@@ -2,7 +2,7 @@
 
 **SPENT WINDOW — every number here is a plumbing check, never evidence** (build prompt §1). Purpose: prove the journal alone answers every question in `fixtures/autopsy_questions.md`. Sample: 10 fills / 10 resolved tranche exits — far below the ≥20-per-cell read floor (charter §4); no conclusions may be drawn, only column liveness.
 
-Run: `97f51466113cdcf9` · engine 1.0.0 · config naiad_v0 · 1503 journal rows · journal sha256 `5be17e5d1f6608ec…` · final equity 9619.04 · 2 halt(s)
+Run: `97f51466113cdcf9` · engine 1.0.0 · config naiad_v0 · 1502 journal rows · journal sha256 `5b7e4b333e364af3…` · final equity 9619.04 · 2 halt(s)
 
 ## Q1 — Loss by cohort
 
@@ -137,7 +137,7 @@ C events: 11; C-gate rejects: 39. No C ever fills (F5-asserted). Outcome simulat
 
 ## Q18 — Halts
 
-2 halt(s): day 2026-06-19 at 2026-06-19T16:10:00Z (running R -2.800); day 2026-07-05 at 2026-07-05T09:20:00Z (running R -2.734).
+2 halt(s): halt_day:2026-06-19 at 2026-06-19T16:10:00Z (running R -2.800); halt_day:2026-07-05 at 2026-07-05T09:20:00Z (running R -2.734).
 Post-halt blocked fills (halted_day/week rejects): 0.
 
 ## Q19 — Cost anatomy

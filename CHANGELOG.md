@@ -1,5 +1,35 @@
 # CHANGELOG
 
+## engine 1.0.0 — reviewer ticket D-1..D-3 (2026-07-10, docs + instrumentation)
+
+No version bump: the reviewer's byte-identity constraint pins `run_id`
+(= hash of engine_version + args), so a bump would rewrite every row. The
+only journal bytes that change are the two HALT rows (D-2, sanctioned).
+
+- **D-1** — replay summary `rows`/`journal_sha256` are now re-read from the
+  PERSISTED files after writing, never from the in-memory stream. Documented
+  formula (README, packet MANIFEST, `engine/journal.py:files_sha256`):
+  sha256 over the byte concatenation of the run's monthly files in
+  chronological (filename) order; rows = newline count. New fixture **F1b**
+  recomputes both via an independent code path.
+  **Root cause of the phantom 1503rd row:** at 2026-07-02T20:00 a PRIME add
+  (rejected `max_tranches`) and a CONFIRM add (rejected `not_positioned`)
+  fired on the same bar; both REJECT rows map to the same journal key
+  `(cell, REJECT, ts, "trade_ADD")`, so the idempotent merge keeps the
+  later one. The summary previously counted the pre-merge stream (1503) and
+  salted the hash with filenames — neither matched disk. The key collision
+  itself is left as-is under this ticket's byte-identity constraint;
+  candidate refinement for the next engine version: make trade-reject
+  subkeys carry the signal family (`trade_ADD_prime` vs
+  `trade_ADD_confirm`).
+- **D-2** — HALT rows no longer put a bare date in `reject_reason`; the
+  value is namespaced: `halt_day:2026-06-19` / `halt_week:2026-Wnn`.
+  Schema note: `reject_reason` on HALT rows = `halt_<scope>:<calendar key>`.
+  Q18 in the dry-run autopsy updated. All other row bytes unchanged.
+- **D-3** — the session packet now includes `Naiad_Phase0_Charter.md`,
+  `Naiad_Phase1_Build_Prompt.md`, `LEDGER.md`, and per-file sha256 digests
+  plus the journal hash formula in MANIFEST.txt.
+
 ## engine 1.0.0 — Phase 1 initial build (2026-07-09, branch phase-1)
 
 - Literal Python port of SS Cascade v11.0.2 (`engine/signals.py`): governor

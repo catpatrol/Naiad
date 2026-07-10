@@ -1,20 +1,547 @@
 [
   {
-    "bars": 142273,
+    "bars": 3591723,
     "duplicates": 0,
-    "first": 1740787200000,
+    "first": 1567965420000,
+    "gaps": [
+      {
+        "after": 1567969140000,
+        "missing_bars": 1
+      }
+    ],
+    "interval": "1m",
+    "last": 1783468800000,
+    "symbol": "BTCUSDT"
+  },
+  {
+    "bars": 718346,
+    "duplicates": 0,
+    "first": 1567965300000,
     "gaps": [],
     "interval": "5m",
     "last": 1783468800000,
     "symbol": "BTCUSDT"
   },
   {
-    "bars": 11857,
+    "bars": 239450,
     "duplicates": 0,
-    "first": 1740787200000,
+    "first": 1567964700000,
+    "gaps": [],
+    "interval": "15m",
+    "last": 1783468800000,
+    "symbol": "BTCUSDT"
+  },
+  {
+    "bars": 59864,
+    "duplicates": 0,
+    "first": 1567962000000,
     "gaps": [],
     "interval": "1h",
     "last": 1783468800000,
     "symbol": "BTCUSDT"
+  },
+  {
+    "bars": 14967,
+    "duplicates": 0,
+    "first": 1567958400000,
+    "gaps": [],
+    "interval": "4h",
+    "last": 1783468800000,
+    "symbol": "BTCUSDT"
+  },
+  {
+    "bars": 4990,
+    "duplicates": 0,
+    "first": 1567944000000,
+    "gaps": [],
+    "interval": "12h",
+    "last": 1783468800000,
+    "symbol": "BTCUSDT"
+  },
+  {
+    "bars": 3477136,
+    "duplicates": 0,
+    "first": 1574840700000,
+    "gaps": [],
+    "interval": "1m",
+    "last": 1783468800000,
+    "symbol": "ETHUSDT"
+  },
+  {
+    "bars": 695428,
+    "duplicates": 0,
+    "first": 1574840700000,
+    "gaps": [],
+    "interval": "5m",
+    "last": 1783468800000,
+    "symbol": "ETHUSDT"
+  },
+  {
+    "bars": 231810,
+    "duplicates": 0,
+    "first": 1574840700000,
+    "gaps": [],
+    "interval": "15m",
+    "last": 1783468800000,
+    "symbol": "ETHUSDT"
+  },
+  {
+    "bars": 57954,
+    "duplicates": 0,
+    "first": 1574838000000,
+    "gaps": [],
+    "interval": "1h",
+    "last": 1783468800000,
+    "symbol": "ETHUSDT"
+  },
+  {
+    "bars": 14490,
+    "duplicates": 0,
+    "first": 1574827200000,
+    "gaps": [],
+    "interval": "4h",
+    "last": 1783468800000,
+    "symbol": "ETHUSDT"
+  },
+  {
+    "bars": 4831,
+    "duplicates": 0,
+    "first": 1574812800000,
+    "gaps": [],
+    "interval": "12h",
+    "last": 1783468800000,
+    "symbol": "ETHUSDT"
+  },
+  {
+    "bars": 3056701,
+    "duplicates": 0,
+    "first": 1600066800000,
+    "gaps": [],
+    "interval": "1m",
+    "last": 1783468800000,
+    "symbol": "SOLUSDT"
+  },
+  {
+    "bars": 611341,
+    "duplicates": 0,
+    "first": 1600066800000,
+    "gaps": [],
+    "interval": "5m",
+    "last": 1783468800000,
+    "symbol": "SOLUSDT"
+  },
+  {
+    "bars": 203781,
+    "duplicates": 0,
+    "first": 1600066800000,
+    "gaps": [],
+    "interval": "15m",
+    "last": 1783468800000,
+    "symbol": "SOLUSDT"
+  },
+  {
+    "bars": 50946,
+    "duplicates": 0,
+    "first": 1600066800000,
+    "gaps": [],
+    "interval": "1h",
+    "last": 1783468800000,
+    "symbol": "SOLUSDT"
+  },
+  {
+    "bars": 12738,
+    "duplicates": 0,
+    "first": 1600056000000,
+    "gaps": [],
+    "interval": "4h",
+    "last": 1783468800000,
+    "symbol": "SOLUSDT"
+  },
+  {
+    "bars": 4247,
+    "duplicates": 0,
+    "first": 1600041600000,
+    "gaps": [],
+    "interval": "12h",
+    "last": 1783468800000,
+    "symbol": "SOLUSDT"
+  },
+  {
+    "bars": 3012001,
+    "duplicates": 0,
+    "first": 1602748800000,
+    "gaps": [],
+    "interval": "1m",
+    "last": 1783468800000,
+    "symbol": "NEARUSDT"
+  },
+  {
+    "bars": 602401,
+    "duplicates": 0,
+    "first": 1602748800000,
+    "gaps": [],
+    "interval": "5m",
+    "last": 1783468800000,
+    "symbol": "NEARUSDT"
+  },
+  {
+    "bars": 200801,
+    "duplicates": 0,
+    "first": 1602748800000,
+    "gaps": [],
+    "interval": "15m",
+    "last": 1783468800000,
+    "symbol": "NEARUSDT"
+  },
+  {
+    "bars": 50201,
+    "duplicates": 0,
+    "first": 1602748800000,
+    "gaps": [],
+    "interval": "1h",
+    "last": 1783468800000,
+    "symbol": "NEARUSDT"
+  },
+  {
+    "bars": 12551,
+    "duplicates": 0,
+    "first": 1602748800000,
+    "gaps": [],
+    "interval": "4h",
+    "last": 1783468800000,
+    "symbol": "NEARUSDT"
+  },
+  {
+    "bars": 4185,
+    "duplicates": 0,
+    "first": 1602720000000,
+    "gaps": [],
+    "interval": "12h",
+    "last": 1783468800000,
+    "symbol": "NEARUSDT"
+  },
+  {
+    "bars": 3376320,
+    "duplicates": 0,
+    "first": 1580889660000,
+    "gaps": [],
+    "interval": "1m",
+    "last": 1783468800000,
+    "symbol": "ZECUSDT"
+  },
+  {
+    "bars": 675265,
+    "duplicates": 0,
+    "first": 1580889600000,
+    "gaps": [],
+    "interval": "5m",
+    "last": 1783468800000,
+    "symbol": "ZECUSDT"
+  },
+  {
+    "bars": 225089,
+    "duplicates": 0,
+    "first": 1580889600000,
+    "gaps": [],
+    "interval": "15m",
+    "last": 1783468800000,
+    "symbol": "ZECUSDT"
+  },
+  {
+    "bars": 56273,
+    "duplicates": 0,
+    "first": 1580889600000,
+    "gaps": [],
+    "interval": "1h",
+    "last": 1783468800000,
+    "symbol": "ZECUSDT"
+  },
+  {
+    "bars": 14069,
+    "duplicates": 0,
+    "first": 1580889600000,
+    "gaps": [],
+    "interval": "4h",
+    "last": 1783468800000,
+    "symbol": "ZECUSDT"
+  },
+  {
+    "bars": 4691,
+    "duplicates": 0,
+    "first": 1580860800000,
+    "gaps": [],
+    "interval": "12h",
+    "last": 1783468800000,
+    "symbol": "ZECUSDT"
+  },
+  {
+    "bars": 1357320,
+    "duplicates": 0,
+    "first": 1702029660000,
+    "gaps": [],
+    "interval": "1m",
+    "last": 1783468800000,
+    "symbol": "JTOUSDT"
+  },
+  {
+    "bars": 271465,
+    "duplicates": 0,
+    "first": 1702029600000,
+    "gaps": [],
+    "interval": "5m",
+    "last": 1783468800000,
+    "symbol": "JTOUSDT"
+  },
+  {
+    "bars": 90489,
+    "duplicates": 0,
+    "first": 1702029600000,
+    "gaps": [],
+    "interval": "15m",
+    "last": 1783468800000,
+    "symbol": "JTOUSDT"
+  },
+  {
+    "bars": 22623,
+    "duplicates": 0,
+    "first": 1702029600000,
+    "gaps": [],
+    "interval": "1h",
+    "last": 1783468800000,
+    "symbol": "JTOUSDT"
+  },
+  {
+    "bars": 5657,
+    "duplicates": 0,
+    "first": 1702022400000,
+    "gaps": [],
+    "interval": "4h",
+    "last": 1783468800000,
+    "symbol": "JTOUSDT"
+  },
+  {
+    "bars": 1887,
+    "duplicates": 0,
+    "first": 1701993600000,
+    "gaps": [],
+    "interval": "12h",
+    "last": 1783468800000,
+    "symbol": "JTOUSDT"
+  },
+  {
+    "bars": 1177051,
+    "duplicates": 0,
+    "first": 1712845800000,
+    "gaps": [],
+    "interval": "1m",
+    "last": 1783468800000,
+    "symbol": "TAOUSDT"
+  },
+  {
+    "bars": 235411,
+    "duplicates": 0,
+    "first": 1712845800000,
+    "gaps": [],
+    "interval": "5m",
+    "last": 1783468800000,
+    "symbol": "TAOUSDT"
+  },
+  {
+    "bars": 78471,
+    "duplicates": 0,
+    "first": 1712845800000,
+    "gaps": [],
+    "interval": "15m",
+    "last": 1783468800000,
+    "symbol": "TAOUSDT"
+  },
+  {
+    "bars": 19619,
+    "duplicates": 0,
+    "first": 1712844000000,
+    "gaps": [],
+    "interval": "1h",
+    "last": 1783468800000,
+    "symbol": "TAOUSDT"
+  },
+  {
+    "bars": 4906,
+    "duplicates": 0,
+    "first": 1712836800000,
+    "gaps": [],
+    "interval": "4h",
+    "last": 1783468800000,
+    "symbol": "TAOUSDT"
+  },
+  {
+    "bars": 1636,
+    "duplicates": 0,
+    "first": 1712836800000,
+    "gaps": [],
+    "interval": "12h",
+    "last": 1783468800000,
+    "symbol": "TAOUSDT"
+  },
+  {
+    "bars": 581131,
+    "duplicates": 0,
+    "first": 1748601000000,
+    "gaps": [],
+    "interval": "1m",
+    "last": 1783468800000,
+    "symbol": "HYPEUSDT"
+  },
+  {
+    "bars": 116227,
+    "duplicates": 0,
+    "first": 1748601000000,
+    "gaps": [],
+    "interval": "5m",
+    "last": 1783468800000,
+    "symbol": "HYPEUSDT"
+  },
+  {
+    "bars": 38743,
+    "duplicates": 0,
+    "first": 1748601000000,
+    "gaps": [],
+    "interval": "15m",
+    "last": 1783468800000,
+    "symbol": "HYPEUSDT"
+  },
+  {
+    "bars": 9687,
+    "duplicates": 0,
+    "first": 1748599200000,
+    "gaps": [],
+    "interval": "1h",
+    "last": 1783468800000,
+    "symbol": "HYPEUSDT"
+  },
+  {
+    "bars": 2423,
+    "duplicates": 0,
+    "first": 1748592000000,
+    "gaps": [],
+    "interval": "4h",
+    "last": 1783468800000,
+    "symbol": "HYPEUSDT"
+  },
+  {
+    "bars": 809,
+    "duplicates": 0,
+    "first": 1748563200000,
+    "gaps": [],
+    "interval": "12h",
+    "last": 1783468800000,
+    "symbol": "HYPEUSDT"
+  },
+  {
+    "bars": 812476,
+    "duplicates": 0,
+    "first": 1734720300000,
+    "gaps": [],
+    "interval": "1m",
+    "last": 1783468800000,
+    "symbol": "FARTCOINUSDT"
+  },
+  {
+    "bars": 162496,
+    "duplicates": 0,
+    "first": 1734720300000,
+    "gaps": [],
+    "interval": "5m",
+    "last": 1783468800000,
+    "symbol": "FARTCOINUSDT"
+  },
+  {
+    "bars": 54166,
+    "duplicates": 0,
+    "first": 1734720300000,
+    "gaps": [],
+    "interval": "15m",
+    "last": 1783468800000,
+    "symbol": "FARTCOINUSDT"
+  },
+  {
+    "bars": 13543,
+    "duplicates": 0,
+    "first": 1734717600000,
+    "gaps": [],
+    "interval": "1h",
+    "last": 1783468800000,
+    "symbol": "FARTCOINUSDT"
+  },
+  {
+    "bars": 3387,
+    "duplicates": 0,
+    "first": 1734710400000,
+    "gaps": [],
+    "interval": "4h",
+    "last": 1783468800000,
+    "symbol": "FARTCOINUSDT"
+  },
+  {
+    "bars": 1130,
+    "duplicates": 0,
+    "first": 1734696000000,
+    "gaps": [],
+    "interval": "12h",
+    "last": 1783468800000,
+    "symbol": "FARTCOINUSDT"
+  },
+  {
+    "bars": 282631,
+    "duplicates": 0,
+    "first": 1766511000000,
+    "gaps": [],
+    "interval": "1m",
+    "last": 1783468800000,
+    "symbol": "LITUSDT"
+  },
+  {
+    "bars": 56527,
+    "duplicates": 0,
+    "first": 1766511000000,
+    "gaps": [],
+    "interval": "5m",
+    "last": 1783468800000,
+    "symbol": "LITUSDT"
+  },
+  {
+    "bars": 18843,
+    "duplicates": 0,
+    "first": 1766511000000,
+    "gaps": [],
+    "interval": "15m",
+    "last": 1783468800000,
+    "symbol": "LITUSDT"
+  },
+  {
+    "bars": 4712,
+    "duplicates": 0,
+    "first": 1766509200000,
+    "gaps": [],
+    "interval": "1h",
+    "last": 1783468800000,
+    "symbol": "LITUSDT"
+  },
+  {
+    "bars": 1179,
+    "duplicates": 0,
+    "first": 1766505600000,
+    "gaps": [],
+    "interval": "4h",
+    "last": 1783468800000,
+    "symbol": "LITUSDT"
+  },
+  {
+    "bars": 394,
+    "duplicates": 0,
+    "first": 1766491200000,
+    "gaps": [],
+    "interval": "12h",
+    "last": 1783468800000,
+    "symbol": "LITUSDT"
   }
 ]

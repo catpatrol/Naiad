@@ -104,14 +104,26 @@ def write_journal(rows: list[dict], journal_root: Path) -> list[Path]:
     return written
 
 
-def journal_sha256(journal_root: Path, cell_id: str) -> str:
-    """Hash a cell's whole journal (F1: bit-identical reruns)."""
+def files_sha256(paths: list[Path]) -> str:
+    """THE documented journal hash formula (reviewer ticket D-1): sha256 over
+    the byte concatenation of the journal files in chronological (filename)
+    order. Reproducible from the packeted files alone:
+        sha256(cat 2026-05.jsonl 2026-06.jsonl 2026-07.jsonl ...)
+    No salts, no separators."""
     h = hashlib.sha256()
-    cell_dir = journal_root / cell_id
-    for path in sorted(cell_dir.glob("*.jsonl")):
-        h.update(path.name.encode())
+    for path in sorted(paths, key=lambda p: p.name):
         h.update(path.read_bytes())
     return h.hexdigest()
+
+
+def count_lines(paths: list[Path]) -> int:
+    """Rows as persisted: newline-terminated lines across the files."""
+    return sum(p.read_bytes().count(b"\n") for p in paths)
+
+
+def journal_sha256(journal_root: Path, cell_id: str) -> str:
+    """Hash a cell's whole persisted journal (F1: bit-identical reruns)."""
+    return files_sha256(list((journal_root / cell_id).glob("*.jsonl")))
 
 
 def read_journal(journal_root: Path, cell_id: str) -> list[dict]:

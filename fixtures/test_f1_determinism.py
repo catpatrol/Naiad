@@ -33,6 +33,30 @@ def test_idempotent_remerge(synth_env, synth_cell, tmp_path):
     assert a["journal_sha256"] == b["journal_sha256"]
 
 
+def test_f1b_summary_derived_from_persisted_bytes(synth_env, synth_cell, tmp_path):
+    """F1b (reviewer ticket D-1): summary `rows` and `journal_sha256` must be
+    reproducible from the written files alone, by an independent code path —
+    sha256 over the byte concatenation of the run's monthly files in
+    chronological (filename) order; rows = newline count."""
+    import hashlib
+
+    summary = run_replay("naiad_v0", synth_cell.cell_id, SYNTH_START,
+                         SYNTH_END, tmp_path / "j", log=lambda *_: None)
+    files = sorted((Path(p) for p in summary["files"]), key=lambda p: p.name)
+    assert files, "run wrote no files"
+
+    h = hashlib.sha256()
+    lines = 0
+    for f in files:
+        b = f.read_bytes()
+        h.update(b)
+        lines += b.count(b"\n")
+    assert summary["rows"] == lines, \
+        f"summary rows {summary['rows']} != persisted line count {lines}"
+    assert summary["journal_sha256"] == h.hexdigest(), \
+        "summary sha256 does not match the documented on-disk formula"
+
+
 def test_v11_faithful_also_deterministic(synth_env, synth_cell, tmp_path):
     a = run_replay("v11_faithful", synth_cell.cell_id, SYNTH_START, SYNTH_END,
                    tmp_path / "j1", log=lambda *_: None)

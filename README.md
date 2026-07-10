@@ -78,6 +78,12 @@ window. *What you should see:* a JSON summary ending in `journal_sha256`,
 `tranches`, `final_equity`. Run the same command twice: the
 `journal_sha256` must be **identical** — that is fixture F1 live.
 
+The summary numbers are read back from the files on disk after writing:
+`rows` = total line count of the run's monthly journal files, and
+`journal_sha256` = SHA-256 over the byte concatenation of those files in
+chronological (filename) order — anyone can recompute it from the packet
+alone (e.g. `cat 2026-05.jsonl 2026-06.jsonl 2026-07.jsonl | sha256sum`).
+
 Cells: `{SYMBOL}_{swing|intraday|position}`, e.g. `ETHUSDT_intraday`.
 Configs: `naiad_v0` (paper line) or `v11_faithful` (signals only, parity).
 

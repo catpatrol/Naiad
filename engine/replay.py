@@ -24,7 +24,8 @@ import numpy as np
 from engine import data as dl
 from engine.cells import INTERVAL_MS, MTF_SET, Cell, cell_by_id
 from engine.config import load_config, make_run_id
-from engine.journal import iso, journal_sha256, make_row, write_journal
+from engine.journal import (count_lines, files_sha256, iso, make_row,
+                            write_journal)
 from engine.shadows import build_shadow_context, enrich_tranche
 from engine.signals import compute_signals
 from engine.trading import run_trading
@@ -212,7 +213,9 @@ def run_replay(config_id: str, cell_id: str, start: str, end: str,
                 rows.append(make_row(
                     **base, ts_open=ts_open, ts_close=ts_close, evt="HALT",
                     dir="-", tranche_id=hv.scope, size_r=round(hv.r_total, 6),
-                    reject_reason=hv.key))
+                    # namespaced (ticket D-2): never a bare date in an
+                    # enum-like field
+                    reject_reason=f"halt_{hv.scope}:{hv.key}"))
 
         for rj in trades.rejects:
             if in_window(rj.i):
@@ -223,11 +226,14 @@ def run_replay(config_id: str, cell_id: str, start: str, end: str,
                     tranche_id=f"trade_{rj.kind}", reject_reason=rj.reason))
 
     written = write_journal(rows, journal_root)
+    # Summary metrics come from the PERSISTED bytes, re-read after writing
+    # (reviewer ticket D-1) — never from the in-memory stream: same-bar
+    # same-kind events can share a journal key and merge to one row.
     return {
         "run_id": run_id,
-        "rows": len(rows),
+        "rows": count_lines(written),
         "files": [str(p) for p in written],
-        "journal_sha256": journal_sha256(journal_root, cell.cell_id),
+        "journal_sha256": files_sha256(written),
         "signal_events": sum(1 for ev in sig.events if in_window(ev.i)),
         "tranches": len(trades.tranches) if trading_enabled else 0,
         "final_equity": round(trades.final_equity, 2) if trading_enabled else None,

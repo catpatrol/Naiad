@@ -6,6 +6,7 @@ Bundles journals, research outputs, configs, state, and a one-page manifest.
 """
 
 import argparse
+import hashlib
 import subprocess
 import sys
 import zipfile
@@ -46,7 +47,12 @@ def main() -> int:
                       (ROOT / "configs", "configs"),
                       (ROOT / "fixtures" / "autopsy_questions.md", "autopsy_questions.md"),
                       (ROOT / "data_starts.csv", "data_starts.csv"),
-                      (ROOT / "CHANGELOG.md", "CHANGELOG.md")]:
+                      (ROOT / "CHANGELOG.md", "CHANGELOG.md"),
+                      # ticket D-3: the packet must be self-sufficient for
+                      # independent review
+                      (ROOT / "Naiad_Phase0_Charter.md", "Naiad_Phase0_Charter.md"),
+                      (ROOT / "Naiad_Phase1_Build_Prompt.md", "Naiad_Phase1_Build_Prompt.md"),
+                      (ROOT / "LEDGER.md", "LEDGER.md")]:
         base = base if base.is_absolute() else ROOT / base
         if base.is_file():
             include.append((base, arc))
@@ -62,8 +68,13 @@ def main() -> int:
         f"git_rev: {git_rev()}",
         f"files: {len(include)}",
         "",
-        "contents:",
-    ] + [f"  {arc}" for _, arc in include]
+        "journal hash formula (ticket D-1): a run's journal_sha256 = sha256",
+        "over the byte concatenation of its monthly .jsonl files in",
+        "chronological (filename) order; rows = total newline count.",
+        "",
+        "contents (sha256  path):",
+    ] + [f"  {hashlib.sha256(path.read_bytes()).hexdigest()}  {arc}"
+         for path, arc in include]
 
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
         z.writestr("MANIFEST.txt", "\n".join(manifest) + "\n")

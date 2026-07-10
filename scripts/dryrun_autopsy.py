@@ -244,9 +244,11 @@ def main() -> int:
 
     # Q18 halts
     halts = q(rows, "HALT")
+    # HALT rows namespace the calendar key as halt_day:YYYY-MM-DD /
+    # halt_week:YYYY-Wnn inside reject_reason (ticket D-2)
     w("## Q18 — Halts", "",
       f"{len(halts)} halt(s): " + "; ".join(
-          f"{r['tranche_id']} {r['reject_reason']} at {r['ts_open']} "
+          f"{r['reject_reason']} at {r['ts_open']} "
           f"(running R {fmt(r['size_r'])})" for r in halts) + ".",
       f"Post-halt blocked fills (halted_day/week rejects): "
       f"{len([r for r in rejects if r['reject_reason'] in ('halted_day', 'halted_week')])}.", "")
