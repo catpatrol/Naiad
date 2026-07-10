@@ -1,0 +1,933 @@
+//@version=6
+indicator("Secret Sauce — Cascade v11", shorttitle="SS CAS v11", overlay=true, max_boxes_count=6)
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  SECRET SAUCE — CASCADE  v11
+//
+//  VERSION BANNER / CHANGELOG
+//  v11.0.2 — style: exec 89 EMA → purple #9C27B0, exec 200 EMA → blue #2962FF
+//    (standing project rule, SS_Style_Spec_EMA_Colors.md); 9 EMA unchanged
+//    yellow. Cosmetic only — zero logic/input/output changes.
+//  v11.0.2 (2026-07-08) — verification addendum patch (SSv11_Verification_Addendum.md §3)
+//    1. ARMING TIERS (the fix): every confirmed governor cross now arms when
+//       provisionalArming is ON (default). campCounter now means "provisional
+//       (Stage-1) campaign": faded arrow, grades capped at B, zones per the
+//       provZones variant input (default Z1+Z2; DS-literal "Z1 only"
+//       selectable for replay comparison). Z3 always requires stage
+//       alignment. When the 89×200 later confirms in the campaign direction
+//       while dir matches, campCounter clears — grades and Z3 unlock (the
+//       STAGE alert already marks the moment). allowCounterStructure input
+//       REMOVED, replaced by provisionalArming (OFF = v11.0.0 strictness).
+//       Root cause per addendum §2: the 200 governs size and grade, not
+//       permission — nearly every major trend birth crosses 9/89 first.
+//    2. C-entries gated: structOK + activeZone > 0. A confirm-only re-cross
+//       (no PRIME this zone episode) failing that gate is dropped entirely —
+//       no marker, no alert, no stop ratchet. PRIME-backed adds unchanged.
+//    3. A-grade alignment TF is now an input (tfAlign, default 1H). Options
+//       are limited to the four fetched MTF TFs {5m,1H,4H,12H}: a free
+//       timeframe would need a 6th request.security call and break the §2.5
+//       hard budget. For a 1H governor use "5" (15m is not in the fetched
+//       set). Kills the intraday A-grade tautology.
+//    4. Sniper re-anchor: terminus freezes at the first Z2/Z3 tag or at R1
+//       fire (was: any zone tag). Fib defaults now 0.5 / 0.786 (were
+//       0.618 / 0.786). Leg tracking decoupled from the box object so the
+//       new "retr" field works with the box display off. V-born campaigns
+//       clear the leg (no box, retr=null, A+ impossible — unchanged).
+//    5. PRIME JSON gains "retr": the tag-extreme's retracement fraction of
+//       the corrected sniper leg (null when no leg exists).
+//    6. Dead confirmCloses input deleted.
+//    7. X glyph locations flipped (long X above bar, short X below).
+//    8. Docs: zoneMemory=5 recommended on 5m charts (tooltip). Execution
+//       bots should filter out evt=="CLUSTER" and treat REGIME payloads with
+//       stage==1 as PROVISIONAL (faded arrow = "provisional campaign: Z1/Z2,
+//       grade ≤ B, half size" — NOT "arms nothing").
+//  v11.0.1 — never shipped; its patch list was superseded by the addendum.
+//  v11.0.0 (2026-07-08) — initial build per SSv11_Build_Prompt_for_Claude_Code.md
+//    • Cascade engine: governor TF (default 4H) supplies regime (9v89),
+//      structure stage (89v200) and three EMA zones. Governor cross ARMS a
+//      state machine that never expires on a bar count; entry fires on the
+//      execution TF (chart) only inside a recently-tagged zone via the
+//      two-stage trigger (PRIME = 9-reclaim + confirming close; CONFIRM =
+//      exec 9/89 re-cross).
+//    • request.security = exactly 5 calls (1 governor tuple + 4 MTF tuples).
+//      NOTE: the governor tuple carries two extra elements beyond the spec
+//      list — lowest(low,snipeLookback) / highest(high,snipeLookback) — so
+//      the sniper origin comes from true governor-series extremes without a
+//      6th security call.
+//    • All HTF state/events from CONFIRMED HTF bars (expr[1] + lookahead_on).
+//      Zone bands also display the confirmed governor EMAs: the prompt allows
+//      live values for display only, but that would cost a 6th security call,
+//      so confirmed values are used everywhere (strictly non-repainting).
+//    • REGIME alert fires on aligned AND counter crosses; the JSON `stage`
+//      field doubles as the aligned/provisional note (cross + stage 2 =
+//      aligned; cross + stage 1 = provisional campaign; mirrored for bear).
+//    • No 30m anywhere. MTF set = 5m / 1H / 4H / 12H.
+//    • Signals via plotshape/plotchar only; the ONLY drawing object is the
+//      single live sniper fib box (var handle, deleted on each new arming).
+//    • Output budget: 11 plots + 32 plotshapes + 0 plotchars + 4 bgcolors
+//      + 10 alertconditions = 57 (+3 fills = 60 worst case) of 64.
+//
+//  Spec cross-references in comments: §n.n = SSv11_Build_Prompt §; DS §n.n =
+//  design spec; ADD §n = SSv11_Verification_Addendum §3 patch item n.
+// ═══════════════════════════════════════════════════════════════════════════
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  INPUTS  (§3, amended per ADD §1/§3/§4/§6/§8)
+// ─────────────────────────────────────────────────────────────────────────────
+G_P = "Periods"
+lenFast  = input.int(9,   "Fast EMA (9)",    minval=2,  group=G_P)
+lenSlow  = input.int(89,  "Slow EMA (89)",   minval=10, group=G_P)
+lenTrend = input.int(200, "Trend EMA (200)", minval=50, group=G_P)
+atrLen   = input.int(14,  "ATR length",      minval=1,  group=G_P)
+
+G_G = "Governor"
+tfGovern = input.timeframe("240", "Governor timeframe",
+     tooltip="Supplies regime (9v89), structure stage (89v200) and the three " +
+             "EMA zones. 4H/5m swing · 1H/1m intraday · 12H/15m position.", group=G_G)
+structureGate = input.bool(true, "Structure gate (stage must align)",
+     tooltip="Full campaigns need the 89 on the regime side of the 200 for " +
+             "PRIMEs. Provisional campaigns pass by design — grade-capped, " +
+             "not blocked (ADD §2: the 200 governs size and grade, not " +
+             "permission).", group=G_G)
+provisionalArming = input.bool(true, "Provisional arming (every governor cross arms)",
+     tooltip="ON (default, ADD §1): a counter-structure governor cross arms a " +
+             "PROVISIONAL Stage-1 campaign — faded arrow, grades capped at B, " +
+             "zones per the variant below, half size by playbook. OFF: " +
+             "v11.0.0 strictness (aligned crosses only; counter crosses arm " +
+             "nothing).", group=G_G)
+provZones = input.string("Z1+Z2", "Provisional campaign zones",
+     options=["Z1+Z2", "Z1 only"],
+     tooltip="Z1+Z2 (recommended): captures the May 26-style Z2 retest at the " +
+             "cost of re-admitting one grade-capped loss (Jun 15). Z1 only: " +
+             "DS-literal variant, kept for replay comparison (ADD §1 variant " +
+             "note).", group=G_G)
+tfAlign = input.timeframe("60", "A-grade alignment TF",
+     options=["5", "60", "240", "720"],
+     tooltip="MTF regime that upgrades a PRIME to grade A (ADD §3). Set one " +
+             "step below the governor: 4H→1H, 12H→4H; for a 1H governor use " +
+             "5m (15m is not in the fetched MTF set — a free TF would need a " +
+             "6th security call, breaking the §2.5 budget). Setting it equal " +
+             "to the governor TF re-creates the A-grade tautology.", group=G_G)
+whipsawBars = input.int(10, "Whipsaw filter (governor bars since opposite cross)",
+     minval=0, tooltip="Suppresses a governor cross ARROW if the opposite raw " +
+     "cross occurred fewer than this many governor-confirmed bars ago (§4.1). " +
+     "Arrows only — arming is unaffected.", group=G_G)
+
+G_Z = "Zones (× governor ATR)"
+z1Prox     = input.float(0.25, "Z1 half-width (around gov 9)",   minval=0.05, step=0.05, group=G_Z)
+z2Prox     = input.float(0.35, "Z2 half-width (around gov 89)",  minval=0.05, step=0.05, group=G_Z)
+z3Prox     = input.float(0.35, "Z3 pad (around gov 89–200 band edges)", minval=0.05, step=0.05, group=G_Z)
+zoneMemory = input.int(3, "Zone memory (exec bars a tag stays recent)", minval=1,
+     tooltip="Default 3. On a 5m execution chart, 5 is recommended (ADD §8).", group=G_Z)
+
+G_T = "Trigger"
+minBarRangeATR = input.float(0.5, "Min bar range (× exec ATR)", minval=0.0, step=0.05, group=G_T)
+minRibbonSepATR= input.float(0.5, "Min exec 9/89 separation (× exec ATR)",
+     minval=0.0, step=0.05, tooltip="Waived when the active zone is Z3 (§4.3).", group=G_T)
+cooldownBars   = input.int(5, "Cooldown between entry signals (exec bars)", minval=1, group=G_T)
+maxRCount      = input.int(0, "Max counted PRIMEs (0 = unlimited)", minval=0, group=G_T)
+
+G_S = "Sniper"
+snipeOn       = input.bool(true, "Sniper fib box (A+ grading)", group=G_S)
+snipeLookback = input.int(55, "Impulse origin lookback (governor bars)", minval=5, group=G_S)
+fib1          = input.float(0.5,   "Fib level 1", minval=0.0, maxval=1.0, step=0.001, group=G_S)
+fib2          = input.float(0.786, "Fib level 2", minval=0.0, maxval=1.0, step=0.001, group=G_S)
+boxBorderTr   = input.int(30, "Box border transparency", minval=0, maxval=100, group=G_S)
+boxFillTr     = input.int(85, "Box fill transparency",   minval=0, maxval=100, group=G_S)
+
+G_C = "Capitulation V"
+capOn      = input.bool(true, "Capitulation V (gate-exempt)", group=G_C)
+climaxMult = input.float(3.5, "Climax volume multiple (× vol MA)", minval=1.0, step=0.25, group=G_C)
+capExtATR  = input.float(1.0, "Min climax extension beyond gov 89 (× gov ATR)",
+     minval=0.0, step=0.25, group=G_C)
+capWindow  = input.int(10, "Band reclaim within (exec bars)", minval=1, group=G_C)
+capVolConf = input.float(1.2, "Reclaim bar volume (× vol MA)", minval=1.0, step=0.05, group=G_C)
+volLen     = input.int(20, "Volume MA length", minval=1, group=G_C)
+
+G_W = "TP Warning"
+tpwOn      = input.bool(true, "TP Warning (opposite MTF cluster)", group=G_W)
+clusterN   = input.int(2,  "Cluster threshold (MTF crosses against)", minval=1, maxval=4, group=G_W)
+clusterWin = input.int(12, "Cluster window (exec bars)", minval=1, group=G_W)
+
+G_ST = "Stops"
+stopBufATR = input.float(0.5, "Stop buffer (× exec ATR)", minval=0.0, step=0.05, group=G_ST)
+showStops  = input.bool(true, "Show ratcheting stop line", group=G_ST)
+
+G_F = "Failure"
+failWin = input.int(3, "Failure window (consecutive exec closes beyond far band edge)",
+     minval=1, group=G_F)
+
+G_M = "MTF Display"
+mtf5On  = input.bool(true, "Show  5m regime", group=G_M)
+mtf1hOn = input.bool(true, "Show  1H regime", group=G_M)
+mtf4hOn = input.bool(true, "Show  4H regime", group=G_M)
+mtf12On = input.bool(true, "Show 12H regime", group=G_M)
+
+G_D = "Display"
+showEMAs     = input.bool(true,  "Show exec 9/89/200 EMAs",        group=G_D)
+showZones    = input.bool(true,  "Show governor zone bands",       group=G_D)
+showRegArrows= input.bool(true,  "Show governor regime arrows",    group=G_D)
+showBgTint   = input.bool(true,  "Show stage background tint",     group=G_D)
+showGrades   = input.bool(true,  "Show grade text markers (R1)",   group=G_D)
+show1mArrows = input.bool(false, "Show regime arrows on 1m charts", group=G_D)
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+//  COLORS — const hex literals only (§2.2). Restyle via the Style tab, or
+//  edit the literals here. NEVER pass input.color()/series color to a plot.
+// ─────────────────────────────────────────────────────────────────────────────
+cFast       = #FFEE58                  // exec 9 EMA — yellow (standing rule)
+cSlow       = #9C27B0                  // exec 89 EMA — strong purple (standing rule)
+cTrend      = #2962FF                  // exec 200 EMA — strong blue (standing rule)
+cZ1         = #FFB300                  // Z1 band (gov 9)
+cZ2         = #BA68C8                  // Z2 band (gov 89)
+cZ3         = #4DD0E1                  // Z3 band (gov 89–200)
+cRegBull    = #00C853                  // aligned bull regime / long stop
+cRegBear    = #D50000                  // aligned bear regime / short stop
+cRegBullCtr = color.new(#00C853, 60)   // provisional bull arming (faded)
+cRegBearCtr = color.new(#D50000, 60)   // provisional bear arming (faded)
+cStageBull  = #1B5E20                  // 89x200 bull stage confirm
+cStageBear  = #7F0000                  // 89x200 bear stage confirm
+cPrimeL     = #00E676                  // PRIME long (R1 graded)
+cPrimeS     = #F50057                  // PRIME short (R1 graded)
+cR2L        = #4CAF50                  // R2+ adds long
+cR2S        = #FF5722                  // R2+ adds short
+cConfL      = #FFD600                  // CONFIRM / C long
+cConfS      = #FFAB00                  // CONFIRM / C short
+cCapL       = #2979FF                  // Capitulation V long
+cCapS       = #AA00FF                  // Capitulation V short
+cFail       = #FF6D00                  // Failure X (both sides)
+cTpw        = #FFC400                  // TP Warning flag (both sides)
+cMtfBull    = #1B5E20                  // MTF triangles bull
+cMtfBear    = #7F0000                  // MTF triangles bear
+cSnipeL     = #00B0FF                  // sniper box long
+cSnipeS     = #FF4081                  // sniper box short
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  EXECUTION-TF CALCULATIONS  (chart TF — Layer 3, DS §2)
+//  All ta.* calls unconditional on every bar (§2.7).
+// ═══════════════════════════════════════════════════════════════════════════
+e9x   = ta.ema(close, lenFast)
+e89x  = ta.ema(close, lenSlow)
+e200x = ta.ema(close, lenTrend)
+atrX  = ta.atr(atrLen)
+volMA = ta.sma(volume, volLen)
+
+x9Up  = ta.crossover(close, e9x)       // exec 9-reclaim events (PRIME raw)
+x9Dn  = ta.crossunder(close, e9x)
+ribUp = ta.crossover(e9x, e89x)        // exec 9/89 re-cross (CONFIRM raw)
+ribDn = ta.crossunder(e9x, e89x)
+barRange = high - low
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  request.security — EXACTLY 5 CALLS  (§2.5)
+//  Non-repaint discipline (§2.6): every returned element is offset [1] inside
+//  the function (confirmed HTF bar) and fetched with lookahead_on — the
+//  standard idiom. gaps_off holds the last confirmed value between HTF bars.
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Governor tuple (call 1 of 5). Spec list + gLo/gHi extremes for the sniper
+// origin (§4.5) — carried here so the security budget stays at 5.
+f_gov() =>
+    ge9    = ta.ema(close, lenFast)
+    ge89   = ta.ema(close, lenSlow)
+    ge200  = ta.ema(close, lenTrend)
+    gatr   = ta.atr(atrLen)
+    gBull  = ge9 > ge89
+    gS2Bu  = ge89 > ge200
+    gS2Be  = ge89 < ge200
+    gBx    = ta.crossover(ge9, ge89)
+    gSx    = ta.crossunder(ge9, ge89)
+    gLow   = ta.lowest(low, snipeLookback)
+    gHigh  = ta.highest(high, snipeLookback)
+    [ge9[1], ge89[1], ge200[1], gatr[1], gBull[1], gS2Bu[1], gS2Be[1], gBx[1], gSx[1], gLow[1], gHigh[1]]
+
+[gE9, gE89, gE200, gATR, gIsBull, gS2B, gS2S, gBullX, gBearX, gLo, gHi] = request.security(syminfo.tickerid, tfGovern, f_gov(),
+     gaps=barmerge.gaps_off, lookahead=barmerge.lookahead_on)
+
+// MTF tuples (calls 2–5 of 5): 5m / 1H / 4H / 12H. No 30m in v11 (§2.5).
+// The isBull elements also serve the A-grade alignment selector (ADD §3).
+f_mtf() =>
+    m9    = ta.ema(close, lenFast)
+    m89   = ta.ema(close, lenSlow)
+    mBx   = ta.crossover(m9, m89)
+    mSx   = ta.crossunder(m9, m89)
+    mBull = m9 > m89
+    [mBx[1], mSx[1], mBull[1]]
+
+[m5bx,  m5sx,  m5Bull ] = request.security(syminfo.tickerid, "5",   f_mtf(), gaps=barmerge.gaps_off, lookahead=barmerge.lookahead_on)
+[m1bx,  m1sx,  m1Bull ] = request.security(syminfo.tickerid, "60",  f_mtf(), gaps=barmerge.gaps_off, lookahead=barmerge.lookahead_on)
+[m4bx,  m4sx,  m4Bull ] = request.security(syminfo.tickerid, "240", f_mtf(), gaps=barmerge.gaps_off, lookahead=barmerge.lookahead_on)
+[m12bx, m12sx, m12Bull] = request.security(syminfo.tickerid, "720", f_mtf(), gaps=barmerge.gaps_off, lookahead=barmerge.lookahead_on)
+
+// A-grade alignment source (ADD §3) — selected from the four fetched tuples.
+alignBull = tfAlign == "5" ? m5Bull : tfAlign == "60" ? m1Bull : tfAlign == "240" ? m4Bull : m12Bull
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  GOVERNOR LAYER  (§4.1)  — all values are CONFIRMED governor-bar states.
+// ═══════════════════════════════════════════════════════════════════════════
+gBandTop = math.max(gE89, gE200)
+gBandBot = math.min(gE89, gE200)
+
+// Zones (§4.2) — confirmed governor EMA bands (display + logic share these).
+z1Top = gE9  + z1Prox * gATR
+z1Bot = gE9  - z1Prox * gATR
+z2Top = gE89 + z2Prox * gATR
+z2Bot = gE89 - z2Prox * gATR
+z3Top = gBandTop + z3Prox * gATR
+z3Bot = gBandBot - z3Prox * gATR
+
+// Stage confirm events (89×200 cross on the governor), from confirmed states.
+stageConfBull = gS2B and not gS2B[1]
+stageConfBear = gS2S and not gS2S[1]
+
+// Aligned vs provisional classification of every regime cross (§4.1, ADD §1).
+alignedBullX = gBullX and gS2B
+alignedBearX = gBearX and gS2S
+counterBullX = gBullX and not gS2B
+counterBearX = gBearX and not gS2S
+// ADD §1: EVERY confirmed governor cross arms when provisionalArming is ON
+// (counter-structure crosses birth a PROVISIONAL campaign). OFF restores
+// v11.0.0 strictness: aligned crosses only, counter crosses arm nothing.
+armBullEvt = provisionalArming ? gBullX : alignedBullX
+armBearEvt = provisionalArming ? gBearX : alignedBearX
+
+// Whipsaw filter (§4.1) — arrows only, counted in GOVERNOR bars. A governor
+// bar counter advances on each confirmed-TF bar change; each raw cross stamps
+// the counter, and an arrow is suppressed if the OPPOSITE cross is < N stamps
+// ago. (Mirrors v10's ta.barssince idea, re-based to governor bars.)
+govBarT   = time(tfGovern)
+govNewBar = ta.change(govBarT) != 0
+var int govSeq = 0
+if govNewBar
+    govSeq += 1
+var int lastBullXSeq = -100000
+var int lastBearXSeq = -100000
+bullArrowOK = govSeq - lastBearXSeq >= whipsawBars
+bearArrowOK = govSeq - lastBullXSeq >= whipsawBars
+if gBullX
+    lastBullXSeq := govSeq
+if gBearX
+    lastBearXSeq := govSeq
+
+// Stage number per side (also the aligned/provisional note in REGIME alerts:
+// stage 1 = provisional campaign — bots may size down or skip, ADD §8).
+stageLnum = gS2B ? 2 : 1
+stageSnum = gS2S ? 2 : 1
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  STATE MACHINE  (§2.9, DS §2.2) — var state, dir ∈ {-1, 0, +1}.
+//  ARMED never expires on a bar count; it dies only on an opposite governor
+//  arming cross (arming logic below) or Failure X (§4.8).
+// ═══════════════════════════════════════════════════════════════════════════
+var int   dir         = 0
+var int   rCount      = 0
+var int   lastSigBar  = -100000
+var float stopLong    = na
+var float stopShort   = na
+var bool  campCounter = false     // ADD §1: provisional (Stage-1) campaign — grade ≤ B
+var int   crossBar    = na        // arming cross: exec bar index
+var float crossPx     = na        // arming cross: close price
+var bool  hadPrimeEp  = false     // a PRIME already fired in the current zone episode
+
+// Per-zone tag records (§4.2): last tag bar + tag extreme per zone.
+var int   tagBar1 = na
+var int   tagBar2 = na
+var int   tagBar3 = na
+var float tagExt1 = na
+var float tagExt2 = na
+var float tagExt3 = na
+
+// Sniper state (§4.5): one live box, handle in var, old box deleted on re-arm.
+// ADD §4: origin/terminus tracked independently of the box so "retr" works
+// with the box display off.
+var box   snipeBox    = na
+var float snipeOrigin = na
+var float snipeTerm   = na
+var float snipeTop    = na
+var float snipeBot    = na
+var bool  snipeFrozen = false
+
+// ── ARMING (§4.1, ADD §1): the cross sets dir, resets rCount, clears the
+//    opposite stop, resets fail state (failure counters are close-streak
+//    based), records cross bar + price, resets zone tags + sniper leg.
+//    campCounter = provisional when the cross was not stage-aligned.
+if armBullEvt
+    dir         := 1
+    rCount      := 0
+    stopShort   := na
+    campCounter := counterBullX
+    crossBar    := bar_index
+    crossPx     := close
+    lastSigBar  := bar_index
+    hadPrimeEp  := false
+    tagBar1     := na
+    tagBar2     := na
+    tagBar3     := na
+    tagExt1     := na
+    tagExt2     := na
+    tagExt3     := na
+    box.delete(snipeBox)
+    snipeBox    := na
+    snipeOrigin := gLo
+    snipeTerm   := high
+    snipeTop    := na
+    snipeBot    := na
+    snipeFrozen := false
+    if snipeOn
+        snipeBox := box.new(left=bar_index, top=close, right=bar_index + 1, bottom=close,
+             border_color=color.new(cSnipeL, boxBorderTr), bgcolor=color.new(cSnipeL, boxFillTr),
+             extend=extend.right)
+
+if armBearEvt
+    dir         := -1
+    rCount      := 0
+    stopLong    := na
+    campCounter := counterBearX
+    crossBar    := bar_index
+    crossPx     := close
+    lastSigBar  := bar_index
+    hadPrimeEp  := false
+    tagBar1     := na
+    tagBar2     := na
+    tagBar3     := na
+    tagExt1     := na
+    tagExt2     := na
+    tagExt3     := na
+    box.delete(snipeBox)
+    snipeBox    := na
+    snipeOrigin := gHi
+    snipeTerm   := low
+    snipeTop    := na
+    snipeBot    := na
+    snipeFrozen := false
+    if snipeOn
+        snipeBox := box.new(left=bar_index, top=close, right=bar_index + 1, bottom=close,
+             border_color=color.new(cSnipeS, boxBorderTr), bgcolor=color.new(cSnipeS, boxFillTr),
+             extend=extend.right)
+
+// ADD §1: when the 89×200 confirms in the campaign direction while dir
+// matches, the provisional campaign upgrades to full — grades uncap and Z3
+// unlocks. One-way per campaign (a later stage flip does not re-demote).
+if campCounter and ((dir == 1 and gS2B) or (dir == -1 and gS2S))
+    campCounter := false
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  ZONE ARMING & TAG TRACKING  (§4.2, amended per ADD §1)
+//  Full campaign: Z1+Z2 armed; Z3 additionally requires stage alignment.
+//  Provisional campaign: Z1+Z2 (default variant) or Z1 only (DS-literal).
+//  Long tag: bar low ≤ zone top. Short tag: bar high ≥ zone bottom. Tag
+//  extreme = running favorable extreme while the episode stays in zoneMemory.
+// ═══════════════════════════════════════════════════════════════════════════
+stageAligned = dir == 1 ? gS2B : dir == -1 ? gS2S : false
+z1Armed = dir != 0
+z2Armed = dir != 0 and (not campCounter or provZones == "Z1+Z2")   // ADD §1
+z3Armed = dir != 0 and stageAligned                                 // Z3 needs stage
+
+tag1Now = z1Armed and (dir == 1 ? low <= z1Top : high >= z1Bot)
+tag2Now = z2Armed and (dir == 1 ? low <= z2Top : high >= z2Bot)
+tag3Now = z3Armed and (dir == 1 ? low <= z3Top : high >= z3Bot)
+
+// Fresh-episode detection: a tag whose previous tag is stale (> zoneMemory)
+// starts a new zone episode — resets the PRIME-seen flag used by grade C.
+fresh1 = tag1Now and (na(tagBar1) or bar_index - tagBar1 > zoneMemory)
+fresh2 = tag2Now and (na(tagBar2) or bar_index - tagBar2 > zoneMemory)
+fresh3 = tag3Now and (na(tagBar3) or bar_index - tagBar3 > zoneMemory)
+if fresh1 or fresh2 or fresh3
+    hadPrimeEp := false
+
+if tag1Now
+    ext1 = dir == 1 ? low : high
+    tagExt1 := fresh1 or na(tagExt1) ? ext1 : dir == 1 ? math.min(tagExt1, ext1) : math.max(tagExt1, ext1)
+    tagBar1 := bar_index
+if tag2Now
+    ext2 = dir == 1 ? low : high
+    tagExt2 := fresh2 or na(tagExt2) ? ext2 : dir == 1 ? math.min(tagExt2, ext2) : math.max(tagExt2, ext2)
+    tagBar2 := bar_index
+if tag3Now
+    ext3 = dir == 1 ? low : high
+    tagExt3 := fresh3 or na(tagExt3) ? ext3 : dir == 1 ? math.min(tagExt3, ext3) : math.max(tagExt3, ext3)
+    tagBar3 := bar_index
+
+// ADD §4: sniper terminus freezes at the first Z2/Z3 tag of the campaign
+// (Z1 tags no longer freeze — they rewarded the shallow-snapback archetype;
+// see Dec 30 A+ post-mortem). R1 fire also freezes — handled after R1
+// classification below.
+if (tag2Now or tag3Now) and dir != 0 and not snipeFrozen
+    snipeFrozen := true
+
+// Sniper leg geometry (§4.5, ADD §4): origin = governor-series extreme at the
+// cross; terminus = running post-cross favorable extreme until frozen. Leg
+// tracked box-or-no-box; the box (when on) spans the fib1–fib2 retracement.
+if dir != 0 and not na(snipeOrigin)
+    if not snipeFrozen
+        snipeTerm := dir == 1 ? math.max(nz(snipeTerm, high), high) : math.min(nz(snipeTerm, low), low)
+    legHi = dir == 1 ? snipeTerm : snipeOrigin
+    legLo = dir == 1 ? snipeOrigin : snipeTerm
+    fibA  = dir == 1 ? legHi - fib1 * (legHi - legLo) : legLo + fib1 * (legHi - legLo)
+    fibB  = dir == 1 ? legHi - fib2 * (legHi - legLo) : legLo + fib2 * (legHi - legLo)
+    snipeTop := math.max(fibA, fibB)
+    snipeBot := math.min(fibA, fibB)
+    if not na(snipeBox)
+        box.set_top(snipeBox, snipeTop)
+        box.set_bottom(snipeBox, snipeBot)
+
+// "Recently tagged" (§4.2) + innermost-zone priority Z3 > Z2 > Z1.
+rec1 = z1Armed and not na(tagBar1) and bar_index - tagBar1 <= zoneMemory
+rec2 = z2Armed and not na(tagBar2) and bar_index - tagBar2 <= zoneMemory
+rec3 = z3Armed and not na(tagBar3) and bar_index - tagBar3 <= zoneMemory
+activeZone = rec3 ? 3 : rec2 ? 2 : rec1 ? 1 : 0
+zTopA   = activeZone == 3 ? z3Top   : activeZone == 2 ? z2Top   : z1Top
+zBotA   = activeZone == 3 ? z3Bot   : activeZone == 2 ? z2Bot   : z1Bot
+tagExtA = activeZone == 3 ? tagExt3 : activeZone == 2 ? tagExt2 : tagExt1
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  TRIGGERS  (§4.3) — execution TF, evaluated on confirmed exec bars.
+// ═══════════════════════════════════════════════════════════════════════════
+coolOK   = bar_index - lastSigBar >= cooldownBars
+rCapOK   = maxRCount == 0 or rCount < maxRCount
+ribSepOK = math.abs(e9x - e89x) >= minRibbonSepATR * atrX or activeZone == 3   // Z3 waiver
+rangeOK  = barRange >= minBarRangeATR * atrX
+// Structure gate: full campaigns need stage alignment; provisional campaigns
+// pass by design — grade-capped, not blocked (ADD §1/§2).
+structOKL = not structureGate or gS2B or campCounter
+structOKS = not structureGate or gS2S or campCounter
+
+// PRIME (§4.3): 9-reclaim crossover on the PRIOR bar + confirming close now
+// (2 consecutive closes beyond the exec 9, second ≥/≤ first — 6-candle rule).
+primeL = dir == 1  and structOKL and activeZone > 0 and x9Up[1] and close > e9x and
+     close >= close[1] and rangeOK and ribSepOK and coolOK and rCapOK
+primeS = dir == -1 and structOKS and activeZone > 0 and x9Dn[1] and close < e9x and
+     close <= close[1] and rangeOK and ribSepOK and coolOK and rCapOK
+
+// CONFIRM raw re-cross (§4.3). Final classification — PRIME-backed add vs
+// gated C-entry — happens after the PRIME state update (ADD §2).
+confirmXL = dir == 1  and ribUp and coolOK
+confirmXS = dir == -1 and ribDn and coolOK
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  CAPITULATION V  (§4.6) — gate-exempt trend-birth entry, tightened.
+// ═══════════════════════════════════════════════════════════════════════════
+// Climax bar: volume climax against the move + extreme ≥ capExtATR×ATRgov
+// beyond the governor 89 (kills mid-range V prints).
+climaxDn = capOn and volume >= climaxMult * volMA and close < open and low  <= gE89 - capExtATR * gATR
+climaxUp = capOn and volume >= climaxMult * volMA and close > open and high >= gE89 + capExtATR * gATR
+bsClxDn  = ta.barssince(climaxDn)
+bsClxUp  = ta.barssince(climaxUp)
+xBandUp  = ta.crossover(close, gBandTop)
+xBandDn  = ta.crossunder(close, gBandBot)
+// V: within capWindow exec bars of the climax, close crosses beyond the FAR
+// edge of the governor 89–200 band, on confirming volume.
+capL = capOn and xBandUp and nz(bsClxDn, 100000) <= capWindow and volume >= capVolConf * volMA
+capS = capOn and xBandDn and nz(bsClxUp, 100000) <= capWindow and volume >= capVolConf * volMA
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  STATE UPDATES  (§4.3, §4.6) — rCount, C-entry gate, dir on V, stops.
+// ═══════════════════════════════════════════════════════════════════════════
+if primeL or primeS
+    rCount     += 1
+    hadPrimeEp := true
+
+// ADD §2: C-entries (confirm-only — no PRIME this zone episode) are gated by
+// structure + an armed recently-tagged zone. Failing the gate drops the
+// signal entirely: no marker, no alert, no stop ratchet. PRIME-backed adds
+// pass through ungated as before. Evaluated after the PRIME update so a
+// same-bar PRIME+CONFIRM classifies as an add, not a C.
+gradeCL  = confirmXL and not hadPrimeEp and structOKL and activeZone > 0
+gradeCS  = confirmXS and not hadPrimeEp and structOKS and activeZone > 0
+confirmL = (confirmXL and hadPrimeEp) or gradeCL
+confirmS = (confirmXS and hadPrimeEp) or gradeCS
+
+// V arms/enters like a PRIME: sets dir if needed (campaign reversal), grade V.
+// ADD §4: the sniper leg is cleared too (no governor cross → no leg → retr
+// null and A+ impossible in V-born campaigns).
+if capL and dir != 1
+    dir         := 1
+    rCount      := 0
+    campCounter := false
+    stopShort   := na
+    hadPrimeEp  := false
+    tagBar1     := na
+    tagBar2     := na
+    tagBar3     := na
+    tagExt1     := na
+    tagExt2     := na
+    tagExt3     := na
+    box.delete(snipeBox)
+    snipeBox    := na
+    snipeOrigin := na
+    snipeTerm   := na
+    snipeTop    := na
+    snipeBot    := na
+    snipeFrozen := false
+if capS and dir != -1
+    dir         := -1
+    rCount      := 0
+    campCounter := false
+    stopLong    := na
+    hadPrimeEp  := false
+    tagBar1     := na
+    tagBar2     := na
+    tagBar3     := na
+    tagExt1     := na
+    tagExt2     := na
+    tagExt3     := na
+    box.delete(snipeBox)
+    snipeBox    := na
+    snipeOrigin := na
+    snipeTerm   := na
+    snipeTop    := na
+    snipeBot    := na
+    snipeFrozen := false
+
+// Ratchet stop on PRIME / CONFIRM / V (na-safe); reset the cooldown anchor.
+// dir re-checked here: a same-bar V reversal must not ratchet the dead side.
+entryL = (primeL or confirmL) and dir == 1 or capL
+entryS = (primeS or confirmS) and dir == -1 or capS
+if entryL
+    newStopL   = low - stopBufATR * atrX
+    stopLong  := na(stopLong) ? newStopL : math.max(stopLong, newStopL)
+    lastSigBar := bar_index
+if entryS
+    newStopS   = high + stopBufATR * atrX
+    stopShort := na(stopShort) ? newStopS : math.min(stopShort, newStopS)
+    lastSigBar := bar_index
+
+// R1 / R2+ classification (rCount already incremented this bar).
+isR1L = primeL and rCount == 1
+isR2L = primeL and rCount >= 2
+isR1S = primeS and rCount == 1
+isR2S = primeS and rCount >= 2
+
+// ADD §4: R1 fire also freezes the sniper terminus (effective next bar —
+// this bar's geometry was already computed above).
+if (isR1L or isR1S) and not snipeFrozen
+    snipeFrozen := true
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  GRADES  (§4.4, ADD §1/§3) — priority A+ > A > B; provisional campaigns cap
+//  at B until the stage confirms; snipeOn off ⇒ A+ impossible ⇒ cap at A.
+// ═══════════════════════════════════════════════════════════════════════════
+// A+: the zone-tag extreme fell inside (sniper fib box ∩ active zone).
+apCont = not na(snipeTop) and not na(tagExtA) and activeZone > 0 and
+     tagExtA >= math.max(snipeBot, zBotA) and tagExtA <= math.min(snipeTop, zTopA)
+gAPL = primeL and snipeOn and apCont and not campCounter
+gAL  = primeL and not gAPL and alignBull and not campCounter       // tfAlign aligned long
+gBL  = primeL and not gAPL and not gAL
+gAPS = primeS and snipeOn and apCont and not campCounter
+gAS  = primeS and not gAPS and not alignBull and not campCounter   // tfAlign aligned short
+gBS  = primeS and not gAPS and not gAS
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  FAILURE X & CAMPAIGN DEATH  (§4.8)
+//  Consecutive exec closes beyond the far band edge against the campaign.
+// ═══════════════════════════════════════════════════════════════════════════
+var int beyondBotCnt = 0
+var int beyondTopCnt = 0
+beyondBotCnt := close < gBandBot ? beyondBotCnt + 1 : 0
+beyondTopCnt := close > gBandTop ? beyondTopCnt + 1 : 0
+
+failL = dir == 1  and beyondBotCnt == failWin
+failS = dir == -1 and beyondTopCnt == failWin
+if failL
+    dir      := 0
+    stopLong := na
+    box.delete(snipeBox)
+    snipeBox := na
+if failS
+    dir       := 0
+    stopShort := na
+    box.delete(snipeBox)
+    snipeBox  := na
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  TP WARNING & MTF CLUSTER  (§4.7)
+//  ≥ clusterN of {5m,1H,4H,12H} crossed AGAINST dir within clusterWin exec
+//  bars, with at least one firing this bar. Information only — never blocks.
+// ═══════════════════════════════════════════════════════════════════════════
+bs5b  = ta.barssince(m5bx)
+bs1b  = ta.barssince(m1bx)
+bs4b  = ta.barssince(m4bx)
+bs12b = ta.barssince(m12bx)
+bs5s  = ta.barssince(m5sx)
+bs1s  = ta.barssince(m1sx)
+bs4s  = ta.barssince(m4sx)
+bs12s = ta.barssince(m12sx)
+
+cntBullRec = (nz(bs5b, 100000) <= clusterWin ? 1 : 0) + (nz(bs1b, 100000) <= clusterWin ? 1 : 0) +
+     (nz(bs4b, 100000) <= clusterWin ? 1 : 0) + (nz(bs12b, 100000) <= clusterWin ? 1 : 0)
+cntBearRec = (nz(bs5s, 100000) <= clusterWin ? 1 : 0) + (nz(bs1s, 100000) <= clusterWin ? 1 : 0) +
+     (nz(bs4s, 100000) <= clusterWin ? 1 : 0) + (nz(bs12s, 100000) <= clusterWin ? 1 : 0)
+anyBullNow = m5bx or m1bx or m4bx or m12bx
+anyBearNow = m5sx or m1sx or m4sx or m12sx
+
+// TPW requires a live campaign (not na(stop) on the active side).
+tpwL = tpwOn and dir == 1  and not na(stopLong)  and cntBearRec >= clusterN and anyBearNow
+tpwS = tpwOn and dir == -1 and not na(stopShort) and cntBullRec >= clusterN and anyBullNow
+
+// CLUSTER (§5): attention-only alert, fires with or without a campaign.
+// ADD §8: execution bots should filter evt=="CLUSTER" out entirely.
+clusterBull = cntBullRec >= clusterN and anyBullNow
+clusterBear = cntBearRec >= clusterN and anyBearNow
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  PLOTS  (§4.9) — plot/plotshape/bgcolor/fill only; all colors const (§2.2);
+//  all plotshape style/location/size/text args compile-time constants (§2.3).
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Exec EMAs (3 plots)
+plot(showEMAs ? e9x : na,   "EMA 9 (exec)",   color=cFast,  linewidth=2)
+plot(showEMAs ? e89x : na,  "EMA 89 (exec)",  color=cSlow,  linewidth=2)
+plot(showEMAs ? e200x : na, "EMA 200 (exec)", color=cTrend, linewidth=1)
+
+// Governor zone bands (6 plots + 3 fills) — confirmed governor EMA values.
+// Z3 renders only while the stage aligns with the governor regime.
+z3Vis  = showZones and (gIsBull ? gS2B : gS2S)
+pZ1Top = plot(showZones ? z1Top : na, "Z1 top",    color=color.new(cZ1, 55), linewidth=1)
+pZ1Bot = plot(showZones ? z1Bot : na, "Z1 bottom", color=color.new(cZ1, 55), linewidth=1)
+pZ2Top = plot(showZones ? z2Top : na, "Z2 top",    color=color.new(cZ2, 55), linewidth=1)
+pZ2Bot = plot(showZones ? z2Bot : na, "Z2 bottom", color=color.new(cZ2, 55), linewidth=1)
+pZ3Top = plot(z3Vis ? z3Top : na,     "Z3 top",    color=color.new(cZ3, 55), linewidth=1)
+pZ3Bot = plot(z3Vis ? z3Bot : na,     "Z3 bottom", color=color.new(cZ3, 55), linewidth=1)
+fill(pZ1Top, pZ1Bot, color=color.new(cZ1, 90), title="Z1 band")
+fill(pZ2Top, pZ2Bot, color=color.new(cZ2, 90), title="Z2 band")
+fill(pZ3Top, pZ3Bot, color=color.new(cZ3, 92), title="Z3 band")
+
+// Ratcheting stop step-lines (2 plots)
+plot(showStops ? stopLong : na,  "Stop (long)",  color=cRegBull, style=plot.style_linebr, linewidth=1)
+plot(showStops ? stopShort : na, "Stop (short)", color=cRegBear, style=plot.style_linebr, linewidth=1)
+
+// Stage background tint (4 bgcolors) — deeper shade at Stage 2 (§4.9).
+bgcolor(showBgTint and gIsBull and gS2B         ? color.new(cRegBull, 88) : na, title="Bull Stage 2 tint")
+bgcolor(showBgTint and gIsBull and not gS2B     ? color.new(cRegBull, 95) : na, title="Bull Stage 1 tint")
+bgcolor(showBgTint and not gIsBull and gS2S     ? color.new(cRegBear, 88) : na, title="Bear Stage 2 tint")
+bgcolor(showBgTint and not gIsBull and not gS2S ? color.new(cRegBear, 95) : na, title="Bear Stage 1 tint")
+
+// Governor regime arrows (4 plotshapes): aligned normal; faded small =
+// PROVISIONAL campaign birth (grade ≤ B, Z1/Z2, half size — ADD §8), or an
+// unarmed counter cross when provisionalArming is OFF.
+// Exec-chart arrows hidden on 1m charts unless show1mArrows (§3 Display).
+showArr = showRegArrows and (show1mArrows or timeframe.period != "1")
+plotshape(showArr and alignedBullX and bullArrowOK, "Gov Regime ↑ (aligned)",     shape.triangleup,   location.belowbar, color=cRegBull,    size=size.normal)
+plotshape(showArr and alignedBearX and bearArrowOK, "Gov Regime ↓ (aligned)",     shape.triangledown, location.abovebar, color=cRegBear,    size=size.normal)
+plotshape(showArr and counterBullX and bullArrowOK, "Gov Regime ↑ (provisional)", shape.triangleup,   location.belowbar, color=cRegBullCtr, size=size.small)
+plotshape(showArr and counterBearX and bearArrowOK, "Gov Regime ↓ (provisional)", shape.triangledown, location.abovebar, color=cRegBearCtr, size=size.small)
+
+// Stage confirms — 89×200 governor cross (2 plotshapes)
+plotshape(stageConfBull, "Stage 2 ↑ (89x200)", shape.circle, location.belowbar, color=cStageBull, text="89x200", textcolor=cStageBull, size=size.tiny)
+plotshape(stageConfBear, "Stage 2 ↓ (89x200)", shape.circle, location.abovebar, color=cStageBear, text="89x200", textcolor=cStageBear, size=size.tiny)
+
+// PRIME R1 grade markers (6 plotshapes — one per grade per direction, §2.3)
+plotshape(showGrades and isR1L and gAPL, "R1 Long A+", shape.circle, location.belowbar, color=cPrimeL, text="A+", textcolor=cPrimeL, size=size.small)
+plotshape(showGrades and isR1L and gAL,  "R1 Long A",  shape.circle, location.belowbar, color=cPrimeL, text="A",  textcolor=cPrimeL, size=size.small)
+plotshape(showGrades and isR1L and gBL,  "R1 Long B",  shape.circle, location.belowbar, color=cPrimeL, text="B",  textcolor=cPrimeL, size=size.small)
+plotshape(showGrades and isR1S and gAPS, "R1 Short A+", shape.circle, location.abovebar, color=cPrimeS, text="A+", textcolor=cPrimeS, size=size.small)
+plotshape(showGrades and isR1S and gAS,  "R1 Short A",  shape.circle, location.abovebar, color=cPrimeS, text="A",  textcolor=cPrimeS, size=size.small)
+plotshape(showGrades and isR1S and gBS,  "R1 Short B",  shape.circle, location.abovebar, color=cPrimeS, text="B",  textcolor=cPrimeS, size=size.small)
+
+// PRIME R2+ adds — unlabeled tiny (2 plotshapes)
+plotshape(isR2L, "R2+ Long",  shape.circle, location.belowbar, color=cR2L, size=size.tiny)
+plotshape(isR2S, "R2+ Short", shape.circle, location.abovebar, color=cR2S, size=size.tiny)
+
+// CONFIRM diamonds (2) — PRIME-backed adds; C markers (2) — gated
+// confirm-only entries (ADD §2).
+plotshape(confirmL and not gradeCL, "Confirm Long",  shape.diamond, location.belowbar, color=cConfL, size=size.tiny)
+plotshape(confirmS and not gradeCS, "Confirm Short", shape.diamond, location.abovebar, color=cConfS, size=size.tiny)
+plotshape(gradeCL, "Confirm-only Entry Long (C)",  shape.labelup,   location.belowbar, color=cConfL, text="C", textcolor=#000000, size=size.small)
+plotshape(gradeCS, "Confirm-only Entry Short (C)", shape.labeldown, location.abovebar, color=cConfS, text="C", textcolor=#000000, size=size.small)
+
+// Capitulation V (2)
+plotshape(capL, "Capitulation V Long",  shape.arrowup,   location.belowbar, color=cCapL, text="V", textcolor=cCapL, size=size.small)
+plotshape(capS, "Capitulation V Short", shape.arrowdown, location.abovebar, color=cCapS, text="V", textcolor=cCapS, size=size.small)
+
+// Failure X (2) — locations flipped per ADD §7 (long X above, short X below).
+plotshape(failL, "Failure (long)",  shape.xcross, location.abovebar, color=cFail, text="X", textcolor=cFail, size=size.small)
+plotshape(failS, "Failure (short)", shape.xcross, location.belowbar, color=cFail, text="X", textcolor=cFail, size=size.small)
+
+// TP Warning flags (2) — printed on the campaign side's exit direction.
+plotshape(tpwL, "TP Warning (long campaign)",  shape.flag, location.abovebar, color=cTpw, text="TPW", textcolor=cTpw, size=size.small)
+plotshape(tpwS, "TP Warning (short campaign)", shape.flag, location.belowbar, color=cTpw, text="TPW", textcolor=cTpw, size=size.small)
+
+// MTF regime triangles (8) — chart TF suppressed (§3 MTF display).
+chartTF = timeframe.period
+show5m  = mtf5On  and chartTF != "5"
+show1h  = mtf1hOn and chartTF != "60"
+show4h  = mtf4hOn and chartTF != "240"
+show12h = mtf12On and chartTF != "720"
+plotshape(show5m  and m5bx,  "MTF 5m Bull",  shape.triangleup,   location.belowbar, color=cMtfBull, text="5m",  textcolor=cMtfBull, size=size.tiny)
+plotshape(show5m  and m5sx,  "MTF 5m Bear",  shape.triangledown, location.abovebar, color=cMtfBear, text="5m",  textcolor=cMtfBear, size=size.tiny)
+plotshape(show1h  and m1bx,  "MTF 1H Bull",  shape.triangleup,   location.belowbar, color=cMtfBull, text="1H",  textcolor=cMtfBull, size=size.tiny)
+plotshape(show1h  and m1sx,  "MTF 1H Bear",  shape.triangledown, location.abovebar, color=cMtfBear, text="1H",  textcolor=cMtfBear, size=size.tiny)
+plotshape(show4h  and m4bx,  "MTF 4H Bull",  shape.triangleup,   location.belowbar, color=cMtfBull, text="4H",  textcolor=cMtfBull, size=size.tiny)
+plotshape(show4h  and m4sx,  "MTF 4H Bear",  shape.triangledown, location.abovebar, color=cMtfBear, text="4H",  textcolor=cMtfBear, size=size.tiny)
+plotshape(show12h and m12bx, "MTF 12H Bull", shape.triangleup,   location.belowbar, color=cMtfBull, text="12H", textcolor=cMtfBull, size=size.tiny)
+plotshape(show12h and m12sx, "MTF 12H Bear", shape.triangledown, location.abovebar, color=cMtfBear, text="12H", textcolor=cMtfBear, size=size.tiny)
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  ALERTS  (§5, ADD §5/§8) — one-line webhook JSON via str.format from
+//  RUNTIME variables (§2.8). {{placeholders}} ONLY in alertconditions below.
+//  Schema (exact keys):
+//  {"v":"SS11","sym":"<tickerid>","tf_exec":"<chart tf>","tf_gov":"<tfGovern>",
+//   "evt":"PRIME","dir":"long|short","grade":"A+|A|B|C|V|-","rc":<int>,
+//   "zone":"Z1|Z2|Z3|-","px":<close>,"stop":<stop or null>,"atr":<ATRexec>,
+//   "stage":<1|2>,"t":"<ISO time>"}
+//  PRIME payloads additionally carry "retr": the tag-extreme retracement
+//  fraction of the corrected sniper leg, or null when no leg exists (ADD §5).
+//  BOT GUIDANCE (ADD §8): filter out evt=="CLUSTER"; treat REGIME payloads
+//  with stage==1 as PROVISIONAL (Z1/Z2, grade ≤ B, half size).
+//  Numeric fields are pre-stringified (str.tostring) so str.format's locale
+//  number formatting can never inject thousands separators into the JSON.
+//  In str.format patterns, '{' and '}' are quoted literals (MessageFormat).
+// ═══════════════════════════════════════════════════════════════════════════
+f_json(string _evt, string _dir, string _grade, int _rc, string _zone, float _stop, int _stage, string _tail) =>
+    stopS = na(_stop) ? "null" : str.tostring(_stop, format.mintick)
+    str.format("'{'\"v\":\"SS11\",\"sym\":\"{0}\",\"tf_exec\":\"{1}\",\"tf_gov\":\"{2}\",\"evt\":\"{3}\",\"dir\":\"{4}\",\"grade\":\"{5}\",\"rc\":{6},\"zone\":\"{7}\",\"px\":{8},\"stop\":{9},\"atr\":{10},\"stage\":{11},\"t\":\"{12}\"{13}'}'",
+         syminfo.tickerid, timeframe.period, tfGovern, _evt, _dir, _grade,
+         str.tostring(_rc), _zone, str.tostring(close, format.mintick), stopS,
+         str.tostring(atrX, format.mintick), str.tostring(_stage), str.format_time(timenow), _tail)
+
+zoneStr   = activeZone == 3 ? "Z3" : activeZone == 2 ? "Z2" : activeZone == 1 ? "Z1" : "-"
+gradeStrL = gAPL ? "A+" : gAL ? "A" : "B"
+gradeStrS = gAPS ? "A+" : gAS ? "A" : "B"
+
+// ADD §5: "retr" — tag-extreme retracement fraction of the corrected leg.
+retrOK   = not na(snipeOrigin) and not na(snipeTerm) and not na(tagExtA) and
+     (dir == 1 ? snipeTerm > snipeOrigin : snipeOrigin > snipeTerm)
+retrVal  = dir == 1 ? (snipeTerm - tagExtA) / (snipeTerm - snipeOrigin) :
+     (tagExtA - snipeTerm) / (snipeOrigin - snipeTerm)
+retrStr  = retrOK ? str.tostring(retrVal, "#.###") : "null"
+retrFrag = ",\"retr\":" + retrStr
+
+// REGIME — every confirmed governor cross, both directions (§5).
+if gBullX
+    alert(f_json("REGIME", "long", "-", 0, "-", na, stageLnum, ""), alert.freq_once_per_bar_close)
+if gBearX
+    alert(f_json("REGIME", "short", "-", 0, "-", na, stageSnum, ""), alert.freq_once_per_bar_close)
+
+// PRIME — carries "retr" (ADD §5)
+if primeL
+    alert(f_json("PRIME", "long", gradeStrL, rCount, zoneStr, stopLong, stageLnum, retrFrag), alert.freq_once_per_bar_close)
+if primeS
+    alert(f_json("PRIME", "short", gradeStrS, rCount, zoneStr, stopShort, stageSnum, retrFrag), alert.freq_once_per_bar_close)
+
+// CONFIRM (grade C when it is the gated entry, "-" when it is an add)
+if confirmL
+    alert(f_json("CONFIRM", "long", gradeCL ? "C" : "-", rCount, zoneStr, stopLong, stageLnum, ""), alert.freq_once_per_bar_close)
+if confirmS
+    alert(f_json("CONFIRM", "short", gradeCS ? "C" : "-", rCount, zoneStr, stopShort, stageSnum, ""), alert.freq_once_per_bar_close)
+
+// Capitulation V
+if capL
+    alert(f_json("V", "long", "V", rCount, "-", stopLong, stageLnum, ""), alert.freq_once_per_bar_close)
+if capS
+    alert(f_json("V", "short", "V", rCount, "-", stopShort, stageSnum, ""), alert.freq_once_per_bar_close)
+
+// TP Warning (campaign side)
+if tpwL
+    alert(f_json("TPW", "long", "-", rCount, "-", stopLong, stageLnum, ""), alert.freq_once_per_bar_close)
+if tpwS
+    alert(f_json("TPW", "short", "-", rCount, "-", stopShort, stageSnum, ""), alert.freq_once_per_bar_close)
+
+// Failure (stop already cleared → null)
+if failL
+    alert(f_json("FAIL", "long", "-", rCount, "-", na, stageLnum, ""), alert.freq_once_per_bar_close)
+if failS
+    alert(f_json("FAIL", "short", "-", rCount, "-", na, stageSnum, ""), alert.freq_once_per_bar_close)
+
+// STAGE — governor 89×200 cross (also the provisional→full upgrade moment)
+if stageConfBull
+    alert(f_json("STAGE", "long", "-", 0, "-", na, 2, ""), alert.freq_once_per_bar_close)
+if stageConfBear
+    alert(f_json("STAGE", "short", "-", 0, "-", na, 2, ""), alert.freq_once_per_bar_close)
+
+// CLUSTER — MTF cluster, attention only (bots: filter this evt out, ADD §8)
+if clusterBull
+    alert(f_json("CLUSTER", "long", "-", 0, "-", na, stageLnum, ""), alert.freq_once_per_bar_close)
+if clusterBear
+    alert(f_json("CLUSTER", "short", "-", 0, "-", na, stageSnum, ""), alert.freq_once_per_bar_close)
+
+// Named alertconditions (10) — {{placeholders}} legal here only (§2.8).
+alertcondition(gBullX, "Regime Bull",        "SS11 {{ticker}} [{{interval}}] governor regime → BULL")
+alertcondition(gBearX, "Regime Bear",        "SS11 {{ticker}} [{{interval}}] governor regime → BEAR")
+alertcondition(isR1L,  "R1 Long",            "SS11 {{ticker}} [{{interval}}] R1 LONG — PRIME in zone @ {{close}}")
+alertcondition(isR1S,  "R1 Short",           "SS11 {{ticker}} [{{interval}}] R1 SHORT — PRIME in zone @ {{close}}")
+alertcondition(capL,   "Capitulation Long",  "SS11 {{ticker}} [{{interval}}] CAPITULATION V LONG @ {{close}}")
+alertcondition(capS,   "Capitulation Short", "SS11 {{ticker}} [{{interval}}] CAPITULATION V SHORT @ {{close}}")
+alertcondition(tpwL,   "TPW Long-side",      "SS11 {{ticker}} [{{interval}}] TP WARNING — MTF cluster against LONG campaign")
+alertcondition(tpwS,   "TPW Short-side",     "SS11 {{ticker}} [{{interval}}] TP WARNING — MTF cluster against SHORT campaign")
+alertcondition(failL,  "Failure Long",       "SS11 {{ticker}} [{{interval}}] FAILURE — long campaign dead")
+alertcondition(failS,  "Failure Short",      "SS11 {{ticker}} [{{interval}}] FAILURE — short campaign dead")
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  SELF-AUDIT  (§6, updated for v11.0.2)
+//
+//  OUTPUT COUNT (unchanged by the patch):
+//    plots 11 (3 exec EMAs + 6 zone edges + 2 stops)
+//    + plotshapes 32 (4 gov arrows + 2 stage + 6 R1 grades + 2 R2+ +
+//      2 CONFIRM + 2 C + 2 V + 2 X + 2 TPW + 8 MTF)
+//    + plotchars 0 + bgcolors 4 + alertconditions 10 = 57 / 64  (≤ 60 ✔)
+//    (+ 3 fills = 60 if fills are billed against the cap — still ≤ 60 ✔)
+//
+//  request.security COUNT: 5 / 5 exactly ✔
+//    1. tfGovern  f_gov()  — 11-tuple, every element expr[1], lookahead_on ✔
+//    2. "5"       f_mtf()  — [bullX[1], bearX[1], isBull[1]], lookahead_on ✔
+//    3. "60"      f_mtf()  — same idiom ✔
+//    4. "240"     f_mtf()  — same idiom ✔
+//    5. "720"     f_mtf()  — same idiom ✔
+//    ADD §3 note: tfAlign selects among tuples 2–5 (no 6th call; a free
+//    alignment TF would break this budget — flagged per protocol §7.5).
+//    Repaint audit: no security call returns a live (non-[1]) value; zone
+//    bands display the same confirmed values. All triggers evaluate on exec
+//    bar close; every alert() uses alert.freq_once_per_bar_close ✔
+//
+//  BOXES: max live 1 / max_boxes_count=6 declared ✔ (var handle; previous
+//    box deleted on every new arming / V-reversal / failure)
+//
+//  CONST AUDIT: zero input.color() anywhere; every plot/plotshape/plotchar
+//    color, style, location, size, text argument is a compile-time constant
+//    (faded variants via color.new(constHex, constInt) at declaration) ✔
+//    Box colors use input transparencies — legal (boxes are not plots) ✔
+//
+//  ta.* CONSISTENCY: every ta.* call sits at global scope, unconditional ✔
+//
+//  CHECKLIST vs §4 (as amended by ADD §3):
+//    §4.1 governor regime/stage/whipsaw(gov bars); arming per ADD §1
+//         (every cross arms; provisional campaigns grade-capped)         ✔
+//    §4.2 Z1/Z2/Z3 bands; arming: Z1+Z2 full, Z3 stage-gated, provisional
+//         per provZones variant; per-zone tags + extremes; innermost
+//         priority                                                       ✔
+//    §4.3 PRIME + CONFIRM triggers, stop ratchet; C-entries gated per
+//         ADD §2                                                         ✔
+//    §4.4 grades A+/A/B (provisional cap B until stage confirm, snipeOff
+//         cap A, alignment TF per ADD §3) + gated C                      ✔
+//    §4.5 sniper: gov-series origin; terminus frozen at first Z2/Z3 tag
+//         or R1 fire (ADD §4); fib 0.5–0.786 box; single live box; A+
+//         containment; leg tracked box-independent for "retr"            ✔
+//    §4.6 capitulation V unchanged (gate-exempt, sets dir, clears leg)   ✔
+//    §4.7 TPW unchanged                                                  ✔
+//    §4.8 failure X unchanged (locations flipped per ADD §7)             ✔
+//    §4.9 visuals complete; faded arrow now = provisional campaign       ✔
+//
+//  ADDENDUM §3 PATCH ITEMS: 1 ✔  2 ✔  3 ✔(compliant variant)  4 ✔  5 ✔
+//    6 ✔  7 ✔  8 ✔(tooltips + header + bot guidance)
+//
+//  ACCEPTANCE TEST (ADD §4 replay signatures to verify on BTC):
+//    · May 17–18 '26: provisional B short(s) at Z1
+//    · May 26 08:00: Z2 PRIME short (B)
+//    · mid-June: STAGE bear → campCounter clears → Jun 16 Z2 retest = A
+//    · Jun 14–15: one grade-capped provisional B long, stopped
+//    · Jul 2–6: provisional B longs at Z1/Z2 after the bull cross
+//    · Dec 30 '25 19:00 (1H chart): A+ persists only if the re-anchored
+//      box still overlaps (likely becomes A — acceptable)
+// ═══════════════════════════════════════════════════════════════════════════
