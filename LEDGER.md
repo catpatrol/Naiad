@@ -7,44 +7,35 @@ proxy of a measurement we can afford to make for real.*
 
 ## Opening entries (charter §6, at ratification 2026-07-09)
 
-|Dataset|Status at ratification|
-|-|-|
-|BTC, all TFs, 2025-10-06 → 2026-07-07|**SPENT for validation** (fitted twice: the nine-month study and the v11.0.2 verification cycle). Parity fixtures and characterization only.|
-|All assets, first valid candle → 2025-09-30, excluding the row above|**Characterization set.** All tuning lives here and only here.|
-|All assets, everything before 2022-01-01 (BTC/ETH ≈ 2019–2021: Covid crash, 2021 blow-off)|**SEALED retro holdout.** Read **once**, against the pre-registered bar in charter §7. The read spends it regardless of outcome.|
-|Forward paper journals|**Virgin, renewable.** Honest exactly once per frozen ruleset; each window is a one-shot exam.|
+| Dataset | Status at ratification |
+|---|---|
+| BTC, all TFs, 2025-10-06 → 2026-07-07 | **SPENT for validation** (fitted twice: the nine-month study and the v11.0.2 verification cycle). Parity fixtures and characterization only. |
+| All assets, first valid candle → 2025-09-30, excluding the row above | **Characterization set.** All tuning lives here and only here. |
+| All assets, everything before 2022-01-01 (BTC/ETH ≈ 2019–2021: Covid crash, 2021 blow-off) | **SEALED retro holdout.** Read **once**, against the pre-registered bar in charter §7. The read spends it regardless of outcome. |
+| Forward paper journals | **Virgin, renewable.** Honest exactly once per frozen ruleset; each window is a one-shot exam. |
 
 ## Entries after ratification
 
-*(none yet — reviewer appends here)*
+### 2026-07-10 — Phase 1 packet review (naiad_packet_20260710_1303.zip, engine 1.0.0, git c97fc31)
 
-*## 2026-07-10 — Phase 1 packet review (naiad\_packet\_20260710\_1303.zip, git c97fc31)*
+- **Data touched:** BTCUSDT_swing journal 2026-05-01→07-07 and D5 parity artifacts 2025-10-06→2026-07-07 — entirely inside the hard-spent BTC window. **Fresh evidence spent: none.** All numbers handled as plumbing characterization under the spent-window rule.
+- **Looks logged:** reviewer recomputed equity, tranches, halts, signal-event decomposition, cost anatomy, ratchet paths, parity cross-consistency, and schema completeness from raw journal bytes. D7 capture/tail table seen and explicitly **not** interpreted (n=10, spent).
+- **Verdict:** CONDITIONAL PASS — see `Phase1_Reviewer_Verdict.md`. Conditions at issue: D-1 (summary rows/sha not derived from persisted files), operator D5/F6 TradingView sign-off incl. the V-signature fork (Feb 6 / Jun 22, 5m vs 4H chart), operator charter conformance check.
+- **Standing reminders:** Phase 2 partitions pending ratification; collector OFF; the nine-month BTC window is spent and may never serve as out-of-sample validation.
 
+### 2026-07-10 (afternoon) — tickets D-1..D-3 closed; basket backfill complete
 
+- Reviewer re-verified `naiad_packet_20260710_1448.zip` (engine 1.0.0, git c2ae143): formula-reproducible journal_sha256 `5b7e4b333e364af394f55da6840c2d4dd89cc43c70003bcd98dc365e67e5b5ee`, rows 1502, 29/29 per-file digests match, journal delta vs the 1303 packet = the two HALT rows only (D-2 namespacing). Fixtures 25 green incl. F1b.
+- Charter now ships in the packet (D-3): reviewer completed the §3.2/§3.3/§3.4 conformance check — config conforms exactly to the ratified grade-split sizing table; the survival-stop-only live line with X-A…X-D shadowed exits **is ratified charter text (§3.3)**; V-births-provisional is charter text (§3.2). Sole open ratification: **halt scope** (charter silent; config default per_cell).
+- Known caveat at 1.0.0 (superseded by the evening entry): same-bar reject key collisions drop duplicates — reject counts are lower bounds.
+- `--all` backfill complete: 60/60 series, 0 duplicates, one 1-bar gap total (BTC 1m, listing day 2019-09-08). **LIT two-token trap verified on all 6 intervals: first candle 2025-12-23, nothing pre-Lighter.** Verdict condition §5c closed.
 
-*- \*\*Data touched:\*\* BTCUSDT\_swing journal 2026-05-01→07-07 and D5 parity artifacts 2025-10-06→2026-07-07 — entirely inside the \*\*hard-spent\*\* BTC window. \*\*Fresh evidence spent: none.\*\* All numbers handled as plumbing characterization under the charter's spent-window rule.*
+### 2026-07-10 (evening) — engine 1.0.1 re-anchor: reject subkeys, collision closed
 
-*- \*\*Looks logged:\*\* reviewer recomputed equity, tranches, halts, signal-event decomposition, cost anatomy, ratchet paths, parity cross-consistency, schema completeness from raw journal bytes. D7 capture/tail table seen and explicitly \*\*not\*\* interpreted (n=10, spent).*
-
-*- \*\*Verdict:\*\* CONDITIONAL PASS — see `Phase1\_Reviewer\_Verdict.md`. Conditions: D-1 fix (summary rows/sha must be computed from persisted files; disk shows 1502 rows vs claimed 1503, sha not reproducible from disk bytes), operator D5/F6 TradingView sign-off incl. the V-signature fork (Feb 6 / Jun 22, 5m vs 4H chart), operator charter eyeball (§3.4 sizing five-tuple; §3.5 live-exit = survival stop only, playbook exits shadow-only; v\_births\_provisional charter-wins; halt\_scope per\_cell).*
-
-*- \*\*Standing reminders:\*\* holdout partitions for Phase 2 remain undefined/unlocked (Decisions P2-1..P2-3 pending ratification); collector remains OFF; nine-month BTC window remains spent and may never serve as out-of-sample validation.*
-
-*### Addendum 2026-07-10 (afternoon): tickets D-1..D-3 closed; basket backfill complete*
-
-*- Reviewer re-verified packet naiad\_packet\_20260710\_1448.zip (git c2ae143): formula-reproducible*
-
-&#x20; *journal\_sha256 5b7e4b333e364af394f55da6840c2d4dd89cc43c70003bcd98dc365e67e5b5ee, rows 1502,*
-
-&#x20; *29/29 file hashes match, journal diff = 2 HALT rows only (D-2). Fixtures 25 green incl. F1b.*
-
-*- Known journal caveat (pending 1.0.1): same-bar reject key collisions drop duplicates; reject*
-
-&#x20; *counts are lower bounds until subkey fix lands.*
-
-*- --all backfill complete: 60/60 series, 0 duplicates, one 1-bar gap (BTC 1m, listing day).*
-
-&#x20; *LIT floor verified on all 6 intervals: first candle 2025-12-23 (nothing pre-Lighter). §5c closed.*
-
-
+- Reviewer re-verified `naiad_packet_20260710_1506.zip` (engine 1.0.1, commit da31062): 29/29 digests; journal_sha256 `c4dfe16c1ee5ce5883abc14162d39be5595cf45c75f1444f2b601f498a4acf2f` reproduced from raw bytes by the documented formula; rows 1503 = newline count; run_id `bac9c0aa12eafa5d` uniform.
+- Independent field-level delta vs 1.0.0: after normalizing run_id / engine_version / subkey families, exactly **one** row differs — the restored 2026-07-02T20:00 REJECT (max_tranches), persisted beside its twin (`trade_ADD_prime` / `trade_ADD_confirm`). Zero rows lost. Economics invariant: exits 10 · pnl −380.96 · equity 9619.04 · halts 2 · fees 182.08. Parity journals regenerated at 1.0.1 (no version mixing). Fixtures 26 green (incl. F8b) on the operator machine.
+- **Reject-count caveat lifted:** counts are exact from 1.0.1 onward.
+- **Operational rule adopted (CHANGELOG 1.0.1):** a key-schema change regenerates into clean journal files, never merges — the idempotent writer strands rows under retired keys (373 stale rows observed and wiped in the builder's first attempt). Any engine bump after collector-on is therefore a deliberate data-branch **migration**, to be governed in the Phase 2 protocol.
+- Cosmetics parked for the next natural engine touch (non-blocking): D7 header prints stale "engine 1.0.0" (its run_id/rows/sha are current); packet MANIFEST `git_rev` stamps the last commit, not tree state — should mark dirty trees.
+- **Anchors for collector launch:** engine 1.0.1 @ `da31062` · journal_sha256 `c4dfe16c…` · fixtures 26. Phase 1 remaining: F6 operator sign-off · halt-scope ratification · CI-green glance on `da31062`.
 
