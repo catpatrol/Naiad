@@ -6,9 +6,11 @@
 # override that points inside it.
 data_cache/
 
-# Local replay journals/state — journals belong on the orphan `data` branch only.
-journal/
-state/
+# Local replay journals/state — journals belong on the orphan `data` branch
+# only. Rooted patterns: the committed parity/dry-run journal COPIES under
+# research_outputs/ must not be swallowed.
+/journal/
+/state/
 
 # Session packet zips — ferried by the operator, not committed.
 research_outputs/packets/

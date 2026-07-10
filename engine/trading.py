@@ -131,6 +131,14 @@ def _week_key(ms: int) -> str:
     return f"{d.year}-W{d.week:02d}"
 
 
+def admit_entry(pe: PendingEntry) -> PendingEntry | None:
+    """The final gate an eligible entry passes before joining the pending
+    queue. Production behavior: pass-through. Exists so F5 can install a
+    deliberately broken gate (a test double that admits ineligible entries)
+    and prove the independent in-path fill assertions fail loudly."""
+    return pe
+
+
 def size_for(kind: str, grade: str, tier: str, t: dict) -> float:
     """Charter §3.4 sizing table, as amended at ratification."""
     if kind == "ADD":
@@ -431,13 +439,15 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
             if projected > max_risk_r + 1e-9:
                 res.rejects.append(TradeReject(i, "risk_cap", kind, ev.dir))
                 continue
-            pending_entries.append(PendingEntry(
+            pe = admit_entry(PendingEntry(
                 kind=kind, dir=ev.dir, size_r=size_r, grade=ev.grade,
                 tier=ev.tier, zone=ev.zone, retr=ev.retr, rc=ev.rc,
                 signal_i=i, stop_at_signal=stop_now,
                 grade_uncapped=ev.grade_uncapped,
                 born_aligned=res.campaign_born_aligned.get(camp, ev.tier == "full"),
                 campaign=camp))
+            if pe is not None:
+                pending_entries.append(pe)
 
     res.final_equity = equity
     return res

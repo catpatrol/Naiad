@@ -1,0 +1,21 @@
+# CI — fixture suite F1–F5, F7, F8 on every push (build prompt §11).
+# F6 validation and the F8 dead-column scan run on the committed
+# research_outputs artifacts; everything else is synthetic and offline.
+name: ci
+
+on:
+  push: {}
+  pull_request: {}
+
+jobs:
+  fixtures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python -m pytest fixtures/ -v
