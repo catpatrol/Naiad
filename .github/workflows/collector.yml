@@ -1,0 +1,73 @@
+# D6 — forward collector (Phase 1.5). DELIVERED DORMANT.
+#
+# The schedule below is COMMENTED OUT on purpose (build prompt §9 D6).
+# Do not enable it until the reviewer confirms the Phase 1 verdict criteria
+# (build prompt §11). To turn it on, follow README "Phase 1.5: turning the
+# collector on" — you will un-comment exactly two lines.
+#
+# What it does when enabled, once per hour:
+#   1. checks out the code (this branch) and the `data` orphan branch
+#   2. runs scripts/tick.py for the whole grid (idempotent rolling re-scan;
+#      journal + state land in the data-branch working tree)
+#   3. commits and pushes journal/state to the `data` branch
+# Concurrency-guarded: overlapping runs queue, they never race.
+# No secrets, no exchange keys — public data only (charter §1).
+
+name: collector
+
+on:
+  workflow_dispatch: {}        # manual runs allowed for smoke-testing
+  # ── Phase 1.5: un-comment the next two lines to go live ──
+  # schedule:
+  #   - cron: "7 * * * *"      # hourly at :07 UTC
+
+concurrency:
+  group: collector
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  tick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Check out data branch
+        uses: actions/checkout@v4
+        with:
+          ref: data
+          path: data-branch
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tick (whole grid)
+        env:
+          NAIAD_CACHE_DIR: ${{ runner.temp }}/naiad_cache
+        run: >
+          python scripts/tick.py --config naiad_v0
+          --journal-root data-branch/journal
+          --state-root data-branch/state
+
+      - name: Commit journal + state to data branch
+        working-directory: data-branch
+        run: |
+          git config user.name "naiad-collector"
+          git config user.email "collector@naiad.invalid"
+          git add -A journal state
+          if git diff --cached --quiet; then
+            echo "no changes this tick"
+          else
+            git commit -m "tick: $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push origin data
+          fi

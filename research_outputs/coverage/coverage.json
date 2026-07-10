@@ -1,0 +1,38 @@
+[
+  {
+    "bars": 89281,
+    "duplicates": 0,
+    "first": 1756684800000,
+    "gaps": [],
+    "interval": "5m",
+    "last": 1783468800000,
+    "symbol": "BTCUSDT"
+  },
+  {
+    "bars": 7441,
+    "duplicates": 0,
+    "first": 1756684800000,
+    "gaps": [],
+    "interval": "1h",
+    "last": 1783468800000,
+    "symbol": "BTCUSDT"
+  },
+  {
+    "bars": 1861,
+    "duplicates": 0,
+    "first": 1756684800000,
+    "gaps": [],
+    "interval": "4h",
+    "last": 1783468800000,
+    "symbol": "BTCUSDT"
+  },
+  {
+    "bars": 621,
+    "duplicates": 0,
+    "first": 1756684800000,
+    "gaps": [],
+    "interval": "12h",
+    "last": 1783468800000,
+    "symbol": "BTCUSDT"
+  }
+]

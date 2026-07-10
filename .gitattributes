@@ -1,0 +1,3 @@
+# No line-ending conversion anywhere: journal files are hash-verified
+# byte-for-byte (F1) and must survive round-trips untouched.
+* -text

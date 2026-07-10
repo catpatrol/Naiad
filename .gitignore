@@ -1,0 +1,19 @@
+# Virtual environment
+.venv/
+
+# Raw candle cache — NEVER committed (charter §10, build prompt §2 invariant 9).
+# Default cache lives outside the repo (see engine/data.py); this guards any
+# override that points inside it.
+data_cache/
+
+# Local replay journals/state — journals belong on the orphan `data` branch only.
+journal/
+state/
+
+# Session packet zips — ferried by the operator, not committed.
+research_outputs/packets/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/

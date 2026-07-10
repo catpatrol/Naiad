@@ -1,0 +1,44 @@
+# v11_faithful — reproduces SS Cascade v11.0.2 (the Pine file) exactly.
+# Used ONLY for screenshot-parity fixtures and full-window characterization
+# (charter §3.1). No trading layer, no shadows. FROZEN.
+config_id: v11_faithful
+
+signal:
+  len_fast: 9
+  len_slow: 89
+  len_trend: 200
+  atr_len: 14
+  structure_gate: true
+  provisional_arming: true
+  prov_zones: "Z1+Z2"
+  whipsaw_bars: 10
+  z1_prox: 0.25
+  z2_prox: 0.35
+  z3_prox: 0.35
+  min_bar_range_atr: 0.5
+  min_ribbon_sep_atr: 0.5
+  cooldown_bars: 5
+  max_r_count: 0
+  snipe_on: true
+  snipe_lookback: 55
+  fib1: 0.5
+  fib2: 0.786
+  cap_on: true
+  climax_mult: 3.5
+  cap_ext_atr: 1.0
+  cap_window: 10
+  cap_vol_conf: 1.2
+  vol_len: 20
+  tpw_on: true
+  cluster_n: 2
+  cluster_win: 12
+  stop_buf_atr: 0.5
+  fail_win: 3
+  # Pine v11.0.2 literal: the V block clears campCounter (full tier at birth).
+  v_births_provisional: false
+
+trading:
+  enabled: false
+
+shadows:
+  enabled: false
