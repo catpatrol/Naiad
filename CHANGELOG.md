@@ -21,3 +21,8 @@
 - Config divergence flagged: `v_births_provisional` — Pine v11.0.2 clears
   campCounter on V; charter §3.2 says V births a provisional campaign.
   v11_faithful follows the Pine, naiad_v0 follows the charter.
+- Fix found by fixture F8 during the dry-run autopsy: Binance funding
+  timestamps jitter a few ms past the hour, so exact-match lookup accrued
+  zero funding; funding times now floor to the hour (engine/trading.py).
+- Fix found during the smoke replay: the paper book traded through the
+  warm-up period; run_trading now starts flat at the window start.

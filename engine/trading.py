@@ -174,10 +174,15 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
     max_tranches = t["max_tranches"]
     max_risk_r = t["max_open_campaign_risk_r"]
 
-    funding_by_ms = {}
+    # Binance funding timestamps jitter by a few ms past the hour
+    # (e.g. 16:00:00.012) — floor to the hour so they land on the exec bar
+    # that OPENS at the funding time; rates on the same hour sum defensively.
+    funding_by_ms: dict[int, float] = {}
     if funding_df is not None and len(funding_df):
-        funding_by_ms = dict(zip(funding_df["funding_time"].astype(np.int64),
-                                 funding_df["funding_rate"].astype(float)))
+        for ft, fr in zip(funding_df["funding_time"].astype(np.int64),
+                          funding_df["funding_rate"].astype(float)):
+            key = int(ft) // 3_600_000 * 3_600_000
+            funding_by_ms[key] = funding_by_ms.get(key, 0.0) + fr
 
     events_by_bar: dict[int, list[SignalEvent]] = {}
     for ev in sig.events:
