@@ -2,7 +2,7 @@
 
 **SPENT WINDOW — every number here is a plumbing check, never evidence** (build prompt §1). Purpose: prove the journal alone answers every question in `fixtures/autopsy_questions.md`. Sample: 10 fills / 10 resolved tranche exits — far below the ≥20-per-cell read floor (charter §4); no conclusions may be drawn, only column liveness.
 
-Run: `97f51466113cdcf9` · engine 1.0.0 · config naiad_v0 · 1502 journal rows · journal sha256 `5b7e4b333e364af3…` · final equity 9619.04 · 2 halt(s)
+Run: `bac9c0aa12eafa5d` · engine 1.0.0 · config naiad_v0 · 1503 journal rows · journal sha256 `c4dfe16c1ee5ce58…` · final equity 9619.04 · 2 halt(s)
 
 ## Q1 — Loss by cohort
 
@@ -84,12 +84,12 @@ Mean give_back_r on MFE>0 exits: 3.495; per-variant give-back = mfe_r − exit_X
 
 ## Q10/Q11 — Funnel: signals -> fills, reject mix
 
-PRIME events: 293; fills: 10; trade-path rejects: 373; signal-gate rejects: 453.
+PRIME events: 293; fills: 10; trade-path rejects: 374; signal-gate rejects: 453.
 
 | reject_reason | n |
 |---|---|
 | no_zone | 296 |
-| max_tranches | 275 |
+| max_tranches | 276 |
 | not_positioned | 90 |
 | ribbon_sep | 55 |
 | bar_range | 41 |

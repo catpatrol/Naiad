@@ -223,7 +223,10 @@ def run_replay(config_id: str, cell_id: str, start: str, end: str,
                 rows.append(make_row(
                     **base, ts_open=ts_open, ts_close=ts_close, evt="REJECT",
                     dir="long" if rj.dir == 1 else "short",
-                    tranche_id=f"trade_{rj.kind}", reject_reason=rj.reason))
+                    # engine 1.0.1: subkey carries the signal family so
+                    # same-bar rejects of different families never collide
+                    tranche_id=f"trade_{rj.kind}_{rj.family}",
+                    reject_reason=rj.reason))
 
     written = write_journal(rows, journal_root)
     # Summary metrics come from the PERSISTED bytes, re-read after writing

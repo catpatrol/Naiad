@@ -54,6 +54,53 @@ def test_every_payload_column_is_claimed():
         assert f in text, f"shadow field '{f}' claimed by no autopsy question"
 
 
+# ── F8b (engine 1.0.1): same-bar multi-family rejects all persist ──
+
+def test_f8b_same_bar_rejects_all_persist(synth_env, synth_cell, tmp_path,
+                                          monkeypatch):
+    """Synthetic scenario: campaign 1 fills its 3-tranche cap (all stopped
+    out), then a PRIME add and a CONFIRM add fire on the SAME bar — the
+    PRIME rejects max_tranches, the CONFIRM rejects not_positioned. Both
+    REJECT rows must persist under distinct subkeys (trade_ADD_prime vs
+    trade_ADD_confirm); pre-1.0.1 they collided and the merge dropped one."""
+    import numpy as np
+
+    from conftest import halt_scenario
+
+    import engine.replay as replay_mod
+    from engine.journal import read_journal
+    from engine.signals import SignalEvent
+
+    sig = halt_scenario()
+    # keep campaign 1's three PRIMEs (bars 10/60/110, all stop out) and add a
+    # same-bar PRIME-add + CONFIRM-add at bar 160 while flat at the cap
+    sig.events = [e for e in sig.events
+                  if e.evt == "REGIME" or (e.evt == "PRIME" and e.i < 200)]
+    sig.events = [e for e in sig.events if not (e.evt == "REGIME" and e.i == 200)]
+    sig.campaign_id[:] = np.where(sig.campaign_id > 0, 1, 0)
+    sig.events.append(SignalEvent(160, "PRIME", 1, grade="A", rc=4, zone="Z2",
+                                  stop=99.0, stage=2, tier="full",
+                                  is_r1=False, is_add=True, grade_uncapped="A"))
+    sig.events.append(SignalEvent(160, "CONFIRM", 1, grade="-", rc=4,
+                                  zone="Z2", stop=99.0, stage=2, tier="full",
+                                  is_add=True))
+    monkeypatch.setattr(replay_mod, "compute_signals", lambda *a, **k: sig)
+
+    summary = replay_mod.run_replay("naiad_v0", synth_cell.cell_id,
+                                    "2024-01-15", "2024-01-16",
+                                    tmp_path / "j", log=lambda *_: None)
+    rows = read_journal(tmp_path / "j", synth_cell.cell_id)
+    same_bar = [r for r in rows if r["evt"] == "REJECT"
+                and r["ts_open"] == "2024-01-15T02:40:00Z"]
+    keys = {(r["tranche_id"], r["reject_reason"]) for r in same_bar}
+    assert ("trade_ADD_prime", "max_tranches") in keys, keys
+    assert ("trade_ADD_confirm", "not_positioned") in keys, keys
+    assert len(same_bar) == 2, f"expected both same-bar rejects persisted: {same_bar}"
+    # and the summary row count equals what is on disk (F1b invariant holds)
+    assert summary["rows"] == sum(
+        1 for _ in open(summary["files"][0], encoding="utf-8"))
+
+
 # ── (b) dead-column scan on the committed dry-run journal ──
 
 pytestmark_b = pytest.mark.skipif(not DRYRUN.exists(),

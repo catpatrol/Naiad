@@ -1,5 +1,29 @@
 # CHANGELOG
 
+## engine 1.0.1 — reject subkeys carry the signal family (2026-07-10, pre-collector)
+
+- Trade-reject journal subkeys now include the signal family:
+  `trade_{kind}_{family}` with family ∈ {prime, confirm, v} — e.g.
+  `trade_ADD_prime` vs `trade_ADD_confirm`. Same-bar rejects of different
+  families no longer share a journal key, closing the 1.0.0 caveat where the
+  idempotent merge silently dropped one row (reviewer-confirmed lower-bound
+  reject counts). Fill-time rejects inherit the family from their pending
+  entry.
+- New fixture **F8b**: a synthetic same-bar PRIME-add + CONFIRM-add
+  multi-reject scenario must persist BOTH rows under distinct subkeys, and
+  the summary row count must equal the on-disk line count.
+- `engine_version` 1.0.0 → 1.0.1: every `run_id` changes (expected —
+  reviewer re-anchors on the fresh packet). No signal, trading, shadow, or
+  config behavior changed; journal deltas verified field-by-field to be
+  limited to `run_id` values, `engine_version` values, REJECT `tranche_id`
+  subkeys, and the one restored row (2026-07-02T20:00 `max_tranches`).
+- **Operational rule learned while regenerating:** a key-schema change must
+  be regenerated into CLEAN journal files, never merged — the idempotent
+  writer replaces rows by key, so rows under retired keys are never
+  re-emitted and linger as stale duplicates (observed: 373 stale 1.0.0
+  reject rows before the wipe). Applies to any future data-branch
+  migration; harmless today because the collector is still off.
+
 ## engine 1.0.0 — reviewer ticket D-1..D-3 (2026-07-10, docs + instrumentation)
 
 No version bump: the reviewer's byte-identity constraint pins `run_id`

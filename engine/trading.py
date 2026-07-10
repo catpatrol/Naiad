@@ -83,6 +83,7 @@ class Tranche:
 @dataclass
 class PendingEntry:
     kind: str
+    family: str               # prime | confirm | v — journal reject subkeys
     dir: int
     size_r: float
     grade: str
@@ -102,7 +103,8 @@ class TradeReject:
     i: int
     reason: str
     kind: str
-    dir: int
+    family: str               # prime | confirm | v (engine 1.0.1): same-bar
+    dir: int                  # rejects of different families never collide
 
 
 @dataclass
@@ -321,23 +323,23 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
         for pe in pending_entries:
             dk, wk = _day_key(open_ms[i]), _week_key(open_ms[i])
             if dk in halted_days:
-                res.rejects.append(TradeReject(i, "halted_day", pe.kind, pe.dir))
+                res.rejects.append(TradeReject(i, "halted_day", pe.kind, pe.family, pe.dir))
                 continue
             if wk in halted_weeks:
-                res.rejects.append(TradeReject(i, "halted_week", pe.kind, pe.dir))
+                res.rejects.append(TradeReject(i, "halted_week", pe.kind, pe.family, pe.dir))
                 continue
             if i == 0 or sig.dir[i - 1] != pe.dir:
                 # campaign died between signal and fill (defensive; the gate
                 # at pending-creation already checks the signal bar's dir)
                 res.rejects.append(TradeReject(i, "campaign_died_before_fill",
-                                               pe.kind, pe.dir))
+                                               pe.kind, pe.family, pe.dir))
                 continue
             raw = o[i]
             fill_px = raw * (1 + slip) if pe.dir == 1 else raw * (1 - slip)
             stop = pe.stop_at_signal
             unit_risk = (fill_px - stop) * pe.dir
             if unit_risk <= 0:
-                res.rejects.append(TradeReject(i, "gap_through_stop", pe.kind, pe.dir))
+                res.rejects.append(TradeReject(i, "gap_through_stop", pe.kind, pe.family, pe.dir))
                 continue
             one_r = r_pct * equity
             risk_usd = pe.size_r * one_r
@@ -406,7 +408,7 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
                 if open_tranches and open_tranches[0].dir != ev.dir:
                     pending_flatten = "v_reversal"
                 elif open_tranches and open_tranches[0].dir == ev.dir:
-                    res.rejects.append(TradeReject(i, "v_already_positioned", "V", ev.dir))
+                    res.rejects.append(TradeReject(i, "v_already_positioned", "V", "v", ev.dir))
                     continue
                 kind = "V"
             elif ev.evt == "PRIME":
@@ -415,26 +417,27 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
                 if not ev.is_add:
                     continue
                 if not open_tranches:
-                    res.rejects.append(TradeReject(i, "not_positioned", "ADD", ev.dir))
+                    res.rejects.append(TradeReject(i, "not_positioned", "ADD", "confirm", ev.dir))
                     continue
                 kind = "ADD"
 
+            family = "v" if ev.evt == "V" else ev.evt.lower()
             if sig.dir[i] != ev.dir:
-                res.rejects.append(TradeReject(i, "campaign_died_same_bar", kind, ev.dir))
+                res.rejects.append(TradeReject(i, "campaign_died_same_bar", kind, family, ev.dir))
                 continue
             camp = int(sig.campaign_id[i])
             if campaign_tranche_count.get(camp, 0) >= max_tranches:
-                res.rejects.append(TradeReject(i, "max_tranches", kind, ev.dir))
+                res.rejects.append(TradeReject(i, "max_tranches", kind, family, ev.dir))
                 continue
             stop_now = sig.stop_long[i] if ev.dir == 1 else sig.stop_short[i]
             if np.isnan(stop_now):
-                res.rejects.append(TradeReject(i, "no_stop", kind, ev.dir))
+                res.rejects.append(TradeReject(i, "no_stop", kind, family, ev.dir))
                 continue
             if kind == "ADD" and open_tranches:
                 bad = any((tr.fill_px - stop_now) * tr.dir > 1e-9
                           for tr in open_tranches)
                 if bad:
-                    res.rejects.append(TradeReject(i, "add_ineligible", kind, ev.dir))
+                    res.rejects.append(TradeReject(i, "add_ineligible", kind, family, ev.dir))
                     continue
             size_r = size_for(kind, ev.grade, ev.tier, t)
             # projected open risk with the new tranche (rails: <= 1R);
@@ -442,10 +445,10 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
             carried = [] if pending_flatten else open_tranches
             projected = (open_risk_r(stop_now) if carried else 0.0) + size_r
             if projected > max_risk_r + 1e-9:
-                res.rejects.append(TradeReject(i, "risk_cap", kind, ev.dir))
+                res.rejects.append(TradeReject(i, "risk_cap", kind, family, ev.dir))
                 continue
             pe = admit_entry(PendingEntry(
-                kind=kind, dir=ev.dir, size_r=size_r, grade=ev.grade,
+                kind=kind, family=family, dir=ev.dir, size_r=size_r, grade=ev.grade,
                 tier=ev.tier, zone=ev.zone, retr=ev.retr, rc=ev.rc,
                 signal_i=i, stop_at_signal=stop_now,
                 grade_uncapped=ev.grade_uncapped,
