@@ -1,0 +1,2127 @@
+{
+  "coverage_ok": {
+    "BTCUSDT_12h": true,
+    "BTCUSDT_15m": true,
+    "BTCUSDT_1h": true,
+    "BTCUSDT_1m": true,
+    "BTCUSDT_4h": true,
+    "BTCUSDT_5m": true,
+    "ETHUSDT_12h": true,
+    "ETHUSDT_15m": true,
+    "ETHUSDT_1h": true,
+    "ETHUSDT_1m": true,
+    "ETHUSDT_4h": true,
+    "ETHUSDT_5m": true,
+    "FARTCOINUSDT_12h": true,
+    "FARTCOINUSDT_15m": true,
+    "FARTCOINUSDT_1h": true,
+    "FARTCOINUSDT_1m": true,
+    "FARTCOINUSDT_4h": true,
+    "FARTCOINUSDT_5m": true,
+    "HYPEUSDT_12h": true,
+    "HYPEUSDT_15m": true,
+    "HYPEUSDT_1h": true,
+    "HYPEUSDT_1m": true,
+    "HYPEUSDT_4h": true,
+    "HYPEUSDT_5m": true,
+    "JTOUSDT_12h": true,
+    "JTOUSDT_15m": true,
+    "JTOUSDT_1h": true,
+    "JTOUSDT_1m": true,
+    "JTOUSDT_4h": true,
+    "JTOUSDT_5m": true,
+    "LITUSDT_12h": true,
+    "LITUSDT_15m": true,
+    "LITUSDT_1h": true,
+    "LITUSDT_1m": true,
+    "LITUSDT_4h": true,
+    "LITUSDT_5m": true,
+    "NEARUSDT_12h": true,
+    "NEARUSDT_15m": true,
+    "NEARUSDT_1h": true,
+    "NEARUSDT_1m": true,
+    "NEARUSDT_4h": true,
+    "NEARUSDT_5m": true,
+    "SOLUSDT_12h": true,
+    "SOLUSDT_15m": true,
+    "SOLUSDT_1h": true,
+    "SOLUSDT_1m": true,
+    "SOLUSDT_4h": true,
+    "SOLUSDT_5m": true,
+    "TAOUSDT_12h": true,
+    "TAOUSDT_15m": true,
+    "TAOUSDT_1h": true,
+    "TAOUSDT_1m": true,
+    "TAOUSDT_4h": true,
+    "TAOUSDT_5m": true,
+    "ZECUSDT_12h": true,
+    "ZECUSDT_15m": true,
+    "ZECUSDT_1h": true,
+    "ZECUSDT_1m": true,
+    "ZECUSDT_4h": true,
+    "ZECUSDT_5m": true
+  },
+  "funding": [
+    {
+      "anomalies": [],
+      "first_ms": 1568102400000,
+      "first_utc": "2019-09-10 08:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "grid_segments": [
+        {
+          "end_utc": "2026-07-07 16:00:00",
+          "records": 7478,
+          "spacing_hours": 8.0,
+          "start_utc": "2019-09-10 08:00:00"
+        }
+      ],
+      "jitter_over_tolerance": false,
+      "last_ms": 1783440000000,
+      "last_utc": "2026-07-07 16:00:00",
+      "max_jitter_ms": 47,
+      "path": "funding/BTCUSDT.parquet",
+      "records": 7478,
+      "retrieved_utc": "2026-07-10",
+      "sha256": "9465666dac34156fa3734c0b0144c3ce41456e8386d33207b4a355805738a324",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "anomalies": [],
+      "first_ms": 1574841600000,
+      "first_utc": "2019-11-27 08:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "grid_segments": [
+        {
+          "end_utc": "2026-07-07 16:00:00",
+          "records": 7244,
+          "spacing_hours": 8.0,
+          "start_utc": "2019-11-27 08:00:00"
+        }
+      ],
+      "jitter_over_tolerance": false,
+      "last_ms": 1783440000000,
+      "last_utc": "2026-07-07 16:00:00",
+      "max_jitter_ms": 47,
+      "path": "funding/ETHUSDT.parquet",
+      "records": 7244,
+      "retrieved_utc": "2026-07-10",
+      "sha256": "af975beb4e79af9a1b25cb52ad1c2525cf8720d0fc1a61be569e57e4aba00578",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "anomalies": [],
+      "first_ms": 1600070400008,
+      "first_utc": "2020-09-14 08:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "grid_segments": [
+        {
+          "end_utc": "2022-11-09 16:00:00",
+          "records": 2360,
+          "spacing_hours": 8.0,
+          "start_utc": "2020-09-14 08:00:00"
+        },
+        {
+          "end_utc": "2022-11-10 04:00:00",
+          "records": 4,
+          "spacing_hours": 4.0,
+          "start_utc": "2022-11-09 16:00:00"
+        },
+        {
+          "end_utc": "2022-11-18 08:00:00",
+          "records": 99,
+          "spacing_hours": 2.0,
+          "start_utc": "2022-11-10 04:00:00"
+        },
+        {
+          "end_utc": "2026-07-07 16:00:00",
+          "records": 3983,
+          "spacing_hours": 8.0,
+          "start_utc": "2022-11-18 08:00:00"
+        }
+      ],
+      "jitter_over_tolerance": false,
+      "last_ms": 1783440000000,
+      "last_utc": "2026-07-07 16:00:00",
+      "max_jitter_ms": 47,
+      "path": "funding/SOLUSDT.parquet",
+      "records": 6443,
+      "retrieved_utc": "2026-07-10",
+      "sha256": "aa2ead0dda6803e0aa3a572aea6e03e19e4d9d72989ba1ebb7b5dc02be940a56",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "anomalies": [],
+      "first_ms": 1602748800000,
+      "first_utc": "2020-10-15 08:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "grid_segments": [
+        {
+          "end_utc": "2026-07-07 16:00:00",
+          "records": 6275,
+          "spacing_hours": 8.0,
+          "start_utc": "2020-10-15 08:00:00"
+        }
+      ],
+      "jitter_over_tolerance": false,
+      "last_ms": 1783440000000,
+      "last_utc": "2026-07-07 16:00:00",
+      "max_jitter_ms": 47,
+      "path": "funding/NEARUSDT.parquet",
+      "records": 6275,
+      "retrieved_utc": "2026-07-10",
+      "sha256": "c51719f9c465324d08d6923fe7a5c7761e48f6256876395ad255fff7319063d4",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "NEARUSDT"
+    },
+    {
+      "anomalies": [],
+      "first_ms": 1580889600000,
+      "first_utc": "2020-02-05 08:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "grid_segments": [
+        {
+          "end_utc": "2026-07-07 16:00:00",
+          "records": 7034,
+          "spacing_hours": 8.0,
+          "start_utc": "2020-02-05 08:00:00"
+        }
+      ],
+      "jitter_over_tolerance": false,
+      "last_ms": 1783440000000,
+      "last_utc": "2026-07-07 16:00:00",
+      "max_jitter_ms": 47,
+      "path": "funding/ZECUSDT.parquet",
+      "records": 7034,
+      "retrieved_utc": "2026-07-10",
+      "sha256": "9639b3be9e982b0d4eaca962dc12f96730593fc3efd94fda5a13c6ef29b1ab79",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "ZECUSDT"
+    },
+    {
+      "anomalies": [],
+      "first_ms": 1702036800000,
+      "first_utc": "2023-12-08 12:00:00",
+      "gap_count": 1,
+      "gaps": [
+        {
+          "classification": "exchange_side",
+          "gap_end_ms": 1782273600000,
+          "gap_end_utc": "2026-06-24 04:00:00",
+          "gap_start_ms": 1782273600000,
+          "gap_start_utc": "2026-06-24 04:00:00",
+          "local_grid_hours": 4,
+          "records_missing": 1
+        }
+      ],
+      "grid_segments": [
+        {
+          "end_utc": "2026-06-24 00:00:00",
+          "records": 5572,
+          "spacing_hours": 4.0,
+          "start_utc": "2023-12-08 12:00:00"
+        },
+        {
+          "end_utc": "2026-07-07 20:00:00",
+          "records": 82,
+          "spacing_hours": 4.0,
+          "start_utc": "2026-06-24 08:00:00"
+        }
+      ],
+      "jitter_over_tolerance": false,
+      "last_ms": 1783454400000,
+      "last_utc": "2026-07-07 20:00:00",
+      "max_jitter_ms": 24,
+      "path": "funding/JTOUSDT.parquet",
+      "records": 5654,
+      "retrieved_utc": "2026-07-10",
+      "sha256": "3f939cf6fc0dd8c5efb5ded034af601419e1bf1d41f2f773418557ec7b03b68c",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "JTOUSDT"
+    },
+    {
+      "anomalies": [],
+      "first_ms": 1712851200000,
+      "first_utc": "2024-04-11 16:00:00",
+      "gap_count": 1,
+      "gaps": [
+        {
+          "classification": "exchange_side",
+          "gap_end_ms": 1782273600000,
+          "gap_end_utc": "2026-06-24 04:00:00",
+          "gap_start_ms": 1782273600000,
+          "gap_start_utc": "2026-06-24 04:00:00",
+          "local_grid_hours": 4,
+          "records_missing": 1
+        }
+      ],
+      "grid_segments": [
+        {
+          "end_utc": "2026-06-24 00:00:00",
+          "records": 4821,
+          "spacing_hours": 4.0,
+          "start_utc": "2024-04-11 16:00:00"
+        },
+        {
+          "end_utc": "2026-07-07 20:00:00",
+          "records": 82,
+          "spacing_hours": 4.0,
+          "start_utc": "2026-06-24 08:00:00"
+        }
+      ],
+      "jitter_over_tolerance": false,
+      "last_ms": 1783454400000,
+      "last_utc": "2026-07-07 20:00:00",
+      "max_jitter_ms": 24,
+      "path": "funding/TAOUSDT.parquet",
+      "records": 4903,
+      "retrieved_utc": "2026-07-10",
+      "sha256": "8bd91fc01e6e7a155cb85cb697c5450e5cd519a21655cb4ce7ff7c99591876c7",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "TAOUSDT"
+    },
+    {
+      "anomalies": [],
+      "first_ms": 1748606400006,
+      "first_utc": "2025-05-30 12:00:00",
+      "gap_count": 1,
+      "gaps": [
+        {
+          "classification": "exchange_side",
+          "gap_end_ms": 1782273600000,
+          "gap_end_utc": "2026-06-24 04:00:00",
+          "gap_start_ms": 1782273600000,
+          "gap_start_utc": "2026-06-24 04:00:00",
+          "local_grid_hours": 4,
+          "records_missing": 1
+        }
+      ],
+      "grid_segments": [
+        {
+          "end_utc": "2026-06-24 00:00:00",
+          "records": 2338,
+          "spacing_hours": 4.0,
+          "start_utc": "2025-05-30 12:00:00"
+        },
+        {
+          "end_utc": "2026-07-07 20:00:00",
+          "records": 82,
+          "spacing_hours": 4.0,
+          "start_utc": "2026-06-24 08:00:00"
+        }
+      ],
+      "jitter_over_tolerance": false,
+      "last_ms": 1783454400000,
+      "last_utc": "2026-07-07 20:00:00",
+      "max_jitter_ms": 24,
+      "path": "funding/HYPEUSDT.parquet",
+      "records": 2420,
+      "retrieved_utc": "2026-07-10",
+      "sha256": "ccf67d1a5ee18d2f4bdecd50620f8d39f4b955e805a7fd39bff575e7bc6ce78d",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "HYPEUSDT"
+    },
+    {
+      "anomalies": [],
+      "first_ms": 1734724800000,
+      "first_utc": "2024-12-20 20:00:00",
+      "gap_count": 1,
+      "gaps": [
+        {
+          "classification": "exchange_side",
+          "gap_end_ms": 1782273600000,
+          "gap_end_utc": "2026-06-24 04:00:00",
+          "gap_start_ms": 1782273600000,
+          "gap_start_utc": "2026-06-24 04:00:00",
+          "local_grid_hours": 4,
+          "records_missing": 1
+        }
+      ],
+      "grid_segments": [
+        {
+          "end_utc": "2026-06-24 00:00:00",
+          "records": 3302,
+          "spacing_hours": 4.0,
+          "start_utc": "2024-12-20 20:00:00"
+        },
+        {
+          "end_utc": "2026-07-07 20:00:00",
+          "records": 82,
+          "spacing_hours": 4.0,
+          "start_utc": "2026-06-24 08:00:00"
+        }
+      ],
+      "jitter_over_tolerance": false,
+      "last_ms": 1783454400000,
+      "last_utc": "2026-07-07 20:00:00",
+      "max_jitter_ms": 24,
+      "path": "funding/FARTCOINUSDT.parquet",
+      "records": 3384,
+      "retrieved_utc": "2026-07-10",
+      "sha256": "6d3eb4c20caea1a6bcd0f88198652ebddc2caf88494340cfdd109ee2c3820fd9",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "FARTCOINUSDT"
+    },
+    {
+      "anomalies": [],
+      "first_ms": 1766520000005,
+      "first_utc": "2025-12-23 20:00:00",
+      "gap_count": 1,
+      "gaps": [
+        {
+          "classification": "exchange_side",
+          "gap_end_ms": 1782273600000,
+          "gap_end_utc": "2026-06-24 04:00:00",
+          "gap_start_ms": 1782273600000,
+          "gap_start_utc": "2026-06-24 04:00:00",
+          "local_grid_hours": 4,
+          "records_missing": 1
+        }
+      ],
+      "grid_segments": [
+        {
+          "end_utc": "2026-06-24 00:00:00",
+          "records": 1094,
+          "spacing_hours": 4.0,
+          "start_utc": "2025-12-23 20:00:00"
+        },
+        {
+          "end_utc": "2026-07-07 20:00:00",
+          "records": 82,
+          "spacing_hours": 4.0,
+          "start_utc": "2026-06-24 08:00:00"
+        }
+      ],
+      "jitter_over_tolerance": false,
+      "last_ms": 1783454400000,
+      "last_utc": "2026-07-07 20:00:00",
+      "max_jitter_ms": 24,
+      "path": "funding/LITUSDT.parquet",
+      "records": 1176,
+      "retrieved_utc": "2026-07-10",
+      "sha256": "304ebd3668bad099e5c321b6d08ce35f29a6bf314b27f41649bfbcafdacf651e",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "LITUSDT"
+    }
+  ],
+  "header": {
+    "boundaries": {
+      "exploration_end_excl_ms": 1719792000000,
+      "lit_floor_ms": 1766448000000,
+      "lockbox_end_excl_ms": 1759708800000,
+      "lockbox_start_ms": 1719792000000,
+      "study_right_edge_excl_ms": 1783468800000
+    },
+    "conventions_added": [
+      "retrieval_meta.json sidecar (write-once per content hash)",
+      "refetch_log.json sidecar (gap re-fetch attempt ledger)",
+      "guard_log.jsonl in the cache dir (loader guard events)",
+      "census artifacts at repo root: census.json, DATA_CENSUS.md, GAP_REPORT.md, SPOT_CHECK.md"
+    ],
+    "engine_anchor": "engine 1.0.1 @ da31062 (signal logic untouched)",
+    "note_hash_scope": "sha256 covers whole cache files as of this census; rows/first/last describe the in-scope slice (>= LIT floor, < right edge)",
+    "phase": "V1",
+    "storage_convention": "Phase 1 parquet cache: klines/{SYMBOL}_{interval}.parquet (open_time ms UTC + OHLCV float64), funding/{SYMBOL}.parquet (funding_time ms UTC + funding_rate). Cache lives outside the repo (NAIAD_CACHE_DIR).",
+    "study": "v12",
+    "value_read_policy": "census scans read only open_time / funding_time columns and raw bytes for SHA256; no OHLCV value is materialized (I3)"
+  },
+  "klines": [
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1567965420000,
+      "first_open_utc": "2019-09-08 17:57:00",
+      "gap_count": 1,
+      "gaps": [
+        {
+          "bars_missing": 1,
+          "classification": "listing_edge",
+          "gap_end_ms": 1567969200000,
+          "gap_end_utc": "2019-09-08 19:00:00",
+          "gap_start_ms": 1567969200000,
+          "gap_start_utc": "2019-09-08 19:00:00"
+        }
+      ],
+      "interval": "1m",
+      "largest_gap_bars": 1,
+      "last_open_ms": 1783468740000,
+      "last_open_utc": "2026-07-07 23:59:00",
+      "partition_rows": {
+        "exploration-classic": 2530442,
+        "lockbox": 665280,
+        "regime-contaminated": 0,
+        "spent": 396000
+      },
+      "path": "klines/BTCUSDT_1m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 3591722,
+      "sha256": "f2606e628685a7224104890666ebcd4ecfa34634c4fc02fbeb348b3137aba2f3",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1567965300000,
+      "first_open_utc": "2019-09-08 17:55:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "5m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783468500000,
+      "last_open_utc": "2026-07-07 23:55:00",
+      "partition_rows": {
+        "exploration-classic": 506089,
+        "lockbox": 133056,
+        "regime-contaminated": 0,
+        "spent": 79200
+      },
+      "path": "klines/BTCUSDT_5m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 718345,
+      "sha256": "658fba0a032a180210888af33c44fad0f5d50725ea55c65c530c309e7f5acb07",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1567964700000,
+      "first_open_utc": "2019-09-08 17:45:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "15m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783467900000,
+      "last_open_utc": "2026-07-07 23:45:00",
+      "partition_rows": {
+        "exploration-classic": 168697,
+        "lockbox": 44352,
+        "regime-contaminated": 0,
+        "spent": 26400
+      },
+      "path": "klines/BTCUSDT_15m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 239449,
+      "sha256": "d3e319ac3c33202f9e80bfbf073ba0b72c112e185b895ccb26a3c0774a6422cf",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1567962000000,
+      "first_open_utc": "2019-09-08 17:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "1h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783465200000,
+      "last_open_utc": "2026-07-07 23:00:00",
+      "partition_rows": {
+        "exploration-classic": 42175,
+        "lockbox": 11088,
+        "regime-contaminated": 0,
+        "spent": 6600
+      },
+      "path": "klines/BTCUSDT_1h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 59863,
+      "sha256": "88521a213d824f643a87de72afc66adf96435a6b9715c4cc98f92b583838cf40",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1567958400000,
+      "first_open_utc": "2019-09-08 16:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "4h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783454400000,
+      "last_open_utc": "2026-07-07 20:00:00",
+      "partition_rows": {
+        "exploration-classic": 10544,
+        "lockbox": 2772,
+        "regime-contaminated": 0,
+        "spent": 1650
+      },
+      "path": "klines/BTCUSDT_4h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 14966,
+      "sha256": "a4eb8898f4f91e86e390cd1ca11c1c90de8a96016b244b76e261547c702c9bfb",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1567944000000,
+      "first_open_utc": "2019-09-08 12:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "12h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783425600000,
+      "last_open_utc": "2026-07-07 12:00:00",
+      "partition_rows": {
+        "exploration-classic": 3515,
+        "lockbox": 924,
+        "regime-contaminated": 0,
+        "spent": 550
+      },
+      "path": "klines/BTCUSDT_12h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 4989,
+      "sha256": "3533fe706cfa608464f6bea9334c121971f0c9a3d63009138abeb5e69469badf",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "BTCUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1574840700000,
+      "first_open_utc": "2019-11-27 07:45:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "1m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783468740000,
+      "last_open_utc": "2026-07-07 23:59:00",
+      "partition_rows": {
+        "exploration-classic": 2415855,
+        "lockbox": 665280,
+        "regime-contaminated": 396000,
+        "spent": 0
+      },
+      "path": "klines/ETHUSDT_1m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 3477135,
+      "sha256": "14f0aa5c83f70be0d99864ded62d652c563ddbbfd428e7081d6c471f01e1f584",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1574840700000,
+      "first_open_utc": "2019-11-27 07:45:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "5m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783468500000,
+      "last_open_utc": "2026-07-07 23:55:00",
+      "partition_rows": {
+        "exploration-classic": 483171,
+        "lockbox": 133056,
+        "regime-contaminated": 79200,
+        "spent": 0
+      },
+      "path": "klines/ETHUSDT_5m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 695427,
+      "sha256": "e15ba6584f9c6c3d5bcdc4815a59d3f47933a22b6a51b87a18e0cc1c8ad713ce",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1574840700000,
+      "first_open_utc": "2019-11-27 07:45:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "15m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783467900000,
+      "last_open_utc": "2026-07-07 23:45:00",
+      "partition_rows": {
+        "exploration-classic": 161057,
+        "lockbox": 44352,
+        "regime-contaminated": 26400,
+        "spent": 0
+      },
+      "path": "klines/ETHUSDT_15m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 231809,
+      "sha256": "b884fd687a7e9a55393ef47828d2916c4bc5567a9605160ad02aea396118e8b2",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1574838000000,
+      "first_open_utc": "2019-11-27 07:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "1h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783465200000,
+      "last_open_utc": "2026-07-07 23:00:00",
+      "partition_rows": {
+        "exploration-classic": 40265,
+        "lockbox": 11088,
+        "regime-contaminated": 6600,
+        "spent": 0
+      },
+      "path": "klines/ETHUSDT_1h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 57953,
+      "sha256": "5500c4066b70792e73422f79bb0bccb1728ff367effad9e7d46287cf8797f97b",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1574827200000,
+      "first_open_utc": "2019-11-27 04:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "4h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783454400000,
+      "last_open_utc": "2026-07-07 20:00:00",
+      "partition_rows": {
+        "exploration-classic": 10067,
+        "lockbox": 2772,
+        "regime-contaminated": 1650,
+        "spent": 0
+      },
+      "path": "klines/ETHUSDT_4h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 14489,
+      "sha256": "df053a918d3a48ca65b545b6528fa93f83ab4f6a36542c9ad7a3f1012f6c2b61",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1574812800000,
+      "first_open_utc": "2019-11-27 00:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "12h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783425600000,
+      "last_open_utc": "2026-07-07 12:00:00",
+      "partition_rows": {
+        "exploration-classic": 3356,
+        "lockbox": 924,
+        "regime-contaminated": 550,
+        "spent": 0
+      },
+      "path": "klines/ETHUSDT_12h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 4830,
+      "sha256": "5307cdac6b1af639f9c6d8582c26a7c7c644af97852ec3da77883ff8ec6c7f91",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "ETHUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1600066800000,
+      "first_open_utc": "2020-09-14 07:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "1m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783468740000,
+      "last_open_utc": "2026-07-07 23:59:00",
+      "partition_rows": {
+        "exploration-classic": 1995420,
+        "lockbox": 665280,
+        "regime-contaminated": 396000,
+        "spent": 0
+      },
+      "path": "klines/SOLUSDT_1m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 3056700,
+      "sha256": "53e7324d5abe3cf73339b44f51ed6cc01cad50000af8209959a05cf5467de5ff",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1600066800000,
+      "first_open_utc": "2020-09-14 07:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "5m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783468500000,
+      "last_open_utc": "2026-07-07 23:55:00",
+      "partition_rows": {
+        "exploration-classic": 399084,
+        "lockbox": 133056,
+        "regime-contaminated": 79200,
+        "spent": 0
+      },
+      "path": "klines/SOLUSDT_5m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 611340,
+      "sha256": "1f788503c61aa9bb1ef60c768d2a3727f6c971edff63e542563729732941a133",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1600066800000,
+      "first_open_utc": "2020-09-14 07:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "15m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783467900000,
+      "last_open_utc": "2026-07-07 23:45:00",
+      "partition_rows": {
+        "exploration-classic": 133028,
+        "lockbox": 44352,
+        "regime-contaminated": 26400,
+        "spent": 0
+      },
+      "path": "klines/SOLUSDT_15m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 203780,
+      "sha256": "cf350b8208f6da35f9891e222a6d3a97293eaf889ddf5bc631c071e0c9203a4e",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1600066800000,
+      "first_open_utc": "2020-09-14 07:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "1h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783465200000,
+      "last_open_utc": "2026-07-07 23:00:00",
+      "partition_rows": {
+        "exploration-classic": 33257,
+        "lockbox": 11088,
+        "regime-contaminated": 6600,
+        "spent": 0
+      },
+      "path": "klines/SOLUSDT_1h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 50945,
+      "sha256": "e6a7dfacad5138bc8cdedbbd766d4b55c8b7f7f77ee8f8ef009d647217090bc5",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1600056000000,
+      "first_open_utc": "2020-09-14 04:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "4h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783454400000,
+      "last_open_utc": "2026-07-07 20:00:00",
+      "partition_rows": {
+        "exploration-classic": 8315,
+        "lockbox": 2772,
+        "regime-contaminated": 1650,
+        "spent": 0
+      },
+      "path": "klines/SOLUSDT_4h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 12737,
+      "sha256": "cbb2dd94a9c6a34d04b7f4d4598aee19de06ede07d02564fb01a1b6edb852b7b",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1600041600000,
+      "first_open_utc": "2020-09-14 00:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "12h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783425600000,
+      "last_open_utc": "2026-07-07 12:00:00",
+      "partition_rows": {
+        "exploration-classic": 2772,
+        "lockbox": 924,
+        "regime-contaminated": 550,
+        "spent": 0
+      },
+      "path": "klines/SOLUSDT_12h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 4246,
+      "sha256": "133ef1c253ac8f75ff06e6c23f803b3ddf13b103179367b94fd270a5aa82f1ef",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "SOLUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1602748800000,
+      "first_open_utc": "2020-10-15 08:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "1m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783468740000,
+      "last_open_utc": "2026-07-07 23:59:00",
+      "partition_rows": {
+        "exploration-classic": 1950720,
+        "lockbox": 665280,
+        "regime-contaminated": 396000,
+        "spent": 0
+      },
+      "path": "klines/NEARUSDT_1m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 3012000,
+      "sha256": "172abacd573711ebec95d4f28842f312d8f08159f49d6505f92512389862edad",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "NEARUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1602748800000,
+      "first_open_utc": "2020-10-15 08:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "5m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783468500000,
+      "last_open_utc": "2026-07-07 23:55:00",
+      "partition_rows": {
+        "exploration-classic": 390144,
+        "lockbox": 133056,
+        "regime-contaminated": 79200,
+        "spent": 0
+      },
+      "path": "klines/NEARUSDT_5m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 602400,
+      "sha256": "57a8199e5641bb043be55fe668fb4afbf20d644d05b5238a238e5a8591120ec0",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "NEARUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1602748800000,
+      "first_open_utc": "2020-10-15 08:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "15m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783467900000,
+      "last_open_utc": "2026-07-07 23:45:00",
+      "partition_rows": {
+        "exploration-classic": 130048,
+        "lockbox": 44352,
+        "regime-contaminated": 26400,
+        "spent": 0
+      },
+      "path": "klines/NEARUSDT_15m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 200800,
+      "sha256": "da6bc20aef9c9b02780040d7564469035758dc7d342a8f9bfc5a23a2f8b7a8e1",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "NEARUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1602748800000,
+      "first_open_utc": "2020-10-15 08:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "1h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783465200000,
+      "last_open_utc": "2026-07-07 23:00:00",
+      "partition_rows": {
+        "exploration-classic": 32512,
+        "lockbox": 11088,
+        "regime-contaminated": 6600,
+        "spent": 0
+      },
+      "path": "klines/NEARUSDT_1h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 50200,
+      "sha256": "d828c37a2e52672c771c3ba90c59a294760820e3b8e054dede6c8bfe10c6422d",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "NEARUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1602748800000,
+      "first_open_utc": "2020-10-15 08:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "4h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783454400000,
+      "last_open_utc": "2026-07-07 20:00:00",
+      "partition_rows": {
+        "exploration-classic": 8128,
+        "lockbox": 2772,
+        "regime-contaminated": 1650,
+        "spent": 0
+      },
+      "path": "klines/NEARUSDT_4h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 12550,
+      "sha256": "cbb8bf42647f1f76145c431604047c9d435328c4e3dd4619f3334ada0ff809f8",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "NEARUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1602720000000,
+      "first_open_utc": "2020-10-15 00:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "12h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783425600000,
+      "last_open_utc": "2026-07-07 12:00:00",
+      "partition_rows": {
+        "exploration-classic": 2710,
+        "lockbox": 924,
+        "regime-contaminated": 550,
+        "spent": 0
+      },
+      "path": "klines/NEARUSDT_12h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 4184,
+      "sha256": "0bf56233200372e74cc322cf82386f97acb1188811c483f5a465df1627b85b4e",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "NEARUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1580889660000,
+      "first_open_utc": "2020-02-05 08:01:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "1m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783468740000,
+      "last_open_utc": "2026-07-07 23:59:00",
+      "partition_rows": {
+        "exploration-classic": 2315039,
+        "lockbox": 665280,
+        "regime-contaminated": 396000,
+        "spent": 0
+      },
+      "path": "klines/ZECUSDT_1m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 3376319,
+      "sha256": "e259e4ac219d79da8c3563a4a965839883b720f2524b6cb2a5783e130d094ee0",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "ZECUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1580889600000,
+      "first_open_utc": "2020-02-05 08:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "5m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783468500000,
+      "last_open_utc": "2026-07-07 23:55:00",
+      "partition_rows": {
+        "exploration-classic": 463008,
+        "lockbox": 133056,
+        "regime-contaminated": 79200,
+        "spent": 0
+      },
+      "path": "klines/ZECUSDT_5m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 675264,
+      "sha256": "7cc5312c33ad25f0166e596c48fba2573b1a36ec60c43869c6e85b07cac72642",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "ZECUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1580889600000,
+      "first_open_utc": "2020-02-05 08:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "15m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783467900000,
+      "last_open_utc": "2026-07-07 23:45:00",
+      "partition_rows": {
+        "exploration-classic": 154336,
+        "lockbox": 44352,
+        "regime-contaminated": 26400,
+        "spent": 0
+      },
+      "path": "klines/ZECUSDT_15m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 225088,
+      "sha256": "2f949756018f6d1b55443209ca8fd64ccbac6adf80c2a531dddbc389496b5ab2",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "ZECUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1580889600000,
+      "first_open_utc": "2020-02-05 08:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "1h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783465200000,
+      "last_open_utc": "2026-07-07 23:00:00",
+      "partition_rows": {
+        "exploration-classic": 38584,
+        "lockbox": 11088,
+        "regime-contaminated": 6600,
+        "spent": 0
+      },
+      "path": "klines/ZECUSDT_1h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 56272,
+      "sha256": "7dd6b9ff25e5c958329127017268be4020c2338989ae702691aadd958ba6e79f",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "ZECUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1580889600000,
+      "first_open_utc": "2020-02-05 08:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "4h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783454400000,
+      "last_open_utc": "2026-07-07 20:00:00",
+      "partition_rows": {
+        "exploration-classic": 9646,
+        "lockbox": 2772,
+        "regime-contaminated": 1650,
+        "spent": 0
+      },
+      "path": "klines/ZECUSDT_4h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 14068,
+      "sha256": "3af1fa3950b925bbac96842fab86507af2779fa8add9f0cdf567f6c8fd6fa951",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "ZECUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1580860800000,
+      "first_open_utc": "2020-02-05 00:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "12h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783425600000,
+      "last_open_utc": "2026-07-07 12:00:00",
+      "partition_rows": {
+        "exploration-classic": 3216,
+        "lockbox": 924,
+        "regime-contaminated": 550,
+        "spent": 0
+      },
+      "path": "klines/ZECUSDT_12h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 4690,
+      "sha256": "63527591c6eedef5ff1dc3dc49e8cb4066a560448ed87adba5c5a93ec630b62f",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "ZECUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1702029660000,
+      "first_open_utc": "2023-12-08 10:01:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "1m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783468740000,
+      "last_open_utc": "2026-07-07 23:59:00",
+      "partition_rows": {
+        "exploration-classic": 296039,
+        "lockbox": 665280,
+        "regime-contaminated": 396000,
+        "spent": 0
+      },
+      "path": "klines/JTOUSDT_1m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 1357319,
+      "sha256": "6a2d7c856154595e45aaa75832a365097d3dc57f971a8cdfa59316baf6ea0da2",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "JTOUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1702029600000,
+      "first_open_utc": "2023-12-08 10:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "5m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783468500000,
+      "last_open_utc": "2026-07-07 23:55:00",
+      "partition_rows": {
+        "exploration-classic": 59208,
+        "lockbox": 133056,
+        "regime-contaminated": 79200,
+        "spent": 0
+      },
+      "path": "klines/JTOUSDT_5m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 271464,
+      "sha256": "4d10dd669df125ec13dc69385f9c6188b8c52ff7c46faaf1a177ca37b49ac6f1",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "JTOUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1702029600000,
+      "first_open_utc": "2023-12-08 10:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "15m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783467900000,
+      "last_open_utc": "2026-07-07 23:45:00",
+      "partition_rows": {
+        "exploration-classic": 19736,
+        "lockbox": 44352,
+        "regime-contaminated": 26400,
+        "spent": 0
+      },
+      "path": "klines/JTOUSDT_15m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 90488,
+      "sha256": "d91167da7f97699c698abc1913789c395d5c9736ef26505e67c7bb2f6f054b60",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "JTOUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1702029600000,
+      "first_open_utc": "2023-12-08 10:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "1h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783465200000,
+      "last_open_utc": "2026-07-07 23:00:00",
+      "partition_rows": {
+        "exploration-classic": 4934,
+        "lockbox": 11088,
+        "regime-contaminated": 6600,
+        "spent": 0
+      },
+      "path": "klines/JTOUSDT_1h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 22622,
+      "sha256": "dd2b44b15e6df4946ecbb651b731e1424f736d4fc2ebf47058ccb3885cfe181c",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "JTOUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1702022400000,
+      "first_open_utc": "2023-12-08 08:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "4h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783454400000,
+      "last_open_utc": "2026-07-07 20:00:00",
+      "partition_rows": {
+        "exploration-classic": 1234,
+        "lockbox": 2772,
+        "regime-contaminated": 1650,
+        "spent": 0
+      },
+      "path": "klines/JTOUSDT_4h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 5656,
+      "sha256": "e92ba1a57b633cc53f4bfcbaab9e0f31e514dbed2c6f1da5a03048f242b5a21f",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "JTOUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1701993600000,
+      "first_open_utc": "2023-12-08 00:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "12h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783425600000,
+      "last_open_utc": "2026-07-07 12:00:00",
+      "partition_rows": {
+        "exploration-classic": 412,
+        "lockbox": 924,
+        "regime-contaminated": 550,
+        "spent": 0
+      },
+      "path": "klines/JTOUSDT_12h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 1886,
+      "sha256": "6cb9d5b14a271c63cdb66f99401fead98c3046f4dd49246dc65d68e237c0f8ac",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "JTOUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1712845800000,
+      "first_open_utc": "2024-04-11 14:30:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "1m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783468740000,
+      "last_open_utc": "2026-07-07 23:59:00",
+      "partition_rows": {
+        "exploration-classic": 115770,
+        "lockbox": 665280,
+        "regime-contaminated": 396000,
+        "spent": 0
+      },
+      "path": "klines/TAOUSDT_1m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 1177050,
+      "sha256": "e1469971c299e24bf085d8eea132fdef170f9118a3bb79b1b397f0404e8c2644",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "TAOUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1712845800000,
+      "first_open_utc": "2024-04-11 14:30:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "5m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783468500000,
+      "last_open_utc": "2026-07-07 23:55:00",
+      "partition_rows": {
+        "exploration-classic": 23154,
+        "lockbox": 133056,
+        "regime-contaminated": 79200,
+        "spent": 0
+      },
+      "path": "klines/TAOUSDT_5m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 235410,
+      "sha256": "3277d1cb707acc73da049e4522a486b790516ca27264501e2641d7d251e5b1b6",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "TAOUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1712845800000,
+      "first_open_utc": "2024-04-11 14:30:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "15m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783467900000,
+      "last_open_utc": "2026-07-07 23:45:00",
+      "partition_rows": {
+        "exploration-classic": 7718,
+        "lockbox": 44352,
+        "regime-contaminated": 26400,
+        "spent": 0
+      },
+      "path": "klines/TAOUSDT_15m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 78470,
+      "sha256": "735a42fac7034e45f5d8a4dbeb317b66b5ca47528349ff4be40d62adc828c906",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "TAOUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1712844000000,
+      "first_open_utc": "2024-04-11 14:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "1h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783465200000,
+      "last_open_utc": "2026-07-07 23:00:00",
+      "partition_rows": {
+        "exploration-classic": 1930,
+        "lockbox": 11088,
+        "regime-contaminated": 6600,
+        "spent": 0
+      },
+      "path": "klines/TAOUSDT_1h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 19618,
+      "sha256": "ec2123ea847e19f13ea3ec700f24f997986cf369c2c255f99924ad29abb768dd",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "TAOUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1712836800000,
+      "first_open_utc": "2024-04-11 12:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "4h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783454400000,
+      "last_open_utc": "2026-07-07 20:00:00",
+      "partition_rows": {
+        "exploration-classic": 483,
+        "lockbox": 2772,
+        "regime-contaminated": 1650,
+        "spent": 0
+      },
+      "path": "klines/TAOUSDT_4h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 4905,
+      "sha256": "1e4128cf60404b9e84229e9e66a2e2b670b6e8767385d02120ee0b0b593843ff",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "TAOUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1712836800000,
+      "first_open_utc": "2024-04-11 12:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "12h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783425600000,
+      "last_open_utc": "2026-07-07 12:00:00",
+      "partition_rows": {
+        "exploration-classic": 161,
+        "lockbox": 924,
+        "regime-contaminated": 550,
+        "spent": 0
+      },
+      "path": "klines/TAOUSDT_12h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 1635,
+      "sha256": "fd228d1f0e7d6121c8e0c737790ee69a542b6ceedff08ba080931d7b1c597ed2",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "TAOUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1748601000000,
+      "first_open_utc": "2025-05-30 10:30:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "1m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783468740000,
+      "last_open_utc": "2026-07-07 23:59:00",
+      "partition_rows": {
+        "exploration-classic": 0,
+        "lockbox": 185130,
+        "regime-contaminated": 396000,
+        "spent": 0
+      },
+      "path": "klines/HYPEUSDT_1m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 581130,
+      "sha256": "3ee6d87811efb8c7d9a6cb38e8f5211e1d41779460509a13ed77540cfe17f5b8",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "HYPEUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1748601000000,
+      "first_open_utc": "2025-05-30 10:30:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "5m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783468500000,
+      "last_open_utc": "2026-07-07 23:55:00",
+      "partition_rows": {
+        "exploration-classic": 0,
+        "lockbox": 37026,
+        "regime-contaminated": 79200,
+        "spent": 0
+      },
+      "path": "klines/HYPEUSDT_5m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 116226,
+      "sha256": "306f947189c24b1174fd7a5439a90e66fe44596734129bdca8b8eeedcb12fe77",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "HYPEUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1748601000000,
+      "first_open_utc": "2025-05-30 10:30:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "15m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783467900000,
+      "last_open_utc": "2026-07-07 23:45:00",
+      "partition_rows": {
+        "exploration-classic": 0,
+        "lockbox": 12342,
+        "regime-contaminated": 26400,
+        "spent": 0
+      },
+      "path": "klines/HYPEUSDT_15m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 38742,
+      "sha256": "83979891f55890f48a31a6caafae52bc741d225e426fa78f0fa38aea0aca9028",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "HYPEUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1748599200000,
+      "first_open_utc": "2025-05-30 10:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "1h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783465200000,
+      "last_open_utc": "2026-07-07 23:00:00",
+      "partition_rows": {
+        "exploration-classic": 0,
+        "lockbox": 3086,
+        "regime-contaminated": 6600,
+        "spent": 0
+      },
+      "path": "klines/HYPEUSDT_1h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 9686,
+      "sha256": "14566f31b060f1d8e15825f8ae8dd468973ed793852fc13c4ba8e7bc24e178a2",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "HYPEUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1748592000000,
+      "first_open_utc": "2025-05-30 08:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "4h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783454400000,
+      "last_open_utc": "2026-07-07 20:00:00",
+      "partition_rows": {
+        "exploration-classic": 0,
+        "lockbox": 772,
+        "regime-contaminated": 1650,
+        "spent": 0
+      },
+      "path": "klines/HYPEUSDT_4h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 2422,
+      "sha256": "717685457e797d40f37fd6ed98015d29d66d5d4a7b9c338c77920e73dd40483c",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "HYPEUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1748563200000,
+      "first_open_utc": "2025-05-30 00:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "12h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783425600000,
+      "last_open_utc": "2026-07-07 12:00:00",
+      "partition_rows": {
+        "exploration-classic": 0,
+        "lockbox": 258,
+        "regime-contaminated": 550,
+        "spent": 0
+      },
+      "path": "klines/HYPEUSDT_12h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 808,
+      "sha256": "aa07e0b9cd7419df78ae24542b3edcc318befcc882b14d63c241dc56ca65cb24",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "HYPEUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1734720300000,
+      "first_open_utc": "2024-12-20 18:45:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "1m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783468740000,
+      "last_open_utc": "2026-07-07 23:59:00",
+      "partition_rows": {
+        "exploration-classic": 0,
+        "lockbox": 416475,
+        "regime-contaminated": 396000,
+        "spent": 0
+      },
+      "path": "klines/FARTCOINUSDT_1m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 812475,
+      "sha256": "edabe5344d5e0375a25886043ac2788d3cbf31e6b6872f68fdef8186c2a9135c",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "FARTCOINUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1734720300000,
+      "first_open_utc": "2024-12-20 18:45:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "5m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783468500000,
+      "last_open_utc": "2026-07-07 23:55:00",
+      "partition_rows": {
+        "exploration-classic": 0,
+        "lockbox": 83295,
+        "regime-contaminated": 79200,
+        "spent": 0
+      },
+      "path": "klines/FARTCOINUSDT_5m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 162495,
+      "sha256": "b271d99c309feae8ee3412b96e1487ad508fcbe2c316730572585a4f42ae6256",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "FARTCOINUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1734720300000,
+      "first_open_utc": "2024-12-20 18:45:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "15m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783467900000,
+      "last_open_utc": "2026-07-07 23:45:00",
+      "partition_rows": {
+        "exploration-classic": 0,
+        "lockbox": 27765,
+        "regime-contaminated": 26400,
+        "spent": 0
+      },
+      "path": "klines/FARTCOINUSDT_15m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 54165,
+      "sha256": "3016cbc9ed011473a447a9098fa0ea8e8d41790e5b9ed73621a3267dca6c4d81",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "FARTCOINUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1734717600000,
+      "first_open_utc": "2024-12-20 18:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "1h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783465200000,
+      "last_open_utc": "2026-07-07 23:00:00",
+      "partition_rows": {
+        "exploration-classic": 0,
+        "lockbox": 6942,
+        "regime-contaminated": 6600,
+        "spent": 0
+      },
+      "path": "klines/FARTCOINUSDT_1h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 13542,
+      "sha256": "6e4e3f7ad632d69cec5bfa26bd3c302eb4f4f9f1ec3bd4cfbd83211be41882ec",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "FARTCOINUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1734710400000,
+      "first_open_utc": "2024-12-20 16:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "4h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783454400000,
+      "last_open_utc": "2026-07-07 20:00:00",
+      "partition_rows": {
+        "exploration-classic": 0,
+        "lockbox": 1736,
+        "regime-contaminated": 1650,
+        "spent": 0
+      },
+      "path": "klines/FARTCOINUSDT_4h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 3386,
+      "sha256": "2e79271ff1ebf68d3a7ad17fe11f2af034cc61da0958aa8dd4c3a368291b9def",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "FARTCOINUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1734696000000,
+      "first_open_utc": "2024-12-20 12:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "12h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783425600000,
+      "last_open_utc": "2026-07-07 12:00:00",
+      "partition_rows": {
+        "exploration-classic": 0,
+        "lockbox": 579,
+        "regime-contaminated": 550,
+        "spent": 0
+      },
+      "path": "klines/FARTCOINUSDT_12h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 1129,
+      "sha256": "6bf9471271e75b8bbcc97e84019ef25177160a325d09308bfbd0f51359a07f0d",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "FARTCOINUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1766511000000,
+      "first_open_utc": "2025-12-23 17:30:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "1m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783468740000,
+      "last_open_utc": "2026-07-07 23:59:00",
+      "partition_rows": {
+        "exploration-classic": 0,
+        "lockbox": 0,
+        "regime-contaminated": 282630,
+        "spent": 0
+      },
+      "path": "klines/LITUSDT_1m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 282630,
+      "sha256": "c959d60e6bc40cf63b11f646f909e3b21593f572c20f7ffcd212302cc9649cb1",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "LITUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1766511000000,
+      "first_open_utc": "2025-12-23 17:30:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "5m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783468500000,
+      "last_open_utc": "2026-07-07 23:55:00",
+      "partition_rows": {
+        "exploration-classic": 0,
+        "lockbox": 0,
+        "regime-contaminated": 56526,
+        "spent": 0
+      },
+      "path": "klines/LITUSDT_5m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 56526,
+      "sha256": "7261ea7f47b5a81116b9682bc011a21a002db423819a6050c98c00d30563f885",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "LITUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1766511000000,
+      "first_open_utc": "2025-12-23 17:30:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "15m",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783467900000,
+      "last_open_utc": "2026-07-07 23:45:00",
+      "partition_rows": {
+        "exploration-classic": 0,
+        "lockbox": 0,
+        "regime-contaminated": 18842,
+        "spent": 0
+      },
+      "path": "klines/LITUSDT_15m.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 18842,
+      "sha256": "f8c2ec3fb6e13c5203c52fac7c257e2c522e0a1970a2fbf2524b6b64e2623dcd",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "LITUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1766509200000,
+      "first_open_utc": "2025-12-23 17:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "1h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783465200000,
+      "last_open_utc": "2026-07-07 23:00:00",
+      "partition_rows": {
+        "exploration-classic": 0,
+        "lockbox": 0,
+        "regime-contaminated": 4711,
+        "spent": 0
+      },
+      "path": "klines/LITUSDT_1h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 4711,
+      "sha256": "d43cec4df220f02b6a1e7b0a1899350a8910123f186d5a6bd5df0338bd08db0b",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "LITUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1766505600000,
+      "first_open_utc": "2025-12-23 16:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "4h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783454400000,
+      "last_open_utc": "2026-07-07 20:00:00",
+      "partition_rows": {
+        "exploration-classic": 0,
+        "lockbox": 0,
+        "regime-contaminated": 1178,
+        "spent": 0
+      },
+      "path": "klines/LITUSDT_4h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 1178,
+      "sha256": "4278f780172b8da5ec266416ce6d0089d3179eb09cdb75a446ca7051f91fb5b7",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "LITUSDT"
+    },
+    {
+      "anomalies": {
+        "backward": [],
+        "duplicates": [],
+        "off_grid": []
+      },
+      "anomaly_count": 0,
+      "first_open_ms": 1766491200000,
+      "first_open_utc": "2025-12-23 12:00:00",
+      "gap_count": 0,
+      "gaps": [],
+      "interval": "12h",
+      "largest_gap_bars": 0,
+      "last_open_ms": 1783425600000,
+      "last_open_utc": "2026-07-07 12:00:00",
+      "partition_rows": {
+        "exploration-classic": 0,
+        "lockbox": 0,
+        "regime-contaminated": 393,
+        "spent": 0
+      },
+      "path": "klines/LITUSDT_12h.parquet",
+      "retrieved_utc": "2026-07-10",
+      "rows": 393,
+      "sha256": "6bde2569eaa076f4d4c53ab95f62e04f39e86d203e18dbc8978cb041d691619c",
+      "source": "binance_vision_bulk+rest_topup",
+      "symbol": "LITUSDT"
+    }
+  ],
+  "schema": "v12-census-1"
+}

@@ -1,5 +1,40 @@
 # CHANGELOG
 
+## v12 Study V1 — data census & integrity gate (2026-07-10, branch v12-v1-census)
+
+Engine version unchanged (1.0.1): no signal, trading, shadow, or config
+behavior touched — this phase adds data tooling, guards, and fixtures only.
+
+- New `study/` package. `study/loader.py`: the v12 Study's only sanctioned
+  candle path — LIT floor 2025-12-23T00:00Z (stricter than the Phase 1 engine
+  floor, which stands for Naiad), study right edge 2026-07-07 23:59:59Z,
+  lockbox seal (`LockboxViolation` on value reads touching
+  2024-07-01 → 2025-10-05 without `integrity_only`), VR-1 partition classes,
+  guard-event JSONL in the cache dir. `study/census.py`: deterministic census
+  (timestamp-and-bytes only; census.json byte-identical on re-run, retrieval
+  dates in a write-once sidecar keyed by content hash).
+- Estate completed (D1): BTCUSDT 5m and 1h caches were found truncated to
+  2025-03-01 — the committed Phase 1 coverage report shows both backfilled to
+  the 2019-09-08 listing, so a later cache write shrank them (open item: find
+  and guard that writer). Re-extended from the listing; 60/60 kline and 10/10
+  funding series now meet the coverage target.
+- Gap census (D4): BTC 1m 1-bar gap on listing day 2019-09-08 —
+  `listing_edge`. Five funding records missing at 2026-06-24 04:00 UTC, one
+  per 4h-grid symbol (JTO/TAO/HYPE/FARTCOIN/LIT), two REST re-fetch attempts
+  each returned nothing — `exchange_side` (same skipped settlement across all
+  five). Zero `download_hole` remaining.
+- Census finding: funding grids are per-symbol, not uniform 8h as the build
+  prompt assumed — BTC/ETH/NEAR/ZEC 8h; JTO/TAO/HYPE/FARTCOIN/LIT 4h; SOL
+  shifts 8h→4h→2h→8h across 2022-11-09 → 2022-11-18 (FTX week), documented
+  as grid segments in census.json.
+- Fixtures F1–F9 (`fixtures/test_v12_census.py`), synthetic and CI-safe;
+  suite 26 → 35 green, Phase 1 fixtures untouched.
+- Artifacts at repo root: `census.json` (manifest of record for the loader
+  guards), `DATA_CENSUS.md`, `GAP_REPORT.md`, `SPOT_CHECK.md` (operator
+  sheet, 30 rows, no lockbox candles, exploration rows floored at 2022-01-01
+  to stay clear of the pre-2022 sealed retro holdout). Sidecars in
+  `research_outputs/census/`. Ledger block appended byte-for-byte (D6).
+
 ## engine 1.0.1 — reject subkeys carry the signal family (2026-07-10, pre-collector)
 
 - Trade-reject journal subkeys now include the signal family:

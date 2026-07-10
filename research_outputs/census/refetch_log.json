@@ -1,0 +1,42 @@
+{
+  "FARTCOINUSDT|funding|1782273600000": {
+    "attempts": 2,
+    "dates": [
+      "2026-07-10",
+      "2026-07-10"
+    ],
+    "result": "still_missing"
+  },
+  "HYPEUSDT|funding|1782273600000": {
+    "attempts": 2,
+    "dates": [
+      "2026-07-10",
+      "2026-07-10"
+    ],
+    "result": "still_missing"
+  },
+  "JTOUSDT|funding|1782273600000": {
+    "attempts": 2,
+    "dates": [
+      "2026-07-10",
+      "2026-07-10"
+    ],
+    "result": "still_missing"
+  },
+  "LITUSDT|funding|1782273600000": {
+    "attempts": 2,
+    "dates": [
+      "2026-07-10",
+      "2026-07-10"
+    ],
+    "result": "still_missing"
+  },
+  "TAOUSDT|funding|1782273600000": {
+    "attempts": 2,
+    "dates": [
+      "2026-07-10",
+      "2026-07-10"
+    ],
+    "result": "still_missing"
+  }
+}

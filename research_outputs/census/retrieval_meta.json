@@ -1,0 +1,352 @@
+{
+  "funding/BTCUSDT.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "9465666dac34156fa3734c0b0144c3ce41456e8386d33207b4a355805738a324",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "funding/ETHUSDT.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "af975beb4e79af9a1b25cb52ad1c2525cf8720d0fc1a61be569e57e4aba00578",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "funding/FARTCOINUSDT.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "6d3eb4c20caea1a6bcd0f88198652ebddc2caf88494340cfdd109ee2c3820fd9",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "funding/HYPEUSDT.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "ccf67d1a5ee18d2f4bdecd50620f8d39f4b955e805a7fd39bff575e7bc6ce78d",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "funding/JTOUSDT.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "3f939cf6fc0dd8c5efb5ded034af601419e1bf1d41f2f773418557ec7b03b68c",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "funding/LITUSDT.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "304ebd3668bad099e5c321b6d08ce35f29a6bf314b27f41649bfbcafdacf651e",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "funding/NEARUSDT.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "c51719f9c465324d08d6923fe7a5c7761e48f6256876395ad255fff7319063d4",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "funding/SOLUSDT.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "aa2ead0dda6803e0aa3a572aea6e03e19e4d9d72989ba1ebb7b5dc02be940a56",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "funding/TAOUSDT.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "8bd91fc01e6e7a155cb85cb697c5450e5cd519a21655cb4ce7ff7c99591876c7",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "funding/ZECUSDT.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "9639b3be9e982b0d4eaca962dc12f96730593fc3efd94fda5a13c6ef29b1ab79",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/BTCUSDT_12h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "3533fe706cfa608464f6bea9334c121971f0c9a3d63009138abeb5e69469badf",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/BTCUSDT_15m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "d3e319ac3c33202f9e80bfbf073ba0b72c112e185b895ccb26a3c0774a6422cf",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/BTCUSDT_1h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "88521a213d824f643a87de72afc66adf96435a6b9715c4cc98f92b583838cf40",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/BTCUSDT_1m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "f2606e628685a7224104890666ebcd4ecfa34634c4fc02fbeb348b3137aba2f3",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/BTCUSDT_4h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "a4eb8898f4f91e86e390cd1ca11c1c90de8a96016b244b76e261547c702c9bfb",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/BTCUSDT_5m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "658fba0a032a180210888af33c44fad0f5d50725ea55c65c530c309e7f5acb07",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/ETHUSDT_12h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "5307cdac6b1af639f9c6d8582c26a7c7c644af97852ec3da77883ff8ec6c7f91",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/ETHUSDT_15m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "b884fd687a7e9a55393ef47828d2916c4bc5567a9605160ad02aea396118e8b2",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/ETHUSDT_1h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "5500c4066b70792e73422f79bb0bccb1728ff367effad9e7d46287cf8797f97b",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/ETHUSDT_1m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "14f0aa5c83f70be0d99864ded62d652c563ddbbfd428e7081d6c471f01e1f584",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/ETHUSDT_4h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "df053a918d3a48ca65b545b6528fa93f83ab4f6a36542c9ad7a3f1012f6c2b61",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/ETHUSDT_5m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "e15ba6584f9c6c3d5bcdc4815a59d3f47933a22b6a51b87a18e0cc1c8ad713ce",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/FARTCOINUSDT_12h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "6bf9471271e75b8bbcc97e84019ef25177160a325d09308bfbd0f51359a07f0d",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/FARTCOINUSDT_15m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "3016cbc9ed011473a447a9098fa0ea8e8d41790e5b9ed73621a3267dca6c4d81",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/FARTCOINUSDT_1h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "6e4e3f7ad632d69cec5bfa26bd3c302eb4f4f9f1ec3bd4cfbd83211be41882ec",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/FARTCOINUSDT_1m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "edabe5344d5e0375a25886043ac2788d3cbf31e6b6872f68fdef8186c2a9135c",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/FARTCOINUSDT_4h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "2e79271ff1ebf68d3a7ad17fe11f2af034cc61da0958aa8dd4c3a368291b9def",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/FARTCOINUSDT_5m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "b271d99c309feae8ee3412b96e1487ad508fcbe2c316730572585a4f42ae6256",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/HYPEUSDT_12h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "aa07e0b9cd7419df78ae24542b3edcc318befcc882b14d63c241dc56ca65cb24",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/HYPEUSDT_15m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "83979891f55890f48a31a6caafae52bc741d225e426fa78f0fa38aea0aca9028",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/HYPEUSDT_1h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "14566f31b060f1d8e15825f8ae8dd468973ed793852fc13c4ba8e7bc24e178a2",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/HYPEUSDT_1m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "3ee6d87811efb8c7d9a6cb38e8f5211e1d41779460509a13ed77540cfe17f5b8",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/HYPEUSDT_4h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "717685457e797d40f37fd6ed98015d29d66d5d4a7b9c338c77920e73dd40483c",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/HYPEUSDT_5m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "306f947189c24b1174fd7a5439a90e66fe44596734129bdca8b8eeedcb12fe77",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/JTOUSDT_12h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "6cb9d5b14a271c63cdb66f99401fead98c3046f4dd49246dc65d68e237c0f8ac",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/JTOUSDT_15m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "d91167da7f97699c698abc1913789c395d5c9736ef26505e67c7bb2f6f054b60",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/JTOUSDT_1h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "dd2b44b15e6df4946ecbb651b731e1424f736d4fc2ebf47058ccb3885cfe181c",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/JTOUSDT_1m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "6a2d7c856154595e45aaa75832a365097d3dc57f971a8cdfa59316baf6ea0da2",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/JTOUSDT_4h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "e92ba1a57b633cc53f4bfcbaab9e0f31e514dbed2c6f1da5a03048f242b5a21f",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/JTOUSDT_5m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "4d10dd669df125ec13dc69385f9c6188b8c52ff7c46faaf1a177ca37b49ac6f1",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/LITUSDT_12h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "6bde2569eaa076f4d4c53ab95f62e04f39e86d203e18dbc8978cb041d691619c",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/LITUSDT_15m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "f8c2ec3fb6e13c5203c52fac7c257e2c522e0a1970a2fbf2524b6b64e2623dcd",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/LITUSDT_1h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "d43cec4df220f02b6a1e7b0a1899350a8910123f186d5a6bd5df0338bd08db0b",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/LITUSDT_1m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "c959d60e6bc40cf63b11f646f909e3b21593f572c20f7ffcd212302cc9649cb1",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/LITUSDT_4h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "4278f780172b8da5ec266416ce6d0089d3179eb09cdb75a446ca7051f91fb5b7",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/LITUSDT_5m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "7261ea7f47b5a81116b9682bc011a21a002db423819a6050c98c00d30563f885",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/NEARUSDT_12h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "0bf56233200372e74cc322cf82386f97acb1188811c483f5a465df1627b85b4e",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/NEARUSDT_15m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "da6bc20aef9c9b02780040d7564469035758dc7d342a8f9bfc5a23a2f8b7a8e1",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/NEARUSDT_1h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "d828c37a2e52672c771c3ba90c59a294760820e3b8e054dede6c8bfe10c6422d",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/NEARUSDT_1m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "172abacd573711ebec95d4f28842f312d8f08159f49d6505f92512389862edad",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/NEARUSDT_4h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "cbb8bf42647f1f76145c431604047c9d435328c4e3dd4619f3334ada0ff809f8",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/NEARUSDT_5m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "57a8199e5641bb043be55fe668fb4afbf20d644d05b5238a238e5a8591120ec0",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/SOLUSDT_12h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "133ef1c253ac8f75ff06e6c23f803b3ddf13b103179367b94fd270a5aa82f1ef",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/SOLUSDT_15m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "cf350b8208f6da35f9891e222a6d3a97293eaf889ddf5bc631c071e0c9203a4e",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/SOLUSDT_1h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "e6a7dfacad5138bc8cdedbbd766d4b55c8b7f7f77ee8f8ef009d647217090bc5",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/SOLUSDT_1m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "53e7324d5abe3cf73339b44f51ed6cc01cad50000af8209959a05cf5467de5ff",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/SOLUSDT_4h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "cbb2dd94a9c6a34d04b7f4d4598aee19de06ede07d02564fb01a1b6edb852b7b",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/SOLUSDT_5m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "1f788503c61aa9bb1ef60c768d2a3727f6c971edff63e542563729732941a133",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/TAOUSDT_12h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "fd228d1f0e7d6121c8e0c737790ee69a542b6ceedff08ba080931d7b1c597ed2",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/TAOUSDT_15m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "735a42fac7034e45f5d8a4dbeb317b66b5ca47528349ff4be40d62adc828c906",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/TAOUSDT_1h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "ec2123ea847e19f13ea3ec700f24f997986cf369c2c255f99924ad29abb768dd",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/TAOUSDT_1m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "e1469971c299e24bf085d8eea132fdef170f9118a3bb79b1b397f0404e8c2644",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/TAOUSDT_4h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "1e4128cf60404b9e84229e9e66a2e2b670b6e8767385d02120ee0b0b593843ff",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/TAOUSDT_5m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "3277d1cb707acc73da049e4522a486b790516ca27264501e2641d7d251e5b1b6",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/ZECUSDT_12h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "63527591c6eedef5ff1dc3dc49e8cb4066a560448ed87adba5c5a93ec630b62f",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/ZECUSDT_15m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "2f949756018f6d1b55443209ca8fd64ccbac6adf80c2a531dddbc389496b5ab2",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/ZECUSDT_1h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "7dd6b9ff25e5c958329127017268be4020c2338989ae702691aadd958ba6e79f",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/ZECUSDT_1m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "e259e4ac219d79da8c3563a4a965839883b720f2524b6cb2a5783e130d094ee0",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/ZECUSDT_4h.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "3af1fa3950b925bbac96842fab86507af2779fa8add9f0cdf567f6c8fd6fa951",
+    "source": "binance_vision_bulk+rest_topup"
+  },
+  "klines/ZECUSDT_5m.parquet": {
+    "retrieved_utc": "2026-07-10",
+    "sha256": "7cc5312c33ad25f0166e596c48fba2573b1a36ec60c43869c6e85b07cac72642",
+    "source": "binance_vision_bulk+rest_topup"
+  }
+}
