@@ -39,3 +39,14 @@ proxy of a measurement we can afford to make for real.*
 - Cosmetics parked for the next natural engine touch (non-blocking): D7 header prints stale "engine 1.0.0" (its run_id/rows/sha are current); packet MANIFEST `git_rev` stamps the last commit, not tree state — should mark dirty trees.
 - **Anchors for collector launch:** engine 1.0.1 @ `da31062` · journal_sha256 `c4dfe16c…` · fixtures 26. Phase 1 remaining: F6 operator sign-off · halt-scope ratification · CI-green glance on `da31062`.
 
+## v12 Study — opened 2026-07-10
+- Charter: V12_Study_Charter_Addendum_v1.0.md (VR-1..VR-5 ratified; governor-TF axis pre-registered)
+- Evidence classes: spent | regime-contaminated | exploration-classic | lockbox | forward(Naiad)
+- Spent: BTCUSDT 2025-10-06 -> 2026-07-07 (six intervals) - characterization only
+- Regime-contaminated: all non-BTC assets 2025-10-06 -> 2026-07-07 - exploration-eligible, lockbox-ineligible
+- Exploration-classic: all study candles <= 2024-06-30
+- LOCKBOX: 2024-07-01 -> 2025-10-05, all assets, all intervals - SEALED. Integrity ops only. Opens once, at V8.
+- Study right edge: 2026-07-07 23:59:59 UTC. Forward data belongs to Naiad.
+- Variant budget: 5 named slots. Study closes at lockbox verdict or 2026-10-31.
+- Regime taxonomy frozen: BTC 12H 89v200 stage x BTC 30d realized-vol terciles (thresholds fit on exploration-classic only)
+- Spend at open: zero (census pending)
