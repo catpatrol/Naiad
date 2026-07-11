@@ -149,15 +149,72 @@ def first_valid_ms(symbol: str, interval: str, detected_first: int) -> int:
 
 def _load_cache(symbol: str, interval: str) -> pd.DataFrame:
     path = _kline_path(symbol, interval)
-    if path.exists():
+    try:
         return pd.read_parquet(path)
-    return pd.DataFrame(columns=KLINE_COLS)
+    except FileNotFoundError:
+        # the only legitimate "no cache yet" signal — a transient stat or
+        # read failure must raise, never masquerade as an empty cache
+        return pd.DataFrame(columns=KLINE_COLS)
 
 
 def _save_cache(symbol: str, interval: str, df: pd.DataFrame) -> None:
+    # No-shrink invariant (engine 1.0.2): a cache file never loses rows through
+    # this save path. Rows already durably on disk are merged back in
+    # regardless of what the caller assembled, and the whole file lands
+    # atomically via a same-directory temp + os.replace, so an interrupted run
+    # cannot corrupt or truncate the destination. New rows win at identical
+    # open_time (keep="last"): values are correctable, timestamps never
+    # droppable. This choke point covers EVERY writer, census --repair included.
+    #
+    # No deletion primitive: because the save path can no longer shrink a file,
+    # genuine row removal is out-of-band — delete the file, then re-extend via
+    # census.py --extend (which fetches from the 2019 listing, not a warm-up
+    # anchor). Accepted residuals: (1) a concurrent last-writer may drop the
+    # OTHER writer's freshly fetched rows — refetchable, never a shrink below
+    # what was on disk; (2) a file deleted and recreated through an engine path
+    # restarts at the warm-up anchor, not the listing — coverage_ok vs
+    # data_starts.csv is the detector.
+    path = _kline_path(symbol, interval)
+    try:
+        df = pd.concat([pd.read_parquet(path), df], ignore_index=True)
+    except FileNotFoundError:
+        pass
     df = df.drop_duplicates("open_time", keep="last").sort_values("open_time")
     df = df.reset_index(drop=True)
-    df.to_parquet(_kline_path(symbol, interval), index=False)
+    tmp = path.with_name(f"{path.name}.{os.getpid()}.tmp")
+    df.to_parquet(tmp, index=False)
+    os.replace(tmp, path)  # atomic — an interrupted run can't corrupt the file
+
+
+FUNDING_COLS = ["funding_time", "funding_rate"]
+
+
+def _load_funding(symbol: str) -> pd.DataFrame:
+    # Funding twin of _load_cache: only an absent file yields an empty frame;
+    # any other read failure raises rather than masquerading as "no cache yet".
+    path = _funding_path(symbol)
+    try:
+        return pd.read_parquet(path)
+    except FileNotFoundError:
+        return pd.DataFrame(columns=FUNDING_COLS)
+
+
+def _save_funding(symbol: str, df: pd.DataFrame) -> pd.DataFrame:
+    # Funding twin of _save_cache — same no-shrink + atomic invariant, same
+    # no-delete property and accepted residuals (see _save_cache). Rows already
+    # on disk are merged back in (new rows win at identical funding_time), then
+    # the file lands atomically via a same-directory temp + os.replace.
+    path = _funding_path(symbol)
+    try:
+        df = pd.concat([pd.read_parquet(path), df], ignore_index=True)
+    except FileNotFoundError:
+        pass
+    df = (df.drop_duplicates("funding_time", keep="last")
+            .sort_values("funding_time").reset_index(drop=True))
+    tmp = path.with_name(f"{path.name}.{os.getpid()}.tmp")
+    df.to_parquet(tmp, index=False)
+    os.replace(tmp, path)  # atomic — an interrupted run can't corrupt the file
+    return df
 
 
 def _month_starts(start_ms: int, end_ms: int) -> list[datetime]:
@@ -288,9 +345,7 @@ def write_coverage_report(reports: list[dict], out_path: Path) -> None:
 
 def backfill_funding(symbol: str, start_ms: int, end_ms: int, log=print) -> pd.DataFrame:
     """Funding rate history via REST (1000/page). Cached like klines."""
-    path = _funding_path(symbol)
-    cache = pd.read_parquet(path) if path.exists() else pd.DataFrame(
-        columns=["funding_time", "funding_rate"])
+    cache = _load_funding(symbol)
     cursor = start_ms
     if len(cache):
         covered = cache[(cache["funding_time"] >= start_ms)]
@@ -315,19 +370,16 @@ def backfill_funding(symbol: str, start_ms: int, end_ms: int, log=print) -> pd.D
             break
         cursor = nxt
         time.sleep(0.15)
-    merged = (pd.concat(frames, ignore_index=True)
-              .drop_duplicates("funding_time", keep="last")
-              .sort_values("funding_time").reset_index(drop=True))
-    merged.to_parquet(path, index=False)
+    assembled = (pd.concat(frames, ignore_index=True) if frames
+                 else pd.DataFrame(columns=FUNDING_COLS))
+    merged = _save_funding(symbol, assembled)  # merge-in-save + atomic replace
     if log:
         log(f"  {symbol} funding: {len(merged)} rows cached")
-    return merged[(merged["funding_time"] >= start_ms) & (merged["funding_time"] <= end_ms)]
+    return merged[(merged["funding_time"] >= start_ms) & (merged["funding_time"] <= end_ms)] \
+        .reset_index(drop=True)
 
 
 def load_funding(symbol: str, start_ms: int, end_ms: int) -> pd.DataFrame:
-    path = _funding_path(symbol)
-    if not path.exists():
-        return pd.DataFrame(columns=["funding_time", "funding_rate"])
-    df = pd.read_parquet(path)
+    df = _load_funding(symbol)
     return df[(df["funding_time"] >= start_ms) & (df["funding_time"] <= end_ms)] \
         .sort_values("funding_time").reset_index(drop=True)

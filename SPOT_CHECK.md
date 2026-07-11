@@ -12,8 +12,10 @@ the exact UTC open time, hover the candle, compare open/high/low/close/volume.
 Make sure your TradingView chart timezone is set to UTC.
 
 No row in this sheet is a lockbox candle (2024-07-01 → 2025-10-05): printing
-lockbox OHLCV would violate the seal. Exploration rows are drawn from
-2022-01-01 onward, keeping clear of the pre-2022 sealed retro holdout.
+lockbox OHLCV would violate the seal. Everything before the lockbox is
+exploration-classic (VR-1) — pre-2022 candles included; there is no pre-2022
+restriction in the v12 Study. Rows 31–33 sample that deep 2020–2021 era so it
+gets operator eyes too.
 
 | # | Symbol | TF | Open (UTC) | Open | High | Low | Close | Volume | Era | Pass? |
 |--:|---|---|---|---|---|---|---|---|---|---|
@@ -47,6 +49,9 @@ lockbox OHLCV would violate the seal. Exploration rows are drawn from
 | 28 | LITUSDT | 4h | 2025-12-25 12:00:00 | 3.504 | 3.507 | 3.376 | 3.462 | 4628598.4 | regime-contaminated |  |
 | 29 | LITUSDT | 1h | 2026-01-25 14:00:00 | 1.741 | 1.742 | 1.691 | 1.706 | 1345797.6 | regime-contaminated |  |
 | 30 | LITUSDT | 15m | 2026-03-06 07:15:00 | 1.187 | 1.191 | 1.184 | 1.191 | 66004.1 | regime-contaminated |  |
+| 31 | BTCUSDT | 12h | 2020-01-01 00:00:00 | 7189.43 | 7239.74 | 7170.15 | 7192.65 | 27830.403 | exploration-classic |  |
+| 32 | ETHUSDT | 12h | 2020-06-01 00:00:00 | 231.55 | 242.52 | 230.61 | 236.07 | 876889.327 | exploration-classic |  |
+| 33 | ZECUSDT | 12h | 2021-01-01 00:00:00 | 63.97 | 67.02 | 63.23 | 66.33 | 129534.469 | exploration-classic |  |
 
 ## Navigation lines
 
@@ -80,5 +85,9 @@ lockbox OHLCV would violate the seal. Exploration rows are drawn from
 28. open BINANCE:LITUSDT.P, 4h, scroll to 2025-12-25 12:00 UTC
 29. open BINANCE:LITUSDT.P, 1h, scroll to 2026-01-25 14:00 UTC
 30. open BINANCE:LITUSDT.P, 15m, scroll to 2026-03-06 07:15 UTC
+31. open BINANCE:BTCUSDT.P, 12h, scroll to 2020-01-01 00:00 UTC
+32. open BINANCE:ETHUSDT.P, 12h, scroll to 2020-06-01 00:00 UTC
+33. open BINANCE:ZECUSDT.P, 12h, scroll to 2021-01-01 00:00 UTC
 
-30 rows, 3 per asset; no lockbox candles.
+33 rows: the 30-row base (3 per asset) plus 3 deep pre-2022 exploration-classic
+rows (BTC/ETH/ZEC, rows 31–33). No lockbox candles.

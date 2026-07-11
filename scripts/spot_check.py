@@ -4,10 +4,12 @@
   python scripts/spot_check.py --escalate SOLUSDT # 10-row sheet, one asset
 
 Selection is deterministic (fixed seed) and NEVER touches the lockbox: rows
-come from the exploration-classic era (window floored at 2022-01-01, keeping
-clear of the Naiad pre-2022 sealed retro holdout) and the spent/regime-
-contaminated era. Values are read through the guarded study loader, so a
-lockbox read here would raise, not print.
+come from the exploration-classic era and the spent/regime-contaminated era.
+Pre-2022 is exploration-classic (VR-1) — there is no pre-2022 restriction in
+the v12 Study; the auto sheet's window is floored at 2022-01-01 only so
+mid-timeframe rows stay reachable on TradingView, and the deep 2020–2021 era
+is covered by curated rows appended to SPOT_CHECK.md. Values are read through
+the guarded study loader, so a lockbox read here would raise, not print.
 """
 
 import argparse
@@ -24,7 +26,7 @@ from study.loader import load_study_klines, partition_class, utc_str
 ROOT = Path(__file__).resolve().parent.parent
 SEED = 20260710
 
-EXPL_START_MS = 1_640_995_200_000     # 2022-01-01T00:00Z (retro-holdout guard)
+EXPL_START_MS = 1_640_995_200_000     # 2022-01-01T00:00Z: auto-sheet TradingView-reachability floor (pre-2022 is exploration-classic, sampled via curated rows)
 EXPL_END_MS = loader.LOCKBOX_START_MS - 1
 CONTAM_START_MS = loader.LOCKBOX_END_EXCL_MS
 CONTAM_END_MS = loader.EDGE_EXCL_MS - 1
@@ -63,8 +65,9 @@ the exact UTC open time, hover the candle, compare open/high/low/close/volume.
 Make sure your TradingView chart timezone is set to UTC.
 
 No row in this sheet is a lockbox candle (2024-07-01 → 2025-10-05): printing
-lockbox OHLCV would violate the seal. Exploration rows are drawn from
-2022-01-01 onward, keeping clear of the pre-2022 sealed retro holdout.
+lockbox OHLCV would violate the seal. Everything before the lockbox is
+exploration-classic (VR-1) — pre-2022 candles included; there is no pre-2022
+restriction in the v12 Study.
 
 | # | Symbol | TF | Open (UTC) | Open | High | Low | Close | Volume | Era | Pass? |
 |--:|---|---|---|---|---|---|---|---|---|---|"""

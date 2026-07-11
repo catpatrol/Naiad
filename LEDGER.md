@@ -50,3 +50,10 @@ proxy of a measurement we can afford to make for real.*
 - Variant budget: 5 named slots. Study closes at lockbox verdict or 2026-10-31.
 - Regime taxonomy frozen: BTC 12H 89v200 stage x BTC 30d realized-vol terciles (thresholds fit on exploration-classic only)
 - Spend at open: zero (census pending)
+
+## 2026-07-10 — Engine 1.0.2: cache no-shrink invariant
+- Incident: BTCUSDT 5m/1h kline caches truncated to [2025-03-01, 2026-07-08) by parity_pack --backfill; attribution recomputed and verified by reviewer; estate repaired by census same day; evidence spend: zero.
+- Root cause: exists()-masked load failure + conditional history merge + non-atomic whole-file save (engine/data.py).
+- Fix: merge-in-save + atomic replace + loud load failures, klines and funding; invariant "caches never shrink via the save path" fixture-enforced (N1-N5). Engine 1.0.1 -> 1.0.2.
+- Accepted residuals: concurrent last-writer may drop the other writer's fresh rows (refetchable); deleted file recreated via engine path starts at warm-up anchor (coverage_ok is the detector); row deletion = delete file + census --extend.
+- V1 packet review: still PENDING. This entry does not close V1.
