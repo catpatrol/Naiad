@@ -57,3 +57,11 @@ proxy of a measurement we can afford to make for real.*
 - Fix: merge-in-save + atomic replace + loud load failures, klines and funding; invariant "caches never shrink via the save path" fixture-enforced (N1-N5). Engine 1.0.1 -> 1.0.2.
 - Accepted residuals: concurrent last-writer may drop the other writer's fresh rows (refetchable); deleted file recreated via engine path starts at warm-up anchor (coverage_ok is the detector); row deletion = delete file + census --extend.
 - V1 packet review: still PENDING. This entry does not close V1.
+
+## 2026-07-11 — v12 V1 census: CLOSED (PASS) · Engine 1.0.2: MERGED
+- V1 verdict: PASS. Reviewer recomputed all headlines from raw artifacts: three-way reconciliation (census.json / DATA_CENSUS / retrieval_meta) zero fails across ~600 fields; boundaries = VR-1 epochs exactly; only the four ratified evidence classes exist; 26,711,569 rows recomputed independently; hash chain intact end to end.
+- Gaps: 1 listing_edge (BTC 1m, 2019-09-08 19:00) + 5 exchange_side (funding, all at 2026-06-24 04:00, refetched 2x) + 0 download_hole. External anchors: HYPE listing confirmed to the minute and LIT floor to the day vs Binance announcements; SOL funding-grid shift = FTX week (2022-11-09 -> 11-18).
+- Operator spot check: 33 rows -> 26 OK / 0 mismatch / 7 unavailable (TradingView intraday lookback tiers; pattern tracks TF x depth, not the estate). Spent era covered by parity 3A (30/30) + coverage cross-check (577/49). FARTCOIN/TAO first-candle date checks waived with cause (pipeline externally validated 2x; coverage_ok is the standing detector; V2 re-touches FARTCOIN).
+- Correction on record: pre-2022 is exploration-classic per VR-1; grep confirmed no code restriction (CHANGELOG carries the dated note).
+- Engine 1.0.2 merged into v12-v1-census (--no-ff): no-shrink invariant live, N1-N5 green, suite 40/40.
+- Evidence spend to date: zero. Estate open for V2 (parity completion) -> V3+.
