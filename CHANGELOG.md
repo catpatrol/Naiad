@@ -72,9 +72,17 @@ behavior touched — this phase adds data tooling, guards, and fixtures only.
   suite 26 → 35 green, Phase 1 fixtures untouched.
 - Artifacts at repo root: `census.json` (manifest of record for the loader
   guards), `DATA_CENSUS.md`, `GAP_REPORT.md`, `SPOT_CHECK.md` (operator
-  sheet, 30 rows, no lockbox candles, exploration rows floored at 2022-01-01
-  to stay clear of the pre-2022 sealed retro holdout). Sidecars in
-  `research_outputs/census/`. Ledger block appended byte-for-byte (D6).
+  sheet, 30 rows, no lockbox candles, exploration rows sampled from 2022-01-01
+  onward for TradingView reachability — pre-2022 is exploration-classic per
+  VR-1, not sealed). Sidecars in `research_outputs/census/`. Ledger block
+  appended byte-for-byte (D6).
+  (Correction, reviewer finding 2026-07-11: the original wording called
+  pre-2022 a "sealed retro holdout" — wrong for the v12 Study, where pre-2022
+  is exploration-classic (VR-1). No pre-2022 restriction exists in the loader
+  or study code; census.json has no such partition. SPOT_CHECK.md now carries
+  33 rows — the 30-row base plus 3 curated deep pre-2022 rows (BTC/ETH/ZEC);
+  the generator's 2022-01-01 window floor is retained only for TradingView
+  reachability of mid-timeframe auto rows.)
 
 ## engine 1.0.1 — reject subkeys carry the signal family (2026-07-10, pre-collector)
 

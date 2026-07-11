@@ -134,7 +134,11 @@ def test_n4_first_save(noshrink_env):
 def test_n5_funding_mirror(noshrink_env):
     full_t = np.arange(T0, T0 + 90 * D, 8 * H)         # 90 days, 8h grid
     _save_funding("BTCUSDT", funding_frame(full_t, rate=1e-4))
-    assert not _funding_path("BTCUSDT").with_suffix(".tmp").exists()
+    # os.replace must leave no pid-suffixed temp behind. The real temp name is
+    # "<file>.parquet.<pid>.tmp"; the old .with_suffix(".tmp") check produced
+    # "BTCUSDT.tmp" and so could never have matched (inert). Glob the actual
+    # pattern instead.
+    assert not list(_funding_path("BTCUSDT").parent.glob("*.tmp"))
 
     win_t = np.arange(T0 + 30 * D, T0 + 60 * D, 8 * H)
     _save_funding("BTCUSDT", funding_frame(win_t, rate=9e-4))
