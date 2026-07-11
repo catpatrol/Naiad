@@ -1,5 +1,46 @@
 # CHANGELOG
 
+## engine 1.0.2 — cache no-shrink invariant (2026-07-10, branch engine-1.0.2-noshrink)
+
+Data-side twin of the stop ratchet: a kline or funding cache file can no
+longer lose rows through the save path. Closes v12 V1 census open item #3
+(the truncating writer). Infrastructure only — no signal, trading, shadow,
+or config behavior changed; both consumers (Naiad paper line, v12 Study)
+inherit the fix.
+
+- **Incident (2026-07-10):** `parity_pack.py --backfill` stamped the 494-day
+  parity window [2025-03-01, 2026-07-08) over the full-history BTCUSDT 5m and
+  1h caches. Root cause: three combining defects in `engine/data.py` —
+  `exists()`-masked silent-empty load, conditional history merge, and a
+  non-atomic whole-file save. Estate already repaired by the census; no cache
+  file needed data changes.
+- **Fix (`engine/data.py`, klines and funding):**
+  - `_load_cache` / `_load_funding` — only `FileNotFoundError` yields an empty
+    frame; any other read failure (corrupt file, transient stat/sharing error)
+    raises and aborts the run. Silent-empty abolished on both the load path
+    and the merge-read inside the save path.
+  - `_save_cache` / `_save_funding` — merge rows already durably on disk back
+    in regardless of the caller's assembled frame (new rows win at identical
+    `open_time`/`funding_time`, `keep="last"` preserved), then land the file
+    atomically via a same-directory pid-suffixed temp + `os.replace`. An
+    interrupted run cannot truncate or corrupt the destination.
+  - `backfill_funding` / `load_funding` routed through the loud-load and
+    merge-in-save funding helpers — structural twins of the kline path.
+- **No deletion primitive (by design):** the save path can no longer shrink a
+  file, for every caller including `census.py --repair`. Genuine row removal
+  is out-of-band: delete the file, re-extend via `census.py --extend`.
+  Accepted residuals: a concurrent last-writer may drop the *other* writer's
+  freshly fetched rows (refetchable, never a shrink below disk); a file
+  deleted and recreated via an engine path restarts at the warm-up anchor, not
+  the listing (`coverage_ok` vs `data_starts.csv` is the detector).
+- **Cost:** one extra parquet read per save — up to a few hundred MB of
+  transient memory for full-history 1m majors (~3.6M rows), negligible against
+  the accompanying network fetch.
+- **Fixtures N1–N5** (`fixtures/test_n_noshrink.py`), synthetic and hermetic
+  via `NAIAD_CACHE_DIR`: merge-preserve, loud load, atomic abort, first save,
+  funding mirror. Suite 35 → 40 green; existing fixtures untouched.
+- `engine_version` 1.0.1 → 1.0.2. The operator owns the merge.
+
 ## v12 Study V1 — data census & integrity gate (2026-07-10, branch v12-v1-census)
 
 Engine version unchanged (1.0.1): no signal, trading, shadow, or config

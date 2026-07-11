@@ -51,6 +51,21 @@ can be normal (exchange maintenance); duplicates are never normal.
 `--all` does the whole 10-asset basket, every interval, from each asset's
 first candle (a large download; hours).
 
+**No-shrink invariant (engine 1.0.2).** A kline or funding cache file can
+never lose rows through the save path: every write merges the rows already on
+disk back in (new rows win at identical timestamps) and lands atomically via a
+temp file + `os.replace`, so no caller — `parity_pack`, `tick`, even
+`census.py --repair` — and no interrupted run can truncate or corrupt a cache.
+The deliberate consequence is that **there is no deletion primitive**: to
+genuinely remove rows you delete the file and re-extend it with
+`python scripts/census.py --extend` (which refills from the exchange listing).
+Two residuals are accepted by design: two writers racing on the same file may
+drop the *other* one's freshly fetched rows (refetchable — never a shrink
+below what was on disk), and a file that is deleted and then recreated through
+an ordinary engine path restarts at the replay warm-up anchor rather than the
+full listing (the census `coverage_ok` check against `data_starts.csv` is the
+detector for that case).
+
 ### 2. Pin the first-candle table — `scripts/first_candles.py`
 
 ```
