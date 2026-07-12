@@ -1,0 +1,10 @@
+I3 — regenerated journal (mem=3) vs validated shadow-at-3
+================================================================================
+  load-bearing entry events (PRIME/CONFIRM/V/X): journal=1790  shadow=1790
+  missing (shadow-only) = 0   extra (journal-only) = 0   field-mismatch = 0
+  >>> I3 DIFF = ZERO — PASS
+
+  regenerated journal SHA256 = 4c7343178af89dc14cd25933a3d5ab76c6b21211d090aad578d81e7413ce92de
+  journal rows on disk = 5446
+  run_id = 1869ff707385dc4e   engine_version = 1.0.3
+  evt census = {'CLUSTER': 504, 'CONFIRM': 463, 'PRIME': 1308, 'REGIME': 30, 'REJECT': 1845, 'STAGE': 5, 'TAG': 1219, 'TPW': 53, 'V': 1, 'X': 18}

@@ -1,0 +1,109 @@
+--- SS_Cascade_v11_0_2.pine	2026-07-09 21:14:32.697949500 -0300
++++ pine/SS_Cascade_v11.3.pine	2026-07-11 18:40:56.342311800 -0300
+@@ -5,6 +5,22 @@
+ //  SECRET SAUCE — CASCADE  v11
+ //
+ //  VERSION BANNER / CHANGELOG
++//  v11.3 (2026-07-11) — "Grade Legibility" (SSv11.3 build prompt; operator
++//    renumber from the 11.0.x scheme — this is the display successor to
++//    v11.0.2, NOT a logic revision). DISPLAY-ONLY per invariant I1:
++//    • R1 grade markers re-styled (VR-B): A+ = gold #FFD700 at size.normal;
++//      A = full direction color at size.small; B = direction color @60%
++//      transparency at size.small. A+ now reads instantly against A/B.
++//    • R2+ adds are now GRADE-DIFFERENTIATED (VR-A Option 3): the two generic
++//      R2+ circles are replaced by six graded circles — A+ gold size.small,
++//      A dir-color size.tiny, B dir@60% size.tiny. Every add shows its grade.
++//    • The two "89x200 Stage 2" glyphs are RETIRED — the deeper Stage-2
++//      background tint already carries that cue; the STAGE alert is unchanged.
++//    • Output budget 57→59 (+2 plotshapes; 60→62 with fills) — see self-audit.
++//    • No trigger/grade/zone/stop/failure/TPW/V or alert() logic changed;
++//      every alert()/alertcondition() block is byte-identical to v11.0.2.
++//      Erratum E-1 (provisional Z2 arming) is DOCUMENTED, not altered (I6);
++//      see SSv12_SPEC_ERRATA.md and the SSv11 playbook erratum edits.
+ //  v11.0.2 — style: exec 89 EMA → purple #9C27B0, exec 200 EMA → blue #2962FF
+ //    (standing project rule, SS_Style_Spec_EMA_Colors.md); 9 EMA unchanged
+ //    yellow. Cosmetic only — zero logic/input/output changes.
+@@ -187,12 +203,13 @@
+ cRegBear    = #D50000                  // aligned bear regime / short stop
+ cRegBullCtr = color.new(#00C853, 60)   // provisional bull arming (faded)
+ cRegBearCtr = color.new(#D50000, 60)   // provisional bear arming (faded)
+-cStageBull  = #1B5E20                  // 89x200 bull stage confirm
+-cStageBear  = #7F0000                  // 89x200 bear stage confirm
+-cPrimeL     = #00E676                  // PRIME long (R1 graded)
+-cPrimeS     = #F50057                  // PRIME short (R1 graded)
+-cR2L        = #4CAF50                  // R2+ adds long
+-cR2S        = #FF5722                  // R2+ adds short
++// v11.3 (VR-A): cStageBull/cStageBear retired with the 89x200 stage glyphs;
++// the deeper Stage-2 background tint (line ~711) carries the cue now.
++cPrimeL     = #00E676                  // grade A long — full direction color (R1/R2+, VR-B)
++cPrimeS     = #F50057                  // grade A short — full direction color (R1/R2+, VR-B)
++cGradeAP    = #FFD700                  // grade A+ — gold, both directions (VR-B)
++cPrimeLB    = color.new(#00E676, 60)   // grade B long — direction color @60% transp (VR-B)
++cPrimeSB    = color.new(#F50057, 60)   // grade B short — direction color @60% transp (VR-B)
+ cConfL      = #FFD600                  // CONFIRM / C long
+ cConfS      = #FFAB00                  // CONFIRM / C short
+ cCapL       = #2979FF                  // Capitulation V long
+@@ -723,21 +740,28 @@
+ plotshape(showArr and counterBullX and bullArrowOK, "Gov Regime ↑ (provisional)", shape.triangleup,   location.belowbar, color=cRegBullCtr, size=size.small)
+ plotshape(showArr and counterBearX and bearArrowOK, "Gov Regime ↓ (provisional)", shape.triangledown, location.abovebar, color=cRegBearCtr, size=size.small)
+ 
+-// Stage confirms — 89×200 governor cross (2 plotshapes)
+-plotshape(stageConfBull, "Stage 2 ↑ (89x200)", shape.circle, location.belowbar, color=cStageBull, text="89x200", textcolor=cStageBull, size=size.tiny)
+-plotshape(stageConfBear, "Stage 2 ↓ (89x200)", shape.circle, location.abovebar, color=cStageBear, text="89x200", textcolor=cStageBear, size=size.tiny)
+-
+-// PRIME R1 grade markers (6 plotshapes — one per grade per direction, §2.3)
+-plotshape(showGrades and isR1L and gAPL, "R1 Long A+", shape.circle, location.belowbar, color=cPrimeL, text="A+", textcolor=cPrimeL, size=size.small)
+-plotshape(showGrades and isR1L and gAL,  "R1 Long A",  shape.circle, location.belowbar, color=cPrimeL, text="A",  textcolor=cPrimeL, size=size.small)
+-plotshape(showGrades and isR1L and gBL,  "R1 Long B",  shape.circle, location.belowbar, color=cPrimeL, text="B",  textcolor=cPrimeL, size=size.small)
+-plotshape(showGrades and isR1S and gAPS, "R1 Short A+", shape.circle, location.abovebar, color=cPrimeS, text="A+", textcolor=cPrimeS, size=size.small)
+-plotshape(showGrades and isR1S and gAS,  "R1 Short A",  shape.circle, location.abovebar, color=cPrimeS, text="A",  textcolor=cPrimeS, size=size.small)
+-plotshape(showGrades and isR1S and gBS,  "R1 Short B",  shape.circle, location.abovebar, color=cPrimeS, text="B",  textcolor=cPrimeS, size=size.small)
+-
+-// PRIME R2+ adds — unlabeled tiny (2 plotshapes)
+-plotshape(isR2L, "R2+ Long",  shape.circle, location.belowbar, color=cR2L, size=size.tiny)
+-plotshape(isR2S, "R2+ Short", shape.circle, location.abovebar, color=cR2S, size=size.tiny)
++// Stage confirms — 89×200 governor cross: glyphs RETIRED in v11.3 (VR-A
++// Option 3). The deeper Stage-2 background tint (line ~711) already carries
++// the cue; the STAGE alert still fires below. stageConfBull/Bear untouched.
++
++// PRIME R1 grade markers (6 plotshapes — one per grade per direction, §2.3).
++// v11.3 (VR-B): A+ gold size.normal · A dir-color size.small · B dir@60% small.
++plotshape(showGrades and isR1L and gAPL, "R1 Long A+", shape.circle, location.belowbar, color=cGradeAP, text="A+", textcolor=cGradeAP, size=size.normal)
++plotshape(showGrades and isR1L and gAL,  "R1 Long A",  shape.circle, location.belowbar, color=cPrimeL,  text="A",  textcolor=cPrimeL,  size=size.small)
++plotshape(showGrades and isR1L and gBL,  "R1 Long B",  shape.circle, location.belowbar, color=cPrimeLB, text="B",  textcolor=cPrimeLB, size=size.small)
++plotshape(showGrades and isR1S and gAPS, "R1 Short A+", shape.circle, location.abovebar, color=cGradeAP, text="A+", textcolor=cGradeAP, size=size.normal)
++plotshape(showGrades and isR1S and gAS,  "R1 Short A",  shape.circle, location.abovebar, color=cPrimeS,  text="A",  textcolor=cPrimeS,  size=size.small)
++plotshape(showGrades and isR1S and gBS,  "R1 Short B",  shape.circle, location.abovebar, color=cPrimeSB, text="B",  textcolor=cPrimeSB, size=size.small)
++
++// PRIME R2+ adds — graded, unlabeled (6 plotshapes, VR-A Option 3 / VR-B):
++// A+ gold size.small · A dir-color size.tiny · B dir@60% size.tiny. Replaces
++// the two generic R2+ circles so grade is legible on every add too.
++plotshape(isR2L and gAPL, "R2+ Long A+", shape.circle, location.belowbar, color=cGradeAP, size=size.small)
++plotshape(isR2L and gAL,  "R2+ Long A",  shape.circle, location.belowbar, color=cPrimeL,  size=size.tiny)
++plotshape(isR2L and gBL,  "R2+ Long B",  shape.circle, location.belowbar, color=cPrimeLB, size=size.tiny)
++plotshape(isR2S and gAPS, "R2+ Short A+", shape.circle, location.abovebar, color=cGradeAP, size=size.small)
++plotshape(isR2S and gAS,  "R2+ Short A",  shape.circle, location.abovebar, color=cPrimeS,  size=size.tiny)
++plotshape(isR2S and gBS,  "R2+ Short B",  shape.circle, location.abovebar, color=cPrimeSB, size=size.tiny)
+ 
+ // CONFIRM diamonds (2) — PRIME-backed adds; C markers (2) — gated
+ // confirm-only entries (ADD §2).
+@@ -872,12 +896,14 @@
+ // ═══════════════════════════════════════════════════════════════════════════
+ //  SELF-AUDIT  (§6, updated for v11.0.2)
+ //
+-//  OUTPUT COUNT (unchanged by the patch):
++//  OUTPUT COUNT (v11.3, VR-A Option 3 — display re-grade; logic unchanged):
+ //    plots 11 (3 exec EMAs + 6 zone edges + 2 stops)
+-//    + plotshapes 32 (4 gov arrows + 2 stage + 6 R1 grades + 2 R2+ +
+-//      2 CONFIRM + 2 C + 2 V + 2 X + 2 TPW + 8 MTF)
+-//    + plotchars 0 + bgcolors 4 + alertconditions 10 = 57 / 64  (≤ 60 ✔)
+-//    (+ 3 fills = 60 if fills are billed against the cap — still ≤ 60 ✔)
++//    + plotshapes 34 (4 gov arrows + 0 stage [retired] + 6 R1 grades +
++//      6 R2+ graded + 2 CONFIRM + 2 C + 2 V + 2 X + 2 TPW + 8 MTF)
++//    + plotchars 0 + bgcolors 4 + alertconditions 10 = 59 / 64  (≤ 64 ✔)
++//    (+ 3 fills = 62 if fills are billed against the cap — still ≤ 64 ✔)
++//    v11.0.2 baseline: plotshapes 32 = 57/64 (60 with fills). Net +2
++//    plotshapes: −2 stage, −2 generic R2+, +6 graded R2+.
+ //
+ //  request.security COUNT: 5 / 5 exactly ✔
+ //    1. tfGovern  f_gov()  — 11-tuple, every element expr[1], lookahead_on ✔

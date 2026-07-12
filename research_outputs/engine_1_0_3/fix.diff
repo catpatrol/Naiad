@@ -1,0 +1,53 @@
+commit 0c516608a2d9f38acdc40e5f9ed94a4240c79cb6
+Author: catpatrol <catpatrolling@gmail.com>
+Date:   Sun Jul 12 03:49:00 2026 -0300
+
+    engine 1.0.3: input-parity conformance (zone_memory 5->3)
+    
+    Root cause of the 2026-06-23 3C parity break (and the May 23/27 divergences):
+    the engine hardcoded zone_memory=5 for 5m exec while the deployed Pine runs
+    zoneMemory=3 (input default, operator-verified on both charts). Logic/bands/EMAs
+    are line-identical; the single constant forked hadPrimeEp/activeZone state.
+    
+    - Fix: Cell.zone_memory -> 3 (all mandates). No signal-logic change.
+    - Input-parity fixtures (test_i_input_parity.py + pine_defaults_manifest.yaml):
+      every signal constant (both configs) + zone_memory (all mandates) asserted vs
+      the .pine defaults; behavioral pins at zone_memory=3 (no PRIME May 23 16:20,
+      no grade-C May 27 12:45, no CONFIRMs Jun 23 17:00/17:45/20:45).
+    - Journal: mem=5 parity + naiad_v0 dryrun journals archived to
+      journal_mem5_archive/ (zoneMemory-5 v12 seed); parity journal regenerated at
+      mem=3 (run_id 1869ff70, engine 1.0.3); I3 diff vs validated shadow = ZERO.
+    - Case windows regenerated; sign-off note states verified inputs.
+    - ENGINE_VERSION 1.0.2 -> 1.0.3; CHANGELOG + LEDGER entries.
+    - Suite 47 passed / 1 skipped (was 40): +8 input-parity fixtures; F8b dryrun
+      scan flips pass->skip (dryrun journal archived; skipif-guarded, unmodified).
+    
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+diff --git a/engine/cells.py b/engine/cells.py
+index f846560..c113a8f 100644
+--- a/engine/cells.py
++++ b/engine/cells.py
+@@ -62,8 +62,11 @@ class Cell:
+ 
+     @property
+     def zone_memory(self) -> int:
+-        # Build prompt §5: zoneMemory 5 when exec = 5m, else 3.
+-        return 5 if self.tf_exec == "5m" else 3
++        # Engine 1.0.3 input-parity conformance: match the deployed Pine
++        # input DEFAULT zoneMemory=3 (SS_Cascade_v11.0.2.pine input.int,
++        # line 121). The former 5-for-5m value is the "zoneMemory-5" v12
++        # named-variant candidate (archived journal seed), not live.
++        return 3
+ 
+ 
+ def make_cell(symbol: str, mandate: str) -> Cell:
+diff --git a/engine/version.py b/engine/version.py
+index f8f1b66..ac6eea5 100644
+--- a/engine/version.py
++++ b/engine/version.py
+@@ -1,3 +1,3 @@
+ """Engine version — bumped on every behavior-affecting change (CHANGELOG.md)."""
+ 
+-ENGINE_VERSION = "1.0.2"
++ENGINE_VERSION = "1.0.3"

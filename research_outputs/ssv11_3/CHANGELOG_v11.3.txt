@@ -1,0 +1,19 @@
+//  VERSION BANNER / CHANGELOG
+//  v11.3 (2026-07-11) — "Grade Legibility" (SSv11.3 build prompt; operator
+//    renumber from the 11.0.x scheme — this is the display successor to
+//    v11.0.2, NOT a logic revision). DISPLAY-ONLY per invariant I1:
+//    • R1 grade markers re-styled (VR-B): A+ = gold #FFD700 at size.normal;
+//      A = full direction color at size.small; B = direction color @60%
+//      transparency at size.small. A+ now reads instantly against A/B.
+//    • R2+ adds are now GRADE-DIFFERENTIATED (VR-A Option 3): the two generic
+//      R2+ circles are replaced by six graded circles — A+ gold size.small,
+//      A dir-color size.tiny, B dir@60% size.tiny. Every add shows its grade.
+//    • The two "89x200 Stage 2" glyphs are RETIRED — the deeper Stage-2
+//      background tint already carries that cue; the STAGE alert is unchanged.
+//    • Output budget 57→59 (+2 plotshapes; 60→62 with fills) — see self-audit.
+//    • No trigger/grade/zone/stop/failure/TPW/V or alert() logic changed;
+//      every alert()/alertcondition() block is byte-identical to v11.0.2.
+//      Erratum E-1 (provisional Z2 arming) is DOCUMENTED, not altered (I6);
+//      see SSv12_SPEC_ERRATA.md and the SSv11 playbook erratum edits.
+//  v11.0.2 — style: exec 89 EMA → purple #9C27B0, exec 200 EMA → blue #2962FF
+//    (standing project rule, SS_Style_Spec_EMA_Colors.md); 9 EMA unchanged

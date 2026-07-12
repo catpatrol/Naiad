@@ -1,0 +1,22 @@
+diff --git a/SSv11_Execution_Playbook_v1_1.md b/SSv11_Execution_Playbook_v1_1.md
+index 8b03630..1da7662 100644
+--- a/SSv11_Execution_Playbook_v1_1.md
++++ b/SSv11_Execution_Playbook_v1_1.md
+@@ -54,7 +54,7 @@ size. Everything else on the chart is management (stops, TPW, X) or context.
+ | Cue | Meaning |
+ |---|---|
+ | **Background tint** | Governor regime (green bull / red bear). **Deep shade = stage-aligned** (89 across the 200): full campaign. **Faint shade = provisional** (Stage 1): campaign live but throttled. |
+-| **Zone bands** | Amber **Z1** (gov 9) and purple **Z2** (gov 89) arm with **every** campaign; cyan **Z3** (gov 89–200 band) appears/arms only when stage-aligned. Bands visible ≠ armed — arming needs a live campaign (dir ≠ 0). |
++| **Zone bands** | Amber **Z1** (gov 9) and purple **Z2** (gov 89) arm with **every** campaign; cyan **Z3** (gov 89–200 band) appears/arms only when stage-aligned. Bands visible ≠ armed — arming needs a live campaign (dir ≠ 0). *Provisional (Stage-1) campaigns arm **Z2**, not just Z1 — see erratum **E-1** (SSv12_SPEC_ERRATA.md); those entries are real but grade-capped at **B**.* |
+ | **Stop step-line** | Green below price = live long campaign with entries printed; red above = live short. No line = no entries yet (machine may still be armed and waiting). |
+ 
+ | What you see | State | Your job |
+@@ -78,7 +78,7 @@ size. Everything else on the chart is management (stops, TPW, X) or context.
+ | Exec 89 EMA | **purple** line | CONFIRM = 9 re-crossing this toward the campaign. (Purple = 89-family, matching the Z2 band.) |
+ | Exec 200 EMA | thin **blue** line | Context on the exec chart. |
+ | Z1 band | amber | Gov-9 zone (±0.25 gov-ATR). Trend-rider add zone. Armed in every campaign. |
+-| Z2 band | purple | Gov-89 zone (±0.35). **The campaign entry zone — armed in every campaign, provisional included** (v11.0.2). |
++| Z2 band | purple | Gov-89 zone (±0.35). **The campaign entry zone — armed in every campaign, provisional (Stage-1) included** per erratum **E-1** (SSv12_SPEC_ERRATA.md): entries there are real, grade ceiling **B** (v11.0.2). |
+ | Z3 band | cyan | Gov 89–200 band (±0.35 pad). Deepest, highest-quality zone; stage-aligned campaigns only. Ribbon-compression filter waived here. |
+ | Stop line | green/red step | Ratcheting risk floor: signal-bar extreme ∓ 0.5 exec-ATR; only tightens. Reference, not an order. |
+ | Background | 4 shades | Regime × tier (see §3). |

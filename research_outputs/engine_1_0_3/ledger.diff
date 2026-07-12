@@ -1,0 +1,41 @@
+commit 0c516608a2d9f38acdc40e5f9ed94a4240c79cb6
+Author: catpatrol <catpatrolling@gmail.com>
+Date:   Sun Jul 12 03:49:00 2026 -0300
+
+    engine 1.0.3: input-parity conformance (zone_memory 5->3)
+    
+    Root cause of the 2026-06-23 3C parity break (and the May 23/27 divergences):
+    the engine hardcoded zone_memory=5 for 5m exec while the deployed Pine runs
+    zoneMemory=3 (input default, operator-verified on both charts). Logic/bands/EMAs
+    are line-identical; the single constant forked hadPrimeEp/activeZone state.
+    
+    - Fix: Cell.zone_memory -> 3 (all mandates). No signal-logic change.
+    - Input-parity fixtures (test_i_input_parity.py + pine_defaults_manifest.yaml):
+      every signal constant (both configs) + zone_memory (all mandates) asserted vs
+      the .pine defaults; behavioral pins at zone_memory=3 (no PRIME May 23 16:20,
+      no grade-C May 27 12:45, no CONFIRMs Jun 23 17:00/17:45/20:45).
+    - Journal: mem=5 parity + naiad_v0 dryrun journals archived to
+      journal_mem5_archive/ (zoneMemory-5 v12 seed); parity journal regenerated at
+      mem=3 (run_id 1869ff70, engine 1.0.3); I3 diff vs validated shadow = ZERO.
+    - Case windows regenerated; sign-off note states verified inputs.
+    - ENGINE_VERSION 1.0.2 -> 1.0.3; CHANGELOG + LEDGER entries.
+    - Suite 47 passed / 1 skipped (was 40): +8 input-parity fixtures; F8b dryrun
+      scan flips pass->skip (dryrun journal archived; skipif-guarded, unmodified).
+    
+    Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+
+diff --git a/LEDGER.md b/LEDGER.md
+index c6d5082..1fb0e57 100644
+--- a/LEDGER.md
++++ b/LEDGER.md
+@@ -76,3 +76,10 @@ proxy of a measurement we can afford to make for real.*
+ ## 2026-07-11 — Halt scope: RATIFIED per_cell
+ - Final open Phase-0 charter decision, closed by operator word (2026-07-11).
+ - Rationale of record: one cell's bad day cannot silence another cell's data collection; portfolio-wide halts remain queued as Phase-2 Experiment E1.
++
++## 2026-07-12 — Engine 1.0.3: input-parity conformance (root cause of the 3C break)
++- Root cause: engine hardcoded zone_memory=5; deployed Pine runs zoneMemory=3 (operator-verified on deployed and v11.3 charts). Bands, EMAs, logic proven identical; one constant forked hadPrimeEp/activeZone state.
++- Ruling: parity target is the deployed chart; engine conforms. zone_memory -> 3 all mandates/configs; input-parity fixture family added (drift can no longer recur silently).
++- Journal: mem=5 parity journal ARCHIVED as v12 named-variant seed ("zoneMemory-5" candidate: 18 extra entries, 2 regrades, 4,360 stop-divergent bars over 9 months). Parity journal REGENERATED at mem=3; diff vs validated shadow = ZERO.
++- Correction to 2026-07-11 criterion entry: the Jun-23 instance was config divergence, not a float fork; the criterion stands as law; measured float-fork count post-conformance: pending re-verify, expected 0.
++- Reviewer record: theories 2-7 falsified by measurement; theory 1 ("engine is the deviant") confirmed by the operator's Inputs reading.

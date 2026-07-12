@@ -1,0 +1,198 @@
+# Handoff — BTCUSDT 5m/1h cache truncation: root cause & proposed guard
+
+- **Scope:** v12 V1 census open item #3 (packet MANIFEST / CHANGELOG 2026-07-10):
+  "some Naiad-line cache writer can persist a windowed frame — recommend a
+  no-shrink guard on `_save_cache`."
+- **Branch / anchor:** `v12-v1-census`, engine 1.0.1 @ `da31062`; coverage
+  report commit `3e40c61`; census contract `070cff4`.
+- **Status:** root cause identified from the estate's own numbers; **no code
+  changed, no cache file touched**. Fix below is a proposal awaiting review.
+- **Estate state:** already repaired — the census re-extended both files from
+  the 2019-09-08 listing before this investigation began (60/60 + 10/10
+  coverage green in committed `census.json`).
+
+---
+
+## 1. Trigger
+
+The Phase 1 coverage report (`research_outputs/coverage/coverage.json`,
+commit `3e40c61`, "backfill to 2026-07-10") records:
+
+| file | first | rows |
+|---|---|---|
+| BTCUSDT_5m.parquet | 1567965300000 = 2019-09-08 17:55 UTC | 718,922 |
+| BTCUSDT_1h.parquet | 1567962000000 = 2019-09-08 17:00 UTC | 59,912 |
+
+The v12 V1 census, run later the same day (2026-07-10), found both cache
+files (`%LOCALAPPDATA%/naiad/data_cache/klines/`) truncated:
+
+| file | first | rows |
+|---|---|---|
+| BTCUSDT_5m.parquet | 2025-03-01 00:00 UTC | 142,272 |
+| BTCUSDT_1h.parquet | 2025-03-01 00:00 UTC | 11,856 |
+
+Everything before 2025-03-01 was gone. The census repaired the files
+(REST re-extension, verified gap-free) but did not chase the writer.
+This investigation audited every writer of the kline cache:
+`engine/data.py` (`_save_cache`, `backfill_klines`), `engine/replay.py`,
+`scripts/parity_pack.py`, `scripts/dryrun_autopsy.py`, `scripts/tick.py`,
+plus `scripts/backfill.py`, `scripts/census.py --extend/--repair`, the
+`study/` package (read-only), and the fixture suite (hermetic via
+`NAIAD_CACHE_DIR`; `v12_packet.py`'s pytest re-run cannot touch the real
+cache).
+
+## 2. Attribution: the truncating write was `parity_pack.py --backfill`
+
+The truncated content is a byte-exact fingerprint of one specific run.
+
+**Row counts.** Both files were the gap-free window
+`[2025-03-01 00:00, 2026-07-08)` — exactly 494 days:
+142,272 = 494 × 288 five-minute bars (last bar 2026-07-07 23:55);
+11,856 = 494 × 24 hourly bars (last bar 2026-07-07 23:00).
+
+**Left edge = the swing cell's warm-up anchor over the parity window.**
+`engine/replay.py:warmup_anchor_ms` gives
+`anchor = month_floor(start − max(2000·tf_exec, 1000·tf_gov) − 35d)`.
+For BTCUSDT_swing (exec 5m, gov 4h): 1000 × 4h ≈ 166.67 d, + 35 d ≈ 201.67 d.
+
+| replay caller | window start | anchor |
+|---|---|---|
+| `parity_pack.py` (WINDOW_START 2025-10-06) | 2025-10-06 | month_floor(2025-03-18) = **2025-03-01** ✓ |
+| `dryrun_autopsy.py` (START 2026-05-01) | 2026-05-01 | 2025-10-01 ✗ |
+| `tick.py` (paper epoch ≈ 2026-07-01) | 2026-07-01 | 2025-12-01 ✗ |
+
+Only the parity window anchors at 2025-03-01. (The earlier "90 days before
+the dry-run start" hypothesis is arithmetically wrong: 2025-03-01 is 426
+days before 2026-05-01.)
+
+**Right edge = daily zips run on/after 2026-07-08.** The requested end was
+WINDOW_END = 2026-07-07 (midnight), but `backfill_klines` fetches daily zips,
+which carry whole days: 17 monthly zips (2025-03 → 2026-06) + 7 daily zips
+(Jul 1–7) = exactly the observed 494 days, through 23:55 / 23:00 on Jul 7.
+
+**Caveat, stated honestly:** that run backfills the full MTF set
+{5m, 1h, 4h, 12h}, so 4h/12h should have been windowed by the same event.
+Only 5m/1h were found truncated. The committed census shows only the
+post-repair state, and any later merging backfill heals a windowed file
+invisibly — so whether 4h/12h were also hit and separately healed cannot be
+reconstructed from the estate. This does not affect the attribution of the
+left/right edges or the fix.
+
+## 3. Root cause: three combining defects in `engine/data.py`
+
+The no-shrink property of the cache is currently an accident of one caller's
+happy path, enforced nowhere. Three defects combine:
+
+1. **`_load_cache` returns silently empty on any failed stat**
+   (`if path.exists(): …`). `Path.exists()` is False not only for a missing
+   file but for any failed `os.stat` — on Windows a transient sharing
+   violation (AV scan, indexer, another process mid-write) suffices. "No
+   cache yet" and "cache unreadable right now" are indistinguishable.
+
+2. **`backfill_klines` preserves history only conditionally**:
+   `frames = [cache] if len(cache) else []`. If the load in (1) returned
+   empty, `merged` is exactly the fetched window `[warmup_anchor, end]` —
+   and every replay-driven writer (parity_pack, dryrun_autopsy, tick, all
+   via `run_replay(backfill=True) → load_cell_data`) passes a
+   warm-up-anchored window by design, never the listing.
+
+3. **`_save_cache` is an unconditional, non-atomic whole-file replace.** It
+   never consults the disk, so whatever frame reaches it becomes the file.
+   `to_parquet` truncates the destination in place, so an interrupted run
+   leaves a corrupt file — and the natural operator recovery (delete,
+   re-run `--backfill`) also recreates the file from the anchor.
+
+**Event reconstruction:** on 2026-07-10, after the coverage backfill,
+`parity_pack.py --backfill` ran; its `_load_cache` for BTCUSDT 5m and 1h did
+not see the existing rows, and `_save_cache` stamped the 494-day parity
+window over both full-history files.
+
+**Proven vs. unproven.** Proven from the estate: the truncating frame's
+identity (window, caller, run date ≥ 2026-07-08) and the code path that
+persisted it. Not provable from the estate: which of the three read-side
+triggers fired (transient stat failure / concurrent non-atomic writer /
+delete-after-corruption). The proposed fix closes all three legs, so the
+distinction does not gate the remedy.
+
+## 4. Proposed fix (minimal diff, two hunks, `engine/data.py` only)
+
+All writers — including `scripts/census.py --repair` — converge on
+`_save_cache`, so one choke point suffices. `os` is already imported.
+
+```diff
+ def _load_cache(symbol: str, interval: str) -> pd.DataFrame:
+     path = _kline_path(symbol, interval)
+-    if path.exists():
+-        return pd.read_parquet(path)
+-    return pd.DataFrame(columns=KLINE_COLS)
++    try:
++        return pd.read_parquet(path)
++    except FileNotFoundError:
++        # the only legitimate "no cache yet" signal — a transient stat or
++        # read failure must raise, never masquerade as an empty cache
++        return pd.DataFrame(columns=KLINE_COLS)
+
+
+ def _save_cache(symbol: str, interval: str, df: pd.DataFrame) -> None:
++    path = _kline_path(symbol, interval)
++    try:
++        # no-shrink invariant: a cache file never loses rows. Rows already
++        # on disk are merged back in regardless of what the caller
++        # assembled; new rows win at identical open_time.
++        df = pd.concat([pd.read_parquet(path), df], ignore_index=True)
++    except FileNotFoundError:
++        pass
+     df = df.drop_duplicates("open_time", keep="last").sort_values("open_time")
+     df = df.reset_index(drop=True)
+-    df.to_parquet(_kline_path(symbol, interval), index=False)
++    tmp = path.with_name(f"{path.name}.{os.getpid()}.tmp")
++    df.to_parquet(tmp, index=False)
++    os.replace(tmp, path)  # atomic — an interrupted run can't corrupt the file
+```
+
+Design notes:
+
+- **Merge-in-save makes no-shrink structural**, not a property of one
+  caller. Windowed saves are the *design* of every replay writer, so a
+  refuse-only guard would crash legitimate runs in exactly the pathological
+  case; merging is self-healing and preserves current `keep="last"`
+  semantics (fetched rows still replace cached rows at the same
+  `open_time` — values correctable, timestamps never droppable).
+- **tmp + `os.replace`** (atomic on Windows same-volume and POSIX) removes
+  the corrupt-file failure mode most likely to have created the empty-read
+  precondition. The pid suffix keeps concurrent savers off one temp file.
+- Concurrent last-writer races can still lose the *other* writer's newly
+  fetched rows (full serialization needs a lock file — out of scope), but
+  no writer can shrink the file below what was durably on disk when it
+  saved: the invariant open item #3 asked for.
+- Cost: one extra parquet read per save (~35 MB peak for the largest
+  series) — negligible against the accompanying network fetch.
+
+## 5. Recommended follow-ups (outside the minimal diff)
+
+1. **`backfill_funding`** carries the identical pattern (`exists()`-gated
+   read + in-place `to_parquet`): the funding estate is one bad stat away
+   from the same truncation. Same two-part treatment.
+2. **Fixture (F-idiom, hermetic):** in a tmp `NAIAD_CACHE_DIR`,
+   `_save_cache` a full synthetic series, then `_save_cache` a one-month
+   slice; assert first/last/row-count unchanged and overlapping timestamps
+   took the new values. Pins the invariant mechanically before the
+   Phase 1.5 collector goes live — `tick.py` on a cron cadence is the path
+   that would otherwise eventually do this to every cell.
+3. **Residual, by design:** a genuinely *deleted* cache file recreated via
+   an engine path starts at the warm-up anchor, not the listing — a
+   recreate, not a shrink. The census `coverage_ok` gate against
+   `data_starts.csv` is the right detector and already exists.
+
+## 6. Reviewer recomputation
+
+- 142,272 / 288 = 494; 11,856 / 24 = 494; 2025-03-01 + 494 d = 2026-07-08.
+- `warmup_anchor_ms` arithmetic: 1000 × 14,400,000 ms = 166.67 d;
+  2025-10-06 − 166.67 d − 35 d ≈ 2025-03-18 → month floor 2025-03-01.
+  Repeat with 2026-05-01 (dry-run) → 2025-10-01, and a 2026-07 epoch
+  (tick) → 2025-12-01, confirming uniqueness.
+- Code path: `engine/data.py` `_load_cache` / `_save_cache` /
+  `backfill_klines` (`frames = [cache] if len(cache) else []`);
+  `engine/replay.py` `warmup_anchor_ms` / `load_cell_data`;
+  `scripts/parity_pack.py` WINDOW_START/WINDOW_END and
+  `run_replay(..., backfill=args.backfill)`.
