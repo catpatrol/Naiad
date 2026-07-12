@@ -1,0 +1,47 @@
+# Pine input DEFAULTS — extracted verbatim from pine/SS_Cascade_v11.0.2.pine
+# (the operator-verified deployed capture). Source of truth for the input-parity
+# fixture (Engine 1.0.3). The parity target is the deployed chart; every live
+# engine signal constant must equal the Pine input default below.
+#
+# Each key is the engine config/cell name; pine/line cite the input.* call.
+# Charter-ratified NON-input divergences (not asserted here): the per-mandate
+# governor/exec/align TFs (charter §4) and v_births_provisional (charter §3.2 —
+# a logic policy, not an input constant; v11_faithful=false matches the Pine
+# literal, naiad_v0=true is the charter override).
+
+source_file: pine/SS_Cascade_v11.0.2.pine
+
+signal:            # must match configs/*.yaml signal block, both configs
+  len_fast: {pine: lenFast, line: 79, default: 9}
+  len_slow: {pine: lenSlow, line: 80, default: 89}
+  len_trend: {pine: lenTrend, line: 81, default: 200}
+  atr_len: {pine: atrLen, line: 82, default: 14}
+  structure_gate: {pine: structureGate, line: 88, default: true}
+  provisional_arming: {pine: provisionalArming, line: 93, default: true}
+  prov_zones: {pine: provZones, line: 99, default: "Z1+Z2"}
+  whipsaw_bars: {pine: whipsawBars, line: 112, default: 10}
+  z1_prox: {pine: z1Prox, line: 118, default: 0.25}
+  z2_prox: {pine: z2Prox, line: 119, default: 0.35}
+  z3_prox: {pine: z3Prox, line: 120, default: 0.35}
+  min_bar_range_atr: {pine: minBarRangeATR, line: 125, default: 0.5}
+  min_ribbon_sep_atr: {pine: minRibbonSepATR, line: 126, default: 0.5}
+  cooldown_bars: {pine: cooldownBars, line: 128, default: 5}
+  max_r_count: {pine: maxRCount, line: 129, default: 0}
+  snipe_on: {pine: snipeOn, line: 132, default: true}
+  snipe_lookback: {pine: snipeLookback, line: 133, default: 55}
+  fib1: {pine: fib1, line: 134, default: 0.5}
+  fib2: {pine: fib2, line: 135, default: 0.786}
+  cap_on: {pine: capOn, line: 140, default: true}
+  climax_mult: {pine: climaxMult, line: 141, default: 3.5}
+  cap_ext_atr: {pine: capExtATR, line: 142, default: 1.0}
+  cap_window: {pine: capWindow, line: 144, default: 10}
+  cap_vol_conf: {pine: capVolConf, line: 145, default: 1.2}
+  vol_len: {pine: volLen, line: 146, default: 20}
+  tpw_on: {pine: tpwOn, line: 149, default: true}
+  cluster_n: {pine: clusterN, line: 150, default: 2}
+  cluster_win: {pine: clusterWin, line: 151, default: 12}
+  stop_buf_atr: {pine: stopBufATR, line: 154, default: 0.5}
+  fail_win: {pine: failWin, line: 158, default: 3}
+
+# cell-layer constant (engine/cells.py property), asserted for every mandate:
+zone_memory: {pine: zoneMemory, line: 121, default: 3}

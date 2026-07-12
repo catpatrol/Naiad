@@ -1,5 +1,27 @@
 # CHANGELOG
 
+## engine 1.0.3 — input-parity conformance (2026-07-12, branch engine-1.0.3-input-parity)
+
+Root cause of the 2026-06-23 parity break (and the May 23/27 divergences): the
+engine hardcoded `zone_memory = 5` for 5m exec (cells.py) while the deployed Pine
+runs `zoneMemory = 3` (input default, operator-verified on the deployed and v11.3
+charts). Bands, EMAs, and signal logic are line-identical to the Pine; the single
+constant forked `hadPrimeEp`/`activeZone` state. Parity target is the deployed
+chart; the engine conforms — never the reverse.
+
+- **Fix:** `Cell.zone_memory` -> 3 for all mandates (was 5 for 5m). No signal-logic
+  change; only the constant differed.
+- **Input-parity fixtures (`fixtures/test_i_input_parity.py` + `pine_defaults_manifest.yaml`):**
+  every live signal constant (both configs) and `zone_memory` (all mandates)
+  asserted against defaults extracted from the .pine; behavioral pins at
+  zone_memory=3 — NO PRIME (May 23 16:20), NO grade-C (May 27 12:45), NO CONFIRMs
+  (Jun 23 17:00/17:45/20:45). Drift can no longer recur silently.
+- **Journal:** mem=5 parity journal ARCHIVED (`research_outputs/parity/journal_mem5_archive/`)
+  as the "zoneMemory-5" v12 named-variant seed (18 extra entries, 2 regrades, 4,360
+  stop-divergent bars over 9 months). Parity journal REGENERATED at mem=3 (new
+  run_id via the version bump); diff vs the validated shadow-at-3 = ZERO.
+- **Version:** ENGINE_VERSION 1.0.2 -> 1.0.3.
+
 ## engine 1.0.2 — cache no-shrink invariant (2026-07-10, branch engine-1.0.2-noshrink)
 
 Data-side twin of the stop ratchet: a kline or funding cache file can no

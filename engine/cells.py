@@ -62,8 +62,11 @@ class Cell:
 
     @property
     def zone_memory(self) -> int:
-        # Build prompt §5: zoneMemory 5 when exec = 5m, else 3.
-        return 5 if self.tf_exec == "5m" else 3
+        # Engine 1.0.3 input-parity conformance: match the deployed Pine
+        # input DEFAULT zoneMemory=3 (SS_Cascade_v11.0.2.pine input.int,
+        # line 121). The former 5-for-5m value is the "zoneMemory-5" v12
+        # named-variant candidate (archived journal seed), not live.
+        return 3
 
 
 def make_cell(symbol: str, mandate: str) -> Cell:
