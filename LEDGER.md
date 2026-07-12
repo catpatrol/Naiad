@@ -72,3 +72,7 @@ proxy of a measurement we can afford to make for real.*
 - Basis: 2026-06-23 break root-caused to a state fork. Evidence: D0 delta EMPTY (deployed == committed, sha 0ade9d01...); v11.3 fresh-compile replicates deployed behavior; deployed chart fires zoneless adds on Jun 24; hair-width tag observed at Jun 24 07:10 (margin 1.6 pts, 0.0025% of price). No engine or Pine change warranted.
 - Measured fork rate: 3 of 5,309 events (0.06%) - inside the 0.5% bound.
 - Jun 22 window: flips to PASS-with-documented-fork when Q4b names the forking bar.
+
+## 2026-07-11 — Halt scope: RATIFIED per_cell
+- Final open Phase-0 charter decision, closed by operator word (2026-07-11).
+- Rationale of record: one cell's bad day cannot silence another cell's data collection; portfolio-wide halts remain queued as Phase-2 Experiment E1.
