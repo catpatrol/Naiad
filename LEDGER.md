@@ -65,3 +65,10 @@ proxy of a measurement we can afford to make for real.*
 - Correction on record: pre-2022 is exploration-classic per VR-1; grep confirmed no code restriction (CHANGELOG carries the dated note).
 - Engine 1.0.2 merged into v12-v1-census (--no-ff): no-shrink invariant live, N1-N5 green, suite 40/40.
 - Evidence spend to date: zero. Estate open for V2 (parity completion) -> V3+.
+
+## 2026-07-11 — 3C verdict-criterion amendment: RATIFIED
+- Old: "engine and chart event streams identical."
+- New (operator-ratified, verbatim): "Engine and chart event streams identical, except at knife-edge state forks — divergences traceable to a boundary comparison within float tolerance of a zone edge or EMA crossing — each identified to its forking bar, documented, and bounded in aggregate below 0.5% of events."
+- Basis: 2026-06-23 break root-caused to a state fork. Evidence: D0 delta EMPTY (deployed == committed, sha 0ade9d01...); v11.3 fresh-compile replicates deployed behavior; deployed chart fires zoneless adds on Jun 24; hair-width tag observed at Jun 24 07:10 (margin 1.6 pts, 0.0025% of price). No engine or Pine change warranted.
+- Measured fork rate: 3 of 5,309 events (0.06%) - inside the 0.5% bound.
+- Jun 22 window: flips to PASS-with-documented-fork when Q4b names the forking bar.
