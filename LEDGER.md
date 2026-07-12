@@ -93,3 +93,10 @@ proxy of a measurement we can afford to make for real.*
 - Errata: E-1 on record (SSv12_SPEC_ERRATA.md). J-1 (REJECT stage dataclass default) parked for next engine touch.
 - Operator sign-off: Ludwig, 2026-07-12. Reviewer: all headline numbers recomputed from raw artifacts.
 - STEP 3 CLOSED. Collector switch-on (Step 5) UNBLOCKED. v12 Study V2 gate SATISFIED; V3 (anchor run) OPEN.
+
+## 2026-07-12 — CORRECTION: v12 gate status in the parity sign-off entry above
+- The sign-off entry of this date (commit cd91ded) closes with "v12 Study V2 gate SATISFIED; V3 (anchor run) OPEN." That claim is incorrect and is superseded by this entry, per VR-4.
+- Correct status: v12 Study V2 = parity legs (3B/3C/3D) SATISFIED plus the ETH+FARTCOIN cross-asset spot check, which remains OUTSTANDING. V3 (anchor run) opens only on its completion.
+- All other content of the sign-off entry stands unchanged and reviewer-verified: every line through the operator sign-off matches the ratified reference byte-for-byte; only the final status claim diverges, and the ratified v12 status bullet is absent. This entry supplies it.
+- Cause: the committed text matches the pre-correction draft; the ratified corrected block (reviewer handoff 2026-07-12, §2/§3.1) was not the version pasted. Ledger is append-only: the original entry is retained as written; this entry supersedes its final claim.
+- Operator: Ludwig, 2026-07-12. Reviewer: correction cross-checked against VR-4, the ratified handoff, and a line-by-line diff of the committed block.
