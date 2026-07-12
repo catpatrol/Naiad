@@ -96,8 +96,10 @@ def write_case_windows(journal_root: Path) -> None:
         "4H, per the swing mandate.",
         "",
         "**How to check (operator sign-off for F6):** open BTCUSDT.P "
-        "(Binance) on TradingView, 5m chart, SS Cascade v11.0.2 with default "
-        "inputs, **chart timezone UTC**. For each table below, step through "
+        "(Binance) on TradingView, 5m chart, SS Cascade v11.0.2 with the verified inputs "
+        "(**Zone memory = 3** — the input default — all other inputs at "
+        "their .pine defaults; see fixtures/pine_defaults_manifest.yaml), "
+        "**chart timezone UTC**. For each table below, step through "
         "the bars and confirm the same events print on the same bars (a "
         "REGIME row here = the bar where the governor cross first becomes "
         "visible on the exec chart; TradingView may paint the arrow across "

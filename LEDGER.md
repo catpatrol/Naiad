@@ -76,3 +76,10 @@ proxy of a measurement we can afford to make for real.*
 ## 2026-07-11 — Halt scope: RATIFIED per_cell
 - Final open Phase-0 charter decision, closed by operator word (2026-07-11).
 - Rationale of record: one cell's bad day cannot silence another cell's data collection; portfolio-wide halts remain queued as Phase-2 Experiment E1.
+
+## 2026-07-12 — Engine 1.0.3: input-parity conformance (root cause of the 3C break)
+- Root cause: engine hardcoded zone_memory=5; deployed Pine runs zoneMemory=3 (operator-verified on deployed and v11.3 charts). Bands, EMAs, logic proven identical; one constant forked hadPrimeEp/activeZone state.
+- Ruling: parity target is the deployed chart; engine conforms. zone_memory -> 3 all mandates/configs; input-parity fixture family added (drift can no longer recur silently).
+- Journal: mem=5 parity journal ARCHIVED as v12 named-variant seed ("zoneMemory-5" candidate: 18 extra entries, 2 regrades, 4,360 stop-divergent bars over 9 months). Parity journal REGENERATED at mem=3; diff vs validated shadow = ZERO.
+- Correction to 2026-07-11 criterion entry: the Jun-23 instance was config divergence, not a float fork; the criterion stands as law; measured float-fork count post-conformance: pending re-verify, expected 0.
+- Reviewer record: theories 2-7 falsified by measurement; theory 1 ("engine is the deviant") confirmed by the operator's Inputs reading.
