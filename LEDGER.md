@@ -83,3 +83,13 @@ proxy of a measurement we can afford to make for real.*
 - Journal: mem=5 parity journal ARCHIVED as v12 named-variant seed ("zoneMemory-5" candidate: 18 extra entries, 2 regrades, 4,360 stop-divergent bars over 9 months). Parity journal REGENERATED at mem=3; diff vs validated shadow = ZERO.
 - Correction to 2026-07-11 criterion entry: the Jun-23 instance was config divergence, not a float fork; the criterion stands as law; measured float-fork count post-conformance: pending re-verify, expected 0.
 - Reviewer record: theories 2-7 falsified by measurement; theory 1 ("engine is the deviant") confirmed by the operator's Inputs reading.
+
+## 2026-07-12 — TradingView parity sign-off (Runbook Step 3 / F6): CLOSED — PASS
+- Instrument: deployed SS Cascade v11.0.2 (= v11.3 logic), inputs at defaults (Zone memory = 3, operator-verified). Engine 1.0.3 (input-parity conformance); parity journal run_id 1869ff70..., SHA 4c734317...ce92de, 5,446 rows; I3 diff vs validated shadow = ZERO.
+- 3A: 30/30 4H governor crosses exact. 3B: 11/11 12H by EMA geometry; 0/11 native prints = design.
+- 3C, six case windows: Jul 2-6 PASS · Jun 14-16 PASS · Jun 22-23 PASS (former break resolved by 1.0.3; phantom mem=5 events removed; chart == journal) · May 16-26 PASS (two regrades "-"->C glyph-verified: 05-17 13:50, 05-29 21:25) · Feb 6 Tier-2 PASS · Dec 4-13 Tier-2 PASS (lone V verified in campaign context). Tiers: 1 = chart-verified; 2 = past TradingView intraday horizon, covered by I3 shadow equivalence.
+- 3D: Outcome C on both doctrine dates (no V printed on any chart or TF; engine agrees). V census: 1 firing in 9 months (2025-12-12 15:25, short @ 90,795).
+- Knife-edge criterion (bf92eaa) stands as law; measured float-fork count post-conformance = 0 — every prior divergence traced to the zone_memory constant, corrected in 1.0.3 and fixture-pinned.
+- Errata: E-1 on record (SSv12_SPEC_ERRATA.md). J-1 (REJECT stage dataclass default) parked for next engine touch.
+- Operator sign-off: Ludwig, 2026-07-12. Reviewer: all headline numbers recomputed from raw artifacts.
+- STEP 3 CLOSED. Collector switch-on (Step 5) UNBLOCKED. v12 Study V2 gate SATISFIED; V3 (anchor run) OPEN.
