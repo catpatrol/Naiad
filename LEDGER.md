@@ -100,3 +100,14 @@ proxy of a measurement we can afford to make for real.*
 - All other content of the sign-off entry stands unchanged and reviewer-verified: every line through the operator sign-off matches the ratified reference byte-for-byte; only the final status claim diverges, and the ratified v12 status bullet is absent. This entry supplies it.
 - Cause: the committed text matches the pre-correction draft; the ratified corrected block (reviewer handoff 2026-07-12, §2/§3.1) was not the version pasted. Ledger is append-only: the original entry is retained as written; this entry supersedes its final claim.
 - Operator: Ludwig, 2026-07-12. Reviewer: correction cross-checked against VR-4, the ratified handoff, and a line-by-line diff of the committed block.
+
+## 2026-07-13 — v12 Study V2 gate: CLOSED — PASS
+- Final V2 item per VR-4 / Charter Addendum line 172: ETH+FARTCOIN cross-asset parity spot check. Result: PASS.
+- Protocol: engine 1.0.3 (input-parity), 4H governor crosses, inputs at defaults (Zone memory = 3), UTC. Operator verified each printed cross on deployed TradingView v11.3.
+- ETHUSDT: 10 most-recent 4H governor crosses (span 2026-04-28 → 2026-07-02), all confirmed on-chart, direction exact. Listing floor organic.
+- FARTCOINUSDT: 10 most-recent 4H governor crosses (span 2026-05-13 → 2026-07-11), all confirmed on-chart, direction exact. First-valid candle 2024-12-20T16:00Z reached organically (detected_first == first_valid, floor_overridden = False); LIT-class trap correctly did NOT fire — single-identity asset, no ticker-sharing history, EMA-200 fully warmed.
+- Operator also independently verified regime-tint (EMA89×EMA200) flips against chart (e.g. 2026-05-17 20:00 → full bear); engine and chart agree on both governor and regime layers.
+- 20/20 rows verified clean across both assets. No mismatch.
+- V2 requirement census: parity 3B CLOSED, 3C CLOSED, 3D CLOSED, ETH+FARTCOIN spot check CLOSED. V2 gate SATISFIED in full.
+- STEP: v12 Study V2 CLOSED. V3 (anchor run) OPEN.
+- Operator sign-off: Ludwig, 2026-07-13. Reviewer: spot-check events and floor status recomputed from engine artifacts; operator performed chart verification.
