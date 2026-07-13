@@ -286,6 +286,20 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
         if open_ms[i] < start_ms:
             continue  # warm-up: state machine only, no book, no ledgers
 
+        # 0. Campaign-death net (1.0.5, G-4; design ruling of 2026-07-13).
+        # The signals arming block re-arms on every exec bar of the
+        # cross-visibility window (Pine-literal), so a counter-window V
+        # campaign can be silently overwritten one bar after birth — dir
+        # flips, the dying side's stop clears, and NO X / REGIME / V event
+        # fires. The book follows the campaign: a direction mismatch at the
+        # prior close with no event-queued flatten exits at THIS open,
+        # uniform with the three event-based death modes. Event-queued
+        # flattens keep their reasons (failure_x / opposite_cross /
+        # v_reversal); this net never overrides them.
+        if open_tranches and pending_flatten is None \
+                and sig.dir[i - 1] != open_tranches[0].dir:
+            pending_flatten = "campaign_died"
+
         # 1. Stop-guarantee-and-repair (first action of every wake).
         # 1.0.4 (G-3): the one-bar death transition is exempt — signals clear
         # the dying side's ratchet ON the death bar (opposite cross / X /

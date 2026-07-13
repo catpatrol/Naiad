@@ -1,5 +1,47 @@
 # CHANGELOG
 
+## engine 1.0.5 — wake-time campaign-death net (2026-07-13, G-4)
+
+Second latent trading-layer defect surfaced by deep history during V3
+anchor-run pre-flight (first observed: BTCUSDT_swing bar 52115, 2020-03-07
+16:50Z). The signals arming block re-arms on every exec bar of the
+cross-visibility window (Pine-literal, parity-signed — §4.1 "literal,
+including re-arming"), so a counter-window V campaign is silently overwritten
+one bar after birth: dir flips, campaign id increments, the dying side's stop
+clears, and NO X / REGIME / V event is journaled. The trading layer's flatten
+triggers were all event-based — the position was stranded (short, no stop,
+campaign long) and the step-1 stop-guarantee fired as a TRUE positive.
+
+- **Design ruling of record (operator, 2026-07-13, charter §3 trading
+  semantics):** a campaign killed by silent re-arm overwrite exits at the
+  NEXT open via the wake-time campaign-death net, exit_reason
+  `campaign_died` — uniform with the three event-based death modes (one bar
+  of exposure, same fill model). The signal layer is untouched.
+- **Alternative logged, not lost:** an entry-filter interpretation
+  (V-into-standing-cross never opens a tranche) is REGISTERED as a v12
+  named-variant seed — "V-entry-filter" — joining the register alongside
+  zoneMemory-5, provisional-Z1-only, and zone-gated CONFIRM adds; to be
+  tested against this baseline in a chartered VR-2 slot.
+- **Fix (`engine/trading.py`):** new step 0 before the stop-guarantee:
+  `if open_tranches and pending_flatten is None and sig.dir[i-1] !=
+  open_tranches[0].dir: pending_flatten = "campaign_died"`. Fires ONLY when
+  no event-queued flatten exists; failure_x / opposite_cross / v_reversal
+  reasons untouched. `campaign_died` is a new value in the existing
+  free-form exit_reason journal field — no schema change.
+- **Fixture (`fixtures/test_g4_campaign_death_net.py`):** silent re-arm
+  scenario (short tranche, dir flips +1 next bar with no event) — raises
+  GateViolation on 1.0.4, flattens at the next open with
+  exit_reason=campaign_died on 1.0.5. The stop-guarantee floor is
+  unweakened: test_orphan_still_hard_fails (G-3 file) still passes — NaN
+  stop + no queued flatten + NO direction mismatch remains a hard failure.
+- **Scope per ruling:** G-4 only. G-1 and J-1 move to 1.0.6 (post-anchor-run
+  touch); no loading or journal-schema paths touched. G-2 unchanged.
+- **Parity:** the net provably cannot fire on any signed window — the state
+  it detects implied a 1.0.3 GateViolation, and those windows ran clean.
+  Pinned-stamp regeneration (1.0.5 code, "1.0.3" stamp) re-verified SHA256
+  byte-identity with the signed parity journal (4c734317…ce92de).
+- **Version:** ENGINE_VERSION 1.0.4 -> 1.0.5.
+
 ## engine 1.0.4 — stop-guarantee death-transition exemption (2026-07-13, G-3)
 
 The step-1 stop-guarantee assert (trading.py) fired spuriously on the one-bar
