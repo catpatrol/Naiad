@@ -1,5 +1,36 @@
 # CHANGELOG
 
+## engine 1.0.4 — stop-guarantee death-transition exemption (2026-07-13, G-3)
+
+The step-1 stop-guarantee assert (trading.py) fired spuriously on the one-bar
+campaign-death transition: the signals layer clears the dying side's ratchet
+ON the death bar (opposite governor cross / X failure / V-reversal), the real
+book flattens at the NEXT open (wake step 3a), and the assert ran first and
+read the now-NaN ratchet. Latent since 1.0.0 — the parity/spent window never
+had a tranche still open when a death arrived; deep history hits it almost
+immediately (first observed: BTCUSDT_swing bar 31418, 2019-12-26 20:05Z,
+during V3 anchor-run pre-flight; operator-ratified G-3 ruling of 2026-07-13).
+
+- **Fix (`engine/trading.py`, one line):** step-1 guard `if open_tranches:` ->
+  `if open_tranches and pending_flatten is None:`. Exempts ONLY the wake whose
+  open already carries a queued flatten fill. A NaN stop with NO queued
+  flatten remains a hard GateViolation for all death modes — the guarantee is
+  narrowed by exactly one bar, not weakened.
+- **Fixture (`fixtures/test_g3_death_transition.py`):** the exact sequence
+  (open tranche + opposite cross next bar) must flatten at that bar's open
+  and must not raise — FAILS on 1.0.3, PASSES on 1.0.4; plus the bound test:
+  an orphaned NaN-stop position with no queued flatten still raises.
+- **Scope per ruling:** G-3 only. G-1 (code-level lockbox guard on the replay
+  path) and J-1 (REJECT stage dataclass default) DEFERRED to 1.0.5 — no
+  loading or journal-schema paths touched. G-2 (LIT Litentry cache bars)
+  deferred to post-run estate remediation.
+- **Parity:** signed parity journal regenerated under the 1.0.4 code with the
+  1.0.3 version stamp pinned -> SHA256 byte-identical to the signed value
+  (4c734317…ce92de) — the fix changes no strategy behavior. (A verbatim 1.0.4
+  rerun re-stamps engine_version and run_id on every row by design, so the
+  raw SHA necessarily differs; the pinned-stamp run is the behavior proof.)
+- **Version:** ENGINE_VERSION 1.0.3 -> 1.0.4.
+
 ## engine 1.0.3 — input-parity conformance (2026-07-12, branch engine-1.0.3-input-parity)
 
 Root cause of the 2026-06-23 parity break (and the May 23/27 divergences): the

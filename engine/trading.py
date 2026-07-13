@@ -287,7 +287,11 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
             continue  # warm-up: state machine only, no book, no ledgers
 
         # 1. Stop-guarantee-and-repair (first action of every wake).
-        if open_tranches:
+        # 1.0.4 (G-3): the one-bar death transition is exempt — signals clear
+        # the dying side's ratchet ON the death bar (opposite cross / X /
+        # V-reversal) and the flatten is already queued for THIS wake's open
+        # (step 3a). A NaN stop with NO queued flatten stays a hard failure.
+        if open_tranches and pending_flatten is None:
             d = open_tranches[0].dir
             if np.isnan(stop_level(i, d)):
                 raise GateViolation(
