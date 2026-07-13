@@ -1,0 +1,240 @@
+{
+  "BTCUSDT_intraday|annex_spent": {
+    "identical": true,
+    "pass1": "49e7114f315ede4d5bfe8ca96452ffb81356df95c6380699658bfdfd085f010f",
+    "pass2": "49e7114f315ede4d5bfe8ca96452ffb81356df95c6380699658bfdfd085f010f"
+  },
+  "BTCUSDT_intraday|scored": {
+    "identical": true,
+    "pass1": "962b4cd1a31bddc850c4c9e635bed64d80f57dd777e3322edbcb8de27eb7f199",
+    "pass2": "962b4cd1a31bddc850c4c9e635bed64d80f57dd777e3322edbcb8de27eb7f199"
+  },
+  "BTCUSDT_position|annex_spent": {
+    "identical": true,
+    "pass1": "e66635f013095cdcd2d9e48d734218b71b73509f2089be5683781939409af43a",
+    "pass2": "e66635f013095cdcd2d9e48d734218b71b73509f2089be5683781939409af43a"
+  },
+  "BTCUSDT_position|scored": {
+    "identical": true,
+    "pass1": "28de3233b4cdfb32c7f6eaaea3f00b09e1d4b9c64b30eebdefd011a0c2a1edb9",
+    "pass2": "28de3233b4cdfb32c7f6eaaea3f00b09e1d4b9c64b30eebdefd011a0c2a1edb9"
+  },
+  "BTCUSDT_swing|annex_spent": {
+    "identical": true,
+    "pass1": "64c77df5aacd6c3866bffd5156cd33f8ff4d0f817a44881a35bd4f6e08a47130",
+    "pass2": "64c77df5aacd6c3866bffd5156cd33f8ff4d0f817a44881a35bd4f6e08a47130"
+  },
+  "BTCUSDT_swing|scored": {
+    "identical": true,
+    "pass1": "069f2e2bc93230ef14b03322f00e58923ec998a40d21e320b049852123706778",
+    "pass2": "069f2e2bc93230ef14b03322f00e58923ec998a40d21e320b049852123706778"
+  },
+  "ETHUSDT_intraday|annex_contam": {
+    "identical": true,
+    "pass1": "5685fde41306bcead33d02e046ad5792eb9020aed06a2a73ace74002e90c0901",
+    "pass2": "5685fde41306bcead33d02e046ad5792eb9020aed06a2a73ace74002e90c0901"
+  },
+  "ETHUSDT_intraday|scored": {
+    "identical": true,
+    "pass1": "6ee5d35b2638a57d7554341fa864a73889d0c4f67cbd60c859328a41e2a7a119",
+    "pass2": "6ee5d35b2638a57d7554341fa864a73889d0c4f67cbd60c859328a41e2a7a119"
+  },
+  "ETHUSDT_position|annex_contam": {
+    "identical": true,
+    "pass1": "074339f34ee331d45e1e3cfb4bd18a6c03512ae9aae48a1215c53a07baec78b0",
+    "pass2": "074339f34ee331d45e1e3cfb4bd18a6c03512ae9aae48a1215c53a07baec78b0"
+  },
+  "ETHUSDT_position|scored": {
+    "identical": true,
+    "pass1": "5f0e46c4d93d34ee58c45bd31a24b09c419d99812d6c599b76f0f4edeae28d9f",
+    "pass2": "5f0e46c4d93d34ee58c45bd31a24b09c419d99812d6c599b76f0f4edeae28d9f"
+  },
+  "ETHUSDT_swing|annex_contam": {
+    "identical": true,
+    "pass1": "02d16db5decc47108aa68eba6bdad4d2d59b46780f04033e5e963e1c6c0aad04",
+    "pass2": "02d16db5decc47108aa68eba6bdad4d2d59b46780f04033e5e963e1c6c0aad04"
+  },
+  "ETHUSDT_swing|scored": {
+    "identical": true,
+    "pass1": "7cfa4c1e94f16dff76342a95a0e209a4abee0e61b108085e2042c24700a6008b",
+    "pass2": "7cfa4c1e94f16dff76342a95a0e209a4abee0e61b108085e2042c24700a6008b"
+  },
+  "FARTCOINUSDT_intraday|annex_contam": {
+    "identical": true,
+    "pass1": "5f9c45520f1b65a43191896155b75491ff8bfb1cfb2b8cfd82aec80afe0206f7",
+    "pass2": "5f9c45520f1b65a43191896155b75491ff8bfb1cfb2b8cfd82aec80afe0206f7"
+  },
+  "FARTCOINUSDT_position|annex_contam": {
+    "identical": true,
+    "pass1": "c961e4ed4d3f6a1a17777f9a015f48452a547ffc0d392ff8d771f1d340aca01d",
+    "pass2": "c961e4ed4d3f6a1a17777f9a015f48452a547ffc0d392ff8d771f1d340aca01d"
+  },
+  "FARTCOINUSDT_swing|annex_contam": {
+    "identical": true,
+    "pass1": "3e6af1b8751defd675fda5eba31fe0244f4a4a2face1db0d0e7a7a221834593d",
+    "pass2": "3e6af1b8751defd675fda5eba31fe0244f4a4a2face1db0d0e7a7a221834593d"
+  },
+  "HYPEUSDT_intraday|annex_contam": {
+    "identical": true,
+    "pass1": "628c96160663a0e950ddad678c824f1679d240a784039566e6fdc79b1e76f874",
+    "pass2": "628c96160663a0e950ddad678c824f1679d240a784039566e6fdc79b1e76f874"
+  },
+  "HYPEUSDT_position|annex_contam": {
+    "identical": true,
+    "pass1": "23219545907a15db6df8d7ce79e0e46293e758d9305d89f7d532df7f3dbbf47c",
+    "pass2": "23219545907a15db6df8d7ce79e0e46293e758d9305d89f7d532df7f3dbbf47c"
+  },
+  "HYPEUSDT_swing|annex_contam": {
+    "identical": true,
+    "pass1": "4ac992b7b26c0725cda1fc91faa41317406f837720c9eea4b7ffbf81ab7fceca",
+    "pass2": "4ac992b7b26c0725cda1fc91faa41317406f837720c9eea4b7ffbf81ab7fceca"
+  },
+  "JTOUSDT_intraday|annex_contam": {
+    "identical": true,
+    "pass1": "480435534b636b733dffd56eb0202878f0933ef4c8fe1911f2fac71e210da027",
+    "pass2": "480435534b636b733dffd56eb0202878f0933ef4c8fe1911f2fac71e210da027"
+  },
+  "JTOUSDT_intraday|scored": {
+    "identical": true,
+    "pass1": "3140dd3db2ad6f3ec5aa0b5be6d91e7a300780495013110ff6d5336c949dad38",
+    "pass2": "3140dd3db2ad6f3ec5aa0b5be6d91e7a300780495013110ff6d5336c949dad38"
+  },
+  "JTOUSDT_position|annex_contam": {
+    "identical": true,
+    "pass1": "5d53b5bf7434b1b9eca25c5e360d38e260011de608ba2409f3c84602341fbc3d",
+    "pass2": "5d53b5bf7434b1b9eca25c5e360d38e260011de608ba2409f3c84602341fbc3d"
+  },
+  "JTOUSDT_position|scored": {
+    "identical": true,
+    "pass1": "403fcea8f51263fd1754e16d24ab3459b0efc6864f7072c887109c8fe997ad8b",
+    "pass2": "403fcea8f51263fd1754e16d24ab3459b0efc6864f7072c887109c8fe997ad8b"
+  },
+  "JTOUSDT_swing|annex_contam": {
+    "identical": true,
+    "pass1": "910a863819547673ab699e17c38f2b3bb0bef16c0f7b6d933d0d7dc9d16b07bb",
+    "pass2": "910a863819547673ab699e17c38f2b3bb0bef16c0f7b6d933d0d7dc9d16b07bb"
+  },
+  "JTOUSDT_swing|scored": {
+    "identical": true,
+    "pass1": "51900b9c3e5dac69c7dd6edd6bdd7bfaacf4f7ab1082ce6c8cfae771e62f6783",
+    "pass2": "51900b9c3e5dac69c7dd6edd6bdd7bfaacf4f7ab1082ce6c8cfae771e62f6783"
+  },
+  "NEARUSDT_intraday|annex_contam": {
+    "identical": true,
+    "pass1": "ec74024a85ec3820884293b72a8544dac0d11039235200e5bb8d5e27b3327940",
+    "pass2": "ec74024a85ec3820884293b72a8544dac0d11039235200e5bb8d5e27b3327940"
+  },
+  "NEARUSDT_intraday|scored": {
+    "identical": true,
+    "pass1": "8e64478cedfb7e5976f0e41027f7934800d3aa4cf73e487b305d49ed860b1643",
+    "pass2": "8e64478cedfb7e5976f0e41027f7934800d3aa4cf73e487b305d49ed860b1643"
+  },
+  "NEARUSDT_position|annex_contam": {
+    "identical": true,
+    "pass1": "14681a336251960e811fc3a4227f3be81610a4848d34fb195d27c128f6260dc5",
+    "pass2": "14681a336251960e811fc3a4227f3be81610a4848d34fb195d27c128f6260dc5"
+  },
+  "NEARUSDT_position|scored": {
+    "identical": true,
+    "pass1": "60c5aca148ed01a819a7e3431e512fb494b80ddd729400323709c5dee36a1a5d",
+    "pass2": "60c5aca148ed01a819a7e3431e512fb494b80ddd729400323709c5dee36a1a5d"
+  },
+  "NEARUSDT_swing|annex_contam": {
+    "identical": true,
+    "pass1": "3591af4faf2a57931d07f4090d586ac66620564d9996ed3e60f36e6e8ca10a37",
+    "pass2": "3591af4faf2a57931d07f4090d586ac66620564d9996ed3e60f36e6e8ca10a37"
+  },
+  "NEARUSDT_swing|scored": {
+    "identical": true,
+    "pass1": "9568556fdcff73415520f3ebe84d41118fccd4c1cbfb03902b3d4fc48d2e0c4e",
+    "pass2": "9568556fdcff73415520f3ebe84d41118fccd4c1cbfb03902b3d4fc48d2e0c4e"
+  },
+  "SOLUSDT_intraday|annex_contam": {
+    "identical": true,
+    "pass1": "1f8f7ebd9598dfb83232d93c1040a08eefe4adccf20b8c70f556310f9efbd9b7",
+    "pass2": "1f8f7ebd9598dfb83232d93c1040a08eefe4adccf20b8c70f556310f9efbd9b7"
+  },
+  "SOLUSDT_intraday|scored": {
+    "identical": true,
+    "pass1": "3b936d112e57748682d1ef1ed5a6b6698d583a6835067d499b6f35b400ac7eff",
+    "pass2": "3b936d112e57748682d1ef1ed5a6b6698d583a6835067d499b6f35b400ac7eff"
+  },
+  "SOLUSDT_position|annex_contam": {
+    "identical": true,
+    "pass1": "15714567eae522cafd70a9b8b5bc9d7b61beccc8de453e0217208ac3ac2471fc",
+    "pass2": "15714567eae522cafd70a9b8b5bc9d7b61beccc8de453e0217208ac3ac2471fc"
+  },
+  "SOLUSDT_position|scored": {
+    "identical": true,
+    "pass1": "5697c64115c605a1a4d0c17ff413ff83c75ce4b907db97fd76e096bbea86b96e",
+    "pass2": "5697c64115c605a1a4d0c17ff413ff83c75ce4b907db97fd76e096bbea86b96e"
+  },
+  "SOLUSDT_swing|annex_contam": {
+    "identical": true,
+    "pass1": "3637ff635c65ea99e0e3909116b4375eb7d5ff7ab6cfa182d1d32045008ffb5e",
+    "pass2": "3637ff635c65ea99e0e3909116b4375eb7d5ff7ab6cfa182d1d32045008ffb5e"
+  },
+  "SOLUSDT_swing|scored": {
+    "identical": true,
+    "pass1": "f4872e448dac43de5b92b442fab04e82c5651b3bf8397b2c2d440b4922198d36",
+    "pass2": "f4872e448dac43de5b92b442fab04e82c5651b3bf8397b2c2d440b4922198d36"
+  },
+  "TAOUSDT_intraday|annex_contam": {
+    "identical": true,
+    "pass1": "80b4b88cdb0e0954487777c649edebe062809da4d732dea67e67a599646f5b3c",
+    "pass2": "80b4b88cdb0e0954487777c649edebe062809da4d732dea67e67a599646f5b3c"
+  },
+  "TAOUSDT_intraday|scored": {
+    "identical": true,
+    "pass1": "739af4386ea917245bcf72cc574ae924666c462aa9c24a6164fb43f43383c5df",
+    "pass2": "739af4386ea917245bcf72cc574ae924666c462aa9c24a6164fb43f43383c5df"
+  },
+  "TAOUSDT_position|annex_contam": {
+    "identical": true,
+    "pass1": "e3358eb512bc75aab8ac40e395ff38fd79732a9ecf24ea520536fa21f374a381",
+    "pass2": "e3358eb512bc75aab8ac40e395ff38fd79732a9ecf24ea520536fa21f374a381"
+  },
+  "TAOUSDT_swing|annex_contam": {
+    "identical": true,
+    "pass1": "8f6606d827e3dae6c18c3eef881794e29881170e6c003209842527b3435874af",
+    "pass2": "8f6606d827e3dae6c18c3eef881794e29881170e6c003209842527b3435874af"
+  },
+  "TAOUSDT_swing|scored": {
+    "identical": true,
+    "pass1": "0d0bccdf7c1f34761e3512fa9a7cc5e038ac6dac90970cac32cbdb3e331f2068",
+    "pass2": "0d0bccdf7c1f34761e3512fa9a7cc5e038ac6dac90970cac32cbdb3e331f2068"
+  },
+  "ZECUSDT_intraday|annex_contam": {
+    "identical": true,
+    "pass1": "5a972e757addb8de0e861ff65cd4a692c3d3fe77963018aee79fc7c25d786298",
+    "pass2": "5a972e757addb8de0e861ff65cd4a692c3d3fe77963018aee79fc7c25d786298"
+  },
+  "ZECUSDT_intraday|scored": {
+    "identical": true,
+    "pass1": "825f5078483260f81fbd44a99aa517c0efa00553825a567b61c988efccca131b",
+    "pass2": "825f5078483260f81fbd44a99aa517c0efa00553825a567b61c988efccca131b"
+  },
+  "ZECUSDT_position|annex_contam": {
+    "identical": true,
+    "pass1": "8af47b11d2d0974e4092a048a85d2ee581d1f45b291939108ab7caa602a19ab0",
+    "pass2": "8af47b11d2d0974e4092a048a85d2ee581d1f45b291939108ab7caa602a19ab0"
+  },
+  "ZECUSDT_position|scored": {
+    "identical": true,
+    "pass1": "f2dba3ee47c56afe377df9f9d24ce6f2b75d02c807f03b5ca7660533c1504b19",
+    "pass2": "f2dba3ee47c56afe377df9f9d24ce6f2b75d02c807f03b5ca7660533c1504b19"
+  },
+  "ZECUSDT_swing|annex_contam": {
+    "identical": true,
+    "pass1": "1b979c530abe4f8ef850db759e3e942240b7e3c4dfd4c43f9b394797c19c72d2",
+    "pass2": "1b979c530abe4f8ef850db759e3e942240b7e3c4dfd4c43f9b394797c19c72d2"
+  },
+  "ZECUSDT_swing|scored": {
+    "identical": true,
+    "pass1": "0a27200988f98b6f29a171f52f38f8c9ad924e1b58c9074a50f4b6f2b17e6a1c",
+    "pass2": "0a27200988f98b6f29a171f52f38f8c9ad924e1b58c9074a50f4b6f2b17e6a1c"
+  },
+  "all_identical": true,
+  "mismatches": [],
+  "pass1_min": null
+}

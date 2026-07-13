@@ -1,0 +1,70 @@
+{
+  "H-A1": {
+    "best_campaign_r1": 114.4519,
+    "cut_pct": null,
+    "grid_net_r_1x": -5756.9093,
+    "net_positive_cells": 0,
+    "of_which_top1_ge_30pct": 0,
+    "part1": "INDETERMINATE (grid net R <= 0; reduction-percentage undefined)",
+    "part2": "INDETERMINATE (no net-positive cells)",
+    "registered": "removing the single best campaign cuts grid total net R by >=25%; AND in a majority of net-positive cell-partitions the top campaign carries >=30% of that cell's net R",
+    "verdict": "INDETERMINATE"
+  },
+  "H-A2": {
+    "e_A_or_better": -1.488,
+    "e_B": -1.6138,
+    "e_C": null,
+    "note": "C-grade never fills by design (engine gate); C cohort structurally empty \u2014 'B > C' leg unevaluable as registered.",
+    "registered": "pooled net expectancy per campaign orders A-or-better > B > C",
+    "verdict": "PASS (partial: A-or-better > B; C empty by design)"
+  },
+  "H-A3": {
+    "per_asset_net_r_1x": {
+      "ETHUSDT": {
+        "intraday": -1311.5346,
+        "position": -65.0173,
+        "swing": -155.978
+      },
+      "NEARUSDT": {
+        "intraday": -837.2108,
+        "position": -22.9557,
+        "swing": -68.4748
+      },
+      "SOLUSDT": {
+        "intraday": -882.9863,
+        "position": -20.1418,
+        "swing": -130.2148
+      },
+      "ZECUSDT": {
+        "intraday": -663.1247,
+        "position": -41.6032,
+        "swing": -270.5798
+      }
+    },
+    "positive_in_swing": 0,
+    "reading": "PRIMARY: diagonal = swing (the deployed 4H/5m configuration). AMBIGUITY FLAGGED: 'diagonal mandate' is not defined per-asset anywhere in the charter; per-mandate numbers printed so the reviewer can re-score under any reading without re-running.",
+    "registered": "at least two of {ETH, SOL, NEAR, ZEC} show positive net total R in exploration-classic in their diagonal mandate",
+    "verdict": "FAIL"
+  },
+  "H-A4": {
+    "expectancies": {
+      "intraday": -1.9205,
+      "position": -0.8455,
+      "swing": -1.0434
+    },
+    "registered": "pooled per-campaign net expectancy: position >= swing >= intraday",
+    "verdict": "PASS"
+  },
+  "H-A5": {
+    "census": {
+      "FADED": 1100,
+      "NEVER_GREEN": 1830,
+      "PROTECTED": 3381,
+      "STILLBORN": 2076
+    },
+    "largest": "PROTECTED",
+    "registered": "STILLBORN is the single largest taxonomy cohort grid-wide",
+    "verdict": "FAIL"
+  },
+  "basis": "scored partitions only (exploration-classic, 20 cells), 1x costs, campaign-level"
+}

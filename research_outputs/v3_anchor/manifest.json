@@ -1,0 +1,2419 @@
+{
+  "config": {
+    "id": "v12_anchor",
+    "proof_shadows_vs_naiad_v0": "EMPTY (byte-identical)",
+    "proof_signal_vs_v11_faithful": "EMPTY (byte-identical)",
+    "proof_trading_vs_naiad_v0": "EMPTY (byte-identical)",
+    "semantic_delta_vs_naiad_v0": [
+      "config_id",
+      "signal.v_births_provisional: True -> False (Pine v11.0.2 literal)"
+    ],
+    "sha256": "a3917ea58a1a7e0569eeee85c957914eb0dd08cacc11c6034fcab54053f57727"
+  },
+  "contract": "prompts/V3_Anchor_Run_Contract.md + Amendment A1 (350b82b)",
+  "cost_semantics": {
+    "modeled": "taker fees 5 bps/side (entry+exit); slippage per side by tier A/B/C = 2/5/10 bps; funding per funding timestamp on qty x last closed price, realized at exit",
+    "not_modeled": "book depth/impact; partial fills; maker/taker split; sub-bar stop path (bar-resolution fidelity bound, charter \u00a74); funding on fill bar; margin/liquidation; fee tiers; era-specific microstructure (VR-3 stress rows stand in)",
+    "stress_rows": "r_0x = realized_r + cost/one_r; r_2x = realized_r - cost/one_r; cost = fees + funding + slippage per EXIT row; one_r from ENTRY row |px_fill-stop|*qty/size_r"
+  },
+  "data_source": "census-verified local estate (V1), offline, backfill=False both passes; zero network fetches during the run",
+  "determinism": {
+    "all_identical": true,
+    "mismatches": []
+  },
+  "engine": {
+    "commit": "2f260e1",
+    "lineage": "1.0.3 (parity-signed, 38b3f66) + 1.0.4 G-3 stop-guarantee death-transition exemption (22b6771) + 1.0.5 G-4 wake-time campaign-death net (3828980) + 1.0.6 G-5/G-5b same-wake sibling semantics (cd42c5c) + 1.0.7 G-6 gate tranche-cap sibling projection (2f260e1); all ratified, each parity-byte-identity-proven under pinned stamp (signed SHA 4c734317...ce92de reproduced four consecutive times)",
+    "strategy_code_delta_vs_parity_signed": "trading.py only (G-3 assert exemption, G-4 death net, G-5 assert scope, G-5b risk projection, G-6 cap projection); signals/data/journal untouched; sibling family and death-transition family both CLOSED by enumeration (CHANGELOG 1.0.7)",
+    "version": "1.0.7"
+  },
+  "findings": {
+    "G-1": "replay path has no code-level lockbox guard; this run protected by window arithmetic + per-cell loaded-span assertions below; code guard due at next engine touch alongside J-1 (A1 Q-2)",
+    "G-2": "LITUSDT cache holds 31,680 pre-Lighter (Litentry) 1m bars [2025-12-01 .. 2025-12-22 23:59] + a 1,050-bar void to the Lighter listing 2025-12-23 17:30; admissible under the engine 2025-12-01 floor, invalid under the census first-valid. LIT annex EXCLUDED from this run; estate remediation (file purge + census --extend) required before any LIT replay."
+  },
+  "grid": {
+    "annex_runs": 27,
+    "lit_annex": "EXCLUDED (G-2)",
+    "scored_cells": 20,
+    "structural_cards": 10
+  },
+  "journal_hash_formula": "sha256 over byte-concatenation of the cell's monthly JSONL files in filename order (engine/journal.py files_sha256)",
+  "loaded_spans_and_assertions": {
+    "BTCUSDT_intraday|annex_spent": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T00:12:00Z",
+      "kind": "annex_spent",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1751328000000,
+          "rows": 744
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1751328000000,
+          "rows": 8928
+        },
+        "1m": {
+          "max_open": 1783468740000,
+          "min_open": 1751328000000,
+          "rows": 535680
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1751328000000,
+          "rows": 2232
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1751328000000,
+          "rows": 107136
+        },
+        "funding": {
+          "max_open": 1783440000000,
+          "min_open": 1751328000007,
+          "rows": 1116
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1m": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "BTCUSDT_intraday|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2019-10-01T00:03:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1567944000000,
+          "rows": 3515
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1567962000000,
+          "rows": 42175
+        },
+        "1m": {
+          "max_open": 1719791940000,
+          "min_open": 1567965420000,
+          "rows": 2530442
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1567958400000,
+          "rows": 10544
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1567965300000,
+          "rows": 506089
+        },
+        "funding": {
+          "max_open": 1719763200000,
+          "min_open": 1568102400000,
+          "rows": 5267
+        }
+      },
+      "start": "2019-10-01",
+      "status": "ok"
+    },
+    "BTCUSDT_position|annex_spent": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T01:15:00Z",
+      "kind": "annex_spent",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1711929600000,
+          "rows": 1656
+        },
+        "15m": {
+          "max_open": 1783467900000,
+          "min_open": 1711929600000,
+          "rows": 79488
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1711929600000,
+          "rows": 19872
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1711929600000,
+          "rows": 4968
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1711929600000,
+          "rows": 238464
+        },
+        "funding": {
+          "max_open": 1783440000000,
+          "min_open": 1711929600000,
+          "rows": 2484
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "15m": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "BTCUSDT_position|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2020-01-01T00:15:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1567944000000,
+          "rows": 3515
+        },
+        "15m": {
+          "max_open": 1719791100000,
+          "min_open": 1567964700000,
+          "rows": 168697
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1567962000000,
+          "rows": 42175
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1567958400000,
+          "rows": 10544
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1567965300000,
+          "rows": 506089
+        },
+        "funding": {
+          "max_open": 1719763200000,
+          "min_open": 1568102400000,
+          "rows": 5267
+        }
+      },
+      "start": "2020-01-01",
+      "status": "ok"
+    },
+    "BTCUSDT_swing|annex_spent": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T00:15:00Z",
+      "kind": "annex_spent",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1740787200000,
+          "rows": 988
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1740787200000,
+          "rows": 11856
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1740787200000,
+          "rows": 2964
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1740787200000,
+          "rows": 142272
+        },
+        "funding": {
+          "max_open": 1783440000000,
+          "min_open": 1740787200000,
+          "rows": 1482
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "BTCUSDT_swing|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2019-11-01T00:55:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1567944000000,
+          "rows": 3515
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1567962000000,
+          "rows": 42175
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1567958400000,
+          "rows": 10544
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1567965300000,
+          "rows": 506089
+        },
+        "funding": {
+          "max_open": 1719763200000,
+          "min_open": 1568102400000,
+          "rows": 5267
+        }
+      },
+      "start": "2019-11-01",
+      "status": "ok"
+    },
+    "ETHUSDT_intraday|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-07T19:00:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1751328000000,
+          "rows": 744
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1751328000000,
+          "rows": 8928
+        },
+        "1m": {
+          "max_open": 1783468740000,
+          "min_open": 1751328000000,
+          "rows": 535680
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1751328000000,
+          "rows": 2232
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1751328000000,
+          "rows": 107136
+        },
+        "funding": {
+          "max_open": 1783440000000,
+          "min_open": 1751328000007,
+          "rows": 1116
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1m": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "ETHUSDT_intraday|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2020-01-01T00:00:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1574812800000,
+          "rows": 3356
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1574838000000,
+          "rows": 40265
+        },
+        "1m": {
+          "max_open": 1719791940000,
+          "min_open": 1574840700000,
+          "rows": 2415855
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1574827200000,
+          "rows": 10067
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1574840700000,
+          "rows": 483171
+        },
+        "funding": {
+          "max_open": 1719763200000,
+          "min_open": 1574841600000,
+          "rows": 5033
+        }
+      },
+      "start": "2020-01-01",
+      "status": "ok"
+    },
+    "ETHUSDT_position|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T02:45:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1711929600000,
+          "rows": 1656
+        },
+        "15m": {
+          "max_open": 1783467900000,
+          "min_open": 1711929600000,
+          "rows": 79488
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1711929600000,
+          "rows": 19872
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1711929600000,
+          "rows": 4968
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1711929600000,
+          "rows": 238464
+        },
+        "funding": {
+          "max_open": 1783440000000,
+          "min_open": 1711929600000,
+          "rows": 2484
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "15m": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "ETHUSDT_position|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2020-04-01T00:30:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1574812800000,
+          "rows": 3356
+        },
+        "15m": {
+          "max_open": 1719791100000,
+          "min_open": 1574840700000,
+          "rows": 161057
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1574838000000,
+          "rows": 40265
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1574827200000,
+          "rows": 10067
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1574840700000,
+          "rows": 483171
+        },
+        "funding": {
+          "max_open": 1719763200000,
+          "min_open": 1574841600000,
+          "rows": 5033
+        }
+      },
+      "start": "2020-04-01",
+      "status": "ok"
+    },
+    "ETHUSDT_swing|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T00:10:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1740787200000,
+          "rows": 988
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1740787200000,
+          "rows": 11856
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1740787200000,
+          "rows": 2964
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1740787200000,
+          "rows": 142272
+        },
+        "funding": {
+          "max_open": 1783440000000,
+          "min_open": 1740787200000,
+          "rows": 1482
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "ETHUSDT_swing|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2020-01-01T00:00:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1574812800000,
+          "rows": 3356
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1574838000000,
+          "rows": 40265
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1574827200000,
+          "rows": 10067
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1574840700000,
+          "rows": 483171
+        },
+        "funding": {
+          "max_open": 1719763200000,
+          "min_open": 1574841600000,
+          "rows": 5033
+        }
+      },
+      "start": "2020-01-01",
+      "status": "ok"
+    },
+    "FARTCOINUSDT_intraday|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T00:07:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1751328000000,
+          "rows": 744
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1751328000000,
+          "rows": 8928
+        },
+        "1m": {
+          "max_open": 1783468740000,
+          "min_open": 1751328000000,
+          "rows": 535680
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1751328000000,
+          "rows": 2232
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1751328000000,
+          "rows": 107136
+        },
+        "funding": {
+          "max_open": 1783454400000,
+          "min_open": 1751328000007,
+          "rows": 2231
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1m": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "FARTCOINUSDT_position|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-08T11:45:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1734696000000,
+          "rows": 1129
+        },
+        "15m": {
+          "max_open": 1783467900000,
+          "min_open": 1734720300000,
+          "rows": 54165
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1734717600000,
+          "rows": 13542
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1734710400000,
+          "rows": 3386
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1734720300000,
+          "rows": 162495
+        },
+        "funding": {
+          "max_open": 1783454400000,
+          "min_open": 1734724800000,
+          "rows": 3384
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2024-12-20T12:00",
+          "to": "2025-10-05T23:59"
+        },
+        "15m": {
+          "from": "2024-12-20T18:45",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2024-12-20T18:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2024-12-20T16:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2024-12-20T18:45",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "FARTCOINUSDT_swing|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T01:20:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1740787200000,
+          "rows": 988
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1740787200000,
+          "rows": 11856
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1740787200000,
+          "rows": 2964
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1740787200000,
+          "rows": 142272
+        },
+        "funding": {
+          "max_open": 1783454400000,
+          "min_open": 1740787200000,
+          "rows": 2963
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "HYPEUSDT_intraday|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T00:02:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1751328000000,
+          "rows": 744
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1751328000000,
+          "rows": 8928
+        },
+        "1m": {
+          "max_open": 1783468740000,
+          "min_open": 1751328000000,
+          "rows": 535680
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1751328000000,
+          "rows": 2232
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1751328000000,
+          "rows": 107136
+        },
+        "funding": {
+          "max_open": 1783454400000,
+          "min_open": 1751328000007,
+          "rows": 2231
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1m": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "HYPEUSDT_position|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T01:30:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1748563200000,
+          "rows": 808
+        },
+        "15m": {
+          "max_open": 1783467900000,
+          "min_open": 1748601000000,
+          "rows": 38742
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1748599200000,
+          "rows": 9686
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1748592000000,
+          "rows": 2422
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1748601000000,
+          "rows": 116226
+        },
+        "funding": {
+          "max_open": 1783454400000,
+          "min_open": 1748606400006,
+          "rows": 2420
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2025-05-30T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "15m": {
+          "from": "2025-05-30T10:30",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2025-05-30T10:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2025-05-30T08:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2025-05-30T10:30",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "HYPEUSDT_swing|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-07T04:00:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1748563200000,
+          "rows": 808
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1748599200000,
+          "rows": 9686
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1748592000000,
+          "rows": 2422
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1748601000000,
+          "rows": 116226
+        },
+        "funding": {
+          "max_open": 1783454400000,
+          "min_open": 1748606400006,
+          "rows": 2420
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2025-05-30T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2025-05-30T10:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2025-05-30T08:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2025-05-30T10:30",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "JTOUSDT_intraday|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T00:15:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1751328000000,
+          "rows": 744
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1751328000000,
+          "rows": 8928
+        },
+        "1m": {
+          "max_open": 1783468740000,
+          "min_open": 1751328000000,
+          "rows": 535680
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1751328000000,
+          "rows": 2232
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1751328000000,
+          "rows": 107136
+        },
+        "funding": {
+          "max_open": 1783454400000,
+          "min_open": 1751328000007,
+          "rows": 2231
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1m": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "JTOUSDT_intraday|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2024-01-01T00:01:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1701993600000,
+          "rows": 412
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1702029600000,
+          "rows": 4934
+        },
+        "1m": {
+          "max_open": 1719791940000,
+          "min_open": 1702029660000,
+          "rows": 296039
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1702022400000,
+          "rows": 1234
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1702029600000,
+          "rows": 59208
+        },
+        "funding": {
+          "max_open": 1719777600004,
+          "min_open": 1702036800000,
+          "rows": 1233
+        }
+      },
+      "start": "2024-01-01",
+      "status": "ok"
+    },
+    "JTOUSDT_position|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T00:15:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1711929600000,
+          "rows": 1656
+        },
+        "15m": {
+          "max_open": 1783467900000,
+          "min_open": 1711929600000,
+          "rows": 79488
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1711929600000,
+          "rows": 19872
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1711929600000,
+          "rows": 4968
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1711929600000,
+          "rows": 238464
+        },
+        "funding": {
+          "max_open": 1783454400000,
+          "min_open": 1711929600000,
+          "rows": 4967
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "15m": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "JTOUSDT_position|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2024-04-01T02:15:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1701993600000,
+          "rows": 412
+        },
+        "15m": {
+          "max_open": 1719791100000,
+          "min_open": 1702029600000,
+          "rows": 19736
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1702029600000,
+          "rows": 4934
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1702022400000,
+          "rows": 1234
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1702029600000,
+          "rows": 59208
+        },
+        "funding": {
+          "max_open": 1719777600004,
+          "min_open": 1702036800000,
+          "rows": 1233
+        }
+      },
+      "start": "2024-04-01",
+      "status": "ok"
+    },
+    "JTOUSDT_swing|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T00:15:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1740787200000,
+          "rows": 988
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1740787200000,
+          "rows": 11856
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1740787200000,
+          "rows": 2964
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1740787200000,
+          "rows": 142272
+        },
+        "funding": {
+          "max_open": 1783454400000,
+          "min_open": 1740787200000,
+          "rows": 2963
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "JTOUSDT_swing|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2024-02-01T00:35:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1701993600000,
+          "rows": 412
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1702029600000,
+          "rows": 4934
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1702022400000,
+          "rows": 1234
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1702029600000,
+          "rows": 59208
+        },
+        "funding": {
+          "max_open": 1719777600004,
+          "min_open": 1702036800000,
+          "rows": 1233
+        }
+      },
+      "start": "2024-02-01",
+      "status": "ok"
+    },
+    "NEARUSDT_intraday|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T00:12:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1751328000000,
+          "rows": 744
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1751328000000,
+          "rows": 8928
+        },
+        "1m": {
+          "max_open": 1783468740000,
+          "min_open": 1751328000000,
+          "rows": 535680
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1751328000000,
+          "rows": 2232
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1751328000000,
+          "rows": 107136
+        },
+        "funding": {
+          "max_open": 1783440000000,
+          "min_open": 1751328000007,
+          "rows": 1116
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1m": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "NEARUSDT_intraday|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2020-11-01T00:13:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1602720000000,
+          "rows": 2710
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1602748800000,
+          "rows": 32512
+        },
+        "1m": {
+          "max_open": 1719791940000,
+          "min_open": 1602748800000,
+          "rows": 1950720
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1602748800000,
+          "rows": 8128
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1602748800000,
+          "rows": 390144
+        },
+        "funding": {
+          "max_open": 1719763200000,
+          "min_open": 1602748800000,
+          "rows": 4064
+        }
+      },
+      "start": "2020-11-01",
+      "status": "ok"
+    },
+    "NEARUSDT_position|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-08T23:00:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1711929600000,
+          "rows": 1656
+        },
+        "15m": {
+          "max_open": 1783467900000,
+          "min_open": 1711929600000,
+          "rows": 79488
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1711929600000,
+          "rows": 19872
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1711929600000,
+          "rows": 4968
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1711929600000,
+          "rows": 238464
+        },
+        "funding": {
+          "max_open": 1783440000000,
+          "min_open": 1711929600000,
+          "rows": 2484
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "15m": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "NEARUSDT_position|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2021-02-01T16:00:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1602720000000,
+          "rows": 2710
+        },
+        "15m": {
+          "max_open": 1719791100000,
+          "min_open": 1602748800000,
+          "rows": 130048
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1602748800000,
+          "rows": 32512
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1602748800000,
+          "rows": 8128
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1602748800000,
+          "rows": 390144
+        },
+        "funding": {
+          "max_open": 1719763200000,
+          "min_open": 1602748800000,
+          "rows": 4064
+        }
+      },
+      "start": "2021-02-01",
+      "status": "ok"
+    },
+    "NEARUSDT_swing|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T01:15:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1740787200000,
+          "rows": 988
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1740787200000,
+          "rows": 11856
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1740787200000,
+          "rows": 2964
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1740787200000,
+          "rows": 142272
+        },
+        "funding": {
+          "max_open": 1783440000000,
+          "min_open": 1740787200000,
+          "rows": 1482
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "NEARUSDT_swing|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2020-12-01T00:00:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1602720000000,
+          "rows": 2710
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1602748800000,
+          "rows": 32512
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1602748800000,
+          "rows": 8128
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1602748800000,
+          "rows": 390144
+        },
+        "funding": {
+          "max_open": 1719763200000,
+          "min_open": 1602748800000,
+          "rows": 4064
+        }
+      },
+      "start": "2020-12-01",
+      "status": "ok"
+    },
+    "SOLUSDT_intraday|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-07T15:00:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1751328000000,
+          "rows": 744
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1751328000000,
+          "rows": 8928
+        },
+        "1m": {
+          "max_open": 1783468740000,
+          "min_open": 1751328000000,
+          "rows": 535680
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1751328000000,
+          "rows": 2232
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1751328000000,
+          "rows": 107136
+        },
+        "funding": {
+          "max_open": 1783440000000,
+          "min_open": 1751328000007,
+          "rows": 1116
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1m": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "SOLUSDT_intraday|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2020-10-05T22:00:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1600041600000,
+          "rows": 2772
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1600066800000,
+          "rows": 33257
+        },
+        "1m": {
+          "max_open": 1719791940000,
+          "min_open": 1600066800000,
+          "rows": 1995420
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1600056000000,
+          "rows": 8315
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1600066800000,
+          "rows": 399084
+        },
+        "funding": {
+          "max_open": 1719763200000,
+          "min_open": 1600070400008,
+          "rows": 4232
+        }
+      },
+      "start": "2020-10-01",
+      "status": "ok"
+    },
+    "SOLUSDT_position|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T02:00:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1711929600000,
+          "rows": 1656
+        },
+        "15m": {
+          "max_open": 1783467900000,
+          "min_open": 1711929600000,
+          "rows": 79488
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1711929600000,
+          "rows": 19872
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1711929600000,
+          "rows": 4968
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1711929600000,
+          "rows": 238464
+        },
+        "funding": {
+          "max_open": 1783440000000,
+          "min_open": 1711929600000,
+          "rows": 2484
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "15m": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "SOLUSDT_position|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2021-01-01T08:15:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1600041600000,
+          "rows": 2772
+        },
+        "15m": {
+          "max_open": 1719791100000,
+          "min_open": 1600066800000,
+          "rows": 133028
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1600066800000,
+          "rows": 33257
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1600056000000,
+          "rows": 8315
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1600066800000,
+          "rows": 399084
+        },
+        "funding": {
+          "max_open": 1719763200000,
+          "min_open": 1600070400008,
+          "rows": 4232
+        }
+      },
+      "start": "2021-01-01",
+      "status": "ok"
+    },
+    "SOLUSDT_swing|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T00:15:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1740787200000,
+          "rows": 988
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1740787200000,
+          "rows": 11856
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1740787200000,
+          "rows": 2964
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1740787200000,
+          "rows": 142272
+        },
+        "funding": {
+          "max_open": 1783440000000,
+          "min_open": 1740787200000,
+          "rows": 1482
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "SOLUSDT_swing|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2020-11-01T00:40:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1600041600000,
+          "rows": 2772
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1600066800000,
+          "rows": 33257
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1600056000000,
+          "rows": 8315
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1600066800000,
+          "rows": 399084
+        },
+        "funding": {
+          "max_open": 1719763200000,
+          "min_open": 1600070400008,
+          "rows": 4232
+        }
+      },
+      "start": "2020-11-01",
+      "status": "ok"
+    },
+    "TAOUSDT_intraday|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T00:01:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1751328000000,
+          "rows": 744
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1751328000000,
+          "rows": 8928
+        },
+        "1m": {
+          "max_open": 1783468740000,
+          "min_open": 1751328000000,
+          "rows": 535680
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1751328000000,
+          "rows": 2232
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1751328000000,
+          "rows": 107136
+        },
+        "funding": {
+          "max_open": 1783454400000,
+          "min_open": 1751328000007,
+          "rows": 2231
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1m": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "TAOUSDT_intraday|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2024-05-01T00:14:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1712836800000,
+          "rows": 161
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1712844000000,
+          "rows": 1930
+        },
+        "1m": {
+          "max_open": 1719791940000,
+          "min_open": 1712845800000,
+          "rows": 115770
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1712836800000,
+          "rows": 483
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1712845800000,
+          "rows": 23154
+        },
+        "funding": {
+          "max_open": 1719777600004,
+          "min_open": 1712851200000,
+          "rows": 482
+        }
+      },
+      "start": "2024-05-01",
+      "status": "ok"
+    },
+    "TAOUSDT_position|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T05:45:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1712836800000,
+          "rows": 1635
+        },
+        "15m": {
+          "max_open": 1783467900000,
+          "min_open": 1712845800000,
+          "rows": 78470
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1712844000000,
+          "rows": 19618
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1712836800000,
+          "rows": 4905
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1712845800000,
+          "rows": 235410
+        },
+        "funding": {
+          "max_open": 1783454400000,
+          "min_open": 1712851200000,
+          "rows": 4903
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "15m": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "TAOUSDT_swing|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-08T07:20:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1740787200000,
+          "rows": 988
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1740787200000,
+          "rows": 11856
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1740787200000,
+          "rows": 2964
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1740787200000,
+          "rows": 142272
+        },
+        "funding": {
+          "max_open": 1783454400000,
+          "min_open": 1740787200000,
+          "rows": 2963
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "TAOUSDT_swing|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2024-06-01T00:00:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1712836800000,
+          "rows": 161
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1712844000000,
+          "rows": 1930
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1712836800000,
+          "rows": 483
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1712845800000,
+          "rows": 23154
+        },
+        "funding": {
+          "max_open": 1719777600004,
+          "min_open": 1712851200000,
+          "rows": 482
+        }
+      },
+      "start": "2024-06-01",
+      "status": "ok"
+    },
+    "ZECUSDT_intraday|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T00:02:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1751328000000,
+          "rows": 744
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1751328000000,
+          "rows": 8928
+        },
+        "1m": {
+          "max_open": 1783468740000,
+          "min_open": 1751328000000,
+          "rows": 535680
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1751328000000,
+          "rows": 2232
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1751328000000,
+          "rows": 107136
+        },
+        "funding": {
+          "max_open": 1783440000000,
+          "min_open": 1751328000007,
+          "rows": 1116
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1m": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2025-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "ZECUSDT_intraday|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2020-03-01T00:08:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1580860800000,
+          "rows": 3216
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1580889600000,
+          "rows": 38584
+        },
+        "1m": {
+          "max_open": 1719791940000,
+          "min_open": 1580889660000,
+          "rows": 2315039
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1580889600000,
+          "rows": 9646
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1580889600000,
+          "rows": 463008
+        },
+        "funding": {
+          "max_open": 1719763200000,
+          "min_open": 1580889600000,
+          "rows": 4823
+        }
+      },
+      "start": "2020-03-01",
+      "status": "ok"
+    },
+    "ZECUSDT_position|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-07T09:00:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1711929600000,
+          "rows": 1656
+        },
+        "15m": {
+          "max_open": 1783467900000,
+          "min_open": 1711929600000,
+          "rows": 79488
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1711929600000,
+          "rows": 19872
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1711929600000,
+          "rows": 4968
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1711929600000,
+          "rows": 238464
+        },
+        "funding": {
+          "max_open": 1783440000000,
+          "min_open": 1711929600000,
+          "rows": 2484
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "15m": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2024-07-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "ZECUSDT_position|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2020-06-08T12:00:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1580860800000,
+          "rows": 3216
+        },
+        "15m": {
+          "max_open": 1719791100000,
+          "min_open": 1580889600000,
+          "rows": 154336
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1580889600000,
+          "rows": 38584
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1580889600000,
+          "rows": 9646
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1580889600000,
+          "rows": 463008
+        },
+        "funding": {
+          "max_open": 1719763200000,
+          "min_open": 1580889600000,
+          "rows": 4823
+        }
+      },
+      "start": "2020-06-01",
+      "status": "ok"
+    },
+    "ZECUSDT_swing|annex_contam": {
+      "end": "2026-07-07T23:59",
+      "first_journal_ts": "2025-10-06T01:05:00Z",
+      "kind": "annex_contam",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1783425600000,
+          "min_open": 1740787200000,
+          "rows": 988
+        },
+        "1h": {
+          "max_open": 1783465200000,
+          "min_open": 1740787200000,
+          "rows": 11856
+        },
+        "4h": {
+          "max_open": 1783454400000,
+          "min_open": 1740787200000,
+          "rows": 2964
+        },
+        "5m": {
+          "max_open": 1783468500000,
+          "min_open": 1740787200000,
+          "rows": 142272
+        },
+        "funding": {
+          "max_open": 1783440000000,
+          "min_open": 1740787200000,
+          "rows": 1482
+        }
+      },
+      "lockbox_warmup_traversal": {
+        "12h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "1h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "4h": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        },
+        "5m": {
+          "from": "2025-03-01T00:00",
+          "to": "2025-10-05T23:59"
+        }
+      },
+      "start": "2025-10-06",
+      "status": "ok"
+    },
+    "ZECUSDT_swing|scored": {
+      "end": "2024-06-30T23:59",
+      "first_journal_ts": "2020-04-03T00:00:00Z",
+      "kind": "scored",
+      "loaded_spans": {
+        "12h": {
+          "max_open": 1719748800000,
+          "min_open": 1580860800000,
+          "rows": 3216
+        },
+        "1h": {
+          "max_open": 1719788400000,
+          "min_open": 1580889600000,
+          "rows": 38584
+        },
+        "4h": {
+          "max_open": 1719777600000,
+          "min_open": 1580889600000,
+          "rows": 9646
+        },
+        "5m": {
+          "max_open": 1719791700000,
+          "min_open": 1580889600000,
+          "rows": 463008
+        },
+        "funding": {
+          "max_open": 1719763200000,
+          "min_open": 1580889600000,
+          "rows": 4823
+        }
+      },
+      "start": "2020-04-01",
+      "status": "ok"
+    }
+  },
+  "partial_look": {
+    "BTCUSDT_intraday": {
+      "computed": "a7c999f6cadfa74f4bbad085606abd14a949c2ca2afcab258a708a1b2cc46d22",
+      "expected": "a7c999f6cadfa74f4bbad085606abd14a949c2ca2afcab258a708a1b2cc46d22",
+      "match": true
+    },
+    "BTCUSDT_position": {
+      "computed": "e5aa95df08d281311dc78fa4a61343d5aa0de572f8ea098aa98f92de7b887a3f",
+      "expected": "e5aa95df08d281311dc78fa4a61343d5aa0de572f8ea098aa98f92de7b887a3f",
+      "match": true
+    },
+    "BTCUSDT_swing": {
+      "computed": "bd4a07c09ea407a0ebca1713d89d17b4393cd14ac81e47ccf56a7fbaad19cbcf",
+      "expected": "bd4a07c09ea407a0ebca1713d89d17b4393cd14ac81e47ccf56a7fbaad19cbcf",
+      "match": true
+    },
+    "ETHUSDT_intraday": {
+      "computed": "ac5c42e662ce9b9c00afd5724a2e96ac05514dae6bcc38368a271fdd42225c54",
+      "expected": "ac5c42e662ce9b9c00afd5724a2e96ac05514dae6bcc38368a271fdd42225c54",
+      "match": true
+    },
+    "ETHUSDT_position": {
+      "computed": "860ce055a804689266eb46b37cb61d932b99bce728303ff236308b768ae9bef6",
+      "expected": "860ce055a804689266eb46b37cb61d932b99bce728303ff236308b768ae9bef6",
+      "match": true
+    },
+    "ETHUSDT_swing": {
+      "computed": "ce2b8c4fabdbfcf71bea0a2843c28bc2ea7e5365e64b4871e343f2c735dd767c",
+      "expected": "ce2b8c4fabdbfcf71bea0a2843c28bc2ea7e5365e64b4871e343f2c735dd767c",
+      "match": true
+    },
+    "NEARUSDT_swing": {
+      "computed": "1cbb7e9e0c6179fd3056017d00c5fe6256d92379db5cd42899e6e44b76494193",
+      "expected": "1cbb7e9e0c6179fd3056017d00c5fe6256d92379db5cd42899e6e44b76494193",
+      "match": true
+    },
+    "SOLUSDT_intraday": {
+      "computed": "d378441c86d8b8ddf6c7f4e0035afac4919828ff2f15a7c8b0b55e7cc6a3217a",
+      "expected": "d378441c86d8b8ddf6c7f4e0035afac4919828ff2f15a7c8b0b55e7cc6a3217a",
+      "match": true
+    },
+    "SOLUSDT_position": {
+      "computed": "13b84c6be57c2d336669242b32099c688f1e55a9b0686899e141cf18586f9f2e",
+      "expected": "13b84c6be57c2d336669242b32099c688f1e55a9b0686899e141cf18586f9f2e",
+      "match": true
+    },
+    "SOLUSDT_swing": {
+      "computed": "af2c3357168845373edd54d02d89b5aa9c920d04f884de72720271152d74bc7c",
+      "expected": "af2c3357168845373edd54d02d89b5aa9c920d04f884de72720271152d74bc7c",
+      "match": true
+    }
+  },
+  "partitions": {
+    "annex_contam": "non-BTC 2025-10-06 .. 2026-07-07 [CHARACTERIZATION]",
+    "annex_spent": "BTCUSDT 2025-10-06 .. 2026-07-07 [CHARACTERIZATION]",
+    "lockbox": "2024-07-01T00:00Z .. 2025-10-05T23:59:59Z (sealed)",
+    "right_edge": "2026-07-07T23:59:59Z (no loaded open time beyond it \u2014 see loaded_spans)",
+    "scored": "exploration-classic (open time <= 2024-06-30 23:59:59)"
+  },
+  "phase": "v12 V3 anchor run",
+  "scripts": {
+    "v3_runner.py_sha256": "9d42b9fc38bbfa3c0640967a4bfc27b5749b18acec990dd7a6c60c617920e5e1",
+    "v3_scorer.py_sha256": "45acb874ae2f0ebb16909f6f5e49b4296c28406aa1b46f90d14f195b351e8cc7"
+  },
+  "shadows_statement": "The shadows layer journals per-tranche counterfactual COLUMNS, never a separate book: MFE/MAE/give-back and post-exit continuation (1/5/20 exec bars) in per-unit R; the exit-variant race X-A (e200-trail survival ratchet) / X-B (X-A + 50% banked at first TPW) / X-C (X-A + 50% at first 2-ATR extension) / X-D (mechanized Playbook 25/25/trail), each as per-unit R on the EXIT row; two stop-anchor variants; an alternate rib-cross entry; and ladder counterfactual fields (size_full_r1 / size_big_adds = realized_r/size_r, ladder_unthrottled_grade/size_r). It does NOT compute the charter \u00a73.4 1R-adds counterfactual as a ready scored line \u2014 per A1 Q-3 that counterfactual is recorded UNIMPLEMENTED as a scored artifact; the journaled per-unit fields make it recomputable offline in V5 with no new data. Contract F3's '1R shadow line' maps to trading.max_open_campaign_risk_r: 1.0 (the open-campaign risk rail, asserted in-path)."
+}
