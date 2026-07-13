@@ -86,3 +86,11 @@ untouched); no lockbox contact; no re-run against a read partition (that is a
 new evidence spend requiring a chartered variant); no engine strategy-code
 changes (J-1 stays parked; an F4 guard, if needed, is manifest-level only);
 no live-capital implications.
+
+## AMENDMENT A1 — Stage 1 rulings (ratified 2026-07-13)
+- Q-1: run config = configs/v12_anchor.yaml — signal block byte-identical to v11_faithful.yaml; trading + shadows blocks from naiad_v0.yaml; v_births_provisional: false (Pine v11.0.2 literal; divergence from naiad_v0 recorded). Manifest must include PROOF: signal-section diff vs v11_faithful = EMPTY; trading/shadows diff vs naiad_v0 = exactly the v_births_provisional line. Stage-1 "BLOCKER B-1" is recorded under Q-1; register name B-1 remains the 12H-swing-mode backlog item.
+- Q-2: R3 annex proceeds under narrow exception F4-a — lockbox bars loadable ONLY as indicator warm-up for annex windows; zero signal emission and zero output from any lockbox bar; manifest lists every lockbox span traversed, per annex cell. G-1 REGISTERED: replay path has no code-level lockbox guard; this run protected by window arithmetic + manifest loaded-span assertions; code guard due at next engine touch alongside J-1.
+- Q-3: "0.5R pilot" = charter §3.4 grade-table shorthand (authoritative). Manifest states in one paragraph what the shadows layer computes; if it is the §3.4 1R-adds counterfactual, report per cell; else record counterfactual unimplemented and map "1R shadow line" to max_open_campaign_risk_r: 1.0.
+- Q-4: month-aligned scored starts per F1; TAOUSDT_swing runs at 30 days with INSUFFICIENT SAMPLE flag.
+- R4/R5 amended: every cell card and rollup carries VR-3 cost-stress rows (0x / 1x / 2x), recomputed from per-row journal cost fields; no re-runs.
+- Scored grid = 20 cells; the 10 EMPTY cells get structural cards (annex where their evidence class provides one; TAOUSDT_position appears only in the regime-contaminated annex).
