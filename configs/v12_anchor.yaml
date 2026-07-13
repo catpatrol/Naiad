@@ -1,0 +1,72 @@
+# v12_anchor — V3 anchor run (prompts/V3_Anchor_Run_Contract.md, Amendment A1 Q-1).
+# signal: byte-identical to v11_faithful.yaml (Pine v11.0.2 literal;
+#   v_births_provisional: false — recorded divergence from naiad_v0).
+# trading + shadows: byte-identical to naiad_v0.yaml. FROZEN.
+config_id: v12_anchor
+
+signal:
+  len_fast: 9
+  len_slow: 89
+  len_trend: 200
+  atr_len: 14
+  structure_gate: true
+  provisional_arming: true
+  prov_zones: "Z1+Z2"
+  whipsaw_bars: 10
+  z1_prox: 0.25
+  z2_prox: 0.35
+  z3_prox: 0.35
+  min_bar_range_atr: 0.5
+  min_ribbon_sep_atr: 0.5
+  cooldown_bars: 5
+  max_r_count: 0
+  snipe_on: true
+  snipe_lookback: 55
+  fib1: 0.5
+  fib2: 0.786
+  cap_on: true
+  climax_mult: 3.5
+  cap_ext_atr: 1.0
+  cap_window: 10
+  cap_vol_conf: 1.2
+  vol_len: 20
+  tpw_on: true
+  cluster_n: 2
+  cluster_win: 12
+  stop_buf_atr: 0.5
+  fail_win: 3
+  # Pine v11.0.2 literal: the V block clears campCounter (full tier at birth).
+  v_births_provisional: false
+
+trading:
+  enabled: true
+  initial_equity: 10000.0         # per cell (build prompt §6)
+  r_pct: 0.005                    # 1R = 0.5% of current cell equity
+  # Sizing table, charter §3.4 as amended at ratification (sizes in R):
+  size_r1_a_full: 0.5             # A+ / A PRIME (R1), full tier
+  size_r1_b_full: 0.25            # B PRIME (R1), full tier
+  size_r1_provisional: 0.25       # any PRIME (R1), provisional tier (B-cap)
+  size_v: 0.25                    # V, provisional at birth
+  size_add: 0.5                   # adds (R2+/CONFIRM), each
+  max_tranches: 3
+  max_open_campaign_risk_r: 1.0   # asserted in-path (F5)
+  # FLAGGED DECISION #1 (operator veto, default per-cell): halts scoped per
+  # cell so one asset's bad day cannot silence another's data collection.
+  halt_scope: per_cell            # per_cell | portfolio
+  halt_day_r: -2.0                # UTC calendar day
+  halt_week_r: -4.0               # UTC calendar week, Monday start
+  fee_bps_side: 5.0               # taker, per side (charter §5)
+  # Slippage per side comes from the cell's asset tier (engine/cells.py).
+
+shadows:
+  enabled: true
+  # X-A: pure two-phase e200 trail, 0.5 x exec-ATR buffer, engagement guard.
+  xa_trail_buf_atr: 0.5
+  # X-B: X-A + 50% partial at first TPW.
+  xb_tpw_partial: 0.5
+  # X-C: X-A + 50% partial at extension >= 2 x exec-ATR beyond exec 9.
+  xc_ext_atr: 2.0
+  xc_partial: 0.5
+  # X-D: mechanized Playbook stack — 25% at TPW, 25% at extension, trail, X flat.
+  xd_tpw_partial: 0.25
+  xd_ext_partial: 0.25
