@@ -1,0 +1,35 @@
+name: egress-probe
+# Manual only. Purpose: classify the fapi.binance.com refusal seen by the collector.
+#   451 -> geographic block (a non-US self-hosted egress works; option 4c/4d viable)
+#   403/other -> datacenter-IP block (a non-US *cloud* IP may also fail; verify per host)
+on:
+  workflow_dispatch: {}
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Runner egress IP + geo (context for the verdict)
+        run: |
+          echo "=== egress identity ==="
+          curl -sS 'https://ipinfo.io/json' || echo "(ipinfo unreachable)"
+          echo
+
+      - name: Probe fapi.binance.com REST (the blocked call)
+        run: |
+          echo "=== fapi.binance.com /fapi/v1/klines ==="
+          code=$(curl -sS -o body.txt -w '%{http_code}' \
+            'https://fapi.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=1m&limit=1') \
+            || echo "curl-exit-$?"
+          echo "HTTP status: $code"
+          echo "--- body (first 1500 bytes) ---"
+          head -c 1500 body.txt; echo
+
+      - name: Probe data.binance.vision bulk (control — expected reachable)
+        run: |
+          echo "=== data.binance.vision daily zip HEAD ==="
+          code=$(curl -sS -I -o /dev/null -w '%{http_code}' \
+            'https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/1m/BTCUSDT-1m-2026-07-10.zip') \
+            || echo "curl-exit-$?"
+          echo "HTTP status: $code   (200/403-on-missing-day both mean the host answers)"
