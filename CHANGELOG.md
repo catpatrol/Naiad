@@ -1,5 +1,60 @@
 # CHANGELOG
 
+## engine 1.0.7 — gate tranche-cap sibling projection (2026-07-13, G-6; sibling family CLOSED)
+
+Fourth latent trading-layer state from the V3 anchor run and the third and
+FINAL sibling-blind enforcement point (first observed: NEARUSDT_intraday bar
+91950, 2020-12-18 04:30Z). A campaign standing at 2 fills received same-wake
+PRIME+CONFIRM adds; the gate's cap check evaluated each sibling individually
+against the signal-time count (2 < 3, both queued); the first fill made it 3
+and the second sibling's fill-time assert refused fill #4 — CORRECTLY: the
+3-tranche cap is a hard charter rail.
+
+- **Semantics note of record (operator, 2026-07-13):** no new trading-rule
+  fork — last-slot allocation follows the already-ratified PRIME-then-CONFIRM
+  order (G-5/G-5b ruling); this fix applies ratified semantics to the last
+  sibling-blind projection.
+- **Fix (`engine/trading.py`, gate only):** queued same-campaign siblings
+  count toward the cap at pending-creation (`queued_same_camp`); the
+  over-cap sibling lands as a graceful `max_tranches` REJECT row (existing
+  reject_reason value; no schema change). Fill-time cap assert untouched —
+  it remains the floor.
+- **Family-closure enumeration (the record the ruling requires):**
+  pending-creation gate checks — campaign-died-same-bar (dir-based,
+  sibling-INDEPENDENT) · no_stop (sibling-INDEPENDENT) · add-breakeven
+  (ruled G-5: siblings exempt BY DESIGN, earlier-bar tranches only) ·
+  risk projection (sibling-AWARE since 1.0.6 G-5b) · tranche cap
+  (sibling-AWARE since 1.0.7 G-6). Fill-time floors — C-ban (per-entry) ·
+  tranche cap (FLOOR, counts filled siblings) · halt (book-level) ·
+  add-breakeven (FLOOR, earlier-bar only per G-5) · open-risk probe (FLOOR,
+  counts filled siblings; gate-passed combos contribute exactly size_r each
+  and cannot trip it). Every gate projection is now sibling-consistent with
+  the floor that enforces it; the sibling family is enumerated and CLOSED.
+- **Fixtures (`fixtures/test_g6_cap_sibling_projection.py`):** (a) production
+  shape — campaign at 2 fills + same-wake PRIME+CONFIRM: GateViolation on
+  1.0.6, on 1.0.7 the PRIME takes the last slot and the CONFIRM lands as one
+  max_tranches REJECT at the signal bar; (b) floor — a forced genuinely
+  over-cap fill (sanctioned admit_entry double, fresh campaign-2 R1
+  rewritten into the capped campaign) still raises on both versions.
+- **G-5b fixture rescoped (disclosed, not silent):** the 1.0.6 risk-cap test
+  used a 3-siblings-over-R1 scenario that was doubly-illegal (cap AND risk);
+  under the sibling-aware cap it now correctly rejects max_tranches first.
+  The test now pins both halves: (i) the risk projection isolated via a
+  flat-campaign 3x0.5R-PRIME scenario where the cap cannot bind (third
+  sibling -> risk_cap REJECT); (ii) the original scenario's ruled outcome
+  under 1.0.7 (third sibling -> max_tranches REJECT; cap-before-risk funnel
+  order pinned). Same graceful shape either way; property coverage unchanged.
+- **Scope per ruling:** G-6 only. G-1 and J-1 slide to 1.0.8 (third slide;
+  they land firmly at the first post-anchor-run engine touch). No loading
+  path, no journal schema.
+- **Parity:** inert on signed windows (the state crashed every prior engine;
+  those windows ran clean) — and the inertness argument is now also
+  empirically proven: at the G-6 halt, all 7 recorded partial-look cells
+  regenerated stripped-field-identical under 1.0.6 (7/7 MATCH); the record
+  extends to 10 cells for the relaunch checkpoint. Pinned-stamp regeneration
+  re-verified byte-identity with the signed parity journal.
+- **Version:** ENGINE_VERSION 1.0.6 -> 1.0.7.
+
 ## engine 1.0.6 — same-wake sibling semantics: breakeven assert + gate risk projection (2026-07-13, G-5/G-5b)
 
 Third latent trading-layer state surfaced by deep history during the V3

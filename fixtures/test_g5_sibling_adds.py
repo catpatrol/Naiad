@@ -141,19 +141,52 @@ def test_breakeven_floor_earlier_tranche_still_fails(monkeypatch):
         run_trading(cell, cfg, unprotected_r1_scenario(), None)
 
 
+def flat_campaign_triple_prime() -> SignalResult:
+    """Risk-projection isolate (1.0.7 rescope): a flat campaign (count 0 —
+    the tranche cap cannot bind on three queued siblings) emits THREE
+    synthetic same-wake PRIME adds of 0.5R each. Only the risk projection
+    can reject the third. ADDs while flat are vacuously breakeven-eligible
+    (charter: an R2+ PRIME while flat mid-campaign trades as an ADD)."""
+    n = 60
+    close = np.full(n, 100.0)
+    a = _arrays(n, close)
+    dir_ = np.zeros(n, dtype=np.int8); dir_[2:] = 1
+    camp = np.zeros(n, dtype=np.int64); camp[2:] = 1
+    sl = np.full(n, np.nan); sl[5:] = 99.0
+    events = [SignalEvent(2, "REGIME", 1, stage=2, tier="full",
+                          arrow_visible=True)]
+    for _ in range(3):
+        events.append(SignalEvent(30, "PRIME", 1, grade="A", rc=2, zone="Z2",
+                                  retr=0.5, stop=99.0, stage=2, tier="full",
+                                  is_r1=False, is_add=True, grade_uncapped="A"))
+    return SignalResult(dir=dir_, campaign_id=camp, stop_long=sl,
+                        events=events, **a)
+
+
 def test_overcap_sibling_rejected_risk_cap():
-    """3c — G-5b: three same-wake siblings project 1.5R combined. The gate
-    (now counting queued siblings) admits two and lands the third as a
-    graceful risk_cap REJECT row; both admitted siblings fill; the in-path
-    1R assert passes. (Pre-fix, the gate projected each sibling alone —
-    0.5R each, all three admitted — and the run crashed at fill: the
-    counterfactual established empirically on 1.0.5.)"""
+    """3c — G-5b, rescoped at 1.0.7 (the original 3-siblings-over-R1
+    scenario was doubly-illegal — cap AND risk — and the sibling-aware cap
+    now correctly rejects it first; both halves pinned here).
+
+    (i) risk projection isolate: flat campaign, three 0.5R PRIME siblings —
+        cap cannot bind (0+2 < 3); the third rejects risk_cap; two fill;
+        the in-path 1R assert passes.
+    (ii) funnel order: the original R1 + PRIME + 2xCONFIRM scenario now
+        lands the third sibling as max_tranches (cap projection fires before
+        risk in the gate order); same graceful shape, ruled reason."""
     cell, cfg = _cfg_cell()
-    res = run_trading(cell, cfg, sibling_scenario(n_confirm_adds=2), None)
-    assert len(res.tranches) == 3, "R1 + exactly two sibling adds fill"
+
+    res = run_trading(cell, cfg, flat_campaign_triple_prime(), None)
+    assert len(res.tranches) == 2, "exactly two 0.5R siblings fill"
     rc = [r for r in res.rejects if r.reason == "risk_cap"]
     assert len(rc) == 1, f"expected one risk_cap reject, got {res.rejects}"
-    assert rc[0].kind == "ADD" and rc[0].family == "confirm" and rc[0].i == 30
-    open_risk = sum(max(0.0, (tr.fill_px - 101.0) * tr.dir) * tr.qty / tr.one_r_usd
+    assert rc[0].kind == "ADD" and rc[0].family == "prime" and rc[0].i == 30
+    open_risk = sum(max(0.0, (tr.fill_px - 99.0) * tr.dir) * tr.qty / tr.one_r_usd
                     for tr in res.tranches)
     assert open_risk <= 1.0 + 1e-9
+
+    res2 = run_trading(cell, cfg, sibling_scenario(n_confirm_adds=2), None)
+    assert len(res2.tranches) == 3, "R1 + exactly two sibling adds fill"
+    rc2 = [r for r in res2.rejects if r.reason == "max_tranches"]
+    assert len(rc2) == 1, f"expected one max_tranches reject, got {res2.rejects}"
+    assert rc2[0].kind == "ADD" and rc2[0].family == "confirm" and rc2[0].i == 30

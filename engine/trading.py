@@ -449,7 +449,13 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
                 res.rejects.append(TradeReject(i, "campaign_died_same_bar", kind, family, ev.dir))
                 continue
             camp = int(sig.campaign_id[i])
-            if campaign_tranche_count.get(camp, 0) >= max_tranches:
+            # 1.0.7 (G-6, ruled): queued same-wake siblings of the same
+            # campaign count toward the cap — the over-cap later sibling
+            # lands as a graceful REJECT (last-slot allocation follows the
+            # ratified PRIME-then-CONFIRM order), never a fill-time crash.
+            # The fill-time cap assert is untouched and remains the floor.
+            queued_same_camp = sum(1 for p in pending_entries if p.campaign == camp)
+            if campaign_tranche_count.get(camp, 0) + queued_same_camp >= max_tranches:
                 res.rejects.append(TradeReject(i, "max_tranches", kind, family, ev.dir))
                 continue
             stop_now = sig.stop_long[i] if ev.dir == 1 else sig.stop_short[i]
