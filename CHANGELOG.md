@@ -1,5 +1,51 @@
 # CHANGELOG
 
+## engine 1.0.6 — same-wake sibling semantics: breakeven assert + gate risk projection (2026-07-13, G-5/G-5b)
+
+Third latent trading-layer state surfaced by deep history during the V3
+anchor run (first observed: SOLUSDT_intraday bar 739466, 2022-02-09 19:26Z).
+A signal bar can emit TWO add authorizations (PRIME R2+ and CONFIRM); both
+pass the pending-creation gate against the book as it stands at the signal
+close; at the next open they fill sequentially and the second sibling's
+in-path breakeven assert counted the FIRST — just filled one instruction
+earlier, and by construction above the standing ratchet (the ratchet only
+catches up on later signal bars) — as "a prior tranche below breakeven".
+Gate and assert disagreed on "prior": gate = open at signal time; assert =
+open at fill instant, including same-open siblings. Within the rails either
+way (3 tranches, exactly 1.0R combined).
+
+- **Design rulings of record (operator, 2026-07-13, charter §3):**
+  same-bar sibling adds are FILLABLE (baseline) — the breakeven doctrine
+  sequences adds across signal events; within-wake siblings do not
+  breakeven-test each other; same-wake fill order is PRIME then CONFIRM (as
+  implemented, now on the record). Alternative logged as a v12 named-variant
+  seed — "one-add-per-signal-bar dedupe (PRIME precedence)" — joining
+  zoneMemory-5 / provisional-Z1-only / zone-gated CONFIRM adds /
+  V-entry-filter.
+- **G-5 fix (`engine/trading.py`, breakeven assert):** test only genuinely
+  earlier tranches — `tr.fill_i < i` — tolerance 1e-9 unchanged; full force
+  retained against all earlier-bar tranches (floor pinned by fixture).
+- **G-5b fix (`engine/trading.py`, gate projection):** pending-creation risk
+  projection now counts queued same-wake siblings (`queued_r`); an over-cap
+  later sibling lands as a graceful `risk_cap` REJECT row instead of a
+  fill-time GateViolation. Unreachable at baseline sizes (max two adds/bar
+  x 0.5R; breakeven-eligible priors carry zero open risk, so sibling pairs
+  sum to exactly 1.0R = the cap) — hardening for future sizing variants.
+  `risk_cap` is an existing reject_reason value; no schema change.
+- **Fixtures (`fixtures/test_g5_sibling_adds.py`, three properties):**
+  (a) production shape — double-add over a protected R1: GateViolation on
+  1.0.5, both fill on 1.0.6 (3 tranches, <=1R); (b) floor — an ADD filling
+  while a genuinely earlier-bar tranche sits below breakeven still raises on
+  both versions (via the sanctioned F5 admit_entry test double); (c) G-5b —
+  three synthetic siblings projecting 1.5R: crash on 1.0.5 (counterfactual
+  established empirically), one risk_cap REJECT + two fills on 1.0.6.
+- **Scope per ruling:** G-5 + G-5b only. G-1 and J-1 move to 1.0.7. No
+  loading path, no journal-schema change.
+- **Parity:** both fixes provably inert on signed windows (the states they
+  govern crashed 1.0.3, and those windows ran clean); pinned-stamp
+  regeneration re-verified byte-identity with the signed parity journal.
+- **Version:** ENGINE_VERSION 1.0.5 -> 1.0.6.
+
 ## engine 1.0.5 — wake-time campaign-death net (2026-07-13, G-4)
 
 Second latent trading-layer defect surfaced by deep history during V3

@@ -273,7 +273,12 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
         if pe.kind == "ADD" and open_tranches:
             stop_now = stop_level(i, pe.dir)
             for tr in open_tranches:
-                if (tr.fill_px - stop_now) * tr.dir > 1e-9:
+                # 1.0.6 (G-5, ruled): the breakeven doctrine sequences adds
+                # across signal events — within-wake siblings (fill_i == i)
+                # do not breakeven-test each other (a just-filled sibling
+                # sits above the standing ratchet by construction). Full
+                # force retained against all earlier-bar tranches.
+                if tr.fill_i < i and (tr.fill_px - stop_now) * tr.dir > 1e-9:
                     raise GateViolation("add filled with a prior tranche below breakeven")
         probe = Tranche("probe", pe.campaign, pe.dir, pe.kind, pe.grade,
                         pe.tier, pe.zone, pe.retr, pe.rc, pe.signal_i, i,
@@ -459,9 +464,15 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
                     continue
             size_r = size_for(kind, ev.grade, ev.tier, t)
             # projected open risk with the new tranche (rails: <= 1R);
-            # tranches being flattened at the next open don't carry forward
+            # tranches being flattened at the next open don't carry forward.
+            # 1.0.6 (G-5b, ruled): queued same-wake siblings count toward the
+            # projection, so an over-cap later sibling lands as a graceful
+            # risk_cap REJECT instead of a fill-time crash. Unreachable at
+            # baseline sizes (max two adds/bar x 0.5R, eligible priors carry
+            # zero risk) — hardening for future sizing variants.
             carried = [] if pending_flatten else open_tranches
-            projected = (open_risk_r(stop_now) if carried else 0.0) + size_r
+            queued_r = sum(p.size_r for p in pending_entries)
+            projected = (open_risk_r(stop_now) if carried else 0.0) + queued_r + size_r
             if projected > max_risk_r + 1e-9:
                 res.rejects.append(TradeReject(i, "risk_cap", kind, family, ev.dir))
                 continue
