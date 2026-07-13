@@ -1,0 +1,6 @@
+{
+  "cell_id": "TAOUSDT_position",
+  "engine_version": "1.0.3",
+  "error": "RuntimeError('failed after 4 attempts: https://fapi.binance.com/fapi/v1/klines')",
+  "paper_epoch": "2026-07-01"
+}
