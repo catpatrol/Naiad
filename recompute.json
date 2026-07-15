@@ -1,0 +1,2165 @@
+{
+ "config": {
+  "cells": [
+   {
+    "cell": "BTCUSDT_swing",
+    "mandate": "swing",
+    "tf_align": "1h",
+    "tf_exec": "5m",
+    "tf_gov": "4h",
+    "zone_memory": 3
+   },
+   {
+    "cell": "BTCUSDT_intraday",
+    "mandate": "intraday",
+    "tf_align": "5m",
+    "tf_exec": "1m",
+    "tf_gov": "1h",
+    "zone_memory": 3
+   },
+   {
+    "cell": "BTCUSDT_position",
+    "mandate": "position",
+    "tf_align": "4h",
+    "tf_exec": "15m",
+    "tf_gov": "12h",
+    "zone_memory": 3
+   }
+  ],
+  "signal": {
+   "cooldown_bars": 5,
+   "max_r_count": 0,
+   "z1_prox": 0.25,
+   "z2_prox": 0.35,
+   "z3_prox": 0.35
+  },
+  "trading": {
+   "enabled": true,
+   "fee_bps_side": 5.0,
+   "halt_day_r": -2.0,
+   "halt_scope": "per_cell",
+   "halt_week_r": -4.0,
+   "initial_equity": 10000.0,
+   "max_open_campaign_risk_r": 1.0,
+   "max_tranches": 3,
+   "r_pct": 0.005,
+   "size_add": 0.5,
+   "size_r1_a_full": 0.5,
+   "size_r1_b_full": 0.25,
+   "size_r1_provisional": 0.25,
+   "size_v": 0.25
+  }
+ },
+ "data_characteristics": {
+  "detail": {
+   "ZECUSDT_intraday": {
+    "sum_cell_r_1x": -663.1247,
+    "tranches_total": 1414,
+    "tranches_with_negative_one_r": 717
+   }
+  },
+  "finding": "one_r = r_pct * equity at fill time (trading.py:367). A NEGATIVE one_r therefore means the cell's realized equity had gone BELOW ZERO and the book kept trading against it, with qty inverting sign. This is journaled faithfully and the §4 formula reproduces F3/F4 exactly with the signed value, so it is NOT a reader artifact and NOT a fixture failure -- but every R-denominated quantity on those rows is measured against a negative unit, which flips the sign of their cost adjustment. Downstream reader: treat this cell's contribution to any aggregate with suspicion, and note that a bankrupt-cell-keeps-trading path is itself a finding about the anchor run rather than about the strategy.",
+  "negative_one_r_by_cell": {
+   "ZECUSDT_intraday": 717
+  },
+  "negative_one_r_tranches": 717
+ },
+ "deliverables": {
+  "R1": {
+   "actual_book": {
+    "GRID": {
+     "n": 8387,
+     "sum_0x": 1345.3095,
+     "win_rate_0x": 25.0984
+    },
+    "intraday": {
+     "n": 5951,
+     "sum_0x": 1048.2672,
+     "win_rate_0x": 25.6932
+    },
+    "position": {
+     "n": 551,
+     "sum_0x": 13.4471,
+     "win_rate_0x": 23.775
+    },
+    "swing": {
+     "n": 1885,
+     "sum_0x": 283.5952,
+     "win_rate_0x": 23.6074
+    }
+   },
+   "basis": "cell-R = exit_X * size_r; actual gross = sum(r_0x)",
+   "caveat": "First-order. A really-adopted exit rule changes which adds fire and when campaigns die. Rank, do not validate. Variants carry no costs -> compared against the 0x line only. Their 1x/2x lines apply the row's ACTUAL cost/one_r as a PROXY: the counterfactual exits at a different price and holds for a different duration, so its true exit fee and funding differ.",
+   "variants": {
+    "X-A": {
+     "GRID": {
+      "actual_sum_0x": 1345.3095,
+      "delta_vs_actual_0x": 10.2225,
+      "expectancy_0x": 0.1616,
+      "n": 8387,
+      "sum_0x": 1355.5319,
+      "sum_1x_proxy": -5746.6869,
+      "sum_2x_proxy": -12848.9057,
+      "win_rate_0x": 23.4649
+     },
+     "intraday": {
+      "actual_sum_0x": 1048.2672,
+      "delta_vs_actual_0x": -421.4661,
+      "expectancy_0x": 0.1053,
+      "n": 5951,
+      "sum_0x": 626.8011,
+      "sum_1x_proxy": -5222.655,
+      "sum_2x_proxy": -11072.111,
+      "win_rate_0x": 23.1558
+     },
+     "position": {
+      "actual_sum_0x": 13.4471,
+      "delta_vs_actual_0x": -97.2276,
+      "expectancy_0x": -0.1521,
+      "n": 551,
+      "sum_0x": -83.7805,
+      "sum_1x_proxy": -275.6233,
+      "sum_2x_proxy": -467.466,
+      "win_rate_0x": 23.9564
+     },
+     "swing": {
+      "actual_sum_0x": 283.5952,
+      "delta_vs_actual_0x": 528.9161,
+      "expectancy_0x": 0.431,
+      "n": 1885,
+      "sum_0x": 812.5114,
+      "sum_1x_proxy": -248.4086,
+      "sum_2x_proxy": -1309.3287,
+      "win_rate_0x": 24.2971
+     }
+    },
+    "X-B": {
+     "GRID": {
+      "actual_sum_0x": 1345.3095,
+      "delta_vs_actual_0x": 10.3118,
+      "expectancy_0x": 0.1616,
+      "n": 8387,
+      "sum_0x": 1355.6213,
+      "sum_1x_proxy": -5746.5975,
+      "sum_2x_proxy": -12848.8163,
+      "win_rate_0x": 23.4768
+     },
+     "intraday": {
+      "actual_sum_0x": 1048.2672,
+      "delta_vs_actual_0x": -421.6211,
+      "expectancy_0x": 0.1053,
+      "n": 5951,
+      "sum_0x": 626.6461,
+      "sum_1x_proxy": -5222.81,
+      "sum_2x_proxy": -11072.266,
+      "win_rate_0x": 23.1558
+     },
+     "position": {
+      "actual_sum_0x": 13.4471,
+      "delta_vs_actual_0x": -97.0303,
+      "expectancy_0x": -0.1517,
+      "n": 551,
+      "sum_0x": -83.5832,
+      "sum_1x_proxy": -275.4259,
+      "sum_2x_proxy": -467.2687,
+      "win_rate_0x": 24.1379
+     },
+     "swing": {
+      "actual_sum_0x": 283.5952,
+      "delta_vs_actual_0x": 528.9632,
+      "expectancy_0x": 0.4311,
+      "n": 1885,
+      "sum_0x": 812.5584,
+      "sum_1x_proxy": -248.3616,
+      "sum_2x_proxy": -1309.2816,
+      "win_rate_0x": 24.2971
+     }
+    },
+    "X-C": {
+     "GRID": {
+      "actual_sum_0x": 1345.3095,
+      "delta_vs_actual_0x": -1145.187,
+      "expectancy_0x": 0.0239,
+      "n": 8387,
+      "sum_0x": 200.1224,
+      "sum_1x_proxy": -6902.0964,
+      "sum_2x_proxy": -14004.3151,
+      "win_rate_0x": 26.2668
+     },
+     "intraday": {
+      "actual_sum_0x": 1048.2672,
+      "delta_vs_actual_0x": -1260.8142,
+      "expectancy_0x": -0.0357,
+      "n": 5951,
+      "sum_0x": -212.547,
+      "sum_1x_proxy": -6062.0031,
+      "sum_2x_proxy": -11911.4591,
+      "win_rate_0x": 26.0628
+     },
+     "position": {
+      "actual_sum_0x": 13.4471,
+      "delta_vs_actual_0x": -86.9966,
+      "expectancy_0x": -0.1335,
+      "n": 551,
+      "sum_0x": -73.5496,
+      "sum_1x_proxy": -265.3923,
+      "sum_2x_proxy": -457.235,
+      "win_rate_0x": 27.2232
+     },
+     "swing": {
+      "actual_sum_0x": 283.5952,
+      "delta_vs_actual_0x": 202.6238,
+      "expectancy_0x": 0.2579,
+      "n": 1885,
+      "sum_0x": 486.219,
+      "sum_1x_proxy": -574.701,
+      "sum_2x_proxy": -1635.621,
+      "win_rate_0x": 26.6313
+     }
+    },
+    "X-D": {
+     "GRID": {
+      "actual_sum_0x": 1345.3095,
+      "delta_vs_actual_0x": -567.4376,
+      "expectancy_0x": 0.0927,
+      "n": 8387,
+      "sum_0x": 777.8718,
+      "sum_1x_proxy": -6324.347,
+      "sum_2x_proxy": -13426.5657,
+      "win_rate_0x": 24.8957
+     },
+     "intraday": {
+      "actual_sum_0x": 1048.2672,
+      "delta_vs_actual_0x": -841.2177,
+      "expectancy_0x": 0.0348,
+      "n": 5951,
+      "sum_0x": 207.0495,
+      "sum_1x_proxy": -5642.4065,
+      "sum_2x_proxy": -11491.8626,
+      "win_rate_0x": 24.6009
+     },
+     "position": {
+      "actual_sum_0x": 13.4471,
+      "delta_vs_actual_0x": -92.0135,
+      "expectancy_0x": -0.1426,
+      "n": 551,
+      "sum_0x": -78.5664,
+      "sum_1x_proxy": -270.4091,
+      "sum_2x_proxy": -462.2518,
+      "win_rate_0x": 25.7713
+     },
+     "swing": {
+      "actual_sum_0x": 283.5952,
+      "delta_vs_actual_0x": 365.7935,
+      "expectancy_0x": 0.3445,
+      "n": 1885,
+      "sum_0x": 649.3887,
+      "sum_1x_proxy": -411.5313,
+      "sum_2x_proxy": -1472.4513,
+      "win_rate_0x": 25.5703
+     }
+    }
+   }
+  },
+  "R10": {
+   "assumption": "maker entries 2 bps/side, taker stops 5 bps/side (entry fee scaled 5->2 bps by removing 3/5 of it); fills otherwise unchanged",
+   "caveat": "This is the OPTIMISTIC bound. It assumes every entry fills as a maker and none is missed. Chase orders miss most when price runs away immediately -- which is disproportionately the character of the entries that become tail campaigns. The bound is a CEILING, not an estimate.",
+   "ceiling_on_all_execution_improvement_sum_0x": 1345.3095,
+   "formula": "cost_maker = cost_total - entry_fee*(3/5) - entry_slippage ; r_maker = realized_r + (cost_total - cost_maker)/one_r",
+   "per_mandate": {
+    "GRID": {
+     "cost_split_after_usd": {
+      "fees": 49037.264,
+      "funding": 316.704,
+      "slippage": 19952.898,
+      "total": 69306.866
+     },
+     "cost_split_before_usd": {
+      "fees": 70052.498,
+      "funding": 316.704,
+      "slippage": 39906.0414,
+      "total": 110275.2434
+     },
+     "delta_vs_1x": 2816.2845,
+     "n": 8387,
+     "sum_1x_actual": -5756.9093,
+     "sum_maker_entry": -2940.6248
+    },
+    "intraday": {
+     "cost_split_after_usd": {
+      "fees": 30745.8797,
+      "funding": 47.2148,
+      "slippage": 11330.0597,
+      "total": 42123.1542
+     },
+     "cost_split_before_usd": {
+      "fees": 43922.6856,
+      "funding": 47.2148,
+      "slippage": 22660.4375,
+      "total": 66630.3379
+     },
+     "delta_vs_1x": 2343.1015,
+     "n": 5951,
+     "sum_1x_actual": -4801.1889,
+     "sum_maker_entry": -2458.0874
+    },
+    "position": {
+     "cost_split_after_usd": {
+      "fees": 3641.3472,
+      "funding": 98.4321,
+      "slippage": 1702.7848,
+      "total": 5442.5641
+     },
+     "cost_split_before_usd": {
+      "fees": 5201.6726,
+      "funding": 98.4321,
+      "slippage": 3405.6848,
+      "total": 8705.7895
+     },
+     "delta_vs_1x": 71.7902,
+     "n": 551,
+     "sum_1x_actual": -178.3957,
+     "sum_maker_entry": -106.6054
+    },
+    "swing": {
+     "cost_split_after_usd": {
+      "fees": 14650.0372,
+      "funding": 171.0571,
+      "slippage": 6920.0535,
+      "total": 21741.1478
+     },
+     "cost_split_before_usd": {
+      "fees": 20928.1398,
+      "funding": 171.0571,
+      "slippage": 13839.9191,
+      "total": 34939.116
+     },
+     "delta_vs_1x": 401.3928,
+     "n": 1885,
+     "sum_1x_actual": -777.3248,
+     "sum_maker_entry": -375.932
+    }
+   }
+  },
+  "R2": {
+   "discriminator": "V-initiated campaign = campaign whose lowest-seq fill tranche is a V. V identified per-tranche by EXIT.shadow.ladder_unthrottled_grade == 'V' (shadows.py:240 sets it to 'V' iff Tranche.kind == 'V'; kind is not otherwise journaled -- ENTRY_FILL covers both R1 and V). Checked by F8 = 45.",
+   "grid": {
+    "best_campaign_r": 2.741,
+    "campaigns": 45,
+    "ci95_hi": 0.0316,
+    "ci95_lo": -0.6315,
+    "expectancy_1x": -0.2932,
+    "strip_best_expectancy_1x": -0.3621,
+    "strip_best_sum_1x": -15.9327,
+    "sum_0x": 2.5685,
+    "sum_1x": -13.1918,
+    "sum_2x": -28.9521,
+    "win_rate": 31.1111
+   },
+   "per_mandate": {
+    "intraday": {
+     "best_campaign_r": 2.2728,
+     "campaigns": 25,
+     "ci95_hi": 0.1195,
+     "ci95_lo": -0.8903,
+     "expectancy_1x": -0.372,
+     "strip_best_expectancy_1x": -0.4822,
+     "strip_best_sum_1x": -11.5739,
+     "sum_0x": 2.1542,
+     "sum_1x": -9.301,
+     "sum_2x": -20.7563,
+     "win_rate": 28.0
+    },
+    "position": {
+     "best_campaign_r": 0.3799,
+     "campaigns": 3,
+     "ci95_hi": 0.3799,
+     "ci95_lo": -0.8242,
+     "expectancy_1x": -0.2378,
+     "strip_best_expectancy_1x": -0.5466,
+     "strip_best_sum_1x": -1.0933,
+     "sum_0x": -0.5445,
+     "sum_1x": -0.7133,
+     "sum_2x": -0.8822,
+     "win_rate": 33.3333
+    },
+    "swing": {
+     "best_campaign_r": 2.741,
+     "campaigns": 17,
+     "ci95_hi": 0.2724,
+     "ci95_lo": -0.5829,
+     "expectancy_1x": -0.1869,
+     "strip_best_expectancy_1x": -0.3699,
+     "strip_best_sum_1x": -5.9184,
+     "sum_0x": 0.9588,
+     "sum_1x": -3.1774,
+     "sum_2x": -7.3136,
+     "win_rate": 35.2941
+    }
+   },
+   "share_of_campaigns_pct": 1.3021,
+   "sum_losses_grid": -7525.0602,
+   "sum_wins_grid": 1768.1509,
+   "top5_by_cell_r": [
+    {
+     "campaign": "BTCUSDT_swing#c201",
+     "cell_r_1x": 2.741,
+     "tranches": 3
+    },
+    {
+     "campaign": "ZECUSDT_intraday#c549",
+     "cell_r_1x": 2.2728,
+     "tranches": 3
+    },
+    {
+     "campaign": "ZECUSDT_intraday#c607",
+     "cell_r_1x": 1.9628,
+     "tranches": 1
+    },
+    {
+     "campaign": "BTCUSDT_intraday#c77",
+     "cell_r_1x": 1.6835,
+     "tranches": 1
+    },
+    {
+     "campaign": "JTOUSDT_swing#c16",
+     "cell_r_1x": 0.6342,
+     "tranches": 3
+    }
+   ],
+   "v_campaigns": 45,
+   "v_share_of_losses_pct": 0.3158,
+   "v_share_of_wins_pct": 0.5979,
+   "v_sum_losses": -23.7634,
+   "v_sum_wins": 10.5717
+  },
+  "R3": {
+   "by_stop_class": {
+    "initial": {
+     "mfe_deciles": [
+      0.0,
+      0.0,
+      0.0169,
+      0.1286,
+      0.2856,
+      0.4636,
+      0.7458,
+      1.2003,
+      2.0369
+     ],
+     "n": 5711,
+     "sum_cell_r_1x": -4450.32
+    },
+    "no_stop_row": {
+     "mfe_deciles": [
+      0.0,
+      0.0106,
+      0.0423,
+      0.0615,
+      0.0744,
+      0.6803,
+      1.1222,
+      1.2362,
+      1.707
+     ],
+     "n": 7,
+     "sum_cell_r_1x": -2.3148
+    },
+    "ratcheted_below_BE": {
+     "mfe_deciles": [
+      0.1339,
+      0.3411,
+      0.4997,
+      0.6743,
+      0.837,
+      1.0433,
+      1.2774,
+      1.6187,
+      2.3328
+     ],
+     "n": 563,
+     "sum_cell_r_1x": -233.4798
+    }
+   },
+   "deciles_of": "mfe_r (per-unit R), numpy.percentile linear interpolation, 10th..90th",
+   "grid": {
+    "initial|intraday|A": {
+     "mfe_deciles": [
+      0.0,
+      0.0,
+      0.0,
+      0.0621,
+      0.1998,
+      0.3766,
+      0.6272,
+      0.9629,
+      1.8769
+     ],
+     "mfe_median": 0.1998,
+     "n": 1321,
+     "sum_cell_r_0x": -497.0197,
+     "sum_cell_r_1x": -1198.2002
+    },
+    "initial|intraday|A+": {
+     "mfe_deciles": [
+      0.0,
+      0.0,
+      0.0,
+      0.0283,
+      0.2915,
+      0.3563,
+      0.763,
+      1.2658,
+      2.4562
+     ],
+     "mfe_median": 0.2915,
+     "n": 29,
+     "sum_cell_r_0x": -11.9384,
+     "sum_cell_r_1x": -22.1393
+    },
+    "initial|intraday|B": {
+     "mfe_deciles": [
+      0.0,
+      0.0,
+      0.0,
+      0.0536,
+      0.1868,
+      0.3658,
+      0.5829,
+      1.011,
+      1.6318
+     ],
+     "mfe_median": 0.1868,
+     "n": 2102,
+     "sum_cell_r_0x": -601.3904,
+     "sum_cell_r_1x": -1545.0626
+    },
+    "initial|position|A": {
+     "mfe_deciles": [
+      0.0184,
+      0.127,
+      0.2506,
+      0.3582,
+      0.5235,
+      0.8047,
+      1.2887,
+      1.733,
+      3.2666
+     ],
+     "mfe_median": 0.5235,
+     "n": 147,
+     "sum_cell_r_0x": -65.5251,
+     "sum_cell_r_1x": -109.1014
+    },
+    "initial|position|A+": {
+     "mfe_deciles": [
+      0.0265,
+      0.0391,
+      0.1363,
+      0.3182,
+      0.5001,
+      0.5877,
+      0.6753,
+      1.1699,
+      2.0713
+     ],
+     "mfe_median": 0.5001,
+     "n": 5,
+     "sum_cell_r_0x": -2.3607,
+     "sum_cell_r_1x": -2.9667
+    },
+    "initial|position|B": {
+     "mfe_deciles": [
+      0.0,
+      0.0886,
+      0.1908,
+      0.2999,
+      0.4419,
+      0.6336,
+      0.9118,
+      1.2287,
+      2.0385
+     ],
+     "mfe_median": 0.4419,
+     "n": 177,
+     "sum_cell_r_0x": -64.9357,
+     "sum_cell_r_1x": -96.7512
+    },
+    "initial|swing|A": {
+     "mfe_deciles": [
+      0.0,
+      0.0061,
+      0.0983,
+      0.223,
+      0.3882,
+      0.577,
+      0.8482,
+      1.3975,
+      2.2138
+     ],
+     "mfe_median": 0.3882,
+     "n": 488,
+     "sum_cell_r_0x": -211.1052,
+     "sum_cell_r_1x": -379.976
+    },
+    "initial|swing|A+": {
+     "mfe_deciles": [
+      0.0,
+      0.0,
+      0.0,
+      0.0484,
+      0.1114,
+      0.1676,
+      0.5875,
+      1.2211,
+      2.206
+     ],
+     "mfe_median": 0.1114,
+     "n": 21,
+     "sum_cell_r_0x": -8.5765,
+     "sum_cell_r_1x": -19.9682
+    },
+    "initial|swing|B": {
+     "mfe_deciles": [
+      0.0,
+      0.0463,
+      0.1319,
+      0.2723,
+      0.4235,
+      0.5939,
+      0.8608,
+      1.3107,
+      2.3509
+     ],
+     "mfe_median": 0.4235,
+     "n": 613,
+     "sum_cell_r_0x": -202.3281,
+     "sum_cell_r_1x": -408.8836
+    },
+    "no_stop_row|intraday|B": {
+     "mfe_deciles": [
+      0.2168,
+      0.4337,
+      0.6505,
+      0.8674,
+      1.0842,
+      1.3386,
+      1.593,
+      1.8474,
+      2.1017
+     ],
+     "mfe_median": 1.0842,
+     "n": 3,
+     "sum_cell_r_0x": -0.3169,
+     "sum_cell_r_1x": -1.2369
+    },
+    "no_stop_row|position|A": {
+     "mfe_deciles": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+     ],
+     "mfe_median": 0.0,
+     "n": 1,
+     "sum_cell_r_0x": -0.1902,
+     "sum_cell_r_1x": -0.4946
+    },
+    "no_stop_row|swing|B": {
+     "mfe_deciles": [
+      1.2743,
+      1.2743,
+      1.2743,
+      1.2743,
+      1.2743,
+      1.2743,
+      1.2743,
+      1.2743,
+      1.2743
+     ],
+     "mfe_median": 1.2743,
+     "n": 1,
+     "sum_cell_r_0x": -0.122,
+     "sum_cell_r_1x": -0.2635
+    },
+    "ratcheted_below_BE|intraday|A": {
+     "mfe_deciles": [
+      0.0927,
+      0.3237,
+      0.4334,
+      0.6125,
+      0.7584,
+      1.0007,
+      1.2796,
+      1.6614,
+      2.5766
+     ],
+     "mfe_median": 0.7584,
+     "n": 144,
+     "sum_cell_r_0x": -29.7662,
+     "sum_cell_r_1x": -82.1344
+    },
+    "ratcheted_below_BE|intraday|A+": {
+     "mfe_deciles": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.3756,
+      0.7513,
+      1.1269,
+      1.5026
+     ],
+     "mfe_median": 0.0,
+     "n": 3,
+     "sum_cell_r_0x": -0.698,
+     "sum_cell_r_1x": -0.8457
+    },
+    "ratcheted_below_BE|intraday|B": {
+     "mfe_deciles": [
+      0.1268,
+      0.2966,
+      0.4372,
+      0.6043,
+      0.7455,
+      0.9711,
+      1.0612,
+      1.4156,
+      1.9775
+     ],
+     "mfe_median": 0.7455,
+     "n": 202,
+     "sum_cell_r_0x": -28.5016,
+     "sum_cell_r_1x": -77.7578
+    },
+    "ratcheted_below_BE|position|A": {
+     "mfe_deciles": [
+      0.5941,
+      0.6946,
+      0.7824,
+      0.8636,
+      0.992,
+      1.1954,
+      1.4076,
+      1.6062,
+      1.9914
+     ],
+     "mfe_median": 0.992,
+     "n": 16,
+     "sum_cell_r_0x": -3.4809,
+     "sum_cell_r_1x": -5.6578
+    },
+    "ratcheted_below_BE|position|A+": {
+     "mfe_deciles": [
+      0.8313,
+      0.8313,
+      0.8313,
+      0.8313,
+      0.8313,
+      0.8313,
+      0.8313,
+      0.8313,
+      0.8313
+     ],
+     "mfe_median": 0.8313,
+     "n": 1,
+     "sum_cell_r_0x": -0.0667,
+     "sum_cell_r_1x": -0.2138
+    },
+    "ratcheted_below_BE|position|B": {
+     "mfe_deciles": [
+      0.527,
+      0.6318,
+      1.1572,
+      1.4913,
+      1.6322,
+      1.7882,
+      1.8767,
+      1.999,
+      2.2229
+     ],
+     "mfe_median": 1.6322,
+     "n": 16,
+     "sum_cell_r_0x": -2.0565,
+     "sum_cell_r_1x": -3.5388
+    },
+    "ratcheted_below_BE|swing|A": {
+     "mfe_deciles": [
+      0.2224,
+      0.3819,
+      0.481,
+      0.7328,
+      0.9616,
+      1.1774,
+      1.3504,
+      1.4341,
+      2.1636
+     ],
+     "mfe_median": 0.9616,
+     "n": 58,
+     "sum_cell_r_0x": -11.8864,
+     "sum_cell_r_1x": -25.59
+    },
+    "ratcheted_below_BE|swing|A+": {
+     "mfe_deciles": [
+      0.803,
+      0.8241,
+      0.8452,
+      0.8662,
+      0.8873,
+      0.9079,
+      0.9284,
+      0.949,
+      0.9696
+     ],
+     "mfe_median": 0.8873,
+     "n": 3,
+     "sum_cell_r_0x": -0.2359,
+     "sum_cell_r_1x": -0.8148
+    },
+    "ratcheted_below_BE|swing|B": {
+     "mfe_deciles": [
+      0.3436,
+      0.4961,
+      0.7047,
+      0.8747,
+      1.019,
+      1.1794,
+      1.4528,
+      1.7147,
+      2.3649
+     ],
+     "mfe_median": 1.019,
+     "n": 74,
+     "sum_cell_r_0x": -10.268,
+     "sum_cell_r_1x": -21.4482
+    }
+   },
+   "n_population": 6281,
+   "population": "tranches that exited at a GROSS loss (r_0x < 0)",
+   "purpose": "Raw material for FITTING a profit-arming threshold instead of guessing +1R.",
+   "structural_note": "The 'ratcheted_ge_BE' class is EMPTY BY CONSTRUCTION for this population, not by accident: a stop resting at or beyond the entry fill on the trade's side cannot produce a gross loss when it is the exit level (gross P&L is measured at raw prices, before the costs that r_0x adds back). Any tranche whose stop reached breakeven and then filled leaves this population by definition. Read the absence as a tautology of the population filter, NOT as evidence that the ratchet never reaches breakeven."
+  },
+  "R4": {
+   "counts": {
+    "GRID": {
+     "either_mixed_windows": 1340,
+     "ext_before_CAMPAIGN_DEATH_loose": 1340,
+     "ext_before_CAMPAIGN_DEATH_loose_pct": 84.7565,
+     "n": 1581,
+     "tpw_before_exit_STRICT": 2,
+     "tpw_before_exit_STRICT_pct": 0.1265
+    },
+    "intraday": {
+     "either_mixed_windows": 876,
+     "ext_before_CAMPAIGN_DEATH_loose": 876,
+     "ext_before_CAMPAIGN_DEATH_loose_pct": 87.0775,
+     "n": 1006,
+     "tpw_before_exit_STRICT": 0,
+     "tpw_before_exit_STRICT_pct": 0.0
+    },
+    "position": {
+     "either_mixed_windows": 107,
+     "ext_before_CAMPAIGN_DEATH_loose": 107,
+     "ext_before_CAMPAIGN_DEATH_loose_pct": 79.8507,
+     "n": 134,
+     "tpw_before_exit_STRICT": 2,
+     "tpw_before_exit_STRICT_pct": 1.4925
+    },
+    "swing": {
+     "either_mixed_windows": 357,
+     "ext_before_CAMPAIGN_DEATH_loose": 357,
+     "ext_before_CAMPAIGN_DEATH_loose_pct": 80.9524,
+     "n": 441,
+     "tpw_before_exit_STRICT": 0,
+     "tpw_before_exit_STRICT_pct": 0.0
+    }
+   },
+   "ext_partial_reason": "NOT COMPUTABLE from journaled fields. The extension's bar index (ext_i, shadows.py:190-194) is never journaled, and the only journaled flag (engagement_flags.ext_before_exit) is evaluated over [fill_i, camp_end] rather than [fill_i, exit_i], so it cannot be narrowed to 'before this tranche's exit' after the fact. MISSING FIELD: either the trigger bar index ('ext_i_offset', bars from fill) or a correctly-windowed boolean computed over [fill_i, exit_i]. ROW TYPE it would live on: the EXIT row, inside engagement_flags alongside the existing (mis-windowed) flag. No estimate substituted. The n_ext_recoverable count below is a genuine LOWER BOUND on the strict reading -- it counts only rows whose extension partial actually banked before the X-A shadow exit.",
+   "ext_strict_before_exit": "PARTIAL",
+   "flag_semantics_warning": "THE TWO FLAGS DO NOT MEASURE THE SAME WINDOW, despite their paired names. (a) tpw_before_exit derives from Tranche.first_tpw_i, which trading.py:412-415 sets ONLY for tranches in open_tranches at the close of the TPW bar -- so it is genuinely 'while THIS tranche was open'. STRICT, answers the question as asked. (b) ext_before_exit derives from shadows.py:190-194, whose loop is `for j in range(tr.fill_i, last + 1)` with last = camp_end -- the CAMPAIGN-DEATH bar, NOT this tranche's exit bar (the engine's own comment says 'within the campaign'). It is therefore true whenever an extension occurred anywhere between this tranche's fill and campaign death, INCLUDING after this tranche was already stopped out. It is misnamed: it reads 'ext_before_CAMPAIGN_DEATH'. The strict 'before their exit' reading is NOT computable -- see partial below.",
+   "median_mfe_at_first_trigger": "PARTIAL",
+   "n_population": 1581,
+   "partial_reason": "NOT COMPUTABLE from journaled fields. mfe_r on the EXIT row is the tranche's WHOLE-LIFE maximum favorable excursion (shadows.py:167), not its value at the trigger bar; the trigger bar index (tpw_i / ext_i, shadows.py:188-193) is never journaled. MISSING FIELD: an MFE-at-trigger column -- e.g. 'mfe_at_tpw_r' and 'mfe_at_ext_r'. ROW TYPE it would live on: the EXIT row (alongside mfe_r / give_back_r), or equivalently a per-tranche TPW event row carrying tranche_id + running mfe_r. No estimate substituted.",
+   "population": "tranches with mfe_r >= +1R that exited at a GROSS loss (r_0x < 0)",
+   "recoverable_R_at_first_trigger": {
+    "definition": "per-unit R realized at the open AFTER the first trigger, inverted from the shadow blend: tpw_r = 2*exit_XB - exit_XA ; ext_r = 2*exit_XC - exit_XA. This is R AT the trigger, NOT MFE at the trigger.",
+    "per_mandate": {
+     "GRID": {
+      "median_R_at_first_ext": 1.4922,
+      "median_R_at_first_tpw": 0.3323,
+      "n_ext_recoverable": 359,
+      "n_tpw_recoverable": 2,
+      "note": "rows where the trigger fired but the partial did not bank before the X-A exit are excluded (xb == xa exactly)"
+     },
+     "intraday": {
+      "median_R_at_first_ext": 1.4209,
+      "median_R_at_first_tpw": null,
+      "n_ext_recoverable": 275,
+      "n_tpw_recoverable": 0,
+      "note": "rows where the trigger fired but the partial did not bank before the X-A exit are excluded (xb == xa exactly)"
+     },
+     "position": {
+      "median_R_at_first_ext": 2.0331,
+      "median_R_at_first_tpw": 0.3323,
+      "n_ext_recoverable": 22,
+      "n_tpw_recoverable": 2,
+      "note": "rows where the trigger fired but the partial did not bank before the X-A exit are excluded (xb == xa exactly)"
+     },
+     "swing": {
+      "median_R_at_first_ext": 1.8918,
+      "median_R_at_first_tpw": null,
+      "n_ext_recoverable": 62,
+      "n_tpw_recoverable": 0,
+      "note": "rows where the trigger fired but the partial did not bank before the X-A exit are excluded (xb == xa exactly)"
+     }
+    }
+   },
+   "route": "TPW IS journaled as an event row (evt='TPW'), but those rows are per-cell/per-bar and carry no tranche_id, so they do not answer 'before THIS tranche's exit'. The per-tranche answer is journaled on the EXIT row as engagement_flags.tpw_before_exit / .ext_before_exit (shadows.py:257-260) -- that is the route taken. The exit_XB fallback was NOT needed for the TPW count; it is used only to recover R-at-first-trigger (see below)."
+  },
+  "R5": {
+   "event_key": "(cell_id, dir, ts_open) over stop/stop_gap EXIT rows",
+   "event_representative": "per-unit quantities (postexit_cont_20) differ across tranches in one event because unit_risk is per-tranche; the event's lowest-seq tranche is the representative.",
+   "per_event": {
+    "forfeited_pool_cell_r": 4395.1405,
+    "median_cont_20": 0.22,
+    "n": 7057,
+    "resumed_ge_1R_20b": 2461,
+    "resumed_pct": 34.8732,
+    "tranches_per_event_mean": 1.1853
+   },
+   "per_mandate": {
+    "intraday": {
+     "events": 5003,
+     "events_resumed": 1768,
+     "events_resumed_pct": 35.3388,
+     "forfeited_pool_cell_r_per_event": 3056.4354,
+     "tranches": 5935,
+     "tranches_resumed": 2093
+    },
+    "position": {
+     "events": 462,
+     "events_resumed": 157,
+     "events_resumed_pct": 33.9827,
+     "forfeited_pool_cell_r_per_event": 302.1742,
+     "tranches": 550,
+     "tranches_resumed": 186
+    },
+    "swing": {
+     "events": 1592,
+     "events_resumed": 536,
+     "events_resumed_pct": 33.6683,
+     "forfeited_pool_cell_r_per_event": 1036.531,
+     "tranches": 1880,
+     "tranches_resumed": 620
+    }
+   },
+   "per_tranche": {
+    "forfeited_pool_cell_r": 4429.1503,
+    "median_cont_20": 0.2117,
+    "n": 8365,
+    "resumed_ge_1R_20b": 2899,
+    "resumed_pct": 34.6563
+   },
+   "purpose": "C6's re-entry trigger needs the per-EVENT denominator, not the per-tranche one.",
+   "resumption_definition": "postexit_cont_20 >= 1.0 (per-unit R at exactly +20 exec bars after the exit). NOTE: only postexit_cont_{1,5,20} are journaled, so this is the value AT bar 20, not the max WITHIN 20 bars -- a strict 'within' reading is not computable from journaled fields."
+  },
+  "R6": {
+   "degeneracy_finding": "The cross-tab is NEARLY DEGENERATE: zone and stage are not independent in this run. Z2 fills are 100% stage-1 (0 stage-2) and Z3 fills are 100% stage-2 (0 stage-1) -- each of those zones occupies exactly ONE stage, so 2 of the 6 Z1/Z2/Z3 x stage cells are structurally empty rather than merely sparse. Only Z1 (and the no-zone '-' bucket) populate both stages. P-R6 is therefore CONFIRMED trivially at 100%, not marginally at >=95%: the prediction tested a coupling that appears to be enforced upstream, not a tendency. Zones with a single occupied stage: Z2, Z3. Anyone reading a Z2-vs-Z3 expectancy difference as a ZONE effect is also reading a STAGE effect -- the two are confounded here and cannot be separated from these journals.",
+   "n_fills": 8415,
+   "n_fills_without_exit": 28,
+   "note": "Counts are over ALL ENTRY_FILL/ADD_FILL rows. Expectancy and sum cell-R use the joined EXIT row; fills whose EXIT is buffered (campaign open at data end) contribute to the count but not to R.",
+   "p_r6": {
+    "z2_entries": 817,
+    "z2_stage1": 817,
+    "z2_stage1_pct": 100.0,
+    "z2_stage2": 0
+   },
+   "per_mandate": {
+    "intraday": {
+     "-|stage1": {
+      "expectancy_1x": -0.4351,
+      "n": 300,
+      "n_with_exit": 300,
+      "sum_cell_r_0x": 11.6107,
+      "sum_cell_r_1x": -130.5198
+     },
+     "-|stage2": {
+      "expectancy_1x": -0.4476,
+      "n": 269,
+      "n_with_exit": 268,
+      "sum_cell_r_0x": -4.0499,
+      "sum_cell_r_1x": -119.9625
+     },
+     "Z1|stage1": {
+      "expectancy_1x": -0.7312,
+      "n": 2226,
+      "n_with_exit": 2225,
+      "sum_cell_r_0x": 372.7564,
+      "sum_cell_r_1x": -1626.85
+     },
+     "Z1|stage2": {
+      "expectancy_1x": -1.1116,
+      "n": 1869,
+      "n_with_exit": 1867,
+      "sum_cell_r_0x": 501.237,
+      "sum_cell_r_1x": -2075.3874
+     },
+     "Z2|stage1": {
+      "expectancy_1x": -0.6023,
+      "n": 605,
+      "n_with_exit": 605,
+      "sum_cell_r_0x": 47.642,
+      "sum_cell_r_1x": -364.396
+     },
+     "Z3|stage2": {
+      "expectancy_1x": -0.7056,
+      "n": 686,
+      "n_with_exit": 686,
+      "sum_cell_r_0x": 119.071,
+      "sum_cell_r_1x": -484.0731
+     }
+    },
+    "position": {
+     "-|stage1": {
+      "expectancy_1x": -0.6468,
+      "n": 24,
+      "n_with_exit": 23,
+      "sum_cell_r_0x": -10.6615,
+      "sum_cell_r_1x": -14.8766
+     },
+     "-|stage2": {
+      "expectancy_1x": -0.4183,
+      "n": 23,
+      "n_with_exit": 22,
+      "sum_cell_r_0x": -7.0653,
+      "sum_cell_r_1x": -9.2029
+     },
+     "Z1|stage1": {
+      "expectancy_1x": -0.1806,
+      "n": 218,
+      "n_with_exit": 212,
+      "sum_cell_r_0x": 21.9392,
+      "sum_cell_r_1x": -38.2769
+     },
+     "Z1|stage2": {
+      "expectancy_1x": -0.3891,
+      "n": 183,
+      "n_with_exit": 181,
+      "sum_cell_r_0x": 33.7441,
+      "sum_cell_r_1x": -70.4311
+     },
+     "Z2|stage1": {
+      "expectancy_1x": -0.3206,
+      "n": 49,
+      "n_with_exit": 44,
+      "sum_cell_r_0x": -8.419,
+      "sum_cell_r_1x": -14.1067
+     },
+     "Z3|stage2": {
+      "expectancy_1x": -0.4565,
+      "n": 69,
+      "n_with_exit": 69,
+      "sum_cell_r_0x": -16.0906,
+      "sum_cell_r_1x": -31.5015
+     }
+    },
+    "swing": {
+     "-|stage1": {
+      "expectancy_1x": -0.0565,
+      "n": 91,
+      "n_with_exit": 91,
+      "sum_cell_r_0x": 16.8845,
+      "sum_cell_r_1x": -5.1391
+     },
+     "-|stage2": {
+      "expectancy_1x": 0.552,
+      "n": 86,
+      "n_with_exit": 85,
+      "sum_cell_r_0x": 66.2953,
+      "sum_cell_r_1x": 46.918
+     },
+     "Z1|stage1": {
+      "expectancy_1x": -0.4711,
+      "n": 700,
+      "n_with_exit": 695,
+      "sum_cell_r_0x": 66.6885,
+      "sum_cell_r_1x": -327.4464
+     },
+     "Z1|stage2": {
+      "expectancy_1x": -0.385,
+      "n": 613,
+      "n_with_exit": 610,
+      "sum_cell_r_0x": 101.2443,
+      "sum_cell_r_1x": -234.8602
+     },
+     "Z2|stage1": {
+      "expectancy_1x": -0.5593,
+      "n": 163,
+      "n_with_exit": 163,
+      "sum_cell_r_0x": 42.8312,
+      "sum_cell_r_1x": -91.1709
+     },
+     "Z3|stage2": {
+      "expectancy_1x": -0.6872,
+      "n": 241,
+      "n_with_exit": 241,
+      "sum_cell_r_0x": -10.3486,
+      "sum_cell_r_1x": -165.6263
+     }
+    }
+   },
+   "purpose": "Tests P-R6.",
+   "table": {
+    "both": {
+     "-|stage1": {
+      "expectancy_1x": -0.3636,
+      "n": 415,
+      "n_with_exit": 414,
+      "sum_cell_r_0x": 17.8338,
+      "sum_cell_r_1x": -150.5355
+     },
+     "-|stage2": {
+      "expectancy_1x": -0.2193,
+      "n": 378,
+      "n_with_exit": 375,
+      "sum_cell_r_0x": 55.1801,
+      "sum_cell_r_1x": -82.2473
+     },
+     "Z1|stage1": {
+      "expectancy_1x": -0.6362,
+      "n": 3144,
+      "n_with_exit": 3132,
+      "sum_cell_r_0x": 461.3842,
+      "sum_cell_r_1x": -1992.5733
+     },
+     "Z1|stage2": {
+      "expectancy_1x": -0.8957,
+      "n": 2665,
+      "n_with_exit": 2658,
+      "sum_cell_r_0x": 636.2255,
+      "sum_cell_r_1x": -2380.6787
+     },
+     "Z2|stage1": {
+      "expectancy_1x": -0.5784,
+      "n": 817,
+      "n_with_exit": 812,
+      "sum_cell_r_0x": 82.0542,
+      "sum_cell_r_1x": -469.6736
+     },
+     "Z3|stage2": {
+      "expectancy_1x": -0.6839,
+      "n": 996,
+      "n_with_exit": 996,
+      "sum_cell_r_0x": 92.6317,
+      "sum_cell_r_1x": -681.2009
+     }
+    },
+    "long": {
+     "-|stage1": {
+      "expectancy_1x": -0.2124,
+      "n": 212,
+      "n_with_exit": 212,
+      "sum_cell_r_0x": 43.3056,
+      "sum_cell_r_1x": -45.0223
+     },
+     "-|stage2": {
+      "expectancy_1x": -0.3839,
+      "n": 179,
+      "n_with_exit": 178,
+      "sum_cell_r_0x": 0.3937,
+      "sum_cell_r_1x": -68.3391
+     },
+     "Z1|stage1": {
+      "expectancy_1x": -0.6747,
+      "n": 1499,
+      "n_with_exit": 1498,
+      "sum_cell_r_0x": 243.6099,
+      "sum_cell_r_1x": -1010.6906
+     },
+     "Z1|stage2": {
+      "expectancy_1x": -0.8888,
+      "n": 1376,
+      "n_with_exit": 1375,
+      "sum_cell_r_0x": 275.4864,
+      "sum_cell_r_1x": -1222.0867
+     },
+     "Z2|stage1": {
+      "expectancy_1x": -0.5651,
+      "n": 366,
+      "n_with_exit": 366,
+      "sum_cell_r_0x": 67.0097,
+      "sum_cell_r_1x": -206.832
+     },
+     "Z3|stage2": {
+      "expectancy_1x": -0.5845,
+      "n": 528,
+      "n_with_exit": 528,
+      "sum_cell_r_0x": 4.7605,
+      "sum_cell_r_1x": -308.6418
+     }
+    },
+    "short": {
+     "-|stage1": {
+      "expectancy_1x": -0.5223,
+      "n": 203,
+      "n_with_exit": 202,
+      "sum_cell_r_0x": -25.4718,
+      "sum_cell_r_1x": -105.5131
+     },
+     "-|stage2": {
+      "expectancy_1x": -0.0706,
+      "n": 199,
+      "n_with_exit": 197,
+      "sum_cell_r_0x": 54.7864,
+      "sum_cell_r_1x": -13.9082
+     },
+     "Z1|stage1": {
+      "expectancy_1x": -0.6009,
+      "n": 1645,
+      "n_with_exit": 1634,
+      "sum_cell_r_0x": 217.7742,
+      "sum_cell_r_1x": -981.8827
+     },
+     "Z1|stage2": {
+      "expectancy_1x": -0.903,
+      "n": 1289,
+      "n_with_exit": 1283,
+      "sum_cell_r_0x": 360.739,
+      "sum_cell_r_1x": -1158.592
+     },
+     "Z2|stage1": {
+      "expectancy_1x": -0.5893,
+      "n": 451,
+      "n_with_exit": 446,
+      "sum_cell_r_0x": 15.0444,
+      "sum_cell_r_1x": -262.8416
+     },
+     "Z3|stage2": {
+      "expectancy_1x": -0.7961,
+      "n": 468,
+      "n_with_exit": 468,
+      "sum_cell_r_0x": 87.8712,
+      "sum_cell_r_1x": -372.5591
+     }
+    }
+   },
+   "zone_stage_occupancy": {
+    "-": {
+     "n": 793,
+     "stage1": 415,
+     "stage2": 378
+    },
+    "Z1": {
+     "n": 5809,
+     "stage1": 3144,
+     "stage2": 2665
+    },
+    "Z2": {
+     "n": 817,
+     "stage1": 817,
+     "stage2": 0
+    },
+    "Z3": {
+     "n": 996,
+     "stage1": 0,
+     "stage2": 996
+    }
+   }
+  },
+  "R7": {
+   "layer_discriminator": "REJECT row whose tranche_id starts with 'trade_' is a TRADING-layer reject (replay.py:228); otherwise SIGNAL-layer (subkey 'prime'/'confirm').",
+   "load_bearing": {
+    "add_ineligible": 716,
+    "no_zone": 229963,
+    "r_cap_F9": 0,
+    "ribbon_sep": 43917,
+    "tranche_cap_max_tranches": 145749
+   },
+   "naming_note": "Contract §6 R7 calls the tranche ceiling 'tranche_cap'; the engine emits it as reject_reason='max_tranches' (trading.py:459). Same gate -- reported under both names.",
+   "signal_layer": {
+    "GRID": {
+     "bar_range": 44771,
+     "c_gate_no_zone": 21091,
+     "c_gate_structure": 11,
+     "cooldown": 15451,
+     "no_zone": 229963,
+     "ribbon_sep": 43917,
+     "structure": 32
+    },
+    "intraday": {
+     "bar_range": 38409,
+     "c_gate_no_zone": 16803,
+     "c_gate_structure": 2,
+     "cooldown": 12053,
+     "no_zone": 179099,
+     "ribbon_sep": 32888,
+     "structure": 7
+    },
+    "position": {
+     "bar_range": 1333,
+     "c_gate_no_zone": 1100,
+     "cooldown": 839,
+     "no_zone": 13081,
+     "ribbon_sep": 2564
+    },
+    "swing": {
+     "bar_range": 5029,
+     "c_gate_no_zone": 3188,
+     "c_gate_structure": 9,
+     "cooldown": 2559,
+     "no_zone": 37783,
+     "ribbon_sep": 8465,
+     "structure": 25
+    }
+   },
+   "totals": {
+    "all": 646027,
+    "signal_layer": 355236,
+    "trading_layer": 290791
+   },
+   "trading_layer": {
+    "GRID": {
+     "add_ineligible": 716,
+     "campaign_died_same_bar": 1,
+     "gap_through_stop": 27440,
+     "halted_day": 6099,
+     "halted_week": 41703,
+     "max_tranches": 145749,
+     "not_positioned": 69082,
+     "v_already_positioned": 1
+    },
+    "intraday": {
+     "add_ineligible": 482,
+     "campaign_died_same_bar": 1,
+     "gap_through_stop": 22774,
+     "halted_day": 5962,
+     "halted_week": 41221,
+     "max_tranches": 102974,
+     "not_positioned": 54762
+    },
+    "position": {
+     "add_ineligible": 54,
+     "gap_through_stop": 881,
+     "halted_day": 16,
+     "halted_week": 16,
+     "max_tranches": 10207,
+     "not_positioned": 3312
+    },
+    "swing": {
+     "add_ineligible": 180,
+     "gap_through_stop": 3785,
+     "halted_day": 121,
+     "halted_week": 466,
+     "max_tranches": 32568,
+     "not_positioned": 11008,
+     "v_already_positioned": 1
+    }
+   }
+  },
+  "R8": {
+   "campaign_level": {
+    "Z1": {
+     "GRID": {
+      "best_campaign_r": 114.4519,
+      "campaigns": 2411,
+      "ci95_hi": -1.4391,
+      "ci95_lo": -2.362,
+      "expectancy_1x": -1.8485,
+      "strip_best_expectancy_1x": -1.8968,
+      "strip_best_sum_1x": -4571.2459,
+      "sum_0x": 1149.6045,
+      "sum_1x": -4456.794,
+      "sum_2x": -10063.1926,
+      "win_rate": 11.1157
+     },
+     "intraday": {
+      "best_campaign_r": 53.1919,
+      "campaigns": 1750,
+      "ci95_hi": -1.6445,
+      "ci95_lo": -2.8466,
+      "expectancy_1x": -2.168,
+      "strip_best_expectancy_1x": -2.1996,
+      "strip_best_sum_1x": -3847.1601,
+      "sum_0x": 880.9962,
+      "sum_1x": -3793.9682,
+      "sum_2x": -8468.9326,
+      "win_rate": 10.7429
+     },
+     "position": {
+      "best_campaign_r": 36.1402,
+      "campaigns": 150,
+      "ci95_hi": -0.0664,
+      "ci95_lo": -1.4728,
+      "expectancy_1x": -0.8161,
+      "strip_best_expectancy_1x": -1.0641,
+      "strip_best_sum_1x": -158.5497,
+      "sum_0x": 44.2278,
+      "sum_1x": -122.4095,
+      "sum_2x": -289.0468,
+      "win_rate": 16.6667
+     },
+     "swing": {
+      "best_campaign_r": 114.4519,
+      "campaigns": 511,
+      "ci95_hi": -0.4121,
+      "ci95_lo": -1.5798,
+      "expectancy_1x": -1.0576,
+      "strip_best_expectancy_1x": -1.2841,
+      "strip_best_sum_1x": -654.8683,
+      "sum_0x": 224.3805,
+      "sum_1x": -540.4164,
+      "sum_2x": -1305.2132,
+      "win_rate": 10.7632
+     }
+    },
+    "Z2": {
+     "GRID": {
+      "best_campaign_r": 22.5418,
+      "campaigns": 496,
+      "ci95_hi": -0.8309,
+      "ci95_lo": -1.4004,
+      "expectancy_1x": -1.0995,
+      "strip_best_expectancy_1x": -1.1472,
+      "strip_best_sum_1x": -567.8803,
+      "sum_0x": 64.908,
+      "sum_1x": -545.3385,
+      "sum_2x": -1155.5849,
+      "win_rate": 8.0645
+     },
+     "intraday": {
+      "best_campaign_r": 22.5418,
+      "campaigns": 367,
+      "ci95_hi": -0.96,
+      "ci95_lo": -1.588,
+      "expectancy_1x": -1.2559,
+      "strip_best_expectancy_1x": -1.3209,
+      "strip_best_sum_1x": -483.4593,
+      "sum_0x": 15.5415,
+      "sum_1x": -460.9175,
+      "sum_2x": -937.3766,
+      "win_rate": 7.0845
+     },
+     "position": {
+      "best_campaign_r": 0.6258,
+      "campaigns": 28,
+      "ci95_hi": -0.6188,
+      "ci95_lo": -1.0962,
+      "expectancy_1x": -0.855,
+      "strip_best_expectancy_1x": -0.9098,
+      "strip_best_sum_1x": -24.5652,
+      "sum_0x": -14.5535,
+      "sum_1x": -23.9394,
+      "sum_2x": -33.3253,
+      "win_rate": 3.5714
+     },
+     "swing": {
+      "best_campaign_r": 18.6631,
+      "campaigns": 101,
+      "ci95_hi": 0.1577,
+      "ci95_lo": -1.4513,
+      "expectancy_1x": -0.5988,
+      "strip_best_expectancy_1x": -0.7914,
+      "strip_best_sum_1x": -79.1446,
+      "sum_0x": 63.9199,
+      "sum_1x": -60.4815,
+      "sum_2x": -184.883,
+      "win_rate": 12.8713
+     }
+    },
+    "Z3": {
+     "GRID": {
+      "best_campaign_r": 26.4633,
+      "campaigns": 504,
+      "ci95_hi": -0.9804,
+      "ci95_lo": -2.1474,
+      "expectancy_1x": -1.4714,
+      "strip_best_expectancy_1x": -1.5269,
+      "strip_best_sum_1x": -768.0483,
+      "sum_0x": 128.2285,
+      "sum_1x": -741.585,
+      "sum_2x": -1611.3985,
+      "win_rate": 13.4921
+     },
+     "intraday": {
+      "best_campaign_r": 26.4633,
+      "campaigns": 358,
+      "ci95_hi": -0.8546,
+      "ci95_lo": -2.4334,
+      "expectancy_1x": -1.5,
+      "strip_best_expectancy_1x": -1.5783,
+      "strip_best_sum_1x": -563.4654,
+      "sum_0x": 149.5752,
+      "sum_1x": -537.0021,
+      "sum_2x": -1223.5794,
+      "win_rate": 14.2458
+     },
+     "position": {
+      "best_campaign_r": 3.4361,
+      "campaigns": 30,
+      "ci95_hi": -0.5881,
+      "ci95_lo": -1.4609,
+      "expectancy_1x": -1.0444,
+      "strip_best_expectancy_1x": -1.199,
+      "strip_best_sum_1x": -34.7696,
+      "sum_0x": -15.6828,
+      "sum_1x": -31.3335,
+      "sum_2x": -46.9841,
+      "win_rate": 3.3333
+     },
+     "swing": {
+      "best_campaign_r": 9.1814,
+      "campaigns": 116,
+      "ci95_hi": -0.8823,
+      "ci95_lo": -2.3363,
+      "expectancy_1x": -1.4935,
+      "strip_best_expectancy_1x": -1.5864,
+      "strip_best_sum_1x": -182.4309,
+      "sum_0x": -5.664,
+      "sum_1x": -173.2495,
+      "sum_2x": -340.835,
+      "win_rate": 13.7931
+     }
+    }
+   },
+   "campaign_level_other_zones": {
+    "-": 45
+   },
+   "note": "Report 1 published Z2 vs Z1 and never published Z3. Z3 is the governor 89-200 band retest cohort and the operator's stated primary structural setup. Gap closed here.",
+   "tranche_level": {
+    "Z1": {
+     "GRID": {
+      "n": 5790,
+      "net_per_unit_ci95": [
+       -2.0069,
+       -1.2553
+      ],
+      "net_per_unit_mean": -1.5847,
+      "sum_cell_r_0x": 1097.6096,
+      "sum_cell_r_1x": -4373.252,
+      "sum_cell_r_2x": -9844.1136,
+      "win_rate_1x": 16.1313
+     },
+     "intraday": {
+      "n": 4092,
+      "net_per_unit_ci95": [
+       -2.4803,
+       -1.453
+      ],
+      "net_per_unit_mean": -1.8997,
+      "sum_cell_r_0x": 873.9934,
+      "sum_cell_r_1x": -3702.2374,
+      "sum_cell_r_2x": -8278.4683,
+      "win_rate_1x": 15.1026
+     },
+     "position": {
+      "n": 393,
+      "net_per_unit_ci95": [
+       -1.0941,
+       0.0199
+      ],
+      "net_per_unit_mean": -0.5607,
+      "sum_cell_r_0x": 55.6834,
+      "sum_cell_r_1x": -108.7079,
+      "sum_cell_r_2x": -273.0992,
+      "win_rate_1x": 22.1374
+     },
+     "swing": {
+      "n": 1305,
+      "net_per_unit_ci95": [
+       -1.2318,
+       -0.5841
+      ],
+      "net_per_unit_mean": -0.9053,
+      "sum_cell_r_0x": 167.9328,
+      "sum_cell_r_1x": -562.3066,
+      "sum_cell_r_2x": -1292.546,
+      "win_rate_1x": 17.5479
+     }
+    },
+    "Z2": {
+     "GRID": {
+      "n": 812,
+      "net_per_unit_ci95": [
+       -1.8132,
+       -0.9971
+      ],
+      "net_per_unit_mean": -1.3807,
+      "sum_cell_r_0x": 82.0542,
+      "sum_cell_r_1x": -469.6736,
+      "sum_cell_r_2x": -1021.4014,
+      "win_rate_1x": 16.8719
+     },
+     "intraday": {
+      "n": 605,
+      "net_per_unit_ci95": [
+       -1.8638,
+       -1.0859
+      ],
+      "net_per_unit_mean": -1.4595,
+      "sum_cell_r_0x": 47.642,
+      "sum_cell_r_1x": -364.396,
+      "sum_cell_r_2x": -776.434,
+      "win_rate_1x": 16.8595
+     },
+     "position": {
+      "n": 44,
+      "net_per_unit_ci95": [
+       -1.1131,
+       -0.6307
+      ],
+      "net_per_unit_mean": -0.878,
+      "sum_cell_r_0x": -8.419,
+      "sum_cell_r_1x": -14.1067,
+      "sum_cell_r_2x": -19.7945,
+      "win_rate_1x": 20.4545
+     },
+     "swing": {
+      "n": 163,
+      "net_per_unit_ci95": [
+       -2.7759,
+       -0.0037
+      ],
+      "net_per_unit_mean": -1.224,
+      "sum_cell_r_0x": 42.8312,
+      "sum_cell_r_1x": -91.1709,
+      "sum_cell_r_2x": -225.1729,
+      "win_rate_1x": 15.9509
+     }
+    },
+    "Z3": {
+     "GRID": {
+      "n": 996,
+      "net_per_unit_ci95": [
+       -2.0712,
+       -0.9499
+      ],
+      "net_per_unit_mean": -1.4127,
+      "sum_cell_r_0x": 92.6317,
+      "sum_cell_r_1x": -681.2009,
+      "sum_cell_r_2x": -1455.0336,
+      "win_rate_1x": 17.0683
+     },
+     "intraday": {
+      "n": 686,
+      "net_per_unit_ci95": [
+       -2.4157,
+       -0.8358
+      ],
+      "net_per_unit_mean": -1.4554,
+      "sum_cell_r_0x": 119.071,
+      "sum_cell_r_1x": -484.0731,
+      "sum_cell_r_2x": -1087.2173,
+      "win_rate_1x": 18.0758
+     },
+     "position": {
+      "n": 69,
+      "net_per_unit_ci95": [
+       -1.2146,
+       -0.7015
+      ],
+      "net_per_unit_mean": -0.9673,
+      "sum_cell_r_0x": -16.0906,
+      "sum_cell_r_1x": -31.5015,
+      "sum_cell_r_2x": -46.9124,
+      "win_rate_1x": 14.4928
+     },
+     "swing": {
+      "n": 241,
+      "net_per_unit_ci95": [
+       -2.0835,
+       -0.8752
+      ],
+      "net_per_unit_mean": -1.4184,
+      "sum_cell_r_0x": -10.3486,
+      "sum_cell_r_1x": -165.6263,
+      "sum_cell_r_2x": -320.904,
+      "win_rate_1x": 14.9378
+     }
+    }
+   },
+   "tranche_level_other_zones": {
+    "-": 789
+   }
+  },
+  "R9": {
+   "aggressive_out_of_scope": "Aggressive mode is OUT OF SCOPE here: it creates tranches that do not exist in these journals. It requires a Tier-C run. R9 covers defensive and neutral only.",
+   "caveat": "FIRST-ORDER ONLY. Removing or re-weighting a tranche does not change the stop path (the ratchet is signal-layer and independent of fills), but it DOES change the equity path, the 1R campaign rail, and the halt calendar -- all of which gate admission. Faithful measurement is S-1's job.",
+   "columns": {
+    "def_c1_grade": {
+     "GRID": {
+      "best_campaign_r": 41.2495,
+      "campaigns": 1483,
+      "ci95_hi": -0.4652,
+      "ci95_lo": -0.7254,
+      "expectancy_1x": -0.6015,
+      "strip_best_expectancy_1x": -0.6298,
+      "strip_best_sum_1x": -933.339,
+      "sum_0x": 180.7474,
+      "sum_1x": -892.0895,
+      "sum_2x": -1964.9264,
+      "tranches_kept": 2752,
+      "tranches_total": 8387,
+      "win_rate": 17.06
+     },
+     "intraday": {
+      "best_campaign_r": 18.0876,
+      "campaigns": 1056,
+      "ci95_hi": -0.6125,
+      "ci95_lo": -0.8538,
+      "expectancy_1x": -0.7354,
+      "strip_best_expectancy_1x": -0.7533,
+      "strip_best_sum_1x": -794.7171,
+      "sum_0x": 76.1222,
+      "sum_1x": -776.6295,
+      "sum_2x": -1629.3812,
+      "tranches_kept": 1854,
+      "tranches_total": 5951,
+      "win_rate": 15.3409
+     },
+     "position": {
+      "best_campaign_r": 36.1402,
+      "campaigns": 89,
+      "ci95_hi": 0.8855,
+      "ci95_lo": -0.7298,
+      "expectancy_1x": -0.1043,
+      "strip_best_expectancy_1x": -0.5162,
+      "strip_best_sum_1x": -45.4259,
+      "sum_0x": 22.3935,
+      "sum_1x": -9.2857,
+      "sum_2x": -40.9649,
+      "tranches_kept": 193,
+      "tranches_total": 551,
+      "win_rate": 21.3483
+     },
+     "swing": {
+      "best_campaign_r": 41.2495,
+      "campaigns": 338,
+      "ci95_hi": 0.0742,
+      "ci95_lo": -0.6285,
+      "expectancy_1x": -0.3141,
+      "strip_best_expectancy_1x": -0.4375,
+      "strip_best_sum_1x": -147.4239,
+      "sum_0x": 82.2316,
+      "sum_1x": -106.1743,
+      "sum_2x": -294.5803,
+      "tranches_kept": 705,
+      "tranches_total": 1885,
+      "win_rate": 21.3018
+     }
+    },
+    "def_c1_only": {
+     "GRID": {
+      "best_campaign_r": 114.4519,
+      "campaigns": 3426,
+      "ci95_hi": -0.5424,
+      "ci95_lo": -0.7646,
+      "expectancy_1x": -0.6609,
+      "strip_best_expectancy_1x": -0.6945,
+      "strip_best_sum_1x": -2378.6716,
+      "sum_0x": 426.3363,
+      "sum_1x": -2264.2198,
+      "sum_2x": -4954.7758,
+      "tranches_kept": 7667,
+      "tranches_total": 8387,
+      "win_rate": 10.8873
+     },
+     "intraday": {
+      "best_campaign_r": 50.8402,
+      "campaigns": 2474,
+      "ci95_hi": -0.6893,
+      "ci95_lo": -0.8954,
+      "expectancy_1x": -0.7957,
+      "strip_best_expectancy_1x": -0.8166,
+      "strip_best_sum_1x": -2019.5064,
+      "sum_0x": 243.2424,
+      "sum_1x": -1968.6662,
+      "sum_2x": -4180.5747,
+      "tranches_kept": 5458,
+      "tranches_total": 5951,
+      "win_rate": 10.1455
+     },
+     "position": {
+      "best_campaign_r": 36.1402,
+      "campaigns": 211,
+      "ci95_hi": 0.1204,
+      "ci95_lo": -0.6522,
+      "expectancy_1x": -0.3307,
+      "strip_best_expectancy_1x": -0.5044,
+      "strip_best_sum_1x": -105.9239,
+      "sum_0x": -1.4855,
+      "sum_1x": -69.7836,
+      "sum_2x": -138.0818,
+      "tranches_kept": 497,
+      "tranches_total": 551,
+      "win_rate": 13.7441
+     },
+     "swing": {
+      "best_campaign_r": 114.4519,
+      "campaigns": 741,
+      "ci95_hi": 0.1027,
+      "ci95_lo": -0.6071,
+      "expectancy_1x": -0.3047,
+      "strip_best_expectancy_1x": -0.4598,
+      "strip_best_sum_1x": -340.2218,
+      "sum_0x": 184.5794,
+      "sum_1x": -225.7699,
+      "sum_2x": -636.1193,
+      "tranches_kept": 1712,
+      "tranches_total": 1885,
+      "win_rate": 12.5506
+     }
+    },
+    "def_full": {
+     "GRID": {
+      "best_campaign_r": 23.7686,
+      "campaigns": 1483,
+      "ci95_hi": -0.3093,
+      "ci95_lo": -0.4815,
+      "expectancy_1x": -0.3994,
+      "strip_best_expectancy_1x": -0.4158,
+      "strip_best_sum_1x": -616.1525,
+      "sum_0x": 93.4099,
+      "sum_1x": -592.3839,
+      "sum_2x": -1278.1777,
+      "tranches_kept": 2752,
+      "tranches_total": 8387,
+      "win_rate": 17.532
+     },
+     "intraday": {
+      "best_campaign_r": 18.0876,
+      "campaigns": 1056,
+      "ci95_hi": -0.3774,
+      "ci95_lo": -0.539,
+      "expectancy_1x": -0.4597,
+      "strip_best_expectancy_1x": -0.4772,
+      "strip_best_sum_1x": -503.4855,
+      "sum_0x": 43.7901,
+      "sum_1x": -485.3978,
+      "sum_2x": -1014.5857,
+      "tranches_kept": 1854,
+      "tranches_total": 5951,
+      "win_rate": 15.625
+     },
+     "position": {
+      "best_campaign_r": 17.7591,
+      "campaigns": 89,
+      "ci95_hi": 0.3276,
+      "ci95_lo": -0.5451,
+      "expectancy_1x": -0.1878,
+      "strip_best_expectancy_1x": -0.3917,
+      "strip_best_sum_1x": -34.4702,
+      "sum_0x": 5.5248,
+      "sum_1x": -16.7111,
+      "sum_2x": -38.947,
+      "tranches_kept": 193,
+      "tranches_total": 551,
+      "win_rate": 23.5955
+     },
+     "swing": {
+      "best_campaign_r": 23.7686,
+      "campaigns": 338,
+      "ci95_hi": -0.0075,
+      "ci95_lo": -0.486,
+      "expectancy_1x": -0.2671,
+      "strip_best_expectancy_1x": -0.3384,
+      "strip_best_sum_1x": -114.0436,
+      "sum_0x": 44.095,
+      "sum_1x": -90.275,
+      "sum_2x": -224.645,
+      "tranches_kept": 705,
+      "tranches_total": 1885,
+      "win_rate": 21.8935
+     }
+    },
+    "neutral": {
+     "GRID": {
+      "best_campaign_r": 114.4519,
+      "campaigns": 3456,
+      "ci95_hi": -1.3613,
+      "ci95_lo": -2.0257,
+      "expectancy_1x": -1.6658,
+      "strip_best_expectancy_1x": -1.6994,
+      "strip_best_sum_1x": -5871.3612,
+      "sum_0x": 1345.3095,
+      "sum_1x": -5756.9093,
+      "sum_2x": -12859.1281,
+      "tranches_kept": 8387,
+      "tranches_total": 8387,
+      "win_rate": 11.2847
+     },
+     "intraday": {
+      "best_campaign_r": 53.1919,
+      "campaigns": 2500,
+      "ci95_hi": -1.5335,
+      "ci95_lo": -2.3896,
+      "expectancy_1x": -1.9205,
+      "strip_best_expectancy_1x": -1.9425,
+      "strip_best_sum_1x": -4854.3808,
+      "sum_0x": 1048.2672,
+      "sum_1x": -4801.1889,
+      "sum_2x": -10650.6449,
+      "tranches_kept": 5951,
+      "tranches_total": 5951,
+      "win_rate": 10.88
+     },
+     "position": {
+      "best_campaign_r": 36.1402,
+      "campaigns": 211,
+      "ci95_hi": -0.3091,
+      "ci95_lo": -1.3269,
+      "expectancy_1x": -0.8455,
+      "strip_best_expectancy_1x": -1.0216,
+      "strip_best_sum_1x": -214.5359,
+      "sum_0x": 13.4471,
+      "sum_1x": -178.3957,
+      "sum_2x": -370.2384,
+      "tranches_kept": 551,
+      "tranches_total": 551,
+      "win_rate": 13.2701
+     },
+     "swing": {
+      "best_campaign_r": 114.4519,
+      "campaigns": 745,
+      "ci95_hi": -0.5726,
+      "ci95_lo": -1.44,
+      "expectancy_1x": -1.0434,
+      "strip_best_expectancy_1x": -1.1986,
+      "strip_best_sum_1x": -891.7767,
+      "sum_0x": 283.5952,
+      "sum_1x": -777.3248,
+      "sum_2x": -1838.2448,
+      "tranches_kept": 1885,
+      "tranches_total": 1885,
+      "win_rate": 12.0805
+     }
+    }
+   },
+   "filters": {
+    "def_c1_grade": "def_c1_only + drop grade not in {A, A+}",
+    "def_c1_only": "drop tranches with abs(px_fill - stop) / atr_exec (both from the ENTRY row) < 0.5",
+    "def_full": "def_c1_grade + size_r x1.5 if retr>=0.5, x0.5 if retr<0.25, x1.0 otherwise",
+    "neutral": "the live line as journaled (control)"
+   },
+   "notes": {
+    "null_atr_handling": "kept (cannot evaluate C1); count reported",
+    "null_retr_handling": "weight x1.0",
+    "reweight_semantics": "realized_r is linear in size_r (pnl scales with qty, qty scales with size_r at fixed unit risk), so a size tilt scales the tranche's cell-R, its cost, and hence r_0x/r_2x by the same weight.",
+    "tranches_with_null_atr_exec_on_entry": 0,
+    "tranches_with_null_retr": 1027
+   }
+  }
+ },
+ "f9_detail": {
+  "config_max_r_count": 0,
+  "r_cap_rejects": 0,
+  "reading": "**F9 MATCHES and the reviewer's reading is UPHELD.** `signal.max_r_count = 0` in the anchor config (= unlimited), and `signals.py:368` reads `rcap_ok = max_rc == 0 or r_count < max_rc`, so with max_rc = 0 the `r_cap` branch is unreachable by construction — consistent with the 0 observed. The signal layer is NOT capping PRIMEs, so unlimited adds remain a **trading-config-only** change (`trading.max_tranches`), not a Pine-parity-bound one."
+ },
+ "fixture_verdict": "PASS",
+ "fixtures": [
+  {
+   "computed": 3456,
+   "expected": 3456,
+   "fixture": "F1 campaigns",
+   "match": true
+  },
+  {
+   "computed": 8387,
+   "expected": 8387,
+   "fixture": "F1 resolved tranches",
+   "match": true
+  },
+  {
+   "computed": -5756.9093,
+   "expected": -5756.9093,
+   "fixture": "F2 sum(realized_r) cell-R",
+   "match": true
+  },
+  {
+   "computed": 1345.3095,
+   "expected": 1345.3095,
+   "fixture": "F3 sum(r_0x) cell-R",
+   "match": true
+  },
+  {
+   "computed": -12859.1281,
+   "expected": -12859.1281,
+   "fixture": "F4 sum(r_2x) cell-R",
+   "match": true
+  },
+  {
+   "computed": {
+    "FADED": 1100,
+    "NEVER_GREEN": 1830,
+    "PROTECTED": 3381,
+    "STILLBORN": 2076
+   },
+   "expected": {
+    "FADED": 1100,
+    "NEVER_GREEN": 1830,
+    "PROTECTED": 3381,
+    "STILLBORN": 2076
+   },
+   "fixture": "F5 taxonomy census",
+   "match": true
+  },
+  {
+   "computed": {
+    "A": 1153,
+    "A+": 39,
+    "B": 1954,
+    "C": 0
+   },
+   "expected": {
+    "A": 1153,
+    "A+": 39,
+    "B": 1954,
+    "C": 0
+   },
+   "fixture": "F6 grade cohorts (campaigns)",
+   "match": true
+  },
+  {
+   "computed": 8365,
+   "expected": 8365,
+   "fixture": "F7 stop + stop_gap exits",
+   "match": true
+  },
+  {
+   "computed": 45,
+   "expected": 45,
+   "fixture": "F8 V-initiated campaigns",
+   "match": true
+  },
+  {
+   "computed": 0,
+   "expected": 0,
+   "fixture": "F9 signal-layer r_cap rejects",
+   "match": true
+  }
+ ],
+ "meta": {
+  "cells": [
+   "BTCUSDT_intraday",
+   "BTCUSDT_position",
+   "BTCUSDT_swing",
+   "ETHUSDT_intraday",
+   "ETHUSDT_position",
+   "ETHUSDT_swing",
+   "JTOUSDT_intraday",
+   "JTOUSDT_position",
+   "JTOUSDT_swing",
+   "NEARUSDT_intraday",
+   "NEARUSDT_position",
+   "NEARUSDT_swing",
+   "SOLUSDT_intraday",
+   "SOLUSDT_position",
+   "SOLUSDT_swing",
+   "TAOUSDT_intraday",
+   "TAOUSDT_swing",
+   "ZECUSDT_intraday",
+   "ZECUSDT_position",
+   "ZECUSDT_swing"
+  ],
+  "config_id": "v12_anchor",
+  "config_sha256": "a3917ea58a1a7e0569eeee85c957914eb0dd08cacc11c6034fcab54053f57727",
+  "contract": "V3_Recompute_R1_R10_Builder_Contract.md",
+  "engine_commit": "2f260e1",
+  "engine_version": "1.0.7",
+  "evt_census_scored": {
+   "ADD_FILL": 5192,
+   "CLUSTER": 42927,
+   "CONFIRM": 82542,
+   "ENTRY_FILL": 3223,
+   "EXIT": 8387,
+   "HALT": 1712,
+   "PRIME": 228511,
+   "REGIME": 4801,
+   "REJECT": 646027,
+   "STAGE": 1050,
+   "STOP_FILL": 8391,
+   "TAG": 245651,
+   "TPW": 2999,
+   "V": 158,
+   "X": 3861
+  },
+  "inputs_excluded": [
+   "ROLLUPS_AND_HYPOTHESES.md",
+   "V3_STOP_AND_EXIT_FORENSICS.md"
+  ],
+  "journal_root": "research_outputs/v3_anchor/journal_pass1/scored",
+  "n_boot": 10000,
+  "n_cells": 20,
+  "partition": "scored (exploration-classic, open time <= 2024-06-30 23:59:59Z)",
+  "phase": "V3 Recompute R1-R10 — Tier A, journals-only",
+  "read_only": true,
+  "seed": 20260715
+ },
+ "predictions": [
+  {
+   "claim": "X-A-family exits beat the actual book (gross basis) on swing AND position; ambiguous-to-negative on intraday",
+   "evidence": {
+    "xa_delta_intraday_0x": -421.4661,
+    "xa_delta_position_0x": -97.2276,
+    "xa_delta_swing_0x": 528.9161
+   },
+   "falsified_if": "X-A loses on swing or position, or wins clearly on intraday",
+   "id": "P-R1",
+   "prior": "70%",
+   "verdict": "FALSIFIED"
+  },
+  {
+   "claim": "The 45 V campaigns are NOT disproportionately tail-carrying -- their share of sum(wins) < 3x their share of campaigns (< 3.9%)",
+   "evidence": {
+    "threshold_pct": 3.9,
+    "v_share_of_campaigns_pct": 1.3021,
+    "v_share_of_wins_pct": 0.5979
+   },
+   "falsified_if": "V's share of sum(wins) >= 3.9%",
+   "id": "P-R2",
+   "prior": "50%",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "claim": ">=95% of Z2-active entries carry stage = 1",
+   "evidence": {
+    "z2_entries": 817,
+    "z2_stage1": 817,
+    "z2_stage1_pct": 100.0,
+    "z2_stage2": 0
+   },
+   "falsified_if": "< 95%",
+   "id": "P-R6",
+   "prior": "85%",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "claim": "tranche_cap rejects > 500 (aggressive mode is a real axis, not a non-event)",
+   "evidence": {
+    "engine_reason_name": "max_tranches",
+    "threshold": 500,
+    "tranche_cap_rejects": 145749
+   },
+   "falsified_if": "<= 500",
+   "id": "P-R7",
+   "prior": "60%",
+   "verdict": "CONFIRMED"
+  },
+  {
+   "claim": "def_full remains NET NEGATIVE at 1x -- no defensive bundle flips the grid sign in-sample on mined data",
+   "evidence": {
+    "def_full_sum_1x": -592.3839
+   },
+   "falsified_if": "def_full 1x >= 0",
+   "id": "P-R9",
+   "prior": "60%",
+   "verdict": "CONFIRMED"
+  }
+ ]
+}
