@@ -1,0 +1,604 @@
+{
+ "by_asset": {
+  "BTCUSDT": {
+   "best_campaign_r": 114.4519,
+   "campaigns": 507,
+   "ci95_hi": 0.1262,
+   "ci95_lo": -0.9684,
+   "expectancy_1x": -0.5117,
+   "strip_best_expectancy_1x": -0.7389,
+   "strip_best_sum_1x": -373.8926,
+   "sum_0x": 264.8508,
+   "sum_1x": -259.4408,
+   "sum_2x": -783.7324,
+   "win_rate_pct": 11.2426
+  },
+  "ETHUSDT": {
+   "best_campaign_r": 34.3715,
+   "campaigns": 519,
+   "ci95_hi": -0.4332,
+   "ci95_lo": -0.9379,
+   "expectancy_1x": -0.7042,
+   "strip_best_expectancy_1x": -0.7719,
+   "strip_best_sum_1x": -399.8369,
+   "sum_0x": 58.6988,
+   "sum_1x": -365.4655,
+   "sum_2x": -789.6298,
+   "win_rate_pct": 10.9827
+  },
+  "JTOUSDT": {
+   "best_campaign_r": 5.17,
+   "campaigns": 78,
+   "ci95_hi": -0.5554,
+   "ci95_lo": -1.1105,
+   "expectancy_1x": -0.8485,
+   "strip_best_expectancy_1x": -0.9267,
+   "strip_best_sum_1x": -71.3559,
+   "sum_0x": -13.9439,
+   "sum_1x": -66.1859,
+   "sum_2x": -118.428,
+   "win_rate_pct": 11.5385
+  },
+  "NEARUSDT": {
+   "best_campaign_r": 23.7686,
+   "campaigns": 474,
+   "ci95_hi": -0.4001,
+   "ci95_lo": -0.8467,
+   "expectancy_1x": -0.6373,
+   "strip_best_expectancy_1x": -0.6889,
+   "strip_best_sum_1x": -325.8717,
+   "sum_0x": 18.2818,
+   "sum_1x": -302.1031,
+   "sum_2x": -622.488,
+   "win_rate_pct": 11.1814
+  },
+  "SOLUSDT": {
+   "best_campaign_r": 18.0876,
+   "campaigns": 516,
+   "ci95_hi": -0.4999,
+   "ci95_lo": -0.8724,
+   "expectancy_1x": -0.6923,
+   "strip_best_expectancy_1x": -0.7288,
+   "strip_best_sum_1x": -375.3312,
+   "sum_0x": 17.7748,
+   "sum_1x": -357.2435,
+   "sum_2x": -732.2619,
+   "win_rate_pct": 11.4341
+  },
+  "TAOUSDT": {
+   "best_campaign_r": 0.9203,
+   "campaigns": 23,
+   "ci95_hi": -0.608,
+   "ci95_lo": -1.2985,
+   "expectancy_1x": -0.9663,
+   "strip_best_expectancy_1x": -1.0521,
+   "strip_best_sum_1x": -23.1456,
+   "sum_0x": -4.2432,
+   "sum_1x": -22.2253,
+   "sum_2x": -40.2073,
+   "win_rate_pct": 17.3913
+  },
+  "ZECUSDT": {
+   "best_campaign_r": 27.3647,
+   "campaigns": 482,
+   "ci95_hi": -0.6963,
+   "ci95_lo": -1.0372,
+   "expectancy_1x": -0.8804,
+   "strip_best_expectancy_1x": -0.9391,
+   "strip_best_sum_1x": -451.6936,
+   "sum_0x": -65.4267,
+   "sum_1x": -424.3289,
+   "sum_2x": -783.2311,
+   "win_rate_pct": 8.9212
+  }
+ },
+ "by_mandate": {
+  "intraday": {
+   "best_campaign_r": 41.1127,
+   "campaigns": 1634,
+   "ci95_hi": -0.7529,
+   "ci95_lo": -1.0055,
+   "expectancy_1x": -0.8819,
+   "strip_best_expectancy_1x": -0.9076,
+   "strip_best_sum_1x": -1482.1857,
+   "sum_0x": 97.6967,
+   "sum_1x": -1441.073,
+   "sum_2x": -2979.8427,
+   "win_rate_pct": 9.3635
+  },
+  "position": {
+   "best_campaign_r": 36.1402,
+   "campaigns": 211,
+   "ci95_hi": 0.1035,
+   "ci95_lo": -0.6789,
+   "expectancy_1x": -0.3497,
+   "strip_best_expectancy_1x": -0.5235,
+   "strip_best_sum_1x": -109.9354,
+   "sum_0x": -0.0707,
+   "sum_1x": -73.7952,
+   "sum_2x": -147.5197,
+   "win_rate_pct": 15.1659
+  },
+  "swing": {
+   "best_campaign_r": 114.4519,
+   "campaigns": 754,
+   "ci95_hi": 0.0217,
+   "ci95_lo": -0.6713,
+   "expectancy_1x": -0.3742,
+   "strip_best_expectancy_1x": -0.5267,
+   "strip_best_sum_1x": -396.5767,
+   "sum_0x": 178.3664,
+   "sum_1x": -282.1248,
+   "sum_2x": -742.616,
+   "win_rate_pct": 12.8647
+  }
+ },
+ "cohort_census": {
+  "FADED": 890,
+  "NEVER_GREEN": 1094,
+  "PROTECTED": 2571,
+  "STILLBORN": 1724
+ },
+ "config_id": "v12_anchor_g8",
+ "config_sha256": "97c24125310a5a588b5ebeff05309719fcf6e87f13c378480dd54709f96284b8",
+ "determinism_all_identical": true,
+ "engine_version": "1.0.8",
+ "fill_class_agg": {
+  "r1": {
+   "n": 2447,
+   "per_unit_cost": 0.6525,
+   "per_unit_gross_0x": 0.0758,
+   "per_unit_net_1x": -0.5767,
+   "sum_cell_r_0x": 64.3789,
+   "sum_cell_r_1x": -489.6267,
+   "sum_cell_r_2x": -1043.6323,
+   "sum_size_r": 849.0,
+   "win_rate_pct": 19.9428
+  },
+  "re_entry": {
+   "n": 2917,
+   "per_unit_cost": 0.8355,
+   "per_unit_gross_0x": 0.0801,
+   "per_unit_net_1x": -0.7554,
+   "sum_cell_r_0x": 116.7851,
+   "sum_cell_r_1x": -1101.7773,
+   "sum_cell_r_2x": -2320.3397,
+   "sum_size_r": 1458.5,
+   "win_rate_pct": 13.7813
+  },
+  "true_add": {
+   "n": 883,
+   "per_unit_cost": 0.6773,
+   "per_unit_gross_0x": 0.21,
+   "per_unit_net_1x": -0.4673,
+   "sum_cell_r_0x": 92.7131,
+   "sum_cell_r_1x": -206.3256,
+   "sum_cell_r_2x": -505.3643,
+   "sum_size_r": 441.5,
+   "win_rate_pct": 13.59
+  },
+  "v": {
+   "n": 32,
+   "per_unit_cost": 0.1723,
+   "per_unit_gross_0x": 0.2644,
+   "per_unit_net_1x": 0.0921,
+   "sum_cell_r_0x": 2.1153,
+   "sum_cell_r_1x": 0.7366,
+   "sum_cell_r_2x": -0.6421,
+   "sum_size_r": 8.0,
+   "win_rate_pct": 31.25
+  }
+ },
+ "fill_class_census": {
+  "r1": 2456,
+  "re_entry": 2928,
+  "true_add": 888,
+  "v": 32
+ },
+ "fixtures": {
+  "F-CLS": {
+   "census": {
+    "r1": 2456,
+    "re_entry": 2928,
+    "true_add": 888,
+    "v": 32
+   },
+   "census_sum": 6304,
+   "match": true,
+   "total_fills": 6304,
+   "violations": 0
+  },
+  "F-DET": {
+   "cells": 20,
+   "manifest_flag": true,
+   "match": true,
+   "mismatched": []
+  },
+  "F-EQ": {
+   "match": true,
+   "min_equity": 2491.34,
+   "pass1_reference": -2732.24,
+   "worst": [
+    "ETHUSDT_intraday",
+    "2022-07-15T06:52:00Z"
+   ]
+  },
+  "F-EXT": {
+   "exit_rows_flagged": 1041,
+   "match": true,
+   "violations": 0
+  },
+  "F-G8a": {
+   "detail": [],
+   "halt_table": {
+    "BTCUSDT_intraday": {
+     "equity_at_breach": 2493.124116,
+     "ts": "2022-04-11T06:04:00Z"
+    },
+    "ETHUSDT_intraday": {
+     "equity_at_breach": 2491.335373,
+     "ts": "2022-07-15T06:52:00Z"
+    },
+    "NEARUSDT_intraday": {
+     "equity_at_breach": 2499.932865,
+     "ts": "2023-01-21T10:26:00Z"
+    },
+    "SOLUSDT_intraday": {
+     "equity_at_breach": 2498.458544,
+     "ts": "2023-04-28T00:10:00Z"
+    },
+    "ZECUSDT_intraday": {
+     "equity_at_breach": 2492.123061,
+     "ts": "2022-06-01T23:47:00Z"
+    }
+   },
+   "match": true,
+   "violations": 0
+  },
+  "F-G8b": {
+   "fills_without_exit_row": 25,
+   "match": true,
+   "max_notional_leverage": 9.186393,
+   "worst_cell": "BTCUSDT_intraday"
+  },
+  "F-G8c": {
+   "fills": 6304,
+   "match": true,
+   "min_stop_dist_atr": 0.501208,
+   "worst": [
+    "BTCUSDT_position",
+    "2024-02-07T17:00:00Z"
+   ]
+  },
+  "F-G8d": {
+   "match": true,
+   "pass1_reference": 717,
+   "tranches_one_r_le_0": 0
+  },
+  "F-SIG": {
+   "match": true,
+   "mismatched_cells": [],
+   "residual_is_config_id_only": true,
+   "rows_pass1": 967736,
+   "rows_pass2": 967736
+  }
+ },
+ "grade_census": {
+  "-": 753,
+  "A": 2227,
+  "A+": 60,
+  "B": 3239
+ },
+ "grid_evidence_hash": "6c00f9b44d32a9d4479de375e81cacc4d2bce1b36f7c41fc6ade135a250a3d1b",
+ "headline_grid": {
+  "best_campaign_r": 114.4519,
+  "campaigns": 2599,
+  "ci95_hi": -0.5466,
+  "ci95_lo": -0.8148,
+  "expectancy_1x": -0.6914,
+  "strip_best_expectancy_1x": -0.7357,
+  "strip_best_sum_1x": -1911.4449,
+  "sum_0x": 275.9924,
+  "sum_1x": -1796.993,
+  "sum_2x": -3869.9784,
+  "win_rate_pct": 10.8503
+ },
+ "n_boot": 10000,
+ "pass1_reference": {
+  "campaigns": 3456,
+  "grid_1x": -5756.9093,
+  "scored_clean_1x": -5093.7846,
+  "tranches": 8387,
+  "win_rate_pct": 11.28
+ },
+ "per_cell": {
+  "BTCUSDT_intraday": {
+   "campaigns": 298,
+   "final_equity": 2493.12,
+   "floor_halt": "2022-04-11",
+   "halt_rows": {
+    "day": 105,
+    "equity_floor": 1,
+    "week": 64
+   },
+   "min_equity": 2493.12,
+   "tranches": 700
+  },
+  "BTCUSDT_position": {
+   "campaigns": 44,
+   "final_equity": 10553.53,
+   "floor_halt": null,
+   "halt_rows": {
+    "day": 2
+   },
+   "min_equity": 8896.12,
+   "tranches": 121
+  },
+  "BTCUSDT_swing": {
+   "campaigns": 165,
+   "final_equity": 8580.58,
+   "floor_halt": null,
+   "halt_rows": {
+    "day": 16,
+    "week": 5
+   },
+   "min_equity": 4903.62,
+   "tranches": 416
+  },
+  "ETHUSDT_intraday": {
+   "campaigns": 313,
+   "final_equity": 2491.34,
+   "floor_halt": "2022-07-15",
+   "halt_rows": {
+    "day": 71,
+    "equity_floor": 1,
+    "week": 58
+   },
+   "min_equity": 2491.34,
+   "tranches": 759
+  },
+  "ETHUSDT_position": {
+   "campaigns": 46,
+   "final_equity": 8885.88,
+   "floor_halt": null,
+   "halt_rows": {
+    "day": 1
+   },
+   "min_equity": 8310.78,
+   "tranches": 123
+  },
+  "ETHUSDT_swing": {
+   "campaigns": 160,
+   "final_equity": 7380.84,
+   "floor_halt": null,
+   "halt_rows": {
+    "day": 16,
+    "week": 4
+   },
+   "min_equity": 7380.84,
+   "tranches": 393
+  },
+  "JTOUSDT_intraday": {
+   "campaigns": 63,
+   "final_equity": 7488.09,
+   "floor_halt": null,
+   "halt_rows": {
+    "day": 12,
+    "week": 4
+   },
+   "min_equity": 7488.09,
+   "tranches": 158
+  },
+  "JTOUSDT_position": {
+   "campaigns": 5,
+   "final_equity": 9828.96,
+   "floor_halt": null,
+   "halt_rows": {},
+   "min_equity": 9742.83,
+   "tranches": 12
+  },
+  "JTOUSDT_swing": {
+   "campaigns": 10,
+   "final_equity": 9743.3,
+   "floor_halt": null,
+   "halt_rows": {},
+   "min_equity": 9743.3,
+   "tranches": 30
+  },
+  "NEARUSDT_intraday": {
+   "campaigns": 319,
+   "final_equity": 2499.93,
+   "floor_halt": "2023-01-21",
+   "halt_rows": {
+    "day": 72,
+    "equity_floor": 1,
+    "week": 54
+   },
+   "min_equity": 2499.93,
+   "tranches": 741
+  },
+  "NEARUSDT_position": {
+   "campaigns": 28,
+   "final_equity": 9162.9,
+   "floor_halt": null,
+   "halt_rows": {},
+   "min_equity": 9202.57,
+   "tranches": 73
+  },
+  "NEARUSDT_swing": {
+   "campaigns": 127,
+   "final_equity": 9242.3,
+   "floor_halt": null,
+   "halt_rows": {
+    "day": 5,
+    "week": 1
+   },
+   "min_equity": 8967.52,
+   "tranches": 303
+  },
+  "SOLUSDT_intraday": {
+   "campaigns": 341,
+   "final_equity": 2498.46,
+   "floor_halt": "2023-04-28",
+   "halt_rows": {
+    "day": 71,
+    "equity_floor": 1,
+    "week": 50
+   },
+   "min_equity": 2498.46,
+   "tranches": 814
+  },
+  "SOLUSDT_position": {
+   "campaigns": 40,
+   "final_equity": 9324.44,
+   "floor_halt": null,
+   "halt_rows": {},
+   "min_equity": 8964.46,
+   "tranches": 99
+  },
+  "SOLUSDT_swing": {
+   "campaigns": 135,
+   "final_equity": 7274.1,
+   "floor_halt": null,
+   "halt_rows": {
+    "day": 7,
+    "week": 3
+   },
+   "min_equity": 7274.1,
+   "tranches": 348
+  },
+  "TAOUSDT_intraday": {
+   "campaigns": 21,
+   "final_equity": 8925.54,
+   "floor_halt": null,
+   "halt_rows": {
+    "day": 2,
+    "week": 2
+   },
+   "min_equity": 9003.91,
+   "tranches": 54
+  },
+  "TAOUSDT_swing": {
+   "campaigns": 2,
+   "final_equity": 10368.52,
+   "floor_halt": null,
+   "halt_rows": {},
+   "min_equity": 9873.99,
+   "tranches": 9
+  },
+  "ZECUSDT_intraday": {
+   "campaigns": 279,
+   "final_equity": 2492.12,
+   "floor_halt": "2022-06-01",
+   "halt_rows": {
+    "day": 68,
+    "equity_floor": 1,
+    "week": 41
+   },
+   "min_equity": 2492.12,
+   "tranches": 650
+  },
+  "ZECUSDT_position": {
+   "campaigns": 48,
+   "final_equity": 9578.43,
+   "floor_halt": null,
+   "halt_rows": {},
+   "min_equity": 9575.45,
+   "tranches": 118
+  },
+  "ZECUSDT_swing": {
+   "campaigns": 155,
+   "final_equity": 4852.92,
+   "floor_halt": null,
+   "halt_rows": {
+    "day": 7,
+    "week": 2
+   },
+   "min_equity": 4898.37,
+   "tranches": 383
+  }
+ },
+ "phase": "TC-4 engine 1.0.8 re-anchor (new baseline)",
+ "predictions": {
+  "P-TC4a": {
+   "days_vs_expectation": {
+    "BTCUSDT_intraday": 462,
+    "ETHUSDT_intraday": 570,
+    "NEARUSDT_intraday": 570,
+    "SOLUSDT_intraday": 775,
+    "ZECUSDT_intraday": 251
+   },
+   "halt_dates": {
+    "BTCUSDT_intraday": "2022-04-11",
+    "ETHUSDT_intraday": "2022-07-15",
+    "NEARUSDT_intraday": "2023-01-21",
+    "SOLUSDT_intraday": "2023-04-28",
+    "ZECUSDT_intraday": "2022-06-01"
+   },
+   "halt_set": [
+    "BTCUSDT_intraday",
+    "ETHUSDT_intraday",
+    "NEARUSDT_intraday",
+    "SOLUSDT_intraday",
+    "ZECUSDT_intraday"
+   ],
+   "halts_more_than_90d_early": {},
+   "prior_pct": 85,
+   "verdict": "CONFIRMED"
+  },
+  "P-TC4a'": {
+   "note": "registered as a genuine coin flip",
+   "prior_pct": 50,
+   "verdict": "FALSIFIED",
+   "zec_swing_halted": false
+  },
+  "P-TC4b": {
+   "band": [
+    -2400.0,
+    -800.0
+   ],
+   "grid_sum_1x": -1796.993,
+   "prior_pct": 65,
+   "verdict": "CONFIRMED"
+  },
+  "P-TC4c": {
+   "band": [
+    1900,
+    2700
+   ],
+   "campaigns": 2599,
+   "prior_pct": 60,
+   "verdict": "CONFIRMED"
+  },
+  "P-TC4d": {
+   "prior_pct": 65,
+   "threshold_pct": 11.0,
+   "verdict": "FALSIFIED",
+   "win_rate_pct": 10.8503
+  }
+ },
+ "reject_census": {
+  "add_ineligible": 551,
+  "bar_range": 44771,
+  "c_gate_no_zone": 21091,
+  "c_gate_structure": 11,
+  "campaign_died_same_bar": 1,
+  "cooldown": 15451,
+  "equity_floor": 71320,
+  "gap_through_stop": 20613,
+  "halted_day": 1572,
+  "halted_week": 15638,
+  "max_tranches": 113136,
+  "no_zone": 229963,
+  "not_positioned": 69395,
+  "notional_cap": 5,
+  "ribbon_sep": 43917,
+  "stop_too_tight": 670,
+  "structure": 32,
+  "v_already_positioned": 1
+ },
+ "seed": 20260718,
+ "supersedes": "journal_pass1 (engine 1.0.7 / v12_anchor); pass 1 retained read-only",
+ "tranches_resolved": 6279,
+ "tranches_total": 6304
+}
