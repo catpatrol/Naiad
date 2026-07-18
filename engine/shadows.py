@@ -192,6 +192,24 @@ def enrich_tranche(sig: SignalResult, tr: Tranche, sh_cfg: dict,
             ext_i = j
             break
 
+    # 1.0.8 (TC-4): ext_before_exit is windowed to THIS tranche's life
+    # [fill_i, exit_i] — the 1.0.7 flag ran to campaign death and was
+    # misnamed (R4 named gap). ext_i above (campaign window) still drives
+    # the X-C/X-D shadow partials: shadow semantics are unchanged.
+    ext_life_i = None
+    for j in range(tr.fill_i, tr.exit_i + 1):
+        if not np.isnan(sig.atr_x[j]) and (sig.c[j] - sig.e9x[j]) * d >= sh_cfg["xc_ext_atr"] * sig.atr_x[j]:
+            ext_life_i = j
+            break
+    ext_i_offset = mfe_at_ext_r = None
+    if ext_life_i is not None:
+        ext_i_offset = ext_life_i - tr.fill_i
+        fav = sig.h[tr.fill_i:ext_life_i + 1] if d == 1 else \
+            sig.l[tr.fill_i:ext_life_i + 1]
+        pk = float(fav.max()) if d == 1 else float(fav.min())
+        pk = max(pk, tr.fill_px) if d == 1 else min(pk, tr.fill_px)
+        mfe_at_ext_r = round((pk - tr.fill_px) * d / unit_risk, 6) + 0.0
+
     def blend(parts: list[tuple[float, float]]) -> float:
         return round(sum(f * r for f, r in parts), 6) + 0.0
 
@@ -257,7 +275,9 @@ def enrich_tranche(sig: SignalResult, tr: Tranche, sh_cfg: dict,
     flags = {
         "xa_engaged_before_exit": bool(engaged_at is not None and engaged_at < xa[1]),
         "tpw_before_exit": bool(tpw_i is not None),
-        "ext_before_exit": bool(ext_i is not None),
+        "ext_before_exit": bool(ext_life_i is not None),
+        "ext_i_offset": ext_i_offset,
+        "mfe_at_ext_r": mfe_at_ext_r,
     }
     return TrancheEnrichment(
         resolved=True,

@@ -175,6 +175,13 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
     r_pct = t["r_pct"]
     max_tranches = t["max_tranches"]
     max_risk_r = t["max_open_campaign_risk_r"]
+    # 1.0.8 (G-8, ratified): hard guards, each behind its config key — absent
+    # key = guard off, so pre-G8 configs replay byte-identically.
+    floor_frac = t.get("equity_floor_frac")           # G-8a
+    equity_floor = (floor_frac * t["initial_equity"]
+                    if floor_frac is not None else None)
+    max_lev = t.get("max_notional_leverage")          # G-8b
+    min_stop_atr = t.get("min_stop_atr")              # G-8c
 
     # Binance funding timestamps jitter by a few ms past the hour
     # (e.g. 16:00:00.012) — floor to the hour so they land on the exec bar
@@ -199,6 +206,7 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
     week_r: dict[str, float] = {}
     halted_days: set[str] = set()
     halted_weeks: set[str] = set()
+    floored = False                       # G-8a: permanent once tripped
     tranche_seq = 0
     campaign_tranche_count: dict[int, int] = {}
 
@@ -247,6 +255,24 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
             halted_weeks.add(wk)
             res.halts.append(HaltEvent(i, "week", wk, week_r[wk]))
             pending_entries = []
+
+    def check_floor(i: int):
+        """G-8a (1.0.8): evaluated after every realized-equity update (exits;
+        funding realizes at exit by design). Breach = permanent cell halt —
+        HALT row scope=equity_floor (r_total carries the breaching equity),
+        pending entries dropped, any still-open tranches queued to flatten at
+        the next open (in this engine every realization path closes all open
+        tranches together, so the queue branch is defensive). The flatten may
+        realize below the floor — correct behavior, then silence."""
+        nonlocal floored, pending_entries, pending_flatten
+        if equity_floor is None or floored or equity >= equity_floor:
+            return
+        floored = True
+        res.halts.append(HaltEvent(i, "equity_floor", _day_key(open_ms[i]),
+                                   equity))
+        pending_entries = []
+        if open_tranches and pending_flatten is None:
+            pending_flatten = "equity_floor"
 
     def open_risk_r(stop: float, extra=None) -> float:
         """Open campaign risk in R against a given stop level."""
@@ -330,6 +356,7 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
                 close_tranche(tr, i, o[i], pending_flatten)
             open_tranches.clear()
             check_halts(i)
+            check_floor(i)
         pending_flatten = None
 
         # 3b. Gap-through stop exits at the open.
@@ -341,9 +368,14 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
                     close_tranche(tr, i, o[i], "stop_gap")
                 open_tranches.clear()
                 check_halts(i)
+                check_floor(i)
 
         # 3c. Entry fills at the open (halt-gated at fill time).
         for pe in pending_entries:
+            if floored:
+                # G-8a: permanent — the cell takes no new entries, ever.
+                res.rejects.append(TradeReject(i, "equity_floor", pe.kind, pe.family, pe.dir))
+                continue
             dk, wk = _day_key(open_ms[i]), _week_key(open_ms[i])
             if dk in halted_days:
                 res.rejects.append(TradeReject(i, "halted_day", pe.kind, pe.family, pe.dir))
@@ -364,9 +396,29 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
             if unit_risk <= 0:
                 res.rejects.append(TradeReject(i, "gap_through_stop", pe.kind, pe.family, pe.dir))
                 continue
+            # G-8c (1.0.8): a stop closer than min_stop_atr x the SIGNAL
+            # bar's exec ATR is refused at the fill — the signal still fired
+            # and journaled; only the fill is denied.
+            if min_stop_atr is not None:
+                atr_sig = sig.atr_x[pe.signal_i]
+                if not np.isnan(atr_sig) and unit_risk < min_stop_atr * atr_sig:
+                    res.rejects.append(TradeReject(i, "stop_too_tight", pe.kind, pe.family, pe.dir))
+                    continue
             one_r = r_pct * equity
+            # G-8d (1.0.8): unit sanity — with the G-8a floor in place a
+            # non-positive R unit is unreachable; this assert is the proof
+            # it stays unreachable (unconditional, like every F5 assert).
+            if one_r <= 0:
+                raise GateViolation(
+                    f"bar {i}: one_r <= 0 at sizing (equity={equity!r}) — "
+                    "G-8d unit sanity")
             risk_usd = pe.size_r * one_r
             qty = risk_usd / unit_risk
+            # G-8b (1.0.8): notional cap — REJECT, never resize (resizing
+            # would mint fractional-R tranches and break 1R semantics).
+            if max_lev is not None and abs(qty) * fill_px > max_lev * equity:
+                res.rejects.append(TradeReject(i, "notional_cap", pe.kind, pe.family, pe.dir))
+                continue
             assert_entry_legal(pe, i, fill_px, qty, one_r)
             tranche_seq += 1
             tr = Tranche(
@@ -397,6 +449,7 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
                         close_tranche(tr, i, stop, "stop")
                     open_tranches.clear()
                     check_halts(i)
+                    check_floor(i)
 
         # 5. Close of bar i: excursion tracking, then signals -> pendings.
         for tr in open_tranches:

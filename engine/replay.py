@@ -149,12 +149,40 @@ def run_replay(config_id: str, cell_id: str, start: str, end: str,
                                  if shadows_on else ({}, {}))
         stop_buf = cfg["signal"]["stop_buf_atr"]
 
+        # 1.0.8 (TC-4, additive): concurrency + fill class, per the RC
+        # definition — same-bar same-campaign siblings count; an earlier
+        # sibling counts iff still open strictly past this fill's bar.
+        # Evaluated on engine truth (a tranche whose EXIT row is buffered at
+        # data end still counts by its true exit bar; one still open at data
+        # end counts as open).
+        camp_members: dict[int, list] = {}
+        for tr in trades.tranches:
+            camp_members.setdefault(tr.campaign, []).append(tr)
+        conc_at_fill: dict[str, int] = {}
+        for members in camp_members.values():
+            for a in members:
+                conc = 0
+                for b in members:
+                    if b is a:
+                        continue
+                    if b.fill_i == a.fill_i:
+                        conc += 1
+                    elif b.fill_i < a.fill_i and \
+                            (not b.exited or b.exit_i > a.fill_i):
+                        conc += 1
+                conc_at_fill[a.tranche_id] = conc
+
         for tr in trades.tranches:
             if in_window(tr.fill_i):
                 ts_open, ts_close = bar_times(tr.fill_i)
+                conc = conc_at_fill[tr.tranche_id]
                 rows.append(make_row(
                     **base, ts_open=ts_open, ts_close=ts_close,
                     evt="ENTRY_FILL" if tr.kind in ("R1", "V") else "ADD_FILL",
+                    concurrent_open_at_fill=conc,
+                    fill_class=("r1" if tr.kind == "R1" else
+                                "v" if tr.kind == "V" else
+                                "true_add" if conc >= 1 else "re_entry"),
                     dir="long" if tr.dir == 1 else "short",
                     tier=tr.tier, grade=tr.grade, rc=tr.rc, zone=tr.zone,
                     stage=int(sig.stage[tr.signal_i]), retr=f(tr.retr, 6),

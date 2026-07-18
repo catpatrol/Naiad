@@ -31,6 +31,12 @@ SHADOW_FIELDS = ["entry_alt_px", "entry_alt_t", "entry_alt_stop",
                  "size_full_r1", "size_big_adds",
                  "exit_XA", "exit_XB", "exit_XC", "exit_XD"]
 
+# Engine 1.0.8 (TC-4, additive): present ONLY on ENTRY_FILL/ADD_FILL rows —
+# every other row keeps its exact pre-1.0.8 key set, so the F-SIG population
+# (signal-event rows) stays byte-comparable across engine versions and old
+# tooling keeps working (readers .get() them; no reader key-errors).
+FILL_ONLY_FIELDS = ["concurrent_open_at_fill", "fill_class"]
+
 MIN_FIELDS = ["run_id", "engine_version", "config_id", "cell_id", "symbol",
               "tf_gov", "tf_exec", "ts_open", "ts_close", "evt", "dir",
               "tier", "grade", "rc", "zone", "stage", "retr", "px_signal",
@@ -52,7 +58,7 @@ def make_row(**kw) -> dict:
     row = {k: None for k in MIN_FIELDS}
     row["shadow"] = None
     row.update(kw)
-    unknown = set(row) - set(MIN_FIELDS)
+    unknown = set(row) - set(MIN_FIELDS) - set(FILL_ONLY_FIELDS)
     if unknown:
         raise KeyError(f"unknown journal fields: {sorted(unknown)}")
     return row

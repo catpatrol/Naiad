@@ -1,5 +1,70 @@
 # CHANGELOG
 
+## engine 1.0.8 — G-8 hard guards + additive fill schema + enrichment window fix (2026-07-18, TC-4; operator-ratified)
+
+Four hard guards (the anchor run's negative-equity/tight-stop pathologies,
+RC findings a/d), two additive journal fields, one enrichment correctness
+fix. `signals.py` UNTOUCHED — fixture F-SIG (TC-4) proves the signal-event
+stream byte-identical to journal_pass1 after normalizing run_id and
+engine_version only. G-8a/b/c sit behind config keys (absent key = guard
+off: pre-G8 configs replay byte-identically); G-8d is an unconditional
+in-path assert of the F5 family.
+
+- **G-8a equity floor (`trading.equity_floor_frac: 0.25`, ratified 25%):**
+  evaluated after every realized-equity update (exits; funding realizes at
+  exit by design). Breach (`equity < frac x initial_equity`) = HALT row
+  `scope=equity_floor` (its `size_r` carries the breaching equity, not an
+  R total), pending entries dropped, any still-open tranches queued to
+  flatten at the next open with `exit_reason="equity_floor"` (in this
+  engine every realization path closes all open tranches together, so the
+  queue branch is defensive), and the cell takes NO new entries for the
+  remainder of the run — fill-time `equity_floor` REJECTs, permanent,
+  unlike day/week halts. The flatten may realize below the floor: correct,
+  then silence.
+- **G-8b notional cap (`trading.max_notional_leverage: 10`):** at entry
+  sizing, `|qty| x px_fill > 10 x equity` = REJECT (`notional_cap`), never
+  resize — resizing would mint fractional-R tranches and break 1R
+  semantics (veto V2).
+- **G-8c minimum stop distance (`trading.min_stop_atr: 0.5`):** extends the
+  `unit_risk <= 0 -> gap_through_stop` rejection: `unit_risk <
+  0.5 x atr_exec(signal bar)` = REJECT (`stop_too_tight`). Signal layer
+  untouched — signals still fire and journal; only the fill is refused.
+- **G-8d unit sanity (unconditional):** `one_r <= 0` at any sizing
+  computation raises `GateViolation`. With G-8a in place this is
+  unreachable; the assert is the proof it stays unreachable (pass 1 had
+  717 negative-one_r tranches on ZECUSDT_intraday).
+- **Schema (additive, `journal.py` FILL_ONLY_FIELDS + `replay.py`):**
+  ENTRY_FILL/ADD_FILL rows — and ONLY those rows — gain
+  `concurrent_open_at_fill` (RC definition: same-bar same-campaign siblings
+  count; an earlier sibling counts iff still open strictly past the fill
+  bar; evaluated on engine truth, so a tranche whose EXIT row is buffered
+  at data end still counts by its true exit bar) and `fill_class` in
+  {`r1`, `v`, `true_add`, `re_entry`} (`true_add` = ADD_FILL with
+  concurrent >= 1, `re_entry` = ADD_FILL with concurrent = 0). `evt`
+  values and every existing key unchanged (veto V3); non-fill rows keep
+  the exact pre-1.0.8 key set.
+- **Enrichment fix (`shadows.py`):** `engagement_flags.ext_before_exit` is
+  now windowed to THIS tranche's life `[fill_i, exit_i]` — the 1.0.7 flag
+  ran to campaign death and was misnamed (R4 named gap). New enrichment
+  keys inside `engagement_flags`: `ext_i_offset` (bars from fill to first
+  qualifying extension in-window, null if none) and `mfe_at_ext_r`
+  (running per-unit MFE over `[fill_i, ext bar]`, bar extremes inclusive —
+  on the open-fill exit-bar edge this may exceed `mfe_r`, which excludes
+  that bar). The X-C/X-D shadow extension trigger keeps the campaign
+  window: shadow semantics are UNCHANGED (veto V4).
+- **Fixtures (`fixtures/test_g8_guards.py`):** each guard breached by a
+  synthetic cell (floor breach + permanence across the day/week-halt
+  horizon; notional reject-not-resize; stop_too_tight vs config-gated off;
+  G-8d raise on the ZEC pathology shape + unreachability under the g8
+  config; fill-field additivity).
+- **Excluded (veto V5):** G-8e dollar-denominated halt floor — the 25%
+  equity floor bounds the R-halt shrink pathology at 4:1.
+- **Still open, NOT in 1.0.8 (disclosed):** the G-1 code-level lockbox
+  guard and J-1 (REJECT stage dataclass default) were slated "next engine
+  touch" but are NOT in the TC-4 contract's §3 change set, and §2 makes
+  scope creep a defect (J-1 would also perturb REJECT-row bytes and break
+  F-SIG). Both remain open for the next contracted engine touch.
+
 ## engine 1.0.7 — gate tranche-cap sibling projection (2026-07-13, G-6; sibling family CLOSED)
 
 Fourth latent trading-layer state from the V3 anchor run and the third and
