@@ -16,6 +16,7 @@ Emission window: journal rows are written for events with open time inside
 state machine but are never journaled and never traded.
 """
 
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -34,6 +35,18 @@ from engine.version import ENGINE_VERSION
 
 class WarmupError(RuntimeError):
     """F7: not enough history precedes the requested window."""
+
+
+class LockboxViolation(RuntimeError):
+    """G-1 (engine 1.0.9): the replay path refuses any run whose requested
+    [start, end] window intersects the sealed lockbox. Warm-up traversal
+    (loading history before `start`) is not emission and is not gated here;
+    journal rows can only carry open times inside [start, end]."""
+
+
+# Sealed holdout (v3_anchor manifest partitions, registered G-1).
+LOCKBOX_START_MS = 1_719_792_000_000   # 2024-07-01T00:00:00Z
+LOCKBOX_END_MS = 1_759_708_799_000     # 2025-10-05T23:59:59Z
 
 
 def parse_utc(s: str) -> int:
@@ -88,12 +101,21 @@ def assert_warmup(cell: Cell, data: dict, start_ms: int) -> None:
 
 
 def run_replay(config_id: str, cell_id: str, start: str, end: str,
-               journal_root: Path, backfill: bool = False, log=print) -> dict:
+               journal_root: Path, backfill: bool = False, log=print,
+               s1_sidecar_root: Path | None = None,
+               s1_resampled_dir: Path | None = None) -> dict:
     cfg = load_config(config_id)
     cell = cell_by_id(cell_id)
     start_ms, end_ms = parse_utc(start), parse_utc(end)
     if end_ms <= start_ms:
         raise ValueError("end must be after start")
+    # G-1 (1.0.9): no emission window may touch the sealed lockbox.
+    if start_ms <= LOCKBOX_END_MS and end_ms >= LOCKBOX_START_MS \
+            and not os.environ.get("NAIAD_LOCKBOX_ACK"):
+        raise LockboxViolation(
+            f"requested window [{start}, {end}] intersects the sealed "
+            "lockbox [2024-07-01T00:00:00Z, 2025-10-05T23:59:59Z]; "
+            "unlocking is an operator act (NAIAD_LOCKBOX_ACK).")
     run_id = make_run_id(config_id, cell_id, start, end)
 
     data = load_cell_data(cell, start_ms, end_ms, backfill=backfill, log=log)
@@ -113,6 +135,37 @@ def run_replay(config_id: str, cell_id: str, start: str, end: str,
     exec_step = INTERVAL_MS[cell.tf_exec]
     in_window = lambda i: start_ms <= int(open_ms[i]) <= end_ms
 
+    # ── S-1 instrumentation (1.0.9, measure-only). Computed AFTER the
+    # trading pass, attached to rows the replay was already going to emit —
+    # emission neutrality is structural, F-BYTE enforces it behaviorally. ──
+    s1res = None
+    if s1_sidecar_root is not None:
+        from engine.s1 import compute_s1
+        s1res = compute_s1(cell, cfg, sig, trades, data, s1_resampled_dir,
+                           in_window)
+
+    def s1_sig(ev):
+        if s1res is None:
+            return {}
+        if ev.evt in ("PRIME", "CONFIRM") or \
+                (ev.evt == "REJECT" and ev.subkey in ("prime", "confirm")):
+            z = s1res["zone_s1"].get(ev.i)
+            if z is not None:
+                return {"s1": {"zone": z}}
+        return {}
+
+    def s1_fill(tr):
+        if s1res is None:
+            return {}
+        v = s1res["fill_s1"].get(tr.tranche_id)
+        return {"s1": v} if v is not None else {}
+
+    def s1_exit(tr):
+        if s1res is None:
+            return {}
+        v = s1res["exit_s1"].get(tr.tranche_id)
+        return {"s1": v} if v is not None else {}
+
     def bar_times(i):
         return iso(int(open_ms[i])), iso(int(open_ms[i]) + exec_step)
 
@@ -128,7 +181,8 @@ def run_replay(config_id: str, cell_id: str, start: str, end: str,
             continue
         ts_open, ts_close = bar_times(ev.i)
         rows.append(make_row(
-            **base, ts_open=ts_open, ts_close=ts_close, evt=ev.evt,
+            **base, **s1_sig(ev),
+            ts_open=ts_open, ts_close=ts_close, evt=ev.evt,
             dir="long" if ev.dir == 1 else "short" if ev.dir == -1 else "-",
             tier=ev.tier, grade=ev.grade, rc=ev.rc, zone=ev.zone,
             stage=ev.stage, retr=f(ev.retr, 6), px_signal=f(sig.c[ev.i]),
@@ -177,7 +231,8 @@ def run_replay(config_id: str, cell_id: str, start: str, end: str,
                 ts_open, ts_close = bar_times(tr.fill_i)
                 conc = conc_at_fill[tr.tranche_id]
                 rows.append(make_row(
-                    **base, ts_open=ts_open, ts_close=ts_close,
+                    **base, **s1_fill(tr),
+                    ts_open=ts_open, ts_close=ts_close,
                     evt="ENTRY_FILL" if tr.kind in ("R1", "V") else "ADD_FILL",
                     concurrent_open_at_fill=conc,
                     fill_class=("r1" if tr.kind == "R1" else
@@ -212,7 +267,8 @@ def run_replay(config_id: str, cell_id: str, start: str, end: str,
                 if enr is not None and not enr.resolved:
                     continue  # EXIT buffered: a later (longer) run emits it
                 rows.append(make_row(
-                    **base, ts_open=ts_open, ts_close=ts_close, evt="EXIT",
+                    **base, **s1_exit(tr),
+                    ts_open=ts_open, ts_close=ts_close, evt="EXIT",
                     dir="long" if tr.dir == 1 else "short",
                     tier=tr.tier, grade=tr.grade, rc=tr.rc, zone=tr.zone,
                     retr=f(tr.retr, 6), px_fill=f(tr.exit_px),
@@ -257,6 +313,13 @@ def run_replay(config_id: str, cell_id: str, start: str, end: str,
                     reject_reason=rj.reason))
 
     written = write_journal(rows, journal_root)
+    sidecar_sha = sidecar_rows = None
+    if s1res is not None:
+        from engine.s1 import write_sidecar
+        sidecar_rows = len(s1res["sidecar"])
+        sidecar_sha = write_sidecar(
+            s1res["sidecar"], s1_sidecar_root / f"{cell.cell_id}.jsonl",
+            cell.cell_id, base)
     # Summary metrics come from the PERSISTED bytes, re-read after writing
     # (reviewer ticket D-1) — never from the in-memory stream: same-bar
     # same-kind events can share a journal key and merge to one row.
@@ -269,4 +332,6 @@ def run_replay(config_id: str, cell_id: str, start: str, end: str,
         "tranches": len(trades.tranches) if trading_enabled else 0,
         "final_equity": round(trades.final_equity, 2) if trading_enabled else None,
         "halts": len(trades.halts) if trading_enabled else 0,
+        "sidecar_rows": sidecar_rows,
+        "sidecar_sha256": sidecar_sha,
     }

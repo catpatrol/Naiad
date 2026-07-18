@@ -37,6 +37,11 @@ SHADOW_FIELDS = ["entry_alt_px", "entry_alt_t", "entry_alt_stop",
 # tooling keeps working (readers .get() them; no reader key-errors).
 FILL_ONLY_FIELDS = ["concurrent_open_at_fill", "fill_class"]
 
+# Engine 1.0.9 (S-1, additive): the measure-only instrumentation object.
+# Attached by replay to rows it was already emitting; F-BYTE strips it and
+# requires byte-identity to the un-instrumented baseline.
+S1_FIELD = "s1"
+
 MIN_FIELDS = ["run_id", "engine_version", "config_id", "cell_id", "symbol",
               "tf_gov", "tf_exec", "ts_open", "ts_close", "evt", "dir",
               "tier", "grade", "rc", "zone", "stage", "retr", "px_signal",
@@ -58,7 +63,7 @@ def make_row(**kw) -> dict:
     row = {k: None for k in MIN_FIELDS}
     row["shadow"] = None
     row.update(kw)
-    unknown = set(row) - set(MIN_FIELDS) - set(FILL_ONLY_FIELDS)
+    unknown = set(row) - set(MIN_FIELDS) - set(FILL_ONLY_FIELDS) - {S1_FIELD}
     if unknown:
         raise KeyError(f"unknown journal fields: {sorted(unknown)}")
     return row

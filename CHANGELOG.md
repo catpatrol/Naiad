@@ -1,5 +1,43 @@
 # CHANGELOG
 
+## engine 1.0.9 — S-1 instrumentation (measure-only) + G-1 lockbox guard (2026-07-18, S-1 Tier B)
+
+Instrumentation-only release: NOTHING in the traded path changes.
+`engine/signals.py` and `engine/trading.py` are byte-untouched (git diff
+empty; F-BYTE enforces behaviorally: strip `s1`, normalize {run_id,
+engine_version, config_id} → byte-identical to journal_pass2, row sets and
+order included). Emission neutrality is structural: `engine/s1.py` observes
+a finished (SignalResult, TradeResult) pair and replay attaches its outputs
+to rows it was already emitting.
+
+- **`engine/s1.py` (new):** 24 ratchet/harvest candidate stop paths
+  (chandelier / pivot / EMA-trail / R-ladder / giveback / two-phase hybrid;
+  semantics pinned in the S-1 pre-registration), dead-gate triage (6),
+  entry-geometry flags (11), zone-geometry shadow (9 labels; the
+  arming/tag/zone state machine is replicated and validated BAR-EXACTLY
+  against sig.active_zone AND sig.dir on every bar — any divergence raises),
+  V-shadow sweep (9 variants, vectorized §4.6 replica), MTF capture over
+  {exec, 15m, 30m, 1h, 4h, 12h, 1d} (30m/1d from the S-1 resampled store,
+  15m via the estate loader; 300-bar warm-up margin before the loaded span
+  keeps HTF EMA seeds far from the window), ratchet-advancement counts,
+  gov-ATR cluster re-measure, and the four sidecar families (add-trigger
+  drought, re-entry A/B, V-shadow firings, MTF crosses) written as
+  canonical JSONL per cell with per-file sha256.
+- **`engine/replay.py`:** G-1 code-level lockbox guard — any requested
+  [start, end] window intersecting [2024-07-01T00:00Z, 2025-10-05T23:59:59Z]
+  raises LockboxViolation (operator override: NAIAD_LOCKBOX_ACK); byte-inert
+  on every valid run; closes the register item open since the anchor.
+  Optional `s1_sidecar_root`/`s1_resampled_dir` params gate all
+  instrumentation (config UNCHANGED: v12_anchor_g8); summary gains
+  sidecar_rows/sidecar_sha256 (null when off).
+- **`engine/journal.py`:** `s1` accepted as an optional row field (absent
+  unless replay passes it); no other schema change.
+- **Candidate-engagement semantics:** engagement is reported only when it
+  precedes the candidate's own exit; paths keep advancing past their
+  simulated exit solely for the drought family's BE-gate tests (pinned).
+- **J-1 carried again, disclosed:** the REJECT stage dataclass fix would
+  perturb REJECT-row bytes and break F-BYTE.
+
 ## engine 1.0.8 — G-8 hard guards + additive fill schema + enrichment window fix (2026-07-18, TC-4; operator-ratified)
 
 Four hard guards (the anchor run's negative-equity/tight-stop pathologies,
