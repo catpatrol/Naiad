@@ -1,0 +1,142 @@
+{
+ "BTCUSDT_intraday": {
+  "exit_rows": 1103,
+  "final_equity": 56.81,
+  "first_floor_cross": "2021-01-04T23:21:00Z",
+  "min_equity": 56.65,
+  "min_equity_ts": "2024-06-12T18:45:00Z"
+ },
+ "BTCUSDT_position": {
+  "exit_rows": 121,
+  "final_equity": 8623.98,
+  "first_floor_cross": null,
+  "min_equity": 7415.84,
+  "min_equity_ts": "2024-02-05T14:45:00Z"
+ },
+ "BTCUSDT_swing": {
+  "exit_rows": 410,
+  "final_equity": 4325.38,
+  "first_floor_cross": null,
+  "min_equity": 3304.17,
+  "min_equity_ts": "2023-06-18T20:10:00Z"
+ },
+ "ETHUSDT_intraday": {
+  "exit_rows": 1121,
+  "final_equity": 2.36,
+  "first_floor_cross": "2020-12-22T03:17:00Z",
+  "min_equity": 2.36,
+  "min_equity_ts": "2024-06-27T20:48:00Z"
+ },
+ "ETHUSDT_position": {
+  "exit_rows": 126,
+  "final_equity": 7214.49,
+  "first_floor_cross": null,
+  "min_equity": 7214.49,
+  "min_equity_ts": "2024-06-21T06:15:00Z"
+ },
+ "ETHUSDT_swing": {
+  "exit_rows": 399,
+  "final_equity": 4397.2,
+  "first_floor_cross": null,
+  "min_equity": 4397.2,
+  "min_equity_ts": "2024-06-09T10:30:00Z"
+ },
+ "JTOUSDT_intraday": {
+  "exit_rows": 144,
+  "final_equity": 6579.46,
+  "first_floor_cross": null,
+  "min_equity": 6579.46,
+  "min_equity_ts": "2024-06-26T23:29:00Z"
+ },
+ "JTOUSDT_position": {
+  "exit_rows": 13,
+  "final_equity": 9798.22,
+  "first_floor_cross": null,
+  "min_equity": 9712.36,
+  "min_equity_ts": "2024-05-05T06:00:00Z"
+ },
+ "JTOUSDT_swing": {
+  "exit_rows": 30,
+  "final_equity": 9194.84,
+  "first_floor_cross": null,
+  "min_equity": 9194.84,
+  "min_equity_ts": "2024-05-28T01:35:00Z"
+ },
+ "NEARUSDT_intraday": {
+  "exit_rows": 1042,
+  "final_equity": 95.32,
+  "first_floor_cross": "2021-06-30T14:19:00Z",
+  "min_equity": 94.81,
+  "min_equity_ts": "2024-06-24T04:34:00Z"
+ },
+ "NEARUSDT_position": {
+  "exit_rows": 75,
+  "final_equity": 8910.39,
+  "first_floor_cross": null,
+  "min_equity": 8910.39,
+  "min_equity_ts": "2024-05-08T14:45:00Z"
+ },
+ "NEARUSDT_swing": {
+  "exit_rows": 305,
+  "final_equity": 6970.68,
+  "first_floor_cross": null,
+  "min_equity": 6940.36,
+  "min_equity_ts": "2024-02-09T21:30:00Z"
+ },
+ "SOLUSDT_intraday": {
+  "exit_rows": 1079,
+  "final_equity": 45.15,
+  "first_floor_cross": "2021-03-14T01:33:00Z",
+  "min_equity": 43.48,
+  "min_equity_ts": "2024-06-25T08:40:00Z"
+ },
+ "SOLUSDT_position": {
+  "exit_rows": 98,
+  "final_equity": 9005.57,
+  "first_floor_cross": null,
+  "min_equity": 8572.52,
+  "min_equity_ts": "2023-08-24T01:30:00Z"
+ },
+ "SOLUSDT_swing": {
+  "exit_rows": 353,
+  "final_equity": 5102.04,
+  "first_floor_cross": null,
+  "min_equity": 5102.04,
+  "min_equity_ts": "2024-06-28T10:15:00Z"
+ },
+ "TAOUSDT_intraday": {
+  "exit_rows": 48,
+  "final_equity": 8686.7,
+  "first_floor_cross": null,
+  "min_equity": 8686.7,
+  "min_equity_ts": "2024-06-27T00:16:00Z"
+ },
+ "TAOUSDT_swing": {
+  "exit_rows": 6,
+  "final_equity": 9935.64,
+  "first_floor_cross": null,
+  "min_equity": 9873.99,
+  "min_equity_ts": "2024-06-06T07:30:00Z"
+ },
+ "ZECUSDT_intraday": {
+  "exit_rows": 1414,
+  "final_equity": -2719.97,
+  "first_floor_cross": "2021-09-23T21:29:00Z",
+  "min_equity": -2732.24,
+  "min_equity_ts": "2024-06-28T02:03:00Z"
+ },
+ "ZECUSDT_position": {
+  "exit_rows": 118,
+  "final_equity": 8060.81,
+  "first_floor_cross": null,
+  "min_equity": 8038.26,
+  "min_equity_ts": "2024-04-04T17:45:00Z"
+ },
+ "ZECUSDT_swing": {
+  "exit_rows": 382,
+  "final_equity": 2402.92,
+  "first_floor_cross": "2024-04-26T08:35:00Z",
+  "min_equity": 2402.92,
+  "min_equity_ts": "2024-06-05T18:15:00Z"
+ }
+}
