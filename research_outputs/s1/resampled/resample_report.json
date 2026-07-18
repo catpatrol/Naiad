@@ -1,0 +1,184 @@
+{
+ "BTCUSDT_1d": {
+  "agg_violations": 0,
+  "boundary_children": [
+   7,
+   1
+  ],
+  "buckets": 2498,
+  "deterministic": true,
+  "interior_buckets_wrong_childcount": 0,
+  "sha256": "39898ce8e77fd271df14a7bbaff20ebadc15f203e8251872faab49d90575743c",
+  "source_rows": 59912,
+  "span_ok": true
+ },
+ "BTCUSDT_30m": {
+  "agg_violations": 0,
+  "boundary_children": [
+   1,
+   1
+  ],
+  "buckets": 119822,
+  "deterministic": true,
+  "interior_buckets_wrong_childcount": 0,
+  "sha256": "1e2af0f03ea13a90a4afdbfd7c2ce9b9dd9c01fc98ce8a59b724c40623f6452e",
+  "source_rows": 239642,
+  "span_ok": true
+ },
+ "ETHUSDT_1d": {
+  "agg_violations": 0,
+  "boundary_children": [
+   17,
+   1
+  ],
+  "buckets": 2418,
+  "deterministic": true,
+  "interior_buckets_wrong_childcount": 0,
+  "sha256": "b4ac0caae68148cef26a10fdb866affa38229915de79c42c168e0d1c475fa280",
+  "source_rows": 58002,
+  "span_ok": true
+ },
+ "ETHUSDT_30m": {
+  "agg_violations": 0,
+  "boundary_children": [
+   1,
+   1
+  ],
+  "buckets": 116002,
+  "deterministic": true,
+  "interior_buckets_wrong_childcount": 0,
+  "sha256": "f996289d91f4e90e0be126312982e5914c23fd02c86b653ca9870224d6affd7d",
+  "source_rows": 232002,
+  "span_ok": true
+ },
+ "JTOUSDT_1d": {
+  "agg_violations": 0,
+  "boundary_children": [
+   14,
+   1
+  ],
+  "buckets": 946,
+  "deterministic": true,
+  "interior_buckets_wrong_childcount": 0,
+  "sha256": "b26a8dad9ea9ddb2cc34d47d5325cb18166bff1ee3fcdd71fdb22e5b841a8260",
+  "source_rows": 22671,
+  "span_ok": true
+ },
+ "JTOUSDT_30m": {
+  "agg_violations": 0,
+  "boundary_children": [
+   2,
+   1
+  ],
+  "buckets": 45341,
+  "deterministic": true,
+  "interior_buckets_wrong_childcount": 0,
+  "sha256": "86ba43ffffc5024def8ec5f73f5fbbdcc14a541290a8b6574e1d6171ff4ca127",
+  "source_rows": 90681,
+  "span_ok": true
+ },
+ "NEARUSDT_1d": {
+  "agg_violations": 0,
+  "boundary_children": [
+   16,
+   1
+  ],
+  "buckets": 2095,
+  "deterministic": true,
+  "interior_buckets_wrong_childcount": 0,
+  "sha256": "1af0239a5c6050c8e5aa2b9699b5f37c69597795ddb9e61099928abc046e3098",
+  "source_rows": 50249,
+  "span_ok": true
+ },
+ "NEARUSDT_30m": {
+  "agg_violations": 0,
+  "boundary_children": [
+   2,
+   1
+  ],
+  "buckets": 100497,
+  "deterministic": true,
+  "interior_buckets_wrong_childcount": 0,
+  "sha256": "e2d12005b527aa1b8c2f571eb8365dd49424197536e675f6d452ee0ea9a63c35",
+  "source_rows": 200993,
+  "span_ok": true
+ },
+ "SOLUSDT_1d": {
+  "agg_violations": 0,
+  "boundary_children": [
+   17,
+   1
+  ],
+  "buckets": 2126,
+  "deterministic": true,
+  "interior_buckets_wrong_childcount": 0,
+  "sha256": "93a3f528a95358d3788df6b4c6d7d498528630114199aecdfb5d5435bc45e688",
+  "source_rows": 50994,
+  "span_ok": true
+ },
+ "SOLUSDT_30m": {
+  "agg_violations": 0,
+  "boundary_children": [
+   2,
+   1
+  ],
+  "buckets": 101987,
+  "deterministic": true,
+  "interior_buckets_wrong_childcount": 0,
+  "sha256": "1bbbbde8877b8014872c0a3eb9e79ea37a816556611da172c826f4ef9ff92a1a",
+  "source_rows": 203973,
+  "span_ok": true
+ },
+ "TAOUSDT_1d": {
+  "agg_violations": 0,
+  "boundary_children": [
+   10,
+   1
+  ],
+  "buckets": 821,
+  "deterministic": true,
+  "interior_buckets_wrong_childcount": 0,
+  "sha256": "d7ad656a6e94969f8424b4f69e7d9b3fbb9a54ec84af5117aec695a88018af29",
+  "source_rows": 19667,
+  "span_ok": true
+ },
+ "TAOUSDT_30m": {
+  "agg_violations": 0,
+  "boundary_children": [
+   2,
+   1
+  ],
+  "buckets": 39332,
+  "deterministic": true,
+  "interior_buckets_wrong_childcount": 0,
+  "sha256": "0698dbfaf35c44a8d3b23291978681ab7de9a62dc36057f171ccad09718f138e",
+  "source_rows": 78663,
+  "span_ok": true
+ },
+ "ZECUSDT_1d": {
+  "agg_violations": 0,
+  "boundary_children": [
+   16,
+   1
+  ],
+  "buckets": 2348,
+  "deterministic": true,
+  "interior_buckets_wrong_childcount": 0,
+  "sha256": "604ba4f007e7eae3d9818de143bfb081506a32fea37ba8261a2f67234aa7a98f",
+  "source_rows": 56321,
+  "span_ok": true
+ },
+ "ZECUSDT_30m": {
+  "agg_violations": 0,
+  "boundary_children": [
+   2,
+   1
+  ],
+  "buckets": 112641,
+  "deterministic": true,
+  "interior_buckets_wrong_childcount": 0,
+  "sha256": "6b1b70eaa933c9dcf87ff9cdf0d24644ac5cc793e37413b23e49de79108f1d36",
+  "source_rows": 225281,
+  "span_ok": true
+ }
+}
