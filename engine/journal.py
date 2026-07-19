@@ -42,6 +42,9 @@ FILL_ONLY_FIELDS = ["concurrent_open_at_fill", "fill_class"]
 # requires byte-identity to the un-instrumented baseline.
 S1_FIELD = "s1"
 
+# Engine 1.0.10 (S-2, additive): same contract as s1 — F-BYTE strips it.
+S2_FIELD = "s2"
+
 MIN_FIELDS = ["run_id", "engine_version", "config_id", "cell_id", "symbol",
               "tf_gov", "tf_exec", "ts_open", "ts_close", "evt", "dir",
               "tier", "grade", "rc", "zone", "stage", "retr", "px_signal",
@@ -63,7 +66,8 @@ def make_row(**kw) -> dict:
     row = {k: None for k in MIN_FIELDS}
     row["shadow"] = None
     row.update(kw)
-    unknown = set(row) - set(MIN_FIELDS) - set(FILL_ONLY_FIELDS) - {S1_FIELD}
+    unknown = set(row) - set(MIN_FIELDS) - set(FILL_ONLY_FIELDS) \
+        - {S1_FIELD, S2_FIELD}
     if unknown:
         raise KeyError(f"unknown journal fields: {sorted(unknown)}")
     return row

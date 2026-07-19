@@ -1,5 +1,29 @@
 # CHANGELOG
 
+## engine 1.0.10 — S-2: wake-order-faithful candidate simulator + level/pattern/doctrine families (2026-07-19, S-2 Tier B)
+
+Instrumentation-only. `engine/signals.py` and `engine/trading.py`
+byte-untouched; F-BYTE (strip `s2`, normalize the three stamps) enforces.
+The two-halt fix: `engine/s2.py::sim_corrected` walks bars in the ENGINE'S
+wake order — (1) queued open-flatten (all five reasons incl. campaign_died)
+at camp_end+1, (2) gap at the open, (3) intra-bar touch — with coverage
+from fill_i (no gap leg on the fill bar; the fill IS the open). Candidate
+PATH construction is unchanged (engine.s1.candidate_path, pinned S-1
+semantics); the legacy walk (engine.s1.simulate_exit) is retained solely
+for F-DELTA, then dead. Two-line = one corrected walk on the pointwise-
+tighter of the native and candidate lines (F-IDENT2 is structural on the
+zero-advance population). Permanent regression tranche c141t213 pinned as
+a unit test (+0.0739R campaign_died flatten; fixtures/test_s2_sim.py) —
+passed before any grid run, alongside synthetic fill-bar-coverage and
+death-bar-precedence tests. New families per the S-2 contract: F1 no_zone
+reject counterfactuals · F2/F3 HTF levels (pivots 4h/12h/1d (5,5),
+PDH/PDL/PWH/PWL, headwind 0.5 TF-ATR) · F4 structure-anchored stop
+({exec,30m,1h}, 200-bar void rule) · D1-D4 pattern detectors on 30m/1h
+with 4h replication (registered sweeps, no trims) · F7 pocket anatomy on
+D4 events · F8 relative-step test-and-reclaim · FH-1 true band depth.
+`s2` optional journal field; sidecars s2_events/<cell>.jsonl. J-1 carried
+a THIRD time, disclosed (bytes). Pre-registered at 6af174b.
+
 ## engine 1.0.9 — S-1 instrumentation (measure-only) + G-1 lockbox guard (2026-07-18, S-1 Tier B)
 
 Instrumentation-only release: NOTHING in the traded path changes.

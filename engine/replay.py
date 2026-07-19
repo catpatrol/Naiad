@@ -103,7 +103,9 @@ def assert_warmup(cell: Cell, data: dict, start_ms: int) -> None:
 def run_replay(config_id: str, cell_id: str, start: str, end: str,
                journal_root: Path, backfill: bool = False, log=print,
                s1_sidecar_root: Path | None = None,
-               s1_resampled_dir: Path | None = None) -> dict:
+               s1_resampled_dir: Path | None = None,
+               s2_sidecar_root: Path | None = None,
+               s2_resampled_dir: Path | None = None) -> dict:
     cfg = load_config(config_id)
     cell = cell_by_id(cell_id)
     start_ms, end_ms = parse_utc(start), parse_utc(end)
@@ -143,6 +145,29 @@ def run_replay(config_id: str, cell_id: str, start: str, end: str,
         from engine.s1 import compute_s1
         s1res = compute_s1(cell, cfg, sig, trades, data, s1_resampled_dir,
                            in_window)
+    s2res = None
+    if s2_sidecar_root is not None:
+        from engine.s2 import compute_s2
+        s2res = compute_s2(cell, cfg, sig, trades, data, s2_resampled_dir,
+                           in_window)
+
+    def s2_sig(ev):
+        if s2res is None:
+            return {}
+        v = s2res["sig_s2"].get((ev.i, ev.evt, ev.dir, ev.subkey))
+        return {"s2": v} if v is not None else {}
+
+    def s2_fill(tr):
+        if s2res is None:
+            return {}
+        v = s2res["fill_s2"].get(tr.tranche_id)
+        return {"s2": v} if v is not None else {}
+
+    def s2_exit(tr):
+        if s2res is None:
+            return {}
+        v = s2res["exit_s2"].get(tr.tranche_id)
+        return {"s2": v} if v is not None else {}
 
     def s1_sig(ev):
         if s1res is None:
@@ -181,7 +206,7 @@ def run_replay(config_id: str, cell_id: str, start: str, end: str,
             continue
         ts_open, ts_close = bar_times(ev.i)
         rows.append(make_row(
-            **base, **s1_sig(ev),
+            **base, **s1_sig(ev), **s2_sig(ev),
             ts_open=ts_open, ts_close=ts_close, evt=ev.evt,
             dir="long" if ev.dir == 1 else "short" if ev.dir == -1 else "-",
             tier=ev.tier, grade=ev.grade, rc=ev.rc, zone=ev.zone,
@@ -231,7 +256,7 @@ def run_replay(config_id: str, cell_id: str, start: str, end: str,
                 ts_open, ts_close = bar_times(tr.fill_i)
                 conc = conc_at_fill[tr.tranche_id]
                 rows.append(make_row(
-                    **base, **s1_fill(tr),
+                    **base, **s1_fill(tr), **s2_fill(tr),
                     ts_open=ts_open, ts_close=ts_close,
                     evt="ENTRY_FILL" if tr.kind in ("R1", "V") else "ADD_FILL",
                     concurrent_open_at_fill=conc,
@@ -267,7 +292,7 @@ def run_replay(config_id: str, cell_id: str, start: str, end: str,
                 if enr is not None and not enr.resolved:
                     continue  # EXIT buffered: a later (longer) run emits it
                 rows.append(make_row(
-                    **base, **s1_exit(tr),
+                    **base, **s1_exit(tr), **s2_exit(tr),
                     ts_open=ts_open, ts_close=ts_close, evt="EXIT",
                     dir="long" if tr.dir == 1 else "short",
                     tier=tr.tier, grade=tr.grade, rc=tr.rc, zone=tr.zone,
@@ -319,6 +344,12 @@ def run_replay(config_id: str, cell_id: str, start: str, end: str,
         sidecar_rows = len(s1res["sidecar"])
         sidecar_sha = write_sidecar(
             s1res["sidecar"], s1_sidecar_root / f"{cell.cell_id}.jsonl",
+            cell.cell_id, base)
+    if s2res is not None:
+        from engine.s1 import write_sidecar
+        sidecar_rows = len(s2res["sidecar"])
+        sidecar_sha = write_sidecar(
+            s2res["sidecar"], s2_sidecar_root / f"{cell.cell_id}.jsonl",
             cell.cell_id, base)
     # Summary metrics come from the PERSISTED bytes, re-read after writing
     # (reviewer ticket D-1) — never from the in-memory stream: same-bar
