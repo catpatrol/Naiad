@@ -21,7 +21,7 @@ Basis: S-1 journals engine 1.0.9; baseline = TC-4 pass2 · seed 20260720, 10000 
 | # | prior | verdict | measured |
 |---|---|---|---|
 | P-STRIP | 60 | **CONFIRMED** | `{"best_position_candidate": "ema200_gov_b0.0", "sum_1x_proxy": 389.2473, "strip_best": 156.2801}` |
-| P-LAT | 60 | **FALSIFIED** | `{"triple_true": {"n": 394, "expectancy": -0.4557, "ci95": [-0.6532, -0.2318], "sum": -179.5376, "share_of_sum_wins_pct": 12.5796}, "triple_false": {"n": 296, "expectancy": -1.2244,` |
+| P-LAT | 60 | **FALSIFIED** | `{"halves": {"separation_ge_0.8": "FAIL (0.7687)", "triple_true_expectancy_ge_-0.2": "FAIL (-0.4557)"}, "triple_true": {"n": 394, "expectancy": -0.4557, "ci95": [-0.6532, -0.2318], ` |
 | P-FH1 | 65 | **FALSIFIED** | `{"median_shift_retr_pct": 47.9863, "median_shift_depth_pct": 2.808}` |
 | P-FH2 | 60 | **FALSIFIED** | `{"mfe_p50_dev_pct": 21.3115, "mfe_p75_dev_pct": 13.6925}` |
 | P-FH3 | 55 | **CONFIRMED** | `{"peaks": {"swing": {"tf": "4h", "steps": 0, "separation": 0.2617}, "intraday": {"tf": "30m", "steps": -1, "separation": 0.2204}, "position": {"tf": "exec", "steps": -5, "separatio` |

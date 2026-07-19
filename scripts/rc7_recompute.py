@@ -694,12 +694,21 @@ def main() -> int:
     sep = (ttt.get("expectancy") - fff.get("expectancy")) \
         if ttt.get("expectancy") is not None \
         and fff.get("expectancy") is not None else None
+    lat_sep_ok = sep is not None and sep >= 0.8
+    lat_exp_ok = (ttt.get("expectancy") is not None
+                  and ttt["expectancy"] >= -0.2)
     preds["P-LAT"] = {
         "prior": 60, "triple_true": ttt, "triple_false": fff,
         "separation": r4(sep),
-        "verdict": "CONFIRMED"
-        if sep is not None and sep >= 0.8
-        and (ttt.get("expectancy") or -1) >= -0.2 else "FALSIFIED"}
+        "halves": {
+            "separation_ge_0.8": f"{'PASS' if lat_sep_ok else 'FAIL'} "
+                                 f"({r4(sep)})",
+            "triple_true_expectancy_ge_-0.2":
+                f"{'PASS' if lat_exp_ok else 'FAIL'} "
+                f"({ttt.get('expectancy')})",
+        },
+        "verdict": "CONFIRMED" if lat_sep_ok and lat_exp_ok
+        else "FALSIFIED"}
     def max_shift(key, idx):
         """Max deviation from the cross-mandate mean, in magnitudes —
         sign-safe (retr medians are negative). Mechanization stated in the
@@ -845,8 +854,11 @@ def render_md(res):
         vd = v.get("verdict") or " / ".join(
             f"{kk.split('_', 1)[1]}:{vv}" for kk, vv in v.items()
             if kk.startswith("verdict_"))
-        keep = {kk: vv for kk, vv in v.items()
-                if not kk.startswith("verdict") and kk != "prior"}
+        keep = {kk: v[kk] for kk in
+                (["halves"] if "halves" in v else [])
+                + [kk for kk in v
+                   if not kk.startswith("verdict")
+                   and kk not in ("prior", "halves")]}
         A(f"| {k} | {v['prior']} | **{vd}** | "
           f"`{json.dumps(keep, default=str)[:180]}` |")
     A("")

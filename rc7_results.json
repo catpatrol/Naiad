@@ -2719,6 +2719,10 @@
    "verdict_separation": "CONFIRMED"
   },
   "P-LAT": {
+   "halves": {
+    "separation_ge_0.8": "FAIL (0.7687)",
+    "triple_true_expectancy_ge_-0.2": "FAIL (-0.4557)"
+   },
    "prior": 60,
    "separation": 0.7687,
    "triple_false": {
