@@ -100,6 +100,44 @@ def assert_warmup(cell: Cell, data: dict, start_ms: int) -> None:
             f"{gov_bars} governor bars (need >= 200). Refusing to emit signals.")
 
 
+def _tc1_arch_data(cell, cfg, sig, data) -> dict | None:
+    """TC-1 (engine 1.0.11): governor e200 (exec-mapped) + confirmed 1h
+    (5,5) pivots for the structural stop / gov-e200 trail. Computed only when
+    an architecture config key is present; None on baseline configs (so cell
+    A's run_trading receives arch_data=None and takes the baseline path)."""
+    t = cfg["trading"]
+    if t.get("stop_mode", "native") == "native" and \
+            t.get("exit_trail", "none") == "none":
+        return None
+    from engine import indicators as ind
+    from engine.htf import map_htf_to_exec, take
+    from engine.s1 import _pivots
+    p = cfg["signal"]
+    # cell's governor e200, mapped to exec (confirmed-HTF rule)
+    gov = data[cell.tf_gov]
+    ge200 = ind.ema(gov["close"].to_numpy(float), p["len_trend"])
+    gidx = map_htf_to_exec(sig.exec_open_ms,
+                           gov["open_time"].to_numpy(np.int64), cell.tf_gov)
+    gov_e200 = take(ge200, gidx)
+    # 1h frame confirmed (5,5) pivots
+    oneh = data["1h"]
+    idx1h = map_htf_to_exec(sig.exec_open_ms,
+                            oneh["open_time"].to_numpy(np.int64), "1h")
+    lc, lv = _pivots(oneh["low"].to_numpy(float), 5, 5, low=True)
+    hc, hv = _pivots(oneh["high"].to_numpy(float), 5, 5, low=False)
+    # conf_exec = first exec bar whose mapped 1h index reaches the pivot's
+    # confirmation 1h bar (pivot+5); pivot's own 1h bar = conf - 5.
+    plow_conf = np.searchsorted(idx1h, lc, side="left")
+    phigh_conf = np.searchsorted(idx1h, hc, side="left")
+    return {
+        "gov_e200": gov_e200, "exec_1h": idx1h,
+        "plow_conf": plow_conf.astype(np.int64),
+        "plow_1h": (lc - 5).astype(np.int64), "plow_val": lv,
+        "phigh_conf": phigh_conf.astype(np.int64),
+        "phigh_1h": (hc - 5).astype(np.int64), "phigh_val": hv,
+    }
+
+
 def run_replay(config_id: str, cell_id: str, start: str, end: str,
                journal_root: Path, backfill: bool = False, log=print,
                s1_sidecar_root: Path | None = None,
@@ -128,7 +166,9 @@ def run_replay(config_id: str, cell_id: str, start: str, end: str,
         {tf: data[tf] for tf in MTF_SET},
         v_births_provisional=cfg["signal"]["v_births_provisional"])
 
-    trades = run_trading(cell, cfg, sig, data["funding"], start_ms=start_ms)
+    arch_data = _tc1_arch_data(cell, cfg, sig, data)
+    trades = run_trading(cell, cfg, sig, data["funding"], start_ms=start_ms,
+                         arch_data=arch_data)
 
     base = dict(run_id=run_id, engine_version=ENGINE_VERSION,
                 config_id=config_id, cell_id=cell.cell_id, symbol=cell.symbol,

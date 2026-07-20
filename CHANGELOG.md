@@ -1,5 +1,44 @@
 # CHANGELOG
 
+## engine 1.0.11 — TC-1 stop x exit architecture (trading-layer, config-gated) (2026-07-20, TC-1 Tier C)
+
+Real trading changes behind two config keys — `stop_mode` in {native,
+struct_1h} and `exit_trail` in {none, gov_e200_b0.5}. **Absent keys =
+baseline behaviour exactly** — every behavioural branch is guarded on
+`arch = use_struct or use_trail`; when arch is False the loop is the 1.0.8
+code verbatim, so cell A (keys absent) is byte-identical to journal_pass2
+(F-A-BYTE, proven on swing/position/intraday smoke: 922/16587/164267 rows
+identical after stamp normalization). `engine/signals.py` byte-untouched
+(git diff empty). J-1 carried a FOURTH time (cell-A byte-identity requires
+it out).
+
+- **Structural stop (`stop_mode: struct_1h`, cells B/D):** at fill the stop
+  becomes the nearest confirmed (5,5) 1h pivot strictly beyond entry within
+  a 200-bar 1h lookback, offset ∓ 0.5·ATR_exec(signal bar); no pivot =>
+  `no_struct_anchor` REJECT (tranche not taken). STATIC for life (no
+  ratchet). Sizing uses the structural distance as unit_risk, so realized_r
+  is natively struct-R. The BE add-gate tests each tranche's own live stop,
+  so a below-entry static stop makes B near-pyramid-free (`add_ineligible`).
+- **gov-e200 trail (`exit_trail: gov_e200_b0.5`, cells C/D):** engagement =
+  first exec close beyond the cell's governor e200 in favour; post-engage
+  one-way tighten of `gov_e200 ∓ 0.5·ATR_exec`, seeded at the native ratchet
+  (C) or the structural stop (D). D floors the trail at the structural stop
+  (max(trail, struct)). Confirmed-at-close-i governs bar i+1 (the S-2
+  corrected-simulator rule). Per-tranche exits in the engine's wake order
+  (flatten -> gap -> intra-bar).
+- **`engine/trading.py`:** per-tranche `work_stop`/`be_stop`/`update_trail`;
+  struct-stop birth (`struct_stop_at`); gap (3b) and intra-bar (4) checks
+  branch per-tranche when arch; stop-guarantee, the BE add-gate, and the
+  add-legality assert all arch-aware. New Tranche fields (defaults keep
+  baseline tranches inert). New `arch_data` param.
+- **`engine/replay.py`:** `_tc1_arch_data` computes the governor e200
+  (exec-mapped) and confirmed 1h (5,5) pivots from the already-loaded
+  frames, only when an arch key is present (None on baseline => cell A
+  path).
+- **Fixtures (`fixtures/test_tc1_arch.py`):** structural anchor value +
+  static-for-life; no_struct_anchor reject; struct stop-out at its own
+  level; trail one-way monotonicity; D's structural floor. 5 passed.
+
 ## engine 1.0.10 — S-2: wake-order-faithful candidate simulator + level/pattern/doctrine families (2026-07-19, S-2 Tier B)
 
 Instrumentation-only. `engine/signals.py` and `engine/trading.py`

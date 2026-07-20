@@ -78,6 +78,12 @@ class Tranche:
     realized_r: float = 0.0
     equity_after: float = 0.0        # cell equity after this exit realized
     first_tpw_i: int | None = None   # first TPW after fill (shadow exits)
+    # 1.0.11 (TC-1, architecture — all defaults keep baseline tranches inert):
+    is_struct: bool = False          # struct_1h static stop
+    struct_stop: float = np.nan      # the static structural level
+    trail_on: bool = False           # gov_e200 trail overlay active
+    engaged: bool = False            # trail engaged (first close beyond gov e200)
+    trail_stop: float = np.nan       # one-way trailed working stop, post-engage
 
 
 @dataclass
@@ -156,9 +162,15 @@ def size_for(kind: str, grade: str, tier: str, t: dict) -> float:
 
 
 def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
-                funding_df, start_ms: int = 0) -> TradeResult:
+                funding_df, start_ms: int = 0, arch_data: dict | None = None
+                ) -> TradeResult:
     """start_ms: the paper book starts FLAT at the window start — warm-up
-    bars drive the signal state machine but are never traded (F7)."""
+    bars drive the signal state machine but are never traded (F7).
+
+    arch_data (1.0.11, TC-1): {gov_e200, plow_conf, plow_1h, plow_val,
+    phigh_conf, phigh_1h, phigh_val, exec_1h} — computed in replay.py from
+    the already-loaded governor and 1h frames, passed only when an
+    architecture config key is present. None on baseline configs."""
     t = cfg["trading"]
     if not t.get("enabled", False):
         return TradeResult(final_equity=0.0)
@@ -182,6 +194,46 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
                     if floor_frac is not None else None)
     max_lev = t.get("max_notional_leverage")          # G-8b
     min_stop_atr = t.get("min_stop_atr")              # G-8c
+
+    # 1.0.11 (TC-1): architecture keys — absent => baseline path exactly
+    # (cell A byte-identity). Every behavioral branch below is guarded on
+    # `arch`; when arch is False none of it runs and the code is the 1.0.8
+    # loop verbatim.
+    stop_mode = t.get("stop_mode", "native")
+    exit_trail = t.get("exit_trail", "none")
+    use_struct = stop_mode == "struct_1h"
+    use_trail = exit_trail == "gov_e200_b0.5"
+    arch = use_struct or use_trail
+    TRAIL_B = 0.5
+    if arch:
+        if arch_data is None:
+            raise ValueError("arch config requires arch_data from replay")
+        gov_e200 = arch_data["gov_e200"]
+        exec_1h = arch_data["exec_1h"]
+        plow_conf = arch_data["plow_conf"]; plow_1h = arch_data["plow_1h"]
+        plow_val = arch_data["plow_val"]
+        phigh_conf = arch_data["phigh_conf"]; phigh_1h = arch_data["phigh_1h"]
+        phigh_val = arch_data["phigh_val"]
+
+    def struct_stop_at(i: int, fill_px: float, d: int, atr_sig: float):
+        """Nearest confirmed 1h (5,5) pivot strictly beyond entry within a
+        200-bar 1h lookback, offset ∓ 0.5·ATR_exec(signal bar). Returns the
+        stop level, or None => no_struct_anchor (tranche not taken)."""
+        cur1h = exec_1h[i]
+        if d == 1:
+            elig = ((plow_conf <= i) & (cur1h - plow_1h <= 200)
+                    & (plow_val < fill_px))
+            if not elig.any():
+                return None
+            pv = float(plow_val[elig].max())        # nearest below entry
+            return pv - TRAIL_B * atr_sig
+        else:
+            elig = ((phigh_conf <= i) & (cur1h - phigh_1h <= 200)
+                    & (phigh_val > fill_px))
+            if not elig.any():
+                return None
+            pv = float(phigh_val[elig].min())       # nearest above entry
+            return pv + TRAIL_B * atr_sig
 
     # Binance funding timestamps jitter by a few ms past the hour
     # (e.g. 16:00:00.012) — floor to the hour so they land on the exec bar
@@ -224,6 +276,57 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
         if i == 0:
             return np.nan
         return sig.stop_long[i - 1] if d == 1 else sig.stop_short[i - 1]
+
+    def work_stop(tr: Tranche, i: int) -> float:
+        """The tranche's working stop order during bar i (1.0.11). Baseline
+        tranches (is_struct=False, trail_on=False) fall through to the shared
+        native ratchet — identical to stop_level, so a per-tranche evaluation
+        of a native tranche equals the campaign-level evaluation."""
+        if tr.trail_on and tr.engaged:
+            return tr.trail_stop
+        if tr.is_struct:
+            return tr.struct_stop
+        return stop_level(i, tr.dir)
+
+    def be_stop(tr: Tranche, i: int) -> float:
+        """The tranche's live stop for the BE add-gate at signal-close i.
+        Native uses the ratchet as of THIS close (sig.stop_long[i]) to match
+        the baseline gate; struct/trail use their own live stop."""
+        if tr.trail_on and tr.engaged:
+            return tr.trail_stop
+        if tr.is_struct:
+            return tr.struct_stop
+        return sig.stop_long[i] if tr.dir == 1 else sig.stop_short[i]
+
+    def tighten(prev: float, cand: float, d: int) -> float:
+        if cand != cand:
+            return prev
+        if prev != prev:
+            return cand
+        return max(prev, cand) if d == 1 else min(prev, cand)
+
+    def update_trail(tr: Tranche, i: int):
+        """At close of bar i: engage (first close beyond gov e200 in favor)
+        and one-way advance the trail. The value confirmed here governs bar
+        i+1 (series[j-1] governs bar j — the S-2 corrected-simulator rule)."""
+        d = tr.dir
+        line = gov_e200[i]
+        atr = sig.atr_x[i]
+        if not tr.engaged:
+            if line == line and (c[i] - line) * d > 0:
+                tr.engaged = True
+                seed = tr.struct_stop if tr.is_struct else \
+                    (sig.stop_long[i] if d == 1 else sig.stop_short[i])
+                if seed != seed:
+                    seed = tr.stop_at_entry
+                tr.trail_stop = seed
+            else:
+                return
+        cand = (line - d * TRAIL_B * atr) if (line == line and atr == atr) \
+            else np.nan
+        if tr.is_struct:
+            cand = tighten(cand, tr.struct_stop, d)    # D: floor at structural
+        tr.trail_stop = tighten(tr.trail_stop, cand, d)
 
     def close_tranche(tr: Tranche, i: int, raw_px: float, reason: str):
         nonlocal equity
@@ -304,7 +407,10 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
                 # do not breakeven-test each other (a just-filled sibling
                 # sits above the standing ratchet by construction). Full
                 # force retained against all earlier-bar tranches.
-                if tr.fill_i < i and (tr.fill_px - stop_now) * tr.dir > 1e-9:
+                # 1.0.11: arch tranches test their OWN live stop (be_stop),
+                # so the assert agrees with the arch add-gate below.
+                s = be_stop(tr, i) if arch else stop_now
+                if tr.fill_i < i and (tr.fill_px - s) * tr.dir > 1e-9:
                     raise GateViolation("add filled with a prior tranche below breakeven")
         probe = Tranche("probe", pe.campaign, pe.dir, pe.kind, pe.grade,
                         pe.tier, pe.zone, pe.retr, pe.rc, pe.signal_i, i,
@@ -337,11 +443,18 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
         # V-reversal) and the flatten is already queued for THIS wake's open
         # (step 3a). A NaN stop with NO queued flatten stays a hard failure.
         if open_tranches and pending_flatten is None:
-            d = open_tranches[0].dir
-            if np.isnan(stop_level(i, d)):
-                raise GateViolation(
-                    f"bar {i}: open tranche(s) with no working stop — "
-                    "stop-guarantee-and-repair failed")
+            if arch:
+                for tr in open_tranches:
+                    if np.isnan(work_stop(tr, i)):
+                        raise GateViolation(
+                            f"bar {i}: open tranche(s) with no working stop — "
+                            "stop-guarantee-and-repair failed")
+            else:
+                d = open_tranches[0].dir
+                if np.isnan(stop_level(i, d)):
+                    raise GateViolation(
+                        f"bar {i}: open tranche(s) with no working stop — "
+                        "stop-guarantee-and-repair failed")
 
         # 2. Funding due at this bar's open (positions opened earlier pay).
         rate = funding_by_ms.get(int(open_ms[i]))
@@ -360,7 +473,19 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
         pending_flatten = None
 
         # 3b. Gap-through stop exits at the open.
-        if open_tranches:
+        if open_tranches and arch:
+            # per-tranche: each tranche gaps against its OWN working stop
+            hit_any = False
+            for tr in list(open_tranches):
+                s = work_stop(tr, i)
+                if not np.isnan(s) and (o[i] - s) * tr.dir <= 0:
+                    close_tranche(tr, i, o[i], "stop_gap")
+                    open_tranches.remove(tr)
+                    hit_any = True
+            if hit_any:
+                check_halts(i)
+                check_floor(i)
+        elif open_tranches:
             d = open_tranches[0].dir
             stop = stop_level(i, d)
             if not np.isnan(stop) and (o[i] - stop) * d <= 0:
@@ -391,7 +516,18 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
                 continue
             raw = o[i]
             fill_px = raw * (1 + slip) if pe.dir == 1 else raw * (1 - slip)
-            stop = pe.stop_at_signal
+            # 1.0.11 (TC-1): struct_1h replaces the bar-extreme stop with the
+            # nearest confirmed 1h pivot beyond entry; no pivot => not taken.
+            if use_struct:
+                atr_sig = sig.atr_x[pe.signal_i]
+                ss = (struct_stop_at(i, fill_px, pe.dir, atr_sig)
+                      if not np.isnan(atr_sig) else None)
+                if ss is None:
+                    res.rejects.append(TradeReject(i, "no_struct_anchor", pe.kind, pe.family, pe.dir))
+                    continue
+                stop = ss
+            else:
+                stop = pe.stop_at_signal
             unit_risk = (fill_px - stop) * pe.dir
             if unit_risk <= 0:
                 res.rejects.append(TradeReject(i, "gap_through_stop", pe.kind, pe.family, pe.dir))
@@ -428,7 +564,17 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
                 fill_i=i, raw_px=raw, fill_px=fill_px, qty=qty,
                 stop_at_entry=stop, one_r_usd=one_r, size_r=pe.size_r,
                 grade_uncapped=pe.grade_uncapped, born_aligned=pe.born_aligned,
-                peak=fill_px, trough=fill_px)
+                peak=fill_px, trough=fill_px,
+                is_struct=use_struct,
+                struct_stop=(stop if use_struct else np.nan),
+                trail_on=use_trail)
+            # G-8c assert for struct: distance ≥ 0.5·ATR by construction
+            if use_struct and min_stop_atr is not None:
+                a = sig.atr_x[pe.signal_i]
+                if not np.isnan(a) and unit_risk < min_stop_atr * a - 1e-9:
+                    raise GateViolation(
+                        f"bar {i}: struct stop below the G-8c floor — "
+                        "unreachable by construction")
             tr.fees += abs(fill_px * qty) * fee
             tr.slippage_usd += abs(fill_px - raw) * qty
             campaign_tranche_count[pe.campaign] = \
@@ -438,7 +584,21 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
         pending_entries = []
 
         # 4. Intra-bar stop check (stop is an order — invariant 3).
-        if open_tranches:
+        if open_tranches and arch:
+            hit_any = False
+            for tr in list(open_tranches):
+                s = work_stop(tr, i)
+                if np.isnan(s):
+                    continue
+                hit = (l[i] <= s) if tr.dir == 1 else (h[i] >= s)
+                if hit:
+                    close_tranche(tr, i, s, "stop")
+                    open_tranches.remove(tr)
+                    hit_any = True
+            if hit_any:
+                check_halts(i)
+                check_floor(i)
+        elif open_tranches:
             d = open_tranches[0].dir
             stop = stop_level(i, d)
             # tranches filled THIS bar use the same level (their signal-bar ratchet)
@@ -516,8 +676,15 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
                 res.rejects.append(TradeReject(i, "no_stop", kind, family, ev.dir))
                 continue
             if kind == "ADD" and open_tranches:
-                bad = any((tr.fill_px - stop_now) * tr.dir > 1e-9
-                          for tr in open_tranches)
+                # 1.0.11: arch adds test each prior tranche's OWN live stop
+                # (struct static below entry => never protected => B is
+                # near-pyramid-free; a trailed tranche past breakeven admits).
+                if arch:
+                    bad = any((tr.fill_px - be_stop(tr, i)) * tr.dir > 1e-9
+                              for tr in open_tranches)
+                else:
+                    bad = any((tr.fill_px - stop_now) * tr.dir > 1e-9
+                              for tr in open_tranches)
                 if bad:
                     res.rejects.append(TradeReject(i, "add_ineligible", kind, family, ev.dir))
                     continue
@@ -544,6 +711,13 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
                 campaign=camp))
             if pe is not None:
                 pending_entries.append(pe)
+
+        # 1.0.11: advance each open tranche's gov-e200 trail at this close;
+        # the value confirmed here governs bar i+1 (series[j-1] rule).
+        if arch and use_trail:
+            for tr in open_tranches:
+                if tr.trail_on:
+                    update_trail(tr, i)
 
     res.final_equity = equity
     return res
