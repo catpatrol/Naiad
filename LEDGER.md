@@ -394,3 +394,19 @@ proxy of a measurement we can afford to make for real.*
 
 ## 2026-07-20 — TC-5 POST-COMPLETION CLARIFICATION (reviewer-verified)
 [2026-07-20] TC-5 POST-COMPLETION CLARIFICATION (read-only recount, reviewer-verified): survival-matched windows (each cell truncated at its v1 halt date) show v2 births ~equal to v1 (1,532 vs 1,550, −1.2%) and PRIME density 4.2× sparser (22.70 vs 95.40 per 100 governor bars). The full-window 2,328-vs-1,550 count was a survival artifact — 34% of v2 births (797) occur after the v1 halt date. P-TC5-c's registered falsification stands on the raw count as registered; the predicted mechanism (fewer, better-formed births) is vindicated on matched windows; the reviewer's registration error (unmatched comparison windows) is logged. Sharpened residual diagnosis: per-trade expectancy over an extended life → TC-2's re-entry quality bar. ALSO RECORDED: operator explicitly ratifies hygiene commit 81b29f3 (S-2 provenance closure).
+
+## 2026-07-20 — TC-1 G-7 PRE-REGISTRATION — Stop × Exit Architecture Factorial, Tier C (before any implementation)
+- Scope: 2×2 factorial {stop anchor: bar-extreme native vs structural-1h-static} × {exit: none vs gov-e200 trail b0.5} — four cells A/B/C/D, D = the joint (trail seeded at the structural floor; the 4,019-tranche interaction region's real answer). Engine 1.0.11 (trading-layer only; signals.py byte-untouched). Full 20-cell grid, exploration-classic window, $10k/cell, G-8 guards. Config keys stop_mode∈{native,struct_1h} · exit_trail∈{none,gov_e200_b0.5}; ABSENT keys = baseline exactly (cell A byte-identity proves the gating inert). J-1 carried a FOURTH time (cell-A byte-identity requires it out). bps floor OUT (owned 85.4% by the anchor → TC-2); 30m anchor OUT (strip-best flip); ratcheting-structural = named follow-up, not a fifth cell.
+- Config shas (F-CFG): tc1_A.yaml 311a1cd3d1e950e3bb8b8c54eefe305b8c56f9a5517c4520076cf9c4fa76edc0 · tc1_B.yaml 3e99401d427fedd96842cc4df15c329220b8ec43e93bd6543c62de7acb3f636b · tc1_C.yaml 462c4e46f1501386b66dd67bccf099e0223d1bd1ee098372cace84b65a8bf4fa · tc1_D.yaml 37f6869631db2b831ea9413fa91799cdfd78bd8e6bbac01330af2e1574bef6c0. (tc1_A = v12_anchor_g8 content, config_id tc1_A, keys absent; B/C/D add the trading keys.)
+- §2 definitions hash (TC1_DEFINITIONS.md): 3cddbc12d4a42f378b43b8683a4c5bb6ff9770e7075ba16fd6d2a8c3ed6922e9.
+- Prediction basis: S-2b decomposition (s2b_results.json D1) — the 38% gross component and per-mandate books, NEVER the +2,360 headline. These are REAL runs; path effects (re-entry suppression, concurrency, funding, rail/halt feedback) are the point.
+- Predictions (EIGHT; scored at 1× vs cell A unless noted; struct-R denominator for B/D):
+  P-A [90%] cell-A byte-identity holds. Falsified: any diff.
+  P-B-1 [55%] B grid 1× ∈ [+100, +900] (struct-R). Falsified outside.
+  P-B-2 [65%] B swing 1× > 0. Falsified ≤ 0.
+  P-B-3 [70%] B intraday 1× < 0. Falsified ≥ 0.
+  P-C-1 [55%] C grid 1× ∈ [−1900, −1300]. Falsified outside.
+  P-C-2 [60%] C position 1× ≥ +250. Falsified below.
+  P-D [50%] D grid 1× ≥ B grid 1× (the interaction). Falsified below.
+  P-CNT [60%] B and D tranche counts ≤ 70% of A's 6,304 (re-entry suppression). Falsified if either above.
+- Roots research_outputs/tc1/<cell>/{run1,run2}; prior roots read-only; no network. Builder-typed, append-only. Do not push, do not merge. Implementation follows THIS commit (G-7).
