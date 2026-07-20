@@ -703,6 +703,22 @@ def compute_s2(cell, cfg, sig, trades, data, resampled_dir,
                                                  / unit0),
                                 "two_off": bar - tr.fill_i,
                                 "two_kind": kind, "two_src": src})
+
+                def noise(sm_px, sm_bar, sm_kind):
+                    if sm_kind not in ("stop", "gap"):
+                        return False
+                    end = sm_bar + 20
+                    if end >= ctx.n:
+                        return None
+                    fav2 = sig.h if d == 1 else sig.l
+                    seg2 = fav2[sm_bar + 1:end + 1]
+                    bb = seg2.max() if d == 1 else seg2.min()
+                    return bool((bb - sm_px) * d / unit0 >= 1.0)
+
+                rec["fold_noise"] = (noise(*fold) if fold is not None
+                                     else None)
+                rec["two_noise"] = (noise(two[0], two[1], two[2])
+                                    if two is not None else None)
                 rec["engaged_off"] = (eng - tr.fill_i) if eng is not None \
                     else None
                 tl[cid] = rec
