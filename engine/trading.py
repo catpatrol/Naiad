@@ -378,7 +378,7 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
             pending_flatten = "equity_floor"
 
     def open_risk_r(stop: float, extra=None) -> float:
-        """Open campaign risk in R against a given stop level."""
+        """Open campaign risk in R against a given stop level (baseline)."""
         total = 0.0
         items = list(open_tranches) + ([extra] if extra else [])
         for tr in items:
@@ -386,6 +386,22 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
                 continue
             risk = max(0.0, (tr.fill_px - stop) * tr.dir) * tr.qty
             total += risk / tr.one_r_usd
+        return total
+
+    def arch_risk(i: int) -> float:
+        """1.0.11: open campaign risk measuring each tranche against its OWN
+        live stop (work_stop). For a struct tranche this is exactly size_r
+        (qty sized on the structural distance, static below entry — never
+        protected); for a native/trailed tranche it decays as the stop
+        rises. The new entry always adds size_r (qty is sized so a full
+        stop-out is −size_r R), so the caller adds pe.size_r."""
+        total = 0.0
+        for tr in open_tranches:
+            if tr.qty <= 0:
+                continue
+            s = work_stop(tr, i)
+            total += max(0.0, (tr.fill_px - s) * tr.dir) * tr.qty \
+                / tr.one_r_usd
         return total
 
     def assert_entry_legal(pe: PendingEntry, i: int, fill_px: float,
@@ -412,12 +428,16 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
                 s = be_stop(tr, i) if arch else stop_now
                 if tr.fill_i < i and (tr.fill_px - s) * tr.dir > 1e-9:
                     raise GateViolation("add filled with a prior tranche below breakeven")
-        probe = Tranche("probe", pe.campaign, pe.dir, pe.kind, pe.grade,
-                        pe.tier, pe.zone, pe.retr, pe.rc, pe.signal_i, i,
-                        fill_px, fill_px, qty, pe.stop_at_signal, one_r,
-                        pe.size_r, pe.grade_uncapped, pe.born_aligned)
-        if open_risk_r(pe.stop_at_signal, extra=probe) > max_risk_r + 1e-9:
-            raise GateViolation("open campaign risk exceeds 1R in-path")
+        if arch:
+            if arch_risk(i) + pe.size_r > max_risk_r + 1e-9:
+                raise GateViolation("open campaign risk exceeds 1R in-path")
+        else:
+            probe = Tranche("probe", pe.campaign, pe.dir, pe.kind, pe.grade,
+                            pe.tier, pe.zone, pe.retr, pe.rc, pe.signal_i, i,
+                            fill_px, fill_px, qty, pe.stop_at_signal, one_r,
+                            pe.size_r, pe.grade_uncapped, pe.born_aligned)
+            if open_risk_r(pe.stop_at_signal, extra=probe) > max_risk_r + 1e-9:
+                raise GateViolation("open campaign risk exceeds 1R in-path")
 
     for i in range(n):
         if open_ms[i] < start_ms:
@@ -696,9 +716,13 @@ def run_trading(cell: Cell, cfg: dict, sig: SignalResult,
             # risk_cap REJECT instead of a fill-time crash. Unreachable at
             # baseline sizes (max two adds/bar x 0.5R, eligible priors carry
             # zero risk) — hardening for future sizing variants.
-            carried = [] if pending_flatten else open_tranches
             queued_r = sum(p.size_r for p in pending_entries)
-            projected = (open_risk_r(stop_now) if carried else 0.0) + queued_r + size_r
+            if arch:
+                carried_risk = 0.0 if pending_flatten else arch_risk(i)
+            else:
+                carried = [] if pending_flatten else open_tranches
+                carried_risk = open_risk_r(stop_now) if carried else 0.0
+            projected = carried_risk + queued_r + size_r
             if projected > max_risk_r + 1e-9:
                 res.rejects.append(TradeReject(i, "risk_cap", kind, family, ev.dir))
                 continue
