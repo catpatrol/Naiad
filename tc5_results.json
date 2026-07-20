@@ -1,0 +1,351 @@
+{
+ "a_grade_share": {
+  "v1_intraday": {
+   "a_grade_share_pct": 33.7063,
+   "n": 3664
+  },
+  "v2": {
+   "a_grade_share_pct": 50.5797,
+   "n": 5261
+  }
+ },
+ "adds_funnel": {
+  "v2_fill_class": {
+   "r1": 2132,
+   "re_entry": 2406,
+   "true_add": 619,
+   "v": 104
+  },
+  "v2_not_positioned_rejects": 9154
+ },
+ "caveat": "in-sample; same-asset five-cell subset (never v1's full 7-cell book); compressed ladder \u2014 v2 align sits AT the governor, no strictly-between rung exists at this scale; 2022-23 chop inside the window (see era split).",
+ "era_split": {
+  "boundary": "2023-01-01",
+  "splits": {
+   "2023_plus": {
+    "v1_net_1x": -42.6154,
+    "v2_med_mfe_bps": 29.0161,
+    "v2_net_1x": -425.8896,
+    "v2_ratio": 1.4527
+   },
+   "pre_2023": {
+    "v1_net_1x": -1319.9465,
+    "v2_med_mfe_bps": 38.0043,
+    "v2_net_1x": -754.4338,
+    "v2_ratio": 1.9391
+   }
+  }
+ },
+ "fill_class_census": {
+  "v2": {
+   "r1": 2132,
+   "re_entry": 2406,
+   "true_add": 619,
+   "v": 104
+  }
+ },
+ "fixtures": {
+  "F-CFG": {
+   "five_shas_match_prereg": true,
+   "match": true
+  },
+  "F-DET": {
+   "manifest": true,
+   "match": true,
+   "mismatched": []
+  },
+  "F-ENG": {
+   "engine_diff_vs_6fdab03": [
+    "engine/s2.py"
+   ],
+   "engine_working_tree": "(clean)",
+   "match": true,
+   "s2_hygiene_only": true,
+   "tc5_engine_changes": "(none)"
+  },
+  "F-GUARDS": {
+   "match": true,
+   "per_cell": {
+    "BTCUSDT_intraday_v2": {
+     "g8a_fills_after_floor": 0,
+     "g8b_max_leverage": 5.312,
+     "g8c_min_stop_atr": 0.5052,
+     "g8d_one_r_le0": 0
+    },
+    "ETHUSDT_intraday_v2": {
+     "g8a_fills_after_floor": 0,
+     "g8b_max_leverage": 8.6903,
+     "g8c_min_stop_atr": 0.5039,
+     "g8d_one_r_le0": 0
+    },
+    "NEARUSDT_intraday_v2": {
+     "g8a_fills_after_floor": 0,
+     "g8b_max_leverage": 2.6521,
+     "g8c_min_stop_atr": 0.504,
+     "g8d_one_r_le0": 0
+    },
+    "SOLUSDT_intraday_v2": {
+     "g8a_fills_after_floor": 0,
+     "g8b_max_leverage": 2.2412,
+     "g8c_min_stop_atr": 0.5017,
+     "g8d_one_r_le0": 0
+    },
+    "ZECUSDT_intraday_v2": {
+     "g8a_fills_after_floor": 0,
+     "g8b_max_leverage": 2.8072,
+     "g8c_min_stop_atr": 0.5023,
+     "g8d_one_r_le0": 0
+    }
+   }
+  },
+  "F-SPEC": {
+   "headers": {
+    "BTCUSDT_intraday_v2": {
+     "tf_align_from_cfg": "1h",
+     "tf_exec": "5m",
+     "tf_gov": "1h"
+    },
+    "ETHUSDT_intraday_v2": {
+     "tf_align_from_cfg": "1h",
+     "tf_exec": "5m",
+     "tf_gov": "1h"
+    },
+    "NEARUSDT_intraday_v2": {
+     "tf_align_from_cfg": "1h",
+     "tf_exec": "5m",
+     "tf_gov": "1h"
+    },
+    "SOLUSDT_intraday_v2": {
+     "tf_align_from_cfg": "1h",
+     "tf_exec": "5m",
+     "tf_gov": "1h"
+    },
+    "ZECUSDT_intraday_v2": {
+     "tf_align_from_cfg": "1h",
+     "tf_exec": "5m",
+     "tf_gov": "1h"
+    }
+   },
+   "match": true,
+   "note": "tf_align not journaled; verified from the committed config spec (cell source of truth); MTF_SET unchanged proven by F-ENG"
+  }
+ },
+ "halt_calendar": {
+  "v1_halt_count": 5,
+  "v1_halts": {
+   "BTCUSDT_intraday": "2022-04-11",
+   "ETHUSDT_intraday": "2022-07-15",
+   "NEARUSDT_intraday": "2023-01-21",
+   "SOLUSDT_intraday": "2023-04-28",
+   "ZECUSDT_intraday": "2022-06-01"
+  },
+  "v2_halt_count": 3,
+  "v2_halts": {
+   "BTCUSDT_intraday_v2": "2022-11-19",
+   "ETHUSDT_intraday_v2": "2023-11-29",
+   "ZECUSDT_intraday_v2": "2024-02-24"
+  }
+ },
+ "holding_bars_median": {
+  "v2": 7.0
+ },
+ "per_cell": {
+  "BTCUSDT_intraday_v2": {
+   "campaigns": 378,
+   "cost_stack": 229.8323,
+   "fills_without_exit_row": 0,
+   "final_equity": 2490.81,
+   "floor_halt": "2022-11-19",
+   "gross_0x": -43.3861,
+   "med_cost_bps": 14.0087,
+   "med_mfe_bps": 21.2499,
+   "net_1x": -273.2184,
+   "stress_2x": -503.0507,
+   "strip_best_1x": -296.9311,
+   "tranches": 871,
+   "win_rate_pct": 11.6402
+  },
+  "ETHUSDT_intraday_v2": {
+   "campaigns": 486,
+   "cost_stack": 261.2541,
+   "fills_without_exit_row": 0,
+   "final_equity": 2492.05,
+   "floor_halt": "2023-11-29",
+   "gross_0x": -5.8765,
+   "med_cost_bps": 14.0014,
+   "med_mfe_bps": 30.1584,
+   "net_1x": -267.1306,
+   "stress_2x": -528.3848,
+   "strip_best_1x": -321.8483,
+   "tranches": 1106,
+   "win_rate_pct": 13.1687
+  },
+  "NEARUSDT_intraday_v2": {
+   "campaigns": 487,
+   "cost_stack": 200.5475,
+   "fills_without_exit_row": 0,
+   "final_equity": 5011.69,
+   "floor_halt": null,
+   "gross_0x": 69.307,
+   "med_cost_bps": 20.0015,
+   "med_mfe_bps": 54.6117,
+   "net_1x": -131.2404,
+   "stress_2x": -331.7879,
+   "strip_best_1x": -155.5125,
+   "tranches": 1089,
+   "win_rate_pct": 15.6057
+  },
+  "SOLUSDT_intraday_v2": {
+   "campaigns": 468,
+   "cost_stack": 206.7454,
+   "fills_without_exit_row": 1,
+   "final_equity": 3000.18,
+   "floor_halt": null,
+   "gross_0x": -30.1304,
+   "med_cost_bps": 20.0218,
+   "med_mfe_bps": 45.157,
+   "net_1x": -236.8758,
+   "stress_2x": -443.6212,
+   "strip_best_1x": -254.1536,
+   "tranches": 1065,
+   "win_rate_pct": 15.3846
+  },
+  "ZECUSDT_intraday_v2": {
+   "campaigns": 509,
+   "cost_stack": 258.4362,
+   "fills_without_exit_row": 0,
+   "final_equity": 2493.41,
+   "floor_halt": "2024-02-24",
+   "gross_0x": -13.4219,
+   "med_cost_bps": 19.9875,
+   "med_mfe_bps": 30.1802,
+   "net_1x": -271.8581,
+   "stress_2x": -530.2943,
+   "strip_best_1x": -306.6771,
+   "tranches": 1130,
+   "win_rate_pct": 12.9666
+  }
+ },
+ "pinned_v1": {
+  "campaigns": 1550,
+  "gross_0x": 113.0427,
+  "halts": {
+   "BTCUSDT_intraday": "2022-04-11",
+   "ETHUSDT_intraday": "2022-07-15",
+   "NEARUSDT_intraday": "2023-01-21",
+   "SOLUSDT_intraday": "2023-04-28",
+   "ZECUSDT_intraday": "2022-06-01"
+  },
+  "med_mfe_bps": 13.0398,
+  "net_1x": -1362.5619,
+  "ratio": 0.6533,
+  "toll": 19.9615,
+  "tranches": 3664
+ },
+ "predictions": {
+  "P-TC5-a": {
+   "bar": 1.3,
+   "prior": 60,
+   "v1_ratio": 0.6533,
+   "v2_ratio": 1.7896,
+   "verdict": "CONFIRMED"
+  },
+  "P-TC5-b": {
+   "bar": -862.5619,
+   "prior": 55,
+   "v2_net_1x": -1180.3234,
+   "verdict": "FALSIFIED"
+  },
+  "P-TC5-c": {
+   "band": [
+    465,
+    930
+   ],
+   "prior": 60,
+   "v2_campaigns": 2328,
+   "verdict": "FALSIFIED"
+  },
+  "P-TC5-d": {
+   "all_later": true,
+   "fewer_than_5": true,
+   "prior": 60,
+   "v2_halt_count": 3,
+   "verdict": "CONFIRMED"
+  },
+  "P-TC5-e": {
+   "d_swing": 87.3671,
+   "d_v1": 75.5585,
+   "nearer": "v1",
+   "prior": 55,
+   "verdict": "FALSIFIED"
+  },
+  "P-TC5-f": {
+   "bar": 1.0,
+   "prior": 65,
+   "v2_ratio": 1.7896,
+   "verdict": "CONFIRMED"
+  }
+ },
+ "signal_mix_per_100_gov_bars": {
+  "distance_to_swing": 87.3671,
+  "distance_to_v1": 75.5585,
+  "nearer": "v1",
+  "swing": {
+   "CLUSTER": 31.2361,
+   "CONFIRM": 29.3185,
+   "PRIME": 83.5701,
+   "TAG": 87.8913,
+   "TPW": 2.9515,
+   "V": 0.0773,
+   "X": 1.4338
+  },
+  "v1_intraday": {
+   "CLUSTER": 11.8265,
+   "CONFIRM": 34.2721,
+   "PRIME": 94.0509,
+   "TAG": 102.6953,
+   "TPW": 0.0717,
+   "V": 0.0603,
+   "X": 1.5981
+  },
+  "v2": {
+   "CLUSTER": 7.763,
+   "CONFIRM": 8.3058,
+   "PRIME": 22.5646,
+   "TAG": 39.8675,
+   "TPW": 0.063,
+   "V": 0.1511,
+   "X": 1.3862
+  }
+ },
+ "thesis_table": {
+  "toll_definition": "median cost_bps (fees+funding+slippage / notional), pooled resolved tranches",
+  "v1_pinned": {
+   "campaigns": 1550,
+   "med_mfe_bps": 13.0398,
+   "net_1x": -1362.5619,
+   "ratio": 0.6533,
+   "toll": 19.9615,
+   "tranches": 3664
+  },
+  "v2": {
+   "campaigns": 2328,
+   "med_mfe_bps": 35.6603,
+   "mfe_bps_p10_50_90": [
+    0.0,
+    35.6603,
+    319.8839
+   ],
+   "net_1x": -1180.3234,
+   "ratio": 1.7896,
+   "toll": 19.9264,
+   "tranches": 5261
+  }
+ },
+ "v1_selfcheck": {
+  "med_mfe_bps": 13.0398,
+  "net_1x": -1362.5619,
+  "reproduces_pinned": true,
+  "toll": 19.9615
+ }
+}

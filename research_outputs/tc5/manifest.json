@@ -1,0 +1,70 @@
+{
+ "align_ruling": "tf_align=1h (governor) per Amendment 1",
+ "base_config": "v12_anchor_g8",
+ "cells": {
+  "BTCUSDT_intraday_v2": {
+   "config_sha256": "3f80a27b70eb2265b5e3f6517f108eab80483038e2b3f19548fdd624e31bfb76",
+   "final_equity": 2490.81,
+   "halts": 90,
+   "match": true,
+   "rerun_sha256": "1ec58f712a8250576da3113184037f5fb1e87b6e376e1d0fb39f8c5c91e1cc48",
+   "rows": 61667,
+   "run_id": "093efabe09c36895",
+   "sha256": "1ec58f712a8250576da3113184037f5fb1e87b6e376e1d0fb39f8c5c91e1cc48",
+   "signal_events": 47639,
+   "tranches": 871
+  },
+  "ETHUSDT_intraday_v2": {
+   "config_sha256": "4c3cd13249a9986aac00e5e0bab3d1d6fd5ab8b4c99a0c191137979a84d5baeb",
+   "final_equity": 2492.05,
+   "halts": 95,
+   "match": true,
+   "rerun_sha256": "224f68349f90e12b935869868c437e14874662139450595a9a51c49157659d62",
+   "rows": 56866,
+   "run_id": "050329ba5a6f5816",
+   "sha256": "224f68349f90e12b935869868c437e14874662139450595a9a51c49157659d62",
+   "signal_events": 43467,
+   "tranches": 1106
+  },
+  "NEARUSDT_intraday_v2": {
+   "config_sha256": "2ec1432fbd70bb1051046de7d4c8f0cb96c79a403cce30e0b00e434957faf72c",
+   "final_equity": 5011.69,
+   "halts": 47,
+   "match": true,
+   "rerun_sha256": "efae62b70415175516ca48553959eccf3b367e8214494fcdc5d961b0ee0afe11",
+   "rows": 45878,
+   "run_id": "1ae8d286ca39986a",
+   "sha256": "efae62b70415175516ca48553959eccf3b367e8214494fcdc5d961b0ee0afe11",
+   "signal_events": 34746,
+   "tranches": 1089
+  },
+  "SOLUSDT_intraday_v2": {
+   "config_sha256": "307be3ccc720d4c3a5880d56aaa52219b97ab0420f496c4f796c802957ac2187",
+   "final_equity": 3000.18,
+   "halts": 45,
+   "match": true,
+   "rerun_sha256": "1d0c33535ba224a8bf1c09be19be814bde6ccded0945906bd94b6e3f29c68a32",
+   "rows": 45118,
+   "run_id": "f0d235c4eb3644f9",
+   "sha256": "1d0c33535ba224a8bf1c09be19be814bde6ccded0945906bd94b6e3f29c68a32",
+   "signal_events": 33943,
+   "tranches": 1066
+  },
+  "ZECUSDT_intraday_v2": {
+   "config_sha256": "010b9dfc2318ed368ade9e9e03449a52a1c815c37284c16ce188db163e6c7480",
+   "final_equity": 2493.41,
+   "halts": 73,
+   "match": true,
+   "rerun_sha256": "45fc298e0306ce033e23f14ecf72c0ca9f2bbde5ea22b7c1bc0ef36ff3edcab3",
+   "rows": 55841,
+   "run_id": "d88af9f2a6752268",
+   "sha256": "45fc298e0306ce033e23f14ecf72c0ca9f2bbde5ea22b7c1bc0ef36ff3edcab3",
+   "signal_events": 43483,
+   "tranches": 1130
+  }
+ },
+ "contract": "TC5_Intraday_Respec_Builder_Contract.md + Amendment 1",
+ "determinism_all_identical": true,
+ "engine_version": "1.0.10",
+ "phase": "TC-5 intraday re-spec 1H/5m (config-only)"
+}

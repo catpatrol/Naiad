@@ -1,0 +1,17 @@
+[journal_tc5] SOLUSDT_intraday_v2  rows= 45118 eq=  3000.18 halts=45 sha=1d0c33535ba2 28.9s (1/5, t+30s)
+[journal_tc5] ETHUSDT_intraday_v2  rows= 56866 eq=  2492.05 halts=95 sha=224f68349f90 36.8s (2/5, t+38s)
+[journal_tc5] BTCUSDT_intraday_v2  rows= 61667 eq=  2490.81 halts=90 sha=1ec58f712a82 38.2s (3/5, t+39s)
+[journal_tc5] NEARUSDT_intraday_v2 rows= 45878 eq=  5011.69 halts=47 sha=efae62b70415 31.3s (4/5, t+61s)
+[journal_tc5] ZECUSDT_intraday_v2  rows= 55841 eq=  2493.41 halts=73 sha=45fc298e0306 31.5s (5/5, t+69s)
+[journal_tc5_run2] SOLUSDT_intraday_v2  rows= 45118 eq=  3000.18 halts=45 sha=1d0c33535ba2 33.4s (1/5, t+35s)
+[journal_tc5_run2] BTCUSDT_intraday_v2  rows= 61667 eq=  2490.81 halts=90 sha=1ec58f712a82 42.2s (2/5, t+44s)
+[journal_tc5_run2] ETHUSDT_intraday_v2  rows= 56866 eq=  2492.05 halts=95 sha=224f68349f90 42.9s (3/5, t+44s)
+[journal_tc5_run2] NEARUSDT_intraday_v2 rows= 45878 eq=  5011.69 halts=47 sha=efae62b70415 31.1s (4/5, t+66s)
+[journal_tc5_run2] ZECUSDT_intraday_v2  rows= 55841 eq=  2493.41 halts=73 sha=45fc298e0306 31.5s (5/5, t+75s)
+BTCUSDT_intraday_v2  MATCH
+ETHUSDT_intraday_v2  MATCH
+NEARUSDT_intraday_v2 MATCH
+SOLUSDT_intraday_v2  MATCH
+ZECUSDT_intraday_v2  MATCH
+
+DETERMINISM: ALL IDENTICAL
