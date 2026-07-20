@@ -1,0 +1,615 @@
+{
+ "D1_decision_table": {
+  "baseline": {
+   "GRID": {
+    "campaigns": 2599,
+    "cost_stack": 2072.9854,
+    "sign_flip_on_strip": false,
+    "strip_best_1x": -1911.4449,
+    "sum_0x": 275.9924,
+    "sum_1x_proxy": -1796.993,
+    "top10_share_of_sum_wins_pct": 28.585,
+    "tranches": 6279,
+    "win_rate_pct": 10.8503
+   },
+   "denominator": "baseline-R",
+   "intraday": {
+    "campaigns": 1634,
+    "cost_stack": 1538.7697,
+    "sign_flip_on_strip": false,
+    "strip_best_1x": -1482.1857,
+    "sum_0x": 97.6967,
+    "sum_1x_proxy": -1441.073,
+    "top10_share_of_sum_wins_pct": 33.2633,
+    "tranches": 3874,
+    "win_rate_pct": 9.3635
+   },
+   "position": {
+    "campaigns": 211,
+    "cost_stack": 73.7245,
+    "sign_flip_on_strip": false,
+    "strip_best_1x": -109.9354,
+    "sum_0x": -0.0707,
+    "sum_1x_proxy": -73.7952,
+    "top10_share_of_sum_wins_pct": 84.0269,
+    "tranches": 532,
+    "win_rate_pct": 15.1659
+   },
+   "swing": {
+    "campaigns": 754,
+    "cost_stack": 460.4912,
+    "sign_flip_on_strip": false,
+    "strip_best_1x": -396.5767,
+    "sum_0x": 178.3664,
+    "sum_1x_proxy": -282.1248,
+    "top10_share_of_sum_wins_pct": 52.0922,
+    "tranches": 1873,
+    "win_rate_pct": 12.8647
+   }
+  },
+  "fold": {
+   "GRID": {
+    "campaigns": 2599,
+    "cost_stack": 2072.9854,
+    "sign_flip_on_strip": false,
+    "strip_best_1x": -1799.6736,
+    "sum_0x": 506.279,
+    "sum_1x_proxy": -1566.7064,
+    "top10_share_of_sum_wins_pct": 50.9925,
+    "tranches": 6279,
+    "win_rate_pct": 6.1562
+   },
+   "denominator": "baseline-R",
+   "intraday": {
+    "campaigns": 1634,
+    "cost_stack": 1538.7697,
+    "sign_flip_on_strip": false,
+    "strip_best_1x": -1895.633,
+    "sum_0x": -214.0648,
+    "sum_1x_proxy": -1752.8345,
+    "top10_share_of_sum_wins_pct": 67.3485,
+    "tranches": 3874,
+    "win_rate_pct": 5.3856
+   },
+   "position": {
+    "campaigns": 211,
+    "cost_stack": 73.7245,
+    "sign_flip_on_strip": false,
+    "strip_best_1x": 151.2716,
+    "sum_0x": 457.9633,
+    "sum_1x_proxy": 384.2388,
+    "top10_share_of_sum_wins_pct": 98.1902,
+    "tranches": 532,
+    "win_rate_pct": 9.4787
+   },
+   "swing": {
+    "campaigns": 754,
+    "cost_stack": 460.4912,
+    "sign_flip_on_strip": false,
+    "strip_best_1x": -352.9225,
+    "sum_0x": 262.3805,
+    "sum_1x_proxy": -198.1107,
+    "top10_share_of_sum_wins_pct": 75.6524,
+    "tranches": 1873,
+    "win_rate_pct": 6.8966
+   }
+  },
+  "struct1h": {
+   "GRID": {
+    "campaigns": 2599,
+    "cost_stack": 606.9916,
+    "sign_flip_on_strip": false,
+    "strip_best_1x": 301.9922,
+    "sum_0x": 1172.5709,
+    "sum_1x_proxy": 565.5794,
+    "top10_share_of_sum_wins_pct": 38.0054,
+    "tranches": 6279,
+    "win_rate_pct": 13.7745
+   },
+   "denominator": "struct-R",
+   "intraday": {
+    "campaigns": 1634,
+    "cost_stack": 400.0842,
+    "sign_flip_on_strip": false,
+    "strip_best_1x": -401.8457,
+    "sum_0x": 92.6539,
+    "sum_1x_proxy": -307.4303,
+    "top10_share_of_sum_wins_pct": 30.412,
+    "tranches": 3874,
+    "win_rate_pct": 14.0147
+   },
+   "position": {
+    "campaigns": 211,
+    "cost_stack": 47.8236,
+    "sign_flip_on_strip": false,
+    "strip_best_1x": 224.6071,
+    "sum_0x": 536.0179,
+    "sum_1x_proxy": 488.1942,
+    "top10_share_of_sum_wins_pct": 93.5143,
+    "tranches": 532,
+    "win_rate_pct": 11.3744
+   },
+   "swing": {
+    "campaigns": 754,
+    "cost_stack": 159.0837,
+    "sign_flip_on_strip": false,
+    "strip_best_1x": 250.6203,
+    "sum_0x": 543.8992,
+    "sum_1x_proxy": 384.8154,
+    "top10_share_of_sum_wins_pct": 59.881,
+    "tranches": 1873,
+    "win_rate_pct": 13.9257
+   }
+  },
+  "struct30": {
+   "GRID": {
+    "campaigns": 2599,
+    "cost_stack": 742.9377,
+    "sign_flip_on_strip": true,
+    "strip_best_1x": -133.4928,
+    "sum_0x": 1106.4739,
+    "sum_1x_proxy": 363.5363,
+    "top10_share_of_sum_wins_pct": 50.6222,
+    "tranches": 6279,
+    "win_rate_pct": 11.4275
+   },
+   "denominator": "struct-R",
+   "intraday": {
+    "campaigns": 1634,
+    "cost_stack": 452.2284,
+    "sign_flip_on_strip": false,
+    "strip_best_1x": -707.0426,
+    "sum_0x": -203.5164,
+    "sum_1x_proxy": -655.7449,
+    "top10_share_of_sum_wins_pct": 30.2363,
+    "tranches": 3874,
+    "win_rate_pct": 12.4235
+   },
+   "position": {
+    "campaigns": 211,
+    "cost_stack": 65.6698,
+    "sign_flip_on_strip": false,
+    "strip_best_1x": 321.5427,
+    "sum_0x": 884.2416,
+    "sum_1x_proxy": 818.5718,
+    "top10_share_of_sum_wins_pct": 99.4213,
+    "tranches": 532,
+    "win_rate_pct": 6.6351
+   },
+   "swing": {
+    "campaigns": 754,
+    "cost_stack": 225.0394,
+    "sign_flip_on_strip": false,
+    "strip_best_1x": 40.5996,
+    "sum_0x": 425.7487,
+    "sum_1x_proxy": 200.7093,
+    "top10_share_of_sum_wins_pct": 67.2252,
+    "tranches": 1873,
+    "win_rate_pct": 10.6101
+   }
+  },
+  "struct_ratcheting": {
+   "denominator": "struct-R",
+   "status": "NAMED-UNMEASURED (blank by design): re-anchors the structural stop to each newer confirmed pivot; not priced this phase \u2014 TC-1's cell"
+  }
+ },
+ "D2_concentration": {
+  "baseline": {
+   "GRID": {
+    "sign_flip_on_strip": false,
+    "strip_best_1x": -1911.4449,
+    "sum_1x_proxy": -1796.993,
+    "top10_share_of_sum_wins_pct": 28.585
+   },
+   "intraday": {
+    "sign_flip_on_strip": false,
+    "strip_best_1x": -1482.1857,
+    "sum_1x_proxy": -1441.073,
+    "top10_share_of_sum_wins_pct": 33.2633
+   },
+   "position": {
+    "sign_flip_on_strip": false,
+    "strip_best_1x": -109.9354,
+    "sum_1x_proxy": -73.7952,
+    "top10_share_of_sum_wins_pct": 84.0269
+   },
+   "swing": {
+    "sign_flip_on_strip": false,
+    "strip_best_1x": -396.5767,
+    "sum_1x_proxy": -282.1248,
+    "top10_share_of_sum_wins_pct": 52.0922
+   }
+  },
+  "fold": {
+   "GRID": {
+    "sign_flip_on_strip": false,
+    "strip_best_1x": -1799.6736,
+    "sum_1x_proxy": -1566.7064,
+    "top10_share_of_sum_wins_pct": 50.9925
+   },
+   "intraday": {
+    "sign_flip_on_strip": false,
+    "strip_best_1x": -1895.633,
+    "sum_1x_proxy": -1752.8345,
+    "top10_share_of_sum_wins_pct": 67.3485
+   },
+   "position": {
+    "sign_flip_on_strip": false,
+    "strip_best_1x": 151.2716,
+    "sum_1x_proxy": 384.2388,
+    "top10_share_of_sum_wins_pct": 98.1902
+   },
+   "swing": {
+    "sign_flip_on_strip": false,
+    "strip_best_1x": -352.9225,
+    "sum_1x_proxy": -198.1107,
+    "top10_share_of_sum_wins_pct": 75.6524
+   }
+  },
+  "struct1h": {
+   "GRID": {
+    "sign_flip_on_strip": false,
+    "strip_best_1x": 301.9922,
+    "sum_1x_proxy": 565.5794,
+    "top10_share_of_sum_wins_pct": 38.0054
+   },
+   "intraday": {
+    "sign_flip_on_strip": false,
+    "strip_best_1x": -401.8457,
+    "sum_1x_proxy": -307.4303,
+    "top10_share_of_sum_wins_pct": 30.412
+   },
+   "position": {
+    "sign_flip_on_strip": false,
+    "strip_best_1x": 224.6071,
+    "sum_1x_proxy": 488.1942,
+    "top10_share_of_sum_wins_pct": 93.5143
+   },
+   "swing": {
+    "sign_flip_on_strip": false,
+    "strip_best_1x": 250.6203,
+    "sum_1x_proxy": 384.8154,
+    "top10_share_of_sum_wins_pct": 59.881
+   }
+  },
+  "struct30": {
+   "GRID": {
+    "sign_flip_on_strip": true,
+    "strip_best_1x": -133.4928,
+    "sum_1x_proxy": 363.5363,
+    "top10_share_of_sum_wins_pct": 50.6222
+   },
+   "intraday": {
+    "sign_flip_on_strip": false,
+    "strip_best_1x": -707.0426,
+    "sum_1x_proxy": -655.7449,
+    "top10_share_of_sum_wins_pct": 30.2363
+   },
+   "position": {
+    "sign_flip_on_strip": false,
+    "strip_best_1x": 321.5427,
+    "sum_1x_proxy": 818.5718,
+    "top10_share_of_sum_wins_pct": 99.4213
+   },
+   "swing": {
+    "sign_flip_on_strip": false,
+    "strip_best_1x": 40.5996,
+    "sum_1x_proxy": 200.7093,
+    "top10_share_of_sum_wins_pct": 67.2252
+   }
+  }
+ },
+ "D3_distributions": {
+  "denominator_ratio_bps": {
+   "1h": {
+    "intraday": {
+     "n": 3874,
+     "p25_50_75": [
+      3.2384,
+      7.3679,
+      15.0017
+     ]
+    },
+    "position": {
+     "n": 532,
+     "p25_50_75": [
+      1.0572,
+      1.9199,
+      3.2432
+     ]
+    },
+    "swing": {
+     "n": 1873,
+     "p25_50_75": [
+      2.1827,
+      4.1165,
+      6.9858
+     ]
+    }
+   },
+   "30m": {
+    "intraday": {
+     "n": 3874,
+     "p25_50_75": [
+      2.7732,
+      6.0039,
+      11.2595
+     ]
+    },
+    "position": {
+     "n": 527,
+     "p25_50_75": [
+      0.7409,
+      1.2264,
+      1.9974
+     ]
+    },
+    "swing": {
+     "n": 1871,
+     "p25_50_75": [
+      1.4791,
+      2.6359,
+      4.5745
+     ]
+    }
+   }
+  },
+  "holding_bars_median": {
+   "baseline": {
+    "intraday": 7.0,
+    "position": 8.0,
+    "swing": 8.0
+   },
+   "fold": {
+    "intraday": 7.0,
+    "position": 8.0,
+    "swing": 8.0
+   },
+   "struct1h": {
+    "intraday": 347.0,
+    "position": 29.0,
+    "swing": 128.0
+   },
+   "struct30": {
+    "intraday": 252.0,
+    "position": 11.5,
+    "swing": 55.0
+   }
+  },
+  "win_rate_by_exit_reason": {
+   "baseline": {
+    "campaign_died": {
+     "n": 4,
+     "win_pct": 25.0
+    },
+    "failure_x": {
+     "n": 9,
+     "win_pct": 33.3333
+    },
+    "opposite_cross": {
+     "n": 3,
+     "win_pct": 66.6667
+    },
+    "stop": {
+     "n": 6223,
+     "win_pct": 16.2301
+    },
+    "stop_gap": {
+     "n": 40,
+     "win_pct": 10.0
+    }
+   },
+   "fold": {
+    "flatten": {
+     "n": 93,
+     "win_pct": 84.9462
+    },
+    "gap": {
+     "n": 36,
+     "win_pct": 2.7778
+    },
+    "stop": {
+     "n": 6150,
+     "win_pct": 5.2683
+    }
+   },
+   "struct1h": {
+    "flatten_baseline_death": {
+     "n": 15,
+     "win_pct": 33.3333
+    },
+    "flatten_ride_to_death": {
+     "n": 2259,
+     "win_pct": 40.5046
+    },
+    "gap": {
+     "n": 8,
+     "win_pct": 0.0
+    },
+    "stop": {
+     "n": 3997,
+     "win_pct": 0.0
+    }
+   },
+   "struct30": {
+    "flatten_baseline_death": {
+     "n": 15,
+     "win_pct": 33.3333
+    },
+    "flatten_ride_to_death": {
+     "n": 1755,
+     "win_pct": 43.0769
+    },
+    "gap": {
+     "n": 9,
+     "win_pct": 0.0
+    },
+    "stop": {
+     "n": 4493,
+     "win_pct": 0.0
+    },
+    "void_baseline_kept": {
+     "n": 7,
+     "win_pct": 0.0
+    }
+   }
+  }
+ },
+ "D4_fold_mirror": {
+  "baseline_cost_stack": 2072.9854,
+  "cost_identity_component": 0.0,
+  "cost_stack": 2072.9854,
+  "exit_census": {
+   "flatten": 93,
+   "native_stop_pre_engage": 1524,
+   "trail_exit_post_engage": 4662
+  },
+  "gross_component": 230.2866,
+  "note": "cost-identity component should be ~0 (same entries, same baseline denominator, cost_r unchanged) \u2014 the decomposition-method sanity check; nonzero would mean the cost split is mis-derived",
+  "swing_vs_baseline": 230.2866
+ },
+ "D5_m2_overlap": {
+  "clears_2xtoll_under_1h": {
+   "n": 3247,
+   "pct": 85.4249,
+   "still_under_or_void": 554,
+   "void_in_flagged": 0
+  },
+  "clears_2xtoll_under_30m": {
+   "n": 3133,
+   "pct": 82.4257,
+   "still_under_or_void": 668,
+   "void_in_flagged": 0
+  },
+  "denominator": "baseline stop_bps < 2xtoll; struct clears iff struct stop_dist_bps >= 2xtoll",
+  "floor_passes_but_1h_under": 98,
+  "floor_passes_but_30m_under": 171,
+  "m2_flagged_fills": 3801
+ },
+ "D6_joint": {
+  "diagnostic_interaction_region_1h": 4019,
+  "diagnostic_note": "tranches where the post-engagement fold trail exits strictly before the 1h structural stop \u2014 the region where the two lines genuinely interact and TC-1's re-simulation is required. Descriptive only.",
+  "missing_field": "the gov-e200 trail re-seeded/re-walked under the STRUCTURAL stop as phase-1 floor. Journals carry the native-seeded trail (fold book) and the fixed structural stop (struct book) but NOT their interaction: the joint's trail would seed at the wider structural stop, so the native-seeded fold trail is not a faithful substitute. A naive first-touch min() over the two journaled books would misprice exactly the pre-engagement region (fold native-stop exits the joint replaces with the wider structural floor). No joint R priced.",
+  "reviewer_ruling": "the real interaction is TC-1's fourth cell either way (contract 4.D6)",
+  "status": "PARTIAL"
+ },
+ "D7_ride_to_death": {
+  "denominator": "struct-R",
+  "note": "the shape of what the doctrine actually buys: baseline stopped these out, the structural stop rode them to campaign death",
+  "per_mandate": {
+   "1h": {
+    "intraday": {
+     "mean_bars": 3443.0191,
+     "mean_cell_r": 0.6003,
+     "n": 1679
+    },
+    "position": {
+     "mean_bars": 4550.3871,
+     "mean_cell_r": 11.9713,
+     "n": 62
+    },
+    "swing": {
+     "mean_bars": 3180.9865,
+     "mean_cell_r": 2.1958,
+     "n": 518
+    }
+   },
+   "30m": {
+    "intraday": {
+     "mean_bars": 3329.7848,
+     "mean_cell_r": 0.5916,
+     "n": 1422
+    },
+    "position": {
+     "mean_bars": 4743.0833,
+     "mean_cell_r": 30.5832,
+     "n": 36
+    },
+    "swing": {
+     "mean_bars": 3524.7003,
+     "mean_cell_r": 3.754,
+     "n": 297
+    }
+   }
+  }
+ },
+ "caveat": "in-sample; first-order (rail/halt/equity feedback ignored, entries fixed); 1x-proxy costs; struct books denominated in the wider structural one_r; flatten-reason split is the disclosed proxy",
+ "fixtures": {
+  "F1": {
+   "campaigns": 2599,
+   "match": true,
+   "sum_0x": 275.9924,
+   "sum_1x": -1796.993,
+   "win_pct": 10.8503
+  },
+  "F2": {
+   "1h": {
+    "baseline_death": 15,
+    "book_1x": 565.5794,
+    "gap": 8,
+    "match": true,
+    "ride_to_death": 2259,
+    "stop": 3997,
+    "void": 0
+   },
+   "30m": {
+    "baseline_death": 15,
+    "book_1x": 363.5363,
+    "gap": 9,
+    "match": true,
+    "ride_to_death": 1755,
+    "stop": 4493,
+    "void": 7
+   },
+   "match": true
+  },
+  "F3": {
+   "1h_cost_identity": 1465.9938,
+   "1h_gross": 896.5785,
+   "1h_ident_pct": 62.0507,
+   "1h_swing": 2362.5724,
+   "baseline_cost": 2072.9854,
+   "cost_1h": 606.9916,
+   "cost_30m": 742.9377,
+   "match": true
+  },
+  "F4": {
+   "fold_grid_0x": 506.279,
+   "fold_position_1x_proxy": 384.2388,
+   "match": true
+  }
+ },
+ "predictions": {
+  "P-S2b-1": {
+   "denominator": "struct-R",
+   "f4_1h_intraday_1x": -307.4303,
+   "prior": 60,
+   "verdict": "FALSIFIED"
+  },
+  "P-S2b-2": {
+   "f4_1h_grid_strip_best": 301.9922,
+   "prior": 65,
+   "verdict": "CONFIRMED"
+  },
+  "P-S2b-3": {
+   "deviation_pct": 0.0,
+   "fold_cost_stack": 2072.9854,
+   "prior": 70,
+   "verdict": "CONFIRMED"
+  },
+  "P-S2b-4": {
+   "clears_1h_pct": 85.4249,
+   "prior": 60,
+   "verdict": "CONFIRMED"
+  },
+  "P-S2b-5": {
+   "hold_ratio_1h_vs_baseline": {
+    "intraday": 49.5714,
+    "position": 3.625,
+    "swing": 16.0
+   },
+   "prior": 60,
+   "verdict": "CONFIRMED"
+  }
+ }
+}
