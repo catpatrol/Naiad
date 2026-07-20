@@ -65,3 +65,23 @@ Every table states its denominator. baseline & fold-in = baseline-R (native one_
 | P-S2b-5 | **CONFIRMED** | `{"hold_ratio_1h_vs_baseline": {"swing": 16.0, "intraday": 49.5714, "position": 3.625}}` |
 
 *scripts/s2b_decompose.py; raw journal bytes; read-only.*
+
+## F5 (determinism) — appended post-generation
+
+Manual annotation (the generated body above hashes to `886bb7de…`; this
+section is appended by hand, so the committed file's hash differs from the
+generation hash — both are recorded in the ledger).
+
+`scripts/s2b_decompose.py` run twice, output hashes IDENTICAL:
+- `sha256(s2b_results.json)` = `0a892053d8148c7af2c2b2eca880e3844f38d74e3ace599bff2289f20e2b3bf9` (both runs)
+- `sha256(S2B_DECOMPOSITION.md, generated)` = `886bb7dedb57eb093ae8cbcb9697ba49105c3a368bef7b131cdb4d68c10da6f6` (both runs)
+
+F5 MATCH.
+
+**D5 reconciliation (m=2-flagged fills):** 3,813 flagged of 6,304 total
+fills = 3,801 of 6,279 resolved + 12 of the 25 buffered/open fills (fills
+whose EXIT row is unresolved at window end, absent from every architecture
+book). Verified from raw bytes: total 6,304 / resolved 6,279 / unresolved
+25; flagged all 3,813 / resolved 3,801 / unresolved 12. The 12 are exactly
+among the 25. S-2b's D5 percentages are computed on the resolved 3,801;
+the count difference is the 12 unresolved-and-flagged, not a discrepancy.
