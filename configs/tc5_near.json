@@ -1,0 +1,12 @@
+{
+ "base_config": "v12_anchor_g8",
+ "cell_id": "NEARUSDT_intraday_v2",
+ "end": "2024-06-30T23:59",
+ "mandate": "intraday_v2",
+ "slippage_bps": 5.0,
+ "start": "2020-11-01",
+ "symbol": "NEARUSDT",
+ "tf_align": "1h",
+ "tf_exec": "5m",
+ "tf_gov": "1h"
+}

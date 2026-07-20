@@ -1,0 +1,12 @@
+{
+ "base_config": "v12_anchor_g8",
+ "cell_id": "BTCUSDT_intraday_v2",
+ "end": "2024-06-30T23:59",
+ "mandate": "intraday_v2",
+ "slippage_bps": 2.0,
+ "start": "2019-10-01",
+ "symbol": "BTCUSDT",
+ "tf_align": "1h",
+ "tf_exec": "5m",
+ "tf_gov": "1h"
+}
