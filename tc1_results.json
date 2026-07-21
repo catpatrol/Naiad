@@ -1,0 +1,362 @@
+{
+ "caveat": "in-sample; REAL runs (path effects \u2014 re-entry suppression, concurrency, funding, rail/halt feedback \u2014 are measured, not noise); B/D denominated in struct-R, A/C in baseline-R; prediction basis s2b D1 (the 38% gross, not the +2360 headline).",
+ "denominators": {
+  "A": "baseline-R",
+  "B": "struct-R",
+  "C": "baseline-R",
+  "D": "struct-R"
+ },
+ "factorial": {
+  "caveat": "B/D are struct-R, A/C baseline-R; the interaction mixes denominators \u2014 read directional, not additive-exact (contract \u00a77).",
+  "table": {
+   "GRID": {
+    "A": -1796.993,
+    "B": -351.1542,
+    "C": -1357.8778,
+    "D": -614.6116,
+    "interaction_D_B_C_A": -702.5726,
+    "stop_effect_B_minus_A": 1445.8388,
+    "trail_effect_C_minus_A": 439.1152
+   },
+   "intraday": {
+    "A": -1441.073,
+    "B": -383.6233,
+    "C": -1409.7884,
+    "D": -546.3205,
+    "interaction_D_B_C_A": -193.9818,
+    "stop_effect_B_minus_A": 1057.4497,
+    "trail_effect_C_minus_A": 31.2846
+   },
+   "position": {
+    "A": -73.7952,
+    "B": -49.056,
+    "C": 279.7283,
+    "D": -52.682,
+    "interaction_D_B_C_A": -357.1495,
+    "stop_effect_B_minus_A": 24.7392,
+    "trail_effect_C_minus_A": 353.5235
+   },
+   "swing": {
+    "A": -282.1248,
+    "B": 81.5251,
+    "C": -227.8177,
+    "D": -15.609,
+    "interaction_D_B_C_A": -151.4412,
+    "stop_effect_B_minus_A": 363.6499,
+    "trail_effect_C_minus_A": 54.3071
+   }
+  }
+ },
+ "fixtures": {
+  "F-A-BYTE": {
+   "match": true,
+   "mismatched_cells": []
+  },
+  "F-ARCH-B": {
+   "B_nonstatic_intrabar_exits": 0,
+   "B_stopgap_wrong_side": 0,
+   "match": true,
+   "note": "static verified on intra-bar `stop` exits; `stop_gap` fills at the open (invariant 3), checked on the losing side of the static stop",
+   "struct_recompute_violations": 0
+  },
+  "F-CFG": {
+   "match": true
+  },
+  "F-DET": {
+   "manifest": true,
+   "match": true,
+   "mismatched": []
+  },
+  "F-GUARDS": {
+   "all_hold": true,
+   "match": true
+  },
+  "F-SIG-ALL": {
+   "match": true,
+   "mismatched": []
+  },
+  "F-TRAIL": {
+   "loosening_violations": 0,
+   "match": true,
+   "note": "C/D intra-bar stop-exits never below the entry stop (one-way); strict per-bar monotonicity + D floor unit-tested (test_tc1_arch); stop_gap fills at the open per invariant 3",
+   "stop_gap_exits_excluded": 75
+  }
+ },
+ "per_cell_arm_headlines": {
+  "A": {
+   "GRID": {
+    "campaigns": 758,
+    "cost_stack": 2072.9854,
+    "strip_best_1x": -1913.765,
+    "sum_0x": 275.9924,
+    "sum_1x": -1796.993,
+    "sum_2x": -3869.9784,
+    "tranches": 6279,
+    "win_rate_pct": 14.248
+   },
+   "add_ineligible_rejects": null,
+   "denominator": "baseline-R",
+   "fill_class": {
+    "r1": 2447,
+    "re_entry": 2917,
+    "true_add": 883,
+    "v": 32
+   },
+   "fills_without_exit_row": 25,
+   "halts": {
+    "BTCUSDT_intraday": "2022-04-11",
+    "ETHUSDT_intraday": "2022-07-15",
+    "NEARUSDT_intraday": "2023-01-21",
+    "SOLUSDT_intraday": "2023-04-28",
+    "ZECUSDT_intraday": "2022-06-01"
+   },
+   "intraday": {
+    "campaigns": 463,
+    "cost_stack": 1538.7697,
+    "strip_best_1x": -1471.9799,
+    "sum_0x": 97.6967,
+    "sum_1x": -1441.073,
+    "sum_2x": -2979.8427,
+    "tranches": 3874,
+    "win_rate_pct": 12.095
+   },
+   "position": {
+    "campaigns": 74,
+    "cost_stack": 73.7245,
+    "strip_best_1x": -111.5892,
+    "sum_0x": -0.0707,
+    "sum_1x": -73.7952,
+    "sum_2x": -147.5197,
+    "tranches": 532,
+    "win_rate_pct": 14.8649
+   },
+   "swing": {
+    "campaigns": 221,
+    "cost_stack": 460.4912,
+    "strip_best_1x": -398.8968,
+    "sum_0x": 178.3664,
+    "sum_1x": -282.1248,
+    "sum_2x": -742.616,
+    "tranches": 1873,
+    "win_rate_pct": 18.552
+   }
+  },
+  "B": {
+   "GRID": {
+    "campaigns": 1186,
+    "cost_stack": 1515.5744,
+    "strip_best_1x": -542.751,
+    "sum_0x": 1164.4202,
+    "sum_1x": -351.1542,
+    "sum_2x": -1866.7286,
+    "tranches": 7094,
+    "win_rate_pct": 21.3322
+   },
+   "add_ineligible_rejects": null,
+   "denominator": "struct-R",
+   "fill_class": {
+    "r1": 3814,
+    "re_entry": 3202,
+    "v": 78
+   },
+   "fills_without_exit_row": 23,
+   "halts": {},
+   "intraday": {
+    "campaigns": 890,
+    "cost_stack": 1135.2367,
+    "strip_best_1x": -502.9213,
+    "sum_0x": 751.6134,
+    "sum_1x": -383.6233,
+    "sum_2x": -1518.8601,
+    "tranches": 5086,
+    "win_rate_pct": 21.9101
+   },
+   "position": {
+    "campaigns": 75,
+    "cost_stack": 87.4286,
+    "strip_best_1x": -80.8675,
+    "sum_0x": 38.3726,
+    "sum_1x": -49.056,
+    "sum_2x": -136.4845,
+    "tranches": 521,
+    "win_rate_pct": 20.0
+   },
+   "swing": {
+    "campaigns": 221,
+    "cost_stack": 292.9091,
+    "strip_best_1x": -110.0717,
+    "sum_0x": 374.4342,
+    "sum_1x": 81.5251,
+    "sum_2x": -211.384,
+    "tranches": 1487,
+    "win_rate_pct": 19.457
+   }
+  },
+  "C": {
+   "GRID": {
+    "campaigns": 839,
+    "cost_stack": 2055.3599,
+    "strip_best_1x": -1572.6369,
+    "sum_0x": 697.4821,
+    "sum_1x": -1357.8778,
+    "sum_2x": -3413.2377,
+    "tranches": 5579,
+    "win_rate_pct": 11.0846
+   },
+   "add_ineligible_rejects": null,
+   "denominator": "baseline-R",
+   "fill_class": {
+    "r1": 2376,
+    "re_entry": 2885,
+    "true_add": 289,
+    "v": 29
+   },
+   "fills_without_exit_row": 25,
+   "halts": {
+    "BTCUSDT_intraday": "2021-06-01",
+    "ETHUSDT_intraday": "2022-08-29",
+    "NEARUSDT_intraday": "2022-09-06",
+    "SOLUSDT_intraday": "2023-09-13",
+    "ZECUSDT_intraday": "2022-12-19"
+   },
+   "intraday": {
+    "campaigns": 544,
+    "cost_stack": 1405.9323,
+    "strip_best_1x": -1562.9302,
+    "sum_0x": -3.8561,
+    "sum_1x": -1409.7884,
+    "sum_2x": -2815.7208,
+    "tranches": 3388,
+    "win_rate_pct": 8.6397
+   },
+   "position": {
+    "campaigns": 74,
+    "cost_stack": 142.514,
+    "strip_best_1x": 64.9692,
+    "sum_0x": 422.2423,
+    "sum_1x": 279.7283,
+    "sum_2x": 137.2143,
+    "tranches": 497,
+    "win_rate_pct": 17.5676
+   },
+   "swing": {
+    "campaigns": 221,
+    "cost_stack": 506.9136,
+    "strip_best_1x": -359.3209,
+    "sum_0x": 279.0958,
+    "sum_1x": -227.8177,
+    "sum_2x": -734.7313,
+    "tranches": 1694,
+    "win_rate_pct": 14.9321
+   }
+  },
+  "D": {
+   "GRID": {
+    "campaigns": 1140,
+    "cost_stack": 1682.7839,
+    "strip_best_1x": -789.9527,
+    "sum_0x": 1068.1723,
+    "sum_1x": -614.6116,
+    "sum_2x": -2297.3955,
+    "tranches": 8813,
+    "win_rate_pct": 17.0175
+   },
+   "add_ineligible_rejects": null,
+   "denominator": "struct-R",
+   "fill_class": {
+    "r1": 3753,
+    "re_entry": 4212,
+    "true_add": 771,
+    "v": 77
+   },
+   "fills_without_exit_row": 27,
+   "halts": {
+    "ZECUSDT_intraday": "2024-03-04"
+   },
+   "intraday": {
+    "campaigns": 844,
+    "cost_stack": 1267.0889,
+    "strip_best_1x": -672.9677,
+    "sum_0x": 720.7684,
+    "sum_1x": -546.3205,
+    "sum_2x": -1813.4095,
+    "tranches": 6440,
+    "win_rate_pct": 17.654
+   },
+   "position": {
+    "campaigns": 75,
+    "cost_stack": 91.6537,
+    "strip_best_1x": -83.2737,
+    "sum_0x": 38.9717,
+    "sum_1x": -52.682,
+    "sum_2x": -144.3357,
+    "tranches": 572,
+    "win_rate_pct": 14.6667
+   },
+   "swing": {
+    "campaigns": 221,
+    "cost_stack": 324.0413,
+    "strip_best_1x": -190.9502,
+    "sum_0x": 308.4323,
+    "sum_1x": -15.609,
+    "sum_2x": -339.6504,
+    "tranches": 1801,
+    "win_rate_pct": 15.3846
+   }
+  }
+ },
+ "predictions": {
+  "P-A": {
+   "byte_identical": true,
+   "prior": 90,
+   "verdict": "CONFIRMED"
+  },
+  "P-B-1": {
+   "B_grid_1x": -351.1542,
+   "band": [
+    100,
+    900
+   ],
+   "prior": 55,
+   "verdict": "FALSIFIED"
+  },
+  "P-B-2": {
+   "B_swing_1x": 81.5251,
+   "prior": 65,
+   "verdict": "CONFIRMED"
+  },
+  "P-B-3": {
+   "B_intraday_1x": -383.6233,
+   "prior": 70,
+   "verdict": "CONFIRMED"
+  },
+  "P-C-1": {
+   "C_grid_1x": -1357.8778,
+   "band": [
+    -1900,
+    -1300
+   ],
+   "prior": 55,
+   "verdict": "CONFIRMED"
+  },
+  "P-C-2": {
+   "C_position_1x": 279.7283,
+   "prior": 60,
+   "verdict": "CONFIRMED"
+  },
+  "P-CNT": {
+   "A_tranches": 6304,
+   "B_tranches": 7094,
+   "D_tranches": 8813,
+   "cap": 4412.8,
+   "prior": 60,
+   "verdict": "FALSIFIED"
+  },
+  "P-D": {
+   "B_grid_1x": -351.1542,
+   "D_grid_1x": -614.6116,
+   "prior": 50,
+   "verdict": "FALSIFIED"
+  }
+ }
+}

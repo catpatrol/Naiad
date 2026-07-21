@@ -1,0 +1,683 @@
+{
+ "cells": {
+  "A": {
+   "BTCUSDT_intraday": {
+    "final_equity": 2493.12,
+    "halts": 170,
+    "rows": 220936,
+    "sha256": "dd02f4a72f12fccdbcf4346492b885a54be52c449f75664bdd3d69f819a19364"
+   },
+   "BTCUSDT_position": {
+    "final_equity": 10451.38,
+    "halts": 2,
+    "rows": 16587,
+    "sha256": "16e625c9028e5ecaebb291db4369f81da8f09327362cbd6f7a5e23cc1ab889d6"
+   },
+   "BTCUSDT_swing": {
+    "final_equity": 8580.58,
+    "halts": 21,
+    "rows": 47786,
+    "sha256": "bb645f50880c0bc7b3e5cad086c82aef5f31d7392fb1490157f6b0fd5bb8a437"
+   },
+   "ETHUSDT_intraday": {
+    "final_equity": 2491.34,
+    "halts": 130,
+    "rows": 209891,
+    "sha256": "eef30653d1277fd4a86901fb2e0a380e332af133218866a04426c07996106ffe"
+   },
+   "ETHUSDT_position": {
+    "final_equity": 8310.78,
+    "halts": 1,
+    "rows": 15941,
+    "sha256": "fe2000749d9e526a6179cfc1c365a8da1a76766f53beadea5300e35fcdb781cc"
+   },
+   "ETHUSDT_swing": {
+    "final_equity": 7380.84,
+    "halts": 20,
+    "rows": 47019,
+    "sha256": "0f3e1c2de02a66919f18cf8e383e1fc985329831f24a5d0daaaa7e406e6f4155"
+   },
+   "JTOUSDT_intraday": {
+    "final_equity": 7488.09,
+    "halts": 16,
+    "rows": 20109,
+    "sha256": "660444b4bbc147643a150eea76e86d0ff8c5fa285e1f13891fe63ded3c6739fa"
+   },
+   "JTOUSDT_position": {
+    "final_equity": 9828.96,
+    "halts": 0,
+    "rows": 548,
+    "sha256": "006be4d2239aecafb4cbfe2721017b26a095e4e8de6ea35dc6e40aaf0349b5f6"
+   },
+   "JTOUSDT_swing": {
+    "final_equity": 9743.3,
+    "halts": 0,
+    "rows": 3385,
+    "sha256": "1cbf1fe59acb7dace568696a16d796201154c4ee92cc509a8e5b66f80516f920"
+   },
+   "NEARUSDT_intraday": {
+    "final_equity": 2499.93,
+    "halts": 127,
+    "rows": 167995,
+    "sha256": "952c0b580c329f3a8b4efcf8c7617e1bf3692bab0327d901f2aad6820c6ca2ec"
+   },
+   "NEARUSDT_position": {
+    "final_equity": 9202.57,
+    "halts": 0,
+    "rows": 10630,
+    "sha256": "6a2d05306cfb179b8f178afdbe68c6accb448acb3589ab12cbe7e7bac5d467c0"
+   },
+   "NEARUSDT_swing": {
+    "final_equity": 9274.07,
+    "halts": 6,
+    "rows": 41014,
+    "sha256": "018010d7403acdbf01d384ad683e40d616a76170e5d55252effb00235cf4d232"
+   },
+   "SOLUSDT_intraday": {
+    "final_equity": 2498.46,
+    "halts": 122,
+    "rows": 164267,
+    "sha256": "1bb78d2b3ca55c6268bc58e15315639d55aff883d2fabecfa92dace0fd4f1483"
+   },
+   "SOLUSDT_position": {
+    "final_equity": 8964.46,
+    "halts": 0,
+    "rows": 11049,
+    "sha256": "155bf35fcf4ad41e7c07bbce766007218796ac80da6a839ce03e34044f41544c"
+   },
+   "SOLUSDT_swing": {
+    "final_equity": 7274.1,
+    "halts": 10,
+    "rows": 37412,
+    "sha256": "ecff87d56966667c02e2d55a24d646f0561cf1cf2bcfeece408d09ee9f386862"
+   },
+   "TAOUSDT_intraday": {
+    "final_equity": 9003.91,
+    "halts": 4,
+    "rows": 7449,
+    "sha256": "cccf695ba05fe631e3655eac1cb177a1a99ea66b96156a96a19bad5f26d737a8"
+   },
+   "TAOUSDT_swing": {
+    "final_equity": 9935.64,
+    "halts": 0,
+    "rows": 922,
+    "sha256": "028314f829e2d3a5053402b5aa3b08e9ff34fe3222f56ad5009f4cf31a1ba04d"
+   },
+   "ZECUSDT_intraday": {
+    "final_equity": 2492.12,
+    "halts": 110,
+    "rows": 198493,
+    "sha256": "8448db94a38906bc50cae0d61f358265178091d59a31812182893a2627169b63"
+   },
+   "ZECUSDT_position": {
+    "final_equity": 9602.32,
+    "halts": 0,
+    "rows": 15330,
+    "sha256": "041243e11cf9ad42a7d0fe1ca2c408b037dc8b256fe51cc51bff3874ccd7cf5c"
+   },
+   "ZECUSDT_swing": {
+    "final_equity": 4898.37,
+    "halts": 9,
+    "rows": 43494,
+    "sha256": "f0c34e2d2bf340e1b07c19cef2c428921d19a017946a8253542faae2ea304d3c"
+   }
+  },
+  "B": {
+   "BTCUSDT_intraday": {
+    "final_equity": 6070.64,
+    "halts": 178,
+    "match": true,
+    "rerun_sha256": "0e93782e0e2396acac1c9063388787945a9eb7a4658fc27355607d1a5019c190",
+    "rows": 221364,
+    "sha256": "0e93782e0e2396acac1c9063388787945a9eb7a4658fc27355607d1a5019c190",
+    "tranches": 1075
+   },
+   "BTCUSDT_position": {
+    "final_equity": 10851.65,
+    "halts": 3,
+    "match": true,
+    "rerun_sha256": "0ed686315dc00e358bce284fdc9c04712505e2a87b02eacc4ab6c8d0679f7044",
+    "rows": 16576,
+    "sha256": "0ed686315dc00e358bce284fdc9c04712505e2a87b02eacc4ab6c8d0679f7044",
+    "tranches": 121
+   },
+   "BTCUSDT_swing": {
+    "final_equity": 8794.75,
+    "halts": 22,
+    "match": true,
+    "rerun_sha256": "af73ec199566dcfe1ea2771c44019b3be89638ef4f4b62ab6069f56dc79e8acb",
+    "rows": 47553,
+    "sha256": "af73ec199566dcfe1ea2771c44019b3be89638ef4f4b62ab6069f56dc79e8acb",
+    "tranches": 333
+   },
+   "ETHUSDT_intraday": {
+    "final_equity": 11136.75,
+    "halts": 124,
+    "match": true,
+    "rerun_sha256": "297039d8ee6226d162203005e5ca89d531ee0524793f415f6e3c35093986cb8c",
+    "rows": 210094,
+    "sha256": "297039d8ee6226d162203005e5ca89d531ee0524793f415f6e3c35093986cb8c",
+    "tranches": 1033
+   },
+   "ETHUSDT_position": {
+    "final_equity": 9754.27,
+    "halts": 2,
+    "match": true,
+    "rerun_sha256": "e221aa8d0d94c1a8d46d9dedcb1c4b89b8ae6eff1dbdcf1bbe720fb4067622e7",
+    "rows": 15912,
+    "sha256": "e221aa8d0d94c1a8d46d9dedcb1c4b89b8ae6eff1dbdcf1bbe720fb4067622e7",
+    "tranches": 115
+   },
+   "ETHUSDT_swing": {
+    "final_equity": 19089.82,
+    "halts": 11,
+    "match": true,
+    "rerun_sha256": "e4b01f78d55d6478ebd4cc771fd51e4726927f578b19f505eadd30a9f136a28d",
+    "rows": 46792,
+    "sha256": "e4b01f78d55d6478ebd4cc771fd51e4726927f578b19f505eadd30a9f136a28d",
+    "tranches": 318
+   },
+   "JTOUSDT_intraday": {
+    "final_equity": 8568.89,
+    "halts": 9,
+    "match": true,
+    "rerun_sha256": "a11283d336e86829b14d91934ea81b4a0d3b0c3470177209fb05e3d6d458f1dd",
+    "rows": 19982,
+    "sha256": "a11283d336e86829b14d91934ea81b4a0d3b0c3470177209fb05e3d6d458f1dd",
+    "tranches": 115
+   },
+   "JTOUSDT_position": {
+    "final_equity": 9880.72,
+    "halts": 0,
+    "match": true,
+    "rerun_sha256": "439ffd354f938a7c052f1bd11acf72aec7523d40f6f065a6465473f83424c470",
+    "rows": 550,
+    "sha256": "439ffd354f938a7c052f1bd11acf72aec7523d40f6f065a6465473f83424c470",
+    "tranches": 14
+   },
+   "JTOUSDT_swing": {
+    "final_equity": 9477.1,
+    "halts": 0,
+    "match": true,
+    "rerun_sha256": "07177110bd7ccf9e838a6ce32429930b205bdcc0ec59182485e8cec087ab075b",
+    "rows": 3369,
+    "sha256": "07177110bd7ccf9e838a6ce32429930b205bdcc0ec59182485e8cec087ab075b",
+    "tranches": 23
+   },
+   "NEARUSDT_intraday": {
+    "final_equity": 4942.86,
+    "halts": 78,
+    "match": true,
+    "rerun_sha256": "dfe6b561ee4c379d55cbf85047af8367f4bb9ebb934f262135c77be8f3e31205",
+    "rows": 167981,
+    "sha256": "dfe6b561ee4c379d55cbf85047af8367f4bb9ebb934f262135c77be8f3e31205",
+    "tranches": 918
+   },
+   "NEARUSDT_position": {
+    "final_equity": 9261.57,
+    "halts": 0,
+    "match": true,
+    "rerun_sha256": "89f7b383cd462515b32d50465c001250f733ffff5a80628ce2302d8544303bc3",
+    "rows": 10618,
+    "sha256": "89f7b383cd462515b32d50465c001250f733ffff5a80628ce2302d8544303bc3",
+    "tranches": 70
+   },
+   "NEARUSDT_swing": {
+    "final_equity": 10005.59,
+    "halts": 5,
+    "match": true,
+    "rerun_sha256": "4a78e4bab77639f3a13eb06974d7cb39a36bd3374ab475f7089154cb5430ea60",
+    "rows": 40869,
+    "sha256": "4a78e4bab77639f3a13eb06974d7cb39a36bd3374ab475f7089154cb5430ea60",
+    "tranches": 259
+   },
+   "SOLUSDT_intraday": {
+    "final_equity": 8949.61,
+    "halts": 73,
+    "match": true,
+    "rerun_sha256": "f6ac16b22b6e50bbfaa345d2dfe5aeb6f9d4ffa1c1e2a0bf03d0459bcd1daa98",
+    "rows": 164011,
+    "sha256": "f6ac16b22b6e50bbfaa345d2dfe5aeb6f9d4ffa1c1e2a0bf03d0459bcd1daa98",
+    "tranches": 867
+   },
+   "SOLUSDT_position": {
+    "final_equity": 8388.36,
+    "halts": 1,
+    "match": true,
+    "rerun_sha256": "5b3908c6d211b6044df91967f4cdee2f132e35b85d35ff5ad482d5e171903fbb",
+    "rows": 11028,
+    "sha256": "5b3908c6d211b6044df91967f4cdee2f132e35b85d35ff5ad482d5e171903fbb",
+    "tranches": 93
+   },
+   "SOLUSDT_swing": {
+    "final_equity": 7606.94,
+    "halts": 8,
+    "match": true,
+    "rerun_sha256": "73ceaf9d41dafdd7c5568b94bc38df65a1c11dac63a17d173f4499ce95ec7a97",
+    "rows": 37160,
+    "sha256": "73ceaf9d41dafdd7c5568b94bc38df65a1c11dac63a17d173f4499ce95ec7a97",
+    "tranches": 254
+   },
+   "TAOUSDT_intraday": {
+    "final_equity": 9911.98,
+    "halts": 4,
+    "match": true,
+    "rerun_sha256": "c6ab1309ad1dff308448a40180cd5cdee5054001606fb67db1a527a90a431369",
+    "rows": 7413,
+    "sha256": "c6ab1309ad1dff308448a40180cd5cdee5054001606fb67db1a527a90a431369",
+    "tranches": 43
+   },
+   "TAOUSDT_swing": {
+    "final_equity": 9899.61,
+    "halts": 0,
+    "match": true,
+    "rerun_sha256": "97f01eaff3a6c39792315b157cbb2d7e3704033a5526d3d05294e660d7784657",
+    "rows": 918,
+    "sha256": "97f01eaff3a6c39792315b157cbb2d7e3704033a5526d3d05294e660d7784657",
+    "tranches": 7
+   },
+   "ZECUSDT_intraday": {
+    "final_equity": 2931.7,
+    "halts": 125,
+    "match": true,
+    "rerun_sha256": "a67a7a06f648888907c987aa6a066e26ce346ebd4ad556c771124b1ff3bb8874",
+    "rows": 198946,
+    "sha256": "a67a7a06f648888907c987aa6a066e26ce346ebd4ad556c771124b1ff3bb8874",
+    "tranches": 1039
+   },
+   "ZECUSDT_position": {
+    "final_equity": 9211.06,
+    "halts": 2,
+    "match": true,
+    "rerun_sha256": "749016ba689e1d72df3e8daed525de9846b31cae70080e8eb0da07d137e2c5c0",
+    "rows": 15323,
+    "sha256": "749016ba689e1d72df3e8daed525de9846b31cae70080e8eb0da07d137e2c5c0",
+    "tranches": 118
+   },
+   "ZECUSDT_swing": {
+    "final_equity": 8297.84,
+    "halts": 8,
+    "match": true,
+    "rerun_sha256": "79959843c8538d719a1ae986b431048d4c4f848ab3f8d9c5134a1c01f143f6b1",
+    "rows": 43261,
+    "sha256": "79959843c8538d719a1ae986b431048d4c4f848ab3f8d9c5134a1c01f143f6b1",
+    "tranches": 302
+   }
+  },
+  "C": {
+   "BTCUSDT_intraday": {
+    "final_equity": 2498.46,
+    "halts": 115,
+    "match": true,
+    "rerun_sha256": "bcd31dff0e4957c6a65db968d3bf7dc5a0648d91c8380da079bc8b40dbf11b68",
+    "rows": 220247,
+    "sha256": "bcd31dff0e4957c6a65db968d3bf7dc5a0648d91c8380da079bc8b40dbf11b68",
+    "tranches": 384
+   },
+   "BTCUSDT_position": {
+    "final_equity": 13904.15,
+    "halts": 3,
+    "match": true,
+    "rerun_sha256": "93dba359f1fda312c8cf783b53ec6daa03d8596b2e1365459759d20b38a7b0c6",
+    "rows": 16574,
+    "sha256": "93dba359f1fda312c8cf783b53ec6daa03d8596b2e1365459759d20b38a7b0c6",
+    "tranches": 115
+   },
+   "BTCUSDT_swing": {
+    "final_equity": 12186.63,
+    "halts": 28,
+    "match": true,
+    "rerun_sha256": "1b459bbb61e93c9176b9bcc8c189f87fb992e4d8ed1e1dfffc39280155bcae4c",
+    "rows": 47712,
+    "sha256": "1b459bbb61e93c9176b9bcc8c189f87fb992e4d8ed1e1dfffc39280155bcae4c",
+    "tranches": 379
+   },
+   "ETHUSDT_intraday": {
+    "final_equity": 2494.92,
+    "halts": 159,
+    "match": true,
+    "rerun_sha256": "e34dca3ce861068eb71af92975dc9350ee4fb5de8ea6fad5cd3266ac61185a01",
+    "rows": 209778,
+    "sha256": "e34dca3ce861068eb71af92975dc9350ee4fb5de8ea6fad5cd3266ac61185a01",
+    "tranches": 691
+   },
+   "ETHUSDT_position": {
+    "final_equity": 10711.22,
+    "halts": 1,
+    "match": true,
+    "rerun_sha256": "25f9b7a3b39565ff27d0c39413c9a7d682a69139f8924e1b43ee8c465263d479",
+    "rows": 15920,
+    "sha256": "25f9b7a3b39565ff27d0c39413c9a7d682a69139f8924e1b43ee8c465263d479",
+    "tranches": 114
+   },
+   "ETHUSDT_swing": {
+    "final_equity": 10315.17,
+    "halts": 19,
+    "match": true,
+    "rerun_sha256": "4ea0d8f8d2bc0fb68207763834fab945274f1b837217ea71469b2463b1a5e236",
+    "rows": 46913,
+    "sha256": "4ea0d8f8d2bc0fb68207763834fab945274f1b837217ea71469b2463b1a5e236",
+    "tranches": 344
+   },
+   "JTOUSDT_intraday": {
+    "final_equity": 6672.6,
+    "halts": 24,
+    "match": true,
+    "rerun_sha256": "05890882871a2bbb83090ded722ef6e44423a3b458957895807194858a85fbf3",
+    "rows": 20083,
+    "sha256": "05890882871a2bbb83090ded722ef6e44423a3b458957895807194858a85fbf3",
+    "tranches": 141
+   },
+   "JTOUSDT_position": {
+    "final_equity": 9703.05,
+    "halts": 0,
+    "match": true,
+    "rerun_sha256": "75b98c292e1ac7e3d19615a7502ecd49886a849bae11f7c034175852e468c432",
+    "rows": 546,
+    "sha256": "75b98c292e1ac7e3d19615a7502ecd49886a849bae11f7c034175852e468c432",
+    "tranches": 11
+   },
+   "JTOUSDT_swing": {
+    "final_equity": 9290.19,
+    "halts": 0,
+    "match": true,
+    "rerun_sha256": "0fb73f44ee6d688453b366fd9af45d4700876a646f85e4b197390e481be1cb27",
+    "rows": 3382,
+    "sha256": "0fb73f44ee6d688453b366fd9af45d4700876a646f85e4b197390e481be1cb27",
+    "tranches": 29
+   },
+   "NEARUSDT_intraday": {
+    "final_equity": 2496.96,
+    "halts": 115,
+    "match": true,
+    "rerun_sha256": "23a4eda8001864755b47b377832f4412187b54c1834e8c3406b74957573249ed",
+    "rows": 167640,
+    "sha256": "23a4eda8001864755b47b377832f4412187b54c1834e8c3406b74957573249ed",
+    "tranches": 572
+   },
+   "NEARUSDT_position": {
+    "final_equity": 10503.22,
+    "halts": 0,
+    "match": true,
+    "rerun_sha256": "ff15e5a1bcdfd32a4f34e1fd033961369636d0ccf2fec4922b6c52c19f9655d2",
+    "rows": 10615,
+    "sha256": "ff15e5a1bcdfd32a4f34e1fd033961369636d0ccf2fec4922b6c52c19f9655d2",
+    "tranches": 66
+   },
+   "NEARUSDT_swing": {
+    "final_equity": 6234.75,
+    "halts": 6,
+    "match": true,
+    "rerun_sha256": "6d00a1170f966f1fa0ef47383a9d162216a808aa78e54c19fb2f4415718243a2",
+    "rows": 40960,
+    "sha256": "6d00a1170f966f1fa0ef47383a9d162216a808aa78e54c19fb2f4415718243a2",
+    "tranches": 278
+   },
+   "SOLUSDT_intraday": {
+    "final_equity": 2484.84,
+    "halts": 178,
+    "match": true,
+    "rerun_sha256": "216e333deeacb87b6121dfa83e7c199938e9130a0b591318b941003846e79875",
+    "rows": 164330,
+    "sha256": "216e333deeacb87b6121dfa83e7c199938e9130a0b591318b941003846e79875",
+    "tranches": 823
+   },
+   "SOLUSDT_position": {
+    "final_equity": 17267.29,
+    "halts": 1,
+    "match": true,
+    "rerun_sha256": "b3a84a3d12ec458c59a4e9397570bfde500c3e5d67be328719da3bc95e309e2a",
+    "rows": 11041,
+    "sha256": "b3a84a3d12ec458c59a4e9397570bfde500c3e5d67be328719da3bc95e309e2a",
+    "tranches": 95
+   },
+   "SOLUSDT_swing": {
+    "final_equity": 5811.17,
+    "halts": 12,
+    "match": true,
+    "rerun_sha256": "3f0c643f57ec96f248b9faa9956208436365e67c75d9970e268c771f004c8da4",
+    "rows": 37338,
+    "sha256": "3f0c643f57ec96f248b9faa9956208436365e67c75d9970e268c771f004c8da4",
+    "tranches": 313
+   },
+   "TAOUSDT_intraday": {
+    "final_equity": 8747.1,
+    "halts": 6,
+    "match": true,
+    "rerun_sha256": "264c9e4b43bd64ddcba0a3f22ec65cfeec11b5e1b02287885b2c2191852f77fe",
+    "rows": 7439,
+    "sha256": "264c9e4b43bd64ddcba0a3f22ec65cfeec11b5e1b02287885b2c2191852f77fe",
+    "tranches": 49
+   },
+   "TAOUSDT_swing": {
+    "final_equity": 9872.11,
+    "halts": 0,
+    "match": true,
+    "rerun_sha256": "a635f529bae42b10b138a0e6216a20d9e8b2bd071d9fecf0d70dc23cdf5b4ec7",
+    "rows": 921,
+    "sha256": "a635f529bae42b10b138a0e6216a20d9e8b2bd071d9fecf0d70dc23cdf5b4ec7",
+    "tranches": 9
+   },
+   "ZECUSDT_intraday": {
+    "final_equity": 2496.92,
+    "halts": 168,
+    "match": true,
+    "rerun_sha256": "e4988492b98516615a9302f44bd86d0fd3f10b017257db6baccd819ea1d435d0",
+    "rows": 198710,
+    "sha256": "e4988492b98516615a9302f44bd86d0fd3f10b017257db6baccd819ea1d435d0",
+    "tranches": 731
+   },
+   "ZECUSDT_position": {
+    "final_equity": 9312.25,
+    "halts": 0,
+    "match": true,
+    "rerun_sha256": "b460628c493931d3ba504544675f21a8b1be22b17d8376bf01de5ff36f7a19ef",
+    "rows": 15311,
+    "sha256": "b460628c493931d3ba504544675f21a8b1be22b17d8376bf01de5ff36f7a19ef",
+    "tranches": 109
+   },
+   "ZECUSDT_swing": {
+    "final_equity": 5139.83,
+    "halts": 8,
+    "match": true,
+    "rerun_sha256": "37888b262623984c9a52b7d5fafd81fcf4438f2e59c97712dccf446aa555efa2",
+    "rows": 43427,
+    "sha256": "37888b262623984c9a52b7d5fafd81fcf4438f2e59c97712dccf446aa555efa2",
+    "tranches": 351
+   }
+  },
+  "D": {
+   "BTCUSDT_intraday": {
+    "final_equity": 7547.65,
+    "halts": 178,
+    "match": true,
+    "rerun_sha256": "8d8f9457401336a09d748bdfa0876c7ef0ba35216f18083ff8e21600e01ad7b5",
+    "rows": 222080,
+    "sha256": "8d8f9457401336a09d748bdfa0876c7ef0ba35216f18083ff8e21600e01ad7b5",
+    "tranches": 1365
+   },
+   "BTCUSDT_position": {
+    "final_equity": 10817.02,
+    "halts": 3,
+    "match": true,
+    "rerun_sha256": "a5f2136eba2db6ac9a86a15729630904996898d222b101bc96e196e658239be3",
+    "rows": 16596,
+    "sha256": "a5f2136eba2db6ac9a86a15729630904996898d222b101bc96e196e658239be3",
+    "tranches": 130
+   },
+   "BTCUSDT_swing": {
+    "final_equity": 8008.06,
+    "halts": 25,
+    "match": true,
+    "rerun_sha256": "7c256d7952d5fe4d7de776794646305639feb4896dd7c91c5193565940fdba3d",
+    "rows": 47710,
+    "sha256": "7c256d7952d5fe4d7de776794646305639feb4896dd7c91c5193565940fdba3d",
+    "tranches": 391
+   },
+   "ETHUSDT_intraday": {
+    "final_equity": 8079.91,
+    "halts": 131,
+    "match": true,
+    "rerun_sha256": "dfacac3107204903c67be64562847a83f95fdcf9ada014f415c83bec3ab01bd0",
+    "rows": 210848,
+    "sha256": "dfacac3107204903c67be64562847a83f95fdcf9ada014f415c83bec3ab01bd0",
+    "tranches": 1333
+   },
+   "ETHUSDT_position": {
+    "final_equity": 9848.53,
+    "halts": 1,
+    "match": true,
+    "rerun_sha256": "c6a0a1e438137c7dccfcfc20861e56a7d1b4a79496d646670539e9cab9d62d1f",
+    "rows": 15942,
+    "sha256": "c6a0a1e438137c7dccfcfc20861e56a7d1b4a79496d646670539e9cab9d62d1f",
+    "tranches": 128
+   },
+   "ETHUSDT_swing": {
+    "final_equity": 19216.66,
+    "halts": 10,
+    "match": true,
+    "rerun_sha256": "776a8b47159fa29f80fdabd5fc9a60826d1dfae5220e4f772c04fff8f486b305",
+    "rows": 46938,
+    "sha256": "776a8b47159fa29f80fdabd5fc9a60826d1dfae5220e4f772c04fff8f486b305",
+    "tranches": 378
+   },
+   "JTOUSDT_intraday": {
+    "final_equity": 8649.48,
+    "halts": 8,
+    "match": true,
+    "rerun_sha256": "e255de202e9dd2eaaa88b96b15b6d5875a0d4e6202e05c0f74aa6a0ad00e266a",
+    "rows": 20077,
+    "sha256": "e255de202e9dd2eaaa88b96b15b6d5875a0d4e6202e05c0f74aa6a0ad00e266a",
+    "tranches": 156
+   },
+   "JTOUSDT_position": {
+    "final_equity": 9957.23,
+    "halts": 0,
+    "match": true,
+    "rerun_sha256": "cb8f6f7b74ae2966d8b2bbb45b31830ae4d4af396cf7bf81719439cc927f0673",
+    "rows": 550,
+    "sha256": "cb8f6f7b74ae2966d8b2bbb45b31830ae4d4af396cf7bf81719439cc927f0673",
+    "tranches": 14
+   },
+   "JTOUSDT_swing": {
+    "final_equity": 9431.1,
+    "halts": 0,
+    "match": true,
+    "rerun_sha256": "713a429dff885fe2a5781e323b762678eb847a399dbb2e2cccd935f872f7fe4c",
+    "rows": 3377,
+    "sha256": "713a429dff885fe2a5781e323b762678eb847a399dbb2e2cccd935f872f7fe4c",
+    "tranches": 26
+   },
+   "NEARUSDT_intraday": {
+    "final_equity": 5328.2,
+    "halts": 86,
+    "match": true,
+    "rerun_sha256": "b07a02140dd5109d7583b295ff5e10bdbad0189b2d7080d59e3904a11886ce04",
+    "rows": 168640,
+    "sha256": "b07a02140dd5109d7583b295ff5e10bdbad0189b2d7080d59e3904a11886ce04",
+    "tranches": 1182
+   },
+   "NEARUSDT_position": {
+    "final_equity": 9512.49,
+    "halts": 0,
+    "match": true,
+    "rerun_sha256": "27d2f7b3e8a2045568562d27dda84ff83d09a94235b9865d696170793517c9f4",
+    "rows": 10632,
+    "sha256": "27d2f7b3e8a2045568562d27dda84ff83d09a94235b9865d696170793517c9f4",
+    "tranches": 77
+   },
+   "NEARUSDT_swing": {
+    "final_equity": 6721.53,
+    "halts": 5,
+    "match": true,
+    "rerun_sha256": "6a2ae06925b9fd598e893147e8cb286edc0d7b0c120d394c57e8715f4ee3acbb",
+    "rows": 40979,
+    "sha256": "6a2ae06925b9fd598e893147e8cb286edc0d7b0c120d394c57e8715f4ee3acbb",
+    "tranches": 302
+   },
+   "SOLUSDT_intraday": {
+    "final_equity": 4913.68,
+    "halts": 79,
+    "match": true,
+    "rerun_sha256": "f063260fef9b0c635b7dc3e7394976ac18e5099be2823291b0001462c592afd0",
+    "rows": 164660,
+    "sha256": "f063260fef9b0c635b7dc3e7394976ac18e5099be2823291b0001462c592afd0",
+    "tranches": 1138
+   },
+   "SOLUSDT_position": {
+    "final_equity": 8580.78,
+    "halts": 1,
+    "match": true,
+    "rerun_sha256": "55863c555205114efa667d33e3b6abbed9ee0cda703b329acc3073920ab3479c",
+    "rows": 11064,
+    "sha256": "55863c555205114efa667d33e3b6abbed9ee0cda703b329acc3073920ab3479c",
+    "tranches": 107
+   },
+   "SOLUSDT_swing": {
+    "final_equity": 8246.2,
+    "halts": 9,
+    "match": true,
+    "rerun_sha256": "aaa87f83ca713cdfd748f4ace5209fd6bc55139556fe3aa300aac1fb70b57a96",
+    "rows": 37344,
+    "sha256": "aaa87f83ca713cdfd748f4ace5209fd6bc55139556fe3aa300aac1fb70b57a96",
+    "tranches": 331
+   },
+   "TAOUSDT_intraday": {
+    "final_equity": 9769.06,
+    "halts": 5,
+    "match": true,
+    "rerun_sha256": "c5abee4217a58749e91cb9b8890467e3b9c6a42d6b7a47260fccfc0f5c847c80",
+    "rows": 7445,
+    "sha256": "c5abee4217a58749e91cb9b8890467e3b9c6a42d6b7a47260fccfc0f5c847c80",
+    "tranches": 57
+   },
+   "TAOUSDT_swing": {
+    "final_equity": 9826.87,
+    "halts": 0,
+    "match": true,
+    "rerun_sha256": "ffb5dcf85d6805e6bb131ed56cf9c800ef973bb0feee9f8c8480fd2fbecae0e9",
+    "rows": 922,
+    "sha256": "ffb5dcf85d6805e6bb131ed56cf9c800ef973bb0feee9f8c8480fd2fbecae0e9",
+    "tranches": 9
+   },
+   "ZECUSDT_intraday": {
+    "final_equity": 2495.11,
+    "halts": 122,
+    "match": true,
+    "rerun_sha256": "3e8688cf4ffd43a18652f4e646cb082eb5c963fdcef8a9f390064e626548727c",
+    "rows": 199438,
+    "sha256": "3e8688cf4ffd43a18652f4e646cb082eb5c963fdcef8a9f390064e626548727c",
+    "tranches": 1214
+   },
+   "ZECUSDT_position": {
+    "final_equity": 9083.57,
+    "halts": 2,
+    "match": true,
+    "rerun_sha256": "4ceaefae8ce826939861ab4622dfca9162b3164dac24726ea7b43dbe0f03a050",
+    "rows": 15353,
+    "sha256": "4ceaefae8ce826939861ab4622dfca9162b3164dac24726ea7b43dbe0f03a050",
+    "tranches": 129
+   },
+   "ZECUSDT_swing": {
+    "final_equity": 7873.91,
+    "halts": 8,
+    "match": true,
+    "rerun_sha256": "a60a427f6a41853b643552c64a579b9ec5b40fe81e508ad2c540576cd8d8cf44",
+    "rows": 43434,
+    "sha256": "a60a427f6a41853b643552c64a579b9ec5b40fe81e508ad2c540576cd8d8cf44",
+    "tranches": 373
+   }
+  }
+ },
+ "config_shas": {
+  "tc1_A": "311a1cd3d1e950e3bb8b8c54eefe305b8c56f9a5517c4520076cf9c4fa76edc0",
+  "tc1_B": "3e99401d427fedd96842cc4df15c329220b8ec43e93bd6543c62de7acb3f636b",
+  "tc1_C": "462c4e46f1501386b66dd67bccf099e0223d1bd1ee098372cace84b65a8bf4fa",
+  "tc1_D": "37f6869631db2b831ea9413fa91799cdfd78bd8e6bbac01330af2e1574bef6c0"
+ },
+ "determinism_all_identical": true,
+ "engine_version": "1.0.11",
+ "f_a_byte": true,
+ "phase": "TC-1 stop x exit factorial",
+ "window_end": "2024-06-30T23:59"
+}

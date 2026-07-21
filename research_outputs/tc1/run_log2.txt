@@ -1,0 +1,148 @@
+[A] already complete — reading from disk
+
+F-A-BYTE: PASS []
+[B_run1] already complete — reading from disk
+[B_run2] already complete — reading from disk
+B BTCUSDT_intraday   MATCH
+B ETHUSDT_intraday   MATCH
+B ZECUSDT_intraday   MATCH
+B SOLUSDT_intraday   MATCH
+B NEARUSDT_intraday  MATCH
+B JTOUSDT_intraday   MATCH
+B TAOUSDT_intraday   MATCH
+B BTCUSDT_position   MATCH
+B ETHUSDT_position   MATCH
+B ZECUSDT_position   MATCH
+B SOLUSDT_position   MATCH
+B NEARUSDT_position  MATCH
+B JTOUSDT_position   MATCH
+B BTCUSDT_swing      MATCH
+B ETHUSDT_swing      MATCH
+B ZECUSDT_swing      MATCH
+B SOLUSDT_swing      MATCH
+B NEARUSDT_swing     MATCH
+B JTOUSDT_swing      MATCH
+B TAOUSDT_swing      MATCH
+[C_run1] partial — cleared, re-running
+[C_run1] BTCUSDT_intraday   rows=220247 eq=   2498.46 halts=115 sha=bcd31dff0e 149.4s (1/20, t+151s)
+[C_run1] ETHUSDT_intraday   rows=209778 eq=   2494.92 halts=159 sha=e34dca3ce8 153.5s (2/20, t+155s)
+[C_run1] SOLUSDT_intraday   rows=164330 eq=   2484.84 halts=178 sha=216e333dee 128.8s (3/20, t+284s)
+[C_run1] ZECUSDT_intraday   rows=198710 eq=   2496.92 halts=168 sha=e4988492b9 144.8s (4/20, t+295s)
+[C_run1] JTOUSDT_intraday   rows= 20083 eq=    6672.6 halts=24 sha=0589088287 15.4s (5/20, t+311s)
+[C_run1] TAOUSDT_intraday   rows=  7439 eq=    8747.1 halts=6 sha=264c9e4b43 6.5s (6/20, t+317s)
+[C_run1] BTCUSDT_position   rows= 16574 eq=  13904.15 halts=3 sha=93dba359f1 19.8s (7/20, t+337s)
+[C_run1] ETHUSDT_position   rows= 15920 eq=  10711.22 halts=1 sha=25f9b7a3b3 18.3s (8/20, t+356s)
+[C_run1] ZECUSDT_position   rows= 15311 eq=   9312.25 halts=0 sha=b460628c49 16.4s (9/20, t+372s)
+[C_run1] SOLUSDT_position   rows= 11041 eq=  17267.29 halts=1 sha=b3a84a3d12 15.1s (10/20, t+387s)
+[C_run1] NEARUSDT_intraday  rows=167640 eq=   2496.96 halts=115 sha=23a4eda800 112.9s (11/20, t+396s)
+[C_run1] JTOUSDT_position   rows=   546 eq=   9703.05 halts=0 sha=75b98c292e 2.0s (12/20, t+398s)
+[C_run1] NEARUSDT_position  rows= 10615 eq=  10503.22 halts=0 sha=ff15e5a1bc 13.9s (13/20, t+401s)
+[C_run1] BTCUSDT_swing      rows= 47712 eq=  12186.63 halts=28 sha=1b459bbb61 41.4s (14/20, t+440s)
+[C_run1] ETHUSDT_swing      rows= 46913 eq=  10315.17 halts=19 sha=4ea0d8f8d2 39.5s (15/20, t+440s)
+[C_run1] SOLUSDT_swing      rows= 37338 eq=   5811.17 halts=12 sha=3f0c643f57 33.1s (16/20, t+474s)
+[C_run1] ZECUSDT_swing      rows= 43427 eq=   5139.83 halts=8 sha=37888b2626 37.3s (17/20, t+477s)
+[C_run1] JTOUSDT_swing      rows=  3382 eq=   9290.19 halts=0 sha=0fb73f44ee 3.8s (18/20, t+481s)
+[C_run1] TAOUSDT_swing      rows=   921 eq=   9872.11 halts=0 sha=a635f529ba 1.6s (19/20, t+483s)
+[C_run1] NEARUSDT_swing     rows= 40960 eq=   6234.75 halts=6 sha=6d00a1170f 23.7s (20/20, t+497s)
+[C_run2] BTCUSDT_intraday   rows=220247 eq=   2498.46 halts=115 sha=bcd31dff0e 153.4s (1/20, t+154s)
+[C_run2] ETHUSDT_intraday   rows=209778 eq=   2494.92 halts=159 sha=e34dca3ce8 156.0s (2/20, t+157s)
+[C_run2] SOLUSDT_intraday   rows=164330 eq=   2484.84 halts=178 sha=216e333dee 123.9s (3/20, t+281s)
+[C_run2] ZECUSDT_intraday   rows=198710 eq=   2496.92 halts=168 sha=e4988492b9 140.6s (4/20, t+295s)
+[C_run2] JTOUSDT_intraday   rows= 20083 eq=    6672.6 halts=24 sha=0589088287 16.4s (5/20, t+311s)
+[C_run2] TAOUSDT_intraday   rows=  7439 eq=    8747.1 halts=6 sha=264c9e4b43 5.7s (6/20, t+317s)
+[C_run2] BTCUSDT_position   rows= 16574 eq=  13904.15 halts=3 sha=93dba359f1 20.3s (7/20, t+337s)
+[C_run2] ETHUSDT_position   rows= 15920 eq=  10711.22 halts=1 sha=25f9b7a3b3 16.3s (8/20, t+354s)
+[C_run2] ZECUSDT_position   rows= 15311 eq=   9312.25 halts=0 sha=b460628c49 17.6s (9/20, t+371s)
+[C_run2] SOLUSDT_position   rows= 11041 eq=  17267.29 halts=1 sha=b3a84a3d12 14.0s (10/20, t+385s)
+[C_run2] NEARUSDT_intraday  rows=167640 eq=   2496.96 halts=115 sha=23a4eda800 112.5s (11/20, t+393s)
+[C_run2] JTOUSDT_position   rows=   546 eq=   9703.05 halts=0 sha=75b98c292e 1.7s (12/20, t+395s)
+[C_run2] NEARUSDT_position  rows= 10615 eq=  10503.22 halts=0 sha=ff15e5a1bc 14.7s (13/20, t+400s)
+[C_run2] BTCUSDT_swing      rows= 47712 eq=  12186.63 halts=28 sha=1b459bbb61 44.2s (14/20, t+439s)
+[C_run2] ETHUSDT_swing      rows= 46913 eq=  10315.17 halts=19 sha=4ea0d8f8d2 42.3s (15/20, t+442s)
+[C_run2] SOLUSDT_swing      rows= 37338 eq=   5811.17 halts=12 sha=3f0c643f57 33.5s (16/20, t+476s)
+[C_run2] ZECUSDT_swing      rows= 43427 eq=   5139.83 halts=8 sha=37888b2626 37.4s (17/20, t+477s)
+[C_run2] JTOUSDT_swing      rows=  3382 eq=   9290.19 halts=0 sha=0fb73f44ee 3.6s (18/20, t+480s)
+[C_run2] TAOUSDT_swing      rows=   921 eq=   9872.11 halts=0 sha=a635f529ba 1.8s (19/20, t+482s)
+[C_run2] NEARUSDT_swing     rows= 40960 eq=   6234.75 halts=6 sha=6d00a1170f 20.9s (20/20, t+497s)
+C BTCUSDT_intraday   MATCH
+C ETHUSDT_intraday   MATCH
+C ZECUSDT_intraday   MATCH
+C SOLUSDT_intraday   MATCH
+C NEARUSDT_intraday  MATCH
+C JTOUSDT_intraday   MATCH
+C TAOUSDT_intraday   MATCH
+C BTCUSDT_position   MATCH
+C ETHUSDT_position   MATCH
+C ZECUSDT_position   MATCH
+C SOLUSDT_position   MATCH
+C NEARUSDT_position  MATCH
+C JTOUSDT_position   MATCH
+C BTCUSDT_swing      MATCH
+C ETHUSDT_swing      MATCH
+C ZECUSDT_swing      MATCH
+C SOLUSDT_swing      MATCH
+C NEARUSDT_swing     MATCH
+C JTOUSDT_swing      MATCH
+C TAOUSDT_swing      MATCH
+[D_run1] ETHUSDT_intraday   rows=210848 eq=   8079.91 halts=131 sha=dfacac3107 186.4s (1/20, t+187s)
+[D_run1] BTCUSDT_intraday   rows=222080 eq=   7547.65 halts=178 sha=8d8f945740 194.9s (2/20, t+196s)
+[D_run1] SOLUSDT_intraday   rows=164660 eq=   4913.68 halts=79 sha=f063260fef 133.2s (3/20, t+329s)
+[D_run1] ZECUSDT_intraday   rows=199438 eq=   2495.11 halts=122 sha=3e8688cf4f 153.7s (4/20, t+341s)
+[D_run1] JTOUSDT_intraday   rows= 20077 eq=   8649.48 halts=8 sha=e255de202e 18.0s (5/20, t+359s)
+[D_run1] TAOUSDT_intraday   rows=  7445 eq=   9769.06 halts=5 sha=c5abee4217 6.6s (6/20, t+366s)
+[D_run1] BTCUSDT_position   rows= 16596 eq=  10817.02 halts=3 sha=a5f2136eba 18.1s (7/20, t+384s)
+[D_run1] ETHUSDT_position   rows= 15942 eq=   9848.53 halts=1 sha=c6a0a1e438 19.4s (8/20, t+403s)
+[D_run1] ZECUSDT_position   rows= 15353 eq=   9083.57 halts=2 sha=4ceaefae8c 18.0s (9/20, t+421s)
+[D_run1] SOLUSDT_position   rows= 11064 eq=   8580.78 halts=1 sha=55863c5552 14.2s (10/20, t+436s)
+[D_run1] NEARUSDT_position  rows= 10632 eq=   9512.49 halts=0 sha=27d2f7b3e8 13.6s (11/20, t+449s)
+[D_run1] JTOUSDT_position   rows=   550 eq=   9957.23 halts=0 sha=cb8f6f7b74 2.0s (12/20, t+451s)
+[D_run1] NEARUSDT_intraday  rows=168640 eq=    5328.2 halts=86 sha=b07a02140d 138.9s (13/20, t+468s)
+[D_run1] BTCUSDT_swing      rows= 47710 eq=   8008.06 halts=25 sha=7c256d7952 43.6s (14/20, t+495s)
+[D_run1] ETHUSDT_swing      rows= 46938 eq=  19216.66 halts=10 sha=776a8b4715 40.3s (15/20, t+508s)
+[D_run1] ZECUSDT_swing      rows= 43434 eq=   7873.91 halts=8 sha=a60a427f6a 36.3s (16/20, t+531s)
+[D_run1] SOLUSDT_swing      rows= 37344 eq=    8246.2 halts=9 sha=aaa87f83ca 32.0s (17/20, t+540s)
+[D_run1] JTOUSDT_swing      rows=  3377 eq=    9431.1 halts=0 sha=713a429dff 4.3s (18/20, t+545s)
+[D_run1] TAOUSDT_swing      rows=   922 eq=   9826.87 halts=0 sha=ffb5dcf85d 1.7s (19/20, t+546s)
+[D_run1] NEARUSDT_swing     rows= 40979 eq=   6721.53 halts=5 sha=6a2ae06925 26.1s (20/20, t+557s)
+[D_run2] ETHUSDT_intraday   rows=210848 eq=   8079.91 halts=131 sha=dfacac3107 187.1s (1/20, t+188s)
+[D_run2] BTCUSDT_intraday   rows=222080 eq=   7547.65 halts=178 sha=8d8f945740 196.1s (2/20, t+197s)
+[D_run2] SOLUSDT_intraday   rows=164660 eq=   4913.68 halts=79 sha=f063260fef 139.9s (3/20, t+337s)
+[D_run2] ZECUSDT_intraday   rows=199438 eq=   2495.11 halts=122 sha=3e8688cf4f 160.0s (4/20, t+348s)
+[D_run2] JTOUSDT_intraday   rows= 20077 eq=   8649.48 halts=8 sha=e255de202e 15.6s (5/20, t+364s)
+[D_run2] TAOUSDT_intraday   rows=  7445 eq=   9769.06 halts=5 sha=c5abee4217 6.3s (6/20, t+370s)
+[D_run2] BTCUSDT_position   rows= 16596 eq=  10817.02 halts=3 sha=a5f2136eba 19.1s (7/20, t+389s)
+[D_run2] ETHUSDT_position   rows= 15942 eq=   9848.53 halts=1 sha=c6a0a1e438 17.8s (8/20, t+407s)
+[D_run2] ZECUSDT_position   rows= 15353 eq=   9083.57 halts=2 sha=4ceaefae8c 16.5s (9/20, t+423s)
+[D_run2] SOLUSDT_position   rows= 11064 eq=   8580.78 halts=1 sha=55863c5552 15.0s (10/20, t+438s)
+[D_run2] NEARUSDT_position  rows= 10632 eq=   9512.49 halts=0 sha=27d2f7b3e8 14.9s (11/20, t+453s)
+[D_run2] JTOUSDT_position   rows=   550 eq=   9957.23 halts=0 sha=cb8f6f7b74 1.8s (12/20, t+455s)
+[D_run2] NEARUSDT_intraday  rows=168640 eq=    5328.2 halts=86 sha=b07a02140d 137.2s (13/20, t+474s)
+[D_run2] BTCUSDT_swing      rows= 47710 eq=   8008.06 halts=25 sha=7c256d7952 38.6s (14/20, t+494s)
+[D_run2] ETHUSDT_swing      rows= 46938 eq=  19216.66 halts=10 sha=776a8b4715 31.3s (15/20, t+506s)
+[D_run2] ZECUSDT_swing      rows= 43434 eq=   7873.91 halts=8 sha=a60a427f6a 28.4s (16/20, t+522s)
+[D_run2] SOLUSDT_swing      rows= 37344 eq=    8246.2 halts=9 sha=aaa87f83ca 24.3s (17/20, t+530s)
+[D_run2] JTOUSDT_swing      rows=  3377 eq=    9431.1 halts=0 sha=713a429dff 3.4s (18/20, t+533s)
+[D_run2] TAOUSDT_swing      rows=   922 eq=   9826.87 halts=0 sha=ffb5dcf85d 1.1s (19/20, t+534s)
+[D_run2] NEARUSDT_swing     rows= 40979 eq=   6721.53 halts=5 sha=6a2ae06925 21.6s (20/20, t+544s)
+D BTCUSDT_intraday   MATCH
+D ETHUSDT_intraday   MATCH
+D ZECUSDT_intraday   MATCH
+D SOLUSDT_intraday   MATCH
+D NEARUSDT_intraday  MATCH
+D JTOUSDT_intraday   MATCH
+D TAOUSDT_intraday   MATCH
+D BTCUSDT_position   MATCH
+D ETHUSDT_position   MATCH
+D ZECUSDT_position   MATCH
+D SOLUSDT_position   MATCH
+D NEARUSDT_position  MATCH
+D JTOUSDT_position   MATCH
+D BTCUSDT_swing      MATCH
+D ETHUSDT_swing      MATCH
+D ZECUSDT_swing      MATCH
+D SOLUSDT_swing      MATCH
+D NEARUSDT_swing     MATCH
+D JTOUSDT_swing      MATCH
+D TAOUSDT_swing      MATCH
+
+F-A-BYTE PASS · DETERMINISM ALL IDENTICAL
