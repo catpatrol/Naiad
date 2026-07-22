@@ -63,3 +63,6 @@ research_outputs/packets/**
 !research_outputs/v3_anchor/pass2_results.json
 !research_outputs/v3_anchor/rollups.json
 
+!research_outputs/s3/run_log.txt
+!research_outputs/s3/analyze_log.txt
+!research_outputs/s3/analyze_log2.txt

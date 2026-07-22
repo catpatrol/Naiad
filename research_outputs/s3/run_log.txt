@@ -1,0 +1,62 @@
+[journal_s3] SOLUSDT_intraday   rows=164011 side=171461 tr=  867 jsha=d0ed37bb11 ssha=fb89e6f762 263.8s (1/20, t+265s)
+[journal_s3] ZECUSDT_intraday   rows=198946 side=194656 tr= 1039 jsha=29fcf5e871 ssha=5771f58506 321.0s (2/20, t+322s)
+[journal_s3] ETHUSDT_intraday   rows=210094 side=217053 tr= 1033 jsha=d0d3c56608 ssha=17cd915444 351.1s (3/20, t+352s)
+[journal_s3] JTOUSDT_intraday   rows= 19982 side= 23342 tr=  115 jsha=6f61823ed7 ssha=d1cf854ff6 42.2s (4/20, t+365s)
+[journal_s3] TAOUSDT_intraday   rows=  7413 side=  8576 tr=   43 jsha=307252be5f ssha=2e7d13d5f9 16.8s (5/20, t+369s)
+[journal_s3] BTCUSDT_intraday   rows=221364 side=216250 tr= 1075 jsha=3fa962861c ssha=99e14d744c 369.3s (6/20, t+371s)
+[journal_s3] ZECUSDT_position   rows= 15323 side= 83267 tr=  118 jsha=7a12e37fb2 ssha=4177c44c53 72.1s (7/20, t+443s)
+[journal_s3] BTCUSDT_position   rows= 16576 side= 92046 tr=  121 jsha=1963b35eba ssha=b46c71ce45 81.5s (8/20, t+446s)
+[journal_s3] ETHUSDT_position   rows= 15912 side= 86887 tr=  115 jsha=4ffb36ccb0 ssha=908a553bcb 77.6s (9/20, t+447s)
+[journal_s3] JTOUSDT_position   rows=   550 side=  5383 tr=   14 jsha=835908c0a7 ssha=adfdabc198 7.6s (10/20, t+454s)
+[journal_s3] SOLUSDT_position   rows= 11028 side= 65618 tr=   93 jsha=b11ad67eea ssha=d0a9dd774b 59.0s (11/20, t+502s)
+[journal_s3] NEARUSDT_position  rows= 10618 side= 67555 tr=   70 jsha=e966d3691f ssha=2c1db9f6b1 55.8s (12/20, t+502s)
+[journal_s3] BTCUSDT_swing      rows= 47553 side=117111 tr=  333 jsha=1787015938 ssha=0c5a5ca152 130.3s (13/20, t+585s)
+[journal_s3] NEARUSDT_intraday  rows=167981 side=169028 tr=  918 jsha=9e4497c00f ssha=53b3431f0a 321.3s (14/20, t+586s)
+[journal_s3] ZECUSDT_swing      rows= 43261 side=108045 tr=  302 jsha=eec8be148d ssha=8495803cd8 114.2s (15/20, t+616s)
+[journal_s3] ETHUSDT_swing      rows= 46792 side=114865 tr=  318 jsha=da2edb822c ssha=17e01f3625 124.8s (16/20, t+626s)
+[journal_s3] JTOUSDT_swing      rows=  3369 side= 10516 tr=   23 jsha=ba8e5b1504 ssha=5230360e38 12.3s (17/20, t+628s)
+[journal_s3] TAOUSDT_swing      rows=   918 side=  2357 tr=    7 jsha=5e7869ebe0 ssha=0b0ecde672 3.6s (18/20, t+630s)
+[journal_s3] SOLUSDT_swing      rows= 37160 side= 89128 tr=  254 jsha=75a004f02a ssha=9248b7c51b 83.4s (19/20, t+668s)
+[journal_s3] NEARUSDT_swing     rows= 40869 side= 90889 tr=  259 jsha=1804a0c7d1 ssha=e8c0607b40 84.0s (20/20, t+670s)
+[journal_s3_run2] SOLUSDT_intraday   rows=164011 side=171461 tr=  867 jsha=d0ed37bb11 ssha=fb89e6f762 294.8s (1/20, t+297s)
+[journal_s3_run2] ZECUSDT_intraday   rows=198946 side=194656 tr= 1039 jsha=29fcf5e871 ssha=5771f58506 346.1s (2/20, t+348s)
+[journal_s3_run2] ETHUSDT_intraday   rows=210094 side=217053 tr= 1033 jsha=d0d3c56608 ssha=17cd915444 365.4s (3/20, t+367s)
+[journal_s3_run2] TAOUSDT_intraday   rows=  7413 side=  8576 tr=   43 jsha=307252be5f ssha=2e7d13d5f9 12.9s (4/20, t+380s)
+[journal_s3_run2] BTCUSDT_intraday   rows=221364 side=216250 tr= 1075 jsha=3fa962861c ssha=99e14d744c 380.2s (5/20, t+382s)
+[journal_s3_run2] JTOUSDT_intraday   rows= 19982 side= 23342 tr=  115 jsha=6f61823ed7 ssha=d1cf854ff6 34.4s (6/20, t+382s)
+[journal_s3_run2] ZECUSDT_position   rows= 15323 side= 83267 tr=  118 jsha=7a12e37fb2 ssha=4177c44c53 54.2s (7/20, t+436s)
+[journal_s3_run2] ETHUSDT_position   rows= 15912 side= 86887 tr=  115 jsha=4ffb36ccb0 ssha=908a553bcb 57.2s (8/20, t+439s)
+[journal_s3_run2] BTCUSDT_position   rows= 16576 side= 92046 tr=  121 jsha=1963b35eba ssha=b46c71ce45 61.4s (9/20, t+442s)
+[journal_s3_run2] JTOUSDT_position   rows=   550 side=  5383 tr=   14 jsha=835908c0a7 ssha=adfdabc198 5.8s (10/20, t+447s)
+[journal_s3_run2] SOLUSDT_position   rows= 11028 side= 65618 tr=   93 jsha=b11ad67eea ssha=d0a9dd774b 43.6s (11/20, t+480s)
+[journal_s3_run2] NEARUSDT_position  rows= 10618 side= 67555 tr=   70 jsha=e966d3691f ssha=2c1db9f6b1 41.5s (12/20, t+481s)
+[journal_s3_run2] NEARUSDT_intraday  rows=167981 side=169028 tr=  918 jsha=9e4497c00f ssha=53b3431f0a 245.1s (13/20, t+542s)
+[journal_s3_run2] BTCUSDT_swing      rows= 47553 side=117111 tr=  333 jsha=1787015938 ssha=0c5a5ca152 95.5s (14/20, t+543s)
+[journal_s3_run2] ZECUSDT_swing      rows= 43261 side=108045 tr=  302 jsha=eec8be148d ssha=8495803cd8 94.9s (15/20, t+576s)
+[journal_s3_run2] ETHUSDT_swing      rows= 46792 side=114865 tr=  318 jsha=da2edb822c ssha=17e01f3625 105.9s (16/20, t+586s)
+[journal_s3_run2] JTOUSDT_swing      rows=  3369 side= 10516 tr=   23 jsha=ba8e5b1504 ssha=5230360e38 12.2s (17/20, t+588s)
+[journal_s3_run2] TAOUSDT_swing      rows=   918 side=  2357 tr=    7 jsha=5e7869ebe0 ssha=0b0ecde672 4.3s (18/20, t+590s)
+[journal_s3_run2] SOLUSDT_swing      rows= 37160 side= 89128 tr=  254 jsha=75a004f02a ssha=9248b7c51b 81.0s (19/20, t+623s)
+[journal_s3_run2] NEARUSDT_swing     rows= 40869 side= 90889 tr=  259 jsha=1804a0c7d1 ssha=e8c0607b40 80.2s (20/20, t+623s)
+BTCUSDT_intraday   MATCH
+ETHUSDT_intraday   MATCH
+ZECUSDT_intraday   MATCH
+SOLUSDT_intraday   MATCH
+NEARUSDT_intraday  MATCH
+JTOUSDT_intraday   MATCH
+TAOUSDT_intraday   MATCH
+BTCUSDT_position   MATCH
+ETHUSDT_position   MATCH
+ZECUSDT_position   MATCH
+SOLUSDT_position   MATCH
+NEARUSDT_position  MATCH
+JTOUSDT_position   MATCH
+BTCUSDT_swing      MATCH
+ETHUSDT_swing      MATCH
+ZECUSDT_swing      MATCH
+SOLUSDT_swing      MATCH
+NEARUSDT_swing     MATCH
+JTOUSDT_swing      MATCH
+TAOUSDT_swing      MATCH
+
+DETERMINISM: ALL IDENTICAL

@@ -1,0 +1,38 @@
+[analyze] collecting 20 cells from C:\Users\luisf\OneDrive\Desktop\Midas-Claude Code Resources\naiad\research_outputs\s3\journal_s3\scored ...
+[analyze] BTCUSDT_intraday   resolved= 1074 sub= 1074 pcirc=  462 camps=  622
+[analyze] ETHUSDT_intraday   resolved= 1033 sub= 1033 pcirc=  471 camps=  619
+[analyze] ZECUSDT_intraday   resolved= 1039 sub= 1039 pcirc=  403 camps=  624
+[analyze] SOLUSDT_intraday   resolved=  866 sub=  866 pcirc=  375 camps=  524
+[analyze] NEARUSDT_intraday  resolved=  918 sub=  918 pcirc=  396 camps=  555
+[analyze] JTOUSDT_intraday   resolved=  115 sub=  115 pcirc=   56 camps=   67
+[analyze] TAOUSDT_intraday   resolved=   41 sub=   41 pcirc=   20 camps=   22
+[analyze] BTCUSDT_position   resolved=  118 sub=  118 pcirc=   52 camps=   47
+[analyze] ETHUSDT_position   resolved=  113 sub=  113 pcirc=   55 camps=   47
+[analyze] ZECUSDT_position   resolved=  117 sub=  117 pcirc=   56 camps=   49
+[analyze] SOLUSDT_position   resolved=   92 sub=   92 pcirc=   42 camps=   41
+[analyze] NEARUSDT_position  resolved=   67 sub=   67 pcirc=   33 camps=   28
+[analyze] JTOUSDT_position   resolved=   14 sub=   14 pcirc=    5 camps=    5
+[analyze] BTCUSDT_swing      resolved=  333 sub=  333 pcirc=  151 camps=  171
+[analyze] ETHUSDT_swing      resolved=  318 sub=  318 pcirc=  149 camps=  160
+[analyze] ZECUSDT_swing      resolved=  299 sub=  299 pcirc=  137 camps=  159
+[analyze] SOLUSDT_swing      resolved=  254 sub=  254 pcirc=  123 camps=  135
+[analyze] NEARUSDT_swing     resolved=  256 sub=  256 pcirc=  112 camps=  126
+[analyze] JTOUSDT_swing      resolved=   23 sub=   23 pcirc=   13 camps=   10
+[analyze] TAOUSDT_swing      resolved=    4 sub=    4 pcirc=    3 camps=    2
+
+== S-3 fixtures (F-BYTE first) ==
+F-BYTE    MATCH {"mismatched_cells": []}
+F-P2REF   MATCH {"measured": {"sum_1x": -351.1542, "sum_0x": 1164.4202, "tranches": 7094, "win_rate_pct": 21.3322}, "target": {"sum_1x": -351.1542, "sum_0x": 1164.420
+F-CIRC-N  MATCH {"pcirc_snapshots": 3114, "reached_1r_tranches": 3114}
+F-SUB     MATCH {"substrate_rows": 7094, "resolved_tranches": 7094, "nonretr_nulls": 0}
+F-DET     MATCH {"mismatched": [], "manifest": true}
+
+fixtures 5/5 MATCH
+OUTPUT_HASH s3_results.json: 60f536cf4aecb1b90ea6bd74615f4b58ed843911614061d1b7d72111eb6b3cd8
+OUTPUT_HASH S3_ENRICHMENT.md: 710cd23fc7ad50dc9233a035d18aabe914cc496293b17aa16632ae64adb66459
+OUTPUT_HASH s3_excursion_substrate.jsonl: a2cf6f2739e3a2ee6fc3fae05ed12ba6082e64b918ecf69b89dded363652b954
+  P-S3-1   FALSIFIED
+  P-S3-2   FALSIFIED
+  P-S3-5   FALSIFIED
+  P-S3-3   CONFIRMED
+  P-S3-4   CONFIRMED
