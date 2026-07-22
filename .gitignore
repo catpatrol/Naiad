@@ -66,3 +66,12 @@ research_outputs/packets/**
 !research_outputs/s3/run_log.txt
 !research_outputs/s3/analyze_log.txt
 !research_outputs/s3/analyze_log2.txt
+
+# CENSUS-1b: large analysis substrate stays out (census large-substrate
+# precedent); the manifest, determinism record and run log are the surface.
+research_outputs/census1b/**
+research_outputs/census1b_run2/**
+/census1b_termini_enriched.jsonl
+!research_outputs/census1b/build_manifest.json
+!research_outputs/census1b/determinism.json
+!research_outputs/census1b/analyze_log2.txt

@@ -1,0 +1,24 @@
+{
+ "determinism": {
+  "F1b-DET": "MATCH",
+  "normalized_fields": [
+   "elapsed_s",
+   "D6b_adverse_zone.elapsed_s",
+   "D5b_enriched_dataset.path"
+  ]
+ },
+ "emits": {
+  "census1b_results.json": "d24dbd6a7ca187ee24ff7dfd84c7bbc05d5070e093316511d0dba882d19f14cc",
+  "census1b_termini_enriched.jsonl": "4feecd54d6e930c57dfe5ed9fa65083c838c05c453496cf66296510dfbcaa75f",
+  "census1b_termini_enriched.jsonl_rows": 14560
+ },
+ "engine_version_note": "engine 1.0.11 byte-untouched; no engine file opened",
+ "phase": "CENSUS-1b analysis (Tier A, measure-only)",
+ "pre_registration": "LEDGER 2026-07-22 CENSUS-1b G-7 (commit a70a49c)",
+ "reads_substrate": {
+  "census_ladder.jsonl": "cc81b8978f81aa277ae38566f5b0fb89e76632b9ff97403f3767f6f3a611bf74",
+  "census_outcomes.jsonl": "daf488acef40a2ab8f23a06d43a77ce2a8256856d635eb2f62bd985bff59385c",
+  "census_termini.jsonl": "61a9b7a30cc2bb4b20e37def02e59ee74eef345292dd0e822aada83e16c06e4e",
+  "continuation.jsonl": "9a7d186620ce7e92722c50a4268e13200756e8da53fabee826194473583b1594"
+ }
+}
