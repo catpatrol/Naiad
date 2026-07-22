@@ -19,3 +19,47 @@ research_outputs/packets/
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# --- charter §10 hygiene: journals & derived data live on orphan `data` branch only ---
+research_outputs/tc1/**
+research_outputs/tc4/**
+research_outputs/tc5/**
+research_outputs/s1/**
+research_outputs/s2/**
+research_outputs/s3/**
+research_outputs/v3_anchor/**
+research_outputs/census/**
+research_outputs/census_run2/**
+# committed manifests are the intended surface; keep them tracked
+!research_outputs/**/build_manifest.json
+!research_outputs/**/manifest.json
+
+# operator-ferried session packets (transport bundles, never the source of record)
+*.zip
+research_outputs/packets/**
+
+# Re-include the analysis products & provenance already in the index. The two
+# manifest negations above under-cover: these 19 files are the source of record
+# for TC/S/V3 phases, not journal payloads. Nested dir re-included first so git
+# will descend into it (a negation cannot rescue a file under an excluded dir).
+!research_outputs/s1/resampled/
+!research_outputs/census/refetch_log.json
+!research_outputs/census/retrieval_meta.json
+!research_outputs/s1/resampled/resample_report.json
+!research_outputs/s1/run_log.txt
+!research_outputs/s2/run_log.txt
+!research_outputs/tc1/run_log.txt
+!research_outputs/tc1/run_log2.txt
+!research_outputs/tc4/expectation_table.json
+!research_outputs/tc4/run_log.txt
+!research_outputs/tc5/run_log.txt
+!research_outputs/v3_anchor/CELL_CARDS.md
+!research_outputs/v3_anchor/ENGINE_LOGIC_EXTRACT.md
+!research_outputs/v3_anchor/ROLLUPS_AND_HYPOTHESES.md
+!research_outputs/v3_anchor/cards.json
+!research_outputs/v3_anchor/determinism.json
+!research_outputs/v3_anchor/hypotheses.json
+!research_outputs/v3_anchor/pass1_results.json
+!research_outputs/v3_anchor/pass2_results.json
+!research_outputs/v3_anchor/rollups.json
+
