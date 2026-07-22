@@ -1,0 +1,88 @@
+{
+ "assets_run": [
+  "BTCUSDT",
+  "ETHUSDT",
+  "JTOUSDT",
+  "NEARUSDT",
+  "SOLUSDT",
+  "TAOUSDT",
+  "ZECUSDT"
+ ],
+ "contract": "Census_1_MTF_Signal_Stack_Builder_Contract.md + Amendment 1",
+ "elapsed_s": 75.6,
+ "engine_version_note": "engine 1.0.11 byte-untouched; imports indicators only",
+ "params": {
+  "atr_len": 14,
+  "bootstrap_seed": 20260721,
+  "ema": [
+   9,
+   89,
+   200
+  ],
+  "governors": [
+   "1h",
+   "4h",
+   "12h",
+   "1d"
+  ],
+  "horizons": [
+   20,
+   100,
+   500
+  ],
+  "nopullback_lookback": 20,
+  "null_mult": 10,
+  "null_seed": 20260721,
+  "pivot": [
+   5,
+   5
+  ],
+  "regime_cap": 2000,
+  "ribbon_sep_atr": 1.0,
+  "tfs": [
+   "5m",
+   "15m",
+   "30m",
+   "1h",
+   "4h",
+   "12h",
+   "1d"
+  ],
+  "z2_band_atr": 0.35
+ },
+ "per_asset_exec_bars": {
+  "BTCUSDT": 499680,
+  "ETHUSDT": 473184,
+  "JTOUSDT": 52416,
+  "NEARUSDT": 385344,
+  "SOLUSDT": 394272,
+  "TAOUSDT": 17568,
+  "ZECUSDT": 455904
+ },
+ "phase": "CENSUS-1 build (trade-independent, measure-only)",
+ "row_counts": {
+  "continuation": 38552,
+  "ladder": 81674,
+  "outcomes": 149802,
+  "termini": 160160
+ },
+ "sha256": {
+  "census_ladder.jsonl": "cc81b8978f81aa277ae38566f5b0fb89e76632b9ff97403f3767f6f3a611bf74",
+  "census_outcomes.jsonl": "daf488acef40a2ab8f23a06d43a77ce2a8256856d635eb2f62bd985bff59385c",
+  "census_termini.jsonl": "61a9b7a30cc2bb4b20e37def02e59ee74eef345292dd0e822aada83e16c06e4e",
+  "continuation.jsonl": "9a7d186620ce7e92722c50a4268e13200756e8da53fabee826194473583b1594"
+ },
+ "window": {
+  "assets": {
+   "BTCUSDT": "2019-10-01",
+   "ETHUSDT": "2020-01-01",
+   "JTOUSDT": "2024-01-01",
+   "NEARUSDT": "2020-11-01",
+   "SOLUSDT": "2020-10-01",
+   "TAOUSDT": "2024-05-01",
+   "ZECUSDT": "2020-03-01"
+  },
+  "ceiling": "2024-07-01T00:00:00Z (exploration-classic)",
+  "ceiling_ms": 1719792000000
+ }
+}
