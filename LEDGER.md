@@ -506,3 +506,113 @@ proxy of a measurement we can afford to make for real.*
 - **Macro-ruling carried to the redesign (report 3.7).** Under light conditioning, gross forward excursion is near-symmetric across governors, ladder rungs, and factor counts - entry-signal combinatorics do not tilt raw price. Measured edge lives in exit asymmetry (structural stop), toll-space scaling (5m floor), and location structure (EMA-terminus), NOT in cleverer entry signals.
 - **Net verdict of record.** CENSUS-1 machinery PASS (5/5 fixtures, byte-identity intact). Substantive scorecard: the provisional 7/9-confirmed OVERSTATES - durable null-survived findings = 2; two reported confirmations reclassified to not-established; slow-agreement falsified-as-magnitude and reassigned as a holding variable; cascade and k-of-N deferred. Evidence class: exploration-classic, already spent by the census; CENSUS-1b is a Tier-A re-expression of the same substrate (zero new spend).
 - Reviewer: Claude (Fable-mode), 2026-07-22. Operator sign-off: PENDING Ludwig ratification of this reconciliation.
+
+## 2026-07-22 — CENSUS-1 D8 CORRECTION (carried into CENSUS-1b pre-registration) — cascade rungs are NOT symmetric noise
+
+- **What was wrong.** The CENSUS-1 run summary (eb671df) and the state-of-project report (fc8ad9c §3.5) recorded the D8 cascade ladder as "remaining favorable ≈ remaining adverse per rung (ratios ~0.98 to 1.01) — symmetric noise", i.e. a timing SCHEDULE with no EDGE. That statement is a **flattening error**: it quotes the ratio band of the rungs that ARE symmetric and generalises it to all seven.
+- **What the substrate actually says.** Recomputed from `census_results.json` D8 `per_followon_tf` (remaining 100-bar MFE/MAE in ATR, ratio = |MFE/MAE|):
+
+  | follow-on TF | n rungs | rem MFE (ATR) | rem MAE (ATR) | ratio |
+  |---|---|---|---|---|
+  | 5m | 29,338 | 4.5284 | −4.4040 | 1.0283 |
+  | 15m | 65,155 | 4.1622 | −4.1135 | 1.0118 |
+  | 30m | 72,676 | 3.9530 | −3.8399 | 1.0295 |
+  | **1h** | **67,218** | **4.2464** | **−3.5663** | **1.1907** |
+  | **4h** | **28,165** | **4.6148** | **−3.4803** | **1.3260** |
+  | 12h | 9,221 | 4.3804 | −4.4066 | 0.9941 |
+  | 1d | 4,215 | 4.0502 | −4.1172 | 0.9837 |
+
+  Five rungs (5m/15m/30m/12h/1d) sit in the 0.98–1.03 symmetric band as reported. **The 1H and 4H rungs do not**: they are favorable-skewed at 1.19 and 1.33, on large samples (67,218 and 28,165 rungs). The skew is produced by the ADVERSE leg shrinking (−3.57 / −3.48 vs −3.8 to −4.4 elsewhere) while the favorable leg holds — i.e. the intermediate rungs carry less drawdown for the same remaining upside, not more upside.
+- **Scope of the correction.** This corrects a READING of an existing number. No substrate byte changes; no analysis is re-run; `census_results.json` is untouched and already contained these values. The four substrate files remain sha-pinned as in `build_manifest.json`.
+- **Consequence.** "The ladder survives as a timing structure but not as a source of edge" is **withdrawn as stated** and replaced by: the ladder is symmetric at the fast (5m/15m/30m) and slow (12H/1D) rungs and **favorable-skewed at the intermediate 1H/4H rungs**, in ATR terms, pending the bps net-of-toll re-score. That re-score is CENSUS-1b job 1 and is the basis of prediction P-1b-D8 (registered in the third entry below): a fixed bps toll is a small slice of a large slow 4H move and a larger share of a faster 1H move, so the ATR asymmetry is predicted to survive into toll-space at 4H and be marginal at 1H.
+- Ledger is append-only: eb671df and fc8ad9c are retained as written; this entry supersedes their D8 "symmetric noise" claim. Reviewer: Claude (Fable-mode), 2026-07-22. Builder-typed, append-only.
+
+## 2026-07-22 — OPERATOR RATIFICATION — CENSUS-1 reconciliation (770860b) accepted
+
+- **What is ratified.** The CENSUS-1 verdict reconciliation committed at `770860b` ("CENSUS-1 verdict: reviewer verification CLOSED; eb671df provisional scorecard reconciled"), which closed eb671df's pending-verification status and revised the substantive scorecard: durable null-survived findings = **2** (zone-landing at ~2× chance on all four lenses; the 9/89→9/200 maturation clock), two reported confirmations **reclassified to not-established** (the add-trigger signal ranking as a units artifact; the pullback-outcome edge as underpowered), slow-stack agreement **falsified as an entry-magnitude lifter and reassigned** as a survival/holding-and-add variable, and cascade-ladder + k-of-N **deferred** to CENSUS-1b.
+- **Form of the ratification.** That entry closed with "Operator sign-off: PENDING Ludwig ratification of this reconciliation." The ratification is the operator's commissioning of **CENSUS-1b**, whose contract is built entirely on the reconciled basis — it names the units artifact (§1, "its ATR-denominated ranking is a units artifact"), the underpowered pullback edge (§1, P-1b-C7b), the collinear factor list (§1, P-1b-D9), and the deferred cascade re-score (§1, P-1b-D8) as the four things this phase exists to fix, and pins CENSUS-1 "verified (`eb671df` build; reviewer verification and D8 correction on record, `770860b`)" as its §Basis. Commissioning a phase whose entire scope is the reconciliation's four deferrals is acceptance of the reconciliation.
+- **Disclosure.** This is ratification **by act**, recorded by the builder from the contract text; it is **not** a separately typed verbal sign-off from Ludwig. If the operator intends a narrower acceptance, this entry is the one to amend — the reconciliation's substance, not CENSUS-1b's fixtures or predictions, is what would change.
+- Operator: Ludwig, 2026-07-22 (by commissioning CENSUS-1b). Reviewer: Claude (Fable-mode). Builder-typed, append-only.
+
+## 2026-07-22 — CENSUS-1b G-7 PRE-REGISTRATION — Re-score, Tradeability & Move-Anatomy Census, Tier A (before any analysis)
+
+- **Scope.** A re-expression and enrichment of the **byte-frozen CENSUS-1 substrate**. Engine 1.0.11 **byte-untouched**; no trading, no trading-layer edit, no rule change, no re-run of the census, no lockbox spend. Five jobs: (1) D4/D8 net-of-cost quality re-rank in bps; (2) D5+MAE tradeability pairing; (3) P-C7b powered pooled test; (4) D9 decorrelation + dose-response re-run; (5) move-anatomy substrate (5a enriched terminus × cross join, 5b adverse-excursion zone landing). Executed under `CENSUS_1b_Rescore_and_Anatomy_Builder_Contract.md`.
+- **Provenance sha (F1b-CFG denominator).** Contract `CENSUS_1b_Rescore_and_Anatomy_Builder_Contract.md` sha256 `314140c01daba91b7bfcfe7d2eb0aa9b7b4b743e1513c221a9c14866fb4959b1`. Substrate pinned in `research_outputs/census/build_manifest.json` (continuation `9a7d1866…` 38,552 · ladder `cc81b897…` 81,674 · outcomes `daf488ac…` 149,802 · termini `61a9b7a3…` 160,160). Bootstrap seed **20260721** (the pinned census seed), 10,000 resamples, percentile 95% CI.
+
+### SCHEMA-PIN (step 0 — exact field names, verbatim from `head -1` of each file)
+
+| file | favorable (bps) | favorable (ATR) | adverse (bps) | adverse (ATR) | anchor carriers |
+|---|---|---|---|---|---|
+| `continuation.jsonl` | `mfe_bps_h{20,100,500}` | `mfe_atr_h{20,100,500}` | **absent — derived** | `mae_atr_h{20,100,500}` | `p0`, `atr_basis`, `exec_idx`, `exec_ts`, `dir` |
+| `census_ladder.jsonl` (per `rungs[]`) | `rem_mfe_bps_100` | `rem_mfe_atr_100` | **absent — derived** | `rem_mae_atr_100` | `init_exec_idx`, `lag_exec_bars`, `init_ts`, `dir` |
+| `census_outcomes.jsonl` (flat) | `mfe_bps_h{20,100,500}` | `mfe_atr_h{20,100,500}` | **`mae_bps_h{20,100,500}` STORED** | `mae_atr_h{20,100,500}` | `p0`, `event_price`, `atr_basis`, `exec_idx`, `exec_ts`, `ts` |
+| `census_outcomes.jsonl` (`gov[lens]`, regime-scale) | `mfe_bps` | `mfe_atr` | **`mae_bps` STORED** | `mae_atr` | `end_off`, `trunc`, `regime_long`; `fac[lens]` = `{k, bits}` |
+| `census_termini.jsonl` (`kind="terminus"`) | `fwd_mfe_bps_100` | `fwd_mfe_atr_100` | **ABSENT ENTIRELY** | **ABSENT ENTIRELY** | `ts`, `lens`, `regime`, `dist_e89_atr`, `dist_e200_atr`, `dist_lensp1_e200_atr`, `near_e89`, `near_e200`, `near_any`, `trunc` |
+| `census_termini.jsonl` (`kind="null"`) | — | — | — | — | as above minus `fwd_*`/`trunc`, plus `sample_i` |
+
+- **§3.5 CONTINGENCY RESOLVED → RE-WALK BRANCH.** `census_outcomes` stores the MAE **magnitude only** (`mae_bps_h*`, `mae_atr_h*`); it carries **no** MAE bar-offset, **no** MAE timestamp, **no** MAE price. The join branch is therefore unavailable and job 5b takes the **scoped in-window re-walk**, restricted per §3.5 to the **continuation (38,552) and cascade-rung (275,988) anchors only** — 314,540 anchors × 100 exec bars. Trade-independent, in-window, **zero lockbox spend**. Declared PARTIAL-eligible per §11.
+- **Disclosure — `census_termini` gaps vs §3.4.** Termini carry no MAE in any unit, so §3.4's "derived bps-MAE where recoverable" is recoverable for **zero** termini; the field is emitted `null` with its count. Termini also carry **no anchor price and no anchor ATR**; the shared per-record carrier `fwd_mfe_bps_100 / fwd_mfe_atr_100` = `ATR_anchor/price_anchor × 1e4` IS recoverable and is emitted as `anchor_atr_over_price_bps`. Absolute anchor price/ATR are **not** back-filled — recovering them would require reading price outside the §3.5-scoped anchors, which the contract forbids.
+
+### TOLL MAPPING (pinned from `scripts/census_analyze.py:40-41`, identical to CENSUS-1 D5)
+
+`TOLL_BPS = {BTCUSDT: 14.0, ETHUSDT: 14.0}`, `DEF_TOLL = 20.0` → **BTCUSDT 14 · ETHUSDT 14 · JTOUSDT 20 · NEARUSDT 20 · SOLUSDT 20 · TAOUSDT 20 · ZECUSDT 20**. Consistency proven: this mapping reproduces CENSUS-1 D5 exactly (gross regime-scale median 614.1646 bps → net-of-toll median **596.7466** bps, CI [581.6739, 612.9538], n=13,299). **Disclosure:** the contract §3.1 and the LEDGER describe a {14, 20, 30} three-tier model, but **no asset in the 7-asset exploration estate maps to the 30 bps C tier** — the tier exists in the constant's comment only. CENSUS-1b uses the mapping D5 used, as §3.1 mandates, and does not introduce the unused tier.
+
+### NET-OF-COST BASIS (§3.1, pinned, applied uniformly)
+
+- net favorable = `MFE_bps − T` · net adverse (magnitude) = `|MAE_bps| + T` · quality ratio = `(MFE_bps − T) / (|MAE_bps| + T)`.
+- **Group statistic — CONFIRMATORY = ratio of medians:** `median(MFE_bps − T) / median(|MAE_bps| + T)` over the group, bootstrapped jointly (each of the 10,000 resamples draws record indices ONCE and recomputes both medians and their ratio). **COMPANION, reported, non-confirmatory:** the median of the per-record ratios. The denominator is `≥ T > 0` by construction, so the ratio is always defined. Pinned here, before any analysis; not tuned.
+- Horizon: **h100 primary** (the only horizon `census_ladder` carries), h20/h500 reported alongside where available. Truncated records are **retained** (matching CENSUS-1 D8) with their `trunc` share reported.
+
+### bps-MAE DERIVATION + DROP-AND-COUNT (§3.2, Fork 2 Option A)
+
+- `mae_bps = mae_atr × (mfe_bps / mfe_atr)` — the shared per-record carrier is `ATR_anchor/price_anchor × 1e4`. Verified algebraically against `scripts/census_build.py` `excursion()` (returns `fav/p0*1e4, adv/p0*1e4, fav/atr, adv/atr`) and `_ladder()` (`rem_mfe_bps_100 = fav/p0*1e4`, `rem_mfe_atr_100 = fav/ab`, `rem_mae_atr_100 = adv/ab`), so the identity is exact up to 6-decimal storage rounding.
+- **Needed for:** `continuation.jsonl` and `census_ladder.jsonl` rungs. **NOT needed for:** `census_outcomes` flat rows and `gov[lens]` regime-scale rows — both store `mae_bps` directly, so **D5 / P-1b-D5 uses the STORED `gov[lens].mae_bps` and performs no derivation at all**.
+- **Drop-and-count (no estimate substituted, ever):** a record is dropped iff its carrier vanishes (`mfe_atr == 0` or `mfe_bps == 0` or either null). Pre-counted from the substrate at pin time: **ladder 1,013 / 275,988 rungs = 0.3671%** (contract expected ≈0.367% ✓) · **continuation h100 99 / 38,552 = 0.2568%** (contract expected 0.12–0.59% ✓). Printed in F1b-DERIV.
+- **F1b-DERIV validation:** on `census_outcomes` (where both units are stored), derived-vs-stored `mae_bps` must agree with **median |Δ| ≤ 1e-6**.
+
+### EXEC-INDEX AND JOIN PINS (§3.4)
+
+- **Exec index derivation:** `exec_idx = (exec_ts − start_ms) / 300_000`, `start_ms = ms(ASSET_STARTS[asset])`. **Verified at pin time on all 149,802 `census_outcomes` rows: 0 mismatches** against the stored `exec_idx` — the 5m exec series is gapless for all seven assets (`per_asset_exec_bars` = span-days × 288 exactly). Registered as fixture **F1b-IDX**. No price is read to do this.
+- **Terminus join reference.** A terminus `ts` is a **LENS-frame** bar open_time (the pivot bar `i`); its `fwd_mfe_*_100` is anchored at the **confirmation bar** `ci = i + 5` lens bars and runs 100 **lens** bars (`scripts/census_build.py:_termini`). The join reference is therefore **`exec_idx_confirm` = exec_idx(ts + 5 × TF_MS[lens])** — the actionable moment, and the same anchor the forward outcome uses. Both `exec_idx_pivot` and `exec_idx_confirm` are emitted so either convention is one subtraction away.
+- **Prior/forward split:** a cross is PRIOR iff `cross.exec_idx ≤ exec_idx_confirm`, FORWARD iff `cross.exec_idx > exec_idx_confirm`. Crosses are matched on `exec_idx` (the as-of exec anchor), never on the cross's own TF `ts`. No cross may be assigned across an asset boundary (F1b-JOIN).
+- **Direction map:** terminus `regime="long"` ↔ cross `dir="up"`; `regime="short"` ↔ `dir="down"`.
+
+### JOB-SPECIFIC METHOD PINS
+
+- **D4 scope (job 1a).** "Decoupled-add candidates at continuation moments" = the 38,552 `continuation.jsonl` records stratified by the three registered prior-cross flags `{cross_989_prior20, cross_9200_prior20, cross_989_prior5}` — each flag's TRUE and FALSE arm plus the unconditioned baseline. **COMPANION** (direct-bps, no derivation): the P-C3 candidate signals `{9_89, 9_200, 89_200} × 7 TFs` from `census_outcomes`. Both are reported; the continuation strata are the primary re-rank.
+- **D8 scope (job 1b).** The 275,988 rungs grouped by follow-on TF. **P-1b-D8 is scored on the `4h` rung (primary) and the `1h` rung (secondary).**
+- **P-C7b pooling (job 3).** `fwd_mfe_atr_100` is already denominated in each lens's **own** ATR (`la[i]`, the lens's ATR-14 at the pivot bar) — that IS the own-ATR normalization §3.3 requires; no further rescaling is applied. Pool the four lenses' **real termini only** (14,560; nulls carry no forward outcome). Statistic = `median(near_any=True) − median(near_any=False)` on the pooled arrays; 10,000-resample bootstrap, seed 20260721. **Pass requires BOTH:** the pooled 95% CI excludes zero **AND** the per-lens difference is positive on **≥2 of 4** lenses (the sign-agreement gate, so pooling cannot manufacture a positive). Per-lens breakdown reported. **Robustness row (reported, NON-confirmatory):** a cluster bootstrap resampling the 7 assets, disclosed because the four lenses are overlapping views of the same price and the ordinary bootstrap treats them as independent.
+- **D9 decorrelation (job 4).** Association = **|φ|** (Pearson correlation of the 0/1 factor vectors; identical to Cramér's V for 2×2). Threshold **|φ| < 0.30** (contract default). Matrix built **per lens** on that lens's arm rows. **Greedy prune, fully deterministic:** (i) drop zero-variance factors first and count them; (ii) while `max |φ| ≥ 0.30` among retained pairs: take the maximal pair (ties → lexicographically smallest `(i,j)` by factor index) and drop whichever member has the larger **sum of |φ| to all other retained factors** (ties → drop the higher-index factor); repeat. Then `k_core` = count of retained bits set, and `ρ_core` = Spearman(`k_core`, `mfe_atr_h100`) per lens, against the collinear full-list baseline **1H 0.038 · 4H 0.018 · 12H 0.013 · 1D 0.012**. Factor list F1–F9 is the CENSUS-1 registered list, unchanged.
+- **Job 5b (adverse-zone) construction.** Per scoped anchor, re-walk exec bars `[i, i+99]`, locate the **adverse extreme bar** (min low for a long anchor, max high for a short), and measure `min(|p_adv − lens_e89|, |p_adv − lens_e200|) / lens_ATR` at that bar's as-of lens state, for each of the four lenses. "Lands on a zone" = that distance ≤ **0.35 lens-ATR** (the D10 Z2 band, unchanged). **Matched null, per D10 discipline:** for each anchor, random in-regime exec bars drawn from the same asset+lens+regime pool, `NULL_MULT = 10`, seed **20260721** — the null row is printed BESIDE every clustering claim. Exploratory; not a validated finding.
+
+### PRE-REGISTERED PREDICTIONS (§8 — the ONLY confirmatory claims; scored falsifications-first)
+
+| # | Prediction | Prior | Falsified if |
+|---|---|---|---|
+| **P-1b-D9** | A decorrelated factor core (pairwise \|φ\| < 0.30) yields dose-response ρ(k_core, MFE) **≥ 0.10 on ≥2 lenses** — materially steeper than the collinear full list (0.012–0.038) | **40%** | core ρ < 0.10 on all but ≤1 lens (the flat dose-response is structural, not a collinearity artifact) |
+| **P-1b-C7b** | Pooled across four lenses (own-ATR-normalized, ≥2-lens sign gate), EMA-terminating pullbacks show **higher 100-bar forward MFE** than non-EMA, **pooled 95% CI excluding zero** | **45%** | pooled CI includes zero, **or** sign agreement holds on <2 lenses |
+| **P-1b-D5** | The P-C5 slow-stack combination's net-of-toll **quality ratio** (regime-scale) has **95% CI lower bound > 1.0** (genuinely tradeable, not just favorable-on-peak) | **55%** | ratio CI includes or is below 1.0 |
+| **P-1b-D8** | **Primary:** the **4H** cascade rung's net-of-toll quality ratio has **95% CI lower bound ≥ 1.05**. **Secondary:** the **1H** rung's ratio CI **includes 1.0** (marginal) | **55%** | 4H CI lower bound < 1.05 (primary); the 1H secondary is recorded separately if it misses |
+
+Priors are the reviewer's, set here at pre-registration. P-1b-D8's directional shape follows from the corrected ATR asymmetry (1H 1.1907, 4H 1.3260 — first entry above) surviving into toll-space at the slow 4H rung where a fixed bps toll is a small slice of a large move, while being eaten at the faster 1H rung where the same toll is a larger share.
+
+### PRE-DECLARED ANNEX CUTS (§10 — exact conditioning stated BEFORE they are run; NONE is a finding)
+
+Prior window for all cuts = **500 exec bars** (pinned now; it is the census's own existing h500 horizon length, not a new tuned constant). Outcome for all cuts = `fwd_mfe_atr_100`. Every cut carries a bootstrap CI and a cross-TF/cross-lens replication status; every cut is labelled *"exploratory, in-sample, exploration-classic, not validated — candidate for a following pre-registered test."*
+
+- **A1 — the operator's motivating pattern.** Real termini where (i) the most recent prior **in-direction 4H 9/89** cross lies within 500 exec bars before `exec_idx_confirm`, **AND** (ii) `near_any = True` (landed within 0.35 lens-ATR of the lens e89/e200). Outcome split by which of the **5m / 15m / 30m** in-direction 9/89 crosses fires **first** after `exec_idx_confirm`. Each LTF arm compared to the complement set. **Replication gate: sign holds on ≥2 of the 3 LTF arms**, else "single-instance, likely noise."
+- **A2 — the zone's marginal contribution.** A1 with condition (ii) dropped; the A1−A2 contrast isolates what the zone-landing adds.
+- **A3 — prior-cross density.** Outcome by the count (0–7) of distinct TFs carrying an in-direction 9/89 cross within 500 exec bars prior. Spearman ρ with CI, per lens. **Replication: sign on ≥2 lenses.**
+- **A4 — forward-cross lag.** Outcome by quartile bins of the lag to the first in-direction **5m** 9/89 cross after `exec_idx_confirm`. **DESCRIPTIVE ONLY — flagged not-tradeable-as-stated:** it conditions on post-anchor information while the outcome is measured from the anchor.
+- **A5 — prior cross type.** Outcome by the **type** of the most recent prior in-direction **4H** cross among `{9_89, 9_200, 89_200}`. **Replication: sign on ≥2 lenses.**
+
+### FIXTURES (§6 — any MISMATCH halts)
+
+F1b-BYTE (four files re-hash to `build_manifest.json`, 4/4) · F1b-DERIV (median |Δ| ≤ 1e-6 on `census_outcomes`; drop counts printed) · F1b-DET (full analysis twice → `census1b_results.json` + enriched jsonl byte-identical) · F1b-CFG (toll mapping, decorrelation threshold, pooling method, drop rule, seed = THIS entry) · F1b-JOIN (every real terminus resolves; row count = 14,560; no cross assigned across an asset boundary) · **F1b-IDX** (added this phase: exec-index derivation exact on all 149,802 `census_outcomes` rows). **F1b-BYTE and F1b-DERIV poison everything downstream — any mismatch HALTS and nothing downstream is produced.**
+
+### ANTI-FISHING PROTOCOL (§7, non-negotiable)
+
+Only the four §8 rows above are confirmatory. Everything in job 5 (5a, 5b) and the annex is exploratory hypothesis-generation for a following, separately pre-registered test. No parameter is tuned to outcome: the toll mapping, the decorrelation threshold, the pooling normalization, the drop-and-count rule, the §3.5 anchor set, the 500-bar annex window, the 0.35 Z2 band and the seed are all fixed in THIS entry and are not searched over. Bootstrap CIs (10,000 resamples, seed 20260721) on every reported number; any effect whose CI spans zero (or, for a ratio, spans 1.0) is reported as such and never as an edge. No single-timeframe pattern is promoted without cross-TF replication.
+
+- **Roots.** Reads `research_outputs/census/{continuation,census_ladder,census_outcomes,census_termini}.jsonl` + `build_manifest.json` (byte-verified, read-only) and, for job 5b only, the offline 5m/1h/4h/12h/1d kline cache for the §3.5-scoped anchors. `research_outputs/census_run2/` read-only. Prior roots (s1, s2, s3, tc1, tc4, tc5, **lockbox**, J-1) untouched. No network. Emits `research_outputs/census1b/`.
+- Builder-typed, append-only. **Do not push, do not merge.** Analysis (D1b–D6b, the scorecard, the annex) follows THIS commit (G-7).
