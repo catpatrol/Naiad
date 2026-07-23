@@ -684,3 +684,11 @@ Only the four §8 rows above are confirmatory. Everything in job 5 (5a, 5b) and 
 - **No result changes.** This entry closes two open-phrased items. It revises no number, verdict, or ruling.
 - **CENSUS-1b arc, complete:** pre-registration (537) → disclosed deviation (620, CLOSED) → PARTIAL completion (632, CLOSED) → ratified PASS (653) → standing rule G-9 (671) → this closure.
 - Reviewer: Claude (Fable-mode), 2026-07-22.
+
+## 2026-07-22 — Push authorization: CENSUS-1b commit set pushed to origin on operator instruction
+
+- **Authorization.** The CENSUS-1b commit set (a70a49c -> d77c2d6 -> 7a7df1f -> 98fe613) was pushed to origin/v12-v1-census on 2026-07-22 on explicit operator instruction, overriding the CENSUS-1b contract §11 do-not-push default. Branch push only; no merge; main untouched. Precedent: TC-4 and S-1 carry equivalent after-the-fact authorization lines.
+- **Reading the superseded clauses.** The "not pushed, not merged" statements in the CENSUS-1b entries of this date (537, 620, 632, 653, 671) describe their state AT AUTHORING and were accurate then; they are not errors and are not corrected. This entry records the subsequent authorized state change, so a cold reader can tell the push was authorized rather than accidental.
+- **Remote state of record.** origin/v12-v1-census HEAD = 98fe613. Local and remote in sync. The full CENSUS-1b arc is now public: pre-registration (537) -> disclosed deviation (620, CLOSED) -> PARTIAL completion (632, CLOSED) -> ratified PASS (653) -> standing rule G-9 (671) -> record closure -> this authorization.
+- **Substrate not on origin (unchanged by this push).** census1b_termini_enriched.jsonl (33.6 MB, 14,560 rows) is fenced per the large-substrate precedent and exists only on the operator's machine, sha-pinned 4feecd54... in research_outputs/census1b/build_manifest.json. Regenerable by re-running census1b_analyze.py against the byte-pinned CENSUS-1 files (F1b-DET proves determinism), ~19 min. NOTE the full chain: the CENSUS-1 substrate is itself fenced, so a clean clone reproduces neither; the sha pins make a rebuild VERIFIABLE but the raw price journals remain the single irreplaceable asset, on one machine under OneDrive (standing integrity risk).
+- Reviewer: Claude (Fable-mode), 2026-07-22. Operator: authorized.
