@@ -1,0 +1,66 @@
+{
+ "BTCUSDT": {
+  "basis": {
+   "at_utc": "2026-07-20T00:00:00Z",
+   "basis_bps": 50.0,
+   "index_price": 100.0,
+   "mark_price": 100.5
+  },
+  "canned": true,
+  "degraded": [],
+  "fetched_utc": "2026-07-20T00:00:00Z",
+  "next_funding": {
+   "interest_rate": 0.0001,
+   "last_funding_rate": 0.0001,
+   "next_funding_utc": "2026-07-20T04:00:00Z"
+  },
+  "open_interest": {
+   "at_utc": "2026-07-20T00:00:00Z",
+   "change_24h_pct": 1.25,
+   "change_24h_percentile": 91.0,
+   "change_7d_pct": -3.5,
+   "level": 100000.0,
+   "percentile": 62.5,
+   "samples": 500
+  },
+  "provenance": "fetched",
+  "top_trader_ratio": {
+   "at_utc": "2026-07-20T00:00:00Z",
+   "percentile_7d": 44.0,
+   "ratio": 1.85,
+   "samples": 168
+  }
+ },
+ "SOLUSDT": {
+  "basis": {
+   "at_utc": "2026-07-20T00:00:00Z",
+   "basis_bps": 50.0,
+   "index_price": 100.0,
+   "mark_price": 100.5
+  },
+  "canned": true,
+  "degraded": [],
+  "fetched_utc": "2026-07-20T00:00:00Z",
+  "next_funding": {
+   "interest_rate": 0.0001,
+   "last_funding_rate": 0.0001,
+   "next_funding_utc": "2026-07-20T04:00:00Z"
+  },
+  "open_interest": {
+   "at_utc": "2026-07-20T00:00:00Z",
+   "change_24h_pct": 1.25,
+   "change_24h_percentile": 91.0,
+   "change_7d_pct": -3.5,
+   "level": 100000.0,
+   "percentile": 62.5,
+   "samples": 500
+  },
+  "provenance": "fetched",
+  "top_trader_ratio": {
+   "at_utc": "2026-07-20T00:00:00Z",
+   "percentile_7d": 44.0,
+   "ratio": 1.85,
+   "samples": 168
+  }
+ }
+}

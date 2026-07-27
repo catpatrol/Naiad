@@ -1,0 +1,95 @@
+{
+ "as_of_ms": 1784505600000,
+ "as_of_utc": "2026-07-20T00:00:00Z",
+ "assets": [
+  "BTCUSDT",
+  "SOLUSDT"
+ ],
+ "date": "2026-07-20",
+ "fencing": "The frozen klines/funding under data_cache/ are NOT committed: charter section 10 / build prompt invariant 9 forbid committing raw candles, and .gitignore data_cache/ enforces it. This manifest pins every slice by sha256 so a rebuild is verifiable. Precedent: the CENSUS-1b substrate is fenced the same way.",
+ "purpose": "F-B3 determinism + F-B6/F-B7/F-B8 harness; frozen klines/funding + canned Tier-2 (A1.7)",
+ "rebuild": "scripts/daily_brief.py --build-fixture 2026-07-20",
+ "script_version": "1.1.0",
+ "slice_count": 14,
+ "slices": {
+  "funding/BTCUSDT.parquet": {
+   "bytes": 108942,
+   "rows": 7515,
+   "sha256": "7df84ff25fbfbe8045a00009bf8ae649cf256fbb687b9283e55b4be693638f9a"
+  },
+  "funding/SOLUSDT.parquet": {
+   "bytes": 95596,
+   "rows": 6480,
+   "sha256": "69fd979efb0507ea11cd8aeafe53a48bf1a274739f947f5aeb687a3af13ef31e"
+  },
+  "klines/BTCUSDT_12h.parquet": {
+   "bytes": 20127,
+   "rows": 401,
+   "sha256": "66c144bbc021e03d8c26d32fb14dfb7ca2835234401e0b8c63c6e84cd30d27b8"
+  },
+  "klines/BTCUSDT_15m.parquet": {
+   "bytes": 787707,
+   "rows": 19201,
+   "sha256": "e068a396c9f421b374563c15c23763f3013f89eb3d8e471547b3d9269834b531"
+  },
+  "klines/BTCUSDT_1h.parquet": {
+   "bytes": 405305,
+   "rows": 9601,
+   "sha256": "3afca95889ca7246fa403b603ed95120422b13110af0303adb21c4da993225f3"
+  },
+  "klines/BTCUSDT_1m.parquet": {
+   "bytes": 1221577,
+   "rows": 36001,
+   "sha256": "00038c1cafb1ba8bb4926aa46172ecee9003d86e6bfb646d032d8d8743cb85cc"
+  },
+  "klines/BTCUSDT_4h.parquet": {
+   "bytes": 52453,
+   "rows": 1201,
+   "sha256": "e62c63680b1fb51a1b1ee23d3c82757734b1214523bdaa90f6e852acbf0d86a2"
+  },
+  "klines/BTCUSDT_5m.parquet": {
+   "bytes": 2247982,
+   "rows": 57601,
+   "sha256": "eb1ed8ffdb736f400be63ac3220c05a30499db4d6b0fdc151aeddae86d01c658"
+  },
+  "klines/SOLUSDT_12h.parquet": {
+   "bytes": 18782,
+   "rows": 401,
+   "sha256": "708b3a91a111b8470bad89bd5f053ae80711be0348e5074f97a4067fcc5f1ab9"
+  },
+  "klines/SOLUSDT_15m.parquet": {
+   "bytes": 518888,
+   "rows": 19201,
+   "sha256": "8ae71db7216639f838421edc03906df6e3e216dce35491d49e8196d277139e89"
+  },
+  "klines/SOLUSDT_1h.parquet": {
+   "bytes": 327715,
+   "rows": 9601,
+   "sha256": "bdab114d219ea9df2434057399f8e0849276ef5d0ad9da547132e2c7ef5d59bd"
+  },
+  "klines/SOLUSDT_1m.parquet": {
+   "bytes": 792876,
+   "rows": 36001,
+   "sha256": "4246f67dca893a1893e65cc34f4616696b25b153634a291cd081f64fadf2cae1"
+  },
+  "klines/SOLUSDT_4h.parquet": {
+   "bytes": 46132,
+   "rows": 1201,
+   "sha256": "c17372e1073d6f82f92a770d3f3b468297aaa01ad3f99056c5f6c154e37a5db5"
+  },
+  "klines/SOLUSDT_5m.parquet": {
+   "bytes": 1407546,
+   "rows": 57601,
+   "sha256": "486da73b18a34f7e9c84ebca60366c66c6a54359eb327e897f16a02a0242f420"
+  }
+ },
+ "spans_days": {
+  "12h": 200,
+  "15m": 200,
+  "1h": 400,
+  "1m": 25,
+  "4h": 200,
+  "5m": 200
+ },
+ "total_bytes": 8051628
+}

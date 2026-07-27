@@ -1,0 +1,19 @@
+{
+ "as_of_ms": 1784505600000,
+ "as_of_utc": "2026-07-20T00:00:00Z",
+ "assets": [
+  "BTCUSDT",
+  "SOLUSDT"
+ ],
+ "date": "2026-07-20",
+ "purpose": "F-B3 determinism + F-B6/F-B7/F-B8 harness; frozen klines/funding + canned Tier-2 (A1.7)",
+ "script_version": "1.1.0",
+ "spans_days": {
+  "12h": 200,
+  "15m": 200,
+  "1h": 400,
+  "1m": 25,
+  "4h": 200,
+  "5m": 200
+ }
+}
