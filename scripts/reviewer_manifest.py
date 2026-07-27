@@ -70,6 +70,8 @@ SOURCE_PATTERNS = [
     "scripts/tc1_*.py",
     "scripts/tc5_*.py",
     "scripts/reviewer_manifest.py",          # F-M1 self-hash target
+    "scripts/daily_brief.py",
+    "scripts/brief_lookup.py",
     "LEDGER.md",
     "DATA_CENSUS.md",
     "census.json",

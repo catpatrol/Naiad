@@ -78,3 +78,7 @@ research_outputs/census1b_run2/**
 
 # Reviewer hand-off staging — local-only, never committed.
 _reviewer_box/
+
+# Daily Brief archive — ops artifacts, untracked by design (A1.5); ignored so `git clean -fd` cannot remove them
+research_outputs/brief/
+tests/brief_fixture/out/
