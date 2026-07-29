@@ -1,0 +1,614 @@
+#!/usr/bin/env python
+"""backup_estate.py -- dated, hashed, bidirectionally-verified archives.
+
+Reference implementation: the manual run recorded in LEDGER.md under
+"2026-07-27 -- Estate protection established" (LEDGER.md:743-757).  That run
+established the pattern this script reproduces: compress -> verify in BOTH
+directions -> only then consider the source releasable, per-phase atomic, with
+an embedded MANIFEST.json carrying {rel_path,size,sha256} for every member.
+
+MODES
+  --estate            (default) the irreplaceable price estate, resolved by
+                      CALLING engine.data.cache_dir() so NAIAD_CACHE_DIR is
+                      honoured.  census.json stores RELATIVE paths only
+                      (LEDGER.md:762 item 3) and is therefore used to check
+                      COMPLETENESS, never to locate anything.
+  --phase <name>      one research_outputs/<name> subtree.
+  --verify <zip>      recompute every member's sha256 from inside the archive
+                      and compare against the embedded manifest.  Extracts
+                      nothing, writes nothing.
+
+INVARIANTS
+  * Read-only on every source.  This script does not delete the estate, ever.
+  * All hashing is hashlib over binary reads, chunked.  No shell text tools.
+  * A hard environment assertion runs before ANY read or write.
+  * Archive names are dated and never overwritten -- an existing target halts.
+  * Standard library only, except engine.data.cache_dir() in --estate mode.
+
+DELETION -- deliberately opt-in.  The spec for --phase permits deleting
+UNTRACKED source files once verification reports zero mismatches, and the
+reference run did exactly that.  Because deletion is irreversible and this
+project's own record shows the builder halting to ask rather than deleting
+unprompted (LEDGER.md:756), it is gated behind an explicit --delete-source
+flag.  Without that flag the run archives, verifies, and REPORTS what it would
+have released.  Git-tracked files are preserved in place under every setting.
+
+FIXTURES (all must pass; any failure exits non-zero)
+  F-K1 member integrity, every member, both directions
+  F-K2 completeness vs census.json (60/60 klines, 10/10 funding)
+  F-K3 source untouched (sha sample + git status identical before/after)
+  F-K4 restore rehearsal into a temp dir asserted OUTSIDE the repo
+  F-K5 destination verification -- archive re-read FROM the destination
+  F-K6 no-clobber
+  F-K7 tracked-file preservation
+"""
+
+import argparse
+import hashlib
+import json
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+import zipfile
+from datetime import datetime, timezone
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO))
+
+CHUNK = 1024 * 1024
+REPO_PREFIX = "_repo/"
+
+
+# --------------------------------------------------------------- hashing
+
+def sha256_file(path: Path) -> str:
+    """sha256 of a file, chunked binary read.  Never loads the whole file."""
+    h = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for block in iter(lambda: fh.read(CHUNK), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
+def sha256_zip_member(zf: zipfile.ZipFile, name: str) -> tuple:
+    """sha256 and byte length of a member, streamed out of the archive."""
+    h, n = hashlib.sha256(), 0
+    with zf.open(name, "r") as fh:
+        for block in iter(lambda: fh.read(CHUNK), b""):
+            h.update(block)
+            n += len(block)
+    return h.hexdigest(), n
+
+
+# --------------------------------------------------------------- git (read-only)
+
+def git(*args) -> tuple:
+    proc = subprocess.run(["git", "-C", str(REPO), *args],
+                          stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    return proc.returncode, proc.stdout.decode("utf-8", "replace")
+
+
+def git_head() -> str:
+    rc, out = git("rev-parse", "HEAD")
+    return out.strip() if rc == 0 else "unavailable"
+
+
+def git_porcelain() -> str:
+    rc, out = git("status", "--porcelain")
+    return out if rc == 0 else "unavailable"
+
+
+def git_tracked_under(rel_dir: str) -> set:
+    rc, out = git("ls-files", "--", rel_dir)
+    if rc != 0:
+        return set()
+    return {line.strip() for line in out.splitlines() if line.strip()}
+
+
+# --------------------------------------------------------------- environment
+
+def assert_environment(dest: Path, need_writable: bool) -> dict:
+    """Hard precondition gate.  Runs before any source read or any write.
+
+    A misrouted read-only run silently succeeds and returns plausible nonsense,
+    which is precisely the failure the standing rule at LEDGER.md:761 exists to
+    prevent -- so this asserts even when nothing will be written.
+    """
+    problems = []
+
+    for marker in ("engine/data.py", "census.json", ".git"):
+        if not (REPO / marker).exists():
+            problems.append(f"repo marker missing: {marker}")
+
+    if need_writable:
+        if dest is None:
+            problems.append("no --dest given")
+        else:
+            try:
+                dest.mkdir(parents=True, exist_ok=True)
+                probe = dest / f".naiad_write_probe_{os.getpid()}"
+                probe.write_bytes(b"probe")
+                if probe.read_bytes() != b"probe":
+                    problems.append(f"destination read-back mismatch: {dest}")
+                probe.unlink()
+            except OSError as exc:
+                problems.append(f"destination not writable: {dest} ({exc})")
+
+    if problems:
+        sys.stderr.write("ENVIRONMENT ASSERTION FAILED\n")
+        for p in problems:
+            sys.stderr.write(f"  - {p}\n")
+        raise SystemExit(2)
+
+    onedrive = os.environ.get("OneDrive") or os.environ.get("OneDriveConsumer")
+    return {"repo": str(REPO), "onedrive_root": onedrive, "head": git_head()}
+
+
+def inside(child: Path, parent: str | None) -> bool:
+    if not parent:
+        return False
+    try:
+        child.resolve().relative_to(Path(parent).resolve())
+        return True
+    except (ValueError, OSError):
+        return False
+
+
+def assert_no_clobber(target: Path) -> None:
+    """F-K6.  Dated names must accumulate generations, never overwrite one."""
+    if target.exists():
+        sys.stderr.write(
+            f"REFUSING TO CLOBBER: {target} already exists.\n"
+            f"  Dated archives are non-overwriting by design (ruling R-B).\n"
+            f"  Move or rename the existing file, or pass a different --dest.\n")
+        raise SystemExit(3)
+
+
+# --------------------------------------------------------------- member collection
+
+def walk_members(root: Path, prefix: str = "") -> list:
+    """[(rel_path, abs_path)] for every file under root, sorted, forward slashes."""
+    out = []
+    for dirpath, _dirs, files in os.walk(root):
+        for name in sorted(files):
+            ap = Path(dirpath) / name
+            rel = prefix + ap.relative_to(root).as_posix()
+            out.append((rel, ap))
+    return sorted(out, key=lambda t: t[0])
+
+
+def estate_members(estate_root: Path) -> list:
+    members = walk_members(estate_root)
+    extras = ["census.json", "DATA_CENSUS.md",
+              "research_outputs/census/build_manifest.json"]
+    for rel in extras:
+        ap = REPO / rel
+        if not ap.exists():
+            sys.stderr.write(f"required companion file missing: {rel}\n")
+            raise SystemExit(2)
+        members.append((REPO_PREFIX + rel, ap))
+    return members
+
+
+def resolve_member(rel: str, estate_root: Path, repo_root: Path) -> Path:
+    if rel.startswith(REPO_PREFIX):
+        return repo_root / rel[len(REPO_PREFIX):]
+    return estate_root / rel
+
+
+# --------------------------------------------------------------- writing
+
+def build_archive(members: list, target: Path, meta: dict) -> dict:
+    """Compress, then embed the manifest.  Returns the manifest dict."""
+    assert_no_clobber(target)
+    files, total = [], 0
+    tmp = target.with_suffix(target.suffix + ".partial")
+    if tmp.exists():
+        tmp.unlink()
+
+    try:
+        with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as zf:
+            for i, (rel, ap) in enumerate(members, 1):
+                size = ap.stat().st_size
+                digest = sha256_file(ap)
+                zf.write(ap, rel)
+                files.append({"rel_path": rel, "size": size, "sha256": digest})
+                total += size
+                if i % 250 == 0 or i == len(members):
+                    print(f"    compressed {i}/{len(members)}")
+            manifest = dict(meta)
+            manifest.update({"file_count": len(files),
+                             "total_bytes": total,
+                             "files": files})
+            zf.writestr("MANIFEST.json",
+                        json.dumps(manifest, indent=1, ensure_ascii=False))
+        os.replace(tmp, target)
+    finally:
+        if tmp.exists():
+            tmp.unlink()
+    return manifest
+
+
+# --------------------------------------------------------------- verification
+
+def verify_archive(target: Path, estate_root: Path | None,
+                   repo_root: Path | None, check_sources: bool) -> dict:
+    """Bidirectional verification.
+
+    For every member: bytes streamed OUT of the zip must hash equal to the
+    embedded pin, and (when check_sources) equal to a fresh re-read of the
+    source on disk.  Set membership is cross-checked in all directions.
+    """
+    res = {"members": 0, "verified": 0, "mismatches": [],
+           "strays": [], "omissions": [], "archive_sha256": None}
+
+    res["archive_sha256"] = sha256_file(target)
+
+    with zipfile.ZipFile(target, "r") as zf:
+        bad = zf.testzip()
+        if bad is not None:
+            res["mismatches"].append({"rel_path": bad, "why": "CRC failure"})
+
+        manifest = json.loads(zf.read("MANIFEST.json"))
+        pinned = {f["rel_path"]: f for f in manifest["files"]}
+        in_zip = {n for n in zf.namelist() if n != "MANIFEST.json"}
+
+        res["members"] = len(pinned)
+        res["strays"] = sorted(in_zip - set(pinned))
+        res["omissions"] = sorted(set(pinned) - in_zip)
+
+        for i, (rel, pin) in enumerate(sorted(pinned.items()), 1):
+            if rel not in in_zip:
+                continue
+            zsha, zlen = sha256_zip_member(zf, rel)
+            row = {"rel_path": rel}
+            ok = True
+            if zsha != pin["sha256"]:
+                row["why"] = "zip content != embedded pin"
+                ok = False
+            elif zlen != pin["size"]:
+                row["why"] = f"zip length {zlen} != pinned size {pin['size']}"
+                ok = False
+            elif check_sources and estate_root is not None:
+                src = resolve_member(rel, estate_root, repo_root)
+                if not src.exists():
+                    row["why"] = "source missing on disk"
+                    ok = False
+                elif sha256_file(src) != pin["sha256"]:
+                    row["why"] = "source on disk != embedded pin"
+                    ok = False
+            if ok:
+                res["verified"] += 1
+            else:
+                res["mismatches"].append(row)
+            if i % 250 == 0 or i == len(pinned):
+                print(f"    verified {i}/{len(pinned)}")
+
+        # disk -> zip direction: nothing on disk may be absent from the archive
+        if check_sources and estate_root is not None:
+            disk = {rel for rel, _ in estate_members(estate_root)} \
+                if repo_root is not None else set()
+            res["omissions"] += sorted(disk - set(pinned))
+
+    res["manifest"] = manifest
+    return res
+
+
+# --------------------------------------------------------------- fixtures
+
+class Fixtures:
+    def __init__(self):
+        self.rows = []
+
+    def record(self, fid, passed, detail):
+        self.rows.append((fid, bool(passed), detail))
+        print(f"  {'PASS' if passed else 'FAIL'} {fid} - {detail}")
+
+    def na(self, fid, why):
+        self.rows.append((fid, True, f"n/a - {why}"))
+        print(f"  N/A  {fid} - {why}")
+
+    @property
+    def ok(self):
+        return all(p for _, p, _ in self.rows)
+
+
+def fk2_completeness(fx: Fixtures, estate_root: Path) -> None:
+    census = json.loads((REPO / "census.json").read_text(encoding="utf-8"))
+    kl, fu = census.get("klines", []), census.get("funding", [])
+    missing = []
+    for entry in kl + fu:
+        # census paths are RELATIVE -- resolve them through the estate root
+        if not (estate_root / entry["path"]).exists():
+            missing.append(entry["path"])
+    ok = (len(kl) == 60 and len(fu) == 10 and not missing)
+    detail = f"census {len(kl)}/60 klines, {len(fu)}/10 funding; {len(missing)} unresolved"
+    if missing:
+        detail += f" (first: {missing[0]})"
+    fx.record("F-K2", ok, detail)
+
+
+def fk3_source_untouched(fx: Fixtures, sample: list, before_status: str) -> None:
+    changed = [rel for rel, ap, pre in sample
+               if not ap.exists() or sha256_file(ap) != pre]
+    after_status = git_porcelain()
+    ok = (not changed) and (after_status == before_status)
+    fx.record("F-K3", ok,
+              f"{len(sample)}-file sha sample unchanged: {not changed}; "
+              f"git porcelain identical: {after_status == before_status}")
+
+
+def fk4_restore_rehearsal(fx: Fixtures, target: Path, limit: int = 10) -> None:
+    tmp = None
+    try:
+        tmp = Path(tempfile.mkdtemp(prefix="naiad_restore_"))
+        # the rehearsal must never land inside the repository
+        assert not inside(tmp, str(REPO)), f"temp dir inside repo: {tmp}"
+        with zipfile.ZipFile(target, "r") as zf:
+            manifest = json.loads(zf.read("MANIFEST.json"))
+            pick = manifest["files"][:limit]
+            bad = []
+            for f in pick:
+                zf.extract(f["rel_path"], tmp)
+                out = tmp / f["rel_path"]
+                if sha256_file(out) != f["sha256"]:
+                    bad.append(f["rel_path"])
+        fx.record("F-K4", not bad,
+                  f"{len(pick)} members restored to {tmp.parent}\\... outside repo; "
+                  f"{len(bad)} hash mismatches")
+    except Exception as exc:                       # noqa: BLE001
+        fx.record("F-K4", False, f"rehearsal raised: {exc}")
+    finally:
+        if tmp and tmp.exists():
+            shutil.rmtree(tmp, ignore_errors=True)
+
+
+def fk5_destination_verification(fx: Fixtures, target: Path,
+                                 expect_sha: str, sidecar: Path) -> None:
+    """Re-read the archive FROM the destination after writing."""
+    try:
+        fresh = sha256_file(target)
+        with zipfile.ZipFile(target, "r") as zf:
+            crc_bad = zf.testzip()
+            n = len([x for x in zf.namelist() if x != "MANIFEST.json"])
+        side = sidecar.read_text(encoding="utf-8").split()[0] if sidecar.exists() else ""
+        ok = (fresh == expect_sha and crc_bad is None and side == expect_sha)
+        fx.record("F-K5", ok,
+                  f"re-read from destination: sha256 {fresh[:16]}... "
+                  f"matches={fresh == expect_sha}, sidecar matches={side == expect_sha}, "
+                  f"CRC clean={crc_bad is None}, {n} members")
+    except Exception as exc:                       # noqa: BLE001
+        fx.record("F-K5", False, f"destination re-read raised: {exc}")
+
+
+def fk6_no_clobber(fx: Fixtures, target: Path) -> None:
+    try:
+        assert_no_clobber(target)
+        fx.record("F-K6", False, "no-clobber guard did NOT trip on an existing target")
+    except SystemExit:
+        fx.record("F-K6", True,
+                  "guard refuses to overwrite the archive just written")
+
+
+def fk7_tracked_preserved(fx: Fixtures, tracked: set) -> None:
+    gone = [t for t in sorted(tracked) if not (REPO / t).exists()]
+    fx.record("F-K7", not gone,
+              f"{len(tracked)} git-tracked source files still present on disk; "
+              f"{len(gone)} missing")
+
+
+# --------------------------------------------------------------- modes
+
+def run_estate(dest: Path, args) -> int:
+    env = assert_environment(dest, need_writable=True)
+    from engine.data import cache_dir            # noqa: PLC0415 - Mode A only
+    estate_root = cache_dir()
+
+    override = os.environ.get("NAIAD_CACHE_DIR")
+    date = datetime.now().strftime("%Y-%m-%d")
+    target = dest / f"naiad_estate_{date}.zip"
+    sidecar = target.with_suffix(".zip.sha256")
+    assert_no_clobber(target)
+    assert_no_clobber(sidecar)
+
+    print(f"estate root      : {estate_root}")
+    print(f"NAIAD_CACHE_DIR  : {override or '(unset)'}")
+    print(f"inside OneDrive  : {inside(estate_root, env['onedrive_root'])}")
+    print(f"destination      : {target}")
+
+    members = estate_members(estate_root)
+    print(f"members to archive: {len(members)}")
+
+    before_status = git_porcelain()
+    sample = [(rel, ap, sha256_file(ap)) for rel, ap in members[:20]]
+    tracked = {"census.json", "DATA_CENSUS.md",
+               "research_outputs/census/build_manifest.json"}
+
+    meta = {
+        "created_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "mode": "estate",
+        "estate_root": str(estate_root),
+        "repo_root": str(REPO),
+        "naiad_cache_dir_override": override,
+        "inside_onedrive": inside(estate_root, env["onedrive_root"]),
+        "repo_head": env["head"],
+    }
+
+    print("  compressing...")
+    manifest = build_archive(members, target, meta)
+    archive_sha = sha256_file(target)
+    sidecar.write_text(f"{archive_sha}  {target.name}\n", encoding="utf-8")
+
+    print("  verifying (bidirectional)...")
+    res = verify_archive(target, estate_root, REPO, check_sources=True)
+
+    print("\nFIXTURES")
+    fx = Fixtures()
+    fx.record("F-K1",
+              not res["mismatches"] and not res["strays"] and not res["omissions"]
+              and res["verified"] == res["members"],
+              f"{res['verified']}/{res['members']} members verified both directions; "
+              f"{len(res['mismatches'])} mismatches, {len(res['strays'])} strays, "
+              f"{len(res['omissions'])} omissions")
+    fk2_completeness(fx, estate_root)
+    fk3_source_untouched(fx, sample, before_status)
+    fk4_restore_rehearsal(fx, target)
+    fk5_destination_verification(fx, target, archive_sha, sidecar)
+    fk6_no_clobber(fx, target)
+    fk7_tracked_preserved(fx, tracked)
+
+    print(f"\narchive   : {target}")
+    print(f"size      : {target.stat().st_size:,} B "
+          f"({target.stat().st_size / 1048576:.1f} MB, "
+          f"{100 * target.stat().st_size / max(manifest['total_bytes'], 1):.1f}% of source)")
+    print(f"sha256    : {archive_sha}")
+    print(f"members   : {manifest['file_count']}")
+    print(f"source    : {manifest['total_bytes']:,} B")
+    print(f"sidecar   : {sidecar}")
+    print(f"\n{sum(1 for _, p, _ in fx.rows if p)}/{len(fx.rows)} fixtures pass")
+    return 0 if fx.ok else 1
+
+
+def run_phase(name: str, args) -> int:
+    env = assert_environment(None, need_writable=False)
+    src = REPO / "research_outputs" / name
+    if not src.is_dir():
+        sys.stderr.write(f"no such phase directory: {src}\n")
+        return 2
+
+    dest = REPO / "research_outputs" / "_archive"
+    dest.mkdir(parents=True, exist_ok=True)
+    date = datetime.now().strftime("%Y-%m-%d")
+    target = dest / f"{name}_{date}.zip"
+    sidecar = target.with_suffix(".zip.sha256")
+    assert_no_clobber(target)
+    assert_no_clobber(sidecar)
+
+    rel_dir = f"research_outputs/{name}"
+    tracked = git_tracked_under(rel_dir)
+    members = walk_members(src)
+    print(f"phase      : {name}")
+    print(f"source     : {src}")
+    print(f"members    : {len(members)}  (git-tracked among them: {len(tracked)})")
+
+    before_status = git_porcelain()
+    sample = [(rel, ap, sha256_file(ap)) for rel, ap in members[:20]]
+
+    meta = {
+        "created_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "mode": "phase",
+        "phase": name,
+        "estate_root": str(src),
+        "repo_root": str(REPO),
+        "naiad_cache_dir_override": os.environ.get("NAIAD_CACHE_DIR"),
+        "inside_onedrive": inside(src, env["onedrive_root"]),
+        "repo_head": env["head"],
+    }
+
+    print("  compressing...")
+    manifest = build_archive(members, target, meta)
+    archive_sha = sha256_file(target)
+    sidecar.write_text(f"{archive_sha}  {target.name}\n", encoding="utf-8")
+
+    print("  verifying (bidirectional)...")
+    res = verify_archive(target, src, None, check_sources=True)
+
+    print("\nFIXTURES")
+    fx = Fixtures()
+    clean = (not res["mismatches"] and not res["strays"]
+             and not res["omissions"] and res["verified"] == res["members"])
+    fx.record("F-K1", clean,
+              f"{res['verified']}/{res['members']} members verified both directions; "
+              f"{len(res['mismatches'])} mismatches, {len(res['strays'])} strays, "
+              f"{len(res['omissions'])} omissions")
+    fx.na("F-K2", "completeness vs census.json applies to --estate only")
+    fk3_source_untouched(fx, sample, before_status)
+    fk4_restore_rehearsal(fx, target)
+    fk5_destination_verification(fx, target, archive_sha, sidecar)
+    fk6_no_clobber(fx, target)
+    fk7_tracked_preserved(fx, tracked)
+
+    releasable = [rel for rel, _ in members if f"{rel_dir}/{rel}" not in tracked]
+    if not fx.ok:
+        print("\nfixtures failed -- source kept, nothing released")
+    elif args.delete_source:
+        if not clean:
+            print("\nmismatches present -- source kept, run aborted")
+            return 1
+        freed = 0
+        for rel, ap in members:
+            if f"{rel_dir}/{rel}" in tracked:
+                continue
+            freed += ap.stat().st_size
+            ap.unlink()
+        print(f"\nreleased {len(releasable)} untracked files, {freed:,} B; "
+              f"{len(tracked)} tracked files preserved in place")
+    else:
+        print(f"\n--delete-source not given: source kept intact. "
+              f"{len(releasable)} untracked files ({len(members) - len(releasable)} tracked) "
+              f"would be releasable.")
+
+    print(f"\narchive   : {target}")
+    print(f"size      : {target.stat().st_size:,} B")
+    print(f"sha256    : {archive_sha}")
+    print(f"members   : {manifest['file_count']}")
+    print(f"\n{sum(1 for _, p, _ in fx.rows if p)}/{len(fx.rows)} fixtures pass")
+    return 0 if fx.ok else 1
+
+
+def run_verify(path: Path) -> int:
+    assert_environment(None, need_writable=False)
+    if not path.is_file():
+        sys.stderr.write(f"no such archive: {path}\n")
+        return 2
+    print(f"archive : {path}")
+    res = verify_archive(path, None, None, check_sources=False)
+    man = res["manifest"]
+    print(f"\nmode         : {man.get('mode', '?')}"
+          f"{'/' + man['phase'] if man.get('phase') else ''}")
+    print(f"created_utc  : {man.get('created_utc', '?')}")
+    print(f"members      : {res['members']}")
+    print(f"verified     : {res['verified']}")
+    print(f"mismatches   : {len(res['mismatches'])}")
+    print(f"strays       : {len(res['strays'])}")
+    print(f"omissions    : {len(res['omissions'])}")
+    print(f"archive sha256: {res['archive_sha256']}")
+    for m in res["mismatches"][:10]:
+        print(f"    MISMATCH {m['rel_path']}: {m.get('why')}")
+    ok = not res["mismatches"] and not res["strays"] and not res["omissions"]
+    print(f"\n{'VERIFIED' if ok else 'FAILED'}")
+    return 0 if ok else 1
+
+
+# --------------------------------------------------------------- cli
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    g = ap.add_mutually_exclusive_group()
+    g.add_argument("--estate", action="store_true",
+                   help="archive the price estate (default)")
+    g.add_argument("--phase", metavar="NAME",
+                   help="archive one research_outputs/<NAME> subtree")
+    g.add_argument("--verify", metavar="ZIP",
+                   help="verify an existing archive against its embedded manifest")
+    ap.add_argument("--dest", metavar="DIR",
+                    help="destination directory (required for --estate)")
+    ap.add_argument("--delete-source", action="store_true",
+                    help="--phase only: release untracked sources after zero mismatches")
+    args = ap.parse_args()
+
+    if args.verify:
+        return run_verify(Path(args.verify))
+    if args.phase:
+        return run_phase(args.phase, args)
+    if not args.dest:
+        ap.error("--estate requires --dest")
+    return run_estate(Path(args.dest), args)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
