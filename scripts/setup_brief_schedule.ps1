@@ -38,7 +38,9 @@ param(
 
 $ErrorActionPreference = "Stop"
 $repo = Split-Path -Parent $PSScriptRoot
-$python = Join-Path $repo ".venv\Scripts\python.exe"
+# The venv lives outside the repo (off OneDrive); a venv cannot be relocated, so
+# this is an absolute path rather than one derived from $repo.
+$python = "C:\venvs\naiad\Scripts\python.exe"
 $script = Join-Path $repo "scripts\daily_brief.py"
 $logDir = Join-Path $repo "research_outputs\brief"
 $log = Join-Path $logDir "brief_run.log"

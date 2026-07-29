@@ -8,7 +8,7 @@ Search the archived daily briefs. Arguments: $ARGUMENTS
 1. Pass the arguments straight through to the lookup tool from the repo root:
 
 ```
-.venv/Scripts/python.exe scripts/brief_lookup.py $ARGUMENTS
+C:\venvs\naiad\Scripts\python.exe scripts/brief_lookup.py $ARGUMENTS
 ```
 
 Available filters: `--date` `--from` `--to` `--asset` `--state` `--flag`

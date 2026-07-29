@@ -4,10 +4,11 @@ description: Generate today's Naiad Daily Brief and report the paths and headlin
 
 Run the daily brief generator and report the result.
 
-1. Run it from the repo root with the project venv (it needs numpy/pandas/pyarrow):
+1. Run it from the repo root with the project venv (it needs numpy/pandas/pyarrow).
+   The venv lives outside the repo, off OneDrive:
 
 ```
-.venv/Scripts/python.exe scripts/daily_brief.py
+C:\venvs\naiad\Scripts\python.exe scripts/daily_brief.py
 ```
 
 It tops up klines and funding to the latest closed bar, computes Tier-1 layers
