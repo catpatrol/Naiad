@@ -39,7 +39,7 @@ SYMBOLS = {
 
 # LIT two-token trap (charter §4, build prompt §4): LITUSDT carried Litentry
 # before the Lighter perp listing. Hard floor — asserted in the loader.
-LIT_FLOOR_MS = 1_764_547_200_000  # 2025-12-01T00:00:00Z
+LIT_FLOOR_MS = 1_766_448_000_000  # 2025-12-23T00:00:00Z (charter I1)
 
 # Mandates (charter §4): governor / exec / A-grade alignment TF (build prompt §5:
 # 4H gov -> 1H, 1H gov -> 5m, 12H gov -> 4H — mirrors Pine tfAlign options).

@@ -295,6 +295,9 @@ def backfill_klines(symbol: str, interval: str, start_ms: int, end_ms: int,
             merged = pd.concat([merged, df], ignore_index=True)
             log(f"  {symbol} {interval}: REST top-up, {len(df)} bars")
 
+    # bulk-zip archives can carry pre-listing rows; enforce the symbol floor at the
+    # persistence boundary so the writer honours the same invariant the loader asserts.
+    merged = merged[merged["open_time"] >= first_valid_ms(symbol, interval, detected)]
     _save_cache(symbol, interval, merged)
     return load_klines(symbol, interval, start_ms, end_ms)
 
