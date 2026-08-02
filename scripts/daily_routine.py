@@ -11,9 +11,21 @@ Contract:
     the run continues
   * each job's declared outputs are staged into output_dir with {date} filled in
   * the report is written to <output_dir>/DAILY_<yyyy-mm-dd>.md
-  * NO git operations of any kind, ever -- repo state is read only from the
-    manifest that the manifest job produces
-  * exit code is non-zero if any required job failed
+  * the ONLY git operations are the final PUBLISH step's, and they are bounded
+    by the scope guard in scripts/publish_exchange.py -- see AMENDMENT below
+  * exit code is non-zero if any required job failed, or if the publish guard
+    tripped
+
+AMENDMENT 2026-08-02 (gate A-6a, ruling Q-2 A).  This script's original
+contract read "NO git operations of any kind, ever".  That line was written
+when the routine's outputs landed in a git-ignored directory and there was
+nothing to publish.  Ruling Q-2 A makes exchange/** auto-publishing coordination
+state, so the routine now ends with a PUBLISH step: stage exchange/** only,
+verify the whole index is inside that scope, then commit and push.  Sections 3
+and 4 of the report still read repo state from the MANIFEST rather than from
+git -- that part of the original contract is untouched, and deliberately so.
+The publish step is the single, bounded exception, and it fails CLOSED: on any
+doubt it resets the index and pushes nothing.
 """
 
 import json
@@ -26,6 +38,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 REGISTRY = Path(__file__).resolve().parent / "routine_jobs.json"
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import publish_exchange                                  # noqa: E402
 
 
 # --------------------------------------------------------------- registry
@@ -338,9 +353,35 @@ def main():
     report.write_text("\n".join(out) + "\n", encoding="utf-8")
     print(f"wrote {report.relative_to(ROOT).as_posix()}")
 
+    # 6. PUBLISH -- gate A-6a.  Runs AFTER the report is written so that the
+    # report itself is inside the commit.  The publish outcome is then appended
+    # to the report; those appended bytes ride along in the NEXT publish, which
+    # is the price of having the report be part of what it describes.
+    pub = None
+    if reg.get("publish", True):
+        pub = publish_exchange.publish(ROOT, today)
+        with report.open("a", encoding="utf-8") as fh:
+            fh.write("\n## 6. Publish\n\n")
+            fh.write("_Appended after the publish step ran; these bytes are "
+                     "published by the next run, not this one._\n\n")
+            fh.write("\n".join(publish_exchange.report_lines(pub)) + "\n")
+    else:
+        with report.open("a", encoding="utf-8") as fh:
+            fh.write("\n## 6. Publish\n\n")
+            fh.write("- disabled in the registry (`\"publish\": false`)\n")
+
     required_failed = [r["id"] for r in results if r["exit"] != 0 and r["required"]]
     if required_failed:
         print(f"FAILED (required): {', '.join(required_failed)}")
+        return 1
+    if pub is not None and pub["status"] in ("FLAGGED", "ERROR"):
+        # Non-zero on purpose: an unattended 07:00 run must surface a publish
+        # that did not happen as a FAILED task, not as a line nobody reads.
+        # ERROR counts as well as FLAGGED -- learned the hard way on the first
+        # real run, where a stale index.lock stopped the publish dead and the
+        # routine still exited 0.  A bus that did not update is a failure
+        # whether the cause was the guard or the plumbing.
+        print(f"FAILED (publish {pub['status']}) -- see the report")
         return 1
     return 0
 

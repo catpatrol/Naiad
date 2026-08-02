@@ -41,12 +41,31 @@ FIXTURES (all must pass; any failure exits non-zero)
   F-K5 destination verification -- archive re-read FROM the destination
   F-K6 no-clobber
   F-K7 tracked-file preservation
+
+AMENDMENT 2026-08-02 (gates A-5a, A-6a).  Two additions, neither of which
+touches the archive path:
+
+  RETENTION REPORT.  After a successful --estate run, the script reports the
+  archive estate against the rule "keep the newest 4 estate generations plus 1
+  phase set" and names every generation outside it.  It REPORTS ONLY.  It never
+  deletes, and it never will -- the DELETION note above governs, and pruning
+  backups unprompted is exactly the class of act this project halts to ask
+  about.  The report is written to exchange/status/RETENTION.md (overwritten
+  each run, so it is a current-state surface, not an accumulating log) and
+  echoed to stdout.
+
+  PUBLISH.  --estate and --phase runs end by staging exchange/** ONLY, checking
+  the whole index against that scope, and pushing if and only if it is clean
+  (scripts/publish_exchange.py).  --verify does neither: it is an inspection
+  mode and stays read-only.  This is the one place the script writes inside the
+  repo; every source remains read-only, as before.
 """
 
 import argparse
 import hashlib
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -57,9 +76,16 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import publish_exchange                                  # noqa: E402
 
 CHUNK = 1024 * 1024
 REPO_PREFIX = "_repo/"
+
+# Retention rule -- REPORTING thresholds, never deletion thresholds.
+KEEP_ESTATE_GENERATIONS = 4
+KEEP_PHASE_SETS = 1
+DATED_ZIP = re.compile(r"_(\d{4}-\d{2}-\d{2})\.zip$")
 
 
 # --------------------------------------------------------------- hashing
@@ -400,6 +426,133 @@ def fk7_tracked_preserved(fx: Fixtures, tracked: set) -> None:
               f"{len(gone)} missing")
 
 
+# --------------------------------------------------------------- retention
+
+def retention_report(dest: Path) -> list:
+    """Report the archive estate against the retention rule.  NEVER deletes.
+
+    Rule: keep the newest KEEP_ESTATE_GENERATIONS estate generations plus
+    KEEP_PHASE_SETS phase set.  A "phase set" is every dated phase archive
+    sharing one date under research_outputs/_archive -- the phases were archived
+    in a batch, so they age as a batch.
+
+    Anything older than the rule is LISTED, with its size, so the operator can
+    decide.  Nothing is removed, moved, or renamed.  Returns markdown lines.
+    """
+    lines = ["# RETENTION — archive estate vs the rule", ""]
+    lines.append(f"Generated {datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')} "
+                 f"by `scripts/backup_estate.py`.")
+    lines.append("")
+    lines.append(f"**Rule:** keep the newest {KEEP_ESTATE_GENERATIONS} estate generations "
+                 f"+ {KEEP_PHASE_SETS} phase set.")
+    lines.append("**This report never deletes anything.** It names what falls outside "
+                 "the rule; acting on it is the operator's call.")
+    lines.append("")
+
+    # --- estate generations -------------------------------------------------
+    lines.append("## Estate generations")
+    lines.append("")
+    lines.append(f"Location: `{dest}`")
+    lines.append("")
+    try:
+        gens = sorted((p for p in dest.glob("naiad_estate_*.zip") if p.is_file()),
+                      key=lambda p: p.name, reverse=True)
+    except OSError as exc:
+        lines.append(f"- could not read the destination: {exc}")
+        gens = []
+
+    if not gens:
+        lines.append("- none found")
+    else:
+        keep, over = gens[:KEEP_ESTATE_GENERATIONS], gens[KEEP_ESTATE_GENERATIONS:]
+        lines.append(f"{len(gens)} generation(s) present; "
+                     f"{len(keep)} within the rule, {len(over)} outside it.")
+        lines.append("")
+        lines.append("| generation | size (B) | within rule |")
+        lines.append("|---|---:|---|")
+        for p in gens:
+            lines.append(f"| `{p.name}` | {p.stat().st_size:,} | "
+                         f"{'yes' if p in keep else '**NO — outside the rule**'} |")
+        if not over:
+            lines.append("")
+            lines.append(f"Nothing to consider: fewer than "
+                         f"{KEEP_ESTATE_GENERATIONS + 1} generations exist.")
+
+    # --- phase sets ---------------------------------------------------------
+    arch = REPO / "research_outputs" / "_archive"
+    lines.append("")
+    lines.append("## Phase sets")
+    lines.append("")
+    lines.append(f"Location: `{arch}`")
+    lines.append("")
+    if not arch.is_dir():
+        lines.append("- no `research_outputs/_archive` directory")
+        return lines
+
+    sets = {}
+    for p in sorted(arch.glob("*.zip")):
+        if not p.is_file():
+            continue
+        m = DATED_ZIP.search(p.name)
+        sets.setdefault(m.group(1) if m else "undated", []).append(p)
+
+    if not sets:
+        lines.append("- none found")
+        return lines
+
+    dates = sorted((d for d in sets if d != "undated"), reverse=True)
+    keep_dates = set(dates[:KEEP_PHASE_SETS])
+    lines.append(f"{len(sets)} set(s) present; keeping the newest {KEEP_PHASE_SETS}.")
+    lines.append("")
+    lines.append("| set (date) | archives | total size (B) | within rule |")
+    lines.append("|---|---:|---:|---|")
+    for d in dates + (["undated"] if "undated" in sets else []):
+        members = sets[d]
+        total = sum(p.stat().st_size for p in members)
+        within = "yes" if d in keep_dates else "**NO — outside the rule**"
+        lines.append(f"| `{d}` | {len(members)} | {total:,} | {within} |")
+
+    outside = [d for d in dates if d not in keep_dates]
+    if outside or "undated" in sets:
+        lines.append("")
+        lines.append("Archives outside the rule, in full:")
+        for d in outside + (["undated"] if "undated" in sets else []):
+            for p in sets[d]:
+                lines.append(f"- `{p.name}` — {p.stat().st_size:,} B")
+    return lines
+
+
+def publish_step() -> dict:
+    """Final PUBLISH step (gate A-6a).  Stages exchange/** only; fails closed.
+
+    A tripped guard is printed as a FLAG line and returned to the caller, which
+    turns it into a non-zero exit code -- an unattended Sunday-morning run must
+    surface this as a failed task, not as a line in a log nobody opens.
+    """
+    date_str = datetime.now().strftime("%Y-%m-%d")
+    print("\nPUBLISH")
+    pub = publish_exchange.publish(REPO, date_str, log=lambda m: print(f"  {m}"))
+    if pub["status"] == "FLAGGED":
+        print("  FLAG: nothing pushed. Resolve the staged paths by hand, then re-run.")
+    return pub
+
+
+def emit_retention(dest: Path) -> None:
+    """Print the retention report and publish it to exchange/status/."""
+    lines = retention_report(dest)
+    print("\nRETENTION REPORT (report only -- nothing is ever deleted)")
+    for line in lines[4:]:                      # skip the markdown title block
+        if line.strip():
+            print(f"  {line}")
+    try:
+        out = REPO / "exchange" / "status" / "RETENTION.md"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        print(f"\nwrote {out.relative_to(REPO).as_posix()}")
+    except OSError as exc:
+        print(f"\ncould not write the retention report: {exc}")
+
+
 # --------------------------------------------------------------- modes
 
 def run_estate(dest: Path, args) -> int:
@@ -469,6 +622,11 @@ def run_estate(dest: Path, args) -> int:
     print(f"source    : {manifest['total_bytes']:,} B")
     print(f"sidecar   : {sidecar}")
     print(f"\n{sum(1 for _, p, _ in fx.rows if p)}/{len(fx.rows)} fixtures pass")
+
+    emit_retention(dest)
+    pub = publish_step()
+    if pub["status"] in ("FLAGGED", "ERROR"):
+        return 1
     return 0 if fx.ok else 1
 
 
@@ -556,6 +714,10 @@ def run_phase(name: str, args) -> int:
     print(f"sha256    : {archive_sha}")
     print(f"members   : {manifest['file_count']}")
     print(f"\n{sum(1 for _, p, _ in fx.rows if p)}/{len(fx.rows)} fixtures pass")
+
+    pub = publish_step()
+    if pub["status"] in ("FLAGGED", "ERROR"):
+        return 1
     return 0 if fx.ok else 1
 
 
