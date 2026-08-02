@@ -332,7 +332,7 @@ destroyed the only fixture proving a *complete* bucket is never dropped.
 | 8c diff (exchange) | `exchange/reports/f_an_8_diff_2026-08-02.json` | 10,870 | `4bdc51fa2e9378b1a67dfcf27e58c215410ca60356cd4edfba809eec2892f655` |
 | 8c diff (legacy name) | `_reviewer_box/_f_an_8_diff.json` | 10,870 | `4bdc51fa2e9378b1a67dfcf27e58c215410ca60356cd4edfba809eec2892f655` |
 | Integrity manifest | `exchange/status/MANIFEST.json` | 19,853 | `205e7abba2f9f87027a85e3684190bcc3a48f5414c6e30e22631d49cb6af41ee` |
-| This report | `exchange/reports/BUILDERS_REPORT_ARGUS_2026-08-02_ANALYTICS1_PHASE_I.md` | — | **NOT PRESENT** (written at publish time) |
+| This report | `exchange/reports/BUILDERS_REPORT_ARGUS_2026-08-02_ANALYTICS1_PHASE_I.md` | — | self-referential — hash it after writing; a file cannot contain its own digest |
 
 **Note on the manifest location.** The Phase I paste expected
 `_reviewer_box/MANIFEST.json`. `scripts/reviewer_manifest.py` writes to
