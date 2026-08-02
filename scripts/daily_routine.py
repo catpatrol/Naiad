@@ -37,6 +37,8 @@ doubt it resets the index and pushes nothing.
 
 import hashlib
 import json
+import os
+import re
 import shutil
 import subprocess
 import sys
@@ -266,6 +268,275 @@ def run_job(job, python, today, out_dir):
         else:
             res["missing"].append(rel)
     return res
+
+
+# --------------------------------------------------------- reminder engine
+
+DATED_ARCHIVE = re.compile(r"_(\d{4}-\d{2}-\d{2})\.zip$")
+PREF_BLOCKS = ("User preferences", "Project instructions", "Custom style")
+
+
+def _archive_date(path):
+    """The generation date from a dated archive name; mtime as a fallback."""
+    m = DATED_ARCHIVE.search(path.name)
+    if m:
+        try:
+            return date.fromisoformat(m.group(1))
+        except ValueError:
+            pass
+    try:
+        return date.fromtimestamp(path.stat().st_mtime)
+    except OSError:
+        return None
+
+
+def _newest(dest, pattern):
+    """(path, date) of the newest dated archive matching pattern, or (None, None)."""
+    best = (None, None)
+    try:
+        for p in dest.glob(pattern):
+            if not p.is_file():
+                continue
+            d = _archive_date(p)
+            if d and (best[1] is None or d > best[1]):
+                best = (p, d)
+    except OSError:
+        return (None, None)
+    return best
+
+
+def _unfilled_pref_blocks():
+    """Which of the three PART 1 blocks are still empty. None if the file is absent.
+
+    A block is a fenced ```text region under a `### <label>` heading.  Empty
+    means whitespace-only between the fences -- which the file itself defines as
+    "not yet captured", never "not set".
+    """
+    path = ROOT / "docs" / "primers" / "OPERATOR_PREFERENCES.md"
+    if not path.is_file():
+        return None
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return None
+    unfilled = []
+    for label in PREF_BLOCKS:
+        head = text.find(f"### {label}")
+        if head == -1:
+            unfilled.append(f"{label} (heading missing)")
+            continue
+        open_fence = text.find("```", head)
+        if open_fence == -1:
+            unfilled.append(f"{label} (no block)")
+            continue
+        body_start = text.find("\n", open_fence)
+        close_fence = text.find("```", body_start)
+        body = text[body_start:close_fence] if close_fence != -1 else ""
+        if not body.strip():
+            unfilled.append(label)
+    return unfilled
+
+
+def _unratified_queue_items():
+    """Queue item numbers with no ratification stamp.  See reviewer_manifest."""
+    qdir = ROOT / "exchange" / "queue"
+    if not qdir.is_dir():
+        return []
+    open_items = []
+    for p in sorted(qdir.glob("*.md")):
+        name = p.name
+        if not (len(name) > 4 and name[:3].isdigit() and name[3] == "_"):
+            continue
+        try:
+            raw = p.read_bytes()
+        except OSError:
+            continue
+        ratified = False
+        for line in raw.split(b"\n"):
+            line = line.strip()
+            if line.upper().startswith(b"RATIFIED:"):
+                rest = line[len(b"RATIFIED:"):].strip()
+                if rest and rest.upper() != b"PENDING":
+                    ratified = True
+        if not ratified:
+            open_items.append(name[:3])
+    return open_items
+
+
+def _onedrive_running():
+    if os.name != "nt":
+        return None
+    try:
+        proc = subprocess.run(["tasklist", "/FI", "IMAGENAME eq OneDrive.exe", "/NH"],
+                              stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except OSError:
+        return None
+    if proc.returncode != 0:
+        return None
+    return b"onedrive.exe" in proc.stdout.lower()
+
+
+def _retention_violations(dest, cfg):
+    """Generations outside 'newest N estate + M phase sets + K workflow'. LIST only."""
+    out = []
+    for pattern, keep, label in (
+        ("naiad_estate_*.zip", cfg.get("keep_estate", 4), "estate"),
+        ("naiad_workflow_*.zip", cfg.get("keep_workflow", 4), "workflow"),
+    ):
+        try:
+            gens = sorted((p for p in dest.glob(pattern) if p.is_file()),
+                          key=lambda p: p.name, reverse=True)
+        except OSError:
+            continue
+        for p in gens[keep:]:
+            out.append(f"{label}: {p.name}")
+
+    arch = ROOT / "research_outputs" / "_archive"
+    if arch.is_dir():
+        sets = {}
+        for p in sorted(arch.glob("*.zip")):
+            m = DATED_ARCHIVE.search(p.name)
+            sets.setdefault(m.group(1) if m else "undated", []).append(p.name)
+        dates = sorted((d for d in sets if d != "undated"), reverse=True)
+        for d in dates[cfg.get("keep_phase_sets", 1):]:
+            out.append(f"phase set {d}: {len(sets[d])} archive(s)")
+        if "undated" in sets:
+            out.append(f"phase set undated: {len(sets['undated'])} archive(s)")
+    return out
+
+
+def check_reminders(reg, today):
+    """Every check computed from real state.  Returns (alerts, facts).
+
+    Nothing here is assumed.  If the backup destination cannot be read, that is
+    reported as its own ALERT rather than silently becoming "0 days since
+    backup" -- an unreachable drive must never read as a healthy one.
+    """
+    cfg = reg.get("reminders", {})
+    alerts, facts = [], {}
+    today_d = date.fromisoformat(today)
+
+    dest_raw = reg.get("backup_dest")
+    dest = Path(dest_raw) if dest_raw else None
+    dest_ok = bool(dest and dest.is_dir())
+    facts["dest"] = str(dest) if dest else "(not configured)"
+
+    if not dest_ok:
+        alerts.append(f"**backup destination unreachable** — `{facts['dest']}` is not readable. "
+                      "Estate, workflow, operator-export and retention checks could NOT run; "
+                      "their state is UNKNOWN, not healthy.")
+        facts.update({"estate": None, "workflow": None, "phase": None})
+    else:
+        for pattern, key, limit, label in (
+            ("naiad_estate_*.zip", "estate", cfg.get("estate_max_days", 8), "estate"),
+            ("naiad_workflow_*.zip", "workflow", cfg.get("workflow_max_days", 8), "workflow"),
+        ):
+            p, d = _newest(dest, pattern)
+            facts[key] = d.isoformat() if d else None
+            if d is None:
+                alerts.append(f"**no {label} archive found** in `{dest}` — the {label} backup has "
+                              "never run, or its output is missing.")
+            else:
+                age = (today_d - d).days
+                if age > limit:
+                    alerts.append(f"**{label} backup is {age} days old** "
+                                  f"(`{p.name}`, limit {limit}).")
+
+        exports = dest / "operator-exports"
+        limit = cfg.get("operator_export_max_days", 35)
+        if not exports.is_dir():
+            alerts.append(f"**operator-exports folder missing** at `{exports}`.")
+        else:
+            files = [f for f in exports.rglob("*") if f.is_file()]
+            if not files:
+                alerts.append(f"**no operator data export yet** — `{exports}` is empty. "
+                              "Project memory, preferences, instructions and custom style are "
+                              "not in any export, so this folder is the only route for the rest.")
+            else:
+                newest = max(files, key=lambda f: f.stat().st_mtime)
+                age = (today_d - date.fromtimestamp(newest.stat().st_mtime)).days
+                if age > limit:
+                    alerts.append(f"**operator export is {age} days old** "
+                                  f"(`{newest.name}`, limit {limit}).")
+
+        violations = _retention_violations(dest, cfg)
+        if violations:
+            alerts.append("**retention — generations outside the rule** (listed, never pruned): "
+                          + "; ".join(violations))
+
+    # phase set date, for the heartbeat
+    arch = ROOT / "research_outputs" / "_archive"
+    _, phase_d = _newest(arch, "*.zip") if arch.is_dir() else (None, None)
+    facts["phase"] = phase_d.isoformat() if phase_d else None
+
+    unfilled = _unfilled_pref_blocks()
+    if unfilled is None:
+        alerts.append("**docs/primers/OPERATOR_PREFERENCES.md is missing.**")
+    elif unfilled:
+        alerts.append(f"**operator preferences not captured** — {len(unfilled)} of 3 PART 1 blocks "
+                      f"still empty: {', '.join(unfilled)}. These exist only in Claude's cloud "
+                      "settings, are excluded from data exports, and can only be pasted by hand.")
+
+    od = _onedrive_running()
+    facts["onedrive"] = od
+    if od is False:
+        alerts.append("**OneDrive.exe is not running** — the repo lives inside the OneDrive tree, "
+                      "so nothing here is syncing to the cloud right now.")
+
+    unratified = _unratified_queue_items()
+    if unratified:
+        alerts.append(f"**{len(unratified)} queue item(s) awaiting your ratification stamp**: "
+                      + ", ".join(unratified) + ". They are requests, not work, until stamped.")
+
+    # (h) published status older than the newest estate snapshot.  Top-level
+    # files of exchange/status/ only: daily/ is an append-only archive whose
+    # older entries are expected to be old, and flagging them every run would
+    # bury the signal this check exists to raise.
+    if facts.get("estate"):
+        cutoff = date.fromisoformat(facts["estate"])
+        status_dir = ROOT / "exchange" / "status"
+        stale = []
+        if status_dir.is_dir():
+            for p in sorted(status_dir.glob("*")):
+                if not p.is_file():
+                    continue
+                try:
+                    if date.fromtimestamp(p.stat().st_mtime) < cutoff:
+                        stale.append(p.name)
+                except OSError:
+                    continue
+        if stale:
+            alerts.append(f"**{len(stale)} published status file(s) predate the newest estate "
+                          f"snapshot ({facts['estate']})** — lane state may be stale: "
+                          + ", ".join(stale[:12])
+                          + (f" … +{len(stale) - 12} more" if len(stale) > 12 else ""))
+
+    return alerts, facts
+
+
+def action_required_lines(alerts):
+    if not alerts:
+        return ["nothing overdue — all cadences current"]
+    lines = [f"**{len(alerts)} item(s) need attention.**", ""]
+    lines += [f"{i}. {a}" for i, a in enumerate(alerts, 1)]
+    return lines
+
+
+def write_heartbeat(facts, alerts, exit_code, out_path):
+    """Six lines max. Its absence or a stale timestamp IS the alert."""
+    stamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    lines = [
+        "# HEARTBEAT",
+        f"run: {stamp}",
+        f"exit: {exit_code} (jobs + window; publish outcome in the day's DAILY report)",
+        f"overdue: {len(alerts)}",
+        f"archives — estate: {facts.get('estate') or 'NONE'} · "
+        f"workflow: {facts.get('workflow') or 'NONE'} · phase: {facts.get('phase') or 'NONE'}",
+    ]
+    try:
+        out_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    except OSError as exc:
+        print(f"  heartbeat could not be written: {exc}")
 
 
 # ------------------------------------------------------- rolling window
@@ -575,9 +846,20 @@ def main():
     failures = [r for r in results if r["exit"] != 0]
     skipped = [j["id"] for j in reg["jobs"] if j["id"] not in {r["id"] for r in results}]
 
+    alerts, facts = check_reminders(reg, today)
+    if alerts:
+        print(f"  ACTION REQUIRED: {len(alerts)} item(s) overdue")
+
     out = [f"# DAILY -- {today}", ""]
     out.append(f"Generated {datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')} "
                f"by `scripts/daily_routine.py` (registry version {reg.get('version')}).")
+    out.append("")
+
+    # 0. ACTION REQUIRED -- first, because it is the only section that asks the
+    # operator to do something. Everything below is a record; this is a request.
+    out.append("## 0. ACTION REQUIRED")
+    out.append("")
+    out += action_required_lines(alerts)
     out.append("")
 
     # 1. failures first, in plain language
@@ -660,6 +942,14 @@ def main():
     with report.open("a", encoding="utf-8") as fh:
         fh.write("\n## 8. Rolling window\n\n")
         fh.write("\n".join(window_lines(windowed, out_dir, keep, archive_dir)) + "\n")
+
+    # HEARTBEAT -- written BEFORE publish on purpose.  It has to be inside the
+    # commit, because the whole point is that a stale timestamp on GitHub is
+    # itself the alert; a heartbeat that always lags one run cannot do that job.
+    # The cost is that the exit code it carries is the pre-publish one, which
+    # the file says plainly rather than implying otherwise.
+    pre_publish_rc = 1 if [r for r in results if r["exit"] != 0 and r["required"]] else 0
+    write_heartbeat(facts, alerts, pre_publish_rc, ROOT / "exchange" / "status" / "HEARTBEAT.md")
 
     # 9. PUBLISH -- gate A-6a.  Runs AFTER the report is written so that the
     # report itself is inside the commit.  The publish outcome is then appended

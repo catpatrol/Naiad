@@ -5,6 +5,15 @@
   "publish": true,
   "daily_archive_dir": "research_outputs/_daily_archive",
   "keep_daily": 7,
+  "backup_dest": "G:\\My Drive\\naiad-backups",
+  "reminders": {
+    "estate_max_days": 8,
+    "workflow_max_days": 8,
+    "operator_export_max_days": 35,
+    "keep_estate": 4,
+    "keep_phase_sets": 1,
+    "keep_workflow": 4
+  },
   "jobs": [
     { "id": "manifest", "script": "scripts/reviewer_manifest.py", "required": true,
       "stage": [{ "from": "exchange/status/MANIFEST.json", "to": "MANIFEST_{date}.json" }] },
