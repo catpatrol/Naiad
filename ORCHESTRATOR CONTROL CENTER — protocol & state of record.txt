@@ -1,0 +1,46 @@
+# ORCHESTRATOR CONTROL CENTER — protocol & state of record
+
+created: 2026-07-27 · owner chat: ORCHESTRATOR · operator: Ludwig
+Coordination protocol for the three subsystem chats (SYSTEM, ENGINE, BRIEF) plus the orchestrator dashboard. Chats cannot read each other's conversations — the project box is the only shared bus.
+
+## The model
+
+- SYSTEM chat — v12 study: census phases, Tier-C contracts, knowledge program. Status doc: claude/STATUS_SYSTEM.md
+- ENGINE chat — engine versions, repo operations, integrity, manifest ritual. Status doc: claude/STATUS_ENGINE.md
+- BRIEF chat — daily brief contract, build, stage-2 evolution. Status doc: claude/STATUS_BRIEF.md
+- ORCHESTRATOR chat — maintains the status docs, renders the dashboard, compiles the operator action queue.
+
+Rules:
+1. Cross-chat knowledge moves only through project docs or operator-relayed STATUS blocks.
+2. Each subsystem chat ends any MATERIAL session with a STATUS block (format below); the operator copies it into the ORCHESTRATOR chat. STANDING INSTRUCTIONS PASTED INTO ALL THREE CHATS 2026-07-27 — the loop is armed.
+3. The orchestrator never invents state; unconfirmable facts carry an UNCONFIRMED LIVE tag.
+4. Refresh ritual: say "refresh the control center", ideally after dropping new inputs (STATUS blocks, MANIFEST.json, current LEDGER.md).
+5. Provenance discipline: verified / ledger / ratified / handoff / unconfirmed-live / pending. No naked facts.
+
+## STATUS block format (all three chats, identical)
+
+=== STATUS_<LANE> — <date> ===
+NOW: <2–3 sentences>
+LAST EVENT: <date> — <one line>
+FACTS: <up to 6 lines, each ending with [verified/ledger/ratified/open]>
+PENDING: <numbered items waiting on the operator>
+NEXT: <single next action + owner>
+=== END STATUS ===
+
+## Operator action queue — updated 2026-07-27 late (post-LEDGER ingestion)
+
+1. [ENGINE] PUSH RULING — the unpushed commits (76cc314 brief build + 60e00c9 hygiene + estate entry) are the last asset with no off-machine copy
+2. [OPS] Two open rulings: R-A′ (cloud commits must push same-session or don't count) · s3_excursion_substrate.jsonl tracked-vs-fenced (deliberate or drift?)
+3. [SYSTEM] Rulings Q1 (1D lens in CENSUS-1c) + Q2 (D8 eligibility window in 1c) — gate 1c drafting
+4. [SYSTEM] Ratify 4 correction ledger entries (D5 basis · lens≠governor · frozen-grid-vs-5m-floor · toll tier C)
+5. [BRIEF] Reviewer acceptance of v1.1: independent recompute from brief_2026-07-27.json → then Amendment 2 (ENTERED semantics · zone-occupancy unmask · POI cap shape · grade footnote)
+6. [OPS] Backup completion: six phase archives to the second cloud · .venv out of the OneDrive tree · .gitignore → sync exclusions
+7. [OPS] Low stakes: prune duplicate project-box docs (incl. 3 stale LEDGER copies — replace with current during prune) · re-copy root .gitignore into _reviewer_box/
+
+DONE 2026-07-27: MANIFEST verified (15/15 pins) · current LEDGER received & byte-prefix-verified (218,441 B; manifest-pinned 209,313 B is an exact prefix) · brief v1.1 build PASS 8/8 ×2 days · estate backed up to two independent clouds (71/71 verified) · OneDrive root-caused (quota) · 19.61 GB reclaimed (13,502 archive members, 0 mismatches) · rulings R-A/R-B/R-C · new standing rule: environment assertion before ANY write · STATUS-loop instructions pasted into all three chats.
+
+## Known limits of the orchestrator
+
+- No local-machine access unless the desktop app bridges it; no live repo, no market data, no journals. Display and coordination only — firewall-clean by construction.
+- Repo facts decay: anything not re-confirmed by a fresh MANIFEST.json within a session or two is treated as stale and tagged.
+- The dashboard HTML is regenerated on request; this doc plus the three STATUS docs are the durable state.
