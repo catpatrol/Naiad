@@ -10,22 +10,72 @@ exactly the class of defect F-AN-13 exists to catch.
 import numpy as np
 
 __all__ = ["CONFIRMATION_LAG", "pivots", "confirmed_pivots",
-           "period_opens", "prior_period_extremes", "resample_ohlcv"]
+           "period_opens", "prior_period_extremes", "resample_ohlcv",
+           "infer_step_ms"]
 
 CONFIRMATION_LAG = 5
 
 
-def resample_ohlcv(open_time_ms, open_, high, low, close, volume, step_ms):
-    """OHLCV aggregation onto a UTC floor-division grid.
+def infer_step_ms(open_time_ms):
+    """Median positive spacing of a timestamp array, or None if undecidable.
 
-    Byte-identical in convention to `scripts/s1_resample.aggregate()` -- key =
-    open_time // step_ms * step_ms, then first/max/min/last/sum.  F-AN-14 asserts
-    that equivalence from the test file rather than here, so `analytics/` keeps
-    invariant I-B (no engine or script imports).
+    Used to tell a CLOSED aggregation bucket from a still-forming one.  The
+    median rather than the last gap: a single missing bar must not redefine the
+    source interval.
+    """
+    t = np.asarray(open_time_ms, dtype="int64")
+    if t.size < 2:
+        return None
+    d = np.diff(t)
+    d = d[d > 0]
+    if d.size == 0:
+        return None
+    return int(np.median(d))
+
+
+def _bucket_is_closed(last_key, step_ms, last_open_time, src_step_ms):
+    """Does the source data reach the end of the bucket beginning at last_key?
+
+    A bucket is CLOSED when the bar that completes it is present.  The last
+    source bar covers [last_open_time, last_open_time + src_step_ms), so the
+    bucket is closed exactly when that reach lands on or past its end.
+    """
+    if src_step_ms is None:
+        return None                      # undecidable -- never guess
+    return (int(last_open_time) + int(src_step_ms)) >= (int(last_key) + int(step_ms))
+
+
+def resample_ohlcv(open_time_ms, open_, high, low, close, volume, step_ms,
+                   drop_unclosed=True):
+    """OHLCV aggregation onto a UTC floor-division grid.  CLOSED BUCKETS ONLY.
+
+    Aggregation convention is byte-identical to `scripts/s1_resample.aggregate()`
+    -- key = open_time // step_ms * step_ms, then first/max/min/last/sum.
+    F-AN-14 asserts that equivalence from the test file rather than here, so
+    `analytics/` keeps invariant I-B (no engine or script imports).
 
     Basis: `engine/s1.py:70-73` already extends 30m and 1d outside the frozen
     INTERVAL_MS/MTF_SET map and is F-RESAMPLE PASS, so daily ATR is an existing
     fixtured capability. Match that convention; do not invent one.
+
+    AMENDMENT FAN8 (2026-08-02, operator-ratified).  The final bucket is DROPPED
+    when the source data does not reach its end.  Rationale on record: keeping
+    the in-progress bucket published a number computed from a fraction of a
+    period -- a 1d "bar" built from a single 1h bar reads as a day.  Preserving
+    it would enshrine a known defect to protect a number now known to be wrong,
+    and it is not reproducible: re-run an hour later and it changes.
+
+    The disclosed cost is real and is the operator's ruling to have taken: the
+    last row is now the last FINISHED period, not the forming one a chart shows
+    mid-candle.
+
+    `drop_unclosed=False` reinstates the old behaviour.  It exists so a fixture
+    can PROVE the dropped bar is the only difference (F-AN-8b) and so F-AN-14 can
+    still assert the aggregation convention itself is untouched.  It is not part
+    of the public contract -- see `_resample_ohlcv_legacy`.
+
+    When the source spacing cannot be inferred (fewer than two bars), closure is
+    undecidable and nothing is dropped: guessing would be worse than keeping.
     """
     # WHY PANDAS HERE, in an otherwise numpy-pure package: F-AN-14 requires
     # BYTE-IDENTICAL agreement with scripts/s1_resample.aggregate(), which is a
@@ -46,7 +96,7 @@ def resample_ohlcv(open_time_ms, open_, high, low, close, volume, step_ms):
     })
     key = src["open_time"].to_numpy(np.int64) // int(step_ms) * int(step_ms)
     g = src.groupby(key, sort=True)
-    return {
+    out = {
         "open_time": np.asarray(sorted(set(key)), dtype=np.int64),
         "open": g["open"].first().to_numpy(float),
         "high": g["high"].max().to_numpy(float),
@@ -54,6 +104,28 @@ def resample_ohlcv(open_time_ms, open_, high, low, close, volume, step_ms):
         "close": g["close"].last().to_numpy(float),
         "volume": g["volume"].sum().to_numpy(float),
     }
+
+    if not drop_unclosed or out["open_time"].size == 0 or t.size == 0:
+        return out
+    closed = _bucket_is_closed(out["open_time"][-1], step_ms, t[-1],
+                               infer_step_ms(t))
+    if closed is False:
+        out = {k: v[:-1] for k, v in out.items()}
+    return out
+
+
+def _resample_ohlcv_legacy(open_time_ms, open_, high, low, close, volume, step_ms):
+    """TEST-ONLY.  Pre-Amendment-FAN8 behaviour: keeps the forming bucket.
+
+    Deliberately NOT in `__all__` and deliberately underscore-prefixed.  Its only
+    purpose is to let F-AN-8b reinstate the in-progress bucket and demonstrate
+    that reinstating it reproduces the v1.1 published numbers EXACTLY -- which is
+    what proves the dropped bar is the ONLY thing that moved.  A fixture asserts
+    that `scripts/daily_brief.py` contains no reference to this name, so it
+    cannot leak into production by drift.
+    """
+    return resample_ohlcv(open_time_ms, open_, high, low, close, volume,
+                          step_ms, drop_unclosed=False)
 
 
 def _arr(x):

@@ -24,7 +24,11 @@ function that returns a number reads anything.
 import hashlib
 from pathlib import Path
 
-ANALYTICS_VERSION = "1.0.0"
+# 1.1.0 -- Amendment FAN8 (2026-08-02): resample_ohlcv drops the unclosed
+# bucket.  Returned NUMBERS change on every resampled layer, and I-F requires at
+# least a minor bump whenever that happens, precisely so an archived capture can
+# be told apart from a current one.
+ANALYTICS_VERSION = "1.1.0"
 
 _PKG = Path(__file__).resolve().parent
 _MODULES = ("__init__.py", "momentum.py", "vwap.py", "volatility.py",
@@ -114,6 +118,13 @@ CONVENTIONS = {
                      "causality": "causal", "warmup": "0"},
     "prior_period_extremes": {"recipe": "high/low of the previous COMPLETED period",
                               "causality": "causal", "warmup": "one full period"},
+    "resample_ohlcv": {"recipe": "key = open_time // step * step, then "
+                                 "first/max/min/last/sum; the FINAL bucket is "
+                                 "DROPPED unless the source data reaches its end "
+                                 "(Amendment FAN8, 2026-08-02) -- closed buckets "
+                                 "only, so the last row is the last FINISHED "
+                                 "period, not the forming one",
+                       "causality": "causal", "warmup": "0"},
     # stats
     "zscore": {"recipe": "rolling, population sd", "causality": "causal", "warmup": "length-1"},
     "correlation": {"recipe": "rolling Pearson", "causality": "causal", "warmup": "length-1"},

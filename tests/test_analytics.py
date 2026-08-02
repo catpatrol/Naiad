@@ -354,10 +354,16 @@ def test_f_an_13_lag_functions_at_lag():
 # --------------------------------------------------------------- F-AN-14
 
 def test_f_an_14_resample_parity():
-    """30m and 1d resampling identical to scripts/s1_resample.aggregate().
+    """30m and 1d aggregation identical to scripts/s1_resample.aggregate().
 
     Asserted from the TEST file -- tests may import both -- so analytics/ keeps
     invariant I-B and never imports a script.
+
+    Compared against the LEGACY entry point on purpose.  Amendment FAN8 changed
+    which buckets are EMITTED, not how a bucket is AGGREGATED, and this fixture
+    is about the aggregation.  Comparing the legacy form keeps it testing what it
+    was written to test; the public form is then checked against the legacy one
+    below, which is where the amendment's effect belongs.
     """
     import pandas as pd
     sys.path.insert(0, str(ROOT / "scripts"))
@@ -372,10 +378,54 @@ def test_f_an_14_resample_parity():
                        "low": l, "close": c, "volume": v})
     for step in (1_800_000, 86_400_000):
         ref = s1r.aggregate(df, step)
-        got = S.resample_ohlcv(t, o, h, l, c, v, step)
+        got = S._resample_ohlcv_legacy(t, o, h, l, c, v, step)
         assert list(got["open_time"]) == list(ref["open_time"].to_numpy())
         for col in ("open", "high", "low", "close", "volume"):
             assert same(got[col], ref[col].to_numpy()), f"{col} differs at step {step}"
+
+
+def test_f_an_14b_public_is_legacy_minus_unclosed():
+    """The public form differs from legacy by AT MOST the final forming bucket."""
+    t, o, h, l, c, v = _series(500)          # hourly bars, 500 of them
+    for step in (1_800_000, 86_400_000):
+        legacy = S._resample_ohlcv_legacy(t, o, h, l, c, v, step)
+        public = S.resample_ohlcv(t, o, h, l, c, v, step)
+        n = len(public["open_time"])
+        assert n in (len(legacy["open_time"]), len(legacy["open_time"]) - 1)
+        for col in ("open_time", "open", "high", "low", "close", "volume"):
+            assert same(np.asarray(public[col], float),
+                        np.asarray(legacy[col][:n], float)), \
+                f"{col}: public is not a prefix of legacy at step {step}"
+
+    # 30m from hourly bars: every bucket holds one bar and is closed by it.
+    assert len(S.resample_ohlcv(t, o, h, l, c, v, 1_800_000)["open_time"]) == \
+        len(S._resample_ohlcv_legacy(t, o, h, l, c, v, 1_800_000)["open_time"])
+
+    # 500 hourly bars = 20 days + 20 hours: the final day is NOT closed.
+    d_pub = S.resample_ohlcv(t, o, h, l, c, v, 86_400_000)["open_time"]
+    d_leg = S._resample_ohlcv_legacy(t, o, h, l, c, v, 86_400_000)["open_time"]
+    assert len(d_pub) == len(d_leg) - 1, "the forming day must be dropped"
+
+    # A day that IS complete must survive.  _series starts at 1_600_000_000_000,
+    # which is 12:26:40 UTC -- NOT a day boundary -- so a plain prefix of it can
+    # never end on one. Build a day-aligned span instead of assuming.
+    n = 48
+    t2 = (np.arange(n, dtype="int64") * 3_600_000) + (1_600_000_000_000 // DAY_MS) * DAY_MS
+    ones = np.ones(n)
+    assert t2[0] % DAY_MS == 0 and (t2[-1] + 3_600_000) % DAY_MS == 0, \
+        "the aligned fixture must start and end exactly on a day boundary"
+    pub2 = S.resample_ohlcv(t2, ones, ones, ones, ones, ones, DAY_MS)["open_time"]
+    leg2 = S._resample_ohlcv_legacy(t2, ones, ones, ones, ones, ones, DAY_MS)["open_time"]
+    assert len(pub2) == len(leg2) == 2, \
+        "a fully-populated final bucket must NOT be dropped"
+
+
+def test_f_an_14c_undecidable_closure_keeps_the_bucket():
+    """With fewer than two bars the spacing is unknowable -- never guess."""
+    t = np.array([1_600_000_000_000], dtype="int64")
+    one = np.array([1.0])
+    got = S.resample_ohlcv(t, one, one, one, one, one, 86_400_000)
+    assert len(got["open_time"]) == 1, "undecidable closure must keep the bucket"
 
 
 # --------------------------------------------------------------- F-AN-8
@@ -386,66 +436,191 @@ def _dp(x):
     return len(s.split(".")[1]) if "." in s else 0
 
 
-def test_f_an_8_brief_equivalence():
-    """THE REGRESSION GUARD.
+CAPTURE = Path("research_outputs") / "brief" / "brief_2026-07-28.json"
+DAY_MS = 86_400_000
+STEP_MS = {"1h": 3_600_000, "4h": 14_400_000, "12h": 43_200_000, "1d": DAY_MS}
 
-    Every recipe daily_brief.py v1.1 already computes must reproduce its
-    PUBLISHED values from analytics/. A refactor that silently changes an
-    already-accepted number is the worst available outcome, so this compares
-    against the capture on disk rather than against a re-run.
+# How daily_brief.py v1.1 actually sources each layer, which is the whole point:
+#   rsi_layer(k["1h"])    -> 1h NATIVE, everything above it RESAMPLED from 1h
+#   volatility_layer(k)   -> 1h/4h/12h NATIVE, 1d RESAMPLED from 1h (load_all:1513)
+NATIVE = {("rsi14", "1h"), ("atr14", "1h"), ("atr14", "4h"), ("atr14", "12h")}
 
-    Published values are rounded in the capture, so agreement is asserted at the
-    precision actually published and the raw signed difference is carried into
-    the diff table for inspection.
+
+def _fan8_rows():
+    """(rows, capture_name).  Each row carries published / legacy / corrected.
+
+    Built once and shared by 8a, 8b and 8c so the three cannot disagree about
+    what they are looking at.
     """
-    cap_p = ROOT / "research_outputs" / "brief" / "brief_2026-07-28.json"
+    cap_p = ROOT / CAPTURE
     if not cap_p.exists():
-        pytest.skip("no v1.1 capture on disk to compare against")
+        return None, None
     cap = json.loads(cap_p.read_text(encoding="utf-8"))
 
     sys.path.insert(0, str(ROOT))
     from engine import data as dl          # test-side only; analytics stays clean
 
-    rows, failures = [], []
+    rows = []
     for sym in ("BTCUSDT", "ETHUSDT", "SOLUSDT"):
         a = cap["assets"][sym]
+        end_1h = a["last_bar_utc"].get("1h")
+        if end_1h is None:
+            continue
+        end_1h = int(np.datetime64(end_1h[:-1], "ms").astype("int64"))
+        k1h = dl.load_klines(sym, "1h", 0, end_1h)
+        base = tuple(k1h[c].to_numpy() for c in
+                     ("open_time", "open", "high", "low", "close", "volume"))
+
         for tf in ("1h", "4h", "12h", "1d"):
             last = a["last_bar_utc"].get(tf)
             if last is None:
                 continue
             end = int(np.datetime64(last[:-1], "ms").astype("int64"))
-            if tf == "1d":
-                src = dl.load_klines(sym, "1h", 0, end + 3_600_000 - 1)
-                r = S.resample_ohlcv(src["open_time"].to_numpy(), src["open"].to_numpy(),
-                                     src["high"].to_numpy(), src["low"].to_numpy(),
-                                     src["close"].to_numpy(), src["volume"].to_numpy(),
-                                     86_400_000)
-                h, l, c = r["high"], r["low"], r["close"]
-            else:
-                k = dl.load_klines(sym, tf, 0, end)
-                h, l, c = (k["high"].to_numpy(), k["low"].to_numpy(), k["close"].to_numpy())
 
-            for name, ours, pub in (
-                ("rsi14", M.rsi(c, 14)[-1],
-                 a["rsi"]["timeframes"].get(tf, {}).get("value")),
-                ("atr14", V.atr(h, l, c, 14)[-1],
-                 a["volatility"]["atr_percentile_vs_1y"].get(tf, {}).get("atr")),
-            ):
-                if pub is None or ours != ours:
+            def hlc(resampler=None, _tf=tf, _end=end):
+                if resampler is None:                     # native load
+                    k = dl.load_klines(sym, _tf, 0, _end)
+                    return (k["high"].to_numpy(), k["low"].to_numpy(),
+                            k["close"].to_numpy())
+                r = resampler(*base, STEP_MS[_tf])
+                return r["high"], r["low"], r["close"]
+
+            for recipe in ("rsi14", "atr14"):
+                pub = (a["rsi"]["timeframes"].get(tf, {}).get("value")
+                       if recipe == "rsi14"
+                       else a["volatility"]["atr_percentile_vs_1y"].get(tf, {}).get("atr"))
+                if pub is None:
+                    continue
+                native = (recipe, tf) in NATIVE
+                h1, l1, c1 = hlc(None if native else S.resample_ohlcv)
+                h0, l0, c0 = hlc(None if native else S._resample_ohlcv_legacy)
+
+                def val(h_, l_, c_, _r=recipe):
+                    return (M.rsi(c_, 14)[-1] if _r == "rsi14"
+                            else V.atr(h_, l_, c_, 14)[-1])
+
+                corrected, legacy = float(val(h1, l1, c1)), float(val(h0, l0, c0))
+                if corrected != corrected or legacy != legacy:
                     continue
                 dp = _dp(pub)
-                ok = round(float(ours), dp) == float(pub)
-                rows.append({"asset": sym, "timeframe": tf, "recipe": name,
-                             "published": float(pub), "ours": float(ours),
-                             "diff": float(ours) - float(pub),
-                             "published_dp": dp, "match": bool(ok)})
-                if not ok:
-                    failures.append(f"{sym} {tf} {name}: published {pub} vs ours {ours}")
+                rows.append({
+                    "asset": sym, "timeframe": tf, "recipe": recipe,
+                    "source": "native" if native else "resampled from 1h",
+                    "convention_changed": not native,
+                    "published_v1_1": float(pub), "published_dp": dp,
+                    "corrected": corrected, "legacy": legacy,
+                    "delta_vs_published": corrected - float(pub),
+                    "legacy_matches_published": round(legacy, dp) == float(pub),
+                    "corrected_matches_published": round(corrected, dp) == float(pub),
+                })
+    return rows, cap_p.name
 
-    (ROOT / "_reviewer_box").mkdir(exist_ok=True)
+
+def test_f_an_8a_unchanged_conventions_reproduce_exactly():
+    """8a -- every recipe whose closed-bar convention did NOT change reproduces
+    its v1.1 published value on the frozen fixture day.
+
+    Published values are rounded in the capture, so agreement is asserted at the
+    precision actually published; the raw signed difference goes into the 8c
+    table for inspection.
+    """
+    rows, cap = _fan8_rows()
+    if rows is None:
+        pytest.skip("no v1.1 capture on disk to compare against")
+    unchanged = [r for r in rows if not r["convention_changed"]]
+    assert unchanged, "8a compared nothing -- the guard would be vacuous"
+    bad = [f"{r['asset']} {r['timeframe']} {r['recipe']}: "
+           f"published {r['published_v1_1']} vs ours {r['corrected']}"
+           for r in unchanged if not r["corrected_matches_published"]]
+    assert not bad, "UNCHANGED CONVENTION MOVED:\n" + "\n".join(bad)
+
+
+def test_f_an_8b_legacy_mode_reproduces_v1_1_exactly():
+    """8b -- reinstating the in-progress bucket must reproduce v1.1 EXACTLY.
+
+    This is the load-bearing fixture of the whole amendment.  If a legacy-mode
+    recomputation reproduces the published number, then the dropped bar is the
+    ONLY thing that changed.  If it does NOT, something else moved and that is a
+    finding, not a tolerance to widen.
+    """
+    rows, cap = _fan8_rows()
+    if rows is None:
+        pytest.skip("no v1.1 capture on disk to compare against")
+    changed = [r for r in rows if r["convention_changed"]]
+    assert changed, "8b compared nothing -- no resampled layer was exercised"
+    bad = [f"{r['asset']} {r['timeframe']} {r['recipe']}: "
+           f"published {r['published_v1_1']} vs legacy {r['legacy']}"
+           for r in changed if not r["legacy_matches_published"]]
+    assert not bad, (
+        "LEGACY MODE DID NOT REPRODUCE v1.1 -- the dropped bar is NOT the only "
+        "difference. HALT and investigate; do not widen a tolerance:\n"
+        + "\n".join(bad))
+
+
+def test_f_an_8b_legacy_is_unreachable_from_production():
+    """Legacy mode must not be reachable from the brief, by name or by flag."""
+    brief = (ROOT / "scripts" / "daily_brief.py").read_text(encoding="utf-8")
+    for token in ("_resample_ohlcv_legacy", "drop_unclosed"):
+        assert token not in brief, \
+            f"production references legacy resampling: {token!r} in daily_brief.py"
+    assert "_resample_ohlcv_legacy" not in S.__all__
+    assert "drop_unclosed" not in " ".join(S.__all__)
+
+
+def test_f_an_8c_documented_diff():
+    """8c -- emit the asset x timeframe x recipe diff, with verdict impact.
+
+    Both momentum confluence votes read these layers:
+        rsi4h_bull_side  = rsi 4h  > 50      (daily_brief.py:1241)
+        rsi12h_bull_side = rsi 12h > 50      (daily_brief.py:1242)
+    so a corrected value that crosses 50 flips a published vote.  Any such flip
+    is recorded explicitly rather than left for a reader to notice.
+    """
+    rows, cap = _fan8_rows()
+    if rows is None:
+        pytest.skip("no v1.1 capture on disk to compare against")
+
+    verdicts = []
+    for r in rows:
+        if r["recipe"] != "rsi14" or r["timeframe"] not in ("4h", "12h"):
+            continue
+        flag = f"rsi{r['timeframe']}_bull_side"
+        was, now = r["published_v1_1"] > 50, r["corrected"] > 50
+        r["verdict_flag"] = flag
+        r["verdict_v1_1"] = bool(was)
+        r["verdict_corrected"] = bool(now)
+        r["verdict_flipped"] = bool(was != now)
+        if was != now:
+            verdicts.append({"asset": r["asset"], "flag": flag,
+                             "from": bool(was), "to": bool(now),
+                             "published_v1_1": r["published_v1_1"],
+                             "corrected": r["corrected"]})
+
+    changed = [r for r in rows if r["convention_changed"]]
+    moved = [r for r in changed if not r["corrected_matches_published"]]
+    payload = {
+        "fixture": "F-AN-8c",
+        "amendment": "prompts/CONTRACT_v4_Amendment_FAN8.md",
+        "analytics_version": analytics.ANALYTICS_VERSION,
+        "analytics_sha": analytics.analytics_sha(),
+        "capture": cap,
+        "summary": {
+            "compared": len(rows),
+            "unchanged_convention": len(rows) - len(changed),
+            "changed_convention": len(changed),
+            "published_values_that_moved": len(moved),
+            "verdict_flips": len(verdicts),
+        },
+        "verdict_changes": verdicts,
+        "rows": rows,
+    }
+    for d in (ROOT / "_reviewer_box",):
+        d.mkdir(exist_ok=True)
+        (d / "f_an_8_diff.json").write_text(json.dumps(payload, indent=1),
+                                            encoding="utf-8")
+    # the historical filename stays too: earlier reports cite it
     (ROOT / "_reviewer_box" / "_f_an_8_diff.json").write_text(
-        json.dumps({"compared": len(rows), "mismatches": len(failures),
-                    "capture": cap_p.name, "rows": rows}, indent=1), encoding="utf-8")
+        json.dumps(payload, indent=1), encoding="utf-8")
 
-    assert rows, "F-AN-8 compared nothing -- the guard would be vacuous"
-    assert not failures, "BRIEF EQUIVALENCE BROKEN:\n" + "\n".join(failures)
+    assert rows, "8c documented nothing"
+    assert (ROOT / "_reviewer_box" / "f_an_8_diff.json").exists()
