@@ -1,6 +1,6 @@
 {
   "ahead_behind": {
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0
   },
   "branch": "v12-v1-census",
@@ -10,8 +10,8 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": true
   },
-  "generated_utc": "2026-08-02T21:34:08Z",
-  "head": "e994f2dd1116d49e401d27c536c50a46d6c5bebc",
+  "generated_utc": "2026-08-02T22:56:28Z",
+  "head": "c1d8e668f7b6e178037b09f1f2d75b8e9e994ac9",
   "lane_last_commit": {
     "brief": null,
     "docs": {
@@ -20,25 +20,25 @@
       "subject": "docs: PC-1 Stage 3 ledger record - LIT estate remediation, save-path floor enforcement, engine 1.0.12"
     },
     "exchange": {
-      "committed_iso": "2026-08-02T18:30:50-03:00",
-      "sha": "e994f2dd1116d49e401d27c536c50a46d6c5bebc",
+      "committed_iso": "2026-08-02T18:38:16-03:00",
+      "sha": "3e3c54f8b59a40042b92c1e4ac8c793cd8809d9e",
       "subject": "exchange: auto-publish 2026-08-02"
     },
     "ops": {
-      "committed_iso": "2026-08-02T18:23:33-03:00",
-      "sha": "f4003e936cc4f373306fc093cdbca33fb689f2c7",
-      "subject": "ops: correct commit identity; extend workflow backup to scripts and root docs; fix report dates"
+      "committed_iso": "2026-08-02T19:56:17-03:00",
+      "sha": "c1d8e668f7b6e178037b09f1f2d75b8e9e994ac9",
+      "subject": "ops: analytics Phase I complete \u2014 F-AN-8a/8b/8c per operator ruling; parity worksheet issued"
     },
     "study-phase": null
   },
   "ledger_head": {
     "present": true,
-    "size": 244110,
+    "size": 248964,
     "title": "# Data-Spend Ledger"
   },
   "manifest_version": "1.1",
   "onedrive_running": false,
-  "origin_head": "e994f2dd1116d49e401d27c536c50a46d6c5bebc",
+  "origin_head": "c38a0ae4b26bffafe6498fdc12a79287a245a74f",
   "queue_open": 1,
   "reviewer_box": [
     {
@@ -56,6 +56,15 @@
       "sha256_head_blob": null,
       "sha256_worktree": "dae66679bf3d242d1c16f20f0932184a8b3ab63bf4f612148ba2614ecadc177c",
       "size": 5053,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/HEARTBEAT.md",
+      "sha256_head_blob": null,
+      "sha256_worktree": "0bfe0fe93d7cb329cadd88f6fc4f146a6704ef11074a8e1fa93c2c69381023fe",
+      "size": 198,
       "source_guess": null,
       "tracked": true
     },
@@ -144,8 +153,8 @@
       "match_head": false,
       "path": "exchange/status/daily/DAILY_2026-08-02.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "814a580480e8213c7ab05debb05be053fe3d365b1469deaafe9b08f4f49ccd2b",
-      "size": 5610,
+      "sha256_worktree": "a672f2a356739b65af832a012754fc5066b042b6f6d147dbc725a06b688eef9c",
+      "size": 6521,
       "source_guess": null,
       "tracked": true
     },
@@ -162,8 +171,8 @@
       "match_head": false,
       "path": "exchange/status/daily/MANIFEST_2026-08-02.json",
       "sha256_head_blob": null,
-      "sha256_worktree": "90b34cc2374809bc7165b4cac235b7dab209e006f9cbc42bc53a70f891be6876",
-      "size": 19581,
+      "sha256_worktree": "60a84465ad1a1f7d03d53c8ebda98f05397835503194a4444adf31159243e20b",
+      "size": 19644,
       "source_guess": null,
       "tracked": true
     }
@@ -508,9 +517,9 @@
     {
       "match_head": true,
       "path": "LEDGER.md",
-      "sha256_head_blob": "98bd433aa17b4310d7659caf503ed951299025a976b1db332439d131521eca44",
-      "sha256_worktree": "98bd433aa17b4310d7659caf503ed951299025a976b1db332439d131521eca44",
-      "size": 244110,
+      "sha256_head_blob": "6f24cfc50316bf08c367828bf8b4f3e57b37a2724b7f6ba3e06267b62362469c",
+      "sha256_worktree": "6f24cfc50316bf08c367828bf8b4f3e57b37a2724b7f6ba3e06267b62362469c",
+      "size": 248964,
       "tracked": true
     },
     {
@@ -538,9 +547,6 @@
       "tracked": true
     }
   ],
-  "status_porcelain": [
-    " M scripts/daily_routine.py",
-    " M scripts/routine_jobs.json"
-  ],
+  "status_porcelain": [],
   "untracked_root": []
 }

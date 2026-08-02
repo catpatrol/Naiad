@@ -1,0 +1,403 @@
+{
+ "artifact": "ANALYTICS1_REPORT",
+ "phase": "ANALYTICS-1 Phase I",
+ "generated_utc": "2026-08-02T22:55:00Z",
+ "contract": "prompts/CONTRACT_v4_ANALYTICS1_BRIEF2_FORWARD0.md",
+ "amendment": {
+  "path": "prompts/CONTRACT_v4_Amendment_FAN8.md",
+  "sha256": "2017fe6636987afd39fa49197424482d5ec69661b8f2df6dd0e9b565da75987f",
+  "bytes": 826
+ },
+ "analytics_version": "1.1.0",
+ "analytics_sha": "a7ff1911848bb30561e477186dc62ed1a4ff3daf39bfe9d42371f3353815e046",
+ "adoption_status": "GATED \u2014 not adopted. Awaiting the operator's parity readings; no partial adoption. CENSUS-2b, CENSUS-1d and H-RVX wait behind it.",
+ "fixture_transcript": {
+  "suite": "tests/test_analytics.py (F-AN-1..14)",
+  "invocation": "python -m pytest tests/test_analytics.py -q",
+  "summary": "41 passed",
+  "exit_code": 0,
+  "count": 41,
+  "results": [
+   {
+    "result": "PASSED",
+    "test": "test_f_an_1_golden_values"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_2_determinism"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_3_no_engine_imports"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_4_no_io"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_5_analytics_sha_reproducible"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_6_warmup_lengths"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_7_edge_cases"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_9_cluster_reproducibility"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_10_rvwap_window_and_floor"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_11_variance_stability"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_12_pivot_confirmation_lag"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[sma]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[ema]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[rma]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[rsi]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[stoch_rsi_k]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[stoch_rsi_d]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[macd_line]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[macd_signal]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[macd_hist]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[awesome_oscillator]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[true_range]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[atr]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[realised_vol]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[rolling_vwap]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[rolling_vwap_sd]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[anchored_vwap]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[zscore]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[correlation]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[beta]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[period_opens]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_causality_truncation_prefix[prior_period_extremes_h]"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_endpoint_only_raises"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_13_lag_functions_at_lag"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_14_resample_parity"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_14b_public_is_legacy_minus_unclosed"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_14c_undecidable_closure_keeps_the_bucket"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_8a_unchanged_conventions_reproduce_exactly"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_8b_legacy_mode_reproduces_v1_1_exactly"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_8b_legacy_is_unreachable_from_production"
+   },
+   {
+    "result": "PASSED",
+    "test": "test_f_an_8c_documented_diff"
+   }
+  ]
+ },
+ "repo_suite": {
+  "invocation": "python -m pytest -q",
+  "summary": "73 passed, 1 skipped",
+  "exit_code": 0,
+  "note": "pytest.ini sets testpaths=fixtures, so tests/test_analytics.py is NOT collected by the default run and must be invoked explicitly. Reported, not changed \u2014 outside this paste's Phase I scope."
+ },
+ "f_an_8": {
+  "8a_unchanged_conventions_reproduce_exactly": {
+   "status": "PASS",
+   "compared": 12,
+   "detail": "native-source recipes: rsi14@1h, atr14@1h/4h/12h"
+  },
+  "8b_legacy_mode_reproduces_v1_1_exactly": {
+   "status": "PASS",
+   "compared": 12,
+   "exact_match_all": true,
+   "detail": "reinstating the in-progress bucket reproduces every v1.1 published value, proving the dropped bar is the ONLY difference",
+   "production_unreachable": true
+  },
+  "8c_documented_diff": {
+   "status": "PASS",
+   "artifact": "_reviewer_box/f_an_8_diff.json",
+   "summary": {
+    "compared": 24,
+    "unchanged_convention": 12,
+    "changed_convention": 12,
+    "published_values_that_moved": 12,
+    "verdict_flips": 1
+   },
+   "verdict_changes": [
+    {
+     "asset": "ETHUSDT",
+     "flag": "rsi12h_bull_side",
+     "from": true,
+     "to": false,
+     "published_v1_1": 56.8469,
+     "corrected": 49.61186753781855
+    }
+   ]
+  }
+ },
+ "diff_summary": {
+  "compared": 24,
+  "unchanged_convention": 12,
+  "changed_convention": 12,
+  "published_values_that_moved": 12,
+  "verdict_flips": 1
+ },
+ "verdict_changes": [
+  {
+   "asset": "ETHUSDT",
+   "flag": "rsi12h_bull_side",
+   "from": true,
+   "to": false,
+   "published_v1_1": 56.8469,
+   "corrected": 49.61186753781855
+  }
+ ],
+ "functions": {
+  "sma": {
+   "recipe": "simple moving average",
+   "causality": "causal",
+   "warmup": "length-1"
+  },
+  "ema": {
+   "recipe": "alpha=2/(length+1), seeded with SMA(length) at index length-1",
+   "causality": "causal",
+   "warmup": "length-1"
+  },
+  "rma": {
+   "recipe": "Wilder smoothing, alpha=1/length, seeded with mean(first length)",
+   "causality": "causal",
+   "warmup": "length-1"
+  },
+  "rsi": {
+   "recipe": "length 14, Wilder/RMA smoothing, source close",
+   "causality": "causal",
+   "warmup": "length"
+  },
+  "stoch_rsi": {
+   "recipe": "RSI 14, Stoch 14, %K smooth 3, %D smooth 3, source close",
+   "causality": "causal",
+   "warmup": "rsi + stoch + k + d - 3"
+  },
+  "macd": {
+   "recipe": "EMA(12)-EMA(26), signal EMA(9), hist = MACD - signal, source close",
+   "causality": "causal",
+   "warmup": "slow-1, signal defined slow+signal-2"
+  },
+  "awesome_oscillator": {
+   "recipe": "SMA(5)-SMA(34) of bar midpoint (H+L)/2",
+   "causality": "causal",
+   "warmup": "slow-1"
+  },
+  "divergences": {
+   "recipe": "pivots(5,5) on price and oscillator; last 2 pivot pairs; regular = price extreme extends while oscillator does not; hidden = the converse; pivot_kind selects which",
+   "causality": "lag:5",
+   "warmup": "n/a (pivot driven)"
+  },
+  "rolling_vwap": {
+   "recipe": "TradingView RVWAP: trailing W-millisecond window floored at 10 bars, src hlc3, volume-weighted POPULATION variance via one-pass max(E[x^2]-E[x]^2, 0), no (n-1) correction",
+   "causality": "causal",
+   "warmup": "first bar with volume"
+  },
+  "anchored_vwap": {
+   "recipe": "accumulated from the anchor bar, src hlc3, same variance definition (INFERRED from shared band machinery, not read from source -- flagged in the parity worksheet)",
+   "causality": "causal",
+   "warmup": "anchor index"
+  },
+  "vw_sigma_bands": {
+   "recipe": "vwap +/- k*stdev, k in {1,2,3}",
+   "causality": "causal",
+   "warmup": "inherits"
+  },
+  "true_range": {
+   "recipe": "max(H-L, abs(H-C_prev), abs(L-C_prev)); index 0 = H-L",
+   "causality": "causal",
+   "warmup": "0"
+  },
+  "atr": {
+   "recipe": "length 14, Wilder smoothing of true range",
+   "causality": "causal",
+   "warmup": "length-1"
+  },
+  "realised_vol": {
+   "recipe": "close-to-close log returns, population sd, 7d vs 30d ratio, NOT annualised",
+   "causality": "causal",
+   "warmup": "slow"
+  },
+  "percentile_rank": {
+   "recipe": "rank among trailing sample, 0-100, sample size returned",
+   "causality": "endpoint_only",
+   "warmup": "n/a -- raises if as_of_index is not the sample end"
+  },
+  "volume_profile": {
+   "recipe": "volume spread uniformly across each bar's range, POC/VAH/VAL at 70% value area (APPROXIMATION)",
+   "causality": "endpoint_only",
+   "warmup": "n/a -- describes the slice it is handed"
+  },
+  "naked_poc_registry": {
+   "recipe": "POCs untested over (poc_index, as_of_index]",
+   "causality": "causal",
+   "warmup": "n/a"
+  },
+  "pivots": {
+   "recipe": "pivot(5,5), strict extreme, unique within the window",
+   "causality": "lag:5",
+   "warmup": "left"
+  },
+  "confirmed_pivots": {
+   "recipe": "pivots filtered to confirmation_lag <= as_of_index",
+   "causality": "causal",
+   "warmup": "left+right"
+  },
+  "period_opens": {
+   "recipe": "opening price of each D/W/M/Q/Y bucket, fixed at its first bar",
+   "causality": "causal",
+   "warmup": "0"
+  },
+  "prior_period_extremes": {
+   "recipe": "high/low of the previous COMPLETED period",
+   "causality": "causal",
+   "warmup": "one full period"
+  },
+  "resample_ohlcv": {
+   "recipe": "key = open_time // step * step, then first/max/min/last/sum; the FINAL bucket is DROPPED unless the source data reaches its end (Amendment FAN8, 2026-08-02) -- closed buckets only, so the last row is the last FINISHED period, not the forming one",
+   "causality": "causal",
+   "warmup": "0"
+  },
+  "zscore": {
+   "recipe": "rolling, population sd",
+   "causality": "causal",
+   "warmup": "length-1"
+  },
+  "correlation": {
+   "recipe": "rolling Pearson",
+   "causality": "causal",
+   "warmup": "length-1"
+  },
+  "beta": {
+   "recipe": "rolling cov/var against market",
+   "causality": "causal",
+   "warmup": "length-1"
+  }
+ },
+ "series_functions_causality_tested": [
+  "sma",
+  "ema",
+  "rma",
+  "rsi",
+  "stoch_rsi",
+  "macd",
+  "awesome_oscillator",
+  "true_range",
+  "atr",
+  "realised_vol",
+  "rolling_vwap",
+  "anchored_vwap",
+  "zscore",
+  "correlation",
+  "beta",
+  "period_opens",
+  "prior_period_extremes"
+ ],
+ "parity_worksheet": {
+  "path": "_reviewer_box/parity_worksheet_2026-08-02.md",
+  "current_rows": 24,
+  "historical_rows": 4,
+  "total_rows": 28,
+  "chart": "BINANCE:<SYM>USDT.P",
+  "timezone": "UTC",
+  "candles": "closed only",
+  "rvwap_target": "TradingView official Rolling VWAP, fixed 7/30/90/365d, src hlc3, bands x1",
+  "anchored_band_variance": "INFERRED, flagged 'to be confirmed by reading'",
+  "operator_column": "blank by design"
+ }
+}
