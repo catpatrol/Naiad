@@ -433,14 +433,51 @@ def fk2_completeness(fx: Fixtures, estate_root: Path) -> None:
     fx.record("F-K2", ok, detail)
 
 
-def fk3_source_untouched(fx: Fixtures, sample: list, before_status: str) -> None:
+def _porcelain_minus_outputs(text: str, outputs: list) -> list:
+    """Porcelain lines with THIS RUN'S OWN outputs removed.
+
+    F-K3 asks "were the sources touched?".  It answered that by comparing raw
+    `git status` before and after, which works only while every output lands
+    outside the repo -- true for --estate and --workflow, whose destination is
+    the Drive.  It is NOT true for --phase, which writes into
+    research_outputs/_archive/.  There the .zip is ignored by *.zip but the
+    .sha256 sidecar is not, so the run creates a new untracked entry and then
+    asserts nothing changed.  F-K3 failed on the first live --phase run
+    (2026-08-02, tc5) for exactly that reason -- and because releasing sources
+    is gated on fx.ok, --delete-source could never have fired either.
+
+    Two forms are dropped, and only these two: a line naming an output exactly,
+    and a collapsed directory entry (git prints `?? dir/` rather than listing a
+    wholly-untracked directory's contents) that CONTAINS an output.  Everything
+    the run did not write stays in the comparison and still fails the fixture.
+    """
+    kept = []
+    for line in text.splitlines():
+        if len(line) <= 3:
+            continue
+        path = line[3:].strip().strip('"')
+        if path in outputs:
+            continue
+        if path.endswith("/") and any(o.startswith(path) for o in outputs):
+            continue
+        kept.append(line)
+    return kept
+
+
+def fk3_source_untouched(fx: Fixtures, sample: list, before_status: str,
+                         outputs: list | None = None) -> None:
     changed = [rel for rel, ap, pre in sample
                if not ap.exists() or sha256_file(ap) != pre]
     after_status = git_porcelain()
-    ok = (not changed) and (after_status == before_status)
-    fx.record("F-K3", ok,
-              f"{len(sample)}-file sha sample unchanged: {not changed}; "
-              f"git porcelain identical: {after_status == before_status}")
+    outputs = outputs or []
+    before = _porcelain_minus_outputs(before_status, outputs)
+    after = _porcelain_minus_outputs(after_status, outputs)
+    same = (before == after)
+    detail = (f"{len(sample)}-file sha sample unchanged: {not changed}; "
+              f"git porcelain identical: {same}")
+    if outputs and after_status != before_status:
+        detail += f" (this run's own {len(outputs)} output path(s) normalised out)"
+    fx.record("F-K3", (not changed) and same, detail)
 
 
 def fk4_restore_rehearsal(fx: Fixtures, target: Path, limit: int = 10) -> None:
@@ -860,7 +897,12 @@ def run_phase(name: str, args) -> int:
               f"{len(res['mismatches'])} mismatches, {len(res['strays'])} strays, "
               f"{len(res['omissions'])} omissions")
     fx.na("F-K2", "completeness vs census.json applies to --estate only")
-    fk3_source_untouched(fx, sample, before_status)
+    # --phase writes its archive INSIDE the repo, so F-K3 must be told which
+    # paths are this run's own output (see _porcelain_minus_outputs).
+    fk3_source_untouched(fx, sample, before_status, outputs=[
+        target.relative_to(REPO).as_posix(),
+        sidecar.relative_to(REPO).as_posix(),
+    ])
     fk4_restore_rehearsal(fx, target)
     fk5_destination_verification(fx, target, archive_sha, sidecar)
     fk6_no_clobber(fx, target)

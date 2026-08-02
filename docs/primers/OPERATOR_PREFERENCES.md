@@ -5,7 +5,7 @@ repository is the only place they can be kept.
 
 ---
 
-## PART 1 — Verbatim settings (operator pastes)
+## PART 1 — Verbatim settings (operator fills by hand)
 
 **These three blocks exist only in Claude's cloud settings. They are NOT included in Anthropic data
 exports, and no script, backup or sync can reach them.** The only way they enter this file is for the
@@ -41,7 +41,7 @@ _Source: the style selector → the custom style in use, if any. Name the style 
 
 ---
 
-## PART 2 — Distilled working conventions (Athena, 2026-08-03)
+## PART 2 — Distilled working conventions (ATHENA — TO BE FILLED NEXT CYCLE)
 
 > **TO BE FILLED BY ATHENA IN THE NEXT CYCLE.**
 

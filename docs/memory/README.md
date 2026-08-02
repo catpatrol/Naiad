@@ -36,11 +36,17 @@ for the same reason and with the same limitation: a human has to paste them.
 So on the operator's figure the snapshot is missing **ten** ratified entries, and everything added to
 the auto-generated section since 2026-07-26 besides.
 
-> **Discrepancy on record, for the operator to settle.** The instruction that prompted this file gave
-> the snapshot's count as **21**. Counted directly, Section 2 of the file contains **19** numbered
-> entries, highest number 19, last entry "Paste-routing convention (2026-07-26…)". The count above
-> reports what the file actually holds. Whether the live figure is 29 against 19 or against 21
-> changes the size of the gap, not its existence — a fresh export is due either way.
+> **Discrepancy on record, for the operator to settle.** The instructions that prompted this file
+> have now given the snapshot's count as **21**, twice (2026-08-02 and again in the following
+> cycle). Counted directly, Section 2 of the file contains **19** numbered entries — highest number
+> 19, last entry "Paste-routing convention (2026-07-26…)", at file line 196 of 196. The table above
+> reports what the file actually holds, because that is checkable and was checked.
+>
+> The two figures are not necessarily in conflict: **21** may well be the correct count of the *live*
+> memory at export time, or may count Section 1 items this file records differently. What is certain
+> is that Section 2 of *this snapshot* holds 19 numbered entries. Whether the live figure of 29 is
+> measured against 19 or 21 changes the size of the gap, not its existence — **a fresh export is due
+> either way**, and taking one settles the question permanently.
 
 **Anything read from this snapshot should be treated as "true on 2026-07-26", not "true now".**
 
