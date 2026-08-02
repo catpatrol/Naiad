@@ -40,6 +40,8 @@ METRICS: operator actions this session = not recorded (predates Q-8) · files re
 
 **Provenance note (HEPHAESTUS, 2026-08-02):** this seed entry is a synthesis of the lane's standing
 status document, carried over unmodified in substance at ledger adoption. Source document:
-`STATUS — ENGINE (engine builds · repo operations · integrity & manifest).txt` (repo root, 2,917 B,
-updated 2026-07-27 late). It is dated 2026-07-27 and its PENDING items may since have been resolved —
-several of them demonstrably were. **Treat as stale until APOLLO appends a current entry.** [handoff]
+`docs/history/STATUS — ENGINE (engine builds · repo operations · integrity & manifest).txt`
+(2,917 B, updated 2026-07-27 late) — it sat at repo root when this ledger was seeded and was **moved
+to `docs/history/` later the same day** by the repo filing pass; the pointer is updated here so it
+does not rot. It is dated 2026-07-27 and its PENDING items may since have been resolved — several of
+them demonstrably were. **Treat as stale until APOLLO appends a current entry.** [handoff]

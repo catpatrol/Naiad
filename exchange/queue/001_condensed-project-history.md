@@ -48,16 +48,23 @@ Tracked:
 - `docs/handoffs/HANDOFF_2026-07-27_BRIEF_to_CENSUS_1.md` (18,475 B)
 - `docs/handoffs/HANDOFF_2026-07-27_BRIEF_to_ENGINE.md` (7,416 B)
 
-Untracked at repo root (confirm with the operator before moving — these have never been committed):
+Already filed into `docs/history/` by the 2026-08-02 filing pass (paths updated here so the order
+stays executable):
 
-- `PROJECT_STATUS_AND_CONTEXT_2026-07-28.md` (26,588 B)
-- `STATUS_HANDOFF_BRIEF_2026-07-28.md` (30,588 B)
+- `docs/history/PROJECT_STATUS_AND_CONTEXT_2026-07-28.md` (26,588 B)
+- `docs/history/STATUS_HANDOFF_BRIEF_2026-07-28.md` (30,588 B)
+- `docs/history/STATUS — ENGINE (…).txt` (2,917 B) and `docs/history/STATUS — BRIEF (…).txt` (3,008 B)
+  — the APOLLO and ARGUS ledger seeds; supersede their *narrative*, and leave the ledger seeds alone
+
+Since the filing pass already moved the seven tracked documents' peers into `docs/history/`, the
+"move them" instruction above now applies only to the five still at their original paths.
 
 **Explicitly NOT superseded** — current coordination state, not history:
-`HANDOFF_DIONYSUS_to_ATHENA_2026-08-02_Workflow_Redesign_Inputs.md`,
-`FUNNEL_DIONYSUS_W1_Workflow_Architecture_2026-08-02.md`,
-`CHALLENGE_DIONYSUS_01_Architecture_2026-08-02.md`, `claude/STATUS_SYSTEM.md`, and the per-lane
-ledgers under `exchange/status/`.
+`docs/history/HANDOFF_DIONYSUS_to_ATHENA_2026-08-02_Workflow_Redesign_Inputs.md`,
+`docs/history/FUNNEL_DIONYSUS_W1_Workflow_Architecture_2026-08-02.md`,
+`docs/history/CHALLENGE_DIONYSUS_01_Architecture_2026-08-02.md`, `claude/STATUS_SYSTEM.md`, and the
+per-lane ledgers under `exchange/status/`. These live in `docs/history/` for filing reasons only —
+their content is current.
 
 ## 4 · Fixtures
 

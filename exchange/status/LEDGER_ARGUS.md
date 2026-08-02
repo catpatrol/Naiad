@@ -42,6 +42,8 @@ METRICS: operator actions this session = not recorded (predates Q-8) · files re
 
 **Provenance note (HEPHAESTUS, 2026-08-02):** this seed entry is a synthesis of the lane's standing
 status document, carried over unmodified in substance at ledger adoption. Source document:
-`STATUS — BRIEF (daily market brief · Atlas HTML report · live laboratory).txt` (repo root, 3,008 B,
-updated 2026-07-27 late). It is dated 2026-07-27; `CONTRACT_ARGUS_Analytics_Scoping_2026-07-29.md`
+`docs/history/STATUS — BRIEF (daily market brief · Atlas HTML report · live laboratory).txt`
+(3,008 B, updated 2026-07-27 late) — it sat at repo root when this ledger was seeded and was **moved
+to `docs/history/` later the same day** by the repo filing pass; the pointer is updated here so it
+does not rot. It is dated 2026-07-27; `prompts/CONTRACT_ARGUS_Analytics_Scoping_2026-07-29.md`
 post-dates it and is not reflected here. **Treat as stale until ARGUS appends a current entry.** [handoff]
