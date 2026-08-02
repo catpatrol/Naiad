@@ -99,6 +99,19 @@ def sweep_legacy_box():
                             Two different files with one name is a real
                             collision and the operator must see both.
 
+    EVERY filesystem call here is guarded, and a failure is recorded as an
+    'error' row rather than raised.  That is not defensive habit -- the sweep
+    runs FIRST, so an unguarded OSError would take down the manifest, the
+    ~4-minute brief, the report and the publish, for the sake of one file in a
+    transitional folder.  These drop points exist precisely so that in-flight
+    pastes can be writing to them, which is the same thing as saying a source
+    file may be locked at the moment the 07:00 task fires.  A stuck file must
+    cost its own row in the report and nothing else.
+
+    A subdirectory is not swept (the drop points are flat by convention) but is
+    RECORDED as 'skipped-dir', because a silently ignored folder looks exactly
+    like an empty one.
+
     Returns a list of {action, src, dst} dicts, oldest-first per folder.
     """
     moved = []
@@ -106,34 +119,50 @@ def sweep_legacy_box():
         src_dir, dst_dir = ROOT / src_rel, ROOT / dst_rel
         if not src_dir.is_dir():
             continue
-        dst_dir.mkdir(parents=True, exist_ok=True)
-        for item in sorted(src_dir.iterdir()):
-            if not item.is_file():
-                continue
-            target = dst_dir / item.name
-            if not target.exists():
-                shutil.move(str(item), str(target))
-                moved.append({"action": "moved", "src": f"{src_rel}/{item.name}",
-                              "dst": f"{dst_rel}/{item.name}"})
-                continue
+        try:
+            dst_dir.mkdir(parents=True, exist_ok=True)
+        except OSError as exc:
+            moved.append({"action": "error", "src": src_rel,
+                          "dst": f"cannot create {dst_rel}: {exc}"})
+            continue
+        try:
+            entries = sorted(src_dir.iterdir())
+        except OSError as exc:
+            moved.append({"action": "error", "src": src_rel,
+                          "dst": f"cannot list: {exc}"})
+            continue
+        for item in entries:
             try:
-                same = _sha256(item) == _sha256(target)
+                if item.is_dir():
+                    moved.append({"action": "skipped-dir", "src": f"{src_rel}/{item.name}",
+                                  "dst": "not swept — drop points are flat"})
+                    continue
+                if not item.is_file():
+                    continue
+                target = dst_dir / item.name
+                if not target.exists():
+                    shutil.move(str(item), str(target))
+                    moved.append({"action": "moved", "src": f"{src_rel}/{item.name}",
+                                  "dst": f"{dst_rel}/{item.name}"})
+                    continue
+                if _sha256(item) == _sha256(target):
+                    item.unlink()
+                    moved.append({"action": "deduped", "src": f"{src_rel}/{item.name}",
+                                  "dst": f"{dst_rel}/{item.name}"})
+                    continue
+                n = 1
+                while (dst_dir / f"{item.stem}__swept-{n}{item.suffix}").exists():
+                    n += 1
+                alt = dst_dir / f"{item.stem}__swept-{n}{item.suffix}"
+                shutil.move(str(item), str(alt))
+                moved.append({"action": "renamed", "src": f"{src_rel}/{item.name}",
+                              "dst": f"{dst_rel}/{alt.name}"})
             except OSError as exc:
+                # Includes the shutil.move copy-then-unlink fallback leaving the
+                # source behind on Windows: the file may now exist in BOTH
+                # places.  Say so, rather than crashing and leaving no report.
                 moved.append({"action": "error", "src": f"{src_rel}/{item.name}",
-                              "dst": str(exc)})
-                continue
-            if same:
-                item.unlink()
-                moved.append({"action": "deduped", "src": f"{src_rel}/{item.name}",
-                              "dst": f"{dst_rel}/{item.name}"})
-                continue
-            n = 1
-            while (dst_dir / f"{item.stem}__swept-{n}{item.suffix}").exists():
-                n += 1
-            alt = dst_dir / f"{item.stem}__swept-{n}{item.suffix}"
-            shutil.move(str(item), str(alt))
-            moved.append({"action": "renamed", "src": f"{src_rel}/{item.name}",
-                          "dst": f"{dst_rel}/{alt.name}"})
+                              "dst": f"{exc} — check for a copy left in both places"})
     return moved
 
 
@@ -153,6 +182,12 @@ def sweep_lines(swept):
         lines.append("")
         lines.append(f"**{len(renamed)} name collision(s) kept under a suffixed name** — two "
                      "different files wanted one name. Both are present; neither was overwritten.")
+    errors = [r for r in swept if r["action"] == "error"]
+    if errors:
+        lines.append("")
+        lines.append(f"**{len(errors)} file(s) could not be swept.** The run continued; they stay "
+                     "in the legacy folder and will be retried next run. A locked source can leave "
+                     "a copy in both places — check before assuming the move completed.")
     return lines
 
 
