@@ -10,8 +10,8 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": true
   },
-  "generated_utc": "2026-08-02T16:46:39Z",
-  "head": "42045bb06ec3152390c9227e8e17b7014fef1ef7",
+  "generated_utc": "2026-08-02T19:15:32Z",
+  "head": "23fbd9eb80b74552fb1ed798f211b47870131fc1",
   "lane_last_commit": {
     "brief": null,
     "docs": {
@@ -20,14 +20,14 @@
       "subject": "docs: PC-1 Stage 3 ledger record - LIT estate remediation, save-path floor enforcement, engine 1.0.12"
     },
     "exchange": {
-      "committed_iso": "2026-08-02T12:47:54-03:00",
-      "sha": "42045bb06ec3152390c9227e8e17b7014fef1ef7",
-      "subject": "exchange: file the HEPHAESTUS exchange v1 build report"
+      "committed_iso": "2026-08-02T15:44:54-03:00",
+      "sha": "b06348c7f451c2a1d22263f7501c5176c9bb399e",
+      "subject": "exchange: file the tc5 archive and scaffolding report"
     },
     "ops": {
-      "committed_iso": "2026-08-02T12:43:42-03:00",
-      "sha": "8be8e7962de10427def550c86f22b255babc9a73",
-      "subject": "ops: exchange v1 \u2014 waterwheel infrastructure per FUNNEL_DIONYSUS_W1 + FUNNEL_ATHENA_W2 (defaults)"
+      "committed_iso": "2026-08-02T16:15:13-03:00",
+      "sha": "23fbd9eb80b74552fb1ed798f211b47870131fc1",
+      "subject": "ops: slim exchange \u2014 brief artifacts referenced not copied, 7-day rolling window"
     },
     "study-phase": null
   },
@@ -38,7 +38,7 @@
   },
   "manifest_version": "1.1",
   "onedrive_running": false,
-  "origin_head": "42045bb06ec3152390c9227e8e17b7014fef1ef7",
+  "origin_head": "23fbd9eb80b74552fb1ed798f211b47870131fc1",
   "queue_open": 1,
   "reviewer_box": [
     {
@@ -48,7 +48,7 @@
       "sha256_worktree": "6249fd86ba0f2d6757db5bb5a53570530404a6b44cb0fe7739424797e11c60d8",
       "size": 6506,
       "source_guess": null,
-      "tracked": false
+      "tracked": true
     },
     {
       "match_head": false,
@@ -124,6 +124,15 @@
     },
     {
       "match_head": false,
+      "path": "exchange/status/RETENTION.md",
+      "sha256_head_blob": null,
+      "sha256_worktree": "96c52bf8089b6cdc7407df10965c774c84dc29f44333a84933d3abe99006e975",
+      "size": 1724,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
       "path": "exchange/status/daily/DAILY_2026-07-28.md",
       "sha256_head_blob": null,
       "sha256_worktree": "e37cb58a723841892c5657c410a0577f10d39a12b5f64c505e481828057ac02b",
@@ -135,8 +144,8 @@
       "match_head": false,
       "path": "exchange/status/daily/DAILY_2026-08-02.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "1107ec089f465b49aa28c345a556889680035df853edf8548dc9c584a012e358",
-      "size": 5791,
+      "sha256_worktree": "dad32083327041bbf35f97cf7c37c3d0b46c8dd5ded89393687f0682405c2565",
+      "size": 4947,
       "source_guess": null,
       "tracked": true
     },
@@ -153,44 +162,8 @@
       "match_head": false,
       "path": "exchange/status/daily/MANIFEST_2026-08-02.json",
       "sha256_head_blob": null,
-      "sha256_worktree": "1da739ac1356f0406501cafcf7bdf636b68211f238807f0f07d8b4927b63a73f",
-      "size": 25134,
-      "source_guess": null,
-      "tracked": true
-    },
-    {
-      "match_head": false,
-      "path": "exchange/status/daily/brief_2026-07-28.html",
-      "sha256_head_blob": null,
-      "sha256_worktree": "329eedad30d493f37fe94703ab612c29ec483229c7bf7ba04af58a7a8159af2a",
-      "size": 141779,
-      "source_guess": null,
-      "tracked": true
-    },
-    {
-      "match_head": false,
-      "path": "exchange/status/daily/brief_2026-07-28.json",
-      "sha256_head_blob": null,
-      "sha256_worktree": "3097c56f19b15d38490582c2298591ea8c95a1f8d09f0c17e664e2dd12ae31f9",
-      "size": 254970,
-      "source_guess": null,
-      "tracked": true
-    },
-    {
-      "match_head": false,
-      "path": "exchange/status/daily/brief_2026-08-02.html",
-      "sha256_head_blob": null,
-      "sha256_worktree": "49710a325b5f28bae34e554a8831fbb5e0bd2d0894c5a0d6ca6956a9227b2601",
-      "size": 142378,
-      "source_guess": null,
-      "tracked": true
-    },
-    {
-      "match_head": false,
-      "path": "exchange/status/daily/brief_2026-08-02.json",
-      "sha256_head_blob": null,
-      "sha256_worktree": "a25ea1c9b1bf8cf141cb35f8ed5e8a5ba65d061407d8c15479ea0b7b71a6ea4d",
-      "size": 258713,
+      "sha256_worktree": "c0065b22b879df6ccfc6e06c5d907248758a1720727d42468fbe2d4ad8a43abb",
+      "size": 21893,
       "source_guess": null,
       "tracked": true
     }
@@ -565,43 +538,6 @@
       "tracked": true
     }
   ],
-  "status_porcelain": [
-    " M exchange/queue/001_condensed-project-history.md",
-    " M exchange/status/CADENCE.md",
-    " M exchange/status/LEDGER_APOLLO.md",
-    " M exchange/status/LEDGER_ARGUS.md",
-    " M exchange/status/MANIFEST.json",
-    " M scripts/backup_estate.py",
-    " M scripts/daily_routine.py",
-    "?? ARGUS_REPRIME_2026-08-02.md",
-    "?? \"ORCHESTRATOR CONTROL CENTER \\342\\200\\224 protocol & state of record.txt\"",
-    "?? SCHED_TEST_RESULT_2026-08-02.md",
-    "?? analytics/",
-    "?? docs/history/",
-    "?? docs/knowledge/pine/",
-    "?? docs/primers/",
-    "?? docs/reports/",
-    "?? exchange/status/2026-08-02_DELTA_W1-rulings-and-exchange.md",
-    "?? prompts/CONTRACT_ARGUS_Analytics_Scoping_2026-07-29.md",
-    "?? prompts/CONTRACT_DESIGN_Atlas_Rewire_2026-07-30.md",
-    "?? scripts/orchestrator_state.py",
-    "?? tests/test_analytics.py"
-  ],
-  "untracked_root": [
-    {
-      "name": "ARGUS_REPRIME_2026-08-02.md",
-      "sha256": "e48ac02c4b70cfc760b1124154f0db0d4a3ea9b441714b73ec0d416ddc42df6a",
-      "size": 6802
-    },
-    {
-      "name": "ORCHESTRATOR CONTROL CENTER \u2014 protocol & state of record.txt",
-      "sha256": "0be1f1e35e6b13ab585a73db1120d003e4c181a1db653263be6d920c31e1e163",
-      "size": 3848
-    },
-    {
-      "name": "SCHED_TEST_RESULT_2026-08-02.md",
-      "sha256": "287a13d8c04706310464f98a92afea0ef12847e8daf9d5be9d51f6dce9742e6c",
-      "size": 4951
-    }
-  ]
+  "status_porcelain": [],
+  "untracked_root": []
 }
