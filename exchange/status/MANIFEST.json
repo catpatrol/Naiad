@@ -10,8 +10,8 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": true
   },
-  "generated_utc": "2026-08-02T19:15:32Z",
-  "head": "23fbd9eb80b74552fb1ed798f211b47870131fc1",
+  "generated_utc": "2026-08-02T21:34:08Z",
+  "head": "e994f2dd1116d49e401d27c536c50a46d6c5bebc",
   "lane_last_commit": {
     "brief": null,
     "docs": {
@@ -20,14 +20,14 @@
       "subject": "docs: PC-1 Stage 3 ledger record - LIT estate remediation, save-path floor enforcement, engine 1.0.12"
     },
     "exchange": {
-      "committed_iso": "2026-08-02T15:44:54-03:00",
-      "sha": "b06348c7f451c2a1d22263f7501c5176c9bb399e",
-      "subject": "exchange: file the tc5 archive and scaffolding report"
+      "committed_iso": "2026-08-02T18:30:50-03:00",
+      "sha": "e994f2dd1116d49e401d27c536c50a46d6c5bebc",
+      "subject": "exchange: auto-publish 2026-08-02"
     },
     "ops": {
-      "committed_iso": "2026-08-02T16:15:13-03:00",
-      "sha": "23fbd9eb80b74552fb1ed798f211b47870131fc1",
-      "subject": "ops: slim exchange \u2014 brief artifacts referenced not copied, 7-day rolling window"
+      "committed_iso": "2026-08-02T18:23:33-03:00",
+      "sha": "f4003e936cc4f373306fc093cdbca33fb689f2c7",
+      "subject": "ops: correct commit identity; extend workflow backup to scripts and root docs; fix report dates"
     },
     "study-phase": null
   },
@@ -38,7 +38,7 @@
   },
   "manifest_version": "1.1",
   "onedrive_running": false,
-  "origin_head": "23fbd9eb80b74552fb1ed798f211b47870131fc1",
+  "origin_head": "e994f2dd1116d49e401d27c536c50a46d6c5bebc",
   "queue_open": 1,
   "reviewer_box": [
     {
@@ -126,8 +126,8 @@
       "match_head": false,
       "path": "exchange/status/RETENTION.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "96c52bf8089b6cdc7407df10965c774c84dc29f44333a84933d3abe99006e975",
-      "size": 1724,
+      "sha256_worktree": "186ac1d4b1a9f25f4d24063219f4686c3670363f544dbdc668a32279adece0dc",
+      "size": 1781,
       "source_guess": null,
       "tracked": true
     },
@@ -144,8 +144,8 @@
       "match_head": false,
       "path": "exchange/status/daily/DAILY_2026-08-02.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "dad32083327041bbf35f97cf7c37c3d0b46c8dd5ded89393687f0682405c2565",
-      "size": 4947,
+      "sha256_worktree": "814a580480e8213c7ab05debb05be053fe3d365b1469deaafe9b08f4f49ccd2b",
+      "size": 5610,
       "source_guess": null,
       "tracked": true
     },
@@ -162,8 +162,8 @@
       "match_head": false,
       "path": "exchange/status/daily/MANIFEST_2026-08-02.json",
       "sha256_head_blob": null,
-      "sha256_worktree": "c0065b22b879df6ccfc6e06c5d907248758a1720727d42468fbe2d4ad8a43abb",
-      "size": 21893,
+      "sha256_worktree": "90b34cc2374809bc7165b4cac235b7dab209e006f9cbc42bc53a70f891be6876",
+      "size": 19581,
       "source_guess": null,
       "tracked": true
     }
@@ -538,6 +538,9 @@
       "tracked": true
     }
   ],
-  "status_porcelain": [],
+  "status_porcelain": [
+    " M scripts/daily_routine.py",
+    " M scripts/routine_jobs.json"
+  ],
   "untracked_root": []
 }
