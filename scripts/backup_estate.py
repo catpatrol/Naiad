@@ -152,10 +152,20 @@ def git_porcelain() -> str:
 
 
 def git_tracked_under(rel_dir: str) -> set:
-    rc, out = git("ls-files", "--", rel_dir)
+    """Tracked paths under rel_dir, NUL-delimited.
+
+    -z is not a style preference.  Without it `git ls-files` C-quotes any path
+    containing a non-ASCII byte -- it returns the literal 14 characters
+    "docs/history/STATUS \\342\\200\\224 ... .txt" rather than the path -- and
+    every consumer then asks whether a file by that literal name exists, is told
+    no, and reports a tracked file as missing.  F-K7 failed exactly this way on
+    the first --workflow run (2026-08-02): 3 of 64 tracked paths, all of them
+    files with an em-dash in the name.  -z suppresses the quoting entirely.
+    """
+    rc, out = git("ls-files", "-z", "--", rel_dir)
     if rc != 0:
         return set()
-    return {line.strip() for line in out.splitlines() if line.strip()}
+    return {p for p in out.split("\0") if p}
 
 
 # --------------------------------------------------------------- environment
@@ -487,9 +497,11 @@ def fk6_no_clobber(fx: Fixtures, target: Path) -> None:
 
 def fk7_tracked_preserved(fx: Fixtures, tracked: set) -> None:
     gone = [t for t in sorted(tracked) if not (REPO / t).exists()]
-    fx.record("F-K7", not gone,
-              f"{len(tracked)} git-tracked source files still present on disk; "
-              f"{len(gone)} missing")
+    detail = (f"{len(tracked) - len(gone)}/{len(tracked)} git-tracked source files "
+              f"still present on disk; {len(gone)} missing")
+    if gone:
+        detail += " -- " + ", ".join(gone[:3])
+    fx.record("F-K7", not gone, detail)
 
 
 # --------------------------------------------------------------- retention
