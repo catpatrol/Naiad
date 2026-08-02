@@ -493,3 +493,352 @@ directory is for.
 
 **Operator actions this session = 1** (one paste).
 **Files re-ingested = 0.**
+
+---
+---
+
+# PART TWO — the delta build (same day, second paste)
+
+**Filed:** 2026-08-02, later the same day · **Lane:** HEPHAESTUS
+**Authorization:** gate A-7 push AUTHORIZED · `FUNNEL_ATHENA_W2` = defaults · **C-4 REVISED** to
+delete the `_unarchived` extraction after verification.
+
+**Why this is appended rather than a separate file.** The second paste named this same path as its
+report target. That file already existed and was committed in `42045bb`, and overwriting it would
+have destroyed the record of the first build. The `reports/` convention is one file per run, never
+an overwrite — so the report is appended here instead: the operator's named path stays valid, and
+nothing is lost. Flagged for a ruling if a separate file was intended.
+
+## STEP 0 — HARD ASSERT (re-pinned)
+
+The paste as issued pinned `HEAD == 5b0e36e`. **That assert FAILED** — HEAD was `42045bb`, three
+commits ahead, because the first paste's own output (`74caae3` → `8be8e79` → `42045bb`) had already
+landed. Per the standing rule the paste **halted with no writes**, the mismatch was reported, and the
+operator re-pinned to `42045bb` and elected to run the delta only (parts A/B/D/E already done).
+
+Re-pinned assert: OS `Windows_NT` · pwd = repo root, `LEDGER.md` present · branch `v12-v1-census` ·
+**HEAD `42045bb`** — **PASS**.
+
+## A / B / D / E — already built, re-verified not rebuilt
+
+Skipped as instructed. Two verifications were run against them rather than taking them on trust:
+
+- **Manifest fixture gate: 4/4 PASS.**
+  ```
+  PASS F-M1 - round-trip byte-identical over 21853 bytes; self sha256 409f2fe6a0749e4f
+  PASS F-M2 - true copy accepted, one-byte mutant rejected (81f8722f270c)
+  PASS F-M3 - two builds byte-identical over 21809 chars
+  PASS F-M4 - porcelain unchanged (19 entries before and after) (manifest's own path normalised out: 19/20 raw)
+  ```
+  F-M4's line is worth reading: `19/20 raw` is the amendment from Part One doing exactly its job now
+  that `exchange/status/MANIFEST.json` is tracked. Without it this fixture would fail every run.
+- **Test suite: 73 passed, 1 skipped, 0 failed in 22.65 s.**
+
+**B was extended:** `CADENCE.md` gained a fifth trigger row and the F4 finding (below).
+
+## C — MIGRATE, BACKWARD-COMPATIBLE · **DONE**
+
+The first paste **moved** the reviewer-box contents; this one requires them **copied, with the drop
+points left live**. The reconciliation:
+
+- `_reviewer_box/reports/` and `_reviewer_box/daily/` **exist and are writable**. They are empty
+  because their historical contents already live in `exchange/`. Duplicating that history back would
+  only be swept forward again next run — churn, not compatibility. What matters for an in-flight
+  APOLLO/ARGUS paste is that the folder accepts a write, and it does.
+- `_reviewer_box/README.md` was rewritten from "retired" to **"TRANSITIONAL, still working"**, with
+  the drop-point → destination table.
+- **SWEEP step added** to `daily_routine.py`, running **first** so a swept file is inventoried by the
+  manifest and published by the same run rather than waiting a day.
+
+**Collision policy — never overwrite.** Identical bytes → source removed, logged `deduped`.
+Different bytes → kept as `<stem>__swept-N<ext>`, logged `renamed`. Subdirectory → logged
+`skipped-dir` rather than silently ignored.
+
+**Proven, not asserted** (synthetic files, cleaned up afterwards):
+
+```
+PASS plain file MOVED · PASS identical file DEDUPED · PASS different file RENAMED
+PASS source folder now empty · PASS real README.md NOT overwritten
+PASS destination restored exactly · PASS legacy folder still exists (kept live)
+```
+
+**.gitignore:** re-checked. `git check-ignore` exits 1 for every real `exchange/` path — **no rule
+excludes `exchange/**`**, no negation added. The only rule that could bite inside is
+`.gitignore:38 *.zip`, which reinforces the content guard rather than fighting it.
+
+## F — WORKFLOW BACKUP MODE · **DONE — 7/7 FIXTURES PASS**
+
+`backup_estate.py --workflow`, dated and hashed exactly like `--estate`: same embedded manifest, same
+bidirectional verification, same no-clobber guard, same fixture set.
+
+**First real run:**
+
+```
+roots archived   : 8
+    docs/memory      1 · docs/knowledge  4 · skills     2 · prompts    13
+    claude           1 · exchange       32 · docs/primers 3 · docs/history 8
+    absent : drops/operator-exports · exchange/drops/operator-exports
+members to archive: 64
+
+PASS F-K1 - 64/64 members verified both directions; 0 mismatches, 0 strays, 0 omissions
+N/A  F-K2 - completeness vs census.json applies to --estate only
+PASS F-K3 - 20-file sha sample unchanged: True; git porcelain identical: True
+PASS F-K4 - 10 members restored outside repo; 0 hash mismatches
+PASS F-K5 - re-read from destination: matches=True, sidecar matches=True, CRC clean=True
+PASS F-K6 - guard refuses to overwrite the archive just written
+PASS F-K7 - 64/64 git-tracked source files still present on disk; 0 missing
+
+archive : G:\My Drive\naiad-backups\naiad_workflow_2026-08-02.zip
+size    : 393,420 B (26.5% of source) · members: 64 · source: 1,482,300 B
+sha256  : a480625ae594edc16a6802771a028b3eed40f5a2bc1ca5d1e249c04ba6b5009a
+```
+
+Members keep their **repo-relative paths**, so a restore lands them back where they came from.
+Absent roots are **named in the output and in the embedded manifest** — an empty backup that looks
+complete is the failure this script exists to prevent. `exchange/drops/operator-exports` is skipped
+as nested inside `exchange/`, which is already archived whole.
+
+**RETENTION REPORT** extended to all modes: keep newest **4 estate + 1 phase set + 4 workflow**,
+written to `exchange/status/RETENTION.md` and echoed to stdout. **It never deletes.** Current state:
+1 estate generation (within rule) · 1 workflow generation (within rule) · phase set `2026-07-27`,
+6 archives, **1,025,189,589 B — outside the rule**, each listed individually.
+
+`G:\My Drive\naiad-backups\operator-exports\` **created** as the drop point for the Claude data export.
+
+### ⚠ A real bug this mode surfaced — and it would have fired every Sunday
+
+The first `--workflow` run came in **6/7: F-K7 FAILED**, "3 missing". Diagnosed rather than waved
+through: **`git ls-files` C-quotes any path containing a non-ASCII byte.** It returns the literal
+escaped string `"docs/history/STATUS \342\200\224 BRIEF ….txt"` instead of the path. `git_tracked_under()`
+parsed that literally, asked whether a file by that name existed, was told no, and reported three
+**present** tracked files as missing — the three with an em-dash in the name.
+
+This bug **pre-existed** in `run_phase`; it had simply never been reachable, because
+`research_outputs/` paths are all ASCII. The `--workflow` mode reaches `docs/`, and it fired
+immediately. **The armed Sunday 08:30 task would have reported a failed backup every single week.**
+
+Fixed with `git ls-files -z` (NUL-delimited, no quoting) — commit `dd926bc`. F-K7 is now 64/64. The
+6/7 archive was deleted and rebuilt so the record shows a clean run; its superseded sha256 was
+`0b328931ea1acfcc…`, and the replacement is byte-verified above.
+
+## G — FILE THE LOOSE WORK · **DONE — 17 moved, 3 unmatched**
+
+`docs/history/`, `docs/primers/`, `docs/reports/` created (plus `docs/knowledge/pine/`).
+
+| file | → destination | rule |
+|---|---|---|
+| `# ORCHESTRATOR PRIMER — what a fresh orchestrator session needs to know.txt` | `docs/primers/` | PRIMER_* / About_* |
+| `About Apollo, Athena, Argus, Hermes and Dionysus.txt` | `docs/primers/` | PRIMER_* / About_* |
+| `About Apollo, Athena, Argus, Hermes, Hephaestus and Dionysus.txt` | `docs/primers/` | PRIMER_* / About_* |
+| `CHALLENGE_DIONYSUS_01_Architecture_2026-08-02.md` | `docs/history/` | CHALLENGE_* |
+| `FUNNEL_DIONYSUS_W1_Workflow_Architecture_2026-08-02.md` | `docs/history/` | FUNNEL_* |
+| `HANDOFF_DIONYSUS_to_ATHENA_2026-08-02_Workflow_Redesign_Inputs.md` | `docs/history/` | HANDOFF_* |
+| `Naiad_Orchestration_and_Open_Questions.md` | `docs/history/` | Naiad_Orchestration_* |
+| `PROJECT_STATUS_AND_CONTEXT_2026-07-28.md` | `docs/history/` | PROJECT_STATUS_* |
+| `STATUS — BRIEF (daily market brief · Atlas HTML report · live laboratory).txt` | `docs/history/` | STATUS_* |
+| `STATUS — ENGINE (engine builds · repo operations · integrity & manifest).txt` | `docs/history/` | STATUS_* |
+| `STATUS_HANDOFF_BRIEF_2026-07-28.md` | `docs/history/` | STATUS_* |
+| `Cascade Rewire.html` | `docs/reports/` | *.html |
+| `Naiad — Orchestrator Control Center.html` | `docs/reports/` | *.html |
+| `CONTRACT_ARGUS_Analytics_Scoping_2026-07-29.md` | `prompts/` | CONTRACT_* |
+| `CONTRACT_DESIGN_Atlas_Rewire_2026-07-30.md` | `prompts/` | CONTRACT_* |
+| `12-25EMA Trend Scanner-Pinescript.txt` | `docs/knowledge/pine/` | *.txt pine/scanner |
+| `Rvwap pine code.txt` | `docs/knowledge/pine/` | *.txt pine/scanner |
+
+**Unmatched — left at repo root, untouched, no rule covered them:**
+
+- `ARGUS_REPRIME_2026-08-02.md`
+- `ORCHESTRATOR CONTROL CENTER — protocol & state of record.txt`
+- `SCHED_TEST_RESULT_2026-08-02.md` — the F4 record (see below)
+
+I did not guess destinations for these. My read, offered not acted on: the control-center document is
+superseded by the primer (the primer's own line 52 says it was "reframed from 'control center' to
+primer"), so `docs/history/` fits; `ARGUS_REPRIME` reads as priming material; and
+`SCHED_TEST_RESULT` is a lane report that belongs in `exchange/reports/` under the naming convention.
+**One consequence worth noting:** the delta note references the F4 record by name, and it is
+currently untracked — so a web lane syncing from GitHub cannot open it. The delta note quotes the
+findings inline, so the substance carries regardless.
+
+**Untouched by instruction:** `analytics/`, `tests/test_analytics.py`, `scripts/orchestrator_state.py`.
+
+**Consequential follow-up the move forced:** `LEDGER_APOLLO.md` and `LEDGER_ARGUS.md` cited their
+seed documents at repo root, and `queue/001` cited five paths that moved. All were updated to the new
+`docs/history/` paths, so no document points at a file that no longer exists. The ledger provenance
+footers were edited rather than appended to — they are pointers about where a seed came from, not
+STATUS entries, and a stale pointer is worse than a strict reading of append-only.
+
+## H — RECLAIM (C-4 revised) · **DONE — 3.97 GB FREED**
+
+**Verify first, as instructed:**
+
+```
+archive : research_outputs\_archive\s3_2026-07-27.zip
+members : 1550 · verified : 1550 · mismatches : 0 · strays : 0 · omissions : 0
+archive sha256: 80ac04439e169cf1dfff5bc122b37fb78ddc6a6a79d2201380973006ff4e146f
+VERIFIED
+```
+
+Exactly the expected 1,550 members and 0 mismatches. The precondition was met.
+
+**I then ran a second, harder check** the paste did not require, because "the archive is sound" and
+"the extraction is redundant" are different claims and only the second licenses a delete. Every one
+of the 1,550 extracted files was hashed and compared against the archive's pinned manifest.
+
+**It found one discrepancy — and it is worth the operator's attention:**
+
+> The extraction's `manifest.json` was **274,059 bytes**; the archive pins it at **11,237 bytes**.
+> Cause: **Windows filesystems are case-insensitive.** The archive contains both `manifest.json`
+> (the s3 phase's own build manifest) and `MANIFEST.json` (the backup's embedded manifest). On
+> extraction the second silently overwrote the first. The extracted file is byte-identical to the
+> embedded `MANIFEST.json` — confirmed.
+
+So the extraction was **the damaged copy**, missing one file's true content, while the archive holds
+both entries distinctly and verified. Deleting the extraction lost nothing; the archive strictly
+dominates it. Set comparison alone would have missed this — 1,550 vs 1,550, names matching
+case-insensitively.
+
+**⚠ Generalised hazard, on record:** *restoring any of these phase archives on Windows silently loses
+`manifest.json`.* Any restore must extract case-sensitively, or rename one entry first. The new
+`--workflow` archive shape is **not** exposed to this: every member carries a directory prefix, so
+nothing can collide with the root-level `MANIFEST.json`.
+
+**Freed:**
+
+| measure | before | after |
+|---|---|---|
+| `research_outputs/_unarchived/` | 1,550 files · 4,261,722,227 B | **deleted** |
+| "Midas-Claude Code Resources" tree | 3,005 files · **5.655 GB** | 1,455 files · **1.686 GB** |
+| C: free | 34.71 GB | **38.68 GB** |
+
+`s3_2026-07-27.zip` intact at 269,919,602 B.
+
+## I — DELTA NOTE · **DONE**
+
+`exchange/status/2026-08-02_DELTA_W1-rulings-and-exchange.md` — one page for APOLLO and ARGUS, opening
+with **"Read this once. Do not re-prime, do not re-verify anything below."** Covers: the eight W1
+rulings as a table of what each changes *for a lane* · the exchange map and the content guard · that
+`_reviewer_box` still works and is swept automatically · how to draft a queue item (six-part contract
++ the exact `RATIFIED: PENDING` stamp) · how to append to `LEDGER_<GOD>.md` with the template · the two
+Q-8 integers · and the F4 result with the no-delete policy.
+
+### The F4 result — an assumption is now known to be wrong
+
+`SCHED_TEST_RESULT_2026-08-02.md` (unattended run, 2026-08-02T15:00:50Z) settles the open experiment:
+
+> **READ = yes · LIST = yes · WRITE = yes.** A scheduled Cowork run **does** see the mounted local
+> repo folder. "Scheduled means remote means GitHub-only" was **wrong**.
+
+What actually constrains a scheduled lane instead: **no network egress** (curl to pypi, github and
+api.binance.com all returned HTTP 000; `web_fetch` allowlisted to Anthropic domains) · **no OAuth
+connectors** · and **git was never tested**, so commit/push capability in that context is **unknown**
+and needs its own pre-registered test before any lane gets commit duties.
+
+### ⚠ SCHEDULED-LANE NO-DELETE POLICY — standing, and it is not a formality
+
+F4 found that deletion, initially blocked, became available **in an unattended run** by calling
+`allow_cowork_file_delete` — **with no human present to approve it.** The technical guardrail did not
+require a person. Therefore: **no scheduled lane deletes anything.** Deletion is an attended builder
+action with an operator decision behind it. This is a policy guardrail standing in for a technical one
+that proved not to hold, and it holds regardless of any re-test — the cost of being wrong is
+asymmetric. Recorded in both `CADENCE.md` and the delta note.
+
+## Triggers — three now armed
+
+| task | schedule | next run | state |
+|---|---|---|---|
+| Naiad daily routine | daily 07:00 | 2026-08-03 07:00 | Enabled · Ready |
+| Naiad weekly backup (estate) | Sundays 08:00 | 2026-08-09 08:00 | Enabled · Ready |
+| **Naiad weekly workflow backup** | **Sundays 08:30** | **2026-08-09 08:30** | **Enabled · Ready** |
+
+All three start-in the repo root and call the venv interpreter by full path. Registered with
+`schtasks /create /XML` (the only way to set "Start in").
+
+```
+schtasks /delete /tn "Naiad daily routine" /f
+schtasks /delete /tn "Naiad weekly backup" /f
+schtasks /delete /tn "Naiad weekly workflow backup" /f
+```
+
+## J — RUN, COMMIT, PUSH · **DONE**
+
+`daily_routine.py` run by hand: manifest 4.3 s, brief 246.5 s, **publish committed `60cf2d1`
+(10 paths) and pushed** — the guard passed, every staged path inside `exchange/`.
+
+```
+$ git log --oneline -5
+5de3fac fix: guard every filesystem call in the sweep so one locked file cannot abort the whole routine
+dd926bc fix: git_tracked_under must use ls-files -z; C-quoting made F-K7 report 3 tracked files as missing
+44e524a exchange: auto-publish 2026-08-02
+9e1c390 exchange: auto-publish 2026-08-02
+4899975 ops: exchange v1 + workflow backup + repo filing (FUNNEL_W1/W2 defaults)
+
+$ git status -sb
+## v12-v1-census...origin/v12-v1-census
+```
+
+**Synced, 0 tracked files dirty.** Untracked remainder: the 3 unmatched root files plus `analytics/`,
+`tests/test_analytics.py`, `scripts/orchestrator_state.py` — all left alone by instruction.
+
+Content guard holds: 32 files under `exchange/`, all text, largest 258,481 B = **24.7% of the 1 MB
+cap**, zero violations. `queue_open = 1`.
+
+## Adversarial verification pass — **PARTIAL, and reported as such**
+
+A multi-agent review was run over five dimensions (workflow mode · sweep · publish guard · document
+consistency · reclaim safety), each finding then handed to independent agents told to refute it.
+
+**It was degraded by a session limit: 12 of 17 agents died mid-run.** Four of five review dimensions
+returned, but most verifiers never ran, and the **reclaim-safety review did not run at all**. So this
+is not a clean bill of health, and I am not presenting it as one. What it did produce:
+
+**One finding survived refutation, and it was correct.** `sweep_legacy_box()` guarded only the hash
+comparison — `mkdir`, `shutil.move` and `unlink` were unprotected, and the sweep runs **first**. One
+locked file in a drop point would have raised out of `main()` and taken down the manifest, the
+~4-minute brief, the report and the publish, leaving the operator a non-zero task result and no report
+explaining anything. The drop points exist *precisely so in-flight pastes can be writing to them*,
+which is the same thing as saying a source may be locked at 07:00.
+
+Fixed in `5de3fac`. **Reproduced before and after:** an open file handle yields `WinError 32` on the
+rename; it now records an `error` row and the run continues. Subdirectories are recorded as
+`skipped-dir` instead of being silently ignored. Re-tested 9/9, including the locked-file path.
+
+The reclaim-safety question the dead agent was meant to answer, I had already answered directly and
+harder — the full 1,550-file hash comparison above, which is what found the case-collision.
+
+## SUMMARY OF VERDICTS — delta build
+
+| part | verdict |
+|---|---|
+| STEP 0 | **HALTED then PASSED** — stale HEAD pin caught, re-pinned to `42045bb` by the operator |
+| A/B/D/E | **SKIPPED as already built** — manifest re-gated 4/4, tests 73/1/0; CADENCE extended |
+| C | **DONE** — drop points live, SWEEP added and proven, no `.gitignore` rule excludes `exchange/**` |
+| F | **DONE — 7/7** — `--workflow` archive sha `a480625ae594edc1…`, 64 members; retention extended; a pre-existing `ls-files` quoting bug found and fixed |
+| G | **DONE** — 17 filed, 3 unmatched and left alone, dependent references updated |
+| H | **DONE — 3.97 GB freed** — clean verify first; extra proof found a Windows case-collision hazard |
+| I | **DONE** — delta note filed, F4 result and no-delete policy on record |
+| J | **DONE** — `60cf2d1` · `4899975` · `44e524a` · `dd926bc` · `5de3fac`, all pushed; clean and synced |
+| verification | **PARTIAL** — 12/17 agents lost to a session limit; 1 real defect found and fixed |
+
+## ITEMS FOR THE OPERATOR — delta build
+
+1. **Configure GitHub sync, then click Sync now.** Still the one action that makes any of this visible
+   to the web lanes.
+2. **Ratify or reject queue item 001** — `queue_open = 1`.
+3. **Three unmatched root files** need a home: `ARGUS_REPRIME`, `ORCHESTRATOR CONTROL CENTER`, and
+   `SCHED_TEST_RESULT` — the last is referenced by the delta note but is untracked, so lanes cannot
+   open it.
+4. **Restoring a phase archive on Windows silently loses `manifest.json`** to case-collision. Extract
+   case-sensitively or rename first.
+5. **~977 MB of 2026-07-27 phase archives** remain outside the retention rule. Reported only.
+6. **Whether a scheduled run can commit or push is unknown** — needs its own pre-registered test
+   before any scheduled lane gets commit duties.
+7. **The verification pass was cut short by a session limit.** A re-run would be worth it, especially
+   over the publish guard and the workflow mode, whose verifiers never completed.
+8. **First unattended run is tomorrow 07:00**, and the first workflow backup Sunday 08:30.
+
+---
+
+## METRICS (Q-8) — delta build
+
+**Operator actions this session = 1** (one paste).
+**Files re-ingested = 0.**
