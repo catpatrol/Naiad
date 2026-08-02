@@ -6,6 +6,8 @@ job is added by editing that file, never by editing this code.
 
 Contract:
   * repo root is resolved from this file's own location -- never hardcoded
+  * a SWEEP step runs FIRST, relocating anything left in the legacy
+    _reviewer_box drop points into exchange/ (gate A-3a transition support)
   * jobs run in registry order, via the interpreter named in the registry
   * a REQUIRED job that fails stops the run; an optional one is recorded and
     the run continues
@@ -28,6 +30,7 @@ The publish step is the single, bounded exception, and it fails CLOSED: on any
 doubt it resets the index and pushes nothing.
 """
 
+import hashlib
 import json
 import shutil
 import subprocess
@@ -41,6 +44,15 @@ REGISTRY = Path(__file__).resolve().parent / "routine_jobs.json"
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import publish_exchange                                  # noqa: E402
+
+# Legacy drop points kept alive for the exchange transition (gate A-3a).  An
+# in-flight APOLLO or ARGUS paste that still writes to _reviewer_box must not
+# lose its output, so those folders stay working and this routine relocates
+# whatever lands in them.  Order is (source, destination), both repo-relative.
+SWEEP_MAP = (
+    ("_reviewer_box/reports", "exchange/reports"),
+    ("_reviewer_box/daily", "exchange/status/daily"),
+)
 
 
 # --------------------------------------------------------------- registry
@@ -57,6 +69,91 @@ def load_registry():
 
 def subst(text, today):
     return text.replace("{date}", today)
+
+
+# --------------------------------------------------------------- sweep
+
+
+def _sha256(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as fh:
+        for block in iter(lambda: fh.read(1 << 20), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
+def sweep_legacy_box():
+    """Relocate anything left in the legacy reviewer box into exchange/.
+
+    Runs BEFORE the jobs, so a swept file is inventoried by the manifest and
+    published by the same run rather than waiting a day.
+
+    Collisions are never resolved by overwriting.  If the destination name is
+    taken:
+      * identical bytes  -> the source is a duplicate of something already
+                            swept; the source is removed and the event logged
+                            as 'deduped'.  Nothing is lost, because the bytes
+                            are provably already there.
+      * different bytes  -> the incoming file is kept under a suffixed name
+                            (<stem>__swept-N<ext>) and logged as 'renamed'.
+                            Two different files with one name is a real
+                            collision and the operator must see both.
+
+    Returns a list of {action, src, dst} dicts, oldest-first per folder.
+    """
+    moved = []
+    for src_rel, dst_rel in SWEEP_MAP:
+        src_dir, dst_dir = ROOT / src_rel, ROOT / dst_rel
+        if not src_dir.is_dir():
+            continue
+        dst_dir.mkdir(parents=True, exist_ok=True)
+        for item in sorted(src_dir.iterdir()):
+            if not item.is_file():
+                continue
+            target = dst_dir / item.name
+            if not target.exists():
+                shutil.move(str(item), str(target))
+                moved.append({"action": "moved", "src": f"{src_rel}/{item.name}",
+                              "dst": f"{dst_rel}/{item.name}"})
+                continue
+            try:
+                same = _sha256(item) == _sha256(target)
+            except OSError as exc:
+                moved.append({"action": "error", "src": f"{src_rel}/{item.name}",
+                              "dst": str(exc)})
+                continue
+            if same:
+                item.unlink()
+                moved.append({"action": "deduped", "src": f"{src_rel}/{item.name}",
+                              "dst": f"{dst_rel}/{item.name}"})
+                continue
+            n = 1
+            while (dst_dir / f"{item.stem}__swept-{n}{item.suffix}").exists():
+                n += 1
+            alt = dst_dir / f"{item.stem}__swept-{n}{item.suffix}"
+            shutil.move(str(item), str(alt))
+            moved.append({"action": "renamed", "src": f"{src_rel}/{item.name}",
+                          "dst": f"{dst_rel}/{alt.name}"})
+    return moved
+
+
+def sweep_lines(swept):
+    """Render the sweep result as report lines."""
+    if not swept:
+        return ["- nothing in the legacy drop points; nothing to sweep",
+                "- `_reviewer_box/reports/` and `_reviewer_box/daily/` remain live "
+                "for in-flight pastes"]
+    lines = [f"- **{len(swept)} file(s) swept out of the legacy reviewer box.**", ""]
+    lines.append("| action | from | to |")
+    lines.append("|---|---|---|")
+    for row in swept:
+        lines.append(f"| {row['action']} | `{row['src']}` | `{row['dst']}` |")
+    renamed = [r for r in swept if r["action"] == "renamed"]
+    if renamed:
+        lines.append("")
+        lines.append(f"**{len(renamed)} name collision(s) kept under a suffixed name** — two "
+                     "different files wanted one name. Both are present; neither was overwritten.")
+    return lines
 
 
 # --------------------------------------------------------------- job runner
@@ -270,6 +367,12 @@ def main():
     if not Path(python).exists():
         raise SystemExit(f"configured interpreter does not exist: {python}")
 
+    # Sweep FIRST: a file relocated now is inventoried by the manifest job and
+    # published by this same run.
+    swept = sweep_legacy_box()
+    if swept:
+        print(f"  sweep: {len(swept)} file(s) relocated out of _reviewer_box")
+
     results, halted = [], None
     for job in reg["jobs"]:
         res = run_job(job, python, today, out_dir)
@@ -349,11 +452,17 @@ def main():
     out += biases if biases else ["The brief did not run, so there is no bias table today."]
     out.append("")
 
+    # 6. legacy box sweep
+    out.append("## 6. Legacy box sweep")
+    out.append("")
+    out += sweep_lines(swept)
+    out.append("")
+
     report = out_dir / f"DAILY_{today}.md"
     report.write_text("\n".join(out) + "\n", encoding="utf-8")
     print(f"wrote {report.relative_to(ROOT).as_posix()}")
 
-    # 6. PUBLISH -- gate A-6a.  Runs AFTER the report is written so that the
+    # 7. PUBLISH -- gate A-6a.  Runs AFTER the report is written so that the
     # report itself is inside the commit.  The publish outcome is then appended
     # to the report; those appended bytes ride along in the NEXT publish, which
     # is the price of having the report be part of what it describes.
@@ -361,13 +470,13 @@ def main():
     if reg.get("publish", True):
         pub = publish_exchange.publish(ROOT, today)
         with report.open("a", encoding="utf-8") as fh:
-            fh.write("\n## 6. Publish\n\n")
+            fh.write("\n## 7. Publish\n\n")
             fh.write("_Appended after the publish step ran; these bytes are "
                      "published by the next run, not this one._\n\n")
             fh.write("\n".join(publish_exchange.report_lines(pub)) + "\n")
     else:
         with report.open("a", encoding="utf-8") as fh:
-            fh.write("\n## 6. Publish\n\n")
+            fh.write("\n## 7. Publish\n\n")
             fh.write("- disabled in the registry (`\"publish\": false`)\n")
 
     required_failed = [r["id"] for r in results if r["exit"] != 0 and r["required"]]

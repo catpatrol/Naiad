@@ -1,0 +1,28 @@
+# STATUS — ENGINE (engine builds · repo operations · integrity & manifest)
+
+updated: 2026-07-27 (late) · by: ORCHESTRATOR chat · basis: MANIFEST.json 05:43Z (verified 15/15 pins) + current LEDGER.md (byte-prefix-verified)
+
+## NOW
+Engine 1.0.11 frozen. Repo at manifest snapshot: HEAD 60e00c9, ahead 4 / behind 0 vs origin 70a5be0, worktree clean; the estate-protection entry postdates the snapshot, so the next manifest will read higher. THE BIG CORRECTION: the raw price estate was NEVER under OneDrive — it sat unprotected in AppData\Local\naiad\data_cache (633.5 MB, 71 files) for the project's whole life. It now has its first offsite backups: verified zip (477.6 MB, 71/71 bidirectional, sha f6cc33b4…) on TWO independent Google Drive accounts (ruling R-B).
+
+## LAST MATERIAL EVENT
+2026-07-27 — Estate protection established; OneDrive root-caused (quota exhaustion, 21.78 GB tree; cloud copy presumed incomplete); 19.61 GB reclaimed (six phases archived: sha-pinned zips, 13,502 members, 0 mismatches, reviewer independently re-hashed 6/6 + 90 sampled members; 25 git-tracked files preserved in place); tree now ~1.9 GB.
+
+## FACTS OF RECORD
+- Integrity at snapshot: 46/46 tracked sources match HEAD; box 19 repo copies match + 2 brief artifacts (by nature) + 1 stale .gitignore (confirmed: hygiene commit added brief rules at lines 82–84 — re-copy to box) [manifest + ledger]
+- Rulings: R-A cloud sessions scoped to Naiad ONLY, Prometheus out of cloud scope · R-B second-cloud dated non-overwriting archives · R-C corrections folded (713dfa7→72b921f amended-SHA on record) [ruled 07-27]
+- NEW STANDING RULE: every paste-go opens with a hard environment assertion that halts — read-only included — and no write (ledger appends especially) precedes it; gates written from POST-action state [ledger 07-27]
+- Routing failures final count: SEVEN on 07-26/27 (not three); every labelled paste was halted by its header [ledger 07-27]
+- %G? diagnosis recorded durably: reports N when SSH verification is impossible, not only when unsigned — not a signature-presence test [ledger 07-27]
+
+## OPEN / PENDING (owner: Ludwig)
+1. PUSH RULING — the unpushed commits (brief build 76cc314 + hygiene 60e00c9 + estate entry) are now the ONLY asset without an off-machine copy
+2. R-A′ proposed, not ruled: cloud-session commits must push same-session or they don't count
+3. s3_excursion_substrate.jsonl (5.7 MB) git-TRACKED while all sibling substrates are fenced — deliberate exception or drift?
+4. Remaining backup steps: six phase archives to the second cloud · .venv relocation out of the OneDrive tree (7,813 files) · .gitignore → sync exclusions
+
+## NEXT ACTION
+Item 1 (push ruling), then a fresh MANIFEST.json to confirm ahead/behind returns to 0.
+
+## SOURCES
+MANIFEST.json 2026-07-27T05:43:06Z · LEDGER.md (current, prefix-verified) · RECOMMENDATIONS_20260727

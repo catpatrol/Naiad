@@ -13,6 +13,12 @@ MODES
                       honoured.  census.json stores RELATIVE paths only
                       (LEDGER.md:762 item 3) and is therefore used to check
                       COMPLETENESS, never to locate anything.
+  --workflow          the irreplaceable everything-else: docs/memory,
+                      docs/knowledge, skills, prompts, claude, exchange,
+                      docs/primers, docs/history and the operator-exports drop.
+                      Dated, hashed and verified exactly like --estate; members
+                      keep their repo-relative paths so a restore lands them
+                      back where they came from.  Added 2026-08-02.
   --phase <name>      one research_outputs/<name> subtree.
   --verify <zip>      recompute every member's sha256 from inside the archive
                       and compare against the embedded manifest.  Extracts
@@ -85,7 +91,25 @@ REPO_PREFIX = "_repo/"
 # Retention rule -- REPORTING thresholds, never deletion thresholds.
 KEEP_ESTATE_GENERATIONS = 4
 KEEP_PHASE_SETS = 1
+KEEP_WORKFLOW_GENERATIONS = 4
 DATED_ZIP = re.compile(r"_(\d{4}-\d{2}-\d{2})\.zip$")
+
+# --workflow mode: the project's THINKING, as opposed to its price estate.
+# Repo-relative roots, archived under their own path so a restore lands them
+# back where they came from.  A root that does not exist is skipped and named
+# in the report -- absence is recorded, never silently passed over.
+WORKFLOW_SOURCES = (
+    "docs/memory",
+    "docs/knowledge",
+    "skills",
+    "prompts",
+    "claude",
+    "exchange",
+    "docs/primers",
+    "docs/history",
+    "drops/operator-exports",
+    "exchange/drops/operator-exports",
+)
 
 
 # --------------------------------------------------------------- hashing
@@ -225,6 +249,41 @@ def resolve_member(rel: str, estate_root: Path, repo_root: Path) -> Path:
     return estate_root / rel
 
 
+def workflow_roots() -> tuple:
+    """(present, missing, skipped_nested) for the --workflow source list.
+
+    Two things this must get right:
+      * a root that does not exist is REPORTED, not silently dropped -- an
+        empty backup that looks complete is the failure this whole script
+        exists to prevent;
+      * a root nested inside another included root is skipped, or its files
+        would be archived twice under two names.  exchange/drops/operator-
+        exports is exactly that case: exchange/ already carries it.
+    """
+    present, missing = [], []
+    for rel in WORKFLOW_SOURCES:
+        (present if (REPO / rel).is_dir() else missing).append(rel)
+
+    kept, nested = [], []
+    for rel in present:
+        parent = next((o for o in present
+                       if o != rel and (rel + "/").startswith(o + "/")), None)
+        (nested.append((rel, parent)) if parent else kept.append(rel))
+    return kept, missing, nested
+
+
+def workflow_members(roots) -> list:
+    """[(rel_path, abs_path)] for every file under the workflow roots.
+
+    Members keep their repo-relative path, so a restore puts them back exactly
+    where they came from.
+    """
+    members = []
+    for rel in roots:
+        members.extend(walk_members(REPO / rel, prefix=rel + "/"))
+    return sorted(members, key=lambda t: t[0])
+
+
 # --------------------------------------------------------------- writing
 
 def build_archive(members: list, target: Path, meta: dict) -> dict:
@@ -261,7 +320,8 @@ def build_archive(members: list, target: Path, meta: dict) -> dict:
 # --------------------------------------------------------------- verification
 
 def verify_archive(target: Path, estate_root: Path | None,
-                   repo_root: Path | None, check_sources: bool) -> dict:
+                   repo_root: Path | None, check_sources: bool,
+                   disk_members: list | None = None) -> dict:
     """Bidirectional verification.
 
     For every member: bytes streamed OUT of the zip must hash equal to the
@@ -313,10 +373,16 @@ def verify_archive(target: Path, estate_root: Path | None,
             if i % 250 == 0 or i == len(pinned):
                 print(f"    verified {i}/{len(pinned)}")
 
-        # disk -> zip direction: nothing on disk may be absent from the archive
+        # disk -> zip direction: nothing on disk may be absent from the archive.
+        # disk_members lets a caller that built its own member list (--workflow)
+        # supply it, instead of re-deriving an estate-shaped one.
         if check_sources and estate_root is not None:
-            disk = {rel for rel, _ in estate_members(estate_root)} \
-                if repo_root is not None else set()
+            if disk_members is not None:
+                disk = {rel for rel, _ in disk_members}
+            elif repo_root is not None:
+                disk = {rel for rel, _ in estate_members(estate_root)}
+            else:
+                disk = set()
             res["omissions"] += sorted(disk - set(pinned))
 
     res["manifest"] = manifest
@@ -444,39 +510,41 @@ def retention_report(dest: Path) -> list:
                  f"by `scripts/backup_estate.py`.")
     lines.append("")
     lines.append(f"**Rule:** keep the newest {KEEP_ESTATE_GENERATIONS} estate generations "
-                 f"+ {KEEP_PHASE_SETS} phase set.")
+                 f"+ {KEEP_PHASE_SETS} phase set "
+                 f"+ {KEEP_WORKFLOW_GENERATIONS} workflow generations.")
     lines.append("**This report never deletes anything.** It names what falls outside "
                  "the rule; acting on it is the operator's call.")
     lines.append("")
 
-    # --- estate generations -------------------------------------------------
-    lines.append("## Estate generations")
-    lines.append("")
-    lines.append(f"Location: `{dest}`")
-    lines.append("")
-    try:
-        gens = sorted((p for p in dest.glob("naiad_estate_*.zip") if p.is_file()),
-                      key=lambda p: p.name, reverse=True)
-    except OSError as exc:
-        lines.append(f"- could not read the destination: {exc}")
-        gens = []
-
-    if not gens:
-        lines.append("- none found")
-    else:
-        keep, over = gens[:KEEP_ESTATE_GENERATIONS], gens[KEEP_ESTATE_GENERATIONS:]
-        lines.append(f"{len(gens)} generation(s) present; "
-                     f"{len(keep)} within the rule, {len(over)} outside it.")
-        lines.append("")
-        lines.append("| generation | size (B) | within rule |")
-        lines.append("|---|---:|---|")
+    def _generations(pattern, keep_n, title):
+        """One dated-generation section, shared by estate and workflow."""
+        out = [f"## {title}", "", f"Location: `{dest}`", ""]
+        try:
+            gens = sorted((p for p in dest.glob(pattern) if p.is_file()),
+                          key=lambda p: p.name, reverse=True)
+        except OSError as exc:
+            return out + [f"- could not read the destination: {exc}"]
+        if not gens:
+            return out + ["- none found"]
+        keep, over = gens[:keep_n], gens[keep_n:]
+        out.append(f"{len(gens)} generation(s) present; "
+                   f"{len(keep)} within the rule, {len(over)} outside it.")
+        out.append("")
+        out.append("| generation | size (B) | within rule |")
+        out.append("|---|---:|---|")
         for p in gens:
-            lines.append(f"| `{p.name}` | {p.stat().st_size:,} | "
-                         f"{'yes' if p in keep else '**NO — outside the rule**'} |")
+            out.append(f"| `{p.name}` | {p.stat().st_size:,} | "
+                       f"{'yes' if p in keep else '**NO — outside the rule**'} |")
         if not over:
-            lines.append("")
-            lines.append(f"Nothing to consider: fewer than "
-                         f"{KEEP_ESTATE_GENERATIONS + 1} generations exist.")
+            out.append("")
+            out.append(f"Nothing to consider: fewer than {keep_n + 1} generations exist.")
+        return out
+
+    lines += _generations("naiad_estate_*.zip", KEEP_ESTATE_GENERATIONS,
+                          "Estate generations")
+    lines.append("")
+    lines += _generations("naiad_workflow_*.zip", KEEP_WORKFLOW_GENERATIONS,
+                          "Workflow generations")
 
     # --- phase sets ---------------------------------------------------------
     arch = REPO / "research_outputs" / "_archive"
@@ -630,6 +698,103 @@ def run_estate(dest: Path, args) -> int:
     return 0 if fx.ok else 1
 
 
+def run_workflow(dest: Path, args) -> int:
+    """Archive the project's THINKING -- dated and hashed exactly like --estate.
+
+    The estate backup protects irreplaceable PRICE data.  This protects the
+    irreplaceable everything-else: memory, knowledge, skills, contracts, lane
+    status, the exchange.  Same archive shape, same embedded manifest, same
+    bidirectional verification, same no-clobber guard -- because the failure
+    modes are identical and the estate mode's answers to them are already
+    proven.
+    """
+    env = assert_environment(dest, need_writable=True)
+    roots, missing, nested = workflow_roots()
+
+    date = datetime.now().strftime("%Y-%m-%d")
+    target = dest / f"naiad_workflow_{date}.zip"
+    sidecar = target.with_suffix(".zip.sha256")
+    assert_no_clobber(target)
+    assert_no_clobber(sidecar)
+
+    print(f"repo root        : {REPO}")
+    print(f"destination      : {target}")
+    print(f"roots archived   : {len(roots)}")
+    for rel in roots:
+        n = sum(1 for _ in walk_members(REPO / rel))
+        print(f"    {rel:<34} {n} file(s)")
+    if nested:
+        for rel, parent in nested:
+            print(f"    SKIPPED (nested) : {rel} -- already inside {parent}")
+    if missing:
+        for rel in missing:
+            print(f"    absent           : {rel}")
+
+    members = workflow_members(roots)
+    if not members:
+        sys.stderr.write("no workflow sources present -- refusing to write an empty archive\n")
+        raise SystemExit(2)
+    print(f"members to archive: {len(members)}")
+
+    before_status = git_porcelain()
+    sample = [(rel, ap, sha256_file(ap)) for rel, ap in members[:20]]
+    tracked = set()
+    for rel in roots:
+        tracked |= git_tracked_under(rel)
+
+    meta = {
+        "created_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "mode": "workflow",
+        "roots": list(roots),
+        "roots_absent": list(missing),
+        "roots_skipped_nested": [r for r, _ in nested],
+        "estate_root": str(REPO),
+        "repo_root": str(REPO),
+        "naiad_cache_dir_override": os.environ.get("NAIAD_CACHE_DIR"),
+        "inside_onedrive": inside(REPO, env["onedrive_root"]),
+        "repo_head": env["head"],
+    }
+
+    print("  compressing...")
+    manifest = build_archive(members, target, meta)
+    archive_sha = sha256_file(target)
+    sidecar.write_text(f"{archive_sha}  {target.name}\n", encoding="utf-8")
+
+    print("  verifying (bidirectional)...")
+    res = verify_archive(target, REPO, None, check_sources=True, disk_members=members)
+
+    print("\nFIXTURES")
+    fx = Fixtures()
+    fx.record("F-K1",
+              not res["mismatches"] and not res["strays"] and not res["omissions"]
+              and res["verified"] == res["members"],
+              f"{res['verified']}/{res['members']} members verified both directions; "
+              f"{len(res['mismatches'])} mismatches, {len(res['strays'])} strays, "
+              f"{len(res['omissions'])} omissions")
+    fx.na("F-K2", "completeness vs census.json applies to --estate only")
+    fk3_source_untouched(fx, sample, before_status)
+    fk4_restore_rehearsal(fx, target)
+    fk5_destination_verification(fx, target, archive_sha, sidecar)
+    fk6_no_clobber(fx, target)
+    fk7_tracked_preserved(fx, tracked)
+
+    print(f"\narchive   : {target}")
+    print(f"size      : {target.stat().st_size:,} B "
+          f"({target.stat().st_size / 1048576:.1f} MB, "
+          f"{100 * target.stat().st_size / max(manifest['total_bytes'], 1):.1f}% of source)")
+    print(f"sha256    : {archive_sha}")
+    print(f"members   : {manifest['file_count']}")
+    print(f"source    : {manifest['total_bytes']:,} B")
+    print(f"sidecar   : {sidecar}")
+    print(f"\n{sum(1 for _, p, _ in fx.rows if p)}/{len(fx.rows)} fixtures pass")
+
+    emit_retention(dest)
+    pub = publish_step()
+    if pub["status"] in ("FLAGGED", "ERROR"):
+        return 1
+    return 0 if fx.ok else 1
+
+
 def run_phase(name: str, args) -> int:
     env = assert_environment(None, need_writable=False)
     src = REPO / "research_outputs" / name
@@ -753,12 +918,15 @@ def main() -> int:
     g = ap.add_mutually_exclusive_group()
     g.add_argument("--estate", action="store_true",
                    help="archive the price estate (default)")
+    g.add_argument("--workflow", action="store_true",
+                   help="archive the workflow estate (memory, knowledge, skills, "
+                        "prompts, claude, exchange, primers, history, operator exports)")
     g.add_argument("--phase", metavar="NAME",
                    help="archive one research_outputs/<NAME> subtree")
     g.add_argument("--verify", metavar="ZIP",
                    help="verify an existing archive against its embedded manifest")
     ap.add_argument("--dest", metavar="DIR",
-                    help="destination directory (required for --estate)")
+                    help="destination directory (required for --estate and --workflow)")
     ap.add_argument("--delete-source", action="store_true",
                     help="--phase only: release untracked sources after zero mismatches")
     args = ap.parse_args()
@@ -767,6 +935,10 @@ def main() -> int:
         return run_verify(Path(args.verify))
     if args.phase:
         return run_phase(args.phase, args)
+    if args.workflow:
+        if not args.dest:
+            ap.error("--workflow requires --dest")
+        return run_workflow(Path(args.dest), args)
     if not args.dest:
         ap.error("--estate requires --dest")
     return run_estate(Path(args.dest), args)

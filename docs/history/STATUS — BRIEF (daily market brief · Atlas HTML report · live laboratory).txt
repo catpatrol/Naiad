@@ -1,0 +1,30 @@
+# STATUS — BRIEF (daily market brief · Atlas HTML report · live laboratory)
+
+updated: 2026-07-27 (late) · by: ORCHESTRATOR chat · basis: current LEDGER.md (byte-prefix-verified against the manifest pin) — three new entries ingested
+
+## NOW
+v1.1 build PASS at commit 76cc314, reviewer acceptance PENDING. Amendment 1 was ratified before the build (Setup Radar state machine, Points of Interest, 18-flag confluence dictionary, archive + firewall clause 4: archive = hypothesis mine, never a scoring window). Fixtures F-B1..F-B8: 8/8 on the live 10-asset day AND 8/8 on the frozen fixture day; 30/30 radar rows carry machine-asserted invalidations; 3 numbers spot-recomputed by an independent script. Sample day: brief_2026-07-27.json 249,983 B sha 78f264d4… (matches the reviewer-box copy exactly), html 144,479 B, runtime 312 s.
+
+## LAST MATERIAL EVENT
+2026-07-27 — build PASS entry + hygiene commit (60e00c9): .gitignore rules for the brief archive, manifest SOURCES extended to the two new scripts, box copies written and sha-asserted.
+
+## FACTS OF RECORD
+- Radar day 1: ENTERED 15 · DORMANT 6 · ARMED 5 · POST_X 4; POI 27 fired / 12 shown / 15 dropped, drop count printed [ledger]
+- Two HALTs resolved by operator ruling: POST_X precedence (an X's authority ends at the NEXT arming; window survives for flat rows + caution chip — see the correction of record) · fixture substrate FENCED, sha-pinned in fixture_manifest.json, charter §10 beats contract F-B3 [ruled]
+- 5 builder defects caught pre-adoption by inspecting real output (zone-distance basis, staleness-from-open, current-day naked POC, POI cap hogging, `contracts` key renamed governed_by) [ledger]
+- Firewall posture: no journal read OR written — compute_signals called directly, trading layer never imported, F-B5 proves it [ledger]
+- Grade caveat: NOT comparable across the three lens columns (1h lens runs align=governor per TC-5 Amendment 1 — A-grade tautology); footnote due in Amendment 2 [ledger]
+- 4 reviewer spec errors logged → Amendment 2 agenda: ENTERED = engine state not operator position (15/30 mislabelled) · unmask zone occupancy on ENTERED rows (the mc=3 add moments) · POI cap shape · grade footnote [ledger]
+
+## OPEN / PENDING
+1. (BRIEF chat) Reviewer acceptance: independent recompute from brief_2026-07-27.json — no partial adoption
+2. (BRIEF chat) Draft Amendment 2 from the four logged spec errors
+3. Named G-7 candidate handed to SYSTEM: are post-X re-arms empirically weaker? (exploration-classic only; never from the brief archive)
+4. v1.2 economy: skip top-up when cache already at latest closed bar (132 s of 312 s) · thresholds re-ratified after ~1 week (A1.10)
+5. /brief registers after a session restart (diagnosed; not a defect)
+
+## NEXT ACTION
+Independent recompute in the BRIEF chat → acceptance → Amendment 2.
+
+## SOURCES
+LEDGER.md entries 2026-07-26/27 (brief v1.1 launch + PASS) · MANIFEST.json 05:43Z · brief_2026-07-27.json (reviewer box)

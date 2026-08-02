@@ -1,0 +1,60 @@
+# ORCHESTRATOR PRIMER — what a fresh orchestrator session needs to know
+
+created: 2026-07-28 (supersedes claude/ORCHESTRATOR_CONTROL_CENTER.md, deleted same day) · operator: Ludwig
+
+This is a primer for the ORCHESTRATOR chat, not governance for the other lanes. Its audience is a fresh session of this chat, loading context without the operator re-explaining. It instructs no one else.
+
+## Status of this experiment — UNPROVEN, on hold
+
+The Cowork-led orchestrator has **not** been shown to save the operator time. As of 2026-07-28 it consumed several manual file drops and produced a dashboard largely restating what the operator had just lived through. Its one demonstrated catch: the project-box LEDGER copy was stale, and the reconciliation surfaced it.
+
+**Operator rulings, 2026-07-28:**
+- The standing STATUS-block instructions in SYSTEM / ENGINE / BRIEF are **SUSPENDED** until file access works. Do not act as if they are live; do not ask the other chats for blocks.
+- Whether to keep the orchestrator at all is **parked** until a session can read repo files on its own. Do not re-litigate it before then; do not assert the orchestrator's value in the meantime.
+
+## The hard limit — state it, never work around it
+
+**Conversations are not readable across chats. Ever.** No setting, no file access, no configuration changes this. The orchestrator can never see what SYSTEM, ENGINE or BRIEF are discussing — only what they leave in the repo or the project box. If a task requires conversation visibility, say it is not buildable rather than approximating it.
+
+## File access — the gate everything waits on
+
+Findings as of 2026-07-28, after two failed attempts:
+- **"Cowork files"** (desktop Settings → Cowork) sets where artifacts are *saved*. It grants no read access. Pointing it at the naiad folder did not work, and that is expected behaviour, not a bug.
+- **"Trusted Cowork folders"** only suppresses the confirmation prompt when a folder is attached. Trust is not attach.
+- **"Run new tasks in the cloud" = ON** means new sessions start in an Anthropic-side sandbox with nothing attached. This is the live blocker.
+- Untried as of this writing: turning that toggle OFF and starting a new chat, or attaching the naiad folder to the task at creation.
+- **Test, every session, before claiming anything:** attempt to read `_reviewer_box/MANIFEST.json`. If it reads, this chat is Tier A and the parked questions above reopen. If not, all repo facts are operator-relayed and must be tagged as such.
+
+## The lanes (for reference only — this doc does not direct them)
+
+- SYSTEM — v12 study: census phases, Tier-C contracts, knowledge program → claude/STATUS_SYSTEM.md
+- ENGINE — engine versions, repo operations, integrity, manifest ritual → claude/STATUS_ENGINE.md
+- BRIEF — daily brief contract, build, stage-2 evolution → claude/STATUS_BRIEF.md
+
+The three status docs hold real reconstructed state and remain useful as handoffs regardless of the orchestrator's fate. Keep them accurate; replace rather than accumulate.
+
+## Session-start ritual (operator request, 2026-07-28)
+
+Open each session by presenting the operator's open decisions as **interview-style multiple-choice questions**, not prose. Pull from the queue below plus anything new; lead with what unblocks the most; state the reviewer's lean and why; keep it to the 2–4 that matter. Check the DONE lines first — never ask about something already ruled.
+
+## Operator action queue — as of 2026-07-28
+
+1. [ENGINE] PUSH RULING — the unpushed commits (76cc314 brief build + 60e00c9 hygiene + estate entry) are the last asset with no off-machine copy
+2. [OPS] Two open rulings: R-A′ (cloud commits must push same-session or don't count) · s3_excursion_substrate.jsonl tracked-vs-fenced (deliberate or drift?)
+3. [SYSTEM] Rulings Q1 (1D lens in CENSUS-1c) + Q2 (D8 eligibility window in 1c) — gate 1c drafting
+4. [SYSTEM] Ratify 4 correction ledger entries (D5 basis · lens≠governor · frozen-grid-vs-5m-floor · toll tier C)
+5. [BRIEF] Reviewer acceptance of v1.1: independent recompute from brief_2026-07-27.json → then Amendment 2 (ENTERED semantics · zone-occupancy unmask · POI cap shape · grade footnote)
+6. [OPS] Backup completion: six phase archives to the second cloud · .venv out of the OneDrive tree · .gitignore → sync exclusions
+7. [OPS] File access: try "Run new tasks in the cloud" OFF (or attach the folder per task), then test the manifest read
+8. [OPS] Low stakes: prune duplicate project-box docs (3 stale LEDGER copies — replace with current) · re-copy root .gitignore into _reviewer_box/
+
+DONE 2026-07-27: MANIFEST verified (15/15 pins) · current LEDGER received & byte-prefix-verified · brief v1.1 build PASS 8/8 on two days · estate backed up to two independent clouds (71/71 verified) · OneDrive root-caused (quota) · 19.61 GB reclaimed · rulings R-A/R-B/R-C · standing rule: environment assertion before ANY write.
+DONE 2026-07-28: naiad-eod skill delivered (v2, XML-tag bug fixed) · file-access root cause narrowed to the cloud-tasks toggle + per-task attach · standing instructions suspended · this doc reframed from "control center" to primer.
+
+## Known limits
+
+- No conversation visibility across chats — permanent, see above.
+- No local-machine access until the toggle/attach question is resolved and re-tested. No market data, no journals. Display and coordination only — firewall-clean by construction.
+- Account memory is DISABLED for this org. This project box is the only durable store; anything that must survive a session belongs here.
+- Repo facts decay: anything not re-confirmed by a fresh MANIFEST.json within a session or two is stale and must be tagged.
+- The dashboard HTML is regenerated on request; this doc plus the three status docs are the durable state.

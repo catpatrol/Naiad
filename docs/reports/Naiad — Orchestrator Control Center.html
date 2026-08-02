@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)file:///C:/Users/luisf/Downloads/naiad_orchestrator.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Naiad — Orchestrator Control Center</title>
+<style>
+  :root{
+    --ink:#0E1420; --panel:#151D2C; --panel2:#111827; --rule:#26324C;
+    --tx:#C9D4E6; --mute:#7A8AA5; --warn:#E8853F; --ok:#54C6A0; --bad:#E06060;
+    --accent:#6FA8DC;
+    --disp:'Space Grotesk','Segoe UI',system-ui,sans-serif;
+    --body:'IBM Plex Sans','Segoe UI',system-ui,sans-serif;
+    --mono:'IBM Plex Mono',Consolas,'Courier New',monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--ink);color:var(--tx);font-family:var(--body);font-size:14px;line-height:1.55;padding:28px 32px 64px}
+  .wrap{max-width:1240px;margin:0 auto}
+
+  /* header */
+  header{border-bottom:1px solid var(--rule);padding-bottom:18px;margin-bottom:18px}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--mute);text-transform:uppercase}
+  h1{font-family:var(--disp);font-size:30px;font-weight:600;letter-spacing:.01em;margin:6px 0 4px}
+  h1 .thin{color:var(--mute);font-weight:400}
+  .sub{color:var(--mute);font-size:13px}
+  .sub b{color:var(--tx);font-weight:600}
+  .ledgerline{font-family:var(--mono);font-size:12px;color:var(--tx);background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:8px 12px;margin-top:12px}
+  .ledgerline .lab{color:var(--mute)}
+
+  /* banner */
+  .banner{display:flex;gap:10px;align-items:flex-start;background:rgba(232,133,63,.08);border:1px solid rgba(232,133,63,.45);border-radius:6px;padding:10px 14px;margin:14px 0 0;font-size:13px}
+  .banner .ic{color:var(--warn);font-weight:700;font-family:var(--mono)}
+  .banner b{color:var(--warn)}
+  .banner.ok{background:rgba(84,198,160,.07);border-color:rgba(84,198,160,.45)}
+  .banner.ok .ic{color:var(--ok)} .banner.ok b{color:var(--ok)}
+
+  /* provenance + status chips */
+  .chip{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.06em;border-radius:4px;padding:1px 7px;vertical-align:middle;white-space:nowrap}
+  .c-ver{color:var(--ok);border:1px solid rgba(84,198,160,.5)}
+  .c-led{color:var(--accent);border:1px solid rgba(111,168,220,.5)}
+  .c-hand{color:var(--tx);border:1px solid var(--rule)}
+  .c-unc{color:var(--warn);border:1px solid rgba(232,133,63,.5)}
+  .c-pend{color:var(--warn);border:1px solid rgba(232,133,63,.5);background:rgba(232,133,63,.07)}
+  .c-open{color:var(--mute);border:1px dashed var(--rule)}
+
+  .status{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;padding:3px 10px;border-radius:5px;text-transform:uppercase}
+  .s-ok{color:var(--ok);background:rgba(84,198,160,.09);border:1px solid rgba(84,198,160,.45)}
+  .s-warn{color:var(--warn);background:rgba(232,133,63,.09);border:1px solid rgba(232,133,63,.45)}
+  .s-bad{color:var(--bad);background:rgba(224,96,96,.09);border:1px solid rgba(224,96,96,.45)}
+
+  /* stat tiles */
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}
+  .tile{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:14px 16px}
+  .tile .t-lab{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--mute);text-transform:uppercase;margin-bottom:6px}
+  .tile .t-val{font-family:var(--mono);font-size:20px;font-weight:600;color:var(--tx)}
+  .tile .t-note{font-size:12px;color:var(--mute);margin-top:5px;line-height:1.45}
+
+  /* sections */
+  h2{font-family:var(--disp);font-size:16px;font-weight:600;letter-spacing:.10em;text-transform:uppercase;color:var(--tx);margin:34px 0 4px}
+  .h2sub{color:var(--mute);font-size:12.5px;margin-bottom:12px}
+
+  /* operator queue */
+  .queue{background:var(--panel);border:1px solid var(--rule);border-radius:8px;overflow:hidden}
+  .q-row{display:grid;grid-template-columns:34px 92px 1fr 190px;gap:12px;align-items:start;padding:11px 16px;border-bottom:1px solid var(--rule)}
+  .q-row:last-child{border-bottom:none}
+  .q-num{font-family:var(--mono);font-size:15px;color:var(--mute)}
+  .q-lane{font-family:var(--mono);font-size:10px;letter-spacing:.1em;padding-top:3px}
+  .q-lane.sys{color:var(--accent)} .q-lane.eng{color:var(--ok)} .q-lane.brf{color:var(--warn)} .q-lane.ops{color:var(--mute)}
+  .q-what b{color:#fff;font-weight:600}
+  .q-what{font-size:13.5px}
+  .q-why{font-size:12px;color:var(--mute)}
+
+  /* lanes */
+  .lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:start}
+  .lane{background:var(--panel);border:1px solid var(--rule);border-radius:10px;padding:18px 18px 14px;display:flex;flex-direction:column;gap:13px}
+  .lane header{border:none;margin:0;padding:0;display:flex;justify-content:space-between;align-items:center}
+  .lane h3{font-family:var(--disp);font-size:19px;font-weight:600;letter-spacing:.05em}
+  .lane .role{font-size:11.5px;color:var(--mute);margin-top:2px}
+  .blk .b-lab{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--mute);text-transform:uppercase;margin-bottom:5px}
+  .blk p, .blk li{font-size:12.8px}
+  .blk ul{list-style:none}
+  .blk li{padding:3px 0 3px 14px;position:relative}
+  .blk li::before{content:"·";position:absolute;left:2px;color:var(--mute)}
+  .kv{font-family:var(--mono);font-size:12px;width:100%;border-collapse:collapse}
+  .kv td{padding:3.5px 0;vertical-align:top;border-bottom:1px dotted rgba(38,50,76,.6)}
+  .kv tr:last-child td{border-bottom:none}
+  .kv .k{color:var(--mute);padding-right:10px;white-space:nowrap}
+  .kv .v{color:var(--tx)}
+  .next{background:var(--panel2);border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:6px;padding:9px 12px;font-size:12.8px}
+  .next .nx{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--accent);display:block;margin-bottom:3px}
+  .src{font-size:10.5px;color:var(--mute);font-family:var(--mono);line-height:1.7;border-top:1px solid var(--rule);padding-top:8px}
+
+  /* pipeline */
+  .pipe{display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:14px 16px}
+  .p-step{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:4px;white-space:nowrap}
+  .p-done{color:var(--mute);border:1px solid var(--rule)}
+  .p-done::before{content:"✓ ";color:var(--ok)}
+  .p-next{color:#fff;background:rgba(111,168,220,.14);border:1px solid var(--accent);font-weight:600}
+  .p-q{color:var(--tx);border:1px dashed var(--rule)}
+  .p-lock{color:var(--bad);border:1px solid rgba(224,96,96,.4)}
+  .p-arrow{color:var(--mute);font-size:11px}
+
+  /* ops grid */
+  .ops{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .op{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:13px 15px}
+  .op .o-lab{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--mute);text-transform:uppercase;margin-bottom:6px}
+  .op p{font-size:12.5px}
+  .op p + p{margin-top:5px}
+
+  footer{margin-top:36px;border-top:1px solid var(--rule);padding-top:14px;font-size:11.5px;color:var(--mute)}
+  footer .keyrow{margin-top:8px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  code{font-family:var(--mono);font-size:.92em;color:var(--tx);background:var(--panel2);border:1px solid var(--rule);border-radius:3px;padding:0 4px}
+  @media (max-width:1000px){.lanes{grid-template-columns:1fr}.tiles{grid-template-columns:repeat(2,1fr)}.ops{grid-template-columns:1fr}.q-row{grid-template-columns:28px 70px 1fr}.q-why{grid-column:3}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Project Naiad · v12 / Secret Sauce · Cascade Atlas</div>
+  <h1>ORCHESTRATOR <span class="thin">— control center</span></h1>
+  <div class="sub">Three subsystem chats coordinated through the project box · compiled <b>2026-07-27</b> by the orchestrator chat · sources: project-box records only (this environment has no live repo access)</div>
+  <div class="ledgerline"><span class="lab">LEDGER HEAD (box copy) ▸</span> 2026-07-26 — reviewer_manifest v1 accepted <span class="lab">· engine</span> 1.0.11 <span class="lab">· branch</span> v12-v1-census <span class="lab">·</span> <span style="color:var(--warn)">HEAD's ledger is ~17 KB newer — refresh requested (queue #2)</span></div>
+  <div class="banner ok"><span class="ic">✓</span><div><b>MANIFEST verified</b> — repo state confirmed as-of <b>2026-07-27 05:43 UTC</b>: HEAD <code>60e00c9</code> · ahead 4 / behind 0 vs origin <code>70a5be0</code> · worktree clean · untracked root empty · 46/46 tracked sources match HEAD · 15/15 ledger-pinned hashes reproduced. <span style="color:var(--warn)">The 4 unpushed commits include the entire daily-brief build — push ruling pending, and anything newer than 05:43 UTC is not visible here.</span></div></div>
+</header>
+
+<div class="tiles">
+  <div class="tile">
+    <div class="t-lab">Engine of record</div>
+    <div class="t-val">1.0.11</div>
+    <div class="t-note">frozen; J-1 parked (carried 5×) <span class="chip c-ver">VERIFIED 07-25</span></div>
+  </div>
+  <div class="tile">
+    <div class="t-lab">Repo · v12-v1-census</div>
+    <div class="t-val">60e00c9 <span style="font-size:12px;color:var(--warn)">+4</span></div>
+    <div class="t-note">origin 70a5be0 · worktree clean · push pending <span class="chip c-ver">MANIFEST 07-27 05:43Z</span></div>
+  </div>
+  <div class="tile">
+    <div class="t-lab">Study position</div>
+    <div class="t-val">CENSUS-1c</div>
+    <div class="t-note">next phase; drafting blocked on 2 rulings + 4 ledger entries <span class="chip c-led">LEDGER</span></div>
+  </div>
+  <div class="tile">
+    <div class="t-lab">Daily brief</div>
+    <div class="t-val">v1 · BUILT</div>
+    <div class="t-note">daily_brief.py at HEAD (132 KB) + Amendment 1; acceptance verdict not yet visible here <span class="chip c-ver">MANIFEST 07-27</span></div>
+  </div>
+</div>
+
+<h2>Operator action queue</h2>
+<div class="h2sub">Everything currently in Ludwig's court, across all three subsystems — ordered by what each unblocks. Nothing else is waiting on anyone but the items below.</div>
+<div class="queue">
+  <div class="q-row"><div class="q-num">1</div><div class="q-lane eng">ENGINE</div><div class="q-what"><b>Push ruling: 4 commits ahead at 60e00c9 — and they include the entire daily-brief build.</b><div class="q-why">132 KB generator + Amendment 1 + ledger entries exist ONLY on the local machine, whose sole sync (OneDrive) was found dead on 07-26. One authorized push removes the single-copy risk.</div></div><div><span class="status s-warn">● pending ruling</span></div></div>
+  <div class="q-row"><div class="q-num">2</div><div class="q-lane ops">ALL</div><div class="q-what"><b>Refresh <code>LEDGER.md</code> in the project box.</b><div class="q-why">The ledger at HEAD is 209,313 B; the box copy predates the brief build (~17 KB of new entries invisible to this board — including the brief's fixture verdict and Amendment 1's content). Drag the current file from the repo into the project box.</div></div><div><span class="status s-warn">● awaiting input</span></div></div>
+  <div class="q-row"><div class="q-num">3</div><div class="q-lane sys">SYSTEM</div><div class="q-what"><b>Two rulings from the 07-25 handoff §9:</b> Q1 — does the 1D lens stay in CENSUS-1c (reviewer lean: include, diagnostic-only)? Q2 — does 1c measure the D8 eligibility window (reviewer lean: yes, all three)?<div class="q-why">CENSUS-1c cannot be drafted until these land; they change the contract's shape, not wording.</div></div><div><span class="status s-warn">● pending ruling</span></div></div>
+  <div class="q-row"><div class="q-num">4</div><div class="q-lane sys">SYSTEM</div><div class="q-what"><b>Ratify 4 correction ledger entries:</b> D5 basis narrowed (12H robust · 4H skew-dependent · 1D excluded) · lens ≠ governor mapping · frozen grid vs 5m floor register item · toll tier C clarification.<div class="q-why">None changes a result; all change a reading or scope. They precede the 1c §Basis.</div></div><div><span class="status s-warn">● pending ruling</span></div></div>
+  <div class="q-row"><div class="q-num">5</div><div class="q-lane brf">BRIEF</div><div class="q-what"><b>Close the v1 acceptance loop:</b> the build evidently ran (generator + Amendment 1 at HEAD; <code>brief_2026-07-27.json</code> in the box). Needed: the fixture transcript (6/6?) and the acceptance/ratification record — both arrive with the refreshed ledger (item 2) — plus the reviewer half of today's brief in the BRIEF chat.<div class="q-why">Contract says no partial adoption: 6/6 fixtures + all-10-asset render + reviewer spot-recompute of 3 numbers.</div></div><div><span class="status s-warn">● pending verification</span></div></div>
+  <div class="q-row"><div class="q-num">6</div><div class="q-lane ops">OPS</div><div class="q-what"><b>Backup sequence</b> (recommendations doc, 8 steps): run the size audit → <code>pip freeze</code> lock → port .gitignore to sync exclusions → switch the Drive backup to git bundles (2.43 MB, full history).<div class="q-why">OneDrive was found dead on 07-26; the raw price estate is the single irreplaceable asset on one machine.</div></div><div><span class="status s-warn">● recommended</span></div></div>
+  <div class="q-row"><div class="q-num">7</div><div class="q-lane ops">OPS</div><div class="q-what"><b>Optional hygiene:</b> prune duplicate project-box docs (LEDGER.md ×3, census.json ×2, DATA_CENSUS.md ×2, census_build.py ×2, .gitignore ×2, 07-13 handoff ×2) and re-copy the root <code>.gitignore</code> into <code>_reviewer_box/</code> — the box copy no longer matches HEAD (expected: the brief commits touched it).<div class="q-why">Duplicates are this project's known hazard class (the _N suffix rule); the stale box .gitignore was the manifest's one true repo-copy mismatch.</div></div><div><span class="status s-ok">● low stakes</span></div></div>
+</div>
+
+<h2>Subsystem lanes</h2>
+<div class="h2sub">One card per chat. Provenance chips on every fact; anything not confirmable from this environment says so.</div>
+<div class="lanes">
+
+  <!-- SYSTEM -->
+  <div class="lane">
+    <header><div><h3>SYSTEM</h3><div class="role">v12 study · Secret Sauce research · knowledge program</div></div><span class="status s-warn">● awaiting rulings</span></header>
+    <div class="blk"><div class="b-lab">Where it stands</div>
+      <p>Between phases; nothing running. CENSUS-1b closed <b>PASS</b> (ratified 07-22, 2 confirmed / 2 falsified). The 07-25 engine-source ingestion re-scoped the queue: the D5 graduation basis narrows to what the engine can represent.</p>
+    </div>
+    <div class="blk"><div class="b-lab">Facts of record</div>
+      <table class="kv">
+        <tbody><tr><td class="k">baseline</td><td class="v">TC-4 pass2 · grid 1× −1796.99 R · 2,599 campaigns · win 10.85% <span class="chip c-led">LEDGER</span></td></tr>
+        <tr><td class="k">architecture</td><td class="v">structural 1h stop = arm B (TC-1: −351.15 vs A −1796.99; swing +81.53) <span class="chip c-led">LEDGER</span></td></tr>
+        <tr><td class="k">graduated</td><td class="v">D5 slow-stack (12H robust 1.0787 · 4H skew-dep 1.0724 · 1D excluded) · D8 4H rung 1.0711 CI[1.0534, 1.0903] <span class="chip c-ver">RECOMPUTED 07-25</span></td></tr>
+        <tr><td class="k">retired</td><td class="v">k-of-N confluence (D9) · pullback-outcome edge (C7b) — both powered falsifications <span class="chip c-led">LEDGER</span></td></tr>
+        <tr><td class="k">evidence</td><td class="v">zero spend since V3 first look · lockbox SEALED (opens once, V8) · 5 named variant slots (bind only at the lockbox) <span class="chip c-led">LEDGER</span></td></tr>
+        <tr><td class="k">clock</td><td class="v">study closes at lockbox verdict or 2026-10-31 <span class="chip c-led">LEDGER</span></td></tr>
+      </tbody></table>
+    </div>
+    <div class="blk"><div class="b-lab">Open in this lane</div>
+      <ul>
+        <li>Rulings Q1 (1D lens) and Q2 (D8 window) — queue item 3 <span class="chip c-pend">PENDING</span></li>
+        <li>4 correction ledger entries — queue item 4 <span class="chip c-pend">PENDING</span></li>
+        <li>Trader-philosophies analysis uploaded 07-27 — not yet integrated into the record <span class="chip c-open">NEW INPUT</span></li>
+      </ul>
+    </div>
+    <div class="next"><span class="nx">NEXT ACTION</span>Operator rules Q1/Q2 → reviewer drafts the CENSUS-1c contract (5 jobs, Tier A + declared re-walk, zero new evidence spend).</div>
+    <div class="src">LEDGER.md · REVIEWER_HANDOFF_2026-07-25_ENGINE_INGESTION.md · State_of_Project_2026-07-22 · CENSUS_1b.md</div>
+  </div>
+
+  <!-- ENGINE -->
+  <div class="lane">
+    <header><div><h3>ENGINE</h3><div class="role">engine builds · repo operations · integrity &amp; manifest</div></div><span class="status s-warn">● push pending</span></header>
+    <div class="blk"><div class="b-lab">Where it stands</div>
+      <p>Engine <b>1.0.11</b> frozen <span class="chip c-ver">VERIFIED 07-25</span>. Repo state <b>confirmed by MANIFEST.json</b> (generated 07-27 05:43Z): HEAD <b>60e00c9</b>, ahead 4 / behind 0 vs origin <b>70a5be0</b>, worktree clean, untracked root empty, EOL config valid for byte comparison <span class="chip c-ver">MANIFEST 07-27</span>. 15/15 ledger-pinned hashes reproduced by the orchestrator.</p>
+    </div>
+    <div class="blk"><div class="b-lab">Facts of record</div>
+      <table class="kv">
+        <tbody><tr><td class="k">guards</td><td class="v">G-8 live (equity floor 0.25 · notional 10× · min-stop 0.5 ATR) · G-1 lockbox code guard since 1.0.9 <span class="chip c-led">LEDGER</span></td></tr>
+        <tr><td class="k">frames</td><td class="v">no 30m / 1d / 2h anywhere in the engine; brief &amp; census resample their own <span class="chip c-ver">VERIFIED 07-25</span></td></tr>
+        <tr><td class="k">manifest</td><td class="v">latest run: 46/46 tracked sources match HEAD (44 + daily_brief.py + brief_lookup.py) · box: 19 repo copies match, 2 brief artifacts untracked-by-nature, 1 stale (.gitignore) <span class="chip c-ver">MANIFEST 07-27</span></td></tr>
+        <tr><td class="k">parked</td><td class="v">J-1 REJECT-stage default (carried 5×, byte-identity) <span class="chip c-led">LEDGER</span></td></tr>
+      </tbody></table>
+    </div>
+    <div class="blk"><div class="b-lab">Incidents (07-26 → 07-27)</div>
+      <ul>
+        <li>4 paste-routing failures; 3 caught by the environment label. Ruling: every paste names its environment; Prometheus gets no new work <span class="chip c-led">RULED</span></li>
+        <li>2 cloud branches abandoned unpushed (72b921f · 19cd17e); no remote was written <span class="chip c-hand">NOTE 07-27</span></li>
+        <li>Stop-hook false positive root-caused &amp; patched — container-local, dies with the session; upstream fix recommended <span class="chip c-hand">NOTE 07-27</span></li>
+        <li>OneDrive found dead 07-26 — estate's only sync inactive → backup follow-up named <span class="chip c-led">LEDGER</span></li>
+      </ul>
+    </div>
+    <div class="next"><span class="nx">NEXT ACTION</span>Queue item 1: the push ruling — 4 commits including the brief build have no off-machine copy. Then item 2: refresh LEDGER.md in the box.</div>
+    <div class="src">LEDGER.md · REVIEWER_NOTE_20260727_cloud_session_findings.md · RECOMMENDATIONS_20260727 · HANDOFF_2026-07-26</div>
+  </div>
+
+  <!-- BRIEF -->
+  <div class="lane">
+    <header><div><h3>BRIEF</h3><div class="role">daily market brief · Atlas HTML report · live laboratory</div></div><span class="status s-warn">● built — acceptance pending</span></header>
+    <div class="blk"><div class="b-lab">Where it stands</div>
+      <p>The v1 build <b>ran</b>: <code>scripts/daily_brief.py</code> (132,138 B) and <code>scripts/brief_lookup.py</code> are committed at HEAD, alongside <code>prompts/Daily_Brief_Contract_Amendment_1.md</code> (10,337 B) <span class="chip c-ver">MANIFEST 07-27</span>. Today's output <code>brief_2026-07-27.json</code> (249,983 B) + index sit in the reviewer box. Fixture verdict (6/6?), amendment content, and acceptance record live in the ledger tail this board hasn't seen — queue item 2.</p>
+    </div>
+    <div class="blk"><div class="b-lab">Facts of record</div>
+      <table class="kv">
+        <tbody><tr><td class="k">shape</td><td class="v">two-half: builder computes from the local estate → HTML + JSON; reviewer verifies, adds calendar, writes bias synthesis <span class="chip c-hand">RATIFIED</span></td></tr>
+        <tr><td class="k">gate</td><td class="v">fixtures F-B1…F-B6 · verdict 6/6 + all-10-asset render + reviewer spot-recompute of 3 numbers · no partial adoption <span class="chip c-hand">RATIFIED</span></td></tr>
+        <tr><td class="k">firewall</td><td class="v">no journal reads · no outcome statistics on any window · hypotheses free, evidence gated (G-7) <span class="chip c-hand">RATIFIED</span></td></tr>
+        <tr><td class="k">bias engine</td><td class="v">fixed count-based votes, never fitted; every vote printed; no bias without its invalidation <span class="chip c-hand">RATIFIED</span></td></tr>
+      </tbody></table>
+    </div>
+    <div class="blk"><div class="b-lab">Open in this lane</div>
+      <ul>
+        <li>Acceptance loop: fixture transcript + ratification record not yet visible to this board (ledger tail newer than box copy) <span class="chip c-pend">PENDING</span></li>
+        <li>Reviewer half of <code>brief_2026-07-27.json</code>: spot-recompute ≥3 numbers, calendar, bias synthesis — in the BRIEF chat <span class="chip c-pend">PENDING</span></li>
+        <li>D-B2…D-B8 queued: shadow layers · scheduling · calendar sourcing · F-B7 resample fixture · schema_version · delta section <span class="chip c-open">OPEN</span></li>
+        <li>Stage 2 menu waiting: structural-stop line · spring-test qualifier · D8 add-context strip · LPS marker · naked-POC harvest table <span class="chip c-open">OPEN</span></li>
+      </ul>
+    </div>
+    <div class="next"><span class="nx">NEXT ACTION</span>Queue items 2 &amp; 5: refresh the ledger so the build's verdict lands on this board, then run the reviewer half of today's brief in the BRIEF chat.</div>
+    <div class="src">HANDOFF_2026-07-26_Daily_Brief_Design.md · Daily_Brief_Builder_Contract.md · skills/naiad-daily-brief</div>
+  </div>
+</div>
+
+<h2>Study pipeline</h2>
+<div class="h2sub">SYSTEM lane's arc — done, next, queued. The lockbox opens once, at V8, and not before.</div>
+<div class="pipe">
+  <span class="p-step p-done">V3 anchor</span><span class="p-arrow">→</span>
+  <span class="p-step p-done">R/RC recomputes</span><span class="p-arrow">→</span>
+  <span class="p-step p-done">TC-4 guards</span><span class="p-arrow">→</span>
+  <span class="p-step p-done">S-1</span><span class="p-arrow">→</span>
+  <span class="p-step p-done">RC-7r</span><span class="p-arrow">→</span>
+  <span class="p-step p-done">S-2 / S-2b</span><span class="p-arrow">→</span>
+  <span class="p-step p-done">TC-5</span><span class="p-arrow">→</span>
+  <span class="p-step p-done">TC-1 factorial</span><span class="p-arrow">→</span>
+  <span class="p-step p-done">S-3</span><span class="p-arrow">→</span>
+  <span class="p-step p-done">CENSUS-1</span><span class="p-arrow">→</span>
+  <span class="p-step p-done">CENSUS-1b</span><span class="p-arrow">→</span>
+  <span class="p-step p-next">CENSUS-1c</span><span class="p-arrow">→</span>
+  <span class="p-step p-q">Tier-C · D5 entry</span><span class="p-arrow">→</span>
+  <span class="p-step p-q">Tier-C · D8 add</span><span class="p-arrow">→</span>
+  <span class="p-step p-q">TC-2 re-entry bar</span><span class="p-arrow">→</span>
+  <span class="p-step p-lock">LOCKBOX · V8 · once</span>
+</div>
+
+<h2>Cross-cutting operations</h2>
+<div class="ops">
+  <div class="op"><div class="o-lab">Environment routing — standing rule</div>
+    <p>Two builders exist and are not interchangeable: the <b>LOCAL Windows Claude Code</b> (full data estate, <code>_reviewer_box/</code>) and <b>ephemeral cloud sessions</b> (no estate; unpushed work evaporates). Every paste opens with its environment line.</p>
+    <p>Identity probe when unsure: <code>git rev-parse --short HEAD; pwd</code> — local shows the OneDrive path.</p>
+  </div>
+  <div class="op"><div class="o-lab">Backup posture — currently thin</div>
+    <p>The raw price estate (60 series · 26.7M rows · ~1 GB) lives on one machine under OneDrive, which was found <b>not running</b> on 07-26. Bundle math: full git history of all branches = <b>2.43 MB</b>, one verifiable file.</p>
+    <p>Never sync a live <code>.git/</code>; back up bundles instead. The .gitignore is already the exclusion list — port it to the sync client.</p>
+  </div>
+  <div class="op"><div class="o-lab">Coordination protocol (this board)</div>
+    <p>Chats cannot read each other; the project box is the shared bus. Each subsystem chat ends a material session by emitting its STATUS block; the operator relays it here; the orchestrator re-renders this board.</p>
+    <p>Status docs seeded: <code>claude/STATUS_SYSTEM.md</code> · <code>claude/STATUS_ENGINE.md</code> · <code>claude/STATUS_BRIEF.md</code> · <code>claude/ORCHESTRATOR_CONTROL_CENTER.md</code>.</p>
+  </div>
+  <div class="op"><div class="o-lab">Pending inputs to this board</div>
+    <p><code>MANIFEST.json</code> — received &amp; verified, snapshot 07-27 05:43 UTC <span class="chip c-ver">DONE</span></p>
+    <p>Current <code>LEDGER.md</code> (209,313 B at HEAD) — box copy predates the brief build <span class="chip c-pend">AWAITED</span></p>
+    <p>First STATUS blocks back from the SYSTEM / ENGINE / BRIEF chats <span class="chip c-open">WHEN THEY HAPPEN</span></p>
+  </div>
+</div>
+
+<footer>
+  <div><b style="color:var(--tx)">Provenance key</b> — every fact on this board carries one:</div>
+  <div class="keyrow">
+    <span class="chip c-ver">VERIFIED</span><span>read from source / recomputed by the reviewer on the dated session</span>
+    <span class="chip c-led">LEDGER</span><span>LEDGER.md of record</span>
+    <span class="chip c-hand">HANDOFF / RATIFIED</span><span>handoff doc or operator ruling on the record</span>
+    <span class="chip c-unc">UNCONFIRMED LIVE</span><span>true as-of its date; not confirmable from this environment</span>
+    <span class="chip c-pend">PENDING</span><span>waiting on the operator</span>
+  </div>
+  <p style="margin-top:10px">Compiled 2026-07-27 from project-box records by the ORCHESTRATOR chat (cloud; no repo, no market data, no journal access — display only, firewall-clean). Repo facts verified against MANIFEST.json generated 2026-07-27 05:43 UTC (15/15 ledger-pinned hashes reproduced). Refresh by saying <b style="color:var(--tx)">"refresh the control center"</b>, ideally after dropping fresh STATUS blocks or a new MANIFEST.json.</p>
+</footer>
+
+</div>
+
+
+</body></html>
