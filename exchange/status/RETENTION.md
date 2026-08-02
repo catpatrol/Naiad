@@ -1,6 +1,6 @@
 # RETENTION — archive estate vs the rule
 
-Generated 2026-08-02T18:27:42Z by `scripts/backup_estate.py`.
+Generated 2026-08-02T18:42:17Z by `scripts/backup_estate.py`.
 
 **Rule:** keep the newest 4 estate generations + 1 phase set + 4 workflow generations.
 **This report never deletes anything.** It names what falls outside the rule; acting on it is the operator's call.
@@ -25,7 +25,7 @@ Location: `G:\My Drive\naiad-backups`
 
 | generation | size (B) | within rule |
 |---|---:|---|
-| `naiad_workflow_2026-08-02.zip` | 403,265 | yes |
+| `naiad_workflow_2026-08-02.zip` | 409,086 | yes |
 
 Nothing to consider: fewer than 5 generations exist.
 
@@ -33,14 +33,17 @@ Nothing to consider: fewer than 5 generations exist.
 
 Location: `C:\Users\luisf\OneDrive\Desktop\Midas-Claude Code Resources\naiad\research_outputs\_archive`
 
-2 set(s) present; keeping the newest 1.
+3 set(s) present; keeping the newest 1.
 
 | set (date) | archives | total size (B) | within rule |
 |---|---:|---:|---|
-| `2026-07-29` | 2 | 26,457 | yes |
+| `2026-08-02` | 1 | 18,375,498 | yes |
+| `2026-07-29` | 2 | 26,457 | **NO — outside the rule** |
 | `2026-07-27` | 6 | 1,025,189,589 | **NO — outside the rule** |
 
 Archives outside the rule, in full:
+- `analytics_tests_v1.0.0_2026-07-29.zip` — 6,816 B
+- `analytics_v1.0.0_2026-07-29.zip` — 19,641 B
 - `s1_2026-07-27.zip` — 106,239,157 B
 - `s2_2026-07-27.zip` — 246,355,294 B
 - `s3_2026-07-27.zip` — 269,919,602 B
