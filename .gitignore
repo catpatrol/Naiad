@@ -83,7 +83,7 @@ _reviewer_box/
 research_outputs/brief/
 tests/brief_fixture/out/
 
-# Daily routine reports aged out of the exchange rolling window (2026-08-03).
+# Daily routine reports aged out of the exchange rolling window (2026-08-02).
 # Same class as the brief archive above and ignored for the same reason: these
 # are ops artifacts moved OUT of exchange/ precisely because they no longer need
 # to be published or box-synced. They stay on disk and in the weekly workflow

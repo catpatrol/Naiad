@@ -15,7 +15,8 @@ MODES
                       COMPLETENESS, never to locate anything.
   --workflow          the irreplaceable everything-else: docs/memory,
                       docs/knowledge, skills, prompts, claude, exchange,
-                      docs/primers, docs/history and the operator-exports drop.
+                      docs/primers, docs/history, scripts, the repo-root *.md
+                      documents, and the operator-exports drop.
                       Dated, hashed and verified exactly like --estate; members
                       keep their repo-relative paths so a restore lands them
                       back where they came from.  Added 2026-08-02.
@@ -98,6 +99,11 @@ DATED_ZIP = re.compile(r"_(\d{4}-\d{2}-\d{2})\.zip$")
 # Repo-relative roots, archived under their own path so a restore lands them
 # back where they came from.  A root that does not exist is skipped and named
 # in the report -- absence is recorded, never silently passed over.
+#
+# scripts/ added 2026-08-02: the disposition inventory found the ENTIRE
+# toolchain -- daily_brief.py, backup_estate.py, every census and recompute
+# script -- protected by nothing but GitHub. One copy on one third-party
+# service is not a backup.
 WORKFLOW_SOURCES = (
     "docs/memory",
     "docs/knowledge",
@@ -107,9 +113,21 @@ WORKFLOW_SOURCES = (
     "exchange",
     "docs/primers",
     "docs/history",
+    "scripts",
     "drops/operator-exports",
     "exchange/drops/operator-exports",
 )
+
+# Repo-ROOT file globs, non-recursive.  Added 2026-08-02 for the same reason as
+# scripts/: the charter, every contract, LEDGER.md and README.md sit at the repo
+# root, belong to no directory in the list above, and were GitHub-only.
+WORKFLOW_ROOT_GLOBS = ("*.md",)
+
+# Never archived, from any root.  Compiled bytecode is regenerable, machine- and
+# version-specific, and would add ~200 KB of noise that restores to something a
+# different interpreter must discard anyway.
+WORKFLOW_EXCLUDE_PARTS = ("__pycache__",)
+WORKFLOW_EXCLUDE_SUFFIXES = (".pyc", ".pyo")
 
 
 # --------------------------------------------------------------- hashing
@@ -282,6 +300,28 @@ def workflow_roots() -> tuple:
     return kept, missing, nested
 
 
+def _workflow_excluded(rel: str) -> bool:
+    parts = rel.split("/")
+    if any(p in WORKFLOW_EXCLUDE_PARTS for p in parts):
+        return True
+    return rel.endswith(WORKFLOW_EXCLUDE_SUFFIXES)
+
+
+def workflow_root_files() -> list:
+    """[(rel_path, abs_path)] for repo-ROOT files matching WORKFLOW_ROOT_GLOBS.
+
+    Non-recursive by design: this covers the loose documents that live at the
+    repo root and belong to no archived directory.  Recursing would duplicate
+    everything already collected from the directory roots.
+    """
+    out = []
+    for pattern in WORKFLOW_ROOT_GLOBS:
+        for ap in sorted(REPO.glob(pattern)):
+            if ap.is_file():
+                out.append((ap.name, ap))
+    return out
+
+
 def workflow_members(roots) -> list:
     """[(rel_path, abs_path)] for every file under the workflow roots.
 
@@ -291,7 +331,14 @@ def workflow_members(roots) -> list:
     members = []
     for rel in roots:
         members.extend(walk_members(REPO / rel, prefix=rel + "/"))
-    return sorted(members, key=lambda t: t[0])
+    members.extend(workflow_root_files())
+    members = [(rel, ap) for rel, ap in members if not _workflow_excluded(rel)]
+    seen, unique = set(), []
+    for rel, ap in sorted(members, key=lambda t: t[0]):
+        if rel not in seen:          # a root file cannot also come from a dir,
+            seen.add(rel)            # but belt-and-braces: never pin twice
+            unique.append((rel, ap))
+    return unique
 
 
 # --------------------------------------------------------------- writing
@@ -768,10 +815,13 @@ def run_workflow(dest: Path, args) -> int:
 
     print(f"repo root        : {REPO}")
     print(f"destination      : {target}")
-    print(f"roots archived   : {len(roots)}")
+    print(f"roots archived   : {len(roots)} dir(s) + repo-root {', '.join(WORKFLOW_ROOT_GLOBS)}")
     for rel in roots:
-        n = sum(1 for _ in walk_members(REPO / rel))
+        n = sum(1 for r, _ in walk_members(REPO / rel, prefix=rel + "/")
+                if not _workflow_excluded(r))
         print(f"    {rel:<34} {n} file(s)")
+    print(f"    {'(repo root) ' + ' '.join(WORKFLOW_ROOT_GLOBS):<34} "
+          f"{len(workflow_root_files())} file(s)")
     if nested:
         for rel, parent in nested:
             print(f"    SKIPPED (nested) : {rel} -- already inside {parent}")
@@ -789,12 +839,16 @@ def run_workflow(dest: Path, args) -> int:
     sample = [(rel, ap, sha256_file(ap)) for rel, ap in members[:20]]
     tracked = set()
     for rel in roots:
-        tracked |= git_tracked_under(rel)
+        tracked |= {t for t in git_tracked_under(rel) if not _workflow_excluded(t)}
+    root_names = {rel for rel, _ in workflow_root_files()}
+    tracked |= {t for t in git_tracked_under(".") if t in root_names}
 
     meta = {
         "created_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "mode": "workflow",
         "roots": list(roots),
+        "root_globs": list(WORKFLOW_ROOT_GLOBS),
+        "excluded": list(WORKFLOW_EXCLUDE_PARTS) + list(WORKFLOW_EXCLUDE_SUFFIXES),
         "roots_absent": list(missing),
         "roots_skipped_nested": [r for r, _ in nested],
         "estate_root": str(REPO),
