@@ -82,3 +82,10 @@ _reviewer_box/
 # Daily Brief archive — ops artifacts, untracked by design (A1.5); ignored so `git clean -fd` cannot remove them
 research_outputs/brief/
 tests/brief_fixture/out/
+
+# Daily routine reports aged out of the exchange rolling window (2026-08-03).
+# Same class as the brief archive above and ignored for the same reason: these
+# are ops artifacts moved OUT of exchange/ precisely because they no longer need
+# to be published or box-synced. They stay on disk and in the weekly workflow
+# backup; keeping them tracked would defeat the move.
+research_outputs/_daily_archive/

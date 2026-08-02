@@ -1,13 +1,16 @@
 {
-  "version": 2,
+  "version": 3,
   "python": "C:\\venvs\\naiad\\Scripts\\python.exe",
   "output_dir": "exchange/status/daily",
   "publish": true,
+  "daily_archive_dir": "research_outputs/_daily_archive",
+  "keep_daily": 7,
   "jobs": [
     { "id": "manifest", "script": "scripts/reviewer_manifest.py", "required": true,
       "stage": [{ "from": "exchange/status/MANIFEST.json", "to": "MANIFEST_{date}.json" }] },
     { "id": "brief", "script": "scripts/daily_brief.py", "required": false,
-      "stage": [{ "from": "research_outputs/brief/brief_{date}.html", "to": "brief_{date}.html" },
-                { "from": "research_outputs/brief/brief_{date}.json", "to": "brief_{date}.json" }] }
+      "stage": [],
+      "reference": ["research_outputs/brief/brief_{date}.html",
+                    "research_outputs/brief/brief_{date}.json"] }
   ]
 }

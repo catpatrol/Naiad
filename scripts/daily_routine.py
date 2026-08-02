@@ -11,7 +11,12 @@ Contract:
   * jobs run in registry order, via the interpreter named in the registry
   * a REQUIRED job that fails stops the run; an optional one is recorded and
     the run continues
-  * each job's declared outputs are staged into output_dir with {date} filled in
+  * each job's declared `stage` outputs are COPIED into output_dir with {date}
+    filled in; each `reference` output is recorded as a POINTER instead
+    (path + size + sha256) and its bytes are left where they are
+  * a ROLLING WINDOW keeps the newest `keep_daily` DAILY_*.md and
+    MANIFEST_*.json in output_dir and MOVES older ones to daily_archive_dir --
+    moved, never deleted
   * the report is written to <output_dir>/DAILY_<yyyy-mm-dd>.md
   * the ONLY git operations are the final PUBLISH step's, and they are bounded
     by the scope guard in scripts/publish_exchange.py -- see AMENDMENT below
@@ -205,6 +210,7 @@ def run_job(job, python, today, out_dir):
         "exit": None,
         "elapsed": 0.0,
         "staged": [],
+        "referenced": [],
         "missing": [],
         "error": None,
     }
@@ -242,7 +248,133 @@ def run_job(job, python, today, out_dir):
             res["staged"].append(dst.name)
         else:
             res["missing"].append(subst(item["from"], today))
+
+    # REFERENCED, not copied.  A pointer -- path, size, sha256 -- instead of the
+    # bytes.  The brief's html+json run ~400 KB a day; copying them into
+    # exchange/ meant every day permanently refilled a capacity-constrained
+    # project box with output that is regenerable and already on disk.  The
+    # pointer is enough to find the file and prove it is the right one.
+    for rel_tmpl in job.get("reference", []):
+        rel = subst(rel_tmpl, today)
+        src = ROOT / rel
+        if src.exists():
+            res["referenced"].append({
+                "path": rel,
+                "size": src.stat().st_size,
+                "sha256": _sha256(src),
+            })
+        else:
+            res["missing"].append(rel)
     return res
+
+
+# ------------------------------------------------------- rolling window
+
+
+def _rel(path):
+    """Repo-relative POSIX path, or the absolute path if it is outside the repo.
+
+    `daily_archive_dir` is operator-configurable, so it can legitimately point
+    anywhere -- another drive, a network share.  A bare relative_to() raises
+    ValueError in that case, and it would raise at the very END of the run,
+    after the jobs, the brief and the report had all succeeded.  Fall back
+    instead of throwing away the day's work over a display string.
+    """
+    try:
+        return path.relative_to(ROOT).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+def apply_rolling_window(out_dir, archive_dir, keep):
+    """Keep the newest `keep` DAILY_*.md and MANIFEST_*.json; MOVE the rest out.
+
+    MOVED, never deleted.  The point is to stop exchange/ growing without bound
+    -- it is tracked, auto-pushed and synced into a capacity-constrained project
+    box -- not to lose the history.  Older reports land in archive_dir, still on
+    disk, still readable.
+
+    Names carry an ISO date (DAILY_2026-08-02.md), so a lexical sort is a
+    chronological sort; no filesystem timestamps are trusted.
+
+    Every move is guarded: a failure is recorded and the run continues, because
+    this happens after the day's real work and must never cost it.
+    """
+    moved = []
+    if keep is None or keep < 0:
+        return moved
+    try:
+        archive_dir.mkdir(parents=True, exist_ok=True)
+    except OSError as exc:
+        return [{"action": "error", "name": str(archive_dir), "detail": str(exc)}]
+
+    for pattern in ("DAILY_*.md", "MANIFEST_*.json"):
+        try:
+            files = sorted(out_dir.glob(pattern), key=lambda p: p.name, reverse=True)
+        except OSError as exc:
+            moved.append({"action": "error", "name": pattern, "detail": str(exc)})
+            continue
+        for old in files[keep:]:
+            target = archive_dir / old.name
+            try:
+                if target.exists():
+                    if _sha256(old) == _sha256(target):
+                        old.unlink()
+                        moved.append({"action": "deduped", "name": old.name,
+                                      "detail": "identical copy already archived"})
+                        continue
+                    n = 1
+                    while (archive_dir / f"{old.stem}__{n}{old.suffix}").exists():
+                        n += 1
+                    target = archive_dir / f"{old.stem}__{n}{old.suffix}"
+                shutil.move(str(old), str(target))
+                moved.append({"action": "moved", "name": old.name,
+                              "detail": _rel(target)})
+            except OSError as exc:
+                moved.append({"action": "error", "name": old.name, "detail": str(exc)})
+    return moved
+
+
+def window_lines(moved, out_dir, keep, archive_dir):
+    kept = {p.name for p in out_dir.glob("DAILY_*.md")} | \
+           {p.name for p in out_dir.glob("MANIFEST_*.json")}
+    lines = [f"- window: newest **{keep}** of each of `DAILY_*.md` and `MANIFEST_*.json` stay in "
+             f"`{_rel(out_dir)}`",
+             f"- anything older is **moved** (never deleted) to `{_rel(archive_dir)}`",
+             f"- {len(kept)} file(s) currently inside the window"]
+    if not moved:
+        lines.append("- nothing aged out this run")
+        return lines
+    lines += ["", "| action | file | destination |", "|---|---|---|"]
+    for row in moved:
+        lines.append(f"| {row['action']} | `{row['name']}` | `{row['detail']}` |")
+    errs = [r for r in moved if r["action"] == "error"]
+    if errs:
+        lines.append("")
+        lines.append(f"**{len(errs)} file(s) could not be moved.** They stay in the window folder "
+                     "and will be retried next run.")
+    return lines
+
+
+def reference_lines(results):
+    """Section 6 -- artifacts recorded as pointers rather than copied in."""
+    refs = [r for res in results for r in res.get("referenced", [])]
+    if not refs:
+        return ["- no referenced artifacts this run"]
+    lines = [
+        "These files are **referenced, not copied.** They are regenerable output that would "
+        "otherwise add ~400 KB per day to a tracked, auto-pushed, box-synced directory. The path "
+        "and hash below are enough to locate each one and prove it is the right file.",
+        "",
+        "| path | size (B) | sha256 |",
+        "|---|---:|---|",
+    ]
+    for r in refs:
+        lines.append(f"| `{r['path']}` | {r['size']:,} | `{r['sha256']}` |")
+    lines.append("")
+    lines.append("_Their directory is git-ignored by design (charter A1.5), so they live on this "
+                 "machine and in the weekly estate backup, not in the repository._")
+    return lines
 
 
 # --------------------------------------------------------------- report parts
@@ -365,20 +497,34 @@ def change_since_last(manifest, out_dir, today):
     return [f"Compared against `{prev_path.name}` ({prev_date}).", ""] + lines
 
 
-def brief_biases(out_dir, today):
+def _brief_json_path(results, out_dir, today):
+    """Where the brief JSON is -- referenced source first, staged copy second.
+
+    The brief is no longer copied into exchange/, so this reads it where it
+    actually lives.  The staged fallback keeps older archived runs readable.
+    """
+    for res in results:
+        for ref in res.get("referenced", []):
+            if ref["path"].endswith(".json"):
+                return ROOT / ref["path"]
+    legacy = out_dir / f"brief_{today}.json"
+    return legacy if legacy.exists() else None
+
+
+def brief_biases(results, out_dir, today):
     """Section 5 -- headline daily/weekly bias per asset, if the brief ran."""
-    staged = out_dir / f"brief_{today}.json"
-    if not staged.exists():
+    source = _brief_json_path(results, out_dir, today)
+    if source is None or not source.exists():
         return None
     try:
-        with staged.open(encoding="utf-8") as fh:
+        with source.open(encoding="utf-8") as fh:
             data = json.load(fh)
     except (OSError, ValueError) as exc:
         return [f"Brief JSON staged but unreadable: {exc}"]
 
     assets = data.get("assets") or {}
     if not assets:
-        return ["Brief JSON staged but carried no assets block."]
+        return ["Brief JSON found but carried no assets block."]
 
     rows = ["| asset | daily bias | weekly bias |", "|---|---|---|"]
     for sym in sorted(assets):
@@ -456,11 +602,12 @@ def main():
     # 2. per-job detail
     out.append("## 2. Jobs")
     out.append("")
-    out.append("| job | exit code | elapsed (s) | staged |")
-    out.append("|---|---:|---:|---|")
+    out.append("| job | exit code | elapsed (s) | staged | referenced |")
+    out.append("|---|---:|---:|---|---:|")
     for r in results:
         staged = ", ".join(f"`{s}`" for s in r["staged"]) if r["staged"] else "--"
-        out.append(f"| {r['id']} | {r['exit']} | {r['elapsed']} | {staged} |")
+        nref = len(r.get("referenced", [])) or "--"
+        out.append(f"| {r['id']} | {r['exit']} | {r['elapsed']} | {staged} | {nref} |")
     for r in results:
         if r["missing"]:
             out.append("")
@@ -483,12 +630,18 @@ def main():
     # 5. brief biases
     out.append("## 5. Headline bias")
     out.append("")
-    biases = brief_biases(out_dir, today)
+    biases = brief_biases(results, out_dir, today)
     out += biases if biases else ["The brief did not run, so there is no bias table today."]
     out.append("")
 
-    # 6. legacy box sweep
-    out.append("## 6. Legacy box sweep")
+    # 6. referenced artifacts -- pointers, not copies
+    out.append("## 6. Brief artifacts — referenced, not copied")
+    out.append("")
+    out += reference_lines(results)
+    out.append("")
+
+    # 7. legacy box sweep
+    out.append("## 7. Legacy box sweep")
     out.append("")
     out += sweep_lines(swept)
     out.append("")
@@ -497,7 +650,18 @@ def main():
     report.write_text("\n".join(out) + "\n", encoding="utf-8")
     print(f"wrote {report.relative_to(ROOT).as_posix()}")
 
-    # 7. PUBLISH -- gate A-6a.  Runs AFTER the report is written so that the
+    # 8. ROLLING WINDOW -- runs after the report is written so that today's own
+    # DAILY_<date>.md is on disk and counts as the newest member of the window.
+    archive_dir = ROOT / reg.get("daily_archive_dir", "research_outputs/_daily_archive")
+    keep = reg.get("keep_daily", 7)
+    windowed = apply_rolling_window(out_dir, archive_dir, keep)
+    if windowed:
+        print(f"  window: {len(windowed)} file(s) aged out of {reg['output_dir']}")
+    with report.open("a", encoding="utf-8") as fh:
+        fh.write("\n## 8. Rolling window\n\n")
+        fh.write("\n".join(window_lines(windowed, out_dir, keep, archive_dir)) + "\n")
+
+    # 9. PUBLISH -- gate A-6a.  Runs AFTER the report is written so that the
     # report itself is inside the commit.  The publish outcome is then appended
     # to the report; those appended bytes ride along in the NEXT publish, which
     # is the price of having the report be part of what it describes.
@@ -505,13 +669,13 @@ def main():
     if reg.get("publish", True):
         pub = publish_exchange.publish(ROOT, today)
         with report.open("a", encoding="utf-8") as fh:
-            fh.write("\n## 7. Publish\n\n")
+            fh.write("\n## 9. Publish\n\n")
             fh.write("_Appended after the publish step ran; these bytes are "
                      "published by the next run, not this one._\n\n")
             fh.write("\n".join(publish_exchange.report_lines(pub)) + "\n")
     else:
         with report.open("a", encoding="utf-8") as fh:
-            fh.write("\n## 7. Publish\n\n")
+            fh.write("\n## 9. Publish\n\n")
             fh.write("- disabled in the registry (`\"publish\": false`)\n")
 
     required_failed = [r["id"] for r in results if r["exit"] != 0 and r["required"]]
