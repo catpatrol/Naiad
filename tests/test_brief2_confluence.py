@@ -283,3 +283,78 @@ def test_f_b28_scores_are_integers():
         for cl in out[view]["clusters"]:
             assert isinstance(cl["score"], int), \
                 f"non-integer score {cl['score']!r} -- counting produces integers"
+
+
+# ------------------------------------------------- F-B35 registry completion
+
+def test_f_b35_prior_anchors_and_confirmed_pivots_reach_the_registry():
+    """Stage B, cycle 3. Two reviewer findings, fixtured so they cannot recur.
+
+    (1) D2-3(a): prior M/Q/Y anchored VWAPs are ratified at D-B11 and appear by
+        name in the operator's manual reviews. They were absent.
+    (2) F-3R-A: `structure` reported EXACTLY 13 levels for all ten assets,
+        because the registry was fed by daily_brief's `last_pivots(..., n=3)` --
+        a DISPLAY cap -- while `analytics.confirmed_pivots` was never emitted at
+        all. Ten instruments cannot share a pivot count.
+    """
+    import sys as _sys
+    from pathlib import Path as _P
+    _sys.path.insert(0, str(_P(__file__).resolve().parent.parent / "scripts"))
+    import brief2 as B2
+
+    prior = {"prior_M": {"warming": False, "vwap": 100.0, "sigma": 2.0,
+                         "bands": {f"{s}{k}s": 100.0 + (1 if s == "+" else -1) * k * 2.0
+                                   for k in (1, 2, 3) for s in ("+", "-")}},
+             "prior_Q": {"warming": True, "reason": "no completed prior period"}}
+    pivots = {"lookback_days": 180,
+              "highs": [{"level": 120.0, "index": 5}, {"level": 130.0, "index": 9}],
+              "lows": [{"level": 80.0, "index": 7}]}
+    a = {"vwap": {}, "structure": {"pivot_highs": [{"level": 999.0, "day": "x"}]},
+         "sessions": {}, "radar": []}
+    reg = B2.build_registry(a, {"windows": {}}, {"windows": {}}, [],
+                            prior_anchors=prior, pivots=pivots)
+    labels = [x["label"] for x in reg.as_list()]
+
+    # prior anchors: 1 vwap + 6 bands for the armed period; warming one emits none
+    assert sum(1 for x in reg.as_list() if x["source_layer"] == "prior_anchor") == 7
+    assert any("prior_M VWAP" in s for s in labels)
+    assert not any("prior_Q" in s for s in labels), "a warming prior anchor emitted levels"
+
+    # confirmed pivots replace the display-capped list, and vary in count
+    cp = [x for x in reg.as_list() if x["source_layer"] == "confirmed_pivots"]
+    assert len(cp) == 3, "confirmed pivots did not reach the registry"
+    assert not any("999" in str(x["level"]) for x in reg.as_list()), \
+        "daily_brief's display-capped pivot leaked in alongside the confirmed ones"
+
+    # ANTI-VACUITY: without pivots the builder must fall back, not emit nothing
+    reg2 = B2.build_registry(a, {"windows": {}}, {"windows": {}}, [],
+                             prior_anchors=None, pivots=None)
+    assert any(x["source_layer"] == "structure_layer" for x in reg2.as_list())
+
+
+def test_f_b35_confirmed_pivots_use_a_lookback_not_a_count_cap():
+    """A count cap is what produced the uniform 13. A trailing lookback is
+    self-limiting and varies per asset, as pivot counts must."""
+    import sys as _sys
+    from pathlib import Path as _P
+    _sys.path.insert(0, str(_P(__file__).resolve().parent.parent / "scripts"))
+    import brief2 as B2
+    import ast
+    import inspect
+    src = inspect.getsource(B2.confirmed_pivot_levels)
+    assert "lookback_days" in src
+    assert "confirmed_pivots" in src, "must use the causality-disciplined entry point"
+
+    # Scan CODE, not prose: this function's docstring QUOTES the defect it
+    # replaced ("last_pivots(..., n=3)"), and a naive substring scan flags the
+    # sentence that explains the fix as if it were the fix's absence. Same false
+    # positive as F-F3's prohibition text.
+    tree = ast.parse(src.lstrip())
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            if (node.body and isinstance(node.body[0], ast.Expr)
+                    and isinstance(node.body[0].value, ast.Constant)):
+                node.body[0].value.value = ""
+    code = ast.unparse(tree)
+    assert "n=3" not in code and "[:3]" not in code, "a count cap has come back"
+    assert "lookback_days" in code, "the stripper ate the code, not just the prose"

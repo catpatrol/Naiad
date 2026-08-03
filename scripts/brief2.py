@@ -495,9 +495,107 @@ def _forming_candle(klines, step_ms):
             "excluded_from_computation": True}
 
 
+# ══════════════════════════════════ §5.1 prior anchors + confirmed pivots
+
+PRIOR_ANCHOR_PERIODS = ("M", "Q", "Y")
+PIVOT_LOOKBACK_DAYS = 180
+
+
+def prior_anchored_vwaps(klines, now_ms):
+    """Prior M/Q/Y anchored VWAP with 1/2/3 sigma (ratified D-B11).
+
+    These are FIXED historical levels: the anchored VWAP accumulated across the
+    PREVIOUS COMPLETED period, read at that period's last bar.  They do not
+    develop -- prior-quarter VWAP is where the last quarter's business settled,
+    which is why the operator's manual reviews cite them by name ("price wicked
+    under pQ-VWAP", "reclaim std1-confluent with pM-VWAP").
+
+    `daily_brief` supplies only the DEVELOPING W/M/Q/Y anchors, so these are
+    computed here rather than read.  Cycle-2's registry was missing them.
+    """
+    out = {}
+    if "1h" not in klines or len(klines["1h"]) < 2:
+        return out
+    t, o, h, l, c, v = _cols(klines["1h"])
+    src = W.hlc3(h, l, c)
+    d = t.astype("datetime64[ms]").astype("datetime64[D]")
+
+    for period in PRIOR_ANCHOR_PERIODS:
+        if period == "M":
+            key = d.astype("datetime64[M]")
+        elif period == "Y":
+            key = d.astype("datetime64[Y]")
+        else:
+            m = d.astype("datetime64[M]").astype(int)
+            key = (m - m % 3).astype("datetime64[M]")
+        key = np.asarray(key)
+        ks = key.astype("datetime64[ms]").astype("int64")
+        uniq = np.unique(ks)
+        if len(uniq) < 2:
+            out[f"prior_{period}"] = {"warming": True,
+                                      "reason": "no completed prior period"}
+            continue
+        prev = uniq[-2]
+        sel = np.flatnonzero(ks == prev)
+        a0, a1 = int(sel[0]), int(sel[-1])
+        r = W.anchored_vwap(src[:a1 + 1], v[:a1 + 1], a0, sigmas=SIGMAS)
+        vw, sd = _f(r["vwap"][-1]), _f(r["stdev"][-1])
+        if vw is None:
+            out[f"prior_{period}"] = {"warming": True, "reason": "no volume"}
+            continue
+        out[f"prior_{period}"] = {
+            "warming": False, "vwap": vw, "sigma": sd,
+            "anchor_utc_ms": int(t[a0]), "closed_utc_ms": int(t[a1]),
+            "bars": int(a1 - a0 + 1),
+            "bands": {f"{sgn}{k}s": _f(vw + mult * k * (sd or 0.0))
+                      for k in SIGMAS for sgn, mult in (("+", 1), ("-", -1))},
+            "note": "FIXED level from the completed prior period; does not develop"}
+    return out
+
+
+def confirmed_pivot_levels(klines, now_ms, lookback_days=PIVOT_LOOKBACK_DAYS):
+    """Confirmed 1d pivots inside a trailing lookback (§5.1, F-AN-13 lag:5).
+
+    FINDING F-3R-A, fixed here.  The registry was fed by `daily_brief`'s
+    `last_pivots(..., n=3)` -- a DISPLAY cap of the three most recent highs and
+    lows, which is why `structure` reported EXACTLY 13 levels for all ten assets.
+    Ten instruments cannot share a pivot count; the number was an artifact of the
+    cap, not a property of the market.
+
+    `analytics.structure.confirmed_pivots` was never emitted into the registry at
+    all -- it was used only inside `oscillator_layer` for divergences. It is the
+    causality-disciplined entry point (it filters to `confirmation_lag <=
+    as_of_index`, so an unconfirmed pivot cannot leak), and §5.1 names confirmed
+    pivots as a structure member.
+
+    A trailing LOOKBACK is used rather than a count cap: it is self-limiting,
+    it varies per asset as it should, and "recent structure" is a statement about
+    time, not about how many pivots happen to have printed.
+    """
+    out = {"lookback_days": lookback_days, "highs": [], "lows": [],
+           "substrate": "1d resampled from 1h, closed buckets only"}
+    got = _resampled(klines, "1d")
+    if got is None:
+        return out
+    t, o, h, l, c, v = got
+    if len(c) < 20:
+        return out
+    as_of = len(c) - 1
+    floor_ms = int(t[-1]) - lookback_days * DAY_MS
+    for kind, arr, bucket in (("high", h, "highs"), ("low", l, "lows")):
+        idx, lvl, conf = S.confirmed_pivots(arr, as_of, 5, 5, kind)
+        for i, lv, cf in zip(idx, lvl, conf):
+            if int(t[i]) < floor_ms:
+                continue
+            out[bucket].append({"level": _f(lv), "index": int(i),
+                                "bar_utc_ms": int(t[i]),
+                                "confirmed_at_index": int(cf)})
+    return out
+
+
 # ══════════════════════════════════════════════ §5 registry and dual scoring
 
-def build_registry(a, vol, rv, nest_levels):
+def build_registry(a, vol, rv, nest_levels, prior_anchors=None, pivots=None):
     """Assemble the level registry from all five families (§5.1).
 
     Every level carries the window it came from, because §4.3's scale
@@ -569,15 +667,37 @@ def build_registry(a, vol, rv, nest_levels):
         reg.add(lv["family"], lv["label"], lv["level"],
                 lv["source_layer"], lv["timeframe"])
 
-    # structure -- confirmed pivots, period opens, prior D/W/M extremes, sessions
+    # vwap_anchored -- PRIOR M/Q/Y, fixed levels from completed periods (D-B11)
+    for pname, blob in (prior_anchors or {}).items():
+        if not isinstance(blob, dict) or blob.get("warming"):
+            continue
+        if blob.get("vwap") is not None:
+            reg.add("vwap_anchored", f"{pname} VWAP", blob["vwap"],
+                    "prior_anchor", pname)
+        for bk, bv in (blob.get("bands") or {}).items():
+            if bv is not None:
+                reg.add("vwap_anchored", f"{pname} {bk}", bv,
+                        "prior_anchor", pname)
+
+    # structure -- CONFIRMED pivots (F-3R-A: was daily_brief's display-capped
+    # top-3, which is why every asset reported exactly 13 structure levels)
     st = a.get("structure") or {}
-    for tag, pivots in (("pivot high", st.get("pivot_highs")),
-                        ("pivot low", st.get("pivot_lows"))):
-        for i, p in enumerate(pivots or []):
-            lv = _f((p or {}).get("level"))
-            if lv is not None:
-                reg.add("structure", f"{tag} {(p or {}).get('day', i)}", lv,
-                        "structure_layer", "1d")
+    if pivots:
+        for bucket, tag in (("highs", "confirmed pivot high"),
+                            ("lows", "confirmed pivot low")):
+            for p in pivots.get(bucket) or []:
+                lv = _f(p.get("level"))
+                if lv is not None:
+                    reg.add("structure", f"{tag} @{p['index']}", lv,
+                            "confirmed_pivots", "1d")
+    else:
+        for tag, plist in (("pivot high", st.get("pivot_highs")),
+                           ("pivot low", st.get("pivot_lows"))):
+            for i, p in enumerate(plist or []):
+                lv = _f((p or {}).get("level"))
+                if lv is not None:
+                    reg.add("structure", f"{tag} {(p or {}).get('day', i)}", lv,
+                            "structure_layer", "1d")
     for period, tf in (("prior_day", "1d"), ("prior_week", "1w"),
                        ("prior_month", "1M")):
         blob = st.get(period) or {}
@@ -906,17 +1026,20 @@ def brief2_asset(a, klines, now_ms, price, atr_d):
     rv = rvwap_layer(klines, now_ms)
     nest = nesting_layer(vol, price)
     osc = oscillator_layer(klines)
+    prior = prior_anchored_vwaps(klines, now_ms)
+    pivs = confirmed_pivot_levels(klines, now_ms)
     a = dict(a)
     a["brief2_oscillators"] = osc
     cross = cross_state_layer(klines, atr_d)
     lat = lattice_layer(klines)
     planes = chart_planes(klines, vol)
-    reg = build_registry(a, vol, rv, nest["levels"])
+    reg = build_registry(a, vol, rv, nest["levels"], prior, pivs)
     conf = confluence(reg, price, atr_d)
 
     part1 = {"volume_windows": vol, "rvwap": rv, "va_nesting": nest,
              "oscillators": osc, "cross_state": cross, "lattice_12_25": lat,
-             "chart_planes": planes, "confluence": conf}
+             "chart_planes": planes, "prior_anchors": prior,
+             "confirmed_pivots": pivs, "confluence": conf}
     part2 = decision_instrument(a, vol, nest, conf, price, atr_d)
     return part1, part2
 
