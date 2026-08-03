@@ -821,7 +821,11 @@ def brief2_asset(a, klines, now_ms, price, atr_d):
 
 # ══════════════════════════════════════════════════ §8.1 the capture envelope
 
-SCHEMA_VERSION = "2.0.0"
+# 2.1.0 -- D-1 (reviewer ruling 2026-08-03): dual_score no longer emits the flat
+# `members` list beside `clusters[].members`.  The collapsed registry was stored
+# twice, at 18.12% of the capture.  Captures written under 2.0.0 remain readable
+# and are simply larger; the bump is what tells the two apart.
+SCHEMA_VERSION = "2.1.0"
 
 # §8.1 ratified A-6.  The closed-bar correction plus the volume filter MOVE
 # published numbers, and archive-comparability law requires a major bump.  The

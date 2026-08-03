@@ -123,8 +123,29 @@ def test_f_b27_both_scored_sets_are_present():
     assert set(out) >= {"with_volume", "without_volume", "differ"}
     for view in ("with_volume", "without_volume"):
         v = out[view]
-        assert {"clusters", "lines", "members", "sensitivity", "by_family"} <= set(v)
+        assert {"clusters", "lines", "member_count", "sensitivity",
+                "by_family"} <= set(v)
         assert v["clusters"], f"{view} produced no clusters"
+
+
+def test_f_b27_collapsed_registry_is_stored_once_only():
+    """D-1: every member lands in exactly one cluster, so a flat `members` list
+    beside `clusters[].members` stored the registry TWICE -- 18.12% of the
+    2026-08-03 capture. The nested form is the single source."""
+    out = L.dual_score(_mixed_registry(), ATR, price=64100)
+    for view in ("with_volume", "without_volume"):
+        v = out[view]
+        assert "members" not in v, \
+            "the flat members list is back -- the registry is stored twice again"
+        nested = [m for cl in v["clusters"] for m in cl["members"]]
+        assert len(nested) == v["member_count"], \
+            "member_count must equal the members actually held in clusters"
+
+    # ANTI-VACUITY: the nested form must genuinely still be there and populated
+    wv = out["with_volume"]
+    assert wv["member_count"] > 0
+    assert all("family" in m and "level" in m
+               for cl in wv["clusters"] for m in cl["members"])
 
 
 def test_f_b27_excluded_set_contains_zero_volume_family_members():

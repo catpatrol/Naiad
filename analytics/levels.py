@@ -240,9 +240,14 @@ def dual_score(levels, atr, price, tol=CLUSTER_ATR):
         sel = [lv for lv in levels if lv["family"] not in drop]
         members = collapse_same_family(sel, atr) if sel else []
         clusters = cluster(members, atr, tol=tol) if members else []
+        # D-1 (reviewer ruling 2026-08-03): the flat `members` list is NOT
+        # returned.  Every member lands in exactly one cluster, so emitting both
+        # stored the collapsed registry TWICE -- measured at 100,872 B, 18.12% of
+        # the 2026-08-03 capture, and growing with the registry.  `member_count`
+        # is kept so a reader can check the partition without walking clusters.
         out[view] = {
             "levels_in": len(sel),
-            "members": members,
+            "member_count": len(members),
             "clusters": clusters,
             "lines": lines_in_sand(clusters, price, atr) if clusters
                      else {"above": None, "below": None},
