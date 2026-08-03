@@ -28,7 +28,17 @@ from pathlib import Path
 # bucket.  Returned NUMBERS change on every resampled layer, and I-F requires at
 # least a minor bump whenever that happens, precisely so an archived capture can
 # be told apart from a current one.
-ANALYTICS_VERSION = "1.1.0"
+#
+# 1.2.0 -- Amendment 2 §1.2 as extended (2026-08-03).  resample_ohlcv now RAISES
+# on an undecidable source step, and emits only buckets PROVED closed by a bar in
+# a strictly later bucket.  MEASURED ON THE ESTATE, NO PUBLISHED NUMBER MOVES:
+# 1h->4h and 1h->1d across all ten assets give identical bucket counts, because
+# live data always carries a forming final bucket that both rules drop.  The
+# minor bump is taken anyway -- the CONTRACT changed and a returned number CAN
+# change (a series ending exactly on a period boundary now drops that period),
+# and I-F is about identifying the recipe, not about whether today's data happens
+# to exercise the difference.
+ANALYTICS_VERSION = "1.2.0"
 
 _PKG = Path(__file__).resolve().parent
 _MODULES = ("__init__.py", "momentum.py", "vwap.py", "volatility.py",
@@ -119,12 +129,19 @@ CONVENTIONS = {
     "prior_period_extremes": {"recipe": "high/low of the previous COMPLETED period",
                               "causality": "causal", "warmup": "one full period"},
     "resample_ohlcv": {"recipe": "key = open_time // step * step, then "
-                                 "first/max/min/last/sum; the FINAL bucket is "
-                                 "DROPPED unless the source data reaches its end "
-                                 "(Amendment FAN8, 2026-08-02) -- closed buckets "
-                                 "only, so the last row is the last FINISHED "
-                                 "period, not the forming one",
-                       "causality": "causal", "warmup": "0"},
+                                 "first/max/min/last/sum; only buckets PROVED "
+                                 "closed by a bar in a strictly later bucket are "
+                                 "emitted, so the FINAL bucket is always dropped "
+                                 "(Amendment FAN8 2026-08-02, extended by "
+                                 "Amendment 2 §1.2 2026-08-03) -- the last row is "
+                                 "the last FINISHED period, never the forming "
+                                 "one; RAISES UndecidableStepError when the "
+                                 "source spacing cannot be inferred at all",
+                       "causality": "causal", "warmup": "0",
+                       "raises": "UndecidableStepError on undecidable source step",
+                       "precondition": "none -- closure is proved from the data, "
+                                       "not inferred from median spacing, so "
+                                       "safety no longer rests on the caller"},
     # stats
     "zscore": {"recipe": "rolling, population sd", "causality": "causal", "warmup": "length-1"},
     "correlation": {"recipe": "rolling Pearson", "causality": "causal", "warmup": "length-1"},

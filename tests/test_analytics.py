@@ -351,6 +351,279 @@ def test_f_an_13_lag_functions_at_lag():
         assert keep_cut == keep_full, f"pivot lag violation at k={k}"
 
 
+# --------------------------------------------------------------- F-AN-13b
+#
+# Amendment 2 §1.1: the five public functions that were outside the truncation
+# discipline.  Each assertion below is written to FAIL against a deliberately
+# non-causal implementation -- the naive prefix form passes vacuously on all five
+# of these signatures, so it is not used anywhere in this block.
+
+
+def _band_producers():
+    """The two functions that actually produce a (vwap, stdev) pair."""
+    return [("rolling", lambda x: W.rolling_vwap(x["t"], x["src"], x["v"], 7)),
+            ("anchored", lambda x: W.anchored_vwap(x["src"], x["v"], 0))]
+
+
+@pytest.mark.parametrize("pname,produce", _band_producers(),
+                         ids=[n for n, _ in _band_producers()])
+def test_f_an_13b_vw_sigma_bands(pname, produce):
+    """vw_sigma_bands, COMPOSED -- truncating its own arguments is vacuous.
+
+    The function takes already-computed arrays, so `f(vwap[:k], sd[:k])[k-1] ==
+    f(vwap, sd)[k-1]` is satisfied by ANY element-wise map, including one handed a
+    stdev built with look-ahead: passing `sd[-1:]` broadcasts index 299 across all
+    300 positions and still passes that form.  So the raw series is truncated
+    FIRST and the pair recomputed -- the path the level registry consumes.
+    """
+    t, o, h, l, c, v = _series(300)
+    full = {"t": t, "o": o, "h": h, "l": l, "c": c, "v": v, "src": W.hlc3(h, l, c)}
+    pf = produce(full)
+    ref = W.vw_sigma_bands(pf["vwap"], pf["stdev"])
+    assert set(ref) == {f"band_{s}_{k}" for s in ("up", "dn") for k in (1, 2, 3)}
+
+    # EVERY k, not five samples.  A band that borrows the NEXT bar's dispersion
+    # only diverges at the prefix's own last index, so a sparse k list misses it
+    # unless a sample happens to land on the offending residue.
+    for k in range(12, 300):
+        cut = {kk: vv[:k] for kk, vv in full.items()}
+        pc = produce(cut)
+        got = W.vw_sigma_bands(pc["vwap"], pc["stdev"])
+        for key in ref:
+            # shape: vwap.py never checks len(vwap) == len(stdev), and numpy
+            # broadcasts a length-1 operand silently rather than raising.
+            assert len(got[key]) == k, (
+                f"vw_sigma_bands[{key}] via {pname}: returned {len(got[key])}, "
+                f"expected {k} -- a length mismatch was broadcast away")
+            a_, b_ = got[key][k - 1], ref[key][k - 1]
+            assert (np.isnan(a_) and np.isnan(b_)) or a_ == b_, (
+                f"CAUSALITY VIOLATION in vw_sigma_bands[{key}] via {pname} at "
+                f"k={k}: truncated={a_!r} full={b_!r}")
+            # index-locality: banding a prefix IS the prefix of banding.
+            assert same(got[key], ref[key][:k]), (
+                f"vw_sigma_bands[{key}] via {pname} at k={k}: the helper couples "
+                f"indices -- banding a prefix != prefix of banding")
+
+    # ANTI-VACUITY: bands must be finite somewhere, or every assertion above is
+    # NaN == NaN.  (A zero-volume series makes them all NaN and passes silently.)
+    assert np.isfinite(ref["band_up_1"]).sum() > 100
+
+    # DRIFT PIN: the bands that actually ship are duplicated inline at
+    # vwap.py:96-97 and vwap.py:128-129, not routed through this helper.
+    for key in ref:
+        assert same(ref[key], pf[key]), (
+            f"{pname}: inline band arithmetic has drifted from vw_sigma_bands")
+
+
+@pytest.mark.parametrize("pivot_kind", ["high", "low"])
+@pytest.mark.parametrize("kind", ["regular", "hidden"])
+def test_f_an_13b_divergences_at_lag(pivot_kind, kind):
+    """divergences at lag:5, both regular and hidden (Amendment 2 §1.1).
+
+    A plain prefix-vs-full equality here is a TAUTOLOGY: at N=5 the arrays
+    `pivots(px[:k+5])` and `pivots(px)[idx <= k-1]` are bit-identical, so both
+    sides are the same function applied to the same values and the assertion
+    cannot fail.  Measured: it passes against mutants that report agreements as
+    divergences, invert regular/hidden, read the oscillator at the wrong index,
+    pair non-adjacent pivots, and emit a from_index five bars in the future.
+
+    So this asserts STRUCTURAL INVARIANTS of each emitted record instead.
+    """
+    # seed 2, not the file default: on seed 7 only two of the four
+    # (pivot_kind, kind) combinations EVER produce a divergence, at any k, so
+    # half the parametrisation would assert over an empty set.  Seed 2 yields all
+    # four (9 / 20 / 12 / 7 records across the sweep below).
+    t, o, h, l, c, v = _series(300, seed=2)
+    N = S.CONFIRMATION_LAG
+    px = h if pivot_kind == "high" else l
+    osc = M.rsi(c, 14)
+
+    seen = 0
+    for k in range(60, 296, 5):
+        as_of = k - 1
+        p_idx, p_val, p_conf = S.confirmed_pivots(px[:k + N], as_of, 5, 5, pivot_kind)
+        o_idx, o_val, _ = S.confirmed_pivots(osc[:k + N], as_of, 5, 5, pivot_kind)
+        out = M.divergences(p_idx, p_val, o_idx, o_val, pivot_kind, kind=kind)
+
+        omap = dict(zip(o_idx.tolist(), o_val.tolist()))
+        usable = [i for i in p_idx.tolist() if i in omap]
+        adjacent = set(zip(usable[:-1], usable[1:]))
+
+        assert len(out) <= 2, "max_pairs=2 must bound the output"
+        for d in out:
+            i0, i1 = d["from_index"], d["to_index"]
+            # never name a bar at or beyond the decision bar
+            assert i0 <= as_of and i1 <= as_of, (
+                f"divergence names bar {max(i0, i1)} > as_of {as_of}")
+            assert i0 < i1, "from_index must precede to_index"
+            # pivots must be ADJACENT in the usable sequence
+            assert (i0, i1) in adjacent, (
+                f"({i0},{i1}) are not adjacent confirmed pivots")
+            # the oscillator legs must be read at the pivots' own indices
+            assert d["osc_from"] == omap[i0] and d["osc_to"] == omap[i1], \
+                "oscillator read at the wrong index"
+            # it must actually be a DISAGREEMENT
+            assert (d["price_to"] > d["price_from"]) != (d["osc_to"] > d["osc_from"]), \
+                "an agreement was reported as a divergence"
+            # regular/hidden must match the definitional table
+            price_up = d["price_to"] > d["price_from"]
+            expect = ("regular" if not price_up else "hidden") if pivot_kind == "low" \
+                     else ("regular" if price_up else "hidden")
+            assert d["kind"] == expect == kind, "regular/hidden mislabelled"
+            assert d["direction"] == ("bullish" if pivot_kind == "low" else "bearish")
+            assert d["price_level"] == d["price_to"], "price_level must be the LATER pivot"
+            seen += 1
+
+        # truncation at lag: recomputing from the full series, filtered to the
+        # same decision bar, must reproduce the record set exactly.
+        fp_i, fp_v, _ = S.confirmed_pivots(px, as_of, 5, 5, pivot_kind)
+        fo_i, fo_v, _ = S.confirmed_pivots(osc, as_of, 5, 5, pivot_kind)
+        assert M.divergences(fp_i, fp_v, fo_i, fo_v, pivot_kind, kind=kind) == out
+
+    assert seen > 0, "compared nothing -- the invariants would be vacuous"
+
+
+def test_f_an_13b_naked_poc_registry_set_stability():
+    """naked_poc_registry -- SET-MEMBERSHIP STABILITY (Amendment 2 §1.1).
+
+    Hand-built geometry, because a random series does not discriminate: against
+    _series(300) at k in (40,60,120,200,299) a registry that reads one bar PAST
+    the decision bar is caught on 0% of seeds, and five bars past on 0%.  The
+    minimal series below separates them exactly.
+    """
+    # level 5.0 is untouched at bars 1-2 and touched at bar 3.
+    hi = np.array([10., 10., 10., 10.])
+    lo = np.array([0., 9., 9., 0.])
+    pocs = [(0, 5.0)]
+
+    at2 = P.naked_poc_registry(pocs, hi, lo, as_of_index=2)
+    at3 = P.naked_poc_registry(pocs, hi, lo, as_of_index=3)
+    assert [d["level"] for d in at2] == [5.0], \
+        "level 5.0 is untested through bar 2 and must be in the registry"
+    assert at3 == [], \
+        "bar 3 straddles 5.0, so the level is tested and must LEAVE the registry"
+    # a registry reading as_of_index+1 would return [] at as_of 2 -- caught above.
+
+    # the as-of guard must drop POCs stamped after the decision bar
+    future = P.naked_poc_registry([(3, 5.0)], hi, lo, as_of_index=1)
+    assert future == [], "a POC stamped at bar 3 must not appear as-of bar 1"
+
+    # truncation: slicing the arrays to the decision bar changes nothing
+    # Two POC families on purpose: levels well above the traded range stay naked
+    # (so the comparison is never empty), while levels drawn from the close are
+    # revisited (so the touched-and-removed path is exercised too).  Levels at
+    # h[i] alone are almost always touched within a few bars, which empties the
+    # registry and makes the sweep vacuous.
+    t, o, h, l, c, v = _series(300)
+    every = ([(i, float(h[i]) + 2000.0) for i in range(10, 200, 17)]
+             + [(i, float(c[i])) for i in range(10, 200, 17)])
+    compared = 0
+    for k in (40, 60, 120, 200, 299):
+        cut = P.naked_poc_registry(every, h[:k], l[:k], as_of_index=k - 1)
+        ful = P.naked_poc_registry(every, h, l, as_of_index=k - 1)
+        key = lambda r: sorted((d["index"], d["level"]) for d in r)
+        assert key(cut) == key(ful), (
+            f"registry differs between truncated and full input at k={k} -- "
+            f"the function reads beyond the decision bar")
+        assert cut, f"registry empty at k={k} -- the comparison would be vacuous"
+        compared += len(cut)
+    assert compared > 0
+
+
+@pytest.mark.parametrize("left,right", [(5, 5), (3, 7), (7, 3)])
+@pytest.mark.parametrize("kind", ["high", "low"])
+def test_f_an_13b_confirmed_pivots(left, right, kind):
+    """confirmed_pivots -- set stability AND no confirmation from partial windows.
+
+    Equality alone is not enough: it passes against a mutant that admits a pivot
+    `right` bars before its window closes, because the prefix physically cannot
+    detect index k-1 and only the FULL-array reference leaks.  The two extra
+    invariants below bound the reference too.
+    """
+    t, o, h, l, c, v = _series(300)
+    vals = h if kind == "high" else l
+    total = 0
+    for k in (40, 60, 120, 200, 299):
+        as_of = k - 1
+        ci, cl, cc = S.confirmed_pivots(vals[:k], as_of, left, right, kind)
+        fi, fl, fc = S.confirmed_pivots(vals, as_of, left, right, kind)
+        assert list(ci) == list(fi) and same(cl, fl) and list(cc) == list(fc), (
+            f"confirmed_pivots differs truncated vs full at k={k} "
+            f"({left},{right},{kind})")
+
+        for i, lv, cf in zip(fi, fl, fc):
+            # never confirm using a bar at or after the decision bar
+            assert cf <= as_of, f"pivot {i} confirmed at {cf} > as_of {as_of}"
+            assert cf == i + right, "confirmation lag must be exactly `right`"
+            # the pivot must be a strict extreme of its FULL window, measured on
+            # the full array -- this is what catches confirmation from a window
+            # that was truncated at the array end.
+            w = vals[i - left:i + right + 1]
+            assert len(w) == left + right + 1, "window must be complete"
+            best = np.max(w) if kind == "high" else np.min(w)
+            assert lv == best and np.sum(w == lv) == 1, (
+                f"pivot {i} is not the unique strict extreme of its window -- "
+                f"it was confirmed on partial evidence")
+        total += len(fi)
+    assert total > 0, "found no pivots -- the assertions would be vacuous"
+
+    # AS-OF AT AND BEYOND THE ARRAY END.  `as_of_index` is an unvalidated free
+    # parameter, and the two mutations that matter here are invisible at
+    # as_of = n-1: `range(left, n)` (confirm from a window the array cannot fill)
+    # and `keep = (conf <= as_of) | (idx == as_of)` (admit before the window
+    # closes) both only bite once as_of reaches the end.  Measured: without this
+    # block both survive the fixture.
+    n = 300
+    for as_of in (n - right - 1, n - 2, n - 1, n, n + right):
+        ai, al, ac = S.confirmed_pivots(vals, as_of, left, right, kind)
+        for i, lv, cf in zip(ai, al, ac):
+            assert cf <= as_of, f"pivot {i} confirmed at {cf} > as_of {as_of}"
+            assert i + right + 1 <= n, (
+                f"pivot {i} confirmed from a window running past the array end "
+                f"(as_of={as_of}) -- confirmation on partial evidence")
+            w = vals[i - left:i + right + 1]
+            assert len(w) == left + right + 1
+            best = np.max(w) if kind == "high" else np.min(w)
+            assert lv == best and np.sum(w == lv) == 1
+
+    # a pivot may never be confirmed by a bar that does not exist yet
+    dense = 0
+    for as_of in range(50, n, 3):
+        di, _, dc = S.confirmed_pivots(vals, as_of, left, right, kind)
+        assert all(cf <= as_of for cf in dc), \
+            f"confirmation leaked past as_of={as_of}"
+        assert all(i + right <= as_of for i in di), \
+            f"a pivot was admitted before its window closed at as_of={as_of}"
+        dense += len(di)
+    assert dense > 0, "dense sweep found no pivots -- it would be vacuous"
+
+
+def test_f_an_13b_resample_ohlcv_bucket_prefix():
+    """resample_ohlcv -- prefix rule on the BUCKET axis.
+
+    The naive form does not apply: the return is re-keyed onto buckets, so index
+    k-1 is bucket k-1, not bar k-1.  The correct statement is that growing the
+    input only APPENDS buckets -- it never revises or removes one already
+    emitted.  test_f_an_14d asserts the same property on the input that used to
+    break it; this one asserts it on the ordinary grid.
+    """
+    t, o, h, l, c, v = _series(500)
+    compared = 0
+    for step in (1_800_000, 86_400_000):
+        full = S.resample_ohlcv(t, o, h, l, c, v, step)
+        for k in (100, 200, 300, 400, 500):
+            cut = S.resample_ohlcv(t[:k], o[:k], h[:k], l[:k], c[:k], v[:k], step)
+            n = len(cut["open_time"])
+            assert n <= len(full["open_time"])
+            for col in ("open_time", "open", "high", "low", "close", "volume"):
+                assert same(np.asarray(cut[col], float),
+                            np.asarray(full[col][:n], float)), (
+                    f"{col}: bucket set at k={k} is not a prefix of the full run "
+                    f"at step {step} -- a published bucket was revised")
+            compared += n
+    assert compared > 0, "compared no buckets -- the guard would be vacuous"
+
+
 # --------------------------------------------------------------- F-AN-14
 
 def test_f_an_14_resample_parity():
@@ -397,18 +670,31 @@ def test_f_an_14b_public_is_legacy_minus_unclosed():
                         np.asarray(legacy[col][:n], float)), \
                 f"{col}: public is not a prefix of legacy at step {step}"
 
-    # 30m from hourly bars: every bucket holds one bar and is closed by it.
+    # AMENDMENT 2 §1.2 EXTENDED: the public form now emits only buckets PROVED
+    # closed by a bar in a strictly later bucket, so it is legacy minus exactly
+    # one bucket at EVERY step -- including 30m, where the old median-reach rule
+    # kept the final bucket because one hourly bar filled it.
     assert len(S.resample_ohlcv(t, o, h, l, c, v, 1_800_000)["open_time"]) == \
-        len(S._resample_ohlcv_legacy(t, o, h, l, c, v, 1_800_000)["open_time"])
+        len(S._resample_ohlcv_legacy(t, o, h, l, c, v, 1_800_000)["open_time"]) - 1
 
     # 500 hourly bars = 20 days + 20 hours: the final day is NOT closed.
     d_pub = S.resample_ohlcv(t, o, h, l, c, v, 86_400_000)["open_time"]
     d_leg = S._resample_ohlcv_legacy(t, o, h, l, c, v, 86_400_000)["open_time"]
     assert len(d_pub) == len(d_leg) - 1, "the forming day must be dropped"
 
-    # A day that IS complete must survive.  _series starts at 1_600_000_000_000,
-    # which is 12:26:40 UTC -- NOT a day boundary -- so a plain prefix of it can
-    # never end on one. Build a day-aligned span instead of assuming.
+    # A day that LOOKS fully populated is dropped too, and that is the point.
+    # _series starts at 1_600_000_000_000 = 12:26:40 UTC -- NOT a day boundary --
+    # so a plain prefix can never end on one. Build a day-aligned span.
+    #
+    # This assertion INVERTED under Amendment 2 §1.2 as extended.  It previously
+    # read "a fully-populated final bucket must NOT be dropped".  Finding F-1R-A
+    # showed that "fully populated" is not decidable from the data: a sparse
+    # 2h-spaced day is byte-for-byte indistinguishable from a complete one, and
+    # trusting the appearance is what published-then-revised a bucket.  Closure
+    # is now proved by a witness bar in a later bucket, which the final bucket
+    # can never have.  Measured cost on the estate: zero -- 1h->4h and 1h->1d on
+    # all ten assets give identical bucket counts, because live data always
+    # carries a forming final bucket that both rules drop.
     n = 48
     t2 = (np.arange(n, dtype="int64") * 3_600_000) + (1_600_000_000_000 // DAY_MS) * DAY_MS
     ones = np.ones(n)
@@ -416,16 +702,89 @@ def test_f_an_14b_public_is_legacy_minus_unclosed():
         "the aligned fixture must start and end exactly on a day boundary"
     pub2 = S.resample_ohlcv(t2, ones, ones, ones, ones, ones, DAY_MS)["open_time"]
     leg2 = S._resample_ohlcv_legacy(t2, ones, ones, ones, ones, ones, DAY_MS)["open_time"]
-    assert len(pub2) == len(leg2) == 2, \
-        "a fully-populated final bucket must NOT be dropped"
+    assert len(leg2) == 2, "legacy must still keep the aligned final bucket"
+    assert len(pub2) == 1, \
+        "closure must be PROVED by a later bar, never inferred from appearance"
 
 
-def test_f_an_14c_undecidable_closure_keeps_the_bucket():
-    """With fewer than two bars the spacing is unknowable -- never guess."""
-    t = np.array([1_600_000_000_000], dtype="int64")
+def test_f_an_14c_prime_undecidable_step_raises():
+    """F-AN-14c' -- Amendment 2 §1.2: refuse, do not keep.
+
+    Replaces test_f_an_14c_undecidable_closure_keeps_the_bucket, which asserted
+    the pre-amendment behaviour: a single 1h bar handed to a 1d resample returned
+    a "day" holding 1/24 of a day.  The ruling is that a function whose safety
+    depends on how it is called is the hazard F-AN-13 exists to abolish.
+    """
     one = np.array([1.0])
-    got = S.resample_ohlcv(t, one, one, one, one, one, 86_400_000)
-    assert len(got["open_time"]) == 1, "undecidable closure must keep the bucket"
+
+    # fewer than two timestamps -- spacing unknowable
+    t1 = np.array([1_600_000_000_000], dtype="int64")
+    with pytest.raises(S.UndecidableStepError):
+        S.resample_ohlcv(t1, one, one, one, one, one, 86_400_000)
+
+    # all-identical stamps -- infer_step_ms finds no positive gap
+    t2 = np.array([1_600_000_000_000] * 4, dtype="int64")
+    four = np.ones(4)
+    with pytest.raises(S.UndecidableStepError):
+        S.resample_ohlcv(t2, four, four, four, four, four, 86_400_000)
+
+    # it is a ValueError subclass, so existing handlers keep working
+    assert issubclass(S.UndecidableStepError, ValueError)
+
+    # the escape hatch is NOT poisoned: legacy mode still reproduces v1.1, which
+    # is what lets F-AN-8b prove the dropped bar is the only difference.
+    leg = S._resample_ohlcv_legacy(t1, one, one, one, one, one, 86_400_000)
+    assert len(leg["open_time"]) == 1
+
+    # ANTI-VACUITY: a decidable step must NOT raise, or the test above would pass
+    # against a function that raises unconditionally.
+    t3 = np.arange(48, dtype="int64") * 3_600_000 + 1_600_000_000_000
+    ok = np.ones(48)
+    S.resample_ohlcv(t3, ok, ok, ok, ok, ok, 86_400_000)
+
+
+def test_f_an_14d_published_bucket_is_never_revised():
+    """FINDING F-1R-A, closed: a published bucket must never later change.
+
+    The regression guard for the defect Amendment 2 §1.2 was extended to cover.
+    The old rule inferred the final bar's reach from the MEDIAN spacing and
+    published the bucket when that reach met the boundary; on a sparse-then-dense
+    feed the median was decidable but wrong, so the §1.2 raise never fired and
+    the bucket was published and then revised.
+
+    Both inputs below are well-formed: strictly monotonic, duplicate-free, every
+    stamp on the hour.  Neither triggers UndecidableStepError.
+    """
+    HOUR, DAY = 3_600_000, 86_400_000
+    DAY0 = (1_600_000_000_000 // DAY) * DAY
+
+    def published(t, vol):
+        n = len(t)
+        a = np.arange(1, n + 1, dtype=float)
+        return S.resample_ohlcv(t, a, a, a, a, np.asarray(vol, float), DAY)
+
+    # sparse first day (2h apparent spacing), then the feed densifies to 1h
+    hours = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22] + list(range(23, 48))
+    t = np.array(hours, dtype="int64") * HOUR + DAY0
+    vol = [10.0] * len(t)
+    assert np.all(np.diff(t) > 0), "the fixture input must be strictly monotonic"
+    assert S.infer_step_ms(t[:12]) is not None, \
+        "the fixture must exercise the DECIDABLE branch, not the §1.2 raise"
+
+    for k in range(2, len(t) + 1):
+        cut = published(t[:k], vol[:k])
+        full = published(t, vol)
+        full_by_key = dict(zip(full["open_time"].tolist(), full["volume"].tolist()))
+        for key, v_ in zip(cut["open_time"].tolist(), cut["volume"].tolist()):
+            assert key in full_by_key, (
+                f"bucket {key} published at k={k} vanishes from the full run")
+            assert v_ == full_by_key[key], (
+                f"REVISION: bucket {key} published at k={k} with volume {v_}, "
+                f"but the full run reports {full_by_key[key]} -- a bucket that "
+                f"was published later changed")
+
+    # ANTI-VACUITY: the sweep must actually have published something.
+    assert len(published(t, vol)["open_time"]) >= 1
 
 
 # --------------------------------------------------------------- F-AN-8

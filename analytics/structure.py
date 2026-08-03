@@ -11,9 +11,26 @@ import numpy as np
 
 __all__ = ["CONFIRMATION_LAG", "pivots", "confirmed_pivots",
            "period_opens", "prior_period_extremes", "resample_ohlcv",
-           "infer_step_ms"]
+           "infer_step_ms", "UndecidableStepError"]
 
 CONFIRMATION_LAG = 5
+
+
+class UndecidableStepError(ValueError):
+    """Raised when the source bar spacing cannot be inferred.
+
+    AMENDMENT 2 §1.2 (operator-ratified 2026-08-03).  `infer_step_ms` returns
+    None on fewer than two timestamps or on all-identical stamps.  The old
+    behaviour KEPT the bucket in that case, so a single 1h bar handed to a 1d
+    resample returned a "day" holding 1/24 of a day.
+
+    The ruling is REFUSE, DO NOT GUESS: this amendment's founding lesson is that
+    a forming bucket must never reach a published number, and under uncertainty
+    the safe default is to refuse rather than to guess.  A function whose safety
+    depends on how it is called is the hazard class F-AN-13 exists to abolish.
+
+    Subclasses ValueError so existing `except ValueError` callers keep working.
+    """
 
 
 def infer_step_ms(open_time_ms):
@@ -33,16 +50,41 @@ def infer_step_ms(open_time_ms):
     return int(np.median(d))
 
 
-def _bucket_is_closed(last_key, step_ms, last_open_time, src_step_ms):
-    """Does the source data reach the end of the bucket beginning at last_key?
+def _provably_closed_count(bucket_keys):
+    """How many leading buckets are PROVED closed by the data itself.
 
-    A bucket is CLOSED when the bar that completes it is present.  The last
-    source bar covers [last_open_time, last_open_time + src_step_ms), so the
-    bucket is closed exactly when that reach lands on or past its end.
+    AMENDMENT 2 §1.2 EXTENDED (operator-ratified 2026-08-03, finding F-1R-A).
+
+    The previous rule inferred the last bar's reach from `infer_step_ms`, the
+    MEDIAN positive spacing, and published the final bucket when that reach
+    landed on or past the bucket's end.  That rule PUBLISHED A BUCKET AND THEN
+    REVISED IT whenever the median was decidable but unrepresentative -- so the
+    §1.2 raise, which only fires on an UNDECIDABLE step, never saw it.  Measured
+    on live code, sparse-then-dense hourly input (monotonic, duplicate-free, all
+    stamps on the hour):
+
+        infer_step_ms(t[:12]) = 7_200_000   -- not None, so no raise
+        k=12 published bucket 1599955200000  volume=120.0  close=12.0
+        full run,  same bucket               volume=130.0  close=13.0
+
+    No prefix-local heuristic can close this door.  At k=12 the prefix is
+    informationally IDENTICAL to a complete 2h-bar day: spacing is uniform, the
+    bucket is fully tiled, the bar count is exactly right.  Median, minimum,
+    uniformity and tiling tests all pass on it.  The distinction simply is not
+    present in the data.
+
+    So closure is proved by one thing only: A BAR EXISTS IN A STRICTLY LATER
+    BUCKET.  Buckets [0..m-1] have that witness; the final bucket never can.
+    The final bucket is therefore dropped unconditionally -- not guessed at.
+
+    Cost, measured over the whole estate before adopting this: 1h->4h and 1h->1d
+    across all ten assets, 20 combinations, IDENTICAL bucket counts to the old
+    rule.  Live data always carries a forming final bucket, which both rules
+    drop, so no published number moves.  The rule differs only where a series
+    ends exactly on a period boundary -- and there the old rule was guessing.
     """
-    if src_step_ms is None:
-        return None                      # undecidable -- never guess
-    return (int(last_open_time) + int(src_step_ms)) >= (int(last_key) + int(step_ms))
+    n = len(bucket_keys)
+    return max(n - 1, 0)
 
 
 def resample_ohlcv(open_time_ms, open_, high, low, close, volume, step_ms,
@@ -74,8 +116,22 @@ def resample_ohlcv(open_time_ms, open_, high, low, close, volume, step_ms,
     still assert the aggregation convention itself is untouched.  It is not part
     of the public contract -- see `_resample_ohlcv_legacy`.
 
-    When the source spacing cannot be inferred (fewer than two bars), closure is
-    undecidable and nothing is dropped: guessing would be worse than keeping.
+    AMENDMENT 2 §1.2, AS EXTENDED (operator-ratified 2026-08-03).  Two changes,
+    both in the direction of refusing rather than guessing:
+
+    1.  RAISES `UndecidableStepError` when the source spacing cannot be inferred
+        at all (fewer than two timestamps, or all-identical stamps).  Previously
+        the bucket was KEPT, and a single 1h bar handed to a 1d resample returned
+        a "day" holding 1/24 of a day.
+
+    2.  Emits only buckets PROVED closed by a bar in a strictly later bucket, so
+        the final bucket is always dropped.  See `_provably_closed_count` for the
+        finding this closes: the old median-reach rule published a bucket and
+        then revised it whenever the median was decidable but unrepresentative,
+        which the §1.2 raise never caught.
+
+    Both apply to the public path only; `drop_unclosed=False` is unaffected, so
+    F-AN-8b still reproduces the v1.1 numbers exactly.
     """
     # WHY PANDAS HERE, in an otherwise numpy-pure package: F-AN-14 requires
     # BYTE-IDENTICAL agreement with scripts/s1_resample.aggregate(), which is a
@@ -105,13 +161,22 @@ def resample_ohlcv(open_time_ms, open_, high, low, close, volume, step_ms,
         "volume": g["volume"].sum().to_numpy(float),
     }
 
-    if not drop_unclosed or out["open_time"].size == 0 or t.size == 0:
+    if not drop_unclosed:
         return out
-    closed = _bucket_is_closed(out["open_time"][-1], step_ms, t[-1],
-                               infer_step_ms(t))
-    if closed is False:
-        out = {k: v[:-1] for k, v in out.items()}
-    return out
+
+    # §1.2: refuse a source whose spacing cannot be inferred at all.  Checked
+    # BEFORE the empty-output shortcut so a degenerate input is rejected rather
+    # than silently returning nothing.
+    if t.size and infer_step_ms(t) is None:
+        raise UndecidableStepError(
+            f"cannot infer source bar spacing from {t.size} timestamp(s) "
+            f"(fewer than 2 distinct, or all identical); refusing to guess "
+            f"whether the {int(step_ms)}ms bucket is closed")
+
+    if out["open_time"].size == 0 or t.size == 0:
+        return out
+    keep = _provably_closed_count(out["open_time"])
+    return {k: v[:keep] for k, v in out.items()}
 
 
 def _resample_ohlcv_legacy(open_time_ms, open_, high, low, close, volume, step_ms):
