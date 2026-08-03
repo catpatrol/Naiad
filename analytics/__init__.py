@@ -38,7 +38,15 @@ from pathlib import Path
 # change (a series ending exactly on a period boundary now drops that period),
 # and I-F is about identifying the recipe, not about whether today's data happens
 # to exercise the difference.
-ANALYTICS_VERSION = "1.2.0"
+# 1.3.0 -- FINDING F-2R-A (2026-08-03).  `stoch_rsi` returned ALL NaN on every
+# input: `sma` is cumsum-based, so the NaN prefix of the raw stochastic poisoned
+# every later value.  StochRSI -- one of the four oscillators §6.1 commissions --
+# had never produced a number, and 100% of its values in the 2026-08-03 capture
+# were null.  F-AN-13 passed it because an all-NaN series satisfies the
+# NaN-equals-NaN branch at every truncation point; F-AN-6b now asserts each
+# series function is FINITE after warm-up, which is the property F-AN-13
+# silently assumed.  Returned NUMBERS change, so I-F requires the bump.
+ANALYTICS_VERSION = "1.3.0"
 
 # --------------------------------------------------------------------------
 # THE SEALED LOCKBOX -- disclosure, not enforcement.

@@ -80,9 +80,48 @@ def rsi(close, length=14):
     return out
 
 
+def _sma_after_warmup(x, length):
+    """SMA applied from the first finite value onward.
+
+    FINDING F-2R-A (2026-08-03).  `sma` is cumsum-based, so a SINGLE leading NaN
+    poisons every later value.  `stoch_rsi`'s raw stochastic always has a NaN
+    prefix (RSI's own warm-up plus the stochastic window), so `sma(raw, k)`
+    returned ALL NaN -- and therefore StochRSI never produced a number, on any
+    input, ever.  Measured before the fix: 100% of stoch_rsi values in the
+    2026-08-03 capture were null, across all ten assets and all five timeframes.
+
+    F-AN-13 did not catch it because the truncation assertion compares
+    `got[k-1] == ref[k-1]` with a NaN-equals-NaN branch, and an all-NaN series
+    satisfies that at every k.  A fixture that cannot fail is not a guard, which
+    is why F-AN-6b now asserts the output is FINITE after warm-up.
+
+    Fixed HERE rather than in `sma` deliberately: making `sma` NaN-tolerant would
+    change every other consumer, including `awesome_oscillator`, whose input has
+    no NaNs and whose published numbers must not move.
+
+    Interior NaNs are NOT papered over.  A gap inside the finite region is a real
+    discontinuity, and smoothing across it would invent data; the result stays
+    NaN and the caller sees the gap.
+    """
+    x = _arr(x)
+    out = np.full(x.shape, np.nan)
+    fin = np.isfinite(x)
+    if not fin.any():
+        return out
+    first = int(np.argmax(fin))
+    seg = x[first:]
+    if np.isnan(seg).any():
+        return out
+    out[first:] = sma(seg, length)
+    return out
+
+
 def stoch_rsi(close, rsi_length=14, stoch_length=14, k=3, d=3):
     """StochRSI: RSI(14) -> stochastic(14) -> %K smoothed 3 -> %D smoothed 3.
-    Returns (k_line, d_line), both 0-100."""
+
+    Returns (k_line, d_line), both 0-100.  Warm-up is
+    rsi_length + stoch_length + k + d - 3 for %D, exactly as CONVENTIONS records.
+    """
     r = rsi(close, rsi_length)
     n = len(r)
     raw = np.full(n, np.nan)
@@ -95,7 +134,9 @@ def stoch_rsi(close, rsi_length=14, stoch_length=14, k=3, d=3):
             continue
         lo, hi = float(np.min(w)), float(np.max(w))
         raw[i] = 50.0 if hi == lo else 100.0 * (r[i] - lo) / (hi - lo)
-    return sma(raw, k), sma(sma(raw, k), d)
+    k_line = _sma_after_warmup(raw, k)
+    d_line = _sma_after_warmup(k_line, d)
+    return k_line, d_line
 
 
 def macd(close, fast=12, slow=26, signal=9):

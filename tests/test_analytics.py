@@ -193,6 +193,53 @@ def test_f_an_6_warmup_lengths():
         assert np.isfinite(arr[warm]), "must be finite immediately after warm-up"
 
 
+def test_f_an_6b_every_series_function_is_finite_after_warmup():
+    """FINDING F-2R-A: an all-NaN series satisfies F-AN-13 at every k.
+
+    `stoch_rsi` returned all-NaN on every input -- `sma` is cumsum-based, so the
+    NaN prefix of the raw stochastic poisoned everything after it -- and the
+    truncation fixture passed it via its NaN-equals-NaN branch.  A guard that
+    cannot fail is not a guard.  This asserts each series function actually
+    PRODUCES numbers, which is the property F-AN-13 silently assumed.
+    """
+    t, o, h, l, c, v = _series(300)
+    src = W.hlc3(h, l, c)
+    series = {
+        "sma": M.sma(c, 20), "ema": M.ema(c, 21), "rma": M.rma(c, 14),
+        "rsi": M.rsi(c, 14),
+        "stoch_rsi_k": M.stoch_rsi(c)[0], "stoch_rsi_d": M.stoch_rsi(c)[1],
+        "macd_line": M.macd(c)[0], "macd_signal": M.macd(c)[1],
+        "macd_hist": M.macd(c)[2],
+        "awesome_oscillator": M.awesome_oscillator(h, l),
+        "true_range": V.true_range(h, l, c), "atr": V.atr(h, l, c, 14),
+        "realised_vol": V.realised_vol(c)[2],
+        "rolling_vwap": W.rolling_vwap(t, src, v, 7)["vwap"],
+        "rolling_vwap_sd": W.rolling_vwap(t, src, v, 7)["stdev"],
+        "anchored_vwap": W.anchored_vwap(src, v, 0)["vwap"],
+        "zscore": ST.zscore(c, 20), "correlation": ST.correlation(c, h, 20),
+        "beta": ST.beta(np.diff(c, prepend=c[0]), np.diff(h, prepend=h[0]), 20),
+        "period_opens": S.period_opens(t, o, "D")[1],
+        "prior_period_extremes_h": S.prior_period_extremes(t, h, l, "D")[0],
+    }
+    for name, arr in series.items():
+        arr = np.asarray(arr, dtype=float)
+        n_fin = int(np.isfinite(arr).sum())
+        assert n_fin > 0, (
+            f"{name} is ALL NaN -- it produces no number on any input, and "
+            f"F-AN-13's NaN-equals-NaN branch would pass it at every k")
+        assert n_fin >= len(arr) // 2, (
+            f"{name}: only {n_fin}/{len(arr)} finite -- a warm-up that consumes "
+            f"more than half the series is a defect, not a warm-up")
+        assert np.isfinite(arr[-1]), f"{name} is NaN at the decision bar"
+
+    # StochRSI specifically: warm-up is exactly what CONVENTIONS records.
+    d = np.asarray(series["stoch_rsi_d"], float)
+    warm = 14 + 14 + 3 + 3 - 3
+    assert np.isnan(d[:warm]).all() and np.isfinite(d[warm]), \
+        "stoch_rsi %D warm-up must be rsi+stoch+k+d-3 = 31"
+    assert 0.0 <= np.nanmin(d) and np.nanmax(d) <= 100.0, "StochRSI must be 0-100"
+
+
 # --------------------------------------------------------------- F-AN-7
 
 def test_f_an_7_edge_cases():

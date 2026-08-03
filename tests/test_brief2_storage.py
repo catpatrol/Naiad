@@ -66,9 +66,20 @@ def test_f_b9_envelope_carries_every_required_field():
                 "rules", "universe", "parity_certified"):
         assert key in doc, f"capture is missing {key}"
     assert doc["rules_version"] == "2.0.0"
-    assert doc["analytics_version"] == analytics.ANALYTICS_VERSION
     assert len(doc["analytics_sha"]) == 64
     assert doc["rules_sha256"] == B2.canonical_rules_sha256(doc["rules"])
+
+    # An ARCHIVED capture records the analytics version it was BUILT under, which
+    # legitimately predates a later bump -- that is the whole point of stamping
+    # it. Asserting equality with the CURRENT version would make every honest
+    # defect fix fail the suite and would quietly punish bumping at all.
+    import re as _re
+    assert _re.fullmatch(r"\d+\.\d+\.\d+", doc["analytics_version"]), \
+        f"analytics_version {doc['analytics_version']!r} is not semver"
+    if doc["analytics_version"] == analytics.ANALYTICS_VERSION:
+        assert doc["analytics_sha"] == analytics.analytics_sha(), \
+            "same analytics_version but a different sha -- the version did not " \
+            "move when the sources did, so two different recipes share a label"
 
     # every input's last_bar_utc, per asset
     for sym, a in doc["assets"].items():
@@ -369,27 +380,65 @@ def test_f_b24_slot_isolation(tmp_path):
 
 # --------------------------------------------------------------- LIT marking
 
-def test_lit_known_wrong_marks_only_percentile_rank_and_bar_count():
-    """v4 §II.11 carried forward. Precision is the point: marking a LEVEL would
-    train the reader to ignore markers."""
-    for kind in ("percentile", "rank", "bar_count"):
-        assert BC.lit_known_wrong("LITUSDT", kind) is True
-    for kind in ("level", "volume_weighted", "poc", "vwap"):
+def test_lit_marking_is_withdrawn_on_evidence():
+    """A.4, 2026-08-03. The marking existed for the two-token trap; the estate
+    audit shows the floor is respected and the data is clean, so LIT's numbers
+    are CORRECT, merely computed over a short sample. Marking correct data as
+    known-wrong trains the reader to ignore markers."""
+    for kind in ("percentile", "rank", "bar_count", "level", "volume_weighted"):
         assert BC.lit_known_wrong("LITUSDT", kind) is False, \
-            f"{kind} must NOT be marked known-wrong"
-    for kind in ("percentile", "rank", "level"):
+            f"{kind} must no longer be marked known-wrong for LIT"
         assert BC.lit_known_wrong("BTCUSDT", kind) is False
 
+    w = BC.LIT_MARKING_WITHDRAWN
+    assert w["withdrawn"] == "2026-08-03"
+    assert "warming chip (F-B30)" in w["short_history_disclosed_by"], \
+        "withdrawing the marking is only honest if the SHORTNESS is still disclosed"
 
-def test_lit_capture_carries_the_marker_scope():
+
+def test_lit_estate_is_clean_which_is_what_justifies_the_withdrawal():
+    """The withdrawal rests on evidence, so the evidence is re-checked here.
+
+    If LIT is ever re-backfilled with padding, or the floor moves, this fails and
+    the withdrawal must be revisited.
+    """
+    import numpy as np
+    import pandas as pd
+    from engine.cells import LIT_FLOOR_MS
+    from engine.data import cache_dir
+
+    p = cache_dir() / "klines" / "LITUSDT_1m.parquet"
+    if not p.exists():
+        pytest.skip("LITUSDT 1m not in the estate")
+    df = pd.read_parquet(p)
+    t = df["open_time"].to_numpy().astype("int64")
+
+    assert int(t[0]) >= LIT_FLOOR_MS, \
+        "LIT data starts before the two-token floor -- Litentry contamination"
+    assert df["open_time"].nunique() == len(df), "duplicate timestamps"
+    assert int((np.diff(t) <= 0).sum()) == 0, "non-monotonic timestamps"
+    expected = (int(t[-1]) - int(t[0])) // 60_000 + 1
+    assert len(df) == expected, f"gaps present: {len(df)} of {expected} minutes"
+
+    # zero-volume bars must look like no-trade minutes, not synthetic padding
+    zf = df[(df["volume"] <= 0) & (df["open"] == df["high"])
+            & (df["high"] == df["low"]) & (df["low"] == df["close"])]
+    assert len(zf) / len(df) < 0.01, "too many flat zero-volume bars to be no-trade"
+    if len(zf):
+        idx = df.index[(df["volume"] <= 0)].to_numpy()
+        assert not (idx[0] < 50 and len(idx) > 1 and (np.diff(idx) == 1).all()), \
+            "flat zero-volume bars form a contiguous block at the start -- padding"
+
+
+def test_lit_capture_records_the_withdrawal_not_a_marker():
     _, doc = _one()
     lit = doc["assets"].get("LITUSDT")
     if lit is None:
         pytest.skip("LITUSDT not in this capture")
-    kw = lit.get("known_wrong")
-    assert kw, "LITUSDT capture carries no known-wrong scope"
-    assert set(kw["applies_to"]) == {"percentile", "rank", "bar_count"}
-    assert "level" in kw["not_marked"]
+    if "known_wrong_withdrawn" not in lit:
+        pytest.skip("capture predates the A.4 withdrawal")
+    assert "known_wrong" not in lit, "the withdrawn marker must not still be written"
+    assert lit["known_wrong_withdrawn"]["withdrawn"] == "2026-08-03"
 
 
 def test_lit_365d_window_is_warming_in_the_real_capture():

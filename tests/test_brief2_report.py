@@ -223,10 +223,15 @@ def test_f_b33_banner_clears_only_when_the_flag_is_set():
 def test_f_b33_rules_version_is_2_0_0():
     """§8.1 ratified A-6: the closed-bar correction plus the volume filter move
     published numbers, and archive-comparability law requires a major bump."""
+    import analytics
     doc = B2.capture_envelope("2026-08-03", "london")
     assert doc["rules_version"] == "2.0.0"
     assert doc["slot"] == "london"
-    assert doc["analytics_version"] == "1.2.0"
+    # Read from the package, never pinned to a literal: analytics is versioned
+    # independently of rules_version, and a defect fix that moves a number is
+    # REQUIRED to bump it (I-F). A hardcoded literal here turns every honest
+    # bump into a spurious failure.
+    assert doc["analytics_version"] == analytics.ANALYTICS_VERSION
     assert len(doc["analytics_sha"]) == 64
 
 

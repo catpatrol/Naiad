@@ -40,12 +40,41 @@ BRIEFS_DIR = ROOT / "briefs"
 INDEX_PATH = BRIEFS_DIR / "index.jsonl"
 DAY_MS = 86_400_000
 
-# v4 §II.11, carried forward.  LIT's usable history begins 2025-12-01 (the
-# two-token trap: earlier LITUSDT history is Litentry, a different asset).  A
-# quantity whose value depends on HOW MUCH history exists is therefore
-# known-wrong for LIT and is marked; a quantity that is a PRICE is not.
-LIT_KNOWN_WRONG_KINDS = ("percentile", "rank", "bar_count")
-LIT_NOT_MARKED = ("level", "volume_weighted")
+# v4 §II.11's LIT known-wrong marking is WITHDRAWN as of 2026-08-03, on evidence.
+#
+# The marking existed for the two-token trap: earlier LITUSDT history is
+# Litentry, a different asset, so quantities depending on HOW MUCH history exists
+# were treated as known-wrong.  Audited directly against the estate (stage A.4):
+#
+#   LIT_FLOOR_MS      2025-12-23T00:00Z   data starts 2025-12-23T17:30Z -- AFTER
+#   rows              319,925 of 319,925 expected   100.00% minute coverage
+#   gaps > 1 bar      0        duplicates 0        non-monotonic 0
+#   zero-volume bars  14 (0.004%), scattered from 14.7% through the series,
+#                     all 14 with O=H=L=C equal to the PREVIOUS close and
+#                     13 distinct prices between them
+#
+# Those 14 bars are the exchange reporting a minute in which no trades occurred,
+# which is genuine data.  Synthetic padding would be a contiguous block at the
+# start repeating a single value; it is neither.  The floor is respected, so no
+# Litentry history can load.
+#
+# LIT therefore has 222 days of CORRECT data.  A percentile over 222 days is a
+# correct percentile over a short sample, not a wrong one, and marking correct
+# data as known-wrong trains the reader to ignore markers -- the exact harm the
+# marking's own scope rule was written to avoid.
+#
+# What genuinely needs disclosing is the SHORTNESS, and two mechanisms already do
+# it honestly: the `warming` chip prints NO NUMBER where a window cannot be
+# honest (F-B30, and LIT's 365d window is the live case), and `percentile_rank`
+# returns its sample size so a reader can see what the rank was taken over.
+LIT_MARKING_WITHDRAWN = {
+    "withdrawn": "2026-08-03",
+    "was": "v4 §II.11 known-wrong on percentile / rank / bar_count",
+    "why": "estate audit: 100.00% minute coverage, 0 gaps, floor respected, no "
+           "synthetic padding -- the data is correct, merely short",
+    "short_history_disclosed_by": ["warming chip (F-B30)",
+                                   "percentile_rank sample size"],
+}
 
 
 def _now_ms():
@@ -60,17 +89,13 @@ def iso(ms):
 
 
 def lit_known_wrong(symbol, kind):
-    """Should this quantity carry a known-wrong marker for this asset?
+    """WITHDRAWN 2026-08-03 -- always False.  See LIT_MARKING_WITHDRAWN.
 
-    v4 §II.11 is precise about scope and the precision is the point: mark
-    PERCENTILE, RANK and BAR-COUNT quantities only.  Do NOT mark levels or
-    volume-weighted quantities -- a VWAP or a POC computed over LIT's real
-    history is a correct number about a real asset, and marking it would train
-    the reader to ignore markers.
+    Kept as a named no-op rather than deleted so that a reader of an ARCHIVED
+    capture, or of the v4 contract text, can find out what happened to the
+    marking instead of concluding it was silently dropped.
     """
-    if symbol != "LITUSDT":
-        return False
-    return kind in LIT_KNOWN_WRONG_KINDS
+    return False
 
 
 def partition_footprint(as_of_ms, windows_days, warmup_days=0):
@@ -181,14 +206,7 @@ def build_capture(symbols, slot, as_of_ms=None, parity_certified=False,
         a["partition_footprint"] = partition_footprint(
             int(t[-1]), [7, 30, 90, 365], warmup_days=0)
         if sym == "LITUSDT":
-            a["known_wrong"] = {
-                "applies_to": list(LIT_KNOWN_WRONG_KINDS),
-                "not_marked": list(LIT_NOT_MARKED),
-                "basis": "v4 §II.11 two-token trap; usable history begins "
-                         "2025-12-01. Percentile/rank/bar-count depend on HOW "
-                         "MUCH history exists and are known-wrong; levels and "
-                         "volume-weighted quantities are correct numbers about "
-                         "a real asset and are NOT marked."}
+            a["known_wrong_withdrawn"] = dict(LIT_MARKING_WITHDRAWN)
         doc["assets"][sym] = a
         doc["runtime_by_layer"][sym] = round(time.time() - s0, 2)
         log(f"  {sym}: {doc['runtime_by_layer'][sym]}s  "
