@@ -68,7 +68,8 @@ def test_f_b29_every_ratio_recomputes_from_its_own_printed_components():
     now = int(k["1h"]["open_time"].iloc[-1])
     price = float(k["1h"]["close"].iloc[-1])
     conf, _, _ = _conf_from(k, now, price)
-    board = B2.rr_board(conf, price, 250.0)["board"]
+    rr = B2.rr_board(conf, price, 250.0)
+    board = rr["board"] + rr["excluded_too_tight"]
     assert board, "no R:R rows produced -- F-B29 would be vacuous"
 
     for row in board:
@@ -91,7 +92,8 @@ def test_f_b29_no_ratio_without_all_three_components():
     price = float(k["1h"]["close"].iloc[-1])
     conf, _, _ = _conf_from(k, now, price)
     for view in ("with_volume", "without_volume"):
-        for row in B2.rr_board(conf, price, 250.0, view=view)["board"]:
+        v = B2.rr_board(conf, price, 250.0, view=view)
+        for row in v["board"] + v["excluded_too_tight"]:
             assert {"entry", "invalidation", "target"} <= set(row)
 
     # a degenerate cluster (entry == invalidation) yields NO row, not inf
@@ -120,8 +122,9 @@ def test_f_b29_ranking_claims_geometry_not_probability():
     # Scan the ROWS, not the metadata: `ranking_is` and
     # `contains_no_probability_claim` mention probability in order to DENY it,
     # which is the opposite of the defect and must not be flagged.
-    assert rr["board"], "no rows to scan -- the assertion would be vacuous"
-    blob = repr(rr["board"]).lower()
+    rows = rr["board"] + rr["excluded_too_tight"]
+    assert rows, "no rows to scan -- the assertion would be vacuous"
+    blob = repr(rows).lower()
     for banned in ("probability", "likely", "expected value", "win rate",
                    "edge", "forecast", "predict"):
         assert banned not in blob, f"predictive language in an R:R row: {banned}"
@@ -142,6 +145,98 @@ def test_f_b29_drafts_carry_no_sizing():
         for banned in ("size", "risk %", "leverage", "contracts", "position size",
                        "% of account", "notional"):
             assert banned not in blob, f"sizing language in a draft: {banned}"
+
+
+# --------------------------------------------------------------- F-B34
+
+def _tight_conf(entry=100.0, far=100.5, opposite=50.0, score=7):
+    """A cluster whose far edge is a hair from its mean -- the R-1 shape.
+
+    Geometry: price sits BELOW `entry`, so the line is genuinely 'above', and the
+    opposing cluster sits below `entry` so it can serve as a target.
+    """
+    return {"with_volume": {
+        "clusters": [
+            {"cluster_id": 0, "mean": entry, "member_count": 2, "score": score,
+             "families": ["structure", "ss"],
+             "members": [{"level": entry}, {"level": far}]},
+            {"cluster_id": 1, "mean": opposite, "member_count": 2, "score": score,
+             "families": ["structure", "ss"],
+             "members": [{"level": opposite}, {"level": opposite + 1}]}],
+        "lines": {
+            "above": {"mean": entry, "score": score,
+                      "families": ["structure", "ss"],
+                      "members": [{"level": entry}, {"level": far}],
+                      "source": "primary"},
+            "below": None}}}
+
+
+def test_f_b34_no_ranked_row_is_below_the_invalidation_floor():
+    """R-1: R:R is inversely proportional to stop distance, so without a floor
+    the least survivable invalidations rank highest."""
+    atr = 100.0
+    # far edge 0.5 away on a 100 ATR -> 0.005 ATR, far under the 0.25 floor
+    rr = B2.rr_board(_tight_conf(), 90.0, atr)
+    assert rr["min_inval_atr"] == B2.MIN_INVAL_ATR == 0.25
+    assert rr["board"] == [], "a knife-edge invalidation was ranked"
+    assert rr["excluded_too_tight"], "it must still be PRINTED, just not ranked"
+    for row in rr["excluded_too_tight"]:
+        assert row["rankable"] is False
+        assert row["flag"] == "invalidation too tight to rank"
+        assert row["inval_atr"] < B2.MIN_INVAL_ATR
+
+    for row in rr["board"]:
+        assert row["inval_atr"] >= B2.MIN_INVAL_ATR
+
+
+def test_f_b34_a_survivable_invalidation_still_ranks():
+    """ANTI-VACUITY: the floor must exclude the tight case and ONLY that case."""
+    atr = 100.0
+    rr = B2.rr_board(_tight_conf(entry=100.0, far=140.0), 90.0, atr)
+    assert rr["board"], "a 0.4-ATR invalidation must still rank"
+    assert rr["excluded_too_tight"] == []
+    row = rr["board"][0]
+    assert row["rankable"] is True and row["flag"] is None
+    assert row["inval_atr"] == pytest.approx(0.4)
+    assert row["rr"] == pytest.approx(row["reward"] / row["risk"])
+
+
+def test_f_b34_inval_atr_is_printed_on_every_row():
+    """C.1: the reader must be able to see the stop distance in ATR terms."""
+    k = _bundle()
+    now = int(k["1h"]["open_time"].iloc[-1])
+    price = float(k["1h"]["close"].iloc[-1])
+    conf, _, _ = _conf_from(k, now, price)
+    rr = B2.rr_board(conf, price, 250.0)
+    rows = rr["board"] + rr["excluded_too_tight"]
+    assert rows, "no rows at all -- the assertion would be vacuous"
+    for row in rows:
+        assert "inval_atr" in row and row["inval_atr"] is not None
+        assert row["inval_atr"] == pytest.approx(row["risk"] / 250.0)
+
+
+def test_f_b34_excluded_drafts_still_print_with_the_flag():
+    """C.2: a draft below the floor is PRINTED, flagged, and not ranked.
+    Suppressing it would hide geometry the operator asked to see."""
+    drafts = B2.hypothesis_drafts(_tight_conf(), 90.0, atr_d=100.0)
+    assert drafts, "the draft must still print"
+    tight = [d for d in drafts if d["rankable"] is False]
+    assert tight, "the tight draft must be flagged, not dropped"
+    for d in tight:
+        assert d["flag"] == "invalidation too tight to rank"
+        assert d["inval_atr"] < B2.MIN_INVAL_ATR
+        assert d["draft"] is True and d["no_sizing"] is True
+
+    loose = B2.hypothesis_drafts(_tight_conf(far=140.0), 90.0, atr_d=100.0)
+    assert all(d["rankable"] for d in loose), "a survivable draft must stay rankable"
+
+
+def test_f_b34_floor_is_declared_a_placeholder():
+    """C.4: it is re-ratified from the calibration distribution, not defended."""
+    rr = B2.rr_board(_tight_conf(), 90.0, 100.0)
+    assert "placeholder" in rr["min_inval_atr_is"]
+    assert "calibration" in rr["min_inval_atr_is"]
+    assert "inversely proportional" in rr["why_a_floor"]
 
 
 # --------------------------------------------------------------- F-B31

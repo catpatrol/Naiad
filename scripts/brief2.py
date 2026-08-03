@@ -79,6 +79,21 @@ PARITY_BANNER = ("PARITY NOT CERTIFIED — numbers not yet adopted. "
                  "The operator's parity readings have not been returned and "
                  "matched; nothing here may be trusted or acted on.")
 
+# R-1 (reviewer finding, 2026-08-03).  R:R = reward / risk is INVERSELY
+# PROPORTIONAL to the invalidation distance, so the tightest and least survivable
+# stops float to the top of a board sorted by R:R.  The arithmetic is exact and
+# F-B29 passes on it; the RANKING is still misleading.  Measured on the
+# 2026-08-03 capture: the top row scored 11.23 on a stop 163.15 wide against a
+# daily ATR of 1,699.80 -- 0.096 ATR, inside the noise it would have to survive.
+#
+# Drafts below the floor still PRINT -- suppressing them would hide geometry the
+# operator asked to see -- but they are excluded from the RANKED board and
+# flagged, because ranking them is what makes them look like the best ideas.
+#
+# v1 PLACEHOLDER.  The calibration report prints the inval_atr distribution so
+# this is re-ratified from data rather than from anyone's guess.
+MIN_INVAL_ATR = 0.25
+
 
 def _f(x):
     """None for anything not finite, so a NaN can never reach a printed number."""
@@ -605,7 +620,7 @@ def rr_board(conf, price, atr_d, view="with_volume"):
     """
     v = (conf or {}).get(view) or {}
     lines, clusters = v.get("lines") or {}, v.get("clusters") or []
-    board = []
+    board, excluded = [], []
     for side in ("above", "below"):
         line = lines.get(side)
         if not line:
@@ -622,26 +637,53 @@ def rr_board(conf, price, atr_d, view="with_volume"):
             key=lambda c: abs(c["mean"] - entry))
         targets = [_f(c["mean"]) for c in opposing[:2]]
         risk = abs(entry - invalidation)
+        inval_atr = (risk / atr_d) if atr_d else None
         for n, tgt in enumerate(targets, start=1):
             if tgt is None or risk <= 0:
                 continue
-            board.append({
+            row = {
                 "side": "short" if side == "above" else "long",
                 "line_side": side, "target_rank": n,
                 "entry": entry, "invalidation": invalidation, "target": tgt,
                 "reward": abs(tgt - entry), "risk": risk,
+                "inval_atr": inval_atr,
                 "rr": abs(tgt - entry) / risk,
                 "cluster_score": int(line["score"]),
                 "cluster_families": list(line["families"]),
-                "source": line.get("source", "primary")})
+                "source": line.get("source", "primary")}
+            # R-1: below the floor it still PRINTS, but it is not RANKED.
+            if inval_atr is not None and inval_atr < MIN_INVAL_ATR:
+                row["rankable"] = False
+                row["flag"] = "invalidation too tight to rank"
+                excluded.append(row)
+            else:
+                row["rankable"] = True
+                row["flag"] = None
+                board.append(row)
+
     board.sort(key=lambda r: -r["rr"])
+    excluded.sort(key=lambda r: -r["rr"])
     return {"view": view, "board": board,
+            "excluded_too_tight": excluded,
+            "min_inval_atr": MIN_INVAL_ATR,
+            "min_inval_atr_is": "v1 placeholder; re-ratified against the "
+                                "inval_atr distribution in the calibration report",
+            "excluded_count": len(excluded),
             "ranking_is": "structural quality, not probability (§7.2)",
+            "why_a_floor": "R:R is inversely proportional to the invalidation "
+                           "distance, so without a floor the tightest and least "
+                           "survivable stops rank highest (R-1)",
             "contains_no_probability_claim": True}
 
 
-def hypothesis_drafts(conf, price, view="with_volume"):
-    """§7.1 -- if-then drafts, mechanically derived.  NO SIZING, EVER."""
+def hypothesis_drafts(conf, price, atr_d=None, view="with_volume"):
+    """§7.1 -- if-then drafts, mechanically derived.  NO SIZING, EVER.
+
+    R-1: a draft whose invalidation is tighter than MIN_INVAL_ATR still PRINTS
+    here, carrying `rankable: False` and the reason.  Suppressing it would hide
+    geometry the operator asked to see; ranking it is what made it look like the
+    best idea on the board.
+    """
     v = (conf or {}).get(view) or {}
     lines = v.get("lines") or {}
     out = []
@@ -651,8 +693,14 @@ def hypothesis_drafts(conf, price, view="with_volume"):
             continue
         lo, hi = _cluster_edges(line)
         far = hi if side == "above" else lo
+        entry = _f(line["mean"])
+        inval_atr = (abs(entry - far) / atr_d) if (atr_d and entry is not None) else None
+        tight = inval_atr is not None and inval_atr < MIN_INVAL_ATR
         out.append({
             "draft": True, "no_sizing": True,
+            "inval_atr": inval_atr,
+            "rankable": not tight,
+            "flag": "invalidation too tight to rank" if tight else None,
             "if": f"price {word} {line['mean']:,.2f} "
                   f"(cluster {lo:,.2f}-{hi:,.2f}, score {line['score']})",
             "then": ("watch for continuation toward the next opposing area"
@@ -788,7 +836,7 @@ def decision_instrument(a, vol, nest, conf, price, atr_d):
                           for v in ("with_volume", "without_volume")
                           if conf.get(v)},
         "lines_differ": conf.get("differ"),
-        "hypothesis_drafts": hypothesis_drafts(conf, price),
+        "hypothesis_drafts": hypothesis_drafts(conf, price, atr_d),
         "rr_ranking": rr_board(conf, price, atr_d),
         "rr_ranking_without_volume": rr_board(conf, price, atr_d,
                                               view="without_volume"),
