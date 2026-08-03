@@ -1,0 +1,51 @@
+# ops/brief_schedule.yaml — the three session-anchored slots (Amendment 2 §2.3)
+#
+# TIMES ARE HELD IN America/New_York AND RESOLVED THROUGH THE ZONE AT GENERATION
+# TIME. This is the whole point of the file.
+#
+# A stored UTC offset silently breaks twice a year: on 2026-11-01 the US leaves
+# daylight time and every slot that was "15:00 UTC" becomes 16:00 UTC if you want
+# it to stay at the same point in the New York session. Anchoring to the SESSION
+# rather than to a UTC clock is what keeps `ny_am` meaning "an hour into the New
+# York morning" all year.
+#
+# scripts/setup_brief_schedule.ps1 reads this file, resolves each local time
+# through the zone, registers THREE Windows tasks, and prints the next four DST
+# transitions so the operator can see exactly when the UTC times will move.
+#
+# F-B22 asserts the generator uses zone resolution and not a stored offset.
+
+zone: America/New_York
+
+# Local wall-clock times in `zone`. The utc_hint column is INFORMATIONAL ONLY —
+# it records what the time resolves to during US Eastern DAYLIGHT time, and it is
+# never used for scheduling. If it disagrees with the resolved value, the
+# resolved value wins and the hint is stale.
+slots:
+  - id: london
+    local: "07:00"
+    utc_hint_edt: "11:00"
+    utc_hint_est: "12:00"
+    why: "London afternoon / New York pre-open — the overnight range is set"
+
+  - id: ny_am
+    local: "10:00"
+    utc_hint_edt: "14:00"
+    utc_hint_est: "15:00"
+    why: "one hour into the New York morning — the session has declared itself"
+
+  - id: post_ny
+    local: "16:30"
+    utc_hint_edt: "20:30"
+    utc_hint_est: "21:30"
+    why: "after the New York close — the day is finished and comparable"
+
+task:
+  name_prefix: NaiadBrief
+  python: 'C:\venvs\naiad\Scripts\python.exe'
+  # ONE scheduler. These tasks invoke the EXISTING daily_routine.py with --slot;
+  # they do not call brief_capture.py directly and they do not introduce a second
+  # scheduling path (§10: "no second scheduler").
+  script: scripts/daily_routine.py
+  args: "--slot {slot}"
+  log: research_outputs/brief/brief_run.log

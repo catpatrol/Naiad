@@ -201,8 +201,14 @@ def sweep_lines(swept):
 # --------------------------------------------------------------- job runner
 
 
-def run_job(job, python, today, out_dir):
-    """Run one job. Returns a result dict; never raises on job failure."""
+def run_job(job, python, today, out_dir, slot=None):
+    """Run one job. Returns a result dict; never raises on job failure.
+
+    Amendment 2 §2.3: when a slot is active, a job declaring `"slot_aware": true`
+    receives `--slot <slot>`. Jobs that are not slot-aware run unchanged, which
+    is what lets the three session tasks drive THIS routine rather than a second
+    scheduler being built beside it.
+    """
     jid = job.get("id", "<unnamed>")
     script = ROOT / job["script"]
     res = {
@@ -222,10 +228,15 @@ def run_job(job, python, today, out_dir):
         res["error"] = f"script not found: {job['script']}"
         return res
 
+    argv = [python, str(script)]
+    if slot and job.get("slot_aware"):
+        argv += ["--slot", slot]
+        res["slot"] = slot
+
     t0 = time.monotonic()
     try:
         proc = subprocess.run(
-            [python, str(script)],
+            argv,
             cwd=str(ROOT),
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -809,8 +820,24 @@ def brief_biases(results, out_dir, today):
 # --------------------------------------------------------------- main
 
 
-def main():
+def main(argv=None):
+    import argparse
+    ap = argparse.ArgumentParser(
+        description="Naiad daily routine. --slot runs the session-anchored "
+                    "BRIEF-2 capture (Amendment 2 §2.3); without it the "
+                    "routine behaves exactly as before.")
+    ap.add_argument("--slot", default=None,
+                    help="london | ny_am | post_ny")
+    args = ap.parse_args(argv)
+
     reg = load_registry()
+    slot = args.slot
+    if slot is not None:
+        allowed = reg.get("slots") or []
+        if allowed and slot not in allowed:
+            raise SystemExit(f"unknown slot {slot!r}; routine_jobs.json "
+                             f"declares {allowed}")
+        print(f"  slot: {slot}")
     today = date.today().strftime("%Y-%m-%d")
     out_dir = ROOT / reg["output_dir"]
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -827,7 +854,7 @@ def main():
 
     results, halted = [], None
     for job in reg["jobs"]:
-        res = run_job(job, python, today, out_dir)
+        res = run_job(job, python, today, out_dir, slot=slot)
         results.append(res)
         print(f"  {res['id']}: exit={res['exit']} elapsed={res['elapsed']}s")
         if res["exit"] != 0 and res["required"]:

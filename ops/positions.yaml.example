@@ -1,0 +1,45 @@
+# ops/positions.yaml — hand-maintained, STATE ONLY (Amendment 2 §8.3)
+#
+# Copy to ops/positions.yaml and edit by hand. The brief reads it to show where
+# you are standing; it never writes it.
+#
+# ─────────────────────────────────────────────────────────────────────────────
+# NO P&L. NO OUTCOMES. NO HISTORY. EVER.
+#
+# Only these five keys per position: symbol, lens, direction, entry, stop.
+#
+# This is not a limitation to be worked around later — it is the firewall. The
+# moment this file carries outcomes, the daily brief becomes a record of whether
+# trades worked, and an ops artifact that knows its own hit rate is study
+# evidence wearing an ops label. Outcome statistics are census work under G-7,
+# computed on scorable data, never accumulated here as a side effect of looking
+# at charts.
+#
+# A fixture (F-B18) rejects any file containing a forbidden key, so adding one
+# fails the suite rather than quietly changing what this file is.
+#
+# FORBIDDEN, non-exhaustive: pnl, p_and_l, realised, unrealised, result,
+#   outcome, win, loss, r_multiple, closed_at, exit, exit_price, return,
+#   size, qty, quantity, notional, leverage, contracts, risk_pct, history
+#
+# `size` and its family are forbidden separately and for a second reason: the
+# brief prints no sizing anywhere (§7.1), and a positions file that carried size
+# would leak it into the render through the back door.
+# ─────────────────────────────────────────────────────────────────────────────
+
+positions:
+  - symbol: BTCUSDT
+    lens: 4h            # 1h | 4h | 12h — which governor you are trading under
+    direction: long     # long | short
+    entry: 63120.00     # the price you are on, quote currency
+    stop: 61850.00      # where you are wrong, quote currency
+
+  - symbol: SOLUSDT
+    lens: 1h
+    direction: short
+    entry: 148.20
+    stop: 153.40
+
+# Leave the list empty when flat:
+#
+# positions: []

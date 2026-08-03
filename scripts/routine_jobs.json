@@ -1,6 +1,7 @@
 {
-  "version": 3,
+  "version": 4,
   "python": "C:\\venvs\\naiad\\Scripts\\python.exe",
+  "slots": ["london", "ny_am", "post_ny"],
   "output_dir": "exchange/status/daily",
   "publish": true,
   "daily_archive_dir": "research_outputs/_daily_archive",
@@ -20,6 +21,16 @@
     { "id": "brief", "script": "scripts/daily_brief.py", "required": false,
       "stage": [],
       "reference": ["research_outputs/brief/brief_{date}.html",
-                    "research_outputs/brief/brief_{date}.json"] }
+                    "research_outputs/brief/brief_{date}.json"] },
+    { "id": "brief2_capture", "script": "scripts/brief_capture.py",
+      "required": false, "slot_aware": true,
+      "stage": [],
+      "reference": ["briefs/brief_{date}_{slot}.json"] },
+    { "id": "brief2_panel", "script": "scripts/brief_panel.py",
+      "required": false,
+      "stage": [],
+      "reference": ["briefs/panel/snapshots/{date}.parquet",
+                    "briefs/panel/levels/{date}.parquet",
+                    "briefs/panel/areas/{date}.parquet"] }
   ]
 }

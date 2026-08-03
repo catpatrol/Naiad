@@ -89,3 +89,10 @@ tests/brief_fixture/out/
 # to be published or box-synced. They stay on disk and in the weekly workflow
 # backup; keeping them tracked would defeat the move.
 research_outputs/_daily_archive/
+
+# --- BRIEF-2 panel (Amendment 2 §8.2) ---
+# Captures and daily partitions are TRACKED: they are the record, and write-once
+# partitions keep git growth linear rather than compounding.
+# The consolidated view is a regenerable convenience over those partitions and is
+# NOT a record, so it stays out of git.
+briefs/panel/consolidated_*.parquet
