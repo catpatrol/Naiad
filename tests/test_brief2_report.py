@@ -518,3 +518,117 @@ def test_substrate_actually_used_is_recorded_per_window():
     assert "substrate_substitutions" in v2
     assert v2["substrate_substitutions"]["7d"]["wanted"] == "1m"
     assert v2["substrate_substitutions"]["7d"]["used"] == "1h"
+
+
+# ------------------------------------------- F-B36 stretch + band excursions
+
+def test_f_b36_worked_example_from_the_operators_capture():
+    """D.5, the operator's own numbers at price 63,522.7.
+
+    Month VWAP 63,112.3 sigma 319.9   -> +1.28 sigma
+    RVWAP365   83,686.7 sigma 18,868.6 -> -1.07 sigma
+
+    Price is simultaneously ABOVE the monthly sigma-1 upper and BELOW the yearly
+    sigma-1 lower: overextended up against the month and down against the year,
+    both true at the same instant. That is the object of interest, not a
+    contradiction.
+    """
+    px, atr = 63522.7, 1649.58
+    m = B2._stretch_row("anchored M", "anchored", 63112.3, 319.9, px, atr, bars=69)
+    y = B2._stretch_row("RVWAP 365d", "rolling", 83686.7, 18868.6, px, atr)
+
+    assert m["sigma_position"] == pytest.approx(1.28, abs=0.005)
+    assert y["sigma_position"] == pytest.approx(-1.07, abs=0.005)
+    assert m["band_reached"] == 1, "price is past the monthly +1 sigma"
+    assert y["band_reached"] == -1, "price is past the yearly -1 sigma"
+    assert m["thin_sample"] is False and 69 >= B2.THIN_SAMPLE_BARS
+
+    # the three units answer different questions and must all be present
+    for r in (m, y):
+        assert r["sigma_position"] is not None
+        assert r["bps"] is not None and r["atr"] is not None
+
+
+def test_f_b36_multiscale_disagreement_is_recorded():
+    """D.5.1 -- max and min sigma-position, and WHICH TWO disagree most."""
+    a = {"vwap": {"anchored": {
+        "M": {"vwap": 63112.3, "sigma": 319.9, "bars": 69},
+        "W": {"vwap": None, "sigma": None, "bars": 0}}}}
+    rv = {"windows": {"365d": {"warming": False, "vwap": 83686.7, "stdev": 18868.6},
+                      "7d": {"warming": True}}}
+    st = B2.stretch_layer(a, rv, {}, 63522.7, 1649.58)
+
+    d = st["disagreement"]
+    assert d["max"]["name"] == "anchored M"
+    assert d["min"]["name"] == "RVWAP 365d"
+    assert d["spread_sigma"] == pytest.approx(1.28 + 1.07, abs=0.01)
+    assert d["straddles_one_sigma"] is True, \
+        "above one +1 sigma AND below another -1 sigma must be flagged"
+    assert set(d["most_disagreeing_pair"]) == {"anchored M", "RVWAP 365d"}
+
+    # warming entries are carried but contribute no sigma position
+    warm = [r for r in st["rows"] if r["warming"]]
+    assert warm, "warming anchors/windows must still appear, not vanish"
+    assert all(r["sigma_position"] is None for r in warm)
+    assert st["n_live"] == 2
+
+
+def test_f_b36_thin_sample_is_flagged_not_suppressed():
+    """A sigma over 2 bars is the spread between two numbers -- arithmetically
+    exact, informationally empty. It is FLAGGED, not silently trusted."""
+    thin = B2._stretch_row("anchored M", "anchored", 63112.3, 319.9,
+                           63522.7, 1649.58, bars=2)
+    assert thin["thin_sample"] is True
+    assert thin["sigma_position"] is not None, "flagged, not suppressed"
+    assert B2.THIN_SAMPLE_BARS == 30
+
+
+def test_f_b36_zero_and_missing_sigma_never_divide():
+    for sig in (0.0, None):
+        r = B2._stretch_row("x", "anchored", 100.0, sig, 110.0, 10.0, bars=50)
+        assert r["sigma_position"] is None
+        assert r["bps"] is not None, "bps does not need sigma and must survive"
+    warm = B2._stretch_row("x", "anchored", None, None, 110.0, 10.0, warming=True)
+    assert warm["sigma_position"] is None and warm["bps"] is None
+
+
+def test_f_b36_excursions_record_and_claim_nothing():
+    """D.6 -- recording is OPS; whether a touch pays is census work."""
+    a = {"vwap": {"anchored": {"M": {"vwap": 63112.3, "sigma": 319.9, "bars": 69}}}}
+    rv = {"windows": {"365d": {"warming": False, "vwap": 83686.7, "stdev": 18868.6}}}
+    st = B2.stretch_layer(a, rv, {}, 63522.7, 1649.58)
+    ex = B2.excursion_layer(st, 1649.58)
+
+    assert len(ex["events"]) == 2
+    by = {e["name"]: e for e in ex["events"]}
+    assert by["anchored M"]["side"] == "above" and by["anchored M"]["band_reached"] == 1
+    assert by["RVWAP 365d"]["side"] == "below"
+    for e in ex["events"]:
+        assert e["recording_only"] is True
+        assert e["distance_to_mean_sigma"] > 0
+        assert e["distance_to_mean_atr"] is not None
+    assert ex["census_candidate"] == "H-VBR"
+
+    # Scan the EVENTS, not the metadata. `claims_nothing` and `census_candidate`
+    # mention paying and expectancy in order to DENY them -- the fourth time this
+    # project has hit the same false positive (F-F3's prohibition text, F-B29's
+    # "not probability", F-B35's quoted `n=3`). The rule that keeps emerging:
+    # scan the DATA a layer emits, never the prose that disclaims it.
+    blob = repr(ex["events"]).lower()
+    for banned in ("expectancy", "probability", "likely", "edge", "pays",
+                   "win_rate", "forecast", "predict"):
+        assert banned not in blob, f"predictive language in an excursion EVENT: {banned}"
+
+    # and the disclaimers must actually be there
+    assert "census work under g-7" in ex["claims_nothing"].lower()
+    assert "derived" in ex["since_last_touch"].lower()
+    assert "captures alone" in ex["since_last_touch"]
+
+
+def test_f_b36_no_touch_means_no_event():
+    """ANTI-VACUITY: an event list that fires on everything records nothing."""
+    a = {"vwap": {"anchored": {"M": {"vwap": 63112.3, "sigma": 319.9, "bars": 69}}}}
+    st = B2.stretch_layer(a, {"windows": {}}, {}, 63150.0, 1649.58)   # +0.12 sigma
+    ex = B2.excursion_layer(st, 1649.58)
+    assert ex["events"] == [], "price inside sigma-1 must produce no excursion"
+    assert ex["n_live_vwaps"] == 1

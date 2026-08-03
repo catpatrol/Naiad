@@ -609,6 +609,166 @@ def confirmed_pivot_levels(klines, now_ms, lookback_days=PIVOT_LOOKBACK_DAYS):
     return out
 
 
+# ══════════════════════════════════════ D.5 / D.6  stretch and excursion
+
+# A sigma computed over very few bars is arithmetically exact and
+# informationally empty -- it is the spread between two numbers, not a
+# dispersion estimate.  Stretch and excursion records carry the bar count and a
+# `thin_sample` flag so a reader never mistakes one for the other.  This is the
+# same honesty the `warming` chip provides for windows that cannot be computed
+# at all; here the quantity CAN be computed and still should not be trusted.
+THIN_SAMPLE_BARS = 30
+
+# §D.6: the bands whose touches are recorded.  Recording only -- whether a touch
+# pays is H-VBR, census work under G-7, and nothing here claims it does.
+EXCURSION_SIGMAS = (1, 2, 3)
+
+
+def _stretch_row(name, kind, mean, sigma, price, atr_d, bars=None,
+                 warming=False):
+    """One anchor's or window's stretch record.
+
+    `sigma_position` is the quantity D.5 asks for: how far price sits from the
+    mean IN SIGMA UNITS.  It is recorded beside bps and daily-ATR because the
+    three answer different questions -- bps is scale-free, ATR is
+    volatility-relative, and sigma is relative to THIS tool's own dispersion,
+    which is what makes two anchors comparable to each other.
+    """
+    row = {"name": name, "kind": kind, "warming": bool(warming),
+           "mean": _f(mean), "sigma": _f(sigma), "bars": bars,
+           "sigma_position": None, "bps": None, "atr": None,
+           "thin_sample": None, "band_reached": None}
+    if warming or mean is None or price is None:
+        return row
+    d = float(price) - float(mean)
+    row["bps"] = _f(1e4 * d / mean) if mean else None
+    row["atr"] = _f(d / atr_d) if atr_d else None
+    if sigma and sigma > 0:
+        row["sigma_position"] = _f(d / sigma)
+        row["thin_sample"] = bool(bars is not None and bars < THIN_SAMPLE_BARS)
+        # the outermost band price has actually reached, signed
+        k = 0
+        for s in EXCURSION_SIGMAS:
+            if abs(row["sigma_position"]) >= s:
+                k = s
+        row["band_reached"] = (0 if k == 0
+                               else (k if row["sigma_position"] > 0 else -k))
+    return row
+
+
+def stretch_layer(a, rv, prior, price, atr_d):
+    """D.5 -- price's distance from every VWAP mean, in SIGMA UNITS.
+
+    Covers the developing W/M/Q/Y anchors, the prior M/Q/Y anchors, and the
+    rolling 7/30/90/365 windows, so every volume-weighted mean in the instrument
+    is on one comparable scale.
+
+    D.5.1 records the MULTI-SCALE STRETCH DISAGREEMENT explicitly.  Price can sit
+    above one anchor's upper band and below another's lower band at the same
+    instant -- overextended up against the month and down against the year, both
+    true -- and that disagreement is the object of interest, not a contradiction
+    to be resolved.  It is the same class of thing as the VA-nesting layer and it
+    belongs beside it in the report.
+    """
+    rows = []
+
+    for name, blob in ((a.get("vwap") or {}).get("anchored") or {}).items():
+        if not isinstance(blob, dict):
+            continue
+        rows.append(_stretch_row(
+            f"anchored {name}", "anchored", blob.get("vwap"), blob.get("sigma"),
+            price, atr_d, bars=blob.get("bars"),
+            warming=blob.get("vwap") is None))
+
+    for name, blob in (prior or {}).items():
+        if not isinstance(blob, dict):
+            continue
+        rows.append(_stretch_row(
+            name.replace("_", " "), "prior_anchor", blob.get("vwap"),
+            blob.get("sigma"), price, atr_d, bars=blob.get("bars"),
+            warming=bool(blob.get("warming"))))
+
+    for name, blob in (rv.get("windows") or {}).items():
+        if not isinstance(blob, dict):
+            continue
+        rows.append(_stretch_row(
+            f"RVWAP {name}", "rolling", blob.get("vwap"), blob.get("stdev"),
+            price, atr_d, bars=None, warming=bool(blob.get("warming"))))
+
+    live = [r for r in rows if r["sigma_position"] is not None]
+    out = {"rows": rows, "thin_sample_bars": THIN_SAMPLE_BARS,
+           "price": _f(price), "n_live": len(live),
+           "units": "sigma_position = (price - mean) / sigma, signed"}
+
+    if live:
+        hi = max(live, key=lambda r: r["sigma_position"])
+        lo = min(live, key=lambda r: r["sigma_position"])
+        out["disagreement"] = {
+            "max": {"name": hi["name"], "sigma_position": hi["sigma_position"],
+                    "thin_sample": hi["thin_sample"]},
+            "min": {"name": lo["name"], "sigma_position": lo["sigma_position"],
+                    "thin_sample": lo["thin_sample"]},
+            "spread_sigma": _f(hi["sigma_position"] - lo["sigma_position"]),
+            "most_disagreeing_pair": [hi["name"], lo["name"]],
+            "straddles_one_sigma": bool(hi["sigma_position"] >= 1.0
+                                        and lo["sigma_position"] <= -1.0),
+            "note": "price can be overextended UP against one scale and DOWN "
+                    "against another at the same instant; both are true and the "
+                    "disagreement is the object of interest"}
+    else:
+        out["disagreement"] = None
+    return out
+
+
+def excursion_layer(stretch, atr_d):
+    """D.6 -- band-excursion events.  RECORDING ONLY.
+
+    Records, per VWAP, whether price has reached sigma1/2/3 on either side and
+    what it would take to get back to the mean.  This is the substrate for the
+    operator's thesis -- enter at an extreme band, target the mean -- and for
+    census candidate H-VBR.
+
+    WHAT IS DELIBERATELY NOT HERE.  No count of "captures since the last touch"
+    is stored.  A capture is a point in time and must stay self-describing; a
+    stored counter would be state the capture cannot verify about itself, and
+    `brief_panel.py` rebuilds every partition FROM CAPTURES ALONE.  The
+    since-last-touch series is therefore DERIVED at panel-build time from the
+    stored per-capture `band_reached` column, where it is reproducible from the
+    archive rather than trusted from a counter.
+
+    RECORDING IS OPS.  Whether a band touch pays anything is H-VBR under G-7,
+    routed to APOLLO, and nothing in this function claims it does.
+    """
+    events, live = [], 0
+    for r in (stretch.get("rows") or []):
+        if r["sigma_position"] is None:
+            continue
+        live += 1
+        sp = r["sigma_position"]
+        reached = r["band_reached"] or 0
+        if reached == 0:
+            continue
+        events.append({
+            "name": r["name"], "kind": r["kind"],
+            "side": "above" if sp > 0 else "below",
+            "band_reached": abs(reached),
+            "sigma_position": sp,
+            "bars": r["bars"], "thin_sample": r["thin_sample"],
+            "distance_to_mean_sigma": _f(abs(sp)),
+            "distance_to_mean_atr": _f(abs(r["atr"])) if r["atr"] is not None else None,
+            "returned_to_mean": False,
+            "recording_only": True})
+    return {"events": events, "n_live_vwaps": live,
+            "sigmas_watched": list(EXCURSION_SIGMAS),
+            "since_last_touch": "DERIVED at panel-build time from the stored "
+                                "band_reached series; not stored per capture, so "
+                                "the capture stays self-describing and the panel "
+                                "stays rebuildable from captures alone",
+            "census_candidate": "H-VBR",
+            "claims_nothing": "recording is OPS; whether a band touch pays is "
+                              "census work under G-7"}
+
+
 # ══════════════════════════════════════════════ §5 registry and dual scoring
 
 def build_registry(a, vol, rv, nest_levels, prior_anchors=None, pivots=None):
@@ -1092,13 +1252,16 @@ def brief2_asset(a, klines, now_ms, price, atr_d):
     cross = cross_state_layer(klines, atr_d)
     lat = lattice_layer(klines)
     planes = chart_planes(klines, vol)
+    stretch = stretch_layer(a, rv, prior, price, atr_d)
+    excursion = excursion_layer(stretch, atr_d)
     reg = build_registry(a, vol, rv, nest["levels"], prior, pivs)
     conf = confluence(reg, price, atr_d)
 
     part1 = {"volume_windows": vol, "rvwap": rv, "va_nesting": nest,
              "oscillators": osc, "cross_state": cross, "lattice_12_25": lat,
              "chart_planes": planes, "prior_anchors": prior,
-             "confirmed_pivots": pivs, "confluence": conf}
+             "confirmed_pivots": pivs, "stretch": stretch,
+             "band_excursions": excursion, "confluence": conf}
     part2 = decision_instrument(a, vol, nest, conf, price, atr_d)
     return part1, part2
 
