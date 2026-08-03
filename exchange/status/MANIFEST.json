@@ -1,6 +1,6 @@
 {
   "ahead_behind": {
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0
   },
   "branch": "v12-v1-census",
@@ -10,8 +10,8 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": true
   },
-  "generated_utc": "2026-08-02T22:56:28Z",
-  "head": "c1d8e668f7b6e178037b09f1f2d75b8e9e994ac9",
+  "generated_utc": "2026-08-03T12:27:04Z",
+  "head": "30b7f17da9b1a93a698af71a30c08b6cb5214e48",
   "lane_last_commit": {
     "brief": null,
     "docs": {
@@ -20,14 +20,14 @@
       "subject": "docs: PC-1 Stage 3 ledger record - LIT estate remediation, save-path floor enforcement, engine 1.0.12"
     },
     "exchange": {
-      "committed_iso": "2026-08-02T18:38:16-03:00",
-      "sha": "3e3c54f8b59a40042b92c1e4ac8c793cd8809d9e",
-      "subject": "exchange: auto-publish 2026-08-02"
+      "committed_iso": "2026-08-03T09:26:51-03:00",
+      "sha": "30b7f17da9b1a93a698af71a30c08b6cb5214e48",
+      "subject": "exchange: auto-publish 2026-08-03"
     },
     "ops": {
-      "committed_iso": "2026-08-02T19:56:17-03:00",
-      "sha": "c1d8e668f7b6e178037b09f1f2d75b8e9e994ac9",
-      "subject": "ops: analytics Phase I complete \u2014 F-AN-8a/8b/8c per operator ruling; parity worksheet issued"
+      "committed_iso": "2026-08-03T09:26:10-03:00",
+      "sha": "b69572e5cc3d3364b0f7ef8193868d90b130a22d",
+      "subject": "ops: analytics/INTERFACE.md \u2014 the census-facing contract (Amendment 2 \u00a710)"
     },
     "study-phase": null
   },
@@ -38,7 +38,7 @@
   },
   "manifest_version": "1.1",
   "onedrive_running": false,
-  "origin_head": "c38a0ae4b26bffafe6498fdc12a79287a245a74f",
+  "origin_head": "30b7f17da9b1a93a698af71a30c08b6cb5214e48",
   "queue_open": 1,
   "reviewer_box": [
     {
@@ -547,6 +547,38 @@
       "tracked": true
     }
   ],
-  "status_porcelain": [],
-  "untracked_root": []
+  "status_porcelain": [
+    "?? AMENDMENT_2_BRIEF2_RESHAPE_1.md",
+    "?? Naiad_KB_Addendum_FourTraders_x_Canon_v1.md",
+    "?? Naiad_Knowledge_Canon_Synthesis_v1.md",
+    "?? PARITY_CAPTURE_PLAN.md",
+    "?? PARITY_READINGS_GUIDE.md"
+  ],
+  "untracked_root": [
+    {
+      "name": "AMENDMENT_2_BRIEF2_RESHAPE_1.md",
+      "sha256": "c502ecf471f8fab08d8a4077edfbb1860496c2fa80b1c9f02376816db532da9c",
+      "size": 29850
+    },
+    {
+      "name": "Naiad_KB_Addendum_FourTraders_x_Canon_v1.md",
+      "sha256": "68a37a3597c634da3623fd15b8185515fa0f56b1890a3b3d0384f31f15312319",
+      "size": 7218
+    },
+    {
+      "name": "Naiad_Knowledge_Canon_Synthesis_v1.md",
+      "sha256": "cace7a91380528552480b25bca489b555bf7ac336b58c1d088719bb534186059",
+      "size": 15862
+    },
+    {
+      "name": "PARITY_CAPTURE_PLAN.md",
+      "sha256": "493298a74ae173bf2ef3217bdc093dcf6062723edf4a60c13d5ff7423ffcf673",
+      "size": 9407
+    },
+    {
+      "name": "PARITY_READINGS_GUIDE.md",
+      "sha256": "ecb9a6177af33ff3f1b257fc47287784b5f0b9ebed2f5c8900424c3961a254d7",
+      "size": 10150
+    }
+  ]
 }
