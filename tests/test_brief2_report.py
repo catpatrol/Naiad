@@ -125,9 +125,18 @@ def test_f_b29_ranking_claims_geometry_not_probability():
     rows = rr["board"] + rr["excluded_too_tight"]
     assert rows, "no rows to scan -- the assertion would be vacuous"
     blob = repr(rows).lower()
+    # "edge" alone is GEOMETRY vocabulary here -- invalidation_source reads
+    # "far edge of the next cluster". Ban the PREDICTIVE senses explicitly
+    # rather than the word, or the fixture flags the geometry it exists to
+    # protect. Same class as "not probability" in the metadata.
     for banned in ("probability", "likely", "expected value", "win rate",
-                   "edge", "forecast", "predict"):
+                   "forecast", "predict", "has edge", "an edge", "our edge",
+                   "trading edge"):
         assert banned not in blob, f"predictive language in an R:R row: {banned}"
+    import re as _re
+    for m in _re.finditer(r"edge", blob):
+        ctx = blob[max(0, m.start() - 12):m.start()]
+        assert ctx.endswith(("far ", "cluster ", "facing ", "near ")),             f"'edge' used outside geometry vocabulary: ...{blob[max(0,m.start()-30):m.start()+20]}..."
 
 
 def test_f_b29_drafts_carry_no_sizing():
@@ -171,59 +180,79 @@ def _tight_conf(entry=100.0, far=100.5, opposite=50.0, score=7):
             "below": None}}}
 
 
-def test_f_b34_no_ranked_row_is_below_the_invalidation_floor():
-    """R-1: R:R is inversely proportional to stop distance, so without a floor
-    the least survivable invalidations rank highest."""
+def test_f_b34_tight_invalidation_is_CHIPPED_not_excluded():
+    """R-1 DEMOTED (ruling D2-2). The §7.2 fix made a knife-edge stop
+    geometrically impossible, and measured inval_atr spanned only 0.03 ATR, so
+    excluding on it was an arbitrary cut wearing the appearance of a principle.
+    A tight stop now carries a CAUTION CHIP and stays on the ranked board."""
     atr = 100.0
-    # far edge 0.5 away on a 100 ATR -> 0.005 ATR, far under the 0.25 floor
-    rr = B2.rr_board(_tight_conf(), 90.0, atr)
+    # a cluster just BEYOND the entry, so the invalidation is genuinely tight
+    # (0.21 ATR) rather than absent -- absence is C.3's path, tested separately.
+    conf = _tight_conf()
+    conf["with_volume"]["clusters"].append(
+        {"cluster_id": 2, "mean": 120.0, "member_count": 2, "score": 6,
+         "families": ["structure", "ss"],
+         "members": [{"level": 120.0}, {"level": 121.0}]})
+    rr = B2.rr_board(conf, 90.0, atr)
     assert rr["min_inval_atr"] == B2.MIN_INVAL_ATR == 0.25
-    assert rr["board"] == [], "a knife-edge invalidation was ranked"
-    assert rr["excluded_too_tight"], "it must still be PRINTED, just not ranked"
-    for row in rr["excluded_too_tight"]:
-        assert row["rankable"] is False
-        assert row["flag"] == "invalidation too tight to rank"
-        assert row["inval_atr"] < B2.MIN_INVAL_ATR
-
+    assert rr["excluded_too_tight"] == [], "the floor is no longer an exclusion gate"
+    assert rr["board"], "a tight row must still be RANKED, carrying a chip"
     for row in rr["board"]:
-        assert row["inval_atr"] >= B2.MIN_INVAL_ATR
+        assert row["rankable"] is True
+        if row["inval_atr"] < B2.MIN_INVAL_ATR:
+            assert row["caution"] is True
+            assert "caution" in row["flag"]
+    assert "CAUTION CHIP" in rr["why_a_floor"] or "caution chip" in rr["why_a_floor"].lower()
 
 
-def test_f_b34_a_survivable_invalidation_still_ranks():
-    """ANTI-VACUITY: the floor must exclude the tight case and ONLY that case."""
+def test_f_b34_invalidation_is_structure_derived_not_width_derived():
+    """C.2: invalidation is the far edge of the NEXT CLUSTER beyond the entry
+    cluster. Dense structure gives a tight stop, a void gives a wide one, and
+    both are true information -- which a width-derived stop could not express."""
     atr = 100.0
-    rr = B2.rr_board(_tight_conf(entry=100.0, far=140.0), 90.0, atr)
-    assert rr["board"], "a 0.4-ATR invalidation must still rank"
-    assert rr["excluded_too_tight"] == []
+    conf = _tight_conf(entry=100.0, far=100.5, opposite=50.0)
+    conf["with_volume"]["clusters"].append(
+        {"cluster_id": 2, "mean": 130.0, "member_count": 2, "score": 6,
+         "families": ["structure", "ss"],
+         "members": [{"level": 129.0}, {"level": 131.0}]})
+    rr = B2.rr_board(conf, 90.0, atr)
+    assert rr["board"]
     row = rr["board"][0]
-    assert row["rankable"] is True and row["flag"] is None
-    # §7.2: invalidation is BEYOND the far edge, by one cluster tolerance.
-    # far edge 140, +0.15*100 buffer -> 155; entry 100 -> 0.55 ATR.
-    assert row["invalidation"] == pytest.approx(140.0 + L.CLUSTER_ATR * atr)
-    assert row["inval_atr"] == pytest.approx(0.55)
-    assert row["rr"] == pytest.approx(row["reward"] / row["risk"])
+    # the next cluster beyond 100 is the one at 130; its far edge is 131
+    assert row["invalidation"] == pytest.approx(131.0),         "invalidation must be the next cluster's far edge, not a width multiple"
+    assert "next cluster" in row["invalidation_source"]
+    assert "structure" in rr["invalidation_rule"]
+
+    # a draft must agree with its ranked row about where the level failed
+    d = B2.hypothesis_drafts(conf, 90.0, atr_d=atr)
+    assert d[0]["inval_atr"] == pytest.approx(row["inval_atr"])
 
 
-def test_f_b34_invalidation_is_beyond_the_far_edge_not_on_it():
-    """§7.2 says BEYOND. Sitting ON the far edge made every stop structurally
-    un-survivable: clusters are bounded by CLUSTER_ATR from their running mean,
-    so a far-edge invalidation can never exceed ~0.15 ATR and could never clear
-    the 0.25 floor. A floor no geometry can satisfy is an off switch."""
+def test_f_b34_no_structure_beyond_means_no_rr_not_a_fabricated_stop():
+    """C.3: never invent a stop to complete a ratio."""
     atr = 100.0
-    rows = B2.rr_board(_tight_conf(entry=100.0, far=140.0), 90.0, atr)["board"]
-    assert rows
-    for r in rows:
-        assert r["invalidation"] > 140.0, \
-            "invalidation sits ON the far edge, not beyond it"
-        assert r["invalidation"] == pytest.approx(140.0 + L.CLUSTER_ATR * atr)
-
-    # the draft and its ranked row must agree about where the level failed
-    d = B2.hypothesis_drafts(_tight_conf(entry=100.0, far=140.0), 90.0, atr_d=atr)
-    assert d[0]["inval_atr"] == pytest.approx(rows[0]["inval_atr"])
+    lonely = {"with_volume": {
+        "clusters": [{"cluster_id": 0, "mean": 100.0, "member_count": 2, "score": 7,
+                      "families": ["structure", "ss"],
+                      "members": [{"level": 100.0}, {"level": 100.5}]},
+                     {"cluster_id": 1, "mean": 50.0, "member_count": 2, "score": 7,
+                      "families": ["structure", "ss"],
+                      "members": [{"level": 50.0}, {"level": 51.0}]}],
+        "lines": {"above": {"mean": 100.0, "score": 7,
+                            "families": ["structure", "ss"],
+                            "members": [{"level": 100.0}, {"level": 100.5}],
+                            "source": "primary"}, "below": None}}}
+    rr = B2.rr_board(lonely, 90.0, atr)
+    assert rr["board"] == [], "no structure beyond -> no ranked row"
+    assert rr["no_rr"], "the draft must be reported, with a reason"
+    n = rr["no_rr"][0]
+    assert n["rr"] is None and n["invalidation"] is None
+    assert "no cluster beyond" in n["reason"]
+    assert "fabricated" in n["reason"]
 
 
 def test_f_b34_inval_atr_is_printed_on_every_row():
-    """C.1: the reader must be able to see the stop distance in ATR terms."""
+    """C.1: the reader must see the stop distance in ATR terms."""
     k = _bundle()
     now = int(k["1h"]["open_time"].iloc[-1])
     price = float(k["1h"]["close"].iloc[-1])
@@ -236,28 +265,11 @@ def test_f_b34_inval_atr_is_printed_on_every_row():
         assert row["inval_atr"] == pytest.approx(row["risk"] / 250.0)
 
 
-def test_f_b34_excluded_drafts_still_print_with_the_flag():
-    """C.2: a draft below the floor is PRINTED, flagged, and not ranked.
-    Suppressing it would hide geometry the operator asked to see."""
-    drafts = B2.hypothesis_drafts(_tight_conf(), 90.0, atr_d=100.0)
-    assert drafts, "the draft must still print"
-    tight = [d for d in drafts if d["rankable"] is False]
-    assert tight, "the tight draft must be flagged, not dropped"
-    for d in tight:
-        assert d["flag"] == "invalidation too tight to rank"
-        assert d["inval_atr"] < B2.MIN_INVAL_ATR
-        assert d["draft"] is True and d["no_sizing"] is True
-
-    loose = B2.hypothesis_drafts(_tight_conf(far=140.0), 90.0, atr_d=100.0)
-    assert all(d["rankable"] for d in loose), "a survivable draft must stay rankable"
-
-
 def test_f_b34_floor_is_declared_a_placeholder():
-    """C.4: it is re-ratified from the calibration distribution, not defended."""
+    """C.4: re-ratified from the calibration distribution, not defended."""
     rr = B2.rr_board(_tight_conf(), 90.0, 100.0)
     assert "placeholder" in rr["min_inval_atr_is"]
     assert "calibration" in rr["min_inval_atr_is"]
-    assert "inversely proportional" in rr["why_a_floor"]
 
 
 # --------------------------------------------------------------- F-B31

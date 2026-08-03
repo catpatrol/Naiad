@@ -90,9 +90,25 @@ PARITY_BANNER = ("PARITY NOT CERTIFIED — numbers not yet adopted. "
 # operator asked to see -- but they are excluded from the RANKED board and
 # flagged, because ranking them is what makes them look like the best ideas.
 #
-# v1 PLACEHOLDER.  The calibration report prints the inval_atr distribution so
-# this is re-ratified from data rather than from anyone's guess.
+# DEMOTED to a CAUTION CHIP, cycle 3 (reviewer ruling D2-2).  The §7.2
+# conformance fix already solved R-1: with invalidation BEYOND the far edge a
+# 0.096-ATR stop is geometrically impossible, and the floor of the geometry is
+# ~0.15 ATR.  Measured inval_atr then spanned 0.244-0.276 -- a 0.03 spread -- so
+# excluding 2 of 12 on it was an arbitrary cut wearing the appearance of a
+# principle.  Rows below the threshold now PRINT ON THE RANKED BOARD carrying a
+# caution chip; nothing is excluded.
 MIN_INVAL_ATR = 0.25
+
+# C.2 STRUCTURE-DERIVED INVALIDATION.  Invalidation is the far edge of the NEXT
+# CLUSTER BEYOND the entry cluster, not a mechanical function of cluster width.
+# Dense structure gives a tight stop, a void gives a wide one, and BOTH ARE TRUE
+# INFORMATION -- which a width-derived stop could never express, because it knew
+# only how wide one cluster happened to be.
+#
+# When no next cluster exists within reach, the draft prints WITHOUT an R:R and
+# says why.  A fabricated stop to complete a ratio would be the worst of both:
+# a number that looks measured and is invented.
+INVAL_SEARCH_ATR = 3.0
 
 
 def _f(x):
@@ -760,6 +776,39 @@ def _cluster_edges(cl):
     return min(lv), max(lv)
 
 
+def _structure_invalidation(clusters, line, side, entry, lo, hi, atr_d):
+    """C.2 -- the far edge of the NEXT CLUSTER BEYOND the entry cluster.
+
+    The level fails when price is through the next piece of structure past it,
+    not when price has travelled some fixed multiple of the entry cluster's own
+    width.  Dense structure therefore gives a tight stop and a void gives a wide
+    one, and both are true statements about the chart.
+
+    Returns (invalidation, source) or (None, reason) when no cluster lies within
+    INVAL_SEARCH_ATR -- the caller then prints the draft with NO R:R rather than
+    inventing a stop to complete the ratio.
+    """
+    if not atr_d or atr_d <= 0:
+        return None, "no daily ATR"
+    reach = INVAL_SEARCH_ATR * atr_d
+    beyond = []
+    for c in clusters:
+        m = c.get("mean")
+        if m is None:
+            continue
+        if side == "above" and m > hi and (m - entry) <= reach:
+            beyond.append(c)
+        elif side == "below" and m < lo and (entry - m) <= reach:
+            beyond.append(c)
+    if not beyond:
+        return None, "no cluster beyond within reach"
+    nxt = sorted(beyond, key=lambda c: abs(c["mean"] - entry))[0]
+    n_lo, n_hi = _cluster_edges(nxt)
+    inval = n_hi if side == "above" else n_lo
+    return _f(inval), (f"far edge of the next cluster beyond "
+                       f"(mean {nxt['mean']:,.2f}, score {nxt['score']})")
+
+
 def rr_board(conf, price, atr_d, view="with_volume"):
     """§7.2 -- R:R ranking, GEOMETRY not prophecy.
 
@@ -779,26 +828,27 @@ def rr_board(conf, price, atr_d, view="with_volume"):
     """
     v = (conf or {}).get(view) or {}
     lines, clusters = v.get("lines") or {}, v.get("clusters") or []
-    board, excluded = [], []
+    board, excluded, no_rr = [], [], []
     for side in ("above", "below"):
         line = lines.get(side)
         if not line:
             continue
         entry = _f(line["mean"])
         lo, hi = _cluster_edges(line)
-        # §7.2 says invalidation is BEYOND the cluster's far edge -- "the price
-        # that says the level failed".  Sitting exactly ON the far edge is not
-        # beyond it, and it made the stop structurally un-survivable: clusters
-        # are bounded by CLUSTER_ATR from their running mean, so a far-edge
-        # invalidation can never exceed ~0.15 ATR and could never clear R-1's
-        # 0.25 floor.  A floor no geometry can satisfy is not a filter, it is an
-        # off switch.
-        #
-        # The buffer REUSES the ratified cluster tolerance rather than inventing
-        # a new number: a price a full cluster-width past the far edge is
-        # unambiguously outside the cluster that defined the level.
-        buf = L.CLUSTER_ATR * atr_d if atr_d else 0.0
-        invalidation = _f((hi + buf) if side == "above" else (lo - buf))
+        invalidation, inval_src = _structure_invalidation(
+            clusters, line, side, entry, lo, hi, atr_d)
+        if invalidation is None:
+            no_rr.append({
+                "side": "short" if side == "above" else "long",
+                "line_side": side, "entry": entry,
+                "cluster_score": int(line["score"]),
+                "cluster_families": list(line["families"]),
+                "rr": None, "invalidation": None,
+                "reason": f"no cluster beyond the level within "
+                          f"{INVAL_SEARCH_ATR} daily-ATR -- no structure to fail "
+                          f"against, so no R:R is printed rather than a "
+                          f"fabricated stop"})
+            continue
         if entry is None or invalidation is None or entry == invalidation:
             continue
         opposing = sorted(
@@ -822,28 +872,34 @@ def rr_board(conf, price, atr_d, view="with_volume"):
                 "cluster_score": int(line["score"]),
                 "cluster_families": list(line["families"]),
                 "source": line.get("source", "primary")}
-            # R-1: below the floor it still PRINTS, but it is not RANKED.
-            if inval_atr is not None and inval_atr < MIN_INVAL_ATR:
-                row["rankable"] = False
-                row["flag"] = "invalidation too tight to rank"
-                excluded.append(row)
-            else:
-                row["rankable"] = True
-                row["flag"] = None
-                board.append(row)
+            # R-1 DEMOTED: a tight invalidation now carries a CAUTION CHIP and
+            # stays on the ranked board.  Excluding it was an arbitrary cut.
+            row["rankable"] = True
+            tight = inval_atr is not None and inval_atr < MIN_INVAL_ATR
+            row["caution"] = tight
+            row["flag"] = ("invalidation tighter than "
+                           f"{MIN_INVAL_ATR} daily-ATR -- caution") if tight else None
+            row["invalidation_source"] = inval_src
+            board.append(row)
 
     board.sort(key=lambda r: -r["rr"])
-    excluded.sort(key=lambda r: -r["rr"])
     return {"view": view, "board": board,
             "excluded_too_tight": excluded,
+            "no_rr": no_rr,
+            "caution_count": sum(1 for r in board if r.get("caution")),
             "min_inval_atr": MIN_INVAL_ATR,
             "min_inval_atr_is": "v1 placeholder; re-ratified against the "
                                 "inval_atr distribution in the calibration report",
             "excluded_count": len(excluded),
             "ranking_is": "structural quality, not probability (§7.2)",
             "why_a_floor": "R:R is inversely proportional to the invalidation "
-                           "distance, so without a floor the tightest and least "
-                           "survivable stops rank highest (R-1)",
+                           "distance (R-1). The §7.2 fix made a knife-edge stop "
+                           "geometrically impossible, so the threshold is now a "
+                           "CAUTION CHIP, not an exclusion gate -- excluding on a "
+                           "0.03-ATR spread was an arbitrary cut.",
+            "invalidation_rule": "far edge of the NEXT CLUSTER beyond the entry "
+                                 "cluster (C.2); dense structure -> tight stop, "
+                                 "void -> wide stop, both true information",
             "contains_no_probability_claim": True}
 
 
@@ -864,11 +920,12 @@ def hypothesis_drafts(conf, price, atr_d=None, view="with_volume"):
             continue
         lo, hi = _cluster_edges(line)
         entry = _f(line["mean"])
-        # §7.2 BEYOND the far edge -- same buffer as rr_board, so a draft and its
-        # ranked row can never disagree about where the level failed.
-        buf = L.CLUSTER_ATR * atr_d if atr_d else 0.0
-        far = (hi + buf) if side == "above" else (lo - buf)
-        inval_atr = (abs(entry - far) / atr_d) if (atr_d and entry is not None) else None
+        # C.2 -- the SAME structure-derived rule rr_board uses, so a draft and
+        # its ranked row can never disagree about where the level failed.
+        far, _src = _structure_invalidation(
+            (v.get("clusters") or []), line, side, entry, lo, hi, atr_d)
+        inval_atr = (abs(entry - far) / atr_d) if (atr_d and far is not None
+                                                   and entry is not None) else None
         tight = inval_atr is not None and inval_atr < MIN_INVAL_ATR
         out.append({
             "draft": True, "no_sizing": True,
@@ -880,9 +937,11 @@ def hypothesis_drafts(conf, price, atr_d=None, view="with_volume"):
             "then": ("watch for continuation toward the next opposing area"
                      if side == "above" else
                      "watch for follow-through toward the next area below"),
-            "invalidated_if": f"price closes back "
-                              f"{'below' if side == 'above' else 'above'} "
-                              f"{far:,.2f}",
+            "invalidated_if": (f"price closes back "
+                               f"{'below' if side == 'above' else 'above'} "
+                               f"{far:,.2f}") if far is not None else
+                              ("no cluster beyond this level within reach -- no "
+                               "structural invalidation, so no R:R is printed"),
             "level": _f(line["mean"]), "score": int(line["score"]),
             "families": list(line["families"])})
     return out
