@@ -197,8 +197,29 @@ def test_f_b34_a_survivable_invalidation_still_ranks():
     assert rr["excluded_too_tight"] == []
     row = rr["board"][0]
     assert row["rankable"] is True and row["flag"] is None
-    assert row["inval_atr"] == pytest.approx(0.4)
+    # §7.2: invalidation is BEYOND the far edge, by one cluster tolerance.
+    # far edge 140, +0.15*100 buffer -> 155; entry 100 -> 0.55 ATR.
+    assert row["invalidation"] == pytest.approx(140.0 + L.CLUSTER_ATR * atr)
+    assert row["inval_atr"] == pytest.approx(0.55)
     assert row["rr"] == pytest.approx(row["reward"] / row["risk"])
+
+
+def test_f_b34_invalidation_is_beyond_the_far_edge_not_on_it():
+    """§7.2 says BEYOND. Sitting ON the far edge made every stop structurally
+    un-survivable: clusters are bounded by CLUSTER_ATR from their running mean,
+    so a far-edge invalidation can never exceed ~0.15 ATR and could never clear
+    the 0.25 floor. A floor no geometry can satisfy is an off switch."""
+    atr = 100.0
+    rows = B2.rr_board(_tight_conf(entry=100.0, far=140.0), 90.0, atr)["board"]
+    assert rows
+    for r in rows:
+        assert r["invalidation"] > 140.0, \
+            "invalidation sits ON the far edge, not beyond it"
+        assert r["invalidation"] == pytest.approx(140.0 + L.CLUSTER_ATR * atr)
+
+    # the draft and its ranked row must agree about where the level failed
+    d = B2.hypothesis_drafts(_tight_conf(entry=100.0, far=140.0), 90.0, atr_d=atr)
+    assert d[0]["inval_atr"] == pytest.approx(rows[0]["inval_atr"])
 
 
 def test_f_b34_inval_atr_is_printed_on_every_row():

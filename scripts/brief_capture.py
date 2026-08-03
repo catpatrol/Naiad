@@ -153,8 +153,19 @@ def _last_bars(klines):
 
 
 def build_capture(symbols, slot, as_of_ms=None, parity_certified=False,
-                  backfill=False, log=print):
-    """Assemble a full capture: envelope + Part I + Part II per asset."""
+                  backfill=False, with_part1=True, log=print):
+    """Assemble a full capture: envelope + Part I + Part II per asset.
+
+    D.3 (reviewer ruling D-2): Part I's layers come from `daily_brief`, not from
+    a reimplementation.  Those layers are already fixtured under F-B1..F-B8 and
+    are what the operator has been reading; rebuilding them here would create a
+    second source of truth for the same numbers, which is the defect D-3 just
+    removed from the resample path.
+
+    `with_part1=False` builds the volume/decision layers alone.  It exists for
+    fixtures and for measuring the registry WITHOUT Part I, not as a shipping
+    mode -- a capture missing three of five families understates every score.
+    """
     import pandas as pd
     from engine.data import cache_dir
     from engine.version import ENGINE_VERSION
@@ -172,6 +183,22 @@ def build_capture(symbols, slot, as_of_ms=None, parity_certified=False,
     doc["backfill"] = guard
     doc["assets"] = {}
     doc["runtime_by_layer"] = {}
+
+    part1_assets, v1_meta = {}, None
+    if with_part1:
+        s0 = time.time()
+        log("  Part I (daily_brief layers)…")
+        import daily_brief as DB
+        v1doc, _runs = DB.build_brief(list(symbols), as_of_ms, log=log)
+        part1_assets = v1doc.get("assets") or {}
+        v1_meta = {"script_version": v1doc.get("script_version"),
+                   "v1_rules_version": v1doc.get("rules_version"),
+                   "v1_rules_sha256": v1doc.get("rules_sha256"),
+                   "vp_substrate": v1doc.get("vp_substrate")}
+        doc["runtime_by_layer"]["_part1"] = round(time.time() - s0, 2)
+        log(f"    Part I built for {len(part1_assets)} asset(s) "
+            f"in {doc['runtime_by_layer']['_part1']}s")
+    doc["part1_provenance"] = v1_meta or {"note": "Part I not built (--no-part1)"}
 
     kd = cache_dir() / "klines"
     for sym in symbols:
@@ -192,12 +219,29 @@ def build_capture(symbols, slot, as_of_ms=None, parity_certified=False,
         r1d = S.resample_ohlcv(t, o, h, l, c, v, DAY_MS)
         atr_d = float(V.atr(r1d["high"], r1d["low"], r1d["close"], 14)[-1])
 
+        # Part I, verbatim from daily_brief where available.
+        base = dict(part1_assets.get(sym) or {})
         a = {"symbol": sym, "price": price,
              "price_at_utc": iso(int(t[-1])),
              "daily_atr": atr_d,
-             "last_bar_utc": _last_bars(k),
-             "vwap": {}, "structure": {}, "sessions": {}, "radar": [],
-             "governor": {}, "funding": {}, "volatility": {}}
+             "last_bar_utc": _last_bars(k)}
+        for key in ("structure", "volume_profile", "tpo", "vwap", "rsi",
+                    "volatility", "funding", "sessions", "btc_beta",
+                    "governor", "radar", "tier2", "flags", "bias",
+                    "points_of_interest", "staleness"):
+            if key in base:
+                a[key] = base[key]
+        # §2.1 / operator ruling A-4: the FULL bias scorecard with every vote is
+        # kept, generously, and tuned later -- it is too early to know whether it
+        # works, and a vote deleted now cannot be studied later.
+        a.setdefault("vwap", {})
+        a.setdefault("structure", {})
+        a.setdefault("sessions", {})
+        a.setdefault("radar", [])
+        a.setdefault("governor", {})
+        a.setdefault("funding", {})
+        a.setdefault("volatility", {})
+        a["part1_present"] = bool(base)
 
         part1, part2 = B2.brief2_asset(a, k, int(t[-1]), price, atr_d)
         a.update(part1)
@@ -209,8 +253,9 @@ def build_capture(symbols, slot, as_of_ms=None, parity_certified=False,
             a["known_wrong_withdrawn"] = dict(LIT_MARKING_WITHDRAWN)
         doc["assets"][sym] = a
         doc["runtime_by_layer"][sym] = round(time.time() - s0, 2)
+        bf = part1["confluence"].get("level_count_by_family") or {}
         log(f"  {sym}: {doc['runtime_by_layer'][sym]}s  "
-            f"levels={part1['confluence'].get('level_count')}")
+            f"levels={part1['confluence'].get('level_count')}  {bf}")
 
     doc["runtime_seconds"] = round(time.time() - t0, 2)
     return doc
@@ -280,6 +325,9 @@ def main():
     ap.add_argument("--backfill", action="store_true")
     ap.add_argument("--parity-certified", action="store_true",
                     help="ONLY after the operator's parity readings match")
+    ap.add_argument("--no-part1", action="store_true",
+                    help="volume/decision layers only -- measurement, not a "
+                         "shipping mode; understates every score")
     args = ap.parse_args()
 
     from engine.cells import SYMBOLS
@@ -288,7 +336,8 @@ def main():
 
     print(f"BRIEF-2 capture: slot={args.slot} symbols={len(symbols)}")
     doc = build_capture(symbols, args.slot, backfill=args.backfill,
-                        parity_certified=args.parity_certified)
+                        parity_certified=args.parity_certified,
+                        with_part1=not args.no_part1)
     path, sha, _ = write_capture(doc, force=args.force)
     print(f"\nwrote {path}")
     print(f"  sha256 {sha}")

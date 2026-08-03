@@ -512,19 +512,32 @@ def build_registry(a, vol, rv, nest_levels):
     """
     reg = L.LevelRegistry()
 
-    # vwap_anchored -- developing W/M/Q/Y + prior M/Q/Y, each with 1/2/3 sigma
-    for key, blob in (a.get("vwap") or {}).items():
+    # vwap_anchored -- developing W/M/Q/Y, each with 1/2/3 sigma.
+    #
+    # `daily_brief` publishes sigma as a scalar and only the 1-sigma band, so the
+    # 2s/3s levels are DERIVED here from the same sigma rather than read.  That is
+    # arithmetic on a published number, not a second recipe.
+    #
+    # Its `vwap.rolling` block is deliberately NOT read: brief2's own rvwap_layer
+    # is the pinned §3.2 recipe and already supplies the vwap_rolling family.
+    # Adding both would double-count the same tool as two agreeing voices, which
+    # is precisely the degeneracy collapse_same_family exists to prevent.
+    anchored = ((a.get("vwap") or {}).get("anchored") or {})
+    for key, blob in anchored.items():
         if not isinstance(blob, dict):
             continue
         lv = _f(blob.get("vwap"))
-        if lv is not None:
-            reg.add("vwap_anchored", f"{key} VWAP", lv, "vwap_complex", key)
+        if lv is None:
+            continue
+        reg.add("vwap_anchored", f"{key} anchored VWAP", lv, "vwap_complex", key)
+        sig = _f(blob.get("sigma"))
+        if sig is None or sig <= 0:
+            continue
         for k in SIGMAS:
-            for side in ("up", "dn"):
-                b = _f((blob.get("bands") or {}).get(f"{side}_{k}"))
-                if b is not None:
-                    reg.add("vwap_anchored", f"{key} {side}{k}s", b,
-                            "vwap_complex", key)
+            reg.add("vwap_anchored", f"{key} +{k}s", lv + k * sig,
+                    "vwap_complex", key)
+            reg.add("vwap_anchored", f"{key} -{k}s", lv - k * sig,
+                    "vwap_complex", key)
 
     # vwap_rolling -- 7/30/90/365d RVWAP, each with 1/2/3 sigma
     for wname, blob in (rv.get("windows") or {}).items():
@@ -557,24 +570,50 @@ def build_registry(a, vol, rv, nest_levels):
                 lv["source_layer"], lv["timeframe"])
 
     # structure -- confirmed pivots, period opens, prior D/W/M extremes, sessions
-    for k, val in (a.get("structure") or {}).items():
-        lv = _f(val)
+    st = a.get("structure") or {}
+    for tag, pivots in (("pivot high", st.get("pivot_highs")),
+                        ("pivot low", st.get("pivot_lows"))):
+        for i, p in enumerate(pivots or []):
+            lv = _f((p or {}).get("level"))
+            if lv is not None:
+                reg.add("structure", f"{tag} {(p or {}).get('day', i)}", lv,
+                        "structure_layer", "1d")
+    for period, tf in (("prior_day", "1d"), ("prior_week", "1w"),
+                       ("prior_month", "1M")):
+        blob = st.get(period) or {}
+        for edge in ("high", "low"):
+            lv = _f(blob.get(edge))
+            if lv is not None:
+                reg.add("structure", f"{period.replace('_', ' ')} {edge}", lv,
+                        "structure_layer", tf)
+    for period, blob in (st.get("period_opens") or {}).items():
+        lv = _f((blob or {}).get("level"))
         if lv is not None:
-            reg.add("structure", k, lv, "structure_layer", None)
-    for k, val in (a.get("sessions") or {}).items():
-        lv = _f(val)
-        if lv is not None and ("high" in k or "low" in k):
-            reg.add("structure", f"session {k}", lv, "sessions_layer", "1h")
+            reg.add("structure", f"{period} open", lv, "structure_layer", period)
+
+    for name, blob in ((a.get("sessions") or {}).get("sessions") or {}).items():
+        for edge in ("high", "low"):
+            lv = _f((blob or {}).get(edge))
+            if lv is not None:
+                reg.add("structure", f"session {name} {edge}", lv,
+                        "sessions_layer", "1h")
 
     # ss -- armed zone edges and governor band edges per lens
     for row in (a.get("radar") or []):
         if not isinstance(row, dict):
             continue
-        for k, val in row.items():
-            lv = _f(val)
-            if lv is not None and ("zone" in k or "band" in k or k.startswith("z")):
-                reg.add("ss", f"{row.get('lens', '?')} {k}", lv, "radar",
-                        row.get("lens"))
+        lens = row.get("lens", "?")
+        for zone, band in (row.get("armed_bands") or {}).items():
+            if not isinstance(band, dict) or not band.get("armed"):
+                continue
+            for edge in ("top", "bot"):
+                lv = _f(band.get(edge))
+                if lv is not None:
+                    reg.add("ss", f"{lens} {zone} {edge}", lv, "radar", lens)
+        for edge in ("governor_band_top", "governor_band_bot"):
+            lv = _f(row.get(edge))
+            if lv is not None:
+                reg.add("ss", f"{lens} {edge}", lv, "radar", lens)
     return reg
 
 
@@ -627,7 +666,19 @@ def rr_board(conf, price, atr_d, view="with_volume"):
             continue
         entry = _f(line["mean"])
         lo, hi = _cluster_edges(line)
-        invalidation = _f(hi if side == "above" else lo)
+        # §7.2 says invalidation is BEYOND the cluster's far edge -- "the price
+        # that says the level failed".  Sitting exactly ON the far edge is not
+        # beyond it, and it made the stop structurally un-survivable: clusters
+        # are bounded by CLUSTER_ATR from their running mean, so a far-edge
+        # invalidation can never exceed ~0.15 ATR and could never clear R-1's
+        # 0.25 floor.  A floor no geometry can satisfy is not a filter, it is an
+        # off switch.
+        #
+        # The buffer REUSES the ratified cluster tolerance rather than inventing
+        # a new number: a price a full cluster-width past the far edge is
+        # unambiguously outside the cluster that defined the level.
+        buf = L.CLUSTER_ATR * atr_d if atr_d else 0.0
+        invalidation = _f((hi + buf) if side == "above" else (lo - buf))
         if entry is None or invalidation is None or entry == invalidation:
             continue
         opposing = sorted(
@@ -692,8 +743,11 @@ def hypothesis_drafts(conf, price, atr_d=None, view="with_volume"):
         if not line:
             continue
         lo, hi = _cluster_edges(line)
-        far = hi if side == "above" else lo
         entry = _f(line["mean"])
+        # §7.2 BEYOND the far edge -- same buffer as rr_board, so a draft and its
+        # ranked row can never disagree about where the level failed.
+        buf = L.CLUSTER_ATR * atr_d if atr_d else 0.0
+        far = (hi + buf) if side == "above" else (lo - buf)
         inval_atr = (abs(entry - far) / atr_d) if (atr_d and entry is not None) else None
         tight = inval_atr is not None and inval_atr < MIN_INVAL_ATR
         out.append({

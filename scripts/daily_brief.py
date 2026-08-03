@@ -66,6 +66,10 @@ from engine.htf import map_htf_to_exec, take, take_bool          # noqa: E402
 from engine.signals import compute_signals                       # noqa: E402
 from engine.version import ENGINE_VERSION                        # noqa: E402
 
+# D-3 (reviewer ruling 2026-08-03): one resample implementation, one closure
+# rule.  See `resample` below for the disclosed value shift.
+from analytics import structure as S                             # noqa: E402
+
 SCRIPT_VERSION = "1.1.0"
 RULES_VERSION = "1.1.0"
 CONFIG_ID = "v11_faithful"        # D2: v11 semantics only, no v12 study content
@@ -214,16 +218,40 @@ def warmup_anchor_ms(tf_exec, tf_gov, start_ms):
 
 
 def resample(df, tf):
-    """OHLCV resample onto a UTC-aligned grid of `tf`."""
+    """OHLCV resample onto a UTC-aligned grid of `tf`.  CLOSED BUCKETS ONLY.
+
+    FINDING F-1R-B, fixed 2026-08-03 (reviewer ruling D-3).  This function used
+    to be a PRIVATE pandas groupby that kept every bucket including the forming
+    one, so it did not inherit Amendment 2 §1.2's closure discipline.  While the
+    v1.1 brief stood alone that was merely wrong; once BRIEF-2 reads the same
+    layers, two briefs disagreeing about which bar is the last closed one is the
+    exact defect class Phase I-R exists to abolish.
+
+    It now delegates to `analytics.structure.resample_ohlcv`, which emits only
+    buckets PROVED closed by a bar in a strictly later bucket.  One implementation,
+    one closure rule, no drift.
+
+    DISCLOSED VALUE SHIFT.  Every resampled timeframe loses exactly one bucket --
+    the forming one -- so published values move from the forming bar to the last
+    CLOSED bar.  Measured 2026-08-03 across the basket:
+
+        RSI(14)   4h   -0.61 to +0.89     12h  -6.40 to +1.19     1d  -5.98 to -1.25
+        ATR(14)   1d   BTCUSDT 1,638.22 -> 1,699.80
+
+    That is the F-AN-8c diff class and it is the correction, not a regression:
+    mid-period, a resampled oscillator was reading a fraction of a period as if
+    it were the whole one.
+    """
     if not len(df):
         return df.copy()
-    step = ALL_MS[tf]
-    g = (df["open_time"].to_numpy(np.int64) // step) * step
-    out = df.groupby(g).agg(open=("open", "first"), high=("high", "max"),
-                            low=("low", "min"), close=("close", "last"),
-                            volume=("volume", "sum"))
-    out.index.name = "open_time"
-    return out.reset_index()
+    r = S.resample_ohlcv(
+        df["open_time"].to_numpy(np.int64),
+        df["open"].to_numpy(float), df["high"].to_numpy(float),
+        df["low"].to_numpy(float), df["close"].to_numpy(float),
+        df["volume"].to_numpy(float), ALL_MS[tf])
+    return pd.DataFrame({"open_time": r["open_time"], "open": r["open"],
+                         "high": r["high"], "low": r["low"],
+                         "close": r["close"], "volume": r["volume"]})
 
 
 def rsi_wilder(close, length=14):
