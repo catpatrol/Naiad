@@ -1,0 +1,999 @@
+{
+ "analytics_sha": "da81034d86329a0e0e581e526ebe515f3d0f491a0c7ae329e3a9ce49c9c6c731",
+ "analytics_version": "1.3.0",
+ "capture": "brief_2026-08-03_post_ny.json",
+ "date": "2026-08-03",
+ "extra_inval_atr_distribution": {
+  "floor": 0.25,
+  "max": 0.32145845031777553,
+  "median": 0.2733593837955164,
+  "min": 0.18605473276892154,
+  "n": 40,
+  "p25": 0.2557738931370279,
+  "p75": 0.285116852110962,
+  "purpose": "R-1 stage C.4 -- the floor is a v1 PLACEHOLDER and is re-ratified against this distribution, not against a guess",
+  "rows_excluded": 10,
+  "rows_ranked": 30
+ },
+ "item1_level_count": {
+  "per_asset": {
+   "BTCUSDT": {
+    "by_family": {
+     "profile_windowed": 30,
+     "ss": 24,
+     "structure": 13,
+     "vwap_anchored": 21,
+     "vwap_rolling": 28
+    },
+    "total": 116
+   },
+   "ETHUSDT": {
+    "by_family": {
+     "profile_windowed": 30,
+     "ss": 12,
+     "structure": 13,
+     "vwap_anchored": 21,
+     "vwap_rolling": 28
+    },
+    "total": 104
+   },
+   "FARTCOINUSDT": {
+    "by_family": {
+     "profile_windowed": 30,
+     "ss": 16,
+     "structure": 13,
+     "vwap_anchored": 21,
+     "vwap_rolling": 28
+    },
+    "total": 108
+   },
+   "HYPEUSDT": {
+    "by_family": {
+     "profile_windowed": 27,
+     "ss": 16,
+     "structure": 13,
+     "vwap_anchored": 21,
+     "vwap_rolling": 28
+    },
+    "total": 105
+   },
+   "JTOUSDT": {
+    "by_family": {
+     "profile_windowed": 36,
+     "ss": 18,
+     "structure": 13,
+     "vwap_anchored": 21,
+     "vwap_rolling": 28
+    },
+    "total": 116
+   },
+   "LITUSDT": {
+    "by_family": {
+     "profile_windowed": 22,
+     "ss": 16,
+     "structure": 13,
+     "vwap_anchored": 21,
+     "vwap_rolling": 21
+    },
+    "total": 93
+   },
+   "NEARUSDT": {
+    "by_family": {
+     "profile_windowed": 39,
+     "ss": 16,
+     "structure": 13,
+     "vwap_anchored": 21,
+     "vwap_rolling": 28
+    },
+    "total": 117
+   },
+   "SOLUSDT": {
+    "by_family": {
+     "profile_windowed": 33,
+     "ss": 16,
+     "structure": 13,
+     "vwap_anchored": 21,
+     "vwap_rolling": 28
+    },
+    "total": 111
+   },
+   "TAOUSDT": {
+    "by_family": {
+     "profile_windowed": 30,
+     "ss": 18,
+     "structure": 13,
+     "vwap_anchored": 21,
+     "vwap_rolling": 28
+    },
+    "total": 110
+   },
+   "ZECUSDT": {
+    "by_family": {
+     "profile_windowed": 33,
+     "ss": 10,
+     "structure": 13,
+     "vwap_anchored": 21,
+     "vwap_rolling": 28
+    },
+    "total": 105
+   }
+  },
+  "summary": {
+   "contract_expectation": "~180-200 (\u00a75.3)",
+   "max": 117,
+   "median": 109.0,
+   "min": 93
+  },
+  "v1_1_reference": "46-62 (contract \u00a75.3, not recomputed)"
+ },
+ "item2_score_distribution": {
+  "cap_binds_count": 19,
+  "cap_binds_pct": 2.59,
+  "cap_opportunities": 735,
+  "family_cap": 3,
+  "max": 17,
+  "median": 2.0,
+  "min": 2,
+  "n_clusters": 446,
+  "note": "the cap binds whenever one family contributes more members than FAMILY_CAP to a single cluster -- that is it doing its job, stopping one prolific tool manufacturing agreement with itself",
+  "p90": 7
+ },
+ "item3_line_stability": {
+  "BTCUSDT": {
+   "above_spread": 65.60576363610016,
+   "below_spread": 87.67951731170615,
+   "by_tolerance": {
+    "0.1": {
+     "above": 63869.52357013161,
+     "below": 63111.923329880716,
+     "clusters": 54
+    },
+    "0.15": {
+     "above": 63803.91780649551,
+     "below": 63199.60284719242,
+     "clusters": 47
+    },
+    "0.2": {
+     "above": 63828.42471237765,
+     "below": 63118.09272315131,
+     "clusters": 43
+    }
+   },
+   "stable": false
+  },
+  "ETHUSDT": {
+   "above_spread": 21.346637122179345,
+   "below_spread": 3.891317880341603,
+   "by_tolerance": {
+    "0.1": {
+     "above": 1931.9283023499493,
+     "below": 1872.2071218104643,
+     "clusters": 57
+    },
+    "0.15": {
+     "above": 1931.9283023499493,
+     "below": 1868.3158039301227,
+     "clusters": 51
+    },
+    "0.2": {
+     "above": 1910.58166522777,
+     "below": 1869.2297481701125,
+     "clusters": 42
+    }
+   },
+   "stable": false
+  },
+  "FARTCOINUSDT": {
+   "above_spread": 0.0008562006867010585,
+   "below_spread": 0.002441945226164352,
+   "by_tolerance": {
+    "0.1": {
+     "above": 0.13334282675248557,
+     "below": 0.12727242591737942,
+     "clusters": 58
+    },
+    "0.15": {
+     "above": 0.1330176150643642,
+     "below": 0.12483048069121506,
+     "clusters": 50
+    },
+    "0.2": {
+     "above": 0.13387381575106524,
+     "below": 0.12584303446686465,
+     "clusters": 44
+    }
+   },
+   "stable": false
+  },
+  "HYPEUSDT": {
+   "above_spread": 4.229218258601264,
+   "below_spread": 0.45446479394866657,
+   "by_tolerance": {
+    "0.1": {
+     "above": 56.92435199638143,
+     "below": 51.99726016677131,
+     "clusters": 53
+    },
+    "0.15": {
+     "above": 52.69513373778017,
+     "below": 51.84654090492459,
+     "clusters": 45
+    },
+    "0.2": {
+     "above": 56.752691967676,
+     "below": 52.301005698873254,
+     "clusters": 40
+    }
+   },
+   "stable": false
+  },
+  "JTOUSDT": {
+   "above_spread": 0.008349546756498183,
+   "below_spread": 0.011731274822614601,
+   "by_tolerance": {
+    "0.1": {
+     "above": 0.49843044034752304,
+     "below": 0.4902970087115035,
+     "clusters": 54
+    },
+    "0.15": {
+     "above": 0.4943637245295133,
+     "below": 0.4785657338888889,
+     "clusters": 45
+    },
+    "0.2": {
+     "above": 0.5027132712860115,
+     "below": 0.48677928622690214,
+     "clusters": 40
+    }
+   },
+   "stable": false
+  },
+  "LITUSDT": {
+   "above_spread": 0.040621250826932354,
+   "below_spread": 0.024883356666666856,
+   "by_tolerance": {
+    "0.1": {
+     "above": 2.0831566625,
+     "below": 2.0461057156538085,
+     "clusters": 37
+    },
+    "0.15": {
+     "above": 2.0725329745,
+     "below": 2.0212223589871416,
+     "clusters": 31
+    },
+    "0.2": {
+     "above": 2.1131542253269324,
+     "below": 2.0417051401459334,
+     "clusters": 26
+    }
+   },
+   "stable": false
+  },
+  "NEARUSDT": {
+   "above_spread": 0.016864382149508694,
+   "below_spread": 0.01719353379545807,
+   "by_tolerance": {
+    "0.1": {
+     "above": 1.7654832688683577,
+     "below": 1.6815709550166744,
+     "clusters": 48
+    },
+    "0.15": {
+     "above": 1.760300800230182,
+     "below": 1.669446784825931,
+     "clusters": 42
+    },
+    "0.2": {
+     "above": 1.748618886718849,
+     "below": 1.6643774212212163,
+     "clusters": 39
+    }
+   },
+   "stable": false
+  },
+  "SOLUSDT": {
+   "above_spread": 0.8707430008407755,
+   "below_spread": 0.28774949261106997,
+   "by_tolerance": {
+    "0.1": {
+     "above": 73.74314449769786,
+     "below": 73.284385478125,
+     "clusters": 56
+    },
+    "0.15": {
+     "above": 73.85711384859023,
+     "below": 73.17308176227273,
+     "clusters": 46
+    },
+    "0.2": {
+     "above": 74.61388749853863,
+     "below": 73.4608312548838,
+     "clusters": 41
+    }
+   },
+   "stable": false
+  },
+  "TAOUSDT": {
+   "above_spread": 2.485534291684843,
+   "below_spread": 6.185907622804962,
+   "by_tolerance": {
+    "0.1": {
+     "above": 193.36714847427098,
+     "below": 186.69787442877535,
+     "clusters": 50
+    },
+    "0.15": {
+     "above": 195.65511958966383,
+     "below": 192.8837820515803,
+     "clusters": 46
+    },
+    "0.2": {
+     "above": 195.85268276595582,
+     "below": 192.25451193575464,
+     "clusters": 40
+    }
+   },
+   "stable": false
+  },
+  "ZECUSDT": {
+   "above_spread": 1.626083446164671,
+   "below_spread": 14.993523915925834,
+   "by_tolerance": {
+    "0.1": {
+     "above": 493.4435856978427,
+     "below": 470.3460418163852,
+     "clusters": 49
+    },
+    "0.15": {
+     "above": 494.12482643000004,
+     "below": 456.5041824523287,
+     "clusters": 43
+    },
+    "0.2": {
+     "above": 495.0696691440074,
+     "below": 471.4977063682545,
+     "clusters": 38
+    }
+   },
+   "stable": false
+  }
+ },
+ "item4_top3_composition": {
+  "largest_family_tally": {
+   "profile_windowed": 10,
+   "ss": 14,
+   "vwap_anchored": 5,
+   "vwap_rolling": 1
+  },
+  "per_asset": {
+   "BTCUSDT": [
+    {
+     "families": {
+      "profile_windowed": 3,
+      "ss": 5,
+      "vwap_anchored": 3,
+      "vwap_rolling": 1
+     },
+     "largest_family": "ss",
+     "mean": 63803.91780649551,
+     "score": 14
+    },
+    {
+     "families": {
+      "profile_windowed": 2,
+      "ss": 4,
+      "vwap_anchored": 2,
+      "vwap_rolling": 1
+     },
+     "largest_family": "ss",
+     "mean": 63199.60284719242,
+     "score": 12
+    },
+    {
+     "families": {
+      "profile_windowed": 3,
+      "structure": 1,
+      "vwap_anchored": 2,
+      "vwap_rolling": 1
+     },
+     "largest_family": "profile_windowed",
+     "mean": 62751.25068185866,
+     "score": 11
+    }
+   ],
+   "ETHUSDT": [
+    {
+     "families": {
+      "profile_windowed": 3,
+      "ss": 3,
+      "structure": 1,
+      "vwap_anchored": 2,
+      "vwap_rolling": 2
+     },
+     "largest_family": "profile_windowed",
+     "mean": 1868.3158039301227,
+     "score": 16
+    },
+    {
+     "families": {
+      "profile_windowed": 1,
+      "structure": 1,
+      "vwap_anchored": 2,
+      "vwap_rolling": 1
+     },
+     "largest_family": "vwap_anchored",
+     "mean": 1833.56702998612,
+     "score": 9
+    },
+    {
+     "families": {
+      "ss": 2,
+      "vwap_anchored": 1,
+      "vwap_rolling": 1
+     },
+     "largest_family": "ss",
+     "mean": 1847.1413959818667,
+     "score": 7
+    }
+   ],
+   "FARTCOINUSDT": [
+    {
+     "families": {
+      "profile_windowed": 5,
+      "ss": 1,
+      "structure": 1,
+      "vwap_anchored": 2,
+      "vwap_rolling": 2
+     },
+     "largest_family": "profile_windowed",
+     "mean": 0.12483048069121506,
+     "score": 14
+    },
+    {
+     "families": {
+      "profile_windowed": 1,
+      "ss": 4,
+      "structure": 1,
+      "vwap_anchored": 1,
+      "vwap_rolling": 1
+     },
+     "largest_family": "ss",
+     "mean": 0.12716574517770698,
+     "score": 12
+    },
+    {
+     "families": {
+      "profile_windowed": 2,
+      "ss": 2,
+      "vwap_anchored": 3,
+      "vwap_rolling": 1
+     },
+     "largest_family": "vwap_anchored",
+     "mean": 0.12953768947043123,
+     "score": 12
+    }
+   ],
+   "HYPEUSDT": [
+    {
+     "families": {
+      "profile_windowed": 3,
+      "ss": 1,
+      "structure": 2,
+      "vwap_anchored": 4,
+      "vwap_rolling": 1
+     },
+     "largest_family": "vwap_anchored",
+     "mean": 51.84654090492459,
+     "score": 15
+    },
+    {
+     "families": {
+      "profile_windowed": 1,
+      "ss": 4,
+      "structure": 2,
+      "vwap_anchored": 2,
+      "vwap_rolling": 1
+     },
+     "largest_family": "ss",
+     "mean": 52.69513373778017,
+     "score": 14
+    },
+    {
+     "families": {
+      "profile_windowed": 2,
+      "ss": 2,
+      "vwap_anchored": 1,
+      "vwap_rolling": 1
+     },
+     "largest_family": "profile_windowed",
+     "mean": 56.92435199638143,
+     "score": 10
+    }
+   ],
+   "JTOUSDT": [
+    {
+     "families": {
+      "profile_windowed": 3,
+      "ss": 3,
+      "structure": 2,
+      "vwap_anchored": 2,
+      "vwap_rolling": 2
+     },
+     "largest_family": "ss",
+     "mean": 0.4943637245295133,
+     "score": 17
+    },
+    {
+     "families": {
+      "profile_windowed": 2,
+      "ss": 3,
+      "structure": 1,
+      "vwap_anchored": 1,
+      "vwap_rolling": 1
+     },
+     "largest_family": "ss",
+     "mean": 0.5088421808350417,
+     "score": 13
+    },
+    {
+     "families": {
+      "profile_windowed": 1,
+      "ss": 2,
+      "structure": 1,
+      "vwap_rolling": 1
+     },
+     "largest_family": "ss",
+     "mean": 0.5360353435774391,
+     "score": 9
+    }
+   ],
+   "LITUSDT": [
+    {
+     "families": {
+      "profile_windowed": 2,
+      "ss": 1,
+      "structure": 1,
+      "vwap_anchored": 2,
+      "vwap_rolling": 2
+     },
+     "largest_family": "vwap_anchored",
+     "mean": 2.0212223589871416,
+     "score": 13
+    },
+    {
+     "families": {
+      "profile_windowed": 2,
+      "ss": 5,
+      "structure": 1,
+      "vwap_anchored": 2
+     },
+     "largest_family": "ss",
+     "mean": 2.0725329745,
+     "score": 12
+    },
+    {
+     "families": {
+      "profile_windowed": 1,
+      "ss": 5,
+      "vwap_anchored": 2,
+      "vwap_rolling": 2
+     },
+     "largest_family": "ss",
+     "mean": 2.1311437958923185,
+     "score": 12
+    }
+   ],
+   "NEARUSDT": [
+    {
+     "families": {
+      "profile_windowed": 4,
+      "ss": 3,
+      "vwap_anchored": 2,
+      "vwap_rolling": 2
+     },
+     "largest_family": "profile_windowed",
+     "mean": 1.760300800230182,
+     "score": 14
+    },
+    {
+     "families": {
+      "profile_windowed": 4,
+      "ss": 2,
+      "structure": 1,
+      "vwap_anchored": 1,
+      "vwap_rolling": 1
+     },
+     "largest_family": "profile_windowed",
+     "mean": 1.669446784825931,
+     "score": 13
+    },
+    {
+     "families": {
+      "profile_windowed": 4,
+      "structure": 1,
+      "vwap_anchored": 2,
+      "vwap_rolling": 1
+     },
+     "largest_family": "profile_windowed",
+     "mean": 1.7317442368646747,
+     "score": 11
+    }
+   ],
+   "SOLUSDT": [
+    {
+     "families": {
+      "profile_windowed": 3,
+      "ss": 5,
+      "structure": 2,
+      "vwap_anchored": 1
+     },
+     "largest_family": "ss",
+     "mean": 73.17308176227273,
+     "score": 13
+    },
+    {
+     "families": {
+      "profile_windowed": 1,
+      "ss": 2,
+      "structure": 1,
+      "vwap_anchored": 1,
+      "vwap_rolling": 2
+     },
+     "largest_family": "ss",
+     "mean": 73.85711384859023,
+     "score": 12
+    },
+    {
+     "families": {
+      "profile_windowed": 1,
+      "ss": 2,
+      "structure": 1,
+      "vwap_anchored": 2,
+      "vwap_rolling": 1
+     },
+     "largest_family": "vwap_anchored",
+     "mean": 74.82745681430116,
+     "score": 12
+    }
+   ],
+   "TAOUSDT": [
+    {
+     "families": {
+      "profile_windowed": 1,
+      "ss": 5,
+      "structure": 1,
+      "vwap_anchored": 3,
+      "vwap_rolling": 2
+     },
+     "largest_family": "ss",
+     "mean": 192.8837820515803,
+     "score": 15
+    },
+    {
+     "families": {
+      "profile_windowed": 1,
+      "ss": 3,
+      "structure": 1,
+      "vwap_anchored": 1,
+      "vwap_rolling": 1
+     },
+     "largest_family": "ss",
+     "mean": 195.65511958966383,
+     "score": 12
+    },
+    {
+     "families": {
+      "ss": 1,
+      "structure": 2,
+      "vwap_anchored": 2,
+      "vwap_rolling": 2
+     },
+     "largest_family": "vwap_rolling",
+     "mean": 201.05352945397772,
+     "score": 11
+    }
+   ],
+   "ZECUSDT": [
+    {
+     "families": {
+      "profile_windowed": 3,
+      "ss": 1,
+      "structure": 2,
+      "vwap_anchored": 2,
+      "vwap_rolling": 1
+     },
+     "largest_family": "profile_windowed",
+     "mean": 456.5041824523287,
+     "score": 14
+    },
+    {
+     "families": {
+      "profile_windowed": 3,
+      "ss": 3,
+      "vwap_anchored": 2,
+      "vwap_rolling": 1
+     },
+     "largest_family": "profile_windowed",
+     "mean": 467.32318145085566,
+     "score": 13
+    },
+    {
+     "families": {
+      "profile_windowed": 3,
+      "ss": 2,
+      "vwap_anchored": 1,
+      "vwap_rolling": 1
+     },
+     "largest_family": "profile_windowed",
+     "mean": 475.5956392666331,
+     "score": 11
+    }
+   ]
+  },
+  "question": "does vwap_rolling or profile_windowed DOMINATE the top areas? if so the family split did not go far enough (\u00a79.2 item 4)"
+ },
+ "item5_nesting_states": {
+  "by_pair": {
+   "30d<->90d": {
+    "disjoint_above": 1,
+    "nested_inside": 7,
+    "overlapping": 2
+   },
+   "7d<->30d": {
+    "disjoint_below": 2,
+    "nested_inside": 4,
+    "overlapping": 4
+   },
+   "90d<->365d": {
+    "disjoint_above": 1,
+    "nested_inside": 4,
+    "overlapping": 4,
+    "unavailable(warming)": 1
+   }
+  },
+  "n_assets": 10,
+  "overall": {
+   "disjoint_above": 2,
+   "disjoint_below": 2,
+   "nested_inside": 15,
+   "overlapping": 10,
+   "unavailable(warming)": 1
+  }
+ },
+ "item6_dual_scoring_divergence": {
+  "assets_where_a_line_moved": 10,
+  "delta_atr": {
+   "max": 0.9455179233026954,
+   "median": 0.12710362339409442,
+   "min": 0.00507554315232866,
+   "n": 20,
+   "p90": 0.6808300290612895
+  },
+  "of_assets": 10,
+  "of_sides": 20,
+  "per_asset": {
+   "BTCUSDT": {
+    "above": {
+     "changed": true,
+     "delta": 47.663043526161346,
+     "delta_atr": 0.028040396645053752,
+     "note": null,
+     "with_volume": 63803.91780649551,
+     "without_volume": 63851.58085002167
+    },
+    "below": {
+     "changed": true,
+     "delta": 103.21517737351678,
+     "delta_atr": 0.06072198288710663,
+     "note": null,
+     "with_volume": 63199.60284719242,
+     "without_volume": 63302.81802456594
+    }
+   },
+   "ETHUSDT": {
+    "above": {
+     "changed": true,
+     "delta": 46.546872709949184,
+     "delta_atr": 0.6808300290612895,
+     "note": null,
+     "with_volume": 1931.9283023499493,
+     "without_volume": 1885.38142964
+    },
+    "below": {
+     "changed": true,
+     "delta": 0.5620889448773596,
+     "delta_atr": 0.00822154122062178,
+     "note": null,
+     "with_volume": 1868.3158039301227,
+     "without_volume": 1868.877892875
+    }
+   },
+   "FARTCOINUSDT": {
+    "above": {
+     "changed": true,
+     "delta": 0.0016503049356358102,
+     "delta_atr": 0.17767494584472496,
+     "note": null,
+     "with_volume": 0.1330176150643642,
+     "without_volume": 0.13466792
+    },
+    "below": {
+     "changed": true,
+     "delta": 0.0020405757373563455,
+     "delta_atr": 0.21969223735440493,
+     "note": null,
+     "with_volume": 0.12483048069121506,
+     "without_volume": 0.1268710564285714
+    }
+   },
+   "HYPEUSDT": {
+    "above": {
+     "changed": true,
+     "delta": 0.5463545455531644,
+     "delta_atr": 0.165395686007377,
+     "note": null,
+     "with_volume": 52.69513373778017,
+     "without_volume": 53.24148828333333
+    },
+    "below": {
+     "changed": true,
+     "delta": 0.7154861995198587,
+     "delta_atr": 0.21659622265718448,
+     "note": null,
+     "with_volume": 51.84654090492459,
+     "without_volume": 52.56202710444445
+    }
+   },
+   "JTOUSDT": {
+    "above": {
+     "changed": true,
+     "delta": 0.016015375470486648,
+     "delta_atr": 0.31297933336327,
+     "note": null,
+     "with_volume": 0.4943637245295133,
+     "without_volume": 0.5103791
+    },
+    "below": {
+     "changed": true,
+     "delta": 0.00858639548611112,
+     "delta_atr": 0.16779902164571542,
+     "note": null,
+     "with_volume": 0.4785657338888889,
+     "without_volume": 0.487152129375
+    }
+   },
+   "LITUSDT": {
+    "above": {
+     "changed": true,
+     "delta": 0.017901167357142977,
+     "delta_atr": 0.08881156078081184,
+     "note": null,
+     "with_volume": 2.0725329745,
+     "without_volume": 2.054631807142857
+    },
+    "below": {
+     "changed": true,
+     "delta": 0.17002685898714165,
+     "delta_atr": 0.8435400004950888,
+     "note": null,
+     "with_volume": 2.0212223589871416,
+     "without_volume": 1.8511955
+    }
+   },
+   "NEARUSDT": {
+    "above": {
+     "changed": true,
+     "delta": 0.05090014323018188,
+     "delta_atr": 0.48830787010192517,
+     "note": null,
+     "with_volume": 1.760300800230182,
+     "without_volume": 1.7094006570000002
+    },
+    "below": {
+     "changed": true,
+     "delta": 0.007521775174069045,
+     "delta_atr": 0.07215975794066677,
+     "note": null,
+     "with_volume": 1.669446784825931,
+     "without_volume": 1.67696856
+    }
+   },
+   "SOLUSDT": {
+    "above": {
+     "changed": true,
+     "delta": 0.013797448590224803,
+     "delta_atr": 0.00507554315232866,
+     "note": null,
+     "with_volume": 73.85711384859023,
+     "without_volume": 73.8433164
+    },
+    "below": {
+     "changed": true,
+     "delta": 0.020890035852275446,
+     "delta_atr": 0.007684629352200348,
+     "note": null,
+     "with_volume": 73.17308176227273,
+     "without_volume": 73.193971798125
+    }
+   },
+   "TAOUSDT": {
+    "above": {
+     "changed": true,
+     "delta": 0.21287145566381582,
+     "delta_atr": 0.021227290015672813,
+     "note": null,
+     "with_volume": 195.65511958966383,
+     "without_volume": 195.442248134
+    },
+    "below": {
+     "changed": true,
+     "delta": 0.05115357619746419,
+     "delta_atr": 0.0051009741719305795,
+     "note": null,
+     "with_volume": 192.8837820515803,
+     "without_volume": 192.93493562777778
+    }
+   },
+   "ZECUSDT": {
+    "above": {
+     "changed": true,
+     "delta": 0.43248964499997555,
+     "delta_atr": 0.013801891947798559,
+     "note": null,
+     "with_volume": 494.12482643000004,
+     "without_volume": 494.557316075
+    },
+    "below": {
+     "changed": true,
+     "delta": 29.628308389671304,
+     "delta_atr": 0.9455179233026954,
+     "note": null,
+     "with_volume": 456.5041824523287,
+     "without_volume": 486.132490842
+    }
+   }
+  },
+  "sides_changed": 20,
+  "what_this_measures": "whether volume evidence MOVES THE OPERATOR'S LINES. It is display-only; whether the move helps is census work under G-7."
+ },
+ "item7_storage": {
+  "capture_bytes": 1425913,
+  "contract_estimate_mb": "150-250 (\u00a78.2)",
+  "partition_bytes": {
+   "areas": 13597,
+   "levels": 31995,
+   "snapshots": 17535
+  },
+  "partitions_per_day": 63127,
+  "projected_annual_mb": {
+   "captures": 1561.4,
+   "partitions": 23.0,
+   "total": 1584.4
+  },
+  "slots_per_day": 3
+ },
+ "not_a_ratification": "reviewer ruling D-2: distributions are printed, no threshold is re-ratified here",
+ "parity_certified": false,
+ "rules_version": "2.0.0",
+ "runtime": {
+  "budget_note": "one capture must stay well under ~15 min; three slots per day",
+  "by_layer": {
+   "BTCUSDT": 19.53,
+   "ETHUSDT": 19.21,
+   "FARTCOINUSDT": 5.25,
+   "HYPEUSDT": 3.99,
+   "JTOUSDT": 8.06,
+   "LITUSDT": 1.81,
+   "NEARUSDT": 17.12,
+   "SOLUSDT": 17.06,
+   "TAOUSDT": 7.18,
+   "ZECUSDT": 18.85,
+   "_part1": 81.1
+  },
+  "total_seconds": 199.16
+ },
+ "schema_version": "2.1.0",
+ "slot": "post_ny"
+}

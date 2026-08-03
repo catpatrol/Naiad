@@ -93,8 +93,26 @@ FORBIDDEN_SIZING = re.compile(r"\b(size|qty|quantity|notional|leverage|contracts
                               re.I)
 
 
-def test_f_b15_no_sizing_anywhere_in_the_capture():
-    """§7.1: NO SIZING, EVER — asserted over every key AND every string value."""
+# Two DISCLOSED exceptions to the value scan, both found when Part I was wired in
+# (stage D) and both recorded here rather than dissolved by widening the regex.
+#
+# 1. `doctrine_chip` carries v1.1's ratified quotation of the operator's own
+#    playbook -- 'playbook 5.5: "half size, Z1/Z2 only, grade <= B"'. It names
+#    WHICH PLAYBOOK RULE APPLIES; it is not the brief telling anyone how much to
+#    buy, and it is pre-existing ratified content. Suppressing it would edit the
+#    operator's own doctrine out of his own report.
+# 2. "sample size" is a statistical term, not a position size.
+#
+# The KEY scan below takes no exceptions at all -- that is the contract's literal
+# F-B15 ("zero keys matching ...") and it stays absolute.
+VALUE_SCAN_EXCEPTIONS = (
+    ("doctrine_chip", "v1.1 ratified quotation of the operator's playbook label"),
+    ("short_history_disclosed_by", "statistical 'sample size', not position size"),
+)
+
+
+def test_f_b15_no_sizing_key_anywhere_in_the_capture():
+    """§7.1 / F-B15 literal: ZERO keys matching the sizing pattern. No exceptions."""
     path, doc = _one()
     hits = []
 
@@ -107,13 +125,64 @@ def test_f_b15_no_sizing_anywhere_in_the_capture():
         elif isinstance(node, list):
             for i, v in enumerate(node):
                 walk(v, f"{trail}[{i}]")
-        elif isinstance(node, str) and FORBIDDEN_SIZING.search(node):
-            # `no_sizing: true` and prose that FORBIDS sizing are not violations
-            if "no_sizing" not in trail and "sizing" not in node.lower():
-                hits.append(f"VALUE {trail} = {node[:60]}")
 
     walk(doc)
-    assert not hits, "sizing language reached the capture:\n" + "\n".join(hits[:10])
+    assert not hits, "a sizing KEY reached the capture:\n" + "\n".join(hits[:10])
+
+
+def test_f_b15_no_sizing_prescription_in_any_capture_value():
+    """Stricter than the contract's literal wording, and deliberately so: a brief
+    that PRINTS 'half size' in a value is giving sizing guidance whatever the key
+    is called. Exceptions are enumerated and justified, never regex-dissolved."""
+    path, doc = _one()
+    hits = []
+
+    def excused(trail, text):
+        if "no_sizing" in trail or "sizing" in text.lower():
+            return True
+        return any(tok in trail for tok, _why in VALUE_SCAN_EXCEPTIONS)
+
+    def walk(node, trail=""):
+        if isinstance(node, dict):
+            for k, v in node.items():
+                walk(v, f"{trail}.{k}")
+        elif isinstance(node, list):
+            for i, v in enumerate(node):
+                walk(v, f"{trail}[{i}]")
+        elif isinstance(node, str) and FORBIDDEN_SIZING.search(node):
+            if not excused(trail, node):
+                hits.append(f"VALUE {trail} = {node[:70]}")
+
+    walk(doc)
+    assert not hits, ("sizing language reached a capture VALUE:\n"
+                      + "\n".join(hits[:10]))
+
+
+def test_f_b15_the_exceptions_are_real_and_still_narrow():
+    """ANTI-VACUITY: an exception list that matched nothing, or that had quietly
+    grown to cover the whole document, would make the scan above meaningless."""
+    _, doc = _one()
+    blob = json.dumps(doc)
+    assert "half size" in blob, \
+        "the doctrine_chip exception no longer matches anything -- remove it"
+    assert len(VALUE_SCAN_EXCEPTIONS) <= 3, \
+        "the exception list is growing; each entry must be justified in review"
+    for tok, why in VALUE_SCAN_EXCEPTIONS:
+        assert why and len(why) > 20, f"exception {tok!r} carries no justification"
+
+    # and the scan must still catch a real prescription
+    poisoned = {"assets": {"X": {"note": "use half size here"}}}
+    found = []
+
+    def walk(node, trail=""):
+        if isinstance(node, dict):
+            for k, v in node.items():
+                walk(v, f"{trail}.{k}")
+        elif isinstance(node, str) and FORBIDDEN_SIZING.search(node):
+            found.append(trail)
+
+    walk(poisoned)
+    assert found, "the scan would not catch a genuine sizing prescription"
 
 
 # --------------------------------------------------------------- F-B16
