@@ -1,0 +1,921 @@
+#!/usr/bin/env python
+"""brief2.py -- the BRIEF-2 layers and the decision instrument.
+
+CONTRACT v4 Amendment 2, §3-§7.  Pure computation over already-loaded klines,
+kept OUT of daily_brief.py so the v1.1 monitor and its F-B1..F-B8 fixtures keep
+working unchanged while the new layers are built and fixtured beside them.
+
+WHAT THIS IS NOT (§11, reprinted because it is load-bearing).  Not a signal
+service.  Not sizing advice.  Not study evidence.  Confluence scores measure
+AGREEMENT BETWEEN TOOLS, not edge.  R:R measures GEOMETRY, not probability.
+Whether any of it predicts anything is census work under G-7.
+
+THE SEQUENCING RULE (§2.2) is the reason this module is shaped the way it is.
+Part II must be reconstructable BY HAND from Part I's printed numbers plus the
+rules header -- no hidden inputs.  So every function here takes numbers that
+Part I already prints, and `decision_instrument` in particular reads only the
+level registry and the printed rules.  If a future edit needs a quantity Part I
+does not print, the fix is to print it, never to reach past the report.
+
+ADOPTION IS NOT PARITY.  Nothing here may be trusted until the operator's parity
+readings are returned and matched; PARITY_BANNER prints on every render until
+the certification flag is set, and F-B33 asserts it.
+"""
+
+import sys
+from pathlib import Path
+
+import numpy as np
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+
+import analytics                                                   # noqa: E402
+from analytics import levels as L                                  # noqa: E402
+from analytics import momentum as M                                # noqa: E402
+from analytics import nesting as N                                 # noqa: E402
+from analytics import profile as P                                 # noqa: E402
+from analytics import structure as S                               # noqa: E402
+from analytics import volatility as V                              # noqa: E402
+from analytics import vwap as W                                    # noqa: E402
+
+DAY_MS = 86_400_000
+HOUR_MS = 3_600_000
+
+# §3.1 -- ONE VOCABULARY EVERYWHERE, for both rolling VWAPs and windowed
+# profiles.  The v1.1 5d and 20d windows are RETIRED: they near-duplicated 7d and
+# 30d, and in a system that scores by counting agreement, near-duplicates inflate
+# scores while adding nothing.
+WINDOWS = ("prior-day", "7d", "30d", "90d", "365d")
+RVWAP_WINDOWS = (7, 30, 90, 365)
+SIGMAS = (1, 2, 3)
+
+# §6.1 -- the 1M plane carries price and volume structure ONLY.  A closed-bar
+# monthly oscillator in late July is June's number and has almost no sample.
+OSC_TFS = ("1h", "4h", "12h", "1d", "1w")
+STEP_MS = {"1h": HOUR_MS, "4h": 4 * HOUR_MS, "12h": 12 * HOUR_MS,
+           "1d": DAY_MS, "1w": 7 * DAY_MS}
+
+# §3.5 chart planes.  All four windows toggleable on every plane; these are the
+# defaults the render opens with.
+CHART_PLANES = {"4H": ("7d", "30d"), "1D": ("30d", "90d"),
+                "1W": ("90d", "365d"), "1M": ("365d",)}
+
+# §3.7 -- display-only lattice.  The practitioner study landed this pair as XO's
+# higher-timeframe filter and the census will measure it against {9,89,200}
+# regardless; rendering it now lets the operator's eye rehearse the comparison
+# months before it is scored.  NO SIGNAL, NO VOTE, NO SCORE.
+LATTICE_EMAS = (12, 25)
+LATTICE_PLANES = ("1d", "1w")
+
+# §6.2 cross-state layers.  Observation only -- H-RVX and H-M1X are routed to
+# APOLLO.  TC-5's permanent 5m entry floor is untouched: measuring 1m crosses as
+# CONTEXT is measurement, not entry logic.
+SS_EMAS = (9, 89, 200)
+SS_LENSES = ("1h", "4h", "12h")
+FAST_EMAS = (300, 450)
+
+PARITY_BANNER = ("PARITY NOT CERTIFIED — numbers not yet adopted. "
+                 "The operator's parity readings have not been returned and "
+                 "matched; nothing here may be trusted or acted on.")
+
+
+def _f(x):
+    """None for anything not finite, so a NaN can never reach a printed number."""
+    try:
+        v = float(x)
+    except (TypeError, ValueError):
+        return None
+    return v if np.isfinite(v) else None
+
+
+def _cols(df):
+    return (df["open_time"].to_numpy().astype("int64"),
+            df["open"].to_numpy(float), df["high"].to_numpy(float),
+            df["low"].to_numpy(float), df["close"].to_numpy(float),
+            df["volume"].to_numpy(float))
+
+
+# ══════════════════════════════════════════════════════ §3 the volume filter
+
+def volume_layer(klines, now_ms):
+    """Windowed volume profiles at {prior-day, 7, 30, 90, 365} (§3.3, §3.4).
+
+    The substrate ACTUALLY USED is recorded per window, per §3.3, and the tier
+    map is the probed one: 1m/5m/15m are all stored for all ten assets, so
+    nothing here is silently resampled from a coarser interval.  When a tier's
+    interval is missing for an asset the fallback is recorded explicitly rather
+    than applied quietly -- an undisclosed substitution is the exact failure the
+    'DO NOT silently resample' instruction names.
+    """
+    out = {"windows": {}, "substrate_used": {}, "rows": P.PROFILE_ROWS,
+           "value_area": P.VALUE_AREA, "provenance": "approximation",
+           "approximation": P.APPROXIMATION,
+           "lvn_threshold": P.LVN_THRESHOLD, "lvn_min_rows": P.LVN_MIN_ROWS,
+           "retired_windows": ["5d", "20d"]}
+
+    for name in WINDOWS:
+        want = P.WINDOW_SUBSTRATE[name]
+        sub = want if (want in klines and len(klines[want])) else None
+        if sub is None:
+            for alt in ("15m", "5m", "1m", "1h"):
+                if alt in klines and len(klines[alt]):
+                    sub = alt
+                    break
+        if sub is None:
+            out["windows"][name] = {"warming": True, "reason": "no substrate"}
+            continue
+        if sub != want:
+            out.setdefault("substrate_substitutions", {})[name] = {
+                "wanted": want, "used": sub,
+                "note": "disclosed substitution, not a silent resample"}
+        out["substrate_used"][name] = sub
+
+        t, o, h, l, c, v = _cols(klines[sub])
+        if name == "prior-day":
+            today = (now_ms // DAY_MS) * DAY_MS
+            sel = (t >= today - DAY_MS) & (t < today)
+            vp = (P.volume_profile(h[sel], l[sel], v[sel], bins=P.PROFILE_ROWS,
+                                   value_area=P.VALUE_AREA)
+                  if sel.any() else None)
+            if vp is None:
+                out["windows"][name] = {"warming": True, "reason": "no prior day"}
+                continue
+            vp["lvns"] = P.low_volume_nodes(vp["edges"], vp["hist"])
+            vp["warming"] = False
+            vp["substrate"] = sub
+            vp["window_start_ms"] = int(today - DAY_MS)
+            vp["as_of_ms"] = int(today)
+            vp["lockbox_overlap"] = analytics.lockbox_overlap(today - DAY_MS, today)
+        else:
+            vp = P.windowed_profile(t, h, l, v, float(name[:-1]), now_ms,
+                                    substrate=sub)
+        out["windows"][name] = _profile_public(vp)
+    return out
+
+
+def _profile_public(vp):
+    """Strip the histogram arrays; keep every number the report prints.
+
+    The edges/hist arrays are large and are not part of the record schema; the
+    LVNs derived from them are.
+    """
+    if vp.get("warming"):
+        return {"warming": True, "poc": None, "vah": None, "val": None,
+                "lvns": [], "bars": vp.get("bars"),
+                "substrate": vp.get("substrate"),
+                "window_start_ms": vp.get("window_start_ms"),
+                "lockbox_overlap": vp.get("lockbox_overlap"),
+                "chip": "warming"}
+    return {"warming": False,
+            "poc": _f(vp["poc"]), "vah": _f(vp["vah"]), "val": _f(vp["val"]),
+            "lvns": [{"low": _f(n["low"]), "high": _f(n["high"]),
+                      "mid": _f(n["mid"]), "rows": n["rows"]}
+                     for n in vp.get("lvns", [])],
+            "bars": vp.get("bars"), "substrate": vp.get("substrate"),
+            "window_start_ms": vp.get("window_start_ms"),
+            "lockbox_overlap": vp.get("lockbox_overlap"),
+            "approximation": P.APPROXIMATION}
+
+
+def rvwap_layer(klines, now_ms, tf="1h"):
+    """Rolling VWAP with 1/2/3 sigma bands on 7/30/90/365d (§3.2).
+
+    The operator: "the key is executing the rvwap with std's on the 7, 30, 90 and
+    365 day".  Warm-up honesty is not optional -- an asset without a year of data
+    prints a `warming` chip rather than a number, because a 365d VWAP computed on
+    200 days is a 200-day VWAP wearing the wrong label.
+    """
+    out = {"tf": tf, "windows": {}, "sigmas": list(SIGMAS)}
+    if tf not in klines or not len(klines[tf]):
+        return out
+    t, o, h, l, c, v = _cols(klines[tf])
+    src = W.hlc3(h, l, c)
+    span_ms = int(t[-1] - t[0])
+
+    for wd in RVWAP_WINDOWS:
+        need = wd * DAY_MS
+        if span_ms < need:
+            out["windows"][f"{wd}d"] = {
+                "warming": True, "chip": "warming", "vwap": None, "stdev": None,
+                "history_days": round(span_ms / DAY_MS, 1), "needs_days": wd,
+                "bands": {}}
+            continue
+        rv = W.rolling_vwap(t, src, v, wd, sigmas=SIGMAS)
+        bands = {}
+        for k in SIGMAS:
+            bands[f"up_{k}"] = _f(rv[f"band_up_{k}"][-1])
+            bands[f"dn_{k}"] = _f(rv[f"band_dn_{k}"][-1])
+        out["windows"][f"{wd}d"] = {
+            "warming": False, "vwap": _f(rv["vwap"][-1]),
+            "stdev": _f(rv["stdev"][-1]), "bands": bands,
+            "lockbox_overlap": analytics.lockbox_overlap(now_ms - need, now_ms)}
+    return out
+
+
+def nesting_layer(vol, price):
+    """VA nesting across adjacent window scales (§4), with the §4.2 prose.
+
+    §4.2 is explicit that a table alone does not satisfy §4, so `prose` is a
+    first-class output: when a pair is disjoint the report must SAY SO IN WORDS,
+    naming the gap and both facing edges.
+    """
+    out = {"pairs": {}, "prose": [], "levels": []}
+    for pair in N.ADJACENT_PAIRS:
+        a = vol["windows"].get(pair[0]) or {}
+        b = vol["windows"].get(pair[1]) or {}
+        nest = N.va_nesting(a.get("val"), a.get("vah"),
+                            b.get("val"), b.get("vah"))
+        nest["price_location"] = N.price_location(price, nest)
+        key = f"{pair[0]}<->{pair[1]}"
+        out["pairs"][key] = {k: nest[k] for k in
+                             ("state", "overlap_frac", "consensus_band",
+                              "gap_band", "facing_edges", "price_location")}
+        out["prose"].append(N.describe_nesting(pair, nest))
+        out["levels"].extend(N.nesting_levels(pair, nest))
+    return out
+
+
+# ══════════════════════════════════════════════════════ §6 indicator layers
+
+def _resampled(klines, tf):
+    """Closed-bucket OHLCV at `tf`, from the finest sane native source.
+
+    Routed through analytics.structure.resample_ohlcv rather than a private copy,
+    so the Amendment-2 §1.2 closure discipline -- only buckets PROVED closed by a
+    bar in a strictly later bucket -- applies to every plane the report prints.
+    This is the fix for the duplicate resample implementation at
+    daily_brief.py:216, which does not inherit that guarantee.
+    """
+    if tf in klines and len(klines[tf]):
+        return _cols(klines[tf])
+    base = None
+    for cand in ("1h", "15m", "5m", "1m"):
+        if cand in klines and len(klines[cand]):
+            base = cand
+            break
+    if base is None:
+        return None
+    t, o, h, l, c, v = _cols(klines[base])
+    if len(t) < 2:
+        return None
+    r = S.resample_ohlcv(t, o, h, l, c, v, STEP_MS[tf])
+    if not len(r["open_time"]):
+        return None
+    return (r["open_time"], r["open"], r["high"], r["low"], r["close"], r["volume"])
+
+
+def oscillator_layer(klines):
+    """RSI / StochRSI / MACD / AO on {1h,4h,12h,1d,1w}, plus generalised
+    divergences on RSI, MACD-histogram and AO -- regular and hidden (§6.1).
+
+    Every divergence records the PRICE LEVEL of its pivot, which is what turns
+    "is the same divergence printing on the AO, and is it landing where Secret
+    Sauce has a level?" into a computed line rather than an impression.
+
+    Divergences consume CONFIRMED pivots only, via structure.confirmed_pivots at
+    the decision bar -- the caller-side half of the F-AN-13 lag:5 discipline that
+    Phase I-R fixtured.
+    """
+    out = {"timeframes": {}, "divergences": [],
+           "note": "1M plane carries price and volume structure only (§6.1)"}
+    for tf in OSC_TFS:
+        got = _resampled(klines, tf)
+        if got is None:
+            continue
+        t, o, h, l, c, v = got
+        if len(c) < 40:
+            out["timeframes"][tf] = {"warming": True, "bars": int(len(c))}
+            continue
+        rsi = M.rsi(c, 14)
+        k_line, d_line = M.stoch_rsi(c)
+        macd_line, macd_sig, macd_hist = M.macd(c)
+        ao = M.awesome_oscillator(h, l)
+        out["timeframes"][tf] = {
+            "warming": False, "bars": int(len(c)),
+            "last_bar_utc_ms": int(t[-1]),
+            "rsi": _f(rsi[-1]),
+            "stoch_rsi_k": _f(k_line[-1]), "stoch_rsi_d": _f(d_line[-1]),
+            "macd": _f(macd_line[-1]), "macd_signal": _f(macd_sig[-1]),
+            "macd_hist": _f(macd_hist[-1]), "ao": _f(ao[-1]),
+        }
+        as_of = len(c) - 1
+        for osc_name, osc in (("rsi", rsi), ("macd_hist", macd_hist), ("ao", ao)):
+            for pk, px in (("high", h), ("low", l)):
+                p_i, p_v, _ = S.confirmed_pivots(px, as_of, 5, 5, pk)
+                o_i, o_v, _ = S.confirmed_pivots(osc, as_of, 5, 5, pk)
+                for kind in ("regular", "hidden"):
+                    for d in M.divergences(p_i, p_v, o_i, o_v, pk, kind=kind):
+                        out["divergences"].append({
+                            "timeframe": tf, "oscillator": osc_name,
+                            "kind": kind, "pivot_kind": pk,
+                            "direction": d["direction"],
+                            "price_level": _f(d["price_level"]),
+                            "from_index": d["from_index"],
+                            "to_index": d["to_index"]})
+    return out
+
+
+def cross_state_layer(klines, atr_d):
+    """§6.2 -- RVWAP crosses, RVWAP<->SS-EMA distances, the 1m fast lattice.
+
+    All three are OBSERVATION layers, recorded as state and never voting.
+    Whether any of them predicts anything is census work: H-RVX and H-M1X, both
+    routed to APOLLO.
+    """
+    out = {"rvwap_pairs": {}, "rvwap_to_ss_ema": {}, "fast_lattice": {},
+           "display_only": True,
+           "census_candidates": ["H-RVX", "H-M1X"]}
+    if "1h" not in klines or len(klines["1h"]) < 50:
+        return out
+    t, o, h, l, c, v = _cols(klines["1h"])
+    src = W.hlc3(h, l, c)
+
+    rv = {}
+    span_ms = int(t[-1] - t[0])
+    for wd in RVWAP_WINDOWS:
+        if span_ms >= wd * DAY_MS:
+            rv[wd] = W.rolling_vwap(t, src, v, wd)["vwap"]
+
+    for a, b in ((7, 30), (7, 90), (30, 90), (90, 365)):
+        if a not in rv or b not in rv:
+            out["rvwap_pairs"][f"{a}x{b}"] = {"warming": True}
+            continue
+        va, vb = rv[a], rv[b]
+        above = va[-1] > vb[-1]
+        sign = np.sign(va - vb)
+        bars = 0
+        for i in range(len(sign) - 1, 0, -1):
+            if sign[i] != sign[i - 1] and np.isfinite(sign[i - 1]):
+                break
+            bars += 1
+        spread = _f(va[-1] - vb[-1])
+        out["rvwap_pairs"][f"{a}x{b}"] = {
+            "warming": False, "above": bool(above), "bars_since_cross": int(bars),
+            "spread": spread,
+            "spread_atr": _f(spread / atr_d) if (spread is not None and atr_d) else None}
+
+    for lens in SS_LENSES:
+        got = _resampled(klines, lens)
+        if got is None:
+            continue
+        lt, lo, lh, ll, lc, lv = got
+        for n in SS_EMAS:
+            e = M.ema(lc, n)
+            if not np.isfinite(e[-1]):
+                continue
+            for wd in rv:
+                d = _f(rv[wd][-1] - e[-1])
+                if d is None:
+                    continue
+                out["rvwap_to_ss_ema"][f"{wd}d_vs_ema{n}_{lens}"] = {
+                    "distance": d,
+                    "bps": _f(1e4 * d / e[-1]) if e[-1] else None,
+                    "atr_d": _f(d / atr_d) if atr_d else None}
+
+    if "1m" in klines and len(klines["1m"]) > 500:
+        _, _, _, _, c1, _ = _cols(klines["1m"])
+        fast = {}
+        for n in tuple(FAST_EMAS) + SS_EMAS:
+            e = M.ema(c1, n)
+            fast[f"ema{n}"] = _f(e[-1])
+        out["fast_lattice"]["1m"] = fast
+        out["fast_lattice"]["1m_above"] = {
+            f"ema{a}_over_ema{b}": bool(fast[f"ema{a}"] > fast[f"ema{b}"])
+            for a, b in ((300, 450), (9, 89), (89, 200))
+            if fast.get(f"ema{a}") is not None and fast.get(f"ema{b}") is not None}
+    got5 = _resampled(klines, "5m") if "5m" in klines else None
+    if got5 is not None:
+        _, _, _, _, c5, _ = got5
+        f5 = {f"ema{n}": _f(M.ema(c5, n)[-1]) for n in SS_EMAS}
+        out["fast_lattice"]["5m"] = f5
+        out["fast_lattice"]["note"] = ("TC-5's permanent 5m entry floor is "
+                                       "untouched; 1m is context, not entry logic")
+    return out
+
+
+def lattice_layer(klines):
+    """§3.7 -- the {12,25} EMA lattice on 1D and 1W.  DISPLAY ONLY.
+
+    No signal, no vote, no score contribution.  It is rendered so the operator's
+    eye can rehearse the comparison against {9,89,200} that the census will make
+    regardless.
+    """
+    out = {"display_only": True, "no_vote": True, "no_score": True,
+           "emas": list(LATTICE_EMAS), "planes": {}}
+    for tf in LATTICE_PLANES:
+        got = _resampled(klines, tf)
+        if got is None:
+            continue
+        t, o, h, l, c, v = got
+        if len(c) < max(LATTICE_EMAS) + 2:
+            out["planes"][tf] = {"warming": True, "bars": int(len(c))}
+            continue
+        e12 = M.ema(c, LATTICE_EMAS[0])
+        e25 = M.ema(c, LATTICE_EMAS[1])
+        out["planes"][tf] = {"warming": False,
+                             "ema12": _f(e12[-1]), "ema25": _f(e25[-1]),
+                             "ema12_above_ema25": bool(e12[-1] > e25[-1])}
+    return out
+
+
+def chart_planes(klines, vol):
+    """§3.5 -- the four planes, their default windows, and the forming candle.
+
+    THE FORMING-CANDLE RULE.  On weekly and monthly planes the current candle is
+    unfinished most of the time.  It is DRAWN, GREYED and LABELLED so the chart
+    looks like the operator's chart -- while EVERY COMPUTED NUMBER USES CLOSED
+    CANDLES ONLY.  Mid-week, the weekly RSI is last week's; that staleness is
+    deliberate and is the founding law of this toolkit.
+
+    `forming` below is therefore explicitly marked draw_only and is emitted in a
+    separate branch of the document from every computed value, so F-B31 can
+    assert no computed number equals it.
+    """
+    out = {"planes": {}, "value_areas_extend": True,
+           "forming_candle_rule": "drawn and greyed; excluded from every "
+                                  "computed value (§3.5)"}
+    for plane, wins in CHART_PLANES.items():
+        tf = {"4H": "4h", "1D": "1d", "1W": "1w", "1M": "1M"}[plane]
+        entry = {"default_windows": list(wins),
+                 "all_windows_toggleable": list(WINDOWS),
+                 "value_areas": {w: {"vah": (vol["windows"].get(w) or {}).get("vah"),
+                                     "val": (vol["windows"].get(w) or {}).get("val"),
+                                     "poc": (vol["windows"].get(w) or {}).get("poc")}
+                                 for w in wins}}
+        if plane == "1M":
+            entry["oscillators"] = None
+            entry["note"] = "price and volume structure only (§6.1)"
+        if plane in ("1W", "1M"):
+            step = STEP_MS["1w"] if plane == "1W" else None
+            entry["forming"] = _forming_candle(klines, step)
+        out["planes"][plane] = entry
+    return out
+
+
+def _forming_candle(klines, step_ms):
+    """The unfinished bucket, for DRAWING ONLY.
+
+    Built from the legacy keep-the-bucket path on purpose: the public
+    resample_ohlcv now refuses to emit an unproven bucket, which is exactly
+    right for computation and exactly wrong for a candle we intend to draw and
+    label as unfinished.  Marked draw_only so it can never be mistaken for a
+    computed value.
+    """
+    if step_ms is None or "1h" not in klines or len(klines["1h"]) < 2:
+        return {"draw_only": True, "available": False}
+    t, o, h, l, c, v = _cols(klines["1h"])
+    closed = S.resample_ohlcv(t, o, h, l, c, v, step_ms)
+    legacy = S._resample_ohlcv_legacy(t, o, h, l, c, v, step_ms)
+    n_closed = len(closed["open_time"])
+    if len(legacy["open_time"]) <= n_closed:
+        return {"draw_only": True, "available": False}
+    i = n_closed
+    return {"draw_only": True, "available": True, "label": "forming",
+            "greyed": True,
+            "open_time_ms": int(legacy["open_time"][i]),
+            "open": _f(legacy["open"][i]), "high": _f(legacy["high"][i]),
+            "low": _f(legacy["low"][i]), "close": _f(legacy["close"][i]),
+            "volume": _f(legacy["volume"][i]),
+            "excluded_from_computation": True}
+
+
+# ══════════════════════════════════════════════ §5 registry and dual scoring
+
+def build_registry(a, vol, rv, nest_levels):
+    """Assemble the level registry from all five families (§5.1).
+
+    Every level carries the window it came from, because §4.3's scale
+    confirmation is keyed on `timeframe` -- a level with no window can never be
+    badged, and a mislabelled one would badge a coincidence as agreement.
+
+    DENSITY WARNING (§5.3), recorded rather than defended: v1.1 ran 46-62 levels
+    per asset; with rolling bands, windowed profiles with LVNs, prior anchors and
+    sigma-2/3, expect ~180-200. Every threshold was calibrated against a registry
+    a third that size, and no threshold is defended on intuition once the
+    calibration report exists.
+    """
+    reg = L.LevelRegistry()
+
+    # vwap_anchored -- developing W/M/Q/Y + prior M/Q/Y, each with 1/2/3 sigma
+    for key, blob in (a.get("vwap") or {}).items():
+        if not isinstance(blob, dict):
+            continue
+        lv = _f(blob.get("vwap"))
+        if lv is not None:
+            reg.add("vwap_anchored", f"{key} VWAP", lv, "vwap_complex", key)
+        for k in SIGMAS:
+            for side in ("up", "dn"):
+                b = _f((blob.get("bands") or {}).get(f"{side}_{k}"))
+                if b is not None:
+                    reg.add("vwap_anchored", f"{key} {side}{k}s", b,
+                            "vwap_complex", key)
+
+    # vwap_rolling -- 7/30/90/365d RVWAP, each with 1/2/3 sigma
+    for wname, blob in (rv.get("windows") or {}).items():
+        if blob.get("warming"):
+            continue
+        if blob.get("vwap") is not None:
+            reg.add("vwap_rolling", f"RVWAP {wname}", blob["vwap"],
+                    "rvwap", wname)
+        for bk, bv in (blob.get("bands") or {}).items():
+            if bv is not None:
+                reg.add("vwap_rolling", f"RVWAP {wname} {bk}", bv, "rvwap", wname)
+
+    # profile_windowed -- POC/VAH/VAL per window, LVN midpoints and edges
+    for wname, blob in (vol.get("windows") or {}).items():
+        if blob.get("warming"):
+            continue
+        for tag in ("poc", "vah", "val"):
+            if blob.get(tag) is not None:
+                reg.add("profile_windowed", f"{wname} {tag.upper()}",
+                        blob[tag], "windowed_profile", wname)
+        for j, n in enumerate(blob.get("lvns") or []):
+            for tag in ("mid", "low", "high"):
+                if n.get(tag) is not None:
+                    reg.add("profile_windowed", f"{wname} LVN{j} {tag}",
+                            n[tag], "lvn", wname)
+
+    # profile_windowed -- consensus and gap band edges from the nesting layer
+    for lv in nest_levels:
+        reg.add(lv["family"], lv["label"], lv["level"],
+                lv["source_layer"], lv["timeframe"])
+
+    # structure -- confirmed pivots, period opens, prior D/W/M extremes, sessions
+    for k, val in (a.get("structure") or {}).items():
+        lv = _f(val)
+        if lv is not None:
+            reg.add("structure", k, lv, "structure_layer", None)
+    for k, val in (a.get("sessions") or {}).items():
+        lv = _f(val)
+        if lv is not None and ("high" in k or "low" in k):
+            reg.add("structure", f"session {k}", lv, "sessions_layer", "1h")
+
+    # ss -- armed zone edges and governor band edges per lens
+    for row in (a.get("radar") or []):
+        if not isinstance(row, dict):
+            continue
+        for k, val in row.items():
+            lv = _f(val)
+            if lv is not None and ("zone" in k or "band" in k or k.startswith("z")):
+                reg.add("ss", f"{row.get('lens', '?')} {k}", lv, "radar",
+                        row.get("lens"))
+    return reg
+
+
+def confluence(reg, price, atr_d):
+    """§5.2 + §5.4 -- both scored views, plus the sensitivity annex."""
+    if not atr_d or atr_d <= 0:
+        return {"unavailable": True, "reason": "no positive daily ATR"}
+    out = L.dual_score(reg.as_list(), atr_d, price)
+    out["rules"] = {"collapse_atr": L.COLLAPSE_ATR, "cluster_atr": L.CLUSTER_ATR,
+                    "lis_atr": L.LIS_ATR, "family_cap": L.FAMILY_CAP,
+                    "families": list(L.FAMILIES),
+                    "volume_families": list(L.VOLUME_FAMILIES),
+                    "scoring": "sum over families of min(count, cap) + distinct "
+                               "families -- counted, never fitted"}
+    out["level_count"] = len(reg)
+    out["level_count_by_family"] = reg.by_family()
+    return out
+
+
+# ══════════════════════════════════════════════════ §7 decision instrument
+
+def _cluster_edges(cl):
+    lv = [m["level"] for m in cl["members"]]
+    return min(lv), max(lv)
+
+
+def rr_board(conf, price, atr_d, view="with_volume"):
+    """§7.2 -- R:R ranking, GEOMETRY not prophecy.
+
+    Every component is printed so the operator can recompute by hand, and F-B29
+    asserts exactly that: no ratio prints without entry, invalidation and target
+    all present, and every printed ratio recomputes from its own components.
+
+    entry        = the line's cluster mean
+    invalidation = the cluster's FAR edge -- the price that says the level failed
+    target 1     = the next opposing cluster scoring >= 4; target 2 = beyond it
+    R:R          = |target - entry| / |entry - invalidation|
+
+    The board sorts by R:R and says plainly what the ranking is: STRUCTURAL
+    QUALITY, not probability.  A high R:R means the geometry is favourable,
+    nothing more -- any claim that a setup is LIKELY to work would need outcome
+    statistics the firewall reserves for the census.
+    """
+    v = (conf or {}).get(view) or {}
+    lines, clusters = v.get("lines") or {}, v.get("clusters") or []
+    board = []
+    for side in ("above", "below"):
+        line = lines.get(side)
+        if not line:
+            continue
+        entry = _f(line["mean"])
+        lo, hi = _cluster_edges(line)
+        invalidation = _f(hi if side == "above" else lo)
+        if entry is None or invalidation is None or entry == invalidation:
+            continue
+        opposing = sorted(
+            [c for c in clusters
+             if c["score"] >= 4 and ((c["mean"] < entry) if side == "above"
+                                     else (c["mean"] > entry))],
+            key=lambda c: abs(c["mean"] - entry))
+        targets = [_f(c["mean"]) for c in opposing[:2]]
+        risk = abs(entry - invalidation)
+        for n, tgt in enumerate(targets, start=1):
+            if tgt is None or risk <= 0:
+                continue
+            board.append({
+                "side": "short" if side == "above" else "long",
+                "line_side": side, "target_rank": n,
+                "entry": entry, "invalidation": invalidation, "target": tgt,
+                "reward": abs(tgt - entry), "risk": risk,
+                "rr": abs(tgt - entry) / risk,
+                "cluster_score": int(line["score"]),
+                "cluster_families": list(line["families"]),
+                "source": line.get("source", "primary")})
+    board.sort(key=lambda r: -r["rr"])
+    return {"view": view, "board": board,
+            "ranking_is": "structural quality, not probability (§7.2)",
+            "contains_no_probability_claim": True}
+
+
+def hypothesis_drafts(conf, price, view="with_volume"):
+    """§7.1 -- if-then drafts, mechanically derived.  NO SIZING, EVER."""
+    v = (conf or {}).get(view) or {}
+    lines = v.get("lines") or {}
+    out = []
+    for side, word in (("above", "reclaims"), ("below", "loses")):
+        line = lines.get(side)
+        if not line:
+            continue
+        lo, hi = _cluster_edges(line)
+        far = hi if side == "above" else lo
+        out.append({
+            "draft": True, "no_sizing": True,
+            "if": f"price {word} {line['mean']:,.2f} "
+                  f"(cluster {lo:,.2f}-{hi:,.2f}, score {line['score']})",
+            "then": ("watch for continuation toward the next opposing area"
+                     if side == "above" else
+                     "watch for follow-through toward the next area below"),
+            "invalidated_if": f"price closes back "
+                              f"{'below' if side == 'above' else 'above'} "
+                              f"{far:,.2f}",
+            "level": _f(line["mean"]), "score": int(line["score"]),
+            "families": list(line["families"])})
+    return out
+
+
+def composite_bias(a, vol, nest, conf, price):
+    """§7.3 -- five families each declare a side. Counted, dissent named.
+
+    Equal weights, count-based, NEVER fitted.  The compression flag demotes the
+    final band one step toward neutral; it does NOT half-weight votes, because
+    that would contradict count-based purity.
+
+    Both this and the radar may disagree; when they do a disagreement chip prints
+    and nothing is reconciled.  They measure different things, and the
+    disagreement is information.
+    """
+    votes, why = {}, {}
+
+    gov = a.get("governor") or {}
+    dirs = [(gov.get(l) or {}).get("direction") for l in SS_LENSES]
+    up = sum(1 for d in dirs if d == "long")
+    dn = sum(1 for d in dirs if d == "short")
+    votes["trend"] = 1 if up > dn else (-1 if dn > up else 0)
+    why["trend"] = f"governor {up} long / {dn} short across {list(SS_LENSES)}"
+
+    osc = (a.get("brief2_oscillators") or {}).get("timeframes") or {}
+    sig = []
+    for tf in ("4h", "12h"):
+        b = osc.get(tf) or {}
+        if b.get("warming") or b.get("rsi") is None:
+            continue
+        sig.append(1 if b["rsi"] > 50 else -1)
+        if b.get("macd_hist") is not None:
+            sig.append(1 if b["macd_hist"] > 0 else -1)
+        if b.get("ao") is not None:
+            sig.append(1 if b["ao"] > 0 else -1)
+    s_sum = sum(sig)
+    votes["momentum"] = 0 if not sig else (1 if s_sum > 0 else (-1 if s_sum < 0 else 0))
+    why["momentum"] = f"RSI+MACD+AO on 4h/12h: net {s_sum} of {len(sig)} signed"
+
+    loc = []
+    for key, blob in (a.get("vwap") or {}).items():
+        lv = _f(blob.get("vwap")) if isinstance(blob, dict) else None
+        if lv is not None:
+            loc.append(1 if price > lv else -1)
+    pd_ = (vol.get("windows") or {}).get("prior-day") or {}
+    if pd_.get("vah") is not None and pd_.get("val") is not None:
+        loc.append(1 if price > pd_["vah"] else (-1 if price < pd_["val"] else 0))
+    l_sum = sum(loc)
+    votes["location"] = 0 if not loc else (1 if l_sum > 0 else (-1 if l_sum < 0 else 0))
+    why["location"] = f"price vs anchored VWAP complex and prior-day value: net {l_sum}"
+
+    vl = []
+    for w in ("7d", "30d", "90d", "365d"):
+        blob = (vol.get("windows") or {}).get(w) or {}
+        if blob.get("warming") or blob.get("vah") is None or blob.get("val") is None:
+            continue
+        vl.append(1 if price > blob["vah"] else (-1 if price < blob["val"] else 0))
+    for _key, pair in (nest.get("pairs") or {}).items():
+        if pair.get("price_location") == "inside_consensus":
+            vl.append(0)
+    v_sum = sum(vl)
+    votes["volume_location"] = 0 if not vl else (1 if v_sum > 0 else
+                                                 (-1 if v_sum < 0 else 0))
+    why["volume_location"] = f"price vs windowed value areas and consensus: net {v_sum}"
+
+    fp = _f((a.get("funding") or {}).get("percentile"))
+    votes["crowding"] = 0 if fp is None else (-1 if fp >= 90 else (1 if fp <= 10 else 0))
+    why["crowding"] = f"funding percentile {fp}"
+
+    total = sum(votes.values())
+    majority = 1 if total > 0 else (-1 if total < 0 else 0)
+    agree = sum(1 for v in votes.values() if v == majority and v != 0)
+    dissent = sorted(k for k, v in votes.items() if v != majority and v != 0)
+
+    bands = ["Short", "Lean-short", "Neutral-mixed", "Lean-long", "Long"]
+    idx = 2 + (1 if total >= 2 else 0) + (1 if total >= 4 else 0) \
+            - (1 if total <= -2 else 0) - (1 if total <= -4 else 0)
+    idx = max(0, min(4, idx))
+    compression = bool((a.get("volatility") or {}).get("compression_flag"))
+    if compression:
+        idx = idx - 1 if idx > 2 else (idx + 1 if idx < 2 else idx)
+
+    radar_states = [r.get("state") for r in (a.get("radar") or [])
+                    if isinstance(r, dict)]
+    return {
+        "votes": votes, "rationale": why,
+        "total": total, "agree": agree, "of": 5,
+        "dissenting": dissent,
+        "print": f"{agree} of 5 agree" + (f", dissenting: {', '.join(dissent)}"
+                                          if dissent else ", no dissent"),
+        "band": bands[idx],
+        "compression_demoted": compression,
+        "weights": "equal, count-based, never fitted (§7.3)",
+        "radar_states": radar_states,
+        "disagreement_chip": bool(dissent),
+        "not_reconciled": "the bias print and the radar measure different things; "
+                          "when they disagree nothing is reconciled (§7.3)",
+    }
+
+
+def decision_instrument(a, vol, nest, conf, price, atr_d):
+    """PART II, in the §2.2 order.  Derived from Part I under printed rules.
+
+    SEQUENCING RULE: every input below is a number Part I prints.  A reader with
+    Part I and the rules header can reconstruct all of this by hand.
+    """
+    area_map = {}
+    for view in ("with_volume", "without_volume"):
+        v = conf.get(view)
+        if not v:
+            continue
+        area_map[view] = [
+            {"mean": c["mean"], "score": c["score"], "families": c["families"],
+             "member_count": c["member_count"],
+             "scale_confirmed": sorted(
+                 {w for m in c["members"] for w in (m.get("scale_confirmed") or [])})}
+            for c in sorted(v.get("clusters") or [], key=lambda c: -c["score"])[:12]]
+
+    return {
+        "part": "II -- decision instrument",
+        "answers": "where would I act, and what would prove me wrong?",
+        "confluence_area_map": area_map,
+        "lines_in_sand": {v: (conf.get(v) or {}).get("lines")
+                          for v in ("with_volume", "without_volume")
+                          if conf.get(v)},
+        "lines_differ": conf.get("differ"),
+        "hypothesis_drafts": hypothesis_drafts(conf, price),
+        "rr_ranking": rr_board(conf, price, atr_d),
+        "rr_ranking_without_volume": rr_board(conf, price, atr_d,
+                                              view="without_volume"),
+        "composite_bias": composite_bias(a, vol, nest, conf, price),
+        "sequencing_rule": "Part II is derivable from Part I's printed numbers "
+                           "alone; no hidden inputs (§2.2)",
+    }
+
+
+def brief2_asset(a, klines, now_ms, price, atr_d):
+    """Compute every BRIEF-2 layer for one asset: Part I additions, then Part II."""
+    vol = volume_layer(klines, now_ms)
+    rv = rvwap_layer(klines, now_ms)
+    nest = nesting_layer(vol, price)
+    osc = oscillator_layer(klines)
+    a = dict(a)
+    a["brief2_oscillators"] = osc
+    cross = cross_state_layer(klines, atr_d)
+    lat = lattice_layer(klines)
+    planes = chart_planes(klines, vol)
+    reg = build_registry(a, vol, rv, nest["levels"])
+    conf = confluence(reg, price, atr_d)
+
+    part1 = {"volume_windows": vol, "rvwap": rv, "va_nesting": nest,
+             "oscillators": osc, "cross_state": cross, "lattice_12_25": lat,
+             "chart_planes": planes, "confluence": conf}
+    part2 = decision_instrument(a, vol, nest, conf, price, atr_d)
+    return part1, part2
+
+
+# ══════════════════════════════════════════════════ §8.1 the capture envelope
+
+SCHEMA_VERSION = "2.0.0"
+
+# §8.1 ratified A-6.  The closed-bar correction plus the volume filter MOVE
+# published numbers, and archive-comparability law requires a major bump.  The
+# f_an_8_diff table is the bridge between eras.
+RULES_VERSION = "2.0.0"
+
+# §2.3 ratified A-3.  Session-anchored slots, times HELD IN America/New_York and
+# resolved through the zone at generation time -- the UTC times below are the
+# standard-time renderings and shift with US DST, which is why the zone and not
+# the UTC offset is the stored quantity.
+SLOTS = {
+    "london": {"utc_hint": "12:00", "local": "07:00", "zone": "America/New_York"},
+    "ny_am": {"utc_hint": "15:00", "local": "10:00", "zone": "America/New_York"},
+    "post_ny": {"utc_hint": "21:30", "local": "16:30", "zone": "America/New_York"},
+}
+
+
+def capture_envelope(date, slot, parity_certified=False, engine_version=None,
+                     universe=None, extra_rules=None):
+    """The provenance envelope every capture embeds (§8.1).
+
+    ADOPTION AND PARITY ARE SEPARATE GATES.  This amendment may be BUILT before
+    the operator's parity readings return; its output may not be TRUSTED until
+    they do.  So `banner` is a function of `parity_certified` and F-B33 asserts
+    both directions -- present while unset, cleared only when set.  A banner that
+    were merely a constant string would assert nothing.
+    """
+    if slot not in SLOTS:
+        raise ValueError(f"unknown slot {slot!r}; expected one of {sorted(SLOTS)}")
+
+    rules = {
+        "rules_version": RULES_VERSION,
+        "windows": list(WINDOWS),
+        "retired_windows": ["5d", "20d"],
+        "profile_rows": P.PROFILE_ROWS,
+        "value_area": P.VALUE_AREA,
+        "lvn_threshold": P.LVN_THRESHOLD,
+        "lvn_min_rows": P.LVN_MIN_ROWS,
+        "window_substrate": dict(P.WINDOW_SUBSTRATE),
+        "collapse_atr": L.COLLAPSE_ATR,
+        "cluster_atr": L.CLUSTER_ATR,
+        "lis_atr": L.LIS_ATR,
+        "family_cap": L.FAMILY_CAP,
+        "families": list(L.FAMILIES),
+        "volume_families": list(L.VOLUME_FAMILIES),
+        "sensitivity_tolerances": [0.10, L.CLUSTER_ATR, 0.20],
+        "sigmas": list(SIGMAS),
+        "oscillator_timeframes": list(OSC_TFS),
+        "lattice_emas": list(LATTICE_EMAS),
+        "scoring": "sum over families of min(count, cap) + distinct families -- "
+                   "counted, never fitted",
+        "forming_candle": "drawn and greyed; excluded from every computed value",
+        "slots": {k: dict(v) for k, v in SLOTS.items()},
+    }
+    if extra_rules:
+        rules.update(extra_rules)
+
+    doc = {
+        "schema": "naiad_daily_brief",
+        "schema_version": SCHEMA_VERSION,
+        "date": date,
+        "slot": slot,
+        "slot_zone": SLOTS[slot]["zone"],
+        "rules_version": RULES_VERSION,
+        "rules": rules,
+        "rules_sha256": canonical_rules_sha256(rules),
+        "analytics_version": analytics.ANALYTICS_VERSION,
+        "analytics_sha": analytics.analytics_sha(),
+        "engine_version": engine_version,
+        "universe": list(universe or []),
+        "parity_certified": bool(parity_certified),
+        "banner": None if parity_certified else PARITY_BANNER,
+        "firewall": ("ops artifact, never study evidence; no journal reads, no "
+                     "lockbox outcome statistics; confluence measures agreement "
+                     "between tools, not edge"),
+        "lockbox": {"window": [analytics.LOCKBOX_START_MS,
+                               analytics.LOCKBOX_END_MS],
+                    "policy": "seal governs scored outcome evidence, not raw "
+                              "price in a display-only trailing window "
+                              "(operator ruling 2026-08-03); every windowed "
+                              "layer discloses its overlap"},
+    }
+    return doc
+
+
+def canonical_rules_sha256(rules):
+    """sha256 over the rule set, canonically serialised.
+
+    Sorted keys and compact separators, so the same rules always hash the same
+    regardless of insertion order -- a capture's rules_sha256 is what lets two
+    archived captures be compared without trusting their prose.
+    """
+    import hashlib
+    import json
+    blob = json.dumps(rules, sort_keys=True, separators=(",", ":"),
+                      default=str).encode("utf-8")
+    return hashlib.sha256(blob).hexdigest()
