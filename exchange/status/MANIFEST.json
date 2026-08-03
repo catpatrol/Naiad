@@ -1,6 +1,6 @@
 {
   "ahead_behind": {
-    "ahead": 0,
+    "ahead": 6,
     "behind": 0
   },
   "branch": "v12-v1-census",
@@ -10,8 +10,8 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": true
   },
-  "generated_utc": "2026-08-03T12:27:04Z",
-  "head": "30b7f17da9b1a93a698af71a30c08b6cb5214e48",
+  "generated_utc": "2026-08-03T17:12:56Z",
+  "head": "70bf028bbb98a0fe55aea6ab3bc64199516c6a10",
   "lane_last_commit": {
     "brief": null,
     "docs": {
@@ -20,25 +20,25 @@
       "subject": "docs: PC-1 Stage 3 ledger record - LIT estate remediation, save-path floor enforcement, engine 1.0.12"
     },
     "exchange": {
-      "committed_iso": "2026-08-03T09:26:51-03:00",
-      "sha": "30b7f17da9b1a93a698af71a30c08b6cb5214e48",
+      "committed_iso": "2026-08-03T13:04:33-03:00",
+      "sha": "1018d8b90800863cce71f98e7244e4009dda7aa2",
       "subject": "exchange: auto-publish 2026-08-03"
     },
     "ops": {
-      "committed_iso": "2026-08-03T09:26:10-03:00",
-      "sha": "b69572e5cc3d3364b0f7ef8193868d90b130a22d",
-      "subject": "ops: analytics/INTERFACE.md \u2014 the census-facing contract (Amendment 2 \u00a710)"
+      "committed_iso": "2026-08-03T14:12:29-03:00",
+      "sha": "70bf028bbb98a0fe55aea6ab3bc64199516c6a10",
+      "subject": "ops: Stage F \u2014 paired handback (builder's report + session summary + ATHENA note)"
     },
     "study-phase": null
   },
   "ledger_head": {
     "present": true,
-    "size": 248964,
+    "size": 255011,
     "title": "# Data-Spend Ledger"
   },
   "manifest_version": "1.1",
   "onedrive_running": false,
-  "origin_head": "30b7f17da9b1a93a698af71a30c08b6cb5214e48",
+  "origin_head": "1018d8b90800863cce71f98e7244e4009dda7aa2",
   "queue_open": 1,
   "reviewer_box": [
     {
@@ -501,9 +501,9 @@
     {
       "match_head": true,
       "path": "scripts/daily_brief.py",
-      "sha256_head_blob": "e196cdb27cb0dcf04dfb8e77a3226e6d698f6b0f9bcef927dd8970af57fd772f",
-      "sha256_worktree": "e196cdb27cb0dcf04dfb8e77a3226e6d698f6b0f9bcef927dd8970af57fd772f",
-      "size": 132138,
+      "sha256_head_blob": "6e3e729eec5172072c777f364664a7c708a18f1f81450cff750d9b8a1757e050",
+      "sha256_worktree": "6e3e729eec5172072c777f364664a7c708a18f1f81450cff750d9b8a1757e050",
+      "size": 133684,
       "tracked": true
     },
     {
@@ -517,9 +517,9 @@
     {
       "match_head": true,
       "path": "LEDGER.md",
-      "sha256_head_blob": "6f24cfc50316bf08c367828bf8b4f3e57b37a2724b7f6ba3e06267b62362469c",
-      "sha256_worktree": "6f24cfc50316bf08c367828bf8b4f3e57b37a2724b7f6ba3e06267b62362469c",
-      "size": 248964,
+      "sha256_head_blob": "37749afa002a66e69227402153db86c4488a147aeb02547e8bc2449a9f036c81",
+      "sha256_worktree": "37749afa002a66e69227402153db86c4488a147aeb02547e8bc2449a9f036c81",
+      "size": 255011,
       "tracked": true
     },
     {
@@ -547,38 +547,6 @@
       "tracked": true
     }
   ],
-  "status_porcelain": [
-    "?? AMENDMENT_2_BRIEF2_RESHAPE_1.md",
-    "?? Naiad_KB_Addendum_FourTraders_x_Canon_v1.md",
-    "?? Naiad_Knowledge_Canon_Synthesis_v1.md",
-    "?? PARITY_CAPTURE_PLAN.md",
-    "?? PARITY_READINGS_GUIDE.md"
-  ],
-  "untracked_root": [
-    {
-      "name": "AMENDMENT_2_BRIEF2_RESHAPE_1.md",
-      "sha256": "c502ecf471f8fab08d8a4077edfbb1860496c2fa80b1c9f02376816db532da9c",
-      "size": 29850
-    },
-    {
-      "name": "Naiad_KB_Addendum_FourTraders_x_Canon_v1.md",
-      "sha256": "68a37a3597c634da3623fd15b8185515fa0f56b1890a3b3d0384f31f15312319",
-      "size": 7218
-    },
-    {
-      "name": "Naiad_Knowledge_Canon_Synthesis_v1.md",
-      "sha256": "cace7a91380528552480b25bca489b555bf7ac336b58c1d088719bb534186059",
-      "size": 15862
-    },
-    {
-      "name": "PARITY_CAPTURE_PLAN.md",
-      "sha256": "493298a74ae173bf2ef3217bdc093dcf6062723edf4a60c13d5ff7423ffcf673",
-      "size": 9407
-    },
-    {
-      "name": "PARITY_READINGS_GUIDE.md",
-      "sha256": "ecb9a6177af33ff3f1b257fc47287784b5f0b9ebed2f5c8900424c3961a254d7",
-      "size": 10150
-    }
-  ]
+  "status_porcelain": [],
+  "untracked_root": []
 }
