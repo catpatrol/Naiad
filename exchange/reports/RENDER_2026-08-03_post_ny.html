@@ -1,0 +1,1367 @@
+<!-- naiad brief-2 render -->
+<style>
+:root{color-scheme:dark}
+body{background:#0E1420;color:#C9D4E6;font:14px/1.55 -apple-system,
+ Segoe UI,Roboto,sans-serif;margin:0;padding:24px}
+h1,h2,h3,h4{margin:0 0 .5em;font-weight:600;letter-spacing:.01em}
+h1{font-size:22px} h2{font-size:18px;color:#6FA8DC;
+ border-bottom:1px solid #26324C;padding-bottom:6px;margin-top:28px}
+h3{font-size:16px;margin-top:20px} h4{font-size:13px;color:#7A8AA5;
+ text-transform:uppercase;letter-spacing:.06em}
+.card{background:#151D2C;border:1px solid #26324C;border-radius:8px;
+ padding:14px 16px;margin:12px 0}
+table{width:100%;border-collapse:collapse;margin:6px 0 2px}
+th{text-align:left;font-weight:500;color:#7A8AA5;font-size:11px;
+ text-transform:uppercase;letter-spacing:.05em;padding:4px 8px 4px 0;
+ border-bottom:1px solid #26324C}
+td{padding:4px 8px 4px 0;border-bottom:1px solid rgba(38,50,76,.5);
+ font-variant-numeric:tabular-nums}
+tr.mute td{color:#7A8AA5}
+.mute{color:#7A8AA5} .small{font-size:12px}
+.big{font-weight:600;font-size:15px}
+.prose{margin:.5em 0;max-width:78ch}
+.chip{display:inline-block;border:1px solid;border-radius:999px;
+ padding:1px 8px;font-size:11px;margin-right:6px;white-space:nowrap}
+.banner{background:#E8853F;color:#1b1200;font-weight:700;padding:12px 16px;
+ border-radius:8px;margin-bottom:18px;letter-spacing:.02em}
+.foot{color:#7A8AA5;font-size:12px;margin-top:28px;
+ border-top:1px solid #26324C;padding-top:12px;max-width:90ch}
+</style>
+<div class="banner">PARITY NOT CERTIFIED — numbers not yet adopted. The operator&#x27;s parity readings have not been returned and matched; nothing here may be trusted or acted on.</div>
+<h1>Naiad daily brief &mdash; 2026-08-03 <span class="mute">post_ny</span></h1>
+<p class="mute small">rules 2.0.0 &middot; schema 2.1.0 &middot; analytics 1.3.0 &middot; as of 2026-08-03T23:28:01Z &middot; rendered 2026-08-03T23:31:39Z</p>
+<h2>Part I &mdash; market monitor</h2>
+<p class="mute small">What is the state of this market? Printed generously, for reading and judgement rather than for action.</p>
+<h3>BTCUSDT <span class="mute">63,755.90 &middot; daily ATR 1,649.58</span></h3>
+<div class="card"><h4>Stretch &mdash; distance from every volume-weighted mean, in sigma</h4>
+<table><tr><th>anchor / window</th><th>mean</th><th>sigma</th><th>&sigma; position</th><th>ATR</th><th>band</th><th></th></tr>
+<tr><td>anchored W</td><td>63,234.18</td><td>496.14</td><td class="big">+1.05</td><td>+0.32</td><td>1</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">thin sample</span><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>anchored M</td><td>63,165.19</td><td>427.38</td><td class="big">+1.38</td><td>+0.36</td><td>1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>anchored Q</td><td>63,453.11</td><td>1,576.38</td><td class="big">+0.19</td><td>+0.18</td><td>0</td><td></td></tr>
+<tr><td>anchored Y</td><td>71,380.23</td><td>8,750.78</td><td class="big">-0.87</td><td>-4.62</td><td>0</td><td></td></tr>
+<tr><td>prior M</td><td>63,471.78</td><td>1,621.27</td><td class="big">+0.18</td><td>+0.17</td><td>0</td><td></td></tr>
+<tr><td>prior Q</td><td>70,384.15</td><td>7,154.94</td><td class="big">-0.93</td><td>-4.02</td><td>0</td><td></td></tr>
+<tr><td>prior Y</td><td>99,401.64</td><td>12,119.60</td><td class="big">-2.94</td><td>-21.61</td><td>-2</td><td><span class="chip" style="border-color:#D9647A;color:#D9647A">past 2&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 7d</td><td>63,662.66</td><td>645.80</td><td class="big">+0.14</td><td>+0.06</td><td>0</td><td></td></tr>
+<tr><td>RVWAP 30d</td><td>63,928.48</td><td>1,071.23</td><td class="big">-0.16</td><td>-0.10</td><td>0</td><td></td></tr>
+<tr><td>RVWAP 90d</td><td>66,607.11</td><td>6,633.82</td><td class="big">-0.43</td><td>-1.73</td><td>0</td><td></td></tr>
+<tr><td>RVWAP 365d</td><td>83,622.62</td><td>18,908.21</td><td class="big">-1.05</td><td>-12.04</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+</table>
+<p class="prose">Widest disagreement: <b>anchored M</b> at +1.38&sigma; against <b>prior Y</b> at -2.94&sigma; &mdash; a spread of 4.32&sigma;. Price is beyond +1&sigma; on one scale and below &minus;1&sigma; on another at the same instant; both are true.</p>
+</div>
+<div class="card"><h4>Windowed volume profiles</h4>
+<table><tr><th>window</th><th>POC</th><th>VAH</th><th>VAL</th><th>LVNs</th><th>substrate</th><th>lockbox</th></tr>
+<tr><td>30d</td><td>63,993.32</td><td>64,978.06</td><td>62,727.22</td><td>0</td><td>5m</td><td>&mdash;</td></tr>
+<tr><td>365d</td><td>63,747.97</td><td>91,698.34</td><td>58,614.22</td><td>1</td><td>15m</td><td>63.2</td></tr>
+<tr><td>7d</td><td>63,454.27</td><td>64,403.02</td><td>62,874.48</td><td>0</td><td>1m</td><td>&mdash;</td></tr>
+<tr><td>90d</td><td>63,921.67</td><td>66,846.51</td><td>59,116.56</td><td>2</td><td>15m</td><td>&mdash;</td></tr>
+<tr><td>prior-day</td><td>63,462.93</td><td>63,532.74</td><td>63,134.83</td><td>0</td><td>1m</td><td>&mdash;</td></tr>
+</table><p class="mute small">Volume spread uniformly across each bar&rsquo;s range &mdash; an approximation of tick data.</p></div>
+<div class="card"><h4>Value-area nesting</h4>
+<p class="prose">7d value sits entirely inside 30d value (100% of 7d value has 30d backing). Both timescales agree between 62,874.48 and 64,403.02.</p>
+<p class="prose">30d value sits entirely inside 90d value (100% of 30d value has 90d backing). Both timescales agree between 62,727.22 and 64,978.06.</p>
+<p class="prose">90d value sits entirely inside 365d value (100% of 90d value has 365d backing). Both timescales agree between 59,116.56 and 66,846.51.</p>
+</div>
+<div class="card"><h4>Oscillators</h4><table><tr><th>tf</th><th>RSI</th><th>StochRSI %K</th><th>%D</th><th>MACD</th><th>signal</th><th>hist</th><th>AO</th></tr>
+<tr><td>12h</td><td>40.11</td><td>19.89</td><td>15.49</td><td>-400.13</td><td>-228.05</td><td>-172.09</td><td>-1,363.27</td></tr>
+<tr><td>1d</td><td>47.73</td><td>7.26</td><td>11.09</td><td>-86.55</td><td>126.60</td><td>-213.15</td><td>49.40</td></tr>
+<tr><td>1h</td><td>60.98</td><td>85.83</td><td>87.54</td><td>195.97</td><td>89.89</td><td>106.08</td><td>653.79</td></tr>
+<tr><td>1w</td><td>39.70</td><td>46.38</td><td>36.74</td><td>-5,641.87</td><td>-5,971.97</td><td>330.11</td><td>-11,610.36</td></tr>
+<tr><td>4h</td><td>55.28</td><td>77.45</td><td>57.65</td><td>-141.52</td><td>-238.03</td><td>96.52</td><td>-488.38</td></tr>
+</table>
+<p class="mute small">23 generalised divergence(s) recorded, each carrying the price level of its pivot.</p>
+<p class="mute small">The 1M plane carries price and volume structure only &mdash; a closed-bar monthly oscillator has almost no sample.</p></div>
+<div class="card"><h4>Bias scorecard &mdash; every vote</h4>
+<p><b>daily</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>0</td></tr>
+<tr><td>location</td><td>1</td></tr>
+<tr><td>momentum</td><td>0</td></tr>
+<tr><td>trend</td><td>-1</td></tr>
+</table>
+<p><b>weekly</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>0</td></tr>
+<tr><td>location</td><td>0</td></tr>
+<tr><td>momentum</td><td>0</td></tr>
+<tr><td>trend</td><td>-1</td></tr>
+</table>
+<p class="mute small">Kept generously and in full: it is too early to know whether it works, and a vote deleted now cannot be studied later.</p></div>
+<div class="card"><h4>Chart planes</h4><table><tr><th>plane</th><th>default windows</th><th>forming candle</th></tr>
+<tr><td>1D</td><td>30d, 90d</td><td>&mdash;</td></tr>
+<tr><td>1M</td><td>365d</td><td>&mdash;</td></tr>
+<tr><td>1W</td><td>90d, 365d</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">forming &amp;mdash; drawn, greyed</span> O 63,958.90 H 65,391.30 L 62,228.80 C 63,755.90</td></tr>
+<tr><td>4H</td><td>7d, 30d</td><td>&mdash;</td></tr>
+</table><p class="mute small">Value areas render as extended horizontal bands. The forming candle is drawn and greyed so the chart looks like the operator&rsquo;s &mdash; and appears in NO computed value. Mid-week, the weekly RSI is last week&rsquo;s.</p></div>
+<div class="card"><h4>{12,25} lattice</h4><table><tr><th>plane</th><th>EMA12</th><th>EMA25</th><th>12&gt;25</th></tr>
+<tr><td>1d</td><td>63,922.75</td><td>64,002.74</td><td>no</td></tr>
+<tr><td>1w</td><td>66,339.00</td><td>71,580.73</td><td>no</td></tr>
+</table><p class="mute small">Display only. No signal, no vote, no score contribution.</p></div>
+<h3>ETHUSDT <span class="mute">1,868.26 &middot; daily ATR 67.45</span></h3>
+<div class="card"><h4>Stretch &mdash; distance from every volume-weighted mean, in sigma</h4>
+<table><tr><th>anchor / window</th><th>mean</th><th>sigma</th><th>&sigma; position</th><th>ATR</th><th>band</th><th></th></tr>
+<tr><td>anchored W</td><td>1,855.58</td><td>11.54</td><td class="big">+1.10</td><td>+0.19</td><td>1</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">thin sample</span><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>anchored M</td><td>1,859.58</td><td>14.61</td><td class="big">+0.59</td><td>+0.13</td><td>0</td><td></td></tr>
+<tr><td>anchored Q</td><td>1,827.61</td><td>88.21</td><td class="big">+0.46</td><td>+0.60</td><td>0</td><td></td></tr>
+<tr><td>anchored Y</td><td>2,126.91</td><td>400.16</td><td class="big">-0.65</td><td>-3.83</td><td>0</td><td></td></tr>
+<tr><td>prior M</td><td>1,825.45</td><td>90.66</td><td class="big">+0.47</td><td>+0.63</td><td>0</td><td></td></tr>
+<tr><td>prior Q</td><td>2,008.09</td><td>287.28</td><td class="big">-0.49</td><td>-2.07</td><td>0</td><td></td></tr>
+<tr><td>prior Y</td><td>2,999.15</td><td>892.47</td><td class="big">-1.27</td><td>-16.77</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 7d</td><td>1,886.15</td><td>25.44</td><td class="big">-0.70</td><td>-0.27</td><td>0</td><td></td></tr>
+<tr><td>RVWAP 30d</td><td>1,853.28</td><td>61.74</td><td class="big">+0.24</td><td>+0.22</td><td>0</td><td></td></tr>
+<tr><td>RVWAP 90d</td><td>1,855.57</td><td>217.92</td><td class="big">+0.06</td><td>+0.19</td><td>0</td><td></td></tr>
+<tr><td>RVWAP 365d</td><td>2,841.34</td><td>975.37</td><td class="big">-1.00</td><td>-14.43</td><td>0</td><td></td></tr>
+</table>
+<p class="prose">Widest disagreement: <b>anchored W</b> at +1.10&sigma; against <b>prior Y</b> at -1.27&sigma; &mdash; a spread of 2.37&sigma;. Price is beyond +1&sigma; on one scale and below &minus;1&sigma; on another at the same instant; both are true.</p>
+</div>
+<div class="card"><h4>Windowed volume profiles</h4>
+<table><tr><th>window</th><th>POC</th><th>VAH</th><th>VAL</th><th>LVNs</th><th>substrate</th><th>lockbox</th></tr>
+<tr><td>30d</td><td>1,875.30</td><td>1,947.18</td><td>1,798.93</td><td>0</td><td>5m</td><td>&mdash;</td></tr>
+<tr><td>365d</td><td>2,064.89</td><td>3,331.38</td><td>1,517.99</td><td>1</td><td>15m</td><td>63.2</td></tr>
+<tr><td>7d</td><td>1,918.95</td><td>1,926.47</td><td>1,873.81</td><td>0</td><td>1m</td><td>&mdash;</td></tr>
+<tr><td>90d</td><td>1,875.00</td><td>1,936.26</td><td>1,553.37</td><td>3</td><td>15m</td><td>&mdash;</td></tr>
+<tr><td>prior-day</td><td>1,876.56</td><td>1,884.98</td><td>1,858.97</td><td>0</td><td>1m</td><td>&mdash;</td></tr>
+</table><p class="mute small">Volume spread uniformly across each bar&rsquo;s range &mdash; an approximation of tick data.</p></div>
+<div class="card"><h4>Value-area nesting</h4>
+<p class="prose">7d value sits entirely inside 30d value (100% of 7d value has 30d backing). Both timescales agree between 1,873.81 and 1,926.47.</p>
+<p class="prose">30d and 90d value overlap in part (93% of 30d value has 90d backing). Both timescales agree between 1,798.93 and 1,936.26.</p>
+<p class="prose">90d value sits entirely inside 365d value (100% of 90d value has 365d backing). Both timescales agree between 1,553.37 and 1,936.26.</p>
+</div>
+<div class="card"><h4>Oscillators</h4><table><tr><th>tf</th><th>RSI</th><th>StochRSI %K</th><th>%D</th><th>MACD</th><th>signal</th><th>hist</th><th>AO</th></tr>
+<tr><td>12h</td><td>43.00</td><td>15.19</td><td>10.84</td><td>-3.92</td><td>5.22</td><td>-9.14</td><td>-26.90</td></tr>
+<tr><td>1d</td><td>53.22</td><td>9.30</td><td>12.00</td><td>24.93</td><td>33.73</td><td>-8.80</td><td>58.79</td></tr>
+<tr><td>1h</td><td>54.52</td><td>88.08</td><td>87.25</td><td>1.14</td><td>-1.17</td><td>2.31</td><td>6.87</td></tr>
+<tr><td>1w</td><td>42.49</td><td>91.64</td><td>73.66</td><td>-232.41</td><td>-268.57</td><td>36.16</td><td>-489.25</td></tr>
+<tr><td>4h</td><td>49.36</td><td>66.79</td><td>54.47</td><td>-8.68</td><td>-9.78</td><td>1.10</td><td>-25.35</td></tr>
+</table>
+<p class="mute small">18 generalised divergence(s) recorded, each carrying the price level of its pivot.</p>
+<p class="mute small">The 1M plane carries price and volume structure only &mdash; a closed-bar monthly oscillator has almost no sample.</p></div>
+<div class="card"><h4>Bias scorecard &mdash; every vote</h4>
+<p><b>daily</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>0</td></tr>
+<tr><td>location</td><td>0</td></tr>
+<tr><td>momentum</td><td>0</td></tr>
+<tr><td>trend</td><td>-1</td></tr>
+</table>
+<p><b>weekly</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>0</td></tr>
+<tr><td>location</td><td>0</td></tr>
+<tr><td>momentum</td><td>0</td></tr>
+<tr><td>trend</td><td>0</td></tr>
+</table>
+<p class="mute small">Kept generously and in full: it is too early to know whether it works, and a vote deleted now cannot be studied later.</p></div>
+<div class="card"><h4>Chart planes</h4><table><tr><th>plane</th><th>default windows</th><th>forming candle</th></tr>
+<tr><td>1D</td><td>30d, 90d</td><td>&mdash;</td></tr>
+<tr><td>1M</td><td>365d</td><td>&mdash;</td></tr>
+<tr><td>1W</td><td>90d, 365d</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">forming &amp;mdash; drawn, greyed</span> O 1,909.68 H 1,936.57 L 1,820.61 C 1,868.26</td></tr>
+<tr><td>4H</td><td>7d, 30d</td><td>&mdash;</td></tr>
+</table><p class="mute small">Value areas render as extended horizontal bands. The forming candle is drawn and greyed so the chart looks like the operator&rsquo;s &mdash; and appears in NO computed value. Mid-week, the weekly RSI is last week&rsquo;s.</p></div>
+<div class="card"><h4>{12,25} lattice</h4><table><tr><th>plane</th><th>EMA12</th><th>EMA25</th><th>12&gt;25</th></tr>
+<tr><td>1d</td><td>1,883.55</td><td>1,860.30</td><td>yes</td></tr>
+<tr><td>1w</td><td>1,903.40</td><td>2,119.04</td><td>no</td></tr>
+</table><p class="mute small">Display only. No signal, no vote, no score contribution.</p></div>
+<h3>FARTCOINUSDT <span class="mute">0.13 &middot; daily ATR 0.01</span></h3>
+<div class="card"><h4>Stretch &mdash; distance from every volume-weighted mean, in sigma</h4>
+<table><tr><th>anchor / window</th><th>mean</th><th>sigma</th><th>&sigma; position</th><th>ATR</th><th>band</th><th></th></tr>
+<tr class="mute"><td>anchored W</td><td colspan="5">&mdash;</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">warming</span></td></tr>
+<tr><td>anchored M</td><td>0.13</td><td>0.00</td><td class="big">+0.96</td><td>+0.16</td><td>0</td><td></td></tr>
+<tr><td>anchored Q</td><td>0.14</td><td>0.01</td><td class="big">-0.93</td><td>-1.43</td><td>0</td><td></td></tr>
+<tr><td>anchored Y</td><td>0.21</td><td>0.08</td><td class="big">-0.99</td><td>-8.48</td><td>0</td><td></td></tr>
+<tr><td>prior M</td><td>0.14</td><td>0.01</td><td class="big">-0.99</td><td>-1.51</td><td>0</td><td></td></tr>
+<tr><td>prior Q</td><td>0.18</td><td>0.04</td><td class="big">-1.11</td><td>-4.87</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>prior Y</td><td>0.71</td><td>0.39</td><td class="big">-1.48</td><td>-62.26</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 7d</td><td>0.13</td><td>0.00</td><td class="big">+1.23</td><td>+0.52</td><td>1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 30d</td><td>0.14</td><td>0.01</td><td class="big">-0.81</td><td>-1.16</td><td>0</td><td></td></tr>
+<tr><td>RVWAP 90d</td><td>0.15</td><td>0.04</td><td class="big">-0.61</td><td>-2.64</td><td>0</td><td></td></tr>
+<tr><td>RVWAP 365d</td><td>0.39</td><td>0.26</td><td class="big">-0.98</td><td>-27.83</td><td>0</td><td></td></tr>
+</table>
+<p class="prose">Widest disagreement: <b>RVWAP 7d</b> at +1.23&sigma; against <b>prior Y</b> at -1.48&sigma; &mdash; a spread of 2.71&sigma;. Price is beyond +1&sigma; on one scale and below &minus;1&sigma; on another at the same instant; both are true.</p>
+</div>
+<div class="card"><h4>Windowed volume profiles</h4>
+<table><tr><th>window</th><th>POC</th><th>VAH</th><th>VAL</th><th>LVNs</th><th>substrate</th><th>lockbox</th></tr>
+<tr><td>30d</td><td>0.13</td><td>0.15</td><td>0.12</td><td>0</td><td>5m</td><td>&mdash;</td></tr>
+<tr><td>365d</td><td>0.20</td><td>0.39</td><td>0.12</td><td>1</td><td>15m</td><td>64.2</td></tr>
+<tr><td>7d</td><td>0.12</td><td>0.13</td><td>0.12</td><td>0</td><td>1m</td><td>&mdash;</td></tr>
+<tr><td>90d</td><td>0.13</td><td>0.16</td><td>0.11</td><td>1</td><td>15m</td><td>&mdash;</td></tr>
+<tr><td>prior-day</td><td>0.13</td><td>0.13</td><td>0.13</td><td>1</td><td>1m</td><td>&mdash;</td></tr>
+</table><p class="mute small">Volume spread uniformly across each bar&rsquo;s range &mdash; an approximation of tick data.</p></div>
+<div class="card"><h4>Value-area nesting</h4>
+<p class="prose">7d and 30d value overlap in part (57% of 7d value has 30d backing). Both timescales agree between 0.12 and 0.13.</p>
+<p class="prose">30d value sits entirely inside 90d value (100% of 30d value has 90d backing). Both timescales agree between 0.12 and 0.15.</p>
+<p class="prose">90d and 365d value overlap in part (86% of 90d value has 365d backing). Both timescales agree between 0.12 and 0.16.</p>
+</div>
+<div class="card"><h4>Oscillators</h4><table><tr><th>tf</th><th>RSI</th><th>StochRSI %K</th><th>%D</th><th>MACD</th><th>signal</th><th>hist</th><th>AO</th></tr>
+<tr><td>12h</td><td>50.38</td><td>89.45</td><td>79.72</td><td>-0.00</td><td>-0.00</td><td>0.00</td><td>-0.00</td></tr>
+<tr><td>1d</td><td>43.39</td><td>38.89</td><td>26.31</td><td>-0.01</td><td>-0.00</td><td>-0.00</td><td>-0.02</td></tr>
+<tr><td>1h</td><td>58.48</td><td>75.92</td><td>59.12</td><td>0.00</td><td>0.00</td><td>-0.00</td><td>0.00</td></tr>
+<tr><td>1w</td><td>38.07</td><td>41.99</td><td>46.19</td><td>-0.06</td><td>-0.07</td><td>0.01</td><td>-0.07</td></tr>
+<tr><td>4h</td><td>58.72</td><td>73.77</td><td>79.07</td><td>0.00</td><td>0.00</td><td>0.00</td><td>0.01</td></tr>
+</table>
+<p class="mute small">16 generalised divergence(s) recorded, each carrying the price level of its pivot.</p>
+<p class="mute small">The 1M plane carries price and volume structure only &mdash; a closed-bar monthly oscillator has almost no sample.</p></div>
+<div class="card"><h4>Bias scorecard &mdash; every vote</h4>
+<p><b>daily</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>0</td></tr>
+<tr><td>location</td><td>0</td></tr>
+<tr><td>momentum</td><td>1</td></tr>
+<tr><td>trend</td><td>1</td></tr>
+</table>
+<p><b>weekly</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>0</td></tr>
+<tr><td>location</td><td>0</td></tr>
+<tr><td>momentum</td><td>0</td></tr>
+<tr><td>trend</td><td>-1</td></tr>
+</table>
+<p class="mute small">Kept generously and in full: it is too early to know whether it works, and a vote deleted now cannot be studied later.</p></div>
+<div class="card"><h4>Chart planes</h4><table><tr><th>plane</th><th>default windows</th><th>forming candle</th></tr>
+<tr><td>1D</td><td>30d, 90d</td><td>&mdash;</td></tr>
+<tr><td>1M</td><td>365d</td><td>&mdash;</td></tr>
+<tr><td>1W</td><td>90d, 365d</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">forming &amp;mdash; drawn, greyed</span> O 0.12 H 0.13 L 0.12 C 0.13</td></tr>
+<tr><td>4H</td><td>7d, 30d</td><td>&mdash;</td></tr>
+</table><p class="mute small">Value areas render as extended horizontal bands. The forming candle is drawn and greyed so the chart looks like the operator&rsquo;s &mdash; and appears in NO computed value. Mid-week, the weekly RSI is last week&rsquo;s.</p></div>
+<div class="card"><h4>{12,25} lattice</h4><table><tr><th>plane</th><th>EMA12</th><th>EMA25</th><th>12&gt;25</th></tr>
+<tr><td>1d</td><td>0.13</td><td>0.13</td><td>no</td></tr>
+<tr><td>1w</td><td>0.15</td><td>0.20</td><td>no</td></tr>
+</table><p class="mute small">Display only. No signal, no vote, no score contribution.</p></div>
+<h3>HYPEUSDT <span class="mute">52.59 &middot; daily ATR 3.30</span></h3>
+<div class="card"><h4>Stretch &mdash; distance from every volume-weighted mean, in sigma</h4>
+<table><tr><th>anchor / window</th><th>mean</th><th>sigma</th><th>&sigma; position</th><th>ATR</th><th>band</th><th></th></tr>
+<tr class="mute"><td>anchored W</td><td colspan="5">&mdash;</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">warming</span></td></tr>
+<tr><td>anchored M</td><td>52.13</td><td>0.39</td><td class="big">+1.19</td><td>+0.14</td><td>1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>anchored Q</td><td>62.65</td><td>5.56</td><td class="big">-1.81</td><td>-3.04</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>anchored Y</td><td>45.95</td><td>15.72</td><td class="big">+0.42</td><td>+2.01</td><td>0</td><td></td></tr>
+<tr><td>prior M</td><td>63.08</td><td>5.24</td><td class="big">-2.00</td><td>-3.17</td><td>-2</td><td><span class="chip" style="border-color:#D9647A;color:#D9647A">past 2&amp;sigma;</span></td></tr>
+<tr><td>prior Q</td><td>56.55</td><td>11.35</td><td class="big">-0.35</td><td>-1.20</td><td>0</td><td></td></tr>
+<tr><td>prior Y</td><td>39.47</td><td>7.39</td><td class="big">+1.78</td><td>+3.97</td><td>1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 7d</td><td>54.67</td><td>2.11</td><td class="big">-0.98</td><td>-0.63</td><td>0</td><td></td></tr>
+<tr><td>RVWAP 30d</td><td>62.19</td><td>5.77</td><td class="big">-1.66</td><td>-2.90</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 90d</td><td>60.62</td><td>8.75</td><td class="big">-0.92</td><td>-2.43</td><td>0</td><td></td></tr>
+<tr><td>RVWAP 365d</td><td>43.59</td><td>13.85</td><td class="big">+0.65</td><td>+2.72</td><td>0</td><td></td></tr>
+</table>
+<p class="prose">Widest disagreement: <b>prior Y</b> at +1.78&sigma; against <b>prior M</b> at -2.00&sigma; &mdash; a spread of 3.78&sigma;. Price is beyond +1&sigma; on one scale and below &minus;1&sigma; on another at the same instant; both are true.</p>
+</div>
+<div class="card"><h4>Windowed volume profiles</h4>
+<table><tr><th>window</th><th>POC</th><th>VAH</th><th>VAL</th><th>LVNs</th><th>substrate</th><th>lockbox</th></tr>
+<tr><td>30d</td><td>58.86</td><td>70.16</td><td>57.03</td><td>0</td><td>5m</td><td>&mdash;</td></tr>
+<tr><td>365d</td><td>39.08</td><td>49.44</td><td>22.59</td><td>0</td><td>15m</td><td>64.2</td></tr>
+<tr><td>7d</td><td>54.81</td><td>56.06</td><td>52.24</td><td>1</td><td>1m</td><td>&mdash;</td></tr>
+<tr><td>90d</td><td>62.91</td><td>72.62</td><td>56.76</td><td>1</td><td>15m</td><td>&mdash;</td></tr>
+<tr><td>prior-day</td><td>52.16</td><td>52.45</td><td>51.89</td><td>0</td><td>1m</td><td>&mdash;</td></tr>
+</table><p class="mute small">Volume spread uniformly across each bar&rsquo;s range &mdash; an approximation of tick data.</p></div>
+<div class="card"><h4>Value-area nesting</h4>
+<p class="prose">7d value sits entirely below 30d value. The unclaimed gap runs 56.06-57.03. The facing edges are the 7d VAH at 56.06 and the 30d VAL at 57.03.</p>
+<p class="prose">30d value sits entirely inside 90d value (100% of 30d value has 90d backing). Both timescales agree between 57.03 and 70.16.</p>
+<p class="prose">90d value sits entirely above 365d value. The unclaimed gap runs 49.44-56.76. The facing edges are the 90d VAL at 56.76 and the 365d VAH at 49.44.</p>
+</div>
+<div class="card"><h4>Oscillators</h4><table><tr><th>tf</th><th>RSI</th><th>StochRSI %K</th><th>%D</th><th>MACD</th><th>signal</th><th>hist</th><th>AO</th></tr>
+<tr><td>12h</td><td>31.54</td><td>13.78</td><td>21.94</td><td>-2.40</td><td>-2.18</td><td>-0.22</td><td>-4.78</td></tr>
+<tr><td>1d</td><td>33.78</td><td>15.48</td><td>15.27</td><td>-2.99</td><td>-2.32</td><td>-0.67</td><td>-8.69</td></tr>
+<tr><td>1h</td><td>57.39</td><td>96.76</td><td>97.15</td><td>-0.01</td><td>-0.14</td><td>0.13</td><td>0.19</td></tr>
+<tr><td>1w</td><td>51.82</td><td>17.08</td><td>27.77</td><td>6.65</td><td>6.51</td><td>0.13</td><td>20.64</td></tr>
+<tr><td>4h</td><td>45.69</td><td>40.81</td><td>29.29</td><td>-0.93</td><td>-0.98</td><td>0.06</td><td>-1.72</td></tr>
+</table>
+<p class="mute small">17 generalised divergence(s) recorded, each carrying the price level of its pivot.</p>
+<p class="mute small">The 1M plane carries price and volume structure only &mdash; a closed-bar monthly oscillator has almost no sample.</p></div>
+<div class="card"><h4>Bias scorecard &mdash; every vote</h4>
+<p><b>daily</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>-1</td></tr>
+<tr><td>location</td><td>0</td></tr>
+<tr><td>momentum</td><td>0</td></tr>
+<tr><td>trend</td><td>-1</td></tr>
+</table>
+<p><b>weekly</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>-1</td></tr>
+<tr><td>location</td><td>-1</td></tr>
+<tr><td>momentum</td><td>-1</td></tr>
+<tr><td>trend</td><td>-1</td></tr>
+</table>
+<p class="mute small">Kept generously and in full: it is too early to know whether it works, and a vote deleted now cannot be studied later.</p></div>
+<div class="card"><h4>Chart planes</h4><table><tr><th>plane</th><th>default windows</th><th>forming candle</th></tr>
+<tr><td>1D</td><td>30d, 90d</td><td>&mdash;</td></tr>
+<tr><td>1M</td><td>365d</td><td>&mdash;</td></tr>
+<tr><td>1W</td><td>90d, 365d</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">forming &amp;mdash; drawn, greyed</span> O 53.92 H 56.14 L 51.11 C 52.59</td></tr>
+<tr><td>4H</td><td>7d, 30d</td><td>&mdash;</td></tr>
+</table><p class="mute small">Value areas render as extended horizontal bands. The forming candle is drawn and greyed so the chart looks like the operator&rsquo;s &mdash; and appears in NO computed value. Mid-week, the weekly RSI is last week&rsquo;s.</p></div>
+<div class="card"><h4>{12,25} lattice</h4><table><tr><th>plane</th><th>EMA12</th><th>EMA25</th><th>12&gt;25</th></tr>
+<tr><td>1d</td><td>56.33</td><td>59.18</td><td>no</td></tr>
+<tr><td>1w</td><td>58.16</td><td>51.85</td><td>yes</td></tr>
+</table><p class="mute small">Display only. No signal, no vote, no score contribution.</p></div>
+<h3>JTOUSDT <span class="mute">0.49 &middot; daily ATR 0.05</span></h3>
+<div class="card"><h4>Stretch &mdash; distance from every volume-weighted mean, in sigma</h4>
+<table><tr><th>anchor / window</th><th>mean</th><th>sigma</th><th>&sigma; position</th><th>ATR</th><th>band</th><th></th></tr>
+<tr class="mute"><td>anchored W</td><td colspan="5">&mdash;</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">warming</span></td></tr>
+<tr><td>anchored M</td><td>0.50</td><td>0.01</td><td class="big">-0.44</td><td>-0.08</td><td>0</td><td></td></tr>
+<tr><td>anchored Q</td><td>0.65</td><td>0.08</td><td class="big">-1.87</td><td>-2.95</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>anchored Y</td><td>0.48</td><td>0.17</td><td class="big">+0.08</td><td>+0.25</td><td>0</td><td></td></tr>
+<tr><td>prior M</td><td>0.65</td><td>0.08</td><td class="big">-1.98</td><td>-3.02</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>prior Q</td><td>0.57</td><td>0.15</td><td class="big">-0.54</td><td>-1.56</td><td>0</td><td></td></tr>
+<tr><td>prior Y</td><td>1.77</td><td>0.83</td><td class="big">-1.54</td><td>-24.88</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 7d</td><td>0.54</td><td>0.04</td><td class="big">-1.14</td><td>-0.87</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 30d</td><td>0.63</td><td>0.07</td><td class="big">-1.93</td><td>-2.57</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 90d</td><td>0.62</td><td>0.11</td><td class="big">-1.09</td><td>-2.38</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 365d</td><td>0.59</td><td>0.38</td><td class="big">-0.27</td><td>-1.96</td><td>0</td><td></td></tr>
+</table>
+<p class="prose">Widest disagreement: <b>anchored Y</b> at +0.08&sigma; against <b>prior M</b> at -1.98&sigma; &mdash; a spread of 2.05&sigma;.</p>
+</div>
+<div class="card"><h4>Windowed volume profiles</h4>
+<table><tr><th>window</th><th>POC</th><th>VAH</th><th>VAL</th><th>LVNs</th><th>substrate</th><th>lockbox</th></tr>
+<tr><td>30d</td><td>0.63</td><td>0.67</td><td>0.55</td><td>1</td><td>5m</td><td>&mdash;</td></tr>
+<tr><td>365d</td><td>0.33</td><td>0.64</td><td>0.27</td><td>2</td><td>15m</td><td>64.2</td></tr>
+<tr><td>7d</td><td>0.51</td><td>0.55</td><td>0.48</td><td>1</td><td>1m</td><td>&mdash;</td></tr>
+<tr><td>90d</td><td>0.54</td><td>0.72</td><td>0.47</td><td>0</td><td>15m</td><td>&mdash;</td></tr>
+<tr><td>prior-day</td><td>0.51</td><td>0.51</td><td>0.50</td><td>1</td><td>1m</td><td>&mdash;</td></tr>
+</table><p class="mute small">Volume spread uniformly across each bar&rsquo;s range &mdash; an approximation of tick data.</p></div>
+<div class="card"><h4>Value-area nesting</h4>
+<p class="prose">7d and 30d value overlap in part (9% of 7d value has 30d backing). Both timescales agree between 0.55 and 0.55.</p>
+<p class="prose">30d value sits entirely inside 90d value (100% of 30d value has 90d backing). Both timescales agree between 0.55 and 0.67.</p>
+<p class="prose">90d and 365d value overlap in part (66% of 90d value has 365d backing). Both timescales agree between 0.47 and 0.64.</p>
+</div>
+<div class="card"><h4>Oscillators</h4><table><tr><th>tf</th><th>RSI</th><th>StochRSI %K</th><th>%D</th><th>MACD</th><th>signal</th><th>hist</th><th>AO</th></tr>
+<tr><td>12h</td><td>30.58</td><td>7.10</td><td>12.14</td><td>-0.03</td><td>-0.03</td><td>-0.01</td><td>-0.06</td></tr>
+<tr><td>1d</td><td>34.07</td><td>7.98</td><td>7.60</td><td>-0.04</td><td>-0.03</td><td>-0.01</td><td>-0.11</td></tr>
+<tr><td>1h</td><td>51.89</td><td>98.36</td><td>82.74</td><td>-0.00</td><td>-0.00</td><td>0.00</td><td>-0.01</td></tr>
+<tr><td>1w</td><td>47.37</td><td>57.53</td><td>67.53</td><td>0.00</td><td>-0.03</td><td>0.04</td><td>0.22</td></tr>
+<tr><td>4h</td><td>40.24</td><td>28.03</td><td>16.45</td><td>-0.01</td><td>-0.01</td><td>0.00</td><td>-0.03</td></tr>
+</table>
+<p class="mute small">15 generalised divergence(s) recorded, each carrying the price level of its pivot.</p>
+<p class="mute small">The 1M plane carries price and volume structure only &mdash; a closed-bar monthly oscillator has almost no sample.</p></div>
+<div class="card"><h4>Bias scorecard &mdash; every vote</h4>
+<p><b>daily</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>0</td></tr>
+<tr><td>location</td><td>0</td></tr>
+<tr><td>momentum</td><td>0</td></tr>
+<tr><td>trend</td><td>-1</td></tr>
+</table>
+<p><b>weekly</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>0</td></tr>
+<tr><td>location</td><td>-1</td></tr>
+<tr><td>momentum</td><td>-1</td></tr>
+<tr><td>trend</td><td>-1</td></tr>
+</table>
+<p class="mute small">Kept generously and in full: it is too early to know whether it works, and a vote deleted now cannot be studied later.</p></div>
+<div class="card"><h4>Chart planes</h4><table><tr><th>plane</th><th>default windows</th><th>forming candle</th></tr>
+<tr><td>1D</td><td>30d, 90d</td><td>&mdash;</td></tr>
+<tr><td>1M</td><td>365d</td><td>&mdash;</td></tr>
+<tr><td>1W</td><td>90d, 365d</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">forming &amp;mdash; drawn, greyed</span> O 0.54 H 0.55 L 0.48 C 0.49</td></tr>
+<tr><td>4H</td><td>7d, 30d</td><td>&mdash;</td></tr>
+</table><p class="mute small">Value areas render as extended horizontal bands. The forming candle is drawn and greyed so the chart looks like the operator&rsquo;s &mdash; and appears in NO computed value. Mid-week, the weekly RSI is last week&rsquo;s.</p></div>
+<div class="card"><h4>{12,25} lattice</h4><table><tr><th>plane</th><th>EMA12</th><th>EMA25</th><th>12&gt;25</th></tr>
+<tr><td>1d</td><td>0.55</td><td>0.59</td><td>no</td></tr>
+<tr><td>1w</td><td>0.58</td><td>0.58</td><td>yes</td></tr>
+</table><p class="mute small">Display only. No signal, no vote, no score contribution.</p></div>
+<h3>LITUSDT <span class="mute">2.05 &middot; daily ATR 0.20</span></h3>
+<div class="card"><h4>Stretch &mdash; distance from every volume-weighted mean, in sigma</h4>
+<table><tr><th>anchor / window</th><th>mean</th><th>sigma</th><th>&sigma; position</th><th>ATR</th><th>band</th><th></th></tr>
+<tr class="mute"><td>anchored W</td><td colspan="5">&mdash;</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">warming</span></td></tr>
+<tr><td>anchored M</td><td>2.06</td><td>0.03</td><td class="big">-0.26</td><td>-0.04</td><td>0</td><td></td></tr>
+<tr><td>anchored Q</td><td>2.32</td><td>0.23</td><td class="big">-1.17</td><td>-1.33</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>anchored Y</td><td>1.64</td><td>0.56</td><td class="big">+0.73</td><td>+2.03</td><td>0</td><td></td></tr>
+<tr><td>prior M</td><td>2.32</td><td>0.23</td><td class="big">-1.20</td><td>-1.35</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>prior Q</td><td>1.29</td><td>0.27</td><td class="big">+2.76</td><td>+3.76</td><td>2</td><td><span class="chip" style="border-color:#D9647A;color:#D9647A">past 2&amp;sigma;</span></td></tr>
+<tr><td>prior Y</td><td>2.90</td><td>0.36</td><td class="big">-2.33</td><td>-4.22</td><td>-2</td><td><span class="chip" style="border-color:#D9647A;color:#D9647A">past 2&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 7d</td><td>2.20</td><td>0.08</td><td class="big">-1.77</td><td>-0.72</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 30d</td><td>2.40</td><td>0.18</td><td class="big">-1.93</td><td>-1.72</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 90d</td><td>1.65</td><td>0.48</td><td class="big">+0.84</td><td>+2.00</td><td>0</td><td></td></tr>
+<tr class="mute"><td>RVWAP 365d</td><td colspan="5">&mdash;</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">warming</span></td></tr>
+</table>
+<p class="prose">Widest disagreement: <b>prior Q</b> at +2.76&sigma; against <b>prior Y</b> at -2.33&sigma; &mdash; a spread of 5.10&sigma;. Price is beyond +1&sigma; on one scale and below &minus;1&sigma; on another at the same instant; both are true.</p>
+</div>
+<div class="card"><h4>Windowed volume profiles</h4>
+<table><tr><th>window</th><th>POC</th><th>VAH</th><th>VAL</th><th>LVNs</th><th>substrate</th><th>lockbox</th></tr>
+<tr><td>30d</td><td>2.20</td><td>2.58</td><td>2.17</td><td>0</td><td>5m</td><td>&mdash;</td></tr>
+<tr class="mute"><td>365d</td><td colspan="4"><span class="chip" style="border-color:#E8853F;color:#E8853F">warming</span> no number</td><td>15m</td><td></td></tr>
+<tr><td>7d</td><td>2.20</td><td>2.30</td><td>2.13</td><td>0</td><td>1m</td><td>&mdash;</td></tr>
+<tr><td>90d</td><td>1.34</td><td>1.85</td><td>0.92</td><td>1</td><td>15m</td><td>&mdash;</td></tr>
+<tr><td>prior-day</td><td>2.02</td><td>2.06</td><td>2.02</td><td>1</td><td>1m</td><td>&mdash;</td></tr>
+</table><p class="mute small">Volume spread uniformly across each bar&rsquo;s range &mdash; an approximation of tick data.</p></div>
+<div class="card"><h4>Value-area nesting</h4>
+<p class="prose">7d and 30d value overlap in part (77% of 7d value has 30d backing). Both timescales agree between 2.17 and 2.30.</p>
+<p class="prose">30d value sits entirely above 90d value. The unclaimed gap runs 1.85-2.17. The facing edges are the 30d VAL at 2.17 and the 90d VAH at 1.85.</p>
+<p class="prose">90d vs 365d: value-area comparison unavailable (a window is still warming).</p>
+</div>
+<div class="card"><h4>Oscillators</h4><table><tr><th>tf</th><th>RSI</th><th>StochRSI %K</th><th>%D</th><th>MACD</th><th>signal</th><th>hist</th><th>AO</th></tr>
+<tr><td>12h</td><td>44.10</td><td>16.89</td><td>24.18</td><td>-0.04</td><td>-0.03</td><td>-0.01</td><td>-0.09</td></tr>
+<tr><td>1d</td><td>44.63</td><td>32.76</td><td>51.24</td><td>-0.00</td><td>0.03</td><td>-0.04</td><td>-0.08</td></tr>
+<tr><td>1h</td><td>47.25</td><td>30.66</td><td>18.37</td><td>-0.01</td><td>-0.00</td><td>-0.00</td><td>-0.02</td></tr>
+<tr class="mute"><td>1w</td><td colspan="7"><span class="chip" style="border-color:#E8853F;color:#E8853F">warming</span></td></tr>
+<tr><td>4h</td><td>44.13</td><td>53.18</td><td>59.01</td><td>-0.04</td><td>-0.03</td><td>-0.00</td><td>-0.09</td></tr>
+</table>
+<p class="mute small">14 generalised divergence(s) recorded, each carrying the price level of its pivot.</p>
+<p class="mute small">The 1M plane carries price and volume structure only &mdash; a closed-bar monthly oscillator has almost no sample.</p></div>
+<div class="card"><h4>Bias scorecard &mdash; every vote</h4>
+<p><b>daily</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>-1</td></tr>
+<tr><td>location</td><td>0</td></tr>
+<tr><td>momentum</td><td>0</td></tr>
+<tr><td>trend</td><td>-1</td></tr>
+</table>
+<p><b>weekly</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>-1</td></tr>
+<tr><td>location</td><td>-1</td></tr>
+<tr><td>momentum</td><td>0</td></tr>
+<tr><td>trend</td><td>-1</td></tr>
+</table>
+<p class="mute small">Kept generously and in full: it is too early to know whether it works, and a vote deleted now cannot be studied later.</p></div>
+<div class="card"><h4>Chart planes</h4><table><tr><th>plane</th><th>default windows</th><th>forming candle</th></tr>
+<tr><td>1D</td><td>30d, 90d</td><td>&mdash;</td></tr>
+<tr><td>1M</td><td>365d</td><td>&mdash;</td></tr>
+<tr><td>1W</td><td>90d, 365d</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">forming &amp;mdash; drawn, greyed</span> O 2.18 H 2.30 L 2.01 C 2.05</td></tr>
+<tr><td>4H</td><td>7d, 30d</td><td>&mdash;</td></tr>
+</table><p class="mute small">Value areas render as extended horizontal bands. The forming candle is drawn and greyed so the chart looks like the operator&rsquo;s &mdash; and appears in NO computed value. Mid-week, the weekly RSI is last week&rsquo;s.</p></div>
+<div class="card"><h4>{12,25} lattice</h4><table><tr><th>plane</th><th>EMA12</th><th>EMA25</th><th>12&gt;25</th></tr>
+<tr><td>1d</td><td>2.17</td><td>2.18</td><td>no</td></tr>
+<tr><td>1w</td><td>1.89</td><td>1.78</td><td>yes</td></tr>
+</table><p class="mute small">Display only. No signal, no vote, no score contribution.</p></div>
+<h3>NEARUSDT <span class="mute">1.70 &middot; daily ATR 0.10</span></h3>
+<div class="card"><h4>Stretch &mdash; distance from every volume-weighted mean, in sigma</h4>
+<table><tr><th>anchor / window</th><th>mean</th><th>sigma</th><th>&sigma; position</th><th>ATR</th><th>band</th><th></th></tr>
+<tr class="mute"><td>anchored W</td><td colspan="5">&mdash;</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">warming</span></td></tr>
+<tr><td>anchored M</td><td>1.69</td><td>0.02</td><td class="big">+0.81</td><td>+0.17</td><td>0</td><td></td></tr>
+<tr><td>anchored Q</td><td>1.89</td><td>0.13</td><td class="big">-1.49</td><td>-1.82</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>anchored Y</td><td>1.73</td><td>0.51</td><td class="big">-0.06</td><td>-0.28</td><td>0</td><td></td></tr>
+<tr><td>prior M</td><td>1.90</td><td>0.12</td><td class="big">-1.60</td><td>-1.89</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>prior Q</td><td>2.00</td><td>0.48</td><td class="big">-0.62</td><td>-2.84</td><td>0</td><td></td></tr>
+<tr><td>prior Y</td><td>2.60</td><td>0.72</td><td class="big">-1.24</td><td>-8.59</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 7d</td><td>1.68</td><td>0.07</td><td class="big">+0.35</td><td>+0.22</td><td>0</td><td></td></tr>
+<tr><td>RVWAP 30d</td><td>1.89</td><td>0.13</td><td class="big">-1.42</td><td>-1.79</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 90d</td><td>2.11</td><td>0.37</td><td class="big">-1.11</td><td>-3.92</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 365d</td><td>1.94</td><td>0.58</td><td class="big">-0.42</td><td>-2.30</td><td>0</td><td></td></tr>
+</table>
+<p class="prose">Widest disagreement: <b>anchored M</b> at +0.81&sigma; against <b>prior M</b> at -1.60&sigma; &mdash; a spread of 2.40&sigma;.</p>
+</div>
+<div class="card"><h4>Windowed volume profiles</h4>
+<table><tr><th>window</th><th>POC</th><th>VAH</th><th>VAL</th><th>LVNs</th><th>substrate</th><th>lockbox</th></tr>
+<tr><td>30d</td><td>1.92</td><td>2.07</td><td>1.86</td><td>2</td><td>5m</td><td>&mdash;</td></tr>
+<tr><td>365d</td><td>1.35</td><td>2.43</td><td>1.14</td><td>0</td><td>15m</td><td>64.2</td></tr>
+<tr><td>7d</td><td>1.66</td><td>1.71</td><td>1.60</td><td>3</td><td>1m</td><td>&mdash;</td></tr>
+<tr><td>90d</td><td>1.92</td><td>2.56</td><td>1.78</td><td>1</td><td>15m</td><td>&mdash;</td></tr>
+<tr><td>prior-day</td><td>1.67</td><td>1.67</td><td>1.66</td><td>0</td><td>1m</td><td>&mdash;</td></tr>
+</table><p class="mute small">Volume spread uniformly across each bar&rsquo;s range &mdash; an approximation of tick data.</p></div>
+<div class="card"><h4>Value-area nesting</h4>
+<p class="prose">7d value sits entirely below 30d value. The unclaimed gap runs 1.71-1.86. The facing edges are the 7d VAH at 1.71 and the 30d VAL at 1.86.</p>
+<p class="prose">30d value sits entirely inside 90d value (100% of 30d value has 90d backing). Both timescales agree between 1.86 and 2.07.</p>
+<p class="prose">90d and 365d value overlap in part (84% of 90d value has 365d backing). Both timescales agree between 1.78 and 2.43.</p>
+</div>
+<div class="card"><h4>Oscillators</h4><table><tr><th>tf</th><th>RSI</th><th>StochRSI %K</th><th>%D</th><th>MACD</th><th>signal</th><th>hist</th><th>AO</th></tr>
+<tr><td>12h</td><td>42.74</td><td>83.90</td><td>74.98</td><td>-0.06</td><td>-0.07</td><td>0.01</td><td>-0.14</td></tr>
+<tr><td>1d</td><td>37.75</td><td>25.73</td><td>17.06</td><td>-0.08</td><td>-0.06</td><td>-0.02</td><td>-0.23</td></tr>
+<tr><td>1h</td><td>55.48</td><td>32.45</td><td>26.58</td><td>0.01</td><td>0.01</td><td>-0.00</td><td>0.01</td></tr>
+<tr><td>1w</td><td>46.59</td><td>27.57</td><td>32.24</td><td>0.05</td><td>0.04</td><td>0.01</td><td>0.29</td></tr>
+<tr><td>4h</td><td>56.14</td><td>71.97</td><td>81.00</td><td>0.00</td><td>-0.00</td><td>0.01</td><td>0.05</td></tr>
+</table>
+<p class="mute small">20 generalised divergence(s) recorded, each carrying the price level of its pivot.</p>
+<p class="mute small">The 1M plane carries price and volume structure only &mdash; a closed-bar monthly oscillator has almost no sample.</p></div>
+<div class="card"><h4>Bias scorecard &mdash; every vote</h4>
+<p><b>daily</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>0</td></tr>
+<tr><td>location</td><td>0</td></tr>
+<tr><td>momentum</td><td>0</td></tr>
+<tr><td>trend</td><td>0</td></tr>
+</table>
+<p><b>weekly</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>0</td></tr>
+<tr><td>location</td><td>-1</td></tr>
+<tr><td>momentum</td><td>0</td></tr>
+<tr><td>trend</td><td>-1</td></tr>
+</table>
+<p class="mute small">Kept generously and in full: it is too early to know whether it works, and a vote deleted now cannot be studied later.</p></div>
+<div class="card"><h4>Chart planes</h4><table><tr><th>plane</th><th>default windows</th><th>forming candle</th></tr>
+<tr><td>1D</td><td>30d, 90d</td><td>&mdash;</td></tr>
+<tr><td>1M</td><td>365d</td><td>&mdash;</td></tr>
+<tr><td>1W</td><td>90d, 365d</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">forming &amp;mdash; drawn, greyed</span> O 1.62 H 1.74 L 1.60 C 1.70</td></tr>
+<tr><td>4H</td><td>7d, 30d</td><td>&mdash;</td></tr>
+</table><p class="mute small">Value areas render as extended horizontal bands. The forming candle is drawn and greyed so the chart looks like the operator&rsquo;s &mdash; and appears in NO computed value. Mid-week, the weekly RSI is last week&rsquo;s.</p></div>
+<div class="card"><h4>{12,25} lattice</h4><table><tr><th>plane</th><th>EMA12</th><th>EMA25</th><th>12&gt;25</th></tr>
+<tr><td>1d</td><td>1.74</td><td>1.82</td><td>no</td></tr>
+<tr><td>1w</td><td>1.86</td><td>1.81</td><td>yes</td></tr>
+</table><p class="mute small">Display only. No signal, no vote, no score contribution.</p></div>
+<h3>SOLUSDT <span class="mute">73.83 &middot; daily ATR 2.70</span></h3>
+<div class="card"><h4>Stretch &mdash; distance from every volume-weighted mean, in sigma</h4>
+<table><tr><th>anchor / window</th><th>mean</th><th>sigma</th><th>&sigma; position</th><th>ATR</th><th>band</th><th></th></tr>
+<tr><td>anchored W</td><td>73.13</td><td>0.52</td><td class="big">+1.34</td><td>+0.26</td><td>1</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">thin sample</span><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>anchored M</td><td>72.82</td><td>0.77</td><td class="big">+1.31</td><td>+0.38</td><td>1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>anchored Q</td><td>77.06</td><td>2.84</td><td class="big">-1.14</td><td>-1.20</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>anchored Y</td><td>88.63</td><td>18.83</td><td class="big">-0.79</td><td>-5.49</td><td>0</td><td></td></tr>
+<tr><td>prior M</td><td>77.37</td><td>2.68</td><td class="big">-1.32</td><td>-1.31</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>prior Q</td><td>79.36</td><td>8.92</td><td class="big">-0.62</td><td>-2.05</td><td>0</td><td></td></tr>
+<tr><td>prior Y</td><td>170.59</td><td>36.64</td><td class="big">-2.64</td><td>-35.87</td><td>-2</td><td><span class="chip" style="border-color:#D9647A;color:#D9647A">past 2&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 7d</td><td>73.38</td><td>0.77</td><td class="big">+0.59</td><td>+0.17</td><td>0</td><td></td></tr>
+<tr><td>RVWAP 30d</td><td>76.51</td><td>2.55</td><td class="big">-1.05</td><td>-0.99</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 90d</td><td>76.93</td><td>8.54</td><td class="big">-0.36</td><td>-1.15</td><td>0</td><td></td></tr>
+<tr><td>RVWAP 365d</td><td>129.37</td><td>52.88</td><td class="big">-1.05</td><td>-20.59</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+</table>
+<p class="prose">Widest disagreement: <b>anchored W</b> at +1.34&sigma; against <b>prior Y</b> at -2.64&sigma; &mdash; a spread of 3.98&sigma;. Price is beyond +1&sigma; on one scale and below &minus;1&sigma; on another at the same instant; both are true.</p>
+</div>
+<div class="card"><h4>Windowed volume profiles</h4>
+<table><tr><th>window</th><th>POC</th><th>VAH</th><th>VAL</th><th>LVNs</th><th>substrate</th><th>lockbox</th></tr>
+<tr><td>30d</td><td>77.63</td><td>78.40</td><td>73.43</td><td>2</td><td>5m</td><td>&mdash;</td></tr>
+<tr><td>365d</td><td>85.02</td><td>160.79</td><td>60.84</td><td>2</td><td>15m</td><td>63.2</td></tr>
+<tr><td>7d</td><td>73.19</td><td>74.26</td><td>72.86</td><td>1</td><td>1m</td><td>&mdash;</td></tr>
+<tr><td>90d</td><td>73.61</td><td>81.91</td><td>63.38</td><td>0</td><td>15m</td><td>&mdash;</td></tr>
+<tr><td>prior-day</td><td>73.15</td><td>73.52</td><td>72.90</td><td>2</td><td>1m</td><td>&mdash;</td></tr>
+</table><p class="mute small">Volume spread uniformly across each bar&rsquo;s range &mdash; an approximation of tick data.</p></div>
+<div class="card"><h4>Value-area nesting</h4>
+<p class="prose">7d and 30d value overlap in part (59% of 7d value has 30d backing). Both timescales agree between 73.43 and 74.26.</p>
+<p class="prose">30d value sits entirely inside 90d value (100% of 30d value has 90d backing). Both timescales agree between 73.43 and 78.40.</p>
+<p class="prose">90d value sits entirely inside 365d value (100% of 90d value has 365d backing). Both timescales agree between 63.38 and 81.91.</p>
+</div>
+<div class="card"><h4>Oscillators</h4><table><tr><th>tf</th><th>RSI</th><th>StochRSI %K</th><th>%D</th><th>MACD</th><th>signal</th><th>hist</th><th>AO</th></tr>
+<tr><td>12h</td><td>40.18</td><td>51.36</td><td>33.39</td><td>-0.88</td><td>-0.82</td><td>-0.06</td><td>-2.27</td></tr>
+<tr><td>1d</td><td>45.49</td><td>12.61</td><td>10.74</td><td>-0.82</td><td>-0.43</td><td>-0.38</td><td>-3.46</td></tr>
+<tr><td>1h</td><td>60.50</td><td>96.18</td><td>93.37</td><td>0.22</td><td>0.09</td><td>0.13</td><td>0.63</td></tr>
+<tr><td>1w</td><td>39.04</td><td>92.64</td><td>97.01</td><td>-11.65</td><td>-14.19</td><td>2.54</td><td>-17.99</td></tr>
+<tr><td>4h</td><td>55.71</td><td>86.10</td><td>74.13</td><td>-0.11</td><td>-0.25</td><td>0.14</td><td>-0.33</td></tr>
+</table>
+<p class="mute small">16 generalised divergence(s) recorded, each carrying the price level of its pivot.</p>
+<p class="mute small">The 1M plane carries price and volume structure only &mdash; a closed-bar monthly oscillator has almost no sample.</p></div>
+<div class="card"><h4>Bias scorecard &mdash; every vote</h4>
+<p><b>daily</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>0</td></tr>
+<tr><td>location</td><td>1</td></tr>
+<tr><td>momentum</td><td>0</td></tr>
+<tr><td>trend</td><td>1</td></tr>
+</table>
+<p><b>weekly</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>0</td></tr>
+<tr><td>location</td><td>0</td></tr>
+<tr><td>momentum</td><td>0</td></tr>
+<tr><td>trend</td><td>-1</td></tr>
+</table>
+<p class="mute small">Kept generously and in full: it is too early to know whether it works, and a vote deleted now cannot be studied later.</p></div>
+<div class="card"><h4>Chart planes</h4><table><tr><th>plane</th><th>default windows</th><th>forming candle</th></tr>
+<tr><td>1D</td><td>30d, 90d</td><td>&mdash;</td></tr>
+<tr><td>1M</td><td>365d</td><td>&mdash;</td></tr>
+<tr><td>1W</td><td>90d, 365d</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">forming &amp;mdash; drawn, greyed</span> O 73.65 H 75.28 L 70.51 C 73.83</td></tr>
+<tr><td>4H</td><td>7d, 30d</td><td>&mdash;</td></tr>
+</table><p class="mute small">Value areas render as extended horizontal bands. The forming candle is drawn and greyed so the chart looks like the operator&rsquo;s &mdash; and appears in NO computed value. Mid-week, the weekly RSI is last week&rsquo;s.</p></div>
+<div class="card"><h4>{12,25} lattice</h4><table><tr><th>plane</th><th>EMA12</th><th>EMA25</th><th>12&gt;25</th></tr>
+<tr><td>1d</td><td>74.24</td><td>75.03</td><td>no</td></tr>
+<tr><td>1w</td><td>77.71</td><td>88.40</td><td>no</td></tr>
+</table><p class="mute small">Display only. No signal, no vote, no score contribution.</p></div>
+<h3>TAOUSDT <span class="mute">193.25 &middot; daily ATR 10.03</span></h3>
+<div class="card"><h4>Stretch &mdash; distance from every volume-weighted mean, in sigma</h4>
+<table><tr><th>anchor / window</th><th>mean</th><th>sigma</th><th>&sigma; position</th><th>ATR</th><th>band</th><th></th></tr>
+<tr class="mute"><td>anchored W</td><td colspan="5">&mdash;</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">warming</span></td></tr>
+<tr><td>anchored M</td><td>193.81</td><td>2.15</td><td class="big">-0.26</td><td>-0.06</td><td>0</td><td></td></tr>
+<tr><td>anchored Q</td><td>201.44</td><td>8.51</td><td class="big">-0.96</td><td>-0.82</td><td>0</td><td></td></tr>
+<tr><td>anchored Y</td><td>253.42</td><td>50.17</td><td class="big">-1.20</td><td>-6.00</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>prior M</td><td>201.74</td><td>8.52</td><td class="big">-1.00</td><td>-0.85</td><td>0</td><td></td></tr>
+<tr><td>prior Q</td><td>265.74</td><td>34.73</td><td class="big">-2.09</td><td>-7.23</td><td>-2</td><td><span class="chip" style="border-color:#D9647A;color:#D9647A">past 2&amp;sigma;</span></td></tr>
+<tr><td>prior Y</td><td>354.94</td><td>74.04</td><td class="big">-2.18</td><td>-16.12</td><td>-2</td><td><span class="chip" style="border-color:#D9647A;color:#D9647A">past 2&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 7d</td><td>192.95</td><td>3.40</td><td class="big">+0.09</td><td>+0.03</td><td>0</td><td></td></tr>
+<tr><td>RVWAP 30d</td><td>200.59</td><td>8.39</td><td class="big">-0.87</td><td>-0.73</td><td>0</td><td></td></tr>
+<tr><td>RVWAP 90d</td><td>243.76</td><td>38.85</td><td class="big">-1.30</td><td>-5.04</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 365d</td><td>286.99</td><td>74.09</td><td class="big">-1.27</td><td>-9.35</td><td>-1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+</table>
+<p class="prose">Widest disagreement: <b>RVWAP 7d</b> at +0.09&sigma; against <b>prior Y</b> at -2.18&sigma; &mdash; a spread of 2.27&sigma;.</p>
+</div>
+<div class="card"><h4>Windowed volume profiles</h4>
+<table><tr><th>window</th><th>POC</th><th>VAH</th><th>VAL</th><th>LVNs</th><th>substrate</th><th>lockbox</th></tr>
+<tr><td>30d</td><td>193.01</td><td>206.05</td><td>186.95</td><td>0</td><td>5m</td><td>&mdash;</td></tr>
+<tr><td>365d</td><td>275.27</td><td>326.36</td><td>179.92</td><td>2</td><td>15m</td><td>64.2</td></tr>
+<tr><td>7d</td><td>193.08</td><td>197.24</td><td>190.16</td><td>1</td><td>1m</td><td>&mdash;</td></tr>
+<tr><td>90d</td><td>212.29</td><td>269.91</td><td>187.24</td><td>0</td><td>15m</td><td>&mdash;</td></tr>
+<tr><td>prior-day</td><td>193.03</td><td>196.03</td><td>190.13</td><td>0</td><td>1m</td><td>&mdash;</td></tr>
+</table><p class="mute small">Volume spread uniformly across each bar&rsquo;s range &mdash; an approximation of tick data.</p></div>
+<div class="card"><h4>Value-area nesting</h4>
+<p class="prose">7d value sits entirely inside 30d value (100% of 7d value has 30d backing). Both timescales agree between 190.16 and 197.24.</p>
+<p class="prose">30d and 90d value overlap in part (98% of 30d value has 90d backing). Both timescales agree between 187.24 and 206.05.</p>
+<p class="prose">90d value sits entirely inside 365d value (100% of 90d value has 365d backing). Both timescales agree between 187.24 and 269.91.</p>
+</div>
+<div class="card"><h4>Oscillators</h4><table><tr><th>tf</th><th>RSI</th><th>StochRSI %K</th><th>%D</th><th>MACD</th><th>signal</th><th>hist</th><th>AO</th></tr>
+<tr><td>12h</td><td>46.50</td><td>65.50</td><td>69.10</td><td>-1.32</td><td>-1.72</td><td>0.40</td><td>-0.04</td></tr>
+<tr><td>1d</td><td>43.48</td><td>71.77</td><td>71.83</td><td>-5.05</td><td>-5.80</td><td>0.75</td><td>-8.71</td></tr>
+<tr><td>1h</td><td>51.38</td><td>47.51</td><td>30.21</td><td>-0.18</td><td>-0.21</td><td>0.03</td><td>-0.23</td></tr>
+<tr><td>1w</td><td>41.59</td><td>4.62</td><td>7.56</td><td>-21.04</td><td>-16.21</td><td>-4.83</td><td>-39.82</td></tr>
+<tr><td>4h</td><td>48.90</td><td>29.91</td><td>36.53</td><td>-0.06</td><td>0.10</td><td>-0.17</td><td>0.55</td></tr>
+</table>
+<p class="mute small">17 generalised divergence(s) recorded, each carrying the price level of its pivot.</p>
+<p class="mute small">The 1M plane carries price and volume structure only &mdash; a closed-bar monthly oscillator has almost no sample.</p></div>
+<div class="card"><h4>Bias scorecard &mdash; every vote</h4>
+<p><b>daily</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>-1</td></tr>
+<tr><td>location</td><td>0</td></tr>
+<tr><td>momentum</td><td>0</td></tr>
+<tr><td>trend</td><td>-1</td></tr>
+</table>
+<p><b>weekly</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>-1</td></tr>
+<tr><td>location</td><td>0</td></tr>
+<tr><td>momentum</td><td>0</td></tr>
+<tr><td>trend</td><td>-1</td></tr>
+</table>
+<p class="mute small">Kept generously and in full: it is too early to know whether it works, and a vote deleted now cannot be studied later.</p></div>
+<div class="card"><h4>Chart planes</h4><table><tr><th>plane</th><th>default windows</th><th>forming candle</th></tr>
+<tr><td>1D</td><td>30d, 90d</td><td>&mdash;</td></tr>
+<tr><td>1M</td><td>365d</td><td>&mdash;</td></tr>
+<tr><td>1W</td><td>90d, 365d</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">forming &amp;mdash; drawn, greyed</span> O 190.57 H 199.86 L 189.13 C 193.25</td></tr>
+<tr><td>4H</td><td>7d, 30d</td><td>&mdash;</td></tr>
+</table><p class="mute small">Value areas render as extended horizontal bands. The forming candle is drawn and greyed so the chart looks like the operator&rsquo;s &mdash; and appears in NO computed value. Mid-week, the weekly RSI is last week&rsquo;s.</p></div>
+<div class="card"><h4>{12,25} lattice</h4><table><tr><th>plane</th><th>EMA12</th><th>EMA25</th><th>12&gt;25</th></tr>
+<tr><td>1d</td><td>193.93</td><td>198.57</td><td>no</td></tr>
+<tr><td>1w</td><td>219.34</td><td>239.06</td><td>no</td></tr>
+</table><p class="mute small">Display only. No signal, no vote, no score contribution.</p></div>
+<h3>ZECUSDT <span class="mute">490.75 &middot; daily ATR 31.34</span></h3>
+<div class="card"><h4>Stretch &mdash; distance from every volume-weighted mean, in sigma</h4>
+<table><tr><th>anchor / window</th><th>mean</th><th>sigma</th><th>&sigma; position</th><th>ATR</th><th>band</th><th></th></tr>
+<tr class="mute"><td>anchored W</td><td colspan="5">&mdash;</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">warming</span></td></tr>
+<tr><td>anchored M</td><td>470.72</td><td>7.71</td><td class="big">+2.60</td><td>+0.64</td><td>2</td><td><span class="chip" style="border-color:#D9647A;color:#D9647A">past 2&amp;sigma;</span></td></tr>
+<tr><td>anchored Q</td><td>495.25</td><td>41.70</td><td class="big">-0.11</td><td>-0.14</td><td>0</td><td></td></tr>
+<tr><td>anchored Y</td><td>391.96</td><td>124.17</td><td class="big">+0.80</td><td>+3.15</td><td>0</td><td></td></tr>
+<tr><td>prior M</td><td>496.08</td><td>42.13</td><td class="big">-0.13</td><td>-0.17</td><td>0</td><td></td></tr>
+<tr><td>prior Q</td><td>445.08</td><td>112.17</td><td class="big">+0.41</td><td>+1.46</td><td>0</td><td></td></tr>
+<tr><td>prior Y</td><td>341.66</td><td>201.46</td><td class="big">+0.74</td><td>+4.76</td><td>0</td><td></td></tr>
+<tr><td>RVWAP 7d</td><td>472.73</td><td>13.53</td><td class="big">+1.33</td><td>+0.58</td><td>1</td><td><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">past 1&amp;sigma;</span></td></tr>
+<tr><td>RVWAP 30d</td><td>504.51</td><td>35.43</td><td class="big">-0.39</td><td>-0.44</td><td>0</td><td></td></tr>
+<tr><td>RVWAP 90d</td><td>490.04</td><td>90.70</td><td class="big">+0.01</td><td>+0.02</td><td>0</td><td></td></tr>
+<tr><td>RVWAP 365d</td><td>392.04</td><td>149.41</td><td class="big">+0.66</td><td>+3.15</td><td>0</td><td></td></tr>
+</table>
+<p class="prose">Widest disagreement: <b>anchored M</b> at +2.60&sigma; against <b>RVWAP 30d</b> at -0.39&sigma; &mdash; a spread of 2.99&sigma;.</p>
+</div>
+<div class="card"><h4>Windowed volume profiles</h4>
+<table><tr><th>window</th><th>POC</th><th>VAH</th><th>VAL</th><th>LVNs</th><th>substrate</th><th>lockbox</th></tr>
+<tr><td>30d</td><td>463.30</td><td>532.67</td><td>453.21</td><td>0</td><td>5m</td><td>&mdash;</td></tr>
+<tr><td>365d</td><td>234.96</td><td>518.87</td><td>210.28</td><td>2</td><td>15m</td><td>64.2</td></tr>
+<tr><td>7d</td><td>473.17</td><td>476.58</td><td>457.62</td><td>1</td><td>1m</td><td>&mdash;</td></tr>
+<tr><td>90d</td><td>529.61</td><td>617.33</td><td>416.30</td><td>0</td><td>15m</td><td>&mdash;</td></tr>
+<tr><td>prior-day</td><td>464.58</td><td>467.11</td><td>459.91</td><td>1</td><td>1m</td><td>&mdash;</td></tr>
+</table><p class="mute small">Volume spread uniformly across each bar&rsquo;s range &mdash; an approximation of tick data.</p></div>
+<div class="card"><h4>Value-area nesting</h4>
+<p class="prose">7d value sits entirely inside 30d value (100% of 7d value has 30d backing). Both timescales agree between 457.62 and 476.58.</p>
+<p class="prose">30d value sits entirely inside 90d value (100% of 30d value has 90d backing). Both timescales agree between 453.21 and 532.67.</p>
+<p class="prose">90d and 365d value overlap in part (51% of 90d value has 365d backing). Both timescales agree between 416.30 and 518.87.</p>
+</div>
+<div class="card"><h4>Oscillators</h4><table><tr><th>tf</th><th>RSI</th><th>StochRSI %K</th><th>%D</th><th>MACD</th><th>signal</th><th>hist</th><th>AO</th></tr>
+<tr><td>12h</td><td>43.90</td><td>44.65</td><td>32.03</td><td>-12.71</td><td>-12.26</td><td>-0.45</td><td>-39.20</td></tr>
+<tr><td>1d</td><td>43.09</td><td>4.12</td><td>3.26</td><td>-6.65</td><td>2.29</td><td>-8.94</td><td>-22.78</td></tr>
+<tr><td>1h</td><td>77.21</td><td>86.67</td><td>53.67</td><td>3.76</td><td>2.42</td><td>1.34</td><td>7.07</td></tr>
+<tr><td>1w</td><td>52.59</td><td>21.43</td><td>22.27</td><td>48.36</td><td>51.15</td><td>-2.80</td><td>84.54</td></tr>
+<tr><td>4h</td><td>62.17</td><td>93.12</td><td>92.39</td><td>0.41</td><td>-2.34</td><td>2.74</td><td>6.58</td></tr>
+</table>
+<p class="mute small">24 generalised divergence(s) recorded, each carrying the price level of its pivot.</p>
+<p class="mute small">The 1M plane carries price and volume structure only &mdash; a closed-bar monthly oscillator has almost no sample.</p></div>
+<div class="card"><h4>Bias scorecard &mdash; every vote</h4>
+<p><b>daily</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>0</td></tr>
+<tr><td>location</td><td>1</td></tr>
+<tr><td>momentum</td><td>0</td></tr>
+<tr><td>trend</td><td>1</td></tr>
+</table>
+<p><b>weekly</b> &mdash; </p>
+<table><tr><th>family</th><th>vote</th></tr>
+<tr><td>crowding</td><td>0</td></tr>
+<tr><td>location</td><td>0</td></tr>
+<tr><td>momentum</td><td>0</td></tr>
+<tr><td>trend</td><td>0</td></tr>
+</table>
+<p class="mute small">Kept generously and in full: it is too early to know whether it works, and a vote deleted now cannot be studied later.</p></div>
+<div class="card"><h4>Chart planes</h4><table><tr><th>plane</th><th>default windows</th><th>forming candle</th></tr>
+<tr><td>1D</td><td>30d, 90d</td><td>&mdash;</td></tr>
+<tr><td>1M</td><td>365d</td><td>&mdash;</td></tr>
+<tr><td>1W</td><td>90d, 365d</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">forming &amp;mdash; drawn, greyed</span> O 467.40 H 493.00 L 452.00 C 490.75</td></tr>
+<tr><td>4H</td><td>7d, 30d</td><td>&mdash;</td></tr>
+</table><p class="mute small">Value areas render as extended horizontal bands. The forming candle is drawn and greyed so the chart looks like the operator&rsquo;s &mdash; and appears in NO computed value. Mid-week, the weekly RSI is last week&rsquo;s.</p></div>
+<div class="card"><h4>{12,25} lattice</h4><table><tr><th>plane</th><th>EMA12</th><th>EMA25</th><th>12&gt;25</th></tr>
+<tr><td>1d</td><td>482.34</td><td>489.01</td><td>no</td></tr>
+<tr><td>1w</td><td>474.17</td><td>429.22</td><td>yes</td></tr>
+</table><p class="mute small">Display only. No signal, no vote, no score contribution.</p></div>
+<h2>Part II &mdash; decision instrument</h2>
+<p class="mute small">Where would I act, and what would prove me wrong? Derived from Part I under the printed rules &mdash; every number below is reconstructable by hand from Part I.</p>
+<h3>BTCUSDT</h3>
+<div class="card"><h4>Confluence area map</h4>
+<p class="mute">with_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>63,892.83</td><td class="big">18</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>15</td><td>&mdash;</td></tr>
+<tr><td>64,913.69</td><td class="big">16</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>11</td><td>30d, 30d<->90d</td></tr>
+<tr><td>62,859.01</td><td class="big">15</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>10</td><td>30d, 30d<->90d, 7d, 7d<->30d</td></tr>
+<tr><td>63,386.87</td><td class="big">14</td><td>profile_windowed, ss, structure, vwap_anchored</td><td>12</td><td>7d, prior-day</td></tr>
+<tr><td>64,336.55</td><td class="big">11</td><td>profile_windowed, ss, vwap_anchored, vwap_rolling</td><td>7</td><td>7d, 7d<->30d</td></tr>
+<tr><td>62,335.54</td><td class="big">9</td><td>structure, vwap_anchored, vwap_rolling</td><td>7</td><td>&mdash;</td></tr>
+<tr><td>66,739.58</td><td class="big">9</td><td>profile_windowed, structure, vwap_anchored, vwap_rolling</td><td>5</td><td>90d, 90d<->365d</td></tr>
+<tr><td>58,637.89</td><td class="big">7</td><td>profile_windowed, structure, vwap_anchored</td><td>4</td><td>&mdash;</td></tr>
+</table>
+<p class="mute">without_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>63,811.24</td><td class="big">12</td><td>ss, structure, vwap_anchored</td><td>10</td><td>&mdash;</td></tr>
+<tr><td>63,273.95</td><td class="big">8</td><td>ss, vwap_anchored</td><td>9</td><td>&mdash;</td></tr>
+<tr><td>64,176.11</td><td class="big">8</td><td>ss, structure, vwap_anchored</td><td>5</td><td>&mdash;</td></tr>
+<tr><td>64,997.92</td><td class="big">8</td><td>ss, structure, vwap_anchored</td><td>5</td><td>&mdash;</td></tr>
+<tr><td>62,329.61</td><td class="big">7</td><td>structure, vwap_anchored</td><td>6</td><td>&mdash;</td></tr>
+<tr><td>64,589.90</td><td class="big">7</td><td>ss, structure, vwap_anchored</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>62,752.40</td><td class="big">6</td><td>structure, vwap_anchored</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>58,645.78</td><td class="big">5</td><td>structure, vwap_anchored</td><td>3</td><td>&mdash;</td></tr>
+</table>
+</div>
+<div class="card"><h4>Lines in the sand</h4><table><tr><th>view</th><th>above</th><th>below</th></tr>
+<tr><td>with_volume</td><td>63,892.83 <span class="mute">score 18</span></td><td>62,859.01 <span class="mute">score 15</span></td></tr>
+<tr><td>without_volume</td><td>63,811.24 <span class="mute">score 12</span></td><td>63,273.95 <span class="mute">score 8</span></td></tr>
+</table>
+<p class="prose">Volume evidence <b>moves</b> a line here. The two views are printed side by side so the move is visible rather than argued.</p>
+</div>
+<div class="card"><h4>Target clusters &mdash; highest scoring beyond price, at any distance</h4><table><tr><th>side</th><th>mean</th><th>score</th><th>ATR away</th><th>families</th></tr>
+<tr><td>above</td><td>63,892.83</td><td class="big">18</td><td>0.08</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>64,913.69</td><td class="big">16</td><td>0.70</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>64,336.55</td><td class="big">11</td><td>0.35</td><td>profile_windowed, ss, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>66,739.58</td><td class="big">9</td><td>1.81</td><td>profile_windowed, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>62,859.01</td><td class="big">15</td><td>0.54</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>63,386.87</td><td class="big">14</td><td>0.22</td><td>profile_windowed, ss, structure, vwap_anchored</td></tr>
+<tr><td>below</td><td>62,335.54</td><td class="big">9</td><td>0.86</td><td>structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>58,637.89</td><td class="big">7</td><td>3.10</td><td>profile_windowed, structure, vwap_anchored</td></tr>
+</table><p class="mute small">A far cluster where a VWAP band, a value-area edge and an SS level coincide is a higher-quality target than a lone band. Distance is not quality &mdash; composition is.</p></div>
+<div class="card"><h4>R:R board &mdash; with volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>short</td><td>63,892.83</td><td>64,497.76</td><td>62,859.01</td><td class="big">1.71</td><td>0.367</td><td>0.63</td><td></td></tr>
+<tr><td>long</td><td>62,859.01</td><td>62,228.80</td><td>63,892.83</td><td class="big">1.64</td><td>0.382</td><td>0.63</td><td></td></tr>
+<tr><td>long</td><td>62,859.01</td><td>62,228.80</td><td>63,386.87</td><td class="big">0.84</td><td>0.382</td><td>0.32</td><td></td></tr>
+<tr><td>short</td><td>63,892.83</td><td>64,497.76</td><td>63,386.87</td><td class="big">0.84</td><td>0.367</td><td>0.31</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>R:R board &mdash; without volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>short</td><td>63,811.24</td><td>64,294.32</td><td>62,752.40</td><td class="big">2.19</td><td>0.293</td><td>0.64</td><td></td></tr>
+<tr><td>long</td><td>63,273.95</td><td>62,629.45</td><td>64,176.11</td><td class="big">1.40</td><td>0.391</td><td>0.55</td><td></td></tr>
+<tr><td>short</td><td>63,811.24</td><td>64,294.32</td><td>63,273.95</td><td class="big">1.11</td><td>0.293</td><td>0.33</td><td></td></tr>
+<tr><td>long</td><td>63,273.95</td><td>62,629.45</td><td>63,811.24</td><td class="big">0.83</td><td>0.391</td><td>0.33</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>Trade hypothesis drafts</h4>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span>  <b>If</b> price reclaims 63,892.83 (cluster 63,662.66-64,122.51, score 18) <b>then</b> watch for continuation toward the next opposing area. <b>Invalidated if</b> price closes back below 64,497.76.</p>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span>  <b>If</b> price loses 62,859.01 (cluster 62,629.45-63,061.82, score 15) <b>then</b> watch for follow-through toward the next area below. <b>Invalidated if</b> price closes back above 62,228.80.</p>
+<p class="mute small">Mechanically derived. No sizing, ever.</p></div>
+<div class="card"><h4>Composite bias</h4>
+<p class="big">0 of 5 agree, dissenting: location, momentum &mdash; <b>Neutral-mixed</b></p><table><tr><th>family</th><th>vote</th><th>why</th></tr>
+<tr><td>crowding</td><td class="big">+0</td><td class="mute">funding percentile None</td></tr>
+<tr><td>location</td><td class="big">+1</td><td class="mute">price vs anchored VWAP complex and prior-day value: net 1</td></tr>
+<tr><td>momentum</td><td class="big">-1</td><td class="mute">RSI+MACD+AO on 4h/12h: net -2 of 6 signed</td></tr>
+<tr><td>trend</td><td class="big">+0</td><td class="mute">governor 0 long / 0 short across [&#x27;1h&#x27;, &#x27;4h&#x27;, &#x27;12h&#x27;]</td></tr>
+<tr><td>volume_location</td><td class="big">+0</td><td class="mute">price vs windowed value areas and consensus: net 0</td></tr>
+</table>
+<p class="mute small">Equal weights, count-based, never fitted. The bias print and the radar measure different things; when they disagree nothing is reconciled.</p></div>
+<h3>ETHUSDT</h3>
+<div class="card"><h4>Confluence area map</h4>
+<p class="mute">with_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>1,880.00</td><td class="big">18</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>15</td><td>30d, 7d, 7d<->30d, 90d</td></tr>
+<tr><td>1,860.69</td><td class="big">14</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>10</td><td>&mdash;</td></tr>
+<tr><td>1,840.83</td><td class="big">12</td><td>ss, structure, vwap_anchored, vwap_rolling</td><td>9</td><td>&mdash;</td></tr>
+<tr><td>1,822.22</td><td class="big">9</td><td>structure, vwap_anchored, vwap_rolling</td><td>8</td><td>&mdash;</td></tr>
+<tr><td>1,913.63</td><td class="big">9</td><td>profile_windowed, structure, vwap_anchored, vwap_rolling</td><td>5</td><td>&mdash;</td></tr>
+<tr><td>1,932.83</td><td class="big">9</td><td>profile_windowed, ss, structure, vwap_rolling</td><td>5</td><td>30d<->90d, 7d, 7d<->30d, 90d, 90d<->365d</td></tr>
+<tr><td>1,731.26</td><td class="big">8</td><td>structure, vwap_anchored, vwap_rolling</td><td>6</td><td>&mdash;</td></tr>
+<tr><td>1,555.46</td><td class="big">7</td><td>profile_windowed, structure, vwap_anchored</td><td>4</td><td>90d, 90d<->365d</td></tr>
+</table>
+<p class="mute">without_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>1,877.84</td><td class="big">11</td><td>ss, structure, vwap_anchored</td><td>9</td><td>&mdash;</td></tr>
+<tr><td>1,844.45</td><td class="big">9</td><td>ss, structure, vwap_anchored</td><td>6</td><td>&mdash;</td></tr>
+<tr><td>1,825.94</td><td class="big">8</td><td>structure, vwap_anchored</td><td>9</td><td>&mdash;</td></tr>
+<tr><td>1,862.48</td><td class="big">8</td><td>ss, structure, vwap_anchored</td><td>5</td><td>&mdash;</td></tr>
+<tr><td>1,891.96</td><td class="big">8</td><td>ss, structure, vwap_anchored</td><td>5</td><td>&mdash;</td></tr>
+<tr><td>1,736.74</td><td class="big">5</td><td>structure, vwap_anchored</td><td>3</td><td>&mdash;</td></tr>
+<tr><td>1,552.75</td><td class="big">4</td><td>structure, vwap_anchored</td><td>2</td><td>&mdash;</td></tr>
+<tr><td>1,567.22</td><td class="big">4</td><td>structure, vwap_anchored</td><td>2</td><td>&mdash;</td></tr>
+</table>
+</div>
+<div class="card"><h4>Lines in the sand</h4><table><tr><th>view</th><th>above</th><th>below</th></tr>
+<tr><td>with_volume</td><td>1,880.00 <span class="mute">score 18</span></td><td>1,860.69 <span class="mute">score 14</span></td></tr>
+<tr><td>without_volume</td><td>1,877.84 <span class="mute">score 11</span></td><td>1,844.45 <span class="mute">score 9</span></td></tr>
+</table>
+<p class="prose">Volume evidence <b>moves</b> a line here. The two views are printed side by side so the move is visible rather than argued.</p>
+</div>
+<div class="card"><h4>Target clusters &mdash; highest scoring beyond price, at any distance</h4><table><tr><th>side</th><th>mean</th><th>score</th><th>ATR away</th><th>families</th></tr>
+<tr><td>above</td><td>1,880.00</td><td class="big">18</td><td>0.17</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>1,913.63</td><td class="big">9</td><td>0.67</td><td>profile_windowed, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>1,932.83</td><td class="big">9</td><td>0.96</td><td>profile_windowed, ss, structure, vwap_rolling</td></tr>
+<tr><td>above</td><td>1,896.47</td><td class="big">6</td><td>0.42</td><td>structure, vwap_anchored</td></tr>
+<tr><td>below</td><td>1,860.69</td><td class="big">14</td><td>0.11</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>1,840.83</td><td class="big">12</td><td>0.41</td><td>ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>1,822.22</td><td class="big">9</td><td>0.68</td><td>structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>1,731.26</td><td class="big">8</td><td>2.03</td><td>structure, vwap_anchored, vwap_rolling</td></tr>
+</table><p class="mute small">A far cluster where a VWAP band, a value-area edge and an SS level coincide is a higher-quality target than a lone band. Distance is not quality &mdash; composition is.</p></div>
+<div class="card"><h4>R:R board &mdash; with volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>short</td><td>1,880.00</td><td>1,903.42</td><td>1,840.83</td><td class="big">1.67</td><td>0.347</td><td>0.58</td><td></td></tr>
+<tr><td>long</td><td>1,860.69</td><td>1,832.51</td><td>1,896.47</td><td class="big">1.27</td><td>0.418</td><td>0.53</td><td></td></tr>
+<tr><td>short</td><td>1,880.00</td><td>1,903.42</td><td>1,860.69</td><td class="big">0.82</td><td>0.347</td><td>0.29</td><td></td></tr>
+<tr><td>long</td><td>1,860.69</td><td>1,832.51</td><td>1,880.00</td><td class="big">0.69</td><td>0.418</td><td>0.29</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>R:R board &mdash; without volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>short</td><td>1,877.84</td><td>1,898.50</td><td>1,844.45</td><td class="big">1.62</td><td>0.306</td><td>0.50</td><td></td></tr>
+<tr><td>long</td><td>1,844.45</td><td>1,815.74</td><td>1,877.84</td><td class="big">1.16</td><td>0.426</td><td>0.50</td><td></td></tr>
+<tr><td>short</td><td>1,877.84</td><td>1,898.50</td><td>1,862.48</td><td class="big">0.74</td><td>0.306</td><td>0.23</td><td></td></tr>
+<tr><td>long</td><td>1,844.45</td><td>1,815.74</td><td>1,862.48</td><td class="big">0.63</td><td>0.426</td><td>0.27</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>Trade hypothesis drafts</h4>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span>  <b>If</b> price reclaims 1,880.00 (cluster 1,872.97-1,888.81, score 18) <b>then</b> watch for continuation toward the next opposing area. <b>Invalidated if</b> price closes back below 1,903.42.</p>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span>  <b>If</b> price loses 1,860.69 (cluster 1,853.28-1,868.46, score 14) <b>then</b> watch for follow-through toward the next area below. <b>Invalidated if</b> price closes back above 1,832.51.</p>
+<p class="mute small">Mechanically derived. No sizing, ever.</p></div>
+<div class="card"><h4>Composite bias</h4>
+<p class="big">2 of 5 agree, no dissent &mdash; <b>Lean-short</b></p><table><tr><th>family</th><th>vote</th><th>why</th></tr>
+<tr><td>crowding</td><td class="big">+0</td><td class="mute">funding percentile None</td></tr>
+<tr><td>location</td><td class="big">+0</td><td class="mute">price vs anchored VWAP complex and prior-day value: net 0</td></tr>
+<tr><td>momentum</td><td class="big">-1</td><td class="mute">RSI+MACD+AO on 4h/12h: net -4 of 6 signed</td></tr>
+<tr><td>trend</td><td class="big">+0</td><td class="mute">governor 0 long / 0 short across [&#x27;1h&#x27;, &#x27;4h&#x27;, &#x27;12h&#x27;]</td></tr>
+<tr><td>volume_location</td><td class="big">-1</td><td class="mute">price vs windowed value areas and consensus: net -1</td></tr>
+</table>
+<p class="mute small">Equal weights, count-based, never fitted. The bias print and the radar measure different things; when they disagree nothing is reconciled.</p></div>
+<h3>FARTCOINUSDT</h3>
+<div class="card"><h4>Confluence area map</h4>
+<p class="mute">with_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>0.12</td><td class="big">14</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>11</td><td>30d, 30d<->90d, 7d<->30d</td></tr>
+<tr><td>0.13</td><td class="big">12</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>8</td><td>&mdash;</td></tr>
+<tr><td>0.13</td><td class="big">12</td><td>profile_windowed, ss, vwap_anchored, vwap_rolling</td><td>9</td><td>7d, 7d<->30d, 90d, prior-day</td></tr>
+<tr><td>0.11</td><td class="big">8</td><td>profile_windowed, vwap_anchored, vwap_rolling</td><td>5</td><td>30d, 365d, 90d, 90d<->365d</td></tr>
+<tr><td>0.16</td><td class="big">8</td><td>ss, structure, vwap_anchored</td><td>5</td><td>&mdash;</td></tr>
+<tr><td>0.13</td><td class="big">7</td><td>profile_windowed, vwap_anchored, vwap_rolling</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>0.13</td><td class="big">7</td><td>ss, structure, vwap_anchored</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>0.14</td><td class="big">7</td><td>ss, structure, vwap_rolling</td><td>4</td><td>&mdash;</td></tr>
+</table>
+<p class="mute">without_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>0.13</td><td class="big">9</td><td>ss, structure, vwap_anchored</td><td>7</td><td>&mdash;</td></tr>
+<tr><td>0.13</td><td class="big">8</td><td>ss, structure, vwap_anchored</td><td>5</td><td>&mdash;</td></tr>
+<tr><td>0.16</td><td class="big">8</td><td>ss, structure, vwap_anchored</td><td>5</td><td>&mdash;</td></tr>
+<tr><td>0.13</td><td class="big">7</td><td>ss, vwap_anchored</td><td>6</td><td>&mdash;</td></tr>
+<tr><td>0.12</td><td class="big">6</td><td>ss, structure, vwap_anchored</td><td>3</td><td>&mdash;</td></tr>
+<tr><td>0.14</td><td class="big">5</td><td>ss, structure</td><td>3</td><td>&mdash;</td></tr>
+<tr><td>0.14</td><td class="big">4</td><td>structure, vwap_anchored</td><td>2</td><td>&mdash;</td></tr>
+<tr><td>0.10</td><td class="big">3</td><td>vwap_anchored</td><td>2</td><td>&mdash;</td></tr>
+</table>
+</div>
+<div class="card"><h4>Lines in the sand</h4><table><tr><th>view</th><th>above</th><th>below</th></tr>
+<tr><td>with_volume</td><td>0.13 <span class="mute">score 7</span></td><td>0.12 <span class="mute">score 14</span></td></tr>
+<tr><td>without_volume</td><td>0.13 <span class="mute">score 8</span></td><td>0.13 <span class="mute">score 9</span></td></tr>
+</table>
+<p class="prose">Volume evidence <b>moves</b> a line here. The two views are printed side by side so the move is visible rather than argued.</p>
+</div>
+<div class="card"><h4>Target clusters &mdash; highest scoring beyond price, at any distance</h4><table><tr><th>side</th><th>mean</th><th>score</th><th>ATR away</th><th>families</th></tr>
+<tr><td>above</td><td>0.16</td><td class="big">8</td><td>2.94</td><td>ss, structure, vwap_anchored</td></tr>
+<tr><td>above</td><td>0.13</td><td class="big">7</td><td>0.28</td><td>profile_windowed, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>0.13</td><td class="big">7</td><td>0.49</td><td>ss, structure, vwap_anchored</td></tr>
+<tr><td>above</td><td>0.14</td><td class="big">7</td><td>0.78</td><td>ss, structure, vwap_rolling</td></tr>
+<tr><td>below</td><td>0.12</td><td class="big">14</td><td>0.60</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>0.13</td><td class="big">12</td><td>0.08</td><td>profile_windowed, ss, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>0.13</td><td class="big">12</td><td>0.35</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>0.11</td><td class="big">8</td><td>1.67</td><td>profile_windowed, vwap_anchored, vwap_rolling</td></tr>
+</table><p class="mute small">A far cluster where a VWAP band, a value-area edge and an SS level coincide is a higher-quality target than a lone band. Distance is not quality &mdash; composition is.</p></div>
+<div class="card"><h4>R:R board &mdash; with volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>short</td><td>0.13</td><td>0.14</td><td>0.13</td><td class="big">2.52</td><td>0.250</td><td>0.63</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">caution &amp;mdash; tight stop</span></td></tr>
+<tr><td>long</td><td>0.12</td><td>0.12</td><td>0.13</td><td class="big">1.48</td><td>0.348</td><td>0.52</td><td></td></tr>
+<tr><td>short</td><td>0.13</td><td>0.14</td><td>0.13</td><td class="big">1.47</td><td>0.250</td><td>0.37</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">caution &amp;mdash; tight stop</span></td></tr>
+<tr><td>long</td><td>0.12</td><td>0.12</td><td>0.13</td><td class="big">0.72</td><td>0.348</td><td>0.25</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>R:R board &mdash; without volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>long</td><td>0.13</td><td>0.12</td><td>0.13</td><td class="big">2.85</td><td>0.296</td><td>0.84</td><td></td></tr>
+<tr><td>short</td><td>0.13</td><td>0.14</td><td>0.13</td><td class="big">2.31</td><td>0.365</td><td>0.84</td><td></td></tr>
+<tr><td>short</td><td>0.13</td><td>0.14</td><td>0.13</td><td class="big">1.46</td><td>0.365</td><td>0.53</td><td></td></tr>
+<tr><td>long</td><td>0.13</td><td>0.12</td><td>0.13</td><td class="big">1.05</td><td>0.296</td><td>0.31</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>Trade hypothesis drafts</h4>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span> <span class="chip" style="border-color:#E8853F;color:#E8853F">caution &amp;mdash; tight stop</span> <b>If</b> price reclaims 0.13 (cluster 0.13-0.13, score 7) <b>then</b> watch for continuation toward the next opposing area. <b>Invalidated if</b> price closes back below 0.14.</p>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span>  <b>If</b> price loses 0.12 (cluster 0.12-0.13, score 14) <b>then</b> watch for follow-through toward the next area below. <b>Invalidated if</b> price closes back above 0.12.</p>
+<p class="mute small">Mechanically derived. No sizing, ever.</p></div>
+<div class="card"><h4>Composite bias</h4>
+<p class="big">3 of 5 agree, no dissent &mdash; <b>Lean-long</b></p><table><tr><th>family</th><th>vote</th><th>why</th></tr>
+<tr><td>crowding</td><td class="big">+0</td><td class="mute">funding percentile None</td></tr>
+<tr><td>location</td><td class="big">+1</td><td class="mute">price vs anchored VWAP complex and prior-day value: net 1</td></tr>
+<tr><td>momentum</td><td class="big">+1</td><td class="mute">RSI+MACD+AO on 4h/12h: net 4 of 6 signed</td></tr>
+<tr><td>trend</td><td class="big">+0</td><td class="mute">governor 0 long / 0 short across [&#x27;1h&#x27;, &#x27;4h&#x27;, &#x27;12h&#x27;]</td></tr>
+<tr><td>volume_location</td><td class="big">+1</td><td class="mute">price vs windowed value areas and consensus: net 1</td></tr>
+</table>
+<p class="mute small">Equal weights, count-based, never fitted. The bias print and the radar measure different things; when they disagree nothing is reconciled.</p></div>
+<h3>HYPEUSDT</h3>
+<div class="card"><h4>Confluence area map</h4>
+<p class="mute">with_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>51.85</td><td class="big">15</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>11</td><td>&mdash;</td></tr>
+<tr><td>52.64</td><td class="big">15</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>10</td><td>&mdash;</td></tr>
+<tr><td>56.73</td><td class="big">13</td><td>profile_windowed, ss, vwap_anchored, vwap_rolling</td><td>9</td><td>30d, 30d<->90d, 7d, 7d<->30d, 90d, 90d<->365d</td></tr>
+<tr><td>58.73</td><td class="big">8</td><td>profile_windowed, structure, vwap_rolling</td><td>6</td><td>&mdash;</td></tr>
+<tr><td>50.79</td><td class="big">7</td><td>profile_windowed, vwap_anchored, vwap_rolling</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>54.85</td><td class="big">7</td><td>profile_windowed, ss, vwap_rolling</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>43.52</td><td class="big">6</td><td>structure, vwap_rolling</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>44.96</td><td class="big">6</td><td>structure, vwap_anchored, vwap_rolling</td><td>3</td><td>&mdash;</td></tr>
+</table>
+<p class="mute">without_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>52.57</td><td class="big">11</td><td>ss, structure, vwap_anchored</td><td>10</td><td>&mdash;</td></tr>
+<tr><td>51.48</td><td class="big">7</td><td>structure, vwap_anchored</td><td>6</td><td>&mdash;</td></tr>
+<tr><td>56.88</td><td class="big">6</td><td>ss, vwap_anchored</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>53.24</td><td class="big">5</td><td>ss, vwap_anchored</td><td>3</td><td>&mdash;</td></tr>
+<tr><td>33.77</td><td class="big">4</td><td>structure, vwap_anchored</td><td>2</td><td>&mdash;</td></tr>
+<tr><td>38.55</td><td class="big">4</td><td>structure</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>45.01</td><td class="big">4</td><td>structure, vwap_anchored</td><td>2</td><td>&mdash;</td></tr>
+<tr><td>45.85</td><td class="big">4</td><td>structure, vwap_anchored</td><td>2</td><td>&mdash;</td></tr>
+</table>
+</div>
+<div class="card"><h4>Lines in the sand</h4><table><tr><th>view</th><th>above</th><th>below</th></tr>
+<tr><td>with_volume</td><td>52.64 <span class="mute">score 15</span></td><td>51.85 <span class="mute">score 15</span></td></tr>
+<tr><td>without_volume</td><td>56.88 <span class="mute">score 6</span></td><td>52.57 <span class="mute">score 11</span></td></tr>
+</table>
+<p class="prose">Volume evidence <b>moves</b> a line here. The two views are printed side by side so the move is visible rather than argued.</p>
+</div>
+<div class="card"><h4>Target clusters &mdash; highest scoring beyond price, at any distance</h4><table><tr><th>side</th><th>mean</th><th>score</th><th>ATR away</th><th>families</th></tr>
+<tr><td>above</td><td>52.64</td><td class="big">15</td><td>0.01</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>56.73</td><td class="big">13</td><td>1.25</td><td>profile_windowed, ss, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>58.73</td><td class="big">8</td><td>1.86</td><td>profile_windowed, structure, vwap_rolling</td></tr>
+<tr><td>above</td><td>54.85</td><td class="big">7</td><td>0.68</td><td>profile_windowed, ss, vwap_rolling</td></tr>
+<tr><td>below</td><td>51.85</td><td class="big">15</td><td>0.23</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>50.79</td><td class="big">7</td><td>0.55</td><td>profile_windowed, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>44.96</td><td class="big">6</td><td>2.31</td><td>structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>43.52</td><td class="big">6</td><td>2.75</td><td>structure, vwap_rolling</td></tr>
+</table><p class="mute small">A far cluster where a VWAP band, a value-area edge and an SS level coincide is a higher-quality target than a lone band. Distance is not quality &mdash; composition is.</p></div>
+<div class="card"><h4>R:R board &mdash; with volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>short</td><td>52.64</td><td>53.30</td><td>50.79</td><td class="big">2.82</td><td>0.199</td><td>0.56</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">caution &amp;mdash; tight stop</span></td></tr>
+<tr><td>short</td><td>52.64</td><td>53.30</td><td>51.85</td><td class="big">1.21</td><td>0.199</td><td>0.24</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">caution &amp;mdash; tight stop</span></td></tr>
+<tr><td>long</td><td>51.85</td><td>50.44</td><td>53.24</td><td class="big">0.99</td><td>0.425</td><td>0.42</td><td></td></tr>
+<tr><td>long</td><td>51.85</td><td>50.44</td><td>52.64</td><td class="big">0.57</td><td>0.425</td><td>0.24</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>R:R board &mdash; without volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>short</td><td>56.88</td><td>57.84</td><td>53.24</td><td class="big">3.80</td><td>0.290</td><td>1.10</td><td></td></tr>
+<tr><td>short</td><td>56.88</td><td>57.84</td><td>54.09</td><td class="big">2.91</td><td>0.290</td><td>0.85</td><td></td></tr>
+<tr><td>long</td><td>52.57</td><td>50.97</td><td>54.09</td><td class="big">0.96</td><td>0.482</td><td>0.46</td><td></td></tr>
+<tr><td>long</td><td>52.57</td><td>50.97</td><td>53.24</td><td class="big">0.42</td><td>0.482</td><td>0.20</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>Trade hypothesis drafts</h4>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span> <span class="chip" style="border-color:#E8853F;color:#E8853F">caution &amp;mdash; tight stop</span> <b>If</b> price reclaims 52.64 (cluster 52.35-52.98, score 15) <b>then</b> watch for continuation toward the next opposing area. <b>Invalidated if</b> price closes back below 53.30.</p>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span>  <b>If</b> price loses 51.85 (cluster 51.36-52.24, score 15) <b>then</b> watch for follow-through toward the next area below. <b>Invalidated if</b> price closes back above 50.44.</p>
+<p class="mute small">Mechanically derived. No sizing, ever.</p></div>
+<div class="card"><h4>Composite bias</h4>
+<p class="big">2 of 5 agree, dissenting: location &mdash; <b>Neutral-mixed</b></p><table><tr><th>family</th><th>vote</th><th>why</th></tr>
+<tr><td>crowding</td><td class="big">+0</td><td class="mute">funding percentile None</td></tr>
+<tr><td>location</td><td class="big">+1</td><td class="mute">price vs anchored VWAP complex and prior-day value: net 1</td></tr>
+<tr><td>momentum</td><td class="big">-1</td><td class="mute">RSI+MACD+AO on 4h/12h: net -4 of 6 signed</td></tr>
+<tr><td>trend</td><td class="big">+0</td><td class="mute">governor 0 long / 0 short across [&#x27;1h&#x27;, &#x27;4h&#x27;, &#x27;12h&#x27;]</td></tr>
+<tr><td>volume_location</td><td class="big">-1</td><td class="mute">price vs windowed value areas and consensus: net -1</td></tr>
+</table>
+<p class="mute small">Equal weights, count-based, never fitted. The bias print and the radar measure different things; when they disagree nothing is reconciled.</p></div>
+<h3>JTOUSDT</h3>
+<div class="card"><h4>Confluence area map</h4>
+<p class="mute">with_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>0.49</td><td class="big">18</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>13</td><td>&mdash;</td></tr>
+<tr><td>0.51</td><td class="big">13</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>8</td><td>7d, prior-day</td></tr>
+<tr><td>0.57</td><td class="big">10</td><td>profile_windowed, ss, vwap_anchored</td><td>7</td><td>&mdash;</td></tr>
+<tr><td>0.48</td><td class="big">9</td><td>profile_windowed, structure, vwap_anchored</td><td>7</td><td>90d, 90d<->365d</td></tr>
+<tr><td>0.54</td><td class="big">9</td><td>profile_windowed, ss, structure, vwap_rolling</td><td>5</td><td>&mdash;</td></tr>
+<tr><td>0.55</td><td class="big">8</td><td>profile_windowed, ss, vwap_rolling</td><td>5</td><td>30d, 30d<->90d, 7d, 7d<->30d</td></tr>
+<tr><td>0.72</td><td class="big">8</td><td>profile_windowed, vwap_anchored, vwap_rolling</td><td>5</td><td>&mdash;</td></tr>
+<tr><td>0.60</td><td class="big">7</td><td>ss, structure, vwap_rolling</td><td>4</td><td>&mdash;</td></tr>
+</table>
+<p class="mute">without_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>0.49</td><td class="big">10</td><td>ss, structure, vwap_anchored</td><td>9</td><td>&mdash;</td></tr>
+<tr><td>0.51</td><td class="big">9</td><td>ss, structure, vwap_anchored</td><td>6</td><td>&mdash;</td></tr>
+<tr><td>0.56</td><td class="big">6</td><td>ss, vwap_anchored</td><td>5</td><td>&mdash;</td></tr>
+<tr><td>0.88</td><td class="big">6</td><td>structure, vwap_anchored</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>0.53</td><td class="big">5</td><td>ss, structure</td><td>3</td><td>&mdash;</td></tr>
+<tr><td>0.60</td><td class="big">5</td><td>ss, structure</td><td>3</td><td>&mdash;</td></tr>
+<tr><td>0.25</td><td class="big">4</td><td>structure</td><td>3</td><td>&mdash;</td></tr>
+<tr><td>0.28</td><td class="big">4</td><td>structure, vwap_anchored</td><td>2</td><td>&mdash;</td></tr>
+</table>
+</div>
+<div class="card"><h4>Lines in the sand</h4><table><tr><th>view</th><th>above</th><th>below</th></tr>
+<tr><td>with_volume</td><td>0.49 <span class="mute">score 18</span></td><td>0.48 <span class="mute">score 9</span></td></tr>
+<tr><td>without_volume</td><td>0.51 <span class="mute">score 9</span></td><td>0.49 <span class="mute">score 10</span></td></tr>
+</table>
+<p class="prose">Volume evidence <b>moves</b> a line here. The two views are printed side by side so the move is visible rather than argued.</p>
+</div>
+<div class="card"><h4>Target clusters &mdash; highest scoring beyond price, at any distance</h4><table><tr><th>side</th><th>mean</th><th>score</th><th>ATR away</th><th>families</th></tr>
+<tr><td>above</td><td>0.49</td><td class="big">18</td><td>0.00</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>0.51</td><td class="big">13</td><td>0.29</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>0.57</td><td class="big">10</td><td>1.47</td><td>profile_windowed, ss, vwap_anchored</td></tr>
+<tr><td>above</td><td>0.54</td><td class="big">9</td><td>0.82</td><td>profile_windowed, ss, structure, vwap_rolling</td></tr>
+<tr><td>below</td><td>0.48</td><td class="big">9</td><td>0.32</td><td>profile_windowed, structure, vwap_anchored</td></tr>
+<tr><td>below</td><td>0.28</td><td class="big">6</td><td>4.22</td><td>structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>0.46</td><td class="big">4</td><td>0.64</td><td>structure, vwap_rolling</td></tr>
+<tr><td>below</td><td>0.42</td><td class="big">4</td><td>1.50</td><td>vwap_anchored, vwap_rolling</td></tr>
+</table><p class="mute small">A far cluster where a VWAP band, a value-area edge and an SS level coincide is a higher-quality target than a lone band. Distance is not quality &mdash; composition is.</p></div>
+<div class="card"><h4>R:R board &mdash; with volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>long</td><td>0.48</td><td>0.46</td><td>0.51</td><td class="big">1.83</td><td>0.333</td><td>0.61</td><td></td></tr>
+<tr><td>short</td><td>0.49</td><td>0.51</td><td>0.46</td><td class="big">1.61</td><td>0.398</td><td>0.64</td><td></td></tr>
+<tr><td>long</td><td>0.48</td><td>0.46</td><td>0.49</td><td class="big">0.97</td><td>0.333</td><td>0.32</td><td></td></tr>
+<tr><td>short</td><td>0.49</td><td>0.51</td><td>0.48</td><td class="big">0.82</td><td>0.398</td><td>0.32</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>R:R board &mdash; without volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>short</td><td>0.51</td><td>0.53</td><td>0.49</td><td class="big">1.46</td><td>0.303</td><td>0.44</td><td></td></tr>
+<tr><td>long</td><td>0.49</td><td>0.47</td><td>0.51</td><td class="big">1.33</td><td>0.334</td><td>0.44</td><td></td></tr>
+<tr><td>short</td><td>0.51</td><td>0.53</td><td>0.50</td><td class="big">0.81</td><td>0.303</td><td>0.24</td><td></td></tr>
+<tr><td>long</td><td>0.49</td><td>0.47</td><td>0.50</td><td class="big">0.59</td><td>0.334</td><td>0.20</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>Trade hypothesis drafts</h4>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span>  <b>If</b> price reclaims 0.49 (cluster 0.49-0.50, score 18) <b>then</b> watch for continuation toward the next opposing area. <b>Invalidated if</b> price closes back below 0.51.</p>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span>  <b>If</b> price loses 0.48 (cluster 0.47-0.48, score 9) <b>then</b> watch for follow-through toward the next area below. <b>Invalidated if</b> price closes back above 0.46.</p>
+<p class="mute small">Mechanically derived. No sizing, ever.</p></div>
+<div class="card"><h4>Composite bias</h4>
+<p class="big">3 of 5 agree, no dissent &mdash; <b>Lean-short</b></p><table><tr><th>family</th><th>vote</th><th>why</th></tr>
+<tr><td>crowding</td><td class="big">+0</td><td class="mute">funding percentile None</td></tr>
+<tr><td>location</td><td class="big">-1</td><td class="mute">price vs anchored VWAP complex and prior-day value: net -1</td></tr>
+<tr><td>momentum</td><td class="big">-1</td><td class="mute">RSI+MACD+AO on 4h/12h: net -4 of 6 signed</td></tr>
+<tr><td>trend</td><td class="big">+0</td><td class="mute">governor 0 long / 0 short across [&#x27;1h&#x27;, &#x27;4h&#x27;, &#x27;12h&#x27;]</td></tr>
+<tr><td>volume_location</td><td class="big">-1</td><td class="mute">price vs windowed value areas and consensus: net -1</td></tr>
+</table>
+<p class="mute small">Equal weights, count-based, never fitted. The bias print and the radar measure different things; when they disagree nothing is reconciled.</p></div>
+<h3>LITUSDT</h3>
+<div class="card"><h4>Confluence area map</h4>
+<p class="mute">with_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>1.85</td><td class="big">13</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>9</td><td>30d<->90d, 90d</td></tr>
+<tr><td>2.02</td><td class="big">13</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>8</td><td>&mdash;</td></tr>
+<tr><td>2.07</td><td class="big">13</td><td>profile_windowed, ss, structure, vwap_anchored</td><td>11</td><td>&mdash;</td></tr>
+<tr><td>2.13</td><td class="big">13</td><td>profile_windowed, ss, vwap_anchored, vwap_rolling</td><td>11</td><td>&mdash;</td></tr>
+<tr><td>2.19</td><td class="big">12</td><td>profile_windowed, ss, vwap_anchored, vwap_rolling</td><td>8</td><td>30d, 30d<->90d, 7d, 7d<->30d</td></tr>
+<tr><td>1.97</td><td class="big">9</td><td>profile_windowed, structure, vwap_anchored, vwap_rolling</td><td>5</td><td>&mdash;</td></tr>
+<tr><td>1.32</td><td class="big">7</td><td>profile_windowed, structure, vwap_anchored</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>2.77</td><td class="big">7</td><td>structure, vwap_anchored, vwap_rolling</td><td>4</td><td>&mdash;</td></tr>
+</table>
+<p class="mute">without_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>2.05</td><td class="big">9</td><td>ss, structure, vwap_anchored</td><td>7</td><td>&mdash;</td></tr>
+<tr><td>2.10</td><td class="big">8</td><td>ss, vwap_anchored</td><td>8</td><td>&mdash;</td></tr>
+<tr><td>1.83</td><td class="big">7</td><td>ss, structure, vwap_anchored</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>2.16</td><td class="big">7</td><td>ss, vwap_anchored</td><td>6</td><td>&mdash;</td></tr>
+<tr><td>1.98</td><td class="big">6</td><td>structure, vwap_anchored</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>1.31</td><td class="big">5</td><td>structure, vwap_anchored</td><td>3</td><td>&mdash;</td></tr>
+<tr><td>1.87</td><td class="big">5</td><td>structure, vwap_anchored</td><td>3</td><td>&mdash;</td></tr>
+<tr><td>2.77</td><td class="big">5</td><td>structure, vwap_anchored</td><td>3</td><td>&mdash;</td></tr>
+</table>
+</div>
+<div class="card"><h4>Lines in the sand</h4><table><tr><th>view</th><th>above</th><th>below</th></tr>
+<tr><td>with_volume</td><td>2.07 <span class="mute">score 13</span></td><td>2.02 <span class="mute">score 13</span></td></tr>
+<tr><td>without_volume</td><td>2.05 <span class="mute">score 9</span></td><td>1.83 <span class="mute">score 7</span></td></tr>
+</table>
+<p class="prose">Volume evidence <b>moves</b> a line here. The two views are printed side by side so the move is visible rather than argued.</p>
+</div>
+<div class="card"><h4>Target clusters &mdash; highest scoring beyond price, at any distance</h4><table><tr><th>side</th><th>mean</th><th>score</th><th>ATR away</th><th>families</th></tr>
+<tr><td>above</td><td>2.07</td><td class="big">13</td><td>0.12</td><td>profile_windowed, ss, structure, vwap_anchored</td></tr>
+<tr><td>above</td><td>2.13</td><td class="big">13</td><td>0.39</td><td>profile_windowed, ss, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>2.19</td><td class="big">12</td><td>0.70</td><td>profile_windowed, ss, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>2.77</td><td class="big">7</td><td>3.54</td><td>structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>2.02</td><td class="big">13</td><td>0.15</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>1.85</td><td class="big">13</td><td>1.01</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>1.97</td><td class="big">9</td><td>0.43</td><td>profile_windowed, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>1.32</td><td class="big">7</td><td>3.63</td><td>profile_windowed, structure, vwap_anchored</td></tr>
+</table><p class="mute small">A far cluster where a VWAP band, a value-area edge and an SS level coincide is a higher-quality target than a lone band. Distance is not quality &mdash; composition is.</p></div>
+<div class="card"><h4>R:R board &mdash; with volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>long</td><td>2.02</td><td>1.95</td><td>2.13</td><td class="big">1.52</td><td>0.355</td><td>0.54</td><td></td></tr>
+<tr><td>short</td><td>2.07</td><td>2.16</td><td>1.97</td><td class="big">1.35</td><td>0.402</td><td>0.54</td><td></td></tr>
+<tr><td>long</td><td>2.02</td><td>1.95</td><td>2.07</td><td class="big">0.75</td><td>0.355</td><td>0.27</td><td></td></tr>
+<tr><td>short</td><td>2.07</td><td>2.16</td><td>2.02</td><td class="big">0.66</td><td>0.402</td><td>0.27</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>R:R board &mdash; without volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>short</td><td>2.05</td><td>2.12</td><td>1.87</td><td class="big">2.75</td><td>0.338</td><td>0.93</td><td></td></tr>
+<tr><td>long</td><td>1.83</td><td>1.73</td><td>1.98</td><td class="big">1.52</td><td>0.500</td><td>0.76</td><td></td></tr>
+<tr><td>short</td><td>2.05</td><td>2.12</td><td>1.98</td><td class="big">1.03</td><td>0.338</td><td>0.35</td><td></td></tr>
+<tr><td>long</td><td>1.83</td><td>1.73</td><td>1.87</td><td class="big">0.36</td><td>0.500</td><td>0.18</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>Trade hypothesis drafts</h4>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span>  <b>If</b> price reclaims 2.07 (cluster 2.05-2.10, score 13) <b>then</b> watch for continuation toward the next opposing area. <b>Invalidated if</b> price closes back below 2.16.</p>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span>  <b>If</b> price loses 2.02 (cluster 2.00-2.04, score 13) <b>then</b> watch for follow-through toward the next area below. <b>Invalidated if</b> price closes back above 1.95.</p>
+<p class="mute small">Mechanically derived. No sizing, ever.</p></div>
+<div class="card"><h4>Composite bias</h4>
+<p class="big">2 of 5 agree, no dissent &mdash; <b>Lean-short</b></p><table><tr><th>family</th><th>vote</th><th>why</th></tr>
+<tr><td>crowding</td><td class="big">+0</td><td class="mute">funding percentile None</td></tr>
+<tr><td>location</td><td class="big">+0</td><td class="mute">price vs anchored VWAP complex and prior-day value: net 0</td></tr>
+<tr><td>momentum</td><td class="big">-1</td><td class="mute">RSI+MACD+AO on 4h/12h: net -6 of 6 signed</td></tr>
+<tr><td>trend</td><td class="big">+0</td><td class="mute">governor 0 long / 0 short across [&#x27;1h&#x27;, &#x27;4h&#x27;, &#x27;12h&#x27;]</td></tr>
+<tr><td>volume_location</td><td class="big">-1</td><td class="mute">price vs windowed value areas and consensus: net -1</td></tr>
+</table>
+<p class="mute small">Equal weights, count-based, never fitted. The bias print and the radar measure different things; when they disagree nothing is reconciled.</p></div>
+<h3>NEARUSDT</h3>
+<div class="card"><h4>Confluence area map</h4>
+<p class="mute">with_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>1.75</td><td class="big">14</td><td>profile_windowed, ss, vwap_anchored, vwap_rolling</td><td>11</td><td>30d, 7d</td></tr>
+<tr><td>1.72</td><td class="big">12</td><td>profile_windowed, ss, structure, vwap_anchored</td><td>8</td><td>7d, 7d<->30d</td></tr>
+<tr><td>1.66</td><td class="big">11</td><td>profile_windowed, ss, structure, vwap_anchored</td><td>8</td><td>&mdash;</td></tr>
+<tr><td>1.78</td><td class="big">11</td><td>profile_windowed, ss, structure, vwap_anchored</td><td>8</td><td>90d, 90d<->365d</td></tr>
+<tr><td>1.69</td><td class="big">10</td><td>ss, structure, vwap_anchored, vwap_rolling</td><td>6</td><td>&mdash;</td></tr>
+<tr><td>1.85</td><td class="big">9</td><td>profile_windowed, ss, structure</td><td>6</td><td>30d, 30d<->90d, 7d<->30d</td></tr>
+<tr><td>1.80</td><td class="big">8</td><td>profile_windowed, structure, vwap_rolling</td><td>7</td><td>&mdash;</td></tr>
+<tr><td>1.88</td><td class="big">8</td><td>ss, vwap_anchored, vwap_rolling</td><td>5</td><td>&mdash;</td></tr>
+</table>
+<p class="mute">without_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>1.68</td><td class="big">10</td><td>ss, structure, vwap_anchored</td><td>7</td><td>&mdash;</td></tr>
+<tr><td>1.71</td><td class="big">8</td><td>ss, structure, vwap_anchored</td><td>5</td><td>&mdash;</td></tr>
+<tr><td>1.85</td><td class="big">7</td><td>ss, structure</td><td>5</td><td>&mdash;</td></tr>
+<tr><td>1.52</td><td class="big">6</td><td>structure, vwap_anchored</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>1.76</td><td class="big">6</td><td>ss, vwap_anchored</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>1.78</td><td class="big">6</td><td>ss, structure, vwap_anchored</td><td>3</td><td>&mdash;</td></tr>
+<tr><td>1.65</td><td class="big">4</td><td>vwap_anchored</td><td>3</td><td>&mdash;</td></tr>
+<tr><td>1.87</td><td class="big">4</td><td>ss, vwap_anchored</td><td>2</td><td>&mdash;</td></tr>
+</table>
+</div>
+<div class="card"><h4>Lines in the sand</h4><table><tr><th>view</th><th>above</th><th>below</th></tr>
+<tr><td>with_volume</td><td>1.75 <span class="mute">score 14</span></td><td>1.66 <span class="mute">score 11</span></td></tr>
+<tr><td>without_volume</td><td>1.71 <span class="mute">score 8</span></td><td>1.68 <span class="mute">score 10</span></td></tr>
+</table>
+<p class="prose">Volume evidence <b>moves</b> a line here. The two views are printed side by side so the move is visible rather than argued.</p>
+</div>
+<div class="card"><h4>Target clusters &mdash; highest scoring beyond price, at any distance</h4><table><tr><th>side</th><th>mean</th><th>score</th><th>ATR away</th><th>families</th></tr>
+<tr><td>above</td><td>1.75</td><td class="big">14</td><td>0.43</td><td>profile_windowed, ss, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>1.72</td><td class="big">12</td><td>0.13</td><td>profile_windowed, ss, structure, vwap_anchored</td></tr>
+<tr><td>above</td><td>1.78</td><td class="big">11</td><td>0.69</td><td>profile_windowed, ss, structure, vwap_anchored</td></tr>
+<tr><td>above</td><td>1.85</td><td class="big">9</td><td>1.43</td><td>profile_windowed, ss, structure</td></tr>
+<tr><td>below</td><td>1.66</td><td class="big">11</td><td>0.38</td><td>profile_windowed, ss, structure, vwap_anchored</td></tr>
+<tr><td>below</td><td>1.69</td><td class="big">10</td><td>0.16</td><td>ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>1.51</td><td class="big">7</td><td>1.85</td><td>structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>1.61</td><td class="big">6</td><td>0.88</td><td>profile_windowed, vwap_anchored, vwap_rolling</td></tr>
+</table><p class="mute small">A far cluster where a VWAP band, a value-area edge and an SS level coincide is a higher-quality target than a lone band. Distance is not quality &mdash; composition is.</p></div>
+<div class="card"><h4>R:R board &mdash; with volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>short</td><td>1.75</td><td>1.79</td><td>1.69</td><td class="big">1.54</td><td>0.382</td><td>0.59</td><td></td></tr>
+<tr><td>long</td><td>1.66</td><td>1.63</td><td>1.72</td><td class="big">1.47</td><td>0.345</td><td>0.51</td><td></td></tr>
+<tr><td>short</td><td>1.75</td><td>1.79</td><td>1.72</td><td class="big">0.79</td><td>0.382</td><td>0.30</td><td></td></tr>
+<tr><td>long</td><td>1.66</td><td>1.63</td><td>1.69</td><td class="big">0.65</td><td>0.345</td><td>0.22</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>R:R board &mdash; without volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>short</td><td>1.71</td><td>1.73</td><td>1.65</td><td class="big">2.65</td><td>0.230</td><td>0.61</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">caution &amp;mdash; tight stop</span></td></tr>
+<tr><td>long</td><td>1.68</td><td>1.64</td><td>1.76</td><td class="big">2.02</td><td>0.376</td><td>0.76</td><td></td></tr>
+<tr><td>short</td><td>1.71</td><td>1.73</td><td>1.68</td><td class="big">1.27</td><td>0.230</td><td>0.29</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">caution &amp;mdash; tight stop</span></td></tr>
+<tr><td>long</td><td>1.68</td><td>1.64</td><td>1.71</td><td class="big">0.78</td><td>0.376</td><td>0.29</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>Trade hypothesis drafts</h4>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span>  <b>If</b> price reclaims 1.75 (cluster 1.73-1.76, score 14) <b>then</b> watch for continuation toward the next opposing area. <b>Invalidated if</b> price closes back below 1.79.</p>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span>  <b>If</b> price loses 1.66 (cluster 1.65-1.68, score 11) <b>then</b> watch for follow-through toward the next area below. <b>Invalidated if</b> price closes back above 1.63.</p>
+<p class="mute small">Mechanically derived. No sizing, ever.</p></div>
+<div class="card"><h4>Composite bias</h4>
+<p class="big">2 of 5 agree, dissenting: volume_location &mdash; <b>Neutral-mixed</b></p><table><tr><th>family</th><th>vote</th><th>why</th></tr>
+<tr><td>crowding</td><td class="big">+0</td><td class="mute">funding percentile None</td></tr>
+<tr><td>location</td><td class="big">+1</td><td class="mute">price vs anchored VWAP complex and prior-day value: net 1</td></tr>
+<tr><td>momentum</td><td class="big">+1</td><td class="mute">RSI+MACD+AO on 4h/12h: net 2 of 6 signed</td></tr>
+<tr><td>trend</td><td class="big">+0</td><td class="mute">governor 0 long / 0 short across [&#x27;1h&#x27;, &#x27;4h&#x27;, &#x27;12h&#x27;]</td></tr>
+<tr><td>volume_location</td><td class="big">-1</td><td class="mute">price vs windowed value areas and consensus: net -2</td></tr>
+</table>
+<p class="mute small">Equal weights, count-based, never fitted. The bias print and the radar measure different things; when they disagree nothing is reconciled.</p></div>
+<h3>SOLUSDT</h3>
+<div class="card"><h4>Confluence area map</h4>
+<p class="mute">with_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>73.61</td><td class="big">17</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>13</td><td>30d, 30d<->90d, 7d<->30d</td></tr>
+<tr><td>72.96</td><td class="big">16</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>11</td><td>7d, prior-day</td></tr>
+<tr><td>72.13</td><td class="big">13</td><td>profile_windowed, structure, vwap_anchored, vwap_rolling</td><td>12</td><td>30d, prior-day</td></tr>
+<tr><td>74.37</td><td class="big">12</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>7</td><td>7d, 7d<->30d</td></tr>
+<tr><td>71.40</td><td class="big">11</td><td>profile_windowed, vwap_anchored, vwap_rolling</td><td>8</td><td>&mdash;</td></tr>
+<tr><td>75.11</td><td class="big">11</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>6</td><td>&mdash;</td></tr>
+<tr><td>75.65</td><td class="big">9</td><td>profile_windowed, ss, structure, vwap_rolling</td><td>5</td><td>&mdash;</td></tr>
+<tr><td>76.39</td><td class="big">8</td><td>ss, structure, vwap_rolling</td><td>5</td><td>30d, 365d</td></tr>
+</table>
+<p class="mute">without_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>73.08</td><td class="big">11</td><td>ss, structure, vwap_anchored</td><td>10</td><td>&mdash;</td></tr>
+<tr><td>73.71</td><td class="big">9</td><td>ss, structure, vwap_anchored</td><td>6</td><td>&mdash;</td></tr>
+<tr><td>74.43</td><td class="big">8</td><td>ss, structure, vwap_anchored</td><td>5</td><td>&mdash;</td></tr>
+<tr><td>72.15</td><td class="big">7</td><td>structure, vwap_anchored</td><td>6</td><td>&mdash;</td></tr>
+<tr><td>75.11</td><td class="big">7</td><td>ss, structure, vwap_anchored</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>79.98</td><td class="big">7</td><td>ss, structure, vwap_anchored</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>76.36</td><td class="big">6</td><td>ss, structure</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>79.14</td><td class="big">6</td><td>ss, structure, vwap_anchored</td><td>3</td><td>&mdash;</td></tr>
+</table>
+</div>
+<div class="card"><h4>Lines in the sand</h4><table><tr><th>view</th><th>above</th><th>below</th></tr>
+<tr><td>with_volume</td><td>74.37 <span class="mute">score 12</span></td><td>73.61 <span class="mute">score 17</span></td></tr>
+<tr><td>without_volume</td><td>74.43 <span class="mute">score 8</span></td><td>73.08 <span class="mute">score 11</span></td></tr>
+</table>
+<p class="prose">Volume evidence <b>moves</b> a line here. The two views are printed side by side so the move is visible rather than argued.</p>
+</div>
+<div class="card"><h4>Target clusters &mdash; highest scoring beyond price, at any distance</h4><table><tr><th>side</th><th>mean</th><th>score</th><th>ATR away</th><th>families</th></tr>
+<tr><td>above</td><td>74.37</td><td class="big">12</td><td>0.20</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>75.11</td><td class="big">11</td><td>0.47</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>75.65</td><td class="big">9</td><td>0.68</td><td>profile_windowed, ss, structure, vwap_rolling</td></tr>
+<tr><td>above</td><td>76.39</td><td class="big">8</td><td>0.95</td><td>ss, structure, vwap_rolling</td></tr>
+<tr><td>below</td><td>73.61</td><td class="big">17</td><td>0.08</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>72.96</td><td class="big">16</td><td>0.32</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>72.13</td><td class="big">13</td><td>0.63</td><td>profile_windowed, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>71.40</td><td class="big">11</td><td>0.90</td><td>profile_windowed, vwap_anchored, vwap_rolling</td></tr>
+</table><p class="mute small">A far cluster where a VWAP band, a value-area edge and an SS level coincide is a higher-quality target than a lone band. Distance is not quality &mdash; composition is.</p></div>
+<div class="card"><h4>R:R board &mdash; with volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>short</td><td>74.37</td><td>75.31</td><td>72.96</td><td class="big">1.49</td><td>0.349</td><td>0.52</td><td></td></tr>
+<tr><td>long</td><td>73.61</td><td>72.60</td><td>75.11</td><td class="big">1.48</td><td>0.375</td><td>0.55</td><td></td></tr>
+<tr><td>short</td><td>74.37</td><td>75.31</td><td>73.61</td><td class="big">0.80</td><td>0.349</td><td>0.28</td><td></td></tr>
+<tr><td>long</td><td>73.61</td><td>72.60</td><td>74.37</td><td class="big">0.74</td><td>0.375</td><td>0.28</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>R:R board &mdash; without volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>short</td><td>74.43</td><td>75.30</td><td>73.08</td><td class="big">1.56</td><td>0.322</td><td>0.50</td><td></td></tr>
+<tr><td>long</td><td>73.08</td><td>71.88</td><td>74.43</td><td class="big">1.13</td><td>0.443</td><td>0.50</td><td></td></tr>
+<tr><td>short</td><td>74.43</td><td>75.30</td><td>73.71</td><td class="big">0.83</td><td>0.322</td><td>0.27</td><td></td></tr>
+<tr><td>long</td><td>73.08</td><td>71.88</td><td>73.71</td><td class="big">0.53</td><td>0.443</td><td>0.24</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>Trade hypothesis drafts</h4>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span>  <b>If</b> price reclaims 74.37 (cluster 74.15-74.69, score 12) <b>then</b> watch for continuation toward the next opposing area. <b>Invalidated if</b> price closes back below 75.31.</p>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span>  <b>If</b> price loses 73.61 (cluster 73.38-73.96, score 17) <b>then</b> watch for follow-through toward the next area below. <b>Invalidated if</b> price closes back above 72.60.</p>
+<p class="mute small">Mechanically derived. No sizing, ever.</p></div>
+<div class="card"><h4>Composite bias</h4>
+<p class="big">0 of 5 agree, dissenting: location, momentum &mdash; <b>Neutral-mixed</b></p><table><tr><th>family</th><th>vote</th><th>why</th></tr>
+<tr><td>crowding</td><td class="big">+0</td><td class="mute">funding percentile None</td></tr>
+<tr><td>location</td><td class="big">+1</td><td class="mute">price vs anchored VWAP complex and prior-day value: net 1</td></tr>
+<tr><td>momentum</td><td class="big">-1</td><td class="mute">RSI+MACD+AO on 4h/12h: net -2 of 6 signed</td></tr>
+<tr><td>trend</td><td class="big">+0</td><td class="mute">governor 0 long / 0 short across [&#x27;1h&#x27;, &#x27;4h&#x27;, &#x27;12h&#x27;]</td></tr>
+<tr><td>volume_location</td><td class="big">+0</td><td class="mute">price vs windowed value areas and consensus: net 0</td></tr>
+</table>
+<p class="mute small">Equal weights, count-based, never fitted. The bias print and the radar measure different things; when they disagree nothing is reconciled.</p></div>
+<h3>TAOUSDT</h3>
+<div class="card"><h4>Confluence area map</h4>
+<p class="mute">with_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>192.91</td><td class="big">15</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>13</td><td>30d, 7d, prior-day</td></tr>
+<tr><td>195.90</td><td class="big">14</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>9</td><td>7d, 7d<->30d</td></tr>
+<tr><td>183.93</td><td class="big">12</td><td>profile_windowed, structure, vwap_anchored, vwap_rolling</td><td>8</td><td>&mdash;</td></tr>
+<tr><td>201.14</td><td class="big">12</td><td>ss, structure, vwap_anchored, vwap_rolling</td><td>8</td><td>&mdash;</td></tr>
+<tr><td>186.91</td><td class="big">10</td><td>profile_windowed, structure, vwap_anchored, vwap_rolling</td><td>6</td><td>30d<->90d, 90d, 90d<->365d</td></tr>
+<tr><td>218.61</td><td class="big">8</td><td>structure, vwap_anchored, vwap_rolling</td><td>5</td><td>&mdash;</td></tr>
+<tr><td>209.59</td><td class="big">7</td><td>ss, vwap_anchored, vwap_rolling</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>189.74</td><td class="big">6</td><td>profile_windowed, vwap_anchored, vwap_rolling</td><td>3</td><td>7d, 7d<->30d, prior-day</td></tr>
+</table>
+<p class="mute">without_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>192.96</td><td class="big">10</td><td>ss, structure, vwap_anchored</td><td>10</td><td>&mdash;</td></tr>
+<tr><td>195.58</td><td class="big">9</td><td>ss, structure, vwap_anchored</td><td>6</td><td>&mdash;</td></tr>
+<tr><td>201.46</td><td class="big">9</td><td>ss, structure, vwap_anchored</td><td>6</td><td>&mdash;</td></tr>
+<tr><td>183.78</td><td class="big">6</td><td>structure, vwap_anchored</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>218.92</td><td class="big">6</td><td>structure, vwap_anchored</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>209.80</td><td class="big">5</td><td>ss, vwap_anchored</td><td>3</td><td>&mdash;</td></tr>
+<tr><td>227.11</td><td class="big">5</td><td>ss, vwap_anchored</td><td>3</td><td>&mdash;</td></tr>
+<tr><td>162.28</td><td class="big">4</td><td>structure, vwap_anchored</td><td>2</td><td>&mdash;</td></tr>
+</table>
+</div>
+<div class="card"><h4>Lines in the sand</h4><table><tr><th>view</th><th>above</th><th>below</th></tr>
+<tr><td>with_volume</td><td>195.90 <span class="mute">score 14</span></td><td>192.91 <span class="mute">score 15</span></td></tr>
+<tr><td>without_volume</td><td>195.58 <span class="mute">score 9</span></td><td>192.96 <span class="mute">score 10</span></td></tr>
+</table>
+<p class="prose">Volume evidence <b>moves</b> a line here. The two views are printed side by side so the move is visible rather than argued.</p>
+</div>
+<div class="card"><h4>Target clusters &mdash; highest scoring beyond price, at any distance</h4><table><tr><th>side</th><th>mean</th><th>score</th><th>ATR away</th><th>families</th></tr>
+<tr><td>above</td><td>195.90</td><td class="big">14</td><td>0.26</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>201.14</td><td class="big">12</td><td>0.79</td><td>ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>218.61</td><td class="big">8</td><td>2.53</td><td>structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>209.59</td><td class="big">7</td><td>1.63</td><td>ss, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>192.91</td><td class="big">15</td><td>0.03</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>183.93</td><td class="big">12</td><td>0.93</td><td>profile_windowed, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>186.91</td><td class="big">10</td><td>0.63</td><td>profile_windowed, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>189.74</td><td class="big">6</td><td>0.35</td><td>profile_windowed, vwap_anchored, vwap_rolling</td></tr>
+</table><p class="mute small">A far cluster where a VWAP band, a value-area edge and an SS level coincide is a higher-quality target than a lone band. Distance is not quality &mdash; composition is.</p></div>
+<div class="card"><h4>R:R board &mdash; with volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>short</td><td>195.90</td><td>198.11</td><td>189.74</td><td class="big">2.78</td><td>0.221</td><td>0.61</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">caution &amp;mdash; tight stop</span></td></tr>
+<tr><td>long</td><td>192.91</td><td>189.51</td><td>201.14</td><td class="big">2.42</td><td>0.339</td><td>0.82</td><td></td></tr>
+<tr><td>short</td><td>195.90</td><td>198.11</td><td>192.91</td><td class="big">1.35</td><td>0.221</td><td>0.30</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">caution &amp;mdash; tight stop</span></td></tr>
+<tr><td>long</td><td>192.91</td><td>189.51</td><td>195.90</td><td class="big">0.88</td><td>0.339</td><td>0.30</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>R:R board &mdash; without volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>short</td><td>195.58</td><td>198.11</td><td>187.65</td><td class="big">3.13</td><td>0.252</td><td>0.79</td><td></td></tr>
+<tr><td>long</td><td>192.96</td><td>189.51</td><td>201.46</td><td class="big">2.46</td><td>0.344</td><td>0.85</td><td></td></tr>
+<tr><td>short</td><td>195.58</td><td>198.11</td><td>192.96</td><td class="big">1.03</td><td>0.252</td><td>0.26</td><td></td></tr>
+<tr><td>long</td><td>192.96</td><td>189.51</td><td>195.58</td><td class="big">0.76</td><td>0.344</td><td>0.26</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>Trade hypothesis drafts</h4>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span> <span class="chip" style="border-color:#E8853F;color:#E8853F">caution &amp;mdash; tight stop</span> <b>If</b> price reclaims 195.90 (cluster 194.63-197.24, score 14) <b>then</b> watch for continuation toward the next opposing area. <b>Invalidated if</b> price closes back below 198.11.</p>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span>  <b>If</b> price loses 192.91 (cluster 191.46-193.91, score 15) <b>then</b> watch for follow-through toward the next area below. <b>Invalidated if</b> price closes back above 189.51.</p>
+<p class="mute small">Mechanically derived. No sizing, ever.</p></div>
+<div class="card"><h4>Composite bias</h4>
+<p class="big">1 of 5 agree, no dissent &mdash; <b>Neutral-mixed</b></p><table><tr><th>family</th><th>vote</th><th>why</th></tr>
+<tr><td>crowding</td><td class="big">+0</td><td class="mute">funding percentile None</td></tr>
+<tr><td>location</td><td class="big">+0</td><td class="mute">price vs anchored VWAP complex and prior-day value: net 0</td></tr>
+<tr><td>momentum</td><td class="big">-1</td><td class="mute">RSI+MACD+AO on 4h/12h: net -2 of 6 signed</td></tr>
+<tr><td>trend</td><td class="big">+0</td><td class="mute">governor 0 long / 0 short across [&#x27;1h&#x27;, &#x27;4h&#x27;, &#x27;12h&#x27;]</td></tr>
+<tr><td>volume_location</td><td class="big">+0</td><td class="mute">price vs windowed value areas and consensus: net 0</td></tr>
+</table>
+<p class="mute small">Equal weights, count-based, never fitted. The bias print and the radar measure different things; when they disagree nothing is reconciled.</p></div>
+<h3>ZECUSDT</h3>
+<div class="card"><h4>Confluence area map</h4>
+<p class="mute">with_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>456.53</td><td class="big">14</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td><td>9</td><td>30d, 30d<->90d, 7d, 7d<->30d</td></tr>
+<tr><td>467.32</td><td class="big">13</td><td>profile_windowed, ss, vwap_anchored, vwap_rolling</td><td>9</td><td>&mdash;</td></tr>
+<tr><td>475.60</td><td class="big">11</td><td>profile_windowed, ss, vwap_anchored, vwap_rolling</td><td>7</td><td>7d, 7d<->30d, prior-day</td></tr>
+<tr><td>486.71</td><td class="big">11</td><td>ss, structure, vwap_anchored, vwap_rolling</td><td>7</td><td>&mdash;</td></tr>
+<tr><td>540.66</td><td class="big">9</td><td>structure, vwap_anchored, vwap_rolling</td><td>6</td><td>&mdash;</td></tr>
+<tr><td>494.45</td><td class="big">8</td><td>profile_windowed, vwap_anchored</td><td>6</td><td>&mdash;</td></tr>
+<tr><td>512.68</td><td class="big">7</td><td>structure, vwap_anchored, vwap_rolling</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>392.67</td><td class="big">6</td><td>structure, vwap_anchored, vwap_rolling</td><td>3</td><td>&mdash;</td></tr>
+</table>
+<p class="mute">without_volume</p><table><tr><th>mean</th><th>score</th><th>families</th><th>members</th><th>scale confirmed</th></tr>
+<tr><td>486.13</td><td class="big">8</td><td>ss, structure, vwap_anchored</td><td>5</td><td>&mdash;</td></tr>
+<tr><td>454.54</td><td class="big">6</td><td>structure, vwap_anchored</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>469.71</td><td class="big">6</td><td>ss, vwap_anchored</td><td>4</td><td>&mdash;</td></tr>
+<tr><td>478.17</td><td class="big">5</td><td>ss, vwap_anchored</td><td>3</td><td>&mdash;</td></tr>
+<tr><td>642.62</td><td class="big">5</td><td>structure, vwap_anchored</td><td>3</td><td>&mdash;</td></tr>
+<tr><td>249.62</td><td class="big">4</td><td>structure</td><td>3</td><td>&mdash;</td></tr>
+<tr><td>332.86</td><td class="big">4</td><td>structure, vwap_anchored</td><td>2</td><td>&mdash;</td></tr>
+<tr><td>368.71</td><td class="big">4</td><td>structure, vwap_anchored</td><td>2</td><td>&mdash;</td></tr>
+</table>
+</div>
+<div class="card"><h4>Lines in the sand</h4><table><tr><th>view</th><th>above</th><th>below</th></tr>
+<tr><td>with_volume</td><td>494.45 <span class="mute">score 8</span></td><td>456.53 <span class="mute">score 14</span></td></tr>
+<tr><td>without_volume</td><td>495.07 <span class="mute">score 4</span></td><td>486.13 <span class="mute">score 8</span></td></tr>
+</table>
+<p class="prose">Volume evidence <b>moves</b> a line here. The two views are printed side by side so the move is visible rather than argued.</p>
+</div>
+<div class="card"><h4>Target clusters &mdash; highest scoring beyond price, at any distance</h4><table><tr><th>side</th><th>mean</th><th>score</th><th>ATR away</th><th>families</th></tr>
+<tr><td>above</td><td>540.66</td><td class="big">9</td><td>1.59</td><td>structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>494.45</td><td class="big">8</td><td>0.12</td><td>profile_windowed, vwap_anchored</td></tr>
+<tr><td>above</td><td>512.68</td><td class="big">7</td><td>0.70</td><td>structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>above</td><td>578.78</td><td class="big">6</td><td>2.81</td><td>vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>456.53</td><td class="big">14</td><td>1.09</td><td>profile_windowed, ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>467.32</td><td class="big">13</td><td>0.75</td><td>profile_windowed, ss, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>486.71</td><td class="big">11</td><td>0.13</td><td>ss, structure, vwap_anchored, vwap_rolling</td></tr>
+<tr><td>below</td><td>475.60</td><td class="big">11</td><td>0.48</td><td>profile_windowed, ss, vwap_anchored, vwap_rolling</td></tr>
+</table><p class="mute small">A far cluster where a VWAP band, a value-area edge and an SS level coincide is a higher-quality target than a lone band. Distance is not quality &mdash; composition is.</p></div>
+<div class="card"><h4>R:R board &mdash; with volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>short</td><td>494.45</td><td>499.79</td><td>475.60</td><td class="big">3.53</td><td>0.171</td><td>0.60</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">caution &amp;mdash; tight stop</span></td></tr>
+<tr><td>long</td><td>456.53</td><td>445.08</td><td>475.60</td><td class="big">1.67</td><td>0.365</td><td>0.61</td><td></td></tr>
+<tr><td>short</td><td>494.45</td><td>499.79</td><td>486.71</td><td class="big">1.45</td><td>0.171</td><td>0.25</td><td><span class="chip" style="border-color:#E8853F;color:#E8853F">caution &amp;mdash; tight stop</span></td></tr>
+<tr><td>long</td><td>456.53</td><td>445.08</td><td>467.32</td><td class="big">0.94</td><td>0.365</td><td>0.34</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>R:R board &mdash; without volume</h4>
+<p class="mute">NEAR targets</p><table><tr><th>side</th><th>entry</th><th>invalidation</th><th>target</th><th>R:R</th><th>inval ATR</th><th>target ATR</th><th></th></tr>
+<tr><td>long</td><td>486.13</td><td>476.78</td><td>543.70</td><td class="big">6.16</td><td>0.298</td><td>1.84</td><td></td></tr>
+<tr><td>short</td><td>495.07</td><td>511.79</td><td>478.17</td><td class="big">1.01</td><td>0.534</td><td>0.54</td><td></td></tr>
+<tr><td>long</td><td>486.13</td><td>476.78</td><td>495.07</td><td class="big">0.96</td><td>0.298</td><td>0.29</td><td></td></tr>
+<tr><td>short</td><td>495.07</td><td>511.79</td><td>486.13</td><td class="big">0.53</td><td>0.534</td><td>0.29</td><td></td></tr>
+</table>
+<p class="mute small">Ranked WITHIN distance buckets, never globally: a distant target inflates R:R exactly as a knife-edge stop does. This ranks structural quality, not probability.</p></div>
+<div class="card"><h4>Trade hypothesis drafts</h4>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span> <span class="chip" style="border-color:#E8853F;color:#E8853F">caution &amp;mdash; tight stop</span> <b>If</b> price reclaims 494.45 (cluster 492.86-496.08, score 8) <b>then</b> watch for continuation toward the next opposing area. <b>Invalidated if</b> price closes back below 499.79.</p>
+<p class="prose"><span class="chip" style="border-color:#6FA8DC;color:#6FA8DC">DRAFT</span>  <b>If</b> price loses 456.53 (cluster 451.54-460.64, score 14) <b>then</b> watch for follow-through toward the next area below. <b>Invalidated if</b> price closes back above 445.08.</p>
+<p class="mute small">Mechanically derived. No sizing, ever.</p></div>
+<div class="card"><h4>Composite bias</h4>
+<p class="big">2 of 5 agree, no dissent &mdash; <b>Lean-long</b></p><table><tr><th>family</th><th>vote</th><th>why</th></tr>
+<tr><td>crowding</td><td class="big">+0</td><td class="mute">funding percentile None</td></tr>
+<tr><td>location</td><td class="big">+1</td><td class="mute">price vs anchored VWAP complex and prior-day value: net 1</td></tr>
+<tr><td>momentum</td><td class="big">+0</td><td class="mute">RSI+MACD+AO on 4h/12h: net 0 of 6 signed</td></tr>
+<tr><td>trend</td><td class="big">+0</td><td class="mute">governor 0 long / 0 short across [&#x27;1h&#x27;, &#x27;4h&#x27;, &#x27;12h&#x27;]</td></tr>
+<tr><td>volume_location</td><td class="big">+1</td><td class="mute">price vs windowed value areas and consensus: net 1</td></tr>
+</table>
+<p class="mute small">Equal weights, count-based, never fitted. The bias print and the radar measure different things; when they disagree nothing is reconciled.</p></div>
+<div class="foot">ops artifact, never study evidence; no journal reads, no lockbox outcome statistics; confluence measures agreement between tools, not edge<br><br>Confluence scores measure AGREEMENT BETWEEN TOOLS, not edge. R:R measures GEOMETRY, not probability. Whether any of it predicts anything is census work under G-7. No sizing, ever.</div>
