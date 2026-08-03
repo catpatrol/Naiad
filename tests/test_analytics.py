@@ -217,7 +217,9 @@ def test_f_an_7_edge_cases():
 
 def test_f_an_9_cluster_reproducibility():
     reg = L.LevelRegistry()
-    for fam, lab, lv in [("profile", "POC", 100.0), ("structure", "PDH", 100.4),
+    # `profile` -> `profile_windowed` under Amendment 2 §5.1: the windowed
+    # profiles get their own family so no single tool type dominates diversity.
+    for fam, lab, lv in [("profile_windowed", "POC", 100.0), ("structure", "PDH", 100.4),
                          ("vwap_rolling", "R7", 100.8), ("vwap_anchored", "AM", 105.0),
                          ("ss", "Z1", 105.3), ("structure", "PIV", 130.0)]:
         reg.add(fam, lab, lv, "test")

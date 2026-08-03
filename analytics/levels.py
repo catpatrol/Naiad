@@ -22,11 +22,28 @@ weights and were never fitted, per D9 discipline.
 
 from collections import Counter, defaultdict
 
-__all__ = ["FAMILIES", "COLLAPSE_ATR", "CLUSTER_ATR", "LIS_ATR", "FAMILY_CAP",
+__all__ = ["FAMILIES", "VOLUME_FAMILIES", "SCALE_FAMILIES", "WINDOW_ORDER",
+           "COLLAPSE_ATR", "CLUSTER_ATR", "LIS_ATR", "FAMILY_CAP",
            "LevelRegistry", "collapse_same_family", "cluster", "score",
-           "lines_in_sand", "sensitivity"]
+           "lines_in_sand", "sensitivity", "dual_score", "lines_differ"]
 
-FAMILIES = ("vwap_anchored", "vwap_rolling", "profile", "structure", "ss")
+# Amendment 2 §5.1.  `profile` becomes `profile_windowed`, and rolling VWAPs are
+# split from anchored ones, so that no single TOOL TYPE can dominate the
+# diversity term by being prolific.
+FAMILIES = ("vwap_anchored", "vwap_rolling", "profile_windowed", "structure", "ss")
+
+# §5.4.  The two families the volume filter adds.  Every capture is scored twice,
+# once with them and once without, so the operator can see daily whether volume
+# evidence MOVES HIS LINES -- and so the census later inherits months of that
+# exact comparison already rehearsed in display-only form.
+VOLUME_FAMILIES = ("vwap_rolling", "profile_windowed")
+
+# §4.3.  Families whose members are indexed by WINDOW SCALE, and therefore the
+# only ones where two members coinciding means "two timescales agree" rather than
+# "one tool fired twice".
+SCALE_FAMILIES = VOLUME_FAMILIES
+
+WINDOW_ORDER = ("prior-day", "7d", "30d", "90d", "365d")
 
 COLLAPSE_ATR = 0.02
 CLUSTER_ATR = 0.15
@@ -90,16 +107,46 @@ def collapse_same_family(levels, atr, tol=COLLAPSE_ATR):
     return sorted(out, key=lambda d: d["level"])
 
 
+def _window_key(tf):
+    return (WINDOW_ORDER.index(tf) if tf in WINDOW_ORDER else len(WINDOW_ORDER),
+            str(tf))
+
+
 def _merge(group):
+    """Collapse a same-family group into one member, badging scale confirmation.
+
+    §4.3, RATIFIED B-10 OPTION (a).  When two WINDOWS' edges land within the
+    collapse tolerance the merged level carries `scale_confirmed: [7d, 30d]` and
+    displays a badge -- but it does NOT add score, and the mechanism by which it
+    does not is structural rather than a special case: the two levels become ONE
+    member, so the family's member count is unchanged and `score` cannot see
+    them as two voices.
+
+    On the record, because it will look like a lost opportunity later: nested
+    windows SHARE DATA -- the 30-day window CONTAINS the 7-day window -- so they
+    are partially dependent voices.  Partial dependence deserves fractional
+    credit, and the project's law is counted-never-weighted, which forbids
+    fractions.  Conservative scoring plus full visibility is the honest
+    treatment of a voice we cannot weigh.
+
+    Whether price actually reacts differently at scale-confirmed edges is H-VAN,
+    routed to APOLLO.  The badge records the state; it never claims it pays.
+    """
     mean = sum(g["level"] for g in group) / len(group)
-    return {"family": group[0]["family"],
-            "label": group[0]["label"] if len(group) == 1
-                     else " + ".join(sorted({g["label"] for g in group})),
-            "level": mean,
-            "source_layer": group[0]["source_layer"],
-            "timeframe": group[0]["timeframe"],
-            "collapsed_from": [g["label"] for g in group],
-            "collapsed_count": len(group)}
+    out = {"family": group[0]["family"],
+           "label": group[0]["label"] if len(group) == 1
+                    else " + ".join(sorted({g["label"] for g in group})),
+           "level": mean,
+           "source_layer": group[0]["source_layer"],
+           "timeframe": group[0]["timeframe"],
+           "collapsed_from": [g["label"] for g in group],
+           "collapsed_count": len(group)}
+
+    if group[0]["family"] in SCALE_FAMILIES:
+        windows = {g.get("timeframe") for g in group if g.get("timeframe")}
+        if len(windows) > 1:
+            out["scale_confirmed"] = sorted(windows, key=_window_key)
+    return out
 
 
 def cluster(members, atr, tol=CLUSTER_ATR):
@@ -170,6 +217,72 @@ def lines_in_sand(clusters, price, atr, reach=LIS_ATR, fallback_score=4):
             out[side] = dict(best, source="fallback")
         else:
             out[side] = None
+    return out
+
+
+def dual_score(levels, atr, price, tol=CLUSTER_ATR):
+    """§5.4 -- score every capture TWICE, with and without the volume families.
+
+    BOTH are recorded; the report's toggle switches views.  This is the filter's
+    purpose made measurable: the operator sees daily whether volume evidence
+    MOVES HIS LINES, and when the census later asks whether volume confluence
+    changes outcomes, the live instrument will have been rehearsing that exact
+    comparison, in display-only form, for months.
+
+    The excluded set drops `vwap_rolling` and `profile_windowed` at the REGISTRY
+    level, before collapse -- not after clustering.  Removing them later would
+    leave clusters whose means had already been pulled by volume levels, which
+    would not be the without-volume answer at all, merely a relabelled
+    with-volume one.
+    """
+    out = {}
+    for view, drop in (("with_volume", ()), ("without_volume", VOLUME_FAMILIES)):
+        sel = [lv for lv in levels if lv["family"] not in drop]
+        members = collapse_same_family(sel, atr) if sel else []
+        clusters = cluster(members, atr, tol=tol) if members else []
+        out[view] = {
+            "levels_in": len(sel),
+            "members": members,
+            "clusters": clusters,
+            "lines": lines_in_sand(clusters, price, atr) if clusters
+                     else {"above": None, "below": None},
+            "sensitivity": sensitivity(members, atr, price) if members else None,
+            "by_family": {f: sum(1 for lv in sel if lv["family"] == f)
+                          for f in FAMILIES},
+            "excluded_families": list(drop),
+        }
+    out["differ"] = lines_differ(out["with_volume"]["lines"],
+                                 out["without_volume"]["lines"], atr)
+    return out
+
+
+def lines_differ(lines_a, lines_b, atr):
+    """How far apart the two views' lines in the sand are, per side.
+
+    Calibration §9.2 item 6 -- 'the single most interesting number the build will
+    produce'.  Distance is reported in daily-ATR as well as price so it is
+    comparable across assets; `changed` is True when a side moved at all, which
+    is the count the calibration report aggregates.
+    """
+    out = {}
+    for side in ("above", "below"):
+        a, b = (lines_a or {}).get(side), (lines_b or {}).get(side)
+        if a is None and b is None:
+            out[side] = {"changed": False, "delta": 0.0, "delta_atr": 0.0,
+                         "with_volume": None, "without_volume": None}
+            continue
+        if a is None or b is None:
+            out[side] = {"changed": True, "delta": None, "delta_atr": None,
+                         "with_volume": a["mean"] if a else None,
+                         "without_volume": b["mean"] if b else None,
+                         "note": "a line exists in one view only"}
+            continue
+        d = abs(float(a["mean"]) - float(b["mean"]))
+        out[side] = {"changed": d > 0.0, "delta": d,
+                     "delta_atr": (d / atr) if atr else None,
+                     "with_volume": float(a["mean"]),
+                     "without_volume": float(b["mean"])}
+    out["any_changed"] = any(out[s]["changed"] for s in ("above", "below"))
     return out
 
 
