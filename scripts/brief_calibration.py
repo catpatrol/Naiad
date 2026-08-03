@@ -227,6 +227,99 @@ def calibrate(date, slot=None):
         "purpose": "R-1 stage C.4 -- the floor is a v1 PLACEHOLDER and is "
                    "re-ratified against this distribution, not against a guess"}
 
+
+    # ---- item 6 RE-BUCKETED (cycle 4). Cycle 2 reported "a line moved on 20 of
+    # 20 sides" with a MEDIAN move of 0.127 daily-ATR -- BELOW one cluster width
+    # (CLUSTER_ATR = 0.15). Most of those "moves" were refinements WITHIN a
+    # cluster, not relocations to different structure. Reporting them together
+    # overstated the result, and the split is the honest headline.
+    refine, relocate, oneview = 0, 0, 0
+    for sym, a in assets.items():
+        d = a["confluence"]["differ"]
+        for side in ("above", "below"):
+            s_ = d[side]
+            if not s_["changed"]:
+                continue
+            da = s_.get("delta_atr")
+            if da is None:
+                oneview += 1
+            elif abs(da) < L.CLUSTER_ATR:
+                refine += 1
+            else:
+                relocate += 1
+    out["item6_rebucketed"] = {
+        "refinements_lt_cluster_width": refine,
+        "relocations_ge_cluster_width": relocate,
+        "line_exists_in_one_view_only": oneview,
+        "cluster_width_atr": L.CLUSTER_ATR,
+        "why": "a move smaller than one cluster tolerance is the same structure "
+               "re-centred, not different structure; counting it as a 'move' "
+               "overstates what the volume filter did",
+        "honest_headline": f"{relocate} relocation(s) and {oneview} "
+                           f"one-view-only line(s); {refine} refinement(s) "
+                           f"within a cluster width"}
+
+    # ---- D.8 level distance from price, BUCKETED, by family. DESCRIBE, DO NOT
+    # FILTER: the withdrawn +/-3 ATR admission rule judged levels by whether they
+    # could cluster NEAR price -- an entry-side test -- while targets are far from
+    # price by definition. One sigma of BTC's 365d RVWAP is 11.4 daily ATR.
+    BUCKETS = (("<1.5 (LIS-eligible)", 0, 1.5), ("1.5-3", 1.5, 3), ("3-6", 3, 6),
+               ("6-12", 6, 12), (">12", 12, float("inf")))
+    dist = {b[0]: {f: 0 for f in L.FAMILIES} for b in BUCKETS}
+    for sym, a in assets.items():
+        price, atr = a["price"], a["daily_atr"]
+        for cl in a["confluence"]["with_volume"]["clusters"]:
+            for m in cl["members"]:
+                d_ = abs(m["level"] - price) / atr if atr else None
+                if d_ is None:
+                    continue
+                for name, lo, hi in BUCKETS:
+                    if lo <= d_ < hi:
+                        dist[name][m["family"]] += 1
+                        break
+    out["d8_level_distance_buckets"] = {
+        "buckets": dist,
+        "purpose": "KNOW the shape, not exclude anything; D.4's admission filter "
+                   "is WITHDRAWN"}
+
+    # ---- D.8 how often price sits beyond each sigma, per asset
+    beyond = {}
+    for sym, a in assets.items():
+        rows = (a.get("stretch") or {}).get("rows") or []
+        live = [r for r in rows if r.get("sigma_position") is not None]
+        beyond[sym] = {
+            "n_vwaps": len(live),
+            "beyond_1s": sum(1 for r in live if abs(r["sigma_position"]) >= 1),
+            "beyond_2s": sum(1 for r in live if abs(r["sigma_position"]) >= 2),
+            "beyond_3s": sum(1 for r in live if abs(r["sigma_position"]) >= 3),
+            "thin_sample": sum(1 for r in live if r.get("thin_sample")),
+            "max_sigma": max((r["sigma_position"] for r in live), default=None),
+            "min_sigma": min((r["sigma_position"] for r in live), default=None)}
+    out["d8_sigma_excursion_frequency"] = beyond
+
+    # ---- D.8 reversion-draft R:R by target-distance bucket
+    import sys as _sys
+    _sys.path.insert(0, str(ROOT / "scripts"))
+    import brief_render as _BR
+    tb = {n: [] for n, _, _ in _BR.TARGET_BUCKETS}
+    for sym, a in assets.items():
+        atr = a["daily_atr"]
+        rr = (a.get("decision_instrument") or {}).get("rr_ranking") or {}
+        for r in rr.get("board") or []:
+            if r.get("target") is None or not atr:
+                continue
+            b = _BR.target_bucket(abs(r["target"] - r["entry"]) / atr)
+            if b:
+                tb[b].append(r["rr"])
+    out["d8_rr_by_target_bucket"] = {
+        k: {"n": len(v), "min": min(v) if v else None,
+            "median": statistics.median(v) if v else None,
+            "max": max(v) if v else None}
+        for k, v in tb.items()}
+    out["d8_rr_by_target_bucket"]["why"] = (
+        "ranked WITHIN buckets, never globally: a distant target inflates R:R "
+        "exactly as a knife-edge stop does (the mirror of R-1)")
+
     # ---- runtime
     out["runtime"] = {"total_seconds": doc.get("runtime_seconds"),
                       "by_layer": doc.get("runtime_by_layer"),

@@ -8,74 +8,74 @@
 
 **A line in the sand moved on 10 of 10 assets** (20 of 20 individual sides).
 
-Where a line moved and both views had one, the move was **0.127 daily-ATR at the median** (min 0.005, p90 0.681, max 0.946, n=20).
+Where a line moved and both views had one, the move was **0.199 daily-ATR at the median** (min 0.005, p90 0.945, max 1.283, n=20).
 
 | asset | side | with volume | without volume | Δ ATR |
 |---|---|---|---|---|
-| BTCUSDT | above | 63,803.92 | 63,851.58 | 0.028 |
-| BTCUSDT | below | 63,199.60 | 63,302.82 | 0.061 |
-| ETHUSDT | above | 1,931.93 | 1,885.38 | 0.681 |
-| ETHUSDT | below | 1,868.32 | 1,868.88 | 0.008 |
-| FARTCOINUSDT | above | 0.13 | 0.13 | 0.178 |
+| BTCUSDT | above | 63,892.83 | 63,811.24 | 0.049 |
+| BTCUSDT | below | 62,859.01 | 63,273.95 | 0.252 |
+| ETHUSDT | above | 1,880.00 | 1,877.84 | 0.032 |
+| ETHUSDT | below | 1,860.69 | 1,844.45 | 0.241 |
+| FARTCOINUSDT | above | 0.13 | 0.13 | 0.182 |
 | FARTCOINUSDT | below | 0.12 | 0.13 | 0.220 |
-| HYPEUSDT | above | 52.70 | 53.24 | 0.165 |
-| HYPEUSDT | below | 51.85 | 52.56 | 0.217 |
-| JTOUSDT | above | 0.49 | 0.51 | 0.313 |
-| JTOUSDT | below | 0.48 | 0.49 | 0.168 |
-| LITUSDT | above | 2.07 | 2.05 | 0.089 |
-| LITUSDT | below | 2.02 | 1.85 | 0.844 |
-| NEARUSDT | above | 1.76 | 1.71 | 0.488 |
-| NEARUSDT | below | 1.67 | 1.68 | 0.072 |
-| SOLUSDT | above | 73.86 | 73.84 | 0.005 |
-| SOLUSDT | below | 73.17 | 73.19 | 0.008 |
-| TAOUSDT | above | 195.66 | 195.44 | 0.021 |
-| TAOUSDT | below | 192.88 | 192.93 | 0.005 |
-| ZECUSDT | above | 494.12 | 494.56 | 0.014 |
-| ZECUSDT | below | 456.50 | 486.13 | 0.946 |
+| HYPEUSDT | above | 52.64 | 56.88 | 1.283 |
+| HYPEUSDT | below | 51.85 | 52.57 | 0.218 |
+| JTOUSDT | above | 0.49 | 0.51 | 0.316 |
+| JTOUSDT | below | 0.48 | 0.49 | 0.198 |
+| LITUSDT | above | 2.07 | 2.05 | 0.100 |
+| LITUSDT | below | 2.02 | 1.83 | 0.945 |
+| NEARUSDT | above | 1.75 | 1.71 | 0.380 |
+| NEARUSDT | below | 1.66 | 1.68 | 0.138 |
+| SOLUSDT | above | 74.37 | 74.43 | 0.024 |
+| SOLUSDT | below | 73.61 | 73.08 | 0.200 |
+| TAOUSDT | above | 195.90 | 195.58 | 0.032 |
+| TAOUSDT | below | 192.91 | 192.96 | 0.005 |
+| ZECUSDT | above | 494.45 | 495.07 | 0.020 |
+| ZECUSDT | below | 456.53 | 486.13 | 0.945 |
 
 *whether volume evidence MOVES THE OPERATOR'S LINES. It is display-only; whether the move helps is census work under G-7.*
 
 ## Item 1 — registry size by family
 
-v1.1 reference: 46-62 (contract §5.3, not recomputed) · contract expectation ~180-200 (§5.3) · measured min 93 / median 109.0 / max 117
+v1.1 reference: 46-62 (contract §5.3, not recomputed) · contract expectation ~180-200 (§5.3) · measured min 126 / median 148.0 / max 173
 
 | asset | total | anchored | rolling | profile | structure | ss |
 |---|---|---|---|---|---|---|
-| BTCUSDT | 116 | 21 | 28 | 30 | 13 | 24 |
-| ETHUSDT | 104 | 21 | 28 | 30 | 13 | 12 |
-| FARTCOINUSDT | 108 | 21 | 28 | 30 | 13 | 16 |
-| HYPEUSDT | 105 | 21 | 28 | 27 | 13 | 16 |
-| JTOUSDT | 116 | 21 | 28 | 36 | 13 | 18 |
-| LITUSDT | 93 | 21 | 21 | 22 | 13 | 16 |
-| NEARUSDT | 117 | 21 | 28 | 39 | 13 | 16 |
-| SOLUSDT | 111 | 21 | 28 | 33 | 13 | 16 |
-| TAOUSDT | 110 | 21 | 28 | 30 | 13 | 18 |
-| ZECUSDT | 105 | 21 | 28 | 33 | 13 | 10 |
+| BTCUSDT | 165 | 49 | 28 | 30 | 34 | 24 |
+| ETHUSDT | 157 | 49 | 28 | 33 | 35 | 12 |
+| FARTCOINUSDT | 143 | 42 | 28 | 30 | 27 | 16 |
+| HYPEUSDT | 140 | 42 | 28 | 27 | 27 | 16 |
+| JTOUSDT | 153 | 42 | 28 | 36 | 29 | 18 |
+| LITUSDT | 126 | 42 | 21 | 22 | 25 | 16 |
+| NEARUSDT | 153 | 42 | 28 | 39 | 28 | 16 |
+| SOLUSDT | 173 | 49 | 28 | 42 | 38 | 16 |
+| TAOUSDT | 141 | 42 | 28 | 30 | 23 | 18 |
+| ZECUSDT | 140 | 42 | 28 | 33 | 27 | 10 |
 
 ## Item 2 — score distribution and the family cap
 
-min 2 · median 2.0 · p90 7 · max 17 over 446 clusters.
+min 2 · median 2 · p90 8 · max 18 over 599 clusters.
 
-The cap (=3) binds in **19 of 735** family-in-cluster opportunities (2.59%). the cap binds whenever one family contributes more members than FAMILY_CAP to a single cluster -- that is it doing its job, stopping one prolific tool manufacturing agreement with itself
+The cap (=3) binds in **28 of 965** family-in-cluster opportunities (2.9%). the cap binds whenever one family contributes more members than FAMILY_CAP to a single cluster -- that is it doing its job, stopping one prolific tool manufacturing agreement with itself
 
 ## Item 3 — line-in-the-sand stability across tolerance
 
 | asset | stable? | above spread | below spread |
 |---|---|---|---|
-| BTCUSDT | NO | 65.61 | 87.68 |
-| ETHUSDT | NO | 21.35 | 3.89 |
+| BTCUSDT | NO | 1,034.65 | 859.19 |
+| ETHUSDT | NO | 6.40 | 5.90 |
 | FARTCOINUSDT | NO | 0.00 | 0.00 |
-| HYPEUSDT | NO | 4.23 | 0.45 |
-| JTOUSDT | NO | 0.01 | 0.01 |
+| HYPEUSDT | NO | 4.09 | 0.51 |
+| JTOUSDT | NO | 0.02 | 0.01 |
 | LITUSDT | NO | 0.04 | 0.02 |
-| NEARUSDT | NO | 0.02 | 0.02 |
-| SOLUSDT | NO | 0.87 | 0.29 |
-| TAOUSDT | NO | 2.49 | 6.19 |
-| ZECUSDT | NO | 1.63 | 14.99 |
+| NEARUSDT | NO | 0.03 | 0.03 |
+| SOLUSDT | NO | 1.14 | 0.30 |
+| TAOUSDT | NO | 2.55 | 6.21 |
+| ZECUSDT | NO | 1.39 | 14.97 |
 
 ## Item 4 — family composition of the top-3 areas
 
-Largest-family tally across all top-3 areas: `{'ss': 14, 'profile_windowed': 10, 'vwap_anchored': 5, 'vwap_rolling': 1}`
+Largest-family tally across all top-3 areas: `{'ss': 10, 'structure': 2, 'vwap_anchored': 7, 'vwap_rolling': 2, 'profile_windowed': 9}`
 
 *does vwap_rolling or profile_windowed DOMINATE the top areas? if so the family split did not go far enough (§9.2 item 4)*
 
@@ -91,23 +91,23 @@ Overall: `{'nested_inside': 15, 'overlapping': 10, 'disjoint_below': 2, 'disjoin
 
 | | bytes |
 |---|---|
-| capture (one slot) | 1,425,913 |
-| partition `snapshots` | 17,535 |
-| partition `levels` | 31,995 |
-| partition `areas` | 13,597 |
-| partitions per day | 63,127 |
+| capture (one slot) | 1,879,133 |
+| partition `snapshots` | 17,538 |
+| partition `levels` | 43,793 |
+| partition `areas` | 13,636 |
+| partitions per day | 74,967 |
 
-Projected annual at 3 slots/day: **captures 1561.4 MB + partitions 23.0 MB = 1584.4 MB/yr** against a contract estimate of 150-250 (§8.2) MB.
+Projected annual at 3 slots/day: **captures 2057.7 MB + partitions 27.4 MB = 2085.0 MB/yr** against a contract estimate of 150-250 (§8.2) MB.
 
 ## Extra — invalidation distance distribution (R-1, stage C.4)
 
-floor **0.25** · min 0.186 · p25 0.256 · median 0.273 · p75 0.285 · max 0.321 (n=40)
+floor **0.25** · min 0.171 · p25 0.339 · median 0.352 · p75 0.382 · max 0.425 (n=40)
 
-30 rows ranked, 10 excluded as too tight. R-1 stage C.4 -- the floor is a v1 PLACEHOLDER and is re-ratified against this distribution, not against a guess
+40 rows ranked, 0 excluded as too tight. R-1 stage C.4 -- the floor is a v1 PLACEHOLDER and is re-ratified against this distribution, not against a guess
 
 ## Runtime
 
-One full capture: **199.16s** (one capture must stay well under ~15 min; three slots per day).
+One full capture: **217.41s** (one capture must stay well under ~15 min; three slots per day).
 
 ---
 
