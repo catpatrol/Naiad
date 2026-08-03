@@ -40,9 +40,51 @@ from pathlib import Path
 # to exercise the difference.
 ANALYTICS_VERSION = "1.2.0"
 
+# --------------------------------------------------------------------------
+# THE SEALED LOCKBOX -- disclosure, not enforcement.
+#
+# [2024-07-01, 2025-10-06) is the study holdout.  OPERATOR RULING 2026-08-03:
+# the seal governs SCORED OUTCOME EVIDENCE -- replay journals, outcome
+# statistics, anything the census may later grade -- and not raw price inside a
+# display-only trailing indicator window.  The G-1 code guard sits on the replay
+# path (LEDGER §220) and is untouched by anything here.
+#
+# The ruling was granted ON CONDITION that the overlap is DISCLOSED, so this is
+# a disclosure utility and deliberately not a refusal: a brief that silently
+# read across the holdout would be exactly what the condition forbids.
+#
+# It bites in one place only.  Measured 2026-08-03: of {7, 30, 90, 365}d, only
+# the 365d window reaches back into the holdout, by 64 days, and that overlap
+# self-clears on 2026-10-06.  7/30/90d are clear by construction and will stay
+# clear.
+# --------------------------------------------------------------------------
+
+LOCKBOX_START_MS = 1_719_792_000_000        # 2024-07-01T00:00:00Z
+LOCKBOX_END_MS = 1_759_708_800_000          # 2025-10-06T00:00:00Z, exclusive
+
+
+def lockbox_overlap(start_ms, end_ms):
+    """Disclosure record for a window spanning [start_ms, end_ms].
+
+    Returned by every windowed layer and printed in every capture.  `days` is 0
+    when the window is clear, which is the case that must stay boring.
+    """
+    lo = max(int(start_ms), LOCKBOX_START_MS)
+    hi = min(int(end_ms), LOCKBOX_END_MS)
+    ms = max(hi - lo, 0)
+    return {"intersects": ms > 0,
+            "overlap_ms": ms,
+            "overlap_days": round(ms / 86_400_000, 3),
+            "lockbox": [LOCKBOX_START_MS, LOCKBOX_END_MS],
+            "basis": "operator ruling 2026-08-03: the seal governs scored "
+                     "outcome evidence, not raw price in a display-only "
+                     "trailing window; disclosed, never silent"}
+
+
 _PKG = Path(__file__).resolve().parent
 _MODULES = ("__init__.py", "momentum.py", "vwap.py", "volatility.py",
-            "profile.py", "structure.py", "levels.py", "stats.py", "parity.py")
+            "profile.py", "structure.py", "levels.py", "stats.py", "parity.py",
+            "nesting.py")
 
 
 def analytics_sha() -> str:
@@ -119,6 +161,26 @@ CONVENTIONS = {
                        "warmup": "n/a -- describes the slice it is handed"},
     "naked_poc_registry": {"recipe": "POCs untested over (poc_index, as_of_index]",
                            "causality": "causal", "warmup": "n/a"},
+    "low_volume_nodes": {"recipe": "contiguous runs of profile rows below "
+                                   "lvn_threshold x the window's MEDIAN row "
+                                   "volume, >= lvn_min_rows wide, INTERIOR only "
+                                   "(a run touching either extreme is discarded); "
+                                   "emits midpoint as a level and edges as a band "
+                                   "(Amendment 2 §3.4)",
+                         "causality": "endpoint_only",
+                         "warmup": "n/a -- describes the histogram it is handed"},
+    # nesting -- Amendment 2 §4
+    "va_nesting": {"recipe": "per adjacent window pair: state in {nested_inside, "
+                             "nested_outside, overlapping, disjoint_above, "
+                             "disjoint_below}; overlap_frac = |intersection| / "
+                             "|SHORTER VA|; consensus_band = [max(VAL), min(VAH)] "
+                             "when they intersect; gap_band when disjoint, edges "
+                             "flagged facing_edge",
+                   "causality": "endpoint_only",
+                   "warmup": "n/a -- describes the two value areas it is handed"},
+    "price_location": {"recipe": "inside_consensus | inside_short_only | "
+                                 "inside_long_only | in_gap | outside_all",
+                       "causality": "endpoint_only", "warmup": "n/a"},
     # structure
     "pivots": {"recipe": "pivot(5,5), strict extreme, unique within the window",
                "causality": "lag:5", "warmup": "left"},

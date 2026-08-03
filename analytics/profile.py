@@ -8,9 +8,30 @@ chip -- §II.10 G10 keeps those chips on the profile layers.
 
 import numpy as np
 
-__all__ = ["volume_profile", "naked_poc_registry", "APPROXIMATION"]
+__all__ = ["volume_profile", "windowed_profile", "naked_poc_registry",
+           "low_volume_nodes",
+           "APPROXIMATION", "PROFILE_ROWS", "VALUE_AREA",
+           "LVN_THRESHOLD", "LVN_MIN_ROWS", "WINDOW_SUBSTRATE"]
 
 APPROXIMATION = "volume spread uniformly across each bar's range (not tick data)"
+
+# Amendment 2 §3.3, all v1 PLACEHOLDERS to be re-ratified against the calibration
+# report and roughly a week of live use.  Printed in every capture.
+PROFILE_ROWS = 120          # rows across each window's range
+VALUE_AREA = 0.70           # fraction of window volume
+
+# §3.4.  An LVN is a price shelf where the histogram is near-empty -- the market
+# moved through without doing business, and such gaps tend to be revisited.
+LVN_THRESHOLD = 0.25        # x the window's MEDIAN row volume
+LVN_MIN_ROWS = 3            # contiguous rows
+
+# §3.3 substrate tiers: precision where short-window levels need it, broad
+# structure elsewhere without ballooning compute.  Probed and confirmed present
+# in the estate for all ten assets (2026-08-03): 1m/5m/15m are all stored, so
+# nothing here is silently resampled from a coarser interval.  prior-day is not
+# named in the §3.3 table; it is shorter than 7d and takes the finest substrate.
+WINDOW_SUBSTRATE = {"prior-day": "1m", "7d": "1m", "30d": "5m",
+                    "90d": "15m", "365d": "15m"}
 
 
 def _arr(x):
@@ -77,6 +98,128 @@ def volume_profile(high, low, volume, bins=100, value_area=0.70):
             "val": float(centers[lo_i]),
             "edges": edges, "hist": hist,
             "approximation": APPROXIMATION}
+
+
+def windowed_profile(open_time_ms, high, low, volume, window_days, as_of_ms,
+                     bins=PROFILE_ROWS, value_area=VALUE_AREA,
+                     substrate=None, min_bars=2):
+    """A TRAILING windowed volume profile (§3.1, §3.3).
+
+    Trailing, not anchored: the last N days as of `as_of_ms`, recomputed each
+    capture, sliding forward with the clock.  THESE ARE NOT the parked
+    judgment-merged composites of D-B12 -- a composite encodes a decision about
+    which balance areas belong together; a trailing window encodes a clock.
+
+    Window membership matches the RVWAP convention in `vwap.rolling_vwap` so the
+    two layers describe the same span: bar_open_time > as_of_ms - W, and bars
+    after `as_of_ms` are excluded outright.  Sharing the convention is the point
+    -- a 30d VWAP and a 30d profile disagreeing about which bars are "the last
+    30 days" would be an invisible and permanent source of level drift.
+
+    `substrate` is carried through untouched and returned, because §3.3 requires
+    the substrate ACTUALLY USED to be printed in every capture.  It is not used
+    in any computation; passing it here is what stops the printed provenance and
+    the real one from drifting apart.
+
+    Returns the volume_profile dict plus window provenance, with `warming=True`
+    and NO numbers when the supplied data does not span the window -- a 365d
+    profile computed on 200 days is a 200-day profile wearing the wrong label
+    (§3.2).
+    """
+    t = np.asarray(open_time_ms, dtype="int64")
+    h, l, v = _arr(high), _arr(low), _arr(volume)
+    W = int(round(float(window_days) * 86_400_000))
+    as_of = int(as_of_ms)
+    start = as_of - W
+
+    from analytics import lockbox_overlap          # disclosure, not enforcement
+
+    prov = {"window_days": float(window_days), "window_start_ms": start,
+            "as_of_ms": as_of, "bins": int(bins), "value_area": float(value_area),
+            "substrate": substrate, "approximation": APPROXIMATION,
+            "lockbox_overlap": lockbox_overlap(start, as_of)}
+
+    sel = (t > start) & (t <= as_of)
+    n_sel = int(np.count_nonzero(sel))
+
+    # Warm-up honesty (§3.2), and it is not optional: the check is whether the
+    # DATA reaches back to the window start, not whether enough bars were
+    # selected.  An asset listed inside the window has plenty of bars and still
+    # cannot honestly claim the window.
+    covered = bool(t.size) and int(t[0]) <= start
+    if not covered or n_sel < min_bars:
+        return {"poc": np.nan, "vah": np.nan, "val": np.nan,
+                "edges": np.array([]), "hist": np.array([]),
+                "lvns": [], "warming": True, "bars": n_sel,
+                "history_start_ms": int(t[0]) if t.size else None, **prov}
+
+    vp = volume_profile(h[sel], l[sel], v[sel], bins=bins, value_area=value_area)
+    vp["lvns"] = low_volume_nodes(vp["edges"], vp["hist"])
+    vp["warming"] = False
+    vp["bars"] = n_sel
+    vp["history_start_ms"] = int(t[0])
+    vp.update(prov)
+    return vp
+
+
+def low_volume_nodes(edges, hist, threshold=LVN_THRESHOLD, min_rows=LVN_MIN_ROWS):
+    """Low-volume nodes: near-empty shelves INSIDE the traded range (§3.4).
+
+    A contiguous run of profile rows whose volume is below `threshold` x the
+    window's MEDIAN row volume, at least `min_rows` wide, lying inside the
+    window's traded range -- not at its extremes.  Each node emits its midpoint
+    as a level and its edges as a band.
+
+    WHY THE MEDIAN AND NOT THE MEAN.  A volume profile is strongly peaked at the
+    POC; the mean is dragged up by that peak, so a mean-relative threshold would
+    classify ordinary rows as "low volume" on any well-formed profile.  The
+    median is the typical row, which is what "near-empty" is meant to be
+    relative to.
+
+    WHY INTERIOR ONLY.  The rows at a window's extremes are always thin -- price
+    visited them briefly by construction.  Calling those LVNs would emit two
+    guaranteed levels per window per asset that carry no information, and with
+    five windows that is ten manufactured levels inflating every score.  A run
+    touching either end of the histogram is therefore discarded, which is also
+    why an all-empty profile yields nothing rather than one enormous node.
+
+    This is the mechanical equivalent of the "single print from April 13th"
+    class of level the operator's manual reviews lean on.  TPO single prints and
+    judgment-composites remain parked.
+    """
+    e = _arr(edges)
+    v = _arr(hist)
+    out = []
+    if v.size == 0 or e.size != v.size + 1:
+        return out
+    live = v[np.isfinite(v)]
+    if live.size == 0:
+        return out
+    med = float(np.median(live))
+    if not np.isfinite(med) or med <= 0:
+        return out
+
+    cut = threshold * med
+    thin = np.isfinite(v) & (v < cut)
+    n = len(v)
+    i = 0
+    while i < n:
+        if not thin[i]:
+            i += 1
+            continue
+        j = i
+        while j + 1 < n and thin[j + 1]:
+            j += 1
+        # interior only -- a run touching either extreme is discarded
+        if i > 0 and j < n - 1 and (j - i + 1) >= min_rows:
+            lo, hi = float(e[i]), float(e[j + 1])
+            out.append({"low": lo, "high": hi, "mid": (lo + hi) / 2.0,
+                        "rows": int(j - i + 1),
+                        "row_volume_median": med,
+                        "threshold_volume": float(cut),
+                        "approximation": APPROXIMATION})
+        i = j + 1
+    return out
 
 
 def naked_poc_registry(period_pocs, high, low, as_of_index):
