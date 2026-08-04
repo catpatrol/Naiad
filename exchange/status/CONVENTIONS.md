@@ -128,6 +128,19 @@ and the PowerShell CLI both qualify; the Code tab's default working directory ca
 **Why this exists:** four routing failures on 2026-07-26. The three that carried the ENVIRONMENT
 label were all halted by it. Zero damage.
 
+### 2.1b · Every paste-go carries a ROLLBACK line
+*(Adopted 2026-08-04.)*
+
+Above the code block, alongside the routing line, state in one sentence **exactly how to undo what
+this paste does** — the command, or the plain statement that it cannot be undone.
+
+Most repo edits roll back with `git checkout -- <paths>`; a pushed commit with `git revert <sha>`.
+Anything touching the data estate, an archive, or a deletion is **not** reversible and must say so
+in those words, so the operator reads the risk before running rather than after.
+
+**Why:** four halts and one near-miss on irreversible deletion in eight days. A paste that cannot
+state its own undo has not been thought through to the end.
+
 ### 2.2 Exact paste-ready text — MOVED FROM MEMORY #7, full text
 *(Ratified 2026-07-19.)*
 
