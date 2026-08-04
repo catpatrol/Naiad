@@ -223,7 +223,56 @@ snapshot as the intended second independent capture. Recorded here so the limit 
 this session's verification is explicit rather than assumed. [verified as a scope
 limit; not a defect]
 
-### FINDING 3 (informational) · Pre-existing untracked files at repo root
+### FINDING 3 (material) · `scripts/publish_exchange.py` has no command-line interface — running it directly does nothing
+
+The commissioning contract instructed, as step 2 after the block:
+
+```
+C:\venvs\naiad\Scripts\python.exe scripts\publish_exchange.py
+```
+
+That command **runs, prints nothing, exits 0, and publishes nothing.** It was run
+first exactly as written, and the outcome was silent success with the report still
+untracked — the most dangerous possible failure mode, because exit code 0 with no
+output reads as "it worked".
+
+Cause, read from the file this session [verified]: `scripts/publish_exchange.py` is
+a **library module**, not a runnable script. It is 187 lines defining `guard()`,
+`publish()` and `report_lines()`, and it has **no `if __name__ == "__main__"` block
+and no argument parser**. Its own docstring says so: *"Both scripts/daily_routine.py
+and scripts/backup_estate.py call publish() as their final step, so there is one
+guard to audit rather than two copies to drift."* Executing the module top-to-top
+merely defines those functions and exits.
+
+The ratified call site, read from `scripts/daily_routine.py:1048` [verified]:
+
+```python
+pub = publish_exchange.publish(ROOT, today)
+```
+
+**What the builder did instead, and why it is not an improvisation.** The publish
+itself was authorized and required (standing handback rule, memory entry #28;
+ruling W1 Q-2 A; and G-5(a) for this paste). Only the *invocation* named in the
+contract was wrong. Rather than substitute a hand-rolled `git add`/`commit`/`push` —
+which would bypass the scope guard that exists specifically so evidence cannot ride
+an auto-push — the builder called **the same `publish()` function through the same
+guard, with the same signature the daily routine uses.** The mechanism is identical
+to the ratified one; only the entry point differs. Result in §10.
+
+This is a Class A (machinery-content) instance in the commissioning contract: an
+assertion about what a file contains, made without reading it. Reported so ATHENA
+can correct the instruction in every future paste. The correct paste-ready line is:
+
+```
+C:\venvs\naiad\Scripts\python.exe -c "import sys; from pathlib import Path; R=Path('.').resolve(); sys.path.insert(0,str(R/'scripts')); import publish_exchange as p; r=p.publish(R,'YYYY-MM-DD'); print(r['status'], r['commit'], r['pushed'])"
+```
+
+Alternatively — and this is ATHENA's call, not the builder's — `publish_exchange.py`
+could be given a small `__main__` block so the obvious command works. It is raised,
+not done, because adding a CLI to a shared guard module is a design change to
+ratified infrastructure and was outside this contract's scope.
+
+### FINDING 4 (informational) · Pre-existing untracked files at repo root
 
 `git status` shows six untracked files at the repository root that predate this
 session and were left untouched: `Cascade Rewire.html`,
@@ -259,7 +308,9 @@ report file was written, before `scripts/publish_exchange.py` ran.
 | `docs/memory/claude_project_memory_2026-08-03.md` | yes (48,278 B) | tracked | yes — `a58b2bb` | yes — `origin/v12-v1-census` | **GitHub only.** Inside `WORKFLOW_SOURCES` but the newest archive (`naiad_workflow_2026-08-02.zip`) predates it — see Finding 1 |
 | `exchange/reports/SESSION_SUMMARY_ATHENA_2026-08-03_MEMORY-SCOPING.md` | yes (9,514 B) | tracked | yes — `a58b2bb` | yes — `origin/v12-v1-census` | **GitHub only.** Same gap as above |
 | `exchange/reports/ACCEPTANCE_MEMORY-RESTRUCTURE_2026-08-03.md` | yes (2,876 B) | tracked | yes — `a58b2bb` | yes — `origin/v12-v1-census` | **GitHub only.** Same gap as above |
-| `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-03_T4-SNAPSHOT.md` (this file) | yes | untracked at time of writing | **not committed** at time of writing | **no** at time of writing — `scripts/publish_exchange.py` runs next; see §10 | **NOT PROTECTED** at time of writing |
+| `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-03_T4-SNAPSHOT.md` (this file) | yes | tracked | yes — first copy in `5b32223`; these corrected bytes in the follow-up publish, §12 | yes — `origin/v12-v1-census` | **GitHub only.** Same `--workflow` gap as above |
+| `exchange/DIGEST.md` — *not authored by this session* | yes | tracked | modified before this session; published in `5b32223` by the all-of-`exchange/**` staging | yes — `origin/v12-v1-census` | **GitHub only** |
+| `exchange/status/LEDGER_HERMES.md` — *not authored by this session* | yes | tracked | modified before this session; published in `5b32223` by the all-of-`exchange/**` staging | yes — `origin/v12-v1-census` | **GitHub only** |
 | `…\scratchpad\t4_snapshot.sh` (contract block, executed copy) | yes | **outside the repository** — session scratchpad, not under version control | n/a — intentionally never committed | n/a | **NOT PROTECTED**, by design. Ephemeral; the contract text itself is preserved in ATHENA's conversation record |
 
 Reminders that belong with this table: committed ≠ pushed; pushed ≠ backed up; and a
@@ -268,13 +319,54 @@ file that "isn't visible on GitHub" is usually the browser opening the default b
 
 ---
 
-## 10 · Publish step
+## 10 · Publish step — result
 
-`scripts/publish_exchange.py` was run after this file was written, per the standing
-handback rule, so that this report rides the guarded `exchange/**` publish. Its
-result is stated on screen in the session output and appended below by the operator's
-transcript rather than pre-declared here — this file cannot honestly report the
-outcome of a command that runs after it is written.
+Two publish attempts, both recorded.
+
+**Attempt 1 — the command as the contract wrote it.**
+`C:\venvs\naiad\Scripts\python.exe scripts\publish_exchange.py` → no output, exit
+code 0, **nothing published**; `git status` still showed this report as untracked.
+See Finding 3 for the cause (the file is a library module with no CLI).
+
+**Attempt 2 — the same guard, through its ratified entry point.**
+`publish_exchange.publish(ROOT, '2026-08-03')`, the identical call
+`scripts/daily_routine.py:1048` makes. Output as printed:
+
+```
+publish: committed 5b32223 (3 path(s)) and pushed to origin/v12-v1-census
+
+status  : PUBLISHED
+branch  : v12-v1-census
+commit  : 5b32223
+pushed  : True
+error   : None
+offenders: []
+staged  :
+    exchange/DIGEST.md
+    exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-03_T4-SNAPSHOT.md
+    exchange/status/LEDGER_HERMES.md
+```
+
+**PUBLISH SUCCEEDED.** Commit `5b32223`, pushed to `origin/v12-v1-census`. The scope
+guard reported **0 offenders** — every staged path began with `exchange/`, so the
+evidence-never-auto-publishes rule was satisfied, not bypassed.
+
+**Disclosure — two files rode along that this session did not author.** The guard
+stages *all* of `exchange/**` by design, so the publish also carried
+`exchange/DIGEST.md` and `exchange/status/LEDGER_HERMES.md`, both of which were
+already modified in the working tree before this session started (they appear as
+modified in the pre-session `git status` quoted in Finding 4). They are coordination
+state inside the ratified auto-publish scope, so publishing them is the mechanism
+working as ruled — but they are named here so nobody attributes their content to
+this paste. Nothing outside `exchange/` was staged: the six untracked root files
+were untouched.
+
+**One correction beyond attempt 2.** This section, and Finding 3, describe events
+that happened *after* the first copy of this report was written and published in
+`5b32223`. The corrected bytes you are reading were published by a third call to the
+same guard, whose result is stated in §12. A report that publishes itself is always
+one step behind by construction; the daily routine documents the same limitation at
+its own publish step.
 
 ---
 
@@ -292,6 +384,17 @@ Repository root: `C:\Users\luisf\OneDrive\Desktop\Midas-Claude Code Resources\na
 All four reach the web lanes through GitHub sync — no hand-uploads. The operator's
 one remaining action is a single **Sync now** click in the Naiad project settings.
 
+---
+
+## 12 · Final publish of these corrected bytes
+
+The corrections in §3 (deviation), Finding 3 and §10 were written after commit
+`5b32223` and published by one further call to the same guard. That call's printed
+result is in the session transcript on screen; if it reported `PUBLISHED`, the
+version of this file on `origin/v12-v1-census` is the corrected one, and the earlier
+`5b32223` copy remains in history as the pre-correction record. Both are visible in
+`git log -- exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-03_T4-SNAPSHOT.md`.
+
 === STATUS_HEPHAESTUS — 2026-08-03 ===
 NOW: T-4 executed. The 30-entry verbatim memory snapshot, ATHENA's memory-scoping
 session summary and the pre-registered acceptance contract are committed and pushed
@@ -302,12 +405,13 @@ FACTS:
 - Gates 30/30 entry headers, three size floors, exact staged set — all PASS [verified]
 - Commit a58b2bb, 3 files, 330 insertions; origin/v12-v1-census re-read = a58b2bb [verified]
 - Contract block exceeded the OS argument limit (ENAMETOOLONG); run verbatim from a scratchpad file, 0 CR bytes verified before execution [verified]
+- publish_exchange.py has NO CLI — the contract's command exits 0 and publishes nothing; published via the ratified publish() call, 5b32223, guard 0 offenders [verified]
 - Armed weekly task runs --estate ONLY; no trigger runs --workflow, and the newest workflow archive (2026-08-02) predates these files [verified]
-- Snapshot's off-machine copy is therefore GitHub alone until --workflow is run [verified]
 - Transcription fidelity vs the live panel is not builder-verifiable — ATHENA's R-1 stands [open]
 PENDING:
 1. Operator: click Sync now in the Naiad project settings
 2. Operator or ATHENA: run backup_estate.py --workflow so the snapshot exists off GitHub
+3. ATHENA: correct the publish instruction in future pastes, or give publish_exchange.py a __main__ block
 NEXT: ATHENA drafts the CONVENTIONS.md paste. Owner: ATHENA.
 METRICS: operator actions this session = 1 · files re-ingested = 0
 === END STATUS ===
