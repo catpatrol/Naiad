@@ -483,7 +483,7 @@ stay in `_reviewer_box/wf1/` and are referenced by path + sha in the JSON manife
 | `exchange/reports/WF1_tables.md` | yes | tracked | see §17 | yes → `origin/v12-v1-census` | GitHub |
 | `exchange/reports/BUILDERS_REPORT_APOLLO_2026-08-03_WF1.md` | yes | tracked | see §17 | yes → `origin/v12-v1-census` | GitHub |
 | `exchange/reports/SS_Reassessment_Synthesis_2026-08-03.md` | yes | tracked | see §17 | yes → `origin/v12-v1-census` | GitHub |
-| `scripts/wf1_forensics.py` | yes | tracked | **`a22a07a`** | **NO — commit-no-push per contract** | local git only |
+| `scripts/wf1_forensics.py` | yes | tracked | **`a22a07a`** | **YES → `origin/v12-v1-census` (UNINTENDED — see §18)** | GitHub |
 | `_reviewer_box/wf1/*.json` (20 per-cell checkpoints) | yes | ignored — `.gitignore:80 _reviewer_box/` | — | no | local disk; regenerable via `--rebuild` |
 | `_reviewer_box/wf1/WF1_discriminant_tables.json` | yes | ignored — `.gitignore:80 _reviewer_box/` | — | no | local disk; sha in the JSON manifest |
 | `research_outputs/_unarchived/s3_2026-07-27/journal_s3/scored/` (753 files) | yes | ignored — `.gitignore:101 research_outputs/_unarchived/**` | — | no | the phase archive `research_outputs/_archive/s3_2026-07-27.zip` |
@@ -515,6 +515,41 @@ staged:
 `a8a130f`. The guard passed with zero offenders — nothing outside `exchange/**` was staged.
 
 This §17 was added after that publish, so this revision of the report is carried by the
-immediately following publish commit; `a8a130f` is the commit that first carried the four
-other deliverables. `scripts/wf1_forensics.py` remains at local commit **`a22a07a`,
-deliberately unpushed** per the contract's commit-no-push instruction.
+immediately following publish commit (`09d5148`); `a8a130f` is the commit that first
+carried the four other deliverables.
+
+---
+
+## 18 · COMMIT-NO-PUSH WAS NOT ACHIEVED — reported, not concealed
+
+The contract says: *"Commit `scripts/wf1_forensics.py` locally (commit-no-push)."* I
+committed it as `a22a07a` before running the publish. **The script nevertheless reached
+`origin`.** Verified, not assumed:
+
+```
+git merge-base --is-ancestor a22a07a origin/v12-v1-census   -> YES, a22a07a IS on origin
+git cat-file -e origin/v12-v1-census:scripts/wf1_forensics.py -> PRESENT at origin
+git show origin/v12-v1-census:scripts/wf1_forensics.py | sha256sum
+  -> 2efb7752ba80dfac828e02d3bc74852878b3eefb639c7fc756d9705fd2f7348f  (identical blob)
+```
+
+**Cause.** `publish_exchange.publish()` pushes the **branch ref**
+(`git push origin v12-v1-census`, `scripts/publish_exchange.py:143`). Its `guard()` controls
+only which paths are *staged into the publish commit* — it has no bearing on which history
+travels with the push. Because `a22a07a` was an ancestor of the publish commit `a8a130f`,
+git carried it to the remote necessarily.
+
+**"Commit-no-push" is therefore unachievable as specified**, for any file committed to this
+branch before a publish. The only ways to honour it are: (a) leave the file uncommitted;
+(b) commit it on a separate branch that is never pushed; or (c) commit it only after the
+final publish of the session — which merely defers the exposure to the next publish.
+
+**I did not discover this until after the push, and I am not attempting to undo it.**
+Rewriting pushed history would be a destructive, outward-facing action taken on my own
+initiative. The operator's options are to accept it (the script is the study's method and
+is arguably better public than not), or to instruct a history rewrite. **Nothing else in
+the run depended on the script staying local, and no data left the repo that was not
+already destined for `exchange/**`.**
+
+Recommend the contract drop the commit-no-push clause for files on the published branch, or
+that `publish_exchange` be given a mode that pushes only the exchange subtree.
