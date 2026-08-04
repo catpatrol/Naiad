@@ -10,7 +10,7 @@ workflow backup and the F4 finding.
 |---|---|---|---|---|---|
 | 1 | **Naiad daily routine** | every day 07:00 local | machine (Task Scheduler) | **ARMED this session** | 2026-08-02 |
 | 2 | **Naiad weekly backup** (estate) | Sundays 08:00 local | machine (Task Scheduler) | **ARMED this session** | 2026-08-02 |
-| 3 | **Naiad weekly workflow backup** | Sundays 08:30 local | machine (Task Scheduler) | **NOT ARMED - never registered** | - |
+| 3 | **Naiad weekly workflow backup** | Sundays 08:30 local | machine (Task Scheduler) | **ARMED** (since 2026-08-02) | 2026-08-04 |
 | 4 | **Hermes scheduled run** | 2×/day | HERMES (Cowork, scheduled) | **NOT ARMED — Hermes-side** | — |
 | 5 | **Sync now** (project GitHub sync) | on demand, ~1×/day | **operator** | **MANUAL — no automation exists** | — |
 
@@ -34,18 +34,30 @@ workflow backup and the F4 finding.
 - **Guard:** if `G:` is not mounted the environment assertion fails closed — a failed run, never a
   silent no-op.
 
-## 3 · Naiad weekly workflow backup — NOT ARMED
-
-> **CORRECTION 2026-08-03.** This document previously listed a weekly `--workflow` backup as ARMED at Sundays 08:30. **Windows Task Scheduler contains no such task and never did.** Three separate documents carried the claim, each copying the one before it, and none verified it. The trigger's real state is **NOT ARMED**. A claim repeated is not a claim verified.
-
+## 3 · Naiad weekly workflow backup — ARMED
 
 - `backup_estate.py --workflow --dest "G:\My Drive\naiad-backups"`, start-in repo root.
-- Weekly, Sundays 08:30 — thirty minutes after the estate backup, so the two never contend for the
-- Command WOULD BE `backup_estate.py --workflow --dest "G:/My Drive/naiad-backups"`. No scheduled task exists for it. Run by hand until armed; the 2026-08-04 archive was a hand run.
+- Weekly, Sundays 08:30 — thirty minutes after the estate backup, so the two never contend
+  for the Drive or the repo. **Next run: 2026-08-09 08:30.** Enabled · Ready.
+  Registered 2026-08-02; **has never yet fired**, because its first scheduled fire is 2026-08-09.
 - Protects the irreplaceable **everything-else**: `docs/memory`, `docs/knowledge`, `skills`,
   `prompts`, `claude`, `exchange`, `docs/primers`, `docs/history`, and the operator-exports drop.
 - Same dated + hashed archive shape as the estate mode, same bidirectional verification, same
   no-clobber guard.
+
+> **RECORD 2026-08-04 — a false finding, reversed.** On 2026-08-03 this section was twice edited
+> to read NOT ARMED. **That was wrong.** The task has been registered and Ready since 2026-08-02 — verified
+> 2026-08-04 by *enumerating* Task Scheduler rather than querying one name: state Ready, next run
+> 2026-08-09 08:30, never yet fired, action `C:\venvs\naiad\Scripts\python.exe
+> scripts\backup_estate.py --workflow --dest "G:\My Drive\naiad-backups"`.
+>
+> **Cause of the error:** only the *estate* task was queried by name, and the absence of a result
+> for the other was inferred rather than measured. **To claim a thing does not exist, enumerate
+> the set — a negative from a single lookup is not a measurement of absence.**
+>
+> **What was true, and stays true:** the newest workflow archive was dated 2026-08-02 and genuinely
+> predated the 08-03/08-04 files, so those files had no off-machine copy until the hand run on
+> 2026-08-04. The gap was real; the cause given for it was not. The hand run was the right call.
 
 ## 4 · Hermes scheduled run — NOT ARMED
 
@@ -93,5 +105,4 @@ web lane sees current state.
 ```
 schtasks /delete /tn "Naiad daily routine" /f
 schtasks /delete /tn "Naiad weekly backup" /f
-schtasks /delete /tn "Naiad weekly workflow backup" /f   # only valid once the task is actually registered
 ```

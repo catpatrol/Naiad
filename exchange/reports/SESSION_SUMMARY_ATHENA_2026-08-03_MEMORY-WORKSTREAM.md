@@ -33,10 +33,13 @@ Hermes staleness) · G-5 a (reviewer-executed, snapshot-bracketed). `[ratified]`
 - **The GitHub sync does not reach the repo root.** `SCHED_TEST_RESULT_2026-08-02.md` is tracked
   and pushed at root and is not retrievable. Anything a web lane must read goes under `exchange/`
   or `docs/`. `[verified]`
-- **🔴 The weekly `--workflow` backup trigger is NOT ARMED and never was**, despite `CADENCE.md`,
-  memory entry #24 and `CONVENTIONS.md` §8 all claiming Sundays 08:30. Three documents copied the
-  claim; none verified it. Same mechanism as the retention-rule failure. Both documents corrected
-  this session; the backup is run by this paste. `[verified]`
+- **RETRACTED 2026-08-04.** This bullet asserted the weekly `--workflow` trigger was NOT ARMED.
+  **It was armed the whole time** — registered 2026-08-02, Ready, first fire 2026-08-09, never
+  yet run. The claim came from querying one task by name and inferring the other was absent
+  instead of enumerating. A Class A error that propagated into four files before the builder
+  caught it. **What was real:** the newest workflow archive was dated 2026-08-02 and predated the
+  08-03/08-04 files, so a hand run on 2026-08-04 was still the right call. The gap was real; the
+  cause given was not. `[verified 2026-08-04]`
 - **The daily brief had been silently halting since `d622b20`** — caught during the retention fix.
   Cause: an optional job that fails still lets the routine exit 0, and F-B1..8 run inside
   `daily_brief.py` rather than pytest, so a green suite said nothing. Fixed, 8/8. **Generalises:
@@ -98,10 +101,12 @@ ARGUS's, no probe covers them, and leaning harder on a one-third hook would be u
 The phase-boundary audit takes memory to 16 once triggers 2 and 3 exist and a valid re-probe runs
 against the ROLLBACK canary planted in §2.1b — a rule that exists nowhere else. `[open]`
 
-**One rule earned the hard way.** A correction REPLACES the assertion it corrects. The
-`--workflow` ARMED claim survived two rounds of annotation across three documents before the
-assertions themselves were rewritten, because a note beneath an uncorrected claim is a second
-claim and the reader believes the first. Written into `CONVENTIONS.md` §0. `[verified]`
+**One rule earned the hard way.** A correction REPLACES the assertion it corrects; a note beneath
+a stale claim is a second claim, and the reader believes the first. The live instance is in this
+file's own §0 of `CONVENTIONS.md`: three enforcement triggers were asserted where one existed, and
+the first fix appended a note under the false sentence instead of rewriting it. Fixed properly
+2026-08-04. **The example originally cited here — the `--workflow` ARMED claim — was itself false
+and has been withdrawn.** `[verified 2026-08-04]`
 
 **Reviewer errors, final count for this workstream: seven.** A gate written against prose the same
 author was writing; a publish command with bash-destroying backslashes calling a module with no

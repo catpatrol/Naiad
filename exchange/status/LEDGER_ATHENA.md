@@ -110,3 +110,26 @@ PENDING:
 NEXT: Build trigger 2, then re-probe against the ROLLBACK canary. Owner: ATHENA.
 METRICS: operator actions this session = 2 · files re-ingested = 1
 === END STATUS ===
+
+---
+
+=== STATUS_ATHENA — 2026-08-04 (b) — CORRECTION, supersedes the two preceding entries in part ===
+NOW: The "weekly --workflow trigger is NOT ARMED" finding was FALSE and is withdrawn. The task has
+been registered and Ready since 2026-08-02, first fire 2026-08-09, never yet run. The two entries
+above cite it; those citations are void. Everything else in them stands.
+LAST EVENT: 2026-08-04 — assertions restored across CADENCE.md, CONVENTIONS.md, the session report
+and project memory entry #19.
+FACTS:
+- "Naiad weekly workflow backup" ARMED since 2026-08-02, Ready, next 2026-08-09 08:30, never fired [verified by enumeration]
+- Cause of the false finding: one task queried by name, the other's absence inferred, not measured [verified]
+- Two rounds of document corrections were built on it; all reversed this session [verified]
+- STILL TRUE: newest workflow archive was 2026-08-02 and predated the 08-03/08-04 files — the hand run was correct [verified]
+- CONVENTIONS §0's one-trigger correction is about ENFORCEMENT triggers, unrelated, and stands [verified]
+- §2.1b ROLLBACK rule and the corrections rule stand; the latter now cites a live instance [ratified]
+PENDING:
+1. Operator: relay the custodian skill's path so enforcement trigger 2 can be built
+2. Operator: remove the 26 box copies; move boxrescue/ outside the repo tree
+3. Operator: T-6 data export — settles the memory-in-export dispute
+NEXT: Build enforcement trigger 2, then re-probe against the ROLLBACK canary. Owner: ATHENA.
+METRICS: operator actions this session = 2 · files re-ingested = 1
+=== END STATUS ===

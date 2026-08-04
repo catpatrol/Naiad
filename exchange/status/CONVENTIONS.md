@@ -9,8 +9,7 @@
 claim is not a correction; it is a second claim, and a reader believes the first one because the
 first one is what they read. When a fact changes, rewrite every place that asserts it — summary
 tables and headings first, because those are read first — and *then* add the dated note explaining
-what changed and why. Instances: the `--workflow` ARMED claim survived two rounds of "correction"
-in three documents before the assertions themselves were rewritten.
+what changed and why. Live instance, still visible in this file: §0 asserted three enforcement triggers when only one existed, and the first fix was a note appended *beneath* the false sentence — so a reader met the claim before its retraction. The sentence itself was rewritten on 2026-08-04, which is what a correction means. **A withdrawn instance, recorded because withdrawing it matters:** this rule originally cited a `--workflow` ARMED claim as its example. That example was itself false — the trigger had been armed all along — and has been removed. The rule stands on its own logic: a reader believes what they read first.
 
 ---
 
@@ -34,7 +33,7 @@ here, not in memory.
 2. The `naiad-custodian` skill's session-start audit names it.
 3. HERMES stamps its staleness in `exchange/DIGEST.md` once armed.
 
-Three independent triggers, because a rule nobody reads is a rule that quietly stopped existing.
+**One trigger exists today, not three.** Only the memory pointer is real. Trigger 2 was never built — the `naiad-custodian` skill predates this file and has never named it. Trigger 3 requires HERMES, who has never run. Treat the pointer as the single point of failure it is; triggers 2 and 3 are open work.
 
 > **CORRECTION 2026-08-04 — only trigger 1 exists.** Trigger 2 was never built: the
 > `naiad-custodian` skill was written 2026-07-26, predates this file, and has never named it.
@@ -541,10 +540,9 @@ new jobs are added by editing JSON, never code) · `backup_estate.py` (`--estate
 `publish_exchange.py` (the path-scoped publish guard, so evidence physically cannot ride an
 auto-push).
 
-**Triggers armed:** daily routine 07:00 · estate backup Sundays 08:00. **NOT armed:** the HERMES scheduled run. **Weekly `--workflow` backup: see CADENCE.md for its true state — it was falsely listed as armed here until 2026-08-04.** **Manual and staying manual:** Sync now.
+**Triggers armed** (enumerated from Task Scheduler 2026-08-04, not inferred): daily routine 07:00 · estate backup Sundays 08:00 · **workflow backup Sundays 08:30, armed since 2026-08-02 and not yet fired.** **Not armed:** the HERMES scheduled run. **Manual and staying manual:** Sync now. See `CADENCE.md` §3 for the record of a false "never armed" finding on 2026-08-03, since reversed.
 08:30. **Not armed:** the HERMES scheduled run. **Manual and staying manual:** Sync now.
 
-> **CORRECTION 2026-08-03.** This document previously listed a weekly `--workflow` backup as ARMED at Sundays 08:30. **Windows Task Scheduler contains no such task and never did.** Three separate documents carried the claim, each copying the one before it, and none verified it. The trigger's real state is **NOT ARMED**. A claim repeated is not a claim verified.
 
 
 **Environment reminder:** the venv is at `C:\venvs\naiad` (Python 3.12.10), **outside OneDrive and
