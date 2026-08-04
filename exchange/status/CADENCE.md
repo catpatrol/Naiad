@@ -105,4 +105,5 @@ web lane sees current state.
 ```
 schtasks /delete /tn "Naiad daily routine" /f
 schtasks /delete /tn "Naiad weekly backup" /f
+schtasks /delete /tn "Naiad weekly workflow backup" /f
 ```
