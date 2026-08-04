@@ -28,6 +28,13 @@ here, not in memory.
 
 Three independent triggers, because a rule nobody reads is a rule that quietly stopped existing.
 
+> **CORRECTION 2026-08-04 — only trigger 1 exists.** Trigger 2 was never built: the
+> `naiad-custodian` skill was written 2026-07-26, predates this file, and has never named it.
+> Trigger 3 requires HERMES, who has never run. **The enforcement hook is currently ONE memory
+> entry.** The paragraph above asserted three — the same failure as the ARMED trigger and the
+> retention rule: an intended state written down, then read back as evidence. Triggers 2 and 3
+> are open work. Until they exist, treat the pointer as the single point of failure it is.
+
 ### Precedence
 1. The operator's instruction in the live conversation — always wins.
 2. This file and project memory — by design they do not conflict; memory carries identity,
@@ -420,6 +427,21 @@ on 2026-07-28.
 **Class A · machinery-content** — asserting what the code or data contains without reading it.
 **Class B · post-action-state** — writing a gate from the state before the paste's own steps run.
 **Class C · provenance** — promoting an operator or builder report to `[verified]`.
+
+**Class A cure, strengthened 2026-08-04 after a fifth instance.** The original cure — *cite a file
+actually read this session* — does not fire for **project memory**, because injected text does not
+feel like a file. It is one. Two additions:
+
+1. **Before claiming something lives ONLY in place P, enumerate every place it could live and check
+   each** — memory entries included, by calling the memory view, not by recalling what you moved.
+2. **A claim repeated across documents is not a claim verified.** Three documents said the
+   `--workflow` trigger was armed; each had copied the one before it. Corroboration requires
+   independent measurement, not restatement.
+
+The instance that produced this: an acceptance probe was designed around the six-column
+disposition table as a signal unique to this file, while that table was still described in full by
+memory entry #8 **and named in the pointer entry itself** — a test whose decisive signal was
+printed on its own signpost. The probe was recorded INCONCLUSIVE rather than passed.
 
 **The counter-pattern, and it is the system working:** the builder has refused a reviewer
 instruction on a ratified invariant at least six times. **A stack whose executor never pushes back

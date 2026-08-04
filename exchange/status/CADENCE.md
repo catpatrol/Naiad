@@ -10,7 +10,7 @@ workflow backup and the F4 finding.
 |---|---|---|---|---|---|
 | 1 | **Naiad daily routine** | every day 07:00 local | machine (Task Scheduler) | **ARMED this session** | 2026-08-02 |
 | 2 | **Naiad weekly backup** (estate) | Sundays 08:00 local | machine (Task Scheduler) | **ARMED this session** | 2026-08-02 |
-| 3 | **Naiad weekly workflow backup** | Sundays 08:30 local | machine (Task Scheduler) | **ARMED this session** | 2026-08-02 |
+| 3 | **Naiad weekly workflow backup** | Sundays 08:30 local | machine (Task Scheduler) | **NOT ARMED - never registered** | - |
 | 4 | **Hermes scheduled run** | 2×/day | HERMES (Cowork, scheduled) | **NOT ARMED — Hermes-side** | — |
 | 5 | **Sync now** (project GitHub sync) | on demand, ~1×/day | **operator** | **MANUAL — no automation exists** | — |
 
@@ -34,10 +34,10 @@ workflow backup and the F4 finding.
 - **Guard:** if `G:` is not mounted the environment assertion fails closed — a failed run, never a
   silent no-op.
 
-## 3 · Naiad weekly workflow backup
+## 3 · Naiad weekly workflow backup — NOT ARMED
 
 > **CORRECTION 2026-08-03.** This document previously listed a weekly `--workflow` backup as ARMED at Sundays 08:30. **Windows Task Scheduler contains no such task and never did.** Three separate documents carried the claim, each copying the one before it, and none verified it. The trigger's real state is **NOT ARMED**. A claim repeated is not a claim verified.
- — ARMED
+
 
 - `backup_estate.py --workflow --dest "G:\My Drive\naiad-backups"`, start-in repo root.
 - Weekly, Sundays 08:30 — thirty minutes after the estate backup, so the two never contend for the
