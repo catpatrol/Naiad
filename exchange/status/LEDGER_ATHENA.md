@@ -88,3 +88,25 @@ NEXT: Grade the acceptance probe, then the phase-boundary audit (#1 #15 #19 + fo
 Owner: ATHENA.
 METRICS: operator actions this session = 6 · files re-ingested = 3
 === END STATUS ===
+
+---
+
+=== STATUS_ATHENA — 2026-08-04 ===
+NOW: Memory workstream CLOSED. Panel at 23 entries, CONVENTIONS.md live and verified, three
+snapshots exist and two are inside the 2026-08-04 workflow archive on Drive. Stale ARMED
+assertions replaced (not annotated). Lane paused with a clean handoff.
+LAST EVENT: 2026-08-04 — assertions rewritten, workflow trigger arming attempted, report closed.
+FACTS:
+- CONVENTIONS.md section 2.1b ROLLBACK rule live; section 0 trigger claim corrected to ONE [verified]
+- CADENCE.md and CONVENTIONS.md section 8: stale ARMED assertions REPLACED, not annotated [verified]
+- Acceptance probe INCONCLUSIVE — every content discriminator confounded by the synced snapshot [verified]
+- Enforcement hook is one trigger, not three; #1 #15 #19 therefore stay in memory [verified]
+- New standing rule: a correction replaces the assertion; a note beneath a stale claim is a second claim [ratified]
+- Workflow backup trigger: see the schtasks verification block in this session's output [open]
+PENDING:
+1. Operator: relay the custodian skill's path so trigger 2 can be built
+2. Operator: remove the 26 box copies; move boxrescue/ outside the repo tree
+3. Operator: T-6 data export — settles the memory-in-export dispute
+NEXT: Build trigger 2, then re-probe against the ROLLBACK canary. Owner: ATHENA.
+METRICS: operator actions this session = 2 · files re-ingested = 1
+=== END STATUS ===

@@ -41,7 +41,7 @@ workflow backup and the F4 finding.
 
 - `backup_estate.py --workflow --dest "G:\My Drive\naiad-backups"`, start-in repo root.
 - Weekly, Sundays 08:30 — thirty minutes after the estate backup, so the two never contend for the
-  Drive or the repo. **Next run: 2026-08-09 08:30.** Enabled · Ready.
+- Command WOULD BE `backup_estate.py --workflow --dest "G:/My Drive/naiad-backups"`. No scheduled task exists for it. Run by hand until armed; the 2026-08-04 archive was a hand run.
 - Protects the irreplaceable **everything-else**: `docs/memory`, `docs/knowledge`, `skills`,
   `prompts`, `claude`, `exchange`, `docs/primers`, `docs/history`, and the operator-exports drop.
 - Same dated + hashed archive shape as the estate mode, same bidirectional verification, same
@@ -93,5 +93,5 @@ web lane sees current state.
 ```
 schtasks /delete /tn "Naiad daily routine" /f
 schtasks /delete /tn "Naiad weekly backup" /f
-schtasks /delete /tn "Naiad weekly workflow backup" /f
+schtasks /delete /tn "Naiad weekly workflow backup" /f   # only valid once the task is actually registered
 ```

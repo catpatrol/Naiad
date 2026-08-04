@@ -71,3 +71,46 @@ discriminant frame, tail-retention gauge, W-F1 — is untouched in entry #30. Th
 reporting format and the manual-task rule now live.
 
 — ATHENA, 2026-08-03
+
+---
+
+## 7 · ADDENDUM 2026-08-04 — lane closed
+
+**Memory workstream complete.** Panel at 23 entries. `CONVENTIONS.md` live and verified on the
+bus. Three snapshots exist — opening (30 entries, pre-restructure), closing (delta + the
+auto-generated layer), and a current capture of the 23 live entries held by the operator. The
+first two are inside `naiad_workflow_2026-08-04.zip` on Drive, confirmed by opening the archive
+rather than trusting its fixture. `[verified]`
+
+**The acceptance probe is INCONCLUSIVE, not passed.** Five of six behaviours were evidenced in a
+cold session, but every one is confounded: the operator's project instructions independently
+mandate most of them, and the synced memory snapshot contains the full text of everything moved,
+so a session can satisfy any content test without opening `CONVENTIONS.md`. A second discriminator
+(the six-column disposition table) was invalid too — that table is still described by memory entry
+#8 and named in the pointer entry itself. **A probe whose signal is printed on its own signpost
+proves nothing.** Recorded honestly rather than scored. `[verified]`
+
+**The enforcement hook is one third built.** `CONVENTIONS.md` §0 claimed three triggers: a memory
+pointer, the `naiad-custodian` skill naming the file, and HERMES stamping staleness. Only the
+pointer exists — the skill predates the file and has never mentioned it, and HERMES has never run.
+Corrected in §0. **Consequence: entries #1, #15 and #19 stay in memory.** They are APOLLO's and
+ARGUS's, no probe covers them, and leaning harder on a one-third hook would be unmeasured risk.
+The phase-boundary audit takes memory to 16 once triggers 2 and 3 exist and a valid re-probe runs
+against the ROLLBACK canary planted in §2.1b — a rule that exists nowhere else. `[open]`
+
+**One rule earned the hard way.** A correction REPLACES the assertion it corrects. The
+`--workflow` ARMED claim survived two rounds of annotation across three documents before the
+assertions themselves were rewritten, because a note beneath an uncorrected claim is a second
+claim and the reader believes the first. Written into `CONVENTIONS.md` §0. `[verified]`
+
+**Reviewer errors, final count for this workstream: seven.** A gate written against prose the same
+author was writing; a publish command with bash-destroying backslashes calling a module with no
+entry point, when the working form was already on record; an insurance archive handed over without
+saying to keep it outside the repo; nine of twenty-one box-file calls wrong from reading around
+the repo instead of reading it; an invalid probe discriminator; a false three-triggers claim; and
+corrections written as annotations three times. **None analytical. All about what a file or a
+memory entry actually contains, or what state exists after my own instructions run.** The builder
+halted correctly on three of them.
+
+**For APOLLO:** unchanged from §6. Your entries were not touched. Read
+`exchange/status/CONVENTIONS.md` at session start — that is the whole ask.

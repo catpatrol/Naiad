@@ -4,6 +4,14 @@
 **Owner:** ATHENA drafts · the operator ratifies · HERMES flags staleness. No other lane edits it.
 **Corrections:** append a dated note under the affected rule; never silently rewrite history.
 
+**Correcting a claim — rule added 2026-08-04, after three failures of exactly this kind.**
+**A correction REPLACES the assertion it corrects.** Appending a note beneath an uncorrected
+claim is not a correction; it is a second claim, and a reader believes the first one because the
+first one is what they read. When a fact changes, rewrite every place that asserts it — summary
+tables and headings first, because those are read first — and *then* add the dated note explaining
+what changed and why. Instances: the `--workflow` ARMED claim survived two rounds of "correction"
+in three documents before the assertions themselves were rewritten.
+
 ---
 
 ## §0 · What this file is, and why you are reading it
@@ -533,7 +541,7 @@ new jobs are added by editing JSON, never code) · `backup_estate.py` (`--estate
 `publish_exchange.py` (the path-scoped publish guard, so evidence physically cannot ride an
 auto-push).
 
-**Triggers armed:** daily routine 07:00 · estate backup Sundays 08:00 · workflow backup Sundays
+**Triggers armed:** daily routine 07:00 · estate backup Sundays 08:00. **NOT armed:** the HERMES scheduled run. **Weekly `--workflow` backup: see CADENCE.md for its true state — it was falsely listed as armed here until 2026-08-04.** **Manual and staying manual:** Sync now.
 08:30. **Not armed:** the HERMES scheduled run. **Manual and staying manual:** Sync now.
 
 > **CORRECTION 2026-08-03.** This document previously listed a weekly `--workflow` backup as ARMED at Sundays 08:30. **Windows Task Scheduler contains no such task and never did.** Three separate documents carried the claim, each copying the one before it, and none verified it. The trigger's real state is **NOT ARMED**. A claim repeated is not a claim verified.
