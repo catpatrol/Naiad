@@ -65,3 +65,26 @@ PENDING:
 NEXT: Operator configures project GitHub sync and clicks Sync now. Owner: operator.
 METRICS: operator actions this session = 1 · files re-ingested = 0
 === END STATUS ===
+
+---
+
+=== STATUS_ATHENA — 2026-08-03 ===
+NOW: Memory workstream closed. CONVENTIONS.md is live and verified readable on the sync bus;
+project memory went 30 -> 23 entries with eight rules relocated, one corrected and a session-start
+pointer added. Opening and closing snapshots are both committed. Only the acceptance probe remains.
+LAST EVENT: 2026-08-03 — orphans filed, false ARMED claims corrected, workflow backup run.
+FACTS:
+- exchange/status/CONVENTIONS.md published dde8523 and returns WITH its repo path (S-4 PASS) [verified]
+- Memory 30 -> 23: removed #7 #8 #9 #14 #16 #25 #28 #29; corrected #24; added the pointer [verified]
+- Box reconciled by sha256: 26 files, 23 identical, 3 orphans — now filed to docs/knowledge and docs/primers [verified]
+- The weekly --workflow trigger was NEVER ARMED despite three documents claiming it; both corrected [verified]
+- Memory does not reach Cowork; the sync does not reach repo root; both now written into CONVENTIONS [verified]
+- boxrescue/ disappearance was an operator action, not OneDrive dehydration — hypothesis withdrawn [operator]
+PENDING:
+1. Operator: run the acceptance probe (one fresh chat, registered prompt) and return the reply
+2. Operator: move boxrescue/ outside the repo tree; remove the 26 box copies
+3. Operator: T-6 data export, settles the memory-in-export dispute
+NEXT: Grade the acceptance probe, then the phase-boundary audit (#1 #15 #19 + four merges -> 16).
+Owner: ATHENA.
+METRICS: operator actions this session = 6 · files re-ingested = 3
+=== END STATUS ===

@@ -501,6 +501,9 @@ auto-push).
 **Triggers armed:** daily routine 07:00 · estate backup Sundays 08:00 · workflow backup Sundays
 08:30. **Not armed:** the HERMES scheduled run. **Manual and staying manual:** Sync now.
 
+> **CORRECTION 2026-08-03.** This document previously listed a weekly `--workflow` backup as ARMED at Sundays 08:30. **Windows Task Scheduler contains no such task and never did.** Three separate documents carried the claim, each copying the one before it, and none verified it. The trigger's real state is **NOT ARMED**. A claim repeated is not a claim verified.
+
+
 **Environment reminder:** the venv is at `C:\venvs\naiad` (Python 3.12.10), **outside OneDrive and
 not in the repo**. A venv cannot be moved, only rebuilt, and scheduled tasks must call python by
 full path.
