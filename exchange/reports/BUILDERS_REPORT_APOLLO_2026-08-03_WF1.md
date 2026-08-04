@@ -499,5 +499,22 @@ It needs a separate decision from the operator.
 
 ## 17 · PUBLISH RESULT
 
-See the closing section of this run's console output. The publish commit sha and push status
-are stated there and in the operator hand-off.
+```
+publish: committed a8a130f (5 path(s)) and pushed to origin/v12-v1-census
+status= PUBLISHED   commit= a8a130f   pushed= True   branch= v12-v1-census
+offenders= []       error= None
+staged:
+  exchange/queue/2026-08-03_WF1_winner_forensics_APOLLO.md
+  exchange/reports/BUILDERS_REPORT_APOLLO_2026-08-03_WF1.md
+  exchange/reports/SS_Reassessment_Synthesis_2026-08-03.md
+  exchange/reports/WF1_discriminants.json
+  exchange/reports/WF1_tables.md
+```
+
+**THE PUSH SUCCEEDED.** All five exchange artefacts are on `origin/v12-v1-census` at
+`a8a130f`. The guard passed with zero offenders — nothing outside `exchange/**` was staged.
+
+This §17 was added after that publish, so this revision of the report is carried by the
+immediately following publish commit; `a8a130f` is the commit that first carried the four
+other deliverables. `scripts/wf1_forensics.py` remains at local commit **`a22a07a`,
+deliberately unpushed** per the contract's commit-no-push instruction.
