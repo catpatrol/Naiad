@@ -23,7 +23,8 @@ the whole file with case-insensitive fragment checks, and published it. A read-o
 reconciliation of the project box against the repo (PART B) was also commissioned; it could not
 run, for the reason in §6.
 
-**Outcome: PART A complete and published. PART B blocked, nothing lost.**
+**Outcome: PART A complete and published. PART B blocked on the first attempt, then completed on
+the second after `boxrescue/` reappeared — full table in §6.**
 
 ---
 
@@ -183,7 +184,9 @@ case-insensitive, and it worked.
 
 ---
 
-## 6 · PART B — could not run. Full output as printed
+## 6 · PART B — blocked on the first attempt, completed on the second
+
+### 6.1 First attempt — blocked. Full output as printed
 
 ```
 === PART B - BOX RECONCILIATION BY SHA256 (read-only) ===
@@ -191,11 +194,10 @@ boxrescue/ not present at repo root — cannot reconcile. Report this and stop.
 === END PART B ===
 ```
 
-**No reconciliation table was produced, so none is reproduced here.** The block behaved exactly as
-designed: it tested for `boxrescue/`, did not find it, printed its own guard message, and stopped
-without creating, reading, or touching anything.
+The block behaved exactly as designed: it tested for `boxrescue/`, did not find it, printed its
+own guard message, and stopped without creating, reading, or touching anything.
 
-### FINDING 1 (material) · `boxrescue/` existed earlier this session and is now gone. The builder did not remove it.
+### FINDING 1 (material, now resolved as to state, open as to cause) · `boxrescue/` vanished mid-session and reappeared. The builder touched it in neither direction.
 
 Timeline, all [verified] from this session's own transcripts:
 
@@ -209,24 +211,145 @@ Timeline, all [verified] from this session's own transcripts:
 **I did not create, move, or delete it.** The contract's instruction — *"Do not delete boxrescue/"*
 — was followed; the directory was already gone before PART B tested for it, and PART B is the only
 step that referenced it. Because it was **untracked**, git never had a copy: there is nothing in
-the repository to restore it from, and nothing in this session's history that could have removed
-it. [verified]
+the repository that could have restored it, and nothing in this session's history that could have
+removed it. [verified]
 
-Who removed it is **[open]**. Candidates the operator can check: a manual delete, OneDrive sync
-reconciling the folder from another device, or a cleanup by another tool. It is worth answering
-rather than shrugging at, for two reasons: PART B's whole purpose was to tell the operator which
-project-box files exist nowhere else, and an untracked directory vanishing between two commands in
-one session is exactly the kind of event the backup architecture exists to notice.
+**It came back.** On the operator's prompt to try again, `boxrescue/` was present at repo root with
+26 files, directory mtime **2026-08-04 01:04**, and `git status` again showed `?? boxrescue/`. Note
+that mtime is *earlier* than the 01:46 check that found nothing — the directory did not have to be
+rebuilt to reappear. [verified]
 
-**Reported, not fixed.** Recreating or hunting for it is an operator decision, not a builder one.
+**Most likely cause, stated as a hypothesis and not as a finding:** OneDrive Files On-Demand. A
+folder that is dehydrated, mid-sync, or being reconciled from another device can be genuinely
+absent to `test -e` and to `find`, then present again minutes later with its original timestamps.
+That fits every observation — including the unchanged mtime — better than a delete-and-restore
+would. It remains **[open]**; the operator is the only one who can say whether anything was done
+by hand.
 
-### What PART B was for, and what to do next
+**Why it is worth answering rather than shrugging at:** if repo-root directories can be
+transiently invisible to file tests, then any gate of the form "the directory is missing, so stop"
+can fire on a healthy tree — and any script that reacts to absence by *creating* or *cleaning*
+something would act on a false premise. This one only reported, which is the correct shape.
 
-The reconciliation was to hash every file in `boxrescue/` against the repo and label each one
-IDENTICAL AT `<path>` (safe to remove from the project box), NAME MATCH CONTENT DIFFERS (needs a
-look), or NOT IN REPO (exists nowhere else — must be filed before removal). None of that is known
-now. **Do not delete anything from the project box on the basis of this session.** When
-`boxrescue/` is restored at repo root, the PART B block re-runs unchanged and produces the table.
+### 6.2 Second attempt — completed. Full table as printed
+
+**Deviation, same family as §3, recorded before the results.** The contract embeds
+`reconcile.py` in a quoted bash heredoc containing `replace('\\','/')` — a Python escaped
+backslash. One backslash was lost in transit to the shell, and Python refused the file:
+
+```
+  File "C:\Users\luisf\AppData\Local\Temp\reconcile.py", line 23
+    rel = os.path.relpath(p, root).replace('\','/')
+                                                 ^
+SyntaxError: unterminated string literal (detected at line 23)
+```
+
+Nothing ran, nothing was read, nothing was written. The script was then written **directly to the
+scratchpad with no shell in the path**, so no escaping layer could touch it. One substantive line
+changed: `replace('\\','/')` became `replace(os.sep, '/')`, which is the same operation on Windows
+and cannot be mangled by any quoting layer. Every hash, every comparison, every verdict string and
+the `SKIP` set are unchanged from the contract. This is a mechanism adaptation, not a verification
+one — PART B is a read-only report and has no gates to weaken.
+
+**Three separate backslash/path failures in two pastes now** — the bash-escaped Windows path, the
+`/tmp` literal Windows Python cannot resolve, and this heredoc escape. The amendment installed in
+`CONVENTIONS.md` §3.4 covers the first two. The third generalises the rule: **do not put
+backslash escapes inside a heredoc that a shell will carry; write the file directly, or use a
+form with no backslash at all.**
+
+```
+=== PART B - BOX RECONCILIATION BY SHA256 (read-only) ===
+box files: 26   repo files hashed (size-matched only): 30
+
+BOX FILE                                                   | VERDICT
+-----------------------------------------------------------+---------------------------------------------
+2026-08-03_HEPHAESTUS_report_retention-fix-and-alarm.md    | IDENTICAL AT exchange/reports/2026-08-03_HEPHAESTUS_report_retention-fix-and-alarm.md
+AMENDMENT_2_BRIEF2_RESHAPE.md                              | IDENTICAL AT AMENDMENT_2_BRIEF2_RESHAPE_1.md
+ARGUS_REPRIME_2026-08-02.md                                | IDENTICAL AT ARGUS_REPRIME_2026-08-02.md
+BUILDERS_REPORT_ARGUS_2026-08-03_C4.md                     | IDENTICAL AT exchange/reports/BUILDERS_REPORT_ARGUS_2026-08-03_C4.md
+CONTRACT_DESIGN_Atlas_Rewire_2026-07-30.md                 | IDENTICAL AT prompts/CONTRACT_DESIGN_Atlas_Rewire_2026-07-30.md
+Deep_Trading_Philosophy_Analysis_Four_Traders.md           | *** NOT IN REPO ***
+FUNNEL_DIONYSUS_W1_Workflow_Architecture_2026-08-02.md     | IDENTICAL AT docs/history/FUNNEL_DIONYSUS_W1_Workflow_Architecture_2026-08-02.md
+HANDOFF_ATHENA_2026-08-03_FULL_STATE_1.md                  | IDENTICAL AT HANDOFF_ATHENA_2026-08-03_FULL_STATE_1.md
+HANDOFF_DIONYSUS_to_ATHENA_2026-08-02_Workflow_Redesign_Inputs.md | IDENTICAL AT docs/history/HANDOFF_DIONYSUS_to_ATHENA_2026-08-02_Workflow_Redesign_Inputs.md
+INTERFACE_2026-08-03.md                                    | IDENTICAL AT analytics/INTERFACE.md
+Level_Selection_Deep_Dive_Wyckoff_AMT_CCL.md               | IDENTICAL AT docs/knowledge/Level_Selection_Deep_Dive_Wyckoff_AMT_CCL.md
+Naiad_KB_Addendum_FourTraders_x_Canon_v1.md                | IDENTICAL AT Naiad_KB_Addendum_FourTraders_x_Canon_v1.md
+Naiad_Knowledge_Canon_Synthesis_v1.md                      | IDENTICAL AT Naiad_Knowledge_Canon_Synthesis_v1.md
+Naiad_Phase1_Build_Prompt.md                               | IDENTICAL AT Naiad_Phase1_Build_Prompt.md
+Naiad_Trading_Knowledge_Foundation_v0.md                   | IDENTICAL AT docs/knowledge/Naiad_Trading_Knowledge_Foundation_v0.md
+PRIMER_APOLLO_2026-08-01_v1_1.md                           | *** NOT IN REPO ***
+PRIMER_DIONYSUS_2026-08-01_v1_1.md                         | *** NOT IN REPO ***
+PRIMER_HERMES_2026-08-03_v2_FIRST_RUN.md                   | IDENTICAL AT PRIMER_HERMES_2026-08-03_v2_FIRST_RUN.md
+Prometheus_Stop_Loss_Logic_Learnings.md                    | IDENTICAL AT Prometheus_Stop_Loss_Logic_Learnings.md
+Rvwap_pine_code.txt                                        | IDENTICAL AT docs/knowledge/pine/Rvwap pine code.txt
+SESSION_SUMMARY_ARGUS_2026-08-03_BRIEF2.md                 | IDENTICAL AT exchange/reports/SESSION_SUMMARY_ARGUS_2026-08-03_BRIEF2.md
+SESSION_SUMMARY_ARGUS_2026-08-03_BRIEF2_C2.md              | IDENTICAL AT exchange/reports/SESSION_SUMMARY_ARGUS_2026-08-03_BRIEF2_C2.md
+SSv11_3_Execution_Playbook_and_Field_Manual_1.md           | IDENTICAL AT SSv11_3_Execution_Playbook_and_Field_Manual.md
+SSv12_SPEC_ERRATA.md                                       | IDENTICAL AT SSv12_SPEC_ERRATA.md
+V12_Study_Charter_Addendum_v1_0.md                         | IDENTICAL AT V12_Study_Charter_Addendum_v1.0.md
+V12_V1_Census_Build_Prompt.md                              | IDENTICAL AT V12_V1_Census_Build_Prompt.md
+
+NOT IN REPO: 3
+   - Deep_Trading_Philosophy_Analysis_Four_Traders.md
+   - PRIMER_APOLLO_2026-08-01_v1_1.md
+   - PRIMER_DIONYSUS_2026-08-01_v1_1.md
+
+IDENTICAL rows are safe to remove from the project box. NOT IN REPO rows exist
+nowhere else and must be filed before removal. NAME MATCH rows need a look.
+=== END PART B ===
+```
+
+**Result: 26 box files · 23 IDENTICAL · 0 NAME MATCH · 3 NOT IN REPO.**
+
+Matching is by **sha256 of file contents**, so it is name-independent — that is why the flattened
+box names still resolve. Four rows are worth reading twice, because the name differs and only the
+hash proves the match:
+
+| box name | repo name | what the difference is |
+|---|---|---|
+| `AMENDMENT_2_BRIEF2_RESHAPE.md` | `AMENDMENT_2_BRIEF2_RESHAPE_1.md` | browser duplicate suffix `_1` |
+| `INTERFACE_2026-08-03.md` | `analytics/INTERFACE.md` | dated on upload, undated in repo |
+| `Rvwap_pine_code.txt` | `docs/knowledge/pine/Rvwap pine code.txt` | spaces flattened to underscores |
+| `V12_Study_Charter_Addendum_v1_0.md` | `V12_Study_Charter_Addendum_v1.0.md` | `.` flattened to `_` |
+
+These are exactly the hand-upload flattening artifacts §4.3 of `CONVENTIONS.md` describes. Byte
+identity is confirmed in every case.
+
+### 6.3 The three files that exist nowhere else
+
+`Deep_Trading_Philosophy_Analysis_Four_Traders.md` · `PRIMER_APOLLO_2026-08-01_v1_1.md` ·
+`PRIMER_DIONYSUS_2026-08-01_v1_1.md`
+
+Two independent checks, both [verified] this session:
+
+1. **By content** — no file anywhere in the scanned tree has a matching sha256.
+2. **By name** — a case-insensitive `find` across the *entire* repo, with no directory exclusions
+   beyond `.git`, for `PRIMER_APOLLO*`, `PRIMER_DIONYSUS*`, `Deep_Trading*`, `Four_Traders*` and
+   `FourTraders*` returns **only the `boxrescue/` copies themselves**. There is no near-name
+   variant, no older version, and no differently-named twin.
+
+The name search matters because the reconciliation's own NAME-MATCH test compares exact filenames,
+and the box flattens `v1.1` → `v1_1` — so a repo file called `PRIMER_APOLLO_2026-08-01_v1.1.md`
+would have been reported as NOT IN REPO even if it existed. It does not exist. The verdict stands
+on both axes.
+
+**Honest limit of the content check:** the hashing walk skips `research_outputs/`, `briefs/`,
+`node_modules/`, `.venv/` and cache directories, so a byte-identical copy hiding *inside* one of
+those under a different name would not have been seen. The name search did cover those
+directories and found nothing, which makes that scenario unlikely — but it is not excluded by
+hash. [verified as stated]
+
+**Consequence, and this is the operator-facing point:** those three files exist **only** in the
+project box and in `boxrescue/`. Deleting them from the box without filing them into the repo
+first would destroy them. The other 23 are safe to remove from the box — every one has a
+byte-identical, tracked twin in the repo, reachable by the lanes through GitHub sync.
+
+**Not filed by this paste.** Filing them means choosing a destination directory, which is a
+content decision for ATHENA and the operator, not a build step. `docs/history/` is the obvious
+candidate for the two primers, given `FUNNEL_DIONYSUS_W1` and `HANDOFF_DIONYSUS_to_ATHENA` already
+live there; `docs/knowledge/` is the obvious candidate for the trading-philosophy analysis, beside
+`Naiad_Trading_Knowledge_Foundation_v0.md`. Recommended, not done.
 
 ---
 
@@ -264,7 +387,11 @@ now. **Do not delete anything from the project box on the basis of this session.
 |---|---|---|---|---|---|
 | `exchange/status/CONVENTIONS.md` | yes (31,015 B) | tracked | yes — `dde8523` | yes — `origin/v12-v1-census` | **GitHub only.** Inside `WORKFLOW_SOURCES` but the newest workflow archive (`naiad_workflow_2026-08-02.zip`) predates it — see §7 |
 | `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-03_CONVENTIONS.md` (this file) | yes | untracked at time of writing | **not committed** at time of writing | **no** at time of writing — publish runs next, §10 | **NOT PROTECTED** at time of writing |
-| `boxrescue/` | **no — absent, see §6** | was untracked when last seen | never committed | never pushed | **NOT PROTECTED, and now unrecoverable from git** |
+| `boxrescue/` (26 files) | **yes — reappeared, see §6** | untracked | never committed | never pushed | **NOT PROTECTED.** Read-only in this paste; not created, moved or deleted by the builder |
+| `boxrescue/Deep_Trading_Philosophy_Analysis_Four_Traders.md` | yes | untracked | never committed | never pushed | **NOT PROTECTED — exists nowhere else, §6.3** |
+| `boxrescue/PRIMER_APOLLO_2026-08-01_v1_1.md` | yes | untracked | never committed | never pushed | **NOT PROTECTED — exists nowhere else, §6.3** |
+| `boxrescue/PRIMER_DIONYSUS_2026-08-01_v1_1.md` | yes | untracked | never committed | never pushed | **NOT PROTECTED — exists nowhere else, §6.3** |
+| `…\scratchpad\reconcile.py` (PART B script, executed copy) | yes | **outside the repository** — session scratchpad | n/a — intentionally never committed | n/a | **NOT PROTECTED**, by design |
 | `…\scratchpad\conv_amend.md` (amendment text, executed copy) | yes | **outside the repository** — session scratchpad | n/a — intentionally never committed | n/a | **NOT PROTECTED**, by design; its content is now inside the published `CONVENTIONS.md` |
 | `…\scratchpad\conv_amend.py` (amendment helper) | yes | **outside the repository** — session scratchpad | n/a | n/a | **NOT PROTECTED**, by design |
 | `C:\Users\luisf\AppData\Local\Temp\conv_amend.md` / `.py` (the contract's own `/tmp` copies) | yes | **outside the repository** | n/a | n/a | **NOT PROTECTED**, by design; inert leftovers of the crashed step |
@@ -298,19 +425,19 @@ Both reach the web lanes through GitHub sync — no hand-uploads. One operator a
 === STATUS_HEPHAESTUS — 2026-08-03 ===
 NOW: CONVENTIONS.md amended with the exact publish invocation, re-gated with case-insensitive
 fragment checks, and published — commit dde8523, guard 0 offenders. All four PART A gates passed.
-PART B could not run: boxrescue/ no longer exists at repo root and the builder did not remove it.
+PART B blocked on attempt 1, completed on attempt 2: 26 box files, 23 IDENTICAL, 3 NOT IN REPO.
 LAST EVENT: 2026-08-03 — dde8523 pushed to origin/v12-v1-census via publish_exchange.publish().
 FACTS:
 - Gates 1-4 all PASS; file 29,282 -> 31,015 bytes, 0 CR bytes, worktree clean vs blob [verified]
 - publish() returned status=PUBLISHED commit=dde8523 pushed=True offenders=[] [verified]
-- Amendment step crashed as written: Windows Python cannot read the bash path /tmp/... ; re-run from scratchpad with gates unmodified [verified]
-- boxrescue/ present at the earlier halt, absent now, not found anywhere under the parent folder; untracked so git holds no copy [verified]
-- Who removed boxrescue/ is undetermined [open]
+- Three backslash/path failures across two pastes (bash path, /tmp literal, heredoc escape); all worked around from scratchpad, no gate altered [verified]
+- boxrescue/ vanished then reappeared with mtime unchanged at 01:04; OneDrive dehydration is the leading hypothesis, cause [open]
+- 3 box files exist nowhere else by hash AND by name: Deep_Trading_Philosophy_Analysis_Four_Traders.md, PRIMER_APOLLO_2026-08-01_v1_1.md, PRIMER_DIONYSUS_2026-08-01_v1_1.md [verified]
 - CONVENTIONS.md §8 claims a workflow-backup trigger Sundays 08:30 that Task Scheduler does not contain [verified]
 PENDING:
 1. Operator: click Sync now in the Naiad project settings
-2. Operator: account for boxrescue/ before any project-box deletion — PART B never ran
+2. Operator/ATHENA: file the 3 NOT-IN-REPO files before deleting anything from the project box
 3. ATHENA: correct §8's trigger claim; arm or hand-run backup_estate.py --workflow
-NEXT: re-run PART B unchanged once boxrescue/ is restored. Owner: operator, then HEPHAESTUS.
-METRICS: operator actions this session = 1 · files re-ingested = 0
+NEXT: file the three orphans, then the 23 IDENTICAL box copies can be removed. Owner: ATHENA.
+METRICS: operator actions this session = 2 · files re-ingested = 0
 === END STATUS ===
