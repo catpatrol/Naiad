@@ -244,11 +244,26 @@ def resample(df, tf):
     """
     if not len(df):
         return df.copy()
-    r = S.resample_ohlcv(
-        df["open_time"].to_numpy(np.int64),
-        df["open"].to_numpy(float), df["high"].to_numpy(float),
-        df["low"].to_numpy(float), df["close"].to_numpy(float),
-        df["volume"].to_numpy(float), ALL_MS[tf])
+    try:
+        r = S.resample_ohlcv(
+            df["open_time"].to_numpy(np.int64),
+            df["open"].to_numpy(float), df["high"].to_numpy(float),
+            df["low"].to_numpy(float), df["close"].to_numpy(float),
+            df["volume"].to_numpy(float), ALL_MS[tf])
+    except S.UndecidableStepError:
+        # REGRESSION FIX 2026-08-03. Amendment 2 §1.2 rules that analytics
+        # REFUSES an undecidable step rather than guessing, and that refusal is
+        # correct and stays. What was wrong is that this caller treated it as
+        # fatal: routing resample() through analytics (finding F-1R-B, cycle 3)
+        # turned a degenerate one-bar slice -- which the frozen fixture day
+        # contains -- into a HALT of the whole brief. F-B3 caught it; the pytest
+        # suite could not, because F-B1..F-B8 run inside this script.
+        #
+        # A timeframe that cannot be resampled DEGRADES to empty, exactly as a
+        # failed Tier-2 fetch degrades under F-B6. The refusal is preserved
+        # (nothing is guessed) and the brief still renders.
+        return df.iloc[0:0][["open_time", "open", "high", "low", "close",
+                             "volume"]].copy()
     return pd.DataFrame({"open_time": r["open_time"], "open": r["open"],
                          "high": r["high"], "low": r["low"],
                          "close": r["close"], "volume": r["volume"]})

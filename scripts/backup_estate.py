@@ -53,13 +53,27 @@ AMENDMENT 2026-08-02 (gates A-5a, A-6a).  Two additions, neither of which
 touches the archive path:
 
   RETENTION REPORT.  After a successful --estate run, the script reports the
-  archive estate against the rule "keep the newest 4 estate generations plus 1
-  phase set" and names every generation outside it.  It REPORTS ONLY.  It never
-  deletes, and it never will -- the DELETION note above governs, and pruning
-  backups unprompted is exactly the class of act this project halts to ask
-  about.  The report is written to exchange/status/RETENTION.md (overwritten
-  each run, so it is a current-state surface, not an accumulating log) and
-  echoed to stdout.
+  archive estate against the retention rule and names every GENERATION outside
+  it.  It REPORTS ONLY.  It never deletes, and it never will -- the DELETION
+  note above governs, and pruning backups unprompted is exactly the class of act
+  this project halts to ask about.  The report is written to
+  exchange/status/RETENTION.md (overwritten each run, so it is a current-state
+  surface, not an accumulating log) and echoed to stdout.
+
+  CORRECTION 2026-08-03.  The rule originally read "keep the newest 4 estate
+  generations plus 1 phase set".  The phase clause was WRONG and is removed:
+  phase archives are not generations of one thing, so keeping only the newest
+  dated set flagged 1,025.2 MB of unique study evidence as prunable.  The rule
+  is now "keep the newest 4 estate + 4 workflow generations; phase archives are
+  PERMANENT EVIDENCE and are never prunable".
+
+AMENDMENT 2026-08-03.  --force-same-day.  The no-clobber guard is correct and
+stays on by default, but it made no distinction between overwriting YESTERDAY's
+archive (a real loss) and re-running TODAY's (ordinary).  It had forced four
+manual archive deletions -- a safety rail that trains the operator to delete
+archives by hand is doing harm.  With the flag, and only when the existing file
+was written today, the new archive takes a -NN suffix and BOTH are kept.  An
+archive from an earlier day still refuses, flag or no flag.
 
   PUBLISH.  --estate and --phase runs end by staging exchange/** ONLY, checking
   the whole index against that scope, and pushing if and only if it is clean
@@ -90,9 +104,28 @@ CHUNK = 1024 * 1024
 REPO_PREFIX = "_repo/"
 
 # Retention rule -- REPORTING thresholds, never deletion thresholds.
+#
+# CORRECTED 2026-08-03.  `KEEP_PHASE_SETS = 1` is REMOVED, not retuned.
+#
+# The old rule grouped phase archives by date and kept only the newest dated
+# "set", on the reasoning that they were archived in a batch and therefore aged
+# as a batch.  That reasoning is wrong, and it was wrong in a dangerous
+# direction: PHASE ARCHIVES ARE NOT GENERATIONS OF ONE THING.  s1, s2, s3, tc1,
+# tc4, tc5 and v3_anchor each hold a DIFFERENT phase's evidence.  An older phase
+# archive is not a superseded copy of a newer one -- it is the only copy of work
+# that will never be produced again.
+#
+# Measured before the fix: the old rule flagged 8 archives totalling 1,025.2 MB
+# as "outside the rule", including every study phase except the most recently
+# archived one.  A retention report that names unique evidence as prunable is
+# worse than no retention report, because it launders a deletion decision as
+# routine housekeeping.
+#
+# Estate and workflow archives ARE generations -- each is a full snapshot of the
+# same thing at a later moment -- so a keep-newest-N rule is correct for them.
 KEEP_ESTATE_GENERATIONS = 4
-KEEP_PHASE_SETS = 1
 KEEP_WORKFLOW_GENERATIONS = 4
+# Phase archives have no keep-count. They are permanent evidence.
 DATED_ZIP = re.compile(r"_(\d{4}-\d{2}-\d{2})\.zip$")
 
 # --workflow mode: the project's THINKING, as opposed to its price estate.
@@ -235,14 +268,59 @@ def inside(child: Path, parent: str | None) -> bool:
         return False
 
 
-def assert_no_clobber(target: Path) -> None:
-    """F-K6.  Dated names must accumulate generations, never overwrite one."""
-    if target.exists():
+def assert_no_clobber(target: Path, force_same_day: bool = False) -> Path:
+    """F-K6.  Dated names must accumulate generations, never overwrite one.
+
+    Returns the path to write, which is `target` unless a same-day suffix was
+    taken.  Raises SystemExit(3) when it refuses.
+
+    --force-same-day (added 2026-08-03).  The guard is correct and stays on by
+    default: a dated archive must never be silently overwritten, because the
+    thing overwritten is a backup.  But a SAME-DAY re-run is a different case
+    from a clobber -- re-running today's backup after fixing something is
+    ordinary, and the guard has now forced FOUR manual archive deletions, which
+    is worse than the risk it was defending: it trained the operator to delete
+    archives by hand to get past a safety rail.
+
+    So with the flag, and ONLY when the existing file was written TODAY, the new
+    archive takes a `-NN` suffix and BOTH are kept. Nothing is deleted, nothing
+    is overwritten, and yesterday's archive is still untouchable -- an older file
+    refuses exactly as before, flag or no flag, because overwriting THAT would
+    be a real loss.
+    """
+    if not target.exists():
+        return target
+
+    same_day = False
+    try:
+        same_day = (datetime.fromtimestamp(target.stat().st_mtime).date()
+                    == datetime.now().date())
+    except OSError:
+        same_day = False
+
+    if force_same_day and same_day:
+        stem, suffix = target.stem, target.suffix
+        for n in range(1, 100):
+            alt = target.with_name(f"{stem}-{n:02d}{suffix}")
+            if not alt.exists():
+                print(f"  same-day re-run: {target.name} exists and was written "
+                      f"today; writing {alt.name} instead (both are kept)")
+                return alt
         sys.stderr.write(
-            f"REFUSING TO CLOBBER: {target} already exists.\n"
-            f"  Dated archives are non-overwriting by design (ruling R-B).\n"
-            f"  Move or rename the existing file, or pass a different --dest.\n")
+            f"REFUSING TO CLOBBER: {target} and -01..-99 all exist.\n")
         raise SystemExit(3)
+
+    hint = ("  The existing file was written TODAY — pass --force-same-day to "
+            "write a -NN suffixed copy instead of halting.\n"
+            if same_day else
+            "  The existing file is from an EARLIER day; --force-same-day does "
+            "NOT apply and will not help.\n")
+    sys.stderr.write(
+        f"REFUSING TO CLOBBER: {target} already exists.\n"
+        f"  Dated archives are non-overwriting by design (ruling R-B).\n"
+        + hint
+        + f"  Move or rename the existing file, or pass a different --dest.\n")
+    raise SystemExit(3)
 
 
 # --------------------------------------------------------------- member collection
@@ -571,12 +649,57 @@ def fk5_destination_verification(fx: Fixtures, target: Path,
 
 
 def fk6_no_clobber(fx: Fixtures, target: Path) -> None:
+    """F-K6, both paths (2026-08-03).
+
+    The default path must still REFUSE, and the --force-same-day path must
+    SIDESTEP without overwriting. Asserting only the refusal would let the new
+    flag silently become a clobber.
+    """
+    # (a) default: refuses
     try:
         assert_no_clobber(target)
         fx.record("F-K6", False, "no-clobber guard did NOT trip on an existing target")
+        return
     except SystemExit:
-        fx.record("F-K6", True,
-                  "guard refuses to overwrite the archive just written")
+        pass
+
+    # (b) --force-same-day on a file written TODAY: takes a -NN suffix
+    try:
+        alt = assert_no_clobber(target, force_same_day=True)
+    except SystemExit:
+        fx.record("F-K6", False,
+                  "--force-same-day refused a same-day target instead of suffixing")
+        return
+
+    ok = (alt != target and not alt.exists() and target.exists()
+          and alt.name.startswith(target.stem) and alt.suffix == target.suffix)
+    fx.record("F-K6", ok,
+              f"default refuses; --force-same-day yields {alt.name} while "
+              f"{target.name} survives untouched"
+              if ok else
+              f"--force-same-day produced {alt} — expected a -NN sibling with "
+              f"the original still present")
+
+    # (c) an archive from an EARLIER day must refuse even with the flag
+    old = target.with_name(f"_fk6_probe_{target.name}")
+    try:
+        old.write_bytes(b"probe")
+        stale = datetime.now().timestamp() - 86_400 * 3
+        os.utime(old, (stale, stale))
+        try:
+            assert_no_clobber(old, force_same_day=True)
+            fx.record("F-K6b", False,
+                      "--force-same-day overrode an archive from an EARLIER day")
+        except SystemExit:
+            fx.record("F-K6b", True,
+                      "--force-same-day correctly does NOT apply to an older archive")
+    except OSError as exc:
+        fx.record("F-K6b", False, f"could not stage the older-file probe: {exc}")
+    finally:
+        try:
+            old.unlink()
+        except OSError:
+            pass
 
 
 def fk7_tracked_preserved(fx: Fixtures, tracked: set) -> None:
@@ -593,23 +716,27 @@ def fk7_tracked_preserved(fx: Fixtures, tracked: set) -> None:
 def retention_report(dest: Path) -> list:
     """Report the archive estate against the retention rule.  NEVER deletes.
 
-    Rule: keep the newest KEEP_ESTATE_GENERATIONS estate generations plus
-    KEEP_PHASE_SETS phase set.  A "phase set" is every dated phase archive
-    sharing one date under research_outputs/_archive -- the phases were archived
-    in a batch, so they age as a batch.
+    Rule, CORRECTED 2026-08-03.  Estate and workflow archives are GENERATIONS --
+    successive full snapshots of the same thing -- so the newest
+    KEEP_*_GENERATIONS are within the rule and older ones are listed as
+    prunable.
 
-    Anything older than the rule is LISTED, with its size, so the operator can
-    decide.  Nothing is removed, moved, or renamed.  Returns markdown lines.
+    PHASE ARCHIVES ARE NEVER PRUNABLE.  Each holds a different phase's evidence,
+    so an older one is not a superseded copy; it is the only copy.  They are
+    reported under their own heading with no keep-count at all.
+
+    Anything outside the generation rule is LISTED, with its size, so the
+    operator can decide.  Nothing is removed, moved, or renamed.
     """
     lines = ["# RETENTION — archive estate vs the rule", ""]
     lines.append(f"Generated {datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')} "
                  f"by `scripts/backup_estate.py`.")
     lines.append("")
     lines.append(f"**Rule:** keep the newest {KEEP_ESTATE_GENERATIONS} estate generations "
-                 f"+ {KEEP_PHASE_SETS} phase set "
-                 f"+ {KEEP_WORKFLOW_GENERATIONS} workflow generations.")
+                 f"and the newest {KEEP_WORKFLOW_GENERATIONS} workflow generations. "
+                 f"**Phase archives are permanent evidence and are never prunable.**")
     lines.append("**This report never deletes anything.** It names what falls outside "
-                 "the rule; acting on it is the operator's call.")
+                 "the generation rule; acting on it is the operator's call.")
     lines.append("")
 
     def _generations(pattern, keep_n, title):
@@ -642,10 +769,14 @@ def retention_report(dest: Path) -> list:
     lines += _generations("naiad_workflow_*.zip", KEEP_WORKFLOW_GENERATIONS,
                           "Workflow generations")
 
-    # --- phase sets ---------------------------------------------------------
+    # --- phase archives: PERMANENT ------------------------------------------
     arch = REPO / "research_outputs" / "_archive"
     lines.append("")
-    lines.append("## Phase sets")
+    lines.append("## PHASE ARCHIVES — PERMANENT EVIDENCE, NEVER PRUNE")
+    lines.append("")
+    lines.append("Each phase archive holds a DIFFERENT phase's evidence, so an older "
+                 "one is not a superseded copy of a newer one — it is the only copy "
+                 "of work that will never be produced again.")
     lines.append("")
     lines.append(f"Location: `{arch}`")
     lines.append("")
@@ -653,36 +784,25 @@ def retention_report(dest: Path) -> list:
         lines.append("- no `research_outputs/_archive` directory")
         return lines
 
-    sets = {}
-    for p in sorted(arch.glob("*.zip")):
-        if not p.is_file():
-            continue
-        m = DATED_ZIP.search(p.name)
-        sets.setdefault(m.group(1) if m else "undated", []).append(p)
-
-    if not sets:
+    phases = sorted((p for p in arch.glob("*.zip") if p.is_file()),
+                    key=lambda p: p.name)
+    if not phases:
         lines.append("- none found")
         return lines
 
-    dates = sorted((d for d in sets if d != "undated"), reverse=True)
-    keep_dates = set(dates[:KEEP_PHASE_SETS])
-    lines.append(f"{len(sets)} set(s) present; keeping the newest {KEEP_PHASE_SETS}.")
+    total = sum(p.stat().st_size for p in phases)
+    lines.append(f"{len(phases)} archive(s), {total:,} B "
+                 f"({total / 1e6:,.1f} MB). **All permanent. None prunable.**")
     lines.append("")
-    lines.append("| set (date) | archives | total size (B) | within rule |")
-    lines.append("|---|---:|---:|---|")
-    for d in dates + (["undated"] if "undated" in sets else []):
-        members = sets[d]
-        total = sum(p.stat().st_size for p in members)
-        within = "yes" if d in keep_dates else "**NO — outside the rule**"
-        lines.append(f"| `{d}` | {len(members)} | {total:,} | {within} |")
-
-    outside = [d for d in dates if d not in keep_dates]
-    if outside or "undated" in sets:
-        lines.append("")
-        lines.append("Archives outside the rule, in full:")
-        for d in outside + (["undated"] if "undated" in sets else []):
-            for p in sets[d]:
-                lines.append(f"- `{p.name}` — {p.stat().st_size:,} B")
+    lines.append("| archive | date | size (B) | status |")
+    lines.append("|---|---|---:|---|")
+    for p in phases:
+        m = DATED_ZIP.search(p.name)
+        lines.append(f"| `{p.name}` | {m.group(1) if m else 'undated'} | "
+                     f"{p.stat().st_size:,} | **PERMANENT — never prune** |")
+    lines.append("")
+    lines.append("There is no keep-count for phase archives and no circumstance "
+                 "under which this report will list one as prunable.")
     return lines
 
 
@@ -728,8 +848,9 @@ def run_estate(dest: Path, args) -> int:
     date = datetime.now().strftime("%Y-%m-%d")
     target = dest / f"naiad_estate_{date}.zip"
     sidecar = target.with_suffix(".zip.sha256")
-    assert_no_clobber(target)
-    assert_no_clobber(sidecar)
+    force_sd = bool(getattr(args, "force_same_day", False))
+    target = assert_no_clobber(target, force_sd)
+    sidecar = assert_no_clobber(target.with_suffix(".zip.sha256"), force_sd)
 
     print(f"estate root      : {estate_root}")
     print(f"NAIAD_CACHE_DIR  : {override or '(unset)'}")
@@ -810,8 +931,9 @@ def run_workflow(dest: Path, args) -> int:
     date = datetime.now().strftime("%Y-%m-%d")
     target = dest / f"naiad_workflow_{date}.zip"
     sidecar = target.with_suffix(".zip.sha256")
-    assert_no_clobber(target)
-    assert_no_clobber(sidecar)
+    force_sd = bool(getattr(args, "force_same_day", False))
+    target = assert_no_clobber(target, force_sd)
+    sidecar = assert_no_clobber(target.with_suffix(".zip.sha256"), force_sd)
 
     print(f"repo root        : {REPO}")
     print(f"destination      : {target}")
@@ -910,8 +1032,9 @@ def run_phase(name: str, args) -> int:
     date = datetime.now().strftime("%Y-%m-%d")
     target = dest / f"{name}_{date}.zip"
     sidecar = target.with_suffix(".zip.sha256")
-    assert_no_clobber(target)
-    assert_no_clobber(sidecar)
+    force_sd = bool(getattr(args, "force_same_day", False))
+    target = assert_no_clobber(target, force_sd)
+    sidecar = assert_no_clobber(target.with_suffix(".zip.sha256"), force_sd)
 
     rel_dir = f"research_outputs/{name}"
     tracked = git_tracked_under(rel_dir)
@@ -1037,6 +1160,11 @@ def main() -> int:
                     help="destination directory (required for --estate and --workflow)")
     ap.add_argument("--delete-source", action="store_true",
                     help="--phase only: release untracked sources after zero mismatches")
+    ap.add_argument("--force-same-day", action="store_true",
+                    help="if the target exists AND was written TODAY, append -NN "
+                         "instead of halting. Both files are kept; nothing is "
+                         "overwritten. Does NOT apply to archives from an "
+                         "earlier day, which still refuse.")
     args = ap.parse_args()
 
     if args.verify:

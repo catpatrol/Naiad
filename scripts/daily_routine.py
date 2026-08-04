@@ -229,7 +229,15 @@ def run_job(job, python, today, out_dir, slot=None):
         return res
 
     argv = [python, str(script)]
-    if slot and job.get("slot_aware"):
+    if job.get("slot_aware"):
+        if not slot:
+            # A slot-aware job cannot run without one -- brief_capture.py makes
+            # --slot required, so calling it slotless would fail on argparse and
+            # report as a broken job rather than an inapplicable one. SKIPPED is
+            # the honest state, and it keeps a no-slot routine run clean.
+            res["exit"] = 0
+            res["skipped"] = "slot-aware job, no --slot given"
+            return res
         argv += ["--slot", slot]
         res["slot"] = slot
 
@@ -388,7 +396,18 @@ def _onedrive_running():
 
 
 def _retention_violations(dest, cfg):
-    """Generations outside 'newest N estate + M phase sets + K workflow'. LIST only."""
+    """Generations outside 'newest N estate + K workflow'. LIST only.
+
+    CORRECTED 2026-08-03, in step with scripts/backup_estate.py.  This helper
+    ALSO carried the phase-set rule, so the alarm was independently reporting
+    unique study evidence as "outside the rule" every single run -- the same
+    defect in a second place, which is exactly how a wrong rule becomes received
+    wisdom.
+
+    PHASE ARCHIVES ARE NEVER A VIOLATION.  Each holds a different phase's
+    evidence; an older one is the only copy, not a superseded generation.  There
+    is no keep-count for them here and no `keep_phase_sets` key is read.
+    """
     out = []
     for pattern, keep, label in (
         ("naiad_estate_*.zip", cfg.get("keep_estate", 4), "estate"),
@@ -401,19 +420,57 @@ def _retention_violations(dest, cfg):
             continue
         for p in gens[keep:]:
             out.append(f"{label}: {p.name}")
-
-    arch = ROOT / "research_outputs" / "_archive"
-    if arch.is_dir():
-        sets = {}
-        for p in sorted(arch.glob("*.zip")):
-            m = DATED_ARCHIVE.search(p.name)
-            sets.setdefault(m.group(1) if m else "undated", []).append(p.name)
-        dates = sorted((d for d in sets if d != "undated"), reverse=True)
-        for d in dates[cfg.get("keep_phase_sets", 1):]:
-            out.append(f"phase set {d}: {len(sets[d])} archive(s)")
-        if "undated" in sets:
-            out.append(f"phase set undated: {len(sets['undated'])} archive(s)")
     return out
+
+
+SECOND_ACCOUNT_PATH = ROOT / "exchange" / "status" / "SECOND_ACCOUNT.md"
+_SECOND_ACCOUNT_DATE = re.compile(r"^last_manual_upload:\s*(\d{4}-\d{2}-\d{2})\s*$",
+                                  re.M)
+
+
+def _second_account_due(dest, facts):
+    """Is a manual upload to the second Google Drive account outstanding?
+
+    That account is NOT machine-verifiable -- there is no API, no mounted drive,
+    nothing this script can read.  The only honest mechanism is a date the
+    operator writes down after each manual upload, compared against the newest
+    archive we CAN see.  If an archive is newer than that date, an upload is
+    outstanding.
+
+    Returns an alert string, or None.
+    """
+    newest_name, newest_d = None, None
+    for key in ("estate", "workflow"):
+        iso = facts.get(key)
+        if not iso:
+            continue
+        d = date.fromisoformat(iso)
+        if newest_d is None or d > newest_d:
+            newest_d, newest_name = d, key
+    if newest_d is None:
+        return None
+
+    if not SECOND_ACCOUNT_PATH.is_file():
+        return (f"**second-account upload state unknown** — "
+                f"`exchange/status/SECOND_ACCOUNT.md` is missing, so there is no "
+                f"record of when the second Google Drive account was last "
+                f"updated by hand. Newest archive is the {newest_name} of "
+                f"{newest_d.isoformat()}.")
+    m = _SECOND_ACCOUNT_DATE.search(
+        SECOND_ACCOUNT_PATH.read_text(encoding="utf-8", errors="replace"))
+    if not m:
+        return ("**second-account date line unreadable** — "
+                "`exchange/status/SECOND_ACCOUNT.md` has no "
+                "`last_manual_upload: YYYY-MM-DD` line.")
+    last = date.fromisoformat(m.group(1))
+    if newest_d > last:
+        return (f"**manual upload to the second Google Drive account is "
+                f"outstanding** — the newest {newest_name} archive is "
+                f"{newest_d.isoformat()}, but the last recorded manual upload "
+                f"was {last.isoformat()}. That account cannot be checked by "
+                f"machine; upload in the browser, then update the date line in "
+                f"`exchange/status/SECOND_ACCOUNT.md`.")
+    return None
 
 
 def check_reminders(reg, today):
@@ -493,6 +550,10 @@ def check_reminders(reg, today):
     if od is False:
         alerts.append("**OneDrive.exe is not running** — the repo lives inside the OneDrive tree, "
                       "so nothing here is syncing to the cloud right now.")
+
+    second = _second_account_due(dest if dest_ok else None, facts)
+    if second:
+        alerts.append(second)
 
     unratified = _unratified_queue_items()
     if unratified:
