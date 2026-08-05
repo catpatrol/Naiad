@@ -282,6 +282,33 @@ machine would lose it. **Committed is not pushed. Pushed is not backed up.** And
 GitHub" is usually the browser showing the DEFAULT branch (`main`) rather than `v12-v1-census`,
 which carries all project work.
 
+**Existence is not protection — rule added 2026-08-04.**
+
+Before removing any file on the grounds that a copy exists elsewhere, **verify the copy is TRACKED
+and present on the REMOTE.** Three checks, all of them, none assumed:
+
+1. `git ls-files --error-unmatch <twin>` — is it tracked at all?
+2. `git cat-file -e origin/v12-v1-census:<twin>` — is it on the remote?
+3. `git hash-object <twin>` against the committed blob — is the worktree copy the committed one?
+
+**A file sitting at a path proves nothing about whether it survives this machine.** Several
+directories are git-ignored *on purpose* and say so in `.gitignore` itself — `_reviewer_box/`
+("local-only, never committed"), `research_outputs/brief/` ("untracked by design"). A duplicate
+living only there is not a backup; it is a second copy on the same disk.
+
+**Why this is a rule and not a note.** On 2026-08-04 a reviewer paste de-duplicated `exchange/` by
+the test "does a byte-identical file exist anywhere outside `exchange/`". Two of three matches were
+git-ignored. Running it would have deleted the **only version-controlled copy** of both files and
+left a pointer stub asserting *"a byte-identical copy exists in the repo"* — true as English,
+false as protection. The builder checked the twins' tracked state, refused both removals, and
+performed only the one whose twin was verified in `HEAD` and on `origin`. **The reviewer wrote the
+rule this paragraph extends and then broke it in the same week; the executor reading the invariant
+rather than the instruction is what stopped it.**
+
+**Corollary for guards.** A per-file size limit does not bound a folder. `exchange/` reached 51% of
+the context box while nine of its ten data files were individually under the 1 MB cap — one
+breach, nine compliant, half the box gone. **Budget the total, not the item.**
+
 ### 3.3 Publishing and the on-screen close
 
 The document is written into `exchange/reports/` with sha256 verified before and after. The paste
