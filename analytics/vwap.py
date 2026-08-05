@@ -28,7 +28,7 @@ import numpy as np
 
 __all__ = ["hlc3", "rolling_vwap", "anchored_vwap", "vw_sigma_bands",
            "two_pass_vw_variance", "MIN_BARS", "DAY_MS",
-           "VWAP_SUBSTRATE", "VWAP_SOURCE", "SUBSTRATE_REASONING",
+           "VWAP_SUBSTRATE", "VWAP_SOURCE", "SUBSTRATE_REASONING", "FLOOR_BASIS",
            "SOURCE_REASONING", "LINE_MIN_BARS", "BAND_MIN_BARS",
            "maturity"]
 
@@ -74,24 +74,88 @@ SOURCE_REASONING = (
 )
 
 # --------------------------------------------------------------------------
-# MATURITY FLOORS -- operator ruling R3, 2026-08-05.  INTERIM, on the 1h
-# substrate; stage 7's MATURITY STABILISATION measurement replaces them with a
-# measured rule.
+# MATURITY FLOORS -- RULED 2026-08-06 (cycle 6 item 1), replacing R3's interim
+# 10/30 convention with the cycle-5 measurement.
 #
 # A VWAP over very few bars is arithmetically exact and informationally empty.
 # The LINE is a weighted average and stabilises fast; the SIGMA is a dispersion
 # estimate over the same handful of points and stabilises far more slowly --
 # which is why the two carry DIFFERENT floors rather than one shared one.
 #
+# LINE 16 -- MEASURED, not conventional.  At 16 bars the median per-bar move of
+# an anchored VWAP line falls below COLLAPSE_ATR (0.02 daily-ATR), which is this
+# system's own definition of "the same level".  Per-bar stability is the RIGHT
+# test for a converging mean; cycle 5 rejected it only for SIGMA, and that
+# rejection does not carry over to the line.
+#
+# BAND 60 -- MEASURED.  Sixty bars is where an anchored sigma first carries half
+# the dispersion it eventually reports (~33% at 30, ~50% at 60, ~91% at 180).
+# It guards SAMPLING NOISE, which is the one genuine small-sample defect here.
+#
 # BELOW THE FLOOR THE VALUE STILL PRINTS, carrying a `thin_sample` chip.  It is
 # NOT emitted as a registry level.  That asymmetry is the whole point: hiding it
 # would conceal market state the operator asked to see, while scoring it would
 # let a two-bar-old anchor cast a confluence vote with the same weight as a
 # year of business.
+#
+# ROLLING WINDOWS TAKE NO FLOOR.  Measured at steady state, every rolling window
+# moves orders of magnitude inside tolerance per bar, and the `warming` chip
+# already refuses a window shorter than its own span.  A floor there would be
+# a second guard on a problem the first one has already solved.
 # --------------------------------------------------------------------------
 
-LINE_MIN_BARS = 10
-BAND_MIN_BARS = 30
+LINE_MIN_BARS = 16
+BAND_MIN_BARS = 60
+
+# --------------------------------------------------------------------------
+# THE WITHDRAWN PERIOD-RELATIVE FLOOR, and why the reasoning was wrong.
+#
+# The reviewer proposed scaling the floor to the anchor's period (period/4) on
+# the grounds that a YOUNG SIGMA INFLATES THE SIGMA-LABEL and so manufactures
+# false reversion signals -- a narrow early band would put price at "sigma 2"
+# when a mature band would not.
+#
+# THAT REASONING IS WRONG, and the correction is worth more than the ruling.
+#
+# An anchored sigma grows roughly as sqrt(t).  But price's DISPLACEMENT from the
+# anchored mean grows as sqrt(t) as well -- both are accumulations of the same
+# random walk from the same anchor.  The ratio of the two is therefore
+# APPROXIMATELY SCALE-FREE IN TIME: the Z-SCORE a young anchor reports is not
+# systematically inflated, even though its band is narrow.
+#
+# MEASURED ON THE OPERATOR'S OWN CAPTURES, same asset, same Month anchor:
+#
+#     bar                 bars    sigma       z
+#     2026-08-02T04:00Z     29   313.3966   +2.0136
+#     2026-08-05T17:00Z    114   583.3876   +1.9389
+#
+#     sigma grew +86.1%   (sqrt(114/29) = 1.983 predicted, 1.861 observed)
+#     z moved     -3.7%
+#
+# A young band's WIDTH is age-dependent.  Its READING is not.  So the defect a
+# period-relative floor was aimed at does not exist, and the floors that remain
+# are justified by SAMPLING NOISE alone -- which is exactly what BAND_MIN_BARS
+# guards and why it is the larger of the two.
+#
+# CONSEQUENCE, enforced in the report: comparing one anchor's band WIDTH to
+# another's is valid ONLY AT COMPARABLE AGES.  Every place widths appear
+# together must print each anchor's AGE IN BARS beside its width.
+# --------------------------------------------------------------------------
+
+FLOOR_BASIS = {
+    "line": "per-bar move below COLLAPSE_ATR at 16 bars (measured, cycle 5)",
+    "band": "sigma carries half its eventual dispersion at 60 bars (measured)",
+    "rolling": "no floor; `warming` already refuses a short span",
+    "withdrawn": "period-relative (period/4) floor, proposed to stop a young "
+                 "sigma inflating the sigma-label. WITHDRAWN: anchored sigma "
+                 "and displacement from the anchored mean BOTH grow as sqrt(t), "
+                 "so the z-score is approximately scale-free in time. Measured "
+                 "on the same Month anchor: sigma +86.1% (29->114 bars) while z "
+                 "moved -3.7% (+2.0136 -> +1.9389). A young band's WIDTH is "
+                 "age-dependent; its READING is not.",
+    "width_comparison_caveat": "band WIDTHS are comparable only at comparable "
+                               "ages; print age in bars beside every width",
+}
 
 
 def maturity(bars, line_min=LINE_MIN_BARS, band_min=BAND_MIN_BARS):

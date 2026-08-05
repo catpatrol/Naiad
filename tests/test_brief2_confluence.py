@@ -336,10 +336,11 @@ def test_f_b35_prior_anchors_and_confirmed_pivots_reach_the_registry():
 
 
 def test_f_b37_r3_maturity_floors_withhold_immature_vwap_levels():
-    """F-B37 -- operator ruling R3, 2026-08-05.
+    """F-B37 -- maturity floors. R3 interim 2026-08-05, RULED 2026-08-06.
 
     A VWAP over a handful of bars is arithmetically exact and informationally
-    empty. The LINE enters the registry at >= 10 bars, the SIGMA BANDS at >= 30.
+    empty. The LINE enters the registry at >= 16 bars, the SIGMA BANDS at >= 60
+    -- both MEASURED (cycle 5), replacing R3's interim 10/30 convention.
     Below the floor the value still PRINTS with a `thin_sample` chip and is
     excluded from SCORING only -- so this asserts three separable things:
 
@@ -355,8 +356,14 @@ def test_f_b37_r3_maturity_floors_withhold_immature_vwap_levels():
     import brief2 as B2
     from analytics import vwap as W
 
-    assert (W.LINE_MIN_BARS, W.BAND_MIN_BARS) == (10, 30), \
-        "R3's interim floors moved without the fixture moving with them"
+    assert (W.LINE_MIN_BARS, W.BAND_MIN_BARS) == (16, 60), \
+        "the ruled floors moved without the fixture moving with them"
+
+    # The withdrawn period-relative proposal, and WHY, must stay on the record:
+    # a young band is NARROW but its READING is not inflated, because sigma and
+    # displacement both grow as sqrt(t). Losing this invites the proposal back.
+    assert "scale-free" in W.FLOOR_BASIS["withdrawn"].lower()
+    assert "sqrt(t)" in W.FLOOR_BASIS["withdrawn"].lower()
 
     def _prior(bars):
         return {"prior_M": {"warming": False, "vwap": 100.0, "sigma": 2.0,
@@ -373,15 +380,26 @@ def test_f_b37_r3_maturity_floors_withhold_immature_vwap_levels():
     assert lvls(r3) == [], "a 3-bar anchor cast confluence votes"
     assert len(r3.withheld) == 7 and r3.withheld[0]["bars"] == 3
 
-    # 15 bars -- ABOVE the line floor, BELOW the band floor. This is the case
-    # the two-floor design exists for: a mature mean whose dispersion estimate
-    # is not yet meaningful. One line scored, six bands withheld.
+    # 30 bars -- ABOVE the line floor (16), BELOW the band floor (60). This is
+    # the case the two-floor design exists for: a settled mean whose dispersion
+    # estimate carries only about a third of the spread it will end with. One
+    # line scored, six bands withheld.
+    #
+    # NOTE this exact bar count was ADMITTED under the interim 30-bar band floor
+    # and is WITHHELD under the ruled 60 -- the registry-membership change that
+    # forced the ANALYTICS_VERSION 1.5.0 bump under I-F.
+    r30 = B2.build_registry(a, {"windows": {}}, {"windows": {}}, [],
+                            prior_anchors=_prior(30))
+    assert len(lvls(r30)) == 1 and lvls(r30)[0]["label"] == "prior_M VWAP"
+    assert len(r30.withheld) == 6
+    assert {w["level"] for w in r30.withheld} == {"band"}, \
+        "the line was withheld at 30 bars, above its own floor of 16"
+
+    # 15 bars -- below BOTH ruled floors now, though it cleared the old line
+    # floor of 10. Nothing scored.
     r15 = B2.build_registry(a, {"windows": {}}, {"windows": {}}, [],
                             prior_anchors=_prior(15))
-    assert len(lvls(r15)) == 1 and lvls(r15)[0]["label"] == "prior_M VWAP"
-    assert len(r15.withheld) == 6
-    assert {w["level"] for w in r15.withheld} == {"band"}, \
-        "the line was withheld at 15 bars, above its own floor of 10"
+    assert lvls(r15) == [], "15 bars is below the ruled line floor of 16"
 
     # 720 bars -- a full month on 1h: everything admitted, nothing withheld.
     r720 = B2.build_registry(a, {"windows": {}}, {"windows": {}}, [],
@@ -395,7 +413,7 @@ def test_f_b37_r3_maturity_floors_withhold_immature_vwap_levels():
 
     # AUDITABILITY: every withheld row names what failed and against what floor.
     for w in r3.withheld:
-        assert w["level"] in ("line", "band") and w["floor"] in (10, 30)
+        assert w["level"] in ("line", "band") and w["floor"] in (16, 60)
         assert w["label"] and w["what"] and w["reason"]
 
 

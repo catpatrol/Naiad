@@ -147,11 +147,12 @@ def part1_html(sym, a):
         # than becoming a parity incident.
         L.append(vwap_provenance_chip(a))
         L.append('<table><tr><th>anchor / window</th><th>mean</th><th>sigma</th>'
+                 '<th>age (bars)</th>'
                  '<th>&sigma; position</th><th>ATR</th><th>band</th><th></th></tr>')
         for r in st["rows"]:
             if r.get("sigma_position") is None:
                 L.append(f'<tr class="mute"><td>{esc(r["name"])}</td>'
-                         f'<td colspan="5">&mdash;</td><td>{chip("warming","warn")}</td></tr>')
+                         f'<td colspan="6">&mdash;</td><td>{chip("warming","warn")}</td></tr>')
                 continue
             flags = []
             if r.get("thin_sample"):
@@ -162,10 +163,22 @@ def part1_html(sym, a):
                                   "bad" if k >= 2 else "accent"))
             L.append(f'<tr><td>{esc(r["name"])}</td><td>{num(r["mean"])}</td>'
                      f'<td>{num(r["sigma"])}</td>'
+                     f'<td>{r.get("bars") if r.get("bars") is not None else "&mdash;"}</td>'
                      f'<td class="big">{sig(r["sigma_position"])}</td>'
                      f'<td>{sig(r["atr"])}</td><td>{r.get("band_reached") or 0}</td>'
                      f'<td>{"".join(flags)}</td></tr>')
         L.append('</table>')
+        # C6 item 1.4 -- sigma WIDTHS are comparable only at comparable AGES.
+        # A young anchor's band is narrow because it has accumulated less time,
+        # not because the market is calm; its z-POSITION is unaffected.
+        L.append('<p class="mute small"><b>Age is printed beside sigma because '
+                 'widths are only comparable at comparable ages.</b> An anchored '
+                 'sigma grows roughly as &radic;t &mdash; but so does the '
+                 'displacement of price from the anchored mean, so the '
+                 '&sigma; POSITION is approximately scale-free in time while '
+                 'the WIDTH is not. '
+                 'Measured on one Month anchor: &sigma; +86% from 29 to 114 bars '
+                 'while the reading moved &minus;3.7%.</p>')
         d = st.get("disagreement")
         if d:
             L.append(f'<p class="prose">Widest disagreement: <b>{esc(d["max"]["name"])}</b> '
@@ -419,6 +432,7 @@ def part2_html(sym, a):
                          '<tr><th>rank</th><th>side</th><th>anchor / window</th>'
                          '<th>band</th><th>entry</th><th>target (mean)</th>'
                          '<th>invalidation</th><th>R:R</th><th>&sigma; in ATR</th>'
+                         '<th>age (bars)</th>'
                          '<th>target ATR</th><th>band score</th></tr>')
                 for d in brs:
                     L.append(
@@ -428,6 +442,7 @@ def part2_html(sym, a):
                         f'<td>{num(d["invalidation"])}</td>'
                         f'<td>{num(d["rr"])}</td>'
                         f'<td>{num(d.get("sigma_atr"))}</td>'
+                        f'<td>{d.get("bars") if d.get("bars") is not None else "&mdash;"}</td>'
                         f'<td>{num(d.get("target_distance_atr"))}</td>'
                         f'<td class="big">{d.get("band_confluence_score")
                                            if d.get("band_confluence_score")

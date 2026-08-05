@@ -65,7 +65,13 @@ from pathlib import Path
 # The 1.2.0 precedent governs: the minor bump is taken when the CONTRACT
 # changes, because I-F is about identifying the recipe an archived capture was
 # produced by, not about whether today's data happens to exercise a difference.
-ANALYTICS_VERSION = "1.4.0"
+# 1.5.0 -- MATURITY FLOORS RULED (2026-08-06, cycle 6 item 1).  R3's interim
+# 10/30 convention is replaced by the cycle-5 measurement: LINE 10 -> 16, BANDS
+# 30 -> 60.  REGISTRY MEMBERSHIP CHANGES -- levels admitted under 10/30 are
+# withheld under 16/60 -- so returned numbers move and I-F requires the bump.
+# The reviewer's period-relative alternative was WITHDRAWN on evidence; see
+# `vwap.FLOOR_BASIS` for the sqrt(t) argument that killed it.
+ANALYTICS_VERSION = "1.5.0"
 
 # --------------------------------------------------------------------------
 # THE SEALED LOCKBOX -- disclosure, not enforcement.
@@ -184,10 +190,28 @@ CONVENTIONS = {
                           "definition is therefore READ OFF A MEASUREMENT that could only "
                           "come out one way, not inferred from shared band machinery. "
                           "True volume weights on the two bars: 0.394428 / 0.605572.",
-                      "certification": "variance VERIFIED, source VERIFIED (hlc3, 1D "
-                                       "capture 2026-08-03); SIGMA ON THE 1h SUBSTRATE "
-                                       "UNVERIFIED -- needs one 1H capture with anchored "
-                                       "bands enabled"},
+                      "certification": "CERTIFIED on both substrates. 1D 14/14 "
+                                       "(2026-08-03); 1h 42/42 (2026-08-06, two closed "
+                                       "bars x W/M/Q x 7 levels, worst |delta| 0.0495)",
+                      "maturity_floors": "line >= 16 bars, bands >= 60 bars (RULED "
+                                         "2026-08-06); see vwap.FLOOR_BASIS",
+                      "withdrawn_period_relative_floor":
+                          "A period-relative floor (period/4) was proposed on the "
+                          "grounds that a YOUNG SIGMA INFLATES THE SIGMA-LABEL and so "
+                          "manufactures false reversion signals. THE REASONING IS WRONG "
+                          "and the correction matters more than the ruling: anchored "
+                          "sigma grows as sqrt(t), but price's DISPLACEMENT from the "
+                          "anchored mean grows as sqrt(t) too -- both accumulate the "
+                          "same walk from the same anchor -- so their RATIO, the "
+                          "z-score, is approximately SCALE-FREE IN TIME. Measured on "
+                          "the operator's captures, same asset, same Month anchor: at "
+                          "29 bars sigma 313.3966 and z +2.0136; at 114 bars sigma "
+                          "583.3876 and z +1.9389. Sigma grew 86.1%, the reading moved "
+                          "3.7%. A young band's WIDTH is age-dependent; its READING is "
+                          "not. The remaining floors are justified by SAMPLING NOISE "
+                          "alone. CONSEQUENCE: band WIDTHS are comparable only at "
+                          "comparable AGES, so every place widths appear together must "
+                          "print each anchor's age in bars."},
     "vw_sigma_bands": {"recipe": "vwap +/- k*stdev, k in {1,2,3}",
                        "causality": "causal", "warmup": "inherits",
                        "certification": "GEOMETRY VERIFIED -- 36 triples across 3 captures, "
