@@ -5,8 +5,8 @@ description of what `analytics/` computes, under which conventions, with which
 causality class, and in which record shape. Nothing here is evidence of edge —
 see the firewall at the end.
 
-- `ANALYTICS_VERSION` **1.3.0**
-- `analytics_sha()` = `da81034d86329a0e0e581e526ebe515f3d0f491a0c7ae329e3a9ce49c9c6c731`
+- `ANALYTICS_VERSION` **1.4.0**
+- `analytics_sha()` = `e8a4959b6f8d6fb22b593eb77da60b59fc9fa499bf4ef94b795f248651d20d66`
   — sha256 over the package sources in fixed order, binary reads. Printed beside
   the version by every artifact that consumes this toolbox, so a stored capture
   can always name the exact code that produced it.
@@ -209,6 +209,28 @@ slicing to the decision bar — see `structure.confirmed_pivots`.
 ```
 zscore(x, length) · correlation(a, b, length) · beta(asset_returns, market_returns, length)
 ```
+
+## CERTIFICATION TABLE — what APOLLO may cite, and how far
+
+**Read this before citing any number.** "Verified" and "certified" are not the
+same claim, and neither means "profitable" — see the firewall.
+
+| recipe | status | evidence |
+|---|---|---|
+| oscillators (RSI, StochRSI, MACD, AO) | **CERTIFIED** | 72/72 values, 9 candles × 3 assets × 5 timeframes, across two sittings |
+| `atr` | **CERTIFIED** | in the same 72/72 |
+| `resample_ohlcv` | **CERTIFIED** | 40/40 — 32 raw OHLC + 8 resampled, matching TradingView's own aggregation |
+| `rolling_vwap` | **CERTIFIED, BOTH SUBSTRATES** | 1D/hlc3 14/14 (2026-08-03) **and** 1h/hlc3 28/28 (2026-08-05) — the ruled substrate, worst \|Δ\| 0.0496 |
+| `vw_sigma_bands` | **GEOMETRY VERIFIED** | 36 triples across 3 captures, 2 instruments, 2 timeframes; every triple exactly symmetric at exact integer multiples of σ |
+| `anchored_vwap` — variance | **VERIFIED** (was INFERRED) | 2-bar Month anchor discriminated population from sample by √2 = 41.4%; population landed within 0.003% |
+| `anchored_vwap` — source | **VERIFIED** | hlc3 confirmed on the 2026-08-03 1D capture; the prediction was made *before* the chart setting changed and held to 0.005 bps |
+| `anchored_vwap` — σ on 1h | **UNVERIFIED** ⚠ | means matched on 1h (M 63,602.4452 / Q 63,486.3109) but the operator's 1H capture had **anchored bands disabled**. Substrate delta measured up to **0.186 daily-ATR**. **One 1H capture with anchored bands enabled closes it.** NOT BLOCKING. |
+| `volume_profile` / `windowed_profile` | **APPROXIMATION, declared** | volume spread uniformly across each bar's range; not tick data. Never certified, by construction |
+| `relative_volume` (RVOL) | **UNCERTIFIED** | built 2026-08-05, no operator reading taken against it yet |
+
+**`PARITY NOT CERTIFIED` still prints on every render.** Rolling VWAP passing on
+both substrates does not certify the instrument as a whole; the banner comes
+down when the operator says it does, not when a builder judges the deltas small.
 
 ## Pinned conventions (`CONVENTIONS`)
 
@@ -685,6 +707,99 @@ verify about itself, and `brief_panel.py` rebuilds every partition FROM CAPTURES
 ALONE. The since-last-touch series is DERIVED at panel-build time from the stored
 `band_reached` column, where it is reproducible from the archive rather than
 trusted from a counter.
+
+**DERIVATION NOW EXISTS.** For a full cycle the sentence above was true as a
+design intent and false as a fact: no `excursions` table and no derivation were
+built. Both landed 2026-08-05. `briefs/panel/excursions/<date>.parquet` stores
+the per-capture events; `brief_panel.since_last_touch()` derives the recency
+series on demand (`python scripts/brief_panel.py --since-last-touch`).
+
+`since_last_touch` is a **recency counter** — the same class of object as a
+naked POC's "untested since". It says WHEN a band was last touched. It never
+says how often a touch works. **F-B38 enforces this on the CODE**, not on the
+prose: it scans what these functions do, never what they mention.
+
+### Reversion draft record (§5.2) — GEOMETRY, never a forecast
+
+```
+{archetype: "reversion", side, name, kind, entry_band, entry, target,
+ invalidation, reward, risk, rr, rr_is_constant: true,
+ sigma, sigma_atr, target_distance_atr, sigma_position, bars,
+ band_confluence_score, band_cluster_families, band_cluster_mean, rank,
+ no_sizing: true, contains_no_probability_claim: true}
+```
+
+**The entry is an OBSERVATION.** A draft exists only where price has ALREADY
+REACHED σ2 or σ3 and is beyond it at the close. Nothing claims price will return.
+
+**`rr` cannot rank these, and that is arithmetic, not opinion.** Entry at σ2
+targeting the mean earns 2σ against a 1σ stop at σ3: exactly 2:1, always. At σ3,
+exactly 3:1, always. Measured across the ten assets on 2026-08-05, `rr` took
+**exactly two values — 2.0 (×9) and 3.0 (×3)** — in every distance bucket.
+Ranking is therefore by **`band_confluence_score`**: the confluence score of the
+band level itself, which is a LOOKUP (the band is already a registry member
+under R6) and which ranged **2..16** on the same capture.
+
+**`sigma_atr` is why identical geometry is not an identical trade.** BTC's
+prior-Y draft on 2026-08-05 travels 14.88 ATR on a 7.44-ATR σ — a position held
+for months. ETH's anchored-W draft travels 0.6 ATR — a day trade. Same 2:1, same
+board. A consumer reading only `rr` would treat them as equivalent.
+
+**Gated on `thin_sample` False** (≥30 bars), so a freshly-opened anchor cannot
+manufacture a setup from a two-bar σ. Skips are recorded, not silent.
+
+Whether a band reversion pays is **H-VBR**, census work under G-7.
+
+### RVOL record (§3.6, ruling B-7) — observation only
+
+```
+{rvol, current_volume, average_volume, samples, oldest_sample_utc_ms,
+ lookback_days: 20, bucket_ms, warming, observation_only: true}
+```
+
+Bar volume ÷ the mean of the **same time-of-day bucket** over the trailing 20
+days, **current bar excluded from its own baseline**. The bucket is the design:
+crypto volume has a hard diurnal shape, so a flat 20-day mean would score every
+US-open bar "high" and every Asian bar "low" — a clock reading, not a market
+reading. Self-exclusion matters most on exactly the spikes the measure exists to
+find. Returns `rvol: None` rather than `inf` when the baseline is zero, because
+`inf` sorts first on any board.
+
+**RVOL contributes NO level and casts NO vote.** It describes participation, not
+price, so it locates nothing and can be confluent with nothing.
+
+### Calibration facts APOLLO should not re-derive (measured 2026-08-05)
+
+Registry **131–169 levels** per asset (median 160) across all ten, five families
+non-empty everywhere. §5.3's 180–200 forecast predates the layers; the measured
+range is the fact.
+
+**Level distance is NOT filtered (R6).** 567 of 1,381 scored levels (**41.1%**)
+sit beyond 3 ATR; the furthest admitted is **192.37 ATR**. A ±3 ATR admission
+filter was proposed and OVERRULED: it judged levels by whether they could cluster
+NEAR price — an entry-side test — while targets are the next OPPOSING clusters,
+far by construction. It would have capped R:R by construction.
+
+**Where price actually lives relative to its own volume-weighted mean**, over the
+trailing 365 days of 1h bars, ten assets:
+
+| beyond | share of bars |
+|---|---|
+| ±1σ | **~50%** (44.9–53.3) |
+| ±2σ | **~9.5%** (6.7–12.4) |
+| ±3σ | **~0.4%** (0.07–0.86) |
+
+A normal distribution would give 31.7 / 4.6 / 0.27. **The 1σ band holds far less
+than Gaussian intuition expects and the 2σ band roughly twice the tail** — so a
+"2σ is rare" prior is wrong by a factor of two. This is a description of the
+distribution, NOT a statistic over excursion outcomes: it says nothing about
+whether a touch pays.
+
+`inval_atr` on the structure-derived rule spans **0.164–1.419** (median 0.396,
+n=100). Cycle 3 measured 0.244–0.276 — a 0.03 spread — on a registry a third
+this size, which is why excluding rows on that threshold was an arbitrary cut and
+why it is now a CAUTION CHIP rather than an exclusion gate.
+
 
 **RECORDING IS OPS.** Whether a band touch pays anything is **H-VBR** under G-7.
 Nothing in this layer claims it does, and the deflation gauge for H-VBR is stated

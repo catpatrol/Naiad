@@ -1,0 +1,168 @@
+
+================================================================================================
+7.1 (1)  LEVEL COUNT PER ASSET, BY FAMILY  -- cycle-2 numbers are VOID
+================================================================================================
+asset             vwap_anchored     vwap_rolling profile_windowed        structure               ss   total
+BTCUSDT                      49               28               33               34               20     164
+ETHUSDT                      49               28               30               35                6     148
+FARTCOINUSDT                 49               28               39               37               16     169
+HYPEUSDT                     49               28               30               35               14     156
+JTOUSDT                      49               28               36               38               12     163
+LITUSDT                      49               21               16               35               10     131
+NEARUSDT                     49               28               21               38               18     154
+SOLUSDT                      49               28               30               38               12     157
+TAOUSDT                      49               28               30               33               22     162
+ZECUSDT                      49               28               27               37               24     165
+
+  range 131-169  median 160
+  §5.3 forecast 180-200 was made BEFORE the layers existed. The measured
+  range is the fact; the forecast is not a target to be reached.
+
+================================================================================================
+7.1 (2)  SCORE DISTRIBUTION, AND HOW OFTEN THE FAMILY CAP BINDS
+================================================================================================
+  clusters 625   min 2  median 2  p90 8  max 18
+  family cap (>= 3 of one family) BINDS on 55 of 625 clusters (8.8%)
+
+================================================================================================
+7.1 (3)  LINE-IN-THE-SAND STABILITY ACROSS TOLERANCE 0.10 / 0.15 / 0.20
+================================================================================================
+asset            tol        above        below   moved vs 0.15
+BTCUSDT         0.10   64994.7235   63701.3387   
+BTCUSDT         0.15   65062.4788   63711.7340   
+BTCUSDT         0.20   64994.7235   64485.3176    above 0.042ATR below 0.475ATR
+ETHUSDT         0.10    1917.0178    1875.0311   
+ETHUSDT         0.15    1943.3951    1848.5659   
+ETHUSDT         0.20    1920.1900    1854.7174    above 0.360ATR below 0.095ATR
+FARTCOINUSDT    0.10       0.1345       0.1287   
+FARTCOINUSDT    0.15       0.1347       0.1322   
+FARTCOINUSDT    0.20       0.1379       0.1283    above 0.353ATR below 0.435ATR
+HYPEUSDT        0.10      58.9552      56.5221   
+HYPEUSDT        0.15      58.7765      55.0244   
+HYPEUSDT        0.20      58.7765      56.2542    below 0.393ATR
+JTOUSDT         0.10       0.5210       0.5053   
+JTOUSDT         0.15       0.5184       0.5066   
+JTOUSDT         0.20       0.5344       0.5006    above 0.350ATR below 0.131ATR
+LITUSDT         0.10       2.1678       2.1327   
+LITUSDT         0.15       2.1863       2.1366   
+LITUSDT         0.20       2.1981       2.1467    above 0.062ATR below 0.053ATR
+NEARUSDT        0.10       1.7282       1.7090   
+NEARUSDT        0.15       1.7403       1.7156   
+NEARUSDT        0.20       1.7200       1.6742    above 0.213ATR below 0.434ATR
+SOLUSDT         0.10      74.6254      73.6260   
+SOLUSDT         0.15      75.7935      73.7023   
+SOLUSDT         0.20      74.8114      73.9362    above 0.380ATR below 0.090ATR
+TAOUSDT         0.10     202.2642     193.3111   
+TAOUSDT         0.15     200.1036     193.5286   
+TAOUSDT         0.20     200.7291     192.4030    above 0.066ATR below 0.118ATR
+ZECUSDT         0.10     518.8199     487.6059   
+ZECUSDT         0.15     518.8199     485.7894   
+ZECUSDT         0.20     522.1254     499.1343    above 0.105ATR below 0.425ATR
+
+  line moves off the 0.15 baseline: n=19  median 0.213 ATR
+
+================================================================================================
+7.1 (4)  FAMILY COMPOSITION OF THE TOP-3 AREAS -- does one family dominate?
+================================================================================================
+  vwap_anchored          77   24.3%
+  vwap_rolling           35   11.0%
+  profile_windowed       69   21.8%
+  structure              66   20.8%
+  ss                     70   22.1%
+
+  A vwap_rolling or profile_windowed majority would mean the family
+  split did not go far enough.
+
+================================================================================================
+7.1 (5)  VA NESTING STATE DISTRIBUTION, ten assets x three pairs
+================================================================================================
+  nested_inside          15
+  overlapping             9
+  disjoint_below          3
+  disjoint_above          2
+  warming                 1
+
+================================================================================================
+7.1 (6) + 7.2  DUAL-SCORING DIVERGENCE, RE-BUCKETED (refinement vs relocation)
+================================================================================================
+  Cycle 2 headline: 'a line moved on 20 of 20 sides'. Median move 0.127 ATR
+  against a cluster width of 0.15 -- BELOW one cluster width. Re-bucketed:
+
+  RELOCATIONS (>= 0.15 ATR, one cluster width) : 6
+  refinements (< 0.15 ATR, within one cluster)  : 14
+  line present in one view only                      : 0
+  median move 0.044 ATR   max 0.971 ATR
+
+================================================================================================
+7.1 (7)  MEASURED STORAGE
+================================================================================================
+  capture JSON, one slot       1,973,883 B
+  snapshots partition             17,459 B
+  levels partition                45,859 B
+  areas partition                 13,591 B
+  excursions partition             9,329 B
+  partitions, per day             86,238 B
+
+  projected annual, 3 slots/day: captures 2161 MB + partitions 31 MB
+  R5: no action. Raw tracked JSON stays; gzip measured 1.74x LARGER.
+
+================================================================================================
+7.1+  INVAL_ATR DISTRIBUTION -- structure-derived vs the old mechanical rule
+================================================================================================
+
+================================================================================================
+7.1+  LEVEL-DISTANCE DISTRIBUTION by family -- TO DESCRIBE, NOT TO FILTER (R6)
+================================================================================================
+family                   <1.5    1.5-3      3-6     6-12      >12   total
+vwap_anchored             176       64       81       66       73     460
+vwap_rolling              101       49       35       41       42     268
+profile_windowed          103       29       35       26       32     225
+structure                 131       44       66       59       11     311
+ss                        106       11        0        0        0     117
+ALL                       617      197      217      192      158    1381
+
+  beyond 3 ATR: 567 of 1381 (41.1%) -- R6 admits every one of them.
+
+================================================================================================
+7.1+  HOW OFTEN PRICE SITS BEYOND SIGMA 1/2/3, per rolling VWAP, per asset
+================================================================================================
+  MEASURED OVER THE 1h ESTATE, trailing 365 days. This is a property of
+  the DISTRIBUTION -- a description of where price lives relative to its
+  own volume-weighted mean. It is NOT a statistic over excursion
+  outcomes: it says nothing about whether a touch pays. That is H-VBR.
+
+asset           window      >1s      >2s      >3s   (% of bars)
+BTCUSDT             7d    48.95     8.92     0.18
+BTCUSDT            30d    50.20    10.68     0.25
+ETHUSDT             7d    44.93     8.79     0.59
+ETHUSDT            30d    49.42     9.13     0.65
+FARTCOINUSDT        7d    50.78    10.06     0.48
+FARTCOINUSDT       30d    52.71     8.33     0.86
+HYPEUSDT            7d    49.88    12.40     0.48
+HYPEUSDT           30d    43.74     9.30     0.60
+JTOUSDT             7d    51.70    10.88     0.47
+JTOUSDT            30d    50.00     6.72     0.13
+LITUSDT             7d    50.89     8.57     0.07
+LITUSDT            30d    52.59     8.85     0.28
+NEARUSDT            7d    50.72     9.72     0.34
+NEARUSDT           30d    50.14     8.06     0.47
+SOLUSDT             7d    47.10     9.05     0.41
+SOLUSDT            30d    49.04     9.52     0.36
+TAOUSDT             7d    52.06     9.53     0.35
+TAOUSDT            30d    53.34     8.97     0.38
+ZECUSDT             7d    50.00     9.68     0.58
+ZECUSDT            30d    48.52    10.66     0.66
+
+================================================================================================
+7.1+  REVERSION-DRAFT R:R BY TARGET-DISTANCE BUCKET
+================================================================================================
+bucket     n                R:R values  median tgt ATR  median band score
+NEAR       6                [2.0, 3.0]            0.55               13.0
+MID        3                [2.0, 3.0]            4.29               13.0
+FAR        3                     [2.0]           15.52                3.0
+
+  R:R takes only the values {2.0, 3.0} in EVERY bucket -- a constant of
+  the geometry. The band's confluence score is what discriminates (5.3).
+
+
+wrote exchange/reports/BRIEF2_CALIBRATION_2026-08-05.json
