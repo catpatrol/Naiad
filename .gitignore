@@ -99,3 +99,7 @@ briefs/panel/consolidated_*.parquet
 
 # restored phase journals - staging only, never committed (ATHENA 2026-08-04)
 research_outputs/_unarchived/**
+
+# SEQ8 / DIONYSUS bulk outputs — untrackable (files exceed GitHub's 100 MB limit) and the only lane output missing from this list; a wildcard `git add -A` swept 3,567 MB of them into a commit on 2026-08-05 and GitHub rejected the whole branch push
+research_outputs/seq8/**
+research_outputs/seq8_run2/**
