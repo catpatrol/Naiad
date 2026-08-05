@@ -646,6 +646,63 @@ def confirmed_pivot_levels(klines, now_ms, lookback_days=PIVOT_LOOKBACK_DAYS):
     return out
 
 
+# ═══════════════════════════════════════════════ G7 ANCHOR DEGENERACY (C5 3.1)
+
+def anchor_degeneracy(a, prior=None):
+    """Report anchors that COINCIDE, so a calendar accident cannot read as
+    agreement between tools.
+
+    THE FAILURE THIS PREVENTS, from a real capture.  On 2026-07-26 the Month and
+    Quarter anchors were the SAME BAR -- July opens Q3, so both anchor at
+    2026-07-01 -- and their seven levels were byte-identical to the last decimal,
+    sigma included.  Fourteen identical levels entering the registry uncollapsed
+    would have counted ONE tool as TWO agreeing voices, at every one of the seven
+    prices, in the family that already contributes the most members.
+
+    `collapse_same_family` already merges them (verified on that capture: 14 ->
+    7, each `collapsed_count` 2).  This function does NOT re-do that work and
+    changes no score.  It makes the collapse VISIBLE: a reader seeing a
+    2-member cluster needs to know whether two tools agreed or one tool was
+    counted twice, and those are opposite facts wearing the same shape.
+
+    Returns [] when no anchors coincide, which is the common case.
+    """
+    groups = {}
+    for name, blob in ((a.get("vwap") or {}).get("anchored") or {}).items():
+        if not isinstance(blob, dict):
+            continue
+        key = blob.get("anchor_utc")
+        if key and blob.get("vwap") is not None:
+            groups.setdefault(str(key), []).append(name)
+    for name, blob in (prior or {}).items():
+        if not isinstance(blob, dict) or blob.get("warming"):
+            continue
+        key = blob.get("anchor_utc_ms")
+        if key is not None and blob.get("vwap") is not None:
+            groups.setdefault(str(key), []).append(name)
+
+    out = []
+    for anchor, names in sorted(groups.items()):
+        if len(names) < 2:
+            continue
+        out.append({
+            "anchor": anchor,
+            "anchors": sorted(names),
+            "n": len(names),
+            "levels_per_anchor": 1 + 2 * len(SIGMAS),
+            "duplicate_levels": len(names) * (1 + 2 * len(SIGMAS)),
+            "collapses_to": 1 + 2 * len(SIGMAS),
+            "why": "these anchors fall on the SAME BAR, so their levels are "
+                   "identical by construction -- a degeneracy of the CALENDAR, "
+                   "not agreement between tools",
+            "handled_by": "collapse_same_family at COLLAPSE_ATR; the merged "
+                          "member keeps every contributing label so the "
+                          "collapse stays auditable",
+            "adds_no_score": True,
+        })
+    return out
+
+
 # ══════════════════════════════════════ D.5 / D.6  stretch and excursion
 
 # A sigma computed over very few bars is arithmetically exact and
@@ -1491,6 +1548,7 @@ def brief2_asset(a, klines, now_ms, price, atr_d):
              "chart_planes": planes, "prior_anchors": prior,
              "confirmed_pivots": pivs, "stretch": stretch,
              "band_excursions": excursion, "rvol": rvol_layer(klines),
+             "anchor_degeneracy": anchor_degeneracy(a, prior),
              "confluence": conf}
     part2 = decision_instrument(a, vol, nest, conf, price, atr_d, stretch=stretch)
     return part1, part2

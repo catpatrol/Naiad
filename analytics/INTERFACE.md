@@ -224,7 +224,7 @@ same claim, and neither means "profitable" — see the firewall.
 | `vw_sigma_bands` | **GEOMETRY VERIFIED** | 36 triples across 3 captures, 2 instruments, 2 timeframes; every triple exactly symmetric at exact integer multiples of σ |
 | `anchored_vwap` — variance | **VERIFIED** (was INFERRED) | 2-bar Month anchor discriminated population from sample by √2 = 41.4%; population landed within 0.003% |
 | `anchored_vwap` — source | **VERIFIED** | hlc3 confirmed on the 2026-08-03 1D capture; the prediction was made *before* the chart setting changed and held to 0.005 bps |
-| `anchored_vwap` — σ on 1h | **UNVERIFIED** ⚠ | means matched on 1h (M 63,602.4452 / Q 63,486.3109) but the operator's 1H capture had **anchored bands disabled**. Substrate delta measured up to **0.186 daily-ATR**. **One 1H capture with anchored bands enabled closes it.** NOT BLOCKING. |
+| `anchored_vwap` — σ on 1h | **CERTIFIED** ✅ | **42/42** — two closed 1H bars (2026-07-26T20:00Z, 2026-08-02T04:00Z) × W/M/Q × 7 levels, worst \|Δ\| **0.0495**. All 18 triples exactly symmetric at exact integer multiples; all six implied σ reproduced (798.4663 / 1729.9887 ×2 / 754.4595 / 313.3966 / 1608.6236). Closed 2026-08-06. |
 | `volume_profile` / `windowed_profile` | **APPROXIMATION, declared** | volume spread uniformly across each bar's range; not tick data. Never certified, by construction |
 | `relative_volume` (RVOL) | **UNCERTIFIED** | built 2026-08-05, no operator reading taken against it yet |
 
@@ -326,15 +326,68 @@ disagreement, which is a real and expected property of bar-granularity
 weighting. Both are now independently confirmed against their own charts, which
 is the only way that number could ever have been interpreted.
 
-**STILL OPEN — anchored sigma on 1h.** The anchored MEANS matched on the same
-bar (Month 63,602.4452 vs 63,602.4; Quarter 63,486.3109 vs 63,486.3), but the
-operator's 1H capture **did not have anchored bands enabled**, so the anchored
-SIGMA on the 1h substrate remains **UNVERIFIED**. The recipe and the variance
-definition are verified (from the 2026-08-03 1D/hlc3 capture, where a two-bar
-anchor discriminated population from sample by 41.4% and population landed
-within 0.003%); only the substrate is untested, and the Month-anchor substrate
-delta was measured at up to **0.186 daily-ATR**. **One 1H capture with anchored
-bands enabled closes it. NOT BLOCKING.**
+### CLOSED 2026-08-06 — anchored sigma on 1h is CERTIFIED
+
+For five cycles the anchored σ on the ruled substrate was the last unverified
+quantity in the VWAP family. The operator supplied two 1H captures **with
+anchored bands enabled** and it passes.
+
+BINANCE:BTCUSDT.P, 1H, hlc3, both CLOSED bars — **42 values, 2 bars × W/M/Q × 7
+levels**:
+
+| bar | anchor | bars since anchor | our σ | operator-implied σ | worst \|Δ\| |
+|---|---|---|---|---|---|
+| 2026-07-26T20:00Z | Week | 165 | 798.4663 | 798.47 | 0.0445 |
+| | Month | 621 | 1729.9887 | 1729.95 | 0.0486 |
+| | Quarter | 621 | 1729.9887 | 1729.95 | 0.0486 |
+| 2026-08-02T04:00Z | Week | 149 | 754.4595 | 754.45 | 0.0408 |
+| | Month | **29** ⚠ | 313.3966 | 313.37 | 0.0495 |
+| | Quarter | 773 | 1608.6236 | 1608.63 | 0.0488 |
+
+**Worst absolute delta across all 42: 0.0495** — inside the 0.05 rounding
+half-step of the operator's one-decimal display, so the residual is his display
+precision and not our arithmetic. **Both raw bars matched to every decimal
+first.** All **18 triples** exactly symmetric (`midpoint − vwap = 0` exactly) at
+exact integer multiples of σ.
+
+**The variance definition is now verified on BOTH substrates**, 1D (two-bar
+Month anchor, where population and sample differ by 41.4% and population landed
+within 0.003%) and the ruled 1h. Nothing in the VWAP family is now unverified.
+
+⚠ The 29-bar Month row is **below R3's 30-bar band floor** — its bands match the
+operator's chart exactly and are still WITHHELD from the registry. See the
+maturity-floor note below: that row is the floor's justifying case.
+
+### The R3 maturity floors — the case that justifies them, in real data
+
+R3 withholds a VWAP LINE below 10 bars and its SIGMA BANDS below 30, on the 1h
+substrate. Until 2026-08-06 the floors were a reviewer's convention defended by
+synthetic fixtures. The operator's `2026-08-02T04:00Z` capture contains the case
+that justifies them.
+
+At that bar the Month anchor (opened `2026-08-01T00:00Z`) carried **29 bars** —
+one short of the band floor. The resulting scale ladder:
+
+| anchor | bars | σ | σ in daily ATR |
+|---|---|---|---|
+| Week | 149 | 754.4595 | 0.463 |
+| **Month** | **29** | **313.3966** | **0.192** |
+| Quarter | 773 | 1608.6236 | 0.988 |
+
+**The monthly σ is 41.5% of the weekly σ — less than half.** A longer lookback
+disperses LESS than a shorter one, which is structurally backwards: the monthly
+band is *narrower* (width 627) than the weekly band (width 1,509), so a reader
+would infer the market had been calmer over a month than over the week inside
+it. It had not. The cause is purely **immaturity** — 29 hours of August measured
+against a full week of history — and nothing about the market.
+
+Note the band VALUES are not wrong: they match the operator's chart to 0.0495.
+They are *arithmetically exact and informationally empty*, which is precisely the
+failure a floor exists to catch and a parity check never could. The line prints
+with a `thin_sample` chip; the six band levels are withheld from the registry.
+
+Measured replacement floors are proposed in the cycle-5 handback; the interim
+10/30 stand until the reviewer rules.
 
 ### ⚠ INSTRUMENT SENSITIVITY — read the right symbol or get a different level
 

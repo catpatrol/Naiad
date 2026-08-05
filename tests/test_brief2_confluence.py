@@ -432,6 +432,7 @@ def test_f_b35_confirmed_pivots_use_a_lookback_not_a_count_cap():
 # readable rather than repeating four lines of path juggling seven times.
 sys.path.insert(0, str(ROOT / "scripts"))
 import brief2 as B2                                                 # noqa: E402
+from analytics import vwap as W                                     # noqa: E402
 
 
 # ------------------------------- F-B41  stage 5.2/5.3/5.4 REVERSION archetype
@@ -613,3 +614,187 @@ def test_f_b41_reversion_populates_the_far_buckets_continuation_cannot():
                             {}, px, atr)["drafts"][0]
     assert BR.target_bucket(d["target_distance_atr"]) == "FAR"
     assert d["side"] == "long" and d["target"] == pytest.approx(mean)
+
+
+# ============================= F-B42  cycle 5 item 3.1 -- G7 ANCHOR DEGENERACY
+#
+# BUILT ON A REAL OPERATOR CAPTURE, not synthetic geometry. BINANCE:BTCUSDT.P,
+# 1H, hlc3, closed bar 2026-07-26T20:00Z. July opens Q3, so the Month and
+# Quarter anchors are BOTH 2026-07-01 -- the same bar -- and our computed levels
+# came out byte-identical to the last decimal, sigma included.
+
+# The real values, from scripts/parity_c5_worksheet.py against the live estate.
+C5_A_DEGENERATE_VWAP = 63334.048643
+C5_A_DEGENERATE_SIGMA = 1729.988691
+C5_A_ATR = 1628.44005908
+
+
+def _c5_capture_a(anchored_only=True):
+    return {"vwap": {"anchored": {
+        "W": {"vwap": 65190.810716, "sigma": 798.4663, "bars": 165,
+              "anchor_utc": "2026-07-20T00:00:00Z"},
+        "M": {"vwap": C5_A_DEGENERATE_VWAP, "sigma": C5_A_DEGENERATE_SIGMA,
+              "bars": 621, "anchor_utc": "2026-07-01T00:00:00Z"},
+        "Q": {"vwap": C5_A_DEGENERATE_VWAP, "sigma": C5_A_DEGENERATE_SIGMA,
+              "bars": 621, "anchor_utc": "2026-07-01T00:00:00Z"},
+    }}, "structure": {}, "sessions": {}, "radar": []}
+
+
+def test_f_b42_july_month_and_quarter_anchors_are_identical_by_construction():
+    """The identity itself, on the real capture. If these ever differ, either
+    the anchor arithmetic or the calendar assumption has broken."""
+    a = _c5_capture_a()
+    m, q = a["vwap"]["anchored"]["M"], a["vwap"]["anchored"]["Q"]
+    assert m["anchor_utc"] == q["anchor_utc"] == "2026-07-01T00:00:00Z"
+    assert m["vwap"] == q["vwap"] and m["sigma"] == q["sigma"]
+    assert m["bars"] == q["bars"] == 621
+
+
+def test_f_b42_degenerate_anchors_collapse_to_seven_not_fourteen():
+    """THE FAILURE THIS PREVENTS: fourteen identical levels entering the
+    registry uncollapsed would count ONE tool as TWO agreeing voices, at every
+    one of the seven prices, in the family that already contributes the most
+    members."""
+    # THE DEGENERACY IN ISOLATION. The Week anchor is deliberately left out
+    # here -- see the next assertion block for why keeping it in would test two
+    # things at once and prove neither.
+    a = _c5_capture_a()
+    del a["vwap"]["anchored"]["W"]
+    reg = B2.build_registry(a, {"windows": {}}, {"windows": {}}, [])
+    raw = [x for x in reg.as_list() if x["source_layer"] == "vwap_complex"]
+    assert len(raw) == 14, "the degenerate pair did not produce 14 raw levels"
+
+    merged = L.collapse_same_family(reg.as_list(), C5_A_ATR)
+    assert len(merged) == 7, \
+        f"14 identical levels collapsed to {len(merged)}, expected 7 -- one " \
+        f"tool would be counted as two agreeing voices"
+
+    deg_prices = [C5_A_DEGENERATE_VWAP + k * C5_A_DEGENERATE_SIGMA
+                  for k in (-3, -2, -1, 0, 1, 2, 3)]
+    for p in deg_prices:
+        hits = [m for m in merged if abs(m["level"] - p) < 1e-6]
+        assert len(hits) == 1, f"price {p} did not collapse to one member"
+        assert hits[0]["collapsed_count"] == 2, \
+            f"price {p} merged {hits[0]['collapsed_count']} members, expected 2"
+        # AUDITABLE: the merged member must still name BOTH contributors, or
+        # the collapse is indistinguishable from silently dropping one.
+        lab = str(hits[0].get("labels") or hits[0].get("label"))
+        assert "M" in lab and "Q" in lab, f"merged member lost a contributor: {lab}"
+
+
+def test_f_b42_the_real_capture_also_merges_the_week_anchor_at_two_sigma():
+    """A SECOND, GENUINE merge in the same capture -- recorded because it looks
+    like the degeneracy and is not.
+
+    On this bar Week +2sigma is 66,787.75 and Month/Quarter +2sigma is
+    66,794.03: 6.28 apart, inside the 32.57 collapse width (0.02 x 1,628.44
+    daily ATR). So the full capture collapses those THREE into one member, not
+    two.
+
+    That is not calendar degeneracy -- the Week anchor is a genuinely different
+    anchor that happens to land nearby -- but the scoring consequence is the
+    same and correct either way: `vwap_anchored` contributes ONE voice at that
+    price, not three. Asserting 'exactly 2' on the full capture would have been
+    wrong, and the first version of this fixture made exactly that error.
+    """
+    reg = B2.build_registry(_c5_capture_a(), {"windows": {}}, {"windows": {}}, [])
+    merged = L.collapse_same_family(reg.as_list(), C5_A_ATR)
+    two_sig = [m for m in merged if abs(m["level"] - 66790.9) < 20.0]
+    assert len(two_sig) == 1, "Week and Month/Quarter +2s did not merge"
+    assert two_sig[0]["collapsed_count"] == 3, \
+        f"expected a 3-way merge, got {two_sig[0]['collapsed_count']}"
+    lab = str(two_sig[0].get("labels") or two_sig[0].get("label"))
+    assert "W" in lab and "M" in lab and "Q" in lab
+
+    # ANTI-VACUITY: the collapse must be the TOLERANCE doing work. The Week and
+    # Month MEANS are 1,856 apart and must NOT merge.
+    means = [m for m in merged if abs(m["level"] - 65190.81) < 1.0]
+    assert means and means[0]["collapsed_count"] == 1, \
+        "the Week mean merged with something it is 1,856 away from"
+
+
+def test_f_b42_degeneracy_note_fires_and_names_the_calendar():
+    """A reader seeing a 2-member cluster must be able to tell whether two tools
+    agreed or one tool was counted twice. Those are opposite facts wearing the
+    same shape, so the collapse has to be VISIBLE, not merely correct."""
+    deg = B2.anchor_degeneracy(_c5_capture_a())
+    assert len(deg) == 1, "the M=Q degeneracy was not reported"
+    g = deg[0]
+    assert set(g["anchors"]) == {"M", "Q"}
+    assert g["anchor"] == "2026-07-01T00:00:00Z"
+    assert g["duplicate_levels"] == 14 and g["collapses_to"] == 7
+    assert g["adds_no_score"] is True
+    assert "calendar" in g["why"].lower()
+
+    # ANTI-VACUITY: a normal capture with distinct anchors reports NOTHING.
+    clean = {"vwap": {"anchored": {
+        "W": {"vwap": 1.0, "sigma": 1.0, "bars": 100,
+              "anchor_utc": "2026-08-03T00:00:00Z"},
+        "M": {"vwap": 2.0, "sigma": 1.0, "bars": 100,
+              "anchor_utc": "2026-08-01T00:00:00Z"},
+        "Q": {"vwap": 3.0, "sigma": 1.0, "bars": 100,
+              "anchor_utc": "2026-07-01T00:00:00Z"}}}}
+    assert B2.anchor_degeneracy(clean) == [], \
+        "the note fires on non-degenerate anchors -- it would flag everything"
+
+
+# ============================= F-B43  cycle 5 item 3.2 -- MATURITY FLOOR, REAL
+#
+# Capture (B), BINANCE:BTCUSDT.P 1H hlc3, closed bar 2026-08-02T04:00Z. The
+# Month anchor opened 2026-08-01T00:00Z, so it carries 29 hourly bars -- one
+# short of R3's 30-bar BAND floor. This is the floor's justifying case, found in
+# real data rather than argued for.
+
+C5_B_MONTH_BARS = 29
+C5_B_SIGMA_WEEK = 754.4595
+C5_B_SIGMA_MONTH = 313.3966
+C5_B_SIGMA_QUARTER = 1608.6236
+
+
+def test_f_b43_immature_month_withholds_bands_but_prints_the_line():
+    a = {"vwap": {"anchored": {
+        "M": {"vwap": 62926.056254, "sigma": C5_B_SIGMA_MONTH,
+              "bars": C5_B_MONTH_BARS, "anchor_utc": "2026-08-01T00:00:00Z"}}},
+         "structure": {}, "sessions": {}, "radar": []}
+    reg = B2.build_registry(a, {"windows": {}}, {"windows": {}}, [])
+    lv = [x for x in reg.as_list() if x["source_layer"] == "vwap_complex"]
+
+    assert C5_B_MONTH_BARS < W.BAND_MIN_BARS, "the case is no longer immature"
+    assert C5_B_MONTH_BARS >= W.LINE_MIN_BARS, "the line floor should still pass"
+
+    assert len(lv) == 1, f"expected the LINE alone, got {len(lv)} levels"
+    assert lv[0]["label"] == "M anchored VWAP"
+    assert len(reg.withheld) == 6, "the six band levels were not withheld"
+    assert {w["level"] for w in reg.withheld} == {"band"}
+    assert all(w["bars"] == C5_B_MONTH_BARS and w["floor"] == W.BAND_MIN_BARS
+               for w in reg.withheld)
+
+    # ONE MORE BAR admits everything -- proving the floor, not a broken layer.
+    a["vwap"]["anchored"]["M"]["bars"] = W.BAND_MIN_BARS
+    reg2 = B2.build_registry(a, {"windows": {}}, {"windows": {}}, [])
+    assert len(reg2.as_list()) == 7 and reg2.withheld == []
+
+
+def test_f_b43_immaturity_inverts_the_scale_ladder():
+    """THE CONCRETE JUSTIFICATION FOR THE FLOOR.
+
+    A longer lookback must not disperse LESS than a shorter one. On this real
+    bar the 29-bar Month sigma is 313.40 against the 149-bar Week's 754.46 --
+    41.5%, well under half. The monthly band is therefore NARROWER than the
+    weekly one, which is structurally backwards and is caused purely by
+    immaturity, not by the market.
+    """
+    assert C5_B_SIGMA_MONTH < C5_B_SIGMA_WEEK / 2.0, \
+        "the inversion this fixture documents has gone away"
+    assert C5_B_SIGMA_WEEK < C5_B_SIGMA_QUARTER, \
+        "week vs quarter should be correctly ordered -- only Month is immature"
+
+    # The ladder is monotonic in lookback ONCE the immature rung is removed.
+    mature = [C5_B_SIGMA_WEEK, C5_B_SIGMA_QUARTER]
+    assert mature == sorted(mature), "the mature rungs are themselves inverted"
+
+    # Width, in daily ATR -- the units a reader acts in.
+    atr = C5_A_ATR
+    assert round(C5_B_SIGMA_MONTH / atr, 3) == 0.192
+    assert round(C5_B_SIGMA_WEEK / atr, 3) == 0.463
+    assert round(C5_B_SIGMA_QUARTER / atr, 3) == 0.988

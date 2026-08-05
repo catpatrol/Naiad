@@ -177,6 +177,22 @@ def part1_html(sym, a):
                         if d.get("straddles_one_sigma") else '') + '</p>')
         L.append('</div>')
 
+    # ---- G7 anchor degeneracy (C5 3.1): a calendar accident must not read
+    # as agreement between tools.
+    deg = a.get("anchor_degeneracy") or []
+    if deg:
+        L.append('<div class="card"><h4>Anchor degeneracy &mdash; coinciding '
+                 'anchors</h4>')
+        for g in deg:
+            L.append(f'<p class="prose">{chip("degenerate","warn")} '
+                     f'<b>{esc(" = ".join(g["anchors"]))}</b> anchor on the same '
+                     f'bar ({esc(g["anchor"])}), so their '
+                     f'{g["duplicate_levels"]} levels are identical by '
+                     f'construction and collapse to {g["collapses_to"]}. '
+                     f'A degeneracy of the <b>calendar</b>, not agreement '
+                     f'between tools &mdash; counted once, adding no score.</p>')
+        L.append('</div>')
+
     # ---- windowed volume profiles
     vol = (a.get("volume_windows") or {}).get("windows") or {}
     if vol:
