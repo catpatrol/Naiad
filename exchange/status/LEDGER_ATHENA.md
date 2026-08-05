@@ -165,3 +165,26 @@ PENDING:
 NEXT: Hold for the probe, then execute the memory audit (3 moves + 4 merges -> 17). Owner: ATHENA.
 METRICS: operator actions this session = 9 · files re-ingested = 4
 === END STATUS ===
+
+---
+
+=== STATUS_ATHENA — 2026-08-05 — PENDING 5 CLOSED ===
+NOW: Fingerprint coverage complete. All 9 phase archives now carry a sha256 in two independent
+places: a git-tracked local sidecar on GitHub, and a sidecar beside the archive on Drive. PENDING
+item 5 of the closing entry is closed; nothing else in that entry changes.
+LAST EVENT: 2026-08-05 — the two analytics sidecars written, verified, and confirmed to agree with
+the Drive sidecars already present.
+FACTS:
+- 9/9 archives have a local git-tracked sidecar; 9/9 have a Drive sidecar [verified]
+- Each new local hash was checked against the existing Drive sidecar and agreed [verified]
+- No archive and no Drive file was created, modified, moved or deleted this session [verified]
+- The builder declined to write these two in the prior session because its authorisation named
+  exactly six files; the gap was reported rather than silently exceeded [handoff]
+PENDING:
+1. Operator: run the ROLLBACK-canary probe now that the naiad-custodian skill names CONVENTIONS.md
+2. ARGUS (8 files) and APOLLO (1) to rule on the orphan memo
+3. HEPHAESTUS to execute queue 002 in its own session
+4. Operator: ~18.7 MB of redundant copies in naiad-backups/ — cosmetic
+NEXT: Grade the probe, then execute the memory audit (3 moves + 4 merges -> 17). Owner: ATHENA.
+METRICS: operator actions this session = 2 · files re-ingested = 1
+=== END STATUS ===
