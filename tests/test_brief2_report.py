@@ -868,3 +868,85 @@ def test_f_b40_rvol_layer_is_observation_only_and_casts_no_vote():
     labels = " ".join(x["label"] for x in reg.as_list()).lower()
     assert "rvol" not in labels and "relative volume" not in labels, \
         "RVOL reached the scoring registry -- it locates no price"
+
+
+# ------------------- F-B38d  cycle 5 item 4.3 -- the EPISODE view is covered
+#
+# The firewall does not get a new boundary because a new view exists. Locating
+# and measuring runs beyond a band is market-state observation and is OPS.
+# Computing what fraction of them RETURN to the mean -- or any hit count or
+# expectancy over the run history -- is H-VBR, census work under G-7.
+
+def test_f_b38_episode_view_computes_no_statistic_over_outcomes():
+    """Stage 3.4's firewall, extended to cover C5's episode view."""
+    import brief_panel as BP
+
+    code = _func_code(BP.episode_runs)
+    for token in BANNED_EXCURSION_STATS:
+        assert token not in code, (
+            f"episode_runs CODE contains {token!r} -- a statistic over the run "
+            f"history is H-VBR, census work under G-7, not OPS")
+
+    # It must genuinely locate runs, or the scan guards nothing.
+    assert "length_bars" in code and "max_abs_z" in code
+
+    # The prohibition must still be STATED in the prose the scan strips.
+    # Whitespace-normalised: the phrase legitimately wraps across lines, and a
+    # fixture that breaks on a line break tests formatting, not content.
+    import inspect
+    import re as _re
+    doc = _re.sub(r"\s+", " ", inspect.getsource(BP.episode_runs).lower())
+    assert "census work under g-7" in doc and "h-vbr" in doc
+
+    # And it must NOT look at what happened after a run ended -- no forward
+    # index, no return-to-mean flag, no outcome column of any kind.
+    for token in ("returned", "revert", "after", "outcome", "target", "exit"):
+        assert token not in code, \
+            f"episode_runs CODE mentions {token!r} -- it may not look past the run"
+
+
+def test_f_b38_episode_runs_is_correct_on_hand_built_geometry():
+    """ANTI-VACUITY for the scan above: the function must actually work, or a
+    firewall test over a broken primitive proves nothing."""
+    import brief_panel as BP
+
+    # two runs beyond 2: indices 1-3 (len 3) and 6-6 (len 1)
+    z = [0.0, 2.5, 3.1, 2.0, 1.9, 0.5, -2.2, 0.0]
+    eps = BP.episode_runs(z, 2)
+    assert len(eps) == 2
+    assert eps[0] == {"start_index": 1, "length_bars": 3, "max_abs_z": 3.1}
+    assert eps[1] == {"start_index": 6, "length_bars": 1, "max_abs_z": 2.2}
+
+    # SIGN-BLIND: a run below -k is an excursion just as one above +k is.
+    assert BP.episode_runs([-2.5, -2.6], 2)[0]["length_bars"] == 2
+
+    # the boundary is INCLUSIVE, matching |z| >= k
+    assert len(BP.episode_runs([2.0], 2)) == 1
+    assert BP.episode_runs([1.999], 2) == []
+
+    # a series never beyond the band yields NO episodes -- it cannot fire on
+    # everything.
+    assert BP.episode_runs([0.0, 1.0, -1.5, 0.2], 2) == []
+
+    # a run open at the END of the series is still closed and counted, not
+    # silently dropped for lacking a return.
+    tail = BP.episode_runs([0.0, 2.1, 2.2], 2)
+    assert len(tail) == 1 and tail[0]["length_bars"] == 2
+
+
+def test_f_b38_the_c4_normal_comparison_is_gone_from_the_interface():
+    """C5 item 4.1 -- the category error must be REMOVED, not merely annotated.
+
+    Price relative to a VWAP is a persistent, autocorrelated series; comparing
+    its time-fractions to a normal distribution's independent-draw tail
+    probabilities licenses a conclusion about tail fatness that does not follow.
+    """
+    iface = (ROOT / "analytics" / "INTERFACE.md").read_text(encoding="utf-8")
+    low = iface.lower()
+    for banned in ("31.7", "roughly double", "wrong by a factor of two"):
+        assert banned not in low, (
+            f"INTERFACE.md still carries the withdrawn normal-distribution "
+            f"comparison ({banned!r}) -- C5 item 4.1 removes it")
+
+    # and the replacement framing must be present, or the removal left a hole
+    assert "episode" in low and "autocorrelated" in low

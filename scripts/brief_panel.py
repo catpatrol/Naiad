@@ -196,6 +196,50 @@ BUILDERS = {"snapshots": snapshot_rows, "levels": level_rows, "areas": area_rows
             "excursions": excursion_rows}
 
 
+def episode_runs(z, k):
+    """Contiguous runs where |z| >= k. DESCRIPTIVE ONLY (C5 item 4.2).
+
+    An EPISODE is one entry beyond the band until price returns inside it.
+    Returns a list of {length_bars, max_abs_z, start_index}.
+
+    WHY THE EPISODE AND NOT THE BAR.  Cycle 4 reported the TIME FRACTION beyond
+    each band (~50% beyond 1 sigma, ~9.5% beyond 2, ~0.4% beyond 3) and compared
+    those to a normal distribution's 31.7 / 4.6 / 0.27, concluding the tails were
+    "roughly double".  THAT COMPARISON WAS A CATEGORY ERROR and is withdrawn: the
+    normal figures describe INDEPENDENT DRAWS, while price relative to a VWAP is
+    a PERSISTENT, AUTOCORRELATED series.  Once price is beyond a band it tends to
+    STAY there, because trending is exactly what carried it there.  A ~50%
+    time-fraction is a statement about persistence, not about tail fatness, and
+    no conclusion about tails follows from it.
+
+    The decision-relevant unit is the EPISODE, because an episode is ONE
+    decision.  Measured on the estate: 8.82% of bars beyond 2 sigma is a median
+    of ~122 episodes per asset-window per YEAR, at a median length of 2 bars.
+
+    FIREWALL (§3.4, unchanged).  Locating and measuring runs is market-state
+    observation and is OPS.  What fraction of them RETURN to the mean, any hit
+    count, any expectancy over the run history -- that is H-VBR, census work
+    under G-7, routed to APOLLO.  Nothing here computes it, and F-B38 asserts so
+    against this function's CODE.
+    """
+    import numpy as np
+    a = np.abs(np.asarray(z, dtype=float))
+    beyond = a >= float(k)
+    out = []
+    i, n = 0, len(beyond)
+    while i < n:
+        if not beyond[i]:
+            i += 1
+            continue
+        j = i
+        while j < n and beyond[j]:
+            j += 1
+        out.append({"start_index": int(i), "length_bars": int(j - i),
+                    "max_abs_z": float(np.max(a[i:j]))})
+        i = j
+    return out
+
+
 def since_last_touch(panel_dir=PANEL_DIR):
     """DERIVED view: captures since each (asset, VWAP) last touched a band.
 

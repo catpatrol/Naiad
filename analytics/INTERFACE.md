@@ -838,15 +838,34 @@ trailing 365 days of 1h bars, ten assets:
 
 | beyond | share of bars |
 |---|---|
-| ±1σ | **~50%** (44.9–53.3) |
-| ±2σ | **~9.5%** (6.7–12.4) |
-| ±3σ | **~0.4%** (0.07–0.86) |
+| ±1σ | ~50% (44.9–53.3) |
+| ±2σ | ~9.5% (6.7–12.4) |
+| ±3σ | ~0.4% (0.07–0.86) |
 
-A normal distribution would give 31.7 / 4.6 / 0.27. **The 1σ band holds far less
-than Gaussian intuition expects and the 2σ band roughly twice the tail** — so a
-"2σ is rare" prior is wrong by a factor of two. This is a description of the
-distribution, NOT a statistic over excursion outcomes: it says nothing about
-whether a touch pays.
+**Do not compare these to a normal distribution's tail probabilities.** A
+previous version of this file did, and the comparison was **WITHDRAWN 2026-08-06
+as a category error**. Those probabilities describe INDEPENDENT DRAWS. Price
+relative to a VWAP is a **persistent, autocorrelated** series: once price is
+beyond a band it tends to STAY there, because trending is exactly what carried
+it there. A time-fraction measures **persistence**, not tail fatness, and no
+conclusion about tails follows from it.
+
+**The decision-relevant unit is the EPISODE, not the bar** — one entry beyond
+the band until price returns inside it is ONE decision, however many bars it
+spans. Measured over the same window (`brief_panel.episode_runs`):
+
+| band | episodes / asset-window / year | median length | p90 length | median max \|z\| |
+|---|---|---|---|---|
+| ±2σ | **~122** | **2 bars** | 8–28 bars | ~2.2σ |
+| ±3σ | **~12** | **1.5 bars** | 1–20 bars | ~3.2σ |
+
+**8.82% of bars is ~122 events a year, not 772 opportunities** — and at σ3 it is
+about **twelve**. Any hypothesis over band excursions has a far smaller usable
+sample than the bar fraction suggests, which RAISES the evidential bar rather
+than lowering it.
+
+Both tables are descriptions of market state, NOT statistics over excursion
+outcomes: they say nothing about whether a touch pays.
 
 `inval_atr` on the structure-derived rule spans **0.164–1.419** (median 0.396,
 n=100). Cycle 3 measured 0.244–0.276 — a 0.03 spread — on a registry a third
