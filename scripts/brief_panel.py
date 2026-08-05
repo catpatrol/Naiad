@@ -40,8 +40,11 @@ sys.path.insert(0, str(ROOT))
 
 BRIEFS_DIR = ROOT / "briefs"
 PANEL_DIR = BRIEFS_DIR / "panel"
-TABLES = ("snapshots", "levels", "areas")
-SCHEMA_VERSION = "2.0.0"
+TABLES = ("snapshots", "levels", "areas", "excursions")
+# 2.1.0 -- stage 3.3 adds the `excursions` table and the derived
+# `since_last_touch` view.  Partitions written under 2.0.0 simply have no
+# excursions file; the bump is what tells the two eras apart.
+SCHEMA_VERSION = "2.1.0"
 
 
 def _captures_for(date_str, briefs_dir=BRIEFS_DIR):
@@ -160,7 +163,95 @@ def area_rows(doc):
     return rows
 
 
-BUILDERS = {"snapshots": snapshot_rows, "levels": level_rows, "areas": area_rows}
+def excursion_rows(doc):
+    """One row per band-excursion event (D.6 / stage 3.3).  RECORDING ONLY.
+
+    Every field here is a per-capture OBSERVATION -- what price was doing
+    against a volume-weighted mean at one instant.  Nothing derived from the
+    event HISTORY is stored, because storing it would make the partition depend
+    on other partitions and break the 'rebuilds from captures alone' guarantee
+    that F-B19/F-B32 exist to protect.  `since_last_touch()` below derives the
+    recency series from this table on demand instead.
+    """
+    rows = []
+    for sym, a in (doc.get("assets") or {}).items():
+        ex = a.get("band_excursions") or {}
+        for e in (ex.get("events") or []):
+            rows.append({
+                "date": doc["date"], "slot": doc["slot"], "asset": sym,
+                "name": e.get("name"), "kind": e.get("kind"),
+                "side": e.get("side"),
+                "band_reached": e.get("band_reached"),
+                "sigma_position": e.get("sigma_position"),
+                "distance_to_mean_sigma": e.get("distance_to_mean_sigma"),
+                "distance_to_mean_atr": e.get("distance_to_mean_atr"),
+                "bars": e.get("bars"),
+                "thin_sample": bool(e.get("thin_sample")),
+                "returned_to_mean": bool(e.get("returned_to_mean")),
+            })
+    return rows
+
+
+BUILDERS = {"snapshots": snapshot_rows, "levels": level_rows, "areas": area_rows,
+            "excursions": excursion_rows}
+
+
+def since_last_touch(panel_dir=PANEL_DIR):
+    """DERIVED view: captures since each (asset, VWAP) last touched a band.
+
+    This is the promise `excursion_layer` makes in every capture -- "DERIVED at
+    panel-build time from the stored band_reached series" -- discharged here.
+    It was documented before it was built; this closes that gap.
+
+    WHY DERIVED AND NOT STORED.  A stored counter is state a capture cannot
+    verify about itself, and it would survive a corrupted neighbour unnoticed.
+    Recomputing from the archive means the number is always reproducible from
+    the partitions actually on disk.
+
+    FIREWALL (§3.4).  This is a RECENCY COUNTER, the same class of object as a
+    naked POC's "untested since" -- it says WHEN something last happened, never
+    HOW OFTEN it works.  No rate, no hit count, no expectancy, no statistic over
+    outcomes: those are H-VBR and are CENSUS work under G-7, routed to APOLLO.
+    """
+    import pandas as pd
+    d = Path(panel_dir) / "excursions"
+    files = sorted(d.glob("*.parquet")) if d.exists() else []
+    if not files:
+        return pd.DataFrame(columns=["asset", "name", "last_touch_date",
+                                     "captures_since_last_touch",
+                                     "last_band_reached", "last_side"])
+    ev = pd.concat([pd.read_parquet(f) for f in files], ignore_index=True)
+
+    # The capture timeline is (date, slot) over ALL captures, not just those
+    # with an event -- "captures since" must count the quiet ones too, or a
+    # month of silence would read the same as yesterday.
+    snap_dir = Path(panel_dir) / "snapshots"
+    snaps = sorted(snap_dir.glob("*.parquet")) if snap_dir.exists() else []
+    if snaps:
+        sn = pd.concat([pd.read_parquet(f) for f in snaps], ignore_index=True)
+        timeline = (sn[["date", "slot"]].drop_duplicates()
+                    .sort_values(["date", "slot"]).reset_index(drop=True))
+    else:
+        timeline = (ev[["date", "slot"]].drop_duplicates()
+                    .sort_values(["date", "slot"]).reset_index(drop=True))
+    timeline["ordinal"] = range(len(timeline))
+    latest = len(timeline) - 1
+
+    ev = ev.merge(timeline, on=["date", "slot"], how="left")
+    touched = ev[ev["band_reached"].fillna(0) != 0]
+    if touched.empty:
+        return pd.DataFrame(columns=["asset", "name", "last_touch_date",
+                                     "captures_since_last_touch",
+                                     "last_band_reached", "last_side"])
+    idx = touched.groupby(["asset", "name"])["ordinal"].idxmax()
+    last = touched.loc[idx].copy()
+    last["captures_since_last_touch"] = latest - last["ordinal"]
+    return (last[["asset", "name", "date", "captures_since_last_touch",
+                  "band_reached", "side"]]
+            .rename(columns={"date": "last_touch_date",
+                             "band_reached": "last_band_reached",
+                             "side": "last_side"})
+            .sort_values(["asset", "name"]).reset_index(drop=True))
 
 
 def build_partition(date_str, briefs_dir=BRIEFS_DIR):
@@ -231,8 +322,24 @@ def main():
     ap.add_argument("--date")
     ap.add_argument("--rebuild-all", action="store_true")
     ap.add_argument("--consolidated", action="store_true")
+    ap.add_argument("--since-last-touch", action="store_true",
+                    help="derived recency view over the excursions table")
     ap.add_argument("--force", action="store_true")
     args = ap.parse_args()
+
+    if args.since_last_touch:
+        df = since_last_touch()
+        if df.empty:
+            print("no band-excursion touches recorded yet")
+        else:
+            print(df.to_string(index=False))
+        # Worded to carry the firewall without naming the banned measures: this
+        # string is executable code, not a docstring, so F-B16's scan sees it
+        # and is RIGHT to -- a prohibition belongs in prose the scanner strips.
+        print("\nRECENCY ONLY -- when a band was last touched, never how often "
+              "a touch works. Any statistic over this history is H-VBR, census "
+              "work under G-7, routed to APOLLO. See briefs/panel/SCHEMA.md.")
+        return
 
     if args.consolidated:
         import pandas as pd

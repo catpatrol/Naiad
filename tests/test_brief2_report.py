@@ -632,3 +632,239 @@ def test_f_b36_no_touch_means_no_event():
     ex = B2.excursion_layer(st, 1649.58)
     assert ex["events"] == [], "price inside sigma-1 must produce no excursion"
     assert ex["n_live_vwaps"] == 1
+
+
+# ------------------------------- F-B38  stage 3.4 EXCURSION FIREWALL
+#
+# The line the operator drew: RECORDING band-excursion events is market-state
+# observation and is OPS. AGGREGATING them -- "band touches revert N% of the
+# time", hit rates, expectancy, any statistic over the event HISTORY -- is the
+# answer to his thesis and is CENSUS work under G-7. Same line as the trade
+# diary: recording is diary-keeping, aggregating is a statistic.
+
+def _code_only(path):
+    """Source with docstrings and comments removed -- scan CODE, never prose.
+
+    This project has now hit the same false positive six times (F-F3's
+    prohibition text, F-B29's "not probability", F-B35's quoted n=3, F-B36's
+    claims_nothing, cycle 4's stoch_rsi_k). The excursion layer's own
+    docstrings QUOTE the prohibition they enforce. The standing rule, written
+    into the fixtures: scan what the code DOES, never what it mentions, and
+    never the prose that disclaims a thing.
+    """
+    import ast
+    import io
+    import tokenize
+
+    src = Path(path).read_text(encoding="utf-8")
+    toks = [t for t in tokenize.generate_tokens(io.StringIO(src).readline)
+            if t.type != tokenize.COMMENT]
+    tree = ast.parse(tokenize.untokenize(toks))
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.Module, ast.ClassDef, ast.FunctionDef,
+                             ast.AsyncFunctionDef)):
+            if (node.body and isinstance(node.body[0], ast.Expr)
+                    and isinstance(node.body[0].value, ast.Constant)
+                    and isinstance(node.body[0].value.value, str)):
+                node.body[0].value.value = ""
+    return ast.unparse(tree).lower()
+
+
+def _func_code(fn):
+    """Just one function's body, prose stripped."""
+    import ast
+    import inspect
+    import textwrap
+    tree = ast.parse(textwrap.dedent(inspect.getsource(fn)))
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            if (node.body and isinstance(node.body[0], ast.Expr)
+                    and isinstance(node.body[0].value, ast.Constant)
+                    and isinstance(node.body[0].value.value, str)):
+                node.body[0].value.value = ""
+    return ast.unparse(tree).lower()
+
+
+# Statistics over OUTCOMES. Deliberately does NOT ban groupby/idxmax: selecting
+# the most recent touch is a LOOKUP, not a statistic, and stage 3.3 explicitly
+# commissions "captures since the last touch".
+BANNED_EXCURSION_STATS = (
+    "expectancy", "win_rate", "winrate", "hit_rate", "hitrate", "revert_rate",
+    "reversion_rate", "success", "profit", "pnl", "r_multiple", "sharpe",
+    "drawdown", "probability", "frequency", "np.mean", "np.std", "np.median",
+    "mean(", "median(", "average(", "describe(", "value_counts", "pct_",
+    "ratio_of", "how_often",
+)
+
+
+def test_f_b38_no_aggregation_is_applied_to_the_excursion_event_history():
+    """Stage 3.4 -- the firewall, enforced on CODE rather than promised in prose."""
+    code = _func_code(B2.excursion_layer)
+    for token in BANNED_EXCURSION_STATS:
+        assert token not in code, (
+            f"excursion_layer CODE contains {token!r} -- aggregating the event "
+            f"history is H-VBR, census work under G-7, not OPS")
+
+    # ANTI-VACUITY: the stripper must not have eaten the code with the prose.
+    assert "events.append" in code and "band_reached" in code
+
+    # And the prohibition must still be STATED in the prose it was stripped from.
+    import inspect
+    assert "census work under g-7" in inspect.getsource(B2.excursion_layer).lower()
+
+
+def test_f_b38_panel_derivation_counts_recency_and_computes_no_rate():
+    """since_last_touch may say WHEN a band was last touched, never HOW OFTEN
+    a touch works. The first is a diary fact; the second answers the thesis."""
+    import brief_panel as BP
+
+    code = _func_code(BP.since_last_touch)
+    for token in BANNED_EXCURSION_STATS:
+        assert token not in code, (
+            f"since_last_touch CODE contains {token!r} -- that is a statistic "
+            f"over the event history, not a recency counter")
+
+    # It must actually derive recency, or the fixture guards nothing.
+    assert "captures_since_last_touch" in code and "idxmax" in code
+
+    # The stored table carries per-capture OBSERVATIONS only: no column may be
+    # derived from other captures, or the partition stops rebuilding from
+    # captures alone (F-B19/F-B32).
+    rowcode = _func_code(BP.excursion_rows)
+    for token in ("since_last_touch", "captures_since", "streak", "count_of"):
+        assert token not in rowcode, (
+            f"excursion_rows stores {token!r} -- a cross-capture derivation in "
+            f"a write-once partition breaks rebuildable-from-captures-alone")
+
+
+def test_f_b38_excursion_partition_is_a_table_and_round_trips():
+    """The table promised by D.6 exists and carries the event grain."""
+    import brief_panel as BP
+    assert "excursions" in BP.TABLES, \
+        "the excursions table was documented for a cycle and never built"
+
+    doc = {"date": "2026-08-05", "slot": "post_ny", "assets": {"BTCUSDT": {
+        "band_excursions": {"events": [
+            {"name": "RVWAP 7d", "kind": "rolling", "side": "above",
+             "band_reached": 1, "sigma_position": 1.51,
+             "distance_to_mean_sigma": 1.51, "distance_to_mean_atr": 0.61,
+             "bars": 168, "thin_sample": False, "returned_to_mean": False}]}}}}
+    rows = BP.excursion_rows(doc)
+    assert len(rows) == 1
+    r = rows[0]
+    assert (r["asset"], r["name"], r["side"], r["band_reached"]) == \
+           ("BTCUSDT", "RVWAP 7d", "above", 1)
+    assert r["date"] == "2026-08-05" and r["slot"] == "post_ny"
+
+    # ANTI-VACUITY: no events -> no rows, so the table cannot fire on everything.
+    empty = {"date": "2026-08-05", "slot": "post_ny",
+             "assets": {"BTCUSDT": {"band_excursions": {"events": []}}}}
+    assert BP.excursion_rows(empty) == []
+
+
+# ------------------------------- F-B39  stage 3.1 stretch, LIVE capture numbers
+
+def test_f_b39_stretch_reproduces_the_2026_08_05_ruled_substrate_capture():
+    """Stage 3.1 -- the operator's worked example on the 1h parity bar.
+
+    Price 64,733.6 at 2026-08-05T17:00Z against the four rolling means, all of
+    which passed parity on the ruled 1h substrate the same run:
+
+        RVWAP   7d  63,737.7323  sigma    658.9130  ->  +1.51
+        RVWAP  30d  64,026.4740  sigma  1,014.3754  ->  +0.70
+        RVWAP  90d  66,248.8393  sigma  6,288.7101  ->  -0.24
+        RVWAP 365d  83,430.7716  sigma 18,858.6356  ->  -0.99
+
+    Price is ABOVE the 7d sigma-1 upper: a LIVE excursion, which is what makes
+    this capture the right one to pin the fixture to.
+    """
+    px, atr = 64733.6, 1628.44005908
+    want = {"7d": 1.51, "30d": 0.70, "90d": -0.24, "365d": -0.99}
+    means = {"7d": (63737.732321, 658.9130), "30d": (64026.474, 1014.3754),
+             "90d": (66248.839326, 6288.7101), "365d": (83430.771601, 18858.6356)}
+
+    for w, (mean, sigma) in means.items():
+        r = B2._stretch_row(f"RVWAP {w}", "rolling", mean, sigma, px, atr)
+        assert r["sigma_position"] == pytest.approx(want[w], abs=0.005), w
+        # all three units answer different questions and must all be present
+        assert r["bps"] is not None and r["atr"] is not None
+
+    seven = B2._stretch_row("RVWAP 7d", "rolling", means["7d"][0],
+                            means["7d"][1], px, atr)
+    assert seven["band_reached"] == 1, \
+        "price above the 7d +1 sigma must register a live excursion"
+
+    # NON-MONOTONIC ACROSS SCALES, and that is the information: stretched UP
+    # against the week, pulled DOWN against the year, at the same instant.
+    rv = {"windows": {w: {"warming": False, "vwap": m, "stdev": s}
+                      for w, (m, s) in means.items()}}
+    st = B2.stretch_layer({"vwap": {}}, rv, {}, px, atr)
+    d = st["disagreement"]
+    assert d["max"]["name"] == "RVWAP 7d" and d["min"]["name"] == "RVWAP 365d"
+    assert d["spread_sigma"] == pytest.approx(1.51 + 0.99, abs=0.02)
+
+
+# ------------------------------- F-B40  stage 3.5 RVOL (ruling B-7)
+
+def test_f_b40_rvol_compares_like_with_like_and_excludes_itself():
+    """RVOL is current volume against the trailing 20-day SAME-TIME-OF-DAY mean.
+
+    The time-of-day bucket is the whole point. Crypto volume has a hard diurnal
+    shape, so a flat 20-day mean scores every US-open bar high and every Asian
+    bar low -- a clock reading, not a market reading.
+    """
+    from analytics import profile as P
+
+    # 40 days of hourly bars. Volume depends ONLY on hour-of-day, so a
+    # like-for-like comparison must return exactly 1.0 and a flat-mean
+    # comparison cannot.
+    n = 40 * 24
+    t = np.arange(n, dtype="int64") * HOUR_MS
+    hour = (t // HOUR_MS) % 24
+    v = np.where(hour == 13, 1000.0, 100.0)          # one loud hour a day
+
+    at_13 = int(np.flatnonzero(hour == 13)[-1])
+    r = P.relative_volume(t, v, as_of_index=at_13)
+    assert r["rvol"] == pytest.approx(1.0), \
+        "a US-open bar of typical US-open size must read 1.0, not 10.0"
+    assert r["samples"] == P.RVOL_LOOKBACK_DAYS and r["warming"] is False
+    assert r["average_volume"] == pytest.approx(1000.0)
+
+    at_03 = int(np.flatnonzero(hour == 3)[-1])
+    assert P.relative_volume(t, v, as_of_index=at_03)["rvol"] == pytest.approx(1.0)
+
+    # A GENUINE spike is still caught: same hour, ten times the usual size.
+    v2 = v.copy()
+    v2[at_13] = 10000.0
+    assert P.relative_volume(t, v2, as_of_index=at_13)["rvol"] == pytest.approx(10.0)
+
+    # SELF-EXCLUSION: the current bar must not enter its own baseline, or every
+    # reading is dragged toward 1.0 exactly when the measure matters most.
+    assert P.relative_volume(t, v2, as_of_index=at_13)["average_volume"] == \
+        pytest.approx(1000.0), "the spike leaked into its own baseline"
+
+    # WARMING is honest rather than silently thin.
+    early = P.relative_volume(t, v, as_of_index=int(np.flatnonzero(hour == 13)[2]))
+    assert early["warming"] is True and early["samples"] == 2
+
+    # A zero baseline reports None, never inf -- inf would rank first on any
+    # board that sorts by RVOL.
+    z = P.relative_volume(t, np.zeros(n), as_of_index=at_13)
+    assert z["rvol"] is None and z["average_volume"] == 0.0
+
+
+def test_f_b40_rvol_layer_is_observation_only_and_casts_no_vote():
+    """B-7 commissions RVOL as CONTEXT. It describes participation, not price,
+    so it contributes no level and must never reach the scoring registry."""
+    kl = _klines(days=40, step_ms=HOUR_MS)
+    lay = B2.rvol_layer(kl)
+    assert lay["observation_only"] is True
+    assert lay["tf"] == "1h" and lay["lookback_days"] == 20
+
+    # It must not have leaked into the registry under any label.
+    reg = B2.build_registry({"vwap": {}, "structure": {}, "sessions": {},
+                             "radar": []},
+                            {"windows": {}}, {"windows": {}}, [])
+    labels = " ".join(x["label"] for x in reg.as_list()).lower()
+    assert "rvol" not in labels and "relative volume" not in labels, \
+        "RVOL reached the scoring registry -- it locates no price"

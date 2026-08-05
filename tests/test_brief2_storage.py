@@ -187,17 +187,69 @@ def test_f_b15_the_exceptions_are_real_and_still_narrow():
 
 # --------------------------------------------------------------- F-B16
 
+def _code_only(path):
+    """Source with docstrings and comments stripped -- scan CODE, never prose.
+
+    SIXTH INSTANCE of one recurring false positive (F-F3's prohibition text,
+    F-B29's "not probability", F-B35's quoted n=3, F-B36's `claims_nothing`,
+    cycle 4's `stoch_rsi_k`, and now `brief_panel.since_last_touch`, whose
+    docstring states WHICH statistics it refuses to compute and was flagged for
+    naming them).
+
+    The rule this project has now ratified into its fixtures: scan what the code
+    DOES, never what it mentions, and never the prose that disclaims a thing. A
+    guard that forbids documenting a prohibition punishes the only artifact that
+    makes the prohibition auditable.
+    """
+    import ast
+    import io
+    import tokenize
+
+    src = Path(path).read_text(encoding="utf-8")
+    toks = [t for t in tokenize.generate_tokens(io.StringIO(src).readline)
+            if t.type != tokenize.COMMENT]
+    tree = ast.parse(tokenize.untokenize(toks))
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.Module, ast.ClassDef, ast.FunctionDef,
+                             ast.AsyncFunctionDef)):
+            if (node.body and isinstance(node.body[0], ast.Expr)
+                    and isinstance(node.body[0].value, ast.Constant)
+                    and isinstance(node.body[0].value.value, str)):
+                node.body[0].value.value = ""
+    return ast.unparse(tree).lower()
+
+
 def test_f_b16_firewall_no_journal_no_outcome_no_lockbox_statistic():
     """The capture path may not import journals or compute outcome statistics."""
     for name in ("brief2.py", "brief_capture.py", "brief_panel.py"):
-        src = (ROOT / "scripts" / name).read_text(encoding="utf-8")
+        path = ROOT / "scripts" / name
+        src = path.read_text(encoding="utf-8")
         assert "engine.journal" not in src and "from engine import journal" not in src, \
             f"{name} imports the journal"
         assert "engine.replay" not in src and "engine.trading" not in src, \
             f"{name} imports a trading/replay surface"
+        code = _code_only(path)
         for banned in ("win_rate", "hit_rate", "expectancy", "r_multiple",
                        "pnl", "profit"):
-            assert banned not in src.lower(), f"{name} computes {banned}"
+            assert banned not in code, f"{name} computes {banned}"
+
+    # ANTI-VACUITY: the stripper must not have eaten the code with the prose,
+    # or this guard passes against anything.
+    b2 = _code_only(ROOT / "scripts" / "brief2.py")
+    assert "def build_registry" in b2 and "def confluence" in b2
+    bp = _code_only(ROOT / "scripts" / "brief_panel.py")
+    assert "def write_partition" in bp and "def since_last_touch" in bp
+
+    # And a genuine violation must still be caught: a real assignment survives
+    # the stripper even though a docstring mentioning the same word does not.
+    import ast as _ast
+    assert "expectancy" in _ast.unparse(
+        _ast.parse("def f():\n    expectancy = 1\n")).lower(), \
+        "the code scan cannot see a real assignment -- it guards nothing"
+    assert "expectancy" not in _ast.unparse(
+        _ast.parse('def f():\n    """no expectancy here"""\n    return 1\n')
+    ).lower().replace("no expectancy here", ""), \
+        "prose and code are indistinguishable to this scan"
 
     _, doc = _one()
     blob = json.dumps(doc).lower()
@@ -306,8 +358,12 @@ def test_f_b32_partitions_are_written_once_and_never_rewritten(tmp_path):
     import pandas as pd
     tables = {t: [{"date": "2026-01-01", "slot": "ny_am", "asset": "X"}]
               for t in BP.TABLES}
+    # Keyed to BP.TABLES rather than a literal: a new table must not silently
+    # slip past write-once because the fixture counted the old number.
+    n = len(BP.TABLES)
+    assert n >= 4, "the excursions table (schema 2.1.0) is missing"
     first = BP.write_partition("2026-01-01", tables, panel_dir=tmp_path)
-    assert len(first["written"]) == 3 and not first["refused_existing"]
+    assert len(first["written"]) == n and not first["refused_existing"]
 
     stamps = {p: (tmp_path / p.split("/")[-2] / p.split("/")[-1]).stat().st_mtime
               for p in [f"{t}/2026-01-01.parquet" for t in BP.TABLES]}
@@ -316,7 +372,7 @@ def test_f_b32_partitions_are_written_once_and_never_rewritten(tmp_path):
                for t in BP.TABLES}
     second = BP.write_partition("2026-01-01", tables2, panel_dir=tmp_path)
     assert not second["written"], "a partition was rewritten"
-    assert len(second["refused_existing"]) == 3
+    assert len(second["refused_existing"]) == n
 
     for rel, mtime in stamps.items():
         p = tmp_path / rel.split("/")[0] / rel.split("/")[1]
@@ -326,7 +382,7 @@ def test_f_b32_partitions_are_written_once_and_never_rewritten(tmp_path):
 
     # --force exists only to repair a known-bad file
     third = BP.write_partition("2026-01-01", tables2, panel_dir=tmp_path, force=True)
-    assert len(third["written"]) == 3
+    assert len(third["written"]) == n
 
 
 def test_f_b32_real_partitions_exist_and_match_the_capture():

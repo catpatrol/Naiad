@@ -144,6 +144,53 @@ on 2026-08-03: the 365d window overlaps by **64.115 days**, self-clearing
 
 ---
 
+## `excursions` — band-excursion events (D.6, stage 3.3) · **since 2.1.0**
+
+One row per VWAP that price has reached a sigma band on, per capture. Empty for
+a quiet asset — an event table that fires on everything records nothing.
+
+| column | type | units | source layer | since |
+|---|---|---|---|---|
+| `date`, `slot`, `asset` | str | — | grain | 2.1.0 |
+| `name` | str | e.g. `RVWAP 7d`, `anchored M` | the mean price is stretched from | 2.1.0 |
+| `kind` | str | `rolling` / `anchored` | which VWAP family | 2.1.0 |
+| `side` | str | `above` / `below` | which side price sits on | 2.1.0 |
+| `band_reached` | int | 1 / 2 / 3 | furthest sigma band reached | 2.1.0 |
+| `sigma_position` | float | sigma, signed | price's position on the mean's own scale | 2.1.0 |
+| `distance_to_mean_sigma` | float | sigma | what a return to the mean would travel | 2.1.0 |
+| `distance_to_mean_atr` | float | daily ATR | the same distance in tradeable units | 2.1.0 |
+| `bars` | int | count | sample depth behind the estimate | 2.1.0 |
+| `thin_sample` | bool | — | R3: sigma below the 30-bar band floor | 2.1.0 |
+| `returned_to_mean` | bool | — | per-capture observation, not a history | 2.1.0 |
+
+**Why both σ and ATR.** They answer different questions and neither substitutes
+for the other. A σ2 reversion is *always* geometrically 2:1 — that is a constant
+of the construction, not a property of the trade. What differs wildly is the
+distance: BTC's 7d σ is ~0.4 ATR (a σ2 reversion travels 0.8 ATR — a day trade)
+while its 365d σ is ~11.4 ATR (the same setup travels 22.8 ATR — a months-long
+position). Identical geometry, entirely different trades.
+
+**Every column is a per-capture OBSERVATION.** Nothing derived from other
+captures is stored, because a cross-capture derivation inside a write-once
+partition would break the guarantee that partitions rebuild **from captures
+alone** (F-B19/F-B32). `brief_panel.since_last_touch()` derives the recency
+series on demand instead:
+
+```
+python scripts/brief_panel.py --since-last-touch
+```
+
+**FIREWALL (§3.4), the line the operator drew.** RECORDING these events is
+market-state observation and is **OPS**. `since_last_touch` is a **recency
+counter** — the same class of object as a naked POC's "untested since" — and
+says *when* a band was last touched. It never says *how often a touch works*.
+Rates, reversion percentages, expectancy, any statistic over the event history
+is **H-VBR**, census work under G-7, routed to APOLLO. F-B38 enforces this on
+the **code**, not on the prose: it scans what these functions do, never what
+they mention.
+
+---
+
 ## Measured storage — fact replacing the §8.2 estimate
 
 Measured 2026-08-03, ten assets, one slot:

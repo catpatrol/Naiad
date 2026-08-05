@@ -250,6 +250,35 @@ def rvwap_layer(klines, now_ms, tf="1h"):
     return out
 
 
+def rvol_layer(klines, tf="1h"):
+    """§3.6 RVOL (ratified B-7) -- the one volume-side addition still owed.
+
+    Reported on the 1h plane, where the time-of-day bucket is an hour and the
+    trailing 20 days give 20 clean samples.  A 5m bucket would give the same 20
+    samples of a twelfth the volume and a far noisier ratio, for no extra
+    information about the day's character.
+
+    OBSERVATION ONLY.  RVOL casts NO VOTE and enters NO registry: it describes
+    participation, not price, so it has no level to contribute and nothing to be
+    confluent with.  The bias print counts agreement between things that locate
+    price; a volume ratio is a different kind of claim and mixing it in would
+    make the count mean less, not more.
+    """
+    out = {"tf": tf, "lookback_days": P.RVOL_LOOKBACK_DAYS,
+           "observation_only": True,
+           "no_vote": "RVOL describes participation, not price -- it contributes "
+                      "no level and casts no vote (§7.3 counts locators only)"}
+    if tf not in klines or not len(klines[tf]):
+        out["warming"] = True
+        out["reason"] = "no substrate"
+        return out
+    t, o, h, l, c, v = _cols(klines[tf])
+    r = P.relative_volume(t, v)
+    out.update(r)
+    out["bar_utc_ms"] = int(t[-1])
+    return out
+
+
 def nesting_layer(vol, price):
     """VA nesting across adjacent window scales (§4), with the §4.2 prose.
 
@@ -1319,7 +1348,8 @@ def brief2_asset(a, klines, now_ms, price, atr_d):
              "oscillators": osc, "cross_state": cross, "lattice_12_25": lat,
              "chart_planes": planes, "prior_anchors": prior,
              "confirmed_pivots": pivs, "stretch": stretch,
-             "band_excursions": excursion, "confluence": conf}
+             "band_excursions": excursion, "rvol": rvol_layer(klines),
+             "confluence": conf}
     part2 = decision_instrument(a, vol, nest, conf, price, atr_d)
     return part1, part2
 

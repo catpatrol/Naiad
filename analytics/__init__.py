@@ -211,6 +211,16 @@ CONVENTIONS = {
                        "warmup": "n/a -- describes the slice it is handed"},
     "naked_poc_registry": {"recipe": "POCs untested over (poc_index, as_of_index]",
                            "causality": "causal", "warmup": "n/a"},
+    "relative_volume": {"recipe": "RVOL (B-7): bar volume / mean volume of the SAME "
+                                  "time-of-day bucket over the trailing 20 days, "
+                                  "current bar EXCLUDED from its own baseline; "
+                                  "None rather than inf when the baseline is zero",
+                        "causality": "causal",
+                        "warmup": "warming until 20 same-bucket samples exist",
+                        "why_time_of_day": "crypto volume has a hard diurnal shape; a "
+                                           "flat 20-day mean would score every US-open "
+                                           "bar high and every Asian bar low, which is a "
+                                           "clock reading and not a market reading"},
     "low_volume_nodes": {"recipe": "contiguous runs of profile rows below "
                                    "lvn_threshold x the window's MEDIAN row "
                                    "volume, >= lvn_min_rows wide, INTERIOR only "
