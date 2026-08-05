@@ -344,4 +344,36 @@ The five `scripts/seq8_*.py` files are **deliberately left uncommitted**. W-F1 �
 
 ## 11 · PUBLISH RESULT
 
-See the session summary's closing block and the on-screen close for the exact publish status, staged path list, and whether the push SUCCEEDED.
+Raw print from `publish_exchange.publish()`:
+
+```
+publish: committed 54a9fe8 (6 path(s)) and pushed to origin/v12-v1-census
+```
+
+```
+status    = PUBLISHED
+commit    = 54a9fe8
+pushed    = True
+branch    = v12-v1-census
+offenders = []
+error     = None
+```
+
+**The push SUCCEEDED.**
+
+Staged paths — all six inside `exchange/`, so `guard()` passed with zero offenders:
+
+```
+exchange/queue/2026-08-04_SEQ8_cascade_event_extract_DIONYSUS.md
+exchange/reports/2026-08-04_SEQ8_cascade_event_extract_DIONYSUS.md
+exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-04_SEQ8.md
+exchange/reports/NOTE_DIONYSUS_to_APOLLO_2026-08-04_range_detection_scoping.md
+exchange/reports/SESSION_SUMMARY_DIONYSUS_2026-08-04_SEQ_rulings.md
+exchange/reports/SESSION_SUMMARY_HEPHAESTUS_2026-08-04_SEQ8.md
+```
+
+Four of those six are **pre-existing DIONYSUS files** that were already sitting untracked in `exchange/` before this build started (the SEQ-8 contract itself, its queue copy, the DIONYSUS session summary, and the APOLLO range-detection note). They rode this publish because `publish()` stages `exchange/` wholesale. That is expected behaviour, not a scope leak — recorded here so the six-path count is not misread.
+
+A second publish follows this edit, carrying only this section's update; its commit id appears in the on-screen close.
+
+No `research_outputs/` path, no `scripts/seq8_*.py`, and no `.gitignore` change was staged, committed or pushed at any point.
