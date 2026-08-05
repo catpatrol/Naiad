@@ -1,0 +1,92 @@
+========================================================================================================
+ITEM 4.1 -- THE C4 COMPARISON IS WITHDRAWN
+========================================================================================================
+
+  C4 §5.3 reported time beyond +/-1s ~50%, +/-2s ~9.5%, +/-3s ~0.4% and compared
+  them to a normal distribution's 31.7 / 4.6 / 0.27, concluding the tails were
+  "roughly double" and a "2 sigma is rare" prior was "wrong by a factor of two".
+
+  THAT COMPARISON IS A CATEGORY ERROR. The normal figures describe INDEPENDENT
+  DRAWS. Price relative to a VWAP is a PERSISTENT, AUTOCORRELATED series: once
+  price is beyond a band it TENDS TO STAY there, because trending is exactly
+  what carries it there. A ~50% time-fraction is a statement about persistence,
+  not about tail fatness, and no conclusion about tails follows from it.
+
+  The C4 sentence must be removed from the report. What follows replaces it.
+
+========================================================================================================
+ITEM 4.2 -- EPISODES: contiguous runs beyond the band
+========================================================================================================
+
+  calibration window: trailing 8760 1h bars (365 days)
+
+asset            VWAP  k  episodes  med len  p90 len  med max|z|  bars beyond  time %
+--------------------------------------------------------------------------------------------------------
+BTCUSDT            7d  2       170      2.0       11       2.225          775    8.85
+BTCUSDT            7d  3         6      1.0        1       3.297            6    0.07
+BTCUSDT           30d  2        79      3.0       27       2.148          771    8.80
+BTCUSDT           30d  3         3      1.0        2       3.014            4    0.05
+ETHUSDT            7d  2       131      3.0       13       2.257          746    8.52
+ETHUSDT            7d  3        14      2.0        4       3.270           35    0.40
+ETHUSDT           30d  2        70      3.5       28       2.177          763    8.71
+ETHUSDT           30d  3         9      4.0       13       3.290           45    0.51
+FARTCOINUSDT       7d  2       178      2.0       11       2.210          765    8.73
+FARTCOINUSDT       7d  3        15      1.0        8       3.214           40    0.46
+FARTCOINUSDT      30d  2        51      3.0       14       2.177          480    5.48
+FARTCOINUSDT      30d  3         7      1.0       16       3.103           25    0.29
+HYPEUSDT           7d  2       218      2.0       12       2.224         1093   12.48
+HYPEUSDT           7d  3        18      1.0        5       3.110           35    0.40
+HYPEUSDT          30d  2        95      3.0       24       2.136          745    8.50
+HYPEUSDT          30d  3        12      1.5        7       3.212           41    0.47
+JTOUSDT            7d  2       158      2.0       18       2.191          986   11.26
+JTOUSDT            7d  3        20      1.0        2       3.128           26    0.30
+JTOUSDT           30d  2        55      2.0       24       2.154          520    5.94
+JTOUSDT           30d  3         7      2.0        3       3.136           12    0.14
+LITUSDT            7d  2       127      2.0        8       2.262          463    8.57
+LITUSDT            7d  3         2      2.0        3       3.307            4    0.07
+LITUSDT           30d  2        63      3.0       12       2.141          478    8.85
+LITUSDT           30d  3         8      2.0        3       3.058           15    0.28
+NEARUSDT           7d  2       191      2.0       11       2.215          848    9.68
+NEARUSDT           7d  3        20      1.5        8       3.162           49    0.56
+NEARUSDT          30d  2        56      2.0       24       2.219          499    5.70
+NEARUSDT          30d  3        15      2.0       10       3.113           52    0.59
+SOLUSDT            7d  2       160      2.0       14       2.264          782    8.93
+SOLUSDT            7d  3         9      1.0        5       3.194           15    0.17
+SOLUSDT           30d  2        79      2.0       20       2.143          783    8.94
+SOLUSDT           30d  3        15      2.0        6       3.100           47    0.54
+TAOUSDT            7d  2       195      2.0       10       2.230          811    9.26
+TAOUSDT            7d  3        18      1.0        4       3.084           32    0.37
+TAOUSDT           30d  2        76      2.0       13       2.116          671    7.66
+TAOUSDT           30d  3        10      5.0       14       3.247           54    0.62
+ZECUSDT            7d  2       198      2.0       13       2.197          915   10.45
+ZECUSDT            7d  3        26      1.0        5       3.226           57    0.65
+ZECUSDT           30d  2        86      3.0       23       2.159          868    9.91
+ZECUSDT           30d  3        10      5.0       20       3.315           65    0.74
+
+========================================================================================================
+ITEM 4.4 -- WHAT THIS DOES TO H-VBR's DEFLATION GAUGE
+========================================================================================================
+
+  sigma2:  2436 episodes across 20 asset-windows in a YEAR
+           median time beyond = 8.82% of bars
+           median episode length = 2.0 bars
+           => per asset-window, ~121.8 episodes/year
+
+  sigma3:  244 episodes across 20 asset-windows in a YEAR
+           median time beyond = 0.40% of bars
+           median episode length = 1.5 bars
+           => per asset-window, ~12.2 episodes/year
+
+  THE POINT. A 9.5%-of-bars figure sounds like abundant opportunity. Counted as
+  EPISODES it is a modest number of events per instrument per year, and each is
+  ONE decision, not N independent ones. H-VBR's baseline must therefore be
+  per-EPISODE, and its usable sample is far smaller than the bar fraction
+  implies -- which raises, not lowers, the evidential bar the hypothesis must
+  clear.
+
+  FIREWALL UNCHANGED. Counting episodes and measuring their length is
+  market-state observation and is OPS. What fraction of them REVERT to the mean,
+  any hit rate, any expectancy -- that is H-VBR, census work under G-7, routed
+  to APOLLO. Nothing above computes it.
+
+wrote exchange/reports/EXCURSION_EPISODES_2026-08-06.json
