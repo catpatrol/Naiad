@@ -1,7 +1,7 @@
 {
  "analytics_sha": "e8a4959b6f8d6fb22b593eb77da60b59fc9fa499bf4ef94b795f248651d20d66",
  "analytics_version": "1.4.0",
- "as_of_utc": "2026-08-05T19:19:30Z",
+ "as_of_utc": "2026-08-05T19:32:09Z",
  "assets": {
   "BTCUSDT": {
    "band_excursions": {
@@ -5406,6 +5406,10 @@
       }
      ]
     },
+    "draft_archetypes": [
+     "continuation",
+     "reversion"
+    ],
     "hypothesis_drafts": [
      {
       "draft": true,
@@ -5867,6 +5871,51 @@
      }
     },
     "part": "II -- decision instrument",
+    "reversion_drafts": {
+     "archetype": "reversion",
+     "claims_nothing": "whether a band reversion pays anything is H-VBR, census work under G-7, routed to APOLLO",
+     "count": 1,
+     "drafts": [
+      {
+       "archetype": "reversion",
+       "band_cluster_families": [
+        "vwap_anchored"
+       ],
+       "band_cluster_mean": 75162.44706453147,
+       "band_confluence_score": 2,
+       "bars": 8760,
+       "contains_no_probability_claim": true,
+       "entry": 75162.44706453147,
+       "entry_band": "-2s",
+       "invalidation": 63042.850277523044,
+       "invalidation_is": "beyond sigma3",
+       "kind": "prior_anchor",
+       "name": "prior Y",
+       "no_sizing": true,
+       "rank": 1,
+       "reward": 24239.193574016856,
+       "risk": 12119.596787008428,
+       "rr": 2.0,
+       "rr_is_constant": true,
+       "side": "long",
+       "sigma": 12119.596787008428,
+       "sigma_atr": 7.442458025647291,
+       "sigma_position": -2.860494556692732,
+       "target": 99401.64063854833,
+       "target_distance_atr": 14.884916051294582,
+       "target_is": "the VWAP mean"
+      }
+     ],
+     "entry_requires": "price has ACTUALLY REACHED the band and is beyond it at the close -- never a forecast that it will",
+     "entry_sigmas": [
+      2,
+      3
+     ],
+     "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
+     "skipped_thin_sample": [],
+     "thin_sample_gate": "a draft requires bars >= 30, so a freshly-opened anchor cannot manufacture a setup from a two-bar sigma",
+     "view": "with_volume"
+    },
     "rr_ranking": {
      "board": [
       {
@@ -6142,7 +6191,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-01-17T19:19:30Z"
+     "window_start_utc": "2026-01-17T19:32:09Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -6166,7 +6215,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:19:30Z"
+     "window_start_utc": "2026-07-20T03:32:09Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -6190,7 +6239,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:19:30Z"
+     "window_start_utc": "2026-05-31T03:32:09Z"
     }
    },
    "last_bar_utc": {
@@ -6706,7 +6755,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": null,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:19:30Z",
+     "window_start_utc": "2026-07-20T03:32:09Z",
      "zone_distance_bps": 42.04,
      "zone_distance_gov_atr": 0.8784
     },
@@ -6774,7 +6823,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 12870,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:19:30Z",
+     "window_start_utc": "2026-05-31T03:32:09Z",
      "zone_distance_bps": 90.16,
      "zone_distance_gov_atr": 0.9826
     },
@@ -6842,7 +6891,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": 1267,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-01-17T19:19:30Z",
+     "window_start_utc": "2026-01-17T19:32:09Z",
      "zone_distance_bps": 0.0,
      "zone_distance_gov_atr": 0.0
     }
@@ -7176,37 +7225,37 @@
    },
    "staleness": [
     {
-     "age_hours": 0.54,
+     "age_hours": 0.75,
      "last_input_utc": "2026-08-05T18:47:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 0.58,
+     "age_hours": 0.79,
      "last_input_utc": "2026-08-05T18:45:00Z",
      "layer": "tpo",
      "native_tf": "30m"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 43.33,
+     "age_hours": 43.54,
      "last_input_utc": "2026-08-04T00:00:00Z",
      "layer": "funding",
      "native_tf": "8h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
      "native_tf": "1h"
@@ -7464,16 +7513,16 @@
    "symbol": "BTCUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:19:46Z",
-     "basis_bps": -5.918,
-     "index_price": 64872.56108696,
-     "mark_price": 64834.17126812
+     "at_utc": "2026-08-05T19:32:19Z",
+     "basis_bps": -5.181,
+     "index_price": 64922.735,
+     "mark_price": 64889.1
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:19:47Z",
+    "fetched_utc": "2026-08-05T19:32:21Z",
     "next_funding": {
      "interest_rate": 0.0001,
-     "last_funding_rate": 7.64e-06,
+     "last_funding_rate": 3.65e-06,
      "next_funding_utc": "2026-08-06T00:00:00Z"
     },
     "open_interest": {
@@ -7497,8 +7546,8 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 239,
-     "poc": 63034.1605,
+     "brackets": 238,
+     "poc": 63059.7275,
      "provenance": "approximation",
      "vah": 64095.191,
      "val": 62714.573
@@ -7639,7 +7688,7 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28767,
+     "bars": 28754,
      "bin_width": 23.4765,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -7650,10 +7699,10 @@
      "vah": 65186.839,
      "val": 63073.954,
      "value_area_fraction": 0.7,
-     "volume_total": 2412899.912
+     "volume_total": 2412630.568
     },
     "5d": {
-     "bars": 7167,
+     "bars": 7154,
      "bin_width": 12.796,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -7664,7 +7713,7 @@
      "vah": 64532.08,
      "val": 63098.928,
      "value_area_fraction": 0.7,
-     "volume_total": 553298.857
+     "volume_total": 552827.64
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -13014,6 +13063,10 @@
       }
      ]
     },
+    "draft_archetypes": [
+     "continuation",
+     "reversion"
+    ],
     "hypothesis_drafts": [
      {
       "draft": true,
@@ -13423,6 +13476,84 @@
      }
     },
     "part": "II -- decision instrument",
+    "reversion_drafts": {
+     "archetype": "reversion",
+     "claims_nothing": "whether a band reversion pays anything is H-VBR, census work under G-7, routed to APOLLO",
+     "count": 2,
+     "drafts": [
+      {
+       "archetype": "reversion",
+       "band_cluster_families": [
+        "structure",
+        "vwap_anchored",
+        "vwap_rolling"
+       ],
+       "band_cluster_mean": 1913.1590245608998,
+       "band_confluence_score": 8,
+       "bars": 66,
+       "contains_no_probability_claim": true,
+       "entry": 1907.4806479099998,
+       "entry_band": "+3s",
+       "invalidation": 1921.2996265099998,
+       "invalidation_is": "sigma3 plus one band width",
+       "kind": "anchored",
+       "name": "anchored W",
+       "no_sizing": true,
+       "rank": 1,
+       "reward": 41.45693579999988,
+       "risk": 13.818978600000037,
+       "rr": 2.9999999999999836,
+       "rr_is_constant": true,
+       "side": "short",
+       "sigma": 13.8189786,
+       "sigma_atr": 0.21442941900840523,
+       "sigma_position": 3.6114310134325094,
+       "target": 1866.02371211,
+       "target_distance_atr": 0.6432882570252139,
+       "target_is": "the VWAP mean"
+      },
+      {
+       "archetype": "reversion",
+       "band_cluster_families": [
+        "structure",
+        "vwap_anchored",
+        "vwap_rolling"
+       ],
+       "band_cluster_mean": 1913.1590245608998,
+       "band_confluence_score": 8,
+       "bars": 114,
+       "contains_no_probability_claim": true,
+       "entry": 1908.7425595,
+       "entry_band": "+3s",
+       "invalidation": 1923.35565617,
+       "invalidation_is": "sigma3 plus one band width",
+       "kind": "anchored",
+       "name": "anchored M",
+       "no_sizing": true,
+       "rank": 2,
+       "reward": 43.83929001000001,
+       "risk": 14.613096670000004,
+       "rr": 3.0,
+       "rr_is_constant": true,
+       "side": "short",
+       "sigma": 14.61309667,
+       "sigma_atr": 0.22675176795351293,
+       "sigma_position": 3.491849240603163,
+       "target": 1864.90326949,
+       "target_distance_atr": 0.680255303860539,
+       "target_is": "the VWAP mean"
+      }
+     ],
+     "entry_requires": "price has ACTUALLY REACHED the band and is beyond it at the close -- never a forecast that it will",
+     "entry_sigmas": [
+      2,
+      3
+     ],
+     "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
+     "skipped_thin_sample": [],
+     "thin_sample_gate": "a draft requires bars >= 30, so a freshly-opened anchor cannot manufacture a setup from a two-bar sigma",
+     "view": "with_volume"
+    },
     "rr_ranking": {
      "board": [
       {
@@ -13696,7 +13827,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:19:30Z"
+     "window_start_utc": "2026-01-17T19:32:09Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -13720,7 +13851,7 @@
      "tier": "-",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:19:30Z"
+     "window_start_utc": "2026-07-20T03:32:09Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -13744,7 +13875,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:19:30Z"
+     "window_start_utc": "2026-05-31T03:32:09Z"
     }
    },
    "last_bar_utc": {
@@ -14220,7 +14351,7 @@
      "tier": "-",
      "tpw_exec_bars_ago": null,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:19:30Z",
+     "window_start_utc": "2026-07-20T03:32:09Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     },
@@ -14288,7 +14419,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 1884,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:19:30Z",
+     "window_start_utc": "2026-05-31T03:32:09Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     },
@@ -14356,7 +14487,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 3367,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:19:30Z",
+     "window_start_utc": "2026-01-17T19:32:09Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     }
@@ -14645,31 +14776,31 @@
    },
    "staleness": [
     {
-     "age_hours": 0.53,
+     "age_hours": 0.74,
      "last_input_utc": "2026-08-05T18:48:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 0.58,
+     "age_hours": 0.79,
      "last_input_utc": "2026-08-05T18:45:00Z",
      "layer": "tpo",
      "native_tf": "30m"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
      "native_tf": "1h"
@@ -14927,16 +15058,16 @@
    "symbol": "ETHUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:19:59Z",
-     "basis_bps": -5.004,
-     "index_price": 1917.49953488,
-     "mark_price": 1916.5399845
+     "at_utc": "2026-08-05T19:32:30Z",
+     "basis_bps": -4.214,
+     "index_price": 1919.13790698,
+     "mark_price": 1918.32915504
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:20:01Z",
+    "fetched_utc": "2026-08-05T19:32:31Z",
     "next_funding": {
      "interest_rate": 0.0001,
-     "last_funding_rate": 5.172e-05,
+     "last_funding_rate": 5.463e-05,
      "next_funding_utc": "2026-08-06T00:00:00Z"
     },
     "open_interest": {
@@ -14960,7 +15091,7 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 239,
+     "brackets": 238,
      "poc": 1868.0381,
      "provenance": "approximation",
      "vah": 1878.1632,
@@ -15102,7 +15233,7 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28768,
+     "bars": 28755,
      "bin_width": 0.8977,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -15113,10 +15244,10 @@
      "vah": 1924.5472,
      "val": 1853.6289,
      "value_area_fraction": 0.7,
-     "volume_total": 66313333.788
+     "volume_total": 66302398.124
     },
     "5d": {
-     "bars": 7168,
+     "bars": 7155,
      "bin_width": 0.5329,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -15127,7 +15258,7 @@
      "vah": 1881.8935,
      "val": 1853.1169,
      "value_area_fraction": 0.7,
-     "volume_total": 14617753.488
+     "volume_total": 14606036.119
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -21168,6 +21299,10 @@
       }
      ]
     },
+    "draft_archetypes": [
+     "continuation",
+     "reversion"
+    ],
     "hypothesis_drafts": [
      {
       "draft": true,
@@ -21665,6 +21800,21 @@
      }
     },
     "part": "II -- decision instrument",
+    "reversion_drafts": {
+     "archetype": "reversion",
+     "claims_nothing": "whether a band reversion pays anything is H-VBR, census work under G-7, routed to APOLLO",
+     "count": 0,
+     "drafts": [],
+     "entry_requires": "price has ACTUALLY REACHED the band and is beyond it at the close -- never a forecast that it will",
+     "entry_sigmas": [
+      2,
+      3
+     ],
+     "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
+     "skipped_thin_sample": [],
+     "thin_sample_gate": "a draft requires bars >= 30, so a freshly-opened anchor cannot manufacture a setup from a two-bar sigma",
+     "view": "with_volume"
+    },
     "rr_ranking": {
      "board": [
       {
@@ -21944,7 +22094,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:19:30Z"
+     "window_start_utc": "2026-01-17T19:32:09Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -21968,7 +22118,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:19:30Z"
+     "window_start_utc": "2026-07-20T03:32:09Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -21992,7 +22142,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:19:30Z"
+     "window_start_utc": "2026-05-31T03:32:09Z"
     }
    },
    "last_bar_utc": {
@@ -22448,7 +22598,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 27733,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:19:30Z",
+     "window_start_utc": "2026-07-20T03:32:09Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     },
@@ -22516,7 +22666,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 12879,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:19:30Z",
+     "window_start_utc": "2026-05-31T03:32:09Z",
      "zone_distance_bps": 0.0,
      "zone_distance_gov_atr": 0.0
     },
@@ -22584,7 +22734,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": 135,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:19:30Z",
+     "window_start_utc": "2026-01-17T19:32:09Z",
      "zone_distance_bps": 67.54,
      "zone_distance_gov_atr": 0.156
     }
@@ -22862,25 +23012,31 @@
    },
    "staleness": [
     {
-     "age_hours": 0.49,
+     "age_hours": 0.7,
      "last_input_utc": "2026-08-05T18:50:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 0.7,
+     "last_input_utc": "2026-08-05T18:50:00Z",
+     "layer": "tpo",
+     "native_tf": "30m"
+    },
+    {
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
      "native_tf": "1h"
@@ -23138,13 +23294,13 @@
    "symbol": "FARTCOINUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:21:50Z",
-     "basis_bps": 10.757,
-     "index_price": 0.13350914,
-     "mark_price": 0.13365275
+     "at_utc": "2026-08-05T19:33:55Z",
+     "basis_bps": 0.821,
+     "index_price": 0.13338905,
+     "mark_price": 0.1334
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:21:52Z",
+    "fetched_utc": "2026-08-05T19:33:56Z",
     "next_funding": {
      "interest_rate": 0.0001,
      "last_funding_rate": 5e-05,
@@ -23171,7 +23327,7 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 239,
+     "brackets": 238,
      "poc": 0.130751,
      "provenance": "approximation",
      "vah": 0.132704,
@@ -23313,7 +23469,7 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28765,
+     "bars": 28752,
      "bin_width": 0.0001285,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -23324,10 +23480,10 @@
      "vah": 0.1393595,
      "val": 0.126124,
      "value_area_fraction": 0.7,
-     "volume_total": 2516304228.6
+     "volume_total": 2515370436.8
     },
     "5d": {
-     "bars": 7166,
+     "bars": 7153,
      "bin_width": 9.3e-05,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -23338,7 +23494,7 @@
      "vah": 0.134006,
      "val": 0.126938,
      "value_area_fraction": 0.7,
-     "volume_total": 652010560.3
+     "volume_total": 651369528.6
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -28959,6 +29115,10 @@
       }
      ]
     },
+    "draft_archetypes": [
+     "continuation",
+     "reversion"
+    ],
     "hypothesis_drafts": [
      {
       "draft": true,
@@ -29387,6 +29547,87 @@
      }
     },
     "part": "II -- decision instrument",
+    "reversion_drafts": {
+     "archetype": "reversion",
+     "claims_nothing": "whether a band reversion pays anything is H-VBR, census work under G-7, routed to APOLLO",
+     "count": 2,
+     "drafts": [
+      {
+       "archetype": "reversion",
+       "band_cluster_families": [
+        "profile_windowed",
+        "ss",
+        "structure",
+        "vwap_anchored",
+        "vwap_rolling"
+       ],
+       "band_cluster_mean": 53.947471466893035,
+       "band_confluence_score": 13,
+       "bars": 5174,
+       "contains_no_probability_claim": true,
+       "entry": 54.24771531259042,
+       "entry_band": "+2s",
+       "invalidation": 61.63563324196933,
+       "invalidation_is": "beyond sigma3",
+       "kind": "prior_anchor",
+       "name": "prior Y",
+       "no_sizing": true,
+       "rank": 1,
+       "reward": 14.775835858757809,
+       "risk": 7.387917929378908,
+       "rr": 1.9999999999999991,
+       "rr_is_constant": true,
+       "side": "short",
+       "sigma": 7.387917929378905,
+       "sigma_atr": 2.3624879496029294,
+       "sigma_position": 2.4759506969381277,
+       "target": 39.471879453832614,
+       "target_distance_atr": 4.724975899205859,
+       "target_is": "the VWAP mean"
+      },
+      {
+       "archetype": "reversion",
+       "band_cluster_families": [
+        "ss",
+        "structure",
+        "vwap_anchored",
+        "vwap_rolling"
+       ],
+       "band_cluster_mean": 57.666376672619116,
+       "band_confluence_score": 12,
+       "bars": null,
+       "contains_no_probability_claim": true,
+       "entry": 57.33904566229326,
+       "entry_band": "+2s",
+       "invalidation": 58.96592489216297,
+       "invalidation_is": "beyond sigma3",
+       "kind": "rolling",
+       "name": "RVWAP 7d",
+       "no_sizing": true,
+       "rank": 2,
+       "reward": 3.25375845973943,
+       "risk": 1.626879229869708,
+       "rr": 2.000000000000009,
+       "rr_is_constant": true,
+       "side": "short",
+       "sigma": 1.6268792298697135,
+       "sigma_atr": 0.5202389377854946,
+       "sigma_position": 2.26120828756341,
+       "target": 54.08528720255383,
+       "target_distance_atr": 1.0404778755709903,
+       "target_is": "the VWAP mean"
+      }
+     ],
+     "entry_requires": "price has ACTUALLY REACHED the band and is beyond it at the close -- never a forecast that it will",
+     "entry_sigmas": [
+      2,
+      3
+     ],
+     "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
+     "skipped_thin_sample": [],
+     "thin_sample_gate": "a draft requires bars >= 30, so a freshly-opened anchor cannot manufacture a setup from a two-bar sigma",
+     "view": "with_volume"
+    },
     "rr_ranking": {
      "board": [
       {
@@ -29666,7 +29907,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:19:30Z"
+     "window_start_utc": "2026-01-17T19:32:09Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -29690,7 +29931,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:19:30Z"
+     "window_start_utc": "2026-07-20T03:32:09Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -29714,7 +29955,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:19:30Z"
+     "window_start_utc": "2026-05-31T03:32:09Z"
     }
    },
    "last_bar_utc": {
@@ -30211,7 +30452,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": null,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:19:30Z",
+     "window_start_utc": "2026-07-20T03:32:09Z",
      "zone_distance_bps": 0.0,
      "zone_distance_gov_atr": 0.0
     },
@@ -30279,7 +30520,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 7531,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:19:30Z",
+     "window_start_utc": "2026-05-31T03:32:09Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     },
@@ -30347,7 +30588,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 1539,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:19:30Z",
+     "window_start_utc": "2026-01-17T19:32:09Z",
      "zone_distance_bps": 281.87,
      "zone_distance_gov_atr": 0.7806
     }
@@ -30663,31 +30904,31 @@
    },
    "staleness": [
     {
-     "age_hours": 0.51,
+     "age_hours": 0.72,
      "last_input_utc": "2026-08-05T18:49:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 0.58,
+     "age_hours": 0.79,
      "last_input_utc": "2026-08-05T18:45:00Z",
      "layer": "tpo",
      "native_tf": "30m"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
      "native_tf": "1h"
@@ -30945,13 +31186,13 @@
    "symbol": "HYPEUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:21:42Z",
-     "basis_bps": -3.7,
-     "index_price": 57.52428571,
-     "mark_price": 57.503
+     "at_utc": "2026-08-05T19:33:45Z",
+     "basis_bps": -7.02,
+     "index_price": 57.48735714,
+     "mark_price": 57.447
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:21:44Z",
+    "fetched_utc": "2026-08-05T19:33:46Z",
     "next_funding": {
      "interest_rate": 0.0001,
      "last_funding_rate": 5e-05,
@@ -30978,7 +31219,7 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 239,
+     "brackets": 238,
      "poc": 52.45094,
      "provenance": "approximation",
      "vah": 55.03544,
@@ -31138,7 +31379,7 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28769,
+     "bars": 28756,
      "bin_width": 0.06167,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -31149,10 +31390,10 @@
      "vah": 63.19432,
      "val": 55.11555,
      "value_area_fraction": 0.7,
-     "volume_total": 141950467.13
+     "volume_total": 141855321.6
     },
     "5d": {
-     "bars": 7169,
+     "bars": 7156,
      "bin_width": 0.03446,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -31163,7 +31404,7 @@
      "vah": 55.20774,
      "val": 51.17592,
      "value_area_fraction": 0.7,
-     "volume_total": 32371023.34
+     "volume_total": 32301312.98
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -37179,6 +37420,10 @@
       }
      ]
     },
+    "draft_archetypes": [
+     "continuation",
+     "reversion"
+    ],
     "hypothesis_drafts": [
      {
       "draft": true,
@@ -37770,6 +38015,55 @@
      }
     },
     "part": "II -- decision instrument",
+    "reversion_drafts": {
+     "archetype": "reversion",
+     "claims_nothing": "whether a band reversion pays anything is H-VBR, census work under G-7, routed to APOLLO",
+     "count": 1,
+     "drafts": [
+      {
+       "archetype": "reversion",
+       "band_cluster_families": [
+        "profile_windowed",
+        "ss",
+        "structure",
+        "vwap_anchored",
+        "vwap_rolling"
+       ],
+       "band_cluster_mean": 0.5183840075934865,
+       "band_confluence_score": 14,
+       "bars": 66,
+       "contains_no_probability_claim": true,
+       "entry": 0.51691107,
+       "entry_band": "+2s",
+       "invalidation": 0.5232259,
+       "invalidation_is": "beyond sigma3",
+       "kind": "anchored",
+       "name": "anchored W",
+       "no_sizing": true,
+       "rank": 1,
+       "reward": 0.012629659999999987,
+       "risk": 0.0063148299999999935,
+       "rr": 2.0,
+       "rr_is_constant": true,
+       "side": "short",
+       "sigma": 0.00631483,
+       "sigma_atr": 0.13766898616442264,
+       "sigma_position": 2.1566043741478373,
+       "target": 0.50428141,
+       "target_distance_atr": 0.275337972328845,
+       "target_is": "the VWAP mean"
+      }
+     ],
+     "entry_requires": "price has ACTUALLY REACHED the band and is beyond it at the close -- never a forecast that it will",
+     "entry_sigmas": [
+      2,
+      3
+     ],
+     "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
+     "skipped_thin_sample": [],
+     "thin_sample_gate": "a draft requires bars >= 30, so a freshly-opened anchor cannot manufacture a setup from a two-bar sigma",
+     "view": "with_volume"
+    },
     "rr_ranking": {
      "board": [
       {
@@ -38051,7 +38345,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:19:30Z"
+     "window_start_utc": "2026-01-17T19:32:09Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -38075,7 +38369,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-07-20T03:19:30Z"
+     "window_start_utc": "2026-07-20T03:32:09Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -38099,7 +38393,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-05-31T03:19:30Z"
+     "window_start_utc": "2026-05-31T03:32:09Z"
     }
    },
    "last_bar_utc": {
@@ -38545,7 +38839,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 27741,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-07-20T03:19:30Z",
+     "window_start_utc": "2026-07-20T03:32:09Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     },
@@ -38613,7 +38907,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": 491,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-05-31T03:19:30Z",
+     "window_start_utc": "2026-05-31T03:32:09Z",
      "zone_distance_bps": 115.19,
      "zone_distance_gov_atr": 0.5112
     },
@@ -38681,7 +38975,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 3131,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:19:30Z",
+     "window_start_utc": "2026-01-17T19:32:09Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     }
@@ -39025,31 +39319,31 @@
    },
    "staleness": [
     {
-     "age_hours": 0.51,
+     "age_hours": 0.72,
      "last_input_utc": "2026-08-05T18:49:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 0.58,
+     "age_hours": 0.79,
      "last_input_utc": "2026-08-05T18:45:00Z",
      "layer": "tpo",
      "native_tf": "30m"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
      "native_tf": "1h"
@@ -39307,13 +39601,13 @@
    "symbol": "JTOUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:21:23Z",
-     "basis_bps": -13.221,
-     "index_price": 0.51868576,
-     "mark_price": 0.518
+     "at_utc": "2026-08-05T19:33:23Z",
+     "basis_bps": -10.036,
+     "index_price": 0.52144363,
+     "mark_price": 0.52092031
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:21:25Z",
+    "fetched_utc": "2026-08-05T19:33:25Z",
     "next_funding": {
      "interest_rate": 0.0001,
      "last_funding_rate": 5e-05,
@@ -39340,7 +39634,7 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 239,
+     "brackets": 238,
      "poc": 0.5071635,
      "provenance": "approximation",
      "vah": 0.514077,
@@ -39491,7 +39785,7 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28769,
+     "bars": 28756,
      "bin_width": 0.0008775,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -39502,10 +39796,10 @@
      "vah": 0.6030275,
      "val": 0.481055,
      "value_area_fraction": 0.7,
-     "volume_total": 524281669.0
+     "volume_total": 524219450.0
     },
     "5d": {
-     "bars": 7169,
+     "bars": 7156,
      "bin_width": 0.0002095,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -39513,10 +39807,10 @@
      "provenance": "approximation",
      "range_high": 0.5212,
      "range_low": 0.4793,
-     "vah": 0.5138675,
-     "val": 0.4958505,
+     "vah": 0.513658,
+     "val": 0.495641,
      "value_area_fraction": 0.7,
-     "volume_total": 89132857.0
+     "volume_total": 88883933.0
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -39968,7 +40262,7 @@
        "invalidation": 2.31117508,
        "invalidation_note": "anchored Q-VWAP cross",
        "vah": 2.336301,
-       "val": 2.108487,
+       "val": 2.111136,
        "vote": 0,
        "vwap_level": 2.31117508
       },
@@ -44360,6 +44654,10 @@
       }
      ]
     },
+    "draft_archetypes": [
+     "continuation",
+     "reversion"
+    ],
     "hypothesis_drafts": [
      {
       "draft": true,
@@ -44835,6 +45133,152 @@
      }
     },
     "part": "II -- decision instrument",
+    "reversion_drafts": {
+     "archetype": "reversion",
+     "claims_nothing": "whether a band reversion pays anything is H-VBR, census work under G-7, routed to APOLLO",
+     "count": 4,
+     "drafts": [
+      {
+       "archetype": "reversion",
+       "band_cluster_families": [
+        "profile_windowed",
+        "ss",
+        "structure",
+        "vwap_anchored",
+        "vwap_rolling"
+       ],
+       "band_cluster_mean": 2.1366258682075827,
+       "band_confluence_score": 16,
+       "bars": 2184,
+       "contains_no_probability_claim": true,
+       "entry": 2.1164480322200006,
+       "entry_band": "+3s",
+       "invalidation": 2.390416970050447,
+       "invalidation_is": "sigma3 plus one band width",
+       "kind": "prior_anchor",
+       "name": "prior Q",
+       "no_sizing": true,
+       "rank": 1,
+       "reward": 0.8219068134913394,
+       "risk": 0.2739689378304466,
+       "rr": 2.9999999999999982,
+       "rr_is_constant": true,
+       "side": "short",
+       "sigma": 0.27396893783044646,
+       "sigma_atr": 1.4297029001591046,
+       "sigma_position": 3.1166262424967823,
+       "target": 1.2945412187286611,
+       "target_distance_atr": 4.289108700477314,
+       "target_is": "the VWAP mean"
+      },
+      {
+       "archetype": "reversion",
+       "band_cluster_families": [
+        "profile_windowed",
+        "ss",
+        "structure",
+        "vwap_anchored",
+        "vwap_rolling"
+       ],
+       "band_cluster_mean": 2.1366258682075827,
+       "band_confluence_score": 16,
+       "bars": 114,
+       "contains_no_probability_claim": true,
+       "entry": 2.13926783,
+       "entry_band": "+2s",
+       "invalidation": 2.1786725799999997,
+       "invalidation_is": "beyond sigma3",
+       "kind": "anchored",
+       "name": "anchored M",
+       "no_sizing": true,
+       "rank": 2,
+       "reward": 0.0788095000000002,
+       "risk": 0.039404749999999655,
+       "rr": 2.0000000000000226,
+       "rr_is_constant": true,
+       "side": "short",
+       "sigma": 0.03940475,
+       "sigma_atr": 0.20563311228337244,
+       "sigma_position": 2.2317530246988038,
+       "target": 2.06045833,
+       "target_distance_atr": 0.4112662245667459,
+       "target_is": "the VWAP mean"
+      },
+      {
+       "archetype": "reversion",
+       "band_cluster_families": [
+        "profile_windowed",
+        "ss",
+        "structure",
+        "vwap_anchored",
+        "vwap_rolling"
+       ],
+       "band_cluster_mean": 2.1366258682075827,
+       "band_confluence_score": 16,
+       "bars": 66,
+       "contains_no_probability_claim": true,
+       "entry": 2.14723343,
+       "entry_band": "+2s",
+       "invalidation": 2.1902647,
+       "invalidation_is": "beyond sigma3",
+       "kind": "anchored",
+       "name": "anchored W",
+       "no_sizing": true,
+       "rank": 3,
+       "reward": 0.08606253999999991,
+       "risk": 0.04303127000000018,
+       "rr": 1.9999999999999898,
+       "rr_is_constant": true,
+       "side": "short",
+       "sigma": 0.04303127,
+       "sigma_atr": 0.22455805393020173,
+       "sigma_position": 2.027109820370163,
+       "target": 2.06117089,
+       "target_distance_atr": 0.44911610786040296,
+       "target_is": "the VWAP mean"
+      },
+      {
+       "archetype": "reversion",
+       "band_cluster_families": [
+        "profile_windowed",
+        "vwap_anchored",
+        "vwap_rolling"
+       ],
+       "band_cluster_mean": 2.1862969498545017,
+       "band_confluence_score": 10,
+       "bars": 199,
+       "contains_no_probability_claim": true,
+       "entry": 2.1733147508796122,
+       "entry_band": "-2s",
+       "invalidation": 1.8088859072286554,
+       "invalidation_is": "beyond sigma3",
+       "kind": "prior_anchor",
+       "name": "prior Y",
+       "no_sizing": true,
+       "rank": 4,
+       "reward": 0.7288576873019132,
+       "risk": 0.36442884365095685,
+       "rr": 1.999999999999999,
+       "rr_is_constant": true,
+       "side": "long",
+       "sigma": 0.3644288436509567,
+       "sigma_atr": 1.901766597320799,
+       "sigma_position": -2.068366572277893,
+       "target": 2.9021724381815255,
+       "target_distance_atr": 3.8035331946415973,
+       "target_is": "the VWAP mean"
+      }
+     ],
+     "entry_requires": "price has ACTUALLY REACHED the band and is beyond it at the close -- never a forecast that it will",
+     "entry_sigmas": [
+      2,
+      3
+     ],
+     "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
+     "skipped_thin_sample": [],
+     "thin_sample_gate": "a draft requires bars >= 30, so a freshly-opened anchor cannot manufacture a setup from a two-bar sigma",
+     "view": "with_volume"
+    },
     "rr_ranking": {
      "board": [
       {
@@ -45108,7 +45552,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:19:30Z"
+     "window_start_utc": "2026-01-17T19:32:09Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -45132,7 +45576,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-07-20T03:19:30Z"
+     "window_start_utc": "2026-07-20T03:32:09Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -45156,7 +45600,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-05-31T03:19:30Z"
+     "window_start_utc": "2026-05-31T03:32:09Z"
     }
    },
    "known_wrong_withdrawn": {
@@ -45617,7 +46061,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": null,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-07-20T03:19:30Z",
+     "window_start_utc": "2026-07-20T03:32:09Z",
      "zone_distance_bps": 0.0,
      "zone_distance_gov_atr": 0.0
     },
@@ -45685,7 +46129,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 190,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-05-31T03:19:30Z",
+     "window_start_utc": "2026-05-31T03:32:09Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     },
@@ -45753,7 +46197,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 8243,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:19:30Z",
+     "window_start_utc": "2026-01-17T19:32:09Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     }
@@ -46035,25 +46479,31 @@
    },
    "staleness": [
     {
-     "age_hours": 0.49,
+     "age_hours": 0.7,
      "last_input_utc": "2026-08-05T18:50:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 0.7,
+     "last_input_utc": "2026-08-05T18:50:00Z",
+     "layer": "tpo",
+     "native_tf": "30m"
+    },
+    {
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
      "native_tf": "1h"
@@ -46311,13 +46761,13 @@
    "symbol": "LITUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:21:56Z",
-     "basis_bps": -0.358,
-     "index_price": 2.122576,
-     "mark_price": 2.1225
+     "at_utc": "2026-08-05T19:34:02Z",
+     "basis_bps": -5.934,
+     "index_price": 2.129964,
+     "mark_price": 2.1287
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:21:57Z",
+    "fetched_utc": "2026-08-05T19:34:04Z",
     "next_funding": {
      "interest_rate": 0.0001,
      "last_funding_rate": 5e-05,
@@ -46344,7 +46794,7 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 239,
+     "brackets": 238,
      "poc": 2.0493165,
      "provenance": "approximation",
      "vah": 2.101575,
@@ -46476,7 +46926,7 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28770,
+     "bars": 28757,
      "bin_width": 0.002649,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -46485,12 +46935,12 @@
      "range_high": 2.4714,
      "range_low": 1.9416,
      "vah": 2.336301,
-     "val": 2.108487,
+     "val": 2.111136,
      "value_area_fraction": 0.7,
-     "volume_total": 247228768.6
+     "volume_total": 247117025.4
     },
     "5d": {
-     "bars": 7170,
+     "bars": 7157,
      "bin_width": 0.0010665,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -46498,10 +46948,10 @@
      "provenance": "approximation",
      "range_high": 2.1549,
      "range_low": 1.9416,
-     "vah": 2.1026415,
+     "vah": 2.101575,
      "val": 2.014122,
      "value_area_fraction": 0.7,
-     "volume_total": 42918619.6
+     "volume_total": 42874581.1
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -52355,6 +52805,10 @@
       }
      ]
     },
+    "draft_archetypes": [
+     "continuation",
+     "reversion"
+    ],
     "hypothesis_drafts": [
      {
       "draft": true,
@@ -52991,6 +53445,21 @@
      }
     },
     "part": "II -- decision instrument",
+    "reversion_drafts": {
+     "archetype": "reversion",
+     "claims_nothing": "whether a band reversion pays anything is H-VBR, census work under G-7, routed to APOLLO",
+     "count": 0,
+     "drafts": [],
+     "entry_requires": "price has ACTUALLY REACHED the band and is beyond it at the close -- never a forecast that it will",
+     "entry_sigmas": [
+      2,
+      3
+     ],
+     "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
+     "skipped_thin_sample": [],
+     "thin_sample_gate": "a draft requires bars >= 30, so a freshly-opened anchor cannot manufacture a setup from a two-bar sigma",
+     "view": "with_volume"
+    },
     "rr_ranking": {
      "board": [
       {
@@ -53272,7 +53741,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-01-17T19:19:30Z"
+     "window_start_utc": "2026-01-17T19:32:09Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -53296,7 +53765,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:19:30Z"
+     "window_start_utc": "2026-07-20T03:32:09Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -53320,7 +53789,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-05-31T03:19:30Z"
+     "window_start_utc": "2026-05-31T03:32:09Z"
     }
    },
    "last_bar_utc": {
@@ -53830,7 +54299,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": null,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:19:30Z",
+     "window_start_utc": "2026-07-20T03:32:09Z",
      "zone_distance_bps": 0.0,
      "zone_distance_gov_atr": 0.0
     },
@@ -53898,7 +54367,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": 1344,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-05-31T03:19:30Z",
+     "window_start_utc": "2026-05-31T03:32:09Z",
      "zone_distance_bps": 0.0,
      "zone_distance_gov_atr": 0.0
     },
@@ -53966,7 +54435,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 1813,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-01-17T19:19:30Z",
+     "window_start_utc": "2026-01-17T19:32:09Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     }
@@ -54255,31 +54724,31 @@
    },
    "staleness": [
     {
-     "age_hours": 0.53,
+     "age_hours": 0.74,
      "last_input_utc": "2026-08-05T18:48:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 0.58,
+     "age_hours": 0.79,
      "last_input_utc": "2026-08-05T18:45:00Z",
      "layer": "tpo",
      "native_tf": "30m"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
      "native_tf": "1h"
@@ -54537,16 +55006,16 @@
    "symbol": "NEARUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:20:33Z",
-     "basis_bps": -8.53,
-     "index_price": 1.71175135,
-     "mark_price": 1.71029117
+     "at_utc": "2026-08-05T19:32:57Z",
+     "basis_bps": -5.242,
+     "index_price": 1.7118973,
+     "mark_price": 1.711
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:20:35Z",
+    "fetched_utc": "2026-08-05T19:32:58Z",
     "next_funding": {
      "interest_rate": 0.0001,
-     "last_funding_rate": 7.345e-05,
+     "last_funding_rate": 7.66e-05,
      "next_funding_utc": "2026-08-06T00:00:00Z"
     },
     "open_interest": {
@@ -54570,7 +55039,7 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 239,
+     "brackets": 238,
      "poc": 1.708625,
      "provenance": "approximation",
      "vah": 1.753,
@@ -54721,7 +55190,7 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28768,
+     "bars": 28755,
      "bin_width": 0.00247,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -54732,10 +55201,10 @@
      "vah": 2.02595,
      "val": 1.69497,
      "value_area_fraction": 0.7,
-     "volume_total": 967554459.0
+     "volume_total": 967167921.0
     },
     "5d": {
-     "bars": 7168,
+     "bars": 7155,
      "bin_width": 0.000625,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -54744,9 +55213,9 @@
      "range_high": 1.768,
      "range_low": 1.643,
      "vah": 1.748625,
-     "val": 1.689875,
+     "val": 1.68925,
      "value_area_fraction": 0.7,
-     "volume_total": 168534724.0
+     "volume_total": 168167871.0
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -60705,6 +61174,10 @@
       }
      ]
     },
+    "draft_archetypes": [
+     "continuation",
+     "reversion"
+    ],
     "hypothesis_drafts": [
      {
       "draft": true,
@@ -61252,6 +61725,51 @@
      }
     },
     "part": "II -- decision instrument",
+    "reversion_drafts": {
+     "archetype": "reversion",
+     "claims_nothing": "whether a band reversion pays anything is H-VBR, census work under G-7, routed to APOLLO",
+     "count": 1,
+     "drafts": [
+      {
+       "archetype": "reversion",
+       "band_cluster_families": [
+        "vwap_anchored"
+       ],
+       "band_cluster_mean": 97.25570717269639,
+       "band_confluence_score": 3,
+       "bars": 8760,
+       "contains_no_probability_claim": true,
+       "entry": 97.30867230103075,
+       "entry_band": "-2s",
+       "invalidation": 60.66686180431982,
+       "invalidation_is": "beyond sigma3",
+       "kind": "prior_anchor",
+       "name": "prior Y",
+       "no_sizing": true,
+       "rank": 1,
+       "reward": 73.28362099342186,
+       "risk": 36.64181049671093,
+       "rr": 2.0,
+       "rr_is_constant": true,
+       "side": "long",
+       "sigma": 36.64181049671093,
+       "sigma_atr": 14.164967209168475,
+       "sigma_position": -2.621930848724747,
+       "target": 170.59229329445262,
+       "target_distance_atr": 28.32993441833695,
+       "target_is": "the VWAP mean"
+      }
+     ],
+     "entry_requires": "price has ACTUALLY REACHED the band and is beyond it at the close -- never a forecast that it will",
+     "entry_sigmas": [
+      2,
+      3
+     ],
+     "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
+     "skipped_thin_sample": [],
+     "thin_sample_gate": "a draft requires bars >= 30, so a freshly-opened anchor cannot manufacture a setup from a two-bar sigma",
+     "view": "with_volume"
+    },
     "rr_ranking": {
      "board": [
       {
@@ -61531,7 +62049,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-01-17T19:19:30Z"
+     "window_start_utc": "2026-01-17T19:32:09Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -61555,7 +62073,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:19:30Z"
+     "window_start_utc": "2026-07-20T03:32:09Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -61579,7 +62097,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:19:30Z"
+     "window_start_utc": "2026-05-31T03:32:09Z"
     }
    },
    "last_bar_utc": {
@@ -62066,7 +62584,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 27441,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:19:30Z",
+     "window_start_utc": "2026-07-20T03:32:09Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     },
@@ -62134,7 +62652,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 11567,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:19:30Z",
+     "window_start_utc": "2026-05-31T03:32:09Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     },
@@ -62202,7 +62720,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": 1537,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-01-17T19:19:30Z",
+     "window_start_utc": "2026-01-17T19:32:09Z",
      "zone_distance_bps": 20.56,
      "zone_distance_gov_atr": 0.0959
     }
@@ -62500,31 +63018,31 @@
    },
    "staleness": [
     {
-     "age_hours": 0.53,
+     "age_hours": 0.74,
      "last_input_utc": "2026-08-05T18:48:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 0.58,
+     "age_hours": 0.79,
      "last_input_utc": "2026-08-05T18:45:00Z",
      "layer": "tpo",
      "native_tf": "30m"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
      "native_tf": "1h"
@@ -62782,16 +63300,16 @@
    "symbol": "SOLUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:20:13Z",
-     "basis_bps": -5.657,
-     "index_price": 74.46212124,
-     "mark_price": 74.42
+     "at_utc": "2026-08-05T19:32:43Z",
+     "basis_bps": -5.017,
+     "index_price": 74.47736254,
+     "mark_price": 74.44
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:20:15Z",
+    "fetched_utc": "2026-08-05T19:32:45Z",
     "next_funding": {
      "interest_rate": 0.0001,
-     "last_funding_rate": 5.499e-05,
+     "last_funding_rate": 5.121e-05,
      "next_funding_utc": "2026-08-06T00:00:00Z"
     },
     "open_interest": {
@@ -62815,7 +63333,7 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 239,
+     "brackets": 238,
      "poc": 73.72095,
      "provenance": "approximation",
      "vah": 74.1735,
@@ -62957,7 +63475,7 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28768,
+     "bars": 28755,
      "bin_width": 0.0418,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -62968,10 +63486,10 @@
      "vah": 76.2366,
      "val": 72.809,
      "value_area_fraction": 0.7,
-     "volume_total": 265876175.42
+     "volume_total": 265824192.86
     },
     "5d": {
-     "bars": 7168,
+     "bars": 7155,
      "bin_width": 0.02155,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -62982,7 +63500,7 @@
      "vah": 74.28125,
      "val": 72.90205,
      "value_area_fraction": 0.7,
-     "volume_total": 65306894.8
+     "volume_total": 65241724.4
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -68869,6 +69387,10 @@
       }
      ]
     },
+    "draft_archetypes": [
+     "continuation",
+     "reversion"
+    ],
     "hypothesis_drafts": [
      {
       "draft": true,
@@ -69508,6 +70030,53 @@
      }
     },
     "part": "II -- decision instrument",
+    "reversion_drafts": {
+     "archetype": "reversion",
+     "claims_nothing": "whether a band reversion pays anything is H-VBR, census work under G-7, routed to APOLLO",
+     "count": 1,
+     "drafts": [
+      {
+       "archetype": "reversion",
+       "band_cluster_families": [
+        "ss",
+        "vwap_anchored",
+        "vwap_rolling"
+       ],
+       "band_cluster_mean": 206.7847499743563,
+       "band_confluence_score": 6,
+       "bars": 8760,
+       "contains_no_probability_claim": true,
+       "entry": 206.8692635468886,
+       "entry_band": "-2s",
+       "invalidation": 132.83278076365366,
+       "invalidation_is": "beyond sigma3",
+       "kind": "prior_anchor",
+       "name": "prior Y",
+       "no_sizing": true,
+       "rank": 1,
+       "reward": 148.07296556646986,
+       "risk": 74.03648278323493,
+       "rr": 2.0,
+       "rr_is_constant": true,
+       "side": "long",
+       "sigma": 74.03648278323493,
+       "sigma_atr": 7.759457938263634,
+       "sigma_position": -2.1287103761369717,
+       "target": 354.94222911335845,
+       "target_distance_atr": 15.518915876527268,
+       "target_is": "the VWAP mean"
+      }
+     ],
+     "entry_requires": "price has ACTUALLY REACHED the band and is beyond it at the close -- never a forecast that it will",
+     "entry_sigmas": [
+      2,
+      3
+     ],
+     "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
+     "skipped_thin_sample": [],
+     "thin_sample_gate": "a draft requires bars >= 30, so a freshly-opened anchor cannot manufacture a setup from a two-bar sigma",
+     "view": "with_volume"
+    },
     "rr_ranking": {
      "board": [
       {
@@ -69787,7 +70356,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-01-17T19:19:30Z"
+     "window_start_utc": "2026-01-17T19:32:09Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -69811,7 +70380,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:19:30Z"
+     "window_start_utc": "2026-07-20T03:32:09Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -69835,7 +70404,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:19:30Z"
+     "window_start_utc": "2026-05-31T03:32:09Z"
     }
    },
    "last_bar_utc": {
@@ -70293,7 +70862,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": 21595,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:19:30Z",
+     "window_start_utc": "2026-07-20T03:32:09Z",
      "zone_distance_bps": 0.0,
      "zone_distance_gov_atr": 0.0
     },
@@ -70361,7 +70930,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 4083,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:19:30Z",
+     "window_start_utc": "2026-05-31T03:32:09Z",
      "zone_distance_bps": 21.39,
      "zone_distance_gov_atr": 0.1169
     },
@@ -70429,7 +70998,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": 28,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-01-17T19:19:30Z",
+     "window_start_utc": "2026-01-17T19:32:09Z",
      "zone_distance_bps": 104.45,
      "zone_distance_gov_atr": 0.3382
     }
@@ -70755,31 +71324,31 @@
    },
    "staleness": [
     {
-     "age_hours": 0.51,
+     "age_hours": 0.72,
      "last_input_utc": "2026-08-05T18:49:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 0.58,
+     "age_hours": 0.79,
      "last_input_utc": "2026-08-05T18:45:00Z",
      "layer": "tpo",
      "native_tf": "30m"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
      "native_tf": "1h"
@@ -71037,13 +71606,13 @@
    "symbol": "TAOUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:21:35Z",
-     "basis_bps": -3.685,
-     "index_price": 196.59709768,
-     "mark_price": 196.52464549
+     "at_utc": "2026-08-05T19:33:35Z",
+     "basis_bps": -6.227,
+     "index_price": 196.60243388,
+     "mark_price": 196.48
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:21:36Z",
+    "fetched_utc": "2026-08-05T19:33:37Z",
     "next_funding": {
      "interest_rate": 0.0001,
      "last_funding_rate": 5e-05,
@@ -71070,11 +71639,11 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 239,
+     "brackets": 238,
      "poc": 192.8894,
      "provenance": "approximation",
      "vah": 196.7312,
-     "val": 189.7216
+     "val": 189.5868
     },
     "session": {
      "bins": 100,
@@ -71212,7 +71781,7 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28769,
+     "bars": 28756,
      "bin_width": 0.09825,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -71223,10 +71792,10 @@
      "vah": 197.89225,
      "val": 190.22875,
      "value_area_fraction": 0.7,
-     "volume_total": 5595554.489
+     "volume_total": 5593280.324
     },
     "5d": {
-     "bars": 7169,
+     "bars": 7156,
      "bin_width": 0.0674,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -71237,7 +71806,7 @@
      "vah": 196.7312,
      "val": 189.2498,
      "value_area_fraction": 0.7,
-     "volume_total": 1265936.184
+     "volume_total": 1264934.191
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -77032,6 +77601,10 @@
       }
      ]
     },
+    "draft_archetypes": [
+     "continuation",
+     "reversion"
+    ],
     "hypothesis_drafts": [
      {
       "draft": true,
@@ -77526,6 +78099,21 @@
      }
     },
     "part": "II -- decision instrument",
+    "reversion_drafts": {
+     "archetype": "reversion",
+     "claims_nothing": "whether a band reversion pays anything is H-VBR, census work under G-7, routed to APOLLO",
+     "count": 0,
+     "drafts": [],
+     "entry_requires": "price has ACTUALLY REACHED the band and is beyond it at the close -- never a forecast that it will",
+     "entry_sigmas": [
+      2,
+      3
+     ],
+     "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
+     "skipped_thin_sample": [],
+     "thin_sample_gate": "a draft requires bars >= 30, so a freshly-opened anchor cannot manufacture a setup from a two-bar sigma",
+     "view": "with_volume"
+    },
     "rr_ranking": {
      "board": [
       {
@@ -77807,7 +78395,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:19:30Z"
+     "window_start_utc": "2026-01-17T19:32:09Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -77831,7 +78419,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-07-20T03:19:30Z"
+     "window_start_utc": "2026-07-20T03:32:09Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -77855,7 +78443,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:19:30Z"
+     "window_start_utc": "2026-05-31T03:32:09Z"
     }
    },
    "last_bar_utc": {
@@ -78401,7 +78989,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": null,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-07-20T03:19:30Z",
+     "window_start_utc": "2026-07-20T03:32:09Z",
      "zone_distance_bps": 6.99,
      "zone_distance_gov_atr": 0.0594
     },
@@ -78469,7 +79057,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": 4510,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:19:30Z",
+     "window_start_utc": "2026-05-31T03:32:09Z",
      "zone_distance_bps": 196.68,
      "zone_distance_gov_atr": 0.9594
     },
@@ -78537,7 +79125,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": 346,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:19:30Z",
+     "window_start_utc": "2026-01-17T19:32:09Z",
      "zone_distance_bps": 468.82,
      "zone_distance_gov_atr": 1.2667
     }
@@ -78815,31 +79403,31 @@
    },
    "staleness": [
     {
-     "age_hours": 0.51,
+     "age_hours": 0.72,
      "last_input_utc": "2026-08-05T18:49:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 0.58,
+     "age_hours": 0.79,
      "last_input_utc": "2026-08-05T18:45:00Z",
      "layer": "tpo",
      "native_tf": "30m"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.33,
+     "age_hours": 1.54,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
      "native_tf": "1h"
@@ -79097,16 +79685,16 @@
    "symbol": "ZECUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:21:02Z",
-     "basis_bps": -7.461,
-     "index_price": 520.55837122,
-     "mark_price": 520.17
+     "at_utc": "2026-08-05T19:33:11Z",
+     "basis_bps": -7.272,
+     "index_price": 518.73769473,
+     "mark_price": 518.36048267
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:21:03Z",
+    "fetched_utc": "2026-08-05T19:33:12Z",
     "next_funding": {
      "interest_rate": 0.0001,
-     "last_funding_rate": -3.648e-05,
+     "last_funding_rate": -4.331e-05,
      "next_funding_utc": "2026-08-06T00:00:00Z"
     },
     "open_interest": {
@@ -79130,7 +79718,7 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 239,
+     "brackets": 238,
      "poc": 472.52275,
      "provenance": "approximation",
      "vah": 494.5895,
@@ -79272,7 +79860,7 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28769,
+     "bars": 28756,
      "bin_width": 0.5823,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -79283,10 +79871,10 @@
      "vah": 528.9859,
      "val": 453.8692,
      "value_area_fraction": 0.7,
-     "volume_total": 15600999.29
+     "volume_total": 15596957.768
     },
     "5d": {
-     "bars": 7169,
+     "bars": 7156,
      "bin_width": 0.36175,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -79297,7 +79885,7 @@
      "vah": 497.4835,
      "val": 455.15875,
      "value_area_fraction": 0.7,
-     "volume_total": 3470207.3
+     "volume_total": 3468462.23
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -79579,7 +80167,7 @@
  "date": "2026-08-05",
  "engine_version": "1.0.12",
  "firewall": "ops artifact, never study evidence; no journal reads, no lockbox outcome statistics; confluence measures agreement between tools, not edge",
- "generated_utc": "2026-08-05T19:19:30Z",
+ "generated_utc": "2026-08-05T19:32:09Z",
  "lockbox": {
   "policy": "seal governs scored outcome evidence, not raw price in a display-only trailing window (operator ruling 2026-08-03); every windowed layer discloses its overlap",
   "window": [
@@ -79688,19 +80276,19 @@
  "rules_sha256": "8d4b9769c9363acc7fc9fb12e2cdd0884a82f197c2354eed457c3ab2840a241f",
  "rules_version": "2.0.0",
  "runtime_by_layer": {
-  "BTCUSDT": 19.67,
-  "ETHUSDT": 19.09,
-  "FARTCOINUSDT": 5.23,
-  "HYPEUSDT": 3.98,
-  "JTOUSDT": 8.15,
-  "LITUSDT": 1.8,
-  "NEARUSDT": 17.21,
-  "SOLUSDT": 16.88,
-  "TAOUSDT": 7.13,
-  "ZECUSDT": 18.76,
-  "_part1": 147.06
+  "BTCUSDT": 30.94,
+  "ETHUSDT": 30.49,
+  "FARTCOINUSDT": 8.59,
+  "HYPEUSDT": 6.11,
+  "JTOUSDT": 12.29,
+  "LITUSDT": 2.74,
+  "NEARUSDT": 27.41,
+  "SOLUSDT": 27.48,
+  "TAOUSDT": 11.08,
+  "ZECUSDT": 29.39,
+  "_part1": 114.3
  },
- "runtime_seconds": 264.96,
+ "runtime_seconds": 300.84,
  "schema": "naiad_daily_brief",
  "schema_version": "2.1.0",
  "slot": "post_ny",

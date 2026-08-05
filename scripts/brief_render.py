@@ -78,6 +78,33 @@ def chip(text, kind="mute"):
 TARGET_BUCKETS = (("NEAR", 0.0, 2.0), ("MID", 2.0, 6.0), ("FAR", 6.0, float("inf")))
 
 
+def vwap_provenance_chip(a):
+    """§5.9 -- every VWAP layer prints its SUBSTRATE and SOURCE.
+
+    READ FROM THE CAPTURE, never imported. The render may not reach into
+    `analytics` (F-B10: a render that recomputed would be a second source of
+    truth), and reading the stored value is also the more honest chip -- it
+    reports what the capture WAS BUILT WITH, not what the current code would do
+    if it ran again.
+
+    The point of printing it at all: a number differing from the operator's
+    daily chart must explain itself where it is read, rather than becoming a
+    parity incident three cycles later.
+    """
+    win = (a.get("rvwap") or {}).get("windows") or {}
+    sub = src = None
+    for w in win.values():
+        sub = sub or w.get("substrate")
+        src = src or w.get("source")
+    if not sub and not src:
+        return ""
+    return ('<p class="mute small">substrate <b>{}</b> &middot; source '
+            '<b>{}</b> &middot; instrument <b>BINANCE perpetual</b> &mdash; '
+            'pinned by ruling (R1/R2), read from the capture. A VWAP read from '
+            'a 1D chart, a spot pair or an index is a DIFFERENT number, not a '
+            'rounding difference.</p>').format(esc(sub or "?"), esc(src or "?"))
+
+
 def target_bucket(atr_distance):
     if atr_distance is None:
         return None
@@ -115,6 +142,10 @@ def part1_html(sym, a):
     if st.get("rows"):
         L.append('<div class="card"><h4>Stretch &mdash; distance from every '
                  'volume-weighted mean, in sigma</h4>')
+        # §5.9 -- SUBSTRATE and SOURCE on the layer itself. A value that differs
+        # from the operator's daily chart must explain itself on sight rather
+        # than becoming a parity incident.
+        L.append(vwap_provenance_chip(a))
         L.append('<table><tr><th>anchor / window</th><th>mean</th><th>sigma</th>'
                  '<th>&sigma; position</th><th>ATR</th><th>band</th><th></th></tr>')
         for r in st["rows"]:
@@ -352,6 +383,57 @@ def part2_html(sym, a):
         L.append('<p class="mute small">Ranked WITHIN distance buckets, never '
                  'globally: a distant target inflates R:R exactly as a knife-edge '
                  'stop does. This ranks structural quality, not probability.</p>'
+                 '</div>')
+
+    # ---- §5.2 REVERSION board, the second archetype
+    rv = di.get("reversion_drafts") or {}
+    rdrafts = rv.get("drafts") or []
+    if rdrafts or rv.get("skipped_thin_sample"):
+        L.append('<div class="card"><h4>Reversion drafts &mdash; entry at a band '
+                 'price has REACHED, target the mean</h4>')
+        if rdrafts:
+            rbuckets = {b: [] for b, _, _ in TARGET_BUCKETS}
+            for d in rdrafts:
+                rbuckets[target_bucket(d.get("target_distance_atr")) or "FAR"].append(d)
+            for bname, _, _ in TARGET_BUCKETS:
+                brs = rbuckets[bname]
+                if not brs:
+                    continue
+                L.append(f'<p class="mute">{bname} targets</p><table>'
+                         '<tr><th>rank</th><th>side</th><th>anchor / window</th>'
+                         '<th>band</th><th>entry</th><th>target (mean)</th>'
+                         '<th>invalidation</th><th>R:R</th><th>&sigma; in ATR</th>'
+                         '<th>target ATR</th><th>band score</th></tr>')
+                for d in brs:
+                    L.append(
+                        f'<tr><td>{d.get("rank")}</td><td>{esc(d["side"])}</td>'
+                        f'<td>{esc(d["name"])}</td><td>{esc(d["entry_band"])}</td>'
+                        f'<td>{num(d["entry"])}</td><td>{num(d["target"])}</td>'
+                        f'<td>{num(d["invalidation"])}</td>'
+                        f'<td>{num(d["rr"])}</td>'
+                        f'<td>{num(d.get("sigma_atr"))}</td>'
+                        f'<td>{num(d.get("target_distance_atr"))}</td>'
+                        f'<td class="big">{d.get("band_confluence_score")
+                                           if d.get("band_confluence_score")
+                                           is not None else "&mdash;"}</td></tr>')
+                L.append('</table>')
+        for s in (rv.get("skipped_thin_sample") or []):
+            L.append(f'<p class="prose">{chip("skipped","warn")} '
+                     f'{esc(s["name"])} &mdash; {esc(s["reason"])}</p>')
+        L.append('<p class="mute small"><b>Ranked by the confluence score of the '
+                 'BAND ITSELF, never by R:R.</b> Reversion R:R is a constant of '
+                 'the geometry &mdash; a &sigma;2 entry is always 2:1 and a '
+                 '&sigma;3 entry always 3:1 &mdash; so sorting by it would be '
+                 'sorting by nothing. The band is already a registry member, so '
+                 'its score is a lookup, not a new computation.</p>'
+                 '<p class="mute small"><b>&sigma; in ATR is why identical '
+                 'geometry is not an identical trade.</b> A 0.4-ATR &sigma; makes '
+                 'a &sigma;2 reversion an 0.8-ATR day trade; an 11.4-ATR &sigma; '
+                 'makes the same 2:1 setup a 22.8-ATR position held for months.</p>'
+                 '<p class="mute small">Entry requires price to have ALREADY '
+                 'REACHED the band and to be beyond it at the close. Nothing here '
+                 'says price will return. Whether a band reversion pays anything '
+                 'is H-VBR &mdash; census work under G-7, routed to APOLLO.</p>'
                  '</div>')
 
     # ---- drafts

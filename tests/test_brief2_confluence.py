@@ -425,3 +425,191 @@ def test_f_b35_confirmed_pivots_use_a_lookback_not_a_count_cap():
     code = ast.unparse(tree)
     assert "n=3" not in code and "[:3]" not in code, "a count cap has come back"
     assert "lookback_days" in code, "the stripper ate the code, not just the prose"
+
+
+# The F-B41 block below uses brief2 at module scope. Earlier tests in this file
+# import it lazily inside each function; both work, and this keeps the new block
+# readable rather than repeating four lines of path juggling seven times.
+sys.path.insert(0, str(ROOT / "scripts"))
+import brief2 as B2                                                 # noqa: E402
+
+
+# ------------------------------- F-B41  stage 5.2/5.3/5.4 REVERSION archetype
+
+def _stretch_for(name, mean, sigma, price, atr, bars=200, kind="rolling"):
+    return {"rows": [B2._stretch_row(name, kind, mean, sigma, price, atr, bars=bars)]}
+
+
+def test_f_b41_reversion_rr_is_a_constant_of_the_geometry():
+    """5.3's PREMISE, asserted rather than assumed.
+
+    Entry at sigma2 targeting the mean earns 2 sigma against a 1-sigma stop at
+    sigma3: exactly 2:1. At sigma3 it is exactly 3:1. This holds for every
+    anchor, every window, every asset and every price -- which is precisely why
+    R:R cannot rank reversion drafts and something else must.
+    """
+    mean, sigma, atr = 1000.0, 50.0, 25.0
+    for k, want in ((2, 2.0), (3, 3.0)):
+        for direction in (+1, -1):
+            px = mean + direction * (k + 0.05) * sigma        # just past the band
+            st = _stretch_for("RVWAP 30d", mean, sigma, px, atr)
+            rd = B2.reversion_drafts(st, {}, px, atr)
+            assert rd["count"] == 1, (k, direction)
+            d = rd["drafts"][0]
+            assert d["rr"] == pytest.approx(want), \
+                f"sigma{k} reversion must be exactly {want}:1, got {d['rr']}"
+            assert d["entry_band"] == f"{'+' if direction > 0 else '-'}{k}s"
+            assert d["side"] == ("short" if direction > 0 else "long")
+            assert d["target"] == pytest.approx(mean), "the target IS the mean"
+            # invalidation is exactly one band further out than the entry
+            assert abs(d["invalidation"] - mean) == pytest.approx((k + 1) * sigma)
+            assert d["rr_is_constant"] is True
+
+
+def test_f_b41_ranking_is_by_band_confluence_score_not_by_rr():
+    """5.3 -- the reviewer's design decision, made falsifiable.
+
+    Two drafts with IDENTICAL R:R and different band scores must order by score.
+    If this test can be made to pass by sorting on R:R, it guards nothing.
+    """
+    atr = 10.0
+    price = 1300.0
+    # BOTH means sit at +2.2 sigma from price, so both drafts enter at sigma2 and
+    # both therefore carry R:R exactly 2.0. Only the sigma WIDTH differs, which
+    # puts their entry bands at different prices and lets them land in different
+    # clusters. Anything that ranks these by R:R cannot order them at all.
+    st = {"rows": [
+        B2._stretch_row("anchored M", "anchored", 1080.0, 100.0, price, atr, bars=200),
+        B2._stretch_row("anchored Q", "anchored", 1190.0, 50.0, price, atr, bars=200),
+    ]}
+    # entries: M -> 1080 + 2*100 = 1280 ; Q -> 1190 + 2*50 = 1290
+    conf = {"with_volume": {"clusters": [
+        {"mean": 1280.0, "score": 3, "families": ["vwap_anchored"], "members": []},
+        {"mean": 1290.0, "score": 11, "families": ["vwap_anchored", "structure"],
+         "members": []},
+    ]}}
+    rd = B2.reversion_drafts(st, conf, price, atr)
+    assert rd["count"] == 2
+    first, second = rd["drafts"]
+    assert first["rr"] == pytest.approx(second["rr"]), \
+        "the two drafts must have EQUAL R:R or this test proves nothing"
+    assert first["band_confluence_score"] == 11 and second["band_confluence_score"] == 3
+    assert first["name"] == "anchored Q" and first["rank"] == 1
+    assert "confluence score of the BAND" in rd["ranked_by"]
+
+
+def test_f_b41_entry_requires_price_to_have_actually_reached_the_band():
+    """The entry is an OBSERVATION, never a forecast. No draft exists until
+    price is past the band at the close."""
+    mean, sigma, atr = 1000.0, 50.0, 25.0
+
+    # inside sigma2 -- nothing, however close
+    for px in (mean + 1.99 * sigma, mean - 1.99 * sigma, mean):
+        st = _stretch_for("RVWAP 7d", mean, sigma, px, atr)
+        assert B2.reversion_drafts(st, {}, px, atr)["count"] == 0, \
+            "a draft appeared for a band price has not reached"
+
+    # exactly at sigma2 -- reached
+    px = mean + 2.0 * sigma
+    st = _stretch_for("RVWAP 7d", mean, sigma, px, atr)
+    assert B2.reversion_drafts(st, {}, px, atr)["count"] == 1
+
+    # sigma1 alone never produces a reversion draft
+    px = mean + 1.5 * sigma
+    st = _stretch_for("RVWAP 7d", mean, sigma, px, atr)
+    assert B2.reversion_drafts(st, {}, px, atr)["count"] == 0
+    assert B2.REVERSION_ENTRY_SIGMAS == (2, 3)
+
+
+def test_f_b41_thin_sample_cannot_manufacture_a_draft():
+    """D4-2 -- a freshly-opened anchor must not turn a two-bar sigma into a
+    setup. The skip is RECORDED, not silent."""
+    mean, sigma, atr = 1000.0, 50.0, 25.0
+    px = mean + 2.5 * sigma
+    st = _stretch_for("anchored W", mean, sigma, px, atr, bars=2, kind="anchored")
+    rd = B2.reversion_drafts(st, {}, px, atr)
+    assert rd["count"] == 0, "a 2-bar sigma produced a tradeable draft"
+    assert len(rd["skipped_thin_sample"]) == 1
+    assert rd["skipped_thin_sample"][0]["bars"] == 2
+    assert "thin_sample" in rd["skipped_thin_sample"][0]["reason"]
+
+    # and the same geometry with a mature sample DOES produce one, or the gate
+    # is indistinguishable from the feature being broken
+    st2 = _stretch_for("anchored W", mean, sigma, px, atr, bars=200, kind="anchored")
+    assert B2.reversion_drafts(st2, {}, px, atr)["count"] == 1
+
+
+def test_f_b41_sigma_width_in_atr_distinguishes_identical_geometry():
+    """5.4 -- identical R:R, wildly different trades. A board printing only the
+    ratio would present a day trade and a multi-month position as the same."""
+    atr = 1628.44005908                      # BTC daily ATR, 2026-08-05
+    fast_sigma, slow_sigma = 0.4 * atr, 11.4 * atr
+
+    out = []
+    for name, sigma in (("RVWAP 7d", fast_sigma), ("RVWAP 365d", slow_sigma)):
+        mean = 60000.0
+        # 2.05 sigma, not exactly 2.0: at an irrational sigma the round-trip
+        # (mean + 2*sigma - mean) / sigma can land a half-ulp under 2.0 and the
+        # `>=` boundary would then correctly refuse the draft. The boundary is
+        # right; pinning a fixture to a float coincidence would not be.
+        px = mean + 2.05 * sigma
+        d = B2.reversion_drafts(_stretch_for(name, mean, sigma, px, atr),
+                                {}, px, atr)["drafts"][0]
+        out.append(d)
+
+    fast, slow = out
+    assert fast["rr"] == pytest.approx(slow["rr"]) == pytest.approx(2.0), \
+        "the two setups must be geometrically identical for this to mean anything"
+    assert fast["sigma_atr"] == pytest.approx(0.4, abs=0.01)
+    assert slow["sigma_atr"] == pytest.approx(11.4, abs=0.01)
+    assert fast["target_distance_atr"] == pytest.approx(0.8, abs=0.02)
+    assert slow["target_distance_atr"] == pytest.approx(22.8, abs=0.05)
+    assert slow["target_distance_atr"] > 6.0 > fast["target_distance_atr"], \
+        "these must land in different distance buckets (5.5)"
+
+
+def test_f_b41_reversion_claims_no_probability_and_prescribes_no_size():
+    """The permanent constraints. R:R is GEOMETRY; whether a reversion pays is
+    H-VBR, census work under G-7."""
+    mean, sigma, atr = 1000.0, 50.0, 25.0
+    px = mean + 2.5 * sigma
+    rd = B2.reversion_drafts(_stretch_for("RVWAP 30d", mean, sigma, px, atr),
+                             {}, px, atr)
+    d = rd["drafts"][0]
+    assert d["no_sizing"] is True and d["contains_no_probability_claim"] is True
+    assert "H-VBR" in rd["claims_nothing"] and "G-7" in rd["claims_nothing"]
+
+    # SEVENTH INSTANCE of the same false positive, and this time the fixture was
+    # the one carrying it: `contains_no_probability_claim` and `no_sizing` are
+    # DISCLAIMERS, and a scan that reads them flags the promise as the offence.
+    # Strip the disclaimer keys, then scan the payload -- scan what the layer
+    # SAYS ABOUT THE MARKET, never the flags that say what it refuses to say.
+    DISCLAIMERS = ("contains_no_probability_claim", "no_sizing", "rr_is_constant")
+    payload = [{k: v for k, v in d.items() if k not in DISCLAIMERS}
+               for d in rd["drafts"]]
+    assert payload and all(len(p) > 10 for p in payload), \
+        "stripping the disclaimers emptied the payload -- the scan is vacuous"
+
+    blob = repr(payload).lower()
+    for banned in ("probability", "likely", "expectancy", "win_rate", "size",
+                   "qty", "leverage", "forecast", "predict"):
+        assert banned not in blob, f"predictive or sizing language in a DRAFT: {banned}"
+
+    # and the disclaimers must still actually be set on every draft
+    assert all(d["no_sizing"] and d["contains_no_probability_claim"]
+               for d in rd["drafts"])
+
+
+def test_f_b41_reversion_populates_the_far_buckets_continuation_cannot():
+    """WHY THIS ARCHETYPE EXISTS. Cycle 4 measured all 40 continuation targets in
+    NEAR (<2 ATR) and MID/FAR both EMPTY, because the next opposing cluster is
+    always close in a 148-level registry. Reversion targets the MEAN, which for
+    the far anchors is where the long distance lives."""
+    import brief_render as BR
+    atr = 1000.0
+    mean, sigma = 60000.0, 8.0 * atr          # a far anchor
+    px = mean - 2.2 * sigma
+    d = B2.reversion_drafts(_stretch_for("prior Y", mean, sigma, px, atr),
+                            {}, px, atr)["drafts"][0]
+    assert BR.target_bucket(d["target_distance_atr"]) == "FAR"
+    assert d["side"] == "long" and d["target"] == pytest.approx(mean)

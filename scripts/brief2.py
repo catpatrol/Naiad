@@ -1150,6 +1150,142 @@ def rr_board(conf, price, atr_d, view="with_volume"):
             "contains_no_probability_claim": True}
 
 
+# §5.2 REVERSION -- the second draft archetype, and the direct answer to the
+# operator's thesis: enter at an extreme band price has ACTUALLY REACHED, target
+# the volume-weighted mean, invalidate beyond the next band out.
+REVERSION_ENTRY_SIGMAS = (2, 3)
+
+
+def _band_confluence_score(conf, level, atr_d, view="with_volume"):
+    """The confluence score of the cluster this band price sits in.
+
+    The band IS a registry member (R6 admits every level at any distance), so it
+    has already been scored against everything else at its price.  Nothing new is
+    computed here -- this is a LOOKUP, which is what makes 5.3's ranking honest.
+    """
+    v = (conf or {}).get(view) or {}
+    if not atr_d or atr_d <= 0 or level is None:
+        return None, None
+    tol = L.CLUSTER_ATR * atr_d
+    best = None
+    for c in (v.get("clusters") or []):
+        m = c.get("mean")
+        if m is None:
+            continue
+        d = abs(m - level)
+        if d <= tol and (best is None or d < best[0]):
+            best = (d, c)
+    if best is None:
+        return None, None
+    return int(best[1]["score"]), best[1]
+
+
+def reversion_drafts(stretch, conf, price, atr_d, view="with_volume"):
+    """§5.2/5.3/5.4 -- REVERSION drafts.  GEOMETRY, never probability.
+
+    THE ENTRY IS NOT A PREDICTION.  A reversion draft exists only where price has
+    ALREADY REACHED a sigma-2 or sigma-3 band and is beyond it at the close.
+    Nothing here says price will come back; it says WHERE the mean is, what the
+    trip costs, and what would prove the idea wrong.
+
+    WHY R:R CANNOT RANK THESE (5.3).  Reversion R:R is a CONSTANT OF THE
+    GEOMETRY.  Entry at sigma2 targeting the mean earns 2 sigma against a 1-sigma
+    stop at sigma3: exactly 2:1, always.  At sigma3 it is exactly 3:1, always.
+    Every sigma2 draft in the book therefore has the same ratio as every other,
+    and sorting by it would be sorting by nothing.  They are ranked instead by
+    the CONFLUENCE SCORE OF THE BAND LEVEL ITSELF -- already computed, since the
+    band is a registry member -- which is the direct answer to the operator's
+    question of whether confluent VWAPs and standard deviations better define the
+    objective.
+
+    WHY EVERY DRAFT PRINTS ITS SIGMA WIDTH IN ATR (5.4).  Identical geometry
+    means wildly different trades.  BTC's 7d sigma is ~0.4 ATR, so a sigma2
+    reversion travels ~0.8 ATR -- a day trade.  Its 365d sigma is ~11.4 ATR, so
+    the SAME 2:1 setup travels ~22.8 ATR -- a months-long position.  A board that
+    printed only the ratio would present these as interchangeable.
+
+    THIN SAMPLE GATE (D4-2): a draft requires `thin_sample` False, so a
+    freshly-opened anchor cannot manufacture a setup out of a two-bar sigma.
+    """
+    out, skipped = [], []
+    for r in (stretch.get("rows") or []):
+        if r.get("warming") or r.get("sigma_position") is None:
+            continue
+        sp = r["sigma_position"]
+        mean, sigma = r.get("mean"), r.get("sigma")
+        if not sigma or sigma <= 0 or mean is None:
+            continue
+
+        reached = 0
+        for s in REVERSION_ENTRY_SIGMAS:
+            if abs(sp) >= s:
+                reached = s
+        if not reached:
+            continue
+
+        if r.get("thin_sample"):
+            skipped.append({"name": r["name"], "reason": "thin_sample -- sigma "
+                            f"over {r.get('bars')} bars, below the "
+                            f"{THIN_SAMPLE_BARS}-bar floor", "bars": r.get("bars")})
+            continue
+
+        above = sp > 0
+        entry = mean + (reached * sigma if above else -reached * sigma)
+        # Invalidation: at sigma2 -> beyond sigma3; at sigma3 -> sigma3 + one
+        # band width.  One band wider than the entry, either way.
+        inval_k = reached + 1
+        invalidation = mean + (inval_k * sigma if above else -inval_k * sigma)
+        target = mean                       # the mean IS the objective
+
+        reward, risk = abs(target - entry), abs(invalidation - entry)
+        if risk <= 0:
+            continue
+        score, cl = _band_confluence_score(conf, entry, atr_d, view)
+        sigma_atr = (sigma / atr_d) if atr_d else None
+        out.append({
+            "archetype": "reversion",
+            "side": "short" if above else "long",
+            "name": r["name"], "kind": r.get("kind"),
+            "entry_band": f"{'+' if above else '-'}{reached}s",
+            "entry": _f(entry), "target": _f(target), "invalidation": _f(invalidation),
+            "target_is": "the VWAP mean",
+            "invalidation_is": (f"beyond sigma{inval_k}" if reached == 2 else
+                                "sigma3 plus one band width"),
+            "reward": _f(reward), "risk": _f(risk), "rr": _f(reward / risk),
+            "rr_is_constant": True,
+            "sigma": _f(sigma), "sigma_atr": _f(sigma_atr),
+            "target_distance_atr": _f(reward / atr_d) if atr_d else None,
+            "sigma_position": sp, "bars": r.get("bars"),
+            "band_confluence_score": score,
+            "band_cluster_families": list(cl["families"]) if cl else [],
+            "band_cluster_mean": _f(cl["mean"]) if cl else None,
+            "no_sizing": True, "contains_no_probability_claim": True,
+        })
+
+    # 5.3 -- ranked by the BAND's confluence score, never by R:R.  Unscored
+    # bands (no cluster within tolerance) sort last rather than being dropped:
+    # a lone band is a weaker objective, not a non-existent one.
+    out.sort(key=lambda d: (-(d["band_confluence_score"] or 0),
+                            -abs(d["sigma_position"])))
+    for i, d in enumerate(out, start=1):
+        d["rank"] = i
+    return {
+        "archetype": "reversion", "view": view, "drafts": out,
+        "count": len(out), "skipped_thin_sample": skipped,
+        "entry_sigmas": list(REVERSION_ENTRY_SIGMAS),
+        "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is "
+                     "a constant of the geometry (sigma2 always 2:1, sigma3 "
+                     "always 3:1) and cannot discriminate between these",
+        "entry_requires": "price has ACTUALLY REACHED the band and is beyond it "
+                          "at the close -- never a forecast that it will",
+        "thin_sample_gate": f"a draft requires bars >= {THIN_SAMPLE_BARS}, so a "
+                            f"freshly-opened anchor cannot manufacture a setup "
+                            f"from a two-bar sigma",
+        "claims_nothing": "whether a band reversion pays anything is H-VBR, "
+                          "census work under G-7, routed to APOLLO",
+    }
+
+
 def hypothesis_drafts(conf, price, atr_d=None, view="with_volume"):
     """§7.1 -- if-then drafts, mechanically derived.  NO SIZING, EVER.
 
@@ -1290,7 +1426,7 @@ def composite_bias(a, vol, nest, conf, price):
     }
 
 
-def decision_instrument(a, vol, nest, conf, price, atr_d):
+def decision_instrument(a, vol, nest, conf, price, atr_d, stretch=None):
     """PART II, in the §2.2 order.  Derived from Part I under printed rules.
 
     SEQUENCING RULE: every input below is a number Part I prints.  A reader with
@@ -1320,6 +1456,12 @@ def decision_instrument(a, vol, nest, conf, price, atr_d):
         "rr_ranking": rr_board(conf, price, atr_d),
         "rr_ranking_without_volume": rr_board(conf, price, atr_d,
                                               view="without_volume"),
+        # §5.2 -- the second archetype. CONTINUATION targets the next opposing
+        # cluster (near price by construction); REVERSION targets the MEAN,
+        # which for the far anchors is where the long distance actually lives.
+        # Both are geometry; neither is a forecast.
+        "reversion_drafts": reversion_drafts(stretch or {}, conf, price, atr_d),
+        "draft_archetypes": ["continuation", "reversion"],
         "composite_bias": composite_bias(a, vol, nest, conf, price),
         "sequencing_rule": "Part II is derivable from Part I's printed numbers "
                            "alone; no hidden inputs (§2.2)",
@@ -1350,7 +1492,7 @@ def brief2_asset(a, klines, now_ms, price, atr_d):
              "confirmed_pivots": pivs, "stretch": stretch,
              "band_excursions": excursion, "rvol": rvol_layer(klines),
              "confluence": conf}
-    part2 = decision_instrument(a, vol, nest, conf, price, atr_d)
+    part2 = decision_instrument(a, vol, nest, conf, price, atr_d, stretch=stretch)
     return part1, part2
 
 
