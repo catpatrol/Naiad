@@ -43,6 +43,6 @@ one is the only copy of a phase that will never be produced again.
 
 <!-- EDIT THE LINE BELOW after each manual upload. Format: YYYY-MM-DD -->
 
-last_manual_upload: 2026-07-28
+last_manual_upload: 2026-08-05
 
 <!-- Nothing else in this file is parsed. The line above is the whole record. -->
