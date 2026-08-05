@@ -276,6 +276,33 @@ The document ENDS with a table covering every file the paste created, modified o
 | COMMITTED | which short SHA, or "not committed" |
 | PUSHED | yes/no, plus the remote ref |
 | PROTECTED BY | estate zip / phase archive / --workflow archive / GitHub only / **NOT PROTECTED** |
+| **BOX COST** | bytes, and % of the 6.39 MB context box, for anything under `exchange/` or another synced path. `n/a` if it lands somewhere unsynced — say which. |
+
+**The BOX COST column, added 2026-08-06 by operator ruling.** **Creating a file that will enter the
+project knowledge box is a WORKFLOW DECISION, not a side effect.** The three web lanes (APOLLO,
+ARGUS, ATHENA) reach repo content ONLY through that box, it holds ~6.39 MB, and it has overflowed
+twice. **Any artifact over ~1% of the budget is flagged to the operator by name, with its intended
+home stated, at the moment it is created** — which is the only moment the choice is cheap.
+
+**The law, confirmed three separate times: DOCUMENTS ARE CHEAP, DATA IS NOT.** Every prose artifact
+the ARGUS lane has ever written — 42 files, every report, summary, parity worksheet and interface
+snapshot — totals ~770 KB, about 12% of the box. Two capture JSONs from a SINGLE 2026-08-06 cycle
+totalled 4,024,198 bytes, about 63%. Two files outweighed a lane's entire written history five to
+one. **So: write more reports, never fewer. The documents are not the problem and never were.**
+
+**Captures, renders, results JSONs, substrates, parquet and HTML do not belong in `exchange/` at
+all.** §4.2 already says text only, 1 MB per file, larger artifacts referenced by path + sha256
+pointer — every overflow so far traces to a breach of that rule. Captures and renders go to
+`briefs/`; study artifacts to `research_outputs/`; local working files to `_reviewer_box/`.
+
+**And archiving is not a fix.** On 2026-08-06 two captures were moved from `exchange/reports/` to
+`docs/history/argus/`; both were then retrieved from the box at their NEW paths, because both
+folders sit inside the sync selection. The reading surface fell 85%. Box consumption fell by zero.
+
+**Standing tick set (operator, 2026-08-06): `LEDGER.md` and `exchange/` ONLY.** Every other file is
+requested per lane, per need — the operator drags it into that one conversation, at zero permanent
+cost. This works only while `exchange/DIGEST.md` lists what exists: **a lane cannot request a file it
+does not know about.** Keeping that index current is HERMES's standing duty.
 
 **Purpose:** the operator sees at a glance where every artifact lives and whether losing the
 machine would lose it. **Committed is not pushed. Pushed is not backed up.** And "not visible on
