@@ -1,0 +1,252 @@
+{
+ "analytics_sha": "da81034d86329a0e0e581e526ebe515f3d0f491a0c7ae329e3a9ce49c9c6c731",
+ "analytics_version": "1.3.0",
+ "artifact": "naiad_parity_anchored_addendum",
+ "band_table_match": {
+  "max_abs_bps": 0.01,
+  "max_abs_delta": 0.0452,
+  "values_compared": 14,
+  "verdict": "COMPLETE MATCH on ohlc4 / 1D / volume-weighted population"
+ },
+ "date": "2026-08-03",
+ "extends": "ARGUS cycle-3 stage A.3",
+ "finding_source": {
+  "headline": "THE SOURCE IS ohlc4, NOT hlc3. Our anchored recipe used hlc3, inherited by INFERENCE -- which CONVENTIONS already flagged as 'INFERRED from shared band machinery, not read from source'. The inference was wrong.",
+  "month_delta": 0.0411,
+  "month_ohlc4_1D": 63038.9411,
+  "month_operator": 63038.9,
+  "note": "Rolling VWAP genuinely IS hlc3 -- cycle 3 stage A proved it to the cent on 1d bars. The two TradingView indicators use different default sources.",
+  "quarter_delta": -0.0067,
+  "quarter_ohlc4_1D": 63505.5933,
+  "quarter_operator": 63505.6
+ },
+ "finding_variance": {
+  "headline": "VARIANCE DEFINITION CONFIRMED: volume-weighted POPULATION, one-pass, no (n-1) correction. Upgraded from INFERRED to VERIFIED.",
+  "method_note": "Step 1 was INCONCLUSIVE on hlc3 -- the closest definition missed by 38%. A variance definition cannot be discriminated while the MEAN it is measured about is unmatched. Fixing the source first made the test decisive.",
+  "month": {
+   "a_vw_population": 231.6568,
+   "b_vw_sample": 327.6122,
+   "c_unweighted_population": 242.2253,
+   "d_unweighted_sample": 342.5584,
+   "miss_pct": {
+    "a": 0.003,
+    "b": 41.43,
+    "c": 4.57,
+    "d": 47.88
+   },
+   "operator_implied": 231.65
+  },
+  "month_n": 2,
+  "quarter": {
+   "a_vw_population": 1530.469,
+   "b_vw_sample": 1554.1986,
+   "c_unweighted_population": 1336.3731,
+   "d_unweighted_sample": 1357.0933,
+   "miss_pct": {
+    "a": 0.002,
+    "b": 1.55,
+    "c": -12.68,
+    "d": -11.33
+   },
+   "operator_implied": 1530.5
+  },
+  "quarter_n": 33,
+  "why_decisive": "the Month anchor holds only TWO daily bars, where population and sample differ by sqrt(2)=41.4%"
+ },
+ "measurement_only": "no recipe changed, no tolerance applied, nothing fixed toward agreement",
+ "operator_reading": {
+  "candle": "2026-08-02",
+  "chart": "1D",
+  "indicator": "TradingView built-in VWAP, Anchor Period presets, bands in STANDARD DEVIATION mode, multipliers 1/2/3",
+  "month": {
+   "l": [
+    62807.3,
+    62575.6,
+    62344.0
+   ],
+   "u": [
+    63270.6,
+    63502.3,
+    63733.9
+   ],
+   "vwap": 63038.9
+  },
+  "quarter": {
+   "l": [
+    61975.1,
+    60444.7,
+    58914.2
+   ],
+   "u": [
+    65036.1,
+    66566.5,
+    68097.0
+   ],
+   "vwap": 63505.6
+  },
+  "symbol": "BTCUSDT.P",
+  "tz": "UTC"
+ },
+ "step3_obscured_digit": {
+  "delta_to_other": -100.0067,
+  "matches": 63505.6,
+  "other_reading": 63605.6,
+  "ours_1D_ohlc4": 63505.5933,
+  "verdict": "the obscured digit is 5. Manual and built-in anchors agree, as they must."
+ },
+ "step4_warmup_finding": {
+  "band_levels_entering_registry": 24,
+  "bar_counts_1h_substrate": {
+   "M": 69,
+   "Q": 813,
+   "W": 21,
+   "Y": 5157
+  },
+  "on_a_1D_chart": {
+   "M": 2,
+   "Q": 33,
+   "W": 1,
+   "Y": 214
+  },
+  "predicate": "scripts/daily_brief.py:406-407 vwap_series returns (None, None) iff len(d)==0; assembled at :450-457",
+  "proposal_not_implemented": "require >= 30 bars on the 1h substrate before anchored BANDS emit; the VWAP LINE may print earlier carrying a thin_sample chip",
+  "trips_at": "ZERO bars only -- there is no minimum-sample rule for anchored bands"
+ },
+ "step5_multiscale": {
+  "caution": "at n=2 the Month sigma is the spread between two numbers -- arithmetically exact, informationally empty as a dispersion estimate",
+  "month_sigma_n2": 231.66,
+  "month_stretch_sigma": 2.65,
+  "price": 63653.2,
+  "quarter_sigma_n33": 1530.47,
+  "quarter_stretch_sigma": 0.1,
+  "reproduced": true
+ },
+ "substrate_delta": [
+  {
+   "anchor": "MONTH",
+   "atr": -0.03214481414560025,
+   "bps": -8.404457076782682,
+   "d1": 63038.94113797124,
+   "d1h": 63091.9665104139,
+   "delta": -53.02537244265841,
+   "level": "VWAP"
+  },
+  {
+   "anchor": "MONTH",
+   "atr": -0.08339296966286622,
+   "bps": -21.69487185752235,
+   "d1": 63270.597962845866,
+   "d1h": 63408.1611559458,
+   "delta": -137.56319309993705,
+   "level": "+1s"
+  },
+  {
+   "anchor": "MONTH",
+   "atr": 0.019103341371665722,
+   "bps": 5.019842413478777,
+   "d1": 62807.284313096614,
+   "d1h": 62775.771864881994,
+   "delta": 31.512448214620235,
+   "level": "-1s"
+  },
+  {
+   "anchor": "MONTH",
+   "atr": -0.1346411251801366,
+   "bps": -34.853394901180415,
+   "d1": 63502.25478772049,
+   "d1h": 63724.355801477715,
+   "delta": -222.10101375722297,
+   "level": "+2s"
+  },
+  {
+   "anchor": "MONTH",
+   "atr": 0.0703514968889361,
+   "bps": 18.58005994250528,
+   "d1": 62575.62748822199,
+   "d1h": 62459.57721935008,
+   "delta": 116.05026887190616,
+   "level": "-2s"
+  },
+  {
+   "anchor": "MONTH",
+   "atr": -0.18588928069739816,
+   "bps": -47.88197981968046,
+   "d1": 63733.911612595126,
+   "d1h": 64040.55044700962,
+   "delta": -306.63883441449434,
+   "level": "+3s"
+  },
+  {
+   "anchor": "MONTH",
+   "atr": 0.12159965240619766,
+   "bps": 32.278270223045105,
+   "d1": 62343.970663347354,
+   "d1h": 62143.38257381818,
+   "delta": 200.58808952917752,
+   "level": "-3s"
+  },
+  {
+   "anchor": "QUARTER",
+   "atr": 0.029832075079685348,
+   "bps": 7.754984926949569,
+   "d1": 63505.59333930504,
+   "d1h": 63456.38300992897,
+   "delta": 49.21032937607379,
+   "level": "VWAP"
+  },
+  {
+   "anchor": "QUARTER",
+   "atr": -0.013009953412576056,
+   "bps": -3.2987623132225035,
+   "d1": 65036.062318716984,
+   "d1h": 65057.523249305625,
+   "delta": -21.460930588640622,
+   "level": "+1s"
+  },
+  {
+   "anchor": "QUARTER",
+   "atr": 0.07267410357194674,
+   "bps": 19.380990837830925,
+   "d1": 61975.1243598931,
+   "d1h": 61855.242770552315,
+   "delta": 119.8815893407882,
+   "level": "-1s"
+  },
+  {
+   "anchor": "QUARTER",
+   "atr": -0.05585198190483746,
+   "bps": -13.82148782040879,
+   "d1": 66566.53129812893,
+   "d1h": 66658.66348868229,
+   "delta": -92.13219055335503,
+   "level": "+2s"
+  },
+  {
+   "anchor": "QUARTER",
+   "atr": 0.11551613206420816,
+   "bps": 31.62487553555544,
+   "d1": 60444.655380481156,
+   "d1h": 60254.10253117565,
+   "delta": 190.5528493055026,
+   "level": "-2s"
+  },
+  {
+   "anchor": "QUARTER",
+   "atr": -0.09869401039709887,
+   "bps": -23.850559425377792,
+   "d1": 68097.00027754088,
+   "d1h": 68259.80372805895,
+   "delta": -162.80345051806944,
+   "level": "+3s"
+  },
+  {
+   "anchor": "QUARTER",
+   "atr": 0.15835816055646956,
+   "bps": 44.537240586523964,
+   "d1": 58914.186401069215,
+   "d1h": 58652.962291799,
+   "delta": 261.224109270217,
+   "level": "-3s"
+  }
+ ]
+}
