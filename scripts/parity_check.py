@@ -68,6 +68,9 @@ RECIPES = {
     "rvwap": ('TradingView "Rolling VWAP": trailing W-millisecond window floored '
               'at 10 bars, src hlc3, volume-weighted POPULATION variance via '
               'max(E[x^2]-E[x]^2, 0), NO (n-1) correction'),
+    "avwap": ('Anchored VWAP accumulated from the period open (param W/M/Q/Y), '
+              'src hlc3, SAME volume-weighted POPULATION variance as the '
+              'rolling form -- VERIFIED (R4), no longer inferred'),
     "poc": "windowed volume profile POC, 120 rows, VA 70%, volume spread "
            "uniformly across each bar's range (APPROXIMATION)",
     "vah": "windowed volume profile VAH (70% value area)",
@@ -169,14 +172,58 @@ def evaluate(symbol, tf, candle_open_utc, measure, param=None):
         row["extra"] = {"%K": val(k_[-1]), "%D": val(d_[-1])}
     elif measure == "rvwap":
         wd = float(param or 7)
-        rv = W.rolling_vwap(tt, W.hlc3(h, l, c), v, wd)
+        rv = W.rolling_vwap(tt, W.hlc3(h, l, c), v, wd, sigmas=(1, 2, 3))
         row["value"] = val(rv["vwap"][-1])
-        row["extra"] = {"sigma": val(rv["stdev"][-1]),
-                        "window_days": wd,
-                        "+1s": val(rv["band_up_1"][-1]),
-                        "-1s": val(rv["band_dn_1"][-1])}
+        # ALL THREE triples, not just +/-1s.  The operator reads six band values
+        # per VWAP off the chart; emitting one pair meant four of every six
+        # numbers he supplied could not be compared at all.
+        row["extra"] = {"sigma": val(rv["stdev"][-1]), "window_days": wd,
+                        "bars_in_window": int(np.count_nonzero(
+                            tt > tt[-1] - wd * DAY_MS)),
+                        "substrate_pinned": W.VWAP_SUBSTRATE,
+                        "source_pinned": W.VWAP_SOURCE}
+        for k in (1, 2, 3):
+            row["extra"][f"+{k}s"] = val(rv[f"band_up_{k}"][-1])
+            row["extra"][f"-{k}s"] = val(rv[f"band_dn_{k}"][-1])
         row["lockbox_overlap"] = analytics.lockbox_overlap(
             int(tt[-1]) - int(wd * DAY_MS), int(tt[-1]))
+    elif measure == "avwap":
+        # Anchored to the UTC period open containing the evaluated bar.  The
+        # anchor is DERIVED from the bar, never passed in, so a parity row can
+        # never silently compare two different anchors.
+        period = str(param or "M").upper()
+        dt = datetime.fromtimestamp(int(tt[-1]) / 1000, timezone.utc)
+        if period == "W":
+            a = dt - pd.Timedelta(days=dt.weekday())
+            a = a.replace(hour=0, minute=0, second=0, microsecond=0)
+        elif period == "M":
+            a = dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        elif period == "Q":
+            a = dt.replace(month=((dt.month - 1) // 3) * 3 + 1, day=1,
+                           hour=0, minute=0, second=0, microsecond=0)
+        elif period == "Y":
+            a = dt.replace(month=1, day=1, hour=0, minute=0, second=0,
+                           microsecond=0)
+        else:
+            raise SystemExit(f"avwap param must be W/M/Q/Y, got {period!r}")
+        a_ms = int(a.timestamp() * 1000)
+        sel = np.flatnonzero(tt >= a_ms)
+        if not len(sel):
+            raise SystemExit(f"no bars at or after the {period} anchor {_iso(a_ms)}")
+        a0 = int(sel[0])
+        av = W.anchored_vwap(W.hlc3(h, l, c), v, a0, sigmas=(1, 2, 3))
+        nbars = len(tt) - a0
+        row["value"] = val(av["vwap"][-1])
+        row["extra"] = {"sigma": val(av["stdev"][-1]), "period": period,
+                        "anchor_utc": _iso(a_ms),
+                        "anchor_bar_utc": _iso(int(tt[a0])),
+                        "bars_since_anchor": int(nbars),
+                        "maturity": W.maturity(nbars),
+                        "substrate_pinned": W.VWAP_SUBSTRATE,
+                        "source_pinned": W.VWAP_SOURCE}
+        for k in (1, 2, 3):
+            row["extra"][f"+{k}s"] = val(av[f"band_up_{k}"][-1])
+            row["extra"][f"-{k}s"] = val(av[f"band_dn_{k}"][-1])
     elif measure in ("poc", "vah", "val"):
         wd = float(param or 30)
         wp = P.windowed_profile(tt, h, l, v, wd, int(tt[-1]), substrate=str(substrate))

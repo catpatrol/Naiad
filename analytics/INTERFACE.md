@@ -274,31 +274,68 @@ The `ohlc4` episode is on the record deliberately: an inference held honestly an
 flagged in the worksheet is what made it findable. An inference asserted as
 pinned would have become a permanent, invisible offset on every anchored band.
 
-### The substrate caveat — the 1h path has never been externally tested
+### The substrate caveat — CLOSED for rolling VWAP, 2026-08-05
 
-**Computation is pinned to the 1h substrate.** Every parity reading taken so far
-was made on a **1D chart** and compared against **1D computation**. TradingView
-computes RVWAP from the CHART's bars, so a 1D reading tests the 1D path and
-nothing else. **The 1h path — the one the brief actually publishes — has no
-external check at all.**
+**Superseded.** For four cycles this section warned that every parity reading
+had been taken on a **1D chart** and compared against **1D computation**, while
+the instrument publishes on **1h** — so the path that actually runs had no
+external check. TradingView computes RVWAP from the CHART's bars, which is what
+made the gap real rather than pedantic, and also what makes it closable: a 1H
+chart uses the same 168 hourly bars we do.
 
-This is not a rounding-scale concern. Measured 2026-08-03, BTC, same candle:
+**The operator supplied a 1H capture on 2026-08-05 and the 1h path passed.**
+BTCUSDT.P, closed bar `2026-08-05T17:00Z`, hlc3:
 
-| | agreement with operator |
+| window | bars in window | worst \|delta\| | worst bps |
+|---|---|---|---|
+| RVWAP 7d | 168 | 0.0453 | 0.0070 |
+| RVWAP 30d | 720 | 0.0496 | 0.0079 |
+| RVWAP 90d | 2,160 | 0.0494 | 0.0068 |
+| RVWAP 365d | 8,760 | 0.0429 | 0.0056 |
+
+All **28 values** (4 means + 24 band levels) agree within **0.0496** — the
+rounding half-step of the operator's one-decimal display, so the residual is
+his display precision and not our arithmetic. The RAW BAR matched to every
+decimal first, so nothing downstream inherited a bad input.
+
+**Rolling VWAP is therefore CERTIFIED on both substrates**, 1D and the ruled 1h.
+The earlier "0.377 daily-ATR" figure was never a defect: it measured 1h-vs-1D
+disagreement, which is a real and expected property of bar-granularity
+weighting. Both are now independently confirmed against their own charts, which
+is the only way that number could ever have been interpreted.
+
+**STILL OPEN — anchored sigma on 1h.** The anchored MEANS matched on the same
+bar (Month 63,602.4452 vs 63,602.4; Quarter 63,486.3109 vs 63,486.3), but the
+operator's 1H capture **did not have anchored bands enabled**, so the anchored
+SIGMA on the 1h substrate remains **UNVERIFIED**. The recipe and the variance
+definition are verified (from the 2026-08-03 1D/hlc3 capture, where a two-bar
+anchor discriminated population from sample by 41.4% and population landed
+within 0.003%); only the substrate is untested, and the Month-anchor substrate
+delta was measured at up to **0.186 daily-ATR**. **One 1H capture with anchored
+bands enabled closes it. NOT BLOCKING.**
+
+### ⚠ INSTRUMENT SENSITIVITY — read the right symbol or get a different level
+
+**A census consumer that reads the wrong instrument gets a DISTINCT registry
+level, not a rounding error.** Measured on the same `2026-08-05T17:00Z` bar:
+
+| instrument | RVWAP 7d |
 |---|---|
-| 1d substrate | to the cent on all twelve triples (max \|delta\| 0.05, ≤ 0.02 bps) |
-| **pinned 1h substrate** | **differs by up to 0.377 daily-ATR** |
+| `BINANCE:BTCUSDT.P` — **what we compute** | 63,737.7 |
+| TradingView `BTCUSD` **INDEX** | 63,786.76 |
+| **gap** | **49.06** |
 
-The gap is largest on the shortest window and vanishes by rv365 — the signature
-of bar-granularity weighting, not of a wrong recipe. The anchored form shows the
-same shape: worst band delta **0.186 daily-ATR** on the Month anchor, where the
-bar count is smallest.
+Against BTC's daily ATR of 1,628.44, the collapse tolerance (`COLLAPSE_ATR`
+0.02 ATR) is **32.57 points**. The instrument gap is **49.06 = 0.030 ATR =
+1.51× the collapse tolerance** — so the two readings would **not** collapse into
+one level. They would enter the registry as **two separate members**, and in a
+system that scores by counting agreement, that is a phantom confluence: one
+tool counted twice.
 
-**Consequence for the census.** The RECIPE is verified; the SUBSTRATE the recipe
-is evaluated on is not. Which substrate the spec pins is open decision **D3-1**.
-Until a reading is taken on a 1h chart, any citation of a published VWAP number
-must carry this caveat, and no agreement between our 1h numbers and a 1D chart
-should be read as parity.
+**Every VWAP number published by this toolkit is `BINANCE:BTCUSDT.P` and its
+per-asset equivalents.** Any parity reading, screenshot, or citation taken from
+an index, a spot pair, or another venue is measuring a different instrument and
+must not be compared to ours without saying so.
 
 ### `stoch_rsi` — FINDING F-2R-A, and why F-AN-6b exists
 
