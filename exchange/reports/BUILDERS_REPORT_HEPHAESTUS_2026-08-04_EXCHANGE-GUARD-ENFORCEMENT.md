@@ -323,6 +323,15 @@ per-file guard alone would not have prevented this.** A total-size check on `exc
 5. **`exchange/status/MANIFEST.json` and `exchange/status/daily/MANIFEST_2026-08-03.json` are both
    21,115 B** — probable duplication, carried over from yesterday's report. Out of scope here
    (`exchange/status/` is excluded by this contract). **Owner: operator.**
+6. **`publish()` has no per-task scoping, and swept up an unrelated edit.** The publish for this
+   session committed **4 paths**, one of which — `exchange/status/SECOND_ACCOUNT.md` — was **not
+   written by this contract**, which explicitly excludes `exchange/status/`. It was a pre-existing
+   operator edit sitting dirty in the working tree (`last_manual_upload: 2026-07-28` → `2026-08-05`,
+   file mtime 00:04:11, publish 00:16:39). `publish()` stages every dirty path under `exchange/`,
+   not only those the current task produced, so any uncommitted edit anywhere in `exchange/` rides
+   along in whatever commit publishes next. The edit itself is correct and was wanted; the point is
+   that **a contract's scope discipline does not survive the publish step**. This belongs in the
+   same follow-up contract as the size guard (§6). **Owner: operator.**
 
 ---
 
@@ -356,6 +365,7 @@ per-file guard alone would not have prevented this.** A total-size check on `exc
 | `exchange/reports/STORAGE_MEASUREMENT_2026-08-03.json` | yes | tracked — **left in place** | unchanged | yes | GitHub only (orphan) |
 | `research_outputs/brief/brief2_2026-08-03_post_ny.html` | yes | **ignored** — `.gitignore:83` | never | no | **NOT PROTECTED** — machine-only by design |
 | `_reviewer_box/ANALYTICS1_REPORT.json` | yes | **ignored** — `.gitignore:80` | never | no | **NOT PROTECTED** — machine-only by design |
+| `exchange/status/SECOND_ACCOUNT.md` | yes | tracked | `2a606b3` — **not an edit by this contract**; pre-existing operator change swept up by `publish()` (§8.6) | yes (`origin/v12-v1-census`) | GitHub + `--workflow` archive |
 | `scripts/publish_exchange.py` | yes | tracked | unchanged this run | unchanged | GitHub + `--workflow` archive |
 
 **Read this table as:** *committed is not pushed, pushed is not backed up.* The last two rows are the
