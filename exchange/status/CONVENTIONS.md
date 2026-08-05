@@ -439,13 +439,7 @@ never a directory listing.**
 (`exchange/status/CADENCE.md`). **A bare filename proves nothing** — hand-uploads are flattened
 (`.gitignore` → `_gitignore`; `v1.1` → `v1_1`), so a bare name may be the upload itself.
 
-**Known limit, measured 2026-08-03:** the sync reaches `exchange/`, `docs/`, `prompts/`. It does
-**not** reach the repo root — `SCHED_TEST_RESULT_2026-08-02.md` is tracked and pushed at root and
-does not return. Whether `engine/`, `scripts/` and `configs/` are reachable is **open**; two
-code-targeted probes returned only manifest hash records, never source.
-
-**Consequence for lane etiquette:** anything a web lane must read goes under `exchange/` or
-`docs/`. Repo root is not a delivery location.
+**The live tick set is `LEDGER.md` and `exchange/` ONLY** (operator, 2026-08-06; see §3.2). Nothing else is in the box. **CORRECTION 2026-08-06, finding H-1, raised by HERMES:** this passage previously read "**Known limit, measured 2026-08-03:** the sync reaches `exchange/`, `docs/`, `prompts/`. It does **not** reach the repo root — `SCHED_TEST_RESULT_2026-08-02.md` is tracked and pushed at root and does not return. Whether `engine/`, `scripts/` and `configs/` are reachable is **open**; two code-targeted probes returned only manifest hash records, never source." — a MEASUREMENT taken 2026-08-03, superseded by the 2026-08-06 tick ruling and never rewritten. For two days the file asserted both, and the two imply box occupancy of 21.2% and 109.7% respectively. It was not a competing rule; it was a stale fact stated as a current one — the exact failure §0 names, committed inside the file that names it. Anything a web lane must DISCOVER belongs under `exchange/`; anything it merely needs to READ, the operator drags into that one conversation at zero permanent cost.
 
 ---
 
