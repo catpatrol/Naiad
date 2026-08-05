@@ -133,3 +133,35 @@ PENDING:
 NEXT: Build enforcement trigger 2, then re-probe against the ROLLBACK canary. Owner: ATHENA.
 METRICS: operator actions this session = 2 · files re-ingested = 1
 === END STATUS ===
+
+---
+
+=== STATUS_ATHENA — 2026-08-04 (close) ===
+NOW: Lane closing on a clean handoff (ruling G1-a). Backup architecture is verified end to end for
+the first time: all 9 phase archives hash-MATCH between laptop and Drive, and 7 of the 9 now carry
+a fingerprint in two independent places. Workflow redesign is built, published and in use. Code work
+is filed as ratified queue item 002 rather than crammed into a closing paste.
+LAST EVENT: 2026-08-04 — six sidecars written and mirrored; queue 002 D4 reduced to a fixture.
+FACTS:
+- 9/9 phase archives hash-verified laptop vs Drive, 1,043,691,544 B, zero mismatches [verified]
+- All 9 have a Drive sidecar; 7 of 9 also have a git-TRACKED local one, pushed as ccbfd2d
+  (.gitignore:38 covers *.zip only, so sidecars travel to GitHub). The two analytics archives have
+  a Drive sidecar but NO local/tracked one — their fingerprints are not on GitHub [verified]
+- Legacy "naiad (local folder) BACKUP" deleted; contents preserved and verified in phases/ [verified]
+- exchange/ 51.4% -> 22.8% of the project box; documents are only 15% [verified]
+- Project memory 30 -> 24 entries; CONVENTIONS.md carries every relocated rule in full [verified]
+- Queue 002 D4 found ALREADY IMPLEMENTED by the builder before code was written [handoff]
+PENDING:
+1. Operator: add the trigger-2 line to the naiad-custodian skill (Settings > Skills), then run the
+   ROLLBACK-canary probe in one fresh chat; that unblocks the memory audit to 17 entries
+2. ARGUS (8 files) and APOLLO (1) to rule on the orphan memo in exchange/reports/
+3. HEPHAESTUS to execute queue 002 in its own session with its own build document
+4. Operator: ~18.7 MB of redundant copies in naiad-backups/ (three "(1)" files plus top-level
+   duplicates of phases/ content) — cosmetic, apply the §3.2 existence-is-not-protection rule first
+5. Two local sidecars still missing: analytics_v1.0.0_2026-07-29.zip.sha256 and
+   analytics_tests_v1.0.0_2026-07-29.zip.sha256. Both archives have a Drive sidecar, so they are
+   verifiable ON Drive, but no fingerprint for either reaches GitHub. This session was authorised
+   for exactly six sidecars, so the gap was reported rather than closed. One paste finishes it
+NEXT: Hold for the probe, then execute the memory audit (3 moves + 4 merges -> 17). Owner: ATHENA.
+METRICS: operator actions this session = 9 · files re-ingested = 4
+=== END STATUS ===

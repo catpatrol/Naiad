@@ -25,7 +25,9 @@ destination file rather than overwrite. In-repo behaviour, F-K3's output exclusi
 staging. WARN at 25% of 6,390,000 B; REFUSE above 40%, printing the ten largest files with their
 percentages and quoting §4.2's pointer rule. Refusal must be overridable by an explicit flag so it
 never becomes an unbypassable block on legitimate work.
-**D4 · Manifest retention.** Keep the newest 7 `exchange/status/daily/` artifacts; older ones are
+**D4 REDUCED TO A FIXTURE — operator ruling 2026-08-04.** The executor of this contract read the retention code before it was filed and found it **ALREADY IMPLEMENTED**; nothing has aged out yet, which is why the observed MANIFEST duplication is not a retention failure. **Do not rebuild it.** Deliver only fixture F-R1 below as confirmation that the existing behaviour reports and never deletes. The original D4 text is retained beneath for provenance and is NOT a work item.
+
+~~**D4 · Manifest retention.**~~ Keep the newest 7 `exchange/status/daily/` artifacts; older ones are
 REPORTED, never auto-deleted — the same posture as the estate/workflow rule. Implement wherever the
 existing writer lives; read it first, do not assume.
 
