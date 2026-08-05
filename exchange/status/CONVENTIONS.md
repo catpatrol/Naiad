@@ -193,49 +193,52 @@ independent workstreams run in parallel, always.
 
 ---
 
-## §3 · How to hand work back — MOVED FROM MEMORY #28, full text
+## §3 · How to hand work back — ONE document
 
-*(Operator, 2026-08-02, extended 2026-08-03. **Two artifacts, mandatory in EVERY package sent to
-the builder by ANY Pantheon lane. No exceptions.**)*
+*(Operator ruling 2026-08-04. **This replaces the former two-artifact rule.** Until this date a
+builder session emitted a separate Builder’s Report and Session Summary. Document proliferation
+was the problem; the content was not. **They are now one file.** The required content is unchanged
+— nothing below was dropped in the merge.)*
 
-### 3.1 The BUILDER'S REPORT — the forensic record
+### 3.1 The build document
 
-Written as a **FILE, never a screen-only block**, to
-`exchange/reports/BUILDERS_REPORT_<LANE>_<date>_<phase>.md`. Standalone and readable with zero
-context. It carries:
+Every builder session emits **exactly one** document, written as a **FILE, never a screen-only
+block**, to `exchange/reports/BUILDERS_REPORT_<LANE>_<date>_<phase>.md`. Standalone and readable
+with **zero prior context**. It is required at the end of any block of work, **and at interim
+stage boundaries when the block is very large**.
 
-- gate and probe values as printed
+It serves two readers at once and must satisfy both:
+
+**As the forensic record** — so the run can be re-derived or refuted:
+
+- gate and probe values **as printed**
 - the full fixture transcript
 - **full result tables, not summaries**
 - versions, hashes, commits
 - findings **reported-not-fixed**
 - exact repo paths of every artifact
-- the six-column file-disposition table (§3.3)
+- the six-column file-disposition table (§3.2)
+
+**As the review artifact** — so the operator and the Pantheon can choose the next move. It carries
+everything the operator and reviewer need to **discriminate the best path forward toward Naiad's
+objective of consistently profitable trading systems**:
+
+- what was built and what it is for
+- what was decided, and **on whose authority**
+- what was found that changes the plan — especially findings reported-not-fixed, and **any
+  operator ruling reinterpreted mid-build**
+- what remains open, **with its owner**
+- the honest next options **with their implications**
+
+Plain language for a non-technical operator. Zero prior context assumed. No jargon left undefined.
 
 **Reminder that bites:** a file must never contain its own sha256 — that row is permanently stale
 the moment it is written.
 
-### 3.2 The SESSION SUMMARY — the decision artifact
+### 3.2 The file-disposition table — six columns, standing
+*(Operator, 2026-08-02. Unchanged by the merge.)*
 
-A **separate file beside it**, `SESSION_SUMMARY_<LANE>_<date>_<phase>.md`. Required at the end of
-any large block of work, **and at interim stage boundaries when the block is very large.**
-
-It carries everything the operator and reviewer need to discriminate the best path forward toward
-Naiad's objective of consistently profitable trading systems:
-
-- what was built and what it is for
-- what was decided, and on whose authority
-- what was found that changes the plan — especially findings reported-not-fixed, and **any
-  operator ruling reinterpreted mid-build**
-- what remains open, with its owner
-- the honest next options with their implications
-
-Plain language for a non-technical operator. Zero prior context assumed. No jargon left undefined.
-
-### 3.3 The file-disposition table — six columns, standing
-*(Operator, 2026-08-02.)*
-
-Every builder report ENDS with a table covering every file the paste created, modified or moved:
+The document ENDS with a table covering every file the paste created, modified or moved:
 
 | column | content |
 |---|---|
@@ -247,31 +250,35 @@ Every builder report ENDS with a table covering every file the paste created, mo
 | PROTECTED BY | estate zip / phase archive / --workflow archive / GitHub only / **NOT PROTECTED** |
 
 **Purpose:** the operator sees at a glance where every artifact lives and whether losing the
-machine would lose it. **Committed ≠ pushed. Pushed ≠ backed up.** And "not visible on GitHub" is
-usually the browser showing the DEFAULT branch (`main`) rather than `v12-v1-census`, which carries
-all project work.
+machine would lose it. **Committed is not pushed. Pushed is not backed up.** And "not visible on
+GitHub" is usually the browser showing the DEFAULT branch (`main`) rather than `v12-v1-census`,
+which carries all project work.
 
-### 3.4 Publishing and the on-screen close
+### 3.3 Publishing and the on-screen close
 
-Both artifacts are copied into `exchange/reports/` with sha256 verified before and after. The
-paste then runs `scripts/publish_exchange.py` to push `exchange/**` — the ratified W1 Q-2
-exception to commit-no-push — and **states plainly on screen whether the push SUCCEEDED**, so the
-operator knows whether to click Sync now.
+The document is written into `exchange/reports/` with sha256 verified before and after. The paste
+then publishes `exchange/**` — the ratified W1 Q-2 exception to commit-no-push — using the exact
+invocation in §3.4, and **states plainly on screen whether the push SUCCEEDED**, so the operator
+knows whether to click Sync now.
 
-**⚠ The exact publish invocation — two wrong forms have already shipped, so it is written out
-in full here rather than described.**
+**Never write "skip silently if absent."** If a directory is missing, create it and say so.
 
-`scripts/publish_exchange.py` is a **library module with no `__main__` block.** Running it as a
-script publishes nothing and exits quietly — a silent no-op, which is the worst failure shape
-available, because the surrounding paste reports success. Separately, a Windows path written with
-**backslashes inside a bash block is destroyed by the shell**, which reads each `\` as an escape:
-`C:\venvs\naiad\Scripts\python.exe` collapses to `C:venvsnaiadScriptspython.exe` → command not
-found. Use forward slashes, and call the function:
+On-screen output stays short and displays, **in bright colours**, the exact filenames and full
+repo paths the operator must carry.
+
+### 3.4 The publish invocation — written out, because two wrong forms have shipped
+
+`scripts/publish_exchange.py` is a **library module with no `__main__` block**: running it as a
+script publishes nothing and exits quietly. And a Windows path with backslashes **inside a bash
+block is destroyed by the shell**. Use forward slashes and call the function:
 
     C:/venvs/naiad/Scripts/python.exe -c "import sys; from pathlib import Path; R=Path('.').resolve(); sys.path.insert(0,str(R/'scripts')); import publish_exchange as p; r=p.publish(R,'<YYYY-MM-DD>'); print(r['status'], r['commit'], r['pushed'], r['offenders'])"
 
-`publish()` stages `exchange/**` only, guard-checks the whole index, commits and pushes. Do not
-`git add`/`commit` exchange files separately — let the guard do it, so evidence cannot ride along.
+`publish()` stages `exchange/**` only, guard-checks the whole index, commits and pushes. **Do not
+`git add` or `git commit` exchange files separately** — let the guard do it, so evidence cannot
+ride along. **Corollary learned 2026-08-04:** because the guard is path-scoped, a `git add` of any
+file outside `exchange/**` in the same paste goes nowhere and leaves that file stranded as an
+uncommitted change. Commit non-exchange paths explicitly, in their own authorized commit.
 
 **Two rules this generalises to, both §6.2 Class A cures:**
 1. Any Windows path inside a bash block uses **forward slashes**.
@@ -283,10 +290,15 @@ matches a **distinctive fragment**, case-insensitively — never a full sentence
 the same author is writing in the same act. Content and its gate authored together get no second
 reading, so the gate must not depend on exact wording.
 
-**Never write "skip silently if absent."** If a directory is missing, create it and say so.
+*(Worked example, kept because it is the fastest way to recognise both failures: a Windows path
+written with backslashes inside a bash block is read by the shell as escapes — `C:\venvs\naiad\Scripts\python.exe` collapses to
+`C:venvsnaiadScriptspython.exe` → command not found. And a `__main__`-less module run as a
+script is a silent no-op — the worst failure shape available, because the surrounding paste
+reports success.)*
 
-On-screen output stays short and displays, **in bright colours**, the exact filenames and full
-repo paths the operator must carry.
+*(These three passages were CARRIED FORWARD verbatim by HEPHAESTUS, 2026-08-04, from the
+pre-merge §3.4. The merge preamble states that nothing was dropped; carrying them is what
+keeps that statement true. Operator-approved amendment to the merge block.)*
 
 ---
 
