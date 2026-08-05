@@ -1406,7 +1406,70 @@ def _band_confluence_score(conf, level, atr_d, view="with_volume"):
     return int(best[1]["score"]), best[1]
 
 
-def reversion_drafts(stretch, conf, price, atr_d, view="with_volume"):
+# ═══════════════════════════════════ THE HINGE -- TARGET B (C6 item 3)
+#
+# OPERATOR'S TRADER FRAMING.  A sigma band is a HINGE with TWO outcomes:
+#   (a) PULLBACK -- mean-reversion before continuation
+#   (b) REJECTION -- the level is genuinely rejected and price goes to AUCTION,
+#       toward the dominant volume POC and/or the far side of traded value
+#
+# The reversion archetype as built captured only (a).  Target B is (b).
+#
+# NO PREFERENCE IS EXPRESSED BETWEEN THEM, and that is the ruling, not an
+# omission.  Operator, verbatim: "our reaction to the level depends on how price
+# is behaving, and this definitions are sensitive as they will carry into range
+# detection. So let's measure before we set these decisions in stone."  Any
+# discrimination rule invented now would be a guess wearing the clothes of a
+# system.  WHICH outcome occurs is outcome data and stays census-side (H-VBR
+# EXTENDED); the GEOMETRY of both is market state and is recorded here.
+
+def _dominant_profile(vol, price, atr_d):
+    """The POC and value-area edges price would auction toward on a rejection.
+
+    Uses the 30d window when available -- the horizon on which "the dominant
+    volume node" is a meaningful phrase -- falling back to the widest formed
+    window.  Returns None when no window has formed, rather than substituting a
+    shorter one under a longer one's name.
+    """
+    wins = (vol or {}).get("windows") or {}
+    for name in ("30d", "90d", "7d", "365d", "prior-day"):
+        w = wins.get(name)
+        if w and not w.get("warming") and w.get("poc") is not None:
+            return {"window": name, "poc": _f(w.get("poc")),
+                    "vah": _f(w.get("vah")), "val": _f(w.get("val"))}
+    return None
+
+
+def _target_b(prof, entry, side, mean, atr_d):
+    """Rejection targets: the dominant POC and the value-area edge price would
+    auction toward if the level FAILS.
+
+    DIRECTION, stated because it is easy to get backwards.  A SHORT reversion
+    draft sits at an UPPER band with price above the mean; the reversion idea is
+    a move DOWN to the mean.  REJECTION is that idea failing -- price CONTINUES
+    UP -- so its auction target is the VAH, above the entry.  A LONG at a lower
+    band mirrors it: rejection continues DOWN, toward the VAL.
+
+    The POC serves both directions: it is the dominant node price auctions
+    toward either way, and it may sit on either side of the entry.
+    """
+    if not prof or entry is None or not atr_d:
+        return None
+    opp = prof["vah"] if side == "short" else prof["val"]
+    out = {"window": prof["window"], "poc": prof["poc"],
+           "opposing_va_edge": opp,
+           "opposing_edge_name": "VAH" if side == "short" else "VAL",
+           "rejection_direction": "up" if side == "short" else "down"}
+    for key, lvl in (("poc", prof["poc"]), ("va_edge", opp)):
+        if lvl is None:
+            out[f"{key}_distance_atr"] = None
+            continue
+        out[f"{key}_distance_atr"] = _f(abs(lvl - entry) / atr_d)
+    return out
+
+
+def reversion_drafts(stretch, conf, price, atr_d, view="with_volume",
+                     vol=None):
     """§5.2/5.3/5.4 -- REVERSION drafts.  GEOMETRY, never probability.
 
     THE ENTRY IS NOT A PREDICTION.  A reversion draft exists only where price has
@@ -1434,6 +1497,7 @@ def reversion_drafts(stretch, conf, price, atr_d, view="with_volume"):
     freshly-opened anchor cannot manufacture a setup out of a two-bar sigma.
     """
     out, skipped = [], []
+    prof = _dominant_profile(vol, price, atr_d)
     for r in (stretch.get("rows") or []):
         if r.get("warming") or r.get("sigma_position") is None:
             continue
@@ -1468,9 +1532,33 @@ def reversion_drafts(stretch, conf, price, atr_d, view="with_volume"):
             continue
         score, cl = _band_confluence_score(conf, entry, atr_d, view)
         sigma_atr = (sigma / atr_d) if atr_d else None
+        side = "short" if above else "long"
+
+        # THE HINGE (item 3). Target A is the pullback case; target B is the
+        # rejection case. Both are printed with their own distance and R:R, and
+        # NO PREFERENCE IS EXPRESSED -- see `no_preference` below.
+        tb = _target_b(prof, entry, side, mean, atr_d)
+        b_rows = []
+        if tb:
+            for key, label in (("poc", f"{tb['window']} POC"),
+                               ("va_edge", f"{tb['window']} {tb['opposing_edge_name']}")):
+                lvl = tb["poc"] if key == "poc" else tb["opposing_va_edge"]
+                if lvl is None:
+                    continue
+                b_rows.append({
+                    "kind": key, "label": label, "target": _f(lvl),
+                    "distance_atr": tb[f"{key}_distance_atr"],
+                    "reward": _f(abs(lvl - entry)),
+                    "rr": _f(abs(lvl - entry) / risk) if risk > 0 else None,
+                    # True when the target lies in the REJECTION direction --
+                    # further out than the band, not back toward the mean.
+                    "in_rejection_direction": bool(
+                        (lvl > entry) if above else (lvl < entry)),
+                })
+
         out.append({
             "archetype": "reversion",
-            "side": "short" if above else "long",
+            "side": side,
             "name": r["name"], "kind": r.get("kind"),
             "entry_band": f"{'+' if above else '-'}{reached}s",
             "entry": _f(entry), "target": _f(target), "invalidation": _f(invalidation),
@@ -1479,6 +1567,24 @@ def reversion_drafts(stretch, conf, price, atr_d, view="with_volume"):
                                 "sigma3 plus one band width"),
             "reward": _f(reward), "risk": _f(risk), "rr": _f(reward / risk),
             "rr_is_constant": True,
+            # --- the hinge, both outcomes, neither preferred
+            "target_a": {"kind": "pullback", "label": "VWAP mean",
+                         "target": _f(target), "distance_atr": _f(reward / atr_d)
+                         if atr_d else None,
+                         "reward": _f(reward), "rr": _f(reward / risk)},
+            "target_b": {"kind": "rejection", "targets": b_rows,
+                         "window": tb["window"] if tb else None,
+                         "note": "price rejects the level and auctions toward "
+                                 "the dominant volume node and the far side of "
+                                 "traded value"} if tb else None,
+            "no_preference": "NO preference is expressed between target A "
+                             "(pullback to the mean) and target B (rejection "
+                             "into auction). Which one occurs depends on how "
+                             "price is behaving at the level, and these "
+                             "definitions carry into range detection -- so they "
+                             "are MEASURED before being set in stone. Any "
+                             "discrimination rule invented now would be a guess "
+                             "wearing the clothes of a system.",
             "sigma": _f(sigma), "sigma_atr": _f(sigma_atr),
             "target_distance_atr": _f(reward / atr_d) if atr_d else None,
             "sigma_position": sp, "bars": r.get("bars"),
@@ -1495,9 +1601,29 @@ def reversion_drafts(stretch, conf, price, atr_d, view="with_volume"):
                             -abs(d["sigma_position"])))
     for i, d in enumerate(out, start=1):
         d["rank"] = i
+    # §3.3 -- the GEOMETRY at every band touch, so the census has targets to
+    # score against. Where the mean, the POC and both VA edges sit relative to
+    # the band, in ATR. Geometry is market state; WHICH outcome occurred is
+    # outcome data and stays census-side.
+    geometry = []
+    for d in out:
+        g = {"name": d["name"], "side": d["side"], "entry_band": d["entry_band"],
+             "entry": d["entry"],
+             "mean_atr": d["target_a"]["distance_atr"],
+             "sigma_atr": d["sigma_atr"], "bars": d["bars"]}
+        for row in ((d.get("target_b") or {}).get("targets") or []):
+            g[f"{row['kind']}_atr"] = row["distance_atr"]
+            g[f"{row['kind']}_in_rejection_dir"] = row["in_rejection_direction"]
+        geometry.append(g)
+
     return {
         "archetype": "reversion", "view": view, "drafts": out,
         "count": len(out), "skipped_thin_sample": skipped,
+        "hinge_geometry": geometry,
+        "hinge": "a sigma band is a HINGE with two outcomes -- pullback to the "
+                 "mean (target A) or rejection into auction toward the dominant "
+                 "POC and the far side of value (target B). BOTH are printed; "
+                 "NEITHER is preferred.",
         "entry_sigmas": list(REVERSION_ENTRY_SIGMAS),
         "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is "
                      "a constant of the geometry (sigma2 always 2:1, sigma3 "
@@ -1686,7 +1812,8 @@ def decision_instrument(a, vol, nest, conf, price, atr_d, stretch=None):
         # cluster (near price by construction); REVERSION targets the MEAN,
         # which for the far anchors is where the long distance actually lives.
         # Both are geometry; neither is a forecast.
-        "reversion_drafts": reversion_drafts(stretch or {}, conf, price, atr_d),
+        "reversion_drafts": reversion_drafts(stretch or {}, conf, price,
+                                            atr_d, vol=vol),
         "draft_archetypes": ["continuation", "reversion"],
         "composite_bias": composite_bias(a, vol, nest, conf, price),
         "sequencing_rule": "Part II is derivable from Part I's printed numbers "

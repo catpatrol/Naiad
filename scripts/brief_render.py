@@ -514,6 +514,42 @@ def part2_html(sym, a):
                                            if d.get("band_confluence_score")
                                            is not None else "&mdash;"}</td></tr>')
                 L.append('</table>')
+        # ---- C6 item 3: THE HINGE. Both outcomes, no preference between them.
+        if rdrafts:
+            L.append('<p class="mute">the hinge &mdash; both outcomes at each '
+                     'band, neither preferred</p><table>'
+                     '<tr><th>draft</th><th>outcome</th><th>target</th>'
+                     '<th>level</th><th>ATR away</th><th>R:R</th>'
+                     '<th>rejection direction</th></tr>')
+            for d in rdrafts:
+                ta = d.get("target_a") or {}
+                L.append(f'<tr><td>{esc(d["name"])} {esc(d["entry_band"])}</td>'
+                         f'<td>{chip("A pullback","accent")}</td>'
+                         f'<td>{esc(ta.get("label"))}</td>'
+                         f'<td>{num(ta.get("target"))}</td>'
+                         f'<td>{num(ta.get("distance_atr"))}</td>'
+                         f'<td>{num(ta.get("rr"))}</td><td>&mdash;</td></tr>')
+                for r in ((d.get("target_b") or {}).get("targets") or []):
+                    L.append(f'<tr><td class="mute">&#8627;</td>'
+                             f'<td>{chip("B rejection","warn")}</td>'
+                             f'<td>{esc(r["label"])}</td>'
+                             f'<td>{num(r["target"])}</td>'
+                             f'<td>{num(r["distance_atr"])}</td>'
+                             f'<td>{num(r["rr"])}</td>'
+                             f'<td>{"yes" if r["in_rejection_direction"] else "no"}</td>'
+                             f'</tr>')
+            L.append('</table>'
+                     '<p class="mute small"><b>A sigma band is a hinge with two '
+                     'outcomes:</b> price pulls back to the mean (A), or the '
+                     'level is genuinely rejected and price auctions toward the '
+                     'dominant volume node and the far side of traded value (B). '
+                     '<b>NO PREFERENCE IS EXPRESSED BETWEEN THEM.</b> Which one '
+                     'occurs depends on how price is behaving at the level, and '
+                     'these definitions carry into range detection &mdash; so '
+                     'they are MEASURED before being set in stone. A '
+                     'discrimination rule invented now would be a guess wearing '
+                     'the clothes of a system.</p>')
+
         for s in (rv.get("skipped_thin_sample") or []):
             L.append(f'<p class="prose">{chip("skipped","warn")} '
                      f'{esc(s["name"])} &mdash; {esc(s["reason"])}</p>')

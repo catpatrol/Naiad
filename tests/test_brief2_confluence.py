@@ -1018,3 +1018,139 @@ def _func_code_c6(fn):
                     and isinstance(node.body[0].value.value, str)):
                 node.body[0].value.value = ""
     return ast.unparse(tree).lower()
+
+
+# ============================== F-B45  cycle 6 item 3 -- THE HINGE, TWO TARGETS
+
+def _hinge_setup(above=True):
+    """A band price has reached, with a formed 30d profile to auction toward."""
+    mean, sigma, atr = 60000.0, 500.0, 1000.0
+    px = mean + (2.4 if above else -2.4) * sigma
+    stretch = {"rows": [B2._stretch_row("anchored M", "anchored", mean, sigma,
+                                        px, atr, bars=400)]}
+    vol = {"windows": {"30d": {"warming": False, "poc": 59500.0,
+                               "vah": 62000.0, "val": 58000.0}}}
+    return stretch, vol, px, atr
+
+
+def test_f_b45_every_reversion_draft_prints_both_targets():
+    """3.1 -- target A is the pullback (the VWAP mean); target B is the
+    rejection (the dominant POC and the opposing value-area edge)."""
+    stretch, vol, px, atr = _hinge_setup(above=True)
+    rd = B2.reversion_drafts(stretch, {}, px, atr, vol=vol)
+    assert rd["count"] == 1
+    d = rd["drafts"][0]
+
+    a = d["target_a"]
+    assert a["kind"] == "pullback" and a["label"] == "VWAP mean"
+    assert a["target"] == pytest.approx(60000.0)
+    assert a["distance_atr"] is not None and a["rr"] == pytest.approx(2.0)
+
+    b = d["target_b"]
+    assert b is not None and b["kind"] == "rejection"
+    kinds = {r["kind"] for r in b["targets"]}
+    assert kinds == {"poc", "va_edge"}, kinds
+    for r in b["targets"]:
+        assert r["target"] is not None
+        assert r["distance_atr"] is not None and r["distance_atr"] >= 0
+        assert r["rr"] is not None
+
+
+def test_f_b45_rejection_direction_is_not_inverted():
+    """THE EASY MISTAKE, asserted so it cannot come back.
+
+    A SHORT reversion sits at an UPPER band: the trade is a move DOWN to the
+    mean, so REJECTION is price CONTINUING UP -- toward the VAH. A LONG at a
+    lower band mirrors it: rejection continues DOWN, toward the VAL.
+    """
+    st_up, vol, px_up, atr = _hinge_setup(above=True)
+    short = B2.reversion_drafts(st_up, {}, px_up, atr, vol=vol)["drafts"][0]
+    assert short["side"] == "short"
+    edge = [r for r in short["target_b"]["targets"] if r["kind"] == "va_edge"][0]
+    assert "VAH" in edge["label"], "a rejected SHORT must auction UP, to the VAH"
+    assert edge["target"] > short["entry"]
+    assert edge["in_rejection_direction"] is True
+
+    st_dn, vol, px_dn, atr = _hinge_setup(above=False)
+    long_ = B2.reversion_drafts(st_dn, {}, px_dn, atr, vol=vol)["drafts"][0]
+    assert long_["side"] == "long"
+    edge = [r for r in long_["target_b"]["targets"] if r["kind"] == "va_edge"][0]
+    assert "VAL" in edge["label"], "a rejected LONG must auction DOWN, to the VAL"
+    assert edge["target"] < long_["entry"]
+    assert edge["in_rejection_direction"] is True
+
+    # the two sides must NOT choose the same edge
+    assert short["target_b"]["targets"][1]["label"] != \
+        long_["target_b"]["targets"][1]["label"]
+
+
+def test_f_b45_no_preference_is_expressed_between_the_two_outcomes():
+    """3.2 -- OPERATOR RULING, and the fixture the ruling asked for.
+
+    Verbatim: "our reaction to the level depends on how price is behaving, and
+    this definitions are sensitive as they will carry into range detection. So
+    let's measure before we set these decisions in stone."
+    """
+    stretch, vol, px, atr = _hinge_setup(above=True)
+    rd = B2.reversion_drafts(stretch, {}, px, atr, vol=vol)
+    d = rd["drafts"][0]
+
+    # the refusal must be STATED, on the draft
+    assert "no_preference" in d
+    txt = d["no_preference"].lower()
+    assert "no preference" in txt and "measured" in txt
+
+    # NO ranking, weighting, probability or recommendation may attach to either
+    # target -- scan the target payloads, not the disclaimer.
+    payload = repr([d["target_a"], d["target_b"]]).lower()
+    for banned in ("prefer", "likely", "probability", "expected", "recommend",
+                   "better", "primary", "rank", "weight", "confidence"):
+        assert banned not in payload, \
+            f"target payload expresses a preference: {banned!r}"
+
+    # the two outcomes must be structurally PEERS: neither carries a field the
+    # other lacks that would order them.
+    assert "rank" not in d["target_a"] and "rank" not in (d["target_b"] or {})
+
+    # ANTI-VACUITY: the drafts themselves are ranked (by band confluence score),
+    # so the absence of ranking above is a property of the TARGETS specifically.
+    assert "rank" in d, "drafts are still ranked; only the two outcomes are not"
+
+
+def test_f_b45_hinge_geometry_is_recorded_for_the_census():
+    """3.3 -- geometry is market state and is recorded. WHICH outcome occurred
+    is outcome data and stays census-side."""
+    stretch, vol, px, atr = _hinge_setup(above=True)
+    rd = B2.reversion_drafts(stretch, {}, px, atr, vol=vol)
+
+    geo = rd["hinge_geometry"]
+    assert len(geo) == 1
+    g = geo[0]
+    for k in ("name", "side", "entry_band", "entry", "mean_atr", "sigma_atr",
+              "bars", "poc_atr", "va_edge_atr"):
+        assert k in g, f"hinge geometry is missing {k}"
+    assert g["mean_atr"] is not None and g["poc_atr"] is not None
+
+    # it records WHERE things are, never WHAT HAPPENED
+    blob = repr(geo).lower()
+    for banned in ("outcome", "reverted", "rejected_actual", "hit", "result",
+                   "won", "lost", "expectancy"):
+        assert banned not in blob, f"outcome data leaked into geometry: {banned}"
+
+    assert "hinge" in rd and "NEITHER is preferred" in rd["hinge"]
+
+
+def test_f_b45_no_profile_means_no_target_b_not_a_fabricated_one():
+    """ANTI-VACUITY. With no formed volume window there is nothing to auction
+    toward, and target B must be absent rather than invented from a shorter
+    window wearing a longer window's name."""
+    stretch, _vol, px, atr = _hinge_setup(above=True)
+    rd = B2.reversion_drafts(stretch, {}, px, atr, vol={"windows": {}})
+    d = rd["drafts"][0]
+    assert d["target_b"] is None
+    # target A is unaffected -- the pullback case needs no profile
+    assert d["target_a"]["target"] == pytest.approx(60000.0)
+
+    warming = {"windows": {"30d": {"warming": True, "poc": 1.0}}}
+    assert B2.reversion_drafts(stretch, {}, px, atr,
+                               vol=warming)["drafts"][0]["target_b"] is None
