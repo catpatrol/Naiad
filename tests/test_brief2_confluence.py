@@ -816,3 +816,205 @@ def test_f_b43_immaturity_inverts_the_scale_ladder():
     assert round(C5_B_SIGMA_MONTH / atr, 3) == 0.192
     assert round(C5_B_SIGMA_WEEK / atr, 3) == 0.463
     assert round(C5_B_SIGMA_QUARTER / atr, 3) == 0.988
+
+
+# ============================== F-B44  cycle 6 item 2 -- THE DE-PEG LAYER
+#
+# An anchor is grown up when it UNPEGS from the next-shorter anchor, not when
+# its estimator settles. Early in a period the longer anchor is measuring the
+# same bars and carries no independent information however stable it looks.
+
+ATR_BTC = 1628.44005908
+
+
+def _anchored(**kw):
+    return {"vwap": {"anchored": kw}}
+
+
+def _anc(v, s, bars, anchor):
+    return {"vwap": v, "sigma": s, "bars": bars, "anchor_utc": anchor}
+
+
+def test_f_b44_july_makes_month_and_quarter_identical_real_case():
+    """The operator's 2026-07-26 capture. July opens Q3, so M and Q share an
+    anchor bar and are byte-identical -- `identical`, not merely `pegged`."""
+    a = _anchored(
+        W=_anc(65190.810716, 798.4663, 165, "2026-07-20T00:00:00Z"),
+        M=_anc(63334.048643, 1729.988691, 621, "2026-07-01T00:00:00Z"),
+        Q=_anc(63334.048643, 1729.988691, 621, "2026-07-01T00:00:00Z"),
+    )
+    d = B2.depeg_layer(a, {"windows": {}}, ATR_BTC)
+    mq = d["adjacent"]["M<->Q"]
+
+    assert mq["peg_state"] == "identical"
+    assert mq["line_separation_atr"] == 0.0
+    assert mq["sigma_ratio"] == pytest.approx(1.0)
+    assert mq["contributes_independent_score"] is False
+    assert mq["redundant_with"] == "M"
+    assert "SAME ANCHOR BAR" in mq["prose"]
+
+    # W<->M on the same capture HAS de-pegged -- so the layer is not simply
+    # calling everything redundant.
+    assert d["adjacent"]["W<->M"]["peg_state"] == "de-pegged"
+    assert d["adjacent"]["W<->M"]["contributes_independent_score"] is True
+    assert d["adjacent_state_counts"]["identical"] == 1
+
+
+def test_f_b44_january_anchors_year_quarter_and_month_at_once():
+    """THE STRUCTURAL CASE, and the reason this is a calendar fact rather than a
+    market one: 1 January anchors Y, Q and M simultaneously. Y=Q until April 1
+    and Y=M until February 1 -- every year, for every asset, unavoidably."""
+    jan = "2026-01-01T00:00:00Z"
+    a = _anchored(
+        W=_anc(50000.0, 400.0, 100, "2026-01-05T00:00:00Z"),
+        M=_anc(49000.0, 900.0, 300, jan),
+        Q=_anc(49000.0, 900.0, 300, jan),
+        Y=_anc(49000.0, 900.0, 300, jan),
+    )
+    d = B2.depeg_layer(a, {"windows": {}}, ATR_BTC)
+    assert d["adjacent"]["M<->Q"]["peg_state"] == "identical"
+    assert d["adjacent"]["Q<->Y"]["peg_state"] == "identical"
+    assert d["adjacent_state_counts"]["identical"] == 2
+    assert "january" in d["structural_note"].lower()
+
+
+def test_f_b44_pegged_is_distinct_from_identical_and_from_depegged():
+    """Three states, three different facts. `identical` is decided on the ANCHOR
+    BAR: two anchors that merely coincide numerically today are a different
+    thing from two anchors that ARE the same anchor."""
+    # different anchors, lines within COLLAPSE_ATR, sigma ratio inside the band
+    near = _anchored(
+        M=_anc(60000.0, 1000.0, 400, "2026-05-01T00:00:00Z"),
+        Q=_anc(60000.0 + 0.01 * ATR_BTC, 1020.0, 900, "2026-04-01T00:00:00Z"),
+    )
+    r = B2.depeg_layer(near, {"windows": {}}, ATR_BTC)["adjacent"]["M<->Q"]
+    assert r["peg_state"] == "pegged", r
+    assert r["contributes_independent_score"] is False
+    assert r.get("redundant_with") == "M"
+
+    # same values but ALSO the same anchor -> identical, not pegged
+    same = _anchored(
+        M=_anc(60000.0, 1000.0, 400, "2026-04-01T00:00:00Z"),
+        Q=_anc(60000.0, 1000.0, 400, "2026-04-01T00:00:00Z"),
+    )
+    assert B2.depeg_layer(same, {"windows": {}},
+                          ATR_BTC)["adjacent"]["M<->Q"]["peg_state"] == "identical"
+
+    # lines far apart -> de-pegged, whatever the sigma ratio
+    far = _anchored(
+        M=_anc(60000.0, 1000.0, 400, "2026-05-01T00:00:00Z"),
+        Q=_anc(63000.0, 1000.0, 900, "2026-04-01T00:00:00Z"),
+    )
+    assert B2.depeg_layer(far, {"windows": {}},
+                          ATR_BTC)["adjacent"]["M<->Q"]["peg_state"] == "de-pegged"
+
+    # lines close BUT sigma ratio outside the band -> de-pegged. Two anchors
+    # agreeing on the mean while disagreeing on dispersion are NOT redundant.
+    wide = _anchored(
+        M=_anc(60000.0, 400.0, 400, "2026-05-01T00:00:00Z"),
+        Q=_anc(60000.0, 1600.0, 900, "2026-04-01T00:00:00Z"),
+    )
+    assert B2.depeg_layer(wide, {"windows": {}},
+                          ATR_BTC)["adjacent"]["M<->Q"]["peg_state"] == "de-pegged"
+
+
+def test_f_b44_redundancy_is_printed_not_suppressed():
+    """OPERATOR RULING, verbatim intent: 'project the monthly anyway with that
+    added observation ... We want to be aware of what is redundant and remain
+    open to what could be signal.'"""
+    a = _anchored(
+        M=_anc(63334.048643, 1729.988691, 621, "2026-07-01T00:00:00Z"),
+        Q=_anc(63334.048643, 1729.988691, 621, "2026-07-01T00:00:00Z"),
+    )
+    d = B2.depeg_layer(a, {"windows": {}}, ATR_BTC)
+    mq = d["adjacent"]["M<->Q"]
+
+    # it is STILL PRESENT in the layer -- not dropped, not nulled
+    assert mq["line_separation_atr"] is not None
+    assert mq["bars_since_anchor"]["Q"] == 621
+    # and it says, in words, what it duplicates and what would change that
+    assert "duplicates" in mq["prose"] and "DE-PEG" in mq["prose"].upper()
+    # but it casts no independent vote
+    assert mq["contributes_independent_score"] is False
+
+
+def test_f_b44_a_depeg_transition_is_recorded_as_an_event():
+    """§2.4 -- the transition is the object of interest, not the state."""
+    prev = {"adjacent": {"M<->Q": {"peg_state": "identical"}}}
+    now = _anchored(
+        M=_anc(60000.0, 1000.0, 40, "2026-08-01T00:00:00Z"),
+        Q=_anc(63000.0, 1500.0, 800, "2026-07-01T00:00:00Z"),
+    )
+    d = B2.depeg_layer(now, {"windows": {}}, ATR_BTC, prev=prev)
+    assert len(d["events"]) == 1
+    e = d["events"][0]
+    assert e["event"] == "de-peg" and e["pair"] == "M<->Q"
+    assert e["from_state"] == "identical" and e["to_state"] == "de-pegged"
+    assert e["ages_at_transition"] == {"M": 40, "Q": 800}
+    assert e["separation_atr"] is not None and e["recording_only"] is True
+    assert d["adjacent"]["M<->Q"]["bars_since_depeg"] == 0
+
+    # ANTI-VACUITY: no transition -> no event. An event log that fires every
+    # capture records nothing.
+    still = {"adjacent": {"M<->Q": {"peg_state": "de-pegged"}}}
+    assert B2.depeg_layer(now, {"windows": {}}, ATR_BTC, prev=still)["events"] == []
+    assert B2.depeg_layer(now, {"windows": {}}, ATR_BTC, prev=None)["events"] == []
+
+
+def test_f_b44_rolling_counterpart_is_formed_while_the_anchor_warms():
+    """§2.2 -- the operator is never without the view. While an anchored VWAP is
+    young its rolling counterpart is ALREADY fully formed over the same horizon,
+    and the separation between them is calendar-effect vs trailing-window."""
+    a = _anchored(M=_anc(62926.056254, 313.3966, 29, "2026-08-01T00:00:00Z"))
+    rv = {"windows": {"30d": {"warming": False, "vwap": 64026.474,
+                              "stdev": 1014.3754, "bars": 720}}}
+    d = B2.depeg_layer(a, rv, ATR_BTC)
+    c = d["counterpart"]["M<->30d"]
+
+    assert c["rolling_is_formed"] is True
+    assert c["anchored_bars"] == 29 and c["rolling_bars"] == 720
+    assert c["line_separation_atr"] > 0
+    assert "fully formed" in c["prose"] or "formed" in c["prose"]
+
+    # a warming rolling window says so rather than reporting a false separation
+    rv2 = {"windows": {"30d": {"warming": True}}}
+    assert B2.depeg_layer(a, rv2, ATR_BTC)["counterpart"]["M<->30d"]["rolling_warming"] is True
+
+
+def test_f_b44_depeg_layer_claims_nothing_and_aggregates_nothing():
+    """FIREWALL. Recording a de-peg is market-state observation and is OPS.
+    Whether it marks or precedes anything is H-VDP, census work under G-7."""
+    a = _anchored(
+        M=_anc(60000.0, 1000.0, 400, "2026-05-01T00:00:00Z"),
+        Q=_anc(63000.0, 1500.0, 900, "2026-04-01T00:00:00Z"),
+    )
+    d = B2.depeg_layer(a, {"windows": {}}, ATR_BTC)
+    assert "H-VDP" in d["claims_nothing"] and "G-7" in d["claims_nothing"]
+
+    code = _func_code_c6(B2.depeg_layer)
+    for banned in ("expectancy", "win_rate", "hit_rate", "probability",
+                   "forecast", "predict", "np.mean", "value_counts", "groupby"):
+        assert banned not in code, \
+            f"depeg_layer CODE contains {banned!r} -- that is H-VDP, census work"
+
+    # scan the DATA, not the disclaimers -- the standing rule.
+    payload = {k: v for k, v in d.items()
+               if k not in ("claims_nothing", "why", "structural_note",
+                            "peg_rules")}
+    blob = repr(payload).lower()
+    for banned in ("expectancy", "probability", "likely", "predict", "signal "):
+        assert banned not in blob, f"predictive language in de-peg DATA: {banned}"
+
+
+def _func_code_c6(fn):
+    import ast
+    import inspect
+    import textwrap
+    tree = ast.parse(textwrap.dedent(inspect.getsource(fn)))
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            if (node.body and isinstance(node.body[0], ast.Expr)
+                    and isinstance(node.body[0].value, ast.Constant)
+                    and isinstance(node.body[0].value.value, str)):
+                node.body[0].value.value = ""
+    return ast.unparse(tree).lower()

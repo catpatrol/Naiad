@@ -190,6 +190,72 @@ def part1_html(sym, a):
                         if d.get("straddles_one_sigma") else '') + '</p>')
         L.append('</div>')
 
+    # ---- C6 item 2: the DE-PEG layer. Redundancy is PRINTED, never
+    # suppressed -- the operator wants to see what duplicates what and stay
+    # open to what could be signal.
+    dp = a.get("depeg") or {}
+    if dp.get("adjacent"):
+        L.append('<div class="card"><h4>Anchor de-peg &mdash; what is currently '
+                 'redundant</h4><table>'
+                 '<tr><th>pair</th><th>state</th><th>separation (ATR)</th>'
+                 '<th>&sigma; ratio</th><th>ages (bars)</th>'
+                 '<th>independent score</th></tr>')
+        for key, r in dp["adjacent"].items():
+            st = r.get("peg_state")
+            k = {"identical": "bad", "pegged": "warn"}.get(st, "ok")
+            ages = r.get("bars_since_anchor") or {}
+            L.append(f'<tr><td>{esc(key)}</td><td>{chip(st, k)}</td>'
+                     f'<td>{num(r.get("line_separation_atr"), 3)}</td>'
+                     f'<td>{num(r.get("sigma_ratio"), 3)}</td>'
+                     f'<td class="mute">'
+                     f'{esc(r.get("shorter"))} {ages.get(r.get("shorter"))} / '
+                     f'{esc(r.get("longer"))} {ages.get(r.get("longer"))}</td>'
+                     f'<td>{"yes" if r.get("contributes_independent_score") else "<b>no</b>"}</td>'
+                     f'</tr>')
+        L.append('</table>')
+        for r in dp["adjacent"].values():
+            if r.get("peg_state") in ("identical", "pegged"):
+                L.append(f'<p class="prose">{chip("redundant &mdash; still shown","warn")} '
+                         f'{esc(r.get("prose"))}</p>')
+        for e in (dp.get("events") or []):
+            ages = e.get("ages_at_transition") or {}
+            L.append(f'<p class="prose">{chip("DE-PEG","accent")} '
+                     f'<b>{esc(e["pair"])}</b> moved {esc(e["from_state"])} '
+                     f'&rarr; {esc(e["to_state"])} at '
+                     f'{num(e.get("separation_atr"), 3)} ATR '
+                     f'(ages {esc(str(ages))}).</p>')
+        L.append('<p class="mute small"><b>An anchor carries independent '
+                 'information only once it UNPEGS from the next-shorter one.</b> '
+                 'Early in a period the longer anchor is measuring the same bars. '
+                 'This is the CALENDAR, not the market: January 1 anchors Year, '
+                 'Quarter and Month at once, so Y=Q until April 1; July 1 makes '
+                 'M=Q for all of July. A redundant anchor is still drawn &mdash; '
+                 'it contributes no independent score, and a de-peg is what makes '
+                 'it informative.</p>')
+        if dp.get("counterpart"):
+            L.append('<p class="mute">anchored vs its rolling counterpart</p>'
+                     '<table><tr><th>pair</th><th>state</th>'
+                     '<th>separation (ATR)</th><th>&sigma; ratio</th>'
+                     '<th>anchored age</th><th>rolling bars</th></tr>')
+            for key, r in dp["counterpart"].items():
+                if r.get("rolling_warming"):
+                    L.append(f'<tr class="mute"><td>{esc(key)}</td>'
+                             f'<td colspan="5">{chip("rolling warming","warn")}</td></tr>')
+                    continue
+                L.append(f'<tr><td>{esc(key)}</td>'
+                         f'<td>{esc(r.get("peg_state"))}</td>'
+                         f'<td>{num(r.get("line_separation_atr"), 3)}</td>'
+                         f'<td>{num(r.get("sigma_ratio"), 3)}</td>'
+                         f'<td>{r.get("anchored_bars")}</td>'
+                         f'<td>{r.get("rolling_bars")}</td></tr>')
+            L.append('</table><p class="mute small">While an anchored VWAP is '
+                     'warming, its rolling counterpart is <b>already fully '
+                     'formed</b> over the same span of market memory &mdash; so '
+                     'that view is never missing. The separation between them is '
+                     'itself information: calendar-anchoring versus '
+                     'trailing-window on the same horizon.</p>')
+        L.append('</div>')
+
     # ---- G7 anchor degeneracy (C5 3.1): a calendar accident must not read
     # as agreement between tools.
     deg = a.get("anchor_degeneracy") or []

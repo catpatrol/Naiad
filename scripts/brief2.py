@@ -648,6 +648,175 @@ def confirmed_pivot_levels(klines, now_ms, lookback_days=PIVOT_LOOKBACK_DAYS):
 
 # ═══════════════════════════════════════════════ G7 ANCHOR DEGENERACY (C5 3.1)
 
+# ═════════════════════════════════════════════ THE DE-PEG LAYER (C6 item 2)
+#
+# OPERATOR RULING, and it replaces bar count as the REDUNDANCY test.
+#
+# An anchor is not "grown up" when its estimator settles.  It is grown up WHEN
+# IT UNPEGS FROM THE NEXT-SHORTER ANCHOR.  Early in a period the longer anchor
+# is literally measuring the same bars as the shorter one, so it carries NO
+# INDEPENDENT INFORMATION however stable its arithmetic looks.
+#
+# This is STRUCTURAL, not incidental.  January 1 anchors Year, Quarter AND Month
+# simultaneously, so Y and Q are byte-identical until April 1 and Y and M until
+# February 1.  July 1 makes Month and Quarter identical for the whole of July --
+# which is exactly what the operator's 2026-07-26 capture showed.
+#
+# MATURITY and DE-PEG answer different questions and both are needed:
+#   maturity  -- is this estimator's SAMPLE deep enough to trust its width?
+#   de-peg    -- is this anchor SAYING ANYTHING the shorter one is not?
+# An anchor can be fully mature and still perfectly redundant.
+
+ADJACENT_ANCHOR_PAIRS = (("W", "M"), ("M", "Q"), ("Q", "Y"))
+ANCHOR_ROLLING_COUNTERPART = (("W", "7d"), ("M", "30d"),
+                              ("Q", "90d"), ("Y", "365d"))
+PEG_SIGMA_LO, PEG_SIGMA_HI = 0.90, 1.10
+
+
+def _peg_state(v_a, s_a, anchor_a, v_b, s_b, anchor_b, atr_d):
+    """Classify one pair.  `identical` is decided on the ANCHOR BAR, not on the
+    values -- two anchors that merely happen to coincide numerically today are a
+    different fact from two anchors that are the same anchor."""
+    if v_a is None or v_b is None or not atr_d or atr_d <= 0:
+        return None, None, None, None
+    sep = abs(v_a - v_b)
+    sep_atr = sep / atr_d
+    sep_bps = 1e4 * sep / v_b if v_b else None
+    ratio = (s_a / s_b) if (s_a and s_b and s_b > 0) else None
+
+    if anchor_a is not None and anchor_b is not None and anchor_a == anchor_b:
+        return "identical", sep_bps, sep_atr, ratio
+    pegged = (sep_atr <= L.COLLAPSE_ATR
+              and ratio is not None and PEG_SIGMA_LO <= ratio <= PEG_SIGMA_HI)
+    return ("pegged" if pegged else "de-pegged"), sep_bps, sep_atr, ratio
+
+
+def depeg_layer(a, rv, atr_d, prev=None):
+    """§2.1-2.4 -- peg state for adjacent anchors and anchored<->rolling pairs.
+
+    PRINTS REDUNDANCY, DOES NOT SUPPRESS IT.  Operator's intent, verbatim:
+    "project the monthly anyway with that added observation ... We want to be
+    aware of what is redundant and remain open to what could be signal."
+
+    A pegged or identical anchor still RENDERS with a `redundant_with` chip. It
+    contributes no INDEPENDENT score -- collapse_same_family already merges the
+    coincident levels -- and this makes that merge VISIBLE, which is the same
+    service `anchor_degeneracy` performs for the exact-anchor case.
+
+    `prev` is the previous capture's depeg block, supplied only so a TRANSITION
+    can be detected. Nothing is aggregated over it (see §2.4 and the firewall).
+    """
+    anchored = (a.get("vwap") or {}).get("anchored") or {}
+    windows = (rv.get("windows") or {})
+    out = {"adjacent": {}, "counterpart": {}, "events": [],
+           "peg_rules": {"identical": "same anchor bar (exact)",
+                         "pegged": f"different anchors, lines within "
+                                   f"{L.COLLAPSE_ATR} daily-ATR AND sigma ratio "
+                                   f"in [{PEG_SIGMA_LO}, {PEG_SIGMA_HI}]",
+                         "de-pegged": "otherwise"},
+           "why": "an anchor carries independent information only once it "
+                  "UNPEGS from the next-shorter one; early in a period it is "
+                  "measuring the same bars",
+           "structural_note": "January 1 anchors Y, Q and M simultaneously, so "
+                              "Y=Q until April 1; July 1 makes M=Q for all of "
+                              "July. Redundancy here is the CALENDAR, not the "
+                              "market",
+           "claims_nothing": "recording is OPS; whether a de-peg marks or "
+                             "precedes anything is H-VDP, census work under G-7"}
+
+    prev_adj = ((prev or {}).get("adjacent") or {})
+
+    for short, long_ in ADJACENT_ANCHOR_PAIRS:
+        sa, la = anchored.get(short) or {}, anchored.get(long_) or {}
+        state, bps_, atr_, ratio = _peg_state(
+            _f(la.get("vwap")), _f(la.get("sigma")), la.get("anchor_utc"),
+            _f(sa.get("vwap")), _f(sa.get("sigma")), sa.get("anchor_utc"), atr_d)
+        if state is None:
+            continue
+        key = f"{short}<->{long_}"
+        p_prev = (prev_adj.get(key) or {}).get("peg_state")
+        row = {"pair": key, "shorter": short, "longer": long_,
+               "peg_state": state,
+               "line_separation_bps": _f(bps_),
+               "line_separation_atr": _f(atr_),
+               "sigma_ratio": _f(ratio),
+               "bars_since_anchor": {short: sa.get("bars"), long_: la.get("bars")},
+               "anchor_utc": {short: sa.get("anchor_utc"),
+                              long_: la.get("anchor_utc")},
+               "previous_peg_state": p_prev}
+        # bars_since_depeg: for a still-pegged pair there is no de-peg yet.
+        row["bars_since_depeg"] = (0 if state == "de-pegged"
+                                   and p_prev in ("pegged", "identical")
+                                   else (None if state != "de-pegged"
+                                         else (prev_adj.get(key) or {})
+                                         .get("bars_since_depeg")))
+        if state in ("identical", "pegged"):
+            row["redundant_with"] = short
+            row["prose"] = (
+                f"{long_} currently duplicates {short}"
+                + (" -- SAME ANCHOR BAR" if state == "identical" else
+                   f" -- lines {atr_:.3f} ATR apart, sigma ratio {ratio:.2f}")
+                + f". It carries no independent information yet; a DE-PEG is "
+                  f"what makes it informative.")
+            row["contributes_independent_score"] = False
+        else:
+            row["contributes_independent_score"] = True
+            row["prose"] = (f"{long_} has separated from {short}: "
+                            f"{atr_:.2f} ATR apart, sigma ratio "
+                            f"{ratio:.2f} -- it is now saying something "
+                            f"{short} is not.")
+        out["adjacent"][key] = row
+
+        # §2.4 -- a TRANSITION is an event, recorded with both ages.
+        if p_prev in ("pegged", "identical") and state == "de-pegged":
+            out["events"].append({
+                "event": "de-peg", "pair": key,
+                "from_state": p_prev, "to_state": state,
+                "separation_atr": _f(atr_), "separation_bps": _f(bps_),
+                "sigma_ratio": _f(ratio),
+                "ages_at_transition": {short: sa.get("bars"),
+                                       long_: la.get("bars")},
+                "recording_only": True})
+
+    # §2.2 -- anchored vs its ROLLING counterpart. The operator's point: during
+    # the anchored anchor's warm-up the rolling window is ALREADY FULLY FORMED
+    # over the same span of market memory, so he is never without that view.
+    # The separation between them is itself information -- calendar effect
+    # versus trailing-window effect on the same horizon.
+    for anch, wname in ANCHOR_ROLLING_COUNTERPART:
+        ab = anchored.get(anch) or {}
+        wb = windows.get(wname) or {}
+        if wb.get("warming"):
+            out["counterpart"][f"{anch}<->{wname}"] = {
+                "pair": f"{anch}<->{wname}", "rolling_warming": True,
+                "note": f"{wname} has not accumulated its own span yet"}
+            continue
+        state, bps_, atr_, ratio = _peg_state(
+            _f(ab.get("vwap")), _f(ab.get("sigma")), None,
+            _f(wb.get("vwap")), _f(wb.get("stdev")), None, atr_d)
+        if state is None:
+            continue
+        out["counterpart"][f"{anch}<->{wname}"] = {
+            "pair": f"{anch}<->{wname}", "anchored": anch, "rolling": wname,
+            "peg_state": state,
+            "line_separation_bps": _f(bps_),
+            "line_separation_atr": _f(atr_),
+            "sigma_ratio": _f(ratio),
+            "anchored_bars": ab.get("bars"), "rolling_bars": wb.get("bars"),
+            "rolling_is_formed": True,
+            "prose": (f"{wname} is fully formed while {anch} is "
+                      f"{ab.get('bars')} bars old; they sit {atr_:.2f} ATR "
+                      f"apart. The separation is calendar-anchoring versus "
+                      f"trailing-window on the same horizon."),
+        }
+
+    counts = {}
+    for r in out["adjacent"].values():
+        counts[r["peg_state"]] = counts.get(r["peg_state"], 0) + 1
+    out["adjacent_state_counts"] = counts
+    return out
+
+
 def anchor_degeneracy(a, prior=None):
     """Report anchors that COINCIDE, so a calendar accident cannot read as
     agreement between tools.
@@ -1525,7 +1694,7 @@ def decision_instrument(a, vol, nest, conf, price, atr_d, stretch=None):
     }
 
 
-def brief2_asset(a, klines, now_ms, price, atr_d):
+def brief2_asset(a, klines, now_ms, price, atr_d, prev_depeg=None):
     """Compute every BRIEF-2 layer for one asset: Part I additions, then Part II."""
     vol = volume_layer(klines, now_ms)
     rv = rvwap_layer(klines, now_ms)
@@ -1549,6 +1718,7 @@ def brief2_asset(a, klines, now_ms, price, atr_d):
              "confirmed_pivots": pivs, "stretch": stretch,
              "band_excursions": excursion, "rvol": rvol_layer(klines),
              "anchor_degeneracy": anchor_degeneracy(a, prior),
+             "depeg": depeg_layer(a, rv, atr_d, prev=prev_depeg),
              "confluence": conf}
     part2 = decision_instrument(a, vol, nest, conf, price, atr_d, stretch=stretch)
     return part1, part2
