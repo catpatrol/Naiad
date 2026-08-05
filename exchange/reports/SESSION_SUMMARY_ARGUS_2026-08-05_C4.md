@@ -200,12 +200,34 @@ occurrences of one pattern, and the rule is written into the fixtures: **scan
 what the code does, never what it mentions, and never the prose that disclaims a
 thing.**
 
-### 4.5 I committed another lane's files by mistake
+### 4.5 ⚠ I committed 3.5 GB of another lane's data and blocked the push
 
-A `git add -A scripts` swept five untracked `scripts/seq8_*.py` files — DIONYSUS
-lane work, outside my authorized scope — into a commit. Reverted with
-`git rm --cached`: the files are **unchanged on disk** and back to untracked.
-Nothing lost. Disclosed rather than left in.
+The worst mistake of the cycle. Two commits used a wildcard `git add -A <dir>`
+instead of naming files, which swept in five `scripts/seq8_*.py` **and**
+`research_outputs/seq8/` + `seq8_run2/` — **26 files, 3,567 MB** of
+SEQ8/DIONYSUS data that was untracked when I started.
+
+**It surfaced as a hard failure:** GitHub rejected the entire branch push.
+Four of those files are over the 100 MB limit, the largest **753 MB**, so
+nothing could publish at all.
+
+**Fixed.** Nothing had ever reached the remote, so I rebuilt the local history
+without those paths and recommitted by explicit filename. **No remote history
+was rewritten.** Two commits changed SHA; their content is otherwise identical.
+The repo tree is back to **25.5 MB**, all 26 files are **unchanged on disk** and
+back to untracked, and the suite still passes 262/1. The publish then succeeded.
+
+**ONE THING FOR YOU, and it is two lines.** `.gitignore` already excludes every
+other lane's bulk output — `tc1/** tc4/** tc5/** s1/** s2/** s3/** census/**
+census1b/**`. **`seq8` is the only one missing.** That gap is exactly why a
+wildcard add could catch it, and until it is closed *any* `git add -A` in this
+repo re-breaks the remote for everyone. I did not add it myself because
+`.gitignore` is outside this cycle's authorized scope:
+
+```
+research_outputs/seq8/**
+research_outputs/seq8_run2/**
+```
 
 ### 4.6 The environment was broken and I fixed it before starting
 
@@ -312,8 +334,12 @@ Capture `briefs/brief_2026-08-05_post_ny.json`, sha256 `a93998f3…8185de`.
 All four write-once partitions built (snapshots 10 · levels 2,269 · areas 80 ·
 excursions 54). Render 158 KB.
 
-Commits `38602a2` · `96f56e3` · `316d810` · `c46bffb` · `fd86aa9` · `7af9ad4`
-(+ the seq8 un-track).
+Commits `38602a2` · `96f56e3` · `316d810` · `c46bffb` · `9701b57` · `4685232` ·
+`b99de62` (the seq8 un-track and §4.5 disclosure).
+
+**Published:** `scripts/publish_exchange.py` → status **PUBLISHED**, commit
+`71cb2ab`, 9 paths, **pushed to `origin/v12-v1-census`**. `HEAD` matches the
+remote. **Sync is already done — you do not need to click it.**
 
 Paired with **`BUILDERS_REPORT_ARGUS_2026-08-05_C4.md`**.
 

@@ -536,26 +536,63 @@ generated yet (D7)", pre-existing and unrelated.
 | `tests/test_brief2_confluence.py` | MODIFIED | F-B37, F-B41 | `tests/*` | +? | ran |
 | `tests/test_brief2_report.py` | MODIFIED | F-B38, F-B39, F-B40 | `tests/*` | +? | ran |
 | `tests/test_brief2_storage.py` | MODIFIED | F-B16 prose-strip; F-B32 keyed to `TABLES` | `tests/*` | +? | ran |
-| `scripts/seq8_*.py` (5 files) | **UN-TRACKED** | ⚠ **swept into a commit by mistake, then reverted with `git rm --cached`.** Another lane's work, outside scope. Files UNCHANGED on disk, back to their original untracked state. **Disclosed.** | not authorized | 0 net | `git status` |
+| `scripts/seq8_*.py` (5 files) | **UN-TRACKED** | ⚠ swept in by a wildcard `git add`, reverted with `git rm --cached`. Another lane's work. Files UNCHANGED on disk, back to untracked. | not authorized | 0 net | `git status` |
+| `research_outputs/seq8/`, `seq8_run2/` (26 files, **3,567 MB**) | **NEVER TRACKED — history rebuilt** | ⚠⚠ **see §9.1** | not authorized | 0 net | tree = 25.5 MB |
 
 **DO NOT MODIFY list respected:** `engine/*`, `configs/*`, `study/*`,
 `publish_exchange.py`, `reviewer_manifest.py`, `backup_estate.py`,
 `orchestrator_state.py` — all untouched.
 
-### Commits
+### 9.1 ⚠ BUILDER ERROR — 3.5 GB of another lane's data, and a blocked push
+
+**What happened.** Two commits used a wildcard `git add -A <dir>` instead of
+naming files. Stage 4's `git add -A scripts …` swept in five
+`scripts/seq8_*.py`; stage 5's `git add -A … research_outputs` swept in
+`research_outputs/seq8/` and `seq8_run2/` — **26 files, 3,567 MB** of
+SEQ8/DIONYSUS lane data that was untracked at session start.
+
+**How it surfaced.** `publish_exchange.py` committed correctly and then **the
+push was rejected outright by GitHub**: four of those files exceed the 100 MB
+hard limit, the largest at **753 MB**. The pre-receive hook declined the whole
+branch, so *nothing* could publish.
+
+**Fix.** Nothing had ever reached the remote, so the local history was rebuilt
+without those paths — `git reset --soft` to the last clean commit, re-stage by
+explicit path, recommit. **No remote history was rewritten.** The two affected
+commits changed SHA (`fd86aa9`→`9701b57`, `7af9ad4`→`4685232`); their content is
+identical apart from the removed files. Tree is back to **25.5 MB**, largest
+blob 6 MB. All 26 files are **unchanged on disk** and back to untracked.
+Suite re-run after the rebuild: **262 passed / 1 skipped**.
+
+**RECOMMENDATION, deliberately NOT applied** (`.gitignore` is outside this
+cycle's authorized scope) — add:
+
+```
+research_outputs/seq8/**
+research_outputs/seq8_run2/**
+```
+
+Every other lane's bulk output is already ignored there — `tc1/** tc4/** tc5/**
+s1/** s2/** s3/** census/** census1b/**`. **`seq8` is the only one missing**,
+which is exactly why a wildcard add could catch it. Two lines close it
+permanently. Until then any `git add -A` in this repo re-breaks the remote.
+
+### Commits (final, after the §9.1 rebuild)
 
 ```
 38602a2  stage 1 — R1/R2/R4 pinned, R3 maturity floors (F-B37)
 96f56e3  stage 2 — the 1h path passes parity, first time in five cycles
 316d810  stage 3 — RVOL, excursion table, firewall enforced on code
 c46bffb  stage 4 — registry confirmed by measurement, R6 vindicated
-fd86aa9  stage 5 — the REVERSION archetype, and the far buckets finally fill
-7af9ad4  stages 6+7 — INTERFACE regenerated, v1.1 retired, recalibration
-(+ 1)    chore — un-track scripts/seq8_*.py
+9701b57  stage 5 — the REVERSION archetype, and the far buckets finally fill
+4685232  stages 6+7 — INTERFACE regenerated, v1.1 retired, recalibration
+b99de62  chore — un-track scripts/seq8_*.py (+ the §9.1 disclosure)
+71cb2ab  exchange: auto-publish 2026-08-05   ← PUSHED
 ```
 
-**Repo is commit-no-push**, per standing rule. `exchange/**` publishes via
-`scripts/publish_exchange.py` — see §8.5 of the Session Summary.
+**Repo is commit-no-push**, per standing rule. `exchange/**` published via
+`scripts/publish_exchange.py`: status **PUBLISHED**, commit `71cb2ab`, 9 paths,
+**pushed to `origin/v12-v1-census`**. `HEAD == origin/v12-v1-census`.
 
 ---
 
