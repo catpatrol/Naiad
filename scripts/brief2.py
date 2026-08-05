@@ -79,6 +79,56 @@ PARITY_BANNER = ("PARITY NOT CERTIFIED — numbers not yet adopted. "
                  "The operator's parity readings have not been returned and "
                  "matched; nothing here may be trusted or acted on.")
 
+# C6 item 4.2.  When parity IS certified the banner comes down and THIS goes up
+# in its place.  Certification is not silence: a reader needs to know which
+# recipes were checked against a chart and which were not, and the ones that
+# were NOT are the ones most likely to be mistaken for verified.
+#
+# WHY THE PROFILE FAMILY IS EXCLUDED BY DESIGN, not by omission.  Our volume
+# profile spreads each bar's volume uniformly across its range -- a declared
+# approximation over kline data.  TradingView's own profile is a DIFFERENT
+# approximation over data we do not have.  Comparing the two would certify
+# nothing whichever way it came out: agreement would be a coincidence of two
+# approximations, disagreement would be uninformative about either.  So they
+# were kept out of the gate deliberately and carry a PERMANENT approximation
+# chip instead.
+PARITY_PROVENANCE = {
+    "certified": [
+        "rolling_vwap — 1D 14/14 and 1h 28/28, both substrates",
+        "anchored_vwap incl. sigma — 1h 42/42, two closed bars, W/M/Q",
+        "vw_sigma_bands — 54 triples, symmetric at exact integer multiples",
+        "oscillators (RSI, StochRSI, MACD, AO) + ATR — 72/72",
+        "resample_ohlcv — 40/40 against TradingView's own aggregation",
+    ],
+    "fixture_verified_not_chart_certified": [
+        "volume_profile / windowed_profile (POC, VAH, VAL)",
+        "low_volume_nodes (LVN)",
+        "va_nesting and its consensus / gap bands",
+    ],
+    "why_excluded": "our profile spreads each bar's volume uniformly across its "
+                    "range -- a declared approximation over klines. TradingView's "
+                    "profile is a DIFFERENT approximation over data we do not "
+                    "have. Comparing them certifies nothing: agreement would be a "
+                    "coincidence of two approximations and disagreement would be "
+                    "uninformative about either. Excluded from the gate BY "
+                    "DESIGN; the approximation chip is permanent.",
+    "instrument": "BINANCE perpetuals. A reading from an index, a spot pair or "
+                  "another venue is a different number, not a rounding difference.",
+    "substrate": "1h · source hlc3 (R1/R2)",
+}
+
+
+def parity_provenance_line(certified):
+    """One line for the top of a certified render.  None while uncertified --
+    the banner occupies that slot instead."""
+    if not certified:
+        return None
+    return ("PARITY CERTIFIED for the VWAP, oscillator and resampling families. "
+            "Volume profile, value area and LVN are FIXTURE-VERIFIED, NOT "
+            "chart-certified — they are approximations over klines and carry a "
+            "permanent `approximation` chip. Instrument: BINANCE perpetuals, "
+            "substrate 1h, source hlc3.")
+
 # R-1 (reviewer finding, 2026-08-03).  R:R = reward / risk is INVERSELY
 # PROPORTIONAL to the invalidation distance, so the tightest and least survivable
 # stops float to the top of a board sorted by R:R.  The arithmetic is exact and
@@ -1930,6 +1980,9 @@ def capture_envelope(date, slot, parity_certified=False, engine_version=None,
         "universe": list(universe or []),
         "parity_certified": bool(parity_certified),
         "banner": None if parity_certified else PARITY_BANNER,
+        "parity_provenance": (dict(PARITY_PROVENANCE) if parity_certified
+                              else None),
+        "parity_provenance_line": parity_provenance_line(parity_certified),
         "firewall": ("ops artifact, never study evidence; no journal reads, no "
                      "lockbox outcome statistics; confluence measures agreement "
                      "between tools, not edge"),

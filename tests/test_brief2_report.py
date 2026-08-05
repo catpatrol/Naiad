@@ -950,3 +950,62 @@ def test_f_b38_the_c4_normal_comparison_is_gone_from_the_interface():
 
     # and the replacement framing must be present, or the removal left a hole
     assert "episode" in low and "autocorrelated" in low
+
+
+# ============================== F-B46  cycle 6 item 4 -- CERTIFICATION FLIP
+#
+# F-B33 already asserts the BANNER appears while uncertified and clears when
+# certified. This asserts what REPLACES it, because certification is not
+# silence: with the warning gone, the recipes that were NOT chart-certified are
+# the ones most likely to be mistaken for verified.
+
+def test_f_b46_certified_capture_swaps_banner_for_provenance():
+    import brief2 as _B2
+    unc = _B2.capture_envelope("2026-08-06", "post_ny", parity_certified=False)
+    assert unc["banner"] == _B2.PARITY_BANNER
+    assert unc["parity_provenance"] is None
+    assert unc["parity_provenance_line"] is None
+
+    cert = _B2.capture_envelope("2026-08-06", "post_ny", parity_certified=True)
+    assert cert["banner"] is None, "the banner survived certification"
+    assert cert["parity_provenance_line"], "certification left an empty slot"
+    assert cert["parity_provenance"] is not None
+
+
+def test_f_b46_provenance_names_what_was_NOT_chart_certified():
+    """The half that matters. Volume profile, value area and LVN are excluded
+    from the gate BY DESIGN and must say so where the reader sees the numbers."""
+    import brief2 as _B2
+    cert = _B2.capture_envelope("2026-08-06", "post_ny", parity_certified=True)
+    pv = cert["parity_provenance"]
+
+    not_cert = " ".join(pv["fixture_verified_not_chart_certified"]).lower()
+    for must in ("profile", "lvn", "nesting"):
+        assert must in not_cert, f"{must} is not disclosed as un-certified"
+
+    # the REASON must be stated, not merely the fact -- otherwise a later cycle
+    # reads the exclusion as an oversight and "fixes" it by comparing two
+    # approximations to each other.
+    why = pv["why_excluded"].lower()
+    assert "approximation" in why and "certifies nothing" in why
+
+    line = cert["parity_provenance_line"].lower()
+    assert "not" in line and "chart-certified" in line
+    assert "approximation" in line
+
+    # and the certified list must actually name the families that passed
+    cert_txt = " ".join(pv["certified"]).lower()
+    for must in ("rolling_vwap", "anchored_vwap", "oscillator", "resample"):
+        assert must in cert_txt, f"{must} missing from the certified list"
+
+    # ANTI-VACUITY: the two lists must be disjoint. A recipe cannot be both.
+    assert not (set(pv["certified"]) & set(pv["fixture_verified_not_chart_certified"]))
+
+
+def test_f_b46_instrument_and_substrate_travel_with_the_certification():
+    """A certification is only meaningful attached to WHAT was certified."""
+    import brief2 as _B2
+    pv = _B2.capture_envelope("2026-08-06", "post_ny",
+                              parity_certified=True)["parity_provenance"]
+    assert "BINANCE" in pv["instrument"]
+    assert "1h" in pv["substrate"] and "hlc3" in pv["substrate"]

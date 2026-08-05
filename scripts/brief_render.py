@@ -651,6 +651,8 @@ tr.mute td{{color:{PAL['mute']}}}
 .prose{{margin:.5em 0;max-width:78ch}}
 .chip{{display:inline-block;border:1px solid;border-radius:999px;
  padding:1px 8px;font-size:11px;margin-right:6px;white-space:nowrap}}
+.certified{{background:{PAL['panel']};border-left:4px solid {PAL['ok']};color:{PAL['tx']};padding:12px 16px;margin:0 0 14px;border-radius:6px}}
+.certified .small{{color:{PAL['mute']};margin:6px 0 0}}
 .banner{{background:{PAL['warn']};color:#1b1200;font-weight:700;padding:12px 16px;
  border-radius:8px;margin-bottom:18px;letter-spacing:.02em}}
 .foot{{color:{PAL['mute']};font-size:12px;margin-top:28px;
@@ -663,6 +665,22 @@ def render(doc, generated_utc=None):
     banner = doc.get("banner")
     if banner:
         L.append(f'<div class="banner">{esc(banner)}</div>')
+    elif doc.get("parity_provenance_line"):
+        # C6 item 4.2 -- certification is not silence. The reader is told which
+        # recipes were checked against a chart AND which were not, because the
+        # ones that were not are the ones most likely to be mistaken for
+        # verified now that the warning banner is gone.
+        pv = doc.get("parity_provenance") or {}
+        L.append('<div class="certified">'
+                 f'<b>{esc(doc["parity_provenance_line"])}</b>')
+        if pv.get("certified"):
+            L.append('<p class="small">CERTIFIED: '
+                     + esc(" · ".join(pv["certified"])) + '</p>')
+        if pv.get("fixture_verified_not_chart_certified"):
+            L.append('<p class="small">FIXTURE-VERIFIED, NOT CHART-CERTIFIED: '
+                     + esc(" · ".join(pv["fixture_verified_not_chart_certified"]))
+                     + f' &mdash; {esc(pv.get("why_excluded", ""))}</p>')
+        L.append('</div>')
     L.append(f'<h1>Naiad daily brief &mdash; {esc(doc.get("date"))} '
              f'<span class="mute">{esc(doc.get("slot"))}</span></h1>')
     L.append(f'<p class="mute small">rules {esc(doc.get("rules_version"))} '

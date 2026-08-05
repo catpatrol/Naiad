@@ -1,9 +1,10 @@
 {
- "analytics_sha": "e8a4959b6f8d6fb22b593eb77da60b59fc9fa499bf4ef94b795f248651d20d66",
- "analytics_version": "1.4.0",
- "as_of_utc": "2026-08-05T19:32:09Z",
+ "analytics_sha": "ea5f02f21ca43b6b71e450b540ff09c807b305971e3eb8cff50bea84c985dc91",
+ "analytics_version": "1.5.0",
+ "as_of_utc": "2026-08-05T22:16:16Z",
  "assets": {
   "BTCUSDT": {
+   "anchor_degeneracy": [],
    "band_excursions": {
     "census_candidate": "H-VBR",
     "claims_nothing": "recording is OPS; whether a band touch pays is census work under G-7",
@@ -467,8 +468,8 @@
      "vwap_rolling": 28
     },
     "maturity_floors": {
-     "band_min_bars": 30,
-     "line_min_bars": 10,
+     "band_min_bars": 60,
+     "line_min_bars": 16,
      "note": "withheld levels still PRINT with a thin_sample chip; they are excluded from SCORING only",
      "ruling": "R3 (operator, 2026-08-05) -- INTERIM, 1h substrate",
      "withheld": [],
@@ -5891,6 +5892,7 @@
        "invalidation_is": "beyond sigma3",
        "kind": "prior_anchor",
        "name": "prior Y",
+       "no_preference": "NO preference is expressed between target A (pullback to the mean) and target B (rejection into auction). Which one occurs depends on how price is behaving at the level, and these definitions carry into range detection -- so they are MEASURED before being set in stone. Any discrimination rule invented now would be a guess wearing the clothes of a system.",
        "no_sizing": true,
        "rank": 1,
        "reward": 24239.193574016856,
@@ -5902,6 +5904,39 @@
        "sigma_atr": 7.442458025647291,
        "sigma_position": -2.860494556692732,
        "target": 99401.64063854833,
+       "target_a": {
+        "distance_atr": 14.884916051294582,
+        "kind": "pullback",
+        "label": "VWAP mean",
+        "reward": 24239.193574016856,
+        "rr": 2.0,
+        "target": 99401.64063854833
+       },
+       "target_b": {
+        "kind": "rejection",
+        "note": "price rejects the level and auctions toward the dominant volume node and the far side of traded value",
+        "targets": [
+         {
+          "distance_atr": 6.870430949419019,
+          "in_rejection_direction": true,
+          "kind": "poc",
+          "label": "30d POC",
+          "reward": 11188.084981198139,
+          "rr": 0.9231400332716662,
+          "target": 63974.36208333333
+         },
+         {
+          "distance_atr": 7.589455470341586,
+          "in_rejection_direction": true,
+          "kind": "va_edge",
+          "label": "30d VAL",
+          "reward": 12358.973314531468,
+          "rr": 1.0197511956651593,
+          "target": 62803.473750000005
+         }
+        ],
+        "window": "30d"
+       },
        "target_distance_atr": 14.884916051294582,
        "target_is": "the VWAP mean"
       }
@@ -5910,6 +5945,22 @@
      "entry_sigmas": [
       2,
       3
+     ],
+     "hinge": "a sigma band is a HINGE with two outcomes -- pullback to the mean (target A) or rejection into auction toward the dominant POC and the far side of value (target B). BOTH are printed; NEITHER is preferred.",
+     "hinge_geometry": [
+      {
+       "bars": 8760,
+       "entry": 75162.44706453147,
+       "entry_band": "-2s",
+       "mean_atr": 14.884916051294582,
+       "name": "prior Y",
+       "poc_atr": 6.870430949419019,
+       "poc_in_rejection_dir": true,
+       "side": "long",
+       "sigma_atr": 7.442458025647291,
+       "va_edge_atr": 7.589455470341586,
+       "va_edge_in_rejection_dir": true
+      }
      ],
      "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
      "skipped_thin_sample": [],
@@ -6134,6 +6185,139 @@
     },
     "sequencing_rule": "Part II is derivable from Part I's printed numbers alone; no hidden inputs (§2.2)"
    },
+   "depeg": {
+    "adjacent": {
+     "M<->Q": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "Q": "2026-07-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "Q": 858
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 0.0713162952312703,
+      "line_separation_bps": 18.259409931975302,
+      "longer": "Q",
+      "pair": "M<->Q",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Q has separated from M: 0.07 ATR apart, sigma ratio 2.64 -- it is now saying something M is not.",
+      "shorter": "M",
+      "sigma_ratio": 2.642019060558985
+     },
+     "Q<->Y": {
+      "anchor_utc": {
+       "Q": "2026-07-01T00:00:00Z",
+       "Y": "2026-01-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "Q": 858,
+       "Y": 5202
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 4.815208992608027,
+      "line_separation_bps": 1235.1133815415824,
+      "longer": "Y",
+      "pair": "Q<->Y",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Y has separated from Q: 4.82 ATR apart, sigma ratio 5.67 -- it is now saying something Q is not.",
+      "shorter": "Q",
+      "sigma_ratio": 5.671180342274923
+     },
+     "W<->M": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "W": "2026-08-03T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "W": 66
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 0.10820899534320141,
+      "line_separation_bps": 27.628656793948146,
+      "longer": "M",
+      "pair": "W<->M",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "M has separated from W: 0.11 ATR apart, sigma ratio 1.06 -- it is now saying something W is not.",
+      "shorter": "W",
+      "sigma_ratio": 1.0643695202686418
+     }
+    },
+    "adjacent_state_counts": {
+     "de-pegged": 3
+    },
+    "claims_nothing": "recording is OPS; whether a de-peg marks or precedes anything is H-VDP, census work under G-7",
+    "counterpart": {
+     "M<->30d": {
+      "anchored": "M",
+      "anchored_bars": 114,
+      "line_separation_atr": 0.2604359813216988,
+      "line_separation_bps": 66.23883175606754,
+      "pair": "M<->30d",
+      "peg_state": "de-pegged",
+      "prose": "30d is fully formed while M is 114 bars old; they sit 0.26 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "30d",
+      "rolling_bars": 720,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.575120043408414
+     },
+     "Q<->90d": {
+      "anchored": "Q",
+      "anchored_bars": 858,
+      "line_separation_atr": 1.6964262142008657,
+      "line_separation_bps": 416.9927250918921,
+      "pair": "Q<->90d",
+      "peg_state": "de-pegged",
+      "prose": "90d is fully formed while Q is 858 bars old; they sit 1.70 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "90d",
+      "rolling_bars": 2160,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.2450933816051224
+     },
+     "W<->7d": {
+      "anchored": "W",
+      "anchored_bars": 66,
+      "line_separation_atr": 0.025131275117065525,
+      "line_separation_bps": 6.42080815333703,
+      "pair": "W<->7d",
+      "peg_state": "de-pegged",
+      "prose": "7d is fully formed while W is 66 bars old; they sit 0.03 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "7d",
+      "rolling_bars": 168,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.8318340841272647
+     },
+     "Y<->365d": {
+      "anchored": "Y",
+      "anchored_bars": 5202,
+      "line_separation_atr": 7.432377627602335,
+      "line_separation_bps": 1450.6855481177713,
+      "pair": "Y<->365d",
+      "peg_state": "de-pegged",
+      "prose": "365d is fully formed while Y is 5202 bars old; they sit 7.43 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "365d",
+      "rolling_bars": 8760,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.46350705270354203
+     }
+    },
+    "events": [],
+    "peg_rules": {
+     "de-pegged": "otherwise",
+     "identical": "same anchor bar (exact)",
+     "pegged": "different anchors, lines within 0.02 daily-ATR AND sigma ratio in [0.9, 1.1]"
+    },
+    "structural_note": "January 1 anchors Y, Q and M simultaneously, so Y=Q until April 1; July 1 makes M=Q for all of July. Redundancy here is the CALENDAR, not the market",
+    "why": "an anchor carries independent information only once it UNPEGS from the next-shorter one; early in a period it is measuring the same bars"
+   },
    "flags": {
     "above_M_vwap": true,
     "above_VAH": true,
@@ -6191,7 +6375,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-01-17T19:32:09Z"
+     "window_start_utc": "2026-01-17T22:16:16Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -6215,7 +6399,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:32:09Z"
+     "window_start_utc": "2026-07-20T06:16:16Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -6239,7 +6423,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:32:09Z"
+     "window_start_utc": "2026-05-31T06:16:16Z"
     }
    },
    "last_bar_utc": {
@@ -6621,10 +6805,10 @@
      "bars": 744,
      "closed_utc_ms": 1785538800000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 744,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -6648,10 +6832,10 @@
      "bars": 2184,
      "closed_utc_ms": 1782860400000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 2184,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -6675,10 +6859,10 @@
      "bars": 8760,
      "closed_utc_ms": 1767222000000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 8760,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -6755,7 +6939,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": null,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:32:09Z",
+     "window_start_utc": "2026-07-20T06:16:16Z",
      "zone_distance_bps": 42.04,
      "zone_distance_gov_atr": 0.8784
     },
@@ -6823,7 +7007,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 12870,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:32:09Z",
+     "window_start_utc": "2026-05-31T06:16:16Z",
      "zone_distance_bps": 90.16,
      "zone_distance_gov_atr": 0.9826
     },
@@ -6891,7 +7075,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": 1267,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-01-17T19:32:09Z",
+     "window_start_utc": "2026-01-17T22:16:16Z",
      "zone_distance_bps": 0.0,
      "zone_distance_gov_atr": 0.0
     }
@@ -7072,10 +7256,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 720,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -7106,10 +7290,10 @@
        "overlap_ms": 5295600000
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 8760,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -7140,10 +7324,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 168,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -7174,10 +7358,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 2160,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -7225,39 +7409,51 @@
    },
    "staleness": [
     {
-     "age_hours": 0.75,
+     "age_hours": 3.49,
      "last_input_utc": "2026-08-05T18:47:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 0.79,
+     "age_hours": 3.52,
      "last_input_utc": "2026-08-05T18:45:00Z",
      "layer": "tpo",
      "native_tf": "30m"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 43.54,
+     "age_hours": 46.27,
      "last_input_utc": "2026-08-04T00:00:00Z",
      "layer": "funding",
      "native_tf": "8h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.52,
+     "last_input_utc": "2026-08-05T18:45:00Z",
+     "layer": "governor:1h",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.52,
+     "last_input_utc": "2026-08-05T18:45:00Z",
+     "layer": "radar:1h",
      "native_tf": "1h"
     }
    ],
@@ -7513,32 +7709,32 @@
    "symbol": "BTCUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:32:19Z",
-     "basis_bps": -5.181,
-     "index_price": 64922.735,
-     "mark_price": 64889.1
+     "at_utc": "2026-08-05T22:16:25Z",
+     "basis_bps": -3.506,
+     "index_price": 64686.87956522,
+     "mark_price": 64664.2
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:32:21Z",
+    "fetched_utc": "2026-08-05T22:16:27Z",
     "next_funding": {
      "interest_rate": 0.0001,
-     "last_funding_rate": 3.65e-06,
+     "last_funding_rate": 4.058e-05,
      "next_funding_utc": "2026-08-06T00:00:00Z"
     },
     "open_interest": {
-     "at_utc": "2026-08-05T19:00:00Z",
-     "change_24h_pct": -0.0599,
-     "change_24h_percentile": 48.21,
-     "change_7d_pct": 5.5888,
-     "level": 108965.842,
-     "percentile": 85.4,
+     "at_utc": "2026-08-05T22:00:00Z",
+     "change_24h_pct": -0.9604,
+     "change_24h_percentile": 26.74,
+     "change_7d_pct": 4.0775,
+     "level": 107350.677,
+     "percentile": 69.0,
      "samples": 500
     },
     "provenance": "fetched",
     "top_trader_ratio": {
-     "at_utc": "2026-08-05T19:00:00Z",
+     "at_utc": "2026-08-05T22:00:00Z",
      "percentile_7d": 0.6,
-     "ratio": 1.2277,
+     "ratio": 1.2017,
      "samples": 168
     }
    },
@@ -7546,11 +7742,11 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 238,
+     "brackets": 233,
      "poc": 63059.7275,
      "provenance": "approximation",
-     "vah": 64095.191,
-     "val": 62714.573
+     "vah": 64223.026,
+     "val": 62893.542
     },
     "session": {
      "bins": 100,
@@ -7669,12 +7865,12 @@
      "1h": {
       "atr": 309.9825187,
       "percentile": 12.62,
-      "sample_bars": 8758
+      "sample_bars": 8755
      },
      "4h": {
       "atr": 594.29488231,
       "percentile": 2.51,
-      "sample_bars": 2189
+      "sample_bars": 2188
      }
     },
     "compression_streak_days": 0,
@@ -7688,7 +7884,7 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28754,
+     "bars": 28590,
      "bin_width": 23.4765,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -7699,10 +7895,10 @@
      "vah": 65186.839,
      "val": 63073.954,
      "value_area_fraction": 0.7,
-     "volume_total": 2412630.568
+     "volume_total": 2408583.437
     },
     "5d": {
-     "bars": 7154,
+     "bars": 6990,
      "bin_width": 12.796,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -7711,9 +7907,9 @@
      "range_high": 64788.0,
      "range_low": 62228.8,
      "vah": 64532.08,
-     "val": 63098.928,
+     "val": 63137.316,
      "value_area_fraction": 0.7,
-     "volume_total": 552827.64
+     "volume_total": 545039.884
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -7953,41 +8149,42 @@
     "provenance": "computed",
     "rolling": {
      "30d": {
-      "bars": 718,
-      "distance_bps": 110.33,
-      "lower_1sigma": 63011.87144394,
-      "sigma": 1015.34807481,
-      "upper_1sigma": 65042.56759357,
-      "vwap": 64027.21951875
+      "bars": 715,
+      "distance_bps": 110.53,
+      "lower_1sigma": 63007.38795119,
+      "sigma": 1018.51204954,
+      "upper_1sigma": 65044.41205026,
+      "vwap": 64025.90000072
      },
      "365d": {
-      "bars": 8758,
-      "distance_bps": -2240.75,
-      "lower_1sigma": 64570.51978461,
-      "sigma": 18857.11921214,
-      "upper_1sigma": 102284.75820889,
-      "vwap": 83427.63899675
+      "bars": 8755,
+      "distance_bps": -2240.31,
+      "lower_1sigma": 64568.11476071,
+      "sigma": 18854.8032611,
+      "upper_1sigma": 102277.72128291,
+      "vwap": 83422.91802181
      },
      "7d": {
-      "bars": 166,
-      "distance_bps": 159.25,
-      "lower_1sigma": 63052.66381843,
-      "sigma": 666.20054253,
-      "upper_1sigma": 64385.06490348,
-      "vwap": 63718.86436096
+      "bars": 163,
+      "distance_bps": 159.08,
+      "lower_1sigma": 63043.61933757,
+      "sigma": 676.30998394,
+      "upper_1sigma": 64396.23930546,
+      "vwap": 63719.92932151
      },
      "90d": {
-      "bars": 2158,
-      "distance_bps": -227.46,
-      "lower_1sigma": 59959.05902141,
-      "sigma": 6281.23845848,
-      "upper_1sigma": 72521.53593837,
-      "vwap": 66240.29747989
+      "bars": 2155,
+      "distance_bps": -225.83,
+      "lower_1sigma": 59957.43059608,
+      "sigma": 6271.85302658,
+      "upper_1sigma": 72501.13664924,
+      "vwap": 66229.28362266
      }
     }
    }
   },
   "ETHUSDT": {
+   "anchor_degeneracy": [],
    "band_excursions": {
     "census_candidate": "H-VBR",
     "claims_nothing": "recording is OPS; whether a band touch pays is census work under G-7",
@@ -8460,8 +8657,8 @@
      "vwap_rolling": 28
     },
     "maturity_floors": {
-     "band_min_bars": 30,
-     "line_min_bars": 10,
+     "band_min_bars": 60,
+     "line_min_bars": 16,
      "note": "withheld levels still PRINT with a thin_sample chip; they are excluded from SCORING only",
      "ruling": "R3 (operator, 2026-08-05) -- INTERIM, 1h substrate",
      "withheld": [],
@@ -13498,6 +13695,7 @@
        "invalidation_is": "sigma3 plus one band width",
        "kind": "anchored",
        "name": "anchored W",
+       "no_preference": "NO preference is expressed between target A (pullback to the mean) and target B (rejection into auction). Which one occurs depends on how price is behaving at the level, and these definitions carry into range detection -- so they are MEASURED before being set in stone. Any discrimination rule invented now would be a guess wearing the clothes of a system.",
        "no_sizing": true,
        "rank": 1,
        "reward": 41.45693579999988,
@@ -13509,6 +13707,39 @@
        "sigma_atr": 0.21442941900840523,
        "sigma_position": 3.6114310134325094,
        "target": 1866.02371211,
+       "target_a": {
+        "distance_atr": 0.6432882570252139,
+        "kind": "pullback",
+        "label": "VWAP mean",
+        "reward": 41.45693579999988,
+        "rr": 2.9999999999999836,
+        "target": 1866.02371211
+       },
+       "target_b": {
+        "kind": "rejection",
+        "note": "price rejects the level and auctions toward the dominant volume node and the far side of traded value",
+        "targets": [
+         {
+          "distance_atr": 0.6038647306439717,
+          "in_rejection_direction": false,
+          "kind": "poc",
+          "label": "30d POC",
+          "reward": 38.91627290999986,
+          "rr": 2.816146839535576,
+          "target": 1868.564375
+         },
+         {
+          "distance_atr": 0.5812091649925275,
+          "in_rejection_direction": true,
+          "kind": "va_edge",
+          "label": "30d VAH",
+          "reward": 37.456227090000084,
+          "rr": 2.7104917211464516,
+          "target": 1944.9368749999999
+         }
+        ],
+        "window": "30d"
+       },
        "target_distance_atr": 0.6432882570252139,
        "target_is": "the VWAP mean"
       },
@@ -13529,6 +13760,7 @@
        "invalidation_is": "sigma3 plus one band width",
        "kind": "anchored",
        "name": "anchored M",
+       "no_preference": "NO preference is expressed between target A (pullback to the mean) and target B (rejection into auction). Which one occurs depends on how price is behaving at the level, and these definitions carry into range detection -- so they are MEASURED before being set in stone. Any discrimination rule invented now would be a guess wearing the clothes of a system.",
        "no_sizing": true,
        "rank": 2,
        "reward": 43.83929001000001,
@@ -13540,6 +13772,39 @@
        "sigma_atr": 0.22675176795351293,
        "sigma_position": 3.491849240603163,
        "target": 1864.90326949,
+       "target_a": {
+        "distance_atr": 0.680255303860539,
+        "kind": "pullback",
+        "label": "VWAP mean",
+        "reward": 43.83929001000001,
+        "rr": 3.0,
+        "target": 1864.90326949
+       },
+       "target_b": {
+        "kind": "rejection",
+        "note": "price rejects the level and auctions toward the dominant volume node and the far side of traded value",
+        "targets": [
+         {
+          "distance_atr": 0.6234458427446672,
+          "in_rejection_direction": false,
+          "kind": "poc",
+          "label": "30d POC",
+          "reward": 40.17818450000004,
+          "rr": 2.7494640874089304,
+          "target": 1868.564375
+         },
+         {
+          "distance_atr": 0.561628052891832,
+          "in_rejection_direction": true,
+          "kind": "va_edge",
+          "label": "30d VAH",
+          "reward": 36.1943154999999,
+          "rr": 2.4768408994587108,
+          "target": 1944.9368749999999
+         }
+        ],
+        "window": "30d"
+       },
        "target_distance_atr": 0.680255303860539,
        "target_is": "the VWAP mean"
       }
@@ -13548,6 +13813,35 @@
      "entry_sigmas": [
       2,
       3
+     ],
+     "hinge": "a sigma band is a HINGE with two outcomes -- pullback to the mean (target A) or rejection into auction toward the dominant POC and the far side of value (target B). BOTH are printed; NEITHER is preferred.",
+     "hinge_geometry": [
+      {
+       "bars": 66,
+       "entry": 1907.4806479099998,
+       "entry_band": "+3s",
+       "mean_atr": 0.6432882570252139,
+       "name": "anchored W",
+       "poc_atr": 0.6038647306439717,
+       "poc_in_rejection_dir": false,
+       "side": "short",
+       "sigma_atr": 0.21442941900840523,
+       "va_edge_atr": 0.5812091649925275,
+       "va_edge_in_rejection_dir": true
+      },
+      {
+       "bars": 114,
+       "entry": 1908.7425595,
+       "entry_band": "+3s",
+       "mean_atr": 0.680255303860539,
+       "name": "anchored M",
+       "poc_atr": 0.6234458427446672,
+       "poc_in_rejection_dir": false,
+       "side": "short",
+       "sigma_atr": 0.22675176795351293,
+       "va_edge_atr": 0.561628052891832,
+       "va_edge_in_rejection_dir": true
+      }
      ],
      "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
      "skipped_thin_sample": [],
@@ -13770,6 +14064,141 @@
     },
     "sequencing_rule": "Part II is derivable from Part I's printed numbers alone; no hidden inputs (§2.2)"
    },
+   "depeg": {
+    "adjacent": {
+     "M<->Q": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "Q": "2026-07-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "Q": 858
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 0.5467853938822856,
+      "line_separation_bps": 188.95229445137076,
+      "longer": "Q",
+      "pair": "M<->Q",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Q has separated from M: 0.55 ATR apart, sigma ratio 5.93 -- it is now saying something M is not.",
+      "shorter": "M",
+      "sigma_ratio": 5.931127041534859
+     },
+     "Q<->Y": {
+      "anchor_utc": {
+       "Q": "2026-07-01T00:00:00Z",
+       "Y": "2026-01-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "Q": 858,
+       "Y": 5202
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 4.58765002572836,
+      "line_separation_bps": 1615.8839134138018,
+      "longer": "Y",
+      "pair": "Q<->Y",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Y has separated from Q: 4.59 ATR apart, sigma ratio 4.61 -- it is now saying something Q is not.",
+      "shorter": "Q",
+      "sigma_ratio": 4.60834485704306
+     },
+     "W<->M": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "W": "2026-08-03T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "W": 66
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": false,
+      "line_separation_atr": 0.017385934734629693,
+      "line_separation_bps": 6.004439347306108,
+      "longer": "M",
+      "pair": "W<->M",
+      "peg_state": "pegged",
+      "previous_peg_state": null,
+      "prose": "M currently duplicates W -- lines 0.017 ATR apart, sigma ratio 1.06. It carries no independent information yet; a DE-PEG is what makes it informative.",
+      "redundant_with": "W",
+      "shorter": "W",
+      "sigma_ratio": 1.0574657572738408
+     }
+    },
+    "adjacent_state_counts": {
+     "de-pegged": 2,
+     "pegged": 1
+    },
+    "claims_nothing": "recording is OPS; whether a de-peg marks or precedes anything is H-VDP, census work under G-7",
+    "counterpart": {
+     "M<->30d": {
+      "anchored": "M",
+      "anchored_bars": 114,
+      "line_separation_atr": 0.07121547332868787,
+      "line_separation_bps": 24.670601675499753,
+      "pair": "M<->30d",
+      "peg_state": "de-pegged",
+      "prose": "30d is fully formed while M is 114 bars old; they sit 0.07 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "30d",
+      "rolling_bars": 720,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.25353702153206475
+     },
+     "Q<->90d": {
+      "anchored": "Q",
+      "anchored_bars": 858,
+      "line_separation_atr": 0.21261672298641696,
+      "line_separation_bps": 74.33220795891658,
+      "pair": "Q<->90d",
+      "peg_state": "de-pegged",
+      "prose": "90d is fully formed while Q is 858 bars old; they sit 0.21 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "90d",
+      "rolling_bars": 2160,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.4253566199521374
+     },
+     "W<->7d": {
+      "anchored": "W",
+      "anchored_bars": 66,
+      "line_separation_atr": 0.1804471027012375,
+      "line_separation_bps": 61.93358579990858,
+      "pair": "W<->7d",
+      "peg_state": "de-pegged",
+      "prose": "7d is fully formed while W is 66 bars old; they sit 0.18 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "7d",
+      "rolling_bars": 168,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.5756683404358721
+     },
+     "Y<->365d": {
+      "anchored": "Y",
+      "anchored_bars": 5202,
+      "line_separation_atr": 10.980454466075473,
+      "line_separation_bps": 2497.881578101999,
+      "pair": "Y<->365d",
+      "peg_state": "de-pegged",
+      "prose": "365d is fully formed while Y is 5202 bars old; they sit 10.98 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "365d",
+      "rolling_bars": 8760,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.4090656609650729
+     }
+    },
+    "events": [],
+    "peg_rules": {
+     "de-pegged": "otherwise",
+     "identical": "same anchor bar (exact)",
+     "pegged": "different anchors, lines within 0.02 daily-ATR AND sigma ratio in [0.9, 1.1]"
+    },
+    "structural_note": "January 1 anchors Y, Q and M simultaneously, so Y=Q until April 1; July 1 makes M=Q for all of July. Redundancy here is the CALENDAR, not the market",
+    "why": "an anchor carries independent information only once it UNPEGS from the next-shorter one; early in a period it is measuring the same bars"
+   },
    "flags": {
     "above_M_vwap": true,
     "above_VAH": true,
@@ -13827,7 +14256,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:32:09Z"
+     "window_start_utc": "2026-01-17T22:16:16Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -13851,7 +14280,7 @@
      "tier": "-",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:32:09Z"
+     "window_start_utc": "2026-07-20T06:16:16Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -13875,7 +14304,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:32:09Z"
+     "window_start_utc": "2026-05-31T06:16:16Z"
     }
    },
    "last_bar_utc": {
@@ -14217,10 +14646,10 @@
      "bars": 744,
      "closed_utc_ms": 1785538800000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 744,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -14244,10 +14673,10 @@
      "bars": 2184,
      "closed_utc_ms": 1782860400000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 2184,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -14271,10 +14700,10 @@
      "bars": 8760,
      "closed_utc_ms": 1767222000000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 8760,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -14351,7 +14780,7 @@
      "tier": "-",
      "tpw_exec_bars_ago": null,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:32:09Z",
+     "window_start_utc": "2026-07-20T06:16:16Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     },
@@ -14419,7 +14848,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 1884,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:32:09Z",
+     "window_start_utc": "2026-05-31T06:16:16Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     },
@@ -14487,7 +14916,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 3367,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:32:09Z",
+     "window_start_utc": "2026-01-17T22:16:16Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     }
@@ -14623,10 +15052,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 720,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -14657,10 +15086,10 @@
        "overlap_ms": 5295600000
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 8760,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -14691,10 +15120,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 168,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -14725,10 +15154,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 2160,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -14776,33 +15205,45 @@
    },
    "staleness": [
     {
-     "age_hours": 0.74,
+     "age_hours": 3.47,
      "last_input_utc": "2026-08-05T18:48:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 0.79,
+     "age_hours": 3.52,
      "last_input_utc": "2026-08-05T18:45:00Z",
      "layer": "tpo",
      "native_tf": "30m"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.52,
+     "last_input_utc": "2026-08-05T18:45:00Z",
+     "layer": "governor:1h",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.52,
+     "last_input_utc": "2026-08-05T18:45:00Z",
+     "layer": "radar:1h",
      "native_tf": "1h"
     }
    ],
@@ -15058,32 +15499,32 @@
    "symbol": "ETHUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:32:30Z",
-     "basis_bps": -4.214,
-     "index_price": 1919.13790698,
-     "mark_price": 1918.32915504
+     "at_utc": "2026-08-05T22:16:40Z",
+     "basis_bps": -4.74,
+     "index_price": 1912.35860465,
+     "mark_price": 1911.45217054
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:32:31Z",
+    "fetched_utc": "2026-08-05T22:16:41Z",
     "next_funding": {
      "interest_rate": 0.0001,
-     "last_funding_rate": 5.463e-05,
+     "last_funding_rate": 3.215e-05,
      "next_funding_utc": "2026-08-06T00:00:00Z"
     },
     "open_interest": {
-     "at_utc": "2026-08-05T19:00:00Z",
-     "change_24h_pct": 0.046,
-     "change_24h_percentile": 52.0,
-     "change_7d_pct": 2.4169,
-     "level": 2342188.442,
-     "percentile": 71.4,
+     "at_utc": "2026-08-05T22:00:00Z",
+     "change_24h_pct": -0.5383,
+     "change_24h_percentile": 38.95,
+     "change_7d_pct": 2.4578,
+     "level": 2316565.331,
+     "percentile": 45.2,
      "samples": 500
     },
     "provenance": "fetched",
     "top_trader_ratio": {
-     "at_utc": "2026-08-05T19:00:00Z",
+     "at_utc": "2026-08-05T22:00:00Z",
      "percentile_7d": 0.6,
-     "ratio": 1.474,
+     "ratio": 1.4248,
      "samples": 168
     }
    },
@@ -15091,7 +15532,7 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 238,
+     "brackets": 233,
      "poc": 1868.0381,
      "provenance": "approximation",
      "vah": 1878.1632,
@@ -15213,13 +15654,13 @@
      },
      "1h": {
       "atr": 13.1816871,
-      "percentile": 14.99,
-      "sample_bars": 8758
+      "percentile": 15.0,
+      "sample_bars": 8755
      },
      "4h": {
       "atr": 21.94123813,
       "percentile": 0.91,
-      "sample_bars": 2189
+      "sample_bars": 2188
      }
     },
     "compression_streak_days": 2,
@@ -15233,7 +15674,7 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28755,
+     "bars": 28591,
      "bin_width": 0.8977,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -15244,21 +15685,21 @@
      "vah": 1924.5472,
      "val": 1853.6289,
      "value_area_fraction": 0.7,
-     "volume_total": 66302398.124
+     "volume_total": 66134667.457
     },
     "5d": {
-     "bars": 7155,
+     "bars": 6991,
      "bin_width": 0.5329,
      "bins": 200,
      "method": "uniform-spread kline CDF",
-     "poc": 1867.23875,
+     "poc": 1868.30455,
      "provenance": "approximation",
      "range_high": 1927.19,
      "range_low": 1820.61,
      "vah": 1881.8935,
-     "val": 1853.1169,
+     "val": 1852.584,
      "value_area_fraction": 0.7,
-     "volume_total": 14606036.119
+     "volume_total": 14419213.818
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -15491,41 +15932,42 @@
     "provenance": "computed",
     "rolling": {
      "30d": {
-      "bars": 718,
-      "distance_bps": 298.27,
-      "lower_1sigma": 1802.82256875,
-      "sigma": 57.61598563,
-      "upper_1sigma": 1918.05454001,
-      "vwap": 1860.43855438
+      "bars": 715,
+      "distance_bps": 296.37,
+      "lower_1sigma": 1803.12512707,
+      "sigma": 57.65747405,
+      "upper_1sigma": 1918.44007517,
+      "vwap": 1860.78260112
      },
      "365d": {
-      "bars": 8758,
-      "distance_bps": -3236.67,
-      "lower_1sigma": 1856.37446255,
-      "sigma": 976.4452405,
-      "upper_1sigma": 3809.26494354,
-      "vwap": 2832.81970304
+      "bars": 8755,
+      "distance_bps": -3236.24,
+      "lower_1sigma": 1856.14648057,
+      "sigma": 976.49402713,
+      "upper_1sigma": 3809.13453483,
+      "vwap": 2832.6405077
      },
      "7d": {
-      "bars": 166,
-      "distance_bps": 212.95,
-      "lower_1sigma": 1852.54815214,
-      "sigma": 23.43197035,
-      "upper_1sigma": 1899.41209285,
-      "vwap": 1875.9801225
+      "bars": 163,
+      "distance_bps": 215.34,
+      "lower_1sigma": 1851.9730116,
+      "sigma": 23.5693645,
+      "upper_1sigma": 1899.11174061,
+      "vwap": 1875.5423761
      },
      "90d": {
-      "bars": 2158,
-      "distance_bps": 395.51,
-      "lower_1sigma": 1639.56507629,
-      "sigma": 203.47154839,
-      "upper_1sigma": 2046.50817308,
-      "vwap": 1843.03662468
+      "bars": 2155,
+      "distance_bps": 398.64,
+      "lower_1sigma": 1639.49062585,
+      "sigma": 202.99040487,
+      "upper_1sigma": 2045.47143559,
+      "vwap": 1842.48103072
      }
     }
    }
   },
   "FARTCOINUSDT": {
+   "anchor_degeneracy": [],
    "band_excursions": {
     "census_candidate": "H-VBR",
     "claims_nothing": "recording is OPS; whether a band touch pays is census work under G-7",
@@ -15669,7 +16111,7 @@
       "location": {
        "invalidation": 0.14291921,
        "invalidation_note": "anchored Q-VWAP cross",
-       "vah": 0.1393595,
+       "vah": 0.139231,
        "val": 0.126124,
        "vote": 0,
        "vwap_level": 0.14291921
@@ -16010,8 +16452,8 @@
      "vwap_rolling": 28
     },
     "maturity_floors": {
-     "band_min_bars": 30,
-     "line_min_bars": 10,
+     "band_min_bars": 60,
+     "line_min_bars": 16,
      "note": "withheld levels still PRINT with a thin_sample chip; they are excluded from SCORING only",
      "ruling": "R3 (operator, 2026-08-05) -- INTERIM, 1h substrate",
      "withheld": [],
@@ -21810,6 +22252,8 @@
       2,
       3
      ],
+     "hinge": "a sigma band is a HINGE with two outcomes -- pullback to the mean (target A) or rejection into auction toward the dominant POC and the far side of value (target B). BOTH are printed; NEITHER is preferred.",
+     "hinge_geometry": [],
      "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
      "skipped_thin_sample": [],
      "thin_sample_gate": "a draft requires bars >= 30, so a freshly-opened anchor cannot manufacture a setup from a two-bar sigma",
@@ -22037,6 +22481,139 @@
     },
     "sequencing_rule": "Part II is derivable from Part I's printed numbers alone; no hidden inputs (§2.2)"
    },
+   "depeg": {
+    "adjacent": {
+     "M<->Q": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "Q": "2026-07-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "Q": 858
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 1.3259602677199323,
+      "line_separation_bps": 920.1933615371108,
+      "longer": "Q",
+      "pair": "M<->Q",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Q has separated from M: 1.33 ATR apart, sigma ratio 4.71 -- it is now saying something M is not.",
+      "shorter": "M",
+      "sigma_ratio": 4.713489852765619
+     },
+     "Q<->Y": {
+      "anchor_utc": {
+       "Q": "2026-07-01T00:00:00Z",
+       "Y": "2026-01-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "Q": 858,
+       "Y": 5202
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 7.246850101239192,
+      "line_separation_bps": 4605.401891040399,
+      "longer": "Y",
+      "pair": "Q<->Y",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Y has separated from Q: 7.25 ATR apart, sigma ratio 5.65 -- it is now saying something Q is not.",
+      "shorter": "Q",
+      "sigma_ratio": 5.64765262795705
+     },
+     "W<->M": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "W": "2026-08-03T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "W": 66
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 0.1505080229120801,
+      "line_separation_bps": 103.37024818236289,
+      "longer": "M",
+      "pair": "W<->M",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "M has separated from W: 0.15 ATR apart, sigma ratio 1.00 -- it is now saying something W is not.",
+      "shorter": "W",
+      "sigma_ratio": 1.0035572021598258
+     }
+    },
+    "adjacent_state_counts": {
+     "de-pegged": 3
+    },
+    "claims_nothing": "recording is OPS; whether a de-peg marks or precedes anything is H-VDP, census work under G-7",
+    "counterpart": {
+     "M<->30d": {
+      "anchored": "M",
+      "anchored_bars": 114,
+      "line_separation_atr": 0.7265608276170736,
+      "line_separation_bps": 480.0171251422744,
+      "pair": "M<->30d",
+      "peg_state": "de-pegged",
+      "prose": "30d is fully formed while M is 114 bars old; they sit 0.73 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "30d",
+      "rolling_bars": 720,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.2749687239323048
+     },
+     "Q<->90d": {
+      "anchored": "Q",
+      "anchored_bars": 858,
+      "line_separation_atr": 0.7884039201394117,
+      "line_separation_bps": 477.12807851813454,
+      "pair": "Q<->90d",
+      "peg_state": "de-pegged",
+      "prose": "90d is fully formed while Q is 858 bars old; they sit 0.79 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "90d",
+      "rolling_bars": 2160,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.39125073347121464
+     },
+     "W<->7d": {
+      "anchored": "W",
+      "anchored_bars": 66,
+      "line_separation_atr": 0.4402105530210435,
+      "line_separation_bps": 311.76648555341086,
+      "pair": "W<->7d",
+      "peg_state": "de-pegged",
+      "prose": "7d is fully formed while W is 66 bars old; they sit 0.44 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "7d",
+      "rolling_bars": 168,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.6127459705946439
+     },
+     "Y<->365d": {
+      "anchored": "Y",
+      "anchored_bars": 5202,
+      "line_separation_atr": 19.28490635127609,
+      "line_separation_bps": 4562.606660497175,
+      "pair": "Y<->365d",
+      "peg_state": "de-pegged",
+      "prose": "365d is fully formed while Y is 5202 bars old; they sit 19.28 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "365d",
+      "rolling_bars": 8760,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.30612857264026366
+     }
+    },
+    "events": [],
+    "peg_rules": {
+     "de-pegged": "otherwise",
+     "identical": "same anchor bar (exact)",
+     "pegged": "different anchors, lines within 0.02 daily-ATR AND sigma ratio in [0.9, 1.1]"
+    },
+    "structural_note": "January 1 anchors Y, Q and M simultaneously, so Y=Q until April 1; July 1 makes M=Q for all of July. Redundancy here is the CALENDAR, not the market",
+    "why": "an anchor carries independent information only once it UNPEGS from the next-shorter one; early in a period it is measuring the same bars"
+   },
    "flags": {
     "above_M_vwap": true,
     "above_VAH": false,
@@ -22069,7 +22646,7 @@
     ],
     "percentile_vs_full_history": 83.95,
     "provenance": "computed",
-    "records_7d": 42
+    "records_7d": 41
    },
    "governor": {
     "12h": {
@@ -22094,7 +22671,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:32:09Z"
+     "window_start_utc": "2026-01-17T22:16:16Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -22118,7 +22695,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:32:09Z"
+     "window_start_utc": "2026-07-20T06:16:16Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -22142,7 +22719,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:32:09Z"
+     "window_start_utc": "2026-05-31T06:16:16Z"
     }
    },
    "last_bar_utc": {
@@ -22464,10 +23041,10 @@
      "bars": 744,
      "closed_utc_ms": 1785538800000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 744,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -22491,10 +23068,10 @@
      "bars": 2184,
      "closed_utc_ms": 1782860400000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 2184,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -22518,10 +23095,10 @@
      "bars": 8760,
      "closed_utc_ms": 1767222000000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 8760,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -22598,7 +23175,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 27733,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:32:09Z",
+     "window_start_utc": "2026-07-20T06:16:16Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     },
@@ -22666,7 +23243,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 12879,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:32:09Z",
+     "window_start_utc": "2026-05-31T06:16:16Z",
      "zone_distance_bps": 0.0,
      "zone_distance_gov_atr": 0.0
     },
@@ -22734,7 +23311,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": 135,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:32:09Z",
+     "window_start_utc": "2026-01-17T22:16:16Z",
      "zone_distance_bps": 67.54,
      "zone_distance_gov_atr": 0.156
     }
@@ -22859,10 +23436,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 720,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -22893,10 +23470,10 @@
        "overlap_ms": 5295600000
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 8760,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -22927,10 +23504,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 168,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -22961,10 +23538,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 2160,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -23012,33 +23589,45 @@
    },
    "staleness": [
     {
-     "age_hours": 0.7,
+     "age_hours": 3.44,
      "last_input_utc": "2026-08-05T18:50:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 0.7,
+     "age_hours": 3.44,
      "last_input_utc": "2026-08-05T18:50:00Z",
      "layer": "tpo",
      "native_tf": "30m"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.44,
+     "last_input_utc": "2026-08-05T18:50:00Z",
+     "layer": "governor:1h",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.44,
+     "last_input_utc": "2026-08-05T18:50:00Z",
+     "layer": "radar:1h",
      "native_tf": "1h"
     }
    ],
@@ -23294,32 +23883,32 @@
    "symbol": "FARTCOINUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:33:55Z",
-     "basis_bps": 0.821,
-     "index_price": 0.13338905,
-     "mark_price": 0.1334
+     "at_utc": "2026-08-05T22:18:08Z",
+     "basis_bps": 14.82,
+     "index_price": 0.1338017,
+     "mark_price": 0.134
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:33:56Z",
+    "fetched_utc": "2026-08-05T22:18:09Z",
     "next_funding": {
      "interest_rate": 0.0001,
      "last_funding_rate": 5e-05,
-     "next_funding_utc": "2026-08-05T20:00:00Z"
+     "next_funding_utc": "2026-08-06T00:00:00Z"
     },
     "open_interest": {
-     "at_utc": "2026-08-05T19:00:00Z",
-     "change_24h_pct": 1.4258,
-     "change_24h_percentile": 70.32,
-     "change_7d_pct": 7.5217,
-     "level": 82238248.5,
-     "percentile": 91.8,
+     "at_utc": "2026-08-05T22:00:00Z",
+     "change_24h_pct": 2.307,
+     "change_24h_percentile": 81.47,
+     "change_7d_pct": 7.7914,
+     "level": 83192067.7,
+     "percentile": 96.4,
      "samples": 500
     },
     "provenance": "fetched",
     "top_trader_ratio": {
-     "at_utc": "2026-08-05T19:00:00Z",
-     "percentile_7d": 98.21,
-     "ratio": 2.126,
+     "at_utc": "2026-08-05T22:00:00Z",
+     "percentile_7d": 95.83,
+     "ratio": 2.0931,
      "samples": 168
     }
    },
@@ -23327,11 +23916,11 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 238,
-     "poc": 0.130751,
+     "brackets": 233,
+     "poc": 0.1307375,
      "provenance": "approximation",
-     "vah": 0.132704,
-     "val": 0.126008
+     "vah": 0.132635,
+     "val": 0.1262
     },
     "session": {
      "bins": 100,
@@ -23450,12 +24039,12 @@
      "1h": {
       "atr": 0.00177957,
       "percentile": 4.6,
-      "sample_bars": 8758
+      "sample_bars": 8755
      },
      "4h": {
       "atr": 0.00350305,
       "percentile": 3.56,
-      "sample_bars": 2189
+      "sample_bars": 2188
      }
     },
     "compression_streak_days": 2,
@@ -23469,7 +24058,7 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28752,
+     "bars": 28588,
      "bin_width": 0.0001285,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -23477,24 +24066,24 @@
      "provenance": "approximation",
      "range_high": 0.1436,
      "range_low": 0.1179,
-     "vah": 0.1393595,
+     "vah": 0.139231,
      "val": 0.126124,
      "value_area_fraction": 0.7,
-     "volume_total": 2515370436.8
+     "volume_total": 2506947377.7
     },
     "5d": {
-     "bars": 7153,
-     "bin_width": 9.3e-05,
+     "bars": 6989,
+     "bin_width": 8.25e-05,
      "bins": 200,
      "method": "uniform-spread kline CDF",
-     "poc": 0.1302395,
+     "poc": 0.13020125,
      "provenance": "approximation",
      "range_high": 0.1394,
-     "range_low": 0.1208,
-     "vah": 0.134006,
-     "val": 0.126938,
+     "range_low": 0.1229,
+     "vah": 0.1340375,
+     "val": 0.127025,
      "value_area_fraction": 0.7,
-     "volume_total": 651369528.6
+     "volume_total": 639054796.1
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -23755,41 +24344,42 @@
     "provenance": "computed",
     "rolling": {
      "30d": {
-      "bars": 718,
-      "distance_bps": -223.64,
-      "lower_1sigma": 0.12661017,
-      "sigma": 0.01076197,
-      "upper_1sigma": 0.1481341,
-      "vwap": 0.13737213
+      "bars": 715,
+      "distance_bps": -212.78,
+      "lower_1sigma": 0.12663694,
+      "sigma": 0.01058283,
+      "upper_1sigma": 0.1478026,
+      "vwap": 0.13721977
      },
      "365d": {
-      "bars": 8758,
-      "distance_bps": -6500.68,
-      "lower_1sigma": 0.12383307,
-      "sigma": 0.25995529,
-      "upper_1sigma": 0.64374366,
-      "vwap": 0.38378837
+      "bars": 8755,
+      "distance_bps": -6499.08,
+      "lower_1sigma": 0.12379675,
+      "sigma": 0.25981638,
+      "upper_1sigma": 0.64342951,
+      "vwap": 0.38361313
      },
      "7d": {
-      "bars": 166,
-      "distance_bps": 453.56,
-      "lower_1sigma": 0.1236676,
-      "sigma": 0.00480532,
-      "upper_1sigma": 0.13327824,
-      "vwap": 0.12847292
+      "bars": 163,
+      "distance_bps": 429.57,
+      "lower_1sigma": 0.12417234,
+      "sigma": 0.00459609,
+      "upper_1sigma": 0.13336452,
+      "vwap": 0.12876843
      },
      "90d": {
-      "bars": 2158,
-      "distance_bps": -1044.85,
-      "lower_1sigma": 0.11407238,
-      "sigma": 0.03589716,
-      "upper_1sigma": 0.1858667,
-      "vwap": 0.14996954
+      "bars": 2155,
+      "distance_bps": -1036.26,
+      "lower_1sigma": 0.11408636,
+      "sigma": 0.03573953,
+      "upper_1sigma": 0.18556542,
+      "vwap": 0.14982589
      }
     }
    }
   },
   "HYPEUSDT": {
+   "anchor_degeneracy": [],
    "band_excursions": {
     "census_candidate": "H-VBR",
     "claims_nothing": "recording is OPS; whether a band touch pays is census work under G-7",
@@ -23961,7 +24551,7 @@
        "invalidation": 62.0916057,
        "invalidation_note": "anchored Q-VWAP cross",
        "vah": 63.19432,
-       "val": 55.11555,
+       "val": 55.05388,
        "vote": 0,
        "vwap_level": 62.0916057
       },
@@ -24290,8 +24880,8 @@
      "vwap_rolling": 28
     },
     "maturity_floors": {
-     "band_min_bars": 30,
-     "line_min_bars": 10,
+     "band_min_bars": 60,
+     "line_min_bars": 16,
      "note": "withheld levels still PRINT with a thin_sample chip; they are excluded from SCORING only",
      "ruling": "R3 (operator, 2026-08-05) -- INTERIM, 1h substrate",
      "withheld": [],
@@ -29571,6 +30161,7 @@
        "invalidation_is": "beyond sigma3",
        "kind": "prior_anchor",
        "name": "prior Y",
+       "no_preference": "NO preference is expressed between target A (pullback to the mean) and target B (rejection into auction). Which one occurs depends on how price is behaving at the level, and these definitions carry into range detection -- so they are MEASURED before being set in stone. Any discrimination rule invented now would be a guess wearing the clothes of a system.",
        "no_sizing": true,
        "rank": 1,
        "reward": 14.775835858757809,
@@ -29582,6 +30173,39 @@
        "sigma_atr": 2.3624879496029294,
        "sigma_position": 2.4759506969381277,
        "target": 39.471879453832614,
+       "target_a": {
+        "distance_atr": 4.724975899205859,
+        "kind": "pullback",
+        "label": "VWAP mean",
+        "reward": 14.775835858757809,
+        "rr": 1.9999999999999991,
+        "target": 39.471879453832614
+       },
+       "target_b": {
+        "kind": "rejection",
+        "note": "price rejects the level and auctions toward the dominant volume node and the far side of traded value",
+        "targets": [
+         {
+          "distance_atr": 1.4734513113747159,
+          "in_rejection_direction": true,
+          "kind": "poc",
+          "label": "30d POC",
+          "reward": 4.607743020742909,
+          "rr": 0.6236862759966089,
+          "target": 58.85545833333333
+         },
+         {
+          "distance_atr": 4.738291581559894,
+          "in_rejection_direction": true,
+          "kind": "va_edge",
+          "label": "30d VAH",
+          "reward": 14.817476354076241,
+          "rr": 2.005636296412124,
+          "target": 69.06519166666666
+         }
+        ],
+        "window": "30d"
+       },
        "target_distance_atr": 4.724975899205859,
        "target_is": "the VWAP mean"
       },
@@ -29603,6 +30227,7 @@
        "invalidation_is": "beyond sigma3",
        "kind": "rolling",
        "name": "RVWAP 7d",
+       "no_preference": "NO preference is expressed between target A (pullback to the mean) and target B (rejection into auction). Which one occurs depends on how price is behaving at the level, and these definitions carry into range detection -- so they are MEASURED before being set in stone. Any discrimination rule invented now would be a guess wearing the clothes of a system.",
        "no_sizing": true,
        "rank": 2,
        "reward": 3.25375845973943,
@@ -29614,6 +30239,39 @@
        "sigma_atr": 0.5202389377854946,
        "sigma_position": 2.26120828756341,
        "target": 54.08528720255383,
+       "target_a": {
+        "distance_atr": 1.0404778755709903,
+        "kind": "pullback",
+        "label": "VWAP mean",
+        "reward": 3.25375845973943,
+        "rr": 2.000000000000009,
+        "target": 54.08528720255383
+       },
+       "target_b": {
+        "kind": "rejection",
+        "note": "price rejects the level and auctions toward the dominant volume node and the far side of traded value",
+        "targets": [
+         {
+          "distance_atr": 0.4849142473160283,
+          "in_rejection_direction": true,
+          "kind": "poc",
+          "label": "30d POC",
+          "reward": 1.5164126710400723,
+          "rr": 0.9320991031162881,
+          "target": 58.85545833333333
+         },
+         {
+          "distance_atr": 3.7497545175012066,
+          "in_rejection_direction": true,
+          "kind": "va_edge",
+          "label": "30d VAH",
+          "reward": 11.726146004373405,
+          "rr": 7.2077544473368915,
+          "target": 69.06519166666666
+         }
+        ],
+        "window": "30d"
+       },
        "target_distance_atr": 1.0404778755709903,
        "target_is": "the VWAP mean"
       }
@@ -29622,6 +30280,35 @@
      "entry_sigmas": [
       2,
       3
+     ],
+     "hinge": "a sigma band is a HINGE with two outcomes -- pullback to the mean (target A) or rejection into auction toward the dominant POC and the far side of value (target B). BOTH are printed; NEITHER is preferred.",
+     "hinge_geometry": [
+      {
+       "bars": 5174,
+       "entry": 54.24771531259042,
+       "entry_band": "+2s",
+       "mean_atr": 4.724975899205859,
+       "name": "prior Y",
+       "poc_atr": 1.4734513113747159,
+       "poc_in_rejection_dir": true,
+       "side": "short",
+       "sigma_atr": 2.3624879496029294,
+       "va_edge_atr": 4.738291581559894,
+       "va_edge_in_rejection_dir": true
+      },
+      {
+       "bars": null,
+       "entry": 57.33904566229326,
+       "entry_band": "+2s",
+       "mean_atr": 1.0404778755709903,
+       "name": "RVWAP 7d",
+       "poc_atr": 0.4849142473160283,
+       "poc_in_rejection_dir": true,
+       "side": "short",
+       "sigma_atr": 0.5202389377854946,
+       "va_edge_atr": 3.7497545175012066,
+       "va_edge_in_rejection_dir": true
+      }
      ],
      "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
      "skipped_thin_sample": [],
@@ -29850,6 +30537,139 @@
     },
     "sequencing_rule": "Part II is derivable from Part I's printed numbers alone; no hidden inputs (§2.2)"
    },
+   "depeg": {
+    "adjacent": {
+     "M<->Q": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "Q": "2026-07-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "Q": 858
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 2.568102126517194,
+      "line_separation_bps": 1485.5357896766695,
+      "longer": "Q",
+      "pair": "M<->Q",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Q has separated from M: 2.57 ATR apart, sigma ratio 2.97 -- it is now saying something M is not.",
+      "shorter": "M",
+      "sigma_ratio": 2.9700712669135667
+     },
+     "Q<->Y": {
+      "anchor_utc": {
+       "Q": "2026-07-01T00:00:00Z",
+       "Y": "2026-01-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "Q": 858,
+       "Y": 5202
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 5.140418830619259,
+      "line_separation_bps": 2588.916689909342,
+      "longer": "Y",
+      "pair": "Q<->Y",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Y has separated from Q: 5.14 ATR apart, sigma ratio 2.74 -- it is now saying something Q is not.",
+      "shorter": "Q",
+      "sigma_ratio": 2.738727822026233
+     },
+     "W<->M": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "W": "2026-08-03T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "W": 66
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 0.3328429049456774,
+      "line_separation_bps": 188.89824054277855,
+      "longer": "M",
+      "pair": "W<->M",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "M has separated from W: 0.33 ATR apart, sigma ratio 1.19 -- it is now saying something W is not.",
+      "shorter": "W",
+      "sigma_ratio": 1.1919378742889801
+     }
+    },
+    "adjacent_state_counts": {
+     "de-pegged": 3
+    },
+    "claims_nothing": "recording is OPS; whether a de-peg marks or precedes anything is H-VDP, census work under G-7",
+    "counterpart": {
+     "M<->30d": {
+      "anchored": "M",
+      "anchored_bars": 114,
+      "line_separation_atr": 2.1256025074866916,
+      "line_separation_bps": 1094.93867760791,
+      "pair": "M<->30d",
+      "peg_state": "de-pegged",
+      "prose": "30d is fully formed while M is 114 bars old; they sit 2.13 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "30d",
+      "rolling_bars": 720,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.35490862617705565
+     },
+     "Q<->90d": {
+      "anchored": "Q",
+      "anchored_bars": 858,
+      "line_separation_atr": 0.400854201032234,
+      "line_separation_bps": 206.04568157001358,
+      "pair": "Q<->90d",
+      "peg_state": "de-pegged",
+      "prose": "90d is fully formed while Q is 858 bars old; they sit 0.40 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "90d",
+      "rolling_bars": 2160,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.6746861878491183
+     },
+     "W<->7d": {
+      "anchored": "W",
+      "anchored_bars": 66,
+      "line_separation_atr": 0.3249791502818871,
+      "line_separation_bps": 187.90088210869015,
+      "pair": "W<->7d",
+      "peg_state": "de-pegged",
+      "prose": "7d is fully formed while W is 66 bars old; they sit 0.32 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "7d",
+      "rolling_bars": 168,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.9944792399430702
+     },
+     "Y<->365d": {
+      "anchored": "Y",
+      "anchored_bars": 5202,
+      "line_separation_atr": 0.7508855345829684,
+      "line_separation_bps": 537.7227095986501,
+      "pair": "Y<->365d",
+      "peg_state": "de-pegged",
+      "prose": "365d is fully formed while Y is 5202 bars old; they sit 0.75 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "365d",
+      "rolling_bars": 8760,
+      "rolling_is_formed": true,
+      "sigma_ratio": 1.1308380977785981
+     }
+    },
+    "events": [],
+    "peg_rules": {
+     "de-pegged": "otherwise",
+     "identical": "same anchor bar (exact)",
+     "pegged": "different anchors, lines within 0.02 daily-ATR AND sigma ratio in [0.9, 1.1]"
+    },
+    "structural_note": "January 1 anchors Y, Q and M simultaneously, so Y=Q until April 1; July 1 makes M=Q for all of July. Redundancy here is the CALENDAR, not the market",
+    "why": "an anchor carries independent information only once it UNPEGS from the next-shorter one; early in a period it is measuring the same bars"
+   },
    "flags": {
     "above_M_vwap": true,
     "above_VAH": true,
@@ -29876,13 +30696,13 @@
     "history_first_utc": "2025-05-30T12:00:00Z",
     "history_records": 2593,
     "integration": "per-record timestamps; never assumed 8h x 3/day",
-    "mean_7d": 4.11667e-05,
+    "mean_7d": 4.15634e-05,
     "observed_grid_hours_7d": [
      4
     ],
     "percentile_vs_full_history": 91.75,
     "provenance": "computed",
-    "records_7d": 42
+    "records_7d": 41
    },
    "governor": {
     "12h": {
@@ -29907,7 +30727,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:32:09Z"
+     "window_start_utc": "2026-01-17T22:16:16Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -29931,7 +30751,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:32:09Z"
+     "window_start_utc": "2026-07-20T06:16:16Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -29955,7 +30775,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:32:09Z"
+     "window_start_utc": "2026-05-31T06:16:16Z"
     }
    },
    "last_bar_utc": {
@@ -30318,10 +31138,10 @@
      "bars": 744,
      "closed_utc_ms": 1785538800000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 744,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -30345,10 +31165,10 @@
      "bars": 2184,
      "closed_utc_ms": 1782860400000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 2184,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -30372,10 +31192,10 @@
      "bars": 5174,
      "closed_utc_ms": 1767222000000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 5174,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -30452,7 +31272,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": null,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:32:09Z",
+     "window_start_utc": "2026-07-20T06:16:16Z",
      "zone_distance_bps": 0.0,
      "zone_distance_gov_atr": 0.0
     },
@@ -30520,7 +31340,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 7531,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:32:09Z",
+     "window_start_utc": "2026-05-31T06:16:16Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     },
@@ -30588,7 +31408,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 1539,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:32:09Z",
+     "window_start_utc": "2026-01-17T22:16:16Z",
      "zone_distance_bps": 281.87,
      "zone_distance_gov_atr": 0.7806
     }
@@ -30751,10 +31571,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 720,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -30785,10 +31605,10 @@
        "overlap_ms": 5295600000
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 8760,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -30819,10 +31639,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 168,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -30853,10 +31673,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 2160,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -30904,33 +31724,45 @@
    },
    "staleness": [
     {
-     "age_hours": 0.72,
+     "age_hours": 3.45,
      "last_input_utc": "2026-08-05T18:49:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 0.79,
+     "age_hours": 3.52,
      "last_input_utc": "2026-08-05T18:45:00Z",
      "layer": "tpo",
      "native_tf": "30m"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.52,
+     "last_input_utc": "2026-08-05T18:45:00Z",
+     "layer": "governor:1h",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.52,
+     "last_input_utc": "2026-08-05T18:45:00Z",
+     "layer": "radar:1h",
      "native_tf": "1h"
     }
    ],
@@ -31186,32 +32018,32 @@
    "symbol": "HYPEUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:33:45Z",
-     "basis_bps": -7.02,
-     "index_price": 57.48735714,
-     "mark_price": 57.447
+     "at_utc": "2026-08-05T22:17:56Z",
+     "basis_bps": -4.512,
+     "index_price": 56.83364286,
+     "mark_price": 56.808
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:33:46Z",
+    "fetched_utc": "2026-08-05T22:17:58Z",
     "next_funding": {
      "interest_rate": 0.0001,
      "last_funding_rate": 5e-05,
-     "next_funding_utc": "2026-08-05T20:00:00Z"
+     "next_funding_utc": "2026-08-06T00:00:00Z"
     },
     "open_interest": {
-     "at_utc": "2026-08-05T19:00:00Z",
-     "change_24h_pct": 3.7467,
-     "change_24h_percentile": 86.74,
-     "change_7d_pct": 8.7271,
-     "level": 4923908.27,
-     "percentile": 88.8,
+     "at_utc": "2026-08-05T22:00:00Z",
+     "change_24h_pct": 4.5214,
+     "change_24h_percentile": 89.26,
+     "change_7d_pct": 11.8146,
+     "level": 4954360.71,
+     "percentile": 92.2,
      "samples": 500
     },
     "provenance": "fetched",
     "top_trader_ratio": {
-     "at_utc": "2026-08-05T19:00:00Z",
-     "percentile_7d": 1.79,
-     "ratio": 1.2282,
+     "at_utc": "2026-08-05T22:00:00Z",
+     "percentile_7d": 7.14,
+     "ratio": 1.2462,
      "samples": 168
     }
    },
@@ -31219,10 +32051,10 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 238,
+     "brackets": 233,
      "poc": 52.45094,
      "provenance": "approximation",
-     "vah": 55.03544,
+     "vah": 55.10436,
      "val": 51.17592
     },
     "session": {
@@ -31359,13 +32191,13 @@
      },
      "1h": {
       "atr": 0.62355639,
-      "percentile": 53.27,
-      "sample_bars": 8758
+      "percentile": 53.28,
+      "sample_bars": 8755
      },
      "4h": {
       "atr": 1.09420577,
-      "percentile": 38.37,
-      "sample_bars": 2189
+      "percentile": 38.39,
+      "sample_bars": 2188
      }
     },
     "compression_streak_days": 0,
@@ -31379,7 +32211,7 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28756,
+     "bars": 28592,
      "bin_width": 0.06167,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -31388,12 +32220,12 @@
      "range_high": 63.441,
      "range_low": 51.107,
      "vah": 63.19432,
-     "val": 55.11555,
+     "val": 55.05388,
      "value_area_fraction": 0.7,
-     "volume_total": 141855321.6
+     "volume_total": 141068289.18
     },
     "5d": {
-     "bars": 7156,
+     "bars": 6992,
      "bin_width": 0.03446,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -31401,10 +32233,10 @@
      "provenance": "approximation",
      "range_high": 57.999,
      "range_low": 51.107,
-     "vah": 55.20774,
+     "vah": 55.31112,
      "val": 51.17592,
      "value_area_fraction": 0.7,
-     "volume_total": 32301312.98
+     "volume_total": 30587919.65
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -31650,41 +32482,42 @@
     "provenance": "computed",
     "rolling": {
      "30d": {
-      "bars": 718,
-      "distance_bps": -481.41,
-      "lower_1sigma": 55.2682563,
-      "sigma": 5.41723107,
-      "upper_1sigma": 66.10271844,
-      "vwap": 60.68548737
+      "bars": 715,
+      "distance_bps": -475.38,
+      "lower_1sigma": 55.25765517,
+      "sigma": 5.38939341,
+      "upper_1sigma": 66.03644198,
+      "vwap": 60.64704857
      },
      "365d": {
-      "bars": 8758,
-      "distance_bps": 3227.64,
-      "lower_1sigma": 29.79698278,
-      "sigma": 13.87218874,
-      "upper_1sigma": 57.54136027,
-      "vwap": 43.66917152
+      "bars": 8755,
+      "distance_bps": 3227.36,
+      "lower_1sigma": 29.79697339,
+      "sigma": 13.87312639,
+      "upper_1sigma": 57.54322616,
+      "vwap": 43.67009978
      },
      "7d": {
-      "bars": 166,
-      "distance_bps": 681.34,
-      "lower_1sigma": 52.42643544,
-      "sigma": 1.65291553,
-      "upper_1sigma": 55.7322665,
-      "vwap": 54.07935097
+      "bars": 163,
+      "distance_bps": 678.93,
+      "lower_1sigma": 52.42287536,
+      "sigma": 1.66869654,
+      "upper_1sigma": 55.76026844,
+      "vwap": 54.0915719
      },
      "90d": {
-      "bars": 2158,
-      "distance_bps": -506.16,
-      "lower_1sigma": 52.35918364,
-      "sigma": 8.48444848,
-      "upper_1sigma": 69.3280806,
-      "vwap": 60.84363212
+      "bars": 2155,
+      "distance_bps": -507.11,
+      "lower_1sigma": 52.37054572,
+      "sigma": 8.47922062,
+      "upper_1sigma": 69.32898696,
+      "vwap": 60.84976634
      }
     }
    }
   },
   "JTOUSDT": {
+   "anchor_degeneracy": [],
    "band_excursions": {
     "census_candidate": "H-VBR",
     "claims_nothing": "recording is OPS; whether a band touch pays is census work under G-7",
@@ -32214,8 +33047,8 @@
      "vwap_rolling": 28
     },
     "maturity_floors": {
-     "band_min_bars": 30,
-     "line_min_bars": 10,
+     "band_min_bars": 60,
+     "line_min_bars": 16,
      "note": "withheld levels still PRINT with a thin_sample chip; they are excluded from SCORING only",
      "ruling": "R3 (operator, 2026-08-05) -- INTERIM, 1h substrate",
      "withheld": [],
@@ -38039,6 +38872,7 @@
        "invalidation_is": "beyond sigma3",
        "kind": "anchored",
        "name": "anchored W",
+       "no_preference": "NO preference is expressed between target A (pullback to the mean) and target B (rejection into auction). Which one occurs depends on how price is behaving at the level, and these definitions carry into range detection -- so they are MEASURED before being set in stone. Any discrimination rule invented now would be a guess wearing the clothes of a system.",
        "no_sizing": true,
        "rank": 1,
        "reward": 0.012629659999999987,
@@ -38050,6 +38884,39 @@
        "sigma_atr": 0.13766898616442264,
        "sigma_position": 2.1566043741478373,
        "target": 0.50428141,
+       "target_a": {
+        "distance_atr": 0.275337972328845,
+        "kind": "pullback",
+        "label": "VWAP mean",
+        "reward": 0.012629659999999987,
+        "rr": 2.0,
+        "target": 0.50428141
+       },
+       "target_b": {
+        "kind": "rejection",
+        "note": "price rejects the level and auctions toward the dominant volume node and the far side of traded value",
+        "targets": [
+         {
+          "distance_atr": 2.41363622000056,
+          "in_rejection_direction": true,
+          "kind": "poc",
+          "label": "30d POC",
+          "reward": 0.1107126799999999,
+          "rr": 17.53217109565895,
+          "target": 0.6276237499999999
+         },
+         {
+          "distance_atr": 3.404105672688148,
+          "in_rejection_direction": true,
+          "kind": "va_edge",
+          "label": "30d VAH",
+          "reward": 0.1561451800000001,
+          "rr": 24.726743237743577,
+          "target": 0.6730562500000001
+         }
+        ],
+        "window": "30d"
+       },
        "target_distance_atr": 0.275337972328845,
        "target_is": "the VWAP mean"
       }
@@ -38058,6 +38925,22 @@
      "entry_sigmas": [
       2,
       3
+     ],
+     "hinge": "a sigma band is a HINGE with two outcomes -- pullback to the mean (target A) or rejection into auction toward the dominant POC and the far side of value (target B). BOTH are printed; NEITHER is preferred.",
+     "hinge_geometry": [
+      {
+       "bars": 66,
+       "entry": 0.51691107,
+       "entry_band": "+2s",
+       "mean_atr": 0.275337972328845,
+       "name": "anchored W",
+       "poc_atr": 2.41363622000056,
+       "poc_in_rejection_dir": true,
+       "side": "short",
+       "sigma_atr": 0.13766898616442264,
+       "va_edge_atr": 3.404105672688148,
+       "va_edge_in_rejection_dir": true
+      }
      ],
      "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
      "skipped_thin_sample": [],
@@ -38288,6 +39171,139 @@
     },
     "sequencing_rule": "Part II is derivable from Part I's printed numbers alone; no hidden inputs (§2.2)"
    },
+   "depeg": {
+    "adjacent": {
+     "M<->Q": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "Q": "2026-07-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "Q": 858
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 2.9882931561941866,
+      "line_separation_bps": 2730.8121705782996,
+      "longer": "Q",
+      "pair": "M<->Q",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Q has separated from M: 2.99 ATR apart, sigma ratio 10.51 -- it is now saying something M is not.",
+      "shorter": "M",
+      "sigma_ratio": 10.509420006471998
+     },
+     "Q<->Y": {
+      "anchor_utc": {
+       "Q": "2026-07-01T00:00:00Z",
+       "Y": "2026-01-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "Q": 858,
+       "Y": 5202
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 3.430692961986007,
+      "line_separation_bps": 2462.6028087381774,
+      "longer": "Y",
+      "pair": "Q<->Y",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Y has separated from Q: 3.43 ATR apart, sigma ratio 1.98 -- it is now saying something Q is not.",
+      "shorter": "Q",
+      "sigma_ratio": 1.9835055492909355
+     },
+     "W<->M": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "W": "2026-08-03T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "W": 66
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 0.050916005211069086,
+      "line_separation_bps": 46.313426465592805,
+      "longer": "M",
+      "pair": "W<->M",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "M has separated from W: 0.05 ATR apart, sigma ratio 1.27 -- it is now saying something W is not.",
+      "shorter": "W",
+      "sigma_ratio": 1.2674466296004803
+     }
+    },
+    "adjacent_state_counts": {
+     "de-pegged": 3
+    },
+    "claims_nothing": "recording is OPS; whether a de-peg marks or precedes anything is H-VDP, census work under G-7",
+    "counterpart": {
+     "M<->30d": {
+      "anchored": "M",
+      "anchored_bars": 114,
+      "line_separation_atr": 2.3378245251369143,
+      "line_separation_bps": 1760.3175357542018,
+      "pair": "M<->30d",
+      "peg_state": "de-pegged",
+      "prose": "30d is fully formed while M is 114 bars old; they sit 2.34 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "30d",
+      "rolling_bars": 720,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.12249153088330691
+     },
+     "Q<->90d": {
+      "anchored": "Q",
+      "anchored_bars": 858,
+      "line_separation_atr": 0.2537825855236682,
+      "line_separation_bps": 185.54906998693875,
+      "pair": "Q<->90d",
+      "peg_state": "de-pegged",
+      "prose": "90d is fully formed while Q is 858 bars old; they sit 0.25 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "90d",
+      "rolling_bars": 2160,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.787542048067084
+     },
+     "W<->7d": {
+      "anchored": "W",
+      "anchored_bars": 66,
+      "line_separation_atr": 0.07450417985704556,
+      "line_separation_bps": 67.31315900107256,
+      "pair": "W<->7d",
+      "peg_state": "de-pegged",
+      "prose": "7d is fully formed while W is 66 bars old; they sit 0.07 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "7d",
+      "rolling_bars": 168,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.4971399992356704
+     },
+     "Y<->365d": {
+      "anchored": "Y",
+      "anchored_bars": 5202,
+      "line_separation_atr": 2.3803832201381967,
+      "line_separation_bps": 1848.0006995964989,
+      "pair": "Y<->365d",
+      "peg_state": "de-pegged",
+      "prose": "365d is fully formed while Y is 5202 bars old; they sit 2.38 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "365d",
+      "rolling_bars": 8760,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.44999945014801157
+     }
+    },
+    "events": [],
+    "peg_rules": {
+     "de-pegged": "otherwise",
+     "identical": "same anchor bar (exact)",
+     "pegged": "different anchors, lines within 0.02 daily-ATR AND sigma ratio in [0.9, 1.1]"
+    },
+    "structural_note": "January 1 anchors Y, Q and M simultaneously, so Y=Q until April 1; July 1 makes M=Q for all of July. Redundancy here is the CALENDAR, not the market",
+    "why": "an anchor carries independent information only once it UNPEGS from the next-shorter one; early in a period it is measuring the same bars"
+   },
    "flags": {
     "above_M_vwap": true,
     "above_VAH": true,
@@ -38314,13 +39330,13 @@
     "history_first_utc": "2023-12-08T12:00:00Z",
     "history_records": 5827,
     "integration": "per-record timestamps; never assumed 8h x 3/day",
-    "mean_7d": 4.2276e-06,
+    "mean_7d": 3.1112e-06,
     "observed_grid_hours_7d": [
      4
     ],
     "percentile_vs_full_history": 89.98,
     "provenance": "computed",
-    "records_7d": 42
+    "records_7d": 41
    },
    "governor": {
     "12h": {
@@ -38345,7 +39361,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:32:09Z"
+     "window_start_utc": "2026-01-17T22:16:16Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -38369,7 +39385,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-07-20T03:32:09Z"
+     "window_start_utc": "2026-07-20T06:16:16Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -38393,7 +39409,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-05-31T03:32:09Z"
+     "window_start_utc": "2026-05-31T06:16:16Z"
     }
    },
    "last_bar_utc": {
@@ -38705,10 +39721,10 @@
      "bars": 744,
      "closed_utc_ms": 1785538800000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 744,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -38732,10 +39748,10 @@
      "bars": 2184,
      "closed_utc_ms": 1782860400000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 2184,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -38759,10 +39775,10 @@
      "bars": 8760,
      "closed_utc_ms": 1767222000000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 8760,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -38839,7 +39855,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 27741,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-07-20T03:32:09Z",
+     "window_start_utc": "2026-07-20T06:16:16Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     },
@@ -38907,7 +39923,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": 491,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-05-31T03:32:09Z",
+     "window_start_utc": "2026-05-31T06:16:16Z",
      "zone_distance_bps": 115.19,
      "zone_distance_gov_atr": 0.5112
     },
@@ -38975,7 +39991,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 3131,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:32:09Z",
+     "window_start_utc": "2026-01-17T22:16:16Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     }
@@ -39166,10 +40182,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 720,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -39200,10 +40216,10 @@
        "overlap_ms": 5295600000
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 8760,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -39234,10 +40250,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 168,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -39268,10 +40284,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 2160,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -39319,33 +40335,45 @@
    },
    "staleness": [
     {
-     "age_hours": 0.72,
+     "age_hours": 3.45,
      "last_input_utc": "2026-08-05T18:49:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 0.79,
+     "age_hours": 3.52,
      "last_input_utc": "2026-08-05T18:45:00Z",
      "layer": "tpo",
      "native_tf": "30m"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.52,
+     "last_input_utc": "2026-08-05T18:45:00Z",
+     "layer": "governor:1h",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.52,
+     "last_input_utc": "2026-08-05T18:45:00Z",
+     "layer": "radar:1h",
      "native_tf": "1h"
     }
    ],
@@ -39601,32 +40629,32 @@
    "symbol": "JTOUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:33:23Z",
-     "basis_bps": -10.036,
-     "index_price": 0.52144363,
-     "mark_price": 0.52092031
+     "at_utc": "2026-08-05T22:17:34Z",
+     "basis_bps": -12.568,
+     "index_price": 0.51911898,
+     "mark_price": 0.51846655
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:33:25Z",
+    "fetched_utc": "2026-08-05T22:17:35Z",
     "next_funding": {
      "interest_rate": 0.0001,
      "last_funding_rate": 5e-05,
-     "next_funding_utc": "2026-08-05T20:00:00Z"
+     "next_funding_utc": "2026-08-06T00:00:00Z"
     },
     "open_interest": {
-     "at_utc": "2026-08-05T19:00:00Z",
-     "change_24h_pct": -1.3455,
-     "change_24h_percentile": 38.95,
-     "change_7d_pct": -5.4023,
-     "level": 21928091.0,
-     "percentile": 2.8,
+     "at_utc": "2026-08-05T22:00:00Z",
+     "change_24h_pct": -0.8531,
+     "change_24h_percentile": 46.53,
+     "change_7d_pct": -4.3815,
+     "level": 21992198.0,
+     "percentile": 4.2,
      "samples": 500
     },
     "provenance": "fetched",
     "top_trader_ratio": {
-     "at_utc": "2026-08-05T19:00:00Z",
+     "at_utc": "2026-08-05T22:00:00Z",
      "percentile_7d": 75.0,
-     "ratio": 0.7042,
+     "ratio": 0.7068,
      "samples": 168
     }
    },
@@ -39634,7 +40662,7 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 238,
+     "brackets": 233,
      "poc": 0.5071635,
      "provenance": "approximation",
      "vah": 0.514077,
@@ -39765,13 +40793,13 @@
      },
      "1h": {
       "atr": 0.00611012,
-      "percentile": 33.63,
-      "sample_bars": 8758
+      "percentile": 33.64,
+      "sample_bars": 8755
      },
      "4h": {
       "atr": 0.01163492,
-      "percentile": 26.91,
-      "sample_bars": 2189
+      "percentile": 26.92,
+      "sample_bars": 2188
      }
     },
     "compression_streak_days": 0,
@@ -39785,7 +40813,7 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28756,
+     "bars": 28592,
      "bin_width": 0.0008775,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -39796,10 +40824,10 @@
      "vah": 0.6030275,
      "val": 0.481055,
      "value_area_fraction": 0.7,
-     "volume_total": 524219450.0
+     "volume_total": 522356299.0
     },
     "5d": {
-     "bars": 7156,
+     "bars": 6992,
      "bin_width": 0.0002095,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -39808,9 +40836,9 @@
      "range_high": 0.5212,
      "range_low": 0.4793,
      "vah": 0.513658,
-     "val": 0.495641,
+     "val": 0.4954315,
      "value_area_fraction": 0.7,
-     "volume_total": 88883933.0
+     "volume_total": 86750702.0
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -40056,41 +41084,42 @@
     "provenance": "computed",
     "rolling": {
      "30d": {
-      "bars": 718,
-      "distance_bps": -1488.09,
-      "lower_1sigma": 0.54375249,
-      "sigma": 0.06468943,
-      "upper_1sigma": 0.67313135,
-      "vwap": 0.60844192
+      "bars": 715,
+      "distance_bps": -1463.89,
+      "lower_1sigma": 0.54397544,
+      "sigma": 0.06274089,
+      "upper_1sigma": 0.66945723,
+      "vwap": 0.60671634
      },
      "365d": {
-      "bars": 8758,
-      "distance_bps": -1233.34,
-      "lower_1sigma": 0.22010119,
-      "sigma": 0.37065974,
-      "upper_1sigma": 0.96142068,
-      "vwap": 0.59076094
+      "bars": 8755,
+      "distance_bps": -1231.8,
+      "lower_1sigma": 0.22012505,
+      "sigma": 0.37053211,
+      "upper_1sigma": 0.96118926,
+      "vwap": 0.59065716
      },
      "7d": {
-      "bars": 166,
-      "distance_bps": 214.41,
-      "lower_1sigma": 0.49522063,
-      "sigma": 0.01180802,
-      "upper_1sigma": 0.51883666,
-      "vwap": 0.50702864
+      "bars": 163,
+      "distance_bps": 232.52,
+      "lower_1sigma": 0.49533695,
+      "sigma": 0.01079463,
+      "upper_1sigma": 0.5169262,
+      "vwap": 0.50613158
      },
      "90d": {
-      "bars": 2158,
-      "distance_bps": -1739.59,
-      "lower_1sigma": 0.51947845,
-      "sigma": 0.10748764,
-      "upper_1sigma": 0.73445373,
-      "vwap": 0.62696609
+      "bars": 2155,
+      "distance_bps": -1742.43,
+      "lower_1sigma": 0.51893075,
+      "sigma": 0.10825156,
+      "upper_1sigma": 0.73543387,
+      "vwap": 0.62718231
      }
     }
    }
   },
   "LITUSDT": {
+   "anchor_degeneracy": [],
    "band_excursions": {
     "census_candidate": "H-VBR",
     "claims_nothing": "recording is OPS; whether a band touch pays is census work under G-7",
@@ -40261,8 +41290,8 @@
       "location": {
        "invalidation": 2.31117508,
        "invalidation_note": "anchored Q-VWAP cross",
-       "vah": 2.336301,
-       "val": 2.111136,
+       "vah": 2.337344,
+       "val": 2.113248,
        "vote": 0,
        "vwap_level": 2.31117508
       },
@@ -40591,8 +41620,8 @@
      "vwap_rolling": 21
     },
     "maturity_floors": {
-     "band_min_bars": 30,
-     "line_min_bars": 10,
+     "band_min_bars": 60,
+     "line_min_bars": 16,
      "note": "withheld levels still PRINT with a thin_sample chip; they are excluded from SCORING only",
      "ruling": "R3 (operator, 2026-08-05) -- INTERIM, 1h substrate",
      "withheld": [],
@@ -45157,6 +46186,7 @@
        "invalidation_is": "sigma3 plus one band width",
        "kind": "prior_anchor",
        "name": "prior Q",
+       "no_preference": "NO preference is expressed between target A (pullback to the mean) and target B (rejection into auction). Which one occurs depends on how price is behaving at the level, and these definitions carry into range detection -- so they are MEASURED before being set in stone. Any discrimination rule invented now would be a guess wearing the clothes of a system.",
        "no_sizing": true,
        "rank": 1,
        "reward": 0.8219068134913394,
@@ -45168,6 +46198,39 @@
        "sigma_atr": 1.4297029001591046,
        "sigma_position": 3.1166262424967823,
        "target": 1.2945412187286611,
+       "target_a": {
+        "distance_atr": 4.289108700477314,
+        "kind": "pullback",
+        "label": "VWAP mean",
+        "reward": 0.8219068134913394,
+        "rr": 2.9999999999999982,
+        "target": 1.2945412187286611
+       },
+       "target_b": {
+        "kind": "rejection",
+        "note": "price rejects the level and auctions toward the dominant volume node and the far side of traded value",
+        "targets": [
+         {
+          "distance_atr": 0.44923706076676984,
+          "in_rejection_direction": true,
+          "kind": "poc",
+          "label": "30d POC",
+          "reward": 0.08608571777999963,
+          "rr": 0.3142170731532937,
+          "target": 2.20253375
+         },
+         {
+          "distance_atr": 2.465229291513869,
+          "in_rejection_direction": true,
+          "kind": "va_edge",
+          "label": "30d VAH",
+          "reward": 0.4724032177799997,
+          "rr": 1.7242948106487888,
+          "target": 2.5888512500000003
+         }
+        ],
+        "window": "30d"
+       },
        "target_distance_atr": 4.289108700477314,
        "target_is": "the VWAP mean"
       },
@@ -45190,6 +46253,7 @@
        "invalidation_is": "beyond sigma3",
        "kind": "anchored",
        "name": "anchored M",
+       "no_preference": "NO preference is expressed between target A (pullback to the mean) and target B (rejection into auction). Which one occurs depends on how price is behaving at the level, and these definitions carry into range detection -- so they are MEASURED before being set in stone. Any discrimination rule invented now would be a guess wearing the clothes of a system.",
        "no_sizing": true,
        "rank": 2,
        "reward": 0.0788095000000002,
@@ -45201,6 +46265,39 @@
        "sigma_atr": 0.20563311228337244,
        "sigma_position": 2.2317530246988038,
        "target": 2.06045833,
+       "target_a": {
+        "distance_atr": 0.4112662245667459,
+        "kind": "pullback",
+        "label": "VWAP mean",
+        "reward": 0.0788095000000002,
+        "rr": 2.0000000000000226,
+        "target": 2.06045833
+       },
+       "target_b": {
+        "kind": "rejection",
+        "note": "price rejects the level and auctions toward the dominant volume node and the far side of traded value",
+        "targets": [
+         {
+          "distance_atr": 0.33015227938436037,
+          "in_rejection_direction": true,
+          "kind": "poc",
+          "label": "30d POC",
+          "reward": 0.06326592000000009,
+          "rr": 1.6055404488037772,
+          "target": 2.20253375
+         },
+         {
+          "distance_atr": 2.3461445101314595,
+          "in_rejection_direction": true,
+          "kind": "va_edge",
+          "label": "30d VAH",
+          "reward": 0.4495834200000002,
+          "rr": 11.409371205248203,
+          "target": 2.5888512500000003
+         }
+        ],
+        "window": "30d"
+       },
        "target_distance_atr": 0.4112662245667459,
        "target_is": "the VWAP mean"
       },
@@ -45223,6 +46320,7 @@
        "invalidation_is": "beyond sigma3",
        "kind": "anchored",
        "name": "anchored W",
+       "no_preference": "NO preference is expressed between target A (pullback to the mean) and target B (rejection into auction). Which one occurs depends on how price is behaving at the level, and these definitions carry into range detection -- so they are MEASURED before being set in stone. Any discrimination rule invented now would be a guess wearing the clothes of a system.",
        "no_sizing": true,
        "rank": 3,
        "reward": 0.08606253999999991,
@@ -45234,6 +46332,39 @@
        "sigma_atr": 0.22455805393020173,
        "sigma_position": 2.027109820370163,
        "target": 2.06117089,
+       "target_a": {
+        "distance_atr": 0.44911610786040296,
+        "kind": "pullback",
+        "label": "VWAP mean",
+        "reward": 0.08606253999999991,
+        "rr": 1.9999999999999898,
+        "target": 2.06117089
+       },
+       "target_b": {
+        "kind": "rejection",
+        "note": "price rejects the level and auctions toward the dominant volume node and the far side of traded value",
+        "targets": [
+         {
+          "distance_atr": 0.2885839121391828,
+          "in_rejection_direction": true,
+          "kind": "poc",
+          "label": "30d POC",
+          "reward": 0.05530032000000018,
+          "rr": 1.2851194027041255,
+          "target": 2.20253375
+         },
+         {
+          "distance_atr": 2.304576142886282,
+          "in_rejection_direction": true,
+          "kind": "va_edge",
+          "label": "30d VAH",
+          "reward": 0.44161782000000027,
+          "rr": 10.262718715947692,
+          "target": 2.5888512500000003
+         }
+        ],
+        "window": "30d"
+       },
        "target_distance_atr": 0.44911610786040296,
        "target_is": "the VWAP mean"
       },
@@ -45254,6 +46385,7 @@
        "invalidation_is": "beyond sigma3",
        "kind": "prior_anchor",
        "name": "prior Y",
+       "no_preference": "NO preference is expressed between target A (pullback to the mean) and target B (rejection into auction). Which one occurs depends on how price is behaving at the level, and these definitions carry into range detection -- so they are MEASURED before being set in stone. Any discrimination rule invented now would be a guess wearing the clothes of a system.",
        "no_sizing": true,
        "rank": 4,
        "reward": 0.7288576873019132,
@@ -45265,6 +46397,39 @@
        "sigma_atr": 1.901766597320799,
        "sigma_position": -2.068366572277893,
        "target": 2.9021724381815255,
+       "target_a": {
+        "distance_atr": 3.8035331946415973,
+        "kind": "pullback",
+        "label": "VWAP mean",
+        "reward": 0.7288576873019132,
+        "rr": 1.999999999999999,
+        "target": 2.9021724381815255
+       },
+       "target_b": {
+        "kind": "rejection",
+        "note": "price rejects the level and auctions toward the dominant volume node and the far side of traded value",
+        "targets": [
+         {
+          "distance_atr": 0.1524789201030458,
+          "in_rejection_direction": false,
+          "kind": "poc",
+          "label": "30d POC",
+          "reward": 0.029218999120387945,
+          "rr": 0.08017751511560747,
+          "target": 2.20253375
+         },
+         {
+          "distance_atr": 0.0950990731465993,
+          "in_rejection_direction": true,
+          "kind": "va_edge",
+          "label": "30d VAL",
+          "reward": 0.01822350087961233,
+          "rr": 0.050005649105718045,
+          "target": 2.15509125
+         }
+        ],
+        "window": "30d"
+       },
        "target_distance_atr": 3.8035331946415973,
        "target_is": "the VWAP mean"
       }
@@ -45273,6 +46438,61 @@
      "entry_sigmas": [
       2,
       3
+     ],
+     "hinge": "a sigma band is a HINGE with two outcomes -- pullback to the mean (target A) or rejection into auction toward the dominant POC and the far side of value (target B). BOTH are printed; NEITHER is preferred.",
+     "hinge_geometry": [
+      {
+       "bars": 2184,
+       "entry": 2.1164480322200006,
+       "entry_band": "+3s",
+       "mean_atr": 4.289108700477314,
+       "name": "prior Q",
+       "poc_atr": 0.44923706076676984,
+       "poc_in_rejection_dir": true,
+       "side": "short",
+       "sigma_atr": 1.4297029001591046,
+       "va_edge_atr": 2.465229291513869,
+       "va_edge_in_rejection_dir": true
+      },
+      {
+       "bars": 114,
+       "entry": 2.13926783,
+       "entry_band": "+2s",
+       "mean_atr": 0.4112662245667459,
+       "name": "anchored M",
+       "poc_atr": 0.33015227938436037,
+       "poc_in_rejection_dir": true,
+       "side": "short",
+       "sigma_atr": 0.20563311228337244,
+       "va_edge_atr": 2.3461445101314595,
+       "va_edge_in_rejection_dir": true
+      },
+      {
+       "bars": 66,
+       "entry": 2.14723343,
+       "entry_band": "+2s",
+       "mean_atr": 0.44911610786040296,
+       "name": "anchored W",
+       "poc_atr": 0.2885839121391828,
+       "poc_in_rejection_dir": true,
+       "side": "short",
+       "sigma_atr": 0.22455805393020173,
+       "va_edge_atr": 2.304576142886282,
+       "va_edge_in_rejection_dir": true
+      },
+      {
+       "bars": 199,
+       "entry": 2.1733147508796122,
+       "entry_band": "-2s",
+       "mean_atr": 3.8035331946415973,
+       "name": "prior Y",
+       "poc_atr": 0.1524789201030458,
+       "poc_in_rejection_dir": false,
+       "side": "long",
+       "sigma_atr": 1.901766597320799,
+       "va_edge_atr": 0.0950990731465993,
+       "va_edge_in_rejection_dir": true
+      }
      ],
      "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
      "skipped_thin_sample": [],
@@ -45495,6 +46715,133 @@
     },
     "sequencing_rule": "Part II is derivable from Part I's printed numbers alone; no hidden inputs (§2.2)"
    },
+   "depeg": {
+    "adjacent": {
+     "M<->Q": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "Q": "2026-07-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "Q": 858
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 1.3083616976144303,
+      "line_separation_bps": 1216.8008755605363,
+      "longer": "Q",
+      "pair": "M<->Q",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Q has separated from M: 1.31 ATR apart, sigma ratio 5.82 -- it is now saying something M is not.",
+      "shorter": "M",
+      "sigma_ratio": 5.82459855728053
+     },
+     "Q<->Y": {
+      "anchor_utc": {
+       "Q": "2026-07-01T00:00:00Z",
+       "Y": "2026-01-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "Q": 858,
+       "Y": 5202
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 3.4804221273080094,
+      "line_separation_bps": 2885.7227467163584,
+      "longer": "Y",
+      "pair": "Q<->Y",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Y has separated from Q: 3.48 ATR apart, sigma ratio 2.44 -- it is now saying something Q is not.",
+      "shorter": "Q",
+      "sigma_ratio": 2.436467605755307
+     },
+     "W<->M": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "W": "2026-08-03T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "W": 66
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": false,
+      "line_separation_atr": 0.0037184839515205658,
+      "line_separation_bps": 3.457064154443765,
+      "longer": "M",
+      "pair": "W<->M",
+      "peg_state": "pegged",
+      "previous_peg_state": null,
+      "prose": "M currently duplicates W -- lines 0.004 ATR apart, sigma ratio 0.92. It carries no independent information yet; a DE-PEG is what makes it informative.",
+      "redundant_with": "W",
+      "shorter": "W",
+      "sigma_ratio": 0.9157236121546029
+     }
+    },
+    "adjacent_state_counts": {
+     "de-pegged": 2,
+     "pegged": 1
+    },
+    "claims_nothing": "recording is OPS; whether a de-peg marks or precedes anything is H-VDP, census work under G-7",
+    "counterpart": {
+     "M<->30d": {
+      "anchored": "M",
+      "anchored_bars": 114,
+      "line_separation_atr": 1.5547017463736046,
+      "line_separation_bps": 1263.2484245423286,
+      "pair": "M<->30d",
+      "peg_state": "de-pegged",
+      "prose": "30d is fully formed while M is 114 bars old; they sit 1.55 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "30d",
+      "rolling_bars": 720,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.2107233999207717
+     },
+     "Q<->90d": {
+      "anchored": "Q",
+      "anchored_bars": 858,
+      "line_separation_atr": 3.374502148191405,
+      "line_separation_bps": 3884.841657779565,
+      "pair": "Q<->90d",
+      "peg_state": "de-pegged",
+      "prose": "90d is fully formed while Q is 858 bars old; they sit 3.37 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "90d",
+      "rolling_bars": 2160,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.483637304013366
+     },
+     "W<->7d": {
+      "anchored": "W",
+      "anchored_bars": 66,
+      "line_separation_atr": 0.28237257002151894,
+      "line_separation_bps": 255.80555763921237,
+      "pair": "W<->7d",
+      "peg_state": "de-pegged",
+      "prose": "7d is fully formed while W is 66 bars old; they sit 0.28 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "7d",
+      "rolling_bars": 168,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.531712836625903
+     },
+     "Y<->365d": {
+      "note": "365d has not accumulated its own span yet",
+      "pair": "Y<->365d",
+      "rolling_warming": true
+     }
+    },
+    "events": [],
+    "peg_rules": {
+     "de-pegged": "otherwise",
+     "identical": "same anchor bar (exact)",
+     "pegged": "different anchors, lines within 0.02 daily-ATR AND sigma ratio in [0.9, 1.1]"
+    },
+    "structural_note": "January 1 anchors Y, Q and M simultaneously, so Y=Q until April 1; July 1 makes M=Q for all of July. Redundancy here is the CALENDAR, not the market",
+    "why": "an anchor carries independent information only once it UNPEGS from the next-shorter one; early in a period it is measuring the same bars"
+   },
    "flags": {
     "above_M_vwap": true,
     "above_VAH": true,
@@ -45527,7 +46874,7 @@
     ],
     "percentile_vs_full_history": 97.63,
     "provenance": "computed",
-    "records_7d": 42
+    "records_7d": 41
    },
    "governor": {
     "12h": {
@@ -45552,7 +46899,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:32:09Z"
+     "window_start_utc": "2026-01-17T22:16:16Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -45576,7 +46923,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-07-20T03:32:09Z"
+     "window_start_utc": "2026-07-20T06:16:16Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -45600,7 +46947,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-05-31T03:32:09Z"
+     "window_start_utc": "2026-05-31T06:16:16Z"
     }
    },
    "known_wrong_withdrawn": {
@@ -45927,10 +47274,10 @@
      "bars": 744,
      "closed_utc_ms": 1785538800000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 744,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -45954,10 +47301,10 @@
      "bars": 2184,
      "closed_utc_ms": 1782860400000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 2184,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -45981,10 +47328,10 @@
      "bars": 199,
      "closed_utc_ms": 1767222000000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 199,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -46061,7 +47408,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": null,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-07-20T03:32:09Z",
+     "window_start_utc": "2026-07-20T06:16:16Z",
      "zone_distance_bps": 0.0,
      "zone_distance_gov_atr": 0.0
     },
@@ -46129,7 +47476,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 190,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-05-31T03:32:09Z",
+     "window_start_utc": "2026-05-31T06:16:16Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     },
@@ -46197,7 +47544,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 8243,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:32:09Z",
+     "window_start_utc": "2026-01-17T22:16:16Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     }
@@ -46351,10 +47698,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 720,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -46394,10 +47741,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 168,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -46428,10 +47775,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 2160,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -46479,33 +47826,45 @@
    },
    "staleness": [
     {
-     "age_hours": 0.7,
+     "age_hours": 3.44,
      "last_input_utc": "2026-08-05T18:50:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 0.7,
+     "age_hours": 3.44,
      "last_input_utc": "2026-08-05T18:50:00Z",
      "layer": "tpo",
      "native_tf": "30m"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.44,
+     "last_input_utc": "2026-08-05T18:50:00Z",
+     "layer": "governor:1h",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.44,
+     "last_input_utc": "2026-08-05T18:50:00Z",
+     "layer": "radar:1h",
      "native_tf": "1h"
     }
    ],
@@ -46761,32 +48120,32 @@
    "symbol": "LITUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:34:02Z",
-     "basis_bps": -5.934,
-     "index_price": 2.129964,
-     "mark_price": 2.1287
+     "at_utc": "2026-08-05T22:18:15Z",
+     "basis_bps": 0.212,
+     "index_price": 2.14948,
+     "mark_price": 2.14952556
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:34:04Z",
+    "fetched_utc": "2026-08-05T22:18:16Z",
     "next_funding": {
      "interest_rate": 0.0001,
      "last_funding_rate": 5e-05,
-     "next_funding_utc": "2026-08-05T20:00:00Z"
+     "next_funding_utc": "2026-08-06T00:00:00Z"
     },
     "open_interest": {
-     "at_utc": "2026-08-05T19:00:00Z",
-     "change_24h_pct": -1.1461,
-     "change_24h_percentile": 35.16,
-     "change_7d_pct": -3.4069,
-     "level": 16097891.9,
-     "percentile": 9.2,
+     "at_utc": "2026-08-05T22:00:00Z",
+     "change_24h_pct": -1.9069,
+     "change_24h_percentile": 17.26,
+     "change_7d_pct": -4.0392,
+     "level": 16033300.5,
+     "percentile": 2.0,
      "samples": 500
     },
     "provenance": "fetched",
     "top_trader_ratio": {
-     "at_utc": "2026-08-05T19:00:00Z",
-     "percentile_7d": 54.76,
-     "ratio": 1.3354,
+     "at_utc": "2026-08-05T22:00:00Z",
+     "percentile_7d": 29.17,
+     "ratio": 1.2492,
      "samples": 168
     }
    },
@@ -46794,11 +48153,11 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 238,
+     "brackets": 233,
      "poc": 2.0493165,
      "provenance": "approximation",
      "vah": 2.101575,
-     "val": 2.016255
+     "val": 2.014122
     },
     "session": {
      "bins": 100,
@@ -46926,21 +48285,21 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28757,
-     "bin_width": 0.002649,
+     "bars": 28593,
+     "bin_width": 0.002384,
      "bins": 200,
      "method": "uniform-spread kline CDF",
-     "poc": 2.1998775,
+     "poc": 2.19788,
      "provenance": "approximation",
-     "range_high": 2.4714,
+     "range_high": 2.4184,
      "range_low": 1.9416,
-     "vah": 2.336301,
-     "val": 2.111136,
+     "vah": 2.337344,
+     "val": 2.113248,
      "value_area_fraction": 0.7,
-     "volume_total": 247117025.4
+     "volume_total": 245896477.5
     },
     "5d": {
-     "bars": 7157,
+     "bars": 6993,
      "bin_width": 0.0010665,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -46948,10 +48307,10 @@
      "provenance": "approximation",
      "range_high": 2.1549,
      "range_low": 1.9416,
-     "vah": 2.101575,
-     "val": 2.014122,
+     "vah": 2.1026415,
+     "val": 2.0130555,
      "value_area_fraction": 0.7,
-     "volume_total": 42874581.1
+     "volume_total": 41780484.9
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -47197,12 +48556,12 @@
     "provenance": "computed",
     "rolling": {
      "30d": {
-      "bars": 718,
-      "distance_bps": -880.4,
-      "lower_1sigma": 2.16970531,
-      "sigma": 0.18609987,
-      "upper_1sigma": 2.54190504,
-      "vwap": 2.35580518
+      "bars": 715,
+      "distance_bps": -869.9,
+      "lower_1sigma": 2.1675667,
+      "sigma": 0.18552981,
+      "upper_1sigma": 2.53862633,
+      "vwap": 2.35309651
      },
      "365d": {
       "bars": 5401,
@@ -47213,25 +48572,26 @@
       "vwap": 1.73026511
      },
      "7d": {
-      "bars": 166,
-      "distance_bps": 171.39,
-      "lower_1sigma": 2.0326382,
-      "sigma": 0.0795608,
-      "upper_1sigma": 2.1917598,
-      "vwap": 2.112199
+      "bars": 163,
+      "distance_bps": 179.51,
+      "lower_1sigma": 2.03026274,
+      "sigma": 0.08025135,
+      "upper_1sigma": 2.19076543,
+      "vwap": 2.11051409
      },
      "90d": {
-      "bars": 2158,
-      "distance_bps": 2905.52,
-      "lower_1sigma": 1.19021983,
-      "sigma": 0.47449373,
-      "upper_1sigma": 2.13920729,
-      "vwap": 1.66471356
+      "bars": 2155,
+      "distance_bps": 2903.75,
+      "lower_1sigma": 1.19053677,
+      "sigma": 0.47440514,
+      "upper_1sigma": 2.13934705,
+      "vwap": 1.66494191
      }
     }
    }
   },
   "NEARUSDT": {
+   "anchor_degeneracy": [],
    "band_excursions": {
     "census_candidate": "H-VBR",
     "claims_nothing": "recording is OPS; whether a band touch pays is census work under G-7",
@@ -47735,8 +49095,8 @@
      "vwap_rolling": 28
     },
     "maturity_floors": {
-     "band_min_bars": 30,
-     "line_min_bars": 10,
+     "band_min_bars": 60,
+     "line_min_bars": 16,
      "note": "withheld levels still PRINT with a thin_sample chip; they are excluded from SCORING only",
      "ruling": "R3 (operator, 2026-08-05) -- INTERIM, 1h substrate",
      "withheld": [],
@@ -53455,6 +54815,8 @@
       2,
       3
      ],
+     "hinge": "a sigma band is a HINGE with two outcomes -- pullback to the mean (target A) or rejection into auction toward the dominant POC and the far side of value (target B). BOTH are printed; NEITHER is preferred.",
+     "hinge_geometry": [],
      "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
      "skipped_thin_sample": [],
      "thin_sample_gate": "a draft requires bars >= 30, so a freshly-opened anchor cannot manufacture a setup from a two-bar sigma",
@@ -53684,6 +55046,139 @@
     },
     "sequencing_rule": "Part II is derivable from Part I's printed numbers alone; no hidden inputs (§2.2)"
    },
+   "depeg": {
+    "adjacent": {
+     "M<->Q": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "Q": "2026-07-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "Q": 858
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 1.8482452714252882,
+      "line_separation_bps": 1030.9675026157151,
+      "longer": "Q",
+      "pair": "M<->Q",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Q has separated from M: 1.85 ATR apart, sigma ratio 4.73 -- it is now saying something M is not.",
+      "shorter": "M",
+      "sigma_ratio": 4.7291660942839755
+     },
+     "Q<->Y": {
+      "anchor_utc": {
+       "Q": "2026-07-01T00:00:00Z",
+       "Y": "2026-01-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "Q": 858,
+       "Y": 5202
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 1.5965440093699523,
+      "line_separation_bps": 807.3329197688163,
+      "longer": "Y",
+      "pair": "Q<->Y",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Y has separated from Q: 1.60 ATR apart, sigma ratio 3.91 -- it is now saying something Q is not.",
+      "shorter": "Q",
+      "sigma_ratio": 3.9106704401430306
+     },
+     "W<->M": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "W": "2026-08-03T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "W": 66
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 0.1576586623251805,
+      "line_separation_bps": 87.17672970335626,
+      "longer": "M",
+      "pair": "W<->M",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "M has separated from W: 0.16 ATR apart, sigma ratio 1.40 -- it is now saying something W is not.",
+      "shorter": "W",
+      "sigma_ratio": 1.400161054961288
+     }
+    },
+    "adjacent_state_counts": {
+     "de-pegged": 3
+    },
+    "claims_nothing": "recording is OPS; whether a de-peg marks or precedes anything is H-VDP, census work under G-7",
+    "counterpart": {
+     "M<->30d": {
+      "anchored": "M",
+      "anchored_bars": 114,
+      "line_separation_atr": 1.6329164926677953,
+      "line_separation_bps": 834.8155980894003,
+      "pair": "M<->30d",
+      "peg_state": "de-pegged",
+      "prose": "30d is fully formed while M is 114 bars old; they sit 1.63 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "30d",
+      "rolling_bars": 720,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.2060715360571415
+     },
+     "Q<->90d": {
+      "anchored": "Q",
+      "anchored_bars": 858,
+      "line_separation_atr": 2.5771610079633818,
+      "line_separation_bps": 1152.9531169019335,
+      "pair": "Q<->90d",
+      "peg_state": "de-pegged",
+      "prose": "90d is fully formed while Q is 858 bars old; they sit 2.58 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "90d",
+      "rolling_bars": 2160,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.3671179083520417
+     },
+     "W<->7d": {
+      "anchored": "W",
+      "anchored_bars": 66,
+      "line_separation_atr": 0.42796917254198397,
+      "line_separation_bps": 242.37961476407514,
+      "pair": "W<->7d",
+      "peg_state": "de-pegged",
+      "prose": "7d is fully formed while W is 66 bars old; they sit 0.43 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "7d",
+      "rolling_bars": 168,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.4836390361996052
+     },
+     "Y<->365d": {
+      "anchored": "Y",
+      "anchored_bars": 5202,
+      "line_separation_atr": 2.1847494746280973,
+      "line_separation_bps": 1072.8625817016348,
+      "pair": "Y<->365d",
+      "peg_state": "de-pegged",
+      "prose": "365d is fully formed while Y is 5202 bars old; they sit 2.18 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "365d",
+      "rolling_bars": 8760,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.8749656430119956
+     }
+    },
+    "events": [],
+    "peg_rules": {
+     "de-pegged": "otherwise",
+     "identical": "same anchor bar (exact)",
+     "pegged": "different anchors, lines within 0.02 daily-ATR AND sigma ratio in [0.9, 1.1]"
+    },
+    "structural_note": "January 1 anchors Y, Q and M simultaneously, so Y=Q until April 1; July 1 makes M=Q for all of July. Redundancy here is the CALENDAR, not the market",
+    "why": "an anchor carries independent information only once it UNPEGS from the next-shorter one; early in a period it is measuring the same bars"
+   },
    "flags": {
     "above_M_vwap": true,
     "above_VAH": false,
@@ -53741,7 +55236,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-01-17T19:32:09Z"
+     "window_start_utc": "2026-01-17T22:16:16Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -53765,7 +55260,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:32:09Z"
+     "window_start_utc": "2026-07-20T06:16:16Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -53789,7 +55284,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-05-31T03:32:09Z"
+     "window_start_utc": "2026-05-31T06:16:16Z"
     }
    },
    "last_bar_utc": {
@@ -54142,7 +55637,7 @@
       "anchor": "M",
       "at_utc": "2026-08-05T03:00:00Z",
       "level": 1.71027937,
-      "occurrences": 7
+      "occurrences": 4
      },
      "rule": "price crossed an anchored VWAP (M/Q/Y) within the last 24h",
      "rule_id": "POI-4",
@@ -54165,10 +55660,10 @@
      "bars": 744,
      "closed_utc_ms": 1785538800000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 744,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -54192,10 +55687,10 @@
      "bars": 2184,
      "closed_utc_ms": 1782860400000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 2184,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -54219,10 +55714,10 @@
      "bars": 8760,
      "closed_utc_ms": 1767222000000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 8760,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -54299,7 +55794,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": null,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:32:09Z",
+     "window_start_utc": "2026-07-20T06:16:16Z",
      "zone_distance_bps": 0.0,
      "zone_distance_gov_atr": 0.0
     },
@@ -54367,7 +55862,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": 1344,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-05-31T03:32:09Z",
+     "window_start_utc": "2026-05-31T06:16:16Z",
      "zone_distance_bps": 0.0,
      "zone_distance_gov_atr": 0.0
     },
@@ -54435,7 +55930,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 1813,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-01-17T19:32:09Z",
+     "window_start_utc": "2026-01-17T22:16:16Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     }
@@ -54571,10 +56066,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 720,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -54605,10 +56100,10 @@
        "overlap_ms": 5295600000
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 8760,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -54639,10 +56134,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 168,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -54673,10 +56168,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 2160,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -54724,33 +56219,45 @@
    },
    "staleness": [
     {
-     "age_hours": 0.74,
+     "age_hours": 3.47,
      "last_input_utc": "2026-08-05T18:48:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 0.79,
+     "age_hours": 3.52,
      "last_input_utc": "2026-08-05T18:45:00Z",
      "layer": "tpo",
      "native_tf": "30m"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.52,
+     "last_input_utc": "2026-08-05T18:45:00Z",
+     "layer": "governor:1h",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.52,
+     "last_input_utc": "2026-08-05T18:45:00Z",
+     "layer": "radar:1h",
      "native_tf": "1h"
     }
    ],
@@ -55006,32 +56513,32 @@
    "symbol": "NEARUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:32:57Z",
-     "basis_bps": -5.242,
-     "index_price": 1.7118973,
-     "mark_price": 1.711
+     "at_utc": "2026-08-05T22:17:08Z",
+     "basis_bps": -3.125,
+     "index_price": 1.69798378,
+     "mark_price": 1.69745315
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:32:58Z",
+    "fetched_utc": "2026-08-05T22:17:09Z",
     "next_funding": {
      "interest_rate": 0.0001,
-     "last_funding_rate": 7.66e-05,
+     "last_funding_rate": 0.0001,
      "next_funding_utc": "2026-08-06T00:00:00Z"
     },
     "open_interest": {
-     "at_utc": "2026-08-05T19:00:00Z",
-     "change_24h_pct": -0.8818,
-     "change_24h_percentile": 44.42,
-     "change_7d_pct": -14.5103,
-     "level": 39909074.0,
-     "percentile": 23.6,
+     "at_utc": "2026-08-05T22:00:00Z",
+     "change_24h_pct": -0.4543,
+     "change_24h_percentile": 50.95,
+     "change_7d_pct": -14.5545,
+     "level": 39981432.0,
+     "percentile": 24.2,
      "samples": 500
     },
     "provenance": "fetched",
     "top_trader_ratio": {
-     "at_utc": "2026-08-05T19:00:00Z",
-     "percentile_7d": 60.12,
-     "ratio": 1.2153,
+     "at_utc": "2026-08-05T22:00:00Z",
+     "percentile_7d": 67.86,
+     "ratio": 1.2262,
      "samples": 168
     }
    },
@@ -55039,11 +56546,11 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 238,
+     "brackets": 233,
      "poc": 1.708625,
      "provenance": "approximation",
-     "vah": 1.753,
-     "val": 1.68675
+     "vah": 1.75175,
+     "val": 1.68925
     },
     "session": {
      "bins": 100,
@@ -55170,13 +56677,13 @@
      },
      "1h": {
       "atr": 0.01516637,
-      "percentile": 18.36,
-      "sample_bars": 8758
+      "percentile": 18.37,
+      "sample_bars": 8755
      },
      "4h": {
       "atr": 0.03123282,
       "percentile": 15.17,
-      "sample_bars": 2189
+      "sample_bars": 2188
      }
     },
     "compression_streak_days": 2,
@@ -55190,7 +56697,7 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28755,
+     "bars": 28591,
      "bin_width": 0.00247,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -55201,10 +56708,10 @@
      "vah": 2.02595,
      "val": 1.69497,
      "value_area_fraction": 0.7,
-     "volume_total": 967167921.0
+     "volume_total": 963671180.0
     },
     "5d": {
-     "bars": 7155,
+     "bars": 6991,
      "bin_width": 0.000625,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -55212,10 +56719,10 @@
      "provenance": "approximation",
      "range_high": 1.768,
      "range_low": 1.643,
-     "vah": 1.748625,
-     "val": 1.68925,
+     "vah": 1.748,
+     "val": 1.691125,
      "value_area_fraction": 0.7,
-     "volume_total": 168167871.0
+     "volume_total": 163386559.0
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -55468,64 +56975,47 @@
       "at_utc": "2026-08-05T17:00:00Z",
       "direction": "up",
       "level": 1.70936096
-     },
-     {
-      "anchor": "Y",
-      "at_utc": "2026-08-04T21:00:00Z",
-      "direction": "down",
-      "level": 1.73340593
-     },
-     {
-      "anchor": "Y",
-      "at_utc": "2026-08-04T22:00:00Z",
-      "direction": "up",
-      "level": 1.73340598
-     },
-     {
-      "anchor": "Y",
-      "at_utc": "2026-08-04T23:00:00Z",
-      "direction": "down",
-      "level": 1.73340594
      }
     ],
     "provenance": "computed",
     "rolling": {
      "30d": {
-      "bars": 718,
-      "distance_bps": -786.32,
-      "lower_1sigma": 1.73235266,
-      "sigma": 0.13226509,
-      "upper_1sigma": 1.99688285,
-      "vwap": 1.86461776
+      "bars": 715,
+      "distance_bps": -782.73,
+      "lower_1sigma": 1.7319803,
+      "sigma": 0.13191157,
+      "upper_1sigma": 1.99580345,
+      "vwap": 1.86389187
      },
      "365d": {
-      "bars": 8758,
-      "distance_bps": -1151.61,
-      "lower_1sigma": 1.36458095,
-      "sigma": 0.57701591,
-      "upper_1sigma": 2.51861276,
-      "vwap": 1.94159686
+      "bars": 8755,
+      "distance_bps": -1151.32,
+      "lower_1sigma": 1.36450526,
+      "sigma": 0.57702744,
+      "upper_1sigma": 2.51856014,
+      "vwap": 1.9415327
      },
      "7d": {
-      "bars": 166,
-      "distance_bps": 187.99,
-      "lower_1sigma": 1.6474631,
-      "sigma": 0.03883687,
-      "upper_1sigma": 1.72513684,
-      "vwap": 1.68629997
+      "bars": 163,
+      "distance_bps": 167.47,
+      "lower_1sigma": 1.65478004,
+      "sigma": 0.03492267,
+      "upper_1sigma": 1.72462538,
+      "vwap": 1.68970271
      },
      "90d": {
-      "bars": 2158,
-      "distance_bps": -1940.77,
-      "lower_1sigma": 1.78033189,
-      "sigma": 0.35138411,
-      "upper_1sigma": 2.48310012,
-      "vwap": 2.131716
+      "bars": 2155,
+      "distance_bps": -1942.89,
+      "lower_1sigma": 1.78128656,
+      "sigma": 0.35099267,
+      "upper_1sigma": 2.4832719,
+      "vwap": 2.13227923
      }
     }
    }
   },
   "SOLUSDT": {
+   "anchor_degeneracy": [],
    "band_excursions": {
     "census_candidate": "H-VBR",
     "claims_nothing": "recording is OPS; whether a band touch pays is census work under G-7",
@@ -56042,8 +57532,8 @@
      "vwap_rolling": 28
     },
     "maturity_floors": {
-     "band_min_bars": 30,
-     "line_min_bars": 10,
+     "band_min_bars": 60,
+     "line_min_bars": 16,
      "note": "withheld levels still PRINT with a thin_sample chip; they are excluded from SCORING only",
      "ruling": "R3 (operator, 2026-08-05) -- INTERIM, 1h substrate",
      "withheld": [],
@@ -61745,6 +63235,7 @@
        "invalidation_is": "beyond sigma3",
        "kind": "prior_anchor",
        "name": "prior Y",
+       "no_preference": "NO preference is expressed between target A (pullback to the mean) and target B (rejection into auction). Which one occurs depends on how price is behaving at the level, and these definitions carry into range detection -- so they are MEASURED before being set in stone. Any discrimination rule invented now would be a guess wearing the clothes of a system.",
        "no_sizing": true,
        "rank": 1,
        "reward": 73.28362099342186,
@@ -61756,6 +63247,39 @@
        "sigma_atr": 14.164967209168475,
        "sigma_position": -2.621930848724747,
        "target": 170.59229329445262,
+       "target_a": {
+        "distance_atr": 28.32993441833695,
+        "kind": "pullback",
+        "label": "VWAP mean",
+        "reward": 73.28362099342186,
+        "rr": 2.0,
+        "target": 170.59229329445262
+       },
+       "target_b": {
+        "kind": "rejection",
+        "note": "price rejects the level and auctions toward the dominant volume node and the far side of traded value",
+        "targets": [
+         {
+          "distance_atr": 9.016256740030412,
+          "in_rejection_direction": true,
+          "kind": "poc",
+          "label": "30d POC",
+          "reward": 23.323172301030752,
+          "rr": 0.6365180100236669,
+          "target": 73.9855
+         },
+         {
+          "distance_atr": 9.442782620591144,
+          "in_rejection_direction": true,
+          "kind": "va_edge",
+          "label": "30d VAL",
+          "reward": 24.426505634364077,
+          "rr": 0.6666293314451988,
+          "target": 72.88216666666668
+         }
+        ],
+        "window": "30d"
+       },
        "target_distance_atr": 28.32993441833695,
        "target_is": "the VWAP mean"
       }
@@ -61764,6 +63288,22 @@
      "entry_sigmas": [
       2,
       3
+     ],
+     "hinge": "a sigma band is a HINGE with two outcomes -- pullback to the mean (target A) or rejection into auction toward the dominant POC and the far side of value (target B). BOTH are printed; NEITHER is preferred.",
+     "hinge_geometry": [
+      {
+       "bars": 8760,
+       "entry": 97.30867230103075,
+       "entry_band": "-2s",
+       "mean_atr": 28.32993441833695,
+       "name": "prior Y",
+       "poc_atr": 9.016256740030412,
+       "poc_in_rejection_dir": true,
+       "side": "long",
+       "sigma_atr": 14.164967209168475,
+       "va_edge_atr": 9.442782620591144,
+       "va_edge_in_rejection_dir": true
+      }
      ],
      "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
      "skipped_thin_sample": [],
@@ -61992,6 +63532,139 @@
     },
     "sequencing_rule": "Part II is derivable from Part I's printed numbers alone; no hidden inputs (§2.2)"
    },
+   "depeg": {
+    "adjacent": {
+     "M<->Q": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "Q": "2026-07-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "Q": 858
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 1.414805741794443,
+      "line_separation_bps": 499.6116914697275,
+      "longer": "Q",
+      "pair": "M<->Q",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Q has separated from M: 1.41 ATR apart, sigma ratio 3.59 -- it is now saying something M is not.",
+      "shorter": "M",
+      "sigma_ratio": 3.593470945130355
+     },
+     "Q<->Y": {
+      "anchor_utc": {
+       "Q": "2026-07-01T00:00:00Z",
+       "Y": "2026-01-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "Q": 858,
+       "Y": 5202
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 4.498950175876619,
+      "line_separation_bps": 1513.1212305299807,
+      "longer": "Y",
+      "pair": "Q<->Y",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Y has separated from Q: 4.50 ATR apart, sigma ratio 6.59 -- it is now saying something Q is not.",
+      "shorter": "Q",
+      "sigma_ratio": 6.594615846241021
+     },
+     "W<->M": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "W": "2026-08-03T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "W": 66
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 0.136305929723818,
+      "line_separation_bps": 47.90326522956765,
+      "longer": "M",
+      "pair": "W<->M",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "M has separated from W: 0.14 ATR apart, sigma ratio 1.59 -- it is now saying something W is not.",
+      "shorter": "W",
+      "sigma_ratio": 1.5887318444460399
+     }
+    },
+    "adjacent_state_counts": {
+     "de-pegged": 3
+    },
+    "claims_nothing": "recording is OPS; whether a de-peg marks or precedes anything is H-VDP, census work under G-7",
+    "counterpart": {
+     "M<->30d": {
+      "anchored": "M",
+      "anchored_bars": 114,
+      "line_separation_atr": 1.0514447712918802,
+      "line_separation_bps": 358.00504335738685,
+      "pair": "M<->30d",
+      "peg_state": "de-pegged",
+      "prose": "30d is fully formed while M is 114 bars old; they sit 1.05 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "30d",
+      "rolling_bars": 720,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.349462102701013
+     },
+     "Q<->90d": {
+      "anchored": "Q",
+      "anchored_bars": 858,
+      "line_separation_atr": 0.13019494024139364,
+      "line_separation_bps": 43.98073866255974,
+      "pair": "Q<->90d",
+      "peg_state": "de-pegged",
+      "prose": "90d is fully formed while Q is 858 bars old; they sit 0.13 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "90d",
+      "rolling_bars": 2160,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.3403474723947256
+     },
+     "W<->7d": {
+      "anchored": "W",
+      "anchored_bars": 66,
+      "line_separation_atr": 0.06475565809078153,
+      "line_separation_bps": 22.809594742158758,
+      "pair": "W<->7d",
+      "peg_state": "de-pegged",
+      "prose": "7d is fully formed while W is 66 bars old; they sit 0.06 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "7d",
+      "rolling_bars": 168,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.6447471424870821
+     },
+     "Y<->365d": {
+      "anchored": "Y",
+      "anchored_bars": 5202,
+      "line_separation_atr": 15.650356185955193,
+      "line_separation_bps": 3137.46188855783,
+      "pair": "Y<->365d",
+      "peg_state": "de-pegged",
+      "prose": "365d is fully formed while Y is 5202 bars old; they sit 15.65 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "365d",
+      "rolling_bars": 8760,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.3552943421151293
+     }
+    },
+    "events": [],
+    "peg_rules": {
+     "de-pegged": "otherwise",
+     "identical": "same anchor bar (exact)",
+     "pegged": "different anchors, lines within 0.02 daily-ATR AND sigma ratio in [0.9, 1.1]"
+    },
+    "structural_note": "January 1 anchors Y, Q and M simultaneously, so Y=Q until April 1; July 1 makes M=Q for all of July. Redundancy here is the CALENDAR, not the market",
+    "why": "an anchor carries independent information only once it UNPEGS from the next-shorter one; early in a period it is measuring the same bars"
+   },
    "flags": {
     "above_M_vwap": true,
     "above_VAH": true,
@@ -62049,7 +63722,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-01-17T19:32:09Z"
+     "window_start_utc": "2026-01-17T22:16:16Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -62073,7 +63746,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:32:09Z"
+     "window_start_utc": "2026-07-20T06:16:16Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -62097,7 +63770,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:32:09Z"
+     "window_start_utc": "2026-05-31T06:16:16Z"
     }
    },
    "last_bar_utc": {
@@ -62411,8 +64084,8 @@
      "asset": "SOLUSDT",
      "detail": "OI 24h change in the top decile",
      "numbers": {
-      "change_24h_pct": 3.8896,
-      "percentile": 97.05
+      "change_24h_pct": 3.6854,
+      "percentile": 95.16
      },
      "rule": "OI 24h-change percentile >=90 (Tier-2; degrades)",
      "rule_id": "POI-7",
@@ -62450,10 +64123,10 @@
      "bars": 744,
      "closed_utc_ms": 1785538800000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 744,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -62477,10 +64150,10 @@
      "bars": 2184,
      "closed_utc_ms": 1782860400000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 2184,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -62504,10 +64177,10 @@
      "bars": 8760,
      "closed_utc_ms": 1767222000000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 8760,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -62584,7 +64257,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 27441,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:32:09Z",
+     "window_start_utc": "2026-07-20T06:16:16Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     },
@@ -62652,7 +64325,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 11567,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:32:09Z",
+     "window_start_utc": "2026-05-31T06:16:16Z",
      "zone_distance_bps": null,
      "zone_distance_gov_atr": null
     },
@@ -62720,7 +64393,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": 1537,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-01-17T19:32:09Z",
+     "window_start_utc": "2026-01-17T22:16:16Z",
      "zone_distance_bps": 20.56,
      "zone_distance_gov_atr": 0.0959
     }
@@ -62865,10 +64538,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 720,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -62899,10 +64572,10 @@
        "overlap_ms": 5295600000
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 8760,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -62933,10 +64606,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 168,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -62967,10 +64640,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 2160,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -63018,33 +64691,45 @@
    },
    "staleness": [
     {
-     "age_hours": 0.74,
+     "age_hours": 3.47,
      "last_input_utc": "2026-08-05T18:48:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 0.79,
+     "age_hours": 3.52,
      "last_input_utc": "2026-08-05T18:45:00Z",
      "layer": "tpo",
      "native_tf": "30m"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.52,
+     "last_input_utc": "2026-08-05T18:45:00Z",
+     "layer": "governor:1h",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.52,
+     "last_input_utc": "2026-08-05T18:45:00Z",
+     "layer": "radar:1h",
      "native_tf": "1h"
     }
    ],
@@ -63300,32 +64985,32 @@
    "symbol": "SOLUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:32:43Z",
-     "basis_bps": -5.017,
-     "index_price": 74.47736254,
-     "mark_price": 74.44
+     "at_utc": "2026-08-05T22:16:54Z",
+     "basis_bps": -5.691,
+     "index_price": 74.15702373,
+     "mark_price": 74.11482185
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:32:45Z",
+    "fetched_utc": "2026-08-05T22:16:55Z",
     "next_funding": {
      "interest_rate": 0.0001,
-     "last_funding_rate": 5.121e-05,
+     "last_funding_rate": 3.093e-05,
      "next_funding_utc": "2026-08-06T00:00:00Z"
     },
     "open_interest": {
-     "at_utc": "2026-08-05T19:00:00Z",
-     "change_24h_pct": 3.8896,
-     "change_24h_percentile": 97.05,
-     "change_7d_pct": 2.6322,
-     "level": 8544940.88,
-     "percentile": 40.4,
+     "at_utc": "2026-08-05T22:00:00Z",
+     "change_24h_pct": 3.6854,
+     "change_24h_percentile": 95.16,
+     "change_7d_pct": 1.4272,
+     "level": 8451141.2,
+     "percentile": 36.2,
      "samples": 500
     },
     "provenance": "fetched",
     "top_trader_ratio": {
-     "at_utc": "2026-08-05T19:00:00Z",
-     "percentile_7d": 14.88,
-     "ratio": 2.7106,
+     "at_utc": "2026-08-05T22:00:00Z",
+     "percentile_7d": 25.0,
+     "ratio": 2.7467,
      "samples": 168
     }
    },
@@ -63333,7 +65018,7 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 238,
+     "brackets": 233,
      "poc": 73.72095,
      "provenance": "approximation",
      "vah": 74.1735,
@@ -63456,12 +65141,12 @@
      "1h": {
       "atr": 0.4730117,
       "percentile": 5.46,
-      "sample_bars": 8758
+      "sample_bars": 8755
      },
      "4h": {
       "atr": 0.89533542,
       "percentile": 1.83,
-      "sample_bars": 2189
+      "sample_bars": 2188
      }
     },
     "compression_streak_days": 2,
@@ -63475,7 +65160,7 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28755,
+     "bars": 28591,
      "bin_width": 0.0418,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -63486,10 +65171,10 @@
      "vah": 76.2366,
      "val": 72.809,
      "value_area_fraction": 0.7,
-     "volume_total": 265824192.86
+     "volume_total": 265122096.33
     },
     "5d": {
-     "bars": 7155,
+     "bars": 6991,
      "bin_width": 0.02155,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -63500,7 +65185,7 @@
      "vah": 74.28125,
      "val": 72.90205,
      "value_area_fraction": 0.7,
-     "volume_total": 65241724.4
+     "volume_total": 64024657.6
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -63725,41 +65410,42 @@
     "provenance": "computed",
     "rolling": {
      "30d": {
-      "bars": 718,
-      "distance_bps": -188.98,
-      "lower_1sigma": 73.70301783,
-      "sigma": 2.25241221,
-      "upper_1sigma": 78.20784225,
-      "vwap": 75.95543004
+      "bars": 715,
+      "distance_bps": -183.85,
+      "lower_1sigma": 73.71676346,
+      "sigma": 2.19896802,
+      "upper_1sigma": 78.1146995,
+      "vwap": 75.91573148
      },
      "365d": {
-      "bars": 8758,
-      "distance_bps": -4224.59,
-      "lower_1sigma": 76.0723173,
-      "sigma": 52.95756103,
-      "upper_1sigma": 181.98743935,
-      "vwap": 129.02987832
+      "bars": 8755,
+      "distance_bps": -4224.32,
+      "lower_1sigma": 76.06319242,
+      "sigma": 52.96046976,
+      "upper_1sigma": 181.98413193,
+      "vwap": 129.02366218
      },
      "7d": {
-      "bars": 166,
-      "distance_bps": 148.87,
-      "lower_1sigma": 72.64237783,
-      "sigma": 0.78449775,
-      "upper_1sigma": 74.21137332,
-      "vwap": 73.42687557
+      "bars": 163,
+      "distance_bps": 146.71,
+      "lower_1sigma": 72.65155544,
+      "sigma": 0.79098996,
+      "upper_1sigma": 74.23353537,
+      "vwap": 73.4425454
      },
      "90d": {
-      "bars": 2158,
-      "distance_bps": -267.13,
-      "lower_1sigma": 68.18646145,
-      "sigma": 8.37884394,
-      "upper_1sigma": 84.94414933,
-      "vwap": 76.56530539
+      "bars": 2155,
+      "distance_bps": -265.54,
+      "lower_1sigma": 68.17794219,
+      "sigma": 8.37482337,
+      "upper_1sigma": 84.92758894,
+      "vwap": 76.55276556
      }
     }
    }
   },
   "TAOUSDT": {
+   "anchor_degeneracy": [],
    "band_excursions": {
     "census_candidate": "H-VBR",
     "claims_nothing": "recording is OPS; whether a band touch pays is census work under G-7",
@@ -63957,7 +65643,7 @@
        "invalidation": 200.86172263,
        "invalidation_note": "anchored Q-VWAP cross",
        "vah": 197.89225,
-       "val": 190.22875,
+       "val": 190.1305,
        "vote": 0,
        "vwap_level": 200.86172263
       },
@@ -64274,8 +65960,8 @@
      "vwap_rolling": 28
     },
     "maturity_floors": {
-     "band_min_bars": 30,
-     "line_min_bars": 10,
+     "band_min_bars": 60,
+     "line_min_bars": 16,
      "note": "withheld levels still PRINT with a thin_sample chip; they are excluded from SCORING only",
      "ruling": "R3 (operator, 2026-08-05) -- INTERIM, 1h substrate",
      "withheld": [],
@@ -70052,6 +71738,7 @@
        "invalidation_is": "beyond sigma3",
        "kind": "prior_anchor",
        "name": "prior Y",
+       "no_preference": "NO preference is expressed between target A (pullback to the mean) and target B (rejection into auction). Which one occurs depends on how price is behaving at the level, and these definitions carry into range detection -- so they are MEASURED before being set in stone. Any discrimination rule invented now would be a guess wearing the clothes of a system.",
        "no_sizing": true,
        "rank": 1,
        "reward": 148.07296556646986,
@@ -70063,6 +71750,39 @@
        "sigma_atr": 7.759457938263634,
        "sigma_position": -2.1287103761369717,
        "target": 354.94222911335845,
+       "target_a": {
+        "distance_atr": 15.518915876527268,
+        "kind": "pullback",
+        "label": "VWAP mean",
+        "reward": 148.07296556646986,
+        "rr": 2.0,
+        "target": 354.94222911335845
+       },
+       "target_b": {
+        "kind": "rejection",
+        "note": "price rejects the level and auctions toward the dominant volume node and the far side of traded value",
+        "targets": [
+         {
+          "distance_atr": 1.1066596945017655,
+          "in_rejection_direction": true,
+          "kind": "poc",
+          "label": "30d POC",
+          "reward": 10.559138546888562,
+          "rr": 0.14262074790618778,
+          "target": 196.31012500000003
+         },
+         {
+          "distance_atr": 1.9302766184225886,
+          "in_rejection_direction": true,
+          "kind": "va_edge",
+          "label": "30d VAL",
+          "reward": 18.417638546888583,
+          "rr": 0.24876436392598508,
+          "target": 188.451625
+         }
+        ],
+        "window": "30d"
+       },
        "target_distance_atr": 15.518915876527268,
        "target_is": "the VWAP mean"
       }
@@ -70071,6 +71791,22 @@
      "entry_sigmas": [
       2,
       3
+     ],
+     "hinge": "a sigma band is a HINGE with two outcomes -- pullback to the mean (target A) or rejection into auction toward the dominant POC and the far side of value (target B). BOTH are printed; NEITHER is preferred.",
+     "hinge_geometry": [
+      {
+       "bars": 8760,
+       "entry": 206.8692635468886,
+       "entry_band": "-2s",
+       "mean_atr": 15.518915876527268,
+       "name": "prior Y",
+       "poc_atr": 1.1066596945017655,
+       "poc_in_rejection_dir": true,
+       "side": "long",
+       "sigma_atr": 7.759457938263634,
+       "va_edge_atr": 1.9302766184225886,
+       "va_edge_in_rejection_dir": true
+      }
      ],
      "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
      "skipped_thin_sample": [],
@@ -70299,6 +72035,139 @@
     },
     "sequencing_rule": "Part II is derivable from Part I's printed numbers alone; no hidden inputs (§2.2)"
    },
+   "depeg": {
+    "adjacent": {
+     "M<->Q": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "Q": "2026-07-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "Q": 858
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 0.757556100268564,
+      "line_separation_bps": 373.2919399463519,
+      "longer": "Q",
+      "pair": "M<->Q",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Q has separated from M: 0.76 ATR apart, sigma ratio 2.73 -- it is now saying something M is not.",
+      "shorter": "M",
+      "sigma_ratio": 2.7297103933060747
+     },
+     "Q<->Y": {
+      "anchor_utc": {
+       "Q": "2026-07-01T00:00:00Z",
+       "Y": "2026-01-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "Q": 858,
+       "Y": 5202
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 5.473815373746523,
+      "line_separation_bps": 2600.203613518118,
+      "longer": "Y",
+      "pair": "Q<->Y",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Y has separated from Q: 5.47 ATR apart, sigma ratio 5.91 -- it is now saying something Q is not.",
+      "shorter": "Q",
+      "sigma_ratio": 5.912004403098676
+     },
+     "W<->M": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "W": "2026-08-03T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "W": 66
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 0.0074461708939847025,
+      "line_separation_bps": 3.67050813797268,
+      "longer": "M",
+      "pair": "W<->M",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "M has separated from W: 0.01 ATR apart, sigma ratio 0.88 -- it is now saying something W is not.",
+      "shorter": "W",
+      "sigma_ratio": 0.883775572799159
+     }
+    },
+    "adjacent_state_counts": {
+     "de-pegged": 3
+    },
+    "claims_nothing": "recording is OPS; whether a de-peg marks or precedes anything is H-VDP, census work under G-7",
+    "counterpart": {
+     "M<->30d": {
+      "anchored": "M",
+      "anchored_bars": 114,
+      "line_separation_atr": 0.531485438021738,
+      "line_separation_bps": 255.20998856256173,
+      "pair": "M<->30d",
+      "peg_state": "de-pegged",
+      "prose": "30d is fully formed while M is 114 bars old; they sit 0.53 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "30d",
+      "rolling_bars": 720,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.41526126690685167
+     },
+     "Q<->90d": {
+      "anchored": "Q",
+      "anchored_bars": 858,
+      "line_separation_atr": 4.087860807187979,
+      "line_separation_bps": 1626.080662618773,
+      "pair": "Q<->90d",
+      "peg_state": "de-pegged",
+      "prose": "90d is fully formed while Q is 858 bars old; they sit 4.09 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "90d",
+      "rolling_bars": 2160,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.22563380547215156
+     },
+     "W<->7d": {
+      "anchored": "W",
+      "anchored_bars": 66,
+      "line_separation_atr": 0.01474415271809432,
+      "line_separation_bps": 7.273254279977611,
+      "pair": "W<->7d",
+      "peg_state": "de-pegged",
+      "prose": "7d is fully formed while W is 66 bars old; they sit 0.01 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "7d",
+      "rolling_bars": 168,
+      "rolling_is_formed": true,
+      "sigma_ratio": 1.2450590237840935
+     },
+     "Y<->365d": {
+      "anchored": "Y",
+      "anchored_bars": 5202,
+      "line_separation_atr": 3.4952672273931835,
+      "line_separation_bps": 1164.2907584489794,
+      "pair": "Y<->365d",
+      "peg_state": "de-pegged",
+      "prose": "365d is fully formed while Y is 5202 bars old; they sit 3.50 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "365d",
+      "rolling_bars": 8760,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.6769070593491688
+     }
+    },
+    "events": [],
+    "peg_rules": {
+     "de-pegged": "otherwise",
+     "identical": "same anchor bar (exact)",
+     "pegged": "different anchors, lines within 0.02 daily-ATR AND sigma ratio in [0.9, 1.1]"
+    },
+    "structural_note": "January 1 anchors Y, Q and M simultaneously, so Y=Q until April 1; July 1 makes M=Q for all of July. Redundancy here is the CALENDAR, not the market",
+    "why": "an anchor carries independent information only once it UNPEGS from the next-shorter one; early in a period it is measuring the same bars"
+   },
    "flags": {
     "above_M_vwap": true,
     "above_VAH": true,
@@ -70325,13 +72194,13 @@
     "history_first_utc": "2024-04-11T16:00:00Z",
     "history_records": 5076,
     "integration": "per-record timestamps; never assumed 8h x 3/day",
-    "mean_7d": 4.52581e-05,
+    "mean_7d": 4.51424e-05,
     "observed_grid_hours_7d": [
      4
     ],
     "percentile_vs_full_history": 96.12,
     "provenance": "computed",
-    "records_7d": 42
+    "records_7d": 41
    },
    "governor": {
     "12h": {
@@ -70356,7 +72225,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-01-17T19:32:09Z"
+     "window_start_utc": "2026-01-17T22:16:16Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -70380,7 +72249,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:32:09Z"
+     "window_start_utc": "2026-07-20T06:16:16Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -70404,7 +72273,7 @@
      "tier": "provisional",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:32:09Z"
+     "window_start_utc": "2026-05-31T06:16:16Z"
     }
    },
    "last_bar_utc": {
@@ -70728,10 +72597,10 @@
      "bars": 744,
      "closed_utc_ms": 1785538800000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 744,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -70755,10 +72624,10 @@
      "bars": 2184,
      "closed_utc_ms": 1782860400000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 2184,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -70782,10 +72651,10 @@
      "bars": 8760,
      "closed_utc_ms": 1767222000000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 8760,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -70862,7 +72731,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": 21595,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-07-20T03:32:09Z",
+     "window_start_utc": "2026-07-20T06:16:16Z",
      "zone_distance_bps": 0.0,
      "zone_distance_gov_atr": 0.0
     },
@@ -70930,7 +72799,7 @@
      "tier": "provisional",
      "tpw_exec_bars_ago": 4083,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:32:09Z",
+     "window_start_utc": "2026-05-31T06:16:16Z",
      "zone_distance_bps": 21.39,
      "zone_distance_gov_atr": 0.1169
     },
@@ -70998,7 +72867,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": 28,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-01-17T19:32:09Z",
+     "window_start_utc": "2026-01-17T22:16:16Z",
      "zone_distance_bps": 104.45,
      "zone_distance_gov_atr": 0.3382
     }
@@ -71171,10 +73040,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 720,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -71205,10 +73074,10 @@
        "overlap_ms": 5295600000
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 8760,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -71239,10 +73108,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 168,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -71273,10 +73142,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 2160,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -71324,33 +73193,45 @@
    },
    "staleness": [
     {
-     "age_hours": 0.72,
+     "age_hours": 3.45,
      "last_input_utc": "2026-08-05T18:49:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 0.79,
+     "age_hours": 3.52,
      "last_input_utc": "2026-08-05T18:45:00Z",
      "layer": "tpo",
      "native_tf": "30m"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.52,
+     "last_input_utc": "2026-08-05T18:45:00Z",
+     "layer": "governor:1h",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.52,
+     "last_input_utc": "2026-08-05T18:45:00Z",
+     "layer": "radar:1h",
      "native_tf": "1h"
     }
    ],
@@ -71606,32 +73487,32 @@
    "symbol": "TAOUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:33:35Z",
-     "basis_bps": -6.227,
-     "index_price": 196.60243388,
-     "mark_price": 196.48
+     "at_utc": "2026-08-05T22:17:47Z",
+     "basis_bps": -0.549,
+     "index_price": 196.30077256,
+     "mark_price": 196.29
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:33:37Z",
+    "fetched_utc": "2026-08-05T22:17:48Z",
     "next_funding": {
      "interest_rate": 0.0001,
      "last_funding_rate": 5e-05,
-     "next_funding_utc": "2026-08-05T20:00:00Z"
+     "next_funding_utc": "2026-08-06T00:00:00Z"
     },
     "open_interest": {
-     "at_utc": "2026-08-05T19:00:00Z",
-     "change_24h_pct": -0.757,
-     "change_24h_percentile": 37.26,
-     "change_7d_pct": 5.0458,
-     "level": 286409.267,
-     "percentile": 30.0,
+     "at_utc": "2026-08-05T22:00:00Z",
+     "change_24h_pct": -1.1009,
+     "change_24h_percentile": 30.74,
+     "change_7d_pct": 4.1873,
+     "level": 286381.568,
+     "percentile": 30.2,
      "samples": 500
     },
     "provenance": "fetched",
     "top_trader_ratio": {
-     "at_utc": "2026-08-05T19:00:00Z",
+     "at_utc": "2026-08-05T22:00:00Z",
      "percentile_7d": 94.05,
-     "ratio": 2.2394,
+     "ratio": 2.252,
      "samples": 168
     }
    },
@@ -71639,8 +73520,8 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 238,
-     "poc": 192.8894,
+     "brackets": 233,
+     "poc": 191.0022,
      "provenance": "approximation",
      "vah": 196.7312,
      "val": 189.5868
@@ -71762,12 +73643,12 @@
      "1h": {
       "atr": 1.83943802,
       "percentile": 4.61,
-      "sample_bars": 8758
+      "sample_bars": 8755
      },
      "4h": {
       "atr": 3.59913317,
       "percentile": 3.61,
-      "sample_bars": 2189
+      "sample_bars": 2188
      }
     },
     "compression_streak_days": 2,
@@ -71781,7 +73662,7 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28756,
+     "bars": 28592,
      "bin_width": 0.09825,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -71790,12 +73671,12 @@
      "range_high": 202.51,
      "range_low": 182.86,
      "vah": 197.89225,
-     "val": 190.22875,
+     "val": 190.1305,
      "value_area_fraction": 0.7,
-     "volume_total": 5593280.324
+     "volume_total": 5568629.691
     },
     "5d": {
-     "bars": 7156,
+     "bars": 6992,
      "bin_width": 0.0674,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -71806,7 +73687,7 @@
      "vah": 196.7312,
      "val": 189.2498,
      "value_area_fraction": 0.7,
-     "volume_total": 1264934.191
+     "volume_total": 1243368.308
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -72051,41 +73932,42 @@
     "provenance": "computed",
     "rolling": {
      "30d": {
-      "bars": 718,
-      "distance_bps": -66.8,
-      "lower_1sigma": 191.20505263,
-      "sigma": 7.46205125,
-      "upper_1sigma": 206.12915512,
-      "vwap": 198.66710388
+      "bars": 715,
+      "distance_bps": -62.06,
+      "lower_1sigma": 191.20725174,
+      "sigma": 7.36508634,
+      "upper_1sigma": 205.93742442,
+      "vwap": 198.57233808
      },
      "365d": {
-      "bars": 8758,
-      "distance_bps": -3110.51,
-      "lower_1sigma": 212.23429172,
-      "sigma": 74.20198071,
-      "upper_1sigma": 360.63825315,
-      "vwap": 286.43627243
+      "bars": 8755,
+      "distance_bps": -3110.4,
+      "lower_1sigma": 212.22791638,
+      "sigma": 74.20373586,
+      "upper_1sigma": 360.63538811,
+      "vwap": 286.43165224
      },
      "7d": {
-      "bars": 166,
-      "distance_bps": 199.66,
-      "lower_1sigma": 190.63926347,
-      "sigma": 2.83778931,
-      "upper_1sigma": 196.31484209,
-      "vwap": 193.47705278
+      "bars": 163,
+      "distance_bps": 192.24,
+      "lower_1sigma": 190.8749676,
+      "sigma": 2.74297002,
+      "upper_1sigma": 196.36090764,
+      "vwap": 193.61793762
      },
      "90d": {
-      "bars": 2158,
-      "distance_bps": -1770.69,
-      "lower_1sigma": 202.18775701,
-      "sigma": 37.61377651,
-      "upper_1sigma": 277.41531002,
-      "vwap": 239.80153352
+      "bars": 2155,
+      "distance_bps": -1765.55,
+      "lower_1sigma": 202.11281213,
+      "sigma": 37.53875786,
+      "upper_1sigma": 277.19032786,
+      "vwap": 239.65157
      }
     }
    }
   },
   "ZECUSDT": {
+   "anchor_degeneracy": [],
    "band_excursions": {
     "census_candidate": "H-VBR",
     "claims_nothing": "recording is OPS; whether a band touch pays is census work under G-7",
@@ -72229,7 +74111,7 @@
       "location": {
        "invalidation": 495.40098126,
        "invalidation_note": "anchored Q-VWAP cross",
-       "vah": 528.9859,
+       "vah": 528.4036,
        "val": 453.8692,
        "vote": 0,
        "vwap_level": 495.40098126
@@ -72570,8 +74452,8 @@
      "vwap_rolling": 28
     },
     "maturity_floors": {
-     "band_min_bars": 30,
-     "line_min_bars": 10,
+     "band_min_bars": 60,
+     "line_min_bars": 16,
      "note": "withheld levels still PRINT with a thin_sample chip; they are excluded from SCORING only",
      "ruling": "R3 (operator, 2026-08-05) -- INTERIM, 1h substrate",
      "withheld": [],
@@ -78109,6 +79991,8 @@
       2,
       3
      ],
+     "hinge": "a sigma band is a HINGE with two outcomes -- pullback to the mean (target A) or rejection into auction toward the dominant POC and the far side of value (target B). BOTH are printed; NEITHER is preferred.",
+     "hinge_geometry": [],
      "ranked_by": "confluence score of the BAND LEVEL ITSELF (5.3) -- R:R is a constant of the geometry (sigma2 always 2:1, sigma3 always 3:1) and cannot discriminate between these",
      "skipped_thin_sample": [],
      "thin_sample_gate": "a draft requires bars >= 30, so a freshly-opened anchor cannot manufacture a setup from a two-bar sigma",
@@ -78338,6 +80222,139 @@
     },
     "sequencing_rule": "Part II is derivable from Part I's printed numbers alone; no hidden inputs (§2.2)"
    },
+   "depeg": {
+    "adjacent": {
+     "M<->Q": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "Q": "2026-07-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "Q": 858
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 0.2038453693703556,
+      "line_separation_bps": 130.74249349106643,
+      "longer": "Q",
+      "pair": "M<->Q",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Q has separated from M: 0.20 ATR apart, sigma ratio 2.23 -- it is now saying something M is not.",
+      "shorter": "M",
+      "sigma_ratio": 2.2258134288577804
+     },
+     "Q<->Y": {
+      "anchor_utc": {
+       "Q": "2026-07-01T00:00:00Z",
+       "Y": "2026-01-01T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "Q": 858,
+       "Y": 5202
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 3.2787775255586693,
+      "line_separation_bps": 2075.8051556225937,
+      "longer": "Y",
+      "pair": "Q<->Y",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "Y has separated from Q: 3.28 ATR apart, sigma ratio 3.06 -- it is now saying something Q is not.",
+      "shorter": "Q",
+      "sigma_ratio": 3.063567378517666
+     },
+     "W<->M": {
+      "anchor_utc": {
+       "M": "2026-08-01T00:00:00Z",
+       "W": "2026-08-03T00:00:00Z"
+      },
+      "bars_since_anchor": {
+       "M": 114,
+       "W": 66
+      },
+      "bars_since_depeg": null,
+      "contributes_independent_score": true,
+      "line_separation_atr": 0.2805382408430957,
+      "line_separation_bps": 176.75150199790508,
+      "longer": "M",
+      "pair": "W<->M",
+      "peg_state": "de-pegged",
+      "previous_peg_state": null,
+      "prose": "M has separated from W: 0.28 ATR apart, sigma ratio 1.18 -- it is now saying something W is not.",
+      "shorter": "W",
+      "sigma_ratio": 1.1780430949295997
+     }
+    },
+    "adjacent_state_counts": {
+     "de-pegged": 3
+    },
+    "claims_nothing": "recording is OPS; whether a de-peg marks or precedes anything is H-VDP, census work under G-7",
+    "counterpart": {
+     "M<->30d": {
+      "anchored": "M",
+      "anchored_bars": 114,
+      "line_separation_atr": 0.6049903589214781,
+      "line_separation_bps": 373.53491883411857,
+      "pair": "M<->30d",
+      "peg_state": "de-pegged",
+      "prose": "30d is fully formed while M is 114 bars old; they sit 0.60 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "30d",
+      "rolling_bars": 720,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.5536403205713913
+     },
+     "Q<->90d": {
+      "anchored": "Q",
+      "anchored_bars": 858,
+      "line_separation_atr": 0.23864650158933684,
+      "line_separation_bps": 153.40568275108302,
+      "pair": "Q<->90d",
+      "peg_state": "de-pegged",
+      "prose": "90d is fully formed while Q is 858 bars old; they sit 0.24 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "90d",
+      "rolling_bars": 2160,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.44399468245745843
+     },
+     "W<->7d": {
+      "anchored": "W",
+      "anchored_bars": 66,
+      "line_separation_atr": 0.5035811683968604,
+      "line_separation_bps": 327.6748281346363,
+      "pair": "W<->7d",
+      "peg_state": "de-pegged",
+      "prose": "7d is fully formed while W is 66 bars old; they sit 0.50 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "7d",
+      "rolling_bars": 168,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.8123080512973825
+     },
+     "Y<->365d": {
+      "anchored": "Y",
+      "anchored_bars": 5202,
+      "line_separation_atr": 0.0021532449624629612,
+      "line_separation_bps": 1.720630632936121,
+      "pair": "Y<->365d",
+      "peg_state": "de-pegged",
+      "prose": "365d is fully formed while Y is 5202 bars old; they sit 0.00 ATR apart. The separation is calendar-anchoring versus trailing-window on the same horizon.",
+      "rolling": "365d",
+      "rolling_bars": 8760,
+      "rolling_is_formed": true,
+      "sigma_ratio": 0.83183451467053
+     }
+    },
+    "events": [],
+    "peg_rules": {
+     "de-pegged": "otherwise",
+     "identical": "same anchor bar (exact)",
+     "pegged": "different anchors, lines within 0.02 daily-ATR AND sigma ratio in [0.9, 1.1]"
+    },
+    "structural_note": "January 1 anchors Y, Q and M simultaneously, so Y=Q until April 1; July 1 makes M=Q for all of July. Redundancy here is the CALENDAR, not the market",
+    "why": "an anchor carries independent information only once it UNPEGS from the next-shorter one; early in a period it is measuring the same bars"
+   },
    "flags": {
     "above_M_vwap": true,
     "above_VAH": true,
@@ -78395,7 +80412,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:32:09Z"
+     "window_start_utc": "2026-01-17T22:16:16Z"
     },
     "1h": {
      "align_tf": "1h",
@@ -78419,7 +80436,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-07-20T03:32:09Z"
+     "window_start_utc": "2026-07-20T06:16:16Z"
     },
     "4h": {
      "align_tf": "1h",
@@ -78443,7 +80460,7 @@
      "tier": "full",
      "trading": "never invoked (NOTE_SIGNALS)",
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:32:09Z"
+     "window_start_utc": "2026-05-31T06:16:16Z"
     }
    },
    "last_bar_utc": {
@@ -78817,8 +80834,8 @@
      "asset": "ZECUSDT",
      "detail": "OI 24h change in the top decile",
      "numbers": {
-      "change_24h_pct": 4.9914,
-      "percentile": 97.89
+      "change_24h_pct": 3.9309,
+      "percentile": 94.74
      },
      "rule": "OI 24h-change percentile >=90 (Tier-2; degrades)",
      "rule_id": "POI-7",
@@ -78855,10 +80872,10 @@
      "bars": 744,
      "closed_utc_ms": 1785538800000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 744,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -78882,10 +80899,10 @@
      "bars": 2184,
      "closed_utc_ms": 1782860400000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 2184,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -78909,10 +80926,10 @@
      "bars": 8760,
      "closed_utc_ms": 1767222000000,
      "maturity": {
-      "band_min_bars": 30,
+      "band_min_bars": 60,
       "band_ok": true,
       "bars": 8760,
-      "line_min_bars": 10,
+      "line_min_bars": 16,
       "line_ok": true,
       "thin_sample": false
      },
@@ -78989,7 +81006,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": null,
      "whipsaw_arrow_hidden": true,
-     "window_start_utc": "2026-07-20T03:32:09Z",
+     "window_start_utc": "2026-07-20T06:16:16Z",
      "zone_distance_bps": 6.99,
      "zone_distance_gov_atr": 0.0594
     },
@@ -79057,7 +81074,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": 4510,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-05-31T03:32:09Z",
+     "window_start_utc": "2026-05-31T06:16:16Z",
      "zone_distance_bps": 196.68,
      "zone_distance_gov_atr": 0.9594
     },
@@ -79125,7 +81142,7 @@
      "tier": "full",
      "tpw_exec_bars_ago": 346,
      "whipsaw_arrow_hidden": false,
-     "window_start_utc": "2026-01-17T19:32:09Z",
+     "window_start_utc": "2026-01-17T22:16:16Z",
      "zone_distance_bps": 468.82,
      "zone_distance_gov_atr": 1.2667
     }
@@ -79250,10 +81267,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 720,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -79284,10 +81301,10 @@
        "overlap_ms": 5295600000
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 8760,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -79318,10 +81335,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 168,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -79352,10 +81369,10 @@
        "overlap_ms": 0
       },
       "maturity": {
-       "band_min_bars": 30,
+       "band_min_bars": 60,
        "band_ok": true,
        "bars": 2160,
-       "line_min_bars": 10,
+       "line_min_bars": 16,
        "line_ok": true,
        "thin_sample": false
       },
@@ -79403,33 +81420,45 @@
    },
    "staleness": [
     {
-     "age_hours": 0.72,
+     "age_hours": 3.45,
      "last_input_utc": "2026-08-05T18:49:00Z",
      "layer": "volume_profile",
      "native_tf": "1m"
     },
     {
-     "age_hours": 0.79,
+     "age_hours": 3.52,
      "last_input_utc": "2026-08-05T18:45:00Z",
      "layer": "tpo",
      "native_tf": "30m"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "vwap",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "rsi",
      "native_tf": "1h"
     },
     {
-     "age_hours": 1.54,
+     "age_hours": 4.27,
      "last_input_utc": "2026-08-05T18:00:00Z",
      "layer": "sessions",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.52,
+     "last_input_utc": "2026-08-05T18:45:00Z",
+     "layer": "governor:1h",
+     "native_tf": "1h"
+    },
+    {
+     "age_hours": 3.52,
+     "last_input_utc": "2026-08-05T18:45:00Z",
+     "layer": "radar:1h",
      "native_tf": "1h"
     }
    ],
@@ -79685,32 +81714,32 @@
    "symbol": "ZECUSDT",
    "tier2": {
     "basis": {
-     "at_utc": "2026-08-05T19:33:11Z",
-     "basis_bps": -7.272,
-     "index_price": 518.73769473,
-     "mark_price": 518.36048267
+     "at_utc": "2026-08-05T22:17:22Z",
+     "basis_bps": -3.27,
+     "index_price": 518.02882675,
+     "mark_price": 517.85943609
     },
     "degraded": [],
-    "fetched_utc": "2026-08-05T19:33:12Z",
+    "fetched_utc": "2026-08-05T22:17:23Z",
     "next_funding": {
      "interest_rate": 0.0001,
-     "last_funding_rate": -4.331e-05,
+     "last_funding_rate": 9.5e-07,
      "next_funding_utc": "2026-08-06T00:00:00Z"
     },
     "open_interest": {
-     "at_utc": "2026-08-05T19:00:00Z",
-     "change_24h_pct": 4.9914,
-     "change_24h_percentile": 97.89,
-     "change_7d_pct": 0.7645,
-     "level": 501344.098,
-     "percentile": 47.4,
+     "at_utc": "2026-08-05T22:00:00Z",
+     "change_24h_pct": 3.9309,
+     "change_24h_percentile": 94.74,
+     "change_7d_pct": 1.0819,
+     "level": 499272.236,
+     "percentile": 41.8,
      "samples": 500
     },
     "provenance": "fetched",
     "top_trader_ratio": {
-     "at_utc": "2026-08-05T19:00:00Z",
-     "percentile_7d": 3.57,
-     "ratio": 0.537,
+     "at_utc": "2026-08-05T22:00:00Z",
+     "percentile_7d": 0.6,
+     "ratio": 0.527,
      "samples": 168
     }
    },
@@ -79718,11 +81747,11 @@
     "composite_5d": {
      "bins": 100,
      "bracket_tf": "30m",
-     "brackets": 238,
-     "poc": 472.52275,
+     "brackets": 233,
+     "poc": 472.51025,
      "provenance": "approximation",
-     "vah": 494.5895,
-     "val": 457.691
+     "vah": 494.702,
+     "val": 458.7725
     },
     "session": {
      "bins": 100,
@@ -79840,13 +81869,13 @@
      },
      "1h": {
       "atr": 6.1189417,
-      "percentile": 44.52,
-      "sample_bars": 8758
+      "percentile": 44.5,
+      "sample_bars": 8755
      },
      "4h": {
       "atr": 10.65862143,
-      "percentile": 33.3,
-      "sample_bars": 2189
+      "percentile": 33.27,
+      "sample_bars": 2188
      }
     },
     "compression_streak_days": 2,
@@ -79860,7 +81889,7 @@
    },
    "volume_profile": {
     "20d": {
-     "bars": 28756,
+     "bars": 28592,
      "bin_width": 0.5823,
      "bins": 200,
      "method": "uniform-spread kline CDF",
@@ -79868,24 +81897,24 @@
      "provenance": "approximation",
      "range_high": 568.0,
      "range_low": 451.54,
-     "vah": 528.9859,
+     "vah": 528.4036,
      "val": 453.8692,
      "value_area_fraction": 0.7,
-     "volume_total": 15596957.768
+     "volume_total": 15502714.163
     },
     "5d": {
-     "bars": 7156,
-     "bin_width": 0.36175,
+     "bars": 6992,
+     "bin_width": 0.35225,
      "bins": 200,
      "method": "uniform-spread kline CDF",
-     "poc": 486.450125,
+     "poc": 486.424125,
      "provenance": "approximation",
      "range_high": 525.7,
-     "range_low": 453.35,
-     "vah": 497.4835,
-     "val": 455.15875,
+     "range_low": 455.25,
+     "vah": 498.57675,
+     "val": 458.42025,
      "value_area_fraction": 0.7,
-     "volume_total": 3468462.23
+     "volume_total": 3428791.238
     },
     "naked_poc_substrate": "5m",
     "naked_poc_window_days": 90,
@@ -80123,36 +82152,36 @@
     "provenance": "computed",
     "rolling": {
      "30d": {
-      "bars": 718,
-      "distance_bps": 200.31,
-      "lower_1sigma": 475.2144127,
-      "sigma": 32.82920769,
-      "upper_1sigma": 540.87282808,
-      "vwap": 508.04362039
+      "bars": 715,
+      "distance_bps": 196.39,
+      "lower_1sigma": 475.50901479,
+      "sigma": 32.72968614,
+      "upper_1sigma": 540.96838708,
+      "vwap": 508.23870093
      },
      "365d": {
-      "bars": 8758,
-      "distance_bps": 3203.03,
-      "lower_1sigma": 243.34041968,
-      "sigma": 149.16042285,
-      "upper_1sigma": 541.66126539,
-      "vwap": 392.50084253
+      "bars": 8755,
+      "distance_bps": 3202.87,
+      "lower_1sigma": 243.34964264,
+      "sigma": 149.155837,
+      "upper_1sigma": 541.66131665,
+      "vwap": 392.50547964
      },
      "7d": {
-      "bars": 166,
-      "distance_bps": 741.88,
-      "lower_1sigma": 463.34507522,
-      "sigma": 19.08429444,
-      "upper_1sigma": 501.5136641,
-      "vwap": 482.42936966
+      "bars": 163,
+      "distance_bps": 733.45,
+      "lower_1sigma": 463.74324671,
+      "sigma": 19.06516455,
+      "upper_1sigma": 501.87357582,
+      "vwap": 482.80841127
      },
      "90d": {
-      "bars": 2158,
-      "distance_bps": 622.09,
-      "lower_1sigma": 396.64086371,
-      "sigma": 91.22903517,
-      "upper_1sigma": 579.09893404,
-      "vwap": 487.86989888
+      "bars": 2155,
+      "distance_bps": 623.58,
+      "lower_1sigma": 396.55352541,
+      "sigma": 91.24807283,
+      "upper_1sigma": 579.04967107,
+      "vwap": 487.80159824
      }
     }
    }
@@ -80163,11 +82192,11 @@
   "backfilled": false,
   "marker": null
  },
- "banner": "PARITY NOT CERTIFIED — numbers not yet adopted. The operator's parity readings have not been returned and matched; nothing here may be trusted or acted on.",
+ "banner": null,
  "date": "2026-08-05",
  "engine_version": "1.0.12",
  "firewall": "ops artifact, never study evidence; no journal reads, no lockbox outcome statistics; confluence measures agreement between tools, not edge",
- "generated_utc": "2026-08-05T19:32:09Z",
+ "generated_utc": "2026-08-05T22:16:16Z",
  "lockbox": {
   "policy": "seal governs scored outcome evidence, not raw price in a display-only trailing window (operator ruling 2026-08-03); every windowed layer discloses its overlap",
   "window": [
@@ -80175,7 +82204,25 @@
    1759708800000
   ]
  },
- "parity_certified": false,
+ "parity_certified": true,
+ "parity_provenance": {
+  "certified": [
+   "rolling_vwap — 1D 14/14 and 1h 28/28, both substrates",
+   "anchored_vwap incl. sigma — 1h 42/42, two closed bars, W/M/Q",
+   "vw_sigma_bands — 54 triples, symmetric at exact integer multiples",
+   "oscillators (RSI, StochRSI, MACD, AO) + ATR — 72/72",
+   "resample_ohlcv — 40/40 against TradingView's own aggregation"
+  ],
+  "fixture_verified_not_chart_certified": [
+   "volume_profile / windowed_profile (POC, VAH, VAL)",
+   "low_volume_nodes (LVN)",
+   "va_nesting and its consensus / gap bands"
+  ],
+  "instrument": "BINANCE perpetuals. A reading from an index, a spot pair or another venue is a different number, not a rounding difference.",
+  "substrate": "1h · source hlc3 (R1/R2)",
+  "why_excluded": "our profile spreads each bar's volume uniformly across its range -- a declared approximation over klines. TradingView's profile is a DIFFERENT approximation over data we do not have. Comparing them certifies nothing: agreement would be a coincidence of two approximations and disagreement would be uninformative about either. Excluded from the gate BY DESIGN; the approximation chip is permanent."
+ },
+ "parity_provenance_line": "PARITY CERTIFIED for the VWAP, oscillator and resampling families. Volume profile, value area and LVN are FIXTURE-VERIFIED, NOT chart-certified — they are approximations over klines and carry a permanent `approximation` chip. Instrument: BINANCE perpetuals, substrate 1h, source hlc3.",
  "part1_provenance": {
   "script_version": "1.1.0",
   "v1_rules_sha256": "900b5bc242e32e909ef7856d1c26b89db431dd7bde61a67540bdccddc4c31ac1",
@@ -80276,19 +82323,19 @@
  "rules_sha256": "8d4b9769c9363acc7fc9fb12e2cdd0884a82f197c2354eed457c3ab2840a241f",
  "rules_version": "2.0.0",
  "runtime_by_layer": {
-  "BTCUSDT": 30.94,
-  "ETHUSDT": 30.49,
-  "FARTCOINUSDT": 8.59,
-  "HYPEUSDT": 6.11,
-  "JTOUSDT": 12.29,
-  "LITUSDT": 2.74,
-  "NEARUSDT": 27.41,
-  "SOLUSDT": 27.48,
-  "TAOUSDT": 11.08,
-  "ZECUSDT": 29.39,
-  "_part1": 114.3
+  "BTCUSDT": 32.5,
+  "ETHUSDT": 31.75,
+  "FARTCOINUSDT": 8.22,
+  "HYPEUSDT": 6.45,
+  "JTOUSDT": 12.9,
+  "LITUSDT": 2.88,
+  "NEARUSDT": 26.8,
+  "SOLUSDT": 27.26,
+  "TAOUSDT": 11.8,
+  "ZECUSDT": 31.29,
+  "_part1": 120.6
  },
- "runtime_seconds": 300.84,
+ "runtime_seconds": 312.46,
  "schema": "naiad_daily_brief",
  "schema_version": "2.1.0",
  "slot": "post_ny",

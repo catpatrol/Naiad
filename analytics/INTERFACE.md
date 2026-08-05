@@ -5,8 +5,8 @@ description of what `analytics/` computes, under which conventions, with which
 causality class, and in which record shape. Nothing here is evidence of edge —
 see the firewall at the end.
 
-- `ANALYTICS_VERSION` **1.4.0**
-- `analytics_sha()` = `e8a4959b6f8d6fb22b593eb77da60b59fc9fa499bf4ef94b795f248651d20d66`
+- `ANALYTICS_VERSION` **1.5.0**
+- `analytics_sha()` = `ea5f02f21ca43b6b71e450b540ff09c807b305971e3eb8cff50bea84c985dc91`
   — sha256 over the package sources in fixed order, binary reads. Printed beside
   the version by every artifact that consumes this toolbox, so a stored capture
   can always name the exact code that produced it.
@@ -228,7 +228,32 @@ same claim, and neither means "profitable" — see the firewall.
 | `volume_profile` / `windowed_profile` | **APPROXIMATION, declared** | volume spread uniformly across each bar's range; not tick data. Never certified, by construction |
 | `relative_volume` (RVOL) | **UNCERTIFIED** | built 2026-08-05, no operator reading taken against it yet |
 
-**`PARITY NOT CERTIFIED` still prints on every render.** Rolling VWAP passing on
+### ✅ PARITY CERTIFIED — 2026-08-06
+
+The banner is down. `parity_certified` is set and every render now carries a
+standing provenance line instead.
+
+**What that does and does not mean.** Certification is not silence — with the
+warning gone, the recipes that were NEVER chart-certified are the ones most
+likely to be mistaken for verified, so they are named on every page:
+
+| | |
+|---|---|
+| **CERTIFIED against the operator's charts** | `rolling_vwap` (1D 14/14, 1h 28/28) · `anchored_vwap` incl. σ (1h 42/42) · `vw_sigma_bands` (54 triples) · oscillators + `atr` (72/72) · `resample_ohlcv` (40/40) |
+| **FIXTURE-VERIFIED, NOT chart-certified** ⚠ | `volume_profile` / `windowed_profile` (POC/VAH/VAL) · `low_volume_nodes` · `va_nesting` |
+
+**The profile family was excluded from the gate BY DESIGN, not by omission.**
+Our profile spreads each bar's volume uniformly across its range — a declared
+approximation over klines. TradingView's profile is a *different* approximation
+over data we do not have. Comparing them would certify nothing whichever way it
+came out: agreement would be a coincidence of two approximations, disagreement
+uninformative about either. They carry a **permanent `approximation` chip**.
+
+**Scope of the certification:** BINANCE perpetuals, substrate **1h**, source
+**hlc3**. A reading from an index, a spot pair or another venue is a different
+number — see the instrument warning below.
+
+**Superseded:** Rolling VWAP passing on
 both substrates does not certify the instrument as a whole; the banner comes
 down when the operator says it does, not when a builder judges the deltas small.
 
