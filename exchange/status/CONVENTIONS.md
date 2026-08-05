@@ -113,6 +113,34 @@ other work in parallel, without holding full project context in mind.
 
 ## §2 · How to build a paste for HEPHAESTUS
 
+### 2.0 · Every paste explains itself, before it is run
+*(Operator ruling 2026-08-04. Binds every lane. This section comes first because it is the one
+the operator reads.)*
+
+**The operator is not a programmer and must never be asked to run something whose purpose he has
+to infer from the code.** Before any code block, in plain language:
+
+1. **What this paste is for** — why it exists, what problem or ruling it answers.
+2. **What each step does** — numbered, one line each, in the order they run, saying *why* the
+   step is there and not only what it calls.
+3. **What you should see on screen** — the expected output, and what a failure looks like.
+4. **What changes on disk when it finishes** — which files are created, modified or moved. If
+   nothing changes, say "read-only" explicitly.
+
+This sits alongside, and does not replace, the routing line (§2.1) or the ROLLBACK line (§2.1b).
+Three separate things: **where** it goes, **what** it does, **how** to undo it.
+
+**Exception, and it is narrow:** a one-line diagnostic the operator himself just asked for by name
+needs no preamble. Everything else does — including read-only pastes, because "this only reads"
+is itself information he needs in order to run it without worrying.
+
+**Why this became a rule:** pastes in this project have grown to hundreds of lines carrying
+guarded edits, fixtures and publish steps. A block that long is unreviewable by its intended
+reader unless something outside it says what it means. **A paste the operator cannot evaluate is
+a paste he can only trust — and trust is not review.**
+
+---
+
 ### 2.1 Routing and the environment assertion
 *(Stays in memory #11; the operative core is restated here because Cowork lanes draft queue items.)*
 
