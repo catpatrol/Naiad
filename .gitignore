@@ -96,3 +96,6 @@ research_outputs/_daily_archive/
 # The consolidated view is a regenerable convenience over those partitions and is
 # NOT a record, so it stays out of git.
 briefs/panel/consolidated_*.parquet
+
+# restored phase journals - staging only, never committed (ATHENA 2026-08-04)
+research_outputs/_unarchived/**
