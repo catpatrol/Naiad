@@ -237,9 +237,15 @@ def rvwap_layer(klines, now_ms, tf="1h"):
         for k in SIGMAS:
             bands[f"up_{k}"] = _f(rv[f"band_up_{k}"][-1])
             bands[f"dn_{k}"] = _f(rv[f"band_dn_{k}"][-1])
+        # R3 needs the SAMPLE DEPTH, not the span.  Count the bars actually in
+        # the trailing window at the evaluated bar, by the same membership rule
+        # rolling_vwap uses (open_time > t_now - W, current bar included).
+        bars = int(np.count_nonzero(t > t[-1] - need))
         out["windows"][f"{wd}d"] = {
             "warming": False, "vwap": _f(rv["vwap"][-1]),
             "stdev": _f(rv["stdev"][-1]), "bands": bands,
+            "bars": bars, "maturity": W.maturity(bars),
+            "substrate": W.VWAP_SUBSTRATE, "source": W.VWAP_SOURCE,
             "lockbox_overlap": analytics.lockbox_overlap(now_ms - need, now_ms)}
     return out
 
@@ -559,10 +565,12 @@ def prior_anchored_vwaps(klines, now_ms):
         if vw is None:
             out[f"prior_{period}"] = {"warming": True, "reason": "no volume"}
             continue
+        nbars = int(a1 - a0 + 1)
         out[f"prior_{period}"] = {
             "warming": False, "vwap": vw, "sigma": sd,
             "anchor_utc_ms": int(t[a0]), "closed_utc_ms": int(t[a1]),
-            "bars": int(a1 - a0 + 1),
+            "bars": nbars, "maturity": W.maturity(nbars),
+            "substrate": W.VWAP_SUBSTRATE, "source": W.VWAP_SOURCE,
             "bands": {f"{sgn}{k}s": _f(vw + mult * k * (sd or 0.0))
                       for k in SIGMAS for sgn, mult in (("+", 1), ("-", -1))},
             "note": "FIXED level from the completed prior period; does not develop"}
@@ -786,6 +794,42 @@ def build_registry(a, vol, rv, nest_levels, prior_anchors=None, pivots=None):
     """
     reg = L.LevelRegistry()
 
+    # R3 MATURITY FLOORS (operator ruling, 2026-08-05).  Every level withheld
+    # here is RECORDED, never silently dropped: `withheld` is returned on the
+    # registry so the report can say which anchors were too young, at what bar
+    # count, and whether it was the line or only the bands that failed.  A floor
+    # that cannot be audited is indistinguishable from a bug.
+    withheld = []
+
+    def _admit(blob, family, line_label, line_level, source_layer, tf,
+               band_items, what):
+        """Emit a VWAP line and its bands subject to the R3 floors.
+
+        `band_items` is an iterable of (label, level) already computed.  The
+        bands are gated SEPARATELY from the line and at a higher floor,
+        because the line is a weighted mean (fast to stabilise) and the sigma
+        is a dispersion estimate over the same few points (slow).
+        """
+        mat = blob.get("maturity") or W.maturity(blob.get("bars"))
+        if line_level is not None:
+            if mat["line_ok"]:
+                reg.add(family, line_label, line_level, source_layer, tf)
+            else:
+                withheld.append({"what": what, "level": "line",
+                                 "label": line_label, "bars": mat["bars"],
+                                 "floor": mat["line_min_bars"],
+                                 "reason": "below R3 line floor"})
+        for blabel, blevel in band_items:
+            if blevel is None:
+                continue
+            if mat["band_ok"]:
+                reg.add(family, blabel, blevel, source_layer, tf)
+            else:
+                withheld.append({"what": what, "level": "band",
+                                 "label": blabel, "bars": mat["bars"],
+                                 "floor": mat["band_min_bars"],
+                                 "reason": "below R3 band floor"})
+
     # vwap_anchored -- developing W/M/Q/Y, each with 1/2/3 sigma.
     #
     # `daily_brief` publishes sigma as a scalar and only the 1-sigma band, so the
@@ -803,26 +847,24 @@ def build_registry(a, vol, rv, nest_levels, prior_anchors=None, pivots=None):
         lv = _f(blob.get("vwap"))
         if lv is None:
             continue
-        reg.add("vwap_anchored", f"{key} anchored VWAP", lv, "vwap_complex", key)
         sig = _f(blob.get("sigma"))
-        if sig is None or sig <= 0:
-            continue
-        for k in SIGMAS:
-            reg.add("vwap_anchored", f"{key} +{k}s", lv + k * sig,
-                    "vwap_complex", key)
-            reg.add("vwap_anchored", f"{key} -{k}s", lv - k * sig,
-                    "vwap_complex", key)
+        bitems = []
+        if sig is not None and sig > 0:
+            for k in SIGMAS:
+                bitems.append((f"{key} +{k}s", lv + k * sig))
+                bitems.append((f"{key} -{k}s", lv - k * sig))
+        _admit(blob, "vwap_anchored", f"{key} anchored VWAP", lv,
+               "vwap_complex", key, bitems, f"anchored {key}")
 
     # vwap_rolling -- 7/30/90/365d RVWAP, each with 1/2/3 sigma
     for wname, blob in (rv.get("windows") or {}).items():
         if blob.get("warming"):
             continue
-        if blob.get("vwap") is not None:
-            reg.add("vwap_rolling", f"RVWAP {wname}", blob["vwap"],
-                    "rvwap", wname)
-        for bk, bv in (blob.get("bands") or {}).items():
-            if bv is not None:
-                reg.add("vwap_rolling", f"RVWAP {wname} {bk}", bv, "rvwap", wname)
+        _admit(blob, "vwap_rolling", f"RVWAP {wname}", blob.get("vwap"),
+               "rvwap", wname,
+               [(f"RVWAP {wname} {bk}", bv)
+                for bk, bv in (blob.get("bands") or {}).items()],
+               f"RVWAP {wname}")
 
     # profile_windowed -- POC/VAH/VAL per window, LVN midpoints and edges
     for wname, blob in (vol.get("windows") or {}).items():
@@ -847,13 +889,11 @@ def build_registry(a, vol, rv, nest_levels, prior_anchors=None, pivots=None):
     for pname, blob in (prior_anchors or {}).items():
         if not isinstance(blob, dict) or blob.get("warming"):
             continue
-        if blob.get("vwap") is not None:
-            reg.add("vwap_anchored", f"{pname} VWAP", blob["vwap"],
-                    "prior_anchor", pname)
-        for bk, bv in (blob.get("bands") or {}).items():
-            if bv is not None:
-                reg.add("vwap_anchored", f"{pname} {bk}", bv,
-                        "prior_anchor", pname)
+        _admit(blob, "vwap_anchored", f"{pname} VWAP", blob.get("vwap"),
+               "prior_anchor", pname,
+               [(f"{pname} {bk}", bv)
+                for bk, bv in (blob.get("bands") or {}).items()],
+               pname)
 
     # structure -- CONFIRMED pivots (F-3R-A: was daily_brief's display-capped
     # top-3, which is why every asset reported exactly 13 structure levels)
@@ -910,6 +950,11 @@ def build_registry(a, vol, rv, nest_levels, prior_anchors=None, pivots=None):
             lv = _f(row.get(edge))
             if lv is not None:
                 reg.add("ss", f"{lens} {edge}", lv, "radar", lens)
+
+    # Ride the audit trail out on the registry rather than in a second return
+    # value: every existing caller keeps working, and no caller can obtain the
+    # registry without also being able to see what was kept out of it.
+    reg.withheld = withheld
     return reg
 
 
@@ -926,6 +971,19 @@ def confluence(reg, price, atr_d):
                                "families -- counted, never fitted"}
     out["level_count"] = len(reg)
     out["level_count_by_family"] = reg.by_family()
+
+    # R3 audit trail.  Counts AND the rows, because "3 levels withheld" is not
+    # checkable and "prior_Y line at 2 bars, floor 10" is.
+    wh = list(getattr(reg, "withheld", []) or [])
+    out["maturity_floors"] = {
+        "ruling": "R3 (operator, 2026-08-05) -- INTERIM, 1h substrate",
+        "line_min_bars": W.LINE_MIN_BARS, "band_min_bars": W.BAND_MIN_BARS,
+        "withheld_count": len(wh),
+        "withheld_lines": sum(1 for r in wh if r["level"] == "line"),
+        "withheld_bands": sum(1 for r in wh if r["level"] == "band"),
+        "withheld": wh,
+        "note": "withheld levels still PRINT with a thin_sample chip; they are "
+                "excluded from SCORING only"}
     return out
 
 

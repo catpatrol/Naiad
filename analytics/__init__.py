@@ -46,7 +46,26 @@ from pathlib import Path
 # NaN-equals-NaN branch at every truncation point; F-AN-6b now asserts each
 # series function is FINITE after warm-up, which is the property F-AN-13
 # silently assumed.  Returned NUMBERS change, so I-F requires the bump.
-ANALYTICS_VERSION = "1.3.0"
+#
+# 1.4.0 -- OPERATOR RULINGS R1/R2/R4 (2026-08-05, ARGUS cycle 4 consolidated).
+# The CONTRACT changed on three counts and NO PUBLISHED NUMBER MOVES, which is
+# itself the finding:
+#
+#   R1/R2 -- the 1h substrate and the hlc3 source are now PINNED BY RULING for
+#   rolling AND anchored VWAP.  They were already what the code did
+#   (`daily_brief.vwap_series` A1.6(d), `brief2.rvwap_layer(tf="1h")`,
+#   `brief2.prior_anchored_vwaps`), so this bump records a promotion from
+#   implementation detail to ratified convention, not a recomputation.  The
+#   distinction matters: an unpinned coincidence can drift, a pinned one cannot.
+#
+#   R4 -- the anchored variance definition moves INFERRED -> VERIFIED.  It was
+#   flagged for four cycles as a reasoned inference from shared band machinery.
+#   It is now read off a discriminating measurement rather than assumed.
+#
+# The 1.2.0 precedent governs: the minor bump is taken when the CONTRACT
+# changes, because I-F is about identifying the recipe an archived capture was
+# produced by, not about whether today's data happens to exercise a difference.
+ANALYTICS_VERSION = "1.4.0"
 
 # --------------------------------------------------------------------------
 # THE SEALED LOCKBOX -- disclosure, not enforcement.
@@ -140,17 +159,40 @@ CONVENTIONS = {
                               "regular = price extreme extends while oscillator does not; "
                               "hidden = the converse; pivot_kind selects which",
                     "causality": "lag:5", "warmup": "n/a (pivot driven)"},
-    # vwap
+    # vwap -- substrate and source PINNED BY OPERATOR RULING, see VWAP_SUBSTRATE
+    # and VWAP_SOURCE below for the reasoning that is not compressible into a
+    # recipe string.
     "rolling_vwap": {"recipe": "TradingView RVWAP: trailing W-millisecond window floored at "
                                "10 bars, src hlc3, volume-weighted POPULATION variance via "
                                "one-pass max(E[x^2]-E[x]^2, 0), no (n-1) correction",
-                     "causality": "causal", "warmup": "first bar with volume"},
-    "anchored_vwap": {"recipe": "accumulated from the anchor bar, src hlc3, same variance "
-                                "definition (INFERRED from shared band machinery, not read "
-                                "from source -- flagged in the parity worksheet)",
-                      "causality": "causal", "warmup": "anchor index"},
+                     "substrate": "1h (R1)", "source": "hlc3 (R2)",
+                     "causality": "causal", "warmup": "first bar with volume",
+                     "certification": "CERTIFIED -- 1D/hlc3 (2026-08-03, 14/14) and "
+                                      "1h/hlc3 (2026-08-05, the ruled substrate)"},
+    "anchored_vwap": {"recipe": "accumulated from the anchor bar, src hlc3, volume-weighted "
+                                "POPULATION variance, one-pass, no (n-1) correction",
+                      "substrate": "1h (R1)", "source": "hlc3 (R2)",
+                      "causality": "causal", "warmup": "anchor index",
+                      "variance_status": "VERIFIED (R4) -- was INFERRED for four cycles",
+                      "variance_evidence":
+                          "The 2026-08-01 Month anchor was TWO BARS wide, which is the "
+                          "smallest sample that discriminates: population and sample "
+                          "(n-1) forms differ by sqrt(n/(n-1)) = sqrt(2) = 41.4% there, "
+                          "against a collapse tolerance of 0.02 ATR. The POPULATION form "
+                          "landed within 0.003% of the operator's observed band-1 "
+                          "distance; the sample form would have missed by 41%. The "
+                          "definition is therefore READ OFF A MEASUREMENT that could only "
+                          "come out one way, not inferred from shared band machinery. "
+                          "True volume weights on the two bars: 0.394428 / 0.605572.",
+                      "certification": "variance VERIFIED, source VERIFIED (hlc3, 1D "
+                                       "capture 2026-08-03); SIGMA ON THE 1h SUBSTRATE "
+                                       "UNVERIFIED -- needs one 1H capture with anchored "
+                                       "bands enabled"},
     "vw_sigma_bands": {"recipe": "vwap +/- k*stdev, k in {1,2,3}",
-                       "causality": "causal", "warmup": "inherits"},
+                       "causality": "causal", "warmup": "inherits",
+                       "certification": "GEOMETRY VERIFIED -- 36 triples across 3 captures, "
+                                        "2 instruments, 2 timeframes; every triple exactly "
+                                        "symmetric at exact integer multiples of sigma"},
     # volatility
     "true_range": {"recipe": "max(H-L, abs(H-C_prev), abs(L-C_prev)); index 0 = H-L",
                    "causality": "causal", "warmup": "0"},

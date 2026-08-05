@@ -302,7 +302,10 @@ def test_f_b35_prior_anchors_and_confirmed_pivots_reach_the_registry():
     _sys.path.insert(0, str(_P(__file__).resolve().parent.parent / "scripts"))
     import brief2 as B2
 
-    prior = {"prior_M": {"warming": False, "vwap": 100.0, "sigma": 2.0,
+    # `bars` is a MATURE month on the 1h substrate (~720). It is supplied
+    # explicitly because R3's floors gate on sample depth, and an anchor with no
+    # countable depth is treated as immature rather than waved through.
+    prior = {"prior_M": {"warming": False, "vwap": 100.0, "sigma": 2.0, "bars": 720,
                          "bands": {f"{s}{k}s": 100.0 + (1 if s == "+" else -1) * k * 2.0
                                    for k in (1, 2, 3) for s in ("+", "-")}},
              "prior_Q": {"warming": True, "reason": "no completed prior period"}}
@@ -330,6 +333,70 @@ def test_f_b35_prior_anchors_and_confirmed_pivots_reach_the_registry():
     reg2 = B2.build_registry(a, {"windows": {}}, {"windows": {}}, [],
                              prior_anchors=None, pivots=None)
     assert any(x["source_layer"] == "structure_layer" for x in reg2.as_list())
+
+
+def test_f_b37_r3_maturity_floors_withhold_immature_vwap_levels():
+    """F-B37 -- operator ruling R3, 2026-08-05.
+
+    A VWAP over a handful of bars is arithmetically exact and informationally
+    empty. The LINE enters the registry at >= 10 bars, the SIGMA BANDS at >= 30.
+    Below the floor the value still PRINTS with a `thin_sample` chip and is
+    excluded from SCORING only -- so this asserts three separable things:
+
+      1. the floors BIND (an immature anchor contributes no scored levels),
+      2. they bind SEPARATELY (line and bands have different floors, so the
+         band-only case must exist and be reachable),
+      3. every withholding is AUDITABLE (recorded with bar count and floor),
+         because a filter nobody can inspect is indistinguishable from a bug.
+    """
+    import sys as _sys
+    from pathlib import Path as _P
+    _sys.path.insert(0, str(_P(__file__).resolve().parent.parent / "scripts"))
+    import brief2 as B2
+    from analytics import vwap as W
+
+    assert (W.LINE_MIN_BARS, W.BAND_MIN_BARS) == (10, 30), \
+        "R3's interim floors moved without the fixture moving with them"
+
+    def _prior(bars):
+        return {"prior_M": {"warming": False, "vwap": 100.0, "sigma": 2.0,
+                            "bars": bars,
+                            "bands": {f"{s}{k}s": 100.0 + (1 if s == "+" else -1) * k * 2.0
+                                      for k in (1, 2, 3) for s in ("+", "-")}}}
+
+    a = {"vwap": {}, "structure": {}, "sessions": {}, "radar": []}
+    lvls = lambda reg: [x for x in reg.as_list() if x["source_layer"] == "prior_anchor"]
+
+    # 3 bars -- below BOTH floors: nothing scored, 7 rows withheld.
+    r3 = B2.build_registry(a, {"windows": {}}, {"windows": {}}, [],
+                           prior_anchors=_prior(3))
+    assert lvls(r3) == [], "a 3-bar anchor cast confluence votes"
+    assert len(r3.withheld) == 7 and r3.withheld[0]["bars"] == 3
+
+    # 15 bars -- ABOVE the line floor, BELOW the band floor. This is the case
+    # the two-floor design exists for: a mature mean whose dispersion estimate
+    # is not yet meaningful. One line scored, six bands withheld.
+    r15 = B2.build_registry(a, {"windows": {}}, {"windows": {}}, [],
+                            prior_anchors=_prior(15))
+    assert len(lvls(r15)) == 1 and lvls(r15)[0]["label"] == "prior_M VWAP"
+    assert len(r15.withheld) == 6
+    assert {w["level"] for w in r15.withheld} == {"band"}, \
+        "the line was withheld at 15 bars, above its own floor of 10"
+
+    # 720 bars -- a full month on 1h: everything admitted, nothing withheld.
+    r720 = B2.build_registry(a, {"windows": {}}, {"windows": {}}, [],
+                             prior_anchors=_prior(720))
+    assert len(lvls(r720)) == 7 and r720.withheld == []
+
+    # UNCOUNTABLE depth is treated as immature, not waved through.
+    rnone = B2.build_registry(a, {"windows": {}}, {"windows": {}}, [],
+                              prior_anchors=_prior(None))
+    assert lvls(rnone) == [], "an anchor with no countable sample was scored anyway"
+
+    # AUDITABILITY: every withheld row names what failed and against what floor.
+    for w in r3.withheld:
+        assert w["level"] in ("line", "band") and w["floor"] in (10, 30)
+        assert w["label"] and w["what"] and w["reason"]
 
 
 def test_f_b35_confirmed_pivots_use_a_lookback_not_a_count_cap():
