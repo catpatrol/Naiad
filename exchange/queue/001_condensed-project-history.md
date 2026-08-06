@@ -99,4 +99,8 @@ history records that a phase ran and what was ruled, not what the numbers were).
 
 ---
 
-RATIFIED: PENDING
+RATIFIED: operator, 2026-08-06 — "ratify 001". Drafted by ATHENA. Executor: HEPHAESTUS.
+This contract was the ONLY one of four in the queue complete against the CONVENTIONS
+standard (deliverables, numbered fixtures F-H1..H6, verdict criteria, and a scope
+boundary) and had waited on this stamp since it was drafted — a fact surfaced by the
+HERMES queue audit of 2026-08-05.

@@ -74,6 +74,35 @@ existing writer lives; read it first, do not assume.
   are deleted**.
 - **F-REG** the full existing suite still passes.
 
+## Verdict criteria
+*(Added 2026-08-06 by ATHENA. This contract shipped without them — a defect found by the HERMES
+queue audit of 2026-08-05 and owned by its drafter, not its executor.)*
+
+**ACCEPT** when every one of the following holds, each evidenced by printed fixture output in the
+build document — not by assertion:
+
+1. **F-M1..F-M4, F-P1..F-P4, F-R1 and F-REG all PASS.** Any single failure is a REJECT.
+2. **F-M4 is the regression bar and it is absolute:** `--phase` run WITHOUT `--mirror` produces
+   output byte-identical to today's. A byte difference is a REJECT, not a discussion.
+3. **F-P4 holds:** the existing path-scope guard still rejects the `exchangeable/` lookalike. The
+   size budget is an ADDITIONAL check, never a replacement for scope.
+4. **`research_outputs/` is byte-identical before and after the full fixture run.** Phase archives
+   are permanent evidence; a contract about backups must not touch what it backs up.
+5. **No file outside `scripts/backup_estate.py` and `scripts/publish_exchange.py` is modified.** If
+   the implementation appears to require one, HALT and report rather than widening scope.
+
+**REJECT and halt without committing** if any of the above fails.
+
+**PARTIAL ACCEPT IS NOT AVAILABLE FOR D1 AND D2 — they ship together or not at all.** D2 turns
+`--phase --dest` into an error; D1 supplies `--mirror` as the alternative it names. Shipping D2
+alone would leave `--phase` with **no off-machine path whatsoever**, which is strictly worse than
+the silent no-op it replaces: today the flag lies, and after D2-alone the flag refuses with nothing
+to offer instead. D3 and D4 may ship independently of both.
+
+**What a PASS does NOT establish.** That any archive is correct — only that the machinery writes
+and verifies where it claims to. Archive integrity is proven by hash comparison against a
+destination, which is a separate operation and already ran on 2026-08-04: 9/9 MATCH.
+
 ## Invariants
 Nothing under `research_outputs/` is deleted. Nothing writes to `_reviewer_box/`. Commit-no-push
 except `exchange/**` via the guard. `signals.py`, `trading.py` and the engine are untouched.

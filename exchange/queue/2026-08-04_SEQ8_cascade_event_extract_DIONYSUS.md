@@ -1,8 +1,19 @@
 # CONTRACT — SEQ-8 · The Cascade Event Extract
 **Drafted:** DIONYSUS, 2026-08-04, on explicit operator instruction (one-time Q-5 drafting exception granted by operator this date; ratification stamp still required).
-**RATIFIED: PENDING** — operator word suggestion: **"extract"**
+**RATIFIED: operator, 2026-08-06** — "stamp seq8". Drafted by DIONYSUS. Executor: HEPHAESTUS.
 **Executor:** HEPHAESTUS · **ENVIRONMENT: local Windows Claude Code** (the repo containing `_reviewer_box/` and the data estate; assert before any write, halt on mismatch)
 **Authority chain:** SEQ interview rulings, operator 2026-08-04 (SEQ-1 C+windows · SEQ-2 D · SEQ-3 B+multiTF meaning · SEQ-4 b+c+d · SEQ-5 a · SEQ-6 b · SEQ-7 promote-(ii)-park-rest · SEQ-8 a). Record: `exchange/reports/SESSION_SUMMARY_DIONYSUS_2026-08-04_SEQ_rulings.md`.
+
+> ⚠ **OPEN DEFECT, recorded beneath the stamp and not a condition on it — owner: DIONYSUS.**
+> This contract carries **no verdict criteria**. `CONVENTIONS.md` requires every queue item to state
+> what outcome constitutes acceptance; this one states fixtures and deliverables but never says what
+> result would mean the work succeeded or failed. The defect was found by the HERMES queue audit of
+> 2026-08-05, which found three of four items incomplete against the same standard.
+>
+> **Consequence for the executor, stated plainly:** run the contract, report every result against its
+> fixtures, and **do not declare a verdict.** A conclusion drawn against an unstated bar is a bar
+> invented after seeing the data, which is the one thing this project's method exists to prevent.
+> DIONYSUS supplies the criteria before any finding here is treated as settled.
 
 ## §0 Hard assertions (run before any read or write)
 `git rev-parse HEAD` printed · path contains `Users…OneDrive…naiad` · `engine/` exists · `scripts/census_build.py` exists · `exchange/{queue,reports,status}/` exist · census exploration substrate present. HALT on any failure; report, do not create.
