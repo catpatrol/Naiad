@@ -10,7 +10,7 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": true
   },
-  "generated_utc": "2026-08-08T10:00:07Z",
+  "generated_utc": "2026-08-07T10:47:54Z",
   "head": "d22380128b8d1ab3243f60550a5304f3055c5600",
   "lane_last_commit": {
     "brief": null,
@@ -229,15 +229,6 @@
       "size": 22600,
       "source_guess": null,
       "tracked": true
-    },
-    {
-      "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-08-07.json",
-      "sha256_head_blob": null,
-      "sha256_worktree": "6940eb5dafb41cc69a200251fc95a4ffa375d4e89ee9c0ea88989197c6513461",
-      "size": 22898,
-      "source_guess": null,
-      "tracked": false
     }
   ],
   "sources": [
@@ -611,15 +602,13 @@
     }
   ],
   "status_porcelain": [
-    " M exchange/status/MANIFEST.json",
     "?? \"Cascade Rewire.html\"",
     "?? Cascade_Atlas_CENSUS_1b.html",
     "?? Cascade_Atlas_CENSUS_1b_v2_1.html",
     "?? HANDOFF_ATHENA_2026-08-03_FULL_STATE_1.md",
     "?? PRIMER_HERMES_2026-08-03_v2_FIRST_RUN.md",
     "?? SS_Reassessment_Synthesis_2026-08-03.md",
-    "?? exchange/reports/SS_SYSTEM_SYNTHESIS_2026-08-06.md",
-    "?? exchange/status/daily/MANIFEST_2026-08-07.json"
+    "?? exchange/reports/SS_SYSTEM_SYNTHESIS_2026-08-06.md"
   ],
   "untracked_root": [
     {
