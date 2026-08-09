@@ -10,8 +10,8 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": true
   },
-  "generated_utc": "2026-08-08T10:00:07Z",
-  "head": "d22380128b8d1ab3243f60550a5304f3055c5600",
+  "generated_utc": "2026-08-09T18:52:53Z",
+  "head": "2de04b470b82894611460307f2ab011be35bc6f0",
   "lane_last_commit": {
     "brief": null,
     "docs": {
@@ -20,9 +20,9 @@
       "subject": "docs: archive 44 superseded ARGUS artifacts to docs/history/argus/"
     },
     "exchange": {
-      "committed_iso": "2026-08-05T21:13:00-03:00",
-      "sha": "d22380128b8d1ab3243f60550a5304f3055c5600",
-      "subject": "exchange: auto-publish 2026-08-06"
+      "committed_iso": "2026-08-09T15:52:56-03:00",
+      "sha": "0fad653ef03fdf4bf0310274a356f12656f487d2",
+      "subject": "exchange: auto-publish 2026-08-09"
     },
     "ops": {
       "committed_iso": "2026-08-05T19:25:35-03:00",
@@ -38,7 +38,7 @@
   },
   "manifest_version": "1.1",
   "onedrive_running": false,
-  "origin_head": "d22380128b8d1ab3243f60550a5304f3055c5600",
+  "origin_head": "2de04b470b82894611460307f2ab011be35bc6f0",
   "queue_open": 0,
   "reviewer_box": [
     {
@@ -72,7 +72,7 @@
       "match_head": false,
       "path": "exchange/status/HEARTBEAT.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "fd309fc6b0eae13868235b2ca5853bd2672431e56a0e01178b6b816107ea10de",
+      "sha256_worktree": "afc4865af4715f7f5b71351b3eb42016d66813acdb190ac7536db5bfb18c7381",
       "size": 198,
       "source_guess": null,
       "tracked": true
@@ -144,8 +144,8 @@
       "match_head": false,
       "path": "exchange/status/RETENTION.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "cfd36a9896a3e1f0e5e5e7560abfa1df4a7673284981a5484cceebb2e78fe8c3",
-      "size": 2487,
+      "sha256_worktree": "4941f8fa27e1149ac7ef3924c0d1f56e1abdf3ddfd8f576739c1111167acfd12",
+      "size": 2601,
       "source_guess": null,
       "tracked": true
     },
@@ -196,6 +196,15 @@
     },
     {
       "match_head": false,
+      "path": "exchange/status/daily/DAILY_2026-08-08.md",
+      "sha256_head_blob": null,
+      "sha256_worktree": "3b591715fdcab1eed55f5383b904b3f3c0b58231e8abe600e70a005b472ab75e",
+      "size": 3889,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
       "path": "exchange/status/daily/MANIFEST_2026-07-28.json",
       "sha256_head_blob": null,
       "sha256_worktree": "9158aa37698deb4b13e7edfd8580baf11566f8ae4593e512e8ce1c4c91a7e50d",
@@ -237,7 +246,16 @@
       "sha256_worktree": "6940eb5dafb41cc69a200251fc95a4ffa375d4e89ee9c0ea88989197c6513461",
       "size": 22898,
       "source_guess": null,
-      "tracked": false
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-08.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "b818c992e5ef42e6b399d187ca84e43e48347d1e366c96ccc69ac56d792b2ee1",
+      "size": 23296,
+      "source_guess": null,
+      "tracked": true
     }
   ],
   "sources": [
@@ -611,15 +629,14 @@
     }
   ],
   "status_porcelain": [
-    " M exchange/status/MANIFEST.json",
+    " M exchange/status/daily/DAILY_2026-08-08.md",
     "?? \"Cascade Rewire.html\"",
     "?? Cascade_Atlas_CENSUS_1b.html",
     "?? Cascade_Atlas_CENSUS_1b_v2_1.html",
     "?? HANDOFF_ATHENA_2026-08-03_FULL_STATE_1.md",
     "?? PRIMER_HERMES_2026-08-03_v2_FIRST_RUN.md",
     "?? SS_Reassessment_Synthesis_2026-08-03.md",
-    "?? exchange/reports/SS_SYSTEM_SYNTHESIS_2026-08-06.md",
-    "?? exchange/status/daily/MANIFEST_2026-08-07.json"
+    "?? briefs/panel/excursions/2026-08-03.parquet"
   ],
   "untracked_root": [
     {
