@@ -283,8 +283,8 @@ downloaded twin, not a missing file. Three HTML atlases and one parquet sit at r
 
 | PATH | EXISTS | TRACKED | COMMITTED | PUSHED | PROTECTED BY | BOX COST |
 |---|---|---|---|---|---|---|
-| `exchange/status/CONVENTIONS.md` | yes | tracked | see §11 | see §11 | GitHub + estate zip | +457 bytes (0.007% of 6.39 MB box) |
-| `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-11_BULK-RELOCATION-SEQ8-UNARCHIVED.md` | yes | tracked (new) | see §11 | see §11 | GitHub + estate zip | 19,965 bytes (19.5 KB, 0.298% of box) |
+| `exchange/status/CONVENTIONS.md` | yes | tracked | `d16e109` | yes — `origin/v12-v1-census` | GitHub + estate zip | +457 bytes (0.007% of 6.39 MB box) |
+| `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-11_BULK-RELOCATION-SEQ8-UNARCHIVED.md` | yes | tracked (new) | `d16e109` | yes — `origin/v12-v1-census` | GitHub + estate zip | 19,965 bytes (19.5 KB, 0.298% of box) |
 | `research_outputs/seq8/` (PRIMARY, untouched) | yes | ignored — `.gitignore:110` | not committed | no | **local only + no D: copy** | n/a — not in sync selection |
 | `research_outputs/seq8_run2/` | **REMOVED** | was ignored — `.gitignore:111` | not committed | no | D: `research_outputs/seq8_run2` (11 files, sha256-verified) **and** identical to primary `seq8/` | n/a |
 | `D:/Naiad/research_outputs/seq8_run2/` | yes | n/a (off-repo) | n/a | n/a | D: drive only | n/a — unsynced drive |
@@ -335,5 +335,23 @@ Run log retained for this session at the scratchpad path
 `…/tasks/btymd293o.output` (857 lines, full 764-row deletion ledger). It is a session-local file and is
 **not** in the repo or the box; every figure quoted above is reproduced in this document.
 
-Publish status, commit SHA and push result are recorded in the session close immediately following this
-document's creation — `publish_exchange.publish(repo, '2026-08-11')`, staging `exchange/**` only.
+`publish_exchange.publish(repo, '2026-08-11')`, staging `exchange/**` only:
+
+```
+publish: committed d16e109 (2 path(s)) and pushed to origin/v12-v1-census
+status= PUBLISHED commit= d16e109 pushed= True offenders= []
+```
+
+Verified after the fact, not assumed:
+
+| check | result |
+|---|---|
+| files in `d16e109` | 2 — `exchange/status/CONVENTIONS.md` (+6), this report (+339) |
+| paths outside `exchange/` in the commit | **none** |
+| local head vs `origin/v12-v1-census` | both `d16e109` |
+| report present at `origin/v12-v1-census` | yes (`git cat-file -e`) |
+| clause present in the **remote** CONVENTIONS copy | yes (1 match) |
+
+A second commit follows this one, carrying only the two edits above — the commit SHA and this section
+could not exist in the document before the document was committed. The relocation itself is entirely
+described by `d16e109`.
