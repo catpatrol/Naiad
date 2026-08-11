@@ -85,8 +85,8 @@ commits between those dates.
 
 | PATH | EXISTS | TRACKED | COMMITTED | PUSHED | PROTECTED BY | BOX COST |
 |---|---|---|---|---|---|---|
-| `exchange/queue/003_report-rotation-and-provenance.md` | yes | tracked (new) | see §5 | see §5 | GitHub + estate zip | 4,640 B (0.073% of the 6.39 MB box) |
-| `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-11_QUEUE-003-FILED.md` | yes | tracked (new) | see §5 | see §5 | GitHub + estate zip | see §5 |
+| `exchange/queue/003_report-rotation-and-provenance.md` | yes | tracked (new) | `e1c4e2d` | yes — `origin/v12-v1-census` | GitHub + estate zip | 4,640 B (0.073% of the 6.39 MB box) |
+| `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-11_QUEUE-003-FILED.md` | yes | tracked (new) | `e1c4e2d`, §5 follows | yes — `origin/v12-v1-census` | GitHub + estate zip | 5,739 B (0.086% of box) |
 | `exchange/status/CONVENTIONS.md` | yes | tracked, **unchanged** | unchanged | unchanged | GitHub + estate zip | 0 — this paste edits nothing |
 | `scripts/rotate_reports.py` | **no** | — | — | — | — | 0 — D-1 is not built here |
 | `exchange/status/ROTATION_LOG.md` | **no** | — | — | — | — | 0 — created by D-1, not by this paste |
@@ -100,7 +100,27 @@ itself the reason 003 exists.
 
 ## 5 · Publish
 
-*(filled in immediately after the first publish)*
+```
+publish: WARNING -- exchange/ holds 1,686,869 B, 26.4% of the 6,390,000 B box
+         (warn at 25%, refuse above 40%).
+publish: committed e1c4e2d (2 path(s)) and pushed to origin/v12-v1-census
+status= PUBLISHED commit= e1c4e2d pushed= True offenders= []
+bytes= 1686869 fraction=26.4% budget= WARN
+```
+
+Verified, not assumed:
+
+| check | result |
+|---|---|
+| files in `e1c4e2d` | 2 — the 003 contract (+65), this report (+110) |
+| paths outside `exchange/` | **none** |
+| local vs `origin/v12-v1-census` | both `e1c4e2d` |
+| 003 contract present on the remote | yes (`git cat-file -e`) |
+
+**The D3 guard from 002 warned on the act of filing 003** — the contract that exists to stop that
+number rising was itself measured by the guard 002 delivered, at 26.4%. Filing cost 0.2 points.
+
+Box cost, final: contract 4,640 B (0.073%), this report 5,739 B (0.086%). A second commit carries §5.
 
 ---
 
