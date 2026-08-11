@@ -13,6 +13,87 @@ what changed and why. Live instance, still visible in this file: §0 asserted th
 
 ---
 
+## FIND IT FAST — what is in this file, and where
+
+*Added 2026-08-06. Retrieval returns the passages that best match a query, not whole files, so a
+session reading a chunk from the middle has no way to learn what else exists. **This map is that
+way.** A broad opening query surfaces this block; from here, search a section by name.*
+
+| If you want to know | go to |
+|---|---|
+| Where do I paste this, and on which machine? | **§2.1** |
+| How do I undo a paste that went wrong? | **§2.1b** |
+| Do I have to explain the paste before the operator runs it? | **§2.0** |
+| Must I give exact runnable code, or can I describe it? | **§2.2** |
+| How do I write a verification gate that is not wrong? | **§2.3** |
+| How much should run without asking the operator? | **§2.4** |
+| How do I ask the operator to do something by hand? | **§1.2** |
+| How do I present a decision to the operator? | **§1.1** |
+| How should a major report be written? | **§1.3** |
+| What document do I write at the end of a build? | **§3.1** |
+| Where did every file end up, and is it protected? | **§3.2** |
+| How do I publish, and what is the exact command? | **§3.4** |
+| Who can see what — chats, Cowork, the builder? | **§4.1** |
+| Where do files go, and what may never enter the bus? | **§4.2** |
+| Is this file actually visible to a web lane? | **§4.3** |
+| What is my lane responsible for? | **§5.1** |
+| How do I close a session? | **§5.2** |
+| How do I tag a claim — verified, handoff, open? | **§6.1** |
+| What mistakes does the reviewer keep making? | **§6.2** |
+| Do I have the files this contract needs? | **§6.3** |
+| Which rules were moved out of project memory, and where are they? | **§10** |
+| How do I change a rule in this file? | **§11** |
+
+**Every section on disk, verbatim:**
+
+```
+# CONVENTIONS — the operating rules every Naiad lane follows
+## §0 · What this file is, and why you are reading it
+### How this file gets read
+### Precedence
+## §1 · How to talk to the operator
+### 1.1 The decision-funnel interview — the ratified format for every gating decision
+### 1.2 Manual-task instruction rule — MOVED FROM MEMORY #29, full text
+### 1.3 Reporting methodology
+## §2 · How to build a paste for HEPHAESTUS
+### 2.0 · Every paste explains itself, before it is run
+### 2.1 Routing and the environment assertion
+### 2.1b · Every paste-go carries a ROLLBACK line
+### 2.2 Exact paste-ready text — MOVED FROM MEMORY #7, full text
+### 2.3 Write every gate from the POST-action state
+### 2.4 Design for autonomy — MOVED FROM MEMORY #14 + #16, merged, full text
+## §3 · How to hand work back — ONE document
+### 3.1 The build document
+### 3.2 The file-disposition table — six columns, standing
+### 3.3 Publishing and the on-screen close
+### 3.4 The publish invocation — written out, because two wrong forms have shipped
+## §4 · Where things live, and who can see what
+### 4.1 The surfaces
+### 4.2 The exchange bus
+### 4.3 Confirming a file is actually visible — rule added 2026-08-03
+## §5 · Lane charters
+### 5.1 The ARGUS lane — purpose and labour division. MOVED FROM MEMORY #15, full text
+### 5.2 Session close — the STATUS block
+## §6 · Evidence discipline
+### 6.1 Provenance tags — load-bearing
+### 6.2 The reviewer error taxonomy
+### 6.3 The context-gap audit — MOVED FROM MEMORY #8, full text
+## §7 · Carried backlogs and locked rulings
+### 7.1 SS Pine display backlog — MOVED FROM MEMORY #1, full text
+### 7.2 SS interview rulings Q1c–Q11 — MOVED FROM MEMORY #19
+## §8 · Infrastructure inventory — MOVED FROM MEMORY #25
+## §9 · Claude-optimization track — MOVED FROM MEMORY #9
+## §10 · MOVED-FROM-MEMORY REGISTER
+## §11 · Maintenance guide — step by step, plain language
+```
+
+**Two rules about this file itself.** It is AUTHORITATIVE — where it and project memory
+disagree, do not choose silently: quote both and ask the operator. And it is the **only**
+instruction surface reaching all six actors, because project memory does not reach Claude Cowork.
+
+---
+
+
 ## §0 · What this file is, and why you are reading it
 
 Project memory is text injected automatically into every session of the three **web chats**
