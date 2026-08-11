@@ -30,18 +30,52 @@ Nothing here is destructive to the worktree.  No file is written, moved or
 deleted by this module.
 """
 
+import os
 import subprocess
 from pathlib import Path
 
 SCOPE = "exchange/"
 SUBJECT = "exchange: auto-publish {date}"
 
+# --------------------------------------------------------------- size budget
+#
+# D3, queue 002 (ratified 2026-08-04, ruling G5-a).  The scope guard above
+# answers "is this the right KIND of file"; it has never answered "is there too
+# much of it".  Those are different questions and only the first was ever asked:
+# `offenders= []` on every run means "nothing outside exchange/", never anything
+# about size.
+#
+# Why a TOTAL and not a per-file cap: exchange/ reached 51.4% of the project box
+# while NINE OF ITS TEN largest data files were each under the 1 MB per-file cap
+# in CONVENTIONS §4.2.  A per-file limit cannot catch an aggregate; only the sum
+# can.  The box holds ~6.39 MB and has overflowed twice, and the three web lanes
+# reach repo content ONLY through it -- so an overflow is not an inconvenience,
+# it is those lanes going blind.
+#
+# WARN, then REFUSE, then an override that is always available: a guard with no
+# escape hatch becomes something people route around, and the routing-around is
+# what actually loses the safety.  The override prints what it let through.
+BOX_BYTES = 6_390_000
+WARN_FRACTION = 0.25
+REFUSE_FRACTION = 0.40
+OVERRIDE_ENV = "NAIAD_ALLOW_OVERSIZE_PUBLISH"
 
-def _git(repo, args, timeout=300):
+# Quoted verbatim on refusal.  A refusal that does not say what to do instead is
+# just an obstacle; this names the remedy CONVENTIONS already ratified.
+POINTER_RULE = (
+    "CONVENTIONS §4.2: text only, 1 MB per file. Larger artifacts are referenced "
+    "by path + sha256 pointer, never copied in. Captures and renders go to "
+    "briefs/; study artifacts to research_outputs/; local working files to "
+    "_reviewer_box/."
+)
+
+
+def _git(repo, args, timeout=300, stdin=None):
     """Run one git command.  Returns (returncode, stdout, stderr) as text."""
     proc = subprocess.run(
         ["git"] + args,
         cwd=str(repo),
+        input=None if stdin is None else stdin.encode("utf-8"),
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         timeout=timeout,
@@ -65,6 +99,59 @@ def guard(staged):
     return (not offenders), offenders
 
 
+def budget(total_bytes, box=BOX_BYTES):
+    """The size budget, as a pure function so it can be tested without a repo.
+
+    Returns (level, fraction) where level is "OK", "WARN" or "REFUSE".
+
+    Thresholds are read as: WARN at or above 25%, REFUSE strictly above 40%.
+    "REFUSE above 40%" is taken literally -- exactly 40.0% warns, it does not
+    refuse -- because a boundary that refuses its own stated limit surprises the
+    one reader who checked the number first.
+    """
+    frac = (total_bytes / box) if box else 0.0
+    if frac > REFUSE_FRACTION:
+        return "REFUSE", frac
+    if frac >= WARN_FRACTION:
+        return "WARN", frac
+    return "OK", frac
+
+
+def _index_sizes(repo):
+    """[(size, path)] for every SCOPE path in the index, largest first.
+
+    Reads the INDEX, not the worktree: the question D3 asks is "how big is what
+    we are about to publish", and after `git add` that is the index.  Sizes come
+    from the staged blobs via cat-file, so a file staged and then edited in the
+    worktree is measured as the bytes that would actually be committed.
+    """
+    rc, out, err = _git(repo, ["ls-files", "-s", "-z", "--", SCOPE.rstrip("/")])
+    if rc != 0:
+        raise RuntimeError("git ls-files failed: %s" % err.strip())
+    entries = []
+    for rec in out.split("\0"):
+        if not rec:
+            continue
+        meta, _, path = rec.partition("\t")
+        parts = meta.split()
+        if len(parts) >= 2 and path:
+            entries.append((parts[1], path))
+    if not entries:
+        return []
+    rc, out, err = _git(repo, ["cat-file", "--batch-check"],
+                        stdin="".join(sha + "\n" for sha, _ in entries))
+    if rc != 0:
+        raise RuntimeError("git cat-file failed: %s" % err.strip())
+    lines = out.split("\n")
+    sized = []
+    for (sha, path), line in zip(entries, lines):
+        parts = line.split()
+        if len(parts) >= 3 and parts[2].isdigit():
+            sized.append((int(parts[2]), path))
+    sized.sort(reverse=True)
+    return sized
+
+
 def _staged_paths(repo):
     rc, out, err = _git(repo, ["diff", "--cached", "--name-only", "-z"])
     if rc != 0:
@@ -72,19 +159,31 @@ def _staged_paths(repo):
     return [p for p in out.split("\0") if p]
 
 
-def publish(repo, date_str, remote="origin", log=print):
+def publish(repo, date_str, remote="origin", log=print, allow_oversize=None):
     """Stage exchange/** only, guard the index, then commit and push.
 
     Returns a result dict with a "status" of:
       PUBLISHED  -- committed and pushed; "commit" holds the short sha
       NOTHING    -- exchange/ had no changes; nothing staged, nothing pushed
-      FLAGGED    -- the guard tripped; index reset, push skipped, see "offenders"
+      FLAGGED    -- the scope guard tripped; index reset, push skipped, see "offenders"
+      REFUSED    -- the D3 size budget tripped; index reset, push skipped
       ERROR      -- a git command failed; see "error"
     Never raises.  A publish failure must not fail the job that called it.
+
+    allow_oversize -- override the D3 refusal.  None (default) consults
+    $NAIAD_ALLOW_OVERSIZE_PUBLISH so a caller that cannot pass the argument
+    still has an escape hatch; True/False decide it outright.  An override is
+    always announced on screen -- a silent override is the same defect as a
+    silent no-op.
     """
     repo = Path(repo)
+    if allow_oversize is None:
+        allow_oversize = os.environ.get(OVERRIDE_ENV, "").strip().lower() in (
+            "1", "true", "yes", "on")
     result = {"status": "ERROR", "offenders": [], "staged": [],
-              "commit": None, "branch": None, "error": None, "pushed": False}
+              "commit": None, "branch": None, "error": None, "pushed": False,
+              "bytes": None, "fraction": None, "budget": None,
+              "largest": [], "oversize_override": bool(allow_oversize)}
 
     try:
         rc, branch, err = _git(repo, ["rev-parse", "--abbrev-ref", "HEAD"])
@@ -132,6 +231,37 @@ def publish(repo, date_str, remote="origin", log=print):
             log("publish: exchange/ unchanged -- nothing to commit.")
             return result
 
+        # --- D3: total-size budget.  Runs AFTER the scope guard, never instead
+        # of it: size is an ADDITIONAL check and a small file in the wrong place
+        # is still a violation.
+        sized = _index_sizes(repo)
+        total = sum(sz for sz, _ in sized)
+        level, frac = budget(total)
+        result["bytes"] = total
+        result["fraction"] = frac
+        result["budget"] = level
+        result["largest"] = sized[:10]
+
+        if level == "WARN":
+            log("publish: WARNING -- %s holds %s B, %.1f%% of the %s B box "
+                "(warn at %d%%, refuse above %d%%)."
+                % (SCOPE, f"{total:,}", 100 * frac, f"{BOX_BYTES:,}",
+                   100 * WARN_FRACTION, 100 * REFUSE_FRACTION))
+        elif level == "REFUSE":
+            for line in _oversize_lines(total, frac, sized):
+                log(line)
+            if not allow_oversize:
+                result["status"] = "REFUSED"
+                _git(repo, ["reset"])
+                log("REFUSE: publish aborted by the size budget; index reset, "
+                    "nothing committed, nothing pushed.")
+                log("REFUSE: override with allow_oversize=True or %s=1 if this "
+                    "publish is legitimate." % OVERRIDE_ENV)
+                return result
+            log("publish: size budget OVERRIDDEN (%s) -- publishing %s B anyway."
+                % ("allow_oversize=True" if os.environ.get(OVERRIDE_ENV, "") == ""
+                   else OVERRIDE_ENV, f"{total:,}"))
+
         rc, out, err = _git(repo, ["commit", "-m", SUBJECT.format(date=date_str)])
         if rc != 0:
             result["error"] = "git commit failed: %s" % (err.strip() or out.strip())
@@ -161,14 +291,49 @@ def publish(repo, date_str, remote="origin", log=print):
         return result
 
 
+def _oversize_lines(total, frac, sized):
+    """The refusal message: the number, the ten largest, and the remedy."""
+    out = [
+        "REFUSE: %s holds %s B, %.1f%% of the %s B project box -- above the "
+        "%d%% ceiling." % (SCOPE, f"{total:,}", 100 * frac, f"{BOX_BYTES:,}",
+                           100 * REFUSE_FRACTION),
+        "REFUSE: the ten largest staged paths:",
+    ]
+    for sz, path in sized[:10]:
+        out.append("    %10s B  %5.2f%%  %s" % (f"{sz:,}", 100.0 * sz / BOX_BYTES, path))
+    out.append("REFUSE: " + POINTER_RULE)
+    return out
+
+
 def report_lines(result):
     """Render a publish result as markdown lines for a report section."""
     status = result.get("status")
     if status == "PUBLISHED":
-        return [
+        lines = [
             f"- committed `{result['commit']}` on `{result['branch']}` and pushed to origin",
             f"- {len(result['staged'])} path(s) published, all inside `{SCOPE}`",
         ]
+        if result.get("bytes") is not None:
+            lines.append(
+                f"- `{SCOPE}` size budget: {result['bytes']:,} B, "
+                f"{100 * result['fraction']:.1f}% of {BOX_BYTES:,} B "
+                f"({result.get('budget')})")
+        if result.get("budget") == "REFUSE" and result.get("oversize_override"):
+            lines.append("- **the size ceiling was OVERRIDDEN for this publish**")
+        return lines
+    if status == "REFUSED":
+        lines = [
+            "- **REFUSED — publish aborted by the D3 size budget.** "
+            f"`{SCOPE}` holds {result['bytes']:,} B, "
+            f"{100 * result['fraction']:.1f}% of the {BOX_BYTES:,} B box, above the "
+            f"{100 * REFUSE_FRACTION:.0f}% ceiling:",
+        ]
+        lines += [f"    - `{p}` — {sz:,} B ({100.0 * sz / BOX_BYTES:.2f}%)"
+                  for sz, p in result.get("largest", [])]
+        lines.append(f"- {POINTER_RULE}")
+        lines.append("- the index was reset; nothing was committed and nothing was pushed")
+        lines.append(f"- override with `allow_oversize=True` or `{OVERRIDE_ENV}=1`")
+        return lines
     if status == "NOTHING":
         return ["- `exchange/` was unchanged; nothing committed, nothing pushed"]
     if status == "FLAGGED":

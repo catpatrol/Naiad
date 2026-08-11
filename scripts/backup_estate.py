@@ -80,6 +80,31 @@ archive from an earlier day still refuses, flag or no flag.
   (scripts/publish_exchange.py).  --verify does neither: it is an inspection
   mode and stays read-only.  This is the one place the script writes inside the
   repo; every source remains read-only, as before.
+
+AMENDMENT 2026-08-11 -- queue 002 (ratified 2026-08-04, rulings G1-a / G5-a;
+amended 2026-08-06 ruling B).  Three defects fixed, all of them measured:
+
+  D1  --phase now writes its ARCHIVE off-machine, to $NAIAD_PHASE_ARCHIVE_ROOT
+      or --phase-archive-root, default D:/Naiad/research_outputs/_archive, and
+      HALTS if that drive is not mounted rather than falling back to the laptop.
+      Its SIDECAR stays tracked in research_outputs/_archive/, which is what
+      makes an archive provable from a clone that has never seen the drive.
+      --mirror DIR takes an ADDITIONAL verified copy after F-K5 passes, checked
+      by re-reading FROM the mirror and refusing to overwrite anything.
+
+  D2  --phase --dest is now an ERROR naming --mirror.  It used to parse cleanly,
+      exit 0, print success and write inside the repo -- run_phase never read
+      args.dest at all.  --estate and --workflow hard-fail without --dest; this
+      was the one mode where the flag lied.
+
+  D3  publish_exchange.py gained a TOTAL-size budget (see that module).  The
+      scope guard answers "is this the right kind of file" and never answered
+      "is there too much of it".
+
+  CORRECTION to the PUBLISH paragraph above: publish is no longer "the one
+  place the script writes inside the repo".  Since ruling B --phase also writes
+  its sidecar to research_outputs/_archive/.  The archive itself no longer
+  lands in the repo at all.  Every SOURCE remains read-only, as before.
 """
 
 import argparse
@@ -161,6 +186,28 @@ WORKFLOW_ROOT_GLOBS = ("*.md",)
 # different interpreter must discard anyway.
 WORKFLOW_EXCLUDE_PARTS = ("__pycache__",)
 WORKFLOW_EXCLUDE_SUFFIXES = (".pyc", ".pyo")
+
+# --------------------------------------------------------------- phase archives
+#
+# AMENDMENT 2026-08-06, RULING B (queue 002).  The local archive root for
+# --phase is the EXTERNAL DRIVE, not the repo.
+#
+# Before this, run_phase hardcoded `REPO / "research_outputs" / "_archive"` and
+# never read args.dest at all -- so `--phase X --dest "G:/..."` parsed cleanly,
+# exited 0, printed success, and wrote inside the repo anyway.  Every phase
+# archive that ever reached off-machine storage got there because a human ran a
+# paste, not because this mode put it there.
+#
+# The split now: the ARCHIVE (large, binary, unpublishable) lands on the drive;
+# its SIDECAR (64 hex bytes, tracked, pushed to GitHub) stays in the repo.  That
+# is what makes an archive provable from a clone that has never seen the drive.
+#
+# If the configured root is unreachable this HALTS.  It does not fall back to
+# the laptop: a silent fallback is how 5.45 GB accumulated in a synced folder,
+# and a backup that quietly lands on the machine it is backing up is not one.
+PHASE_ARCHIVE_ROOT_DEFAULT = "D:/Naiad/research_outputs/_archive"
+PHASE_ARCHIVE_ROOT_ENV = "NAIAD_PHASE_ARCHIVE_ROOT"
+PHASE_SIDECAR_DIR = "research_outputs/_archive"
 
 
 # --------------------------------------------------------------- hashing
@@ -266,6 +313,80 @@ def inside(child: Path, parent: str | None) -> bool:
         return True
     except (ValueError, OSError):
         return False
+
+
+def phase_archive_root(args) -> Path:
+    """Where --phase writes its archive.  Ruling B, 2026-08-06.
+
+    Precedence: --phase-archive-root, then $NAIAD_PHASE_ARCHIVE_ROOT, then the
+    external-drive default.  Configurable in all three places so a machine
+    without D: can be told where its drive actually is -- but never silently.
+
+    HALTS with SystemExit(2) when the root's drive is not mounted.  The check is
+    on the ANCHOR (`D:\\`) rather than the full path, so a first run on a fresh
+    drive creates the directory instead of refusing over a missing folder, while
+    an unplugged drive still stops the run dead.
+    """
+    raw = (getattr(args, "phase_archive_root", None)
+           or os.environ.get(PHASE_ARCHIVE_ROOT_ENV)
+           or PHASE_ARCHIVE_ROOT_DEFAULT)
+    root = Path(raw)
+    anchor = Path(root.anchor) if root.anchor else None
+    if anchor is not None and not anchor.exists():
+        sys.stderr.write(
+            f"PHASE ARCHIVE ROOT UNREACHABLE: {root}\n"
+            f"  The drive {anchor} is not mounted.\n"
+            f"  --phase writes its archive off-machine by ruling B (2026-08-06) and\n"
+            f"  will NOT fall back to the laptop -- a backup that lands on the machine\n"
+            f"  it is backing up is not a backup.\n"
+            f"  Plug the drive, or point --phase-archive-root / ${PHASE_ARCHIVE_ROOT_ENV}\n"
+            f"  at a reachable directory.\n")
+        raise SystemExit(2)
+    return root
+
+
+def mirror_phase_outputs(fx: "Fixtures", target: Path, sidecar: Path,
+                         mirror_dir: Path, expect_sha: str) -> None:
+    """D1.  Copy archive AND sidecar to mirror_dir, then verify FROM the mirror.
+
+    Two rules the contract is explicit about, and both matter:
+
+    * Verification re-reads the MIRRORED bytes.  Re-hashing the source would
+      prove only that the source is still the source -- it would pass even if
+      the copy never landed, which is exactly the failure a mirror exists to
+      rule out.
+    * No-clobber refuses rather than overwrites, and BOTH destinations are
+      checked BEFORE either is written, so a refusal never leaves a half-mirror.
+    """
+    mirror_dir.mkdir(parents=True, exist_ok=True)
+    m_archive = mirror_dir / target.name
+    m_sidecar = mirror_dir / sidecar.name
+
+    existing = [p for p in (m_archive, m_sidecar) if p.exists()]
+    if existing:
+        sys.stderr.write(
+            "REFUSING TO CLOBBER THE MIRROR: "
+            + ", ".join(str(p) for p in existing) + "\n"
+            "  Mirrored archives are non-overwriting by design (D1, queue 002).\n"
+            "  Nothing was written to the mirror; the source archive is intact.\n"
+            "  Move or rename the existing file, or pass a different --mirror DIR.\n")
+        raise SystemExit(3)
+
+    shutil.copy2(target, m_archive)
+    shutil.copy2(sidecar, m_sidecar)
+
+    try:
+        fresh = sha256_file(m_archive)                      # FROM the mirror
+        with zipfile.ZipFile(m_archive, "r") as zf:
+            crc_bad = zf.testzip()
+        side = m_sidecar.read_text(encoding="utf-8").split()[0]
+        ok = (fresh == expect_sha and crc_bad is None and side == expect_sha)
+        fx.record("F-M1", ok,
+                  f"mirror {mirror_dir}: re-read FROM mirror sha256 {fresh[:16]}... "
+                  f"matches source={fresh == expect_sha}, "
+                  f"sidecar matches={side == expect_sha}, CRC clean={crc_bad is None}")
+    except Exception as exc:                       # noqa: BLE001
+        fx.record("F-M1", False, f"mirror re-read raised: {exc}")
 
 
 def assert_no_clobber(target: Path, force_same_day: bool = False) -> Path:
@@ -806,18 +927,26 @@ def retention_report(dest: Path) -> list:
     return lines
 
 
-def publish_step() -> dict:
+def publish_step(args=None) -> dict:
     """Final PUBLISH step (gate A-6a).  Stages exchange/** only; fails closed.
 
     A tripped guard is printed as a FLAG line and returned to the caller, which
     turns it into a non-zero exit code -- an unattended Sunday-morning run must
     surface this as a failed task, not as a line in a log nobody opens.
+
+    The D3 size budget can refuse for a second, independent reason; REFUSED is
+    treated exactly like FLAGGED by every caller.
     """
     date_str = datetime.now().strftime("%Y-%m-%d")
+    allow = True if getattr(args, "allow_oversize_publish", False) else None
     print("\nPUBLISH")
-    pub = publish_exchange.publish(REPO, date_str, log=lambda m: print(f"  {m}"))
+    pub = publish_exchange.publish(REPO, date_str, log=lambda m: print(f"  {m}"),
+                                   allow_oversize=allow)
     if pub["status"] == "FLAGGED":
         print("  FLAG: nothing pushed. Resolve the staged paths by hand, then re-run.")
+    if pub["status"] == "REFUSED":
+        print("  REFUSE: nothing pushed. Move data out of exchange/ per §4.2, or "
+              "re-run with --allow-oversize-publish if this publish is legitimate.")
     return pub
 
 
@@ -909,8 +1038,8 @@ def run_estate(dest: Path, args) -> int:
     print(f"\n{sum(1 for _, p, _ in fx.rows if p)}/{len(fx.rows)} fixtures pass")
 
     emit_retention(dest)
-    pub = publish_step()
-    if pub["status"] in ("FLAGGED", "ERROR"):
+    pub = publish_step(args)
+    if pub["status"] in ("FLAGGED", "REFUSED", "ERROR"):
         return 1
     return 0 if fx.ok else 1
 
@@ -1014,33 +1143,37 @@ def run_workflow(dest: Path, args) -> int:
     print(f"\n{sum(1 for _, p, _ in fx.rows if p)}/{len(fx.rows)} fixtures pass")
 
     emit_retention(dest)
-    pub = publish_step()
-    if pub["status"] in ("FLAGGED", "ERROR"):
+    pub = publish_step(args)
+    if pub["status"] in ("FLAGGED", "REFUSED", "ERROR"):
         return 1
     return 0 if fx.ok else 1
 
 
 def run_phase(name: str, args) -> int:
-    env = assert_environment(None, need_writable=False)
     src = REPO / "research_outputs" / name
     if not src.is_dir():
         sys.stderr.write(f"no such phase directory: {src}\n")
         return 2
 
-    dest = REPO / "research_outputs" / "_archive"
-    dest.mkdir(parents=True, exist_ok=True)
+    # Ruling B: the archive goes off-machine, the sidecar stays tracked in-repo.
+    dest = phase_archive_root(args)
+    env = assert_environment(dest, need_writable=True)
+    sidecar_dir = REPO / PHASE_SIDECAR_DIR
+    sidecar_dir.mkdir(parents=True, exist_ok=True)
     date = datetime.now().strftime("%Y-%m-%d")
     target = dest / f"{name}_{date}.zip"
-    sidecar = target.with_suffix(".zip.sha256")
     force_sd = bool(getattr(args, "force_same_day", False))
     target = assert_no_clobber(target, force_sd)
-    sidecar = assert_no_clobber(target.with_suffix(".zip.sha256"), force_sd)
+    # the sidecar follows whatever name the archive actually took (-NN and all)
+    sidecar = assert_no_clobber(sidecar_dir / f"{target.stem}.zip.sha256", force_sd)
 
     rel_dir = f"research_outputs/{name}"
     tracked = git_tracked_under(rel_dir)
     members = walk_members(src)
     print(f"phase      : {name}")
     print(f"source     : {src}")
+    print(f"archive to : {target}        (off-machine, ruling B)")
+    print(f"sidecar to : {sidecar}   (in-repo, tracked)")
     print(f"members    : {len(members)}  (git-tracked among them: {len(tracked)})")
 
     before_status = git_porcelain()
@@ -1074,16 +1207,28 @@ def run_phase(name: str, args) -> int:
               f"{len(res['mismatches'])} mismatches, {len(res['strays'])} strays, "
               f"{len(res['omissions'])} omissions")
     fx.na("F-K2", "completeness vs census.json applies to --estate only")
-    # --phase writes its archive INSIDE the repo, so F-K3 must be told which
-    # paths are this run's own output (see _porcelain_minus_outputs).
-    fk3_source_untouched(fx, sample, before_status, outputs=[
-        target.relative_to(REPO).as_posix(),
-        sidecar.relative_to(REPO).as_posix(),
-    ])
+    # F-K3 must be told which paths are this run's own output (see
+    # _porcelain_minus_outputs).  Since ruling B the archive lands OUTSIDE the
+    # repo and cannot appear in porcelain at all, so only in-repo outputs are
+    # normalised out -- and the membership test is `inside`, not an assumption.
+    outputs = [p.relative_to(REPO).as_posix()
+               for p in (target, sidecar) if inside(p, str(REPO))]
+    fk3_source_untouched(fx, sample, before_status, outputs=outputs)
     fk4_restore_rehearsal(fx, target)
     fk5_destination_verification(fx, target, archive_sha, sidecar)
     fk6_no_clobber(fx, target)
     fk7_tracked_preserved(fx, tracked)
+
+    # D1: the mirror runs only AFTER F-K5 has passed -- there is no point
+    # copying an archive that has not yet proved it verifies at its source.
+    mirror = getattr(args, "mirror", None)
+    if mirror:
+        fk5_ok = next((p for fid, p, _ in fx.rows if fid == "F-K5"), False)
+        if not fk5_ok:
+            fx.record("F-M1", False,
+                      "F-K5 did not pass -- mirror skipped, nothing copied")
+        else:
+            mirror_phase_outputs(fx, target, sidecar, Path(mirror), archive_sha)
 
     releasable = [rel for rel, _ in members if f"{rel_dir}/{rel}" not in tracked]
     if not fx.ok:
@@ -1111,8 +1256,8 @@ def run_phase(name: str, args) -> int:
     print(f"members   : {manifest['file_count']}")
     print(f"\n{sum(1 for _, p, _ in fx.rows if p)}/{len(fx.rows)} fixtures pass")
 
-    pub = publish_step()
-    if pub["status"] in ("FLAGGED", "ERROR"):
+    pub = publish_step(args)
+    if pub["status"] in ("FLAGGED", "REFUSED", "ERROR"):
         return 1
     return 0 if fx.ok else 1
 
@@ -1157,7 +1302,20 @@ def main() -> int:
     g.add_argument("--verify", metavar="ZIP",
                    help="verify an existing archive against its embedded manifest")
     ap.add_argument("--dest", metavar="DIR",
-                    help="destination directory (required for --estate and --workflow)")
+                    help="destination directory (required for --estate and --workflow; "
+                         "an ERROR for --phase -- use --mirror)")
+    ap.add_argument("--mirror", metavar="DIR",
+                    help="--phase only: after F-K5 passes, copy the archive AND its "
+                         "sidecar to DIR and verify by re-reading FROM DIR. Refuses "
+                         "an existing destination file rather than overwriting.")
+    ap.add_argument("--phase-archive-root", metavar="DIR",
+                    help=f"--phase only: where the archive is written "
+                         f"(default ${PHASE_ARCHIVE_ROOT_ENV}, else "
+                         f"{PHASE_ARCHIVE_ROOT_DEFAULT}). The sidecar always stays "
+                         f"tracked in {PHASE_SIDECAR_DIR}/.")
+    ap.add_argument("--allow-oversize-publish", action="store_true",
+                    help="override the publish size budget for this run (D3). "
+                         "The override is announced on screen.")
     ap.add_argument("--delete-source", action="store_true",
                     help="--phase only: release untracked sources after zero mismatches")
     ap.add_argument("--force-same-day", action="store_true",
@@ -1166,6 +1324,23 @@ def main() -> int:
                          "overwritten. Does NOT apply to archives from an "
                          "earlier day, which still refuse.")
     args = ap.parse_args()
+
+    # D2, queue 002.  --dest is defined on the top-level parser, so before this
+    # `--phase X --dest "G:/..."` parsed cleanly, exited 0, printed success and
+    # wrote inside the repo.  --estate and --workflow hard-fail when --dest is
+    # missing; --phase was the one mode where the flag LIED.  It is now an error
+    # that names the alternative, because a refusal with nothing to offer would
+    # be worse than the no-op it replaces.
+    if args.phase and args.dest:
+        ap.error("--phase does not take --dest. The phase archive root is "
+                 "configured with --phase-archive-root or $%s (default %s); "
+                 "an additional off-machine copy is made with --mirror DIR."
+                 % (PHASE_ARCHIVE_ROOT_ENV, PHASE_ARCHIVE_ROOT_DEFAULT))
+    if args.mirror and not args.phase:
+        ap.error("--mirror applies to --phase only; --estate and --workflow "
+                 "write to --dest.")
+    if args.phase_archive_root and not args.phase:
+        ap.error("--phase-archive-root applies to --phase only.")
 
     if args.verify:
         return run_verify(Path(args.verify))
