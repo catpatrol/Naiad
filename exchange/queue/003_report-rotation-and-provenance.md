@@ -1,20 +1,28 @@
 # 003 · Report rotation, rerun provenance, and the anchor-context rule
 
-RATIFIED: **PENDING** — operator ratifies with one word. Drafted: ATHENA, 2026-08-11.
-Executor: HEPHAESTUS. Runs AFTER queue 002 (D-1's box arithmetic assumes 002's D3 guard exists;
-if 002 is unbuilt, build it first and say so).
+RATIFIED: **operator, 2026-08-11** — "ratify 003", issued after verifying the filing report.
+Drafted: ATHENA, 2026-08-11. Executor: HEPHAESTUS. Ratification resolves both findings of
+`BUILDERS_REPORT_HEPHAESTUS_2026-08-11_QUEUE-003-FILED.md` (3.1 and 3.2, both applied below).
+Runs AFTER queue 002 (D-1's box arithmetic assumes 002's D3 guard exists; if 002 is unbuilt,
+build it first and say so).
 
 ## Why this exists
 `exchange/` is ticked into the ~6.39 MB project box and grows with every session by design (one
-build document each, no exceptions — CONVENTIONS §3.1). Measured trajectory: ~21% of the box on
-2026-08-05 → ~31% on 2026-08-11. Queue 002 D3 warns at 25% and refuses at 40%: without rotation,
-normal reporting hits the refuse line within weeks. Rotation makes the box steady-state — the
+build document each, no exceptions — CONVENTIONS §3.1). Measured trajectory: **17.9% of the box on
+2026-08-05 → 26.2% on 2026-08-11** (builder-measured from git, finding 3.2). The drafted ~21%/~31%
+were not wrong, they were the wrong subject: they are whole-**box** readings — `exchange/` plus
+`LEDGER.md`, the tick set — which measure 21.9% and 30.4% at those same commits, verified. The
+figures above are `exchange/`-only, which is what 002's D3 guard actually meters. Growth of +8.3
+points in six days reaches the 40% refuse line in roughly ten more days of comparable activity.
+Queue 002 D3 warns at 25% and refuses at 40%: without rotation, normal reporting hits the refuse
+line within weeks. Rotation makes the box steady-state — the
 current month's record hot on the bus, everything older archived, tracked, and findable.
 
 ## Deliverables
 **D-1 · `scripts/rotate_reports.py`.** Scope: `exchange/reports/*.md` ONLY. Selects files whose
 filename date (YYYY-MM-DD; fall back to first `git log` date if unparseable) is older than
-**30 days [VETO]**. For each: sha256 → `git mv` to `docs/history/reports/YYYY-MM/<name>` → sha256
+**30 days** — constant PINNED at ratification 2026-08-11; the `[VETO]` marker was finding 3.1 and
+the drafted default stands. For each: sha256 → `git mv` to `docs/history/reports/YYYY-MM/<name>` → sha256
 at destination must match → append one line (name, new path, sha256, date) to
 `exchange/status/ROTATION_LOG.md`. **Moves only — the script contains no delete call of any
 kind.** Exemptions, checked per file: any `NOTE_*_to_*` file listed as unacted inbox in the
