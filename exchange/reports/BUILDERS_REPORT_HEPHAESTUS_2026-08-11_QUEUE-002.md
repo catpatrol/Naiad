@@ -362,7 +362,34 @@ the measured budget line are recorded in §11, written after the publish returne
 
 ## 11 · Publish result
 
-*(filled in immediately after the first publish)*
+**The D3 guard's first live act was to measure its own publish.**
+
+```
+publish: WARNING -- exchange/ holds 1,673,892 B, 26.2% of the 6,390,000 B box
+         (warn at 25%, refuse above 40%).
+publish: committed 4f0294d (1 path(s)) and pushed to origin/v12-v1-census
+status= PUBLISHED commit= 4f0294d pushed= True offenders= []
+bytes= 1673892 fraction=26.2% budget= WARN
+```
+
+**Two commits, and they are not the same kind of thing.**
+
+| commit | contents | pushed |
+|---|---|---|
+| `4f0294d` | this report — `exchange/**`, via the guard | **yes**, `origin/v12-v1-census` |
+| `c32ffa5` | `scripts/backup_estate.py`, `scripts/publish_exchange.py` | **no** — commit-no-push invariant |
+
+The publisher stages `exchange/` only, so the two scripts could never ride in `4f0294d`; they were
+committed separately and **not pushed**, per the contract's "commit-no-push except `exchange/**` via
+the guard" invariant.
+
+**A consequence worth stating plainly rather than discovering later:** `publish()` pushes the
+*branch*, not the commit. The next `exchange/` publish on `v12-v1-census` will carry `c32ffa5` to the
+remote as an ordinary fast-forward. Commit-no-push holds for this session — no push of code was
+performed here — but it is not a durable property of a shared branch, and nothing in the tooling makes
+it one. If code is meant to stay off the remote until reviewed, that needs a branch, not an invariant.
+
+*(A second commit follows this one, carrying §11 itself — a document cannot contain its own SHA.)*
 
 ---
 
