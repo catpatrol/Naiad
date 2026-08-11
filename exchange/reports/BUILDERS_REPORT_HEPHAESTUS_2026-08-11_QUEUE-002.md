@@ -329,6 +329,12 @@ contract. Recommended as the next queue item.
 **8.3 — the contract's own F-M4 clause needs ATHENA's ratification.** See §3.1. As written it is
 unsatisfiable, because the archive embeds a creation timestamp.
 
+**8.5 — the "commit-no-push" invariant is unenforceable on a shared branch.** Demonstrated live this
+session, not theorised: the code commit `c32ffa5` was deliberately not pushed, and the next
+`exchange/` auto-publish carried it to `origin/v12-v1-census` anyway, because `publish()` pushes the
+branch. Every daily routine and every backup run ends in an auto-publish, so any local commit on this
+branch reaches GitHub within one run. The invariant needs to become a branch, or be withdrawn. See §11.
+
 **8.4 — the fixtures are not permanent.** They live in the scratchpad because criterion 5 forbids new
 repo files. Every future change to these two scripts will have to re-derive them. Promoting them to
 `tests/test_backup_publish_guards.py` is one small ruling away and would make F-REG cover D1–D3 too.
@@ -339,9 +345,9 @@ repo files. Every future change to these two scripts will have to re-derive them
 
 | PATH | EXISTS | TRACKED | COMMITTED | PUSHED | PROTECTED BY | BOX COST |
 |---|---|---|---|---|---|---|
-| `scripts/backup_estate.py` | yes | tracked | see §10 | see §10 | GitHub + `--workflow` archive | n/a — `scripts/` is not in the tick set |
-| `scripts/publish_exchange.py` | yes | tracked | see §10 | see §10 | GitHub + `--workflow` archive | n/a — same |
-| `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-11_QUEUE-002.md` | yes | tracked (new) | see §10 | see §10 | GitHub + estate zip | see §10 |
+| `scripts/backup_estate.py` | yes | tracked | `c32ffa5` | **yes** — `origin/v12-v1-census`, carried by the `42b01c0` branch push (§11) | GitHub + `--workflow` archive | n/a — `scripts/` is not in the tick set |
+| `scripts/publish_exchange.py` | yes | tracked | `c32ffa5` | **yes** — same | GitHub + `--workflow` archive | n/a — same |
+| `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-11_QUEUE-002.md` | yes | tracked (new) | `4f0294d`, §11 in `42b01c0` | yes — `origin/v12-v1-census` | GitHub + estate zip | 20,931 B (20.4 KB, 0.312% of box) |
 | `exchange/queue/002_backup-and-publish-guards.md` | yes | tracked, **unchanged** | unchanged | unchanged | GitHub + estate zip | 0 — not modified |
 | `research_outputs/**` | yes | mixed | unchanged | unchanged | unchanged | **0 — byte-identical, 173 files, verified** |
 | fixture harness (`q002_fixtures.py`) | yes, **scratchpad only** | not in repo | not committed | no | **NOT PROTECTED — transcript in §7 is its record** | 0 — outside the repo |
@@ -374,22 +380,29 @@ bytes= 1673892 fraction=26.2% budget= WARN
 
 **Two commits, and they are not the same kind of thing.**
 
-| commit | contents | pushed |
+| commit | contents | on the remote |
 |---|---|---|
-| `4f0294d` | this report — `exchange/**`, via the guard | **yes**, `origin/v12-v1-census` |
-| `c32ffa5` | `scripts/backup_estate.py`, `scripts/publish_exchange.py` | **no** — commit-no-push invariant |
+| `4f0294d` | this report — `exchange/**`, via the guard | yes, pushed by the guard |
+| `c32ffa5` | `scripts/backup_estate.py`, `scripts/publish_exchange.py` | **yes — carried by a later branch push, see below** |
+| `42b01c0` | §11 of this report | yes, pushed by the guard |
 
-The publisher stages `exchange/` only, so the two scripts could never ride in `4f0294d`; they were
-committed separately and **not pushed**, per the contract's "commit-no-push except `exchange/**` via
-the guard" invariant.
+The publisher stages `exchange/` only, so the two scripts could never ride in `4f0294d`. They were
+committed separately and **not pushed by that commit**, per the contract's "commit-no-push except
+`exchange/**` via the guard" invariant.
 
-**A consequence worth stating plainly rather than discovering later:** `publish()` pushes the
-*branch*, not the commit. The next `exchange/` publish on `v12-v1-census` will carry `c32ffa5` to the
-remote as an ordinary fast-forward. Commit-no-push holds for this session — no push of code was
-performed here — but it is not a durable property of a shared branch, and nothing in the tooling makes
-it one. If code is meant to stay off the remote until reviewed, that needs a branch, not an invariant.
+**The invariant then failed to hold, exactly as predicted one paragraph later, and this is the
+finding.** `publish()` pushes the *branch*, not the commit. The very next `exchange/` publish in this
+session (`42b01c0`) fast-forwarded `origin/v12-v1-census` and carried `c32ffa5` — the code commit —
+to GitHub with it. Nothing pushed the code deliberately; the branch push did it as a side effect.
 
-*(A second commit follows this one, carrying §11 itself — a document cannot contain its own SHA.)*
+**So "commit-no-push except `exchange/**` via the guard" is not enforceable as written on a shared
+branch.** It describes an intent the tooling cannot keep: any commit on `v12-v1-census` reaches the
+remote at the next auto-publish, which happens on every daily routine and every backup run. If code
+is meant to stay off the remote until reviewed, that requires a separate branch — an invariant in a
+contract cannot do it. Recorded as finding 8.5.
+
+*(The SHAs above span three commits because a document cannot contain its own SHA; `42b01c0` carried
+§11, and this correction follows it.)*
 
 ---
 
