@@ -159,7 +159,7 @@ three, the stamp is one `git checkout` from reversal.
 | PATH | EXISTS | TRACKED | COMMITTED | PUSHED | PROTECTED BY | BOX COST |
 |---|---|---|---|---|---|---|
 | `exchange/queue/003_report-rotation-and-provenance.md` | yes | tracked | `8ce3b11` | yes — `origin/v12-v1-census` | GitHub + estate zip | 5,374 B (0.080% of box); **+734 B** from the stamp |
-| `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-11_QUEUE-003-RATIFIED.md` | yes | tracked (new) | see §6 | see §6 | GitHub + estate zip | see §6 |
+| `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-11_QUEUE-003-RATIFIED.md` | yes | tracked (new) | `ec53796` | yes — `origin/v12-v1-census` | GitHub + estate zip | 10,438 B (0.156% of box) |
 | `exchange/status/CONVENTIONS.md` | yes | tracked, **unchanged** | unchanged | unchanged | GitHub + estate zip | 0 — D-3/D-4 are 003's work, not this paste's |
 | `scripts/rotate_reports.py` | **no** | — | — | — | — | 0 — D-1 not built here |
 | `exchange/status/ROTATION_LOG.md` | **no** | — | — | — | — | 0 — created by D-1 |
@@ -178,7 +178,11 @@ bytes= 1688526 fraction=26.4% budget= WARN
 ```
 
 The D3 budget line is the guard 002 delivered, metering the ratification of the contract written to
-bring that number back down. A second commit carries this section.
+bring that number back down.
+
+This report itself published as `ec53796`, taking `exchange/` to **1,698,964 B / 26.6%** — still WARN.
+A third commit carries these two lines, for the usual reason that a document cannot contain its own
+SHA. Session chain: `b729cb8` → `8ce3b11` (stamp) → `ec53796` (this report) → this correction.
 
 ---
 
