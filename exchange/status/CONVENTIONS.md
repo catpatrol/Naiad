@@ -329,6 +329,12 @@ block**, to `exchange/reports/BUILDERS_REPORT_<LANE>_<date>_<phase>.md`. Standal
 with **zero prior context**. It is required at the end of any block of work, **and at interim
 stage boundaries when the block is very large**.
 
+**No exceptions — rule hardened 2026-08-11 by operator instruction, after a reviewer
+waived it for a "read-only" census and the results reached the operator only as a screenshot.**
+EVERY builder session emits the single build document — read-only sessions included: a
+measurement nobody can re-read is a measurement that will be re-run. A reviewer paste may not
+waive this; an AFTER line saying "no document needed" is a drafting defect — refuse it.
+
 It serves two readers at once and must satisfy both:
 
 **As the forensic record** — so the run can be re-derived or refuted:
