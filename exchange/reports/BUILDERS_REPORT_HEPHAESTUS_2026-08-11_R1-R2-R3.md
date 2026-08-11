@@ -273,7 +273,24 @@ returned — a document cannot contain its own commit hash, so a second commit c
 
 ## 10 · Publish result
 
-*(filled in after the first publish; see the session close for the confirming SHA)*
+```
+publish: committed 5c15a59 (2 path(s)) and pushed to origin/v12-v1-census
+status= PUBLISHED commit= 5c15a59 pushed= True offenders= []
+```
+
+Verified after the fact, not assumed:
+
+| check | result |
+|---|---|
+| files in `5c15a59` | 2 — `exchange/status/CONVENTIONS.md` (+6), this report (+285) |
+| paths outside `exchange/` in the commit | **none** |
+| local head vs `origin/v12-v1-census` | both `5c15a59` |
+| report present at `origin/v12-v1-census` | yes (`git cat-file -e`) |
+| R3 rule present in the **remote** CONVENTIONS copy | yes (1 match) |
+
+A second commit carries §10 itself, for the reason given in §9.
+
+**Session chain:** `2cd6f53` (previous session close) → `5c15a59` (R1/R2/R3 + this report).
 
 ---
 
