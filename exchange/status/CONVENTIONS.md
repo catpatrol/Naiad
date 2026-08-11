@@ -13,6 +13,19 @@ what changed and why. Live instance, still visible in this file: §0 asserted th
 
 ---
 
+## THE FIRST RULE
+
+**Be elitist, clever, concise, efficient, and elegant.** *(Operator, 2026-08-06. Binds every
+lane, every document, every paste.)*
+
+Hold the highest standard of craft. Signal-dense, never padded: no filler, no repetition, no
+restating what the reader already has. Clever means the solution that makes the problem small,
+not the one that shows off. Elegant means the shortest version that loses nothing — detail and
+context are never the fat; ceremony is. When a rule below and this rule tension, keep the
+substance and cut the ceremony.
+
+---
+
 ## FIND IT FAST — what is in this file, and where
 
 *Added 2026-08-06. Retrieval returns the passages that best match a query, not whole files, so a
@@ -538,6 +551,10 @@ validates and sequences the queue. **Never re-authors another lane's content. Ne
 lane without the operator's ratification stamp.**
 **HEPHAESTUS** — the builder (local Claude Code).
 
+**Queue drafting rights (ruling Q-5, 2026-08-02):** APOLLO, ATHENA and ARGUS may draft builder
+work orders. DIONYSUS and HERMES may not — they critique and verify. Every item carries the
+operator’s RATIFIED stamp before HEPHAESTUS works it.
+
 **Lane attribution is by CONTENT, not chat title.** Flag it when emitting so events get filed
 correctly.
 
@@ -713,6 +730,12 @@ auto-push).
 08:30. **Not armed:** the HERMES scheduled run. **Manual and staying manual:** Sync now.
 
 
+
+**Data estate:** ‘C:/Users/luisf/AppData/Local/naiad/data_cache’ via engine/data.py
+cache_dir() — NOT in the repo, never under OneDrive. **Backup verification standard, binding on
+every backup job:** bidirectional per member — bytes re-read OUT of the archive hash equal to a
+fresh read of the source, set membership cross-checked archive/manifest/disk, archive re-read FROM
+the destination after write, no-clobber guard. Full text: docs/memory snapshot 2026-08-06, entry 12.
 
 **Environment reminder:** the venv is at `C:\venvs\naiad` (Python 3.12.10), **outside OneDrive and
 not in the repo**. A venv cannot be moved, only rebuilt, and scheduled tasks must call python by
