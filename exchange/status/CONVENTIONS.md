@@ -541,6 +541,12 @@ never a directory listing.**
 
 **The live tick set is `LEDGER.md` and `exchange/` ONLY** (operator, 2026-08-06; see §3.2). Nothing else is in the box. **CORRECTION 2026-08-06, finding H-1, raised by HERMES:** this passage previously read "**Known limit, measured 2026-08-03:** the sync reaches `exchange/`, `docs/`, `prompts/`. It does **not** reach the repo root — `SCHED_TEST_RESULT_2026-08-02.md` is tracked and pushed at root and does not return. Whether `engine/`, `scripts/` and `configs/` are reachable is **open**; two code-targeted probes returned only manifest hash records, never source." — a MEASUREMENT taken 2026-08-03, superseded by the 2026-08-06 tick ruling and never rewritten. For two days the file asserted both, and the two imply box occupancy of 21.2% and 109.7% respectively. It was not a competing rule; it was a stale fact stated as a current one — the exact failure §0 names, committed inside the file that names it. Anything a web lane must DISCOVER belongs under `exchange/`; anything it merely needs to READ, the operator drags into that one conversation at zero permanent cost.
 
+**Determinism reruns: hash-and-compare, then discard — rule R3, operator 2026-08-11.**
+A rerun exists to prove byte-identity, and the hash IS that proof. Print both digests in the build
+document, then delete the rerun copy in the same session. Never retain it: three retained _run2
+trees held ~3.2 GB of pure redundancy (seq8_run2 relocated 2026-08-11; journal_s3_run2 and
+s3_events_run2 live inside the s3 phase archive). Every study contract inherits this clause.
+
 ---
 
 ## §5 · Lane charters
