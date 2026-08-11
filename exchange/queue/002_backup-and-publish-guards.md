@@ -16,6 +16,8 @@ Three defects, all measured, none guessed:
    individually under the 1 MB cap.** A per-file limit would not have caught it.
 
 ## Deliverables
+**AMENDMENT 2026-08-06, RULING B:** the local archive root is now the external drive. D1 gains a config: `--phase` writes its archive to `D:/Naiad/research_outputs/_archive` by default (configurable), with `--mirror` still targeting Drive. Fixture: the archive lands on D:, its tracked sidecar lands in the REPO folder, and both verify. If D: is absent, HALT loudly — never fall back silently to the laptop. 
+
 **D1 · `--mirror DIR` for `--phase`.** After F-K5 passes, copy archive AND sidecar to `DIR`, then
 verify by re-reading FROM `DIR` — never by re-hashing the source. No-clobber: refuse an existing
 destination file rather than overwrite. In-repo behaviour, F-K3's output exclusion and
