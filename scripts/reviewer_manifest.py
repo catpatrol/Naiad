@@ -408,7 +408,12 @@ def eol_config():
 def onedrive_running():
     """Is OneDrive.exe running right now?  None when unanswerable.
 
-    The repo lives inside the OneDrive tree, so this is not trivia: a false
+    NOTE 2026-08-12 (queue 004 Phase A): the repo has MOVED to C:/Naiad and no
+    longer lives inside the OneDrive tree, so a false here no longer implies the
+    repo is unsynced.  Retained as machine state, not as a repo-health signal.
+    The reasoning below is kept because it explains why the field exists.
+
+    Formerly: the repo lives inside the OneDrive tree, so this is not trivia: a false
     means the working tree currently has no live cloud copy.  Process listing
     only -- no sync state, no error queue, and nothing is started or stopped.
     """

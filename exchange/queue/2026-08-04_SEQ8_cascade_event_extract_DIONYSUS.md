@@ -17,7 +17,7 @@ BUILT: `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-04_SEQ8.md`. Verifie
 > DIONYSUS supplies the criteria before any finding here is treated as settled.
 
 ## §0 Hard assertions (run before any read or write)
-`git rev-parse HEAD` printed · path contains `Users…OneDrive…naiad` · `engine/` exists · `scripts/census_build.py` exists · `exchange/{queue,reports,status}/` exist · census exploration substrate present. HALT on any failure; report, do not create.
+`git rev-parse HEAD` printed · **path ends with `C:/Naiad` AND does not contain `OneDrive`** (amended 2026-08-12, queue 004 Phase A; two-sided because two complete clones coexist until Phase B, and the former `Users…OneDrive…naiad` form would now halt every valid session and admit every invalid one) · `engine/` exists · `scripts/census_build.py` exists · `exchange/{queue,reports,status}/` exist · census exploration substrate present. HALT on any failure; report, do not create.
 
 ## §1 Purpose, plain language
 Produce the raw substrate that lets Naiad study *sequences* of Secret Sauce events across time AND across timeframes — without baking any arbitrary definition of "a cascade" into the data. Today's sequence numbers chain events with a 48-hour window chosen for convenience; the operator's ruling requires that cascade definitions become **views computed on top of a raw event stream**, so any future definition can be recomputed without re-extraction. This extract is also the bridge substrate joining cascade-world to trade-world (the journals carry no EMA-lattice state — W-F1 P-WF1 premise-false), and the same stream serves the range-detection program (G-RD2).

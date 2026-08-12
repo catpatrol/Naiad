@@ -8,7 +8,7 @@ NO pass/fail and NO tolerance. This COMPUTES; the reviewer judges.
 import sys
 from pathlib import Path
 
-ROOT = Path(r"C:\Users\luisf\OneDrive\Desktop\Midas-Claude Code Resources\naiad")
+ROOT = Path(__file__).resolve().parent.parent   # was a hardcoded OneDrive path; queue 004 Phase A, 2026-08-12
 sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT / "scripts"))
 
 import numpy as np                                                  # noqa: E402

@@ -142,6 +142,10 @@ Manifest `11c3fb83` (2026-08-11T19:37Z) vs live `04d05ab`; **10 commits behind**
 Line 764, an orphan fragment: `08:30. **Not armed:** the HERMES scheduled run. **Manual and staying manual:** Sync now.` — the tail of a rewritten sentence. Cosmetic, in the file binding all six lanes. **My H-1 from 2026-08-05 was accepted and corrected properly in §4.3; this one was not carried across.**
 
 **F-8 · Backup posture, from the last routine that ran** `[handoff, DAILY_2026-08-09]`
+> **CORRECTION 2026-08-12 (queue 004 Phase A).** The quoted line below says "the repo is inside the
+> OneDrive tree and is not syncing". **That was true on 2026-08-09 and is now false:** the working
+> clone lives at `C:/Naiad`, outside every sync tree, by design. OneDrive's state no longer bears on
+> repo safety. The snapshot is left as it was written — what it said on its date is the record.
 `operator-exports` folder missing at `G:\My Drive\naiad-backups` · 3 of 3 operator preference blocks still uncaptured · **OneDrive.exe not running** — the repo is inside the OneDrive tree and is not syncing · second Google Drive upload outstanding (newest workflow archive 2026-08-09 vs last manual upload 2026-08-05). All four unverifiable by me and three days stale.
 
 **F-9 · `drops/` empty.** README only. No filing owed. `[verified]`

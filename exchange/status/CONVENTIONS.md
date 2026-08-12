@@ -249,10 +249,20 @@ Every paste-go carries:
 fails loudly on its preconditions. A misrouted *read* silently returns plausible nonsense. That
 asymmetry is why the rule has no exemptions.
 
-**Identity probe when unsure:** `git rev-parse --short HEAD; pwd`. "Local" = any session whose
-probe returns the `C:\` (or `/c/`) `Users…OneDrive` working-clone path. The desktop-app Code tab
-and the PowerShell CLI both qualify; the Code tab's default working directory can be the parent
-"Midas-Claude Code Resources" folder, so prefer the PowerShell session already inside `naiad`.
+**Identity probe when unsure:** `git rev-parse --short HEAD; pwd`. **AMENDED 2026-08-12 (queue 004
+Phase A): "Local" = any session whose probe returns the `C:\Naiad` (or `/c/Naiad`) working-clone
+path.** The desktop-app Code tab and the PowerShell CLI both qualify.
+
+**The gate is TWO-SIDED, and deliberately so:** HALT if the path contains `OneDrive`, **and** HALT
+unless it ends with `C:/Naiad`. One side alone is not enough — checking only for the new path would
+pass a *copy* left behind in the OneDrive tree that still satisfies nothing else, and checking only
+for the absence of `OneDrive` would pass any directory on the machine. Until the old tree is deleted
+(Phase B, deliberately days later) **two complete clones exist side by side**, and only a two-sided
+gate can tell a session in the live one from a session in the abandoned one.
+
+*(Superseded: the probe formerly required a `Users…OneDrive` path. That was correct until
+2026-08-12 and is now exactly inverted — it would halt every session in the live clone and pass
+every session in the dead one.)*
 
 **Why this exists:** four routing failures on 2026-07-26. The three that carried the ENVIRONMENT
 label were all halted by it. Zero damage.

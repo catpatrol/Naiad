@@ -35,7 +35,7 @@ Tier OPS. No Tier-C created or implied. No engine module modified.
 
 ## §0.1 Environment gate — corrected design
 
-**HARD gate (halt on failure):** branch is `v12-v1-census`; working directory path contains `\Users\` **and** `OneDrive`; the repo root contains `engine/` and `prompts/`.
+**HARD gate (halt on failure), AMENDED 2026-08-12 (queue 004 Phase A):** branch is `v12-v1-census`; the working directory path **ends with `C:\Naiad`** (or `/c/Naiad`) **AND does NOT contain `OneDrive`**; the repo root contains `engine/` and `prompts/`. *Two-sided on purpose: until Phase B deletes the old tree, two complete clones exist side by side, and only checking both directions distinguishes the live clone from the abandoned one. The former wording required `\Users\` and `OneDrive`, which after the move would halt every valid session and admit every invalid one.*
 
 **INFORMATIONAL (report, do not halt):** current HEAD. Expected to begin `837c635`; if it has advanced further that is normal and this contract does not depend on pre-commit state. *Rationale: the previous paste pinned an exact HEAD and produced a false halt when the operator's own authorised commits advanced it. Environment identity and state freshness are different questions and must not share a gate.*
 

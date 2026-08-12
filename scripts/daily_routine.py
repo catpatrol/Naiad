@@ -569,8 +569,10 @@ def check_reminders(reg, today):
     od = _onedrive_running()
     facts["onedrive"] = od
     if od is False:
-        alerts.append("**OneDrive.exe is not running** — the repo lives inside the OneDrive tree, "
-                      "so nothing here is syncing to the cloud right now.")
+        alerts.append("**OneDrive.exe is not running.** Since 2026-08-12 (queue 004 Phase A) the "
+                      "repo lives at `C:/Naiad`, OUTSIDE the OneDrive tree, so this no longer "
+                      "affects the repo — it is reported only because other folders on this "
+                      "machine may still rely on it.")
 
     second = _second_account_due(dest if dest_ok else None, facts)
     if second:
