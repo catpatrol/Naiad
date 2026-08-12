@@ -188,3 +188,47 @@ PENDING:
 NEXT: Run 2 begins at CEN-3 (outcomes). Owner: HEPHAESTUS on the operator's word.
 METRICS: operator actions this session = 1 (the v0.3 contract) — files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-12d ===
+NOW: CENSUS-2A run 2 complete. CEN-3 (outcomes) ran end to end under the R-1 ruler with both I6
+lenses printed, the held-in-time split, the fate-stratified view carrying its mechanical-separation
+caveat, and P-REL-1 scored SUPPORTED. Stopped at a stage boundary: CEN-4 is blocked on a forward
+dependency, not on budget alone.
+LAST EVENT: 2026-08-12 — run 2: CEN-3 done; P-REL-1 SUPPORTED; lens implementation corrected twice
+before it was right
+FACTS:
+- F-PIN held ACROSS SESSIONS: run-1 pins {preflight, F-GUARD, F-PIN, CEN-0b, CEN-1, CEN-2} were all
+  present before any run-2 work, and CEN-3 logged "merging into existing manifest (3 stages)" [verified]
+- P-REL-1 SUPPORTED: 12_25-triggered windows n=155 vs other n=440, asset-cluster 90% CI
+  [+0.0933, +0.2876] excludes zero. First supported registration in the census. The effect clears
+  every asset's toll line by 3-7x [verified]
+- MY OWN LENS IMPLEMENTATION WAS WRONG TWICE. Attempt 1 gave direction_consistent max_depth=1 for
+  all 848 armings (4h 9/89 crosses strictly alternate direction); attempt 2 gave window_chained 23
+  chains of mean depth 1,733 (a 24h window never breaks once 5m events are included). Fixed by
+  DELEGATING to seq8_views.build_cascades -- cascades are per (asset, event_class), every rung must
+  be a NEW timeframe, and chaining is greedy non-overlapping [verified]
+- Several per-asset terminal medians do NOT clear the 10 bps toll line in ATR terms (BTC-down
+  -0.0012, SOL-down -0.0175 vs tolls 0.058 / 0.028). NEAR-down is the worst cell at -0.2227 [verified]
+- COMPLETED's interquartile range straddles zero (-0.155 to +0.704): a completed window is a
+  longer-lived one, not a better one [verified]
+PENDING:
+1. PX-1 (PAXG disposition) — PENDING-OPERATOR. Carried from run 1: PAXG's perp begins 2025-03-27,
+   nine months after the evidence wall, so it holds ZERO evidence-era bars and can never enter a
+   scored table under I1. It cannot be the independent jury D-D intended. What PAXG is FOR is the
+   operator's decision; the builder will not assume it
+2. CEN-4 BLOCKED: its chop composite's fifth component (verdict-open) is a CEN-6 output, but the
+   contract sequences CEN-4 first. Running on 4 of 5 components would silently change the >=3
+   threshold P-CHOP-1 is registered against — a mid-run re-pin, which §N forbids. Options: (a) run
+   CEN-6 before CEN-4 [recommended], (b) amend P-CHOP-1 by name, (c) define verdict-open
+   independently
+3. P-ARM-2 — FILED as a next-cycle registration, prior 55%, UNSCORED. It is the hazard / competing-
+   risk successor to P-ARM-1's trigger-rate limb, which run 1 showed is confounded by exposure time
+   (WALL-true windows median 8 bars vs 30; conditioned on width>=48 the trigger rates converge to
+   1.000 vs 0.985). Builder's reading of the identifier; the operator should correct it if the
+   intent differs, and the text is not final until the operator words it
+4. CEN-7's i-b registry-levels completion (clarification 2) not started; run-1 covered long EMAs only
+5. 7 of 9 registrations remain unscored
+NEXT: Operator answers PENDING 2 (the CEN-4/CEN-6 ordering), then run 3 proceeds
+CEN-6 -> CEN-4 -> CEN-5 -> CEN-7 -> CEN-8 -> CEN-9. Owner: operator, then HEPHAESTUS.
+METRICS: operator actions this session = 1 (the run-2 sequencing paste) — files re-ingested = 0
+=== END STATUS ===
