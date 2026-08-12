@@ -270,3 +270,21 @@ PENDING:
 NEXT: Check Computers in the Drive web UI, then rule on item 2. Owner: operator.
 METRICS: operator actions this session = 0 · files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_ATHENA — 2026-08-12 ===
+NOW: Seven previously untracked files are committed and pushed as 5e8d7ba. Two of the ten turned out to be byte-identical duplicates of content already on origin and were left in place; one, research_outputs/wf1/WF1_discriminants.json, was left for ATHENA because its tracking status is an open lane decision — and it is now the last genuinely unprotected file in the repository.
+LAST EVENT: 2026-08-12 — untracked root artifacts filed; commit 5e8d7ba pushed to origin/v12-v1-census; filed as exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-12_FILE-UNTRACKED.md.
+FACTS:
+- 7 files filed: 4 moved (copy -> sha256 verify -> remove original, 0 mismatches), 3 staged in place; all 7 confirmed present on origin/v12-v1-census [verified]
+- Destinations chosen on MEASURED archive coverage, not on file extension: docs/history, docs/primers, scripts and exchange/reports are WORKFLOW_SOURCES; docs/reports, docs/handoffs, briefs and research_outputs are NOT [verified]
+- Cascade Rewire.html (blob 37502615) and SS_Reassessment_Synthesis_2026-08-03.md (blob 0ad38893) are byte-identical to tracked+pushed twins; all three CONVENTIONS §3.2 checks passed on both. The contract's "exist in NO other copy" premise was false for these two [verified]
+- research_outputs/wf1/ is a DIRECTORY entry; git collapses a wholly-untracked directory to one porcelain line, and an isfile() filter drops it silently. Enumerated with --untracked-files=all instead [verified]
+- briefs/panel/excursions/2026-08-03.parquet was the one missing file in an otherwise fully tracked panel partition set — its 08-05 sibling was already tracked [verified]
+- Box cost of the whole operation: 0 B — nothing new entered exchange/ [verified]
+PENDING:
+1. ATHENA: rule on research_outputs/wf1/ — 110.7 KB, zero box cost, no precedent problem, and the last unprotected content on the machine (O-1)
+2. Operator: two byte-identical duplicate files sit at the repo root; removing them loses nothing but is a deletion and none was authorized (O-2)
+3. ATHENA: briefs/, docs/reports/ and docs/handoffs/ hold tracked content but are absent from WORKFLOW_SOURCES — GitHub-only protection (O-3)
+NEXT: Rule on item 1; it is the only remaining file with no copy anywhere. Owner: ATHENA.
+METRICS: operator actions this session = 0 · files re-ingested = 0
+=== END STATUS ===
