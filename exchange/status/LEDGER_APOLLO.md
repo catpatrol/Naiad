@@ -341,3 +341,50 @@ Owner: operator, then HEPHAESTUS.
 METRICS: operator actions this session = 2 (the run-3 rulings paste; the (a) restore authorisation)
   — files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-12g ===
+NOW: CENSUS-2A run 4. h named (Amendment A2, h=2 bars [VETO]), which unblocked CEN-6. CEN-6 ran to
+completion: acceptance head-to-head on {1H,4H,12H}, deviation-reclaim branch, trap-rate both ways,
+hysteresis, refusal join, and the verdict_state table CEN-4 was blocked on. CEN-4 is now blocked on
+a DIFFERENT unnamed [VETO].
+LAST EVENT: 2026-08-12 — run 4: A2 named h; CEN-6 complete; CEN-4 blocked on the churn-density cut
+FACTS:
+- A2 names h = 2 bars [VETO]. The acceptance rule is now complete and CEN-6 ran. Prior queue-item
+  content byte-identical; nothing re-pinned [verified]
+- CEN-6 accept rate is NEAR-FLAT across the close-set: 1H 0.714, 4H 0.733, 12H 0.740, on 2,532 /
+  1,425 / 949 episodes. Which clock rules changes how many excursions exist, barely what fraction
+  survive two bars [verified]
+- TRAP-RATE DIRECTION DEPENDS ON THE WINDOW'S UNITS. At 10 MEMBER BARS it rises 0.527 -> 0.607 ->
+  0.883; at a fixed 48h it FALLS 0.803 -> 0.669 -> 0.540. 10 bars is 10h on 1H and 5 DAYS on 12H,
+  so the rising version measured the window growing. On a comparable window the 12H close is the
+  LEAST trap-prone. Both columns ship. This is the same duration-vs-bars defect the run-2 review
+  found in the CEN-3 horizons, repeated by the builder in a new stage and caught before publication
+  [verified]
+- AN EPISODE IS A TRANSITION, NOT A STATE. The first CEN-6 draft opened one at every bar closing
+  beyond the boundary, so a sustained breakout manufactured 50 episodes of one excursion (28,816 on
+  1H). Fixed: 39,110 -> 4,906 episodes. The 0.919 hysteresis it produced was that artifact; the
+  real figures are 0.598 / 0.620 / 0.635 against 0.5 memoryless [verified]
+- VERDICTS CONSUME REFUSALS: on 1H, deviation-reclaims are preceded by ~3x the price<->level (i-b)
+  refusal density of acceptances (0.226 vs 0.072 per episode) -- the contract's "RESPECTED is
+  largely a breakout that failed to be born", now measured. The i-b limb built in run 1 is what
+  makes it visible. On 12H the i-a relation INVERTS and is reported unexplained [verified]
+- CEN-6 used a prior-week H/L envelope, NOT engine/s2.py's D1/D3/D4, because LEDGER.md:311 records
+  P-PD1/P-PD2/P-PD4 FALSIFIED -- those detectors are admissible as a LOCATION object but not as a
+  promoted signal [verified]
+PENDING:
+1. CEN-4 BLOCKED on a NEW unnamed [VETO]: the chop composite's churn-density-percentile component
+   has no window, no event set and no reference distribution in the contract. Naming the firing cut
+   by looking at capture or TRG is a sweep, which §N forbids for a [VETO]. Operator must name it
+2. CEN-4 decile ruler, operator's call: realized_r is NOT size-normalised. The book is 66%
+   size_r=0.5 / 34% 0.25 and the pooled bottom decile is 692/709 = 97.6% size_r=0.5 -- the
+   incumbent "loser decile" is substantially a POSITION-SIZE selector. A size-free ruler
+   (realized_r / size_r) moves 145 of 709 members. The pooled decile is also 37.7% BTC, so an
+   asset-cluster CI against that denominator compares unequal panels
+3. P-FAN-1 [60%] and P-ARM-2 [55%] still filed, unscored; FAN's six-EMA membership still a
+   builder's reading
+4. ROTATION PROGRAM unchanged: Hyperliquid, own universe, own evidence wall, never pooled;
+   portability battery = the tunable-variables question; funnel at census close
+NEXT: Operator names the churn cut and rules on the decile ruler; then CEN-4 -> CEN-5 -> CEN-7 ->
+CEN-8 -> CEN-9. Owner: operator, then HEPHAESTUS.
+METRICS: operator actions this session = 1 (h = 2 bars) — files re-ingested = 0
+=== END STATUS ===
