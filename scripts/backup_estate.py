@@ -149,6 +149,7 @@ REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import publish_exchange                                  # noqa: E402
+from drive_wait import wait_for_drive                    # noqa: E402  (D-0b)
 
 CHUNK = 1024 * 1024
 REPO_PREFIX = "_repo/"
@@ -277,6 +278,58 @@ BACKUP_DEST_DEFAULT = "D:/naiad-backups"
 BACKUP_DEST_ENV = "NAIAD_BACKUP_DEST"
 
 
+# ------------------------------------------------------------------ D-0b
+# Anchors that are NEVER waited on, and why.
+#
+# `G:\` is the Google Drive virtual mount.  A Drive mount is not a sleeping
+# disk: when it is missing the client is not running, and no amount of waiting
+# spins it up.  Waiting there would only delay an inevitable halt -- and the two
+# Sunday tasks still pass `--dest "G:\My Drive\naiad-backups"` explicitly
+# (open item O-6), so without this exclusion they would wait on the wrong drive.
+#
+# This is a LIST rather than a drive-type test because a drive-type test does
+# not work.  Measured 2026-08-12 with GetDriveTypeW: C:\ = 3 (FIXED),
+# D:\ = 3 (FIXED), G:\ = 3 (FIXED).  Windows reports the Drive mount as a fixed
+# local disk, indistinguishable from the LaCie; and an ABSENT drive returns
+# 1 (NO_ROOT_DIR) whatever it was, which is precisely the case we must classify.
+# So the exclusion is declared, not detected.  Override with NAIAD_NO_WAIT_ANCHORS
+# (semicolon-separated) if the Drive letter ever changes.
+NO_WAIT_ANCHORS_DEFAULT = "G:\\"
+NO_WAIT_ANCHORS_ENV = "NAIAD_NO_WAIT_ANCHORS"
+
+
+def _no_wait_anchors() -> set:
+    raw = os.environ.get(NO_WAIT_ANCHORS_ENV, NO_WAIT_ANCHORS_DEFAULT)
+    return {a.strip().upper() for a in raw.split(";") if a.strip()}
+
+
+def drive_ready(root: Path, note=print):
+    """Is `root`'s drive reachable?  Waits for a sleeping disk.  Never raises.
+
+    D-0b.  Replaces the bare `anchor.exists()` that every D: gate used to run.
+    A single existence check returns False in milliseconds on a spun-down
+    external disk, so it cannot tell "the drive is gone" from "the drive has
+    not spun up yet" -- and we were reading the second as the first.
+
+    Returns (ok, detail) where detail is a human-readable measurement suitable
+    for appending to a halt message.  Anchors in NO_WAIT_ANCHORS are probed
+    once, exactly as before, and never waited on.
+    """
+    anchor = Path(root.anchor) if root.anchor else None
+    if anchor is None:
+        return True, "no drive anchor to check"
+    if str(anchor).upper() in _no_wait_anchors():
+        ok = anchor.exists()
+        return ok, (f"{anchor} probed once (no-wait anchor; a Drive mount is not "
+                    f"a sleeping disk)")
+    r = wait_for_drive(anchor)
+    if r.state == "WOKE":
+        note(f"drive {anchor} was asleep and WOKE after {r.elapsed:.2f}s "
+             f"(attempt {r.attempts} of {r.attempts})")
+    return r.ok, (f"{anchor} {r.state} after {r.elapsed:.2f}s "
+                  f"({r.attempts} attempt(s), budget {r.budget:.1f}s)")
+
+
 # --------------------------------------------------------------- hashing
 
 def sha256_file(path: Path) -> str:
@@ -352,6 +405,13 @@ def assert_environment(dest: Path, need_writable: bool) -> dict:
         if dest is None:
             problems.append("no --dest given")
         else:
+            # D-0b.  All three modes funnel through this write probe, so a
+            # sleeping disk must be given time to wake BEFORE mkdir decides it
+            # is unwritable.  Reachable is still not writable -- the probe
+            # below remains the actual test, exactly as before.
+            ready, detail = drive_ready(dest)
+            if not ready:
+                problems.append(f"destination drive unreachable: {dest} ({detail})")
             try:
                 dest.mkdir(parents=True, exist_ok=True)
                 probe = dest / f".naiad_write_probe_{os.getpid()}"
@@ -410,9 +470,11 @@ def phase_archive_root(args) -> Path:
     """
     root = phase_archive_root_path(getattr(args, "phase_archive_root", None))
     anchor = Path(root.anchor) if root.anchor else None
-    if anchor is not None and not anchor.exists():
+    ok, detail = drive_ready(root)
+    if not ok:
         sys.stderr.write(
             f"PHASE ARCHIVE ROOT UNREACHABLE: {root}\n"
+            f"  {detail}\n"
             f"  The drive {anchor} is not mounted.\n"
             f"  --phase writes its archive off-machine by ruling B (2026-08-06) and\n"
             f"  will NOT fall back to the laptop -- a backup that lands on the machine\n"
@@ -441,9 +503,11 @@ def backup_dest_root(args) -> Path:
            or BACKUP_DEST_DEFAULT)
     root = Path(raw)
     anchor = Path(root.anchor) if root.anchor else None
-    if anchor is not None and not anchor.exists():
+    ok, detail = drive_ready(root)
+    if not ok:
         sys.stderr.write(
             f"BACKUP DESTINATION UNREACHABLE: {root}\n"
+            f"  {detail}\n"
             f"  The drive {anchor} is not mounted.\n"
             f"  --estate and --workflow write off-machine and will NOT fall back to\n"
             f"  the laptop -- a backup that lands on the machine it is backing up is\n"
@@ -973,16 +1037,40 @@ def retention_report(dest: Path) -> list:
                  "the generation rule; acting on it is the operator's call.")
     lines.append("")
 
+    # D-0b, 2026-08-12.  The estate/workflow half of this report was UNGATED.
+    #
+    # Ruling O-4 gave the PHASE section three distinct states and forbade it
+    # from ever saying "none found" when it could not look.  It left this half
+    # alone -- so an unmounted drive made `dest.glob()` return an empty iterator
+    # (an empty glob is not an OSError), and the report printed "- none found"
+    # for four perfectly good archives sitting on an unplugged disk.  Same
+    # conflation, same file, one function higher up.
+    #
+    # Resolved ONCE, not per section: two calls would pay the wait budget twice
+    # for the same drive.  The -NN grouping and the same-day sort inversion are
+    # O-5 and are deliberately NOT touched here -- this is a gate fix only.
+    dest_mounted, dest_detail = drive_ready(dest, note=lambda *_a, **_k: None)
+
     def _generations(pattern, keep_n, title):
         """One dated-generation section, shared by estate and workflow."""
         out = [f"## {title}", "", f"Location: `{dest}`", ""]
+        if not dest_mounted:
+            return out + [
+                f"**NOT ENUMERABLE — the destination drive is not reachable.** "
+                f"({dest_detail})",
+                "",
+                "This is NOT the same as \"none found\", and this report will never say "
+                "that when it could not look. Plug the drive, or point `--dest` / "
+                f"`${BACKUP_DEST_ENV}` at a reachable directory, and re-run.",
+            ]
         try:
             gens = sorted((p for p in dest.glob(pattern) if p.is_file()),
                           key=lambda p: p.name, reverse=True)
         except OSError as exc:
             return out + [f"- could not read the destination: {exc}"]
         if not gens:
-            return out + ["- none found"]
+            return out + ["- none found — the drive is reachable and holds no "
+                          "matching archive"]
         keep, over = gens[:keep_n], gens[keep_n:]
         out.append(f"{len(gens)} generation(s) present; "
                    f"{len(keep)} within the rule, {len(over)} outside it.")
@@ -1029,7 +1117,10 @@ def retention_report(dest: Path) -> list:
     # they hashed to.  That is precisely why ruling B kept them in-repo.
     arch = phase_archive_root_path()
     anchor = Path(arch.anchor) if arch.anchor else None
-    drive_mounted = anchor is None or anchor.exists()
+    # D-0b: waits for a sleeping disk before declaring it absent.  note=lambda
+    # discards the WOKE line -- this function returns report lines and must not
+    # print into the middle of a caller's output.
+    drive_mounted, _ = drive_ready(arch, note=lambda *_a, **_k: None)
 
     lines.append("")
     lines.append("## PHASE ARCHIVES — PERMANENT EVIDENCE, NEVER PRUNE")

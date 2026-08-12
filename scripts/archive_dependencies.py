@@ -4,11 +4,14 @@ import io
 import json
 import os
 import re
+import sys
 import zipfile
 from collections import defaultdict
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from backup_estate import drive_ready, phase_archive_root_path   # noqa: E402  (D-0b)
 SCAN_DIRS = ["fixtures", "tests", "scripts"]
 EXTS = {".py", ".ps1"}
 
@@ -47,9 +50,22 @@ for d in SCAN_DIRS:
                 hits[c].append((rel, n, line.strip()[:150], kind))
 
 # archive membership: which top-level component lives in which zip
-arch_dir = REPO / "research_outputs" / "_archive"
+#
+# STALE PATH, fixed 2026-08-12 (D-0b).  This read REPO/research_outputs/_archive,
+# which has held no zips since ruling B moved them off-machine on 2026-08-06 --
+# so the archive-membership column silently went blank and this report has been
+# claiming components live in no archive at all.  Third copy of the same defect
+# (backup_estate.py fixed by O-4, daily_routine.py fixed alongside this one).
+# Resolves the same root --phase writes to, through the same waiting gate.
+arch_dir = phase_archive_root_path()
+arch_ready, arch_detail = drive_ready(arch_dir, note=lambda *_a, **_k: None)
 archives = {}
-if arch_dir.exists():
+ARCHIVE_SCAN_NOTE = (f"archive membership read from `{arch_dir}` ({arch_detail})"
+                     if arch_ready else
+                     f"**archive membership NOT ENUMERABLE** — `{arch_dir}` is "
+                     f"unreachable ({arch_detail}). This is not the same as "
+                     f"\"no archives\".")
+if arch_ready and arch_dir.exists():
     for z in sorted(arch_dir.glob("*.zip")):
         phase = z.name.split("_2026")[0]
         try:
@@ -104,9 +120,14 @@ w("|---|---|---|---:|\n")
 for comp, state, arc, hh in rows:
     flag = "**MISSING**" if state == "MISSING" else state
     w(f"| `{comp}/` | {flag} | {arc} | {len(hh)} |\n")
-w("\n### Archives present\n\n| archive | entries |\n|---|---:|\n")
-for phase, (name, n) in sorted(archives.items()):
-    w(f"| `{name}` | {n} |\n")
+w("\n### Archives present\n\n")
+w(ARCHIVE_SCAN_NOTE + "\n\n")
+if arch_ready:
+    w("| archive | entries |\n|---|---:|\n")
+    for phase, (name, n) in sorted(archives.items()):
+        w(f"| `{name}` | {n} |\n")
+    if not archives:
+        w("_The archive root is reachable and holds no `.zip`._\n")
 
 w("\n## Detail -- every referencing site\n\n")
 for comp, state, arc, hh in rows:

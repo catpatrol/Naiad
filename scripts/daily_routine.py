@@ -43,7 +43,7 @@ import shutil
 import subprocess
 import sys
 import time
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -51,6 +51,7 @@ REGISTRY = Path(__file__).resolve().parent / "routine_jobs.json"
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import publish_exchange                                  # noqa: E402
+from backup_estate import drive_ready, phase_archive_root_path   # noqa: E402  (D-0b)
 
 # Legacy drop points kept alive for the exchange transition (gate A-3a).  An
 # in-flight APOLLO or ARGUS paste that still writes to _reviewer_box must not
@@ -486,11 +487,22 @@ def check_reminders(reg, today):
 
     dest_raw = reg.get("backup_dest")
     dest = Path(dest_raw) if dest_raw else None
-    dest_ok = bool(dest and dest.is_dir())
+    # D-0b.  This is the gate that runs unattended most often -- the 07:00 daily
+    # job, after the machine has been idle all night.  A bare is_dir() on a
+    # spun-down external disk returned False in milliseconds and raised
+    # "backup destination unreachable" on a drive that was merely asleep.
+    dest_detail = "(not configured)"
+    if dest is not None:
+        ready, dest_detail = drive_ready(dest)
+        dest_ok = bool(ready and dest.is_dir())
+    else:
+        dest_ok = False
     facts["dest"] = str(dest) if dest else "(not configured)"
+    facts["dest_probe"] = dest_detail
 
     if not dest_ok:
-        alerts.append(f"**backup destination unreachable** — `{facts['dest']}` is not readable. "
+        alerts.append(f"**backup destination unreachable** — `{facts['dest']}` is not readable "
+                      f"({dest_detail}). "
                       "Estate, workflow, operator-export and retention checks could NOT run; "
                       "their state is UNKNOWN, not healthy.")
         facts.update({"estate": None, "workflow": None, "phase": None})
@@ -532,9 +544,18 @@ def check_reminders(reg, today):
             alerts.append("**retention — generations outside the rule** (listed, never pruned): "
                           + "; ".join(violations))
 
-    # phase set date, for the heartbeat
-    arch = ROOT / "research_outputs" / "_archive"
-    _, phase_d = _newest(arch, "*.zip") if arch.is_dir() else (None, None)
+    # phase set date, for the heartbeat.
+    #
+    # STALE PATH, fixed 2026-08-12 (D-0b).  This read REPO/research_outputs/
+    # _archive, which stopped holding archives on 2026-08-06 when ruling B moved
+    # them off-machine -- only the sidecars stayed in the repo.  So the heartbeat
+    # has been reporting `phase: NONE` while nine archives sat on the drive.
+    # This is the same defect O-4 fixed inside backup_estate.py, surviving in a
+    # second file; it now resolves the SAME root --phase writes to, through the
+    # same waiting gate.
+    arch = phase_archive_root_path()
+    arch_ready, _arch_detail = drive_ready(arch, note=lambda *_a, **_k: None)
+    _, phase_d = _newest(arch, "*.zip") if (arch_ready and arch.is_dir()) else (None, None)
     facts["phase"] = phase_d.isoformat() if phase_d else None
 
     unfilled = _unfilled_pref_blocks()
@@ -592,6 +613,81 @@ def action_required_lines(alerts):
     lines = [f"**{len(alerts)} item(s) need attention.**", ""]
     lines += [f"{i}. {a}" for i, a in enumerate(alerts, 1)]
     return lines
+
+
+def _heartbeat_last_run(hb_path):
+    """The date of the last completed routine run, from HEARTBEAT.md.
+
+    Returns (date, reason).  `date` is None when it cannot be established, and
+    `reason` then says why -- which is NOT the same as "no runs were missed".
+    """
+    try:
+        text = hb_path.read_text(encoding="utf-8")
+    except OSError:
+        return None, f"`{_rel(hb_path)}` is absent — no run has ever recorded a heartbeat here"
+    for line in text.splitlines():
+        if line.startswith("run:"):
+            stamp = line.split(":", 1)[1].strip()
+            try:
+                return date.fromisoformat(stamp[:10]), None
+            except ValueError:
+                return None, f"the heartbeat's run line is unreadable: `{line.strip()}`"
+    return None, "the heartbeat has no `run:` line"
+
+
+def missed_runs(out_dir, archive_dir, hb_path, today):
+    """D-0e.  Which daily runs never happened, BY NAME.  Report-only.
+
+    The cadence is daily, so every date strictly between the last recorded run
+    and today should have produced a DAILY_<date>.md.  A date counts as run if
+    its report is either still in the window or has aged into the archive --
+    checking only `out_dir` would report the rolling window's own housekeeping
+    as missed runs.
+
+    Returns (missing_dates, reason).  This NEVER backfills and never launches a
+    catch-up: a missed run is a fact to report, and re-running yesterday's jobs
+    today would produce a report dated yesterday from today's data.
+    """
+    last, reason = _heartbeat_last_run(hb_path)
+    if last is None:
+        return [], reason
+
+    today_d = date.fromisoformat(today)
+    have = set()
+    for d in (out_dir, archive_dir):
+        try:
+            have |= {p.name for p in d.glob("DAILY_*.md")}
+        except OSError:
+            pass
+
+    missing, cursor = [], last + timedelta(days=1)
+    while cursor < today_d:
+        if f"DAILY_{cursor.isoformat()}.md" not in have:
+            missing.append(cursor.isoformat())
+        cursor += timedelta(days=1)
+    return missing, None
+
+
+def missed_run_lines(missing, reason, today):
+    """The banner. Empty list when there is nothing to say -- no gap, no noise."""
+    if reason:
+        return ["## MISSED RUNS — UNKNOWN", "",
+                f"**Cannot tell whether any run was missed:** {reason}.",
+                "",
+                "An unanswerable question is not a clean bill of health. This says "
+                "UNKNOWN rather than nothing, for the same reason the retention "
+                "report says NOT ENUMERABLE rather than \"none found\".", ""]
+    if not missing:
+        return []
+    n = len(missing)
+    out = [f"## MISSED RUNS — {n} DAY(S) WITH NO REPORT", "",
+           f"The routine is daily. These {n} date(s) between the last recorded run "
+           f"and today ({today}) produced no `DAILY_<date>.md`:", ""]
+    out += [f"- **{d}** — no `DAILY_{d}.md`" for d in missing]
+    out += ["",
+            "Report-only: nothing was backfilled and no catch-up was run. A missed "
+            "day's data cannot be reconstructed by running today's jobs.", ""]
+    return out
 
 
 def write_heartbeat(facts, alerts, exit_code, out_path):
@@ -942,6 +1038,21 @@ def main(argv=None):
     out.append(f"Generated {datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')} "
                f"by `scripts/daily_routine.py` (registry version {reg.get('version')}).")
     out.append("")
+
+    # D-0e.  ABOVE section 0, because a run that never happened outranks a
+    # request inside a run that did.  Unnumbered on purpose: it is a banner that
+    # appears only when there is something to say, not a standing section, so
+    # numbering it would renumber every section below it on gap days only.
+    _missed, _missed_reason = missed_runs(
+        out_dir,
+        ROOT / reg.get("daily_archive_dir", "research_outputs/_daily_archive"),
+        ROOT / "exchange" / "status" / "HEARTBEAT.md",
+        today)
+    _missed_lines = missed_run_lines(_missed, _missed_reason, today)
+    if _missed_lines:
+        print(f"  MISSED RUNS: {len(_missed)} day(s) with no report"
+              if not _missed_reason else f"  MISSED RUNS: UNKNOWN ({_missed_reason})")
+    out += _missed_lines
 
     # 0. ACTION REQUIRED -- first, because it is the only section that asks the
     # operator to do something. Everything below is a record; this is a request.
