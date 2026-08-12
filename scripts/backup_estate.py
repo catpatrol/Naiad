@@ -105,6 +105,31 @@ amended 2026-08-06 ruling B).  Three defects fixed, all of them measured:
   place the script writes inside the repo".  Since ruling B --phase also writes
   its sidecar to research_outputs/_archive/.  The archive itself no longer
   lands in the repo at all.  Every SOURCE remains read-only, as before.
+
+AMENDMENT 2026-08-12 -- the backup destination is configuration again.
+
+  --estate and --workflow now DEFAULT to D:/naiad-backups (BACKUP_DEST_DEFAULT),
+  overridable by $NAIAD_BACKUP_DEST and, above that, by an explicit --dest,
+  which still wins exactly as before.  Both modes previously hard-failed
+  without --dest.  That looked strict and was in fact the opposite: it pushed
+  the only statement of WHERE the backups go into the argument string of a
+  Windows scheduled task, where no clone can read it, no review can see it and
+  no commit records a change to it.
+
+  The move that prompted this: the operator relocated the backup folder from
+  `G:/My Drive/naiad-backups` -- the Google Drive VIRTUAL mount -- to
+  `D:/naiad-backups`, a physical external disk.  The off-site property survives
+  the move because Google Drive for desktop mirrors that local folder back to
+  the cloud; verified 2026-08-12 by decoding the DriveFS `SyncTargets` registry
+  value, which names `D:\\naiad-backups` as a sync target for the signed-in
+  account.  This was MEASURED, not inferred from the folder's existence.
+
+  Note what did NOT change and is deliberately left to the operator: the two
+  weekly scheduled tasks still pass `--dest "G:\\My Drive\\naiad-backups"`
+  explicitly, and an explicit --dest wins.  Until those task arguments are
+  edited, the Sunday runs still target the old path.  Changing a default cannot
+  fix a hardcoded caller, and pretending otherwise is how a backup silently
+  stops being one.
 """
 
 import argparse
@@ -208,6 +233,32 @@ WORKFLOW_EXCLUDE_SUFFIXES = (".pyc", ".pyo")
 PHASE_ARCHIVE_ROOT_DEFAULT = "D:/Naiad/research_outputs/_archive"
 PHASE_ARCHIVE_ROOT_ENV = "NAIAD_PHASE_ARCHIVE_ROOT"
 PHASE_SIDECAR_DIR = "research_outputs/_archive"
+
+# --------------------------------------------------------- estate/workflow dest
+#
+# AMENDMENT 2026-08-12.  --estate and --workflow gain a DEFAULT destination.
+#
+# Until now both modes hard-failed without --dest, so the destination lived only
+# in the argument string of a Windows scheduled task -- a place no clone can
+# read, no review can see, and no `git log` records.  The operator moved the
+# backup folder from `G:/My Drive/naiad-backups` (the Google Drive virtual
+# mount) to `D:/naiad-backups` (a physical external disk that Google Drive
+# MIRRORS back to the cloud, verified 2026-08-12 from the DriveFS SyncTargets
+# registry value), and nothing in the repository had to change for that move to
+# happen -- which is exactly the problem.  The destination is now configuration,
+# in the repo, under version control.
+#
+# Precedence, deliberately identical to --phase: an explicit --dest wins, then
+# $NAIAD_BACKUP_DEST, then this default.  Explicit --dest STILL WINS, so every
+# existing caller keeps its current behaviour and this change cannot silently
+# redirect a backup somebody else configured.
+#
+# HALT-if-absent matches phase_archive_root(): the check is on the drive ANCHOR,
+# so a first run on a freshly-mounted disk creates the folder, while an unplugged
+# disk stops the run dead instead of quietly writing the backup onto the machine
+# it is backing up.
+BACKUP_DEST_DEFAULT = "D:/naiad-backups"
+BACKUP_DEST_ENV = "NAIAD_BACKUP_DEST"
 
 
 # --------------------------------------------------------------- hashing
@@ -342,6 +393,41 @@ def phase_archive_root(args) -> Path:
             f"  Plug the drive, or point --phase-archive-root / ${PHASE_ARCHIVE_ROOT_ENV}\n"
             f"  at a reachable directory.\n")
         raise SystemExit(2)
+    return root
+
+
+def backup_dest_root(args) -> Path:
+    """Where --estate and --workflow write.  Amendment 2026-08-12.
+
+    Precedence: --dest, then $NAIAD_BACKUP_DEST, then BACKUP_DEST_DEFAULT.
+    An explicit --dest always wins, so this cannot redirect an existing caller.
+
+    HALTS with SystemExit(2) when the root's drive is not mounted, for the same
+    reason phase_archive_root() does: --estate and --workflow protect the two
+    irreplaceable things this project owns, and a backup that silently lands on
+    the laptop it is backing up is not a backup.  The check is on the ANCHOR
+    (`D:\\`), not the full path, so a first run on a fresh disk creates the
+    directory rather than refusing over a folder that does not exist yet.
+    """
+    raw = (getattr(args, "dest", None)
+           or os.environ.get(BACKUP_DEST_ENV)
+           or BACKUP_DEST_DEFAULT)
+    root = Path(raw)
+    anchor = Path(root.anchor) if root.anchor else None
+    if anchor is not None and not anchor.exists():
+        sys.stderr.write(
+            f"BACKUP DESTINATION UNREACHABLE: {root}\n"
+            f"  The drive {anchor} is not mounted.\n"
+            f"  --estate and --workflow write off-machine and will NOT fall back to\n"
+            f"  the laptop -- a backup that lands on the machine it is backing up is\n"
+            f"  not a backup.\n"
+            f"  Plug the drive, or point --dest / ${BACKUP_DEST_ENV} at a reachable\n"
+            f"  directory.\n")
+        raise SystemExit(2)
+    if not getattr(args, "dest", None):
+        src = (f"${BACKUP_DEST_ENV}" if os.environ.get(BACKUP_DEST_ENV)
+               else "built-in default")
+        print(f"destination      : {root}   (no --dest given; from {src})")
     return root
 
 
@@ -1302,8 +1388,10 @@ def main() -> int:
     g.add_argument("--verify", metavar="ZIP",
                    help="verify an existing archive against its embedded manifest")
     ap.add_argument("--dest", metavar="DIR",
-                    help="destination directory (required for --estate and --workflow; "
-                         "an ERROR for --phase -- use --mirror)")
+                    help=f"destination directory for --estate and --workflow "
+                         f"(default ${BACKUP_DEST_ENV}, else {BACKUP_DEST_DEFAULT}; "
+                         f"an explicit --dest always wins). An ERROR for --phase "
+                         f"-- use --mirror.")
     ap.add_argument("--mirror", metavar="DIR",
                     help="--phase only: after F-K5 passes, copy the archive AND its "
                          "sidecar to DIR and verify by re-reading FROM DIR. Refuses "
@@ -1346,13 +1434,14 @@ def main() -> int:
         return run_verify(Path(args.verify))
     if args.phase:
         return run_phase(args.phase, args)
+    # Amendment 2026-08-12: both modes resolve their destination through
+    # backup_dest_root(), which honours an explicit --dest first and HALTS on an
+    # unmounted drive rather than falling back to the laptop.  The old
+    # `ap.error("... requires --dest")` pair is gone: it did not make the backup
+    # safer, it only made the destination invisible to the repository.
     if args.workflow:
-        if not args.dest:
-            ap.error("--workflow requires --dest")
-        return run_workflow(Path(args.dest), args)
-    if not args.dest:
-        ap.error("--estate requires --dest")
-    return run_estate(Path(args.dest), args)
+        return run_workflow(backup_dest_root(args), args)
+    return run_estate(backup_dest_root(args), args)
 
 
 if __name__ == "__main__":
