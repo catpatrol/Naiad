@@ -49,6 +49,16 @@ INVARIANTS
   * No side effects on import.  The log is touched only by a WOKE result.
   * The repo root is resolved from __file__, never hardcoded, so this survives
     queue 004 Phase A moving the clone to C:/Naiad.
+  * The result is a frozen dataclass and NOT a NamedTuple.  It was a NamedTuple
+    for exactly one build, until F-0-1's own cold probe hit this:
+
+        print("RESULT: %s" % result)
+        TypeError: not all arguments converted during string formatting
+
+    A NamedTuple IS a tuple, so %-formatting spreads its six fields across one
+    placeholder.  A helper whose headline invariant is NEVER RAISES must not
+    hand callers a value that makes THEM raise on an ordinary idiom -- and
+    D-0b is about to add nine call sites.  Unpacking is not worth that.
 
 USAGE
     from drive_wait import wait_for_drive
@@ -64,12 +74,14 @@ USAGE
 
 from __future__ import annotations
 
+import dataclasses
 import datetime as _dt
 import os
 import sys
 import time
+from dataclasses import dataclass
 from pathlib import Path
-from typing import NamedTuple, Optional
+from typing import Optional
 
 # --------------------------------------------------------------------------
 # PROVISIONAL CONSTANTS -- pinned by a one-line amendment to queue 004 once
@@ -109,8 +121,12 @@ budget was never long enough to catch one waking.
 """
 
 
-class DriveWaitResult(NamedTuple):
-    """The answer, plus the measurement that produced it."""
+@dataclass(frozen=True)
+class DriveWaitResult:
+    """The answer, plus the measurement that produced it.
+
+    Frozen dataclass, deliberately NOT a NamedTuple -- see INVARIANTS above.
+    """
 
     state: str          # PRESENT | WOKE | UNREACHABLE
     root: str           # what was probed, as given
@@ -206,7 +222,8 @@ def wait_for_drive(root, attempts: Optional[int] = None,
                                      elapsed=elapsed, budget=budget,
                                      logged=False)
             if state == STATE_WOKE:
-                result = result._replace(logged=_append_wake_log(result))
+                result = dataclasses.replace(result,
+                                             logged=_append_wake_log(result))
             return result
         _poke(root_s)
         try:
