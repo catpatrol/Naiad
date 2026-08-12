@@ -53,3 +53,16 @@ Bulk artifacts → `research_outputs/seq8/` (path + size + sha256 for each in th
 
 ## §6 What this contract is NOT
 Not a trading rule, signal, or filter. Not an engine change (engine/ is untouched). Not a registration of any outcome claim beyond P-SEQ-ii. Not new detector construction. Not a lockbox read. Not the range-detection module — it only feeds it. The parked promotions and all D3/D4 analysis wait for the operator's stamps after the Secret Sauce deep-dive.
+
+---
+
+## AMENDMENT A1 — VERDICT CRITERIA (DIONYSUS, 2026-08-12; settles the 2026-08-05 HERMES audit defect)
+**Honesty header:** supplied AFTER execution. To avoid inventing bars post-data, criteria are split: (a) restates the contract's own §3–§4 obligations (execution completeness, no outcome content — legitimate post-hoc); (b) touches outcomes and is either pre-stated or explicitly deferred.
+
+**(a) BUILD ACCEPTANCE.** ACCEPT iff: D1–D6 exist with printed hashes · 8/8 fixtures with full transcript · every deviation itemized, none silently patched · embargo I6 held · determinism re-run hash-identical. Graded: ACCEPT / ACCEPT-WITH-CORRECTION (deviations itemized and neutralized) / REJECT (silent patch, embargo breach, missing deliverable). **Applied to the 2026-08-04 run: ACCEPT-WITH-CORRECTION** — the corrections being F-SEQ4 executed via its own escape clause (Atlas counts pullback lows, not window-chains; rebuilt under its recipe, 20/20 values matched, diffs itemized) and F-SEQ3 per (c) below.
+
+**(b) FINDING VERDICTS.** P-SEQ-ii's bar was pre-stated in D5 (sign-consistent ≥5/7, both limbs) — the REPLICATES verdict stands on that pre-run bar. No other output of this run carries a verdict: anchor-relative leap and episode-as-atom are unregistered observations. D3/D4 bars are set at registration time, before any scoped analysis of the relevant table — the ordering protection this amendment does not weaken. (Scoped embargo lift since ratified operator-side is governed by its own registrations, per APOLLO's record.)
+
+**(c) F-SEQ3 restated** (supersedes its "zero orphans both ways" wording by naming it): bar = zero orphan JOINS (every joined key exists in the journals) AND unjoined births reported as a counted cohort with its size — not forced to zero, not an error. The 2026-08-04 run passes this bar (0 orphan joins; 286 unjoined births counted). This settles the F-SEQ3 routing item on APOLLO's blocked-hygiene list.
+
+*Append-only; nothing above this line is edited by this amendment.*

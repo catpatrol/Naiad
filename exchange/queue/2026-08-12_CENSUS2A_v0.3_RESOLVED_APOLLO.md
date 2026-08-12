@@ -1,0 +1,157 @@
+# CENSUS-2A · THE ARMED-WINDOW CENSUS — CONTRACT v0.3 RESOLVED
+**Supersedes v0.2. Status: EXECUTABLE ON OPERATOR'S RUN — running this paste IS the RATIFIED stamp
+(condition 3); every [VETO] constant remains nameable before or after.** Drafted: APOLLO,
+2026-08-12, incorporating paste #1 (`exchange/reports/BUILD_2026-08-12_CENSUS2A_PASTE1.md`) and
+reviewer rulings R-1..R-9. Executor: HEPHAESTUS. Seed 20260812.
+
+## DIFF REGISTER — keyed by row, not token (the ⟨W_max⟩ hazard is dead)
+| # | Placeholder | v0.2 fallback | **v0.3 value** | Source |
+|---|---|---|---|---|
+| i | kiss/refusal ε/δ/k | 0.25/0.75/10 | **0.25/0.75/10 CONFIRMED** (gradient not plateau, disclosed) | paste-1 §5(i) |
+| ii | TRAP density | ≥2 | **STAMP DROPPED (R-3)** — `counter_n` = measured column only; ≥2 fires 91.5%/92.1% (null gate); ≥5 withdrawn as selection artifact p=0.287 | §5(ii) |
+| iii | W_max | 90 | **151** (KM p90 among completers, CI [112.8,186.0]; near-non-binding: counter-arming closes 98.9% of windows) | §5(iii) |
+| iv | nested pair set | {1h-in-4h,30m-in-4h,30m-in-1h} | **carried UNCONFIRMED, columns only (R-4)**; 30m-in-4h "pin" withdrawn p=0.549 | §5(iv) |
+| v | ribbon c | 0.5×ATR | **0.5 CONFIRMED** (selectivity 14.8%; can reject, cannot order — disclosed) | §5(v) |
+| vi | 25-pair inclusion | both | **25_89 IN · 9_25 OUT** (cluster CI both eras; 9_25 = 2.19× count, weakest effect); incumbent 12_25 fails the same bar — measured, decided by D-CEN2b | §5(vi) |
+**Era ruling (R-6, ratified):** constants pinned on the LIVE era, disjoint from everything scored;
+evidence values printed beside; `--era evidence` reverses. **Ruler ruling (R-1):** outcome primary
+= signed terminal return at horizon, ATR-normalized at anchor; MFE/|MAE| quality ratio + raw
+MFE/MAE + toll line printed beside — `MFE − MAE` is a position-in-range statistic and is retired as
+a discriminant. **Replication ruling (R-2):** asset-cluster bootstrap 90% CI excluding zero replaces
+the ≥3-of-5 sign gate (a fair coin, proven) in every registration; per-asset signs print
+descriptively.
+
+**AUTHORITY:** THE PATH · rule set v0.2 · MC-1 verified findings · paste-1 resolutions ·
+**operator stamp 2026-08-12** ratifying CD-1(d)/CD-2(a)/CD-3(a)/CD-4(a)/CD-5(a) (previously
+leans; the stamp is the citation) · EMA500 + residency + relocation per the bus notes
+(`NOTE_ATHENA_2026-08-12_ALL-LANES_STATUS-REFRESH.md`; `NOTE_ATHENA_to_APOLLO_2026-08-11_DATA-RESIDENCY.md`) ·
+Dionysus inversions D-A..D-H · rulings R-1..R-9 (this session).
+
+## 0 · PINNED CONSTANTS [VETO by name]
+wall b = 0.5×ATR per limb (4h-e89 / 1d-e200, limb recorded) · FIRST N = 20 4h bars · seal window
+k = 6 4h bars · **W_max = 151 4h bars** · chop min age = 6 fast bars · kiss/refusal ε=0.25 δ=0.75
+k=10 (both limbs) · ribbon c = 0.5×ATR · horizon = **duration-fixed**: H100 ≡ 100×5m equivalent
+(8h20m), plus H20 (1h40m) and H500 (~1.74d), converted per timeframe (paste-1 defect 6 fix) ·
+cushion grid {0.25,0.5,1.0}×ATR · ratchet/feed EMAs {200,300,450,500} × {15m,1h,4h} · acceptance
+close-set {1H,4H,12H} · co-location 0.15×daily-ATR · FDR q=0.10 per declared family · **toll line =
+10 bps round-trip (global `fee_bps_side: 5.0`; per-mandate values do not exist — stated, not
+implied)** · panel {BTC,ETH,SOL,NEAR,ZEC}USDT; JTO/TAO annex · sampling-clock anchors (CEN-9):
+prior-day H/L/open · prior-week H/L · VA-edge · prior-extreme sweep; random N=200/asset,
+quarter-stratified · lens-concordance metric (D-C, pinned): trailing-24h same-rung-string
+agreement between the two chaining rules; baseline 38.46% printed; used as a COUNT, no threshold.
+
+## I · INVARIANTS
+**I1** evidence wall: every scored table ≤ 2024-07-01 (read from the census constant); ops
+artifacts headed "DISPLAY-ONLY — post-lockbox live-era data — hypothesis generation only, never
+evidence." **I2** all bulk born on `D:/Naiad/research_outputs/census2a/**`; gate =
+`drive_wait.py::wait_for_drive` (PRESENT/WOKE proceed, UNREACHABLE → SystemExit — the caller
+raises; `wait_for_drive` never does). **I3 IN CODE** (paste-1: prose gates gate nothing):
+`stage_preflight` asserts pwd ends `C:/Naiad` (`/c/Naiad`) AND not contains `OneDrive` AND branch
+`v12-v1-census` AND remote contains `catpatrol/Naiad` AND `LEDGER.md` + CONVENTIONS present.
+**I4 (amended, R-7):** EMA family {9,12,25,89,200,300,450,500}; **EMA500 evidence-side on
+{1m,5m,15m,30m,1h,4h,12h} only — on 1d it is NEVER for 4 of 5 panel assets; 1d/500 and the
+450/500-on-1d ribbon are ops-only.** Warmth per `feasibility_matrix.parquet` (392 cells, built
+paste-1); NaN before warm, enforced (F-PARITY-2 pattern). **I5** counted never fitted. **I6**
+lens-to-purpose: entry/context claims on `24h|window_chained`, exit/termination on
+`direction_consistent`, the other lens always printed; rulers arrival/trigger-anchored. **I7**
+as-of slicing everywhere; last-CLOSED-bar rule (paste-1 defect 2); curtain audit per stamp;
+sabotage fixture mandatory. **I8** TRG beside every filter-like readout · FDR per family ·
+**asset-cluster bootstrap as the replication criterion (R-2)** · witness-correlation print beside
+every verdict · held-in-time split · per-direction everywhere. **I9** analytics INTERFACE binding
+(bus copy `exchange/status/INTERFACE_PUBLISHED.md`); endpoint-only sliced; dual scoring; chip;
+instrument string. **I10** no lockbox row scored · no engine change (PAXG fetch passes the symbol
+explicitly — `engine SYMBOLS` untouched) · no estate write · the build document ENDS with the
+LEDGER_APOLLO append, same session. **I11 (new, R-9):** the selection guard (max-statistic
+permutation vs the I8 bar) is COMMITTED CODE on every stage that sweeps candidates — obs25 and
+ribbon paths included; the 15.2% scratch check moves into the program. **I12 (new):** manifest
+pins MERGE across `--stage` re-runs; fixture F-PIN proves survival.
+
+## MODULES
+**CEN-0 · DATA.** (a) readiness = paste-1 table (5/5 READY; 1 pre-wall gap disclosed).
+(b) **PAXG fetch NOW** (network in scope this paste): PAXGUSDT perp, fapi.binance.com, symbol
+passed explicitly, full depth 1m→1d, venue first bar → 2026-08-12, →
+`D:/Naiad/research_outputs/census2a/klines/PAXGUSDT/`; print first bar + evidence-era length +
+classification (≥2y evidence → panel-eligible next cycle; else ANNEX). Graceful on network
+failure. (c) TradFi stays CD-6-gated.
+**CEN-1 · SUBSTRATE.** Cross events {9_89, 9_200, 89_200, 12_25, **25_89**, 300_450, 450_500} —
+9_25 recorded in the raw stream but EXCLUDED from the trigger taxonomy (vi) · price↔{200,300,450,500}
+touch/test/reclaim (cushion-graded) · **REFUSAL events, both limbs: i-a EMA↔EMA (ratified
+constants) and i-b price↔level — BUILT THIS PASTE (R-8), same grammar against registry levels +
+long EMAs, 3 events hand-verified (F-6)** · nested-cross flags (fallback set, UNCONFIRMED columns,
+R-4) · decision-point stamp · per-event snapshot with ribbon spreads (9/89 · 89/200 · 300/450 ·
+450/500 where warm) · `counter_n` as a measured column (R-3).
+**CEN-2 · ARMED-WINDOW LEDGER — headline: THE ARMING-FATE TABLE.** Stamps AT arming =
+**{WALL, KISS/refusal, FIRST}, score 0–3, strict core 3/3 (R-3)**. Window closes at
+min(**151**, counter-arming) — expect ABORTED to dominate (paste-1: full relay completes on 14.7%;
+median window 28 bars). Fates disjoint {COMPLETED, ABORTED, ROTTED} (paste-1 defect 3 fix) crossed
+with trigger presence → the five-class table; arming-only discriminants; per-class outcomes.
+D-CEN2b: trigger taxonomy {12_25 (incumbent — its failed sandbox bar disclosed; the census
+decides), 25_89, LTF cascade, nested (columns)}; lags; seal lag; entry-before-seal. D-CEN2c:
+May-26 + Jun-17 reconciliation rows (ops). **D-CEN2d: the no-cascade cohort recomputed UNDER THE
+ENTRY LENS (expect ~3,363; the "286" was a union over 8 views — different object, disclosed);**
+journal features + nearest-event context; one table.
+**CEN-3 · OUTCOMES (ruler R-1).** Primary: signed terminal ATR-normalized return at H20/H100/H500
+(duration-fixed), anchored at arming AND at each trigger; MFE/|MAE| ratio + raw MFE + raw MAE +
+the global toll line printed beside; per lens (both), per asset, per direction, held-in-time.
+**CEN-4 · CHOP-STATE.** P-iii-b (curtain-clean; age ≥6) + components {churn density percentile ·
+no-slow-arrival-yet · ribbon c=0.5 flag · verdict-open · lens-concordance count (pinned metric)} —
+counts only; scored on loser-decile capture AND TRG, printed together.
+**CEN-5 · EXIT-AND-FEED.** Population = **ALL 7,094 resolved campaigns, stratified by outcome
+sign** (the sandbox's "709" was the top decile — disclosed, R-7). Three arms vs RIDE-ONLY control
+(printed first), net of the global toll, give-back printed, TRG beside each: (a) ratchet+add
+JOINTLY at long-EMA reclaims (grid incl. 500); (b) PO3-mirror exit v0 (CEN-6 band); (c)
+harvest-at-structure (H-VBT).
+**CEN-6 · RANGE & VERDICT.** Acceptance head-to-head {1H,4H,12H}; deviation-reclaim branch;
+trap-rate per member; hysteresis prior; verdicts consume CEN-1 refusal events; v0 band [VETO]
+feeds CEN-5b.
+**CEN-7 · ANALYTICS SERIES.** Registry as-of every arming/trigger/exit instant + daily spine;
+dual-scored; sliced; co-location; evolving-RVWAP × cascade alignment; H-RVX-2/H-VBT columns.
+**CEN-8 · FRAME.** FDR families declared before scoring · sabotage fixture · determinism ·
+per-direction · annex printed never pooled · witness-correlation prints · **selection guard on
+every sweep (I11)**.
+**CEN-9 · SAMPLING-CLOCK CONTROL.** State + outcomes at the pinned non-EMA anchors and random
+instants, distributions beside the EMA-anchored ones, same rulers, same toll lines. Tests the
+instrument; registers nothing.
+
+## R · REGISTRATIONS (re-specified under R-1/R-2; verbatim; verdicts print after their text;
+criterion = asset-cluster 90% CI excl. 0 unless stated; per-asset signs descriptive)
+- **P-ARM-1 [60%]** (entry): WALL-true armings → higher trigger-within-151 rate AND higher
+  post-trigger terminal return than WALL-false.
+- **P-iii-b [65%]** (entry): curtain-clean grind-at-birth over-represented in loser births
+  (proportion delta, cluster CI), both directions.
+- **P-REL-1 [60%]** (entry): windows with an in-window 12_25 trigger → higher trigger-anchored
+  terminal return than A-only windows.
+- **P-NEST-1 [45% — prior cut from 55%, sandbox inconclusive-both-eras disclosed]** (entry):
+  armings nested per the pre-named fallback set outperform un-nested on terminal return.
+- **P-i′ [50%]** (entry): leap-arrival windows outperform stair-arrival on arrival-anchored
+  terminal return. **P-iv′ [45%]** (entry): the leap edge survives ATR-bucket conditioning.
+- **P-CHOP-1 [65%]** (entry): chop-composite ≥3 captures ≥40% of loser-decile births at TRG ≥85%.
+- **P-RAT-2 [40%]** (exit): joint ratchet+add beats RIDE-ONLY on net terminal R at ≥1 grid corner
+  with TRG ≥85%. **P-VBT-1 [45%]** (exit): the harvest arm cuts median give-back ≥30% at TRG ≥80%.
+
+## F · FIXTURES
+F-1 identity(I3-in-code)+drive_wait transcripts · F-2 evidence wall + estate byte-identity ·
+F-3 feasibility reconciliation to `feasibility_matrix.parquet` (3 cells hand-recomputed) ·
+F-4 curtain audits (violations demoted never kept) · F-5 nested hand-unpack ·
+F-6 refusal determinism + 3 hand-verified per limb (i-a AND i-b) · F-KISS-PARITY carried ·
+F-7 join integrities + the entry-lens no-cascade cohort count printed (union-286 disclosed) ·
+F-8 registration-before-results ordering · F-9 TRG identity 100.0% · F-10 as-of sabotage REJECT ·
+F-11 per-asset sums; annex outside · F-12 PAXG first-bar + classification printed ·
+F-13 one scored deliverable re-run hash-identical · F-14 disposition + BOX-COST; bus additions
+<1%; results JSONs stay on D: with pointers · F-15 CEN-9 re-draw reproducibility + anchor
+reconciliation · F-16 witness-correlation panel per promoted discriminant · F-17 build document
+ends with the LEDGER_APOLLO append · **F-PIN pins survive `--stage` re-runs (I12)** ·
+**F-GUARD the selection guard demonstrably fires on a synthetic planted sweep (a fixture that can
+fail) and covers every sweep stage (I11)** · **F-PARITY-2 zero cold-head events on every new
+series (I4 enforcement)**.
+
+## X · EXECUTION
+Staged CEN-0→9, checkpointed on D:, resume-safe, multi-session; one build document per session,
+each ending with its ledger append; partial scored tables never emitted; on budget exhaustion:
+whole stages only, cached-vs-remaining named.
+
+## N · NOT THIS CONTRACT
+No Tier-C run · no trading rule adopted · no TradFi fetch (CD-6) · no lockbox read · no engine or
+estate change · no re-pinning of constants mid-run (a change is a new [VETO]-named amendment).
+
+— APOLLO, 2026-08-12 · v0.3 RESOLVED · running it is the stamp; every [VETO] stays live

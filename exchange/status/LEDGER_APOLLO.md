@@ -85,3 +85,106 @@ NEXT: Operator rules on PENDING 2 (view selection for P-i/P-iv); reviewer lands 
 operator, then APOLLO.
 METRICS: operator actions this session = 1 (the MC-1 paste) · files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-12 ===
+NOW: CENSUS-2A paste #1 built and run. MC-2 did not exist in any form and has been written
+(scripts/mc2_program.py), extended per operator word to pin all six placeholders rather than the
+three its commission covered. Constants pinned OUT-OF-SAMPLE on the live era, evidence era printed
+beside. The census remains NOT EXECUTABLE: conditions (2) and (3) are open, and placeholder (iv) is
+unresolved.
+LAST EVENT: 2026-08-12 — MC-2 (extended) + CEN-0(a) executed; F-1/F-PARITY/F-3/F-DET all pass
+FACTS:
+- MC-2 had no artifact on C: or D:; "drafted, D:-resident" was uncorroborated [verified]
+- TRAP fallback >=2 fires on 91.5% live / 92.2% evidence of 4h lattice-A armings — a null gate;
+  rejection replicates, the >=5 replacement does not [verified]
+- W_max fallback 90 rejected: terminal-leg lag p90 = 108 live / 132 evidence; full relay completes
+  on only 14.7% of armings [verified]
+- 25_89 earns trigger inclusion, 9_25 does not (2.19x the reference count, net CI straddles 0);
+  the incumbent 12_25 also fails the same bar [verified]
+- I4 wrong as written: EMA500 evidence-side on 1d is NEVER for ETH/SOL/NEAR/ZEC, 30 bars for BTC;
+  the cited MC1_tables.md feasibility matrix has no EMA500 column [verified]
+- AUTHORITY block cited CD-1(d)..CD-5(a) as ratifications; estate recorded them as [lean] until the
+  operator stamped them 2026-08-12 [ratified]
+PENDING:
+1. Placeholder (iv) nested pair set UNRESOLVED — no candidate's separation CI excludes 0 in either
+   era; operator pins by name [VETO] or it defers into the census population
+2. TRAP: adopt >=5 provisionally, drop the stamp from D-CEN2a's discriminants, or re-scope —
+   its discriminative power is not established on the era the census scores
+3. Amend I4 (EMA500 evidence-side <=12h only) and the AUTHORITY block (cite the stamp, not the lean)
+4. Operator review of the live-era pinning decision — the largest judgement call in this paste
+5. CEN-0(b) PAXG unfetched by scope decision; price<->level refusal detector (i-b) has no
+   implementation anywhere and remains open work
+NEXT: Operator performs condition (2) review of this document, then stamps or withholds (3).
+Owner: operator.
+METRICS: operator actions this session = 3 (scope, network, authority) — files re-ingested = 0
+=== END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-12b ===
+NOW: SUPERSEDES the 2026-08-12 entry above on three points, following adversarial review of the
+paste-#1 build. The review found six defects in the build itself; all are fixed in code and the
+affected numbers are restated here. The census remains NOT EXECUTABLE and two of six placeholders
+remain unresolved.
+LAST EVENT: 2026-08-12 — four-lens adversarial review of MC-2; six build defects fixed; both eras re-run
+FACTS:
+- SUPERSEDES "adopt >=5 provisionally": TRAP >=5 is WITHDRAWN as a selection artifact. Selection-
+  corrected permutation p = 0.287 live / 0.528 evidence against an I8 bar (BH, q=0.10, m=11) of
+  0.0091 — inadmissible by 32x. It also fails an asset-cluster bootstrap, CI [-2.333, +0.059].
+  The rejection of the >=2 fallback stands: it fires on 91.5% of armings, a descriptive fact [verified]
+- SUPERSEDES "W_max = 108": the naive completed-only p90 conditions on survival. Kaplan-Meier gives
+  45.1% of armings NEVER completing, so the p90 over armings does not exist; conditional on eventual
+  completion W_max = 151 live / 160 evidence, CI [112.8, 186.0], stable across observation caps
+  >= 200. W_max is near-non-binding: the counter-arming closes 98.9% of windows first [verified]
+- SUPERSEDES "92.2% evidence": that was MC-1's figure, not MC-2's. MC-2 evidence = 92.1%. The two
+  populations are NOT the same (MC-1 7 assets floored at ASSET_STARTS; MC-2 5 assets) and the earlier
+  claim that they agreed to 4 events was a coincidental cancellation of two differences [verified]
+- Build defects fixed: cold-EMA armings (I4 "NaN before warm" was never implemented, and F-PARITY
+  concealed it); a lookahead in the query cards (bar containing ts, not last closed bar); a
+  non-disjoint arming fate; a reimplemented kiss detector now asserted == mc1_program.kiss_v0; a
+  silently redefined outcome-horizon unit; and a manifest rebuild that destroyed 5 of 6 pins [verified]
+- 25_89 inclusion SURVIVES the stronger test: asset-cluster CI [0.352,1.527] live / [0.493,1.287]
+  evidence. 9_25 excluded in both eras [verified]
+PENDING:
+1. (ii) TRAP and (iv) nested pair set remain UNRESOLVED — condition (1) of the contract is NOT met
+2. The discriminant (net = MFE - MAE) is a position-in-range statistic, invariant to the terminal
+   price and ~0.91 correlated with forward range; it should be re-specified before the census scores
+   on it. This is the largest open methodological item
+3. The selection guard is implemented for (ii) only; three other sweep-and-select stages are unguarded
+4. Amend I4 (EMA500 evidence-side <=12h only) and the AUTHORITY block (cite the stamp, not the lean)
+5. Operator review of the live-era pinning decision
+NEXT: Operator performs condition (2) review, then stamps or withholds (3). Owner: operator.
+METRICS: operator actions this session = 3 (scope, network, authority) — files re-ingested = 0
+=== END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-12c ===
+NOW: CENSUS-2A v0.3 RATIFIED BY EXECUTION. Contract filed as the queue item
+(sha b0da051b), programs committed (3a0c35e), and stages CEN-0(b), CEN-1 and CEN-2 ran to
+completion with every gating fixture passing. CEN-3..CEN-9 remain; next session starts at CEN-3.
+LAST EVENT: 2026-08-12 — run 1: PAXG fetched, substrate built (516,866 events), armed-window
+ledger built (848 armings), P-ARM-1 scored NOT SUPPORTED with its confound disclosed
+FACTS:
+- PAXG's Binance perp begins 2025-03-27, NINE MONTHS AFTER the evidence wall: zero evidence-era
+  bars at every interval. It is ANNEX by the contract rule, but the larger consequence is that it
+  can never enter a scored table under I1 — so it cannot be the "independent jury" D-D intended
+  [verified]
+- CEN-1 built the i-b price<->level refusal limb (R-8) — 174,293 events. The object did not exist
+  in the estate before this run; same grammar as the ratified i-a, 3 hand-verified per limb [verified]
+- ARMING-FATE (disjoint): COMPLETED 595 (median terminal H100 +0.2421), ABORTED 252 (-0.4767),
+  ROTTED 1. W_max=151 governs ONE arming in 848 — correctly pinned and nearly inert [verified]
+- P-ARM-1 NOT SUPPORTED: WALL-true trigger rate 0.464 vs 0.760, terminal H100 cluster CI
+  [-0.2479,-0.0635] excludes zero in the WRONG direction [verified]
+- CONFOUND DISCLOSED: WALL-true windows have median width 8 bars vs 30; conditioned on width>=48
+  the trigger rates are 1.000 vs 0.985. The trigger-rate limb measures exposure time, not the
+  stamp, and cannot be evaluated as written — a hazard framing is required [verified]
+- F-GUARD passes in both directions (declines a 12-candidate null sweep at p=0.674, admits a
+  planted effect at p=0.0007 and names it) and ran BEFORE any real sweep, per I11 [verified]
+PENDING:
+1. Operator decision on what PAXG is FOR, given it cannot serve as an evidence-era control
+2. P-ARM-1's trigger-rate limb needs a hazard / competing-risk re-specification before it can be
+   scored as written; the terminal-return limb stands
+3. Registry levels are absent from the i-b refusal limb this run (long EMAs only); they join at CEN-7
+4. 8 of 9 registrations remain unscored (CEN-3..CEN-9)
+5. Duplicate v0.3 contract in exchange/reports/ alongside the queue item — operator-placed, not
+   removed by the builder
+NEXT: Run 2 begins at CEN-3 (outcomes). Owner: HEPHAESTUS on the operator's word.
+METRICS: operator actions this session = 1 (the v0.3 contract) — files re-ingested = 0
+=== END STATUS ===

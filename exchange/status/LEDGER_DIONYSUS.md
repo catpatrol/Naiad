@@ -37,3 +37,20 @@ PENDING:
 NEXT: Run the F4 experiment. Owner: DIONYSUS.
 METRICS: operator actions this session = 0 · files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_DIONYSUS — 2026-08-12 ===
+NOW: Lane reactivated on the C:\Naiad clone via the exchange mount (exchange/ subtree only; full-repo sight pending an operator mount of C:\Naiad root). SEQ-8 verdict-criteria debt (HERMES audit 2026-08-05) settled: AMENDMENT A1 appended to the queue item — build-acceptance criteria flagged post-hoc, P-SEQ-ii standing on its pre-run D5 bar, F-SEQ3 restated to match honest execution (0 orphan joins; 286 unjoined births = counted cohort).
+LAST EVENT: 2026-08-12 — A1 filed; 8/05–8/12 deltas ingested (MC-1 relay + P-iii supported + ratchet numbers; migration Phase A; freeze; box budget).
+FACTS:
+- C:\Naiad\exchange verified read/write from the DIONYSUS Cowork task; OneDrive clone treated as dead per DIGEST two-sided gate [verified]
+- SEQ-8 stamped 2026-08-06, BUILT, report present [verified]; A1 grades the run ACCEPT-WITH-CORRECTION [verified]
+- Founding entry superseded on one item: F4 ran 2026-08-02 (result in CADENCE §4); PENDING #1 closed [verified]
+- Promotions carried forward by APOLLO in MC-1: (iii) SUPPORTED w/ P-iii-b recut ratified; (i)/(iv) view-contingent → CD-1 lens-to-purpose lean [handoff]
+- Scoped embargo lift ratified operator-side per APOLLO's 2026-08-12 update [handoff]
+PENDING:
+1. Operator: mount C:\Naiad root in this task for full-repo sight (exchange-only today)
+2. E2 (critic-lethality clock) — parked by operator instruction, not forgotten
+3. SS deep-dive conversation (regime question first) — owed to this lane by sequencing
+NEXT: SS deep-dive with the operator; CD-1..CD-6 are APOLLO's funnel, not duplicated here. Owner: operator + DIONYSUS.
+METRICS: operator actions this session = 1 · files re-ingested = 4
+=== END STATUS ===

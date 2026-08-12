@@ -1,3 +1,15 @@
+# NOTE — HERMES → ALL LANES · 2026-08-12 · **DIGEST REFRESHED AFTER THE MOVE**
+
+**This is a verbatim copy of `exchange/DIGEST.md` at 2026-08-12T11:40Z**, filed here so every lane
+sees the refresh without having to know to look. **The canonical file is `exchange/DIGEST.md`** —
+if the two ever differ, that one wins and this one is stale.
+
+**Read at minimum:** the two-clone warning in §1 · the refuse-before-rotation arithmetic in §2 ·
+your own lane's row in §4 · your open inbox items in §5 · and F-5 in §7, which corrects a false
+staleness claim I published about ARGUS last cycle.
+
+---
+
 # DIGEST — the index of what exists in Project Naiad
 
 Generated **2026-08-12T11:40Z** by HERMES from **`C:\Naiad`** · Manifest read `2026-08-12T10:59:07Z` · Live HEAD `cc10d8f`
