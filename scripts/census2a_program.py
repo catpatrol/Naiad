@@ -100,7 +100,17 @@ HORIZONS_MS = {"H20": 20 * 300_000, "H100": 100 * 300_000, "H500": 500 * 300_000
 # taxonomy (contract vi) -- it is 2.19x the reference count and the weakest
 # measured effect, and admitting it unstratified would let one class set the
 # FDR budget for nine registrations.
-CROSS_CLASSES = ["9_89", "9_200", "89_200", "12_25", "25_89", "300_450", "450_500"]
+# A1-FAN (run 3, VETO): {200_500, 300_500} join the scored cross classes.
+CROSS_CLASSES = ["9_89", "9_200", "89_200", "12_25", "25_89", "300_450", "450_500",
+                 "200_500", "300_500"]
+
+# A1-FAN state columns. The ruling names KNOT's five EMAs explicitly but says only
+# "six-EMA" for FAN. READING TAKEN: the six are KNOT's five plus the fast line --
+# {9, 89, 200, 300, 450, 500}. That is the only six-member set the ruling's own
+# vocabulary supplies, but it IS a reading, not a quotation, and it is flagged as
+# such in the build document so the operator can correct it by name.
+FAN_EMAS = [9, 89, 200, 300, 450, 500]
+KNOT_EMAS = [89, 200, 300, 450, 500]
 RAW_ONLY_CLASSES = ["9_25"]
 LATTICE_A = ["9_89", "9_200", "89_200"]
 
@@ -647,6 +657,36 @@ def stage_cen1(assets: list[str], era: str = "evidence") -> dict:
             c = df["close"].to_numpy(float)
             av = df["atr"].to_numpy(float)
 
+            # ---- A1-FAN: two ADDITIVE state columns, computed per bar once and
+            # attached to every event snapshot on this (asset, tf).
+            #
+            # FAN  = the six-EMA stack is fully monotone, either side. A fanned
+            #        stack is the visual the operator reads as "trending"; making
+            #        it a column lets the census find out whether that is true.
+            # KNOT = the five long EMAs are inside the pinned c (0.5*ATR) of one
+            #        another -- the stack collapsed to a point. The complement of
+            #        a fan, and the shape a range coils into.
+            #
+            # NOTHING IS SCORED ON EITHER THIS RUN (A1-FAN: "columns only").
+            # Where any member is NaN (cold per I4) the flag is False, not True:
+            # an unknown ordering is not an ordering.
+            fan_cols = [df[f"e{L}"].to_numpy(float) for L in FAN_EMAS]
+            fan_stack = np.vstack(fan_cols)
+            fan_warm = np.isfinite(fan_stack).all(axis=0)
+            d_fan = np.diff(fan_stack, axis=0)
+            fan_up = (d_fan < 0).all(axis=0)      # e9 > e89 > ... > e500
+            fan_dn = (d_fan > 0).all(axis=0)      # e9 < e89 < ... < e500
+            FAN = fan_warm & (fan_up | fan_dn)
+            fan_side = np.where(~FAN, "none", np.where(fan_up, "up", "down"))
+
+            knot_stack = np.vstack([df[f"e{L}"].to_numpy(float) for L in KNOT_EMAS])
+            knot_warm = np.isfinite(knot_stack).all(axis=0)
+            knot_spread = knot_stack.max(axis=0) - knot_stack.min(axis=0)
+            with np.errstate(invalid="ignore"):
+                KNOT = knot_warm & np.isfinite(av) & (av > 0) & (knot_spread < RIBBON_C * av)
+            knot_spread_atr = np.where(np.isfinite(av) & (av > 0),
+                                       knot_spread / av, np.nan)
+
             # ---- cross events (scored classes + raw-only 9_25)
             for cls in CROSS_CLASSES + RAW_ONLY_CLASSES:
                 fa, sl = MC2.PAIRS[cls]
@@ -677,6 +717,12 @@ def stage_cen1(assets: list[str], era: str = "evidence") -> dict:
                                 if av[i] > 0 and np.isfinite(df["e300"][i]) and np.isfinite(df["e450"][i]) else np.nan,
                             "ribbon_450_500": float((df["e450"][i] - df["e500"][i]) / av[i])
                                 if av[i] > 0 and np.isfinite(df["e450"][i]) and np.isfinite(df["e500"][i]) else np.nan,
+                            # --- A1-FAN additive columns (observation only, unscored)
+                            "FAN": bool(FAN[i]),
+                            "fan_side": str(fan_side[i]),
+                            "KNOT": bool(KNOT[i]),
+                            "knot_spread_atr": (float(knot_spread_atr[i])
+                                                if np.isfinite(knot_spread_atr[i]) else np.nan),
                         })
 
             # ---- refusal limb i-a: EMA<->EMA (the ratified kiss)
@@ -970,6 +1016,17 @@ def stage_cen2(assets: list[str], era: str = "evidence") -> dict:
                     "KISS": kiss, "FIRST": first,
                     "stamp_score": score, "strict_core": bool(score == 3),
                     "has_trigger": has_trig,
+                    # EXPLICIT PREDICATES, not an ordering label. `trigger_class`
+                    # records which class fired FIRST; it is NOT "the window
+                    # contains a 12_25". 146 of the 440 windows labelled
+                    # 25_89-first also contain an in-window 12_25, so scoring a
+                    # window-property registration on the first-mover label
+                    # contaminated the control arm by 33%. P-REL-1b uses these.
+                    "has_12_25": bool(len(in12)),
+                    "has_25_89": bool(len(in25)),
+                    "n_triggers": int(len(in12) + len(in25)),
+                    "trigger_class_first": ("12_25" if len(in12) and (not len(in25) or in12[0] <= in25[0])
+                                            else "25_89" if len(in25) else None),
                     "trigger_class": ("12_25" if len(in12) and (not len(in25) or in12[0] <= in25[0])
                                       else "25_89" if len(in25) else None),
                     "trigger_lag_bars": (float((first_trig - t) / step4)
@@ -1185,12 +1242,21 @@ def stage_cen3(assets: list[str], era: str = "evidence") -> dict:
     # all 848 armings -- a lens that cannot vary is not a lens, and I6's
     # "the other lens ALWAYS printed" would have been satisfied in letter only.
     log("    I6 dual-lens: cascades via seq8_views.build_cascades (the estate's own rule)")
-    ev = pd.read_parquet(OUT / "cen1" / "cen1_events.parquet",
-                         columns=["asset", "tf", "event_class", "dir", "ts"])
-    ev = ev[ev.event_class.isin(LATTICE_A)].copy()
+    ev_all = pd.read_parquet(OUT / "cen1" / "cen1_events.parquet",
+                             columns=["asset", "tf", "event_class", "dir", "ts"])
+    ev_all = ev_all[ev_all.event_class.isin(LATTICE_A)].copy()
+    # R-F11 (Amendment A1): annex assets sit OUTSIDE every printed panel count.
+    # Run 2 pooled JTO (3,812) + TAO (1,348) into the headline 151,718 cascade
+    # stream. Cascades are per (asset, class) so no panel arming's depth moved,
+    # but the printed total was a pooled number wearing a panel label -- which
+    # is exactly what F-11 forbids. Annex is counted separately and never added.
+    n_annex = int(ev_all.asset.isin(ANNEX).sum())
+    ev = ev_all[ev_all.asset.isin(assets)].copy()
     ev["bar_close_ms"] = ev["ts"] + ev["tf"].map(TF_MS)
-    log(f"      lattice-A stream: {len(ev):,} events, {ev.tf.nunique()} timeframes, "
-        f"{ev.event_class.nunique()} classes")
+    log(f"      lattice-A stream (PANEL ONLY): {len(ev):,} events, "
+        f"{ev.tf.nunique()} timeframes, {ev.event_class.nunique()} classes")
+    log(f"      annex excluded from every printed count (R-F11): {n_annex:,} events "
+        f"across {sorted(set(ev_all.asset) & set(ANNEX))}")
     for rule in ("window_chained", "direction_consistent"):
         ch = assign_chains_seq8(ev, rule)
         # Armings are 4h 9_89 events. The key MUST include the timeframe:
@@ -1474,7 +1540,94 @@ def stage_cen3(assets: list[str], era: str = "evidence") -> dict:
         log("      VERDICT: WITHDRAWN -- UNSCOREABLE AS WRITTEN "
             "(successor P-REL-1b to be registered by name)")
 
+    # =====================================================================
+    # P-REL-1b [50%, POST-HOC-INFORMED -- LABEL PERMANENT] (Amendment A1)
+    # Text before result (F-8). Scored from cached CEN-3 substrate.
+    # =====================================================================
+    log("    P-REL-1b [50%, post-hoc-informed -- LABEL PERMANENT] (Amendment A1):")
+    log("      'among windows with >=1 in-window trigger: TREAT has_in_window_12_25=true")
+    log("       vs CONTROL triggered without any in-window 12_25; anchor = FIRST")
+    log("       in-window trigger of ANY class, identical rule both arms.'")
+    log("      Best attainable grade this run = SUPPORTED-PROVISIONAL (the prior is")
+    log("      informed by run-2's post-hoc look; only next-cycle replication can lift it).")
+    rel1b = None
+    if not trig.empty and "has_12_25" in led.columns:
+        jb = trig.merge(led[["asset", "arming_ts", "has_12_25", "dir", "time_half"]]
+                        .drop_duplicates(subset=["asset", "arming_ts"]),
+                        on=["asset", "arming_ts"], how="left", suffixes=("", "_l"))
+        assert len(jb) == len(trig), "P-REL-1b merge multiplied rows"
+        treat = jb["has_12_25"].fillna(False).to_numpy(bool)
+        clus = jb["asset"].to_numpy()
+        prim = jb["trig_term_H100"].to_numpy(float)
+        log(f"      arms: TREAT n={int(treat.sum())} vs CONTROL n={int((~treat).sum())} "
+            f"(anchor = first in-window trigger of ANY class, both arms)")
+
+        ci_primary = cluster_ci(prim, clus, treat)
+        splits, per_asset, loao = {}, {}, {}
+        for h in ("H20", "H100", "H500"):
+            col = f"trig_term_{h}"
+            if col in jb and jb[col].notna().any():
+                splits[f"horizon_{h}"] = cluster_ci(jb[col].to_numpy(float), clus, treat)
+            else:
+                splits[f"horizon_{h}"] = {"point": None, "excludes_zero": False,
+                                          "reason": "infeasible on 4h -- NaN, not substituted"}
+        for d in ("up", "down"):
+            s = (jb["dir_l"] if "dir_l" in jb else jb["dir"]).to_numpy() == d
+            if s.sum() > 20:
+                splits[f"dir_{d}"] = cluster_ci(prim[s], clus[s], treat[s])
+        for hh in ("early", "late"):
+            s = jb["time_half"].to_numpy() == hh
+            if s.sum() > 20:
+                splits[f"half_{hh}"] = cluster_ci(prim[s], clus[s], treat[s])
+        for a in np.unique(clus):
+            s = clus == a
+            aa = prim[s & treat]; bb = prim[s & ~treat]
+            aa = aa[np.isfinite(aa)]; bb = bb[np.isfinite(bb)]
+            if len(aa) >= 5 and len(bb) >= 5:
+                per_asset[a] = round(float(np.median(aa) - np.median(bb)), 4)
+            loao[f"drop_{a}"] = cluster_ci(prim[~s], clus[~s], treat[~s])
+        n_loao = sum(1 for v in loao.values() if v.get("excludes_zero"))
+
+        log(f"      H100 PRIMARY: point={ci_primary['point']} "
+            f"CI[{ci_primary['lo']},{ci_primary['hi']}] "
+            f"{'EXCL-0' if ci_primary['excludes_zero'] else 'straddles 0'}")
+        for k in ("horizon_H20", "horizon_H500", "dir_up", "dir_down",
+                  "half_early", "half_late"):
+            v = splits.get(k)
+            if not v:
+                continue
+            if v.get("point") is None:
+                log(f"      {k:14} n/a -- {v.get('reason','')}")
+            else:
+                log(f"      {k:14} point={v['point']} CI[{v['lo']},{v['hi']}] "
+                    f"{'EXCL-0' if v['excludes_zero'] else 'straddles 0'}")
+        log(f"      per-asset deltas: {per_asset}")
+        log(f"      sign-reversed: {[k for k, v in per_asset.items() if v < 0] or 'none'}")
+        log(f"      LOAO: {n_loao}/{len(loao)} refits still exclude zero")
+
+        passes = bool(ci_primary["excludes_zero"] and (ci_primary["point"] or 0) > 0)
+        verdict = "SUPPORTED-PROVISIONAL" if passes else "NOT SUPPORTED"
+        log(f"      VERDICT: {verdict}  [label post-hoc-informed, PERMANENT]")
+        rel1b = {
+            "registration": ("among windows with >=1 in-window trigger: TREAT "
+                             "has_in_window_12_25=true vs CONTROL triggered without any "
+                             "in-window 12_25; anchor = FIRST in-window trigger of ANY "
+                             "class, identical rule both arms"),
+            "prior": 0.50,
+            "label": "POST-HOC-INFORMED -- PERMANENT; ceiling this run is "
+                     "SUPPORTED-PROVISIONAL pending next-cycle replication",
+            "n_treat": int(treat.sum()), "n_control": int((~treat).sum()),
+            "anchor": "first in-window trigger of any class (identical both arms)",
+            "primary": {"horizon": "H100", "ci": ci_primary},
+            "mandated_splits": splits, "per_asset_delta": per_asset,
+            "leave_one_asset_out": loao, "loao_excluding_zero": f"{n_loao}/{len(loao)}",
+            "criterion": "R-2 asset-cluster 90% CI excluding zero",
+            "verdict": verdict,
+            "supersedes": "P-REL-1 (WITHDRAWN -- unscoreable as written)",
+        }
+
     return {"ledger": led, "trigger_outcomes": trig, "by_asset": by_asset,
+            "p_rel_1b": rel1b,
             "by_half": by_half, "by_depth_window_chained": by_depth_wc,
             "by_depth_direction_consistent": by_depth_dc, "by_fate": by_fate,
             "toll_atr": toll, "fate_caveat": CAVEAT, "p_rel_1": rel,
@@ -1650,6 +1803,8 @@ def main(argv=None) -> int:
         man.setdefault("registrations", {})
         if c3.get("p_rel_1"):
             man["registrations"]["P-REL-1"] = c3["p_rel_1"]
+        if c3.get("p_rel_1b"):
+            man["registrations"]["P-REL-1b"] = c3["p_rel_1b"]
 
     man["elapsed_s"] = round(time.time() - t0, 1)
     mp.write_text(json.dumps(man, indent=2, default=str), encoding="utf-8")

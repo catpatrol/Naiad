@@ -136,6 +136,9 @@ PAIRS = {
     "12_25": (12, 25),                                          # lattice B
     "9_25": (9, 25), "25_89": (25, 89),                         # the 25 (obs)
     "300_450": (300, 450), "450_500": (450, 500),               # long ribbon
+    # A1-FAN (run-3 amendment, VETO): two further long-ribbon rungs.
+    "200_500": (200, 500), "300_500": (300, 500),
+
 }
 LATTICE_A = ["9_89", "89_200", "9_200"]
 FAST_TFS = M1.FAST_TFS                    # 5m/15m/30m -- TRAP's counter tier
