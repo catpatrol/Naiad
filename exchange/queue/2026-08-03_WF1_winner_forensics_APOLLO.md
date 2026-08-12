@@ -1,5 +1,6 @@
 # W-F1 · WINNER FORENSICS — Tier-A discriminant study
 RATIFIED: operator, 2026-08-03, word "forensics". Drafted: APOLLO. Executor: HEPHAESTUS.
+BUILT: `exchange/reports/WF1_tables.md` + `WF1_discriminants.json`. Verified present 2026-08-12.
 FRAME (ratified "discriminant"): condition on outcome, discriminate at birth; every
 discriminant must be decision-curtain-clean; Tail-Retention Gauge mandatory.
 

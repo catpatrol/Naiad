@@ -548,6 +548,13 @@ exchange/
 **Content guard:** text only, 1 MB per file. Larger artifacts are referenced by path + sha256
 pointer, never copied in.
 
+**Named exception (2026-08-12, drafted ATHENA on the HERMES recommendation; operator may veto):**
+`exchange/status/MANIFEST.json` and `exchange/status/daily/MANIFEST_*.json` are data by type but
+bus-resident by PURPOSE - they exist to be read off the bus, each is under 0.5% of the box, and
+the rolling window caps the series. The text-only rule does not apply to them. A rule in
+permanent technical breach stops being enforced; this exception exists so the rule stays sharp
+everywhere else. No other data file inherits it - captures, results and substrates remain barred.
+
 ### 4.3 Confirming a file is actually visible — rule added 2026-08-03
 
 The project box is in **SEARCH MODE**: synced repo files are *indexed for retrieval*, **not
@@ -768,8 +775,8 @@ new jobs are added by editing JSON, never code) · `backup_estate.py` (`--estate
 `publish_exchange.py` (the path-scoped publish guard, so evidence physically cannot ride an
 auto-push).
 
-**Triggers armed** (enumerated from Task Scheduler 2026-08-04, not inferred): daily routine 07:00 · estate backup Sundays 08:00 · **workflow backup Sundays 08:30, armed since 2026-08-02 and not yet fired.** **Not armed:** the HERMES scheduled run. **Manual and staying manual:** Sync now. See `CADENCE.md` §3 for the record of a false "never armed" finding on 2026-08-03, since reversed.
-08:30. **Not armed:** the HERMES scheduled run. **Manual and staying manual:** Sync now.
+**Triggers armed** (enumerated from Task Scheduler 2026-08-12, not inferred): daily routine 07:00 · estate backup Sundays 08:00 · workflow backup Sundays 08:30 — all three carry `StartWhenAvailable`, so a run missed while the machine is off or asleep fires on the next wake instead of being skipped; the workflow backup first fired 2026-08-09.
+**NOT ARMED:** no HERMES scheduled task exists — its creation is pending the operator. **Manual and staying manual BY DESIGN:** Sync now. See `CADENCE.md` §3 for the record of a false "never armed" finding on 2026-08-03, since reversed.
 
 
 

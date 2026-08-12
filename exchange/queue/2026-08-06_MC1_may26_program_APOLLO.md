@@ -3,6 +3,7 @@
 RATIFIED: operator 2026-08-06 ("MC defaults + 25ema in 1m") + amendment 2026-08-06
 ("continuous queryability before/after the cross"; lockbox change offered, DECLINED as
 unnecessary — dossier is ops-class). Drafted: APOLLO. Executor: HEPHAESTUS.
+BUILT: `exchange/reports/BUILD_APOLLO_2026-08-06_MC1.md` + `MC1_results.json`. Verified present 2026-08-12.
 Seed 20260806. All constants [VETO].
 
 AUTHORITY: MC-1..7 rulings (SS_SYSTEM_SYNTHESIS_2026-08-06.md §3.4) + memory #20.

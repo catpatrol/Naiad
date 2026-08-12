@@ -1,6 +1,7 @@
 # CONTRACT — SEQ-8 · The Cascade Event Extract
 **Drafted:** DIONYSUS, 2026-08-04, on explicit operator instruction (one-time Q-5 drafting exception granted by operator this date; ratification stamp still required).
 **RATIFIED: operator, 2026-08-06** — "stamp seq8". Drafted by DIONYSUS. Executor: HEPHAESTUS.
+BUILT: `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-04_SEQ8.md`. Verified present 2026-08-12. (Verdict criteria still owed — see the open defect above; that is a drafting debt, not an execution one.)
 **Executor:** HEPHAESTUS · **ENVIRONMENT: local Windows Claude Code** (the repo containing `_reviewer_box/` and the data estate; assert before any write, halt on mismatch)
 **Authority chain:** SEQ interview rulings, operator 2026-08-04 (SEQ-1 C+windows · SEQ-2 D · SEQ-3 B+multiTF meaning · SEQ-4 b+c+d · SEQ-5 a · SEQ-6 b · SEQ-7 promote-(ii)-park-rest · SEQ-8 a). Record: `exchange/reports/SESSION_SUMMARY_DIONYSUS_2026-08-04_SEQ_rulings.md`.
 

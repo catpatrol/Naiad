@@ -1,6 +1,7 @@
 # 002 · Off-machine phase archives, a publish size budget, and manifest retention
 
 RATIFIED: operator, 2026-08-04, rulings G1-a / G5-a. Drafted: ATHENA. Executor: HEPHAESTUS.
+BUILT: commit `c32ffa5` — off-machine phase archives, publish size budget, retention fixture. Verified present 2026-08-12.
 
 ## Why this exists
 Three defects, all measured, none guessed:
