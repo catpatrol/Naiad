@@ -379,3 +379,30 @@ PENDING:
 NEXT: Give the go for Phase A as its own session, or rule on item 1 first. Owner: operator.
 METRICS: operator actions this session = 0 · files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_ATHENA — 2026-08-12 ===
+NOW: Queue 004 Phase A is ACCEPTED. The working clone now lives at C:/Naiad, outside every sync tree. The old OneDrive tree is INTACT and untouched — deleting it is Phase B, days from now. Every acceptance gate passed, so the single-rmdir rollback was not needed.
+LAST EVENT: 2026-08-12 — A-2 amendments committed 75b7444 from the OLD tree before the copy; C:/Naiad created and verified; proof runs af86168 and b938e81 published FROM the new tree; filed as exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-12_QUEUE-004-PHASE-A.md.
+FACTS:
+- A-0 all five gates passed: HEAD==origin; untracked enumerated with --untracked-files=all; D: PRESENT 0.00s; C: free 44.24 GB vs 7.65 GB needed (3x a 2.55 GB tree); and ZERO dehydrated files of 2,452 — the 164 placeholders the 2026-08-12 census found have all been rehydrated. Attributes only; no file was opened [verified]
+- A-1 swept 340 hits across 120 files and classified every one. 283 hits are PROSE-HISTORY and were LEFT — rewriting them would falsify the archive. Zero old-form absolute ROOT constants remain anywhere in the tree [verified]
+- TWELVE AMENDMENTS committed 75b7444 FROM THE OLD TREE before the copy, so the new clone inherited corrected gates and history stayed linear. Three identity gates are now TWO-SIDED (HALT if the path contains OneDrive AND HALT unless it ends with C:/Naiad) because two complete clones coexist until Phase B; six ROOT constants use Path(__file__).resolve().parent.parent; three prose assertions corrected without rewriting any dated snapshot [verified]
+- A-3 copied 2,482 files / 825 dirs / 2.373 GB in 26.4s, 0 failed 0 mismatched. __pycache__ removed from the COPY only: 6 dirs, 80 .pyc of which 79 embedded the old absolute path. The old tree still has its own 6, asserted [verified]
+- A-4 ADOPT: 562 of 562 tracked files sha256-equal; HEAD identical; status --untracked-files=all byte-identical; untracked 3/3 equal; gitignored 213 vs 213 with a 0-byte delta; all five files >100 MB hashed equal; 5% sample equal [verified]
+- A-4's FIRST pass said REJECT and was WRONG on all three counts — git ls-files emits raw path BYTES and text=True mangled the six filenames containing an em dash, and the gitignored comparison had not subtracted the 80 .pyc deliberately removed (293-213=80 exactly). Nothing was deleted on the strength of a failing check before the check itself was verified [verified]
+- A-5 SIDE BY SIDE vs the Phase 0 baseline: suite 287/1 IDENTICAL; --workflow 0 mismatches / 0 strays / 0 omissions IDENTICAL with all 7 fixtures PASS; routine exit 0 with all 4 jobs exit 0 IDENTICAL; heartbeat phase 2026-08-02 IDENTICAL; publish pushed. Members 349->353 is +4 ADDITIONS with ZERO losses, proven by diffing the two archives' member lists [verified]
+- NEGATIVE GATE TEST passes in three directions: OLD path HALTs (exit 1), C:/Naiad PASSes (exit 0), and an unrelated directory ALSO halts (exit 1) — the control proves the gate is genuinely two-sided rather than a single OneDrive test [verified]
+- A-6 all three scheduled tasks repointed: only WorkingDirectory needed it, since Command is the venv (outside both trees) and the script paths are RELATIVE to Start In. Read back from XML, 18/18 assertions PASS — StartWhenAvailable, the principal SID and LogonType all preserved, and the two --dest "G:\..." arguments deliberately untouched (O-6). All Ready [verified]
+- A-7 mirrored 37 files / 381.1 MB of census and mc1 to D:, copy-only, every file re-hashed AT THE DESTINATION, 0 mismatches. The harness project directory was COPIED to the C--Naiad key: 283 files and all six memory files in both, original left intact [verified]
+PENDING:
+1. Operator: RE-ATTACH the Cowork folder at C:\Naiad. HERMES and DIONYSUS lose their mount and CANNOT TELL YOU — a stale mount reads a frozen bus and reports it as current
+2. Operator: from now on open Claude Code sessions in C:\Naiad, not the OneDrive folder
+3. Operator/next tidy: I resurrected two files that the 2026-08-06 slimming had deliberately moved to docs/history/argus — importing the six worksheet modules to prove their ROOT executed them (no __main__ guard). No delete authorization, so they were left and a publish committed them in af86168. +12,850 B, +0.201% of the box; byte-identical copies remain in docs/history/argus
+4. ATHENA: a FOURTH identity gate exists at prompts/PC1_...:55/:151/:155. It is a COMPLETED contract so it was classified prose-history and left, but re-running it would halt
+5. ATHENA: O-5 is now FOUR-deep — -02 and -03 are this session's own proof runs, so one calendar day occupies all four workflow keep-slots and every distinct older generation reads as outside the rule
+6. Operator, Phase B: the old tree's remote-tracking ref is STALE at 75b7444, so a session opening there sees 'up to date' while the true origin is b938e81 — a plausible, wrong picture
+7. Operator: 28 of 138 permission rules in .claude/settings.local.json name the old path or slug and will stop matching. They degrade to fresh prompts, not failures. Reported, not edited
+8. Carried: O-6, O-7, O-8, and the Phase 0 items (per-process UNREACHABLE memo; F-0-1/F-0-3 not committed as regression tests; the wake log records only WOKE)
+NEXT: Re-attach Cowork at C:\Naiad, then run one clean scheduled day before Phase B. Owner: operator.
+METRICS: operator actions this session = 0 · files re-ingested = 0
+=== END STATUS ===
