@@ -292,6 +292,18 @@ existed · a ledger entry asserting 18/18 while the same paste restored a file m
 a phase-directory deletion contradicting its own expected-EMPTY git status · `.gitignore`
 covering `*.zip` but not the `.sha256` sidecar, so writing it legitimately failed F-K3.
 
+**Anchor context — rule D-4, queue 003, ratified 2026-08-11.** Any paste that edits this file
+**prints at least 3 lines either side of every anchor BEFORE writing**, and the build document
+shows what was printed. **An occurrence count is not a placement check.** Counting proves a string
+exists; only the surrounding lines prove it is the right place. Three misses in three days, each
+one passing its own guard: `find('### 3.1')` matched the heading OUTLINE at the top of this file
+rather than the section body 250 lines later · a once-occurring anchor sat mid-sentence inside an
+unrelated section, so inserting before it would have severed the sentence · a single-line
+`.replace()` was handed a search string spanning a hard-wrapped line break, matched nothing, and
+the script reported the edit applied. **Every one of those had a guard that returned "1 hit".**
+Print the context, read it, then write — and prefer a structural boundary (the `---` closing a
+section) over a prose fragment.
+
 ### 2.4 Design for autonomy — MOVED FROM MEMORY #14 + #16, merged, full text
 *(Operator, 2026-07-27, extended 2026-07-29.)*
 
@@ -546,6 +558,16 @@ A rerun exists to prove byte-identity, and the hash IS that proof. Print both di
 document, then delete the rerun copy in the same session. Never retain it: three retained _run2
 trees held ~3.2 GB of pure redundancy (seq8_run2 relocated 2026-08-11; journal_s3_run2 and
 s3_events_run2 live inside the s3 phase archive). Every study contract inherits this clause.
+
+**Refinement D-3, queue 003, ratified 2026-08-11 — discard the DATA, keep the PROVENANCE.** The
+rule above says "delete the rerun copy"; read it as the rerun's **data files** only. **Retain its
+run manifests and logs** — KB-scale — beside the build document or inside the phase archive. They
+are the second run's provenance and the only thing a discard actually costs. Measured, and this is
+what the refinement is built on: `seq8_run2` was byte-identical to `seq8` on **all 8 data files**
+and **differed on all 3 of its metadata files** (`seq8_extract_manifest.json`,
+`seq8_outcomes_manifest.json`, `seq8_views_summary.json`) — the signature of a determinism rerun,
+identical outputs with fresh run manifests. The 1783.5 MB of data was genuinely redundant; the few
+KB recording what run 2 did was not.
 
 ---
 
