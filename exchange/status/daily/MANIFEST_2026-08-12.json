@@ -10,8 +10,8 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": true
   },
-  "generated_utc": "2026-08-12T10:11:49Z",
-  "head": "81fcc5f901794f65ed0185b31e47bc5961684c30",
+  "generated_utc": "2026-08-12T10:59:07Z",
+  "head": "af861682abb01b189d104c52e32778bf6e67eb9c",
   "lane_last_commit": {
     "brief": null,
     "docs": {
@@ -20,14 +20,14 @@
       "subject": "docs: closing 11-entry memory snapshot post-redraft + phase-archive relocation pointer (ruling B, archives to D:/Naiad)"
     },
     "exchange": {
-      "committed_iso": "2026-08-12T07:11:16-03:00",
-      "sha": "81fcc5f901794f65ed0185b31e47bc5961684c30",
+      "committed_iso": "2026-08-12T07:58:27-03:00",
+      "sha": "af861682abb01b189d104c52e32778bf6e67eb9c",
       "subject": "exchange: auto-publish 2026-08-12"
     },
     "ops": {
-      "committed_iso": "2026-08-12T05:46:30-03:00",
-      "sha": "e16de8b80bf625b3777de7395041b2a3a749b569",
-      "subject": "ops: queue 004 D-0a - drive_wait helper with three states and self-measurement"
+      "committed_iso": "2026-08-12T07:52:01-03:00",
+      "sha": "75b74442fb8572fd33b0d69b0858b9b4157379f1",
+      "subject": "ops: queue 004 Phase A A-2 - repoint every gate and constant to C:/Naiad"
     },
     "study-phase": null
   },
@@ -38,7 +38,7 @@
   },
   "manifest_version": "1.1",
   "onedrive_running": false,
-  "origin_head": "81fcc5f901794f65ed0185b31e47bc5961684c30",
+  "origin_head": "af861682abb01b189d104c52e32778bf6e67eb9c",
   "queue_open": 3,
   "queue_ratified_unbuilt": 3,
   "queue_total": 7,
@@ -66,8 +66,8 @@
       "match_head": false,
       "path": "exchange/status/CONVENTIONS.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "364930b1f34232773ceb4d62c02d4827ff0ba3f44b2c4ff9626489657542b32a",
-      "size": 52994,
+      "sha256_worktree": "66e28909fe9108da0c54049e4d4c84bbe692a514d8fea6f50009af9f2d664527",
+      "size": 53679,
       "source_guess": null,
       "tracked": true
     },
@@ -75,8 +75,8 @@
       "match_head": false,
       "path": "exchange/status/HEARTBEAT.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "581237efad92bfe64c113b79360172ead6c3e894da786e8f01a8d79a83b381fa",
-      "size": 192,
+      "sha256_worktree": "febbd4626f2fa9daea9abd5969f5e53f53490f299d366268e66bb11c8dd0953c",
+      "size": 198,
       "source_guess": null,
       "tracked": true
     },
@@ -111,8 +111,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_ATHENA.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "a408244f3fb026be5f97d11c8d6e39aa2308ba47527023f47c3a21790948f259",
-      "size": 41368,
+      "sha256_worktree": "c488fbdf5c84333073cffb45b0cdb33cd0b7744d6255fc07b6db5432e59fd36f",
+      "size": 45922,
       "source_guess": null,
       "tracked": true
     },
@@ -156,8 +156,8 @@
       "match_head": false,
       "path": "exchange/status/RETENTION.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "2edbdebaf70580181d8405ced513d84c20df522bc5b3e59920daf54be03f290e",
-      "size": 2902,
+      "sha256_worktree": "0ebed329e91b171421583f198d70f5f1e2018cbf52ec52820ebd37c02fcb2839",
+      "size": 2984,
       "source_guess": null,
       "tracked": true
     },
@@ -228,8 +228,8 @@
       "match_head": false,
       "path": "exchange/status/daily/DAILY_2026-08-12.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "cb1f5c17b681e1db8df2342472a7f8c0f8d0b23f39931de0835e2795425c59aa",
-      "size": 5402,
+      "sha256_worktree": "a8ed105053681d7a210f2d0ff8d7d90e99eae2c6a1d76a6effebd8527220a23f",
+      "size": 5445,
       "source_guess": null,
       "tracked": true
     },
@@ -291,8 +291,8 @@
       "match_head": false,
       "path": "exchange/status/daily/MANIFEST_2026-08-12.json",
       "sha256_head_blob": null,
-      "sha256_worktree": "b54ee5e5b1fbf6a45da60472aa851a659ebf65139eb66f741cafb82aef79191d",
-      "size": 23863,
+      "sha256_worktree": "eeafd04a0c079a24e8a5953835fea10ad2221b895f45389a2e4ece3715c76a3e",
+      "size": 23896,
       "source_guess": null,
       "tracked": true
     }
@@ -613,9 +613,9 @@
     {
       "match_head": true,
       "path": "scripts/reviewer_manifest.py",
-      "sha256_head_blob": "9872ba7b3973a18fb9370eedfd54e941c21a610a0191a407ec047515bcab0170",
-      "sha256_worktree": "9872ba7b3973a18fb9370eedfd54e941c21a610a0191a407ec047515bcab0170",
-      "size": 33073,
+      "sha256_head_blob": "d280c87dc0b5cebb44f891eeb21591bc7a2eb2463f8402345a7b331679cd2535",
+      "sha256_worktree": "d280c87dc0b5cebb44f891eeb21591bc7a2eb2463f8402345a7b331679cd2535",
+      "size": 33397,
       "tracked": true
     },
     {
@@ -668,10 +668,7 @@
     }
   ],
   "status_porcelain": [
-    " M .gitignore",
-    " M scripts/archive_dependencies.py",
-    " M scripts/backup_estate.py",
-    " M scripts/daily_routine.py"
+    " M .gitignore"
   ],
   "untracked_root": []
 }
