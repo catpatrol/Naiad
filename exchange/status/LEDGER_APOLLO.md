@@ -569,3 +569,55 @@ NEXT: CEN-7 (registry as-of + i-b registry-levels completion + two-limb reconcil
 CEN-8, then CEN-9. Owner: HEPHAESTUS.
 METRICS: operator actions this session = 1 (the A4 rulings paste) — files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-12l ===
+NOW: CENSUS-2A IS COMPLETE. CEN-7, CEN-8 and CEN-9 all ran to completion this session. Every module
+of the contract (CEN-0b, 1, 2, 3, 4, 5, 6, 7, 8, 9) is run and hash-recorded. THE CENSUS CONTRACT
+IS SPENT.
+LAST EVENT: 2026-08-12 — run 8: the final three stages; the contract closes
+FACTS:
+- ALL TEN MODULES RUN. Fixture set at close, all passing: F-GUARD, F-PIN, F-KEY, F-6, F-6-VEC,
+  F-PARITY-2, F-10 (restored), F-15, F-16 (restored) [verified]
+- CEN-7 COMPLETED THE D-B TWO-LIMB OBJECT for the first time: i-a 175,696 (EMA<->EMA), i-b 168,468
+  (long EMAs) + 14,759 (registry RVWAP 7/30/90/365d and sigma bands) = 183,227 i-b total. The
+  price<->level limb the estate never had is now complete against both families [verified]
+- CO-LOCATION IS RARE: at the pinned 0.15x daily-ATR, a mean of 0.137 of 12 registry levels sit
+  within the band, and only 0.7% of instants carry >=2. Registry levels do not cluster at armings
+  on this tape -- a finding about the confluence premise itself [verified]
+- P-NEST-1 NOT SUPPORTED: TREAT 149 vs CONTROL 699, terminal H100 cluster CI [-0.0513,+0.2292]
+  straddles zero. A4-WITCORR beside it: pairwise sign-agreement 0.40 (2 of 5 pairs) against panel
+  return correlation 0.6458 [verified]
+- P-i' AND P-iv' NOT SCORED: leap-arrival vs stair-arrival is defined in NEITHER draft. MC-1's leap
+  family is a CASCADE object; P-i' is a WINDOW recut. Register: known-open. Inventing the split to
+  score it is the sweep §N forbids [verified]
+- BOTH TIME SPLITS PRINTED (R-SPLIT): count-balanced gives 970.7/724.8 days; duration-balanced gives
+  847.8/847.8. The duration split fixes the TIME imbalance and NOT the composition drift -- BTC is
+  ~29% of the early half and ~18% of the late half under BOTH. Era and panel composition remain
+  entangled [verified]
+- FDR FAMILIES DECLARED: entry-lens m=3 (BH 0.03333), exit-lens m=1 (0.10), CEN-5 corners m=36
+  (0.00278). WITHDRAWN and NOT-SCORED registrations do NOT shrink m -- they carry no p-value, which
+  is not the same as passing [verified]
+- CEN-9, THE INSTRUMENT'S OWN CONTROL: EMA-anchored armings median terminal H100 +0.0748 against
+  stratified random instants +0.0227 -- an edge of +0.052 ATR. THE PINNED TOLL IS 0.026-0.059 ATR
+  PER ASSET, so the entire EMA edge is the size of the round-trip cost. And the prior-extreme sweep
+  from below EDGES IT OUT at +0.0845. Descriptive medians, no intervals, registers nothing -- by
+  design [verified]
+- F-15 PASS: the N=200 quarter-stratified draw reproduces identically under its seed [verified]
+- THE CENSUS YIELD: one SUPPORTED-PROVISIONAL result (P-REL-1b, itself qualified by a
+  witness-correlation print that had to be restored from a superseded draft) out of nine scored
+  hypotheses. Three died to confounds the frame exposed; two to definitions the contract never
+  carried. That is the honest yield and the frame is what produced it [verified]
+PENDING (all next-cycle; none blocks this contract, which is spent):
+1. Filed and unscored: P-FAN-1 [60%], P-ARM-2 [55%], P-NEST-2 [50%], P-RAT-3 [40%], P-VBT-2 [45%],
+   and P-CHOP-2 on the newly-valued ribbon operand
+2. Needs-word before their registrations can ever be scored: leap/stair arrival (P-i'), ATR buckets
+   and "survives" (P-iv'), H-VBT's band rule (P-VBT-2)
+3. The register's closure is MODULE-LEVEL only; an AST scan of scoring paths for bare literals is
+   the natural next hardening and is NOT implemented
+4. The D:-moved incident remains routed to ATHENA; cause unidentified
+5. ROTATION PROGRAM unchanged: Hyperliquid, own universe, own evidence wall, never pooled;
+   portability battery = the tunable-variables question; the funnel opens NOW, at census close
+NEXT: THE PATH's next step is the operator's -- Tier-C / EngineV2, or the rotation funnel. The
+census has delivered what it can. Owner: operator.
+METRICS: operator actions this session = 1 (the run-8 sequencing paste) — files re-ingested = 0
+=== END STATUS ===
