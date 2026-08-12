@@ -82,8 +82,14 @@ Field semantics, so a record cannot be misread:
   lane_last_commit    per message-prefix, the most recent commit carrying it:
                       {sha, subject, committed_utc} or null.  Answers "when did
                       this lane last land anything?" without reading a ledger
-  queue_open          count of exchange/queue work orders NOT yet ratified --
-                      see queue_open() for the exact stamp rule
+  queue_total         every non-README work order in exchange/queue/
+  queue_unratified    of those, the ones with no usable RATIFIED stamp --
+                      they may not be executed yet
+  queue_ratified_unbuilt
+                      ratified but not yet stamped BUILT -- the real backlog
+  queue_open          KEPT as an alias of queue_ratified_unbuilt so older
+                      readers do not break; see queue_counts() for why its
+                      meaning changed on 2026-08-12
 
 Run:  python scripts/reviewer_manifest.py
 """
@@ -461,45 +467,101 @@ def lane_last_commit():
     return out
 
 
-def queue_open():
-    """Count of exchange/queue work orders that are NOT yet ratified.
+def _stamp_value(line, keyword):
+    """The value of a `KEYWORD:` stamp on one line, or None if it is not one.
 
-    A work order is a file named NNN_*.md directly under exchange/queue/ --
-    three leading digits then an underscore.  README.md is documentation, not a
-    work order, and is excluded by that rule (it necessarily quotes the stamp
-    format, which is exactly why the filter is structural and not a text
-    search over the whole directory).
+    Tolerant of the markdown the queue actually contains.  The old parser
+    required the line to START with the bare keyword, so it silently missed
+    `**RATIFIED: operator, 2026-08-06** -- "stamp seq8"` -- a real, valid,
+    operator-issued stamp that reads as UNSTAMPED to a `startswith` test.  A
+    counter that calls a ratified item unratified because of two asterisks is
+    not measuring the queue, it is measuring its own formatting assumptions.
 
-    An item counts as OPEN unless it carries a line starting `RATIFIED:` whose
-    remainder is non-empty and is not the literal word PENDING.  So both a
-    missing stamp and an explicit `RATIFIED: PENDING` count as open, which is
-    the operator-facing meaning: nothing here may be executed yet.
+    Leading `>`, `#`, `*`, `_` and whitespace are stripped before matching, and
+    trailing emphasis is stripped from the value.
+    """
+    text = line.strip().lstrip(b">#*_ \t")
+    if not text.upper().startswith(keyword + b":"):
+        return None
+    return text[len(keyword) + 1:].strip().strip(b"*_ \t")
+
+
+def _is_stamped(blob, keyword):
+    """True when `blob` carries a KEYWORD stamp that is real and not PENDING.
+
+    Both a missing stamp and an explicit `KEYWORD: PENDING` read as NOT
+    stamped -- the operator-facing meaning is the same in each case.
+    """
+    for raw in blob.split(b"\n"):
+        value = _stamp_value(raw, keyword)
+        if value and value.upper() != b"PENDING":
+            return True
+    return False
+
+
+def queue_items():
+    """[(name, ratified, built)] for every work order in exchange/queue/.
+
+    A work order is ANY `.md` directly under exchange/queue/ except README.md,
+    which is the convention document.
+
+    The old rule counted only `NNN_*.md` -- three digits then an underscore.
+    That silently excluded the three date-named contracts (WF1, SEQ8, MC1),
+    which is how `MANIFEST.json` came to report `queue_open: 0` against a queue
+    holding SIX items (HERMES finding F-3, 2026-08-12).  The filter was not
+    wrong about the files it looked at; it was wrong about which files were
+    work orders at all.
 
     Returns None when the queue directory does not exist.
     """
     qdir = os.path.join(REPO_ROOT, *QUEUE_DIR.split("/"))
     if not os.path.isdir(qdir):
         return None
-    count = 0
+    items = []
     for name in sorted(os.listdir(qdir)):
-        if not name.lower().endswith(".md"):
-            continue
-        if not (len(name) > 4 and name[:3].isdigit() and name[3] == "_"):
+        if not name.lower().endswith(".md") or name.lower() == "readme.md":
             continue
         abs_path = os.path.join(qdir, name)
         if not os.path.isfile(abs_path):
             continue
-        ratified = False
         with open(abs_path, "rb") as handle:     # bytes, not a text pipeline
-            for raw in handle.read().split(b"\n"):
-                line = raw.strip()
-                if line.upper().startswith(b"RATIFIED:"):
-                    rest = line[len(b"RATIFIED:"):].strip()
-                    if rest and rest.upper() != b"PENDING":
-                        ratified = True
-        if not ratified:
-            count += 1
-    return count
+            blob = handle.read()
+        items.append((name, _is_stamped(blob, b"RATIFIED"),
+                      _is_stamped(blob, b"BUILT")))
+    return items
+
+
+def queue_counts():
+    """The three truthful counters, plus the `queue_open` alias.
+
+    queue_total              every non-README work order
+    queue_unratified         no usable RATIFIED stamp -- may not be executed
+    queue_ratified_unbuilt   ratified but not yet stamped BUILT -- the real
+                             backlog, and the number `queue_open` now carries
+
+    `queue_open` is KEPT as an alias of queue_ratified_unbuilt so nothing that
+    reads the old key breaks.  Its meaning has changed, which is the point: the
+    old number answered "what may not be executed yet" and was read by everyone
+    as "what still has to be done".  Those differ, and on 2026-08-12 they
+    differed by the entire queue.
+
+    Returns a dict of Nones when the queue directory does not exist.
+    """
+    items = queue_items()
+    if items is None:
+        return {"queue_total": None, "queue_unratified": None,
+                "queue_ratified_unbuilt": None, "queue_open": None}
+    unratified = sum(1 for _, ratified, _ in items if not ratified)
+    unbuilt = sum(1 for _, ratified, built in items if ratified and not built)
+    return {"queue_total": len(items),
+            "queue_unratified": unratified,
+            "queue_ratified_unbuilt": unbuilt,
+            "queue_open": unbuilt}
+
+
+def queue_open():
+    """Backward-compatible alias -- now `queue_ratified_unbuilt`.  See above."""
+    return queue_counts()["queue_open"]
 
 
 # --------------------------------------------------------------- the manifest
@@ -536,7 +598,7 @@ def build_manifest():
         "onedrive_running": onedrive_running(),
         "ledger_head": ledger_head(),
         "lane_last_commit": lane_last_commit(),
-        "queue_open": queue_open(),
+        **queue_counts(),
     }
 
 
@@ -718,10 +780,16 @@ def main():
         OUT_REL, len(second["sources"]), len(second["reviewer_box"]),
         len(second["untracked_root"])))
     od = second["onedrive_running"]
-    print("v1.1 fields: onedrive_running=%s, queue_open=%s, ledger %d B" % (
+    print("v1.1 fields: onedrive_running=%s, ledger %d B" % (
         "unknown" if od is None else ("yes" if od else "NO"),
-        "n/a" if second["queue_open"] is None else second["queue_open"],
         second["ledger_head"]["size"] or 0))
+    print("queue: %s total · %s unratified · %s ratified-unbuilt "
+          "(queue_open aliases the last)" % (
+              "n/a" if second["queue_total"] is None else second["queue_total"],
+              "n/a" if second["queue_unratified"] is None
+              else second["queue_unratified"],
+              "n/a" if second["queue_ratified_unbuilt"] is None
+              else second["queue_ratified_unbuilt"]))
 
     failed = [name for name, ok, _ in results if not ok]
     if failed:

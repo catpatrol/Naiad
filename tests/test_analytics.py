@@ -1039,24 +1039,41 @@ def test_f_an_8c_documented_diff():
 
 _IFACE_NAME = re.compile(r"^INTERFACE_(\d{4}-\d{2}-\d{2})(?:_.+)?\.md$")
 
+# Where the published contract lives, in priority order.  ATHENA ruled on
+# 2026-08-12, on the rotation conflict this fixture surfaced: the census-facing
+# contract moved to `exchange/status/`, which queue 003 does not rotate, under a
+# DATELESS name.  Both halves of the ruling matter -- status/ stops the 30-day
+# sweep carrying it off APOLLO's reading surface, and dropping the date stops a
+# re-export from silently creating a second "newest" copy.
+#
+# `exchange/reports/` is still searched, second, on purpose.  A half-finished
+# migration that left a stale dated copy behind should FAIL loudly against the
+# canonical file, not SKIP as though no contract were published at all.
+_IFACE_HOMES = (("exchange", "status"), ("exchange", "reports"))
+
 
 def _newest_published_interface():
-    """The newest `exchange/reports/INTERFACE_*.md`, or None if there is none.
+    """The published contract, or None if no copy exists in any known home.
 
-    "Newest" is decided by the ISO DATE IN THE FILENAME, never by mtime.  git
-    does not preserve mtimes, so a fresh clone would pick a different file than
-    this working tree does, and a fixture that compares different files on
-    different machines is not a fixture.
+    `exchange/status/INTERFACE_PUBLISHED.md` wins when present.  Otherwise the
+    newest dated `INTERFACE_<date>*.md` is chosen by the ISO DATE IN THE
+    FILENAME, never by mtime: git does not preserve mtimes, so a fresh clone
+    would pick a different file than this working tree does, and a fixture that
+    compares different files on different machines is not a fixture.
     """
-    d = ROOT / "exchange" / "reports"
-    if not d.is_dir():
-        return None
-    dated = [(m.group(1), p.name, p)
-             for p in d.glob("INTERFACE_*.md")
-             if (m := _IFACE_NAME.match(p.name))]
-    if not dated:
-        return None
-    return max(dated, key=lambda row: (row[0], row[1]))[2]
+    for parts in _IFACE_HOMES:
+        d = ROOT.joinpath(*parts)
+        if not d.is_dir():
+            continue
+        fixed = d / "INTERFACE_PUBLISHED.md"
+        if fixed.is_file():
+            return fixed
+        dated = [(m.group(1), p.name, p)
+                 for p in d.glob("INTERFACE_*.md")
+                 if (m := _IFACE_NAME.match(p.name))]
+        if dated:
+            return max(dated, key=lambda row: (row[0], row[1]))[2]
+    return None
 
 
 def _sha256_bytes(blob):
@@ -1090,12 +1107,13 @@ def test_f_an_15_published_interface_is_byte_identical():
     published = _newest_published_interface()
     if published is None:
         pytest.skip(
-            "SKIPPED, NOT PASSED: no exchange/reports/INTERFACE_<date>*.md "
-            "exists, so there is no published copy to compare against. This is "
-            "not a green result -- the census-facing lanes (APOLLO) have no "
-            "contract to read at all. Publish one with:\n"
-            f"    copy analytics\\INTERFACE.md "
-            f"exchange\\reports\\INTERFACE_<YYYY-MM-DD>_C6.md")
+            "SKIPPED, NOT PASSED: no published contract found in "
+            "exchange/status/ or exchange/reports/, so there is nothing to "
+            "compare against. This is not a green result -- the census-facing "
+            "lanes (APOLLO) have no contract to read at all. Publish one with:\n"
+            "    copy analytics\\INTERFACE.md "
+            "exchange\\status\\INTERFACE_PUBLISHED.md")
+    rel = published.relative_to(ROOT).as_posix()
 
     can_bytes = canonical.read_bytes()          # binary: no newline translation
     pub_bytes = published.read_bytes()
@@ -1116,7 +1134,7 @@ def test_f_an_15_published_interface_is_byte_identical():
             f"  canonical  analytics/INTERFACE.md\n"
             f"             sha256 {can_sha}\n"
             f"             bytes  {len(can_bytes)}\n"
-            f"  published  exchange/reports/{published.name}\n"
+            f"  published  {rel}\n"
             f"             sha256 {pub_sha}\n"
             f"             bytes  {len(pub_bytes)}\n"
             f"  delta      published - canonical = "
@@ -1134,18 +1152,19 @@ def test_f_an_15_published_interface_is_byte_identical():
             "Make\n"
             "  the copy deliberately, from the repo root:\n"
             "\n"
-            f"      copy analytics\\INTERFACE.md "
-            f"exchange\\reports\\{published.name}\n"
+            f"      copy analytics\\INTERFACE.md {rel.replace('/', chr(92))}\n"
             "\n"
-            "  -- or publish under today's date instead, leaving the old "
-            "snapshot\n"
-            "  in place as history:\n"
-            "\n"
-            "      copy analytics\\INTERFACE.md "
-            "exchange\\reports\\INTERFACE_<YYYY-MM-DD>_C6.md")
+            "  The published copy lives under exchange/status/ and is DATELESS "
+            "by\n"
+            "  ATHENA's 2026-08-12 ruling: status/ does not rotate, so the "
+            "contract\n"
+            "  cannot age off the surface APOLLO reads, and one dateless name "
+            "means\n"
+            "  a re-export overwrites rather than quietly becoming a second "
+            "copy.")
 
     print(f"\nF-AN-15: IDENTICAL\n"
-          f"  analytics/INTERFACE.md              "
-          f"sha256 {can_sha}  {len(can_bytes)} B\n"
-          f"  exchange/reports/{published.name}  "
-          f"sha256 {pub_sha}  {len(pub_bytes)} B")
+          f"  analytics/INTERFACE.md\n"
+          f"      sha256 {can_sha}  {len(can_bytes)} B\n"
+          f"  {rel}\n"
+          f"      sha256 {pub_sha}  {len(pub_bytes)} B")

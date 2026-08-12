@@ -30,12 +30,34 @@ Nothing here is destructive to the worktree.  No file is written, moved or
 deleted by this module.
 """
 
+import datetime as _dt
 import os
+import re
 import subprocess
 from pathlib import Path
 
 SCOPE = "exchange/"
 SUBJECT = "exchange: auto-publish {date}"
+
+# ------------------------------------------------------- F-P6: routine freshness
+#
+# The unmasking line, 2026-08-12.  Queue 002 made PUBLISH refresh MANIFEST.json.
+# That closed one defect and opened a worse one: `MANIFEST.json` is the file every
+# lane reads to check the repo is alive, and after 002 its freshness only proves
+# that SOMEONE PUBLISHED -- not that the daily routine ran.  On 2026-08-09 the
+# routine halted; eleven publishes on 08-11 kept the manifest looking six hours
+# old, and the outage went unseen for three days.
+#
+# So publish now states, every time, when the ROUTINE last completed -- a fact it
+# reads from HEARTBEAT.md and does not itself write.  The signal and the thing it
+# signals are separated again.
+#
+# PRINT-ONLY, NEVER BLOCKS.  A stale heartbeat is information, not a reason to
+# refuse a publish: the publishes are usually how a human is repairing the very
+# outage being reported.  A guard that blocked here would fight the repair.
+HEARTBEAT_PATH = "exchange/status/HEARTBEAT.md"
+STALE_AFTER_HOURS = 36.0
+_HEARTBEAT_RUN = re.compile(r"^\s*run:\s*(\S+)", re.M)
 
 # --------------------------------------------------------------- size budget
 #
@@ -117,6 +139,50 @@ def budget(total_bytes, box=BOX_BYTES):
     return "OK", frac
 
 
+def heartbeat_line(text, now=None):
+    """F-P6.  Render the routine-freshness line from HEARTBEAT.md's contents.
+
+    A pure function of (text, now) -- like budget() above -- so the STALE and
+    MISSING branches can be demonstrated on doctored input without touching the
+    real heartbeat or waiting two days for one to go stale.
+
+    `text` is the file's contents, or None if it could not be read.  Returns the
+    single line publish should print.  Never raises: an unreadable, truncated or
+    garbled heartbeat reports itself as MISSING rather than taking down the
+    publish that is probably trying to fix it.
+    """
+    if now is None:
+        now = _dt.datetime.now(_dt.timezone.utc)
+    if not text:
+        return "publish: *** HEARTBEAT MISSING *** (%s unreadable)" % HEARTBEAT_PATH
+    match = _HEARTBEAT_RUN.search(text)
+    if not match:
+        return ("publish: *** HEARTBEAT MISSING *** (no `run:` line in %s)"
+                % HEARTBEAT_PATH)
+    stamp = match.group(1).strip()
+    try:
+        parsed = _dt.datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+    except ValueError:
+        return ("publish: *** HEARTBEAT MISSING *** (unparseable run stamp %r in %s)"
+                % (stamp, HEARTBEAT_PATH))
+    if parsed.tzinfo is None:                    # naive stamp: read it as UTC
+        parsed = parsed.replace(tzinfo=_dt.timezone.utc)
+    hours = (now - parsed).total_seconds() / 3600.0
+    line = ("publish: routine last completed %s (%.0fh ago)"
+            % (parsed.date().isoformat(), hours))
+    if hours > STALE_AFTER_HOURS:
+        line += " *** STALE >%dh ***" % STALE_AFTER_HOURS
+    return line
+
+
+def heartbeat_text(repo):
+    """HEARTBEAT.md's contents, or None if it cannot be read for any reason."""
+    try:
+        return Path(repo, *HEARTBEAT_PATH.split("/")).read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError):
+        return None
+
+
 def _index_sizes(repo):
     """[(size, path)] for every SCOPE path in the index, largest first.
 
@@ -182,7 +248,7 @@ def publish(repo, date_str, remote="origin", log=print, allow_oversize=None):
             "1", "true", "yes", "on")
     result = {"status": "ERROR", "offenders": [], "staged": [],
               "commit": None, "branch": None, "error": None, "pushed": False,
-              "bytes": None, "fraction": None, "budget": None,
+              "bytes": None, "fraction": None, "budget": None, "heartbeat": None,
               "largest": [], "oversize_override": bool(allow_oversize)}
 
     try:
@@ -257,10 +323,19 @@ def publish(repo, date_str, remote="origin", log=print, allow_oversize=None):
                     "nothing committed, nothing pushed.")
                 log("REFUSE: override with allow_oversize=True or %s=1 if this "
                     "publish is legitimate." % OVERRIDE_ENV)
+                # printed here too: this path returns early, and a dead routine
+                # is worth knowing about even on a publish that was refused.
+                log(heartbeat_line(heartbeat_text(repo)))
                 return result
             log("publish: size budget OVERRIDDEN (%s) -- publishing %s B anyway."
                 % ("allow_oversize=True" if os.environ.get(OVERRIDE_ENV, "") == ""
                    else OVERRIDE_ENV, f"{total:,}"))
+
+        # F-P6: the routine-freshness line, immediately after the budget report.
+        # Read, never written, by this module -- publish reports the heartbeat,
+        # it does not produce one, which is the whole point of the separation.
+        result["heartbeat"] = heartbeat_line(heartbeat_text(repo))
+        log(result["heartbeat"])
 
         rc, out, err = _git(repo, ["commit", "-m", SUBJECT.format(date=date_str)])
         if rc != 0:
@@ -320,6 +395,8 @@ def report_lines(result):
                 f"({result.get('budget')})")
         if result.get("budget") == "REFUSE" and result.get("oversize_override"):
             lines.append("- **the size ceiling was OVERRIDDEN for this publish**")
+        if result.get("heartbeat"):
+            lines.append("- %s" % result["heartbeat"].replace("publish: ", "", 1))
         return lines
     if status == "REFUSED":
         lines = [
