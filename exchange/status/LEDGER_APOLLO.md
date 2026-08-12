@@ -471,3 +471,53 @@ PENDING:
 NEXT: Operator rules on NW-5 first (it gates three registrations), then CEN-5. Owner: operator.
 METRICS: operator actions this session = 1 (the A3 rulings paste) — files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-12j ===
+NOW: CENSUS-2A run 6. CEN-5 ran to completion on 6,834 of 7,094 resolved campaigns. P-RAT-2 scored
+NOT SUPPORTED (0 of 36 corners); P-VBT-1 NOT SCORED because H-VBT is undefined in both contract
+drafts. CEN-7, CEN-8, CEN-9 remain.
+LAST EVENT: 2026-08-12 — run 6: CEN-5 complete; two exit registrations resolved
+FACTS:
+- THE R UNIT RECONSTRUCTS: realized_r = size_r x gross_R + costs, verified on all 7,094 rows
+  (median |err| 0.058 vs size_r x gross_R, residual systematically negative = costs). THEREFORE
+  A3-DECILE's realized_r/size_r IS gross R, correlation 0.993 -- the operator's size-free ruling is
+  correct and CEN-4 used it correctly. One ruler, not two [verified]
+- 432 CAMPAIGNS WERE NEARLY LOST SILENTLY. tranche_id is unique only WITHIN a cell (c104t145 exists
+  in both BTCUSDT_intraday and ETHUSDT_swing; 378 ids collide). A first draft keyed a dict on
+  tranche_id alone and dropped 6.1% of the book. Now carried in a list that cannot collide. This is
+  the THIRD appearance of the non-unique-key defect in this census -- a join-key uniqueness
+  assertion belongs in the fixture set [verified]
+- 260 campaigns excluded AND COUNTED: every one is sub-bar (hold_s < 300s), exiting inside the same
+  5m candle it entered, so there is no forward path to ratchet along. Never imputed [verified]
+- RIDE-ONLY control: the book is 12.3% winners (814 of 6,643) carrying mean +9.4R against a median
+  loser of -1.04R; ALL median -1.0324, mean +0.3072. Any exit study on this book is a study of tail
+  preservation [verified]
+- P-RAT-2 NOT SUPPORTED: 0 of 36 corners meet both bars. FDR family m=36 DECLARED BEFORE SCORING,
+  BH bar 0.00278; the I11 guard is ADMISSIBLE (p_sel 0.0005). TWO CAVEATS THAT MUST NOT BE READ
+  PAST: (a) median delta R is +0.0000 for the best corners BY CONSTRUCTION, because most campaigns
+  never reclaim the long EMA -- the mean deltas are +0.45R and +0.43R at the 4h/long/wide corners,
+  and the registration names neither median nor mean; (b) TRG came back >1 for 30+ corners, because
+  TRG is defined as a retention SHARE for a FILTER and a ratchet is an alternative EXIT that can
+  exceed the ride. So P-RAT-2's TRG limb IS NOT DECIDABLE AS WRITTEN and the verdict rests on the
+  delta limb alone [verified]
+- NW-5 HAS NOW LANDED ON A LIVE VERDICT. TRG's numerator was defined (v0.2:64-65) while the ruler
+  was MFE-MAE; R-1 retired that ruler and no text renamed the column. It gates P-RAT-2, P-VBT-1,
+  P-CHOP-1's re-score and F-9 [verified]
+- P-VBT-1 NOT SCORED: H-VBT is a bare NAME in both v0.2:131 and v0.3:103. The estate defines it
+  only as "VWAP Band Target -- exits at confluence-scored VWAP levels", and those bands are CEN-7's
+  registry output, which has not run. Choosing a band set by outcome is the sweep §N forbids, so
+  the arm is not built and the registration is not scored rather than scored on an invented rule
+  [verified]
+PENDING:
+1. NW-5 TRG numerator -- now blocking THREE registrations and one fixture. Highest-value word
+2. P-RAT-2's "net terminal R": median or mean? The registration names neither and they disagree in
+   sign at the 4h/long/wide corners
+3. H-VBT's definition (band set + confluence cut), or drop P-VBT-1 to a printed column
+4. NW-2 witness-correlation and NW-4 sabotage fixture both block CEN-8
+5. P-NEST-1 scored-vs-columns-only contradiction must be resolved before CEN-8
+6. RECOMMEND (repeat): close a [VETO] register over the whole contract, and add a join-key
+   uniqueness assertion to the fixture set -- the same key defect has now appeared three times
+NEXT: Operator rules on NW-5 and the median/mean question; then CEN-7 -> CEN-8 -> CEN-9.
+Owner: operator, then HEPHAESTUS.
+METRICS: operator actions this session = 1 (the run-6 sequencing paste) — files re-ingested = 0
+=== END STATUS ===
