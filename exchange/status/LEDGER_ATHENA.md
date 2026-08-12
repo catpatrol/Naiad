@@ -307,3 +307,26 @@ PENDING:
 NEXT: Rule on O-5; it is the only item this session created. Owner: ATHENA.
 METRICS: operator actions this session = 0 · files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_ATHENA — 2026-08-12 ===
+NOW: Queue 004 cannot be ratified because it does not exist in this repository. The operator's "ratify 004" is recorded as received and unexecuted — blocked on the contract text being filed, not refused. The amendment paste was checked against the code anyway, and its motivating premise does not survive the check.
+LAST EVENT: 2026-08-12 — HEPHAESTUS halted on the paste's own gate (004 missing); no byte written to exchange/queue/; filed as exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-12_QUEUE-004-HALT.md.
+FACTS:
+- exchange/queue/004_move-clone-out-of-onedrive.md does not exist: absent from disk, untracked, and never committed on ANY branch (git log --all). Six independent checks incl. Downloads/Desktop for a _1-suffix twin; all negative. The queue runs 001-003 and stops [verified]
+- The paste's stamp anchor is character-for-character the 003 stamp of 2026-08-11 with the date advanced, so 004 was drafted in a session whose output never reached this repo — same class as the 2026-08-12 "file it" ruling [verified]
+- PREMISE REFUTED: the 2026-08-09 weekly backups did NOT fail on a sleeping LaCie. Both archives exist and re-verify, RETENTION.md shows no date gap; the tasks started 15:51:58 (StartWhenAvailable catch-up), never at 08:00; and the destination that day was G:\My Drive, not D: — D: became the target on 2026-08-12. Exit 1 came from backup_estate.py conflating archive success with the git publish step (CLOSEOUT 7.3) [verified]
+- D-0b scope understated: 20 D: resolution/gate sites across 4 files, minimum correct wiring set is 9 points, not 3. backup_estate.py:980 (_generations) is UNGATED and still prints "none found" for an unmounted drive — O-4 fixed the phase half and left the estate/workflow half standing. daily_routine.py carries its own D: literal and gate, and is the job that runs unattended daily [verified]
+- D-0b claim (b) gates on the WRONG DRIVE: both Sunday tasks pass --dest "G:\..." explicitly and backup_dest_root() honours --dest first, so a wait_for_drive wired there waits for Google Drive (open item O-6) [verified]
+- D-0d targets the wrong document: CONVENTIONS section 2 is "How to build a paste for HEPHAESTUS" and contains no D: gate; literal D: appears only at lines 784/788/795 in section 8. The gate rule lives in NOTE_ATHENA_to_ARGUS_2026-08-11_DATA-RESIDENCY.md:19 and LEDGER_ARGUS.md:52 [verified]
+- O-5 CONFIRMED and worse than described: _generations() has no day key at all (sorts on full filename, raw slice). NEW defect — the same-day sort is INVERTED ("." 0x2E > "-" 0x2D), so the newer -01 archive ranks as the older generation and is labelled prunable first. " (N)" OneDrive duplicates hit the same bug [verified]
+- 287/1 is correct and current (287 passed, 1 skipped, plain pytest) [verified]
+- C:/Naiad is unclaimed — zero repo references, absent from disk — so no collision, but the stated justification fails: the residency rule is repo-RELATIVE and the two trees are already parallel today. 23 breakages enumerated, 3 silent and outside the repo (3 Task Scheduler Start In values, the .claude/projects harness dir holding auto-memory, ~25 permission rules). Three HARD identity gates assert the path contains "OneDrive" — C:/Naiad fails both conjuncts, so every builder session would halt at pre-flight until they are amended in the same change [verified]
+PENDING:
+1. ATHENA: file the 004 contract text into exchange/queue/ — nothing can be stamped until it lands; the operator's ratification is held open against it
+2. ATHENA: rule on the seven objections in section 6 of the report, then re-issue the amendment against the filed file — chiefly the refuted premise, D-0b's 9-point scope, and D-0d's target
+3. ATHENA: widen O-5 to cover backup_estate.py:980 (unmounted-drive conflation in the estate/workflow half) and the same-day sort inversion
+4. HEPHAESTUS: two stale REPO/research_outputs/_archive paths still live at daily_routine.py:537 and archive_dependencies.py:52 — the pre-O-4 bug in a second and third file
+5. Operator: O-6 carried unchanged — both Sunday tasks still pass --dest "G:\My Drive\naiad-backups"
+NEXT: File 004. Everything else in this lane is blocked behind it. Owner: ATHENA.
+METRICS: operator actions this session = 0 · files re-ingested = 0
+=== END STATUS ===
