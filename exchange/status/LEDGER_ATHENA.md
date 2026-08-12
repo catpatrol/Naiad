@@ -250,3 +250,23 @@ PENDING:
 NEXT: Rule on item 1; the rescue is the only option that removes risk rather than relocating it. Owner: operator, then HEPHAESTUS to execute.
 METRICS: operator actions this session = 0 · files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_ATHENA — 2026-08-12 ===
+NOW: The backup destination is repointed in code. Repo integrity is green where it now sits — fsck clean, 544/544 tracked files present, zero dehydrated — and all 20 archives on D:/naiad-backups verify against their sidecars with zero mismatches. --estate/--workflow now default to D:/naiad-backups and HALT if the drive is absent; explicit --dest still wins, which is why the two Sunday tasks still target G: and need an operator decision.
+LAST EVENT: 2026-08-12 — live --workflow run wrote naiad_workflow_2026-08-12.zip to the new default, 324 members, 8/8 fixtures, 0 mismatches; filed as exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-12_BACKUP-PATH-REROUTE.md; published 44a2abc, code committed 0509912.
+FACTS:
+- Sync idle: repo and D:/naiad-backups byte-identical across a 60s double measurement; git fsck clean; HEAD == origin/v12-v1-census at 7552d652eb… [verified]
+- 20/20 archives on D: verified against their sidecars, 0 mismatched; 3 unverifiable (1)-suffixed duplicates carry no sidecar and were left untouched [verified]
+- G:/My Drive/naiad-backups is EMPTY, 0 files — the move was a move, not a copy. It was read-only this session and is exactly as found [verified]
+- D:\naiad-backups IS a registered Google Drive mirror target, decoded from the DriveFS SyncTargets registry protobuf; D: is a physical LaCie exFAT disk, not a Drive mount — the two facts are compatible and both were measured [verified]
+- Its uploads are ERRORING: 50 CreateHardLinkW failures naming these archives, no completion record in Drive's logs; exFAT has no hard links. Registered is not uploaded [verified]
+- No provable copy of the four estate generations (1.85 GB) exists outside D:; the second-account upload is stale at 2026-08-05, predating both the 08-09 and 08-11 generations [verified]
+PENDING:
+1. Operator: check drive.google.com > Computers for naiad-backups — thirty seconds, and it settles whether the off-site copy exists (O-1)
+2. Operator: rule on the two Sunday tasks, which still pass --dest "G:\My Drive\naiad-backups" explicitly; next fire 2026-08-16 08:00/08:30. Decision funnel in §8 of the build document (O-2)
+3. ATHENA: both weekly backup tasks returned exit 1 on 2026-08-09 while writing valid archives — unexamined, reported not fixed (O-3)
+4. ATHENA: retention_report() reports "PHASE ARCHIVES — none found" while nine exist at D:/Naiad/research_outputs/_archive; pre-existing, reported not fixed (O-4)
+5. Operator: D:\Naid-GDRIVE is a second 4.2 GB Drive-mirrored copy of the tree — deliberate or stray? (O-7)
+NEXT: Check Computers in the Drive web UI, then rule on item 2. Owner: operator.
+METRICS: operator actions this session = 0 · files re-ingested = 0
+=== END STATUS ===
