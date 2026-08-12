@@ -386,9 +386,18 @@ behind.
 
 - **Publish:** `44a2abc`, 6 paths, **pushed to `origin/v12-v1-census`** — succeeded. F-P6 freshness
   line present (`routine last completed 2026-08-12 (3h ago)`). **No budget WARNING.**
-- **Code commit:** `0509912`, exactly 2 files. **Committed, not pushed** — standing commit-no-push
-  rule for code; only `exchange/**` auto-pushes. `.gitignore` was already modified before this
-  session began and is not mine; I left it uncommitted.
+- **Code commit:** `0509912`, exactly 2 files. `.gitignore` was already modified before this session
+  began and is not mine; I left it uncommitted.
+- **Correction, and it is worth understanding because it recurs.** I first recorded the code commit
+  as *committed, not pushed*, on the standing commit-no-push rule. **It is in fact on `origin`** —
+  verified by `git branch -r --contains 0509912` and by reading both files back out of
+  `origin/v12-v1-census`. The reason: `publish()` is path-scoped when it *stages* — `exchange/**`
+  only, which is what stops evidence riding along in a commit — but the `git push` that follows
+  pushes the **branch**, and a branch carries every commit on it. So a separately-authorized code
+  commit made before a publish is pushed by that publish. **"Publish only touches exchange/" is true
+  of staging and false of pushing.** No harm here: the commit was authorized and its content is
+  exactly the two intended files. Worth a note in CONVENTIONS §3.4 for the next session that
+  assumes otherwise.
 - This report and the ledger entry are published by a second `publish()` after this file is
   written. Two publishes, because the `--workflow` run performs one of its own.
 
@@ -398,8 +407,8 @@ behind.
 
 | PATH | EXISTS | TRACKED | COMMITTED | PUSHED | PROTECTED BY | BOX COST |
 |---|---|---|---|---|---|---|
-| `scripts/backup_estate.py` | yes | tracked | `0509912` | **no** — commit-no-push | GitHub *(after push)* + `naiad_workflow_2026-08-12.zip` | 65,440 B · 0.98% |
-| `scripts/routine_jobs.json` | yes | tracked | `0509912` | **no** — commit-no-push | GitHub *(after push)* + workflow archive | 1,773 B · 0.03% |
+| `scripts/backup_estate.py` | yes | tracked | `0509912` | **yes**, `origin/v12-v1-census` — see note | GitHub + `naiad_workflow_2026-08-12.zip` | 65,440 B · 0.98% |
+| `scripts/routine_jobs.json` | yes | tracked | `0509912` | **yes**, `origin/v12-v1-census` — see note | GitHub + workflow archive | 1,773 B · 0.03% |
 | `exchange/status/CONVENTIONS.md` | yes | tracked | `44a2abc` | yes, `origin/v12-v1-census` | GitHub + workflow archive | 52,994 B · 0.79% |
 | `exchange/status/CADENCE.md` | yes | tracked | `44a2abc` | yes | GitHub + workflow archive | 7,503 B · 0.11% |
 | `exchange/status/SECOND_ACCOUNT.md` | yes | tracked | `44a2abc` | yes | GitHub + workflow archive | 2,941 B · 0.04% |
