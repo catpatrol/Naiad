@@ -1013,6 +1013,244 @@ def stage_cen2(assets: list[str], era: str = "evidence") -> dict:
 
 
 # ===========================================================================
+# I6 LENSES -- chaining is a PARAMETER, never a property of the data
+# ===========================================================================
+LENS_WINDOW_MS = 24 * 3_600_000          # the pinned trailing-24h window
+
+
+def assign_chains_seq8(ev, rule, window_ms=LENS_WINDOW_MS):
+    """Cascade id + depth per event, using SEQ8's OWN builder.
+
+    This DELEGATES to `seq8_views.build_cascades` rather than reimplementing it.
+    Two earlier drafts of this function guessed the semantics and both
+    degenerated -- one gave max_depth=1 for every arming, the other pooled the
+    whole lattice into 23 chains of mean depth 1,733. The real rule has three
+    properties that are not obvious from the name:
+
+      * cascades are built per (asset, EVENT CLASS), not over a pooled lattice;
+      * every admitted rung must be a NEW TIMEFRAME -- a cascade is a ladder
+        across timeframes, so a re-firing on a TF already in the chain does not
+        extend it;
+      * chaining is greedy and NON-OVERLAPPING: an event consumed by one
+        cascade cannot start another.
+
+    `window_chained` SKIPS counter-direction events; `direction_consistent`
+    TERMINATES on the first one. That single difference is the whole of the
+    P-i/P-iv view-contingency: direction_consistent ends chains exactly where
+    outcomes are contested, which moves the outcome clock.
+
+    Reimplementing a definition the estate already owns is how two lenses stop
+    being comparable to the eight views already on disk. Import it.
+    """
+    import seq8_views as S8V
+    out = []
+    for (sym, klass), g in ev.groupby(["asset", "event_class"], sort=True):
+        g = g.assign(_tfi=g.tf.map(S8V.TFI)).sort_values(
+            ["bar_close_ms", "_tfi", "dir"], kind="mergesort").reset_index(drop=True)
+        evs = g.to_dict("records")
+        chains = S8V.build_cascades(evs, window_ms, rule)
+        for ci, (members, _ended) in enumerate(chains):
+            for depth, m in enumerate(members, start=1):
+                out.append({"asset": sym, "event_class": klass,
+                            "ts": int(evs[m]["ts"]), "tf": evs[m]["tf"],
+                            "chain_id": f"{sym}|{klass}|{ci}", "depth": depth,
+                            "chain_len": len(members)})
+    return pd.DataFrame(out)
+
+
+# ===========================================================================
+# CEN-3 -- OUTCOMES (ruler R-1), dual-lens (I6), held-in-time
+# ===========================================================================
+def stage_cen3(assets: list[str], era: str = "evidence") -> dict:
+    """Terminal return anchored at the ARMING and at each TRIGGER, both lenses.
+
+    R-1 ruler throughout: signed terminal return, ATR-normalised at the anchor.
+    MFE, MAE, the MFE/|MAE| quality ratio and the toll line print beside it --
+    never in place of it.
+
+    The toll line is the contract's global 10 bps round trip. Printed in ATR
+    units per asset, because an excursion measured in ATR cannot be compared to
+    a cost measured in bps without the conversion, and a table that omits it
+    invites reading a 0.05-ATR edge as real when the toll eats it.
+    """
+    log(f"CEN-3 -- outcomes [{era}]  ruler: signed terminal return / ATR (R-1)")
+    led = pd.read_parquet(OUT / "cen2" / "cen2_ledger.parquet")
+    log(f"    armings from CEN-2 ledger: {len(led):,}")
+
+    # ---- toll line, per asset, in ATR units (I8 'toll beside every excursion')
+    toll = {}
+    for sym in assets:
+        d4 = MC2.frame(sym, "4h", era)
+        px = d4["close"].to_numpy(float); av = d4["atr"].to_numpy(float)
+        ok = np.isfinite(px) & np.isfinite(av) & (av > 0)
+        toll[sym] = float(np.median((TOLL_BPS_ROUND_TRIP / 10000.0) * px[ok] / av[ok]))
+    log(f"    toll line ({TOLL_BPS_ROUND_TRIP:.0f} bps round trip) in ATR units:")
+    for s, v in toll.items():
+        log(f"      {s:9} {v:.4f} ATR")
+    led["toll_atr"] = led["asset"].map(toll)
+
+    # ---- I6: both lenses, always.
+    #
+    # Chains are built over the FULL lattice-A event stream (9_89, 9_200,
+    # 89_200 across every timeframe), not over the 4h 9/89 armings alone.
+    # That distinction is not cosmetic: consecutive 9/89 crosses on one
+    # timeframe STRICTLY ALTERNATE direction, so a direction-change rule breaks
+    # every chain at depth 1 and `direction_consistent` degenerates into a
+    # constant. An earlier draft did exactly that and printed max_depth=1 for
+    # all 848 armings -- a lens that cannot vary is not a lens, and I6's
+    # "the other lens ALWAYS printed" would have been satisfied in letter only.
+    log("    I6 dual-lens: cascades via seq8_views.build_cascades (the estate's own rule)")
+    ev = pd.read_parquet(OUT / "cen1" / "cen1_events.parquet",
+                         columns=["asset", "tf", "event_class", "dir", "ts"])
+    ev = ev[ev.event_class.isin(LATTICE_A)].copy()
+    ev["bar_close_ms"] = ev["ts"] + ev["tf"].map(TF_MS)
+    log(f"      lattice-A stream: {len(ev):,} events, {ev.tf.nunique()} timeframes, "
+        f"{ev.event_class.nunique()} classes")
+    for rule in ("window_chained", "direction_consistent"):
+        ch = assign_chains_seq8(ev, rule)
+        # Armings are 4h 9_89 events. The key MUST include the timeframe:
+        # (asset, ts) alone is not unique because a 4h and a 12h bar can share
+        # an open_time (00:00), which silently turns the lookup into a Series.
+        k = ch[(ch.event_class == "9_89") & (ch.tf == "4h")]
+        dmap = dict(zip(zip(k.asset, k.ts), k.depth))
+        lmap = dict(zip(zip(k.asset, k.ts), k.chain_len))
+        pairs = list(zip(led.asset, led.arming_ts))
+        led[f"depth_{rule}"] = [int(dmap.get(p, 0)) for p in pairs]
+        led[f"chainlen_{rule}"] = [int(lmap.get(p, 0)) for p in pairs]
+        d = led[f"depth_{rule}"]
+        log(f"      {rule:22} cascades={ch.chain_id.nunique():6d} "
+            f"max_depth={int(ch.depth.max())} mean_len={ch.chain_len.mean():.2f} "
+            f"| arming depth: max={int(d.max())} mean={d.mean():.2f} "
+            f"unmatched={int((d == 0).sum())}")
+
+    # ---- trigger-anchored outcomes (arming-anchored already on the ledger)
+    log("    trigger-anchored terminal returns (R-1)")
+    trig_rows = []
+    for sym in assets:
+        d4 = MC2.frame(sym, "4h", era)
+        o4 = d4["open_time"].to_numpy(np.int64)
+        sub = led[(led.asset == sym) & led.has_trigger]
+        for d in ("up", "down"):
+            s2 = sub[sub.dir == d]
+            if s2.empty:
+                continue
+            t_ts = (s2.arming_ts.to_numpy(np.int64)
+                    + (s2.trigger_lag_bars.to_numpy(float) * TF_MS["4h"]).astype(np.int64))
+            idx = np.searchsorted(o4, t_ts)
+            idx = np.clip(idx, 0, len(o4) - 1)
+            ob = outcome_block(d4, idx, d == "up", "4h")
+            rec = {"asset": sym, "dir": d, "arming_ts": s2.arming_ts.to_numpy(),
+                   "trigger_class": s2.trigger_class.to_numpy()}
+            for h, blk in ob.items():
+                rec[f"trig_term_{h}"] = blk["terminal"]
+                rec[f"trig_mfe_{h}"] = blk["mfe"]
+                rec[f"trig_mae_{h}"] = blk["mae"]
+            trig_rows.append(pd.DataFrame(rec))
+    trig = pd.concat(trig_rows, ignore_index=True) if trig_rows else pd.DataFrame()
+
+    # ---- held-in-time split (I8)
+    mid = int(led.arming_ts.median())
+    led["time_half"] = np.where(led.arming_ts <= mid, "early", "late")
+    log(f"    held-in-time split at {iso(mid)}: "
+        f"early={int((led.time_half=='early').sum())} late={int((led.time_half=='late').sum())}")
+
+    # ---- the outcome panel: per asset x direction x half, both lenses printed
+    def panel(df, by):
+        rows = []
+        for keys, g in df.groupby(by, sort=True):
+            keys = keys if isinstance(keys, tuple) else (keys,)
+            r = dict(zip(by, keys))
+            r["n"] = int(len(g))
+            for h in HORIZONS_MS:
+                t = g[f"term_{h}"].dropna()
+                mf = g[f"mfe_{h}"].dropna()
+                ma = g[f"mae_{h}"].dropna()
+                r[f"median_term_{h}"] = round(float(t.median()), 6) if len(t) else None
+                r[f"median_mfe_{h}"] = round(float(mf.median()), 6) if len(mf) else None
+                r[f"median_mae_{h}"] = round(float(ma.median()), 6) if len(ma) else None
+                r[f"quality_{h}"] = (round(float(mf.median() / ma.median()), 4)
+                                     if len(mf) and len(ma) and ma.median() > 0 else None)
+            r["toll_atr"] = round(float(g["toll_atr"].median()), 4)
+            rows.append(r)
+        return pd.DataFrame(rows)
+
+    by_asset = panel(led, ["asset", "dir"])
+    by_half = panel(led, ["time_half"])
+    by_depth_wc = panel(led.assign(depth_bucket=np.minimum(led.depth_window_chained, 4)),
+                        ["depth_bucket"])
+    by_depth_dc = panel(led.assign(depth_bucket=np.minimum(led.depth_direction_consistent, 4)),
+                        ["depth_bucket"])
+
+    log("    OUTCOME PANEL by asset x direction (terminal H100, ATR; toll beside):")
+    for r in by_asset.itertuples(index=False):
+        log(f"      {r.asset:9} {r.dir:5} n={r.n:4d} term={r.median_term_H100:+.4f} "
+            f"mfe={r.median_mfe_H100:.3f} mae={r.median_mae_H100:.3f} "
+            f"Q={r.quality_H100} toll={r.toll_atr:.3f}")
+    log("    DUAL-LENS depth panel (I6 -- both always printed):")
+    log("      window_chained (PRIMARY for entry claims):")
+    for r in by_depth_wc.itertuples(index=False):
+        log(f"        depth{r.depth_bucket} n={r.n:4d} term_H100={r.median_term_H100:+.4f}")
+    log("      direction_consistent (printed, not primary here):")
+    for r in by_depth_dc.itertuples(index=False):
+        log(f"        depth{r.depth_bucket} n={r.n:4d} term_H100={r.median_term_H100:+.4f}")
+
+    # ---- clarification (1): fate-stratified view WITH the caveat in the header
+    CAVEAT = ("MECHANICAL SEPARATION -- an ABORTED window is a regime flip INSIDE "
+              "the horizon, so its terminal return is negative BY CONSTRUCTION. "
+              "The sign of this split is NOT a finding.")
+    fate_rows = []
+    for f, g in led.groupby("fate", sort=True):
+        r = {"fate": f, "n": int(len(g)), "_caveat": CAVEAT}
+        for h in HORIZONS_MS:
+            t = g[f"term_{h}"].dropna()
+            r[f"median_term_{h}"] = round(float(t.median()), 6) if len(t) else None
+            r[f"p25_term_{h}"] = round(float(t.quantile(.25)), 6) if len(t) else None
+            r[f"p75_term_{h}"] = round(float(t.quantile(.75)), 6) if len(t) else None
+        r["median_width_bars"] = round(float(g.window_width_bars.median()), 2)
+        fate_rows.append(r)
+    by_fate = pd.DataFrame(fate_rows)
+    log(f"    FATE-STRATIFIED VIEW [{CAVEAT}]")
+    for r in by_fate.itertuples(index=False):
+        log(f"      {r.fate:10} n={r.n:4d} term_H100={r.median_term_H100:+.4f} "
+            f"[p25 {r.p25_term_H100:+.3f}, p75 {r.p75_term_H100:+.3f}] "
+            f"width={r.median_width_bars:.0f}")
+
+    # ---- P-REL-1, scored here (text before result, F-8)
+    log("    P-REL-1 [60%] (entry lens = 24h|window_chained):")
+    log("      'windows with an in-window 12_25 trigger -> higher trigger-anchored")
+    log("       terminal return than A-only windows.'")
+    rel = None
+    if not trig.empty:
+        j = trig.merge(led[["asset", "arming_ts", "trigger_class"]].drop_duplicates(),
+                       on=["asset", "arming_ts"], how="left", suffixes=("", "_led"))
+        mask = (j["trigger_class"] == "12_25").to_numpy(bool)
+        vals = j["trig_term_H100"].to_numpy(float)
+        clus = j["asset"].to_numpy()
+        if mask.sum() >= 8 and (~mask).sum() >= 8:
+            rel_ci = cluster_ci(vals, clus, mask)
+            verdict = ("SUPPORTED" if (rel_ci["excludes_zero"] and (rel_ci["point"] or 0) > 0)
+                       else "NOT SUPPORTED")
+            log(f"      12_25-triggered n={int(mask.sum())} vs other n={int((~mask).sum())}")
+            log(f"      cluster CI on the difference: [{rel_ci['lo']},{rel_ci['hi']}] "
+                f"{'EXCL-0' if rel_ci['excludes_zero'] else 'straddles 0'}")
+            log(f"      VERDICT: {verdict}")
+            rel = {"registration": ("windows with an in-window 12_25 trigger -> higher "
+                                   "trigger-anchored terminal return than A-only windows"),
+                   "prior": 0.60, "lens": "24h|window_chained",
+                   "n_12_25": int(mask.sum()), "n_other": int((~mask).sum()),
+                   "cluster_ci": rel_ci, "verdict": verdict,
+                   "criterion": "R-2 asset-cluster 90% CI excluding zero"}
+        else:
+            log("      INSUFFICIENT SAMPLE -- not scored")
+            rel = {"verdict": "NOT SCORED (insufficient sample)", "prior": 0.60}
+
+    return {"ledger": led, "trigger_outcomes": trig, "by_asset": by_asset,
+            "by_half": by_half, "by_depth_window_chained": by_depth_wc,
+            "by_depth_direction_consistent": by_depth_dc, "by_fate": by_fate,
+            "toll_atr": toll, "fate_caveat": CAVEAT, "p_rel_1": rel}
+
+
+# ===========================================================================
 # MANIFEST (I12 -- merge, never clobber)
 # ===========================================================================
 def load_manifest(path: Path, scoped: bool) -> dict:
@@ -1132,6 +1370,42 @@ def main(argv=None) -> int:
                 "toll_bps_round_trip": TOLL_BPS_ROUND_TRIP}
             man["registrations"] = man.get("registrations", {})
             man["registrations"]["P-ARM-1"] = c2["p_arm_1"]
+
+    if run("cen3"):
+        c3 = stage_cen3(PANEL, "evidence")
+        sub = OUT / "cen3"; sub.mkdir(parents=True, exist_ok=True)
+        for name, df, keys in [
+                ("cen3_by_asset", c3["by_asset"], ["asset", "dir"]),
+                ("cen3_by_half", c3["by_half"], ["time_half"]),
+                ("cen3_by_depth_window_chained", c3["by_depth_window_chained"], ["depth_bucket"]),
+                ("cen3_by_depth_direction_consistent", c3["by_depth_direction_consistent"], ["depth_bucket"]),
+                ("cen3_by_fate", c3["by_fate"], ["fate"]),
+                ("cen3_trigger_outcomes", c3["trigger_outcomes"], ["asset", "dir", "arming_ts"]),
+                ("cen3_ledger_lensed", c3["ledger"], ["asset", "dir", "arming_ts"])]:
+            if df is None or df.empty:
+                continue
+            d = df.sort_values([k for k in keys if k in df.columns]).reset_index(drop=True)
+            for col in d.columns:
+                if d[col].dtype.kind == "f":
+                    d[col] = d[col].round(R6)
+            pth = sub / f"{name}.parquet"
+            d.to_parquet(pth, index=False)
+            man["artifacts"][name] = {
+                "path": str(pth), "rows": int(len(d)), "bytes": pth.stat().st_size,
+                "sha256": _sha(pth), "class": "EVIDENCE -- exploration-classic"}
+            log(f"    wrote {name}.parquet rows={len(d):,} "
+                f"sha={man['artifacts'][name]['sha256'][:12]}")
+        man["stages"]["CEN-3"] = {
+            "era": "evidence", "ruler": "R-1 signed terminal return / ATR at anchor",
+            "horizons": {k: v for k, v in HORIZONS_MS.items()},
+            "toll_bps_round_trip": TOLL_BPS_ROUND_TRIP,
+            "toll_atr_by_asset": c3["toll_atr"],
+            "lenses_printed": ["window_chained", "direction_consistent"],
+            "entry_lens_primary": "24h|window_chained (I6)",
+            "fate_caveat": c3["fate_caveat"]}
+        man["registrations"] = man.get("registrations", {})
+        if c3.get("p_rel_1"):
+            man["registrations"]["P-REL-1"] = c3["p_rel_1"]
 
     man["elapsed_s"] = round(time.time() - t0, 1)
     mp.write_text(json.dumps(man, indent=2, default=str), encoding="utf-8")
