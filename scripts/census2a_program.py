@@ -257,7 +257,7 @@ def selection_guard(candidates: list, q: float = FDR_Q, n_perm: int = 2000,
 
 
 def cluster_ci(values: np.ndarray, clusters: np.ndarray, mask: np.ndarray | None = None,
-               n_boot: int = 4000, seed: int = SEED) -> dict:
+               n_boot: int = 4000, seed: int = SEED, stat: str = "median") -> dict:
     """R-2: asset-cluster bootstrap CI. The unit of replication is the ASSET.
 
     With mask -> CI on the median difference between the two groups.
@@ -267,6 +267,12 @@ def cluster_ci(values: np.ndarray, clusters: np.ndarray, mask: np.ndarray | None
     observations; they are not, and a five-asset panel claim asserts
     replication across assets, not across rows.
     """
+    # stat="median" for returns; stat="mean" for a PROPORTION. A median
+    # difference on a 0/1 indicator is identically 0 (the median of a binary
+    # vector is 0 or 1), so a proportion delta scored on medians produces a
+    # degenerate CI of [0,0] and reads as "straddles zero" no matter what the
+    # data says. P-iii-b is a proportion delta and must use the mean.
+    agg = np.mean if stat == "mean" else np.median
     values = np.asarray(values, float)
     clusters = np.asarray(clusters)
     uniq = np.unique(clusters)
@@ -281,23 +287,23 @@ def cluster_ci(values: np.ndarray, clusters: np.ndarray, mask: np.ndarray | None
             v = np.concatenate([values[clusters == c] for c in pick])
             v = v[np.isfinite(v)]
             if len(v) >= 3:
-                stats.append(np.median(v))
+                stats.append(agg(v))
         else:
             a = np.concatenate([values[(clusters == c) & mask] for c in pick])
             b = np.concatenate([values[(clusters == c) & ~mask] for c in pick])
             a = a[np.isfinite(a)]; b = b[np.isfinite(b)]
             if len(a) >= 3 and len(b) >= 3:
-                stats.append(np.median(a) - np.median(b))
+                stats.append(agg(a) - agg(b))
     if len(stats) < n_boot // 4:
         return {"point": None, "lo": None, "hi": None, "excludes_zero": False,
                 "n_clusters": int(len(uniq)), "reason": "degenerate draws"}
     stats = np.asarray(stats)
     lo, hi = np.percentile(stats, [5, 95])
     if mask is None:
-        pt = float(np.median(values[np.isfinite(values)]))
+        pt = float(agg(values[np.isfinite(values)]))
     else:
         a = values[mask]; b = values[~mask]
-        pt = float(np.median(a[np.isfinite(a)]) - np.median(b[np.isfinite(b)]))
+        pt = float(agg(a[np.isfinite(a)]) - agg(b[np.isfinite(b)]))
     return {"point": round(pt, 6), "lo": round(float(lo), 6), "hi": round(float(hi), 6),
             "excludes_zero": bool(lo > 0 or hi < 0), "n_clusters": int(len(uniq))}
 
@@ -1882,6 +1888,260 @@ def stage_cen6(assets: list[str], era: str = "evidence") -> dict:
 
 
 # ===========================================================================
+# CEN-4 -- CHOP-STATE  (Amendment A3: A3-CHURN, A3-DECILE)
+# ===========================================================================
+CHURN_WINDOW_MS = 24 * 3_600_000          # A3-CHURN: trailing 24 FIXED HOURS
+CHURN_MIN_HISTORY_MS = 90 * 86_400_000    # A3-CHURN: NaN until >=90 days
+CHURN_PCTL = 0.80                         # A3-CHURN: fires at >= P80, pre-named
+CHOP_THRESHOLD = 3                        # P-CHOP-1's registered composite cut
+
+
+def load_births() -> pd.DataFrame:
+    """The 7,117 WF1 births. Read-only; the estate file is never touched."""
+    rows = []
+    for p in sorted((ROOT / "_reviewer_box" / "wf1").glob("*USDT_*.json")):
+        d = json.loads(p.read_text(encoding="utf-8"))
+        for r in d["rows"]:
+            rows.append({"cell": r["cell"], "tranche_id": r["tranche_id"],
+                         "asset": r["symbol"], "mandate": r["mandate"],
+                         "dir": r["dir"], "ts_open": r["ts_open"],
+                         "ts_ms": int(r["ts_open_epoch"]) * 1000,
+                         "resolved": bool(r.get("resolved")),
+                         "size_r": r.get("size_r"),
+                         "realized_r": r.get("realized_r")})
+    return pd.DataFrame(rows)
+
+
+def trg(win: pd.DataFrame, keep_mask: np.ndarray, col: str) -> float:
+    """Tail-Retention Gauge: the share of the UNFILTERED top-decile profit that
+    survives the rule. A filter that captures losers by deleting the winners'
+    tail has bought nothing, and TRG is what makes that visible."""
+    tot = float(win[col].sum())
+    if tot == 0:
+        return float("nan")
+    return float(win.loc[keep_mask, col].sum() / tot)
+
+
+def stage_cen4(assets: list[str], era: str = "evidence") -> dict:
+    """P-iii-b + the five-component chop composite, counts only (I5).
+
+    A3-DECILE governs the cohorts: PER-ASSET deciles on the SIZE-FREE ruler
+    realized_r/size_r. The incumbent pooled-raw decile prints beside as
+    continuity and is NEVER scored -- because it is substantially a
+    position-size selector (the pooled bottom decile is 97.6% size_r=0.5).
+    """
+    log(f"CEN-4 -- chop-state [{era}]  (A3-CHURN P{int(CHURN_PCTL*100)}, A3-DECILE size-free)")
+    b = load_births()
+    log(f"    births loaded: {len(b):,} ({int(b.resolved.sum()):,} resolved)")
+    b = b[b.resolved & b.realized_r.notna() & b.size_r.notna()].copy()
+    b = b[b.ts_ms < CEIL_MS]                      # I1
+    b["r_norm"] = b.realized_r / b.size_r
+    panel = b[b.asset.isin(assets)].copy()
+    annex_n = int((~b.asset.isin(assets)).sum())
+    log(f"    I1-bounded resolved: {len(b):,}  | panel {len(panel):,}  "
+        f"annex {annex_n} (R-F11: outside every panel count)")
+
+    # ---- A3-DECILE: per-asset deciles on the size-free ruler
+    panel["cohort"] = "MID"
+    for sym, g in panel.groupby("asset", sort=True):
+        k = int(np.floor(0.10 * len(g)))
+        if k < 1:
+            continue
+        s = g.r_norm.sort_values()
+        lo_cut, hi_cut = s.iloc[k - 1], s.iloc[-k]
+        panel.loc[g.index[g.r_norm <= lo_cut], "cohort"] = "L"
+        panel.loc[g.index[g.r_norm >= hi_cut], "cohort"] = "W"
+    # incumbent pooled-RAW decile, for continuity only -- never scored
+    kp = int(np.floor(0.10 * len(panel)))
+    sr = panel.realized_r.sort_values()
+    panel["cohort_incumbent"] = np.where(
+        panel.realized_r <= sr.iloc[kp - 1], "L",
+        np.where(panel.realized_r >= sr.iloc[-kp], "W", "MID"))
+    L = panel[panel.cohort == "L"]; W = panel[panel.cohort == "W"]
+    log(f"    A3-DECILE (scored)   L={len(L)} W={len(W)}")
+    log(f"    incumbent (continuity, NOT scored) "
+        f"L={int((panel.cohort_incumbent=='L').sum())} "
+        f"W={int((panel.cohort_incumbent=='W').sum())}")
+    comp_rows = []
+    for name, col in [("A3-DECILE", "cohort"), ("incumbent-raw", "cohort_incumbent")]:
+        g = panel[panel[col] == "L"]
+        comp_rows.append({"book": name, "cohort": "L", "n": len(g),
+                          "size_r_0.5_share": round(float((g.size_r == 0.5).mean()), 4),
+                          "top_asset": g.asset.value_counts().idxmax(),
+                          "top_asset_share": round(float(g.asset.value_counts(normalize=True).iloc[0]), 4)})
+    comp = pd.DataFrame(comp_rows)
+    for _, r in comp.iterrows():
+        log(f"      composition {r['book']:14} L n={int(r['n']):4d} "
+            f"size_r=0.5 {r['size_r_0.5_share']:.1%} "
+            f"top asset {r['top_asset']} {r['top_asset_share']:.1%}")
+
+    # ---- the five components, as COUNTS, as-of the birth (I7)
+    log("    five components, counts only (I5), as-of the birth (I7):")
+    ev = pd.read_parquet(OUT / "cen1" / "cen1_events.parquet",
+                         columns=["asset", "tf", "event_class", "dir", "ts"])
+    vs = pd.read_parquet(OUT / "cen6" / "cen6_verdict_state.parquet")
+    FAST = ["5m", "15m", "30m"]
+    for c in ("churn", "no_slow", "ribbon", "verdict_open", "concord"):
+        panel[c] = np.nan
+
+    for sym, g in panel.groupby("asset", sort=True):
+        idx = g.index
+        ts = g.ts_ms.to_numpy(np.int64)
+
+        # (1) A3-CHURN: FAST-tier 9_89 crosses, both dirs, trailing 24 FIXED HOURS,
+        #     against the asset's OWN EXPANDING causal distribution, fires at P80.
+        f = ev[(ev.asset == sym) & (ev.tf.isin(FAST)) & (ev.event_class == "9_89")]
+        fts = np.sort(f.ts.to_numpy(np.int64))
+        cnt = (np.searchsorted(fts, ts, "left")
+               - np.searchsorted(fts, ts - CHURN_WINDOW_MS, "left"))
+        t0 = fts[0] if len(fts) else ts.min()
+        order = np.argsort(ts, kind="mergesort")
+        fire = np.full(len(ts), np.nan)
+        hist = []
+        for pos in order:
+            if ts[pos] - t0 >= CHURN_MIN_HISTORY_MS and len(hist) >= 30:
+                fire[pos] = float(cnt[pos] >= np.quantile(hist, CHURN_PCTL))
+            hist.append(cnt[pos])        # expanding, causal: only the past
+        panel.loc[idx, "churn"] = fire
+
+        # (2) no-slow-arrival-yet, CURTAIN-CLEAN: no SLOW-tier (4h/12h) lattice-A
+        #     event in the trailing window AS OF the birth. MC-1's original stamp
+        #     read whole-cascade attributes that had not happened yet at the
+        #     birth; that peek is exactly what P-iii-b's recut exists to remove.
+        sl = ev[(ev.asset == sym) & (ev.tf.isin(["4h", "12h"]))
+                & (ev.event_class.isin(LATTICE_A))]
+        sts = np.sort(sl.ts.to_numpy(np.int64))
+        n_slow = (np.searchsorted(sts, ts, "left")
+                  - np.searchsorted(sts, ts - CHURN_WINDOW_MS, "left"))
+        panel.loc[idx, "no_slow"] = (n_slow == 0).astype(float)
+
+        # (3) ribbon compression flag, c = 0.5 x ATR on the 1h 9/89 spread
+        d1 = MC2.frame(sym, "1h", era)
+        o1 = d1["open_time"].to_numpy(np.int64) + TF_MS["1h"]      # bar CLOSE (I7)
+        k = np.searchsorted(o1, ts, "right") - 1
+        sp = np.abs(d1["e9"].to_numpy() - d1["e89"].to_numpy())
+        av = d1["atr"].to_numpy()
+        ok = (k >= 0)
+        rib = np.full(len(ts), np.nan)
+        kk = np.clip(k, 0, len(sp) - 1)
+        good = ok & np.isfinite(sp[kk]) & np.isfinite(av[kk]) & (av[kk] > 0)
+        rib[good] = (sp[kk][good] <= RIBBON_C * av[kk][good]).astype(float)
+        panel.loc[idx, "ribbon"] = rib
+
+        # (4) verdict-open, from CEN-6 (the dependency A2 discharged)
+        v = vs[(vs.asset == sym) & (vs.member == "4h")].sort_values("ts")
+        if len(v):
+            vt = v.ts.to_numpy(np.int64); vstate = v.verdict_state.to_numpy()
+            kv = np.searchsorted(vt, ts, "right") - 1
+            vv = np.where(kv >= 0, vstate[np.clip(kv, 0, len(vstate) - 1)], "NONE")
+            # READING, flagged: "verdict-open" = the range verdict is still
+            # OPEN, i.e. the boundary is holding and no accepted break is in
+            # force -> state == RESPECTED (20.2% of 4h bars). A first draft
+            # read it as state == NONE ("no verdict has ever occurred"), which
+            # fires on 0.75% of bars and on 1 of 6,897 births -- a component
+            # that never fires is not a component. RESPECTED is also the state
+            # LEDGER.md:315 P-PD3 CONFIRMED points at ("Z2's deficit
+            # concentrates in-range"), which is what CEN-4 wants from it.
+            panel.loc[idx, "verdict_open"] = (vv == "RESPECTED").astype(float)
+
+        # (5) lens-concordance: do the two chaining rules agree on the open
+        #     chain in the trailing 24h? Counted, no threshold (pinned metric).
+        a4 = ev[(ev.asset == sym) & (ev.tf == "4h") & (ev.event_class.isin(LATTICE_A))]
+        ats = np.sort(a4.ts.to_numpy(np.int64))
+        n24 = (np.searchsorted(ats, ts, "left")
+               - np.searchsorted(ats, ts - CHURN_WINDOW_MS, "left"))
+        panel.loc[idx, "concord"] = (n24 <= 1).astype(float)
+
+    comps = ["churn", "no_slow", "ribbon", "verdict_open", "concord"]
+    panel["composite"] = panel[comps].sum(axis=1, skipna=True)
+    panel["n_components_known"] = panel[comps].notna().sum(axis=1)
+    for c in comps:
+        f = panel[c]
+        log(f"      {c:13} fires {np.nansum(f):6.0f}/{int(f.notna().sum()):5d} known "
+            f"({np.nanmean(f):.1%})  NaN {int(f.isna().sum())}")
+    log(f"      composite distribution: "
+        f"{panel.composite.value_counts().sort_index().to_dict()}")
+
+    # ---- P-iii-b (text before result, F-8)
+    log("    P-iii-b [65%] (entry lens):")
+    log("      'curtain-clean grind-at-birth over-represented in loser births")
+    log("       (proportion delta, cluster CI), both directions.'")
+    grind = (panel["no_slow"] == 1) & (panel["churn"] == 1)
+    panel["grind"] = grind.astype(float)
+    pL = float(grind[panel.cohort == "L"].mean())
+    pW = float(grind[panel.cohort == "W"].mean())
+    vals = grind.astype(float).to_numpy()
+    sel = panel.cohort.isin(["L", "W"]).to_numpy()
+    ci_iiib = cluster_ci(vals[sel], panel.asset.to_numpy()[sel],
+                         (panel.cohort.to_numpy()[sel] == "L"), stat="mean")
+    # The registration says "both directions". That clause is part of the
+    # hypothesis, not decoration, so the verdict must enforce it -- a pooled CI
+    # that excludes zero while one direction straddles has not met the text.
+    pooled_ok = bool(ci_iiib["excludes_zero"] and (ci_iiib["point"] or 0) > 0)
+    v_iiib = "PENDING"
+    log(f"      grind prevalence  L={pL:.4f}  W={pW:.4f}  delta={pL-pW:+.4f}")
+    log(f"      cluster CI on the proportion delta: [{ci_iiib['lo']},{ci_iiib['hi']}] "
+        f"{'EXCL-0' if ci_iiib['excludes_zero'] else 'straddles 0'}")
+    per_dir = {}
+    for d in ("long", "short"):
+        s = (panel.dir == d) & sel
+        if s.sum() > 40:
+            per_dir[d] = cluster_ci(vals[s.to_numpy()], panel.asset.to_numpy()[s.to_numpy()],
+                                    (panel.cohort.to_numpy()[s.to_numpy()] == "L"),
+                                    stat="mean")
+            log(f"      dir {d:6} delta={per_dir[d]['point']} "
+                f"CI[{per_dir[d]['lo']},{per_dir[d]['hi']}] "
+                f"{'EXCL-0' if per_dir[d]['excludes_zero'] else 'straddles 0'}")
+    dirs_ok = bool(per_dir) and all(
+        v["excludes_zero"] and (v["point"] or 0) > 0 for v in per_dir.values())
+    v_iiib = ("SUPPORTED" if (pooled_ok and dirs_ok)
+              else "NOT SUPPORTED -- pooled effect measured, but the registration's "
+                   "'both directions' clause is not met" if pooled_ok
+              else "NOT SUPPORTED")
+    if pooled_ok and not dirs_ok:
+        failing = {d: v for d, v in per_dir.items()
+                   if not (v["excludes_zero"] and (v["point"] or 0) > 0)}
+        for d, v in failing.items():
+            margin = min(abs(v["lo"] or 0), abs(v["hi"] or 0))
+            log(f"      !! '{d}' fails the both-directions clause: CI[{v['lo']},{v['hi']}] "
+                f"-- it straddles zero by {margin:.4f}")
+        log("         The pooled effect IS measured (CI excludes zero). The verdict is "
+            "NOT SUPPORTED because the registered text requires both directions, and "
+            "that margin is reported rather than rounded either way.")
+    log(f"      VERDICT: {v_iiib}")
+
+    # ---- P-CHOP-1 (text before result, F-8)
+    log("    P-CHOP-1 [65%] (entry lens):")
+    log(f"      'chop-composite >={CHOP_THRESHOLD} captures >=40% of loser-decile")
+    log("       births at TRG >=85%.'")
+    flag = (panel.composite >= CHOP_THRESHOLD)
+    cap = float(flag[panel.cohort == "L"].mean())
+    t = trg(W, (~flag[panel.cohort == "W"]).to_numpy(), "r_norm")
+    v_chop = "SUPPORTED" if (cap >= 0.40 and t >= 0.85) else "NOT SUPPORTED"
+    log(f"      loser-decile capture = {cap:.4f} (needs >=0.40)")
+    log(f"      TRG (winner-decile profit retained) = {t:.4f} (needs >=0.85)")
+    log(f"      VERDICT: {v_chop}")
+    log(f"      the two print together by construction -- a filter that captures "
+        f"losers by deleting the winners' tail has bought nothing")
+
+    return {"book": panel, "composition": comp,
+            "p_iii_b": {"registration": ("curtain-clean grind-at-birth over-represented in "
+                                         "loser births (proportion delta, cluster CI), both "
+                                         "directions"),
+                        "prior": 0.65, "prevalence_L": round(pL, 6),
+                        "prevalence_W": round(pW, 6), "delta": round(pL - pW, 6),
+                        "cluster_ci": ci_iiib, "per_direction": per_dir,
+                        "decile_rule": "A3-DECILE size-free per-asset", "verdict": v_iiib},
+            "p_chop_1": {"registration": (f"chop-composite >={CHOP_THRESHOLD} captures >=40% of "
+                                          "loser-decile births at TRG >=85%"),
+                         "prior": 0.65, "capture": round(cap, 6), "trg": round(t, 6),
+                         "threshold_capture": 0.40, "threshold_trg": 0.85,
+                         "components": comps, "verdict": v_chop},
+            "churn_rule": ("A3-CHURN: FAST 9_89 count, trailing 24 fixed hours, vs the asset's "
+                           "own EXPANDING causal distribution, fires at P80, NaN before 90 days")}
+
+
+# ===========================================================================
 # MANIFEST (I12 -- merge, never clobber)
 # ===========================================================================
 def load_manifest(path: Path, scoped: bool) -> dict:
@@ -2089,6 +2349,28 @@ def main(argv=None) -> int:
                     "LEDGER.md:311 P-PD1/P-PD2/P-PD4 FALSIFIED -- engine/s2.py D1/D3/D4 are "
                     "admissible as a LOCATION object but not as a promoted signal; CEN-6 uses a "
                     "prior-week envelope instead and promotes nothing")}
+
+    if run("cen4"):
+        c4 = stage_cen4(PANEL, "evidence")
+        sub = OUT / "cen4"; sub.mkdir(parents=True, exist_ok=True)
+        for name, df, keys in [("cen4_book", c4["book"], ["asset", "ts_ms"]),
+                               ("cen4_composition", c4["composition"], ["book", "cohort"])]:
+            if df is None or df.empty: continue
+            d = df.sort_values([k for k in keys if k in df.columns]).reset_index(drop=True)
+            for col in d.columns:
+                if d[col].dtype.kind == "f": d[col] = d[col].round(R6)
+            pth = sub / f"{name}.parquet"; d.to_parquet(pth, index=False)
+            man["artifacts"][name] = {"path": str(pth), "rows": int(len(d)),
+                                      "bytes": pth.stat().st_size, "sha256": _sha(pth),
+                                      "class": "EVIDENCE -- exploration-classic"}
+            log(f"    wrote {name}.parquet rows={len(d):,} sha={man['artifacts'][name]['sha256'][:12]}")
+        man["stages"]["CEN-4"] = {"era": "evidence", "churn_rule": c4["churn_rule"],
+                                  "decile_rule": "A3-DECILE size-free per-asset",
+                                  "chop_threshold": CHOP_THRESHOLD,
+                                  "components": c4["p_chop_1"]["components"]}
+        man.setdefault("registrations", {})
+        man["registrations"]["P-iii-b"] = c4["p_iii_b"]
+        man["registrations"]["P-CHOP-1"] = c4["p_chop_1"]
 
     man["elapsed_s"] = round(time.time() - t0, 1)
     mp.write_text(json.dumps(man, indent=2, default=str), encoding="utf-8")
