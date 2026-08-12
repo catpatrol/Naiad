@@ -230,3 +230,23 @@ PENDING:
 NEXT: Enable the Operational log, then rule on items 2-4. Owner: operator, then ATHENA.
 METRICS: operator actions this session = 0 · files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_ATHENA — 2026-08-12 ===
+NOW: HEPHAESTUS ran a READ-ONLY safety audit after an accidental OneDrive "Free up space" on the repo tree with the quota showing full. Nothing was written by the audit and no dehydrated file was opened — attributes only, because opening a placeholder downloads it. 164 of 839 files are now cloud-only placeholders holding 299.4 MB, but almost all of it is protected: the true exposure is 287.2 MB across 52 untracked files, and 98.7% of that is SIX files. No rehydration, pinning or OneDrive action was taken; that decision is now the operator's, informed by these numbers.
+LAST EVENT: 2026-08-12 — OneDrive "Free up space" dehydrated 164 repo files; audit filed as exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-12_ONEDRIVE-CENSUS.md.
+FACTS:
+- Local HEAD == origin/v12-v1-census at 7552d652eb…508a00924, tree clean but for .gitignore, so all 112 dehydrated TRACKED files (12.2 MB) are recoverable from GitHub whatever OneDrive does [verified]
+- seq8 was NOT touched: 1783.5 MB / 15 files, ZERO dehydrated, and D:/naiad/research_outputs/seq8 matches it file-for-file at identical total size. mc1 also untouched, 155.3 MB / 30 files, zero dehydrated. D:/naiad is not a OneDrive path and is 100% intact, 44 files / 4.46 GB [verified]
+- F-OD-1 THE EXPOSURE: 52 files, 287.2 MB, are dehydrated AND untracked AND absent from the D: mirror — OneDrive cloud is their only copy. 283.6 MB of it is six files: census_outcomes.jsonl 110.92, v12_v3_anchor_packet_20260713.zip 43.43, census_ladder.jsonl 43.23, census_termini.jsonl 35.94, census1b_termini_enriched.jsonl 32.08, continuation.jsonl 17.97. The other 46 files are 3.6 MB of _reviewer_box mirrors and .pytest_cache [verified]
+- F-OD-3: class B is ZERO — nothing dehydrated has a D: mirror copy. The mirror only ever covered seq8 and _archive, so "Free up space" did not create the single-copy gap, it exposed one that always existed [verified]
+- F-OD-2: that the cloud actually holds those bytes is REASONED, not confirmed — OneDrive only dehydrates a file whose upload completed, so a placeholder implies a full quota did not strand it, but the only direct proof is to open a file, which downloads it, which the instruction forbade [unconfirmed-live]
+- Governance surface and ALL uncommitted work survived on disk: LEDGER.md, CONVENTIONS.md, LEDGER_ATHENA.md, both Cascade Atlas HTMLs, HANDOFF_ATHENA, PRIMER_HERMES, the panel parquet, scripts/mc1_program.py, mc1_report.py and research_outputs/wf1/ are all hydrated. C: 35.6 GB free, D: 3721.2 GB free [verified]
+PENDING:
+1. Operator: rule on rescuing the six class-C files (283.6 MB) to D:/naiad — recommended FIRST because copying forces the download and so doubles as the test of F-OD-2. Costs <1% of C: headroom
+2. Operator/ATHENA: "always keep on this device" on research_outputs/ is the tempting fix and is the WRONG one while the quota is full — it increases the pressure that caused this. Flagged against, not applied
+3. ATHENA: whether the census substrates should be tracked is the same open decision already carried for research_outputs/wf1/ and mc1/ — one directory wider, and 208 MB of .jsonl would need LFS
+4. ATHENA: moving research_outputs/ out of the OneDrive tree is the clean long-term fix with the largest blast radius — script paths, backup estate and mirror logic all need review before it is attempted
+5. Operator: .pytest_cache/ sits inside the sync selection and is spending OneDrive quota on transient build artifacts
+NEXT: Rule on item 1; the rescue is the only option that removes risk rather than relocating it. Owner: operator, then HEPHAESTUS to execute.
+METRICS: operator actions this session = 0 · files re-ingested = 0
+=== END STATUS ===

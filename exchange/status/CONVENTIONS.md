@@ -780,6 +780,25 @@ auto-push).
 
 
 
+**Backup destination — CHANGED 2026-08-12.** `--estate` and `--workflow` write to
+**`D:/naiad-backups`**, a physical external LaCie disk, which is also the default compiled into
+`backup_estate.py` (`BACKUP_DEST_DEFAULT`, overridable by `$NAIAD_BACKUP_DEST`, and by an explicit
+`--dest` above both). It was `G:/My Drive/naiad-backups` — the Google Drive virtual mount — until
+the operator moved the folder on 2026-08-12. `--phase` is SEPARATE and unchanged:
+`D:/Naiad/research_outputs/_archive`. **This section previously named no destination at all**,
+which is why the move could happen with nothing in the repo contradicting it; the destination is
+recorded here now so a lane can read it without querying Task Scheduler.
+
+**Two things that are true and uncomfortable, both measured 2026-08-12, neither yet fixed:** the
+two weekly scheduled tasks still pass `--dest "G:\My Drive\naiad-backups"` **explicitly**, and an
+explicit `--dest` outranks the new default — so until those task arguments are edited the Sunday
+runs still target the old, now-empty path. And `D:/naiad-backups` **is** registered with Google
+Drive as a mirrored folder (verified by decoding the DriveFS `SyncTargets` registry value, not
+inferred), but its uploads are erroring — `CreateHardLinkW failed`, 50 occurrences naming these
+archives, because exFAT has no hard links — with no upload-completion record in Drive's logs.
+**Registered is not uploaded.** Treat the off-site copy as UNCONFIRMED until the operator checks
+Drive's web UI under *Computers*.
+
 **Data estate:** ‘C:/Users/luisf/AppData/Local/naiad/data_cache’ via engine/data.py
 cache_dir() — NOT in the repo, never under OneDrive. **Backup verification standard, binding on
 every backup job:** bidirectional per member — bytes re-read OUT of the archive hash equal to a

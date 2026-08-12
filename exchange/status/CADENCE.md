@@ -59,6 +59,24 @@ workflow backup and the F4 finding.
 > predated the 08-03/08-04 files, so those files had no off-machine copy until the hand run on
 > 2026-08-04. The gap was real; the cause given for it was not. The hand run was the right call.
 
+> **NOTE 2026-08-12 — the archives moved; these two task definitions did NOT.** The command lines
+> quoted in §2, §3 and in the 2026-08-04 record above are left verbatim because they are still
+> **exactly what Task Scheduler contains** — re-enumerated 2026-08-12, both tasks Ready, both
+> passing `--dest "G:\My Drive\naiad-backups"`. They are a true record of a stale configuration,
+> which is why they are not rewritten.
+>
+> What changed around them: the operator moved the backup folder to `D:\naiad-backups`, and
+> `G:\My Drive\naiad-backups` is now **empty (0 files, verified 2026-08-12)**. `backup_estate.py`
+> gained a default destination of `D:/naiad-backups` the same day — **but an explicit `--dest`
+> still wins, and these tasks pass one.** So the next scheduled fire (2026-08-16 08:00 / 08:30)
+> writes a fresh generation to the OLD path, splitting the estate across two locations.
+> **Editing the two task arguments is an operator decision and is open — see the 2026-08-12
+> build report, open item O-2.**
+>
+> Also correct the §2 guard sentence when those arguments change: the "if `G:` is not mounted"
+> wording becomes "if `D:` is not mounted", and the new `backup_dest_root()` halt covers it.
+> Last run of both tasks: 2026-08-09, **result 1 (failure)** — unexamined, open item O-3.
+
 ## 4 · Hermes scheduled run — NOT ARMED
 
 Ruled at 2×/day (Q-4 A). Still not armed, but **the reason has changed** — and the change is worth

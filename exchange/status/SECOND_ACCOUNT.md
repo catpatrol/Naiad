@@ -30,10 +30,24 @@ intention.
 
 ## What to upload
 
-The newest generations from `G:\My Drive\naiad-backups`:
+The newest generations from `D:\naiad-backups` — the LaCie external disk:
 
 - `naiad_estate_<date>.zip` — the price estate
 - `naiad_workflow_<date>.zip` — the project's thinking
+
+> **CORRECTION 2026-08-12 — the source folder moved.** This section previously read
+> `G:\My Drive\naiad-backups`. The operator moved the folder to `D:\naiad-backups` on
+> 2026-08-12; `G:\My Drive\naiad-backups` still exists but is **empty (0 files, verified
+> this session)**, so following the old instruction would have found nothing to upload.
+> The sentence above is rewritten rather than annotated, per the correction rule at the
+> top of `CONVENTIONS.md`: a reader believes what they read first.
+>
+> **This makes the manual upload MORE important, not less.** `D:` is a physical external
+> disk. It is registered with Google Drive as a mirrored folder, but every upload attempt
+> for these files is currently logging `CreateHardLinkW failed` — `D:` is exFAT, which has
+> no hard links — and no upload-completion record exists in Drive's own logs. Until that is
+> resolved, **the second-account upload is the only copy of the estate that is provably not
+> on this desk.** See the 2026-08-12 build report, open item O-1.
 
 Phase archives in `research_outputs/_archive` are **permanent evidence and are
 never pruned**; if the second account does not hold them, upload those too. Each
