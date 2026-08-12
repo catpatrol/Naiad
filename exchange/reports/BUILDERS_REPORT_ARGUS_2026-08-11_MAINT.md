@@ -23,10 +23,10 @@ rather than silently falling back to the laptop.
 
 **This cycle writes no bulk data, so no `D:` reachability gate applies, and none was run.** Saying
 so explicitly rather than leaving it inferred: the three files this cycle touched are a Python test
-module, a Markdown ledger and this Markdown report. Together they come to **12,7xx bytes of prose
-and code**. Nothing here is data-class, nothing is a capture, render, results JSON, substrate,
-parquet or HTML, and nothing was written to `D:` or needed to be. The rule is adopted and live for
-this lane — it simply had no work to do today.
+module, a Markdown ledger and this Markdown report — exact sizes in §5. Nothing here is data-class,
+nothing is a capture, render, results JSON, substrate, parquet or HTML, and nothing was written to
+`D:` or needed to be. The rule is adopted and live for this lane — it simply had no work to do
+today.
 
 ---
 
@@ -228,11 +228,11 @@ their location named.
 | PATH | EXISTS | TRACKED | COMMITTED | PUSHED | PROTECTED BY | BOX COST |
 |---|---|---|---|---|---|---|
 | `tests/test_analytics.py` | yes | tracked (modified: 48,745 → 53,866 B, +5,121) | `d93bba1` | yes — `origin/v12-v1-census` | GitHub + estate zip | **n/a** — `tests/` is outside the tick set (`LEDGER.md` and `exchange/` only), so it never enters the box |
-| `exchange/status/LEDGER_ARGUS.md` | yes | tracked (appended: 3,894 → 7,665 B, +3,771) | `PUBSHA` | yes — `origin/v12-v1-census` | GitHub + estate zip | 7,665 B — **0.12%** |
-| `exchange/reports/BUILDERS_REPORT_ARGUS_2026-08-11_MAINT.md` | yes | tracked (new) | `PUBSHA` | yes — `origin/v12-v1-census` | GitHub + estate zip | SELFSIZE B — **SELFPCT%** |
+| `exchange/status/LEDGER_ARGUS.md` | yes | tracked (appended: 3,894 → 7,665 B, +3,771) | `45775d2` | yes — `origin/v12-v1-census` | GitHub + estate zip | 7,665 B — **0.12%** |
+| `exchange/reports/BUILDERS_REPORT_ARGUS_2026-08-11_MAINT.md` | yes | tracked (new) | draft in `45775d2`; **this final text in the follow-up publish commit** (see §6 — a document cannot name the commit that carries it) | yes — `origin/v12-v1-census` | GitHub + estate zip | 16,401 B — **0.26%** |
 
-**Nothing here is over the ~1% flag threshold.** The two `exchange/` files together add **PAIRSUM B,
-PAIRPCT% of the box** — the largest single artifact is this document at well under a tenth of the
+**Nothing here is over the ~1% flag threshold.** The two `exchange/` files together add **24,066 B,
+0.38% of the box** — the largest single artifact is this document at well under a tenth of the
 threshold. DOCUMENTS ARE CHEAP, DATA IS NOT: this cycle produced no data.
 
 Files created outside the repo and deliberately **not** committed: the mutation script and the
@@ -244,13 +244,42 @@ pre-mutation backup of `INTERFACE_2026-08-06_C6.md`, both in the session scratch
 
 ## 6. Publish
 
-`scripts/publish_exchange.py` was run after this document was written.
+`scripts/publish_exchange.py` has **no `__main__` block** — it is a library, and its documented
+callers (`scripts/daily_routine.py:1048`, `scripts/backup_estate.py:943`) invoke
+`publish_exchange.publish(ROOT, date)`. Running the file directly is a silent no-op, which is worth
+knowing before anyone reports a publish that never happened. It was driven the documented way, from
+a scratchpad driver; **`publish_exchange.py` itself was not modified.**
 
 ```
-PUBLISH_BLOCK
+publish: committed 45775d2 (7 path(s)) and pushed to origin/v12-v1-census
+
+- committed `45775d2` on `v12-v1-census` and pushed to origin
+- 7 path(s) published, all inside `exchange/`
+- `exchange/` size budget: 1,777,190 B, 27.8% of 6,390,000 B (WARN)
 ```
 
-**Push: PUSHSTATUS**
+**Push: SUCCEEDED.** Verified against the actual remote, not just the local tracking ref —
+`git ls-remote origin v12-v1-census` returns `45775d2a521f1bd9d06e69e1097c3106b3eb2e28`, matching
+local `HEAD`. The earlier commit `d93bba1` (the F-AN-15 fixture) is an ancestor and went up with it.
+
+### ⚠ THE SIZE BUDGET IS AT **WARN**
+
+**1,777,190 B — 27.8% of the 6,390,000 B box.** Thresholds are WARN at ≥ 25%, REFUSE above 40%. The
+publish proceeded and was not blocked, but `exchange/` has crossed the warning line and there is
+about **12 percentage points of headroom left**. This is not caused by this cycle: the two files
+added here are 0.4% of the box between them. It is the standing level of `exchange/`, now 101 files.
+Recorded here so the next lane to add something large sees the number before it does, not after.
+
+**The seven paths published were not all ARGUS's.** `publish_exchange.py` stages all of
+`exchange/**`, so this commit also carried a modified `exchange/DIGEST.md` and four pending files
+from the HERMES and ATHENA lanes that were sitting untracked in the tree. Designed behaviour, listed
+in §3 and again here so the commit is not misread as one lane's work.
+
+**Two publishes, and why.** The commit above was made while §5 and §6 of this document still held
+placeholders, because the commit SHA and the budget line do not exist until the publish runs. This
+final text was carried by a second publish immediately after. That second commit's SHA is
+necessarily absent from the file it commits — the same reason a file never contains its own sha256.
+It is reported to the operator on screen.
 
 ---
 
