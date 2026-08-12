@@ -100,6 +100,21 @@ briefs/panel/consolidated_*.parquet
 # restored phase journals - staging only, never committed (ATHENA 2026-08-04)
 research_outputs/_unarchived/**
 
+# MC-1 / APOLLO ops substrate — display-only fetched klines, per-bar series,
+# registry series and bulk tables. Same class as the SEQ8 bulk below: ops data,
+# regenerable, and large enough to break a push. The build document carries the
+# path+size+sha256 pointers, which are the intended surface.
+research_outputs/mc1/**
+
 # SEQ8 / DIONYSUS bulk outputs — untrackable (files exceed GitHub's 100 MB limit) and the only lane output missing from this list; a wildcard `git add -A` swept 3,567 MB of them into a commit on 2026-08-05 and GitHub rejected the whole branch push
 research_outputs/seq8/**
 research_outputs/seq8_run2/**
+
+# CENSUS-2A / MC-2 substrate — same class as the SEQ8 and MC-1 bulk above.
+# Listed BEFORE the directory can exist: CENSUS-2A bulk is born on D: per I2, so
+# a C: path here is already a residency violation — but the 2026-08-05 incident
+# was untracked-but-unignored bulk, and the rule that would have prevented it
+# costs two lines. The build document's path+size+sha256 pointers are the
+# intended surface.
+research_outputs/census2a/**
+research_outputs/mc2/**
