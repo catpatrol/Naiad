@@ -306,7 +306,23 @@ Nothing rotates unattended. `--execute` is never implied.
 
 ## 9 · Publish
 
-*(filled in immediately after the first publish)*
+```
+publish: WARNING -- exchange/ holds 1,717,591 B, 26.9% of the 6,390,000 B box
+         (warn at 25%, refuse above 40%).
+publish: committed ce16233 (2 path(s)) and pushed to origin/v12-v1-census
+status= PUBLISHED commit= ce16233 pushed= True bytes= 1717591 budget= WARN
+```
+
+**F-REG satisfied:** publish works and 002's D3 guard metered the post-sweep bus at 26.9%.
+
+| commit | contents | pushed |
+|---|---|---|
+| `f3efb0f` | `scripts/rotate_reports.py` (D-1) | not by this commit — carried by the next branch push, per the §11 finding of the 002 report |
+| `ce16233` | `exchange/status/CONVENTIONS.md` (D-3, D-4) + this report | yes, by the guard |
+
+Box cost of the whole contract: **+1,808 B** of `CONVENTIONS` and this report. The bus rose from
+26.6% to 26.9% delivering the machinery that will lower it — the first sweep with anything to move
+is around 2026-08-27.
 
 ---
 
