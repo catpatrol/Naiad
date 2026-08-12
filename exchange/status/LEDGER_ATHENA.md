@@ -188,3 +188,23 @@ PENDING:
 NEXT: Grade the probe, then execute the memory audit (3 moves + 4 merges -> 17). Owner: ATHENA.
 METRICS: operator actions this session = 2 · files re-ingested = 1
 === END STATUS ===
+
+=== STATUS_ATHENA — 2026-08-11 ===
+NOW: ARGUS maintenance cycle commissioned by NOTE_ATHENA_to_ARGUS_2026-08-11_DATA-RESIDENCY closed in one session: F-AN-15 interface byte-identity fixture built and demonstrated failing before being trusted, LEDGER_ARGUS acknowledgement appended, build document filed. Addendum folded into the same document and the same publish: the daily-routine outage was re-diagnosed from artifacts, and Ruling 'append' was installed in CONVENTIONS 3.1. This entry is that ruling's first application — the rule's own installer honours it.
+LAST EVENT: 2026-08-11 — CONVENTIONS 3.1 gained Ruling 'append'; this STATUS entry is the byproduct it mandates.
+FACTS:
+- F-AN-15 added to tests/test_analytics.py: newest exchange/reports/INTERFACE_*.md must be byte-identical to analytics/INTERFACE.md. Both copies currently sha256 70c3f368…f6f93c61e, 48,885 B — no drift [verified]
+- F-AN-15 watched to FAIL on a one-byte mutation at offset 20,000 with file length unchanged, and to SKIP (not pass) with the published copy absent; restore sha-verified. Suite 286 -> 287 passed, 1 skipped [verified]
+- Daily routine did NOT fail four times: 08-09 TRIGGERED-AND-FAILED (HALT F-M3/F-M4, no manifest written), 08-10 NEVER-TRIGGERED (no artifacts; machine away), 08-11 TRIGGERED-THEN-KILLED at 16:36:33 with 0xC000013A STATUS_CONTROL_C_EXIT after MANIFEST_2026-08-11.json was written, 08-12 NOT YET DUE locally [verified]
+- The F-M3/F-M4 repair is EVIDENCED WORKING: 08-09 wrote no manifest, 08-11 wrote 24,164 B. The 08-11 run died from session termination, not from a fixture [verified]
+- StartWhenAvailable is ALREADY true on all three Naiad tasks; there is no HERMES task at all; TaskScheduler/Operational log is DISABLED, which is why this needed artifact forensics [verified]
+- Both weekly backups last returned result 1 on 2026-08-09 and have not run since; next due 2026-08-16. Flagged, NOT diagnosed — outside cycle scope [open]
+PENDING:
+1. Operator: the CONVENTIONS 4.2 manifest exception arrived truncated mid-sentence; 4.2 is UNMODIFIED pending the remaining text
+2. ATHENA: rule on the rotation conflict — INTERFACE_2026-08-06_C6.md leaves APOLLO's reading surface 2026-09-05; ARGUS proposes exchange/status/
+3. ATHENA: diagnose the two failing weekly backups before 2026-08-16
+4. Operator: WakeToRun (currently false) and InteractiveToken fragility — each implication stated in the build document, no setting changed
+5. Operator: enable the TaskScheduler Operational log so the next outage is answerable from the log
+NEXT: Rule on the rotation conflict and supply the truncated 4.2 text. Owner: ATHENA, then operator.
+METRICS: operator actions this session = 0 · files re-ingested = 0
+=== END STATUS ===

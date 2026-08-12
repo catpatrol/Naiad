@@ -229,11 +229,15 @@ their location named.
 |---|---|---|---|---|---|---|
 | `tests/test_analytics.py` | yes | tracked (modified: 48,745 → 53,866 B, +5,121) | `d93bba1` | yes — `origin/v12-v1-census` | GitHub + estate zip | **n/a** — `tests/` is outside the tick set (`LEDGER.md` and `exchange/` only), so it never enters the box |
 | `exchange/status/LEDGER_ARGUS.md` | yes | tracked (appended: 3,894 → 7,665 B, +3,771) | `45775d2` | yes — `origin/v12-v1-census` | GitHub + estate zip | 7,665 B — **0.12%** |
-| `exchange/reports/BUILDERS_REPORT_ARGUS_2026-08-11_MAINT.md` | yes | tracked (new) | draft in `45775d2`; **this final text in the follow-up publish commit** (see §6 — a document cannot name the commit that carries it) | yes — `origin/v12-v1-census` | GitHub + estate zip | 16,401 B — **0.26%** |
+| `exchange/reports/BUILDERS_REPORT_ARGUS_2026-08-11_MAINT.md` | yes | tracked (new, then extended by the addendum) | pre-addendum text in `45775d2` / `39c5f2f`; **this final text in the addendum publish commit** — a document cannot name the commit that carries it, so its SHA is reported on screen | yes — `origin/v12-v1-census` | GitHub + estate zip | 30,800 B — **0.48%** |
+| `exchange/status/CONVENTIONS.md` | yes | tracked (modified: 50,218 → 50,772 B, **+554**; `numstat` 8 insertions / 0 deletions) | addendum publish commit (SHA on screen) | yes — `origin/v12-v1-census` | GitHub + estate zip | 50,772 B — **0.79%** (marginal +554 B, +0.01%) |
+| `exchange/status/LEDGER_ATHENA.md` | yes | tracked (appended: 13,583 → 16,327 B, **+2,744**) | addendum publish commit (SHA on screen) | yes — `origin/v12-v1-census` | GitHub + estate zip | 16,327 B — **0.26%** |
 
-**Nothing here is over the ~1% flag threshold.** The two `exchange/` files together add **24,066 B,
-0.38% of the box** — the largest single artifact is this document at well under a tenth of the
-threshold. DOCUMENTS ARE CHEAP, DATA IS NOT: this cycle produced no data.
+**Nothing here is over the ~1% flag threshold.** The four `exchange/` files occupy **105,564 B,
+1.65% of the box** in total; the largest is `CONVENTIONS.md` at 0.79%, and it was already there —
+this session added only 554 B to it. The whole addendum — ruling, ledger entry and all of §A–§E —
+cost the box **17,697 B, 0.28%**. DOCUMENTS ARE CHEAP, DATA IS NOT: this cycle produced no data,
+and no `D:` gate applied to any of it.
 
 Files created outside the repo and deliberately **not** committed: the mutation script and the
 pre-mutation backup of `INTERFACE_2026-08-06_C6.md`, both in the session scratchpad under
@@ -297,3 +301,230 @@ rule that was never written with it in mind. ATHENA rules on where it should liv
 stays where it is and F-AN-15 watches it.
 
 *ARGUS lane, built by HEPHAESTUS, 2026-08-11.*
+
+---
+---
+
+# ADDENDUM — 2026-08-12 (UTC), folded into this same document and the same publish
+
+**Why this is in the 2026-08-11 document.** The addendum instruction is dated 2026-08-12 and this
+report is dated 2026-08-11. Both are right. The machine clock reads **2026-08-11 22:35:38 −03:00**;
+the same instant in UTC is **2026-08-12 01:35Z**. HERMES flagged the identical gap in its own cycle
+report ("my sandbox clock reads 2026-08-12T01:04Z") and, correctly, refused to silently pick one.
+The two are three hours apart, not one day. **The filename and the local-dated sections stay on
+local time; the addendum keeps its UTC date, and every scheduler timestamp below is LOCAL** — which
+matters, because the scheduler itself runs on local time.
+
+---
+
+## A. Did the routine fail four times, or fail once and never fire again?
+
+**It failed ONCE.** The four-failure reading is wrong, and one of the three remaining days is not a
+failure at all — it is a run that was *killed*, after the repair had already worked.
+
+### A.1 The tasks — enumerated, not inferred from one lookup
+
+There are **three** Naiad tasks, not four. **There is no HERMES scheduled task at all** — the
+addendum's "plus any HERMES entry" has no referent, and that absence is itself worth recording.
+
+| task | last run (local) | last result | next run | state |
+|---|---|---|---|---|
+| `\Naiad daily routine` | **11-Aug-26 16:36:33** | **-1073741510** = `0xC000013A` **STATUS_CONTROL_C_EXIT** | 12-Aug-26 07:00 | Ready / Enabled |
+| `\Naiad weekly backup` (estate, Sun 08:00) | 09-Aug-26 15:51:58 | **1** (generic failure) | 16-Aug-26 08:00 | Ready / Enabled |
+| `\Naiad weekly workflow backup` (Sun 08:30) | 09-Aug-26 15:51:58 | **1** (generic failure) | 16-Aug-26 08:30 | Ready / Enabled |
+
+Note the last-run *times*: 15:51:58 for two tasks scheduled at 08:00 and 08:30, and 16:36:33 for one
+scheduled at 07:00. **None of them ran at its scheduled time.** That is the signature of catch-up
+firing, which brings us to the setting the addendum asked about.
+
+### A.2 `StartWhenAvailable` — already ON, on all three
+
+```
+\Naiad daily routine             StartWhenAvailable=true  WakeToRun=(absent -> false)  DisallowStartIfOnBatteries=false
+\Naiad weekly backup             StartWhenAvailable=true  WakeToRun=(absent -> false)  DisallowStartIfOnBatteries=false
+\Naiad weekly workflow backup    StartWhenAvailable=true  WakeToRun=(absent -> false)  DisallowStartIfOnBatteries=false
+```
+
+**The recommendation the addendum asked for is moot: the setting is already enabled.** Nothing was
+changed, as instructed. And the odd-hour implication the addendum wanted stated is not hypothetical
+— **it has already happened twice**, and those two catch-up runs are exactly the 15:51 and 16:36
+timestamps above.
+
+### A.3 Why the per-day verdict rests on artifacts, not the event log
+
+**`Microsoft-Windows-TaskScheduler/Operational` is DISABLED** (`IsEnabled=False`, 0 records). Task
+Scheduler keeps only the *most recent* run time per task, so the log that would have answered this
+directly does not exist. The verdict below is therefore built on **run artifacts**, and it turns on
+one fact that makes absence into evidence:
+
+> **A failed run still writes its DAILY document.** The 08-09 run failed at its first required job
+> and *still* produced a complete `DAILY_2026-08-09.md`, including a "## 1. Failures" section. So
+> "triggered" implies "a DAILY exists". The contrapositive is what licenses a NEVER-TRIGGERED
+> verdict: no DAILY, no run — unless the process was killed before the write, which is precisely
+> what distinguishes 08-11 below.
+
+### A.4 VERDICT, per day
+
+| date (local) | verdict | evidence |
+|---|---|---|
+| **08-09 Sun** | **TRIGGERED-AND-FAILED** | `DAILY_2026-08-09.md` (2,370 B), generated `2026-08-09T18:52:59Z` = 15:52 local. `manifest` (required) exit 1, `HALT: F-M3, F-M4 failed; no partial adoption (contract section 5)`. Run stopped; brief, brief2_capture, brief2_panel never attempted. **No `MANIFEST_2026-08-09.json` was written** — the halt was real and total. |
+| **08-10 Mon** | **NEVER-TRIGGERED** | No `DAILY_2026-08-10.md`, no `MANIFEST_2026-08-10.json`, nothing anywhere. Scheduler's last-run for the daily is 08-11, so 08-10 was not the most recent start. Operator away, machine off or asleep; `WakeToRun` is false so nothing woke it. The missed 08-10 trigger was then satisfied by the 08-11 catch-up. |
+| **08-11 Tue** | **TRIGGERED, THEN KILLED** — *not* a fixture failure | Started **16:36:33** (catch-up from 07:00). `MANIFEST_2026-08-11.json` written **16:37**, 24,164 B. Exit `0xC000013A` = STATUS_CONTROL_C_EXIT — the console was closed or the session ended. **No `DAILY_2026-08-11.md`**: the process died after the manifest job and before the document write. |
+| **08-12 Wed** | **NOT YET DUE** | Next run 12-Aug-26 07:00; local clock is 2026-08-11 22:35. The day has not happened yet locally. HERMES counted it as a dead day by reading a UTC clock. |
+
+### A.5 The finding that changes the picture: THE REPAIR WORKED
+
+On 08-09 the manifest job halted and **no manifest was written**. On 08-11 the same job ran and
+**`MANIFEST_2026-08-11.json` was written, 24,164 B**. The F-M3/F-M4 fixtures that halted the routine
+on 08-09 **passed on 08-11**. The run then died for an unrelated reason.
+
+This also resolves HERMES's headline. HERMES reported the routine "dead for three days" with its
+`MANIFEST.json` freshness masked by publishes. The refinement: `exchange/status/MANIFEST.json`
+(24,164 B, 16:37) and `exchange/status/daily/MANIFEST_2026-08-11.json` (24,164 B, 16:37) are the
+same bytes at the same minute — **that manifest is the routine's own output, not a publish
+artifact.** The routine was not dead on 08-11. It ran, did its first job correctly, and was killed.
+
+### A.6 What actually killed it, and what to do (RECOMMENDATIONS — no settings were changed)
+
+`ExecutionTimeLimit` is `PT2H`; a timeout kill returns `0x41306`, not `0xC000013A`, and the run
+lasted under a minute — **not the time limit**. The task's principal is
+`LogonType=InteractiveToken`: it runs inside the logged-on user's session, so **closing the console,
+logging off, or sleeping the laptop sends the process a control-C and kills it mid-run.** That is
+the 08-11 death, exactly.
+
+1. **`StartWhenAvailable`: leave it alone — already `true`.** The addendum's proposed change is
+   already in force. Its stated implication is confirmed rather than predicted: catch-up runs
+   publish at odd hours (15:52 on 08-09, 16:36 on 08-11). That is the price and it is already being
+   paid.
+2. **Consider `WakeToRun=true`** *(operator's call)* — currently absent, so false. This is the
+   setting that would actually change away-day behaviour: today a sleeping laptop is never woken and
+   the run simply waits for the next wake. Implication: the machine wakes itself at 07:00.
+3. **The real fragility is `InteractiveToken`.** Running whether-or-not-logged-on with stored
+   credentials would have survived 08-11. Implication: it needs a stored password and the run
+   becomes invisible (no console to watch).
+4. **Turn on the Operational log** — `IsEnabled=False` is why this question needed forensics at all.
+   One click makes the next occurrence answerable in seconds instead of by artifact archaeology.
+5. **Both weekly backups last returned `1` (failure) on 08-09 and have not run since.** Out of this
+   cycle's scope and NOT investigated. Next due 16-Aug. Flagged, not diagnosed. **Owner: ATHENA.**
+
+**Bottom line: the 08-09 fixture failure is real and the repair for it is real and evidenced. What
+is not real is a four-day failure streak.** One genuine failure, one away-day, one killed run, and
+one day that has not arrived.
+
+---
+
+## B. Ruling 'append' installed in CONVENTIONS §3.1
+
+Appended to the no-exceptions clause of **§3.1 The build document**.
+
+**The placement hazard was live and was handled.** `### 3.1 The build document` occurs **twice** in
+this file — line 79 (the outline at the top) and line 337 (the body). CONVENTIONS' own line 299
+records a previous guard that matched the outline heading instead of the body one. The anchor used
+here was a body-only sentence, asserted unique (1 occurrence), and asserted to sit *after* the body
+heading — **a count alone is not a placement check.**
+
+Pre-write context, post-write assertions, all passed:
+
+```
+'### 3.1' headings  : 2 at lines [79, 337]  <- TOC + body, as expected
+anchor              : UNIQUE, 1 occurrence, line 348
+placement check     : anchor line 348 > body heading line 337  OK
+ruling present      : exactly 1 time  OK
+CR bytes            : 0 -> 0  UNCHANGED  OK
+LF bytes            : 855 -> 863  (+8, exactly the lines inserted)  OK
+landing zone        : body '### 3.1' < ruling < 'It serves two readers at once'  OK
+```
+
+Independently confirmed with `git diff --numstat`: **8 insertions, 0 deletions** — a pure insertion,
+no existing line rewritten. 50,218 → 50,772 B.
+
+**One defect found and fixed in the same session.** The first write left the ruling with no blank
+line before it, which in Markdown glues it to the end of the previous paragraph, and left a doubled
+blank line after. Both were repaired; the repair moved a newline rather than adding one, so byte
+count and LF count were identical before and after (50,772 B, 863 LF) and `numstat` still reads 8/0.
+
+**Honouring it immediately:** this document ends by appending the session's STATUS entry to
+**`exchange/status/LEDGER_ATHENA.md`** — ATHENA commissioned this work via
+`NOTE_ATHENA_to_ARGUS_2026-08-11_DATA-RESIDENCY.md`. The rule's first application is its own
+installer, as instructed. See §D.
+
+---
+
+## C. The manifest exception — NOT WRITTEN, text incomplete
+
+**The instruction was truncated mid-sentence.** It ends:
+
+> `exchange/status/MANIFEST.json` and `exchange/status/daily/MANIFEST_*.json` are data by type and
+> bus-resident by
+
+— and stops there. The rest of the sentence, and whatever conditions and bounds follow it, never
+arrived.
+
+**Nothing was written to CONVENTIONS §4.2.** This is a named exception to the text-only / 1 MB rule,
+in the one file that governs every lane's behaviour, and the operator is explicitly reserving a veto
+over it. Guessing the completion of a rule of that kind — inventing the justification for an
+exception to the rule that has caught every box overflow so far — is not a defensible thing for a
+builder to do quietly. The remaining text has been requested.
+
+**§4.2 is unmodified.** When the full text arrives it goes in under the same edit discipline as §B,
+and this section is replaced with the result.
+
+*Context that may be useful when the text is finalised:* `exchange/status/MANIFEST.json` is
+**24,164 B (0.38% of the box)** and `exchange/status/daily/` holds **7 dated `MANIFEST_*.json`
+totalling 159,717 B (2.50%)**, kept by the §8 rolling window at newest-7. Together **183,881 B,
+2.88% of the 6,390,000 B box** — under the 25% warn line on their own, but not negligible against
+the 27.8% the bus is already carrying.
+
+---
+
+## D. Ledger append — Ruling 'append', first application
+
+Per the ruling installed in §B, this document ends by appending the session's STATUS entry to the
+**commissioning lane's** ledger. ATHENA commissioned this work through
+`NOTE_ATHENA_to_ARGUS_2026-08-11_DATA-RESIDENCY.md`, so the entry goes to
+**`exchange/status/LEDGER_ATHENA.md`**, in the `naiad-eod` STATUS format that file's own template
+defines.
+
+| | bytes |
+|---|---|
+| before | 13,583 |
+| appended | 2,744 |
+| after | 16,327 |
+
+**Append-only verified mechanically:** the post-append bytes were asserted to *start with* the
+complete pre-append bytes — no prior byte changed. CR count 0 before and after.
+
+**Two ledgers carry this session, and that is correct, not duplication.** `LEDGER_ARGUS.md` holds
+the lane's own acknowledgement of the residency note (§2) — that is the *recipient's* record, and it
+is what satisfies the inbox-acknowledgement test the ruling restores: **acted = the recipient's
+ledger references the note.** `LEDGER_ATHENA.md` holds the commissioning lane's record of what the
+session produced. Different questions, different files.
+
+---
+
+## E. Addendum disposition and what remains open
+
+**Files touched by the addendum, beyond those in §5:**
+
+- `exchange/status/CONVENTIONS.md` — Ruling 'append' installed in §3.1
+- `exchange/status/LEDGER_ATHENA.md` — STATUS entry appended
+- `exchange/reports/BUILDERS_REPORT_ARGUS_2026-08-11_MAINT.md` — this document, extended
+
+All three are in §5's table with their box cost.
+
+**Read-only throughout item A.** Task Scheduler was queried, never modified: `schtasks /query` and
+XML reads only. No task setting was changed, no task was run, disabled or re-registered. The
+recommendations in §A.6 are recommendations.
+
+**Open, with owners:**
+
+1. **Item C — the manifest exception. Owner: operator.** Truncated mid-sentence; §4.2 unmodified,
+   awaiting the remaining text. This is the one piece of the addendum that was not delivered, and
+   the reason is stated in §C rather than papered over.
+2. **Both weekly backups failing (result `1`) since 08-09. Owner: ATHENA.** Flagged in §A.6, not
+   diagnosed — outside this cycle's scope. Next scheduled run 16-Aug 08:00 / 08:30.
+3. **`WakeToRun` and `InteractiveToken`. Owner: operator.** §A.6 items 2 and 3, each with its
+   implication stated. No setting was changed.
+4. **Task Scheduler Operational log is disabled. Owner: operator.** §A.6 item 4.
+5. **⚠ Rotation conflict on `INTERFACE_2026-08-06_C6.md`. Owner: ATHENA.** Unchanged from §4;
+   still the item with a dated deadline (2026-09-05).

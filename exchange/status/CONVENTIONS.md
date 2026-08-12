@@ -347,6 +347,14 @@ EVERY builder session emits the single build document — read-only sessions inc
 measurement nobody can re-read is a measurement that will be re-run. A reviewer paste may not
 waive this; an AFTER line saying "no document needed" is a drafting defect — refuse it.
 
+**Ruling 'append' (operator, 2026-08-12), resolving the HERMES 2026-08-12 finding that five
+of six lane ledgers trailed their own filed reports:** every build document ENDS by appending
+the session's STATUS entry to the commissioning lane's ledger
+(exchange/status/LEDGER_<LANE>.md) in the same session. The ledger line is a byproduct of the
+build document, never a separate chore; **a report without its ledger entry is an incomplete
+deliverable.** This also restores the inbox-acknowledgement test: acted = the recipient's
+ledger references the note.
+
 It serves two readers at once and must satisfy both:
 
 **As the forensic record** — so the run can be re-derived or refuted:
