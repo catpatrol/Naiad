@@ -1,4 +1,4 @@
-"""F-AN-1..14 -- the Phase I fixture suite for `analytics/`.
+"""F-AN-1..15 -- the Phase I fixture suite for `analytics/`.
 
 Run: C:\\venvs\\naiad\\Scripts\\python.exe -m pytest tests/test_analytics.py -q
 
@@ -10,6 +10,7 @@ unguarded bug. Neither lane located the instance. Rather than hunt one, this
 finds the whole class.
 """
 
+import hashlib
 import json
 import re
 import subprocess
@@ -1032,3 +1033,119 @@ def test_f_an_8c_documented_diff():
 
     assert rows, "8c documented nothing"
     assert (ROOT / "_reviewer_box" / "f_an_8_diff.json").exists()
+
+
+# --------------------------------------------------------------- F-AN-15
+
+_IFACE_NAME = re.compile(r"^INTERFACE_(\d{4}-\d{2}-\d{2})(?:_.+)?\.md$")
+
+
+def _newest_published_interface():
+    """The newest `exchange/reports/INTERFACE_*.md`, or None if there is none.
+
+    "Newest" is decided by the ISO DATE IN THE FILENAME, never by mtime.  git
+    does not preserve mtimes, so a fresh clone would pick a different file than
+    this working tree does, and a fixture that compares different files on
+    different machines is not a fixture.
+    """
+    d = ROOT / "exchange" / "reports"
+    if not d.is_dir():
+        return None
+    dated = [(m.group(1), p.name, p)
+             for p in d.glob("INTERFACE_*.md")
+             if (m := _IFACE_NAME.match(p.name))]
+    if not dated:
+        return None
+    return max(dated, key=lambda row: (row[0], row[1]))[2]
+
+
+def _sha256_bytes(blob):
+    return hashlib.sha256(blob).hexdigest()
+
+
+def test_f_an_15_published_interface_is_byte_identical():
+    """The published contract must be the canonical contract, byte for byte.
+
+    `analytics/INTERFACE.md` is canonical, but it lives under `analytics/` and
+    a web lane cannot reach it.  APOLLO cites the `exchange/reports/` copy.  Two
+    files, one contract: the moment they diverge, the census-facing lane is
+    reading a contract this code no longer honours, and nothing anywhere says so.
+
+    This fixture is the thing that says so.
+
+    IT DOES NOT RE-COPY ON MISMATCH, BY DESIGN.  An automated re-export would
+    succeed every single time and would therefore report a green suite for
+    exactly the staleness it was built to catch.  The fix is one deliberate
+    copy, named in the failure message, made by a human who has decided the
+    canonical file is the one to publish.
+
+    It SKIPS -- it does not pass -- when no published copy exists.  A missing
+    mirror is an unanswered question, not a satisfied assertion.
+    """
+    canonical = PKG / "INTERFACE.md"
+    assert canonical.is_file(), (
+        f"canonical contract missing: {canonical} -- F-AN-15 cannot compare "
+        f"against a file that is not there, and must not pretend it can")
+
+    published = _newest_published_interface()
+    if published is None:
+        pytest.skip(
+            "SKIPPED, NOT PASSED: no exchange/reports/INTERFACE_<date>*.md "
+            "exists, so there is no published copy to compare against. This is "
+            "not a green result -- the census-facing lanes (APOLLO) have no "
+            "contract to read at all. Publish one with:\n"
+            f"    copy analytics\\INTERFACE.md "
+            f"exchange\\reports\\INTERFACE_<YYYY-MM-DD>_C6.md")
+
+    can_bytes = canonical.read_bytes()          # binary: no newline translation
+    pub_bytes = published.read_bytes()
+    can_sha, pub_sha = _sha256_bytes(can_bytes), _sha256_bytes(pub_bytes)
+
+    assert len(can_bytes) > 0, (
+        f"{canonical} is EMPTY -- two empty files hash alike and the comparison "
+        f"would pass while saying nothing")
+
+    # Both directions, always reported -- which file is ahead is the operator's
+    # first question and the fixture should never make them go and find out.
+    if can_sha != pub_sha:
+        first_diff = next(
+            (i for i, (x, y) in enumerate(zip(can_bytes, pub_bytes)) if x != y),
+            min(len(can_bytes), len(pub_bytes)))
+        raise AssertionError(
+            "PUBLISHED CONTRACT IS STALE -- the two copies are NOT identical.\n"
+            f"  canonical  analytics/INTERFACE.md\n"
+            f"             sha256 {can_sha}\n"
+            f"             bytes  {len(can_bytes)}\n"
+            f"  published  exchange/reports/{published.name}\n"
+            f"             sha256 {pub_sha}\n"
+            f"             bytes  {len(pub_bytes)}\n"
+            f"  delta      published - canonical = "
+            f"{len(pub_bytes) - len(can_bytes):+d} bytes; "
+            f"first differing byte at offset {first_diff}\n"
+            "\n"
+            "  APOLLO is reading the published copy. It no longer matches the "
+            "code.\n"
+            "\n"
+            "  THIS FIXTURE WILL NOT FIX IT FOR YOU. An automatic re-export "
+            "would\n"
+            "  turn this test green without anyone deciding the canonical file "
+            "was\n"
+            "  ready to publish, which is the failure it exists to prevent. "
+            "Make\n"
+            "  the copy deliberately, from the repo root:\n"
+            "\n"
+            f"      copy analytics\\INTERFACE.md "
+            f"exchange\\reports\\{published.name}\n"
+            "\n"
+            "  -- or publish under today's date instead, leaving the old "
+            "snapshot\n"
+            "  in place as history:\n"
+            "\n"
+            "      copy analytics\\INTERFACE.md "
+            "exchange\\reports\\INTERFACE_<YYYY-MM-DD>_C6.md")
+
+    print(f"\nF-AN-15: IDENTICAL\n"
+          f"  analytics/INTERFACE.md              "
+          f"sha256 {can_sha}  {len(can_bytes)} B\n"
+          f"  exchange/reports/{published.name}  "
+          f"sha256 {pub_sha}  {len(pub_bytes)} B")
