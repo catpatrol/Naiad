@@ -187,6 +187,19 @@ DATED_ZIP = re.compile(r"_(\d{4}-\d{2}-\d{2})\.zip$")
 # toolchain -- daily_brief.py, backup_estate.py, every census and recompute
 # script -- protected by nothing but GitHub. One copy on one third-party
 # service is not a backup.
+#
+# briefs/, docs/reports/, docs/handoffs/ added 2026-08-12 (ATHENA ruling O-3),
+# for exactly the reason scripts/ was added and found the same way: the
+# 2026-08-12 filing session measured which destinations this list actually
+# covers, and these three held TRACKED content while sitting outside it. They
+# had GitHub and nothing else -- the same "one copy on one third-party service"
+# that the note above already refuses to call a backup.
+#
+# Measured before widening, because a backup list that silently grows is how a
+# weekly job becomes an hourly one: briefs 3.92 MB / 12 files, docs/reports
+# 0.26 MB / 2, docs/handoffs 0.02 MB / 2 -- 4.21 MB total against a 50 MB
+# ceiling. If a future addition approaches that ceiling, measure again rather
+# than assuming this one stayed cheap.
 WORKFLOW_SOURCES = (
     "docs/memory",
     "docs/knowledge",
@@ -196,6 +209,9 @@ WORKFLOW_SOURCES = (
     "exchange",
     "docs/primers",
     "docs/history",
+    "docs/reports",
+    "docs/handoffs",
+    "briefs",
     "scripts",
     "drops/operator-exports",
     "exchange/drops/operator-exports",
@@ -366,6 +382,20 @@ def inside(child: Path, parent: str | None) -> bool:
         return False
 
 
+def phase_archive_root_path(override: str | None = None) -> Path:
+    """Resolve the configured --phase archive root WITHOUT checking the mount.
+
+    Split out 2026-08-12 (ruling O-4) so retention_report(), which has no args
+    and must never halt, resolves the SAME path --phase writes to.  Before this
+    the retention report looked in `REPO/research_outputs/_archive` and reported
+    "none found" while nine archives sat on the drive -- a report that answers a
+    different question from the one it appears to answer.
+    """
+    return Path(override
+                or os.environ.get(PHASE_ARCHIVE_ROOT_ENV)
+                or PHASE_ARCHIVE_ROOT_DEFAULT)
+
+
 def phase_archive_root(args) -> Path:
     """Where --phase writes its archive.  Ruling B, 2026-08-06.
 
@@ -378,10 +408,7 @@ def phase_archive_root(args) -> Path:
     drive creates the directory instead of refusing over a missing folder, while
     an unplugged drive still stops the run dead.
     """
-    raw = (getattr(args, "phase_archive_root", None)
-           or os.environ.get(PHASE_ARCHIVE_ROOT_ENV)
-           or PHASE_ARCHIVE_ROOT_DEFAULT)
-    root = Path(raw)
+    root = phase_archive_root_path(getattr(args, "phase_archive_root", None))
     anchor = Path(root.anchor) if root.anchor else None
     if anchor is not None and not anchor.exists():
         sys.stderr.write(
@@ -977,7 +1004,33 @@ def retention_report(dest: Path) -> list:
                           "Workflow generations")
 
     # --- phase archives: PERMANENT ------------------------------------------
-    arch = REPO / "research_outputs" / "_archive"
+    #
+    # RULING O-4, 2026-08-12.  Two defects fixed here, and the second is the
+    # one that matters.
+    #
+    # (1) WRONG LOCATION.  This scanned `REPO/research_outputs/_archive`, which
+    #     stopped holding archives on 2026-08-06 when ruling B moved them
+    #     off-machine.  Only the SIDECARS stayed in the repo.  So the report
+    #     printed "none found" while nine archives sat on the drive.  It now
+    #     resolves the same root --phase writes to.
+    #
+    # (2) ABSENCE OF THE DRIVE IS NOT ABSENCE OF THE ARCHIVES.  Three states are
+    #     now distinct, and the third must NEVER print "none found":
+    #       drive mounted + archives  -> enumerate them
+    #       drive mounted + no zips   -> "none found"
+    #       drive NOT mounted         -> "NOT ENUMERABLE"
+    #     Collapsing the third into the second is the exact conflation that
+    #     produced the 2026-08-04 retraction: a single lookup returning nothing
+    #     was read as a measurement of absence.  To claim a thing does not
+    #     exist, you must have been able to look.
+    #
+    # When the drive is absent the report falls back to the TRACKED SIDECARS in
+    # the repo, which are the standing proof of which archives exist and what
+    # they hashed to.  That is precisely why ruling B kept them in-repo.
+    arch = phase_archive_root_path()
+    anchor = Path(arch.anchor) if arch.anchor else None
+    drive_mounted = anchor is None or anchor.exists()
+
     lines.append("")
     lines.append("## PHASE ARCHIVES — PERMANENT EVIDENCE, NEVER PRUNE")
     lines.append("")
@@ -987,14 +1040,44 @@ def retention_report(dest: Path) -> list:
     lines.append("")
     lines.append(f"Location: `{arch}`")
     lines.append("")
+
+    if not drive_mounted:
+        lines.append(f"**NOT ENUMERABLE — the drive `{anchor}` is not mounted.**")
+        lines.append("")
+        lines.append("This is NOT the same as \"none found\", and this report will never say "
+                     "that when it could not look. The archives are off-machine by ruling B "
+                     "(2026-08-06); plug the drive, or set "
+                     f"`${PHASE_ARCHIVE_ROOT_ENV}`, and re-run to enumerate them.")
+        sidecars = sorted((REPO / PHASE_SIDECAR_DIR).glob("*.sha256"))
+        lines.append("")
+        if sidecars:
+            lines.append(f"**{len(sidecars)} tracked sidecar(s) in `{PHASE_SIDECAR_DIR}/` record "
+                         "which archives exist and what they hashed to** — this is the "
+                         "standing proof that survives an unplugged drive:")
+            lines.append("")
+            lines.append("| sidecar | recorded sha256 |")
+            lines.append("|---|---|")
+            for s in sidecars:
+                try:
+                    rec = next((t for t in s.read_text(encoding="utf-8").replace("*", " ").split()
+                                if len(t) == 64), "unreadable")
+                except OSError as exc:
+                    rec = f"unreadable: {exc}"
+                lines.append(f"| `{s.name}` | `{rec}` |")
+        else:
+            lines.append(f"No sidecars in `{PHASE_SIDECAR_DIR}/` either — "
+                         "the archive set cannot be described from this clone.")
+        return lines
+
     if not arch.is_dir():
-        lines.append("- no `research_outputs/_archive` directory")
+        lines.append(f"- none found — the drive is mounted but `{arch}` does not exist, "
+                     "so no phase archive has been written there yet")
         return lines
 
     phases = sorted((p for p in arch.glob("*.zip") if p.is_file()),
                     key=lambda p: p.name)
     if not phases:
-        lines.append("- none found")
+        lines.append("- none found — the directory exists and is mounted, and holds no `.zip`")
         return lines
 
     total = sum(p.stat().st_size for p in phases)
