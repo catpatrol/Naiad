@@ -354,3 +354,28 @@ PENDING:
 NEXT: Rule on item 1, then give the go for D-0b. Owner: ATHENA.
 METRICS: operator actions this session = 0 · files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_ATHENA — 2026-08-12 ===
+NOW: Queue 004 Phase 0 is complete and green in the current tree. Eight D: gates now wait for a sleeping disk before calling it absent, the missed-run detector is live, and the baseline Phase A must reproduce from C:/Naiad is recorded. Phase A was deliberately NOT begun.
+LAST EVENT: 2026-08-12 — code commit 20ad593 pushed (D-0b 8 sites + 2 stale paths, D-0e); D-0d filed via 89c849f; proof runs 81fcc5f/e923850; filed as exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-12_PHASE-0.md.
+FACTS:
+- Step 0 found 004 and drive_wait.py ALREADY PRESENT and committed; neither was rewritten. drive_wait.py asserted still 250 lines and still a frozen dataclass [verified]
+- D-0b wired 8 call sites: backup_estate assert_environment/phase_archive_root/backup_dest_root/_generations/retention phase half; daily_routine check_reminders + phase date; archive_dependencies membership. The 9th site from the earlier census (arch.is_dir()) is SUBSUMED — it sits downstream of an already-waited gate [verified]
+- _generations() was UNGATED: an unmounted drive makes dest.glob() yield nothing (an empty glob is not an OSError), so the retention report printed "none found" for four good archives on an unplugged disk. O-4 fixed the phase half and left this one. Now prints NOT ENUMERABLE; the wait is resolved ONCE for both sections, not per-section [verified]
+- G: exclusion is DECLARED, not detected, because detection does not work: GetDriveTypeW returns C:=3 FIXED, D:=3 FIXED, G:=3 FIXED — Windows reports the Drive mount as a fixed local disk, and an absent drive returns 1 NO_ROOT_DIR whatever it was. Overridable via NAIAD_NO_WAIT_ANCHORS [verified]
+- TWO STALE PATHS FIXED, 3rd and 2nd copies of the defect O-4 fixed once. Measured live: HEARTBEAT read "phase: NONE" before and "phase: 2026-08-02" after — nine phase archives (1,043,591,544 B) were on the drive the whole time. The heartbeat had been calling the phase estate absent for six days. archive_dependencies had the same defect with a silent symptom [verified]
+- D-0e live: banner above section 0, names every missing DAILY_<date> by name, report-only. Searches the daily ARCHIVE as well as the window, or the rolling window's own housekeeping reads as missed runs. Unreadable heartbeat prints UNKNOWN, never silence [verified]
+- BASELINE for Phase A acceptance: suite 287 passed/1 skipped; --workflow 349/349 members verified both directions, 0 mismatches/strays/omissions, F-K1/F-K4/F-K5/F-K6b PASS, exit 0; daily routine exit 0 with all 4 jobs exit 0; F-0-1 43 checks 0 failed; F-0-3 28 checks 0 failed [verified]
+- Provisional constants STILL unvalidated — every probe returned PRESENT at ~0.00s and DRIVE_WAKE_LOG.md does not exist. But the common-path cost is now retired as a risk: eight gates changed no measurable timing anywhere. The only real number is UNREACHABLE = the full 18.00s budget, confirmed live on Q:/ [verified]
+PENDING:
+1. ATHENA: O-5 is now WORSE by my own proof run — --force-same-day wrote a THIRD same-day workflow archive, so retention reads 8 generations with 4 outside the rule and three keep-slots held by one calendar day. Nothing deleted; the report never deletes
+2. HEPHAESTUS: per-process UNREACHABLE memo, before anyone reports a cold-boot run as hung — eight gates can now each pay 18s in a single routine
+3. HEPHAESTUS: mirror_phase_outputs() (backup_estate.py:538) is the one D:-capable site left unwaited — deliberate (interactive-only, arbitrary operator path) but an inconsistency
+4. ATHENA: the wake log records only WOKE, so an empty log still cannot distinguish "never asleep" from "budget too short"
+5. HEPHAESTUS: F-0-1 (43) and F-0-3 (28) are still NOT committed as regression tests — adding them moves the suite off 287/1, which is the number Phase A is measured against. Land them in the session AFTER Phase A
+6. Operator: the publish budget WARNING could not be cleared — exchange/ is at 26.0% against a 25% warn line and the only mechanism that lowers it is queue 003 rotation, ratified 2026-08-11 and still unbuilt
+7. Operator/ATHENA: Phase A blocking pre-work unchanged — A-2's three identity gates assert the path contains "OneDrive", so until they are amended NO post-move session can start
+8. Carried: O-6 (Sunday tasks still pass --dest "G:\..."; Task Scheduler not modified by instruction), O-7, O-8
+NEXT: Give the go for Phase A as its own session, or rule on item 1 first. Owner: operator.
+METRICS: operator actions this session = 0 · files re-ingested = 0
+=== END STATUS ===
