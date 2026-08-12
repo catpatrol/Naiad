@@ -388,3 +388,48 @@ NEXT: Operator names the churn cut and rules on the decile ruler; then CEN-4 -> 
 CEN-8 -> CEN-9. Owner: operator, then HEPHAESTUS.
 METRICS: operator actions this session = 1 (h = 2 bars) — files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-12h ===
+NOW: CENSUS-2A run 5. Amendment A3 named A3-CHURN, A3-DECILE, A3-BAND and confirmed the FAN
+membership. CEN-4 ran to completion: five components as counts, P-iii-b and P-CHOP-1 both scored
+NOT SUPPORTED for different and informative reasons. A3-AUDIT was launched and had not returned at
+budget; it is not reported rather than reported thin.
+LAST EVENT: 2026-08-12 — run 5: A3 named; CEN-4 complete; P-iii-b and P-CHOP-1 scored
+FACTS:
+- A3-DECILE MATTERS MORE THAN ANY SINGLE VERDICT. The incumbent pooled-raw loser decile is 97.5%
+  size_r=0.5 and 38.6% BTC -- substantially a POSITION-SIZE selector. The size-free per-asset
+  cohort is 78.0% / 22.1%. Every earlier result scored against the incumbent book inherits that
+  bias, including MC-1's P-iii figures [verified]
+- P-iii-b NOT SUPPORTED. Grind prevalence L 0.2209 vs W 0.1526, delta +0.0683, pooled cluster CI
+  [+0.0362,+0.1020] EXCL-0; long +0.1013 EXCL-0; SHORT +0.0393 CI [-0.0006,+0.0963] STRADDLES BY
+  0.0006. The registered text requires both directions, so the pooled effect being real does not
+  carry it. The margin is reported, not rounded [verified]
+- P-CHOP-1 NOT SUPPORTED, and this is TRG doing its job: capture 0.5814 (passes >=0.40) at TRG
+  0.5466 (fails >=0.85). The composite catches 58% of losers by deleting 45% of the winners' tail
+  profit. Reported alone, capture would have looked like a good filter [verified]
+- TWO DEFECTS CAUGHT IN MY OWN DRAFT: (a) cluster_ci aggregated with the MEDIAN, which on a 0/1
+  indicator is identically 0 -- P-iii-b's proportion delta printed CI [0.0,0.0] until the statistic
+  was made explicit (mean for proportions, median for returns); (b) verdict-open was read as
+  state=="NONE" and fired on 1 of 6,897 births -- re-read as state=="RESPECTED" (20.2% of bars),
+  which is also the state LEDGER.md:315 P-PD3 CONFIRMED points at [verified]
+- lens-concordance fires on 94.0% of births -- a component true of nearly everything adds almost no
+  discrimination, the same null-gate shape that got the TRAP stamp dropped by R-3. Reported, not
+  fixed [verified]
+- A3-CHURN's 240 NaNs are the rule working: the component is undefined until an asset has >=90 days
+  of its own expanding causal history, and is emitted NaN rather than imputed [verified]
+PENDING:
+1. A3-AUDIT table (v0.2 -> v0.3 compression diff) still in flight; report next run
+2. P-NEST-2 [50%] FILED next-cycle, UNSCORED -- the FORWARD FALSE-POSITIVE question: given a nested
+   LTF cross mid-bar, how often does the 4H actually confirm? Run 1 measured nesting prevalence
+   backward from armings; the operator's question is the forward conditional, which is a different
+   population and cannot be read off the run-1 table
+3. THE D:-MOVED INCIDENT IS ROUTED TO ATHENA. On 2026-08-12 D:\\Naiad was moved to D:\\Archive\\Naiad
+   by something outside the repo (daily_routine.py sweeps flat files only, skips directories, last
+   ran 07:00). Restored on the operator's word, 123 files / 5,229,264,513 B verified identical. The
+   census cannot survive its residency root vanishing mid-run; cause unidentified. ATHENA's lane
+4. P-FAN-1 [60%] and P-ARM-2 [55%] still filed, unscored
+5. ROTATION PROGRAM unchanged: Hyperliquid, own universe, own evidence wall, never pooled;
+   portability battery = the tunable-variables question; funnel at census close
+NEXT: CEN-5 -> CEN-7 -> CEN-8 -> CEN-9, then the A3-AUDIT table. Owner: HEPHAESTUS.
+METRICS: operator actions this session = 1 (the A3 rulings paste) — files re-ingested = 0
+=== END STATUS ===
