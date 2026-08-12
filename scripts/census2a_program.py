@@ -1635,6 +1635,253 @@ def stage_cen3(assets: list[str], era: str = "evidence") -> dict:
 
 
 # ===========================================================================
+# CEN-6 -- RANGE & VERDICT
+# ===========================================================================
+ACCEPT_H = 2                       # [VETO, operator-named 2026-08-12] Amendment A2
+CLOSE_SET = ["1h", "4h", "12h"]    # pinned acceptance close-set (CD-4a)
+# Trap window, BOTH ways -- because they answer different questions and a bar
+# count alone is not comparable across a close-set.
+#   *_bars : 10 MEMBER bars. Member-relative, but that is 10h on 1h and 5 DAYS
+#            on 12h, so a trap rate rising across the close-set on this measure
+#            is largely the window growing, not the tape changing. A first draft
+#            of this stage reported only this and read 0.527 -> 0.607 -> 0.883 as
+#            structure. It is the same duration-vs-bars defect the run-2 review
+#            caught in the CEN-3 horizons.
+#   *_dur  : a fixed 48h for every member. Comparable across the close-set.
+TRAP_LOOKBACK_BARS = 10
+TRAP_WINDOW_MS = 48 * 3_600_000
+
+
+def stage_cen6(assets: list[str], era: str = "evidence") -> dict:
+    """Acceptance head-to-head on {1H,4H,12H}, deviation-reclaim branch,
+    trap-rate per member, hysteresis, and the verdict-open state CEN-4 needs.
+
+    THE RULE, in full (Amendment A2 supplies h; the v0.2->v0.3 compression had
+    deleted it):
+      An excursion beyond a range boundary is ACCEPTED on a close-set member
+      when that member's close is beyond the boundary and HOLDS beyond for
+      h = 2 consecutive member bars. It is DEVIATION-RECLAIMED when price
+      closes back inside first. Two branches of ONE episode, three clocks.
+
+    BOUNDARY OBJECT: the prior completed WEEK's high/low, via
+    analytics.structure.prior_period_extremes -- "causal by construction: a bar
+    only ever sees periods that closed before its own period began". Chosen
+    over engine/s2.py's D1/D3 detectors deliberately: LEDGER.md:311 records
+    P-PD1/P-PD2/P-PD4 FALSIFIED ("the pattern detectors as gridded do not
+    graduate"), so those are admissible as a LOCATION object but reusing them
+    as a promoted signal would re-run a falsified test. A prior-week envelope
+    is a location, carries its own causality class, and asserts nothing.
+
+    NOT A SWEEP. h is named, the close-set is pinned, the boundary is one
+    object. Nothing is selected, so no I11 promotion occurs here -- the three
+    members are a head-to-head that is PRINTED, not a grid a winner is drawn
+    from. If a later run promotes one member, that promotion is a selection
+    over m=3 and must clear the guard.
+    """
+    log(f"CEN-6 -- range & verdict [{era}]  h={ACCEPT_H} [VETO, A2]  "
+        f"close-set {CLOSE_SET}")
+    sys.path.insert(0, str(ROOT))
+    from analytics.structure import prior_period_extremes
+
+    ep_rows, state_rows = [], []
+    for sym in assets:
+        for tf in CLOSE_SET:
+            df = MC2.frame(sym, tf, era)
+            if len(df) < 200:
+                continue
+            o = df["open_time"].to_numpy(np.int64)
+            c = df["close"].to_numpy(float)
+            hi = df["high"].to_numpy(float)
+            lo = df["low"].to_numpy(float)
+            av = df["atr"].to_numpy(float)
+            ph, pl = prior_period_extremes(o, hi, lo, period="W")
+            n = len(c)
+
+            # per-bar verdict state, carried forward (the hysteresis substrate
+            # and CEN-4's `verdict-open` input)
+            state = np.array(["NONE"] * n, dtype=object)
+            cur = "NONE"
+            i = 0
+            # AN EPISODE IS A TRANSITION, NOT A STATE.
+            #
+            # A first draft opened an episode at every bar whose close sat
+            # beyond the boundary and then advanced by h, so a sustained
+            # 100-bar breakout manufactured 50 "episodes" of the SAME
+            # excursion -- 28,816 of them on 1h. That inflates every count,
+            # and it manufactured a monotone trap-rate climb (0.245 -> 0.566
+            # -> 0.931 across the close-set) that was a re-counting artifact
+            # rather than structure. An excursion beyond a boundary is ONE
+            # event; it begins when price closes beyond having been inside.
+            outside = False
+            while i < n:
+                up_b = np.isfinite(ph[i]) and c[i] > ph[i]
+                dn_b = np.isfinite(pl[i]) and c[i] < pl[i]
+                if not (up_b or dn_b):
+                    outside = False          # back inside: re-arm the trigger
+                    state[i] = cur
+                    i += 1
+                    continue
+                if outside:                  # already beyond -- not a new episode
+                    state[i] = cur
+                    i += 1
+                    continue
+                outside = True
+                side = "up" if up_b else "down"
+                bound = ph[i] if up_b else pl[i]
+                # hold test: h consecutive member closes beyond, from i
+                end = min(i + ACCEPT_H, n)
+                held = all((c[j] > ph[j]) if side == "up" else (c[j] < pl[j])
+                           for j in range(i, end)
+                           if np.isfinite(ph[j]) and np.isfinite(pl[j]))
+                complete = (end - i) == ACCEPT_H
+                verdict = ("ACCEPTED" if (held and complete)
+                           else "DEVIATION-RECLAIM" if complete else "TRUNCATED")
+                # trap: accepted, then closes back inside within the lookback
+                trap, trap_lag, trap_dur = False, np.nan, False
+                if verdict == "ACCEPTED":
+                    dur_end = o[end - 1] + TRAP_WINDOW_MS if end >= 1 else o[i]
+                    for j in range(end, n):
+                        if not (np.isfinite(ph[j]) and np.isfinite(pl[j])):
+                            continue
+                        within_bars = (j - end) < TRAP_LOOKBACK_BARS
+                        within_dur = o[j] <= dur_end
+                        if not (within_bars or within_dur):
+                            break
+                        inside = (c[j] <= ph[j]) if side == "up" else (c[j] >= pl[j])
+                        if inside:
+                            if within_bars and not trap:
+                                trap, trap_lag = True, float(j - end)
+                            if within_dur:
+                                trap_dur = True
+                            if trap and trap_dur:
+                                break
+                ep_rows.append({
+                    "asset": sym, "member": tf, "side": side,
+                    "ts": int(o[i]), "ts_iso": iso(int(o[i])),
+                    "boundary": float(bound),
+                    "depth_atr": (float(abs(c[i] - bound) / av[i])
+                                  if np.isfinite(av[i]) and av[i] > 0 else np.nan),
+                    "verdict": verdict, "trap": bool(trap), "trap_lag_bars": trap_lag,
+                    "trap_48h": bool(trap_dur),
+                })
+                cur = ("RESPECTED" if verdict == "DEVIATION-RECLAIM"
+                       else "BROKEN" if verdict == "ACCEPTED" else cur)
+                for j in range(i, end):
+                    state[j] = cur
+                i = end
+            for j in range(n):
+                state_rows.append({"asset": sym, "member": tf,
+                                   "ts": int(o[j]), "verdict_state": state[j]})
+            log(f"    {sym:9} {tf:4} episodes so far {len(ep_rows):,}")
+
+    ep = pd.DataFrame(ep_rows)
+    st = pd.DataFrame(state_rows)
+    if ep.empty:
+        return {"episodes": ep, "states": st}
+
+    # ---- head-to-head, per close-set member (PRINTED, not selected)
+    log("    ACCEPTANCE HEAD-TO-HEAD (h=2), per close-set member:")
+    rows = []
+    for tf in CLOSE_SET:
+        g = ep[ep.member == tf]
+        if g.empty:
+            continue
+        acc = g[g.verdict == "ACCEPTED"]
+        dev = g[g.verdict == "DEVIATION-RECLAIM"]
+        n_trap = int(acc.trap.sum())
+        rows.append({
+            "member": tf, "episodes": int(len(g)),
+            "accepted": int(len(acc)), "deviation_reclaim": int(len(dev)),
+            "truncated": int((g.verdict == "TRUNCATED").sum()),
+            "accept_rate": round(len(acc) / len(g), 6),
+            "traps_10bars": n_trap,
+            "trap_rate_10bars": round(n_trap / len(acc), 6) if len(acc) else None,
+            "traps_48h": int(acc.trap_48h.sum()),
+            "trap_rate_48h": (round(float(acc.trap_48h.sum()) / len(acc), 6)
+                              if len(acc) else None),
+            "trap_window_bars_hours": round(TRAP_LOOKBACK_BARS * TF_MS[tf] / 3.6e6, 1),
+            "median_depth_atr": round(float(g.depth_atr.median()), 6),
+            "median_trap_lag": (round(float(acc.loc[acc.trap, "trap_lag_bars"].median()), 2)
+                                if n_trap else None),
+        })
+        r = rows[-1]
+        log(f"      {tf:4} episodes={r['episodes']:5d} accepted={r['accepted']:5d} "
+            f"({r['accept_rate']:.3f}) reclaim={r['deviation_reclaim']:5d} "
+            f"depth={r['median_depth_atr']:.2f}ATR")
+        log(f"           trap  10-bar window (= {r['trap_window_bars_hours']:.0f}h here): "
+            f"{r['traps_10bars']:4d}  rate={r['trap_rate_10bars']}")
+        log(f"           trap  48h  window (comparable across members): "
+            f"{r['traps_48h']:4d}  rate={r['trap_rate_48h']}")
+    h2h = pd.DataFrame(rows)
+
+    # ---- hysteresis prior: does a verdict persist into the next episode?
+    log("    HYSTERESIS PRIOR (P(next verdict == this verdict), per member):")
+    hyst = []
+    for tf in CLOSE_SET:
+        for sym in assets:
+            g = ep[(ep.member == tf) & (ep.asset == sym)].sort_values("ts")
+            v = g.verdict.to_numpy()
+            v = v[(v == "ACCEPTED") | (v == "DEVIATION-RECLAIM")]
+            if len(v) < 10:
+                continue
+            same = int((v[1:] == v[:-1]).sum())
+            hyst.append({"member": tf, "asset": sym, "n_transitions": len(v) - 1,
+                         "same": same, "p_persist": round(same / (len(v) - 1), 6)})
+    hy = pd.DataFrame(hyst)
+    for tf in CLOSE_SET:
+        g = hy[hy.member == tf]
+        if not g.empty:
+            p = float((g["same"].sum()) / g["n_transitions"].sum())
+            log(f"      {tf:4} P(persist)={p:.3f} over "
+                f"{int(g.n_transitions.sum())} transitions, {len(g)} assets "
+                f"(0.5 = memoryless)")
+
+    # ---- verdicts consume CEN-1 refusal events
+    log("    VERDICTS x CEN-1 REFUSAL EVENTS (I8 / D-B):")
+    ref = pd.read_parquet(OUT / "cen1" / "cen1_refusals.parquet",
+                          columns=["asset", "tf", "limb", "ts"])
+    ref = ref[ref.asset.isin(assets) & ref.tf.isin(CLOSE_SET)]
+    join_rows = []
+    for tf in CLOSE_SET:
+        span = TF_MS[tf] * TRAP_LOOKBACK_BARS
+        for lim in ("i-a", "i-b"):
+            rt = ref[(ref.tf == tf) & (ref.limb == lim)]
+            for verdict in ("ACCEPTED", "DEVIATION-RECLAIM"):
+                g = ep[(ep.member == tf) & (ep.verdict == verdict)]
+                if g.empty or rt.empty:
+                    continue
+                cnt = 0
+                for sym, gg in g.groupby("asset", sort=False):
+                    rr = np.sort(rt[rt.asset == sym].ts.to_numpy(np.int64))
+                    if not len(rr):
+                        continue
+                    ts = gg.ts.to_numpy(np.int64)
+                    lo_i = np.searchsorted(rr, ts - span)
+                    hi_i = np.searchsorted(rr, ts)
+                    cnt += int((hi_i - lo_i).sum())
+                join_rows.append({"member": tf, "limb": lim, "verdict": verdict,
+                                  "episodes": int(len(g)),
+                                  "refusals_in_prior_window": cnt,
+                                  "per_episode": round(cnt / len(g), 4)})
+    rj = pd.DataFrame(join_rows)
+    for r in rj.itertuples(index=False):
+        log(f"      {r.member:4} {r.limb} {r.verdict:18} "
+            f"{r.refusals_in_prior_window:6d} refusals / {r.episodes:5d} episodes "
+            f"= {r.per_episode:.3f} each")
+    log("      (RESPECTED is largely a breakout that failed to be born -- the "
+        "substrate now records what almost fired beside what fired.)")
+
+    return {"episodes": ep, "states": st, "head_to_head": h2h,
+            "hysteresis": hy, "refusal_join": rj,
+            "h": ACCEPT_H, "close_set": CLOSE_SET,
+            "boundary_object": "prior completed week H/L "
+                               "(analytics.structure.prior_period_extremes, period='W')",
+            "not_a_sweep": ("h is named [VETO A2], the close-set is pinned, the "
+                            "boundary is one object; the three members are PRINTED "
+                            "head-to-head, not a grid a winner is drawn from")}
+
+
+# ===========================================================================
 # MANIFEST (I12 -- merge, never clobber)
 # ===========================================================================
 def load_manifest(path: Path, scoped: bool) -> dict:
@@ -1805,6 +2052,43 @@ def main(argv=None) -> int:
             man["registrations"]["P-REL-1"] = c3["p_rel_1"]
         if c3.get("p_rel_1b"):
             man["registrations"]["P-REL-1b"] = c3["p_rel_1b"]
+
+    if run("cen6"):
+        c6 = stage_cen6(PANEL, "evidence")
+        if c6.get("episodes") is not None and not c6["episodes"].empty:
+            sub = OUT / "cen6"; sub.mkdir(parents=True, exist_ok=True)
+            for name, df, keys in [
+                    ("cen6_episodes", c6["episodes"], ["asset", "member", "ts"]),
+                    ("cen6_head_to_head", c6["head_to_head"], ["member"]),
+                    ("cen6_hysteresis", c6["hysteresis"], ["member", "asset"]),
+                    ("cen6_refusal_join", c6["refusal_join"], ["member", "limb", "verdict"]),
+                    ("cen6_verdict_state", c6["states"], ["asset", "member", "ts"])]:
+                if df is None or df.empty:
+                    continue
+                d = df.sort_values([k for k in keys if k in df.columns]).reset_index(drop=True)
+                for col in d.columns:
+                    if d[col].dtype.kind == "f":
+                        d[col] = d[col].round(R6)
+                pth = sub / f"{name}.parquet"
+                d.to_parquet(pth, index=False)
+                man["artifacts"][name] = {
+                    "path": str(pth), "rows": int(len(d)), "bytes": pth.stat().st_size,
+                    "sha256": _sha(pth), "class": "EVIDENCE -- exploration-classic"}
+                log(f"    wrote {name}.parquet rows={len(d):,} "
+                    f"sha={man['artifacts'][name]['sha256'][:12]}")
+            man["stages"]["CEN-6"] = {
+                "era": "evidence", "h_veto": ACCEPT_H, "h_source": "Amendment A2",
+                "close_set": c6["close_set"],
+                "boundary_object": c6["boundary_object"],
+                "trap_lookback_bars": TRAP_LOOKBACK_BARS,
+                "not_a_sweep": c6["not_a_sweep"],
+                "verdict_open_interface": ("cen6_verdict_state.parquet -- per (asset, member, ts) "
+                                           "verdict_state in {NONE, RESPECTED, BROKEN}; CEN-4's "
+                                           "fifth composite component consumes this"),
+                "falsified_detector_disclosure": (
+                    "LEDGER.md:311 P-PD1/P-PD2/P-PD4 FALSIFIED -- engine/s2.py D1/D3/D4 are "
+                    "admissible as a LOCATION object but not as a promoted signal; CEN-6 uses a "
+                    "prior-week envelope instead and promotes nothing")}
 
     man["elapsed_s"] = round(time.time() - t0, 1)
     mp.write_text(json.dumps(man, indent=2, default=str), encoding="utf-8")
