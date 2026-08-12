@@ -18,6 +18,15 @@ working substrates only.
    `D:/Naiad/<repo-mirror-path>` at creation** and searched there.
 2. **Every D:-path contract carries a reachability gate that HALTS if D: is absent** — spinning USB;
    it may simply be unplugged. Never a silent laptop fallback.
+
+   **AMENDMENT 2026-08-12 (queue 004, D-0d) — what "absent" is allowed to mean.**
+   **A single failed lookup measures that lookup, not absence — of a file, a task, or a disk.**
+   A spun-down external disk fails an existence check in milliseconds, so the gate above was
+   reading ASLEEP as ABSENT. Gates now resolve through `wait_for_drive()`
+   (`scripts/drive_wait.py`), which distinguishes three states — PRESENT, WOKE, UNREACHABLE — and
+   halts only on the third. The rule generalises past hardware: it is the same error as the
+   2026-08-04 retraction, where one empty lookup was read as a measurement of absence. To claim a
+   thing does not exist, you must have been able to look.
 3. **Existing pipelines keep their written paths until a contract re-points them** — the daily brief
    keeps writing `briefs/` locally (it is small and live); the change binds NEW acquisitions and
    NEW study substrates, not the running routine.

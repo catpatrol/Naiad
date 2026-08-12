@@ -1,6 +1,6 @@
 {
   "ahead_behind": {
-    "ahead": 1,
+    "ahead": 0,
     "behind": 0
   },
   "branch": "v12-v1-census",
@@ -10,8 +10,8 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": true
   },
-  "generated_utc": "2026-08-12T03:03:42Z",
-  "head": "f83d3218bdeee5d56eb13002b249efaf8e1fbb03",
+  "generated_utc": "2026-08-12T10:00:05Z",
+  "head": "dea01d45865a372089f8352ebb9634b909a9191d",
   "lane_last_commit": {
     "brief": null,
     "docs": {
@@ -20,14 +20,14 @@
       "subject": "docs: closing 11-entry memory snapshot post-redraft + phase-archive relocation pointer (ruling B, archives to D:/Naiad)"
     },
     "exchange": {
-      "committed_iso": "2026-08-11T23:48:55-03:00",
-      "sha": "7a708d6c271245643853f76d53f1ccdd0f9e5423",
-      "subject": "exchange: auto-publish 2026-08-11"
+      "committed_iso": "2026-08-12T06:00:48-03:00",
+      "sha": "dea01d45865a372089f8352ebb9634b909a9191d",
+      "subject": "exchange: auto-publish 2026-08-12"
     },
     "ops": {
-      "committed_iso": "2026-08-05T19:25:35-03:00",
-      "sha": "6d11e9c9a13cb68c8820504b0f8ff67de83bc262",
-      "subject": "ops: cycle 6 item 4 - ALL 42 MATCH; PARITY CERTIFIED, banner flipped down"
+      "committed_iso": "2026-08-12T05:46:30-03:00",
+      "sha": "e16de8b80bf625b3777de7395041b2a3a749b569",
+      "subject": "ops: queue 004 D-0a - drive_wait helper with three states and self-measurement"
     },
     "study-phase": null
   },
@@ -37,11 +37,11 @@
     "title": "# Data-Spend Ledger"
   },
   "manifest_version": "1.1",
-  "onedrive_running": true,
-  "origin_head": "7a708d6c271245643853f76d53f1ccdd0f9e5423",
-  "queue_open": 2,
-  "queue_ratified_unbuilt": 2,
-  "queue_total": 6,
+  "onedrive_running": false,
+  "origin_head": "dea01d45865a372089f8352ebb9634b909a9191d",
+  "queue_open": 3,
+  "queue_ratified_unbuilt": 3,
+  "queue_total": 7,
   "queue_unratified": 0,
   "reviewer_box": [
     {
@@ -57,8 +57,8 @@
       "match_head": false,
       "path": "exchange/status/CADENCE.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "9acd2a7f41178faea53a5ddee9e006de4c2a5a4710936abf138087dc72fcb951",
-      "size": 6190,
+      "sha256_worktree": "7e40f4b4743dfc4bacd7100a0a62a1e38e7a66246cc990069e8bc20fdeb90468",
+      "size": 7503,
       "source_guess": null,
       "tracked": true
     },
@@ -66,8 +66,8 @@
       "match_head": false,
       "path": "exchange/status/CONVENTIONS.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "05617cf51306d778ff5da0793b2d05c41b4e442e7b53e907c6bc5be1fb36270b",
-      "size": 51454,
+      "sha256_worktree": "364930b1f34232773ceb4d62c02d4827ff0ba3f44b2c4ff9626489657542b32a",
+      "size": 52994,
       "source_guess": null,
       "tracked": true
     },
@@ -75,8 +75,8 @@
       "match_head": false,
       "path": "exchange/status/HEARTBEAT.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "d5c0fca307059eb52dc8965c525ff84515cdf2ae22986d1a4e2d719e64f059bf",
-      "size": 198,
+      "sha256_worktree": "65081a00823abfe0062f3813ae33e5529a47f13a186897605f03ab721e094053",
+      "size": 192,
       "source_guess": null,
       "tracked": true
     },
@@ -111,8 +111,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_ATHENA.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "f5b08a5fae2abdb7a48ffa5084e22f02b4ae562120116910bf2ed1f6a512fb60",
-      "size": 16327,
+      "sha256_worktree": "a408244f3fb026be5f97d11c8d6e39aa2308ba47527023f47c3a21790948f259",
+      "size": 41368,
       "source_guess": null,
       "tracked": true
     },
@@ -156,8 +156,8 @@
       "match_head": false,
       "path": "exchange/status/RETENTION.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "6faf230c2ca215ecc1fbb4f7581e184445672cef102b872d33adc511fe9b1eeb",
-      "size": 1705,
+      "sha256_worktree": "a28640e52d3adb44da9d21cf8b0b3cd0ed38978b57355ca764be15e9ff7a70f6",
+      "size": 2820,
       "source_guess": null,
       "tracked": true
     },
@@ -165,8 +165,8 @@
       "match_head": false,
       "path": "exchange/status/SECOND_ACCOUNT.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "a49897c31d4b306b53014f53dadbc60e17949e438c8464e0126d601df19ae31f",
-      "size": 1891,
+      "sha256_worktree": "934058018f1c67a0857a4ebdc8282b6446d1deb57897d184aab1b0483a01b2ab",
+      "size": 2941,
       "source_guess": null,
       "tracked": true
     },
@@ -226,10 +226,10 @@
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-07-28.json",
+      "path": "exchange/status/daily/DAILY_2026-08-12.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "9158aa37698deb4b13e7edfd8580baf11566f8ae4593e512e8ce1c4c91a7e50d",
-      "size": 26000,
+      "sha256_worktree": "4da4a46a7de76a9a0e45f5b7ac41c474820939bfb73e50024ed98fd2ff39e079",
+      "size": 4684,
       "source_guess": null,
       "tracked": true
     },
@@ -284,6 +284,15 @@
       "sha256_head_blob": null,
       "sha256_worktree": "0a3ee1a3b279ebf6862f783383396e5d2515de350b58d1ceaf2250a1c7749324",
       "size": 24916,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-12.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "2bac038145d53af3560bdd5f0d9facdc97e925a81938ee3a884c9d9a833f59e0",
+      "size": 25013,
       "source_guess": null,
       "tracked": true
     }
@@ -660,49 +669,7 @@
   ],
   "status_porcelain": [
     " M .gitignore",
-    " M exchange/status/MANIFEST.json",
-    " M exchange/status/daily/MANIFEST_2026-08-11.json",
-    "?? \"Cascade Rewire.html\"",
-    "?? Cascade_Atlas_CENSUS_1b.html",
-    "?? Cascade_Atlas_CENSUS_1b_v2_1.html",
-    "?? HANDOFF_ATHENA_2026-08-03_FULL_STATE_1.md",
-    "?? PRIMER_HERMES_2026-08-03_v2_FIRST_RUN.md",
-    "?? SS_Reassessment_Synthesis_2026-08-03.md",
-    "?? briefs/panel/excursions/2026-08-03.parquet",
-    "?? research_outputs/wf1/",
-    "?? scripts/mc1_program.py",
-    "?? scripts/mc1_report.py"
+    "?? exchange/reports/NOTE_ATHENA_2026-08-12_CROSS-LANE-RECONCILIATION.md"
   ],
-  "untracked_root": [
-    {
-      "name": "Cascade Rewire.html",
-      "sha256": "6fc84a2e318cc442bfebf190bdbb8aa8caf22ed2381d0310f87ba47e2b976fdb",
-      "size": 243474
-    },
-    {
-      "name": "Cascade_Atlas_CENSUS_1b.html",
-      "sha256": "1af63dffa477014bd1e259fa42eaa4c00e95c7bebe3a44d4fc0a92b604214998",
-      "size": 23511
-    },
-    {
-      "name": "Cascade_Atlas_CENSUS_1b_v2_1.html",
-      "sha256": "bc303723dcb97100ef5ece04c4968c2bd6139e9ddb9a2c818f508d3ed1cb7709",
-      "size": 51802
-    },
-    {
-      "name": "HANDOFF_ATHENA_2026-08-03_FULL_STATE_1.md",
-      "sha256": "4efdeeb112d95fd2099a68f3c7bb6a5b19c01b771d4e8dbb6f34eb622230ec90",
-      "size": 27586
-    },
-    {
-      "name": "PRIMER_HERMES_2026-08-03_v2_FIRST_RUN.md",
-      "sha256": "846b8646ed438206d9942fc8fda3040cd35814dadd147d0da13c6ecea971daa2",
-      "size": 13460
-    },
-    {
-      "name": "SS_Reassessment_Synthesis_2026-08-03.md",
-      "sha256": "9d6e7ea747544561af509bbcc845648fa66367cae8157feec1916b18ab4cbff1",
-      "size": 8282
-    }
-  ]
+  "untracked_root": []
 }
