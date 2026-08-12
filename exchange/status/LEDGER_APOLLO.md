@@ -232,3 +232,54 @@ NEXT: Operator answers PENDING 2 (the CEN-4/CEN-6 ordering), then run 3 proceeds
 CEN-6 -> CEN-4 -> CEN-5 -> CEN-7 -> CEN-8 -> CEN-9. Owner: operator, then HEPHAESTUS.
 METRICS: operator actions this session = 1 (the run-2 sequencing paste) — files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-12e ===
+NOW: SUPERSEDES the 2026-08-12d entry on four points, following a six-agent adversarial review of
+run 2. The census's only SUPPORTED registration is WITHDRAWN, and the run-2 CEN-3 invocation was
+found to have silently deleted P-ARM-1 from the manifest. All five required repairs are applied and
+re-run. The machinery below CEN-3 was independently verified sound and does NOT need rebuilding.
+LAST EVENT: 2026-08-12 — adversarial review of run 2: 2 blockers, 5 majors, 15 minors; repairs applied
+FACTS:
+- SUPERSEDES "P-REL-1 SUPPORTED": WITHDRAWN — UNSCOREABLE AS WRITTEN. The registration names
+  "A-only windows" (armed-but-never-triggered, n=253); the code scored against the 440
+  25_89-triggered windows instead, so none of the registered control arm entered. It is also not
+  computable as written: A-only windows have no trigger anchor, and that cohort is 252/253 ABORTED
+  at median width 4 bars vs 48 — the mechanical separation CEN-3 itself caveats. THE CENSUS NOW HAS
+  ZERO SUPPORTED REGISTRATIONS [verified]
+- SUPERSEDES "clears every asset's toll line by 3-7x": wrong twice. ETH's own delta is -0.2418, and
+  a between-group difference of medians is not a return that pays a toll — both arms pay it [verified]
+- SUPERSEDES the run-1 pin language: manifest["pins"] is EMPTY. The six names checked
+  {preflight, F-GUARD, F-PIN, CEN-0b, CEN-1, CEN-2} are top-level / fixtures / stages keys. The
+  check verified SECTIONS, not pins [verified]
+- I12 WAS VIOLATED IN PRACTICE: load_manifest carried {pins, artifacts, fixtures, stages} and not
+  registrations, so run-2's CEN-3 DELETED run-1's P-ARM-1 and its mandatory confound disclosure.
+  F-PIN passed throughout because it tested a hand-written probe dict, never load_manifest itself.
+  Both fixed; F-PIN now asserts 7 sections survive and would fail against the old code [verified]
+- Horizons were NOT duration-fixed: max(1,round()) made H20 mean 4h on the 4h frame instead of
+  1h40m (2.4x; 7.2x on 12h). Infeasible horizons now emit NaN plus a flag, never a substitute, and
+  the realized bar count is persisted [verified]
+- build_cascades is NOT non-overlapping: 805/848 armings hold >1 cascade membership, 388 with a
+  depth spread, and the shipped depth column was dict-insertion last-write-wins. Tie rule now
+  PINNED BY NAME (depth_min) with depth_min/depth_max/n_memberships all emitted [verified]
+- The I11 guard had never run on real data. Called now on the asset x direction panel: m=10,
+  winner NEARUSDT|down, selection-corrected p=0.0135 against a BH bar of 0.01 -> NOT ADMISSIBLE.
+  So run-2's "worst cell" and "only quality ratio below 1.0" statements are UNGATED OBSERVATIONS,
+  not findings [verified]
+- VERIFIED SOUND, do not re-litigate: the R-1 ruler reproduces to 5e-07 on all 595 anchors x 3
+  horizons; zero lookahead at both anchors; zero evidence-wall leakage; 848/848 joins with no row
+  multiplication; cluster_ci is a correct asset-cluster bootstrap; MFE-MAE is genuinely retired
+  [verified]
+PENDING:
+1. PX-1 (PAXG disposition) — PENDING-OPERATOR, unchanged from run 1
+2. CEN-4 still BLOCKED on the verdict-open forward dependency (CEN-6 first is recommended)
+3. P-REL-1b — the successor registration must be worded BY THE OPERATOR with explicit arm
+   predicates (has_in_window_12_25 vs the named control) and an explicit anchor rule. The builder
+   will not word a registration it is also scoring
+4. P-ARM-2 — still filed, prior 55%, UNSCORED (hazard successor to P-ARM-1's confounded limb)
+5. Filed-not-fixed: silent horizon truncation (scales badly at 5m/15m in CEN-7/CEN-9); MAE can go
+   negative on 1 row; the held-in-time split balances count not time (early 970d vs late 725d, BTC
+   29% vs 17%); annex pooled into printed cascade counts against F-11
+NEXT: Operator words P-REL-1b and answers the CEN-4/CEN-6 ordering; then run 3.
+Owner: operator, then HEPHAESTUS.
+METRICS: operator actions this session = 1 (ultracode) — files re-ingested = 0
+=== END STATUS ===

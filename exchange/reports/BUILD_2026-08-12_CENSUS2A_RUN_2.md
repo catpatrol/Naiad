@@ -7,6 +7,20 @@
 
 ---
 
+> # ⚠ CORRECTION — 2026-08-12, same session
+>
+> **This document was published, then adversarially reviewed, and the review found defects in it. The corrections are recorded here rather than by quietly editing the text below.** The affected passages remain visible so the correction is auditable; where a claim is wrong it is struck through in §9A with the replacement.
+>
+> **The headline reversal: P-REL-1 is WITHDRAWN — UNSCOREABLE AS WRITTEN.** It was reported below as SUPPORTED. It is not. The census currently has **zero** supported registrations.
+>
+> **Two defects destroyed or misstated the record itself:**
+> - `load_manifest` omitted `registrations` from its carry-forward, so this run's CEN-3 invocation **silently deleted P-ARM-1** — including its mandatory confound disclosure — from the manifest the build documents cite as the record. F-PIN passed throughout because it tested a hand-written probe dict instead of the function under test.
+> - The horizon clamp `max(1, round(...))` made **H20 mean 4h on the 4h frame instead of 1h40m — a 2.4× overshoot** (7.2× on 12h), so "duration-fixed" was false and every `*_H20` column below is mislabelled.
+>
+> All five required repairs are applied and re-run; see **§9A**. The machinery underneath was independently verified sound (R-1 ruler reproduced to 5e-07 on all 595 anchors, zero lookahead, zero wall leakage, 848/848 joins). **Nothing below CEN-3 needs rebuilding.**
+
+---
+
 ## 0 · WHAT RAN
 
 Run 2 resumed at CEN-3, as sequenced. **One whole stage completed: CEN-3.** The session then stopped at a stage boundary per the budget rule, on a dependency I am not entitled to resolve unilaterally (§5).
@@ -211,6 +225,57 @@ Registrations unscored: P-iii-b, P-NEST-1, P-i′, P-iv′, P-CHOP-1, P-RAT-2, P
 
 ---
 
+## 9A · CORRECTION REGISTER — what the adversarial review found, and what changed
+
+Six agents across four lenses re-verified CEN-3 against the artifacts. **Two blockers, five majors, fifteen minors.** Everything below was reproduced independently before being accepted.
+
+### The blockers
+
+**B1 · P-REL-1 scored a different hypothesis than the one registered.** The text names *"A-only windows"* — armed-but-never-triggered, **n=253**. The code built its population as `led[led.has_trigger]`, so **none of the 253 could enter**, and the control arm was the 440 `25_89`-triggered windows. Worse, the registration is **not computable as written**: A-only windows have no trigger, so the trigger anchor it names does not exist; and the A-only cohort is **252/253 ABORTED**, median width **4 bars vs 48** — the mechanical separation this very document caveats in §2.5.
+
+> ~~"**VERDICT: SUPPORTED.** The first supported registration in the census."~~
+> **VERDICT: WITHDRAWN — UNSCOREABLE AS WRITTEN.** Successor `P-REL-1b` to be registered by name with explicit arm predicates and a stated anchor. **The census has zero supported registrations.**
+
+All variants now print beside the withdrawal: `12_25-first vs 25_89-first` +0.199 [+0.093, +0.288]; `12_25 vs A-only` +0.629 [+0.472, +0.758] (the confounded registered reading).
+
+**B2 · The manifest lost P-ARM-1.** `load_manifest` carried `{pins, artifacts, fixtures, stages}` — not `registrations`. This run's CEN-3 destroyed run 1's P-ARM-1 and its confound disclosure. **Fixed:** the carry list is now the named constant `MERGED_SECTIONS`, so a new section cannot be added to the writer and forgotten in the merge. **F-PIN rewritten** to call `load_manifest` on a real seeded manifest and assert section-by-section survival — it now passes 7 sections + coexistence, and would have failed against the old code. P-ARM-1 restored; both registrations present.
+
+### The majors
+
+| # | Defect | Status |
+|---|---|---|
+| M1 | `trigger_class` is **first-trigger only** — 146/440 (33%) of the "25_89" control arm *do* contain an in-window 12_25. Under the most faithful anchor (at the 12_25 cross) the effect **straddles zero**. | folded into the B1 withdrawal |
+| M2 | Horizons **not duration-fixed**: `max(1,round())` clamped H20 to 1 bar = **4h vs 1h40m (2.4×)**; 7.2× on 12h. | **fixed** — infeasible horizons emit **NaN + `infeasible` flag**, never a substitute; `bars_realized`/`duration_ratio` persisted. H100/H500 disclosed at ratio 0.96 |
+| M3 | The SUPPORTED verdict rested on **1 of 3 horizons, 1 of 2 directions, 1 of 2 halves**, pooled. H500 **flips sign** (−0.083, straddles); **ETH is sign-reversed** (−0.2418); **only 1 of 5** leave-one-asset-out refits still excludes zero. | **fixed** — all mandated splits now print beside any verdict |
+| M4 | `build_cascades` is **not** non-overlapping — its forward scan never tests `used`. **805/848** armings hold >1 membership, **388 with a depth spread**; `dict(zip(...))` was silently last-write-wins. | **fixed** — tie rule **pinned by name** (`DEPTH_TIE_RULE = "depth_min"`), with `depth_min`/`depth_max`/`n_memberships` all emitted. §3's phrase "greedy and **non-overlapping**" was wrong on the second half |
+| M5 | The I11 selection guard **had never run on real data** — only on F-GUARD's synthetic sweeps. | **fixed** — now called on the asset×direction panel: `m=10`, winner `NEARUSDT\|down`, **p_sel = 0.0135 vs BH bar 0.01 → NOT ADMISSIBLE** |
+
+**Consequence of M5 for §4:** the extreme-cell statements ("NEAR-down is the worst cell", "ZEC-up is the only quality ratio below 1.0") are **ungated observations, not findings**. They are max-statistic selections over a 10-cell panel that does not clear its own guard.
+
+### Corrected claims (the ledger entry below carries some of these; §9B supersedes it)
+
+| Claim as published | Correct |
+|---|---|
+| "clears every asset's toll line by 3–7×" | **Wrong twice.** ETH's own delta is **−0.2418**; and a between-group *difference of medians* is not a return that pays a toll — both arms pay it. |
+| "NEAR-up fails its toll" (§2.1) | **Wrong.** NEAR-up +0.0577 vs toll 0.0263 — clears by 2.2×. The genuine sub-toll cells are BTC-down and SOL-down, both **negative** (failing against zero, not the toll). |
+| "Longs beat shorts in 4 of 5" | **5 of 5** at H100, the table it annotates. |
+| toll per asset (0.0581 / 0.0458 / 0.0333 / 0.0277 / 0.0257) | measured over *every* evidence bar; armings sit at compressed ATR. Corrected, measured **at armings**: BTC **0.0594**, ETH **0.0490**, ZEC **0.0353**, SOL **0.0315**, NEAR **0.0263** |
+| pooled `toll_atr` in `by_half`/`by_depth_*` | was a median of a per-asset constant — i.e. one asset's number. Now `toll_atr_binding` (the max in the group) + `toll_atr_assets` |
+| "run-1 pins {preflight, F-GUARD, F-PIN, CEN-0b, CEN-1, CEN-2}" | `manifest["pins"]` is **empty**; those are top-level/`fixtures`/`stages` keys. The pin-check verified *sections*, not pins. |
+| D: footprint "70 MB" | **64.3 MB** (`du -sb` = 64,278,107 B) |
+
+### Filed, not fixed
+- **m5** silent horizon truncation (`end = min(i+bars, n-1)`) returns a short-horizon value unflagged. Immaterial now (2 rows at H500) but **scales badly at 5m/15m in CEN-7/CEN-9**.
+- **m6** MAE can go negative (1 row) because the anchor bar is excluded from the forward window.
+- **m9** the held-in-time split balances **count, not time**: early spans 970 days, late 725, and BTC is 29% of early vs 17% of late — it confounds era with panel composition.
+- **m10** annex assets (JTO/TAO, 3.4% of lattice-A rows) are pooled into the printed cascade counts, against F-11's "annex printed never pooled".
+- **m14** 5 windows are unresolved at the wall yet assert width 151; unfalsifiable from evidence-era data.
+
+### Verified sound (do not re-litigate)
+R-1 ruler reproduced to **5e-07** on all 595 trigger anchors × 3 horizons · **zero lookahead** at both anchors · **zero** evidence-wall leakage (max `arming_ts` = 2024-06-30 08:00) · trigger anchoring exact **595/595**, `np.clip` never fired · `trigger_class`/`has_trigger` faithful **0/848 mismatches** · join completeness **848/848**, no row multiplication · `cluster_ci` a correct asset-cluster bootstrap · `MFE − MAE` genuinely retired · toll **algebra** dimensionally correct · `direction_consistent` a clean partition · all published tables reconcile to the artifacts · the fate caveat is real plumbing (in the parquet and the manifest, not just prose).
+
+---
+
 ## 8 · LEDGER_APOLLO APPEND (F-17 · I10 — this section IS the append, same session)
 
 ```
@@ -260,3 +325,64 @@ METRICS: operator actions this session = 1 (the run-2 sequencing paste) — file
 ```
 
 — HEPHAESTUS, 2026-08-12 · CENSUS-2A run 2 · CEN-3 complete; stopped on a named dependency, not silently
+
+---
+
+## 9B · SUPERSEDING LEDGER APPEND (F-17, second entry — same session)
+
+The §8 entry above is reproduced **as landed**. `LEDGER_APOLLO.md` is append-only — a correction is a NEW entry naming what it supersedes — so the review's corrections land as a second entry. Both are in the ledger.
+
+```
+=== STATUS_APOLLO — 2026-08-12e ===
+NOW: SUPERSEDES the 2026-08-12d entry on four points, following a six-agent adversarial review of
+run 2. The census's only SUPPORTED registration is WITHDRAWN, and the run-2 CEN-3 invocation was
+found to have silently deleted P-ARM-1 from the manifest. All five required repairs are applied and
+re-run. The machinery below CEN-3 was independently verified sound and does NOT need rebuilding.
+LAST EVENT: 2026-08-12 — adversarial review of run 2: 2 blockers, 5 majors, 15 minors; repairs applied
+FACTS:
+- SUPERSEDES "P-REL-1 SUPPORTED": WITHDRAWN — UNSCOREABLE AS WRITTEN. The registration names
+  "A-only windows" (armed-but-never-triggered, n=253); the code scored against the 440
+  25_89-triggered windows instead, so none of the registered control arm entered. It is also not
+  computable as written: A-only windows have no trigger anchor, and that cohort is 252/253 ABORTED
+  at median width 4 bars vs 48 — the mechanical separation CEN-3 itself caveats. THE CENSUS NOW HAS
+  ZERO SUPPORTED REGISTRATIONS [verified]
+- SUPERSEDES "clears every asset's toll line by 3-7x": wrong twice. ETH's own delta is -0.2418, and
+  a between-group difference of medians is not a return that pays a toll — both arms pay it [verified]
+- SUPERSEDES the run-1 pin language: manifest["pins"] is EMPTY. The six names checked
+  {preflight, F-GUARD, F-PIN, CEN-0b, CEN-1, CEN-2} are top-level / fixtures / stages keys. The
+  check verified SECTIONS, not pins [verified]
+- I12 WAS VIOLATED IN PRACTICE: load_manifest carried {pins, artifacts, fixtures, stages} and not
+  registrations, so run-2's CEN-3 DELETED run-1's P-ARM-1 and its mandatory confound disclosure.
+  F-PIN passed throughout because it tested a hand-written probe dict, never load_manifest itself.
+  Both fixed; F-PIN now asserts 7 sections survive and would fail against the old code [verified]
+- Horizons were NOT duration-fixed: max(1,round()) made H20 mean 4h on the 4h frame instead of
+  1h40m (2.4x; 7.2x on 12h). Infeasible horizons now emit NaN plus a flag, never a substitute, and
+  the realized bar count is persisted [verified]
+- build_cascades is NOT non-overlapping: 805/848 armings hold >1 cascade membership, 388 with a
+  depth spread, and the shipped depth column was dict-insertion last-write-wins. Tie rule now
+  PINNED BY NAME (depth_min) with depth_min/depth_max/n_memberships all emitted [verified]
+- The I11 guard had never run on real data. Called now on the asset x direction panel: m=10,
+  winner NEARUSDT|down, selection-corrected p=0.0135 against a BH bar of 0.01 -> NOT ADMISSIBLE.
+  So run-2's "worst cell" and "only quality ratio below 1.0" statements are UNGATED OBSERVATIONS,
+  not findings [verified]
+- VERIFIED SOUND, do not re-litigate: the R-1 ruler reproduces to 5e-07 on all 595 anchors x 3
+  horizons; zero lookahead at both anchors; zero evidence-wall leakage; 848/848 joins with no row
+  multiplication; cluster_ci is a correct asset-cluster bootstrap; MFE-MAE is genuinely retired
+  [verified]
+PENDING:
+1. PX-1 (PAXG disposition) — PENDING-OPERATOR, unchanged from run 1
+2. CEN-4 still BLOCKED on the verdict-open forward dependency (CEN-6 first is recommended)
+3. P-REL-1b — the successor registration must be worded BY THE OPERATOR with explicit arm
+   predicates (has_in_window_12_25 vs the named control) and an explicit anchor rule. The builder
+   will not word a registration it is also scoring
+4. P-ARM-2 — still filed, prior 55%, UNSCORED (hazard successor to P-ARM-1's confounded limb)
+5. Filed-not-fixed: silent horizon truncation (scales badly at 5m/15m in CEN-7/CEN-9); MAE can go
+   negative on 1 row; the held-in-time split balances count not time (early 970d vs late 725d, BTC
+   29% vs 17%); annex pooled into printed cascade counts against F-11
+NEXT: Operator words P-REL-1b and answers the CEN-4/CEN-6 ordering; then run 3.
+Owner: operator, then HEPHAESTUS.
+METRICS: operator actions this session = 1 (ultracode) — files re-ingested = 0
+=== END STATUS ===
+```
+
+— HEPHAESTUS, 2026-08-12 · run-2 correction · the review found what the build did not
