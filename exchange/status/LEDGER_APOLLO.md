@@ -433,3 +433,41 @@ PENDING:
 NEXT: CEN-5 -> CEN-7 -> CEN-8 -> CEN-9, then the A3-AUDIT table. Owner: HEPHAESTUS.
 METRICS: operator actions this session = 1 (the A3 rulings paste) — files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-12i ===
+NOW: SUPERSEDES the 2026-08-12h entry on one verdict. The A3-AUDIT returned after run 5's build
+document was written and found that two of CEN-4's five composite components were not the
+registered objects. P-CHOP-1 is WITHDRAWN. P-iii-b is unaffected and stands.
+LAST EVENT: 2026-08-12 — A3-AUDIT returned: 15 needs-word items across 4 slices
+FACTS:
+- SUPERSEDES "P-CHOP-1 NOT SUPPORTED (capture 0.5814, TRG 0.5466)": WITHDRAWN -- COMPUTED ON A
+  MIS-SPECIFIED COMPONENT SET. (a) lens-concordance is PINNED at v0.3:40 as "trailing-24h
+  same-rung-string agreement between the two chaining rules, baseline 38.46%"; the build computed a
+  count of 4h lattice-A events in 24h firing at <=1 -- an event-density proxy, a different
+  quantity, which is why it fired on 94.0%. (b) the ribbon operand is "30m/1h 9/89 spread"
+  (v0.2:40) and the build used 1h only. Both feed composite>=3 [verified]
+- P-iii-b UNAFFECTED and STANDS: its predicate is no_slow AND churn, neither implicated [verified]
+- THE COMPRESSION DROPPED MORE THAN h. 15 needs-word items. Highest severity: TRG's numerator was
+  defined on "top-decile profit" when the ruler was MFE-MAE, and R-1 retired that ruler without
+  renaming the column -- every TRG threshold (85/85/80%) rides on it; witness-correlation was
+  defined only in v0.2:65-67 and exists in NO code; the sabotage fixture lost its defining
+  parenthetical ("one future bar -> guard must REJECT") in the same shape as the h incident; CEN-5's
+  population lost the word "panel", which would admit annex against F-11 [verified]
+- LIVE CONTRADICTIONS: P-NEST-1 is scored by v0.3:124 while R-4 carries the nested object as
+  UNCONFIRMED columns-only; P-ARM-1's "trigger-within-151" phrase differs from CEN-2's computed
+  min(151, counter-arming), which closes 98.9% of windows; and A1's R-PAXG contradicts the body's
+  "PAXG fetch NOW" + F-12, though F-12 was in fact discharged before the deletion [verified]
+- STRUCTURAL ROOT: neither draft ever closed a register over its own [VETO]s. Three of v0.2's five
+  [VETO] markers lived in module bodies, not section 0, so compressing section 0 could never have
+  preserved h. Unrepaired; it will keep producing this failure [verified]
+PENDING:
+1. NW-5 TRG numerator under R-1 -- blocks P-CHOP-1 re-score, P-RAT-2, P-VBT-1, F-9
+2. NW-2 witness-correlation definition -- blocks I8/F-16/CEN-8
+3. NW-4 sabotage-fixture construction -- blocks F-10/CEN-8
+4. NW-1 CEN-5 population: restore "panel" or rule annex in by name
+5. P-NEST-1 scored-vs-columns-only contradiction must be resolved before CEN-8
+6. RECOMMEND: close a [VETO] register over the whole contract -- one enumerated list, module
+   bodies included -- so the next compression cannot silently drop a constant
+NEXT: Operator rules on NW-5 first (it gates three registrations), then CEN-5. Owner: operator.
+METRICS: operator actions this session = 1 (the A3 rulings paste) — files re-ingested = 0
+=== END STATUS ===

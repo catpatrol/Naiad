@@ -189,3 +189,48 @@ METRICS: operator actions this session = 1 (the A3 rulings paste) — files re-i
 ```
 
 — HEPHAESTUS, 2026-08-12 · CENSUS-2A run 5 · A3 named, CEN-4 complete, two registrations scored honestly
+
+---
+
+# ⚠ ADDENDUM — A3-AUDIT RETURNED (same session, after §5 was written)
+
+§5 said the audit was in flight and would be reported next run. It returned. **It found defects in this document**, so the correction lands here rather than a session later.
+
+## A3-AUDIT · the headline
+
+**The v0.2→v0.3 compression dropped operative content in more places than CEN-6's `h`.** Four slices produced **15 needs-word items**. Two of them had *already been silently substituted by builder readings inside a scored component*.
+
+## P-CHOP-1 is WITHDRAWN
+
+> ~~**VERDICT: NOT SUPPORTED.** capture 0.5814 at TRG 0.5466~~
+> **VERDICT: WITHDRAWN — COMPUTED ON A MIS-SPECIFIED COMPONENT SET.**
+
+Two of the five composite components were not the registered objects:
+
+| component | registered | what I built |
+|---|---|---|
+| **lens-concordance** | v0.3:40 **pins** it: *"trailing-24h **same-rung-string agreement between the two chaining rules**; baseline 38.46%"* | count of 4h lattice-A events in a trailing 24h, firing at ≤1 — **an event-density proxy, a different quantity**. This is why it fired on 94.0% and read as a null gate. |
+| **ribbon** | v0.2:40: *"0.5×ATR on **30m/1h** 9/89 spread"* (`mc2_program.py:162` swept both) | **1h only** — an unratified narrowing |
+
+Both feed `composite ≥ 3`, so **0.5814 / 0.5466 are not the registered statistic in either direction**. The verdict is withdrawn rather than re-stated, because a number computed on the wrong component is not a finding whichever way it points.
+
+**P-iii-b is NOT affected** — its predicate is `no_slow ∧ churn`, neither of which is implicated. **That verdict stands.**
+
+## The other needs-word items, ranked
+
+| # | Item | Halts |
+|---|---|---|
+| **NW-5** | **TRG's numerator under R-1.** v0.2 defined TRG on "top-decile **profit**" while the ruler was MFE−MAE. R-1 retired that ruler and **no text renamed the column**. Every TRG threshold (85/85/80%) rides on the answer. | P-CHOP-1, P-RAT-2, P-VBT-1, F-9 |
+| **NW-2** | **Witness-correlation.** Defined only at v0.2:65-67 (pairwise sign-agreement across assets + panel return correlation). v0.3 keeps the obligation and drops the definition; **the term exists in no code**. | I8, F-16, CEN-8 |
+| **NW-4** | **Sabotage fixture.** v0.2:62-63's defining parenthetical — *"one future bar → guard must REJECT"* — was dropped. **The identical failure shape as the `h` incident.** | F-10, CEN-8 |
+| **NW-1** | **CEN-5 population.** v0.2:131 said "all **panel** assets"; v0.3:99 dropped the word, so annex would enter the 7,094 book against F-11. | CEN-5 |
+| **—** | **P-NEST-1 is a live contradiction**: v0.3:124 scores it, while R-4 carries the nested object as UNCONFIRMED **columns-only**. | CEN-3/CEN-8 |
+| **—** | **P-ARM-1's denominator**: v0.3:118 says "trigger-within-**151**"; CEN-2 computes `min(151, counter-arming)`, which closes 98.9% of windows. The phrase and the computation differ. | P-ARM-1 re-score |
+| **—** | `no-slow-arrival-yet`, leap/stair (P-i′), ATR buckets + "survives" (P-iv′), H-VBT, the P-RAT-2 grid corner set | defined in **neither** draft — pre-existing, not compression losses |
+
+Also flagged, and worth the operator's eye: **A1's `R-PAXG` contradicts the v0.3 body it claims not to alter** — the body orders "PAXG fetch NOW" (:71) and F-12 requires its classification printed (:139), while A1 orders the directory deleted. In practice F-12 *was* discharged before the deletion (run 3 printed first bar, evidence-era length and classification), so the contradiction is discharged in fact but not in text.
+
+## What this changes about the run
+
+The census now stands at **one supported registration** (P-REL-1b, SUPPORTED-PROVISIONAL) and **five withdrawn or not-supported**. The audit's deeper lesson is structural: **neither draft ever closed a register over its own `[VETO]`s** — three of v0.2's five `[VETO]` markers lived in module bodies, not §0, so compressing §0 could never have preserved `h`. That gap is unrepaired and will keep producing this failure until a closed VETO register exists.
+
