@@ -283,3 +283,61 @@ NEXT: Operator words P-REL-1b and answers the CEN-4/CEN-6 ordering; then run 3.
 Owner: operator, then HEPHAESTUS.
 METRICS: operator actions this session = 1 (ultracode) — files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-12f ===
+NOW: CENSUS-2A run 3. The session opened on an infrastructure HALT (D:\Naiad had been moved to
+D:\Archive\Naiad); restored on the operator's word, 123 files / 5,229,264,513 B verified identical.
+Amendment A1 written to the queue item verbatim, ratified body byte-identical. PX-1(b) executed.
+A1-FAN enacted. R-F11 fixed. P-REL-1b scored SUPPORTED-PROVISIONAL — the census's first
+registration to survive its own mandated splits. CEN-6 is BLOCKED on an unnamed [VETO].
+LAST EVENT: 2026-08-12 — run 3: rulings block executed; CEN-1/2/3 re-run; CEN-6 blocked
+FACTS:
+- PX-1(b) EXECUTED: PAXGUSDT dropped from D:, 23,636,729 bytes (23.6 MB) freed, klines/ parent
+  removed, marked DROPPED in the manifest, re-fetchable via --stage cen0b. The deletion was
+  WITHHELD while the estate was displaced — the archived tree was the only copy [verified]
+- A1-FAN ENACTED: cross classes 200_500 (6,715 events) and 300_500 (5,480) added; FAN true on
+  38.35% of 529,061 events (up 104,688 / down 98,228), KNOT true on 2.63%, both together 710.
+  Columns only, nothing scored. FAN's six-EMA membership {9,89,200,300,450,500} is the BUILDER'S
+  READING — the ruling names only KNOT's five explicitly and says "six-EMA" for FAN; correct by
+  name if a different six was meant [verified]
+- P-FAN-1 [60%] FILED next-cycle, UNSCORED: "armings stamped FAN=true at the arming instant show
+  higher terminal ATR-return than FAN=false armings, asset-cluster 90% CI excl. 0, both directions"
+  — text filed here, to be worded finally by the operator before it is scored [filed]
+- P-REL-1b [50%, POST-HOC-INFORMED, LABEL PERMANENT] = SUPPORTED-PROVISIONAL. TREAT 301 vs CONTROL
+  294 on explicit predicates (the first-mover label had contaminated run-2's control arm by 33%:
+  146 of 440). H100 +0.1869 CI [+0.0638,+0.2887] EXCL-0; H500 +0.6399 EXCL-0; BOTH directions
+  EXCL-0; late half EXCL-0, early half straddles; LOAO 4/5. Materially stronger than the
+  mis-specified predecessor (which had H500 straddling and LOAO 1/5) [verified]
+- CEN-6 BLOCKED: the v0.2 -> v0.3 compression KEPT the noun phrases and DELETED the parenthetical
+  "(close beyond + hold h bars [VETO] vs deviation-reclaim)". The [VETO] constant h appears nowhere
+  in the ratified body and was never valued. Sweeping h and promoting a winner would be selecting a
+  [VETO] by search, which §N forbids. It cascades: CEN-6 -> CEN-4's verdict-open -> CEN-5b's v0 band
+  [verified]
+- MANDATORY DISCLOSURE for CEN-6 when it runs: LEDGER.md:311 records P-PD1/P-PD2/P-PD4 FALSIFIED,
+  "the pattern detectors as gridded do not graduate". Reusing D1/D3/D4 as a LOCATION object is
+  legitimate; as a promoted signal it re-runs a falsified test. LEDGER.md:315 P-PD3 CONFIRMED —
+  "Z2's deficit concentrates in-range (-0.33R)" — is the part CEN-4 actually wants [verified]
+- R-F11 FIXED: run-2's 151,718 lattice-A stream pooled JTO 3,812 + TAO 1,348 into a panel-labelled
+  count. Panel-only is 146,558; annex 5,160 printed separately, never added. No panel arming's
+  depth moved [verified]
+- INFRASTRUCTURE: D:\Naiad was moved outside the repo's doing (daily_routine.py sweeps flat files
+  only, skips directories, last ran 07:00). The census cannot survive its residency root vanishing
+  mid-run; cause unidentified [verified]
+PENDING:
+1. NAME h — the acceptance hold length, [VETO]. CEN-6, CEN-4 and CEN-5b are blocked until it is
+   valued by the operator. Recommend also auditing the other v0.2->v0.3 compressions for the same
+   kind of dropped definition; CEN-6's loss was found only because the stage was reached
+2. P-FAN-1 [60%] filed, unscored; final wording is the operator's
+3. P-ARM-2 [55%] still filed, unscored (hazard successor to P-ARM-1's confounded limb)
+4. FAN's six-EMA membership is a builder's reading pending confirmation
+5. ROTATION PROGRAM — filed as a HORIZON WORKSTREAM, not this contract: Hyperliquid as a venue
+   candidate, carrying its OWN universe and its OWN evidence wall, NEVER pooled with the Binance
+   panel (the PAXG lesson: an asset whose history begins after the wall cannot enter a scored
+   table, and a venue is that problem multiplied). The portability battery is the operator's
+   tunable-variables question — which constants are venue-invariant and which are fitted to this
+   tape. Scoping funnel opens at census close, not before
+NEXT: Operator names h; then run 4 proceeds CEN-6 -> CEN-4 -> CEN-5 -> CEN-7 -> CEN-8 -> CEN-9.
+Owner: operator, then HEPHAESTUS.
+METRICS: operator actions this session = 2 (the run-3 rulings paste; the (a) restore authorisation)
+  — files re-ingested = 0
+=== END STATUS ===
