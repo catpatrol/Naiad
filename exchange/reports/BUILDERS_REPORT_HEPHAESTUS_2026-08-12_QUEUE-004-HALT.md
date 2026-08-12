@@ -395,8 +395,27 @@ conventions whatever happens to the rest of Phase 0.
 ## 8 · Publish and rollback
 
 `exchange/` measured **1,566,668 B — 24.5%** of the 6.39 MB box before this report (107 tracked
-files); the tick set with `LEDGER.md` is 28.5%. This report and its ledger entry add roughly 0.36%,
-leaving `exchange/` just under the 25% warn line — the closest it has run to WARN without crossing.
+files); the tick set with `LEDGER.md` is 28.5%.
+
+**Publish output, as printed:**
+
+```
+publish: WARNING -- exchange/ holds 1,598,604 B, 25.0% of the 6,390,000 B box (warn at 25%, refuse above 40%).
+publish: routine last completed 2026-08-12 (5h ago)
+publish: committed 56e6be0 (2 path(s)) and pushed to origin/v12-v1-census
+status= PUBLISHED commit= 56e6be0 pushed= True offenders= []
+```
+
+**Correction to this section's own first draft, recorded rather than silently edited.** It predicted
+the two files would leave `exchange/` "just under the 25% warn line." They did not: +31,936 B took it
+to **1,598,604 B, exactly 25.0%, and the guard fired.** The estimate was low because it costed the
+report at its pre-correction length and omitted this section. **The number that matters is the
+measured one, and 002's D3 guard is now warning on every publish** — which is the guard doing its
+job, and is the case for building queue 003's rotation rather than a reason to write less. Per
+CONVENTIONS §3.2: documents are cheap, data is not; the answer to WARN is rotation, not silence.
+
+`.gitignore` remains modified in the working tree. It was already modified at session start
+(`0305179`) and is untouched by this session — it is deliberately not part of this publish.
 
 **Rollback:** `git checkout -- exchange/queue/` is a no-op — the queue was never touched. To undo
 this session entirely, delete this report and revert the `LEDGER_ATHENA.md` append; there is nothing
@@ -409,8 +428,8 @@ else.
 | PATH | EXISTS | TRACKED | COMMITTED | PUSHED | PROTECTED BY | BOX COST |
 |---|---|---|---|---|---|---|
 | `exchange/queue/004_move-clone-out-of-onedrive.md` | **no** | — | — | — | — | **0 — the halt; never existed** |
-| `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-12_QUEUE-004-HALT.md` | yes | untracked at time of writing | pending this session's publish | pending | **NOT PROTECTED** until publish | ~18 KB — ~0.28% of the 6.39 MB box (stated rounded: a file cannot carry its own exact final size or sha256) |
-| `exchange/status/LEDGER_ATHENA.md` | yes | tracked | append pending | pending | GitHub + estate zip once committed | **+~3.6 KB — ~0.06%**; 32,374 B → ~36,000 B |
+| `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-12_QUEUE-004-HALT.md` | yes | tracked (new) | `56e6be0`, +§8 correction in a follow-up commit | yes — `origin/v12-v1-census` | GitHub + estate zip | ~27 KB — ~0.42% of the 6.39 MB box (stated rounded: a file cannot carry its own exact final size or sha256) |
+| `exchange/status/LEDGER_ATHENA.md` | yes | tracked | `56e6be0` | yes — `origin/v12-v1-census` | GitHub + estate zip | **+4,336 B — +0.07%**; 32,374 B → 36,710 B, 14 STATUS_ATHENA blocks |
 | `exchange/queue/**` (all other) | yes | tracked | unchanged | unchanged | GitHub + estate zip | **0 — nothing amended, nothing stamped** |
 | `scripts/drive_wait.py` | **no** | — | — | — | — | 0 — D-0a not built; no `wait_for_drive` symbol exists anywhere in the repo |
 | `scripts/backup_estate.py` | yes | tracked, **unchanged** | unchanged | unchanged | GitHub + estate zip | 0 — D-0b/D-0c are Phase 0's work, not this paste's |
