@@ -104,6 +104,19 @@ CROSS_CLASSES = ["9_89", "9_200", "89_200", "12_25", "25_89", "300_450", "450_50
 RAW_ONLY_CLASSES = ["9_25"]
 LATTICE_A = ["9_89", "9_200", "89_200"]
 
+# I12: every dict-valued manifest section that ACCUMULATES across --stage
+# re-runs. Named once so a new section cannot be added to the writer and
+# forgotten in the merge -- which is exactly how P-ARM-1 was destroyed.
+MERGED_SECTIONS = ["pins", "artifacts", "fixtures", "stages", "registrations"]
+# Cascade membership is NOT unique under window_chained (build_cascades lets an
+# event JOIN several cascades). The rule below is PINNED BY NAME so the depth
+# column is a choice on the record rather than whatever dict insertion order
+# happened to leave last. "depth_min" = the shallowest cascade the arming
+# belongs to, i.e. the earliest rung it occupies.
+DEPTH_TIE_RULE = "depth_min"
+# Whole-run sections that are replaced, not merged, when their stage re-runs.
+CARRIED_SECTIONS = ["feasibility", "query_cards"]
+
 _LOG: list[str] = []
 
 
@@ -357,25 +370,48 @@ def fixture_pin() -> dict:
     from scratch on every invocation, so `--stage trap` deleted the record of
     every other stage. The build document cited that manifest as the record.
     """
-    log("F-PIN -- manifest pins survive a --stage re-run (I12)")
-    tmp = OUT / "_fpin_probe.json"
-    a = {"pins": {"alpha": 1}, "artifacts": {"a1": "x"}, "feasibility": {"k": 1}}
-    tmp.write_text(json.dumps(a), encoding="utf-8")
-    prior = json.loads(tmp.read_text(encoding="utf-8"))
-    merged = {"pins": dict(prior.get("pins", {})),
-              "artifacts": dict(prior.get("artifacts", {}))}
-    for k in ("feasibility", "query_cards"):
-        if k in prior:
-            merged[k] = prior[k]
-    merged["pins"]["beta"] = 2                     # the scoped stage's own pin
-    ok = (merged["pins"].get("alpha") == 1 and merged["pins"].get("beta") == 2
-          and merged["artifacts"].get("a1") == "x" and "feasibility" in merged)
-    tmp.unlink(missing_ok=True)
-    log(f"    {'PASS' if ok else 'FAIL'}  prior pins + artifacts + sections carried "
-        f"forward alongside the new pin")
-    if not ok:
-        raise SystemExit("HALT (F-PIN): manifest merge does not preserve prior pins.")
-    return {"pass": True}
+    log("F-PIN -- manifest sections survive a --stage re-run (I12)")
+
+    # This fixture now exercises load_manifest() ITSELF on a real file. The
+    # previous version built its own merge inline over a three-key probe dict
+    # and asserted against that -- so it tested a hand-written copy of the
+    # logic, not the logic. It passed for two sessions while `registrations`
+    # was missing from the real merge list, and run-2's CEN-3 invocation
+    # destroyed run-1's P-ARM-1 (with its confound disclosure) unnoticed.
+    #
+    # A fixture that cannot fail when the function under test is broken is
+    # decorative. This one populates EVERY section the program writes, calls
+    # the real loader, and asserts section-by-section survival.
+    probe = OUT / "_fpin_probe_manifest.json"
+    seeded = {"generated_utc": "SEEDED"}
+    for k in MERGED_SECTIONS:
+        seeded[k] = {f"prior_{k}": {"marker": k}}
+    for k in CARRIED_SECTIONS:
+        seeded[k] = {"marker": k}
+    probe.write_text(json.dumps(seeded), encoding="utf-8")
+    try:
+        merged = load_manifest(probe, scoped=True)
+    finally:
+        probe.unlink(missing_ok=True)
+
+    rows = []
+    for k in MERGED_SECTIONS:
+        ok = merged.get(k, {}).get(f"prior_{k}", {}).get("marker") == k
+        rows.append((k, ok))
+    for k in CARRIED_SECTIONS:
+        rows.append((k, merged.get(k, {}).get("marker") == k))
+    # and a new write must not evict the prior one
+    merged["pins"]["new_this_stage"] = 1
+    rows.append(("new pin coexists with prior",
+                 merged["pins"].get("prior_pins") is not None))
+
+    for name, ok in rows:
+        log(f"    {'PASS' if ok else 'FAIL'}  section survives: {name}")
+    bad = [n for n, ok in rows if not ok]
+    if bad:
+        raise SystemExit(f"HALT (F-PIN): load_manifest drops {bad} across a scoped "
+                         f"re-run. Prior evidence would be destroyed silently.")
+    return {"pass": True, "sections_checked": [n for n, _ in rows]}
 
 
 # ===========================================================================
@@ -789,7 +825,24 @@ def outcome_block(df: pd.DataFrame, idx: np.ndarray, up: bool, tf: str) -> dict:
     n = len(c)
     out = {}
     for hname, hms in HORIZONS_MS.items():
-        bars = max(1, int(round(hms / TF_MS[tf])))
+        # DURATION-fixing, honestly. `max(1, round(...))` silently substituted
+        # ONE BAR whenever the requested duration was shorter than a bar --
+        # H20 (1h40m) on 4h became 4h, a 2.4x overshoot, and 12h on the 12h
+        # frame, 7.2x. The label then meant a different duration per timeframe,
+        # which is the exact paste-1 defect R-1 was written to remove.
+        #
+        # An infeasible horizon is now NaN + a flag, not a substituted one.
+        raw = hms / TF_MS[tf]
+        bars = int(round(raw))
+        if bars < 1:
+            out[hname] = {"terminal": np.full(len(idx), np.nan),
+                          "mfe": np.full(len(idx), np.nan),
+                          "mae": np.full(len(idx), np.nan),
+                          "bars": 0, "realized_ms": 0, "requested_ms": hms,
+                          "infeasible": True,
+                          "reason": f"{hname} ({hms/3.6e6:.2f}h) is shorter than one "
+                                    f"{tf} bar; no substitution made"}
+            continue
         term = np.full(len(idx), np.nan)
         mfe = np.full(len(idx), np.nan)
         mae = np.full(len(idx), np.nan)
@@ -805,7 +858,10 @@ def outcome_block(df: pd.DataFrame, idx: np.ndarray, up: bool, tf: str) -> dict:
             seg_lo = lo[i + 1:end + 1].min()
             mfe[j] = ((seg_hi - c[i]) if up else (c[i] - seg_lo)) / av[i]
             mae[j] = ((c[i] - seg_lo) if up else (seg_hi - c[i])) / av[i]
-        out[hname] = {"terminal": term, "mfe": mfe, "mae": mae, "bars": bars}
+        out[hname] = {"terminal": term, "mfe": mfe, "mae": mae, "bars": bars,
+                      "realized_ms": bars * TF_MS[tf], "requested_ms": hms,
+                      "infeasible": False,
+                      "duration_ratio": round(bars * TF_MS[tf] / hms, 4)}
     return out
 
 
@@ -1077,13 +1133,42 @@ def stage_cen3(assets: list[str], era: str = "evidence") -> dict:
     led = pd.read_parquet(OUT / "cen2" / "cen2_ledger.parquet")
     log(f"    armings from CEN-2 ledger: {len(led):,}")
 
+    # ---- horizon realisation, printed BEFORE any outcome table.
+    # A horizon label that means a different duration per timeframe is not a
+    # horizon. Anything infeasible is reported as such, never substituted.
+    horizon_realized = {}
+    log("    HORIZON REALISATION on the 4h anchor frame (duration-fixed check):")
+    for hname, hms in HORIZONS_MS.items():
+        raw = hms / TF_MS["4h"]
+        bars = int(round(raw))
+        rec = {"requested_ms": hms, "requested_h": round(hms / 3.6e6, 3),
+               "bars_4h": bars, "realized_h": round(bars * TF_MS["4h"] / 3.6e6, 3),
+               "infeasible": bars < 1,
+               "duration_ratio": round(bars * TF_MS["4h"] / hms, 4) if bars >= 1 else None}
+        horizon_realized[hname] = rec
+        flag = "  INFEASIBLE on 4h -- emitted as NaN, NOT substituted" if bars < 1 else ""
+        log(f"      {hname:5} requested {rec['requested_h']:.2f}h -> {bars} bar(s) = "
+            f"{rec['realized_h']:.2f}h (ratio {rec['duration_ratio']}){flag}")
+
     # ---- toll line, per asset, in ATR units (I8 'toll beside every excursion')
+    # Indices of this asset's armings on its own 4h frame, so the toll is
+    # measured where the returns are measured (see m8 note below).
+    led_arm_idx = {s: g["arming_idx"].to_numpy(int)
+                   for s, g in led.groupby("asset", sort=True)}
     toll = {}
     for sym in assets:
         d4 = MC2.frame(sym, "4h", era)
         px = d4["close"].to_numpy(float); av = d4["atr"].to_numpy(float)
         ok = np.isfinite(px) & np.isfinite(av) & (av > 0)
-        toll[sym] = float(np.median((TOLL_BPS_ROUND_TRIP / 10000.0) * px[ok] / av[ok]))
+        # m8: measure the toll on the population the returns are normalised on
+        # -- the ARMINGS -- not over every evidence bar. Armings occur at
+        # compressed ATR, so the global figure understates the toll 2-14%.
+        at = led_arm_idx.get(sym)
+        sel = at if (at is not None and len(at)) else np.arange(len(px))
+        sel = sel[(sel >= 0) & (sel < len(px))]
+        oks = ok[sel]
+        toll[sym] = float(np.median((TOLL_BPS_ROUND_TRIP / 10000.0)
+                                    * px[sel][oks] / av[sel][oks]))
     log(f"    toll line ({TOLL_BPS_ROUND_TRIP:.0f} bps round trip) in ATR units:")
     for s, v in toll.items():
         log(f"      {s:9} {v:.4f} ATR")
@@ -1112,11 +1197,37 @@ def stage_cen3(assets: list[str], era: str = "evidence") -> dict:
         # (asset, ts) alone is not unique because a 4h and a 12h bar can share
         # an open_time (00:00), which silently turns the lookup into a Series.
         k = ch[(ch.event_class == "9_89") & (ch.tf == "4h")]
-        dmap = dict(zip(zip(k.asset, k.ts), k.depth))
-        lmap = dict(zip(zip(k.asset, k.ts), k.chain_len))
+
+        # NAMED TIE RULE (I5 discipline; required before CEN-4 reads the lens).
+        #
+        # seq8_views.build_cascades is NOT non-overlapping in its forward scan:
+        # `used` only prevents an event STARTING a second cascade, never
+        # JOINING one. Under window_chained an arming can therefore belong to
+        # several cascades at different depths (measured: 817/860 armings hold
+        # >1 membership, 391 with a depth SPREAD). A `dict(zip(...))` over that
+        # non-unique key silently keeps the LAST write -- an arbitrary rule
+        # nobody chose, and every depth number moves under an equally
+        # defensible one (mean depth 3.21 under last/min vs 4.18 under
+        # first/max).
+        #
+        # So: emit min, max and the membership count, and PIN the rule by name.
+        # direction_consistent is a clean partition here (1 membership per
+        # event), so the rule is a no-op for it -- which is itself worth
+        # recording rather than assuming.
+        agg = k.groupby(["asset", "ts"], sort=False).agg(
+            depth_min=("depth", "min"), depth_max=("depth", "max"),
+            n_memberships=("depth", "size"), chain_len_max=("chain_len", "max"))
         pairs = list(zip(led.asset, led.arming_ts))
-        led[f"depth_{rule}"] = [int(dmap.get(p, 0)) for p in pairs]
-        led[f"chainlen_{rule}"] = [int(lmap.get(p, 0)) for p in pairs]
+        for col, src in [(f"depth_{rule}", DEPTH_TIE_RULE),
+                         (f"depth_min_{rule}", "depth_min"),
+                         (f"depth_max_{rule}", "depth_max"),
+                         (f"n_memberships_{rule}", "n_memberships")]:
+            m = agg[src].to_dict()
+            led[col] = [int(m.get(p, 0)) for p in pairs]
+        multi = int((led[f"n_memberships_{rule}"] > 1).sum())
+        spread = int((led[f"depth_max_{rule}"] > led[f"depth_min_{rule}"]).sum())
+        log(f"      {rule:22} tie-rule='{DEPTH_TIE_RULE}' (pinned) | armings with "
+            f">1 membership: {multi}/{len(led)}, with a depth spread: {spread}")
         d = led[f"depth_{rule}"]
         log(f"      {rule:22} cascades={ch.chain_id.nunique():6d} "
             f"max_depth={int(ch.depth.max())} mean_len={ch.chain_len.mean():.2f} "
@@ -1170,7 +1281,11 @@ def stage_cen3(assets: list[str], era: str = "evidence") -> dict:
                 r[f"median_mae_{h}"] = round(float(ma.median()), 6) if len(ma) else None
                 r[f"quality_{h}"] = (round(float(mf.median() / ma.median()), 4)
                                      if len(mf) and len(ma) and ma.median() > 0 else None)
-            r["toll_atr"] = round(float(g["toll_atr"].median()), 4)
+            # m1: a pooled group spans several assets, and toll_atr is a
+            # per-asset constant -- a median of it is just one asset's number
+            # wearing a pooled label. The BINDING toll is the largest in the group.
+            r["toll_atr_binding"] = round(float(g["toll_atr"].max()), 4)
+            r["toll_atr_assets"] = int(g["asset"].nunique())
             rows.append(r)
         return pd.DataFrame(rows)
 
@@ -1181,11 +1296,32 @@ def stage_cen3(assets: list[str], era: str = "evidence") -> dict:
     by_depth_dc = panel(led.assign(depth_bucket=np.minimum(led.depth_direction_consistent, 4)),
                         ["depth_bucket"])
 
+    # ---- I11 ON REAL DATA. Naming "the worst cell on the board" or "the only
+    # asset below 1.0" out of a 10-cell panel IS a max-statistic selection, and
+    # until now the guard only ever ran on F-GUARD's synthetic sweeps -- a
+    # committed-but-uncalled guard is the prose gate I11 exists to abolish.
+    panel_cands = []
+    for (a, d), g in led.groupby(["asset", "dir"], sort=True):
+        rest = led[~((led.asset == a) & (led.dir == d))]
+        vals = np.concatenate([g["term_H100"].to_numpy(float),
+                               rest["term_H100"].to_numpy(float)])
+        msk = np.concatenate([np.ones(len(g), bool), np.zeros(len(rest), bool)])
+        panel_cands.append((f"{a}|{d}", vals, msk))
+    panel_guard = selection_guard(panel_cands)
+    log(f"    I11 guard on the asset x direction panel (m={panel_guard.get('m')}): "
+        f"winner={panel_guard.get('winner')} "
+        f"p_sel={panel_guard.get('p_selection_corrected')} "
+        f"vs BH bar {panel_guard.get('bh_bar_q_over_m')} -> "
+        f"{'ADMISSIBLE' if panel_guard.get('admissible') else 'NOT ADMISSIBLE'}")
+    if not panel_guard.get("admissible"):
+        log("      => extreme-cell statements about this panel are UNGATED "
+            "OBSERVATIONS, not findings. Labelled as such in the build document.")
+
     log("    OUTCOME PANEL by asset x direction (terminal H100, ATR; toll beside):")
     for r in by_asset.itertuples(index=False):
         log(f"      {r.asset:9} {r.dir:5} n={r.n:4d} term={r.median_term_H100:+.4f} "
             f"mfe={r.median_mfe_H100:.3f} mae={r.median_mae_H100:.3f} "
-            f"Q={r.quality_H100} toll={r.toll_atr:.3f}")
+            f"Q={r.quality_H100} toll={r.toll_atr_binding:.3f}")
     log("    DUAL-LENS depth panel (I6 -- both always printed):")
     log("      window_chained (PRIMARY for entry claims):")
     for r in by_depth_wc.itertuples(index=False):
@@ -1223,31 +1359,126 @@ def stage_cen3(assets: list[str], era: str = "evidence") -> dict:
     if not trig.empty:
         j = trig.merge(led[["asset", "arming_ts", "trigger_class"]].drop_duplicates(),
                        on=["asset", "arming_ts"], how="left", suffixes=("", "_led"))
-        mask = (j["trigger_class"] == "12_25").to_numpy(bool)
-        vals = j["trig_term_H100"].to_numpy(float)
+        n_a_only = int((~led.has_trigger).sum())
+        a_only = led[~led.has_trigger]
+
+        # ---- WHY THIS REGISTRATION CANNOT BE SCORED AS WRITTEN.
+        #
+        # "A-only windows" means armed-but-never-triggered: n=253 here. Two
+        # facts kill the comparison:
+        #   1. A-only windows have NO TRIGGER, so no trigger anchor exists.
+        #      The only shared anchor is the arming, which changes the ruler
+        #      mid-comparison.
+        #   2. A-only is 252/253 ABORTED, median window width 4 bars against
+        #      46 for the triggered arms. That is the MECHANICAL SEPARATION
+        #      this very stage prints a caveat about: an abort is a regime flip
+        #      inside the horizon, so its terminal return is negative by
+        #      construction. Scoring against it measures survival, not the relay.
+        #
+        # An earlier version silently substituted "25_89-triggered" for
+        # "A-only" and reported SUPPORTED. That is a different hypothesis than
+        # the one registered, which is precisely what F-8 exists to prevent.
+        log("      !! UNSCOREABLE AS WRITTEN -- registration WITHDRAWN")
+        log(f"         'A-only' = armed-but-never-triggered, n={n_a_only}; of those "
+            f"{int((a_only.fate == 'ABORTED').sum())} are ABORTED, "
+            f"median width {a_only.window_width_bars.median():.0f} bars vs "
+            f"{led[led.has_trigger].window_width_bars.median():.0f}")
+        log("         (a) A-only windows have no trigger, so no trigger anchor exists;")
+        log("         (b) the A-only arm IS the aborted arm -- the mechanical")
+        log("             separation this stage's own fate table warns about.")
+
+        variants = []
+        m_first = (j["trigger_class"] == "12_25").to_numpy(bool)
+        vals_first = j["trig_term_H100"].to_numpy(float)
         clus = j["asset"].to_numpy()
-        if mask.sum() >= 8 and (~mask).sum() >= 8:
-            rel_ci = cluster_ci(vals, clus, mask)
-            verdict = ("SUPPORTED" if (rel_ci["excludes_zero"] and (rel_ci["point"] or 0) > 0)
-                       else "NOT SUPPORTED")
-            log(f"      12_25-triggered n={int(mask.sum())} vs other n={int((~mask).sum())}")
-            log(f"      cluster CI on the difference: [{rel_ci['lo']},{rel_ci['hi']}] "
-                f"{'EXCL-0' if rel_ci['excludes_zero'] else 'straddles 0'}")
-            log(f"      VERDICT: {verdict}")
-            rel = {"registration": ("windows with an in-window 12_25 trigger -> higher "
-                                   "trigger-anchored terminal return than A-only windows"),
-                   "prior": 0.60, "lens": "24h|window_chained",
-                   "n_12_25": int(mask.sum()), "n_other": int((~mask).sum()),
-                   "cluster_ci": rel_ci, "verdict": verdict,
-                   "criterion": "R-2 asset-cluster 90% CI excluding zero"}
-        else:
-            log("      INSUFFICIENT SAMPLE -- not scored")
-            rel = {"verdict": "NOT SCORED (insufficient sample)", "prior": 0.60}
+        variants.append(("V1 12_25-FIRST vs 25_89-FIRST (trigger anchor) "
+                         "-- what an earlier draft reported",
+                         cluster_ci(vals_first, clus, m_first),
+                         int(m_first.sum()), int((~m_first).sum())))
+        # literal-predicate arm: ANY in-window 12_25, vs 25_89-only
+        vv = np.concatenate([j.loc[m_first, "trig_term_H100"].to_numpy(float),
+                             a_only["term_H100"].to_numpy(float)])
+        cc = np.concatenate([j.loc[m_first, "asset"].to_numpy(),
+                             a_only["asset"].to_numpy()])
+        mm = np.concatenate([np.ones(int(m_first.sum()), bool),
+                             np.zeros(len(a_only), bool)])
+        variants.append(("V2 12_25 vs A-ONLY (mixed anchor) -- THE REGISTERED "
+                         "COMPARISON, confounded",
+                         cluster_ci(vv, cc, mm), int(mm.sum()), int((~mm).sum())))
+        for label, ci_v, na, nb in variants:
+            log(f"         {label}")
+            log(f"            n={na} vs {nb}  point={ci_v['point']} "
+                f"CI[{ci_v['lo']},{ci_v['hi']}] "
+                f"{'EXCL-0' if ci_v['excludes_zero'] else 'straddles 0'}")
+
+        # ---- I8/R-2 mandated splits, printed BESIDE any headline
+        splits = {}
+        for h in ("H100", "H500"):
+            col = f"trig_term_{h}"
+            if col in j and j[col].notna().any():
+                splits[f"horizon_{h}"] = cluster_ci(j[col].to_numpy(float), clus, m_first)
+        for d in ("up", "down"):
+            sel = (j["dir"] == d).to_numpy(bool)
+            if sel.sum() > 20:
+                splits[f"dir_{d}"] = cluster_ci(vals_first[sel], clus[sel], m_first[sel])
+        per_asset = {}
+        for a in np.unique(clus):
+            s = clus == a
+            aa = vals_first[s & m_first]; bb = vals_first[s & ~m_first]
+            aa = aa[np.isfinite(aa)]; bb = bb[np.isfinite(bb)]
+            if len(aa) >= 5 and len(bb) >= 5:
+                per_asset[a] = round(float(np.median(aa) - np.median(bb)), 4)
+        loao = {}
+        for a in np.unique(clus):
+            s = clus != a
+            loao[f"drop_{a}"] = cluster_ci(vals_first[s], clus[s], m_first[s])
+        log(f"         per-asset deltas (descriptive, R-2): {per_asset}")
+        log(f"         sign-reversed assets: "
+            f"{[k for k, v in per_asset.items() if v < 0] or 'none'}")
+        n_loao_excl = sum(1 for v in loao.values() if v["excludes_zero"])
+        log(f"         leave-one-asset-out: {n_loao_excl}/{len(loao)} refits still "
+            f"exclude zero")
+        for hk in ("horizon_H500",):
+            if hk in splits:
+                log(f"         {hk}: point={splits[hk]['point']} "
+                    f"CI[{splits[hk]['lo']},{splits[hk]['hi']}] "
+                    f"{'EXCL-0' if splits[hk]['excludes_zero'] else 'straddles 0'}")
+
+        rel = {
+            "registration": ("windows with an in-window 12_25 trigger -> higher "
+                             "trigger-anchored terminal return than A-only windows"),
+            "prior": 0.60, "lens": "24h|window_chained",
+            "verdict": "WITHDRAWN -- UNSCOREABLE AS WRITTEN",
+            "withdrawal_reason": (
+                "'A-only' means armed-but-never-triggered (n=%d). Those windows have "
+                "no trigger, so the registered trigger-anchored comparison has no "
+                "anchor; and the A-only cohort is %d/%d ABORTED with median width "
+                "%.0f bars vs %.0f, so the split is the mechanical separation this "
+                "stage explicitly caveats. An earlier draft substituted "
+                "'25_89-triggered' for 'A-only' and reported SUPPORTED -- a "
+                "different hypothesis than the one registered."
+                % (n_a_only, int((a_only.fate == 'ABORTED').sum()), n_a_only,
+                   a_only.window_width_bars.median(),
+                   led[led.has_trigger].window_width_bars.median())),
+            "n_a_only": n_a_only,
+            "variants": [{"label": l, "n_treat": na, "n_control": nb, "ci": c}
+                         for l, c, na, nb in variants],
+            "mandated_splits": splits,
+            "per_asset_delta": per_asset,
+            "leave_one_asset_out": loao,
+            "loao_excluding_zero": f"{n_loao_excl}/{len(loao)}",
+            "criterion": "R-2 asset-cluster 90% CI excluding zero",
+            "successor": ("re-register by name as P-REL-1b with the arms defined by "
+                          "an explicit event-stream predicate and the anchor stated"),
+        }
+        log("      VERDICT: WITHDRAWN -- UNSCOREABLE AS WRITTEN "
+            "(successor P-REL-1b to be registered by name)")
 
     return {"ledger": led, "trigger_outcomes": trig, "by_asset": by_asset,
             "by_half": by_half, "by_depth_window_chained": by_depth_wc,
             "by_depth_direction_consistent": by_depth_dc, "by_fate": by_fate,
-            "toll_atr": toll, "fate_caveat": CAVEAT, "p_rel_1": rel}
+            "toll_atr": toll, "fate_caveat": CAVEAT, "p_rel_1": rel,
+            "horizon_realized": horizon_realized}
 
 
 # ===========================================================================
@@ -1271,13 +1502,25 @@ def load_manifest(path: Path, scoped: bool) -> dict:
         "seed": SEED,
         "generated_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "ceil_ms": CEIL_MS,
-        "pins": dict(prior.get("pins", {})),
-        "artifacts": dict(prior.get("artifacts", {})),
-        "fixtures": dict(prior.get("fixtures", {})),
-        "stages": dict(prior.get("stages", {})),
+        # I12: EVERY accumulating section must be carried, not a hand-picked
+        # subset. `registrations` was omitted from this list, so the run-2
+        # CEN-3 invocation silently DELETED run-1's P-ARM-1 -- including the
+        # mandatory exposure-time confound disclosure attached to it. The
+        # manifest is what the build documents cite as the record of record.
+        #
+        # The list is now derived from a named constant rather than written out
+        # here, so adding a new section cannot forget to add it to the merge.
+        **{k: dict(prior.get(k, {})) for k in MERGED_SECTIONS},
     }
+    # Whole-run sections a scoped run does not regenerate (feasibility matrix,
+    # query cards): carried forward verbatim rather than merged key-by-key.
+    for k in CARRIED_SECTIONS:
+        if k in prior:
+            man[k] = prior[k]
     if prior:
         man["merged_from"] = prior.get("generated_utc")
+        man["merge_sections"] = {"merged": MERGED_SECTIONS,
+                                 "carried": CARRIED_SECTIONS}
     return man
 
 
@@ -1368,7 +1611,7 @@ def main(argv=None) -> int:
                 "strict_core_n": int(led.strict_core.sum()),
                 "ruler": "R-1 signed terminal return, ATR-normalised, duration-fixed horizons",
                 "toll_bps_round_trip": TOLL_BPS_ROUND_TRIP}
-            man["registrations"] = man.get("registrations", {})
+            man.setdefault("registrations", {})
             man["registrations"]["P-ARM-1"] = c2["p_arm_1"]
 
     if run("cen3"):
@@ -1397,13 +1640,14 @@ def main(argv=None) -> int:
                 f"sha={man['artifacts'][name]['sha256'][:12]}")
         man["stages"]["CEN-3"] = {
             "era": "evidence", "ruler": "R-1 signed terminal return / ATR at anchor",
-            "horizons": {k: v for k, v in HORIZONS_MS.items()},
+            "horizons_requested_ms": {k: v for k, v in HORIZONS_MS.items()},
+            "horizons_realized_on_4h": c3["horizon_realized"],
             "toll_bps_round_trip": TOLL_BPS_ROUND_TRIP,
             "toll_atr_by_asset": c3["toll_atr"],
             "lenses_printed": ["window_chained", "direction_consistent"],
             "entry_lens_primary": "24h|window_chained (I6)",
             "fate_caveat": c3["fate_caveat"]}
-        man["registrations"] = man.get("registrations", {})
+        man.setdefault("registrations", {})
         if c3.get("p_rel_1"):
             man["registrations"]["P-REL-1"] = c3["p_rel_1"]
 
