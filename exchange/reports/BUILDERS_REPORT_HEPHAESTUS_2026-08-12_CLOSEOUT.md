@@ -466,7 +466,45 @@ confirming the repair independently of the 08-11 evidence.
 
 ### 9.2 HEARTBEAT — and an accidental reproduction of the 08-11 death
 
-ROUTINE_OUTCOME
+**HEARTBEAT.md regenerated today, and the routine is GREEN — its first clean end-to-end run
+since 2026-08-08.**
+
+```
+  manifest: exit=0 elapsed=9.8s
+  brief: exit=0 elapsed=561.2s
+  brief2_capture: exit=0 elapsed=0.0s
+  brief2_panel: exit=0 elapsed=1.9s
+wrote exchange/status/daily/DAILY_2026-08-12.md
+publish: routine last completed 2026-08-12 (0h ago)
+publish: committed 4479606 (6 path(s)) and pushed to origin/v12-v1-census
+```
+
+```
+# HEARTBEAT
+run: 2026-08-12T03:13:10Z
+exit: 0 (jobs + window; publish outcome in the day's DAILY report)
+overdue: 5
+archives — estate: 2026-08-11 · workflow: 2026-08-11 · phase: NONE
+```
+
+`DAILY_2026-08-12.md` §1 reads **"all jobs OK"**. `exit: 0` — against `exit: 1` on 08-09.
+
+**F-P6 has now been seen in production in BOTH states, on the day it was written:**
+`*** STALE >36h ***` at 56 hours on the backup publish, and `(0h ago)` with no flag here. The
+non-stale branch is not a doctored demonstration; that is the live line after a real clean run.
+
+**And the first attempt reproduced the 08-11 death exactly.** My initial foreground run was killed
+at a 10-minute limit during `brief` (which takes 561 s). The manifest job had already completed and
+written its output — but `HEARTBEAT.md` was **not** written, because the routine writes it only
+after all jobs finish. That is precisely the 08-11 signature: manifest done, no DAILY, no heartbeat,
+process killed from outside. The diagnosis in the addendum was confirmed by accident.
+
+**`phase: NONE` is not missing evidence.** `research_outputs/_archive/POINTER.md` records that the
+phase archives moved to `D:/Naiad/research_outputs/_archive/` on 2026-08-06 (operator ruling B),
+with tracked `.sha256` fingerprints left behind and an independent copy on Drive. The heartbeat
+scans the local folder, finds no `.zip`, and reports NONE. **Reporting artifact of the relocation,
+not a loss** — but it does mean the heartbeat's phase field is now permanently uninformative.
+Reported, not fixed. **Owner: ATHENA.**
 
 ### 9.3 The code commit
 
@@ -487,8 +525,8 @@ The contract asked for ONE publish. There were four. **Three were not mine to ch
 |---|---|---|
 | `e835755` | `backup_estate.py --workflow` | the script calls `publish()` itself; there is **no `--no-publish` flag** |
 | `7a708d6` | `backup_estate.py --estate` | same |
-| ROUTINE_PUB | `daily_routine.py` | `routine_jobs.json` sets `"publish": true` |
-| FINAL_PUB | this document + ledger | the one publish the contract intended |
+| `4479606` | `daily_routine.py` | `routine_jobs.json` sets `"publish": true` |
+| final publish (SHA on screen) | this document + ledger | the one publish the contract intended |
 
 Item 7 required running both backups and item 9 required running the routine; each publishes as a
 side effect. **Reported rather than engineered around** — suppressing them would have meant editing
@@ -496,7 +534,22 @@ side effect. **Reported rather than engineered around** — suppressing them wou
 
 ### 9.5 Final publish
 
-FINAL_PUBLISH_BLOCK
+The final publish carries this document and the `LEDGER_ATHENA.md` append. **Its own SHA
+cannot appear inside the file it commits** — the same reason a file never contains its own sha256 —
+so it is reported on screen.
+
+Measured immediately before it, from the committed tree:
+
+```
+exchange/ at session start (2604d5e) : 1,797,189 B   28.13%   *** WARN ***
+exchange/ at 4479606                 : 1,459,396 B   22.84%   OK
+net                                  :  -337,793 B   -5.29 points
+```
+
+**NO BUDGET WARNING.** `exchange/` is back under the 25% warn line for the first time since the bus
+crossed it — the contract's post-publish assertion (`guard < 25%`) is met with 2.16 points to spare.
+The final publish adds this document and the ledger entry, which together move that figure by well
+under a tenth of a point.
 
 ---
 
@@ -554,20 +607,22 @@ costs the box nothing.
 | `exchange/reports/MC1_results.json.pointer.md` | yes | tracked (new) | `e835755` | yes | GitHub + estate zip | 362 B — **0.01%** |
 | `exchange/reports/WF1_discriminants.json.pointer.md` | yes | tracked (new) | `e835755` | yes | GitHub + estate zip | 374 B — **0.01%** |
 | `exchange/status/RETENTION.md` | yes | tracked (regenerated) | `7a708d6` | yes | GitHub + estate zip | 1,705 B — **0.03%** |
-| `exchange/status/MANIFEST.json` | yes | tracked (regenerated) | ROUTINE_PUB | yes | GitHub + estate zip | MANIFEST_COST |
-| `exchange/status/daily/MANIFEST_2026-08-11.json` | yes | tracked (regenerated) | ROUTINE_PUB | yes | GitHub + estate zip | DAILYMAN_COST |
-| `exchange/status/HEARTBEAT.md` | yes | tracked | HEARTBEAT_COMMIT | yes | GitHub + estate zip | HEARTBEAT_COST |
-| `exchange/status/LEDGER_ATHENA.md` | yes | tracked (appended) | FINAL_PUB | yes | GitHub + estate zip | LEDGER_COST |
-| `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-12_CLOSEOUT.md` | yes | tracked (new) | FINAL_PUB — a document cannot name the commit carrying it; SHA on screen | yes | GitHub + estate zip | SELFSIZE B — **SELFPCT%** |
+| `exchange/status/MANIFEST.json` | yes | tracked (regenerated) | `4479606` | yes | GitHub + estate zip | 25,013 B — **0.39%** |
+| `exchange/status/daily/MANIFEST_2026-08-12.json` | yes | tracked (new; `MANIFEST_2026-07-28.json` aged out of the 7-file window) | `4479606` | yes | GitHub + estate zip | 25,013 B — **0.39%** |
+| `exchange/status/HEARTBEAT.md` | yes | tracked | `4479606` | yes | GitHub + estate zip | 192 B — **0.00%** |
+| `exchange/status/LEDGER_ATHENA.md` | yes | tracked (appended) | final publish (SHA on screen) | yes | GitHub + estate zip | 20,230 B — **0.32%** |
+| `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-12_CLOSEOUT.md` | yes | tracked (new) | final publish (SHA on screen) — a document cannot name the commit carrying it; SHA on screen | yes | GitHub + estate zip | 33,372 B — **0.52%** |
 | `research_outputs/mc1/MC1_results.json` | yes | **untracked — `.gitignore:107`** | never | **no** | local disk + git history | **n/a** — outside the tick set |
 | `research_outputs/wf1/WF1_discriminants.json` | yes | untracked (not ignored) | never | **no** | local disk + git history | **n/a** — outside the tick set |
 | `G:\…\naiad_workflow_2026-08-11.zip` (+ `.sha256`) | yes | n/a — off-repo | n/a | n/a | Google Drive | **n/a** — off-repo |
 | `G:\…\naiad_estate_2026-08-11.zip` (+ `.sha256`) | yes | n/a — off-repo | n/a | n/a | Google Drive | **n/a** — off-repo |
 
 **Nothing created this session is over the ~1% flag threshold.** The largest single artifact is
-`CONVENTIONS.md` at 0.81%, and it was already there. **This session was net-NEGATIVE on the box: the
-two `git rm`'d JSONs freed 374,427 B (5.86%) against roughly ADDBACK B added.** That is the whole
-point of the pointer-stub pattern, and it is why the budget line at the end reads what it reads.
+`CONVENTIONS.md` at 0.81%, and it was already there. **This session was net-NEGATIVE on the box by
+337,793 B — 5.29 percentage points, taking `exchange/` from 28.13% (WARN) to 22.84% (OK).** The two
+`git rm`'d JSONs freed 374,427 B; everything written back — nine prose edits, two stubs, three
+regenerated status files, this report and the ledger entry — came to about 37 KB against it. That is
+the pointer-stub pattern working exactly as designed: **documents are cheap, data is not.**
 
 **Scratchpad, deliberately NOT committed:** the F-P6 and F-Q1 harnesses, the stamping and
 section-repair scripts, and the routine log — all under

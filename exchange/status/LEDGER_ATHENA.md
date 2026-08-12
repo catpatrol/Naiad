@@ -208,3 +208,25 @@ PENDING:
 NEXT: Rule on the rotation conflict and supply the truncated 4.2 text. Owner: ATHENA, then operator.
 METRICS: operator actions this session = 0 · files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_ATHENA — 2026-08-12 ===
+NOW: Close-out session executed under operator go 2026-08-12. Seven of nine items delivered in full, one delivered only after correcting a placement bug in the instruction that issued it, one HALT-SOFT needing an elevated shell. The daily routine is GREEN again — first clean end-to-end run since 2026-08-08, all four jobs exit 0, HEARTBEAT regenerated with exit: 0. The three-day "dead automation" reading is closed: one real failure, one away-day, one killed run.
+LAST EVENT: 2026-08-12 — routine ran clean (4479606); F-P6 freshness line live in production; queue counters truthful for the first time.
+FACTS:
+- F-P6 built into publish_exchange.py: every publish now prints when the ROUTINE last completed, read from HEARTBEAT.md, never written by publish. Print-only, never blocks. 5/5 asserted cases including the 36h boundary and four MISSING modes [verified]
+- F-P6 proved itself in PRODUCTION in both states on the day it was written: "routine last completed 2026-08-09 (56h ago) *** STALE >36h ***" on the backup publish, then "2026-08-12 (0h ago)" after the routine ran clean [verified]
+- F-Q1: queue_open reported 0 against six work orders for two independent reasons — the NNN_*.md filter excluded the three date-named contracts, and a bare `RATIFIED:` startswith test could not see SEQ8's `**RATIFIED:**`. Both fixed; counters now 6 total / 0 unratified / 2 ratified-unbuilt, machine matching hand enumeration on all six rows [verified]
+- BUILT: stamp convention added as queue/README.md rule 6 — "ratified but unbuilt" had no source of truth in the files. Four items stamped from artifacts verified on disk; 001 and 003 deliberately left unstamped and are now the visible backlog. SCOPE JUDGMENT, operator may veto [ledger]
+- MC1_results.json and WF1_discriminants.json left the bus for pointer stubs after double sha256 verification: 374,427 B freed, 5.86% of the box. NEITHER safety copy is pushed — research_outputs/mc1/** is gitignored — so git history at 2604d5e is the durable protection, not the copies [verified]
+- INTERFACE relocated to exchange/status/INTERFACE_PUBLISHED.md per the rotation ruling; git recorded a rename, sha unchanged 70c3f368…, F-AN-15 follows it, suite 287 passed / 1 skipped unchanged [verified]
+- Weekly backups: destination healthy throughout — G: writable, Drive running, 08-09 archives intact. Both exit 0 today, 8/8 fixtures each, bidirectional verification 73/73 and 321 members. ROOT MECHANISM: backup_estate.py returns 1 when publish_step() is FLAGGED/REFUSED/ERROR, so a perfect verified archive reports failure for a git-step stumble. Size budget was 19.3% that day and all three publishes committed; concurrent index contention is the leading hypothesis, NOT proven [verified/open]
+PENDING:
+1. Operator: enable the scheduler log in an ADMIN shell — `wevtutil sl Microsoft-Windows-TaskScheduler/Operational /e:true` (exit 5, access denied from this session). Until then every scheduler question needs artifact archaeology
+2. ATHENA: backup_estate.py exit-code conflation (§7.3 of the build document) — out of this session's scope, reported not fixed
+3. ATHENA: F-P6 and F-Q1 are scratchpad harnesses, NOT in pytest — one line of scope for fixtures/ makes them permanent
+4. ATHENA: decide whether research_outputs/wf1/ (and mc1/, needing a .gitignore edit) should be tracked
+5. HEPHAESTUS: queue 001 and 003 are ratified_unbuilt; 003 is half-built — rotate_reports.py exists, ROTATION_LOG.md and docs/history/reports/ do not
+6. Operator: WakeToRun is false and the task runs as InteractiveToken, so an away-day waits for wake and a logoff kills a running routine — both implications stated, no setting changed
+NEXT: Enable the Operational log, then rule on items 2-4. Owner: operator, then ATHENA.
+METRICS: operator actions this session = 0 · files re-ingested = 0
+=== END STATUS ===
