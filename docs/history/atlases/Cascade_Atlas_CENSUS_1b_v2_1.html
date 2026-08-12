@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cascade Atlas v2.1 — CENSUS-1b MTF cross structure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0E1420;--panel:#151D2C;--panel2:#1B2436;--rule:#26324C;--tx:#C9D4E6;--mute:#7A8AA5;--dim:#55637C;
+--tf0:#2FB0BE;--tf1:#3D93D4;--tf2:#6C7FE0;--tf3:#9A6FD8;--tf4:#D96BA8;--tf5:#E8853F;--tf6:#F0B429;
+--warn:#E8853F;--ok:#54C6A0;--err:#E0576B;
+--disp:'Space Grotesk',system-ui,sans-serif;--body:'IBM Plex Sans',system-ui,sans-serif;--mono:'IBM Plex Mono',ui-monospace,monospace;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--tx);font-family:var(--body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 96px}
+header{padding:56px 0 32px;border-bottom:1px solid var(--rule)}
+h1{font-family:var(--disp);font-weight:700;font-size:clamp(30px,4.6vw,52px);line-height:1.02;letter-spacing:-.028em;margin:0 0 14px}
+h1 em{font-style:normal;color:var(--tf5)}
+.sub{color:var(--mute);max-width:72ch;font-size:16px;margin:0}
+.prov{font-family:var(--mono);font-size:11.5px;color:var(--dim);margin-top:20px;display:flex;flex-wrap:wrap;gap:8px 22px}
+.prov b{color:var(--mute);font-weight:500}
+.banner{margin:26px 0 0;padding:13px 17px;border-left:3px solid var(--warn);background:rgba(232,133,63,.07);font-size:13.5px;color:#E6C6A8;border-radius:0 4px 4px 0}
+.banner b{color:var(--warn)}
+.banner.blue{border-color:var(--tf1);background:rgba(61,147,212,.07);color:#B9CFE6}.banner.blue b{color:var(--tf1)}
+.banner.err{border-color:var(--err);background:rgba(224,87,107,.07);color:#E6BCC3}.banner.err b{color:var(--err)}
+section{padding:52px 0;border-bottom:1px solid var(--rule)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:0 0 9px}
+h2{font-family:var(--disp);font-weight:600;font-size:26px;letter-spacing:-.02em;margin:0 0 12px}
+h4{font-family:var(--disp);font-weight:600;font-size:15px;margin:22px 0 8px;color:var(--tx)}
+.lede{color:var(--mute);max-width:74ch;margin:0 0 30px;font-size:15px}
+.grid{display:grid;grid-template-columns:1fr 340px;gap:34px;align-items:start}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+@media(max-width:900px){.grid,.grid2{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:7px;padding:20px}
+.card h3{font-family:var(--disp);font-size:14px;margin:0 0 12px;font-weight:600}
+.note{font-size:13px;color:var(--mute);margin:12px 0 0}.note b{color:var(--tx)}
+ul.tight{margin:8px 0 0;padding-left:19px;font-size:13px;color:var(--mute)}ul.tight li{margin:7px 0}ul.tight b{color:var(--tx)}
+table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12.5px}
+th{text-align:right;color:var(--dim);font-weight:500;padding:6px 9px;border-bottom:1px solid var(--rule);font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+th:first-child,td:first-child{text-align:left}
+td{padding:6px 9px;border-bottom:1px solid rgba(38,50,76,.5);text-align:right}
+tr:last-child td{border-bottom:none}
+.tfchip{display:inline-block;padding:1px 7px;border-radius:3px;font-family:var(--mono);font-size:11.5px;font-weight:600;color:#0E1420}
+.tfchip.ghost{background:transparent!important;border:1.5px dashed;color:inherit}
+.toggle{display:flex;border:1px solid var(--rule);border-radius:6px;overflow:hidden;margin:0 0 14px;width:fit-content;flex-wrap:wrap}
+.toggle button{background:transparent;border:none;border-right:1px solid var(--rule);color:var(--mute);font-family:var(--mono);font-size:12px;padding:10px 15px;cursor:pointer;transition:background .15s,color .15s}
+.toggle button:last-child{border-right:none}
+.toggle button:hover{background:var(--panel2);color:var(--tx)}
+.toggle button[aria-pressed=true]{background:var(--tf5);color:#0E1420;font-weight:600}
+.toggle.small button{padding:7px 12px;font-size:11.5px}
+.toggle.alt button[aria-pressed=true]{background:var(--tf1)}
+.bars{display:flex;flex-direction:column;gap:9px}
+.bar{display:grid;grid-template-columns:70px 1fr 108px;align-items:center;gap:12px}
+.bar .lab{font-family:var(--mono);font-size:12px;color:var(--mute);text-align:right}
+.bar .track{height:22px;background:var(--panel2);border-radius:3px;overflow:hidden}
+.bar .fill{height:100%;border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.bar .val{font-family:var(--mono);font-size:12px;color:var(--tx)}.bar .val span{color:var(--dim)}
+.seqrow{display:grid;grid-template-columns:1fr 62px 62px 78px;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid rgba(38,50,76,.5)}
+.seqrow:last-child{border-bottom:none}
+.seqhead{font-family:var(--mono);font-size:10.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.05em}
+.seqchain{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.arrow{color:var(--dim);font-size:11px}
+.pct,.mfe,.nn{font-family:var(--mono);font-size:12px;text-align:right}
+.pct{color:var(--mute)}.nn{color:var(--dim)}
+.hm{font-family:var(--mono);font-size:11.5px;width:100%;border-collapse:separate;border-spacing:2px}
+.hm td{padding:6px 4px;text-align:center;border:none;border-radius:3px;color:#0E1420;font-weight:600}
+.hm td.z{background:var(--panel2);color:var(--dim);font-weight:400}
+.hm th{padding:5px 3px;font-size:10px;text-align:center;border:none;color:var(--dim)}
+.hm th.rl{text-align:right;padding-right:8px}
+svg{display:block;max-width:100%;height:auto}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;color:var(--mute);margin-top:14px}
+.legend i{display:inline-block;width:20px;height:3px;vertical-align:middle;margin-right:6px}
+.assetchip{display:inline-block;font-family:var(--mono);font-size:11.5px;padding:3px 9px;border-radius:4px;margin:0 6px 6px 0;border:1px solid var(--rule)}
+.assetchip.up{color:var(--ok);border-color:rgba(84,198,160,.4)}
+.assetchip.dn{color:var(--warn);border-color:rgba(232,133,63,.4)}
+.corr{border-left:3px solid var(--err);padding:14px 18px;margin:0 0 16px;background:rgba(224,87,107,.05);border-radius:0 5px 5px 0}
+.corr h4{margin:0 0 6px;color:#F0A8B3;font-size:14px}
+.corr p{margin:0;font-size:13.5px;color:var(--mute)}
+.corr .was{font-family:var(--mono);font-size:12px;color:var(--dim);display:block;margin-top:6px}
+footer{padding:44px 0 0;color:var(--dim);font-size:13px;max-width:78ch}footer b{color:var(--mute)}
+.kicker{font-family:var(--mono);font-size:12px;color:var(--tf5);margin:22px 0 0}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style></head><body><div class="wrap">
+
+<header>
+  <p class="eyebrow">CENSUS-1b · move-anatomy substrate · exploratory · Atlas v2.1</p>
+  <h1>The cascade climbs a ladder.<br>Most of the time it <em>stalls at 1H</em>.</h1>
+  <p class="sub">Every EMA cross in the census arranged around the 14,560 pullback termini in the
+  enriched dataset. <b>v2.1 changes no data</b> — the substrate is byte-identical to v2. What changed
+  is what the numbers mean: the outcome horizon was mislabelled, and correcting it moves one headline
+  and dissolves part of another.</p>
+  <div class="prov">
+    <span><b>rows</b> 14,560</span><span><b>substrate</b> census1b_termini_enriched.jsonl</span>
+    <span><b>sha256</b> 4feecd54… (unchanged)</span><span><b>window</b> exploration-classic</span>
+    <span><b>assets</b> 7 (5 scorable + 2 slivers)</span><span><b>v2.1</b> 2026-07-29</span>
+  </div>
+  <div class="banner err"><b>v2.1 corrects v2 — four items, no data change.</b> The outcome column was
+  labelled "100 bars (8.3 hours)". It is <b>100 bars of the lens's own timeframe</b>, measured from the
+  pivot's confirmation bar — 4 days on the 1H lens, 100 days on the 1D lens. Everything downstream of
+  that label needed re-reading. See the corrections panel below.</div>
+  <div class="banner"><b>Exploratory — not a finding.</b> Generated by looking at data already seen, in
+  a large search space. A map of where to look next, not evidence to trade on.</div>
+  <div class="banner blue"><b>Upside-only.</b> The termini substrate carries no adverse-excursion data
+  (derived-MAE coverage 0%), so every outcome here is favorable excursion. Nothing is net-of-cost.</div>
+</header>
+
+<section>
+  <p class="eyebrow">v2 → v2.1</p>
+  <h2>What changed, and why</h2>
+  <p class="lede">Four corrections. None of them altered a single stored number; all of them altered a
+  reading. They are listed first because you should carry them into every chart below.</p>
+
+  <div class="corr"><h4>1 · The outcome horizon was wrong by 12× to 288×</h4>
+  <p>The forward-outcome column is a rolling window over the <b>lens's own bars</b>, anchored at the
+  pivot's confirmation bar. Per lens: <b>1H → 100 hours (4 days) · 4H → 400 hours (17 days) · 12H →
+  1,200 hours (50 days) · 1D → 2,400 hours (100 days)</b>.
+  <span class="was">v2 said: "the outcome is measured over the 100 bars (8.3 hours) after the pullback."</span></p></div>
+
+  <div class="corr"><h4>2 · Pooled outcome columns mix horizons</h4>
+  <p>Every chart that pools termini across lenses puts 4-day and 100-day outcomes in one column. The
+  sequence table, the depth cut and the frontier are all mixtures. Where it matters, v2.1 now shows a
+  <b>single-lens control</b> alongside the pooled view.</p></div>
+
+  <div class="corr"><h4>3 · The look-ahead audit had the right conclusion for the wrong reason</h4>
+  <p>v2 said wider counting windows credit crosses that fired <i>after the outcome was decided</i>.
+  They don't — the outcome window is far longer than that. They credit crosses that fire <b>during</b>
+  the move being measured, and after the <b>decision curtain</b> (the moment the pivot becomes
+  knowable: 5 lens bars past the low). Contemporaneity, not hindsight. The conclusion — reason with
+  the causal cut — stands, and v2.1 adds the curtain cut that makes it precise.</p></div>
+
+  <div class="corr"><h4>4 · "The gradient holds within each lens" was false</h4>
+  <p>It holds in the 1H lens (+0.49 ATR, n≈10.6k) and <b>reverses in the 4H lens</b>; the 12H and 1D
+  lenses lack the sample to say. The pooled gradient is also partly a composition effect — slower
+  frontier categories contain more slow-lens, longer-horizon termini. The finding survives, narrowed
+  to one lens, with the per-asset replication intact.</p></div>
+
+  <p class="note"><b>What did not change:</b> the ladder and its transition probabilities, the timing
+  heatmaps, the gap distributions and the inter-rung tempo. All are counts and lags with no outcome
+  dependence — the 1H→4H stall, the page's central finding, is untouched.</p>
+</section>
+
+<section>
+  <p class="eyebrow">The cascade on a clock</p>
+  <h2>When each timeframe's cross sits, relative to the pullback</h2>
+  <p class="lede">The pivot low is at <b>t = 0</b>. Left: how long ago each timeframe's most recent
+  <em>aligned</em> cross fired. Right: how soon its next cross arrives. Bands are the middle half of
+  all pullbacks, whiskers the middle 80%, the bright tick the median. Log time axis.
+  The shaded region marks the <b>decision curtain</b> — a (5,5) pivot is only confirmed five lens bars
+  after the low, so nothing right of the curtain was knowable when the terminus became actionable. The
+  curtain sits at +5h on the 1H lens and +120h on the 1D lens, which is why it is drawn as a band.</p>
+  <div class="toggle small" role="group" aria-label="Cross type">
+    <button data-ct="9_89" aria-pressed="true">9/89 — regime</button>
+    <button data-ct="89_200" aria-pressed="false">89/200 — stage</button>
+    <button data-ct="9_200" aria-pressed="false">9/200 — momentum</button>
+  </div>
+  <svg id="clock" viewBox="0 0 960 470" role="img" aria-label="Cross timing quantiles around the pullback"></svg>
+  <div class="grid" style="margin-top:18px">
+    <div class="card"><h3>How to read it</h3><p class="note" style="margin:0">The staircase is the
+    cascade as a clock. The 5m band hugs t=0 on both sides; each slower frame steps outward on
+    <em>both</em> sides in near-regular log steps. A pullback is the hinge of a temporally ordered
+    structure: the fast stack has just turned, the slow stack turned long ago and will not speak again
+    for a long time.</p></div>
+    <div class="card"><h3>Across the toggles</h3><p class="note" style="margin:0">The 89/200 stage clock
+    sits about one log-step further out than the regime clock on every frame — structure moves later
+    than regime, uniformly. The 9/200 sits between them, consistent with its measured role as the
+    mid-sequence marker (canonical in 97% of chains). Same machine, three gears.</p></div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Signature · the ladder</p>
+  <h2>Where the cascade goes next</h2>
+  <p class="lede">Each rung is a timeframe; ribbon thickness is transition probability. Right-hand
+  ribbons <em>advance</em> up the stack, left-hand ribbons <em>fall back</em>. Click a rung to isolate
+  it. Dashed rungs are census-only frames the engine cannot see. <b>This section is unchanged in v2.1
+  — it contains no outcome data.</b></p>
+  <div class="grid">
+    <div><svg id="ladder" viewBox="0 0 620 470" role="img" aria-label="Cascade transition ladder"></svg>
+      <div class="legend"><span><i style="background:var(--tf5)"></i>advance</span>
+      <span><i style="background:var(--dim)"></i>fall back</span><span>width ∝ P(next rung)</span></div></div>
+    <div class="card"><h3 id="lt">Transition detail</h3><div id="ldet"></div>
+      <p class="note" id="lnote">Tight and adjacent while fast: 5m→15m 84%, 15m→30m 80%. It loosens at
+      30m→1H (63%), then breaks: from 1H the cascade falls back to 30m (48%) more often than it
+      advances to 4H (29%). <b>That stall is the structure the whole page is about.</b></p></div>
+  </div>
+  <h4>Three readings <span style="color:var(--dim);font-weight:400">[all OPEN]</span></h4>
+  <ul class="tight">
+    <li><b>A participation cascade.</b> Fast frames turn on small flow; slower frames need sustained
+    flow. 80%+ adjacent advance below 1H says small moves routinely propagate two or three rungs; 29%
+    at 1H→4H says only a minority recruit enough participation to turn the 4-hour trend. On this
+    reading the 4H cross is the census's operational definition of <em>a move that recruited real
+    size</em>.</li>
+    <li><b>Where trends die young.</b> The 47.5% fall-back from 1H is the fast stack oscillating under
+    a slow stack that never moved — most cascades are round-trips of the fast frames. This is the
+    anatomy behind the re-entry toll bleed: fast-rung churn generates fills whose moves rarely
+    graduate.</li>
+    <li><b>The engine sees a coarser ladder.</b> Its telemetry is {5m, 1H, 4H, 12H} — no 15m or 30m
+    rungs. The dominant observed path 5m→15m→30m is invisible churn from the engine's seat; the first
+    engine-visible confirmation above exec is 1H, and the first that historically means anything is
+    4H.</li>
+  </ul>
+  <p class="kicker">Applications for consideration: condition adds on "cleared 1H→4H" rather than any
+  fast-rung event · treat fast-rung activity as churn to filter, not signal to chase · read the 4H rung
+  as the participation threshold D8 already priced (1.071 net of toll) — and note it is 4H-specific:
+  the 12H rung is 0.809, far below break-even. Late confirmation is spent confirmation.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Corrected · read this one</p>
+  <h2>Does reaching a higher rung mean a bigger move?</h2>
+  <p class="lede">Yes — but less than the naive cut suggests, and the honest version needs two controls
+  v2 lacked. <b>Control one: the decision curtain.</b> A (5,5) pivot is confirmed five lens bars after
+  the low; only crosses at or before that instant were knowable. <b>Control two: the lens.</b> Pooling
+  mixes 4-day and 100-day outcome windows, so the single-lens view is the one with a constant
+  yardstick.</p>
+  <div class="toggle" role="group" aria-label="Counting window">
+    <button data-w="prior" aria-pressed="true">Prior only — causal, conservative</button>
+    <button data-w="curtain" aria-pressed="false">To the curtain — causal, maximal</button>
+    <button data-w="w8h" aria-pressed="false">≤8.3h — partly post-decision</button>
+    <button data-w="w48h" aria-pressed="false">≤48h — largely post-decision</button>
+  </div>
+  <div class="toggle alt small" role="group" aria-label="Lens scope">
+    <button data-sc="lens1h" aria-pressed="true">1H lens only — horizon constant (4 days)</button>
+    <button data-sc="pooled" aria-pressed="false">All lenses — horizon mixture</button>
+  </div>
+  <div class="grid">
+    <div><div class="bars" id="depth"></div></div>
+    <div class="card"><h3>What the toggles show</h3><p class="note" id="wnote"></p>
+      <p class="note" style="margin-top:14px"><b>Why it matters.</b> On the 1H lens with a constant
+      yardstick, the causal cut shows 3.94 → 4.28 at 4H. The ≤48h cut shows 6.60 at 4H. The gap is
+      information that arrives <em>after</em> the decision — real, but untradeable. The curtain cut
+      sits between them and is the maximum a decision could legitimately use; its deep cells are thin,
+      because only five hours have elapsed.</p></div>
+  </div>
+
+  <h4>Interpretations <span style="color:var(--dim);font-weight:400">[all OPEN]</span></h4>
+  <ul class="tight">
+    <li><b>State beats event.</b> This gradient measures a <em>state</em> — how deep the already-standing
+    alignment reaches — and echoes the confirmed D5 entry. Contrast the <em>event</em> axis: waiting for
+    the 12H cross to fire and adding there scores 0.809 in D8, a heavy loser, because that cross arrives
+    ~83 hours into the move. The census compresses to one sentence: <b>trade the state of the slow
+    frames; act on the event of the 4H frame.</b></li>
+    <li><b>A maturity sweet spot, not a monotone.</b> The gradient rises to 4H–12H and flattens; the
+    daily adds nothing beyond 12H. Deep-enough alignment marks a trend mature enough to trust; beyond
+    that, extra depth is redundant information about the same trend. It is also why the engine's
+    missing 1D frame costs the findings almost nothing.</li>
+    <li><b>The skeptical alternative, now partly borne out.</b> Deep alignment is commoner in regimes
+    that trended hard, so some of the gradient may be regime confound rather than per-trade signal. The
+    4H lens reversing is exactly what that objection predicts. The per-asset panel below is the
+    counter-evidence, and it survives the horizon control.</li>
+  </ul>
+
+  <div class="grid2" style="margin-top:24px">
+    <div class="card"><h3>The frontier, per lens — the honest version</h3>
+      <p class="note" style="margin:0 0 12px">Same causal cut, one row per lens, so the outcome
+      yardstick is constant within each row. This <b>replaces</b> v2's claim that the gradient held
+      within every lens.</p>
+      <table id="flens"><thead><tr><th>Lens</th><th>frontier 1h</th><th>4h</th><th>12h</th><th>1d</th></tr></thead><tbody></tbody></table>
+      <p class="note"><b>1H lens: holds</b> (3.94 → 4.28 → 4.64). <b>4H lens: reverses</b> (4.86 → 4.40
+      → 4.26), and its fast-frontier cell is too thin to compare. <b>12H / 1D: underpowered.</b></p></div>
+    <div class="card"><h3>The composition confound</h3>
+      <p class="note" style="margin:0 0 12px">Share of each frontier category drawn from each lens.
+      Slower frontier categories carry more slow-lens termini — which have longer outcome windows — so
+      part of the pooled gradient is mechanical.</p>
+      <table id="lcomp"><thead><tr><th>Frontier</th><th>1h</th><th>4h</th><th>12h</th><th>1d</th></tr></thead><tbody></tbody></table>
+      <p class="note">frontier=1h is 97.7% single-lens; frontier=1d is only 65.7%. That drift is the
+      confound, and it is why the per-lens table above is the one to read.</p></div>
+  </div>
+
+  <div class="card" style="margin-top:22px"><h3>Per-asset replication — within the 1H lens, horizon constant</h3>
+    <p class="note" style="margin:0 0 12px">Median outcome when the aligned frontier reaches 4H/12H
+    minus when it stops at 1H, per asset, computed inside the 1H lens only. Green = the gradient holds.</p>
+    <div id="arep"></div>
+    <p class="note"><b>Five of five scorable majors replicate</b> (BTC +0.64, NEAR +0.75, ZEC +0.49,
+    ETH +0.41, SOL +0.35). JTO dissents at −0.97 on 205 days of exploration-classic history — an annex
+    asset, reported but not weighted; TAO lacks the sample entirely. This is the finding's strongest
+    support and it survives both controls.</p></div>
+
+  <p class="kicker">Applications for consideration: an entry filter requiring the aligned frontier to
+  reach ≥ 4H (the D5 family, restated causally) · position-mandate primacy, where the robust D5
+  statistic and the S-2b structural stop already converge · a frontier <em>downgrade</em> as a de-risk
+  tell — entirely untested, named so it can be pre-registered rather than improvised.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Sequence census · sortable</p>
+  <h2>The most probable cascade orders</h2>
+  <p class="lede">First three rungs of every cascade that fired at least three, for every order seen 15+
+  times. <b>83.6%</b> run strictly fast-to-slow. Sort three ways — they disagree, and the disagreement
+  is the point.</p>
+  <div class="toggle small" role="group" aria-label="Sort"><button data-s="share" aria-pressed="true">Sort by share</button>
+    <button data-s="mfe" aria-pressed="false">Sort by ATR outcome</button><button data-s="n" aria-pressed="false">Sort by n</button></div>
+  <div class="grid">
+    <div><div class="seqrow seqhead"><div>sequence (first 3 rungs)</div><div style="text-align:right">share</div><div style="text-align:right">n</div><div style="text-align:right">med MFE</div></div>
+      <div id="seqs"></div></div>
+    <div class="card"><h3>Reading the two orderings against each other</h3>
+      <p class="note">By share, 5m→15m→30m dominates (60.6%, a middling 4.44). By outcome the top rows
+      touch 4H or 12H within three rungs — each under 2.5% of cascades. The market's most common
+      behaviour and its most profitable behaviour are nearly disjoint sets.</p>
+      <p class="note" style="margin-top:12px"><b>Two caveats, both sharpened in v2.1.</b> The outcome
+      column is a <b>horizon mixture</b> (4 days to 100 days depending on each terminus's lens), and it
+      uses the full 48h counting window, so it also carries post-curtain information. Trust the
+      <em>ordering</em>; treat the outcome column as indicative only.</p></div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Gap anatomy</p>
+  <h2>How many bars apart consecutive rungs fire</h2>
+  <p class="lede">Full distributions for the six most common rung-to-rung steps, in log-spaced bins,
+  annotated with quartiles in exec bars. <b>No outcome data — unchanged in v2.1.</b></p>
+  <div class="grid2" id="gaps"></div>
+  <p class="note" style="max-width:74ch">Two shapes. The fast steps are tight unimodal humps in the 1–4h
+  range — the cascade has a metronome while it is fast. The 1H→4H step is flatter and pushed right
+  (median 8h, upper quartile deep in the tail): the gap the cascade must clear to matter is also the
+  least predictable in timing. A rule waiting for 4H confirmation waits a workday, not a candle — which
+  is why the D8 eligibility-window question is economics, not detail.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Timing grid</p>
+  <h2>When each frame fires — the full count</h2>
+  <p class="lede">The clock as a complete grid. Counts of pullbacks by how long before (left) and after
+  (right) each timeframe's regime cross sits. <b>No outcome data — unchanged in v2.1.</b></p>
+  <div class="toggle small" role="group" aria-label="Units"><button data-h="cnt" aria-pressed="true">Counts</button>
+    <button data-h="pct" aria-pressed="false">% of termini</button></div>
+  <div class="grid2">
+    <div class="card"><h3>Before the pullback — aligned crosses</h3><div id="hp"></div></div>
+    <div class="card"><h3>After the pullback — next cross</h3><div id="hf"></div></div>
+  </div>
+  <p class="kicker">The pullback sits at the hinge: fast frames fresh on both sides, slow frames distant
+  on both sides.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Tempo</p>
+  <h2>How long each step of the ladder takes</h2>
+  <p class="lede">Median and quartiles of the gap between consecutive rungs, for the ten most common
+  transitions.</p>
+  <div class="grid">
+    <div class="card"><table id="lags"><thead><tr><th>Step</th><th>n</th><th>p25</th><th>median</th><th>p75</th><th>median h</th></tr></thead><tbody></tbody></table></div>
+    <div class="card"><h3>The frontier, pooled — for continuity only</h3>
+      <p class="note">v2's headline chart, retained so the correction is visible rather than hidden.
+      <b>This is the horizon-mixture view</b>; the per-lens table above is the one to reason with.</p>
+      <div class="bars" id="front" style="margin-top:14px"></div>
+      <p class="note" style="margin-top:14px">Pooled, alignment reaching 4H–12H is where the gradient
+      appears. Roughly half that spread is the lens-composition effect; the rest survives in the 1H
+      lens.</p></div>
+  </div>
+</section>
+
+<footer>
+  <p><b>What this is not.</b> Not a validated finding, not a trading rule, not out-of-sample, and not
+  net-of-cost — this substrate has no adverse-excursion data, so every outcome is upside-only. Every
+  figure is computed in-sample on exploration-classic data that has already been searched.</p>
+  <p style="margin-top:14px"><b>The outcome column, precisely.</b> Median forward maximum-favorable
+  excursion in ATR, measured over <b>100 bars of the terminus's own lens timeframe</b>, anchored at the
+  pivot's <b>confirmation bar</b> (five lens bars after the low). 1H lens → 4 days · 4H → 17 days · 12H
+  → 50 days · 1D → 100 days. Any chart pooling lenses mixes these windows.</p>
+  <p style="margin-top:14px"><b>A labelling defect in the substrate, disclosed.</b> Terminus rows are
+  timestamped at the pivot bar, not at the confirmation bar where the pivot becomes knowable. No stored
+  feature or outcome depends on that timestamp — features are read at the pivot bar and outcomes from
+  the confirmation bar — so no published number is affected. It matters here only because the clock's
+  t=0 is that pivot bar, which is why the decision curtain is drawn.</p>
+  <p style="margin-top:14px"><b>Engine-representability.</b> The engine's world is {1m, 5m, 15m, 1h, 4h,
+  12h} with MTF telemetry on {5m, 1h, 4h, 12h}. The 30m and 1D frames are resampled measurement lenses
+  with no engine counterpart; results anchored on them are diagnostic. The census's four "governor
+  lenses" are measurement frames — the engine's governors are 1H intraday, 4H swing, 12H position.</p>
+  <p style="margin-top:14px"><b>Panel.</b> Exploration-classic is a five-asset panel (BTC, ETH, SOL,
+  NEAR, ZEC) plus two slivers (JTO 205d, TAO 80d). Cross-asset replication has five independent units,
+  not seven.</p>
+</footer>
+
+</div><script>
+const D={"n_termini": 14560, "curtain": {"1h": {"h": 5, "exec": 60, "out_lo": 5, "out_hi": 105}, "4h": {"h": 20, "exec": 240, "out_lo": 20, "out_hi": 420}, "12h": {"h": 60, "exec": 720, "out_lo": 60, "out_hi": 1260}, "1d": {"h": 120, "exec": 1440, "out_lo": 120, "out_hi": 2520}}, "timeline": {"9_89": {"5m": {"prior": {"p10": 5, "p25": 13, "p50": 29, "p75": 44, "p90": 88, "n": 9555}, "fwd": {"p10": 5, "p25": 12, "p50": 32, "p75": 71, "p90": 129, "n": 14558}}, "15m": {"prior": {"p10": 12, "p25": 30, "p50": 135, "p75": 267, "p90": 444, "n": 9863}, "fwd": {"p10": 15, "p25": 39, "p50": 102, "p75": 231, "p90": 396, "n": 14555}}, "30m": {"prior": {"p10": 30, "p25": 144, "p50": 312, "p75": 594, "p90": 948, "n": 11036}, "fwd": {"p10": 30, "p25": 84, "p50": 222, "p75": 486, "p90": 834, "n": 14557}}, "1h": {"prior": {"p10": 132, "p25": 276, "p50": 612, "p75": 1176, "p90": 1920, "n": 12727}, "fwd": {"p10": 84, "p25": 204, "p50": 492, "p75": 1032, "p90": 1776, "n": 14555}}, "4h": {"prior": {"p10": 288, "p25": 732, "p50": 1992, "p75": 4416, "p90": 7632, "n": 11490}, "fwd": {"p10": 324, "p25": 864, "p50": 2172, "p75": 4608, "p90": 7860, "n": 14296}}, "12h": {"prior": {"p10": 696, "p25": 2208, "p50": 6168, "p75": 12984, "p90": 22416, "n": 9798}, "fwd": {"p10": 1008, "p25": 2808, "p50": 7008, "p75": 13980, "p90": 22800, "n": 14239}}, "1d": {"prior": {"p10": 1488, "p25": 4620, "p50": 12672, "p75": 30564, "p90": 51636, "n": 8666}, "fwd": {"p10": 2064, "p25": 5904, "p50": 14100, "p75": 30600, "p90": 51792, "n": 14229}}}, "89_200": {"5m": {"prior": {"p10": 18, "p25": 79, "p50": 177, "p75": 336, "p90": 531, "n": 9159}, "fwd": {"p10": 21, "p25": 54, "p50": 136, "p75": 278, "p90": 465, "n": 14555}}, "15m": {"prior": {"p10": 126, "p25": 276, "p50": 576, "p75": 1044, "p90": 1674, "n": 12406}, "fwd": {"p10": 84, "p25": 204, "p50": 471, "p75": 930, "p90": 1542, "n": 14555}}, "30m": {"prior": {"p10": 162, "p25": 408, "p50": 960, "p75": 1944, "p90": 3246, "n": 12370}, "fwd": {"p10": 168, "p25": 420, "p50": 948, "p75": 1878, "p90": 3186, "n": 14526}}, "1h": {"prior": {"p10": 264, "p25": 684, "p50": 1776, "p75": 3732, "p90": 6180, "n": 11283}, "fwd": {"p10": 312, "p25": 828, "p50": 1896, "p75": 3792, "p90": 6144, "n": 14312}}, "4h": {"prior": {"p10": 1032, "p25": 3168, "p50": 7776, "p75": 14880, "p90": 25344, "n": 9252}, "fwd": {"p10": 1476, "p25": 3828, "p50": 8532, "p75": 15612, "p90": 25428, "n": 14268}}, "12h": {"prior": {"p10": 3216, "p25": 9348, "p50": 28260, "p75": 56976, "p90": 93600, "n": 7874}, "fwd": {"p10": 3864, "p25": 9936, "p50": 25560, "p75": 57024, "p90": 98316, "n": 12908}}, "1d": {"prior": {"p10": 6516, "p25": 21456, "p50": 51528, "p75": 91296, "p90": 134748, "n": 7283}, "fwd": {"p10": 6192, "p25": 17328, "p50": 44676, "p75": 87696, "p90": 128736, "n": 10747}}}, "9_200": {"5m": {"prior": {"p10": 8, "p25": 22, "p50": 43, "p75": 161, "p90": 269, "n": 9720}, "fwd": {"p10": 7, "p25": 21, "p50": 58, "p75": 141, "p90": 258, "n": 14556}}, "15m": {"prior": {"p10": 24, "p25": 120, "p50": 276, "p75": 564, "p90": 909, "n": 11391}, "fwd": {"p10": 27, "p25": 75, "p50": 207, "p75": 456, "p90": 804, "n": 14557}}, "30m": {"prior": {"p10": 114, "p25": 246, "p50": 582, "p75": 1140, "p90": 1908, "n": 12631}, "fwd": {"p10": 66, "p25": 174, "p50": 456, "p75": 990, "p90": 1752, "n": 14558}}, "1h": {"prior": {"p10": 144, "p25": 396, "p50": 948, "p75": 1992, "p90": 3420, "n": 12465}, "fwd": {"p10": 120, "p25": 336, "p50": 888, "p75": 1932, "p90": 3384, "n": 14508}}, "4h": {"prior": {"p10": 432, "p25": 1248, "p50": 3840, "p75": 8808, "p90": 15072, "n": 10672}, "fwd": {"p10": 540, "p25": 1572, "p50": 4416, "p75": 9456, "p90": 15924, "n": 14280}}, "12h": {"prior": {"p10": 1176, "p25": 4032, "p50": 11136, "p75": 28800, "p90": 50892, "n": 8972}, "fwd": {"p10": 1740, "p25": 5328, "p50": 12744, "p75": 29196, "p90": 51552, "n": 14218}}, "1d": {"prior": {"p10": 2448, "p25": 7920, "p50": 24396, "p75": 56880, "p90": 93504, "n": 8228}, "fwd": {"p10": 3144, "p25": 8964, "p50": 23520, "p75": 58476, "p90": 100692, "n": 12905}}}}, "transitions": {"5m": {"15m": 2844, "30m": 233, "1h": 79, "4h": 100, "12h": 73, "1d": 50}, "15m": {"5m": 107, "30m": 2196, "1h": 194, "4h": 104, "12h": 89, "1d": 40}, "30m": {"5m": 34, "15m": 291, "1h": 820, "4h": 84, "12h": 36, "1d": 32}, "1h": {"5m": 3, "15m": 72, "30m": 188, "4h": 116, "12h": 12, "1d": 5}, "4h": {"5m": 5, "30m": 2, "1h": 15, "12h": 57, "1d": 16}, "12h": {"5m": 3, "15m": 5, "30m": 1, "1h": 1, "4h": 22, "1d": 36}, "1d": {"5m": 7, "15m": 4, "30m": 1, "1h": 2, "4h": 8, "12h": 14}}, "sequences": [{"seq": ["5m", "15m", "30m"], "n": 1441, "share": 60.6, "mfe": 4.44}, {"seq": ["15m", "30m", "1h"], "n": 151, "share": 6.35, "mfe": 4.34}, {"seq": ["5m", "15m", "1h"], "n": 141, "share": 5.93, "mfe": 5.46}, {"seq": ["5m", "15m", "4h"], "n": 55, "share": 2.31, "mfe": 6.41}, {"seq": ["5m", "30m", "1h"], "n": 27, "share": 1.14, "mfe": 3.69}, {"seq": ["5m", "30m", "15m"], "n": 180, "share": 7.57, "mfe": 4.18}, {"seq": ["30m", "5m", "15m"], "n": 30, "share": 1.26, "mfe": 4.07}, {"seq": ["5m", "1h", "15m"], "n": 43, "share": 1.81, "mfe": 5.02}, {"seq": ["15m", "30m", "4h"], "n": 27, "share": 1.14, "mfe": 7.22}, {"seq": ["5m", "15m", "1d"], "n": 20, "share": 0.84, "mfe": 4.06}, {"seq": ["5m", "15m", "12h"], "n": 46, "share": 1.93, "mfe": 6.69}, {"seq": ["1h", "15m", "30m"], "n": 29, "share": 1.22, "mfe": 4.93}, {"seq": ["15m", "30m", "12h"], "n": 19, "share": 0.8, "mfe": 8.46}, {"seq": ["15m", "1h", "30m"], "n": 45, "share": 1.89, "mfe": 3.73}, {"seq": ["30m", "1h", "4h"], "n": 17, "share": 0.71, "mfe": 5.65}], "seq_total": 2378, "depth": {"pooled": {"prior": {"none": {"n": 132, "mfe": 3.66}, "5m": {"n": 44, "mfe": 3.32}, "30m": {"n": 36, "mfe": 4.81}, "1h": {"n": 1806, "mfe": 3.94}, "4h": {"n": 2202, "mfe": 4.46}, "12h": {"n": 1660, "mfe": 4.48}, "1d": {"n": 8666, "mfe": 4.34}}, "curtain": {"none": {"n": 8441, "mfe": 4.23}, "5m": {"n": 2240, "mfe": 4.04}, "15m": {"n": 1333, "mfe": 4.45}, "30m": {"n": 1197, "mfe": 4.61}, "1h": {"n": 781, "mfe": 4.69}, "4h": {"n": 335, "mfe": 5.12}, "12h": {"n": 146, "mfe": 4.65}, "1d": {"n": 87, "mfe": 7.04}}, "w8h": {"none": {"n": 8229, "mfe": 4.23}, "5m": {"n": 2497, "mfe": 3.83}, "15m": {"n": 1519, "mfe": 4.62}, "30m": {"n": 1274, "mfe": 4.76}, "1h": {"n": 533, "mfe": 4.72}, "4h": {"n": 315, "mfe": 5.54}, "12h": {"n": 119, "mfe": 4.68}, "1d": {"n": 74, "mfe": 5.02}}, "w48h": {"none": {"n": 6378, "mfe": 4.12}, "5m": {"n": 1527, "mfe": 3.62}, "15m": {"n": 1609, "mfe": 3.52}, "30m": {"n": 1860, "mfe": 3.86}, "1h": {"n": 1150, "mfe": 4.45}, "4h": {"n": 1029, "mfe": 6.45}, "12h": {"n": 624, "mfe": 6.05}, "1d": {"n": 383, "mfe": 6.8}}}, "lens1h": {"prior": {"none": {"n": 109, "mfe": 3.89}, "1h": {"n": 1764, "mfe": 3.94}, "4h": {"n": 1778, "mfe": 4.28}, "12h": {"n": 1183, "mfe": 4.64}, "1d": {"n": 5691, "mfe": 4.34}}, "curtain": {"none": {"n": 6754, "mfe": 4.19}, "5m": {"n": 1704, "mfe": 4.05}, "15m": {"n": 934, "mfe": 4.62}, "30m": {"n": 782, "mfe": 4.86}, "1h": {"n": 146, "mfe": 5.41}, "4h": {"n": 155, "mfe": 5.1}, "12h": {"n": 64, "mfe": 3.48}, "1d": {"n": 37, "mfe": 6.41}}, "w8h": {"none": {"n": 6159, "mfe": 4.19}, "5m": {"n": 1784, "mfe": 3.72}, "15m": {"n": 1093, "mfe": 4.66}, "30m": {"n": 928, "mfe": 4.86}, "1h": {"n": 196, "mfe": 5.13}, "4h": {"n": 251, "mfe": 5.54}, "12h": {"n": 102, "mfe": 4.66}, "1d": {"n": 63, "mfe": 5.19}}, "w48h": {"none": {"n": 4804, "mfe": 4.03}, "5m": {"n": 1077, "mfe": 3.37}, "15m": {"n": 1265, "mfe": 3.51}, "30m": {"n": 1401, "mfe": 4.14}, "1h": {"n": 380, "mfe": 4.31}, "4h": {"n": 844, "mfe": 6.6}, "12h": {"n": 501, "mfe": 6.5}, "1d": {"n": 304, "mfe": 6.65}}}}, "front_pooled": {"5m": {"n": 44, "mfe": 3.32}, "30m": {"n": 36, "mfe": 4.81}, "1h": {"n": 1806, "mfe": 3.94}, "4h": {"n": 2202, "mfe": 4.46}, "12h": {"n": 1660, "mfe": 4.48}, "1d": {"n": 8666, "mfe": 4.34}}, "front_by_lens": {"1h": {"1h": {"n": 1764, "mfe": 3.94}, "4h": {"n": 1778, "mfe": 4.28}, "12h": {"n": 1183, "mfe": 4.64}, "1d": {"n": 5691, "mfe": 4.34}}, "4h": {"4h": {"n": 407, "mfe": 4.86}, "12h": {"n": 374, "mfe": 4.4}, "1d": {"n": 1804, "mfe": 4.26}}, "12h": {"12h": {"n": 96, "mfe": 3.56}, "1d": {"n": 764, "mfe": 4.31}}, "1d": {"1d": {"n": 407, "mfe": 4.67}}}, "lens_comp": {"12h": {"1h": 1183, "4h": 374, "12h": 96, "1d": 7}, "1d": {"1h": 5691, "4h": 1804, "12h": 764, "1d": 407}, "4h": {"1h": 1778, "4h": 407, "12h": 10, "1d": 7}, "1h": {"1h": 1764, "4h": 14, "12h": 13, "1d": 15}, "5m": {"1h": 25, "4h": 15, "12h": 1, "1d": 3}}, "asset_rep_1h": {"BTCUSDT": {"n_fast": 370, "mfe_fast": 3.91, "n_slow": 728, "mfe_slow": 4.55, "delta": 0.64}, "ETHUSDT": {"n_fast": 315, "mfe_fast": 3.71, "n_slow": 591, "mfe_slow": 4.12, "delta": 0.41}, "JTOUSDT": {"n_fast": 41, "mfe_fast": 5.66, "n_slow": 104, "mfe_slow": 4.67, "delta": -0.99}, "NEARUSDT": {"n_fast": 303, "mfe_fast": 3.57, "n_slow": 425, "mfe_slow": 4.33, "delta": 0.75}, "SOLUSDT": {"n_fast": 326, "mfe_fast": 4.28, "n_slow": 465, "mfe_slow": 4.64, "delta": 0.35}, "ZECUSDT": {"n_fast": 391, "mfe_fast": 3.87, "n_slow": 586, "mfe_slow": 4.36, "delta": 0.49}}, "gap_labels": ["\u226415m", "20-30m", "35m-1h", "1-2h", "2-4h", "4-8h", "8-16h", "16-48h"], "gapdist": [{"from": "5m", "to": "15m", "n": 2844, "bins": [163, 172, 329, 432, 451, 430, 497, 370], "p25": 14, "p50": 41, "p75": 118}, {"from": "15m", "to": "30m", "n": 2196, "bins": [371, 166, 299, 404, 348, 227, 193, 188], "p25": 9, "p50": 21, "p75": 57}, {"from": "30m", "to": "1h", "n": 820, "bins": [0, 85, 77, 141, 202, 155, 77, 83], "p25": 18, "p50": 36, "p75": 78}, {"from": "30m", "to": "15m", "n": 291, "bins": [88, 41, 44, 34, 24, 25, 14, 21], "p25": 3, "p50": 9, "p75": 30}, {"from": "5m", "to": "30m", "n": 233, "bins": [26, 36, 41, 45, 44, 27, 4, 10], "p25": 6, "p50": 15, "p75": 37}, {"from": "15m", "to": "1h", "n": 194, "bins": [57, 23, 30, 41, 22, 13, 4, 4], "p25": 3, "p50": 12, "p75": 24}], "interrung": [{"from": "5m", "to": "15m", "n": 2844, "p25": 14, "med": 41, "p75": 118, "med_h": 3.4}, {"from": "15m", "to": "30m", "n": 2196, "p25": 9, "med": 21, "p75": 57, "med_h": 1.8}, {"from": "30m", "to": "1h", "n": 820, "p25": 18, "med": 36, "p75": 78, "med_h": 3.0}, {"from": "30m", "to": "15m", "n": 291, "p25": 3, "med": 9, "p75": 30, "med_h": 0.8}, {"from": "5m", "to": "30m", "n": 233, "p25": 6, "med": 15, "p75": 37, "med_h": 1.2}, {"from": "15m", "to": "1h", "n": 194, "p25": 3, "med": 12, "p75": 24, "med_h": 1.0}, {"from": "1h", "to": "30m", "n": 188, "p25": 0, "med": 6, "p75": 12, "med_h": 0.5}, {"from": "1h", "to": "4h", "n": 116, "p25": 36, "med": 96, "p75": 216, "med_h": 8.0}, {"from": "15m", "to": "5m", "n": 107, "p25": 1, "med": 3, "p75": 9, "med_h": 0.2}, {"from": "15m", "to": "4h", "n": 104, "p25": 102, "med": 189, "p75": 330, "med_h": 15.8}], "bin_labels": ["\u226430m", "35m\u20132h", "2\u20136h", "6\u201318h", "18\u201348h", ">48h"], "hist_prior": {"5m": {"bins": [1275, 2757, 4377, 1039, 107, 0], "none": 5005}, "15m": {"bins": [699, 1359, 1904, 2827, 2614, 460], "none": 4697}, "30m": {"bins": [386, 590, 755, 2609, 3816, 2880], "none": 3524}, "1h": {"bins": [101, 162, 310, 2014, 3570, 6570], "none": 1833}, "4h": {"bins": [68, 64, 123, 597, 1510, 9128], "none": 3070}, "12h": {"bins": [28, 28, 55, 229, 510, 8948], "none": 4762}, "1d": {"bins": [10, 6, 40, 92, 235, 8283], "none": 5894}}, "hist_fwd": {"5m": {"bins": [2055, 4146, 4780, 3230, 346, 1], "none": 2}, "15m": {"bins": [677, 1802, 3416, 4754, 3365, 541], "none": 5}, "30m": {"bins": [348, 859, 2046, 3909, 4568, 2827], "none": 3}, "1h": {"bins": [0, 412, 945, 2543, 4093, 6562], "none": 5}, "4h": {"bins": [0, 93, 201, 678, 1579, 11745], "none": 264}, "12h": {"bins": [0, 24, 71, 190, 545, 13409], "none": 321}, "1d": {"bins": [0, 12, 44, 100, 265, 13808], "none": 331}}, "monotone_pct": 83.6};
+const TFS=['5m','15m','30m','1h','4h','12h','1d'];
+const C={'5m':'#2FB0BE','15m':'#3D93D4','30m':'#6C7FE0','1h':'#9A6FD8','4h':'#D96BA8','12h':'#E8853F','1d':'#F0B429'};
+const GHOST={'30m':1,'1d':1};
+const chip=t=>GHOST[t]?`<span class="tfchip ghost" style="border-color:${C[t]};color:${C[t]}" title="census-only">${t}</span>`:`<span class="tfchip" style="background:${C[t]}">${t}</span>`;
+
+const CK={W:960,H:470,cx:480,top:44,rh:56,axpad:34};
+function hscale(h){const lo=Math.log10(0.25),hi=Math.log10(2000);
+  return CK.axpad+((Math.log10(Math.max(h,0.25))-lo)/(hi-lo))*(CK.cx-CK.axpad-16);}
+const b2h=b=>b*5/60;
+function clock(ct){
+  const T=D.timeline[ct];let g='';
+  const c1=CK.cx+hscale(5), c2=CK.cx+hscale(120);
+  g+=`<rect x="${c1}" y="${CK.top-12}" width="${c2-c1}" height="${CK.H-CK.top-32}" fill="#E8853F" opacity=".07"/>`;
+  g+=`<line x1="${c1}" y1="${CK.top-12}" x2="${c1}" y2="${CK.H-44}" stroke="#E8853F" stroke-width="1.2" stroke-dasharray="4 4" opacity=".55"/>`;
+  g+=`<text x="${c1+5}" y="${CK.top-20}" font-family="IBM Plex Mono,monospace" font-size="9.5" fill="#E8853F" opacity=".85">decision curtain (1H lens → 1D lens)</text>`;
+  [[0.5,'30m'],[2,'2h'],[6,'6h'],[18,'18h'],[48,'48h'],[168,'1w'],[720,'1mo']].forEach(([h,l])=>{
+    const off=hscale(h);
+    [CK.cx-off,CK.cx+off].forEach(x=>{g+=`<line x1="${x}" y1="${CK.top-8}" x2="${x}" y2="${CK.H-44}" stroke="#1B2436"/>
+      <text x="${x}" y="${CK.H-26}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9.5" fill="#55637C">${l}</text>`;});});
+  g+=`<line x1="${CK.cx}" y1="${CK.top-16}" x2="${CK.cx}" y2="${CK.H-38}" stroke="#26324C" stroke-width="2"/>
+      <text x="${CK.cx}" y="${CK.top-24}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#7A8AA5">pivot low · t = 0</text>`;
+  TFS.forEach((tf,i)=>{
+    const y=CK.top+i*CK.rh+CK.rh/2,row=T[tf];
+    g+=`<text x="8" y="${y+4}" font-family="IBM Plex Mono,monospace" font-size="12" font-weight="600" fill="${C[tf]}" opacity="${GHOST[tf]?.75:1}">${tf}${GHOST[tf]?'*':''}</text>`;
+    [['prior',-1],['fwd',1]].forEach(([side,sg])=>{
+      const q=row[side];if(!q)return;
+      const px=h=>CK.cx+sg*hscale(b2h(h));
+      const x10=px(q.p10),x25=px(q.p25),x50=px(q.p50),x75=px(q.p75),x90=px(q.p90);
+      g+=`<line x1="${Math.min(x10,x90)}" y1="${y}" x2="${Math.max(x10,x90)}" y2="${y}" stroke="${C[tf]}" stroke-width="1.5" opacity=".35"/>
+      <rect x="${Math.min(x25,x75)}" y="${y-7}" width="${Math.abs(x75-x25)}" height="14" rx="3" fill="${C[tf]}" opacity="${side==='prior'?.75:.45}"/>
+      <line x1="${x50}" y1="${y-9}" x2="${x50}" y2="${y+9}" stroke="#0E1420" stroke-width="2.5"/>
+      <line x1="${x50}" y1="${y-9}" x2="${x50}" y2="${y+9}" stroke="#fff" stroke-width="1.2" opacity=".9"/>`;});});
+  document.getElementById('clock').innerHTML=g;}
+document.querySelectorAll('[data-ct]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('[data-ct]').forEach(x=>x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true');clock(b.dataset.ct);}));
+
+const L={x:250,y0:34,gap:66,w:96,h:30};const ypos=i=>L.y0+i*L.gap;let sel=null;
+function ladder(){const s=document.getElementById('ladder');let g='';
+  TFS.forEach((tf,i)=>{const src=D.transitions[tf];if(!src)return;
+    const tot=Object.values(src).reduce((a,b)=>a+b,0);
+    Object.entries(src).forEach(([to,n])=>{const p=n/tot,j=TFS.indexOf(to);if(p<0.012)return;
+      const up=j>i,y1=ypos(i)+L.h/2,y2=ypos(j)+L.h/2,x1=up?L.x+L.w:L.x,bow=up?90+Math.abs(j-i)*26:-(70+Math.abs(j-i)*22);
+      const on=(sel===null||sel===tf);
+      g+=`<path d="M${x1},${y1} C${x1+bow},${y1} ${x1+bow},${y2} ${x1},${y2}" fill="none" stroke="${up?C[tf]:'#55637C'}" stroke-width="${Math.max(1,p*26).toFixed(2)}" opacity="${on?(up?.62:.34):.07}" stroke-linecap="round"/>`;});});
+  TFS.forEach((tf,i)=>{const on=(sel===null||sel===tf);
+    const body=GHOST[tf]?`<rect x="${L.x}" y="${ypos(i)}" width="${L.w}" height="${L.h}" rx="4" fill="none" stroke="${C[tf]}" stroke-width="1.6" stroke-dasharray="5 4"/><text x="${L.x+L.w/2}" y="${ypos(i)+20}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="14" font-weight="600" fill="${C[tf]}">${tf}</text>`
+      :`<rect x="${L.x}" y="${ypos(i)}" width="${L.w}" height="${L.h}" rx="4" fill="${C[tf]}"/><text x="${L.x+L.w/2}" y="${ypos(i)+20}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="14" font-weight="600" fill="#0E1420">${tf}</text>`;
+    g+=`<g class="rung" data-tf="${tf}" style="cursor:pointer" opacity="${on?1:.3}">${body}</g>`;});
+  g+=`<text x="${L.x+L.w/2}" y="${ypos(6)+56}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10.5" fill="#55637C">slower ↑ · faster ↓ · dashed = census-only</text>`;
+  s.innerHTML=g;
+  s.querySelectorAll('.rung').forEach(el=>el.addEventListener('click',()=>{const tf=el.dataset.tf;sel=(sel===tf)?null:tf;ladder();ldet();}));}
+function ldet(){const t=document.getElementById('lt'),d=document.getElementById('ldet'),nt=document.getElementById('lnote');
+  if(!sel){t.textContent='Transition detail';d.innerHTML='<p class="note" style="margin:0">Click any rung to see where cascades go from it.</p>';nt.style.display='block';return;}
+  nt.style.display='none';t.innerHTML=`From ${chip(sel)}`;
+  const src=D.transitions[sel]||{},tot=Object.values(src).reduce((a,b)=>a+b,0);
+  d.innerHTML=`<div class="bars">`+Object.entries(src).sort((a,b)=>b[1]-a[1]).map(([to,n])=>{
+    const p=n/tot*100,up=TFS.indexOf(to)>TFS.indexOf(sel);
+    return `<div class="bar" style="grid-template-columns:52px 1fr 66px"><div class="lab">${chip(to)}</div>
+    <div class="track"><div class="fill" style="width:${p}%;background:${up?C[sel]:'#55637C'}"></div></div>
+    <div class="val">${p.toFixed(1)}% <span>n${n}</span></div></div>`;}).join('')+`</div><p class="note">${tot} transitions from ${sel}.</p>`;}
+
+const WN={prior:'Only crosses that had <b>already fired at the pivot low</b>. Strictly before the decision curtain, so conservative — it ignores crosses that fire between the low and the confirmation bar, which a decision could legitimately have used.',
+curtain:'Everything knowable <b>at the decision instant</b> — the pivot\'s confirmation bar, five lens bars after the low. This is the maximum information a real decision could use. Deep cells are thin because little cascade has unfolded in five bars.',
+w8h:'Crosses within 100 exec bars of the low. On the 1H lens that runs 40 bars past the curtain, so it is <b>partly post-decision</b>.',
+w48h:'Crosses for a full 48 hours after the low — far past the curtain on every lens. <b>Largely post-decision</b>: shown to make the inflation visible, not to be believed.'};
+let curW='prior',curSc='lens1h';
+function depth(){const dd=D.depth[curSc][curW],el=document.getElementById('depth');
+  const keys=['none',...TFS].filter(k=>dd[k]);const mx=Math.max(...keys.map(k=>dd[k].mfe));
+  el.innerHTML=keys.map(k=>{const v=dd[k],col=k==='none'?'#55637C':C[k];
+    return `<div class="bar"><div class="lab">${k==='none'?'no cascade':k}</div>
+    <div class="track"><div class="fill" style="width:${v.mfe/mx*100}%;background:${col}"></div></div>
+    <div class="val">${v.mfe.toFixed(2)} <span>ATR · n${v.n}</span></div></div>`;}).join('');
+  document.getElementById('wnote').innerHTML=WN[curW]+(curSc==='pooled'?' <b>Pooled across lenses — the outcome column mixes 4-day and 100-day windows.</b>':'');}
+document.querySelectorAll('[data-w]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('[data-w]').forEach(x=>x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true');curW=b.dataset.w;depth();}));
+document.querySelectorAll('[data-sc]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('[data-sc]').forEach(x=>x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true');curSc=b.dataset.sc;depth();}));
+
+document.querySelector('#flens tbody').innerHTML=['1h','4h','12h','1d'].map(L=>{
+  const row=D.front_by_lens[L]||{};const cell=t=>{const v=row[t];return v?`${v.mfe.toFixed(2)}<span style="color:#55637C"> n${v.n}</span>`:'·';};
+  return `<tr><td>${chip(L)}</td><td>${cell('1h')}</td><td>${cell('4h')}</td><td>${cell('12h')}</td><td>${cell('1d')}</td></tr>`;}).join('');
+document.querySelector('#lcomp tbody').innerHTML=TFS.filter(f=>D.lens_comp[f]).map(f=>{
+  const row=D.lens_comp[f];const tot=Object.values(row).reduce((a,b)=>a+b,0);
+  return `<tr><td>${chip(f)}</td>`+['1h','4h','12h','1d'].map(L=>`<td>${(row[L]/tot*100).toFixed(1)}%</td>`).join('')+`</tr>`;}).join('');
+document.getElementById('arep').innerHTML=Object.entries(D.asset_rep_1h).map(([a,v])=>{
+  const up=v.delta>0;return `<span class="assetchip ${up?'up':'dn'}" title="slow ${v.mfe_slow} (n${v.n_slow}) vs fast ${v.mfe_fast} (n${v.n_fast})">${a.replace('USDT','')} ${up?'+':''}${v.delta.toFixed(2)}</span>`;}).join('');
+
+function seqs(key){const arr=[...D.sequences].sort((a,b)=>b[key]-a[key]);
+  document.getElementById('seqs').innerHTML=arr.map(s=>`<div class="seqrow"><div class="seqchain">${s.seq.map(chip).join('<span class="arrow">→</span>')}</div>
+  <div class="pct">${s.share.toFixed(1)}%</div><div class="nn">${s.n}</div><div class="mfe">${s.mfe.toFixed(2)} ATR</div></div>`).join('')
+  +`<p class="note">${D.seq_total} cascades fired three or more rungs; ${D.sequences.length} distinct orders occur 15+ times.</p>`;}
+document.querySelectorAll('[data-s]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('[data-s]').forEach(x=>x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true');seqs(b.dataset.s);}));
+
+document.getElementById('gaps').innerHTML=D.gapdist.map(g=>{
+  const mx=Math.max(...g.bins);
+  const bars=g.bins.map((v,i)=>{const h=mx?Math.max(2,v/mx*72):2;
+    return `<div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px">
+    <div style="width:100%;height:${h}px;background:${C[g.from]};opacity:.8;border-radius:3px 3px 0 0"></div>
+    <div style="font-family:var(--mono);font-size:9px;color:#55637C;transform:rotate(-38deg);white-space:nowrap;margin-top:2px">${D.gap_labels[i]}</div></div>`;}).join('');
+  return `<div class="card"><h3>${chip(g.from)} <span class="arrow">→</span> ${chip(g.to)} <span style="color:#55637C;font-weight:400;font-size:12px"> n=${g.n}</span></h3>
+  <div style="display:flex;gap:4px;align-items:flex-end;height:110px;padding-top:6px">${bars}</div>
+  <p class="note" style="margin-top:16px">p25 ${g.p25} · median ${g.p50} · p75 ${g.p75} exec bars (${(g.p50*5/60).toFixed(1)}h median)</p></div>`;}).join('');
+
+function heat(id,H,mode){const rm={};TFS.forEach(t=>rm[t]=Math.max(...H[t].bins));
+  let h='<table class="hm"><thead><tr><th class="rl"></th>'+D.bin_labels.map(b=>`<th>${b}</th>`).join('')+'</tr></thead><tbody>';
+  TFS.forEach(t=>{h+=`<tr><th class="rl">${t}${GHOST[t]?'*':''}</th>`;
+    H[t].bins.forEach(v=>{const r=rm[t]?v/rm[t]:0;const lab=mode==='pct'?(v/D.n_termini*100).toFixed(1):v;
+      h+=r<0.04?`<td class="z">${lab}</td>`:`<td style="background:${C[t]};opacity:${(0.22+r*0.78).toFixed(2)}">${lab}</td>`;});h+='</tr>';});
+  document.getElementById(id).innerHTML=h+'</tbody></table>';}
+function heats(m){heat('hp',D.hist_prior,m);heat('hf',D.hist_fwd,m);}
+document.querySelectorAll('[data-h]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('[data-h]').forEach(x=>x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true');heats(b.dataset.h);}));
+
+document.querySelector('#lags tbody').innerHTML=D.interrung.map(r=>`<tr><td>${chip(r.from)} <span class="arrow">→</span> ${chip(r.to)}</td><td>${r.n}</td><td>${r.p25}</td><td>${r.med}</td><td>${r.p75}</td><td>${r.med_h}h</td></tr>`).join('');
+const fk=TFS.filter(t=>D.front_pooled[t]),fmx=Math.max(...fk.map(t=>D.front_pooled[t].mfe));
+document.getElementById('front').innerHTML=fk.map(t=>{const v=D.front_pooled[t];
+  return `<div class="bar" style="grid-template-columns:50px 1fr 84px"><div class="lab">${chip(t)}</div>
+  <div class="track"><div class="fill" style="width:${v.mfe/fmx*100}%;background:${C[t]}"></div></div>
+  <div class="val">${v.mfe.toFixed(2)} <span>n${v.n}</span></div></div>`;}).join('');
+
+clock('9_89');ladder();ldet();depth();seqs('share');heats('cnt');
+</script></body></html>

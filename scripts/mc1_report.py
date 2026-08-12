@@ -1,0 +1,168 @@
+"""MC-1 v2 report emitter — MC1_tables.md, MC1_results.json, BUILD document.
+
+Reads only the checkpoints under _reviewer_box/mc1/ and the bulk under
+research_outputs/mc1/. Writes only exchange/reports/.
+"""
+from __future__ import annotations
+
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT / "scripts"))
+import mc1_program as M                                          # noqa: E402
+
+BOX_CAPACITY = 6_390_000          # bytes; derived, see exchange/DIGEST.md:19
+ONE_PCT = BOX_CAPACITY / 100.0
+REP = ROOT / "exchange" / "reports"
+CK = M.ckpt_load
+
+
+def sh(cmd):
+    return subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True,
+                          shell=True).stdout.strip()
+
+
+def md_table(rows, cols, widths=None):
+    out = ["| " + " | ".join(cols) + " |",
+           "|" + "|".join("---" for _ in cols) + "|"]
+    for r in rows:
+        out.append("| " + " | ".join(str(r.get(c, "")) for c in cols) + " |")
+    return "\n".join(out)
+
+
+def main() -> int:
+    d1 = CK("d1_matrix"); d4 = CK("d4_similarity"); d5 = CK("d5_outcomes")
+    d6 = CK("d6_join"); d7 = CK("d7_winner_stacks"); fx = CK("fixtures")
+    d3a = CK("d3a_manifest"); d3b = CK("d3b_registry"); d3c = CK("d3c_colocation")
+    d3e = CK("d3e_event_card"); fetch = CK("fetch_manifest")
+
+    head = sh("git rev-parse --short HEAD")
+    branch = sh("git rev-parse --abbrev-ref HEAD")
+    syn = ROOT / "exchange" / "reports" / "SS_SYSTEM_SYNTHESIS_2026-08-06.md"
+    syn_sha = M.sha256_file(syn)
+
+    # ---------------- MC1_tables.md ----------------
+    T = [f"# MC-1 v2 · MACHINE TABLES", "",
+         f"Exploration ceiling **{M.CEIL_MS}** (`{M.CEIL_ISO}`) — "
+         f"`scripts/census_build.py:60 CEIL_MS`. Seed {M.SEED}. HEAD `{head}`.", "",
+         "## D-1 · WARMUP / FEASIBILITY MATRIX (EVIDENCE, exploration-classic)", "",
+         f"Warmup rule (I3): {d1['warmup_rule']}", "",
+         "Bars required: " + " · ".join(f"EMA{k}={v}"
+                                        for k, v in d1["warmup_bars"].items()), "",
+         f"1W/1M convention: {d1['resample_note']}", ""]
+    rows = {(r["asset"], r["tf"], r["ema"]): r for r in d1["rows"]}
+    for a in d1["assets"]:
+        T.append(f"### {a}")
+        T.append("| TF | " + " | ".join(f"EMA{e}" for e in d1["emas"]) + " | bars |")
+        T.append("|---|" + "|".join("---" for _ in d1["emas"]) + "|---|")
+        for tf in d1["tfs"]:
+            cells = [rows[(a, tf, e)]["first_warm_date"] for e in d1["emas"]]
+            n = d1["axis"][f"{a}|{tf}"]["bars_ceiled"]
+            T.append(f"| {tf} | " + " | ".join(cells) + f" | {n} |")
+        T.append("")
+
+    T += ["## D-4 · SIMILARITY FAMILY — population pyramid", "",
+          f"Population: {d4['population_rule']}", "",
+          f"n = {d4['n_events']} · strict core 4/4 = {d4['strict_core_n']} · "
+          f"stamps {d4['stamp_counts']} · WALL limbs {d4['wall_limb_counts']}", "",
+          "| asset | score 0 | 1 | 2 | 3 | 4 |", "|---|---|---|---|---|---|"]
+    for a, d in sorted(d4["pyramid"].items()):
+        T.append(f"| {a} | " + " | ".join(str(d.get(str(i), 0)) for i in range(5)) + " |")
+    T += ["", f"Excluding the SEAL-degenerate 89_200 subpopulation "
+              f"({d4['seal_degenerate_n']} events):", "",
+          "| asset | score 0 | 1 | 2 | 3 | 4 |", "|---|---|---|---|---|---|"]
+    for a, d in sorted(d4["pyramid_excl_seal_degenerate"].items()):
+        T.append(f"| {a} | " + " | ".join(str(d.get(str(i), 0)) for i in range(5)) + " |")
+
+    T += ["", "## D-5 · OUTCOMES BY TIER — TRG tail table", "",
+          d5["trg_definition"], "",
+          "| tier | gate | n kept | tail n | tail mass | TRG % |",
+          "|---|---|---|---|---|---|"]
+    for r in d5["trg_table"]:
+        T.append(f"| {r['tier']} | {r['gate']} | {r['n_kept']} | {r['tail_n_kept']} "
+                 f"| {r['tail_mass_kept']:.1f} | {r['TRG_pct']} |")
+    t5 = pd.read_parquet(ROOT / "research_outputs/mc1/d5_outcomes_by_tier.parquet")
+    T += ["", f"### Per-lens MFE/MAE per tier per asset ({len(t5)} rows, h100 shown)", "",
+          "| lens | asset | tier | n | MFE med | MAE med | net med | n early | n late |",
+          "|---|---|---|---|---|---|---|---|---|"]
+    for r in t5[t5.horizon == 100].itertuples(index=False):
+        T.append(f"| {r.lens} | {r.asset} | {r.tier} | {r.n} | {r.mfe_median:.2f} "
+                 f"| {r.mae_median:.2f} | {r.net_median:.2f} | {r.n_early} | {r.n_late} |")
+
+    (REP / "MC1_tables.md").write_text("\n".join(T) + "\n", encoding="utf-8")
+
+    # ---------------- MC1_results.json ----------------
+    card = dict(d3e)
+    chron = card.pop("before_chronology", [])
+    card["before_chronology_first_50"] = chron[:50]
+    card["before_chronology_full_count"] = len(chron)
+    res = {
+        "study": "MC-1 v2 — THE MAY-26 PROGRAM",
+        "seed": M.SEED, "head": head, "branch": branch,
+        "ceiling_ms": M.CEIL_MS, "ceiling_iso": M.CEIL_ISO,
+        "ceiling_source": "scripts/census_build.py:60 CEIL_MS (same source as SEQ8 F-SEQ2)",
+        "synthesis_filing": {"attached_to_paste": False, "status": "MISSING — not attached",
+                             "resident_copy": str(syn.relative_to(ROOT)).replace("\\", "/"),
+                             "sha256": syn_sha, "bytes": syn.stat().st_size,
+                             "action": "hashed and left byte-identical; NOT overwritten"},
+        "analytics": M.ANALYTICS_CITE,
+        "D1": {k: v for k, v in d1.items() if k != "rows"},
+        "D3": {"fetch": fetch, "perbar": d3a, "registry": d3b, "colocation": d3c,
+               "event_card": card},
+        "D4": d4, "D5": d5, "D6": d6, "D7": d7,
+        "fixtures": fx["fixtures"], "all_fixtures_pass": fx["all_pass"],
+    }
+    (REP / "MC1_results.json").write_text(
+        json.dumps(res, indent=1, sort_keys=True, default=str), encoding="utf-8")
+
+    # ---------------- file disposition ----------------
+    disp = []
+    for p in sorted((ROOT / "research_outputs" / "mc1").rglob("*")):
+        if p.is_file():
+            b = p.stat().st_size
+            disp.append({"File": str(p.relative_to(ROOT)).replace("\\", "/"),
+                         "Class": "OPS bulk" if "ops_" in str(p) else "EVIDENCE bulk",
+                         "Bytes": f"{b:,}",
+                         "Disposition": "NOT pushed (gitignored)",
+                         "Home": "research_outputs/mc1/ (local + estate backup)",
+                         "BOX-COST": f"{100.0 * b / BOX_CAPACITY:.2f}%"})
+    for name in ("MC1_tables.md", "MC1_results.json",
+                 "BUILD_APOLLO_2026-08-06_MC1.md"):
+        p = REP / name
+        if p.exists():
+            b = p.stat().st_size
+            disp.append({"File": f"exchange/reports/{name}", "Class": "TEXT deliverable",
+                         "Bytes": f"{b:,}", "Disposition": "PUSHED via publish_exchange",
+                         "Home": "exchange/reports/",
+                         "BOX-COST": f"{100.0 * b / BOX_CAPACITY:.2f}%"})
+    for name in ("exchange/queue/2026-08-06_MC1_may26_program_APOLLO.md",
+                 "exchange/status/LEDGER_APOLLO.md"):
+        p = ROOT / name
+        b = p.stat().st_size
+        disp.append({"File": name, "Class": "COORDINATION", "Bytes": f"{b:,}",
+                     "Disposition": "PUSHED via publish_exchange", "Home": "exchange/",
+                     "BOX-COST": f"{100.0 * b / BOX_CAPACITY:.2f}%"})
+    for name in ("scripts/mc1_program.py", "scripts/mc1_report.py", ".gitignore"):
+        p = ROOT / name
+        b = p.stat().st_size
+        disp.append({"File": name, "Class": "CODE", "Bytes": f"{b:,}",
+                     "Disposition": "NOT pushed — outside exchange/ scope guard",
+                     "Home": "repo worktree (uncommitted)",
+                     "BOX-COST": f"{100.0 * b / BOX_CAPACITY:.2f}%"})
+    over = [d for d in disp if float(d["BOX-COST"].rstrip("%")) > 1.0]
+    json.dump(disp, open(ROOT / "_reviewer_box" / "mc1" / "disposition.json", "w"),
+              indent=1)
+    print(f"disposition rows {len(disp)}; over 1% of box: {len(over)}")
+    print("tables", (REP / "MC1_tables.md").stat().st_size,
+          "results", (REP / "MC1_results.json").stat().st_size)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

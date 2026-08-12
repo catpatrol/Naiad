@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cascade Atlas — CENSUS-1b MTF cross structure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E1420; --panel:#151D2C; --panel2:#1B2436; --rule:#26324C;
+  --tx:#C9D4E6; --mute:#7A8AA5; --dim:#55637C;
+  --tf0:#2FB0BE; --tf1:#3D93D4; --tf2:#6C7FE0; --tf3:#9A6FD8;
+  --tf4:#D96BA8; --tf5:#E8853F; --tf6:#F0B429;
+  --warn:#E8853F; --ok:#54C6A0;
+  --disp:'Space Grotesk',system-ui,sans-serif;
+  --body:'IBM Plex Sans',system-ui,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--tx);font-family:var(--body);
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 96px}
+header{padding:56px 0 32px;border-bottom:1px solid var(--rule)}
+h1{font-family:var(--disp);font-weight:700;font-size:clamp(30px,4.6vw,52px);
+  line-height:1.02;letter-spacing:-.028em;margin:0 0 14px}
+h1 em{font-style:normal;color:var(--tf5)}
+.sub{color:var(--mute);max-width:70ch;font-size:16px;margin:0}
+.prov{font-family:var(--mono);font-size:11.5px;color:var(--dim);margin-top:20px;
+  display:flex;flex-wrap:wrap;gap:8px 22px}
+.prov b{color:var(--mute);font-weight:500}
+.banner{margin:26px 0 0;padding:13px 17px;border-left:3px solid var(--warn);
+  background:rgba(232,133,63,.07);font-size:13.5px;color:#E6C6A8;border-radius:0 4px 4px 0}
+.banner b{color:var(--warn)}
+section{padding:52px 0;border-bottom:1px solid var(--rule)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--dim);margin:0 0 9px}
+h2{font-family:var(--disp);font-weight:600;font-size:26px;letter-spacing:-.02em;margin:0 0 12px}
+.lede{color:var(--mute);max-width:74ch;margin:0 0 30px;font-size:15px}
+.grid{display:grid;grid-template-columns:1fr 340px;gap:34px;align-items:start}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:7px;padding:20px}
+.card h3{font-family:var(--disp);font-size:14px;margin:0 0 12px;font-weight:600;letter-spacing:.01em}
+.note{font-size:13px;color:var(--mute);margin:12px 0 0}
+table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12.5px}
+th{text-align:right;color:var(--dim);font-weight:500;padding:6px 9px;
+  border-bottom:1px solid var(--rule);font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+th:first-child,td:first-child{text-align:left}
+td{padding:6px 9px;border-bottom:1px solid rgba(38,50,76,.5);text-align:right}
+tr:last-child td{border-bottom:none}
+.tfchip{display:inline-block;padding:1px 7px;border-radius:3px;font-family:var(--mono);
+  font-size:11.5px;font-weight:600;color:#0E1420}
+.toggle{display:flex;gap:0;border:1px solid var(--rule);border-radius:6px;
+  overflow:hidden;margin:0 0 22px;width:fit-content;flex-wrap:wrap}
+.toggle button{background:transparent;border:none;border-right:1px solid var(--rule);
+  color:var(--mute);font-family:var(--mono);font-size:12px;padding:10px 15px;cursor:pointer;
+  transition:background .15s,color .15s}
+.toggle button:last-child{border-right:none}
+.toggle button:hover{background:var(--panel2);color:var(--tx)}
+.toggle button[aria-pressed=true]{background:var(--tf5);color:#0E1420;font-weight:600}
+.toggle button:focus-visible{outline:2px solid var(--tf0);outline-offset:-2px}
+.bars{display:flex;flex-direction:column;gap:9px}
+.bar{display:grid;grid-template-columns:70px 1fr 108px;align-items:center;gap:12px}
+.bar .lab{font-family:var(--mono);font-size:12px;color:var(--mute);text-align:right}
+.bar .track{height:22px;background:var(--panel2);border-radius:3px;overflow:hidden}
+.bar .fill{height:100%;border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+.bar .val{font-family:var(--mono);font-size:12px;color:var(--tx)}
+.bar .val span{color:var(--dim)}
+.seqrow{display:grid;grid-template-columns:1fr 62px 78px;gap:12px;align-items:center;
+  padding:8px 0;border-bottom:1px solid rgba(38,50,76,.5)}
+.seqrow:last-child{border-bottom:none}
+.seqchain{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.arrow{color:var(--dim);font-size:11px}
+.pct,.mfe{font-family:var(--mono);font-size:12px;text-align:right}
+.pct{color:var(--mute)}
+.hm{font-family:var(--mono);font-size:11.5px;width:100%;border-collapse:separate;border-spacing:2px}
+.hm td{padding:6px 4px;text-align:center;border:none;border-radius:3px;color:#0E1420;font-weight:600}
+.hm td.z{background:var(--panel2);color:var(--dim);font-weight:400}
+.hm th{padding:5px 3px;font-size:10px;text-align:center;border:none;color:var(--dim)}
+.hm th.rl{text-align:right;padding-right:8px}
+svg{display:block;max-width:100%;height:auto}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;
+  color:var(--mute);margin-top:14px}
+.legend i{display:inline-block;width:20px;height:3px;vertical-align:middle;margin-right:6px}
+footer{padding:44px 0 0;color:var(--dim);font-size:13px;max-width:78ch}
+footer b{color:var(--mute)}
+.kicker{font-family:var(--mono);font-size:12px;color:var(--tf5);margin:22px 0 0}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">CENSUS-1b · move-anatomy substrate · exploratory</p>
+  <h1>The cascade climbs a ladder.<br>Most of the time it <em>stalls at 1H</em>.</h1>
+  <p class="sub">Every EMA regime cross in the census, arranged by the one thing that turned out to
+  organise them: how far up the timeframe stack the cascade propagates. Built from the 14,560
+  pullback termini in the enriched dataset — every number below is computed from that file, none
+  are illustrative.</p>
+  <div class="prov">
+    <span><b>rows</b> 14,560</span>
+    <span><b>substrate</b> census1b_termini_enriched.jsonl</span>
+    <span><b>sha256</b> 4feecd54…</span>
+    <span><b>window</b> exploration-classic (pre-2024-07-01)</span>
+    <span><b>assets</b> 7</span>
+  </div>
+  <div class="banner"><b>Exploratory — not a finding.</b> Everything here is generated by looking at
+  data already seen, in a large search space. It is a map of where to look next, not evidence to
+  trade on. Only pre-registered, lockbox-tested results count as findings.</div>
+</header>
+
+<section>
+  <p class="eyebrow">Signature · the ladder</p>
+  <h2>Where the cascade goes next</h2>
+  <p class="lede">Each rung is a timeframe. A ribbon shows where a cascade travels after firing on
+  that rung — thickness is probability, measured across every observed transition. Ribbons on the
+  right <em>advance</em> up the stack; ribbons on the left <em>fall back</em> to a faster frame.
+  Click a rung to isolate it.</p>
+  <div class="grid">
+    <div><svg id="ladder" viewBox="0 0 620 470" role="img"
+      aria-label="Timeframe ladder showing cascade transition probabilities"></svg>
+      <div class="legend">
+        <span><i style="background:var(--tf5)"></i>advance (up the stack)</span>
+        <span><i style="background:var(--dim)"></i>fall back (to a faster frame)</span>
+        <span>ribbon width ∝ P(next rung)</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3 id="lt">Transition detail</h3>
+      <div id="ldet"></div>
+      <p class="note" id="lnote">The chain is tight and adjacent while it is fast: 5m→15m runs 84%,
+      15m→30m 80%. It loosens at 30m→1H (63%), and then it breaks. From 1H, the cascade is more
+      likely to fall back to 30m (48%) than to advance to 4H (29%). <b>That stall is the structure
+      the whole page is about.</b></p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">The honest version · read this one</p>
+  <h2>Does reaching a higher rung mean a bigger move?</h2>
+  <p class="lede">Yes — but far less than the naive cut suggests, and the gap between those two
+  answers is a lesson worth keeping. The outcome is measured over the 100 bars (8.3 hours) after the
+  pullback. If you let the cascade keep counting for 48 hours, you are crediting crosses that fired
+  <em>after</em> the outcome was already decided. Shrink the counting window and watch the effect
+  deflate.</p>
+  <div class="toggle" role="group" aria-label="Cascade counting window">
+    <button data-w="prior" aria-pressed="true">Prior only — causal</button>
+    <button data-w="w8h" aria-pressed="false">≤8.3h — outcome window</button>
+    <button data-w="w48h" aria-pressed="false">≤48h — inflated</button>
+  </div>
+  <div class="grid">
+    <div><div class="bars" id="depth"></div></div>
+    <div class="card">
+      <h3>What the toggle shows</h3>
+      <p class="note" id="wnote"></p>
+      <p class="note" style="margin-top:14px"><b>Why it matters.</b> The inflated view shows a move
+      jumping from 3.86 to 6.45 ATR when the cascade reaches 4H — a spectacular, untradeable number.
+      The causal view, using only crosses that had already fired when you would have to decide, shows
+      3.94 → 4.46. Real, useful, a third the size. The difference is pure hindsight.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Sequence census</p>
+  <h2>The most probable cascade orders</h2>
+  <p class="lede">The first three rungs of every cascade that fired at least three, ranked by how
+  often that exact order occurs. <b>83.6%</b> of all cascades run strictly fast-to-slow — the ladder
+  metaphor is not an idealisation, it is what the data does. Note the right-hand column: the common
+  sequences are the shallow ones, and the rare ones carry the bigger moves.</p>
+  <div class="grid">
+    <div><div id="seqs"></div></div>
+    <div class="card">
+      <h3>Reading the tail</h3>
+      <p class="note">The top sequence, 5m→15m→30m, is 60.6% of all three-rung cascades and returns
+      a middling 4.44 ATR. The sequences that reach a slow frame in three steps — 5m→15m→4H (2.3%,
+      6.41), 5m→15m→12H (1.9%, 6.69), 15m→30m→4H (1.1%, 7.22) — are individually rare and carry
+      moves half again as large.</p>
+      <p class="note" style="margin-top:14px">Same caution as above: these outcome figures use the
+      full counting window, so they carry the same hindsight inflation. Treat the <em>ordering</em>
+      as solid and the <em>outcome column</em> as indicative.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="eyebrow">Timing</p>
+  <h2>When each frame fires, relative to the pullback</h2>
+  <p class="lede">Counts of pullbacks by how long before (left) and after (right) each timeframe's
+  regime cross sits. Colour is the share of that row. The diagonal drift is the cascade seen as a
+  clock: fast frames cluster close to the pullback on both sides, slow frames sit far away on both.</p>
+  <div class="grid" style="grid-template-columns:1fr 1fr">
+    <div class="card"><h3>Before the pullback — aligned crosses</h3><div id="hp"></div></div>
+    <div class="card"><h3>After the pullback — next cross</h3><div id="hf"></div></div>
+  </div>
+  <p class="kicker">The pullback sits at the hinge: fast frames fresh on both sides, slow frames
+  distant on both sides.</p>
+</section>
+
+<section>
+  <p class="eyebrow">Tempo</p>
+  <h2>How long each step of the ladder takes</h2>
+  <p class="lede">Median gap between consecutive rungs, for the ten most common transitions. The
+  fast steps are quick and the 1H→4H step is the long one — eight hours of waiting between the
+  cascade reaching 1H and confirming at 4H, if it confirms at all.</p>
+  <div class="grid">
+    <div class="card"><table id="lags"><thead><tr><th>Step</th><th>n</th><th>Median gap</th>
+      <th>Hours</th></tr></thead><tbody></tbody></table></div>
+    <div class="card">
+      <h3>The frontier, causally</h3>
+      <p class="note">Same question asked only of crosses that had already fired — the slowest frame
+      still aligned at the moment of the pullback, against the subsequent move.</p>
+      <div class="bars" id="front" style="margin-top:14px"></div>
+      <p class="note" style="margin-top:14px">Alignment reaching 4H–12H is where the gradient lives.
+      The daily adds nothing beyond 12H.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><b>What this is not.</b> Not a validated finding, not a trading rule, and not out-of-sample.
+  Every figure is computed in-sample on exploration-classic data that has already been searched. The
+  page exists to generate hypotheses precisely enough that they can be pre-registered and tested
+  against the sealed lockbox — which is the only place any of it can earn the word "edge".</p>
+  <p style="margin-top:14px"><b>Reproducing it.</b> Every number derives from
+  census1b_termini_enriched.jsonl (sha256 4feecd54…, 14,560 rows), itself regenerable from the
+  byte-pinned CENSUS-1 substrate. Outcome throughout is median forward MFE in ATR over 100 exec
+  bars. Lags are in 5-minute exec bars.</p>
+</footer>
+
+</div>
+<script>
+const D = {"transitions": {"5m": {"15m": 2844, "30m": 233, "1h": 79, "4h": 100, "12h": 73, "1d": 50}, "15m": {"5m": 107, "30m": 2196, "1h": 194, "4h": 104, "12h": 89, "1d": 40}, "30m": {"5m": 34, "15m": 291, "1h": 820, "4h": 84, "12h": 36, "1d": 32}, "1h": {"5m": 3, "15m": 72, "30m": 188, "4h": 116, "12h": 12, "1d": 5}, "4h": {"5m": 5, "30m": 2, "1h": 15, "12h": 57, "1d": 16}, "12h": {"5m": 3, "15m": 5, "30m": 1, "1h": 1, "4h": 22, "1d": 36}, "1d": {"5m": 7, "15m": 4, "30m": 1, "1h": 2, "4h": 8, "12h": 14}}, "sequences": [{"seq": ["5m", "15m", "30m"], "n": 1441, "share": 60.6, "mfe": 4.44}, {"seq": ["5m", "30m", "15m"], "n": 180, "share": 7.6, "mfe": 4.18}, {"seq": ["15m", "30m", "1h"], "n": 151, "share": 6.3, "mfe": 4.34}, {"seq": ["5m", "15m", "1h"], "n": 141, "share": 5.9, "mfe": 5.46}, {"seq": ["5m", "15m", "4h"], "n": 55, "share": 2.3, "mfe": 6.41}, {"seq": ["5m", "15m", "12h"], "n": 46, "share": 1.9, "mfe": 6.69}, {"seq": ["15m", "1h", "30m"], "n": 45, "share": 1.9, "mfe": 3.73}, {"seq": ["5m", "1h", "15m"], "n": 43, "share": 1.8, "mfe": 5.02}, {"seq": ["30m", "5m", "15m"], "n": 30, "share": 1.3, "mfe": 4.07}, {"seq": ["1h", "15m", "30m"], "n": 29, "share": 1.2, "mfe": 4.93}, {"seq": ["5m", "30m", "1h"], "n": 27, "share": 1.1, "mfe": 3.69}, {"seq": ["15m", "30m", "4h"], "n": 27, "share": 1.1, "mfe": 7.22}], "seq_total": 2378, "depth": {"w48h": {"none": {"n": 6378, "mfe": 4.12}, "5m": {"n": 1527, "mfe": 3.62}, "15m": {"n": 1609, "mfe": 3.52}, "30m": {"n": 1860, "mfe": 3.86}, "1h": {"n": 1150, "mfe": 4.45}, "4h": {"n": 1029, "mfe": 6.45}, "12h": {"n": 624, "mfe": 6.05}, "1d": {"n": 383, "mfe": 6.8}}, "w8h": {"none": {"n": 8229, "mfe": 4.23}, "5m": {"n": 2497, "mfe": 3.83}, "15m": {"n": 1519, "mfe": 4.62}, "30m": {"n": 1274, "mfe": 4.76}, "1h": {"n": 533, "mfe": 4.72}, "4h": {"n": 315, "mfe": 5.54}, "12h": {"n": 119, "mfe": 4.68}, "1d": {"n": 74, "mfe": 5.02}}, "prior": {"none": {"n": 132, "mfe": 3.66}, "5m": {"n": 44, "mfe": 3.32}, "1h": {"n": 1806, "mfe": 3.94}, "4h": {"n": 2202, "mfe": 4.46}, "12h": {"n": 1660, "mfe": 4.48}, "1d": {"n": 8666, "mfe": 4.34}}}, "hist_prior": {"5m": {"bins": [1275, 2757, 4377, 1039, 107, 0], "none": 5005}, "15m": {"bins": [699, 1359, 1904, 2827, 2614, 460], "none": 4697}, "30m": {"bins": [386, 590, 755, 2609, 3816, 2880], "none": 3524}, "1h": {"bins": [101, 162, 310, 2014, 3570, 6570], "none": 1833}, "4h": {"bins": [68, 64, 123, 597, 1510, 9128], "none": 3070}, "12h": {"bins": [28, 28, 55, 229, 510, 8948], "none": 4762}, "1d": {"bins": [10, 6, 40, 92, 235, 8283], "none": 5894}}, "hist_fwd": {"5m": {"bins": [2055, 4146, 4780, 3230, 346, 1], "none": 2}, "15m": {"bins": [677, 1802, 3416, 4754, 3365, 541], "none": 5}, "30m": {"bins": [348, 859, 2046, 3909, 4568, 2827], "none": 3}, "1h": {"bins": [0, 412, 945, 2543, 4093, 6562], "none": 5}, "4h": {"bins": [0, 93, 201, 678, 1579, 11745], "none": 264}, "12h": {"bins": [0, 24, 71, 190, 545, 13409], "none": 321}, "1d": {"bins": [0, 12, 44, 100, 265, 13808], "none": 331}}, "bin_labels": ["\u226430m", "35m\u20132h", "2\u20136h", "6\u201318h", "18\u201348h", ">48h"], "interrung": [{"from": "5m", "to": "15m", "n": 2844, "med_bars": 41.0, "med_h": 3.4}, {"from": "15m", "to": "30m", "n": 2196, "med_bars": 21.0, "med_h": 1.8}, {"from": "30m", "to": "1h", "n": 820, "med_bars": 36.0, "med_h": 3.0}, {"from": "30m", "to": "15m", "n": 291, "med_bars": 9, "med_h": 0.8}, {"from": "5m", "to": "30m", "n": 233, "med_bars": 15, "med_h": 1.2}, {"from": "15m", "to": "1h", "n": 194, "med_bars": 12.0, "med_h": 1.0}, {"from": "1h", "to": "30m", "n": 188, "med_bars": 6.0, "med_h": 0.5}, {"from": "1h", "to": "4h", "n": 116, "med_bars": 96.0, "med_h": 8.0}, {"from": "15m", "to": "5m", "n": 107, "med_bars": 3, "med_h": 0.2}, {"from": "15m", "to": "4h", "n": 104, "med_bars": 189.0, "med_h": 15.8}], "frontier": {"5m": {"n": 44, "mfe": 3.32}, "1h": {"n": 1806, "mfe": 3.94}, "4h": {"n": 2202, "mfe": 4.46}, "12h": {"n": 1660, "mfe": 4.48}, "1d": {"n": 8666, "mfe": 4.34}}, "monotone_pct": 83.6, "n_termini": 14560};
+const TFS=['5m','15m','30m','1h','4h','12h','1d'];
+const C={'5m':'#2FB0BE','15m':'#3D93D4','30m':'#6C7FE0','1h':'#9A6FD8','4h':'#D96BA8','12h':'#E8853F','1d':'#F0B429'};
+const chip=t=>`<span class="tfchip" style="background:${C[t]}">${t}</span>`;
+
+/* ---------- ladder ---------- */
+const L={x:250,y0:34,gap:66,w:96,h:30};
+const ypos=i=>L.y0+i*L.gap;
+let sel=null;
+function ladder(){
+  const s=document.getElementById('ladder');
+  let g='';
+  TFS.forEach((tf,i)=>{
+    const src=D.transitions[tf];
+    if(!src) return;
+    const tot=Object.values(src).reduce((a,b)=>a+b,0);
+    Object.entries(src).forEach(([to,n])=>{
+      const p=n/tot, j=TFS.indexOf(to);
+      if(p<0.012) return;
+      const up=j>i, y1=ypos(i)+L.h/2, y2=ypos(j)+L.h/2;
+      const x1=up?L.x+L.w:L.x, bow=up?90+Math.abs(j-i)*26:-(70+Math.abs(j-i)*22);
+      const on=(sel===null||sel===tf);
+      g+=`<path d="M${x1},${y1} C${x1+bow},${y1} ${x1+bow},${y2} ${x1},${y2}"
+        fill="none" stroke="${up?C[tf]:'#55637C'}" stroke-width="${Math.max(1,p*26).toFixed(2)}"
+        opacity="${on?(up?.62:.34):.07}" stroke-linecap="round"/>`;
+    });
+  });
+  TFS.forEach((tf,i)=>{
+    const on=(sel===null||sel===tf);
+    g+=`<g class="rung" data-tf="${tf}" style="cursor:pointer" opacity="${on?1:.3}">
+      <rect x="${L.x}" y="${ypos(i)}" width="${L.w}" height="${L.h}" rx="4" fill="${C[tf]}"/>
+      <text x="${L.x+L.w/2}" y="${ypos(i)+20}" text-anchor="middle"
+        font-family="IBM Plex Mono,monospace" font-size="14" font-weight="600" fill="#0E1420">${tf}</text></g>`;
+  });
+  g+=`<text x="${L.x+L.w/2}" y="${ypos(6)+56}" text-anchor="middle" font-family="IBM Plex Mono,monospace"
+    font-size="10.5" fill="#55637C">slower ↑ · faster ↓</text>`;
+  s.innerHTML=g;
+  s.querySelectorAll('.rung').forEach(el=>el.addEventListener('click',()=>{
+    const tf=el.dataset.tf; sel=(sel===tf)?null:tf; ladder(); ldet();
+  }));
+}
+function ldet(){
+  const t=document.getElementById('lt'), d=document.getElementById('ldet');
+  const nt=document.getElementById('lnote');
+  if(!sel){ t.textContent='Transition detail';
+    d.innerHTML='<p class="note" style="margin:0">Click any rung to see exactly where cascades go from it.</p>';
+    nt.style.display='block'; return; }
+  nt.style.display='none';
+  t.innerHTML=`From ${chip(sel)}`;
+  const src=D.transitions[sel]||{}, tot=Object.values(src).reduce((a,b)=>a+b,0);
+  const rows=Object.entries(src).sort((a,b)=>b[1]-a[1]).map(([to,n])=>{
+    const p=(n/tot*100), up=TFS.indexOf(to)>TFS.indexOf(sel);
+    return `<div class="bar" style="grid-template-columns:52px 1fr 66px">
+      <div class="lab">${chip(to)}</div>
+      <div class="track"><div class="fill" style="width:${p}%;background:${up?C[sel]:'#55637C'}"></div></div>
+      <div class="val">${p.toFixed(1)}% <span>n${n}</span></div></div>`;}).join('');
+  d.innerHTML=`<div class="bars">${rows}</div>
+    <p class="note">${tot} observed transitions from ${sel}.</p>`;
+}
+
+/* ---------- depth ---------- */
+const WN={
+ prior:'Only crosses that had <b>already fired</b> when the pullback confirmed — everything here was knowable at decision time. This is the version to reason with.',
+ w8h:'Crosses firing within the 8.3-hour outcome window. Partly contemporaneous with the move being measured, so still optimistic.',
+ w48h:'Crosses counted for a full 48 hours — long after the 8.3-hour outcome window closed. <b>Structurally hindsight-contaminated.</b> Shown to make the inflation visible, not to be believed.'};
+function depth(w){
+  const dd=D.depth[w], el=document.getElementById('depth');
+  const keys=['none',...TFS].filter(k=>dd[k]);
+  const mx=Math.max(...keys.map(k=>dd[k].mfe));
+  el.innerHTML=keys.map(k=>{
+    const v=dd[k], col=k==='none'?'#55637C':C[k];
+    return `<div class="bar"><div class="lab">${k==='none'?'no cascade':k}</div>
+      <div class="track"><div class="fill" style="width:${v.mfe/mx*100}%;background:${col}"></div></div>
+      <div class="val">${v.mfe.toFixed(2)} <span>ATR · n${v.n}</span></div></div>`;}).join('');
+  document.getElementById('wnote').innerHTML=WN[w];
+}
+document.querySelectorAll('.toggle button').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.toggle button').forEach(x=>x.setAttribute('aria-pressed','false'));
+  b.setAttribute('aria-pressed','true'); depth(b.dataset.w);
+}));
+
+/* ---------- sequences ---------- */
+document.getElementById('seqs').innerHTML=D.sequences.map(s=>{
+  const chain=s.seq.map(chip).join('<span class="arrow">→</span>');
+  return `<div class="seqrow"><div class="seqchain">${chain}</div>
+    <div class="pct">${s.share}%</div><div class="mfe">${s.mfe.toFixed(2)} ATR</div></div>`;}).join('')
+  +`<p class="note">${D.seq_total} cascades fired three or more rungs.</p>`;
+
+/* ---------- heatmaps ---------- */
+function heat(id,H){
+  const rowsMax={};
+  TFS.forEach(t=>rowsMax[t]=Math.max(...H[t].bins));
+  let h='<table class="hm"><thead><tr><th class="rl"></th>'
+    +D.bin_labels.map(b=>`<th>${b}</th>`).join('')+'</tr></thead><tbody>';
+  TFS.forEach(t=>{
+    h+=`<tr><th class="rl">${t}</th>`;
+    H[t].bins.forEach(v=>{
+      const r=rowsMax[t]?v/rowsMax[t]:0;
+      h+= r<0.04 ? `<td class="z">${v}</td>`
+        : `<td style="background:${C[t]};opacity:${(0.22+r*0.78).toFixed(2)}">${v}</td>`;
+    });
+    h+='</tr>';
+  });
+  document.getElementById(id).innerHTML=h+'</tbody></table>';
+}
+heat('hp',D.hist_prior); heat('hf',D.hist_fwd);
+
+/* ---------- lags + frontier ---------- */
+document.querySelector('#lags tbody').innerHTML=D.interrung.map(r=>
+  `<tr><td>${chip(r.from)} <span class="arrow">→</span> ${chip(r.to)}</td>
+   <td>${r.n}</td><td>${r.med_bars}</td><td>${r.med_h}h</td></tr>`).join('');
+const fk=TFS.filter(t=>D.frontier[t]), fmx=Math.max(...fk.map(t=>D.frontier[t].mfe));
+document.getElementById('front').innerHTML=fk.map(t=>{
+  const v=D.frontier[t];
+  return `<div class="bar" style="grid-template-columns:50px 1fr 84px">
+    <div class="lab">${chip(t)}</div>
+    <div class="track"><div class="fill" style="width:${v.mfe/fmx*100}%;background:${C[t]}"></div></div>
+    <div class="val">${v.mfe.toFixed(2)} <span>n${v.n}</span></div></div>`;}).join('');
+
+ladder(); ldet(); depth('prior');
+</script>
+</body>
+</html>
