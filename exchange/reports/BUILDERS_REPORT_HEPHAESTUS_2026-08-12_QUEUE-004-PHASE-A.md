@@ -402,7 +402,22 @@ af86168  exchange: auto-publish   [from C:\Naiad -- backup_estate's own publish 
 b938e81  exchange: auto-publish   [from C:\Naiad -- the daily routine's own publish step]
 ```
 
-<<PUBLISH>>
+**Final publish, FROM `C:\Naiad`, as printed:**
+
+```
+=== PUBLISHING FROM: /c/Naiad ===
+publish: WARNING -- exchange/ holds 1,759,447 B, 27.5% of the 6,390,000 B box (warn at 25%, refuse above 40%).
+publish: routine last completed 2026-08-12 (0h ago)
+publish: committed 84cb2b0 (3 path(s)) and pushed to origin/v12-v1-census
+status= PUBLISHED commit= 84cb2b0 pushed= True offenders= []
+```
+
+The **F-P6 freshness line reads `0h ago`** — the routine that produced it ran from `C:\Naiad` minutes
+earlier. The budget WARNING persists at **27.5%**; rotation is queue 003, ratified 2026-08-11 and
+still unbuilt, and §9.1 added 0.201% of it. A fifth commit carries this block, for the standing
+reason that a document cannot contain its own commit SHA.
+
+`.gitignore` remains modified in both trees; it was modified before this session and is untouched.
 
 ---
 
