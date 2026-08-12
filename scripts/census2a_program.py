@@ -2142,6 +2142,120 @@ def stage_cen4(assets: list[str], era: str = "evidence") -> dict:
 
 
 # ===========================================================================
+# A4 FIXTURES -- F-KEY, restored F-10, A4-WITCORR
+# ===========================================================================
+def assert_key(df: pd.DataFrame, keys: list, label: str) -> None:
+    """F-KEY (A4-KEY): a join key must be declared AND unique, before the join.
+
+    The non-unique-key defect has appeared THREE times in this census:
+    CEN-3 keyed (asset, ts) when a 4h and a 12h bar share an open_time; CEN-5
+    keyed tranche_id when it is unique only within a cell and silently dropped
+    432 of 7,094 campaigns; and the CEN-3 depth map was a dict over a
+    non-unique cascade membership. Each was caught by reading a count, not by
+    a fixture. This is the fixture.
+    """
+    dup = int(df.duplicated(subset=keys).sum())
+    log(f"    F-KEY  {label:34} key={keys} rows={len(df):,} dup={dup}")
+    if dup:
+        ex = df[df.duplicated(subset=keys, keep=False)].head(3)[keys].to_dict("records")
+        raise SystemExit(f"HALT (F-KEY): '{label}' key {keys} is NOT unique -- "
+                         f"{dup} duplicate row(s), e.g. {ex}. A join on a "
+                         f"non-unique key silently drops or multiplies rows.")
+
+
+def fixture_sabotage() -> dict:
+    """F-10 (A4-SAB), restored verbatim from v0.2: recompute one registry as-of
+    twice -- once correctly sliced, once deliberately fed ONE FUTURE BAR -- and
+    the guard must REJECT the second.
+
+    v0.3's compression kept 'sabotage fixture mandatory' and deleted the
+    parenthetical that said what the test IS. A fixture whose test is not
+    stated cannot fail, which is the same defect shape as the missing h.
+    """
+    log("F-10 -- sabotage: one future bar must be REJECTED (A4-SAB, v0.2 verbatim)")
+    sym, tf = PANEL[0], "4h"
+    df = MC2.frame(sym, tf, "evidence")
+    o = df["open_time"].to_numpy(np.int64)
+    c = df["close"].to_numpy(float)
+    probe = int(o[len(o) // 2])
+
+    def as_of(t, extra_bars=0):
+        """Registry-style as-of read. extra_bars>0 is the sabotage lever."""
+        k = int(np.searchsorted(o + TF_MS[tf], t, "right")) - 1 + extra_bars
+        if k < 0 or k >= len(c):
+            raise IndexError("out of range")
+        if extra_bars > 0 and (o[k] + TF_MS[tf]) > t:
+            raise ValueError(f"CAUSALITY VIOLATION: bar closing {iso(int(o[k]+TF_MS[tf]))} "
+                             f"is in the future of the as-of instant {iso(t)}")
+        return float(c[k])
+
+    clean = as_of(probe, 0)
+    log(f"    clean as-of {iso(probe)} -> close {clean:.2f}  (last CLOSED bar)")
+    rejected = False
+    try:
+        bad = as_of(probe, 1)
+        log(f"    !! sabotage NOT rejected -- returned {bad:.2f}")
+    except ValueError as exc:
+        rejected = True
+        log(f"    sabotage REJECTED: {exc}")
+    log(f"    {'PASS' if rejected else 'FAIL'}  the guard rejects one future bar")
+    if not rejected:
+        raise SystemExit("HALT (F-10): the as-of guard accepted a future bar. "
+                         "Every causality claim in this census is void until it does not.")
+    return {"pass": True, "probe_iso": iso(probe), "clean_close": round(clean, 6)}
+
+
+def witness_correlation(values: np.ndarray, clusters: np.ndarray,
+                        mask: np.ndarray, ts: np.ndarray) -> dict:
+    """A4-WITCORR, v0.2 I8 verbatim: two parts, printed beside every
+    promoted-discriminant verdict.
+
+      (a) pairwise SIGN-AGREEMENT of the discriminant across assets
+      (b) the panel's RETURN CORRELATION over the window
+
+    Part (b) matters because (a) alone can look like replication when the
+    assets simply moved together -- five correlated witnesses are closer to
+    one witness than to five.
+    """
+    out = {"per_asset_delta": {}, "pairwise_sign_agreement": None,
+           "panel_return_correlation": None, "n_assets": 0}
+    per = {}
+    for a in np.unique(clusters):
+        s = clusters == a
+        x = values[s & mask]; y = values[s & ~mask]
+        x = x[np.isfinite(x)]; y = y[np.isfinite(y)]
+        if len(x) >= 5 and len(y) >= 5:
+            per[str(a)] = float(np.median(x) - np.median(y))
+    out["per_asset_delta"] = {k: round(v, 6) for k, v in per.items()}
+    out["n_assets"] = len(per)
+    if len(per) >= 2:
+        ks = list(per)
+        agree = tot = 0
+        for i in range(len(ks)):
+            for j in range(i + 1, len(ks)):
+                tot += 1
+                agree += int(np.sign(per[ks[i]]) == np.sign(per[ks[j]]))
+        out["pairwise_sign_agreement"] = round(agree / tot, 4) if tot else None
+        # (b) panel return correlation over the window the discriminant spans
+        lo, hi = int(np.min(ts)), int(np.max(ts))
+        series = {}
+        for a in ks:
+            d = MC2.frame(a, "4h", "evidence")
+            oo = d["open_time"].to_numpy(np.int64)
+            sel = (oo >= lo) & (oo <= hi)
+            cc = d["close"].to_numpy(float)[sel]
+            if len(cc) > 10:
+                series[a] = np.diff(np.log(cc))
+        if len(series) >= 2:
+            n = min(len(v) for v in series.values())
+            M = np.vstack([v[-n:] for v in series.values()])
+            C = np.corrcoef(M)
+            iu = np.triu_indices_from(C, k=1)
+            out["panel_return_correlation"] = round(float(np.nanmean(C[iu])), 4)
+    return out
+
+
+# ===========================================================================
 # CEN-5 -- EXIT-AND-FEED
 # ===========================================================================
 RATCHET_EMAS = [200, 300, 450, 500]
@@ -2405,6 +2519,7 @@ def main(argv=None) -> int:
     # Fixtures ALWAYS run first -- F-GUARD gates every sweep stage.
     man["fixtures"]["F-GUARD"] = fixture_guard()
     man["fixtures"]["F-PIN"] = fixture_pin()
+    man["fixtures"]["F-10-SABOTAGE"] = fixture_sabotage()
 
     if run("cen0b"):
         man["stages"]["CEN-0b"] = stage_cen0b(args.end)
