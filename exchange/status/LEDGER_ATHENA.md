@@ -330,3 +330,27 @@ PENDING:
 NEXT: File 004. Everything else in this lane is blocked behind it. Owner: ATHENA.
 METRICS: operator actions this session = 0 · files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_ATHENA — 2026-08-12 ===
+NOW: Queue 004 is filed and ratified, and D-0a is built. wait_for_drive() makes a sleeping disk distinguishable from a missing one, and logs its own wake latency so the timing constants get pinned by measurement instead of guessed. The contract asserts the operator disabled disk sleep and USB suspend; measured, neither is disabled.
+LAST EVENT: 2026-08-12 — exchange/queue/004_move-clone-out-of-onedrive.md filed; scripts/drive_wait.py committed e16de8b and corrected 9f3747d; F-0-1 43/43, suite 287/1 unchanged; filed as exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-12_QUEUE-004-FILED-AND-D0A.md.
+FACTS:
+- 004 filed at 7,725 B / 121 lines, LF, UTF-8; all seven required fields present and the six queue README conventions met. BUILT stamp correctly ABSENT — ratified-and-partially-built is the truthful state [verified]
+- The paste's own field check reported a FALSE MISSING on the RATIFIED stamp: grep without -F reads "**operator**" as a regex where ** is a quantifier. Third consecutive session in which a guard misreported a healthy artifact, and all three were checking strings containing markdown emphasis. Any paste grepping this project's prose must use grep -F [verified]
+- D-0a built as scripts/drive_wait.py, 250 lines, ASCII-only, no side effects on import, REPO resolved from __file__ so it survives the Phase A move. Three states PRESENT/WOKE/UNREACHABLE, never raises; WOKE alone appends to exchange/status/DRIVE_WAKE_LOG.md [verified]
+- DEFECT SHIPPED AND FIXED IN-SESSION: DriveWaitResult was a NamedTuple, so "%s" % result raised TypeError in the CALLER — the helper's NEVER-RAISES invariant reintroduced one layer up, with nine D-0b call sites pending. Found by this session's own cold probe. Now a frozen dataclass; F-0-1 gained six checks pinning it [verified]
+- CONTRACT FACT REFUTED: Phase 0 says the operator "has since disabled USB selective suspend and disk-sleep on AC". Measured via powercfg: DISKIDLE = 30 SECONDS on AC and DC (units confirmed from powercfg's own output), USB selective suspend = ENABLED on both. Neither is disabled. Phase 0 is more necessary than the redraft claims, not less [verified]
+- DEFAULTS STILL UNVALIDATED, and this session could not validate them. F-0-1's PRESENT reading is self-confounded — it probes D: on the line before measuring it. A cold probe idling 150s (5x the 30s timeout) with no D: access still returned PRESENT in 0.00s: the disk did not spin down. Zero WOKE observations; DRIVE_WAKE_LOG.md does not exist [verified]
+- What IS established: the healthy path is free (PRESENT costs one stat call, 0.00s measured twice), so wiring nine call sites adds no cost when the drive is awake — D-0b's main risk is retired. The unhealthy path costs the full budget: drive_wait.py Q:/ returned UNREACHABLE at elapsed=18.00s, exit 2 [verified]
+- The defaults can only be pinned from real unattended runs (the 07:00 daily after an overnight gap, the Sunday weeklies) — exactly the paths D-0b wires. An empty wake log today is the expected state, not a failure [verified]
+PENDING:
+1. ATHENA: D-0e (missed-run detector) is NEW and lands in Phase 0, which gates Phase A — it shares no code or failure mode with waking a disk. This is the same coupling that removing O-5 from Phase 0 was meant to break. Move it out, or let D-0b ship without it
+2. ATHENA drafts / operator decides: strike or rewrite Phase 0's power-settings sentence to match the measurement. Cheaper alternative to the whole common case: powercfg /setacvalueindex SCHEME_CURRENT SUB_DISK DISKIDLE 0 — NOT run, it changes machine state and no authorization was given
+3. HEPHAESTUS (D-0b session): add a per-process UNREACHABLE memo before wiring nine sites, or a cold-drive run pays 18s per gate and reads as a hang
+4. HEPHAESTUS (D-0b session): commit F-0-1 into fixtures/, accepting the new suite count. drive_wait.py currently ships with 43 passing checks and NO permanent regression guard
+5. ATHENA: the wake log records only WOKE, so an empty log cannot distinguish "never asleep" from "budget too short". D-0b's call sites should record UNREACHABLE where they halt
+6. ATHENA: F-0-1 as drafted can pass without measuring anything — "PRESENT on a live root" is satisfiable by a probe that woke the drive itself. Respecify as a probe after a measured idle
+7. Carried: O-5 widening (incl. backup_estate.py:980 and the same-day sort inversion), the two stale REPO/research_outputs/_archive paths, O-6's G: destinations
+NEXT: Rule on item 1, then give the go for D-0b. Owner: ATHENA.
+METRICS: operator actions this session = 0 · files re-ingested = 0
+=== END STATUS ===
