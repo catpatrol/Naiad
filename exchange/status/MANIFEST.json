@@ -10,8 +10,8 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": true
   },
-  "generated_utc": "2026-08-12T10:00:05Z",
-  "head": "dea01d45865a372089f8352ebb9634b909a9191d",
+  "generated_utc": "2026-08-12T10:11:49Z",
+  "head": "81fcc5f901794f65ed0185b31e47bc5961684c30",
   "lane_last_commit": {
     "brief": null,
     "docs": {
@@ -20,8 +20,8 @@
       "subject": "docs: closing 11-entry memory snapshot post-redraft + phase-archive relocation pointer (ruling B, archives to D:/Naiad)"
     },
     "exchange": {
-      "committed_iso": "2026-08-12T06:00:48-03:00",
-      "sha": "dea01d45865a372089f8352ebb9634b909a9191d",
+      "committed_iso": "2026-08-12T07:11:16-03:00",
+      "sha": "81fcc5f901794f65ed0185b31e47bc5961684c30",
       "subject": "exchange: auto-publish 2026-08-12"
     },
     "ops": {
@@ -38,7 +38,7 @@
   },
   "manifest_version": "1.1",
   "onedrive_running": false,
-  "origin_head": "dea01d45865a372089f8352ebb9634b909a9191d",
+  "origin_head": "81fcc5f901794f65ed0185b31e47bc5961684c30",
   "queue_open": 3,
   "queue_ratified_unbuilt": 3,
   "queue_total": 7,
@@ -75,7 +75,7 @@
       "match_head": false,
       "path": "exchange/status/HEARTBEAT.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "65081a00823abfe0062f3813ae33e5529a47f13a186897605f03ab721e094053",
+      "sha256_worktree": "581237efad92bfe64c113b79360172ead6c3e894da786e8f01a8d79a83b381fa",
       "size": 192,
       "source_guess": null,
       "tracked": true
@@ -156,8 +156,8 @@
       "match_head": false,
       "path": "exchange/status/RETENTION.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "a28640e52d3adb44da9d21cf8b0b3cd0ed38978b57355ca764be15e9ff7a70f6",
-      "size": 2820,
+      "sha256_worktree": "2edbdebaf70580181d8405ced513d84c20df522bc5b3e59920daf54be03f290e",
+      "size": 2902,
       "source_guess": null,
       "tracked": true
     },
@@ -228,8 +228,8 @@
       "match_head": false,
       "path": "exchange/status/daily/DAILY_2026-08-12.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "4da4a46a7de76a9a0e45f5b7ac41c474820939bfb73e50024ed98fd2ff39e079",
-      "size": 4684,
+      "sha256_worktree": "cb1f5c17b681e1db8df2342472a7f8c0f8d0b23f39931de0835e2795425c59aa",
+      "size": 5402,
       "source_guess": null,
       "tracked": true
     },
@@ -291,8 +291,8 @@
       "match_head": false,
       "path": "exchange/status/daily/MANIFEST_2026-08-12.json",
       "sha256_head_blob": null,
-      "sha256_worktree": "2bac038145d53af3560bdd5f0d9facdc97e925a81938ee3a884c9d9a833f59e0",
-      "size": 25013,
+      "sha256_worktree": "b54ee5e5b1fbf6a45da60472aa851a659ebf65139eb66f741cafb82aef79191d",
+      "size": 23863,
       "source_guess": null,
       "tracked": true
     }
@@ -669,7 +669,9 @@
   ],
   "status_porcelain": [
     " M .gitignore",
-    "?? exchange/reports/NOTE_ATHENA_2026-08-12_CROSS-LANE-RECONCILIATION.md"
+    " M scripts/archive_dependencies.py",
+    " M scripts/backup_estate.py",
+    " M scripts/daily_routine.py"
   ],
   "untracked_root": []
 }
