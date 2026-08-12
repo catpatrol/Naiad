@@ -801,7 +801,23 @@ scoped to the appended block, never counted across the whole file.**
 
 **Publish output, as printed:**
 
-<<PUBLISH>>
+```
+publish: WARNING -- exchange/ holds 1,653,351 B, 25.9% of the 6,390,000 B box (warn at 25%, refuse above 40%).
+publish: routine last completed 2026-08-12 (6h ago)
+publish: committed cc02307 (3 path(s)) and pushed to origin/v12-v1-census
+status= PUBLISHED commit= cc02307 pushed= True offenders= []
+```
+
+Three paths: the contract, this report, and the ledger append. `exchange/` moves **25.0% → 25.9%**,
+still WARN, still far from the 40% refusal. The rotation that fixes this is queue 003, ratified
+2026-08-11 and unbuilt.
+
+**Session chain:** `8d9eddf` → `e16de8b` (D-0a) → `9f3747d` (the tuple fix) → `cc02307` (contract +
+report + ledger). A fourth commit carries this block, for the standing reason that a document cannot
+contain its own commit SHA.
+
+`.gitignore` remains modified in the working tree. It was already modified at session start and is
+untouched by this session — deliberately not part of this publish.
 
 ---
 
