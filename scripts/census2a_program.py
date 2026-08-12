@@ -2455,6 +2455,401 @@ def stage_cen5(assets: list[str], era: str = "evidence") -> dict:
 
 
 # ===========================================================================
+# CEN-7 -- ANALYTICS SERIES
+# ===========================================================================
+RVWAP_WINDOWS = [7, 30, 90, 365]           # days
+COLOCATION_ATR = 0.15                      # x daily-ATR, pinned (register row 13)
+
+
+def stage_cen7(assets: list[str], era: str = "evidence") -> dict:
+    """Registry as-of every arming/trigger instant + a daily spine, dual-scored,
+    causality-sliced; the i-b refusal limb completed against REGISTRY levels;
+    the two-limb reconciliation; co-location.
+
+    CAUSALITY. Every registry read indexes on bar CLOSE, the same rule F-10
+    (restored by A4-SAB) proves rejects a future bar. RVWAPs are computed on the
+    full evidence-era series and then read as-of -- the recursion is causal, so
+    a value at index i uses only bars <= i.
+
+    TRUNCATION (the run-2 m5 watch-item). Any instant whose forward window runs
+    past the series end is FLAGGED per row, never silently shortened. Run 2's
+    review found this immaterial at 4h and warned it scales badly at 5m/15m;
+    CEN-7 reads at those timeframes, so the flag ships as a column.
+    """
+    log(f"CEN-7 -- analytics series [{era}]")
+    sys.path.insert(0, str(ROOT))
+    from analytics.vwap import rolling_vwap, hlc3
+    from analytics.levels import dual_score
+
+    led = pd.read_parquet(OUT / "cen3" / "cen3_ledger_lensed.parquet")
+    assert_key(led, ["asset", "arming_ts"], "cen3_ledger_lensed")
+
+    rows, ref_rows, colo_rows = [], [], []
+    for sym in assets:
+        d = MC2.frame(sym, "1h", era)
+        o = d["open_time"].to_numpy(np.int64)
+        close_ms = o + TF_MS["1h"]
+        c = d["close"].to_numpy(float)
+        hi = d["high"].to_numpy(float); lo = d["low"].to_numpy(float)
+        av = d["atr"].to_numpy(float)
+        raw = pd.read_parquet(MC2.KLINES / f"{sym}_1h.parquet")
+        raw = raw[raw.open_time < CEIL_MS].sort_values("open_time").reset_index(drop=True)
+        vol = raw["volume"].to_numpy(float)[:len(c)]
+        src = hlc3(hi[:len(vol)], lo[:len(vol)], c[:len(vol)])
+        n = min(len(vol), len(c))
+
+        # ---- the registry: RVWAP families + sigma bands, causal by recursion
+        reg = {}
+        for w in RVWAP_WINDOWS:
+            try:
+                # rolling_vwap returns {vwap, stdev, band_up_1..3, band_dn_1..3}.
+                # The contract's registry is "RVWAPs 7/30/90/365d + sigma bands",
+                # so the mean AND the +/-1 sigma edges are levels; a refusal
+                # against a band edge is as real as one against the mean.
+                rv = rolling_vwap(o[:n], src[:n], vol[:n], w)
+                reg[f"rvwap_{w}d"] = np.asarray(rv["vwap"], float)
+                for tag in ("band_up_1", "band_dn_1"):
+                    if tag in rv:
+                        reg[f"rvwap_{w}d_{tag}"] = np.asarray(rv[tag], float)
+            except Exception as exc:
+                log(f"    {sym} rvwap_{w}d unavailable: {type(exc).__name__}: {exc}")
+        if not reg:
+            continue
+
+        # ---- as-of at every arming and trigger instant (+ a daily spine)
+        g = led[led.asset == sym]
+        inst = list(g.arming_ts.to_numpy(np.int64))
+        tt = g.loc[g.has_trigger, ["arming_ts", "trigger_lag_bars"]]
+        inst += list((tt.arming_ts.to_numpy(np.int64)
+                      + (tt.trigger_lag_bars.to_numpy(float) * TF_MS["4h"]).astype(np.int64)))
+        spine = o[::24]                                    # daily spine
+        inst += list(spine)
+        inst = np.sort(np.unique(np.array(inst, dtype=np.int64)))
+
+        k = np.searchsorted(close_ms[:n], inst, "right") - 1      # last CLOSED bar (I7)
+        valid = k >= 0
+        for t, kk in zip(inst[valid], k[valid]):
+            kk = int(kk)
+            r = {"asset": sym, "ts": int(t), "ts_iso": iso(int(t)),
+                 "bar_close_iso": iso(int(close_ms[kk])),
+                 "price": float(c[kk]), "atr": float(av[kk]),
+                 # m5 WATCH-ITEM: flagged per row, never silent
+                 "truncated_forward": bool(kk >= n - 1),
+                 "kind": ("spine" if t in set(spine.tolist()) else "event")}
+            lv = []
+            for name, series in reg.items():
+                v = float(series[kk]) if kk < len(series) and np.isfinite(series[kk]) else np.nan
+                r[name] = v
+                if np.isfinite(v):
+                    lv.append(v)
+                    r[f"dist_{name}_atr"] = (abs(c[kk] - v) / av[kk]
+                                             if np.isfinite(av[kk]) and av[kk] > 0 else np.nan)
+            # I9 dual scoring: with and without the volume families
+            if lv and np.isfinite(av[kk]) and av[kk] > 0:
+                try:
+                    ds = dual_score(lv, float(av[kk]), float(c[kk]), tol=COLOCATION_ATR)
+                    r["dual_score"] = json.dumps(ds, default=str)[:300]
+                except Exception:
+                    r["dual_score"] = None
+                # co-location: how many registry levels sit within 0.15 x ATR
+                r["colocation_n"] = int(sum(abs(c[kk] - x) <= COLOCATION_ATR * av[kk] for x in lv))
+                colo_rows.append({"asset": sym, "ts": int(t),
+                                  "colocation_n": r["colocation_n"],
+                                  "n_levels": len(lv)})
+            rows.append(r)
+
+        # ---- i-b REGISTRY-LEVELS completion (run 1 covered long EMAs only)
+        for name, series in reg.items():
+            s = np.asarray(series, float)[:n]
+            f, conf = refusal_events(c[:n], s, av[:n])
+            for i in np.nonzero(f)[0]:
+                ref_rows.append({"asset": sym, "tf": "1h", "limb": "i-b",
+                                 "object": f"price_{name}", "level_family": "registry",
+                                 "ts": int(o[i]), "confirm_lag_bars": int(conf[i] - i),
+                                 "price": float(c[i]), "atr": float(av[i])})
+        log(f"    {sym:9} instants={int(valid.sum()):,}  registry-level refusals so far={len(ref_rows):,}")
+
+    series_df = pd.DataFrame(rows)
+    reg_ref = pd.DataFrame(ref_rows)
+    colo = pd.DataFrame(colo_rows)
+    if series_df.empty:
+        return {"series": series_df}
+    assert_key(series_df, ["asset", "ts"], "cen7_registry_series")
+
+    log(f"    registry series: {len(series_df):,} as-of rows "
+        f"({int((series_df.kind=='event').sum()):,} event · "
+        f"{int((series_df.kind=='spine').sum()):,} spine)")
+    log(f"    TRUNCATION WATCH (m5 item): {int(series_df.truncated_forward.sum())} rows flagged "
+        f"-- flagged per row, never silent")
+    if not colo.empty:
+        log(f"    CO-LOCATION at {COLOCATION_ATR}x ATR: mean levels within band = "
+            f"{colo.colocation_n.mean():.3f} of {colo.n_levels.mean():.1f}; "
+            f"share with >=2 = {float((colo.colocation_n>=2).mean()):.3f}")
+
+    # ---- THE TWO-LIMB RECONCILIATION TABLE
+    old = pd.read_parquet(OUT / "cen1" / "cen1_refusals.parquet",
+                          columns=["asset", "tf", "limb", "object"])
+    old = old[old.asset.isin(assets)]
+    rec = []
+    rec.append({"limb": "i-a", "level_family": "EMA<->EMA (ratified kiss)",
+                "events": int((old.limb == "i-a").sum()), "source": "CEN-1 (run 1)"})
+    rec.append({"limb": "i-b", "level_family": "long EMAs {200,300,450,500}",
+                "events": int((old.limb == "i-b").sum()), "source": "CEN-1 (run 1)"})
+    rec.append({"limb": "i-b", "level_family": f"REGISTRY RVWAP {RVWAP_WINDOWS}d",
+                "events": int(len(reg_ref)), "source": "CEN-7 (this run)"})
+    recon = pd.DataFrame(rec)
+    log("    TWO-LIMB RECONCILIATION (D-B complete for the first time):")
+    for r in recon.itertuples(index=False):
+        log(f"      {r.limb:4} {r.level_family:34} {r.events:>8,}  [{r.source}]")
+    tot_ib = int((old.limb == "i-b").sum()) + len(reg_ref)
+    log(f"      i-b TOTAL after registry completion: {tot_ib:,} "
+        f"(was {int((old.limb=='i-b').sum()):,}; registry adds {len(reg_ref):,})")
+
+    return {"series": series_df, "registry_refusals": reg_ref,
+            "reconciliation": recon, "colocation": colo,
+            "rvwap_windows": RVWAP_WINDOWS, "colocation_atr": COLOCATION_ATR}
+
+
+# ===========================================================================
+# CEN-8 -- FRAME
+# ===========================================================================
+NEST_PRENAMED = [("1h", "4h"), ("30m", "4h"), ("30m", "1h")]   # the pre-named fallback set
+
+
+def stage_cen8(assets: list[str], era: str = "evidence") -> dict:
+    """Frame consolidation: FDR families, witness-correlation beside EVERY
+    promoted verdict, count- AND duration-balanced splits, P-NEST-1.
+
+    P-i' and P-iv' are NOT scored: 'leap-arrival' vs 'stair-arrival' is defined
+    in NEITHER contract draft. MC-1 defines a leap FAMILY for CASCADES ("4h-tier
+    arrival from the FAST tier, pullback-anchored frame") but P-i' is a WINDOW
+    recut, a different object. The register carries it known-open. Inventing the
+    split to score it would be the sweep §N forbids.
+    """
+    log(f"CEN-8 -- frame [{era}]")
+    led = pd.read_parquet(OUT / "cen3" / "cen3_ledger_lensed.parquet")
+    assert_key(led, ["asset", "arming_ts"], "cen3_ledger_lensed")
+    ev = pd.read_parquet(OUT / "cen1" / "cen1_events.parquet",
+                         columns=["asset", "tf", "event_class", "dir", "ts"])
+    ev = ev[(ev.event_class == "9_89") & ev.asset.isin(assets)]
+
+    # ---- P-NEST-1: nested per the PRE-NAMED set (one comparison, not a sweep)
+    log("    P-NEST-1 [45%] (entry lens) -- A4-NEST: scores as registered:")
+    log("      'armings nested per the pre-named fallback set outperform un-nested")
+    log("       on terminal return.'  Pre-named set: {1h-in-4h, 30m-in-4h, 30m-in-1h}.")
+    nested = np.zeros(len(led), dtype=bool)
+    for sym in assets:
+        m = (led.asset == sym).to_numpy()
+        if not m.any():
+            continue
+        ats = led.loc[m, "arming_ts"].to_numpy(np.int64)
+        dirs = led.loc[m, "dir"].to_numpy()
+        hit = np.zeros(len(ats), dtype=bool)
+        for ltf, htf in NEST_PRENAMED:
+            if htf != "4h":
+                continue                       # armings are 4h events
+            span = TF_MS[htf]
+            sub = ev[(ev.asset == sym) & (ev.tf == ltf)]
+            for d in ("up", "down"):
+                lts = np.sort(sub[sub.dir == d].ts.to_numpy(np.int64))
+                if not len(lts):
+                    continue
+                sel = dirs == d
+                if not sel.any():
+                    continue
+                a = ats[sel]
+                cnt = (np.searchsorted(lts, a + span, "left")
+                       - np.searchsorted(lts, a, "left"))
+                idx = np.nonzero(sel)[0]
+                hit[idx] = hit[idx] | (cnt > 0)
+        nested[m] = hit
+    led["nested_prenamed"] = nested
+    vals = led["term_H100"].to_numpy(float)
+    clus = led["asset"].to_numpy()
+    ts = led["arming_ts"].to_numpy(np.int64)
+    log(f"      TREAT nested n={int(nested.sum())} vs CONTROL un-nested n={int((~nested).sum())}")
+    ci_n = cluster_ci(vals, clus, nested)
+    wc_n = witness_correlation(vals, clus, nested, ts)
+    v_nest = ("SUPPORTED" if (ci_n["excludes_zero"] and (ci_n["point"] or 0) > 0)
+              else "NOT SUPPORTED")
+    log(f"      terminal H100 cluster CI: [{ci_n['lo']},{ci_n['hi']}] "
+        f"{'EXCL-0' if ci_n['excludes_zero'] else 'straddles 0'}  point={ci_n['point']}")
+    log(f"      WITNESS-CORRELATION (A4-WITCORR): sign-agreement "
+        f"{wc_n['pairwise_sign_agreement']} · panel return corr "
+        f"{wc_n['panel_return_correlation']} over {wc_n['n_assets']} assets")
+    log(f"      VERDICT: {v_nest}")
+
+    # ---- count- AND duration-balanced splits (R-SPLIT)
+    log("    HELD-IN-TIME, BOTH SPLITS (R-SPLIT):")
+    mid_c = int(np.median(ts))
+    lo, hi = int(ts.min()), int(ts.max())
+    mid_d = (lo + hi) // 2
+    splits = {}
+    for name, cut in [("count_balanced", mid_c), ("duration_balanced", mid_d)]:
+        early = ts <= cut
+        splits[name] = {
+            "cut_iso": iso(cut),
+            "n_early": int(early.sum()), "n_late": int((~early).sum()),
+            "days_early": round((cut - lo) / 86400000, 1),
+            "days_late": round((hi - cut) / 86400000, 1),
+            "btc_share_early": round(float((clus[early] == "BTCUSDT").mean()), 4),
+            "btc_share_late": round(float((clus[~early] == "BTCUSDT").mean()), 4),
+        }
+        s = splits[name]
+        log(f"      {name:18} cut {s['cut_iso']}  n {s['n_early']}/{s['n_late']}  "
+            f"days {s['days_early']}/{s['days_late']}  BTC share "
+            f"{s['btc_share_early']:.3f}/{s['btc_share_late']:.3f}")
+    log("      (run-2 found the count split confounds era with panel composition; "
+        "both now print so the reader can see which is which)")
+
+    # ---- FDR families, declared
+    fam = [
+        {"family": "entry-lens registrations", "members": ["P-ARM-1", "P-iii-b", "P-NEST-1"],
+         "m": 3, "q": FDR_Q, "bh_bar": round(FDR_Q / 3, 5)},
+        {"family": "exit-lens registrations", "members": ["P-RAT-2"], "m": 1,
+         "q": FDR_Q, "bh_bar": round(FDR_Q / 1, 5)},
+        {"family": "CEN-5 ratchet corners", "members": ["36 grid corners"], "m": RAT_FAMILY_M,
+         "q": FDR_Q, "bh_bar": round(FDR_Q / RAT_FAMILY_M, 5)},
+    ]
+    log("    FDR FAMILIES DECLARED:")
+    for f in fam:
+        log(f"      {f['family']:28} m={f['m']:2d}  BH bar={f['bh_bar']}")
+    log("      WITHDRAWN / NOT SCORED registrations do NOT shrink m: P-REL-1, "
+        "P-CHOP-1, P-VBT-1, P-i', P-iv' are excluded from the families above "
+        "because they carry no p-value, not because they passed.")
+
+    log("    P-i' [50%] and P-iv' [45%]: NOT SCORED.")
+    log("      'leap-arrival' vs 'stair-arrival' is defined in NEITHER contract draft.")
+    log("      MC-1 defines a leap FAMILY for CASCADES (BUILD_APOLLO_2026-08-06_MC1.md:448);")
+    log("      P-i' is a WINDOW recut -- a different object. Register: known-open.")
+
+    return {"ledger": led, "splits": splits, "fdr_families": pd.DataFrame(fam),
+            "p_nest_1": {"registration": ("armings nested per the pre-named fallback set "
+                                          "outperform un-nested on terminal return"),
+                         "prior": 0.45, "pre_named_set": [f"{a}-in-{b}" for a, b in NEST_PRENAMED],
+                         "n_treat": int(nested.sum()), "n_control": int((~nested).sum()),
+                         "cluster_ci": ci_n, "witness_correlation": wc_n,
+                         "verdict": v_nest, "note": "A4-NEST resolved the scored-vs-columns contradiction"},
+            "p_i_prime": {"prior": 0.50, "verdict": "NOT SCORED -- leap/stair UNDEFINED",
+                          "reason": ("defined in neither draft; MC-1's leap family is a CASCADE "
+                                     "object and P-i' is a WINDOW recut. Register: known-open")},
+            "p_iv_prime": {"prior": 0.45, "verdict": "NOT SCORED -- depends on P-i'",
+                           "reason": "ATR buckets and 'survives' also undefined in both drafts"}}
+
+
+# ===========================================================================
+# CEN-9 -- SAMPLING-CLOCK CONTROL (registers nothing)
+# ===========================================================================
+CEN9_RANDOM_N = 200                       # per asset, quarter-stratified [VETO]
+
+
+def stage_cen9(assets: list[str], era: str = "evidence") -> dict:
+    """The census's control for itself: measure the same outcomes at NON-EMA
+    anchors and at stratified random instants, beside the EMA-anchored ones.
+
+    If they match, the EMA clock is innocent and the record says so with
+    evidence. If they differ, the difference is itself the finding. This module
+    REGISTERS NOTHING -- it exists to test the instrument, not to mine it.
+    """
+    log(f"CEN-9 -- sampling-clock control [{era}]  (registers nothing)")
+    sys.path.insert(0, str(ROOT))
+    from analytics.structure import prior_period_extremes
+
+    led = pd.read_parquet(OUT / "cen3" / "cen3_ledger_lensed.parquet")
+    rows = []
+    for sym in assets:
+        d = MC2.frame(sym, "4h", era)
+        o = d["open_time"].to_numpy(np.int64)
+        c = d["close"].to_numpy(float)
+        hi = d["high"].to_numpy(float); lo = d["low"].to_numpy(float)
+        av = d["atr"].to_numpy(float)
+        n = len(c)
+
+        def emit(idx, kind, direction):
+            ob = outcome_block(d, np.asarray(idx, int), direction == "up", "4h")
+            for j, i in enumerate(idx):
+                r = {"asset": sym, "anchor": kind, "dir": direction,
+                     "ts": int(o[i]), "idx": int(i),
+                     # truncation watch-item: flagged, never silent
+                     "truncated_forward": bool(i + 2 >= n)}
+                for h, blk in ob.items():
+                    r[f"term_{h}"] = blk["terminal"][j]
+                rows.append(r)
+
+        for period, tag in (("D", "prior-day"), ("W", "prior-week")):
+            ph, pl = prior_period_extremes(o, hi, lo, period=period)
+            up = np.nonzero(np.isfinite(ph) & (hi >= ph) & (c < ph))[0]      # touch, no accept
+            dn = np.nonzero(np.isfinite(pl) & (lo <= pl) & (c > pl))[0]
+            emit(up[up < n - 2], f"{tag}-H touch", "down")
+            emit(dn[dn < n - 2], f"{tag}-L touch", "up")
+
+        # prior-extreme sweep: wick through a trailing extreme, close back inside
+        for w, tag in ((60, "prior-extreme sweep"),):
+            rmax = pd.Series(hi).rolling(w).max().shift(1).to_numpy()
+            rmin = pd.Series(lo).rolling(w).min().shift(1).to_numpy()
+            sw_up = np.nonzero(np.isfinite(rmax) & (hi > rmax) & (c <= rmax))[0]
+            sw_dn = np.nonzero(np.isfinite(rmin) & (lo < rmin) & (c >= rmin))[0]
+            emit(sw_up[sw_up < n - 2], tag + " (high)", "down")
+            emit(sw_dn[sw_dn < n - 2], tag + " (low)", "up")
+
+        # N=200 quarter-stratified random instants [VETO], seeded for F-15
+        q = pd.to_datetime(o, unit="ms").to_period("Q").astype(str)
+        rng = np.random.default_rng(SEED + abs(hash(sym)) % 10000)
+        uq = sorted(set(q)); per = max(1, CEN9_RANDOM_N // max(len(uq), 1))
+        pick = []
+        for qq in uq:
+            cand = np.nonzero((q == qq) & (np.arange(n) < n - 2))[0]
+            if len(cand):
+                pick += list(rng.choice(cand, size=min(per, len(cand)), replace=False))
+        pick = np.array(sorted(set(pick)))[:CEN9_RANDOM_N]
+        emit(pick, "random (quarter-stratified)", "up")
+        log(f"    {sym:9} anchors so far: {len(rows):,}")
+
+    ctl = pd.DataFrame(rows)
+    if ctl.empty:
+        return {"control": ctl}
+    log(f"    control instants: {len(ctl):,}")
+    log(f"    TRUNCATION WATCH: {int(ctl.truncated_forward.sum())} flagged (never silent)")
+
+    # ---- the comparison: non-EMA anchors vs the EMA-anchored armings
+    ema_med = float(led["term_H100"].median())
+    ema_n = int(len(led))
+    log(f"    EMA-ANCHORED reference (CEN-2 armings): n={ema_n} median terminal H100 = {ema_med:+.4f}")
+    log("    NON-EMA ANCHORS, same ruler, same horizons:")
+    comp = []
+    for k, g in ctl.groupby("anchor", sort=True):
+        m = float(g["term_H100"].median())
+        comp.append({"anchor": k, "n": int(len(g)), "median_term_H100": round(m, 6),
+                     "delta_vs_ema": round(m - ema_med, 6)})
+        log(f"      {k:32} n={len(g):6,d}  median={m:+.4f}  delta vs EMA={m-ema_med:+.4f}")
+    cmp_df = pd.DataFrame(comp)
+
+    # ---- F-15: re-draw reproducibility
+    log("    F-15 re-draw reproducibility:")
+    same = True
+    for sym in assets[:3]:
+        d = MC2.frame(sym, "4h", era); n2 = len(d)
+        o2 = d["open_time"].to_numpy(np.int64)
+        q2 = pd.to_datetime(o2, unit="ms").to_period("Q").astype(str)
+        def draw():
+            r = np.random.default_rng(SEED + abs(hash(sym)) % 10000)
+            uq = sorted(set(q2)); per = max(1, CEN9_RANDOM_N // max(len(uq), 1)); pk = []
+            for qq in uq:
+                cand = np.nonzero((q2 == qq) & (np.arange(n2) < n2 - 2))[0]
+                if len(cand):
+                    pk += list(r.choice(cand, size=min(per, len(cand)), replace=False))
+            return np.array(sorted(set(pk)))[:CEN9_RANDOM_N]
+        ok = np.array_equal(draw(), draw())
+        same &= ok
+        log(f"      {'PASS' if ok else 'FAIL'}  {sym} re-draw identical under the same seed")
+    if not same:
+        raise SystemExit("HALT (F-15): the random draw is not reproducible under its seed.")
+
+    return {"control": ctl, "comparison": cmp_df, "ema_reference":
+            {"n": ema_n, "median_term_H100": round(ema_med, 6)}, "f15_pass": bool(same)}
+
+
+# ===========================================================================
 # MANIFEST (I12 -- merge, never clobber)
 # ===========================================================================
 def load_manifest(path: Path, scoped: bool) -> dict:
@@ -2710,6 +3105,73 @@ def main(argv=None) -> int:
             man.setdefault("registrations", {})
             man["registrations"]["P-RAT-2"] = c5["p_rat_2"]
             man["registrations"]["P-VBT-1"] = c5["p_vbt_1"]
+
+    if run("cen7"):
+        c7 = stage_cen7(PANEL, "evidence")
+        if c7.get("series") is not None and not c7["series"].empty:
+            sub = OUT / "cen7"; sub.mkdir(parents=True, exist_ok=True)
+            for name, df, keys in [
+                    ("cen7_registry_series", c7["series"], ["asset", "ts"]),
+                    ("cen7_registry_refusals", c7["registry_refusals"], ["asset", "object", "ts"]),
+                    ("cen7_two_limb_reconciliation", c7["reconciliation"], ["limb", "level_family"]),
+                    ("cen7_colocation", c7["colocation"], ["asset", "ts"])]:
+                if df is None or df.empty: continue
+                d = df.sort_values([k for k in keys if k in df.columns]).reset_index(drop=True)
+                for col in d.columns:
+                    if d[col].dtype.kind == "f": d[col] = d[col].round(R6)
+                pth = sub / f"{name}.parquet"; d.to_parquet(pth, index=False)
+                man["artifacts"][name] = {"path": str(pth), "rows": int(len(d)),
+                                          "bytes": pth.stat().st_size, "sha256": _sha(pth),
+                                          "class": "EVIDENCE -- exploration-classic"}
+                log(f"    wrote {name}.parquet rows={len(d):,} sha={man['artifacts'][name]['sha256'][:12]}")
+            man["stages"]["CEN-7"] = {"era": "evidence",
+                "rvwap_windows_days": c7["rvwap_windows"],
+                "colocation_atr": c7["colocation_atr"],
+                "causality": "as-of by bar CLOSE; the rule F-10 (A4-SAB) proves rejects a future bar",
+                "truncation_watch": "flagged per row in cen7_registry_series.truncated_forward",
+                "i_b_completion": "registry RVWAP levels; two-limb reconciliation emitted"}
+
+    if run("cen8"):
+        c8 = stage_cen8(PANEL, "evidence")
+        sub = OUT / "cen8"; sub.mkdir(parents=True, exist_ok=True)
+        for name, df, keys in [("cen8_fdr_families", c8["fdr_families"], ["family"]),
+                               ("cen8_ledger_nested", c8["ledger"], ["asset", "arming_ts"])]:
+            if df is None or df.empty: continue
+            d = df.sort_values([k for k in keys if k in df.columns]).reset_index(drop=True)
+            for col in d.columns:
+                if d[col].dtype.kind == "f": d[col] = d[col].round(R6)
+            pth = sub / f"{name}.parquet"; d.to_parquet(pth, index=False)
+            man["artifacts"][name] = {"path": str(pth), "rows": int(len(d)),
+                                      "bytes": pth.stat().st_size, "sha256": _sha(pth),
+                                      "class": "EVIDENCE -- exploration-classic"}
+            log(f"    wrote {name}.parquet rows={len(d):,} sha={man['artifacts'][name]['sha256'][:12]}")
+        man["stages"]["CEN-8"] = {"era": "evidence", "splits": c8["splits"],
+            "fdr_families": c8["fdr_families"].to_dict("records"),
+            "witness_correlation": "A4-WITCORR printed beside every promoted verdict"}
+        man.setdefault("registrations", {})
+        man["registrations"]["P-NEST-1"] = c8["p_nest_1"]
+        man["registrations"]["P-i-prime"] = c8["p_i_prime"]
+        man["registrations"]["P-iv-prime"] = c8["p_iv_prime"]
+
+    if run("cen9"):
+        c9 = stage_cen9(PANEL, "evidence")
+        if c9.get("control") is not None and not c9["control"].empty:
+            sub = OUT / "cen9"; sub.mkdir(parents=True, exist_ok=True)
+            for name, df, keys in [("cen9_control_instants", c9["control"], ["asset","anchor","ts"]),
+                                   ("cen9_comparison", c9["comparison"], ["anchor"])]:
+                d = df.sort_values([k for k in keys if k in df.columns]).reset_index(drop=True)
+                for col in d.columns:
+                    if d[col].dtype.kind == "f": d[col] = d[col].round(R6)
+                pth = sub / f"{name}.parquet"; d.to_parquet(pth, index=False)
+                man["artifacts"][name] = {"path": str(pth), "rows": int(len(d)),
+                                          "bytes": pth.stat().st_size, "sha256": _sha(pth),
+                                          "class": "EVIDENCE -- exploration-classic"}
+                log(f"    wrote {name}.parquet rows={len(d):,} sha={man['artifacts'][name]['sha256'][:12]}")
+            man["stages"]["CEN-9"] = {"era": "evidence", "random_n_per_asset": CEN9_RANDOM_N,
+                "ema_reference": c9["ema_reference"], "f15_redraw_reproducible": c9["f15_pass"],
+                "registers": "nothing -- tests the instrument"}
+            man["fixtures"]["F-15"] = {"pass": c9["f15_pass"],
+                "test": "random-instant draw reproduces under the same seed"}
 
     man["elapsed_s"] = round(time.time() - t0, 1)
     mp.write_text(json.dumps(man, indent=2, default=str), encoding="utf-8")
