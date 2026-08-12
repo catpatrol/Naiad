@@ -521,3 +521,51 @@ NEXT: Operator rules on NW-5 and the median/mean question; then CEN-7 -> CEN-8 -
 Owner: operator, then HEPHAESTUS.
 METRICS: operator actions this session = 1 (the run-6 sequencing paste) — files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-12k ===
+NOW: CENSUS-2A run 7. Amendment A4 appended and the [VETO] REGISTER IS CLOSED -- 39 rows, and the
+HALT check finds zero constants in code absent from it. F-KEY and the restored F-10 sabotage both
+implemented and passing. A4-WITCORR restored and exercised, and it qualifies the census's one
+supported result. CEN-7/8/9 remain.
+LAST EVENT: 2026-08-12 — run 7: A4 repair block complete; register closed; three fixtures live
+FACTS:
+- THE REGISTER IS CLOSED. 39 rows covering every pinned constant and its source (v0.3 §0 / A1 / A2 /
+  A3 / A4). The A4-REGISTER HALT check scans every module-level constant in census2a_program.py and
+  mc2_program.py: 23 scored constants covered, 39 machinery exemptions named, ZERO absent. The
+  structural gap that let h vanish is closed [verified]
+- A4-TRG REPAIRS THE METRIC: TRG is for FILTERS only (summed positive terminal ATR-R of the
+  unfiltered top decile). Alternative-exit arms print TAIL-EXIT-RATIO, unbounded, no pass-bar this
+  cycle. P-RAT-2's NOT SUPPORTED verdict STANDS on its delta limb; its TRG limb is now VOID BY
+  DEFINITION and the manifest says so. This closes the run-6 loop where TRG returned >1 [verified]
+- F-10 RESTORED VERBATIM AND PASSING: clean as-of 2022-02-03 08:00 -> 36995.50; sabotage rejected
+  with "bar closing 2022-02-03 12:00 is in the future of the as-of instant". v0.3 had kept
+  "sabotage fixture mandatory" and deleted the parenthetical that said what the test IS -- a
+  fixture whose test is unstated cannot fail [verified]
+- F-KEY LIVE: assert_key() declares a join's key and asserts uniqueness BEFORE the join, halting on
+  violation. Exercised: cen3_ledger_lensed (asset,arming_ts) 848 rows dup=0; cen3_trigger_outcomes
+  (asset,dir,arming_ts) 595 rows dup=0. It exists because the non-unique-key defect appeared THREE
+  times and every one was caught by reading a count, never by a fixture [verified]
+- A4-WITCORR RESTORED AND IT QUALIFIES P-REL-1b. Pairwise sign-agreement across assets 0.60 (6 of
+  10 pairs; ETH dissents at -0.0923) against a PANEL RETURN CORRELATION OF 0.6458. The headline
+  "LOAO 4 of 5" overstates the replication: five assets correlated at 0.65 are closer to one
+  witness than to five. P-REL-1b remains SUPPORTED-PROVISIONAL and the provisional half of that
+  label is now load-bearing. This is precisely the print v0.2's I8 required and the v0.3
+  compression deleted [verified]
+- A4-NEST resolves the contradiction on the record: P-NEST-1 SCORES at CEN-8 as registered on the
+  pre-named set; R-4 governs the flags' use as composite stamps only [ratified]
+PENDING:
+1. CEN-7 -> CEN-8 -> CEN-9 remain; run 8 starts at CEN-7
+2. The register's closure is over MODULE-LEVEL constants only. A bare literal inside a function
+   body would not be caught; an AST scan of scoring paths is the natural next hardening and is NOT
+   implemented
+3. The ribbon operand (30m and 1h vs 1h only) is still unvalued and sits in the register's
+   known-open list; P-CHOP-1 stays withdrawn until it is named
+4. A4-WITCORR is exercised on ONE discriminant; CEN-8 must print it beside every promoted verdict
+5. Filed next-cycle and unscored: P-FAN-1 [60%], P-ARM-2 [55%], P-NEST-2 [50%], P-RAT-3 [40%],
+   P-VBT-2 [45%]
+6. ROTATION PROGRAM unchanged: Hyperliquid, own universe, own evidence wall, never pooled;
+   portability battery = the tunable-variables question; funnel at census close
+NEXT: CEN-7 (registry as-of + i-b registry-levels completion + two-limb reconciliation), then
+CEN-8, then CEN-9. Owner: HEPHAESTUS.
+METRICS: operator actions this session = 1 (the A4 rulings paste) — files re-ingested = 0
+=== END STATUS ===
