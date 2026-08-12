@@ -621,3 +621,52 @@ NEXT: THE PATH's next step is the operator's -- Tier-C / EngineV2, or the rotati
 census has delivered what it can. Owner: operator.
 METRICS: operator actions this session = 1 (the run-8 sequencing paste) — files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-12m ===
+NOW: CENSUS-2A VIZ-1 IS DELIVERED. Nine payloads extracted, nine views rendered, the handoff
+folder is packed, and the probe ledger is open. CLASS: DISPLAY-ONLY / Tier-E — this build
+registers nothing, scores nothing and claims nothing; selection surface m = 0.
+LAST EVENT: 2026-08-12 — VIZ-1: the census's instants, drawn
+FACTS:
+- TIER-E CLASS STATED ON EVERY ARTIFACT. Nine payloads and ten HTML pages each carry the close-out
+  §5 footer verbatim with their own payload sha; the probe ledger stamps entry #1
+  "EXPLORATION — ungated; promotion requires registration" [verified]
+- THE BRIEF AND THE CLOSE-OUT ARE FILED BYTE-EXACT and were verified identical rather than
+  re-written: brief 6,067 B sha 9baa5a4e…, close-out 19,464 B sha 5de5fd74… [verified]
+- PROBE LEDGER OPEN: exchange/reports/CENSUS2A_PROBE_LEDGER.md, append-only, carrying the §5 law
+  and the m-accounting rule. Entry #1 = VIZ-1 extraction, m = 0. RUNNING SELECTION SURFACE: 0 —
+  nothing this build did can ever be charged to a future FDR family [verified]
+- F-V1 PASS ×9: every payload round-trips json.load, every meta.sha256 re-verifies against a fresh
+  hash of its own data block, every payload under the 700,000 B cap (largest 662,099 = 94.6%)
+  [verified]
+- F-KEY PASS on all three joins: cen3_ledger_lensed (asset, arming_ts) dup=0 · cen5_campaigns
+  (tranche_id) dup=0 · cen7_registry_series (asset, ts) dup=0. The fixture exists because the
+  non-unique-key defect appeared three times during the census [verified]
+- HANDOFF READY: D:/Naiad/research_outputs/census2a/DESIGN_HANDOFF/ — 11 files, 2,454,089 B (nine
+  payloads + brief + close-out). Renders at .../viz/ — ten pages, 1,587,395 B, self-contained,
+  zero external fetches [verified]
+- THE TOLL IS DRAWN ON EVERY OUTCOME AXIS, read from each payload's own meta, never a literal in
+  the drawing path. V3 draws it as a ring, so "smaller than its own cost" is geometry, not a
+  caption [verified]
+- REPORTED NOT FIXED: mae_r and n_reclaims DO NOT EXIST in cen5_campaigns — emitted null, so V6's
+  reclaim ticks and MFE/|MAE| glyph cannot be drawn; displacement_atr and the six-EMA ranks are
+  RECOMPUTED from 4h frames, not stored anywhere; v6 is truncated to 4,000 of 7,094 by the byte
+  cap (disclosed in its own downsample_rule); and there is NO interactivity in the first pass
+- WHY RAW SVG: neither matplotlib nor plotly is installed. Installing a package to draw a picture
+  is not a thing to do unasked, and self-contained-no-external-fetch is what the brief actually
+  requires. First-pass renders are legible and unornamented; Design's versions sit BESIDE them and
+  never replace them, per the paste
+- BOX-COST: exchange/** was 2,078,416 B = 32.53%; this build adds ~18 KB ≈ +0.28% → ~32.8%. All
+  6,470,042 B of payloads, renders and handoff live on D: — not one byte committed [verified]
+PENDING (unchanged; the census contract remains SPENT):
+1. Filed and unscored: P-FAN-1 [60%], P-ARM-2 [55%], P-NEST-2 [50%], P-RAT-3 [40%], P-VBT-2 [45%],
+   P-CHOP-2 on the newly-valued ribbon operand
+2. Design's session, if it happens, consumes DESIGN_HANDOFF/ and returns DESIGN_NOTES.md; the
+   first-pass renders stand regardless
+3. Anything a viewer finds interesting in these nine views is a PROBE, logged in the probe ledger
+   with its m — never a finding, and never citable without the Tier-P ceremony
+4. The D:-moved incident remains routed to ATHENA; cause unidentified
+NEXT: THE PATH's next step is still the operator's — Tier-C / EngineV2, or the rotation funnel.
+Owner: operator.
+METRICS: operator actions this session = 1 (the VIZ-1 paste) — files re-ingested = 0
+=== END STATUS ===
