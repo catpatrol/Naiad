@@ -1,6 +1,6 @@
 {
   "ahead_behind": {
-    "ahead": 0,
+    "ahead": 1,
     "behind": 0
   },
   "branch": "v12-v1-census",
@@ -10,19 +10,19 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": true
   },
-  "generated_utc": "2026-08-11T19:37:35Z",
-  "head": "11c3fb83c3eb96763eceb5a26f72756ef1ae5fac",
+  "generated_utc": "2026-08-12T03:03:42Z",
+  "head": "f83d3218bdeee5d56eb13002b249efaf8e1fbb03",
   "lane_last_commit": {
     "brief": null,
     "docs": {
-      "committed_iso": "2026-08-05T19:45:42-03:00",
-      "sha": "24ea673f1f1b47fc81136e9af68d8037483c3997",
-      "subject": "docs: archive 44 superseded ARGUS artifacts to docs/history/argus/"
+      "committed_iso": "2026-08-11T19:14:55-03:00",
+      "sha": "292e8390b1198f68b32f89206f8f2e7657072984",
+      "subject": "docs: closing 11-entry memory snapshot post-redraft + phase-archive relocation pointer (ruling B, archives to D:/Naiad)"
     },
     "exchange": {
-      "committed_iso": "2026-08-10T00:42:27-03:00",
-      "sha": "11c3fb83c3eb96763eceb5a26f72756ef1ae5fac",
-      "subject": "exchange: auto-publish 2026-08-10"
+      "committed_iso": "2026-08-11T23:48:55-03:00",
+      "sha": "7a708d6c271245643853f76d53f1ccdd0f9e5423",
+      "subject": "exchange: auto-publish 2026-08-11"
     },
     "ops": {
       "committed_iso": "2026-08-05T19:25:35-03:00",
@@ -37,9 +37,12 @@
     "title": "# Data-Spend Ledger"
   },
   "manifest_version": "1.1",
-  "onedrive_running": false,
-  "origin_head": "11c3fb83c3eb96763eceb5a26f72756ef1ae5fac",
-  "queue_open": 0,
+  "onedrive_running": true,
+  "origin_head": "7a708d6c271245643853f76d53f1ccdd0f9e5423",
+  "queue_open": 2,
+  "queue_ratified_unbuilt": 2,
+  "queue_total": 6,
+  "queue_unratified": 0,
   "reviewer_box": [
     {
       "match_head": false,
@@ -63,8 +66,8 @@
       "match_head": false,
       "path": "exchange/status/CONVENTIONS.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "0f0fd1eaeff147cf8c9d50e1f9240c6f98c72a32d9fc7052970276b541851d4f",
-      "size": 42147,
+      "sha256_worktree": "05617cf51306d778ff5da0793b2d05c41b4e442e7b53e907c6bc5be1fb36270b",
+      "size": 51454,
       "source_guess": null,
       "tracked": true
     },
@@ -74,6 +77,15 @@
       "sha256_head_blob": null,
       "sha256_worktree": "d5c0fca307059eb52dc8965c525ff84515cdf2ae22986d1a4e2d719e64f059bf",
       "size": 198,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/INTERFACE_PUBLISHED.md",
+      "sha256_head_blob": null,
+      "sha256_worktree": "70c3f36894684442871f57c6435380fbcea9ca9e23680e356ce610f16f93c61e",
+      "size": 48885,
       "source_guess": null,
       "tracked": true
     },
@@ -90,8 +102,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_ARGUS.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "362220e0afc2348fdb238f2212602dd55a0bd341b8d0b4b2b553f8750bacbdb0",
-      "size": 3894,
+      "sha256_worktree": "2bc7a95290a16dc836d525a9cab0f0fda11e69c13b4124d765a7c79c599ef6c2",
+      "size": 7665,
       "source_guess": null,
       "tracked": true
     },
@@ -99,8 +111,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_ATHENA.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "faea185fda1b165a9e40f2125d5a7a8602b9a6cd9dfdb486b452a3a9a39cf6b7",
-      "size": 13583,
+      "sha256_worktree": "f5b08a5fae2abdb7a48ffa5084e22f02b4ae562120116910bf2ed1f6a512fb60",
+      "size": 16327,
       "source_guess": null,
       "tracked": true
     },
@@ -144,8 +156,8 @@
       "match_head": false,
       "path": "exchange/status/RETENTION.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "d25b05bff477eeb58bcf143c8582582ef2d0f62d43b612ad27021fd76e6f3522",
-      "size": 2656,
+      "sha256_worktree": "6faf230c2ca215ecc1fbb4f7581e184445672cef102b872d33adc511fe9b1eeb",
+      "size": 1705,
       "source_guess": null,
       "tracked": true
     },
@@ -263,6 +275,15 @@
       "sha256_head_blob": null,
       "sha256_worktree": "b818c992e5ef42e6b399d187ca84e43e48347d1e366c96ccc69ac56d792b2ee1",
       "size": 23296,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-11.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "0a3ee1a3b279ebf6862f783383396e5d2515de350b58d1ceaf2250a1c7749324",
+      "size": 24916,
       "source_guess": null,
       "tracked": true
     }
@@ -583,9 +604,9 @@
     {
       "match_head": true,
       "path": "scripts/reviewer_manifest.py",
-      "sha256_head_blob": "409f2fe6a0749e4f90e9a8a0e8c6be358228592c8914bb0a55bcbc46058bb053",
-      "sha256_worktree": "409f2fe6a0749e4f90e9a8a0e8c6be358228592c8914bb0a55bcbc46058bb053",
-      "size": 30057,
+      "sha256_head_blob": "9872ba7b3973a18fb9370eedfd54e941c21a610a0191a407ec047515bcab0170",
+      "sha256_worktree": "9872ba7b3973a18fb9370eedfd54e941c21a610a0191a407ec047515bcab0170",
+      "size": 33073,
       "tracked": true
     },
     {
@@ -639,6 +660,8 @@
   ],
   "status_porcelain": [
     " M .gitignore",
+    " M exchange/status/MANIFEST.json",
+    " M exchange/status/daily/MANIFEST_2026-08-11.json",
     "?? \"Cascade Rewire.html\"",
     "?? Cascade_Atlas_CENSUS_1b.html",
     "?? Cascade_Atlas_CENSUS_1b_v2_1.html",
@@ -646,6 +669,7 @@
     "?? PRIMER_HERMES_2026-08-03_v2_FIRST_RUN.md",
     "?? SS_Reassessment_Synthesis_2026-08-03.md",
     "?? briefs/panel/excursions/2026-08-03.parquet",
+    "?? research_outputs/wf1/",
     "?? scripts/mc1_program.py",
     "?? scripts/mc1_report.py"
   ],
