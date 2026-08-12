@@ -653,7 +653,25 @@ Three of those four are **not mine** — they are `backup_estate.py` and `daily_
 their own output, which is exactly what step 6 asked them to do. The code went in **one** commit as
 instructed, staged set printed and verified at exactly three files.
 
-<<PUBLISH>>
+**Publish output, as printed:**
+
+```
+publish: WARNING -- exchange/ holds 1,699,332 B, 26.6% of the 6,390,000 B box (warn at 25%, refuse above 40%).
+publish: routine last completed 2026-08-12 (0h ago)
+publish: committed 2f62ed2 (3 path(s)) and pushed to origin/v12-v1-census
+status= PUBLISHED commit= 2f62ed2 pushed= True offenders= []
+```
+
+**The F-P6 freshness line is present and healthy** — `routine last completed 2026-08-12 (0h ago)`,
+because §5.3 ran the routine minutes earlier. **The budget WARNING is present and was not
+suppressed**, for the reason in §7.6: `exchange/` is at 26.6% and rotation is queue 003, unbuilt.
+Three paths: this report, the ledger append, and the regenerated `DAILY_2026-08-12.md`.
+
+`.gitignore` remains modified in the working tree; it was already modified at session start and is
+untouched by this session.
+
+A fourth commit carries this block, for the standing reason that a document cannot contain its own
+commit SHA.
 
 ---
 
