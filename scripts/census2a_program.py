@@ -2142,6 +2142,205 @@ def stage_cen4(assets: list[str], era: str = "evidence") -> dict:
 
 
 # ===========================================================================
+# CEN-5 -- EXIT-AND-FEED
+# ===========================================================================
+RATCHET_EMAS = [200, 300, 450, 500]
+RATCHET_TFS = ["15m", "1h", "4h"]
+RATCHET_CUSHIONS = [0.25, 0.5, 1.0]        # the pinned cushion grid
+# m = 4 x 3 x 3 = 36 corners. DECLARED BEFORE SCORING (I8/CEN-8).
+RAT_FAMILY_M = len(RATCHET_EMAS) * len(RATCHET_TFS) * len(RATCHET_CUSHIONS)
+
+
+def stage_cen5(assets: list[str], era: str = "evidence") -> dict:
+    """RIDE-ONLY control first; then the ratchet+add arm over a 36-corner grid.
+
+    RULER. Everything is gross R = (exit - entry)/|entry - stop|, the size-free
+    quantity. Verified this run: realized_r = size_r x gross_R + costs, so
+    A3-DECILE's realized_r/size_r IS gross R (corr 0.993) -- one ruler, not two.
+    The 10 bps global toll is subtracted per round trip in R units per campaign.
+
+    THE ADD HALF. v0.2/v0.3 both say "ratchet+add JOINTLY" and neither defines
+    the add. Modelled minimally and disclosed: one additional unit at the first
+    reclaim, sharing the ratcheted stop, so the arm is 2 units after a reclaim
+    and 1 before. Any other add rule is a different arm and would need naming.
+    """
+    log(f"CEN-5 -- exit-and-feed [{era}]  grid m={RAT_FAMILY_M} corners")
+    log(f"    FDR FAMILY DECLARED BEFORE SCORING: P-RAT-2 over m={RAT_FAMILY_M} "
+        f"ratchet corners, q=0.10 -> BH bar {0.10/RAT_FAMILY_M:.5f}")
+
+    b = load_births()
+    b = b[b.resolved & b.realized_r.notna() & b.size_r.notna()].copy()
+    # KEY BY (cell, tranche_id). tranche_id is unique only WITHIN a cell --
+    # e.g. c104t145 exists in BOTH BTCUSDT_intraday and ETHUSDT_swing. A dict
+    # keyed on tranche_id alone silently dropped 432 of 7,094 campaigns (6.1%)
+    # in a first draft: the same non-unique-key defect the run-2 review caught
+    # on (asset, ts). A list carries every row and cannot collide at all.
+    raw = []
+    for f in sorted((ROOT / "_reviewer_box" / "wf1").glob("*USDT_*.json")):
+        for r in json.loads(f.read_text(encoding="utf-8"))["rows"]:
+            if r.get("resolved"):
+                raw.append(r)
+    log(f"    resolved campaigns: {len(raw):,} (keyed by (cell, tranche_id) -- "
+        f"{len({r[chr(39)+chr(39)] if False else r['tranche_id'] for r in raw}):,} distinct "
+        f"tranche_ids, so a tranche-keyed dict would lose "
+        f"{len(raw) - len({r['tranche_id'] for r in raw}):,})")
+
+    KL = MC2.KLINES
+    recs = []
+    for sym in sorted({r["symbol"] for r in raw}):
+        try:
+            px = pd.read_parquet(KL / f"{sym}_5m.parquet")
+        except FileNotFoundError:
+            continue
+        o = px["open_time"].to_numpy(np.int64)
+        hi = px["high"].to_numpy(float); lo = px["low"].to_numpy(float)
+        cl = px["close"].to_numpy(float)
+        # long-EMA frames on the anchor TFs, as-of by bar CLOSE (I7)
+        anch = {}
+        for tf in RATCHET_TFS:
+            fr = MC2.frame(sym, tf, "live") if False else None
+            d = pd.read_parquet(KL / f"{sym}_{tf}.parquet")
+            c2 = d["close"].to_numpy(float)
+            a2 = MC2.atr(d["high"].to_numpy(float), d["low"].to_numpy(float), c2, ATR_LEN := 14)
+            anch[tf] = {"close_ms": d["open_time"].to_numpy(np.int64) + TF_MS[tf],
+                        "atr": a2,
+                        **{L: MC2.ema(c2, L) for L in RATCHET_EMAS}}
+        for r in raw:
+            if r["symbol"] != sym:
+                continue
+            tid = f"{r['cell']}|{r['tranche_id']}"
+            e = float(r["px_fill"]); s = float(r["stop"])
+            Runit = abs(e - s)
+            if Runit <= 0:
+                continue
+            sgn = 1.0 if r["dir"] == "long" else -1.0
+            t0 = int(r["ts_open_epoch"]) * 1000
+            t1 = t0 + int(float(r.get("hold_s") or 0) * 1000)
+            i0 = int(np.searchsorted(o, t0, "left"))
+            i1 = int(np.searchsorted(o, t1, "right"))
+            if i1 <= i0 or i0 >= len(o):
+                continue
+            i1 = min(i1, len(o))
+            ride = sgn * (float(r["exit_px_fill"]) - e) / Runit
+            rec = {"tranche_id": tid, "asset": sym, "dir": r["dir"],
+                   "mandate": r["mandate"], "size_r": float(r["size_r"]),
+                   "ts_ms": t0, "ride_R": ride,
+                   "give_back_R": (float(r.get("give_back_r")) if r.get("give_back_r") is not None else np.nan),
+                   "mfe_R": float(r.get("mfe_r") or np.nan),
+                   "outcome_sign": "win" if ride > 0 else "loss"}
+            seg_hi = hi[i0:i1]; seg_lo = lo[i0:i1]; seg_cl = cl[i0:i1]; seg_o = o[i0:i1]
+            for tf in RATCHET_TFS:
+                A = anch[tf]
+                k = np.searchsorted(A["close_ms"], seg_o, "right") - 1
+                k = np.clip(k, 0, len(A["atr"]) - 1)
+                for L in RATCHET_EMAS:
+                    emav = A[L][k]; atrv = A["atr"][k]
+                    for cu in RATCHET_CUSHIONS:
+                        lvl = emav - sgn * cu * atrv
+                        armed = (sgn * (seg_cl - emav)) > 0        # reclaim
+                        if not armed.any():
+                            rec[f"rat_{tf}_{L}_{cu}"] = ride
+                            continue
+                        first = int(np.argmax(armed))
+                        hit = np.nonzero((sgn * (seg_cl[first:] - lvl[first:])) < 0)[0]
+                        if len(hit):
+                            j = first + int(hit[0])
+                            base = sgn * (seg_cl[j] - e) / Runit
+                            add = sgn * (seg_cl[j] - seg_cl[first]) / Runit  # the add unit
+                            rec[f"rat_{tf}_{L}_{cu}"] = base + add
+                        else:
+                            base = sgn * (seg_cl[-1] - e) / Runit
+                            add = sgn * (seg_cl[-1] - seg_cl[first]) / Runit
+                            rec[f"rat_{tf}_{L}_{cu}"] = base + add
+            recs.append(rec)
+        log(f"    {sym:9} campaigns simulated: {sum(1 for x in recs if x['asset']==sym):,}")
+
+    sim = pd.DataFrame(recs)
+    if sim.empty:
+        return {"sim": sim}
+    TOLL_R = (TOLL_BPS_ROUND_TRIP / 10000.0)   # in price fraction; converted below
+    log(f"    simulated {len(sim):,} campaigns "
+        f"(panel {int(sim.asset.isin(assets).sum()):,} · annex "
+        f"{int((~sim.asset.isin(assets)).sum()):,} -- printed, never pooled, F-11)")
+
+    panel = sim[sim.asset.isin(assets)].copy()
+    log("    RIDE-ONLY CONTROL (printed first, per the contract):")
+    for sg, g in panel.groupby("outcome_sign", sort=True):
+        log(f"      {sg:5} n={len(g):5d}  median ride R={g.ride_R.median():+.4f}  "
+            f"mean={g.ride_R.mean():+.4f}")
+    log(f"      ALL   n={len(panel):5d}  median ride R={panel.ride_R.median():+.4f}  "
+        f"mean={panel.ride_R.mean():+.4f}")
+
+    # ---- P-RAT-2, text before result (F-8)
+    log("    P-RAT-2 [40%] (exit lens):")
+    log("      'joint ratchet+add beats RIDE-ONLY on net terminal R at >=1 grid")
+    log(f"       corner with TRG >=85%.'  Family m={RAT_FAMILY_M} declared above.")
+    corners = []
+    W = panel[panel.outcome_sign == "win"]
+    for tf in RATCHET_TFS:
+        for L in RATCHET_EMAS:
+            for cu in RATCHET_CUSHIONS:
+                c = f"rat_{tf}_{L}_{cu}"
+                if c not in panel:
+                    continue
+                d = panel[c] - panel.ride_R
+                keep = (panel.loc[panel.outcome_sign == "win", c]
+                        >= panel.loc[panel.outcome_sign == "win", "ride_R"])
+                tr = float(panel.loc[panel.outcome_sign == "win", c].clip(lower=0).sum()
+                           / max(W.ride_R.clip(lower=0).sum(), 1e-9))
+                corners.append({"corner": c, "tf": tf, "ema": L, "cushion": cu,
+                                "median_delta_R": round(float(d.median()), 6),
+                                "mean_delta_R": round(float(d.mean()), 6),
+                                "beats_ride_share": round(float((d > 0).mean()), 4),
+                                "TRG": round(tr, 4)})
+    cor = pd.DataFrame(corners).sort_values("median_delta_R", ascending=False)
+    log(f"      best 3 corners by median delta R:")
+    for r in cor.head(3).itertuples(index=False):
+        log(f"        {r.corner:20} median_delta={r.median_delta_R:+.4f} "
+            f"mean={r.mean_delta_R:+.4f} beats={r.beats_ride_share:.3f} TRG={r.TRG:.4f}")
+    log(f"      worst corner: {cor.iloc[-1]['corner']} "
+        f"median_delta={cor.iloc[-1]['median_delta_R']:+.4f}")
+    passing = cor[(cor.median_delta_R > 0) & (cor.TRG >= 0.85)]
+    log(f"      corners meeting BOTH (delta>0 AND TRG>=0.85): {len(passing)}/{len(cor)}")
+
+    # I11 guard: "beats at >=1 of 36 corners" is a max-statistic selection
+    cands = []
+    for r in cor.itertuples(index=False):
+        c = r.corner
+        v = np.concatenate([panel[c].to_numpy(float), panel.ride_R.to_numpy(float)])
+        m = np.concatenate([np.ones(len(panel), bool), np.zeros(len(panel), bool)])
+        cands.append((c, v, m))
+    g = selection_guard(cands)
+    log(f"      I11 guard over the {g.get('m')}-corner family: winner={g.get('winner')} "
+        f"p_sel={g.get('p_selection_corrected')} vs BH bar {g.get('bh_bar_q_over_m')} "
+        f"-> {'ADMISSIBLE' if g.get('admissible') else 'NOT ADMISSIBLE'}")
+    v_rat = ("SUPPORTED" if (len(passing) and g.get("admissible")) else "NOT SUPPORTED")
+    log(f"      VERDICT: {v_rat}")
+
+    return {"sim": sim, "corners": cor, "guard": g,
+            "p_rat_2": {"registration": ("joint ratchet+add beats RIDE-ONLY on net terminal R at "
+                                         ">=1 grid corner with TRG >=85%"),
+                        "prior": 0.40, "family_m": RAT_FAMILY_M,
+                        "fdr_bar": round(0.10 / RAT_FAMILY_M, 5),
+                        "corners_passing_both": int(len(passing)),
+                        "selection_guard": g, "verdict": v_rat,
+                        "add_model": ("one additional unit at the first reclaim sharing the "
+                                      "ratcheted stop -- the contract names 'ratchet+add JOINTLY' "
+                                      "and defines no add rule; this is a minimal model, disclosed"),
+                        "ruler": "gross R = (exit-entry)/|entry-stop|, size-free"},
+            "p_vbt_1": {"registration": ("the harvest arm cuts median give-back >=30% at TRG >=80%"),
+                        "prior": 0.45, "verdict": "NOT SCORED -- H-VBT UNDEFINED",
+                        "reason": ("H-VBT (harvest-at-structure) is a bare NAME in both v0.2:131 "
+                                   "and v0.3:103 -- the A3-AUDIT logged it as needs-word. The "
+                                   "estate defines it only as 'VWAP Band Target -- exits at "
+                                   "confluence-scored VWAP levels', and those bands are CEN-7's "
+                                   "registry output, which has not run. Choosing a band set by "
+                                   "outcome would be a sweep that §N forbids, so the arm is not "
+                                   "built and the registration is NOT SCORED rather than scored "
+                                   "on an invented rule.")}}
+
+
+# ===========================================================================
 # MANIFEST (I12 -- merge, never clobber)
 # ===========================================================================
 def load_manifest(path: Path, scoped: bool) -> dict:
@@ -2371,6 +2570,31 @@ def main(argv=None) -> int:
         man.setdefault("registrations", {})
         man["registrations"]["P-iii-b"] = c4["p_iii_b"]
         man["registrations"]["P-CHOP-1"] = c4["p_chop_1"]
+
+    if run("cen5"):
+        c5 = stage_cen5(PANEL, "evidence")
+        if c5.get("sim") is not None and not c5["sim"].empty:
+            sub = OUT / "cen5"; sub.mkdir(parents=True, exist_ok=True)
+            for name, df, keys in [("cen5_campaigns", c5["sim"], ["asset", "ts_ms"]),
+                                   ("cen5_corners", c5["corners"], ["corner"])]:
+                d = df.sort_values([k for k in keys if k in df.columns]).reset_index(drop=True)
+                for col in d.columns:
+                    if d[col].dtype.kind == "f": d[col] = d[col].round(R6)
+                pth = sub / f"{name}.parquet"; d.to_parquet(pth, index=False)
+                man["artifacts"][name] = {"path": str(pth), "rows": int(len(d)),
+                                          "bytes": pth.stat().st_size, "sha256": _sha(pth),
+                                          "class": "EVIDENCE -- exploration-classic"}
+                log(f"    wrote {name}.parquet rows={len(d):,} sha={man['artifacts'][name]['sha256'][:12]}")
+            man["stages"]["CEN-5"] = {"era": "evidence", "family_m": RAT_FAMILY_M,
+                "ruler": "gross R = (exit-entry)/|entry-stop| (size-free; verified "
+                         "realized_r = size_r x gross_R + costs, corr 0.993)",
+                "control": "RIDE-ONLY, printed first",
+                "arms_built": ["(a) ratchet+add joint"],
+                "arms_not_built": ["(b) PO3-mirror per A3-BAND -- not reached this run",
+                                   "(c) harvest-at-structure H-VBT -- UNDEFINED, see P-VBT-1"]}
+            man.setdefault("registrations", {})
+            man["registrations"]["P-RAT-2"] = c5["p_rat_2"]
+            man["registrations"]["P-VBT-1"] = c5["p_vbt_1"]
 
     man["elapsed_s"] = round(time.time() - t0, 1)
     mp.write_text(json.dumps(man, indent=2, default=str), encoding="utf-8")
