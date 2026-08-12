@@ -288,3 +288,22 @@ PENDING:
 NEXT: Rule on item 1; it is the only remaining file with no copy anywhere. Owner: ATHENA.
 METRICS: operator actions this session = 0 · files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_ATHENA — 2026-08-12 ===
+NOW: O-1, O-3 and O-4 are closed and the operator's tidy is done. WF1_discriminants.json is tracked and pushed, so the repository has no unprotected file left. WORKFLOW_SOURCES now covers briefs, docs/reports and docs/handoffs — proved live at 343 members, 0 mismatches. The retention report finds the nine phase archives it had been reporting as absent, and can no longer confuse an unmounted drive with an empty one.
+LAST EVENT: 2026-08-12 — code commit 91ce815 pushed; proof run wrote naiad_workflow_2026-08-12-01.zip (343 members, 8/8 fixtures); filed as exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-12_O1-O3-O4-TIDY.md.
+FACTS:
+- O-1: research_outputs/wf1/WF1_discriminants.json verified NOT gitignored, tracked in 91ce815, confirmed present on origin/v12-v1-census. research_outputs/mc1/ deliberately NOT added, per the ruling that bulk data stays pointered [verified]
+- O-3: WORKFLOW_SOURCES 11 -> 14 entries; the old list asserted a STRICT SUBSET of the new, no duplicates, no nested roots. Measured 4.21 MB (briefs 3.92, docs/reports 0.26, docs/handoffs 0.02) against a 50 MB ceiling BEFORE widening [verified]
+- O-3 proved live: 343 members vs 324, +829,163 B (+30.2%), 0 mismatches/strays/omissions, 8/8 fixtures; 16 of the 22 added members come from the three newly covered roots, and the 3 removed are the files that left the repo root today [verified]
+- O-4: retention_report() now resolves the --phase root through a shared phase_archive_root_path() and prints 9 archives / 1,043.6 MB where it printed "none found" this morning. It had been scanning REPO/research_outputs/_archive, which stopped holding archives when ruling B moved them off-machine on 2026-08-06 [verified]
+- O-4 third state: an unmounted drive prints "NOT ENUMERABLE" and falls back to the 9 tracked sidecars; fixture F-O4 asserts that state never emits a "none found" verdict — the conflation behind the 2026-08-04 retraction [verified]
+- TIDY: both repo-root duplicates removed only after four checks each passed IN THIS RUN (sha256 equal to twin, twin tracked, twin's blob on origin, twin's worktree bytes == that blob). Both twins re-verified intact afterwards. Neither file was tracked, so neither deletion is a git change [verified]
+PENDING:
+1. ATHENA: the keep-4 rule counts a same-day -NN archive as a full generation, so today occupies two slots and naiad_workflow_2026-08-04.zip now reads as outside the rule. Report-only, nothing deleted — accept it, or group -NN siblings under their base date (O-5, created this session)
+2. Operator: the two Sunday tasks still pass --dest "G:\My Drive\naiad-backups"; next fire 2026-08-16 08:00/08:30 (O-6, carried)
+3. Operator: confirm or refute the Google Drive mirror of D:/naiad-backups at drive.google.com > Computers — registered but its uploads log CreateHardLinkW failures on exFAT (O-7, carried)
+4. ATHENA: research_outputs/ remains outside WORKFLOW_SOURCES, so WF1_discriminants.json has GitHub-only protection. Widening it would pull in the multi-GB study estate and is a separate decision, not an oversight (O-8)
+NEXT: Rule on O-5; it is the only item this session created. Owner: ATHENA.
+METRICS: operator actions this session = 0 · files re-ingested = 0
+=== END STATUS ===
