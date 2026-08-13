@@ -10,8 +10,8 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": true
   },
-  "generated_utc": "2026-08-12T10:59:07Z",
-  "head": "af861682abb01b189d104c52e32778bf6e67eb9c",
+  "generated_utc": "2026-08-13T10:00:08Z",
+  "head": "48e6e081acad783c27481629344c3c4b59c6b169",
   "lane_last_commit": {
     "brief": null,
     "docs": {
@@ -20,8 +20,8 @@
       "subject": "docs: closing 11-entry memory snapshot post-redraft + phase-archive relocation pointer (ruling B, archives to D:/Naiad)"
     },
     "exchange": {
-      "committed_iso": "2026-08-12T07:58:27-03:00",
-      "sha": "af861682abb01b189d104c52e32778bf6e67eb9c",
+      "committed_iso": "2026-08-12T19:37:02-03:00",
+      "sha": "48e6e081acad783c27481629344c3c4b59c6b169",
       "subject": "exchange: auto-publish 2026-08-12"
     },
     "ops": {
@@ -37,12 +37,12 @@
     "title": "# Data-Spend Ledger"
   },
   "manifest_version": "1.1",
-  "onedrive_running": false,
-  "origin_head": "af861682abb01b189d104c52e32778bf6e67eb9c",
+  "onedrive_running": true,
+  "origin_head": "48e6e081acad783c27481629344c3c4b59c6b169",
   "queue_open": 3,
   "queue_ratified_unbuilt": 3,
-  "queue_total": 7,
-  "queue_unratified": 0,
+  "queue_total": 8,
+  "queue_unratified": 1,
   "reviewer_box": [
     {
       "match_head": false,
@@ -75,7 +75,7 @@
       "match_head": false,
       "path": "exchange/status/HEARTBEAT.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "febbd4626f2fa9daea9abd5969f5e53f53490f299d366268e66bb11c8dd0953c",
+      "sha256_worktree": "6acb023a1bcf271b43797bd8e5dc01d5da1394dd7e7f34b22bcebb04bce41895",
       "size": 198,
       "source_guess": null,
       "tracked": true
@@ -93,8 +93,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_APOLLO.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "e6730825a5f89900681c802ce302ed474ae9867d78f6e804181b5963e25d5b02",
-      "size": 6557,
+      "sha256_worktree": "dccb1a2708f1ac18fb146c95ff93a84ef813486a3a8f9f2b2cc480a469f481d4",
+      "size": 52400,
       "source_guess": null,
       "tracked": true
     },
@@ -111,8 +111,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_ATHENA.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "c488fbdf5c84333073cffb45b0cdb33cd0b7744d6255fc07b6db5432e59fd36f",
-      "size": 45922,
+      "sha256_worktree": "6588c64c2ed47df6e360cf813c71bb855593d7fce3d3d9baedbd8756f5a48960",
+      "size": 51363,
       "source_guess": null,
       "tracked": true
     },
@@ -120,8 +120,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_DIONYSUS.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "ceb33bbaeaff1b3bbadb9880ff9cf7bb02e845dbd127f72f6c0d992365a61207",
-      "size": 2383,
+      "sha256_worktree": "ec4dba14ba752521b4046a3c1a712c8dc088d80e6b9ff1eaad5503f9955e5470",
+      "size": 4108,
       "source_guess": null,
       "tracked": true
     },
@@ -228,8 +228,8 @@
       "match_head": false,
       "path": "exchange/status/daily/DAILY_2026-08-12.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "a8ed105053681d7a210f2d0ff8d7d90e99eae2c6a1d76a6effebd8527220a23f",
-      "size": 5445,
+      "sha256_worktree": "9214b4ce88c249654d36b2d4c816da4805647f2d3d404836fb5565eeff855ea2",
+      "size": 5644,
       "source_guess": null,
       "tracked": true
     },
@@ -291,8 +291,8 @@
       "match_head": false,
       "path": "exchange/status/daily/MANIFEST_2026-08-12.json",
       "sha256_head_blob": null,
-      "sha256_worktree": "eeafd04a0c079a24e8a5953835fea10ad2221b895f45389a2e4ece3715c76a3e",
-      "size": 23896,
+      "sha256_worktree": "69fb3ddc8a8f2e41541bd2c93d0f4b00bdf54ca591534022d127713eeb67f27b",
+      "size": 23778,
       "source_guess": null,
       "tracked": true
     }
@@ -667,8 +667,6 @@
       "tracked": true
     }
   ],
-  "status_porcelain": [
-    " M .gitignore"
-  ],
+  "status_porcelain": [],
   "untracked_root": []
 }
