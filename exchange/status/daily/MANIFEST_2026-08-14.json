@@ -10,24 +10,24 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": true
   },
-  "generated_utc": "2026-08-04T00:45:29Z",
-  "head": "484d62c86318370a6ffb3ee1a4bdb5ee92f9c5cc",
+  "generated_utc": "2026-08-14T10:00:11Z",
+  "head": "7a3e0718beb841b2feef78897206026d58aa1c81",
   "lane_last_commit": {
     "brief": null,
     "docs": {
-      "committed_iso": "2026-07-29T03:46:34-03:00",
-      "sha": "f1dc0266b687292bcf9368e0c5a962e7796a6921",
-      "subject": "docs: PC-1 Stage 3 ledger record - LIT estate remediation, save-path floor enforcement, engine 1.0.12"
+      "committed_iso": "2026-08-11T19:14:55-03:00",
+      "sha": "292e8390b1198f68b32f89206f8f2e7657072984",
+      "subject": "docs: closing 11-entry memory snapshot post-redraft + phase-archive relocation pointer (ruling B, archives to D:/Naiad)"
     },
     "exchange": {
-      "committed_iso": "2026-08-03T20:44:43-03:00",
-      "sha": "484d62c86318370a6ffb3ee1a4bdb5ee92f9c5cc",
-      "subject": "exchange: auto-publish 2026-08-03"
+      "committed_iso": "2026-08-13T07:05:39-03:00",
+      "sha": "7a3e0718beb841b2feef78897206026d58aa1c81",
+      "subject": "exchange: auto-publish 2026-08-13"
     },
     "ops": {
-      "committed_iso": "2026-08-03T20:42:29-03:00",
-      "sha": "6a758f6419cb02b0a7dbd46e171d7ae8611174ee",
-      "subject": "ops: cycle 4 F+G \u2014 INTERFACE regenerated, recalibration, item 6 re-bucketed, D.8/D.9"
+      "committed_iso": "2026-08-12T07:52:01-03:00",
+      "sha": "75b74442fb8572fd33b0d69b0858b9b4157379f1",
+      "subject": "ops: queue 004 Phase A A-2 - repoint every gate and constant to C:/Naiad"
     },
     "study-phase": null
   },
@@ -37,9 +37,12 @@
     "title": "# Data-Spend Ledger"
   },
   "manifest_version": "1.1",
-  "onedrive_running": false,
-  "origin_head": "484d62c86318370a6ffb3ee1a4bdb5ee92f9c5cc",
-  "queue_open": 1,
+  "onedrive_running": true,
+  "origin_head": "7a3e0718beb841b2feef78897206026d58aa1c81",
+  "queue_open": 3,
+  "queue_ratified_unbuilt": 3,
+  "queue_total": 8,
+  "queue_unratified": 1,
   "reviewer_box": [
     {
       "match_head": false,
@@ -54,8 +57,17 @@
       "match_head": false,
       "path": "exchange/status/CADENCE.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "dae66679bf3d242d1c16f20f0932184a8b3ab63bf4f612148ba2614ecadc177c",
-      "size": 5053,
+      "sha256_worktree": "7e40f4b4743dfc4bacd7100a0a62a1e38e7a66246cc990069e8bc20fdeb90468",
+      "size": 7503,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/CONVENTIONS.md",
+      "sha256_head_blob": null,
+      "sha256_worktree": "66e28909fe9108da0c54049e4d4c84bbe692a514d8fea6f50009af9f2d664527",
+      "size": 53679,
       "source_guess": null,
       "tracked": true
     },
@@ -63,8 +75,17 @@
       "match_head": false,
       "path": "exchange/status/HEARTBEAT.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "0bfe0fe93d7cb329cadd88f6fc4f146a6704ef11074a8e1fa93c2c69381023fe",
+      "sha256_worktree": "4ee44b6918eb71da5f0757c4fad76e8f651da2903a1263db1f5d128526aa89dd",
       "size": 198,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/INTERFACE_PUBLISHED.md",
+      "sha256_head_blob": null,
+      "sha256_worktree": "70c3f36894684442871f57c6435380fbcea9ca9e23680e356ce610f16f93c61e",
+      "size": 48885,
       "source_guess": null,
       "tracked": true
     },
@@ -72,8 +93,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_APOLLO.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "3c2068d9da4a5ef5f3efa96b44b2aa697292f5043407c21fc015b5be2cf3fb28",
-      "size": 3616,
+      "sha256_worktree": "dccb1a2708f1ac18fb146c95ff93a84ef813486a3a8f9f2b2cc480a469f481d4",
+      "size": 52400,
       "source_guess": null,
       "tracked": true
     },
@@ -81,8 +102,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_ARGUS.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "362220e0afc2348fdb238f2212602dd55a0bd341b8d0b4b2b553f8750bacbdb0",
-      "size": 3894,
+      "sha256_worktree": "2bc7a95290a16dc836d525a9cab0f0fda11e69c13b4124d765a7c79c599ef6c2",
+      "size": 7665,
       "source_guess": null,
       "tracked": true
     },
@@ -90,8 +111,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_ATHENA.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "ec4706bddefa40f5789bbdff95865df3ed605344dfe6fe3c57030e80eb09be0a",
-      "size": 5224,
+      "sha256_worktree": "6588c64c2ed47df6e360cf813c71bb855593d7fce3d3d9baedbd8756f5a48960",
+      "size": 51363,
       "source_guess": null,
       "tracked": true
     },
@@ -99,8 +120,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_DIONYSUS.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "ceb33bbaeaff1b3bbadb9880ff9cf7bb02e845dbd127f72f6c0d992365a61207",
-      "size": 2383,
+      "sha256_worktree": "ec4dba14ba752521b4046a3c1a712c8dc088d80e6b9ff1eaad5503f9955e5470",
+      "size": 4108,
       "source_guess": null,
       "tracked": true
     },
@@ -117,8 +138,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_HERMES.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "edb64ff7ad488ba19849d2a5ce933d3556cb9e088a7e8dbee25f13ad1b92e238",
-      "size": 2636,
+      "sha256_worktree": "1164dc7e4d91a54ff6be880bbd2755cbc057603a5bfd60adb37b2db28665ed6e",
+      "size": 5156,
       "source_guess": null,
       "tracked": true
     },
@@ -135,8 +156,8 @@
       "match_head": false,
       "path": "exchange/status/RETENTION.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "adacef0fe5e27455efd0164c60bdc60964522d9e8bf9632bfaed2bc9c40a8348",
-      "size": 2379,
+      "sha256_worktree": "0ebed329e91b171421583f198d70f5f1e2018cbf52ec52820ebd37c02fcb2839",
+      "size": 2984,
       "source_guess": null,
       "tracked": true
     },
@@ -144,17 +165,8 @@
       "match_head": false,
       "path": "exchange/status/SECOND_ACCOUNT.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "d957fd755c1636454da0a10331ef1933aaead118497a82895df8ff90d89981a1",
-      "size": 1891,
-      "source_guess": null,
-      "tracked": false
-    },
-    {
-      "match_head": false,
-      "path": "exchange/status/daily/DAILY_2026-07-28.md",
-      "sha256_head_blob": null,
-      "sha256_worktree": "e37cb58a723841892c5657c410a0577f10d39a12b5f64c505e481828057ac02b",
-      "size": 1850,
+      "sha256_worktree": "934058018f1c67a0857a4ebdc8282b6446d1deb57897d184aab1b0483a01b2ab",
+      "size": 2941,
       "source_guess": null,
       "tracked": true
     },
@@ -169,19 +181,118 @@
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-07-28.json",
+      "path": "exchange/status/daily/DAILY_2026-08-03.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "9158aa37698deb4b13e7edfd8580baf11566f8ae4593e512e8ce1c4c91a7e50d",
-      "size": 26000,
+      "sha256_worktree": "53a818da17d272c1c8288803c60138dca6e8c40fa41074a74126852277368d59",
+      "size": 4552,
       "source_guess": null,
       "tracked": true
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-08-02.json",
+      "path": "exchange/status/daily/DAILY_2026-08-05.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "60a84465ad1a1f7d03d53c8ebda98f05397835503194a4444adf31159243e20b",
-      "size": 19644,
+      "sha256_worktree": "b59c665198d08f8e8312d736ad6d18f93bd7f41a18bf358b38507adfe0e784a5",
+      "size": 4766,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/DAILY_2026-08-08.md",
+      "sha256_head_blob": null,
+      "sha256_worktree": "3b591715fdcab1eed55f5383b904b3f3c0b58231e8abe600e70a005b472ab75e",
+      "size": 3889,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/DAILY_2026-08-09.md",
+      "sha256_head_blob": null,
+      "sha256_worktree": "3fa71f6f27bd39e8dd6bb40bb497d8a8edee77542682eddd2db2b4f61050b105",
+      "size": 2370,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/DAILY_2026-08-12.md",
+      "sha256_head_blob": null,
+      "sha256_worktree": "9214b4ce88c249654d36b2d4c816da4805647f2d3d404836fb5565eeff855ea2",
+      "size": 5644,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/DAILY_2026-08-13.md",
+      "sha256_head_blob": null,
+      "sha256_worktree": "2815c04e900ee0ba34cd74d0fff4045eb939d914048c2ca31ac640dc39c591da",
+      "size": 4966,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-03.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "c9293f2a6fc97bf966c4b0b1da1ce9f37409a7976ea226f103627b744c288057",
+      "size": 21115,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-05.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "d7a1dbd8641664b3c15883ff08793b11baaf632f0976c6c73c80ad81f38f8271",
+      "size": 22600,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-07.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "6940eb5dafb41cc69a200251fc95a4ffa375d4e89ee9c0ea88989197c6513461",
+      "size": 22898,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-08.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "b818c992e5ef42e6b399d187ca84e43e48347d1e366c96ccc69ac56d792b2ee1",
+      "size": 23296,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-11.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "0a3ee1a3b279ebf6862f783383396e5d2515de350b58d1ceaf2250a1c7749324",
+      "size": 24916,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-12.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "69fb3ddc8a8f2e41541bd2c93d0f4b00bdf54ca591534022d127713eeb67f27b",
+      "size": 23778,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-13.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "17acee4bc700f3c8ffc638f5fb0e35be900a65d28c0e6ecd57c1b9e8c723155b",
+      "size": 23755,
       "source_guess": null,
       "tracked": true
     }
@@ -502,17 +613,17 @@
     {
       "match_head": true,
       "path": "scripts/reviewer_manifest.py",
-      "sha256_head_blob": "409f2fe6a0749e4f90e9a8a0e8c6be358228592c8914bb0a55bcbc46058bb053",
-      "sha256_worktree": "409f2fe6a0749e4f90e9a8a0e8c6be358228592c8914bb0a55bcbc46058bb053",
-      "size": 30057,
+      "sha256_head_blob": "d280c87dc0b5cebb44f891eeb21591bc7a2eb2463f8402345a7b331679cd2535",
+      "sha256_worktree": "d280c87dc0b5cebb44f891eeb21591bc7a2eb2463f8402345a7b331679cd2535",
+      "size": 33397,
       "tracked": true
     },
     {
       "match_head": true,
       "path": "scripts/daily_brief.py",
-      "sha256_head_blob": "6e3e729eec5172072c777f364664a7c708a18f1f81450cff750d9b8a1757e050",
-      "sha256_worktree": "6e3e729eec5172072c777f364664a7c708a18f1f81450cff750d9b8a1757e050",
-      "size": 133684,
+      "sha256_head_blob": "430fa0b8991968ac2226902dec75b7e40182ac62e8e493588106a962df5b94cd",
+      "sha256_worktree": "430fa0b8991968ac2226902dec75b7e40182ac62e8e493588106a962df5b94cd",
+      "size": 134635,
       "tracked": true
     },
     {
@@ -557,35 +668,10 @@
     }
   ],
   "status_porcelain": [
-    " M exchange/status/RETENTION.md",
-    " M scripts/backup_estate.py",
-    " M scripts/daily_routine.py",
-    "?? \"Cascade Rewire.html\"",
-    "?? Cascade_Atlas_CENSUS_1b.html",
-    "?? Cascade_Atlas_CENSUS_1b_v2_1.html",
-    "?? SS_Reassessment_Synthesis_2026-08-03.md",
-    "?? exchange/status/SECOND_ACCOUNT.md"
+    " M exchange/status/daily/DAILY_2026-08-13.md",
+    "?? scripts/census2b_firstlook.py",
+    "?? scripts/census2b_program.py",
+    "?? scripts/census2b_report.py"
   ],
-  "untracked_root": [
-    {
-      "name": "Cascade Rewire.html",
-      "sha256": "6fc84a2e318cc442bfebf190bdbb8aa8caf22ed2381d0310f87ba47e2b976fdb",
-      "size": 243474
-    },
-    {
-      "name": "Cascade_Atlas_CENSUS_1b.html",
-      "sha256": "1af63dffa477014bd1e259fa42eaa4c00e95c7bebe3a44d4fc0a92b604214998",
-      "size": 23511
-    },
-    {
-      "name": "Cascade_Atlas_CENSUS_1b_v2_1.html",
-      "sha256": "bc303723dcb97100ef5ece04c4968c2bd6139e9ddb9a2c818f508d3ed1cb7709",
-      "size": 51802
-    },
-    {
-      "name": "SS_Reassessment_Synthesis_2026-08-03.md",
-      "sha256": "9d6e7ea747544561af509bbcc845648fa66367cae8157feec1916b18ab4cbff1",
-      "size": 8282
-    }
-  ]
+  "untracked_root": []
 }
