@@ -670,3 +670,84 @@ NEXT: THE PATH's next step is still the operator's — Tier-C / EngineV2, or the
 Owner: operator.
 METRICS: operator actions this session = 1 (the VIZ-1 paste) — files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-14a ===
+NOW: CENSUS-2B / V-ULT-1 IS BUILT. Six EMA ribbons x seven timeframes x five assets are on D: as
+a substrate, with the warm-up law asserted rather than assumed, and the operator's question has
+had its first descriptive look. CLASS: substrate + DISPLAY-ONLY / Tier-E. Selection surface
+m = 0 — this build registers nothing, scores nothing and claims nothing. The census-2A record is
+untouched.
+LAST EVENT: 2026-08-14 — census-2B V-ULT-1: the U-VHT data module (contract ratified 2026-08-12)
+FACTS:
+- THE FEASIBILITY MATRIX RAN FIRST, 630 cells, before one EMA was computed. 45 cells are NEVER
+  and were SKIPPED not computed; 14 are OPS-ONLY. The contract's expectation is confirmed and
+  sharpened: UH is NEVER on 4h and 12h, VH is NEVER on 12h and OPS-ONLY on 4h. 1m is FULL for
+  all 18 lengths on all 5 assets [verified]
+- F-B0, A FIXTURE THE CONTRACT DID NOT ASK FOR, settles a real ambiguity: the contract pins
+  warm_bars = ceil(3.46*N) and calls it "the SEQ8 rule", but the SEQ8 rule in this estate is
+  ceil(log(1e-3)/log(1-alpha)) and they are different expressions. ceil(3.46*N) is >= the exact
+  rule for all 18 lengths (delta 0..+30, never negative), so the contract constant is the
+  CONSERVATIVE one and is used as written, by name. A FAIL would have halted before stage 1
+  [verified]
+- WARM-UP ASSERTED, NOT INTENDED. F-B2: 0 cold-head values across 540 series, and every NEVER
+  column proved all-NaN. Because the cold head is NaN at the source, crossover/crossunder return
+  False there BY CONSTRUCTION — the defect that produced ~50 phantom 4h armings on 2026-08-12
+  cannot recur here. F-B3: every family's middle EMA bit-matches a hand-run recursion [verified]
+- FIXTURES ALL PASS: F-B0, F-B1 (3/3 hand-recomputed), F-B2, F-B3, F-B4a/b/c/d, F-B5a (re-run
+  hash-IDENTICAL), F-B5b (3 hand-verified events per pair class), F-B5c (the copied kiss grammar
+  is element-equal to census-2A's original), F-B6 (324 equivalences, 0 span mismatches), F-KEY
+  dup=0 on all 35 cross cells and all three census-2A joins [verified]
+- A 53-AGENT ADVERSARIAL REVIEW OF THIS PROGRAM RAISED FINDINGS AND A SECOND AGENT PER FINDING
+  TRIED TO REFUTE EACH; NINE SURVIVED AND ALL NINE ARE FIXED. The one that mattered: the band
+  grammar {enter, exit, reject} is defined entirely against `inside`, so a bar clearing the
+  whole band in one move matched nothing and was dropped — 510,584 events, 18.4% of all band
+  transitions, concentrated in the FAST cells. `traverse` is now its own class. NO FIXTURE IN
+  THIS BUILD COULD HAVE CAUGHT IT: every one asked "is what we emitted correct", none asked "is
+  a class missing" [verified]
+- THE ENQUIRY CARD RETURNED A CLEAN NULL, AND IT IS NOT A FINDING. Conditioning FAST-ribbon
+  crosses on VH+UH orientation: across all 18 strata (3 pairs x 3 orientations x 2 tfs) every
+  median terminal-H100 sits INSIDE the measured toll band and %>0 stays within 47.9-50.1%. One
+  measurement, one ruler, one horizon, m = 0. Promotion needs the Tier-P ceremony [verified]
+- TWO STRUCTURAL OBSERVATIONS, REPORTED NOT FIXED, BOTH ABOUT THE PINNED CONSTANTS RATHER THAN
+  THE TAPE: UH returns `flat` for 95.1% of warm bars against VH's 23.4% (k=20 is not scale-
+  matched to lines spanning 1.18x in length); and 66-68% of VH knot episodes "expand" on the
+  very next bar against 2.5-5.2% for UH, because a knot run ends precisely when width is rising.
+  The constants are VETO by name and were NOT changed; the shares are printed as the evidence
+  [verified]
+- THE TOLL IN ATR UNITS IS TIMEFRAME-DEPENDENT and census-2A's 0.026-0.059 is a 4h figure. On 5m
+  the same 10 bps round trip is 0.29-0.35 ATR. A first draft quoted the 4h number beside 5m
+  tables and was corrected to measure the toll on each population's own bars [verified]
+- 1m IS THE NAMED SKIP, AND THE BUDGET WAS RAM. This machine has 7.6 GB with ~0.8 GB free; a 1m
+  cell is 3.65M bars, stage 2 ran at 57% CPU efficiency (paging) without finishing its first
+  asset, and stage 3 needs ~1.2 GB peak per asset. Stages 3-5 never read 1m, so no table in the
+  build document is affected; the 1m rows of the feasibility matrix are complete [verified]
+- SEVEN DEFECTS IN THIS BUILD'S OWN MACHINERY, FOUND AND FIXED: a scoped run overwrote the
+  feasibility matrix (now I12-merges); F-B1's sample was hardcoded and crashed on a scoped
+  matrix; a killed run left a footer-less parquet the manifest recorded as valid (now atomic
+  writes + a readability HALT); pin-merge resurrected that deleted artifact with its stale sha
+  (now pruned); the manifest recorded rows: 0 for every artifact (now 15,807,077); it stamped the
+  Tier-E tables as SUBSTRATE (now 9 carry the Tier-E class); and `--stage 34`, a missing
+  comma, ran nothing and exited 0 [verified]
+- BOX-COST: exchange/** was 2,137,089 B = 33.44%; this build adds 115,730 B to
+  35.26%, above the contract's <1% target and well below the 40% REFUSE
+  line. The overage is the two blocks the contract required verbatim — the 630-cell matrix and
+  the full first-look transcript. All 1.71 GB of substrate is on D:, not one byte
+  committed [verified]
+PENDING (none blocks this contract):
+1. THE V-ULT SLATE IS NOT WORDED. Per the paste, no registrations this build; the slate is
+   written after the operator reads the first look. Owner: operator
+2. `traverse` IS AN ADDITION TO A TAXONOMY THE CONTRACT CALLED "pared by design". Emitted as its
+   own class and flagged for veto by name. Owner: operator
+3. THE MISSING FIXTURE CLASS: nothing here asserts the event taxonomy is COMPLETE over the
+   transitions it claims to cover. A partition check on `pos` would have caught the traverse gap
+   on day one. Named, not retrofitted
+4. 1m stages 2-4 remain unrun. `--stage 2,3,4 --tfs 1m` on a machine with headroom
+5. Whether `k = 20` should be scale-matched per family is an OPERATOR question — changing a VETO
+   constant is a ruling, not an edit
+6. The annex (JTO/TAO) was not run; the contract made it optional and the budget went to 1m
+7. Census-2A's cen4_book tranche_id defect (360 dups; the whole key is cell|tranche_id) is
+   recorded but NOT repaired in census-2A's artifacts
+NEXT: the operator reads §6 and words the V-ULT slate, rules on `traverse`, or rules on the k=20
+scale-match. Owner: operator.
+METRICS: operator actions this session = 1 (the CENSUS-2B V-ULT-1 paste) — files re-ingested = 0
+=== END STATUS ===
