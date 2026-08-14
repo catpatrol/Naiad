@@ -751,3 +751,98 @@ NEXT: the operator reads §6 and words the V-ULT slate, rules on `traverse`, or 
 scale-match. Owner: operator.
 METRICS: operator actions this session = 1 (the CENSUS-2B V-ULT-1 paste) — files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-14b ===
+NOW: CENSUS-2B PART A AND W-TB1 ARE BUILT, IN THAT ORDER, AS THE CONTRACT REQUIRED. The completion
+certificate A-0 could not obtain from the box now exists and is printed first; the sequential
+substrate A-1..A-4 is on D:; and the 12.3% tail has its ±72h biography against a 1:1 matched control.
+CLASS: Tier-E substrate + Tier-E descriptive. NO REGISTRATIONS. Selection surface m = 743,516, all of
+it W-B's motif surface — and the I11 guard returns a clean null in all three SEQ frames. Tail Bio nomenclature is
+NOT ratified; it remains [proposed] as W-TB1 · TAIL BIOGRAPHY, DIONYSUS 2026-08-13, routed to APOLLO.
+LAST EVENT: 2026-08-14 — census-2B Part A (A-0..A-4) + W-TB1 tail biography, one build document
+FACTS:
+- THE CENSUS-2B COMPLETION CERTIFICATE IS PRINTED. A-0 probed 157 cells against the manifest and
+  recomputed every sha from the bytes on D:. 100 PRESENT, 0 STALE, 0 PINNED-MISSING, 1.71 GB.
+  V-ULT-1 is COMPLETE on the panel across {5m,15m,30m,1h,4h,12h}. The 57 ABSENT cells reconcile
+  exactly: 15 panel-1m + 42 annex. 1m DEFERRED, named, per the contract's own instruction [verified]
+- A-2 IS THE HEADLINE AND ITS HEADLINE IS NEGATIVE. 103,153 armed windows on five lenses. The
+  arming-anchored fate split (+2.48 ATR TRIGGERED vs -1.27 ABORTED at H100 on 5m) is CIRCULAR: fate
+  is decided inside the window. The curtain-clean anchor is the trigger, and the median forward R-1
+  from the first 12_26 trigger is NEGATIVE at both horizons on 5m/15m/30m, before a 0.28 ATR toll.
+  Structural, not empirical: e12 crosses e26 long before e89, so the "trigger" is a re-entry after a
+  pullback, arriving 33-43 bars after the displacement already happened [verified]
+- THE MOTIF PROBE RETURNED A CLEAN NULL AND COST 743,516. Every k-gram k<=4 over the full BRIDGE
+  grammar in all three ratified SEQ frames, 24h before birth, winners vs matched control. The largest
+  winners-vs-control gap any motif achieves (0.08477, absolute frame) sits BELOW its own permutation
+  null p95 (0.08722), and the same holds in gov_relative and tier. `admissible` is False everywhere
+  but is NOT the informative column: at 2,000 permutations the BH bar q/m is 1,239x below the
+  p-value floor of 1/2001, so it could not have been True whatever the data said. Nothing promoted;
+  the full surface is charged to the probe ledger [verified]
+- AN 8-DIMENSION ADVERSARIAL REVIEW RAISED 44 FINDINGS AND A SECOND AGENT PER FINDING TRIED TO REFUTE
+  EACH; 6 SURVIVED AND ALL 6 ARE FIXED. The one that mattered: `br_state` stacked the six SR medians
+  fast-to-slow and then read `np.diff > 0` as BULL -- which is fast BELOW slow. EVERY bull/bear
+  column in W-A and every BR@t0 label in W-E was BACKWARDS; 273,883 rows carried br_orient=BULL with
+  an SR-order disorder of 1.000, which on the same function's own ruler is perfectly BEAR-ordered.
+  This lane found and fixed five more the review did not reach in time, including the one two
+  reviewers independently flagged CRITICAL after it was already gone. ELEVEN defects, all fixed,
+  all with measured before/after in the build document [verified]
+- THE COHORT IS EXACTLY THE 12.3% TAIL. 814 winners by gross_R > 0 from the resolved panel book,
+  mean +9.4458 against a median loser of -1.0332 — byte-for-byte the F1 figures. 814 controls matched
+  1:1 and EXACTLY on (asset, direction, entry-quarter, size_r); 0 unmatched, 0 reused, 0 overlap. The
+  exact match makes F-W1b's "marginals within 10%" a VACUOUS pass and it is reported as such [verified]
+- THE EXIT SIDE WAS NEVER A DATA GAP. Every downstream table since census-2A says campaign exit
+  timestamps do not exist. They exist: stage_cen5 computes t1 = t0 + hold_s*1000 and does not persist
+  it. W-TB1 reads ts_close/hold_s from the WF1 source JSONs and gets t_exit for all 1,628 campaigns.
+  No simulation, no inference. The named gap is closed by reading [verified]
+- W-D'S 7x HEADLINE IS AN EXPOSURE ARTIFACT AND SAYING SO IS THE RESULT. "27.1% of winners vs 3.8%
+  of controls show a long-EMA loss->reclaim" collapses to 0.374 vs 0.305 events per 100 OPEN HOURS,
+  and reverses on e2618/e4618. Median hold is 112.4h for winners against 2.2h for controls, a 50x
+  gap. In the >=24h duration-matched band the CONTROLS are higher. Whatever P-REC-1 says, it cannot
+  be "winners reclaim more" [verified]
+- THE PINNED CONSTANTS DO NOT SCALE, NOW MEASURED IN TWO MORE PLACES. The kiss grammar is INERT on
+  five of eleven pared pairs: they touch 61k-820k times each, and the MAXIMUM separation reachable in
+  k=10 bars across the whole history is BELOW delta=0.75 (0.42-0.61 ATR). And RIBBON_C = 0.5 ATR is
+  vacuous on the BR, whose width is 15-20 ATR at every stage, so the in-knot class is empty by
+  construction. Both constants are VETO and NEITHER was changed; both are measured, printed, and
+  referred to the operator. With V-ULT-1's k=20/UH finding this is now one pattern, not three notes
+  [verified]
+- FIXTURES ALL PASS: F-A0R (the restated R-1 ruler is element-for-element identical to census-2A's
+  outcome_block, both directions, both horizons, terminal/mfe/mae), F-A1a/b (3 hand-verified, re-run
+  hash-IDENTICAL), F-A2a/b/c (0 overlapping windows; arming counts reconcile to the A-0 cross
+  artifact with the 4 suppressed re-arms read from the run's OWN stats, not derived; one window
+  hand-unpacked per lens), F-A3a/b, F-A4a/b, F-W1a/b, F-KEY dup=0 on every Part-A table and all 20
+  W-TB1 state cells [verified]
+- HORIZONS ARE DURATION-FIXED AND ONE IS INFEASIBLE. H20 = 1h40m, H100 = 8h20m, converted per lens
+  and printed before every outcome table. H20 on 4h is shorter than one bar: it emits NaN and is
+  NEVER substituted with one bar, which is why the 4h H20 columns are blank rather than zero [verified]
+- BOX-COST: exchange/** was 2,256,225 B = 35.31%; this build adds 112,319 B (document 97,369 +
+  probe ledger 6,421 + this entry 8,529) to 2,368,544 B = 37.06%, ABOVE the
+  contract's <1% target and well below the 40% REFUSE line. The overage is one contract-required
+  block — A-0's verbatim 157-row completion table, 14,859 B, which the contract orders printed FIRST
+  and verbatim, and which IS the certificate. W-A prints 2 of 4 lenses, W-C 1 of 4, W-E the identity
+  card not 20 event pages, to compensate. The publish also carries 15,571 B of DIONYSUS's own
+  uncommitted exchange/ files -- the bus is path-scoped, not lane-scoped -- landing the box at
+  37.31%. All 2.22 GB of substrate is on D:, not one byte committed [verified]
+PENDING (none blocks this contract):
+1. FOUR CONSTANTS NOW MEASURED AS SCALE-MISMATCHED: kiss (eps/delta/k) on slow line pairs, RIBBON_C
+   on the BR, k=20 on UH, and the knot/expansion tautology at VH scale. Each is VETO by name.
+   Changing any is a ruling, not an edit. Owner: operator
+2. NOMENCLATURE_MAP is cited by the W-TB1 contract and does not exist anywhere in the estate. Part A
+   pins its own spring/upthrust definitions [VETO N=96, reclaim<=3] so nothing is blocked. File the
+   map or drop the citation. Owner: operator
+3. "SR-order entropy" had no pinned definition; implemented as the normalised inversion count of the
+   six SR medians and stored as sr_order_disorder. Ratify or replace. Owner: operator
+4. m = 743,516 counts (frame, motif) PAIRS; the same sequence appears once per SEQ frame. The larger,
+   conservative reading was charged. Is the surface 743,516 or 288,857? Owner: operator
+5. "both lenses per I6" was read as the two ANCHORS (arming, trigger), both always printed, because
+   I6's window lenses are a cascade construct A-2 does not build. Confirm the reading. Owner: operator
+6. price_band events are on D: but NOT on the W-TB1 tape and NOT in the motif alphabet — the
+   contract's tape enumeration does not name them. In or out. Owner: operator
+7. THE COMPLETENESS FIXTURE IS STILL MISSING (V-ULT-1 pending 3, carried). Part A adds disjointness
+   and reconciliation fixtures but still nothing asserts a taxonomy is exhaustive over what it covers
+8. 1m stages 2-4 remain unrun; the annex (JTO/TAO) was never built. Both named in A-0
+NEXT: the operator reads §3.3 (the trigger is negative), §10 (the motif null), §12 (the exposure
+artifact), and rules on the four scale-mismatched constants as one question rather than four.
+Owner: operator.
+METRICS: operator actions this session = 1 (the CENSUS-2B PART A + W-TB1 paste) — files re-ingested = 0
+=== END STATUS ===

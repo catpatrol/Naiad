@@ -54,3 +54,19 @@ PENDING:
 NEXT: SS deep-dive with the operator; CD-1..CD-6 are APOLLO's funnel, not duplicated here. Owner: operator + DIONYSUS.
 METRICS: operator actions this session = 1 · files re-ingested = 4
 === END STATUS ===
+
+=== STATUS_DIONYSUS — 2026-08-13 ===
+NOW: The SS deep-dive is HAPPENING — operator declared back-to-basics (SS = momentum system; Big Ribbon of six Sub-Ribbons, 9→5000). Lane update filed for APOLLO carrying: the six-stage trade-lifetime kit (evidence-tagged), the ribbon-cross hierarchy, the W-TB1 winner-zoom commission scope (±72h biography of the 12.3% tail vs matched control), ribbon-native range detection implications, full ARGUS brief feedback + new spaghetti-chart item, and 5-of-10 chart selection with captions.
+LAST EVENT: 2026-08-13 — LANE_UPDATE_DIONYSUS_2026-08-13_BR-momentum_winner-zoom_brief-feedback.md filed to exchange/reports/ (~19 KB, box cost declared).
+FACTS:
+- CENSUS-2A close-out + ten-view gallery ingested; walkthrough delivered to operator [verified]
+- Operator's median-cross intuition formalized: 12×89 = the arming, generalized [this session]
+- P-REC-1 (reclaim-as-entry) and S4 agile-entry definition PROPOSED, awaiting word [proposed]
+- W-TB1 scoping routed to APOLLO — design and registrations are his lane [handoff]
+- BR periods are [VETO] pins; warmup feasibility gates every long-EMA column (UH never on 1d evidence-side) [verified discipline]
+PENDING:
+1. Operator words: agile-entry definition · P-REC-1/sweep-anchor priority · CD-1..CD-6 · parity readings
+2. E2 (critic-lethality clock) — parked
+NEXT: operator ferries chart images + this update to APOLLO; W-TB1 design interview follows. Owner: operator.
+METRICS: operator actions this session = 1 (directive + 10 charts) · files re-ingested = 2
+=== END STATUS ===
