@@ -120,6 +120,10 @@ TIER_E_HEADER = (
 ST_COMPRESS, ST_FLAT, ST_EXPAND, ST_NA = -1, 0, 1, -9
 OR_BEAR, OR_MIXED, OR_BULL, OR_NA = -1, 0, 1, -9
 PS_BELOW, PS_INSIDE, PS_ABOVE, PS_NA = -1, 0, 1, -9
+# `knot` was the one categorical column stored as bare bool, so "not computed"
+# and "never knotted" were the same byte -- absent data presented as a definite
+# negative, which is this estate's signature wound. It now carries a sentinel.
+KN_FALSE, KN_TRUE, KN_NA = 0, 1, -9
 
 STATE_NAME = {ST_COMPRESS: "compressing", ST_FLAT: "flat",
               ST_EXPAND: "expanding", ST_NA: "n/a"}
@@ -127,6 +131,7 @@ ORIENT_NAME = {OR_BEAR: "bear-fanned", OR_MIXED: "mixed",
                OR_BULL: "bull-fanned", OR_NA: "n/a"}
 POS_NAME = {PS_BELOW: "below", PS_INSIDE: "inside",
             PS_ABOVE: "above", PS_NA: "n/a"}
+KNOT_NAME = {KN_FALSE: "no", KN_TRUE: "knot", KN_NA: "n/a"}
 
 _T0 = time.time()
 _ROWS_TOTAL = 0
@@ -203,6 +208,32 @@ def load_raw(sym: str, tf: str) -> pd.DataFrame:
         df = pd.read_parquet(kd / f"{sym}_{tf}.parquet")
         df = df.sort_values("open_time").reset_index(drop=True)
     return df.reset_index(drop=True)
+
+
+def pick_cell(fm: pd.DataFrame, prefer: list[tuple[str, str]],
+              label: str) -> tuple[str, str] | None:
+    """Choose an (asset, tf) cell a fixture can actually read.
+
+    Fixture cells were hard-coded, so a scoped run (--assets BTCUSDT, --tfs 1h)
+    raised FileNotFoundError from inside the fixture -- or worse, read a cell
+    some EARLIER run had written and silently certified stale artifacts as this
+    run's. Preference order is kept for reproducibility; the fallback is the
+    largest cell this run actually produced, and a fixture with nothing to read
+    says so instead of dying.
+    """
+    have = {(r.asset, r.tf) for _, r in fm.iterrows()
+            if (OUT / "emas" / r.asset / f"{r.tf}.parquet").exists()}
+    for c in prefer:
+        if c in have:
+            return c
+    if not have:
+        print(f"      {label}: SKIP -- this run produced no readable cell")
+        return None
+    best = max(have, key=lambda c: int(
+        fm[(fm.asset == c[0]) & (fm.tf == c[1])].bars_available.iloc[0]))
+    print(f"      {label}: preferred cell absent from this run's scope; "
+          f"using {best[0]} {best[1]}")
+    return best
 
 
 def to_parquet_atomic(df: pd.DataFrame, p: Path) -> None:
@@ -671,8 +702,9 @@ def family_state(fam: str, df: pd.DataFrame) -> dict[str, np.ndarray]:
     orient[warm & (ea > em) & (em > ez)] = OR_BULL
     orient[warm & (ea < em) & (em < ez)] = OR_BEAR
 
-    knot = np.zeros(n, dtype=bool)
-    knot[warm & np.isfinite(w_atr)] = (w_atr[warm & np.isfinite(w_atr)] < RIBBON_C)
+    knot = np.full(n, KN_NA, dtype=np.int8)
+    kok = warm & np.isfinite(w_atr)
+    knot[kok] = (w_atr[kok] < RIBBON_C).astype(np.int8)
 
     pos = np.full(n, PS_NA, dtype=np.int8)
     pos[warm] = PS_INSIDE
@@ -718,7 +750,7 @@ def stage3(fm: pd.DataFrame, assets: list[str], tfs: list[str]) -> None:
                     cols[f"{fam}_width_delta_k"] = np.full(n, np.nan, np.float32)
                     cols[f"{fam}_state"] = np.full(n, ST_NA, np.int8)
                     cols[f"{fam}_orient"] = np.full(n, OR_NA, np.int8)
-                    cols[f"{fam}_knot"] = np.zeros(n, bool)
+                    cols[f"{fam}_knot"] = np.full(n, KN_NA, np.int8)
                     cols[f"{fam}_pos"] = np.full(n, PS_NA, np.int8)
                     continue
                 s = family_state(fam, df)
@@ -740,12 +772,15 @@ def stage3(fm: pd.DataFrame, assets: list[str], tfs: list[str]) -> None:
             del df, out, cols
 
 
-def fixtures_stage3() -> None:
+def fixtures_stage3(fm: pd.DataFrame) -> None:
     banner("STAGE 3 FIXTURES -- F-B4")
 
     # ---- F-B4a: ribbon(9,26) reproduces the stored FAST band
     print("F-B4a  ribbon(9,26) reproduces the FAST band, exactly")
-    sym, tf = "ETHUSDT", "1h"
+    cell = pick_cell(fm, [("ETHUSDT", "1h"), ("BTCUSDT", "1h")], "F-B4a")
+    if cell is None:
+        return
+    sym, tf = cell
     src = pd.read_parquet(OUT / "emas" / sym / f"{tf}.parquet")
     rb = pd.read_parquet(OUT / "ribbons" / sym / f"{tf}.parquet")
     got = ribbon(9, 26, src)
@@ -937,6 +972,20 @@ def crosses_for_cell(fm: pd.DataFrame, sym: str, tf: str) -> pd.DataFrame:
               "exit", "up")
         _emit(rows, sym, tf, ot, ex_dn, "price_band", f"{fam}_band", fam,
               "exit", "down")
+        # traverse: below -> above (or the reverse) in ONE bar, never closing
+        # inside. The contract's grammar names {enter, exit, reject}; a bar that
+        # clears the whole band matches none of them and was being dropped in
+        # silence -- 510,584 events, 18.4% of all band transitions on this panel,
+        # concentrated in exactly the fast/wide-bar cells where a band crossing
+        # matters most. Emitted as its own class rather than folded into `exit`,
+        # so the pared taxonomy stays readable and this addition is visible to
+        # the operator rather than hidden inside an existing count.
+        tv_up = np.flatnonzero(ok & (prev == PS_BELOW) & (pos == PS_ABOVE))
+        tv_dn = np.flatnonzero(ok & (prev == PS_ABOVE) & (pos == PS_BELOW))
+        _emit(rows, sym, tf, ot, tv_up, "price_band", f"{fam}_band", fam,
+              "traverse", "up")
+        _emit(rows, sym, tf, ot, tv_dn, "price_band", f"{fam}_band", fam,
+              "traverse", "down")
         # reject-at-band: the ratified kiss grammar, price vs each rail
         fu, cu = refusal_events(close, up, av)
         fl, cl = refusal_events(close, lo, av)
@@ -989,7 +1038,10 @@ def stage4(fm: pd.DataFrame, assets: list[str], tfs: list[str]) -> None:
 
 def fixtures_stage4(fm: pd.DataFrame) -> None:
     banner("STAGE 4 FIXTURES -- F-B5")
-    sym, tf = "NEARUSDT", "4h"
+    cell = pick_cell(fm, [("NEARUSDT", "4h"), ("BTCUSDT", "4h")], "F-B5")
+    if cell is None:
+        return
+    sym, tf = cell
 
     # ---- F-B5a: determinism, re-run hash-identical
     print("F-B5a  determinism -- re-run is hash-identical")
@@ -1140,9 +1192,14 @@ def write_manifest(extra: dict | None = None) -> dict:
             print(f"  HALT: {p} is not a readable parquet -- refusing to record "
                   f"it in the manifest. Delete it and re-run its stage.")
             raise SystemExit(2)
+        # Stage-5 tables are Tier-E and must never be stamped SUBSTRATE: the
+        # manifest is what a later reader cites, and a display-only table
+        # labelled as substrate is exactly how a probe becomes evidence.
+        cls = ("DISPLAY-ONLY / Tier-E exploration -- m = 0"
+               if key.startswith("firstlook/")
+               else "SUBSTRATE -- census-2B V-ULT-1")
         arts[key] = {"path": str(p), "rows": rows, "bytes": p.stat().st_size,
-                     "sha256": sha256_file(p),
-                     "class": "SUBSTRATE -- census-2B V-ULT-1"}
+                     "sha256": sha256_file(p), "class": cls}
     for p in sorted(OUT.rglob("*.json")):
         if p.name == MANIFEST.name:
             continue
@@ -1172,6 +1229,7 @@ def write_manifest(extra: dict | None = None) -> dict:
                 "state": {str(k): v for k, v in STATE_NAME.items()},
                 "orient": {str(k): v for k, v in ORIENT_NAME.items()},
                 "pos": {str(k): v for k, v in POS_NAME.items()},
+                "knot": {str(k): v for k, v in KNOT_NAME.items()},
             },
             "engine_note": "engine 1.0.11 byte-untouched; imports indicators only",
             "machinery_note": ("scripts/census_build.py constants + _resample "
@@ -1216,6 +1274,14 @@ def main() -> int:
     tfs = [s.strip() for s in a.tfs.split(",") if s.strip()]
     stages = ({"1", "2", "3", "4", "5"} if a.stage == "all"
               else {s.strip() for s in a.stage.split(",")})
+    # `--stage 34` (a missing comma) used to parse as {"34"}, match no guard,
+    # run only the always-on stage 1 and exit 0 -- a silent no-op that looks
+    # exactly like success.
+    bad = sorted(stages - {"1", "2", "3", "4", "5"})
+    if bad:
+        print(f"HALT: unrecognised --stage token(s) {bad}. "
+              f"Use 1|2|3|4|5, a comma-separated list, or 'all'.")
+        return 2
 
     banner("CENSUS-2B / V-ULT-1 -- THE U-VHT DATA MODULE")
     print(f"program   {PROGRAM}   seed {SEED}")
@@ -1236,7 +1302,7 @@ def main() -> int:
     if "3" in stages:
         stage3(fm, assets, run_tfs)
         if not a.no_fixtures:
-            fixtures_stage3()
+            fixtures_stage3(fm)
     if "4" in stages:
         stage4(fm, assets, run_tfs)
         if not a.no_fixtures:

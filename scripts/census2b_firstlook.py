@@ -31,6 +31,7 @@ from census2b_program import (
     ST_COMPRESS, ST_FLAT, ST_EXPAND, ST_NA,
     OR_BEAR, OR_MIXED, OR_BULL, OR_NA,
     PS_BELOW, PS_INSIDE, PS_ABOVE, PS_NA,
+    KN_FALSE, KN_TRUE, KN_NA,
     STATE_NAME, ORIENT_NAME, hr, banner, iso, feasible_lengths,
 )
 
@@ -292,7 +293,7 @@ def look_c(assets: list[str], tfs: list[str]) -> pd.DataFrame:
             for fam in V_ULT:
                 o = rb[f"{fam}_orient"].to_numpy()
                 st = rb[f"{fam}_state"].to_numpy()
-                kn = rb[f"{fam}_knot"].to_numpy()
+                kn = rb[f"{fam}_knot"].to_numpy() == KN_TRUE
                 w = rb[f"{fam}_width_atr"].to_numpy()
                 warm = o != OR_NA
                 n = int(warm.sum())
@@ -496,7 +497,7 @@ def knot_episodes(sym: str, tf: str, fam: str) -> pd.DataFrame:
                                       f"{fam}_orient", f"{fam}_width_atr",
                                       "open_time"])
     e = pd.read_parquet(pe, columns=["close", "atr"])
-    kn = rb[f"{fam}_knot"].to_numpy(bool)
+    kn = rb[f"{fam}_knot"].to_numpy() == KN_TRUE
     st = rb[f"{fam}_state"].to_numpy()
     o = rb[f"{fam}_orient"].to_numpy()
     w = rb[f"{fam}_width_atr"].to_numpy(np.float64)
@@ -746,7 +747,7 @@ def look_d3(assets: list[str], tfs: list[str]) -> pd.DataFrame:
             "in_range": inside,
             "vh_state": [STATE_NAME[int(x)] for x in rb["VH_state"].to_numpy()[j]],
             "vh_orient": [ORIENT_NAME[int(x)] for x in rb["VH_orient"].to_numpy()[j]],
-            "vh_knot": rb["VH_knot"].to_numpy()[j],
+            "vh_knot": rb["VH_knot"].to_numpy()[j] == KN_TRUE,
             "vh_width_atr": rb["VH_width_atr"].to_numpy()[j],
             "vult_orient": [ORIENT_NAME[int(x)] for x in jv[j]],
             "toll_atr": np.where(np.isfinite(e["atr"].to_numpy()[j])
