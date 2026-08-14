@@ -168,11 +168,17 @@ def br_state(e: pd.DataFrame) -> dict[str, np.ndarray]:
     meds = [12, 89, 316, 889, 2618, 4618]
     S = np.vstack([e[f"e{L}"].to_numpy(np.float64) for L in meds])   # 6 x n
     ok6 = np.isfinite(S).all(axis=0)
-    dif = np.diff(S, axis=0)                          # 5 x n
+    # S is stacked FAST-to-SLOW, so diff(S, axis=0)[i] = S[i+1] - S[i] = slower
+    # minus faster. BULL is fast ABOVE slow -- e12 > e89 > ... > e4618 -- which
+    # is dif < 0, not dif > 0. The first draft had these two lines the wrong way
+    # round and labelled every textbook bear fan `bull`, contradicting both the
+    # ratified per-family grammar (census2b_program.py:702-703) and this
+    # function's own `sr_order_disorder`, which had the convention right.
+    dif = np.diff(S, axis=0)                          # 5 x n, slower - faster
     orient = np.full(n, OR_NA, dtype=np.int8)
     orient[ok6] = OR_MIXED
-    orient[ok6 & (dif > 0).all(axis=0)] = OR_BULL     # e12 > e89 > ... > e4618
-    orient[ok6 & (dif < 0).all(axis=0)] = OR_BEAR
+    orient[ok6 & (dif < 0).all(axis=0)] = OR_BULL     # e12 > e89 > ... > e4618
+    orient[ok6 & (dif > 0).all(axis=0)] = OR_BEAR     # e12 < e89 < ... < e4618
 
     knot = np.full(n, KN_NA, dtype=np.int8)
     kok = warm & np.isfinite(w_atr)
@@ -603,8 +609,13 @@ def _verdict_tape(sym: str) -> pd.DataFrame:
         chg = np.ones(len(st), dtype=bool)
         chg[1:] = st[1:] != st[:-1]
         g = g[chg]
+        # Verdict rows ride the 1h tape but belong to members {1h, 4h, 12h}.
+        # capture_cell adds one bar of the CAPTURE lens (1h) to every tape row
+        # to get its knowability instant, so the member's extra bar-length is
+        # added here; the pair then lands exactly on the member's own close.
+        lag = TF_MS[str(mem)] - TF_MS["1h"]
         out.append(pd.DataFrame({
-            "ts_ms": g.ts.to_numpy(np.int64),
+            "ts_ms": g.ts.to_numpy(np.int64) + lag,
             "src_ts_ms": g.ts.to_numpy(np.int64), "kind": "verdict",
             "token": np.char.add(np.char.add("V", str(mem) + "."),
                                  g.verdict_state.to_numpy(object).astype(str)),
@@ -675,20 +686,32 @@ def capture_cell(coh: pd.DataFrame, sym: str, tf: str
         # t-72h stage instant needs a bar that has already CLOSED by then; the
         # first bar whose OPEN is >= t0-72h closes after it, and the stage would
         # report n/a at the very edge it was asked about.
-        lo = max(0, int(np.searchsorted(ot, t0 - win_ms, "left")) - 1)
+        # The margin must reach a bar whose CLOSE is at or before t0-72h, not
+        # merely whose OPEN is. One bar of margin gives the last bar OPENING
+        # before t0-72h, and that bar closes AFTER it -- so the as-of lookup at
+        # the t-72h stage found nothing and the whole stage reported n/a for
+        # 1,362 of 1,628 campaigns on 5m and 1,611 on 1h. Anchor the margin on
+        # the close instead.
+        lo = max(0, int(np.searchsorted(ot, t0 - win_ms - step, "right")) - 1)
         hi = int(np.searchsorted(ot, t0 + win_ms, "right"))
         keep = np.zeros(n, dtype=bool)
         keep[lo:hi] = chg[lo:hi]
         # hourly spine: the last bar at or before each whole-hour offset
+        # The spine marks, for each whole-hour offset, the bar that is KNOWN by
+        # then -- the last bar whose CLOSE is at or before it. Indexing the
+        # spine on bar-open keeps a bar that has not finished at its own spine
+        # instant, and the as-of lookup then finds nothing at the earliest
+        # stage: t-72h reported n/a for 998 of 1,628 campaigns on 5m.
         spine_ts = t0 + np.arange(-WIN_H, WIN_H + 1) * 3_600_000
-        si = np.searchsorted(ot, spine_ts, "right") - 1
+        si = np.searchsorted(ot, spine_ts - step, "right") - 1
         si = si[(si >= 0) & (si < n)]
         keep[si] = True
         keep[i0] = True                          # the bar containing t0
         keep[i0s] = True                         # the last bar CLOSED before t0
         exit_lo = exit_hi = -1
         if te > 0:
-            exit_lo = max(0, int(np.searchsorted(ot, te - ex_ms, "left")) - 1)
+            exit_lo = max(0, int(np.searchsorted(ot, te - ex_ms - step,
+                                                 "right")) - 1)
             exit_hi = int(np.searchsorted(ot, te + ex_ms, "right"))
             # |= not =. The exit window overlaps the birth window whenever the
             # hold is under 96h -- which is most of the control cohort -- and a
@@ -700,7 +723,7 @@ def capture_cell(coh: pd.DataFrame, sym: str, tf: str
             if 0 <= ie < n:
                 keep[ie] = True
                 es = te + np.arange(-EXIT_H, EXIT_H + 1) * 3_600_000
-                ei = np.searchsorted(ot, es, "right") - 1
+                ei = np.searchsorted(ot, es - step, "right") - 1
                 ei = ei[(ei >= 0) & (ei < n)]
                 keep[ei] = True
         idx = np.flatnonzero(keep)
@@ -814,7 +837,10 @@ def capture_cell(coh: pd.DataFrame, sym: str, tf: str
                 rec[f"verdict_age_h_{mem}"] = np.nan
                 continue
             ts_a, st_a = a
-            q = int(np.searchsorted(ts_a, t0, "right")) - 1
+            # as-of on the MEMBER's own close, not its open. A 12h verdict row
+            # stamped at its open is not known for another 12 hours, and would
+            # be a curtain leak of up to half a day into a birth stamp.
+            q = int(np.searchsorted(ts_a, t0 - TF_MS[mem], "right")) - 1
             rec[f"verdict_{mem}"] = str(st_a[q]) if q >= 0 else ""
             rec[f"verdict_age_h_{mem}"] = ((t0 - int(ts_a[q])) / 3.6e6
                                            if q >= 0 else np.nan)

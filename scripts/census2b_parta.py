@@ -1356,6 +1356,8 @@ def windows_for_cell(fm: pd.DataFrame, sym: str, tf: str) -> tuple[pd.DataFrame,
                          columns=["pair_class", "pair", "event", "dir", "ts_ms"])
     tax_pairs = ([f"{p}_{q}" for p, q in PARED_WITHIN_SR]
                  + [f"{p}_{q}" for p, q in SR_MEDIAN_PAIRS])
+    tax_dead = {nm for nm in tax_pairs
+                if not set(int(x) for x in nm.split("_")).issubset(feas)}
     tax_ts: dict[tuple[str, str], np.ndarray] = {}
     for nm in tax_pairs:
         for d in ("up", "down"):
@@ -1413,8 +1415,12 @@ def windows_for_cell(fm: pd.DataFrame, sym: str, tf: str) -> tuple[pd.DataFrame,
                     sweep_lag_bars = int(round((t0 - int(sw_ts[q]))
                                                / TF_MS[tf]))
                     sweep_depth = float(sw_depth[q])
+            # HALF-OPEN (t0-24h, t0]: exactly `lookback_bars` bars, the same L
+            # the density divides by. A closed lower bound spans L+1 bars against
+            # a denominator of L on 100% of armings -- a systematic over-count of
+            # up to 27% on 4h, not a rounding artefact.
             n_ref = int(np.searchsorted(rf_ts, t0, "right")
-                        - np.searchsorted(rf_ts, t0 - lookback_ms, "left"))
+                        - np.searchsorted(rf_ts, t0 - lookback_ms, "right"))
 
             rec = {
                 "asset": sym, "tf": tf, "dir": d,
@@ -1451,6 +1457,14 @@ def windows_for_cell(fm: pd.DataFrame, sym: str, tf: str) -> tuple[pd.DataFrame,
                 rec[f"{fam}_fan_age"] = int(sr_age[fam][i])
                 rec[f"{fam}_width_atr"] = float(sr_w[fam][i])
             for nm in tax_pairs:
+                # A pair whose EMAs are NEVER warm on this cell contributes no
+                # crosses, and an integer 0 would present "this pair does not
+                # exist here" as "this pair existed and did not cross" -- absent
+                # data as a definite negative, the wound this estate keeps
+                # reopening. Infeasible pairs carry -1.
+                if nm in tax_dead:
+                    rec[f"tax_{nm}"] = -1
+                    continue
                 a = tax_ts[(nm, d)]
                 rec[f"tax_{nm}"] = int(np.searchsorted(a, t_close, "left")
                                        - np.searchsorted(a, t0, "right"))
@@ -1582,6 +1596,18 @@ def a2_tables(assets: list[str]) -> pd.DataFrame:
     print("  The toll RISES as the lens shortens: ATR(14) shrinks faster than")
     print("  price does, so a fixed 10 bps is a larger multiple of ATR on 5m")
     print("  than on 4h. On 5m it is of the same order as the median outcome.")
+    print("")
+    print("  The trg_* columns are ATR-normalised at the TRIGGER bar, which is")
+    print("  a different population from the armings, so they get their own toll")
+    print("  line rather than being read against the arming one:")
+    print(f"  {'asset':9s} " + "".join(f"{t:>9s}" for t in LENSES_A2))
+    for sym in sorted(led.asset.unique()):
+        cells = []
+        for tf in LENSES_A2:
+            s = led[(led.asset == sym) & (led.tf == tf) & led.has_trigger]
+            cells.append(f"{s.trg_toll_atr.iloc[0]:9.4f}" if len(s)
+                         else f"{'--':>9s}")
+        print(f"  {sym:9s} " + "".join(cells))
 
     for tf in LENSES_A2:
         s = led[led.tf == tf]
