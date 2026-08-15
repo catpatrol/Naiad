@@ -1,0 +1,231 @@
+//@version=6
+indicator("Secret Sauce — Big Ribbon v12.0.1", shorttitle="SS v12.0.1", overlay=true,
+     max_labels_count=500)
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  SECRET SAUCE v12.0.1 — THE BIG RIBBON
+//  v12.0.1 CHANGES (vs v12.0):
+//    • FIX CE10123: plotchar() now receives the bare bool series — the
+//      `cond ? true : na` idiom is illegal for bool in Pine v6.
+//    • Per-EMA ENABLE toggle (unchecked = line hidden entirely).
+//    • Per-EMA DIM toggle ("50%") — renders that line at 50% transparency.
+//    • Band fills respect the enables: hide a line, its ribbon fill goes too.
+//  Everything else identical to v12.0 (see its header for the full design).
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ── PALETTE ────────────────────────────────────────────────────────────────
+G_PAL = "Palette"
+ground   = input.string("Bone", "Ground", options=["Bone","Sietch Dusk","Noir"], group=G_PAL)
+usePal   = input.bool(true, "Use palette preset (OFF = per-line colors below)", group=G_PAL)
+
+f_pal(i) =>
+    switch ground
+        "Bone" =>
+            i == 0 ? #B53C40 : i == 1 ? #C95A36 : i == 2 ? #AA6103 : i == 3 ? #B47301 :
+             i == 4 ? #6C680B : i == 5 ? #70790E : i == 6 ? #045260 : i == 7 ? #01587B :
+             i == 8 ? #133476 : i == 9 ? #2A3F83 : i == 10 ? #2F1B57 : #3E2660
+        "Sietch Dusk" =>
+            i == 0 ? #FED5D1 : i == 1 ? #FEBCA4 : i == 2 ? #FFD1A6 : i == 3 ? #FDBB64 :
+             i == 4 ? #E4D976 : i == 5 ? #C9CB6B : i == 6 ? #00272F : i == 7 ? #002E43 :
+             i == 8 ? #011649 : i == 9 ? #122054 : i == 10 ? #1B0B39 : #281641
+        => // Noir
+            i == 0 ? #FDB7B3 : i == 1 ? #FD9F7F : i == 2 ? #FFC38E : i == 3 ? #F3AB4C :
+             i == 4 ? #D4CA5D : i == 5 ? #B3B94F : i == 6 ? #15DAFB : i == 7 ? #11AFED :
+             i == 8 ? #6A9CFB : i == 9 ? #6182E3 : i == 10 ? #9173DF : #8459C3
+
+// ── PER-LINE STYLE: enable · color · width · dim-50% ───────────────────────
+G_L = "Lines — on · color · width · 50% dim"
+on12   = input.bool(true,  "12",   inline="l1",  group=G_L)
+c12    = input.color(#B53C40, "",  inline="l1",  group=G_L)
+w12    = input.int(1, "", minval=1, maxval=4, inline="l1",  group=G_L)
+d12    = input.bool(false, "50%", inline="l1",  group=G_L)
+on26   = input.bool(true,  "26",   inline="l2",  group=G_L)
+c26    = input.color(#C95A36, "",  inline="l2",  group=G_L)
+w26    = input.int(1, "", minval=1, maxval=4, inline="l2",  group=G_L)
+d26    = input.bool(false, "50%", inline="l2",  group=G_L)
+on89   = input.bool(true,  "89",   inline="l3",  group=G_L)
+c89    = input.color(#AA6103, "",  inline="l3",  group=G_L)
+w89    = input.int(1, "", minval=1, maxval=4, inline="l3",  group=G_L)
+d89    = input.bool(false, "50%", inline="l3",  group=G_L)
+on127  = input.bool(true,  "127",  inline="l4",  group=G_L)
+c127   = input.color(#B47301, "",  inline="l4",  group=G_L)
+w127   = input.int(1, "", minval=1, maxval=4, inline="l4",  group=G_L)
+d127   = input.bool(false, "50%", inline="l4",  group=G_L)
+on316  = input.bool(true,  "316",  inline="l5",  group=G_L)
+c316   = input.color(#6C680B, "",  inline="l5",  group=G_L)
+w316   = input.int(1, "", minval=1, maxval=4, inline="l5",  group=G_L)
+d316   = input.bool(false, "50%", inline="l5",  group=G_L)
+on423  = input.bool(true,  "423 (seam)", inline="l6", group=G_L)
+c423   = input.color(#70790E, "",  inline="l6",  group=G_L)
+w423   = input.int(1, "", minval=1, maxval=4, inline="l6",  group=G_L)
+d423   = input.bool(false, "50%", inline="l6",  group=G_L)
+on889  = input.bool(true,  "889",  inline="l7",  group=G_L)
+c889   = input.color(#045260, "",  inline="l7",  group=G_L)
+w889   = input.int(1, "", minval=1, maxval=4, inline="l7",  group=G_L)
+d889   = input.bool(false, "50%", inline="l7",  group=G_L)
+on1272 = input.bool(true,  "1272", inline="l8",  group=G_L)
+c1272  = input.color(#01587B, "",  inline="l8",  group=G_L)
+w1272  = input.int(1, "", minval=1, maxval=4, inline="l8",  group=G_L)
+d1272  = input.bool(false, "50%", inline="l8",  group=G_L)
+on2618 = input.bool(true,  "2618", inline="l9",  group=G_L)
+c2618  = input.color(#133476, "",  inline="l9",  group=G_L)
+w2618  = input.int(1, "", minval=1, maxval=4, inline="l9",  group=G_L)
+d2618  = input.bool(false, "50%", inline="l9",  group=G_L)
+on3618 = input.bool(true,  "3618", inline="l10", group=G_L)
+c3618  = input.color(#2A3F83, "",  inline="l10", group=G_L)
+w3618  = input.int(1, "", minval=1, maxval=4, inline="l10", group=G_L)
+d3618  = input.bool(false, "50%", inline="l10", group=G_L)
+on4618 = input.bool(true,  "4618", inline="l11", group=G_L)
+c4618  = input.color(#2F1B57, "",  inline="l11", group=G_L)
+w4618  = input.int(1, "", minval=1, maxval=4, inline="l11", group=G_L)
+d4618  = input.bool(false, "50%", inline="l11", group=G_L)
+on5000 = input.bool(true,  "5000", inline="l12", group=G_L)
+c5000  = input.color(#3E2660, "",  inline="l12", group=G_L)
+w5000  = input.int(1, "", minval=1, maxval=4, inline="l12", group=G_L)
+d5000  = input.bool(false, "50%", inline="l12", group=G_L)
+
+// enable + palette + dim resolved into one final line color (na = hidden)
+lcol(i, cIn, onX, dX) =>
+    base = usePal ? f_pal(i) : cIn
+    onX ? (dX ? color.new(base, 50) : base) : na
+
+// ── EVENTS ─────────────────────────────────────────────────────────────────
+G_E = "Cross Events"
+showEvents = input.bool(true, "MASTER — show event symbols", group=G_E,
+     tooltip="OFF = clean chart, EMAs and ribbons only.")
+evArming  = input.bool(true, "12/89  — the ARMING",  group=G_E)
+evTrigger = input.bool(true, "12/26  — the TRIGGER", group=G_E)
+evBell    = input.bool(true, "89/316 — the BELL",    group=G_E)
+ev5    = input.bool(true, "5m",  inline="tfs", group=G_E)
+ev30   = input.bool(true, "30m", inline="tfs", group=G_E)
+ev60   = input.bool(true, "1H",  inline="tfs", group=G_E)
+ev240  = input.bool(true, "4H",  inline="tfs", group=G_E)
+ev720  = input.bool(true, "12H", inline="tfs", group=G_E)
+histDots = input.bool(true, "Deep-history dots (capless, no hover)", group=G_E,
+     tooltip="Hover labels are capped at 500 by Pine; these tiny dots never expire.")
+cUp   = input.color(#1B5E20, "Bull mark", inline="ec", group=G_E)
+cDn   = input.color(#7F0000, "Bear mark", inline="ec", group=G_E)
+atrLen = input.int(14, "ATR length (for panel stats)", minval=1, group=G_E)
+
+// ── RIBBONS ────────────────────────────────────────────────────────────────
+G_R = "Ribbons (fills)"
+rFAST = input.bool(true,  "FAST 12–26",   group=G_R)
+rM    = input.bool(true,  "M 89–127",     group=G_R)
+rMH   = input.bool(true,  "MH 316–423",   group=G_R)
+rH    = input.bool(true,  "H 889–1272",   group=G_R)
+rVH   = input.bool(true,  "VH 2618–3618", group=G_R)
+rUH   = input.bool(true,  "UH 4618–5000", group=G_R)
+rARM  = input.bool(false, "Accent: 12↔89 (the window)",  group=G_R)
+rBELL = input.bool(false, "Accent: 89↔316 (the bell)",   group=G_R)
+fillT = input.int(85, "Fill transparency", minval=50, maxval=98, group=G_R)
+
+// ═══ CALC — chart-TF twelve ════════════════════════════════════════════════
+e12   = ta.ema(close, 12)
+e26   = ta.ema(close, 26)
+e89   = ta.ema(close, 89)
+e127  = ta.ema(close, 127)
+e316  = ta.ema(close, 316)
+e423  = ta.ema(close, 423)
+e889  = ta.ema(close, 889)
+e1272 = ta.ema(close, 1272)
+e2618 = ta.ema(close, 2618)
+e3618 = ta.ema(close, 3618)
+e4618 = ta.ema(close, 4618)
+e5000 = ta.ema(close, 5000)
+atrC  = ta.atr(atrLen)
+
+// ═══ PLOTS ═════════════════════════════════════════════════════════════════
+p12   = plot(e12,   "12",   color=lcol(0,  c12,   on12,   d12),   linewidth=w12)
+p26   = plot(e26,   "26",   color=lcol(1,  c26,   on26,   d26),   linewidth=w26)
+p89   = plot(e89,   "89",   color=lcol(2,  c89,   on89,   d89),   linewidth=w89)
+p127  = plot(e127,  "127",  color=lcol(3,  c127,  on127,  d127),  linewidth=w127)
+p316  = plot(e316,  "316",  color=lcol(4,  c316,  on316,  d316),  linewidth=w316)
+p423  = plot(e423,  "423",  color=lcol(5,  c423,  on423,  d423),  linewidth=w423)
+p889  = plot(e889,  "889",  color=lcol(6,  c889,  on889,  d889),  linewidth=w889)
+p1272 = plot(e1272, "1272", color=lcol(7,  c1272, on1272, d1272), linewidth=w1272)
+p2618 = plot(e2618, "2618", color=lcol(8,  c2618, on2618, d2618), linewidth=w2618)
+p3618 = plot(e3618, "3618", color=lcol(9,  c3618, on3618, d3618), linewidth=w3618)
+p4618 = plot(e4618, "4618", color=lcol(10, c4618, on4618, d4618), linewidth=w4618)
+p5000 = plot(e5000, "5000", color=lcol(11, c5000, on5000, d5000), linewidth=w5000)
+
+// fills respect the ribbon toggle AND both member enables
+fill(p12,   p26,   color=rFAST and on12   and on26   ? color.new(usePal ? f_pal(0)  : c12,   fillT) : na, title="FAST band")
+fill(p89,   p127,  color=rM    and on89   and on127  ? color.new(usePal ? f_pal(2)  : c89,   fillT) : na, title="M band")
+fill(p316,  p423,  color=rMH   and on316  and on423  ? color.new(usePal ? f_pal(4)  : c316,  fillT) : na, title="MH band")
+fill(p889,  p1272, color=rH    and on889  and on1272 ? color.new(usePal ? f_pal(6)  : c889,  fillT) : na, title="H band")
+fill(p2618, p3618, color=rVH   and on2618 and on3618 ? color.new(usePal ? f_pal(8)  : c2618, fillT) : na, title="VH band")
+fill(p4618, p5000, color=rUH   and on4618 and on5000 ? color.new(usePal ? f_pal(10) : c4618, fillT) : na, title="UH band")
+fill(p12,   p89,   color=rARM  and on12   and on89   ? color.new(color.gray,   fillT) : na, title="12↔89 window")
+fill(p89,   p316,  color=rBELL and on89   and on316  ? color.new(color.silver, fillT) : na, title="89↔316 bell")
+
+// ═══ MTF EVENT ENGINE ══════════════════════════════════════════════════════
+// v9.4.2 parity: gaps_off + lookahead_on on closed HTF bars.
+f_lens(tf) =>
+    request.security(syminfo.tickerid, tf,
+         [ta.ema(close, 12), ta.ema(close, 26), ta.ema(close, 89), ta.ema(close, 316),
+          ta.atr(atrLen), close],
+         gaps=barmerge.gaps_off, lookahead=barmerge.lookahead_on)
+
+[a12_5,  a26_5,  a89_5,  a316_5,  atr_5,  cl_5 ] = f_lens("5")
+[a12_30, a26_30, a89_30, a316_30, atr_30, cl_30] = f_lens("30")
+[a12_60, a26_60, a89_60, a316_60, atr_60, cl_60] = f_lens("60")
+[a12_4h, a26_4h, a89_4h, a316_4h, atr_4h, cl_4h] = f_lens("240")
+[a12_12, a26_12, a89_12, a316_12, atr_12, cl_12] = f_lens("720")
+
+f_mark(_on, _pairOn, txt, up, eA, eB, aatr, ccl, tfName, yUp) =>
+    if showEvents and _on and _pairOn
+        spreadATR = aatr > 0 ? math.abs(eA - eB) / aatr : na
+        dispATR   = aatr > 0 ? math.abs(ccl - eB) / aatr : na
+        tip = "PAIR " + txt + "  ·  LENS " + tfName
+             + "\nDIR  " + (up ? "BULL ▲" : "BEAR ▼")
+             + "\nTIME " + str.format_time(time, "yyyy-MM-dd HH:mm", "UTC") + " UTC"
+             + "\nPRICE " + str.tostring(close, format.mintick)
+             + "\nEMA-A " + str.tostring(eA, format.mintick)
+             + "  EMA-B " + str.tostring(eB, format.mintick)
+             + "\nSPREAD " + str.tostring(spreadATR, "#.##") + " ATR"
+             + "\nDISP(cl−B) " + str.tostring(dispATR, "#.##") + " ATR"
+        label.new(bar_index, yUp ? high + atrC * 0.6 : low - atrC * 0.6, txt,
+             style=label.style_none, size=size.small,
+             textcolor=up ? cUp : cDn, tooltip=tip)
+
+f_pair(_tfOn, tfName, eA, eB, aatr, ccl, txt, _pairOn, yBias) =>
+    up = ta.crossover(eA, eB)
+    dn = ta.crossunder(eA, eB)
+    if up
+        f_mark(_tfOn, _pairOn, txt, true,  eA, eB, aatr, ccl, tfName, yBias)
+    if dn
+        f_mark(_tfOn, _pairOn, txt, false, eA, eB, aatr, ccl, tfName, not yBias)
+    [up, dn]
+
+// ARMING 12/89
+[u1a, d1a] = f_pair(ev5,   "5m",  a12_5,  a89_5,  atr_5,  cl_5,  "12/89", evArming, false)
+[u2a, d2a] = f_pair(ev30,  "30m", a12_30, a89_30, atr_30, cl_30, "12/89", evArming, false)
+[u3a, d3a] = f_pair(ev60,  "1H",  a12_60, a89_60, atr_60, cl_60, "12/89", evArming, false)
+[u4a, d4a] = f_pair(ev240, "4H",  a12_4h, a89_4h, atr_4h, cl_4h, "12/89", evArming, false)
+[u5a, d5a] = f_pair(ev720, "12H", a12_12, a89_12, atr_12, cl_12, "12/89", evArming, false)
+// TRIGGER 12/26
+[u1t, d1t] = f_pair(ev5,   "5m",  a12_5,  a26_5,  atr_5,  cl_5,  "12/26", evTrigger, false)
+[u2t, d2t] = f_pair(ev30,  "30m", a12_30, a26_30, atr_30, cl_30, "12/26", evTrigger, false)
+[u3t, d3t] = f_pair(ev60,  "1H",  a12_60, a26_60, atr_60, cl_60, "12/26", evTrigger, false)
+[u4t, d4t] = f_pair(ev240, "4H",  a12_4h, a26_4h, atr_4h, cl_4h, "12/26", evTrigger, false)
+[u5t, d5t] = f_pair(ev720, "12H", a12_12, a26_12, atr_12, cl_12, "12/26", evTrigger, false)
+// BELL 89/316
+[u1b, d1b] = f_pair(ev5,   "5m",  a89_5,  a316_5,  atr_5,  cl_5,  "89/316", evBell, false)
+[u2b, d2b] = f_pair(ev30,  "30m", a89_30, a316_30, atr_30, cl_30, "89/316", evBell, false)
+[u3b, d3b] = f_pair(ev60,  "1H",  a89_60, a316_60, atr_60, cl_60, "89/316", evBell, false)
+[u4b, d4b] = f_pair(ev240, "4H",  a89_4h, a316_4h, atr_4h, cl_4h, "89/316", evBell, false)
+[u5b, d5b] = f_pair(ev720, "12H", a89_12, a316_12, atr_12, cl_12, "89/316", evBell, false)
+
+// Deep-history dots — CE10123 fix: plotchar takes the bare bool series.
+anyArmUp = showEvents and histDots and (u1a or u2a or u3a or u4a or u5a)
+anyArmDn = showEvents and histDots and (d1a or d2a or d3a or d4a or d5a)
+anyTrgUp = showEvents and histDots and (u1t or u2t or u3t or u4t or u5t)
+anyTrgDn = showEvents and histDots and (d1t or d2t or d3t or d4t or d5t)
+anyBelUp = showEvents and histDots and (u1b or u2b or u3b or u4b or u5b)
+anyBelDn = showEvents and histDots and (d1b or d2b or d3b or d4b or d5b)
+plotchar(anyArmUp, "arm▲",  "·", location.belowbar, cUp, size=size.tiny)
+plotchar(anyArmDn, "arm▼",  "·", location.abovebar, cDn, size=size.tiny)
+plotchar(anyTrgUp, "trg▲",  "˙", location.belowbar, cUp, size=size.tiny)
+plotchar(anyTrgDn, "trg▼",  "˙", location.abovebar, cDn, size=size.tiny)
+plotchar(anyBelUp, "bell▲", "◦", location.belowbar, cUp, size=size.tiny)
+plotchar(anyBelDn, "bell▼", "◦", location.abovebar, cDn, size=size.tiny)
