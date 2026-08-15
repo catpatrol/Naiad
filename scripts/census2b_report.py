@@ -28,7 +28,8 @@ from census2b_program import (                                    # noqa: E402
     seq8_warm_exact,
 )
 
-from publish_exchange import BOX_BYTES                            # noqa: E402
+from publish_exchange import (BOX_BYTES, WARN_FRACTION,           # noqa: E402
+                              REFUSE_FRACTION)
 # Imported, not copied.  This was a hand-kept copy of publish_exchange.BOX_BYTES
 # and it silently went stale the moment the operator raised the box on
 # 2026-08-15 (6.39 MB -> 16 MB), which would have made every occupancy figure
@@ -224,7 +225,8 @@ def sec_boxcost(added_bytes: int = 0) -> None:
     print(f"| occupancy before | {100.0 * (tot - added_bytes) / BOX_BYTES:.2f} % |")
     print(f"| this build adds | ~{added_bytes:,} B |")
     print(f"| occupancy after | {100.0 * tot / BOX_BYTES:.2f} % |")
-    print(f"| WARN line / REFUSE line | 25 % / 40 % |")
+    print(f"| WARN line / REFUSE line | {100 * WARN_FRACTION:.0f} % / "
+          f"{100 * REFUSE_FRACTION:.0f} % |")
     print()
 
 

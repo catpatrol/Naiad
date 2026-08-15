@@ -17,7 +17,15 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT / "scripts"))
 import mc1_program as M                                          # noqa: E402
 
-BOX_CAPACITY = 6_390_000          # bytes; derived, see exchange/DIGEST.md:19
+# PINNED HISTORICAL, deliberately NOT imported from publish_exchange.  This
+# module regenerates the MC-1 build document filed 2026-08-06, whose occupancy
+# figures record the box AS IT STOOD THEN.  The operator raised the box to
+# 16_000_000 on 2026-08-15; importing the live constant would silently restate a
+# filed record against a ceiling that did not exist when it was written.
+BOX_CAPACITY = 6_390_000          # the box AT FILING (2026-08-06); see
+                                  # exchange/DIGEST.md:19. Raised to 16_000_000
+                                  # on 2026-08-15 -- live value lives in
+                                  # publish_exchange.BOX_BYTES, not here.
 ONE_PCT = BOX_CAPACITY / 100.0
 REP = ROOT / "exchange" / "reports"
 CK = M.ckpt_load

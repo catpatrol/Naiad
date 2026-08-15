@@ -3,13 +3,19 @@
 
 Queue 003, D-1 (ratified operator 2026-08-11).
 
-WHY THIS EXISTS.  `exchange/` is ticked into the ~6.39 MB project box and grows
-with every session BY DESIGN: CONVENTIONS 3.1 requires one build document per
+WHY THIS EXISTS.  `exchange/` is ticked into the project box and grows with
+every session BY DESIGN: CONVENTIONS 3.1 requires one build document per
 session, read-only sessions included, and that rule is correct.  The bus is not
 growing because anyone is careless; it is growing because the record is being
-kept.  Measured: 17.9% of the box on 2026-08-05, 26.4% on 2026-08-11.  Queue
-002's D3 guard warns at 25% and refuses above 40%.  Without rotation, ordinary
-reporting reaches the refuse line in roughly ten more days of similar activity.
+kept.  Measured against the then-6.39 MB box: 17.9% on 2026-08-05, 26.4% on
+2026-08-11, and a REFUSE at 40.2% on 2026-08-15 that stopped a paste dead.
+
+The box was raised that day by operator ruling to 16 MB (warn 50%, refuse 80%)
+and THIS SCRIPT DID NOT CHANGE: the ceiling rose, the housekeeping stayed.
+AGE_DAYS is still 30.  The live thresholds are read from
+`publish_exchange.BOX_BYTES` / `WARN_FRACTION` / `REFUSE_FRACTION` -- never
+copied here -- so the raise reached this module for free.  Rotation is not a
+pressure valve for a full box; it is how the record stays navigable.
 
 So: the current month's record stays hot on the bus; everything older moves to
 docs/history/reports/YYYY-MM/, where it is still tracked, still on GitHub, and
