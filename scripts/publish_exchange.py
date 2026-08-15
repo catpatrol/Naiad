@@ -70,16 +70,22 @@ _HEARTBEAT_RUN = re.compile(r"^\s*run:\s*(\S+)", re.M)
 # Why a TOTAL and not a per-file cap: exchange/ reached 51.4% of the project box
 # while NINE OF ITS TEN largest data files were each under the 1 MB per-file cap
 # in CONVENTIONS §4.2.  A per-file limit cannot catch an aggregate; only the sum
-# can.  The box holds ~6.39 MB and has overflowed twice, and the three web lanes
-# reach repo content ONLY through it -- so an overflow is not an inconvenience,
-# it is those lanes going blind.
+# can.  The box held ~6.39 MB and had overflowed twice (raised to 16 MB on
+# 2026-08-15, below), and the three web lanes reach repo content ONLY through it
+# -- so an overflow is not an inconvenience, it is those lanes going blind.
 #
 # WARN, then REFUSE, then an override that is always available: a guard with no
 # escape hatch becomes something people route around, and the routing-around is
 # what actually loses the safety.  The override prints what it let through.
-BOX_BYTES = 6_390_000
-WARN_FRACTION = 0.25
-REFUSE_FRACTION = 0.40
+# RAISED by operator ruling 2026-08-15 ["box", VETO]: 6.39 MB -> 16 MB, warn
+# 25% -> 50%, refuse 40% -> 80%.  The ceiling rises; the housekeeping stays --
+# the 30-day rotation (queue 003, next ~2026-08-28) remains scheduled and
+# AGE_DAYS is untouched.  The ruling was taken after the VIZ-2 paste was
+# REFUSED at 40.16% with all four payloads already built and local: the guard
+# worked, and the number it was defending had simply gone stale.
+BOX_BYTES = 16_000_000
+WARN_FRACTION = 0.50
+REFUSE_FRACTION = 0.80
 OVERRIDE_ENV = "NAIAD_ALLOW_OVERSIZE_PUBLISH"
 
 # Quoted verbatim on refusal.  A refusal that does not say what to do instead is
@@ -126,8 +132,9 @@ def budget(total_bytes, box=BOX_BYTES):
 
     Returns (level, fraction) where level is "OK", "WARN" or "REFUSE".
 
-    Thresholds are read as: WARN at or above 25%, REFUSE strictly above 40%.
-    "REFUSE above 40%" is taken literally -- exactly 40.0% warns, it does not
+    Thresholds are read as: WARN at or above WARN_FRACTION, REFUSE strictly
+    above REFUSE_FRACTION -- 50% and 80% since the 2026-08-15 raise.
+    "REFUSE above 80%" is taken literally -- exactly 80.0% warns, it does not
     refuse -- because a boundary that refuses its own stated limit surprises the
     one reader who checked the number first.
     """

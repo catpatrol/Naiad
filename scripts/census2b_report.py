@@ -28,7 +28,11 @@ from census2b_program import (                                    # noqa: E402
     seq8_warm_exact,
 )
 
-BOX_BYTES = 6_390_000            # publish_exchange.BOX_BYTES
+from publish_exchange import BOX_BYTES                            # noqa: E402
+# Imported, not copied.  This was a hand-kept copy of publish_exchange.BOX_BYTES
+# and it silently went stale the moment the operator raised the box on
+# 2026-08-15 (6.39 MB -> 16 MB), which would have made every occupancy figure
+# this report prints wrong by 2.5x.  One definition, one place.
 
 
 def md_table(df: pd.DataFrame, cols: list[str], aligns: dict | None = None) -> str:

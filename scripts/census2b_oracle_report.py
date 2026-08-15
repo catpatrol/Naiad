@@ -17,7 +17,13 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent.parent
 ORC = ROOT / "research_outputs" / "census2b" / "oracle"
 DOC = ROOT / "exchange" / "reports" / "BUILD_2026-08-15_CENSUS2B_ORACLE.md"
-BOX_BYTES = 6_390_000
+# PINNED HISTORICAL, deliberately NOT imported from publish_exchange.  This
+# module regenerates a FILED document whose BOX-COST section records the box as
+# it stood on 2026-08-15 at filing time.  The operator raised the box to 16 MB
+# later the same day; importing the live constant would silently rewrite that
+# filed record's arithmetic with a ceiling that did not exist when it was
+# written.  A historical report reproduces history.
+BOX_BYTES = 6_390_000            # the box AT FILING; raised to 16_000_000 after
 
 LENSES = ["5m", "15m", "30m", "1h", "4h"]
 SR = ["FAST", "M", "MH", "H", "VH", "UH"]
