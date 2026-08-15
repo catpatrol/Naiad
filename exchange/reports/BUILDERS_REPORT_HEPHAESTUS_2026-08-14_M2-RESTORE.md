@@ -2,7 +2,10 @@
 
 **Date:** 2026-08-14 (executed 2026-08-15 local) · **Operator go:** 2026-08-14
 **Machine:** Luiss-MacBook-Pro.local · Mac17,6 · Apple M5 Max · macOS 26.3 (25D2125) · arm64
-**Branch:** v12-v1-census · **Verdict:** **HALT AT GATE 0 — NOTHING ADOPTED**
+**Branch:** v12-v1-census
+**Verdict:** **HALT AT GATE 0 — NOTHING ADOPTED.** Amended in-session: HALT 3 resolved,
+HALT 1 downgraded, Mac baseline recorded. **HALT 2 (no LaCie) and HALT 4 (no credentials)
+stand — the restore drill is still not run.**
 
 ---
 
@@ -16,6 +19,13 @@ written to any source. The ADOPTED ledger below is empty by design, not by omiss
 A fourth blocker surfaced at close: **this Mac has no GitHub credentials**, so the
 `publish()` at §6 committed locally (`35c293f`) but could not push. **The branch is 1 commit
 ahead of origin and this report is not yet on the remote.**
+
+**AMENDMENT, same session, at operator direction.** After the halt was filed, the operator
+directed toolchain installation. **HALT 3 is now RESOLVED** and **the Mac suite baseline
+has been recorded** — see §5, which supersedes the "NOT RECORDED" text this report
+originally carried. HALT 1 is **downgraded**: `requirements.txt` turned out to be fully
+pinned, so the missing lock file is no longer blocking. **HALT 2 and HALT 4 stand
+unchanged, and nothing was adopted — the restore drill itself is still not run.**
 
 ---
 
@@ -39,11 +49,29 @@ I honoured that exit rather than improvising past it.
 
 `requirements-lock-2026-08-14-win.txt` is absent from the working tree **and from all of
 git history**: `git log --all --oneline -- 'requirements-lock*'` returns nothing. The only
-requirements artefact in the repo is the unpinned `requirements.txt`.
+requirements artefact in the repo is `requirements.txt` (see the amendment below — it is
+fully pinned, which this report initially got wrong).
 
 This is not a fetch problem. `git fetch origin` succeeded and the clone is exactly at the
 origin tip. The file was never committed and pushed. **M0's push did not cross** — the
 gate's own wording is correct.
+
+**AMENDMENT — HALT 1 downgraded from BLOCKING to DEGRADED.** This report first described
+`requirements.txt` as *unpinned*. **That was wrong.** All six direct dependencies carry
+exact `==` pins:
+
+```
+pandas==2.2.3   numpy==2.1.3      pytest==8.3.4
+PyYAML==6.0.2   requests==2.32.3  pyarrow==18.1.0
+```
+
+So the environment **is** reproducible from the repo alone, and the venv was in fact built
+from it (§5). What the missing lock file still costs is the **transitive** set: `pip`
+resolved `certifi`, `charset-normalizer`, `idna`, `urllib3==2.7.0`, `six`, `tzdata`,
+`pytz==2026.3.post1`, `packaging==26.3`, `pluggy==1.6.0`, `iniconfig`,
+`python-dateutil==2.9.0.post0` at whatever was current on 2026-08-14, **not** at whatever
+the Windows box had. Direct-dependency parity is exact; transitive parity is unproven.
+Recover the lock file for exact parity, but **it no longer blocks anyone.**
 
 ### HALT 2 — the LaCie is not attached
 
@@ -88,6 +116,30 @@ So M1 step 6 is not a one-command fix on this machine — it needs a Python 3.10
 installed first, and it needs the lock file from HALT 1 to pin against. **Two blockers
 compose here.**
 
+A further probe found **no means of installing one**: no Homebrew (neither
+`/opt/homebrew/bin/brew` nor `/usr/local/bin/brew`), and no `uv`, `pyenv`, `conda`, `mamba`,
+`asdf` or MacPorts. `brew install python@3.12` therefore fails at `command not found`, not
+at the install. Xcode Command Line Tools *were* already present at
+`/Library/Developer/CommandLineTools`, with `git`, `clang`, `gcc` and `make`.
+
+### ✅ HALT 3 — RESOLVED THIS SESSION (operator-directed)
+
+The operator directed installation and chose the `uv` route (no sudo, user-local,
+reversible). Executed:
+
+| Step | Result |
+|---|---|
+| `curl -LsSf https://astral.sh/uv/install.sh \| sh` | uv **0.12.5** → `~/.local/bin/uv` |
+| `uv python install 3.12` | **CPython 3.12.14** (23.8 MiB, 1.79 s) |
+| `uv venv ~/venvs/naiad --python 3.12` | venv created |
+| `uv pip install -r requirements.txt` | 6 direct + 11 transitive packages |
+
+**Gate re-check: `~/venvs/naiad/bin/python` exists, is executable, and reports Python
+3.12.14. HALT 3 is cleared.** `python3.12 --version` → `Python 3.12.14`.
+
+Undo, if wanted: `rm -rf ~/.local/bin/uv ~/.local/bin/uvx ~/.local/share/uv ~/venvs/naiad`.
+Nothing was installed system-wide; no sudo was used; `/usr/bin/python3` is untouched.
+
 ---
 
 ## THE ADOPTED LEDGER
@@ -97,6 +149,8 @@ compose here.**
 ```
 
 **Files adopted: 0. Files written into ~/Naiad by this session: 1** — this report.
+**Unchanged by the amendment:** the toolchain work installed nothing into `~/Naiad` and
+adopted no artefact; it made the suite runnable, which is M1's job, not M2's restore.
 Nothing was copied, extracted, renamed or overwritten. No source was touched: the
 COPY-ONLY and NO-CLOBBER constraints were never exercised, because no copy was attempted.
 
@@ -108,7 +162,7 @@ folder to stop adopting from.
 
 ## WHAT I ESTABLISHED ANYWAY (all read-only, all free)
 
-The drill is blocked, but four questions could be answered without the LaCie, and three of
+The drill is blocked, but six questions could be answered without the LaCie, and most of
 them are things M3 will otherwise have to discover the hard way.
 
 ### A — The tracked tree needs no restore drill at all
@@ -235,24 +289,125 @@ material loss the halt is protecting, and it is why §2 is not a formality.
 
 ## 5 — THE MAC SUITE BASELINE
 
-**NOT RECORDED — blocked, not skipped.**
+**RECORDED.** (This section originally read "NOT RECORDED — blocked, not skipped." HALT 3
+was cleared later in the same session, so the baseline was taken. The original reasoning —
+that a run under Python 3.9.6 would `SyntaxError` at collection and produce a number that
+measures nothing — still stands; it simply no longer applies.)
 
-`source ~/venvs/naiad/bin/activate` cannot run (HALT 3), and no interpreter on this machine
-can import the codebase (Python 3.9.6 vs the 3.10+ floor at `engine/data.py:63`). Running
-the suite under system Python would produce a `SyntaxError` at collection — a number that
-looks like a baseline and measures nothing. **There is no Mac baseline yet. M3 must not
-treat any figure as one.**
+```
+$ source ~/venvs/naiad/bin/activate && python -m pytest
+4 failed, 282 passed, 2 skipped in 11.30s
+```
 
-The `drive_wait` probe *was* run and is recorded above (§HALT 2) — the one §5 deliverable
-that survived, and the M3-relevant reading is this: **the helper handles a POSIX path
-correctly.** It resolved `/Volumes/LaCie`, polled it six times across its full 18-second
-budget, poked for spin-up, never raised, and returned a well-formed `UNREACHABLE` result
+### 🟡 THE BASELINE IS PROVISIONAL — READ THIS BEFORE USING THE NUMBER
+
+**This is a baseline of "Mac with an EMPTY estate cache", not a baseline of "Mac".** §3
+could not restore the estate (HALT 2), so `/Users/luis/.cache/naiad/data_cache` does not
+exist and every test needing cached market data is running on nothing. The failures say so
+in their own words — see the messages below: *"0 exec bars (need >= 2000)"*, *"size 0"*,
+*"not in the estate"*. **Do not compare this against the Windows figure and conclude the
+Mac is broken.** Re-take it once the LaCie is attached and §3 has run.
+
+For reference, LEDGER_ATHENA's Queue 004 A-5 entry records the Windows suite at
+**287 passed / 1 failed**. Totals match exactly — 287+1 = 288, and 282+4+2 = 288 — so
+**no test was lost or gained in the platform crossing.** Five tests changed state, all of
+them consistent with absent estate data.
+
+### The four failures
+
+| # | Test | Error | Tag |
+|---|---|---|---|
+| 1 | `fixtures/test_s2_sim.py::test_c141t213_regression` | `engine.replay.WarmupError` at `engine/replay.py:97` — `BTCUSDT_intraday: warm-up floor not met … 0 exec bars (need >= 2000), 0 governor bars (need >= 200). Refusing to emit signals.` | — |
+| 2 | `tests/test_analytics.py::test_f_an_8a_unchanged_conventions_reproduce_exactly` | `IndexError: index -1 is out of bounds for axis 0 with size 0` at `tests/test_analytics.py:908` | — |
+| 3 | `tests/test_analytics.py::test_f_an_8b_legacy_mode_reproduces_v1_1_exactly` | same, same line | — |
+| 4 | `tests/test_analytics.py::test_f_an_8c_documented_diff` | same, same line | — |
+
+**No failure is tagged `[expect-windows-ism]`, because none earns it.** Per the brief the
+tag applies only where the traceback makes it obvious — drive letters, `schtasks`,
+`wevtutil`, `st_file_attributes`. **Not one of those appears in any of the four
+tracebacks.** All four are empty-array / zero-bar conditions. I have classified nothing
+further; cause is M3's to determine.
+
+The two skips are self-explaining and expected:
+`fixtures/test_f8_journal.py:110` — *dry-run journal not generated yet (D7)*;
+`tests/test_brief2_storage.py:537` — *LITUSDT 1m not in the estate*.
+
+### ⚠️ The one drive letter that appeared — and why it was NOT a portability defect
+
+The first run's skip summary printed a Windows absolute path **on macOS**:
+
+```
+SKIPPED [1] C:\Naiad\fixtures\test_f8_journal.py:110: dry-run journal not generated yet (D7)
+```
+
+By the brief's own criterion (*drive letters*) that is a candidate `[expect-windows-ism]`.
+It is not one, and the difference matters enough to prove rather than assert. I re-ran the
+whole suite with the bytecode cache redirected out of the repo —
+`PYTHONPYCACHEPREFIX=<scratch> python -m pytest` — which reads and writes bytecode
+elsewhere and **modifies nothing in the tree**:
+
+```
+4 failed, 282 passed, 2 skipped in 11.71s          <- counts identical
+SKIPPED [1] fixtures/test_f8_journal.py:110: dry-run journal not generated yet (D7)
+                                                   <- path now POSIX and relative
+```
+
+Identical counts, correct path. **The drive letter came from stale Windows bytecode, not
+from source** — see finding F. `fixtures/test_f8_journal.py:110` is a plain
+`@pytest.mark.skipif(not DRYRUN.exists(), reason=...)` with no path in its reason string.
+
+**Net: zero Windows-isms were observed in the suite. The only drive letter in the entire
+run was an artefact of the unverified transplant.**
+
+### The `drive_wait` probe (§5's second instruction)
+
+Already reported under HALT 2 and unchanged by any of the above:
+
+```
+UNREACHABLE root=/Volumes/LaCie attempts=6 elapsed=18.02s budget=18.0s
+```
+
+**The helper handles a POSIX path correctly** — resolved it, polled six times across the
+full 18-second budget, poked for spin-up, never raised, and returned a well-formed result
 whose `%`-formatting did not explode. Its docstring worries about surviving a move to
 `C:/Naiad`; the answer for the reverse crossing is that the path handling is already
 platform-neutral. No drive-letter assumption fired. **`drive_wait` is not an M3 item.**
 
-No suite failure is listed below, and none is tagged `[expect-windows-ism]`, because none
-was observed. Per the brief: classify nothing, fix nothing. I have classified nothing.
+### One invocation note for M3
+
+`pytest.ini:9` sets `addopts = -q`. Passing `-q` again on the command line makes it
+**double-quiet, which silently suppresses the final count line entirely** — the run ends on
+the `FAILED` list with no `N passed` anywhere. That looked like a crash and is not one.
+Use plain `python -m pytest`, or `-v`, to see the counts.
+
+---
+
+## F — THIRTY-ONE STALE WINDOWS `.pyc` FILES ARE IN THE TREE
+
+Chasing the drive letter above found its source, and it is a direct consequence of finding
+B — the unverified bulk transplant.
+
+`__pycache__` exists in six packages (`study`, `tests`, `scripts`, `fixtures`, `engine`,
+`analytics`), holding **73 `.pyc` files, of which 31 embed the literal string `C:\Naiad`**
+as their `co_filename`. They are `cpython-312` bytecode, which **matches the 3.12.14 just
+installed**, and the transplant preserved source mtimes — so CPython's staleness check
+passes and **Python reuses this Windows-built bytecode**, reporting Windows paths in
+tracebacks and skip locations.
+
+Affected: all 13 `.pyc` in `scripts/` (including `drive_wait`, `publish_exchange`,
+`backup_estate`, and the `census2a`/`census2b`/`mc1`/`mc2`/`seq8` programs), 3 in `study/`,
+and 15 pytest-rewritten fixture modules.
+
+This project has met this exact defect before: LEDGER_ATHENA's Queue 004 A-3 entry records
+`__pycache__` being stripped from the copy — *"6 dirs, 80 .pyc of which 79 embedded the old
+absolute path"* — during the OneDrive → `C:/Naiad` move. **The lesson was learned and then
+lost, because this transplant did not go through that process.**
+
+**I did not delete them** — that is a fix, and fixes are M3's. The verified impact is
+confined to *reported paths*: with bytecode redirected out of the tree the suite returned
+**identical counts** (4/282/2), so no pass or fail outcome depends on them. Removal is one
+command (`find . -name '__pycache__' -type d -not -path './.git/*' -exec rm -rf {} +`) and
+is safe whenever M3 wants it — `.pyc` files are regenerable by definition.
 
 ---
 
@@ -313,23 +468,29 @@ works; push is blocked on credentials, not on code.**
 | # | Step | Disposition | Basis | BOX COST |
 |---|---|---|---|---|
 | 0 | Identity gate | **PASS** (4 of 7 checks) | direct observation | 0 B |
-| 0 | Lock file present | **HALT 1** | absent from tree and all history | 0 B |
+| 0 | Lock file present | **HALT 1 — DOWNGRADED** | absent, but `requirements.txt` is fully pinned | 0 B |
 | 0 | LaCie mounted | **HALT 2** | 4 independent probes incl. `drive_wait` UNREACHABLE | 0 B |
-| 0 | venv present | **HALT 3** | `~/venvs` absent; py3.9.6 < 3.10 floor | 0 B |
+| 0 | venv present | **HALT 3 — RESOLVED** | uv 0.12.5 → CPython 3.12.14 → venv + 17 pkgs | 0 B in-repo |
 | 1 | LaCie inventory | **BLOCKED** | no source | 0 B |
 | 2 | Substrates restore | **BLOCKED** | no source · 0 adopted | 0 B |
 | 3 | `cache_dir()` resolution | **DONE** | read from source, not called | 0 B |
 | 3 | Estate restore | **BLOCKED** | no source; local set stale + weak basis | 0 B |
 | 4 | Untracked handoff zip | **BLOCKED** | no source | 0 B |
-| 5 | Suite baseline | **BLOCKED** | no interpreter | 0 B |
+| 5 | Suite baseline | **RECORDED — provisional** | 282 passed / 4 failed / 2 skipped, empty estate | 0 B |
+| 5 | Windows-ism tags | **ZERO** | no drive letter, schtasks, wevtutil or st_file_attributes in any traceback | 0 B |
+| — | Stale Windows `.pyc` | **FOUND, not fixed** | 31 of 73 embed `C:\Naiad`; counts unaffected | 0 B |
 | 5 | `drive_wait` POSIX probe | **DONE — passes** | executed, 18.02 s | 0 B |
 | 6 | `publish()` — commit | **DONE** | scope guard + D3 passed; commit `35c293f` | 0 B |
 | 6 | `publish()` — push | **HALT 4** | no GitHub credentials on this Mac | 0 B |
 | — | Tracked-tree integrity | **VERIFIED 598/598** | git, clean at origin tip | 0 B |
 | — | Local archive integrity | **VERIFIED 15/15** | co-located sidecars (weak basis) | 0 B |
+| — | Toolchain survey | **DONE** | no brew/uv/pyenv/conda/asdf; CLT present | 0 B |
 | — | This report | committed `35c293f`, push blocked | — | 19.7 KB |
 
-**TOTAL BOX COST: 19.7 KB — this document alone** (plus the LEDGER_ATHENA append). No archive extracted, no cache directory
+**TOTAL BOX COST: this document alone** (plus the LEDGER_ATHENA append). **Zero bytes were
+added to the repo by the toolchain work** — uv, CPython 3.12.14 and the venv all live
+outside `~/Naiad` (`~/.local/`, `~/venvs/`). The estate cache is still absent and no
+archive was extracted. No archive extracted, no cache directory
 created, no artefact adopted, no source byte read-modified. `~/.cache/naiad` still does not
 exist.
 
@@ -361,22 +522,32 @@ Not asleep, not renamed: no external device is present at the USB or Thunderbolt
 the cable, the port or the enclosure has failed — **check that before assuming data loss,
 and do not reformat or "repair" anything.**
 
-### 🔴 2 — M0's LOCK FILE NEVER REACHED THE REPO.
+### 🟠 2 — M0's LOCK FILE NEVER REACHED THE REPO — but it is no longer blocking.
 `requirements-lock-2026-08-14-win.txt` is not in the tree and not in any commit on any
 branch. It is still on the Windows machine, uncommitted. **Recover it from that machine
-before it is wiped.** If the PC is already gone, the pinned environment M1 and M3 depend on
-must be rebuilt from scratch.
+before it is wiped** — but the urgency has dropped: `requirements.txt` pins all six direct
+dependencies exactly, and the venv was built from it successfully. What you lose without
+the lock file is *transitive* parity with the Windows environment, not the ability to work.
 
-### 🔴 3 — THIS MAC HAS NO USABLE PYTHON.
-Only Apple's system Python 3.9.6, which **cannot import this codebase** — the repo requires
-3.10+. M1 step 6 is not "make a venv"; it is "install a modern Python toolchain, *then*
-make a venv, *then* pin it against the lock file from item 2." Three blockers in sequence.
+### ✅ 3 — DONE THIS SESSION: THIS MAC NOW HAS PYTHON 3.12.14.
+Was: only Apple's 3.9.6, which cannot import the codebase. At your direction I installed
+`uv` (user-local, no sudo), CPython **3.12.14**, and the venv at `~/venvs/naiad` with all
+dependencies. **The suite runs.** Nothing went in system-wide and nothing went into
+`~/Naiad`; undo is `rm -rf ~/.local/bin/uv ~/.local/bin/uvx ~/.local/share/uv ~/venvs/naiad`.
+Note `uv` lives in `~/.local/bin` — **add it to your PATH** if you want `uv` on a fresh
+shell.
 
 ### 🟠 4 — SOMEONE ALREADY BULK-COPIED `~/Naiad` ONTO THIS MAC, UNVERIFIED.
 The tracked 598 files happen to be correct — git proves it after the fact. **The untracked
 files have no such proof, and three of them are missing entirely.** Please tell M3 what
 performed that copy and from which source; if that tool skipped or truncated files silently,
 its other output cannot be trusted either.
+
+**It already left one mess:** 31 stale `.pyc` files embedding `C:\Naiad` came across in the
+copy and are being *reused* by Python 3.12, so tracebacks print Windows paths on macOS.
+Harmless to outcomes (proven — counts identical with bytecode redirected) but actively
+misleading to anyone reading a failure. This project stripped `__pycache__` deliberately
+during the last migration; that step was skipped this time. Left in place for M3.
 
 ### 🔴 5 — THIS REPORT IS NOT ON THE REMOTE. Push it.
 `publish()` committed cleanly at **`35c293f`** but the push died on
@@ -386,16 +557,28 @@ then `git push origin v12-v1-census`. Until you do, the branch sits 1 commit ahe
 origin and **everything in this report exists only on this machine** — the same
 single-copy exposure described in item 4, now applied to the report about it.
 
-### 🟢 6 — THREE PIECES OF GOOD NEWS.
+### 🟡 6 — THE MAC BASELINE EXISTS NOW, BUT DO NOT TRUST THE NUMBER YET.
+**282 passed · 4 failed · 2 skipped** — against Windows' 287/1. Same 288 tests, so nothing
+was lost in the crossing. **But the estate cache is empty**, because §3 could not run, and
+all four failures are zero-bar / empty-array conditions that say so themselves. **Re-take
+this baseline after the LaCie is attached and the estate restored.** Judging the Mac on it
+now would be judging a machine with no data.
+
+### 🟢 7 — FOUR PIECES OF GOOD NEWS.
 `drive_wait` handles POSIX paths correctly and is **not** an M3 portability item. All 15
 sidecar'd archives in `naiad-backups/` hash clean — the carried backup set is internally
 intact, merely stale (newest estate 2026-08-11) and resting on a weaker witness than this
-drill accepts. And `publish()`'s scope guard, size budget and commit path all work on
-macOS — only the push is blocked, and only on credentials.
+drill accepts. `publish()`'s scope guard, size budget and commit path all work on macOS —
+only the push is blocked, and only on credentials. And **the suite found zero genuine
+Windows-isms**: the single drive letter that appeared was stale bytecode, not code.
 
 ---
 
-**M2 is NOT complete. It has not started.** Re-run this drill from Gate 0 once items 1–3
-are resolved. Nothing in it was partially applied, so the re-run begins from a clean board.
+**M2 is NOT complete. The restore itself has not started** — item 1 is the whole of it.
+The environment around it is now in better shape than when this session opened: Python
+works, the suite runs, and a provisional baseline exists. **None of that is the drill.**
+Re-run from Gate 0 once the LaCie is attached. Nothing was partially adopted, so the re-run
+begins from a clean board.
 
-*— HEPHAESTUS, 2026-08-14 · 0 files adopted · 0 sources touched · 0 mismatches · 4 halts*
+*— HEPHAESTUS, 2026-08-14 · 0 files adopted · 0 sources touched · 0 mismatches*
+*· 4 halts raised, 1 resolved, 1 downgraded, 2 standing*

@@ -436,3 +436,28 @@ PENDING:
 NEXT: Push 35c293f (PENDING 5), resolve PENDING 1-3, then RE-RUN M2 FROM GATE 0. Nothing was partially applied, so the re-run starts from a clean board. Owner: operator.
 METRICS: operator actions this session = 0 · files adopted = 0 · sources touched = 0 · mismatches = 0 · halts = 4 · box cost = ~11 KB
 === END STATUS ===
+
+=== STATUS ATHENA — 2026-08-14 — QUEUE 005 M2 AMENDMENT (supersedes parts of the entry above) ===
+NOW: Same session, after the halt was filed. At OPERATOR DIRECTION the toolchain was installed, so HALT 3 is RESOLVED and the Mac suite baseline IS RECORDED. HALT 1 is DOWNGRADED. HALT 2 (no LaCie) and HALT 4 (no credentials) STAND. THE RESTORE DRILL ITSELF IS STILL NOT RUN AND NOTHING WAS ADOPTED — this amendment changes the environment around M2, not M2.
+LAST EVENT: 2026-08-14 — uv + CPython 3.12.14 + venv installed; suite run twice; 31 stale Windows .pyc found; report amended and committed.
+FACTS:
+- SUPERSEDES the prior entry's claim that requirements.txt is unpinned. IT IS FULLY PINNED — pandas==2.2.3, numpy==2.1.3, pytest==8.3.4, PyYAML==6.0.2, requests==2.32.3, pyarrow==18.1.0. The environment is reproducible from the repo alone and the venv was built from it. HALT 1 drops from BLOCKING to DEGRADED: what the missing lock file costs is TRANSITIVE parity (11 packages resolved at 2026-08-14 current, not at whatever the Windows box held), not the ability to work [verified]
+- NO PACKAGE MANAGER EXISTED: no brew at either path, no uv/pyenv/conda/mamba/asdf/MacPorts. `brew install python@3.12` fails at command-not-found, not at the install. Xcode CLT WAS already present with git/clang/gcc/make, so the slow prerequisite was already satisfied [verified]
+- HALT 3 RESOLVED via the uv route (operator's choice, no sudo): uv 0.12.5 -> ~/.local/bin; CPython 3.12.14 in 1.79s; venv at ~/venvs/naiad; 6 direct + 11 transitive packages. ~/venvs/naiad/bin/python now exists, is executable, reports 3.12.14. NOTHING system-wide, NOTHING into ~/Naiad, /usr/bin/python3 untouched. Undo is one rm -rf of four paths [verified]
+- MAC BASELINE RECORDED: 282 passed / 4 failed / 2 skipped in 11.30s. Windows reference (Queue 004 A-5) was 287/1. TOTALS MATCH EXACTLY — 287+1 = 288 and 282+4+2 = 288 — so NO TEST WAS LOST OR GAINED in the platform crossing; five changed state [verified]
+- THE BASELINE IS PROVISIONAL AND MUST NOT BE COMPARED NAIVELY. It is a baseline of "Mac with an EMPTY ESTATE CACHE", because §3 could not run. All four failures are data starvation IN THEIR OWN WORDS: WarmupError "0 exec bars (need >= 2000), 0 governor bars (need >= 200)" at engine/replay.py:97, and 3x IndexError "index -1 is out of bounds for axis 0 with size 0" at tests/test_analytics.py:908. One skip literally reads "LITUSDT 1m not in the estate". RE-TAKE after the estate is restored [verified]
+- ZERO FAILURES TAGGED [expect-windows-ism]. The brief's criterion is drive letters, schtasks, wevtutil, st_file_attributes — NOT ONE appears in any of the four tracebacks. Classified nothing further; cause is M3's [verified]
+- THE ONE DRIVE LETTER SEEN WAS NOT A CODE DEFECT, AND THIS WAS PROVEN NOT ASSERTED. First run printed `SKIPPED [1] C:\Naiad\fixtures\test_f8_journal.py:110` ON MACOS. Re-running with PYTHONPYCACHEPREFIX pointed outside the repo (reads and writes bytecode elsewhere, modifies nothing in tree) returned IDENTICAL counts 4/282/2 and the path came back POSIX-relative. The drive letter came from STALE BYTECODE, not source [verified]
+- 31 STALE WINDOWS .pyc IN THE TREE, of 73 total across six __pycache__ dirs, embedding literal C:\Naiad as co_filename. They are cpython-312 — MATCHING the 3.12.14 just installed — and the transplant preserved source mtimes, so CPython's staleness check PASSES and Python REUSES Windows-built bytecode. All 13 in scripts/ (drive_wait, publish_exchange, backup_estate, census2a/2b/mc1/mc2/seq8 programs), 3 in study/, 15 pytest-rewritten fixtures. DIRECT CONSEQUENCE of the unverified transplant. Queue 004 A-3 stripped __pycache__ deliberately during the OneDrive->C: move ("80 .pyc of which 79 embedded the old absolute path"); THE LESSON WAS LEARNED AND THEN LOST because this transplant skipped that process. NOT DELETED — that is a fix, and fixes are M3's. Impact is confined to reported paths; no outcome depends on them [verified]
+- M3 INVOCATION NOTE: pytest.ini:9 sets `addopts = -q`. Passing -q again makes it DOUBLE-QUIET and SILENTLY SUPPRESSES THE FINAL COUNT LINE — the run ends on the FAILED list with no "N passed" anywhere. It looks like a crash and is not one. Use plain `python -m pytest` or -v [verified]
+PENDING:
+1. Operator, BLOCKING and now the ONLY thing standing between us and M2: ATTACH THE LACIE. Unchanged from the entry above
+2. Operator, BLOCKING: configure GitHub credentials and push. Now THREE commits ahead of origin
+3. Operator: RE-TAKE THE SUITE BASELINE after the estate is restored. The current 282/4/2 measures a machine with no data
+4. Operator: recover requirements-lock-2026-08-14-win.txt for transitive parity — no longer urgent
+5. Operator: add ~/.local/bin to PATH if you want `uv` available in a fresh shell
+6. M3: 31 stale C:\Naiad .pyc left in place, deliberately. One find -exec rm -rf clears them whenever M3 wants
+7. All other PENDING items from the entry above carry forward unchanged
+NEXT: Attach the LaCie and re-run M2 from Gate 0. Owner: operator.
+METRICS: operator actions this session = 1 (chose the install route) · files adopted = 0 · sources touched = 0 · mismatches = 0 · halts resolved = 1 · halts downgraded = 1 · halts standing = 2
+=== END STATUS ===
