@@ -119,6 +119,15 @@ research_outputs/seq8_run2/**
 research_outputs/census2a/**
 research_outputs/mc2/**
 
+# CENSUS-2B substrate — same class again, and the one member of the family that
+# was MISSING from this list. Found 2026-08-15 during the M2 restore: census2a,
+# seq8_run2, mc1 and mc2 were all covered, census2b was not, and the LaCie holds
+# 2.1 GB / 261 files of it. Restoring under v2 (substrate is now permanently
+# local) would have put untracked-but-unignored bulk back in the tree — the
+# precise 2026-08-05 condition the two blocks above were written to prevent.
+# Listed BEFORE the restore, not after.
+research_outputs/census2b/**
+
 # Operator backup vault — 2.9 GB of estate/workflow zips plus their .sha256
 # sidecars. The zips were already covered by the `*.zip` rule above; the
 # sidecars were not, which is the only reason this directory showed as
