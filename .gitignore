@@ -118,3 +118,17 @@ research_outputs/seq8_run2/**
 # intended surface.
 research_outputs/census2a/**
 research_outputs/mc2/**
+
+# Operator backup vault — 2.9 GB of estate/workflow zips plus their .sha256
+# sidecars. The zips were already covered by the `*.zip` rule above; the
+# sidecars were not, which is the only reason this directory showed as
+# untracked. Same class as the packet zips: operator-ferried, never the source
+# of record.
+naiad-backups/
+
+# macOS Finder metadata.
+.DS_Store
+
+# Per-machine Claude Code harness settings. Scoped to the one file: the shared
+# .claude/commands/ skills ARE tracked and must stay that way.
+.claude/settings.local.json
