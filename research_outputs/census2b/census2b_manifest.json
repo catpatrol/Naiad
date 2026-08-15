@@ -1,0 +1,2014 @@
+{
+  "program": "census2b_program.py",
+  "module": "CENSUS-2B / V-ULT-1 -- the U-VHT data module",
+  "seed": 20260812,
+  "generated_utc": "2026-08-14T16:49:37Z",
+  "class": "substrate + Tier-E first-look; NO REGISTRATIONS; m = 0",
+  "ceil_ms": 1719792000000,
+  "pins": {
+    "ribbons": {
+      "FAST": [
+        9,
+        12,
+        26
+      ],
+      "M": [
+        62,
+        89,
+        127
+      ],
+      "MH": [
+        262,
+        316,
+        423
+      ],
+      "H": [
+        616,
+        889,
+        1272
+      ],
+      "VH": [
+        1618,
+        2618,
+        3618
+      ],
+      "UH": [
+        4236,
+        4618,
+        5000
+      ]
+    },
+    "tfs": [
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "4h",
+      "12h"
+    ],
+    "panel": [
+      "BTCUSDT",
+      "ETHUSDT",
+      "SOLUSDT",
+      "NEARUSDT",
+      "ZECUSDT"
+    ],
+    "annex": [
+      "JTOUSDT",
+      "TAOUSDT"
+    ],
+    "warmfactor": 3.46,
+    "warm_bars_rule": "ceil(3.46*N), NaN before warm, never backfilled",
+    "warm_bars": {
+      "9": 32,
+      "12": 42,
+      "26": 90,
+      "62": 215,
+      "89": 308,
+      "127": 440,
+      "262": 907,
+      "316": 1094,
+      "423": 1464,
+      "616": 2132,
+      "889": 3076,
+      "1272": 4402,
+      "1618": 5599,
+      "2618": 9059,
+      "3618": 12519,
+      "4236": 14657,
+      "4618": 15979,
+      "5000": 17300
+    },
+    "k_window": 20,
+    "state_eps_atr": 0.05,
+    "knot_c_atr": 0.5,
+    "atr_len": 14,
+    "kiss": {
+      "eps": 0.25,
+      "delta": 0.75,
+      "k": 10
+    },
+    "midline_pairs": [
+      "12_89",
+      "89_316",
+      "316_889",
+      "889_2618",
+      "2618_4618"
+    ],
+    "toll_bps_round_trip": 10.0,
+    "codes": {
+      "state": {
+        "-1": "compressing",
+        "0": "flat",
+        "1": "expanding",
+        "-9": "n/a"
+      },
+      "orient": {
+        "-1": "bear-fanned",
+        "0": "mixed",
+        "1": "bull-fanned",
+        "-9": "n/a"
+      },
+      "pos": {
+        "-1": "below",
+        "0": "inside",
+        "1": "above",
+        "-9": "n/a"
+      }
+    },
+    "engine_note": "engine 1.0.11 byte-untouched; imports indicators only",
+    "machinery_note": "scripts/census_build.py constants + _resample imported, not restated; census2a_program.py byte-untouched",
+    "klines_note": "LIVE cache (engine.data.cache_dir), NOT mc1/ops_klines -- census-2B spans the full history and reports evidence-era share as a column",
+    "parta_wtb1": {
+      "pared_within_sr": [
+        "12_26",
+        "89_127",
+        "316_423",
+        "889_1272",
+        "2618_3618",
+        "4618_5000"
+      ],
+      "sr_median_pairs": [
+        "12_89",
+        "89_316",
+        "316_889",
+        "889_2618",
+        "2618_4618"
+      ],
+      "arm_pair": "12_89",
+      "trigger_pair": "12_26",
+      "sweep_lookback_bars": 96,
+      "sweep_reclaim_bars": 3,
+      "horizons_ms": {
+        "H20": 6000000,
+        "H100": 30000000
+      },
+      "horizon_rule": "DURATION-fixed: H20 = 20x5m = 1h40m, H100 = 100x5m = 8h20m; bars = round(hms/TF_MS[tf]); bars<1 is INFEASIBLE -> NaN, never substituted",
+      "lookback_hours": 24,
+      "lenses": {
+        "A1": [
+          "5m",
+          "15m",
+          "30m",
+          "1h"
+        ],
+        "A2": [
+          "5m",
+          "15m",
+          "30m",
+          "1h",
+          "4h"
+        ],
+        "A3": [
+          "5m",
+          "15m",
+          "30m",
+          "1h"
+        ],
+        "A4": [
+          "5m",
+          "15m",
+          "30m",
+          "1h"
+        ]
+      },
+      "kiss": {
+        "eps": 0.25,
+        "delta": 0.75,
+        "k": 10,
+        "note": "unchanged; applied line-vs-line, both limbs"
+      },
+      "toll_bps_round_trip": 10.0,
+      "toll_note": "measured on each table's OWN event population, per census2a_program.py:1226-1234 note m8",
+      "seed": 20260814,
+      "programs": [
+        "census2b_parta.py",
+        "census2b_wtb1.py"
+      ],
+      "class": "Tier-E substrate + Tier-E descriptive; NO REGISTRATIONS; W-B's motif surface m is declared in the probe ledger"
+    }
+  },
+  "artifacts": {
+    "cen2b_feasibility.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\cen2b_feasibility.parquet",
+      "rows": 630,
+      "bytes": 12402,
+      "sha256": "273e4f97bf0f0ecad929f9f3af114ea4141275c0eb0849c69b3fe7b5ea91845f",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/BTCUSDT/12h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\BTCUSDT\\12h.parquet",
+      "rows": 3289,
+      "bytes": 61432,
+      "sha256": "cb60e17aac438bce4de3a5f4f8e5a3951f7a0da4e7e9cac83daeb7dfe2386d1e",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/BTCUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\BTCUSDT\\15m.parquet",
+      "rows": 221036,
+      "bytes": 3995251,
+      "sha256": "de7c14c5d4dcc276610c7a7eb0b09a5e364dfa232cc69fe2c2472d4aa639b476",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/BTCUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\BTCUSDT\\1h.parquet",
+      "rows": 50454,
+      "bytes": 879308,
+      "sha256": "4a29001493ea33f9be6f22cbffc8cec382741d81c945a4c35cfb8ca313d2faf0",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/BTCUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\BTCUSDT\\30m.parquet",
+      "rows": 105527,
+      "bytes": 1863277,
+      "sha256": "67239e41915a335cc3ced80453d98e6ad7e2e9e68307297d963a43adb65bf0d7",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/BTCUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\BTCUSDT\\4h.parquet",
+      "rows": 11146,
+      "bytes": 193027,
+      "sha256": "5eee077451c84ddb61b0032a4b9de1ec66034414940db35509bbd96a126e4c68",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/BTCUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\BTCUSDT\\5m.parquet",
+      "rows": 688963,
+      "bytes": 9956297,
+      "sha256": "40295c2a23828501721e4968fe5de0c409e8603c7a16fab30074922285834c02",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/ETHUSDT/12h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\ETHUSDT\\12h.parquet",
+      "rows": 3218,
+      "bytes": 59253,
+      "sha256": "c93744a5404b97e0e165d1b47e65cb210cf3a8dca3830756caffea2cbbf3e966",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/ETHUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\ETHUSDT\\15m.parquet",
+      "rows": 213073,
+      "bytes": 3802578,
+      "sha256": "1a691f5356d3867f0c7a58cc5ba92316fe0d48ef145f218387ca956da504ba92",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/ETHUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\ETHUSDT\\1h.parquet",
+      "rows": 48801,
+      "bytes": 849670,
+      "sha256": "a485ae3de5d330d33b417a47a25cc4767d443078e063e6040a05ac3daca18318",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/ETHUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\ETHUSDT\\30m.parquet",
+      "rows": 103074,
+      "bytes": 1811994,
+      "sha256": "12b2b513f8efad51fa2e63f66fe00fcf1c4914d01f48fe7f1a976bd505b9c95d",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/ETHUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\ETHUSDT\\4h.parquet",
+      "rows": 11108,
+      "bytes": 192064,
+      "sha256": "627dba3eca6ad9d309ccac1676f80512a9a31cf5c25b6f0c65045171a811743e",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/ETHUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\ETHUSDT\\5m.parquet",
+      "rows": 664252,
+      "bytes": 9647512,
+      "sha256": "7ae70bfdbb1678518f65353da27170abb5ca755bc08b4f8d5c65099bc93f4f07",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/NEARUSDT/12h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\NEARUSDT\\12h.parquet",
+      "rows": 2770,
+      "bytes": 51771,
+      "sha256": "e31dd559a955f0fd9a624a13e2f53fee56cad1ecf4891f94e08294beb996c5b9",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/NEARUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\NEARUSDT\\15m.parquet",
+      "rows": 187894,
+      "bytes": 3326117,
+      "sha256": "be45981becfc6d2f7ca1e8b792330979de92d17199cff69c0ad7b1775ab2acc7",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/NEARUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\NEARUSDT\\1h.parquet",
+      "rows": 43533,
+      "bytes": 754278,
+      "sha256": "0f5e37e86954918c9bac86e47243dad27af1b1becf24ada1be27d4d8b37f5b6a",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/NEARUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\NEARUSDT\\30m.parquet",
+      "rows": 90874,
+      "bytes": 1591857,
+      "sha256": "ad536cc446ad474c15e9af4927dc413e0fddd0ac40c4c153cf3f0dd452b14c30",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/NEARUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\NEARUSDT\\4h.parquet",
+      "rows": 9535,
+      "bytes": 165488,
+      "sha256": "3288281ea7ce2f578c9e90c991c114aa5232ed891ef0dfb4808c611cfe963562",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/NEARUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\NEARUSDT\\5m.parquet",
+      "rows": 577967,
+      "bytes": 8503393,
+      "sha256": "68663e33b5050491b95e63279ab3ae472adaca935c3d509d02985929ca34b8ae",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/SOLUSDT/12h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\SOLUSDT\\12h.parquet",
+      "rows": 2936,
+      "bytes": 54333,
+      "sha256": "78aab621723e620cdc67e99ff7f55d19129e0b177170e6161f7ea3b9d073606c",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/SOLUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\SOLUSDT\\15m.parquet",
+      "rows": 184996,
+      "bytes": 3307517,
+      "sha256": "74fd4035c263eaa27c7bacacf5153af1d297d95d44964af4b05206c4cb083db3",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/SOLUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\SOLUSDT\\1h.parquet",
+      "rows": 43626,
+      "bytes": 757444,
+      "sha256": "8b4f6b2002f8839f36d55eefdd6af505d27c840e8606bc29404c113d76c77098",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/SOLUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\SOLUSDT\\30m.parquet",
+      "rows": 90591,
+      "bytes": 1594244,
+      "sha256": "90d09276baab002085f93f7a8b3db24710ddcfa9c8f977ca69d29a2b5ba64645",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/SOLUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\SOLUSDT\\4h.parquet",
+      "rows": 10012,
+      "bytes": 171907,
+      "sha256": "60a975c9ba199682248ffd4c5ae68937e119cb8076833e6901f0dec7aab4ded4",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/SOLUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\SOLUSDT\\5m.parquet",
+      "rows": 572880,
+      "bytes": 8500559,
+      "sha256": "815932fc2b50d3adff344186d6c30c65ec01eaedb8d9dc4227c6b47c84535974",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/ZECUSDT/12h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\ZECUSDT\\12h.parquet",
+      "rows": 3396,
+      "bytes": 62536,
+      "sha256": "050025e1ed0c768dffafe77cbfd6b9c9ef073cc5c15f55e0f8f0cc9fe48149d2",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/ZECUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\ZECUSDT\\15m.parquet",
+      "rows": 214150,
+      "bytes": 3776697,
+      "sha256": "390a2ece728abb733dc9a52e07fa7fb9e2b75bce11b166503b6fd64caa20090b",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/ZECUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\ZECUSDT\\1h.parquet",
+      "rows": 50372,
+      "bytes": 862367,
+      "sha256": "7deae8923d624026f8972ba6c9ef93acc183c825355dfaefb55735e7d72a4464",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/ZECUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\ZECUSDT\\30m.parquet",
+      "rows": 104049,
+      "bytes": 1810238,
+      "sha256": "4ee934686da09a949a213ac63da9b7b65f17ac216df2c8e87715ad7dfe35c888",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/ZECUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\ZECUSDT\\4h.parquet",
+      "rows": 11380,
+      "bytes": 193719,
+      "sha256": "234d03168a172ab882ca0e907ef92ff6c095df034b2236f033c5e70c6cf88e2d",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "crosses/ZECUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\crosses\\ZECUSDT\\5m.parquet",
+      "rows": 649788,
+      "bytes": 9415439,
+      "sha256": "2f8b9187294254c6f7768188954ba27af1a1f55d06a58406c5c53f39072477c2",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/BTCUSDT/12h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\BTCUSDT\\12h.parquet",
+      "rows": 5061,
+      "bytes": 481180,
+      "sha256": "8db770cc2070455468aea8e8c9e3040b1dfcad9d0af6bd58dd52594c060b5621",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/BTCUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\BTCUSDT\\15m.parquet",
+      "rows": 242945,
+      "bytes": 36937902,
+      "sha256": "d5d6c380a12272487ce9b3eceb5c043ef004c7d9bed3e45a207532ef139a9c83",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/BTCUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\BTCUSDT\\1h.parquet",
+      "rows": 60737,
+      "bytes": 8651685,
+      "sha256": "7e5e6f9b1c20fb8d3c728860490fd628dd30742356d4687deb196e2be8b4b244",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/BTCUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\BTCUSDT\\30m.parquet",
+      "rows": 121473,
+      "bytes": 18108111,
+      "sha256": "08f66d1a37b166521775dc2f6d873481f47d050def4eade0349fe89bde432c00",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/BTCUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\BTCUSDT\\4h.parquet",
+      "rows": 15184,
+      "bytes": 1719202,
+      "sha256": "1da95f770511fa77534e65f2872be53385cd2cce962038a62e65777fd14263c8",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/BTCUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\BTCUSDT\\5m.parquet",
+      "rows": 728833,
+      "bytes": 88690998,
+      "sha256": "46422108056fa9e0b22442fd1d367f80253fb11d2172670e1a08f89d7b19f4f3",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/ETHUSDT/12h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\ETHUSDT\\12h.parquet",
+      "rows": 4902,
+      "bytes": 462549,
+      "sha256": "5e356d384b0bc82de892078afbd9d21b96094f2b8eb1e3e5b1525626dd94fee7",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/ETHUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\ETHUSDT\\15m.parquet",
+      "rows": 235305,
+      "bytes": 35045554,
+      "sha256": "c36ee7b86e839123dd370ad5a3761195b74a5be3a01a460b592646a297bb0d45",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/ETHUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\ETHUSDT\\1h.parquet",
+      "rows": 58827,
+      "bytes": 8294646,
+      "sha256": "ea7dd7571c372f6cc6301830be907b4f78f9ea3855c4b469f2a253a365f2a58c",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/ETHUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\ETHUSDT\\30m.parquet",
+      "rows": 117653,
+      "bytes": 17287615,
+      "sha256": "68f77b2433e8415fb2418cb39634b96cb2d09d6f3adf24008f7b3fb66a9ef743",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/ETHUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\ETHUSDT\\4h.parquet",
+      "rows": 14707,
+      "bytes": 1650152,
+      "sha256": "deaa005f2ac1529de51ee2fa39e1929b8b8f13c50e8ec764efdbb752d4f39e95",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/ETHUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\ETHUSDT\\5m.parquet",
+      "rows": 705915,
+      "bytes": 84421348,
+      "sha256": "1d8783cdeca2cd1c6e67ca0e7aeb645f5d9db5659c7746ce7879e436ce6e5857",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/NEARUSDT/12h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\NEARUSDT\\12h.parquet",
+      "rows": 4256,
+      "bytes": 377593,
+      "sha256": "2c9021c697a49122d5cd37aecc20123e9a403058c4ad44e8dffe607fd01e46e7",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/NEARUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\NEARUSDT\\15m.parquet",
+      "rows": 204296,
+      "bytes": 28691733,
+      "sha256": "efe19fd3c14eeb7f597b0bd19f8e225fd790d6eaa13bf2f598378174601f1191",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/NEARUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\NEARUSDT\\1h.parquet",
+      "rows": 51074,
+      "bytes": 6691521,
+      "sha256": "c0cde2327280e8460321a26f61dd636c2c3c7837e85a11b550a95d4b65b28cad",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/NEARUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\NEARUSDT\\30m.parquet",
+      "rows": 102148,
+      "bytes": 14015738,
+      "sha256": "76f1bc295e83224371acb8c9290f648d22d61fa9fa2830fdd434cf80ffb3fd21",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/NEARUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\NEARUSDT\\4h.parquet",
+      "rows": 12768,
+      "bytes": 1321754,
+      "sha256": "809f1d7c683ce26bf31164dd2202e21ed670d22fe1176f573bbaa86bdf612a81",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/NEARUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\NEARUSDT\\5m.parquet",
+      "rows": 612888,
+      "bytes": 71174963,
+      "sha256": "6cd56ac4ce5a28818b8cd33679cb0ed9006501bdfa6b3f9635e78dde4e2dd1e4",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/SOLUSDT/12h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\SOLUSDT\\12h.parquet",
+      "rows": 4318,
+      "bytes": 396518,
+      "sha256": "dabb74dacb895d2f5d23b43dfb70f5b6016780d3ea11dbe2a2fd77fc12c9abaf",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/SOLUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\SOLUSDT\\15m.parquet",
+      "rows": 207276,
+      "bytes": 29904526,
+      "sha256": "585ef7331449b8352afe1287b81fce8d1045de2f99e80188d239a73ee9966d81",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/SOLUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\SOLUSDT\\1h.parquet",
+      "rows": 51819,
+      "bytes": 7096474,
+      "sha256": "6e66a648bc651a47ec92c4db17ecc19fbe96d02b89a18d507dc096f4dcd9ccb3",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/SOLUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\SOLUSDT\\30m.parquet",
+      "rows": 103638,
+      "bytes": 14734659,
+      "sha256": "414bb1cad25066d701473c9fb4e56c0d48c6d1f06c854f332a8dde14caed7554",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/SOLUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\SOLUSDT\\4h.parquet",
+      "rows": 12955,
+      "bytes": 1412045,
+      "sha256": "7a48b21ab62b49b98f041d1ea970387ddb255e11eb63e45f72c1bfa8f5c98645",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/SOLUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\SOLUSDT\\5m.parquet",
+      "rows": 621828,
+      "bytes": 73568885,
+      "sha256": "e94312eec54afd3f082881ff075caaecb8d1b2c23e1a5a7b118be98dba99dde1",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/ZECUSDT/12h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\ZECUSDT\\12h.parquet",
+      "rows": 4762,
+      "bytes": 433407,
+      "sha256": "35c1dd2dd2e1c86da5c634c18b6147fec57392fd94e8ec6dd4b708d2dc6f023d",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/ZECUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\ZECUSDT\\15m.parquet",
+      "rows": 228584,
+      "bytes": 32072792,
+      "sha256": "5ef184aabda700e51f06a03523c89df6880fb98d7d0c3621a6ae172fa9cc0837",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/ZECUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\ZECUSDT\\1h.parquet",
+      "rows": 57146,
+      "bytes": 7554398,
+      "sha256": "76cade350229936950ff4d6a83d4c9ef07aba7338a57343e90495afa49e71d92",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/ZECUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\ZECUSDT\\30m.parquet",
+      "rows": 114292,
+      "bytes": 15717957,
+      "sha256": "46fa8c26de0368a53ec0b50f515e2a3a51f7017b9d5fd976b4dd69fdfc450d03",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/ZECUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\ZECUSDT\\4h.parquet",
+      "rows": 14286,
+      "bytes": 1521982,
+      "sha256": "e187dff8322998f700000ed962d7a5d6db4209ded8c748fc282f5fa089acf861",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "emas/ZECUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\emas\\ZECUSDT\\5m.parquet",
+      "rows": 685752,
+      "bytes": 77439612,
+      "sha256": "cfaebca7f715b6b2ad801a5f972670b0f77d2204338975ed61e980c3384468da",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/BTCUSDT/12h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\BTCUSDT\\12h.parquet",
+      "rows": 5061,
+      "bytes": 517349,
+      "sha256": "ade5ca97b9a31875305fcaa67229a72d1cc567eb74210f31399dcf07553bdb72",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/BTCUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\BTCUSDT\\15m.parquet",
+      "rows": 242945,
+      "bytes": 49286610,
+      "sha256": "5e07687831ffdd178f8e0d7b7ad24a002e4bf9bfddb893973028b3f7891ba4f8",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/BTCUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\BTCUSDT\\1h.parquet",
+      "rows": 60737,
+      "bytes": 11160643,
+      "sha256": "a6166a1bf31c1b889680b31792097fe88ae216ff6d6fbe6cce67f20248a396e4",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/BTCUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\BTCUSDT\\30m.parquet",
+      "rows": 121473,
+      "bytes": 23819096,
+      "sha256": "51735bed3ddb80ff3cf55ae52da88ca132d37179b78a0dcd37cc622eb2e009b1",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/BTCUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\BTCUSDT\\4h.parquet",
+      "rows": 15184,
+      "bytes": 1973543,
+      "sha256": "1d2f2ccc402d326488c5974caf3843c2d7a96b54276fce002a5d862b83d3fbfa",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/BTCUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\BTCUSDT\\5m.parquet",
+      "rows": 728833,
+      "bytes": 117983222,
+      "sha256": "69368295e62da2c4ae4dc4c98fbc04020728ae4e63859515de5ec61c0f696543",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/ETHUSDT/12h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\ETHUSDT\\12h.parquet",
+      "rows": 4902,
+      "bytes": 496202,
+      "sha256": "98f698bbe01a3d47f5e13b00f45c54efa544afcbfab02c8002b360ffd0dca7e4",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/ETHUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\ETHUSDT\\15m.parquet",
+      "rows": 235305,
+      "bytes": 47500434,
+      "sha256": "efedbf729b88faf5f62a2e4d71f7e860fbf7985cc175c3a55107d0637bd283d8",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/ETHUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\ETHUSDT\\1h.parquet",
+      "rows": 58827,
+      "bytes": 10757844,
+      "sha256": "7da8b9b2220ecb7e3b945fcdc483f4729c1266222bef36ffa6f882fce9ea8405",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/ETHUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\ETHUSDT\\30m.parquet",
+      "rows": 117653,
+      "bytes": 22968647,
+      "sha256": "1f1188b94b8d9cf8da7d6b975159e0c7db3d10c2c8358888a53c8633961c5e44",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/ETHUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\ETHUSDT\\4h.parquet",
+      "rows": 14707,
+      "bytes": 1894720,
+      "sha256": "883b887e81ff860c22a2de7ad7b6854259a48655728cf5cfd629ab31fb53aa00",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/ETHUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\ETHUSDT\\5m.parquet",
+      "rows": 705915,
+      "bytes": 114386631,
+      "sha256": "335558f4760d721dc55a3d7edb19be64c587b251f8e9470c987c2385331d774b",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/NEARUSDT/12h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\NEARUSDT\\12h.parquet",
+      "rows": 4256,
+      "bytes": 409719,
+      "sha256": "9fc7832658969f4f6cb471b318ef41f35d94483bd3ce17218c5860e8ccb3735b",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/NEARUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\NEARUSDT\\15m.parquet",
+      "rows": 204296,
+      "bytes": 40756398,
+      "sha256": "234a7039affc4c54fd0bf9d9a127d3e314177bacd480029953663177a55d4c3c",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/NEARUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\NEARUSDT\\1h.parquet",
+      "rows": 51074,
+      "bytes": 9089595,
+      "sha256": "dd460ab23a0d27988dfeda05ad81e7f3ec93ffa807967dc53658e69650198756",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/NEARUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\NEARUSDT\\30m.parquet",
+      "rows": 102148,
+      "bytes": 19573449,
+      "sha256": "f924480e6b92ea7a908200513732f1f201eb323ef71591434c46a31a41d91236",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/NEARUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\NEARUSDT\\4h.parquet",
+      "rows": 12768,
+      "bytes": 1558101,
+      "sha256": "06e0041797bfc15a022d61d8cd235abe64ead0a0a8cf7b7eaa4a6ebe7b2edd71",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/NEARUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\NEARUSDT\\5m.parquet",
+      "rows": 612888,
+      "bytes": 100924514,
+      "sha256": "b53efed472cb7a3d505ac4fa9f0a38eada61544c5832e88357239a02125ce1a6",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/SOLUSDT/12h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\SOLUSDT\\12h.parquet",
+      "rows": 4318,
+      "bytes": 419519,
+      "sha256": "059dbc7ac4ec354ee13380520f220cdb8a8afb8b8814af5f6575389e82e200cb",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/SOLUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\SOLUSDT\\15m.parquet",
+      "rows": 207276,
+      "bytes": 41560056,
+      "sha256": "e10aa2ea2a96f6f0d7a86755708a20d601a7cc0035e07c84d742d5b998fa1339",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/SOLUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\SOLUSDT\\1h.parquet",
+      "rows": 51819,
+      "bytes": 9314704,
+      "sha256": "e69b26bb1554e0dfdedce5869ab75cd976a38bf75b90b22705941d161349ed7b",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/SOLUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\SOLUSDT\\30m.parquet",
+      "rows": 103638,
+      "bytes": 20003015,
+      "sha256": "6ef5c42550d2c98bc3bb3c01a2e7d98221d260a047553866ad45dd8ce5718d44",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/SOLUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\SOLUSDT\\4h.parquet",
+      "rows": 12955,
+      "bytes": 1605344,
+      "sha256": "b4fadbdf69695c3ac4005ce40edb4bdc12ff3193698636424b4022d7370405d1",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/SOLUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\SOLUSDT\\5m.parquet",
+      "rows": 621828,
+      "bytes": 102564919,
+      "sha256": "a84fad680db0fe5c61c6cc40dbde3c628882965eaf1e3596b042bf1b4db8abb1",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/ZECUSDT/12h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\ZECUSDT\\12h.parquet",
+      "rows": 4762,
+      "bytes": 474478,
+      "sha256": "3cab068d835c231a3491b90718192fa63f1b04c875ba06019293d74f3150522d",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/ZECUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\ZECUSDT\\15m.parquet",
+      "rows": 228584,
+      "bytes": 45657121,
+      "sha256": "0c796d9c7370ba912f64b9b28be34bea57bc04357646995f027f8149f6f3e541",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/ZECUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\ZECUSDT\\1h.parquet",
+      "rows": 57146,
+      "bytes": 10296756,
+      "sha256": "0b750d2fa9b7b2ec3f4a71dcaf51ef5f7f871ce96df9662174b37e5965dd64be",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/ZECUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\ZECUSDT\\30m.parquet",
+      "rows": 114292,
+      "bytes": 22018743,
+      "sha256": "7fe557d9531e04e28a86e828b55010e44acbdffacfc0202c776e918c8aaadee9",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/ZECUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\ZECUSDT\\4h.parquet",
+      "rows": 14286,
+      "bytes": 1806228,
+      "sha256": "902d4a7653da09f31ac702b6f6f1a3aacc223437bb5ee0eda5589d36a42b642a",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "ribbons/ZECUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\ribbons\\ZECUSDT\\5m.parquet",
+      "rows": 685752,
+      "bytes": 110413668,
+      "sha256": "d9304aa43213848da2a22c7928d9d3000d2a2463ea12ecb202ae2b11ec92e22e",
+      "class": "SUBSTRATE -- census-2B V-ULT-1"
+    },
+    "firstlook/5a_event_density.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\firstlook\\5a_event_density.parquet",
+      "rows": 2484,
+      "bytes": 31234,
+      "sha256": "093a3b7cfea271eb667b6939ab2c35c24a1efb2dbd3c3cdc8b73e08f2be4ba73",
+      "class": "DISPLAY-ONLY / Tier-E exploration -- m = 0"
+    },
+    "firstlook/5b_equivalence.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\firstlook\\5b_equivalence.parquet",
+      "rows": 108,
+      "bytes": 7548,
+      "sha256": "3f1a2a0530a35ef9ef535b3b7183390c269814f1270afa246db985320aa7c024",
+      "class": "DISPLAY-ONLY / Tier-E exploration -- m = 0"
+    },
+    "firstlook/5b_equivalence_htf.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\firstlook\\5b_equivalence_htf.parquet",
+      "rows": 324,
+      "bytes": 5884,
+      "sha256": "09afed019f4d090dd9bfa17f0063ec156af2b743877b1802d3fb31b5080a1e7a",
+      "class": "DISPLAY-ONLY / Tier-E exploration -- m = 0"
+    },
+    "firstlook/5c_vult_occupancy.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\firstlook\\5c_vult_occupancy.parquet",
+      "rows": 30,
+      "bytes": 18994,
+      "sha256": "0ab405daf96bd8e294c17f0b0c856c22ab679b9c0a3f4f8ab61f3ecb888b0308",
+      "class": "DISPLAY-ONLY / Tier-E exploration -- m = 0"
+    },
+    "firstlook/5d1_fast_by_vult.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\firstlook\\5d1_fast_by_vult.parquet",
+      "rows": 270,
+      "bytes": 20157,
+      "sha256": "c5fbff3ba9ecefd61823577c49dab709a48f4676b126729ab493ac75adddbe27",
+      "class": "DISPLAY-ONLY / Tier-E exploration -- m = 0"
+    },
+    "firstlook/5d2_knot_episodes.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\firstlook\\5d2_knot_episodes.parquet",
+      "rows": 10684,
+      "bytes": 464407,
+      "sha256": "d19857dda05da9010fa39358671fb2d610d94129144e7fea6111cb04fe66e186",
+      "class": "DISPLAY-ONLY / Tier-E exploration -- m = 0"
+    },
+    "firstlook/5d3_campaign_by_vh.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\firstlook\\5d3_campaign_by_vh.parquet",
+      "rows": 6571,
+      "bytes": 448846,
+      "sha256": "c16782cd8559c225cebcd392dd7c9354035efddd8edaced47eeecff2d2fa2793",
+      "class": "DISPLAY-ONLY / Tier-E exploration -- m = 0"
+    },
+    "firstlook/5d3_campaign_by_vh_summary.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\firstlook\\5d3_campaign_by_vh_summary.parquet",
+      "rows": 30,
+      "bytes": 8443,
+      "sha256": "b3ed3072d08fa1410ea80383b12d43de1c4efd3cd63fdfea38a5cd85989e60f7",
+      "class": "DISPLAY-ONLY / Tier-E exploration -- m = 0"
+    },
+    "firstlook/TIER_E.json": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\firstlook\\TIER_E.json",
+      "rows": null,
+      "bytes": 772,
+      "sha256": "54d8cd23db37c97ae3432e10c287ff4edff15bb9ce289899b11d062a6405097c",
+      "class": "DISPLAY-ONLY / Tier-E"
+    },
+    "cen2b_completion_audit.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\cen2b_completion_audit.parquet",
+      "rows": 157,
+      "bytes": 14456,
+      "sha256": "c86c2d65b4be7898dd42a766fbf19de73c3a4c985a8a7f7e4570f09ae5c0de80",
+      "class": "SUBSTRATE -- census-2B PART A / A-0 audit"
+    },
+    "refusals/BTCUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\BTCUSDT\\15m.parquet",
+      "rows": 11689,
+      "bytes": 344381,
+      "sha256": "6e405b9c328dc39193c84fd656f3691f486a58cea990b795911ef978d88fe22b",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "refusals/BTCUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\BTCUSDT\\1h.parquet",
+      "rows": 2974,
+      "bytes": 90011,
+      "sha256": "595e95dcc21ab3fc73db22eeb60f22539ab208effb49f03baa0a5e4303593b8a",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "refusals/BTCUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\BTCUSDT\\30m.parquet",
+      "rows": 5864,
+      "bytes": 171700,
+      "sha256": "d625fb35abc9a6cc498807a03e614fa57492000ce499ceaf3d7d3490936e39dc",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "refusals/BTCUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\BTCUSDT\\5m.parquet",
+      "rows": 37170,
+      "bytes": 1102407,
+      "sha256": "4fc01499633bc60eb2e88f05184844cdc432b98e0571c4fe5995f987bee18855",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "refusals/ETHUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\ETHUSDT\\15m.parquet",
+      "rows": 11911,
+      "bytes": 346704,
+      "sha256": "f9c1f023346653921ec35c5c1639f3a85c41e6aee9376a3b515b707f6a254aa4",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "refusals/ETHUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\ETHUSDT\\1h.parquet",
+      "rows": 3066,
+      "bytes": 91156,
+      "sha256": "fc8c3cd2df1dd6e5b3b552d7a90d6084678c60e30697c742c9c2e2f319fb87f9",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "refusals/ETHUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\ETHUSDT\\30m.parquet",
+      "rows": 5773,
+      "bytes": 169182,
+      "sha256": "a1e92c311854ee314438efcc8552fc0d20f4ef060208942d6ea05b1b4b14b328",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "refusals/ETHUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\ETHUSDT\\5m.parquet",
+      "rows": 36253,
+      "bytes": 1070598,
+      "sha256": "47495ee8001eb317268c7f05bee34cd0fb23f267490bf888ce486a423547dba6",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "refusals/NEARUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\NEARUSDT\\15m.parquet",
+      "rows": 10534,
+      "bytes": 311394,
+      "sha256": "171cd62bd48869ea9a5bc4195ac25de5d88b457c1cbc1dd7188f046b86d5bdfc",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "refusals/NEARUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\NEARUSDT\\1h.parquet",
+      "rows": 2640,
+      "bytes": 79482,
+      "sha256": "f4f23f499ab75f45ebeff02cfb69a061403924560375cf551ae29fec6c2e3b5c",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "refusals/NEARUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\NEARUSDT\\30m.parquet",
+      "rows": 5191,
+      "bytes": 151850,
+      "sha256": "b866b6f16ee25ac07b2bcfe6738c1ec06b328f810a8fce532c7659f596093cc1",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "refusals/NEARUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\NEARUSDT\\5m.parquet",
+      "rows": 32935,
+      "bytes": 967251,
+      "sha256": "b63651cd5b18dd4642942dd6673296093cd2b24e7bf6effab10a657e4aa56c20",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "refusals/SOLUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\SOLUSDT\\15m.parquet",
+      "rows": 10654,
+      "bytes": 316023,
+      "sha256": "2b1970432171721e0dce9d5d7e6599da27c46cfcfaeb1746cad1c94e45495145",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "refusals/SOLUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\SOLUSDT\\1h.parquet",
+      "rows": 2667,
+      "bytes": 80961,
+      "sha256": "e9647c9ffc28bf115f0bf4f69bddf7ca5d82e311cfee128b56048cabc08f3a48",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "refusals/SOLUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\SOLUSDT\\30m.parquet",
+      "rows": 5311,
+      "bytes": 158074,
+      "sha256": "edd1e05c10fa1ff8ff7ffcd9d792e2dd964de4348e2fdb145f721d1a822645ef",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "refusals/SOLUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\SOLUSDT\\5m.parquet",
+      "rows": 33202,
+      "bytes": 981474,
+      "sha256": "07f7191101f4776b8e79093cdce761221d3b7a45a16153b193815baf9b07c2f1",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "refusals/ZECUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\ZECUSDT\\15m.parquet",
+      "rows": 11797,
+      "bytes": 345995,
+      "sha256": "1c552cc68514591deba57e6fdeb8efbb64f5143a5b8cfc50e951abffbb519e84",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "refusals/ZECUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\ZECUSDT\\1h.parquet",
+      "rows": 2944,
+      "bytes": 87739,
+      "sha256": "d16b1c2ab087715cf75a636e7401eb0a32827822b4f87f21598edccbb41766f9",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "refusals/ZECUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\ZECUSDT\\30m.parquet",
+      "rows": 5878,
+      "bytes": 171456,
+      "sha256": "c739f07ebf847e87d31f2de814bc987eda91b721d2fbdd7353e269ba470cc1d6",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "refusals/ZECUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\ZECUSDT\\5m.parquet",
+      "rows": 37259,
+      "bytes": 1100940,
+      "sha256": "284731910dc842e24277c291efca4adce928000f04eef9e62254ac6fc9d2fff3",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    },
+    "springs/BTCUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\BTCUSDT\\15m.parquet",
+      "rows": 9399,
+      "bytes": 854214,
+      "sha256": "bfe5d957876d317a9c6b51d9c21b91dfa69926a69d5f8d383bc80969dd391ba6",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "springs/BTCUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\BTCUSDT\\1h.parquet",
+      "rows": 2502,
+      "bytes": 227733,
+      "sha256": "15654fa7ccbba9239715d80e48c3f1a546fb58a90e64c12e922722f43eef3e8e",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "springs/BTCUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\BTCUSDT\\30m.parquet",
+      "rows": 4812,
+      "bytes": 435831,
+      "sha256": "ec9a240b8fc06a41d123a225ae9ade4918682144b7a193346b2b45687ee0ee22",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "springs/BTCUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\BTCUSDT\\5m.parquet",
+      "rows": 28930,
+      "bytes": 2631400,
+      "sha256": "d6c6af473344ba080c3b33360ab5b26c8cbb9e1eb22ff057675b0230f4c4bec7",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "springs/ETHUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\ETHUSDT\\15m.parquet",
+      "rows": 9080,
+      "bytes": 825351,
+      "sha256": "d8326715516455fa392247d6a6d2ec8cd4386c67316bc53dd1867a6edf419813",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "springs/ETHUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\ETHUSDT\\1h.parquet",
+      "rows": 2431,
+      "bytes": 221708,
+      "sha256": "7f98c6243fe06ef46592f7b51cd8d0efcdf952b9e8d86373f0ab4f3dd04caf1f",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "springs/ETHUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\ETHUSDT\\30m.parquet",
+      "rows": 4740,
+      "bytes": 429487,
+      "sha256": "ddcf93d11a5972eac161fb18d06128f4bf1f577fcbb141f764cb31f1ad53adc5",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "springs/ETHUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\ETHUSDT\\5m.parquet",
+      "rows": 27437,
+      "bytes": 2494328,
+      "sha256": "5c3330a8318a4c085f98062b545284384c18c7cc90a4d15fa0900db49ba29a66",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "springs/NEARUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\NEARUSDT\\15m.parquet",
+      "rows": 9545,
+      "bytes": 849752,
+      "sha256": "8686ac7bb5c32595ef01c947a7a1fc619b6a7c7d697611064bf1d98db26ffe88",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "springs/NEARUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\NEARUSDT\\1h.parquet",
+      "rows": 2538,
+      "bytes": 229819,
+      "sha256": "ce081a0ad65c3112ea273eb32dc1809aae5eb51a8ae525827b05a5b1f930af7b",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "springs/NEARUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\NEARUSDT\\30m.parquet",
+      "rows": 4961,
+      "bytes": 442755,
+      "sha256": "1c7273c054e0055317be884eb63097f76a1e7eab81317055c562e43d4cf0fcfd",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "springs/NEARUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\NEARUSDT\\5m.parquet",
+      "rows": 27542,
+      "bytes": 2432485,
+      "sha256": "70db9b301b54916f6bb8fed57291f843569559ce7d9e7c983cea3ba7b15c87e5",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "springs/SOLUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\SOLUSDT\\15m.parquet",
+      "rows": 9436,
+      "bytes": 856032,
+      "sha256": "f5ea97291996c977f32c8fad892368da63943ec0f43ee95fcdc44a201148c4fe",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "springs/SOLUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\SOLUSDT\\1h.parquet",
+      "rows": 2330,
+      "bytes": 213408,
+      "sha256": "09abd54a223aa9b171586f03ccd68b59adbd4521c3238039116629e929e9cf3e",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "springs/SOLUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\SOLUSDT\\30m.parquet",
+      "rows": 4672,
+      "bytes": 423627,
+      "sha256": "a0d920d3af1ca4454eddbd1dc1369c1acf8bb2a211d34a5d4d53d6a4ea052d15",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "springs/SOLUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\SOLUSDT\\5m.parquet",
+      "rows": 28159,
+      "bytes": 2544292,
+      "sha256": "c5d1f799837989f6e8ebd76ed6c3a417cb0a7b99a52e9fe888ff05148bd8d281",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "springs/ZECUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\ZECUSDT\\15m.parquet",
+      "rows": 10328,
+      "bytes": 922396,
+      "sha256": "6354c0aa953c86b0e0f952af31b48e035460be67de00249b850c6fc1e0c32708",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "springs/ZECUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\ZECUSDT\\1h.parquet",
+      "rows": 2700,
+      "bytes": 244007,
+      "sha256": "86fb6c0cf46e60c6523f7c8c3689011335aea0ed3fe2e689b43049435f537252",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "springs/ZECUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\ZECUSDT\\30m.parquet",
+      "rows": 5324,
+      "bytes": 476769,
+      "sha256": "68160272463faa1827bac21c9b5b80d2939153facdb36f30af079979ffd3151c",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "springs/ZECUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\springs\\ZECUSDT\\5m.parquet",
+      "rows": 30402,
+      "bytes": 2688759,
+      "sha256": "0d99a4eb61c26aa1494c79656a7a0f0be15039080890c995db404cd34ddc5a36",
+      "class": "SUBSTRATE -- census-2B PART A / A-4 spring/upthrust stream"
+    },
+    "transitions/BTCUSDT/15m_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\BTCUSDT\\15m_fans.parquet",
+      "rows": 14750,
+      "bytes": 1068134,
+      "sha256": "b27fe7fb5f57597e703288215a363e3500e3ebf91fd420890ce48e64371f6c1c",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/BTCUSDT/15m_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\BTCUSDT\\15m_knots.parquet",
+      "rows": 11603,
+      "bytes": 994054,
+      "sha256": "da3866fdf8b0158c5f09b3d52e4d71be273af1610b1f1e9e4dce05c5c211f8f7",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/BTCUSDT/1h_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\BTCUSDT\\1h_fans.parquet",
+      "rows": 3521,
+      "bytes": 253419,
+      "sha256": "3cdf0e45b4ed22a8a345e55c7ebf3348d098fe9242ebe4c4b52930b6c9459d51",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/BTCUSDT/1h_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\BTCUSDT\\1h_knots.parquet",
+      "rows": 2712,
+      "bytes": 231143,
+      "sha256": "8b7e2602957fc821ad538e0d2c56840b7e8a402565aca3b1fcc3c36cd5c9c585",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/BTCUSDT/30m_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\BTCUSDT\\30m_fans.parquet",
+      "rows": 7158,
+      "bytes": 515902,
+      "sha256": "233737a509efba2b05d785269edb022ec2810117643c6647dd7aab4b082db79c",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/BTCUSDT/30m_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\BTCUSDT\\30m_knots.parquet",
+      "rows": 5540,
+      "bytes": 472395,
+      "sha256": "fc63b1991495e00716ba289bef58e6a514bb82165a1e95289d55e2c21b2934ac",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/BTCUSDT/5m_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\BTCUSDT\\5m_fans.parquet",
+      "rows": 44731,
+      "bytes": 3315883,
+      "sha256": "f9bff78261e5472de4890c469df27b16baefae6f21fdfef9507ce022546da09a",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/BTCUSDT/5m_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\BTCUSDT\\5m_knots.parquet",
+      "rows": 37502,
+      "bytes": 3272038,
+      "sha256": "d1771395ec8e8f86c569a302262fa1b1b1ab3d35c4d9e5d820777ddac67c5e4f",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/ETHUSDT/15m_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\ETHUSDT\\15m_fans.parquet",
+      "rows": 14004,
+      "bytes": 1016110,
+      "sha256": "79eb33422cef50f8e9a7f538333cf25e7546f20b5d8704e08cada16242c33053",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/ETHUSDT/15m_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\ETHUSDT\\15m_knots.parquet",
+      "rows": 11142,
+      "bytes": 956355,
+      "sha256": "05ff6971f8da145a4add6399418987d41cf6d08675b5b3de4f35c38a3c6a5ff9",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/ETHUSDT/1h_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\ETHUSDT\\1h_fans.parquet",
+      "rows": 3365,
+      "bytes": 242633,
+      "sha256": "c1277bf2bc75aa6fa9e8f4fb4aba799237e212b2310ee535cd39533b27800b79",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/ETHUSDT/1h_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\ETHUSDT\\1h_knots.parquet",
+      "rows": 2646,
+      "bytes": 226386,
+      "sha256": "95bcc8b18c807a85741a86ea0369ef685f009f59d08f60298faf9ac6ac5efe8b",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/ETHUSDT/30m_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\ETHUSDT\\30m_fans.parquet",
+      "rows": 6787,
+      "bytes": 488160,
+      "sha256": "d21e53ae482861550c0eba28c5c7d53963df60c3f2286056d4fedb1f10107774",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/ETHUSDT/30m_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\ETHUSDT\\30m_knots.parquet",
+      "rows": 5424,
+      "bytes": 462166,
+      "sha256": "47f8e711831f64709555a9c75d5cf1f4a0df283ab8fc70608c9bbf1bd9d0f4d2",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/ETHUSDT/5m_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\ETHUSDT\\5m_fans.parquet",
+      "rows": 43144,
+      "bytes": 3199783,
+      "sha256": "2b1f70ee175f0b614bcb3742d9ee91159f25fbcf8f2c9346aa923f4a0d1c0a66",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/ETHUSDT/5m_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\ETHUSDT\\5m_knots.parquet",
+      "rows": 35328,
+      "bytes": 3086201,
+      "sha256": "c1bce2345c2dcf9bfb506106bb0cb7a341472b2ca878ed0c36196851124aeb2f",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/NEARUSDT/15m_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\NEARUSDT\\15m_fans.parquet",
+      "rows": 12236,
+      "bytes": 886983,
+      "sha256": "46965a36c21c850b3b826b0eb836f7371cc77bd8923403d1651a0346e266428c",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/NEARUSDT/15m_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\NEARUSDT\\15m_knots.parquet",
+      "rows": 9807,
+      "bytes": 840922,
+      "sha256": "c1da13277e2a405be73663daa690d4985473adb147cb33d27473a928162d0984",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/NEARUSDT/1h_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\NEARUSDT\\1h_fans.parquet",
+      "rows": 2918,
+      "bytes": 211430,
+      "sha256": "5fb3225e874dc17593eb52e9c513f25ac6d2de8463f7c449ab2c17419688502d",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/NEARUSDT/1h_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\NEARUSDT\\1h_knots.parquet",
+      "rows": 2346,
+      "bytes": 201482,
+      "sha256": "596a02872f0fc46e1c8f2633b94310d0e2b4c1e297a7e60040b6ce7c4e3ceb11",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/NEARUSDT/30m_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\NEARUSDT\\30m_fans.parquet",
+      "rows": 5953,
+      "bytes": 428776,
+      "sha256": "4d1c1c57c289aeb056f74ac289a1bcf155e378a61adad80cfc9d8a9af28100f6",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/NEARUSDT/30m_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\NEARUSDT\\30m_knots.parquet",
+      "rows": 4829,
+      "bytes": 411446,
+      "sha256": "3668f1b3d1fc5a7123b63d3c8575619be02d44a955acfdbe435d2d35694b416f",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/NEARUSDT/5m_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\NEARUSDT\\5m_fans.parquet",
+      "rows": 36916,
+      "bytes": 2734176,
+      "sha256": "323bfea1a4c30e6cb84d2542267fa96462b2151b319cc8868114d331d866af30",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/NEARUSDT/5m_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\NEARUSDT\\5m_knots.parquet",
+      "rows": 30681,
+      "bytes": 2625004,
+      "sha256": "d3450f27cefc658e1ea28fedd092cecd5bb7e00f6015d1253f26e187620af7d3",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/SOLUSDT/15m_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\SOLUSDT\\15m_fans.parquet",
+      "rows": 11987,
+      "bytes": 872145,
+      "sha256": "0e500c790ee31112871d62dc808eaffd29cd65e6bfac64fd9c6b801e6043d88b",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/SOLUSDT/15m_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\SOLUSDT\\15m_knots.parquet",
+      "rows": 9867,
+      "bytes": 848015,
+      "sha256": "7bdf871ada473bbfe1ad1749cef10a8c0be59f9d0d056d929aa611318d72e002",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/SOLUSDT/1h_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\SOLUSDT\\1h_fans.parquet",
+      "rows": 2871,
+      "bytes": 208925,
+      "sha256": "9a5e626eb63d2d3ea11281081dbd8186ae4752491abe99bc114c65a3ee219aa2",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/SOLUSDT/1h_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\SOLUSDT\\1h_knots.parquet",
+      "rows": 2433,
+      "bytes": 208884,
+      "sha256": "12e798e8009642dfaebeeda29feb0f59907eb280f8ac887eefb72813d5f59990",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/SOLUSDT/30m_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\SOLUSDT\\30m_fans.parquet",
+      "rows": 5869,
+      "bytes": 424192,
+      "sha256": "94ac76f62c5234c0beeb25ca9e2e4c135eee9eb846e411eaeda32f601437a728",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/SOLUSDT/30m_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\SOLUSDT\\30m_knots.parquet",
+      "rows": 4898,
+      "bytes": 418614,
+      "sha256": "583342b17aec300c4dc31776b15d8f8e63b38abbc5f4dd9d6b49e0384ef40960",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/SOLUSDT/5m_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\SOLUSDT\\5m_fans.parquet",
+      "rows": 36875,
+      "bytes": 2738386,
+      "sha256": "92c3392961c48b24a47f6268fc72020025db0e9b7d40f54436aa6d657e423996",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/SOLUSDT/5m_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\SOLUSDT\\5m_knots.parquet",
+      "rows": 30643,
+      "bytes": 2629533,
+      "sha256": "e087417d24b065cdfd1df4e057cebdce8e12150528a1835f7c0ec36ffbd4a75a",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/ZECUSDT/15m_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\ZECUSDT\\15m_fans.parquet",
+      "rows": 13776,
+      "bytes": 998149,
+      "sha256": "6ee1e8262c6caec50f9480ede820c8e1be26cc42c97617bcb61dadb3fdca1caf",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/ZECUSDT/15m_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\ZECUSDT\\15m_knots.parquet",
+      "rows": 11326,
+      "bytes": 969057,
+      "sha256": "cd9d87a204963a023d407acb188e4f9cee6ff44d669857114d995f9fbed17b40",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/ZECUSDT/1h_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\ZECUSDT\\1h_fans.parquet",
+      "rows": 3246,
+      "bytes": 233906,
+      "sha256": "9c921690af9df56f9abee263e0d2590c14987d474974cbcf81296beb5a968977",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/ZECUSDT/1h_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\ZECUSDT\\1h_knots.parquet",
+      "rows": 2714,
+      "bytes": 230921,
+      "sha256": "587efcf1716069facf4668d44b3985d680247f0c97840f764c640bfe06a866ec",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/ZECUSDT/30m_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\ZECUSDT\\30m_fans.parquet",
+      "rows": 6708,
+      "bytes": 483922,
+      "sha256": "3381eecf7ed99744bfb6c3572e8978256b978ef2bc0ce6b32f7c8d60ef9d17a3",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/ZECUSDT/30m_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\ZECUSDT\\30m_knots.parquet",
+      "rows": 5574,
+      "bytes": 474207,
+      "sha256": "a09a90b35ed6e1f6bd2e15bad8987c4757d73d38e4037856c54847da17513663",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/ZECUSDT/5m_fans.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\ZECUSDT\\5m_fans.parquet",
+      "rows": 41612,
+      "bytes": 3082018,
+      "sha256": "e7c887d5ce31e1218ce2b45977d30ccb4d4e2667c71a8f8ef9c999cdeb2a3d56",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "transitions/ZECUSDT/5m_knots.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\transitions\\ZECUSDT\\5m_knots.parquet",
+      "rows": 35071,
+      "bytes": 3055260,
+      "sha256": "4cc651da3ff624515e0f7c962509c70773133486a20479332cc424e2da3e007a",
+      "class": "SUBSTRATE -- census-2B PART A / A-3 transition ledger"
+    },
+    "windows/a2_stats.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\a2_stats.parquet",
+      "rows": 25,
+      "bytes": 2975,
+      "sha256": "b4b9984ebccd6b7f773fd266330da7dc354b0499f36b57f1c5f9f846af8b9691",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/BTCUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\BTCUSDT\\15m.parquet",
+      "rows": 4564,
+      "bytes": 814983,
+      "sha256": "321e0f0c02446e8de2666608d73c37e9d993add7f606c8d8483eb166dfbc29b9",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/BTCUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\BTCUSDT\\1h.parquet",
+      "rows": 1016,
+      "bytes": 207259,
+      "sha256": "21cc9a976297add95597ee5c43ce69f6d1255085bac4220c0bcf2f30b8422455",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/BTCUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\BTCUSDT\\30m.parquet",
+      "rows": 2133,
+      "bytes": 397980,
+      "sha256": "47dcc27ec4b41b55df55ca0ed19dbcaf5388357e351a17653f3511c345e3bd43",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/BTCUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\BTCUSDT\\4h.parquet",
+      "rows": 229,
+      "bytes": 71424,
+      "sha256": "0843e1095c6381b94bdbf8f55e15fd258ecb4659f320425cf7b6e20912ad2f6c",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/BTCUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\BTCUSDT\\5m.parquet",
+      "rows": 14544,
+      "bytes": 2491777,
+      "sha256": "1dd0580a5c047a39d8fb69381176bf75a86e9fcad186876a5d8e0f16a713ecda",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/ETHUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\ETHUSDT\\15m.parquet",
+      "rows": 4377,
+      "bytes": 782879,
+      "sha256": "9d6034c2058357ea5e7eeb5a3067244834e8888070c86ed85101a565cbe7ff39",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/ETHUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\ETHUSDT\\1h.parquet",
+      "rows": 1022,
+      "bytes": 207006,
+      "sha256": "26baeaf9d0ca3b1ddab82bad9c1b4578276629a59e3e45aab5fa2a6390202e53",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/ETHUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\ETHUSDT\\30m.parquet",
+      "rows": 2157,
+      "bytes": 399703,
+      "sha256": "44f1918883bdddca0de486d974ce6d969385d83b5f7079019868edee3341f1f3",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/ETHUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\ETHUSDT\\4h.parquet",
+      "rows": 243,
+      "bytes": 73006,
+      "sha256": "974e1030f372578e52a6193c54885a42bbd319bde4bec415f6b044121d01113c",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/ETHUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\ETHUSDT\\5m.parquet",
+      "rows": 13873,
+      "bytes": 2377266,
+      "sha256": "4c29fc86e76b4451c436b39390d59c4dbcc70c2a5e34bb2501132fa62147a6f5",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/NEARUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\NEARUSDT\\15m.parquet",
+      "rows": 3912,
+      "bytes": 695902,
+      "sha256": "90187a1b3bb92c206cfa722f04f66716c456e0189f4659f904e238a4890859df",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/NEARUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\NEARUSDT\\1h.parquet",
+      "rows": 901,
+      "bytes": 186151,
+      "sha256": "f67cae76f4e6dfb83aded87c32c1178f3384223e7868aee6dd1173d85d9b4d4d",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/NEARUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\NEARUSDT\\30m.parquet",
+      "rows": 1847,
+      "bytes": 345579,
+      "sha256": "2ee96271373cf3be279eb4354d0dcd443a8edbc8df18cf75b3188c7426feeba6",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/NEARUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\NEARUSDT\\4h.parquet",
+      "rows": 207,
+      "bytes": 68195,
+      "sha256": "851d67cb97fafa6e6e4f1d85ecf883ac1e636ececaf8af60b7d86a9a080615f8",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/NEARUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\NEARUSDT\\5m.parquet",
+      "rows": 12093,
+      "bytes": 2080043,
+      "sha256": "ba3cedf4f3a760598495eb58fafc693ddd684b33a006638764aa879657940290",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/SOLUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\SOLUSDT\\15m.parquet",
+      "rows": 3787,
+      "bytes": 674057,
+      "sha256": "e6df9369392b10d22c94e60b182daeea76f176ea0188f5037de8d2a0a9086cbe",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/SOLUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\SOLUSDT\\1h.parquet",
+      "rows": 918,
+      "bytes": 188013,
+      "sha256": "0f8423271b746e2c981bcf2a06412c9964579f775f6bb6ddf8ffd706696d688c",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/SOLUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\SOLUSDT\\30m.parquet",
+      "rows": 1859,
+      "bytes": 348135,
+      "sha256": "255c9d6d5991f26010da0ab071888fa59ff183c7abee03f278d19d5b38c88b37",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/SOLUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\SOLUSDT\\4h.parquet",
+      "rows": 207,
+      "bytes": 68417,
+      "sha256": "ebdcc3a9517dd2f14a633290038e390149f6b4da0cc74ca073e9e9dd7ca6cc88",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/SOLUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\SOLUSDT\\5m.parquet",
+      "rows": 11836,
+      "bytes": 2045794,
+      "sha256": "656939e4e946146562b66d8bd9287927161aa29476708b5786eab1375b572f35",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/ZECUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\ZECUSDT\\15m.parquet",
+      "rows": 4274,
+      "bytes": 761577,
+      "sha256": "b66569895bae1511748b47f644494e23b2a1b64f4f4cc0fefa519582dc099701",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/ZECUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\ZECUSDT\\1h.parquet",
+      "rows": 1027,
+      "bytes": 205936,
+      "sha256": "93b7946333bd1b47db5ebf4e3d54cae0d2222fc44b7f3469fea475d013c9c1f9",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/ZECUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\ZECUSDT\\30m.parquet",
+      "rows": 2106,
+      "bytes": 388814,
+      "sha256": "71fc5adcb1432f103afea8a0b4c2ac8eaf7a8d7c576968448db839807b8a72c0",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/ZECUSDT/4h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\ZECUSDT\\4h.parquet",
+      "rows": 230,
+      "bytes": 71389,
+      "sha256": "d0c9b15367ee5e65daa609c877c3b5632af90f6ffe88aa1de340b01200f90fcf",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "windows/ZECUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\windows\\ZECUSDT\\5m.parquet",
+      "rows": 13791,
+      "bytes": 2352039,
+      "sha256": "260ddd0b3cc022d9fd8b46895a0fa09c51d75771c71604896ef2ffa22fe097f7",
+      "class": "SUBSTRATE -- census-2B PART A / A-2 armed-window ledger v2"
+    },
+    "wtb1/agg/w_a_station_occupancy.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\agg\\w_a_station_occupancy.parquet",
+      "rows": 6512,
+      "bytes": 318205,
+      "sha256": "d0054f5aac5198ed7b0eb692aa3d4e32d9fd412c2f60fea38bf48da520a856a8",
+      "class": "DISPLAY-ONLY / Tier-E -- W-TB1 aggregate; REGISTRATIONS DEFERRED; m declared in the probe ledger"
+    },
+    "wtb1/agg/w_b_motifs_absolute.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\agg\\w_b_motifs_absolute.parquet",
+      "rows": 288819,
+      "bytes": 4506578,
+      "sha256": "2961b24a5ad5038f8ab4522fcf3adf95ffda5f5dc1602246370905809d11e818",
+      "class": "DISPLAY-ONLY / Tier-E -- W-TB1 aggregate; REGISTRATIONS DEFERRED; m declared in the probe ledger"
+    },
+    "wtb1/agg/w_b_motifs_by_k.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\agg\\w_b_motifs_by_k.parquet",
+      "rows": 12,
+      "bytes": 2898,
+      "sha256": "61d63dc712d1f16db91f315e928ce90e4940cc7bddad0db0c14e2766497b9318",
+      "class": "DISPLAY-ONLY / Tier-E -- W-TB1 aggregate; REGISTRATIONS DEFERRED; m declared in the probe ledger"
+    },
+    "wtb1/agg/w_b_motifs_gov_relative.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\agg\\w_b_motifs_gov_relative.parquet",
+      "rows": 262207,
+      "bytes": 4031494,
+      "sha256": "5cef0de8750b31bd118cf06c286899c75cf7a278676d218e85c2b6206e26fa32",
+      "class": "DISPLAY-ONLY / Tier-E -- W-TB1 aggregate; REGISTRATIONS DEFERRED; m declared in the probe ledger"
+    },
+    "wtb1/agg/w_b_motifs_tier.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\agg\\w_b_motifs_tier.parquet",
+      "rows": 192477,
+      "bytes": 3050769,
+      "sha256": "361d091dd91c1cfdf7a04bbe62ada183bd919219f2f1f7e306f543b9cc736727",
+      "class": "DISPLAY-ONLY / Tier-E -- W-TB1 aggregate; REGISTRATIONS DEFERRED; m declared in the probe ledger"
+    },
+    "wtb1/agg/w_b_motifs_usable.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\agg\\w_b_motifs_usable.parquet",
+      "rows": 21292,
+      "bytes": 413330,
+      "sha256": "9fbf4edc3dc4115e4c11d4bc04bae9e8f2b305fa092e759fbf4be06a5faaa702",
+      "class": "DISPLAY-ONLY / Tier-E -- W-TB1 aggregate; REGISTRATIONS DEFERRED; m declared in the probe ledger"
+    },
+    "wtb1/agg/w_c_fan_question.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\agg\\w_c_fan_question.parquet",
+      "rows": 6512,
+      "bytes": 307975,
+      "sha256": "369a19a25924c0d9924bea8b2608f299b36669daa20227c10261f88a66a6fa07",
+      "class": "DISPLAY-ONLY / Tier-E -- W-TB1 aggregate; REGISTRATIONS DEFERRED; m declared in the probe ledger"
+    },
+    "wtb1/agg/w_d_reclaim.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\agg\\w_d_reclaim.parquet",
+      "rows": 1187,
+      "bytes": 58617,
+      "sha256": "7608c75bf4ff0b0d1dd705800aa5480e6b21f3be271ad5f892b077aae1a46c67",
+      "class": "DISPLAY-ONLY / Tier-E -- W-TB1 aggregate; REGISTRATIONS DEFERRED; m declared in the probe ledger"
+    },
+    "wtb1/state/BTCUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\BTCUSDT\\15m.parquet",
+      "rows": 124036,
+      "bytes": 18064064,
+      "sha256": "b17e7660b915cf5348a561ffc9634a0144ff4a009bdce29acb57f4b3163c352c",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/state/BTCUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\BTCUSDT\\1h.parquet",
+      "rows": 55836,
+      "bytes": 6274190,
+      "sha256": "e2224fc77539814438884bd3aff9006467e1b3370118facfd140e033f4df5d54",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/state/BTCUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\BTCUSDT\\30m.parquet",
+      "rows": 79560,
+      "bytes": 10768012,
+      "sha256": "77adaa0cecd3c8d8cbde5ea9facb085bb4d4da289602507266c83d6b914a65c9",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/state/BTCUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\BTCUSDT\\5m.parquet",
+      "rows": 300756,
+      "bytes": 44481568,
+      "sha256": "c9cb13dd664148dc83d3f5b850dd257943a2ae2926f50bb5a6da020493b23bb2",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/state/ETHUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\ETHUSDT\\15m.parquet",
+      "rows": 132063,
+      "bytes": 18896003,
+      "sha256": "51e54a9c815b0eed44d8c1fff515e519b21fa1ac26b907111141a75440be8469",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/state/ETHUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\ETHUSDT\\1h.parquet",
+      "rows": 60309,
+      "bytes": 6379086,
+      "sha256": "98c7c837a8312d7c1da89d72d4cd0e71025266b1e2972e11531362d8078fbffa",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/state/ETHUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\ETHUSDT\\30m.parquet",
+      "rows": 85784,
+      "bytes": 11270117,
+      "sha256": "ca8e2b2de707f68df8ab96cc5843b415aa6fae7ada11ce4a987d7d36c0fbfe33",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/state/ETHUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\ETHUSDT\\5m.parquet",
+      "rows": 319941,
+      "bytes": 46136117,
+      "sha256": "5e8d94621b8eab5f2f2eb85eab87f02b19653f0190392c03050fa6e529e9fac4",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/state/NEARUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\NEARUSDT\\15m.parquet",
+      "rows": 102221,
+      "bytes": 13938624,
+      "sha256": "9c3968f7cd300669e5a6d6e810e3ae013a3efdd6b0ba6be512d2a0e67a13e441",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/state/NEARUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\NEARUSDT\\1h.parquet",
+      "rows": 46330,
+      "bytes": 4719769,
+      "sha256": "096b8fb854d33dbc5f134adc7da94c9d3a5346fedc567a8d96194fefbd403743",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/state/NEARUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\NEARUSDT\\30m.parquet",
+      "rows": 65912,
+      "bytes": 8392228,
+      "sha256": "9db43c18fa32cd9add276704fdbc2901da0feb0dcef0712221701a8437896594",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/state/NEARUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\NEARUSDT\\5m.parquet",
+      "rows": 245692,
+      "bytes": 34053551,
+      "sha256": "625113702b2f91263dc5672d18f458001f25fac44ff7e7058f1c074a0e2b88f0",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/state/SOLUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\SOLUSDT\\15m.parquet",
+      "rows": 112458,
+      "bytes": 15773117,
+      "sha256": "fcd8bcc1c82d17ace6b2005b614dc21f68c0c9323b06b19006404086246d0097",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/state/SOLUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\SOLUSDT\\1h.parquet",
+      "rows": 51129,
+      "bytes": 5424773,
+      "sha256": "2abfcb8f9381d96cd36475157a20cb0bb92ec5980b53cd77452fbd3709bcee89",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/state/SOLUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\SOLUSDT\\30m.parquet",
+      "rows": 72787,
+      "bytes": 9536568,
+      "sha256": "dff0e6e711d9461ece0bd3a1a0a645811a31f1d9f7475e9d1b27cd7d02cf129d",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/state/SOLUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\SOLUSDT\\5m.parquet",
+      "rows": 269381,
+      "bytes": 39005378,
+      "sha256": "6baaeba81ca6f8d1bd7724a7572a2a82bb14db5a3f8c0f43f7e0a178a99bcca1",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/state/ZECUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\ZECUSDT\\15m.parquet",
+      "rows": 115547,
+      "bytes": 16603021,
+      "sha256": "91283a3db498842862dc70a01588d45834f988e49ed9ad7487fee3efdc75bf8d",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/state/ZECUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\ZECUSDT\\1h.parquet",
+      "rows": 51948,
+      "bytes": 5685172,
+      "sha256": "26cfcda106df483b811b282e8624a4a0e5c096a9f21f416a935fde631f033d17",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/state/ZECUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\ZECUSDT\\30m.parquet",
+      "rows": 74252,
+      "bytes": 9953230,
+      "sha256": "3ce51cfe047c78f997fdacf82b5765d5a41ca1998ab510fc7c10b5752463b4ba",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/state/ZECUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\state\\ZECUSDT\\5m.parquet",
+      "rows": 280676,
+      "bytes": 41193494,
+      "sha256": "73e72438552212c4be3289bad0e15b9895c6a427c0553646cac493daf16002ca",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/BTCUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\BTCUSDT\\15m.parquet",
+      "rows": 108077,
+      "bytes": 1921003,
+      "sha256": "20604c6dc4fb872948b32760dc14d372ffd70025399cb97e810025b75b79011f",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/BTCUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\BTCUSDT\\1h.parquet",
+      "rows": 27213,
+      "bytes": 486257,
+      "sha256": "91c83f738dd0a9dde96872e8da1c47316360251236fac4513bc86cc14de15848",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/BTCUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\BTCUSDT\\30m.parquet",
+      "rows": 53633,
+      "bytes": 955233,
+      "sha256": "6c51c6c37906549a52208fdc71819083c10d452e2a0448be21145ab9c2f9680f",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/BTCUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\BTCUSDT\\5m.parquet",
+      "rows": 335664,
+      "bytes": 6082764,
+      "sha256": "bdb3a78ca3cb318c90bddf4b821e846e61bca2866814e0ff7e1447800ad5cec2",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/ETHUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\ETHUSDT\\15m.parquet",
+      "rows": 115183,
+      "bytes": 2008379,
+      "sha256": "41baa32e82e3d7e803b52e21536ac310b4c936ce431e9ca90f883cde1925696d",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/ETHUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\ETHUSDT\\1h.parquet",
+      "rows": 28664,
+      "bytes": 506814,
+      "sha256": "5e19d4725ea1884e96c6eeb1369948031bc1ec1b3099dee244022dfb7ef2294a",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/ETHUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\ETHUSDT\\30m.parquet",
+      "rows": 57301,
+      "bytes": 991339,
+      "sha256": "b2f8ad1deed16c316b2453f4fcc54243eca98f3594de8669c23636876af2e4fe",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/ETHUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\ETHUSDT\\5m.parquet",
+      "rows": 356284,
+      "bytes": 6301001,
+      "sha256": "18c8212e2213dd43e22ad57dbd8ef1af84448667354862ee9b95057ae6c543b1",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/NEARUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\NEARUSDT\\15m.parquet",
+      "rows": 89419,
+      "bytes": 1563475,
+      "sha256": "21d680fa7b9fafd6bcb262cf8dfa21d140492893c63d8c0d5583722b46c7cfa7",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/NEARUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\NEARUSDT\\1h.parquet",
+      "rows": 22981,
+      "bytes": 405387,
+      "sha256": "b5c6549133e1f9e30c805408dadef8465cade427790d935918d087b9fab6d524",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/NEARUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\NEARUSDT\\30m.parquet",
+      "rows": 44260,
+      "bytes": 771619,
+      "sha256": "6256231c0e38b74d1ad291d6c4817d4c1e0c794c820c0eeb573de8e1ff36bbc6",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/NEARUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\NEARUSDT\\5m.parquet",
+      "rows": 275859,
+      "bytes": 4934121,
+      "sha256": "17161dd198670eea60cfe4b734f8d41950c949a79906a143ea755258f0ff7c52",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/SOLUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\SOLUSDT\\15m.parquet",
+      "rows": 97655,
+      "bytes": 1726011,
+      "sha256": "d1e76eeb824520dbbb7efe68bc199c2c6d582cb50e309516a4aef82c2859c1db",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/SOLUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\SOLUSDT\\1h.parquet",
+      "rows": 25257,
+      "bytes": 443969,
+      "sha256": "6ac99262b88119c9ce107668e16937ec7c40c7dbdf8cca4bcd5572944bbe1ed3",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/SOLUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\SOLUSDT\\30m.parquet",
+      "rows": 47977,
+      "bytes": 843744,
+      "sha256": "e98e761ca9d56da71e0e02517096736c9a475b52100b732a9abe7a7020cd2b0b",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/SOLUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\SOLUSDT\\5m.parquet",
+      "rows": 302760,
+      "bytes": 5413647,
+      "sha256": "90f5e6300f3e202404520f57656bbcf29911fd900a7877e5f2dfbdee3a21bb33",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/ZECUSDT/15m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\ZECUSDT\\15m.parquet",
+      "rows": 104301,
+      "bytes": 1862690,
+      "sha256": "04a4129b85af8341e18c66a8191e195f4b76ee2949df8863f8a13294fffec08f",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/ZECUSDT/1h.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\ZECUSDT\\1h.parquet",
+      "rows": 26320,
+      "bytes": 470861,
+      "sha256": "3a068c72135ef8f8c51bac3e892407978bb9ec26ec979e95c9c1cbd4669e424f",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/ZECUSDT/30m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\ZECUSDT\\30m.parquet",
+      "rows": 51361,
+      "bytes": 921870,
+      "sha256": "3019ae41607717e2526a776fc3c395c225a951f60fc81be5fc670de92b8665d2",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/tape/ZECUSDT/5m.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\tape\\ZECUSDT\\5m.parquet",
+      "rows": 318574,
+      "bytes": 5781442,
+      "sha256": "97ed7a60ebd454a0900cb0f8cd44f372f03a9dcf87694542adb168006692fb05",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/wtb1_cohort.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\wtb1_cohort.parquet",
+      "rows": 1628,
+      "bytes": 741868,
+      "sha256": "dd106df479b3e4bf4463a6afb220f9923513a3efc2e5b236ec4c63a94273dd05",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/wtb1_matching.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\wtb1_matching.parquet",
+      "rows": 814,
+      "bytes": 27360,
+      "sha256": "18383ab70845bacf5c1fd6447d399c7da73ad03de36182267bea4d60b8735d53",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/wtb1_t0_stamps.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\wtb1_t0_stamps.parquet",
+      "rows": 6512,
+      "bytes": 306130,
+      "sha256": "34dd636eb260d78a9616a7617fc405b60a153bfb91a497e8677584c917ffa237",
+      "class": "Tier-E DESCRIPTIVE CAPTURE -- census-2B W-TB1; the AFTER side is ANATOMY, never entry evidence"
+    },
+    "wtb1/agg/w_b_guard.json": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\wtb1\\agg\\w_b_guard.json",
+      "rows": null,
+      "bytes": 1318,
+      "sha256": "cf809f3431b55a49a21f52f703b7ebc7a35e0caa5b0feab62dfa4cc7dd69c8e5",
+      "class": "DISPLAY-ONLY / Tier-E -- W-TB1 aggregate; REGISTRATIONS DEFERRED; m declared in the probe ledger"
+    },
+    "refusals/a1_grammar_reach.parquet": {
+      "path": "D:\\Naiad\\research_outputs\\census2b\\refusals\\a1_grammar_reach.parquet",
+      "rows": 220,
+      "bytes": 11739,
+      "sha256": "1bd3676c5f6c5d2ccdae8e588f57028a3a589a1e19ce4325ce1aa3de64ad07c9",
+      "class": "SUBSTRATE -- census-2B PART A / A-1 i-a refusals"
+    }
+  }
+}

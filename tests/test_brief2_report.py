@@ -1,6 +1,6 @@
 """F-B29 / F-B31 / F-B33 -- the report layer (Amendment 2 §2, §3.5, §4.2, §7).
 
-Run: C:\\venvs\\naiad\\Scripts\\python.exe -m pytest tests/test_brief2_report.py -q
+Run: python -m pytest tests/test_brief2_report.py
 
 F-B29  R:R integrity -- every printed ratio recomputes from its own printed
        components, and no ratio prints without entry, invalidation and target.

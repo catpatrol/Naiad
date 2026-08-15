@@ -37,7 +37,7 @@ SECOND PURPOSE — the honest scoring frame for P-SEQ-ii.
   beside the D2 frames in seq8_views.py.
 
 Usage:
-  C:\\venvs\\naiad\\Scripts\\python.exe scripts/seq8_atlas.py
+  python scripts/seq8_atlas.py
 """
 from __future__ import annotations
 

@@ -92,6 +92,17 @@ amended 2026-08-06 ruling B).  Three defects fixed, all of them measured:
       --mirror DIR takes an ADDITIONAL verified copy after F-K5 passes, checked
       by re-reading FROM the mirror and refusing to overwrite anything.
 
+      SUPERSEDED 2026-08-15 (DATA RESIDENCY v2) -- D1's text above is kept as
+      the record of why the split exists.  What changed: the archive is now
+      BORN LOCAL, at REPO/research_outputs/_archive, and `--mirror` carries the
+      verified second copy to /Volumes/LaCie/naiad-backups.  D1's premise was
+      that the laptop was a synced OneDrive tree, so "off-machine" and "safe"
+      were the same word; ~/Naiad is now unsynced and permanent, so they are
+      not.  The invariant D1 actually protects -- the archive exists in two
+      places and the second copy is VERIFIED, never assumed -- is unchanged,
+      and mirror_phase_outputs() still re-reads FROM the mirror to prove it.
+      The SIDECAR still stays tracked in-repo, for exactly the original reason.
+
   D2  --phase --dest is now an ERROR naming --mirror.  It used to parse cleanly,
       exit 0, print success and write inside the repo -- run_phase never read
       args.dest at all.  --estate and --workflow hard-fail without --dest; this
@@ -107,6 +118,10 @@ amended 2026-08-06 ruling B).  Three defects fixed, all of them measured:
   lands in the repo at all.  Every SOURCE remains read-only, as before.
 
 AMENDMENT 2026-08-12 -- the backup destination is configuration again.
+(ADDRESS UPDATED 2026-08-15: every `D:/naiad-backups` in this section is the
+SAME PHYSICAL DISK now reached at `/Volumes/LaCie/naiad-backups`.  The Windows
+paths and the DriveFS measurement below are retained as the record of how the
+destination came to be configuration; they are not live paths on this host.)
 
   --estate and --workflow now DEFAULT to D:/naiad-backups (BACKUP_DEST_DEFAULT),
   overridable by $NAIAD_BACKUP_DEST and, above that, by an explicit --dest,
@@ -247,7 +262,16 @@ WORKFLOW_EXCLUDE_SUFFIXES = (".pyc", ".pyo")
 # If the configured root is unreachable this HALTS.  It does not fall back to
 # the laptop: a silent fallback is how 5.45 GB accumulated in a synced folder,
 # and a backup that quietly lands on the machine it is backing up is not one.
-PHASE_ARCHIVE_ROOT_DEFAULT = "D:/Naiad/research_outputs/_archive"
+# AMENDED 2026-08-15 (DATA RESIDENCY v2).  The rule above -- "never falls back
+# to the laptop" -- was written when the laptop was a synced OneDrive tree and
+# the archive had to be born off-machine to be safe.  v2 inverts that premise:
+# ~/Naiad is now the permanent home and is not synced anywhere, so an archive
+# born HERE is born in the right place.  --phase therefore writes LOCALLY and
+# `--mirror` copies it to the backup volume as a SECOND step.  The distinction
+# that matters is preserved exactly: the archive still ends up in two places,
+# and the mirror still halts rather than pretending.  What changed is which of
+# the two is the original.
+PHASE_ARCHIVE_ROOT_DEFAULT = str(REPO / "research_outputs" / "_archive")
 PHASE_ARCHIVE_ROOT_ENV = "NAIAD_PHASE_ARCHIVE_ROOT"
 PHASE_SIDECAR_DIR = "research_outputs/_archive"
 
@@ -274,7 +298,10 @@ PHASE_SIDECAR_DIR = "research_outputs/_archive"
 # so a first run on a freshly-mounted disk creates the folder, while an unplugged
 # disk stops the run dead instead of quietly writing the backup onto the machine
 # it is backing up.
-BACKUP_DEST_DEFAULT = "D:/naiad-backups"
+# AMENDED 2026-08-15 (v2).  The physical external disk is the same object; only
+# its address changed when the estate crossed to macOS.  D:/naiad-backups and
+# /Volumes/LaCie/naiad-backups are the SAME FOLDER on the SAME DRIVE.
+BACKUP_DEST_DEFAULT = "/Volumes/LaCie/naiad-backups"
 BACKUP_DEST_ENV = "NAIAD_BACKUP_DEST"
 
 
@@ -294,13 +321,47 @@ BACKUP_DEST_ENV = "NAIAD_BACKUP_DEST"
 # 1 (NO_ROOT_DIR) whatever it was, which is precisely the case we must classify.
 # So the exclusion is declared, not detected.  Override with NAIAD_NO_WAIT_ANCHORS
 # (semicolon-separated) if the Drive letter ever changes.
-NO_WAIT_ANCHORS_DEFAULT = "G:\\"
+# AMENDED 2026-08-15 (v2).  `G:\` does not exist on this platform, and the
+# GetDriveTypeW reasoning above is a Windows measurement that cannot be taken
+# here at all.  The MECHANISM is kept -- a declared exclusion list is still the
+# right shape, and a Drive/iCloud mount is still not a sleeping disk -- but the
+# default is now EMPTY, because on macOS the one volume we wait for (the LaCie)
+# is a real spinning disk that genuinely benefits from the wait.  Set
+# $NAIAD_NO_WAIT_ANCHORS (semicolon-separated) if a virtual mount ever needs
+# excluding again.  The Windows text above is retained as the reason the list
+# exists; it is not a live measurement of this machine.
+NO_WAIT_ANCHORS_DEFAULT = ""
 NO_WAIT_ANCHORS_ENV = "NAIAD_NO_WAIT_ANCHORS"
 
 
 def _no_wait_anchors() -> set:
     raw = os.environ.get(NO_WAIT_ANCHORS_ENV, NO_WAIT_ANCHORS_DEFAULT)
     return {a.strip().upper() for a in raw.split(";") if a.strip()}
+
+
+def volume_anchor(root: Path) -> Path | None:
+    """The mount point that must be PRESENT for `root` to be writable.
+
+    ADDED 2026-08-15 (v2), and this is a CORRECTNESS FIX, not a port.
+
+    Every caller here used `Path(root.anchor)`.  On Windows that is `D:\\` --
+    exactly right.  On POSIX `Path("/Volumes/LaCie/naiad-backups").anchor` is
+    `"/"`, the boot volume, which is ALWAYS mounted.  So on macOS the guard
+    that exists to stop a backup landing on the machine it is backing up
+    returned "reachable" no matter what -- including with the LaCie unplugged.
+    The halt could not fire.  A guard that cannot fail is not a guard.
+
+    Returns the mount point, or None when the path is on the boot volume and
+    there is genuinely nothing external to wait for.
+    """
+    p = root if root.is_absolute() else Path(root).resolve()
+    parts = p.parts
+    # macOS mounts external volumes at /Volumes/<name>.
+    if len(parts) >= 3 and parts[1] == "Volumes":
+        return Path(parts[0]) / parts[1] / parts[2]
+    if os.name == "nt":
+        return Path(p.anchor) if p.anchor else None
+    return None
 
 
 def drive_ready(root: Path, note=print):
@@ -314,8 +375,11 @@ def drive_ready(root: Path, note=print):
     Returns (ok, detail) where detail is a human-readable measurement suitable
     for appending to a halt message.  Anchors in NO_WAIT_ANCHORS are probed
     once, exactly as before, and never waited on.
+
+    AMENDED 2026-08-15 (v2): the anchor comes from volume_anchor(), not from
+    Path.anchor -- see that function for why the old form could not halt here.
     """
-    anchor = Path(root.anchor) if root.anchor else None
+    anchor = volume_anchor(root)
     if anchor is None:
         return True, "no drive anchor to check"
     if str(anchor).upper() in _no_wait_anchors():
@@ -457,30 +521,35 @@ def phase_archive_root_path(override: str | None = None) -> Path:
 
 
 def phase_archive_root(args) -> Path:
-    """Where --phase writes its archive.  Ruling B, 2026-08-06.
+    """Where --phase writes its archive.  Ruling B (2026-08-06), amended v2.
 
     Precedence: --phase-archive-root, then $NAIAD_PHASE_ARCHIVE_ROOT, then the
-    external-drive default.  Configurable in all three places so a machine
-    without D: can be told where its drive actually is -- but never silently.
+    repo-local default.  Configurable in all three places, but never silently.
 
-    HALTS with SystemExit(2) when the root's drive is not mounted.  The check is
-    on the ANCHOR (`D:\\`) rather than the full path, so a first run on a fresh
-    drive creates the directory instead of refusing over a missing folder, while
-    an unplugged drive still stops the run dead.
+    AMENDED 2026-08-15 (v2).  Ruling B sent the archive off-machine because the
+    machine was a synced OneDrive tree.  Under v2 ~/Naiad is the permanent,
+    unsynced home, so the archive is BORN LOCAL here and `--mirror` carries a
+    copy to the backup volume.  Ruling B's substance -- the archive must exist
+    in two places, and the second copy must never be faked -- is unchanged; see
+    mirror_phase_outputs() for the half that still halts.
+
+    Still HALTS with SystemExit(2) if the configured root IS on an external
+    volume (an operator can still point this at the LaCie) and that volume is
+    not mounted.  For a local root there is no volume to wait on, so
+    volume_anchor() returns None and drive_ready() passes trivially.
     """
     root = phase_archive_root_path(getattr(args, "phase_archive_root", None))
-    anchor = Path(root.anchor) if root.anchor else None
+    anchor = volume_anchor(root)
     ok, detail = drive_ready(root)
     if not ok:
         sys.stderr.write(
             f"PHASE ARCHIVE ROOT UNREACHABLE: {root}\n"
             f"  {detail}\n"
-            f"  The drive {anchor} is not mounted.\n"
-            f"  --phase writes its archive off-machine by ruling B (2026-08-06) and\n"
-            f"  will NOT fall back to the laptop -- a backup that lands on the machine\n"
-            f"  it is backing up is not a backup.\n"
-            f"  Plug the drive, or point --phase-archive-root / ${PHASE_ARCHIVE_ROOT_ENV}\n"
-            f"  at a reachable directory.\n")
+            f"  The volume {anchor} is not mounted.\n"
+            f"  You have pointed --phase at an external volume, and it will NOT fall\n"
+            f"  back to the laptop silently -- if you meant the local default, drop\n"
+            f"  --phase-archive-root / ${PHASE_ARCHIVE_ROOT_ENV} and re-run.\n"
+            f"  Otherwise mount the volume and re-run.\n")
         raise SystemExit(2)
     return root
 
@@ -494,21 +563,25 @@ def backup_dest_root(args) -> Path:
     HALTS with SystemExit(2) when the root's drive is not mounted, for the same
     reason phase_archive_root() does: --estate and --workflow protect the two
     irreplaceable things this project owns, and a backup that silently lands on
-    the laptop it is backing up is not a backup.  The check is on the ANCHOR
-    (`D:\\`), not the full path, so a first run on a fresh disk creates the
-    directory rather than refusing over a folder that does not exist yet.
+    the laptop it is backing up is not a backup.  The check is on the VOLUME
+    ANCHOR (`/Volumes/LaCie`, or `D:\\` on Windows), not the full path, so a
+    first run on a fresh disk creates the directory rather than refusing over a
+    folder that does not exist yet.
+
+    AMENDED 2026-08-15 (v2): anchor now comes from volume_anchor().  Under the
+    old Path.anchor form this check was INERT on macOS -- see volume_anchor().
     """
     raw = (getattr(args, "dest", None)
            or os.environ.get(BACKUP_DEST_ENV)
            or BACKUP_DEST_DEFAULT)
     root = Path(raw)
-    anchor = Path(root.anchor) if root.anchor else None
+    anchor = volume_anchor(root)
     ok, detail = drive_ready(root)
     if not ok:
         sys.stderr.write(
             f"BACKUP DESTINATION UNREACHABLE: {root}\n"
             f"  {detail}\n"
-            f"  The drive {anchor} is not mounted.\n"
+            f"  The volume {anchor} is not mounted.\n"
             f"  --estate and --workflow write off-machine and will NOT fall back to\n"
             f"  the laptop -- a backup that lands on the machine it is backing up is\n"
             f"  not a backup.\n"
@@ -1115,8 +1188,14 @@ def retention_report(dest: Path) -> list:
     # When the drive is absent the report falls back to the TRACKED SIDECARS in
     # the repo, which are the standing proof of which archives exist and what
     # they hashed to.  That is precisely why ruling B kept them in-repo.
+    # v2, 2026-08-15.  `arch` is now the LOCAL _archive and is ALWAYS present,
+    # so the NOT-ENUMERABLE branch below has become the rare case rather than
+    # the normal one -- but it is kept in full, because an operator can still
+    # point $NAIAD_PHASE_ARCHIVE_ROOT at an external volume, and the reasoning
+    # in ruling O-4 (absence of the drive is not absence of the archives) is
+    # exactly as true then as it was in 2026-08.
     arch = phase_archive_root_path()
-    anchor = Path(arch.anchor) if arch.anchor else None
+    anchor = volume_anchor(arch)
     # D-0b: waits for a sleeping disk before declaring it absent.  note=lambda
     # discards the WOKE line -- this function returns report lines and must not
     # print into the middle of a caller's output.
@@ -1184,6 +1263,41 @@ def retention_report(dest: Path) -> list:
     lines.append("")
     lines.append("There is no keep-count for phase archives and no circumstance "
                  "under which this report will list one as prunable.")
+
+    # --- the BACKUP copy on the external volume (v2, 2026-08-15) -------------
+    #
+    # Under v2 the enumeration above is of the LOCAL working copies, which are
+    # always present.  That makes it easy to read this report as "the archives
+    # are safe" when what it has actually shown is "the archives are HERE" --
+    # one copy, on one machine.  So the backup volume is reported too, and the
+    # same three-state discipline from ruling O-4 applies to it: reachable and
+    # holding archives, reachable and empty, or NOT ENUMERABLE.  It must never
+    # print a count it could not take.
+    bdest = Path(os.environ.get(BACKUP_DEST_ENV) or BACKUP_DEST_DEFAULT)
+    bphases = bdest / "phases"
+    banchor = volume_anchor(bdest)
+    breachable, bdetail = drive_ready(bdest, note=lambda *_a, **_k: None)
+    lines.append("")
+    lines.append(f"Backup copy: `{bphases}`")
+    if not breachable:
+        lines.append(f"- **[backup] NOT ENUMERABLE — `{banchor}` is not mounted** "
+                     f"({bdetail}). This is NOT \"no backup exists\"; it is "
+                     "\"this run could not look\". The tracked sidecars in "
+                     f"`{PHASE_SIDECAR_DIR}/` remain the standing proof of what "
+                     "the archive set is.")
+    elif not bphases.is_dir():
+        lines.append(f"- **[backup] volume mounted, `{bphases}` does not exist** — "
+                     "the phase archives have never been mirrored there.")
+    else:
+        bzips = sorted(p for p in bphases.glob("*.zip") if p.is_file())
+        btotal = sum(p.stat().st_size for p in bzips)
+        lines.append(f"- **[backup] {len(bzips)} archive(s), {btotal:,} B** on "
+                     f"`{banchor}`.")
+        local_names = {p.name for p in phases}
+        missing = sorted(local_names - {p.name for p in bzips})
+        if missing:
+            lines.append(f"- **[backup] {len(missing)} local archive(s) NOT mirrored: "
+                         f"{', '.join(missing)}** — run `--phase <name> --mirror`.")
     return lines
 
 

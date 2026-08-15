@@ -398,7 +398,7 @@ def fixture_a0r(assets: list[str]) -> None:
 
 def a0_audit() -> dict:
     banner("A-0  COMPLETION AUDIT -- the census-2B completion certificate")
-    print("Source: D:/Naiad/research_outputs/census2b/census2b_manifest.json")
+    print(f"Source: {MANIFEST}")
     print("A cell is PRESENT only if the manifest pins it AND the file is on disk")
     print("AND its recorded sha256 still matches the bytes.  A pinned-but-changed")
     print("file is reported STALE, which is neither PRESENT nor ABSENT.\n")

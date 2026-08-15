@@ -63,13 +63,26 @@ INVARIANTS
 USAGE
     from drive_wait import wait_for_drive
 
-    r = wait_for_drive("D:/Naiad")
+    r = wait_for_drive("/Volumes/LaCie")
     if not r.ok:
         raise SystemExit(f"HALT: {r.root} unreachable after {r.elapsed:.1f}s")
     if r.state == "WOKE":
         print(f"note: drive woke after {r.elapsed:.1f}s")
 
-    $ python scripts/drive_wait.py D:/Naiad
+    $ python scripts/drive_wait.py /Volumes/LaCie
+
+SCOPE UNDER DATA RESIDENCY v2 (2026-08-15)
+  The D:/Naiad examples above were rewritten to the LaCie mount point, and the
+  reason is not cosmetic.  Under v2 the substrate is LOCAL, so nothing waits on
+  a volume to READ.  This helper now guards BACKUP WRITES only -- the one place
+  a volume can legitimately be absent.  The D: text preserved further up under
+  THE PROBLEM is deliberate: it is the historical defect this module was built
+  to fix, not a live instruction.
+
+  Pass a MOUNT POINT (`/Volumes/LaCie`), not a path inside it.  On POSIX
+  `Path("/Volumes/LaCie/x").anchor` is `"/"` -- the boot volume, always present
+  -- so anchoring on it silently disables the check.  See
+  backup_estate.volume_anchor(), which exists because of exactly that bug.
 """
 
 from __future__ import annotations
@@ -238,7 +251,9 @@ def wait_for_drive(root, attempts: Optional[int] = None,
 
 def main(argv=None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
-    root = argv[0] if argv else "D:/Naiad"
+    # v2, 2026-08-15: the bare default is the BACKUP volume's mount point, not a
+    # substrate path -- the substrate is local now and never waited on.
+    root = argv[0] if argv else "/Volumes/LaCie"
     result = wait_for_drive(root)
     print(result)
     if result.state == STATE_WOKE:

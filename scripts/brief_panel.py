@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 """brief_panel.py -- write-once daily panel partitions (Amendment 2 §8.2).
 
-    C:\\venvs\\naiad\\Scripts\\python.exe scripts/brief_panel.py --date 2026-08-03
-    C:\\venvs\\naiad\\Scripts\\python.exe scripts/brief_panel.py --rebuild-all
-    C:\\venvs\\naiad\\Scripts\\python.exe scripts/brief_panel.py --consolidated
+    python scripts/brief_panel.py --date 2026-08-03
+    python scripts/brief_panel.py --rebuild-all
+    python scripts/brief_panel.py --consolidated
 
 WHY PARTITIONS AND NOT THREE MONOLITHIC FILES.  v4 specified three parquet files
 rebuilt each day.  With the volume layers the levels table reaches roughly

@@ -413,6 +413,11 @@ def onedrive_running():
     repo is unsynced.  Retained as machine state, not as a repo-health signal.
     The reasoning below is kept because it explains why the field exists.
 
+    NOTE 2026-08-15 (data residency v2): the C:/Naiad above was true on the
+    Windows machine and stands as written.  The estate has since moved to
+    ~/Naiad on macOS, where this probe returns None and OneDrive is not part
+    of the estate at all -- the conclusion is unchanged, only more so.
+
     Formerly: the repo lives inside the OneDrive tree, so this is not trivia: a false
     means the working tree currently has no live cloud copy.  Process listing
     only -- no sync state, no error queue, and nothing is started or stopped.

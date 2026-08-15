@@ -42,9 +42,9 @@ the last CLOSED bar of each other TF at that instant (engine.htf convention,
 the same rule census_build.asof_idx applies).
 
 Usage:
-  C:\\venvs\\naiad\\Scripts\\python.exe scripts/seq8_extract.py
-  C:\\venvs\\naiad\\Scripts\\python.exe scripts/seq8_extract.py --run2
-  SEQ8_ASSETS=TAOUSDT C:\\venvs\\naiad\\Scripts\\python.exe scripts/seq8_extract.py
+  python scripts/seq8_extract.py
+  python scripts/seq8_extract.py --run2
+  SEQ8_ASSETS=TAOUSDT python scripts/seq8_extract.py
 """
 from __future__ import annotations
 

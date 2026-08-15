@@ -1,6 +1,6 @@
 """F-B25 -- the volume layer: VA nesting and LVN detection (Amendment 2 §3-§4).
 
-Run: C:\\venvs\\naiad\\Scripts\\python.exe -m pytest tests/test_brief2_volume.py -q
+Run: python -m pytest tests/test_brief2_volume.py
 
 F-B25 is the fixture the amendment names: on synthetic profiles with KNOWN
 geometry, `state`, `overlap_frac`, consensus and gap bands are computed

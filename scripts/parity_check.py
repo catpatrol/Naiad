@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 """parity_check.py -- emit OUR value for exactly the candles the operator read.
 
-    C:\\venvs\\naiad\\Scripts\\python.exe scripts/parity_check.py --demo
-    C:\\venvs\\naiad\\Scripts\\python.exe scripts/parity_check.py --spec spec.json
-    C:\\venvs\\naiad\\Scripts\\python.exe scripts/parity_check.py \\
+    python scripts/parity_check.py --demo
+    python scripts/parity_check.py --spec spec.json
+    python scripts/parity_check.py \\
         --ask BTCUSDT,1d,2026-08-01T00:00Z,rsi14
 
 PURPOSE.  Adoption is gated on the operator's parity readings matching ours

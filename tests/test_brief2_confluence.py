@@ -1,6 +1,6 @@
 """F-B26 / F-B27 / F-B28 -- the confluence engine (Amendment 2 §5, §7.4).
 
-Run: C:\\venvs\\naiad\\Scripts\\python.exe -m pytest tests/test_brief2_confluence.py -q
+Run: python -m pytest tests/test_brief2_confluence.py
 
 F-B26  scale confirmation merges, badges, and does NOT increase score (B-10a).
 F-B27  both scored sets present; the excluded set holds zero volume-family members.

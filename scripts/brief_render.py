@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """brief_render.py -- Part I / Part II HTML from a STORED capture (§2, §3.5).
 
-    C:\\venvs\\naiad\\Scripts\\python.exe scripts/brief_render.py --date 2026-08-03 --slot post_ny
+    python scripts/brief_render.py --date 2026-08-03 --slot post_ny
 
 THE RENDER RECOMPUTES NOTHING.  Every number here is read from the capture.  A
 render that recomputed would be a second source of truth and the two would drift;

@@ -1,6 +1,6 @@
 """F-AN-1..15 -- the Phase I fixture suite for `analytics/`.
 
-Run: C:\\venvs\\naiad\\Scripts\\python.exe -m pytest tests/test_analytics.py -q
+Run: python -m pytest tests/test_analytics.py
 
 F-AN-13 is the one that matters most. It is a truncation-prefix test over every
 series-returning public function, and it exists because the ENGINE lane reported
@@ -1111,8 +1111,8 @@ def test_f_an_15_published_interface_is_byte_identical():
             "exchange/status/ or exchange/reports/, so there is nothing to "
             "compare against. This is not a green result -- the census-facing "
             "lanes (APOLLO) have no contract to read at all. Publish one with:\n"
-            "    copy analytics\\INTERFACE.md "
-            "exchange\\status\\INTERFACE_PUBLISHED.md")
+            "    cp analytics/INTERFACE.md "
+            "exchange/status/INTERFACE_PUBLISHED.md")
     rel = published.relative_to(ROOT).as_posix()
 
     can_bytes = canonical.read_bytes()          # binary: no newline translation
@@ -1152,7 +1152,7 @@ def test_f_an_15_published_interface_is_byte_identical():
             "Make\n"
             "  the copy deliberately, from the repo root:\n"
             "\n"
-            f"      copy analytics\\INTERFACE.md {rel.replace('/', chr(92))}\n"
+            f"      cp analytics/INTERFACE.md {rel}\n"
             "\n"
             "  The published copy lives under exchange/status/ and is DATELESS "
             "by\n"

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """brief_capture.py -- build and store a BRIEF-2 capture (Amendment 2 §8.1).
 
-    C:\\venvs\\naiad\\Scripts\\python.exe scripts/brief_capture.py --slot ny_am
+    python scripts/brief_capture.py --slot ny_am
 
 Writes `briefs/brief_<date>_<slot>.json` (TRACKED) and appends to
 `briefs/index.jsonl`.  HTML is disposable and is regenerated from any stored

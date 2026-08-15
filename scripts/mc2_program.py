@@ -62,10 +62,15 @@ REUSE DISCIPLINE (this program invents no primitive it can import)
     rather than silently re-defining the vocabulary.
 
 RESIDENCY (contract I2)
-  All bulk is born on D:/Naiad/research_outputs/census2a/mc2/**.  The output
-  root is asserted to be on D: -- not merely "the write succeeded", which a C:
-  fallback would also satisfy.  The D: gate is scripts/drive_wait.wait_for_drive
-  wrapped to HALT, because that helper never raises by design.
+  RESTATED 2026-08-15 under DATA RESIDENCY v2.  All bulk is born LOCAL, under
+  `~/Naiad/research_outputs/census2a/mc2/**`, resolved repo-relative from ROOT.
+  The output root is asserted to be CONTAINED under ROOT/research_outputs -- not
+  merely "the write succeeded", which a stray absolute path would also satisfy.
+  The intent is unchanged from the original rule; only the definition of "where"
+  moved.  The original text read "born on D:/... asserted to be on D:", which was
+  correct for the Windows estate and is retained here as the reason this gate
+  exists at all.  drive_wait is no longer in this path: it guards BACKUP writes
+  to the LaCie, not substrate reads.
 
 DETERMINISM
   Seed 20260812.  Every emitted frame is sorted by a total key and floats are
@@ -98,17 +103,22 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from engine.indicators import ema, atr, crossover, crossunder  # noqa: E402
+from engine.data import cache_dir  # noqa: E402
 import census_build as CB  # noqa: E402
 import mc1_program as M1  # noqa: E402
-from drive_wait import wait_for_drive  # noqa: E402
+# `drive_wait` is deliberately NOT imported here any more (v2, 2026-08-15): the
+# substrate is local, so nothing in this program waits on an external volume.
+# drive_wait now guards BACKUP writes only -- see scripts/backup_estate.py.
 
 SEED = 20260812
 R6 = 6
 
 # ---------------------------------------------------------------------------
-# Residency.  D: only -- see I2.  Asserted, not hoped for.
+# Residency.  Repo-local only (v2, 2026-08-15) -- see I2.  Asserted, not hoped
+# for.  Name kept as D_ROOT so callers and log lines keep working; it no longer
+# means "the D: drive", it means the census2a substrate root.
 # ---------------------------------------------------------------------------
-D_ROOT = Path("D:/Naiad/research_outputs/census2a")
+D_ROOT = ROOT / "research_outputs" / "census2a"
 OUT = D_ROOT / "mc2"
 
 DISPLAY_ONLY = ("DISPLAY-ONLY -- post-lockbox live-era data -- "
@@ -191,7 +201,14 @@ QUERY_CARDS = [
     {"id": "QC-2", "ts_iso": "2026-08-11 10:00", "note": "same anatomy on the 5m lens"},
 ]
 
-KLINES = Path(os.path.expandvars(r"%LOCALAPPDATA%\naiad\data_cache\klines"))
+# v2, 2026-08-15.  Was `%LOCALAPPDATA%\naiad\data_cache\klines`, which expands to
+# a literal unexpanded string on macOS and then silently reads nothing.  Resolved
+# through engine.data.cache_dir() instead of re-deriving it here, so there is ONE
+# definition of where the estate lives and $NAIAD_CACHE_DIR keeps working.
+# NOTE: cache_dir() mkdirs on call (engine/data.py:47), so importing this module
+# creates the cache directory if it is absent.  That is the real cache path, not
+# a stray directory, but it is a side effect worth knowing about.
+KLINES = cache_dir() / "klines"
 
 _LOG_LINES: list[str] = []
 
@@ -229,12 +246,20 @@ def stage_preflight() -> dict:
     re-implemented inline here -- which is the point: a gate that lives only in
     a document is not a gate.
     """
-    log("S0 preflight -- identity (I3) + drive (I2)")
+    log("S0 preflight -- identity (I3) + residency (I2)")
     checks: list[tuple[str, bool, str]] = []
 
     cwd = str(Path.cwd()).replace("\\", "/")
-    checks.append(("pwd ends C:/Naiad", cwd.rstrip("/").lower().endswith("c:/naiad"), cwd))
-    checks.append(("pwd OneDrive-free", "onedrive" not in cwd.lower(), cwd))
+    # I3, two-sided, RESTATED 2026-08-15 (v2).  The positive limb used to test
+    # for a "c:/naiad" suffix, which on this platform can never be true -- the
+    # gate was DEAD, not strict.  It now names $HOME/Naiad.  The negative limb
+    # covers the three cloud roots that corrupt bulk writes, not just OneDrive.
+    checks.append(("pwd == $HOME/Naiad",
+                   Path.cwd().resolve() == (Path.home() / "Naiad").resolve(), cwd))
+    _low = cwd.lower()
+    checks.append(("pwd cloud-free",
+                   not any(m in _low for m in
+                           ("onedrive", "com~apple~clouddocs", "mobile documents")), cwd))
 
     import subprocess
     def _git(args: list[str]) -> str:
@@ -257,25 +282,27 @@ def stage_preflight() -> dict:
     if not all(ok for _, ok, _ in checks):
         raise SystemExit("HALT (I3): two-sided identity gate failed -- see above.")
 
-    # --- I2: the D: gate.  wait_for_drive NEVER raises by design, so the HALT
-    #     is ours to make.  A bare existence check here would be the exact
-    #     conflation drive_wait.py exists to prevent.
-    r = wait_for_drive("D:/Naiad")
-    log(f"    drive_wait: {r}")
-    if not r.ok:
-        raise SystemExit(f"HALT (I2): D:/Naiad {r.state} after {r.elapsed:.1f}s "
-                         f"(budget {r.budget:.1f}s). Bulk cannot be born.")
+    # --- I2, RESTATED 2026-08-15 (v2).  There is no external drive to wait on:
+    #     bulk is born local, so wait_for_drive is gone from this path.  It has
+    #     not been weakened away -- it now guards BACKUP writes to the LaCie in
+    #     scripts/backup_estate.py, which is the only place a volume can be
+    #     absent.  Waiting on a volume we never write to would be theatre.
 
-    # Residency is about WHERE, not whether the write worked.
-    if OUT.drive.upper() != "D:":
-        raise SystemExit(f"HALT (I2): output root {OUT} is not on D:.")
+    # Residency is about WHERE, not whether the write worked.  The old form,
+    # `OUT.drive.upper() != "D:"`, could never pass on POSIX -- Path.drive is
+    # always "" -- so it halted unconditionally.  Same intent, containment now.
+    try:
+        OUT.resolve().relative_to((ROOT / "research_outputs").resolve())
+    except ValueError:
+        raise SystemExit(f"HALT (I2): output root {OUT} is not under "
+                         f"{ROOT / 'research_outputs'}.")
     OUT.mkdir(parents=True, exist_ok=True)
     probe = OUT / ".write_probe"
     try:
         probe.write_text("ok", encoding="utf-8")
         probe.unlink()
     except Exception as exc:
-        raise SystemExit(f"HALT (I2): D: reachable but not writable: {exc}")
+        raise SystemExit(f"HALT (I2): {OUT} present but not writable: {exc}")
     log(f"    residency OK -> {OUT}")
 
     # --- vocabulary parity: MC-1 owns the stamp grammar; we only borrow it.
@@ -286,10 +313,13 @@ def stage_preflight() -> dict:
     assert CEIL_MS == 1719792000000, "evidence wall moved"
     log("    stamp-grammar parity vs mc1_program: OK")
 
+    # "drive" is retained as a key so downstream manifest readers do not have to
+    # branch on its absence; under v2 there is no volume to wait on, and saying
+    # so explicitly is better than dropping the field.
     return {
         "identity": [{"check": n, "pass": bool(o), "detail": d} for n, o, d in checks],
-        "drive": {"state": r.state, "attempts": r.attempts,
-                  "elapsed_s": round(r.elapsed, 3), "budget_s": r.budget},
+        "drive": {"state": "LOCAL", "attempts": 0,
+                  "elapsed_s": 0.0, "budget_s": 0.0},
         "out_root": str(OUT),
         "ceil_ms": CEIL_MS, "ceil_iso": iso(CEIL_MS),
     }

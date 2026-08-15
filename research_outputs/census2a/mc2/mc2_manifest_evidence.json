@@ -1,0 +1,643 @@
+{
+  "program": "mc2_program.py",
+  "seed": 20260812,
+  "generated_utc": "2026-08-12T15:02:11Z",
+  "pin_era": "evidence",
+  "pin_era_note": "constants pinned IN-SAMPLE on evidence-era bars -- the census scores the same bars; selection risk is NOT controlled",
+  "class": "EVIDENCE -- exploration-classic",
+  "preflight": {
+    "identity": [
+      {
+        "check": "pwd ends C:/Naiad",
+        "pass": true,
+        "detail": "C:/Naiad"
+      },
+      {
+        "check": "pwd OneDrive-free",
+        "pass": true,
+        "detail": "C:/Naiad"
+      },
+      {
+        "check": "branch v12-v1-census",
+        "pass": true,
+        "detail": "v12-v1-census"
+      },
+      {
+        "check": "remote catpatrol/Naiad",
+        "pass": true,
+        "detail": "https://github.com/catpatrol/Naiad.git"
+      },
+      {
+        "check": "LEDGER.md present",
+        "pass": true,
+        "detail": "LEDGER.md"
+      },
+      {
+        "check": "exchange/status/CONVENTIONS.md present",
+        "pass": true,
+        "detail": "exchange/status/CONVENTIONS.md"
+      }
+    ],
+    "drive": {
+      "state": "PRESENT",
+      "attempts": 1,
+      "elapsed_s": 0.0,
+      "budget_s": 18.0
+    },
+    "out_root": "D:\\Naiad\\research_outputs\\census2a\\mc2",
+    "ceil_ms": 1719792000000,
+    "ceil_iso": "2024-07-01 00:00"
+  },
+  "artifacts": {
+    "feasibility_matrix": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\mc2\\evidence\\feasibility_matrix.parquet",
+      "rows": 392,
+      "bytes": 6269,
+      "sha256": "0384a07dba92129c08228cc39f3b666bef243a57e0f73653a2d8cfe832e56509",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "relay_chains": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\mc2\\evidence\\relay_chains.parquet",
+      "rows": 848,
+      "bytes": 26961,
+      "sha256": "c2e96e73b6edabd7da007c2bd5794c991abcd8d879109031fb41ee6afb0dde6d",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "nesting_table": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\mc2\\evidence\\nesting_table.parquet",
+      "rows": 6,
+      "bytes": 7380,
+      "sha256": "d27e547af6b5392926d2d863814211979fb41574564a829828a024686749d93a",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "obs25_table": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\mc2\\evidence\\obs25_table.parquet",
+      "rows": 4,
+      "bytes": 8383,
+      "sha256": "35dd2f186130fb214ab57324a98688f94a0ba74daa3a83a0f44c59082388a5ea",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "trap_sweep": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\mc2\\evidence\\trap_sweep.parquet",
+      "rows": 20,
+      "bytes": 6643,
+      "sha256": "17d7e142f3a93bd83326d51637f7721a6cc7d495d9d70454045bf32a0d957551",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "ribbon_sweep": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\mc2\\evidence\\ribbon_sweep.parquet",
+      "rows": 18,
+      "bytes": 4418,
+      "sha256": "5a4f5dc081b128ae2e198a1b7797a2a6e529dc77455c07eb0298bc6220807ec3",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "kiss_sweep": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\mc2\\evidence\\kiss_sweep.parquet",
+      "rows": 75,
+      "bytes": 4729,
+      "sha256": "a0926d36fcbd2ee9ed0927c2aebf7e4a2cdf7461de9848aae445e43693be4dfc",
+      "class": "EVIDENCE -- exploration-classic"
+    }
+  },
+  "pins": {
+    "W_max_4h_bars": {
+      "value": 160,
+      "fallback": 90,
+      "rule": "W_max = ceil(Kaplan-Meier p90 of the terminal-leg (12_25) lag CONDITIONAL on eventually completing. Windows close at the counter-arming, so non-completers are CENSORED, not slow. Two consequences the naive quantile hides: (a) a large fraction of armings never complete at all (S_inf), so the p90 of the lag OVER ARMINGS does not exist -- survival never reaches 0.10; (b) the completed-only p90 conditions on survival and understates the lag. Both the naive figure and the KM figure are emitted so the gap is visible. Note also that W_max is near-non-binding in practice: the counter-arming closes the window first in ~99% of armings, at a median width far below any candidate W_max.",
+      "leg2_lag": {
+        "n": 252,
+        "p50": 6.0,
+        "p90": 20.0
+      },
+      "leg3_lag_naive_completed_only": {
+        "n": 111,
+        "p50": 63.0,
+        "p90": 123.0,
+        "p95": 148.0,
+        "max": 171.0,
+        "warning": "conditions on survival; understates the true lag"
+      },
+      "leg3_lag_kaplan_meier": {
+        "S_inf": 0.4164,
+        "never_completes_pct": 41.64,
+        "cond_p50": 92.0,
+        "cond_p90": 160.0,
+        "cond_p95": 171.0,
+        "n": 848,
+        "n_events": 111,
+        "cond_p90_ci": [
+          144.0,
+          171.0
+        ],
+        "cond_p90_ci_note": "90% bootstrap CI, 400 resamples, seeded"
+      },
+      "fates": {
+        "ABORTED": 734,
+        "COMPLETED": 111,
+        "ROTTED": 3
+      },
+      "window_width_p50": 26.0,
+      "pct_closed_by_counter": 0.9929,
+      "completion_curve": [
+        {
+          "width_4h_bars": 60,
+          "completed": 52,
+          "of_armings": 848,
+          "completion_rate": 0.061321
+        },
+        {
+          "width_4h_bars": 90,
+          "completed": 79,
+          "of_armings": 848,
+          "completion_rate": 0.09316
+        },
+        {
+          "width_4h_bars": 120,
+          "completed": 97,
+          "of_armings": 848,
+          "completion_rate": 0.114387
+        },
+        {
+          "width_4h_bars": 150,
+          "completed": 105,
+          "of_armings": 848,
+          "completion_rate": 0.123821
+        },
+        {
+          "width_4h_bars": 400,
+          "completed": 111,
+          "of_armings": 848,
+          "completion_rate": 0.130896
+        }
+      ]
+    },
+    "nested_pair_set": {
+      "value": null,
+      "inconclusive": true,
+      "selection_test": {
+        "m_candidates": 6,
+        "observed_max_sep": 1.784872,
+        "p_selection_corrected": 0.5487,
+        "bh_bar_q_over_m": 0.01667,
+        "admissible": false,
+        "null_p95": 3.068042,
+        "n_perm": 2000
+      },
+      "fallback": [
+        "1h-in-4h",
+        "30m-in-4h",
+        "30m-in-1h"
+      ],
+      "rule": "prevalence in [0.05,0.95] AND bootstrap 90% CI on the nested-vs-unnested median net-excursion difference excludes 0 AND the direction replicates on >=3 assets. A sign test alone is not evidence at these sample sizes."
+    },
+    "pair25_inclusion": {
+      "value": [
+        "25_89"
+      ],
+      "excluded": [
+        "9_25"
+      ],
+      "fallback": "included (both)",
+      "rule": "include a 25-pair as a trigger class iff its median net excursion is positive, its bootstrap 90% CI excludes 0, AND the direction replicates on >=3 of 5 panel assets. Counts are reported so the FDR family can be stratified by class rather than swamped by the largest one.",
+      "count_ratio_vs_9_89": {
+        "9_89": 1.0,
+        "12_25": 1.847,
+        "9_25": 2.142,
+        "25_89": 0.59
+      }
+    },
+    "trap_counter_density": {
+      "value": null,
+      "fallback": 2,
+      "rule": "threshold maximising |median net-excursion separation| in a 10-85% fire-rate band whose bootstrap 90% CI excludes 0 -- BUT only if a label-shuffled permutation null shows the selection procedure itself fires <=10% of the time. The fallback >=2 is rejected on fire rate alone: a stamp true of ~92% of the population partitions nothing, and that is a descriptive fact requiring no inference.",
+      "fallback_fire_rate": 0.926531,
+      "naive_pin_rejected": null,
+      "selection_test": {
+        "m_in_band": 11,
+        "winner_threshold": 14,
+        "observed_max_sep": 0.993856,
+        "p_selection_corrected": 0.5282,
+        "p_uncorrected_winner": 0.2224,
+        "bh_bar_q_over_m": 0.00909,
+        "admissible": false,
+        "null_p95": 1.859529,
+        "n_perm": 2000
+      },
+      "guard_failed": true
+    },
+    "ribbon_compression_c": {
+      "value": 0.5,
+      "fallback": 0.5,
+      "rule": "confirm the ratified fallback if its panel-mean 1h compressed share lands in (0.1, 0.25); selectivity can reject a c but cannot order two admissible c's without a chop label, which is CEN-4's output, not its input",
+      "admissible_set": [
+        0.35,
+        0.5,
+        0.65,
+        0.8
+      ],
+      "note": "fallback c=0.5 CONFIRMED: flags 14.7% of 1h bars, inside the 10%-25% admissible band"
+    },
+    "kiss_refusal": {
+      "value": {
+        "eps": 0.25,
+        "delta": 0.75,
+        "k": 10
+      },
+      "fallback": {
+        "eps": 0.25,
+        "delta": 0.75,
+        "k": 10
+      },
+      "rule": "MC-1's ratified triple is CONFIRMED rather than re-fitted: the sweep exists to show the point is stable, and a sandbox does not overturn a ratified constant",
+      "local_stability": 0.6337,
+      "scope_note": "EMA<->EMA limb only; price<->level (SFP/deviation) has no detector in the estate and is filed as scoped-out for a follow-up paste"
+    }
+  },
+  "fixtures": {
+    "F-PARITY": {
+      "cells": [
+        {
+          "asset": "BTCUSDT",
+          "tf": "1h",
+          "pass": true,
+          "warm_overlap": 41484,
+          "excluded": 156,
+          "detail": "warm-overlap n=41484 (excluded 156 cold/unaligned)"
+        },
+        {
+          "asset": "BTCUSDT",
+          "tf": "4h",
+          "pass": true,
+          "warm_overlap": 9853,
+          "excluded": 557,
+          "detail": "warm-overlap n=9853 (excluded 557 cold/unaligned)"
+        },
+        {
+          "asset": "BTCUSDT",
+          "tf": "12h",
+          "pass": true,
+          "warm_overlap": 2824,
+          "excluded": 646,
+          "detail": "warm-overlap n=2824 (excluded 646 cold/unaligned)"
+        },
+        {
+          "asset": "ETHUSDT",
+          "tf": "1h",
+          "pass": true,
+          "warm_overlap": 39432,
+          "excluded": 0,
+          "detail": "warm-overlap n=39432 (excluded 0 cold/unaligned)"
+        },
+        {
+          "asset": "ETHUSDT",
+          "tf": "4h",
+          "pass": true,
+          "warm_overlap": 9376,
+          "excluded": 482,
+          "detail": "warm-overlap n=9376 (excluded 482 cold/unaligned)"
+        },
+        {
+          "asset": "ETHUSDT",
+          "tf": "12h",
+          "pass": true,
+          "warm_overlap": 2665,
+          "excluded": 621,
+          "detail": "warm-overlap n=2665 (excluded 621 cold/unaligned)"
+        }
+      ],
+      "pass": 6,
+      "total": 6,
+      "cold_head_crosses": 0
+    }
+  },
+  "feasibility": {
+    "hand_recomputed": [
+      {
+        "asset": "ETHUSDT",
+        "tf": "1d",
+        "ema": 500,
+        "n_bars": 1678,
+        "warmup_needed": 1727,
+        "warm_bars": -49,
+        "state": "NEVER",
+        "hand_check": "n_bars - ceil(log(1e-3)/log(1-2/(L+1)))"
+      },
+      {
+        "asset": "BTCUSDT",
+        "tf": "4h",
+        "ema": 500,
+        "n_bars": 10544,
+        "warmup_needed": 1727,
+        "warm_bars": 8817,
+        "state": "WARM",
+        "hand_check": "n_bars - ceil(log(1e-3)/log(1-2/(L+1)))"
+      },
+      {
+        "asset": "SOLUSDT",
+        "tf": "12h",
+        "ema": 450,
+        "n_bars": 2772,
+        "warmup_needed": 1555,
+        "warm_bars": 1217,
+        "state": "WARM",
+        "hand_check": "n_bars - ceil(log(1e-3)/log(1-2/(L+1)))"
+      }
+    ],
+    "warmup_rule": "ceil(log(1e-3)/log(1-2/(L+1))) -- seq8_extract.warmup_bars",
+    "warmup_by_ema": {
+      "9": 31,
+      "12": 42,
+      "25": 87,
+      "89": 308,
+      "200": 691,
+      "300": 1037,
+      "450": 1555,
+      "500": 1727
+    }
+  },
+  "query_cards": [
+    {
+      "id": "QC-1",
+      "ts_iso": "2026-06-17 14:30",
+      "note": "4H short; nesting photographed",
+      "ts": 1781706600000,
+      "_class": "DISPLAY-ONLY -- post-lockbox live-era data -- hypothesis generation only, never evidence.",
+      "assets": {
+        "BTCUSDT": {
+          "1h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-06-17 13:00",
+            "bar_close": "2026-06-17 14:00",
+            "close": 65232.9,
+            "atr": 379.77358,
+            "ribbon_9_89_atr": -0.431638,
+            "e300": 65175.010005,
+            "e450": 66318.171869,
+            "e500": 66728.999542
+          },
+          "4h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-06-17 08:00",
+            "bar_close": "2026-06-17 12:00",
+            "close": 64774.5,
+            "atr": 791.919781,
+            "ribbon_9_89_atr": 0.038528,
+            "e300": 70451.899864,
+            "e450": 71870.838831,
+            "e500": 72280.165158
+          }
+        },
+        "ETHUSDT": {
+          "1h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-06-17 13:00",
+            "bar_close": "2026-06-17 14:00",
+            "close": 1760.14,
+            "atr": 15.681377,
+            "ribbon_9_89_atr": 1.019889,
+            "e300": 1742.152281,
+            "e450": 1782.920942,
+            "e500": 1798.04869
+          },
+          "4h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-06-17 08:00",
+            "bar_close": "2026-06-17 12:00",
+            "close": 1763.22,
+            "atr": 32.511537,
+            "ribbon_9_89_atr": 0.728138,
+            "e300": 1958.578392,
+            "e450": 2040.662783,
+            "e500": 2065.459104
+          }
+        },
+        "SOLUSDT": {
+          "1h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-06-17 13:00",
+            "bar_close": "2026-06-17 14:00",
+            "close": 72.38,
+            "atr": 0.686601,
+            "ribbon_9_89_atr": 1.002632,
+            "e300": 70.500651,
+            "e450": 71.895664,
+            "e500": 72.427746
+          },
+          "4h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-06-17 08:00",
+            "bar_close": "2026-06-17 12:00",
+            "close": 71.98,
+            "atr": 1.506316,
+            "ribbon_9_89_atr": 1.439756,
+            "e300": 77.994492,
+            "e450": 81.353627,
+            "e500": 82.517406
+          }
+        },
+        "NEARUSDT": {
+          "1h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-06-17 13:00",
+            "bar_close": "2026-06-17 14:00",
+            "close": 2.306,
+            "atr": 0.041334,
+            "ribbon_9_89_atr": 0.173137,
+            "e300": 2.216111,
+            "e450": 2.194439,
+            "e500": 2.183866
+          },
+          "4h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-06-17 08:00",
+            "bar_close": "2026-06-17 12:00",
+            "close": 2.284,
+            "atr": 0.092541,
+            "ribbon_9_89_atr": 1.296303,
+            "e300": 1.981708,
+            "e450": 1.852154,
+            "e500": 1.821556
+          }
+        },
+        "ZECUSDT": {
+          "1h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-06-17 13:00",
+            "bar_close": "2026-06-17 14:00",
+            "close": 481.12,
+            "atr": 10.470389,
+            "ribbon_9_89_atr": 0.860127,
+            "e300": 470.271432,
+            "e450": 478.493069,
+            "e500": 480.90679
+          },
+          "4h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-06-17 08:00",
+            "bar_close": "2026-06-17 12:00",
+            "close": 488.55,
+            "atr": 21.229975,
+            "ribbon_9_89_atr": 1.412884,
+            "e300": 474.283841,
+            "e450": 450.683508,
+            "e500": 443.447547
+          }
+        }
+      },
+      "in_range_any": true
+    },
+    {
+      "id": "QC-2",
+      "ts_iso": "2026-08-11 10:00",
+      "note": "same anatomy on the 5m lens",
+      "ts": 1786442400000,
+      "_class": "DISPLAY-ONLY -- post-lockbox live-era data -- hypothesis generation only, never evidence.",
+      "assets": {
+        "BTCUSDT": {
+          "1h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-08-11 09:00",
+            "bar_close": "2026-08-11 10:00",
+            "close": 64281.0,
+            "atr": 186.14269,
+            "ribbon_9_89_atr": -2.560437,
+            "e300": 64376.579233,
+            "e450": 64285.981461,
+            "e500": 64260.615482
+          },
+          "4h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-08-11 04:00",
+            "bar_close": "2026-08-11 08:00",
+            "close": 64031.7,
+            "atr": 414.576191,
+            "ribbon_9_89_atr": 0.100256,
+            "e300": 64619.619358,
+            "e450": 65620.530473,
+            "e500": 66002.580801
+          }
+        },
+        "ETHUSDT": {
+          "1h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-08-11 09:00",
+            "bar_close": "2026-08-11 10:00",
+            "close": 1884.78,
+            "atr": 7.34482,
+            "ribbon_9_89_atr": -2.939507,
+            "e300": 1894.814442,
+            "e450": 1886.962966,
+            "e500": 1883.823753
+          },
+          "4h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-08-11 04:00",
+            "bar_close": "2026-08-11 08:00",
+            "close": 1876.84,
+            "atr": 17.109643,
+            "ribbon_9_89_atr": -0.086647,
+            "e300": 1861.438685,
+            "e450": 1882.16762,
+            "e500": 1893.938863
+          }
+        },
+        "SOLUSDT": {
+          "1h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-08-11 09:00",
+            "bar_close": "2026-08-11 10:00",
+            "close": 75.84,
+            "atr": 0.367108,
+            "ribbon_9_89_atr": 0.296249,
+            "e300": 74.850721,
+            "e450": 74.85769,
+            "e500": 74.883167
+          },
+          "4h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-08-11 04:00",
+            "bar_close": "2026-08-11 08:00",
+            "close": 75.66,
+            "atr": 0.824169,
+            "ribbon_9_89_atr": 1.571379,
+            "e300": 75.474306,
+            "e450": 76.615686,
+            "e500": 77.153147
+          }
+        },
+        "NEARUSDT": {
+          "1h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-08-11 09:00",
+            "bar_close": "2026-08-11 10:00",
+            "close": 1.603,
+            "atr": 0.015319,
+            "ribbon_9_89_atr": -1.456663,
+            "e300": 1.673814,
+            "e450": 1.708005,
+            "e500": 1.718822
+          },
+          "4h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-08-11 04:00",
+            "bar_close": "2026-08-11 08:00",
+            "close": 1.6,
+            "atr": 0.030113,
+            "ribbon_9_89_atr": -2.444419,
+            "e300": 1.815233,
+            "e450": 1.827316,
+            "e500": 1.824179
+          }
+        },
+        "ZECUSDT": {
+          "1h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-08-11 09:00",
+            "bar_close": "2026-08-11 10:00",
+            "close": 486.87,
+            "atr": 4.109976,
+            "ribbon_9_89_atr": -3.170104,
+            "e300": 498.782834,
+            "e450": 497.33032,
+            "e500": 496.902005
+          },
+          "4h": {
+            "in_range": true,
+            "as_of": "last CLOSED bar at or before ts",
+            "bar_open": "2026-08-11 04:00",
+            "bar_close": "2026-08-11 08:00",
+            "close": 487.65,
+            "atr": 9.35287,
+            "ribbon_9_89_atr": 0.148888,
+            "e300": 489.160854,
+            "e450": 479.196569,
+            "e500": 475.347575
+          }
+        }
+      },
+      "in_range_any": true
+    }
+  ],
+  "merged_from_prior_run": "2026-08-12T15:00:41Z",
+  "stages_this_invocation": "nest",
+  "elapsed_s": 71.1
+}

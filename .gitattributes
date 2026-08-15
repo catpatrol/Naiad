@@ -1,3 +1,34 @@
-# No line-ending conversion anywhere: journal files are hash-verified
-# byte-for-byte (F1) and must survive round-trips untouched.
-* -text
+# Naiad line-ending policy.  Added 2026-08-15 (queue 005 M3).
+#
+# WHY THIS FILE EXISTS, in one case:
+#
+# The nine tracked *.sha256 sidecars under research_outputs/_archive/ were
+# written on Windows with CRLF line endings.  `shasum -a 256 -c <file>` parses
+# the line as "<hash>  <filename>", so the trailing \r became part of the
+# FILENAME and every check failed with:
+#
+#     shasum: s1_2026-07-27.zip: No such file or directory
+#     s1_2026-07-27.zip: FAILED open or read
+#
+# Nine perfect archives reported as nine failures.  The bytes were never wrong;
+# the sidecars were unreadable by the standard tool on any POSIX host.  Anyone
+# auditing the restore without knowing this would have concluded corruption.
+#
+# A checksum sidecar is a machine-parsed contract, not prose, so it is pinned to
+# LF everywhere regardless of platform.  This is the class rule, not a one-off
+# repair of those nine files.
+*.sha256 text eol=lf
+
+# SCOPE IS DELIBERATELY THIS NARROW.  A first draft of this file also pinned
+# *.py, *.json and *.sh to LF.  That is defensible policy and it was REVERTED
+# unapplied, because eleven source files in this repo are still CRLF in the
+# working tree: the rule would have re-normalised them wholesale, producing a
+# ~15,000-line diff in the same commit as a targeted platform sweep and burying
+# every real change in it.  Line-ending policy for source is its own decision,
+# with its own commit and its own before/after suite run.  It is not something
+# to smuggle in alongside other work.
+#
+# The eleven CRLF files, for whoever takes that decision:
+#   scripts/{brief_render,census2a_program,census2a_viz,census2b_parta,
+#            census2b_program,census2b_wtb1,mc2_program,wf1_forensics}.py
+#   tests/{test_brief2_confluence,test_brief2_report,test_brief2_storage}.py

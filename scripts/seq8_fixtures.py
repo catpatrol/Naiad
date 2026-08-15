@@ -17,7 +17,7 @@ Prints a transcript in the repo's fixture idiom ([PASS]/[FAIL] + the assertion
 with its actual numbers inline) and writes seq8_fixtures.json.
 
 Usage:
-  C:\\venvs\\naiad\\Scripts\\python.exe scripts/seq8_fixtures.py
+  python scripts/seq8_fixtures.py
 """
 from __future__ import annotations
 

@@ -99,7 +99,7 @@ SEQ_FRAMES = ["absolute", "gov_relative", "tier"]
 
 WALL_ATR = 0.5                                # census-2A §0 pin, carried
 
-C2A = Path("D:/Naiad/research_outputs/census2a")
+C2A = REPO / "research_outputs" / "census2a"
 CEN5 = C2A / "cen5" / "cen5_campaigns.parquet"
 CEN4 = C2A / "cen4" / "cen4_book.parquet"
 VERDICT = C2A / "cen6" / "cen6_verdict_state.parquet"

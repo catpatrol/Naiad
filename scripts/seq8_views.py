@@ -51,8 +51,8 @@ source two or more ladder positions below. Redefining them would have made the
 replication vacuous.
 
 Usage:
-  C:\\venvs\\naiad\\Scripts\\python.exe scripts/seq8_views.py
-  C:\\venvs\\naiad\\Scripts\\python.exe scripts/seq8_views.py --run2
+  python scripts/seq8_views.py
+  python scripts/seq8_views.py --run2
 """
 from __future__ import annotations
 

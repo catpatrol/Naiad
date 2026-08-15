@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """brief_note.py -- timestamp an operator observation into a capture (§8.3).
 
-    C:\\venvs\\naiad\\Scripts\\python.exe scripts/brief_note.py \\
+    python scripts/brief_note.py \\
         --date 2026-08-03 --slot post_ny --text "watching the 90d VAL"
 
 WHY THIS EXISTS AND WHY IT IS NARROW.  The operator's read is the one input the

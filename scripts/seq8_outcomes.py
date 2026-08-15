@@ -44,7 +44,7 @@ curtain audit emitted here follows the W-F1 shape (wf1_forensics.py:901-929):
 a `clean` list with a per-column attestation and a `post_curtain` list.
 
 Usage:
-  C:\\venvs\\naiad\\Scripts\\python.exe scripts/seq8_outcomes.py
+  python scripts/seq8_outcomes.py
 """
 from __future__ import annotations
 

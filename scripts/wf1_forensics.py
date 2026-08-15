@@ -42,8 +42,8 @@ COST MODEL (measured against the ratified constants, not assumed)
   LEDGER.md:556-558 mapping (BTC/ETH 14 bps, others 20 bps).
 
 Usage
-  C:/venvs/naiad/Scripts/python.exe scripts/wf1_forensics.py
-  C:/venvs/naiad/Scripts/python.exe scripts/wf1_forensics.py --rebuild
+  python scripts/wf1_forensics.py
+  python scripts/wf1_forensics.py --rebuild
 No network.  Sorted iteration throughout.  Resume-safe per-cell checkpoints.
 """
 from __future__ import annotations

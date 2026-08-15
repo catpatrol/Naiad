@@ -1391,6 +1391,22 @@ CONFIG_SHA = [""]
 JOURNAL_REL = [""]
 
 
+def _cache_root() -> Path:
+    """The kline cache root, mirroring engine.data.cache_dir() exactly --
+    $NAIAD_CACHE_DIR, then LOCALAPPDATA on Windows, else
+    ~/.cache/naiad/data_cache -- but WITHOUT its mkdir.  This module is
+    READ-ONLY and creates nothing, so the logic is mirrored rather than
+    imported.  The former inline default evaluated the LOCALAPPDATA leg
+    eagerly as os.environ.get's fallback argument, so it raised KeyError off
+    Windows even when NAIAD_CACHE_DIR was set."""
+    env = os.environ.get("NAIAD_CACHE_DIR")
+    if env:
+        return Path(env)
+    if os.name == "nt":
+        return Path(os.environ["LOCALAPPDATA"]) / "naiad" / "data_cache"
+    return Path.home() / ".cache" / "naiad" / "data_cache"
+
+
 def main():
     ap = argparse.ArgumentParser()
     here = Path(__file__).resolve().parents[1]
@@ -1398,9 +1414,7 @@ def main():
                     default=here / "research_outputs" / "v3_anchor"
                     / "journal_pass1" / "scored")
     ap.add_argument("--kline-root", type=Path,
-                    default=Path(os.environ.get("NAIAD_CACHE_DIR",
-                                 Path(os.environ["LOCALAPPDATA"]) / "naiad"
-                                 / "data_cache")) / "klines")
+                    default=_cache_root() / "klines")
     ap.add_argument("--config", type=Path,
                     default=here / "configs" / "v12_anchor.yaml")
     ap.add_argument("--out-dir", type=Path, default=here)

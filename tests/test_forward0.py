@@ -1,6 +1,6 @@
 """F-F1..F-F5 -- FORWARD-0, the hash-chained trade diary (v4 Phase III).
 
-Run: C:\\venvs\\naiad\\Scripts\\python.exe -m pytest tests/test_forward0.py -q
+Run: python -m pytest tests/test_forward0.py
 
 F-F1 chain integrity   -- a deliberately mutated line is detected
 F-F2 append-only       -- rewriting history is refused

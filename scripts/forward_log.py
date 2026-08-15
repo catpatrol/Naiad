@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """forward_log.py -- FORWARD-0, the hash-chained trade diary (v4 Phase III).
 
-    C:\\venvs\\naiad\\Scripts\\python.exe scripts/forward_log.py --verify
-    C:\\venvs\\naiad\\Scripts\\python.exe scripts/forward_log.py --log --kind mechanical ...
+    python scripts/forward_log.py --verify
+    python scripts/forward_log.py --log --kind mechanical ...
 
 A DIARY, NOT A SCOREBOARD.  It records what was intended, when, and on what
 basis, so that when a forward-validation hypothesis is eventually registered

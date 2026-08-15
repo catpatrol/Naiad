@@ -128,6 +128,32 @@ research_outputs/mc2/**
 # Listed BEFORE the restore, not after.
 research_outputs/census2b/**
 
+# --- OPERATOR RULING 2026-08-15 (queue 005 M3): the census2a/2b MANIFESTS are
+# TRACKED, following the census1b precedent above rather than the census2a one.
+#
+# The bulk stays ignored -- that is unchanged and is what keeps a push from
+# being rejected.  What changes is that the manifest, which is the *description*
+# of the bulk (names + sizes + sha256), becomes a committed surface, so a clone
+# that has never seen the substrate can still say what it should contain and
+# what it should hash to.  That is the same argument that keeps the _archive
+# sidecars tracked.
+#
+# The nested mc2/ directory is re-included FIRST: a negation cannot rescue a
+# file underneath a directory git was told not to descend into (the same trap
+# recorded at the s1/resampled/ block above).
+!research_outputs/census2a/mc2/
+!research_outputs/census2a/*manifest*.json
+!research_outputs/census2a/mc2/*manifest*.json
+!research_outputs/census2b/*manifest*.json
+
+# Spotlight suppression marker (M3, 2026-08-15).  An ops artifact, not a repo
+# file.  EFFICACY IS NOT PROVEN for a subdirectory -- .metadata_never_index is
+# documented for volume roots, and `mdutil -i off` refuses a subdirectory
+# ("invalid operation"), so the authoritative exclusion is the Spotlight Privacy
+# list, which needs the GUI or root.  Kept because it is free, reversible and
+# the only lever available without sudo; see the M3 report's HALT-SOFT item.
+.metadata_never_index
+
 # Operator backup vault — 2.9 GB of estate/workflow zips plus their .sha256
 # sidecars. The zips were already covered by the `*.zip` rule above; the
 # sidecars were not, which is the only reason this directory showed as

@@ -1965,7 +1965,8 @@ def stage_fixtures() -> dict:
     wall_ok = all(v <= CEIL_MS for v in scored_max.values())
     est_before = json.loads((BOX / "estate_before.json").read_text())
     est_now = {}
-    kk = Path(os.environ["LOCALAPPDATA"]) / "naiad" / "data_cache"
+    from engine.data import cache_dir                     # same root estate_klines() reads
+    kk = cache_dir()
     for p in sorted(kk.rglob("*")):
         if p.is_file():
             st = p.stat()

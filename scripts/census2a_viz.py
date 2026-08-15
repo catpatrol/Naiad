@@ -25,7 +25,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT / "scripts"))
 SEED = 20260812
-B = Path("D:/Naiad/research_outputs/census2a")
+B = ROOT / "research_outputs" / "census2a"
 PAY = B / "viz_payloads"; VIZ = B / "viz"; HAND = B / "DESIGN_HANDOFF"
 TOLL_LO, TOLL_HI = 0.0263, 0.0594
 GEN = datetime.now(timezone.utc).strftime("%Y-%m-%d")

@@ -1,7 +1,17 @@
-# Phase archives — relocated 2026-08-06 (operator ruling B)
+# Phase archives — local under data residency v2 (operator ruling 2026-08-15)
 
-The *.zip phase archives now live at **D:/Naiad/research_outputs/_archive/** (external drive),
-each beside a copy of its sidecar. The tracked *.sha256 files in THIS folder are the canonical
-GitHub-held fingerprints and never move. Independent backup: G:/My Drive/naiad-backups/phases/,
-hash-verified 2026-08-04. Archives are PERMANENT EVIDENCE — never prunable. If the D: drive is
-absent, restore from Drive and verify against the sidecars here.
+The nine *.zip phase archives are WORKING COPIES and live HERE, at
+**~/Naiad/research_outputs/_archive/** — born local under v2, ignored by the `*.zip` rule
+(.gitignore:38). Backup copies live on **/Volumes/LaCie/naiad-backups** and the Drive cloud
+mirror; the LaCie is BACKUP ONLY and is never read as substrate.
+
+The nine *.sha256 sidecars in THIS folder remain TRACKED in git and are the canonical
+fingerprints. **ATTESTATION CHAIN:** git — a clean tree at the origin tip — proves the tracked
+sidecars; the sidecars attest the zips. That is verification basis (1), repo-tracked sidecar —
+the strongest tier.
+
+Archives are PERMANENT EVIDENCE — never prunable. If a zip is lost, restore from the LaCie or
+Drive and verify against the sidecar here.
+
+*(Superseded: the 2026-08-06 ruling B put the zips on D:/Naiad/research_outputs/_archive and the
+independent backup on G:/My Drive/naiad-backups/phases. Neither path exists on this host.)*

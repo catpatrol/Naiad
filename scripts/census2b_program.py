@@ -107,9 +107,9 @@ H100 = 100                       # the terminal horizon the enquiry card uses
 CEIL_MS = cb.CEIL_MS             # 2024-07-01Z -- the evidence-era ceiling
 ASSET_STARTS = cb.ASSET_STARTS
 
-OUT = Path("D:/Naiad/research_outputs/census2b")
+OUT = REPO / "research_outputs" / "census2b"
 MANIFEST = OUT / "census2b_manifest.json"
-CENSUS2A = Path("D:/Naiad/research_outputs/census2a")
+CENSUS2A = REPO / "research_outputs" / "census2a"
 
 TIER_E_HEADER = (
     "CLASS: DISPLAY-ONLY / Tier-E -- EXPLORATION, ungated; promotion requires "
@@ -184,10 +184,11 @@ def klines_dir() -> Path:
     ops_klines snapshot: that one is the right source for reproducing MC-1 and
     the wrong source for anything about the present."""
     from engine.data import cache_dir
-    d = Path(cache_dir()) / "klines"
-    if not d.is_dir():                                    # explicit fallback
-        d = Path(os.environ["LOCALAPPDATA"]) / "naiad" / "data_cache" / "klines"
-    return d
+    # engine.data.cache_dir() IS the fallback chain: $NAIAD_CACHE_DIR, then
+    # LOCALAPPDATA on Windows, else ~/.cache/naiad/data_cache.  The former
+    # second branch here hard-coded the Windows leg and raised KeyError on
+    # POSIX whenever the klines subdir did not exist yet.
+    return Path(cache_dir()) / "klines"
 
 
 def load_raw(sym: str, tf: str) -> pd.DataFrame:

@@ -35,8 +35,13 @@ WHAT CHANGED FROM THE PASTE-1 SANDBOX, AND WHY IT IS LOAD-BEARING
        the manifest from scratch and destroyed five of six pins. F-PIN proves
        survival.
 
-RESIDENCY (I2).  All bulk born on D:/Naiad/research_outputs/census2a/**.
-  `wait_for_drive` never raises by design, so the HALT is the caller's.
+RESIDENCY (I2).  RESTATED 2026-08-15 under DATA RESIDENCY v2: all bulk is born
+  LOCAL, under `~/Naiad/research_outputs/census2a/**`, resolved repo-relative
+  from ROOT rather than from a drive letter.  The original rule read "born on
+  D:/Naiad/..." and was correct for the Windows estate; v2 moved the substrate
+  home, so the gate below asserts containment under ROOT instead of a drive.
+  `wait_for_drive` never raises by design, so the HALT is the caller's -- it now
+  guards BACKUP writes to the LaCie, not substrate reads.
 IDENTITY (I3).  Asserted IN CODE. Paste #1's lesson: prose gates gate nothing.
 EVIDENCE WALL (I1).  Every scored table <= 2024-07-01, read from the census
   constant, never restated.
@@ -67,12 +72,14 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 import census_build as CB  # noqa: E402
 import mc2_program as MC2  # noqa: E402
-from drive_wait import wait_for_drive  # noqa: E402
+# `drive_wait` is deliberately NOT imported here any more (v2, 2026-08-15): the
+# substrate is local, so nothing in this program waits on an external volume.
+# drive_wait now guards BACKUP writes only -- see scripts/backup_estate.py.
 
 SEED = 20260812
 R6 = 6
 
-OUT = Path("D:/Naiad/research_outputs/census2a")
+OUT = ROOT / "research_outputs" / "census2a"
 KLINES_OUT = OUT / "klines"
 CEIL_MS = CB.CEIL_MS
 TF_MS = {**CB.TF_MS, "1m": 60_000}
@@ -152,13 +159,21 @@ def _sha(path: Path) -> str:
 # I3 IN CODE + I2 -- the preflight.  Paste-1: prose gates gate nothing.
 # ===========================================================================
 def stage_preflight() -> dict:
-    log("PREFLIGHT -- I3 identity (in code) + I2 drive gate")
+    log("PREFLIGHT -- I3 identity (in code) + I2 residency gate")
     import subprocess
     checks = []
     cwd = str(Path.cwd()).replace("\\", "/")
-    checks.append(("pwd ends C:/Naiad",
-                   cwd.rstrip("/").lower().endswith(("c:/naiad", "/c/naiad")), cwd))
-    checks.append(("pwd NOT contains OneDrive", "onedrive" not in cwd.lower(), ""))
+    # I3, two-sided, RESTATED 2026-08-15 (v2).  The old positive limb tested for
+    # a "c:/naiad" suffix; on this platform that can never pass, so the gate was
+    # not strict -- it was DEAD, and a gate that always fails is as useless as
+    # one that always passes.  The v2 limb names $HOME/Naiad, and the negative
+    # limb grew to cover the two other cloud roots that corrupt bulk writes.
+    checks.append(("pwd == $HOME/Naiad",
+                   Path.cwd().resolve() == (Path.home() / "Naiad").resolve(), cwd))
+    low = cwd.lower()
+    checks.append(("pwd cloud-free",
+                   not any(m in low for m in
+                           ("onedrive", "com~apple~clouddocs", "mobile documents")), cwd))
 
     def _git(a):
         try:
@@ -178,23 +193,34 @@ def stage_preflight() -> dict:
     if not all(o for _, o, _ in checks):
         raise SystemExit("HALT (I3): identity gate failed.")
 
-    r = wait_for_drive("D:/Naiad")
-    log(f"    drive_wait: {r}")
-    if not r.ok:
-        raise SystemExit(f"HALT (I2): D:/Naiad {r.state} after {r.elapsed:.1f}s.")
-    if OUT.drive.upper() != "D:":
-        raise SystemExit(f"HALT (I2): output root {OUT} is not on D:.")
+    # I2, RESTATED 2026-08-15 (v2).  Bulk is born LOCAL now, so there is no
+    # external drive to wait on for a substrate write and `wait_for_drive` is
+    # gone from this path -- it guards BACKUP writes to the LaCie instead.
+    # The residency assertion keeps its exact original intent (bulk lands where
+    # residency says) and only changes what "where" means.  The old form,
+    # `OUT.drive.upper() != "D:"`, could never pass here: Path.drive is always
+    # "" on POSIX, so it halted unconditionally.
+    try:
+        OUT.resolve().relative_to((ROOT / "research_outputs").resolve())
+    except ValueError:
+        raise SystemExit(f"HALT (I2): output root {OUT} is not under "
+                         f"{ROOT / 'research_outputs'}.")
     OUT.mkdir(parents=True, exist_ok=True)
     probe = OUT / ".rw_probe"
     try:
         probe.write_text("ok", encoding="utf-8"); probe.unlink()
     except Exception as exc:
-        raise SystemExit(f"HALT (I2): D: reachable but not writable: {exc}")
+        raise SystemExit(f"HALT (I2): {OUT} present but not writable: {exc}")
     log(f"    residency OK -> {OUT}")
     assert CEIL_MS == 1719792000000, "evidence wall moved"
     log(f"    I1 wall: {CEIL_MS} ({iso(CEIL_MS)}) imported from census_build")
+    # "drive" is retained as a key so downstream manifest readers do not have to
+    # branch on its absence; under v2 there is no volume to wait on, and saying
+    # so explicitly is better than dropping the field and leaving a reader to
+    # guess whether the gate ran.
     return {"identity": [{"check": n, "pass": bool(o)} for n, o, _ in checks],
-            "drive": {"state": r.state, "elapsed_s": round(r.elapsed, 3)},
+            "drive": {"state": "LOCAL", "elapsed_s": 0.0},
+            "residency_root": str(OUT),
             "ceil_ms": CEIL_MS}
 
 

@@ -1,0 +1,83 @@
+{
+  "module": "CEN-0(a)",
+  "generated_utc": "2026-08-12T14:18:53Z",
+  "class": "EVIDENCE -- inventory of the estate as it stands",
+  "ceil_ms": 1719792000000,
+  "ceil_iso": "2024-07-01 00:00",
+  "cache_root": "C:\\Users\\luisf\\AppData\\Local\\naiad\\data_cache\\klines",
+  "native_tfs": [
+    "1m",
+    "5m",
+    "15m",
+    "1h",
+    "4h",
+    "12h"
+  ],
+  "derived_tfs": {
+    "30m": "15m (resampled, s1 algorithm)",
+    "1d": "1h (resampled)"
+  },
+  "preflight": {
+    "identity": [
+      {
+        "check": "pwd ends C:/Naiad",
+        "pass": true,
+        "detail": "C:/Naiad"
+      },
+      {
+        "check": "pwd OneDrive-free",
+        "pass": true,
+        "detail": "C:/Naiad"
+      },
+      {
+        "check": "branch v12-v1-census",
+        "pass": true,
+        "detail": "v12-v1-census"
+      },
+      {
+        "check": "remote catpatrol/Naiad",
+        "pass": true,
+        "detail": "https://github.com/catpatrol/Naiad.git"
+      },
+      {
+        "check": "LEDGER.md present",
+        "pass": true,
+        "detail": "LEDGER.md"
+      },
+      {
+        "check": "exchange/status/CONVENTIONS.md present",
+        "pass": true,
+        "detail": "exchange/status/CONVENTIONS.md"
+      }
+    ],
+    "drive": {
+      "state": "PRESENT",
+      "attempts": 1,
+      "elapsed_s": 0.0,
+      "budget_s": 18.0
+    },
+    "out_root": "D:\\Naiad\\research_outputs\\census2a\\mc2",
+    "ceil_ms": 1719792000000,
+    "ceil_iso": "2024-07-01 00:00"
+  },
+  "cen0b_paxg": {
+    "asset": "PAXGUSDT",
+    "present_in_cache": false,
+    "classification": null,
+    "rule": "contract CEN-0(b): >=2y evidence-era -> panel-eligible; else annex",
+    "state": "BLOCKED -- requires a network fetch, which paste #1 was scoped to exclude by operator decision 2026-08-12",
+    "engine_note": "PAXGUSDT is absent from engine/cells.py SYMBOLS; the contract's I10 forbids an engine change, so the fetch must pass the symbol explicitly and registration is a separate queue item"
+  },
+  "artifacts": {
+    "cen0_panel_inventory": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen0_panel_inventory.parquet",
+      "rows": 48,
+      "sha256": "df0c96f30f240bd51ac841ae92be47344d733468d838e6f5e8ae158467fc13a1"
+    },
+    "cen0_readiness": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen0_readiness.parquet",
+      "rows": 8,
+      "sha256": "153ff707879647fa215771ab399dbf5f0df4228cb9985ce2214ea53d559f9a68"
+    }
+  }
+}

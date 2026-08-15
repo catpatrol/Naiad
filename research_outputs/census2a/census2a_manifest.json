@@ -1,0 +1,1170 @@
+{
+  "program": "census2a_program.py",
+  "contract": "exchange/queue/2026-08-12_CENSUS2A_v0.3_RESOLVED_APOLLO.md",
+  "contract_sha256": "b0da051b894fc8586fab466fcf99cb0390763551d0d67bbac83743abc1547a6a",
+  "seed": 20260812,
+  "generated_utc": "2026-08-12T21:00:28Z",
+  "ceil_ms": 1719792000000,
+  "pins": {},
+  "artifacts": {
+    "cen1_events": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen1\\cen1_events.parquet",
+      "rows": 529061,
+      "bytes": 33979241,
+      "sha256": "87906a966b21a018a45743327511957ed6cdc46249b27f468ac87cd42b684db2",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen1_refusals": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen1\\cen1_refusals.parquet",
+      "rows": 356315,
+      "bytes": 11330426,
+      "sha256": "0f6442020aca4884109d334d33a9854f1578fbad0d0d4920ca643230755009ca",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen1_counters": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen1\\cen1_counters.parquet",
+      "rows": 1492,
+      "bytes": 15193,
+      "sha256": "7eedad61cf2ba602cda9a25200730f863645409165fb1608ae1829eb9a91f16f",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen2_ledger": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen2\\cen2_ledger.parquet",
+      "rows": 848,
+      "bytes": 92177,
+      "sha256": "5d3354f5132a72a0526b8f697cac9169729791b4a3890de8e9f168ea589edadb",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen2_fate_table": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen2\\cen2_fate_table.parquet",
+      "rows": 3,
+      "bytes": 3341,
+      "sha256": "4f573c6f2eb8abd0463d0c983fe13710179bf35306c19fa882bbd930cc0e19d5",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen3_by_asset": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen3\\cen3_by_asset.parquet",
+      "rows": 10,
+      "bytes": 10870,
+      "sha256": "129deb034a4fb398af8ff3281c0c13d4604f3811ce8da55a432555a367870421",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen3_by_half": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen3\\cen3_by_half.parquet",
+      "rows": 2,
+      "bytes": 9729,
+      "sha256": "aabc3755920fad4718e901d98615ea668278643501f780a7ff911a875805407e",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen3_by_depth_window_chained": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen3\\cen3_by_depth_window_chained.parquet",
+      "rows": 4,
+      "bytes": 9987,
+      "sha256": "915fb8e048a4e1fec783c4434b1d559890845f2ecfbdad1d32bd89b183c74a51",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen3_by_depth_direction_consistent": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen3\\cen3_by_depth_direction_consistent.parquet",
+      "rows": 4,
+      "bytes": 9971,
+      "sha256": "44987ea68ea4317b8a8af2e10b27bf17c47c192ec4c6900d0add7f29c6ec4edf",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen3_by_fate": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen3\\cen3_by_fate.parquet",
+      "rows": 3,
+      "bytes": 8796,
+      "sha256": "f3bf6ad1a2b132d89f7ffd8692c080b0ed6514e86a686cad0bd69bf7e0d0a4a3",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen3_trigger_outcomes": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen3\\cen3_trigger_outcomes.parquet",
+      "rows": 595,
+      "bytes": 45082,
+      "sha256": "99361ebfedc1052818f2cd8d3a0448523db9b2c509fcef468478b075d8d4fe4e",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen3_ledger_lensed": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen3\\cen3_ledger_lensed.parquet",
+      "rows": 848,
+      "bytes": 101701,
+      "sha256": "8e05a3ad36d4c2efbabe8703b67c8ecdb6bd842bc5211dcf2f3a1f7b215e9743",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen6_episodes": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen6\\cen6_episodes.parquet",
+      "rows": 4906,
+      "bytes": 125991,
+      "sha256": "0ac95a6e08f6fdb41e9a108d344315b47025a82ff91382446c353976644e1074",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen6_head_to_head": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen6\\cen6_head_to_head.parquet",
+      "rows": 3,
+      "bytes": 8390,
+      "sha256": "d88b1e726a7abcd9aa044e4cbe8e920e36cea018a3a6c9f38acc03c739fff5cc",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen6_hysteresis": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen6\\cen6_hysteresis.parquet",
+      "rows": 15,
+      "bytes": 3587,
+      "sha256": "284fb3aa74f5a67c952353c5dd3588a151d25b4a5c5afe627e72c9ac67faeac3",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen6_refusal_join": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen6\\cen6_refusal_join.parquet",
+      "rows": 12,
+      "bytes": 4142,
+      "sha256": "b719082f7bb96e4203001a0ecd6401cba841ce2c427978ad4056ffffa344f5b2",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen6_verdict_state": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen6\\cen6_verdict_state.parquet",
+      "rows": 249062,
+      "bytes": 761412,
+      "sha256": "8c802ff66c6262aa05ced6c14c3496b245865ea8c6ceba264f062efd6b1875e2",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen4_book": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen4\\cen4_book.parquet",
+      "rows": 6897,
+      "bytes": 326792,
+      "sha256": "e5c1aefd3d74b7b179efa186614438bb04fb48f1d68d3ed06d4407053fb5b79c",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen4_composition": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen4\\cen4_composition.parquet",
+      "rows": 2,
+      "bytes": 3881,
+      "sha256": "3d6f116dc45e8b23ed491fda28b95693a2ec9addd7be06399cc4c22bb8d525b8",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen5_campaigns": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen5\\cen5_campaigns.parquet",
+      "rows": 6834,
+      "bytes": 2704488,
+      "sha256": "6925f06818a30d94cd6f1a1feb48a35979268532321ca135e95589c801b988f5",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen5_corners": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen5\\cen5_corners.parquet",
+      "rows": 36,
+      "bytes": 6365,
+      "sha256": "3f659c2e1ff475cc2bf8cc1060a757f40dd2f0724eec04287aacc91974dc190e",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen7_registry_series": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen7\\cen7_registry_series.parquet",
+      "rows": 9137,
+      "bytes": 2453947,
+      "sha256": "0b7ad0daf81303167a33d44bf1888c12a725023a098b2f9d3b2d6376439f2352",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen7_registry_refusals": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen7\\cen7_registry_refusals.parquet",
+      "rows": 14759,
+      "bytes": 343430,
+      "sha256": "bac7f244596a6644f0746e99933fc73a6f43bfc0f0d281024ec0335e8ebc5a01",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen7_two_limb_reconciliation": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen7\\cen7_two_limb_reconciliation.parquet",
+      "rows": 3,
+      "bytes": 2906,
+      "sha256": "ddef66cbc4d526bb4224bd772f25e96cac47a9ec6221f1b8e06c9be60f33cef5",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen7_colocation": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen7\\cen7_colocation.parquet",
+      "rows": 9137,
+      "bytes": 58287,
+      "sha256": "f1a05967df67355fcf6204580af58d2b279d9a0d77ec6a30b162c9d9314fd6de",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen8_fdr_families": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen8\\cen8_fdr_families.parquet",
+      "rows": 3,
+      "bytes": 3512,
+      "sha256": "16724b9b549271b49b3e01fcd15e8f7f83dc69ae9495ee0a51ed441152991e91",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen8_ledger_nested": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen8\\cen8_ledger_nested.parquet",
+      "rows": 848,
+      "bytes": 102270,
+      "sha256": "623964b9312fbf2eaf9bec1e7c9915122ffa2c42891baca5fa3163cc2b01455a",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen9_control_instants": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen9\\cen9_control_instants.parquet",
+      "rows": 14871,
+      "bytes": 379703,
+      "sha256": "38401c17ef347b33508e5a03bc4a3b944a4e54a3c4c39ac144a8c54549f62c5d",
+      "class": "EVIDENCE -- exploration-classic"
+    },
+    "cen9_comparison": {
+      "path": "D:\\Naiad\\research_outputs\\census2a\\cen9\\cen9_comparison.parquet",
+      "rows": 7,
+      "bytes": 3122,
+      "sha256": "1f5b3df78567a53c451bb1d1baec1ad78260869fe2f86827718a8d7dd01da947",
+      "class": "EVIDENCE -- exploration-classic"
+    }
+  },
+  "fixtures": {
+    "F-GUARD": {
+      "null": {
+        "m": 12,
+        "winner": "null10",
+        "observed_max_sep": 0.190218,
+        "p_selection_corrected": 0.6742,
+        "bh_bar_q_over_m": 0.00833,
+        "null_p95": 0.312085,
+        "admissible": false,
+        "n_perm": 1500
+      },
+      "planted": {
+        "m": 12,
+        "winner": "plant5",
+        "observed_max_sep": 1.75942,
+        "p_selection_corrected": 0.0007,
+        "bh_bar_q_over_m": 0.00833,
+        "null_p95": 0.321355,
+        "admissible": true,
+        "n_perm": 1500
+      },
+      "naive_hits_in_null": 1,
+      "pass": true
+    },
+    "F-PIN": {
+      "pass": true,
+      "sections_checked": [
+        "pins",
+        "artifacts",
+        "fixtures",
+        "stages",
+        "registrations",
+        "feasibility",
+        "query_cards",
+        "new pin coexists with prior"
+      ]
+    },
+    "F-6-VEC": {
+      "cells": 18,
+      "identical": 18,
+      "pass": true
+    },
+    "F-6": {
+      "determinism": {
+        "i-a": true,
+        "i-b": true
+      },
+      "hand_verified": {
+        "i-a": [
+          {
+            "limb": "i-a",
+            "ts": "2019-12-09 04:00",
+            "confirm_ts": "2019-12-10 08:00",
+            "lag_bars": "7",
+            "|spread|@touch/ATR": 0.0178,
+            "|spread|@confirm/ATR": 0.7929,
+            "touch<=eps": true,
+            "veer>=delta": true,
+            "no_sign_change": true,
+            "lag<=k": true,
+            "PASS": true
+          },
+          {
+            "limb": "i-a",
+            "ts": "2019-12-09 08:00",
+            "confirm_ts": "2019-12-10 08:00",
+            "lag_bars": "6",
+            "|spread|@touch/ATR": 0.0603,
+            "|spread|@confirm/ATR": 0.7929,
+            "touch<=eps": true,
+            "veer>=delta": true,
+            "no_sign_change": true,
+            "lag<=k": true,
+            "PASS": true
+          },
+          {
+            "limb": "i-a",
+            "ts": "2019-12-09 12:00",
+            "confirm_ts": "2019-12-10 08:00",
+            "lag_bars": "5",
+            "|spread|@touch/ATR": 0.1504,
+            "|spread|@confirm/ATR": 0.7929,
+            "touch<=eps": true,
+            "veer>=delta": true,
+            "no_sign_change": true,
+            "lag<=k": true,
+            "PASS": true
+          }
+        ],
+        "i-b": [
+          {
+            "limb": "i-b",
+            "ts": "2020-01-04 20:00",
+            "confirm_ts": "2020-01-05 00:00",
+            "lag_bars": "1",
+            "|spread|@touch/ATR": 0.1667,
+            "|spread|@confirm/ATR": 1.408,
+            "touch<=eps": true,
+            "veer>=delta": true,
+            "no_sign_change": true,
+            "lag<=k": true,
+            "PASS": true
+          },
+          {
+            "limb": "i-b",
+            "ts": "2020-01-05 20:00",
+            "confirm_ts": "2020-01-06 00:00",
+            "lag_bars": "1",
+            "|spread|@touch/ATR": 0.1468,
+            "|spread|@confirm/ATR": 1.8942,
+            "touch<=eps": true,
+            "veer>=delta": true,
+            "no_sign_change": true,
+            "lag<=k": true,
+            "PASS": true
+          },
+          {
+            "limb": "i-b",
+            "ts": "2020-02-25 04:00",
+            "confirm_ts": "2020-02-25 08:00",
+            "lag_bars": "1",
+            "|spread|@touch/ATR": 0.2055,
+            "|spread|@confirm/ATR": 0.8783,
+            "touch<=eps": true,
+            "veer>=delta": true,
+            "no_sign_change": true,
+            "lag<=k": true,
+            "PASS": true
+          }
+        ]
+      },
+      "pass": true
+    },
+    "F-10-SABOTAGE": {
+      "pass": true,
+      "probe_iso": "2022-02-03 08:00",
+      "clean_close": 36995.5
+    },
+    "F-KEY": {
+      "state": "IMPLEMENTED -- assert_key() declares and asserts every join key",
+      "motivation": "the non-unique-key defect appeared three times: CEN-3 (asset,ts); CEN-5 tranche_id (dropped 432 of 7,094); CEN-3 cascade depth map"
+    },
+    "F-16-WITCORR": {
+      "state": "IMPLEMENTED and EXERCISED on P-REL-1b",
+      "definition": "v0.2 I8 verbatim: pairwise sign-agreement of the discriminant across assets + the panel's return correlation over the window",
+      "result": {
+        "per_asset_delta": {
+          "BTCUSDT": 0.204153,
+          "ETHUSDT": -0.092347,
+          "NEARUSDT": 0.467464,
+          "SOLUSDT": 0.366552,
+          "ZECUSDT": 0.225369
+        },
+        "pairwise_sign_agreement": 0.6,
+        "panel_return_correlation": 0.6458,
+        "n_assets": 5
+      }
+    },
+    "F-15": {
+      "pass": true,
+      "test": "random-instant draw reproduces under the same seed"
+    }
+  },
+  "stages": {
+    "CEN-0b": {
+      "symbol": "PAXGUSDT",
+      "dest": "D:\\Naiad\\research_outputs\\census2a\\klines\\PAXGUSDT",
+      "intervals": {
+        "1m": {
+          "state": "OK",
+          "rows": 723691,
+          "first_open": "2025-03-27 10:30",
+          "last_open": "2026-08-12 00:00",
+          "evidence_rows": 0,
+          "live_rows": 723691,
+          "path": "D:\\Naiad\\research_outputs\\census2a\\klines\\PAXGUSDT\\PAXGUSDT_1m.parquet",
+          "bytes": 16567078,
+          "sha256": "ed21f1843f7c7c97b6d12ca3cd08b719136b83a9d30d23e361cba6fb3def6cd8"
+        },
+        "5m": {
+          "state": "OK",
+          "rows": 144739,
+          "first_open": "2025-03-27 10:30",
+          "last_open": "2026-08-12 00:00",
+          "evidence_rows": 0,
+          "live_rows": 144739,
+          "path": "D:\\Naiad\\research_outputs\\census2a\\klines\\PAXGUSDT\\PAXGUSDT_5m.parquet",
+          "bytes": 4634808,
+          "sha256": "ca512d2404668e35618751d8b9e693108d57a8e1036310dc1cee7ef8e6fa28b6"
+        },
+        "15m": {
+          "state": "OK",
+          "rows": 48247,
+          "first_open": "2025-03-27 10:30",
+          "last_open": "2026-08-12 00:00",
+          "evidence_rows": 0,
+          "live_rows": 48247,
+          "path": "D:\\Naiad\\research_outputs\\census2a\\klines\\PAXGUSDT\\PAXGUSDT_15m.parquet",
+          "bytes": 1791678,
+          "sha256": "3e5cf367c66913c5065800a3f6cd03b1f0cbe00f7f48851ed295ba7b761790ab"
+        },
+        "1h": {
+          "state": "OK",
+          "rows": 12063,
+          "first_open": "2025-03-27 10:00",
+          "last_open": "2026-08-12 00:00",
+          "evidence_rows": 0,
+          "live_rows": 12063,
+          "path": "D:\\Naiad\\research_outputs\\census2a\\klines\\PAXGUSDT\\PAXGUSDT_1h.parquet",
+          "bytes": 476642,
+          "sha256": "6137be93ffb8844cdd7978ad868a74937166693ec36dbe94dae110f2b15ff8d3"
+        },
+        "4h": {
+          "state": "OK",
+          "rows": 3017,
+          "first_open": "2025-03-27 08:00",
+          "last_open": "2026-08-12 00:00",
+          "evidence_rows": 0,
+          "live_rows": 3017,
+          "path": "D:\\Naiad\\research_outputs\\census2a\\klines\\PAXGUSDT\\PAXGUSDT_4h.parquet",
+          "bytes": 122841,
+          "sha256": "98836d8fe6555ba6fdeaa023952eebf00f9dd99699b89c55aff890cac4560b8c"
+        },
+        "12h": {
+          "state": "OK",
+          "rows": 1007,
+          "first_open": "2025-03-27 00:00",
+          "last_open": "2026-08-12 00:00",
+          "evidence_rows": 0,
+          "live_rows": 1007,
+          "path": "D:\\Naiad\\research_outputs\\census2a\\klines\\PAXGUSDT\\PAXGUSDT_12h.parquet",
+          "bytes": 43682,
+          "sha256": "abae2d747ee9e7c769a31e2a2242920353c55deb771d333dce24bb2f8cc792bf"
+        }
+      },
+      "network_ok": true,
+      "evidence_years_1h": 0.0,
+      "classification": "ANNEX (<2y evidence-era)",
+      "rule": "contract CEN-0(b): >=2y evidence-era -> panel-eligible next cycle; else ANNEX",
+      "paxg_disposition": {
+        "ruling": "PX-1 = (b) DROP",
+        "state": "DROPPED",
+        "freed_bytes": 23636729,
+        "freed_mb": 23.6,
+        "path_removed": "D:/Naiad/research_outputs/census2a/klines/PAXGUSDT/",
+        "refetch": "python scripts/census2a_program.py --stage cen0b",
+        "note": "engine/cells.py SYMBOLS untouched; deletion withheld until the estate was restored, since the archived tree was the only copy"
+      }
+    },
+    "CEN-1": {
+      "era": "evidence",
+      "rows": {
+        "cen1_events": 529061,
+        "cen1_refusals": 356315,
+        "cen1_counters": 1492
+      },
+      "cold_head_violations": 0,
+      "scored_classes": [
+        "9_89",
+        "9_200",
+        "89_200",
+        "12_25",
+        "25_89",
+        "300_450",
+        "450_500",
+        "200_500",
+        "300_500"
+      ],
+      "raw_only_classes": [
+        "9_25"
+      ],
+      "note_ib": "i-b runs against the long EMAs this paste; the detector is generic over any level series, so registry levels plug in at CEN-7 without rework",
+      "trap_stamp": "DROPPED (R-3); counter_n is a measured column only"
+    },
+    "CEN-2": {
+      "era": "evidence",
+      "W_max": 151,
+      "armings": 848,
+      "stamp_set": [
+        "WALL",
+        "KISS",
+        "FIRST"
+      ],
+      "trap_stamp": "DROPPED (R-3)",
+      "fates": {
+        "COMPLETED": 595,
+        "ABORTED": 252,
+        "ROTTED": 1
+      },
+      "strict_core_n": 29,
+      "ruler": "R-1 signed terminal return, ATR-normalised, duration-fixed horizons",
+      "toll_bps_round_trip": 10.0
+    },
+    "CEN-3": {
+      "era": "evidence",
+      "ruler": "R-1 signed terminal return / ATR at anchor",
+      "horizons_requested_ms": {
+        "H20": 6000000,
+        "H100": 30000000,
+        "H500": 150000000
+      },
+      "horizons_realized_on_4h": {
+        "H20": {
+          "requested_ms": 6000000,
+          "requested_h": 1.667,
+          "bars_4h": 0,
+          "realized_h": 0.0,
+          "infeasible": true,
+          "duration_ratio": null
+        },
+        "H100": {
+          "requested_ms": 30000000,
+          "requested_h": 8.333,
+          "bars_4h": 2,
+          "realized_h": 8.0,
+          "infeasible": false,
+          "duration_ratio": 0.96
+        },
+        "H500": {
+          "requested_ms": 150000000,
+          "requested_h": 41.667,
+          "bars_4h": 10,
+          "realized_h": 40.0,
+          "infeasible": false,
+          "duration_ratio": 0.96
+        }
+      },
+      "toll_bps_round_trip": 10.0,
+      "toll_atr_by_asset": {
+        "BTCUSDT": 0.059427856291146726,
+        "ETHUSDT": 0.04903389057021065,
+        "SOLUSDT": 0.03151736133777649,
+        "NEARUSDT": 0.02631620865292716,
+        "ZECUSDT": 0.035337577393707825
+      },
+      "lenses_printed": [
+        "window_chained",
+        "direction_consistent"
+      ],
+      "entry_lens_primary": "24h|window_chained (I6)",
+      "fate_caveat": "MECHANICAL SEPARATION -- an ABORTED window is a regime flip INSIDE the horizon, so its terminal return is negative BY CONSTRUCTION. The sign of this split is NOT a finding."
+    },
+    "CEN-6": {
+      "era": "evidence",
+      "h_veto": 2,
+      "h_source": "Amendment A2",
+      "close_set": [
+        "1h",
+        "4h",
+        "12h"
+      ],
+      "boundary_object": "prior completed week H/L (analytics.structure.prior_period_extremes, period='W')",
+      "trap_lookback_bars": 10,
+      "not_a_sweep": "h is named [VETO A2], the close-set is pinned, the boundary is one object; the three members are PRINTED head-to-head, not a grid a winner is drawn from",
+      "verdict_open_interface": "cen6_verdict_state.parquet -- per (asset, member, ts) verdict_state in {NONE, RESPECTED, BROKEN}; CEN-4's fifth composite component consumes this",
+      "falsified_detector_disclosure": "LEDGER.md:311 P-PD1/P-PD2/P-PD4 FALSIFIED -- engine/s2.py D1/D3/D4 are admissible as a LOCATION object but not as a promoted signal; CEN-6 uses a prior-week envelope instead and promotes nothing"
+    },
+    "CEN-4": {
+      "era": "evidence",
+      "churn_rule": "A3-CHURN: FAST 9_89 count, trailing 24 fixed hours, vs the asset's own EXPANDING causal distribution, fires at P80, NaN before 90 days",
+      "decile_rule": "A3-DECILE size-free per-asset",
+      "chop_threshold": 3,
+      "components": [
+        "churn",
+        "no_slow",
+        "ribbon",
+        "verdict_open",
+        "concord"
+      ]
+    },
+    "CEN-5": {
+      "era": "evidence",
+      "family_m": 36,
+      "ruler": "gross R = (exit-entry)/|entry-stop| (size-free; verified realized_r = size_r x gross_R + costs, corr 0.993)",
+      "control": "RIDE-ONLY, printed first",
+      "arms_built": [
+        "(a) ratchet+add joint"
+      ],
+      "arms_not_built": [
+        "(b) PO3-mirror per A3-BAND -- not reached this run",
+        "(c) harvest-at-structure H-VBT -- UNDEFINED, see P-VBT-1"
+      ]
+    },
+    "CEN-7": {
+      "era": "evidence",
+      "rvwap_windows_days": [
+        7,
+        30,
+        90,
+        365
+      ],
+      "colocation_atr": 0.15,
+      "causality": "as-of by bar CLOSE; the rule F-10 (A4-SAB) proves rejects a future bar",
+      "truncation_watch": "flagged per row in cen7_registry_series.truncated_forward",
+      "i_b_completion": "registry RVWAP levels; two-limb reconciliation emitted"
+    },
+    "CEN-8": {
+      "era": "evidence",
+      "splits": {
+        "count_balanced": {
+          "cut_iso": "2022-07-06 12:00",
+          "n_early": 424,
+          "n_late": 424,
+          "days_early": 970.7,
+          "days_late": 724.8,
+          "btc_share_early": 0.2901,
+          "btc_share_late": 0.1698
+        },
+        "duration_balanced": {
+          "cut_iso": "2022-03-05 14:00",
+          "n_early": 381,
+          "n_late": 467,
+          "days_early": 847.8,
+          "days_late": 847.8,
+          "btc_share_early": 0.2913,
+          "btc_share_late": 0.1799
+        }
+      },
+      "fdr_families": [
+        {
+          "family": "entry-lens registrations",
+          "members": [
+            "P-ARM-1",
+            "P-iii-b",
+            "P-NEST-1"
+          ],
+          "m": 3,
+          "q": 0.1,
+          "bh_bar": 0.03333
+        },
+        {
+          "family": "exit-lens registrations",
+          "members": [
+            "P-RAT-2"
+          ],
+          "m": 1,
+          "q": 0.1,
+          "bh_bar": 0.1
+        },
+        {
+          "family": "CEN-5 ratchet corners",
+          "members": [
+            "36 grid corners"
+          ],
+          "m": 36,
+          "q": 0.1,
+          "bh_bar": 0.00278
+        }
+      ],
+      "witness_correlation": "A4-WITCORR printed beside every promoted verdict"
+    },
+    "CEN-9": {
+      "era": "evidence",
+      "random_n_per_asset": 200,
+      "ema_reference": {
+        "n": 848,
+        "median_term_H100": 0.074827
+      },
+      "f15_redraw_reproducible": true,
+      "registers": "nothing -- tests the instrument"
+    }
+  },
+  "registrations": {
+    "P-REL-1": {
+      "registration": "windows with an in-window 12_25 trigger -> higher trigger-anchored terminal return than A-only windows",
+      "prior": 0.6,
+      "lens": "24h|window_chained",
+      "verdict": "WITHDRAWN -- UNSCOREABLE AS WRITTEN",
+      "withdrawal_reason": "'A-only' means armed-but-never-triggered (n=253). Those windows have no trigger, so the registered trigger-anchored comparison has no anchor; and the A-only cohort is 252/253 ABORTED with median width 4 bars vs 48, so the split is the mechanical separation this stage explicitly caveats. An earlier draft substituted '25_89-triggered' for 'A-only' and reported SUPPORTED -- a different hypothesis than the one registered.",
+      "n_a_only": 253,
+      "variants": [
+        {
+          "label": "V1 12_25-FIRST vs 25_89-FIRST (trigger anchor) -- what an earlier draft reported",
+          "n_treat": 155,
+          "n_control": 440,
+          "ci": {
+            "point": 0.19932,
+            "lo": 0.093272,
+            "hi": 0.287613,
+            "excludes_zero": true,
+            "n_clusters": 5
+          }
+        },
+        {
+          "label": "V2 12_25 vs A-ONLY (mixed anchor) -- THE REGISTERED COMPARISON, confounded",
+          "n_treat": 155,
+          "n_control": 253,
+          "ci": {
+            "point": 0.629371,
+            "lo": 0.472241,
+            "hi": 0.758084,
+            "excludes_zero": true,
+            "n_clusters": 5
+          }
+        }
+      ],
+      "mandated_splits": {
+        "horizon_H100": {
+          "point": 0.19932,
+          "lo": 0.093272,
+          "hi": 0.287613,
+          "excludes_zero": true,
+          "n_clusters": 5
+        },
+        "horizon_H500": {
+          "point": -0.082974,
+          "lo": -0.369028,
+          "hi": 0.427855,
+          "excludes_zero": false,
+          "n_clusters": 5
+        },
+        "dir_up": {
+          "point": 0.361433,
+          "lo": 0.095226,
+          "hi": 0.512507,
+          "excludes_zero": true,
+          "n_clusters": 5
+        },
+        "dir_down": {
+          "point": 0.135276,
+          "lo": -0.064524,
+          "hi": 0.312346,
+          "excludes_zero": false,
+          "n_clusters": 5
+        }
+      },
+      "per_asset_delta": {
+        "BTCUSDT": 0.2181,
+        "ETHUSDT": -0.2418,
+        "NEARUSDT": 0.4572,
+        "SOLUSDT": 0.4354,
+        "ZECUSDT": 0.2237
+      },
+      "leave_one_asset_out": {
+        "drop_BTCUSDT": {
+          "point": 0.20028,
+          "lo": -0.014148,
+          "hi": 0.43042,
+          "excludes_zero": false,
+          "n_clusters": 4
+        },
+        "drop_ETHUSDT": {
+          "point": 0.233129,
+          "lo": 0.198711,
+          "hi": 0.43042,
+          "excludes_zero": true,
+          "n_clusters": 4
+        },
+        "drop_NEARUSDT": {
+          "point": 0.16337,
+          "lo": -0.029733,
+          "hi": 0.276826,
+          "excludes_zero": false,
+          "n_clusters": 4
+        },
+        "drop_SOLUSDT": {
+          "point": 0.16572,
+          "lo": -0.014148,
+          "hi": 0.276826,
+          "excludes_zero": false,
+          "n_clusters": 4
+        },
+        "drop_ZECUSDT": {
+          "point": 0.20873,
+          "lo": -0.014148,
+          "hi": 0.43042,
+          "excludes_zero": false,
+          "n_clusters": 4
+        }
+      },
+      "loao_excluding_zero": "1/5",
+      "criterion": "R-2 asset-cluster 90% CI excluding zero",
+      "successor": "re-register by name as P-REL-1b with the arms defined by an explicit event-stream predicate and the anchor stated"
+    },
+    "P-ARM-1": {
+      "registration": "WALL-true armings -> higher trigger-within-151 rate AND higher post-trigger terminal return than WALL-false",
+      "prior": 0.6,
+      "trigger_rate_wall_true": 0.463855,
+      "trigger_rate_wall_false": 0.759531,
+      "terminal_H100_cluster_ci": {
+        "point": -0.160449,
+        "lo": -0.247928,
+        "hi": -0.063548,
+        "excludes_zero": true,
+        "n_clusters": 5
+      },
+      "criterion": "R-2 asset-cluster 90% CI excluding zero",
+      "verdict": "NOT SUPPORTED",
+      "confound_disclosure": {
+        "median_width_wall_true": 8.0,
+        "median_width_wall_false": 30.0,
+        "trigger_rate_conditioned_width_ge_48": {
+          "wall_true": 1.0,
+          "wall_false": 0.985019
+        },
+        "reading": "WALL-true windows close fast (price is adjacent to the e89, where the counter-cross is imminent), so the trigger-rate limb is confounded by exposure time; the terminal-return limb is not affected by this mechanism"
+      }
+    },
+    "P-REL-1b": {
+      "registration": "among windows with >=1 in-window trigger: TREAT has_in_window_12_25=true vs CONTROL triggered without any in-window 12_25; anchor = FIRST in-window trigger of ANY class, identical rule both arms",
+      "prior": 0.5,
+      "label": "POST-HOC-INFORMED -- PERMANENT; ceiling this run is SUPPORTED-PROVISIONAL pending next-cycle replication",
+      "n_treat": 301,
+      "n_control": 294,
+      "anchor": "first in-window trigger of any class (identical both arms)",
+      "primary": {
+        "horizon": "H100",
+        "ci": {
+          "point": 0.186945,
+          "lo": 0.063813,
+          "hi": 0.288707,
+          "excludes_zero": true,
+          "n_clusters": 5
+        }
+      },
+      "mandated_splits": {
+        "horizon_H20": {
+          "point": null,
+          "excludes_zero": false,
+          "reason": "infeasible on 4h -- NaN, not substituted"
+        },
+        "horizon_H100": {
+          "point": 0.186945,
+          "lo": 0.063813,
+          "hi": 0.288707,
+          "excludes_zero": true,
+          "n_clusters": 5
+        },
+        "horizon_H500": {
+          "point": 0.63991,
+          "lo": 0.485636,
+          "hi": 0.866919,
+          "excludes_zero": true,
+          "n_clusters": 5
+        },
+        "dir_up": {
+          "point": 0.143683,
+          "lo": 0.036903,
+          "hi": 0.409848,
+          "excludes_zero": true,
+          "n_clusters": 5
+        },
+        "dir_down": {
+          "point": 0.238157,
+          "lo": 0.107032,
+          "hi": 0.299341,
+          "excludes_zero": true,
+          "n_clusters": 5
+        },
+        "half_early": {
+          "point": 0.151464,
+          "lo": -0.028454,
+          "hi": 0.273665,
+          "excludes_zero": false,
+          "n_clusters": 5
+        },
+        "half_late": {
+          "point": 0.221097,
+          "lo": 0.125648,
+          "hi": 0.489483,
+          "excludes_zero": true,
+          "n_clusters": 5
+        }
+      },
+      "per_asset_delta": {
+        "BTCUSDT": 0.2042,
+        "ETHUSDT": -0.0923,
+        "NEARUSDT": 0.4675,
+        "SOLUSDT": 0.3666,
+        "ZECUSDT": 0.2254
+      },
+      "leave_one_asset_out": {
+        "drop_BTCUSDT": {
+          "point": 0.188254,
+          "lo": -0.017085,
+          "hi": 0.385137,
+          "excludes_zero": false,
+          "n_clusters": 4
+        },
+        "drop_ETHUSDT": {
+          "point": 0.246809,
+          "lo": 0.206115,
+          "hi": 0.385137,
+          "excludes_zero": true,
+          "n_clusters": 4
+        },
+        "drop_NEARUSDT": {
+          "point": 0.15684,
+          "lo": 0.000268,
+          "hi": 0.237756,
+          "excludes_zero": true,
+          "n_clusters": 4
+        },
+        "drop_SOLUSDT": {
+          "point": 0.186581,
+          "lo": 0.000268,
+          "hi": 0.312004,
+          "excludes_zero": true,
+          "n_clusters": 4
+        },
+        "drop_ZECUSDT": {
+          "point": 0.190921,
+          "lo": 0.000268,
+          "hi": 0.385137,
+          "excludes_zero": true,
+          "n_clusters": 4
+        }
+      },
+      "loao_excluding_zero": "4/5",
+      "criterion": "R-2 asset-cluster 90% CI excluding zero",
+      "verdict": "SUPPORTED-PROVISIONAL",
+      "supersedes": "P-REL-1 (WITHDRAWN -- unscoreable as written)",
+      "witness_correlation": {
+        "per_asset_delta": {
+          "BTCUSDT": 0.204153,
+          "ETHUSDT": -0.092347,
+          "NEARUSDT": 0.467464,
+          "SOLUSDT": 0.366552,
+          "ZECUSDT": 0.225369
+        },
+        "pairwise_sign_agreement": 0.6,
+        "panel_return_correlation": 0.6458,
+        "n_assets": 5
+      }
+    },
+    "P-FAN-1": {
+      "prior": 0.6,
+      "verdict": "FILED NEXT-CYCLE -- UNSCORED",
+      "registration": "armings stamped FAN=true at the arming instant show higher terminal ATR-return than FAN=false armings; asset-cluster 90% CI excl. 0; both directions",
+      "note": "A1-FAN columns are observation-only this run; final wording is the operator's",
+      "fan_emas_reading": [
+        9,
+        89,
+        200,
+        300,
+        450,
+        500
+      ],
+      "fan_reading_flag": "BUILDER'S READING -- the ruling names only KNOT's five explicitly"
+    },
+    "P-iii-b": {
+      "registration": "curtain-clean grind-at-birth over-represented in loser births (proportion delta, cluster CI), both directions",
+      "prior": 0.65,
+      "prevalence_L": 0.22093,
+      "prevalence_W": 0.152616,
+      "delta": 0.068314,
+      "cluster_ci": {
+        "point": 0.068314,
+        "lo": 0.036232,
+        "hi": 0.102041,
+        "excludes_zero": true,
+        "n_clusters": 5
+      },
+      "per_direction": {
+        "long": {
+          "point": 0.101286,
+          "lo": 0.058985,
+          "hi": 0.164317,
+          "excludes_zero": true,
+          "n_clusters": 5
+        },
+        "short": {
+          "point": 0.039258,
+          "lo": -0.000646,
+          "hi": 0.09634,
+          "excludes_zero": false,
+          "n_clusters": 5
+        }
+      },
+      "decile_rule": "A3-DECILE size-free per-asset",
+      "verdict": "NOT SUPPORTED -- pooled effect measured, but the registration's 'both directions' clause is not met"
+    },
+    "P-CHOP-1": {
+      "registration": "chop-composite >=3 captures >=40% of loser-decile births at TRG >=85%",
+      "prior": 0.65,
+      "capture": 0.581395,
+      "trg": 0.546604,
+      "threshold_capture": 0.4,
+      "threshold_trg": 0.85,
+      "components": [
+        "churn",
+        "no_slow",
+        "ribbon",
+        "verdict_open",
+        "concord"
+      ],
+      "verdict": "WITHDRAWN -- COMPUTED ON A MIS-SPECIFIED COMPONENT SET",
+      "verdict_superseded": "NOT SUPPORTED",
+      "withdrawal_reason": "Two of the five composite components were not the registered objects. (1) lens-concordance: v0.3 section 0 PINS it as 'trailing-24h same-rung-string agreement between the two chaining rules; baseline 38.46%'. The build computed a count of 4h lattice-A events in a trailing 24h and fired at <=1 -- an event-density proxy, a different quantity, which is why it fired on 94.0%. (2) ribbon: v0.2:40 names the operand as the 9/89 spread on 30m AND 1h; the build used 1h only -- an unratified narrowing. Both feed composite>=3, so the capture and TRG figures (0.5814 / 0.5466) are not the registered statistic in either direction.",
+      "unaffected": "P-iii-b is NOT affected: its predicate is no_slow AND churn only, neither of which is implicated. That verdict stands.",
+      "found_by": "A3-AUDIT (v0.2 -> v0.3 compression diff), needs-word items NW-3 and NW-1/NW-6"
+    },
+    "P-NEST-2": {
+      "prior": 0.5,
+      "verdict": "FILED NEXT-CYCLE -- UNSCORED",
+      "registration": "given a nested LTF cross mid-bar, how often does the 4H confirm -- the FORWARD false-positive conditional, a different population from run-1's backward nesting prevalence",
+      "note": "final wording is the operator's"
+    },
+    "P-RAT-2": {
+      "registration": "joint ratchet+add beats RIDE-ONLY on net terminal R at >=1 grid corner with TRG >=85%",
+      "prior": 0.4,
+      "family_m": 36,
+      "fdr_bar": 0.00278,
+      "corners_passing_both": 0,
+      "selection_guard": {
+        "m": 36,
+        "winner": "rat_1h_200_1.0",
+        "observed_max_sep": 0.141968,
+        "p_selection_corrected": 0.0005,
+        "bh_bar_q_over_m": 0.00278,
+        "null_p95": 0.006931,
+        "admissible": true,
+        "n_perm": 2000
+      },
+      "verdict": "NOT SUPPORTED",
+      "add_model": "one additional unit at the first reclaim sharing the ratcheted stop -- the contract names 'ratchet+add JOINTLY' and defines no add rule; this is a minimal model, disclosed",
+      "ruler": "gross R = (exit-entry)/|entry-stop|, size-free",
+      "trg_limb": "VOID under A4-TRG -- TRG is defined for FILTERS only; an alternative-exit arm is scored on TAIL-EXIT-RATIO, unbounded above, NO pass-bar this cycle. The recorded NOT SUPPORTED verdict stands on the delta limb alone."
+    },
+    "P-VBT-1": {
+      "registration": "the harvest arm cuts median give-back >=30% at TRG >=80%",
+      "prior": 0.45,
+      "verdict": "NOT SCORED -- H-VBT UNDEFINED",
+      "reason": "H-VBT (harvest-at-structure) is a bare NAME in both v0.2:131 and v0.3:103 -- the A3-AUDIT logged it as needs-word. The estate defines it only as 'VWAP Band Target -- exits at confluence-scored VWAP levels', and those bands are CEN-7's registry output, which has not run. Choosing a band set by outcome would be a sweep that \u00a7N forbids, so the arm is not built and the registration is NOT SCORED rather than scored on an invented rule."
+    },
+    "P-RAT-3": {
+      "prior": 0.4,
+      "verdict": "FILED NEXT-CYCLE -- UNSCORED",
+      "registration": "on the triple {mean delta, tail-exit-ratio, beat-share} at the 4h/long/wide ratchet family; statistic NAMED per A4-STAT",
+      "note": "prior honest to run-6's shape (mean deltas +0.45R at low beat-share)"
+    },
+    "P-VBT-2": {
+      "prior": 0.45,
+      "verdict": "FILED NEXT-CYCLE -- UNSCORED",
+      "registration": "harvest arm; band rule pre-named from CEN-7's registry STRUCTURE, never outcomes"
+    },
+    "P-NEST-1": {
+      "registration": "armings nested per the pre-named fallback set outperform un-nested on terminal return",
+      "prior": 0.45,
+      "pre_named_set": [
+        "1h-in-4h",
+        "30m-in-4h",
+        "30m-in-1h"
+      ],
+      "n_treat": 149,
+      "n_control": 699,
+      "cluster_ci": {
+        "point": 0.127535,
+        "lo": -0.0513,
+        "hi": 0.229208,
+        "excludes_zero": false,
+        "n_clusters": 5
+      },
+      "witness_correlation": {
+        "per_asset_delta": {
+          "BTCUSDT": -0.073201,
+          "ETHUSDT": -0.117989,
+          "NEARUSDT": 0.065937,
+          "SOLUSDT": 0.109198,
+          "ZECUSDT": 0.347689
+        },
+        "pairwise_sign_agreement": 0.4,
+        "panel_return_correlation": 0.6458,
+        "n_assets": 5
+      },
+      "verdict": "NOT SUPPORTED",
+      "note": "A4-NEST resolved the scored-vs-columns contradiction"
+    },
+    "P-i-prime": {
+      "prior": 0.5,
+      "verdict": "NOT SCORED -- leap/stair UNDEFINED",
+      "reason": "defined in neither draft; MC-1's leap family is a CASCADE object and P-i' is a WINDOW recut. Register: known-open"
+    },
+    "P-iv-prime": {
+      "prior": 0.45,
+      "verdict": "NOT SCORED -- depends on P-i'",
+      "reason": "ATR buckets and 'survives' also undefined in both drafts"
+    }
+  },
+  "merged_from": "2026-08-12T20:59:24Z",
+  "merge_sections": {
+    "merged": [
+      "pins",
+      "artifacts",
+      "fixtures",
+      "stages",
+      "registrations"
+    ],
+    "carried": [
+      "feasibility",
+      "query_cards"
+    ]
+  },
+  "preflight": {
+    "identity": [
+      {
+        "check": "pwd ends C:/Naiad",
+        "pass": true
+      },
+      {
+        "check": "pwd NOT contains OneDrive",
+        "pass": true
+      },
+      {
+        "check": "branch v12-v1-census",
+        "pass": true
+      },
+      {
+        "check": "remote catpatrol/Naiad",
+        "pass": true
+      },
+      {
+        "check": "LEDGER.md",
+        "pass": true
+      },
+      {
+        "check": "exchange/status/CONVENTIONS.md",
+        "pass": true
+      }
+    ],
+    "drive": {
+      "state": "PRESENT",
+      "elapsed_s": 0.0
+    },
+    "ceil_ms": 1719792000000
+  },
+  "elapsed_s": 11.5,
+  "census_status": {
+    "state": "SPENT",
+    "closed_utc": "2026-08-12",
+    "modules_run": [
+      "CEN-0b",
+      "CEN-1",
+      "CEN-2",
+      "CEN-3",
+      "CEN-6",
+      "CEN-4",
+      "CEN-5",
+      "CEN-7",
+      "CEN-8",
+      "CEN-9"
+    ],
+    "fixtures_passing": [
+      "F-GUARD",
+      "F-PIN",
+      "F-6-VEC",
+      "F-6",
+      "F-10-SABOTAGE",
+      "F-KEY",
+      "F-16-WITCORR",
+      "F-15"
+    ],
+    "yield": "1 SUPPORTED-PROVISIONAL of 9 scored; 2 withdrawn; 4 not scored (undefined terms)",
+    "register_row_40": "ribbon operand = OR over {30m,1h} 9/89 spread < c*ATR (P-CHOP-2 next cycle)"
+  }
+}

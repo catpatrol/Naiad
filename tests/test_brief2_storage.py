@@ -1,6 +1,6 @@
 """F-B9..F-B24 (storage subset) and F-B32 — record and storage (Amendment 2 §8).
 
-Run: C:\\venvs\\naiad\\Scripts\\python.exe -m pytest tests/test_brief2_storage.py -q
+Run: python -m pytest tests/test_brief2_storage.py
 
 These run against the REAL capture in `briefs/` when one exists, and skip with a
 stated reason when it does not — a fixture that silently passes because there is

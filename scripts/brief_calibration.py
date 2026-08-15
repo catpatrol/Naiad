@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """brief_calibration.py -- the §9.2 calibration report.
 
-    C:\\venvs\\naiad\\Scripts\\python.exe scripts/brief_calibration.py --date 2026-08-03
+    python scripts/brief_calibration.py --date 2026-08-03
 
 Emits `exchange/reports/BRIEF2_CALIBRATION_<date>.json` plus a markdown summary.
 
