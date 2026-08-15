@@ -56,6 +56,11 @@ BRIEF_DOC = (ROOT / "exchange" / "reports" /
 PAY.mkdir(parents=True, exist_ok=True)
 HAND.mkdir(parents=True, exist_ok=True)
 V.PAY = PAY
+# The shared emitter stamps meta.seed from its OWN module constant (VIZ-1's
+# 20260812).  This run is seeded 20260814 and every record says so, so the
+# emitter is re-pointed here too -- otherwise the payloads' provenance field
+# contradicts the build document, the probe ledger and the lane ledger.
+V.SEED = SEED
 _ART = dict(json.loads((C2A / "census2a_manifest.json").read_text()).get("artifacts", {}))
 for k, v in json.loads((C2B / "census2b_manifest.json").read_text()).get("artifacts", {}).items():
     _ART.setdefault(Path(k).with_suffix("").name if "/" not in k else k, v)
