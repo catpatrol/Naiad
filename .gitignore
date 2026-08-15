@@ -166,8 +166,10 @@ naiad-backups/
 # `fatal: unable to stat '.tmp.driveupload/1915'` because Drive moved the file
 # out from under the scan).
 #
-# 7.8 GB across 952 entries, sitting in the REPO ROOT, untracked and -- until
-# this line -- UNIGNORED. That is precisely the 2026-08-05 condition described
+# 7.8 GB across 952 entries when first measured at 12:59, down to 2.7 GB across
+# 6 by 13:4x -- it drains as Drive uploads, which is WHY git aborted: git stat'd
+# an entry that Drive removed mid-scan. Sitting in the REPO ROOT, untracked and
+# -- until this line -- UNIGNORED. That is precisely the 2026-08-05 condition described
 # three blocks up: untracked-but-unignored bulk that a wildcard `git add -A`
 # will sweep into a commit and that GitHub will then reject. The file sizes
 # match the phase archives (e.g. 242,926,299 B = tc1_2026-07-27.zip), so this is
