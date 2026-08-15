@@ -76,7 +76,7 @@ smoke-proven on this machine. APOLLO may draft and run.
 | One `--estate` refresh on the PC (cache there is newer than the 08-11 archive) | operator, at leisure |
 | 11 CRLF source files → LF (own commit + suite run) | code lane |
 | `backup_estate.py --no-publish` flag | code lane |
-| Box at ~37% WARN — next relief is the scheduled 30-day rotation (~08-28) or another named set | operator word |
+| ~~Box at ~37% WARN — next relief is the scheduled 30-day rotation (~08-28) or another named set~~ **CLOSED 2026-08-15**: the operator's word was given — `["box", VETO]` raised the box to 16 MB (warn 50 / refuse 80). Bus now ~16%, level OK. The 30-day rotation stays scheduled (~08-28) and `AGE_DAYS` was not touched | ~~operator word~~ — given |
 | Parked queue, in return order: momentum-wording ruling · memory redesign (13-entry index model) · OneDrive Phase B + PC decommission | operator + ATHENA |
 
 — ATHENA, 2026-08-15

@@ -98,7 +98,7 @@ routine publishes for you). Flag it as pending until the operator arms it.
    against **16,000,000 B** (raised 2026-08-15; read it from `publish_exchange.BOX_BYTES` rather
    than from this line, so the next raise reaches you for free); every file >1% named — **note that
    1% is now ~160,000 B, not ~63,900 B**, so the naming threshold loosened 2.5× with the box and
-   §4.2 of CONVENTIONS says so explicitly; **rotation-candidate table** (>30 days) per §2c.
+   §3.2 of CONVENTIONS says so explicitly; **rotation-candidate table** (>30 days) per §2c.
 3. Rebuild `exchange/DIGEST.md` in full: how-to-use → budget → by-lane (ledger, latest artifacts,
    key references, staleness) → inbox with acted-status → queue table → findings. Index of
    pointers, never a re-authored substitute.

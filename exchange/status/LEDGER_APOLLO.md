@@ -1103,3 +1103,51 @@ PENDING (operator):
 NEXT: the operator rules on the 1% trip-wire. Owner: operator.
 METRICS: operator actions this session = 3 -- files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-15f ===
+NOW: THREE DEFECTS IN THE 15e PROSE SWEEP, FOUND BY AN ADVERSARIAL VERIFIER AND FIXED. This entry
+SUPERSEDES 15e on two points of fact. The sweep's substance stands; its completeness did not.
+CLASS: repo operation / record correction. NO REGISTRATIONS. m = 0.
+LAST EVENT: 2026-08-15 -- post-publish verification of the box-raise prose sweep
+FACTS:
+ 1. I CITED THE WRONG SECTION, AND PROPAGATED IT INTO TWO LIVE INSTRUCTION SURFACES. The ~1% naming
+    trip-wire and the BOX COST column both live in CONVENTIONS **§3.2** (The file-disposition table,
+    line 405ff), NOT §4.2 (The exchange bus, line 577ff). 15e facts 2 and 3 say §4.2 -- WRONG, and
+    corrected here rather than edited there. The same wrong reference had been written into
+    PRIMER_HERMES §6.2 and DIGEST §2, i.e. into the standing instruction that regenerates the DIGEST
+    budget block every cycle: HERMES would have been sent to a section that does not carry the rule
+    it was told to apply. Both live surfaces now read §3.2. NOTE: §4.2 is a real section with a real
+    rule -- text-only / 1 MB per file, the one publish_exchange quotes on refusal -- so the filed
+    reports that cite it are correct and were left alone. My error was the pairing, not the number.
+ 2. I FIXED ONE OF TWO IDENTICAL CLAIMS IN THE SAME FILE. NOTE_ATHENA_2026-08-15_ALL-LANES_MAC-ERA-
+    STATUS carried "box at ~37%" TWICE: the geography table (line 30, corrected in 15e) and §4 OPEN
+    ITEMS (line 79, MISSED). The missed one was worse than stale: it listed the box as an OPEN item
+    owned by "operator word" when the operator had already given that word in the same day's ruling,
+    on a broadcast whose whole purpose is telling six lanes what is currently true. Now struck
+    through and marked CLOSED with the ruling named.
+ 3. I RE-STAMPED A SECTION AND LEFT A CONTRADICTION 26 LINES INSIDE IT. DIGEST §2 header now reads
+    "measured 2026-08-15, against 16,000,000 B", but its closing paragraph still read "Data is now
+    3.05% of the box, down from 8.74%" and "reports/ holds 77 files" -- 6.39-MB-era denominators and
+    a stale file count, against the same section's corrected "1.31% (11 files)" and "98 files". Both
+    now era-anchored and reconciled, with the 16 MB readings stated beside them. DIGEST §7 F-3
+    carried the same un-anchored 8.74%/3.05% pair and got the same treatment.
+ 4. THE COMMON SHAPE OF ALL THREE: I corrected the line I went looking for and did not re-read the
+    surrounding document. Grepping for a VALUE finds the values; it does not find a claim that
+    CONTRADICTS a value, an OWNERSHIP row that a ruling has closed, or a second instance further
+    down the same file. 15e fact 4 already recorded that grepping a constant's NAME is not a
+    completeness check; the sharper form is: **after editing a document, re-read the document.**
+ 5. WHAT 15e GOT RIGHT AND STANDS: the ordering (PRIMER before DIGEST, because DIGEST has no
+    generator); the four documents identified as live; the 1% trip-wire flagged as an operator
+    decision rather than silently taken; every superseded figure era-anchored rather than erased;
+    nothing filed edited. The verifier independently confirmed the guard's boundary behaviour
+    (budget(12,800,000)=WARN, budget(12,800,001)=REFUSE) and found NO other live instruction
+    document missed -- CADENCE, RETENTION, HEARTBEAT, MANIFEST.json, every README and every other
+    lane's primer are clean, and the live CENSUS2A contract states BOX-COST as a bare fraction
+    ("bus additions <1%"), so it tracked the raise for free.
+ 6. exchange/** = 2,582,800 B = 16.14% of the 16,000,000 B box. Level OK.
+PENDING (operator): unchanged from 15e -- the 1% trip-wire (leave proportional at ~160,000 B, or pin
+absolute at ~64,000 B); re-attach DESIGN_CONTRACT_VIZ3_TRADE_CATHEDRAL_2026-08-15.md; name the VIZ
+stage's contract; rule on the twelve stations; rule on `fuzz`.
+NEXT: the operator rules on the 1% trip-wire. Owner: operator.
+METRICS: operator actions this session = 3 -- files re-ingested = 0
+=== END STATUS ===

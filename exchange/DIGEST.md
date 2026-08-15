@@ -35,7 +35,7 @@ a file cannot carry its own final size. The guard's own figure at publish is aut
 
 **Prose 2,366,564 B / 14.79% (130 files) · Data 209,470 B / 1.31% (11 files).**
 **No file exceeds 1% of the box** — though note 1% is now ~160,000 B rather than ~63,900 B, so this
-statement is weaker than the same sentence was a cycle ago. See CONVENTIONS §4.2, where the
+statement is weaker than the same sentence was a cycle ago. See CONVENTIONS §3.2, where the
 loosening is named.
 
 Folders: `reports/` 1,915,772 (11.97%, 98 files) · `status/` 359,525 (2.25%) · `status/daily/` 198,774 (1.24%) · `queue/` 78,804 (0.49%) · root 22,598 (0.14%) · `drops/` 561 (0.00%).
@@ -59,7 +59,7 @@ box with 785,732 B of headroom and 794,687 B added in a day, the arithmetic real
 saying so is what got the box raised. The conflict was dissolved by moving the ceiling, not by the
 lanes writing less.
 
-**And the standing law has inverted.** Data is now 3.05% of the box, down from 8.74%: the two pointer stubs worked. In the same ten hours prose grew ~389 KB and the bus got *bigger*. Per unit documents are still cheap; at twelve builder reports a day they are the binding constraint. `reports/` holds 77 files.
+**And the standing law has inverted.** Measured 2026-08-12 against the then-6.39 MB box: data fell to 3.05% from 8.74% — the two pointer stubs worked — while in the same ten hours prose grew ~389 KB and the bus got *bigger*. **Against the 16 MB box those same readings are 1.31% data and 14.79% prose** (see the table above; `reports/` now holds 98 files, not the 77 of that cycle). The raise changes the denominators, not the finding: per unit documents are still cheap, and at twelve builder reports a day they are still the binding constraint.
 
 ---
 
@@ -165,7 +165,7 @@ Broadcasts (no single recipient): `NOTE_ATHENA_2026-08-12_ALL-LANES_STATUS-REFRE
 
 **F-2 · The abandoned clone reports itself healthy.** `[verified]` Old tree HEAD `75b7444`, its own `origin/v12-v1-census` also `75b7444`, so `git status -sb` prints *up to date* while 4 commits behind. **No signal inside that tree distinguishes it from the live one.** Both mounts were simultaneously attached to this session. Two-sided gate is mandatory until Phase B.
 
-**F-3 · Prior findings closed.** The 2026-08-09 routine outage is **fixed** — `HEARTBEAT` reads `exit: 0` at 2026-08-12T11:03:40Z and `DAILY_2026-08-12.md` exists. Both pointer stubs are **built and on the bus**, crediting the finding by name; data fell from 8.74% to 3.05% of the box. `[verified]`
+**F-3 · Prior findings closed.** The 2026-08-09 routine outage is **fixed** — `HEARTBEAT` reads `exit: 0` at 2026-08-12T11:03:40Z and `DAILY_2026-08-12.md` exists. Both pointer stubs are **built and on the bus**, crediting the finding by name; data fell from 8.74% to 3.05% of the then-6.39 MB box (1.31% of the 16 MB box as re-measured 2026-08-15). `[verified]`
 
 **F-4 · Manifest still trails live HEAD — fourth consecutive cycle.** `[verified]` `af861682` vs `cc10d8f2`. Queue 002 closed staleness at publish time; between publishes it reopens.
 
