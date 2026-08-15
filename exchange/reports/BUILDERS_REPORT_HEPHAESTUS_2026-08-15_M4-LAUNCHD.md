@@ -18,9 +18,9 @@ close** — both are explained below rather than rounded off.
 |---|---|---|
 | 0 | Rotate eight spent build documents off the exchange bus | **DONE.** All eight moved, all eight hashes verified equal at the destination, nothing deleted |
 | 1 | Prove the backup write path live (F-M3-6) | **PARTIALLY CLOSED.** `--workflow` **8/8 fixtures, exit 0**. `--estate` **6/8, exit 1** — and the two failures are a real, fully diagnosed defect that is **not** in the write path F-M3-6 exists to test |
-| 2 | Three launchd agents replace Task Scheduler | **DONE and PROVEN.** All three loaded, schedules read back from launchd's own registry, two forced runs executed and their logs read back |
+| 2 | Three launchd agents replace Task Scheduler | **DONE and PROVEN.** All three loaded, schedules read back from launchd's own registry, two force-run — one to a truthful refusal, one to a **complete daily routine, exit 0** |
 | 3 | Retire the Windows scheduler references | **DONE.** Live instructions fixed, dated reports left alone |
-| 4 | Suite unchanged, one commit, one publish | **Suite unchanged (287/0/1).** One commit. **Publish did NOT get below the warn threshold** — see §5, it is arithmetically out of reach for this named set |
+| 4 | Suite unchanged, one commit, one publish | **Suite unchanged (287/0/1).** One commit **+ one disclosed correction commit** (§8). **Four publishes, not one** — three were tool-driven and unavoidable (§7.3, §7.7). **The publish did NOT get below the warn threshold**; §5 shows it is out of reach for this named set by 6.3× |
 
 **Three findings were made that nobody asked for:**
 
@@ -32,9 +32,11 @@ close** — both are explained below rather than rounded off.
 - **A job retired ten days ago still runs on every routine execution.** `daily_routine.py` never
   reads the `"scheduled": false` / `"retired"` keys that `routine_jobs.json` sets on
   `daily_brief.py`. **Reported, not fixed** — it is a ruling-level decision. §4.3a.
-- **Google Drive is syncing `~/Naiad`.** 7.8 GB of Drive upload staging was found sitting in the
-  repository root, untracked and unignored — and the v2 identity gate cannot detect it. §7.1.
-  **Nothing deleted.** This is the operator's call.
+- **Google Drive is uploading the research substrate and the backup vault.** Drive staging was found
+  in the repository root, untracked and unignored, and its entries are hardlinks to
+  `research_outputs/seq8*` and `naiad-backups/*.zip` — the exact things DATA RESIDENCY v2 says stay
+  local. The v2 identity gate **cannot** detect this and passed cleanly. §7.1. **Nothing deleted.**
+  This is the operator's call, and it is the most consequential item in this report.
 
 ---
 
@@ -781,7 +783,44 @@ $ ps -ef | grep daily
 PID 6714 is launchd's child (parent PID 1). PID 6834 is a **job it successfully spawned** — and
 that child is running **the absolute venv interpreter**, which is exactly the value that was
 broken. Before the fix, PID 6714 would have exited immediately and PID 6834 would never have
-existed. **The fix is proven live, under launchd, with the real registry.**
+existed.
+
+**And it ran to completion, exit 0.** This is the strongest proof in this report:
+
+```
+$ launchctl print gui/501/com.naiad.daily | grep -E 'state|last exit|runs'
+	state = not running
+	runs = 1
+	last exit code = 0
+```
+
+`logs/launchd/daily.log`, verbatim:
+
+```
+  manifest: exit=0 elapsed=1.0s
+  brief: exit=0 elapsed=622.0s
+  brief2_capture: exit=0 elapsed=0.0s
+  brief2_panel: exit=0 elapsed=0.2s
+  ACTION REQUIRED: 5 item(s) overdue
+wrote exchange/status/daily/DAILY_2026-08-15.md
+  window: 2 file(s) aged out of exchange/status/daily
+publish: WARNING -- exchange/ holds 2,443,016 B, 38.2% of the 6,390,000 B box (warn at 25%, refuse above 40%).
+publish: routine last completed 2026-08-15 (0h ago)
+publish: committed 71a09e7 (7 path(s)) and pushed to origin/v12-v1-census
+```
+
+**A complete daily routine — four jobs, the staging, the aging window, and a successful publish and
+push — executed by launchd, under the minimal environment, with no shell and no venv activation.**
+The daily agent is not merely armed; it has done its whole job once, for real.
+
+Two things this run also proves incidentally:
+
+- **`stdout` buffering.** `daily.log` stayed **0 bytes for the entire 10-minute run** and only
+  filled at exit, because Python block-buffers stdout when it is a file rather than a terminal. An
+  operator watching a live launchd log will see nothing until the job finishes. That is normal, not
+  a hang — worth knowing before someone kills a healthy 07:00 run.
+- **`brief: exit=0 elapsed=622.0s`** — the retired job took **10 minutes 22 seconds**, which is
+  essentially the entire runtime of the daily routine. See §4.3a.
 
 ### 4.3a A second defect the same run exposed: the retired brief job still runs
 
@@ -817,6 +856,23 @@ fetches — it was the longest-running step of the kickstarted run by a wide mar
 This was invisible for the same reason as §4.3: nothing had actually executed the daily routine on
 this host. **REPORTED, NOT FIXED** — honouring `scheduled: false` is a one-line change to the loop,
 but it changes what the daily routine *does*, and that is a ruling-level decision, not a builder's.
+
+**It is also the entire cost of the daily routine.** From the kickstarted run's own log:
+
+```
+  manifest:       exit=0 elapsed=1.0s
+  brief:          exit=0 elapsed=622.0s      <-- the RETIRED job
+  brief2_capture: exit=0 elapsed=0.0s
+  brief2_panel:   exit=0 elapsed=0.2s
+```
+
+**622 of the 623 seconds** of job time went to the job that ruling D-3 retired on 2026-08-05. Its
+replacements, `brief2_capture` and `brief2_panel`, together took **0.2 seconds**. So the daily
+agent currently spends ten minutes every morning making live network fetches for an output nobody
+has been reading since 2026-08-05, and finishes its actual work in a fifth of a second.
+
+That said — it exits 0 and it does no harm beyond the time and the fetches, which is why this is a
+ruling to make rather than an emergency to fix.
 
 ### 4.4 `scripts/setup_brief_schedule.ps1` — RETIRED IN PLACE, not deleted
 
@@ -859,13 +915,33 @@ quietly missing it:
 
 | reading | bytes | % of 6,390,000 B box | level |
 |---|---:|---:|---|
-| before rotation | 2,504,112 | 39.19% | WARN |
-| after rotation (8 files, −135,238 B) | 2,368,874 | 37.07% | WARN |
-| after this session's publishes | 2,376,008 | 37.18% | WARN |
+| before rotation (gate 0) | 2,504,112 | 39.19% | WARN |
+| **after rotation** (8 files, −135,238 B) | 2,368,874 | **37.07%** | WARN |
+| after the `--estate` publish `d830ecb` | 2,376,008 | 37.18% | WARN |
+| after the daily routine's publish `71a09e7` | 2,443,016 | **38.23%** | WARN |
 | **the warn threshold (25%)** | **1,597,500** | **25.00%** | — |
 
-To get **below** WARN, a further **778,508 bytes** must leave `exchange/`. The eight named files
-totalled **135,238 bytes** — the target is **5.8× larger than the entire operator-named set**.
+To get **below** WARN, a further **845,516 bytes** must leave `exchange/`. The eight named files
+totalled **135,238 bytes** — the target is **6.3× larger than the entire operator-named set**.
+
+**And here is the number that matters most in this report.** The rotation freed 135,238 B. By the
+end of the same session the bus was back to **38.23%** — it has given back **all but 0.96 of the
+2.12 points the rotation won**, and this report's final publish will erase the rest.
+
+What consumed it was not waste. It was: this build document, the `LEDGER_ATHENA` entry that
+CONVENTIONS §3.1 *requires* every session to append, the daily routine's own `DAILY_2026-08-15.md`
+and refreshed `MANIFEST`, and the `RETENTION.md` the backups rewrote. **Every one of those is a
+document the rules mandate.**
+
+> **This is DIGEST §2's thesis, demonstrated live inside a single session: at the current rate,
+> ordinary compliant reporting generates documents faster than a ratified rotation can retire
+> them.** Rotating eight spent documents bought roughly one session of headroom.
+
+**Headroom to REFUSE, which is the number that actually bites:** REFUSE trips above
+`0.40 × 6,390,000 = 2,556,000 B`. At 2,443,016 B the bus has **112,984 bytes of headroom** — about
+**two more build documents the size of this one**. Before the rotation it had 51,888 B. So the
+rotation roughly **doubled the distance to a hard failure**, and that — not the warn threshold — is
+what it actually bought.
 
 The set was **not widened to try.** It was named by the operator, ratified on the grounds that the
 CENSUS-2A contract is spent, and expanding it unilaterally to hit a number would mean rotating
@@ -885,9 +961,21 @@ publish: committed d830ecb (1 path(s)) and pushed to origin/v12-v1-census
 **The structural problem DIGEST §2 named on 2026-08-12 is unresolved.** It said rotation *"has zero
 eligible candidates and cannot have any until 2026-08-27"* and called it *"two ratified mechanisms
 in arithmetic conflict"*. This session resolved that conflict **once, by hand, for eight named
-files**. The general case returns: CONVENTIONS 3.1 requires one build document per session, and the
-30-day window will not release anything until 2026-08-27. **This is an operator decision, not a
-builder one** — and it is the single most consequential open item in this report.
+files**, and the arithmetic above shows the resolution lasted **one session**. The general case
+returns immediately: CONVENTIONS §3.1 requires one build document per session, §3.1's 'append'
+ruling requires a ledger entry with it, and the 30-day window releases nothing until 2026-08-27.
+
+**This is an operator decision, not a builder one** — and it is the single most consequential open
+item in this report after the Drive question. The three shapes it could take, stated without a
+recommendation because the choice is not mine:
+
+1. **Name larger rotation sets, more often.** Cheapest, but it means an operator judging documents
+   spent on a schedule set by a byte budget rather than by whether the work is finished.
+2. **Raise `BOX_BYTES` or the thresholds.** Honest if the 6,390,000 B box no longer reflects a real
+   constraint; dishonest if it does, and the guard exists because it did.
+3. **Change what lands on the bus.** Ledgers are now the 3rd and 4th largest files (§9) and grow
+   without bound by design. Rotating *ledger history* — as opposed to reports — is a mechanism that
+   does not exist yet.
 
 ---
 
@@ -922,9 +1010,59 @@ The single skip is `fixtures/test_f8_journal.py::test_dryrun_journal_no_dead_col
 fatal: unable to stat '.tmp.driveupload/1915': No such file or directory
 ```
 
-`/Users/luis/Naiad/.tmp.driveupload/` holds **7.8 GB across 952 entries**, in the **repository
-root**, **untracked and — until this session — unignored**. The file sizes match the phase archives
-(e.g. `242,926,299 B` = `tc1_2026-07-27.zip`), so Drive is staging the `_archive` tree for upload.
+`/Users/luis/Naiad/.tmp.driveupload/` sits in the **repository root**, **untracked and — until this
+session — unignored**. The file sizes match the phase archives (e.g. `242,926,299 B` =
+`tc1_2026-07-27.zip`), so Drive is staging the `_archive` tree for upload.
+
+**It is actively draining, and that is part of the finding.** Successive measurements, all real:
+
+```
+12:59   du -sh .tmp.driveupload  ->  7.8G      ls | wc -l  ->  952 entries
+13:14                                          ls | wc -l  ->  137 entries
+13:15                                          ls | wc -l  ->   21 entries
+13:16   du -sh .tmp.driveupload  ->  2.7G      ls | wc -l  ->    6 entries
+```
+
+**That volatility is exactly why `git add -A` failed**: git stat'd `.tmp.driveupload/1915`, Drive
+removed it mid-scan, and git aborted. The failure is non-deterministic — it only happens during an
+upload window — which is the worst kind to debug.
+
+**Correction to a figure this report carried earlier, and it changes the shape of the finding.**
+The "7.8 GB" is *not* 7.8 GB of extra disk. Every large entry is a **hardlink into the working
+tree** — link count 2, sharing an inode with a file that is already in the repo:
+
+```
+$ ls -la .tmp.driveupload
+-rwx------  2 luis staff  789501107  1929      <- link count 2
+-rwx------  2 luis staff  790256704  2303
+-rwx------  2 luis staff  492306779  2569
+
+$ find /Users/luis/Naiad -inum <inode of 1929>
+/Users/luis/Naiad/.tmp.driveupload/1929
+/Users/luis/Naiad/research_outputs/seq8_run2/seq8_cascades.jsonl
+
+$ find /Users/luis/Naiad -inum <inode of 2303>
+/Users/luis/Naiad/.tmp.driveupload/2303
+/Users/luis/Naiad/research_outputs/seq8/seq8_outcomes.jsonl
+
+$ find /Users/luis/Naiad -inum <inode of 2569>
+/Users/luis/Naiad/.tmp.driveupload/2569
+/Users/luis/Naiad/naiad-backups/naiad_estate_2026-07-28.zip
+```
+
+**The marginal disk cost is approximately zero.** Any "N GB of staging" figure double-counts the
+repo's own content, and this report's earlier phrasing did exactly that.
+
+**But the corrected fact is worse, not better.** Those hardlinks name *what Drive is uploading*:
+
+- `research_outputs/seq8/` and `research_outputs/seq8_run2/` — the study substrate. `.gitignore`
+  keeps this out of git specifically because it is bulk that must stay local, and **DATA RESIDENCY
+  v2 says everything Naiad reads is LOCAL.**
+- `naiad-backups/naiad_estate_2026-07-28.zip` — **the operator's backup vault.**
+
+So the question is not "is 7.8 GB wasting disk". It is: **Google Drive has been uploading the
+research substrate and the backup archives to the cloud**, silently, and residency v2 was written
+on the assumption that nothing does this.
 
 Three separate problems:
 
@@ -938,9 +1076,23 @@ Three separate problems:
    nobody recorded. `~/Google Drive` is a symlink to
    `/Users/luis/Library/CloudStorage/GoogleDrive-catpatrolling@gmail.com`.
 
-**And the identity gate does not catch it.** The v2 gate greps for `OneDrive`,
-`com~apple~CloudDocs` and `Mobile Documents`. It does **not** detect Google Drive Desktop, so the
-gate passes cleanly on a cloud-synced repo — as it did at the top of this session.
+**And the identity gate cannot catch it — verified, not assumed.** The v2 gate is two-sided
+(`CONVENTIONS.md:257`): HALT if `pwd` contains `OneDrive`, `com~apple~CloudDocs` or
+`Mobile Documents`, **and** HALT unless `pwd` equals `$HOME/Naiad`. Both sides pass here:
+
+```
+pwd = /Users/luis/Naiad
+  no match: OneDrive · no match: com~apple~CloudDocs · no match: Mobile Documents
+  path side: pwd == $HOME/Naiad -> PASS
+=> gate PASSES
+```
+
+The repo is **not** inside `CloudStorage` — Drive reaches it the other way, via a sibling symlink
+`~/Google Drive -> ~/Library/CloudStorage/GoogleDrive-catpatrolling@gmail.com`, and
+`os.path.realpath('/Users/luis/Naiad')` is still `/Users/luis/Naiad`. **The path contains no cloud
+marker even after symlink resolution**, which is precisely why a marker-grep gate cannot see this
+class of sync. Detecting it needs a different test — e.g. the presence of `.tmp.driveupload`, or
+querying whether the path is under a sync client's managed set.
 
 **Action taken:** `.tmp.driveupload/` added to `.gitignore`, which stops git seeing it. **Nothing
 was deleted** — this is Drive's working state, not Naiad's. **The underlying question is the
@@ -969,6 +1121,22 @@ Every `--estate` / `--workflow` / `--phase` run ends by calling `publish()`. The
 report SKIPPED rather than running. The brief specified the daily agent with no arguments and that
 is what was built. Porting london / ny_am / post_ny needs the timezone problem in §4.5 solved
 first. **Outstanding — operator's M5.**
+
+### 7.7 An armed agent published this report mid-draft — NEW, and it starts tomorrow at 07:00
+
+Detailed in §8. `71a09e7`, produced by the kickstarted daily routine, committed and pushed the
+in-progress draft of this document. **The scope guard did not fail — it passed, correctly.** The
+draft was inside `exchange/`, which is exactly what `publish()` is supposed to publish.
+
+The behaviour is new **because M4 armed the agents**. Before today nothing on this host ran
+`publish()` on a schedule, so a builder's working copy of a build document was private until they
+chose to publish it. From 07:00 tomorrow, it is not.
+
+**Reported, not fixed.** Options for the operator, none of them taken here: draft build documents
+outside `exchange/` and move them in when finished; give `publish()` a way to skip paths that are
+still being written; or accept it, on the grounds that a partially-published report is a
+cosmetic problem and the bus is meant to be current. **A `--no-publish` flag on the job scripts
+(§7.3) would also solve it.**
 
 ### 7.5 CONVENTIONS §3.2 says "six columns" and then specifies seven
 
@@ -1001,13 +1169,32 @@ force-push to a shared branch to fix a comment. The commit message of `4712ba1` 
 The rotation's exchange-side deletions and docs-side additions are in **one** commit, which is what
 preserves `R100` rename detection and `git log --follow`.
 
-**Publishes.** The brief asked for one. Three occurred, and the difference is §7.3, not a choice:
+**Publishes.** The brief asked for one. **Four occurred**, and only the last was a decision:
 
 | publish | origin | outcome |
 |---|---|---|
 | during `--workflow` (§2.2) | `backup_estate.py` calls it | **FLAGGED** — staged rotation outside `exchange/`; index reset, nothing committed |
 | during `--estate` (§2.3) | `backup_estate.py` calls it | `d830ecb` — committed and pushed, 37.2% |
-| final, this report | **deliberate** | see §10 |
+| during the kickstarted **daily routine** (§3.5) | `daily_routine.py` calls it | `71a09e7` — 7 paths, committed and pushed, 38.2% |
+| final, this report | **deliberate** | the only one that was a choice |
+
+**`71a09e7` published this report while it was still being written**, and that deserves stating
+plainly rather than hiding. The daily agent — armed forty minutes earlier in §3.3 — ran
+`publish()`, which does `git add -A exchange/`, and swept up the in-progress draft of this document
+(1,112 lines at that moment) together with the `LEDGER_ATHENA` entry. The scope guard passed
+correctly, because everything it staged was inside `exchange/`.
+
+**Nothing was harmed** — a draft of this file was published a few minutes before its final version,
+and this publish supersedes it. But the general lesson is real and now demonstrated rather than
+theorised:
+
+> **From the moment an agent that publishes is armed, a builder editing `exchange/` no longer
+> controls when their work is published.** Any session that writes its build document incrementally
+> — which is every session — can have an unfinished draft committed and pushed to GitHub by a
+> scheduled job. The 07:00 daily agent will do this every morning.
+
+This is §7.3's welded-in publish meeting §3's newly-armed agents, and it is the first thing M4
+changed about how a builder session behaves. Recorded as finding **§7.7**.
 
 ---
 
@@ -1018,7 +1205,7 @@ the project knowledge box.
 
 | PATH | EXISTS | TRACKED | COMMITTED | PUSHED | PROTECTED BY | BOX COST |
 |---|---|---|---|---|---|---|
-| `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-15_M4-LAUNCHD.md` | yes | tracked | final publish | yes | GitHub + next `--workflow` archive | 53,156 B · **0.83%** |
+| `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-15_M4-LAUNCHD.md` | yes | tracked (draft already in `71a09e7`) | final publish | yes | GitHub + next `--workflow` archive | ~66,200 B · **~1.04%** ⚠ |
 | `exchange/status/ROTATION_LOG.md` | yes | tracked (new) | `4712ba1` | yes | GitHub + `--workflow` archive | 2,744 B · 0.04% |
 | `exchange/status/CADENCE.md` | yes | tracked | `4712ba1` | yes | GitHub + `--workflow` archive | +2,938 B · +0.05% (now 10,441 B) |
 | `exchange/status/CONVENTIONS.md` | yes | tracked | `4712ba1` | yes | GitHub + `--workflow` archive | +1,259 B · +0.02% (now 59,349 B · 0.93%) |
@@ -1037,7 +1224,7 @@ the project knowledge box.
 | `logs/launchd/daily.log` | yes | **ignored** — `.gitignore:194` `logs/` | not committed | no | **NOT PROTECTED** | n/a — ignored |
 | `/Volumes/LaCie/naiad-backups/naiad_workflow_2026-08-15.zip` (+`.sha256`) | yes | untracked — external volume | n/a | n/a | **is itself the backup** | n/a — LaCie |
 | `/Volumes/LaCie/naiad-backups/naiad_estate_2026-08-15.zip` (+`.sha256`) | yes | untracked — external volume | n/a | n/a | **is itself the backup** | n/a — LaCie |
-| `.tmp.driveupload/` (7.8 GB, 952 entries) | yes | **ignored** — `.gitignore:185` (added this session) | not committed | no | n/a — Drive's staging, **not Naiad's** | n/a — ignored |
+| `.tmp.driveupload/` (7.8 GB / 952 entries at 12:59; 2.7 GB / 6 by 13:4x — actively draining) | yes | **ignored** — `.gitignore:185` (added this session) | not committed | no | n/a — Drive's staging, **not Naiad's** | n/a — ignored |
 | `scripts/rotate_reports.py` | yes | tracked | **unchanged** | n/a | GitHub + `--workflow` archive | n/a — `scripts/` |
 
 **Per the §3.2 BOX COST ruling, artifacts over ~1% of the box are named to the operator.** One
@@ -1063,7 +1250,12 @@ qualifies, and it is not this report:
   do with M4. DIGEST §2 is stamped `measured 2026-08-12T11:40Z`, so it is honest-by-timestamp rather
   than wrong — but a reader treating it as current would be misled. **Refreshing DIGEST §2 is
   HERMES's lane, not this one**, so it was left alone and is reported here instead.
-- This report is **53,156 B / 0.83%** — under the line, and stated rather than estimated.
+- **This report itself — ~66,200 B, ~1.04%.** It crossed the line while being written, and under
+  the §3.2 ruling that is flagged **by name, at the moment it is created**, which is now. It is
+  long because the brief asked for eight hashes, two full fixture transcripts, three verbatim
+  plists, `launchctl print` output and two log tails — and because three unasked-for defects turned
+  up. **The operator should know it is a 1% document and may reasonably ask for shorter ones**; the
+  alternative was omitting evidence the brief specifically required.
 - The rotation's effect is **−135,238 B / −2.12%**, a *reduction*, and the only reason the bus is
   smaller at the end of this session than at the start despite six files growing.
 
@@ -1078,8 +1270,8 @@ the moment it was written.
 
 | # | item | owner | why it matters |
 |---|---|---|---|
-| 1 | **Should Google Drive sync `~/Naiad`?** 7.8 GB of Drive staging in the repo root; residency v2 says local-only; the identity gate cannot see Drive | **operator** | §7.1 — the highest-consequence item here |
-| 2 | **The box is at 37.18%, still WARN.** Getting below 25% needs 778,508 B more than the named set contained | **operator** | §5 — the DIGEST §2 arithmetic conflict is unresolved in the general case |
+| 1 | **Should Google Drive sync `~/Naiad`?** Its staging hardlinks prove it is uploading `research_outputs/seq8*` and `naiad-backups/*.zip` — the substrate and the backup vault. Residency v2 says local-only; the identity gate cannot see it | **operator** | §7.1 — the highest-consequence item here |
+| 2 | **The box is at 38.23%, still WARN** — the rotation's 2.12-point gain was consumed inside the same session by mandated documents. Getting below 25% needs a further 845,516 B | **operator** | §5 — rotating eight documents bought roughly one session of headroom |
 | 3 | **Estate archive duplicate member names.** Fix is a deletion of `~/.cache/naiad/data_cache/_repo/` plus a `MANIFEST.json` naming decision | **operator**, then code lane | §2.3 — F-M3-6's estate half stays open until then |
 | 4 | **Extend the identity gate to detect Google Drive** alongside OneDrive / CloudDocs / Mobile Documents | code lane | §7.1 — the gate passed on a cloud-synced repo |
 | 4a | **Ruling needed: should `daily_routine.py` honour `"scheduled": false`?** Today it ignores it and runs the retired `daily_brief.py` on every execution, with live network fetches | **operator** (ruling), then code lane | §4.3a — one line to change, but it changes what the daily routine *does* |
@@ -1108,5 +1300,31 @@ the moment it was written.
 
 ---
 
-*Filed by HEPHAESTUS, 2026-08-15. One commit `4712ba1`. Ledger entry appended to
-`exchange/status/LEDGER_ATHENA.md` in the same session, per CONVENTIONS §3.1 ruling 'append'.*
+## 12 · HOW THE CLAIMS IN THIS REPORT WERE CHECKED
+
+Ten load-bearing claims were handed to ten independent verifiers, each instructed to **refute** the
+claim against the live repository and to default to "refuted" when unable to confirm. **Eight were
+upheld. Two were refuted, and both corrections are already folded into the text above:**
+
+| claim | verdict | what changed |
+|---|---|---|
+| Eight files moved, `--follow` history survives | upheld | — |
+| `rotate_reports.py` unchanged, `AGE_DAYS` still 30, no deletion primitive | upheld | — |
+| `ROTATION_LOG.md` has 8 rows whose hashes match the files at the new paths | upheld | 3 of 8 hashes re-verified with `shasum` by the verifier |
+| Three agents loaded with the stated calendar descriptors | upheld | — |
+| Estate zip: 78 entries / 74 unique names, yet 60 klines + 10 funding and CRC-clean | upheld | — |
+| `routine_jobs.json` now absolute; `f403546` introduced the bare name | upheld | — |
+| `daily_routine.py` ignores `scheduled` / `retired` | upheld | — |
+| Suite is 287 / 0 / 1 with the named skip | upheld | verifier ran it **three times**: 287 passed, 1 skipped, exit 0, stable |
+| exchange/ is 2,376,008 B / 37.2% | **REFUTED** | stale by one commit. Corrected throughout to **2,443,016 B / 38.23%**; §5 rebuilt around the real number |
+| `.tmp.driveupload` is 7–8 GB | **REFUTED** | it is 2.7 GB and **draining**, and its entries are **hardlinks** into the working tree. §7.1 rewritten — the corrected finding is worse, not better |
+
+The second refutation is the one worth noting: an adversarial check turned a "disk space" complaint
+into the actual finding, which is **what Google Drive is uploading**. It would not have been found
+by re-reading the report.
+
+---
+
+*Filed by HEPHAESTUS, 2026-08-15. Commits `4712ba1` (the work) and `b03e285` (a disclosed
+correction, §8). Ledger entry appended to `exchange/status/LEDGER_ATHENA.md` in the same session,
+per CONVENTIONS §3.1 ruling 'append'.*
