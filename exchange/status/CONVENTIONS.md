@@ -241,7 +241,8 @@ a paste he can only trust — and trust is not review.**
 Every paste-go carries:
 
 - an **operator-facing routing line ABOVE the code block** — e.g. "→ WHERE TO PASTE: your LOCAL
-  Claude Code — the PowerShell window on your PC" — or an explicit cloud target;
+  Claude Code — the terminal window on your Mac" *(read "the PowerShell window on your PC" until
+  2026-08-15)* — or an explicit cloud target;
 - an **in-paste ENVIRONMENT header**;
 - a **hard environment assertion that halts before ANY action**.
 
@@ -249,20 +250,28 @@ Every paste-go carries:
 fails loudly on its preconditions. A misrouted *read* silently returns plausible nonsense. That
 asymmetry is why the rule has no exemptions.
 
-**Identity probe when unsure:** `git rev-parse --short HEAD; pwd`. **AMENDED 2026-08-12 (queue 004
-Phase A): "Local" = any session whose probe returns the `C:\Naiad` (or `/c/Naiad`) working-clone
-path.** The desktop-app Code tab and the PowerShell CLI both qualify.
+**Identity probe when unsure:** `git rev-parse --short HEAD; pwd`. **AMENDED 2026-08-15 (data
+residency v2): "Local" = any session whose probe returns the `$HOME/Naiad` working-clone path** —
+`/Users/luis/Naiad` on this host. The desktop-app Code tab and the terminal CLI both qualify.
 
-**The gate is TWO-SIDED, and deliberately so:** HALT if the path contains `OneDrive`, **and** HALT
-unless it ends with `C:/Naiad`. One side alone is not enough — checking only for the new path would
-pass a *copy* left behind in the OneDrive tree that still satisfies nothing else, and checking only
-for the absence of `OneDrive` would pass any directory on the machine. Until the old tree is deleted
-(Phase B, deliberately days later) **two complete clones exist side by side**, and only a two-sided
-gate can tell a session in the live one from a session in the abandoned one.
+**The gate is TWO-SIDED, and deliberately so:** HALT if `pwd` contains `OneDrive`,
+`com~apple~CloudDocs` or `Mobile Documents`, **and** HALT unless `pwd` equals `$HOME/Naiad`. One
+side alone is not enough — checking only for the path would pass a *copy* left behind in a
+cloud-synced tree, and checking only for the absence of the sync markers would pass any directory
+on the machine. **Why the marker side exists: a cloud-synced tree corrupts bulk writes** — the sync
+client rewrites, relocates and locks files underneath a run, so a paste writing many files at once
+cannot trust that what it reads back is what it wrote.
 
 *(Superseded: the probe formerly required a `Users…OneDrive` path. That was correct until
 2026-08-12 and is now exactly inverted — it would halt every session in the live clone and pass
 every session in the dead one.)*
+
+*(AMENDED 2026-08-15 — data residency v2. From 2026-08-12 this gate read: HALT if the path contains
+`OneDrive`, **and** HALT unless it ends with `C:/Naiad` — its stated reason being that two complete
+clones existed side by side until the OneDrive tree was deleted in Phase B. True on the Windows
+host, dead here: no `C:` exists, and the sync hazard on macOS wears two further names,
+`com~apple~CloudDocs` and `Mobile Documents` (iCloud Drive). The two-sided SHAPE is unchanged —
+only the two sides are restated.)*
 
 **Why this exists:** four routing failures on 2026-07-26. The three that carried the ENVIRONMENT
 label were all halted by it. Zero damage.
@@ -484,7 +493,7 @@ repo paths the operator must carry.
 script publishes nothing and exits quietly. And a Windows path with backslashes **inside a bash
 block is destroyed by the shell**. Use forward slashes and call the function:
 
-    C:/venvs/naiad/Scripts/python.exe -c "import sys; from pathlib import Path; R=Path('.').resolve(); sys.path.insert(0,str(R/'scripts')); import publish_exchange as p; r=p.publish(R,'<YYYY-MM-DD>'); print(r['status'], r['commit'], r['pushed'], r['offenders'])"
+    ~/venvs/naiad/bin/python -c "import sys; from pathlib import Path; R=Path('.').resolve(); sys.path.insert(0,str(R/'scripts')); import publish_exchange as p; r=p.publish(R,'<YYYY-MM-DD>'); print(r['status'], r['commit'], r['pushed'], r['offenders'])"
 
 `publish()` stages `exchange/**` only, guard-checks the whole index, commits and pushes. **Do not
 `git add` or `git commit` exchange files separately** — let the guard do it, so evidence cannot
@@ -511,6 +520,19 @@ reports success.)*
 *(These three passages were CARRIED FORWARD verbatim by HEPHAESTUS, 2026-08-04, from the
 pre-merge §3.4. The merge preamble states that nothing was dropped; carrying them is what
 keeps that statement true. Operator-approved amendment to the merge block.)*
+
+> **NOTE 2026-08-15 — the PowerShell / Git-Bash hazards above are RETIRED on this platform.** The
+> hazard text is kept verbatim as the Windows-era record; none of it can fire here. Under data
+> residency v2 the builder runs **native bash on macOS**, so: the native-bash hazard is retired
+> (no msys translation layer, no PowerShell wrapper); the **chr(92)** backslash-escape hazard is
+> retired (a POSIX path carries no backslashes for the shell to eat, and no drive-letter path
+> remains in a live instruction here); and the **PYTHONIOENCODING** hazard is retired (the venv
+> interpreter's stdio is already `utf-8` — read this session — so no encoding shim is prepended to
+> a paste). **What is NOT retired:** `publish_exchange.py` still has no `__main__` block, so the
+> "call the function, never run the script" half of this section stands unchanged, as does the
+> Class B gate-fragment cure. **The invocation above was rewritten in the same act** — it read
+> `C:/venvs/naiad/Scripts/python.exe`, which does not exist on this host — to
+> `~/venvs/naiad/bin/python` (Python 3.12.14, verified present this session).
 
 ---
 
@@ -788,7 +810,34 @@ auto-push).
 **Triggers armed** (enumerated from Task Scheduler 2026-08-12, not inferred): daily routine 07:00 · estate backup Sundays 08:00 · workflow backup Sundays 08:30 — all three carry `StartWhenAvailable`, so a run missed while the machine is off or asleep fires on the next wake instead of being skipped; the workflow backup first fired 2026-08-09.
 **NOT ARMED:** no HERMES scheduled task exists — its creation is pending the operator. **Manual and staying manual BY DESIGN:** Sync now. See `CADENCE.md` §3 for the record of a false "never armed" finding on 2026-08-03, since reversed.
 
+> **NOTE 2026-08-15 — the enumeration above stands as the 2026-08-12 Windows record and nothing
+> more.** Those were **Task Scheduler** entries; they did not survive the move to macOS. Measured
+> on this host this session: no `crontab` for the operator, no Naiad agent in `launchctl list` or
+> `~/Library/LaunchAgents`. **NOTHING is armed today** — every job is manual until the code lane
+> re-arms it under launchd.
 
+
+
+**DATA RESIDENCY v2 — operator ruling 2026-08-15. This supersedes the two paragraphs below.**
+Everything Naiad reads is LOCAL, under `~/Naiad`; the canonical READ path is repo-relative,
+anchored on `Path(__file__).resolve().parent.parent` — never an env-var root, never a drive letter.
+**The LaCie is BACKUP ONLY**, never a substrate: `--estate` and `--workflow` write to
+`/Volumes/LaCie/naiad-backups`, the same physical disk at its POSIX mount point. `--phase` is
+SEPARATE and its subject moved — the phase zips are WORKING COPIES living in the repo at
+`~/Naiad/research_outputs/_archive` (see that folder's `POINTER.md`), backed up to the LaCie beside
+the rest.
+
+**`drive_wait` now guards BACKUP WRITES, not substrate reads.** Under v1 an absent drive meant the
+data could not be read at all and the run had to halt; under v2 it means only that a backup copy
+cannot be written. Same helper, same three states — different blast radius.
+
+**Open, measured 2026-08-15 and named rather than assumed fixed:** `BACKUP_DEST_DEFAULT` in
+`scripts/backup_estate.py` was still the Windows-era `D:/naiad-backups` when this was written (read
+from source this session), so until the code lane retargets that constant every v2 backup must pass
+`--dest` or `$NAIAD_BACKUP_DEST` explicitly. And the
+LaCie was not attached when this was written — `/Volumes/LaCie` does not exist on this host today.
+
+*(History, Windows era — kept verbatim as migration evidence, superseded by the block above:)*
 
 **Backup destination — CHANGED 2026-08-12.** `--estate` and `--workflow` write to
 **`D:/naiad-backups`**, a physical external LaCie disk, which is also the default compiled into
@@ -809,15 +858,18 @@ archives, because exFAT has no hard links — with no upload-completion record i
 **Registered is not uploaded.** Treat the off-site copy as UNCONFIRMED until the operator checks
 Drive's web UI under *Computers*.
 
-**Data estate:** ‘C:/Users/luisf/AppData/Local/naiad/data_cache’ via engine/data.py
-cache_dir() — NOT in the repo, never under OneDrive. **Backup verification standard, binding on
+**Data estate:** `~/.cache/naiad/data_cache` via engine/data.py cache_dir() — the POSIX branch;
+`$NAIAD_CACHE_DIR` overrides it. NOT in the repo, never in a cloud-synced tree. *(Read
+‘C:/Users/luisf/AppData/Local/naiad/data_cache’ — the `LOCALAPPDATA` branch — until the move to
+macOS; corrected 2026-08-15 from engine/data.py:39-48, read this session.)* **Backup verification standard, binding on
 every backup job:** bidirectional per member — bytes re-read OUT of the archive hash equal to a
 fresh read of the source, set membership cross-checked archive/manifest/disk, archive re-read FROM
 the destination after write, no-clobber guard. Full text: docs/memory snapshot 2026-08-06, entry 12.
 
-**Environment reminder:** the venv is at `C:\venvs\naiad` (Python 3.12.10), **outside OneDrive and
-not in the repo**. A venv cannot be moved, only rebuilt, and scheduled tasks must call python by
-full path.
+**Environment reminder:** the venv is at `~/venvs/naiad` — interpreter `~/venvs/naiad/bin/python`,
+Python 3.12.14 — **outside the repo and outside any cloud-synced tree**. A venv cannot be moved,
+only rebuilt, and any scheduled job must call python by full path. *(Read `C:\venvs\naiad`, Python
+3.12.10, until the move to macOS; corrected 2026-08-15, version read this session.)*
 
 ---
 
@@ -830,6 +882,11 @@ embedded rules — Python-hashlib binary reads only for byte questions, because 
 silently strip CR; the one-paste-complete-manifest rule; explicit destination filenames;
 authorization boundaries. The **LIVE-DATA FIREWALL** on the brief: an ops artifact, never study
 evidence, no journal reads, no lockbox outcome stats.
+
+**Note 2026-08-15:** the msys `grep`/`sed` CR-stripping *reason* is Windows-era and retired here
+(see §3.4's dated note). The rule it justified — **Python-hashlib binary reads for byte questions**
+— stands on its own merit and is unchanged: a text-mode read is the wrong instrument for a byte
+question on any platform.
 
 **Invocation convention for knowledge work:** "Depth: `<topic>`" = one-theme deep pass or operator
 interview. "Breadth: `<domains>`" = wide search-enriched sweep with citations.
