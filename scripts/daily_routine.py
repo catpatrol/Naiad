@@ -224,6 +224,25 @@ def run_job(job, python, today, out_dir, slot=None):
         "error": None,
     }
 
+    # RULING 4a (operator, 2026-08-15): the registry's retirement flags are
+    # HONOURED. Until today they were DECORATIVE -- this function never read
+    # them and the caller's loop is unconditional, so `daily_brief.py`, retired
+    # 2026-08-05 by ruling D-3 and carrying "scheduled": false, ran on every
+    # single execution. Measured on the 2026-08-15 launchd proof run: it took
+    # 622.0s of the routine's 623.2s, making live network fetches for an output
+    # nothing had read in ten days, while its two replacements finished in 0.2s.
+    #
+    # Checked BEFORE script.exists() on purpose: a retired job is not required
+    # to still be on disk, and reporting "script not found" for a job we have
+    # decided not to run would be a misleading error rather than a clean skip.
+    # The script is NOT deleted -- daily_brief.py is still imported by
+    # brief_capture.py for the Part I layers.
+    if job.get("scheduled") is False or job.get("retired"):
+        res["exit"] = 0
+        why = job.get("retired")
+        res["skipped"] = f"retired {why}" if why else "scheduled: false"
+        return res
+
     if not script.exists():
         res["exit"] = 127
         res["error"] = f"script not found: {job['script']}"
@@ -1015,7 +1034,12 @@ def main(argv=None):
     for job in reg["jobs"]:
         res = run_job(job, python, today, out_dir, slot=slot)
         results.append(res)
-        print(f"  {res['id']}: exit={res['exit']} elapsed={res['elapsed']}s")
+        if res.get("skipped"):
+            # Ruling 4a: a skip is REPORTED, never silent. A job that vanishes
+            # from the output looks identical to a job that was forgotten.
+            print(f"  {res['id']}: SKIPPED({res['skipped']})")
+        else:
+            print(f"  {res['id']}: exit={res['exit']} elapsed={res['elapsed']}s")
         if res["exit"] != 0 and res["required"]:
             halted = res["id"]
             break
@@ -1066,6 +1090,15 @@ def main(argv=None):
     # 1. failures first, in plain language
     out.append("## 1. Failures")
     out.append("")
+    # Ruling 4a (2026-08-15): skipped jobs are named here, above the failures.
+    # "all jobs OK" alongside a job that never ran is technically true and
+    # practically a lie -- a reader must be able to see what did NOT run.
+    _skipped = [r for r in results if r.get("skipped")]
+    if _skipped:
+        for r in _skipped:
+            out.append(f"- **{r['id']}** SKIPPED — {r['skipped']}. Not a failure; it was not run.")
+        out.append("")
+
     if not failures:
         out.append("all jobs OK")
     else:

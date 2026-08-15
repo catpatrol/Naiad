@@ -158,6 +158,39 @@ def _sha(path: Path) -> str:
 # ===========================================================================
 # I3 IN CODE + I2 -- the preflight.  Paste-1: prose gates gate nothing.
 # ===========================================================================
+# Google Drive Desktop's in-tree footprints.  `.tmp.driveupload` is the one
+# observed on this repo (2026-08-15): a directory of HARDLINKS to the files
+# Drive is uploading, which is why it costs no disk and why `du` will not
+# betray it.  The other two are Drive's id-indexed shadow folders.
+DRIVE_STAGING_MARKERS = (".tmp.driveupload", ".shortcut-targets-by-id",
+                         ".file-revisions-by-id")
+
+
+def _drive_staging_markers(root: Path) -> list:
+    """Repo-relative paths of any Drive staging marker at root or one level in.
+
+    Deliberately shallow -- root plus its immediate subdirectories.  Both
+    locations seen in the wild were at that depth (`./.tmp.driveupload` and
+    `./naiad-backups/.tmp.driveupload`), and a full walk of a multi-GB tree on
+    every preflight would cost more than the check is worth.  Never raises: a
+    gate that dies on an unreadable directory is a gate that stops gating.
+    """
+    hits = []
+    try:
+        dirs = [root] + [p for p in root.iterdir()
+                         if p.is_dir() and p.name != ".git"]
+    except OSError:
+        return hits
+    for d in dirs:
+        for marker in DRIVE_STAGING_MARKERS:
+            try:
+                if (d / marker).exists():
+                    hits.append(str((d / marker).relative_to(root)))
+            except OSError:
+                continue
+    return hits
+
+
 def stage_preflight() -> dict:
     log("PREFLIGHT -- I3 identity (in code) + I2 residency gate")
     import subprocess
@@ -174,6 +207,17 @@ def stage_preflight() -> dict:
     checks.append(("pwd cloud-free",
                    not any(m in low for m in
                            ("onedrive", "com~apple~clouddocs", "mobile documents")), cwd))
+    # THIRD LIMB, added 2026-08-15 (M4 open item 4).  The two limbs above grep
+    # the PATH, and a path grep CANNOT see Google Drive.  Measured 2026-08-15:
+    # Drive was actively uploading research_outputs/seq8* and the backup vault
+    # out of ~/Naiad while BOTH limbs above passed cleanly -- because the repo
+    # is not under CloudStorage.  Drive reaches it from outside, via a sibling
+    # symlink, and realpath("~/Naiad") is unchanged, so there is no marker in
+    # the path to find.  What Drive DOES leave inside the tree is staging, so
+    # this limb looks for the ARTEFACT instead of the path.
+    _found = _drive_staging_markers(Path.cwd())
+    checks.append(("no Drive staging in tree", not _found,
+                   ", ".join(_found) if _found else "none"))
 
     def _git(a):
         try:

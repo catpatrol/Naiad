@@ -169,6 +169,14 @@ from drive_wait import wait_for_drive                    # noqa: E402  (D-0b)
 CHUNK = 1024 * 1024
 REPO_PREFIX = "_repo/"
 
+# Names the ARCHIVE FORMAT owns at the zip root.  build_archive() writes the
+# member index as "MANIFEST.json" and verify_archive() both reads it back by
+# that name and excludes it from the member set, so any SOURCE file that would
+# land on the same arcname must be escaped instead of silently duplicated.
+# See estate_members() for the measured failure this prevents.
+RESERVED_ROOT_NAMES = frozenset({"MANIFEST.json"})
+ESTATE_PREFIX = "_estate/"
+
 # Retention rule -- REPORTING thresholds, never deletion thresholds.
 #
 # CORRECTED 2026-08-03.  `KEEP_PHASE_SETS = 1` is REMOVED, not retuned.
@@ -274,6 +282,22 @@ WORKFLOW_EXCLUDE_SUFFIXES = (".pyc", ".pyo")
 PHASE_ARCHIVE_ROOT_DEFAULT = str(REPO / "research_outputs" / "_archive")
 PHASE_ARCHIVE_ROOT_ENV = "NAIAD_PHASE_ARCHIVE_ROOT"
 PHASE_SIDECAR_DIR = "research_outputs/_archive"
+
+# ZIP RESIDENCY RULING, operator 2026-08-15:
+#   "older zips live on the LaCie; new zips are born local; backups go to the
+#    LaCie only."
+#
+# So the LOCAL _archive is a CURRENT-CYCLE working set, not the whole archive
+# set, and it is EXPECTED to be empty right after an aging pass.  The aged-out
+# zips live here.  This is a separate subtree from the estate/workflow backup
+# destination -- the LaCie carries both, and they are not the same shelf.
+PHASE_ARCHIVE_AGED_DEFAULT = "/Volumes/LaCie/Naiad/research_outputs/_archive"
+PHASE_ARCHIVE_AGED_ENV = "NAIAD_PHASE_ARCHIVE_AGED"
+
+
+def phase_archive_aged_path() -> Path:
+    """Where aged-out phase zips live, $NAIAD_PHASE_ARCHIVE_AGED or the default."""
+    return Path(os.environ.get(PHASE_ARCHIVE_AGED_ENV) or PHASE_ARCHIVE_AGED_DEFAULT)
 
 # --------------------------------------------------------- estate/workflow dest
 #
@@ -709,6 +733,31 @@ def walk_members(root: Path, prefix: str = "") -> list:
 
 def estate_members(estate_root: Path) -> list:
     members = walk_members(estate_root)
+
+    # RESERVED-NAME COLLISION, fixed 2026-08-15.  `MANIFEST.json` at the archive
+    # ROOT belongs to the archive format: build_archive() writes the member
+    # index under exactly that name, and verify_archive() reads it back with
+    # `zf.read("MANIFEST.json")` and then EXCLUDES it from the member set with
+    # `n != "MANIFEST.json"`.
+    #
+    # The estate cache has its own MANIFEST.json at its root.  Walking it
+    # produced a SECOND zip entry under the reserved name, so every estate
+    # archive carried two, and zipfile returns the LAST for a duplicated name.
+    # Measured consequences, both of which the fixtures caught honestly:
+    # F-K1 reported 1 omission (the cache's copy is in `pinned` but its name is
+    # excluded from `in_zip`), and F-K4 restored `MANIFEST.json`, got the
+    # generated index instead of the cache's, and reported 1 hash mismatch.
+    # This was the SECOND of the two collisions found on 2026-08-15; removing
+    # the stray `_repo/` from the cache fixed the other three and left this one.
+    #
+    # The fix is symmetric with REPO_PREFIX rather than novel: a member whose
+    # arcname would collide with a reserved root name is stored under a prefix,
+    # and resolve_member() maps it back.  The cache's manifest is PRESERVED --
+    # dropping it would have been the smaller change and would have quietly
+    # made restores incomplete.
+    members = [((ESTATE_PREFIX + rel) if rel in RESERVED_ROOT_NAMES else rel, ap)
+               for rel, ap in members]
+
     extras = ["census.json", "DATA_CENSUS.md",
               "research_outputs/census/build_manifest.json"]
     for rel in extras:
@@ -723,6 +772,8 @@ def estate_members(estate_root: Path) -> list:
 def resolve_member(rel: str, estate_root: Path, repo_root: Path) -> Path:
     if rel.startswith(REPO_PREFIX):
         return repo_root / rel[len(REPO_PREFIX):]
+    if rel.startswith(ESTATE_PREFIX):          # reserved-name escape, see estate_members
+        return estate_root / rel[len(ESTATE_PREFIX):]
     return estate_root / rel
 
 
@@ -1246,23 +1297,77 @@ def retention_report(dest: Path) -> list:
 
     phases = sorted((p for p in arch.glob("*.zip") if p.is_file()),
                     key=lambda p: p.name)
+    # ZIP RESIDENCY, 2026-08-15.  The local _archive is the CURRENT-CYCLE set.
+    # An empty one is the NORMAL state immediately after an aging pass, so this
+    # branch must not read like a finding.  It used to say "none found", which
+    # is the same sentence this report prints when something is wrong, and a
+    # scan that cries wolf is a scan an operator learns to ignore.
     if not phases:
-        lines.append("- none found — the directory exists and is mounted, and holds no `.zip`")
-        return lines
+        lines.append("**CURRENT CYCLE EMPTY — this is BY DESIGN and is NOT a finding.**")
+        lines.append("")
+        lines.append("Under the zip-residency ruling (operator, 2026-08-15) *new zips are "
+                     "born local and older zips live on the LaCie*. An empty local "
+                     "`_archive` means every archive written so far has been aged out to "
+                     "the backup volume — which is the intended end state of a cycle, not "
+                     "a missing archive. The tracked sidecars below are the standing "
+                     "fingerprint set and are always present; the aged-out archives are "
+                     "enumerated further down when the volume is reachable.")
+    else:
+        total = sum(p.stat().st_size for p in phases)
+        lines.append(f"**CURRENT CYCLE:** {len(phases)} archive(s) born local, {total:,} B "
+                     f"({total / 1e6:,.1f} MB). **All permanent. None prunable.**")
+        lines.append("")
+        lines.append("| archive | date | size (B) | status |")
+        lines.append("|---|---|---:|---|")
+        for p in phases:
+            m = DATED_ZIP.search(p.name)
+            lines.append(f"| `{p.name}` | {m.group(1) if m else 'undated'} | "
+                         f"{p.stat().st_size:,} | **PERMANENT — never prune** |")
+        lines.append("")
+        lines.append("There is no keep-count for phase archives and no circumstance "
+                     "under which this report will list one as prunable.")
 
-    total = sum(p.stat().st_size for p in phases)
-    lines.append(f"{len(phases)} archive(s), {total:,} B "
-                 f"({total / 1e6:,.1f} MB). **All permanent. None prunable.**")
+    # --- the FINGERPRINT SET.  Always printed, in every branch, because it is
+    # the one part of this report that does not depend on any volume being
+    # mounted or any zip still being local: the sidecars are tracked in git.
+    sidecars = sorted((REPO / PHASE_SIDECAR_DIR).glob("*.sha256"))
     lines.append("")
-    lines.append("| archive | date | size (B) | status |")
-    lines.append("|---|---|---:|---|")
-    for p in phases:
-        m = DATED_ZIP.search(p.name)
-        lines.append(f"| `{p.name}` | {m.group(1) if m else 'undated'} | "
-                     f"{p.stat().st_size:,} | **PERMANENT — never prune** |")
+    if sidecars:
+        lines.append(f"**FINGERPRINT SET: {len(sidecars)} tracked sidecar(s) in "
+                     f"`{PHASE_SIDECAR_DIR}/`.** These are committed, so they describe the "
+                     "archive set from any clone, with no volume attached and no zip "
+                     "present locally.")
+    else:
+        lines.append(f"**FINGERPRINT SET: none.** No sidecars in `{PHASE_SIDECAR_DIR}/` — "
+                     "the archive set cannot be described from this clone. THIS one *is* "
+                     "a finding.")
+
+    # --- the AGED-OUT archives on the LaCie.  Same three-state discipline as
+    # ruling O-4: enumerated, reachable-but-empty, or NOT ENUMERABLE.  Never a
+    # count this run did not actually take.
+    aged = phase_archive_aged_path()
+    aged_anchor = volume_anchor(aged)
+    aged_reachable, aged_detail = drive_ready(aged, note=lambda *_a, **_k: None)
     lines.append("")
-    lines.append("There is no keep-count for phase archives and no circumstance "
-                 "under which this report will list one as prunable.")
+    lines.append(f"Aged-out archives: `{aged}`")
+    if not aged_reachable:
+        lines.append(f"- **[backup] NOT ENUMERABLE — `{aged_anchor}` is not mounted** "
+                     f"({aged_detail}). This is NOT \"no archives exist\"; it is \"this run "
+                     "could not look\". The fingerprint set above is what stands.")
+    elif not aged.is_dir():
+        lines.append(f"- **[backup] volume mounted, `{aged}` does not exist** — nothing has "
+                     "been aged out to it yet.")
+    else:
+        azips = sorted(p for p in aged.glob("*.zip") if p.is_file())
+        atotal = sum(p.stat().st_size for p in azips)
+        lines.append(f"- **[backup] {len(azips)} archive(s), {atotal:,} B "
+                     f"({atotal / 1e6:,.1f} MB)** on `{aged_anchor}`.")
+        names = {s.name[:-len(".sha256")] for s in sidecars}
+        gap = sorted(names - {p.name for p in azips})
+        if gap:
+            lines.append(f"- **{len(gap)} fingerprinted archive(s) NOT on the volume: "
+                         f"{', '.join(f'`{g}`' for g in gap)}** — a sidecar exists but "
+                         "neither a local nor an aged-out copy was found. THIS is a finding.")
 
     # --- the BACKUP copy on the external volume (v2, 2026-08-15) -------------
     #

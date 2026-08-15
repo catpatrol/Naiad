@@ -236,6 +236,39 @@ def _sha(path: Path) -> str:
     return h.hexdigest()
 
 
+# Google Drive Desktop's in-tree footprints.  `.tmp.driveupload` is the one
+# observed on this repo (2026-08-15): a directory of HARDLINKS to the files
+# Drive is uploading, which is why it costs no disk and why `du` will not
+# betray it.  Kept in step with the identical block in census2a_program.py.
+DRIVE_STAGING_MARKERS = (".tmp.driveupload", ".shortcut-targets-by-id",
+                         ".file-revisions-by-id")
+
+
+def _drive_staging_markers(root: Path) -> list:
+    """Repo-relative paths of any Drive staging marker at root or one level in.
+
+    Deliberately shallow -- root plus its immediate subdirectories.  Both
+    locations seen in the wild were at that depth (`./.tmp.driveupload` and
+    `./naiad-backups/.tmp.driveupload`), and a full walk of a multi-GB tree on
+    every preflight would cost more than the check is worth.  Never raises: a
+    gate that dies on an unreadable directory is a gate that stops gating.
+    """
+    hits = []
+    try:
+        dirs = [root] + [p for p in root.iterdir()
+                         if p.is_dir() and p.name != ".git"]
+    except OSError:
+        return hits
+    for d in dirs:
+        for marker in DRIVE_STAGING_MARKERS:
+            try:
+                if (d / marker).exists():
+                    hits.append(str((d / marker).relative_to(root)))
+            except OSError:
+                continue
+    return hits
+
+
 # ===========================================================================
 # S0 -- PREFLIGHT.  Identity (I3, two-sided) + drive (I2).  F-1's transcript.
 # ===========================================================================
@@ -260,6 +293,14 @@ def stage_preflight() -> dict:
     checks.append(("pwd cloud-free",
                    not any(m in _low for m in
                            ("onedrive", "com~apple~clouddocs", "mobile documents")), cwd))
+    # THIRD LIMB, added 2026-08-15 (M4 open item 4).  A PATH grep cannot see
+    # Google Drive: measured 2026-08-15, Drive was uploading the study substrate
+    # and the backup vault out of ~/Naiad while both limbs above passed, because
+    # the repo is not under CloudStorage -- Drive reaches it via a sibling
+    # symlink and realpath("~/Naiad") is unchanged.  Look for the ARTEFACT.
+    _found = _drive_staging_markers(Path.cwd())
+    checks.append(("no Drive staging in tree", not _found,
+                   ", ".join(_found) if _found else "none"))
 
     import subprocess
     def _git(args: list[str]) -> str:
