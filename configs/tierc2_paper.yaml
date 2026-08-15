@@ -1,0 +1,88 @@
+# tierc2_paper — TIER-C2 · THE FORWARD BASELINE, as a paper profile.
+#
+# RATIFIED operator 2026-08-15.  STAGE B of the Tier-C2 paste: "the same rule
+# card configured as an engine paper profile; one heartbeat run executed now;
+# subsequent heartbeats ride the com.naiad.daily 07:00 agent — config
+# committed, agent untouched."
+#
+# ─────────────────────────────────────────────────────────────────────────────
+# READ THIS BEFORE ASSUMING `engine.replay.run_replay` CONSUMES THIS FILE.
+# IT DOES NOT, AND IT CANNOT.  Two independent reasons, both structural:
+#
+#   1. e316 EXISTS NOWHERE IN engine/.  `grep -rn 316 engine/*.py` returns
+#      nothing.  The frozen signal path is the SSv11/v12 cascade on
+#      {9, 89, 200}; this rule card is {12, 26, 89, 316}.  Teaching
+#      engine/signals._prep_tf the 316 leg forks it from the frozen Pine port
+#      and breaks F-SIG byte-identity — an engine change, which this class of
+#      work (measurement, m = 0, no estate write) is explicitly not.
+#   2. G-1.  `engine/replay.py:152` refuses any window intersecting the sealed
+#      lockbox, and the corridor this profile was drafted against began inside
+#      it.  Unlocking is an operator act; it was not taken.
+#
+# So the EXECUTOR of this profile is `scripts/tierc2_rules.py` — bit for bit
+# the same decision path Stage A replayed, which is the property that actually
+# matters: Stage A and Stage B cannot disagree, because they are one
+# implementation. This file is the profile of record; it is READ by
+# `scripts/tierc2_baseline.py --stage heartbeat`, and every value in it is
+# asserted against `tierc2_rules.REGISTER` on load (F-C2-3).
+#
+# Engine config grammar is followed exactly (config_id / signal / trading) so
+# that if and when a contracted engine touch adds the 316 leg, this file is
+# already the shape `engine.config.load_config` expects.
+# ─────────────────────────────────────────────────────────────────────────────
+
+config_id: tierc2_paper
+
+executor: scripts/tierc2_rules.py     # NOT engine/signals.py — see the note above
+class: measurement                    # m = 0 · no registration · no live orders
+seed: 20260815
+
+universe: [BTCUSDT, ETHUSDT, SOLUSDT, NEARUSDT, ZECUSDT]
+lens: 4h                              # decisions on 4h only
+stop_lens: 1h                         # the 1h series is read ONLY for the stop pivot
+
+signal:
+  # TIDE — long iff e89 > e316 AND close > e316 on 4h (mirror short)
+  tide_fast: 89
+  tide_slow: 316
+  # WINDOW — 4h 12/89 cross in direction, no counter yet
+  window_fast: 12
+  window_slow: 89
+  # displacement |close - e89| / ATR at the cross
+  d_displacement: 0.75
+  d_strip: [0.50, 1.00]               # printed UNSCORED — never a decision
+  # TRIGGER — first in-window 4h 12/26 cross, enter at that bar close
+  trigger_fast: 12
+  trigger_slow: 26
+  atr_len: 14                         # configs/naiad_v0.yaml signal.atr_len
+  # STOP — the architecture of record, engine/trading.py:219 struct_stop_at
+  stop_mode: struct_1h
+  pivot_l: 5
+  pivot_r: 5
+  pivot_lookback_1h: 200
+  stop_buf_atr: 0.5                   # engine/trading.py TRAIL_B
+
+trading:
+  enabled: false                      # PAPER. No live orders, ever, from this file.
+  size: one_unit                      # one unit; R = |entry - stop|
+  max_open_per_asset: 1               # one position per asset
+  exit_trail: none                    # RIDE — no management of any kind
+  bell:                               # counter 4h 12/89 OR 4h 89/316 against
+    - counter_12_89
+    - counter_89_316
+  fee_bps_side: 5.0                   # configs/naiad_v0.yaml trading.fee_bps_side
+                                      # => 10 bps round trip, the ['accounting'] figure
+  funding: journaled                  # engine/trading.py:480-484 convention
+
+heartbeat:
+  # The com.naiad.daily 07:00 LaunchAgent is UNTOUCHED by this build.  Adding
+  # this job to scripts/routine_jobs.json is a separate, operator-authorised
+  # act; until then the heartbeat is run by hand with the command below.
+  agent: com.naiad.daily
+  agent_modified: false
+  registered_in_routine_jobs: false
+  command: >-
+    ~/venvs/naiad/bin/python scripts/tierc2_baseline.py --stage heartbeat
+  state_out: research_outputs/tierc2/heartbeat.json
+  class_header: >-
+    DISPLAY-ONLY — live-era ops state — hypothesis generation only, never evidence

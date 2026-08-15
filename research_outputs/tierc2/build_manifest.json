@@ -1,0 +1,55 @@
+{
+  "counts": {
+    "scored_armings": 43,
+    "scored_trades": 10,
+    "tape_instants": {
+      "arming": 43,
+      "exit": 9,
+      "spine": 583,
+      "trigger": 8
+    },
+    "tape_rows": 643
+  },
+  "elapsed_s": 2.8,
+  "seed": 20260815,
+  "sha": {
+    "display_only": "d0455323c00f691dc3e3c58224a969fd906332762ec9d32b822520e49fdba2dd",
+    "funnel": "c3d8294529c65597415616922e4cf6c2f71c01469d64da194438da04892facf7",
+    "headline": "b896756b21d80c688dd9b6d6aaf74d2135768dae1bf0deeea127a44273a5a92a",
+    "journal": "58071cf2b4d0c6e75b1baf84c38aacfefe5e40c8316a425940194b0070b354a4",
+    "monthly": "fdf6d2f003c3b7faf5e83996c959aa271c66d0ce081a9707fa0872860eb854e5",
+    "stop_geometry": "779f6f2150473aa61c4f2571c487937de5193dad799572cb4f96ee977bf023ad",
+    "strip_d": "254a2d6fd31f53b89c592093c4b0d5005a9bcc0e4310593e8d94d8261553452a",
+    "tape": "74df8437d2ce7b052a628590db209cfe55fed6278dcb6b9905035468d47867db",
+    "tape_inventory": "9c4e00b026f533588799b1d03ab70614f1113e634e6841fd6a0d45e4bfbcf4aa"
+  },
+  "windows": {
+    "CENSUS_ERA": {
+      "armings": 745,
+      "scored": false,
+      "span": [
+        "2019-09-08",
+        "2024-06-30"
+      ],
+      "trades": 128
+    },
+    "PINNING": {
+      "armings": 103,
+      "scored": false,
+      "span": [
+        "2026-02-01",
+        "2026-08-11"
+      ],
+      "trades": 16
+    },
+    "SCORED": {
+      "armings": 43,
+      "scored": true,
+      "span": [
+        "2025-10-06",
+        "2026-01-31"
+      ],
+      "trades": 10
+    }
+  }
+}
