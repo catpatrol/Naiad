@@ -84,9 +84,32 @@ _HEARTBEAT_RUN = re.compile(r"^\s*run:\s*(\S+)", re.M)
 # REFUSED at 40.16% with all four payloads already built and local: the guard
 # worked, and the number it was defending had simply gone stale.
 BOX_BYTES = 16_000_000
-WARN_FRACTION = 0.50
-REFUSE_FRACTION = 0.80
+
+# RECALIBRATED 2026-08-15 by ATHENA on the box-governance transfer (APOLLO ->
+# ATHENA handoff note, operator go "edit these limits to proportions reasonable
+# to new capabilities"): warn 0.50 -> 0.40, refuse 0.80 -> 0.70.  The raise
+# moved the ceiling but left the thresholds where a 6.39 MB box had put them,
+# proportionally; at 0.50/0.80 the first warning would not arrive until 8 MB, by
+# which point the bus would have tripled with nothing said.  0.40/0.70 restores
+# a margin that warns while there is still room to act: warn 6.4 MB, refuse
+# 11.2 MB, against a current footprint near 2.6 MB.
+#
+# BOUNDARY SEMANTICS ARE UNCHANGED and are the comparators below, not these
+# numbers: `> REFUSE` and `>= WARN`, so exactly 70.0% warns and does not refuse,
+# exactly as exactly 80.0% did.  F-BOX-1 proves it at both edges.
+WARN_FRACTION = 0.40
+REFUSE_FRACTION = 0.70
 OVERRIDE_ENV = "NAIAD_ALLOW_OVERSIZE_PUBLISH"
+
+# D3 METERING GAP -- CLOSED 2026-08-15.  The box holds `LEDGER.md` AND
+# `exchange/` (DIGEST §1).  The guard metered `exchange/` alone and so
+# under-reported true occupancy by the size of the ledger -- ~4 points on the
+# old 6.39 MB box, ~1.6 on this one.  Open since ATHENA's queue-003 report of
+# 2026-08-11 and transferred with the governance.  Closed here: the THRESHOLDS
+# NOW GOVERN ON THE TICK SET.  The exchange-only figure keeps being printed
+# beside it, because every prior report quotes that number and a reader
+# comparing across cycles must not be handed a silent redefinition.
+TICK_EXTRA = ("LEDGER.md",)
 
 # Quoted verbatim on refusal.  A refusal that does not say what to do instead is
 # just an obstacle; this names the remedy CONVENTIONS already ratified.
@@ -132,11 +155,16 @@ def budget(total_bytes, box=BOX_BYTES):
 
     Returns (level, fraction) where level is "OK", "WARN" or "REFUSE".
 
+    `total_bytes` is the TICK SET -- `exchange/` plus TICK_EXTRA -- since the
+    D3 gap was closed on 2026-08-15.  Callers that pass exchange-only bytes get
+    an under-reading, which is the defect that closure exists to remove.
+
     Thresholds are read as: WARN at or above WARN_FRACTION, REFUSE strictly
-    above REFUSE_FRACTION -- 50% and 80% since the 2026-08-15 raise.
-    "REFUSE above 80%" is taken literally -- exactly 80.0% warns, it does not
+    above REFUSE_FRACTION -- 40% and 70% since the 2026-08-15 recalibration.
+    "REFUSE above 70%" is taken literally -- exactly 70.0% warns, it does not
     refuse -- because a boundary that refuses its own stated limit surprises the
-    one reader who checked the number first.
+    one reader who checked the number first.  The comparators below are the
+    definition; the constants only move where the edges sit.
     """
     frac = (total_bytes / box) if box else 0.0
     if frac > REFUSE_FRACTION:
@@ -188,6 +216,51 @@ def heartbeat_text(repo):
         return Path(repo, *HEARTBEAT_PATH.split("/")).read_text(encoding="utf-8")
     except (OSError, UnicodeDecodeError):
         return None
+
+
+def tick_extra_bytes(repo):
+    """Bytes of the tracked box members that sit OUTSIDE `exchange/`.
+
+    Measured at HEAD, not in the index, and deliberately: publish only ever
+    commits `exchange/` -- the scope guard forbids anything else -- so a
+    TICK_EXTRA file's contribution to the box is whatever is already committed.
+    Reading the index here would report 0 and silently re-open the gap.
+
+    Returns (total_bytes, [(size, path)]).
+    """
+    rows = []
+    for path in TICK_EXTRA:
+        rc, out, _err = _git(repo, ["ls-tree", "-l", "HEAD", "--", path])
+        if rc != 0 or not out.strip():
+            continue
+        for line in out.splitlines():
+            parts = line.split()
+            # <mode> <type> <sha> <size>\t<path>
+            if len(parts) >= 4 and parts[3].isdigit():
+                rows.append((int(parts[3]), line.split("\t", 1)[-1]))
+    return sum(sz for sz, _ in rows), rows
+
+
+def budget_lines(scope_total, tick_total, level):
+    """The dual-figure budget report -- printed on EVERY publish, not only on
+    warn/refuse.  A ceiling that only speaks when it is angry teaches the bus
+    nothing on the way up.
+
+    Percentages against a ceiling that has just moved are exactly the figure a
+    reader mis-reads, so the absolute MB is printed beside every one of them.
+    """
+    def mb(b):
+        return f"{b / 1e6:.2f} MB"
+    return [
+        "publish: box %s -- TICK SET %s B (%s) = %.2f%% of %s B (%s)  [governs]"
+        % (level, f"{tick_total:,}", mb(tick_total),
+           100.0 * tick_total / BOX_BYTES, f"{BOX_BYTES:,}", mb(BOX_BYTES)),
+        "publish:     exchange-only %s B (%s) = %.2f%%   [continuity with prior reports]"
+        % (f"{scope_total:,}", mb(scope_total), 100.0 * scope_total / BOX_BYTES),
+        "publish:     warn %.0f%% = %s · refuse %.0f%% = %s"
+        % (100 * WARN_FRACTION, mb(BOX_BYTES * WARN_FRACTION),
+           100 * REFUSE_FRACTION, mb(BOX_BYTES * REFUSE_FRACTION)),
+    ]
 
 
 def _index_sizes(repo):
@@ -308,17 +381,28 @@ def publish(repo, date_str, remote="origin", log=print, allow_oversize=None):
         # of it: size is an ADDITIONAL check and a small file in the wrong place
         # is still a violation.
         sized = _index_sizes(repo)
-        total = sum(sz for sz, _ in sized)
+        scope_total = sum(sz for sz, _ in sized)
+        extra_total, extra_rows = tick_extra_bytes(repo)
+        total = scope_total + extra_total          # the TICK SET; it governs
         level, frac = budget(total)
-        result["bytes"] = total
-        result["fraction"] = frac
+        # `bytes` / `fraction` keep their historical meaning -- exchange-only --
+        # so no prior consumer is handed a silent redefinition.  The governing
+        # figures are the tick_* keys, and `budget` is derived from them.
+        result["bytes"] = scope_total
+        result["fraction"] = scope_total / BOX_BYTES if BOX_BYTES else 0.0
+        result["tick_bytes"] = total
+        result["tick_fraction"] = frac
+        result["tick_extra"] = extra_rows
         result["budget"] = level
         result["largest"] = sized[:10]
 
+        for line in budget_lines(scope_total, total, level):
+            log(line)
+
         if level == "WARN":
-            log("publish: WARNING -- %s holds %s B, %.1f%% of the %s B box "
-                "(warn at %d%%, refuse above %d%%)."
-                % (SCOPE, f"{total:,}", 100 * frac, f"{BOX_BYTES:,}",
+            log("publish: WARNING -- the box holds %s B (tick set), %.1f%% of "
+                "the %s B box (warn at %d%%, refuse above %d%%)."
+                % (f"{total:,}", 100 * frac, f"{BOX_BYTES:,}",
                    100 * WARN_FRACTION, 100 * REFUSE_FRACTION))
         elif level == "REFUSE":
             for line in _oversize_lines(total, frac, sized):
@@ -376,9 +460,11 @@ def publish(repo, date_str, remote="origin", log=print, allow_oversize=None):
 def _oversize_lines(total, frac, sized):
     """The refusal message: the number, the ten largest, and the remedy."""
     out = [
-        "REFUSE: %s holds %s B, %.1f%% of the %s B project box -- above the "
-        "%d%% ceiling." % (SCOPE, f"{total:,}", 100 * frac, f"{BOX_BYTES:,}",
-                           100 * REFUSE_FRACTION),
+        "REFUSE: the box holds %s B (%.2f MB) across the tick set (%s + %s), "
+        "%.1f%% of the %s B project box -- above the %d%% ceiling (%.1f MB)."
+        % (f"{total:,}", total / 1e6, SCOPE, " + ".join(TICK_EXTRA),
+           100 * frac, f"{BOX_BYTES:,}", 100 * REFUSE_FRACTION,
+           BOX_BYTES * REFUSE_FRACTION / 1e6),
         "REFUSE: the ten largest staged paths:",
     ]
     for sz, path in sized[:10]:
@@ -396,10 +482,22 @@ def report_lines(result):
             f"- {len(result['staged'])} path(s) published, all inside `{SCOPE}`",
         ]
         if result.get("bytes") is not None:
+            tb = result.get("tick_bytes", result["bytes"])
+            tf = result.get("tick_fraction", result["fraction"])
             lines.append(
-                f"- `{SCOPE}` size budget: {result['bytes']:,} B, "
-                f"{100 * result['fraction']:.1f}% of {BOX_BYTES:,} B "
-                f"({result.get('budget')})")
+                f"- box budget **{result.get('budget')}** — tick set "
+                f"({SCOPE} + {' + '.join(TICK_EXTRA)}): {tb:,} B / {tb / 1e6:.2f} MB "
+                f"= {100 * tf:.1f}% of {BOX_BYTES:,} B ({BOX_BYTES / 1e6:.0f} MB) "
+                f"— **governs**")
+            lines.append(
+                f"- `{SCOPE}` only: {result['bytes']:,} B / "
+                f"{result['bytes'] / 1e6:.2f} MB = {100 * result['fraction']:.1f}% "
+                f"— continuity with prior reports")
+            lines.append(
+                f"- warn {100 * WARN_FRACTION:.0f}% = "
+                f"{BOX_BYTES * WARN_FRACTION / 1e6:.1f} MB · refuse "
+                f"{100 * REFUSE_FRACTION:.0f}% = "
+                f"{BOX_BYTES * REFUSE_FRACTION / 1e6:.1f} MB")
         if result.get("budget") == "REFUSE" and result.get("oversize_override"):
             lines.append("- **the size ceiling was OVERRIDDEN for this publish**")
         if result.get("heartbeat"):
@@ -407,10 +505,13 @@ def report_lines(result):
         return lines
     if status == "REFUSED":
         lines = [
-            "- **REFUSED — publish aborted by the D3 size budget.** "
-            f"`{SCOPE}` holds {result['bytes']:,} B, "
-            f"{100 * result['fraction']:.1f}% of the {BOX_BYTES:,} B box, above the "
-            f"{100 * REFUSE_FRACTION:.0f}% ceiling:",
+            "- **REFUSED — publish aborted by the D3 size budget.** The tick set "
+            f"(`{SCOPE}` + {' + '.join(TICK_EXTRA)}) holds "
+            f"{result.get('tick_bytes', result['bytes']):,} B / "
+            f"{result.get('tick_bytes', result['bytes']) / 1e6:.2f} MB, "
+            f"{100 * result.get('tick_fraction', result['fraction']):.1f}% of the "
+            f"{BOX_BYTES:,} B box, above the {100 * REFUSE_FRACTION:.0f}% ceiling "
+            f"({BOX_BYTES * REFUSE_FRACTION / 1e6:.1f} MB):",
         ]
         lines += [f"    - `{p}` — {sz:,} B ({100.0 * sz / BOX_BYTES:.2f}%)"
                   for sz, p in result.get("largest", [])]

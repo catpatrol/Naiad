@@ -10,12 +10,18 @@ growing because anyone is careless; it is growing because the record is being
 kept.  Measured against the then-6.39 MB box: 17.9% on 2026-08-05, 26.4% on
 2026-08-11, and a REFUSE at 40.2% on 2026-08-15 that stopped a paste dead.
 
-The box was raised that day by operator ruling to 16 MB (warn 50%, refuse 80%)
-and THIS SCRIPT DID NOT CHANGE: the ceiling rose, the housekeeping stayed.
-AGE_DAYS is still 30.  The live thresholds are read from
-`publish_exchange.BOX_BYTES` / `WARN_FRACTION` / `REFUSE_FRACTION` -- never
-copied here -- so the raise reached this module for free.  Rotation is not a
-pressure valve for a full box; it is how the record stays navigable.
+The box was raised that day by operator ruling to 16 MB, and its thresholds were
+recalibrated the same day on the APOLLO -> ATHENA governance transfer to warn
+40% / refuse 70%.  THIS SCRIPT DID NOT CHANGE THROUGH EITHER: the ceiling rose,
+the thresholds moved, the housekeeping stayed.  AGE_DAYS is still 30.  The live
+values are read from `publish_exchange.BOX_BYTES` / `WARN_FRACTION` /
+`REFUSE_FRACTION` -- never copied here -- so both changes reached this module for
+free, which is the whole argument for importing.  Rotation is not a pressure
+valve for a full box; it is how the record stays navigable.
+
+Metering note: since 2026-08-15 the guard governs on the TICK SET
+(`exchange/` + `publish_exchange.TICK_EXTRA`, i.e. the ledger), not on
+`exchange/` alone.  Rotation still only ever moves files inside `exchange/`.
 
 So: the current month's record stays hot on the bus; everything older moves to
 docs/history/reports/YYYY-MM/, where it is still tracked, still on GitHub, and
