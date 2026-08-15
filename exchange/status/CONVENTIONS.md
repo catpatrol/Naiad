@@ -91,6 +91,7 @@ way.** A broad opening query surfaces this block; from here, search a section by
 ### 6.1 Provenance tags — load-bearing
 ### 6.2 The reviewer error taxonomy
 ### 6.3 The context-gap audit — MOVED FROM MEMORY #8, full text
+### 6.4 The named-constant change protocol
 ## §7 · Carried backlogs and locked rulings
 ### 7.1 SS Pine display backlog — MOVED FROM MEMORY #1, full text
 ### 7.2 SS interview rulings Q1c–Q11 — MOVED FROM MEMORY #19
@@ -423,8 +424,20 @@ ARGUS, ATHENA) reach repo content ONLY through that box, **it holds ~16 MB**, an
 twice. **Any artifact over ~1% of the budget is flagged to the operator by name, with its intended
 home stated, at the moment it is created** — which is the only moment the choice is cheap.
 
-**The box was raised 6.39 MB → 16 MB on 2026-08-15 by operator ruling `["box", VETO]`** (warn
-25→50%, refuse 40→80%), after a REFUSE at 40.2% stopped a paste whose artifacts were already built.
+**The box was raised 6.39 MB → 16 MB on 2026-08-15 by operator ruling `["box", VETO]`**, after a
+REFUSE at 40.2% stopped a paste whose artifacts were already built. **Its thresholds are warn 40% /
+refuse 70%** — 6.4 MB and 11.2 MB — **and the guard governs on the TICK SET** (`exchange/` + the
+ledger), not on `exchange/` alone.
+
+> **CORRECTION 2026-08-15 (box governance, APOLLO → ATHENA).** This paragraph first read *"warn
+> 25→50%, refuse 40→80%"*. Those were the raise's own first thresholds and they held for part of one
+> day. Carried up proportionally from a 6.39 MB box, they put the first warning at 8 MB — the bus
+> would have tripled with nothing said. ATHENA recalibrated to **0.40 / 0.70** on the governance
+> transfer, and closed the D3 metering gap in the same change so the figure the thresholds read is
+> the whole box rather than `exchange/` alone. Boundary semantics were preserved verbatim through
+> both moves: exactly the refuse fraction WARNS, it does not refuse. Fixture **F-BOX-1** pins all of
+> it. The assertion above is rewritten rather than annotated, per the correction rule at the head of
+> this file.
 The capacity of record is `publish_exchange.BOX_BYTES`; this paragraph describes it, it does not
 define it. **One consequence is named here rather than left to be discovered: the ~1% naming
 trip-wire moved with the box, from ~63,900 B to ~160,000 B** — a 2.5× loosening that nobody
@@ -577,6 +590,12 @@ re-test, because the cost of being wrong is asymmetric.
 ### 4.2 The exchange bus
 
 All six actors exchange files through `exchange/` and no other route (operator ruling, 2026-08-03).
+
+**Threshold custody — ATHENA, from 2026-08-15.** The box ceiling, the warn/refuse fractions and the
+metered set are **ATHENA's** (APOLLO → ATHENA box-governance handoff, that date). Changes route
+**ATHENA-first**, and the operator's word is sought through her; no lane edits
+`publish_exchange.BOX_BYTES` / `WARN_FRACTION` / `REFUSE_FRACTION` / `TICK_EXTRA` on its own
+authority. Any such change runs **§6.4**, the named-constant protocol.
 
 ```
 exchange/
@@ -744,6 +763,39 @@ printed on its own signpost. The probe was recorded INCONCLUSIVE rather than pas
 **The counter-pattern, and it is the system working:** the builder has refused a reviewer
 instruction on a ratified invariant at least six times. **A stack whose executor never pushes back
 is a stack whose reviewer errors all land.**
+
+### 6.4 The named-constant change protocol
+*(Adopted 2026-08-15, credited **APOLLO handoff 2026-08-15** §1.4, from that day's incident. It sits
+in the error-taxonomy neighbourhood because it is a Class A cure: asserting a change is complete
+without reading everywhere it lands.)*
+
+**Changing any named constant requires all three of:**
+
+1. **Grep the NAME, the VALUE, and the THRESHOLD TEXT.** Not the name alone. On 2026-08-15, of five
+   sites depending on `BOX_BYTES`, **two contained no `BOX_BYTES` string at all** — one held a copy
+   under a different name (`BOX_CAPACITY`), one stated the thresholds as prose (`25 % / 40 %`) with
+   no identifier to find. A name-only grep reports a clean sweep and is wrong.
+2. **List every dependent with a pin-vs-import decision recorded per site.** Not a global policy —
+   the correct answer differs by site, and writing it down is what makes the difference reviewable.
+3. ***A historical report reproduces history.*** Regenerators of already-filed documents stay
+   **pinned and labelled historical**; live consumers **import from the one definition**. Importing
+   a live constant into a historical regenerator silently restates a filed record against a value
+   that did not exist when it was written.
+
+**The exemplar, both halves, from the day it was written:** `scripts/mc1_report.py:25`
+(`BOX_CAPACITY`, pinned + labelled — it regenerates the MC-1 document filed 2026-08-06) versus
+`scripts/census2b_report.py` (now imports — one definition in one place; the hand-kept copy it had
+would have made every occupancy figure wrong by 2.5×).
+
+**Corollary, added the same day from the sweep's own three defects: after editing a document,
+RE-READ THE DOCUMENT.** Grepping for a value finds values. It does not find a claim that
+*contradicts* a value 26 lines below it, an ownership row a ruling has just closed, or a second
+instance of the same stale figure further down the same file. All three happened; all three were
+caught by adversarial verification rather than by the sweep that made them.
+
+**This protocol governed the session that adopted it** — the 2026-08-15 threshold recalibration ran
+its own three legs and its dependents table is in
+`BUILDERS_REPORT_HEPHAESTUS_2026-08-15_BOX-GOVERNANCE.md`.
 
 ### 6.3 The context-gap audit — MOVED FROM MEMORY #8, full text
 *(Ratified 2026-07-25. Now runs DURING contract drafting, not after — the Class A cure.)*

@@ -538,3 +538,64 @@ PENDING:
 NEXT: Confirm the Drive mirror shows synced — it is what closes 3-2-1 for the 2026-08-15 archives. Owner: operator.
 METRICS: operator actions this session = 0 · files verified = 71 · files deleted = 71 · bytes freed = 5,975,371,985 · hash mismatches = 0 · files kept by the gate = 1 · disk 10G -> 4.6G · code defects found = 1 (reserved-name collision) · defects fixed = 1 · rulings implemented = 2 (4a, zip residency) · suite delta = 0 · commits = 1
 === END STATUS ===
+
+=== STATUS_ATHENA — 2026-08-15 (box governance accepted) ===
+NOW: **Box governance accepted from APOLLO 2026-08-15; thresholds recalibrated warn 0.40 / refuse
+0.70 on the 16 MB [operator] ceiling; D3 metering gap CLOSED (tick-set metering live);
+named-constant protocol adopted into CONVENTIONS.**
+CLASS: infrastructure / governance transfer. NO REGISTRATIONS.
+LAST EVENT: 2026-08-15 -- APOLLO -> ATHENA box & publish-guard governance handoff, implemented
+BASIS: exchange/reports/NOTE_APOLLO_2026-08-15_TO_ATHENA_box-governance-handoff.md
+       sha256 e7cfae19d45983f3f7be06a4af660b9c032fc57f2afde313aa12ed7ea153b7af (filed verbatim
+       this session, per the note's own Route line)
+FACTS:
+ 1. THE NOTE'S FACTS WERE VERIFIED BEFORE BEING GOVERNED ON. BOX_BYTES = 16,000,000, warn 0.50,
+    refuse 0.80 -- all three MATCH publish_exchange.py:86-88 exactly. The note's byte figure
+    (2,568,320 B / 16.05%) reads 2,593,743 B today; the delta is bus growth from two later publishes
+    (2925ebe, 6f2c79a) and is attributable commit by commit, not a discrepancy. Governing facts
+    matched; the measurement had simply moved on. No HALT.
+ 2. THRESHOLDS RECALIBRATED warn 0.50 -> 0.40, refuse 0.80 -> 0.70. Reason on the record: the raise
+    moved the ceiling but carried the fractions up proportionally, so the first warning would not
+    have arrived until 8 MB -- the bus tripling with nothing said. 0.40/0.70 warns while there is
+    still room to act. WARN 6.4 MB - REFUSE 11.2 MB - current tick set 2.85 MB.
+ 3. BOUNDARY SEMANTICS PRESERVED VERBATIM, and proved rather than asserted: the comparators are
+    unchanged (`> REFUSE`, `>= WARN`), so exactly 70.0% WARNS and does not refuse, exactly as
+    exactly 80.0% did. F-BOX-1 pins both edges and derives them from the constants, so the next
+    re-pin re-tests itself instead of passing on stale numbers.
+ 4. THE D3 METERING GAP IS CLOSED -- open since my own queue-003 report of 2026-08-11 and
+    transferred with the governance. The box holds LEDGER.md AND exchange/ (DIGEST section 1); the
+    guard metered exchange/ alone and under-reported by the ledger's size. THE TICK SET NOW
+    GOVERNS: TICK_EXTRA = ("LEDGER.md",), measured at HEAD because publish only ever commits
+    exchange/. Today that is 2,593,743 + 255,011 = 2,848,754 B = 17.80% against
+    16.21% exchange-only -- a 1.59-point correction.
+ 5. BOTH FIGURES PRINT ON EVERY PUBLISH, not only on warn/refuse, and every percentage carries its
+    absolute MB beside it -- because a percentage against a ceiling that has just moved is exactly
+    the number a reader mis-reads. The exchange-only figure is kept for continuity with every prior
+    report; result["bytes"]/["fraction"] keep their old meaning and the governing values are new
+    tick_* keys, so no existing consumer was handed a silent redefinition.
+ 6. THE NAMED-CONSTANT PROTOCOL IS ADOPTED AS CONVENTIONS 6.4 (TOC and body), credited "APOLLO
+    handoff 2026-08-15", and IT GOVERNED THE SESSION THAT ADOPTED IT: all three legs run -- NAME,
+    VALUE, THRESHOLD TEXT -- with a pin-vs-import decision recorded per site. It caught one live
+    stale prose site (rotate_reports.py docstring, "warn 50%, refuse 80%") that a name-only grep
+    would have missed. Its corollary, added from the same day's three defects: after editing a
+    document, RE-READ THE DOCUMENT.
+ 7. THRESHOLD CUSTODY IS WRITTEN INTO CONVENTIONS 4.2: the ceiling, the fractions and the metered
+    set are ATHENA's; changes route ATHENA-first; no lane edits them on its own authority.
+ 8. ROTATION UNTOUCHED, as the operator's ruling required: AGE_DAYS = 30, queue 003 next eligible
+    ~2026-08-28. rotate_reports.py imports the live constants and needed no value change; only its
+    docstring's stale prose was corrected.
+ 9. PINNED-VS-IMPORT, per site: publish_exchange.py = the one definition - census2b_report.py and
+    rotate_reports.py IMPORT - census2b_oracle_report.py and mc1_report.py stay PINNED + labelled
+    (they regenerate FILED documents; a historical report reproduces history, and both keep their
+    self-consistent 6,390,000 / warn 25 / refuse 40 text).
+10. SUITE 226 passed / 0 failed / 0 skipped, up from 214 -- delta +12, all F-BOX-1
+    (tests/test_box_guard.py, new).
+PENDING (operator): the ~1% naming trip-wire in CONVENTIONS 3.2 still moved with the box, from
+~63,900 B to ~160,000 B. Left proportional, flagged in the conventions themselves; pin it absolute
+at ~64,000 B if the intent was a sensitivity rather than a fraction. APOLLO raised it, it is now
+mine to carry, and it is the one box question still open.
+NEXT: the next all-lanes note carries the one-line acknowledgment to APOLLO. Owner: ATHENA.
+METRICS: operator actions this session = 1 (the box-governance go) - constants changed = 2 -
+dependents audited = 6 - fixtures added = 1 (F-BOX-1, 12 assertions) - suite delta = +12 - D3 gaps
+closed = 1
+=== END STATUS ===
