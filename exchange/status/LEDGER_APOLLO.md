@@ -916,3 +916,100 @@ grid), and §6 F-3. Owner: operator.
 METRICS: operator actions this session = 1 (the CENSUS-2B ORACLE rev C paste) — files re-ingested
 = 0 — indicator filed = 1
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-15b ===
+NOW: VIZ-2 CATHEDRAL PAYLOADS ARE EMITTED. Four payloads -- the May-26 tape, the twelve station
+cards, the terrain and the BTC 1h helix -- F-V3 PASS, m = 0, all local under
+research_outputs/census2b/viz_payloads/ with a 7-file DESIGN_HANDOFF_VIZ3. write_payload is
+IMPORTED from census2a_viz so the meta block has one implementation across both viz stages.
+CLASS: DISPLAY-ONLY / Tier-E exploration. NO REGISTRATIONS. m = 0.
+LAST EVENT: 2026-08-15 -- VIZ-2 cathedral payloads, appended to the ORACLE run's close
+FACTS:
+ 1. DESIGN_CONTRACT_VIZ3 DOES NOT EXIST AND NEVER HAS -- zero hits in the working tree and in
+    every blob reachable from every commit on every branch, for DESIGN_CONTRACT, VIZ3, VIZ-2,
+    cathedral, station card, and helix alike. What governs is a PAIR: DESIGN_BRIEF_CENSUS2A_VIZ
+    (whose §3 IS the payload-spec template this build's §3 follows) and BUILD_2026-08-12_CENSUS2A
+    _VIZ1 (where the real eleven-key meta block lives). Both are in the handoff.
+ 2. NO CANONICAL TWELVE EXISTS. The estate's own use of the word is BUILD_2026-08-14 §9 "STATION
+    OCCUPANCY -- the six-stage kit, photographed", and that is SIX. The twelve emitted are the
+    twelve ORACLE classes, the only twelve-item structure the estate has; the class->stage mapping
+    is THIS PASS'S READING and is flagged on the payload. The gate text it selects is verbatim.
+ 3. TWO RECORDS ARE "THE SIX-RULES RECORD" -- the trade-lifetime six-stage kit S1..S6, and IRON
+    RULES IR1..IR6 in the design brief. Both are carried VERBATIM rather than guessing between
+    them; stations quote the lifecycle gate, and switching needs no re-run.
+ 4. S4 and S5 CARRY NO STATION (coverage S1x6, S2x3, S3x2, S6x1). They are post-entry disciplines
+    and the ORACLE classes are all events. Their gate text is still emitted in full -- the record
+    is complete where the mapping is empty. Forcing a class in would have been invention.
+ 5. `bell` IS A ROLE ALIAS, NOT AN EVENT. The word occurs exactly once in the estate and names the
+    arming. No fifth object was invented; the fifth cross family the dossier does carry (300x450)
+    is emitted under its own name.
+ 6. `fuzz` HAS NO ANCHOR -- zero hits repo-wide. veto_pins is emitted per station; what fuzz was
+    to do to those names needs the operator's word.
+ 7. COLUMNAR ENCODING KEPT EVERY ROW. Object-per-row put the helix at 1.33 MB and the terrain at
+    812 KB, both over the 700 KB cap; column arrays fit with ZERO rows dropped -- the terrain would
+    otherwise have lost 977 campaigns to a top-N slice.
+ 8. THE TERRAIN IS SLIGHTLY SURVIVORSHIP-TILTED: 260 resolved WF1 campaigns have no cen5 row and
+    257 of them exit on `stop`, all intraday. Dropped upstream by cen5, named here, not corrected.
+ 9. 542 NULL MFEs WERE ZEROS, not gaps (wf1 reads exactly 0.0 on all 542) -- emitted as 0.0 so they
+    do not sort to an arbitrary end and vanish. is_winner is sign(ride_R) > 0; the size-scaled
+    realized_r reading would flip 38 of 6,834, so the ruler is stated rather than assumed.
+10. F-V3 PASS: all four payloads round-trip json.load and re-hash to their own meta.sha256, all
+    under cap; the May-26 timestamps reconcile EXACTLY to the D-CEN2c row (MC1 D3.event_card) and
+    the four legs match the anatomy printed in BUILD_APOLLO_2026-08-06_MC1.
+PENDING (operator rulings):
+ 1. Name this viz stage and write its contract, or ratify BUILD_2026-08-15_VIZ2_CATHEDRAL as it.
+ 2. Rule on the twelve: promote the ORACLE-class reading, or name a real twelve.
+ 3. Rule on `fuzz`, or drop the word.
+ 4. THE BUS IS AT THE REFUSE LINE. exchange/** is at ~39.9% of a 40%-refuse box and this paste
+    does not fit in what remains. Three cheap ways out, all the operator's: a named-set early
+    rotation of the spent census-2A/V-ULT-1 documents (the machinery exists and was ratified for
+    exactly this on 2026-08-15), raise BOX_BYTES, or allow_oversize for one paste. NOT overridden
+    here -- that would be this lane overruling a ratified guard on its own authority.
+NEXT: the operator reads §4 V-1/V-2 and §5 BOX-COST. Owner: operator.
+METRICS: operator actions this session = 1 (the VIZ-2 paste) -- files re-ingested = 0
+=== END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-15c ===
+NOW: THE BOX IS RAISED AND THE VIZ-2 PAPERWORK IS FILED. This entry SUPERSEDES the bus-status half
+of 2026-08-15b (which recorded the REFUSE and left the documents waiting); everything 15b says
+about the payloads themselves stands unchanged.
+CLASS: repo operation + DISPLAY-ONLY / Tier-E filing. NO REGISTRATIONS. m = 0.
+LAST EVENT: 2026-08-15 -- operator box ruling ["box", VETO], guard raised, publish retried
+FACTS:
+ 1. OPERATOR RULING ["box", VETO], 2026-08-15: publish_exchange BOX_BYTES 6_390_000 -> 16_000_000,
+    WARN_FRACTION 0.25 -> 0.50, REFUSE_FRACTION 0.40 -> 0.80. Named constants, cited to the ruling
+    in the commit message and in an in-file comment. THE 30-DAY ROTATION REMAINS SCHEDULED (queue
+    003, next ~2026-08-28); AGE_DAYS was NOT touched. The ceiling rises, the housekeeping stays.
+ 2. exchange/** went from 2,566,419 B = 40.16% REFUSE to 2,568,320 B = 16.05% OK.
+    Boundary semantics preserved: exactly 80.0% warns, it does not refuse -- the same literal
+    reading the guard has always applied to its own stated limit.
+ 3. TWO PRIVATE COPIES OF THE CONSTANT WERE FOUND, AND ONE HAD ALREADY GONE STALE.
+    scripts/rotate_reports.py imports publish_exchange.BOX_BYTES live -- correct by construction,
+    no change. scripts/census2b_report.py held a hand-kept copy that the raise would have made
+    wrong by 2.5x on every occupancy figure it prints -- now IMPORTED, one definition in one place.
+    scripts/census2b_oracle_report.py is deliberately LEFT PINNED at 6,390,000: it regenerates a
+    FILED document whose BOX-COST records the box at filing time, and importing the live constant
+    would silently rewrite a historical record with a ceiling that did not exist when it was
+    written. A historical report reproduces history.
+ 4. FULL TEST SUITE GREEN after the raise: 214 passed. No assertion anywhere depends on the old
+    thresholds.
+ 5. THE ATTACHED CONTRACT DID NOT ARRIVE. DESIGN_CONTRACT_VIZ3_TRADE_CATHEDRAL_2026-08-15.md is
+    NOT present anywhere on this machine -- searched ~/Downloads, ~/Desktop, ~/Documents, /tmp and
+    the whole repo, by name and by the tokens VIZ3 / CATHEDRAL / DESIGN_CONTRACT. The one prior
+    attachment this lane received (SS_v12_0_1.pine) was found in ~/Downloads by exactly this
+    method. NOTHING WAS FILED AND NOTHING WAS RECONSTRUCTED: writing the contract from the recon's
+    description of what it should say would produce a document that looks ratified and is not.
+    Item 2 of the ruling STANDS OPEN -- re-attach and it files in one pass. Finding V-10.
+ 6. Consequently VIZ-2 finding V-1 is UNCHANGED: as of this filing, DESIGN_CONTRACT_VIZ3 still
+    does not exist in the estate, and the governing text remains the design brief + the VIZ-1
+    build doc, both already copied into DESIGN_HANDOFF_VIZ3.
+ 7. FILED THIS PASTE: BUILD_2026-08-15_VIZ2_CATHEDRAL.md (its BOX-COST section rewritten before
+    filing to record BOTH halves -- the refusal and the ruling -- rather than filing a statement
+    the ruling had already made false), the CENSUS2A_PROBE_LEDGER m=0 line, and 15b.
+PENDING (operator):
+ 1. RE-ATTACH DESIGN_CONTRACT_VIZ3_TRADE_CATHEDRAL_2026-08-15.md. Blocks nothing; files in one pass.
+ 2. Carried from 15b: name this viz stage's contract (or ratify the build doc as it); rule on the
+    twelve stations; rule on `fuzz`.
+NEXT: the operator re-attaches the contract, then reads VIZ-2 §4 V-1/V-2. Owner: operator.
+METRICS: operator actions this session = 2 (the VIZ-2 paste, the box ruling) -- files re-ingested = 0
+=== END STATUS ===

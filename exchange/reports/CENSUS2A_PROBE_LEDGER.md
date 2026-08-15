@@ -210,3 +210,7 @@ non-empty rows.**
 **Stamp:** `EXPLORATION — ungated; promotion requires registration.`
 
 **RUNNING SELECTION SURFACE after this entry: 743,516.** (m = 0 adds nothing.)
+
+### ENTRY 5 · VIZ-2 CATHEDRAL PAYLOADS, selection surface m = 0
+
+**2026-08-15** · seed 20260814 · DISPLAY-ONLY / Tier-E · four payloads (`v3_may26_tape`, `v3_stations`, `v3_terrain`, `v3_helix`) are complete extractions of fixed populations — nothing ranked, thresholded or promoted, so **m = 0** and the running surface is unchanged. Findings, including that `DESIGN_CONTRACT_VIZ3` does not exist and that no canonical twelve stations exist, are in `BUILD_2026-08-15_VIZ2_CATHEDRAL.md` §4. **Stamp:** `EXPLORATION — ungated; promotion requires registration.` **RUNNING SELECTION SURFACE after this entry: 743,516.**
