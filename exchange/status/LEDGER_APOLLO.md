@@ -1013,3 +1013,35 @@ PENDING (operator):
 NEXT: the operator re-attaches the contract, then reads VIZ-2 §4 V-1/V-2. Owner: operator.
 METRICS: operator actions this session = 2 (the VIZ-2 paste, the box ruling) -- files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-15d ===
+NOW: CORRECTION TO 15c FACT 3 AND TO BUILD_2026-08-15_VIZ2_CATHEDRAL §5. Both say TWO private
+copies of the box constant were found. THE TRUE COUNT IS THREE, plus two stale text sites. An
+adversarial sweep run against the raise found what the first pass missed; the fix is commit
+905b9fc and the suite is green. Nothing about the ruling, the raise, or the publish changes --
+only the completeness of the dependent list I filed.
+CLASS: repo operation. NO REGISTRATIONS. m = 0.
+LAST EVENT: 2026-08-15 -- box-raise completeness sweep
+FACTS:
+ 1. THE THIRD COPY: scripts/mc1_report.py:20 held BOX_CAPACITY = 6_390_000 -- a private copy under
+    a DIFFERENT NAME, which is exactly why a grep for BOX_BYTES did not surface it. Left PINNED
+    (it regenerates the MC-1 document filed 2026-08-06; a historical report reproduces history)
+    but now LABELLED as historical rather than reading like a constant that should have tracked
+    the guard.
+ 2. A STALE TEXT SITE I INTRODUCED: census2b_report.py:227 hard-coded "WARN line / REFUSE line |
+    25 % / 40 %" and printed it directly beside the freshly-imported 16 MB BOX_BYTES -- the table
+    contradicted itself, and the raise is what made it do so. Now interpolated from the imported
+    WARN_FRACTION / REFUSE_FRACTION.
+ 3. A STALE POLICY STATEMENT: rotate_reports.py's docstring asserted "warns at 25% and refuses
+    above 40%" as CURRENT policy. Rewritten so the measured history stays history, the live
+    thresholds are named as imported, and the ruling's point is on the record: the ceiling rose,
+    the housekeeping stayed, AGE_DAYS is still 30.
+ 4. THE LESSON, for the next lane that changes a named constant: grepping the constant's NAME is
+    not a completeness check. Two of these five sites do not contain the string "BOX_BYTES" at
+    all. Grep the VALUE and the THRESHOLD TEXT as well.
+ 5. Full suite green after the correction: 214 passed. exchange/** unchanged in substance.
+PENDING: unchanged from 15c -- re-attach DESIGN_CONTRACT_VIZ3_TRADE_CATHEDRAL_2026-08-15.md
+(item 2 of the box ruling, still open; nothing blocks on it).
+NEXT: the operator re-attaches the contract. Owner: operator.
+METRICS: operator actions this session = 2 -- files re-ingested = 0
+=== END STATUS ===
