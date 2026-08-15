@@ -3,6 +3,32 @@
   Register (or remove) the THREE session-anchored Naiad brief tasks.
   Amendment 2 §2.3 / §10.
 
+.NOTES
+  RETIRED 2026-08-15 (queue 005 M4). DO NOT RUN THIS.
+
+  This is a Windows PowerShell installer for Windows Task Scheduler. The project
+  moved to macOS; there is no Task Scheduler on this host and `$python` below
+  still points at `C:\venvs\naiad\Scripts\python.exe`, which does not exist. It
+  was already classified ALREADY-DEAD by the M3 sweep
+  (BUILDERS_REPORT_HEPHAESTUS_2026-08-15_M3-SWEEP.md) and is NOT deleted, because
+  it is the only written record of how the three slot-anchored brief triggers
+  were specified — including the timezone reasoning below, which is still correct
+  and still unimplemented on macOS.
+
+  WHAT REPLACES IT, partially: three launchd agents armed 2026-08-15 —
+  `com.naiad.daily` (07:00 daily), `com.naiad.estate` (Sundays 08:00),
+  `com.naiad.workflow` (Sundays 08:30). See `exchange/status/CADENCE.md`.
+
+  WHAT IS NOT YET REPLACED, and is the reason this file is kept rather than
+  archived: those three agents do NOT cover the per-slot brief triggers this
+  script registers. `com.naiad.daily` invokes `daily_routine.py` with **no
+  `--slot`**, so the slot-aware jobs in `routine_jobs.json` report SKIPPED by
+  design rather than running. Porting the london / ny_am / post_ny triggers to
+  launchd -- including the America/New_York anchoring described below, which
+  launchd's `StartCalendarInterval` does NOT do natively (it fires on machine
+  local wall-clock, exactly like the Windows triggers) -- is OUTSTANDING and
+  belongs to the operator's M5 checklist.
+
 .DESCRIPTION
   Reads ops/brief_schedule.yaml and registers one Windows Task Scheduler job per
   slot (london / ny_am / post_ny), each invoking the EXISTING

@@ -8,11 +8,48 @@ workflow backup and the F4 finding.
 
 | # | trigger | when | owner | state | verified |
 |---|---|---|---|---|---|
-| 1 | **Naiad daily routine** | every day 07:00 local | machine (Task Scheduler) | **ARMED this session** | 2026-08-02 |
-| 2 | **Naiad weekly backup** (estate) | Sundays 08:00 local | machine (Task Scheduler) | **ARMED this session** | 2026-08-02 |
-| 3 | **Naiad weekly workflow backup** | Sundays 08:30 local | machine (Task Scheduler) | **ARMED** (since 2026-08-02) | 2026-08-04 |
+| 1 | **Naiad daily routine** | every day 07:00 local | machine (**launchd** `com.naiad.daily`) | **ARMED** | 2026-08-15 |
+| 2 | **Naiad weekly backup** (estate) | Sundays 08:00 local | machine (**launchd** `com.naiad.estate`) | **ARMED** | 2026-08-15 |
+| 3 | **Naiad weekly workflow backup** | Sundays 08:30 local | machine (**launchd** `com.naiad.workflow`) | **ARMED** | 2026-08-15 |
 | 4 | **Hermes scheduled run** | 2×/day | HERMES (Cowork, scheduled) | **NOT ARMED — Hermes-side** | — |
 | 5 | **Sync now** (project GitHub sync) | on demand, ~1×/day | **operator** | **MANUAL — no automation exists** | — |
+
+> ### CORRECTION 2026-08-15 (queue 005 M4) — launchd replaces Task Scheduler
+>
+> Rows 1–3 above previously read **machine (Task Scheduler)**, verified 2026-08-02/04.
+> That owner no longer exists: this host is macOS and has no Task Scheduler. Per
+> `CONVENTIONS.md`'s own 2026-08-15 note — *"NOTHING is armed today — every job is
+> manual until the code lane re-arms it under launchd"* — the three triggers were
+> re-armed this session as **user LaunchAgents**, and the rows now name them.
+>
+> | trigger | label | plist | schedule |
+> |---|---|---|---|
+> | daily routine | `com.naiad.daily` | `~/Library/LaunchAgents/com.naiad.daily.plist` | `Hour 7, Minute 0` |
+> | estate backup | `com.naiad.estate` | `~/Library/LaunchAgents/com.naiad.estate.plist` | `Weekday 0, Hour 8, Minute 0` |
+> | workflow backup | `com.naiad.workflow` | `~/Library/LaunchAgents/com.naiad.workflow.plist` | `Weekday 0, Hour 8, Minute 30` |
+>
+> **The plists are NOT in this repository.** `~/Library/LaunchAgents/` is outside
+> `~/Naiad`, so the agents are untracked *by location*, not by omission — the same
+> class of fact as the Task Scheduler entries they replace, and the reason this
+> registry exists at all. Their verbatim contents are in
+> `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-15_M4-LAUNCHD.md`.
+>
+> **`StartWhenAvailable` came free.** The Windows tasks needed that flag set
+> explicitly so a run missed while the machine was off or asleep fired at next
+> wake. launchd does this for `StartCalendarInterval` by default: a missed
+> calendar job runs when the machine next wakes. The behaviour the old registry
+> had to ask for is the behaviour launchd already has.
+>
+> **The `--dest` problem died with the tasks.** §2 and §3 below record that both
+> weekly tasks passed `--dest "G:\My Drive\naiad-backups"` explicitly, outranking
+> the code default and targeting a now-empty path. The new agents pass **no
+> `--dest` at all**, so `backup_estate.py`'s own default is what applies —
+> measured this session as `/Volumes/LaCie/naiad-backups`, and confirmed live by
+> the F-M3-6 run. The stale-argument hazard is not fixed so much as removed.
+>
+> The Windows command lines quoted in §1, §2, §3 and the 2026-08-04 record are
+> left verbatim below. They are no longer a description of anything armed; they
+> are migration evidence.
 
 ---
 
@@ -119,6 +156,20 @@ web lane sees current state.
 ---
 
 **Removal counterparts**, should any armed trigger need to go:
+
+```
+launchctl bootout gui/501/com.naiad.daily
+launchctl bootout gui/501/com.naiad.estate
+launchctl bootout gui/501/com.naiad.workflow
+```
+
+`bootout` unloads the agent; the plist stays on disk at
+`~/Library/LaunchAgents/<label>.plist` and `launchctl bootstrap gui/501 <plist>`
+re-arms it. To remove one permanently the operator deletes the plist as well —
+that is an operator action, not a scheduled-lane one (§4 no-delete policy).
+
+*(Windows era, superseded 2026-08-15 — kept as migration evidence. These commands
+have no effect on macOS and there is no Task Scheduler on this host:)*
 
 ```
 schtasks /delete /tn "Naiad daily routine" /f

@@ -161,6 +161,38 @@ research_outputs/census2b/**
 # of record.
 naiad-backups/
 
+# Google Drive Desktop upload staging (FOUND 2026-08-15, queue 005 M4 -- NOT
+# looked for; `git add -A` aborted on it with
+# `fatal: unable to stat '.tmp.driveupload/1915'` because Drive moved the file
+# out from under the scan).
+#
+# 7.8 GB across 952 entries, sitting in the REPO ROOT, untracked and -- until
+# this line -- UNIGNORED. That is precisely the 2026-08-05 condition described
+# three blocks up: untracked-but-unignored bulk that a wildcard `git add -A`
+# will sweep into a commit and that GitHub will then reject. The file sizes
+# match the phase archives (e.g. 242,926,299 B = tc1_2026-07-27.zip), so this is
+# Drive staging the _archive tree for upload.
+#
+# THIS LINE ONLY STOPS GIT FROM SEEING IT. It does not address the real finding,
+# which is reported to the operator rather than acted on: **Google Drive is
+# syncing ~/Naiad.** DATA RESIDENCY v2 says everything Naiad reads is LOCAL and
+# the LaCie is backup-only; an active cloud sync of the working tree is a
+# residency condition nobody recorded. The v2 identity gate greps for OneDrive,
+# com~apple~CloudDocs and Mobile Documents -- it does NOT detect Google Drive
+# Desktop, so the gate passes cleanly on a cloud-synced repo.
+#
+# NOTHING WAS DELETED. This directory is Drive's working state, not Naiad's.
+.tmp.driveupload/
+
+# launchd agent logs (QUEUE 005 M4, 2026-08-15).  StandardOutPath /
+# StandardErrorPath for com.naiad.{daily,estate,workflow}.  Ops artifacts in the
+# same class as the brief archive and the daily archive above: they are the
+# machine's record of a scheduled run, they grow without bound, and they are not
+# the source of record -- the build documents and the .sha256 sidecars are.
+# Added BEFORE the agents were loaded, so the first scheduled run cannot put an
+# untracked-but-unignored log into the tree.
+logs/
+
 # macOS Finder metadata.
 .DS_Store
 

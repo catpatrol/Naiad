@@ -816,6 +816,22 @@ auto-push).
 > `~/Library/LaunchAgents`. **NOTHING is armed today** — every job is manual until the code lane
 > re-arms it under launchd.
 
+> **RE-ARMED 2026-08-15 (queue 005 M4) — the note above is now discharged.** The code lane
+> re-armed all three under launchd, as user LaunchAgents: `com.naiad.daily` (07:00 daily,
+> `daily_routine.py`), `com.naiad.estate` (Sundays 08:00, `backup_estate.py --estate`),
+> `com.naiad.workflow` (Sundays 08:30, `backup_estate.py --workflow`). Bootstrapped into
+> `gui/501` and verified by `launchctl print`, not assumed. The `StartWhenAvailable` property
+> the Windows tasks carried explicitly is launchd's default behaviour for
+> `StartCalendarInterval`: a missed calendar job runs at next wake.
+>
+> **One prerequisite had to be fixed first, and it would have broken every daily run silently.**
+> `scripts/routine_jobs.json` carried `"python": "python"` — a bare interpreter name inherited
+> from Windows. `daily_routine.py` builds `argv = [python, script]` and has no `--python`
+> override. Bare `python` does not resolve on this machine **at all**: not under launchd's
+> minimal `PATH`, and not in the operator's interactive shell either. Every child job would have
+> returned `exit=126, "could not launch: [Errno 2] No such file or directory"`. It is now the
+> absolute venv path. See `CADENCE.md` for the trigger registry and the `bootout` undo lines.
+
 
 
 **DATA RESIDENCY v2 — operator ruling 2026-08-15. This supersedes the two paragraphs below.**

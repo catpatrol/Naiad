@@ -1,13 +1,13 @@
 # RETENTION — archive estate vs the rule
 
-Generated 2026-08-12T10:58:26Z by `scripts/backup_estate.py`.
+Generated 2026-08-15T15:51:05Z by `scripts/backup_estate.py`.
 
 **Rule:** keep the newest 4 estate generations and the newest 4 workflow generations. **Phase archives are permanent evidence and are never prunable.**
 **This report never deletes anything.** It names what falls outside the generation rule; acting on it is the operator's call.
 
 ## Estate generations
 
-Location: `D:\naiad-backups`
+Location: `/Volumes/LaCie/naiad-backups`
 
 4 generation(s) present; 4 within the rule, 0 outside it.
 
@@ -22,16 +22,17 @@ Nothing to consider: fewer than 5 generations exist.
 
 ## Workflow generations
 
-Location: `D:\naiad-backups`
+Location: `/Volumes/LaCie/naiad-backups`
 
-9 generation(s) present; 4 within the rule, 5 outside it.
+10 generation(s) present; 4 within the rule, 6 outside it.
 
 | generation | size (B) | within rule |
 |---|---:|---|
+| `naiad_workflow_2026-08-15.zip` | 4,183,212 | yes |
 | `naiad_workflow_2026-08-12.zip` | 2,749,895 | yes |
 | `naiad_workflow_2026-08-12-03.zip` | 3,664,349 | yes |
 | `naiad_workflow_2026-08-12-02.zip` | 3,637,063 | yes |
-| `naiad_workflow_2026-08-12-01.zip` | 3,579,058 | yes |
+| `naiad_workflow_2026-08-12-01.zip` | 3,579,058 | **NO — outside the rule** |
 | `naiad_workflow_2026-08-11.zip` | 2,721,722 | **NO — outside the rule** |
 | `naiad_workflow_2026-08-09.zip` | 2,529,667 | **NO — outside the rule** |
 | `naiad_workflow_2026-08-04.zip` | 1,794,646 | **NO — outside the rule** |
@@ -42,7 +43,7 @@ Location: `D:\naiad-backups`
 
 Each phase archive holds a DIFFERENT phase's evidence, so an older one is not a superseded copy of a newer one — it is the only copy of work that will never be produced again.
 
-Location: `D:\Naiad\research_outputs\_archive`
+Location: `/Users/luis/Naiad/research_outputs/_archive`
 
 9 archive(s), 1,043,591,544 B (1,043.6 MB). **All permanent. None prunable.**
 
@@ -59,3 +60,6 @@ Location: `D:\Naiad\research_outputs\_archive`
 | `v3_anchor_2026-07-27.zip` | 2026-07-27 | 91,049,070 | **PERMANENT — never prune** |
 
 There is no keep-count for phase archives and no circumstance under which this report will list one as prunable.
+
+Backup copy: `/Volumes/LaCie/naiad-backups/phases`
+- **[backup] 9 archive(s), 1,043,591,544 B** on `/Volumes/LaCie`.

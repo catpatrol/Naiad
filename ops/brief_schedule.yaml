@@ -14,6 +14,30 @@
 # transitions so the operator can see exactly when the UTC times will move.
 #
 # F-B22 asserts the generator uses zone resolution and not a stored offset.
+#
+# ---------------------------------------------------------------------------
+# CORRECTION 2026-08-15 (queue 005 M4). NOTHING READS THIS FILE ON THIS HOST.
+#
+# The consumer named above -- setup_brief_schedule.ps1 -- is a Windows Task
+# Scheduler installer and is RETIRED (see its own .NOTES block). This host is
+# macOS. The three slot triggers it describes are NOT armed and have no launchd
+# counterpart yet.
+#
+# What IS armed as of 2026-08-15: com.naiad.daily (07:00 daily),
+# com.naiad.estate (Sundays 08:00), com.naiad.workflow (Sundays 08:30). See
+# exchange/status/CADENCE.md. com.naiad.daily runs daily_routine.py with NO
+# --slot, so the slot-aware jobs in scripts/routine_jobs.json report SKIPPED by
+# design rather than running. This file's contents are therefore currently
+# UNUSED CONFIGURATION, kept because the zone reasoning above is still correct
+# and is the specification any launchd port must satisfy.
+#
+# THE HARD PART, stated so the port is not attempted casually: launchd's
+# StartCalendarInterval fires on MACHINE LOCAL WALL-CLOCK, exactly like the
+# Windows triggers did. It has no timezone field. So a launchd port cannot
+# express "America/New_York 10:00" directly -- it needs either a regenerating
+# installer that rewrites the plists at each DST transition (what the .ps1 did),
+# or a wrapper that computes the zone itself. Outstanding; operator's M5.
+# ---------------------------------------------------------------------------
 
 zone: America/New_York
 
