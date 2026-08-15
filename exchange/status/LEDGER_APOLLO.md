@@ -846,3 +846,73 @@ artifact), and rules on the four scale-mismatched constants as one question rath
 Owner: operator.
 METRICS: operator actions this session = 1 (the CENSUS-2B PART A + W-TB1 paste) — files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-15 ===
+NOW: THE ORACLE IS BUILT. One grid, a complete partition of the filed census-2B event substrate:
+5 lenses x 12 classes x {ALL, 2 directions, 3 orientation states}, 856,877 anchors, m = 0,
+toll-honest, printed whole in the build document. The three instrument-scale vetoes are executed:
+knot-scale VERIFIED (the substrate was already per-SR), state-scale APPLIED (and it was the real
+defect — UH read 92.8% flat at 5m under the global k=20), kiss-scale RUN AND
+INERT, with the reason measured rather than guessed.
+CLASS: Tier-E + instrument re-pins. NO REGISTRATIONS. m = 0 — the partition is complete and
+unranked, so there is no family to correct over. Any selection FROM the grid is a new probe.
+LAST EVENT: 2026-08-15 — CENSUS-2B ORACLE rev C, one build document
+FACTS:
+ 1. MAC-ERA RULES v2 ACKNOWLEDGED IN-LANE: identity gate passed (pwd == $HOME/Naiad, no cloud-sync
+    marker in the path), data born and read local, nothing touched the LaCie this pass. ATHENA's
+    crossing is SALUTED — 425 files / 7.45 GB restored at 0 mismatches, suite 287 passed / 0 failed
+    / 1 skipped, census work unblocked. This is the first census build of the Mac era.
+ 2. PINE v12.0.1 FILED byte-exact: pine/SS_v12_0_1.pine, sha256 af166d92035a3981da0926b589dec6135d5c57a4a4bc49ed833f6b217c068ad9
+ 3. THE ORACLE GRID IS THE PER-LENS MARK-DEFAULT AUTHORITY for the indicator's next revision. It is
+    descriptive, not prescriptive: it says what each class has historically done at each lens under
+    one ruler, net of that lens's toll. SS v12.0.2 marks should be argued against it by name and
+    lens, not against intuition.
+ 4. R-3 WAS THE REAL DEFECT. The global k=20 made the state column report the LOOKBACK, not the
+    ribbon: UH 92.8% flat at 5m -> 6.1% at k=577. FAST and M
+    are unchanged by construction (their k floors at 20), so the correction lands exactly where the
+    mis-scale was and nowhere else. _v2 columns sit BESIDE the originals; nothing was overwritten.
+ 5. R-2 CHANGED NOTHING BECAUSE NOTHING WAS WRONG: <SR>_knot already thresholds that family's own
+    width_atr at 0.5, element for element, 0 violations on every cell. The veto ratifies the
+    substrate; BR-dispersion is demoted to a reported column and is never a knot definition.
+ 6. R-1 IS INERT AND THE OPERATOR NEEDS TO RULE. min(0.75, 0.6 x p95 spread) can only LOWER delta,
+    and only for a pair whose p95 spread is under 1.25 ATR; all five inert pairs are inert because
+    they are WIDE. Measured veer reach NEVER exceeds 0.61 ATR on
+    any of them anywhere on the panel, so no delta at or above ~0.62 can ever wake them, and a
+    spread-sized delta will never be that low. A working law sizes off the REACH distribution
+    (p95 ~ 0.28-0.33). NOT TAKEN HERE — a different law is a different veto.
+ 7. 26_89 WAS NOT IN THE FILED TAXONOMY (it is a cross-FAMILY adjacency; the taxonomy is 18
+    within-family + 5 midline + price/band). Derived this pass from the pinned emas substrate with
+    the same crossover rule and feasibility gate, labelled derived<emas> on every row, and excluded
+    from F-O1. F-O1b licenses the rule by re-deriving 12_26 exactly: 197,305 = 197,305, 0 mismatched
+    cells.
+ 8. 12_26 IN-WINDOW vs BARE IS DEGENERATE: a window closes on the counter 12_89 cross that arms the
+    next one, so windows TILE the armed span — measured 100.0000% union coverage on all 25 cells.
+    'bare' can only be the warm-up head: 264 events against 197,041.
+ 9. THE 4h LENS IS THREE-QUARTERS OF A LENS, for three different reasons: H20 is INFEASIBLE there
+    (bars = 0 under the duration-fixed law, NaN, never substituted); knot->fan and spring do not
+    exist at 4h because Part A pins its lens lists to [5m,15m,30m,1h]; 2618_4618 is unrealizable
+    (EMA-4618 warm-bars exceed 4h history, verdict NEVER on all five assets); and VH/UH orientation
+    is vacuous (UH is never warm, so 100% of 4h rows fall to 'mixed'). Each prints its own cause
+    per cell rather than showing an empty zero.
+10. F-O1 AND F-O1b PASS. Every native cross class, both halves of 12_26, and spring reconcile
+    EXACTLY (delta = 0) to the filed crosses/windows/springs inventories; knot->fan is a join and is
+    bounded by both parents.
+11. BOX-COST is stated in §7 of the build document. The box was ALREADY AT WARN before this paste.
+PENDING (operator rulings; none blocks this document):
+ 1. Re-size the kiss delta off the veer-reach distribution, or accept the five pairs as permanently
+    inert and record that. (F-1)
+ 2. Promote 26_89 into the pinned crosses taxonomy and re-run stage 4, or keep it derived-at-query.
+    (F-2)
+ 3. Redefine IN-WINDOW as a narrower predicate — e.g. inside a TRIGGERED window and before its
+    trigger bar — or retire the split. (F-3)
+ 4. Extend transitions/springs/refusals to 4h, or pin the lens set to [5m,15m,30m,1h] and stop
+    asking for 4h rows that cannot exist. (F-4)
+ 5. state_eps_atr = 0.05 IS THE FOURTH scale-mismatched constant and rev C did not name it. It is
+    still global and still unscaled. (F-7)
+ 6. Carried from 2026-08-14: the completeness fixture is still missing; 1m stages 2-4 unrun; the
+    annex (JTO/TAO) never built.
+NEXT: the operator reads §1 (the kiss re-pin is inert, and the measurement that says why), §4 (the
+grid), and §6 F-3. Owner: operator.
+METRICS: operator actions this session = 1 (the CENSUS-2B ORACLE rev C paste) — files re-ingested
+= 0 — indicator filed = 1
+=== END STATUS ===

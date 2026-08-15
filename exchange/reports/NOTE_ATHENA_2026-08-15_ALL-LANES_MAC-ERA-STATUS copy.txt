@@ -1,0 +1,82 @@
+# NOTE — ATHENA → ALL LANES · 2026-08-15 · **STATUS REFRESH: THE MAC ERA**
+
+**Supersedes every prior geography note (2026-08-12 STATUS-REFRESH included).** Read once; every
+claim is builder-verified with transcripts on the bus. Queue-005 reports of record:
+`BUILDERS_REPORT_HEPHAESTUS_2026-08-15_{M2-RESTORE-V2, M3-SWEEP, M4-LAUNCHD, ZIP-RESIDENCY}.md`.
+
+---
+
+## 0 · THE HEADLINE
+
+**The project runs on a MacBook Pro 16" M5 (48 GB), macOS.** The crossing (Queue 005, M0→M4 +
+zip-residency) is complete and verified: **425 files / 7.45 GB restored at 0 mismatches; suite
+287 passed / 0 failed / 1 skipped — one test better than the Windows baseline; 5.98 GB of proven
+duplicates removed with every byte gated on a fresh hash against its twin.**
+
+**CENSUS WORK IS UNBLOCKED.** The census2a/mc2 residency gates were un-deadened in M3 and
+smoke-proven on this machine. APOLLO may draft and run.
+
+## 1 · WHERE EVERYTHING IS — the table of record
+
+| what | location | protected by |
+|---|---|---|
+| **The working repo (live)** | **`~/Naiad`** (= `/Users/luis/Naiad`), ~4.6 GB | GitHub `catpatrol/Naiad` (SSH), branch `v12-v1-census` |
+| Python | `~/venvs/naiad` (3.12, uv) — outside the repo | rebuildable from the tracked lock file |
+| Estate cache (raw price data) | `~/.cache/naiad/data_cache` | dated estate archives on the LaCie + Drive cloud |
+| Live substrates — `seq8`, `census`, `census2a/b`, `mc1` | `~/Naiad/research_outputs/…` | LaCie bulk mirror (`/Volumes/LaCie/Naiad/…`), sha-verified |
+| `seq8_run2` | **data retired per R3** — 3 run-manifests + `README_R3.md` remain locally | data twins live on the LaCie mirror |
+| **9 phase archives (permanent evidence)** | **LaCie ONLY** (`…/Naiad/research_outputs/_archive` + `naiad-backups/phases`) — local `_archive` holds *current-cycle* zips, empty right now **by design** | tracked `.sha256` sidecars in the repo = the fingerprint set; PC-era cloud copies |
+| **Backup vault** | `/Volumes/LaCie/naiad-backups` (~53 files incl. fresh 08-15 estate + workflow) | Google Drive mirror → `naiad1310@gmail.com` (syncing; verification pending) |
+| The bus | `exchange/` — box at ~37% (warn 25 / refuse 40) | GitHub + workflow archive |
+| Old PC | alive, old trees intact | decommission + OneDrive Phase B = later phases |
+
+## 2 · THE RULES THAT CHANGED
+
+1. **Identity gate (every paste):** HALT if the path contains `OneDrive`, `com~apple~CloudDocs`,
+   `Mobile Documents`, **or Google Drive staging markers**; HALT unless `pwd == $HOME/Naiad`.
+2. **DATA RESIDENCY v2 + zip aging:** live data is born local and read local under `~/Naiad`.
+   **New archives are born local and mirrored to the LaCie in the same act; completed/older zips
+   live on the LaCie only.** Reads NEVER touch the LaCie; `drive_wait` gates backup writes only.
+   An empty local `_archive` is the normal end state of a cycle — **not a finding**; the retention
+   scan now says so itself and reports three states (current / [backup] / NOT ENUMERABLE), with
+   "sidecar with no archive anywhere" kept sharp as the one real alarm.
+3. **Scheduling is launchd**, not Task Scheduler: `com.naiad.daily` 07:00 · `com.naiad.estate`
+   Sun 08:00 · `com.naiad.workflow` Sun 08:30 — armed, kickstart-proven, logs at
+   `~/Naiad/logs/launchd/`. Missed-while-asleep jobs run at next wake (launchd native).
+   Retired routine jobs are now genuinely SKIPPED (`scheduled: false` honoured — ruling 4a).
+4. **Platform:** native bash/zsh — the chr(92) and PYTHONIOENCODING transit hazards are dead.
+   Windows-era path assertions anywhere are HISTORICAL. `backup_estate.py` reserved-name collision
+   fixed (`_estate/` escape); estate archives verify 8/8 end-to-end.
+5. **Unchanged and binding:** THE FIRST RULE · single build document + ruling "append" · pointer
+   discipline (data never on the bus) · the two-sided-gate philosophy · reviewer error taxonomy ·
+   R3 (rerun data discarded, provenance kept).
+
+## 3 · PER LANE
+
+- **APOLLO — GREENLIT.** census2a/mc2 run here; substrates verified local; the eight spent
+  CENSUS2A run documents rotated to `docs/history/reports/2026-08/` (pickup document
+  `CENSUS2A_CLOSEOUT_2026-08-12.md` still hot on the bus). Draft contracts with `~/Naiad` paths and
+  the v2 gate; bulk outputs are born local; archive steps use `--phase` + `--mirror`.
+- **ARGUS** — the three slot-anchored brief triggers (london / ny_am / post_ny) have **no launchd
+  counterpart yet** (launchd lacks a timezone field; needs a wrapper — open item). The daily agent
+  runs slotless at 07:00 local.
+- **HERMES / DIONYSUS** — **your Cowork mounts still point at a machine that no longer exists.**
+  The operator remounts at `~/Naiad`; until then treat any repo read as suspect. Discriminator
+  test after remount: `BUILDERS_REPORT_HEPHAESTUS_2026-08-15_M3-SWEEP.md` present = live tree.
+- **HEPHAESTUS** — Claude Code at `~/Naiad`; venv `~/venvs/naiad/bin/python`, absolute paths under
+  launchd (no shell rc).
+
+## 4 · OPEN ITEMS, WITH OWNERS
+
+| item | owner |
+|---|---|
+| Drive mirror verification: drive.google.com → Computers → `naiad-backups` shows ~53 files incl. `naiad_estate_2026-08-15-02.zip` — then delete PC-era cloud folders + empty Drive trash (~7 GB quota back). **Verify first, delete second.** | operator |
+| Cowork remount + discriminator test | operator |
+| Spotlight privacy list (`~/Naiad/research_outputs`, `~/.cache/naiad`) | operator (GUI) |
+| One `--estate` refresh on the PC (cache there is newer than the 08-11 archive) | operator, at leisure |
+| 11 CRLF source files → LF (own commit + suite run) | code lane |
+| `backup_estate.py --no-publish` flag | code lane |
+| Box at ~37% WARN — next relief is the scheduled 30-day rotation (~08-28) or another named set | operator word |
+| Parked queue, in return order: momentum-wording ruling · memory redesign (13-entry index model) · OneDrive Phase B + PC decommission | operator + ATHENA |
+
+— ATHENA, 2026-08-15

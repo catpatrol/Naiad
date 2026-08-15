@@ -168,3 +168,45 @@ and `cen2b_completion_audit.parquet`, all sha-pinned in `census2b_manifest.json`
 **Stamp:** `EXPLORATION — ungated; promotion requires registration.`
 
 **RUNNING SELECTION SURFACE after this entry: 743,516.**
+
+---
+
+### ENTRY 4 · CENSUS-2B ORACLE (Mac-native rev C), selection surface m = 0
+
+**Date** 2026-08-15 · **Seed** 20260814 · **Class** Tier-E + instrument re-pins · **NO REGISTRATIONS**
+
+**m = 0.** The ORACLE grid is a *complete partition* of the filed census-2B event substrate — 5
+lenses × 12 classes × {ALL, 2 directions, 3 orientation states}, 856,877 anchors — computed under
+one ruler and printed whole. No cell was selected, ranked, promoted or compared against a
+threshold, so there is no family to correct over. The three re-pins are scale decisions applied to
+every row alike, not choices among candidates. **Any future selection *from* this grid is a new
+probe and must declare its own m before it looks; the number to declare is 313, the count of
+non-empty rows.**
+
+**What was measured — recorded, NOT claimed.** The findings are stated once, in the build document
+(§1–§6); this entry records only what the ledger exists to record.
+
+- **ENTRY 3's kiss suspicion is now quantified, and the ratified fix does not fix it.** Entry 3
+  recorded the grammar inert on five of eleven pared pairs with max reach below δ=0.75. The number:
+  **0.6112 ATR**, the largest reach any of the five ever attains across the whole panel and all five
+  lenses. No δ ≥ ~0.62 can wake them, and `δ = min(0.75, 0.6 × p95 spread)` cannot produce such a δ
+  — it is sized off the spread (p95 2.7–23 ATR) and the cap binds on ten of eleven pairs. The event
+  is impossible, not rare. **No constant was changed.**
+- **The state window was the real mis-scale**: UH read 92.8% flat at 5m under the global k=20 —
+  the column was reporting the lookback, not the ribbon — and 6.1% at k=577. `_v2` beside originals.
+- **The knot re-pin changed nothing because nothing was wrong** (0 violations on every cell).
+  Entry 3's companion finding, that `RIBBON_C = 0.5` makes `br_knot` false everywhere, is answered
+  by demoting BR-dispersion to a reported column rather than by moving a constant.
+- **`26_89` was derived, not fabricated and not dropped**, from the pinned `emas/` substrate, and is
+  excluded from the reconciliation gate; the rule is licensed by re-deriving `12_26` exactly
+  (197,305 = 197,305, 0 mismatched cells). **`12_26 IN-WINDOW`/`bare` is degenerate** — windows tile
+  the armed span 100.0000% on all 25 cells. **The 4h lens is three-quarters of a lens**, and its
+  VH/UH orientation cut is undefined rather than measured. All four are build-doc §6.
+
+**Provenance:** `~/Naiad/research_outputs/census2b/oracle/`, all artifacts sha-pinned in
+`oracle_manifest.json`; built by `scripts/census2b_oracle.py` from the substrate sha-pinned in
+`census2b_manifest.json`; full transcript in `BUILD_2026-08-15_CENSUS2B_ORACLE.md`.
+**Data born and read local, Mac-era residency v2.**
+**Stamp:** `EXPLORATION — ungated; promotion requires registration.`
+
+**RUNNING SELECTION SURFACE after this entry: 743,516.** (m = 0 adds nothing.)
