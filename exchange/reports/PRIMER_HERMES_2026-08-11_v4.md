@@ -29,11 +29,16 @@ never assert D: contents as `[verified]`.
 
 **b · Queue 002 EXECUTED — ACCEPT, 10/10 fixtures, commit `c32ffa5`.** Live guards: `--phase`
 defaults to D: (sidecar to repo, HALT if absent); `--phase --dest` is an honest error; **publish
-enforces an `exchange/` size budget** — warn 25% / refuse 40% of the 6.39 MB box, currently WARNING
-(~26.4%); **publish refreshes `MANIFEST.json` every run** — manifest staleness is a closed defect
-class. Known metering gap, on record: the guard measures `exchange/` only, ~4 points under true
-tick-set occupancy (~30.4%). **Your budget section therefore prints BOTH figures** — guard reading
-AND tick-set truth (`exchange/` + `LEDGER.md`).
+enforces an `exchange/` size budget** — **warn 50% / refuse 80% of the 16 MB box** (raised from
+6.39 MB / 25 / 40 by operator ruling 2026-08-15 `["box", VETO]` after a REFUSE at 40.2% stopped a
+paste dead), **currently OK (~16%)**; **publish refreshes `MANIFEST.json` every run** — manifest
+staleness is a closed defect class. **Never copy these numbers into a script**: the live values are
+`publish_exchange.BOX_BYTES` / `WARN_FRACTION` / `REFUSE_FRACTION`, and the 2026-08-15 raise found
+three private copies that had silently gone stale. Known metering gap, on record: the guard measures
+`exchange/` only, under true tick-set occupancy — measured at ~4 points on the then-6.39 MB box
+(26.4% guard vs 30.4% tick-set, 2026-08-11); the gap is a fixed number of BYTES, so on the 16 MB box
+the same shortfall reads ~1.6 points. **Your budget section therefore prints BOTH figures** — guard
+reading AND tick-set truth (`exchange/` + `LEDGER.md`).
 
 **c · Queue 003 RATIFIED, NOT BUILT — and it deputises you.** Report rotation: `exchange/reports/*.md`
 older than **30 days** (pinned) → `git mv` to `docs/history/reports/YYYY-MM/`, sha-verified,
@@ -90,7 +95,10 @@ routine publishes for you). Flag it as pending until the operator arms it.
 0. Read CONVENTIONS end to end; name one rule you found there.
 1. Inventory `exchange/` fresh: path, bytes, mtime, owner, prose/data.
 2. **Budget, both figures**: guard-metered `exchange/` % AND tick-set % (`exchange/`+`LEDGER.md`),
-   against 6,390,000 B; every file >1% named; **rotation-candidate table** (>30 days) per §2c.
+   against **16,000,000 B** (raised 2026-08-15; read it from `publish_exchange.BOX_BYTES` rather
+   than from this line, so the next raise reaches you for free); every file >1% named — **note that
+   1% is now ~160,000 B, not ~63,900 B**, so the naming threshold loosened 2.5× with the box and
+   §4.2 of CONVENTIONS says so explicitly; **rotation-candidate table** (>30 days) per §2c.
 3. Rebuild `exchange/DIGEST.md` in full: how-to-use → budget → by-lane (ledger, latest artifacts,
    key references, staleness) → inbox with acted-status → queue table → findings. Index of
    pointers, never a re-authored substitute.

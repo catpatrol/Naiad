@@ -415,19 +415,30 @@ The document ENDS with a table covering every file the paste created, modified o
 | COMMITTED | which short SHA, or "not committed" |
 | PUSHED | yes/no, plus the remote ref |
 | PROTECTED BY | estate zip / phase archive / --workflow archive / GitHub only / **NOT PROTECTED** |
-| **BOX COST** | bytes, and % of the 6.39 MB context box, for anything under `exchange/` or another synced path. `n/a` if it lands somewhere unsynced — say which. |
+| **BOX COST** | bytes, and % of the **16 MB** context box, for anything under `exchange/` or another synced path. `n/a` if it lands somewhere unsynced — say which. Take the capacity from `publish_exchange.BOX_BYTES`, never from a copy. |
 
 **The BOX COST column, added 2026-08-06 by operator ruling.** **Creating a file that will enter the
 project knowledge box is a WORKFLOW DECISION, not a side effect.** The three web lanes (APOLLO,
-ARGUS, ATHENA) reach repo content ONLY through that box, it holds ~6.39 MB, and it has overflowed
+ARGUS, ATHENA) reach repo content ONLY through that box, **it holds ~16 MB**, and it has overflowed
 twice. **Any artifact over ~1% of the budget is flagged to the operator by name, with its intended
 home stated, at the moment it is created** — which is the only moment the choice is cheap.
 
+**The box was raised 6.39 MB → 16 MB on 2026-08-15 by operator ruling `["box", VETO]`** (warn
+25→50%, refuse 40→80%), after a REFUSE at 40.2% stopped a paste whose artifacts were already built.
+The capacity of record is `publish_exchange.BOX_BYTES`; this paragraph describes it, it does not
+define it. **One consequence is named here rather than left to be discovered: the ~1% naming
+trip-wire moved with the box, from ~63,900 B to ~160,000 B** — a 2.5× loosening that nobody
+separately asked for. It is left proportional because that is how the rule is written, but if the
+intent was a *sensitivity* rather than a *fraction*, the fix is one line: state the trip-wire as an
+absolute (`~64,000 B`) instead of a percentage. **Operator's call; flagged, not taken.**
+
 **The law, confirmed three separate times: DOCUMENTS ARE CHEAP, DATA IS NOT.** Every prose artifact
 the ARGUS lane has ever written — 42 files, every report, summary, parity worksheet and interface
-snapshot — totals ~770 KB, about 12% of the box. Two capture JSONs from a SINGLE 2026-08-06 cycle
-totalled 4,024,198 bytes, about 63%. Two files outweighed a lane's entire written history five to
-one. **So: write more reports, never fewer. The documents are not the problem and never were.**
+snapshot — totals ~770 KB, about 12% of the then-6.39 MB box. Two capture JSONs from a SINGLE
+2026-08-06 cycle totalled 4,024,198 bytes, about 63% of it. **Two files outweighed a lane's entire
+written history five to one** — a ratio, which is why the 2026-08-15 raise to 16 MB does not touch
+this argument at all. **So: write more reports, never fewer. The documents are not the problem and
+never were.**
 
 **Captures, renders, results JSONs, substrates, parquet and HTML do not belong in `exchange/` at
 all.** §4.2 already says text only, 1 MB per file, larger artifacts referenced by path + sha256

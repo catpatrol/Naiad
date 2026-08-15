@@ -21,29 +21,43 @@ Generated **2026-08-12T11:40Z** by HERMES from **`C:\Naiad`** · Manifest read `
 
 ---
 
-## 2 · Budget — measured 2026-08-12T11:40Z, against 6,390,000 B
+## 2 · Budget — measured 2026-08-15T21:05Z, against 16,000,000 B
 
 | reading | bytes | % | state |
 |---|---:|---:|---|
-| **Guard-metered** (`exchange/` — what `publish` enforces) | 1,770,268 | **27.70%** | ⚠ **WARNING** (warn 25 / refuse 40) |
-| **Tick-set truth** (`exchange/` + `LEDGER.md`) | 2,025,279 | **31.69%** | the real occupancy |
-| metering gap | 255,011 | 3.99 pts | `LEDGER.md`, invisible to the guard |
+| **Guard-metered** (`exchange/` — what `publish` enforces) | 2,576,034 | **16.10%** | **OK** (warn 50 / refuse 80) |
+| **Tick-set truth** (`exchange/` + `LEDGER.md`) | 2,831,045 | **17.69%** | the real occupancy |
+| metering gap | 255,011 | 1.59 pts | `LEDGER.md`, invisible to the guard |
 
-117 files. **Prose 1,575,393 B / 24.65% (109 files) · Data 194,875 B / 3.05% (8 files).**
-**No file exceeds 1% of the box.** First cycle that has been true.
+141 files, **as of the measurement stamp above** — documents written later in the same session
+(this cycle: the LEDGER_APOLLO 15e entry, ~6 KB) land after the reading, per the standing rule that
+a file cannot carry its own final size. The guard's own figure at publish is authoritative.
 
-Folders: `reports/` 1,292,207 (20.22%, 77 files) · `status/` 223,062 (3.49%) · `status/daily/` 187,839 (2.94%) · `queue/` 51,009 (0.80%) · root 15,590 (0.24%) · `drops/` 561 (0.01%).
+**Prose 2,366,564 B / 14.79% (130 files) · Data 209,470 B / 1.31% (11 files).**
+**No file exceeds 1% of the box** — though note 1% is now ~160,000 B rather than ~63,900 B, so this
+statement is weaker than the same sentence was a cycle ago. See CONVENTIONS §4.2, where the
+loosening is named.
 
-### ⚠ The bus will refuse before rotation is allowed to fire
+Folders: `reports/` 1,915,772 (11.97%, 98 files) · `status/` 359,525 (2.25%) · `status/daily/` 198,774 (1.24%) · `queue/` 78,804 (0.49%) · root 22,598 (0.14%) · `drops/` 561 (0.00%).
+
+### The refuse-before-rotation conflict is RESOLVED
 
 ```
-headroom to REFUSE (40%)    785,732 B    12.3 points
-added in the last 24h       794,687 B    12.44% of box
+headroom to REFUSE (80%)   10,223,966 B    63.9 points
 ```
 
-**Yesterday alone added more than the entire remaining headroom.** At that rate, ~1 day; at the calmer 08-10/08-11 rate (~85 KB/day), ~9 days. Queue 003 rotation has **zero eligible candidates and cannot have any until 2026-08-27** — the oldest dated report is `BACKUP_BUILD_2026-07-28.md`.
+**The box was raised 6.39 MB → 16 MB on 2026-08-15 by operator ruling `["box", VETO]`** (warn
+25→50%, refuse 40→80%), after the guard did exactly what it was built to do: it REFUSED a paste at
+40.2% whose artifacts were already built and local. The ruling is explicit that **the ceiling rises
+and the housekeeping stays** — queue 003 rotation remains scheduled at `AGE_DAYS = 30`, next
+eligible ~2026-08-28, and `rotate_reports.py` was not touched.
 
-**Two ratified mechanisms are in arithmetic conflict.** When publish refuses, `exchange/**` stops publishing and every web lane goes blind — the exact failure the bus exists to prevent. See §6 F-1.
+**The prior reading of this section — "⚠ the bus will refuse before rotation is allowed to fire",
+"two ratified mechanisms are in arithmetic conflict" — is now VOID and is recorded here as
+superseded rather than deleted.** It was correct when written on 2026-08-12: at 27.70% of a 6.39 MB
+box with 785,732 B of headroom and 794,687 B added in a day, the arithmetic really did collide, and
+saying so is what got the box raised. The conflict was dissolved by moving the ceiling, not by the
+lanes writing less.
 
 **And the standing law has inverted.** Data is now 3.05% of the box, down from 8.74%: the two pointer stubs worked. In the same ten hours prose grew ~389 KB and the bus got *bigger*. Per unit documents are still cheap; at twelve builder reports a day they are the binding constraint. `reports/` holds 77 files.
 
@@ -147,7 +161,7 @@ Broadcasts (no single recipient): `NOTE_ATHENA_2026-08-12_ALL-LANES_STATUS-REFRE
 
 ## 7 · Findings
 
-**F-1 · The bus refuses before rotation can fire.** `[verified]` — §2. Headroom 785,732 B; last 24 h added 794,687 B; rotation ineligible until 2026-08-27. Lowering the 30-day threshold to ~10 days would make ~40 reports eligible immediately. ATHENA's rule to redraft, operator's to ratify.
+**F-1 · The bus refuses before rotation can fire. — CLOSED 2026-08-15, by raising the ceiling rather than shortening the rotation.** `[verified, resolved]` — §2. As filed 2026-08-12: headroom 785,732 B; last 24 h added 794,687 B; rotation ineligible until 2026-08-27; the proposed remedy was to lower the 30-day threshold to ~10 days, making ~40 reports eligible at once. **It went the other way.** The finding was proved live on 2026-08-15 when publish REFUSED a paste at 40.2%, and the operator ruled `["box", VETO]`: box 6.39 → 16 MB, warn 25→50%, refuse 40→80%, **rotation untouched at `AGE_DAYS = 30`**. Headroom is now 10,223,966 B. The 30-day threshold was never shortened, so no report was rotated off the bus earlier than the ratified window — which is the outcome the redraft would have cost. Nothing owed to ATHENA here any more.
 
 **F-2 · The abandoned clone reports itself healthy.** `[verified]` Old tree HEAD `75b7444`, its own `origin/v12-v1-census` also `75b7444`, so `git status -sb` prints *up to date* while 4 commits behind. **No signal inside that tree distinguishes it from the live one.** Both mounts were simultaneously attached to this session. Two-sided gate is mandatory until Phase B.
 

@@ -1045,3 +1045,61 @@ PENDING: unchanged from 15c -- re-attach DESIGN_CONTRACT_VIZ3_TRADE_CATHEDRAL_20
 NEXT: the operator re-attaches the contract. Owner: operator.
 METRICS: operator actions this session = 2 -- files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-15e ===
+NOW: THE PROSE LANE OF THE BOX RAISE IS DONE. The 2026-08-15 ruling changed a constant; four LIVE
+documents still described the old one, and one of them was a standing INSTRUCTION that would have
+re-manufactured the stale figure on the next HERMES cycle. All four corrected, PRIMER first.
+CLASS: repo operation / record maintenance. NO REGISTRATIONS. m = 0.
+LAST EVENT: 2026-08-15 -- box-raise prose sweep
+FACTS:
+ 1. ORDERING WAS LOAD-BEARING AND IS WHY PRIMER WENT FIRST. exchange/DIGEST.md has NO generator --
+    it is rebuilt by hand each HERMES cycle from PRIMER_HERMES §6. Correcting DIGEST first would
+    have been undone by the next cycle, because PRIMER §6.2 still said "against 6,390,000 B".
+ 2. FOUR LIVE DOCUMENTS CORRECTED:
+    - PRIMER_HERMES_2026-08-11_v4.md §2b and §6.2 -- the standing measure-against instruction, now
+      16,000,000 B, with the guard named as the place to read it from rather than this line.
+    - CONVENTIONS.md §4.2 -- the BOX COST column definition (a MANDATORY column in every future
+      build document, which would have carried a dead denominator forever), the capacity statement
+      of record, and the 1% trip-wire.
+    - DIGEST.md §2 and §6 F-1 -- re-measured against 16 MB and the resolved alarm closed.
+    - NOTE_ATHENA_2026-08-15_ALL-LANES_MAC-ERA-STATUS -- the bus row of today's all-lanes
+      broadcast, which is what the three web lanes read.
+ 3. THE 1% TRIP-WIRE IS THE ONE REAL POLICY CONSEQUENCE AND IT IS FLAGGED, NOT BURIED.
+    CONVENTIONS §4.2 flags any artifact over ~1% of the budget to the operator BY NAME. Raising the
+    box moved that trip-wire from ~63,900 B to ~160,000 B -- a 2.5x loosening nobody separately
+    asked for. It is left PROPORTIONAL because that is how the rule is written, and the consequence
+    is now stated in the conventions themselves along with the one-line alternative (state it as an
+    absolute ~64,000 B if the intent was a sensitivity rather than a fraction). OPERATOR'S CALL.
+    For scale: each of this lane's last three build documents would have tripped the old wire and
+    none trips the new one.
+ 4. F-1 IS CLOSED, AND THE WAY IT CLOSED IS WORTH KEEPING. DIGEST F-1 ("the bus refuses before
+    rotation can fire") proposed shortening the 30-day rotation to ~10 days, which would have made
+    ~40 reports eligible at once. The ruling went the OTHER way: raise the ceiling, leave the
+    housekeeping. No report left the bus earlier than its ratified window -- the outcome the
+    redraft would have cost. Recorded as resolved-and-superseded, not deleted.
+ 5. NOTHING FILED WAS EDITED. Working-tree diff is exactly four files, 54 insertions / 25 deletions,
+    and every deletion is a replaced live-policy line. Verified untouched: every LEDGER_*.md, every
+    queue/*.md ratified contract, every BUILD_*.md, CENSUS2A_PROBE_LEDGER.md, ROTATION_LOG.md. Line
+    endings unchanged (all four were and remain LF).
+ 6. THE SUPERSEDED NUMBERS SURVIVE AS HISTORY, NOT AS POLICY: 785,732 B headroom, 794,687 B added
+    in 24h, the 27.70% reading, ARGUS's 770 KB / 4,024,198 B comparison -- all preserved and
+    era-anchored to the then-6.39 MB box rather than erased or silently rescaled. CONVENTIONS'
+    "two files outweighed a lane's entire written history five to one" is a RATIO and survives the
+    raise untouched; it was not weakened.
+ 7. REMAINING repo-wide hits on the old figures are all correctly historical: filed BUILDERS_REPORT
+    and NOTE documents, ratified queue contracts, append-only ledgers, the two deliberately-pinned
+    report generators, and status/daily/DAILY_*.md -- which are dated snapshots of what the guard
+    said that day AND self-heal, since daily_routine reads the figure from publish_exchange at run
+    time. None is a live instruction.
+ 8. exchange/** = 2,577,306 B = 16.11% of the 16,000,000 B box. Level OK.
+ 9. DIGEST WAS EDITED OUT OF CYCLE. It is HERMES's artifact and HERMES retains regeneration
+    authority; this pass corrected the figures in place because the alarm it carried was void and
+    the web lanes read it live. The next HERMES cycle will rebuild it from the corrected PRIMER.
+PENDING (operator):
+ 1. The 1% trip-wire: leave proportional (~160,000 B, current) or pin absolute (~64,000 B). Fact 3.
+ 2. Carried: re-attach DESIGN_CONTRACT_VIZ3_TRADE_CATHEDRAL_2026-08-15.md; name the VIZ stage's
+    contract; rule on the twelve stations; rule on `fuzz`.
+NEXT: the operator rules on the 1% trip-wire. Owner: operator.
+METRICS: operator actions this session = 3 -- files re-ingested = 0
+=== END STATUS ===

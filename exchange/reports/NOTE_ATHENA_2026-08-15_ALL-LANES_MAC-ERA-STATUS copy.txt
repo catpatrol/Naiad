@@ -27,7 +27,7 @@ smoke-proven on this machine. APOLLO may draft and run.
 | `seq8_run2` | **data retired per R3** — 3 run-manifests + `README_R3.md` remain locally | data twins live on the LaCie mirror |
 | **9 phase archives (permanent evidence)** | **LaCie ONLY** (`…/Naiad/research_outputs/_archive` + `naiad-backups/phases`) — local `_archive` holds *current-cycle* zips, empty right now **by design** | tracked `.sha256` sidecars in the repo = the fingerprint set; PC-era cloud copies |
 | **Backup vault** | `/Volumes/LaCie/naiad-backups` (~53 files incl. fresh 08-15 estate + workflow) | Google Drive mirror → `naiad1310@gmail.com` (syncing; verification pending) |
-| The bus | `exchange/` — box at ~37% (warn 25 / refuse 40) | GitHub + workflow archive |
+| The bus | `exchange/` — box at **~16% of 16 MB** (warn 50 / refuse 80) — raised from 6.39 MB / 25 / 40 by operator ruling `["box", VETO]` later on 2026-08-15, after a REFUSE at 40.2%; rotation unchanged at 30 days | GitHub + workflow archive |
 | Old PC | alive, old trees intact | decommission + OneDrive Phase B = later phases |
 
 ## 2 · THE RULES THAT CHANGED
