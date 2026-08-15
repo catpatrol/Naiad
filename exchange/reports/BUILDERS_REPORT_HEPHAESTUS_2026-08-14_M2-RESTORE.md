@@ -13,6 +13,10 @@ and the one that matters most is physical: **the LaCie is not attached to this m
 not asleep, not mis-mounted, not renamed. **Zero bytes were adopted. Zero bytes were
 written to any source. The ADOPTED ledger below is empty by design, not by omission.**
 
+A fourth blocker surfaced at close: **this Mac has no GitHub credentials**, so the
+`publish()` at §6 committed locally (`35c293f`) but could not push. **The branch is 1 commit
+ahead of origin and this report is not yet on the remote.**
+
 ---
 
 ## 0 — IDENTITY GATE
@@ -254,14 +258,53 @@ was observed. Per the brief: classify nothing, fix nothing. I have classified no
 
 ## 6 — CLOSE / PUBLISH
 
-`scripts/publish_exchange.py` exists and `exchange/reports/` is the correct home for this
-document. **I did not attempt `publish()`**: it runs under the project interpreter, which
-does not exist on this machine (HALT 3). The attempt would fail on the missing venv, not on
-a Windows-ism, and would tell M3 nothing true about platform portability. Recording a
-fabricated "publish tripped" would be worse than recording nothing.
+One `publish()` was attempted, as instructed. It got **most of the way and then failed on a
+fourth blocker nobody had listed** — HALT 4.
 
-This document is therefore filed by hand. **Whether `publish()` survives macOS is untested
-and remains an open M3 question.**
+First, a note for M3 on how it is invoked. `scripts/publish_exchange.py` has **no
+`__main__` guard**: running it as a script exits 0 and prints nothing at all — a silent
+no-op that looks exactly like success. It is a library. The entry point is
+`publish(repo, date_str, remote="origin", ...)` at line 228.
+
+It imports and runs cleanly under Python 3.9.6 — `publish_exchange` does not touch the
+3.10+ syntax that blocks `engine/data.py`, so HALT 3 did **not** stop it. The result:
+
+| Stage | Outcome |
+|---|---|
+| branch resolve | OK — `v12-v1-census`, not detached |
+| `git add -- exchange` | OK |
+| scope guard | **PASS** — exactly 2 staged paths, both inside `exchange/` |
+| D3 size budget | PASS — not tripped, no override used |
+| commit | **OK — `35c293f`** `exchange: auto-publish 2026-08-14` |
+| **push** | **FAILED** |
+
+Staged and committed: `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-14_M2-RESTORE.md`
+and `exchange/status/LEDGER_ATHENA.md`. Nothing outside `exchange/` was touched — the
+untracked `.DS_Store`, `.claude/settings.local.json` and `naiad-backups/` were correctly
+left alone by the scope guard.
+
+### HALT 4 — this Mac has no GitHub credentials
+
+```
+$ git push origin v12-v1-census
+fatal: could not read Username for 'https://github.com': Device not configured
+```
+
+The remote is HTTPS (`https://github.com/catpatrol/Naiad.git`) and no credential helper,
+token or SSH alternative is configured on this machine. `Device not configured` is git
+finding no TTY to prompt on — it cannot ask, so it dies.
+
+**This is not a Windows-ism.** `publish()` behaved correctly on macOS at every stage it
+could control: path handling, scope guard, size budget and commit all worked, and it
+returned rather than raising, exactly as its contract promises. The failure is environmental
+and belongs to the operator, not to M3's portability work.
+
+**Current state: the branch is 1 commit ahead of origin.** The report and the ledger are
+committed locally at `35c293f` and are **not on the remote**. I cannot complete the push —
+it needs credentials only the operator can supply.
+
+**Net finding: `publish()` survives macOS as far as this machine let it be tested. Commit
+works; push is blocked on credentials, not on code.**
 
 ---
 
@@ -280,16 +323,19 @@ and remains an open M3 question.**
 | 4 | Untracked handoff zip | **BLOCKED** | no source | 0 B |
 | 5 | Suite baseline | **BLOCKED** | no interpreter | 0 B |
 | 5 | `drive_wait` POSIX probe | **DONE — passes** | executed, 18.02 s | 0 B |
-| 6 | `publish()` | **NOT ATTEMPTED** | would fail on venv, not portability | 0 B |
+| 6 | `publish()` — commit | **DONE** | scope guard + D3 passed; commit `35c293f` | 0 B |
+| 6 | `publish()` — push | **HALT 4** | no GitHub credentials on this Mac | 0 B |
 | — | Tracked-tree integrity | **VERIFIED 598/598** | git, clean at origin tip | 0 B |
 | — | Local archive integrity | **VERIFIED 15/15** | co-located sidecars (weak basis) | 0 B |
-| — | This report | filed by hand | — | ~11 KB |
+| — | This report | committed `35c293f`, push blocked | — | 19.7 KB |
 
-**TOTAL BOX COST: ~11 KB — this document alone.** No archive extracted, no cache directory
+**TOTAL BOX COST: 19.7 KB — this document alone** (plus the LEDGER_ATHENA append). No archive extracted, no cache directory
 created, no artefact adopted, no source byte read-modified. `~/.cache/naiad` still does not
 exist.
 
-**ROLLBACK:** delete this one file. Nothing else changed.
+**ROLLBACK:** `git reset --hard db63b8c` drops the local publish commit; then delete this
+report and revert the LEDGER_ATHENA append. Nothing left this machine — the push never landed —
+so rollback is purely local. No source was touched.
 
 ---
 
@@ -332,15 +378,24 @@ files have no such proof, and three of them are missing entirely.** Please tell 
 performed that copy and from which source; if that tool skipped or truncated files silently,
 its other output cannot be trusted either.
 
-### 🟢 5 — TWO PIECES OF GOOD NEWS.
+### 🔴 5 — THIS REPORT IS NOT ON THE REMOTE. Push it.
+`publish()` committed cleanly at **`35c293f`** but the push died on
+`could not read Username for 'https://github.com': Device not configured` — **this Mac has
+no GitHub credentials.** Configure a credential helper, a PAT, or switch the remote to SSH,
+then `git push origin v12-v1-census`. Until you do, the branch sits 1 commit ahead of
+origin and **everything in this report exists only on this machine** — the same
+single-copy exposure described in item 4, now applied to the report about it.
+
+### 🟢 6 — THREE PIECES OF GOOD NEWS.
 `drive_wait` handles POSIX paths correctly and is **not** an M3 portability item. All 15
 sidecar'd archives in `naiad-backups/` hash clean — the carried backup set is internally
 intact, merely stale (newest estate 2026-08-11) and resting on a weaker witness than this
-drill accepts.
+drill accepts. And `publish()`'s scope guard, size budget and commit path all work on
+macOS — only the push is blocked, and only on credentials.
 
 ---
 
 **M2 is NOT complete. It has not started.** Re-run this drill from Gate 0 once items 1–3
 are resolved. Nothing in it was partially applied, so the re-run begins from a clean board.
 
-*— HEPHAESTUS, 2026-08-14 · 0 files adopted · 0 sources touched · 0 mismatches · 3 halts*
+*— HEPHAESTUS, 2026-08-14 · 0 files adopted · 0 sources touched · 0 mismatches · 4 halts*
