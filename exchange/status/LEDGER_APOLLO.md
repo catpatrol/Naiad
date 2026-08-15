@@ -1151,3 +1151,124 @@ stage's contract; rule on the twelve stations; rule on `fuzz`.
 NEXT: the operator rules on the 1% trip-wire. Owner: operator.
 METRICS: operator actions this session = 3 -- files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-15 ===
+NOW: TIER-C2 IS MEASURED. The forward baseline — the number every multiplier must
+     beat — is **−0.7762 R per trade over 10 trades**, 2025-10-06 → 2026-01-31,
+     net of a 10 bps round trip and journaled funding. Net R −7.7620 · win rate
+     10.0% · maxDD 9.5107 R. **It is NEGATIVE, and it is stated as commissioned.**
+     THE SEAL WAS KEPT. The ratified STAGE A corridor (2024-07-01 → 2026-01-31)
+     was **79.7% sealed lockbox** — its start date IS `LOCKBOX_START_MS`, and
+     LEDGER.md:865 rules the seal governs scored outcome evidence, which is
+     exactly what a headline is. Raised mid-build with the arithmetic; operator
+     ruled SEAL INTACT. The corridor moved; the seal did not. **462 sealed days
+     remain unspent and unread**; no outcome was computed over one of them.
+CLASS: measurement, not registration. m = 0. No lockbox spend. No estate write.
+       No live orders. engine/ and analytics/ byte-untouched (zero diff).
+LAST EVENT: 2026-08-15 — TIER-C2 BASELINE + Amendment B1 analytics tape, ONE build
+       document: exchange/reports/BUILD_2026-08-15_TIERC2_BASELINE.md
+ARTIFACTS: scripts/tierc2_rules.py (the decision path) · scripts/tierc2_baseline.py
+       (the program) · scripts/tierc2_fixtures.py (the transcript) ·
+       configs/tierc2_paper.yaml (Stage-B profile). Tables local, gitignored, at
+       research_outputs/tierc2/ — funnel · headline · monthly_equity ·
+       stop_geometry · trade_journal · strip_d_unscored · display_only_strips ·
+       analytics_tape (643 rows) · tape_inventory · build_manifest.json ·
+       heartbeat.json. Determinism root research_outputs/tierc2_run2/.
+FACTS: [9]
+ 1. THE TIDE IS THE WHOLE FUNNEL. 27 of 43 armings removed — 63% — and removed by
+    DIRECTION, WHOLESALE: every long on BTC/ETH/NEAR/SOL, every short on ZEC. Over
+    118 days the panel was one-way. `d` removed 3 more. NOTHING ELSE LEAKED — no
+    trigger refused for an open position, none for a missing structural anchor,
+    none for a degenerate R. This baseline measures ONE REGIME and cannot separate
+    "the rule card is negative" from "shorts were wrong in Q4-2025".
+ 2. 9 of 10 trades were shorts and ALL NINE DIED AT THE STOP. The single long
+    (ZECUSDT, +1.7487 R, belled 12/89) is the single winner.
+ 3. THE STOP IS UNRAILED AND ONE TRADE CARRIES 89.5% OF THE COUNTERFACTUAL. R comes
+    from a 1H pivot but entry from a 4h bar, so R ran 0.52–2.16 × ATR. Bell-only
+    (no stop honoured) gives +14.8733 R against the headline's −7.7620 — a 22.6353 R
+    gap, of which **20.2572 R is one ETHUSDT trade** entered at R = 0.52 ATR and
+    stopped on the very next bar, whose LOW was favourable. Strip it and the stop
+    costs 2.38 R across the other nine. The architecture of record carries
+    `min_stop_atr = 0.5` (G-8c, configs/tc1_B.yaml:53); THE RULE CARD NAMES NO RAIL.
+ 4. THE TOLL TAKES UP TO 19.36% OF R. Fixed 10 bps against a stop that can sit half
+    an ATR from entry: median toll share 3.28%, max 19.36%, and the two tightest-R
+    trades are the two worst net R in the book.
+ 5. THE TAPE IS CAPTURED-NOT-CONSULTED, PROVED BY IMPORT CLOSURE, NOT BY GREP. The
+    decision path is its own module; its AST imports are {engine.indicators,
+    engine.s1, numpy, dataclasses}; its 239-module transitive closure contains no
+    analytics member; and engine/ imports no analytics module either (invariant
+    I-B), so the closure CANNOT reach a registry symbol by any path. The line-grep
+    the amendment asks for is printed beside it — and it FAILED on first run,
+    matching the module's own prose about not importing analytics. That false
+    positive is why the AST scan is the test of record.
+ 6. SABOTAGE REJECT RE-PROVEN ON THIS CORRIDOR. F-10's lever with extra_bars=1
+    raises "CAUSALITY VIOLATION: bar closing 2025-12-04T08:00:00Z is in the future
+    of the as-of instant 2025-12-04T04:00:00Z"; and against the real level path a
+    7d RVWAP built one bar into the future reads 89,859.14 vs the stored 89,828.12.
+    All 30 level series reconciled under ACTUAL endpoint slicing at that instant.
+ 7. THE SINGLE-WALL STAMP IS 'multi' 73.2% OF THE TIME (427 of 583 spine instants;
+    35 of 43 armings). It is raw material, not a finding, and nothing here
+    conditions on it — but any location gate built on it would be built on a label
+    that says "several".
+ 8. THE FUNNEL UNDERCOUNTS BY A LEFT EDGE, MEASURED. In the 30 days before the
+    scored window, 4 armings passed tide+d and 2 of them triggered INSIDE it —
+    trades this baseline does not contain. Against n = 10 that is a potential 20%
+    undercount.
+ 9. 7/7 FIXTURES PASS. Suite `pytest fixtures tests -m "not slow"` = 288 passed,
+    1 skipped, exit 0 — unchanged from session start; no existing test touched.
+    Full re-run hash-identical on all 9 tables. Seed 20260815 is printed and
+    UNUSED: no stochastic step exists, so determinism here is structural.
+STAGE B — LIVE PAPER ARMED: one heartbeat executed. POSITIONS: 1 OPEN (NEARUSDT
+     short, entry 2026-07-22T00:00Z @ 1.911, stop 1.959687, held 147 bars, mark
+     1.635, unrealised +5.6688 R). ARMED AWAITING TRIGGER: 1 (BTCUSDT short since
+     2026-08-11T12:00Z, d = 1.601421). configs/tierc2_paper.yaml COMMITTED; the
+     com.naiad.daily 07:00 agent is UNTOUCHED (agent_modified: false,
+     registered_in_routine_jobs: false) — wiring it into scripts/routine_jobs.json
+     is a separate operator act and was NOT taken. NOTE: the rule card is NOT
+     expressible in engine/signals.py — `grep -rn 316 engine/*.py` returns ZERO, so
+     the 316 leg would fork the frozen Pine port and break F-SIG. The profile
+     therefore follows engine config grammar while its EXECUTOR is
+     scripts/tierc2_rules.py — bit for bit the module Stage A replayed, so Stage A
+     and Stage B cannot disagree.
+Q6 DECISION RULE INVOKED: Q6c — "stillbirth counterfactual first: rescore all
+     historical fills by range-position BEFORE any location gate becomes law."
+     This baseline IS that unconditioned population of fills, and the analytics
+     tape IS the location record it must be rescored against. Nothing in the rule
+     card read a registry symbol, which is precisely why the counterfactual is
+     still answerable. No location gate is proposed here, and none may be adopted
+     until it has been scored against this population.
+NAMING ["tc-name"]: the parked **TC-2** re-entry-quality bar is RENAMED **TC-RE**
+     from this entry forward (HANDOFF_2026-07-22_Census_to_Census1b.md:96;
+     docs/memory/claude_project_memory_2026-07-26.md:84-85). It is a DIFFERENT
+     OBJECT from Tier-C2, this baseline; no equivalence was ever stated anywhere,
+     and the collision is now removed at the name. 60 prior occurrences of "TC-2"
+     across 25 files are NOT swept — the instruction was a ledger touch; a
+     repo-wide rename is its own authorised act.
+PENDING (operator): 7 rulings, all in §9 of the build document —
+     F-1 the corridor's permanent shape (post-lockbox for good, or a spend at a
+         future gate; "clean corridor"/2026-01-31/the pinning window are new names
+         that exist nowhere in the estate before this paste)
+     F-2 whether 118 days / n = 10 is an acceptable yardstick window
+     F-3 the G-8c stop rail — adopt into the rule card, re-derive R on the entry
+         lens, or accept the geometry and say so
+     F-4 does the stop EXECUTE — the rule card's "no management of any kind" admits
+         both readings and they differ by 22.6 R; read here as "the stop executes",
+         with the bell-only alternative printed unscored
+     F-5 the funnel's left edge — prepend a warm-arming lead-in, or accept the bias
+     F-6 narrow the wall test before any location gate is built on it
+     F-7 the VR-1 forward edge — truncate continuity strips at 2026-07-07, or
+         ratify that Tier-C forward baselines may read the forward partition for
+         display (the pinning strip's last 35 days cross it; printed as
+         commissioned, disclosed here)
+NEXT: the operator reads §0 (the seal), §3 (the number, and what the stop cost it),
+     and §9 F-3/F-4. Owner: operator.
+PROBE LEDGER: m = 0. Stamp: EXPLORATION — ungated; promotion requires registration.
+BOX: exchange/** = 2,608,293 B = 16.30% before this paste, tick set (exchange/** +
+     LEDGER.md) 2,863,304 B = 17.90%. This paste adds 45,692 B = 0.286% of the box
+     — exchange/** to 2,653,985 B = 16.59%, tick set to 2,908,996 B = 18.18%, level
+     OK (warn 40 / refuse 70). 57% of the <0.5% target; ~34 KB unspent. The full
+     fixture transcript, the 643-row tape and the per-trade journal stay LOCAL.
+R3: the determinism rerun was hashed against run 1, then its DATA discarded in the
+     same session per rule R3; research_outputs/tierc2_run2/build_manifest.json is
+     retained per refinement D-3 — discard the data, keep the provenance.
+=== END STATUS ===
