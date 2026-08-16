@@ -3,7 +3,7 @@
 **Contract:** queue BR-1b `ORACLE DATA FRESHNESS`, RATIFIED operator 2026-08-16 under the
 BR-1 Amendment A1-3 chain authorisation. **Executor:** HEPHAESTUS. **Reviewer:** ARGUS.
 **Class:** operations. Fetch-and-store only — nothing here scores, aggregates or publishes.
-**Code commit:** `3bdc4c5`. **This document:** published by `publish_exchange.publish()`.
+**Code commits:** `3bdc4c5` (build) + `20f4a36` (post-review repairs, section 8). **This document:** published by `publish_exchange.publish()`.
 
 ---
 
@@ -37,8 +37,8 @@ them "to be safe" would be a silent scope change, which is exactly what the cont
 
 | ID | Deliverable | Path | State |
 |---|---|---|---|
-| D-1 | The top-up organ | `scripts/oracle_topup.py` | built, 17,684 B |
-| D-2 | The pinned scope manifest | `research_outputs/oracle/topup_scope.json` | built, 2,843 B, TRACKED |
+| D-1 | The top-up organ | `scripts/oracle_topup.py` | built, 21,072 B |
+| D-2 | The pinned scope manifest | `research_outputs/oracle/topup_scope.json` | built, 2,928 B, TRACKED |
 | D-3 | Two more armed slots | `com.naiad.oracle-topup-0645` / `-1545` | ARMED |
 | D-4 | This build document | `exchange/reports/BUILD_2026-08-16_ORACLE_TOPUP.md` | this file |
 | D-5 | Ledger append | `exchange/status/LEDGER_ARGUS.md` | appended |
@@ -91,7 +91,7 @@ Kept distinct on purpose, because conflating them is how a real clobber hides:
 
 ```
 ==============================================================================
-ORACLE TOP-UP FIXTURES — 2026-08-16T06:53:17Z
+ORACLE TOP-UP FIXTURES — 2026-08-16T07:19:31Z
   scope manifest research_outputs/oracle/topup_scope.json
   topup log      research_outputs/oracle/calibration/topup_log.jsonl
 ==============================================================================
@@ -101,8 +101,8 @@ F-TU-1 — SCOPE IDENTITY — the manifest equals a fresh enumeration
   [PASS] F-TU-1: 40 pair(s) — the pinned manifest equals a fresh instrumented enumeration exactly, both directions; 10 symbol(s) x ['15m', '1h', '4h', '5m']; oracle_daily.py sha 45f44015731394f6… matches the pin
 
 F-TU-2 — NO-CLOBBER — history never shrinks, closed bars never change
-  [BREAK] deliberate violation -> RED (correct): closed bar rewritten: got {'shrank': False, 'rewrote': True, 'forming_corrected': False} want {'shrank': False, 'rewrote': False, 'forming_corrected': False}
-  [PASS] F-TU-2: 5 synthetic cases separate shrink / closed-bar rewrite / forming-bar correction correctly; and the last real run (topup, 2026-08-16T06:52:42) shows 0 shrinks and 0 closed-bar rewrites across 40 pair(s), rows_added min 0 max 1 — monotone non-decreasing
+  [BREAK] deliberate violation -> RED (correct): closed bar rewritten: got {'shrank': False, 'rewrote': True, 'forming_corrected': False} want {'shrank': False, 'rewrote': False, 'forming_corrected': False} (full {'shrank': False, 'rewrote': True, 'forming_corrected': False, 'lost_newest': False, 'duplicate_open_time': False})
+  [PASS] F-TU-2: 7 synthetic cases separate shrink / closed-bar rewrite / forming-bar correction correctly; and the last real run (topup, 2026-08-16T07:18:42) shows 0 shrinks and 0 closed-bar rewrites across 40 pair(s), rows_added min 0 max 0 — monotone non-decreasing
 
 F-TU-3 — FIREWALL — no journal, no aggregation, no publish
   [BREAK] deliberate violation -> RED (correct): source contains a forbidden call: 'read_journal'
@@ -110,14 +110,14 @@ F-TU-3 — FIREWALL — no journal, no aggregation, no publish
 
 F-TU-4 — NO exchange/ WRITE — the bus is untouched
   [BREAK] deliberate violation -> RED (correct): exchange/ touched — added ['exchange/reports/PRETEND_TOPUP_WROTE_HERE.md'], changed [], source path literals []
-  [PASS] F-TU-4: 162 file(s) under exchange/ unchanged in size and mtime across a real top-up write path; and the source contains no 'exchange/' path literal at all
+  [PASS] F-TU-4: 164 file(s) under exchange/ unchanged in size and mtime across a real top-up write path; and the source contains no 'exchange/' path literal at all
 
 F-TU-5 — CONTIGUITY — gap-free, or the gap list is printed
   [BREAK] deliberate violation -> RED (correct): 1 gap(s) across 1 series — GAP LIST: BTCUSDT 15m x1
   [PASS] F-TU-5: detector proven both ways on synthetic frames; and all 40 cached series in scope are gap-free at their own interval (gap list EMPTY)
 
 F-TU-6 — FAILURE PATH — a fault logs, exits nonzero, cache untouched
-  [BREAK] deliberate violation -> RED (correct): real run topup verdict PASS
+  [BREAK] deliberate violation -> RED (correct): audit of real run topup: verdict is PASS, not FAIL
   [PASS] F-TU-6: simulated fault: verdict FAIL, 40 pair(s) reported ERROR, cache fingerprint unchanged, exactly one row appended to topup_log.jsonl, exit code would be 1
 
 ==============================================================================
@@ -267,4 +267,76 @@ counts rows, never outcomes. Not a publisher — `publish_exchange` is not in it
 and it writes nothing under `exchange/`. It does not touch `com.naiad.daily`. And it does not
 change the Oracle: `oracle_daily.py` is byte-identical to the file BR-1 shipped.
 
-— HEPHAESTUS, 2026-08-16. Reviewed against BR-1b.
+---
+
+## 8 · POST-BUILD ADVERSARIAL REVIEW — WHAT IT BROKE, AND THE REPAIRS
+
+After this document was first published at `833144f`, the build was put through an independent
+adversarial review (three attackers, sixteen judged findings: seven real, nine refuted). Two of
+the seven were serious and are recorded here rather than quietly patched.
+
+**R-1 · THE ENUMERATION WAS SILENTLY RE-RENDERING THE DAY'S ORACLE. [was major]**
+`enumerate_scope()` calls `oracle_daily.run()`, and that function unconditionally writes FIVE
+artifact sets — the canon JSON, ten mantle payloads, the day's HTML, the tape parquet and the
+calibration JSON. The cleanup removed exactly one of the five. So every `--enumerate`, and every
+F-TU-1 leg — **twice per fixtures pass** — overwrote `briefs/oracle/oracle_<date>.html` and its
+tape. Nothing was corrupted and no number was wrong, but a *scope query* was rewriting the day's
+deliverables, which is not a thing a scope query may do. REPAIRED: every output path is
+redirected into a `TemporaryDirectory` for the duration of the enumeration and restored
+afterwards. Redirection was chosen over an `emit=False` flag on `oracle_daily` precisely because
+it leaves that file **byte-identical** — the manifest pins its sha256, and editing it would
+invalidate the pin the whole scope claim rests on. Proven inert: the HTML, the tape, the canon
+and a sample payload are all byte-identical across an enumeration, and the calibration directory
+is unchanged.
+
+**R-2 · F-TU-6 WAS VOID. [was major]** Every failure-path assertion sat behind `if simulate:`
+with an empty `else`, so the other leg fell through to a bare `return True`; and the break
+wrapper computed `(not ok, detail) if ok else (ok, detail)`, which maps True→False **and**
+False→False. The break leg was therefore a **constant**: no property of the code under test
+could change it, and `prove()`'s void detector — the one mechanism that is supposed to catch
+exactly this — was structurally unreachable for this fixture. It reported green while proving
+nothing. REPAIRED: both legs now run the same four assertions, and the break leg audits the last
+real run, going red for a real reason (`verdict is PASS, not FAIL`). The irony is the point: the
+two-leg design exists to catch fixtures that cannot fail, and this one slipped past it and had
+to be caught by a reviewer.
+
+**R-3 · TWO COUNT-MASKED HOLES IN NO-CLOBBER. [was minor]** `rewrote` used a strict `<` so the
+previously-newest bar was exempt from the value check — correct, because it may be a forming bar
+being corrected — but that also exempted it from any **existence** check, while `shrank` was a
+bare row count. Delete the newest bar, append one: count unchanged, every other bar identical,
+all three flags clean. A duplicated `open_time` slipped through the same way. Both are now
+asserted explicitly (`lost_newest`, `duplicate_open_time`) and both are new cases in F-TU-2.
+
+**R-4 · `ABSENT` GRADED AS PASS. [was nit, and consequential]** A pair in the enumerated scope
+with no parquet returned ABSENT and the run still exited 0 — but `oracle_daily`'s 1h and 4h
+reads are unguarded, so a missing parquet HALTs the organ fifteen minutes later. The top-up
+would have exited clean into an Oracle that could not run. ABSENT is now a failure. It is still
+not created here: no schema change, no new intervals, as the contract requires.
+
+**R-5 · THE MANIFEST WAS NOT BOUND TO ITSELF. [was nit]** `load_scope()` verified
+`oracle_daily.py`'s sha but nothing about the manifest's own contents, so a hand-edited manifest
+with extra symbols or intervals would have been fetched without complaint — the silent scope
+change the contract forbids. A `pairs_sha256` over the pair list is now recorded and verified,
+and a mismatch HALTs.
+
+**WHAT THE REVIEW CONFIRMED CORRECT**, by independent reproduction: the G-TU-1 HALT fires all
+three ways (tampered sha, missing manifest, deleted sha key); `load_lens` really is the only
+kline read path — proven dynamically with a spy on `pandas.read_parquet`, which found exactly
+one non-kline read (the ORACLE GRID table) and **zero** kline files read outside the enumerated
+scope; the manifest is a genuine instrumented enumeration and not a disguised hardcode, because
+its `read_counts` (4h=3, 1h=2, 15m=2, 5m=1) reconcile with the actual call sites and could not
+have been guessed; `engine.data`'s write is genuinely atomic (same-directory temp + `os.replace`,
+called once after all fetching) so a mid-fetch crash leaves the parquet byte-identical; the
+`end_ms` clamp means the top-up can never itself store a forming bar; middle-of-history insertion
+and unsorted frames are both caught; the stray-filename construction matches what the writer
+produces; the `unlink` is unreachable from any scheduled path; and all four plists carry the
+right `--job` and the right minutes.
+
+Nine further claims were refuted on inspection.
+
+**RE-VERIFIED AFTER THE REPAIRS:** F-TU-1..6 **6/6 green**; BR-1's fixtures **10/10 green**;
+a further real top-up (+80 rows, 0 gaps); and a second unattended run of
+`com.naiad.oracle-topup-0645` at **exit code 0**.
+
+— HEPHAESTUS, 2026-08-16. Reviewed against BR-1b, then re-reviewed adversarially and repaired.
+Section 8 is the correction record.

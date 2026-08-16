@@ -151,3 +151,33 @@ PENDING: 1. seven live mornings  2. operator mid-week PARITY line  3. BR-2 on ga
      4. the [VETO] rows, now including OVERLAP_BARS  5. the T-3 staleness-alarm ruling
 NEXT: live week runs unattended, now on fresh data. Owner: launchd, then operator.
 === END STATUS ===
+
+=== STATUS_ARGUS — 2026-08-16 (ORACLE TOP-UP · CORRECTION) ===
+NOW: BR-1b put through an adversarial review after publication. Seven findings real, nine
+     refuted. Two were serious. Repaired at 20f4a36; BUILD_2026-08-16_ORACLE_TOPUP section 8
+     is the correction record.
+LAST EVENT: 2026-08-16 — BR-1b reviewed; five repairs; F-TU 6/6 and BR-1 10/10 re-verified.
+FACTS:
+- R-1: enumerate_scope() was silently RE-RENDERING the day's Oracle. oracle_daily.run() writes
+  five artifact sets and the cleanup removed one, so every --enumerate and every F-TU-1 leg
+  (twice per fixtures pass) overwrote briefs/oracle's HTML, tape, payloads and canon. All output
+  paths are now redirected to a TemporaryDirectory; oracle_daily.py stays byte-identical so the
+  sha pin survives. Proven inert on four watched artifacts [verified]
+- R-2: F-TU-6 WAS VOID. Its assertions sat behind `if simulate:` with an empty else and the
+  break wrapper mapped True->False AND False->False, so the break leg was a CONSTANT and
+  prove()'s void detector was structurally unreachable. Both legs now run the same assertions.
+  The two-leg design exists to catch this and it still took a reviewer [verified]
+- R-3: noclobber_verdict missed "delete newest + append one" (count-masked) and a duplicated
+  open_time. Both now asserted via lost_newest / duplicate_open_time, both added to F-TU-2 [verified]
+- R-4: ABSENT graded PASS although a missing 1h/4h parquet HALTs the Oracle 15 min later on its
+  unguarded reads. ABSENT is now a failure; still never created here [verified]
+- R-5: the scope manifest is now bound to its own pair list by pairs_sha256; a hand-edited
+  manifest HALTs instead of quietly fetching out of scope [verified]
+- CONFIRMED CORRECT by independent reproduction: the G-TU-1 HALT fires three ways; load_lens is
+  provably the ONLY kline read path (spy on pandas.read_parquet found zero kline reads outside
+  the enumerated scope); engine.data's write is atomic so a mid-fetch crash cannot corrupt;
+  the end_ms clamp means the top-up can never store a forming bar [verified]
+PENDING: 1. seven live mornings  2. operator mid-week PARITY line  3. BR-2 on gates
+     4. the [VETO] rows  5. the T-3 staleness-alarm ruling
+NEXT: live week runs unattended on fresh data. Owner: launchd, then operator.
+=== END STATUS ===

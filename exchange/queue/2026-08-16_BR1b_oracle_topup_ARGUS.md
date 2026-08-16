@@ -1,7 +1,7 @@
 # QUEUE BR-1b — ORACLE DATA FRESHNESS
 Drafted ARGUS 2026-08-16. Executor HEPHAESTUS. Reviewer ARGUS.
 RATIFIED: operator, 2026-08-16 (chain auth A1-3)
-BUILT: exchange/reports/BUILD_2026-08-16_ORACLE_TOPUP.md · code commit 3bdc4c5 · F-TU-1..F-TU-6 6/6 green · two slots armed · one unattended run exit 0 · +2,521 rows across 40 pairs, 0 gaps
+BUILT: exchange/reports/BUILD_2026-08-16_ORACLE_TOPUP.md · code commits 3bdc4c5 + 20f4a36 (post-review repairs) · F-TU-1..F-TU-6 6/6 green · two slots armed · one unattended run exit 0 · +2,521 rows across 40 pairs, 0 gaps
 
 QUEUE BR-1b — ORACLE DATA FRESHNESS. RATIFIED: operator, 2026-08-16 (chain auth
 A1-3). Fetch-and-store ONLY: scope = EXACTLY the (symbol, interval) set enumerated
