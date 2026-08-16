@@ -18,8 +18,8 @@ Contract:
     MANIFEST_*.json in output_dir and MOVES older ones to daily_archive_dir --
     moved, never deleted
   * the report is written to <output_dir>/DAILY_<yyyy-mm-dd>.md
-  * the ONLY git operations are the final PUBLISH step's, and they are bounded
-    by the scope guard in scripts/publish_exchange.py -- see AMENDMENT below
+  * git operations are the final PUBLISH step's, plus two READ-ONLY queries in
+    the bus-health section -- see both AMENDMENTS below
   * exit code is non-zero if any required job failed, or if the publish guard
     tripped
 
@@ -33,6 +33,18 @@ and 4 of the report still read repo state from the MANIFEST rather than from
 git -- that part of the original contract is untouched, and deliberately so.
 The publish step is the single, bounded exception, and it fails CLOSED: on any
 doubt it resets the index and pushes nothing.
+
+AMENDMENT 2026-08-15 (ruling 007).  Section 8, BUS HEALTH, reads live git: one
+`rev-parse HEAD` and, only when the manifest disagrees with it, one `rev-list
+--count`.  Both are READ-ONLY and neither stages, commits, moves or deletes
+anything.  This is recorded as an amendment rather than done quietly because
+the paragraph above asserts sections 3 and 4 read repo state from the MANIFEST
+and not from git, and that assertion is still true and still deliberate --
+section 8 exists precisely to state the DIFFERENCE between the two, which is
+finding F-4, the manifest trailing live HEAD.  A section whose whole subject is
+manifest-versus-git cannot answer the question from the manifest alone.  Ruling
+007 retired DIGEST.md and made HERMES dormant; this section is where the
+measurements that lane produced by hand are now taken.
 """
 
 import hashlib
@@ -816,6 +828,257 @@ def window_lines(moved, out_dir, keep, archive_dir):
     return lines
 
 
+# --------------------------------------------------------------- bus health
+# RULING 007, 2026-08-15.  DIGEST.md is retired and HERMES is dormant, so the
+# measurements that lane produced by hand each cycle are taken here, by the run
+# that already happens every day.  publish_exchange carries the two cheap
+# components and the renderer; the two expensive ones live here -- see the
+# note above publish_exchange.folder_rows for the measured cost split.
+
+LEDGER_LANES = ("APOLLO", "ARGUS", "ATHENA", "DIONYSUS", "HEPHAESTUS", "HERMES")
+
+# A parked lane's ledger age is not a finding, and saying so is the difference
+# between a report and a nag.  Without this, the block that ABSORBED HERMES's
+# staleness duty would report HERMES as the stalest lane in the project, by a
+# margin growing one day per day forever -- while CONVENTIONS §5 tells the
+# reader "nothing waits on HERMES".  The successor surface would contradict
+# the dormancy ruling it was created by.  The row stays (dropping it would
+# hide the ledger entirely); only the interpretation changes.
+DORMANT_LANES = {"HERMES": "DORMANT (ruling 007) — not expected to move"}
+
+# Entry headers, and why each piece is here.  THREE header shapes are live in
+# the ledgers today and a reader that knows only one publishes a false
+# staleness reading -- which is finding F-5, committed for real on 2026-08-12
+# and reported as another lane's neglect:
+#   `=== STATUS_ARGUS — 2026-08-11 ===`   the naiad-eod template
+#   `=== STATUS ATHENA — 2026-08-15 ===`  a SPACE, not an underscore; five of
+#                                         ATHENA's most recent entries use it
+#   `## 2026-08-11 — ARGUS acknowledges…` ARGUS's newest entry is this shape,
+#                                         and ONLY this shape
+# Both patterns anchor on a real ISO date, which is what keeps the fenced
+# template line `=== STATUS_<LANE> — <date> ===` -- present in all six files --
+# from matching, and what keeps the trailing sequence letter in APOLLO's
+# `2026-08-15b` from being read as part of the date.
+#
+# Anchoring on the HEADER rather than on any date is the other half.  Grepping
+# for any date returns 2026-08-28 for APOLLO and 2026-09-05 for ARGUS -- both
+# forward-looking rotation due-dates sitting in prose.  Too loose fails exactly
+# as badly as too strict, and in the more embarrassing direction.
+_ISO = r"(\d{4}-\d{2}-\d{2})"
+_DASH = r"(?:—|--)"
+ENTRY_HEADER_RES = (
+    re.compile(r"^===\s*STATUS[_ ][A-Za-z]+.*?" + _DASH + r"\s*" + _ISO),
+    re.compile(r"^##\s+" + _ISO + r"\s*" + _DASH),
+)
+
+
+def _valid_past_dates(found, today):
+    """Keep only real calendar dates at or before `today`; report the rest.
+
+    max() over raw matches is not safe, and the failure is finding F-5 in the
+    direction the obvious fixture does not test.  A single typo'd header --
+    `2027-08-15` for `2026-08-15` -- or a planning heading like
+    `## 2026-09-05 — INTERFACE rotation` pins that lane at "fresh" forever and
+    HIDES a genuinely stale ledger underneath it.  `\\d{4}-\\d{2}-\\d{2}` also
+    accepts 2026-13-45, which then renders an age of "--" that looks exactly
+    like the NOT ENUMERABLE row meaning something else entirely.
+
+    So: parse, drop the impossible and the future, and SAY how many were
+    dropped -- a discarded header must become visible, not become the answer.
+    """
+    good, bad, future = [], 0, 0
+    for s in found:
+        try:
+            d = datetime.strptime(s, "%Y-%m-%d").date()
+        except ValueError:
+            bad += 1
+            continue
+        if d > today:
+            future += 1
+            continue
+        good.append(s)
+    notes = []
+    if future:
+        notes.append(f"{future} future-dated header(s) ignored")
+    if bad:
+        notes.append(f"{bad} unparseable date(s) ignored")
+    return good, notes
+
+
+def ledger_recency(status_dir=None, today=None):
+    """[(lane, newest entry-header date or None, note)] for the six lanes.
+
+    RECENCY IS PER FILE, not per lane token, and that is a deliberate choice
+    worth stating: LEDGER_ATHENA.md holds one STATUS_HEPHAESTUS entry filed by
+    the lane that commissioned it, so "the newest entry in ATHENA's ledger" and
+    "ATHENA's newest entry" can differ.  The question this table answers is
+    whether a ledger is being kept current, so the file is the right unit --
+    but a reader comparing it against a lane-scoped count deserves to know why
+    the two can disagree, and that is what this docstring is for.
+    """
+    status_dir = Path(status_dir) if status_dir else ROOT / "exchange" / "status"
+    today = today or date.today()
+    rows = []
+    for lane in LEDGER_LANES:
+        path = status_dir / f"LEDGER_{lane}.md"
+        if not path.is_file():
+            rows.append((lane, None, "no ledger file at %s" % _rel(path)))
+            continue
+        try:
+            text = path.read_text(encoding="utf-8", errors="replace")
+        except OSError as exc:
+            rows.append((lane, None, "unreadable: %s" % exc))
+            continue
+        found = []
+        for line in text.splitlines():
+            for rx in ENTRY_HEADER_RES:
+                m = rx.match(line)
+                if m:
+                    found.append(m.group(1))
+                    break
+        good, notes = _valid_past_dates(found, today)
+        if not good:
+            why = "no entry header matched" if not found else \
+                  "no usable date; " + " · ".join(notes)
+            rows.append((lane, None, why))
+        else:
+            note = "%d entry header(s)" % len(good)
+            if notes:
+                note += " · " + " · ".join(notes)
+            if lane in DORMANT_LANES:
+                note += " · %s" % DORMANT_LANES[lane]
+            rows.append((lane, max(good), note))
+    return rows
+
+
+def ledger_recency_lines(rows, today):
+    """The recency table, as markdown."""
+    out = ["| lane | newest entry | age (days) | entries |", "|---|---|---:|---:|"]
+    for lane, when, note in rows:
+        if when is None:
+            out.append(f"| **{lane}** | NOT ENUMERABLE | -- | {note} |")
+            continue
+        try:
+            age = (datetime.strptime(today, "%Y-%m-%d").date()
+                   - datetime.strptime(when, "%Y-%m-%d").date()).days
+            age_s = str(age)
+        except ValueError:
+            age_s = "--"
+        out.append(f"| **{lane}** | {when} | {age_s} | {note} |")
+    return out
+
+
+def rotation_candidate_lines(today):
+    """The queue-003 rotation-candidate count, or a stated reason there is none.
+
+    Wrapped in its own try/except and never allowed to propagate: this is a
+    reporting line inside an unattended 07:00 run, and no report line is worth
+    failing a launchd task over.  InboxSourceUnavailable is expected, not
+    exceptional, while the unacted-inbox surface has no home (ruling 007).
+    """
+    try:
+        import rotate_reports
+    except ImportError as exc:
+        return ["- rotation candidates: NOT ENUMERABLE -- "
+                f"`scripts/rotate_reports.py` did not import ({exc})."]
+    caveat = []
+    try:
+        when = datetime.strptime(today, "%Y-%m-%d").date()
+        parts = rotate_reports.classify(when)
+    except rotate_reports.InboxSourceUnavailable as exc:
+        # Report the count anyway, as an UPPER BOUND with the exemption switched
+        # off and said out loud.  Ruling 007 asked for this number; refusing to
+        # print it because one input is missing would hide the very cadence
+        # figure queue 003 D-2 exists to publish.  The SWEEP still halts -- only
+        # this reporting line proceeds, and it cannot move anything.
+        caveat = ["- **exemption NOT APPLIED.** " + str(exc),
+                  "  The count above is therefore an UPPER BOUND: it includes "
+                  "any unacted inbox note that would otherwise be exempt."]
+        try:
+            parts = rotate_reports.classify(when, inbox=set())
+        except Exception as exc2:                       # noqa: BLE001
+            return [f"- rotation candidates: NOT ENUMERABLE -- "
+                    f"{type(exc2).__name__}: {exc2}"]
+    except Exception as exc:                            # noqa: BLE001
+        return [f"- rotation candidates: NOT ENUMERABLE -- {type(exc).__name__}: {exc}"]
+    candidates, exempt, young, undated, cutoff, _inbox = parts
+    cand_bytes = sum(s for _, s, _, _ in candidates)
+    box = publish_exchange.BOX_BYTES
+    return [
+        f"- rotation candidates (queue 003, {rotate_reports.AGE_DAYS}-day window, "
+        f"cutoff {cutoff.isoformat()}): **{len(candidates)}** file(s), "
+        f"{cand_bytes:,} B, {100.0 * cand_bytes / box:.2f}% of the box",
+        f"- exempt {len(exempt)} · inside the window {len(young)} · undated "
+        f"{len(undated)} (undated files are never selected — an unknown age is "
+        "not an old age)",
+    ] + caveat
+
+
+def _walk_scope(scope_dir):
+    """[(bytes, repo-relative posix path)] for every file under scope_dir."""
+    out = []
+    for p in scope_dir.rglob("*"):
+        if p.is_file() and not p.is_symlink():
+            try:
+                out.append((p.stat().st_size, _rel(p)))
+            except OSError:
+                continue
+    return out
+
+
+def bus_health_lines(today):
+    """Section 8 -- the bus-health block, all four components, as markdown.
+
+    The folder breakdown is measured from the WORKTREE here, not from the git
+    index as in publish().  Deliberate, and the block says which: bus health is
+    about what the bus is CARRYING, so a file dropped in and not yet committed
+    has loaded the bus whether or not git has noticed it.  The two figures
+    agree whenever exchange/ is clean and diverge exactly when it is not, which
+    is the moment the difference is worth seeing.
+    """
+    scope = ROOT / "exchange"
+    sized = _walk_scope(scope)
+    total_bytes = sum(s for s, _ in sized)
+    rows = publish_exchange.folder_rows(sized)
+    recorded, live, delta = publish_exchange.measure_head_pair(ROOT)
+
+    out = [f"Bus carrying **{total_bytes:,} B** in **{len(sized)}** file(s) "
+           "(worktree, including anything not yet committed).", ""]
+    out.append("| folder | bytes | files | % of box |")
+    out.append("|---|---:|---:|---:|")
+    box = publish_exchange.BOX_BYTES
+    for folder, b, n in rows:
+        out.append(f"| `{folder}` | {b:,} | {n} | {100.0 * b / box:.2f}% |")
+    out.append(f"| **total** | **{total_bytes:,}** | **{len(sized)}** | "
+               f"**{100.0 * total_bytes / box:.2f}%** |")
+    out.append("")
+    out.append("**Manifest freshness (F-4).** Stated side by side on every run, "
+               "including the runs where they agree — a line that appears only "
+               "on disagreement teaches nothing on the days it is silent, and "
+               "F-4 has been re-found in five separate cycles for want of it.")
+    out.append("")
+    out.append("| | sha |")
+    out.append("|---|---|")
+    out.append(f"| manifest records | `{recorded[:7] if recorded else 'unknown'}` |")
+    out.append(f"| live HEAD | `{live[:7] if live else 'unknown'}` |")
+    # ONE verdict function, shared with the publish line.  This was a second
+    # hand-rolled copy of the same three-way branch, and it was the copy that
+    # lands in the published report while the fixture pinned only the other --
+    # so the ruling's headline clause ("the two heads print even when equal")
+    # was asserted against the renderer lanes do not read.
+    verdict, detail = publish_exchange.head_verdict(recorded, live, delta)
+    out.append(f"| verdict | **{verdict}**{' — ' + detail if detail else ''} |")
+    out.append("")
+    out.append("**Ledger recency.** Newest entry header per ledger file.")
+    out.append("")
+    out += ledger_recency_lines(
+        ledger_recency(today=datetime.strptime(today, "%Y-%m-%d").date()), today)
+    out.append("")
+    out.append("**Rotation.**")
+    out += rotation_candidate_lines(today)
+    return out
+
+
 def reference_lines(results):
     """Section 6 -- artifacts recorded as pointers rather than copied in."""
     refs = [r for res in results for r in res.get("referenced", [])]
@@ -1162,11 +1425,31 @@ def main(argv=None):
     out += sweep_lines(swept)
     out.append("")
 
+    # 8. bus health -- ruling 007.  The residue of the retired DIGEST and the
+    # dormant HERMES lane, measured rather than maintained.
+    out.append("## 8. Bus health")
+    out.append("")
+    try:
+        out += bus_health_lines(today)
+    except Exception as exc:                            # noqa: BLE001
+        # This section is a REPORT LINE.  It is assembled before the report is
+        # written, before the heartbeat, and before the publish, so an escape
+        # here would cost all three and leave a bare traceback in the launchd
+        # log -- the routine dying of the section that exists to say the
+        # routine is healthy.  It degrades to a stated reason instead.
+        out.append(f"NOT ENUMERABLE — the bus-health block raised "
+                   f"{type(exc).__name__}: {exc}")
+        out.append("")
+        out.append("_The rest of this report is unaffected; the block is "
+                   "reporting only._")
+        print(f"  bus-health: NOT ENUMERABLE ({type(exc).__name__}: {exc})")
+    out.append("")
+
     report = out_dir / f"DAILY_{today}.md"
     report.write_text("\n".join(out) + "\n", encoding="utf-8")
     print(f"wrote {report.relative_to(ROOT).as_posix()}")
 
-    # 8. ROLLING WINDOW -- runs after the report is written so that today's own
+    # 9. ROLLING WINDOW -- runs after the report is written so that today's own
     # DAILY_<date>.md is on disk and counts as the newest member of the window.
     archive_dir = ROOT / reg.get("daily_archive_dir", "research_outputs/_daily_archive")
     keep = reg.get("keep_daily", 7)
@@ -1174,7 +1457,7 @@ def main(argv=None):
     if windowed:
         print(f"  window: {len(windowed)} file(s) aged out of {reg['output_dir']}")
     with report.open("a", encoding="utf-8") as fh:
-        fh.write("\n## 8. Rolling window\n\n")
+        fh.write("\n## 9. Rolling window\n\n")
         fh.write("\n".join(window_lines(windowed, out_dir, keep, archive_dir)) + "\n")
 
     # HEARTBEAT -- written BEFORE publish on purpose.  It has to be inside the
@@ -1185,7 +1468,7 @@ def main(argv=None):
     pre_publish_rc = 1 if [r for r in results if r["exit"] != 0 and r["required"]] else 0
     write_heartbeat(facts, alerts, pre_publish_rc, ROOT / "exchange" / "status" / "HEARTBEAT.md")
 
-    # 9. PUBLISH -- gate A-6a.  Runs AFTER the report is written so that the
+    # 10. PUBLISH -- gate A-6a.  Runs AFTER the report is written so that the
     # report itself is inside the commit.  The publish outcome is then appended
     # to the report; those appended bytes ride along in the NEXT publish, which
     # is the price of having the report be part of what it describes.
@@ -1193,13 +1476,13 @@ def main(argv=None):
     if reg.get("publish", True):
         pub = publish_exchange.publish(ROOT, today)
         with report.open("a", encoding="utf-8") as fh:
-            fh.write("\n## 9. Publish\n\n")
+            fh.write("\n## 10. Publish\n\n")
             fh.write("_Appended after the publish step ran; these bytes are "
                      "published by the next run, not this one._\n\n")
             fh.write("\n".join(publish_exchange.report_lines(pub)) + "\n")
     else:
         with report.open("a", encoding="utf-8") as fh:
-            fh.write("\n## 9. Publish\n\n")
+            fh.write("\n## 10. Publish\n\n")
             fh.write("- disabled in the registry (`\"publish\": false`)\n")
 
     required_failed = [r["id"] for r in results if r["exit"] != 0 and r["required"]]

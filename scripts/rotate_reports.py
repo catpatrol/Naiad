@@ -78,6 +78,21 @@ DATE_RE = re.compile(r"(\d{4}-\d{2}-\d{2})")
 NOTE_RE = re.compile(r"^NOTE_.+_to_.+", re.IGNORECASE)
 
 
+class InboxSourceUnavailable(RuntimeError):
+    """The exemption rule's INPUT cannot be obtained.
+
+    Raised -- never swallowed -- when the unacted-inbox list cannot be read.
+    Queue 003 exempts "any NOTE_*_to_* file listed as unacted inbox in the
+    newest DIGEST".  It does not authorise this script to GUESS when that list
+    is unavailable, and an unknown inbox is not an empty inbox.
+
+    Deliberately a RuntimeError and not a SystemExit: main() turns it into a
+    loud non-zero exit for the operator, while a library caller (the daily
+    routine's bus-health block) catches it and reports NOT ENUMERABLE instead
+    of dying.  A SystemExit here would take down an unattended 07:00 run.
+    """
+
+
 def sha256_file(path: Path) -> str:
     h = hashlib.sha256()
     with open(path, "rb") as fh:
@@ -133,14 +148,37 @@ def digest_inbox_names() -> set:
     anywhere in the inbox section counts -- because the failure that matters is
     rotating a live note, and a too-wide exemption merely keeps a file one more
     cycle.
+
+    RULING 007, 2026-08-15 -- the two unanswerable states now RAISE.  DIGEST.md
+    was retired to docs/history/ and a tombstone left at its path, and against
+    that tombstone this function used to return a plausible non-zero answer:
+    the "search it all" fallback below scraped .md basenames out of the
+    tombstone's own prose and the banner in main() printed "2 name(s) parsed",
+    so an operator reading a dry-run saw a successful parse of an inbox that no
+    longer exists.  The exemption then silently stopped protecting six live
+    unacted notes, and the first one becomes a rotation candidate 2026-09-03.
+    That is a delete-adjacent scope widening arriving with no signal at all.
+
+    The RULE is untouched -- AGE_DAYS, SCOPE_DIR, NOTE_RE and the `name in
+    inbox` test are all exactly as ratified.  What changed is only what happens
+    when the rule's input CANNOT BE OBTAINED: this script used to invent an
+    answer and now refuses to answer.  Refusing to compute is not a policy
+    decision; guessing was.  Restoring the exemption is a one-line repoint of
+    DIGEST_PATH once the operator rules where the unacted-inbox list now lives.
     """
     p = REPO / DIGEST_PATH
     if not p.is_file():
-        return set()
+        raise InboxSourceUnavailable(
+            "%s does not exist, so the queue-003 unacted-inbox exemption has no "
+            "input. Nothing was classified. Point DIGEST_PATH at the file that "
+            "now carries the unacted-inbox list, or rule that the exemption is "
+            "withdrawn." % DIGEST_PATH)
     try:
         text = p.read_text(encoding="utf-8", errors="replace")
-    except OSError:
-        return set()
+    except OSError as exc:
+        raise InboxSourceUnavailable(
+            "%s could not be read (%s), so the queue-003 unacted-inbox "
+            "exemption has no input." % (DIGEST_PATH, exc)) from exc
     lines = text.splitlines()
     start = None
     for i, line in enumerate(lines):
@@ -148,7 +186,13 @@ def digest_inbox_names() -> set:
             start = i
             break
     if start is None:
-        section = text                      # no section found: search it all
+        raise InboxSourceUnavailable(
+            "%s contains no heading naming an inbox, so the queue-003 unacted-"
+            "inbox exemption has no input. It is RETIRED (ruling 007): the file "
+            "at that path is a tombstone. Rotation cannot tell an unacted note "
+            "from a spent one until the operator rules where that list lives, "
+            "and it will not guess -- six unacted notes are unprotected, the "
+            "first becoming a candidate 2026-09-03." % DIGEST_PATH)
     else:
         end = len(lines)
         for j in range(start + 1, len(lines)):
@@ -159,11 +203,23 @@ def digest_inbox_names() -> set:
     return {m for m in re.findall(r"[A-Za-z0-9_.\-]+\.md", section)}
 
 
-def classify(today):
-    """Partition exchange/reports/*.md into candidates, exempt, and too-young."""
+def classify(today, inbox=None):
+    """Partition exchange/reports/*.md into candidates, exempt, and too-young.
+
+    `inbox` overrides the exemption set instead of reading it.  Added 2026-08-15
+    (ruling 007) for ONE caller: the daily bus-health block, which reports a
+    candidate COUNT and must still produce one after the retirement left
+    digest_inbox_names() with nothing to read.  Passing an empty set there means
+    "no exemptions applied", which makes the count an UPPER BOUND -- and the
+    report says so in those words rather than presenting it as the real figure.
+
+    The default is unchanged and still raises.  This is a reporting affordance,
+    not a policy hole: rotate() never passes it, so the actual SWEEP still halts
+    rather than moving a file whose exempt status cannot be determined.
+    """
     src_dir = REPO / SCOPE_DIR
     cutoff = today - timedelta(days=AGE_DAYS)
-    inbox = digest_inbox_names()
+    inbox = digest_inbox_names() if inbox is None else inbox
     candidates, exempt, young, undated = [], [], [], []
     if not src_dir.is_dir():
         return candidates, exempt, young, undated, cutoff, inbox
@@ -332,7 +388,16 @@ def main() -> int:
     g.add_argument("--execute", action="store_true",
                    help="actually move the candidates; required, never implied")
     args = ap.parse_args()
-    return rotate(execute=bool(args.execute))
+    try:
+        return rotate(execute=bool(args.execute))
+    except InboxSourceUnavailable as exc:
+        # A HALT, not a traceback.  classify() raises before any file is
+        # examined and long before any git mv, so nothing is half-done here --
+        # the sweep simply reports that it cannot answer and moves nothing.
+        print("rotate_reports -- HALT: the unacted-inbox exemption has no source.")
+        print("  %s" % exc)
+        print("  Nothing was classified. Nothing was moved. Exit 2.")
+        return 2
 
 
 if __name__ == "__main__":

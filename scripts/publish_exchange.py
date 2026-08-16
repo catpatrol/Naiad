@@ -31,6 +31,7 @@ deleted by this module.
 """
 
 import datetime as _dt
+import json
 import os
 import re
 import subprocess
@@ -102,7 +103,14 @@ REFUSE_FRACTION = 0.70
 OVERRIDE_ENV = "NAIAD_ALLOW_OVERSIZE_PUBLISH"
 
 # D3 METERING GAP -- CLOSED 2026-08-15.  The box holds `LEDGER.md` AND
-# `exchange/` (DIGEST §1).  The guard metered `exchange/` alone and so
+# `exchange/` (CONVENTIONS 4.3, token NAIAD-S4-BOX -- cited WITHOUT guillemets
+# on purpose: F-CONV-1 reads any line starting "# " as a markdown heading, so a
+# Python comment quoting a token in guillemets looks like a second definition
+# and fails the fixture.  Reported as a latent defect, not worked around
+# silently.  This cited DIGEST 1 until
+# ruling 007 retired that file -- the tick set is unchanged, only the citation
+# moved to the surface that actually defines it).  The guard metered
+# `exchange/` alone and so
 # under-reported true occupancy by the size of the ledger -- ~4 points on the
 # old 6.39 MB box, ~1.6 on this one.  Open since ATHENA's queue-003 report of
 # 2026-08-11 and transferred with the governance.  Closed here: the THRESHOLDS
@@ -263,6 +271,164 @@ def budget_lines(scope_total, tick_total, level):
     ]
 
 
+# ------------------------------------------------------------- bus health
+# RULING 007, 2026-08-15.  DIGEST.md is retired and HERMES is dormant.  The
+# residue -- the handful of measurements that lane produced by hand each cycle
+# -- is taken here instead, by the two steps that already run every day.
+#
+# THE SPLIT BETWEEN publish() AND daily_routine.py IS COST, MEASURED, NOT TASTE.
+# publish() prints the two components it can produce for almost nothing: the
+# per-folder breakdown (it already holds `sized`; aggregating is ~0.06 ms and
+# zero new git calls) and the manifest-vs-live head pair (one `rev-parse` and
+# one small json read).  The other two -- the six-lane ledger recency table and
+# the queue-003 rotation-candidate count -- cost a new parser over ~235 KB of
+# ledgers and six `git log --follow` subprocesses respectively, on a function
+# documented "Never raises" that runs up to eleven times a day.  They belong in
+# the once-a-day report, and daily_routine.py is where they live.
+
+MANIFEST_REL = "exchange/status/MANIFEST.json"
+
+# Reported separately from its parent so the rows partition the scope exactly
+# once.  A breakdown whose rows do not reconcile to its own total is worse than
+# no breakdown, because it looks like it was checked.
+NESTED_FOLDERS = ("status/daily/",)
+
+
+def folder_rows(sized, scope=SCOPE):
+    """[(bytes, path)] -> [(folder, bytes, files)], largest first.
+
+    `folder` is the path's first component beneath `scope`; files sitting
+    directly at the scope root are gathered under "(root)".  Nested folders in
+    NESTED_FOLDERS are broken out from their parent rather than double-counted
+    inside it, so sum(rows) == sum(sized) exactly.  Pure: no I/O, so F-BH-1 can
+    drive it with fabricated data and no repo.
+    """
+    agg = {}
+    for size, path in sized:
+        rel = path[len(scope):] if path.startswith(scope) else path
+        key = "(root)" if "/" not in rel else rel.split("/")[0] + "/"
+        for nested in NESTED_FOLDERS:
+            if rel.startswith(nested):
+                key = nested
+                break
+        b, n = agg.get(key, (0, 0))
+        agg[key] = (b + size, n + 1)
+    return sorted(((k, b, n) for k, (b, n) in agg.items()),
+                  key=lambda r: (-r[1], r[0]))
+
+
+def manifest_head(repo):
+    """The HEAD sha MANIFEST.json recorded, or None if it cannot be read.
+
+    Every failure returns None rather than raising.  json.JSONDecodeError is a
+    ValueError and is NOT in publish()'s except clause, so a malformed manifest
+    read without this guard would escape a function documented never to raise.
+    """
+    try:
+        with open(Path(repo) / MANIFEST_REL, "r", encoding="utf-8") as fh:
+            doc = json.load(fh)
+    except (OSError, ValueError):
+        return None
+    # `[]`, `null` and a bare string are all VALID json and none of them has
+    # .get.  AttributeError is not in publish()'s except clause either, so
+    # without this line a manifest containing `[]` escapes a function
+    # documented never to raise -- and takes the daily routine's report,
+    # heartbeat and publish down with it.  Caught in adversarial review.
+    if not isinstance(doc, dict):
+        return None
+    head = doc.get("head")
+    return head if isinstance(head, str) and head else None
+
+
+def measure_head_pair(repo):
+    """(recorded, live, (behind, ahead)) for the F-4 line.  Any failure
+    degrades to None rather than raising; the renderer says so in words.
+
+    The range is SYMMETRIC (three dots, --left-right) on purpose.  A two-dot
+    `recorded..HEAD` counts only what HEAD can reach, so a manifest that is
+    AHEAD of live HEAD -- after a reset, a rebase, a force-push, or simply a
+    different branch -- comes back 0 while the shas still differ, and the line
+    renders the self-contradiction "F-4 LAG, manifest is 0 commit(s) behind".
+    The one manifest-versus-git relation this block exists to state would have
+    been the one it stated wrongly.  Caught in adversarial review.
+    """
+    recorded = manifest_head(repo)
+    rc, live, _ = _git(repo, ["rev-parse", "HEAD"])
+    live = live.strip() if rc == 0 else None
+    delta = None
+    if recorded and live and recorded != live:
+        rc, out, _ = _git(repo, ["rev-list", "--left-right", "--count",
+                                 "%s...HEAD" % recorded])
+        parts = out.split()
+        if rc == 0 and len(parts) == 2 and all(p.isdigit() for p in parts):
+            # left = reachable from the manifest only (it is AHEAD by this
+            # many); right = reachable from HEAD only (it is BEHIND by this
+            # many).  Returned as (behind, ahead) for the renderer.
+            delta = (int(parts[1]), int(parts[0]))
+    return recorded, live, delta
+
+
+def head_verdict(recorded, live, delta=None):
+    """(verdict, detail) for the manifest-vs-live pair.  ONE definition, used
+    by the publish line AND the daily report's table, because two hand-rolled
+    copies of the same three-way branch is how they drift apart -- and only one
+    of them would have been the copy a fixture pinned."""
+    if not recorded or not live:
+        return "NOT ENUMERABLE", ""
+    if recorded == live:
+        return "IN SYNC", ""
+    if delta is None:
+        return "F-4 LAG", ""
+    behind, ahead = delta
+    if behind and ahead:
+        return "DIVERGED", "manifest %d ahead, %d behind" % (ahead, behind)
+    if ahead:
+        return "MANIFEST AHEAD", "by %d commit(s)" % ahead
+    return "F-4 LAG", "manifest behind by %d commit(s)" % behind
+
+
+def head_pair_line(recorded, live, delta=None):
+    """The F-4 lag, stated side by side and printed EVEN WHEN THE TWO AGREE.
+
+    F-4 -- "the manifest trails live HEAD" -- has been re-found in five
+    consecutive cycles because nothing printed it between the cycles that went
+    looking.  A line that appears only when the heads differ teaches a reader
+    nothing on the runs where they agree, and "no news" is exactly how a
+    silently-broken freshness check looks.  So it always prints, and it says
+    IN SYNC in words rather than by saying nothing.
+    """
+    short = lambda s: s[:7] if s else "unknown"
+    if not recorded:
+        return ("bus-health: manifest head unknown (%s unreadable) · live HEAD %s"
+                % (MANIFEST_REL, short(live)))
+    if not live:
+        return ("bus-health: manifest head %s · live HEAD unknown"
+                % short(recorded))
+    verdict, detail = head_verdict(recorded, live, delta)
+    return ("bus-health: manifest head %s · live HEAD %s · %s%s"
+            % (short(recorded), short(live), verdict,
+               " · " + detail if detail else ""))
+
+
+def bus_health_lines(rows, total_bytes, total_files, basis,
+                     recorded_head, live_head, delta=None, extra=()):
+    """The bus-health block, as printable lines.  Pure -- renders, measures
+    nothing.  `basis` names WHICH definition of "exchange bytes" produced the
+    rows, because three incompatible ones exist in this tree (index blobs here,
+    tracked-worktree in rotate_reports, a plain walk in the daily routine) and
+    they diverge the moment a file is edited after `git add`.
+    """
+    out = ["bus-health: exchange/ %s B in %d file(s)  [%s]"
+           % (f"{total_bytes:,}", total_files, basis)]
+    width = max((len(k) for k, _, _ in rows), default=0)
+    for folder, b, n in rows:
+        out.append("bus-health:   %-*s %13s B  %4d file(s)"
+                   % (width, folder, f"{b:,}", n))
+    out.append(head_pair_line(recorded_head, live_head, delta))
+    out.extend(extra)
+    return out
+
+
 def _index_sizes(repo):
     """[(size, path)] for every SCOPE path in the index, largest first.
 
@@ -329,7 +495,8 @@ def publish(repo, date_str, remote="origin", log=print, allow_oversize=None):
     result = {"status": "ERROR", "offenders": [], "staged": [],
               "commit": None, "branch": None, "error": None, "pushed": False,
               "bytes": None, "fraction": None, "budget": None, "heartbeat": None,
-              "largest": [], "oversize_override": bool(allow_oversize)}
+              "largest": [], "oversize_override": bool(allow_oversize),
+              "bus_health": []}
 
     try:
         rc, branch, err = _git(repo, ["rev-parse", "--abbrev-ref", "HEAD"])
@@ -375,6 +542,13 @@ def publish(repo, date_str, remote="origin", log=print, allow_oversize=None):
         if not staged:
             result["status"] = "NOTHING"
             log("publish: exchange/ unchanged -- nothing to commit.")
+            # The head pair prints HERE TOO, and this is the path that most
+            # needs it.  A publish with nothing to commit skips the budget
+            # block entirely, so before ruling 007 the run that said least was
+            # the run where a manifest trailing HEAD by 30-odd commits was
+            # likeliest and least visible.  Two cheap calls, no `sized`.
+            result["bus_health"] = [head_pair_line(*measure_head_pair(repo))]
+            log(result["bus_health"][0])
             return result
 
         # --- D3: total-size budget.  Runs AFTER the scope guard, never instead
@@ -397,6 +571,24 @@ def publish(repo, date_str, remote="origin", log=print, allow_oversize=None):
         result["largest"] = sized[:10]
 
         for line in budget_lines(scope_total, total, level):
+            log(line)
+
+        # RULING 007: the bus-health block, printed on every publish that gets
+        # this far.  Built from `sized` -- already computed above for the budget
+        # -- plus one rev-parse, so it adds no measurable cost to the publish.
+        recorded, live, delta = measure_head_pair(repo)
+        # BASIS, stated exactly: `sized` is every tracked exchange/ path in the
+        # INDEX -- the whole bus as it would be committed -- NOT the subset
+        # staged by this run.  The first wording said "staged for this commit"
+        # and was simply false on any publish that changes three files out of
+        # 148.  A basis label that misdescribes its own numbers is worse than
+        # none, since the label is the only thing telling the reader which of
+        # this tree's three definitions of "exchange bytes" they are reading.
+        result["bus_health"] = bus_health_lines(
+            folder_rows(sized), scope_total, len(sized),
+            "whole exchange/ index, as it would be committed",
+            recorded, live, delta)
+        for line in result["bus_health"]:
             log(line)
 
         if level == "WARN":

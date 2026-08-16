@@ -58,6 +58,46 @@ CORE_BUDGET_BYTES = 6_000
 # to satisfy a fixture is the failure mode the fixture exists to prevent.
 CONV_BYTES_BEFORE = 64_012
 
+# RE-PINNED 2026-08-15 (ruling 007), exactly as the paragraph above instructs.
+#
+# WHAT GREW AND WHY.  Ruling 007 retired DIGEST.md and put HERMES to sleep, and
+# that is net-new law: a DORMANT charter row, the dormancy block naming where
+# each absorbed duty went and the condition for revival, and two dated
+# corrections (§0 THE MAP, §4.2) recording what the retirement changed.
+# 64,008 B -> 65,703 B, +1,695 B.  Every byte of it is a rule or a dated
+# correction -- the growth the paragraph above calls the system working -- so
+# the baseline moves and the law stays.
+#
+# THE CEILING CARRIES DELIBERATE HEADROOM, and that is a correction to my own
+# first attempt this session, which pinned it at EXACTLY the current size.
+# Zero headroom fails the fixture on the next one-word correction, and a
+# fixture that fails on a legitimate correction is a standing invitation to
+# trim law to make it pass -- the precise failure the paragraph above forbids.
+# The clause is meant to catch SILENT BLOAT, not to price every byte.
+#
+# WHY A SECOND CONSTANT RATHER THAN OVERWRITING THE FIRST.  CONV_BYTES_BEFORE
+# means "the size immediately before the collapse".  That is a HISTORICAL fact,
+# quoted verbatim by three filed documents
+# (BUILDERS_REPORT_HEPHAESTUS_2026-08-15_COLLAPSE.md:318,320,473 ·
+# LEDGER_ATHENA.md:623 · docs/CONVENTIONS_RULE_CENSUS_2026-08-15.md:17), and
+# overwriting its value would make its own name false and silently restate
+# those filed records against a number that did not exist when they were
+# written -- the exact defect §6.4 names.  So the historical figure stays
+# pinned under its historical name, and the LIVE clause tests this ceiling.
+#
+# The collapse's proof is closed, not deleted: 64,012 -> 64,008 B on 2026-08-15
+# stands above and in those three documents for good.  What the ceiling asserts
+# from here is narrower and still worth having: CONVENTIONS has not bloated
+# SILENTLY.  Re-pin it the same way -- a dated note saying what grew and why --
+# and never by trimming a rule.
+CONV_BYTES_CEILING = 66_500
+
+# Top-level `**RULE —` lines in CONVENTIONS.md, pinned 2026-08-15 (ruling 007)
+# as a FLOOR.  89 at the collapse commit and 89 after ruling 007 -- measured
+# both sides, not assumed.  A floor, not a target: the file is supposed to gain
+# rules, and only a FALL is ever a defect.
+RULES_FLOOR = 89
+
 results: list[tuple[str, bool, str]] = []
 
 
@@ -162,7 +202,8 @@ def main() -> int:
 
     # ---------------------------------------------------------------- F-CONV-4
     conv_now = len(conv.encode("utf-8"))
-    shrank = conv_now < CONV_BYTES_BEFORE
+    within_ceiling = conv_now <= CONV_BYTES_CEILING
+    rule_count = len(re.findall(r"^\*\*RULE —", conv, re.M))
 
     caselaw = read(CASELAW)
     cl_ids = sorted(set(re.findall(r"^### (CL-\d+)", caselaw, re.M)))
@@ -186,15 +227,25 @@ def main() -> int:
     # Four clauses, reported one by one, because "F-CONV-4 FAILED" on its own
     # does not tell the next reader which half of the claim broke.
     clauses = [
-        ("zero rules lost",
+        # LABEL NARROWED 2026-08-15 (ruling 007).  This clause reads
+        # docs/CONVENTIONS_RULE_CENSUS_2026-08-15.md, a document whose own
+        # terminal figure is 64,008 B -- the file as it stood at the collapse.
+        # Every edit since is outside its scope, so read as a live guarantee
+        # it certifies a revision that no longer exists.  It is FROZEN
+        # EVIDENCE about one day's restructure and the label now says so.
+        # The live no-silent-loss control is the RULE count below plus the
+        # ceiling clause; if a future edit needs a live census, re-run it and
+        # append a dated block rather than letting this one drift.
+        ("zero rules lost IN THE 2026-08-15 COLLAPSE (frozen evidence)",
          census_ok and lost == 0 and after >= before,
          f"census {before} -> {after}, LOST {lost}"
          + ("" if census_ok else "  [census document missing]")),
-        ("size shrinks",
-         shrank,
-         f"{CONV_BYTES_BEFORE:,} B -> {conv_now:,} B "
-         f"({conv_now - CONV_BYTES_BEFORE:+,} B, "
-         f"{100.0 * (conv_now - CONV_BYTES_BEFORE) / CONV_BYTES_BEFORE:+.2f}%)"),
+        ("size within ceiling",
+         within_ceiling,
+         f"{conv_now:,} B of {CONV_BYTES_CEILING:,} B ceiling "
+         f"(headroom {CONV_BYTES_CEILING - conv_now:,} B); "
+         f"pre-collapse {CONV_BYTES_BEFORE:,} B, "
+         f"{conv_now - CONV_BYTES_BEFORE:+,} B since"),
         ("every narrative backlinked",
          bool(cl_ids) and not no_backlink,
          f"{len(cl_ids)} cases in CASELAW, all carry EARNS"
@@ -203,6 +254,17 @@ def main() -> int:
          not uncited,
          "all CL-n resolve both ways"
          + (f"; UNCITED {uncited}" if uncited else "")),
+        # ADDED 2026-08-15 (ruling 007).  The LIVE control the census clause
+        # above stopped being.  The census is frozen at the collapse; this
+        # counts top-level rules in the file as it stands right now, so a rule
+        # deleted by any later edit shows up here on the next run.  Pinned as a
+        # FLOOR, never a target: rules are supposed to be added, and the only
+        # direction that is ever a defect is down.  If it fails, find the
+        # deleted rule -- do not lower the number.
+        ("rule count holds",
+         rule_count >= RULES_FLOOR,
+         f"{rule_count} top-level rules, floor {RULES_FLOOR} "
+         f"({rule_count - RULES_FLOOR:+d})"),
     ]
     failed_clauses = [n for n, ok, _ in clauses if not ok]
     check(
