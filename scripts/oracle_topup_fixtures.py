@@ -108,22 +108,32 @@ def _noclobber(inject=None) -> tuple[bool, str]:
         "closed bar rewritten": (base, _frame([0, step, 2 * step], [99.0, 2.0, 3.0]),
                                  {"shrank": False, "rewrote": True,
                                   "forming_corrected": False}),
-        # NB rewrote is False here and that is CORRECT: dropping the newest row
-        # leaves every strictly-older bar identical. `shrank` is the flag that
-        # catches this case, which is why the two are kept separate.
+        # Dropping the newest row trips TWO independent flags now: `shrank` on
+        # the row count, and `rewrote` via `lost_newest` on the bar's absence.
+        # Before the lost_newest check existed, rewrote was False here — which
+        # was fine while the count also fell, and was NOT fine in the
+        # "deleted one, appended one" case below, where the count is unchanged.
         "series shrank": (base, _frame([0, step], [1.0, 2.0]),
-                          {"shrank": True, "rewrote": False, "forming_corrected": False}),
+                          {"shrank": True, "rewrote": True, "forming_corrected": False}),
         "shrank AND rewrote": (base, _frame([0, step], [99.0, 2.0]),
                                {"shrank": True, "rewrote": True,
                                 "forming_corrected": False}),
+        # the two count-masked holes an adversarial review found
+        "newest bar deleted, one appended": (
+            base, _frame([0, step, 3 * step], [1.0, 2.0, 4.0]),
+            {"shrank": False, "rewrote": True, "forming_corrected": False}),
+        "duplicate open_time": (
+            base, _frame([0, step, 2 * step, 2 * step], [1.0, 2.0, 3.0, 99.0]),
+            {"shrank": False, "rewrote": True, "forming_corrected": False}),
     }
     if inject:
         cases.update(inject)
     wrong = []
     for name, (b, a, want) in cases.items():
-        got = TU.noclobber_verdict(b, a)
+        full = TU.noclobber_verdict(b, a)
+        got = {k: full[k] for k in want}
         if got != want:
-            wrong.append(f"{name}: got {got} want {want}")
+            wrong.append(f"{name}: got {got} want {want} (full {full})")
     if wrong:
         return False, "; ".join(wrong)
 
@@ -136,7 +146,7 @@ def _noclobber(inject=None) -> tuple[bool, str]:
     if bad:
         return False, f"the last real run clobbered {len(bad)} pair(s): {bad[:2]}"
     added = [d["rows_added"] for d in run["detail"] if d["status"] == "OK"]
-    return True, (f"5 synthetic cases separate shrink / closed-bar rewrite / "
+    return True, (f"7 synthetic cases separate shrink / closed-bar rewrite / "
                   f"forming-bar correction correctly; and the last real run "
                   f"({run['slot']}, {run['ts'][:19]}) shows 0 shrinks and 0 closed-bar "
                   f"rewrites across {len(run['detail'])} pair(s), rows_added min "
@@ -308,7 +318,19 @@ def f_tu_5() -> None:
 # ══════════════════════════════════ F-TU-6 · FAILURE PATH
 
 def _failure_path(simulate=True) -> tuple[bool, str]:
-    """A network fault must log, exit nonzero, and leave the cache untouched."""
+    """A network fault must log, exit nonzero, and leave the cache untouched.
+
+    BOTH legs run the SAME assertions. An earlier version gated every assertion
+    behind `if simulate:` and let the other leg fall through to a bare
+    `return True`, while the break wrapper mapped True->False AND False->False —
+    so the break leg was a CONSTANT, no property of the code could change it,
+    and prove()'s void detector was structurally unreachable for this fixture.
+    That is precisely the failure the two-leg design exists to catch, and it had
+    to be caught by a reviewer instead. Now `simulate=False` audits the last
+    REAL run against the same four assertions; a real run passed, so it fails
+    the "verdict must be FAIL" assertion for a real reason, and the redness
+    comes from the code under test rather than from the wrapper's arithmetic.
+    """
     probe = TU.load_scope()[0]
     before_fp = TU.fingerprint(TU.read_cached(*probe))
     n_before = sum(1 for _ in TU.TOPUP_LOG.read_text().splitlines()
@@ -324,36 +346,38 @@ def _failure_path(simulate=True) -> tuple[bool, str]:
             doc = TU.run(slot="fixture-F-TU-6", log=lambda *a, **k: None)
         finally:
             TU.backfill_klines = orig
+        expect_rows = 1
+        label = "simulated fault"
     else:
+        # The audited subject is the last REAL run, which succeeded. It must not
+        # satisfy the failure-path assertions — that is the point of this leg.
         doc = last_real_run()
         if doc is None:
-            return False, "no real run to compare against"
+            return False, "no real run to audit"
+        expect_rows = 0
+        label = f"audit of real run {doc['slot']}"
 
     after_fp = TU.fingerprint(TU.read_cached(*probe))
     n_after = sum(1 for _ in TU.TOPUP_LOG.read_text().splitlines() if _.strip())
 
-    if simulate:
-        if doc["verdict"] != "FAIL":
-            return False, f"a total network fault produced verdict {doc['verdict']}"
-        if after_fp != before_fp:
-            return False, "the cache changed during a failed run"
-        if n_after != n_before + 1:
-            return False, f"the failure was not logged (log went {n_before} -> {n_after})"
-        return True, (f"simulated fault: verdict FAIL, {len(doc['failures'])} pair(s) "
-                      f"reported ERROR, cache fingerprint unchanged, exactly one row "
-                      f"appended to topup_log.jsonl, exit code would be 1")
-    return True, (f"real run {doc['slot']} verdict {doc['verdict']}")
+    # ── the same four assertions, both legs ────────────────────────────────
+    if doc["verdict"] != "FAIL":
+        return False, f"{label}: verdict is {doc['verdict']}, not FAIL"
+    if not doc["failures"]:
+        return False, f"{label}: verdict FAIL but no failure was recorded"
+    if after_fp != before_fp:
+        return False, f"{label}: the cache changed during a failed run"
+    if n_after != n_before + expect_rows:
+        return False, (f"{label}: log rows went {n_before} -> {n_after}, "
+                       f"expected +{expect_rows}")
+    return True, (f"{label}: verdict FAIL, {len(doc['failures'])} pair(s) reported "
+                  f"ERROR, cache fingerprint unchanged, exactly one row appended to "
+                  f"topup_log.jsonl, exit code would be 1")
 
 
 def f_tu_6() -> None:
-    # The break asks the failure path to be judged as a SUCCESS path: a real run
-    # (verdict PASS) must not satisfy the "a fault was logged and nothing moved"
-    # assertions, so the fixture must go red when handed one.
-    def _break():
-        ok, detail = _failure_path(simulate=False)
-        return (not ok, detail) if ok else (ok, detail)
     prove("F-TU-6", "FAILURE PATH — a fault logs, exits nonzero, cache untouched",
-          _break, lambda: _failure_path(simulate=True))
+          lambda: _failure_path(simulate=False), lambda: _failure_path(simulate=True))
 
 
 # ══════════════════════════════════════════════════════════════════ MAIN

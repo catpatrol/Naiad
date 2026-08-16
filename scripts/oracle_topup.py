@@ -100,7 +100,10 @@ def enumerate_scope(log=print) -> dict:
     expensive and deliberately real: a static read of the source would miss a
     conditional read, and a hardcoded list would miss a change.
     """
+    import tempfile
+
     import oracle_daily as OD
+    import station_engine as SE
 
     seen: dict[tuple[str, str], int] = {}
     orig = OD.load_lens
@@ -109,21 +112,38 @@ def enumerate_scope(log=print) -> dict:
         seen[(sym, tf)] = seen.get((sym, tf), 0) + 1
         return orig(sym, tf, tail=tail)
 
+    # THE ENUMERATION MUST NOT WRITE ANYTHING REAL.
+    #
+    # oracle_daily.run() unconditionally emits FIVE artifact sets — the canon
+    # JSON, ten mantle payloads, the day's HTML, the tape parquet and the
+    # calibration JSON. An earlier version of this function deleted only the
+    # calibration file, which meant every `--enumerate` (and every F-TU-1 leg,
+    # twice per fixture pass) silently overwrote the day's real Oracle render
+    # and its tape. Nothing was corrupted, but the deliverables were being
+    # rewritten by a scope query, which is not a thing a scope query may do.
+    #
+    # So every output path is redirected into a throwaway directory for the
+    # duration of the run and restored afterwards. Redirection is preferred
+    # over an `emit=False` flag on oracle_daily because it leaves that file
+    # BYTE-IDENTICAL — and this manifest pins its sha256, so touching it would
+    # invalidate the very pin the top-up relies on.
+    saved = {"OUT_DIR": OD.OUT_DIR, "TAPE_DIR": OD.TAPE_DIR, "CAL_DIR": OD.CAL_DIR,
+             "PAYLOAD_DIR": OD.PAYLOAD_DIR, "CANON": SE.CANON_JSON_PATH}
     OD.load_lens = spy
-    try:
-        OD.run(slot="scope-enumeration", log=lambda *a, **k: None)
-    finally:
-        OD.load_lens = orig
-        # The enumeration run emits a calibration JSON under a slot name that is
-        # not a real slot. It is not evidence of anything and BR-2 must not read
-        # it, so it is removed by the attended builder that created it seconds
-        # earlier. Scheduled paths never delete (CADENCE §4); `--enumerate` is an
-        # attended command.
-        stray = (ROOT / "research_outputs" / "oracle" / "calibration"
-                 / f"oracle_calibration_{datetime.now().astimezone():%Y-%m-%d}_"
-                   f"scope-enumeration.json")
-        if stray.exists():
-            stray.unlink()
+    with tempfile.TemporaryDirectory(prefix="oracle-scope-") as td:
+        sandbox = Path(td)
+        OD.OUT_DIR = sandbox / "briefs"
+        OD.TAPE_DIR = sandbox / "tape"
+        OD.CAL_DIR = sandbox / "calibration"
+        OD.PAYLOAD_DIR = sandbox / "payloads"
+        SE.CANON_JSON_PATH = sandbox / "station_canon.json"
+        try:
+            OD.run(slot="scope-enumeration", log=lambda *a, **k: None)
+        finally:
+            OD.load_lens = orig
+            OD.OUT_DIR, OD.TAPE_DIR = saved["OUT_DIR"], saved["TAPE_DIR"]
+            OD.CAL_DIR, OD.PAYLOAD_DIR = saved["CAL_DIR"], saved["PAYLOAD_DIR"]
+            SE.CANON_JSON_PATH = saved["CANON"]
 
     pairs = sorted(seen)
     doc = {
@@ -148,8 +168,16 @@ def sha256_file(p: Path) -> str:
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 
 
+def pairs_sha(pairs) -> str:
+    """A sha over the pair list alone, so the manifest is bound to its own scope."""
+    return hashlib.sha256(
+        json.dumps(sorted([list(p) for p in pairs]), separators=(",", ":"))
+        .encode("utf-8")).hexdigest()
+
+
 def write_scope(doc: dict) -> tuple[Path, str, int]:
     SCOPE_MANIFEST.parent.mkdir(parents=True, exist_ok=True)
+    doc = {**doc, "pairs_sha256": pairs_sha(doc["pairs"])}
     b = json.dumps(doc, indent=1, sort_keys=True).encode("utf-8")
     SCOPE_MANIFEST.write_bytes(b)
     return SCOPE_MANIFEST, hashlib.sha256(b).hexdigest(), len(b)
@@ -172,6 +200,22 @@ def load_scope() -> list[tuple[str, str]]:
             f"HALT: oracle_daily.py has changed since the scope was enumerated.\n"
             f"  pinned  {doc.get('oracle_daily_sha256')}\n  current {now}\n"
             f"The top-up will not fetch a scope it cannot vouch for. Re-run "
+            f"`oracle_topup.py --enumerate`.")
+    # Pinning oracle_daily's sha proves the SOURCE has not changed; it says
+    # nothing about the manifest itself. Without this second check a hand-edited
+    # manifest — extra symbols, extra intervals — would be fetched without
+    # complaint, which is exactly the silent scope change the contract forbids.
+    want = doc.get("pairs_sha256")
+    got = pairs_sha(doc["pairs"])
+    if want is None:
+        raise SystemExit(
+            f"HALT: {SCOPE_MANIFEST} carries no pairs_sha256. It predates the "
+            f"integrity binding — re-run `oracle_topup.py --enumerate`.")
+    if want != got:
+        raise SystemExit(
+            f"HALT: the scope manifest's pair list does not match its own sha.\n"
+            f"  recorded {want}\n  actual   {got}\n"
+            f"The manifest has been edited by hand. Re-run "
             f"`oracle_topup.py --enumerate`.")
     return [(s, t) for s, t in doc["pairs"]]
 
@@ -226,19 +270,38 @@ def noclobber_verdict(before: pd.DataFrame, after: pd.DataFrame) -> dict:
                           purpose is to replace it with the closed version.
     """
     if before is None or before.empty:
-        return {"shrank": False, "rewrote": False, "forming_corrected": False}
+        return {"shrank": False, "rewrote": False, "forming_corrected": False,
+                "lost_newest": False, "duplicate_open_time": False}
     newest_before = int(before["open_time"].iloc[-1])
     shrank = len(after) < len(before)
     stable_before = before[before["open_time"] < newest_before].reset_index(drop=True)
     stable_after = after[after["open_time"] < newest_before].reset_index(drop=True)
     rewrote = (len(stable_after) != len(stable_before)
                or fingerprint(stable_before) != fingerprint(stable_after))
+
+    # TWO COUNT-MASKED HOLES, closed explicitly rather than left to arithmetic.
+    #
+    # (1) `rewrote` uses a STRICT `<`, so the previously-newest bar is exempt
+    #     from the value check — deliberately, because that bar may legitimately
+    #     be a forming bar being corrected. But that also exempts it from the
+    #     EXISTENCE check, and `shrank` is only a row count: delete the newest
+    #     bar, append one, and the count is unchanged and every other bar is
+    #     identical, so all three flags read clean. The bar's existence is now
+    #     asserted directly.
+    # (2) A duplicated open_time slips through a row count entirely. The cache
+    #     merge dedups on open_time, so a duplicate means something upstream is
+    #     wrong, and it must not read as OK.
+    lost_newest = newest_before not in set(after["open_time"].to_numpy().tolist())
+    dup_after = bool(after["open_time"].duplicated().any())
+    if lost_newest or dup_after:
+        rewrote = True
     overlap_after = after[after["open_time"] <= newest_before].reset_index(drop=True)
     forming = (len(overlap_after) == len(before)
                and fingerprint(overlap_after) != fingerprint(before)
                and not rewrote)
     return {"shrank": bool(shrank), "rewrote": bool(rewrote),
-            "forming_corrected": bool(forming)}
+            "forming_corrected": bool(forming),
+            "lost_newest": bool(lost_newest), "duplicate_open_time": bool(dup_after)}
 
 
 # ═════════════════════════════════════════════════════════════ THE TOP-UP
@@ -250,9 +313,16 @@ def topup_pair(sym: str, tf: str, log=print) -> dict:
     row: dict = {"symbol": sym, "interval": tf}
 
     if before is None or before.empty:
-        row.update({"status": "ABSENT", "detail": "no cached parquet; not created by "
-                                                  "the top-up (no schema change, "
-                                                  "no new intervals)"})
+        # NOT created here — the contract forbids a schema change or a new
+        # interval — but NOT silent either. This pair is in the enumerated scope,
+        # which means the Oracle reads it; and oracle_daily's 1h/4h reads are
+        # unguarded, so a missing parquet HALTs the organ 15 minutes later. An
+        # earlier version graded ABSENT as a pass, which would have let the
+        # top-up exit 0 into an Oracle that could not run.
+        row.update({"status": "ABSENT",
+                    "detail": "no cached parquet for a pair the Oracle reads. NOT "
+                              "created here (no schema change, no new intervals) — "
+                              "restore it with scripts/backfill.py"})
         return row
 
     n_before = len(before)
@@ -271,6 +341,8 @@ def topup_pair(sym: str, tf: str, log=print) -> dict:
 
     v = noclobber_verdict(before, after)
     shrank, rewrote, forming_changed = v["shrank"], v["rewrote"], v["forming_corrected"]
+    row.update({"lost_newest": v["lost_newest"],
+                "duplicate_open_time": v["duplicate_open_time"]})
     gaps = contiguity(after, tf)
     row.update({
         "status": "OK" if not (shrank or rewrote) else "CLOBBER",
@@ -303,7 +375,7 @@ def run(slot: str = "topup", log=print) -> dict:
             r = {"symbol": sym, "interval": tf, "status": "ERROR",
                  "error": f"{e.__class__.__name__}: {e}"}
         rows.append(r)
-        if r["status"] in ("ERROR", "CLOBBER"):
+        if r["status"] in ("ERROR", "CLOBBER", "ABSENT"):
             failures.append(f"{sym} {tf}: {r['status']}")
         log(f"  {sym:14} {tf:4} {r['status']:7} "
             + (f"+{r['rows_added']:>5} rows  newest {r.get('newest_after_iso','—')}  "

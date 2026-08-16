@@ -1,6 +1,6 @@
 {
  "class": "SCOPE MANIFEST \u2014 the (symbol, interval) set the Oracle actually reads",
- "enumerated_utc": "2026-08-16T06:45:32.700069+00:00",
+ "enumerated_utc": "2026-08-16T07:14:49.866692+00:00",
  "intervals": [
   "15m",
   "1h",
@@ -172,6 +172,7 @@
    "5m"
   ]
  ],
+ "pairs_sha256": "48f1b0decbc4aec3107469dfd7f6c977535f6f39223f727579e8f70e03337e62",
  "read_counts": {
   "BTCUSDT|15m": 2,
   "BTCUSDT|1h": 2,
