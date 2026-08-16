@@ -214,10 +214,10 @@ logs/
 # exchange/). DOCUMENTS ARE CHEAP, DATA IS NOT.
 briefs/oracle/
 research_outputs/oracle/**
-# station_canon.json is the deliberate exception and IS tracked: BR-2 F-R2-1
+# posture_canon.json is the deliberate exception and IS tracked: BR-2 F-R2-1
 # requires the R2 JS surface and Python to read the SAME file at the SAME sha,
 # so it is the one Oracle artifact that must be versioned.
-!research_outputs/oracle/station_canon.json
+!research_outputs/oracle/posture_canon.json
 # topup_scope.json is the second: BR-1b's whole claim is "to claim the set,
 # enumerate the set", and this manifest IS that claim — it pins the enumerated
 # (symbol, interval) set together with the sha256 of the oracle_daily.py it was

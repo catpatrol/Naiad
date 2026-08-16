@@ -1,23 +1,23 @@
-"""THE STATION ENGINE — station canon v1, the four posture words, in code.
+"""THE POSTURE ENGINE — posture canon v1, the four posture words, in code.
 
 D-1 of queue BR-1 (RATIFIED operator 2026-08-16).  C-3, verbatim:
 
-    C-3 STATIONS = station canon v1 verbatim (STALKING/ARMED/TRIGGERED/DEAD);
-    one canonical module `scripts/station_engine.py` read by Board, Cards, and
+    C-3 STATIONS = posture canon v1 verbatim (STALKING/ARMED/TRIGGERED/DEAD);
+    one canonical module `scripts/posture_engine.py` read by Board, Cards, and
     the Pine-parity fixture.  No re-derived semantics anywhere [D3].
 
 ════════════════════════════════════════════════════════════════════════════
-READ THIS FIRST — THE NAME COLLISION.  "station canon v1" DENOTES TWO THINGS.
+READ THIS FIRST — THE NAME COLLISION.  "posture canon v1" DENOTES TWO THINGS.
 
   (i)  OPERATOR RULING 2026-08-15, verbatim from
        docs/memory/NAIAD_MEMORY_VERBATIM_2026-08-15.md:
          'Rulings given: ["stations"] six-station lifecycle w/ ORACLE-class
-          mapping = station canon v1'
+          mapping = posture canon v1'
        That is the S1..S6 TRADE-LIFETIME kit (WATCHLIST · ACTIVE HUNT ·
        TRIGGER · AGILE ENTRY · MANAGEMENT · GRACEFUL EXIT), written out in
        research_outputs/census2b/viz_payloads/v3_stations.json.
 
-  (ii) BR-1 C-3, one day later, says "station canon v1 verbatim
+  (ii) BR-1 C-3, one day later, says "posture canon v1 verbatim
        (STALKING/ARMED/TRIGGERED/DEAD)" — FOUR BOARD POSTURE WORDS.
 
   NO DOCUMENT RECONCILES THEM.  This module binds reading (ii), because C-3
@@ -99,11 +99,14 @@ REGISTER: dict[str, dict] = {
         "value": V3.REGISTER["TRIGGER_SLOW"]["value"],
         "ruled": True,
         "source": "tierc2_rules.REGISTER['TRIGGER_SLOW'] — rule card TRIGGER 12/26. "
-                  "DISCLOSURE: the Board/Watch prose of LANE_UPDATE_DIONYSUS_2026-08-13 "
-                  "says 'a 12/25 trigger', and the S3 gate text says '12x25/26 ... The 25 "
-                  "is the ruled load-bearing shadow line [ratified]'. The EXECUTABLE canon "
-                  "— rule card, census, Pine — is 26 everywhere. This engine uses 26 and "
-                  "prints this line rather than reconciling the two by fiat.",
+                  "RULED 26 by BR-1 Amendment A2-3 (operator, 2026-08-16), which closes "
+                  "finding V-6. The discrepancy it settles: the Board/Watch prose of "
+                  "LANE_UPDATE_DIONYSUS_2026-08-13 said 'a 12/25 trigger' and the S3 gate "
+                  "text said '12x25/26 ... The 25 is the ruled load-bearing shadow line'; "
+                  "the executable canon — rule card, census, Pine — was 26 everywhere. "
+                  "A2-3: 'Prose corrected in Oracle-owned surfaces; historical documents "
+                  "stay as written.' The two canon QUOTES below are left verbatim because "
+                  "a quote that is edited is no longer a quote; each carries an A2-3 rider.",
     },
     "D_DISPLACEMENT": {"value": V3.REGISTER["D_DISPLACEMENT"]["value"], "ruled": True,
                        "source": "tierc2_rules.REGISTER['D_DISPLACEMENT'] — rule card ['d'] "
@@ -140,7 +143,8 @@ REGISTER: dict[str, dict] = {
     "DEAD_MEMORY_BARS": {
         "value": 6,
         "ruled": False,
-        "source": "PROPOSED by the BR-1 build 2026-08-16 — UNRULED [VETO]. The Board "
+        "deferred_to": "BR-2",
+        "source": "DEFERRED-TO-BR2 by BR-1 Amendment A2-6 (operator, 2026-08-16): BR-2 proposes a measured value from a week of D-7 distributions; nothing self-adopts. ORIGINALLY: PROPOSED by the BR-1 build 2026-08-16 — UNRULED [VETO]. The Board "
                   "shows ONE posture word per asset (C-5), but DEAD is a property of a "
                   "WINDOW, not of an asset: an asset with no open window is either being "
                   "watched (STALKING) or has just buried one (DEAD). This constant is how "
@@ -151,7 +155,8 @@ REGISTER: dict[str, dict] = {
     "TRIGGER_FRESH_BARS": {
         "value": 6,
         "ruled": False,
-        "source": "PROPOSED by the BR-1 build 2026-08-16 — UNRULED [VETO]. TRIGGERED has "
+        "deferred_to": "BR-2",
+        "source": "DEFERRED-TO-BR2 by BR-1 Amendment A2-6 (operator, 2026-08-16): BR-2 proposes a measured value from a week of D-7 distributions; nothing self-adopts. ORIGINALLY: PROPOSED by the BR-1 build 2026-08-16 — UNRULED [VETO]. TRIGGERED has "
                   "no age term in the rule card: a window stays TRIGGERED until it closes, "
                   "so a 12/26 cross from 24 days ago still reads TRIGGERED today. That is "
                   "faithful to the card and MISLEADING on a Board whose word the operator "
@@ -163,7 +168,8 @@ REGISTER: dict[str, dict] = {
     "BOARD_PRECEDENCE": {
         "value": ("TRIGGERED", "ARMED", "DEAD", "STALKING"),
         "ruled": False,
-        "source": "PROPOSED by the BR-1 build 2026-08-16 — UNRULED [VETO]. C-5 asks for "
+        "deferred_to": "BR-2",
+        "source": "DEFERRED-TO-BR2 by BR-1 Amendment A2-6 (operator, 2026-08-16): BR-2 proposes a measured value from a week of D-7 distributions; nothing self-adopts. ORIGINALLY: PROPOSED by the BR-1 build 2026-08-16 — UNRULED [VETO]. C-5 asks for "
                   "one posture word per row; C-7 lists 12/89 windows PLURAL per asset. "
                   "The collapse rule from N windows to one word is not written anywhere. "
                   "This is the order: live business outranks a burial, a burial outranks "
@@ -172,7 +178,8 @@ REGISTER: dict[str, dict] = {
     "HEAT_KEY": {
         "value": "proximity_x_cluster_score",
         "ruled": False,
-        "source": "PROPOSED by the BR-1 build 2026-08-16 — UNRULED [VETO]. The only text "
+        "deferred_to": "BR-2",
+        "source": "DEFERRED-TO-BR2 by BR-1 Amendment A2-6 (operator, 2026-08-16): BR-2 proposes a measured value from a week of D-7 distributions; nothing self-adopts. ORIGINALLY: PROPOSED by the BR-1 build 2026-08-16 — UNRULED [VETO]. The only text "
                   "is LANE_UPDATE_DIONYSUS_2026-08-13 'sorted by heat (proximity x cluster "
                   "score)'; no formula exists anywhere in the estate. The Board implements "
                   "it as score / (1 + atr_distance) and prints both inputs beside the "
@@ -186,7 +193,7 @@ LIFECYCLE_S1_S6_POINTER = (
     "(sha256 37b00bed88104b180ec05ccf7311dceca714d9bf11e1d7ec5aadf1271a7b43d0, "
     "sourced from LANE_UPDATE_DIONYSUS_2026-08-13). S1 WATCHLIST · S2 ACTIVE HUNT · "
     "S3 TRIGGER · S4 AGILE ENTRY · S5 MANAGEMENT · S6 GRACEFUL EXIT. "
-    "This is operator ruling 2026-08-15's 'station canon v1'. It is NOT this module's."
+    "This is operator ruling 2026-08-15's 'posture canon v1'. It is NOT this module's."
 )
 
 # ══════════════════════════════════════════════════════════ THE FOUR WORDS
@@ -209,6 +216,13 @@ CANON_QUOTE_TRANSITION = (
     "alert; seal or counter-cross closes it. The census studies dead armed windows; the "
     "brief displays living ones — same organ, two tempos."
 )
+# A2-3 RIDER, outside the quote: the quote says 12/25; the operator ruled the pair
+# is 26 on 2026-08-16. The quote is not edited — a quote that is edited is no longer
+# a quote — and the engine executes 26 via REGISTER['TRIGGER_SLOW'].
+CANON_QUOTE_TRANSITION_RIDER = (
+    "A2-3 (operator, 2026-08-16): the trigger pair is 26. The quoted 12/25 is the "
+    "2026-08-13 wording, preserved verbatim as history."
+)
 
 CANON: dict[str, dict] = {
     "STALKING": {
@@ -218,7 +232,10 @@ CANON: dict[str, dict] = {
                 "displacement floor d>=0.75 leaves the asset STALKING and prints "
                 "its reject reason ('tide' or 'd').",
         "ruled": False,
-        "source": "PROPOSED. The word appears only in the enumeration. The gate is the "
+        "deferred_to": "BR-2",
+        "source": "DEFERRED-TO-BR2 by BR-1 Amendment A2-6 (operator, 2026-08-16) — the "
+                  "WORDING is BR-2's to propose from measurement. PROPOSED. The word "
+                  "appears only in the enumeration. The gate is the "
                   "COMPLEMENT of the ruled ARMED gate, plus the rule card's own reject "
                   "reasons (tierc2_rules.armings sets tide_ok / d_ok; "
                   "tierc3_baseline assigns Arming.reject 'tide' | 'd').",
@@ -242,9 +259,10 @@ CANON: dict[str, dict] = {
                 "the entry alert inside it.",
         "ruled": True,
         "source": "RULED. RULE_CARD_V3: 'TRIGGER: first in-window 4h 12/26 cross -> "
-                  "enter at that bar close'. Canon transition text: 'a 12/25 trigger "
-                  "inside one is the entry alert'. See REGISTER['TRIGGER_SLOW'] for the "
-                  "25-vs-26 disclosure.",
+                  "enter at that bar close'. The canon transition text of 2026-08-13 "
+                  "reads 'a 12/25 trigger inside one is the entry alert'; A2-3 (operator, "
+                  "2026-08-16) rules the pair is 26, and that quote is kept verbatim as "
+                  "history. See REGISTER['TRIGGER_SLOW'].",
     },
     "DEAD": {
         "station": 4,
@@ -500,18 +518,18 @@ def stations_for(symbol: str, df, as_of_i: int | None = None) -> AssetStations:
 
 
 # ═════════════════════════════════════════════ THE ONE TRUTH SOURCE (BR-2)
-# BR-2 F-R2-1 CANON IDENTITY: 'JS reads the same station_canon.json sha as
+# BR-2 F-R2-1 CANON IDENTITY: 'JS reads the same posture_canon.json sha as
 # Python'. The JSON below IS the canon; Python reads these same dicts. The
 # R2 page must read this file and must not re-implement any gate.
 
-CANON_JSON_PATH = Path(__file__).resolve().parent.parent / "research_outputs" / "oracle" / "station_canon.json"
+CANON_JSON_PATH = Path(__file__).resolve().parent.parent / "research_outputs" / "oracle" / "posture_canon.json"
 
 
 def canon_doc() -> dict:
     """The canonical document. Ordering and separators are pinned so the sha
     is reproducible from either side of the language boundary."""
     return {
-        "canon": "station canon v1 (BR-1 C-3 reading: the four Board posture words)",
+        "canon": "posture canon v1 (BR-1 C-3 reading: the four Board posture words)",
         "version": "1.0.0",
         "words": list(STATION_WORDS),
         "stations": CANON,
@@ -522,7 +540,7 @@ def canon_doc() -> dict:
             "transition": CANON_QUOTE_TRANSITION,
         },
         "name_collision_disclosure": (
-            "'station canon v1' denotes TWO things. Operator ruling 2026-08-15 gave the "
+            "'posture canon v1' denotes TWO things. Operator ruling 2026-08-15 gave the "
             "name to the SIX-STAGE lifecycle kit; BR-1 C-3 of 2026-08-16 gives it to these "
             "FOUR posture words. This document binds the BR-1 reading. The six-stage kit "
             "is a different register and lives at: " + LIFECYCLE_S1_S6_POINTER
@@ -549,7 +567,7 @@ def canon_sha() -> str:
 
 
 def write_canon_json(path: Path | None = None) -> tuple[Path, str, int]:
-    """Emit station_canon.json. Returns (path, sha256, bytes)."""
+    """Emit posture_canon.json. Returns (path, sha256, bytes)."""
     path = Path(path) if path is not None else CANON_JSON_PATH
     path.parent.mkdir(parents=True, exist_ok=True)
     b = canon_bytes()
@@ -559,7 +577,7 @@ def write_canon_json(path: Path | None = None) -> tuple[Path, str, int]:
 
 def register_table() -> list[str]:
     """The closed register, printed. tierc2/tierc3 print theirs the same way."""
-    rows = ["REGISTER — station canon v1 (RULED rows are law; UNRULED rows are [VETO])"]
+    rows = ["REGISTER — posture canon v1 (RULED rows are law; UNRULED rows are [VETO])"]
     for k, v in REGISTER.items():
         mark = "RULED  " if v["ruled"] else "[VETO] "
         rows.append(f"  {mark}{k:22} = {v['value']!r}")
@@ -573,5 +591,5 @@ if __name__ == "__main__":  # a printer, not a builder
     for line in register_table():
         print(line)
     p, sha, nb = write_canon_json()
-    print(f"\nstation_canon.json -> {p}")
+    print(f"\nposture_canon.json -> {p}")
     print(f"  {nb} B  sha256 {sha}")

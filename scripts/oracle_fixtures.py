@@ -32,7 +32,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from engine.data import cache_dir            # noqa: E402
 from engine import indicators as ind         # noqa: E402
 
-import station_engine as SE                  # noqa: E402
+import posture_engine as PE                  # noqa: E402
 import oracle_daily as OD                    # noqa: E402
 
 FAILED: list[str] = []
@@ -148,7 +148,7 @@ def _cross_independent(a: np.ndarray, b: np.ndarray, up: bool) -> np.ndarray:
 
 def _stations_independent(close, high, low) -> tuple[np.ndarray, dict]:
     """A SECOND state machine, transcribed from the ratified TC3 rule card, that
-    produces the FOUR POSTURE WORDS per bar without touching station_engine.
+    produces the FOUR POSTURE WORDS per bar without touching posture_engine.
 
     The first version of this fixture compared six boolean cross series and
     never formed a word — so the whole of D-1's central output shipped with no
@@ -185,8 +185,8 @@ def _stations_independent(close, high, low) -> tuple[np.ndarray, dict]:
         "b_up": _cross_independent(e89, e316, True),
         "b_dn": _cross_independent(e89, e316, False),
     }
-    d_floor = SE.REGISTER["D_DISPLACEMENT"]["value"]
-    dead_mem = SE.REGISTER["DEAD_MEMORY_BARS"]["value"]
+    d_floor = PE.REGISTER["D_DISPLACEMENT"]["value"]
+    dead_mem = PE.REGISTER["DEAD_MEMORY_BARS"]["value"]
 
     words = np.array(["STALKING"] * n, dtype=object)
     open_dir = 0        # 0 none, +1 long, -1 short
@@ -247,7 +247,7 @@ def _parity_compare(mutate=None, as_of_offsets=(0, 40, 120, 300)) -> tuple[bool,
             i = len(df) - 1 - off
             if i < PARITY_WARM_BARS:
                 continue
-            ours = SE.stations_for(sym, df, as_of_i=i).board_word
+            ours = PE.stations_for(sym, df, as_of_i=i).board_word
             theirs = str(indep[i])
             compared += 1
             if ours != theirs:
@@ -267,7 +267,7 @@ def _parity_compare(mutate=None, as_of_offsets=(0, 40, 120, 300)) -> tuple[bool,
                  f"{', '.join(skipped)}.")
     return True, (f"{checked}/10 symbols x {len(as_of_offsets)} as-of points = {compared} "
                   f"station-word comparisons against a SECOND state machine with its own "
-                  f"EMA/ATR/cross recursions (no engine.indicators, no station_engine) — "
+                  f"EMA/ATR/cross recursions (no engine.indicators, no posture_engine) — "
                   f"mismatch list EMPTY (= pass)." + skip_note + handoff)
 
 
@@ -383,11 +383,11 @@ def _closure(modname: str) -> set[str]:
 
 def _firewall(extra_banned=(), extra_src="") -> tuple[bool, str]:
     bad = []
-    dec = _closure("station_engine")
+    dec = _closure("posture_engine")
     for m in list(BANNED_IN_DECISION) + list(extra_banned):
         hits = [x for x in dec if x == m or x.startswith(m + ".")]
         if hits:
-            bad.append(f"station_engine reaches {sorted(hits)[:3]}")
+            bad.append(f"posture_engine reaches {sorted(hits)[:3]}")
     both = dec | _closure("oracle_daily")
     # COMPONENT-WISE matching: a banned token is banned at ANY dotted position,
     # so `engine.forward_log` cannot hide behind a top-level-only test.
@@ -400,7 +400,7 @@ def _firewall(extra_banned=(), extra_src="") -> tuple[bool, str]:
     # The two inherited modules are permitted, but ONLY as inherited: no oracle
     # source may import or name them, and no journal READ may be called.
     src_all = "\n".join((ROOT / "scripts" / f).read_text()
-                         for f in ("oracle_daily.py", "station_engine.py")) + extra_src
+                         for f in ("oracle_daily.py", "posture_engine.py")) + extra_src
     for mod in INHERITED_DISCLOSED:
         if re.search(rf"\b(?:from|import)\s+{re.escape(mod)}\b", src_all):
             bad.append(f"an oracle source imports {mod} directly (must be inherited only)")
@@ -408,7 +408,7 @@ def _firewall(extra_banned=(), extra_src="") -> tuple[bool, str]:
         if call in src_all:
             bad.append(f"an oracle source calls a journal read: {call}")
     srcs = {p: (ROOT / "scripts" / p).read_text()
-            for p in ("oracle_daily.py", "station_engine.py")}
+            for p in ("oracle_daily.py", "posture_engine.py")}
     srcs["<injected>"] = extra_src
     for name, src in srcs.items():
         if re.search(r"\b(?:from|import)\s+engine\.trading\b", src) or \
@@ -421,7 +421,7 @@ def _firewall(extra_banned=(), extra_src="") -> tuple[bool, str]:
         return False, "; ".join(sorted(set(bad)))
     present = {m: (m in both) for m in INHERITED_DISCLOSED}
     return True, (
-        f"station_engine closure is analytics-free ({len(dec)} modules); no forward_log "
+        f"posture_engine closure is analytics-free ({len(dec)} modules); no forward_log "
         f"and no positions module is reachable (component-wise match); no oracle source "
         f"imports or names a trading or journal module; no journal read is called; no "
         f"outcome-aggregation symbol is assigned. "
@@ -526,7 +526,7 @@ def _anchors(perturb=False) -> tuple[bool, str]:
     lines, bad = [], []
     for sym in OD.REGISTER["ROSTER"]["value"]:
         df = OD.load_lens(sym, "4h")
-        a1 = SE.last_tide_flip(SE.build_frame(df), len(df) - 1)
+        a1 = PE.last_tide_flip(PE.build_frame(df), len(df) - 1)
         df2 = df.copy()
         if perturb:
             # The anchor is an e89-vs-e316 crossing, so a single-bar nudge cannot
@@ -536,7 +536,7 @@ def _anchors(perturb=False) -> tuple[bool, str]:
             ramp = np.linspace(1.0, 1.8, n)
             df2.iloc[-n:, df2.columns.get_loc("close")] = \
                 df2["close"].to_numpy("float64")[-n:] * ramp
-        a2 = SE.last_tide_flip(SE.build_frame(df2), len(df2) - 1)
+        a2 = PE.last_tide_flip(PE.build_frame(df2), len(df2) - 1)
         if a1 != a2:
             bad.append(f"{sym}: {a1} != {a2}")
         lines.append(f"{sym.replace('USDT','')}@{a1[1]}")
@@ -555,10 +555,10 @@ def f_br_5() -> None:
 
 def _refresh(tamper=False) -> tuple[bool, str]:
     view = OD.build_view(log=lambda *a, **k: None)
-    d1 = OD.render_html(view, DATE, SE.canon_sha())
+    d1 = OD.render_html(view, DATE, PE.canon_sha())
     if tamper:
         view["assets"][0]["heat"] += 0.5
-    d2 = OD.render_html(view, DATE, SE.canon_sha())
+    d2 = OD.render_html(view, DATE, PE.canon_sha())
     diffs = []
     for name in ("The Board", "The Watch"):
         s1, s2 = _sec(d1, name), _sec(d2, name)
@@ -624,7 +624,7 @@ def _footer(doc: str) -> tuple[bool, str]:
         "payload shas": n_sha >= 10,
         "CERTIFIED list": "CERTIFIED:" in foot,
         "NOT CERTIFIED list": "NOT CERTIFIED:" in foot,
-        "station canon sha": SE.canon_sha() in foot,
+        "posture canon sha": PE.canon_sha() in foot,
     }
     missing = [k for k, v in need.items() if not v]
     if missing:

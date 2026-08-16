@@ -70,7 +70,8 @@ REGISTER: dict[str, dict] = {
     "OVERLAP_BARS": {
         "value": OVERLAP_BARS,
         "ruled": False,
-        "source": "PROPOSED by the BR-1b build 2026-08-16 — UNRULED [VETO]. The fetch "
+        "deferred_to": "BR-2",
+        "source": "DEFERRED-TO-BR2 by BR-1 Amendment A2-6 (operator, 2026-08-16): BR-2 proposes a measured value from a week of D-7 distributions; nothing self-adopts. ORIGINALLY: PROPOSED by the BR-1b build 2026-08-16 — UNRULED [VETO]. The fetch "
                   "starts OVERLAP_BARS before the newest cached bar so that a bar stored "
                   "while still forming is re-pulled once closed. engine.data's cache "
                   "merge is keep='last' on open_time, so overlap is corrective, not "
@@ -103,7 +104,7 @@ def enumerate_scope(log=print) -> dict:
     import tempfile
 
     import oracle_daily as OD
-    import station_engine as SE
+    import posture_engine as PE
 
     seen: dict[tuple[str, str], int] = {}
     orig = OD.load_lens
@@ -128,7 +129,7 @@ def enumerate_scope(log=print) -> dict:
     # BYTE-IDENTICAL — and this manifest pins its sha256, so touching it would
     # invalidate the very pin the top-up relies on.
     saved = {"OUT_DIR": OD.OUT_DIR, "TAPE_DIR": OD.TAPE_DIR, "CAL_DIR": OD.CAL_DIR,
-             "PAYLOAD_DIR": OD.PAYLOAD_DIR, "CANON": SE.CANON_JSON_PATH}
+             "PAYLOAD_DIR": OD.PAYLOAD_DIR, "CANON": PE.CANON_JSON_PATH}
     OD.load_lens = spy
     with tempfile.TemporaryDirectory(prefix="oracle-scope-") as td:
         sandbox = Path(td)
@@ -136,14 +137,14 @@ def enumerate_scope(log=print) -> dict:
         OD.TAPE_DIR = sandbox / "tape"
         OD.CAL_DIR = sandbox / "calibration"
         OD.PAYLOAD_DIR = sandbox / "payloads"
-        SE.CANON_JSON_PATH = sandbox / "station_canon.json"
+        PE.CANON_JSON_PATH = sandbox / "posture_canon.json"
         try:
             OD.run(slot="scope-enumeration", log=lambda *a, **k: None)
         finally:
             OD.load_lens = orig
             OD.OUT_DIR, OD.TAPE_DIR = saved["OUT_DIR"], saved["TAPE_DIR"]
             OD.CAL_DIR, OD.PAYLOAD_DIR = saved["CAL_DIR"], saved["PAYLOAD_DIR"]
-            SE.CANON_JSON_PATH = saved["CANON"]
+            PE.CANON_JSON_PATH = saved["CANON"]
 
     pairs = sorted(seen)
     doc = {

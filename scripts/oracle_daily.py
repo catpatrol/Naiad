@@ -34,7 +34,7 @@ is operations; AGGREGATING outcomes is census work under G-7.
 
 This module reads `analytics/` (the measurement side) for levels, VWAP and
 ATR. It does NOT let analytics touch a station: every posture word comes from
-`station_engine`, whose own import closure is analytics-free so the decision
+`posture_engine`, whose own import closure is analytics-free so the decision
 path stays captured-not-consulted (F-C2-6). F-BR-3 asserts both properties.
 
 WHAT THIS MODULE NEVER DOES: it never reads journal/, never imports
@@ -64,7 +64,7 @@ from analytics import volatility as VOL               # noqa: E402
 from analytics import vwap as VW                      # noqa: E402
 from analytics import ANALYTICS_VERSION, analytics_sha  # noqa: E402
 
-import station_engine as SE                           # noqa: E402
+import posture_engine as PE                           # noqa: E402
 import census2b_program as P                          # noqa: E402
 import tierc3_rules as V3                             # noqa: E402
 
@@ -76,7 +76,7 @@ PAYLOAD_DIR = ROOT / "research_outputs" / "oracle" / "payloads"
 GRID_PARQUET = ROOT / "research_outputs" / "census2b" / "oracle" / "oracle_grid.parquet"
 
 # ═══════════════════════════════════════════════════════ THE CLOSED REGISTER
-# Same law as tierc2/tierc3/station_engine: nothing invented without saying so.
+# Same law as tierc2/tierc3/posture_engine: nothing invented without saying so.
 # 'ruled': False rows are [VETO] and are logged by D-7 every run.
 
 REGISTER: dict[str, dict] = {
@@ -87,9 +87,9 @@ REGISTER: dict[str, dict] = {
                   "BR-1 C-5 'Roster = current 10-asset capture set'; A1-2 'Roster as-is'.",
     },
     "LENS": {
-        "value": SE.REGISTER["LENS"]["value"],
+        "value": PE.REGISTER["LENS"]["value"],
         "ruled": True,
-        "source": "station_engine.REGISTER['LENS'] — the rule card's 4h. The Board, the "
+        "source": "posture_engine.REGISTER['LENS'] — the rule card's 4h. The Board, the "
                   "Cards and the Watch all read ONE lens so a row means one thing.",
     },
     "MANTLE_BARS": {
@@ -106,14 +106,16 @@ REGISTER: dict[str, dict] = {
     "FIRED_WINDOW_HOURS": {
         "value": 24,
         "ruled": False,
-        "source": "PROPOSED by the BR-1 build 2026-08-16 — UNRULED [VETO]. C-8 says "
+        "deferred_to": "BR-2",
+        "source": "DEFERRED-TO-BR2 by BR-1 Amendment A2-6 (operator, 2026-08-16): BR-2 proposes a measured value from a week of D-7 distributions; nothing self-adopts. ORIGINALLY: PROPOSED by the BR-1 build 2026-08-16 — UNRULED [VETO]. C-8 says "
                   "'yesterday's fired events' and does not define yesterday. 24h back "
                   "from the as-of bar. D-7 logs the resulting event count per run.",
     },
     "GRID_TOLL_KEY": {
         "value": ("4h", "12_26 IN-WINDOW"),
         "ruled": False,
-        "source": "PROPOSED by the BR-1 build 2026-08-16 — UNRULED [VETO]. C-2 says the "
+        "deferred_to": "BR-2",
+        "source": "DEFERRED-TO-BR2 by BR-1 Amendment A2-6 (operator, 2026-08-16): BR-2 proposes a measured value from a week of D-7 distributions; nothing self-adopts. ORIGINALLY: PROPOSED by the BR-1 build 2026-08-16 — UNRULED [VETO]. C-2 says the "
                   "toll comes from the ORACLE GRID 'by name and lens' but no mapping from "
                   "a Trap Card to a (lens, class) key is written anywhere. A card is a "
                   "12/26 in-window entry on the 4h lens, so this is that cell. "
@@ -121,20 +123,22 @@ REGISTER: dict[str, dict] = {
     },
     "NET_RR_FORM": {
         "value": "(reward - toll_price) / (risk + toll_price)",
-        "ruled": False,
-        "source": "PROPOSED by the BR-1 build 2026-08-16 — UNRULED [VETO]. NO net-R:R "
-                  "formula exists anywhere in the estate; C-2 requires one and forbids a "
-                  "cost-free number. The round-trip toll is paid whether the trade wins "
-                  "or loses, so it shrinks the reward AND widens the realised loss — the "
-                  "conservative reading. toll_price = toll_atr x ATR(lens). Both inputs "
-                  "print beside every ratio so the operator can re-derive it by eye.",
+        "ruled": True,
+        "source": "RATIFIED by BR-1 Amendment A2-4 (operator, 2026-08-16), closing "
+                  "finding V-5: '(reward - toll) / (risk + toll), toll paid win or lose; "
+                  "both inputs print beside every ratio.' Proposed by the BR-1 build "
+                  "because no net-R:R formula existed anywhere in the estate while C-2 "
+                  "required one and forbade a cost-free number. toll_price = toll_atr x "
+                  "ATR(lens); both inputs print beside every ratio so the operator can "
+                  "re-derive it by eye.",
     },
     "HEAT": {
         "value": "score / (1 + atr_distance)",
         "ruled": False,
-        "source": "PROPOSED by the BR-1 build 2026-08-16 — UNRULED [VETO]. The only text "
+        "deferred_to": "BR-2",
+        "source": "DEFERRED-TO-BR2 by BR-1 Amendment A2-6 (operator, 2026-08-16): BR-2 proposes a measured value from a week of D-7 distributions; nothing self-adopts. ORIGINALLY: PROPOSED by the BR-1 build 2026-08-16 — UNRULED [VETO]. The only text "
                   "is 'sorted by heat (proximity x cluster score)'. Both inputs print in "
-                  "the row so the sort is auditable. See station_engine.REGISTER['HEAT_KEY'].",
+                  "the row so the sort is auditable. See posture_engine.REGISTER['HEAT_KEY'].",
     },
     "VWAP_WINDOWS_D": {
         "value": (7, 30),
@@ -159,7 +163,7 @@ CERTIFIED = (
 NOT_CERTIFIED = (
     "volume_profile / LVN / va_nesting — FIXTURE-VERIFIED, never chart-certified BY DESIGN",
     "RVOL — uncertified",
-    "station canon v1 — the four-word MAP is PROPOSED, not ruled (see the [VETO] table)",
+    "posture canon v1 — the four-word MAP is PROPOSED, not ruled (see the [VETO] table)",
     "net R:R form — PROPOSED, no estate precedent exists",
 )
 
@@ -211,8 +215,8 @@ def level_registry(sym: str, h4: pd.DataFrame, h1: pd.DataFrame, atr_d: float):
     n = len(hi)
     as_of = n - 1
     for kind, vals in (("high", hi), ("low", lo)):
-        idx, lvl, _conf = ST.confirmed_pivots(vals, as_of, left=SE.REGISTER["PIVOT_L"]["value"],
-                                              right=SE.REGISTER["PIVOT_R"]["value"], kind=kind)
+        idx, lvl, _conf = ST.confirmed_pivots(vals, as_of, left=PE.REGISTER["PIVOT_L"]["value"],
+                                              right=PE.REGISTER["PIVOT_R"]["value"], kind=kind)
         for i, v in zip(np.asarray(idx), np.asarray(lvl)):
             if int(i) >= n - look:
                 reg.add("structure", f"4h pivot {kind} @{int(i)}", float(v),
@@ -393,7 +397,7 @@ def build_view(as_of_ms: int | None = None, log=print) -> dict:
             h4 = h4[h4["open_time"] <= as_of_ms].reset_index(drop=True)
             h1 = h1[h1["open_time"] <= as_of_ms].reset_index(drop=True)
         atr_d = daily_atr(h1)
-        st = SE.stations_for(sym, h4)
+        st = PE.stations_for(sym, h4)
         reg, members, clusters = level_registry(sym, h4, h1, atr_d)
         price = st.close
         lis = L.lines_in_sand(clusters, price, atr_d)
@@ -474,7 +478,7 @@ def trap_card(sym, h4, st, clusters, atr_d, toll_atr) -> dict | None:
     pv = V3.build_pivots_4h(h4["high"].to_numpy("float64"), h4["low"].to_numpy("float64"))
     stop = V3.struct_stop_4h(pv, st.as_of_i, entry, direction, atr_l,
                              lookback=REGISTER["PIVOT_LOOKBACK_BARS"]["value"],
-                             min_stop_atr=SE.REGISTER["MIN_STOP_ATR"]["value"])
+                             min_stop_atr=PE.REGISTER["MIN_STOP_ATR"]["value"])
     if stop is None:
         return {
             "direction": "long" if direction == 1 else "short",
@@ -492,7 +496,7 @@ def trap_card(sym, h4, st, clusters, atr_d, toll_atr) -> dict | None:
         }
     stop_px = float(stop.stop_px)
     anchor = (f"4h swing pivot @bar {stop.anchor_bar} + "
-              f"{SE.REGISTER['STOP_BUF_ATR']['value']} ATR buffer"
+              f"{PE.REGISTER['STOP_BUF_ATR']['value']} ATR buffer"
               + ("; RAIL BINDING at 1.0 ATR" if stop.rail_binding else "")
               + f"; {stop.n_eligible} eligible pivot(s)")
     risk = float(stop.r_dist)
@@ -553,8 +557,8 @@ def fired_events(roster, as_of_ms, g, log=print) -> dict:
                 df = df[df["open_time"] <= as_of_ms].reset_index(drop=True)
             if len(df) < warm + 5:
                 continue
-            f = SE.build_frame(df)
-            x = SE.crosses(f)
+            f = PE.build_frame(df)
+            x = PE.crosses(f)
             cut = int(f.open_ms[-1]) - hours * 3_600_000
             recent = f.open_ms >= cut
             for cls, series in (("12_89", x["w_up"] | x["w_dn"]),
@@ -754,16 +758,25 @@ def render_html(view: dict, date_str: str, canon_sha: str) -> str:
 
     r1 = r1_block(view)
 
+    def _chip(src):
+        return ('<span class="chip defer">DEFERRED-TO-BR2</span>'
+                if src.get("deferred_to") == "BR-2"
+                else '<span class="chip">[VETO]</span>')
+
     veto = []
-    for name, src in ([(k, v) for k, v in SE.REGISTER.items() if not v["ruled"]]
-                      + [(k, v) for k, v in REGISTER.items() if not v["ruled"]]):
+    rows = ([(k, v) for k, v in PE.REGISTER.items() if not v["ruled"]]
+            + [(k, v) for k, v in REGISTER.items() if not v["ruled"]]
+            + [(f"CANON.{k}", v) for k, v in PE.CANON.items() if not v["ruled"]])
+    try:
+        import oracle_topup as _TU
+        rows += [(k, v) for k, v in _TU.REGISTER.items() if not v.get("ruled", True)]
+    except Exception:
+        pass
+    for name, src in rows:
         veto.append(f"<tr><td><code>{html.escape(name)}</code></td>"
-                    f"<td class='num'>{html.escape(str(src['value']))}</td>"
+                    f"<td>{_chip(src)}</td>"
+                    f"<td class='num'>{html.escape(str(src.get('value', 'gate')))}</td>"
                     f"<td class='small'>{html.escape(src['source'])}</td></tr>")
-    for k, v in SE.CANON.items():
-        if not v["ruled"]:
-            veto.append(f"<tr><td><code>CANON.{k}</code></td><td class='num'>gate</td>"
-                        f"<td class='small'>{html.escape(v['source'])}</td></tr>")
 
     pay_js = []
     for name, pl in view["payloads"].items():
@@ -773,6 +786,7 @@ def render_html(view: dict, date_str: str, canon_sha: str) -> str:
 
     shas = " · ".join(f"payload {n} sha256 {p['meta']['sha256']}"
                       for n, p in view["payloads"].items())
+    stale_banner = staleness_banner(view)
 
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
@@ -788,6 +802,9 @@ h2{{font-size:13px;letter-spacing:.18em;color:var(--mut);margin:34px 0 10px;
    border-bottom:1px solid var(--line);padding-bottom:6px;text-transform:uppercase}}
 .banner{{border:1px solid var(--terra);color:var(--terra);padding:8px 12px;
    font-size:11px;letter-spacing:.1em;margin:14px 0 6px}}
+.stale{{border:2px solid var(--terra);background:rgba(198,113,57,.14);color:var(--terra);
+   padding:10px 12px;font-size:12px;font-weight:700;letter-spacing:.1em;margin:14px 0 6px}}
+.chip.defer{{color:var(--sage);border-color:var(--sage)}}
 table{{width:100%;border-collapse:collapse;font-size:12.5px}}
 th{{text-align:left;color:var(--mut);font-weight:400;font-size:11px;
    letter-spacing:.1em;border-bottom:1px solid var(--line);padding:6px 8px}}
@@ -821,10 +838,10 @@ footer{{margin-top:40px;border-top:1px solid var(--line);padding-top:14px;
    font-size:10.5px;color:var(--mut);word-break:break-word}}
 </style></head><body><div class="wrap">
 <h1>THE ORACLE — {date_str}</h1>
-<div class="banner">DISPLAY-ONLY · OPERATIONS · not study evidence · no journal is read ·
+{stale_banner}<div class="banner">DISPLAY-ONLY · OPERATIONS · not study evidence · no journal is read ·
 no outcome is scored · rules are born only under G-7 on exploration-classic</div>
 <p class="small muted">lens {lens} · as-of bar {as_of.strftime('%Y-%m-%dT%H:%MZ')} ·
-roster {len(a0)} · station canon v1 sha256 {canon_sha}</p>
+roster {len(a0)} · posture canon v1 sha256 {canon_sha}</p>
 
 <h2>The Board — where is business possible today</h2>
 <table><tr><th>asset</th><th>regime</th><th>dist</th><th>score</th>
@@ -853,13 +870,17 @@ comparable across assets. H20 at 4h is infeasible by construction (0 bars) and p
 <h2>R1 — alert prices, paste-ready</h2>
 <pre class="r1">{html.escape(r1)}</pre>
 
-<h2>Appendix — the [VETO] table: what this build PROPOSED and did not rule</h2>
-<table><tr><th>constant</th><th>value</th><th>why it is not law</th></tr>
+<h2>Appendix — posture canon v1 · the rows still open</h2>
+<p class="small muted">BR-1 Amendment A2 (operator, 2026-08-16) ruled the naming, the trigger
+pair, the net R:R form and the schedule. The rows below are what remains: each is
+DEFERRED-TO-BR2, which proposes a measured value from a week of D-7 distributions.
+Nothing self-adopts.</p>
+<table><tr><th>constant</th><th>disposition</th><th>value</th><th>why it is not law</th></tr>
 {''.join(veto)}</table>
 
 <footer>
 DISPLAY-ONLY · operations · {date_str} · lens {lens} ·
-station canon v1 sha256 {canon_sha} · {shas} ·
+posture canon v1 sha256 {canon_sha} · {shas} ·
 displacements are (EMA−price)/ATR · analytics {ANALYTICS_VERSION} sha {analytics_sha()} ·
 net R:R = {html.escape(REGISTER['NET_RR_FORM']['value'])}, toll from the ORACLE GRID
 (census-2B, oracle_grid.parquet) — no cost-free number prints on this page.<br>
@@ -871,6 +892,37 @@ under G-7 on exploration-classic.
 <script>{''.join(pay_js)}</script>
 <script>{MANTLE_JS}</script>
 </body></html>"""
+
+
+# ═══════════════════════════════════════════ A2-7 · THE STALENESS BANNER
+# BR-1 Amendment A2-7 (operator, 2026-08-16), a PARTIAL remedy for finding T-3:
+# launchd runs a missed calendar job on wake, so a laptop asleep at 06:45 can
+# fetch AFTER the 07:00 Oracle has already rendered, and the brief would be a
+# day stale with nothing to say so. This banner says so. It is display-only and
+# [VETO-by-firing]: the threshold earns its keep the first time it fires.
+#
+# It does NOT close T-3. The wake-order race — should the Oracle refuse to
+# render at all on a stale cache? — is still an open ruling.
+STALE_LENS_PERIODS = 2
+
+LENS_MS = {"5m": 300_000, "15m": 900_000, "30m": 1_800_000,
+           "1h": 3_600_000, "4h": 14_400_000, "12h": 43_200_000}
+
+
+def staleness_banner(view: dict) -> str:
+    """A2-7. Fires when the newest cache bar is older than STALE_LENS_PERIODS
+    lens periods AT RENDER TIME. The as-of stamp prints regardless — the banner
+    adds an alarm, it never replaces the provenance."""
+    step = LENS_MS[view["lens"]]
+    now_ms = int(datetime.now(timezone.utc).timestamp() * 1000)
+    age_ms = now_ms - int(view["as_of_ms"])
+    limit = STALE_LENS_PERIODS * step
+    if age_ms <= limit:
+        return ""
+    return (f'<div class="stale">STALE DATA — the newest {view["lens"]} bar is '
+            f'{age_ms / 3_600_000:.1f}h old, over the {STALE_LENS_PERIODS}-lens-period '
+            f'limit of {limit / 3_600_000:.1f}h. The top-up may not have run. Every '
+            f'number below is computed from that bar, and the as-of stamp names it.</div>')
 
 
 def r1_block(view: dict) -> str:
@@ -990,21 +1042,21 @@ def write_calibration(view: dict, date_str: str, slot: str) -> tuple[Path, str, 
         "date": date_str, "slot": slot, "lens": view["lens"],
         "as_of_ms": view["as_of_ms"],
         "generated_utc": datetime.now(timezone.utc).isoformat(),
-        "station_canon_sha256": SE.canon_sha(),
+        "posture_canon_sha256": PE.canon_sha(),
         "thresholds_in_force": {
             "collapse_atr": L.COLLAPSE_ATR, "cluster_atr": L.CLUSTER_ATR,
             "lis_atr": L.LIS_ATR, "family_cap": L.FAMILY_CAP,
             "maturity_line_min": VW.LINE_MIN_BARS, "maturity_band_min": VW.BAND_MIN_BARS,
-            "d_displacement": SE.REGISTER["D_DISPLACEMENT"]["value"],
-            "dead_memory_bars": SE.REGISTER["DEAD_MEMORY_BARS"]["value"],
+            "d_displacement": PE.REGISTER["D_DISPLACEMENT"]["value"],
+            "dead_memory_bars": PE.REGISTER["DEAD_MEMORY_BARS"]["value"],
         },
         "veto_rows_awaiting_ruling": (
-            [k for k, v in SE.REGISTER.items() if not v["ruled"]]
+            [k for k, v in PE.REGISTER.items() if not v["ruled"]]
             + [k for k, v in REGISTER.items() if not v["ruled"]]
-            + [f"CANON.{k}" for k, v in SE.CANON.items() if not v["ruled"]]),
+            + [f"CANON.{k}" for k, v in PE.CANON.items() if not v["ruled"]]),
         "station_distribution": {w: sum(1 for a in view["assets"]
                                         if a["station"].board_word == w)
-                                 for w in SE.STATION_WORDS},
+                                 for w in PE.STATION_WORDS},
         "fired_event_cells": len(view["fired"]["rows"]),
         "per_asset": per_asset,
     }
@@ -1023,8 +1075,8 @@ def run(slot: str = "full", as_of_ms: int | None = None, log=print) -> dict:
     date_str = now_ba.strftime("%Y-%m-%d")
 
     log(f"ORACLE {slot} · {date_str} · lens {REGISTER['LENS']['value']}")
-    canon_p, canon_sha, canon_b = SE.write_canon_json()
-    log(f"  station_canon.json {canon_b} B sha256 {canon_sha}")
+    canon_p, canon_sha, canon_b = PE.write_canon_json()
+    log(f"  posture_canon.json {canon_b} B sha256 {canon_sha}")
 
     view = build_view(as_of_ms=as_of_ms, log=log)
 
