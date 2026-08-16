@@ -1386,3 +1386,142 @@ BOX: exchange/** = 2,722,503 B = 17.02% before this document; tick set 2,981,801
      = 18.64%, level OK (warn 40 / refuse 70). This paste adds ~19 KB, ~24% of the
      <0.5% target. The 12.7 MB of payloads never touch the box — local, ferried.
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-15g ===
+NOW: TIER-C3 IS MEASURED. THE RAILED BASELINE — the seven F's enacted as card
+     diffs — is **+0.7056 R per trade over 11 trades**, 2025-10-06 -> 2026-01-31,
+     net of a 10 bps round trip and journaled funding. Net R +7.7614 · win rate
+     45.45% (5 of 11) · maxDD 4.2697 R.
+     STATED BESIDE ITS PREDECESSOR, WHICH IS THE ONLY WAY IT MEANS ANYTHING:
+         TIER-C2 (v1, 1H anchor, no rail)   -0.7762 R / trade   n = 10   win 10.00%
+         TIER-C3 (v3, 4h anchor, 1.0 ATR)   +0.7056 R / trade   n = 11   win 45.45%
+     SAME CORRIDOR, SAME TIDE, WINDOW, TRIGGER, BELL AND TOLL. THE NUMBER
+     CHANGED SIGN. IT IS PROVISIONAL AND IS LABELLED SO ON EVERY HEADLINE ROW —
+     "YARDSTICK v3 — PROVISIONAL (one regime, n small)". 9 of 11 trades are
+     still shorts, and ONE trade is 71.8% of the swing.
+     *** AND IT WAS NOT THE RAIL. *** See FACT 1.
+CLASS: measurement, not registration. m = 0. NO lockbox read — enforced in code,
+       not asserted in prose (FACT 2). No estate write. No live orders. engine/,
+       analytics/ and scripts/tierc2_* byte-untouched.
+LAST EVENT: 2026-08-15 — TIER-C3 RAILED BASELINE, one build document:
+       exchange/reports/BUILD_2026-08-15_TIERC3_RAILED.md
+       *** THAT DOCUMENT SUPERSEDES THE VERSION AT COMMIT af6ebf4. *** An
+       exchange/** auto-publish fired from another lane mid-build and committed
+       AND PUSHED the draft, whose headline was +6.7151 R over 12 trades. An
+       adversarial audit then found a seal breach and a false attribution; both
+       are fixed in code and the corrected document is the build's. The guard
+       did exactly what it is specified to do — see F-C3-i.
+V-10: **CLOSED BY RULING.** DESIGN_CONTRACT_VIZ3_TRADE_CATHEDRAL_2026-08-15.md was
+       sought a third time and is ABSENT. Per F-1, VIZ-4's inline restatement of
+       the iron rules is PROMOTED to the rules of record — one line,
+       exchange/reports/RULES_OF_RECORD_VIZ_IRON_2026-08-15.md, cited to the VIZ-4
+       contract sha256 8e8b3264805c9dee92d4bd9ad79ba62e56f1f404175d9a60d82ae9d1b1cdec7c.
+       VIZ-3 stops being cited. The re-attach item is STRUCK, not carried.
+ARTIFACTS: scripts/tierc3_rules.py · scripts/tierc3_baseline.py ·
+       scripts/tierc3_fixtures.py (all new) · research_outputs/tierc3/ (14 parquet
+       tables + manifest, local, gitignored) · .gitignore (tierc3 lines).
+       Table content-shas: funnel 391fae98 · headline bd0cca2b · journal 7bf46e07 ·
+       delta_v1_v3 de6f0a02 · attribution_unscored d1be133f · stop_geometry ff082da0
+       · tape e5ef978a.
+FACTS: [8]
+ 1. IT WAS NOT THE RAIL, AND THE BUILD IS NAMED FOR THE RAIL. The diffs were
+    switched off one at a time and the corridor re-ridden through the SAME code
+    path (attribution_unscored.parquet, F-C3-ABLATE, UNSCORED):
+        V1  1H anchor, no rail, no lead-in      -7.7620 / 10   (reproduces v1)
+        D   4h anchor                           +8.6507 / 10   +16.4127 vs V1
+        C   4h anchor + rail                    +8.8032 / 10   +0.1525  vs D
+        B   4h anchor + lead-in                 +7.6062 / 11   -1.0445  vs D
+        A   4h anchor + rail + lead-in (SHIPPED)+7.7614 / 11   +0.1552  vs B
+    THE ANCHOR LENS CARRIES THE RESULT. The rail is cheap insurance that almost
+    never pays out on this corridor. The V1 cell reproduces Tier-C2's FILED net
+    R to 2.2e-05, so every marginal is the DIFF and not the fork. Consequence
+    beyond naming: the object a multiplier must beat is the 4h-anchor card.
+ 2. THE CARD, EXECUTED LITERALLY, READS THE LOCKBOX. F-3 quadrupled the anchor
+    lookback's reach in TIME (200 bars = 200 h on 1h, 800 h on 4h) and F-5 pulled
+    the first entry to 2025-10-08, two days after the seal closes. The two
+    rulings met: the low of the SEALED 4h bar 2025-09-15T12:00Z becomes a scored
+    trade's structural anchor — published, used as the R denominator, paid out as
+    the exit price — and EVERY anchor that trade could reach is sealed, so
+    without a lockbox read the trade does not exist. The CARD has no seal floor;
+    the CLASS LINE does. Precedent Tier-C2 §0: "the corridor moved, the seal did
+    not." Sealed bars are masked out of anchor eligibility; 2 armings refused.
+    BOTH NUMBERS PRINTED: with the floor +7.7614/11, without it +6.7151/12.
+    v1 was clean here BY ARITHMETIC ACCIDENT, not by design.
+ 3. FOUR SURVIVALS DID IT, NOT TEN. Four of the ten shared armings changed exit
+    reason stop -> bell_12_89; the other six moved 0.004-0.090 R, which is only
+    the toll shrinking against a wider R. ETHUSDT short 2025-10-29 alone is
+    +11.1480 of the 15.5234 swing (71.8%) — the SAME trade v1's F-3 was about.
+ 4. THE F-3 ROW IS NOT A NEW PRICE PATH. v1's own bell-only counterfactual was
+    +19.1618 R against R = 41.1318 = 788.161 price units; v3's REALISED outcome
+    is +10.0526 R against R = 78.4037 = 788.161. Identical path, different
+    denominator, asserted to 3.97e-05. And the width that saved it came from the
+    LENS, not the rail: even unrailed, that trade's 4h pivot stop (3965.20) sits
+    above the excursion that killed it in v1 (3962.55).
+ 5. THE RAIL IS PROVED PER TRADE. F-C3-RAIL asserts R >= 1.0 x ATR on every one
+    of the eleven individually, re-derives stop = the farther of {pivot, rail} to
+    1e-6, and checks rail_binding is arithmetic not a label. R/ATR range
+    1.0000 -> 3.1907 (v1: 0.5246 -> 2.1637). Worst toll bite halved, 19.36% of R
+    -> 9.49%. Rail BINDING on 3 of 11.
+ 6. THE 4h LENS DOES NOT UNIFORMLY WIDEN THE STOP. ZECUSDT's 4h anchor sat NEARER
+    than its 1H anchor (0.651 ATR vs 1.044), so on that trade the lens NARROWED R
+    and only the rail restored it. "Railed" is the true word; "wider" is not.
+ 7. THE F-5 LEAD-IN CORROBORATED v1's PREDICTION AND COST 1.04 R. v1's F-5 said
+    "4 armings passed tide+d in the 30 days before, 2 triggered inside the
+    window"; v3 measures 4 and 2 — of which one survives the seal floor and one
+    does not. The single trade it bought is a LOSER. An edge correction that only
+    ever added winners would deserve suspicion.
+ 8. 10/10 FIXTURES PASS, including TWO THAT DID NOT EXIST BEFORE THE AUDIT:
+    F-C3-SEAL resolves every scored trade's anchor back to the bar it was quoted
+    from and asserts that bar is not sealed (0 of 11 sealed) — a min/max-of-
+    timestamps era test can never see a sealed PRICE, which is why the first
+    draft passed 8/8 while breaching the seal. F-C3-ABLATE proves the fork
+    reproduces its parent. Determinism hash-identical across 14 tables AND the
+    counts block. F-KEY 0 duplicates on 13 written tables plus six funnel
+    reconciliation identities. Suite 323 passed / 1 skipped / 1 deselected —
+    measured WITH and WITHOUT this build's files, identical both ways (the count
+    moved from 314 because commit 7176b6d landed tests/test_bus_health.py from
+    another lane mid-build). The card's unchanged half is Tier-C2's OWN OBJECTS,
+    bound by import: F-C3-INHERIT asserts twelve identities with `is`, so a copy
+    cannot drift because there is no copy.
+Q6 DECISION RULE, RE-INVOKED AGAINST v3: Q6c still governs — "stillbirth
+     counterfactual first; rescore all historical fills by range-position BEFORE
+     any location gate becomes law." v3 is a SECOND unconditioned population of
+     fills over the same corridor, and its 640-row tape is the location record it
+     must be rescored against. Nothing in the v3 decision path read a registry
+     symbol — proved by AST scan over BOTH decision modules and an import closure
+     whose project members are exactly {engine.indicators, tierc2_rules,
+     tierc3_rules}. So the counterfactual is still answerable, and it is now
+     answerable TWICE over one corridor, once per card version. That is a
+     strictly better position than Q6c required and it was not paid for with a
+     conditioning. NO LOCATION GATE IS PROPOSED, and none may be until the
+     rescore is done.
+PENDING (operator): 5 rulings, all in §8 of the build document —
+     F-C3-a  THE SEAL FLOOR: ratify it as standing law (an anchor is a price, not
+             a state), or overturn it and accept the sealed read with disclosure.
+             Related and larger: the F-5 lead-in reaches into the seal WHENEVER a
+             corridor starts adjacent to it — moving future corridor starts 30
+             days later closes the whole class
+     F-C3-b  THE NAME: rename the baseline, or ratify "railed" as historical and
+             record the attribution beside it. The rail is +0.15 R
+     F-C3-c  PIN THE LOOKBACK in the card, in BARS or in HOURS. 200 bars-in-lens
+             (taken) vs 200 hours (50 bars) disagree on the anchor for 6 of 11
+             trades, and the bars reading is what let the search reach the seal.
+             Counts only, NO R attached to either reading
+     F-C3-d  is an 11-trade, one-regime, one-dominant-trade result an acceptable
+             bar for a multiplier to beat? PROVISIONAL stands until answered
+     F-C3-e  TWO RAILS FOR ONE CONCEPT — G-8c min_stop_atr 0.5 and the v3 card's
+             1.0. Reconcile, or name them as deliberately distinct objects the
+             way TC-2 / Tier-C2 had to be
+     -- also filed, not blocking: F-C3-f (the 4h lens is not uniformly wider),
+     F-C3-g (NO STAGE B was built; configs/tierc2_paper.yaml and the heartbeat
+     still enact the SUPERSEDED v1 card — the live paper line is one full card
+     version behind the yardstick), F-C3-h (the cross-version bell-only
+     comparison is not like-for-like; do not subtract them), F-C3-i (exchange/**
+     auto-publishes, so a draft build document is published the instant it is
+     written — the superseded draft of this build is at af6ebf4 and on the
+     remote), F-C3-j (F-6 carried for the next TC; m = 0 — these tables must not
+     be mined as if they were a registration).
+NEXT: the operator reads §0 (the sign change, the attribution, and the seal
+      floor), §3 (the delta table), and §8 F-C3-a and F-C3-b. Owner: operator.
+PROBE LEDGER: m = 0. EXPLORATION — ungated; promotion requires registration.
+=== END STATUS ===
