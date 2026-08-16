@@ -8,6 +8,8 @@
 
 **Programs (local):** `scripts/tierc4_rules.py` (decision path) · `scripts/tierc4_baseline.py` (program) · `scripts/tierc4_fixtures.py` (transcript) · `scripts/tierc4_independent.py` (a second, independent reading of the card — §9). **Tables local** at `research_outputs/tierc4/` — 17 parquet + `build_manifest.json`.
 
+> **THIS DOCUMENT SUPERSEDES THE VERSIONS AT COMMITS `5d4acdc` AND `49cc242`.** `exchange/**` auto-publishes, so this document was on the remote the instant it was first written — F-C3-i, carried and now demonstrated a second time. **The three states differ ONLY in §11's BOX-COST block** (estimated figures → `publish_exchange`'s own published figures → this banner). **No finding, table, fixture verdict or headline figure differs between them.** Named because the estate's rule is that an intermediate published state is part of the record, not because anything was corrected.
+
 **I9** — `ANALYTICS_VERSION` **1.5.0**, `analytics_sha()` `ea5f02f21ca43b6b71e450b540ff09c807b305971e3eb8cff50bea84c985dc91`. Instrument: **BINANCE USDT-M perpetuals**, `{BTC,ETH,SOL,NEAR,ZEC}USDT.P`, offline cache `~/.cache/naiad/data_cache/klines`.
 
 ---
@@ -417,7 +419,7 @@ So `scripts/tierc4_independent.py` **re-implements the whole v4 card from the ca
 | **tick set** (`exchange/**` + `LEDGER.md`) — *governs* | 3,232,518 B · 20.20% | **3,303,749 B · 20.65%** |
 | level | OK | **OK** (warn 40% / refuse 70%) · headroom to REFUSE ≈ **7.90 MB** |
 
-**This paste's own two files: 68,743 B (this document, after the BOX-COST block itself was written) + 4,635 B (the `LEDGER_APOLLO` append) ≈ 73,400 B ≈ 0.46% of the box.**
+**This paste's own two files: ≈ 68.8 KB (this document) + 4,635 B (the `LEDGER_APOLLO` append) ≈ 73.4 KB ≈ 0.46% of the box.** *(The document's own size is quoted approximately on purpose: a byte-exact self-measurement inside the file it measures cannot converge.)*
 
 **AGAINST THE < 0.5% TARGET (80,000 B) THAT IS 92% OF BUDGET, WITH ≈ 6.6 KB UNSPENT — and it is a bigger document than Tier-C3's 50,439 B.** The card said LEAN and this is not lean. Where the extra went, so the operator can rule on it: the five card deliverables cost what they cost, and **§9's repair table plus five new findings are the post-review overhead**. **Named rather than trimmed, because the alternative was to cut the record of what the review found, which is the one part of a build document that cannot be re-derived from the tables.**
 
