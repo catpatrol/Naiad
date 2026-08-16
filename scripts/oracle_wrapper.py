@@ -55,17 +55,27 @@ AGENTS = Path.home() / "Library" / "LaunchAgents"
 LOGDIR = ROOT / "logs" / "launchd"
 SELFCHECK = ROOT / "research_outputs" / "oracle" / "calibration" / "selfcheck_log.jsonl"
 
-# label -> (slot, target hour in the ORACLE's zone)
+# label -> {slot, hour, minute, job}. Times are in the ORACLE's zone, never the
+# machine's; `machine_local_time_for` resolves them through the zone each run.
+# job "oracle" renders the organ; job "topup" is BR-1b's fetch-and-store, armed
+# 15 minutes ahead of each Oracle slot so the cache is fresh before it is read.
 SLOTS = {
-    "com.naiad.oracle-0700": ("full", 7),
-    "com.naiad.oracle-1600": ("refresh", 16),
+    "com.naiad.oracle-topup-0645": {"slot": "topup", "hour": 6, "minute": 45,
+                                    "job": "topup"},
+    "com.naiad.oracle-0700": {"slot": "full", "hour": 7, "minute": 0,
+                              "job": "oracle"},
+    "com.naiad.oracle-topup-1545": {"slot": "topup", "hour": 15, "minute": 45,
+                                    "job": "topup"},
+    "com.naiad.oracle-1600": {"slot": "refresh", "hour": 16, "minute": 0,
+                              "job": "oracle"},
 }
 
 
 # ══════════════════════════════════════════════════════ THE ZONE ARITHMETIC
 
-def machine_local_hour_for(zone_hour: int, when: datetime | None = None) -> tuple[int, int]:
-    """The machine-local (hour, minute) at which it is `zone_hour`:00 in ZONE.
+def machine_local_time_for(zone_hour: int, zone_minute: int = 0,
+                           when: datetime | None = None) -> tuple[int, int]:
+    """The machine-local (hour, minute) at which it is zone_hour:zone_minute in ZONE.
 
     Computed through the zone, never through a stored UTC offset — the zone is
     the durable quantity and the offset is a rendering of it (the .ps1 the
@@ -73,7 +83,7 @@ def machine_local_hour_for(zone_hour: int, when: datetime | None = None) -> tupl
     """
     z = ZoneInfo(ZONE)
     now = (when or datetime.now(timezone.utc)).astimezone(z)
-    target = now.replace(hour=zone_hour, minute=0, second=0, microsecond=0)
+    target = now.replace(hour=zone_hour, minute=zone_minute, second=0, microsecond=0)
     if target <= now:
         target = target + timedelta(days=1)
     local = target.astimezone()          # the machine's own zone
@@ -97,11 +107,12 @@ def zone_report() -> dict:
 
 # ═════════════════════════════════════════════════════════ THE PLIST ITSELF
 
-def plist_body(label: str, slot: str, hour: int, minute: int) -> dict:
+def plist_body(label: str, slot: str, hour: int, minute: int,
+               job: str = "oracle") -> dict:
     return {
         "Label": label,
         "ProgramArguments": [PY, str(ROOT / "scripts" / "oracle_wrapper.py"),
-                             "--slot", slot],
+                             "--job", job, "--slot", slot],
         "WorkingDirectory": str(ROOT),
         # PATH pinned exactly as the three existing agents pin it: the house
         # reason is that scripts shell out to bare `git`, and pinning makes the
@@ -118,12 +129,12 @@ def plist_body(label: str, slot: str, hour: int, minute: int) -> dict:
 
 
 def write_plist(label: str) -> tuple[Path, int, int]:
-    slot, zone_hour = SLOTS[label]
-    h, m = machine_local_hour_for(zone_hour)
+    cfg = SLOTS[label]
+    h, m = machine_local_time_for(cfg["hour"], cfg["minute"])
     p = AGENTS / f"{label}.plist"
     p.parent.mkdir(parents=True, exist_ok=True)
     LOGDIR.mkdir(parents=True, exist_ok=True)
-    p.write_bytes(plistlib.dumps(plist_body(label, slot, h, m)))
+    p.write_bytes(plistlib.dumps(plist_body(label, cfg["slot"], h, m, cfg["job"])))
     return p, h, m
 
 
@@ -151,8 +162,9 @@ def arm(label: str, log=print) -> dict:
                        capture_output=True, text=True)
     lint = subprocess.run(["plutil", "-lint", str(p)], capture_output=True, text=True)
     sched = loaded_schedule(label)
-    log(f"  ARMED {label}: machine-local {h:02d}:{m:02d} "
-        f"(= {SLOTS[label][1]:02d}:00 {ZONE}) · plist {p}")
+    cfg = SLOTS[label]
+    log(f"  ARMED {label} [{cfg['job']}]: machine-local {h:02d}:{m:02d} "
+        f"(= {cfg['hour']:02d}:{cfg['minute']:02d} {ZONE}) · plist {p}")
     log(f"    plutil: {lint.stdout.strip() or lint.stderr.strip()}")
     log(f"    launchd reports: {sched}")
     if r.returncode != 0:
@@ -163,7 +175,8 @@ def arm(label: str, log=print) -> dict:
 
 def reschedule_if_drifted(label: str, log=print) -> dict:
     """The self-reschedule. Compares the plist's hour against the zone's truth."""
-    want_h, want_m = machine_local_hour_for(SLOTS[label][1])
+    cfg = SLOTS[label]
+    want_h, want_m = machine_local_time_for(cfg["hour"], cfg["minute"])
     p = AGENTS / f"{label}.plist"
     have = {}
     if p.exists():
@@ -252,7 +265,7 @@ def main(argv=None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     log = print
     if "--install" in argv:
-        log("ORACLE — arming two slots")
+        log(f"ORACLE — arming {len(SLOTS)} slots")
         zr = zone_report()
         log(f"  zone check: oracle {zr['oracle_now']} · machine {zr['machine_now']} · "
             f"agree={zr['zones_agree']}")
@@ -266,37 +279,69 @@ def main(argv=None) -> int:
     slot = "full"
     if "--slot" in argv:
         slot = argv[argv.index("--slot") + 1]
+    job = "oracle"
+    if "--job" in argv:
+        job = argv[argv.index("--job") + 1]
 
     started = datetime.now(timezone.utc)
-    log(f"=== ORACLE WRAPPER · slot={slot} · {started.isoformat()} ===")
+    log(f"=== ORACLE WRAPPER · job={job} slot={slot} · {started.isoformat()} ===")
     zr = zone_report()
     log(f"  zone: {zr}")
     rc = 0
     result = {}
-    try:
-        import oracle_daily as OD
-        result = OD.run(slot=slot, log=log)
-        log(f"  render {result['html']} sha256 {result['html_sha']}")
-    except Exception:
-        rc = 1
-        log("  RUN FAILED:\n" + traceback.format_exc())
 
-    res = {}
-    if rc == 0:
+    if job == "topup":
+        # BR-1b. Fetch-and-store only: no render, no self-checks, no publish.
+        # A failure here logs to topup_log.jsonl and exits nonzero; the Oracle
+        # 15 minutes later is unaffected and stamps whatever as-of it finds.
         try:
-            res = self_checks(log=log)
-            if not all(v["pass"] for v in res.values()):
-                rc = 1
+            import oracle_topup as TU
+            doc = TU.run(slot=slot, log=log)
+            rc = 0 if doc["verdict"] == "PASS" else 1
+            log(f"  top-up {doc['verdict']}: +{doc['rows_added']} rows across "
+                f"{doc['pairs']} pair(s), {doc['gaps']} gap(s)")
+        except SystemExit as e:
+            rc = 1
+            log(f"  TOP-UP HALTED: {e}")
         except Exception:
             rc = 1
-            log("  SELF-CHECKS FAILED:\n" + traceback.format_exc())
+            log("  TOP-UP FAILED:\n" + traceback.format_exc())
+            try:
+                import oracle_topup as TU
+                TU.append_log({"ts": datetime.now(timezone.utc).isoformat(),
+                               "date": datetime.now().astimezone().strftime("%Y-%m-%d"),
+                               "slot": slot, "verdict": "FAIL", "pairs": 0,
+                               "rows_added": 0, "gaps": 0,
+                               "failures": ["wrapper-level exception"],
+                               "traceback": traceback.format_exc()[-1200:]})
+            except Exception:
+                pass
+    else:
+        try:
+            import oracle_daily as OD
+            result = OD.run(slot=slot, log=log)
+            log(f"  render {result['html']} sha256 {result['html_sha']}")
+        except Exception:
+            rc = 1
+            log("  RUN FAILED:\n" + traceback.format_exc())
 
-    p = append_selfcheck(slot, res or {"run": {"pass": rc == 0, "detail": "run failed"}},
-                         {"zone_agree": zr["zones_agree"],
-                          "html_sha": result.get("html_sha"),
-                          "seconds": round((datetime.now(timezone.utc) - started)
-                                           .total_seconds(), 1)})
-    log(f"  selfcheck log -> {p}")
+        res = {}
+        if rc == 0:
+            try:
+                res = self_checks(log=log)
+                if not all(v["pass"] for v in res.values()):
+                    rc = 1
+            except Exception:
+                rc = 1
+                log("  SELF-CHECKS FAILED:\n" + traceback.format_exc())
+
+        p = append_selfcheck(slot, res or {"run": {"pass": rc == 0,
+                                                   "detail": "run failed"}},
+                             {"zone_agree": zr["zones_agree"],
+                              "html_sha": result.get("html_sha"),
+                              "seconds": round((datetime.now(timezone.utc) - started)
+                                               .total_seconds(), 1)})
+        log(f"  selfcheck log -> {p}")
 
     # The self-reschedule runs LAST, so a bootout can never kill the run that
     # is producing today's Oracle.
