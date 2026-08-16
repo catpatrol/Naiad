@@ -1525,3 +1525,68 @@ NEXT: the operator reads §0 (the sign change, the attribution, and the seal
       floor), §3 (the delta table), and §8 F-C3-a and F-C3-b. Owner: operator.
 PROBE LEDGER: m = 0. EXPLORATION — ungated; promotion requires registration.
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-16b ===
+NOW: TIER-C4 IS MEASURED. THE MEAN CARD — the v3 card plus the LPS-trail ratchet
+     and the creek/ice harvest — is +0.6907 R per trade over 11 trades against
+     TIER-C3's +0.7056 over 11. THE MEAN DID NOT MOVE. THE SHAPE DID:
+         maxDD 4.2697 -> 2.0348 · tail share 71.83% -> 50.76% ·
+         net R WITHOUT the best trade -2.2912 -> +1.4184, WHICH CHANGES SIGN.
+     The operator asked for "a mean for the average trade" and got one.
+     THE PRICE IS THE TAIL, and it is only visible at scale: on the DISPLAY-ONLY
+     127-trade census strip the same code path takes +145.4539 R -> -7.0097 R and
+     the best trade +165.79 -> +5.85. Display-only, hypothesis generation only,
+     and the most informative number in the build. F-C4-a.
+     ABLATION (unscored, one code path, five cells): V3 +7.7614 | RATCHET-only
+     +7.3262 | HARVEST-only +4.5800 | BOTH +7.5978 | BOTH_NOSEAL +6.5515/12.
+     INTERACTION +3.4530 — the two amendments are NOT separable and must not be
+     quoted apart. The trail pre-empts the harvest: 9 fills alone, 3 together.
+CLASS: measurement, not registration. m = 0. ONE pre-named card, no grid, no
+     sweep; the selection guard is LOADED, CALLED and IDLE at m = 0, in the
+     manifest. NO lockbox read. No estate write. No live orders. engine/,
+     analytics/, scripts/tierc2_* and scripts/tierc3_* byte-untouched.
+RIDE-ONLY, PROVED AS AN OUTCOME: the ENTRY half of the ride loop is a hand
+     TRANSCRIPTION, not an import, so `is` cannot reach it — and five Tier-C3
+     tables therefore come out CONTENT-HASH-IDENTICAL (funnel, lead_in_census,
+     lead_in_trades, strip_d_unscored, anchor_lookback_disclosure). Same
+     armings, same entries, same entry stops. The bell-only counterfactual is
+     byte-identical at -0.0919 R. An INDEPENDENT re-implementation written from
+     the card text (scripts/tierc4_independent.py, sharing only the engine's
+     EMA/ATR and the raw bars) agrees on all 11 trades.
+THE REVIEW RAN BEFORE PUBLICATION, NOT AFTER: six adversarial lenses over the
+     three scripts, 18 findings raised, TWELVE REPAIRED. Nothing in the headline
+     moved; every repair was to a claim, a fixture, or a rule the code obeyed by
+     accident rather than by reading. The recurring shape — a check that
+     re-derives a value the way the program derived it and compares it to itself
+     — accounted for six of them. The sharpest catch: BOTH_NOSEAL files an
+     outcome descended from a SEALED bar while F-C4-SEAL printed a blanket "no
+     outcome anywhere in this build", and leg 3 was structurally blind to it
+     because the ablation table has no timestamp column — the F-C3-a class
+     again, in a table a timestamp test can never reach. Now named, counted and
+     bounded (manifest `seal_read`). Recommendation in F-C4-h: a standing
+     convention that every fixture leg must name what would have to be true for
+     it to FAIL.
+PENDING (operator): 5 rulings, all in section 10 --
+     F-C4-a  IS A MEAN BOUGHT WITH THE TAIL THE OBJECT THE ESTATE WANTS? If yes,
+             the trail needs a rule that lets a runner run, which is a NEW card
+             and a new probe, not a tune of this one
+     F-C4-b  PIN THE TRAIL'S "BEYOND" in the card. 0.5 ATR (taken, re-pointed
+             from the entry anchor's own word) vs 0.0 (the stop at the pivot).
+             The pivot buffer, not the rail, set the stop on 14 of 21 advances
+     F-C4-c  THE RATCHET RETIRES THE BELL: 11 of 11 scored campaigns exit on a
+             stop, 126 of 127 on the display strip. Backstop, or dead law?
+     F-C4-d  A MINIMUM ADVANCE INCREMENT, or ratify that any strict improvement
+             counts. The smallest advance in the book is 0.002053 ATR and it is
+             the one that was PAID OUT
+     F-C4-e  IS HALVING THE RUNNER THE INTENT? The harvest's fills NET +1.7282 R
+             and the amendment still costs -3.1814 R — the cost is the half that
+             was not allowed to run
+     -- also filed, not blocking: F-C4-f (not separable), F-C4-g (n = 11, two
+     trades), F-C4-h (the fixture-hygiene pattern, three builds running),
+     F-C4-i (the "new pivot" gate is on the CONFIRMATION bar — a reading that
+     did not bind), F-C4-j (the harvest's "from below" precondition, now in the
+     card, 0 of 153 campaigns affected), F-C4-k (the causality leg is sound and
+     NOT falsifiable on this corridor's data), F-C4-l (the live paper line is
+     now TWO card versions behind), F-C4-m (F-C3-a..e and F-C3-i carried).
+PROBE LEDGER: m = 0. EXPLORATION — ungated; promotion requires registration.
+=== END STATUS ===
