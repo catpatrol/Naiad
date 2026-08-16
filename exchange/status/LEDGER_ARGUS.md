@@ -181,3 +181,31 @@ PENDING: 1. seven live mornings  2. operator mid-week PARITY line  3. BR-2 on ga
      4. the [VETO] rows  5. the T-3 staleness-alarm ruling
 NEXT: live week runs unattended on fresh data. Owner: launchd, then operator.
 === END STATUS ===
+
+=== STATUS_ARGUS — 2026-08-16 (A2 CLOSE · LANE PARKED) ===
+NOW: The interrupted paste completed. BR-1 ACCEPTED in full. A2 executed: posture canon
+     v1 · 26 · R:R form · 07:00 kept · ten rows deferred to BR-2 · staleness banner in.
+LAST EVENT: 2026-08-16 — corrective paste; A2 steps 2-9 of the prior contract.
+FACTS:
+- RENAME: 39 ARGUS-owned occurrences renamed across 5 files + 2 git mv (station_engine.py
+  -> posture_engine.py, station_canon.json -> posture_canon.json); 71 substitutions;
+  residual station_canon/station_engine in ARGUS sources = 0. 24 other-lane and historical
+  occurrences left as written, enumerated in the build doc [verified]
+- RE-PIN DONE IN THE SAME COMMIT (22c94d4): the rename changed oracle_daily.py, which the
+  top-up pins. The guard was observed HALTing on the stale pin first, then re-enumerated:
+  45f44015... -> 5f0338c1..., 40 pairs unchanged. Without this the 06:45 job halts tomorrow
+  [verified]
+- FIXTURES: F-BR 10/10 · F-TU 6/6 · F-CONV 4/4 = 20/20 green [verified]
+- RENDER: briefs/oracle/oracle_2026-08-16.html 233,224 B
+  sha256 343e4acea6c1516cc0d75f868fc80e9142d702f5076f4a17a818e36f012b6c86, as-of
+  2026-08-16T00:00Z, kickstart exit 0, staleness banner correctly ABSENT, 19
+  DEFERRED-TO-BR2 chips in the appendix [verified]
+- RULINGS RECORDED: A2-1 BR-1 VERDICT ACCEPT; A2-2 closes V-1; A2-3 closes V-6; A2-4 closes
+  V-5; A2-5 closes V-4; A2-6 defers nine rows; A2-7 partial T-3 remedy [ratified]
+- A-2 REPORTED: BR-2 is a ratified contract and was left as written, so its F-R2-1 still
+  says station_canon.json. Mapping recorded in the build doc and the APOLLO note; BR-2's
+  executor must read it or the operator amends BR-2 first [handoff]
+PENDING: 1. live week accrues  2. mid-week PARITY line  3. BR-2 on gates  4. deferred
+         rows at BR-2  5. T-3 wake-order ruling
+NEXT: lane parked; wakes for PARITY relay and BR-2. Owner: launchd, then operator.
+=== END STATUS ===

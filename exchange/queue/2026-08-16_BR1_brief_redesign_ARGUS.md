@@ -96,3 +96,23 @@ A1-4 NEW DELIVERABLE D-7, calibration logger: each run appends one JSON of
      research_outputs/oracle/calibration/. NO outcome fields, NO signal-performance
      fields — enforced by fixture F-BR-10 (code scan; shown failing on a planted
      outcome field first). This is what makes the live week self-instrumenting.
+
+## AMENDMENT A2 (operator rulings 2026-08-16, verbatim "BOARD OK, Rb posture, Rc 26,
+Rd yes, Re keep, Rf defer"; executed by corrective paste after a half-run)
+A2-1 BOARD ACCEPTED — BR-1 §6 third clause discharged. BR-1 VERDICT: ACCEPT.
+A2-2 NAMING RULED (closes V-1): the four Board words are POSTURE CANON v1
+     (STALKING/ARMED/TRIGGERED/DEAD). "Station canon v1" belongs SOLELY to the S1..S6
+     lifecycle per the 2026-08-15 ruling. Binding all lanes.
+A2-3 TRIGGER PAIR RULED (closes V-6): 26. Prose corrected in Oracle-owned surfaces;
+     historical documents stay as written.
+A2-4 NET_RR_FORM RATIFIED (closes V-5): (reward − toll) / (risk + toll), toll paid win
+     or lose; both inputs print beside every ratio.
+A2-5 SCHEDULE RULED (closes V-4): 07:00 kept; top-up precedes at 06:45 (BR-1b, BUILT).
+A2-6 DEFERRED TO BR-2's measured proposals: CANON.STALKING wording · DEAD_MEMORY_BARS ·
+     BOARD_PRECEDENCE · HEAT_KEY · GRID_TOLL_KEY · FIRED_WINDOW_HOURS ·
+     TRIGGER_FRESH_BARS · OVERLAP_BARS (from the BR-1b correction). Marked
+     DEFERRED-TO-BR2 in the render appendix; all logged daily by D-7.
+A2-7 STALENESS BANNER (T-3 partial remedy, display-only, [VETO-by-firing]): the render
+     header shows a STALE DATA banner when the newest cache bar is older than 2 lens
+     periods at render time; the as-of stamp stays regardless. The full T-3 alarm
+     question (wake-order race) remains OPEN for a proper ruling.
