@@ -660,3 +660,29 @@ publish: TICK SET 2,955,679 B = 18.47% of 16,000,000 B, level OK (warn 40 / refu
 A second publish followed, carrying only this addendum and the disposition table's SHAs — the
 report shipped with "see commit below" and no commit below. Flagged in the report as a deviation
 from the one-publish instruction.
+
+---
+
+=== STATUS_ATHENA — 2026-08-15 — RULING 007 + PIN — LANE CLOSE ===
+NOW: The BOX-COST trip-wire is PINNED ABSOLUTE at 64,000 B, the last box question this lane carried. Ruling 007 (DIGEST retired, HERMES dormant, bus-health automated) landed in the prior session and is verified intact. With that, the ATHENA infrastructure programme CLOSES — construction complete, operation automated, custody retained.
+LAST EVENT: 2026-08-15 — the pin executed and the lane closed; filed as exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-15_RULING-007-LANE-CLOSE.md.
+FACTS:
+- ATHENA INFRASTRUCTURE PROGRAMME CLOSED 2026-08-15 — construction complete, operation automated, custody retained for box governance and phase-boundary audits [ratified]
+- THE PIN IS A RESTORATION AND IT IS MEASURED, NOT ASSERTED. On the tracked TICK SET: 7 files over the new 64,000 B wire, the SAME 7 over the old ~63,900 B wire, and just 1 over the raised ~160,000 B wire, with no file in the 100 B gap between old and new. The raised wire found 1 of 7. APOLLO's consequence note is cited verbatim as the trigger in both homes. §6.4's three legs ran on NAME + VALUE + THRESHOLD TEXT, and the threshold-text leg is what earned its keep: it found the one live instruction surface (PRIMER_HERMES §6 step 2, carrying "1% is now ~160,000 B, not ~63,900 B") that a NAME-only grep sweeps straight past [verified]
+- I RE-OPENED THE D3 METERING GAP AT FILE LEVEL AND REVIEW CAUGHT IT. The first version of the wire metered exchange/ alone while §3.2 binds "any BOX-BOUND file" and §4.3 defines the box as exchange/ AND LEDGER.md. That hid LEDGER.md — 259,298 B, the largest box-bound file in the project, four times over the wire — and made the correction notice's headline claim ("zero over the raised wire") FALSE, since LEDGER.md trips even the loosened one. The same lane that closed this gap at aggregate level on 2026-08-15 re-opened it at file level on 2026-08-15. Fixed to read the tick set; figures corrected to 7/7/1 in all three homes; F-BOX-1 clause added so it cannot recur [verified]
+- THE CONSTANT GOT A CONSUMER ON PURPOSE. A named constant in the guard module that nothing reads is worse than prose: a reader infers the guard enforces it, and a clean publish reads as compliance. publish() now names what is over the wire, from data the budget already computed — zero new git calls — and it prints into the DAILY report as well as stdout, because a line in a launchd log does not discharge "flagged TO THE OPERATOR" (this module already carries the scar of a three-day unseen outage). It also closes the growth gap: the rule binds at CREATION, which never binds a file that GREW across the wire, and three of the seven are append-only with no moment of creation at their current size [verified]
+- CUSTODY IS RETAINED, AND THAT IS WHAT MAKES THE CLOSE SAFE. §4.2 now names five constants under ATHENA custody (BOX_BYTES, WARN_FRACTION, REFUSE_FRACTION, TICK_EXTRA, FLAG_BYTES) and its preamble gained a fourth noun so prose and list agree. publish_exchange states "moving this number is a separate operator ruling", and §4.2 is the channel that ruling travels. CONVENTIONS.md also names this lane as its only drafter, its phase-boundary auditor and its escalation address. So ATHENA is NOT dormant and is deliberately NOT in DORMANT_LANES — what closed is the construction programme, not the custody [ratified]
+- F-CONV 4/4 · SUITE 334 passed / 1 skipped = 335, scope fixtures 74 + tests 261. Ruling 007 closed at 325; this session adds 10 F-BOX-1 clauses. CONV_BYTES_CEILING re-pinned 66,500 -> 68,500 with a dated note, per the fixture's own instruction: re-pin with a note saying what grew, never trim law to hit a number [verified]
+PENDING (operator) — every carried item disposed of, because a lane that closes with unlisted open items is the defect:
+1. CLOSED THIS SESSION: the ~1% trip-wire (carried twice — raised by APOLLO, carried by me). Pinned absolute at 64,000 B
+2. CLOSED BY RULING 007: the carried NEXT, "DIGEST.md is stale in a way that bites". It is retired to docs/history/DIGEST_RETIRED_2026-08-15.md
+3. CARRIED, yours: Sync now — GUI-only, and the only step that puts this on the three web lanes
+4. CARRIED, yours: was the HALT gate meant as an operator checkpoint? The snapshot was in ~/Downloads, not docs/memory/; I placed it byte-identical rather than halting
+5. CARRIED, DATED: where does the unacted-inbox list live now? DEADLINE 2026-09-03, when the first of six notes becomes a rotation candidate. Until ruled, rotate_reports HALTS rather than guess. A one-line repoint of DIGEST_PATH restores it
+6. CARRIED: queue-003 D-2 named HERMES's DIGEST section as where the rotation figure is published. The bus-health block now publishes it, but re-homing a RATIFIED cadence is not the builder's to do
+7. CARRIED: exchange/drops/ has no owner since HERMES went dormant — nothing names and files what you leave there
+8. CARRIED: the live Claude project-memory panel still records HERMES's duty as "DIGEST 2x/day, box budget, staleness stamps, inbox". Only you can edit it
+9. CARRIED: F-BOX-1 and F-BH-1 do not run in CI — ci.yml runs `pytest fixtures/` only, so tests/ never executes on push. One-line fix, ops decision
+NEXT: Sync now, then answer 5 (one line) before 2026-09-03. Owner: operator.
+METRICS: operator actions this session = 0 · files re-ingested = 0 · verification agents = 6 · defects found in own work = 13 · defects fixed = 13 · constants pinned = 1 · lane closed = 1
+=== END STATUS ===

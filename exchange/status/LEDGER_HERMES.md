@@ -72,3 +72,22 @@ PENDING:
 NEXT: Operator ratifies or rejects queue item 001, and rules on the Hermes cadence. Owner: operator.
 METRICS: operator actions this session = 1 · files re-ingested = 2
 === END STATUS ===
+
+---
+
+=== STATUS_HERMES — 2026-08-15 — DORMANT (ruling 007) ===
+NOW: This lane is DORMANT by operator ruling 007, 2026-08-15. It ran once, on 2026-08-04. Every duty it held is now discharged by something that reports itself, or is named as parked with no successor. This entry is written by HEPHAESTUS on the ruling's authority, not by HERMES: the lane does not self-verify (HELIOS tripwire, §5), and it cannot append to its own ledger while dormant.
+LAST EVENT: 2026-08-15 — ruling 007 retired DIGEST.md and put this lane to sleep; filed as exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-15_RULING-007-LANE-CLOSE.md.
+FACTS:
+- FIVE DUTIES ABSORBED, each by a source that reports itself: budget -> printed on every publish · queue validation -> manifest counters and RATIFIED stamps · staleness -> F-P6 and the bus-health block · inbox -> ledger appends, since acted means the recipient's ledger cites the note · DIGEST.md -> retired to docs/history/DIGEST_RETIRED_2026-08-15.md with a tombstone at the old path [ratified]
+- TWO DUTIES PARKED, NOT ABSORBED, and named rather than quietly dropped: filing exchange/drops/, which nothing now owns; and the queue-003 unacted-inbox list, whose only home was the DIGEST — rotate_reports.py HALTS rather than guess, and the first unacted note becomes a rotation candidate 2026-09-03. Both are operator calls. The first draft of the dormancy block claimed EVERY duty was absorbed; that was an overclaim and adversarial review caught it [verified]
+- THIS LEDGER'S 11-DAY STALENESS CLOSES AS A BYPRODUCT, which is what ruling 'append' is for. The bus-health recency table had been reporting HERMES as the stalest ledger in the project — correctly, and it was this lane's own. It now carries a DORMANT label in that table (daily_routine.DORMANT_LANES), because the block that ABSORBED the staleness duty must not then report a parked lane's age as a finding while §5 says nothing waits on HERMES [verified]
+- THE PRIMER IS KEPT, NOT DELETED, and now carries a dated DORMANT banner. exchange/reports/PRIMER_HERMES_2026-08-11_v4.md is the run-book any future coordinator inherits; its step 3 ordered a rebuild of DIGEST.md and now has no target. Only the byte figures were corrected (the naming trip-wire, pinned absolute at 64,000 B this session); the lane's own content is untouched, because a builder re-authoring the coordination lane's output is the HELIOS tripwire [verified]
+- THE HELIOS TRIPWIRE SURVIVES THE DORMANCY, byte-identical and deliberately so: "HERMES never re-authors another lane's content and never instructs a lane without the operator's ratification stamp... a verifier who re-authors is not verifying." It binds whoever takes the role next, which is the whole reason the charter row was marked DORMANT rather than deleted [verified]
+PENDING (operator):
+1. The unacted-inbox list has no home. DEADLINE 2026-09-03. A one-line repoint of rotate_reports.DIGEST_PATH restores the exemption once you rule where it lives
+2. exchange/drops/ has no owner
+3. Revival is yours alone: the condition recorded in §5 is cross-lane coordination pain that a script cannot measure
+NEXT: Nothing. Nothing waits on HERMES — that is the point of the ruling. Owner: none until revival.
+METRICS: operator actions this session = 0 · files re-ingested = 0 · duties absorbed = 5 · duties parked = 2 · days stale at dormancy = 11
+=== END STATUS ===

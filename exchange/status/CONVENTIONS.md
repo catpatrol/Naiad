@@ -351,20 +351,23 @@ EARNED-BY Operator, 2026-08-02; BOX COST added 2026-08-06.
 | COMMITTED | which short SHA, or "not committed" |
 | PUSHED | yes/no, plus the remote ref |
 | PROTECTED BY | estate zip / phase archive / `--workflow` archive / GitHub only / **NOT PROTECTED** |
-| **BOX COST** | bytes and % of the box for anything under `exchange/` or another synced path. `n/a` if it lands somewhere unsynced — say which. Take the capacity from `publish_exchange.BOX_BYTES`, never a copy. |
+| **BOX COST** | bytes and % of the box for anything under `exchange/` or another synced path, **and FLAGGED if the file is over the trip-wire** — that flag, not the percentage, is what the rule below asks for. `n/a` if it lands somewhere unsynced — say which. Take both constants from `publish_exchange` (`BOX_BYTES`, `FLAG_BYTES`), never a copy. |
 
 *(Seven columns. Ratified as "six columns, standing" 2026-08-02; BOX COST added 2026-08-06 without
 updating the heading count — noted here, and the heading dropped, not carried as a second wrong
 number.)*
 
-**RULE — Creating a file that will enter the project-knowledge box is a WORKFLOW DECISION, not a side effect. Any artifact over ~1% of the budget is flagged to the operator by name, with its intended home, at the moment it is created.**
-BECAUSE the three web lanes reach repo content ONLY through that box, and creation is the only moment the choice is cheap.
-EARNED-BY Operator ruling 2026-08-06, after the box overflowed twice — CL-8.
+**RULE — Creating a file that will enter the project-knowledge box is a WORKFLOW DECISION, not a side effect. Any box-bound file over 64,000 B is flagged to the operator by name, with its intended home, at the moment it is created. The wire is ABSOLUTE: it does NOT move with `BOX_BYTES`.**
+BECAUSE the three web lanes reach repo content ONLY through that box, and creation is the only moment the choice is cheap. Absolute because the intent was a SENSITIVITY, not a proportion — what is worth a sentence at creation does not scale with the ceiling.
+EARNED-BY Operator ruling 2026-08-06, after the box overflowed twice — CL-8; PINNED ABSOLUTE at 64,000 B by operator ruling "pin", 2026-08-15.
 
 **The box is 16,000,000 B. Its thresholds are warn 0.40 / refuse 0.70** — 6.4 MB and 11.2 MB — **and
 the guard governs on the TICK SET** (`exchange/` + `LEDGER.md`), not `exchange/` alone. Exactly the
 refuse fraction WARNS; it does not refuse. Fixture **F-BOX-1** pins all of it. The capacity of
-record is `publish_exchange.BOX_BYTES` — described here, not defined here.
+record is `publish_exchange.BOX_BYTES`, and the trip-wire of record is
+`publish_exchange.FLAG_BYTES` — described here, not defined here. **Three limits look alike and are
+not:** the 64,000 B trip-wire NAMES a file, the §4.2 1 MB cap REFUSES one, and warn/refuse govern
+the whole tick set. Only the middle one is a limit.
 
 > **CORRECTION 2026-08-15 (box governance, APOLLO → ATHENA).** This paragraph first read *"warn
 > 25→50%, refuse 40→80%"*. Those were the raise's own first thresholds and they held for part of one
@@ -374,8 +377,23 @@ record is `publish_exchange.BOX_BYTES` — described here, not defined here.
 > the whole box rather than `exchange/` alone. Boundary semantics were preserved verbatim through
 > both moves. The assertion above is rewritten rather than annotated, per the correction rule in §0.
 
-**OPEN, operator's call:** the ~1% trip-wire moved with the box (~63,900 B → ~160,000 B). Stated and
-carried in `LEDGER_ATHENA.md` PENDING — open items live in ledgers, not here.
+> **CORRECTION 2026-08-15 (ruling "pin"). The trip-wire above read *"over ~1% of the budget"*.**
+> A fraction moves with the ceiling, so the 6.39 MB → 16 MB raise loosened it from ~63,900 B to
+> ~160,000 B — **a 2.5× loosening nobody separately asked for.** APOLLO flagged the consequence
+> rather than burying it (*"each of this lane's last three build documents would have tripped the
+> old wire and none trips the new one"*) and carried it to ATHENA as the one box question still
+> open. The operator has now ruled: **pin it absolute at 64,000 B.** Measured 2026-08-15 on the
+> tracked tick set — 7 files over the new wire, **the same 7** over the old ~63,900 B one, and just
+> **1** over the raised ~160,000 B one, with no file at all in the 100 B gap between old and new. So
+> this restores a sensitivity that had been all but switched off; it does not invent a limit. *(A
+> snapshot of a moving quantity — the live count is printed on every publish.)* The rule is
+> rewritten rather than annotated, per §0. The OPEN item it replaces is closed in `LEDGER_ATHENA.md`,
+> which holds threshold custody and carried it — open items live in ledgers.
+>
+> **Named cost, stated because it is real:** the duty binds *at creation*, so it never binds a file
+> that GREW across the wire — and three of the six are append-only files with no moment of creation
+> at their current size. `publish()` therefore reads the wire again on every publish and names what
+> is over it. Advisory: nothing is refused, and nothing on the bus today is in breach.
 
 ### 3.3 Publishing and the on-screen close
 **RULE — The document is written into `exchange/reports/` with sha256 verified before and after; the paste then publishes `exchange/**` with the invocation below and states on screen whether the push SUCCEEDED.**
@@ -469,7 +487,7 @@ EARNED-BY CL-12.
 BECAUSE two captures moved 2026-08-06 from `exchange/reports/` to `docs/history/argus/` were still retrieved from the box at their NEW paths — both folders sit in the sync selection. Reading surface fell 85%. Box consumption fell by zero.
 EARNED-BY CL-10.
 
-**RULE — Threshold custody is ATHENA's. The box ceiling, the warn/refuse fractions and the metered set change ATHENA-first; the operator's word comes through her; no lane edits `publish_exchange.BOX_BYTES` / `WARN_FRACTION` / `REFUSE_FRACTION` / `TICK_EXTRA` on its own authority, and any such change runs the named-constant protocol (§6).**
+**RULE — Threshold custody is ATHENA's. The box ceiling, the warn/refuse fractions, the metered set and the naming trip-wire change ATHENA-first; the operator's word comes through her; no lane edits `publish_exchange.BOX_BYTES` / `WARN_FRACTION` / `REFUSE_FRACTION` / `TICK_EXTRA` / `FLAG_BYTES` on its own authority, and any such change runs the named-constant protocol (§6).**
 BECAUSE one constant with five dependents is the shape that goes stale silently.
 EARNED-BY APOLLO → ATHENA box-governance handoff, 2026-08-15.
 

@@ -1,5 +1,15 @@
 # PRIMER — HERMES · v4 · 2026-08-11
 
+> ⏸ **THIS LANE IS DORMANT — 2026-08-15, ruling 007.** Do not run §6. `exchange/DIGEST.md` is
+> RETIRED (final edition `docs/history/DIGEST_RETIRED_2026-08-15.md`), so **step 3 has no target**,
+> and the duties in steps 1–2 and 4–7 are now discharged by the budget and bus-health blocks printed
+> on every publish, and in `status/daily/DAILY_<date>.md` §8 **from the next routine run onward**
+> (the routine has not run since ruling 007 landed, so today's newest DAILY still ends at §9
+> Publish). This primer is kept, not deleted: it is
+> the run-book any future coordinator inherits, and the HELIOS tripwire in CONVENTIONS §5 binds them.
+> **Revival is an operator ruling**, on cross-lane coordination pain a script cannot measure.
+> Only the byte figures below were corrected on 2026-08-15; the lane's own content is untouched.
+
 **You are HERMES.** Read this, then do §6. Reading this IS the instruction — no second message
 comes. **Supersedes v3** (2026-08-06); your charter is unchanged, the world under it moved.
 **Surface:** Claude Cowork task, `naiad` folder attached. **First read:**
@@ -96,9 +106,12 @@ routine publishes for you). Flag it as pending until the operator arms it.
 1. Inventory `exchange/` fresh: path, bytes, mtime, owner, prose/data.
 2. **Budget, both figures**: guard-metered `exchange/` % AND tick-set % (`exchange/`+`LEDGER.md`),
    against **16,000,000 B** (raised 2026-08-15; read it from `publish_exchange.BOX_BYTES` rather
-   than from this line, so the next raise reaches you for free); every file >1% named — **note that
-   1% is now ~160,000 B, not ~63,900 B**, so the naming threshold loosened 2.5× with the box and
-   §3.2 of CONVENTIONS says so explicitly; **rotation-candidate table** (>30 days) per §2c.
+   than from this line, so the next raise reaches you for free); **every file over 64,000 B named**
+   — the trip-wire is ABSOLUTE since operator ruling "pin" (2026-08-15) and no longer moves with the
+   box; read it from `publish_exchange.FLAG_BYTES`, per CONVENTIONS §3.2. `publish()` now also names
+   what is over it — measured on the TICK SET, so `LEDGER.md` counts — so this step confirms rather
+   than discovers;
+   **rotation-candidate table** (>30 days) per §2c.
 3. Rebuild `exchange/DIGEST.md` in full: how-to-use → budget → by-lane (ledger, latest artifacts,
    key references, staleness) → inbox with acted-status → queue table → findings. Index of
    pointers, never a re-authored substitute.
