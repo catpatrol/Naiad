@@ -5,6 +5,56 @@ its session summary; the reviewer decides what lands here. Governing rule:
 reading a result spends the data, whether or not you act on it. Never read a
 proxy of a measurement we can afford to make for real.*
 
+## STANDING VERDICTS (index — full numbers below and in the closeout docs)
+
+*Added 2026-08-15 in THE GREAT COLLAPSE. Study state used to live in project memory, which does not
+reach Cowork or the builder and was carrying duplicates of these numbers. It lives here now: this
+block is what a lane reads at session start, per CONVENTIONS §0 THE MAP. **These are one-liners and
+pointers, not the evidence** — the evidence is the dated entries below and the closeout documents.
+Definitions, THE PATH and the MC programme: `exchange/reports/SS_SYSTEM_SYNTHESIS_2026-08-06.md`.*
+
+**STUDY SPINE — findings through 2026-07-20, plus rulings 2026-08-03**
+
+| verdict | one-liner |
+|---|---|
+| **ARCHITECTURE OF RECORD** | the **structural stop** (anchor beyond a real 1H swing pivot) **dominates** — grid **+565.58**, strip-best **+301.99**. SWING positive-and-robust for the first time; struct-30m dropped as a lottery. |
+| **FALSIFIED — never re-assert** | the **two-line exit architecture** (S-2: the native ratchet fires first and the trail clips engaged winners). |
+| **HARVEST PROBLEM** — priority 3, unsolved | **73.67%** of +1R-touchers round-trip to gross loss. The winning book rides to regime break (opposite_cross 67% / failure_x 24%) and **never manages individual winners**. |
+| **ADD GATE (P-CIRC)** | **97.59%** of +1R winning moments had **no** pullback-reclaim PRIME available — circular topology. |
+| **ENTRY ADMISSION** | the biggest gate **vindicated** (P-F1); 8 conditions negative on S-1 flip **positive** on the struct book; slow TFs strongest. |
+| **FRACTAL PROGRAM** | FH-3 **CONFIRMED RELATIVE** — all cross-TF rules in governor-relative steps. TC-5: mechanical fractal confirmed, **economic claim falsified — entries floored at 5m PERMANENTLY.** TC-2 (re-entry quality bar) inherits the intraday mandate. |
+
+**CENSUS-2A — COMPLETE 2026-08-12, 8 runs, contract SPENT.** Ten modules run, hash-recorded, 29
+artifacts / 53.3 MB, manifest-pinned. Queue item sha `5cd8ab57…`, body `b0da051b…`. Artifacts were
+recovered in the M2 restore (425 files / 7.45 GB / 0 mismatches) and now live under `~/Naiad` —
+**the `D:/…` paths in the closeout are pre-migration.** **Yield: ONE supported result of nine scored.**
+
+| verdict | items |
+|---|---|
+| **SUPPORTED-PROVISIONAL** | **P-REL-1b** — in-window 12/25 presence, **+0.19 ATR H100**, label permanent; qualified by panel return correlation **0.6458** / sign-agreement **0.60** — **five witnesses ≈ one.** |
+| **NOT SUPPORTED** | **P-ARM-1** (exposure-time confound; WALL-at-arming = low displacement, return limb INVERTED) · **P-iii-b** (short-side straddle by 0.0006; pooled grind effect real ~7pts under the size-free ruler) · **P-RAT-2** (0/36; exit-alone bounded again; mean-carried 4h/long/wide corners → P-RAT-3) · **P-NEST-1** (straddles) |
+| **WITHDRAWN** | P-REL-1 · P-CHOP-1 |
+| **NOT SCORED** — undefined terms, correctly not invented | P-VBT-1 · P-i′ · P-iv′ |
+
+**Structural findings.** Incumbent loser decile was a **position-size selector** (97.5% size-0.5 →
+A3-DECILE size-free per-asset ruler, validated by R-unit reconstruction) · ride-only book = **12.3%
+winners × mean +9.4R** — every exit study is tail preservation · CEN-9 clock control: EMA-arming edge
+over random **+0.052 ATR ≈ toll-sized** (0.026–0.059), and the prior-extreme sweep-from-below **edges
+out** the armings (+0.0845 vs +0.0748, descriptive) · registry co-location **rare** at armings (0.7%
+of instants ≥2 levels within 0.15×ATR) — **the confluence-as-count premise is unsupported by this
+tape's geometry** · RESPECTED range verdicts = failed births (1H reclaims preceded by 3× i-b refusal
+density) · 12H least trap-prone on fixed windows.
+
+**NEXT-CYCLE SLATE (APOLLO).** P-ARM-2 **[55]** · P-FAN-1 **[60]** · P-NEST-2 **[50]** · P-RAT-3
+**[40]** · P-VBT-2 **[45]** · P-CHOP-2 (ribbon operand = OR{30m,1h}) · P-REL-1b replication.
+**Needs-word first, three:** leap/stair window recut · ATR buckets · H-VBT band rule.
+
+**Pickup document:** `exchange/reports/CENSUS2A_CLOSEOUT_2026-08-12.md`. **Path forward is the
+operator's word:** EngineV2/Tier-C design interview and/or the Rotation Program funnel — now a
+statistical mandate, the panel votes 65% together.
+
+---
+
 ## Opening entries (charter §6, at ratification 2026-07-09)
 
 | Dataset | Status at ratification |
