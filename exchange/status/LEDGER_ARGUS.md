@@ -57,3 +57,19 @@ post-dates it and is not reflected here. **Treat as stale until ARGUS appends a 
 - RESIDENCY REFINEMENT PROPOSED, not urgent: briefs/panel/{snapshots,levels,areas,excursions}/*.parquet are 100% REGENERABLE from the captures via brief_panel.py — derived data occupying tracked space to no durable end. Captures are the record and must stay tracked; the partitions are the free candidate for D: when archive volume makes it worth a contract. Recorded now so it is not rediscovered later.
 - LANE STATE UNCHANGED: analytics 1.5.0, sha ea5f02f2…, suite 286 passed / 1 skipped. Certified against the operator's charts: oscillators + ATR (72/72), resample_ohlcv (40/40), rolling VWAP both substrates (14/14 and 28/28), anchored VWAP including sigma (42/42), band geometry (54 triples). volume_profile / LVN / va_nesting remain FIXTURE-VERIFIED and NOT chart-certified BY DESIGN — comparing our kline approximation against TradingView's different approximation certifies nothing whichever way it comes out. Scope travels with every number: BINANCE perpetuals, 1h substrate, hlc3 source.
 - ARGUS, 2026-08-11.
+
+=== STATUS_ARGUS — 2026-08-16 ===
+NOW: Lane re-primed and re-scoped. Render audit filed; BRIEF_REDESIGN_SPEC_v1 drafted to the
+     queue awaiting the RATIFIED stamp. Rulings D1c D2a D3 D4(event/ATR) D5c taken.
+LAST EVENT: 2026-08-16 — BR-1 drafted; audit note filed; this append.
+FACTS:
+- VIZ-4 render shas 4/4 match BUILD_2026-08-15_VIZ4_MANTLE §2 [verified]
+- VIZ3_Gallery_dc.html is the VIZ-4 M3 gallery misnamed; rename proposed [verified]
+- Brief job retired 2026-08-05 per ruling 4a; BR-1 is a rebirth not a facelift [ledger]
+- VIZ-3 payload shas printed, emitter cross-check owed [handoff]
+- Primer two-artifact rule superseded by single-build-document; CONVENTIONS wins [ratified-lean, flagged]
+PENDING: 1. Operator RATIFIED stamp on queue BR-1  2. 16:00 refresh-hour veto  3. Charter
+amendment to ATHENA  4. VIZ-3 sha cross-check + verdict-language sweep
+NEXT: On the stamp — HEPHAESTUS executes BR-1. Owner: operator.
+METRICS: operator actions this session = 2 · files re-ingested = 10
+=== END STATUS ===
