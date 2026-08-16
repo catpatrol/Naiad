@@ -88,24 +88,26 @@ def main() -> int:
     counts = {t: conv.count(t) for t in tokens}
     bad = {t: n for t, n in counts.items() if n != 2}
 
-    # Uniqueness across the repo: grep -F, tracked files only. A token appearing
-    # anywhere else is a SECOND HOME for a fact, which is the thing the collapse
-    # exists to prevent.
+    # What is actually being protected is that a token has ONE HOME -- one
+    # section, in one file, that it names. It is NOT that the token is rare.
     #
-    # The allowlist below is not a loophole, it is the distinction the check
-    # cannot make on its own: a second HOME versus a QUOTATION. CONVENTIONS is
-    # the home. This script must name the memory-pointer tokens in order to
-    # check them. And the collapse's own build document is required by the task
-    # that commissioned it to reproduce the TOCs and section 0 VERBATIM, which
-    # necessarily reproduces all nine tokens.
+    # The first version of this check asserted the token appeared nowhere else
+    # in the repo at all, and that was wrong in a way worth recording. Tokens
+    # exist precisely so that memory entries, contracts and inter-lane notes can
+    # CITE a section exactly and survive renumbering. A check that fails on
+    # citation punishes the behaviour the tokens were minted for, and it failed
+    # twice within an hour of being written: first on the collapse's own build
+    # document, then on the first inter-lane note that used a token as intended.
     #
-    # Keep this list short and add to it deliberately. Every entry is a promise
-    # that the file quotes CONVENTIONS rather than competing with it; a document
-    # that starts *asserting* section content under a token belongs in neither
-    # this list nor the repo.
-    QUOTERS = {
+    # So: a DEFINITION is a heading that names the token. A MENTION is anything
+    # else, and mentions are free. Only a second definition is a second home.
+    DEFINES = re.compile(r"^#{1,6} .*«(NAIAD-S\d+-[A-Z]+)»", re.M)
+
+    # Verbatim reproductions of CONVENTIONS reproduce its headings too, so they
+    # look like definitions without being any. Keep this list to files that
+    # quote whole sections; ordinary citation needs no entry.
+    VERBATIM_QUOTERS = {
         "exchange/status/CONVENTIONS.md",  # the home itself
-        "scripts/fixtures_conventions.py",  # this checker
         "exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-15_COLLAPSE.md",
     }
     tracked = subprocess.run(
@@ -113,7 +115,7 @@ def main() -> int:
     ).stdout.split()
     strays: list[str] = []
     for rel in tracked:
-        if rel in QUOTERS:
+        if rel in VERBATIM_QUOTERS:
             continue
         p = REPO / rel
         if not p.is_file():
@@ -122,9 +124,8 @@ def main() -> int:
             body = p.read_text(encoding="utf-8")
         except (UnicodeDecodeError, OSError):
             continue
-        for t in tokens:
-            if t in body:
-                strays.append(f"{rel}:{t}")
+        for t in set(DEFINES.findall(body)):
+            strays.append(f"{rel}:{t} (defines a section)")
 
     check(
         "F-CONV-1",
