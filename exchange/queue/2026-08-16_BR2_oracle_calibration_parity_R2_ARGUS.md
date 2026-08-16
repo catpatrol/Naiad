@@ -24,3 +24,22 @@ F-R2-2 no-network-writes (page sends nothing, only receives) · F-R2-3 firewall 
 F-R2-4 R1 format. Each shown failing first.
 NOT THIS CONTRACT: no R3 daemon · no census scoring · no threshold self-adoption ·
 no Pine changes · no sizing.
+
+## AMENDMENT A-BR2-1 (records an operator note, 2026-08-16; appended by the executor)
+Recording — not inventing — the operator's note delivered with the execution paste of
+2026-08-16, so the ratified body above stops carrying a pointer to a file that no longer
+exists. Operator, verbatim:
+
+    "NOTE (Amendment A2-2, build doc ORACLE_A2_CLOSE §2): station_canon.json was renamed
+    posture_canon.json; F-R2-1 discharges against posture_canon.json; the tape's `station`
+    column is unchanged by design."
+
+A-BR2-1a F-R2-1 READS posture_canon.json. The fixture text above still says
+     station_canon.json; that file was renamed at commit 22c94d4 under BR-1 Amendment A2-2
+     and does not exist. F-R2-1's canon-identity assertion discharges against
+     research_outputs/oracle/posture_canon.json, which is tracked for exactly this reason.
+A-BR2-1b THE TAPE'S `station` COLUMN IS UNCHANGED BY DESIGN. Renaming it would be a schema
+     change to an artifact accruing daily for TC4; it is deliberately out of scope.
+A-BR2-1c THE BODY ABOVE IS OTHERWISE UNTOUCHED. Gates, WORK items and fixtures stand as
+     ratified. This block records a mapping and rules nothing new; revert it alone if the
+     operator disagrees.

@@ -209,3 +209,33 @@ PENDING: 1. live week accrues  2. mid-week PARITY line  3. BR-2 on gates  4. def
          rows at BR-2  5. T-3 wake-order ruling
 NEXT: lane parked; wakes for PARITY relay and BR-2. Owner: launchd, then operator.
 === END STATUS ===
+
+=== STATUS_ARGUS — 2026-08-16 (BR-2 GATES SHUT · CHAIN NOT CLOSED) ===
+NOW: BR-2 executed to its gates and HALTED there. All three hard gates fail because the live
+     week has not happened — the estate is one day old. WORK (1)(2)(3) withheld; BR-2 stays
+     BUILT: PENDING. Halt record filed at exchange/reports/ORACLE_CHAIN_CLOSE_2026-08-16.md.
+LAST EVENT: 2026-08-16 — BR-2 gate check; halt record; A-BR2-1 appended; this append.
+FACTS:
+- G-BR2-1 FAIL: 1 dated render in briefs/oracle/ vs 7 required. One file per calendar day
+  (the 16:00 refresh overwrites the same date), so it opens 2026-08-22 [verified]
+- G-BR2-2 FAIL: selfcheck_log.jsonl holds 3 PASS rows on ONE date; 5 of the last 7 days
+  required. Log printed verbatim into the halt record. Opens 2026-08-20 earliest [verified]
+- G-BR2-3 FAIL: no "PARITY: OK <date>" or "PARITY: mismatches:" line exists. This one is the
+  operator's, not mine; the exact string to paste is in the halt record section 3.1 [verified]
+- HALT IS TOTAL INCLUDING RECALIBRATION: the "recalibration still runs" clause presupposes a
+  parity line that EXISTS and reports mismatches; an absent line is not that state. And WORK(1)
+  needs a week of distributions against which exactly one calibration JSON exists [ratified]
+- C-0 TIME-CRITICAL, REPORTED NOT FIXED: D-7 writes a LITERAL maturity_withheld_fraction 0.0
+  for every asset — A1-4 requires it measured, analytics.vwap.maturity() is one call away — and
+  family-cap binding counts and target buckets are absent entirely. Three of the six threshold
+  families BR-2 must recalibrate will have NO measured support on 2026-08-22 unless this is
+  patched. Fix is BR-1-owned code and re-pins the top-up; operator's call, with a clock [open]
+- AMENDMENT A-BR2-1 appended to BR-2 recording the operator's mapping note verbatim: F-R2-1
+  discharges against posture_canon.json; the tape's `station` column unchanged by design. Body,
+  gates, WORK items and fixtures untouched; BUILT: PENDING stands [ratified]
+- Independent audit of this halt: gate readings correct, wrongly_halted = none [verified]
+PENDING: 1. six more mornings to 2026-08-22  2. operator PARITY line  3. the C-0 ruling
+         4. BR-2 on gates  5. T-3 wake-order  6. V-7 rails (APOLLO F-C3-e)
+NEXT: lane parked at the gate. Wakes on the PARITY relay or 2026-08-22, whichever is later.
+      Owner: launchd, then operator.
+=== END STATUS ===
