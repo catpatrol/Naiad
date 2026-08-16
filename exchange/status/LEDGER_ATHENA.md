@@ -599,3 +599,53 @@ METRICS: operator actions this session = 1 (the box-governance go) - constants c
 dependents audited = 6 - fixtures added = 1 (F-BOX-1, 12 assertions) - suite delta = +12 - D3 gaps
 closed = 1
 === END STATUS ===
+
+=== STATUS_HEPHAESTUS — 2026-08-15 (filed to ATHENA's ledger; she commissioned it) ===
+NOW: THE GREAT COLLAPSE landed. CONVENTIONS.md is restructured to a lane-scoped CORE model: a §0
+     every lane reads every session (4,934 B of a 6,000 B budget), then eight addressed sections
+     S1-S8, each opening "WHO READS THIS". Every rule is RULE / BECAUSE / EARNED-BY. 27 incident
+     narratives extracted to docs/CASELAW.md (CL-1..CL-27), tracked and OFF the bus at zero box
+     cost. Two TOCs at the head; nine «NAIAD-S*» tokens, each appearing exactly twice in the file
+     and nowhere else in the repo. LEDGER.md gains STANDING VERDICTS. Memory's landing sites exist.
+LAST EVENT: 2026-08-15 — F-CONV 4/4 PASS; suite 299 passed / 0 failed / 1 skipped.
+FACTS:
+- PRIME DIRECTIVE now reads, verbatim: "Naiad develops profitable momentum trading systems. Secret
+  Sauce is such system." The 2026-08-01 wording is REPLACED, not annotated, with a dated note
+  quoting the old text once [ratified]
+- RULE CENSUS, measured not asserted: 422 rules before, 422 after, 0 lost. Nine agents enumerated
+  the pre-collapse file; ten more hunted losses adversarially against the rewrite [verified]
+- THE CENSUS EARNED ITS KEEP: it found EIGHT rules genuinely dropped by the rewrite, and no fixture
+  would have caught any of them. All eight restored and re-verified by grep -F. Three of the eight
+  came from one place - the old §9 list, distributed section by section [verified]
+- IT ALSO CAUGHT A DEFECT I INTRODUCED: §0's identity-gate rationale was INVERTED (it said the
+  marker side passes a cloud copy; the path side does). §0 and §2.1 now agree and both are correct
+  [verified]
+- CONVENTIONS 64,012 B -> 64,008 B. It SHRANK while absorbing ~12 KB of content it never carried
+  (§2.1 GEOGRAPHY, §7 FRAMES, THE INDEX) plus ~1.5 KB of new dated corrections - after 46 machine-
+  checked lossless compression edits. The margin is 4 B and that is thin [verified]
+- 287-vs-214 RECONCILED ON THE RECORD: same tree, same moment, TWO SCOPES. fixtures/ = 74 (73 pass
+  + 1 skip); tests/ = 214 pre-F-BOX-1; 74 + 214 = 288 = 287 passed + 1 skipped. 214 was tests/
+  alone. The BOX-GOVERNANCE report's "different tree" explanation is wrong - a different SCOPE of
+  the same tree - left uncorrected in that filed report per §6.4 leg 3 [verified]
+- BACKUP_DEST_DEFAULT: CONVENTIONS asserted it was still Windows-era D:/naiad-backups. FALSE - it
+  is /Volumes/LaCie/naiad-backups (backup_estate.py:328, read this session). The stale text was
+  DANGEROUS: it told lanes to pass --dest explicitly, which outranks the default and re-enables the
+  very override that kept Sunday runs writing to a dead Drive path (CL-27). Rewritten with a dated
+  correction [verified]
+- APOLLO's carried backlog (B-1/B-3, Q1c-Q11) MOVED to LEDGER_APOLLO.md - it is lane state, and §5
+  already rules lane state lives in the lane ledger. Kept ON the bus deliberately: APOLLO reaches
+  repo content only through the box, so docs/ would have hidden it from its own owner [ratified]
+PENDING (operator):
+ 1. Sync now. Until then APOLLO/ARGUS/ATHENA read the pre-collapse file.
+ 2. The ~1% box trip-wire: fraction (~160,000 B) or sensitivity (~64,000 B)? Still yours; carried.
+ 3. Was the HALT gate meant as an operator checkpoint? The snapshot was in ~/Downloads, not
+    docs/memory/; I placed it (byte-identical, original untouched) rather than halting. Flagged.
+NEXT: DIGEST.md is now the FIRST pointer in §0 THE MAP and it is stale in a way that bites - it
+    still carries "HALT unless it ends C:\Naiad", a gate that halts unconditionally on this host,
+    and quotes the retired warn 50 / refuse 80. NOT edited: it is HERMES-only per §4.2 and a
+    builder re-authoring the coordination lane's output is the HELIOS tripwire. Owner: HERMES,
+    escalating to ATHENA.
+METRICS: operator actions this session = 1 (Sync now) · rules censused = 422 · rules lost = 0 ·
+    rules the census recovered = 8 · defects I introduced and it caught = 1 · narratives extracted
+    = 27 · tokens minted = 9 · compression edits applied = 46 · fixtures added = 4 (F-CONV-1..4)
+=== END STATUS ===

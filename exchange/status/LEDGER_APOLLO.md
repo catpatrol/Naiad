@@ -1272,3 +1272,45 @@ R3: the determinism rerun was hashed against run 1, then its DATA discarded in t
      same session per rule R3; research_outputs/tierc2_run2/build_manifest.json is
      retained per refinement D-3 — discard the data, keep the provenance.
 === END STATUS ===
+
+---
+
+## 2026-08-15 — CARRIED BACKLOG RELOCATED HERE FROM CONVENTIONS §7 (THE GREAT COLLAPSE)
+
+*Filed by HEPHAESTUS during the CONVENTIONS restructure. These items were sitting in the file all
+six actors read; they are APOLLO's lane state, and CONVENTIONS §5 rules that lane state lives in the
+lane ledger. Nothing is changed — the text is carried verbatim from CONVENTIONS as it stood at
+commit a2b69cf, §7.1 and §7.2. CONVENTIONS §7.8 now points here.*
+
+### SS Pine display backlog — MOVED FROM MEMORY #1, full text
+*(APOLLO's lane. Display-only; no study impact. Both items are inherited requirements of the
+SSv12 Pine deliverable.)*
+
+**B-1 · "SWING MODE"** (operator, 2026-07-10): make 12H governor/regime signals printable in the
+SS Pine indicator. Context: v11's `tfGovern` input defaults to 240 and drives all regime tint and
+triangles, and the 12H cascade layer is suppressed when chart TF = 720. **Exact semantics —
+mandate presets vs un-suppressing the native-TF layer — to be pinned at SSv12 spec time.**
+
+**B-3** (operator, 2026-07-11): in v11.0.2 grade text prints only on R1 PRIMEs, while all R2+ adds
+render as identical unlabeled tiny circles (A+ indistinguishable from B). Chartered as **SSv11.3**
+— grade-differentiated glyphs (VR-A Option 3, VR-B defaults ratified) plus playbook erratum
+corrections for **E-1** (faint-tint / provisional Z2 entries are real in v11.0.2; the code revert
+is deferred to a v12 named-variant slot).
+
+**Reminder:** parity charts stay pinned to v11.0.2 until 3C closes.
+
+### SS interview rulings Q1c–Q11 — MOVED FROM MEMORY #19
+APOLLO's lane, locked for census design, ledger-backed. **Verbatim text:**
+`docs/memory/claude_project_memory_2026-08-03.md`, Entry 19.
+
+Operative summary: full signal taxonomy (Q1c) · sequential fingerprint mining as census headline,
+`{9,89,200}` and `{12,25}` in parallel (Q2a) · the anti-fishing package ratified as written (Q3a)
+· lenses to 1W measured, 1M display-only (Q4) · verdict shape with hysteresis as registered prior
+(Q5) · stillbirth counterfactual first (Q6c) · borders as walls + rectangles, midrange as a
+first-class object (Q7c) · PRIME as mandatory control arm (Q8b) · three add-families counted at
+winning moments (Q9c) · exit counterfactual leg with the operator's H-RVX-2 prediction (Q10a) ·
+volume overlay deferred to 2b (Q11a).
+
+*The standing analytical principles that used to ride with this block — HTF→LTF ordering, HTF
+enclosure stamping, signals-as-relationships — were promoted to CONVENTIONS §7.8 as rules, because
+they bind every study lane and not only this one.*
