@@ -126,3 +126,28 @@ PENDING: 1. seven live mornings  2. operator mid-week PARITY line  3. BR-2 on ga
      4. the nine [VETO] rows, now including TRIGGER_FRESH_BARS
 NEXT: live week runs unattended. Owner: launchd, then operator (parity glance).
 === END STATUS ===
+
+=== STATUS_ARGUS — 2026-08-16 (ORACLE TOP-UP · BR-1b) ===
+NOW: V-8 closed. The kline estate is no longer stale and nothing about the Oracle changed to
+     make it so. Two more slots armed at 06:45 and 15:45 BA, 15 minutes ahead of each Oracle
+     slot; the Oracle stays cache-only and the fetching lives in its own organ.
+LAST EVENT: 2026-08-16 — BR-1b filed, built, armed; F-TU-1..6 6/6; unattended run exit 0.
+FACTS:
+- SCOPE ENUMERATED, NOT ASSERTED: 10 symbols x {5m,15m,1h,4h} = 40 pairs, obtained by
+  instrumenting oracle_daily.load_lens on a real run and pinned with that file's sha256.
+  The top-up HALTS if oracle_daily.py changes. 30m is absent on purpose (resampled from
+  15m); 1m and 12h are absent because the Oracle never reads them [verified]
+- First real run +2,521 rows across 40 pairs, 0 gaps, 0 clobbers, 1m49s — inside the 15
+  minute head start. Unattended run +10 rows, exit 0 [verified]
+- THE CHAIN WORKS: the Oracle's as-of advanced 2026-08-15T12:00Z -> 2026-08-16T00:00Z with
+  oracle_daily.py byte-identical, and the BR-1 fixtures stayed 10/10 green [verified]
+- Fixtures F-TU-1..6 6/6, each shown failing on a deliberate break first. Two were RED at
+  first and both times the FIXTURE was wrong, not the code — recorded in the build doc [verified]
+- topup_log.jsonl carries fixture rows tagged slot="fixture-F-TU-6"; anything reading that
+  log, BR-2 included, must filter them as last_real_run() does [handoff]
+- T-3 OPEN: launchd runs a missed calendar job on wake, so a laptop asleep at 06:45 may fetch
+  after the 07:00 Oracle has rendered. No staleness alarm exists; a ruling is available [open]
+PENDING: 1. seven live mornings  2. operator mid-week PARITY line  3. BR-2 on gates
+     4. the [VETO] rows, now including OVERLAP_BARS  5. the T-3 staleness-alarm ruling
+NEXT: live week runs unattended, now on fresh data. Owner: launchd, then operator.
+=== END STATUS ===
