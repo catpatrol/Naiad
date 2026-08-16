@@ -1,0 +1,104 @@
+{
+  "card": "TIER-C3 \u00b7 THE RAILED BASELINE",
+  "counts": {
+    "anchor_rows": 11,
+    "anchor_same_under_time_equiv_lookback": 5,
+    "anchors_in_lockbox": 0,
+    "armings_refused_anchor_sealed": 2,
+    "lead_in_armings": 11,
+    "lead_in_trades_unscored": 0,
+    "rail_binding": 3,
+    "scored_armings": 43,
+    "scored_trades": 11,
+    "scored_trades_armed_in_lead_in": 1,
+    "tape_instants": {
+      "arming": 43,
+      "exit": 5,
+      "spine": 582,
+      "trigger": 10
+    },
+    "tape_rows": 640
+  },
+  "elapsed_s": 4.0,
+  "seal_floor_on_anchor": true,
+  "seed": 20260815,
+  "sha": {
+    "anchor_lookback": "62c34cea67323feae6a945fc78239af238d116d42a511a817448af25fb30c772",
+    "attribution": "d1be133f913721cf26990959973c6d5223c0166fa7680f3a206a9246eac3c36e",
+    "delta": "de6f0a0201239fe6581ea21987f984eb95e1000c36c045755969e31c87feabc2",
+    "display_only": "9f1a43d350e0987d5a62a9446e4a8ecf80ca0ab07b52968a404c8c86214a48ae",
+    "funnel": "391fae98b3c13367c0e58ea9113c8a7ca37d85f6768a6304c42a04679c401886",
+    "headline": "bd0cca2bf275f21b46ef77f98421c762b991ec35bb30921ca91e398dd9b58e26",
+    "journal": "7bf46e07b204201a8f0d123d272b808be59c94b9ae542e076bdc7a1b1af9fe4e",
+    "lead_in_census": "f00105fb3666375274599a1866eafd2aaf164cbcdf3b1bdff2758867a3ef111d",
+    "lead_in_trades": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "monthly": "117f680013b78383b4220e455a736e945c2c9e48714a6a9924756747b2be2d4e",
+    "stop_geometry": "ff082da0c809760caa8eeb8299f47e7a1efe6418dcb577cda5febc3b87546e4c",
+    "strip_d": "89943555e2381e57b7e5969c726111fa801cb7428fa4f245e7ea2399930f25e6",
+    "tape": "e5ef978aaf43ad1335cf73dc56c3ab777ab52844e5944c5d6de9aa9a85290c2d",
+    "tape_inventory": "305f353ffb0f516fc0f25098f5e58ffc84c290d35a90f3147601312d35425f2c"
+  },
+  "windows": {
+    "CENSUS_ERA": {
+      "armings": 745,
+      "armings_in_window": 745,
+      "armings_lead_in": 0,
+      "lead_in_from": "2019-08-09",
+      "scored": false,
+      "span": [
+        "2019-09-08",
+        "2024-06-30"
+      ],
+      "trade_ts_bounds": {
+        "max_entry": "2024-06-05T04:00:00Z",
+        "max_exit": "2024-06-07T16:00:00Z",
+        "max_exit_ms": 1717776000000,
+        "min_entry": "2019-09-16T12:00:00Z",
+        "min_exit": "2019-10-10T12:00:00Z"
+      },
+      "trades_lead_in_unscored": 0,
+      "trades_scored": 127
+    },
+    "PINNING": {
+      "armings": 88,
+      "armings_in_window": 81,
+      "armings_lead_in": 7,
+      "lead_in_from": "2026-01-02",
+      "scored": false,
+      "span": [
+        "2026-02-01",
+        "2026-07-07"
+      ],
+      "trade_ts_bounds": {
+        "max_entry": "2026-06-18T16:00:00Z",
+        "max_exit": "2026-06-22T12:00:00Z",
+        "max_exit_ms": 1782129600000,
+        "min_entry": "2026-02-18T20:00:00Z",
+        "min_exit": "2026-02-21T08:00:00Z"
+      },
+      "trades_lead_in_unscored": 0,
+      "trades_scored": 15
+    },
+    "SCORED": {
+      "armings": 54,
+      "armings_in_window": 43,
+      "armings_lead_in": 11,
+      "lead_in_from": "2025-09-06",
+      "scored": true,
+      "span": [
+        "2025-10-06",
+        "2026-01-31"
+      ],
+      "trade_ts_bounds": {
+        "max_entry": "2026-01-01T04:00:00Z",
+        "max_exit": "2026-01-07T20:00:00Z",
+        "max_exit_ms": 1767816000000,
+        "min_entry": "2025-10-08T20:00:00Z",
+        "min_exit": "2025-10-09T00:00:00Z"
+      },
+      "trades_lead_in_unscored": 0,
+      "trades_scored": 11
+    }
+  },
+  "yardstick_label": "YARDSTICK v3 \u2014 PROVISIONAL (one regime, n small)"
+}
