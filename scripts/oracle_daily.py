@@ -425,6 +425,11 @@ def build_view(as_of_ms: int | None = None, log=print) -> dict:
     }
 
 
+def f_close_at(h4, i: int) -> float:
+    """The close of bar i on the lens frame — the rule card's entry price."""
+    return float(h4["close"].to_numpy("float64")[i])
+
+
 def trap_card(sym, h4, st, clusters, atr_d, toll_atr) -> dict | None:
     """C-6. A pre-framed if-then, never a recommendation.
 
@@ -440,8 +445,25 @@ def trap_card(sym, h4, st, clusters, atr_d, toll_atr) -> dict | None:
         return None
     w = max(live, key=lambda w: w.arm_i)
     direction = w.direction
-    entry = st.close
     atr_l = st.atr
+
+    # THE ENTRY ANCHOR. The rule card is explicit — "TRIGGER: first in-window 4h
+    # 12/26 cross -> enter at that bar close" — so a TRIGGERED window's entry is
+    # the CLOSE OF THE TRIGGER BAR, not today's close. Anchoring it to today's
+    # close silently re-prices a card that already fired: on NEARUSDT that was a
+    # 10.1 ATR drift, and every derived field (risk, target, net R:R) inherited
+    # it. An ARMED window has not fired yet, so its entry is genuinely unknown
+    # and the card is PROVISIONAL: the last close stands in as the reference and
+    # says so, rather than pretending to a price the market has not printed.
+    if w.trigger_i is not None:
+        entry = float(f_close_at(h4, w.trigger_i))
+        entry_basis = (f"close of the 12/26 trigger bar, {w.trigger_age_bars} bar(s) ago"
+                       + (" — STALE" if w.trigger_stale else ""))
+        provisional = False
+    else:
+        entry = st.close
+        entry_basis = "PROVISIONAL — the 12/26 has not fired; last close stands in"
+        provisional = True
 
     # THE STOP IS NOT COMPUTED HERE. tierc3_rules.struct_stop_4h is the ratified
     # anchor: nearest confirmed 4h (5,5) pivot strictly beyond entry within the
@@ -457,7 +479,8 @@ def trap_card(sym, h4, st, clusters, atr_d, toll_atr) -> dict | None:
         return {
             "direction": "long" if direction == 1 else "short",
             "station": w.station, "arm_ms": w.arm_ms, "disp": w.disp,
-            "not_taken": True,
+            "not_taken": True, "provisional": provisional, "entry_basis": entry_basis,
+            "trigger_age_bars": w.trigger_age_bars, "trigger_stale": w.trigger_stale,
             "entry": entry,
             "entry_rule": "at the close of the first in-window 4h 12/26 cross",
             "invalidation": None, "anchor": "NO ADMISSIBLE 4h PIVOT ANCHOR — NOT TAKEN",
@@ -485,7 +508,8 @@ def trap_card(sym, h4, st, clusters, atr_d, toll_atr) -> dict | None:
     return {
         "direction": "long" if direction == 1 else "short",
         "station": w.station, "arm_ms": w.arm_ms, "disp": w.disp,
-        "not_taken": False,
+        "not_taken": False, "provisional": provisional, "entry_basis": entry_basis,
+        "trigger_age_bars": w.trigger_age_bars, "trigger_stale": w.trigger_stale,
         "entry": entry, "entry_rule": "at the close of the first in-window 4h 12/26 cross",
         "invalidation": stop_px, "anchor": anchor, "risk": risk,
         "target": target_px, "target_score": (tgt["score"] if tgt else None),
@@ -674,10 +698,13 @@ def render_html(view: dict, date_str: str, canon_sha: str) -> str:
   <div class="card-h"><b>{html.escape(a['symbol'].replace('USDT',''))}</b>
     <span class="chip d-{c['direction']}">{c['direction']}</span>
     <span class="chip w-{c['station'].lower()}">{c['station']}</span>
+    {'<span class="chip stale">STALE TRIGGER</span>' if c.get('trigger_stale') else ''}
+    {'<span class="chip prov">PROVISIONAL</span>' if c.get('provisional') else ''}
     <span class="muted small">displacement {c['disp']:.2f} ATR at the arming</span></div>
   <table class="kv">
     <tr><td>IF</td><td>{html.escape(c['entry_rule'])}</td></tr>
-    <tr><td>ENTRY</td><td class="num">{_f(c['entry'])}</td></tr>
+    <tr><td>ENTRY</td><td class="num">{_f(c['entry'])}
+        <span class="muted">— {html.escape(c['entry_basis'])}</span></td></tr>
     <tr><td>INVALIDATION</td><td class="num">{_f(c['invalidation'])}
         <span class="muted">— {html.escape(c['anchor'])}; risk {_f(c['risk'])}</span></td></tr>
     <tr><td>TARGET</td><td class="num">{_f(c['target'])}
@@ -774,6 +801,8 @@ td{{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}}
 .t-short{{color:var(--terra);border-color:var(--terra)}}
 .d-long{{color:var(--teal);border-color:var(--teal)}}
 .d-short{{color:var(--terra);border-color:var(--terra)}}
+.stale{{color:var(--terra);border-color:var(--terra);font-weight:700}}
+.prov{{color:var(--mut);border-color:var(--mut)}}
 .post{{font-weight:700;letter-spacing:.1em}}
 .w-triggered{{color:var(--sage)}} .w-armed{{color:var(--teal)}}
 .w-dead{{color:var(--terra)}} .w-stalking{{color:var(--mut)}}

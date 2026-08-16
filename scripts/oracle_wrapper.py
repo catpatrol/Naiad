@@ -202,9 +202,11 @@ def self_checks(log=print) -> dict:
         t = sorted(OD.TAPE_DIR.glob("oracle_tape_*.parquet"))
         df = pd.read_parquet(t[-1])
         missing = [c for c in OD.TAPE_COLS if c not in df.columns]
+        # the same stemmed, component-wise matcher the fixture uses — the first
+        # version split on "_" only and let plurals through
+        import oracle_fixtures as _OF
         banned = [c for c in df.columns
-                  if any(set(w.split("_")) <= set(c.split("_"))
-                         for w in OD.BANNED_CALIBRATION_KEYS)]
+                  if _OF._calibration({c: 0})[0] is False]
         ok = (not missing) and (not banned) and len(df) > 0
         detail = (f"{len(t)} tape file(s), newest {t[-1].name} with {len(df)} rows, "
                   f"{len(df.columns)} columns; missing={missing}; outcome_columns={banned}")

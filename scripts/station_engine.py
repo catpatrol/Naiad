@@ -148,6 +148,18 @@ REGISTER: dict[str, dict] = {
                   "D-7 logs the resulting DEAD fraction every run so BR-2 can recalibrate "
                   "it against a week of measured distributions instead of a guess.",
     },
+    "TRIGGER_FRESH_BARS": {
+        "value": 6,
+        "ruled": False,
+        "source": "PROPOSED by the BR-1 build 2026-08-16 — UNRULED [VETO]. TRIGGERED has "
+                  "no age term in the rule card: a window stays TRIGGERED until it closes, "
+                  "so a 12/26 cross from 24 days ago still reads TRIGGERED today. That is "
+                  "faithful to the card and MISLEADING on a Board whose word the operator "
+                  "reads as 'the entry alert is live now'. This is the age past which a "
+                  "trigger is printed STALE — the word does not change (the card rules the "
+                  "word), the staleness prints beside it. 6 bars = 24h on the 4h lens. "
+                  "D-7 logs the trigger-age distribution every run so BR-2 can rule it.",
+    },
     "BOARD_PRECEDENCE": {
         "value": ("TRIGGERED", "ARMED", "DEAD", "STALKING"),
         "ruled": False,
@@ -272,9 +284,11 @@ class Window:
     trigger_i: int | None
     trigger_ms: int | None
     trigger_on_arming_bar: bool
+    trigger_age_bars: int | None   # bars from the trigger to as_of; None if untriggered
+    trigger_stale: bool            # trigger_age_bars > TRIGGER_FRESH_BARS [VETO]
     close_i: int | None            # None while alive
     close_ms: int | None
-    closed_by: str                 # '' | 'counter-12_89' | 'bell-89_316' | 'series-end'
+    closed_by: str                 # '' (alive) | 'counter-12_89' | 'bell-89_316'
     age_bars: int                  # bars from arming to as-of (alive) or to close
     station: str                   # the word THIS window is in
 
@@ -371,8 +385,12 @@ def windows_for(symbol: str, f: V2.Frame4h, as_of_i: int | None = None,
     lens = lens or REGISTER["LENS"]["value"]
     n = len(f.c)
     as_of_i = n - 1 if as_of_i is None else int(as_of_i)
+    if not (0 <= as_of_i < n):
+        raise ValueError(f"as_of_i {as_of_i} out of range for {n} bars; negative "
+                         f"indices are NOT honoured here — the scalar stamps would "
+                         f"follow Python's wrap-around while the arming range and "
+                         f"every age would not, giving a silently wrong board")
     x = crosses(f)
-    dead_memory = REGISTER["DEAD_MEMORY_BARS"]["value"]
 
     out: list[Window] = []
     for a in V2.armings(symbol, f, 0, as_of_i):
@@ -421,6 +439,9 @@ def windows_for(symbol: str, f: V2.Frame4h, as_of_i: int | None = None,
             trigger_i=trig_i,
             trigger_ms=(int(f.open_ms[trig_i]) if trig_i is not None else None),
             trigger_on_arming_bar=bool(trig_i is not None and trig_i == a.arm_i),
+            trigger_age_bars=(None if trig_i is None else int(as_of_i - trig_i)),
+            trigger_stale=bool(trig_i is not None
+                               and (as_of_i - trig_i) > REGISTER["TRIGGER_FRESH_BARS"]["value"]),
             close_i=close_i,
             close_ms=(int(f.open_ms[close_i]) if close_i is not None else None),
             closed_by=closed_by,
@@ -437,6 +458,8 @@ def stations_for(symbol: str, df, as_of_i: int | None = None) -> AssetStations:
     f = build_frame(df)
     n = len(f.c)
     as_of_i = n - 1 if as_of_i is None else int(as_of_i)
+    if not (0 <= as_of_i < n):
+        raise ValueError(f"as_of_i {as_of_i} out of range for {n} bars")
     wins = windows_for(symbol, f, as_of_i=as_of_i, lens=lens)
     dead_memory = REGISTER["DEAD_MEMORY_BARS"]["value"]
 
@@ -446,8 +469,15 @@ def stations_for(symbol: str, df, as_of_i: int | None = None) -> AssetStations:
 
     # BOARD_PRECEDENCE, [VETO]: live business outranks a burial, a burial an
     # empty watch. Both inputs printed so the collapse is auditable.
-    if any(w.station == "TRIGGERED" for w in live):
-        word, why = "TRIGGERED", "an open window holds an in-window 12/26 cross"
+    trg = [w for w in live if w.station == "TRIGGERED"]
+    if trg:
+        w = min(trg, key=lambda w: w.trigger_age_bars)
+        why = (f"an open window holds an in-window 12/26 cross, "
+               f"{w.trigger_age_bars} bar(s) ago")
+        if w.trigger_stale:
+            why += (f" — STALE, older than TRIGGER_FRESH_BARS="
+                    f"{REGISTER['TRIGGER_FRESH_BARS']['value']} [VETO]")
+        word = "TRIGGERED"
     elif live:
         word, why = "ARMED", f"{len(live)} open 12/89 window(s), no trigger yet"
     elif buried:
