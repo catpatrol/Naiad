@@ -90,7 +90,21 @@ CONV_BYTES_BEFORE = 64_012
 # from here is narrower and still worth having: CONVENTIONS has not bloated
 # SILENTLY.  Re-pin it the same way -- a dated note saying what grew and why --
 # and never by trimming a rule.
-CONV_BYTES_CEILING = 66_500
+#
+# RE-PINNED AGAIN 2026-08-15 (ruling "pin"), 66,500 -> 68,500.  WHAT GREW: the
+# BOX-COST trip-wire, pinned absolute at 64,000 B -- the rewritten rule and its
+# BECAUSE, the dated CORRECTION carrying APOLLO's 2.5x-loosening evidence and
+# the measured restoration (7 files over the new wire, the SAME 7 over the old
+# one, 1 over the raised one -- measured on the TICK SET, which is what "box-
+# bound" means), the trip-wire-of-record sentence, the
+# three-limits distinction, and the 4.2 custody amendment naming FLAG_BYTES.
+# 65,703 B -> 67,473 B, +1,770 B, every byte of it rule or dated correction.
+#
+# TWO RE-PINS IN TWO SESSIONS IS THE MECHANISM WORKING, NOT FAILING: each cost
+# a dated note saying what grew and why, which is the friction that stops
+# growth from being silent.  If a third arrives with nothing to show for it,
+# that is the signal to look hard at what is being added.
+CONV_BYTES_CEILING = 68_500
 
 # Top-level `**RULE —` lines in CONVENTIONS.md, pinned 2026-08-15 (ruling 007)
 # as a FLOOR.  89 at the collapse commit and 89 after ruling 007 -- measured

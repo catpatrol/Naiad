@@ -119,6 +119,38 @@ OVERRIDE_ENV = "NAIAD_ALLOW_OVERSIZE_PUBLISH"
 # comparing across cycles must not be handed a silent redefinition.
 TICK_EXTRA = ("LEDGER.md",)
 
+
+# ---------------------------------------------------------------------------
+# THE NAMING TRIP-WIRE.  ABSOLUTE, and that is the entire content of the ruling.
+#
+# PINNED 2026-08-15 by operator ruling "pin".  CONVENTIONS §3.2 requires any
+# box-bound file over this size to be named to the operator at creation, with
+# its intended home.  It is a NAMING duty and never a refusal -- six files on
+# the bus are already over it and none of them is in breach.
+#
+# IT DOES NOT MOVE WITH `BOX_BYTES`, AND THAT IS WHY IT EXISTS.  The rule used
+# to read "over ~1% of the budget", a FRACTION, so the 6.39 MB -> 16 MB raise
+# loosened it from ~63,900 B to ~160,000 B -- a 2.5x loosening nobody asked
+# for, which APOLLO flagged rather than buried (LEDGER_APOLLO, 2026-08-15:
+# "each of this lane's last three build documents would have tripped the old
+# wire and none trips the new one").  The intent was a SENSITIVITY, not a
+# proportion: what is worth a sentence at creation does not scale with the
+# ceiling.  MEASURED 2026-08-15 on the tracked TICK SET (a snapshot of a moving
+# quantity, not a standing fact): 7 files over 64,000 B, the SAME 7 over the
+# old 63,900 B wire, and 1 over the raised 160,000 B wire -- no file falls in
+# the 100 B gap between the old and new numbers.  So the pin restores a
+# sensitivity that had been almost entirely switched off (the raised wire found
+# 1 of 7), rather than inventing a limit.  The live number is whatever the
+# advisory below prints; this comment is history.
+#
+# READ THIS BEFORE RAISING `BOX_BYTES` AGAIN.  The three constants above are
+# whole-bus FRACTIONS and move with the ceiling by construction; this one is
+# PER FILE and absolute and must NOT be carried up beside them.  Doing that is
+# exactly the mistake made one block up on 2026-08-15, when warn/refuse were
+# carried up proportionally and had to be recalibrated within the day.  Moving
+# this number is a separate operator ruling.
+FLAG_BYTES = 64_000
+
 # Quoted verbatim on refusal.  A refusal that does not say what to do instead is
 # just an obstacle; this names the remedy CONVENTIONS already ratified.
 POINTER_RULE = (
@@ -317,6 +349,57 @@ def folder_rows(sized, scope=SCOPE):
                   key=lambda r: (-r[1], r[0]))
 
 
+def over_flag(sized, limit=FLAG_BYTES):
+    """[(bytes, path)] over the naming trip-wire, largest first.  Pure.
+
+    STRICTLY over: "any file OVER 64,000 B" is read literally, so a file of
+    exactly 64,000 B does not flag.  Same reading as REFUSE one block up, and
+    for the same reason -- a boundary that fires at its own stated limit
+    surprises the one reader who checked the number first.
+    """
+    return sorted((r for r in sized if r[0] > limit), reverse=True)
+
+
+def flag_lines(over, limit=FLAG_BYTES):
+    """The §3.2 naming duty, discharged at PUBLISH as well as at creation.
+
+    WHY THIS PRINTS AT ALL.  The rule binds "at the moment it is created",
+    BECAUSE creation is the only moment the choice is cheap -- and that is
+    sound, but it never binds a file that GREW across the wire.  Three of the
+    six files over it today are append-only and have no moment of creation at
+    their current size, and one build report entered the bus at 55,536 B,
+    correctly unflagged, then reached 68,524 B with nothing said.  A document
+    cannot know its final size when it is written.
+
+    So the wire is read here too, against the whole indexed bus, and the file
+    is named ONCE MORE rather than never.  This wire NEVER refuses: it does not
+    reset the index and does not change an exit code.
+
+    IT DISCHARGES HALF THE DUTY, AND SAYING SO IS THE POINT.  §3.2 requires the
+    file be named "by name, WITH ITS INTENDED HOME".  A publish cannot know a
+    file's intended home -- that is the disposition table's job, at creation,
+    which is where the actual workflow decision gets made.  This block supplies
+    the naming half and points at the other, rather than quietly redefining the
+    duty down to what was easy to implement.
+    """
+    if not over:
+        return ["publish: naming trip-wire -- no box-bound file over %s B "
+                "(CONVENTIONS 3.2)" % f"{limit:,}"]
+    out = ["publish: NAMING TRIP-WIRE -- %d box-bound file(s) over %s B "
+           "(naming only; this wire never refuses a publish):"
+           % (len(over), f"{limit:,}")]
+    # Capped like every other list in this module (offenders[:10], sized[:10]):
+    # the count only ever grows as the bus fills, and an unbounded list in a
+    # launchd log is how the interesting lines stop being read.
+    for size, path in over[:10]:
+        out.append("publish:   %13s B  %s" % (f"{size:,}", path))
+    if len(over) > 10:
+        out.append("publish:   ... and %d more over the wire" % (len(over) - 10))
+    out.append("publish:   each needs an intended home in the build document's "
+               "disposition table (CONVENTIONS 3.2).")
+    return out
+
+
 def manifest_head(repo):
     """The HEAD sha MANIFEST.json recorded, or None if it cannot be read.
 
@@ -496,7 +579,7 @@ def publish(repo, date_str, remote="origin", log=print, allow_oversize=None):
               "commit": None, "branch": None, "error": None, "pushed": False,
               "bytes": None, "fraction": None, "budget": None, "heartbeat": None,
               "largest": [], "oversize_override": bool(allow_oversize),
-              "bus_health": []}
+              "bus_health": [], "over_flag": []}
 
     try:
         rc, branch, err = _git(repo, ["rev-parse", "--abbrev-ref", "HEAD"])
@@ -549,6 +632,16 @@ def publish(repo, date_str, remote="origin", log=print, allow_oversize=None):
             # likeliest and least visible.  Two cheap calls, no `sized`.
             result["bus_health"] = [head_pair_line(*measure_head_pair(repo))]
             log(result["bus_health"][0])
+            # The wire prints here too, for the same reason the head pair does.
+            # "exchange/ unchanged" does NOT mean the box is unchanged: the
+            # tick set also holds LEDGER.md, which lives at the repo root and
+            # moves on sessions that touch no exchange/ file at all. A run that
+            # says least is the run where a crossing is least visible.
+            _sized = _index_sizes(repo)
+            _extra_total, _extra_rows = tick_extra_bytes(repo)
+            result["over_flag"] = over_flag(_sized + _extra_rows)
+            for line in flag_lines(result["over_flag"]):
+                log(line)
             return result
 
         # --- D3: total-size budget.  Runs AFTER the scope guard, never instead
@@ -589,6 +682,19 @@ def publish(repo, date_str, remote="origin", log=print, allow_oversize=None):
             "whole exchange/ index, as it would be committed",
             recorded, live, delta)
         for line in result["bus_health"]:
+            log(line)
+
+        # The §3.2 naming trip-wire, read against the TICK SET -- `sized` plus
+        # `extra_rows`, both already computed above, so still zero new git
+        # calls.  IT MUST BE THE TICK SET, NOT `sized`: §3.2 binds "any
+        # BOX-BOUND file", and §4.3 defines the box as `exchange/` AND
+        # `LEDGER.md`.  Metering `exchange/` alone here would be the D3 gap --
+        # closed at aggregate level on 2026-08-15 -- re-opened at file level by
+        # the very session that pinned the wire, and it would hide the single
+        # largest box-bound file in the project: LEDGER.md, 259,298 B, four
+        # times over the wire and over even the loosened one.
+        result["over_flag"] = over_flag(sized + extra_rows)
+        for line in flag_lines(result["over_flag"]):
             log(line)
 
         if level == "WARN":
@@ -665,6 +771,28 @@ def _oversize_lines(total, frac, sized):
     return out
 
 
+def _flag_report_lines(result):
+    """The naming trip-wire, as markdown for the DAILY report.
+
+    WHY THIS EXISTS SEPARATELY FROM flag_lines().  flag_lines() writes to
+    stdout, which on a scheduled run means a launchd log.  §3.2 requires the
+    file be "flagged TO THE OPERATOR by name", and a line in a log nobody opens
+    does not discharge that -- this module already carries the scar (the
+    2026-08-09 routine outage went unseen for three days because the only
+    record was a log).  report_lines() is what lands in DAILY_<date>.md, so the
+    naming has to reach here too or it reaches nobody.
+    """
+    over = result.get("over_flag") or []
+    if not over:
+        return [f"- naming trip-wire: no box-bound file over {FLAG_BYTES:,} B"]
+    out = [f"- **naming trip-wire** — {len(over)} box-bound file(s) over "
+           f"{FLAG_BYTES:,} B (naming only; never a refusal):"]
+    out += [f"    - `{p}` — {sz:,} B" for sz, p in over[:10]]
+    if len(over) > 10:
+        out.append(f"    - … and {len(over) - 10} more")
+    return out
+
+
 def report_lines(result):
     """Render a publish result as markdown lines for a report section."""
     status = result.get("status")
@@ -692,6 +820,7 @@ def report_lines(result):
                 f"{BOX_BYTES * REFUSE_FRACTION / 1e6:.1f} MB")
         if result.get("budget") == "REFUSE" and result.get("oversize_override"):
             lines.append("- **the size ceiling was OVERRIDDEN for this publish**")
+        lines += _flag_report_lines(result)
         if result.get("heartbeat"):
             lines.append("- %s" % result["heartbeat"].replace("publish: ", "", 1))
         return lines
