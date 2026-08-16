@@ -61,3 +61,26 @@ PENDING:
 NEXT: Answer PENDING 1 and 3 (one word each), then M3 takes the sweep list. Owner: operator.
 METRICS: operator actions this session = 0 · files re-ingested = 425 (+74 estate) · bytes hashed = ~16 GB · mismatches = 0 · halts cleared = 2 · deletions = 0 · sources touched = 0
 === END STATUS ===
+
+---
+
+=== STATUS_HEPHAESTUS — 2026-08-15 — RULING 007 — DIGEST RETIRED, HERMES DORMANT ===
+NOW: DIGEST.md is retired to docs/history/ with a 561 B tombstone at its old path, HERMES is DORMANT with five duties routed and two named as PARKED, and the residue that lane produced by hand is now measured by publish() and the daily routine's new section 8. Five adversarial agents were run against the finished build and found thirteen defects in my own work, one of them blocking; all are fixed. F-CONV 4/4, suite 324 passed / 1 skipped.
+LAST EVENT: 2026-08-15 — ruling 007 executed; filed as exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-15_RULING-007.md.
+FACTS:
+- THE RULING'S OWN git mv WOULD HAVE DESTROYED ITSELF. `docs/history/DIGEST_RETIRED_2026-08-15.md` is OUTSIDE publish_exchange.SCOPE, so a publish would have FLAGGED, `git reset` would have wiped the staged rename, and the next publish would have committed the tombstone OVER the DIGEST with the final edition never committed at all. Proven end-to-end in a clone. Cured by putting the rename, the tombstone and the fixture in ONE hand commit before any publish — which is also the shape that keeps `--follow` working, itself replayed and confirmed at 9 commits back to 2026-08-02 [verified]
+- ROTATION WAS THE ONLY CODE COUPLED TO DIGEST, AND IT WOULD HAVE FAILED SILENTLY, NOT LOUDLY. digest_inbox_names()'s "search it all" fallback scrapes .md names from the whole file, so against a tombstone it returns 2 names and the banner prints "DIGEST inbox : 2 name(s) parsed" — a successful-looking parse of an inbox that no longer exists, six live unacted notes quietly unprotected, first candidate 2026-09-03 (measured by stepping classify() day by day; "date + 30" is one day early). Now raises InboxSourceUnavailable and exits 2. NO ratified policy touched: AGE_DAYS, SCOPE_DIR, NOTE_RE and the `name in inbox` test are exactly as queue 003 ratified them — only what happens when the rule's INPUT is unobtainable changed, from inventing an answer to refusing one [verified]
+- CONVENTIONS GREW AND THE LAW STAYED. The edits broke F-CONV-4's shrink clause; the fixture's own docstring rules on exactly that case — re-pin with a dated note, never trim a rule to hit a number. CONV_BYTES_BEFORE was NOT overwritten (it means "size before the collapse" and three filed documents quote it); a new CONV_BYTES_CEILING carries the live clause, with headroom, after §6.4's three legs ran. The census clause was narrowed to frozen evidence and a live rule-count floor of 89 added — 89 at the collapse, 89 now [verified]
+- SUITE BASELINE RE-MEASURED AND THE QUOTED FIGURE IS STALE. Ledgers carry "287 passed / 1 skipped = 288 = fixtures 74 + tests 214". Live at 20f23a1 BEFORE this build: 299 / 1 = 300 = fixtures 74 + tests 226, the +12 being tests/test_box_guard.py. A third version, 286/1, sits in LEDGER_ARGUS. After F-BH-1: 324 passed / 1 skipped = 325 = 74 + 251. Do not re-quote 288 [verified]
+- THE BLOCK CONTRADICTED THE RULING THAT CREATED IT, UNTIL REVIEW CAUGHT IT. The recency table reported dormant HERMES as the stalest lane in the project by a margin growing one day per day forever, while §5 says nothing waits on HERMES. Now labelled DORMANT. Same class of error: §5 first claimed EVERY duty absorbed when "files drops" had no successor — now named as PARKED alongside the unacted-inbox list [verified]
+- MANIFEST.json IS NOT A FILE INVENTORY AND §0 SAID IT WAS. Measured: `sources` is 46 hardcoded engine/script paths, `reviewer_box` is 29 paths ALL under exchange/status/ — it lists no report on the bus. §0, §4.3 and the tombstone now credit it with repo state and point "what the bus is carrying" at the bus-health block [verified]
+PENDING (operator):
+1. WHERE DOES THE UNACTED-INBOX LIST LIVE? Deadline 2026-09-03, when the first of six notes becomes a rotation candidate. Until ruled, rotate_reports halts rather than guess. Restoring it is a one-line repoint of DIGEST_PATH
+2. Queue 003 D-2 named HERMES's DIGEST section as where the rotation-candidate figure is published each cycle. The bus-health block now publishes it, but re-homing a RATIFIED cadence is not the builder's to do
+3. `exchange/reports/PRIMER_HERMES_2026-08-11_v4.md:102` still instructs HERMES to rebuild DIGEST every cycle. Superseding it instructs another lane and needs your stamp (§5)
+4. `exchange/drops/` — nothing now names and files what you leave there
+5. The live Claude project-memory panel still records HERMES's duty as "DIGEST 2x/day, box budget, staleness stamps, inbox". Only you can edit it; the repo snapshots were left alone
+6. F-BH-1 does not run in CI — ci.yml runs `pytest fixtures/` only, so tests/ (including F-BOX-1) never executes on push. One-line fix not applied: widening CI scope is an ops call
+NEXT: Answer PENDING 1 (one line), then the September sweep can run. Owner: operator.
+METRICS: operator actions this session = 0 · files re-ingested = 0 · verification agents = 10 · defects found in own work = 13 · defects fixed = 13
+=== END STATUS ===

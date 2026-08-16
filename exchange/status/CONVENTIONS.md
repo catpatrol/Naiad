@@ -1,7 +1,7 @@
 # CONVENTIONS — the operating rules every Naiad lane follows
 
 **Status:** AUTHORITATIVE. Ratified by the operator 2026-08-03 (rulings G-1 c, G-4 a).
-**Owner:** ATHENA drafts · the operator ratifies · HERMES flags staleness. No other lane edits it.
+**Owner:** ATHENA drafts · the operator ratifies. No other lane edits it. *(HERMES flagged staleness until ruling 007, 2026-08-15, put that lane dormant — §5.)*
 **Shape:** restructured 2026-08-15 (THE GREAT COLLAPSE). One fact, one home, one pointer. §0 is read
 by everyone; every other section is addressed, and read when its task comes up. Incident narratives
 live in `docs/CASELAW.md`, cited as CL-n, off the bus.
@@ -105,9 +105,11 @@ EARNED-BY Operator ruling 2026-08-15 (R2).
 
 | what you need | where it is |
 |---|---|
-| what exists, and the box budget | `exchange/DIGEST.md` |
 | your own lane's state | `exchange/status/LEDGER_<GOD>.md` |
 | study state — verdicts, yields, the slate | `LEDGER.md` → **STANDING VERDICTS**, at its head |
+| what exists, and the box budget | the **bus-health** and **budget** blocks — per-folder counts, bytes, ledger recency, manifest-vs-HEAD — printed on every publish and in `daily/DAILY_<date>.md` §8; repo state in `exchange/status/MANIFEST.json` |
+
+> **RETIRED 2026-08-15 (ruling 007).** The first row was `exchange/DIGEST.md`, an index built by hand. Sources that report themselves replace it; final edition `docs/history/DIGEST_RETIRED_2026-08-15.md`.
 
 Anything beyond those three is pursued as needed: ask the operator to drag the file into the conversation, where it costs nothing permanent (§4).
 
@@ -447,7 +449,7 @@ EARNED-BY Operator ruling, 2026-08-03.
 
 ```
 exchange/
-├── DIGEST.md        HERMES only — an index of pointers, never a re-authored substitute
+├── DIGEST.md        RETIRED 2026-08-15 — a tombstone; its source list is inside
 ├── status/          LEDGER_<LANE>.md · MANIFEST.json · CADENCE.md · RETENTION.md ·
 │                    HEARTBEAT.md · SECOND_ACCOUNT.md · CONVENTIONS.md · daily/
 ├── queue/           numbered builder work orders; each a FULL contract with a RATIFIED stamp
@@ -479,7 +481,7 @@ enforced**; the exception keeps the rule sharp everywhere else. Nothing else inh
 
 ### 4.3 The tick set, and confirming a file is visible
 **RULE — The standing tick set is `LEDGER.md` and `exchange/` ONLY. Every other file is requested per lane, per need — dragged into that one conversation at zero permanent cost.**
-BECAUSE it works only while `exchange/DIGEST.md` lists what exists: **a lane cannot request a file it does not know about.** Keeping it current is HERMES's standing duty.
+BECAUSE it works only while something says what is there: **a lane cannot request a file it does not know about.** Since ruling 007 that is the bus-health block — per-folder counts and bytes on every publish and in `daily/DAILY_<date>.md` §8 — measured rather than maintained by hand. **Named cost:** it reports the SHAPE of the bus, not a filename list, so a lane hunting a specific file still asks the operator.
 EARNED-BY Operator, 2026-08-06.
 
 **RULE — The box is in SEARCH MODE: synced repo files are indexed for retrieval, NOT mounted as browsable files. Test visibility with the project-knowledge search tool, never a directory listing. A file is confirmed synced only when a search returns it WITH a folder path.**
@@ -517,8 +519,12 @@ sections of this file you are expected to have read.**
 | **ARGUS** | web chat | analytics toolkit, daily brief, volume filter (charter, 5.1) | §0 · §1 · §2 · §6 · **§7** |
 | **ATHENA** | web chat | system resilience and sustainability: repo operations, integrity, backups, manifest ritual, scheduled routines, workflow design, context compaction. Inherits the old SYSTEM lane; holds threshold custody. | §0 · §1 · §2 · §4 · §6 · **§8** |
 | **DIONYSUS** | Cowork | independent creative critique | §0 · §6 · **§7** |
-| **HERMES** | Cowork | coordination and verification: builds `DIGEST.md`, stamps staleness, files drops, validates and sequences the queue | §0 · §3 · §4 · §5 |
+| **HERMES** | Cowork | **DORMANT** (2026-08-15, ruling 007) — coordination and verification; duties absorbed or parked, see below | §0 · §3 · §4 · §5 |
 | **HEPHAESTUS** | local Claude Code | the builder | §0 · §2 · **§3** · §6 · §8, plus §7 for study work |
+
+**HERMES IS DORMANT — 2026-08-15, ruling 007.** Five duties are now discharged by something that reports itself: **budget** → printed on every publish · **queue validation** → manifest counters and RATIFIED stamps · **staleness** → F-P6 and the bus-health block · **inbox** → ledger appends, since acted means the recipient's ledger cites the note · **`DIGEST.md`** → retired to `docs/history/DIGEST_RETIRED_2026-08-15.md`.
+**Two are PARKED, not absorbed, and are named rather than quietly dropped:** *filing `drops/`* — nothing now names and files what the operator leaves in `exchange/drops/`; and *the queue-003 unacted-inbox list*, whose only home was the DIGEST, so `rotate_reports.py` HALTS rather than guess (§4.3). Both are operator calls.
+**Revival condition:** cross-lane coordination pain that a script cannot measure. Until then nothing waits on HERMES, and the rule below still binds any lane that takes the role.
 
 **RULE — DIONYSUS's challenges are NON-BLOCKING; a written answer is owed by the next phase boundary.**
 BECAUSE critique that blocks becomes critique avoided.
@@ -831,7 +837,7 @@ EARNED-BY Memory-restructure acceptance, 2026-08-03. **Pass requires ≥5 of 6 b
 
 
 **Who does what.** ATHENA drafts every change. You ratify it. HEPHAESTUS writes and publishes it.
-HERMES flags staleness. Nobody else edits this file.
+Staleness is flagged by the bus-health block, not by a lane (ruling 007). Nobody else edits this file.
 
 **To change a rule:**
 

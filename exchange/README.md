@@ -13,7 +13,7 @@ artifacts are NOT published this way — they keep the per-authorization push ru
 | `queue/` | numbered builder work orders, each carrying an operator ratification stamp |
 | `reports/` | builder outputs |
 | `drops/` | raw operator inbox — drag artifacts in unformatted; Hermes names and files them |
-| `DIGEST.md` | Hermes-maintained one-page index at the head of the bus |
+| `DIGEST.md` | **RETIRED 2026-08-15 (ruling 007)** — a tombstone naming the self-reporting sources that replaced it; final edition `docs/history/DIGEST_RETIRED_2026-08-15.md` |
 
 ## CONTENT GUARD — binding on every file under `exchange/**`
 
