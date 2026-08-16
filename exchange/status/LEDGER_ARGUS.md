@@ -98,3 +98,31 @@ FACTS:
 PENDING: 1. seven live mornings  2. operator mid-week PARITY line  3. BR-2 on gates
 NEXT: live week runs unattended. Owner: launchd, then operator (parity glance).
 === END STATUS ===
+
+=== STATUS_ARGUS — 2026-08-16 (ORACLE REBIRTH · CORRECTION) ===
+NOW: Post-build adversarial review run against the shipped ORACLE. It found real defects in
+     work the build document had already published as acceptance evidence. Repaired at
+     802b3cb; BUILD_2026-08-16_ORACLE_REBIRTH section 9 is the correction record.
+LAST EVENT: 2026-08-16 — adversarial review; six repairs; fixtures re-run 10/10; second
+     unattended run exit 0.
+FACTS:
+- CORRECTION, published claim was FALSE: F-BR-3 printed "no journal ... module is reachable"
+  as acceptance evidence. engine/s1.py does `from engine.journal import iso`, so engine.journal
+  was always in the closure; the ban was dead code (bare token vs dotted module). Matcher now
+  component-wise; both inherited imports DISCLOSED; the fixture now asserts no journal READ,
+  which is what BR-1 section 2 actually forbids [verified]
+- F-BR-1 tested no station word and called engine.indicators — the module under test — so it
+  was blind twice over. Rebuilt: an independent state machine with its own EMA/ATR/cross,
+  compared on WORDS, 28 comparisons, 0 mismatches, 3 skipped symbols named [verified]
+- Trap Card priced today's close while printing "at the close of the 12/26 cross": 10.12 ATR
+  drift on the shipped NEAR card. TRIGGERED now prices the trigger bar; ARMED is PROVISIONAL
+  [verified]
+- TRIGGER_FRESH_BARS [VETO] added: a 24.5-day-old trigger read like this morning's. Age and a
+  STALE chip print; the word is unchanged because the card rules the word [ratified-lean]
+- CONFIRMED CORRECT by independent recompute: alive/dead over 11,398 window-observations, 0
+  mismatches; and the strip PAINTS — all 10 canvases render under JavaScriptCore, colour law
+  and 0.45 knot dimming byte-identical to the shipped VIZ-4 original [verified]
+PENDING: 1. seven live mornings  2. operator mid-week PARITY line  3. BR-2 on gates
+     4. the nine [VETO] rows, now including TRIGGER_FRESH_BARS
+NEXT: live week runs unattended. Owner: launchd, then operator (parity glance).
+=== END STATUS ===

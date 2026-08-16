@@ -4,7 +4,7 @@
 2026-08-16 ("ratify BR-1, refresh 16:00, roster as-is"), as amended by Amendment A1 at stamp
 time. **Executor:** HEPHAESTUS. **Reviewer:** ARGUS. **Merge authority:** operator.
 **Class:** operations / display-only. Nothing here scores an outcome.
-**Code commit:** `a36edc1`. **This document:** published by `publish_exchange.publish()`.
+**Code commits:** `a36edc1` (build) + `802b3cb` (post-review repairs, section 9). **This document:** published by `publish_exchange.publish()`.
 
 ---
 
@@ -12,7 +12,7 @@ time. **Executor:** HEPHAESTUS. **Reviewer:** ARGUS. **Merge authority:** operat
 
 THE ORACLE IS ALIVE AND UNATTENDED. Two launchd agents are armed — `com.naiad.oracle-0700`
 (full) and `com.naiad.oracle-1600` (Watch/Board refresh), both at Buenos Aires wall-clock.
-One unattended run has already completed with **exit code 0**, produced the render with zero
+Two unattended runs have completed with **exit code 0** (the second after the section 9 repairs), produced the render with zero
 manual steps, and logged three self-checks PASS. All ten fixtures are green, each shown
 failing on a deliberate break first.
 
@@ -37,9 +37,9 @@ run so BR-2 recalibrates them against a week of measurement rather than against 
 
 | ID | Deliverable | Path | State |
 |---|---|---|---|
-| D-1 | Station engine, canon v1, closed register | `scripts/station_engine.py` | built, 27,351 B |
-| D-1b | The one truth source both languages read | `research_outputs/oracle/station_canon.json` | built, 7,813 B, TRACKED |
-| D-2 | The daily organ | `scripts/oracle_daily.py` | built, 52,016 B |
+| D-1 | Station engine, canon v1, closed register | `scripts/station_engine.py` | built, 29,272 B |
+| D-1b | The one truth source both languages read | `research_outputs/oracle/station_canon.json` | built, 8,458 B, TRACKED |
+| D-2 | The daily organ | `scripts/oracle_daily.py` | built, 53,871 B |
 | D-3 | Slot-anchored wrapper + two armed slots | `scripts/oracle_wrapper.py` + 2 plists | built + ARMED |
 | D-4 | Parquet tape for TC4 | `research_outputs/oracle/tape/` | built |
 | D-5 | This build document | `exchange/reports/BUILD_2026-08-16_ORACLE_REBIRTH.md` | this file |
@@ -85,34 +85,34 @@ anchor, so the fixture was proving nothing and was marked RED until the break wa
 ```
 ==============================================================================
 ORACLE FIXTURES — artifact set 2026-08-16
-  html  230,498 B
+  html  231,763 B
   tape  10 rows
   cal   10 per-asset records
 ==============================================================================
 
-F-BR-1 — PARITY — station markers vs the Pine source, symbol for symbol
-  [BREAK] deliberate violation -> RED (correct): mismatch list: BTCUSDT:trg_up/t_up x528, ETHUSDT:trg_up/t_up x530, SOLUSDT:trg_up/t_up x440, NEARUSDT:trg_up/t_up x434, ZECUSDT:trg_up/t_up x468, JTOUSDT:trg_up/t_up x214, TAOUSDT:trg_up/t_up x172, HYPEUSDT:trg_up/t_up x100  [handoff] pine/ holds SS_v12_0_1.pine only; SS v12.1 is described in PINE_LANE_PRIMER_2026-08-15 section 2 but is NOT in the repo, so marker-level parity against v12.1 itself is OWED, not discharged.
-  [PASS] F-BR-1: 10/10 symbols, 6 marker series each, on the frozen day 2026-08-12 — mismatch list EMPTY (= pass).
+F-BR-1 — PARITY — station WORDS vs an independent transcription, symbol for symbol
+  [BREAK] deliberate violation -> RED (correct): mismatch list (7): BTCUSDT@-0: engine=ARMED independent=DEAD; ETHUSDT@-0: engine=DEAD independent=ARMED; SOLUSDT@-0: engine=STALKING independent=DEAD; NEARUSDT@-0: engine=TRIGGERED independent=DEAD; ZECUSDT@-0: engine=DEAD independent=ARMED; JTOUSDT@-0: engine=STALKING independent=DEAD  [handoff] pine/ holds SS_v12_0_1.pine only; SS v12.1 is described in PINE_LANE_PRIMER_2026-08-15 section 2 but is NOT in the repo, so marker-level parity against v12.1 itself is OWED, not discharged.
+  [PASS] F-BR-1: 7/10 symbols x 4 as-of points = 28 station-word comparisons against a SECOND state machine with its own EMA/ATR/cross recursions (no engine.indicators, no station_engine) — mismatch list EMPTY (= pass).  SKIPPED 3 symbol(s) with less than 4776 4h bars of pre-fixture-day history (the independent EMA is SMA-seeded and needs the warm-up): HYPEUSDT(2633b), FARTCOINUSDT(3597b), LITUSDT(1389b).  [handoff] pine/ holds SS_v12_0_1.pine only; SS v12.1 is described in PINE_LANE_PRIMER_2026-08-15 section 2 but is NOT in the repo, so marker-level parity against v12.1 itself is OWED, not discharged.
 
 F-BR-2 — TOLL PRESENCE — no cost-free number prints anywhere
-  [BREAK] deliberate violation -> RED (correct): a rendered NET R:R row prints no toll; document prints a ratio and never a toll; net_rr() does not take a toll
-  [PASS] F-BR-2: net_rr() takes toll_price; 3 rendered NET R:R cell(s), every one carrying its per-lens toll band from the ORACLE GRID
+  [BREAK] deliberate violation -> RED (correct): a NET R:R row prints no toll VALUE (the bare word is not a toll); a rendered NET R:R row prints no toll; net_rr() does not take a toll
+  [PASS] F-BR-2: net_rr() takes toll_price; 3 NET R:R row(s) for 3 card(s) — counts reconcile, and every row carries a NUMERIC per-lens toll in ATR and in price from the ORACLE GRID
 
 F-BR-3 — FIREWALL — import graph, not prose
-  [BREAK] deliberate violation -> RED (correct): <injected> references a trading symbol directly
-  [PASS] F-BR-3: station_engine closure is analytics-free (779 modules); no journal / forward_log / positions module is reachable from either module; no oracle source references a trading symbol; no outcome-aggregation symbol is assigned. DISCLOSED: engine.trading IS in the closure via the ratified chain tierc2_rules -> engine.s1 -> 'from engine.trading import TradeResult'; it is imported, never called — BR-1 section 2 'imported read-only, trading disabled'.
+  [BREAK] deliberate violation -> RED (correct): an oracle source calls a journal read: read_journal; an oracle source imports engine.journal directly (must be inherited only)
+  [PASS] F-BR-3: station_engine closure is analytics-free (779 modules); no forward_log and no positions module is reachable (component-wise match); no oracle source imports or names a trading or journal module; no journal read is called; no outcome-aggregation symbol is assigned. DISCLOSED, NOT DENIED — these ARE in the closure, inherited via tierc2_rules -> engine.s1: engine.trading (only 'TradeResult') present=True; engine.journal (only 'iso') present=True. BR-1 section 2 permits engine modules 'imported read-only, trading disabled'; what section 2 forbids is a journal READ, and that is what is asserted above.
 
 F-BR-4 — THUMBNAIL PROVENANCE — strip bytes derive from a sha-stamped payload
   [BREAK] deliberate violation -> RED (correct): oracle_mantle_LITUSDT_4h.json: data-block sha mismatch; oracle_mantle_JTOUSDT_4h.json: data-block sha mismatch; oracle_mantle_HYPEUSDT_4h.json: data-block sha mismatch; oracle_mantle_BTCUSDT_4h.json: data-block sha mismatch; oracle_mantle_TAOUSDT_4h.json: data-block sha mismatch
-  [PASS] F-BR-4: 10 strips; each canvas binds a payload whose meta.sha256 recomputes from its own data block and is printed in that strip's footer (the shipped VIZ-4 convention: data-block sha, not file sha)
+  [PASS] F-BR-4: 10 strips; each canvas binds a payload whose meta.sha256 recomputes from its own data block and is printed in that strip's footer (the shipped VIZ-4 convention: data-block sha, not file sha); and the paint routine (divRGB/heatCanvas/putImageData/paintStrips + its DOMContentLoaded hook) is present in the document
 
 F-BR-5 — ANCHOR DETERMINISM — the C-4 tide-flip anchor, twice
   [BREAK] deliberate violation -> RED (correct): BTCUSDT: (14732, 1780099200000, 'down') != (14919, 1782792000000, 'up'); ETHUSDT: (14566, 1784577600000, 'up') != (14464, 1783108800000, 'up'); SOLUSDT: (12836, 1784894400000, 'down') != (12675, 1782576000000, 'up'); NEARUSDT: (12609, 1784318400000, 'down') != (12018, 1775808000000, 'up')
   [PASS] F-BR-5: anchor identical across two computations from the same substrate; per-asset anchor timestamps: BTC@1780099200000, ETH@1784577600000, SOL@1784894400000, NEAR@1784318400000, ZEC@1783728000000, JTO@1784491200000, TAO@1780070400000, HYPE@1784894400000, FARTCOIN@1779364800000, LIT@1779408000000
 
 F-BR-6 — REFRESH IDEMPOTENCE — the 16:00 refresh over unchanged data
-  [BREAK] deliberate violation -> RED (correct): The Board: 4741 B vs 4741 B
-  [PASS] F-BR-6: Board 4,741 B and Watch 5,426 B byte-identical across two renders over unchanged data
+  [BREAK] deliberate violation -> RED (correct): The Board: 4805 B vs 4805 B
+  [PASS] F-BR-6: Board 4,805 B and Watch 5,426 B byte-identical across two renders over unchanged data
 
 F-BR-7 — R1 FORMAT — alert block parses as price levels only
   [BREAK] deliberate violation -> RED (correct): 1 non-conforming line(s), first: 'BTCUSDT: consider a long here'
@@ -124,10 +124,10 @@ F-BR-8 — PROVENANCE FOOTER on the brief HTML
 
 F-BR-9 — BOX — the render and the tape never enter exchange/
   [BREAK] deliberate violation -> RED (correct): 1 forbidden artifact(s) under exchange/: ['exchange/reports/oracle_PRETEND.parquet']
-  [PASS] F-BR-9: no .html and no .parquet under exchange/; the render lives at briefs/oracle/oracle_2026-08-16.html (230,672 B) and the tape at research_outputs/oracle/tape/oracle_tape_2026-08-16.parquet (15,288 B) — pointer lines only on the bus
+  [PASS] F-BR-9: no .html and no .parquet under exchange/; the render lives at briefs/oracle/oracle_2026-08-16.html (231,955 B) and the tape at research_outputs/oracle/tape/oracle_tape_2026-08-16.parquet (15,288 B) — pointer lines only on the bus
 
 F-BR-10 — CALIBRATION PURITY — no outcome field may reach calibration/
-  [BREAK] deliberate violation -> RED (correct): outcome/performance field(s) present: ["win_rate (matched 'win')"]
+  [BREAK] deliberate violation -> RED (correct): outcome/performance field(s) present: ["n_wins (matched 'win')"]
   [PASS] F-BR-10: 10 per-asset records; keys ['asset', 'cluster_count', 'cluster_width_atr_max', 'cluster_width_atr_p50', 'collapse_events', 'heat', 'level_count', 'lis_distance_atr', 'lis_fallback_used', 'maturity_withheld_fraction', 'nearest_cluster_atr', 'open_window_ages_bars', 'open_window_disp_atr', 'station'] — display-machinery distributions only, no outcome field, no signal-performance field (banned vocabulary of 21 terms scanned)
 
 ==============================================================================
@@ -314,17 +314,17 @@ strictly over 64,000 B.
 
 | PATH | EXISTS | TRACKED | COMMITTED | PUSHED | PROTECTED BY | BOX COST |
 |---|---|---|---|---|---|---|
-| `scripts/station_engine.py` | yes | yes | `a36edc1` | rides this branch push | hand commit, explicit paths (CL-13) | 27,351 B, non-box |
-| `scripts/oracle_daily.py` | yes | yes | `a36edc1` | rides this branch push | same | 52,016 B, non-box |
-| `scripts/oracle_wrapper.py` | yes | yes | `a36edc1` | rides this branch push | same | 13,314 B, non-box |
-| `scripts/oracle_fixtures.py` | yes | yes | `a36edc1` | rides this branch push | same | 23,728 B, non-box |
+| `scripts/station_engine.py` | yes | yes | `a36edc1` + repair | rides this branch push | hand commit, explicit paths (CL-13) | 29,272 B, non-box |
+| `scripts/oracle_daily.py` | yes | yes | `a36edc1` + repair | rides this branch push | same | 53,871 B, non-box |
+| `scripts/oracle_wrapper.py` | yes | yes | `a36edc1` + repair | rides this branch push | same | 13,426 B, non-box |
+| `scripts/oracle_fixtures.py` | yes | yes | `a36edc1` + repair | rides this branch push | same | 33,266 B, non-box |
 | `.gitignore` | yes | yes | `a36edc1` | rides this branch push | same | 10,346 B, non-box |
-| `research_outputs/oracle/station_canon.json` | yes | yes | `a36edc1` | rides this branch push | tracked exception, BR-2 F-R2-1 | 7,813 B, non-box |
+| `research_outputs/oracle/station_canon.json` | yes | yes | `a36edc1` + repair | rides this branch push | tracked exception, BR-2 F-R2-1 | 8,458 B, non-box |
 | `exchange/queue/2026-08-16_BR1_brief_redesign_ARGUS.md` | yes | yes | publish | yes | publish guard, `exchange/**` scope | 6,557 B → 0.041% |
 | `exchange/queue/2026-08-16_BR2_oracle_calibration_parity_R2_ARGUS.md` | yes | yes | publish | yes | same | 1,895 B → 0.012% |
 | `exchange/reports/BUILD_2026-08-16_ORACLE_REBIRTH.md` | yes | yes | publish | yes | same | this file |
 | `exchange/status/LEDGER_ARGUS.md` | yes | yes | publish | yes | same, append-only | +~1.1 KB |
-| `briefs/oracle/oracle_2026-08-16.html` | yes | **no — gitignored** | — | — | residency block, F-BR-9 | 230,672 B, OFF-BUS |
+| `briefs/oracle/oracle_2026-08-16.html` | yes | **no — gitignored** | — | — | residency block, F-BR-9 | 231,955 B, OFF-BUS |
 | `research_outputs/oracle/tape/oracle_tape_2026-08-16.parquet` | yes | **no — gitignored** | — | — | same | 15,288 B, OFF-BUS |
 | `research_outputs/oracle/calibration/oracle_calibration_2026-08-16_full.json` | yes | **no — gitignored** | — | — | same | 6,088 B, OFF-BUS |
 | `research_outputs/oracle/calibration/selfcheck_log.jsonl` | yes | **no — gitignored** | — | — | same, append-only | 775 B, OFF-BUS |
@@ -362,4 +362,77 @@ work: not one outcome is scored anywhere, and F-BR-3 and F-BR-10 assert it by sc
 keys rather than prose. No new indicators, no sizing, no Pine changes. No threshold
 self-adopted. Not a resurrection of the 3×/day capture era — two slots, exactly as C-1 names.
 
-— HEPHAESTUS, 2026-08-16. Reviewed against BR-1 as amended by A1.
+---
+
+## 9 · POST-BUILD ADVERSARIAL REVIEW — WHAT IT BROKE, AND THE REPAIRS
+
+After this document was first published at commit `1112f11`, the build was put through an
+independent adversarial review (four attackers, twenty judged findings). It found real defects
+in work this document had already presented as acceptance evidence. They are recorded here
+rather than quietly patched, because the first version of section 2 asserted a sentence that
+was **false**.
+
+**C-1 · THE FALSE SENTENCE. [was blocking]** F-BR-3 printed, and this document published,
+*"no journal / forward_log / positions module is reachable from either module."* That was
+untrue. `engine/s1.py` does `from engine.journal import iso`, so `engine.journal` has been in
+the closure from the first run. The fixture never caught it because its matcher tested
+`x == m or x.startswith(m + ".")` against the bare token `journal`, which cannot match
+`engine.journal` — **the ban was dead code that could never fire.** REPAIRED: the matcher is
+now component-wise (a banned token is banned at any dotted position); `engine.journal` and
+`engine.trading` are named as DISCLOSED inherited imports with the single symbol each
+contributes; and the fixture now asserts the thing section 2 actually forbids — that no
+journal READ is called and no oracle source imports either module directly. The break leg
+plants a journal read.
+
+**C-2 · F-BR-1 TESTED NO STATION WORD, AND WAS NOT INDEPENDENT. [was blocking]** The fixture
+compared six boolean cross series and never formed a posture word, so D-1's central output —
+the entire four-word map — shipped with zero fixture coverage; gutting `stations_for()` left it
+green. Worse, its "independent second implementation" called `engine.indicators`, the same
+module object the engine under test uses, so monkeypatching `ind.ema` to a Pine-incompatible
+variant also left it green. REPAIRED: F-BR-1 now runs a genuinely independent state machine
+with its own EMA, ATR and crossover recursions (no `engine.indicators`, no `station_engine`)
+and compares **station words** at four as-of points per symbol — 28 comparisons, all matching.
+Three symbols are skipped for want of warm-up history and are now named in the transcript
+rather than silently dropped.
+
+**C-3 · THE TRAP CARD PRICED THE WRONG BAR. [was major]** `trap_card` set `entry = st.close`
+while printing "IF: at the close of the first in-window 4h 12/26 cross" — the code contradicted
+its own rule in the same dict, and the rule card is explicit ("enter at that bar close"). On the
+shipped NEARUSDT card the drift was **10.12 ATR** (1.635 printed against a trigger-bar close of
+1.911, 147 bars stale), and risk, target and net R:R all inherited it. REPAIRED: a TRIGGERED
+window is priced at the close of its trigger bar; an ARMED window has not fired, so its card is
+marked PROVISIONAL and says the last close is standing in for a price the market has not printed.
+
+**C-4 · TRIGGERED HAD NO AGE. [was major]** The rule card gives TRIGGERED no staleness term, so
+a 24.5-day-old 12/26 cross read TRIGGERED on the Board exactly like one from this morning. The
+word is the card's and has not been changed; what was added is `TRIGGER_FRESH_BARS` [VETO] = 6
+(24h on the lens), the trigger's age in bars on the Board reason and on the card, and a STALE
+TRIGGER chip. D-7 now logs the trigger-age distribution so BR-2 can rule the threshold.
+
+**C-5 · THREE FIXTURES COULD PASS VACUOUSLY. [was major/minor]** F-BR-2 accepted the bare WORD
+"toll" and failed OPEN if its row regex matched nothing — repaired to fail closed, reconcile the
+row count against the card count, and re-derive every ratio's toll as a NUMBER. F-BR-4 passed on
+a render with the entire paint routine deleted — it now also asserts `divRGB`/`heatCanvas`/
+`putImageData`/`paintStrips` and the DOMContentLoaded hook are present. F-BR-10's token matcher
+let plurals through (`n_wins`, `losses`) — now stemmed, and its break leg plants a plural.
+
+**C-6 · MINOR.** A dead `DEAD_MEMORY_BARS` read in `windows_for`, a documented `closed_by`
+value (`series-end`) that was never assigned, and `stations_for` silently accepting a negative
+`as_of_i` (Python's wrap-around applied to the scalar stamps but not to the arming range or the
+ages, giving a wrong board). All three repaired; `as_of_i` now raises with the reason.
+
+**WHAT THE REVIEW CONFIRMED CORRECT**, by independent recompute rather than by reading: the
+alive/dead window determination (11,398 window-observations, 0 mismatches, 0 trigger leaks);
+`age_bars` with no off-by-one; the half-open trigger boundary agreeing with `tierc2_baseline`;
+non-admitted windows correctly excluded from both collapse lists; and — the thing no one had
+checked — **the page really paints**. Run under JavaScriptCore with a DOM shim, all ten canvases
+receive their image; a Python re-implementation reproduces the engine's pixels byte-identically;
+and the colour law, the 0.45 knot dimming and the null-is-absent rule are **byte-identical to
+the shipped VIZ-4 original** on all ten payloads, verified by decompressing the original bundle
+and running both side by side. Row order, aspect (a uniform 10x) and script ordering all check out.
+
+Ten findings were judged real and are addressed above or disclosed; ten were refuted on
+inspection.
+
+— HEPHAESTUS, 2026-08-16. Reviewed against BR-1 as amended by A1, then re-reviewed
+adversarially and repaired. Section 9 is the correction record.
