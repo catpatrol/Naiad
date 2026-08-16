@@ -88,14 +88,32 @@ def main() -> int:
     counts = {t: conv.count(t) for t in tokens}
     bad = {t: n for t, n in counts.items() if n != 2}
 
-    # Uniqueness across the repo: grep -F, tracked files only, CONVENTIONS
-    # excluded. A token appearing anywhere else is a second home for a fact.
+    # Uniqueness across the repo: grep -F, tracked files only. A token appearing
+    # anywhere else is a SECOND HOME for a fact, which is the thing the collapse
+    # exists to prevent.
+    #
+    # The allowlist below is not a loophole, it is the distinction the check
+    # cannot make on its own: a second HOME versus a QUOTATION. CONVENTIONS is
+    # the home. This script must name the memory-pointer tokens in order to
+    # check them. And the collapse's own build document is required by the task
+    # that commissioned it to reproduce the TOCs and section 0 VERBATIM, which
+    # necessarily reproduces all nine tokens.
+    #
+    # Keep this list short and add to it deliberately. Every entry is a promise
+    # that the file quotes CONVENTIONS rather than competing with it; a document
+    # that starts *asserting* section content under a token belongs in neither
+    # this list nor the repo.
+    QUOTERS = {
+        "exchange/status/CONVENTIONS.md",  # the home itself
+        "scripts/fixtures_conventions.py",  # this checker
+        "exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-15_COLLAPSE.md",
+    }
     tracked = subprocess.run(
         ["git", "ls-files"], cwd=REPO, capture_output=True, text=True, check=True
     ).stdout.split()
     strays: list[str] = []
     for rel in tracked:
-        if rel == "exchange/status/CONVENTIONS.md":
+        if rel in QUOTERS:
             continue
         p = REPO / rel
         if not p.is_file():
