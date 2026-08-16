@@ -205,3 +205,16 @@ logs/
 # Per-machine Claude Code harness settings. Scoped to the one file: the shared
 # .claude/commands/ skills ARE tracked and must stay that way.
 .claude/settings.local.json
+
+# THE ORACLE (queue BR-1, ratified 2026-08-16). The daily render, its mantle
+# payloads, the TC4 tape and the calibration log are DATA and REGENERABLE: the
+# generator rebuilds any of them from the kline cache in seconds. They are
+# pointed at from the bus by path + sha256 and never carried on it
+# (CONVENTIONS §4.2 pointer discipline; F-BR-9 asserts they stay out of
+# exchange/). DOCUMENTS ARE CHEAP, DATA IS NOT.
+briefs/oracle/
+research_outputs/oracle/**
+# station_canon.json is the deliberate exception and IS tracked: BR-2 F-R2-1
+# requires the R2 JS surface and Python to read the SAME file at the SAME sha,
+# so it is the one Oracle artifact that must be versioned.
+!research_outputs/oracle/station_canon.json
