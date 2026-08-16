@@ -409,11 +409,19 @@ So `scripts/tierc4_independent.py` **re-implements the whole v4 card from the ca
 
 ### BOX-COST
 
-`exchange/**` measured **2,973,220 B = 18.58%** of the 16,000,000 B box **before this paste**; the governing **tick set** (`exchange/**` + `LEDGER.md`) **3,232,518 B = 20.20%** — state **OK** (warn 40% / refuse 70%).
+**Figures below are `publish_exchange`'s own, read from the publish that filed this document — not estimated.** `BOX_BYTES` / `WARN_FRACTION` / `REFUSE_FRACTION` were read live from the module, never typed.
 
-**This paste adds this document (≈ 67,500 B) plus the `LEDGER_APOLLO` append (≈ 5,000 B) ≈ 72,500 B = 0.45% of the box**, taking `exchange/**` to ≈ **3,045,700 B = 19.04%** and the tick set to ≈ **3,305,000 B = 20.66%**, level **OK**, headroom to REFUSE ≈ **7.89 MB**. *(`BOX_BYTES` / `WARN_FRACTION` / `REFUSE_FRACTION` were read live from `publish_exchange.py`, not typed.)*
+| | before this paste | **after** |
+|---|---:|---:|
+| `exchange/**` | 2,973,220 B · 18.58% | **3,044,451 B · 19.03%** (167 files) |
+| **tick set** (`exchange/**` + `LEDGER.md`) — *governs* | 3,232,518 B · 20.20% | **3,303,749 B · 20.65%** |
+| level | OK | **OK** (warn 40% / refuse 70%) · headroom to REFUSE ≈ **7.90 MB** |
 
-**AGAINST THE < 0.5% TARGET (80,000 B) THAT IS 91% OF BUDGET, WITH ≈ 7.5 KB UNSPENT — and it is a bigger document than Tier-C3's 50,439 B.** The card said LEAN and this is not lean. Where the extra went, so the operator can rule on it: the five card deliverables cost what they cost, and §9's repair table plus three new findings are the post-review overhead. **Named rather than trimmed, because the alternative was to cut the record of what the review found, which is the one part of a build document that cannot be re-derived from the tables.**
+**This paste's own two files: 68,743 B (this document, after the BOX-COST block itself was written) + 4,635 B (the `LEDGER_APOLLO` append) ≈ 73,400 B ≈ 0.46% of the box.**
+
+**AGAINST THE < 0.5% TARGET (80,000 B) THAT IS 92% OF BUDGET, WITH ≈ 6.6 KB UNSPENT — and it is a bigger document than Tier-C3's 50,439 B.** The card said LEAN and this is not lean. Where the extra went, so the operator can rule on it: the five card deliverables cost what they cost, and **§9's repair table plus five new findings are the post-review overhead**. **Named rather than trimmed, because the alternative was to cut the record of what the review found, which is the one part of a build document that cannot be re-derived from the tables.**
+
+**THE NAMING TRIP-WIRE FIRED ON THIS DOCUMENT AND IT IS ANSWERED HERE, NOT IGNORED.** `publish_exchange` names every box-bound file over the absolute 64,000 B wire and requires each to have an intended home in the disposition table (CONVENTIONS §3.2). This paste puts two files over it: **`BUILD_2026-08-16_TIERC4_MEANCARD.md` at ≈ 68,700 B** — intended home: **`exchange/reports/`, permanent, the build's only document, per the card's "ONE build doc"**; and **`exchange/status/LEDGER_APOLLO.md` at 122,526 B**, which was already over the wire before this paste and is **append-only by ruling** — its home is `exchange/status/` and its growth is structural, not this build's to fix. *(The wire is a naming rule; it never refuses a publish. It is answered because an unanswered trip-wire is how a soft rule becomes decoration.)*
 
 The full fixture transcript (496 lines), the 649-row tape, the 21-row ratchet ledger beyond the four narrated in §5, and the per-trade journal stay **local**. **What is printed whole is what a reader cannot re-derive from a pointer: the two amendments, the triptych, the ablation with its interaction, the per-trade delta with its give-back, the ETH narration, and the findings.**
 
