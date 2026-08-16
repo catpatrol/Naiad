@@ -1314,3 +1314,75 @@ volume overlay deferred to 2b (Q11a).
 *The standing analytical principles that used to ride with this block — HTF→LTF ordering, HTF
 enclosure stamping, signals-as-relationships — were promoted to CONVENTIONS §7.8 as rules, because
 they bind every study lane and not only this one.*
+
+=== STATUS_APOLLO — 2026-08-15b ===
+NOW: VIZ-4 · THE EMA MANTLE — payloads built, ferried, F-V4 PASS. Four payloads
+     (mantle + echo, BTC 1h and 5m), 12.7 MB, local; DESIGN_HANDOFF_VIZ4/ ready
+     for the Claude Design session. Class DISPLAY-ONLY / Tier-E, m = 0, no
+     registrations, no rule adopted. Echoes are SHOWN, NOT SCORED.
+CLASS: Tier-E exploration. m = 0. No registration. census2b/ substrate, analytics/
+       and engine/ read-only and untouched.
+LAST EVENT: 2026-08-15 — VIZ-4 payloads, one build document:
+       exchange/reports/BUILD_2026-08-15_VIZ4_MANTLE.md
+CONTRACTS: DESIGN_CONTRACT_VIZ4_EMA_MANTLE_2026-08-15.md FILED to
+       exchange/reports/ from the operator's attachment, sha256
+       8e8b3264805c9dee92d4bd9ad79ba62e56f1f404175d9a60d82ae9d1b1cdec7c, 3,857 B.
+       *** V-10 DOES NOT CLOSE. *** DESIGN_CONTRACT_VIZ3_TRADE_CATHEDRAL_2026-08-15.md
+       is ABSENT — not in exchange/reports/, not in the attachment folder, nowhere
+       in the tree; DESIGN_HANDOFF_VIZ3/ holds the four v3_*.json payloads and
+       three documents, but NO contract. It was NOT invented and NOT ferried. The
+       re-attach item carries a SECOND cycle.
+ARTIFACTS: scripts/census2b_viz4.py (new) ·
+       research_outputs/census2b/viz_payloads/{v4_mantle_BTC_1h, v4_echo_BTC_1h,
+       v4_mantle_BTC_5m, v4_echo_BTC_5m}.json + viz4_manifest.json ·
+       research_outputs/census2b/DESIGN_HANDOFF_VIZ4/ (4 payloads + the contract).
+       Payload data-block shas: mantle-1h c01bd118df16ae17 · echo-1h 4fd09d4f233f077a
+       · mantle-5m 0676e3c1c2502a0e · echo-5m a3f683f437fee134.
+FACTS: [6]
+ 1. A KNOT->FAN MARK ALMOST NEVER STARTS A FAN. F-V4 (d) first asserted every mark
+    lands on a fan ONSET and FAILED 2,568 of 2,710. The estate never promised it:
+    `fans` splits an ordered run at every direction change, and a ribbon can be
+    KNOTTED while `orient` is already bull/bear, so a knot commonly releases into
+    a fan ALREADY RUNNING. Measured: only 142/2,710 (5.2%) at 1h and 1,479/37,501
+    (3.9%) at 5m begin a new fan. Every mark now carries `at_fan_onset`. This
+    bears directly on the contract's M2 question "did an echo precede the fan?" --
+    for ~95% of marks the fan predates the knot's release.
+ 2. THE 1h MANTLE IS A QUARTER UNWOVEN AT THE ROD. e5000 needs 17,300 warm bars
+    (WARMFACTOR 3.46) = ~721 days at 1h, so 28.5% of the rod thread is ABSENT,
+    8.2% of the whole 1h cloth. At 5m it is 2.4% / 0.7%. Nulls lead unbroken and
+    ZERO absent cells were written as exact zeros -- proved, not asserted.
+ 3. THE PAYLOADS ARE 3-6x THE VIZ-1 700 KB CAP AND THE CONTRACT'S OWN SPEC IS WHY.
+    8,000 steps x 18 threads x 2 = 288,000 numbers, plus 49 lags x 8,000 = 392,000;
+    no rounding fits that in 700 KB. Reductions taken and stated: disp 3 dp, vel
+    5 dp, corr 2 dp (200 levels across [-1,1]), marks COLUMNAR -- which alone cut
+    the handoff 18.3 MB -> 12.7 MB. The cap is VIZ-1's module constant, not this
+    contract's requirement; the contract sets no byte limit.
+ 4. "12 AT THE HEM" IS 17 THREADS; THE FABRIC IS 18. Contract §2's axis label vs
+    §1/§3's "eighteen EMAs" and RIBBONS FAST = (9,12,26). Read as: the axis spans
+    9 -> 5000, and the hem EDGE for the echo is 12/26 exactly as §2 defines it.
+    Both facts ship in every payload so no renderer has to guess.
+ 5. PROVENANCE IS READ, NOT RETYPED. Per-SR smoothing k comes from the ORACLE
+    manifest's own pins {FAST 20, M 20, MH 40, H 111, VH 327, UH 577}, law
+    k = max(20, round(median_len/8)) -- R-3 owns it. Toll bands are read per cell
+    from that cell's transitions tables (1h 0.1355/0.1400, 5m 0.5537/0.5641), so
+    the emitter's single global TOLL is re-pointed PER PAYLOAD -- an extension of
+    the VIZ-2 re-point pattern, named as an extension.
+ 6. F-V4 PASS on all six legs; F-KEY 0 duplicates on four joins plus an explicit
+    emas/ribbons grid-equality check. Suite 288 passed / 1 skipped / exit 0,
+    unchanged; no existing test touched.
+PENDING (operator): 4 rulings, all in §4 of the build document --
+     F-1 the VIZ-3 contract: re-attach it, or promote VIZ-4's inline restatement
+         of the iron rules to the rules of record and stop citing VIZ-3
+     F-2 what a knot->fan mark MEANS in the design session's copy: "knot released"
+         (what it is) or "fan began" (what it mostly is not)
+     F-3 the 700 KB shared cap: raise it for 3D payloads, or cap VIZ-4 by
+         steps-per-payload instead
+     F-4 e9: keep it in the cloth (as built) or drop it to match §2's axis label
+     -- carried from 2026-08-15: the seven TIER-C2 rulings, unchanged.
+NEXT: the operator ferries DESIGN_HANDOFF_VIZ4/ into a Claude Design session with
+     the §5 opener, and rules on F-1 and F-2. Owner: operator.
+PROBE LEDGER: m = 0. Stamp: EXPLORATION — ungated; promotion requires registration.
+BOX: exchange/** = 2,722,503 B = 17.02% before this document; tick set 2,981,801 B
+     = 18.64%, level OK (warn 40 / refuse 70). This paste adds ~19 KB, ~24% of the
+     <0.5% target. The 12.7 MB of payloads never touch the box — local, ferried.
+=== END STATUS ===
