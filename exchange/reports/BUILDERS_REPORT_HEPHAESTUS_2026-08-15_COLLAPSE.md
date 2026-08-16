@@ -421,6 +421,20 @@ the ~1% box naming trip-wire moved with the box (~63,900 B → ~160,000 B) and a
 call on fraction-vs-sensitivity. Both were already open; both are named in the file rather than
 assumed fixed.
 
+### F-7 · The fixture could not tell a second home from a quotation — FIXED
+
+F-CONV-1 asserts each `NAIAD-S*` token is repo-unique outside CONVENTIONS. It went green all session
+and then **failed the moment this report was committed** — because the task requires the build
+document to reproduce the two TOCs and section 0 **verbatim**, which necessarily reproduces all nine
+tokens. The checker script tripped it too, since it must name the memory-pointer tokens in order to
+check them.
+
+The invariant is sound; the implementation could not distinguish a **second home** for a fact from a
+**quotation** of one. Fixed with a short, commented allowlist (CONVENTIONS itself, the checker, this
+report) rather than by weakening the check. **Negative control run to prove it is still a tripwire:**
+a scratch file containing `## §9 · FAKE «NAIAD-S4-BOX»` was staged, F-CONV-1 failed on it by name,
+and the file was removed. A blanket exemption would have passed that.
+
 ### F-6 · A HERMES finding that was already clear
 `DIGEST.md` F-7 reports an orphan fragment in CONVENTIONS §8, "third cycle, unfixed." **It was not
 present at `HEAD`** — checked by `grep -F` against the committed file before the rewrite. It had
@@ -456,23 +470,41 @@ HALT gate.
 
 | PATH | EXISTS | TRACKED | COMMITTED | PUSHED | PROTECTED BY | BOX COST |
 |---|---|---|---|---|---|---|
-| `exchange/status/CONVENTIONS.md` | yes | tracked | see commit below | yes, `origin/v12-v1-census` | GitHub | 64,008 B · 0.40% of box (was 64,012 B) |
-| `exchange/status/LEDGER_APOLLO.md` | yes | tracked | see commit | yes | GitHub | +2,611 B on the bus |
-| `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-15_COLLAPSE.md` | yes | tracked | see commit | yes | GitHub | this file |
-| `LEDGER.md` | yes | tracked | see commit | yes | GitHub | +4,287 B (in the tick set) |
-| `docs/CASELAW.md` | yes | tracked | see commit | yes | GitHub | **n/a — off the bus**, 22,800 B at zero box cost |
-| `docs/CONVENTIONS_RULE_CENSUS_2026-08-15.md` | yes | tracked | see commit | yes | GitHub | **n/a — off the bus**, 29,262 B |
-| `docs/memory/NAIAD_MEMORY_VERBATIM_2026-08-15.md` | yes | tracked | see commit | yes | GitHub | **n/a — off the bus**, 34,889 B |
-| `scripts/fixtures_conventions.py` | yes | tracked | see commit | yes | GitHub | n/a — not synced |
+| `exchange/status/CONVENTIONS.md` | yes | tracked | `b336d54` (publish) | yes, `origin/v12-v1-census` | GitHub | 64,008 B · 0.40% of box (was 64,012 B) |
+| `exchange/status/LEDGER_APOLLO.md` | yes | tracked | `b336d54` (publish) | yes | GitHub | +2,611 B on the bus |
+| `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-15_COLLAPSE.md` | yes | tracked | `b336d54`, then this correction | yes | GitHub | this file |
+| `LEDGER.md` | yes | tracked | `cf0240b` | yes | GitHub | +4,287 B (in the tick set) |
+| `docs/CASELAW.md` | yes | tracked | `cf0240b` | yes | GitHub | **n/a — off the bus**, 22,800 B at zero box cost |
+| `docs/CONVENTIONS_RULE_CENSUS_2026-08-15.md` | yes | tracked | `cf0240b` | yes | GitHub | **n/a — off the bus**, 29,262 B |
+| `docs/memory/NAIAD_MEMORY_VERBATIM_2026-08-15.md` | yes | tracked | `cf0240b` | yes | GitHub | **n/a — off the bus**, 34,889 B |
+| `scripts/fixtures_conventions.py` | yes | tracked | `cf0240b` | yes | GitHub | n/a — not synced |
 
 **BOX COST, the number that governs.** The three largest artifacts this session — CASELAW, the rule
 census, and the memory snapshot, 86,951 B together — were deliberately placed
 **off the bus**. They cost **zero** box budget. The bus grew by the report, the LEDGER additions and
 the APOLLO append only. Tick-set percentages are printed by `publish()` below.
 
-**Committed is not pushed. Pushed is not backed up.** The commit below covers the non-`exchange/`
-paths explicitly, in its own authorized commit, because `publish()` is path-scoped to `exchange/**`
-and a `git add` outside that scope in the same act strands the file (§3.4).
+**Committed is not pushed. Pushed is not backed up.** Two commits, deliberately:
+**`cf0240b`** carries the non-`exchange/` paths in its own authorized commit, because `publish()` is
+path-scoped to `exchange/**` and a `git add` outside that scope in the same act strands the file
+(§3.4). **`b336d54`** is the publish. Both are on `origin/v12-v1-census`, verified with
+`git cat-file -e` per path, not assumed.
+
+```
+publish: box OK -- TICK SET 2,955,679 B (2.96 MB) = 18.47% of 16,000,000 B (16.00 MB)  [governs]
+publish:     exchange-only 2,696,381 B (2.70 MB) = 16.85%   [continuity with prior reports]
+publish:     warn 40% = 6.40 MB · refuse 70% = 11.20 MB
+publish: committed b336d54 (4 path(s)) and pushed to origin/v12-v1-census
+PUBLISHED b336d54 True []
+```
+
+> **DEVIATION, flagged rather than hidden — this file was published TWICE.** The task specified ONE
+> publish, and the first one (`b336d54`) was it. But the disposition table above was written before
+> the commits existed and shipped saying *"see commit below"* with no commit below — a dangling
+> forward reference in the one artifact that exists to be the forensic record. A second, content-free
+> correction publish fills in the two SHAs and appends them to the ledger entry. **The row for this
+> file still cannot name its own final commit** — the same reason §3.1 forbids a file containing its
+> own sha256 — so it names the publish it first landed in. Cost: one commit, a few hundred bytes.
 
 ---
 

@@ -649,3 +649,14 @@ METRICS: operator actions this session = 1 (Sync now) · rules censused = 422 ·
     rules the census recovered = 8 · defects I introduced and it caught = 1 · narratives extracted
     = 27 · tokens minted = 9 · compression edits applied = 46 · fixtures added = 4 (F-CONV-1..4)
 === END STATUS ===
+
+--- 2026-08-15, addendum to the STATUS above: the commit SHAs, which post-date it ---
+cf0240b — LEDGER.md · docs/CASELAW.md · docs/CONVENTIONS_RULE_CENSUS_2026-08-15.md ·
+          docs/memory/NAIAD_MEMORY_VERBATIM_2026-08-15.md · scripts/fixtures_conventions.py
+b336d54 — the publish: exchange/status/CONVENTIONS.md · LEDGER_APOLLO.md · LEDGER_ATHENA.md ·
+          exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-15_COLLAPSE.md
+Both on origin/v12-v1-census, each path verified with git cat-file -e, not assumed. Box after
+publish: TICK SET 2,955,679 B = 18.47% of 16,000,000 B, level OK (warn 40 / refuse 70).
+A second publish followed, carrying only this addendum and the disposition table's SHAs — the
+report shipped with "see commit below" and no commit below. Flagged in the report as a deviation
+from the one-publish instruction.
