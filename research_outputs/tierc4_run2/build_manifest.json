@@ -1,0 +1,149 @@
+{
+  "card": "TIER-C4 \u00b7 THE MEAN CARD",
+  "counts": {
+    "advance_pivots_in_lockbox": 0,
+    "advances_total": 21,
+    "anchor_rows": 11,
+    "anchor_same_under_time_equiv_lookback": 5,
+    "anchors_in_lockbox": 0,
+    "armings_refused_anchor_sealed": 2,
+    "entries_inside_band": 0,
+    "harvest_blocked_by_bell": 0,
+    "harvest_blocked_by_stop": 3,
+    "harvests": 3,
+    "lead_in_armings": 11,
+    "lead_in_trades_unscored": 0,
+    "never_touched_band": 5,
+    "rail_binding": 3,
+    "ratchet_exits": 8,
+    "scored_armings": 43,
+    "scored_trades": 11,
+    "scored_trades_armed_in_lead_in": 1,
+    "tape_instants": {
+      "arming": 43,
+      "exit": 11,
+      "harvest": 3,
+      "spine": 582,
+      "trigger": 10
+    },
+    "tape_rows": 649,
+    "trades_with_advance": 8
+  },
+  "elapsed_s": 3.9,
+  "seal_floor_on_anchor": true,
+  "seal_floor_on_ratchet_pivot": true,
+  "seal_read": {
+    "deliberately_unmasked": {
+      "anchors_in_lockbox": 1,
+      "cells": [
+        "BOTH_NOSEAL"
+      ],
+      "seal_floor": false,
+      "why": "the CLASS line's seal floor PRINTED BOTH WAYS (F-C3-a). The operator can overturn the floor in one line and this cell is the number if they do. UNSCORED, and the only place in this build where an outcome descends from a sealed bar."
+    },
+    "shipped_card": {
+      "anchors_in_lockbox": 0,
+      "cells": [
+        "V3",
+        "RATCHET",
+        "HARVEST",
+        "BOTH"
+      ],
+      "seal_floor": true
+    }
+  },
+  "seed": 20260816,
+  "selection_guard": {
+    "called": true,
+    "candidates": 0,
+    "loaded": true,
+    "verdict": {
+      "admissible": false,
+      "m": 0,
+      "reason": "no usable candidate"
+    },
+    "why": "CLASS: ONE pre-named card, m = 0. No grid, no sweep, nothing promoted. The guard idles because there is no selection to correct \u2014 the ABLATION decomposes a card already chosen, and picking a cell out of it on its R is a NEW probe that declares its own m before the look."
+  },
+  "sha": {
+    "ablation": "807f67475d899f621bf580674254cff4808b3a54a306ac1dd261ad62a8d43a7c",
+    "anchor_lookback": "62c34cea67323feae6a945fc78239af238d116d42a511a817448af25fb30c772",
+    "delta": "4b1714b8fa843ae23b2674ed09f4607a212356bb8825ac8f0ff000a58d035429",
+    "display_only": "6c7c78a569faa3bf95bc9be14611626899a1c4de644ebb7e9cc9a2b74fd1f8a3",
+    "funnel": "391fae98b3c13367c0e58ea9113c8a7ca37d85f6768a6304c42a04679c401886",
+    "harvest_ledger": "038bb125e540061683a045a5cbe7a47f0979847f5c01e4e63dda3f91f9ff0447",
+    "headline": "0f7de04a4758d136d4e8be56a5eb047e7d58fa3f6df84adb3732436ed39904cd",
+    "journal": "f98a5998d8a4de7ac3b0b30c40a5154df1517191cc2d9eb06300fce4eb66c92e",
+    "lead_in_census": "f00105fb3666375274599a1866eafd2aaf164cbcdf3b1bdff2758867a3ef111d",
+    "lead_in_trades": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "monthly": "eef6e06f183740349026beecfe214def341eab3ff0108ccf78235c3a8179f0c6",
+    "ratchet_ledger": "d21eea852add001359a0484bb1b68d9bb2c2eb53612224df051e4310a860a6b1",
+    "stop_geometry": "303edf8d6e697b288bd289555428dfe5dfdc79c933332d8b64cc93cad97ebc16",
+    "strip_d": "89943555e2381e57b7e5969c726111fa801cb7428fa4f245e7ea2399930f25e6",
+    "tape": "4a18cb16fac85f74b74a580e3bc8da86284b60309c73d1b67036a53a7b6892fd",
+    "tape_inventory": "17ef5f7a2b09d99ef9e7edccf0c5bf459e063138e254183d4b5ce04eef07658b",
+    "triptych": "b493e0a761b82fd040e4f2c32ae32722d93017bf17bc30948dedd81d44e8f672"
+  },
+  "windows": {
+    "CENSUS_ERA": {
+      "armings": 745,
+      "armings_in_window": 745,
+      "armings_lead_in": 0,
+      "lead_in_from": "2019-08-09",
+      "scored": false,
+      "span": [
+        "2019-09-08",
+        "2024-06-30"
+      ],
+      "trade_ts_bounds": {
+        "max_entry": "2024-06-05T04:00:00Z",
+        "max_exit": "2024-06-07T16:00:00Z",
+        "max_exit_ms": 1717776000000,
+        "min_entry": "2019-09-16T12:00:00Z",
+        "min_exit": "2019-09-19T20:00:00Z"
+      },
+      "trades_lead_in_unscored": 0,
+      "trades_scored": 127
+    },
+    "PINNING": {
+      "armings": 88,
+      "armings_in_window": 81,
+      "armings_lead_in": 7,
+      "lead_in_from": "2026-01-02",
+      "scored": false,
+      "span": [
+        "2026-02-01",
+        "2026-07-07"
+      ],
+      "trade_ts_bounds": {
+        "max_entry": "2026-06-18T16:00:00Z",
+        "max_exit": "2026-06-22T12:00:00Z",
+        "max_exit_ms": 1782129600000,
+        "min_entry": "2026-02-18T20:00:00Z",
+        "min_exit": "2026-02-21T08:00:00Z"
+      },
+      "trades_lead_in_unscored": 0,
+      "trades_scored": 15
+    },
+    "SCORED": {
+      "armings": 54,
+      "armings_in_window": 43,
+      "armings_lead_in": 11,
+      "lead_in_from": "2025-09-06",
+      "scored": true,
+      "span": [
+        "2025-10-06",
+        "2026-01-31"
+      ],
+      "trade_ts_bounds": {
+        "max_entry": "2026-01-01T04:00:00Z",
+        "max_exit": "2026-01-01T20:00:00Z",
+        "max_exit_ms": 1767297600000,
+        "min_entry": "2025-10-08T20:00:00Z",
+        "min_exit": "2025-10-09T00:00:00Z"
+      },
+      "trades_lead_in_unscored": 0,
+      "trades_scored": 11
+    }
+  },
+  "yardstick_label": "YARDSTICK v4 \u2014 PROVISIONAL (one regime, n small)"
+}
