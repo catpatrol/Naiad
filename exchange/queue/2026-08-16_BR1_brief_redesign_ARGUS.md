@@ -76,3 +76,23 @@ The 16:00 refresh hour [VETO default] · Board roster trim · render-size consta
 from the audit note) · charter amendment (viz estate + brief redesign into CONVENTIONS §5.1)
 routed to ATHENA as file owner.
 — ARGUS
+
+RATIFIED: operator, 2026-08-16 — "ratify BR-1, refresh 16:00, roster as-is"
+BUILT: exchange/reports/BUILD_2026-08-16_ORACLE_REBIRTH.md · code commit a36edc1 · F-BR-1..F-BR-10 10/10 green · two slots armed · one unattended run exit 0
+
+## AMENDMENT A1 (operator rulings 2026-08-16, appended at stamp time)
+A1-1 RENAME: the product is THE ORACLE. Disambiguation, binding all lanes: "Oracle"
+     unqualified = this daily organ; the census-2B artifact is always "ORACLE GRID",
+     fully qualified. All BR-1 deliverables use oracle_* naming.
+A1-2 C-1 pinned: refresh slot = 16:00 America/Argentina/Buenos_Aires. Roster as-is.
+A1-3 CHAIN PRE-AUTHORIZED (operator verbatim: "proceed bravely ahead to stamp → build →
+     live week → recalibrate → parity → R2 — collapse this workflow into the fewest
+     possible pastes"): queue BR-2 files this session already ratified, executable only
+     when its own gates pass. Constants proposed by BR-2 remain [VETO] — measured and
+     proposed by the machine, adopted only by the operator.
+A1-4 NEW DELIVERABLE D-7, calibration logger: each run appends one JSON of
+     display-machinery distribution stats ONLY (per-asset level counts, cluster widths,
+     collapse events, LIS distances, maturity-withheld fractions, window ages) to
+     research_outputs/oracle/calibration/. NO outcome fields, NO signal-performance
+     fields — enforced by fixture F-BR-10 (code scan; shown failing on a planted
+     outcome field first). This is what makes the live week self-instrumenting.

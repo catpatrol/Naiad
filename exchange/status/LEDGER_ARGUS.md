@@ -73,3 +73,28 @@ amendment to ATHENA  4. VIZ-3 sha cross-check + verdict-language sweep
 NEXT: On the stamp — HEPHAESTUS executes BR-1. Owner: operator.
 METRICS: operator actions this session = 2 · files re-ingested = 10
 === END STATUS ===
+
+=== STATUS_ARGUS — 2026-08-16 (ORACLE REBIRTH) ===
+NOW: BR-1 stamped + built + armed. THE ORACLE lives: 07:00 full / 16:00 refresh, tape
+     + calibration self-instrumenting. BR-2 filed pre-ratified behind gates G-BR2-1..3.
+LAST EVENT: 2026-08-16 — BR-1 executed; BR-2 filed; agents armed.
+FACTS:
+- Fixtures F-BR-1..F-BR-10: 10/10 GREEN, each shown FAILING on a deliberate break first;
+  F-CONV 4/4 still green. Transcripts in BUILD_2026-08-16_ORACLE_REBIRTH §2 [verified]
+- Agents armed, schedules read back FROM launchd: com.naiad.oracle-0700 {Hour 7, Minute 0}
+  and com.naiad.oracle-1600 {Hour 16, Minute 0}; one unattended run exit code 0 in 5.6 s,
+  three self-checks PASS [verified]
+- First render briefs/oracle/oracle_2026-08-16.html 230,672 B
+  sha256 8e1fb36612f27d79a80a07a334d439e16150c45cd0fb1a6a2685e2a43ae32e2c; station_canon.json
+  7,813 B sha256 73331bed77484f2f0337907bb0f0827b804070caaeed849784bf203dfb5fe693 [verified]
+- A1-1 RECORDED AND BINDING: the daily organ is THE ORACLE; the census-2B artifact is always
+  ORACLE GRID, fully qualified; all deliverables are oracle_* [ratified]
+- V-1/V-2 REPORTED NOT FIXED: "station canon v1" names TWO things one day apart, and no
+  per-word definition of STALKING/ARMED/TRIGGERED/DEAD exists anywhere in the estate. Gates
+  taken from the ratified TC3 card; only the naming map is new, and its 8 unruled rows are
+  [VETO], printed in the render and logged every run [handoff]
+- V-3 Pine SS v12.1 is NOT in the repo; F-BR-1 discharges parity against SS_v12_0_1.pine
+  (10/10 symbols, 6 marker series, mismatch list empty) and prints the v12.1 handoff [verified]
+PENDING: 1. seven live mornings  2. operator mid-week PARITY line  3. BR-2 on gates
+NEXT: live week runs unattended. Owner: launchd, then operator (parity glance).
+=== END STATUS ===
