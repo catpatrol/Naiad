@@ -1,0 +1,114 @@
+{
+  "card": "TIER-C5 \u00b7 FULL-WATER",
+  "corridor": {
+    "cache_lag_hours": 11.57,
+    "last_closed_4h_close": "2026-08-16T16:00:00Z",
+    "last_closed_4h_open": "2026-08-16T12:00:00Z",
+    "note": "the corridor END is the latest closed 4h bar PRESENT IN THE OFFLINE CACHE; this build makes no network call, so the lag against wall clock is disclosed rather than closed.",
+    "panel_start": "2019-09-08T16:00:00Z",
+    "per_asset_first_4h": {
+      "BTCUSDT": "2019-09-08T16:00:00Z",
+      "ETHUSDT": "2019-11-27T04:00:00Z",
+      "NEARUSDT": "2020-10-15T08:00:00Z",
+      "SOLUSDT": "2020-09-14T04:00:00Z",
+      "ZECUSDT": "2020-02-05T08:00:00Z"
+    },
+    "span_days": 2534.0,
+    "wall_clock_at_run": "2026-08-17T03:34:10Z"
+  },
+  "counts": {
+    "adds_campaigns_with_adds": 60,
+    "adds_total": 117,
+    "advances": 273,
+    "advances_from_formerly_sealed_pivot_bars": 60,
+    "anchors_from_formerly_sealed_bars": 41,
+    "armings": 1116,
+    "avg_ae_r": 0.310491,
+    "campaigns": 195,
+    "campaigns_quoting_ANY_formerly_sealed_price": 42,
+    "campaigns_whose_EXIT_PRICE_came_from_a_sealed_bar": 24,
+    "campaigns_with_a_sealed_ratchet_pivot": 24,
+    "funding_ceiling_bound": 0,
+    "harvests": 37,
+    "league_rows": 313,
+    "midband_rows": 108,
+    "spring_campaigns": 241,
+    "spring_sweeps_refused_on_tide_at_first_reclaim": 3526,
+    "tape_instants": {
+      "arming": 1116,
+      "exit": 192,
+      "harvest": 37,
+      "spine": 1626,
+      "trigger": 147
+    },
+    "tape_rows": 3118,
+    "union_campaigns": 420
+  },
+  "elapsed_s": 9.6,
+  "ruling_verbatim": "\"open the sealed box, we lose continuity otherwise\u2026 we will put it to paper trade the Prometheus route\u2026 another data stream\"  \u00b7  \"D15 caveats not hard gates\"",
+  "seal": {
+    "earliest_formerly_sealed_bar": "2024-07-01T00:00:00Z",
+    "formerly_sealed_4h_bars_now_readable": 13860,
+    "mask_returns_true_anywhere": false,
+    "ruling": "\"open the sealed box, we lose continuity otherwise\u2026 we will put it to paper trade the Prometheus route\u2026 another data stream\"  \u00b7  \"D15 caveats not hard gates\"",
+    "state": "OPEN",
+    "was": {
+      "from": "2024-07-01",
+      "to": "2025-10-05"
+    }
+  },
+  "seed": 20260816,
+  "selection_guard": {
+    "called": true,
+    "candidates": 0,
+    "loaded": true,
+    "verdict": {
+      "admissible": false,
+      "m": 0,
+      "reason": "no usable candidate"
+    },
+    "why": "no cell is promoted; the guard has nothing to correct."
+  },
+  "selection_surface": {
+    "fdr_family_for_the_two_registrations": 2,
+    "league_note": "54 eligible panel cells across 4 timeframes. The champion wall named per timeframe is an ARGMAX over these, with no acceptance bar, no interval and no multiplicity correction. It is the biggest number in a column and the build says so on the row.",
+    "per_grid": {
+      "LEAGUE eligible panel cells": 54,
+      "S-ADDSIZE": 4,
+      "S-CLOCK": 2,
+      "S-HARV": 2,
+      "S-LIMIT": 5,
+      "S-RAIL": 2,
+      "S-SIZE": 4,
+      "S-TRAIL": 3,
+      "card": 1,
+      "registration arms": 3
+    },
+    "statement": "EVERY GRID WAS NAMED BEFORE IT RAN AND EVERY CELL IS REPORTED. Nothing here is promoted. This number is written down so that a future promotion out of these tables starts from an m that existed BEFORE the look \u2014 which is the only thing that makes a later correction meaningful.",
+    "total_cells_excluding_the_card": 79
+  },
+  "sha": {
+    "addsize": "2b2d2954200a1ef5951303c803685ad1febfd9701882ac6d048b922fded85bbd",
+    "ae": "6dd531e17902b0434eddd71b43f5406154688d59336aab1482adee2dc4177119",
+    "by_slice": "9d11d997b2b0e627fb8bf1196d83d7639fc8097852698a9fb5d98dbb78ee7f2f",
+    "corridor": "d2bbbdc1c84f36752e69825ddb183ae5ae79d3c441de9dc570368a668d52761e",
+    "d13c": "153dd7c648a4d863775490cf3d9ae67f31745667ab079c9760248b0538edcc92",
+    "fleet": "d7b853b98f31351ac8ecd824859584584ae4e46a2410ea003d33986589caa87b",
+    "funnel": "59bb606015a545f493500cc65129a93b265449bfde172eeed638a194667164c4",
+    "harvest_lab": "e74f2ab9c77c962bbfb748575ec20ca9217452ade20c791948f604186ac9f234",
+    "headline": "4752d260368b086b3a8179b659c37ab116bf3698bf0fb85e5e030f6a41cbaf20",
+    "journal": "97f909fb078017dc927d619d78a646c4f885799e92ec22d505718db0c80c75c8",
+    "league": "70c2406d8396e13a514667620d79c24f44481044a6153484ee8c40ee73dd1ec0",
+    "limit": "1e9684181b50e2fbf4a8819d194cbae44545aa115ec352f5781c5e079c6ce99a",
+    "lineage": "a62bf0b9d72920f58876097109546da2e62e0d1fdafa31d8242e98d8b22b6d2c",
+    "midband": "752c31250ffcef3c89f3d871c5055249cb1d5f7abe1e9baa86e0fefe2a46eecc",
+    "ratchet": "393b91237be54aee872f258448baa013bbb67915d93c0ae03c3b527428ebff47",
+    "reg_robust": "4b9355fba7f6a9219fc88b3b09eb8abe25a93671ce7401368d80b2ddbb1969b1",
+    "reg_text": "b51c547867942d11a03d95b7a0a160c0333aec2447a7cee4b09840546f9abcd4",
+    "registrations": "57a539a80268bae7e2b2830ddc456ac24ad2e2658d2a2c6b773e1505504436a9",
+    "size": "d45431457d3a6c30ac6753cbebf14c1343e1e2e94014612a033cfe5d93d3430b",
+    "tape": "1543fd2625067c7bd5452bd114a8ec6cb5aff5a5b8f159b90014b725db5c7998",
+    "tape_inventory": "008f208cef1bbf1cb98ec7917ed28c6baabde570ec5adc11b1e5f028631b3ec5"
+  },
+  "yardstick_label": "YARDSTICK v5 \u2014 IN-SAMPLE BY CONSTRUCTION (the box is open; out-of-sample transfers forward to live paper)"
+}
