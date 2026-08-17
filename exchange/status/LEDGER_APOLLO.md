@@ -1590,3 +1590,88 @@ PENDING (operator): 5 rulings, all in section 10 --
      now TWO card versions behind), F-C4-m (F-C3-a..e and F-C3-i carried).
 PROBE LEDGER: m = 0. EXPLORATION — ungated; promotion requires registration.
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-16c ===
+NOW: TIER-C5 IS MEASURED, THE BOX IS OPEN, AND NOTHING WAS SUPPORTED.
+RULING, VERBATIM: "open the sealed box, we lose continuity otherwise… we will
+     put it to paper trade the Prometheus route… another data stream" ·
+     "D15 caveats not hard gates"
+     THE YARDSTICK LINEAGE, ALL FOUR, STATED TOGETHER:
+       v1  TIER-C2  1H anchor, no rail       -0.7762 R/trade  n=10   118 d SEALED
+       v3  TIER-C3  4h anchor + 1.0 rail     +0.7056 R/trade  n=11   118 d SEALED
+       v4  TIER-C4  + LPS-trail + harvest    +0.6907 R/trade  n=11   118 d SEALED
+       v5  TIER-C5  + funding ceiling 1R     +0.1724 R/trade  n=195  2534 d OPEN
+     THE 118-DAY NUMBER WAS NOT WRONG, IT WAS SMALL. Every R is post-2024-07-01:
+     pre-wall -7.2687 over 123, post-wall +40.8836 over 72. The operator's own
+     post-lockbox read is +1.1964 over 29 — PROVISIONAL, and the best slice in
+     the book by a factor of seven.
+     *** AND THE CARD ITSELF DOES NOT CLEAR THE ESTATE'S OWN BAR. *** Scored
+     through the same asset-cluster ruler as the registrations, the card's
+     expectancy CI is [-0.0271, +0.4336], one-sided p 0.0912. On seven years,
+     five assets and 195 campaigns this card is not distinguishable from zero
+     at q = 0.10. That is F-C5-b and it is the deepest ruling in the document.
+     EVERYTHING IS IN-SAMPLE BY CONSTRUCTION. Out-of-sample transfers FORWARD to
+     live paper on the Prometheus route (Stage-B interim), which is NOT BUILT.
+SEAL: 13,860 formerly-sealed 4h bars readable. 41 campaigns quote an ANCHOR from
+     one; 60 ADVANCES quote a RATCHET PIVOT from one, and on 24 campaigns that
+     advance is the FINAL stop — the EXIT PRICE came out of the old lockbox. 42
+     campaigns quote ANY formerly-sealed price. THE MASK IS PROVED LIVE, not
+     merely constant-false: over Tier-C4's corridor the same code path yields 11
+     campaigns box-open and 10 box-closed. F-C3-a IS CLOSED — the operator did
+     not ratify the seal floor, they removed the seal.
+REGISTRATIONS (text before result; ruler DECLARED before scoring — asset-cluster
+     90% CI, MEAN; a BUILDER'S READING the operator should confirm):
+       (reference) THE CARD v5    n=195  exp +0.1724  CI [-0.0271,+0.4336] NOT SUPPORTED
+       P-SPR-1 standalone spring  n=241  exp +0.0882  CI [-0.0373,+0.2389] NOT SUPPORTED
+       P-SPR-1 UNION vs CARD      n=420  d   -0.0520  CI [-0.2583,+0.0655] NOT SUPPORTED
+       P-CASC-1 card+adds PAIRED  n=195  d   +0.1461  CI [-0.0100,+0.2532] NOT SUPPORTED
+     THE UNION VERDICT WAS REVERSED IN REVIEW. The first draft named the arm
+     "vs card" and scored it against ZERO; with 2.2x the card's campaigns a
+     narrower interval passed while the union was per-campaign WORSE than the
+     card (-0.0520 R). FDR: m = 3 (tests RUN, not registrations FILED), q = 0.10,
+     bar 0.03333, CORRECTION APPLIED — the bootstrap yields the tail, so no p
+     was invented. No arm clears it.
+     LOAO: 1 of 5 on every arm, and in each case the panel that excludes zero is
+     the one with ZEC DROPPED. ZEC is 84% of the card's book AND the asset whose
+     removal flips every arm.
+FLEET: 79 LOGGED CELLS (25 shadow across 8 pre-named grids + 54 eligible league
+     cells a champion is argmaxed from), ALL REPORTED, NONE PROMOTED. D12 bound
+     0 of 195 at unit size, 2 at 2x, 4 at 3x. S-TRAIL +0.25 ATR posts +69.20 vs
+     the card's +33.61 and its D15 max-single-trade-delta-share is 1.1562 —
+     GREATER THAN ONE: one campaign exceeds the whole net improvement.
+LABS: H1 — the harvest is a DE-RISK, never a profit-take: 37 fills, both took
+     (-9.1743) and would-have (-14.9127) NEGATIVE, delta +5.7383 R, positive in
+     EVERY slice. H2/H7 — the champion wall is EMA 889 on BOTH 12h (62.7%) and
+     1d (61.9%); the estate's own tide-slow EMA 316 is the WEAKEST wall on 12h
+     at 23.9%. AE STUDY, the most stable number here: a winner goes 0.3105 R
+     against you before it goes 1 R for you, and the census era agrees at
+     0.3145 — four thousandths apart across two regimes.
+REVIEW: seven adversarial lenses run BEFORE publication. 16 REPAIRS. Two changed
+     a headline number (an EMA WARM-UP FLOOR the full-water corridor needed and
+     no parent did — `ind.ema` SEEDS at the series start, so 23 pre-warm armings
+     and 4 scored campaigns had ridden on EMAs that were all the same number;
+     and S-SIZE re-capped because D12's 1R cap does not scale). One REVERSED A
+     VERDICT. Five fixture legs that could not fail were replaced.
+FIXTURES: 11/11 PASS. F-C4-h's convention is the HOUSE RULE from here — every
+     leg states what would make it FAIL.
+PENDING (operator): 8 rulings, all in section 8 —
+     F-C5-a  WHICH NUMBER IS THE YARDSTICK? +0.6907 / +0.1724 / +1.1964, 7x apart
+     F-C5-b  THE CARD DOES NOT CLEAR THE ESTATE'S OWN BAR on 195 campaigns.
+             Edge that is hard to measure, or a coin that flipped heads?
+     F-C5-c  ONE ASSET IS 84% OF THE BOOK and flips every LOAO. Same ruling F-C3-d awaits
+     F-C5-d  D12 inert at unit size, live above it — keep as insurance or strike
+     F-C5-e  THE BELL FIRES ONCE IN SEVEN YEARS — backstop or dead law
+     F-C5-g  S-LIMIT's avg-AE is fitted on the book it is scored against
+     F-C5-h  D1-D15 AND H1-H7 HAVE NO SOURCE. H3 and H6 have no content at all.
+             Define them or strike the labels (precedent V-6)
+     F-C5-i  THE SPRING'S TIDE READING refuses 3,526 sweeps and admits 241.
+             Pin "the reclaim is the FIRST inside close" or open the window
+     F-C5-k  *** THE LIVE PAPER LINE IS THREE CARD VERSIONS BEHIND AND THE
+             RULING JUST MADE IT THE OUT-OF-SAMPLE INSTRUMENT. This moves from
+             housekeeping to BLOCKING. ***
+     -- also filed: F-C5-f (the fleet's best cell fails its own D15 column),
+     F-C5-j (Tier-C4's Trade docstring is falsified by the open seal),
+     F-C5-l (F-C3-b/c/e, F-C4-b/i carried).
+PROBE LEDGER: card m = 0. LOGGED SELECTION SURFACE 79, written BEFORE the look.
+     EXPLORATION — ungated; promotion requires registration and declares its m.
+=== END STATUS ===
