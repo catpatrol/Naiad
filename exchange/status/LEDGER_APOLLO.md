@@ -1823,3 +1823,115 @@ CLASS     REPAIR — the sixth adversarial review, applied. No scored number mov
   SESSION TOTAL  37 numbered repairs across FOUR pre-publication reviews
     (TC4 12 + 2 unnumbered · TC5 16 · TC5-Q 5 + 4).
 === END ===
+
+=== STATUS_APOLLO — 2026-08-16f ===
+LANE      APOLLO · branch v12-v1-census · seed 20260816
+CLASS     BUILD — TIER-C6 rev B. Measurement + registrations + pre-named labs.
+          D15 columns everywhere, gates nowhere. Every grid reported whole.
+
+  THE CARD GOT BETTER AND STILL CANNOT CLEAR ITS OWN BAR.
+    card v6 = v5 + trail ARMS AFTER +1R [H5] + MINIMUM ADVANCE 0.05 ATR [F-C4-d].
+    195 campaigns, 2,534 days: net +39.8443 R, expectancy +0.2043 (v5 +0.1724).
+    Through the estate's own asset-cluster ruler: CI [-0.0132, +0.5085],
+    p = 0.0740. Closer to the bar than v5 and on the same side of it.
+    F-C5-b SURVIVES INTO v6.
+
+  BOTH REGISTRATIONS REFUSED.
+    P-TRAIL-1 [65%]  paired dExp +0.0319  CI [-0.0050, +0.0688]  p 0.0817
+    P-WALL-1  [55%]  paired dExp -0.0331  CI [-0.0859, +0.0278]  p 0.8318
+    m = 2 tests actually run, q = 0.10, bar 0.05. Neither clears BH.
+    Both arms PAIRED — TC5 shipped an arm named "vs card" scored against ZERO
+    and the review reversed it; that does not happen here.
+    P-WALL-1 loses BY CUTTING THE TAIL (tail_exit_ratio 0.9329). 16 wall exits.
+
+  THE WHY-ZEC ANSWER, IN ONE PARAGRAPH.
+    None of the five named hypotheses explains ZEC, and the thing that does is
+    one trade. Of 27 EXPLANATORY metrics (8 outcome metrics segregated by
+    construction) ZEC is INTERIOR to the other four on 18, DEGENERATE on 3,
+    EXTERIOR on 6 — of which 3 fail the materiality floor, 1 separates the
+    WRONG WAY (shortest tide streak of the five, most regime flips), leaving 2
+    that clear every gate and are economically nil. ZEC books +32.5680 R of
+    +39.8443 (81.7%) — and +25.0605 R of THAT, 76.95% of ZEC's net, is a
+    SINGLE campaign, 2026-05-01 -> 2026-05-10, 58 bars, 7 advances, 1.63x.
+    Strip it: +7.5075 R. Strip 2026: expectancy +0.2531, SECOND of five.
+    The question presupposes a distribution that does not exist.
+
+  THE LIMIT FRONTIER — k* = 0.40 ATR, AND THE PRE-REGISTRATION KILLS IT.
+    E[R] 0.2056 offered / 0.2344 filled-only against a card at 0.20433. The
+    form was written before the look with three falsification clauses; clause
+    (c) fires on its own winner — k*'s max_single_trade_delta_share = 41.4008.
+    And the limit MISSES THE TRADES THAT PAY: missed-would-have expectancy
+    +3.4042 R at k=0.10, 48.69 R forgone at k=0.40 against a 39.84 R book.
+    The SPLIT arm is an exact convex combination, so k*(SPLIT) == k*(FULL) and
+    prereg clause (b) is UNFALSIFIABLE by construction; effective argmax
+    surface is 5 cells, not the declared 10.
+    SAIL IS UNBOUND — zero grep hits estate-wide. BLOCKING for clause (c).
+
+  STAGE W — THE LEAGUE GREW A SUPPORT SIDE.
+    resistance 12h EMA 889 @ 62.71% · SUPPORT 12h EMA 300 @ 54.55%.
+    Support is the WEAKER wall and its champion is a third the length. Every
+    prior tier scored shorts against the wall BEHIND them.
+    The resistance side reproduces TC5's filed league 313/313, zero differences
+    on approaches, rejections, champion flags AND penetration.
+
+  L-SPR-NT — THE ESTATE'S OWN 3,526 IS DEFECTIVE FOUR WAYS.
+    admitted 363 SIGNALS (not 241 campaigns) · refused 3,470 (floored; the
+    filed 3,526 counts 56 refusals inside the first 316 warm-up bars) ·
+    unreclaimed 1,374 (counted nowhere before) · partition closes at 5,207 ·
+    episode-collapsed refusals 2,916 (no non-overlap guard).
+
+  ALSO FILED  DEFINITIONS_D_H_2026-08-16.md — every D1-D15 and H1-H7 mapped.
+    11 of 15 D-items and 2 of 7 H-items have NO SOURCE OF ANY KIND. D1-D10's
+    apparent hits belong to FOUR OTHER CONTRACTS' namespaces. H3 (=50%) and H6
+    (=the pins + their comparison grids) are DEFINED THIS TURN by operator
+    ruling. Recommended: strike D1-D11, D13(a-b), D14; keep D12/D13(c)/D15
+    citing code; keep H1-H7 citing the TC5 relay table. F-C5-h ANSWERED.
+
+  THE REVIEW, AND THE BLOCKER IT FOUND.
+    Eight lenses, 55 agents, run BEFORE publication. Seven repairs applied.
+    C6-1 BLOCKER: F-C6-LEAGUE's "mirror proof" NEVER CALLED league(). It ran a
+      private copy of the predicate, which was an exact algebraic identity
+      (ATR invariant, EMA equivariant under negation) and passed all 20 swept
+      constant combinations including APPROACH_ATR=0.0. No fixture leg ever
+      executed the support branch. The reviewer mutated it, rebuilt, and got
+      10/10 PASS while the 12h support champion moved 300 -> 89 and the wall
+      book went 16 exits -> 4. REPAIRED to call T6.league on a negated tape;
+      sabotage-tested after the repair -> 307 mismatches, all 4 champions move.
+    C6-2 mean_penetration_atr SILENTLY REDEFINED under a reproduction claim —
+      290 of 313 rows differed. Parent's definition restored; the broke-only
+      depth published under its own name.
+    C6-3 P-TRAIL-1's D15 was d15(v6, v6), a self-comparison. Now measured
+      against the v5 control; max_single_trade_delta_share = 0.4892 — UNDER
+      ONE, the only effect in this build not dominated by a single campaign.
+    C6-4 top_decile_share_pct carried two denominators under one name.
+    C6-5 wall_touch accepted `direction` and never read it. Removed.
+    C6-6 F-C6-GRID passed unconditionally on grids that built no cards —
+      4 of 12 grids, 16 of 41 declared cells unchecked.
+    C6-7 F-KEY named 9 tables while the build filed 27. Now TOTAL, read from
+      the manifest: 27 keys covering 27 parquets.
+    NO SCORED NUMBER MOVED — every repair was a fixture, a column definition
+    or a diagnostic's base.
+
+  THE REVIEW DID NOT FINISH. 31 of 55 verifiers hit the session usage limit.
+    39 findings raised and NEVER ADJUDICATED, several corroborated across
+    three or four independent lenses. Carried as F-C6-k. A review that stopped
+    early is not a review that passed, and 11/11 fixtures does not stand in
+    for it. RULING NEEDED: re-run the verifier pass before TIER-C7.
+
+  INTEGRITY  27 tables · 11/11 fixtures · suite 334 passed, 1 skipped, exit 0.
+    F-C6-CTRL: the v5 card through v6's FORKED code reproduces TC5's FILED
+    journal, WORST ABSOLUTE DIFF 0.0 across 13 columns and every exit_reason.
+    F-C6-DET: two runs, 27 tables, 0 sha moved, 0 parquet files differ.
+
+  OPEN, AND THE TOP TWO NEED A WORD.
+    F-C6-b  DOES A CARD WHOSE RESULT IS ONE CAMPAIGN ON ONE ASSET CONSTITUTE
+            AN EDGE? Lean: keep the panel, and make "≥3 of 5 leave-one-out
+            panels exclude zero" part of the REGISTERED TEXT. It would have
+            failed every arm this session, which is the point.
+    F-C6-c  SAIL UNBOUND — blocking for the limit form's validation clause.
+    also open: F-C6-a (card vs its own bar), F-C6-d (unfalsifiable prereg
+    clause), F-C6-e (top-decile share > 100% under EAR), F-C6-f (L-FMH cannot
+    run on the card book), F-C6-g (in-sample argmax as a decision input),
+    F-C6-h (TWO ATTACHED DOCUMENTS DID NOT ARRIVE — the only incomplete
+    deliverable), F-C6-i, F-C6-j, F-C6-k.
+=== END ===

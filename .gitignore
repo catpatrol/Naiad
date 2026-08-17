@@ -230,3 +230,8 @@ research_outputs/oracle/**
 # enumerated from. Tracking it makes a scope change visible in git history
 # instead of only on disk.
 !research_outputs/oracle/topup_scope.json
+
+research_outputs/tierc6/**
+research_outputs/tierc6_run2/**
+research_outputs/tierc6q/**
+research_outputs/tierc6q_run2/**
