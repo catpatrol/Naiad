@@ -36,6 +36,8 @@ research_outputs/tierc3/**
 research_outputs/tierc3_run2/**
 research_outputs/tierc4/**
 research_outputs/tierc4_run2/**
+research_outputs/tierc5/**
+research_outputs/tierc5_run2/**
 # committed manifests are the intended surface; keep them tracked
 !research_outputs/**/build_manifest.json
 !research_outputs/**/manifest.json
