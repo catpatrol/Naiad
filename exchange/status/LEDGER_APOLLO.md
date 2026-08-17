@@ -1675,3 +1675,80 @@ PENDING (operator): 8 rulings, all in section 8 —
 PROBE LEDGER: card m = 0. LOGGED SELECTION SURFACE 79, written BEFORE the look.
      EXPLORATION — ungated; promotion requires registration and declares its m.
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-16d ===
+NOW: SESSION CLOSE. Four stages: TIER-C4 (the mean card), the interview replies
+     enacted (seal OPEN, D12, D13(c), D15 DEMOTED to diagnostic), TIER-C5
+     (full water), TIER-C5-Q (the queryable book + this report).
+THE ARC IN ONE LINE: a card that looked like +0.6907 R/trade over one sealed
+     quarter returns +0.1724 over seven open years, CANNOT BE DISTINGUISHED
+     FROM ZERO at the estate's own bar (CI [-0.0271,+0.4336], p 0.0912), rests
+     84% on ZEC — and is now the first card in this estate that can be
+     cross-examined trade by trade without a rebuild. The measurement got worse
+     and the instrumentation got much better, and those are the same event.
+TC5-Q IS LIVE: 436 campaigns indexed (195 card + 241 spring, 60 add-carrying),
+     3,677 instants demanded and 3,677 covered, ZERO missing; tape_full 13,861
+     rows = every arming/trigger/sweep/add/advance/harvest/exit PLUS the three
+     kinds the commission did not name and a queryable book needs anyway —
+     anchor_bar, pivot_bar, retrace, the bars PUBLISHED PRICES are quoted from —
+     PLUS a DAILY 00:00Z spine over 6.938 years (the ruling asked for >=3).
+     Families: AVWAP set, RVWAP +-1s/+-2s, period extremes, and the league
+     champions each on its OWN clock (1h EMA4618, 4h EMA3618, 12h & 1d EMA889),
+     each NULL until its EMA has seen its own length — warm on 92.0 / 74.4 /
+     81.4 / 61.9 % of rows, FILED.
+     `python scripts/query_trade.py <campaign_id>` — median 195 ms, worst 209,
+     budget 2,000, 9.6x headroom. It COMPUTES NOTHING; that is why it is fast.
+     8/8 fixtures. F-Q-0 asserts all 21 TC5 tables unchanged — the manifest
+     against its git blob AND every parquet re-hashed FROM DISK against both
+     the committed manifest and the independent re-run. NO SCORED NUMBER MOVED.
+*** THE QUERYABLE BOOK IS THE NEW FLOOR FOR REGISTRATION WORDING. *** A
+     registration whose predicate cannot be evaluated against campaigns,
+     instants and tape_full is one nobody can score without a rebuild. This
+     estate has already lost registrations to definitions the contract never
+     carried (H-VBT, leap/stair arrival). From here, wording a claim means
+     naming the columns it will be scored on.
+REVIEWS: THREE adversarial reviews run BEFORE publication (6 lenses on TC4,
+     7 on TC5, 5 on TC5-Q). 33 NUMBERED repairs across the session (TC4 12 +
+     2 unnumbered, TC5 16, TC5-Q 5). TWO of the TC5-Q five were mine to see
+     and I did not: THE CHAMPION EMAs HAD NO WARM-UP FLOOR — verbatim TC5's
+     own repair #4, which I fixed in the decision path and then reintroduced
+     with EMAs 3-15x longer. ONE VERDICT
+     REVERSED (P-SPR-1's union arm was named "vs card" and scored against
+     ZERO). TWO HEADLINE NUMBERS CHANGED (an EMA warm-up floor the full-water
+     corridor needed and no parent did; S-SIZE re-capped because D12's 1R cap
+     does not scale). SIX of sixteen TC5 repairs were ONE defect wearing
+     different clothes: a check that re-derives a value the way the program
+     derived it and compares it to itself.
+FIXTURE CONVENTION ADOPTED AS HOUSE RULE: every leg states inline what would
+     have to be true for it to FAIL. It is what exposed that three F-C5-OPEN
+     legs had no answer.
+PENDING (operator) — the register, TOP first:
+  TOP  THE UNIVERSE QUESTION. ZEC is 84% of the book AND the asset whose
+       removal flips every registration arm. LEAN: keep the five-asset panel
+       AND make "excludes zero on >=3 of 5 leave-one-out panels" part of the
+       REGISTERED TEXT rather than a caveat beside it. It would have failed all
+       three arms this session, which is the point. Gates every future
+       registration
+  F-C5-b  THE CARD DOES NOT CLEAR THE ESTATE'S OWN BAR on 195 campaigns over
+       seven years. Edge that is hard to measure, or a coin that flipped heads?
+  F-C5-k  BLOCKING — the live paper line is THREE card versions behind and the
+       seal-open ruling just made it the OUT-OF-SAMPLE INSTRUMENT
+  F-C5-a  which number is the yardstick: +0.6907 / +0.1724 / +1.1964, 7x apart
+  F-C4-b  LEAN: RATIFY 0.5 ATR as the trail's "beyond" — the card's own word
+       for it at the entry anchor; the 0.0 reading parks a stop on a liquidity
+       magnet. Buffer-bound on 14 of 21 TC4 advances
+  F-C4-c  LEAN: KEEP THE BELL AS A BACKSTOP, do not strike. It fires once in
+       seven years because the trail is faster, not because it is wrong
+  F-C4-d  LEAN: ADOPT A MINIMUM ADVANCE INCREMENT in principle; the operator
+       pins the number, and NOT from this book's outcomes (the smallest advance
+       was 0.002053 ATR and it was the one paid out)
+  H3, H6  NO DEFINITION ANYWHERE. Define, or strike the labels (precedent V-6)
+  -- H1 ANSWERED (harvest = de-risk, +5.7383 R, positive in every slice);
+     H2/H7 ANSWERED (champion wall EMA 889 on both slow clocks; EMA 316 the
+     WEAKEST wall on 12h); H4/H5 MEASURED not answered, awaiting F-C4-b/d.
+  -- also open: F-C5-c, F-C5-d, F-C5-g, F-C5-h, F-C5-i, F-C5-j, F-C3-b/c/e,
+     F-C4-i. CLOSED this session: F-C3-a, by ruling.
+PROBE LEDGER: card m = 0. TC5's logged selection surface 79, written BEFORE the
+     look. TC5-Q registers nothing and scores nothing. EXPLORATION — ungated;
+     promotion requires registration and declares its m first.
+=== END STATUS ===
