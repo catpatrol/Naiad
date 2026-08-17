@@ -135,8 +135,14 @@ def render(cid: str, D: dict) -> list[str]:
     A(f"    share of its lane's net R      {_sig(r['share_of_lane_net_r'],6)}"
       f"   (lane total {_f(r['lane_net_r'],4)} R)")
     A(f"    in its lane's top decile       {bool(r['in_lane_top_decile'])}")
-    A(f"    slice {r['slice_year']} flagged PROVISIONAL  "
-      f"{bool(r['slice_provisional'])}")
+    # LANE-SCOPED, AND THE COUNT IS PRINTED — ADVERSARIAL REPAIR Q-7. This line
+    # used to read `slice 2023 flagged PROVISIONAL True` off a flag computed
+    # from the CARD lane's year count and stamped on spring rows too, so 68
+    # spring screens carried another lane's verdict. The lane and the n are now
+    # both on the line: the reader can see which book was counted.
+    A(f"    slice {r['slice_year']} · {r['lane']} lane        n={int(r['slice_n'])}"
+      f"  PROVISIONAL {bool(r['slice_provisional'])}"
+      f"   (thin below {int(D['man']['counts']['provisional_min_n'])})")
     if int(r["adds_n"]) > 0:
         A(f"    adds delta vs card             "
           f"{_sig(r['adds_delta_vs_card'],6)} R over {int(r['adds_n'])} add(s)"
@@ -145,24 +151,46 @@ def render(cid: str, D: dict) -> list[str]:
     # ── SEAL PROVENANCE ───────────────────────────────────────────────────
     A("")
     A(_rule("SEAL PROVENANCE"))
+    # ADVERSARIAL REPAIR Q-9. This block used to test two flags — the anchor's
+    # and the pivots' — and print "Tier-C2, C3 and C4 could have taken it
+    # unchanged", which was false on 332 of the 343 screens that printed it
+    # (190 of them SPRING campaigns, a lane those builds do not have). It now
+    # reads columns Q1 filed off the FULL instant ledger against the window in
+    # RC.LOCKBOX_WAS, and states only what was checked.
     adv = D["advances"]
     ma = adv[adv["campaign_id"] == cid]
-    lb0, lb1 = "2024-07-01", "2025-10-05T23:59:59Z"
-    piv_sealed = ma[(ma["pivot_bar_ts"] >= lb0) & (ma["pivot_bar_ts"] <= lb1)]
+    n_sealed = int(r["sealed_instants"])
+    A(f"  the old lockbox       {r['lockbox_was']}")
     A(f"  entry anchor          {_f(r['anchor'])}  from bar "
       f"{r['anchor_bar_ts'] or '—'}"
       + ("   *** FORMERLY SEALED ***" if bool(r["anchor_was_sealed"]) else ""))
     if len(ma):
+        lb0, lb1 = str(r["lockbox_was"]).split("→")
+        piv_sealed = ma[(ma["pivot_bar_ts"] >= lb0)
+                        & (ma["pivot_bar_ts"] <= lb1 + "T23:59:59Z")]
         A(f"  ratchet pivots        {len(ma)} advance(s), "
           f"{len(piv_sealed)} quoting a FORMERLY SEALED bar"
           + ("   *** and one of them paid out ***"
              if len(piv_sealed[piv_sealed["paid_out"]]) else ""))
-    if not bool(r["anchor_was_sealed"]) and not len(piv_sealed):
-        A("  → this campaign quotes no price from the old lockbox; Tier-C2, C3")
-        A("    and C4 could have taken it unchanged.")
+    A(f"  its OWN bars inside   {n_sealed} instant(s)"
+      + (f"   [{r['sealed_kinds']}]" if n_sealed else ""))
+    if n_sealed:
+        A(f"  → {n_sealed} of this campaign's own quoted bars sit inside the")
+        A("    formerly-sealed span. It could not have been scored as it stands")
+        A("    before the 2026-08-16 seal-open ruling.")
     else:
-        A("  → this campaign COULD NOT HAVE EXISTED as scored before the")
-        A("    2026-08-16 seal-open ruling.")
+        A("  → no bar of this campaign's life sits inside the formerly-sealed")
+        A("    span.")
+    tc4 = r["in_tc4_book"]
+    if tc4 is None or (isinstance(tc4, float) and pd.isna(tc4)):
+        A("  in Tier-C4's filed book   NOT CHECKED (no tierc4 journal on disk)")
+    elif bool(tc4):
+        A("  in Tier-C4's filed book   YES — matched on (asset, entry, exit)")
+    else:
+        A("  in Tier-C4's filed book   no — and that is a MEMBERSHIP fact, not a")
+        A("    claim about what C4 would have done. C4 scored 11 card campaigns")
+        A("    over 2025-10-06→2026-01-31; the spring lane is new in P-SPR-1 and")
+        A("    has no counterpart there at all.")
 
     # ── SPRING (lane-specific) ────────────────────────────────────────────
     if r["lane"] == "spring":
@@ -298,23 +326,46 @@ def render(cid: str, D: dict) -> list[str]:
 
 
 def render_day(day: str, D: dict) -> list[str]:
-    c = D["campaigns"]
-    m = c[(c["entry_ts"].str[:10] == day) | (c["exit_ts"].str[:10] == day)
-          | (c["arm_ts"].str[:10] == day)]
-    out = [f"THE BOOK ON {day} — {len(m)} campaign(s) armed, entered or exited"]
+    """THE DAY'S BOOK — EVERY EVENT, NOT THREE OF THEM.
+
+    ADVERSARIAL REPAIR Q-8. This filtered on arm/entry/exit only, so a day on
+    which the book advanced a stop, harvested a half or took an add — but armed
+    nothing and closed nothing — printed "(nothing)" under a header that says
+    THE BOOK ON <day>, and exited 0. That was 314 days carrying 384 advances,
+    36 harvests and 18 adds. Worse than the empty case: on 149 (campaign, day)
+    pairs the day was NOT empty, so a table printed with no qualifier at all and
+    the moving campaign simply was not in it. The filter is now the instant
+    ledger — the same ledger the coverage contract is written against — so a day
+    is empty here only when the book did nothing that day.
+    """
+    c, inst = D["campaigns"], D["instants"]
+    di = inst[(inst["ts_iso"].str[:10] == day) & (inst["kind"] != "spine")]
+    m = c[c["campaign_id"].isin(set(di["campaign_id"]))]
+    out = [f"THE BOOK ON {day} — {len(m)} campaign(s) with a book event "
+           f"({len(di)} instant(s))"]
     if not len(m):
-        out.append("  (nothing)")
+        out.append("  (nothing — no arming, entry, advance, harvest, add or exit)")
         return out
+    by_c: dict[str, list[str]] = {}
+    for _, i_ in di.sort_values("ts").iterrows():
+        by_c.setdefault(i_["campaign_id"], []).append(i_["kind"])
+    verb = {"arming": "armed", "trigger": "entered", "exit": "exited",
+            "advance": "advanced", "harvest": "harvested", "add": "added",
+            "sweep": "swept", "anchor_bar": "anchor bar",
+            "pivot_bar": "pivot bar", "retrace": "retrace"}
     out.append(f"  {'campaign_id':34} {'dir':6} {'entry':21} {'exit':21} "
                f"{'net R':>10}  what happened today")
     for _, r in m.sort_values(["entry_ms", "asset"]).iterrows():
-        ev = [k for k, col in (("armed", "arm_ts"), ("entered", "entry_ts"),
-                               ("exited", "exit_ts")) if r[col][:10] == day]
+        ks = by_c.get(r["campaign_id"], [])
+        ev = [(f"{verb[k]} x{ks.count(k)}" if ks.count(k) > 1 else verb[k])
+              for k in dict.fromkeys(ks)]
         out.append(f"  {r['campaign_id']:34} {r['direction']:6} "
                    f"{r['entry_ts']:21} {r['exit_ts']:21} "
                    f"{_sig(r['net_r'],4):>10}  {', '.join(ev)}")
-    out.append(f"  net R of campaigns ENTERED today: "
-               f"{_sig(m.loc[m['entry_ts'].str[:10] == day, 'net_r'].astype(float).sum(), 4)}")
+    ent = m.loc[m["entry_ts"].str[:10] == day, "net_r"].astype(float)
+    out.append(f"  net R of the {len(ent)} campaign(s) ENTERED today: "
+               f"{_sig(ent.sum(), 4)}   (net R is a CLOSED-campaign number; the "
+               f"rows above that merely moved today have not paid out)")
     return out
 
 
@@ -322,7 +373,10 @@ def main() -> int:
     ap = argparse.ArgumentParser(
         description="Query the TIER-C5 book. Every number is read, none computed.")
     ap.add_argument("campaign_id", nargs="?", help="e.g. ETHUSDT:card:20251029T1600")
-    ap.add_argument("--day", help="YYYY-MM-DD — the day's book")
+    ap.add_argument("--day", help="YYYY-MM-DD — every campaign with a book "
+                                  "event that day (arm/entry/advance/harvest/"
+                                  "add/sweep/exit), not only the ones opened "
+                                  "or closed")
     ap.add_argument("--random", type=int, metavar="N",
                     help="spot-audit N campaigns (SEEDED, reproducible)")
     ap.add_argument("--seed", type=int, default=20260816)

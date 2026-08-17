@@ -85,6 +85,7 @@ SEED = 20260816
 OUT = ROOT / "research_outputs" / "tierc5q"
 OUT_RERUN = ROOT / "research_outputs" / "tierc5q_run2"
 TC5 = ROOT / "research_outputs" / "tierc5"
+TC4_JOURNAL = ROOT / "research_outputs" / "tierc4" / "trade_journal.parquet"
 
 # THE LEAGUE CHAMPIONS, each on its own clock — TC5 §6.2.
 CHAMPIONS = (("1h", 4618), ("4h", 3618), ("12h", 889), ("1d", 889))
@@ -101,6 +102,15 @@ FROZEN = ("headline", "registrations", "fleet")
 # to an instant kind here, and F-Q-1 walks the dataclasses and asserts the map
 # is TOTAL. Add a timestamped event to `Trade` and forget a kind, and that leg
 # fails. Found by the builder's own audit, before the review returned.
+#
+# AND IT IS ONLY HALF THE CONTRACT — ADVERSARIAL REPAIR Q-6.  This map is a
+# check on KINDS, and it is satisfied by ONE row of a kind.  A reviewer deleted
+# 2,362 of the 3,677 ledger rows, keeping arming/trigger/exit and exactly one
+# each of the other seven, and the whole fixture file still returned 8/8 PASS:
+# every kind was still present here, and `coverage` reported 0 missing because
+# it is seeded from the same frame it checks.  The partner leg — cardinality,
+# re-derived in F-Q-1 from the campaigns table and the three ledgers and never
+# from the instants frame — is what turns presence into a contract.
 MS_FIELD_MAP = {
     "Trade.arm_ms": "arming",
     "Trade.entry_ms": "trigger",
@@ -366,9 +376,19 @@ def ledger_rows(card: list, spring: list, adds: list
                     })
     di = pd.DataFrame(inst, columns=["campaign_id", "asset", "kind", "ts"])
     di["ts_iso"] = di["ts"].map(lambda m: iso(int(m)))
+    # THE DEDUP IS DISCLOSED, NOT SILENT — ADVERSARIAL REPAIR Q-6.  Two advances
+    # confirming on the same bar of the same campaign are ONE (campaign_id, kind,
+    # ts) and collapse here.  That is correct — the tape holds one snapshot per
+    # bar — but it means the ledger's row count is NOT the ledger tables' row
+    # count, so F-Q-1's cardinality contract counts DISTINCT (campaign_id, ts)
+    # pairs in the source, and the collapse is filed in the manifest rather than
+    # left to be discovered as a discrepancy.
+    n_pre = len(di)
     di = di.drop_duplicates(subset=["campaign_id", "kind", "ts"])
-    return (di.sort_values(["ts", "campaign_id", "kind"]).reset_index(drop=True),
-            pd.DataFrame(advs), pd.DataFrame(harv), pd.DataFrame(addr))
+    di = di.sort_values(["ts", "campaign_id", "kind"]).reset_index(drop=True)
+    di.attrs["pre_dedup"] = n_pre
+    di.attrs["collapsed"] = n_pre - len(di)
+    return di, pd.DataFrame(advs), pd.DataFrame(harv), pd.DataFrame(addr)
 
 
 def d15_per_campaign(camp: pd.DataFrame) -> pd.DataFrame:
@@ -403,10 +423,75 @@ def d15_per_campaign(camp: pd.DataFrame) -> pd.DataFrame:
         out.append(g)
     d = pd.concat(out, ignore_index=True)
     d["slice_year"] = d["entry_ts"].str[:4]
-    n_by_year = d[d["lane"] == "card"].groupby("slice_year").size().to_dict()
-    d["slice_provisional"] = [
-        bool(n_by_year.get(y, 0) < RC.PROVISIONAL_MIN_N) for y in d["slice_year"]]
+    # LANE-SCOPED, AND THAT IS A REPAIR — ADVERSARIAL REPAIR Q-7.  The first
+    # draft counted `d[d["lane"] == "card"]` and stamped that count on EVERY
+    # row, spring included, so 68 spring campaigns (33 in 2023, 35 in 2024)
+    # carried the CARD lane's thinness verdict for their entry year — a True on
+    # slices that hold 33 and 35 springs against a MIN_N of 30.  The other three
+    # columns of this block are lane-scoped by construction (they are computed
+    # inside the `groupby("lane")` above); this one silently was not.  The
+    # estate's convention for every other `provisional` in tierc5.py is
+    # `len(the book this row summarizes) < MIN_N`, and the book a campaign's row
+    # summarizes is its OWN lane's slice.  `slice_n` is filed beside the flag so
+    # the count that produced it is on the row, not only its verdict.
+    n_by = d.groupby(["lane", "slice_year"]).size().to_dict()
+    d["slice_n"] = [int(n_by.get((ln, y), 0))
+                    for ln, y in zip(d["lane"], d["slice_year"])]
+    d["slice_provisional"] = [bool(n < RC.PROVISIONAL_MIN_N) for n in d["slice_n"]]
     return d.sort_values(["entry_ms", "asset", "lane"]).reset_index(drop=True)
+
+
+def seal_provenance(camp: pd.DataFrame, inst: pd.DataFrame) -> pd.DataFrame:
+    """WHAT THIS CAMPAIGN QUOTES OUT OF THE OLD LOCKBOX — AND NOTHING MORE.
+
+    ADVERSARIAL REPAIR Q-9.  The tool's first draft branched on exactly two
+    things — the anchor bar's sealed flag, and any advance whose PIVOT bar fell
+    in the span — and then printed the verdict "Tier-C2, C3 and C4 could have
+    taken it unchanged."  A narrow test carrying a broad claim: the same shape
+    §9 of the TC5 build repaired once already, and it was FALSE on 332 of the
+    343 screens that printed it.  190 of those are SPRING campaigns, and the
+    spring lane is registered GENUINELY NEW under P-SPR-1 — it does not exist
+    in C2, C3 or C4 at all, so nothing there could have taken them.  Most of
+    the rest sit outside those builds' scored corridor entirely.  The test also
+    missed campaigns whose ENTRY and HARVEST prices are quoted from inside the
+    span while only the anchor sits outside it: SOL 2024-07-07 paid out on two
+    formerly-sealed closes and printed "quotes no price from the old lockbox".
+
+    So the claim is replaced by two things that are CHECKED:
+
+      sealed_instants / sealed_kinds  every bar of this campaign's OWN life —
+          arming, anchor, trigger, every pivot, every advance, harvest, exit —
+          whose timestamp falls in the formerly-sealed span, counted off the
+          instant ledger instead of inferred from two flags.
+      in_tc4_book  whether this exact campaign IS a row of Tier-C4's FILED
+          journal, matched on (asset, entry_ts, exit_ts).  Eleven campaigns can
+          be True.  A membership test against a file on disk, not an inference
+          about what another build would have done.
+
+    The window is READ from `RC.LOCKBOX_WAS` rather than typed as a literal, so
+    it cannot go stale against the register the way the tool's hard-coded copy
+    could.  This is also why the test lives HERE and not in `query_trade.py`:
+    the tool's stated property is that it COMPUTES NOTHING, and re-deriving a
+    seal test at render time was a quiet breach of it.
+    """
+    lb0 = _ms(RC.LOCKBOX_WAS[0])
+    lb1 = _ms(RC.LOCKBOX_WAS[1]) + MS_1D - 1
+    sl = inst[(inst["ts"] >= lb0) & (inst["ts"] <= lb1)]
+    n_by = sl.groupby("campaign_id").size().to_dict()
+    k_by = (sl.groupby("campaign_id")["kind"]
+              .agg(lambda s: "+".join(sorted(set(s)))).to_dict())
+    d = camp.copy()
+    d["lockbox_was"] = f"{RC.LOCKBOX_WAS[0]}→{RC.LOCKBOX_WAS[1]}"
+    d["sealed_instants"] = [int(n_by.get(c, 0)) for c in d["campaign_id"]]
+    d["sealed_kinds"] = [str(k_by.get(c, "")) for c in d["campaign_id"]]
+    if TC4_JOURNAL.exists():
+        j = pd.read_parquet(TC4_JOURNAL)
+        keys = set(zip(j["asset"], j["entry_ts"], j["exit_ts"]))
+        d["in_tc4_book"] = [bool((a, e, x) in keys) for a, e, x in
+                            zip(d["asset"], d["entry_ts"], d["exit_ts"])]
+    else:                              # the tool must say "not checked", not "no"
+        d["in_tc4_book"] = None
+    return d
 
 
 # ═══════════════════════════════════════════════════════ the enriched tape
@@ -521,8 +606,11 @@ def run(root: Path) -> dict:
 
     camp = d15_per_campaign(campaign_rows(card, spring, adds))
     inst, advs, harv, addr = ledger_rows(card, spring, adds)
+    camp = seal_provenance(camp, inst)
     log(f"  INSTANTS demanded: {len(inst):,} across {len(camp)} campaigns "
         f"({inst['kind'].value_counts().to_dict()})")
+    log(f"  dedup collapsed {inst.attrs['collapsed']} of "
+        f"{inst.attrs['pre_dedup']:,} raw instant rows")
 
     tape = build_tape(inst, lo_ms, hi_ms)
     log(f"  TAPE {len(tape):,} rows over {tape['asset'].nunique()} assets")
@@ -555,6 +643,14 @@ def run(root: Path) -> dict:
         "campaigns_add_carrying": int((camp["adds_n"] > 0).sum()),
         "instants": len(inst),
         "instants_by_kind": inst["kind"].value_counts().to_dict(),
+        "provisional_min_n": int(RC.PROVISIONAL_MIN_N),
+        "instants_pre_dedup": int(inst.attrs["pre_dedup"]),
+        "instants_collapsed_by_dedup": int(inst.attrs["collapsed"]),
+        "campaigns_quoting_a_formerly_sealed_price":
+            int((camp["sealed_instants"] > 0).sum()),
+        "campaigns_in_the_tc4_filed_book": (
+            None if camp["in_tc4_book"].isna().all()
+            else int(camp["in_tc4_book"].fillna(False).astype(bool).sum())),
         "tape_rows": len(tape),
         "tape_instant_labels": tape["instant"].value_counts().to_dict(),
         "spine_rows": int((tape["instant"] == "spine").sum()),

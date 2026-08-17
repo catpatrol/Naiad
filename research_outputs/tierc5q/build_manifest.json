@@ -20,6 +20,8 @@
     "campaigns": 436,
     "campaigns_add_carrying": 60,
     "campaigns_card": 195,
+    "campaigns_in_the_tc4_filed_book": 11,
+    "campaigns_quoting_a_formerly_sealed_price": 96,
     "campaigns_spring": 241,
     "champion_blocks": [
       "1h_ema4618",
@@ -48,7 +50,10 @@
       "sweep": 241,
       "trigger": 436
     },
+    "instants_collapsed_by_dedup": 0,
+    "instants_pre_dedup": 3677,
     "missing_instants": 0,
+    "provisional_min_n": 30,
     "spine_rows": 11232,
     "tape_instant_labels": {
       "add": 6,
@@ -88,12 +93,12 @@
     },
     "tape_rows": 13861
   },
-  "elapsed_s": 4.4,
+  "elapsed_s": 4.5,
   "seed": 20260816,
   "sha": {
     "adds": "b145236af10760fa4a50ffb8634314cba2a1c4899bbf2170f096094ad1fa4d4a",
     "advances": "409b52c991e62df677a95a4e7ca6c4d11e130ad6775936ab4e4a6aed89d4357b",
-    "campaigns": "f946fb5774e8782e9ec3ce4b68b48d444a66d5fc236e907bd5bedfc4ccc22fca",
+    "campaigns": "8680fe93624cac871a2946622aeab817c0a30375565aa31a49decf1bc9be9cfd",
     "coverage": "13deddd1c7093f4eac30e07b258fd02dca9d2148495d8d507922d984c73ee274",
     "harvests": "80cab8f04ababfb8a66d45b9ce69a8f2f1df5cd681ab7da736e0797063590065",
     "instants": "012ec8ffaddb87935b548c80dbd9f89e2acac67f6afdb8dff589b33c58dead9b",

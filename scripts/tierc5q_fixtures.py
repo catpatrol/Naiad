@@ -63,6 +63,19 @@ def tbl(name: str, root: Path | None = None) -> pd.DataFrame:
     return pd.read_parquet((root or Q.OUT) / f"{name}.parquet")
 
 
+def _stamped(v) -> bool:
+    """Does this cell hold a real ISO timestamp?
+
+    An ABSENT timestamp renders as the STRING "None", not as "" — so the
+    obvious `if str(v)` is true for every empty cell in the book, and a leg
+    written that way counts absences as events. It happens to be harmless where
+    a range comparison follows ("None" sorts outside any ISO window), and that
+    is exactly the kind of accident that stops being harmless when someone
+    reuses the idiom without the comparison. Tested at the front instead.
+    """
+    return str(v)[:1].isdigit()
+
+
 def sh(cmd: str) -> tuple[int, str]:
     p = subprocess.run(cmd, shell=True, capture_output=True, text=True, cwd=ROOT)
     return p.returncode, p.stdout
@@ -221,6 +234,71 @@ def f_coverage() -> bool:
                  "assert below cannot be — the tape is built FROM the ledger, "
                  "so coverage is circular and is printed as bookkeeping, not "
                  "as evidence.")
+    lines.append("")
+
+    # ── AND THE OTHER HALF OF IT: CARDINALITY ─────────────────────────────
+    # ADVERSARIAL REPAIR Q-6.  The contract above is a check on KINDS, and one
+    # row of a kind satisfies it.  A reviewer kept every arming/trigger/exit row
+    # and exactly ONE each of advance, harvest, add, anchor_bar, pivot_bar,
+    # retrace and sweep — 1,315 rows instead of 3,677, leaving 1,483 real book
+    # bars with no snapshot — and this whole file returned 8/8 PASS.  The
+    # coverage table below read `0 missing` because it is seeded from the frame
+    # it checks, and the per-kind rows read 1 · 1 · 0 with an [OK] beside each.
+    #
+    # So the count is re-derived HERE from the campaigns table and the three
+    # ledgers — never from the instants frame — and the ledgers are themselves
+    # tied to campaigns.n_advances / .harvested / .adds_n by F-KEY.  Dedup is
+    # honoured exactly rather than waved at: the ledger keys on
+    # (campaign_id, kind, ts), so what a source table DEMANDS is its number of
+    # DISTINCT (campaign_id, ts) pairs, not its row count.
+    advs_t, harv_t, add_t = tbl("advances"), tbl("harvests"), tbl("adds")
+    nd = (lambda df, col: 0 if not len(df)
+          else len(df[["campaign_id", col]].drop_duplicates()))
+    spr = camp[camp["lane"] == "spring"]
+    want = {
+        "arming":     (len(camp), "one per campaign"),
+        "trigger":    (len(camp), "one per campaign"),
+        "exit":       (len(camp), "one per campaign"),
+        "anchor_bar": (int(camp["anchor_bar_ts"].map(_stamped).sum()),
+                       "campaigns carrying an anchor bar"),
+        "sweep":      (int(spr["spring_sweep_ts"].map(_stamped).sum()),
+                       "spring campaigns"),
+        "advance":    (nd(advs_t, "conf_ts"), "distinct (campaign, conf_ts)"),
+        "pivot_bar":  (nd(advs_t, "pivot_bar_ts"), "distinct (campaign, pivot bar)"),
+        "harvest":    (nd(harv_t, "harvest_ts"), "distinct (campaign, harvest_ts)"),
+        "add":        (nd(add_t, "add_ts"), "distinct (campaign, add_ts)"),
+        "retrace":    (nd(add_t, "retrace_ts"), "distinct (campaign, retrace_ts)"),
+    }
+    got = inst["kind"].value_counts().to_dict()
+    lines.append("    THE CARDINALITY CONTRACT — every kind's row count "
+                 "re-derived from the SOURCE tables, never from the ledger:")
+    lines.append(f"      {'kind':12} {'in ledger':>10} {'demanded':>9}   "
+                 f"what demands it")
+    for k in sorted(want):
+        n_want, why = want[k]
+        n_got = int(got.get(k, 0))
+        g = n_got == n_want
+        ok &= g
+        lines.append(f"      {'[OK ]' if g else '[BAD]'} {k:<12} {n_got:>8,} "
+                     f"{n_want:>9,}   {why}")
+    extra = sorted(set(got) - set(want))
+    ok &= not extra
+    lines.append(f"      [{'OK ' if not extra else 'BAD'}] and no kind in the "
+                 f"ledger that no source demands: {extra}")
+    tot_want = sum(v[0] for v in want.values())
+    g = tot_want == len(inst)
+    ok &= g
+    lines.append(f"      [{'OK ' if g else 'BAD'}] TOTAL {len(inst):,} == "
+                 f"{tot_want:,} demanded")
+    lines.append(f"      dedup collapsed "
+                 f"{man['counts']['instants_collapsed_by_dedup']} of "
+                 f"{man['counts']['instants_pre_dedup']:,} raw rows — filed, "
+                 f"and already inside the DISTINCT counts above")
+    lines.append("      FAILS IF: the ledger loses a row that a campaign, an "
+                 "advance, a harvest or an add demands. THIS is the leg that "
+                 "the presence contract above and the coverage table below "
+                 "both cannot be: a book can lose 64% of its instants and pass "
+                 "either one.")
     lines.append("")
 
     tot = cov[cov["lane"] == "__ALL__"].iloc[0]
@@ -616,6 +694,157 @@ def f_closure() -> bool:
     return rec("F-Q-6", ok, lines)
 
 
+# ═══════════════════════ F-Q-7 · the sentences the tool prints
+def f_claims() -> bool:
+    """EVERY ASSERTION THE SCREEN MAKES, CHECKED AGAINST THE SOURCE.
+
+    ADVERSARIAL REPAIRS Q-7, Q-8, Q-9 — and the fixture that should have existed
+    before them.  F-Q-0..F-Q-6 check what the tool COMPUTES: hashes, coverage,
+    determinism, latency, champions, closure.  Not one of them reads a sentence
+    the tool PRINTS.  All three of this round's tool defects lived in that gap —
+    a flag stamped from the wrong lane, an empty-day claim that was false on 314
+    days, and a cross-build existence claim that was false on 332 of the 343
+    screens that made it.  A book whose numbers are right and whose sentences
+    are wrong is not a trustworthy read surface; it is a trap with good
+    arithmetic.
+
+    FAILS IF: a rendered claim disagrees with the tables it claims to summarize.
+    """
+    import query_trade as QT                                          # noqa
+    lines, ok = [], True
+    camp, inst, adv = tbl("campaigns"), tbl("instants"), tbl("advances")
+    D = QT._load()
+
+    # ── Q-7 · the PROVISIONAL flag is the row's OWN lane's slice ──────────
+    n_by = camp.groupby(["lane", "slice_year"]).size().to_dict()
+    want = [int(n_by.get((ln, y), 0)) < RC.PROVISIONAL_MIN_N
+            for ln, y in zip(camp["lane"], camp["slice_year"])]
+    bad = int((np.array(want) != camp["slice_provisional"].astype(bool).values).sum())
+    ok &= bad == 0
+    lines.append(f"[{'OK ' if not bad else 'BAD'}] slice_provisional is the "
+                 f"campaign's OWN lane's slice on all {len(camp)} rows: {bad} "
+                 f"disagree")
+    # and the leg is not vacuous — the card-anchored reading it replaced DOES
+    # differ, on rows we can name.
+    n_card = camp[camp["lane"] == "card"].groupby("slice_year").size().to_dict()
+    old = [int(n_card.get(y, 0)) < RC.PROVISIONAL_MIN_N for y in camp["slice_year"]]
+    moved = camp[np.array(old) != np.array(want)]
+    good = len(moved) > 0
+    ok &= good
+    yrs = sorted(set(zip(moved["lane"], moved["slice_year"])))
+    lines.append(f"[{'OK ' if good else 'BAD'}] and the repair is not "
+                 f"cosmetic: the CARD-anchored reading this replaced differs on "
+                 f"{len(moved)} rows {yrs} — every one a spring campaign "
+                 f"wearing the card lane's thinness verdict")
+    lines.append("      FAILS IF: the two readings agree. Then the repair "
+                 "changed nothing and the leg is decoration.")
+
+    # ── Q-8 · a day the tool calls empty is a day the BOOK was empty ──────
+    ev_days = set(inst.loc[inst["kind"] != "spine", "ts_iso"].str[:10])
+    old_days = set(camp["entry_ts"].str[:10]) | set(camp["exit_ts"].str[:10]) \
+        | set(camp["arm_ts"].str[:10])
+    hidden = sorted(ev_days - old_days)
+    d0 = hidden[0] if hidden else "—"
+    rows0 = QT.render_day(d0, D) if hidden else []
+    good = bool(hidden) and "(nothing" not in "\n".join(rows0)
+    ok &= good
+    lines.append(f"[{'OK ' if good else 'BAD'}] --day: {len(hidden)} days "
+                 f"carried a book event but NO arming/entry/exit — the old "
+                 f"filter called every one of them empty. First is {d0}, and "
+                 f"it now renders {max(len(rows0) - 3, 0)} campaign(s)")
+    # the named regression, kept by name
+    t2 = "\n".join(QT.render_day("2025-11-01", D))
+    good = "ETHUSDT:card:20251029T1600" in t2 and "advanced" in t2
+    ok &= good
+    lines.append(f"[{'OK ' if good else 'BAD'}] the named case: `--day "
+                 f"2025-11-01` shows ETHUSDT:card:20251029T1600 advancing "
+                 f"(it printed `(nothing)` before Q-8, while the same tool "
+                 f"printed that advance on the campaign screen)")
+    # and every day the tool DOES call empty must really be empty
+    sample = sorted(set(inst["ts_iso"].str[:10]) - ev_days)[:40]
+    lied = [d for d in sample if "(nothing" not in "\n".join(QT.render_day(d, D))]
+    ok &= not lied
+    lines.append(f"[{'OK ' if not lied else 'BAD'}] and over {len(sample)} "
+                 f"spine-only days the tool calls empty, {len(lied)} actually "
+                 f"held a book event")
+    lines.append("      FAILS IF: a day with an advance, a harvest or an add "
+                 "renders as '(nothing)'. The header says THE BOOK ON <day>.")
+
+    # ── Q-9 · the seal sentence says only what was checked ────────────────
+    # RE-DERIVED FROM A DIFFERENT PATH: Q1 counts the campaign's sealed bars off
+    # the INSTANT ledger; this counts them off the campaign row's own timestamp
+    # columns and the advances table. Same number, two paths — not the same
+    # computation compared to itself.
+    lb0, lb1 = RC.LOCKBOX_WAS[0], RC.LOCKBOX_WAS[1] + "T23:59:59Z"
+    ain: dict[str, int] = {}
+    # ALL THREE LEDGERS. The first draft of this leg counted advances and forgot
+    # the adds, and disagreed with the filed column on exactly the 19
+    # add-carrying campaigns whose add/retrace bars fall in the span. The FILED
+    # number was right and the re-derivation was short — which is the whole
+    # reason a second path is worth writing.
+    for src, cs in ((adv, ("conf_ts", "pivot_bar_ts")),
+                    (tbl("adds"), ("add_ts", "retrace_ts"))):
+        for c in cs:
+            if not len(src):
+                continue
+            hit = src[(src[c] >= lb0) & (src[c] <= lb1)]
+            for cid_, n_ in hit["campaign_id"].value_counts().items():
+                ain[cid_] = ain.get(cid_, 0) + int(n_)
+    cols = ["arm_ts", "anchor_bar_ts", "entry_ts", "harvest_ts", "exit_ts",
+            "spring_sweep_ts"]
+    mine = []
+    for _, r in camp.iterrows():
+        n = sum(1 for c in cols
+                if _stamped(r[c]) and lb0 <= str(r[c]) <= lb1)
+        mine.append(n + int(ain.get(r["campaign_id"], 0)))
+    bad = int((np.array(mine) != camp["sealed_instants"].astype(int).values).sum())
+    ok &= bad == 0
+    lines.append(f"[{'OK ' if not bad else 'BAD'}] sealed_instants re-derived "
+                 f"from the campaign row's OWN timestamps + the advances "
+                 f"ledger (not from the instant frame Q1 counted): {bad} of "
+                 f"{len(camp)} disagree")
+    stale = int((camp["lockbox_was"].astype(str)
+                 != f"{RC.LOCKBOX_WAS[0]}→{RC.LOCKBOX_WAS[1]}").sum())
+    ok &= stale == 0
+    lines.append(f"[{'OK ' if not stale else 'BAD'}] and the window on every "
+                 f"row IS RC.LOCKBOX_WAS ({RC.LOCKBOX_WAS[0]}→"
+                 f"{RC.LOCKBOX_WAS[1]}): {stale} stale. The tool used to carry "
+                 f"its own hard-coded copy, which the register could outrun in "
+                 f"silence.")
+    # the named counterexample: entry AND harvest inside the span, anchor outside
+    sol = "SOLUSDT:card:20240707T1600"
+    if sol in set(camp["campaign_id"]):
+        t3 = "\n".join(QT.render(sol, D))
+        good = ("could have taken it unchanged" not in t3
+                and "own quoted bars sit inside" in t3)
+        ok &= good
+        lines.append(f"[{'OK ' if good else 'BAD'}] the named counterexample "
+                     f"{sol}: entry 137.277 and harvest 140.556 are both closes "
+                     f"inside the span while the ANCHOR sits outside it, so the "
+                     f"two-flag test missed it and the screen read 'quotes no "
+                     f"price from the old lockbox'")
+    # no spring campaign may claim a C2/C3/C4 counterpart — the lane is new
+    spr = camp[camp["lane"] == "spring"]
+    claim = int(spr["in_tc4_book"].fillna(False).astype(bool).sum())
+    ok &= claim == 0
+    lines.append(f"[{'OK ' if not claim else 'BAD'}] {claim} of "
+                 f"{len(spr)} SPRING campaigns claim a Tier-C4 counterpart — "
+                 f"P-SPR-1 registers the lane GENUINELY NEW, so the only "
+                 f"correct number is zero")
+    j = pd.read_parquet(Q.TC4_JOURNAL)
+    n_in = int(camp["in_tc4_book"].fillna(False).astype(bool).sum())
+    good = n_in == len(j)
+    ok &= good
+    lines.append(f"[{'OK ' if good else 'BAD'}] in_tc4_book is a MEMBERSHIP "
+                 f"test against the filed journal, and it finds all "
+                 f"{n_in}/{len(j)} of Tier-C4's rows in this book")
+    lines.append("      FAILS IF: the screen makes a cross-build claim the "
+                 "tables cannot support. The first draft printed 'Tier-C2, C3 "
+                 "and C4 could have taken it unchanged' on 343 screens; 332 "
+                 "were false.")
+    return rec("F-Q-7", ok, lines)
+
+
 # ════════════════════════════════════════════════════════ F-KEY
 def f_keys() -> bool:
     """FAILS IF: any written table has a duplicate on its declared key, or the
@@ -667,6 +896,7 @@ def main() -> int:
     f_speed()
     f_champions()
     f_closure()
+    f_claims()
     f_keys()
     print("\n".join(T))
     n_ok = sum(RESULTS.values())

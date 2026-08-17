@@ -1752,3 +1752,74 @@ PROBE LEDGER: card m = 0. TC5's logged selection surface 79, written BEFORE the
      look. TC5-Q registers nothing and scores nothing. EXPLORATION — ungated;
      promotion requires registration and declares its m first.
 === END STATUS ===
+
+=== STATUS_APOLLO — 2026-08-16e ===
+LANE      APOLLO · branch v12-v1-census · seed 20260816
+CLASS     REPAIR — the sixth adversarial review, applied. No scored number moved.
+
+  A sixth review ran over the FINISHED TIER-C5-Q and confirmed eight findings.
+  Four were repairs already applied while it worked. FOUR WERE LIVE, and one
+  was a blocker.
+
+  Q-6  BLOCKER · THE COMPLETENESS CONTRACT WAS HALF A CONTRACT.
+       F-Q-1's leg asks whether every `_ms` field maps to a kind the ledger
+       CARRIES — satisfied by ONE row of a kind. The reviewer kept every
+       arming/trigger/exit row and exactly one each of the other seven kinds
+       (1,315 rows instead of 3,677; 1,483 real book bars with no snapshot)
+       and the whole fixture file returned 8/8 PASS: coverage read 0 missing
+       because it is seeded from the frame it checks, and the per-kind rows
+       read 1 · 1 · 0 with an [OK] beside each.
+       FIX: a CARDINALITY contract — every kind's count re-derived from the
+       campaigns table and the three ledgers, never from the instants frame,
+       with dedup honoured as DISTINCT (campaign_id, ts) pairs. Replayed
+       against the same sabotage it now FAILS seven kinds and the total.
+       The dedup itself is now disclosed in the manifest (collapsed 0 of 3,677).
+
+  Q-7  slice_provisional was the CARD lane's year count stamped on SPRING
+       rows — 68 campaigns (33 in 2023, 35 in 2024) wearing another lane's
+       thinness verdict. Now lane-scoped, with slice_n filed beside the flag.
+
+  Q-8  `--day` filtered on arm/entry/exit only: 314 days carrying 384
+       advances, 36 harvests and 18 adds printed "(nothing)" under a header
+       reading THE BOOK ON <day>. On 149 (campaign, day) pairs the day was
+       not even empty and the moving campaign was simply absent from an
+       unqualified table. The filter is now the instant ledger.
+
+  Q-9  THE SEAL VERDICT — a two-flag test carrying the sentence "Tier-C2, C3
+       and C4 could have taken it unchanged", FALSE on 332 of the 343 screens
+       that printed it (190 of them SPRING, a lane P-SPR-1 registers GENUINELY
+       NEW). It also missed campaigns whose ENTRY and HARVEST prices are
+       quoted inside the span while the anchor sits outside — SOL 2024-07-07
+       paid out on two formerly-sealed closes and printed "quotes no price
+       from the old lockbox".
+       FIX: `sealed_instants` counts every bar of the campaign's own life in
+       the span, off the FULL ledger, against a window READ FROM RC.LOCKBOX_WAS
+       rather than a hard-coded copy; `in_tc4_book` is a MEMBERSHIP test
+       against C4's filed journal, finding 11/11 of its rows. 96 campaigns
+       quote a formerly-sealed price. The test moved OUT of query_trade.py,
+       whose stated property is that it computes nothing.
+
+  NEW FIXTURE  F-Q-7 · THE RENDERED CLAIM. F-Q-0..F-Q-6 check what the tool
+       COMPUTES; not one read a sentence it PRINTS, and all three tool defects
+       lived in that gap. F-Q-7 checks the assertions against the source, the
+       named counterexamples by name. Its own first draft forgot the adds
+       ledger and disagreed with the filed column on exactly the 19
+       add-carrying campaigns — the filed number was right and the check was
+       short.
+
+  THE PATTERN, NAMED  Both surviving defects are A CHECK SATISFIED BY ONE
+       EXAMPLE — one row of a kind, one flag out of six bars. Sibling to the
+       circularity defect: the first compares a thing to itself, the second
+       asks "does this exist" when the question was "how many".
+
+  INTEGRITY
+    exactly one file moved: campaigns.parquet f946fb5774e8 -> 8680fe93624c.
+    instants / advances / harvests / adds / tape_full / coverage re-wrote
+    BYTE-IDENTICAL. F-Q-0 still asserts all 21 TC5 tables unchanged against
+    the manifest committed at HEAD.
+    TC5-Q 9/9 · TC5 11/11 · estate suite 334 passed, 1 skipped, exit 0.
+    query latency 33 ms against a 2,000 ms budget.
+
+  SESSION TOTAL  37 numbered repairs across FOUR pre-publication reviews
+    (TC4 12 + 2 unnumbered · TC5 16 · TC5-Q 5 + 4).
+=== END ===

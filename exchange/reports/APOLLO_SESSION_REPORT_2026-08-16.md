@@ -17,7 +17,7 @@
 | **TIER-C4** | the mean card — LPS-trail ratchet + creek/ice harvest on the v3 card, 118 sealed days | **the mean did not move; the SHAPE did.** maxDD halved, tail share −21 pts, and the ex-best-trade result changed sign. 12 repairs from an adversarial review run before publication |
 | **THE INTERVIEW REPLIES** | D12, D13(c), D15 and the seal-open ruling, enacted | **the box was opened.** D15 demoted from gate to diagnostic, by the operator's own word |
 | **TIER-C5** | full water — 2,534 days, 195 campaigns, two registrations, a 25-cell fleet, three labs | **nothing was supported, including the card.** 16 repairs, one reversed verdict, two headline numbers changed |
-| **TIER-C5-Q** | the queryable book + this report | **436 campaigns, 3,677 instants, zero holes, 195 ms a query.** Every trade in the book is now interrogable to the registry level |
+| **TIER-C5-Q** | the queryable book + this report | **436 campaigns, 3,677 instants, zero holes, 195 ms a query.** Every trade in the book is now interrogable to the registry level. 9 repairs over two reviews — including a completeness check a book could pass having lost 64% of itself |
 
 **THE ONE-LINE ARC.** A card that looked like **+0.6907 R per trade** over one quarter returns **+0.1724** over seven years, cannot be distinguished from zero at the estate's own bar, rests 84% on one asset — **and is now the first card in this estate that can be cross-examined trade by trade without a rebuild.** The measurement got worse and the instrumentation got very much better, and those are the same event: **you cannot find out that a number is thin without looking at it closely enough to find out.**
 
@@ -167,7 +167,7 @@ ETHUSDT short, entered 2025-10-29T16:00Z at 3903.54, R = 78.403688 = exactly 1.0
 
 *This section is written in my own voice because the card asks for it, and because a repair table that reads like a changelog teaches nothing. What follows is what I got wrong, how it was caught, and what the pattern is.*
 
-**Three adversarial reviews ran BEFORE publication — six lenses on TC4, seven on TC5, five on TC5-Q — and between them they produced 33 NUMBERED repairs** (TC4 12 numbered plus 2 unnumbered · TC5 16 · TC5-Q 5). Tier-C3's seal breach was found *after* its draft was published and put a wrong number on the remote. That does not happen any more, and the reason it does not is that the audit moved in front of the publish.
+**Four adversarial reviews ran BEFORE publication — six lenses on TC4, seven on TC5, then five and five again on TC5-Q — and between them they produced 37 NUMBERED repairs** (TC4 12 numbered plus 2 unnumbered · TC5 16 · TC5-Q 5 + 4). Tier-C3's seal breach was found *after* its draft was published and put a wrong number on the remote. That does not happen any more, and the reason it does not is that the audit moved in front of the publish.
 
 ### The 16 TC5 repairs, and the three that mattered
 
@@ -224,7 +224,7 @@ Adopted as F-C4-h's recommendation and made the house rule in TC5's transcript, 
 | tape rows | **13,861** — every instant plus a **DAILY 00:00Z spine** (11,232 rows) |
 | corridor | 2019-09-08 → 2026-08-16 = **6.938 years** ⊇ the ruled 3 |
 | **query latency** | **median 195 ms · worst 209 ms** cold subprocess · budget 2,000 ms · **9.6× headroom** |
-| fixtures | **8/8 PASS** |
+| fixtures | **9/9 PASS** |
 
 **THREE INSTANT KINDS THE COMMISSION DID NOT NAME WERE ADDED ANYWAY.** The card asked for arming / trigger / add / harvest / advance / exit. But **`anchor_bar`** is the bar the entry stop's price was quoted from — a published price that gets paid out — and **`pivot_bar`** is the same for every advance, and **`retrace`** is the bar that armed each add. **A book that prints those prices and cannot say what the walls looked like at the bar they came from is not queryable; it is nearly queryable.** Added on my own audit, not on the card's list: 1,233 extra instants, +591 tape rows.
 
@@ -254,7 +254,24 @@ A fifth adversarial review ran over TC5-Q. **Five repairs; two of them were mine
 
 **AND TWO I CAUGHT BEFORE THE REVIEW RETURNED, WHICH ARE THE SAME TWO PATTERNS AGAIN.** The coverage assert was **circular** — the tape is built *from* the instant ledger, so of course the ledger is covered — so F-Q-1 now leads with a **completeness contract derived by introspection**: every `_ms` field across `Trade`, `Advance`, `Add` and `Spring` must map to an instant kind the ledger carries. Add a timestamped event and forget a kind, and it fails. The coverage count is still printed, **labelled as bookkeeping, not evidence.**
 
-**NO SCORED NUMBER MOVED.** F-Q-0 asserts every one of TC5's 21 tables byte-identical to the manifest **committed at HEAD**, read out of git — not argued from the fact that Q1 writes elsewhere. The card froze three tables; the fixture freezes all 21, because a stage that moved a fourth would still have moved the record.
+### The SIXTH review — and the leg that let a book lose 64% of itself
+
+A sixth adversarial review ran over the finished TC5-Q. It confirmed eight findings; four were the repairs above, already applied while it worked. **Four were live, and one was a blocker.**
+
+| what was wrong | what changed |
+|---|---|
+| **THE COMPLETENESS CONTRACT WAS ONLY HALF A CONTRACT — and it was the leg I had just written to replace a circular one.** It asks whether every `_ms` field maps to a kind **the ledger carries**, and that is satisfied by *one row of a kind*. The reviewer kept every arming/trigger/exit row and exactly **one each** of advance, harvest, add, anchor_bar, pivot_bar, retrace and sweep — **1,315 rows instead of 3,677**, leaving 1,483 real book bars with no snapshot — and **the whole file returned 8/8 PASS.** The coverage table read `0 missing` (it is seeded from the frame it checks) and the per-kind rows read `1 · 1 · 0` with an `[OK]` beside each | **F-Q-1 now carries a CARDINALITY contract**: every kind's row count re-derived from the campaigns table and the three ledgers — *never* from the instants frame — with dedup honoured exactly (what a source demands is its count of **distinct** `(campaign_id, ts)` pairs, not its rows). Replayed against the same sabotage it now **fails seven kinds and the total**, while the circular leg still cheerfully reports `0 missing` — which is the clearest statement of why both legs exist |
+| **`slice_provisional` was the CARD lane's year count stamped onto SPRING rows.** 68 spring campaigns (33 in 2023, 35 in 2024) wore another lane's thinness verdict — a `True` on slices that hold 33 and 35 springs against a MIN_N of 30. The other three columns of that block are lane-scoped by construction; this one silently was not | lane-scoped, and `slice_n` is **filed beside the flag** so the count that produced the verdict is on the row. The screen now prints `slice 2023 · spring lane  n=33  PROVISIONAL False` |
+| **`--day` filtered on arm/entry/exit only**, so **314 days** carrying 384 advances, 36 harvests and 18 adds printed `(nothing)` under a header reading THE BOOK ON *day*, and exited 0. Worse than the empty case: on 149 `(campaign, day)` pairs the day was *not* empty, so a table printed with no qualifier at all and the moving campaign simply was not in it | the filter is now the **instant ledger** — the same ledger the coverage contract is written against — so a day is empty here only when the book did nothing. It reports what each campaign *did*: `advanced, pivot bar` |
+| **THE SEAL VERDICT WAS A NARROW TEST CARRYING A BROAD CLAIM** — two flags (the anchor's, and the pivots'), then the sentence *"Tier-C2, C3 and C4 could have taken it unchanged."* **False on 332 of the 343 screens that printed it.** 190 were SPRING campaigns, and P-SPR-1 registers that lane GENUINELY NEW — those builds have no such lane. And it missed campaigns whose **entry and harvest prices** are quoted inside the span while only the anchor sits outside: SOL 2024-07-07 paid out on two formerly-sealed closes and printed *"quotes no price from the old lockbox"* | the claim is replaced by two things that are **checked**. `sealed_instants` counts every bar of the campaign's *own* life inside the span, off the full ledger, against a window **read from `RC.LOCKBOX_WAS`** instead of a hard-coded copy the register could outrun in silence. `in_tc4_book` is a **membership test** against C4's filed journal on `(asset, entry, exit)` — it finds **11/11** of C4's rows. **96 campaigns** quote a formerly-sealed price, where the two-flag test found a fraction of that |
+
+**And the fix for the last one moved the test out of the tool**, because `query_trade.py`'s stated property is that it **computes nothing** — re-deriving a seal window at render time was a quiet breach of it that no fixture could see.
+
+**THE NEW FIXTURE IS THE ADMISSION.** F-Q-0..F-Q-6 check what the tool *computes*: hashes, coverage, determinism, latency, champions, closure. **Not one of them read a sentence the tool prints** — and all three tool defects lived in exactly that gap. **F-Q-7 · THE RENDERED CLAIM** now checks the assertions themselves against the source, including the named counterexamples by name. Its seal leg re-derives `sealed_instants` from the campaign row's own timestamps *and all three ledgers* — and its **first draft forgot the adds**, disagreeing with the filed column on exactly the 19 add-carrying campaigns whose add bars fall in the span. **The filed number was right and my check was short.** That is the second path earning its keep in the only way it can.
+
+**AND A THIRD PATTERN, NAMED.** Both surviving TC5-Q defects of this round were **a check that is satisfied by one example** — one row of a kind, one flag out of six bars. It is the presence/cardinality confusion, and it is the sibling of the circularity defect: the first compares a thing to itself, the second asks *does this exist* when the question was *how many*.
+
+**NO SCORED NUMBER MOVED.** F-Q-0 asserts every one of TC5's 21 tables byte-identical to the manifest **committed at HEAD**, read out of git — not argued from the fact that Q1 writes elsewhere. The card froze three tables; the fixture freezes all 21, because a stage that moved a fourth would still have moved the record. **The four repairs above moved exactly one file: `campaigns.parquet` (`f946fb57…` → `8680fe93…`).** Every other Q1 table — instants, advances, harvests, adds, tape_full, coverage — re-wrote byte-identical, which is itself the check that the repairs touched what they claimed to.
 
 **THE QUERYABLE BOOK IS THE NEW FLOOR FOR REGISTRATION WORDING.** A registration whose predicate cannot be evaluated against `campaigns`, `instants` and `tape_full` is a registration nobody can score without a rebuild, and this estate has already lost two registrations to definitions the contract never carried (H-VBT, leap/stair arrival). **From here, wording a claim means naming the columns it will be scored on.**
 
@@ -316,9 +333,9 @@ A fifth adversarial review ran over TC5-Q. **Five repairs; two of them were mine
 | `tierc5_rules.py` | 34,173 | `c27a5ecb425f` | `a20c579` |
 | `tierc5.py` | 101,988 | `ad912b385cc8` | `a20c579` |
 | `tierc5_fixtures.py` | 49,549 | `3ec5758314f4` | `a20c579` |
-| `tierc5q.py` | 27,491 | `5e3e8c280253` | *this paste* |
-| `query_trade.py` | 17,926 | `48a0f569e8a3` | *this paste* |
-| `tierc5q_fixtures.py` | 24,910 | `9252444a64b1` | *this paste* |
+| `tierc5q.py` | 37,568 | `43ebf7a0fecf` | *this paste* |
+| `query_trade.py` | 21,393 | `a24b0ca8726f` | *this paste* |
+| `tierc5q_fixtures.py` | 48,745 | `693fcb4351f8` | *this paste* |
 
 **Tables (local, gitignored; manifests tracked)**
 
@@ -334,7 +351,7 @@ A fifth adversarial review ran over TC5-Q. **Five repairs; two of them were mine
 
 | table | rows | sha (12) |
 |---|---:|---|
-| `campaigns` | 436 | `f946fb5774e8` |
+| `campaigns` | 436 | `8680fe93624c` |
 | `instants` | **3,677** | `012ec8ffad…` |
 | `advances` | 680 | `409b52c991e6` |
 | `harvests` | 98 | `80cab8f04aba` |
@@ -342,7 +359,7 @@ A fifth adversarial review ran over TC5-Q. **Five repairs; two of them were mine
 | `tape_full` | **13,861** | `b20ba3d2d0…` |
 | `coverage` | 15 | `13deddd1c7…` |
 
-**Fixture state at session close:** TC4 **10/10** · TC4 independent re-derivation **agrees on all 11 trades** · TC5 **11/11** · TC5-Q **8/8** · estate suite **333 passed, 1 skipped, 1 deselected, exit 0**.
+**Fixture state at session close:** TC4 **10/10** · TC4 independent re-derivation **agrees on all 11 trades** · TC5 **11/11** · TC5-Q **9/9** · estate suite **334 passed, 1 skipped, exit 0**.
 
 ---
 
@@ -429,4 +446,4 @@ PROBE LEDGER: card m = 0. TC5's logged selection surface 79, written BEFORE the
 
 ---
 
-*End of session report. APOLLO · 2026-08-16 · four stages · 28 repairs · one reversed verdict · nothing supported, including the card · and the book is queryable.*
+*End of session report. APOLLO · 2026-08-16 · four stages · four pre-publication reviews · 37 repairs · one reversed verdict · nothing supported, including the card · and the book is queryable — and now says only what it can show.*
