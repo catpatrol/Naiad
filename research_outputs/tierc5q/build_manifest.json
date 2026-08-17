@@ -1,0 +1,103 @@
+{
+  "corridor": {
+    "last_closed_4h_close": "2026-08-16T16:00:00Z",
+    "last_closed_4h_open": "2026-08-16T12:00:00Z",
+    "note": "the corridor END is the latest closed 4h bar PRESENT IN THE OFFLINE CACHE; this build makes no network call, so the lag against wall clock is disclosed rather than closed.",
+    "panel_start": "2019-09-08T16:00:00Z",
+    "per_asset_first_4h": {
+      "BTCUSDT": "2019-09-08T16:00:00Z",
+      "ETHUSDT": "2019-11-27T04:00:00Z",
+      "NEARUSDT": "2020-10-15T08:00:00Z",
+      "SOLUSDT": "2020-09-14T04:00:00Z",
+      "ZECUSDT": "2020-02-05T08:00:00Z"
+    },
+    "span_days": 2534.0
+  },
+  "counts": {
+    "adds": 117,
+    "advances": 680,
+    "ae_mean_r_tc_book": 0.310491,
+    "campaigns": 436,
+    "campaigns_add_carrying": 60,
+    "campaigns_card": 195,
+    "campaigns_spring": 241,
+    "champion_blocks": [
+      "1h_ema4618",
+      "4h_ema3618",
+      "12h_ema889",
+      "1d_ema889"
+    ],
+    "champion_warm_pct": {
+      "12h_ema889": 81.36,
+      "1d_ema889": 61.94,
+      "1h_ema4618": 92.01,
+      "4h_ema3618": 74.42
+    },
+    "corridor_years": 6.938,
+    "harvests": 98,
+    "instants": 3677,
+    "instants_by_kind": {
+      "add": 117,
+      "advance": 680,
+      "anchor_bar": 436,
+      "arming": 436,
+      "exit": 436,
+      "harvest": 98,
+      "pivot_bar": 680,
+      "retrace": 117,
+      "sweep": 241,
+      "trigger": 436
+    },
+    "missing_instants": 0,
+    "spine_rows": 11232,
+    "tape_instant_labels": {
+      "add": 6,
+      "add+advance+retrace": 2,
+      "add+pivot_bar+retrace": 6,
+      "add+retrace": 103,
+      "advance": 642,
+      "advance+arming": 1,
+      "advance+arming+trigger": 2,
+      "advance+harvest": 3,
+      "anchor_bar": 169,
+      "anchor_bar+arming+exit+pivot_bar+sweep": 9,
+      "anchor_bar+arming+exit+sweep": 12,
+      "anchor_bar+arming+exit+sweep+trigger": 1,
+      "anchor_bar+arming+pivot_bar+sweep": 9,
+      "anchor_bar+arming+pivot_bar+sweep+trigger": 70,
+      "anchor_bar+arming+sweep": 53,
+      "anchor_bar+arming+sweep+trigger": 87,
+      "anchor_bar+pivot_bar": 7,
+      "arming": 145,
+      "arming+harvest+trigger": 1,
+      "arming+pivot_bar": 1,
+      "arming+pivot_bar+trigger": 1,
+      "arming+trigger": 44,
+      "exit": 399,
+      "exit+harvest": 1,
+      "exit+pivot_bar": 3,
+      "harvest": 83,
+      "harvest+pivot_bar": 9,
+      "harvest+trigger": 1,
+      "pivot_bar": 524,
+      "pivot_bar+retrace": 1,
+      "pivot_bar+trigger": 10,
+      "retrace": 5,
+      "spine": 11232,
+      "trigger": 219
+    },
+    "tape_rows": 13861
+  },
+  "elapsed_s": 4.4,
+  "seed": 20260816,
+  "sha": {
+    "adds": "b145236af10760fa4a50ffb8634314cba2a1c4899bbf2170f096094ad1fa4d4a",
+    "advances": "409b52c991e62df677a95a4e7ca6c4d11e130ad6775936ab4e4a6aed89d4357b",
+    "campaigns": "f946fb5774e8782e9ec3ce4b68b48d444a66d5fc236e907bd5bedfc4ccc22fca",
+    "coverage": "13deddd1c7093f4eac30e07b258fd02dca9d2148495d8d507922d984c73ee274",
+    "harvests": "80cab8f04ababfb8a66d45b9ce69a8f2f1df5cd681ab7da736e0797063590065",
+    "instants": "012ec8ffaddb87935b548c80dbd9f89e2acac67f6afdb8dff589b33c58dead9b",
+    "tape_full": "b20ba3d2d0c4e820bcff24d1bbdf0fe107e9fc2db12878f80c6237df184a0a66"
+  },
+  "stage": "TIER-C5-Q \u00b7 Q1 the queryable book"
+}
