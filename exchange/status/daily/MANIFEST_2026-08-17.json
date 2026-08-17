@@ -6,40 +6,43 @@
   "branch": "v12-v1-census",
   "eol_config": {
     "byte_comparison_valid": true,
-    "core_autocrlf": "true",
+    "core_autocrlf": null,
     "gitattributes_present": true,
-    "gitattributes_star_minus_text": true
+    "gitattributes_star_minus_text": false
   },
-  "generated_utc": "2026-08-07T10:47:54Z",
-  "head": "d22380128b8d1ab3243f60550a5304f3055c5600",
+  "generated_utc": "2026-08-17T10:00:02Z",
+  "head": "4cf0e18257dc44b96ad65d92e4b30b2f127baf30",
   "lane_last_commit": {
     "brief": null,
     "docs": {
-      "committed_iso": "2026-08-05T19:45:42-03:00",
-      "sha": "24ea673f1f1b47fc81136e9af68d8037483c3997",
-      "subject": "docs: archive 44 superseded ARGUS artifacts to docs/history/argus/"
+      "committed_iso": "2026-08-11T19:14:55-03:00",
+      "sha": "292e8390b1198f68b32f89206f8f2e7657072984",
+      "subject": "docs: closing 11-entry memory snapshot post-redraft + phase-archive relocation pointer (ruling B, archives to D:/Naiad)"
     },
     "exchange": {
-      "committed_iso": "2026-08-05T21:13:00-03:00",
-      "sha": "d22380128b8d1ab3243f60550a5304f3055c5600",
-      "subject": "exchange: auto-publish 2026-08-06"
+      "committed_iso": "2026-08-17T04:54:14-03:00",
+      "sha": "4cf0e18257dc44b96ad65d92e4b30b2f127baf30",
+      "subject": "exchange: auto-publish 2026-08-16"
     },
     "ops": {
-      "committed_iso": "2026-08-05T19:25:35-03:00",
-      "sha": "6d11e9c9a13cb68c8820504b0f8ff67de83bc262",
-      "subject": "ops: cycle 6 item 4 - ALL 42 MATCH; PARITY CERTIFIED, banner flipped down"
+      "committed_iso": "2026-08-12T07:52:01-03:00",
+      "sha": "75b74442fb8572fd33b0d69b0858b9b4157379f1",
+      "subject": "ops: queue 004 Phase A A-2 - repoint every gate and constant to C:/Naiad"
     },
     "study-phase": null
   },
   "ledger_head": {
     "present": true,
-    "size": 255011,
+    "size": 259298,
     "title": "# Data-Spend Ledger"
   },
   "manifest_version": "1.1",
-  "onedrive_running": false,
-  "origin_head": "d22380128b8d1ab3243f60550a5304f3055c5600",
-  "queue_open": 0,
+  "onedrive_running": null,
+  "origin_head": "4cf0e18257dc44b96ad65d92e4b30b2f127baf30",
+  "queue_open": 4,
+  "queue_ratified_unbuilt": 4,
+  "queue_total": 11,
+  "queue_unratified": 1,
   "reviewer_box": [
     {
       "match_head": false,
@@ -54,8 +57,8 @@
       "match_head": false,
       "path": "exchange/status/CADENCE.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "9acd2a7f41178faea53a5ddee9e006de4c2a5a4710936abf138087dc72fcb951",
-      "size": 6190,
+      "sha256_worktree": "82793eee8b86c67f9532e0d14d3fa7f3f5fa2c6720124c16c0e407f41534a865",
+      "size": 10441,
       "source_guess": null,
       "tracked": true
     },
@@ -63,8 +66,8 @@
       "match_head": false,
       "path": "exchange/status/CONVENTIONS.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "0f0fd1eaeff147cf8c9d50e1f9240c6f98c72a32d9fc7052970276b541851d4f",
-      "size": 42147,
+      "sha256_worktree": "c3427babf9ad9848b3e8479074c4a841ff55d3d1b37f109ee1f1291fc23e314a",
+      "size": 67752,
       "source_guess": null,
       "tracked": true
     },
@@ -72,8 +75,17 @@
       "match_head": false,
       "path": "exchange/status/HEARTBEAT.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "fd309fc6b0eae13868235b2ca5853bd2672431e56a0e01178b6b816107ea10de",
-      "size": 198,
+      "sha256_worktree": "1d3f8e22b9b117c02e9a5ef76195a39439c6c8fa25a8b1f0c51a26a2aa9fd457",
+      "size": 193,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/INTERFACE_PUBLISHED.md",
+      "sha256_head_blob": null,
+      "sha256_worktree": "70c3f36894684442871f57c6435380fbcea9ca9e23680e356ce610f16f93c61e",
+      "size": 48885,
       "source_guess": null,
       "tracked": true
     },
@@ -81,8 +93,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_APOLLO.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "3c2068d9da4a5ef5f3efa96b44b2aa697292f5043407c21fc015b5be2cf3fb28",
-      "size": 3616,
+      "sha256_worktree": "d43d64e002644dcfced3f67d5aea874af2b14d23be3233e68155af0845255218",
+      "size": 145139,
       "source_guess": null,
       "tracked": true
     },
@@ -90,8 +102,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_ARGUS.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "362220e0afc2348fdb238f2212602dd55a0bd341b8d0b4b2b553f8750bacbdb0",
-      "size": 3894,
+      "sha256_worktree": "e69b165faebc143c94603f35555a3f220e7fd2f60ebfa4dfd87b1f3fdbef6ecb",
+      "size": 21159,
       "source_guess": null,
       "tracked": true
     },
@@ -99,8 +111,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_ATHENA.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "faea185fda1b165a9e40f2125d5a7a8602b9a6cd9dfdb486b452a3a9a39cf6b7",
-      "size": 13583,
+      "sha256_worktree": "68f8da7d8423cfad0211196a2a4a7d7765726c4a61491b3b695b74dd17fe7954",
+      "size": 104471,
       "source_guess": null,
       "tracked": true
     },
@@ -108,8 +120,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_DIONYSUS.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "ceb33bbaeaff1b3bbadb9880ff9cf7bb02e845dbd127f72f6c0d992365a61207",
-      "size": 2383,
+      "sha256_worktree": "6ff6a81bbfd3e7e56c6383570c1337c907495c68f13f092c42cd5bbedc2c0fe5",
+      "size": 5685,
       "source_guess": null,
       "tracked": true
     },
@@ -117,8 +129,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_HEPHAESTUS.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "228118f70c71ae228fa8d6d2068616b8f5649f1045a7789a29becd0c40cbc423",
-      "size": 2910,
+      "sha256_worktree": "08d315179f4ff002259c43d65002e00487cbba00b3d84ddcbf59989e8530ffe2",
+      "size": 14061,
       "source_guess": null,
       "tracked": true
     },
@@ -126,8 +138,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_HERMES.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "1164dc7e4d91a54ff6be880bbd2755cbc057603a5bfd60adb37b2db28665ed6e",
-      "size": 5156,
+      "sha256_worktree": "ecce64c8b39067d6a2d78ae6c353cd6bde9f307fbfbb6bdc6779be9ead29abcf",
+      "size": 8567,
       "source_guess": null,
       "tracked": true
     },
@@ -144,8 +156,17 @@
       "match_head": false,
       "path": "exchange/status/RETENTION.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "cfd36a9896a3e1f0e5e5e7560abfa1df4a7673284981a5484cceebb2e78fe8c3",
-      "size": 2487,
+      "sha256_worktree": "ae2be3cef5b79f497f9b502416ee4f8ec0a6cf161907a682d1e7981c35f4d3b9",
+      "size": 3175,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/ROTATION_LOG.md",
+      "sha256_head_blob": null,
+      "sha256_worktree": "77b9e6a50e14c8fec06d7e7bea9d69c65292ed9d359d721203af10312ac7a63f",
+      "size": 2744,
       "source_guess": null,
       "tracked": true
     },
@@ -153,35 +174,8 @@
       "match_head": false,
       "path": "exchange/status/SECOND_ACCOUNT.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "a49897c31d4b306b53014f53dadbc60e17949e438c8464e0126d601df19ae31f",
-      "size": 1891,
-      "source_guess": null,
-      "tracked": true
-    },
-    {
-      "match_head": false,
-      "path": "exchange/status/daily/DAILY_2026-07-28.md",
-      "sha256_head_blob": null,
-      "sha256_worktree": "e37cb58a723841892c5657c410a0577f10d39a12b5f64c505e481828057ac02b",
-      "size": 1850,
-      "source_guess": null,
-      "tracked": true
-    },
-    {
-      "match_head": false,
-      "path": "exchange/status/daily/DAILY_2026-08-02.md",
-      "sha256_head_blob": null,
-      "sha256_worktree": "a672f2a356739b65af832a012754fc5066b042b6f6d147dbc725a06b688eef9c",
-      "size": 6521,
-      "source_guess": null,
-      "tracked": true
-    },
-    {
-      "match_head": false,
-      "path": "exchange/status/daily/DAILY_2026-08-03.md",
-      "sha256_head_blob": null,
-      "sha256_worktree": "53a818da17d272c1c8288803c60138dca6e8c40fa41074a74126852277368d59",
-      "size": 4552,
+      "sha256_worktree": "934058018f1c67a0857a4ebdc8282b6446d1deb57897d184aab1b0483a01b2ab",
+      "size": 2941,
       "source_guess": null,
       "tracked": true
     },
@@ -196,37 +190,118 @@
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-07-28.json",
+      "path": "exchange/status/daily/DAILY_2026-08-08.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "9158aa37698deb4b13e7edfd8580baf11566f8ae4593e512e8ce1c4c91a7e50d",
-      "size": 26000,
+      "sha256_worktree": "3b591715fdcab1eed55f5383b904b3f3c0b58231e8abe600e70a005b472ab75e",
+      "size": 3889,
       "source_guess": null,
       "tracked": true
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-08-02.json",
+      "path": "exchange/status/daily/DAILY_2026-08-09.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "60a84465ad1a1f7d03d53c8ebda98f05397835503194a4444adf31159243e20b",
-      "size": 19644,
+      "sha256_worktree": "3fa71f6f27bd39e8dd6bb40bb497d8a8edee77542682eddd2db2b4f61050b105",
+      "size": 2370,
       "source_guess": null,
       "tracked": true
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-08-03.json",
+      "path": "exchange/status/daily/DAILY_2026-08-12.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "c9293f2a6fc97bf966c4b0b1da1ce9f37409a7976ea226f103627b744c288057",
-      "size": 21115,
+      "sha256_worktree": "9214b4ce88c249654d36b2d4c816da4805647f2d3d404836fb5565eeff855ea2",
+      "size": 5644,
       "source_guess": null,
       "tracked": true
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-08-05.json",
+      "path": "exchange/status/daily/DAILY_2026-08-13.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "d7a1dbd8641664b3c15883ff08793b11baaf632f0976c6c73c80ad81f38f8271",
-      "size": 22600,
+      "sha256_worktree": "2815c04e900ee0ba34cd74d0fff4045eb939d914048c2ca31ac640dc39c591da",
+      "size": 4966,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/DAILY_2026-08-14.md",
+      "sha256_head_blob": null,
+      "sha256_worktree": "bd49c04518cbb05f68171e0ae03878ad69f8efb3492722748244378f07dde489",
+      "size": 5064,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/DAILY_2026-08-15.md",
+      "sha256_head_blob": null,
+      "sha256_worktree": "9862c9dcd395d4cea6cb3c1ce0a7fa541306161821a8e300de02685a14aa7b0d",
+      "size": 5469,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-07.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "6940eb5dafb41cc69a200251fc95a4ffa375d4e89ee9c0ea88989197c6513461",
+      "size": 22898,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-08.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "b818c992e5ef42e6b399d187ca84e43e48347d1e366c96ccc69ac56d792b2ee1",
+      "size": 23296,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-11.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "0a3ee1a3b279ebf6862f783383396e5d2515de350b58d1ceaf2250a1c7749324",
+      "size": 24916,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-12.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "69fb3ddc8a8f2e41541bd2c93d0f4b00bdf54ca591534022d127713eeb67f27b",
+      "size": 23778,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-13.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "17acee4bc700f3c8ffc638f5fb0e35be900a65d28c0e6ecd57c1b9e8c723155b",
+      "size": 23755,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-14.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "c576ed8357eae7eea8e6399b8615be835776b535a202d64b5617fb8c2141fe85",
+      "size": 23924,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-15.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "cc75138bbe75ed70c69399f20a41051e183ac6c170ebbaa8c5468ad63652b366",
+      "size": 24039,
       "source_guess": null,
       "tracked": true
     }
@@ -382,6 +457,14 @@
       "sha256_head_blob": "37f6869631db2b831ea9413fa91799cdfd78bd8e6bbac01330af2e1574bef6c0",
       "sha256_worktree": "37f6869631db2b831ea9413fa91799cdfd78bd8e6bbac01330af2e1574bef6c0",
       "size": 1169,
+      "tracked": true
+    },
+    {
+      "match_head": true,
+      "path": "configs/tierc2_paper.yaml",
+      "sha256_head_blob": "5984be379dff17c8807a5a74c0064f262d1c13cfbffd4f4b6e9771e0fbe3b011",
+      "sha256_worktree": "5984be379dff17c8807a5a74c0064f262d1c13cfbffd4f4b6e9771e0fbe3b011",
+      "size": 4673,
       "tracked": true
     },
     {
@@ -547,9 +630,9 @@
     {
       "match_head": true,
       "path": "scripts/reviewer_manifest.py",
-      "sha256_head_blob": "409f2fe6a0749e4f90e9a8a0e8c6be358228592c8914bb0a55bcbc46058bb053",
-      "sha256_worktree": "409f2fe6a0749e4f90e9a8a0e8c6be358228592c8914bb0a55bcbc46058bb053",
-      "size": 30057,
+      "sha256_head_blob": "d7f04b2995c816e6275124363180b4e0d863090f935e2bd382b9bd72f3b67a59",
+      "sha256_worktree": "d7f04b2995c816e6275124363180b4e0d863090f935e2bd382b9bd72f3b67a59",
+      "size": 33696,
       "tracked": true
     },
     {
@@ -571,9 +654,9 @@
     {
       "match_head": true,
       "path": "LEDGER.md",
-      "sha256_head_blob": "37749afa002a66e69227402153db86c4488a147aeb02547e8bc2449a9f036c81",
-      "sha256_worktree": "37749afa002a66e69227402153db86c4488a147aeb02547e8bc2449a9f036c81",
-      "size": 255011,
+      "sha256_head_blob": "4d58d591668badffc34624e81feddf106ac94a92ca64aceafd4f871e84d31c76",
+      "sha256_worktree": "4d58d591668badffc34624e81feddf106ac94a92ca64aceafd4f871e84d31c76",
+      "size": 259298,
       "tracked": true
     },
     {
@@ -602,44 +685,12 @@
     }
   ],
   "status_porcelain": [
-    "?? \"Cascade Rewire.html\"",
-    "?? Cascade_Atlas_CENSUS_1b.html",
-    "?? Cascade_Atlas_CENSUS_1b_v2_1.html",
-    "?? HANDOFF_ATHENA_2026-08-03_FULL_STATE_1.md",
-    "?? PRIMER_HERMES_2026-08-03_v2_FIRST_RUN.md",
-    "?? SS_Reassessment_Synthesis_2026-08-03.md",
-    "?? exchange/reports/SS_SYSTEM_SYNTHESIS_2026-08-06.md"
+    "?? \"research_outputs/CENSUS-2A \\342\\200\\224 ENTRIES & EXITS, SEEN.html\"",
+    "?? \"research_outputs/Cascade Atlas v2 \\342\\200\\224 CENSUS-1b MTF cross structure.html\"",
+    "?? \"research_outputs/Cascade Atlas v2 \\342\\200\\224 CENSUS-1b MTF cross structure_files/\"",
+    "?? \"research_outputs/Cascade Rewire.html\"",
+    "?? \"research_outputs/Naiad Daily Brief v2 \\342\\200\\224 Confluence Prototype \\342\\200\\224 2026-07-27.html\"",
+    "?? research_outputs/VIZ3-4/"
   ],
-  "untracked_root": [
-    {
-      "name": "Cascade Rewire.html",
-      "sha256": "6fc84a2e318cc442bfebf190bdbb8aa8caf22ed2381d0310f87ba47e2b976fdb",
-      "size": 243474
-    },
-    {
-      "name": "Cascade_Atlas_CENSUS_1b.html",
-      "sha256": "1af63dffa477014bd1e259fa42eaa4c00e95c7bebe3a44d4fc0a92b604214998",
-      "size": 23511
-    },
-    {
-      "name": "Cascade_Atlas_CENSUS_1b_v2_1.html",
-      "sha256": "bc303723dcb97100ef5ece04c4968c2bd6139e9ddb9a2c818f508d3ed1cb7709",
-      "size": 51802
-    },
-    {
-      "name": "HANDOFF_ATHENA_2026-08-03_FULL_STATE_1.md",
-      "sha256": "4efdeeb112d95fd2099a68f3c7bb6a5b19c01b771d4e8dbb6f34eb622230ec90",
-      "size": 27586
-    },
-    {
-      "name": "PRIMER_HERMES_2026-08-03_v2_FIRST_RUN.md",
-      "sha256": "846b8646ed438206d9942fc8fda3040cd35814dadd147d0da13c6ecea971daa2",
-      "size": 13460
-    },
-    {
-      "name": "SS_Reassessment_Synthesis_2026-08-03.md",
-      "sha256": "9d6e7ea747544561af509bbcc845648fa66367cae8157feec1916b18ab4cbff1",
-      "size": 8282
-    }
-  ]
+  "untracked_root": []
 }
