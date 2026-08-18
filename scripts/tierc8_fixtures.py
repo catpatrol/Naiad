@@ -127,10 +127,17 @@ def f_jrn():
     lines.append(f"[{'OK ' if not bad else 'BAD'}] and every rollup's n_legs "
                  f"equals the leg rows filed for it: {bad} disagree")
     # the flags read ALL legs
-    hb = int((roll["harvested_any_leg"].astype(bool)
-              != (legs.groupby(["asset", "entry_ms"])["leg_harvested"]
-                  .any().reset_index(drop=True).reindex(
-                      range(len(roll))).fillna(False).astype(bool))).sum())
+    # THE FLAGS-READ-ALL-LEGS LEG WAS DEAD CODE — `hb` was computed and never
+    # asserted on. It is now a join, and it is asserted.
+    anyleg = (legs.groupby(["asset", "entry_ms"])["leg_harvested"].any()
+              .rename("any_leg").reset_index())
+    jj = roll.merge(anyleg, on=["asset", "entry_ms"], how="left")
+    hb = int((jj["harvested_any_leg"].astype(bool)
+              != jj["any_leg"].fillna(False).astype(bool)).sum())
+    ok &= hb == 0
+    lines.append(f"[{'OK ' if not hb else 'BAD'}] `harvested_any_leg` equals "
+                 f"the OR over that chain's filed leg rows on all {len(jj)} "
+                 f"rollups: {hb} disagree")
     multi = int((roll["n_harvests"] > 1).sum())
     lines.append(f"[OK ] {multi} chains harvest on MORE THAN ONE leg — under "
                  f"TIER-C7's single-campaign schema they filed harvested from "
@@ -218,13 +225,48 @@ def f_match():
     lines, ok = [], True
     B = books()
     lo, hi = B["lo"], B["hi"]
+    # THE FRACTAL SET IS REBUILT FROM RAW BARS, AND THE FIRST DRAFT DID NOT.
+    # It called `T8.fractals(sym, 2, 2)` — which returns the IDENTICAL MEMOISED
+    # OBJECT `_ride_leg` handed to `matched_step`, because `card.trail_l/r` ARE
+    # (2,2). `a is b` was True. The docstring claimed "rebuilt independently"
+    # and the build document repeated it; both were false.
+    #
+    # A reviewer shifted every confirmation key by +3 bars in the SHARED
+    # builder and this leg reported "all 2,087 advances ... 0 do not -> PASS"
+    # while 1,875 of them (89.8%) sat on a bar with no (2,2) pivot. Five legs
+    # stayed green, F-CTRL included, because v6 and v8 read the same poisoned
+    # cache. The leg could see a broken ANCHOR (a reviewer deleted the pivot
+    # gate and it failed correctly, 7,655 of 9,321) but not a broken CLOCK.
+    #
+    # A strict (2,2) fractal low at bar i is l[i] < l[i±1] and l[i] < l[i±2],
+    # confirmed at i+2. That is nine lines of numpy and it shares nothing with
+    # the estate's builder.
+    def raw_conf(sym: str, low: bool) -> set:
+        f = T8.frame(sym)["f"]
+        v = np.asarray(f.l if low else f.h, float)
+        n = len(v)
+        out = set()
+        for i in range(2, n - 2):
+            a1, b1, c1 = v[i - 2], v[i - 1], v[i]
+            d1, e1 = v[i + 1], v[i + 2]
+            if low:
+                if c1 < a1 and c1 < b1 and c1 < d1 and c1 < e1:
+                    out.add(i + 2)
+            else:
+                if c1 > a1 and c1 > b1 and c1 > d1 and c1 > e1:
+                    out.add(i + 2)
+        return out
+
+    RAW: dict = {}
     tot = badbar = 0
     for kind in ("pivot", "e26", "e89", "m_edge", "max_pivot_e89"):
         bk = T8.run_cell(T8.Card(name=kind, anchor_kind=kind,
                                  anchor_offset=0.50), lo, hi)
         for t in bk:
-            fr = T8.fractals(t.symbol, RC.RATCHET_PIVOT_L, RC.RATCHET_PIVOT_R)
-            src = fr.low_by_conf if t.direction == 1 else fr.high_by_conf
+            key = (t.symbol, t.direction == 1)
+            if key not in RAW:
+                RAW[key] = raw_conf(t.symbol, t.direction == 1)
+            src = RAW[key]
             for a in t.advances:
                 tot += 1
                 if int(a.conf_i) not in src:
@@ -233,7 +275,9 @@ def f_match():
     ok &= g
     lines.append(f"[{'OK ' if g else 'BAD'}] TIMING IS MATCHED: all {tot:,} "
                  f"advances across 5 anchor cells sit on a bar where a (2,2) "
-                 f"fractal confirmed — {badbar} do not")
+                 f"fractal confirmed IN A SET REBUILT FROM RAW BARS by a scan "
+                 f"that shares no code with the estate's builder — {badbar} "
+                 f"do not")
     lines.append("      FAILS IF: one does not. That is the confound this "
                  "phase exists to remove: TIER-C7's bake-off let a smooth "
                  "anchor advance off the pivot clock and then compared the "
@@ -319,7 +363,12 @@ def f_loao():
             for t in base]
     r = T7.loao(fake, base, "SYNTHETIC", two_sample=False)
     n_ab = r["loao_excluding_above"]
-    g = not r["loao_clears_3_of_5"] or n_ab < 3
+    # NO ESCAPE DISJUNCT. The first draft was
+    #     `not r["loao_clears_3_of_5"] or n_ab < 3`
+    # and the second half could satisfy it without the 3/5 line ever being
+    # consulted — a falsification test with a way out is not one. The leg now
+    # demands BOTH: the line refuses, AND it refuses for the stated reason.
+    g = (not r["loao_clears_3_of_5"]) and n_ab < 3
     ok &= g
     lines.append(f"[{'OK ' if g else 'BAD'}] SYNTHETIC BOOK lifted on 2 of 5 "
                  f"assets → loao {r['loao_line']}, clears_3_of_5="

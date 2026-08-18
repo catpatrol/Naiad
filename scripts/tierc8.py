@@ -340,12 +340,16 @@ def _ride_leg(sym, card, d, ti, entry_px, stop0, r_dist, hi_i, chain_r=None):
                        else "bell_89_316" if bool(x["b_up"][j]) else None)))
         if bell:
             exit_i, exit_px, exit_reason = j, float(f.c[j]), bell
+            if touch:
+                blocked = "bell"          # the label TIER-C7 recorded
             break
         if card.time_stop_bars is not None and (j - ti) >= card.time_stop_bars:
             exit_i, exit_px, exit_reason = j, float(f.c[j]), "time_stop"
             break
         if card.ae_abort_r is not None and uadv <= -abs(card.ae_abort_r):
             exit_i, exit_px, exit_reason = j, float(f.c[j]), "ae_abort"
+            if touch:
+                blocked = "ae_abort"
             break
         if touch:
             harv = (j, RC.harvest_fill_px(f.c[j]),
@@ -435,6 +439,21 @@ def replay(sym, card, lo_ms, hi_ms):
         raise SystemExit(
             f"HALT: tierc8.replay implements no adds; got "
             f"adds_max={card.adds_max}. P-CASC-1's cascade lives in tierc5.")
+    # AND THE TWO KNOBS THE FIRST GUARD MISSED. A guard that names two of the
+    # four knobs this module drops is a guard that certifies the other two by
+    # omission. `seal_open=False` would ask for the old lockbox mask, which
+    # this module never threads; `trail_extra_buf_atr` is the S-BUF dimension,
+    # which `matched_step` does not read because the offset arrives as
+    # `anchor_offset`. Both would run silently as their defaults.
+    if not card.seal_open:
+        raise SystemExit(
+            "HALT: tierc8.replay does not thread the lockbox mask; "
+            "seal_open=False would run as if the box were open.")
+    if card.trail_extra_buf_atr:
+        raise SystemExit(
+            f"HALT: tierc8's ladder takes its offset from `anchor_offset`, not "
+            f"`trail_extra_buf_atr` (got {card.trail_extra_buf_atr}); the S-BUF "
+            f"dimension would be silently dropped.")
     lo_i, hi_i = _idx_range(f.open_ms, lo_ms, hi_ms)
     lo_i = max(lo_i, RC.WARMUP_BARS)
     if hi_i < lo_i:
@@ -470,7 +489,19 @@ def replay(sym, card, lo_ms, hi_ms):
         # SIZE-WEIGHTED, ACROSS LEGS — the TC7-a class, retired by schema.
         mfe_r = max(sz * (lg["mfe"] - lg["entry_px"]) * d / stp.r_dist
                     for sz, lg in zip(sizes, chain["legs"]))
-        mae_r = min(sz * lg["mae"] for sz, lg in zip(sizes, chain["legs"]))
+        # THE CHAIN'S MAE IS NOT THE DEEPEST LEG'S.
+        # `min` over legs answers "how deep did the worst leg go", which is a
+        # LEG statistic wearing a CHAIN name — on 7 chains it read SHALLOWER
+        # than the campaign's real worst moment because leg 2's sized excursion
+        # is scaled down while leg 1 already banked a loss. The chain's adverse
+        # excursion is the deepest point of its CUMULATIVE path: leg 1's
+        # realised contribution carried into leg 2's excursion.
+        run = 0.0
+        mae_r = 0.0
+        for k_, (sz, lg) in enumerate(zip(sizes, chain["legs"])):
+            mae_r = min(mae_r, run + sz * lg["mae"])
+            run += (sz * (lg["exit_px"] - lg["entry_px"]) * d / stp.r_dist)
+        mae_r = float(mae_r)
         last_ratchet = bool(last["exit_reason"] == "stop" and last["advances"]
                             and abs(last["final_stop"] - last["stop0"]) > 1e-12)
         t = RC.Trade(
@@ -479,7 +510,17 @@ def replay(sym, card, lo_ms, hi_ms):
             entry_ms=int(f.open_ms[ti]), entry_px=entry_px,
             stop_px=stp.stop_px, r_dist=stp.r_dist, anchor=stp.anchor,
             anchor_bar_ms=int(f.open_ms[stp.anchor_bar]) if stp.anchor_bar >= 0 else -1,
-            anchor_was_sealed=False, atr_at_entry=atr_sig,
+            # NOT HARDCODED. The first draft filed `False` on every row and
+            # published 41 wrong values in the control journal. The seal is
+            # OPEN, so the flag never gates anything — but it is a DISCLOSURE
+            # of which prices were once locked away, and a disclosure that
+            # always says "no" is worse than absent.
+            anchor_was_sealed=bool(
+                stp.anchor_bar >= 0
+                and _ms(RC.LOCKBOX_WAS[0])
+                <= int(f.open_ms[stp.anchor_bar])
+                <= _ms(RC.LOCKBOX_WAS[1]) + 86_400_000 - 1),
+            atr_at_entry=atr_sig,
             disp_at_arming=arm.disp,
             exit_i=last["exit_i"], exit_ms=int(f.open_ms[last["exit_i"]]),
             exit_px=last["exit_px"], exit_reason=last["exit_reason"],

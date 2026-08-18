@@ -2215,3 +2215,74 @@ CLASS     TIER-C7-C + TIER-C8 — THE LAST IN-SAMPLE RUN.
     the freeze is v6 PLAIN, not v6-plus-an-arm. Awaiting ATHENA skeleton.
     The sea is next.
 === END ===
+
+=== STATUS_APOLLO — 2026-08-18b ===
+LANE      APOLLO · branch v12-v1-census · seed 20260818
+CLASS     CORRECTION — the TIER-C8 review returned AFTER publication.
+
+  I PUBLISHED BEFORE THE REVIEW RETURNED. The house rule since Tier-C3 is that
+  the audit runs IN FRONT OF the publish; this time the workflow was still
+  running when the commit went out, and the corrections below were applied to
+  a record already on the remote. That is the exact situation the rule exists
+  to prevent. Recorded as a process failure, not a footnote.
+
+  FIVE LENSES IN READ-ONLY WORKTREES, 24 FINDINGS CONFIRMED, NO BLOCKERS.
+
+  THE TWO THAT MATTERED.
+    (1) F-C8-MATCH READ THE PROGRAM'S OWN MEMOISED FRACTAL OBJECT while its
+        docstring — and this build's document — claimed an independently
+        rebuilt set. `T8.fractals(sym,2,2)` returns the identical cached object
+        `_ride_leg` handed to `matched_step`. A reviewer shifted every
+        confirmation key +3 bars in the shared builder: the leg reported "all
+        2,087 advances ... 0 do not -> PASS" while 1,875 of them (89.8%) sat on
+        a bar with NO (2,2) pivot, and FIVE legs stayed green INCLUDING F-CTRL,
+        because v6 and v8 read the same poisoned cache. It could see a broken
+        ANCHOR (a deleted pivot gate failed it correctly, 7,655 of 9,321) but
+        not a broken CLOCK. REPAIRED: rebuilt from raw bars by a nine-line scan
+        sharing no code with the estate's builder — 2,012 advances, 0 off-clock.
+        NO PUBLISHED NUMBER WAS WRONG (on the certified tree the memoised map
+        IS the raw-bar set, 2,176 vs 2,176) — but the independence claim was
+        false and it was in the record twice.
+    (2) PHASE 8 DE-CONFOUNDS NOTHING. TIER-C7's L-ANCHOR lab already gated
+        every cell on the confirming pivot — its builder said so — and I did
+        not read that closely enough when designing the phase. VERIFIED:
+        TIER-C8's P-ANC-1 book is BIT-IDENTICAL to TIER-C7's cell (n=196,
+        +118.7489, 696 advances, all three). The confound the phase was built
+        to remove was never there. What PHASE 8 actually contributes is
+        VERIFICATION — TC7 asserted the gate, nothing checked it — and the
+        document now says that instead.
+
+  ALSO REPAIRED
+    anchor_was_sealed was hardcoded False -> computed; 41 of 196 anchors WERE
+      sealed and the control journal filed 41 wrong values.
+    chain_mae_r was a per-leg minimum under a chain name, shallower than
+      reality on 7 chains -> the deepest point of the CUMULATIVE path;
+      min now -4.5891 R.
+    F-LOAO-FALSIFIABLE had an ESCAPE DISJUNCT that let the 3/5 line go
+      untested -> both conditions required; synthetic reports 2/5, clears=False.
+    F-C7C-JRN's "flags read ALL legs" leg was DEAD CODE (`hb` computed, never
+      asserted) -> a join, asserted, 0 of 189 disagree.
+    the scope guard named two dropped knobs and certified two by OMISSION ->
+      seal_open and trail_extra_buf_atr now HALT.
+    the v8 ride dropped the bell/ae_abort harvest-block labels -> restored.
+
+  STILL OPEN (16, none moving a published number)
+    F-C8-VAL samples 3 long BTCUSDT advances of 696, never the rail, never a
+      short. F-C7C-TIDE measures a bar population the gate never evaluates.
+    F-C7C-JRN's hand-walk re-derives the program's own expression.
+    P-AE-2's threshold is named from mae_tape_r — A POPULATION THE ABORT
+      CANNOT REACH, since it fires before the stop and never sees the deep
+      tail the curve was built on. It failed anyway, but the naming rule must
+      be re-derived on the population the mechanism can see before anything
+      like it is proposed again. THIS ONE MATTERS FOR SAIL.
+    tierc8.py still asserts in three places that cadence is "equal by
+      construction" when it is equal only PER BAR.
+
+  UNCHANGED BY ALL OF IT  three registrations NOT SUPPORTED; card v6 does not
+    clear its own bar; the anchor's +118.75 R is one campaign on one asset
+    while four of five lose. 11/11 fixtures, suite 334 passed.
+
+  IN-SAMPLE PROGRAM COMPLETE — and the last thing it produced was a review
+  that caught a fixture claiming an independence it did not have. SAIL-READY =
+  card_spec freeze at v6 PLAIN. Awaiting ATHENA skeleton. The sea is next.
+=== END ===
