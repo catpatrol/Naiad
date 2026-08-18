@@ -2039,3 +2039,94 @@ CLASS     TC6-V PHASE A — audit completion. NO NEW CLAIMS.
   RESUME WORD  "TC7 GO" — with a ruling on TC6V-c, since P-AE-1 cannot be
     pre-named from a curve whose censoring is now on the record.
 === END ===
+
+=== STATUS_APOLLO — 2026-08-17b ===
+LANE      APOLLO · branch v12-v1-census · seed 20260817
+CLASS     TIER-C7 — the hybrid R&H program. Measurement + FOUR registrations.
+          Resume word "TC7 GO" given; P-AE-1 ruled CARD-CONDITIONAL, arm kept.
+
+  NOTHING CLEARED — AND TWO ARMS CLEARED UNTIL THE REVIEW REVERSED THEM.
+    P-HYB-1   [50%] two-sample +0.1128  CI [-0.0193, +0.2401]  p 0.0862  NOT SUPPORTED  LOAO 1/5
+    P-CHAIN-1 [50%] two-sample +0.1125  CI [-0.0198, +0.2400]  p 0.0862  NOT SUPPORTED  LOAO 1/5
+    P-WEV-1   [45%] paired     -0.0027  CI [-0.0084, +0.0029]  p 0.7521  NOT SUPPORTED  LOAO 0/5
+    P-AE-1    [40%] paired     +0.0044  CI [-0.0979, +0.1017]  p 0.4379  NOT SUPPORTED  LOAO 1/5
+    (reference) card v6 vs zero +0.2030 CI [-0.0132, +0.5022]  p 0.0740  NOT SUPPORTED
+    F-C5-b SURVIVES INTO A THIRD TIER.
+
+  THE BLOCKER: A PAIRED RULER ON ARMS THAT CHANGE THE CAMPAIGN SET.
+    P-HYB-1 and P-CHAIN-1 were SUPPORTED on the paired delta (+0.2406/+0.2403,
+    CI [+0.115,+0.372], p 0.00025, BH cleared, LOAO 5/5). The paired ruler is
+    legitimate only for an arm that rides INSIDE the campaign set — TC5's own
+    law. A chain holds its asset's slot until its last leg exits, so 7 control
+    campaigns worth +25.58 R never open, and the bias is DIRECTIONAL: when a
+    re-entry captures the very move the control booked as a SEPARATE campaign,
+    the arm is credited inside the surviving twin while the control's campaign
+    is deleted from the comparison and never debited.
+    ZEC 2026-04-23 -> 2026-05-10: control two campaigns +25.5692 R, hybrid one
+    chain +25.3148 R — the hybrid is 0.2544 R WORSE and the paired ruler
+    credits it +24.8061 R = 54.6% OF THE ENTIRE PAIRED DELTA. Across all 7
+    blocked slots: paired credits +29.3562 R where the account earned +3.7723.
+    Re-scored on cluster_boot_diff — the F-C5-n repair, a function this module
+    IMPORTED AND CALLED ZERO TIMES — both arms fail and LOAO inverts 5/5 -> 1/5
+    with the only clearing panel being -ZECUSDT. On the whole book the hybrid
+    is 6.82 R WORSE on ZEC. Both rulers now print on every row.
+
+  THE SECOND BLOCKER: THE FIXTURE GUARDING THE LARGEST REPAIR WAS ALGEBRA.
+    F-C7-CHAIN computed the leg size IN THE FIXTURE and asserted an identity in
+    its own variables. It passed at 2.22e-16 and WOULD HAVE PASSED WITH THE
+    SIZING DELETED. It now reads the sizes _account_chain actually used,
+    asserts them on all 79 chains, and proves the rule load-bearing (79/79 legs
+    carry a size != 1.0). Written by the same hand that wrote the preamble
+    banning self-comparison.
+
+  THE SIZING REPAIR ITSELF, FOUND BY DISBELIEVING A GOOD NUMBER.
+    D-R6 makes a chain one campaign, which fixes the denominator but not the
+    SIZE. One unit per leg let SOL 2023-10-16 re-enter at own-R 1.5264 against
+    a chain R of 0.4391 — 3.5x the risk — booking +40.74 R for a move worth
+    +11.72 R. That campaign was 75% of the arm's delta. Leg 2 is now sized
+    chain_R/own_R; the campaign books +12.24 R, the arm falls +68.17 -> +59.62,
+    concentration 0.7473 -> 0.5462.
+
+  THE WEAVE IS NOT THE MECHANISM [D-R3/D-R4].
+    weave-only -0.5198 R paired. RE-ENTRY ONLY +38.1513 of the +45.4175 that
+    weave+re-entry earns. 67 of 79 re-entries follow a plain LADDER-OUT, 12 a
+    weave. The commissioned ladder could not separate them — the only cell with
+    a re-entry also had the weave — so one unscored rung was added.
+    L-WEAVE says why: 1 of 42 weave events fires in profit against a base rate
+    of 79.47% of open bars in profit — a 33.4x skew, mean unit move at an event
+    bar -0.5630 R. THE WEAVE IS A LOSS-SIDE DETECTOR, NOT PROFIT PROTECTION,
+    and the commission's premise is very nearly an empty set.
+
+  ALSO REPAIRED  the journal's cross-leg columns: mfe_r published 57.31 R of
+    excursion no position had (now 33.24); stop_advanced_atr/ratchet_exit
+    spliced leg 2's stop onto leg 1's anchor (8 negative advances -> 0, 26
+    mis-filed ratchet exits -> 37 correct); 14 chains that harvested were filed
+    harvested=False. And T7.loao counted panels excluding zero in EITHER
+    direction, so S-STOPGRID's +0.25/+0.50 cells read 5/5 while being reliably
+    WORSE — the halves are split and the 3/5 line is taken above only.
+
+  NEW FIXTURE  F-C7-LABS. _labs() swallowed ImportError and a full run
+    completed GREEN with THREE OF FOUR LABS ABSENT. A missing lab now fails.
+
+  INTEGRITY  11/11 fixtures · suite 334 passed, 1 skipped, exit 0 · 16 tables.
+    F-C7-CTRL: v7 with every knob at default reproduces card v6, WORST
+    ABSOLUTE DIFF 0.000e+00 across 13 columns and every exit_reason.
+
+  PROCESS FINDING — AN AGENT MUTATED THE REPO DURING THE REVIEW.
+    A sabotage patch (`return pd.DataFrame()`) was left at the top of
+    regime_table after a lens tested whether the fixtures catch a silently
+    empty commissioned table. THEY DO — F-KEY's totality leg failed on the
+    stale parquet with no declared key. Patch removed, tree re-verified, the
+    decision path confirmed intact. RULING NEEDED: future reviewers must run
+    against a READ-ONLY worktree; a review that edits what it reviews can
+    invalidate its own result.
+
+  OPEN  TC7-a..TC7-j (10 findings, listed in the build doc §B5), plus the
+    TC6-V set: TC6V-a corridor-as-warranty, TC6V-b cache immutability,
+    TC6V-d the 16 cosmetic findings. TC6V-c is CLOSED by the operator's
+    card-conditional ruling.
+
+  THE PAUSE POINT, DECLARED. Analysis next, then engine definition, then the
+    live-agent discussion. The estate has now run seven tiers and NOTHING has
+    cleared its own bar. That is the finding the analysis should start from.
+=== END ===

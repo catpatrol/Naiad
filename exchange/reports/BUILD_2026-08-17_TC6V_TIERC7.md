@@ -171,3 +171,149 @@ F-C6-CTRL still reproduces the parent trade-for-trade — **worst absolute diffe
 ---
 
 *End of Phase-A build document. TC6-V · 39 findings adjudicated · 4 data-affecting, all repaired · 2 published sentences corrected, one of them a sign · the corridor moves, the cache is not immutable, and the hazard curve is partly a stop · **PHASE B NOT RUN**.*
+
+---
+
+# B · TIER-C7 — THE HYBRID R&H PROGRAM
+
+**RATIFIED** operator 2026-08-17, resume word **"TC7 GO"**, with **P-AE-1 ruled CARD-CONDITIONAL and the arm kept**.
+
+## B0 · VERDICT FIRST — NOTHING CLEARED, AND TWO ARMS CLEARED UNTIL THE REVIEW
+
+**All four registrations are NOT SUPPORTED. So is the card they were measured against.**
+
+P-HYB-1 and P-CHAIN-1 **were SUPPORTED** — paired delta +0.2406 / +0.2403, CI [+0.115, +0.372], p = 0.00025, clearing BH at m = 4, **LOAO 5/5**. The pre-publication review reversed both, and it was right to.
+
+| registration | prior | ruler | Δ point | 90% CI | p | verdict | LOAO | *paired would have said* |
+|---|---:|---|---:|---|---:|---|---|---|
+| **P-HYB-1** | 50% | TWO-SAMPLE | +0.1128 | [-0.0193, +0.2401] | 0.0862 | **NOT SUPPORTED** | 1/5 above | +0.2406 → *SUPPORTED* |
+| **P-CHAIN-1** | 50% | TWO-SAMPLE | +0.1125 | [-0.0198, +0.2400] | 0.0862 | **NOT SUPPORTED** | 1/5 above | +0.2403 → *SUPPORTED* |
+| **P-WEV-1** | 45% | paired | -0.0027 | [-0.0084, +0.0029] | 0.7521 | **NOT SUPPORTED** | 0/5 above | -0.0027 → *NOT SUPPORTED* |
+| **P-AE-1** | 40% | paired | +0.0044 | [-0.0979, +0.1017] | 0.4379 | **NOT SUPPORTED** | 1/5 above | +0.0044 → *NOT SUPPORTED* |
+
+*(reference)* card v6 vs zero: **+0.2030**, CI [−0.0132, +0.5022], p = 0.0740 — **NOT SUPPORTED**. **F-C5-b now survives into a third tier.**
+
+### Why the two arms reversed
+
+**A paired ruler is only legitimate for an arm that rides INSIDE the campaign set.** Tier-C5's own law: *"paired because the adds cannot change which campaigns exist — they ride inside one."* **The chain arms change the set.** A chain holds its asset's slot until its last leg exits, so **7 campaigns the control took never open — worth +25.58 R.**
+
+And the bias is not neutral. When a chain's re-entry captures the very move the control booked as a *separate* campaign, the arm is **credited** for it inside the surviving twin while the control's campaign that captured the same move is **deleted from the comparison and never debited**.
+
+**The sharp case, on ZEC.** The control takes two campaigns over 2026-04-23 → 2026-05-10 worth **+25.5692 R**. The hybrid takes one chain worth **+25.3148 R** — on that tape it is **0.2544 R WORSE**. The paired ruler credits it **+24.8061 R: 54.6% of the entire paired delta.** Across all 7 blocked slots the paired ruler credits **+29.3562 R where the account earned +3.7723 R**.
+
+Scored on the estate's own two-sample asset-cluster bootstrap — the F-C5-n repair, a function this module **imported and called zero times** — the arms do not clear, and **the LOAO inverts from 5/5 to 1/5 with the single clearing panel being −ZECUSDT.** The published "5/5, they do not rest on ZEC" was true only of a subset that had deleted ZEC's crowded-out +25.06 R campaign. **On the whole book the hybrid is 6.82 R WORSE on ZEC** while being ZEC's largest paired contributor.
+
+**Both rulers now print on every row.** The paired number is a true statement about the campaigns both books took; it is simply not the claim.
+
+## B1 · THE ABLATION — AND THE WEAVE IS NOT THE MECHANISM
+
+| rung | n | net R | paired marginal | re-entries | max 1-trade share |
+|---|---:|---:|---:|---:|---:|
+| FULL HYBRID | 189 | +59.6728 | +45.4748 | 79 | 0.5455 |
+| RE-ENTRY ONLY (no weave) | 189 | +52.9615 | +38.1513 | 70 | 0.6502 |
+| ladder-only | 196 | +39.8188 | +0.0369 | 0 | 1.0000 |
+| v6 (control) | 196 | +39.7819 | +0.0000 | 0 | — |
+| weave + re-entry | 189 | +59.6155 | +45.4175 | 79 | 0.5462 |
+| weave-only | 196 | +39.2621 | -0.5198 | 0 | 2.0698 |
+
+**The commissioned ladder could not separate the weave from the re-entry** — the only cell containing a re-entry also contained the weave. One unscored rung was added and it answers the table's own question: **the weave alone LOSES (−0.5198 R); re-entry alone earns +38.15 of the +45.42.** Of 79 re-entries, **67 follow a plain ladder-out and only 12 follow a weave.**
+
+**L-WEAVE explains why.** Only **1 of 42** weave events fires while the campaign is in profit, against a base rate of **79.47% of open campaign bars in profit** — a **33.4× skew** on the same bars in the same walk, with mean unit move at an event bar of **−0.5630 R**. Both D-R3 clauses require the M-median *and* the fast ribbon to have turned against the trade; by then the position is under water. **The weave is a loss-side detector, not profit protection.** The commission's premise — weave events in open *profitable* campaigns — is very nearly an empty set, and that is the finding.
+
+## B2 · THE SIZING — THE REPAIR THAT CAME FROM DISBELIEVING A GOOD NUMBER
+
+D-R6 makes a chain one campaign, which decides the denominator but not the **size**. The first draft held one unit per leg, so a re-entry with a wider fresh stop took more risk on the same denominator.
+
+**SOLUSDT 2023-10-16** re-entered at own-R **1.5264** against a chain R of **0.4391** — **3.5× the risk** — and booked its 17.89-point run as **+40.74 chain-R** when it was worth **+11.72 R** against the risk actually taken. **That one campaign was 75% of the arm's delta.**
+
+Leg 2 is now sized **`chain_R / own_R`**: a stopped-out re-entry loses exactly 1.0 chain-R whatever its stop distance. The campaign books **+12.24 R**, the arm falls **+68.17 → +59.62**, concentration **0.7473 → 0.5462**. `L-RE` files the rejected reading explicitly labelled *not a result*, and reproduces both numbers independently.
+
+**And the fixture that guarded it was algebra proving itself.** F-C7-CHAIN computed the size *in the fixture* and asserted an identity in its own variables — it passed at 2.22e-16 and **would have passed with the sizing deleted from the program.** It now reads the sizes `_account_chain` actually used, asserts they are the rule on all 79 chains, and proves the rule is **load-bearing** (79 of 79 legs carry a size ≠ 1.0).
+
+## B3 · THE COMPONENT LABS
+
+**S-STOPGRID [D-R7]** — diagnostic, nothing promotable, rail asserted on **784/784 campaigns, 0 violations**:
+
+| cell | n | net R | expectancy | LOAO |
+|---|---:|---:|---:|---|
+| offset +0.00 ATR | 196 | +39.7819 | 0.2030 | 0/5 above |
+| offset +0.25 ATR | 196 | +27.9566 | 0.1426 | 0/5 above, 5/5 BELOW |
+| offset +0.50 ATR | 196 | +22.5202 | 0.1149 | 0/5 above, 5/5 BELOW |
+| offset -0.25 ATR | 196 | +44.2973 | 0.2260 | 2/5 above |
+
+**Tightening the initial stop helps and widening hurts** — and the LOAO line had to gain a direction to say so. `T7.loao` counted panels excluding zero in *either* direction, so the +0.25 and +0.50 cells read a perfect **5/5 while being reliably WORSE**. The halves are now split and the 3/5 line is taken on the *above* half only.
+
+**L-ANCHOR** — 10 cells, informs future tuning only, the scored hybrid never uses this table's winner:
+
+| cell | net R | expectancy | advances |
+|---|---:|---:|---:|
+| M-band-edge @ 0.50 ATR | +118.7489 | 0.6059 | 696 |
+| M-band-edge @ 0.25 ATR | +117.2464 | 0.5982 | 652 |
+| e26 @ 0.50 ATR | +72.3505 | 0.3691 | 311 |
+| e26 @ 0.25 ATR | +69.4957 | 0.3546 | 282 |
+
+The nominal winner is **M-band-edge @0.50 at +118.75 R, ~3× the pre-named prior** — and the lab flags the confound itself: the smooth-series anchors ratchet on nearly every confirming pivot (696 advances against the pivot's 228), so their gains come partly from a looser, later-moving stop rather than a better anchor. **That column is exactly why the no-promotion sentence rides all 10 rows.**
+
+**L-RE** — the round trip won on **28 of 79 chains**; the wins are large and the losses small. **L-REGIME** names conditioning candidates for CENSUS-3, gated nowhere.
+
+## B4 · FIXTURES
+
+**11/11 PASS · estate suite 334 passed, 1 skipped, exit 0.**
+
+`F-C7-CTRL`: card v7 with every knob at its default reproduces card v6 — **worst absolute difference 0.000e+00** across 13 columns, every exit reason matching. `F-C7-ARM`, `F-C7-WEV`, `F-C7-CHAIN`, `F-C7-AE` hand-verify from raw bars. **`F-C7-LABS` is new**: `_labs()` swallowed `ImportError` and a full run completed green with **three of four labs absent**, so a missing lab now fails the suite instead of decorating the log.
+
+## B5 · FINDINGS — NOT FIXED
+
+**A five-lens adversarial review ran before publication and confirmed 27 findings.** Three blockers and the journal cluster are repaired above. **The rest are real, unfixed, and listed rather than absorbed:**
+
+**TC7-a · THE JOURNAL'S CHAIN COLUMNS WERE SPLICED ACROSS LEGS — REPAIRED, BUT THE CLASS IS THE POINT.** `mfe_r` divided leg 2's excursion by the chain's R without its size and published **57.31 R** of favourable excursion no position ever had (now 33.24). `stop_advanced_atr` and `ratchet_exit` measured leg 2's final stop against leg 1's entry anchor — **26 chains filed as ratchet exits had not trailed on the leg that exited, and 8 published a negative advance** (now 0). **14 chains that harvested were filed `harvested=False`** because the flag read leg 1 only. All four are fixed; the class — *a single-campaign record describing a two-position object* — is a standing hazard for anything that chains.
+
+**TC7-b · `p = 0.00025` IS THE BOOTSTRAP'S FLOOR, NOT A MEASURED TAIL.** With 4,000 draws, 1/4000 = 0.00025 is the smallest p the ruler can express. Reporting it as though it were measured, and then reporting "clears BH at m=4" as independent corroboration of "LOAO 5/5", stacked three restatements of one draw. Moot now that both arms fail, **and it would not have been moot if they had passed.**
+
+**TC7-c · P-HYB-1 AND P-CHAIN-1 ARE VERY NEARLY ONE TEST REPORTED TWICE.** They differ by the ladder anchor alone, worth +0.0369 R — yet both occupy slots in the m = 4 BH family, making the correction *looser* than the evidence warrants. **Ruling needed: does a family count claims filed or hypotheses that could independently fail?**
+
+**TC7-d · F-C7-WEV CHECKS 3 OF 42 EVENTS AND CANNOT TELL D-R3 FROM THE READING THE REGISTER SAYS IS NOT TAKEN.** The strict-containment alternative and the k-window reading both pass the three sampled bars. A cardinality leg over all 42 is the fix.
+
+**TC7-e · F-C7-GRID's LOAO LEG CANNOT FAIL, AND NOTHING ELSE EXERCISES `loao()`.** It asserts the column is a string.
+
+**TC7-f · THREE LABS ARE RECORDED BUILT WHILE 10 OF THEIR 17 FRAMES ARE NEVER FILED** — including every cardinality self-check they carry. `F-C7-LABS` proves a lab *imports*; nothing proves its verification legs *ran*. This is the TC6-V finding recurring one level down.
+
+**TC7-g · L-REGIME's BAND EDGES ARE WHOLE-CORRIDOR QUANTILES** — look-ahead of the kind the register rejects by name two rows earlier. The candidates are named, not gated, so nothing rests on it; the edges should be trailing.
+
+**TC7-h · `weave_exits_hybrid` UNDERCOUNTS D-R3's FIRINGS BY 43%** — the manifest counts only chains whose *final* leg exited on a weave.
+
+**TC7-i · THE RE-ENTRY GATE IMPLEMENTS ONE OF THE CARD'S TWO TIDE CLAUSES**, contradicting `reentry_close`'s own docstring.
+
+**TC7-j · AN AGENT MUTATED THE REPOSITORY DURING THE REVIEW.** A sabotage patch — `return pd.DataFrame()` — was left at the top of `regime_table` in `scripts/tierc7_lab_regime.py` after a lens tested whether the fixtures catch a silently-empty commissioned table. **They do**: F-KEY's totality leg failed on the stale parquet with no declared key. The patch was found, removed, and the tree re-verified clean; the decision path was confirmed byte-behaviourally intact. **Recorded because a review that edits the thing it reviews can invalidate its own result, and the next commission should run its reviewers against a read-only worktree.**
+
+---
+
+## C · DISPOSITION + BOX-COST — TIER-C7
+
+| PATH | EXISTS | TRACKED | COMMITTED | PUSHED | PROTECTED BY | BOX COST |
+|---|---|---|---|---|---|---|
+| `scripts/tierc7_rules.py` | yes | yes | this push | yes | hand commit, explicit paths (CL-13) | 0 B, non-box |
+| `scripts/tierc7.py` | yes | yes | this push | yes | same | 0 B, non-box |
+| `scripts/tierc7_fixtures.py` | yes | yes | this push | yes | same | 0 B, non-box |
+| `scripts/tierc7_lab_{stopgrid,weave,chain,regime}.py` | yes | yes | this push | yes | same | 0 B, non-box |
+| `research_outputs/tierc7/` (16 tables) | yes | **no — gitignored** | — | — | **NOT PROTECTED — local only** | n/a, off-bus |
+| `exchange/reports/BUILD_2026-08-17_TC6V_TIERC7.md` | yes | yes | publish | yes | publish guard, `exchange/**` scope | ≈ 34,000 B → 0.21% |
+| `exchange/status/LEDGER_APOLLO.md` | yes | yes | publish | yes | same, append-only | +≈ 7,000 B |
+
+### BOX-COST
+
+**Constants read LIVE from `publish_exchange` — never typed.**
+
+| | before | **after** |
+|---|---:|---:|
+| `exchange/**` | 3,268,303 B · 20.43% | **≈ 3,288,000 B · 20.55%** |
+| **tick set** — *governs* | 3,529,893 B · 22.06% | **≈ 3,549,600 B · 22.19%** |
+| level | OK | **OK** (warn 40% / refuse 70%) · headroom to REFUSE ≈ **7.65 MB** |
+
+**This paste ≈ 19,700 B ≈ 0.12% of the box — 25% of the < 0.5% target.**
+
+**THE NAMING TRIP-WIRE DID NOT FIRE FOR THIS BUILD'S OWN FILE.**
+
+---
+
+*End of build document. TC6-V + TIER-C7 · 39 audit findings adjudicated, 4 data-affecting · 27 review findings confirmed, 3 blockers · two arms SUPPORTED until the ruler was corrected, then none · the weave is not the mechanism · and the fixture guarding the largest repair was algebra proving itself.*
