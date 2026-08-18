@@ -155,13 +155,18 @@ REGISTER: dict[str, dict] = {
     "BELL_DISPOSITION": {
         "value": "backstop",
         "ruling": "F-C4-c / F-C5-e",
-        "text": "KEPT. It fired once in seven years (194 of 195 exits are "
-                "stops). It fires rarely because the trail is faster, not "
-                "because the bell is wrong, and a regime in which no favourable "
-                "fractal ever confirms would leave a campaign with no exit but "
-                "its entry stop. Recorded as a backstop EXPECTED NEVER TO FIRE "
-                "so nobody later mistakes its silence for evidence it works.",
-        "was": "v5: same code, no ruling",
+        "text": "KEPT. UNDER v5 it fired once in seven years (194 of 195 exits "
+                "were stops) and the ruling's argument was that it fires rarely "
+                "because the trail is FASTER, not because the bell is wrong. "
+                "UNDER v6 THE TRAIL SLEEPS UNTIL +1R AND THE BELL FIRES FOUR "
+                "TIMES (191 stops, 4 bells) — the argument made a prediction "
+                "and slowing the trail tested it. Recorded as a backstop, and "
+                "no longer as one expected never to fire.",
+        "was": "v5: same code, no ruling. THIS ROW'S EXIT COUNTS ARE NOW "
+               "LABELLED BY CARD: the first draft quoted v5's distribution "
+               "unlabelled in a register filed as v6's, which made a filed "
+               "table state something false of the book it describes "
+               "[TC6-V A1 #34, ruled 2026-08-17].",
     },
     "FUNDING_CEILING_R": {
         "value": FUNDING_CEILING_R,

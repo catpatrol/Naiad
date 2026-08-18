@@ -1935,3 +1935,107 @@ CLASS     BUILD — TIER-C6 rev B. Measurement + registrations + pre-named labs.
     F-C6-h (TWO ATTACHED DOCUMENTS DID NOT ARRIVE — the only incomplete
     deliverable), F-C6-i, F-C6-j, F-C6-k.
 === END ===
+
+=== STATUS_APOLLO — 2026-08-17a ===
+LANE      APOLLO · branch v12-v1-census · seed 20260817
+CLASS     TC6-V PHASE A — audit completion. NO NEW CLAIMS.
+          PHASE B (TIER-C7) NOT RUN — CP-A fired.
+
+  CP-A IS RED, BY THE COMMISSION'S OWN GATE.
+    All 39 outstanding TIER-C6 findings adjudicated by 13 agents, each
+    required to RUN the scenario before returning a class:
+      CONFIRMED-FIXED           12   (the C6-1..C6-7 repairs, each re-proved)
+      COSMETIC                  16
+      REFUTED                    7
+      CONFIRMED-DATA-AFFECTING   4   <- the gate
+    Two of the four changed sentences already published in
+    BUILD_2026-08-16_TIERC6_REVB.md. One of them was a SIGN.
+
+  THE FOUR, REPAIRED AND RESTATED.
+    #11 L-FMH's counterfactual booked an exit at the CLOSE of bars on which
+        the STOP had already been taken — 173 impossible exits. Adverse-first
+        says the stop fills intrabar and the campaign is already out. Search
+        now stops one bar short of a stop exit.
+        v5-control A3 sum-delta -3.1944 -> +1.2276. THE SIGN REVERSES, and
+        the published sentence "every arm's Sigma delta is negative" IS
+        WITHDRAWN.
+    #12 the wall-aware S-BUF cell read UNFLOORED, SEEDED ribbon EMAs — this
+        estate's THIRD repair of that defect. Floored at the family's LONGEST
+        member (a band is not defined while only some members are warm).
+        cell net R +38.6177 -> +39.4020.
+    #33 mean_breakthrough_depth_atr was pooled on ALL approaches when it is a
+        mean over the approaches that BROKE THROUGH. Repooled on break counts.
+        12h/889 depth (the row P-WALL-1 reads) 1.139996 -> 1.177652.
+    #25 the hazard curve's "None on 105 of 195" was the CONTROL book's count;
+        v6's is 94. Corrected, and the censoring disclosed (below).
+
+  THREE FINDINGS NOBODY HAD RAISED.
+    THE CORRIDOR MOVES. Identical code one day later: 2,534 -> 2,535 days,
+      195 -> 196 campaigns (ZEC opened 2026-08-17T04:00Z, still open,
+      -0.0624 R). Every TIER-C6 headline is as-of its corridor and silently
+      is not as-of any other. Corridor pin added for audit re-runs;
+      F-C6-CTRL made PREFIX-ROBUST — proves all 195 parent campaigns present
+      and identical, REPORTS the extras instead of failing on growth.
+    THE OFFLINE CACHE IS NOT IMMUTABLE. Pinned to TC5's exact corridor end
+      the league still sees +1 approach on 30 of 313 rows — boundary bars
+      that arrived after TC5 filed. NO FIXTURE IN THIS ESTATE HAD EVER SAID
+      a filed parquet is not bit-reproducible after a refresh. Two magnitude
+      bounds were tried and both were guesses that failed; rather than tune a
+      constant until the suite went green, the leg asserts only what is
+      defensible (no champion moves, no count shrinks) and PRINTS the rest.
+    THE AE DISTRIBUTION IS CENSORED AT THE CARD'S OWN RAIL. mae_held_r
+      bottoms at EXACTLY -1.0000 R with 110 of 196 campaigns (56%) on it;
+      the uncensored tape reaches -4.5891 R and 124 campaigns gap through
+      their stop. Any decile or hazard statistic on held excursions reports
+      the STOP in its tail. P-AE-1's 0.60R threshold was pre-named from that
+      curve — which is why this reaches into Phase B.
+
+  A2 APPLIED.
+    F-C6-j  m DERIVED from the non-null p-values the table publishes (8 -> 12)
+            and the BH bar APPLIED per row at q/m = 0.00833, not just recorded.
+    F-C6-e  the over-100% column RENAMED AND RECOMPUTED on POSITIVE MASS,
+            bounded [0,100] and comparable across aggregations; the old column
+            NULLED on EAR rows with the reason on the row.
+
+  A3 RIDERS, ALL BUILT.
+    THE SUPPLEMENT  196 campaigns, 67 winners, net +39.7819 R. MAE x MFE
+      cross-tab in net R and count; cuts by exit mechanism / asset / year /
+      direction; WINNERS AND LOSERS SEPARATELY. Every excursion printed
+      TWICE (held and tape). SUPPLEMENT.html 29.6 KB + parquet.
+    L-LAG  arm->trigger in bars and ATR-time, by year/asset/direction and BY
+      LAG DECILE with outcome. 49 of 196 campaigns trigger on the arming bar
+      itself, so decile 0 is EMPTY under average-rank and the gate had to be
+      cut by value. lag-0 expectancy +0.4149 (win 46.9%) vs the 56-bar decile
+      -0.5796.
+    query_filter v1  predicate DSL over a NAMED feature table; unknown column
+      RAISES; every emitted table carries the D15 trio and is labelled "a
+      SELECTION, not a result"; every invocation logs its m to a probe ledger
+      (m = 3 this build).
+
+  P-LAG-1'S CONDITION ADJUDICATED ITSELF — AND AGAINST THE INTERESTING ANSWER.
+    bottom (lag <= 0 bars, n=49) +0.4149 vs top (lag >= 71, n=20) +0.3534,
+    delta +0.0616, CI [-0.7819, +0.9566]. DOES NOT EXCLUDE ZERO.
+    P-LAG-1 REPORT-ONLY, NOT REGISTERED, m UNCHANGED.
+
+  PHASE B NOT STARTED. No scripts/tierc7.py, no registration text, no arm
+    scored. There is no half-built claim anywhere in the estate.
+
+  INTEGRITY  TIER-C6 fixtures 11/11 PASS after every repair. Suite 334
+    passed, 1 skipped, exit 0. F-C6-CTRL worst absolute diff 0.000e+00 across
+    13 columns on all 195 shared campaigns.
+
+  RULINGS NEEDED BEFORE TIER-C7.
+    TC6V-a  does a build document state its corridor as a WARRANTY (numbers
+            valid only as-of), or does the estate re-run and restate on a
+            cadence?
+    TC6V-b  freeze a cache snapshot per build, or accept and document
+            boundary drift?
+    TC6V-c  P-AE-1: re-name the threshold from the UNCENSORED tape
+            distribution, keep it and score it as a CARD-CONDITIONAL rule, or
+            drop the arm?
+    TC6V-d  do the 16 COSMETIC findings get fixed before TIER-C7? None moves
+            a number; all weaken a check.
+
+  RESUME WORD  "TC7 GO" — with a ruling on TC6V-c, since P-AE-1 cannot be
+    pre-named from a curve whose censoring is now on the record.
+=== END ===

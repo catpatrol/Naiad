@@ -104,6 +104,50 @@ TC5 = ROOT / "research_outputs" / "tierc5"
 SIDES = ("resistance", "support")
 
 
+# ═══════════════════════════════════ THE CORRIDOR PIN — TC6-V audit finding
+def corridor_pinned(pin_hi_iso: str | None = None):
+    """`corridor()`, optionally CLAMPED to a stated last-closed-4h-bar.
+
+    THE CORRIDOR MOVES, AND THAT MAKES PUBLISHED NUMBERS WALL-CLOCK DEPENDENT.
+    The corridor ends at "the latest closed 4h bar present in the offline
+    cache".  TIER-C6 was published against 2026-08-16T16:00Z — 2,534 days, 195
+    campaigns.  Re-running the identical code one day later gives 2,535 days and
+    **196** campaigns, because a ZEC campaign opened on 2026-08-17T04:00Z and is
+    still open at the new edge (`corridor_end`, −0.0624 R).
+
+    Nothing is broken: the corridor is doing exactly what it is defined to do.
+    But it means "did this repair move a published number?" is unanswerable
+    unless the audit can re-run on the corridor the number was published on.
+    So the pin exists, and the audit uses it.
+
+    It also means F-C6-CTRL's referee — Tier-C5's FILED journal, frozen on its
+    own corridor — drifts out of comparability with the child a little more
+    every day.  The fixture is made PREFIX-ROBUST rather than pinned, because a
+    fork should keep proving it reproduces its parent for as long as both exist,
+    not only on the day the parent was written.
+
+    WHAT WOULD MAKE THIS WRONG: pinning by DAY COUNT rather than by bar (a cache
+    that gains a gap would silently pin somewhere else), or using the pin for
+    anything but an audit re-run — a build that pins its own corridor is a build
+    that stops seeing new data.
+    """
+    lo, hi, meta = corridor()
+    if pin_hi_iso is None:
+        return lo, hi, meta
+    pin = _ms(pin_hi_iso)
+    if pin > hi:
+        raise SystemExit(
+            f"HALT: corridor pin {pin_hi_iso} is AFTER the cache's last closed "
+            f"4h bar {meta['last_closed_4h_close']} — a pin may only look back.")
+    meta = dict(meta)
+    meta["last_closed_4h_close"] = pin_hi_iso
+    meta["corridor_pinned_to"] = pin_hi_iso
+    meta["corridor_pin_reason"] = (
+        "TC6-V audit re-run: adjudicating whether a repair moved a number "
+        "requires the corridor the number was published on")
+    return lo, pin, meta
+
+
 # ══════════════════════════════════════════ THE WALL, CACHED PER (SYM, LEN)
 _WALL: dict[tuple[str, int, str], np.ndarray] = {}
 
@@ -589,11 +633,27 @@ def agg_ear(trades: list, label: str, key: str = "ALL",
         # correct and semantically not a share, so it is published with its
         # BASIS on the row and a flag that says when it may be compared across
         # aggregations. Nothing is hidden and nothing is silently rescaled.
-        "top_decile_share_pct": (r4(100.0 * float(top.sum()) / tot)
-                                 if abs(tot) > 1e-12 else None),
-        "top_decile_share_basis": "weighted net R total (equal-asset-risk)",
-        "top_decile_share_comparable_to_raw": bool(
-            abs(tot) > 1e-12 and 0.0 <= 100.0 * float(top.sum()) / tot <= 100.0),
+        #
+        # TC6-V · A2 · F-C6-e RULED AND APPLIED.  Carrying the number with a
+        # caveat column was not enough: 260% sat beside 72.6% under one name,
+        # and a reader who skips a `_basis` column reads two denominators as one
+        # quantity.  The ruling was to rename it "top-decile share of POSITIVE
+        # MASS" — and a rename is only honest if the arithmetic follows the
+        # name.  The denominator is now the sum of the POSITIVE contributions,
+        # which is bounded [0, 100] BY CONSTRUCTION and means the same thing
+        # under both aggregations, so the two rows can finally be compared.
+        # The old column is NULLED on equal-asset-risk rows rather than deleted,
+        # with the reason on the row, so the raw lineage still reconciles to
+        # Tier-C5's filed 77.1435 and nothing changes meaning in silence.
+        "top_decile_share_pct": None,
+        "top_decile_share_of_positive_mass_pct": (
+            r4(100.0 * float(top.sum()) / float(wr[wr > 0].sum()))
+            if float(wr[wr > 0].sum()) > 1e-12 else None),
+        "top_decile_share_basis": "positive weighted mass (equal-asset-risk)",
+        "top_decile_share_pct_withheld_because": (
+            "the NET-R denominator is not a share under equal-asset-risk — it "
+            "exceeded 100% on 4 of 8 ALL rows. See "
+            "top_decile_share_of_positive_mass_pct [F-C6-e, ruled 2026-08-17]"),
         "best_r": r4(float(r.max())),          # UNWEIGHTED — it names a trade
         "best_contrib_r": r4(float(wr[jbest])),
         "strip_best_net_r": r4(tot - float(wr[jbest])),
@@ -621,9 +681,17 @@ def agg_both(trades: list, label: str, key: str = "ALL",
     # grouping dimension is set explicitly. Writing `label` into `group` and
     # then overwriting `group` — which the first draft did — silently dropped
     # the book name and made the headline key non-unique.
+    # The raw row keeps its lineage column AND gains the positive-mass one, so
+    # the two aggregations have a quantity that means the same thing on both.
+    _rr = np.array([float(t.net_r) for t in trades]) if trades else np.zeros(0)
+    _kk = max(int(np.floor(0.10 * len(_rr))), 1) if len(_rr) else 0
+    _tp = np.sort(_rr)[::-1][:_kk] if len(_rr) else np.zeros(0)
+    _pos = float(_rr[_rr > 0].sum()) if len(_rr) else 0.0
     a = dict(agg(trades, group, key, extra), aggregation="raw_panel",
              top_decile_share_basis="raw net R total",
-             top_decile_share_comparable_to_raw=True)
+             top_decile_share_of_positive_mass_pct=(
+                 r4(100.0 * float(_tp.sum()) / _pos) if _pos > 1e-12 else None),
+             top_decile_share_pct_withheld_because="")
     b = agg_ear(trades, group, key, extra)
     rows = []
     for x in (a, b):
@@ -784,6 +852,15 @@ def league(hi_ms: int, side: str) -> pd.DataFrame:
                                              else None),
                     "mean_breakthrough_depth_atr": (r6(float(np.mean(depths)))
                                                     if depths else None),
+                    # THE DEPTH'S OWN DENOMINATOR, PUBLISHED — TC6-V #33.
+                    # `mean_breakthrough_depth_atr` is a CONDITIONAL mean over
+                    # the approaches that broke through, so the panel row must
+                    # pool it on BREAK counts, not on approach counts. Pooling
+                    # a conditional mean on the wrong denominator moved the
+                    # 12h/889 champion's depth — the row P-WALL-1 reads — by
+                    # 0.038 ATR, and 1d/423 by 0.146. The count is emitted so
+                    # the pooling can use it instead of inferring it.
+                    "n_breakthroughs": int(len(depths)),
                     "longest_rejection_streak": int(best_streak),
                 })
     d = pd.DataFrame(rows)
@@ -803,10 +880,16 @@ def league(hi_ms: int, side: str) -> pd.DataFrame:
     # to mirror.  Caught by comparing against the filed table, which is the only
     # reason it was caught at all.
     d["_pen_w"] = d["mean_penetration_atr"].astype(float) * d["approaches"]
-    d["_dep_w"] = d["mean_breakthrough_depth_atr"].astype(float) * d["approaches"]
+    # THE PENETRATION IS APPROACH-WEIGHTED (it is defined over every approach);
+    # THE DEPTH IS BREAK-WEIGHTED (it is defined only over the breaks). Two
+    # different conditional means, two different denominators, and pooling the
+    # second on the first was the defect.
+    d["_dep_w"] = (d["mean_breakthrough_depth_atr"].astype(float).fillna(0.0)
+                   * d["n_breakthroughs"].astype(float))
     panel = (d.groupby(["tf", "ema"], as_index=False)
              .agg(approaches=("approaches", "sum"),
                   rejections=("rejections", "sum"),
+                  n_breakthroughs=("n_breakthroughs", "sum"),
                   _pen_w=("_pen_w", "sum"),
                   _dep_w=("_dep_w", "sum"),
                   longest_rejection_streak=("longest_rejection_streak", "max")))
@@ -818,8 +901,8 @@ def league(hi_ms: int, side: str) -> pd.DataFrame:
         r6(w / a) if a else None
         for w, a in zip(panel["_pen_w"], panel["approaches"])]
     panel["mean_breakthrough_depth_atr"] = [
-        r6(w / a) if a else None
-        for w, a in zip(panel["_dep_w"], panel["approaches"])]
+        r6(w / nb) if nb else None
+        for w, nb in zip(panel["_dep_w"], panel["n_breakthroughs"])]
     d = d.drop(columns=["_pen_w", "_dep_w"])
     panel = panel.drop(columns=["_pen_w", "_dep_w"])
     out = pd.concat([d, panel[d.columns]], ignore_index=True)

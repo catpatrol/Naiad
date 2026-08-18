@@ -174,7 +174,9 @@ Then F-C6-LEAGUE **calls `T6.league` itself on a negated tape** and demands `lea
 | **P(win)** | 32.98% | 31.18% | 27.59% | 22.36% | 17.12% | **11.19%** | **7.03%** |
 | n at or beyond | 191 | 186 | 174 | 161 | 146 | 134 | 128 |
 
-**Monotone, well-populated, and it does not depend on any registration.** A campaign that has been 0.5 R under water wins **one time in nine**. `mae_to_1r_r` could not produce this — it is `None` on 105 of 195 campaigns — so the excursion is recomputed post hoc for **every** campaign, winners and losers, with the exit bar clipped at the stop.
+**Monotone, well-populated, and it does not depend on any registration.** A campaign that has been 0.5 R under water wins **one time in nine**. `mae_to_1r_r` could not produce this — it is `None` on **94 of 195** campaigns — so the excursion is recomputed post hoc for **every** campaign, winners and losers, with the exit bar clipped at the stop.
+
+> ⚠ **CORRECTED BY THE TC6-V AUDIT (2026-08-17), TWICE.** *(a)* This paragraph originally read "105 of 195". **105 is the v5 CONTROL book's count; v6's is 94** — the sentence attributed the control's number to the card. *(b)* And the curve is **partly measuring the card's own stop.** The entry rail is 1.0 ATR = 1R, so a HELD excursion is censored at −1R by construction: its minimum is **exactly −1.0000** and **110 of 196 campaigns sit at or past −0.95R**, while the uncensored tape reading reaches **−4.5891 R** and **124 campaigns gap through their stop.** The hazard numbers are correct *as statements about campaigns under this card* — which is the operationally useful reading — but they are **not** statements about the market, and "the most usable number in the build" was a stronger claim than the censoring supports. `research_outputs/tc6v/campaign_features.parquet` publishes both readings side by side.
 
 ### The frontier
 
@@ -202,7 +204,9 @@ Then F-C6-LEAGUE **calls `T6.league` itself on a negated tape** and demands `lea
 
 ### L-FMH [H1] — the card book's zeros are the finding
 
-On the **card book**, the three winner-protection arms fire 8 / 17 / 53 times and save **0 / 1 / 4** winners, and **every arm's Σ delta is negative**. That is not a null result to be tidied away: the card book exits `stop` **191 of 195 times**, so the (2,2) ratchet takes the campaign before any 12/89 counter-cross can speak. On the **union book** (414 campaigns, 147 winners) A2-containment fires 62 times with 37 winners — **17 saved, 19 killed.** Both books are printed side by side.
+On the **card book**, the three winner-protection arms fire 8 / 17 / 53 times and save **0 / 1 / 4** winners. That is not a null result to be tidied away: the card book exits `stop` **191 of 195 times**, so the (2,2) ratchet takes the campaign before any 12/89 counter-cross can speak. On the **union book** (414 campaigns, 147 winners) A2-containment fires 62 times with 37 winners — **17 saved, 19 killed.** Both books are printed side by side.
+
+> ⚠ **CORRECTED BY THE TC6-V AUDIT (2026-08-17) — A SENTENCE HERE WAS FALSE.** This paragraph originally claimed **"every arm's Σ delta is negative"**. The counterfactual was booking an exit at the CLOSE of bars on which the stop had already been taken — **173 impossible exits** across the books — and adverse-first says the stop fills intrabar and the campaign is already out. With the signal search bounded one bar short of a stop exit, **the v5-control A3 arm reverses sign: Σ delta −3.1944 → +1.2276.** The claim "every arm's Σ delta is negative" is withdrawn; on the repaired tables it is false for A3 on the control book. The remaining arms stay negative. See §A of `BUILD_2026-08-17_TC6V_TIERC7.md`.
 
 ### L-WALLQ [H2] — a wall beyond the stop is a worse campaign
 

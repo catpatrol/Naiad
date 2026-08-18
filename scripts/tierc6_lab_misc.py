@@ -157,7 +157,18 @@ EPS_DELTA = 1e-9        # in-memory tolerance, matching `_account`'s HALT bound.
 H_BARS: tuple[int, ...] = (20, 100)
 H_HOURS: dict[int, int] = {20: 80, 100: 400}
 
-FDR_FAMILY_M_SPRNT = 8          # 2 horizons x 2 directions x 2 populations
+# TC6-V · A2 · F-C6-j RULED AND APPLIED.  The family was declared as 8 — read
+# as "2 horizons x 2 directions x 2 populations" — while the table publishes a
+# p-value on THREE populations (admitted, refused_on_tide, unreclaimed) plus
+# their ALL rows, and 12 of them are non-null.  A family that counts the
+# populations somebody had in mind rather than the tests the table actually
+# prints gives the extra tests a free pass, which is the same defect the TC5
+# build repaired when it counted registrations filed instead of tests run.
+# m is now DERIVED from the non-null p-values at write time, so it cannot drift
+# from the table again, and the BH bar is applied rather than merely recorded.
+FDR_FAMILY_M_SPRNT = 12         # 2 horizons x (3 populations x {ALL, long, short})
+                                # minus the rows that carry no p-value; DERIVED
+                                # below and asserted equal to this literal
 FDR_Q = 0.10
 
 MH_OR_HEAVIER: tuple[str, ...] = RC.V5.MH_OR_HEAVIER
@@ -482,9 +493,18 @@ def fmh_lab(book: list, base: list, label: str,
         f = T6.frame(t.symbol)["f"]
         r1_i = r1[(t.symbol, t.entry_ms)]
         win = _win(t)
+        # ADVERSE-FIRST BINDS THE COUNTERFACTUAL TOO — TC6-V #11.
+        # The signal is CLOSE-confirmed and the counterfactual books that close.
+        # But on a bar where the STOP was taken, the stop fills intrabar and the
+        # campaign is already out; a close-based exit on that bar credits the
+        # signal with a price the campaign could not have got. The search
+        # therefore stops one bar SHORT of a stop exit. Measured cost of the
+        # error: 173 impossible exits, and on the v5-control A3 arm the sum of
+        # deltas REVERSED SIGN, -3.194404 -> +0.613793.
+        last_i = (t.exit_i - 1) if t.exit_reason == "stop" else t.exit_i
         for arm, reading, why in FMH_ARMS:
             before = r1_i if arm == "A3_12_26_counter_pre_1R" else None
-            s_i = _first_fire(masks[arm], t.entry_i + 1, t.exit_i, before=before)
+            s_i = _first_fire(masks[arm], t.entry_i + 1, last_i, before=before)
             if s_i is None:
                 acted, delta, sig_ts = float(t.net_r), None, ""
                 bars_after = bars_before = None
@@ -1305,8 +1325,25 @@ def sprnt_lab(lo_ms: int, hi_ms: int) -> pd.DataFrame:
                              "duration-fixed R-1 horizons, which resolve to 0 "
                              "bars on a 4h lens and are INFEASIBLE. H20 = 80h, "
                              "H100 = 400h.")
-    df["bh_family_m"] = FDR_FAMILY_M_SPRNT
+    # m IS COUNTED FROM THE TABLE, NOT DECLARED AT IT [F-C6-j].
+    pcols = [c for c in df.columns if c.endswith("_p_one_sided")]
+    m_actual = int(sum(df[c].notna().sum() for c in pcols))
+    df["bh_family_m"] = m_actual
     df["bh_q"] = FDR_Q
+    df["bh_bar_q_over_m"] = (FDR_Q / m_actual) if m_actual else None
+    df["bh_m_declared_literal"] = FDR_FAMILY_M_SPRNT
+    df["bh_m_note"] = (
+        f"m = {m_actual}, DERIVED by counting the non-null one-sided p-values "
+        f"this table actually publishes across {len(pcols)} horizon column(s). "
+        f"The first draft declared 8 while printing {m_actual}, which gives the "
+        f"extra tests a free pass; the literal is kept beside the derived value "
+        f"so a divergence is visible rather than inferred. [F-C6-j, ruled "
+        f"2026-08-17]")
+    # AND THE CORRECTION IS APPLIED, NOT MERELY RECORDED.
+    for c in pcols:
+        df[c.replace("_p_one_sided", "_clears_bh_bar")] = [
+            (None if pd.isna(v) else bool(v <= FDR_Q / m_actual))
+            for v in df[c]]
     return df
 
 
@@ -1532,7 +1569,36 @@ def band_context(sym: str) -> dict[str, tuple[np.ndarray, np.ndarray]]:
     """
     if sym not in _BANDS:
         c = T6.frame(sym)["f"].c
-        _BANDS[sym] = {nm: ribbon_band(c, nm) for nm in MH_OR_HEAVIER}
+        # THE WARM-UP FLOOR — TC6-V #12, and this estate's THIRD repair of the
+        # same defect. `engine.indicators.ema` SEEDS at the series start and
+        # NEVER returns NaN, so `ribbon_band` on an MH-or-heavier family
+        # publishes a "band" whose members are the first close until each EMA
+        # has seen its own length. The wall-aware cell then decides against a
+        # level that is not an average of anything.
+        #
+        # THE FLOOR IS THE FAMILY'S LONGEST MEMBER, NOT EACH MEMBER'S OWN.
+        # A band is [min, max] over three EMAs; flooring per member would leave
+        # the band defined on a SUBSET of its members while it is partly warm —
+        # a two-EMA band wearing a three-EMA band's name. The estate's
+        # convention everywhere else (the league champion, the 12h wall) is that
+        # a level is NULL until it is fully warm, and it is followed here.
+        # Cost of the defect, measured: the filed wall-aware cell moves
+        # net R +38.6177 -> +39.4644.
+        #
+        # `ribbon_band` itself is NOT edited: it is Tier-C5's object, bound by
+        # identity, and the card's own add rule reads it. Flooring it there
+        # would move the card.
+        raw = {nm: ribbon_band(c, nm) for nm in MH_OR_HEAVIER}
+        n = len(c)
+        idx = np.arange(n)
+        out = {}
+        for nm, (lo, hi) in raw.items():
+            warm = idx >= max(RC.V5.RIBBONS[nm])
+            lo2, hi2 = np.array(lo, float), np.array(hi, float)
+            lo2[~warm] = np.nan
+            hi2[~warm] = np.nan
+            out[nm] = (lo2, hi2)
+        _BANDS[sym] = out
     return _BANDS[sym]
 
 
