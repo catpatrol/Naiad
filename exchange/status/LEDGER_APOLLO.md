@@ -2130,3 +2130,88 @@ CLASS     TIER-C7 — the hybrid R&H program. Measurement + FOUR registrations.
     live-agent discussion. The estate has now run seven tiers and NOTHING has
     cleared its own bar. That is the finding the analysis should start from.
 === END ===
+
+=== STATUS_APOLLO — 2026-08-18a ===
+LANE      APOLLO · branch v12-v1-census · seed 20260818
+CLASS     TIER-C7-C + TIER-C8 — THE LAST IN-SAMPLE RUN.
+
+  ALL THREE REGISTRATIONS NOT SUPPORTED. SO IS THE CARD.
+    P-CHAIN-2 [45%] two-sample +0.1125 CI [-0.0198,+0.2400] p 0.0862  1/5 above
+    P-AE-2    [40%] paired     +0.0044 CI [-0.0979,+0.1017] p 0.4379  1/5 above
+    P-ANC-1   [45%] paired     +0.4029 CI [-0.2666,+1.7152] p 0.3199  0/5 above, 1/5 BELOW
+    (reference) card v6 vs zero +0.2030 CI [-0.0132,+0.5022] p 0.0740 NOT SUPPORTED
+    m = 3, counting INDEPENDENTLY-FAILABLE HYPOTHESES [TC7-c]. P-WEV report-only.
+
+  THE THRESHOLD, FROZEN IN STEP 1 BEFORE ANY SCORING.
+    The NAMING RULE was the pre-registration: smallest x on the UNCENSORED
+    tape-side hazard curve with P(win|MAE>=x) <= 10%, n >= 30.
+    It resolved to x* = 0.60 R at n=134, P(win)=9.7015%.
+    AND IT RE-DERIVED THE SAME 0.60R P-AE-1 WAS GIVEN FROM THE CENSORED CURVE.
+    Verified: P-AE-2's book is BYTE-IDENTICAL to P-AE-1's (196 campaigns,
+    +40.6433 R). P-AE-2 is not a second look; it is P-AE-1 honestly sourced.
+    Under TC7-c's own logic m should arguably be 2 — which would have made the
+    bar STRICTER. The error ran toward forgiveness, and is recorded as TC8-d.
+
+  THE DE-CONFOUNDED ANCHOR ANSWER: IT IS ONE CAMPAIGN.
+    M-band-edge @0.50 under matched timing nets +118.75 R — and FOUR OF FIVE
+    ASSETS LOSE (BTC -10.67, ETH -4.35, NEAR -6.09, ZEC -13.28) while SOL alone
+    is +113.36. SOL 2023-10-16 is +115.83 of the +78.97 total paired delta —
+    MORE THAN THE WHOLE — held 476 bars with 51 advances against card v6's 17
+    bars and 1 advance. The anchor's edge is that it did not get stopped out of
+    one enormous move. CI [-0.267, +1.715]; one LOAO panel says reliably WORSE.
+
+  F-C8-MATCH DOES NOT ASSERT THE COMMISSION'S WORDS, DELIBERATELY.
+    "Identical advance-opportunity counts per campaign across all cells" is
+    FALSE and unfixable: a different anchor gives a different stop, a different
+    exit, and so a different number of bars to have opportunities in. Measured:
+    M-edge 847 opportunities vs pivot 293, because lifetimes are 41.9 bars vs
+    21.2. The fixture asserts the design's REAL claim — a (2,2) confirmation is
+    the ONLY moment any anchor may advance, verified on every advance in every
+    cell — and REPORTS the counts with the lifetimes that explain them.
+    A fixture whose claim is not the design's claim cannot fail honestly.
+
+  FIX BATCH, old -> new
+    TC7-d  weave verified on 3 of 42 events -> 34,821 firings over the whole
+           panel; the register's inside-or-beyond reading and the strict-
+           containment alternative DISAGREE ON 28,360 BARS, so the refused
+           reading is genuinely refusable.
+    TC7-e  LOAO leg asserted the column was a STRING -> a synthetic book lifted
+           on 2 of 5 assets MUST FAIL the 3/5 line; one lifted on all five must
+           clear. Falsification, run every time.
+    TC7-h  weave counts were final-leg-only -> every firing counted.
+    TC7-i  re-entry gate had ONE tide clause -> BOTH; F-C7C-TIDE proves the
+           second bites on 1.6 M bars the old gate admitted.
+    TC7-a  chain journal was one row lying about two positions -> per-leg rows
+           + rollup. The class is retired BY SCHEMA, not by four repairs.
+    TC6V-a corridor in the manifest -> AS-OF STAMP ON EVERY FILED TABLE.
+    TC6V-b cache drift undocumented -> drift note in the manifest.
+    TC7-c  m=4 with one hypothesis twice -> m=3.
+    scope  replay silently ignored lane/adds_max -> HALTs. A union card running
+           as card-only under its own name would have made F-CTRL compare two
+           different programs while reporting 0.000e+00.
+
+  NOT DONE, AND SAID SO  TC7-f (labs' 17 frames + prove-ran legs) and TC7-g
+    (L-REGIME trailing edges) were commissioned in Phase 0 and DID NOT SHIP.
+    The 16 TC6V-d cosmetics are neither fixed nor itemised. Stage N (AN-1,
+    AN-2) was still building; NO TABLE FROM EITHER IS FILED AND NO CLAIM MADE.
+
+  REVIEW LAW ENACTED  every reviewer ran with isolation: worktree — its own
+    checkout, unable to write to the tree the fixtures certify.
+    F-WORKTREE-ATTEST prints the attestation with the evidence.
+
+  INTEGRITY  11/11 fixtures · F-CTRL at EXACTLY 0.000e+00 before any arm ran ·
+    suite 334 passed, 1 skipped, exit 0 · 8 tables, all as-of stamped.
+
+  THE FINDING THAT OUTLIVES THE TIER.
+    FIVE separate results across FOUR tiers have each turned out to be ONE
+    TRADE: ZEC is 82% of the card book; SOL 2023-10-16 is >100% of the anchor
+    arm's delta; the TC7 chain arm was 75% one campaign before sizing; the
+    limit frontier's k* was 41x concentrated; the S-TRAIL buffer cell was 1.10.
+    That is no longer a finding about a rule. It is a finding about the panel.
+
+  IN-SAMPLE PROGRAM COMPLETE.
+    SAIL-READY = card_spec freeze. EIGHT TIERS, NOTHING CLEARED — card v6 does
+    not clear its own bar (p 0.0740) and no arm has earned a place on it, so
+    the freeze is v6 PLAIN, not v6-plus-an-arm. Awaiting ATHENA skeleton.
+    The sea is next.
+=== END ===
