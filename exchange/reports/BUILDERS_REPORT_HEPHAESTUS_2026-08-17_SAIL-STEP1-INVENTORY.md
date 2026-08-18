@@ -612,10 +612,17 @@ are prior art the SAIL journal schema should read before it is frozen.
 - **Filename date.** The paste specifies `…_2026-08-17_SAIL-STEP1-INVENTORY.md` and that name is
   honoured exactly. Execution actually ran **2026-08-18 00:40–02:00 local**; the publish carries
   today's date. Both facts are stated rather than reconciled to one.
-- **The brief was `git add`-ed before the publish, as the paste instructed.** §3.4 says to let
-  `publish()` do the staging and not to `git add` exchange files separately. The brief is inside
-  `exchange/`, so `publish()` stages it either way and the pre-staging changes nothing. Recorded
-  because the rule was consciously crossed, not because it caused harm.
+- **THE PRE-STAGED BRIEF RODE INTO ANOTHER LANE'S COMMIT — §3.4's hazard, observed live.** The
+  paste instructed `git add` of the brief; §3.4 forbids exactly that (*"Do NOT `git add` or
+  `git commit` exchange files separately — let the guard do it, so evidence cannot ride along"*).
+  The rule was crossed on instruction, and **it did not turn out to be harmless.** Measured after
+  the fact: `git log --diff-filter=A -- exchange/reports/BRIEF_ATHENA_SAIL_REPO_2026-08-17.md`
+  returns **`2a3b75d` — "oracle: TIER-C7-C + TIER-C8 — the last in-sample run"**, a *concurrent
+  session's commit on an unrelated lane*, which swept the staged brief out of the index at
+  ~01:0x. The brief is committed and pushed and nothing was lost — but **it is not in the closing
+  publish the paste designed for it**, and its provenance now reads as oracle-lane work. This is
+  CL-13's shape exactly, and it is recorded here as a live confirmation of the rule rather than a
+  clean deviation: **the correct form is to drag the brief in and let `publish()` stage it.**
 - **`/Volumes/LaCie` was not mounted**, so the local-candidate enumeration covered `~` and
   `/Volumes` only. Per §2.1 the LaCie is backup-only; this does not weaken the finding that no local
   Prometheus checkout exists on the working machine.
@@ -660,7 +667,7 @@ the Prometheus repo or its clone.**
 | PATH | EXISTS | TRACKED | COMMITTED | PUSHED | PROTECTED BY | BOX COST |
 |---|---|---|---|---|---|---|
 | `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-17_SAIL-STEP1-INVENTORY.md` | yes | tracked (new) | see §11 | yes — `origin/v12-v1-census` | GitHub + estate zip | **51,927 B at creation = 0.32% of box — UNDER the 64,000 B trip-wire, not flagged.** Measured at creation, which is when the rule binds (§3.2). The publish re-reads the wire and names whatever is over it |
-| `exchange/reports/BRIEF_ATHENA_SAIL_REPO_2026-08-17.md` | yes | tracked (new — dragged in by operator, staged this session) | see §11 | yes — `origin/v12-v1-census` | GitHub + estate zip | 5,171 B = 0.03% of box — under the wire |
+| `exchange/reports/BRIEF_ATHENA_SAIL_REPO_2026-08-17.md` | yes | tracked (new — dragged in by operator, `git add`-ed per the paste) | **`2a3b75d`** — swept into a *concurrent oracle-lane commit*, NOT this session's publish (§8.1) | yes — `origin/v12-v1-census` | GitHub + estate zip | 5,171 B = 0.03% of box — under the wire |
 | `exchange/status/LEDGER_ATHENA.md` | yes | tracked | see §11 | yes — `origin/v12-v1-census` | GitHub + estate zip | **104,471 B before this append = 0.65% of box — ALREADY OVER the 64,000 B trip-wire.** An append-only file that grew across the wire — the named cost in §3.2. Flagged, not refused |
 | `~/prometheus-inventory/` | yes | **not in this repo** | n/a | n/a | **NOT PROTECTED — deliberately.** Disposable quarantine clone, outside `~/Naiad`, outside every sync tree | **n/a — unsynced**, outside the box entirely |
 
@@ -673,9 +680,30 @@ publish and printed on screen.
 
 ## 11 · PUBLISH RECORD
 
-One publish, carrying the brief and this report, per the commissioning paste. Invocation is §3.4's
-exact form. The publish output — status, commit SHA, push result, offenders, box figures and the
-live over-the-wire naming — is printed on screen and relayed in the closing block.
+**Publish 1 — `e9458c0`, 2026-08-18, PUSHED to `origin/v12-v1-census`, offenders `[]`.** Carried
+this report (687 lines) and the `LEDGER_ATHENA.md` append (22 lines). Invocation was §3.4's exact
+form. Box at publish: **TICK SET 3,628,486 B = 22.68%** of the 16,000,000 B box, level OK
+(warn 40% / refuse 70%); `exchange/` only 3,369,188 B = 21.06% across 181 files. Eight box-bound
+files are over the 64,000 B naming wire — **this report is not one of them** (52,086 B); the eight
+are `LEDGER.md` (259,298 B), `LEDGER_APOLLO.md` (161,898), `LEDGER_ATHENA.md` (110,389),
+`BUILD_2026-08-12_CENSUS2B_VULT1.md` (105,838), `BUILD_2026-08-14_CENSUS2B_PARTA_WTB1.md` (97,369),
+`BUILD_2026-08-16_TIERC4_MEANCARD.md` (69,480), `BUILDERS_REPORT_HEPHAESTUS_2026-08-15_M4-LAUNCHD.md`
+(68,524) and `CONVENTIONS.md` (67,752). Each is pre-existing and append-only; none was created by
+this session. `bus-health` also reports **F-4 LAG — manifest behind by 6 commits** (manifest head
+`4cf0e18`, live HEAD `3eb4619`), unrelated to this work and not acted on.
+
+**Publish 2 — a named deviation from the paste's ONE-publish instruction.** The paste says one
+publish. A second was required because publish 1 shipped this report containing a **false
+statement about this session's own rule-crossing**: it asserted the pre-staged brief "changes
+nothing", and the record then showed the brief had been swept into a concurrent oracle-lane commit
+(§8.1). §0's correction rule says rewrite rather than annotate and never let a stale fact stand as
+a current one — and §3.1 makes this document the forensic record, so a known-false line in it is a
+defect, not a cosmetic issue. The second publish carries only that correction, this §11, and the
+matching ledger line. **Flagged rather than absorbed:** the deviation is the extra publish, and the
+alternative — leaving the falsehood filed — was worse.
+
+All three artifacts were confirmed present on the pushed ref with `git cat-file -e`, not assumed
+(§4.3): the report, the brief, and `LEDGER_ATHENA.md`.
 
 **LEDGER:** the STATUS block is appended to `exchange/status/LEDGER_ATHENA.md` in this same session,
 per Invariant 4, ending with the line the paste specifies:
