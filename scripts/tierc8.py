@@ -853,6 +853,39 @@ def run(root: Path) -> dict:
                  "re-filing would buy a second bite at a decided question.")}]),
         "p_wev_recheck", ["line"])
 
+    # ── STAGE N · AN-1 and AN-2 — TIER-E, FILED WITH THEIR COLLAR ──────
+    # The labs deliberately file nothing themselves, on the reasoning that a
+    # sha is the first step by which a measurement that gates nothing becomes a
+    # number something rests on. That instinct is right and the answer is not
+    # to hide the tables: they are filed HERE with their disclosure columns
+    # intact — `selection_not_a_result`, `gates_nothing`, the logged m and the
+    # as-of warranty all ride every row — so the collar travels with the sha.
+    stage_n = {}
+    try:
+        import tierc8_an1 as A1
+        put(A1.confluence_table(lo, hi), "an1_confluence",
+            ["side", "wall", "band", "asset"])
+        put(A1.rejection_by_confluence(lo, hi), "an1_rejection",
+            ["side", "wall", "band", "asset"])
+        put(A1.an1_selfcheck(), "an1_selfcheck", ["check"])
+        stage_n["AN-1"] = "FILED"
+    except Exception as e:                                    # noqa: BLE001
+        stage_n["AN-1"] = f"NOT AVAILABLE — {type(e).__name__}: {e}"
+        log(f"    AN-1: {stage_n['AN-1']}")
+    try:
+        import tierc8_an2 as A2
+        put(A2.entry_outcome(lo, hi), "an2_entry",
+            ["measure", "event", "clock", "family", "presence", "direction_group"])
+        put(A2.exit_followthrough(lo, hi), "an2_exit",
+            ["measure", "event", "clock", "family", "presence", "direction_group",
+             "horizon_bars"])
+        put(A2.an2_selfcheck(), "an2_selfcheck", ["leg"])
+        stage_n["AN-2"] = "FILED"
+    except Exception as e:                                    # noqa: BLE001
+        stage_n["AN-2"] = f"NOT AVAILABLE — {type(e).__name__}: {e}"
+        log(f"    AN-2: {stage_n['AN-2']}")
+    man["stage_n"] = stage_n
+
     man["sha"], man["keys"], man["skipped_empty"] = W, K, SK
     man["counts"] = {f"{k}_n": len(b) for k, b in
                      [("v6", base)] + list(arms.items())}

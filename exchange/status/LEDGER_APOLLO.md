@@ -2286,3 +2286,66 @@ CLASS     CORRECTION — the TIER-C8 review returned AFTER publication.
   that caught a fixture claiming an independence it did not have. SAIL-READY =
   card_spec freeze at v6 PLAIN. Awaiting ATHENA skeleton. The sea is next.
 === END ===
+
+=== STATUS_APOLLO — 2026-08-18c ===
+LANE      APOLLO · branch v12-v1-census · seed 20260818
+CLASS     STAGE N FILED — AN-1 and AN-2 landed after the build doc was written.
+          TIER-E measurement. Nothing registered, nothing gated.
+
+  AN-1 · RVWAP x WALL CONFLUENCE — THE ANSWER IS "ESSENTIALLY NOTHING".
+    m = 720 cells (2 sides x 5 walls x 12 band edges x 6 populations).
+    commissioned-side panel cells n>=30:  15 positive, 11 negative,
+      mean +0.71 pp, median +2.85 pp.
+    ALL 58 non-provisional panel cells:  29 POSITIVE, 29 NEGATIVE,
+      mean +0.54 pp.
+    62 of 120 panel cells are PROVISIONAL (co-located n < 30).
+    A wall that coincides with an RVWAP band rejects no more reliably than the
+    same wall alone. The largest cell (1d_ema889 x rvwap_7d_up2, +20.96 pp,
+    59.46% vs 38.50%) sits on n=37 AND IS ONE OF 120.
+    F-AN-1 24/24. Two hand-walks added beyond the commissioned three, after a
+    sabotage showed the single example insufficient: patching the as-of back to
+    the bar's OPEN — the bug TIER-C6 repaired — LEFT THE SINGLE HAND-CHECK
+    PASSING, because two of every three 4h bars in a 12h bucket see the same
+    wall under both conventions. Three sabotage levers verified. 152,044
+    seeded bars suppressed by four explicit warm-up floors.
+
+  AN-1 ALSO FOUND A CROSS-MODULE DIVERGENCE.
+    TIER-C6's decision-path wall_series_12h and TIER-C5-Q's own-clock champion
+    builder agree on WARMTH bar-for-bar on all five assets but their 12h/889
+    LEVELS DIFFER BY UP TO 0.4616%. Cause: the EMA SEED, not the as-of. Two
+    modules compute "the 12h champion wall" and get different numbers. Carried
+    as a fixture row; NOT reconciled. RULING NEEDED.
+
+  AN-2 · OSCILLATOR COINCIDENCE.
+    RSI(14) on {1h,4h,12h}, own clocks, at every arming/trigger/exit +/-12
+    bars. 44,100 panel rows, 1,844 divergence flags, m = 225 selections.
+    Pivot-pair rule PINNED and quotable: (2,2) fractals on the clock's own
+    high/low, confirmation lag 2 bars filtered confirmed_at <= j, lookback 60
+    bars, RSI read at those same bars rather than separately pivoted.
+    F-AN-2 17/17.
+
+  AN-2 FOUND A DEFECT THAT REACHES BEYOND ITSELF.
+    analytics.structure.resample_ohlcv PUBLISHES A PARTIAL LEADING BUCKET.
+    AMENDMENT FAN8 drops the FORMING TAIL bucket and NOTHING COVERS THE HEAD:
+    every one of the five assets' first 12h bar is built from ONE OR TWO 4h
+    bars — NEAR and ZEC FROM A SINGLE BAR — so its high and low are
+    understated by construction and it is a legitimate pivot candidate.
+    The lab filters on completeness and REFUSES rather than skips an interior
+    hole; a cardinality leg asserts all 23,339 published 12h bars are three 4h
+    bars each. resample_ohlcv IS THE ESTATE'S SHARED RESAMPLER — TIER-C5's
+    league builds its 1d clock through it — SO THIS IS NOT CONFINED TO AN-2.
+    RULING NEEDED before SAIL.
+
+  AND TWO THIRDS OF THE D15 TRIO ARE DEGENERATE FOR A SUBSET.
+    An AN-2 cell is a SUBSET of the control book, not an arm ridden through it,
+    so every paired delta is IDENTICALLY ZERO — and 0.0000 in a column named
+    paired_delta_expectancy_r reads as "no effect" when it means "not a
+    comparison". Said on the row.
+
+  INTEGRITY  14 tables filed, all as-of stamped · 11/11 fixtures ·
+    suite 334 passed, 1 skipped, exit 0.
+
+  IN-SAMPLE PROGRAM COMPLETE. SAIL-READY = card_spec freeze at v6 PLAIN.
+  TWO RULINGS NOW STAND BETWEEN HERE AND THE SEA: the resample_ohlcv leading
+  bucket, and the two-modules-one-wall divergence. Awaiting ATHENA skeleton.
+=== END ===
