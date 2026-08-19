@@ -10,8 +10,8 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": false
   },
-  "generated_utc": "2026-08-17T10:00:02Z",
-  "head": "4cf0e18257dc44b96ad65d92e4b30b2f127baf30",
+  "generated_utc": "2026-08-19T10:00:01Z",
+  "head": "18186a1e3e594bf14955832e2b8d70e462011881",
   "lane_last_commit": {
     "brief": null,
     "docs": {
@@ -20,9 +20,9 @@
       "subject": "docs: closing 11-entry memory snapshot post-redraft + phase-archive relocation pointer (ruling B, archives to D:/Naiad)"
     },
     "exchange": {
-      "committed_iso": "2026-08-17T04:54:14-03:00",
-      "sha": "4cf0e18257dc44b96ad65d92e4b30b2f127baf30",
-      "subject": "exchange: auto-publish 2026-08-16"
+      "committed_iso": "2026-08-18T04:06:48-03:00",
+      "sha": "18186a1e3e594bf14955832e2b8d70e462011881",
+      "subject": "exchange: auto-publish 2026-08-18"
     },
     "ops": {
       "committed_iso": "2026-08-12T07:52:01-03:00",
@@ -38,10 +38,10 @@
   },
   "manifest_version": "1.1",
   "onedrive_running": null,
-  "origin_head": "4cf0e18257dc44b96ad65d92e4b30b2f127baf30",
-  "queue_open": 4,
-  "queue_ratified_unbuilt": 4,
-  "queue_total": 11,
+  "origin_head": "18186a1e3e594bf14955832e2b8d70e462011881",
+  "queue_open": 5,
+  "queue_ratified_unbuilt": 5,
+  "queue_total": 12,
   "queue_unratified": 1,
   "reviewer_box": [
     {
@@ -75,8 +75,8 @@
       "match_head": false,
       "path": "exchange/status/HEARTBEAT.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "1d3f8e22b9b117c02e9a5ef76195a39439c6c8fa25a8b1f0c51a26a2aa9fd457",
-      "size": 193,
+      "sha256_worktree": "4df864f23a9bd8464779b90ce4734fba062cdd418c65ef12df6a18780ee39336",
+      "size": 175,
       "source_guess": null,
       "tracked": true
     },
@@ -93,8 +93,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_APOLLO.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "d43d64e002644dcfced3f67d5aea874af2b14d23be3233e68155af0845255218",
-      "size": 145139,
+      "sha256_worktree": "b351b8a597d386ce302b5e3ffaebfa5c19b242f62ca7bc36ceda1456d76e614d",
+      "size": 169791,
       "source_guess": null,
       "tracked": true
     },
@@ -111,8 +111,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_ATHENA.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "68f8da7d8423cfad0211196a2a4a7d7765726c4a61491b3b695b74dd17fe7954",
-      "size": 104471,
+      "sha256_worktree": "7f7e2de3643831844dc8af0216763a9a2d3feb73aade00165a4ecc14cbce5adb",
+      "size": 118571,
       "source_guess": null,
       "tracked": true
     },
@@ -181,15 +181,6 @@
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/DAILY_2026-08-05.md",
-      "sha256_head_blob": null,
-      "sha256_worktree": "b59c665198d08f8e8312d736ad6d18f93bd7f41a18bf358b38507adfe0e784a5",
-      "size": 4766,
-      "source_guess": null,
-      "tracked": true
-    },
-    {
-      "match_head": false,
       "path": "exchange/status/daily/DAILY_2026-08-08.md",
       "sha256_head_blob": null,
       "sha256_worktree": "3b591715fdcab1eed55f5383b904b3f3c0b58231e8abe600e70a005b472ab75e",
@@ -244,10 +235,10 @@
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-08-07.json",
+      "path": "exchange/status/daily/DAILY_2026-08-17.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "6940eb5dafb41cc69a200251fc95a4ffa375d4e89ee9c0ea88989197c6513461",
-      "size": 22898,
+      "sha256_worktree": "dce28d3921a53a1894cecb458cb21fc11dc4cfc41e7dade4ad6bfa7b37f45d89",
+      "size": 6962,
       "source_guess": null,
       "tracked": true
     },
@@ -302,6 +293,15 @@
       "sha256_head_blob": null,
       "sha256_worktree": "cc75138bbe75ed70c69399f20a41051e183ac6c170ebbaa8c5468ad63652b366",
       "size": 24039,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-17.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "7cb947e9b8a0fb2294ce1e7f26e65ece158403fe3c1400830293f10c920ea0f9",
+      "size": 24848,
       "source_guess": null,
       "tracked": true
     }
@@ -685,6 +685,8 @@
     }
   ],
   "status_porcelain": [
+    " M exchange/.DS_Store",
+    "?? .claude/worktrees/",
     "?? \"research_outputs/CENSUS-2A \\342\\200\\224 ENTRIES & EXITS, SEEN.html\"",
     "?? \"research_outputs/Cascade Atlas v2 \\342\\200\\224 CENSUS-1b MTF cross structure.html\"",
     "?? \"research_outputs/Cascade Atlas v2 \\342\\200\\224 CENSUS-1b MTF cross structure_files/\"",
