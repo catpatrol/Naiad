@@ -10,8 +10,8 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": false
   },
-  "generated_utc": "2026-08-19T10:00:01Z",
-  "head": "18186a1e3e594bf14955832e2b8d70e462011881",
+  "generated_utc": "2026-08-20T10:00:00Z",
+  "head": "5f28d2a973089f83fa56508832ddfb7ed0ee4659",
   "lane_last_commit": {
     "brief": null,
     "docs": {
@@ -20,9 +20,9 @@
       "subject": "docs: closing 11-entry memory snapshot post-redraft + phase-archive relocation pointer (ruling B, archives to D:/Naiad)"
     },
     "exchange": {
-      "committed_iso": "2026-08-18T04:06:48-03:00",
-      "sha": "18186a1e3e594bf14955832e2b8d70e462011881",
-      "subject": "exchange: auto-publish 2026-08-18"
+      "committed_iso": "2026-08-19T07:00:21-03:00",
+      "sha": "5f28d2a973089f83fa56508832ddfb7ed0ee4659",
+      "subject": "exchange: auto-publish 2026-08-19"
     },
     "ops": {
       "committed_iso": "2026-08-12T07:52:01-03:00",
@@ -38,7 +38,7 @@
   },
   "manifest_version": "1.1",
   "onedrive_running": null,
-  "origin_head": "18186a1e3e594bf14955832e2b8d70e462011881",
+  "origin_head": "5f28d2a973089f83fa56508832ddfb7ed0ee4659",
   "queue_open": 5,
   "queue_ratified_unbuilt": 5,
   "queue_total": 12,
@@ -75,7 +75,7 @@
       "match_head": false,
       "path": "exchange/status/HEARTBEAT.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "4df864f23a9bd8464779b90ce4734fba062cdd418c65ef12df6a18780ee39336",
+      "sha256_worktree": "e716ed7d9b1b08c8385369e45d2f2efdb6bdc71d9c60983d31c3d6aaf9c1acac",
       "size": 175,
       "source_guess": null,
       "tracked": true
@@ -181,15 +181,6 @@
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/DAILY_2026-08-08.md",
-      "sha256_head_blob": null,
-      "sha256_worktree": "3b591715fdcab1eed55f5383b904b3f3c0b58231e8abe600e70a005b472ab75e",
-      "size": 3889,
-      "source_guess": null,
-      "tracked": true
-    },
-    {
-      "match_head": false,
       "path": "exchange/status/daily/DAILY_2026-08-09.md",
       "sha256_head_blob": null,
       "sha256_worktree": "3fa71f6f27bd39e8dd6bb40bb497d8a8edee77542682eddd2db2b4f61050b105",
@@ -244,10 +235,10 @@
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-08-08.json",
+      "path": "exchange/status/daily/DAILY_2026-08-19.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "b818c992e5ef42e6b399d187ca84e43e48347d1e366c96ccc69ac56d792b2ee1",
-      "size": 23296,
+      "sha256_worktree": "44fc881787b853e6fe1056e1f6ab477afd887985b281316847cdc565213022b4",
+      "size": 6790,
       "source_guess": null,
       "tracked": true
     },
@@ -302,6 +293,15 @@
       "sha256_head_blob": null,
       "sha256_worktree": "7cb947e9b8a0fb2294ce1e7f26e65ece158403fe3c1400830293f10c920ea0f9",
       "size": 24848,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-19.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "7c890586560bc289678df48fd378e65e481a1f37659051731a8d37dcafff3fed",
+      "size": 24906,
       "source_guess": null,
       "tracked": true
     }
@@ -685,7 +685,7 @@
     }
   ],
   "status_porcelain": [
-    " M exchange/.DS_Store",
+    " M exchange/status/daily/DAILY_2026-08-19.md",
     "?? .claude/worktrees/",
     "?? \"research_outputs/CENSUS-2A \\342\\200\\224 ENTRIES & EXITS, SEEN.html\"",
     "?? \"research_outputs/Cascade Atlas v2 \\342\\200\\224 CENSUS-1b MTF cross structure.html\"",
