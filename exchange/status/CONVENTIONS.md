@@ -851,7 +851,7 @@ EARNED-BY Data residency v2, 2026-08-15.
 
 **RULE — A rule with no probe coverage is a rule on trust. Name the uncovered ones rather than implying all are checked.**
 BECAUSE rules covered only by operator inspection are ones you notice if a lane drops them — its own detection, but an argument, not an assumption.
-EARNED-BY Memory-restructure acceptance, 2026-08-03. **Pass requires ≥5 of 6 behaviours, and B6 — did the session consult this file — must be among them; if B6 fails the pointer failed and the restructure is reconsidered.** Probes: `ACCEPTANCE_MEMORY-RESTRUCTURE_2026-08-03.md`. Relocation register: the ANNEX in `docs/CASELAW.md`. Fixtures: `scripts/fixtures_conventions.py`. Census: `docs/CONVENTIONS_RULE_CENSUS_2026-08-15.md`.
+EARNED-BY Memory-restructure acceptance, 2026-08-03. **Pass requires ≥5 of 6 behaviours, and B6 — did the session consult this file — must be among them; if B6 fails the pointer failed and the restructure is reconsidered.** Probes: `docs/history/reports/2026-08/ACCEPTANCE_MEMORY-RESTRUCTURE_2026-08-03.md` (rotated off the bus 2026-08-22). Relocation register: the ANNEX in `docs/CASELAW.md`. Fixtures: `scripts/fixtures_conventions.py`. Census: `docs/CONVENTIONS_RULE_CENSUS_2026-08-15.md`.
 
 
 **Who does what.** ATHENA drafts every change. You ratify it. HEPHAESTUS writes and publishes it.

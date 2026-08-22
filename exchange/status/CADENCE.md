@@ -13,6 +13,11 @@ workflow backup and the F4 finding.
 | 3 | **Naiad weekly workflow backup** | Sundays 08:30 local | machine (**launchd** `com.naiad.workflow`) | **ARMED** | 2026-08-15 |
 | 4 | **Hermes scheduled run** | 2×/day | HERMES (Cowork, scheduled) | **NOT ARMED — Hermes-side** | — |
 | 5 | **Sync now** (project GitHub sync) | on demand, ~1×/day | **operator** | **MANUAL — no automation exists** | — |
+| 6 | **Oracle top-up 06:45** (BR-1b, fetch-only) | every day 06:45 BA | machine (**launchd** `com.naiad.oracle-topup-0645`) | **ARMED — operator ruling W4, 2026-08-22** | 2026-08-22 |
+| 7 | **Oracle 07:00** (full render) | every day 07:00 BA | machine (**launchd** `com.naiad.oracle-0700`) | **ARMED — operator ruling W4, 2026-08-22** | 2026-08-22 |
+| 8 | **Oracle top-up 15:45** (BR-1b, fetch-only) | every day 15:45 BA | machine (**launchd** `com.naiad.oracle-topup-1545`) | **ARMED — operator ruling W4, 2026-08-22** | 2026-08-22 |
+| 9 | **Oracle 16:00** (refresh) | every day 16:00 BA | machine (**launchd** `com.naiad.oracle-1600`) | **ARMED — operator ruling W4, 2026-08-22** | 2026-08-22 |
+| 10 | **Oracle catch-up** (boundary coverage, single-flight locked) | clockless — every login/boot (`RunAtLoad`) | machine (**launchd** `com.naiad.oracle-catchup`) | **ARMED — operator ruling W4, 2026-08-22** | 2026-08-22 |
 
 > ### CORRECTION 2026-08-15 (queue 005 M4) — launchd replaces Task Scheduler
 >
@@ -119,7 +124,7 @@ workflow backup and the F4 finding.
 Ruled at 2×/day (Q-4 A). Still not armed, but **the reason has changed** — and the change is worth
 reading before anyone arms it.
 
-**F4 has a result** (`SCHED_TEST_RESULT_2026-08-02.md`, run 2026-08-02T15:00:50Z, unattended):
+**F4 has a result** (`docs/history/reports/2026-08/SCHED_TEST_RESULT_2026-08-02.md`, rotated off the root 2026-08-22, run 2026-08-02T15:00:50Z, unattended):
 
 > **READ = yes · LIST = yes · WRITE = yes.** A scheduled Cowork run **does** see the mounted local
 > repo folder. The working assumption that "scheduled = remote = GitHub-only" is **wrong**.

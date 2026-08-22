@@ -373,9 +373,54 @@ Per the exchange CONTENT GUARD, artifacts are referenced, never carried.
 | Catch-up agent (shutdown half of T-3) | **BUILT + repaired after audit, 7/7 scenarios** | ARGUS |
 | Single-flight lock (D4) | **BUILT, verified** | ARGUS |
 | Two days of calibration records | **LOST, unrecoverable** | — |
-| T-7 crash surfacing | **[VETO] — awaits one word** | operator |
-| T-3 wake-order ruling | **[VETO] — awaits one word** | operator |
+| T-7 crash surfacing | **RULED "flagfile" 2026-08-22 — BUILT, F-BR-12 green** | ARGUS |
+| T-3 wake-order ruling | **RULED 2026-08-22 — renders on a stale cache, banner showing; CLOSED on all four faces** | ARGUS |
 | CADENCE.md has no Oracle rows | **REPORTED, not fixed** | operator |
 | Top-up exit code not wired to the Oracle | **REPORTED, not fixed** | operator |
 | Non-chained `None` hazards | **NOT CLOSED — scan cannot see them** | ARGUS |
 
+---
+
+## ADDENDUM 2026-08-22 — OPERATOR RULINGS
+
+(verbatim 'W1 fire, W2 flagfile, W3 banner, W4 yes')
+
+T-7 RULED = flag-file alarm, built this session (F-BR-12). C-0/T-3 RULED = the Oracle RENDERS on a
+stale cache, banner showing; refusal rejected — a stale brief that confesses beats a missing one.
+T-3 is now CLOSED on all four faces: wake replay (measured), boot coverage (catch-up agent), alarm
+(T-7 flag), disclosure (A2-7 banner). Repair committed at `88850e0`.
+
+### What the rulings changed on disk
+
+**W1 · the repair is committed.** `88850e0` on `v12-v1-census`, pushed: the four paths the §5 diff
+names and no others. The concurrent lane's `scripts/tierc6*.py` were not staged, stashed or checked
+out — the reconciliation was printed before anything was added to the index.
+
+**W2 · T-7 is candidate A of §8, not A+B.** One file, `ORACLE_DOWN.flag`, at the repo root, written
+by `oracle_wrapper.py` on any run ending `rc != 0` and carrying the UTC stamp, the job and slot, the
+exit code, and the last 15 traceback lines. It is **gitignored** — an alarm on the bus would tell
+every reader that a laptop in Buenos Aires had a bad morning, and the alarm is for the operator
+standing at the machine. Three things the build decided that §8's sketch did not:
+
+- **The all-clear is not `rc == 0`, it is a clean run.** The lock stand-down exits 0 having done no
+  work, `--install` exits 0 without running the Oracle, and a catch-up that finds nothing missed
+  exits 0 by design. Had any of those cleared the flag, a login could silently cancel a live alarm —
+  the same class of error as D1/D2, where a file a FAILED run also writes was read as proof the run
+  succeeded. The flag is cleared only by a run that performed a job AND reached `rc == 0`.
+- **The alarm has an outermost net.** `main()` carried no top-level `try`: argv parsing,
+  `zone_report()` and `acquire_lock()` all sat outside one, so a crash in any of them exited nonzero
+  with the alarm silent. That is the failure T-7 exists to end, so the entry point now nets it.
+  `KeyboardInterrupt` is deliberately not caught — an operator who stops a manual run has not
+  discovered an outage.
+- **Failures that raise nothing still speak.** A red self-check and a vanished agent plist both drive
+  `rc` nonzero without an exception, so both now write a line the flag can carry.
+
+**W3 · this addendum**, and the two §10 rows above.
+
+**W4 · CADENCE.md** now carries a row for each of the five Oracle agents, cited to this ruling.
+
+### Superseded above, left as written
+
+Two §10 rows predate this session and were outside the ruling's scope, so they were not edited:
+**CADENCE.md has no Oracle rows** — five rows were added under W4 on 2026-08-22 and the row is now
+discharged; and **F-BR-11 ... 11/11 green**, which reads **12/12** with F-BR-12 in the suite.

@@ -280,3 +280,37 @@ PENDING: 1. T-7 crash surfacing [VETO] 2. T-3 wake-order ruling [VETO] 3. operat
 NEXT: the estate is armed and self-recovering; nothing further runs until a word lands on T-7 or
       T-3. Owner: operator.
 === END STATUS ===
+
+=== STATUS_ARGUS — 2026-08-22 (FOUR RULINGS EXECUTED · T-3 CLOSED · T-7 BUILT) ===
+NOW: The operator's four words landed — "W1 fire, W2 flagfile, W3 banner, W4 yes" — and all four
+     are executed. The repair is committed and pushed, T-7 is built as a flag-file alarm with its
+     own fixture, T-3 is closed on all four faces, and CADENCE finally describes the machine.
+LAST EVENT: 2026-08-22 — repair committed 88850e0; F-BR-12 built; incident addendum filed;
+     five Oracle rows added to CADENCE; oracle-0700 kickstarted clean.
+FACTS:
+- W1 REPAIR COMMITTED at 88850e0 on v12-v1-census, pushed. Four paths, staged by explicit path
+  and reconciled against the incident §5 diff before anything entered the index; the concurrent
+  lane's scripts/tierc6*.py were untouched and unstaged [verified]
+- W2 T-7 BUILT = candidate A of §8: ORACLE_DOWN.flag at the repo root on any rc != 0, carrying UTC
+  stamp, job, slot, exit code and the last 15 traceback lines; gitignored, so the alarm never
+  reaches the bus. The all-clear is a CLEAN RUN, not rc == 0 — a lock stand-down, --install and an
+  idle catch-up all exit 0 having done no work and must not cancel a live alarm [verified]
+- W2 ALSO CLOSED THE ALARM'S OWN BLIND SPOT: main() carried no top-level try, so a crash in argv
+  parsing, zone_report() or acquire_lock() exited nonzero with the alarm silent. Netted at the
+  entry point; KeyboardInterrupt deliberately not caught [verified]
+- F-BR-12 drives the REAL main() with a planted render failure, in a TemporaryDirectory so no
+  fixture touches the lane. Break leg replants the pre-T-7 silence and goes red. GREEN 12/12 [verified]
+- W3/W4 FILED: incident addendum records the rulings verbatim and §10 rows T-7 and T-3 now read
+  RULED; CADENCE carries five Oracle rows cited to operator ruling W4, 2026-08-22 [verified]
+- PROOF OF LIFE: oracle-0700 kickstarted, exit 0, render briefs/oracle/oracle_2026-08-22.html
+  221,018 B sha256 86bf0fca…b7b45d85, as-of bar 2026-08-22T00:00Z, calibration 6,042 B, 3/3
+  self-checks PASS, ORACLE_DOWN.flag ABSENT [verified]
+- PUBLISH HALTED, NOT FAILED: at 02:12, seven minutes after 88850e0, a second lane staged 110
+  exchange/ -> docs/history/ renames (R100) plus CONVENTIONS.md and ROTATION_LOG.md into the SHARED
+  index. publish() commits the whole index by design, so publishing would have swept another lane's
+  in-flight rotation into this lane's commit under this lane's name. Unstaging it would have been
+  the same trespass in reverse. Held for the operator [open]
+PENDING: 1. operator PARITY line (last human gate) 2. BR-2 on gates, earliest 2026-08-26 on
+         unattended evidence 3. V-7 rails (APOLLO F-C3-e)
+NEXT: the unattended week accrues; the lane sleeps. Owner: launchd, then operator.
+=== END STATUS ===
