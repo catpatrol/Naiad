@@ -17,15 +17,16 @@ import numpy as np
 import rangefinder_twin as RF
 from engine import indicators as ind
 
-d = RF.daily_bars()
-o = d["o"].to_numpy(float); h = d["h"].to_numpy(float)
-l = d["l"].to_numpy(float); c = d["c"].to_numpy(float)
-n = len(d)
 ATR_LEN = 14
-atr = ind.atr(h, l, c, ATR_LEN)
+
 
 def run_pine_repaired(boundaryMode="body", legMin=0.5, revMin=1.75, touchEps=0.60,
-                      devRet=7, brkN=8, brkMargin=1.5):
+                      devRet=7, brkN=8, brkMargin=1.5, tape=None):
+    d = RF.daily_bars() if tape is None else tape
+    o = d["o"].to_numpy(float); h = d["h"].to_numpy(float)
+    l = d["l"].to_numpy(float); c = d["c"].to_numpy(float)
+    n = len(d)
+    atr = ind.atr(h, l, c, ATR_LEN)
     NA = float("nan")
     def na(x): return x is None or (isinstance(x, float) and math.isnan(x))
     zdir = 0; extBar = None; extPx = NA; extLo = NA
@@ -35,17 +36,22 @@ def run_pine_repaired(boundaryMode="body", legMin=0.5, revMin=1.75, touchEps=0.6
     nPivots = 0
     rTop = NA; rBot = NA; devTopExt = NA; devBotExt = NA
     rP0Bar = None; rState = "NONE"; confirmSide = ""
+    cands = []          # THE CANDIDATE LIST [twin law; the single slot
+                        # diverged on the 4h tape — F-RF-12]
+    pivs = []           # (wickBar, px, dir) — terminal test scans BY WICK
+                        # BAR against the floor [twin law verbatim]
     pendSide = 0; pendOpen = None; pendExt = NA; pendCloses = 0
     nConfirmed = 0; nPotential = 0; coveredBars = 0
-    expansionFloorBar = -1; expPivHi = NA; expPivLo = NA
+    expansionFloorBar = -1
     ranges = []; cur = None; seeds = 0; inval = 0; hard = []
     for i in range(n):
         open_, high, low, close = o[i], h[i], l[i], c[i]
-        if i <= ATR_LEN:
+        if i < ATR_LEN:      # twin parity: bar 14 IS processed [F-RF-12
+                             # off-by-one, chapter-moving on 4h]
             if na(extPx) or high >= extPx:
                 extPx = high; extBar = i; extLo = low
                 extBodyHi = max(open_, close)
-        if i > ATR_LEN and not na(atr[i]):
+        if i >= ATR_LEN and not na(atr[i]):
             a = atr[i]
             sealedNow = False                       # R1
             if zdir == 0:
@@ -56,7 +62,7 @@ def run_pine_repaired(boundaryMode="body", legMin=0.5, revMin=1.75, touchEps=0.6
                     prevPivPx = lastPivPx; prevPivBody = lastPivBody; prevPivBar = lastPivBar
                     lastPivPx = extPx; lastPivBody = extBodyHi; lastPivDir = 1; lastPivBar = extBar
                     nPivots += 1; sealedNow = True
-                    expPivHi = lastPivPx if na(expPivHi) else max(expPivHi, lastPivPx)
+                    pivs.append((lastPivBar, lastPivPx, 1))
                     extPx = low; extBar = i; extBodyLo = min(open_, close)
                 elif high > extPx:
                     extPx = high; extBar = i; extLo = low; extBodyHi = max(open_, close)
@@ -67,7 +73,7 @@ def run_pine_repaired(boundaryMode="body", legMin=0.5, revMin=1.75, touchEps=0.6
                     prevPivPx = lastPivPx; prevPivBody = lastPivBody; prevPivBar = lastPivBar
                     lastPivPx = extPx; lastPivBody = extBodyHi; lastPivDir = 1; lastPivBar = extBar
                     nPivots += 1; sealedNow = True
-                    expPivHi = lastPivPx if na(expPivHi) else max(expPivHi, lastPivPx)
+                    pivs.append((lastPivBar, lastPivPx, 1))
                     zdir = -1; extPx = low; extBar = i; extBodyLo = min(open_, close)
             else:
                 if low < extPx:
@@ -76,43 +82,78 @@ def run_pine_repaired(boundaryMode="body", legMin=0.5, revMin=1.75, touchEps=0.6
                     prevPivPx = lastPivPx; prevPivBody = lastPivBody; prevPivBar = lastPivBar
                     lastPivPx = extPx; lastPivBody = extBodyLo; lastPivDir = -1; lastPivBar = extBar
                     nPivots += 1; sealedNow = True
-                    expPivLo = lastPivPx if na(expPivLo) else min(expPivLo, lastPivPx)
+                    pivs.append((lastPivBar, lastPivPx, -1))
                     zdir = 1; extPx = high; extBar = i; extBodyHi = max(open_, close)
             # SEED — R1 sealedNow gate; R2 no floor bar-guard; R3 na->true
             if rState != "CONFIRMED" and sealedNow and lastPivDir != 0 and not na(prevPivPx):
-                bullTerm = lastPivDir == -1 and (na(expPivHi) or prevPivPx >= expPivHi) and prevPivPx > lastPivPx
-                bearTerm = lastPivDir == 1 and (na(expPivLo) or prevPivPx <= expPivLo) and prevPivPx < lastPivPx
+                segHi = [px for (b, px, d_) in pivs
+                         if b > expansionFloorBar and d_ == 1]
+                segLo = [px for (b, px, d_) in pivs
+                         if b > expansionFloorBar and d_ == -1]
+                bullTerm = (lastPivDir == -1
+                            and (not segHi or prevPivPx >= max(segHi))
+                            and prevPivPx > lastPivPx)
+                bearTerm = (lastPivDir == 1
+                            and (not segLo or prevPivPx <= min(segLo))
+                            and prevPivPx < lastPivPx)
                 bodyM = boundaryMode == "body"
                 if bullTerm or bearTerm:
                     if bullTerm:
-                        rTop = prevPivBody if bodyM else prevPivPx
-                        rBot = lastPivBody if bodyM else lastPivPx
-                        devTopExt = prevPivPx if (bodyM and prevPivPx > rTop) else NA
-                        devBotExt = lastPivPx if (bodyM and lastPivPx < rBot) else NA
-                        rP0Bar = prevPivBar; confirmSide = "top"
+                        cTop = prevPivBody if bodyM else prevPivPx
+                        cBot = lastPivBody if bodyM else lastPivPx
+                        cDevT = prevPivPx if (bodyM and prevPivPx > cTop) else NA
+                        cDevB = lastPivPx if (bodyM and lastPivPx < cBot) else NA
+                        cSide = "top"
                     else:
-                        rTop = lastPivBody if bodyM else lastPivPx
-                        rBot = prevPivBody if bodyM else prevPivPx
-                        devTopExt = lastPivPx if (bodyM and lastPivPx > rTop) else NA
-                        devBotExt = prevPivPx if (bodyM and prevPivPx < rBot) else NA
-                        rP0Bar = prevPivBar; confirmSide = "bottom"
-                    rState = "POTENTIAL" if rTop > rBot else rState
-                    if rState == "POTENTIAL":
+                        cTop = lastPivBody if bodyM else lastPivPx
+                        cBot = prevPivBody if bodyM else prevPivPx
+                        cDevT = lastPivPx if (bodyM and lastPivPx > cTop) else NA
+                        cDevB = prevPivPx if (bodyM and prevPivPx < cBot) else NA
+                        cSide = "bottom"
+                    if cTop > cBot:
+                        # the CANDIDATE LIST [twin law] — append, never replace
+                        cands.append({"top": cTop, "bot": cBot,
+                                      "devT": cDevT, "devB": cDevB,
+                                      "p0": prevPivBar, "side": cSide})
                         nPotential += 1; seeds += 1
-            if rState == "POTENTIAL":
-                if close > rTop or close < rBot:
-                    rState = "NONE"; nPotential -= 1; inval += 1
-                else:
+            if rState != "CONFIRMED" and cands:
+                # twin order: creation order; invalidate first, first confirm
+                # wins the bar and supersedes the rest
+                keep = []
+                won = None
+                for cd in cands:
+                    if won is not None:
+                        continue          # superseded at confirm below
+                    if close > cd["top"] or close < cd["bot"]:
+                        nPotential -= 1; inval += 1
+                        expansionFloorBar = i    # a lifecycle boundary
+                        continue
                     eps = touchEps * a
-                    hitTop = confirmSide == "top" and high >= rTop - eps
-                    hitBot = confirmSide == "bottom" and low <= rBot + eps
+                    hitTop = cd["side"] == "top" and high >= cd["top"] - eps
+                    hitBot = cd["side"] == "bottom" and low <= cd["bot"] + eps
                     if hitTop or hitBot:
-                        rState = "CONFIRMED"; nPotential -= 1; nConfirmed += 1
-                        leftEdge = i if rP0Bar is None else rP0Bar
-                        cur = {"conf": i, "top": rTop, "bot": rBot, "left": leftEdge,
-                               "die": -1, "ndev": 0,
-                               "incept": int(not na(devTopExt)) + int(not na(devBotExt))}
-                        ranges.append(cur)
+                        won = cd
+                        continue
+                    keep.append(cd)
+                if won is not None:
+                    rTop, rBot = won["top"], won["bot"]
+                    devTopExt, devBotExt = won["devT"], won["devB"]
+                    rP0Bar = won["p0"]
+                    confirmSide = won["side"]
+                    rState = "CONFIRMED"
+                    nPotential -= 1
+                    nPotential -= len(keep)          # superseded
+                    nConfirmed += 1
+                    cands = []
+                    expansionFloorBar = i        # confirm closes an expansion
+                    leftEdge = i if rP0Bar is None else rP0Bar
+                    cur = {"conf": i, "top": rTop, "bot": rBot,
+                           "left": leftEdge, "die": -1, "ndev": 0,
+                           "incept": int(not na(devTopExt))
+                                     + int(not na(devBotExt))}
+                    ranges.append(cur)
+                else:
+                    cands = keep
             if rState == "CONFIRMED":
                 if pendSide == 0:
                     if close > rTop:
@@ -142,7 +183,7 @@ def run_pine_repaired(boundaryMode="body", legMin=0.5, revMin=1.75, touchEps=0.6
                     if dieN or dieM:
                         cur["die"] = i
                         rState = "NONE"; pendSide = 0; pendCloses = 0
-                        expansionFloorBar = i; expPivHi = NA; expPivLo = NA
+                        expansionFloorBar = i
             covTop = rTop if na(devTopExt) else max(rTop, devTopExt)
             covBot = rBot if na(devBotExt) else min(rBot, devBotExt)
             if rState == "CONFIRMED" and not na(covTop) and close <= covTop and close >= covBot:

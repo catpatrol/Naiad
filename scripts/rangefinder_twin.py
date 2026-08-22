@@ -195,6 +195,11 @@ def run_machine(d: pd.DataFrame, pins: dict) -> dict:
 
     # ── ZigZag pivots (alternating by construction; merge law in header)
     pivots: list[tuple[int, float, int]] = []   # (bar, px, dir +1 high/-1 low)
+    seals: list[int] = []                       # the bar each pivot SEALED at
+                                                # [F-RF-12: the post-hoc scan
+                                                # diverged from the seal bar
+                                                # on the 4h tape — knowability
+                                                # IS the seal, recorded live]
     zdir = 0
     ext_i, ext_px = 0, c[0]
     warm = ATR_LEN                               # ATR seed floor
@@ -209,6 +214,7 @@ def run_machine(d: pd.DataFrame, pins: dict) -> dict:
             elif ext_px - l[i] >= pins["REV_MIN"] * atr[i]:
                 zdir = -1
                 pivots.append((ext_i, ext_px, 1))
+                seals.append(i)
                 log(ext_i, "pivot", px=ext_px, side="high")
                 ext_i, ext_px = i, l[i]
             elif h[i] > ext_px:
@@ -222,6 +228,7 @@ def run_machine(d: pd.DataFrame, pins: dict) -> dict:
                        or abs(ext_px - pivots[-1][1])
                        >= pins["LEG_MIN"] * atr[i])):
                 pivots.append((ext_i, ext_px, 1))
+                seals.append(i)
                 log(ext_i, "pivot", px=ext_px, side="high")
                 zdir, ext_i, ext_px = -1, i, l[i]
         else:
@@ -232,9 +239,12 @@ def run_machine(d: pd.DataFrame, pins: dict) -> dict:
                        or abs(ext_px - pivots[-1][1])
                        >= pins["LEG_MIN"] * atr[i])):
                 pivots.append((ext_i, ext_px, -1))
+                seals.append(i)
                 log(ext_i, "pivot", px=ext_px, side="low")
                 zdir, ext_i, ext_px = 1, i, h[i]
-    pivots.sort(key=lambda p: p[0])
+    order = sorted(range(len(pivots)), key=lambda k: pivots[k][0])
+    pivots = [pivots[k] for k in order]
+    seals = [seals[k] for k in order]
 
     # ── the lifecycle sweep
     piv_by_bar = {}
@@ -242,21 +252,10 @@ def run_machine(d: pd.DataFrame, pins: dict) -> dict:
         piv_by_bar.setdefault(p[0], []).append(p)
     confirmed_at: dict[int, int] = {}      # pivot bar -> bar it CONFIRMED at
     # a pivot at bar b is only knowable at its reversal bar; replay that:
-    conf_order: list[tuple[int, tuple]] = []   # (confirm_bar, pivot)
-    for k, p in enumerate(pivots):
-        # the pivot confirms at the first bar whose counter-move sealed it —
-        # conservatively the NEXT pivot's own extreme bar is too late; use
-        # the first bar j > p.bar where the reversal condition held. For the
-        # twin's event ORDER a bar-accurate confirmation suffices: the
-        # reversal bar is the first j with excursion >= REV_MIN*atr[j].
-        b, px, pd_ = p
-        j = b + 1
-        while j < n:
-            exc = (px - l[j]) if pd_ == 1 else (h[j] - px)
-            if exc >= pins["REV_MIN"] * atr[j]:
-                break
-            j += 1
-        conf_order.append((min(j, n - 1), p))
+    # knowability IS the recorded seal bar — the prior post-hoc REV-only
+    # rescan ignored the LEG_MIN merge deferral and diverged from the
+    # sequential machine on the 4h tape [F-RF-12]
+    conf_order: list[tuple[int, tuple]] = list(zip(seals, pivots))
     conf_order.sort(key=lambda x: (x[0], x[1][0]))
 
     ranges: list[Range] = []
@@ -469,7 +468,7 @@ def run_machine(d: pd.DataFrame, pins: dict) -> dict:
     # pivot events are stamped at their WICK bar with the bar they became
     # KNOWABLE at riding beside; the log ships stable-sorted by bar index
     # [review: "ordered" must mean ordered]
-    know = {(p[0], p[1]): cb for cb, p in conf_order}
+    know = {(p[0], round(p[1], 2)): cb for cb, p in conf_order}
     for e in ev:
         if e["event"] == "pivot":
             e["knowable_at"] = int(know.get((e["i"], e["px"]),
@@ -786,3 +785,443 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+
+# ═══════════════════════════ v2 · HIERARCHY + FLIPS + THE LEASH [RF-3]
+# The identical machine runs TWICE on the 4h tape: MACRO (LEG_MIN and
+# REV_MIN scaled by SCALE_MULT) is the primary structure and the ONLY
+# writer of global state, memory lines and flips; MICRO (v1 pins FROZEN,
+# never refit) renders subordinate and only inside a live macro range.
+#
+# v2 PINNED READINGS:
+#   CONTAINMENT [H1]  a micro range is KEPT iff at its confirm bar a macro
+#                     range is alive AND the micro's span-at-birth
+#                     (boundaries + inception zones) lies inside the
+#                     macro's current span (boundaries + zones). Everything
+#                     else is filed as micro-suppressed, counted, unrendered.
+#   FLIP [H2, observed — the operator's own grey arrows] the FIRST retest
+#                     of a dead macro boundary, approached from the side
+#                     OPPOSITE its birth side, that survives FLIP_HOLD_BARS
+#                     bars with no body close through by FLIP_HOLD_MARGIN×
+#                     ATR ⇒ ▲ (dead top → support) / ▼ (dead bottom →
+#                     resistance). A truncated hold window (tape ends) does
+#                     NOT confirm. A fail-through stays a plain touch —
+#                     AND CONSUMES THE CANDIDACY [review-pinned]: one
+#                     evaluation per line, ever; later opposite touches
+#                     log "candidacy consumed" and can never flip. The
+#                     rival first-retest-THAT-HOLDS reading would print a
+#                     ▼ at 65,359 on 2026-06-17 — filed as the operator's
+#                     arbitration exhibit, not enacted.
+#   LEASH [H3]        memory lines are MACRO corpses only; a line untouched
+#                     for MEM_TTL_BARS after death expires (reason ttl); at
+#                     most 6 LIVE (unfrozen, unexpired) lines per side —
+#                     the oldest expires (reason cap). Expiry precedes any
+#                     later touch: an expired line neither freezes nor flips.
+#   TTL DEFAULT       400 as PROPOSED by the commission — no KEY-C row
+#                     constrains it, so it is adopted, not fitted; disclosed.
+
+V2_WINDOW_BARS = 1700          # 4h bars: 2025-11-12 → now; the Jan shelf
+                               # forms inside, per C-R3's "visible-left"
+MEM_CAP_PER_SIDE = 6           # H3, commissioned
+
+PINS_V2 = {
+    # v2 CALIBRATION OF RECORD (written by --calibrate-v2; micro pins are
+    # v1's ruled values, FROZEN, read by fixture from the v1 pine)
+    # v2 CALIBRATION OF RECORD (KEY-C objective, 36 cells): score 2.9968.
+    # TIED with SCALE 3.5 at the same score (3.5 covers 39.18% vs 31.94%);
+    # the deterministic tie-break chose 3.0 — disclosed. FLIP_HOLD_MARGIN
+    # 1.0 is what lets C-F2's Apr 18–19 hold window survive (deepest
+    # window close 75,205.6 vs 75,998.9 − 1.0×ATR ≈ 75,104 — held by
+    # ~101 USD; era ATR ~0.9–1.0k; margins 0.25/0.5 fail through, and
+    # BARS 12/18 extend the window into the 2026-04-19T16:00 close
+    # 74,917.9, which also fails — BARS 6 is load-bearing too)
+    # [doc-prep lens: the first draft's story numbers were wrong on all
+    # three counts while the headline claim survived].
+    "SCALE_MULT": 3.0,
+    "FLIP_HOLD_MARGIN": 1.0,
+    "FLIP_HOLD_BARS": 6,
+    "MEM_TTL_BARS": 400,       # PROPOSED, adopted, not fitted [disclosed]
+}
+
+
+def bars_4h(n_bars: int = V2_WINDOW_BARS) -> pd.DataFrame:
+    """The raw 4h tape, no resample — KEY-C is a 4h transcription."""
+    f = pd.read_parquet(cache_dir() / "klines" / "BTCUSDT_4h.parquet")
+    d = f.tail(n_bars).reset_index(drop=True)
+    d = d.rename(columns={"open": "o", "high": "h", "low": "l",
+                          "close": "c", "open_time": "t0"})
+    d["ts"] = pd.to_datetime(d["t0"], unit="ms", utc=True).dt.strftime(
+        "%Y-%m-%dT%H:%M")
+    d.attrs["dropped_incomplete_days"] = 0
+    return d
+
+
+def _span(r) -> tuple:
+    lo = r.bottom if np.isnan(r.dev_bot_ext) else min(r.bottom, r.dev_bot_ext)
+    hi = r.top if np.isnan(r.dev_top_ext) else max(r.top, r.dev_top_ext)
+    return float(lo), float(hi)
+
+
+def _span_at(r, events, i: int) -> tuple:
+    """A range's span AS OF bar i, reconstructed from its own events —
+    boundaries at their pre-redraw values plus any zone extremes logged at
+    or before i.  [review L1/L3: the first draft read END-OF-RUN spans —
+    look-ahead in the machine of record, and a third variant in the pine.]
+    """
+    top, bot = float(r.top0), float(r.bottom0)
+    for e in events:
+        if e.get("rid") != r.rid or e["i"] > i:
+            continue
+        if e["event"] in ("inception-deviation", "harden"):
+            if e["side"] == "top":
+                top = max(top, float(e["extreme"]))
+            else:
+                bot = min(bot, float(e["extreme"]))
+    return bot, top
+
+
+def containment(micro: dict, macro: dict) -> tuple[list, list]:
+    """[H1] kept micro rids + suppression events.  Spans AS OF the micro's
+    confirm bar — at-birth for the micro, current-as-of-that-bar for the
+    macro [pinned law; never end-of-run]."""
+    kept, sup = [], []
+    for r in micro["ranges"]:
+        if r.confirm_i < 0:
+            continue
+        i = r.confirm_i
+        parent = None
+        for q in macro["ranges"]:
+            if q.confirm_i >= 0 and q.confirm_i <= i and (
+                    q.die_i < 0 or q.die_i > i):
+                parent = q
+                break
+        if parent is None:
+            sup.append({"i": i, "event": "micro-suppressed", "rid": r.rid,
+                        "reason": "no_live_macro"})
+            continue
+        mlo, mhi = _span_at(r, micro["events"], i)
+        plo, phi = _span_at(parent, macro["events"], i)
+        if mlo >= plo and mhi <= phi:
+            kept.append((r.rid, parent.rid))
+        else:
+            sup.append({"i": i, "event": "micro-suppressed", "rid": r.rid,
+                        "reason": "outside_macro_span",
+                        "parent_rid": parent.rid})
+    return kept, sup
+
+
+def flips_and_leash(macro: dict, d: pd.DataFrame, pins: dict) -> list[dict]:
+    """[H2+H3] the memory-line lifecycle, re-walked post-machine: expiry
+    (ttl/cap) precedes touches; the first opposite-side touch that holds
+    flips. Returns ordered leash/flip events."""
+    h, l, c = (d["h"].to_numpy(float), d["l"].to_numpy(float),
+               d["c"].to_numpy(float))
+    atr = ind.atr(h, l, c, ATR_LEN)
+    ts = d["ts"].tolist()
+    n = len(d)
+    ttl = int(pins["MEM_TTL_BARS"])
+    hold_n = int(pins["FLIP_HOLD_BARS"])
+    hold_m = float(pins["FLIP_HOLD_MARGIN"])
+    # line registry: (rid, side, px, born_i)
+    lines = []
+    for r in macro["ranges"]:
+        # corpses = DEAD CONFIRMED ranges only [H2/H3 law; the first run
+        # admitted invalidated candidates and printed phantom flips]
+        if r.state == "DEAD" and r.confirm_i >= 0 and r.die_i >= 0:
+            lines.append({"rid": r.rid, "side": "top", "px": float(r.top),
+                          "born": r.die_i, "state": "live", "die_ts":
+                          ts[r.die_i]})
+            lines.append({"rid": r.rid, "side": "bottom",
+                          "px": float(r.bottom), "born": r.die_i,
+                          "state": "live", "die_ts": ts[r.die_i]})
+    ev = []
+    for i in range(n):
+        # cap: count live per side, expire oldest [H3]
+        for side in ("top", "bottom"):
+            live = [x for x in lines if x["side"] == side
+                    and x["state"] == "live" and x["born"] <= i]
+            if len(live) > MEM_CAP_PER_SIDE:
+                for x in sorted(live, key=lambda y: y["born"])[
+                        :len(live) - MEM_CAP_PER_SIDE]:
+                    x["state"] = "expired"
+                    ev.append({"i": i, "ts": ts[i], "event": "line-expired",
+                               "rid": x["rid"], "side": side,
+                               "px": round(x["px"], 1), "reason": "cap"})
+        for x in lines:
+            if x["state"] not in ("live", "frozen") or x["born"] >= i:
+                continue
+            if x.get("flip_done"):
+                if l[i] <= x["px"] <= h[i]:
+                    ev.append({"i": i, "ts": ts[i],
+                               "event": ("flip-retest" if x.get("flipped")
+                                         else "memory-retest"),
+                               "rid": x["rid"], "side": x["side"],
+                               "px": round(x["px"], 1),
+                               **({} if x.get("flipped") else
+                                  {"verdict": "candidacy consumed — the "
+                                              "one evaluation is spent "
+                                              "[pinned]"})})
+                continue
+            # ttl runs from death; an expired line neither freezes nor flips
+            if x["state"] == "live" and i - x["born"] > ttl:
+                x["state"] = "expired"
+                ev.append({"i": i, "ts": ts[i], "event": "line-expired",
+                           "rid": x["rid"], "side": x["side"],
+                           "px": round(x["px"], 1), "reason": "ttl"})
+                continue
+            # TWO-SIDED touch [H2 law, review-of-first-run]: a dead bottom's
+            # flip retest arrives from BELOW (h crosses up into it) — the
+            # one-sided test could only see birth-side touches, so a line
+            # frozen by a same-side crash was blind to the very retest the
+            # operator's arrow marks.
+            touched = l[i] <= x["px"] <= h[i]
+            if not touched:
+                continue
+            if x["state"] == "live":
+                x["state"] = "frozen"          # freeze at FIRST touch (any
+                x["touch_i"] = i               # side) — the v1 render law
+            # flip candidacy [H2]: the FIRST OPPOSITE-side approach gets ONE
+            # evaluation, frozen or not; same-side touches spend nothing
+            appr_above = c[i - 1] > x["px"]
+            opposite = (appr_above if x["side"] == "top"
+                        else not appr_above)
+            if not opposite:
+                ev.append({"i": i, "ts": ts[i], "event": "memory-retest",
+                           "rid": x["rid"], "side": x["side"],
+                           "px": round(x["px"], 1),
+                           "verdict": "same-side touch, no flip candidacy"})
+                continue
+            x["flip_done"] = True          # one evaluation, consumed
+            if i + hold_n >= n:
+                ev.append({"i": i, "ts": ts[i], "event": "memory-retest",
+                           "rid": x["rid"], "side": x["side"],
+                           "px": round(x["px"], 1),
+                           "verdict": "hold window truncated by tape end — "
+                                      "NOT confirmed"})
+                continue
+            held = True
+            for k in range(i, i + hold_n + 1):
+                thr = hold_m * atr[k]
+                through = (c[k] < x["px"] - thr if x["side"] == "top"
+                           else c[k] > x["px"] + thr)
+                if through:
+                    held = False
+                    break
+            if held:
+                ev.append({"i": i, "ts": ts[i], "event": "flip",
+                           "rid": x["rid"], "side": x["side"],
+                           "px": round(x["px"], 1),
+                           "polarity": ("support" if x["side"] == "top"
+                                        else "resistance"),
+                           "glyph": "▲" if x["side"] == "top" else "▼",
+                           "parent_death": x["die_ts"],
+                           "retest": ts[i]})
+                x["flipped"] = True
+            else:
+                ev.append({"i": i, "ts": ts[i], "event": "memory-retest",
+                           "rid": x["rid"], "side": x["side"],
+                           "px": round(x["px"], 1),
+                           "verdict": "failed through within the hold "
+                                      "window — touch only"})
+    return ev
+
+
+def run_v2(d: pd.DataFrame, pins_v2: dict) -> dict:
+    micro_pins = dict(PINS)                    # v1 ruled values, FROZEN
+    macro_pins = dict(PINS,
+                      LEG_MIN=PINS["LEG_MIN"] * pins_v2["SCALE_MULT"],
+                      REV_MIN=PINS["REV_MIN"] * pins_v2["SCALE_MULT"])
+    macro = run_machine(d, macro_pins)
+    micro = run_machine(d, micro_pins)
+    kept, sup = containment(micro, macro)
+    leash = flips_and_leash(macro, d, pins_v2)
+    kept_rids = {k for k, _ in kept}
+    micro_kept_events = [e for e in micro["events"]
+                         if e.get("rid") is None or e["rid"] in kept_rids
+                         or e["event"] == "pivot"]
+    conf_feb_aug = [r for r in macro["ranges"] if r.confirm_i >= 0
+                    and d["ts"].iloc[r.confirm_i] >= "2026-02-01"]
+    out = {
+        "macro": macro, "micro": micro, "kept": kept, "suppressed": sup,
+        "micro_kept_events": micro_kept_events, "leash": leash,
+        "flips": [e for e in leash if e["event"] == "flip"],
+        "state": macro["final_state"],
+        "macro_count_feb_aug": len(conf_feb_aug),
+        "status_line": (f"{len(d)} CANDLES · {macro['final_state']} · "
+                        f"{macro['coverage_pct']}% COV (MACRO) · "
+                        f"{macro['n_pending_open']} PENDING · "
+                        f"{macro['n_confirmed']} MACRO · "
+                        f"{len(kept)} MICRO · "
+                        f"{macro['n_pivots']} PIVOTS"),
+    }
+    return out
+
+
+# ═══════════════════════════════════ v2 · KEY-C VERIFY + CALIBRATE
+KEY_C_TOL_USD = 1_200.0
+KEY_C_TOL_BARS = 8
+
+KEY_C_RANGES = [
+    # (name, window_a, window_b, top, bottom, midline, devs)
+    ("C-R1", "2026-02-01", "2026-05-31", 75_000.0, 59_900.0, 66_500.0,
+     [("bottom", 57_900.0, 62_000.0, "2026-02-20"),
+      ("top", 75_000.0, 78_500.0, "2026-04-15")]),
+    ("C-R2", "2026-06-01", "2026-08-22", 67_300.0, 59_900.0, None,
+     [("bottom", 57_600.0, 60_300.0, "2026-07-02")]),
+    ("C-R3", "2025-12-01", "2026-02-05", None, 84_500.0, None,
+     [("top", 95_000.0, 97_500.0, "2026-01-05")]),
+]
+KEY_C_FLIPS = [
+    ("C-F1", "resistance", 84_500.0, 1_500.0, "2026-02-01"),
+    ("C-F2", "support", 75_000.0, 1_200.0, "2026-05-15"),
+]
+
+
+def verify_key_c(v2: dict, d: pd.DataFrame) -> list[dict]:
+    ts = d["ts"].tolist()
+    n = len(d)
+
+    def bar_of(s):
+        for i, t in enumerate(ts):
+            if t >= s:
+                return i
+        return n - 1
+    rows = []
+    macro = v2["macro"]
+    conf = [r for r in macro["ranges"] if r.confirm_i >= 0]
+    for name, a, b, top_t, bot_t, mid_t, devs in KEY_C_RANGES:
+        ia, ib = bar_of(a), bar_of(b)
+        best, best_ov = None, 0
+        for r in conf:
+            hi_r = r.die_i if r.die_i >= 0 else n - 1
+            ov = max(0, min(ib, hi_r) - max(ia, r.confirm_i))
+            if ov > best_ov:
+                best, best_ov = r, ov
+        row = {"target": name, "matched_rid": best.rid if best else None,
+               "overlap_bars": best_ov}
+        if best:
+            # the RF-2 finding carried: the operator's numbers track the
+            # REDRAWN extent — both bases print, redrawn is the comparison
+            for label, t_val, got_box, got_rd in (
+                    ("top", top_t, best.top0, best.top),
+                    ("bottom", bot_t, best.bottom0, best.bottom)):
+                if t_val is None:
+                    continue
+                row[f"{label}_redrawn"] = round(float(got_rd), 1)
+                row[f"{label}_box"] = round(float(got_box), 1)
+                row[f"{label}_residual"] = round(abs(got_rd - t_val), 1)
+                row[f"{label}_within"] = bool(abs(got_rd - t_val)
+                                              <= KEY_C_TOL_USD)
+            if mid_t is not None:
+                mid = (best.top + best.bottom) / 2
+                row["mid_residual"] = round(abs(mid - mid_t), 1)
+                row["mid_within"] = bool(abs(mid - mid_t) <= KEY_C_TOL_USD)
+            for side, lo_d, hi_d, anchor in devs:
+                ai = bar_of(anchor)
+                cands = [e for e in macro["events"]
+                         if e["event"] in ("harden", "inception-deviation")
+                         and e.get("rid") == best.rid
+                         and e.get("side") == side
+                         and lo_d - KEY_C_TOL_USD <= e["extreme"]
+                         <= hi_d + KEY_C_TOL_USD]
+                hit = (min(cands, key=lambda e: abs(e["i"] - ai))
+                       if cands else None)
+                key = f"dev_{side}_{int(lo_d / 1000)}k"
+                row[key] = (f"FOUND@{hit['ts']} ext {hit['extreme']:.0f} "
+                            f"({hit['event']})" if hit else "NOT FOUND")
+                row[key + "_found"] = bool(hit)
+        rows.append(row)
+    for name, pol, px_t, tol, anchor in KEY_C_FLIPS:
+        ai = bar_of(anchor)
+        cands = [e for e in v2["flips"]
+                 if e["polarity"] == pol and abs(e["px"] - px_t) <= tol]
+        hit = min(cands, key=lambda e: abs(e["i"] - ai)) if cands else None
+        in_time = bool(hit and abs(hit["i"] - ai) <= 180)  # ~30d of 4h
+        # bars; computed-not-asserted [disclosed]: the April flip + May
+        # flip-retests is the accepted C-F2 reading
+        rows.append({"target": name, "polarity": pol, "line": px_t,
+                     "found": (f"{hit['glyph']}@{hit['ts']} px {hit['px']}"
+                               if hit else "NOT FOUND"),
+                     "found_flag": bool(hit),
+                     "near_anchor": in_time})
+    rows.append({"target": "C-Q1",
+                 "macro_confirms_feb_aug": v2["macro_count_feb_aug"],
+                 "within_2_4": bool(2 <= v2["macro_count_feb_aug"] <= 4)})
+    return rows
+
+
+def score_key_c(v2: dict, d: pd.DataFrame) -> tuple[float, list]:
+    rows = verify_key_c(v2, d)
+    s = 0.0
+    for row in rows:
+        t = row["target"]
+        if t.startswith("C-R"):
+            if row.get("matched_rid") is None:
+                s += 5.0
+                continue
+            for k, v in row.items():
+                if k.endswith("_residual") and v is not None:
+                    s += max(0.0, v - KEY_C_TOL_USD) / KEY_C_TOL_USD
+                if k.endswith("_found") and not v:
+                    s += 1.0
+        elif t.startswith("C-F"):
+            if not row["found_flag"]:
+                s += 3.0
+        elif t == "C-Q1" and not row["within_2_4"]:
+            s += 3.0
+    return round(s, 4), rows
+
+
+def calibrate_v2(d: pd.DataFrame):
+    """Fit ONLY the four v2 pins (TTL adopted at the proposed 400 — no
+    KEY-C row constrains it, disclosed); micro pins FROZEN."""
+    import itertools
+    grid = {"SCALE_MULT": [2.5, 3.0, 3.5, 4.0],
+            "FLIP_HOLD_MARGIN": [0.25, 0.5, 1.0],
+            "FLIP_HOLD_BARS": [6, 12, 18]}
+    rows = []
+    for combo in itertools.product(*grid.values()):
+        pins = dict(zip(grid, combo), MEM_TTL_BARS=400)
+        v2 = run_v2(d, pins)
+        s, res = score_key_c(v2, d)
+        rows.append((s, pins, v2["status_line"]))
+    rows.sort(key=lambda r: (r[0], tuple(sorted(r[1].items()))))
+    print(f"\nKEY-C SCOREBOARD ({len(rows)} cells) — top 5:")
+    for s, pins, sl in rows[:5]:
+        print(f"  score {s:7.4f}  {pins}")
+        print(f"          {sl}")
+    s0, p0, _ = rows[0]
+    print("\nCHOSEN v2 SET:", p0)
+    v2 = run_v2(d, p0)
+    _, res = score_key_c(v2, d)
+    print("KEY-C RESIDUALS:")
+    for row in res:
+        print("  " + json.dumps(row, default=str))
+    return rows
+
+
+def export_v2(d: pd.DataFrame, pins_v2: dict) -> Path:
+    v2 = run_v2(d, pins_v2)
+    _, res = score_key_c(v2, d)
+    OUT.mkdir(parents=True, exist_ok=True)
+    p = OUT / "BTCUSD_4h_ranges_v2.json"
+    payload = {
+        "source": "SS12-RangeFinder v2 twin — hierarchy + flips + leash "
+                  "(RF-3); display-only",
+        "window": {"start": d["ts"].iloc[0], "end": d["ts"].iloc[-1],
+                   "bars": int(len(d)), "tf": "4h"},
+        "pins_v2": pins_v2, "micro_pins_frozen": PINS,
+        "mem_cap_per_side": MEM_CAP_PER_SIDE,
+        "status_line": v2["status_line"],
+        "key_c": res,
+        "flips": v2["flips"], "leash_events": v2["leash"],
+        "suppressed_micro": v2["suppressed"],
+        "kept_micro": v2["kept"],
+        "macro_events": v2["macro"]["events"],
+        "macro_ranges": [asdict(r) for r in v2["macro"]["ranges"]],
+        "micro_ranges": [asdict(r) for r in v2["micro"]["ranges"]],
+    }
+    txt = json.dumps(payload, indent=1, default=str)
+    txt = txt.replace(": NaN", ": null")
+    p.write_text(txt)
+    return p

@@ -1,0 +1,918 @@
+//@version=6
+indicator("SS12-RangeFinder v2", shorttitle="SS RangeFinder v2", overlay=true,
+     max_boxes_count=500, max_lines_count=500, max_labels_count=500)
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  SS12-RangeFinder v2 — HIERARCHY + FLIPS + THE LEASH (queue RF-3)
+//
+//  DISPLAY-ONLY RECONSTRUCTION lineage: v0 rebuilt @sergio_tesla_'s public
+//  artifacts (credit to the original author); v1 added the operator's body
+//  grammar; v2 answers the operator's three field diagnoses:
+//   · micro-only detection misses macro balances → TWO-SCALE HIERARCHY:
+//     the identical machine runs twice; MACRO (LEG_MIN/REV_MIN × SCALE_MULT)
+//     is primary and the only writer of state, memory lines and flips;
+//     MICRO (v1 pins FROZEN) renders dimmed, only inside a live macro.
+//   · grey-arrow flips wanted → FLIP MARKERS on macro corpse lines: the
+//     first OPPOSITE-side retest that holds FLIP_HOLD_BARS bars within
+//     FLIP_HOLD_MARGIN×ATR prints ▲ (dead top → support) / ▼ (dead bottom
+//     → resistance), pedigree in the tooltip.
+//   · dashed-line clutter → THE LEASH: memory is macro-only, MEM_TTL_BARS
+//     expiry, live cap 6 per side (oldest culled), toggles for everything.
+//  Renders-never-rules: no alerts, no signals, no security(); chart TF.
+//
+//  v2 PINS (KEY-C calibration of record, 36 cells, score 2.9968; BTCUSDT
+//  4h, 1,700 bars 2025-11-12 → 2026-08-22): SCALE_MULT 3.0 (tied with 3.5,
+//  tie-break disclosed) · FLIP_HOLD_MARGIN 1.0 · FLIP_HOLD_BARS 6 ·
+//  MEM_TTL_BARS 400 (proposed, adopted, unconstrained by KEY-C).
+//  Micro pins FROZEN at v1's ruled values — never refit.
+//  KEY-C concordance: C-R1 top ✓ devs ✓ (bottom 2,968 — the operator's
+//  boundary tracks the ZONE edge; the redraw-basis finding, filed, not
+//  forced) · C-R2 top 52 ✓ dev ✓ (bottom 1,295) · C-R3 bottom 53 ✓ dev ✓ ·
+//  C-F1 ▼ 84,447 @2026-01-29 (the large grey arrow) ✓ · C-F2 ▲ 75,999
+//  (Apr first-retest; the operator's May touches log as flip-retests) ✓ ·
+//  C-Q1 macro count 3 ✓.  scripts/rangefinder_twin.py is the machine of
+//  record; scripts/rangefinder_pine_sim.py + F-RF-12 pin core parity.
+//  Operator TV-eyeball PENDING — the final fixture.
+// ═══════════════════════════════════════════════════════════════════════════
+
+ATR_LEN = 14   // house pin, never swept
+boundaryMode = input.string("body", "BOUNDARY_MODE", options = ["body", "wick"],
+     tooltip = "[VETO] [C1 v1 law] body: boundaries at pivot-bar BODY extremes with spring-birth zones. wick: the v0 reference. Default MEASURED.")
+legMin  = input.float(0.5,  "LEG_MIN (×ATR, micro)",   minval = 0.0, step = 0.25,
+     tooltip = "[VETO] FROZEN at v1's ruled value — never refit [RF-3 law].")
+revMin  = input.float(1.75, "REV_MIN (×ATR, micro)",   minval = 0.5, step = 0.25,
+     tooltip = "[VETO] FROZEN at v1's ruled value.")
+touchEps = input.float(0.60, "TOUCH_EPS (×ATR)", minval = 0.0, step = 0.05,
+     tooltip = "[VETO] FROZEN at v1's ruled value.")
+devRet  = input.int(7, "DEV_RETURN_BARS", minval = 1,
+     tooltip = "[VETO] FROZEN at v1's ruled value.")
+brkN    = input.int(8, "BREAK_CONFIRM_N", minval = 2,
+     tooltip = "[VETO] FROZEN at v1's ruled value.")
+brkMargin = input.float(1.5, "BREAK_MARGIN (×ATR)", minval = 0.25, step = 0.25,
+     tooltip = "[VETO] FROZEN at v1's ruled value.")
+scaleMult = input.float(3.0, "SCALE_MULT (macro)", minval = 1.5, step = 0.25,
+     tooltip = "[VETO] [H1] macro pins = micro LEG_MIN/REV_MIN × this. MEASURED vs KEY-C (tied with 3.5; tie-break disclosed).")
+flipMargin = input.float(1.0, "FLIP_HOLD_MARGIN (×ATR)", minval = 0.0, step = 0.25,
+     tooltip = "[VETO] [H2] a retest holds if no body close through by this ×ATR. MEASURED (1.0 is what lets the May dip hold the 75k line, the operator's own read).")
+flipBars = input.int(6, "FLIP_HOLD_BARS", minval = 1,
+     tooltip = "[VETO] [H2] the hold window after the retest touch. MEASURED.")
+memTtl = input.int(400, "MEM_TTL_BARS", minval = 50,
+     tooltip = "[VETO] [H3] an untouched memory line expires after this many bars. PROPOSED 400, adopted — no KEY-C row constrains it (disclosed).")
+showMicro = input.bool(true, "show micro ranges",
+     tooltip = "[H1] micro is subordinate: dimmed, only inside a live macro range.")
+showMemory = input.bool(true, "show memory lines (macro only)",
+     tooltip = "[H3] micro corpses leave no lines by law.")
+showMidline = input.bool(true, "show midlines")
+showLegend = input.bool(true, "show legend")
+showPivots = input.bool(false, "show pivot markers",
+     tooltip = "[C4] symbol diet: OFF by default.")
+
+// ── colors are INPUTS [C5/H1]
+color MACFILL = input.color(color.new(#4A6FA5, 72), "macro range fill",
+     tooltip = "[H1] the operator's blue")
+color DEVFILL = input.color(color.new(color.orange, 55), "deviation fill")
+color MIDC    = input.color(color.new(color.orange, 20), "midline")
+color MICFILL = color.new(color.gray, 88)
+color MACLN   = color.new(#4A6FA5, 30)
+color MICLN   = color.new(color.gray, 70)
+color MICDEV  = color.new(color.gray, 80)
+color MICMID  = color.new(color.gray, 82)
+color MEMCLR  = color.new(color.gray, 30)
+color DIAC    = color.new(#20b2aa, 0)
+color MICDIA  = color.new(#20b2aa, 70)
+color PENDCLR = color.new(color.orange, 30)   // dashed-orange pending [H3]
+
+// [observed] ta.atr seeds by SMA vs the twin engine's first-value RMA —
+// warm-up-class divergence only, disclosed since v1.
+atr = ta.atr(ATR_LEN)
+
+// ═══ H2+H3 · FLIPS + THE LEASH (macro corpses only) ══════════════════════
+var array<line>   memLines  = array.new<line>()
+var array<float>  memPx     = array.new<float>()
+var array<int>    memBorn   = array.new<int>()
+var array<string> memSide   = array.new<string>()
+var array<int>    memState  = array.new<int>()    // 0 live · 1 frozen · 2 done/expired
+var array<bool>   memFlipDn = array.new<bool>()   // flip evaluation consumed
+var array<string> memPedigree = array.new<string>()
+
+newMemLine(float px, string side, string pedigree) =>
+    if showMemory
+        line ln = line.new(bar_index, px, bar_index + 1, px, color = MEMCLR,
+             style = line.style_dashed, extend = extend.right)
+        array.push(memLines, ln)
+        array.push(memPx, px)
+        array.push(memBorn, bar_index)
+        array.push(memSide, side)
+        array.push(memState, 0)
+        array.push(memFlipDn, false)
+        array.push(memPedigree, pedigree)
+        // THE LEASH: live cap 6 per side, oldest culled [H3]
+        int liveCnt = 0
+        for k = 0 to array.size(memLines) - 1
+            if array.get(memSide, k) == side and array.get(memState, k) == 0
+                liveCnt += 1
+        if liveCnt > 6
+            for k = 0 to array.size(memLines) - 1
+                if array.get(memSide, k) == side and array.get(memState, k) == 0
+                    array.set(memState, k, 2)
+                    line.delete(array.get(memLines, k))
+                    break
+
+
+var array<float>  flipWatchPx   = array.new<float>()
+var array<string> flipWatchSide = array.new<string>()
+var array<int>    flipWatchBar  = array.new<int>()
+var array<string> flipWatchPed  = array.new<string>()
+var array<bool>   flipWatchDead = array.new<bool>()
+
+
+// ── ZigZag state
+var int   m_zdir   = 0
+bool m_sealedNow = false         // set on any pivot seal this bar [F1 repair]
+var int   m_extBar = na
+var float m_extPx  = na
+var float m_extLo  = na          // the LOW at the extreme bar [twin parity]
+var float m_extBodyHi = na       // BODY extremes at the extreme bar [C1]
+var float m_extBodyLo = na
+var float m_lastPivPx  = na
+var float m_lastPivBody = na     // the pivot bar's BODY extreme [C1]
+var int   m_lastPivDir = 0
+var float m_prevPivPx  = na       // the pivot before lastPiv (P0 candidate)
+var float m_prevPivBody = na
+var int   m_prevPivBar = na
+var int   m_lastPivBar = na
+var int   m_nPivots = 0
+
+// ── range state (ONE ACTIVE, the calibrated reading)
+var float m_rTop = na
+var float m_rBot = na
+var float m_devTopExt = na       // furthest deviation extremes (zones)
+var float m_devBotExt = na
+var int   m_rP0Bar = na          // C3: the terminal pivot bar (backdate target)
+var box   m_pendBox = na         // C2: the hollow pending box
+var string m_rState = "NONE"      // NONE | POTENTIAL | CONFIRMED
+var string m_confirmSide = ""
+var int   m_pendSide = 0          // 0 none · +1 top · −1 bottom
+var int   m_pendOpen = na
+var float m_pendExt  = na
+var int   m_pendCloses = 0
+var int   m_nConfirmed = 0
+var int   m_nPotential = 0
+var int   m_coveredBars = 0
+var int   m_expansionFloorBar = -1
+// the twin's terminal test scans PIVOTS BY WICK BAR against the floor, and
+// the floor advances at EVERY lifecycle event [F-RF-12: the register
+// approximation and the single candidate both diverged on the 4h tape]
+var array<int>   m_pivB   = array.new<int>()
+var array<float> m_pivPx  = array.new<float>()
+var array<int>   m_pivDir = array.new<int>()
+var array<float> m_cTop  = array.new<float>()
+var array<float> m_cBot  = array.new<float>()
+var array<string> m_cSide = array.new<string>()
+var array<int>   m_cP0   = array.new<int>()
+var array<float> m_cDevT = array.new<float>()
+var array<float> m_cDevB = array.new<float>()
+var box   m_rBox = na
+var line  m_rMid = na
+var int   m_confirmBar = na
+
+// ── the sweep, bar by bar (close-of-bar semantics — a body close decides)
+// warm-up parity with the twin: the running extreme tracks from bar 0
+if bar_index < ATR_LEN    // twin parity: bar 14 IS processed [F-RF-12]
+    if na(m_extPx) or high >= m_extPx
+        m_extPx := high
+        m_extBar := bar_index
+        m_extLo := low
+        m_extBodyHi := math.max(open, close)
+
+if bar_index >= ATR_LEN and not na(atr)
+    // ZigZag — pivot bookkeeping is UNCONDITIONAL at every seal [review
+    // BLOCKER: the first draft's guarded ternaries left prevPiv na forever
+    // and the indicator rendered nothing]
+    if m_zdir == 0
+        // TWIN ORDER: up-entry → seal → extend
+        if high - m_extLo >= revMin * scaleMult * atr and m_extLo <= low
+            // up-entry without a seal (twin's m_zdir==0 up path)
+            m_zdir := 1
+            m_extPx := high
+            m_extBar := bar_index
+            m_extBodyHi := math.max(open, close)
+        else if m_extPx - low >= revMin * scaleMult * atr
+            m_zdir := -1
+            m_prevPivPx := m_lastPivPx
+            m_prevPivBody := m_lastPivBody
+            m_prevPivBar := m_lastPivBar
+            m_lastPivPx := m_extPx
+            m_lastPivBody := m_extBodyHi
+            m_lastPivDir := 1
+            m_lastPivBar := m_extBar
+            m_nPivots += 1
+            m_sealedNow := true
+            array.push(m_pivB, m_lastPivBar)
+            array.push(m_pivPx, m_lastPivPx)
+            array.push(m_pivDir, 1)
+            if array.size(m_pivB) > 100
+                array.shift(m_pivB)
+                array.shift(m_pivPx)
+                array.shift(m_pivDir)
+            m_extPx := low
+            m_extBar := bar_index
+            m_extBodyLo := math.min(open, close)
+        else if high > m_extPx
+            m_extPx := high
+            m_extBar := bar_index
+            m_extLo := low
+            m_extBodyHi := math.max(open, close)
+    else if m_zdir == 1
+        if high > m_extPx
+            m_extPx := high
+            m_extBar := bar_index
+            m_extBodyHi := math.max(open, close)
+        else if m_extPx - low >= revMin * scaleMult * atr and (na(m_lastPivPx) or math.abs(m_extPx - m_lastPivPx) >= legMin * scaleMult * atr)
+            m_prevPivPx := m_lastPivPx
+            m_prevPivBody := m_lastPivBody
+            m_prevPivBar := m_lastPivBar
+            m_lastPivPx := m_extPx
+            m_lastPivBody := m_extBodyHi
+            m_lastPivDir := 1
+            m_lastPivBar := m_extBar
+            m_nPivots += 1
+            m_sealedNow := true
+            array.push(m_pivB, m_lastPivBar)
+            array.push(m_pivPx, m_lastPivPx)
+            array.push(m_pivDir, 1)
+            if array.size(m_pivB) > 100
+                array.shift(m_pivB)
+                array.shift(m_pivPx)
+                array.shift(m_pivDir)
+            m_zdir := -1
+            m_extPx := low
+            m_extBar := bar_index
+            m_extBodyLo := math.min(open, close)
+    else
+        if low < m_extPx
+            m_extPx := low
+            m_extBar := bar_index
+            m_extBodyLo := math.min(open, close)
+        else if high - m_extPx >= revMin * scaleMult * atr and (na(m_lastPivPx) or math.abs(m_extPx - m_lastPivPx) >= legMin * scaleMult * atr)
+            m_prevPivPx := m_lastPivPx
+            m_prevPivBody := m_lastPivBody
+            m_prevPivBar := m_lastPivBar
+            m_lastPivPx := m_extPx
+            m_lastPivBody := m_extBodyLo
+            m_lastPivDir := -1
+            m_lastPivBar := m_extBar
+            m_nPivots += 1
+            m_sealedNow := true
+            array.push(m_pivB, m_lastPivBar)
+            array.push(m_pivPx, m_lastPivPx)
+            array.push(m_pivDir, -1)
+            if array.size(m_pivB) > 100
+                array.shift(m_pivB)
+                array.shift(m_pivPx)
+                array.shift(m_pivDir)
+            m_zdir := 1
+            m_extPx := high
+            m_extBar := bar_index
+            m_extBodyHi := math.max(open, close)
+
+    // SEED — attempted ONLY on a seal bar [F1: the twin seeds at pivot
+    // knowability; per-bar re-evaluation churned 11 seed/invalidate cycles],
+    // while no CONFIRMED range holds; a newly sealed terminal pair REPLACES
+    // a held POTENTIAL (single-candidate emulation of the twin's
+    // newest-seed precedence); a degenerate body cluster refuses WITHOUT
+    // clobbering the held candidate; NO floor bar-guard — after a death the
+    // first new pivot legally pairs with a pre-death pivot [twin law], and
+    // an EMPTY post-floor segment defaults terminal-TRUE (na tests).
+    // SEED [twin law verbatim — F-RF-12]: CANDIDATE LIST, terminal by
+    // wick-bar pivot scan against the floor, floor advanced at EVERY
+    // lifecycle event (invalidate / confirm / death).
+    if m_sealedNow and m_rState != "CONFIRMED" and m_lastPivDir != 0 and not na(m_prevPivPx)
+        float m_segHi = na
+        float m_segLo = na
+        if array.size(m_pivB) > 0
+            for m_k = 0 to array.size(m_pivB) - 1
+                if array.get(m_pivB, m_k) > m_expansionFloorBar
+                    if array.get(m_pivDir, m_k) == 1
+                        m_segHi := na(m_segHi) ? array.get(m_pivPx, m_k) : math.max(m_segHi, array.get(m_pivPx, m_k))
+                    else
+                        m_segLo := na(m_segLo) ? array.get(m_pivPx, m_k) : math.min(m_segLo, array.get(m_pivPx, m_k))
+        bool m_bullTerm = m_lastPivDir == -1 and (na(m_segHi) or m_prevPivPx >= m_segHi) and m_prevPivPx > m_lastPivPx
+        bool m_bearTerm = m_lastPivDir == 1  and (na(m_segLo) or m_prevPivPx <= m_segLo) and m_prevPivPx < m_lastPivPx
+        bool m_bodyM = boundaryMode == "body"
+        float m_sTop = m_bullTerm ? (m_bodyM ? m_prevPivBody : m_prevPivPx) : (m_bodyM ? m_lastPivBody : m_lastPivPx)
+        float m_sBot = m_bullTerm ? (m_bodyM ? m_lastPivBody : m_lastPivPx) : (m_bodyM ? m_prevPivBody : m_prevPivPx)
+        if (m_bullTerm or m_bearTerm) and m_sTop > m_sBot
+            array.push(m_cTop, m_sTop)
+            array.push(m_cBot, m_sBot)
+            array.push(m_cSide, m_bullTerm ? "top" : "bottom")
+            array.push(m_cP0, m_prevPivBar)
+            array.push(m_cDevT, m_bodyM and (m_bullTerm ? m_prevPivPx : m_lastPivPx) > m_sTop ? (m_bullTerm ? m_prevPivPx : m_lastPivPx) : na)
+            array.push(m_cDevB, m_bodyM and (m_bullTerm ? m_lastPivPx : m_prevPivPx) < m_sBot ? (m_bullTerm ? m_lastPivPx : m_prevPivPx) : na)
+            m_nPotential += 1
+
+    // CANDIDATES: invalidate (floor bumps) · first confirm wins the bar
+    if m_rState != "CONFIRMED" and array.size(m_cTop) > 0
+        int m_won = -1
+        int m_k2 = 0
+        while m_k2 < array.size(m_cTop) and m_won == -1
+            if close > array.get(m_cTop, m_k2) or close < array.get(m_cBot, m_k2)
+                array.remove(m_cTop, m_k2)
+                array.remove(m_cBot, m_k2)
+                array.remove(m_cSide, m_k2)
+                array.remove(m_cP0, m_k2)
+                array.remove(m_cDevT, m_k2)
+                array.remove(m_cDevB, m_k2)
+                m_nPotential -= 1
+                m_expansionFloorBar := bar_index   // a lifecycle boundary
+                continue
+            float m_eps = touchEps * atr
+            bool m_hitTop = array.get(m_cSide, m_k2) == "top" and high >= array.get(m_cTop, m_k2) - m_eps
+            bool m_hitBot = array.get(m_cSide, m_k2) == "bottom" and low <= array.get(m_cBot, m_k2) + m_eps
+            if m_hitTop or m_hitBot
+                m_won := m_k2
+            m_k2 += 1
+        if m_won >= 0
+            m_rTop := array.get(m_cTop, m_won)
+            m_rBot := array.get(m_cBot, m_won)
+            m_devTopExt := array.get(m_cDevT, m_won)
+            m_devBotExt := array.get(m_cDevB, m_won)
+            m_rP0Bar := array.get(m_cP0, m_won)
+            m_confirmSide := array.get(m_cSide, m_won)
+            m_nPotential := 0                       // superseded [twin law]
+            // [scar removed: a stray -= 1 sat below the := 0]
+            array.clear(m_cTop)
+            array.clear(m_cBot)
+            array.clear(m_cSide)
+            array.clear(m_cP0)
+            array.clear(m_cDevT)
+            array.clear(m_cDevB)
+            m_expansionFloorBar := bar_index        // confirm closes it
+            bool m_hitTop = m_confirmSide == "top"
+            bool m_hitBot = not m_hitTop
+            if true
+                m_rState := "CONFIRMED"
+                m_nConfirmed += 1
+                m_confirmBar := bar_index
+                int m_leftEdge = na(m_rP0Bar) ? bar_index : m_rP0Bar   // C3 backdate
+                m_rBox := box.new(m_leftEdge, m_rTop, bar_index, m_rBot,
+                     border_color = MACLN, bgcolor = MACFILL, extend = extend.right)
+                m_rMid := not showMidline ? na : line.new(m_leftEdge, (m_rTop + m_rBot) / 2, bar_index + 1,
+                     (m_rTop + m_rBot) / 2, color = MIDC, style = line.style_solid,
+                     extend = extend.right, width = 2)
+                label.new(bar_index, m_hitTop ? m_rTop : m_rBot, "◆",
+                     style = m_hitTop ? label.style_label_down : label.style_label_up,
+                     color = color.new(color.white, 100), textcolor = DIAC)
+                // C1/C3: spring-birth inception zones, classified now
+                if not na(m_devTopExt)
+                    box.new(m_leftEdge, m_devTopExt, bar_index, m_rTop,
+                         border_color = DEVFILL, bgcolor = DEVFILL)
+                if not na(m_devBotExt)
+                    box.new(m_leftEdge, m_rBot, bar_index, m_devBotExt,
+                         border_color = DEVFILL, bgcolor = DEVFILL)
+
+    // ACTIVE: breach → deviation | breakout
+    if m_rState == "CONFIRMED"
+        if m_pendSide == 0
+            if close > m_rTop
+                m_pendSide := 1
+                m_pendOpen := bar_index
+                m_pendExt := high
+                m_pendCloses := 1
+                m_pendBox := box.new(bar_index, high, bar_index, m_rTop,
+                     border_color = PENDCLR, bgcolor = na,
+                     border_style = line.style_dashed)   // HOLLOW [C2/H3]
+            else if close < m_rBot
+                m_pendSide := -1
+                m_pendOpen := bar_index
+                m_pendExt := low
+                m_pendCloses := 1
+                m_pendBox := box.new(bar_index, m_rBot, bar_index, low,
+                     border_color = PENDCLR, bgcolor = na,
+                     border_style = line.style_dashed)   // HOLLOW [C2/H3]
+        else
+            m_pendExt := m_pendSide == 1 ? math.max(m_pendExt, high) : math.min(m_pendExt, low)
+            if not na(m_pendBox)      // the hollow box tracks the episode
+                box.set_right(m_pendBox, bar_index)
+                if m_pendSide == 1
+                    box.set_top(m_pendBox, m_pendExt)
+                else
+                    box.set_bottom(m_pendBox, m_pendExt)
+            bool m_beyond = m_pendSide == 1 ? close > m_rTop : close < m_rBot
+            if m_beyond
+                m_pendCloses += 1
+            else
+                // body close back INSIDE
+                if bar_index - m_pendOpen <= devRet
+                    // HARDEN [C2] — the hollow box turns SOLID, diamond,
+                    // boundary redrawn per v0 rules (wick extreme)
+                    float m_oldB = m_pendSide == 1 ? m_rTop : m_rBot
+                    if m_pendSide == 1
+                        m_rTop := math.max(m_rTop, m_pendExt)
+                        m_devTopExt := na(m_devTopExt) ? m_pendExt : math.max(m_devTopExt, m_pendExt)
+                    else
+                        m_rBot := math.min(m_rBot, m_pendExt)
+                        m_devBotExt := na(m_devBotExt) ? m_pendExt : math.min(m_devBotExt, m_pendExt)
+                    if not na(m_pendBox)
+                        box.set_bgcolor(m_pendBox, DEVFILL)
+                        box.set_border_style(m_pendBox, line.style_solid)
+                        box.set_right(m_pendBox, bar_index)
+                    label.new(bar_index, m_pendExt, "◆",
+                         style = m_pendSide == 1 ? label.style_label_down : label.style_label_up,
+                         color = color.new(color.white, 100), textcolor = DIAC)
+                    box.set_top(m_rBox, m_rTop)
+                    box.set_bottom(m_rBox, m_rBot)
+                    line.set_y1(m_rMid, (m_rTop + m_rBot) / 2)
+                    line.set_y2(m_rMid, (m_rTop + m_rBot) / 2)
+                else
+                    if not na(m_pendBox)          // breach-lapse: box removed
+                        box.delete(m_pendBox)
+                m_pendBox := na
+                m_pendSide := 0
+                m_pendCloses := 0
+        if m_pendSide != 0
+            float m_bnd = m_pendSide == 1 ? m_rTop : m_rBot
+            bool m_dieN = m_pendCloses >= brkN
+            bool m_dieM = m_pendSide == 1 ? close - m_bnd >= brkMargin * atr : m_bnd - close >= brkMargin * atr
+            if m_dieN or m_dieM
+                // BREAKOUT — the range dies; the pending box converts
+                if not na(m_pendBox)
+                    box.delete(m_pendBox)
+                    m_pendBox := na
+                box.set_right(m_rBox, bar_index)
+                box.set_extend(m_rBox, extend.none)
+                line.set_x2(m_rMid, bar_index)
+                line.set_extend(m_rMid, extend.none)
+                gState := m_pendSide == 1 ? "BULL_EXP" : "BEAR_EXP"
+                gVirgin := false
+                string ped = "range [" + str.tostring(m_rBot, "#") + " … "
+                     + str.tostring(m_rTop, "#") + "] · died "
+                     + str.format_time(time, "yyyy-MM-dd", "UTC")
+                newMemLine(m_rTop, "top", ped)
+                newMemLine(m_rBot, "bottom", ped)
+                label.new(bar_index, m_pendSide == 1 ? m_rTop : m_rBot,
+                     m_pendSide == 1 ? "▲" : "▼", size = size.tiny,
+                     style = m_pendSide == 1 ? label.style_label_up : label.style_label_down,
+                     color = color.new(color.white, 100),
+                     textcolor = m_pendSide == 1 ? color.green : color.red)
+                m_rState := "NONE"
+                m_pendSide := 0
+                m_pendCloses := 0
+                m_expansionFloorBar := bar_index
+
+    float m_covTop = na(m_devTopExt) ? m_rTop : math.max(m_rTop, m_devTopExt)
+    float m_covBot = na(m_devBotExt) ? m_rBot : math.min(m_rBot, m_devBotExt)
+    if m_rState == "CONFIRMED" and close <= m_covTop and close >= m_covBot
+        m_coveredBars += 1
+
+
+// ── ZigZag state
+var int   u_zdir   = 0
+bool u_sealedNow = false         // set on any pivot seal this bar [F1 repair]
+var int   u_extBar = na
+var float u_extPx  = na
+var float u_extLo  = na          // the LOW at the extreme bar [twin parity]
+var float u_extBodyHi = na       // BODY extremes at the extreme bar [C1]
+var float u_extBodyLo = na
+var float u_lastPivPx  = na
+var float u_lastPivBody = na     // the pivot bar's BODY extreme [C1]
+var int   u_lastPivDir = 0
+var float u_prevPivPx  = na       // the pivot before lastPiv (P0 candidate)
+var float u_prevPivBody = na
+var int   u_prevPivBar = na
+var int   u_lastPivBar = na
+var int   u_nPivots = 0
+
+// ── range state (ONE ACTIVE, the calibrated reading)
+var float u_rTop = na
+var float u_rBot = na
+var float u_devTopExt = na       // furthest deviation extremes (zones)
+var float u_devBotExt = na
+var int   u_rP0Bar = na          // C3: the terminal pivot bar (backdate target)
+var box   u_pendBox = na         // C2: the hollow pending box
+var string u_rState = "NONE"      // NONE | POTENTIAL | CONFIRMED
+var string u_confirmSide = ""
+var int   u_pendSide = 0          // 0 none · +1 top · −1 bottom
+var int   u_pendOpen = na
+var float u_pendExt  = na
+var int   u_pendCloses = 0
+var int   u_nConfirmed = 0
+var bool  u_renderThis = false
+var int   u_nKept = 0
+var int   u_nPotential = 0
+var int   u_coveredBars = 0
+var int   u_expansionFloorBar = -1
+// the twin's terminal test scans PIVOTS BY WICK BAR against the floor, and
+// the floor advances at EVERY lifecycle event [F-RF-12: the register
+// approximation and the single candidate both diverged on the 4h tape]
+var array<int>   u_pivB   = array.new<int>()
+var array<float> u_pivPx  = array.new<float>()
+var array<int>   u_pivDir = array.new<int>()
+var array<float> u_cTop  = array.new<float>()
+var array<float> u_cBot  = array.new<float>()
+var array<string> u_cSide = array.new<string>()
+var array<int>   u_cP0   = array.new<int>()
+var array<float> u_cDevT = array.new<float>()
+var array<float> u_cDevB = array.new<float>()
+var box   u_rBox = na
+var line  u_rMid = na
+var int   u_confirmBar = na
+
+// ── the sweep, bar by bar (close-of-bar semantics — a body close decides)
+// warm-up parity with the twin: the running extreme tracks from bar 0
+if bar_index < ATR_LEN    // twin parity: bar 14 IS processed [F-RF-12]
+    if na(u_extPx) or high >= u_extPx
+        u_extPx := high
+        u_extBar := bar_index
+        u_extLo := low
+        u_extBodyHi := math.max(open, close)
+
+if bar_index >= ATR_LEN and not na(atr)
+    // ZigZag — pivot bookkeeping is UNCONDITIONAL at every seal [review
+    // BLOCKER: the first draft's guarded ternaries left prevPiv na forever
+    // and the indicator rendered nothing]
+    if u_zdir == 0
+        // TWIN ORDER: up-entry → seal → extend
+        if high - u_extLo >= revMin * atr and u_extLo <= low
+            // up-entry without a seal (twin's u_zdir==0 up path)
+            u_zdir := 1
+            u_extPx := high
+            u_extBar := bar_index
+            u_extBodyHi := math.max(open, close)
+        else if u_extPx - low >= revMin * atr
+            u_zdir := -1
+            u_prevPivPx := u_lastPivPx
+            u_prevPivBody := u_lastPivBody
+            u_prevPivBar := u_lastPivBar
+            u_lastPivPx := u_extPx
+            u_lastPivBody := u_extBodyHi
+            u_lastPivDir := 1
+            u_lastPivBar := u_extBar
+            u_nPivots += 1
+            u_sealedNow := true
+            array.push(u_pivB, u_lastPivBar)
+            array.push(u_pivPx, u_lastPivPx)
+            array.push(u_pivDir, 1)
+            if array.size(u_pivB) > 100
+                array.shift(u_pivB)
+                array.shift(u_pivPx)
+                array.shift(u_pivDir)
+            u_extPx := low
+            u_extBar := bar_index
+            u_extBodyLo := math.min(open, close)
+        else if high > u_extPx
+            u_extPx := high
+            u_extBar := bar_index
+            u_extLo := low
+            u_extBodyHi := math.max(open, close)
+    else if u_zdir == 1
+        if high > u_extPx
+            u_extPx := high
+            u_extBar := bar_index
+            u_extBodyHi := math.max(open, close)
+        else if u_extPx - low >= revMin * atr and (na(u_lastPivPx) or math.abs(u_extPx - u_lastPivPx) >= legMin * atr)
+            u_prevPivPx := u_lastPivPx
+            u_prevPivBody := u_lastPivBody
+            u_prevPivBar := u_lastPivBar
+            u_lastPivPx := u_extPx
+            u_lastPivBody := u_extBodyHi
+            u_lastPivDir := 1
+            u_lastPivBar := u_extBar
+            u_nPivots += 1
+            u_sealedNow := true
+            array.push(u_pivB, u_lastPivBar)
+            array.push(u_pivPx, u_lastPivPx)
+            array.push(u_pivDir, 1)
+            if array.size(u_pivB) > 100
+                array.shift(u_pivB)
+                array.shift(u_pivPx)
+                array.shift(u_pivDir)
+            u_zdir := -1
+            u_extPx := low
+            u_extBar := bar_index
+            u_extBodyLo := math.min(open, close)
+    else
+        if low < u_extPx
+            u_extPx := low
+            u_extBar := bar_index
+            u_extBodyLo := math.min(open, close)
+        else if high - u_extPx >= revMin * atr and (na(u_lastPivPx) or math.abs(u_extPx - u_lastPivPx) >= legMin * atr)
+            u_prevPivPx := u_lastPivPx
+            u_prevPivBody := u_lastPivBody
+            u_prevPivBar := u_lastPivBar
+            u_lastPivPx := u_extPx
+            u_lastPivBody := u_extBodyLo
+            u_lastPivDir := -1
+            u_lastPivBar := u_extBar
+            u_nPivots += 1
+            u_sealedNow := true
+            array.push(u_pivB, u_lastPivBar)
+            array.push(u_pivPx, u_lastPivPx)
+            array.push(u_pivDir, -1)
+            if array.size(u_pivB) > 100
+                array.shift(u_pivB)
+                array.shift(u_pivPx)
+                array.shift(u_pivDir)
+            u_zdir := 1
+            u_extPx := high
+            u_extBar := bar_index
+            u_extBodyHi := math.max(open, close)
+
+    // SEED — attempted ONLY on a seal bar [F1: the twin seeds at pivot
+    // knowability; per-bar re-evaluation churned 11 seed/invalidate cycles],
+    // while no CONFIRMED range holds; a newly sealed terminal pair REPLACES
+    // a held POTENTIAL (single-candidate emulation of the twin's
+    // newest-seed precedence); a degenerate body cluster refuses WITHOUT
+    // clobbering the held candidate; NO floor bar-guard — after a death the
+    // first new pivot legally pairs with a pre-death pivot [twin law], and
+    // an EMPTY post-floor segment defaults terminal-TRUE (na tests).
+    // SEED [twin law verbatim — F-RF-12]: CANDIDATE LIST, terminal by
+    // wick-bar pivot scan against the floor, floor advanced at EVERY
+    // lifecycle event (invalidate / confirm / death).
+    if u_sealedNow and u_rState != "CONFIRMED" and u_lastPivDir != 0 and not na(u_prevPivPx)
+        float u_segHi = na
+        float u_segLo = na
+        if array.size(u_pivB) > 0
+            for u_k = 0 to array.size(u_pivB) - 1
+                if array.get(u_pivB, u_k) > u_expansionFloorBar
+                    if array.get(u_pivDir, u_k) == 1
+                        u_segHi := na(u_segHi) ? array.get(u_pivPx, u_k) : math.max(u_segHi, array.get(u_pivPx, u_k))
+                    else
+                        u_segLo := na(u_segLo) ? array.get(u_pivPx, u_k) : math.min(u_segLo, array.get(u_pivPx, u_k))
+        bool u_bullTerm = u_lastPivDir == -1 and (na(u_segHi) or u_prevPivPx >= u_segHi) and u_prevPivPx > u_lastPivPx
+        bool u_bearTerm = u_lastPivDir == 1  and (na(u_segLo) or u_prevPivPx <= u_segLo) and u_prevPivPx < u_lastPivPx
+        bool u_bodyM = boundaryMode == "body"
+        float u_sTop = u_bullTerm ? (u_bodyM ? u_prevPivBody : u_prevPivPx) : (u_bodyM ? u_lastPivBody : u_lastPivPx)
+        float u_sBot = u_bullTerm ? (u_bodyM ? u_lastPivBody : u_lastPivPx) : (u_bodyM ? u_prevPivBody : u_prevPivPx)
+        if (u_bullTerm or u_bearTerm) and u_sTop > u_sBot
+            array.push(u_cTop, u_sTop)
+            array.push(u_cBot, u_sBot)
+            array.push(u_cSide, u_bullTerm ? "top" : "bottom")
+            array.push(u_cP0, u_prevPivBar)
+            array.push(u_cDevT, u_bodyM and (u_bullTerm ? u_prevPivPx : u_lastPivPx) > u_sTop ? (u_bullTerm ? u_prevPivPx : u_lastPivPx) : na)
+            array.push(u_cDevB, u_bodyM and (u_bullTerm ? u_lastPivPx : u_prevPivPx) < u_sBot ? (u_bullTerm ? u_lastPivPx : u_prevPivPx) : na)
+            u_nPotential += 1
+
+    // CANDIDATES: invalidate (floor bumps) · first confirm wins the bar
+    if u_rState != "CONFIRMED" and array.size(u_cTop) > 0
+        int u_won = -1
+        int u_k2 = 0
+        while u_k2 < array.size(u_cTop) and u_won == -1
+            if close > array.get(u_cTop, u_k2) or close < array.get(u_cBot, u_k2)
+                array.remove(u_cTop, u_k2)
+                array.remove(u_cBot, u_k2)
+                array.remove(u_cSide, u_k2)
+                array.remove(u_cP0, u_k2)
+                array.remove(u_cDevT, u_k2)
+                array.remove(u_cDevB, u_k2)
+                u_nPotential -= 1
+                u_expansionFloorBar := bar_index   // a lifecycle boundary
+                continue
+            float u_eps = touchEps * atr
+            bool u_hitTop = array.get(u_cSide, u_k2) == "top" and high >= array.get(u_cTop, u_k2) - u_eps
+            bool u_hitBot = array.get(u_cSide, u_k2) == "bottom" and low <= array.get(u_cBot, u_k2) + u_eps
+            if u_hitTop or u_hitBot
+                u_won := u_k2
+            u_k2 += 1
+        if u_won >= 0
+            u_rTop := array.get(u_cTop, u_won)
+            u_rBot := array.get(u_cBot, u_won)
+            u_devTopExt := array.get(u_cDevT, u_won)
+            u_devBotExt := array.get(u_cDevB, u_won)
+            u_rP0Bar := array.get(u_cP0, u_won)
+            u_confirmSide := array.get(u_cSide, u_won)
+            u_nPotential := 0                       // superseded [twin law]
+            array.clear(u_cTop)
+            array.clear(u_cBot)
+            array.clear(u_cSide)
+            array.clear(u_cP0)
+            array.clear(u_cDevT)
+            array.clear(u_cDevB)
+            u_expansionFloorBar := bar_index        // confirm closes it
+            bool u_hitTop = u_confirmSide == "top"
+            bool u_hitBot = not u_hitTop
+            if true
+                u_rState := "CONFIRMED"
+                u_nConfirmed += 1
+                u_confirmBar := bar_index
+                int u_leftEdge = na(u_rP0Bar) ? bar_index : u_rP0Bar   // C3 backdate
+                float m_spanTop = na(m_devTopExt) ? m_rTop : math.max(m_rTop, m_devTopExt)
+                float m_spanBot = na(m_devBotExt) ? m_rBot : math.min(m_rBot, m_devBotExt)
+                // the micro span INCLUDES its inception zones [twin law —
+                // three operand variants existed; this is the pinned one]
+                float u_spanTop = na(u_devTopExt) ? u_rTop : math.max(u_rTop, u_devTopExt)
+                float u_spanBot = na(u_devBotExt) ? u_rBot : math.min(u_rBot, u_devBotExt)
+                bool u_contained = m_rState == "CONFIRMED" and
+                     u_spanTop <= m_spanTop and u_spanBot >= m_spanBot
+                if u_contained
+                    u_nKept += 1        // the status line's MICRO [review]
+                u_renderThis := showMicro and u_contained
+                u_rBox := u_renderThis ? box.new(u_leftEdge, u_rTop, bar_index, u_rBot,
+                     border_color = MICLN, bgcolor = MICFILL, extend = extend.right) : na
+                u_rMid := not (u_renderThis and showMidline) ? na : line.new(u_leftEdge, (u_rTop + u_rBot) / 2, bar_index + 1,
+                     (u_rTop + u_rBot) / 2, color = MICMID, style = line.style_solid,
+                     extend = extend.right, width = 2)
+                if u_renderThis
+                    label.new(bar_index, u_hitTop ? u_rTop : u_rBot, "◆",
+                         style = u_hitTop ? label.style_label_down : label.style_label_up,
+                         color = color.new(color.white, 100), textcolor = MICDIA)
+                // C1/C3: spring-birth inception zones, classified now
+                if u_renderThis and not na(u_devTopExt)
+                    box.new(u_leftEdge, u_devTopExt, bar_index, u_rTop,
+                         border_color = MICDEV, bgcolor = MICDEV)
+                if u_renderThis and not na(u_devBotExt)
+                    box.new(u_leftEdge, u_rBot, bar_index, u_devBotExt,
+                         border_color = MICDEV, bgcolor = MICDEV)
+
+    // ACTIVE: breach → deviation | breakout
+    if u_rState == "CONFIRMED"
+        if u_pendSide == 0
+            if close > u_rTop
+                u_pendSide := 1
+                u_pendOpen := bar_index
+                u_pendExt := high
+                u_pendCloses := 1
+                u_pendBox := not u_renderThis ? na : box.new(bar_index, high,
+                     bar_index, u_rTop, border_color = MICDEV, bgcolor = na,
+                     border_style = line.style_dashed)   // HOLLOW [C2]
+            else if close < u_rBot
+                u_pendSide := -1
+                u_pendOpen := bar_index
+                u_pendExt := low
+                u_pendCloses := 1
+                u_pendBox := not u_renderThis ? na : box.new(bar_index, u_rBot,
+                     bar_index, low, border_color = MICDEV, bgcolor = na,
+                     border_style = line.style_dashed)   // HOLLOW [C2]
+        else
+            u_pendExt := u_pendSide == 1 ? math.max(u_pendExt, high) : math.min(u_pendExt, low)
+            if not na(u_pendBox)      // the hollow box tracks the episode
+                box.set_right(u_pendBox, bar_index)
+                if u_pendSide == 1
+                    box.set_top(u_pendBox, u_pendExt)
+                else
+                    box.set_bottom(u_pendBox, u_pendExt)
+            bool u_beyond = u_pendSide == 1 ? close > u_rTop : close < u_rBot
+            if u_beyond
+                u_pendCloses += 1
+            else
+                // body close back INSIDE
+                if bar_index - u_pendOpen <= devRet
+                    // HARDEN [C2] — the hollow box turns SOLID, diamond,
+                    // boundary redrawn per v0 rules (wick extreme)
+                    float u_oldB = u_pendSide == 1 ? u_rTop : u_rBot
+                    if u_pendSide == 1
+                        u_rTop := math.max(u_rTop, u_pendExt)
+                        u_devTopExt := na(u_devTopExt) ? u_pendExt : math.max(u_devTopExt, u_pendExt)
+                    else
+                        u_rBot := math.min(u_rBot, u_pendExt)
+                        u_devBotExt := na(u_devBotExt) ? u_pendExt : math.min(u_devBotExt, u_pendExt)
+                    if not na(u_pendBox)
+                        box.set_bgcolor(u_pendBox, MICDEV)
+                        box.set_border_style(u_pendBox, line.style_solid)
+                        box.set_right(u_pendBox, bar_index)
+                    if u_renderThis
+                        label.new(bar_index, u_pendExt, "◆",
+                             style = u_pendSide == 1 ? label.style_label_down : label.style_label_up,
+                             color = color.new(color.white, 100), textcolor = MICDIA)
+                    if not na(u_rBox)
+                        box.set_top(u_rBox, u_rTop)
+                    if not na(u_rBox)
+                        box.set_bottom(u_rBox, u_rBot)
+                    if not na(u_rMid)
+                        line.set_y1(u_rMid, (u_rTop + u_rBot) / 2)
+                    if not na(u_rMid)
+                        line.set_y2(u_rMid, (u_rTop + u_rBot) / 2)
+                else
+                    if not na(u_pendBox)          // breach-lapse: box removed
+                        box.delete(u_pendBox)
+                u_pendBox := na
+                u_pendSide := 0
+                u_pendCloses := 0
+        if u_pendSide != 0
+            float u_bnd = u_pendSide == 1 ? u_rTop : u_rBot
+            bool u_dieN = u_pendCloses >= brkN
+            bool u_dieM = u_pendSide == 1 ? close - u_bnd >= brkMargin * atr : u_bnd - close >= brkMargin * atr
+            if u_dieN or u_dieM
+                // BREAKOUT — the range dies; the pending box converts
+                if not na(u_pendBox)
+                    box.delete(u_pendBox)
+                    u_pendBox := na
+                if not na(u_rBox)
+                    box.set_right(u_rBox, bar_index)
+                if not na(u_rBox)
+                    box.set_extend(u_rBox, extend.none)
+                if not na(u_rMid)
+                    line.set_x2(u_rMid, bar_index)
+                if not na(u_rMid)
+                    line.set_extend(u_rMid, extend.none)
+                // micro corpses leave NO lines [H1]
+                if false     // micro death triangles suppressed [diet/H1]
+                    label.new(bar_index, u_pendSide == 1 ? u_rTop : u_rBot,
+                     u_pendSide == 1 ? "▲" : "▼", size = size.tiny,
+                     style = u_pendSide == 1 ? label.style_label_up : label.style_label_down,
+                     color = color.new(color.white, 100),
+                     textcolor = u_pendSide == 1 ? color.green : color.red)
+                u_rState := "NONE"
+                u_pendSide := 0
+                u_pendCloses := 0
+                u_expansionFloorBar := bar_index
+
+
+// per-bar walk: ttl, touches, flips
+if array.size(memLines) > 0
+    for k = 0 to array.size(memLines) - 1
+        int st = array.get(memState, k)
+        if st == 2
+            continue
+        float px = array.get(memPx, k)
+        int born = array.get(memBorn, k)
+        if bar_index <= born
+            continue
+        if st == 0 and bar_index - born > memTtl
+            array.set(memState, k, 2)               // ttl expiry [H3]
+            line.delete(array.get(memLines, k))
+            continue
+        bool touched = low <= px and px <= high
+        if not touched
+            continue
+        if st == 0
+            array.set(memState, k, 1)               // freeze at first touch
+            line.set_x2(array.get(memLines, k), bar_index)
+            line.set_extend(array.get(memLines, k), extend.none)
+        if not array.get(memFlipDn, k)
+            bool apprAbove = close[1] > px
+            string side = array.get(memSide, k)
+            bool opposite = side == "top" ? apprAbove : not apprAbove
+            if opposite
+                array.set(memFlipDn, k, true)       // one evaluation [H2]
+                // the hold verdict resolves flipBars later; render then
+                // via a pending-watch registry
+                array.push(flipWatchPx, px)
+                array.push(flipWatchSide, side)
+                array.push(flipWatchBar, bar_index)
+                array.push(flipWatchPed, array.get(memPedigree, k)
+                     + " · retest " + str.format_time(time, "yyyy-MM-dd", "UTC"))
+
+// grow the dead-flags array in step
+while array.size(flipWatchDead) < array.size(flipWatchPx)
+    array.push(flipWatchDead, false)
+
+if array.size(flipWatchPx) > 0
+    for k = 0 to array.size(flipWatchPx) - 1
+        if array.get(flipWatchDead, k)
+            continue
+        float px = array.get(flipWatchPx, k)
+        string side = array.get(flipWatchSide, k)
+        int tb = array.get(flipWatchBar, k)
+        float thr = flipMargin * atr
+        bool through = side == "top" ? close < px - thr : close > px + thr
+        if through
+            array.set(flipWatchDead, k, true)       // fail-through: touch only
+        else if bar_index - tb >= flipBars
+            array.set(flipWatchDead, k, true)       // HELD → the flip mark
+            label.new(tb, px, side == "top" ? "▲" : "▼", size = size.small,
+                 style = side == "top" ? label.style_label_up : label.style_label_down,
+                 color = color.new(color.white, 100),
+                 textcolor = side == "top" ? color.green : color.red,
+                 tooltip = array.get(flipWatchPed, k))
+
+// global STATE, the twin's sticky law [review: per-bar recompute diverged
+// on 27.6% of bars]: death-direction until the next confirm; NEUTRAL while
+// a macro range lives; pivot-direction only from virgin NEUTRAL
+var string gState = "NEUTRAL"
+var bool gVirgin = true
+if m_rState == "CONFIRMED"
+    gState := "NEUTRAL"
+    gVirgin := false
+else if gVirgin and m_lastPivDir != 0
+    gState := m_lastPivDir == -1 ? "BULL_EXP" : "BEAR_EXP"
+
+// C4: pivot markers, macro, toggle default OFF
+if showPivots and m_sealedNow
+    label.new(m_lastPivBar, m_lastPivPx, "·", size = size.tiny,
+         style = m_lastPivDir == 1 ? label.style_label_down : label.style_label_up,
+         color = color.new(color.white, 100), textcolor = MEMCLR)
+
+// ═══ H4 · LEGEND + the status line ═══════════════════════════════════════
+var table leg = table.new(position.bottom_right, 1, 8,
+     bgcolor = color.new(color.black, 40))
+if barstate.islast and showLegend
+    table.cell(leg, 0, 0, "LEGEND", text_color = color.white, text_size = size.tiny)
+    table.cell(leg, 0, 1, "blue box — macro range · grey — micro (inside macro)", text_color = color.silver, text_size = size.tiny)
+    table.cell(leg, 0, 2, "orange slab — deviation zone", text_color = color.silver, text_size = size.tiny)
+    table.cell(leg, 0, 3, "hollow dashed-orange — pending breach", text_color = color.silver, text_size = size.tiny)
+    table.cell(leg, 0, 4, "◆ — confirm / harden diamonds (the only diamonds)", text_color = color.silver, text_size = size.tiny)
+    table.cell(leg, 0, 5, "orange line — midline · grey dashed — memory", text_color = color.silver, text_size = size.tiny)
+    table.cell(leg, 0, 6, "▲▼ on memory — flip (dead top→support / dead bottom→resistance)", text_color = color.silver, text_size = size.tiny)
+    table.cell(leg, 0, 7, "tiny ▲▼ at boundary — breakout death", text_color = color.silver, text_size = size.tiny)
+
+var table t = table.new(position.top_left, 1, 1, bgcolor = color.new(color.black, 25))
+if barstate.islast
+    float cov = bar_index > 0 ? 100.0 * m_coveredBars / (bar_index + 1) : 0.0
+    string st = str.tostring(bar_index + 1) + " CANDLES · " + gState + " · " +
+         str.tostring(cov, "#.#") + "% COV (MACRO) · " +
+         str.tostring(m_pendSide != 0 ? 1 : 0) + " PENDING · " +
+         str.tostring(m_nConfirmed) + " MACRO · " +
+         str.tostring(u_nKept) + " MICRO · " +
+         str.tostring(m_nPivots) + " PIVOTS"
+    table.cell(t, 0, 0, st, text_color = color.white, text_size = size.small)
