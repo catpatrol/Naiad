@@ -356,3 +356,41 @@ PENDING: 1. operator TV-eyeball parity verdict on SS12_RangeFinder_v0.pine (NEW,
          2026-08-26 (unchanged) 4. V-7 rails (APOLLO F-C3-e) (unchanged)
 NEXT: eyeball verdict lands or RF-2 fires on the named seed-law suspect. Owner: operator.
 === END STATUS ===
+
+=== STATUS_ARGUS — 2026-08-22 (RF-2 BUILT · RANGEFINDER v1 · THE OPERATOR'S GRAMMAR) ===
+NOW: SS12-RangeFinder v1 is built — BOUNDARY_MODE body DEFAULT (the operator's grammar; wick
+     preserves the v0/Sergio reconstruction), pendings rendered hollow and hardening solid,
+     backdated left edges, dieted symbols, color inputs, and the machine recalibrated on the
+     420-bar window that KEY-B demands.
+LAST EVENT: 2026-08-22 — BUILD_2026-08-22_RANGEFINDER_V1.md filed; publish follows this append.
+FACTS:
+- v1 PINS MEASURED (KEY-A objective, body mode, coarse 5,120 + fine): LEG_MIN 0.5 · REV_MIN 1.75
+  · TOUCH_EPS 0.60 · DEV_RETURN_BARS 7 · BREAK_CONFIRM_N 8 · BREAK_MARGIN 1.5. Score 3.5507 vs
+  v0's 10.7601: Q4 SATISFIED (68.2 in [51,154]), Q1/Q3 near-miss (71.19 vs 72.6 · 1.19 vs 1.12),
+  Q2 RESISTS (7.78 bars/pivot) — the pivot cadence remains the named suspect [verified]
+- KEY-B CONCORDANCE (operator transcription, spot-vs-perp disclosed): 4/4 ranges matched with
+  large overlaps; 6/7 transcribed deviations FOUND (L-R2's Dec bottom the miss); L-R4's July
+  bottom deviation found AND its range resolved by the upside breakout, per the transcription
+- THE REDRAW-BASIS DIVERGENCE IS THE FILED FINDING: the operator's boundaries sit BETWEEN the
+  seed box and the wick-redrawn extent — body-basis redraws lift boundary concordance 4/8 → 6/8
+  (L-R1 top residual 2,008 → 429) at 2.4 coverage points. The queue's wick redraw law SHIPS;
+  the experiment is evidence for RF-3, not a silent change
+- THE C1 SPLIT, QUANTIFIED (F-RF-4): the reclaim invariant holds 8/8; 6/8 bottom hardens also
+  sweep the 20-bar wick extreme (house springs), 2/8 are BODY-ONLY breaches — under body
+  grammar deviations are not all springs; reported both directions (6/25 independent springs
+  fall inside deviation episodes)
+- FIXTURES 8/8 GREEN, EVERY BREAK LEG RED FIRST (transcript filed off-bus), including the NEW
+  F-RF-8 PINE-SIM PARITY: a maintained python port of the pine bar loop must reproduce the
+  twin's chapters EXACTLY in both modes — the fixture class that caught the v0 AND v1 pine
+  BLOCKERS, made standing law
+- A SECOND CONSECUTIVE PINE BLOCKER WAS CAUGHT BY THE PRE-PUBLISH LENSES (the v1 seed law
+  diverged from the twin — a chapter missing from the render); the lens VALIDATED its own
+  repair, applied in place; also repaired: an INERT legality clause (harden rename), a dead
+  toggle, the memory-freeze law, anchor-honest KEY-B evidence pointers, the lapse disclosure
+- OPERATOR TV-EYEBALL VERDICT PENDING — the final parity fixture; v0 kept untouched in pine/
+  for lineage
+PENDING: 1. operator TV-eyeball on SS12_RangeFinder_v1.pine (NEW, the final fixture)
+         2. operator PARITY line (prior, unchanged) 3. BR-2 on gates, earliest 2026-08-26
+         (unchanged) 4. V-7 rails (APOLLO F-C3-e) (unchanged)
+NEXT: eyeball verdict lands, or RF-3 fires on the redraw-basis finding. Owner: operator.
+=== END STATUS ===
