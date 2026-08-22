@@ -390,6 +390,10 @@ def _structure(text):
         # declaration (CE10272) — the class is now a standing clause
         ("declaration order: no var used above its declaration",
          not _use_before_decl(text)),
+        # round 3: TV's 10-char shorttitle max, also operator-caught
+        ("shorttitle <= 10 chars",
+         (lambda m: bool(m) and len(m.group(1)) <= 10)(
+             re.search(r'shorttitle="([^"]*)"', text))),
     ]
     bad = [n for n, ok in checks if not ok]
     return not bad, (f"all {len(checks)} v2 structure clauses hold"

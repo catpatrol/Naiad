@@ -1,5 +1,5 @@
 //@version=6
-indicator("SS12-RangeFinder v0", shorttitle="SS RangeFinder", overlay=true,
+indicator("SS12-RangeFinder v0", shorttitle="SS RF v0", overlay=true,
      max_boxes_count=500, max_lines_count=500, max_labels_count=500)
 
 // ═══════════════════════════════════════════════════════════════════════════
