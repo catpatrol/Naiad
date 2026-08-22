@@ -719,7 +719,7 @@ def wallq_lab(book: list, champs: dict, tf: str = "12h") -> pd.DataFrame:
         return per
 
     agg_rows = []
-    order = ["beyond_stop", "blocks_2r", "both", "neither", "no_wall"]
+    order = list(RC.WALL_BUCKETS)   # the registry, not a stale literal [#15]
     for bucket in order:                       # EVERY bucket, whether or not
         for dname in ("ALL", "long", "short"):  # it is populated
             m = per[per["alignment"] == bucket]

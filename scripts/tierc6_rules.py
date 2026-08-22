@@ -289,9 +289,18 @@ def wall_series_12h(open_ms: np.ndarray, high: np.ndarray, low: np.ndarray,
 
     THE BUCKETING IS ARITHMETIC, NOT A LIBRARY CALL.  4h bars open at
     00/04/08/12/16/20 UTC, so a 12h bucket is exactly three of them and
-    `open_ms // MS_12H` labels it.  The FORMING bucket is dropped (the estate's
-    AMENDMENT FAN8 convention): a 12h bar counts only once all three of its 4h
-    bars have closed.
+    `open_ms // MS_12H` labels it.  THE RULE IS TIME-CLOSED, NOT
+    THREE-BARS-COMPLETE [TC6V-d #32]: a bucket counts once its last 4h bar
+    has closed — the FORMING tail bucket is dropped (AMENDMENT FAN8), but a
+    partial HEAD bucket (a cache that begins mid-bucket; NEAR and ZEC start
+    with one 4h bar) is ADMITTED as of its time-close, with its high/low
+    understated by construction.  The first draft of this docstring claimed
+    "a 12h bar counts only once all three of its 4h bars have closed", a
+    completeness rule the code does not implement.  AN-2 found the shared
+    resampler carries the same head defect; whether the head bucket should
+    be refused estate-wide is a PENDING RULING (LEDGER_APOLLO 2026-08-18),
+    and until it lands the rule is stated here as it is implemented.
+    F-C6-WALL pins the two rules' divergence to the series head.
 
     THE AS-OF IS THE 4h BAR'S CLOSE, NOT ITS OPEN.  Bar j's decision is taken at
     `open_ms[j] + 4h`; the wall it may consult is the newest 12h bar that had
@@ -390,7 +399,17 @@ def wall_alignment(entry_px: float, stop_px: float, r_dist: float,
     both          a wall on each side (this is possible only when two walls are
                   read; with ONE champion per side it is the degenerate case and
                   is reported so the bucket is never silently empty)
-    neither       no wall within the campaign's working range
+    inside_risk   the wall sits BETWEEN the stop and the entry — inside the
+                  campaign's risk zone, behind price but in front of the stop
+    beyond_2r     the wall sits past the first +2R on the profit side — ahead
+                  of the campaign but outside its working range
+
+    THE OLD `neither` BUCKET IS RETIRED [TC6V-d #15].  It merged those two
+    OPPOSITE geometries — 11 of its 28 campaigns had the wall INSIDE the risk
+    zone, the rest beyond +2R — and a bucket whose members disagree about
+    which side of price the wall is on cannot be read.  The historical
+    l_wallq parquet keeps its filed `neither` rows; this split governs every
+    future emission.
 
     WHAT WOULD MAKE THIS WRONG: computing it from the EXIT (it would be an
     outcome, not a context), or reading a wall the arming bar had not yet seen.
@@ -407,7 +426,16 @@ def wall_alignment(entry_px: float, stop_px: float, r_dist: float,
         return "beyond_stop"
     if blocks:
         return "blocks_2r"
-    return "neither"
+    # the retired `neither`, split by geometry [TC6V-d #15]
+    inside = ((wall_px - stop_px) * d > 0.0) and ((wall_px - entry_px) * d <= 0.0)
+    return "inside_risk" if inside else "beyond_2r"
+
+
+# THE BUCKET REGISTRY, DEFINED ONCE [TC6V-d #15 completion — the review
+# found the split's consumers iterating the pre-split label set, silently
+# dropping the split buckets' campaigns from every aggregate].
+WALL_BUCKETS = ("beyond_stop", "blocks_2r", "both", "inside_risk",
+                "beyond_2r", "no_wall")
 
 
 def register_rows() -> list[dict]:

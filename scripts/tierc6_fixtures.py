@@ -239,8 +239,14 @@ def f_inherit() -> bool:
 
 # ═══════════════════════ F-C6-ARM · the trail is asleep before +1R
 def f_arm() -> bool:
-    """FAILS IF: any v6 advance confirms on a bar at or before the bar the
+    """FAILS IF: any v6 advance confirms on a bar BEFORE the bar the
     campaign first reached +1R — on ANY campaign, not on a sample.
+    An advance confirming ON the first +1R bar is admitted BY DESIGN: the
+    arming latch fires within the bar that reaches +1R, and the shipped book
+    carries 11 such same-bar advances.  The first draft of this docstring
+    said "at or before", a condition the code never tested and the book
+    violates 11 times — the declared failure condition now IS the tested
+    one [TC6V-d #38].
 
     NON-CIRCULAR BY CONSTRUCTION.  The program decides arming from
     `unit_fav_r >= card.trail_arm_after_r` inside `_ride`, using the running
@@ -294,14 +300,25 @@ def f_arm() -> bool:
                 early += 1
                 worst.append((t.symbol, T6.iso(t.entry_ms),
                               f"advance at bar {a.conf_i} < first +1R bar {j1}"))
-    with_adv = sum(1 for t in B["v6"] if t.advances)
-    g = checked == with_adv
+    # THE ANCHOR IS EXTERNAL [TC6V-d #17].  The first draft compared
+    # `checked` to a count derived from the SAME loop over the SAME book —
+    # x == x, a leg that could not fail.  Both clauses now anchor against the
+    # FILED journal: the campaign SET and its advancing subset.
+    jn = tbl("trade_journal")
+    g = len(B["v6"]) == len(jn)
     ok &= g
-    lines.append(f"[{'OK ' if g else 'BAD'}] CARDINALITY: {checked} campaigns "
-                 f"checked == {with_adv} campaigns carrying an advance (of "
-                 f"{len(B['v6'])} in the book)")
-    lines.append("      FAILS IF: the two differ. A leg that checks 'some "
-                 "campaign' passes on a book that has lost the rest.")
+    lines.append(f"[{'OK ' if g else 'BAD'}] CARDINALITY: the ridden book "
+                 f"holds {len(B['v6'])} campaigns == the FILED journal's "
+                 f"{len(jn)} rows")
+    filed_adv = int((jn["n_advances"].astype(int) > 0).sum())
+    g = checked == filed_adv
+    ok &= g
+    lines.append(f"[{'OK ' if g else 'BAD'}] and {checked} campaigns "
+                 f"checked == the FILED journal's {filed_adv} campaigns "
+                 f"with n_advances > 0")
+    lines.append("      FAILS IF: either differs from the FILED table. A "
+                 "count compared to itself passes on a book that lost the "
+                 "rest; these compare the ride to the filed evidence.")
     g = early == 0
     ok &= g
     lines.append(f"[{'OK ' if g else 'BAD'}] and {early} advance(s) confirm "
@@ -355,8 +372,34 @@ def f_minadv() -> bool:
     rl = tbl("ratchet_ledger")
     mn = float(RC.REGISTER["TRAIL_MIN_ADVANCE_ATR"]["value"])
     atr = rl["atr_at_conf"].astype(float)
-    recomp = (np.abs(rl["new_stop_px"].astype(float)
-                     - rl["prev_stop_px"].astype(float)) / atr)
+    # THE REBUILD STARTS FROM RIDE INPUTS [TC6V-d #36].  The first draft
+    # recomputed advance_atr from the ledger's OWN new_stop/prev_stop columns
+    # — the banned self-comparison: the ledger derived advance_atr the same
+    # way, so the leg would have passed with the gate deleted.  The stop is
+    # now rebuilt from the confirming pivot, the close, the register's
+    # BUF/RAIL and the ATR — the quantities the RIDE consumed.
+    d_ = np.where(rl["direction"].astype(str).isin(("long", "1")), 1.0, -1.0)
+    buf = float(RC.RATCHET_BUF_ATR)   # the OBJECT the ride reads
+    rail = float(RC.RATCHET_RAIL_ATR)
+    pv_ = rl["pivot_val"].astype(float)
+    cl_ = rl["close_at_conf"].astype(float)
+    cand_rb = pv_ - d_ * buf * atr
+    rail_rb = cl_ - d_ * rail * atr
+    stop_rb = np.where(d_ > 0, np.minimum(cand_rb, rail_rb),
+                       np.maximum(cand_rb, rail_rb))
+    # 6-dp write rounding on pivot, close and atr: |err| <= 5e-7·(1+max(buf,
+    # rail)) + 5e-7 (stored stop's own rounding) < 2e-6 price units.
+    px_dev = np.abs(stop_rb - rl["new_stop_px"].astype(float))
+    px_bad = int((px_dev > 2e-6).sum())
+    g = px_bad == 0
+    ok &= g
+    lines.append(f"[{'OK ' if g else 'BAD'}] new_stop REBUILT from ride "
+                 f"inputs (pivot, close, BUF {buf}, RAIL {rail}, ATR) on all "
+                 f"{len(rl)} rows — {px_bad} beyond the 2e-6 rounding bound "
+                 f"(worst {float(np.nanmax(px_dev)):.3e})")
+    lines.append("      FAILS IF: the ride-input rebuild disagrees — the "
+                 "ledger would then describe stops the ride never set.")
+    recomp = np.abs(stop_rb - rl["prev_stop_px"].astype(float)) / atr
     pub = rl["advance_atr"].astype(float)
     # THE BOUND IS DERIVED, NOT GUESSED — AND IT IS NOT A FLAT CONSTANT.
     # Every written column is rounded to 6 dp in PRICE units, and this leg
@@ -558,7 +601,13 @@ def f_league() -> bool:
     finally:
         T6._tf_frame = _real_tf
         T6._WALL.clear()
-    res_pos = lg[lg["side"] == "resistance"]
+    # LIVE vs LIVE [review L5]: the first draft compared the negated LIVE
+    # scan to the FILED parquet — two populations once the cache drifts, so
+    # the mirror leg failed on four days of boundary bars while the claim
+    # ("league(negated) == league(tape)") was about the FUNCTION.  Both
+    # sides now run on the same tape at the same corridor.
+    res_pos = T6.league(B["hi"], "resistance")
+    res_pos = res_pos[res_pos["side"] == "resistance"]
 
     j2 = res_pos.merge(sup_neg, on=["asset", "tf", "ema"],
                        suffixes=("_r", "_s"))
@@ -668,13 +717,15 @@ def f_wall() -> bool:
         lines.append(f"      {side:10} {n}")
 
     checked = 0
+    # EVERY EXIT, NOT head(3) [TC6V-d #21] — 16 rows run in well under a
+    # second, and a support-side defect beyond the third row was invisible
+    # to the sampled leg.
     for side, dirv in (("resistance", 1), ("support", -1)):
         dname = "long" if dirv == 1 else "short"
-        sel = wex[wex["direction"] == dname].head(3)
+        sel = wex[wex["direction"] == dname]
         if not len(sel):
             ok = False
-            lines.append(f"[BAD] no wall exit on the {side} side to verify — "
-                         f"the commission asks for three per side")
+            lines.append(f"[BAD] no wall exit on the {side} side to verify")
             continue
         L = ch[(side, "12h")]
         for _, r in sel.iterrows():
@@ -696,8 +747,35 @@ def f_wall() -> bool:
                          f"{r['exit_ts']}  close {float(f.c[xi]):.4f} vs "
                          f"EMA{L} {oe[xi]:.4f} = {dist:.4f} ATR (bar {tol}) · "
                          f"earlier qualifying bars in the ride: {len(earlier)}")
-    lines.append(f"      {checked} exits hand-verified against an INDEPENDENT "
-                 f"12h rebuild (pandas groupby, not `wall_series_12h`)")
+    g = checked == len(wex)
+    ok &= g
+    lines.append(f"[{'OK ' if g else 'BAD'}] {checked} exits verified == "
+                 f"ALL {len(wex)} filed wall exits [TC6V-d #21] against an "
+                 f"INDEPENDENT 12h rebuild (pandas groupby, not "
+                 f"`wall_series_12h`)")
+    # THE TWO COMPLETENESS RULES ARE PINNED TO THE HEAD [TC6V-d #0].  This
+    # rebuild requires 3/3 bars per bucket; production's rule is TIME-CLOSED
+    # and admits a partial HEAD bucket (the AN-2 resampler finding — ruling
+    # pending).  The leg's claim is honest only if the divergence cannot
+    # touch a wall read at trade time: every incomplete bucket is asserted
+    # to sit at the series head or forming tail.
+    interior_bad = []
+    for sym in sorted(set(wex["asset"])):
+        f6 = T6.frame(sym)["f"]
+        bk_ = pd.Series(f6.open_ms // MS12)
+        sizes = bk_.value_counts()
+        inc = sorted(sizes[sizes < 3].index)
+        edge = {bk_.iloc[0], bk_.iloc[-1]}
+        bad = [b for b in inc if b not in edge]
+        if bad:
+            interior_bad.append((sym, len(bad)))
+    g = not interior_bad
+    ok &= g
+    lines.append(f"[{'OK ' if g else 'BAD'}] bucket-rule divergence pinned "
+                 f"to the head/tail: interior incomplete buckets = "
+                 f"{interior_bad or 'none'} — production's time-closed rule "
+                 f"and this 3/3 rebuild can differ ONLY where no trade-time "
+                 f"wall is read [TC6V-d #0; AN-2 head-bucket ruling pending]")
     lines.append("      FAILS IF: the distance exceeds the tolerance, or any "
                  "earlier bar of the same ride also qualified — the rule says "
                  "FIRST, and 'is within' is satisfied by every bar of a run.")

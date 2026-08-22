@@ -424,7 +424,13 @@ def _account(sym: str, card: RC.Card, direction: int, ti: int, entry_px: float,
     fund_eff = min(fund_raw, cap) if (cap is not None and fund_raw > cap) else fund_raw
     net = gross - fee - fund_eff
 
-    if n1 is not None and cap is None:
+    # THE HALT IS REACHABLE NOW [TC6V-d #37].  The first draft guarded this
+    # identity with `and cap is None` — but n1, n2 and base_net are ALL built
+    # from UNCAPPED funding (the D12 ceiling applies once, to the campaign
+    # total, never to the halves), so a bound ceiling cannot falsify the
+    # identity and the clause only made the HALT dead code on every book the
+    # build ships.
+    if n1 is not None:
         base_net = (g_base - f_base - u_base) / r_dist
         if abs((n1 + n2) - base_net) > 1e-9:
             raise SystemExit(
@@ -657,6 +663,17 @@ def agg_ear(trades: list, label: str, key: str = "ALL",
         "best_r": r4(float(r.max())),          # UNWEIGHTED — it names a trade
         "best_contrib_r": r4(float(wr[jbest])),
         "strip_best_net_r": r4(tot - float(wr[jbest])),
+        # DISCLOSED ON THE ROW [TC6V-d #10]: under equal-asset-risk the strip
+        # removes the largest WEIGHTED contribution while best_r stays a raw
+        # trade — two bases, named so a reader cannot subtract one from the
+        # other's total.
+        "strip_best_basis": "best weighted contribution (best_contrib_r), "
+                            "not the raw best_r trade",
+        # DISCLOSED ON THE ROW [TC6V-d #8]: the weights are recomputed WITHIN
+        # this slice, so slice rows do not sum to the book row and one
+        # campaign's weight differs across slices that hold it.
+        "ear_weights_recomputed_within_window": True,
+        "max_asset_weight": r6(float(np.max(w))),
         "gross_r": r4(float((w * np.array([t.gross_r for t in trades])).sum())),
         "fee_r": r4(float((w * np.array([t.fee_r for t in trades])).sum())),
         "funding_r": r4(float((w * np.array([t.funding_r for t in trades])).sum())),
@@ -1103,6 +1120,13 @@ def score_registrations6(base: list, trail_ctrl: list, wallbook: list
     tested = d[d["registration"] != "(reference)"]
     m = len(tested)
     bar = FDR_Q / m
+    # THE CAVEAT RIDES THE RESULT ROW [TC6V-d #1].  registration_text()
+    # carries each claim's named_caveat, and the score table is the row a
+    # reader actually quotes — a caveat filed one table away is a caveat
+    # skipped.
+    _cav = {r_["registration"]: r_["named_caveat"]
+            for _, r_ in registration_text().iterrows()}
+    d["named_caveat"] = d["registration"].map(_cav)
     d["fdr_m_tests_actually_run"] = m
     d["fdr_q"] = FDR_Q
     d["fdr_bar_q_over_m"] = r6(bar)
@@ -1238,28 +1262,53 @@ def run(root: Path) -> dict:
     lab_state = {}
     if L["zec"]:
         Z = L["zec"]
-        tabs = {h: getattr(Z, f"hz{h}_table")() for h in (1, 2, 3, 4, 5)}
-        for h, t in tabs.items():
-            put(t, f"lzec_hz{h}", ["asset"])
+        # ALL SEVEN TABLES THROUGH THE LAB'S OWN REGISTRY, AND THE SELFCHECK
+        # RUNS IN THE BUILD [TC6V-d #6].  The first draft rebuilt five tables
+        # through a local dict, never filed hz1_scope or hz5_slice, and never
+        # called Z.selfcheck — the lab's own verification legs existed and
+        # nothing executed them.
+        tabs = Z.all_tables("v6")
+        for h in (1, 2, 3, 4, 5):
+            put(tabs[f"hz{h}"], f"lzec_hz{h}", ["asset"])
+        put(tabs["hz1_scope"].reset_index(drop=True).assign(
+            row_id=lambda d_: range(len(d_))), "lzec_hz1_scope", ["row_id"])
+        put(tabs["hz5_slice"].reset_index(drop=True).assign(
+            row_id=lambda d_: range(len(d_))), "lzec_hz5_slice", ["row_id"])
         fp = Z.fingerprint(tabs)
         put(fp, "lzec_fingerprint", ["metric"])
-        put(Z.suitability_card(fp), "lzec_suitability_card", ["metric"])
+        card_z = Z.suitability_card(fp)
+        put(card_z, "lzec_suitability_card", ["metric"])
         put(Z.crosscheck(), "lzec_crosscheck", ["leg"])
+        sc_z = Z.selfcheck(tabs, fp, card_z)
+        put(sc_z.reset_index(drop=True).assign(
+            row_id=lambda d_: range(len(d_))), "lzec_selfcheck", ["row_id"])
         man["why_zec"] = Z.answer_paragraph(fp, tabs)
         lab_state["L-ZEC"] = "BUILT"
     else:
         lab_state["L-ZEC"] = "NOT AVAILABLE"
     if L["limit"]:
         M = L["limit"]
-        put(M.ae_deciles(v6, lo_ms, hi_ms), "l_ae_deciles", ["bucket", "key"])
-        put(M.hazard_curve(v6), "l_ae_hazard", ["x_r"])
-        put(M.ae_by_context(v6, ch), "l_ae_by_context", ["context", "bucket"])
-        # THE CARD IS THREADED, NOT DEFAULTED. The split arm caps funding at
-        # the campaign level and must read the ceiling off the card that is
-        # being scored, not off a module global — the lab's own self-check
-        # found that divergence and it is invisible while both are 1.0.
-        put(M.frontier(v6, lo_ms, hi_ms, card=RC.CARD_V6), "l_limit_frontier",
-            ["k_atr", "arm"])
+        # THE LAB RUNS THROUGH ITS OWN build() [TC6V-d #23], WITH THE
+        # PRE-REGISTRATION WRITTEN TO DISK FIRST [TC6V-d #26].  The first
+        # draft called four table functions directly: the 14-leg selfcheck
+        # and build()'s own HALT had no caller anywhere in the estate, and
+        # write_prereg was never invoked, so frontier ran with its
+        # pre-registration enforcement disarmed.
+        # THE CARD IS THREADED, NOT DEFAULTED — unchanged law.
+        pre = M.write_prereg(root / "l_limit_prereg.json")
+        lim = M.build(v6, lo_ms, hi_ms, champs=ch, card=RC.CARD_V6,
+                      prereg_path=pre["path"])
+        put(lim["ae_deciles"], "l_ae_deciles", ["bucket", "key"])
+        put(lim["hazard_curve"], "l_ae_hazard", ["x_r"])
+        put(lim["hazard_curve_atr"].reset_index(drop=True).assign(
+            row_id=lambda d_: range(len(d_))), "l_ae_hazard_atr", ["row_id"])
+        put(lim["legacy_ae_study"].reset_index(drop=True).assign(
+            row_id=lambda d_: range(len(d_))), "l_ae_legacy", ["row_id"])
+        put(lim["ae_by_context"], "l_ae_by_context", ["context", "bucket"])
+        put(lim["frontier"], "l_limit_frontier", ["k_atr", "arm"])
+        put(lim["selfcheck"].reset_index(drop=True).assign(
+            row_id=lambda d_: range(len(d_))), "l_limit_selfcheck",
+            ["row_id"])
         man["limit_prereg"] = M.prereg_text()
         man["limit_prereg_sha256"] = M.prereg_sha256()
         lab_state["L-LIMIT-2"] = "BUILT"
@@ -1275,7 +1324,19 @@ def run(root: Path) -> dict:
         put(X.shadow_identity_checks(lo_ms, hi_ms), "shadow_identity", ["leg"])
         put(X.wallq_lab(v6, ch), "l_wallq", ["bucket", "key"])
         put(X.sprnt_lab(lo_ms, hi_ms), "l_spr_nt", ["population", "direction"])
-        put(X.shadow_table(lo_ms, hi_ms, v6), "fleet_unscored", ["cell"])
+        # THE SHADOW FRAME IS HELD, AND THE THREE VERIFICATION TABLES THAT
+        # HAD NO CALLER NOW RUN IN THE BUILD [TC6V-d #13] — hfrac_enactment
+        # is the only leg that can detect a wrong harvest split.
+        sh = X.shadow_table(lo_ms, hi_ms, v6)
+        put(sh, "fleet_unscored", ["cell"])
+        put(X.hfrac_enactment(sh.attrs["hfrac_cells"]).reset_index(
+            drop=True).assign(row_id=lambda d_: range(len(d_))),
+            "hfrac_enactment", ["row_id"])
+        put(X.wall_aware_population(lo_ms, hi_ms).reset_index(
+            drop=True).assign(row_id=lambda d_: range(len(d_))),
+            "wall_aware_population", ["row_id"])
+        put(X.knob_ruling_rows().reset_index(drop=True).assign(
+            row_id=lambda d_: range(len(d_))), "knob_rulings", ["row_id"])
         man["grid_sizes"] = X.GRID_SIZES6
         lab_state["L-FMH/L-WALLQ/L-SPR-NT/SHADOWS"] = "BUILT"
     else:

@@ -455,7 +455,19 @@ def ae_deciles(book: list, lo_ms: int, hi_ms: int) -> pd.DataFrame:
         r = np.array([-campaign_mae(t)[0] for t in ts], dtype=float)
         oa = np.array([_r_over_atr(t) for t in ts], dtype=float)
         a = r * oa
+        # THE RAIL IS NAMED ON THE ROW [TC6V-d #24].  The held-basis AE of a
+        # stopped campaign is CENSORED at ~1R by the 1.0-ATR entry rail, so
+        # d5-d9/p90/max on a mostly-stopped bucket publish the card's own
+        # stop distance wearing a distribution's clothes.  The count of
+        # rail-censored campaigns now rides beside every quantile block; the
+        # uncensored twin lives in tc6v's mae_tape_r.
+        censored_n = int(np.sum(np.abs(r - 1.0) <= 1e-9))
         row = {"grouping": by, "bucket": by, "key": key, "n": len(ts),
+               "censored_at_the_rail_n": censored_n,
+               "censoring": "mae_held_r is censored at the 1.0-ATR entry "
+                            "rail (~1R) on stopped campaigns; the tape-side "
+                            "twin is research_outputs/tc6v mae_tape_r "
+                            "[TC6V-d #24]",
                "f_key": "(bucket, key)",
                "provisional": bool(len(ts) < RC.PROVISIONAL_MIN_N),
                "window": WINDOW, "in_sample": True,
@@ -675,7 +687,8 @@ def wall_context(t, champs: dict, tf: str = WALL_TF) -> dict:
 
     `RC.wall_alignment(entry_px, stop_px, r_dist, wall_px, direction)` with
     `wall_px` read out of `T6.wall(symbol, champion_len)` at `t.entry_i`.  Four
-    buckets: `beyond_stop` / `blocks_2r` / `both` / `neither`, plus `no_wall`.
+    buckets: `RC.WALL_BUCKETS` — beyond_stop / blocks_2r / both /
+    inside_risk / beyond_2r / no_wall (the `neither` split, TC6V-d #15).
 
     **THE PROFIT SIDE DECIDES WHICH CHAMPION.**  A long makes money upward, so
     the wall in its way is RESISTANCE; a short makes money downward, so its wall
@@ -843,7 +856,7 @@ def ae_by_context(book: list, champs: dict | None = None,
                 wall_unwarm_share_pct=pct(sum(1 for t in ts
                                               if not ctx[id(t)]["warm"]), len(ts)))))
 
-    for lab in ("beyond_stop", "blocks_2r", "both", "neither", "no_wall"):
+    for lab in RC.WALL_BUCKETS:   # the registry, not a stale literal [#15]
         ts = [t for t in book if ctx[id(t)]["wall_alignment"] == lab]
         if ts:
             rows.append(_ctx_row("wall_alignment", lab, ts, n, dict(
@@ -877,7 +890,7 @@ def ae_by_context(book: list, champs: dict | None = None,
                                           if not ctx[id(t)]["warm"]), len(ts)))))
 
     for lab in DISP_LABELS:
-        for wl in ("beyond_stop", "blocks_2r", "both", "neither", "no_wall"):
+        for wl in RC.WALL_BUCKETS:   # the registry, not a stale literal [#15]
             ts = [t for t in book if dispb[id(t)] == lab
                   and ctx[id(t)]["wall_alignment"] == wl]
             if not ts:
@@ -1937,6 +1950,28 @@ def selfcheck(book: list, lo_ms: int, hi_ms: int,
         "fails_if": "the declared m and the constructed m disagree — the "
                     "selection surface would be a number the code derived from "
                     "itself.",
+    })
+
+    # ── F-C6-LIM-7 · the wall margin is a PARTITION of the book [#15 compl.]
+    # The TC6V-d #15 bucket split's first shipment left ae_by_context's
+    # margin loops iterating the pre-split label set: 28 campaigns silently
+    # vanished from every wall aggregate while a "0 campaigns. Printed
+    # rather than omitted" row stood where they had been.  A margin whose
+    # buckets do not sum to the book is a filter wearing a margin's name.
+    ctx = ae_by_context(book, champs)
+    wall_rows = ctx[ctx["context"] == "wall_alignment"] if "context" in         ctx.columns else ctx[ctx.get("grouping", pd.Series()) == "wall"]
+    n_sum = int(wall_rows["n"].sum()) if len(wall_rows) else -1
+    rows.append({
+        "leg": "F-C6-LIM-7 · wall-alignment margin ns sum to the book "
+               "(bucket registry covers every label wall_alignment returns)",
+        "independent_path": "CARDINALITY — the margin against the book "
+                            "count, not against itself",
+        "n_total": len(book), "detail": f"margin sum {n_sum} vs book "
+                                        f"{len(book)}; buckets iterated: "
+                                        f"{list(RC.WALL_BUCKETS)}",
+        "passed": bool(n_sum == len(book)),
+        "fails_if": "the margin drops a bucket the classifier can return — "
+                    "the 28-campaign hole the review found, made a leg.",
     })
     return pd.DataFrame(rows)
 
