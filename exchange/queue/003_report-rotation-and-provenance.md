@@ -25,11 +25,14 @@ filename date (YYYY-MM-DD; fall back to first `git log` date if unparseable) is 
 the drafted default stands. For each: sha256 → `git mv` to `docs/history/reports/YYYY-MM/<name>` → sha256
 at destination must match → append one line (name, new path, sha256, date) to
 `exchange/status/ROTATION_LOG.md`. **Moves only — the script contains no delete call of any
-kind.** Exemptions, checked per file: any `NOTE_*_to_*` file listed as unacted inbox in the
-newest DIGEST; anything under `exchange/status/`, `queue/`, or `DIGEST.md` (out of scope by
-construction). `--dry-run` is the default; `--execute` required to move.
-**D-2 · Cadence.** HERMES's box-budget section in the DIGEST lists rotation candidates (count +
-bytes + % of box) each cycle — within his existing charter, no new instruction surface. The
+kind.** Exemptions, checked per file: **any `NOTE_*` file that is the NEWEST note of its
+lane pair** — sender→recipient parsed from the filename, broadcasts grouped as
+`<LANE>→ALL-LANES`, newest by filename date with mtime as tie-break; anything under
+`exchange/status/`, `queue/`, or `DIGEST.md` (out of scope by construction). `--dry-run`
+is the default; `--execute` required to move.
+**D-2 · Cadence.** The bus-health block lists rotation candidates (count +
+bytes + % of box) on every publish and in `status/daily/DAILY_<date>.md` §8 — it replaced HERMES's
+DIGEST box-budget section when ruling 007 (2026-08-15) retired the DIGEST and put that lane dormant — within his existing charter, no new instruction surface. The
 operator says "rotate" roughly monthly; the builder runs D-1 with `--execute` in its own session.
 Nothing rotates unattended.
 **D-3 · R3 refinement in CONVENTIONS §4.** The determinism-rerun rule gains: after the hash-proof,
@@ -71,3 +74,45 @@ every sweep is operator-triggered.
 
 ## Deliverable document
 ONE build document per CONVENTIONS §3.1, full fixture transcript, disposition table with BOX COST.
+
+
+---
+
+## CORRECTION 2026-08-22 — D-1's exemption input, and D-2's cadence surface
+
+**RATIFIED: operator, 2026-08-22** — root-adjudication brief, *"Amend queue 003 D-1 per its own
+recommended fix: the unacted-inbox exemption = the newest-NOTE-per-lane-pair rule (as implemented in
+the 08-18 sweep), replacing the DIGEST read."* Drafted and executed: HEPHAESTUS.
+
+**WHAT D-1 SAID BEFORE THIS CORRECTION, quoted once and asserted nowhere:** *"Exemptions, checked
+per file: any `NOTE_*_to_*` file listed as unacted inbox in the newest DIGEST."*
+
+**WHY IT HAD TO CHANGE.** Ruling 007 (2026-08-15) retired `exchange/DIGEST.md` and left a tombstone
+at its path. The exemption's only input died with it, and from that day
+`rotate_reports.py --dry-run` **halted with exit 2** rather than classifying anything — correctly,
+since it will not guess which notes are live, but with the consequence that **no rotation could run
+at all**. That was finding F-2 of
+`BUILDERS_REPORT_HEPHAESTUS_2026-08-18_BOX-CLEANUP-MAILBOX.md`, and it went unnoticed for seven days
+because nothing calls the script on a schedule.
+
+**WHAT BINDS NOW.** The exemption is **computed from the bus itself** — the newest `NOTE_*` of each
+lane pair is live and exempt; anything older in the same pair has been superseded by it and may
+rotate. **The rule has no external input, so it cannot become unavailable the way the DIGEST did.**
+It was applied to all 15 notes in the 2026-08-18 sweep before it was written down here.
+
+**TWO SUBSTANTIVE WIDENINGS, NAMED RATHER THAN SLIPPED IN:**
+
+1. **The note pattern widens from `^NOTE_.+_to_.+` to `^NOTE_`.** The old pattern only ever matched
+   `NOTE_<FROM>_to_<TO>_…`. Broadcasts — `NOTE_HERMES_2026-08-12_ALL-LANES_…`,
+   `NOTE_DIONYSUS_2026-08-12_PANTHEON_…` — never matched it, so **they were never exemptible at all**,
+   even while the DIGEST worked. The new rule protects them.
+2. **The exemption no longer depends on anyone maintaining a list.** D-2's cadence surface is
+   corrected in the same act: it named "HERMES's box-budget section in the DIGEST", and HERMES has
+   been dormant since ruling 007. The bus-health block already does that job.
+
+**WHAT DID NOT CHANGE:** `AGE_DAYS = 30`, `SCOPE_DIR`, `DEST_ROOT`, the sha256→`git mv`→sha256
+discipline, the no-delete invariant, `--dry-run` as the default, and the out-of-scope-by-construction
+list. This correction replaces one input and one stale pointer; it is not a retention-policy change.
+
+**Both assertions above are REWRITTEN in place, not annotated** — §0's correction rule — and this
+note records what changed and why.

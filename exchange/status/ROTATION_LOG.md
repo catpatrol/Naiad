@@ -143,3 +143,34 @@ that is what makes the layout reproducible by the script later.
 | 2026-08-22 | `STATUS_ATHENA_2026-08-11_LANE-CLOSEOUT.md` | `docs/history/reports/2026-08/STATUS_ATHENA_2026-08-11_LANE-CLOSEOUT.md` | `f0cffd6ee40b2fcffae9bd0279123866df3cdd9b5fcb150a55cc9a2f30284080` |
 | 2026-08-22 | `WF1_discriminants.json.pointer.md` | `docs/history/reports/2026-08/WF1_discriminants.json.pointer.md` | `a8665abbfddc85f4b900942ad1d56268e154093888395c8a6ce894d25cf22aab` |
 | 2026-08-22 | `WF1_tables.md` | `docs/history/reports/2026-08/WF1_tables.md` | `c6501ddb11289bf5d689acc54fc41ffeae0ccb4940f48b77848919c3ea127025` |
+
+PROVENANCE OF THE 2026-08-22 ROOT-PACKET BLOCK (root-adjudication brief, operator go
+2026-08-22). **These four rows are NOT build documents and did not come off the
+exchange bus**, so they sit outside this log's stated scope; they are recorded here
+by explicit operator instruction ("ROTATION_LOG rows appended"), and the widening is
+named rather than left for a reader to trip over. They are operator-ferried session
+packet zips that had been sitting at the repo root since July. They are **untracked and
+ignored** (`.gitignore:48 *.zip`), so this was a FILESYSTEM move verified by
+`rotate_reports.sha256_file`, not a `git mv` -- git has never held these bytes and
+`git log --follow` will not find them.
+
+**PROTECTION IS UNCHANGED BY THIS MOVE, AND IT IS NONE.** Measured, not assumed:
+`backup_estate.WORKFLOW_SOURCES` does not include `research_outputs`, and
+`WORKFLOW_ROOT_GLOBS` is `("*.md",)`, so these zips were not in the workflow archive at
+the root and are not in it at the destination either. The estate archive covers the
+price-data cache, not the repo. They are transport bundles -- the `.gitignore` comment
+at line 47 calls them "operator-ferried session packets (transport bundles, never the
+source of record)" -- and the source of record for every one of them is the tracked
+study output they were built from. `research_outputs/packets/` is their named home and
+already held six siblings under the same ignore rule.
+
+The fifth root zip, `v12_v3_anchor_packet_20260713.zip` (45,537,070 B), **STAYS**: it is
+pinned by `scripts/v3_scorer.py:393`, and under the standing rule a citation is what
+pins a file to KEEP.
+
+| rotated | file | new path | sha256 |
+|---|---|---|---|
+| 2026-08-22 | `engine_1.0.2_noshrink_packet_20260711.zip` | `research_outputs/packets/engine_1.0.2_noshrink_packet_20260711.zip` | `f20bf1f2732ae3b6c8bfc57c7f82096969edb6f53aa8dc3d15d9d406b2b39fe0` |
+| 2026-08-22 | `engine_1_0_3_input_parity_packet_20260712.zip` | `research_outputs/packets/engine_1_0_3_input_parity_packet_20260712.zip` | `6846cac33a171bf1ead98ec46ab5eb00377a1acdafce3d162ef72be87d12c1d9` |
+| 2026-08-22 | `ssv11_3_grade_legibility_packet_20260711.zip` | `research_outputs/packets/ssv11_3_grade_legibility_packet_20260711.zip` | `a22f11d641aeda48efb7aa50cf7b1bcc27da8e6b647f4af57461d549b665f8f6` |
+| 2026-08-22 | `v12_v1_census_packet_20260711.zip` | `research_outputs/packets/v12_v1_census_packet_20260711.zip` | `88af8a5495dea29287a813ad84e5a542f2689a0b34b058618f28f55c18135c31` |
