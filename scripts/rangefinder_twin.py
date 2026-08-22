@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-"""SS12-RANGEFINDER v0 · the PYTHON TWIN — range lifecycle with DEVIATIONS.
+"""SS12-RANGEFINDER v1 · the PYTHON TWIN — the operator's grammar.
 
-QUEUE RF-1 v2, drafted ARGUS 2026-08-22, ratified by firing. DISPLAY-ONLY:
+QUEUE RF-2 (v1) atop RF-1 v2, drafted ARGUS 2026-08-22, ratified by firing
+("ok, make it better"). DISPLAY-ONLY:
 this module renders and measures; it rules NOTHING and no decision path may
 import it. RECONSTRUCTION, NOT CODE ACCESS: the semantics are rebuilt from
 the public artifacts of a closed-source system (@sergio_tesla_, 2026-08-10
@@ -36,6 +37,21 @@ reading is NAMED here rather than smuggled — evidence class per line):
   MERGE [inferred]  a reversal that passes REV_MIN but whose completed leg
                     is shorter than LEG_MIN*ATR does not confirm a pivot;
                     the running leg keeps extending (alternation preserved).
+  BODY MODE [C1, operator grammar] boundaries sit at the pivot-bar BODY
+                    extremes (max/min of open,close); the wick territory
+                    beyond is deviation-eligible FROM INCEPTION — the seed
+                    is born WITH a deviation zone at its wick extreme
+                    (spring-birth). wick mode preserves v0/Sergio parity.
+  HARDEN [C2]       the v1 name for deviation-confirm: a pending breach
+                    (hollow box) HARDENS solid on return-inside within
+                    DEV_RETURN_BARS; the status line carries the live
+                    count of open pendings ("D pending").
+  BACKDATE [C3]     at range CONFIRMATION the left edge extends back to
+                    the terminal pivot; inception zones are classified
+                    retroactively; the log records born_at AND
+                    backdated_from.
+  WINDOW [C6]       420 complete days (v0 ran 200) — KEY-B's L-R1 opens
+                    Jul 2025; disclosed, not silent.
   SAME-BAR TIE [inferred, review-pinned] a bar that both touches the
                     confirm boundary intrabar AND body-closes beyond a
                     boundary INVALIDATES the candidate — the close outranks
@@ -67,28 +83,41 @@ from engine import indicators as ind                                 # noqa: E40
 from engine.data import cache_dir                                    # noqa: E402
 
 OUT = ROOT / "research_outputs" / "rangefinder"
-WINDOW_BARS = 200          # "~200-day window" — the reference's visible span
+WINDOW_BARS = 420          # covers KEY-B's Jul-2025 opening [C6, disclosed]
 ATR_LEN = 14               # house pin, never swept
 
 # THE CALIBRATED PINS [VETO] — measured by --calibrate, never guessed.
 # Values below are written by the calibration run of record (STEP 2c) and
 # asserted equal to the Pine defaults by F-RF-5.
 PINS = {
-    # CALIBRATION OF RECORD 2026-08-22 (coarse 10,240 + fine; deterministic
-    # edge-avoiding tie-break): score 10.7601. Q5 SATISFIED (the Jun–Jul
-    # downside deviation exists and the range survives it); Q4 near-miss
-    # (45.7 vs floor 51); Q1/Q2/Q3 RESIST under both readings — the named
-    # suspect is the SEED law (potentials invalidate in trends before they
-    # can confirm, so ranges seed one leg tall), recorded for RF-2, NOT
-    # forced here. G2 misses its band floor by 41 pts (0.03 violations);
-    # G1's 83k top is unreachable inside this window (the reference's
-    # active range predates it).
+    # v1 CALIBRATION OF RECORD 2026-08-22 (KEY-A objective, BODY mode, 420
+    # bars, coarse 5,120 + fine, edge-avoiding tie-break): score 3.5507 —
+    # v0's 200-bar wick-mode record was 10.7601. Q4 SATISFIED (68.2 in
+    # [51,154]); Q1 near-miss (71.19 vs floor 72.6); Q3 near-miss (1.19 vs
+    # 1.12); Q2 RESISTS (7.78 bars/pivot vs [19.95,37.05]) — the pivot
+    # cadence remains the named suspect (the ZigZag reads far more MS
+    # pivots than the reference draws). TOUCH_EPS 0.6 and BREAK_CONFIRM_N 8
+    # sit at fine/coarse grid edges — disclosed, not hidden.
     "LEG_MIN": 0.5,
     "REV_MIN": 1.75,
-    "TOUCH_EPS": 0.30,
-    "DEV_RETURN_BARS": 4,
-    "BREAK_CONFIRM_N": 6,
+    "TOUCH_EPS": 0.60,
+    "DEV_RETURN_BARS": 7,
+    "BREAK_CONFIRM_N": 8,
+    # DISCLOSED [review]: at these pins the LATE-RETURN (breach-lapse) state
+    # is UNREACHABLE — BREAK_CONFIRM_N <= DEV_RETURN_BARS + 1 empties the
+    # lapse window [DEV+1, N-1].  The law stays implemented (v0 pins reach
+    # it; F-RF-3 exercises it off-defaults) rather than silently dead.
     "BREAK_MARGIN": 1.5,
+    # C1 — the operator's grammar. "body" places boundaries at pivot-bar
+    # body extremes with spring-birth inception zones; "wick" preserves the
+    # v0/Sergio reconstruction exactly.
+    "BOUNDARY_MODE": "body",
+    # DIAGNOSTIC ONLY (not swept, not shipped as default): C2 pins redraw
+    # to the WICK extreme ("per v0 rules"); KEY-B's residual pattern says
+    # the operator's own redraws land at the breach cluster's BODY edge.
+    # The experiment is filed as evidence for the finding; the queue law
+    # stays the default.
+    "REDRAW_BASIS": "wick",
     # A READING, not a numeric pin: may several CONFIRMED ranges coexist?
     # The artifacts underdetermine it; calibration ARBITRATES and the
     # chosen reading is recorded in the contract [inferred].
@@ -133,6 +162,11 @@ class Range:
     mem_top_frozen_i: int = -1      # memory-line first-touch bars
     mem_bot_frozen_i: int = -1
     pending: dict | None = None     # the open breach, if any
+    born_at: int = -1               # C3: the confirm bar
+    backdated_from: int = -1        # C3: the terminal pivot's bar
+    n_inception_zones: int = 0      # C1: spring-birth zones at the seed
+    p0_bar: int = -1
+    p1_bar: int = -1
 
     @property
     def mid(self) -> float:
@@ -144,6 +178,10 @@ def run_machine(d: pd.DataFrame, pins: dict) -> dict:
     pivots, coverage — everything the fixtures and the JSON export read."""
     h, l, c = (d["h"].to_numpy(float), d["l"].to_numpy(float),
                d["c"].to_numpy(float))
+    o = d["o"].to_numpy(float)
+    body_hi = np.maximum(o, c)      # C1: the pivot-bar BODY extremes
+    body_lo = np.minimum(o, c)
+    body_mode = pins.get("BOUNDARY_MODE", "body") == "body"
     atr = ind.atr(h, l, c, ATR_LEN)
     n = len(d)
     ts = d["ts"].tolist()
@@ -260,17 +298,36 @@ def run_machine(d: pd.DataFrame, pins: dict) -> dict:
                     is_term = p0[1] <= min((p[1] for p in seg if p[2] == -1),
                                            default=p0[1])
                 if is_term and p1[2] == -p0[2]:
-                    top, bot = ((p0[1], p1[1]) if p0[2] == 1
-                                else (p1[1], p0[1]))
+                    hi_p = p0 if p0[2] == 1 else p1
+                    lo_p = p1 if p0[2] == 1 else p0
+                    if body_mode:
+                        # C1: boundaries at the defining pivots' BODY
+                        # extremes; the wick beyond is a spring-birth
+                        # inception zone
+                        top = float(body_hi[hi_p[0]])
+                        bot = float(body_lo[lo_p[0]])
+                    else:
+                        top, bot = hi_p[1], lo_p[1]
+                    if top <= bot:      # degenerate body cluster — refuse
+                        continue
                     rid_seq += 1
                     r = Range(rid=rid_seq, top=top, bottom=bot, top0=top,
                               bottom0=bot, seed_i=i)
+                    r.p0_bar, r.p1_bar = int(p0[0]), int(p1[0])
+                    if body_mode:
+                        if hi_p[1] > top:
+                            r.dev_top_ext = hi_p[1]
+                            r.n_inception_zones += 1
+                        if lo_p[1] < bot:
+                            r.dev_bot_ext = lo_p[1]
+                            r.n_inception_zones += 1
                     # the seed's FINAL pivot P1 is the last-touched side;
                     # confirmation must touch the OPPOSITE boundary
                     r.confirm_side = "top" if p1[2] == -1 else "bottom"
                     ranges.append(r)
                     log(i, "seed", rid=r.rid, top=top, bottom=bot,
-                        p0_bar=p0[0], p1_bar=p1[0])
+                        p0_bar=p0[0], p1_bar=p1[0],
+                        inception_zones=r.n_inception_zones)
         atr_i = atr[i]
 
         # potentials: invalidate / confirm
@@ -290,8 +347,18 @@ def run_machine(d: pd.DataFrame, pins: dict) -> dict:
                 r.state = "CONFIRMED"
             if r.state == "CONFIRMED":
                 r.confirm_i = i
+                r.born_at = i
+                r.backdated_from = r.p0_bar
                 log(i, "confirm", rid=r.rid, boundary=r.confirm_side,
                     top=r.top, bottom=r.bottom, mid=r.mid)
+                log(i, "backdate", rid=r.rid, born_at=i,
+                    backdated_from=r.p0_bar)
+                if not np.isnan(r.dev_top_ext):
+                    log(i, "inception-deviation", rid=r.rid, side="top",
+                        extreme=r.dev_top_ext, boundary=r.top)
+                if not np.isnan(r.dev_bot_ext):
+                    log(i, "inception-deviation", rid=r.rid, side="bottom",
+                        extreme=r.dev_bot_ext, boundary=r.bottom)
                 if not multi:
                     for q in ranges:
                         if q.state == "POTENTIAL":
@@ -305,20 +372,26 @@ def run_machine(d: pd.DataFrame, pins: dict) -> dict:
             if pending is None:
                 if c[i] > r.top:
                     r.pending = {"side": "top", "open_i": i,
-                                 "extreme": h[i], "closes": 1}
-                    log(i, "breach-open", rid=r.rid, side="top", px=c[i])
+                                 "extreme": h[i], "body_ext": body_hi[i],
+                                 "closes": 1}
+                    log(i, "breach-open", rid=r.rid, side="top", px=c[i],
+                        boundary=r.top)
                 elif c[i] < r.bottom:
                     r.pending = {"side": "bottom", "open_i": i,
-                                 "extreme": l[i], "closes": 1}
-                    log(i, "breach-open", rid=r.rid, side="bottom", px=c[i])
+                                 "extreme": l[i], "body_ext": body_lo[i],
+                                 "closes": 1}
+                    log(i, "breach-open", rid=r.rid, side="bottom",
+                        px=c[i], boundary=r.bottom)
                 pending = r.pending
             else:
                 beyond = (c[i] > r.top if pending["side"] == "top"
                           else c[i] < r.bottom)
                 if pending["side"] == "top":
                     pending["extreme"] = max(pending["extreme"], h[i])
+                    pending["body_ext"] = max(pending["body_ext"], body_hi[i])
                 else:
                     pending["extreme"] = min(pending["extreme"], l[i])
+                    pending["body_ext"] = min(pending["body_ext"], body_lo[i])
                 if beyond:
                     pending["closes"] += 1
                 else:
@@ -326,21 +399,24 @@ def run_machine(d: pd.DataFrame, pins: dict) -> dict:
                     bars_out = i - pending["open_i"]
                     if bars_out <= pins["DEV_RETURN_BARS"]:
                         r.n_deviations += 1
+                        rd = (pending["body_ext"]
+                              if pins.get("REDRAW_BASIS", "wick") == "body"
+                              else pending["extreme"])
                         if pending["side"] == "top":
                             r.dev_top_ext = (pending["extreme"]
                                              if np.isnan(r.dev_top_ext)
                                              else max(r.dev_top_ext,
                                                       pending["extreme"]))
                             old_b = r.top
-                            r.top = max(r.top, pending["extreme"])
+                            r.top = max(r.top, rd)
                         else:
                             r.dev_bot_ext = (pending["extreme"]
                                              if np.isnan(r.dev_bot_ext)
                                              else min(r.dev_bot_ext,
                                                       pending["extreme"]))
                             old_b = r.bottom
-                            r.bottom = min(r.bottom, pending["extreme"])
-                        log(i, "deviation-confirm", rid=r.rid,
+                            r.bottom = min(r.bottom, rd)
+                        log(i, "harden", rid=r.rid,
                             side=pending["side"], bars_outside=bars_out,
                             extreme=pending["extreme"])
                         log(i, "redraw", rid=r.rid, side=pending["side"],
@@ -401,6 +477,9 @@ def run_machine(d: pd.DataFrame, pins: dict) -> dict:
                                                       round(e["px"], 2)), -1)))
     ev.sort(key=lambda e: e["i"])
 
+    n_pending_open = sum(1 for r in ranges
+                         if r.state == "CONFIRMED" and r.pending is not None)
+
     conf = [r for r in ranges if r.confirm_i >= 0]
     # censored (still-alive-at-window-end) lifetimes are EXCLUDED from the
     # Q4 mean and counted beside it [review: censoring-as-completion biased
@@ -417,35 +496,54 @@ def run_machine(d: pd.DataFrame, pins: dict) -> dict:
         "mean_confirmed_lifetime": (round(float(np.mean(lifetimes)), 1)
                                     if lifetimes else None),
         "n_lifetime_censored": n_censored,
+        "n_pending_open": n_pending_open,
         "final_state": state,
         "status_line": "",
     }
     out["status_line"] = (f"{n} CANDLES · {out['coverage_pct']}% RANGE "
                           f"COVERAGE · {out['n_potential_unresolved']} "
                           f"POTENTIAL · {out['n_confirmed']} CONFIRMED · "
-                          f"{out['n_pivots']} SUPPORTING PIVOTS")
+                          f"{out['n_pivots']} SUPPORTING PIVOTS · "
+                          f"{n_pending_open} D PENDING")
     return out
 
 
-# ═══════════════════════════════════════════════════ STEP 2c · CALIBRATION
-# Q first (quantitative, his artifacts), G second (recent-window geometry).
-# Weighted violation score; a target inside its band scores 0.
+# ═════════════════════════ STEP 2c · CALIBRATION — KEY-A · VERIFY — KEY-B
+# KEY-A: the reference's published statistics (unchanged from RF-1).
+# KEY-B: the operator's chart transcription (BTCUSDT.P 1D; our tape is
+# BTCUSDT SPOT resampled 4h→1D — a DISCLOSED feed divergence inside the
+# ±1,500 USD transcription tolerance).  Calibrate on A; VERIFY on B; a
+# divergence IS the finding, never forced.
 TARGETS_Q = {
     "Q1_coverage": (80.6, 8.0, 3.0),          # (center, halfband, weight)
-    "Q2_pivot_per_bars": (28.5, 8.55, 2.0),    # 27–30 ±30% → band on bars/pivot
+    "Q2_pivot_per_bars": (28.5, 8.55, 2.0),    # 27–30 ±30%
     "Q3_conf_per_100": (0.75, 0.375, 1.0),
-    "Q4_lifetime": (102.5, 51.5, 1.0),         # 85–110 ±40% → [51, 154] exact
+    "Q4_lifetime": (102.5, 51.5, 1.0),         # 85–110 ±40% → [51, 154]
 }
-TARGETS_G = {
-    "G1_top": (83_000.0, 1_500.0, 0.25),
-    "G2_low": (59_300.0, 1_500.0, 0.25),
-}
-Q5_WEIGHT = 5.0        # binary: a downside deviation at the Jun–Jul lows,
-                       # range SURVIVING it — the reference's navy box.
-JUNJUL = ("2026-06-01", "2026-07-31")
 
+# KEY-B, transcription-grade: (name, from, to, top, bottom, deviations)
+# each deviation carries the transcription's own DATE ANCHOR [review: a
+# first-hit matcher credited the Oct ATH spike to a July inception event —
+# the verdicts survived but the evidence pointers lied]
+KEY_B = [
+    ("L-R1", "2025-07-01", "2025-11-20", 124_200.0, 100_300.0,
+     [("top", 124_000.0, 128_000.0, "2025-10-07"),
+      ("bottom", 100_000.0, 107_000.0, "2025-10-10")]),
+    ("L-R2", "2025-11-20", "2026-02-10", 96_200.0, 84_600.0,
+     [("top", 96_000.0, 99_300.0, "2026-01-15"),
+      ("bottom", 83_000.0, 86_500.0, "2025-12-15")]),
+    ("L-R3", "2026-02-10", "2026-05-31", 80_100.0, 60_800.0,
+     [("bottom", 57_900.0, 62_000.0, "2026-02-20"),
+      ("top", 78_000.0, 81_000.0, "2026-05-15")]),
+    ("L-R4", "2026-06-01", "2026-08-22", 67_400.0, 60_100.0,
+     [("bottom", 57_600.0, 60_300.0, "2026-07-02")]),
+]
+KEY_B_TOL_USD = 1_500.0
+KEY_B_TOL_BARS = 6
+
+# ONE_ACTIVE is PINNED by the v0 calibration of record (multi lost in the
+# RF-1 grid); v1 sweeps the six numeric pins in BODY mode [C6].
 GRID_COARSE = {
-    "MULTI_ACTIVE": [0, 1],
     "LEG_MIN": [0.25, 0.5, 1.0, 1.5],
     "REV_MIN": [1.5, 2.0, 2.5, 3.0, 3.5],
     "TOUCH_EPS": [0.0, 0.15, 0.30, 0.50],
@@ -455,19 +553,8 @@ GRID_COARSE = {
 }
 
 
-def _q5_hit(m: dict, d: pd.DataFrame) -> bool:
-    lo, hi = JUNJUL
-    for e in m["events"]:
-        if (e["event"] == "deviation-confirm" and e["side"] == "bottom"
-                and lo <= e["ts"] <= hi):
-            rid = e["rid"]
-            r = next(x for x in m["ranges"] if x.rid == rid)
-            if r.die_i < 0 or r.die_i > e["i"]:      # survived the deviation
-                return True
-    return False
-
-
 def score(m: dict, d: pd.DataFrame) -> tuple[float, dict]:
+    """KEY-A only — the calibration objective (v1)."""
     res = {}
     vals = {
         "Q1_coverage": m["coverage_pct"],
@@ -481,29 +568,80 @@ def score(m: dict, d: pd.DataFrame) -> tuple[float, dict]:
     for k, (c0, hb, w) in TARGETS_Q.items():
         v = vals[k]
         viol = max(0.0, abs(v - c0) - hb) / hb
-        res[k] = {"value": round(v, 2), "band": [round(c0 - hb, 2),
-                                                 round(c0 + hb, 2)],
-                  "violation": round(viol, 4)}
+        res[k] = {"value": round(float(v), 2),
+                  "band": [round(c0 - hb, 2), round(c0 + hb, 2)],
+                  "violation": round(float(viol), 4)}
         s += w * viol
-    hit5 = _q5_hit(m, d)
-    res["Q5_junjul_deviation_survived"] = {"value": bool(hit5)}
-    s += 0.0 if hit5 else Q5_WEIGHT
-    # geometry, secondary: the LAST confirmed range's boundaries
-    conf = [r for r in m["ranges"] if r.confirm_i >= 0]
-    if conf:
-        last = conf[-1]
-        gtop = max(last.top, last.top0)
-        glow = min(last.bottom, last.bottom0)
-        for k, v in (("G1_top", gtop), ("G2_low", glow)):
-            c0, hb, w = TARGETS_G[k]
-            viol = max(0.0, abs(v - c0) - hb) / hb
-            res[k] = {"value": round(v, 1), "band": [c0 - hb, c0 + hb],
-                      "violation": round(viol, 4)}
-            s += w * viol
-    else:
-        s += 2.0
-        res["G1_top"] = res["G2_low"] = {"value": None, "violation": None}
     return round(s, 4), res
+
+
+def _bar_of(d: pd.DataFrame, iso_date: str) -> int:
+    ts = d["ts"].tolist()
+    for i, t in enumerate(ts):
+        if t >= iso_date:
+            return i
+    return len(d) - 1
+
+
+def verify_key_b(m: dict, d: pd.DataFrame) -> list[dict]:
+    """One row per L-R target: the matched range (largest bar-overlap with
+    the target window), boundary residuals against the transcription, and
+    each transcribed deviation found-or-not (a harden OR an
+    inception-deviation on the given side whose extreme falls inside the
+    transcribed band ±1,500, within the window ±6 bars)."""
+    n = m["n_bars"]
+    rows = []
+    conf = [r for r in m["ranges"] if r.confirm_i >= 0]
+    for name, a, b, top_t, bot_t, devs in KEY_B:
+        ia, ib = _bar_of(d, a), _bar_of(d, b)
+        best, best_ov = None, 0
+        for r in conf:
+            lo_r = r.confirm_i
+            hi_r = r.die_i if r.die_i >= 0 else n - 1
+            ov = max(0, min(ib, hi_r) - max(ia, lo_r))
+            if ov > best_ov:
+                best, best_ov = r, ov
+        row = {"target": name, "window": f"{a}→{b}",
+               "target_top": top_t, "target_bottom": bot_t,
+               "matched_rid": best.rid if best else None,
+               "overlap_bars": best_ov}
+        if best:
+            # THE TRANSCRIPTION'S OBJECT IS THE BOX [operator grammar]: the
+            # range numbers on his chart are the BODY-cluster boundaries;
+            # the zones beyond carry the extremes.  So the box basis
+            # (top0/bottom0, pre-redraw) is the comparison of record; the
+            # redrawn extent prints beside it — two bases, both shown,
+            # neither shopped.
+            row.update({
+                "box_top": round(float(best.top0), 1),
+                "box_bottom": round(float(best.bottom0), 1),
+                "redrawn_top": round(float(best.top), 1),
+                "redrawn_bottom": round(float(best.bottom), 1),
+                "top_residual_usd": round(abs(best.top0 - top_t), 1),
+                "bottom_residual_usd": round(abs(best.bottom0 - bot_t), 1),
+                "top_within_tol": bool(abs(best.top0 - top_t)
+                                       <= KEY_B_TOL_USD),
+                "bottom_within_tol": bool(abs(best.bottom0 - bot_t)
+                                          <= KEY_B_TOL_USD),
+            })
+            for side, lo_d, hi_d, anchor in devs:
+                anchor_i = _bar_of(d, anchor)
+                cands = [e for e in m["events"]
+                         if e["event"] in ("harden", "inception-deviation")
+                         and e.get("rid") == best.rid
+                         and e.get("side") == side
+                         and ia - KEY_B_TOL_BARS <= e["i"]
+                         <= ib + KEY_B_TOL_BARS
+                         and lo_d - KEY_B_TOL_USD <= e["extreme"]
+                         <= hi_d + KEY_B_TOL_USD]
+                hit = (min(cands, key=lambda e: abs(e["i"] - anchor_i))
+                       if cands else None)
+                key = f"dev_{side}_{int(lo_d / 1000)}k"
+                row[key] = (f"FOUND@{hit['ts']} ext {hit['extreme']:.0f} "
+                            f"({hit['event']})" if hit else "NOT FOUND")
+                row[key + "_found"] = bool(hit)
+        rows.append(row)
+    return rows
 
 
 def calibrate(d: pd.DataFrame, verbose: bool = True):
@@ -533,7 +671,6 @@ def calibrate(d: pd.DataFrame, verbose: bool = True):
     best = rows[0]
     # fine pass around the winner: ±one half-step per continuous pin
     fine_axes = {
-        "MULTI_ACTIVE": [best[1]["MULTI_ACTIVE"]],
         "LEG_MIN": [max(0.25, best[1]["LEG_MIN"] - 0.25),
                     best[1]["LEG_MIN"], best[1]["LEG_MIN"] + 0.25],
         "REV_MIN": [max(1.0, best[1]["REV_MIN"] - 0.25),
@@ -551,7 +688,7 @@ def calibrate(d: pd.DataFrame, verbose: bool = True):
                          best[1]["BREAK_MARGIN"] + 0.25],
     }
     for combo in itertools.product(*(fine_axes[k] for k in keys)):
-        pins = dict(zip(keys, combo))
+        pins = dict(zip(keys, combo), BOUNDARY_MODE="body", MULTI_ACTIVE=0)
         m = run_machine(d, pins)
         s, res = score(m, d)
         rows.append((s, pins, res, m["status_line"]))
@@ -570,36 +707,41 @@ def calibrate(d: pd.DataFrame, verbose: bool = True):
         hardq = [k for k, v in r0.items()
                  if k.startswith("Q") and isinstance(v.get("violation"), float)
                  and v["violation"] > 0]
-        if not r0["Q5_junjul_deviation_survived"]["value"]:
-            hardq.append("Q5")
         if hardq:
             print(f"\nRESISTING TARGET(S): {hardq} — the rule they lean on "
                   f"is the suspect; NOT forced. Best three sets above.")
         else:
-            print("\nQ-1..Q-5 all satisfied by the chosen set.")
+            print("\nKEY-A (Q-1..Q-4) all satisfied by the chosen set.")
     return rows
 
 
 # ═══════════════════════════════════════════════════ STEP 2d · EXPORT
-def export(d: pd.DataFrame, pins: dict, residuals: dict) -> Path:
-    m = run_machine(d, pins)
+def export(d: pd.DataFrame, pins: dict) -> Path:
+    """v1: BOTH modes ridden, BOTH keys scored, one artifact."""
     OUT.mkdir(parents=True, exist_ok=True)
-    p = OUT / "BTCUSD_1d_ranges.json"
+    p = OUT / "BTCUSD_1d_ranges_v1.json"
+    modes = {}
+    for mode in ("body", "wick"):
+        mp = dict(pins, BOUNDARY_MODE=mode)
+        m = run_machine(d, mp)
+        _, res_a = score(m, d)
+        modes[mode] = {
+            "status_line": m["status_line"],
+            "coverage_pct": m["coverage_pct"],
+            "key_a_residuals": res_a,
+            "key_b": verify_key_b(m, d),
+            "events": m["events"],
+            "ranges": [asdict(r) for r in m["ranges"]],
+        }
     payload = {
-        "source": "SS12-RangeFinder v0 twin — reconstruction of public "
-                  "artifacts (@sergio_tesla_, 2026-08-10); display-only",
+        "source": "SS12-RangeFinder v1 twin — the operator's grammar atop "
+                  "the v0 reconstruction (@sergio_tesla_); display-only",
         "window": {"start": d["ts"].iloc[0], "end": d["ts"].iloc[-1],
                    "bars": int(len(d)),
                    "dropped_incomplete_days":
                        int(d.attrs["dropped_incomplete_days"])},
         "pins": pins, "atr_len": ATR_LEN,
-        "status_line": m["status_line"],
-        "coverage_pct": m["coverage_pct"],
-        "residuals": residuals,
-        "events": m["events"],
-        "ranges": [asdict(r) for r in m["ranges"]],
-        "pivots": [{"i": int(b), "px": float(px), "side": int(s)}
-                   for b, px, s in m["pivots"]],
+        "modes": modes,
     }
     txt = json.dumps(payload, indent=1, default=str)
     txt = txt.replace(": NaN", ": null")     # strict JSON [review]
@@ -615,19 +757,28 @@ def main() -> int:
     if "--calibrate" in sys.argv:
         rows = calibrate(d)
         return 0
-    m = run_machine(d, PINS)
-    print("\nEVENT LOG:")
-    for e in m["events"]:
-        print("  " + json.dumps(e))
-    print("\nRANGE TABLE:")
-    for r in m["ranges"]:
-        print(f"  #{r.rid} {r.state:12} seed@{r.seed_i} conf@{r.confirm_i} "
-              f"die@{r.die_i}  [{r.bottom:.1f} … {r.top:.1f}] mid {r.mid:.1f} "
-              f"dev n={r.n_deviations}")
-    _, res = score(m, d)
-    print("\n" + m["status_line"])
-    print("RESIDUALS:", json.dumps(res, default=str))
-    p = export(d, PINS, res)
+    for mode in ("body", "wick"):
+        m = run_machine(d, dict(PINS, BOUNDARY_MODE=mode))
+        _, res = score(m, d)
+        print(f"\n═══ MODE {mode.upper()} ═══")
+        print(m["status_line"])
+        print("KEY-A RESIDUALS:", json.dumps(res, default=str))
+        print("RANGE TABLE:")
+        for r in m["ranges"]:
+            if r.confirm_i >= 0:
+                print(f"  #{r.rid} {r.state:10} conf@{r.confirm_i} "
+                      f"die@{r.die_i} [{r.bottom:.0f} … {r.top:.0f}] "
+                      f"dev n={r.n_deviations} incept={r.n_inception_zones} "
+                      f"born@{r.born_at}<-{r.backdated_from}")
+        print("KEY-B CONCORDANCE:")
+        for row in verify_key_b(m, d):
+            print("  " + json.dumps(row, default=str))
+        if mode == "body":
+            print("\nBODY EVENT LOG (lifecycle only):")
+            for e in m["events"]:
+                if e["event"] != "pivot":
+                    print("  " + json.dumps(e))
+    p = export(d, PINS)
     sha = hashlib.sha256(p.read_bytes()).hexdigest()
     print(f"\nEXPORT {p}  {p.stat().st_size:,} B  sha256 {sha[:16]}…")
     return 0

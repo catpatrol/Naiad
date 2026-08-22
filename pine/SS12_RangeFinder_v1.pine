@@ -1,0 +1,385 @@
+//@version=6
+indicator("SS12-RangeFinder v1", shorttitle="SS RangeFinder v1", overlay=true,
+     max_boxes_count=500, max_lines_count=500, max_labels_count=500)
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  SS12-RangeFinder v1 — the operator's grammar
+//
+//  DISPLAY-ONLY RECONSTRUCTION lineage: v0 rebuilt the public artifacts of
+//  a closed-source system (@sergio_tesla_, 2026-08-10 — credit to the
+//  original author); v1 layers the OPERATOR'S grammar per queue RF-2:
+//  BOUNDARY grammar: body (operator) — wick mode preserves the v0
+//  reference reconstruction. Body mode places boundaries at the pivot-bar
+//  BODY extremes; wick territory beyond is deviation-eligible FROM
+//  INCEPTION (spring-birth). Pending breaches render HOLLOW and harden
+//  solid on return-inside [C2]; confirmed ranges BACKDATE their left edge
+//  to the terminal pivot [C3]; symbols dieted [C4]; box colors are
+//  INPUTS [C5]. Renders-never-rules: no alerts, no signals, no security().
+//
+//  scripts/rangefinder_twin.py is the machine of record (single-candidate
+//  simplification carried from v0, disclosed; operator TV-eyeball is the
+//  parity fixture, PENDING).
+//
+//  v1 CALIBRATED PINS (KEY-A objective, BODY mode, BTC 1D, 420 bars
+//  2025-06-28 → 2026-08-21): LEG_MIN 0.5 · REV_MIN 1.75 · TOUCH_EPS 0.60 ·
+//  DEV_RETURN_BARS 7 · BREAK_CONFIRM_N 8 · BREAK_MARGIN 1.5 · ATR_LEN 14
+//  KEY-A residuals (score 3.5507): Q1 71.19 vs [72.6,88.6] near-miss ·
+//  Q2 7.78 vs [19.95,37.05] RESISTS (pivot cadence, the named suspect) ·
+//  Q3 1.19 vs [0.38,1.12] near-miss · Q4 68.2 in [51,154] SATISFIED
+//  KEY-B concordance (operator transcription): 4/4 ranges matched · 6/7
+//  deviations found (L-R2 Dec bottom the miss) · redraw-basis divergence
+//  FILED: body-basis redraws lift boundary concordance 4/8 → 6/8; the
+//  queue's wick redraw law ships as the default.
+//  calibrated against published statistics and the operator's chart
+//  transcription on this window; full-history behaviour is not claimed.
+// ═══════════════════════════════════════════════════════════════════════════
+// ── pins — six inputs with evidence class + [VETO] tooltips;
+//    ATR_LEN is the pinned house constant (14), never an input
+ATR_LEN = 14   // house pin, never swept
+boundaryMode = input.string("body", "BOUNDARY_MODE", options = ["body", "wick"],
+     tooltip = "[VETO] [C1, operator grammar] body: boundaries at pivot-bar BODY extremes, wick territory deviation-eligible from inception (spring-birth). wick: the v0/Sergio reference reconstruction. Default MEASURED (body).")
+legMin  = input.float(0.5,  "LEG_MIN (×ATR)",   minval = 0.0, step = 0.25,
+     tooltip = "[VETO] [inferred merge law] legs shorter than LEG_MIN×ATR do not confirm a pivot; the running leg keeps extending. Default MEASURED by calibration 2026-08-22, never guessed.")
+revMin  = input.float(1.75, "REV_MIN (×ATR)",   minval = 0.5, step = 0.25,
+     tooltip = "[VETO] [D-R2a, observed ATR-ZigZag] a reversal ≥ REV_MIN×ATR(14) confirms a pivot at the wick extreme. Default MEASURED.")
+touchEps = input.float(0.60, "TOUCH_EPS (×ATR)", minval = 0.0, step = 0.05,
+     tooltip = "[VETO] [observed diamonds] a traverse touching the opposite boundary within TOUCH_EPS×ATR confirms the range. Default MEASURED.")
+devRet  = input.int(7, "DEV_RETURN_BARS", minval = 1,
+     tooltip = "[VETO] [his checklist, verbatim lifecycle] a body close back INSIDE within this many bars converts a pending breach into a CONFIRMED DEVIATION (range survives, boundary redrawn to the breach extreme). Default MEASURED.")
+brkN    = input.int(8, "BREAK_CONFIRM_N", minval = 2,
+     tooltip = "[VETO] [his checklist] this many CONSECUTIVE body closes beyond a boundary confirm the breakout — the range dies. Default MEASURED.")
+brkMargin = input.float(1.5, "BREAK_MARGIN (×ATR)", minval = 0.25, step = 0.25,
+     tooltip = "[VETO] [his checklist] a single body close beyond the boundary by ≥ BREAK_MARGIN×ATR also confirms the breakout. Default MEASURED.")
+
+// ── colors are INPUTS [C5 — boxes are not Style-tab reachable]
+color TAN    = input.color(color.new(#d2b48c, 78), "range fill",
+     tooltip = "[C5] the confirmed-range box fill")
+color DEVCLR = input.color(color.new(color.orange, 55), "deviation fill",
+     tooltip = "[C5] deviation-zone fill — the operator's own color")
+color MIDCLR = input.color(color.new(color.orange, 20), "midline",
+     tooltip = "[C5] the midline color")
+showPivots = input.bool(false, "show pivot markers",
+     tooltip = "[C4] symbol diet: pivot markers OFF by default")
+color TAN_LN = color.new(#b8860b, 35)
+color MEMCLR = color.new(color.gray, 30)
+color DIACLR = color.new(#20b2aa, 0)
+
+// [observed] ta.atr seeds its RMA with an SMA; the twin's engine RMA seeds
+// at the first value — warm-up-class divergence only (measured: one
+// confirm bar shifts 18→19 on the record tape; nothing else moves).
+atr = ta.atr(ATR_LEN)
+
+// ── ZigZag state
+var int   zdir   = 0
+bool sealedNow = false         // set on any pivot seal this bar [F1 repair]
+var int   extBar = na
+var float extPx  = na
+var float extLo  = na          // the LOW at the extreme bar [twin parity]
+var float extBodyHi = na       // BODY extremes at the extreme bar [C1]
+var float extBodyLo = na
+var float lastPivPx  = na
+var float lastPivBody = na     // the pivot bar's BODY extreme [C1]
+var int   lastPivDir = 0
+var float prevPivPx  = na       // the pivot before lastPiv (P0 candidate)
+var float prevPivBody = na
+var int   prevPivBar = na
+var int   lastPivBar = na
+var int   nPivots = 0
+
+// ── range state (ONE ACTIVE, the calibrated reading)
+var float rTop = na
+var float rBot = na
+var float devTopExt = na       // furthest deviation extremes (zones)
+var float devBotExt = na
+var int   rP0Bar = na          // C3: the terminal pivot bar (backdate target)
+var box   pendBox = na         // C2: the hollow pending box
+var string rState = "NONE"      // NONE | POTENTIAL | CONFIRMED
+var string confirmSide = ""
+var int   pendSide = 0          // 0 none · +1 top · −1 bottom
+var int   pendOpen = na
+var float pendExt  = na
+var int   pendCloses = 0
+var int   nConfirmed = 0
+var int   nPotential = 0
+var int   coveredBars = 0
+var int   expansionFloorBar = -1
+var float expPivHi = na        // extreme PIVOT prices since the floor —
+var float expPivLo = na        // the twin's terminal test, not bar extremes
+var box   rBox = na
+var line  rMid = na
+var int   confirmBar = na
+var line  memT = na            // the most recent dead range's memory lines
+var line  memB = na
+var float memTopPx = na
+var float memBotPx = na
+var int   memBornBar = na
+
+// ── the sweep, bar by bar (close-of-bar semantics — a body close decides)
+// warm-up parity with the twin: the running extreme tracks from bar 0
+if bar_index <= ATR_LEN
+    if na(extPx) or high >= extPx
+        extPx := high
+        extBar := bar_index
+        extLo := low
+        extBodyHi := math.max(open, close)
+
+if bar_index > ATR_LEN and not na(atr)
+    // ZigZag — pivot bookkeeping is UNCONDITIONAL at every seal [review
+    // BLOCKER: the first draft's guarded ternaries left prevPiv na forever
+    // and the indicator rendered nothing]
+    if zdir == 0
+        // TWIN ORDER: up-entry → seal → extend
+        if high - extLo >= revMin * atr and extLo <= low
+            // up-entry without a seal (twin's zdir==0 up path)
+            zdir := 1
+            extPx := high
+            extBar := bar_index
+            extBodyHi := math.max(open, close)
+        else if extPx - low >= revMin * atr
+            zdir := -1
+            prevPivPx := lastPivPx
+            prevPivBody := lastPivBody
+            prevPivBar := lastPivBar
+            lastPivPx := extPx
+            lastPivBody := extBodyHi
+            lastPivDir := 1
+            lastPivBar := extBar
+            nPivots += 1
+            sealedNow := true
+            expPivHi := na(expPivHi) ? lastPivPx : math.max(expPivHi, lastPivPx)
+            extPx := low
+            extBar := bar_index
+            extBodyLo := math.min(open, close)
+        else if high > extPx
+            extPx := high
+            extBar := bar_index
+            extLo := low
+            extBodyHi := math.max(open, close)
+    else if zdir == 1
+        if high > extPx
+            extPx := high
+            extBar := bar_index
+            extBodyHi := math.max(open, close)
+        else if extPx - low >= revMin * atr and (na(lastPivPx) or math.abs(extPx - lastPivPx) >= legMin * atr)
+            prevPivPx := lastPivPx
+            prevPivBody := lastPivBody
+            prevPivBar := lastPivBar
+            lastPivPx := extPx
+            lastPivBody := extBodyHi
+            lastPivDir := 1
+            lastPivBar := extBar
+            nPivots += 1
+            sealedNow := true
+            expPivHi := na(expPivHi) ? lastPivPx : math.max(expPivHi, lastPivPx)
+            zdir := -1
+            extPx := low
+            extBar := bar_index
+            extBodyLo := math.min(open, close)
+    else
+        if low < extPx
+            extPx := low
+            extBar := bar_index
+            extBodyLo := math.min(open, close)
+        else if high - extPx >= revMin * atr and (na(lastPivPx) or math.abs(extPx - lastPivPx) >= legMin * atr)
+            prevPivPx := lastPivPx
+            prevPivBody := lastPivBody
+            prevPivBar := lastPivBar
+            lastPivPx := extPx
+            lastPivBody := extBodyLo
+            lastPivDir := -1
+            lastPivBar := extBar
+            nPivots += 1
+            sealedNow := true
+            expPivLo := na(expPivLo) ? lastPivPx : math.min(expPivLo, lastPivPx)
+            zdir := 1
+            extPx := high
+            extBar := bar_index
+            extBodyHi := math.max(open, close)
+
+    // SEED — attempted ONLY on a seal bar [F1: the twin seeds at pivot
+    // knowability; per-bar re-evaluation churned 11 seed/invalidate cycles],
+    // while no CONFIRMED range holds; a newly sealed terminal pair REPLACES
+    // a held POTENTIAL (single-candidate emulation of the twin's
+    // newest-seed precedence); a degenerate body cluster refuses WITHOUT
+    // clobbering the held candidate; NO floor bar-guard — after a death the
+    // first new pivot legally pairs with a pre-death pivot [twin law], and
+    // an EMPTY post-floor segment defaults terminal-TRUE (na tests).
+    if sealedNow and rState != "CONFIRMED" and lastPivDir != 0 and not na(prevPivPx)
+        bool bullTerm = lastPivDir == -1 and (na(expPivHi) or prevPivPx >= expPivHi) and prevPivPx > lastPivPx
+        bool bearTerm = lastPivDir == 1  and (na(expPivLo) or prevPivPx <= expPivLo) and prevPivPx < lastPivPx
+        bool bodyM = boundaryMode == "body"
+        float sTop = bullTerm ? (bodyM ? prevPivBody : prevPivPx) : (bodyM ? lastPivBody : lastPivPx)
+        float sBot = bullTerm ? (bodyM ? lastPivBody : lastPivPx) : (bodyM ? prevPivBody : prevPivPx)
+        if (bullTerm or bearTerm) and sTop > sBot
+            if rState == "POTENTIAL"
+                nPotential -= 1              // replaced, the stock is honest
+            rTop := sTop
+            rBot := sBot
+            devTopExt := bodyM and (bullTerm ? prevPivPx : lastPivPx) > sTop ? (bullTerm ? prevPivPx : lastPivPx) : na
+            devBotExt := bodyM and (bullTerm ? lastPivPx : prevPivPx) < sBot ? (bullTerm ? lastPivPx : prevPivPx) : na
+            rP0Bar := prevPivBar
+            confirmSide := bullTerm ? "top" : "bottom"
+            rState := "POTENTIAL"
+            nPotential += 1
+
+    // POTENTIAL: invalidate / confirm
+    if rState == "POTENTIAL"
+        if close > rTop or close < rBot
+            rState := "NONE"
+            nPotential -= 1
+        else
+            float eps = touchEps * atr
+            bool hitTop = confirmSide == "top" and high >= rTop - eps
+            bool hitBot = confirmSide == "bottom" and low <= rBot + eps
+            if hitTop or hitBot
+                rState := "CONFIRMED"
+                nPotential -= 1
+                nConfirmed += 1
+                confirmBar := bar_index
+                int leftEdge = na(rP0Bar) ? bar_index : rP0Bar   // C3 backdate
+                rBox := box.new(leftEdge, rTop, bar_index, rBot,
+                     border_color = TAN_LN, bgcolor = TAN, extend = extend.right)
+                rMid := line.new(leftEdge, (rTop + rBot) / 2, bar_index + 1,
+                     (rTop + rBot) / 2, color = MIDCLR, style = line.style_solid,
+                     extend = extend.right, width = 2)
+                label.new(bar_index, hitTop ? rTop : rBot, "◆",
+                     style = hitTop ? label.style_label_down : label.style_label_up,
+                     color = color.new(color.white, 100), textcolor = DIACLR)
+                // C1/C3: spring-birth inception zones, classified now
+                if not na(devTopExt)
+                    box.new(leftEdge, devTopExt, bar_index, rTop,
+                         border_color = DEVCLR, bgcolor = DEVCLR)
+                if not na(devBotExt)
+                    box.new(leftEdge, rBot, bar_index, devBotExt,
+                         border_color = DEVCLR, bgcolor = DEVCLR)
+
+    // ACTIVE: breach → deviation | breakout
+    if rState == "CONFIRMED"
+        if pendSide == 0
+            if close > rTop
+                pendSide := 1
+                pendOpen := bar_index
+                pendExt := high
+                pendCloses := 1
+                pendBox := box.new(bar_index, high, bar_index, rTop,
+                     border_color = DEVCLR, bgcolor = na,
+                     border_style = line.style_dashed)   // HOLLOW [C2]
+            else if close < rBot
+                pendSide := -1
+                pendOpen := bar_index
+                pendExt := low
+                pendCloses := 1
+                pendBox := box.new(bar_index, rBot, bar_index, low,
+                     border_color = DEVCLR, bgcolor = na,
+                     border_style = line.style_dashed)   // HOLLOW [C2]
+        else
+            pendExt := pendSide == 1 ? math.max(pendExt, high) : math.min(pendExt, low)
+            if not na(pendBox)      // the hollow box tracks the episode
+                box.set_right(pendBox, bar_index)
+                if pendSide == 1
+                    box.set_top(pendBox, pendExt)
+                else
+                    box.set_bottom(pendBox, pendExt)
+            bool beyond = pendSide == 1 ? close > rTop : close < rBot
+            if beyond
+                pendCloses += 1
+            else
+                // body close back INSIDE
+                if bar_index - pendOpen <= devRet
+                    // HARDEN [C2] — the hollow box turns SOLID, diamond,
+                    // boundary redrawn per v0 rules (wick extreme)
+                    float oldB = pendSide == 1 ? rTop : rBot
+                    if pendSide == 1
+                        rTop := math.max(rTop, pendExt)
+                        devTopExt := na(devTopExt) ? pendExt : math.max(devTopExt, pendExt)
+                    else
+                        rBot := math.min(rBot, pendExt)
+                        devBotExt := na(devBotExt) ? pendExt : math.min(devBotExt, pendExt)
+                    if not na(pendBox)
+                        box.set_bgcolor(pendBox, DEVCLR)
+                        box.set_border_style(pendBox, line.style_solid)
+                        box.set_right(pendBox, bar_index)
+                    label.new(bar_index, pendExt, "◆",
+                         style = pendSide == 1 ? label.style_label_down : label.style_label_up,
+                         color = color.new(color.white, 100), textcolor = DIACLR)
+                    box.set_top(rBox, rTop)
+                    box.set_bottom(rBox, rBot)
+                    line.set_y1(rMid, (rTop + rBot) / 2)
+                    line.set_y2(rMid, (rTop + rBot) / 2)
+                else
+                    if not na(pendBox)          // breach-lapse: box removed
+                        box.delete(pendBox)
+                pendBox := na
+                pendSide := 0
+                pendCloses := 0
+        if pendSide != 0
+            float bnd = pendSide == 1 ? rTop : rBot
+            bool dieN = pendCloses >= brkN
+            bool dieM = pendSide == 1 ? close - bnd >= brkMargin * atr : bnd - close >= brkMargin * atr
+            if dieN or dieM
+                // BREAKOUT — the range dies; the pending box converts
+                if not na(pendBox)
+                    box.delete(pendBox)
+                    pendBox := na
+                box.set_right(rBox, bar_index)
+                box.set_extend(rBox, extend.none)
+                line.set_x2(rMid, bar_index)
+                line.set_extend(rMid, extend.none)
+                memT := line.new(confirmBar, rTop, bar_index, rTop,
+                     color = MEMCLR, style = line.style_dashed,
+                     extend = extend.right)
+                memB := line.new(confirmBar, rBot, bar_index, rBot,
+                     color = MEMCLR, style = line.style_dashed,
+                     extend = extend.right)
+                memTopPx := rTop
+                memBotPx := rBot
+                memBornBar := bar_index
+                label.new(bar_index, pendSide == 1 ? rTop : rBot,
+                     pendSide == 1 ? "▲" : "▼", size = size.tiny,
+                     style = pendSide == 1 ? label.style_label_up : label.style_label_down,
+                     color = color.new(color.white, 100),
+                     textcolor = pendSide == 1 ? color.green : color.red)
+                rState := "NONE"
+                pendSide := 0
+                pendCloses := 0
+                expansionFloorBar := bar_index
+                expPivHi := na
+                expPivLo := na
+
+    // C4: pivot markers, toggle default OFF
+    if showPivots and sealedNow
+        label.new(lastPivBar, lastPivPx, lastPivDir == 1 ? "·" : "·",
+             size = size.tiny,
+             style = lastPivDir == 1 ? label.style_label_down : label.style_label_up,
+             color = color.new(color.white, 100), textcolor = MEMCLR)
+
+    // memory lines FREEZE at the first later touch [queue law]
+    if not na(memT) and bar_index > memBornBar and high >= memTopPx
+        line.set_x2(memT, bar_index)
+        line.set_extend(memT, extend.none)
+        memT := na
+    if not na(memB) and bar_index > memBornBar and low <= memBotPx
+        line.set_x2(memB, bar_index)
+        line.set_extend(memB, extend.none)
+        memB := na
+
+    // coverage — live evaluation, deviation zones count as inside
+    float covTop = na(devTopExt) ? rTop : math.max(rTop, devTopExt)
+    float covBot = na(devBotExt) ? rBot : math.min(rBot, devBotExt)
+    if rState == "CONFIRMED" and close <= covTop and close >= covBot
+        coveredBars += 1
+
+// ── the status table, his confession format
+// DISCLOSED: every status number is FULL CHART HISTORY (from bar ~15 on);
+// the twin's confession line and the Q-targets are a 420-bar window — the
+// two lines will NOT match on a longer chart, by construction.
+var table t = table.new(position.top_left, 1, 1, bgcolor = color.new(color.black, 25))
+if barstate.islast
+    float cov = bar_index > 0 ? 100.0 * coveredBars / (bar_index + 1) : 0.0
+    string st = str.tostring(bar_index + 1) + " CANDLES · " +
+         str.tostring(cov, "#.#") + "% RANGE COVERAGE · " +
+         str.tostring(nPotential) + " POTENTIAL · " +
+         str.tostring(nConfirmed) + " CONFIRMED · " +
+         str.tostring(nPivots) + " SUPPORTING PIVOTS · " +
+         str.tostring(pendSide != 0 ? 1 : 0) + " D PENDING"
+    table.cell(t, 0, 0, st, text_color = color.white, text_size = size.small)
