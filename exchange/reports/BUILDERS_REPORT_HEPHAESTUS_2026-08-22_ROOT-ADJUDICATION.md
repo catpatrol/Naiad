@@ -608,13 +608,21 @@ of leaving it to be reconstructed from a report.
 | **F-ROT** *(new this session)* | **7/7 PASS** — `scripts/rotation_exemption_fixtures.py` |
 | **F-MB-1** | **8/8 PASS** |
 | `rotate_reports.py --dry-run` | **exit 0**, 0 candidates / 10 exempt / 52 too young — it was exit 2 this morning |
-| **MAILBOX** | `43 link(s) -- 0 created, 0 pruned, 43 unchanged` |
+| **MAILBOX** | two refreshes, both printed: **proof-time `43 -- 0 created, 0 pruned`**, then **publish-tail `43 -- 1 created, 1 pruned`** |
 
-**The mailbox no-op is honest, not a stall.** Nothing this session touched is in either mailbox set:
-the four zips are not a rolling surface, `.DS_Store` was never linked, and
-`exchange/queue/003_…md` — which *was* edited — is **pinned**, so it was already linked and stays
-linked. A delta would have meant something unexpected moved. The one pinned entry not on disk is
-still `*QUEUE-008-BUILD*.md`, which is correct: 008 is ratified and unbuilt.
+**Both numbers are right, and the difference between them is this document.**
+
+- **At proof time — a true no-op.** Nothing the session had done by then was in either mailbox set:
+  the four zips are not a rolling surface, `.DS_Store` was never linked, and
+  `exchange/queue/003_…md` — which *was* edited — is **pinned**, so it was already linked and stayed
+  linked.
+- **At the publish tail — `1 created, 1 pruned`.** The one thing that entered the rolling set is
+  **this report**, which did not exist when the proof ran. It displaced the oldest member of the
+  newest-25 window. That is the wiring behaving as designed: a report is one click away the moment
+  it is published, with nobody maintaining a list.
+
+The one pinned entry not on disk is still `*QUEUE-008-BUILD*.md`, which is correct: 008 is ratified
+and unbuilt. Link count is 43 at both refreshes.
 
 **One stale test docstring was corrected in the same act.** `tests/test_bus_health.py` asserted its
 block renders *"even though rotate_reports currently HALTS"*. It does not halt any more. The
@@ -631,7 +639,7 @@ Constants read from `publish_exchange`, never copied: `BOX_BYTES = 16,000,000`,
 | PATH | EXISTS | TRACKED | COMMITTED | PUSHED | PROTECTED BY | BOX COST |
 |---|---|---|---|---|---|---|
 | `exchange/queue/003_report-rotation-and-provenance.md` | yes | tracked | this publish | yes | GitHub + `--workflow` | 5,374 → **8,280 B**, 0.052% |
-| `exchange/status/ROTATION_LOG.md` | yes | tracked | this publish | yes | GitHub + `--workflow` | 23,015 → **24,486 B**, 0.153% |
+| `exchange/status/ROTATION_LOG.md` | yes | tracked | this publish | yes | GitHub + `--workflow` | 23,015 → **25,503 B**, 0.159% |
 | `exchange/status/LEDGER_ATHENA.md` | yes | tracked | this publish | yes | GitHub + `--workflow` | +this session's entry — **over the 64,000 B wire (append-only)** |
 | `exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-22_ROOT-ADJUDICATION.md` *(this document)* | yes | tracked (new) | this publish | yes | GitHub + `--workflow` | see the FLAG below |
 | `exchange/.DS_Store` | **yes, on disk, untouched** | **UNTRACKED as of this commit** — `.gitignore:209` | removed from the index in `<this session's commit>` | yes | **NOT PROTECTED — and correctly so; it is Finder metadata** | **−8,196 B, removed from the box** |
@@ -719,8 +727,9 @@ FACTS:
 - STAMPS written in the README's grammar after the operator's colon-less form was verified NOT to
   parse (BUILT=False). Counters unchanged at 3/0/3 — and now TRUE rather than silently right
   [verified]
-- suite 334 passed / 1 skipped · F-CONV 4/4 · F-ROT 7/7 · F-MB-1 8/8 · MAILBOX no-op 43/43
-  [verified]
+- suite 334 passed / 1 skipped · F-CONV 4/4 · F-ROT 7/7 · F-MB-1 8/8 · MAILBOX 43 links at both
+  refreshes: a true no-op at proof time, then 1 created / 1 pruned on the publish tail as this
+  report entered the rolling newest-25 window [verified]
 PENDING (operator):
 1. QUEUE-008 D-0 — the only unblocked ratified work; everything else here is closed or is a word
 2. The " copy.txt": KEEP stands. A rename is possible but breaks a LEDGER_ATHENA citation
@@ -754,3 +763,42 @@ file came back unreferenced.**
 **And one folder to keep using: `~/Naiad/MAILBOX`** — 43 links, still current, still refreshing
 itself on every publish and every daily routine.
 
+
+---
+
+> ### CORRECTION 2026-08-22 — the mailbox line, and THREE publishes disclosed
+>
+> **§6 first reported the mailbox as `0 created, 0 pruned, 43 unchanged` and explained it with the
+> sentence "Nothing this session touched is in either mailbox set."** That reading was taken before
+> this document existed. The publish's own tail-refresh then printed **`1 created, 1 pruned`** —
+> because **this report** entered the rolling newest-25 window and displaced the oldest member. The
+> count was a stale snapshot and **the explanation was false**: something this session produced *is*
+> in the rolling set. Both are **rewritten**, not annotated, per §0's correction rule, and §6 now
+> gives both refreshes with the reason they differ. The disposition table's `ROTATION_LOG.md` figure
+> was corrected in the same pass — **25,503 B**, not the 24,486 B I predicted before the four rows
+> and their provenance block were written.
+>
+> **THREE PUBLISHES, not the ONE the brief asked for, and the third is my own error — stated
+> because a report that hides its own process failure is not a forensic record:**
+>
+> | publish | commit | what it carried |
+> |---|---|---|
+> | 1 | `c7ed011` | the session's work and this report, in its first form |
+> | 2 | `43a7390` | the LEDGER_ATHENA correction **only** |
+> | 3 | *(this one)* | the report correction that publish 2 already claimed had happened |
+>
+> **Publish 2 should have carried both.** The edit script that corrected the report and the ledger
+> asserted its anchors before writing; the report's fourth anchor did not match (I had written it
+> with bold markers that the STATUS block, being inside a code fence, does not use), so the script
+> aborted **after** the ledger had been written and **before** the report was. The assertion is what
+> stopped a wrong edit — that part worked — but the two files were then written by separate scripts
+> with no transaction between them, so for the length of one publish **the ledger on the bus
+> asserted a correction to a report that did not yet carry it.** That is the defect, it was mine,
+> and this is where it is recorded.
+>
+> **It terminates here.** The report is already linked in the mailbox, so this publish's refresh is
+> a genuine no-op — unlike the box-percentage recursion disclosed in the 2026-08-18 report, this
+> correction does not invalidate its own number.
+>
+> **How both were caught:** the same way as last session — reading the publish's own output against
+> the document just filed, rather than assuming the prediction and the measurement agreed.
