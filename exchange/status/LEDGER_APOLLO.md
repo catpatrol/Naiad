@@ -2349,3 +2349,78 @@ CLASS     STAGE N FILED — AN-1 and AN-2 landed after the build doc was written
   TWO RULINGS NOW STAND BETWEEN HERE AND THE SEA: the resample_ohlcv leading
   bucket, and the two-modules-one-wall divergence. Awaiting ATHENA skeleton.
 === END ===
+
+---
+
+=== STATUS_APOLLO — 2026-08-22 — TIER-C9 · THE WINNERS' HABITAT + THE PAIR SWEEP ===
+LANE      APOLLO (drafted) · branch v12-v1-census · seed 20260818
+CLASS     IN-SAMPLE REOPENED BY OPERATOR WORD (ratified 2026-08-18), THIS
+          RUN'S SCOPE ONLY. One registration. The reframe RECORDED:
+          business concentration = the model; the D15 guard polices CLAIMS
+          only.
+
+  VERDICT · P-TRG-1 [50%, m=1] — NOT SUPPORTED. "Is 12/26 better than
+    9/26?" — 9/26 is WORSE: two-sample delta -0.0205 R/campaign,
+    CI [-0.1268, +0.1011], p = 0.6221, LOAO 0/5 above AND 1/5 BELOW.
+    Only 75 of 196 campaigns survive the swap. (reference) card v6 vs
+    zero on this corridor: +0.1980, p = 0.0740 — still NOT SUPPORTED.
+
+  THE GRID, WHOLE (7 OFAT cells, two-sample, D15 + LOAO every row, NO
+    PROMOTION): two UNREGISTERED cells light up and wear the collar —
+    window-9/89 +128.54 R (CI [+0.090,+0.681], LOAO 3/5, but one
+    campaign's delta is 2.31x the total) and trigger-9/12 +94.40 R
+    (CI [+0.121,+0.436], p=0.003, LOAO 5/5, sharing only 19 of 196
+    campaigns with v6). A SELECTION, not a result. The next tier may
+    pre-name ONE cell before the look; this one did not.
+
+  THE WINNERS' HABITAT (Stage A, display-only, zero estimation) — the
+    commissioned answer to "which numbers is the alpha hiding in":
+    NOT the entry. The separation table (top-10 vs other-186 medians,
+    robust z, SELECTION-collared, tautologies NAMED per row after the
+    review disciplined the z-column): the winners' INITIAL stops
+    survive 441 bars vs 15 (entry_only_bars, z=23.9); the entry-only
+    counterfactual LOSES for both groups (-0.73 vs -1.03, a +0.31 R
+    gap — EVEN THE WINNERS' ENTRIES LOSE WITHOUT MANAGEMENT);
+    bars_held 47 vs 15; mae_tape -0.41 vs -1.07; winners COLLECT
+    funding (-0.016 vs +0.003). management_delta_r's z=20.9 is
+    net_r - entry_only BY IDENTITY and is FLAGGED derived, not quoted.
+    All ten top campaigns exit by ratchet stop; none harvested.
+    Book: net expectancy +0.1980, PF 1.349, win 34.2%; costs eat 23.5%
+    of gross; maxDD -27.41 R = 67% of peak equity; 2,275 of 2,539
+    corridor days under water (longest episode 1,534 days); max losing
+    streak 9; lag-1 serial corr +0.22 book-level, measured not tested.
+
+  DE-ALIASING, THE DECISION OF RECORD [D1]: v6's window (12/89) shares
+    its fast array with the trigger and its slow with the tide-fast —
+    without six role arrays the commissioned "window 9/89" and
+    "trigger 9/26" cells are the SAME cell. F-CTRL demanded and got
+    EXACTLY 0.000e+00 from the de-aliased pipeline at v6 periods.
+
+  OWED BATCH SHIPPED: TC7-f (all 18 lab frames filed with prove-ran
+    legs per verification frame; the commission's "17" vs 18-on-disk
+    stated) · TC7-g (L-REGIME re-emitted, trailing causal edges through
+    the lab's own machinery; measured look-ahead: 2020 streak edges
+    [35,107,200] vs whole-corridor [88,207,399]; 12/20 cells move) ·
+    TC6V-d (ALL SIXTEEN cosmetics LISTED+FIXED in one batch; guards:
+    F-CTRL 0e+00 through the touched path, suite 334, full tierc6
+    scratch re-run, edited F-C6 legs green).
+
+  INTEGRITY  44 tables filed x2 roots, all as-of stamped (AS-OF
+    2026-08-22T00:00Z — the cache topped up mid-build; caught by the
+    review, restamped) · fixtures 13/13, transcript FILED
+    (F-CTRL exact zero AND cross-process-anchored to tierc6's filed
+    journal; F-C9-SWAP all-118 cardinality + sabotage converse;
+    F-C9-TOP10 end-to-end vs raw parquets; F-DET byte-identical) ·
+    suite 334 passed, 1 skipped · corridor drift vs tc8 stated (book
+    +38.8044 after the tc8 corridor_end campaign resolved as a stop) ·
+    SIX adversarial lenses in read-only worktrees ran IN FRONT of the
+    publish; every confirmed finding repaired in place, incl. the
+    TC6V-d #15 consumer hole (28 campaigns dropped from wall
+    aggregates - now a registry + partition leg) and four scope HALTs
+    the first guard missed.
+
+  NINE TIERS IN-SAMPLE; NOTHING HAS CLEARED ITS OWN BAR. SAIL-READY
+    remains card_spec freeze at v6 PLAIN. The two standing rulings
+    (resample_ohlcv head bucket · two-modules-one-wall) both re-named;
+    the head-bucket ruling now also gates wall_series_12h's deeper fix.
+=== END ===
