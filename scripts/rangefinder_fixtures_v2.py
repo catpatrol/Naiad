@@ -350,6 +350,23 @@ def rf5_real():
 
 
 # ── F-RF-6v2 · STRUCTURE
+def _use_before_decl(text):
+    lines = text.split("\n")
+    decl = {}
+    for i, ln in enumerate(lines, 1):
+        m = re.match(r"\s*var\s+(?:\w+(?:<\w+>)?\s+)?(\w+)\s*=", ln)
+        if m:
+            decl.setdefault(m.group(1), i)
+    for name, dln in decl.items():
+        pat = re.compile(rf"\b{re.escape(name)}\b")
+        for i, ln in enumerate(lines, 1):
+            if i >= dln:
+                break
+            if pat.search(ln) and not ln.strip().startswith("//"):
+                return [(name, i, dln)]
+    return []
+
+
 def _structure(text):
     checks = [
         ("//@version=6", text.startswith("//@version=6")),
@@ -369,15 +386,32 @@ def _structure(text):
         ("no security/alerts/signals",
          "request.security" not in text and "alertcondition" not in text
          and "plotshape" not in text and "plotarrow" not in text),
+        # the operator's TV compiler caught gState used above its var
+        # declaration (CE10272) — the class is now a standing clause
+        ("declaration order: no var used above its declaration",
+         not _use_before_decl(text)),
     ]
     bad = [n for n, ok in checks if not ok]
-    return not bad, ("all 8 v2 structure clauses hold" if not bad
-                     else f"failed: {bad}")
+    return not bad, (f"all {len(checks)} v2 structure clauses hold"
+                     if not bad else f"failed: {bad}")
 
 
 def rf6_break():
-    ok, det = _structure(PINE.replace('showLegend', 'xLegend'))
-    return ok, ("toggle removal passed" if ok else "toggle removal caught")
+    ok1, _ = _structure(PINE.replace('showLegend', 'xLegend'))
+    # plant a use-before-declaration: assign gState on line 2
+    planted = PINE.replace('atr = ta.atr(ATR_LEN)',
+                           'gStatePlant := "X"\natr = ta.atr(ATR_LEN)', 1
+                           ).replace('var string gState =',
+                                     'var string gStatePlant = "n"\n'
+                                     'var string gState =', 1)
+    # move the planted assignment ABOVE the declaration
+    ok2 = not _use_before_decl(
+        planted.replace('gStatePlant := "X"', '', 1)
+        .replace('//@version=6', '//@version=6\ngStatePlant := "X"', 1))
+    ok = ok1 or ok2
+    return ok, ("a break variant passed" if ok else
+                "toggle removal AND planted use-before-declaration both "
+                "caught")
 
 
 def rf6_real():
