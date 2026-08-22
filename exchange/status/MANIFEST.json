@@ -10,8 +10,8 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": false
   },
-  "generated_utc": "2026-08-21T10:00:00Z",
-  "head": "97760b9918547acacae6a1ef42adef846d86d3bc",
+  "generated_utc": "2026-08-22T10:00:03Z",
+  "head": "7e7bec031bb620e8362772f4d16b00d89e43adbb",
   "lane_last_commit": {
     "brief": null,
     "docs": {
@@ -20,9 +20,9 @@
       "subject": "docs: closing 11-entry memory snapshot post-redraft + phase-archive relocation pointer (ruling B, archives to D:/Naiad)"
     },
     "exchange": {
-      "committed_iso": "2026-08-20T07:00:20-03:00",
-      "sha": "97760b9918547acacae6a1ef42adef846d86d3bc",
-      "subject": "exchange: auto-publish 2026-08-20"
+      "committed_iso": "2026-08-22T05:23:10-03:00",
+      "sha": "7e7bec031bb620e8362772f4d16b00d89e43adbb",
+      "subject": "exchange: auto-publish 2026-08-22"
     },
     "ops": {
       "committed_iso": "2026-08-12T07:52:01-03:00",
@@ -38,11 +38,11 @@
   },
   "manifest_version": "1.1",
   "onedrive_running": null,
-  "origin_head": "97760b9918547acacae6a1ef42adef846d86d3bc",
+  "origin_head": "7e7bec031bb620e8362772f4d16b00d89e43adbb",
   "queue_open": 5,
   "queue_ratified_unbuilt": 5,
-  "queue_total": 12,
-  "queue_unratified": 1,
+  "queue_total": 5,
+  "queue_unratified": 0,
   "reviewer_box": [
     {
       "match_head": false,
@@ -57,8 +57,8 @@
       "match_head": false,
       "path": "exchange/status/CADENCE.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "82793eee8b86c67f9532e0d14d3fa7f3f5fa2c6720124c16c0e407f41534a865",
-      "size": 10441,
+      "sha256_worktree": "2174ad25df78dc6e78e91c710fd41f96bc142baf77ba9396df07ca83a91dfc32",
+      "size": 11438,
       "source_guess": null,
       "tracked": true
     },
@@ -66,8 +66,8 @@
       "match_head": false,
       "path": "exchange/status/CONVENTIONS.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "c3427babf9ad9848b3e8479074c4a841ff55d3d1b37f109ee1f1291fc23e314a",
-      "size": 67752,
+      "sha256_worktree": "42b2cdd6ae4fa5cd85548c133862ac25ddad9c7dd3910b63555a5b628f8a226e",
+      "size": 67814,
       "source_guess": null,
       "tracked": true
     },
@@ -75,7 +75,7 @@
       "match_head": false,
       "path": "exchange/status/HEARTBEAT.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "a7977860d5e436008c554c4b497d9a8a8e14fad24e2d3c8c4d578cb1837ad059",
+      "sha256_worktree": "4c4b03dd84984bcfcb945d82a36abcb602603a063d66031fa06c4abfcd618de7",
       "size": 175,
       "source_guess": null,
       "tracked": true
@@ -93,8 +93,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_APOLLO.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "b351b8a597d386ce302b5e3ffaebfa5c19b242f62ca7bc36ceda1456d76e614d",
-      "size": 169791,
+      "sha256_worktree": "cd6ad43a0fe4890635e6d7098d29ae52d4af1268be4466740823701014222d2c",
+      "size": 174090,
       "source_guess": null,
       "tracked": true
     },
@@ -102,8 +102,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_ARGUS.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "e69b165faebc143c94603f35555a3f220e7fd2f60ebfa4dfd87b1f3fdbef6ecb",
-      "size": 21159,
+      "sha256_worktree": "e7a3eaaaa4c30ea699fc278bb80876482127550f809ac0228508c2be084a935c",
+      "size": 30290,
       "source_guess": null,
       "tracked": true
     },
@@ -111,8 +111,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_ATHENA.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "7f7e2de3643831844dc8af0216763a9a2d3feb73aade00165a4ecc14cbce5adb",
-      "size": 118571,
+      "sha256_worktree": "511e71e29619fa12c1bdbbee5323a75ba7e5841a1c2bf97af75f8572429c8820",
+      "size": 143605,
       "source_guess": null,
       "tracked": true
     },
@@ -165,8 +165,8 @@
       "match_head": false,
       "path": "exchange/status/ROTATION_LOG.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "77b9e6a50e14c8fec06d7e7bea9d69c65292ed9d359d721203af10312ac7a63f",
-      "size": 2744,
+      "sha256_worktree": "5d7cfc3d3aca34dd43df55af0493b5a63614745fb69f5ad1b1ce612cc5ff95f5",
+      "size": 25503,
       "source_guess": null,
       "tracked": true
     },
@@ -176,15 +176,6 @@
       "sha256_head_blob": null,
       "sha256_worktree": "934058018f1c67a0857a4ebdc8282b6446d1deb57897d184aab1b0483a01b2ab",
       "size": 2941,
-      "source_guess": null,
-      "tracked": true
-    },
-    {
-      "match_head": false,
-      "path": "exchange/status/daily/DAILY_2026-08-12.md",
-      "sha256_head_blob": null,
-      "sha256_worktree": "9214b4ce88c249654d36b2d4c816da4805647f2d3d404836fb5565eeff855ea2",
-      "size": 5644,
       "source_guess": null,
       "tracked": true
     },
@@ -244,10 +235,10 @@
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-08-12.json",
+      "path": "exchange/status/daily/DAILY_2026-08-21.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "69fb3ddc8a8f2e41541bd2c93d0f4b00bdf54ca591534022d127713eeb67f27b",
-      "size": 23778,
+      "sha256_worktree": "2491554a35304496ff359ee779890ac496cb7d6b05dcc4f354e4cf7ea0de9aeb",
+      "size": 6363,
       "source_guess": null,
       "tracked": true
     },
@@ -301,6 +292,15 @@
       "path": "exchange/status/daily/MANIFEST_2026-08-20.json",
       "sha256_head_blob": null,
       "sha256_worktree": "f52f8fe403cfd1c3a5480eea064ad7e2a92250dc005f1295246340030c82929d",
+      "size": 24929,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-21.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "66b3565ffdbffc3ea13c04fe1bf0700d2aa82efb93442a19aff1b7e41ef511e3",
       "size": 24929,
       "source_guess": null,
       "tracked": true
@@ -685,8 +685,17 @@
     }
   ],
   "status_porcelain": [
-    " M exchange/status/daily/DAILY_2026-08-20.md",
+    " M scripts/oracle_fixtures.py",
+    " M scripts/oracle_wrapper.py",
+    " M scripts/rangefinder_fixtures.py",
+    " M scripts/rangefinder_twin.py",
     "?? .claude/worktrees/",
+    "?? exchange/queue/2026-08-22_RF2_rangefinder_v1_ARGUS.md",
+    "?? pine/SS12_ANCHOR_v12_6.pine",
+    "?? pine/SS12_MANTLE_v12_6.pine",
+    "?? pine/SS12_RangeFinder_v1.pine",
+    "?? pine/SS12_SIGNAL_v12_6.pine",
+    "?? pine/SS_Anchor_v12_T_0.pine",
     "?? \"research_outputs/CENSUS-2A \\342\\200\\224 ENTRIES & EXITS, SEEN.html\"",
     "?? \"research_outputs/Cascade Atlas v2 \\342\\200\\224 CENSUS-1b MTF cross structure.html\"",
     "?? \"research_outputs/Cascade Atlas v2 \\342\\200\\224 CENSUS-1b MTF cross structure_files/\"",
