@@ -239,3 +239,13 @@ PENDING: 1. six more mornings to 2026-08-22  2. operator PARITY line  3. the C-0
 NEXT: lane parked at the gate. Wakes on the PARITY relay or 2026-08-22, whichever is later.
       Owner: launchd, then operator.
 === END STATUS ===
+
+=== STATUS_ARGUS — 2026-08-16 (PINE ESTATE FILED) ===
+NOW: Pine estate v12.6 filed: MANTLE (fabric) · SIGNAL (events) · ANCHOR (v12-T).
+     PINE lane operates inside ARGUS by operator ruling.
+FACTS: three files, shas per build doc [verified] · 12/89 regime ruling recorded
+       [ratified] · parity target = SS12-SIGNAL v12.6 [standing]
+PENDING: 1. operator parity spot-check (doubles as Oracle PARITY line) 2. Anchor
+         pins await handbook 3. live week + BR-2 unchanged
+NEXT: iterate on operator screenshots. Owner: operator.
+=== END STATUS ===
