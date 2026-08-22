@@ -656,16 +656,39 @@ did not move the number.
 
 ## 7 · THE BOX — before and after
 
-| measure | before (`4c6211d`) | after this session's publish | change |
-|---|--:|--:|--:|
-| **TICK SET** — `exchange/` + `LEDGER.md`, *the figure that governs* | **3,851,115 B** | **2,430,358 B** + this session's own writes | **−1,420,757 B** |
-| **as % of the 16,000,000 B box** | **24.07%** | **15.19%** | **−8.88 points** |
-| `exchange/` only — continuity with prior reports | 3,591,817 B (22.45%) | 2,171,060 B (13.57%) | −8.88 points |
-| tracked files under `exchange/` | 186 | 100 | −86 |
-| budget level | OK | **OK** | warn is 40% (6.4 MB), refuse above 70% (11.2 MB) |
+**Two different questions, two different numbers, and they must not be confused.** *What did the
+rotation do?* is measured with this session's own documents excluded — otherwise the instrument is
+measuring itself. *Where does the box stand now?* includes them, because they are on the bus. Both
+are given.
 
-**The bus is 36.9% smaller than it was this morning**, and it is at **38% of the warn threshold**
-rather than 60%. Per-folder:
+| measure | before (`4c6211d`) | after the rotation, before this session wrote | **as published** |
+|---|--:|--:|--:|
+| **TICK SET** — `exchange/` + `LEDGER.md`, *the figure that governs* | **3,851,115 B** | **2,430,358 B** | **2,547,543 B** |
+| **as % of the 16,000,000 B box** | **24.07%** | **15.19%** | **15.92%** |
+| `exchange/` only — continuity with prior reports | 3,591,817 B (22.45%) | 2,171,060 B (13.57%) | 2,288,245 B (14.30%) |
+| tracked files under `exchange/` | 186 | 100 | 101 |
+| budget level | OK | OK | **OK** |
+
+**The rotation released 1,420,757 B — 8.88 points.** This session then wrote 117,185 B back onto the
+bus, so the published state is **15.92%**, a net **−8.15 points**. The reconciliation, because a
+figure that cannot be reconciled is a figure to be doubted:
+
+| | bytes |
+|---|--:|
+| tick set after the rotation | 2,430,358 |
+| + this build document | +82,423 |
+| + `ROTATION_LOG.md` — 86 rows and the F-2 provenance block | +20,271 |
+| + this session's `LEDGER_ATHENA.md` entry | +7,718 |
+| + the two repointed citations (`CONVENTIONS` +62, `CADENCE` +62) | +124 |
+| + **another session's edits riding this publish — F-8** (`INCIDENT_ORACLE` +49/−2, `LEDGER_ARGUS` +34) | +6,649 |
+| **= as published** | **2,547,543** |
+
+That last row is F-8 arriving as a number rather than a caveat: 6,649 B of this publish is not this
+session's work.
+
+**The bus is 33.9% smaller than it was this morning**, and it is at **40% of the warn threshold**
+rather than 60%. Per-folder — the *after the rotation* column, so the folder deltas isolate the
+rotation:
 
 | folder | before | after |
 |---|--:|--:|
@@ -926,13 +949,15 @@ mechanism of this session. Constants read from `publish_exchange`: `BOX_BYTES = 
 ```
 === STATUS_HEPHAESTUS — 2026-08-22 ===
 NOW: The exchange bus is rotated, the root is swept and MAILBOX is live and self-refreshing.
-110 files moved, zero deleted, every move sha256-verified and R100 to git. The box fell from
-24.07% to 15.19% of its 16 MB ceiling.
+110 files moved, zero deleted, every move sha256-verified and R100 to git. The rotation took the
+box from 24.07% to 15.19% of its 16 MB ceiling; this session's own documents put the PUBLISHED
+figure at 15.92%, a net -8.15 points.
 LAST EVENT: 2026-08-22 — commit 98951cd (rotation + root sweep + mailbox wiring), then one
 publish carrying ROTATION_LOG's 86 new rows, two repointed status citations and this report.
 FACTS:
 - 86 bus documents + 24 root documents moved to docs/history/**; 0 sha mismatches [verified]
-- tick set 3,851,115 B (24.07%) -> 2,430,358 B (15.19%); exchange/ 186 files -> 100 [verified]
+- tick set 3,851,115 B (24.07%) -> 2,430,358 B (15.19%) on the rotation, -> 2,547,543 B
+  (15.92%) as published once this session's own 117,185 B went on the bus [verified]
 - MAILBOX = 43 symlinks, 18 pinned + 25 rolling, gitignored, 0 B box cost [verified]
 - F-MB-1 8/8 · F-CONV 4/4 · suite 334 passed / 1 skipped / 0 failed [verified]
 - rotate_reports.py --dry-run HALTS exit 2 since ruling 007 retired the DIGEST — the scheduled
@@ -952,3 +977,24 @@ METRICS: operator actions this session = 0 · files re-ingested = 0
 
 **Drag `~/Naiad/MAILBOX` into the Finder sidebar once.** From then on everything current is one
 click away, and it refreshes itself on every publish and every daily routine.
+
+---
+
+> ### CORRECTION 2026-08-22 — the box figure, and a second publish disclosed
+>
+> **§7's "after" column first read `15.19%` under the heading *after this session's publish*.** That
+> is the rotation-only figure, measured with this session's own documents excluded. It is the right
+> number for *"what did the rotation do"* and the **wrong** number for *"where does the box stand"* —
+> the first publish printed **15.92%**, and a reader would have carried 15.19% away as the published
+> state. The table is **rewritten**, not annotated, per the correction rule (§0), and it now gives
+> both bases side by side with a reconciliation that closes to the byte. The STATUS block and the
+> §7 headline carried the same defect and are rewritten with it.
+>
+> **This cost a SECOND PUBLISH, and it is a named deviation from the brief's "ONE publish".** The
+> precedent is M4, 2026-08-15, recorded in `LEDGER_ATHENA`: a known-false line in a filed report is
+> a defect under §3.1's forensic-record duty, and the remedy is to rewrite and re-publish rather
+> than to protect a process count. Publish 1 = `34ec888`. Publish 2 carries this correction.
+>
+> **How it was caught:** by reading the publish's own output against the document that had just been
+> written, rather than assuming the prediction and the measurement agreed. They differed by 0.73
+> points, and 6,649 B of the difference was not even this session's (F-8).
