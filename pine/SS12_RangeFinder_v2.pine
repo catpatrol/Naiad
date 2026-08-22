@@ -119,6 +119,12 @@ newMemLine(float px, string side, string pedigree) =>
                     break
 
 
+// global STATE registers — declared BEFORE the macro core, whose death
+// block writes them [TV compile fix: CE10272 at the first firing of the
+// operator-eyeball fixture]
+var string gState = "NEUTRAL"
+var bool   gVirgin = true
+
 var array<float>  flipWatchPx   = array.new<float>()
 var array<string> flipWatchSide = array.new<string>()
 var array<int>    flipWatchBar  = array.new<int>()
@@ -879,8 +885,6 @@ if array.size(flipWatchPx) > 0
 // global STATE, the twin's sticky law [review: per-bar recompute diverged
 // on 27.6% of bars]: death-direction until the next confirm; NEUTRAL while
 // a macro range lives; pivot-direction only from virgin NEUTRAL
-var string gState = "NEUTRAL"
-var bool gVirgin = true
 if m_rState == "CONFIRMED"
     gState := "NEUTRAL"
     gVirgin := false
