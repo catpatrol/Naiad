@@ -1,4 +1,4 @@
-"""ORACLE FIXTURES — F-BR-1 .. F-BR-10 of queue BR-1 (as amended by A1-4).
+"""ORACLE FIXTURES — F-BR-1 .. F-BR-11 of queue BR-1 (as amended by A1-4, A2-8).
 
 BR-1 §4, verbatim: "FIXTURES (numbered; each shown FAILING on a deliberate
 break before trusted)". So every fixture here runs TWICE:
@@ -20,6 +20,7 @@ import json
 import re
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 import numpy as np
@@ -714,6 +715,97 @@ def f_br_10() -> None:
           lambda: _calibration(planted), lambda: _calibration(CAL))
 
 
+# ═══════════════════════ F-BR-11 · CALIBRATION TOTALITY (finding of 2026-08-21)
+#
+# `lines_in_sand` writes None on a side with no qualifying cluster. The
+# calibration writer read that side with `lis.get(k, {})`, which never reaches
+# its default when the key is PRESENT holding None, so `.get("fallback")` on None
+# raised AttributeError. Every scheduled run from 2026-08-20T10:00Z to
+# 2026-08-22T02:49Z died there — six runs, no calibration record for two days,
+# and F-BR-4/6 and the tape check gated off behind the nonzero exit. The brief
+# rendered before the crash, so nothing on screen said the record was missing.
+#
+# The same line carried a second, quieter defect: it read a "fallback" key that
+# `lines_in_sand` never writes (the fallback is marked source="fallback"), so
+# `lis_fallback_used` recorded False for every asset on every side since
+# 2026-08-16 and was structurally incapable of recording anything else.
+#
+# This fixture pins BOTH: the record must be produced over a None-bearing view,
+# and every side of it must agree with what `lines_in_sand` actually returned.
+# It writes into a throwaway CAL_DIR so it never lands a file in the real lane.
+
+_VIEW = None
+
+
+def _view_with_null_lis() -> dict:
+    """The real view, with a None side FORCED on the first asset.
+
+    Forced rather than found: on 2026-08-21 three of ten assets had no line
+    above, but a day where every asset has both sides must still exercise the
+    property, or the fixture goes quietly vacuous exactly when the market is calm.
+    """
+    global _VIEW
+    if _VIEW is None:
+        _VIEW = OD.build_view(log=lambda *a, **k: None)
+    v = dict(_VIEW)
+    v["assets"] = [dict(a) for a in _VIEW["assets"]]
+    v["assets"][0]["lis"] = dict(v["assets"][0]["lis"], above=None)
+    return v
+
+
+def _lis_provenance(doc: dict, view: dict) -> tuple[bool, str]:
+    """Every per-asset record carries both sides, and each side tells the truth:
+    None when there is no line, True when it came from the fallback rule, False
+    when it came from the primary rule."""
+    by_sym = {a["symbol"]: (a["lis"] if isinstance(a["lis"], dict) else {})
+              for a in view["assets"]}
+    bad: list[str] = []
+    seen = {"none": 0, "primary": 0, "fallback": 0}
+    for rec in doc.get("per_asset", []):
+        lis = by_sym.get(rec["asset"], {})
+        got = rec.get("lis_fallback_used")
+        if not isinstance(got, dict) or set(got) != {"above", "below"}:
+            bad.append(f"{rec['asset']}: lis_fallback_used is {got!r}")
+            continue
+        for side in ("above", "below"):
+            ln = lis.get(side)
+            want = None if not ln else (ln.get("source") == "fallback")
+            seen["none" if want is None else ("fallback" if want else "primary")] += 1
+            if got[side] != want:
+                bad.append(f"{rec['asset']}.{side}: recorded {got[side]!r}, "
+                           f"lines_in_sand said {want!r} "
+                           f"(source={(ln or {}).get('source')!r})")
+    if not doc.get("per_asset"):
+        return False, "no per-asset records — the calibration record was not produced"
+    if bad:
+        return False, f"lis provenance misrecorded: {sorted(bad)[:6]}"
+    return True, (f"{len(doc['per_asset'])} per-asset records, both sides each; "
+                  f"{seen['none']} side(s) with no line recorded None, "
+                  f"{seen['primary']} primary, {seen['fallback']} fallback — "
+                  f"write_calibration completed over a None-bearing view")
+
+
+def f_br_11() -> None:
+    view = _view_with_null_lis()
+    real_dir = OD.CAL_DIR
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            OD.CAL_DIR = Path(td)          # never write into the real lane
+            cal_p, _, _ = OD.write_calibration(view, "0000-00-00", "fixture")
+            doc = json.loads(Path(cal_p).read_text())
+    finally:
+        OD.CAL_DIR = real_dir
+    # the deliberate break: the pre-repair behaviour — every side flatly False,
+    # including the side that has no line at all
+    planted = json.loads(json.dumps(doc))
+    for rec in planted["per_asset"]:
+        rec["lis_fallback_used"] = {"above": False, "below": False}
+    prove("F-BR-11", "CALIBRATION TOTALITY — a None line-in-sand side must not stop "
+                     "the record, and each side's provenance must be told",
+          lambda: _lis_provenance(planted, view),
+          lambda: _lis_provenance(doc, view))
+
+
 # ══════════════════════════════════════════════════════════════════ MAIN
 
 def main() -> int:
@@ -724,8 +816,9 @@ def main() -> int:
     print(f"  tape  {len(TAPE):,} rows" if TAPE is not None else "  tape  ABSENT")
     print(f"  cal   {len(CAL.get('per_asset', [])) if CAL else 0} per-asset records")
     print("=" * 78)
-    for fn in (f_br_1, f_br_2, f_br_3, f_br_4, f_br_5,
-               f_br_6, f_br_7, f_br_8, f_br_9, f_br_10):
+    fixtures = (f_br_1, f_br_2, f_br_3, f_br_4, f_br_5, f_br_6,
+                f_br_7, f_br_8, f_br_9, f_br_10, f_br_11)
+    for fn in fixtures:
         try:
             fn()
         except Exception as e:                       # a fixture that errors is a fail
@@ -733,7 +826,7 @@ def main() -> int:
             FAILED.append(f"{name} (raised {e.__class__.__name__}: {e})")
             print(f"  [FAIL] {name}: raised {e.__class__.__name__}: {e}")
     print("\n" + "=" * 78)
-    print(f"GREEN {len(PASSED)}/10 · RED {len(FAILED)}")
+    print(f"GREEN {len(PASSED)}/{len(fixtures)} · RED {len(FAILED)}")
     for f in FAILED:
         print(f"  RED: {f}")
     print("=" * 78)

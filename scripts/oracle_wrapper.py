@@ -30,12 +30,21 @@ It also runs the daily self-checks and appends PASS/FAIL to
 research_outputs/oracle/calibration/selfcheck_log.jsonl — the log BR-2 gate
 G-BR2-2 reads.
 
+FIVE AGENTS, NOT FOUR (A2-8, 2026-08-21). The four above are clock agents. The
+fifth, com.naiad.oracle-catchup, has no clock at all: it carries RunAtLoad and
+fires once per login/boot, asks whether the most recent slot boundary actually
+produced a brief, and runs the missed slot if it did not. It exists because
+launchd replays a missed calendar job on WAKE but not on BOOT — measured on this
+host, see THE CATCH-UP below — so a laptop that was shut down over a slot lost
+that slot silently, twice in the six days to 2026-08-21.
+
 NO DELETION, EVER (CADENCE §4). Re-arming is bootout + bootstrap; the plist
 stays on disk. This wrapper never removes a file.
 """
 from __future__ import annotations
 
 import json
+import os
 import plistlib
 import subprocess
 import sys
@@ -68,6 +77,12 @@ SLOTS = {
                                     "job": "topup"},
     "com.naiad.oracle-1600": {"slot": "refresh", "hour": 16, "minute": 0,
                               "job": "oracle"},
+    # A2-8 · THE CATCH-UP. Not a clock slot: hour is None, so no
+    # StartCalendarInterval is written and the self-reschedule skips it. It
+    # carries RunAtLoad instead and fires once at every login/boot. See THE
+    # CATCH-UP below for why the other four are not enough.
+    "com.naiad.oracle-catchup": {"slot": "catchup", "hour": None, "minute": None,
+                                 "job": "catchup", "run_at_load": True},
 }
 
 
@@ -107,9 +122,9 @@ def zone_report() -> dict:
 
 # ═════════════════════════════════════════════════════════ THE PLIST ITSELF
 
-def plist_body(label: str, slot: str, hour: int, minute: int,
-               job: str = "oracle") -> dict:
-    return {
+def plist_body(label: str, slot: str, hour: int | None, minute: int | None,
+               job: str = "oracle", run_at_load: bool = False) -> dict:
+    body = {
         "Label": label,
         "ProgramArguments": [PY, str(ROOT / "scripts" / "oracle_wrapper.py"),
                              "--job", job, "--slot", slot],
@@ -118,23 +133,29 @@ def plist_body(label: str, slot: str, hour: int, minute: int,
         # reason is that scripts shell out to bare `git`, and pinning makes the
         # tested environment identical to the scheduled one.
         "EnvironmentVariables": {"PATH": "/usr/bin:/bin:/usr/sbin:/sbin"},
-        "StartCalendarInterval": {"Hour": int(hour), "Minute": int(minute)},
         "StandardOutPath": str(LOGDIR / f"{label.split('.')[-1]}.log"),
         "StandardErrorPath": str(LOGDIR / f"{label.split('.')[-1]}.log"),
-        # false ON PURPOSE, the same reason the other three say so: RunAtLoad
-        # true would fire a full run the instant the agent is bootstrapped and
-        # again at every login, which is not what "07:00 daily" means.
-        "RunAtLoad": False,
+        # false ON PURPOSE for every CLOCK slot, the same reason the other three
+        # say so: RunAtLoad true would fire a full run the instant the agent is
+        # bootstrapped and again at every login, which is not what "07:00 daily"
+        # means. The catch-up agent is the one deliberate exception — it has no
+        # clock, and firing at login is its entire job.
+        "RunAtLoad": bool(run_at_load),
     }
+    if hour is not None:
+        body["StartCalendarInterval"] = {"Hour": int(hour), "Minute": int(minute)}
+    return body
 
 
-def write_plist(label: str) -> tuple[Path, int, int]:
+def write_plist(label: str) -> tuple[Path, int | None, int | None]:
     cfg = SLOTS[label]
-    h, m = machine_local_time_for(cfg["hour"], cfg["minute"])
+    h, m = ((None, None) if cfg["hour"] is None
+            else machine_local_time_for(cfg["hour"], cfg["minute"]))
     p = AGENTS / f"{label}.plist"
     p.parent.mkdir(parents=True, exist_ok=True)
     LOGDIR.mkdir(parents=True, exist_ok=True)
-    p.write_bytes(plistlib.dumps(plist_body(label, cfg["slot"], h, m, cfg["job"])))
+    p.write_bytes(plistlib.dumps(plist_body(label, cfg["slot"], h, m, cfg["job"],
+                                            cfg.get("run_at_load", False))))
     return p, h, m
 
 
@@ -163,8 +184,10 @@ def arm(label: str, log=print) -> dict:
     lint = subprocess.run(["plutil", "-lint", str(p)], capture_output=True, text=True)
     sched = loaded_schedule(label)
     cfg = SLOTS[label]
-    log(f"  ARMED {label} [{cfg['job']}]: machine-local {h:02d}:{m:02d} "
-        f"(= {cfg['hour']:02d}:{cfg['minute']:02d} {ZONE}) · plist {p}")
+    when = (f"machine-local {h:02d}:{m:02d} "
+            f"(= {cfg['hour']:02d}:{cfg['minute']:02d} {ZONE})"
+            if h is not None else "no clock · RunAtLoad, once per login/boot")
+    log(f"  ARMED {label} [{cfg['job']}]: {when} · plist {p}")
     log(f"    plutil: {lint.stdout.strip() or lint.stderr.strip()}")
     log(f"    launchd reports: {sched}")
     if r.returncode != 0:
@@ -176,6 +199,17 @@ def arm(label: str, log=print) -> dict:
 def reschedule_if_drifted(label: str, log=print) -> dict:
     """The self-reschedule. Compares the plist's hour against the zone's truth."""
     cfg = SLOTS[label]
+    if cfg["hour"] is None:
+        # A clockless agent has no StartCalendarInterval to drift away from the
+        # zone. It is still checked for PRESENCE — an agent that vanished is the
+        # failure this whole wrapper exists to notice.
+        p = AGENTS / f"{label}.plist"
+        gone = not p.exists()
+        if gone:
+            log(f"  AGENT MISSING: {label} has no plist at {p} — the catch-up is "
+                f"NOT armed. Re-arm with: oracle_wrapper.py --install")
+        return {"label": label, "drift": False, "missing": gone,
+                "want": {"RunAtLoad": True, "installed": not gone}, "had": {}}
     want_h, want_m = machine_local_time_for(cfg["hour"], cfg["minute"])
     p = AGENTS / f"{label}.plist"
     have = {}
@@ -191,6 +225,189 @@ def reschedule_if_drifted(label: str, log=print) -> dict:
         arm(label, log=log)
     return {"label": label, "drift": drift, "want": {"Hour": want_h, "Minute": want_m},
             "had": have}
+
+
+# ══════════════════════════════════════════════════════════════ SINGLE FLIGHT
+# D4 of the 2026-08-22 incident audit. Before the catch-up existed, every Oracle
+# job was a distinct calendar slot and two could not overlap. The catch-up can
+# fire at a login that lands while a clock slot is still running — a top-up takes
+# ~130 s wall-clock (measured: 09:45:04 -> 09:47:14) — and both paths append to
+# the SAME dated tape parquet and the same selfcheck log. One writer at a time.
+#
+# A plain O_EXCL file, not flock: the holder must survive being inspected by an
+# operator, and a stale lock from a killed run must be recoverable without a
+# reboot. STALE_MIN is generous — the longest observed run is well under it.
+LOCK = LOGDIR / ".oracle.lock"
+LOCK_STALE_MIN = 30
+
+
+def acquire_lock(who: str, log=print) -> bool:
+    LOCK.parent.mkdir(parents=True, exist_ok=True)
+    body = json.dumps({"who": who, "pid": os.getpid(),
+                       "ts": datetime.now(timezone.utc).isoformat()})
+    try:
+        fd = os.open(LOCK, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+    except FileExistsError:
+        held = {}
+        try:
+            held = json.loads(LOCK.read_text())
+            age_min = (datetime.now(timezone.utc)
+                       - datetime.fromisoformat(held["ts"])).total_seconds() / 60.0
+        except Exception:
+            age_min = LOCK_STALE_MIN + 1          # unreadable lock is a stale lock
+        if age_min <= LOCK_STALE_MIN:
+            log(f"  LOCK HELD by {held.get('who')} (pid {held.get('pid')}, "
+                f"{age_min:.1f} min old) — standing down, this run does nothing")
+            return False
+        log(f"  STALE LOCK from {held.get('who')} ({age_min:.1f} min > "
+            f"{LOCK_STALE_MIN} min) — reclaiming it")
+        try:
+            LOCK.unlink()
+        except FileNotFoundError:
+            pass
+        try:
+            fd = os.open(LOCK, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+        except FileExistsError:
+            log("  lock re-taken by another run in the same instant — standing down")
+            return False
+    os.write(fd, body.encode())
+    os.close(fd)
+    return True
+
+
+def release_lock(log=print) -> None:
+    try:
+        LOCK.unlink()
+    except FileNotFoundError:
+        pass
+    except Exception as e:
+        log(f"  could not release {LOCK}: {e}")
+
+
+# ═══════════════════════════════════════════════════════════════ THE CATCH-UP
+# A2-8 (2026-08-21), the SHUTDOWN half of finding T-3. A2-7 gave the sleep half
+# a banner; this gives the shutdown half a run.
+#
+# MEASURED ON THIS HOST, 2026-08-16 → 2026-08-21, from logs/launchd and
+# `last reboot`: launchd DOES replay a missed StartCalendarInterval when the
+# machine WAKES — 08-20 16:00 ran at 16:03 and 08-21 16:00 ran at 16:08, each on
+# the DarkWake logged the same second — but it does NOT replay one when the
+# machine BOOTS. The 08-18 07:00 and 08-19 16:00 slots fell inside power-off
+# windows (05:05→15:30 and 14:21→18:40) and were never replayed: the 15:30 boot
+# fired neither the 06:45 top-up nor the 07:00 Oracle, and 2026-08-18 has no
+# morning brief and no calibration record to this day.
+#
+# So the four clock agents are complete for a sleeping laptop and silently
+# incomplete for one that was off. This agent closes that: no clock, RunAtLoad
+# true, one question at every login — has the most recent slot boundary actually
+# produced a brief? — and the missed slot runs if it has not.
+#
+# IT RUNS THE TOP-UP FIRST. That is not the open T-3 ruling (whether the Oracle
+# should REFUSE to render on a stale cache); it is only the obvious ordering for
+# a catch-up that owns both halves and can therefore choose them in order.
+#
+# GRACE keeps it out of launchd's way. launchd's own on-wake replay was 3 and 8
+# minutes late in the two measured cases, so a boundary younger than GRACE is
+# left to launchd rather than raced for it.
+CATCHUP_GRACE_MIN = 20
+
+
+def last_slot_boundary(now: datetime | None = None) -> tuple[datetime, str]:
+    """The most recent Oracle slot boundary at or before `now`, and its slot name.
+
+    Computed in the ORACLE's zone for the same reason everything else here is:
+    the zone is the durable quantity. Yesterday's boundaries are candidates too,
+    so a 03:00 login correctly resolves to yesterday's 16:00 and not to nothing.
+    """
+    z = ZoneInfo(ZONE)
+    now = (now or datetime.now(timezone.utc)).astimezone(z)
+    cands = []
+    for cfg in SLOTS.values():
+        if cfg["job"] != "oracle":
+            continue
+        for back in (0, 1):
+            b = (now - timedelta(days=back)).replace(
+                hour=cfg["hour"], minute=cfg["minute"], second=0, microsecond=0)
+            if b <= now:
+                cands.append((b, cfg["slot"]))
+    return max(cands, key=lambda t: t[0])
+
+
+def selfcheck_rows() -> list[dict]:
+    if not SELFCHECK.exists():
+        return []
+    out = []
+    for line in SELFCHECK.read_text().splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            out.append(json.loads(line))
+        except Exception:
+            continue                      # a torn row is not a reason to stop
+    return out
+
+
+def _row_time(row: dict, z: ZoneInfo) -> datetime | None:
+    try:
+        return datetime.fromisoformat(row["ts"]).astimezone(z)
+    except Exception:
+        return None
+
+
+def catchup_due(now: datetime | None = None) -> dict:
+    """Did the most recent slot boundary produce a PASSING run?
+
+    THE EVIDENCE IS THE SELFCHECK LOG, NOT THE BRIEF (repaired 2026-08-22, defect
+    D2 of the incident audit). The first draft read the brief's mtime, which is
+    wrong for the exact failure this agent was built after: oracle_daily.run()
+    writes the brief BEFORE it calls write_calibration, so the four crashed runs
+    of 2026-08-20/21 each left a freshly stamped brief on disk and no calibration
+    record at all. A file that a FAILED run also writes cannot be the evidence
+    that the run succeeded — the mtime test would have reported covered=True
+    straight through the outage and the catch-up would have sat silent.
+
+    The selfcheck log is the right witness: it is one row per run carrying the
+    verdict, it is the same log BR-2 gate G-BR2-2 reads, and it distinguishes
+    "no run happened" from "a run happened and failed". Both now count as not
+    covered, so this agent recovers a MISSED SLOT and a CRASHED RUN alike.
+
+    A boundary is tried at most ONCE. If a catch-up already ran for it and still
+    did not produce a PASS, the fault is not a missed wake-up and re-running on
+    every login would only bury the operator's evidence under retries.
+    """
+    z = ZoneInfo(ZONE)
+    now_z = (now or datetime.now(timezone.utc)).astimezone(z)
+    boundary, slot = last_slot_boundary(now_z)
+    age_min = (now_z - boundary).total_seconds() / 60.0
+
+    rows = selfcheck_rows()
+    after = [(r, t) for r in rows for t in [_row_time(r, z)] if t and t >= boundary]
+    passed = [(r, t) for r, t in after if r.get("verdict") == "PASS"]
+    tried = [(r, t) for r, t in after if r.get("catchup")]
+
+    covered = bool(passed)
+    if covered:
+        t = max(t for _, t in passed)
+        reason = f"selfcheck row {t:%Y-%m-%d %H:%M} verdict PASS, at or after the boundary"
+    elif age_min < CATCHUP_GRACE_MIN:
+        reason = (f"boundary is only {age_min:.0f} min old, inside the "
+                  f"{CATCHUP_GRACE_MIN}-min grace — left to launchd's own wake replay")
+    elif tried:
+        t = max(t for _, t in tried)
+        reason = (f"a catch-up already ran for this boundary at {t:%Y-%m-%d %H:%M} "
+                  f"and did not reach PASS — not retried; this needs the operator")
+    elif after:
+        reason = (f"{len(after)} run(s) since the boundary, none of them PASS — "
+                  f"newest verdict {max(after, key=lambda rt: rt[1])[0].get('verdict')}")
+    else:
+        reason = "no selfcheck row at all at or after the boundary — the slot never ran"
+
+    return {"due": (not covered) and (not tried) and age_min >= CATCHUP_GRACE_MIN,
+            "slot": slot, "boundary": boundary.isoformat(),
+            "age_min": round(age_min, 1),
+            "rows_after_boundary": len(after), "passed_after_boundary": len(passed),
+            "already_tried": bool(tried), "covered": covered, "reason": reason}
 
 
 # ═════════════════════════════════════════════════════════ THE SELF-CHECKS
@@ -261,6 +478,90 @@ def undo_lines() -> list[str]:
     return out
 
 
+def run_topup(slot: str, log=print) -> int:
+    """BR-1b. Fetch-and-store only: no render, no self-checks, no publish. A
+    failure here logs to topup_log.jsonl and exits nonzero; the Oracle 15 minutes
+    later is unaffected and stamps whatever as-of it finds."""
+    try:
+        import oracle_topup as TU
+        doc = TU.run(slot=slot, log=log)
+        rc = 0 if doc["verdict"] == "PASS" else 1
+        log(f"  top-up {doc['verdict']}: +{doc['rows_added']} rows across "
+            f"{doc['pairs']} pair(s), {doc['gaps']} gap(s)")
+    except SystemExit as e:
+        rc = 1
+        log(f"  TOP-UP HALTED: {e}")
+    except Exception:
+        rc = 1
+        log("  TOP-UP FAILED:\n" + traceback.format_exc())
+        try:
+            import oracle_topup as TU
+            TU.append_log({"ts": datetime.now(timezone.utc).isoformat(),
+                           "date": datetime.now().astimezone().strftime("%Y-%m-%d"),
+                           "slot": slot, "verdict": "FAIL", "pairs": 0,
+                           "rows_added": 0, "gaps": 0,
+                           "failures": ["wrapper-level exception"],
+                           "traceback": traceback.format_exc()[-1200:]})
+        except Exception:
+            pass
+    return rc
+
+
+def run_oracle(slot: str, zr: dict, started: datetime, log=print,
+               catchup: bool = False) -> int:
+    """Render the organ, then the three self-checks, then one selfcheck_log row.
+
+    The self-checks are gated on a clean render ON PURPOSE — checking the
+    idempotence of a render that did not happen proves nothing. The cost of that
+    gate is that a render failure takes the checks dark with it, which is exactly
+    what happened for six runs from 2026-08-20, so the row below records
+    `checks: {run: ...}` and the reader can tell the two states apart."""
+    rc = 0
+    result: dict = {}
+    try:
+        import oracle_daily as OD
+        result = OD.run(slot=slot, log=log)
+        log(f"  render {result['html']} sha256 {result['html_sha']}")
+    except Exception:
+        rc = 1
+        log("  RUN FAILED:\n" + traceback.format_exc())
+
+    res = {}
+    if rc == 0:
+        try:
+            res = self_checks(log=log)
+            if not all(v["pass"] for v in res.values()):
+                rc = 1
+        except Exception:
+            rc = 1
+            log("  SELF-CHECKS FAILED:\n" + traceback.format_exc())
+
+    p = append_selfcheck(slot, res or {"run": {"pass": rc == 0,
+                                               "detail": "run failed"}},
+                         {"zone_agree": zr["zones_agree"],
+                          "html_sha": result.get("html_sha"),
+                          "catchup": bool(catchup),
+                          "seconds": round((datetime.now(timezone.utc) - started)
+                                           .total_seconds(), 1)})
+    log(f"  selfcheck log -> {p}")
+    return rc
+
+
+def run_catchup(zr: dict, started: datetime, log=print) -> int:
+    """A2-8. Fires at every login/boot; runs something only when a slot was missed."""
+    d = catchup_due()
+    log(f"  catch-up: most recent Oracle boundary {d['boundary']} [{d['slot']}], "
+        f"{d['age_min']:.0f} min ago")
+    log(f"  evidence: {d['reason']}")
+    if not d["due"]:
+        log("  NOTHING MISSED — no catch-up run")
+        return 0
+    log(f"  MISSED SLOT [{d['slot']}] — running the top-up first, then the Oracle")
+    rc_t = run_topup("topup", log=log)
+    rc_o = run_oracle(d["slot"], zr, started, log=log, catchup=True)
+    return rc_t or rc_o
+
+
 def main(argv=None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     log = print
@@ -287,68 +588,27 @@ def main(argv=None) -> int:
     log(f"=== ORACLE WRAPPER · job={job} slot={slot} · {started.isoformat()} ===")
     zr = zone_report()
     log(f"  zone: {zr}")
-    rc = 0
-    result = {}
-
-    if job == "topup":
-        # BR-1b. Fetch-and-store only: no render, no self-checks, no publish.
-        # A failure here logs to topup_log.jsonl and exits nonzero; the Oracle
-        # 15 minutes later is unaffected and stamps whatever as-of it finds.
-        try:
-            import oracle_topup as TU
-            doc = TU.run(slot=slot, log=log)
-            rc = 0 if doc["verdict"] == "PASS" else 1
-            log(f"  top-up {doc['verdict']}: +{doc['rows_added']} rows across "
-                f"{doc['pairs']} pair(s), {doc['gaps']} gap(s)")
-        except SystemExit as e:
-            rc = 1
-            log(f"  TOP-UP HALTED: {e}")
-        except Exception:
-            rc = 1
-            log("  TOP-UP FAILED:\n" + traceback.format_exc())
-            try:
-                import oracle_topup as TU
-                TU.append_log({"ts": datetime.now(timezone.utc).isoformat(),
-                               "date": datetime.now().astimezone().strftime("%Y-%m-%d"),
-                               "slot": slot, "verdict": "FAIL", "pairs": 0,
-                               "rows_added": 0, "gaps": 0,
-                               "failures": ["wrapper-level exception"],
-                               "traceback": traceback.format_exc()[-1200:]})
-            except Exception:
-                pass
-    else:
-        try:
-            import oracle_daily as OD
-            result = OD.run(slot=slot, log=log)
-            log(f"  render {result['html']} sha256 {result['html_sha']}")
-        except Exception:
-            rc = 1
-            log("  RUN FAILED:\n" + traceback.format_exc())
-
-        res = {}
-        if rc == 0:
-            try:
-                res = self_checks(log=log)
-                if not all(v["pass"] for v in res.values()):
-                    rc = 1
-            except Exception:
-                rc = 1
-                log("  SELF-CHECKS FAILED:\n" + traceback.format_exc())
-
-        p = append_selfcheck(slot, res or {"run": {"pass": rc == 0,
-                                                   "detail": "run failed"}},
-                             {"zone_agree": zr["zones_agree"],
-                              "html_sha": result.get("html_sha"),
-                              "seconds": round((datetime.now(timezone.utc) - started)
-                                               .total_seconds(), 1)})
-        log(f"  selfcheck log -> {p}")
+    if not acquire_lock(f"{job}/{slot}", log=log):
+        log("=== exit 0 (no-op: another Oracle run holds the lock) ===")
+        return 0
+    try:
+        if job == "topup":
+            rc = run_topup(slot, log=log)
+        elif job == "catchup":
+            rc = run_catchup(zr, started, log=log)
+        else:
+            rc = run_oracle(slot, zr, started, log=log)
+    finally:
+        release_lock(log=log)
 
     # The self-reschedule runs LAST, so a bootout can never kill the run that
     # is producing today's Oracle.
     for label in SLOTS:
         try:
             d = reschedule_if_drifted(label, log=log)
-            if not d["drift"]:
+            if d.get("missing"):
+                rc = rc or 1
+            elif not d["drift"]:
                 log(f"  schedule OK on {label}: {d['want']}")
         except Exception as e:
             log(f"  reschedule check failed on {label}: {e}")

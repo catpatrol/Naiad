@@ -1,6 +1,6 @@
 {
  "class": "SCOPE MANIFEST \u2014 the (symbol, interval) set the Oracle actually reads",
- "enumerated_utc": "2026-08-16T07:39:10.540114+00:00",
+ "enumerated_utc": "2026-08-22T03:02:30.164932+00:00",
  "intervals": [
   "15m",
   "1h",
@@ -9,7 +9,7 @@
  ],
  "method": "instrumented oracle_daily.load_lens over one full oracle_daily.run()",
  "note": "30m is ABSENT on purpose: the Oracle derives it from 15m by resample (census_build.RESAMPLE), so there is no 30m parquet to top up. 1m and 12h are absent because the Oracle does not read them.",
- "oracle_daily_sha256": "5f0338c1ea737c578d2ed4c7a87fae76eeeef4947946beff516e2e678c608a3c",
+ "oracle_daily_sha256": "93a7eac330fb3d84dc548bfd865fbc3ccaf6ac31c9c671eb5fbe9a0cf27f6086",
  "pairs": [
   [
    "BTCUSDT",

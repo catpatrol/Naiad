@@ -1026,7 +1026,20 @@ def write_calibration(view: dict, date_str: str, slot: str) -> tuple[Path, str, 
             "lis_distance_atr": {k: (round(abs(lis[k]["mean"] - a["price"]) / a["atr_d"], 6)
                                      if lis.get(k) and lis[k].get("mean") is not None else None)
                                  for k in ("above", "below")},
-            "lis_fallback_used": {k: bool(lis.get(k, {}).get("fallback", False))
+            # REPAIRED 2026-08-21, two defects on one line, both found by the
+            # T-3 diagnostic. (1) `lines_in_sand` writes None on a side with no
+            # qualifying cluster (levels.py `out[side] = None`), so the key is
+            # PRESENT holding None and `.get(k, {})` never reaches its default —
+            # `.get("fallback")` on None raised AttributeError and killed every
+            # scheduled run from 2026-08-20T10:00Z. The line directly above already
+            # guarded this way; this one did not. (2) the flag was read from a
+            # "fallback" key that `lines_in_sand` never writes — it marks the
+            # fallback with source="fallback" — so this field recorded False for
+            # every asset on every side since 2026-08-16 and could not have said
+            # otherwise. None here means NO LINE on that side, matching the None
+            # convention `lis_distance_atr` above already uses.
+            "lis_fallback_used": {k: (None if not lis.get(k)
+                                      else lis[k].get("source") == "fallback")
                                   for k in ("above", "below")},
             "maturity_withheld_fraction": 0.0,
             "open_window_ages_bars": [w.age_bars for w in st.open_windows],
