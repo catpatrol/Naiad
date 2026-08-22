@@ -242,6 +242,7 @@ research_outputs/tierc8/**
 research_outputs/tierc8_run2/**
 research_outputs/tierc9/**
 research_outputs/tierc9_run2/**
+research_outputs/rangefinder/**
 
 # THE ORACLE'S ALARM (T-7, ruled 2026-08-22). scripts/oracle_wrapper.py writes
 # ORACLE_DOWN.flag at the repo root on any run that ends rc != 0 and removes it
