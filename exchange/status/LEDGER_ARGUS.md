@@ -249,3 +249,34 @@ PENDING: 1. operator parity spot-check (doubles as Oracle PARITY line) 2. Anchor
          pins await handbook 3. live week + BR-2 unchanged
 NEXT: iterate on operator screenshots. Owner: operator.
 === END STATUS ===
+
+=== STATUS_ARGUS — 2026-08-22 (ORACLE CRASH · CONVICTED, REPAIRED, PROVEN) ===
+NOW: The Oracle crashed on every run from 2026-08-20T10:00Z; nothing reported it for two days
+     and the PINE lane found it by accident. Convicted, repaired, proven. The repair was then
+     audited adversarially and its own catch-up agent repaired a second time.
+LAST EVENT: 2026-08-22 — incident filed at exchange/reports/INCIDENT_ORACLE_2026-08-20_CRASH.md;
+     five agents armed; F-BR-1..11 GREEN 11/11.
+FACTS:
+- CONVICTED oracle_daily.py:1029 — lis.get(k,{}) never reaches its default on a present-but-None
+  side (levels.py:219) so .get raised AttributeError on 4 scheduled slots. The same line read a
+  "fallback" key lines_in_sand never writes: lis_fallback_used was False-always since 08-16 [verified]
+- RULED OUT with evidence: code/config change (nothing entered 08-19..08-20), cache health, disk
+  (6% capacity), top-up (11/11 PASS), R-4 ABSENT (CLOSED at 20f4a36, never fired), environment.
+  Same code, same schedule, new data — the defect is data-triggered and is latent again now [verified]
+- REPAIRED AND PROVEN: the line; fixture F-BR-11; a fifth clockless agent com.naiad.oracle-catchup
+  for the shutdown half of T-3; a single-flight lock. Top-up exit 0 (+223 rows, 0 gaps), Oracle
+  exit 0, calibration 6,042 B, 3/3 self-checks, fixtures GREEN 11/11 [verified]
+- THE FIRST REPAIR WAS WRONG AND THE AUDIT CAUGHT IT: the catch-up judged coverage by the brief's
+  mtime, but the brief is written BEFORE write_calibration — replayed against this incident it
+  reports covered=True throughout. Evidence moved to selfcheck verdicts; 7/7 scenarios [verified]
+- BR-2 ARITHMETIC: G-BR2-1 SATISFIED, 7 dated renders 08-16..08-22. G-BR2-2 reads 5 of the last 7
+  days PASS today but is carried by pre-break days and by hand-triggered runs; on UNATTENDED
+  post-repair evidence alone the earliest healthy wake is 2026-08-26. G-BR2-3 still absent [verified]
+- 08-20 and 08-21 calibration records are LOST and unrecoverable; six runs carry no self-check
+  attestation, and that is the evidence G-BR2-2 reads [verified]
+PENDING: 1. T-7 crash surfacing [VETO] 2. T-3 wake-order ruling [VETO] 3. operator PARITY line
+         4. the C-0 ruling 5. CADENCE.md has no row for any of the five Oracle agents
+         6. BR-2 on gates, earliest 2026-08-26 7. V-7 rails (APOLLO F-C3-e)
+NEXT: the estate is armed and self-recovering; nothing further runs until a word lands on T-7 or
+      T-3. Owner: operator.
+=== END STATUS ===
