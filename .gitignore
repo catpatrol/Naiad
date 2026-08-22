@@ -240,3 +240,20 @@ research_outputs/tierc7/**
 research_outputs/tierc7_run2/**
 research_outputs/tierc8/**
 research_outputs/tierc8_run2/**
+
+# THE ORACLE'S ALARM (T-7, ruled 2026-08-22). scripts/oracle_wrapper.py writes
+# ORACLE_DOWN.flag at the repo root on any run that ends rc != 0 and removes it
+# on the next clean run. It sits at the top of the tree ON PURPOSE, where the
+# operator cannot walk past it -- and for exactly that reason it must never be
+# committed or published. A flag on the bus would tell every reader that a
+# laptop in Buenos Aires had a bad morning; the alarm is for the operator
+# standing at the machine, and the incident report is for everyone else.
+ORACLE_DOWN.flag
+
+# THE MAILBOX (box-cleanup brief, operator go 2026-08-18). scripts/mailbox_refresh.py
+# rebuilds ~/Naiad/MAILBOX on every publish and every daily routine. Every entry is a
+# SYMLINK to a file that already lives in the repo -- it is a view, never a second copy,
+# so committing it would publish the same bytes twice under a second set of paths and
+# would break for every reader whose clone sits at a different absolute path. It exists
+# for one person standing at this machine, dragging one folder into the Finder sidebar.
+MAILBOX/

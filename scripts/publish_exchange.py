@@ -37,6 +37,14 @@ import re
 import subprocess
 from pathlib import Path
 
+# MAILBOX (box-cleanup brief, 2026-08-18).  Guarded, because publish() must never
+# fail the job that called it: if this module is unreachable the publish still runs
+# and SAYS the mailbox did not refresh -- a silent skip is the defect §3.3 names.
+try:
+    import mailbox_refresh as _mailbox
+except ImportError:                                        # pragma: no cover
+    _mailbox = None
+
 SCOPE = "exchange/"
 SUBJECT = "exchange: auto-publish {date}"
 
@@ -754,6 +762,22 @@ def publish(repo, date_str, remote="origin", log=print, allow_oversize=None):
         log("publish: ERROR -- %s" % exc)
         return result
 
+    finally:
+        # THE MAILBOX, refreshed on publish's TAIL.  `finally` and not a line before
+        # `return`, because publish() has SEVEN return paths -- PUBLISHED, NOTHING,
+        # FLAGGED, REFUSED, two ERROR paths and the branch guard -- and the operator's
+        # one-click view must be current after all of them, not after the happy one.
+        # A refresh mutates `result` in place, so the dict the caller receives carries
+        # the outcome even though the return expression was evaluated first.
+        # NAMED-CONSTANT CARE: this CALLS refresh(); ROLLING_N, the rolling scopes and
+        # the working set have exactly one definition, in mailbox_refresh, and nothing
+        # here copies a value out of it.
+        if _mailbox is None:
+            result["mailbox"] = {"error": "mailbox_refresh not importable"}
+            log("mailbox: NOT REFRESHED -- scripts/mailbox_refresh.py is not importable")
+        else:
+            result["mailbox"] = _mailbox.refresh(repo, log=log)
+
 
 def _oversize_lines(total, frac, sized):
     """The refusal message: the number, the ten largest, and the remedy."""
@@ -794,7 +818,24 @@ def _flag_report_lines(result):
 
 
 def report_lines(result):
-    """Render a publish result as markdown lines for a report section."""
+    """Render a publish result as markdown lines for a report section.
+
+    The mailbox line is appended to EVERY status, including the aborted ones: the
+    view is refreshed on publish's tail whatever the outcome, so a report that shows
+    it only on success would misdescribe four of the five paths.
+    """
+    lines = _status_report_lines(result)
+    mb = result.get("mailbox")
+    if mb:
+        if _mailbox is not None and not mb.get("error"):
+            lines += ["- %s" % l.replace("mailbox: ", "", 1)
+                      for l in _mailbox.report_lines(mb)]
+        else:
+            lines.append("- mailbox NOT refreshed — %s" % mb.get("error", "unknown"))
+    return lines
+
+
+def _status_report_lines(result):
     status = result.get("status")
     if status == "PUBLISHED":
         lines = [

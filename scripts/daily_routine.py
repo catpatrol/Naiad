@@ -63,6 +63,7 @@ REGISTRY = Path(__file__).resolve().parent / "routine_jobs.json"
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import publish_exchange                                  # noqa: E402
+import mailbox_refresh                                   # noqa: E402
 from backup_estate import drive_ready, phase_archive_root_path   # noqa: E402  (D-0b)
 
 # Legacy drop points kept alive for the exchange transition (gate A-3a).  An
@@ -1468,6 +1469,17 @@ def main(argv=None):
     pre_publish_rc = 1 if [r for r in results if r["exit"] != 0 and r["required"]] else 0
     write_heartbeat(facts, alerts, pre_publish_rc, ROOT / "exchange" / "status" / "HEARTBEAT.md")
 
+    # MAILBOX -- the operator's one-click view, refreshed BEFORE the publish so that a
+    # run with `"publish": false` in the registry still leaves it current.  publish()
+    # refreshes on its own tail as well; on a normal run this call does the work and
+    # publish()'s call is the no-op that proves the rebuild is idempotent.  It is NOT
+    # redundant: it is the leg that covers the publish-disabled path.
+    # NAMED-CONSTANT CARE: both sites CALL refresh().  ROLLING_N, the rolling scopes and
+    # the working set are defined once, in mailbox_refresh, and copied nowhere.
+    mailbox = mailbox_refresh.refresh(ROOT)
+    for _line in mailbox_refresh.report_lines(mailbox):
+        print("  " + _line)
+
     # 10. PUBLISH -- gate A-6a.  Runs AFTER the report is written so that the
     # report itself is inside the commit.  The publish outcome is then appended
     # to the report; those appended bytes ride along in the NEXT publish, which
@@ -1484,6 +1496,14 @@ def main(argv=None):
         with report.open("a", encoding="utf-8") as fh:
             fh.write("\n## 10. Publish\n\n")
             fh.write("- disabled in the registry (`\"publish\": false`)\n")
+
+    with report.open("a", encoding="utf-8") as fh:
+        fh.write("\n## 11. Mailbox\n\n")
+        fh.write("\n".join("- " + l.replace("mailbox: ", "", 1)
+                           for l in mailbox_refresh.report_lines(mailbox)) + "\n")
+        fh.write("\n_`MAILBOX/` is gitignored: links only, zero box cost. "
+                 "These counts are from the pre-publish refresh; publish() ran the "
+                 "same rebuild again on its tail._\n")
 
     required_failed = [r["id"] for r in results if r["exit"] != 0 and r["required"]]
     if required_failed:
