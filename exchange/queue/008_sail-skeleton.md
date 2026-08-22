@@ -876,3 +876,44 @@ per §3.1, ending with the file-disposition table (§3.2) and appending its STAT
 `exchange/status/LEDGER_ATHENA.md` (Invariant 4). **The full fixture transcript for F-SAIL-1..10 goes
 in it verbatim, gate values as printed**, plus both determinism digests (§4.4), every deviation
 named, and every finding reported-not-fixed.
+
+---
+
+## D-0 · EXECUTION RECORD — 2026-08-22
+
+**D-0 RAN on 2026-08-22. IT IS OPEN.** No confirmation has been given and none is recorded here.
+**Nothing below D-0 was executed: `~/naiad-sail` does not exist, and no deliverable or fixture text
+in this file was amended while the gate is open.**
+
+**What the gate produced.** The derived content — D-1..D-8 and F-SAIL-1..7, 9, 10 — was verified
+against the estate by thirteen read-only agents (eleven verifiers, one per deliverable/fixture
+group, plus a completeness critic and a decidability critic). **All eleven sections returned
+DEFECTIVE: 139 findings, 32 of them blocking.** The eight most consequential were then re-checked by
+hand against the code; **all eight held.** Full transcript, evidence and citations:
+`exchange/reports/BUILDERS_REPORT_HEPHAESTUS_2026-08-22_D0-CONFIRMATION-GATE.md`.
+
+**What is put to the operator.** Not the ninety-two items the verification produced — the
+decidability critic found that about twenty of them are citation corrections rather than decisions,
+and that **the one question D-0 names first, the card-spec fork, was asked by none of the eleven**.
+The funnel is therefore **SIX questions**, ordered, in §1 of that report:
+
+| # | question | blocks |
+|--:|---|---|
+| ❶ | The card-spec fork — and branch (b) as written is unbuildable | verdict criteria 1 and 4; everything downstream |
+| ❷ | D-7's first client (L-LIMIT-2) is already falsified in-sample by its own clause (c) | criterion 13 |
+| ❸ | What L-LIMIT-2 needs the operator to name — instrument, corridor edges, card version | D-7c · REGISTER 8 |
+| ❹ | `exited` vs `belled` — malformed as posed; `belled` has no functional consumer | D-8(2) · REGISTER 2 |
+| ❺ | Is D-4 ratified or pending? The stamp and this gate disagree | the gate's own scope |
+| ❻ | Eighteen sub-deliverables have no fixture and no verdict criterion | what "done" means |
+
+**THE GATE'S OWN DEFECTS, recorded rather than quietly fixed.** (1) Its list is wrong in both
+directions: the stamp at line 3 ratifies *"D-4 (strengthened)"* while lines 5 and 160 put
+*"D-1..D-8"* — which contains D-4 — as PENDING. (2) It carries REGISTER items 2 and 7 but not item
+8, whose own row declares it BLOCKS D-7c. (3) It has no verdict criterion of its own. (4) It states
+no ordering and no partial-closure rule for the decisions it asks for.
+
+**HOW THIS RECORD CLOSES.** The operator's answers are appended beneath this block, each dated, and
+D-0 is closed when every one of the six carries one and no derived deliverable remains that no
+answer reaches. The ~20 citation amendments land in the same act, not before — amending the
+contract's body while the gate is open would hand the operator a different document than the one he
+was asked about.
