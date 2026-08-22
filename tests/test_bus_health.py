@@ -288,8 +288,16 @@ def test_fbh1_recency_matches_the_hand_enumeration():
 
 
 def test_fbh1_section_8_assembles_on_the_live_tree():
-    """The whole block, end to end, against the real repo: it must render, and
-    it must not raise even though rotate_reports currently HALTS."""
+    """The whole block, end to end, against the real repo: it must render and it
+    must not raise.
+
+    CORRECTION 2026-08-22: this said "even though rotate_reports currently
+    HALTS".  It does not halt any more -- queue 003's exemption input was
+    repaired (newest note per lane pair, computed from the bus), so
+    rotation_candidate_lines() now reports a REAL count instead of an upper
+    bound with the exemption switched off.  The assertion is unchanged and
+    still the right one: this block must survive whatever rotate_reports does.
+    """
     lines = D.bus_health_lines(date.today().isoformat())
     text = "\n".join(lines)
     assert "| folder | bytes | files | % of box |" in text

@@ -119,3 +119,17 @@ tasks read back correct. **REJECT = delete the destination**; the old tree is un
 Not a fresh clone · not a change to `D:` residency, the estate cache, the venv, GitHub, the box, or
 any backup destination · not an OneDrive uninstall · not a quota fix by itself · **not O-5**, which
 is a separate ATHENA item.
+
+---
+
+BUILT: 2026-08-22 (retroactive) — Phase A executed 2026-08-12; Phase B superseded by
+Queue 005 and the pending PC-decommission phase.
+
+*Context, so "retroactive" is not read as a claim that anything ran today: Phase A landed
+on 2026-08-12 and is filed at
+`docs/history/reports/2026-08/BUILDERS_REPORT_HEPHAESTUS_2026-08-12_QUEUE-004-PHASE-A.md`.
+Phase B — deleting the old OneDrive tree — was never run and is now moot: Queue 005 moved
+the project to a MacBook on 2026-08-14/15, so the Windows tree this contract was written to
+decommission is not on the machine any more. What remains of Phase B belongs to the pending
+PC-decommission phase, not to this contract. The stamp is dated 2026-08-22 because that is
+when it was written, not when the work happened; the work's own date is above.*

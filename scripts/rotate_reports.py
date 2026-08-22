@@ -63,7 +63,11 @@ import publish_exchange                                  # noqa: E402
 SCOPE_DIR = "exchange/reports"
 DEST_ROOT = "docs/history/reports"
 LOG_PATH = "exchange/status/ROTATION_LOG.md"
-DIGEST_PATH = "exchange/DIGEST.md"
+
+# The six lanes, plus the two broadcast tokens a note can be addressed to.
+# Used ONLY to parse a note's recipient out of its filename -- see note_pair().
+LANES = ("APOLLO", "ARGUS", "ATHENA", "DIONYSUS", "HEPHAESTUS", "HERMES")
+BROADCAST = ("ALL-LANES", "ALL", "PANTHEON", "LANES")
 
 # PINNED at ratification 2026-08-11 (queue 003 finding 3.1).  The contract
 # shipped this number carrying a [VETO] marker; the operator let the drafted
@@ -74,12 +78,30 @@ AGE_DAYS = 30
 
 CHUNK = 1024 * 1024
 DATE_RE = re.compile(r"(\d{4}-\d{2}-\d{2})")
-# Inbox notes, exempt while unacted -- see digest_inbox_names().
-NOTE_RE = re.compile(r"^NOTE_.+_to_.+", re.IGNORECASE)
+# Notes.  The exemption keeps the NEWEST note of each lane pair -- see
+# newest_note_per_lane_pair().
+#
+# CORRECTION 2026-08-22 (queue 003 correction, operator-ratified).  This read
+# `^NOTE_.+_to_.+`, which only ever matched NOTE_<FROM>_to_<TO>_... .  Broadcasts
+# -- NOTE_HERMES_2026-08-12_ALL-LANES_..., NOTE_DIONYSUS_2026-08-12_PANTHEON_...
+# -- never matched it, so they were NEVER EXEMPTIBLE AT ALL, even on the days the
+# DIGEST read worked.  The widening is deliberate and is named in the contract.
+NOTE_RE = re.compile(r"^NOTE_", re.IGNORECASE)
 
 
 class InboxSourceUnavailable(RuntimeError):
     """The exemption rule's INPUT cannot be obtained.
+
+    RETAINED, NOT RAISED, since the 2026-08-22 correction.  The ratified
+    exemption is now computed from exchange/reports/ itself
+    (newest_note_per_lane_pair), and a rule with no external input has no
+    unavailable state -- so nothing in this module raises this any more.  It
+    stays defined because daily_routine.rotation_candidate_lines() names it in
+    an `except` clause, and because if a future exemption source is ever ruled
+    to live outside the bus, this is the shape it must fail in.
+
+    The original rationale, preserved because it is the reason the halt was
+    right at the time:
 
     Raised -- never swallowed -- when the unacted-inbox list cannot be read.
     Queue 003 exempts "any NOTE_*_to_* file listed as unacted inbox in the
@@ -138,88 +160,121 @@ def resolve_date(rel: str):
     return None, "unknown"
 
 
-def digest_inbox_names() -> set:
-    """Basenames listed in the newest DIGEST's inbox section.
+def note_pair(name: str):
+    """(sender, recipient) for a NOTE filename, or None if it is not a note.
 
-    The contract exempts "any NOTE_*_to_* file listed as unacted inbox in the
-    newest DIGEST".  An open note is a message somebody still owes a reply to;
-    rotating it off the bus would file the request as history before it was
-    answered.  Parsing is deliberately loose -- any report basename appearing
-    anywhere in the inbox section counts -- because the failure that matters is
-    rotating a live note, and a too-wide exemption merely keeps a file one more
-    cycle.
+    Three shapes exist on the bus and all three are parsed:
 
-    RULING 007, 2026-08-15 -- the two unanswerable states now RAISE.  DIGEST.md
-    was retired to docs/history/ and a tombstone left at its path, and against
-    that tombstone this function used to return a plausible non-zero answer:
-    the "search it all" fallback below scraped .md basenames out of the
-    tombstone's own prose and the banner in main() printed "2 name(s) parsed",
-    so an operator reading a dry-run saw a successful parse of an inbox that no
-    longer exists.  The exemption then silently stopped protecting six live
-    unacted notes, and the first one becomes a rotation candidate 2026-09-03.
-    That is a delete-adjacent scope widening arriving with no signal at all.
+        NOTE_<FROM>_to_<TO>_<date>_<topic>.md        ARGUS   -> APOLLO
+        NOTE_<FROM>_<date>_TO_<TO>_<topic>.md        APOLLO  -> ATHENA
+        NOTE_<FROM>_<date>_<BROADCAST>_<topic>.md    HERMES  -> ALL-LANES
 
-    The RULE is untouched -- AGE_DAYS, SCOPE_DIR, NOTE_RE and the `name in
-    inbox` test are all exactly as ratified.  What changed is only what happens
-    when the rule's input CANNOT BE OBTAINED: this script used to invent an
-    answer and now refuses to answer.  Refusing to compute is not a policy
-    decision; guessing was.  Restoring the exemption is a one-line repoint of
-    DIGEST_PATH once the operator rules where the unacted-inbox list now lives.
+    Anything that starts NOTE_ but names no recipient is treated as a BROADCAST
+    rather than dropped: an unparsed note must still land in SOME pair, because a
+    note that belongs to no pair is a note the exemption cannot protect.  That is
+    the direction to fail in -- a too-wide exemption keeps a file one more cycle,
+    a too-narrow one rotates a live message off the bus.
     """
-    p = REPO / DIGEST_PATH
-    if not p.is_file():
-        raise InboxSourceUnavailable(
-            "%s does not exist, so the queue-003 unacted-inbox exemption has no "
-            "input. Nothing was classified. Point DIGEST_PATH at the file that "
-            "now carries the unacted-inbox list, or rule that the exemption is "
-            "withdrawn." % DIGEST_PATH)
-    try:
-        text = p.read_text(encoding="utf-8", errors="replace")
-    except OSError as exc:
-        raise InboxSourceUnavailable(
-            "%s could not be read (%s), so the queue-003 unacted-inbox "
-            "exemption has no input." % (DIGEST_PATH, exc)) from exc
-    lines = text.splitlines()
-    start = None
-    for i, line in enumerate(lines):
-        if line.startswith("#") and "inbox" in line.lower():
-            start = i
-            break
-    if start is None:
-        raise InboxSourceUnavailable(
-            "%s contains no heading naming an inbox, so the queue-003 unacted-"
-            "inbox exemption has no input. It is RETIRED (ruling 007): the file "
-            "at that path is a tombstone. Rotation cannot tell an unacted note "
-            "from a spent one until the operator rules where that list lives, "
-            "and it will not guess -- six unacted notes are unprotected, the "
-            "first becoming a candidate 2026-09-03." % DIGEST_PATH)
-    else:
-        end = len(lines)
-        for j in range(start + 1, len(lines)):
-            if lines[j].startswith("## "):
-                end = j
-                break
-        section = "\n".join(lines[start:end])
-    return {m for m in re.findall(r"[A-Za-z0-9_.\-]+\.md", section)}
+    if not NOTE_RE.match(name):
+        return None
+    stem = Path(name).stem
+    tokens = stem.split("_")[1:]                       # drop the NOTE_ prefix
+    if not tokens:
+        return None
+    sender = tokens[0].upper()
+    for i, tok in enumerate(tokens[1:], start=1):
+        up = tok.upper()
+        if up == "TO" and i + 1 < len(tokens):
+            nxt = tokens[i + 1].upper()
+            if nxt in LANES:
+                return sender, nxt
+        if up in BROADCAST:
+            return sender, "ALL-LANES"
+        if up in LANES and up != sender:
+            return sender, up
+    return sender, "ALL-LANES"
+
+
+def newest_note_per_lane_pair(src_dir: Path = None) -> set:
+    """Basenames of the notes that are the NEWEST of their lane pair.
+
+    THIS IS D-1's EXEMPTION INPUT since the 2026-08-22 correction.  A note is
+    live while it is the most recent thing its sender said to its recipient;
+    once a newer note of the same pair exists, the older one has been superseded
+    by it and may rotate.
+
+    WHY IT REPLACED THE DIGEST READ.  The ratified rule exempted "any
+    NOTE_*_to_* file listed as unacted inbox in the newest DIGEST".  Ruling 007
+    retired the DIGEST on 2026-08-15 and the exemption's only input died with it,
+    so this script halted -- correctly, since guessing which notes are live is
+    exactly the guess that rotates a live message off the bus, but with the
+    consequence that NO rotation could run for seven days (finding F-2,
+    2026-08-18).  The rule now reads the bus itself.
+
+    THE PROPERTY THAT MATTERS: this function has no external input, so unlike
+    the DIGEST read it CANNOT become unavailable.  It never raises
+    InboxSourceUnavailable; a missing scope directory yields an empty set, which
+    is correct rather than unknown -- no directory means no notes to protect.
+    """
+    src_dir = (REPO / SCOPE_DIR) if src_dir is None else Path(src_dir)
+    if not src_dir.is_dir():
+        return set()
+    best = {}
+    for path in sorted(src_dir.glob("*.md")):
+        pair = note_pair(path.name)
+        if pair is None:
+            continue
+        # A note under a FABRICATED tree (the fixtures) has no git history, so
+        # only its filename can date it.  Asking resolve_date() for a path
+        # outside the repo used to raise ValueError out of relative_to() --
+        # caught by F-ROT-3 on the first run of these fixtures, before this
+        # function had ever been pointed anywhere but the live bus.
+        try:
+            rel = path.relative_to(REPO).as_posix()
+        except ValueError:
+            when = None
+            m = DATE_RE.search(path.name)
+            if m:
+                try:
+                    when = datetime.strptime(m.group(1), "%Y-%m-%d").date()
+                except ValueError:
+                    when = None
+        else:
+            when, _how = resolve_date(rel)
+        # (date, mtime) -- the date decides, mtime breaks the tie when two notes
+        # of one pair carry the same date, which has happened (DIONYSUS->APOLLO,
+        # both 2026-08-04).
+        key = (when or date_min(), path.stat().st_mtime)
+        if pair not in best or key > best[pair][0]:
+            best[pair] = (key, path.name)
+    return {name for _key, name in best.values()}
+
+
+def date_min():
+    """The floor for an undated note, so it never outranks a dated one."""
+    return datetime.min.date()
 
 
 def classify(today, inbox=None):
     """Partition exchange/reports/*.md into candidates, exempt, and too-young.
 
-    `inbox` overrides the exemption set instead of reading it.  Added 2026-08-15
-    (ruling 007) for ONE caller: the daily bus-health block, which reports a
-    candidate COUNT and must still produce one after the retirement left
-    digest_inbox_names() with nothing to read.  Passing an empty set there means
-    "no exemptions applied", which makes the count an UPPER BOUND -- and the
-    report says so in those words rather than presenting it as the real figure.
+    `inbox` overrides the exemption set instead of computing it.  Added
+    2026-08-15 (ruling 007) for ONE caller: the daily bus-health block, which
+    reports a candidate COUNT and had to keep producing one while the DIGEST
+    retirement left the old exemption with nothing to read.  Passing an empty
+    set means "no exemptions applied", which makes the count an UPPER BOUND --
+    and the report says so in those words.
 
-    The default is unchanged and still raises.  This is a reporting affordance,
-    not a policy hole: rotate() never passes it, so the actual SWEEP still halts
-    rather than moving a file whose exempt status cannot be determined.
+    CORRECTION 2026-08-22: the default no longer raises.  It computes the
+    exemption from the bus itself (newest_note_per_lane_pair), which has no
+    external input and so cannot become unavailable.  The override survives
+    because it is still the honest way for a REPORTING caller to ask for the
+    unexempted upper bound, and because deleting a parameter that one caller
+    passes by keyword is a break with no benefit.
     """
     src_dir = REPO / SCOPE_DIR
     cutoff = today - timedelta(days=AGE_DAYS)
-    inbox = digest_inbox_names() if inbox is None else inbox
+    inbox = newest_note_per_lane_pair(src_dir) if inbox is None else inbox
     candidates, exempt, young, undated = [], [], [], []
     if not src_dir.is_dir():
         return candidates, exempt, young, undated, cutoff, inbox
@@ -231,7 +286,7 @@ def classify(today, inbox=None):
         when, how = resolve_date(rel)
 
         if NOTE_RE.match(name) and name in inbox:
-            exempt.append((rel, size, when, "unacted inbox note in DIGEST"))
+            exempt.append((rel, size, when, "newest note of its lane pair"))
             continue
         if when is None:
             undated.append((rel, size, None, "no date in name, none in git log"))
@@ -297,7 +352,12 @@ def rotate(execute: bool, today=None) -> int:
     print("  today        : %s   window: %d days   cutoff: files dated before %s"
           % (stamp, AGE_DAYS, cutoff.isoformat()))
     print("  destination  : %s/YYYY-MM/" % DEST_ROOT)
-    print("  DIGEST inbox : %d name(s) parsed from %s" % (len(inbox), DIGEST_PATH))
+    print("  exemption    : %d note(s) -- newest of their lane pair, computed from "
+          "%s/ (queue 003 correction 2026-08-22)" % (len(inbox), SCOPE_DIR))
+    for nm in sorted(inbox):
+        pair = note_pair(nm)
+        print("      EXEMPT  %-14s -> %-10s %s"
+              % (pair[0] if pair else "?", pair[1] if pair else "?", nm))
     print("  " + box_line("before       :"))
     print("")
 

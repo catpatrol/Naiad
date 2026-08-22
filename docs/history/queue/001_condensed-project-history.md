@@ -104,3 +104,14 @@ This contract was the ONLY one of four in the queue complete against the CONVENT
 standard (deliverables, numbered fixtures F-H1..H6, verdict criteria, and a scope
 boundary) and had waited on this stamp since it was drafted — a fact surfaced by the
 HERMES queue audit of 2026-08-05.
+
+WITHDRAWN: 2026-08-22 (operator via ATHENA) — revivable by re-filing; the drafting is
+preserved and was judged the best in the queue.
+
+*Context, so the stamp is not read as a verdict on the work: this contract was ratified
+2026-08-06 and never built. It was rotated off the exchange bus on 2026-08-22 with its
+whole family (finding F-3, `BUILDERS_REPORT_HEPHAESTUS_2026-08-18_BOX-CLEANUP-MAILBOX.md`),
+and until this stamp existed `MANIFEST.json` counted it as ratified-unbuilt backlog while
+it sat in history — the counter fell without the reason being recorded anywhere. The stamp
+is what closes that gap. WITHDRAWN is not REJECTED: re-filing this text under a new number
+revives it unchanged.*
