@@ -394,3 +394,37 @@ PENDING: 1. operator TV-eyeball on SS12_RangeFinder_v1.pine (NEW, the final fixt
          (unchanged) 4. V-7 rails (APOLLO F-C3-e) (unchanged)
 NEXT: eyeball verdict lands, or RF-3 fires on the redraw-basis finding. Owner: operator.
 === END STATUS ===
+
+=== STATUS_ARGUS — 2026-08-22 (RF-3 BUILT · RANGEFINDER v2 · HIERARCHY + FLIPS + LEASH) ===
+NOW: SS12-RangeFinder v2 is built — the two-scale hierarchy is live (macro = the identical
+     machine at LEG/REV x3.0, the only writer of state, memory and flips; micro = v1 pins
+     FROZEN, dimmed, contained), the operator's grey-arrow flips are DETECTED AND FIXTURED TO
+     HIS OWN ARROWS, and the dashed-line clutter is leashed (TTL 400, live cap 6/side).
+LAST EVENT: 2026-08-22 — BUILD_2026-08-22_RANGEFINDER_V2.md filed; publish follows.
+FACTS:
+- THE FLIPS ARE HIS FLIPS: C-F1 ▼ resistance detected at 84,447 on 2026-01-29 20:00 — the
+  large grey arrow (his "February" is the Jan-29 breakdown retest, inside transcription
+  tolerance); C-F2 ▲ support at 75,999 (April first-retest under the pinned one-evaluation
+  law) with NINE May flip-retests of that line — his two marked touches are in the evidence.
+  FLIP_HOLD_MARGIN 1.0 is what lets the May dip hold, exactly his read [verified]
+- KEY-C CONCORDANCE: C-R1 top res 999 + both devs · C-R2 top res 52 + dev · C-R3 (the Jan
+  shelf) bottom res 53 + dev · C-Q1 macro count 3 in [2,4]. RESISTING: C-R1/C-R2 BOTTOMS
+  (res 2,968 / 1,295) — the operator's boundaries track the ZONE edge; the redraw-basis
+  finding, third sighting, filed for RF-4, never forced
+- THE TWIN ITSELF WAS REPAIRED THIS ROUND, review-grade: knowability = the recorded seal bar
+  (the post-hoc rescan diverged on 4h); the CANDIDATE LIST and the floor-advances-at-every-
+  lifecycle-event law ported into sim and pine (the disclosed v1 single-candidate debt came
+  due on the dense tape). The v1 1D record is UNCHANGED by all of it [verified]
+- FIXTURES 8/8 GREEN, BREAK LEGS RED FIRST: determinism both scales · hierarchy (a planted
+  foreign state is caught) · flips (inverted hold kills every flip) · leash (cap proven on a
+  synthetic ten-corpse population — the real tape cannot make the cap bind and says so) ·
+  KEY-C · pine parity · structure · pine-sim parity BOTH cores exact
+- OPERATOR LAYOUT NOTE [commissioned]: REMOVE SS12_RangeFinder_v0 (and ideally v1) from the
+  TV layout — stacked versions double-print boxes and lines; v2 supersedes both on-chart.
+  All three files stay in pine/ for lineage
+- OPERATOR TV-EYEBALL VERDICT PENDING — the final fixture
+PENDING: 1. operator TV-eyeball on SS12_RangeFinder_v2.pine (NEW, the final fixture)
+         2. operator PARITY line (prior, unchanged) 3. BR-2 on gates, earliest 2026-08-26
+         (unchanged) 4. V-7 rails (APOLLO F-C3-e) (unchanged)
+NEXT: eyeball verdict, or RF-4 fires on the zone-edge boundary grammar. Owner: operator.
+=== END STATUS ===
