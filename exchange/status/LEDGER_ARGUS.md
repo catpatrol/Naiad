@@ -314,3 +314,45 @@ PENDING: 1. operator PARITY line (last human gate) 2. BR-2 on gates, earliest 20
          unattended evidence 3. V-7 rails (APOLLO F-C3-e)
 NEXT: the unattended week accrues; the lane sleeps. Owner: launchd, then operator.
 === END STATUS ===
+
+=== STATUS_ARGUS — 2026-08-22 (RF-1 v2 BUILT · RANGEFINDER v0 · PINS MEASURED) ===
+NOW: SS12-RangeFinder v0 is built end to end — queue v2 filed (fresh-file path; no prior RF1
+     existed), twin + calibration + fixtures + Pine port + P-RNG note + build doc — and the
+     deviation lifecycle correction is PROVEN ON OUR OWN TAPE: range #5 breaches down 06-30,
+     deviation-confirms 07-01 at 57,758.6 with redraw (the navy box at the 60k lows), survives
+     50 bars, dies UPWARD into the August rally.
+LAST EVENT: 2026-08-22 — BUILD_2026-08-22_RANGEFINDER_V0.md filed; publish follows this append.
+FACTS:
+- PINS MEASURED, NEVER GUESSED: LEG_MIN 0.5 · REV_MIN 1.75 · TOUCH_EPS 0.30 · DEV_RETURN_BARS 4
+  · BREAK_CONFIRM_N 6 · BREAK_MARGIN 1.5 · ONE_ACTIVE reading (calibration ARBITRATED one-vs-
+  multi; multi lost in the grid). Coarse 10,240 cells + fine, deterministic edge-avoiding
+  tie-break [verified]
+- RESISTANCE REPORTED, NOT FORCED: Q5 SATISFIED (the Jun–Jul downside deviation exists and the
+  range survives it); Q4 near-miss (45.7 vs floor 51); Q1/Q2/Q3 RESIST and the named suspect is
+  the SEED law (potentials invalidate in trends before they can confirm — ranges seed one leg
+  tall). Recorded for RF-2. G1: the reference's 83k-top active range PREDATES any 200-day
+  window. G2 misses its band floor by 41 pts (feed divergence, unreconcilable from artifacts)
+- DEVIATION≈SPRING KINSHIP QUANTIFIED (F-RF-4): 1/1 twin bottom-deviations satisfy the house
+  spring shape computed independently from raw bars; 1/7 independent springs fall inside a
+  deviation episode — six fire OUTSIDE range life, the discriminating fact offered to P-SPR-1
+  sharpening [verified]
+- FIXTURES 6/6 GREEN, EVERY BREAK LEG RED FIRST (transcript filed off-bus): determinism 57-event
+  byte-identity · targets vs the exported record · lifecycle legality with stock conservation
+  (5 seeds = 3 confirmed + 2 superseded) · spring kinship · pine/twin pin parity EXACT · pine
+  structure 8 clauses [verified]
+- THREE ADVERSARIAL LENSES RAN IN FRONT OF THE PUBLISH and caught TWO PINE
+  BLOCKERS before anything shipped: a DEAD seed path (the indicator as first
+  written rendered NOTHING — proven by a lens-built bar-loop simulator) and a
+  compile-fatal global mutation. Repaired in place with the fixture and doc
+  defects they trailed; the repaired pine simulates 22 pivots == twin,
+  3 confirms == twin, the Q-5 chapter identical, coverage 34% vs 60% = the
+  MEASURED cost of the disclosed single-candidate simplification (RF-b)
+- P-RNG NOTE FILED to APOLLO: P-SPR-1 sharpening + the ~80%-in-range regime prior + boundary-
+  fade + post-breakout continuation, all G-7-gated, none registered
+- OPERATOR TV-EYEBALL VERDICT PENDING — the final parity fixture; the Pine seed path is a
+  DISCLOSED simplification of the twin's (RF-b) and the eyeball is what certifies it
+PENDING: 1. operator TV-eyeball parity verdict on SS12_RangeFinder_v0.pine (NEW, the final
+         fixture) 2. operator PARITY line (prior, unchanged) 3. BR-2 on gates, earliest
+         2026-08-26 (unchanged) 4. V-7 rails (APOLLO F-C3-e) (unchanged)
+NEXT: eyeball verdict lands or RF-2 fires on the named seed-law suspect. Owner: operator.
+=== END STATUS ===
