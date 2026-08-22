@@ -131,7 +131,9 @@ Six adversarial lenses in read-only worktrees, per the law TIER-C8 broke and rec
 | `scripts/tierc9.py` | yes | yes | hand commit, explicit paths | CL-13 | 0 B, non-box |
 | `scripts/tierc9_fixtures.py` | yes | yes | same | same | 0 B, non-box |
 | `scripts/tierc6*.py` (+lab_limit) TC6V-d batch | yes | yes | same | same | 0 B, non-box |
-| `research_outputs/tierc9/` (44 tables ×2 roots) | yes | no — gitignored | — | NOT PROTECTED — local only | n/a, off-bus |
+| `research_outputs/tierc9/` (44 tables ×2 roots, + CSV twins for the APOLLO ferry) | yes | no — gitignored | — | NOT PROTECTED — local only | n/a, off-bus |
+
+> ⚠ **CORRECTED AFTER PUBLICATION (2026-08-22).** As first published this row said "gitignored" while `.gitignore` enumerated the tier roots only through `tierc8/**` — tierc9 was merely UNTRACKED, one careless `git add -A` from the bus. The substance of the row (untracked, unprotected, local only) was true; the mechanism named was not. The two `tierc9/**` lines now exist, following the house per-tier pattern. Found while verifying a CSV export, not by the six-lens review — filed as the review's escape, per the tc8 precedent that the miss is part of the record.
 | `exchange/reports/BUILD_2026-08-18_TIERC9_HABITAT_PAIRS.md` | yes | yes | publish | publish guard, `exchange/**` | ≈ 20,900 B → 0.13% |
 | `exchange/status/LEDGER_APOLLO.md` | yes | yes | publish, append-only | same | +≈ 4,300 B |
 
