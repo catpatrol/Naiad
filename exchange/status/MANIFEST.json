@@ -10,8 +10,8 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": false
   },
-  "generated_utc": "2026-08-22T10:00:03Z",
-  "head": "7e7bec031bb620e8362772f4d16b00d89e43adbb",
+  "generated_utc": "2026-08-23T10:00:01Z",
+  "head": "6837ce0ee2e9abd3ebdda4adcc157d4bf9cf5972",
   "lane_last_commit": {
     "brief": null,
     "docs": {
@@ -20,8 +20,8 @@
       "subject": "docs: closing 11-entry memory snapshot post-redraft + phase-archive relocation pointer (ruling B, archives to D:/Naiad)"
     },
     "exchange": {
-      "committed_iso": "2026-08-22T05:23:10-03:00",
-      "sha": "7e7bec031bb620e8362772f4d16b00d89e43adbb",
+      "committed_iso": "2026-08-22T11:36:01-03:00",
+      "sha": "1d10bd9160ac1c374b4497441a4804432cd1fea7",
       "subject": "exchange: auto-publish 2026-08-22"
     },
     "ops": {
@@ -38,10 +38,10 @@
   },
   "manifest_version": "1.1",
   "onedrive_running": null,
-  "origin_head": "7e7bec031bb620e8362772f4d16b00d89e43adbb",
-  "queue_open": 5,
-  "queue_ratified_unbuilt": 5,
-  "queue_total": 5,
+  "origin_head": "6837ce0ee2e9abd3ebdda4adcc157d4bf9cf5972",
+  "queue_open": 6,
+  "queue_ratified_unbuilt": 6,
+  "queue_total": 6,
   "queue_unratified": 0,
   "reviewer_box": [
     {
@@ -75,7 +75,7 @@
       "match_head": false,
       "path": "exchange/status/HEARTBEAT.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "4c4b03dd84984bcfcb945d82a36abcb602603a063d66031fa06c4abfcd618de7",
+      "sha256_worktree": "3243055baf2538fcfa23d51ea8a1e67195357b67ac414f40b486f20841d52a98",
       "size": 175,
       "source_guess": null,
       "tracked": true
@@ -102,8 +102,8 @@
       "match_head": false,
       "path": "exchange/status/LEDGER_ARGUS.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "e7a3eaaaa4c30ea699fc278bb80876482127550f809ac0228508c2be084a935c",
-      "size": 30290,
+      "sha256_worktree": "09c4c7f3db369af0a66422a9376aced2a93d639f8b1e8defc7702641c9a107ac",
+      "size": 35941,
       "source_guess": null,
       "tracked": true
     },
@@ -181,15 +181,6 @@
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/DAILY_2026-08-13.md",
-      "sha256_head_blob": null,
-      "sha256_worktree": "2815c04e900ee0ba34cd74d0fff4045eb939d914048c2ca31ac640dc39c591da",
-      "size": 4966,
-      "source_guess": null,
-      "tracked": true
-    },
-    {
-      "match_head": false,
       "path": "exchange/status/daily/DAILY_2026-08-14.md",
       "sha256_head_blob": null,
       "sha256_worktree": "bd49c04518cbb05f68171e0ae03878ad69f8efb3492722748244378f07dde489",
@@ -244,10 +235,10 @@
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-08-13.json",
+      "path": "exchange/status/daily/DAILY_2026-08-22.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "17acee4bc700f3c8ffc638f5fb0e35be900a65d28c0e6ecd57c1b9e8c723155b",
-      "size": 23755,
+      "sha256_worktree": "7777475aa02f27ec555cdc9c50bb2f50df6b6cf3e25ce49a742e997d45691ab4",
+      "size": 6615,
       "source_guess": null,
       "tracked": true
     },
@@ -302,6 +293,15 @@
       "sha256_head_blob": null,
       "sha256_worktree": "66b3565ffdbffc3ea13c04fe1bf0700d2aa82efb93442a19aff1b7e41ef511e3",
       "size": 24929,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-08-22.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "63acd29a408e5f0905f0ee09b00f5fbed9b5a69dc172f5eba1c6a36e1f4410a7",
+      "size": 25286,
       "source_guess": null,
       "tracked": true
     }
@@ -687,13 +687,9 @@
   "status_porcelain": [
     " M scripts/oracle_fixtures.py",
     " M scripts/oracle_wrapper.py",
-    " M scripts/rangefinder_fixtures.py",
-    " M scripts/rangefinder_twin.py",
     "?? .claude/worktrees/",
-    "?? exchange/queue/2026-08-22_RF2_rangefinder_v1_ARGUS.md",
     "?? pine/SS12_ANCHOR_v12_6.pine",
     "?? pine/SS12_MANTLE_v12_6.pine",
-    "?? pine/SS12_RangeFinder_v1.pine",
     "?? pine/SS12_SIGNAL_v12_6.pine",
     "?? pine/SS_Anchor_v12_T_0.pine",
     "?? \"research_outputs/CENSUS-2A \\342\\200\\224 ENTRIES & EXITS, SEEN.html\"",
