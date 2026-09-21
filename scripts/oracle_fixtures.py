@@ -1,8 +1,8 @@
 """ORACLE FIXTURES — F-BR-1 .. F-BR-12 of queue BR-1 (as amended by A1-4, A2-8, T-7),
 F-BR-13 of queue OR-1 STEP B (finding C-0: the D-7 logger must MEASURE),
-F-BR-14 of queue OR-1 STEP D (the range layer renders and never rules), and
-F-BR-16 of queue OR-1 STEP C (the roster is ONE literal definition; 15 is the
-number the OR-1 contract gives to STEP F).
+F-BR-14 of queue OR-1 STEP D (the range layer renders and never rules),
+F-BR-15 of queue OR-1 STEP F (THE DAILY ORACLE: typeset, semantics untouched), and
+F-BR-16 of queue OR-1 STEP C (the roster is ONE literal definition).
 
 BR-1 §4, verbatim: "FIXTURES (numbered; each shown FAILING on a deliberate
 break before trusted)". So every fixture here runs TWICE:
@@ -95,12 +95,10 @@ def load_artifacts() -> None:
 
 
 def section(name: str) -> str:
-    """The HTML between one <h2> and the next — how F-BR-6 compares sections."""
-    parts = re.split(r"<h2>", HTML)
-    for p in parts[1:]:
-        if p.lower().startswith(name.lower()):
-            return p
-    return ""
+    """The HTML between one <h2> and the next, of the artifact under test. '' IF NO
+    HEADING STARTS WITH `name`: a caller that COMPARES two of these must treat '' as a
+    failure, never as equality (see F-BR-6)."""
+    return _sec(HTML, name)
 
 
 # ═══════════════════════════════════ F-BR-1 · PARITY (Pine, symbol for symbol)
@@ -566,25 +564,65 @@ def f_br_5() -> None:
 
 # ═══════════════════════════════════════ F-BR-6 · REFRESH IDEMPOTENCE
 
-def _refresh(tamper=False) -> tuple[bool, str]:
-    view = OD.build_view(log=lambda *a, **k: None)
+# THE SECTION NAMES (OR-1 STEP F, 2026-09-21). The contract's eight, in the operator's
+# order, COPIED from the queue file and not read off the module under test. Every
+# selector in this file finds a section by how its <h2> STARTS, so these eight strings
+# are the coupling between the fixtures and the typesetting, typed ONCE here.
+SECTIONS = ("Front Page", "The Docket", "The Watch", "Tide Tables", "Telegrams",
+            "The Market Page", "Yesterday's Returns", "Colophon")
+(SEC_BOARD, SEC_DOCKET, SEC_WATCH, SEC_TIDE, SEC_TELEGRAMS, SEC_MARKET, SEC_RETURNS,
+ SEC_COLOPHON) = SECTIONS
+# What F-BR-6 compares, and one thing each section MUST contain to count as found: the
+# Board is a table, The Watch holds the strips.
+REFRESH_SECTIONS = ((SEC_BOARD, "<table"), (SEC_WATCH, "<canvas"))
+# The pre-STEP-F names, kept ONLY as F-BR-6's vacuity plant.
+PRE_STEP_F_SECTIONS = (("The Board", "<table"), ("The Watch", "<canvas"))
+
+
+# THE VACUOUS PASS, CLOSED (OR-1 STEP F). _sec() returns '' when no heading matches. The
+# first version of _refresh compared _sec(d1, name) with _sec(d2, name) and nothing else,
+# so the day a heading was renamed — STEP F renamed 'The Board' to 'Front Page' — it
+# would have compared '' with '' and reported "byte-identical" for ever: in this fixture
+# AND in the wrapper's daily production self-check, which calls this same function
+# (oracle_wrapper.self_checks -> refresh_idempotence, the rows G-BR2-2 counts). A
+# section that is missing, empty, or lacks the one thing it exists to show is now a
+# FAIL that says so, and the old names are a standing break-leg plant.
+def _refresh(tamper=False, sections=None, view=None) -> tuple[bool, str]:
+    """`_refresh(tamper=False)` is a PRODUCTION API (the wrapper's daily self-check):
+    the two new parameters are optional and are used by F-BR-6's break leg alone."""
+    sections = REFRESH_SECTIONS if sections is None else sections
+    view = OD.build_view(log=lambda *a, **k: None) if view is None else view
     d1 = OD.render_html(view, DATE, PE.canon_sha())
-    if tamper:
-        view["assets"][0]["heat"] += 0.5
-    d2 = OD.render_html(view, DATE, PE.canon_sha())
-    diffs = []
-    for name in ("The Board", "The Watch"):
+    heat0 = view["assets"][0]["heat"]
+    try:
+        if tamper:
+            view["assets"][0]["heat"] = heat0 + 0.5
+        d2 = OD.render_html(view, DATE, PE.canon_sha())
+    finally:
+        view["assets"][0]["heat"] = heat0          # a shared view leaves as it came
+    void, diffs, sizes = [], [], []
+    for name, must in sections:
         s1, s2 = _sec(d1, name), _sec(d2, name)
-        if s1 != s2:
+        if not s1.strip() or not s2.strip():
+            void.append(f"no <h2> section starts with {name!r}")
+        elif must not in s1 or must not in s2:
+            void.append(f"the {name!r} section carries no {must!r}")
+        elif s1 != s2:
             diffs.append(f"{name}: {len(s1)} B vs {len(s2)} B")
+        else:
+            sizes.append(f"{name} {len(s1):,} B")
+    if void:
+        return False, ("VACUOUS — " + "; ".join(void) + ": there is nothing to compare, and "
+                       "'' == '' is not idempotence")
     if diffs:
         return False, "; ".join(diffs)
-    return True, (f"Board {len(_sec(d1,'The Board')):,} B and Watch "
-                  f"{len(_sec(d1,'The Watch')):,} B byte-identical across two renders "
-                  f"over unchanged data")
+    return True, (f"{' and '.join(sizes)} byte-identical across two renders over unchanged "
+                  f"data; both sections found, each carrying its table / its strips")
 
 
 def _sec(doc: str, name: str) -> str:
+    """The HTML from the <h2> that STARTS with `name` to the next <h2>; '' if none does.
+    Never compare two of these without checking for '' first (see _refresh)."""
     for p in re.split(r"<h2>", doc)[1:]:
         if p.lower().startswith(name.lower()):
             return p
@@ -592,8 +630,32 @@ def _sec(doc: str, name: str) -> str:
 
 
 def f_br_6() -> None:
-    prove("F-BR-6", "REFRESH IDEMPOTENCE — the 16:00 refresh over unchanged data",
-          lambda: _refresh(tamper=True), lambda: _refresh(tamper=False))
+    view = _pristine_view()
+    # (name, the finding it MUST produce, how it is planted) — judged one at a time
+    plants = (
+        ("DATA PLANT (the first Board row's heat moved between the two renders)",
+         f"{SEC_BOARD}:", dict(tamper=True, view=view)),
+        ("SELECTOR PLANT (the pre-STEP-F heading names: 'The Board' matches nothing)",
+         "VACUOUS", dict(sections=PRE_STEP_F_SECTIONS, view=view)),
+        ("SELECTOR PLANT (a heading that is found, over a section without its content)",
+         "VACUOUS", dict(sections=((SEC_TELEGRAMS, "<canvas"),), view=view)),
+    )
+
+    def _break() -> tuple[bool, str]:
+        green, out = False, []
+        for name, must, kw in plants:
+            ok, detail = _refresh(**kw)
+            if not ok and must in detail:
+                out.append(f"{name} -> RED: {detail}")
+            else:
+                green = True
+                out.append(f"{name} -> " + ("GREEN" if ok else
+                           f"RED FOR THE WRONG REASON (nothing says {must!r}): {detail}"))
+        return green, " ‖ ".join(out)
+
+    prove("F-BR-6", "REFRESH IDEMPOTENCE — the 16:00 refresh over unchanged data, and never "
+                    "a comparison of nothing with nothing",
+          _break, lambda: _refresh(tamper=False))
 
 
 # ══════════════════════════════════════════════════════ F-BR-7 · R1 FORMAT
@@ -756,6 +818,15 @@ def f_br_10() -> None:
 # It writes into a throwaway CAL_DIR so it never lands a file in the real lane.
 
 _VIEW = None
+
+
+def _pristine_view() -> dict:
+    """ONE real view for the fixtures that only READ it (F-BR-6's break leg, F-BR-11,
+    F-BR-15). Whoever changes a field puts it back, or works on a copy."""
+    global _VIEW
+    if _VIEW is None:
+        _VIEW = OD.build_view(log=lambda *a, **k: None)
+    return _VIEW
 
 
 def _view_with_null_lis() -> dict:
@@ -2130,9 +2201,9 @@ def _range_decision_side(mod, view: dict) -> dict[str, str]:
     page = mod.render_html(view, "0000-00-00", PE.canon_sha()).split("<footer>")[0]
     for part in re.split(r"<h2>", page)[1:]:
         title = part.split("</h2>")[0]
-        if title.lower().startswith("tide tables"):
+        if title.lower().startswith(SEC_TIDE.lower()):
             continue
-        if title.lower().startswith("the board"):
+        if title.lower().startswith(SEC_BOARD.lower()):    # 'The Board' until OR-1 STEP F
             part, n_cells = re.subn(r"<td class='rng'>.*?</td>", "", part, flags=re.S)
             out["__range_cells__"] = str(n_cells)
         out[f"the rendered section '{title[:40]}'"] = part
@@ -2369,11 +2440,11 @@ def f_br_14() -> None:
             bad.append(f"{unruled} read 'ruled': True — they are the contract's [VETO] defaults "
                        f"and no ruling is on record")
         if HTML is not None:
-            veto = _sec(HTML, "Appendix")
+            veto = _sec(HTML, SEC_COLOPHON)       # the appendix is its <h3> since STEP F
             gone = [k for k in ("RANGE_LENS", "RANGE_WATCH_ATR") if f"<code>{k}</code>" not in veto]
             if gone:
                 bad.append(f"artifact set {DATE}: the rendered [VETO] appendix does not list {gone}")
-            if not _sec(HTML, "Tide Tables") or "EDGE WATCH" not in _sec(HTML, "Tide Tables"):
+            if not _sec(HTML, SEC_TIDE) or "EDGE WATCH" not in _sec(HTML, SEC_TIDE):
                 bad.append(f"artifact set {DATE}: no Tide Tables section carrying EDGE WATCH")
         if OD.REGISTER["RANGE_WINDOW_BARS"]["value"] != OD.RNG.V2_WINDOW_BARS:
             bad.append("REGISTER['RANGE_WINDOW_BARS'] is not the machine's V2_WINDOW_BARS")
@@ -2418,6 +2489,530 @@ def f_br_14() -> None:
     prove("F-BR-14", "THE RANGE LAYER RENDERS, NEVER RULES — posture_engine.py byte-unchanged; "
                      "the range object in render + tape only, never in a gate path; a planted "
                      "gate read must go red",
+          _break, _real)
+
+
+# ═════════════ F-BR-15 · THE DAILY ORACLE — typeset, semantics untouched (OR-1 STEP F)
+#
+# WHAT THIS GUARDS. STEP F re-set the page as a newspaper: "semantics untouched,
+# template only". The contract names three properties and this fixture holds all
+# three on the edition under test — EVERY mantle strip has its caption, verbatim; the
+# EIGHT sections are present in the operator's order and nothing else is an <h2>; the
+# Colophon carries the DISPLAY-ONLY fragment — and then the things a typesetting can
+# break without any number moving:
+#   · THE INKS. Paper, ink and ONE red, the serif stack, no remnant of the dark page,
+#     no theme switch; and the red under an ALARM selector only (the band, WIRE DOWN,
+#     STALE TRIGGER, the range layer's PENDING). A red posture word is an alarm that
+#     cries every morning. The Spaghetti's hues are data and stay OUT of the red band.
+#   · THE BAND. "LATE EDITION — wire stale since <as-of>" directly under the masthead
+#     WHEN AND ONLY WHEN A2-7's rule fires. Driven, not assumed: one view rendered with
+#     an as-of five minutes INSIDE the limit and five minutes PAST it. And the phrase
+#     nowhere else in the page's text: the on-demand wrapper reads "banner UP" off it
+#     (oracle_wrapper BANNER_MARKERS), so a caption or a [VETO] source that spelt it
+#     would raise a false alarm in the log every day.
+#   · NO WALL CLOCK in the Front Page or The Watch. F-BR-6 renders twice a few
+#     milliseconds apart and cannot see a stamp with minute resolution; here the
+#     module's clock is pushed 400 days on and both sections must not move a byte.
+#   · THE MASTHEAD. The contract's ears; 'Refresh Edition' for a refresh slot, 'Morning
+#     Edition' otherwise; an un-numbered render says 'No. —'; render_html still takes
+#     (view, date_str, canon_sha) — the wrapper's daily self-check calls it that way —
+#     and run() is what numbers an edition.
+#   · THE HEADLINE. "Business possible" is earned by a FRESH trigger only. The posture
+#     engine's own register calls TRIGGERED without its age "MISLEADING on a Board whose
+#     word the operator reads as 'the entry alert is live now'", and the headline is
+#     read before any row: on the day this was built all five TRIGGERED rows were STALE
+#     (19 to 212 bars), and the first draft of the headline called them business.
+#   · THE EDITION COUNT. Dates on the TAPE, this edition's included: robust to a render
+#     leaving briefs/oracle (the operator moved 2026-09-21's to his Desktop).
+#   · THE TWO ORGANS WITH NO SECTION OF THEIR OWN are not lost: the Spaghetti is an
+#     <h3> inside The Watch, the [VETO] appendix an <h3> inside the Colophon.
+#   · THE STRIP'S BAR COUNT IS TYPED ONCE: REGISTER['MANTLE_BARS']. The caption below
+#     is COPIED from the queue file, number and all — a page that prints whatever the
+#     module under test says proves nothing — and the register must agree with it.
+#
+# CONSEQUENCE, stated (the F-BR-16 rule, same reason): this suite audits the NEWEST
+# artifact set on disk. An edition printed BEFORE STEP F has the old headings, no
+# caption and the dark inks, so it is RED here — and in F-BR-14's appendix lookup,
+# which now reads the Colophon — until one edition is printed by the new template.
+# On purpose: a green here about an old page would be a statement about another page.
+#
+# WHAT IT DOES NOT PROVE: that no number moved. That is F-BR-1..14 staying green on a
+# fresh render, and the block-by-block old-template/new-template comparison in the
+# build document (scratchpad semantic_diff.py); nor that the page is handsome.
+
+TS_CAPTION = ("rows = threads, rod 5000 top → hem 9 bottom · columns = last 96 bars · "
+              "hue = thread above/below price in ATR · dark pinch = knot · hole = unwoven")
+TS_PAPER, TS_INK, TS_RED = "#F4ECD8", "#1A1A1A", "#B3261E"
+TS_SERIF = '"Iowan Old Style", Palatino, Georgia, serif'
+TS_TITLE = "THE DAILY ORACLE"
+TS_EAR_LEFT = re.compile(r"^Vol\. I · No\. (\d+|—)$")
+TS_EAR_RIGHT = re.compile(r"^Buenos Aires · (\d{4}-\d{2}-\d{2}) · (Morning|Refresh) Edition · "
+                          r"Price: one toll$")
+TS_BAND = "LATE EDITION"
+TS_BAND_HEAD = "LATE EDITION — wire stale since {as_of}"
+TS_BAND_DETAIL = "The top-up may not have run"
+TS_FRAGMENT = "DISPLAY-ONLY"
+# every colour the pre-STEP-F page typed: its style block, its SVG, its stale band
+TS_DARK_REMNANTS = ("#14120f", "#e9dcc3", "#8a7f72", "#2b2620", "#55949b", "#c67139",
+                    "#a3b581", "#181512", "#0e0c0a", "#5b5148", "rgba(198,113,57")
+TS_ALARM_CLASSES = (".stale", ".pend", ".wire")
+TS_RED_HUES = (20, 340)          # a hue below 20 or above 340 reads as red on paper
+TS_MARGIN_MS = 5 * 60_000        # how far inside / past A2-7's limit the band is driven
+TS_CLOCK_SHIFT_DAYS = 400
+_TS_CANVAS = re.compile(r'<canvas[^>]*data-payload="([^"]+)"[^>]*>')
+
+
+def _page_text(fragment: str) -> str:
+    """What the operator READS: style, script and comments out, tags out, entities
+    back, whitespace collapsed (the wrapper's banner_state reads a page the same way)."""
+    import html as _h
+    t = re.sub(r"(?is)<(style|script)\b.*?</\1\s*>|<!--.*?-->", " ", fragment)
+    return re.sub(r"\s+", " ", _h.unescape(re.sub(r"(?s)<[^>]+>", " ", t))).strip()
+
+
+def _ts_static(doc: str, date: str | None) -> tuple[list[str], dict]:
+    """The properties of ONE rendered page."""
+    bad: list[str] = []
+    # ── the eight sections, bare, in the contract's order ─────────────────────
+    heads = re.findall(r"(?s)<h2\b([^>]*)>(.*?)</h2>", doc)
+    dressed = [t for a, t in heads if a.strip()]
+    if dressed:
+        bad.append(f"sections: {len(dressed)} <h2> carry an attribute (first {dressed[0][:30]!r}) "
+                   f"— every selector splits the page on the literal '<h2>'")
+    titles = [_page_text(t) for _a, t in heads]
+    if len(titles) != len(SECTIONS):
+        bad.append(f"sections: {len(titles)} <h2> heading(s) on the page, want exactly the "
+                   f"contract's {len(SECTIONS)}: {[t[:24] for t in titles]}")
+    for i, want in enumerate(SECTIONS):
+        if i < len(titles) and not titles[i].lower().startswith(want.lower()):
+            bad.append(f"section order: heading {i + 1} reads {titles[i][:40]!r}; the contract's "
+                       f"order puts {want!r} there")
+    # ── every mantle strip carries the caption ───────────────────────────────
+    canv = list(_TS_CANVAS.finditer(doc))
+    if not canv:
+        bad.append("caption: no mantle strip on the page — nothing to caption; fail closed")
+    for k, c in enumerate(canv):
+        end = canv[k + 1].start() if k + 1 < len(canv) else len(doc)
+        region = re.split(r"<h[23]\b", doc[c.end():end])[0]
+        n = _page_text(region).count(TS_CAPTION)
+        if n != 1:
+            bad.append(f"caption: the strip {c.group(1)} carries the contract's caption {n} "
+                       f"time(s), want exactly 1")
+    # ── the colophon, and the two organs with no section of their own ─────────
+    col = _sec(doc, SEC_COLOPHON)
+    foot = re.search(r"(?s)<footer>(.*?)</footer>", col)
+    if not foot:
+        bad.append("colophon: the <footer> is not inside the Colophon section")
+    else:
+        ftxt = _page_text(foot.group(1))
+        if TS_FRAGMENT not in ftxt:
+            bad.append(f"colophon: the {TS_FRAGMENT} fragment is missing from the Colophon's "
+                       f"provenance block")
+        if "as-of bar" not in ftxt:
+            bad.append("colophon: the as-of stamp is missing from the provenance block")
+    if not re.search(r"<h3>\s*Appendix", col):
+        bad.append("colophon: the [VETO] appendix sub-block (<h3>Appendix) is missing — it has "
+                   "no section of its own in the eight and must not be lost")
+    if not re.search(r"<h3>\s*Spaghetti", _sec(doc, SEC_WATCH)) or "<svg" not in _sec(doc, SEC_WATCH):
+        bad.append("the watch: the Spaghetti sub-block (<h3>Spaghetti + its <svg>) is missing — "
+                   "it has no section of its own in the eight and must not be lost")
+    # ── the inks ─────────────────────────────────────────────────────────────
+    m = re.search(r"(?s)<style>(.*?)</style>", doc)
+    style = m.group(1) if m else ""
+    if not style:
+        bad.append("inks: no <style> block — fail closed")
+    for name, val in (("paper", TS_PAPER), ("ink", TS_INK), ("red", TS_RED)):
+        if val.lower() not in style.lower():
+            bad.append(f"inks: the {name} {val} is not in the style block")
+    if TS_SERIF not in style:
+        bad.append(f"inks: the serif stack {TS_SERIF} is not in the style block")
+    body = re.sub(r"(?is)<script\b.*?</script\s*>", " ", doc).lower()
+    left = [c for c in TS_DARK_REMNANTS if c in body]
+    if left:
+        bad.append(f"inks: dark-theme remnant colour(s) still on the page: {left}")
+    if re.search(r"prefers-color-scheme|\bdark\b", style, re.I):
+        bad.append("inks: the style block names a dark scheme or a theme switch — light paper "
+                   "only [D-7a]")
+    for sel, decl in re.findall(r"([^{}]+)\{([^{}]*)\}", re.sub(r"(?s)/\*.*?\*/", " ", style)):
+        if ("var(--red)" in decl or TS_RED.lower() in decl.lower()) and sel.strip() != ":root":
+            stray = [s.strip() for s in sel.split(",")
+                     if not any(a in s for a in TS_ALARM_CLASSES)]
+            if stray:
+                bad.append(f"inks: the alarm red is set on {stray}, which is no alarm — red "
+                           f"belongs to {list(TS_ALARM_CLASSES)} only")
+    inline = re.findall(r'style="[^"]*(?:var\(--red\)|' + re.escape(TS_RED) + r')', body, re.I)
+    if inline:
+        bad.append(f"inks: the alarm red is typed inline {len(inline)} time(s)")
+    hues = sorted({int(h) for h in re.findall(r"hsl\((\d+),", body)})
+    hot = [h for h in hues if h < TS_RED_HUES[0] or h > TS_RED_HUES[1]]
+    if hot:
+        bad.append(f"inks: Spaghetti hue(s) {hot} fall inside the red band — red is the alarm ink")
+    # ── the masthead ─────────────────────────────────────────────────────────
+    head = doc.split("<h2>")[0]
+    if f"<h1>{TS_TITLE}</h1>" not in head:
+        bad.append(f"masthead: no <h1>{TS_TITLE}</h1> above the first section")
+    ears = {k: _page_text(v) for k, v in
+            re.findall(r'(?s)<div class="ear (ear-[lr])">(.*?)</div>', head)}
+    ml = TS_EAR_LEFT.match(ears.get("ear-l", ""))
+    mr = TS_EAR_RIGHT.match(ears.get("ear-r", ""))
+    if not ml:
+        bad.append(f"masthead: the left ear reads {ears.get('ear-l')!r}, not 'Vol. I · No. <n>'")
+    if not mr:
+        bad.append(f"masthead: the right ear reads {ears.get('ear-r')!r}, not 'Buenos Aires · "
+                   f"<date> · <Morning|Refresh> Edition · Price: one toll'")
+    elif date is not None and mr.group(1) != date:
+        bad.append(f"masthead: the right ear is dated {mr.group(1)}, the edition is {date}")
+    # ── the band's phrase, only ever inside the band ─────────────────────────
+    band = re.search(r'(?s)<div class="stale">(.*?)</div>', doc)
+    n_phrase = _page_text(doc).count(TS_BAND)
+    if band is None and n_phrase:
+        bad.append(f"late edition: {TS_BAND!r} is in the page's text {n_phrase} time(s) with no "
+                   f"band up — the wrapper would log a false 'banner UP'")
+    if band is not None:
+        if n_phrase != 1 or TS_BAND not in _page_text(band.group(1)):
+            bad.append(f"late edition: a band is up and {TS_BAND!r} is in the page's text "
+                       f"{n_phrase} time(s), want once, inside the band")
+        if not re.search(r'</header>\s*<div class="stale">', head):
+            bad.append("late edition: the band is not directly under the masthead")
+    return bad, {"sections": len(titles), "strips": len(canv), "hues": hues,
+                 "edition": ml.group(1) if ml else None, "name": mr.group(2) if mr else None,
+                 "band": band is not None}
+
+
+def _ts_band(doc: str) -> str | None:
+    m = re.search(r'(?s)<div class="stale">(.*?)</div>', doc)
+    return None if m is None else _page_text(m.group(1))
+
+
+def _ts_renders() -> dict:
+    """ONE view, rendered five ways. The stale and fresh as-ofs straddle A2-7's limit
+    by TS_MARGIN_MS; the limit is recomputed HERE from the two module constants, so a
+    banner that fires on some other rule is caught, not mirrored."""
+    from datetime import datetime, timedelta, timezone
+    view = _pristine_view()
+    canon = PE.canon_sha()
+    limit = OD.STALE_LENS_PERIODS * OD.LENS_MS[view["lens"]]
+    now_ms = int(datetime.now(timezone.utc).timestamp() * 1000)
+    fresh = {**view, "as_of_ms": now_ms - limit + TS_MARGIN_MS}
+    stale = {**view, "as_of_ms": now_ms - limit - TS_MARGIN_MS}
+    out = {"limit_h": limit / 3_600_000,
+           "stale_as_of": datetime.fromtimestamp(stale["as_of_ms"] / 1000, timezone.utc)
+                                  .strftime("%Y-%m-%dT%H:%MZ"),
+           "fresh": OD.render_html(fresh, DATE, canon),
+           "stale": OD.render_html(stale, DATE, canon),
+           "plain": OD.render_html(view, DATE, canon),
+           "numbered": OD.render_html(view, DATE, canon, edition_no=7, slot="on-demand-refresh")}
+    real_dt = OD.datetime
+
+    class _Shifted(real_dt):                       # the module's clock, 400 days on
+        @classmethod
+        def now(cls, tz=None):
+            return real_dt.now(tz) + timedelta(days=TS_CLOCK_SHIFT_DAYS)
+    try:
+        OD.datetime = _Shifted
+        out["shifted"] = OD.render_html(view, DATE, canon)
+    finally:
+        OD.datetime = real_dt
+    return out
+
+
+def _ts_live(renders: dict) -> tuple[list[str], dict]:
+    bad: list[str] = []
+    fresh, stale = _ts_band(renders["fresh"]), _ts_band(renders["stale"])
+    if fresh is not None or TS_BAND in _page_text(renders["fresh"]):
+        bad.append(f"late edition: the band prints on a wire {TS_MARGIN_MS // 60_000} min INSIDE "
+                   f"the {renders['limit_h']:.1f}h limit — it must print only when the rule fires")
+    want = TS_BAND_HEAD.format(as_of=renders["stale_as_of"])
+    if stale is None:
+        bad.append(f"late edition: no band on a wire {TS_MARGIN_MS // 60_000} min PAST the "
+                   f"{renders['limit_h']:.1f}h limit — the rule fired and the page is silent")
+    else:
+        if not stale.startswith(want):
+            bad.append(f"late edition: the band opens {stale[:60]!r}, not {want!r}")
+        if TS_BAND_DETAIL not in stale:
+            bad.append("late edition: A2-7's detail sentence no longer follows the opening")
+        sb, _x = _ts_static(renders["stale"], DATE)
+        bad += [b for b in sb if b.startswith("late edition")]
+    for name in (SEC_BOARD, SEC_WATCH):
+        a, b = _sec(renders["plain"], name), _sec(renders["shifted"], name)
+        if not a or not b:
+            bad.append(f"wall clock: no {name!r} section to compare — fail closed")
+        elif a != b:
+            bad.append(f"wall clock: {name!r} differs ({len(a):,} B vs {len(b):,} B) when the "
+                       f"module's clock is pushed {TS_CLOCK_SHIFT_DAYS} days on — something "
+                       f"wall-clock is typeset into it")
+    _b, plain = _ts_static(renders["plain"], DATE)
+    _b, numbered = _ts_static(renders["numbered"], DATE)
+    if (plain["edition"], plain["name"]) != ("—", "Morning"):
+        bad.append(f"masthead: a render nobody numbered reads No. {plain['edition']} · "
+                   f"{plain['name']} Edition, want 'No. —' and 'Morning Edition'")
+    if (numbered["edition"], numbered["name"]) != ("7", "Refresh"):
+        bad.append(f"masthead: edition_no=7, slot='on-demand-refresh' reads No. "
+                   f"{numbered['edition']} · {numbered['name']} Edition, want No. 7 · Refresh")
+    return bad, {"stale_as_of": renders["stale_as_of"], "limit_h": renders["limit_h"]}
+
+
+def _ts_edition_count(counter=None) -> list[str]:
+    """OD.edition_count against a planted tape directory, briefs/oracle EMPTY: the day
+    the operator moved the render away."""
+    counter = OD.edition_count if counter is None else counter
+    bad = []
+    saved = (OD.TAPE_DIR, OD.OUT_DIR)
+    try:
+        with tempfile.TemporaryDirectory(prefix="f-br-15-") as td:
+            OD.TAPE_DIR, OD.OUT_DIR = Path(td) / "tape", Path(td) / "briefs"
+            got = counter("2030-01-03")
+            if got != 1:
+                bad.append(f"edition count: {got} with no tape directory at all, want 1")
+            OD.TAPE_DIR.mkdir()
+            OD.OUT_DIR.mkdir()
+            for stem in ("oracle_tape_2030-01-01", "oracle_tape_2030-01-02", "oracle_tape_notadate"):
+                (OD.TAPE_DIR / f"{stem}.parquet").write_bytes(b"")
+            for date, want in (("2030-01-03", 3), ("2030-01-02", 2)):
+                got = counter(date)
+                if got != want:
+                    bad.append(f"edition count: {got} for an edition dated {date} over tapes of "
+                               f"2030-01-01 and 2030-01-02 (+ one misnamed file) and an EMPTY "
+                               f"briefs/oracle, want {want}")
+    finally:
+        OD.TAPE_DIR, OD.OUT_DIR = saved
+    return bad
+
+
+def _ts_headline(fn=None) -> list[str]:
+    """oracle_daily.front_page over four SYNTHETIC boards (no cache, no clock): which
+    words open the headline, and which clause each symbol lands in."""
+    from types import SimpleNamespace as NS
+    fn = OD.front_page if fn is None else fn
+
+    def asset(sym, word, age=None, stale=False):
+        wins = [] if word in ("STALKING", "DEAD") else [
+            NS(trigger_i=None if age is None else 1, trigger_age_bars=age, trigger_stale=stale)]
+        return {"symbol": sym, "card": None,
+                "station": NS(board_word=word, open_windows=wins)}
+    # names no contract has, and no <X>USDT string: F-BR-16 hunts second symbol lists
+    fresh, stale = asset("AAA", "TRIGGERED", 2), asset("BBB", "TRIGGERED", 40, True)
+    armed, idle, dead = asset("CCC", "ARMED"), asset("DDD", "STALKING"), asset("EEE", "DEAD")
+    cases = (
+        ("a fresh trigger, a stale one, an armed window", [fresh, stale, armed, idle],
+         "Business possible:", ("AAA triggered", "BBB triggered but stale", "CCC armed")),
+        ("ONLY a stale trigger and an armed window", [stale, armed, idle],
+         "No fresh trigger on the roster:", ("BBB triggered but stale", "CCC armed")),
+        ("only an armed window", [armed, idle, dead],
+         "No fresh trigger on the roster:", ("CCC armed",)),
+        ("nothing but STALKING and DEAD", [idle, dead], "No business possible today", ()),
+    )
+    bad = []
+    for label, assets, opens, clauses in cases:
+        h = fn({"assets": assets, "lens": "4h", "as_of_ms": 0})["headline"]
+        if not h.startswith(opens):
+            bad.append(f"headline: over {label} it opens {h[:50]!r}, want {opens!r} — only a "
+                       f"FRESH trigger earns 'Business possible'")
+        gone = [c for c in clauses if c not in h]
+        if gone:
+            bad.append(f"headline: over {label} it does not say {gone}: {h!r}")
+    return bad
+
+
+def _ts_source(src: str | None = None) -> list[str]:
+    """Scans CODE, not prose: the bar count typed once, the signature the wrapper calls,
+    and run() numbering the edition."""
+    src = (ROOT / "scripts" / "oracle_daily.py").read_text(encoding="utf-8") if src is None else src
+    tree = ast.parse(src)
+    bad = []
+    for n in ast.walk(tree):
+        if isinstance(n, ast.Constant) and isinstance(n.value, str) and re.search(
+                r"columns = last \d+ bars", n.value):
+            bad.append(f"caption: oracle_daily.py:{n.lineno} types the strip's bar count inside "
+                       f"the caption — a second literal beside REGISTER['MANTLE_BARS']")
+    fns = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+    rh = fns.get("render_html")
+    if rh is None:
+        bad.append("signature: render_html() not found — fail closed")
+    else:
+        pos = [a.arg for a in (*rh.args.posonlyargs, *rh.args.args)]
+        kwo = [a.arg for a in rh.args.kwonlyargs]
+        if pos != ["view", "date_str", "canon_sha"] or sorted(kwo) != ["edition_no", "slot"] \
+                or any(d is None for d in rh.args.kw_defaults):
+            bad.append(f"signature: render_html takes {pos} + keyword-only {kwo}; the fixtures "
+                       f"and the wrapper's daily self-check call render_html(view, date_str, "
+                       f"canon_sha), and the masthead's two are optional keywords")
+    run = fns.get("run")
+    calls = [n for n in ast.walk(run) if isinstance(n, ast.Call)
+             and isinstance(n.func, ast.Name)] if run is not None else []
+    if not any(c.func.id == "edition_count" for c in calls):
+        bad.append("run(): never calls edition_count() — the edition is not numbered")
+    if not any(c.func.id == "render_html" and {"edition_no", "slot"} <= {k.arg for k in c.keywords}
+               for c in calls):
+        bad.append("run(): does not hand render_html BOTH edition_no and slot — a real edition "
+                   "would go to press as 'No. —' or as the wrong edition")
+    return bad
+
+
+_TS_RENDERS = None
+
+
+def _typeset_judge(html_doc: str | None = None, renders: dict | None = None,
+                   src: str | None = None, counter=None, headliner=None) -> tuple[list[str], dict]:
+    global _TS_RENDERS
+    if _TS_RENDERS is None:
+        _TS_RENDERS = _ts_renders()
+    bad, page = _ts_static(HTML if html_doc is None else html_doc, DATE)
+    live_bad, live = _ts_live({**_TS_RENDERS, **(renders or {})})
+    bad = bad + live_bad + _ts_edition_count(counter) + _ts_source(src) + _ts_headline(headliner)
+    m = re.search(r"columns = last (\d+) bars", TS_CAPTION)
+    bars = OD.REGISTER["MANTLE_BARS"]["value"]
+    if int(m.group(1)) != bars:
+        bad.append(f"caption: the contract's caption says {m.group(1)} bars and "
+                   f"REGISTER['MANTLE_BARS'] is {bars} — the caption and the strip disagree")
+    if (max(OD.THREADS), min(OD.THREADS)) != (5000, 9):
+        bad.append(f"caption: the caption names rod 5000 and hem 9; the threads run "
+                   f"{max(OD.THREADS)}..{min(OD.THREADS)}")
+    if OD.mantle_caption() != TS_CAPTION:
+        bad.append("caption: oracle_daily.mantle_caption() is not the contract's sentence")
+    if tuple(OD.REGISTER["SECTIONS"]["value"]) != SECTIONS:
+        bad.append("sections: REGISTER['SECTIONS'] is not the contract's eight, in order")
+    for k in ("EDITION_COUNT", "FRONT_PAGE_HEADLINE"):
+        if OD.REGISTER[k]["ruled"]:
+            bad.append(f"{k} reads 'ruled': True — it is this build's reading and no ruling is "
+                       f"on record")
+        if f"<code>{k}</code>" not in _sec(HTML if html_doc is None else html_doc, SEC_COLOPHON):
+            bad.append(f"colophon: the rendered [VETO] appendix does not list {k}")
+    return bad, {**page, **live}
+
+
+def f_br_15() -> None:
+    src = (ROOT / "scripts" / "oracle_daily.py").read_text(encoding="utf-8")
+    import html as _h
+    cap_html = _h.escape(TS_CAPTION, quote=False)
+
+    def _ensure():
+        global _TS_RENDERS
+        if _TS_RENDERS is None:
+            _TS_RENDERS = _ts_renders()
+        return _TS_RENDERS
+
+    # THE PAGE THE RENDER PLANTS ARE CUT FROM. The edition under test, if it is a STEP F
+    # page; otherwise a fresh render by the current code. An edition printed before
+    # STEP F has no caption to remove and no eight sections to swap, and a plant that
+    # cannot be planted voids the fixture for a reason that is not the code's (the
+    # F-BR-16 rule). The REAL leg still audits the edition under test, and is red on it.
+    step_f_page = cap_html in HTML and len(re.split(r"(?=<h2>)", HTML)) == len(SECTIONS) + 1
+    base = HTML if step_f_page else _ensure()["plain"]
+    cut_from = f"artifact set {DATE}" if step_f_page else "a fresh render — the artifact predates STEP F"
+    no_caption, n_cap = (base.replace(cap_html, "", 1), base.count(cap_html))
+    parts = re.split(r"(?=<h2>)", base)            # [head, sec1 .. sec8], the <h2> kept
+    swapped = "".join(parts[:2] + [parts[3], parts[2]] + parts[4:]) if len(parts) == 9 else None
+    col = _sec(base, SEC_COLOPHON)
+    foot = re.search(r"(?s)<footer>.*?</footer>", col)
+    no_fragment = (base.replace(foot.group(0), foot.group(0).replace(TS_FRAGMENT, ""), 1)
+                   if foot and TS_FRAGMENT in foot.group(0) else None)
+    dark = base.replace("<style>", "<style>.chip.defer{color:#a3b581}", 1)
+    red_word = base.replace("<style>", "<style>td.post.w-dead{color:var(--red)}", 1)
+    loud = base.replace(cap_html, cap_html + " · LATE EDITION strips are re-cut hourly", 1)
+    kw_anchor = "edition_no=edition_no, slot=slot"
+    cap_anchor = "columns = last {bars} bars"
+
+    def _stamped(r):                                # a wall-clock stamp set into the Front Page
+        from datetime import datetime
+        return {"shifted": r["shifted"].replace('<p class="deck">',
+                '<p class="deck">printed ' + datetime.now().isoformat() + " · ", 1)}
+
+    # (name, the finding it MUST produce, how it is planted). Judged one at a time, the
+    # F-BR-13 idiom: a red plant must not carry a green one through, and a plant red for
+    # some OTHER reason has not shown its own guard working. The first three are the
+    # contract's own break legs.
+    plants = (
+        ("RENDER PLANT, the contract's (the caption removed from ONE strip)",
+         "carries the contract's caption 0 time(s)", lambda: dict(html_doc=no_caption) if n_cap else None),
+        ("RENDER PLANT, the contract's (two sections swapped: The Docket and The Watch)",
+         "section order", lambda: dict(html_doc=swapped) if swapped else None),
+        ("RENDER PLANT, the contract's (DISPLAY-ONLY stripped from the colophon)",
+         "fragment is missing from the Colophon", lambda: dict(html_doc=no_fragment) if no_fragment else None),
+        ("RENDER PLANT (a dark-theme sage left in the style block)",
+         "dark-theme remnant", lambda: dict(html_doc=dark)),
+        ("RENDER PLANT (the posture word DEAD set in the alarm red)",
+         "which is no alarm", lambda: dict(html_doc=red_word)),
+        ("RENDER PLANT (the band's phrase spelt under a strip, no band up)",
+         "false 'banner UP'", lambda: dict(html_doc=loud) if _ts_band(base) is None else
+         dict(html_doc=loud.replace(re.search(r'(?s)<div class="stale">.*?</div>', loud).group(0), "", 1))),
+        ("LIVE PLANT (the band dropped from a render past the limit)",
+         "the rule fired and the page is silent",
+         lambda: dict(renders={"stale": re.sub(r'(?s)<div class="stale">.*?</div>', "",
+                                               _ensure()["stale"], count=1)})),
+        ("LIVE PLANT (the band printed on a wire inside the limit)",
+         "INSIDE the", lambda: dict(renders={"fresh": _ensure()["stale"]})),
+        ("LIVE PLANT (a wall-clock stamp typeset into the Front Page)",
+         "wall clock", lambda: dict(renders=_stamped(_ensure()))),
+        ("SOURCE PLANT (run() stops handing render_html the edition number and the slot)",
+         "does not hand render_html BOTH",
+         lambda: dict(src=src.replace(", " + kw_anchor, "", 1)) if src.count(", " + kw_anchor) == 1 else None),
+        ("SOURCE PLANT (the strip's bar count typed into the caption, a second literal)",
+         "a second literal", lambda: dict(src=src.replace(cap_anchor, "columns = last 96 bars", 1))
+         if src.count(cap_anchor) == 1 else None),
+        ("HEADLINE PLANT (this build's first draft: every TRIGGERED word is business, stale or not)",
+         "only a FRESH trigger earns",
+         lambda: dict(headliner=lambda v: {"headline": "Business possible: " + ", ".join(
+             a["symbol"].replace("USDT", "") + " triggered" for a in v["assets"]
+             if a["station"].board_word == "TRIGGERED")} if any(
+             a["station"].board_word == "TRIGGERED" for a in v["assets"]) else OD.front_page(v))),
+        ("COUNTER PLANT (editions counted from briefs/oracle, the render the operator moved)",
+         "edition count",
+         lambda: dict(counter=lambda d: len({p.stem for p in OD.OUT_DIR.glob("oracle_*.html")} | {d}))),
+    )
+
+    def _break() -> tuple[bool, str]:
+        green, out = False, []
+        for name, must, plant in plants:
+            kw = plant()
+            if kw is None:
+                green = True
+                out.append(f"{name} -> GREEN: the plant could not be planted")
+                continue
+            bad, _x = _typeset_judge(**kw)
+            hits = [b for b in bad if must in b]
+            if hits:
+                rest = [b for b in bad if must not in b]
+                out.append(f"{name} -> RED: {hits[0]}"
+                           + (f" [and {len(rest)} other finding(s), first: {rest[0]}]" if rest else ""))
+            else:
+                green = True
+                out.append(f"{name} -> " + ("GREEN" if not bad else
+                           f"RED FOR THE WRONG REASON (no finding says {must!r}; first: {bad[0]})"))
+        return green, f"[render plants cut from {cut_from}] " + " ‖ ".join(out)
+
+    def _real() -> tuple[bool, str]:
+        bad, x = _typeset_judge()
+        if bad:
+            return False, "; ".join(bad[:6]) + (f" (+{len(bad) - 6} more)" if len(bad) > 6 else "")
+        return True, (
+            f"artifact set {DATE}: exactly {x['sections']} bare <h2> sections in the contract's "
+            f"order ({' · '.join(SECTIONS)}); each of {x['strips']} mantle strips carries the "
+            f"contract's caption once, verbatim, its bar count = REGISTER['MANTLE_BARS'] = "
+            f"{OD.REGISTER['MANTLE_BARS']['value']} and typed nowhere else in oracle_daily.py; the "
+            f"<footer> sits inside the Colophon and carries {TS_FRAGMENT} and the as-of; the "
+            f"Spaghetti is an <h3> of The Watch and the [VETO] appendix an <h3> of the Colophon, "
+            f"listing EDITION_COUNT and FRONT_PAGE_HEADLINE ('ruled': False). Inks: {TS_PAPER}, "
+            f"{TS_INK}, {TS_RED} and the serif stack in the style block, none of the "
+            f"{len(TS_DARK_REMNANTS)} pre-STEP-F colours on the page, no theme switch, the red "
+            f"only under {list(TS_ALARM_CLASSES)}, Spaghetti hues {x['hues'][0]}..{x['hues'][-1]} "
+            f"clear of the red band. Masthead: '{TS_TITLE}', left ear No. {x['edition']}, right "
+            f"ear {DATE} · {x['name']} Edition; an un-numbered render says 'No. —' · Morning, "
+            f"edition_no=7 + a refresh slot says No. 7 · Refresh; render_html(view, date_str, "
+            f"canon_sha) still stands; over four synthetic boards the headline opens 'Business "
+            f"possible' for a FRESH trigger only ('No fresh trigger on the roster' over stale or "
+            f"armed rows, 'No business possible today' over none); run() numbers the edition from the TAPE's dates "
+            f"(3 of 2 tapes + today, 2 on a reprint, 1 with no directory; a misnamed file and an "
+            f"empty briefs/oracle change nothing). LATE EDITION: one view rendered "
+            f"{TS_MARGIN_MS // 60_000} min inside the {x['limit_h']:.1f}h limit -> no band and the "
+            f"phrase nowhere in the text; {TS_MARGIN_MS // 60_000} min past it -> the band directly "
+            f"under the masthead, opening 'LATE EDITION — wire stale since {x['stale_as_of']}', "
+            f"A2-7's sentence after it, the phrase exactly once. The Front Page and The Watch do "
+            f"not move a byte with the module's clock pushed {TS_CLOCK_SHIFT_DAYS} days on")
+
+    prove("F-BR-15", "THE DAILY ORACLE — eight sections in order, a caption under every strip, "
+                     "DISPLAY-ONLY in the colophon, three inks, the LATE EDITION band when and "
+                     "only when the wire is stale",
           _break, _real)
 
 
@@ -2731,7 +3326,7 @@ def main() -> int:
     print("=" * 78)
     fixtures = (f_br_1, f_br_2, f_br_3, f_br_4, f_br_5, f_br_6,
                 f_br_7, f_br_8, f_br_9, f_br_10, f_br_11, f_br_12, f_br_13, f_br_14,
-                f_br_16)
+                f_br_15, f_br_16)
     for fn in fixtures:
         try:
             fn()

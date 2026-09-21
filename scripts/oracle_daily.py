@@ -1,4 +1,6 @@
 """THE ORACLE — the daily organ. D-2 of queue BR-1 (RATIFIED operator 2026-08-16).
+Since OR-1 STEP F (2026-09-21) it goes to press as THE DAILY ORACLE: see "THE
+TYPESETTING" below. The organs and every number they print are BR-1's and OR-1's.
 
 Amendment A1-1 names the product: "Oracle" unqualified is THIS daily organ.
 The census-2B artifact is always "ORACLE GRID", fully qualified. Every
@@ -49,6 +51,27 @@ and, since OR-1 STEP E (2026-09-21), one more that is not BR-1's:
 
 and, beside the render, per run: the D-4 tape parquet and the D-7 calibration
 JSON (display-machinery distributions only, A1-4).
+
+THE TYPESETTING — OR-1 STEP F (2026-09-21), "semantics untouched, template only". The
+page is set as a newspaper, light paper only [D-7a], in the operator's eight sections
+(REGISTER['SECTIONS']), in his order:
+
+    FRONT PAGE            the BOARD (C-5) under a headline and a lead that restate
+                          its posture column and nothing else
+    THE DOCKET            the TRAP CARDS (C-6)
+    THE WATCH             the WATCH (C-7), a caption under every mantle strip, and
+                          the SPAGHETTI (C-4) as a sub-block
+    TIDE TABLES           OR-1 D, EDGE WATCH inside it
+    TELEGRAMS             the R1 ALERTS (C-9)
+    THE MARKET PAGE       OR-1 E
+    YESTERDAY'S RETURNS   the GRID FOOTER (C-8) and its disclaimer
+    COLOPHON              PROVENANCE (F-BR-8, the <footer>) and the [VETO] appendix
+                          as a sub-block
+
+No number, posture word, level, card field, R1 line, grid row, sha or note moved:
+only markup, order, headings and ink. The build document carries the block-by-block
+comparison of this template against the pre-STEP-F one over one view; F-BR-15 pins
+the sections, the captions, the colophon, the inks and the LATE EDITION band.
 
 C-0, CLOSED AT OR-1 STEP B (2026-09-21). From 2026-08-16 the D-7 logger wrote
 the LITERAL `"maturity_withheld_fraction": 0.0` for every asset on every run,
@@ -335,6 +358,128 @@ REGISTER: dict[str, dict] = {
                   "writes; load_movers() refuses a document whose top_n is not a positive "
                   "integer, and market_page() cuts each table at it. Display-only: no gate, "
                   "filter, heat, station, card or sizing reads a mover (F-MV-9).",
+    },
+    # THE TYPESETTING'S CONSTANTS (OR-1 STEP F, 2026-09-21): THE DAILY ORACLE. STEP F is
+    # "semantics untouched, template only", so every row below is read by render_html,
+    # its typesetting helpers (page_css, mantle_caption, edition_name, edition_count,
+    # front_page, staleness_banner, svg_spaghetti) and run()'s one masthead number, and
+    # by NOTHING that computes a level, a word, a card or a row of the tape. Six rows
+    # are the contract's own words and are 'ruled': True. Two are this build's reading
+    # of words the contract leaves open: 'ruled': False, so they print in the rendered
+    # [VETO] appendix and in D-7's veto_rows_awaiting_ruling until the operator rules.
+    #   ONE PHRASE MAY NOT BE SPELT IN AN UNRULED ROW'S 'source': the band's two opening
+    # words (REGISTER['LATE_EDITION']). An unruled source PRINTS in the appendix, and
+    # the on-demand wrapper reads "banner UP" off that phrase anywhere in the page's
+    # text. F-BR-15 holds the page to it: the phrase only inside the band.
+    "TYPE_PALETTE": {
+        "value": {"paper": "#F4ECD8", "ink": "#1A1A1A", "red": "#B3261E"},
+        "ruled": True,
+        "source": "OR-1 STEP F, verbatim: 'paper #F4ECD8, ink #1A1A1A, one red #B3261E for "
+                  "alarms' and 'Light paper only [D-7a]'. ONE definition: page_css() "
+                  "interpolates these three and derives the muted ink, the hairline and the "
+                  "tint from the ink by alpha, so the style block types no fourth colour. "
+                  "RED IS THE ALARM INK AND NOTHING ELSE: the late-edition band, WIRE DOWN, a "
+                  "STALE TRIGGER chip and the range layer's PENDING / UNAVAILABLE marks — "
+                  "exactly what the pre-STEP-F page set in its alarm treatment (terra AND "
+                  "bold). Direction and posture, which that page told apart by hue alone, are "
+                  "told apart in ink: long an open box, short a filled one; TRIGGERED a double "
+                  "rule, ARMED a plain one, STALKING muted, DEAD dotted. F-BR-15 reads the "
+                  "style block and goes red on the red under any other selector, on a "
+                  "dark-theme remnant and on a theme switch. NOT PAGE INKS, by design: the "
+                  "mantle strips' teal/terra displacement scale (MANTLE_JS, 'same law, same "
+                  "colours' as VIZ-4, untouched) and the Spaghetti's per-symbol hues are DATA "
+                  "encodings; the Spaghetti's hue wheel skips the red band so that an alarm "
+                  "stays the only red on the paper.",
+    },
+    "TYPE_SERIF_STACK": {
+        "value": '"Iowan Old Style", Palatino, Georgia, serif',
+        "ruled": True,
+        "source": "OR-1 STEP F, verbatim: 'serif stack \"Iowan Old Style\", Palatino, Georgia, "
+                  "serif'. The page's face. ONE EXCEPTION, stated: the Telegrams block and "
+                  "<code> are set in a typewriter face, because an R1 line is pasted into a "
+                  "machine and has to read character for character.",
+    },
+    "MASTHEAD": {
+        "value": {"title": "THE DAILY ORACLE", "volume": "Vol. I", "city": "Buenos Aires",
+                  "price": "Price: one toll"},
+        "ruled": True,
+        "source": "OR-1 STEP F, verbatim: 'MASTHEAD \"THE DAILY ORACLE\" · ears: left \"Vol. I · "
+                  "No. <edition count>\", right \"Buenos Aires · <date> · <Morning|Refresh> "
+                  "Edition · Price: one toll\"'. <date> is run()'s date_str; the edition's "
+                  "name is edition_name(slot); the count is REGISTER['EDITION_COUNT'].",
+    },
+    "SECTIONS": {
+        "value": ("Front Page", "The Docket", "The Watch", "Tide Tables", "Telegrams",
+                  "The Market Page", "Yesterday's Returns", "Colophon"),
+        "ruled": True,
+        "source": "OR-1 STEP F, the operator's eight, in his order: 'FRONT PAGE (the Board; "
+                  "headline = the day's answer to \"where is business possible today\") · THE "
+                  "DOCKET (Trap Cards) · THE WATCH (windows + mantle strips, EACH with a "
+                  "caption) · TIDE TABLES (STEP D + Edge Watch) · TELEGRAMS (R1 blocks) · THE "
+                  "MARKET PAGE (STEP E) · YESTERDAY'S RETURNS (ORACLE GRID footer) · COLOPHON "
+                  "(DISPLAY-ONLY line, payload shas, certified/not-certified lists, as-of)'. "
+                  "Every <h2> on the page is one of these and is BARE, styled through the "
+                  "element: oracle_fixtures._sec, the movers fixtures and the wrapper's daily "
+                  "self-check all split the page on the literal '<h2>' and find a section by "
+                  "how its heading STARTS. TWO ORGANS HAVE NO SECTION OF THEIR OWN IN THE "
+                  "EIGHT and are kept as <h3> sub-blocks, not lost: the Spaghetti (C-4) inside "
+                  "The Watch, and the [VETO] appendix inside the Colophon.",
+    },
+    "MANTLE_CAPTION": {
+        "value": "rows = threads, rod 5000 top → hem 9 bottom · columns = last {bars} bars · "
+                 "hue = thread above/below price in ATR · dark pinch = knot · hole = unwoven",
+        "ruled": True,
+        "source": "OR-1 STEP F, verbatim, printed under EACH mantle strip (F-BR-15). The strip's "
+                  "bar count is NOT typed a second time: mantle_caption() fills {bars} from "
+                  "REGISTER['MANTLE_BARS'], the row mantle_payload() cuts the strip by, so a "
+                  "caption cannot disagree with the strip it sits under. It replaces the "
+                  "pre-STEP-F strip legend, which said three of the same five things; the "
+                  "payload name and sha256 stay directly under the canvas (F-BR-4 reads the "
+                  "sha within 900 characters of the tag), the caption after them.",
+    },
+    "LATE_EDITION": {
+        "value": "LATE EDITION — wire stale since {as_of}",
+        "ruled": True,
+        "source": "OR-1 STEP F, verbatim: 'Staleness banner => red band under the masthead \"LATE "
+                  "EDITION — wire stale since <as-of>\"'. ONLY THE WORDS AND THE INK MOVED: "
+                  "WHEN the band prints is still A2-7's arithmetic, STALE_LENS_PERIODS lens "
+                  "periods at render time, and A2-7's detail sentence still follows the new "
+                  "opening. <as-of> is the view's as-of bar, in the dateline's own format.",
+    },
+    "EDITION_COUNT": {
+        "value": "distinct dates among tape/oracle_tape_<date>.parquet, this edition's date included",
+        "ruled": False,
+        "source": "PROPOSED by the OR-1 STEP F build 2026-09-21 — UNRULED [VETO]. The contract "
+                  "prints 'Vol. I · No. <edition count>' and does not say what is counted. "
+                  "Counted here: the DATES the Oracle has gone to press on, read off the D-4 "
+                  "tape directory (one parquet per date), with this edition's own date added "
+                  "because the page is rendered before the day's tape is written. NOT the "
+                  "renders in briefs/oracle: on 2026-09-21 the operator moved that day's render "
+                  "to his Desktop, and a count of renders would have gone backwards. A second "
+                  "run on a date already printed — the refresh, an on-demand reprint — keeps "
+                  "the day's number. Display-only: one number in the masthead.",
+    },
+    "FRONT_PAGE_HEADLINE": {
+        "value": "'Business possible' needs a FRESH trigger; then TRIGGERED-but-stale, then "
+                 "ARMED, in the Board's own order; neither word on the Board => 'No business "
+                 "possible today'",
+        "ruled": False,
+        "source": "PROPOSED by the OR-1 STEP F build 2026-09-21 — UNRULED [VETO]. The contract: "
+                  "'headline = the day's answer to \"where is business possible today\"', the "
+                  "canon's one morning question (posture_engine.CANON_QUOTE_ENUMERATION), and "
+                  "no rule for answering it. front_page() answers from the Board's POSTURE "
+                  "COLUMN alone: the symbols whose word is the canon's station 3 (an open "
+                  "window holds its entry alert), then station 2 (a window is open), in the "
+                  "Board's own order; if neither word is on the Board the headline says so. A "
+                  "STALE trigger is set apart, by the Board's own test (the row's freshest "
+                  "in-window trigger is older than posture_engine's TRIGGER_FRESH_BARS, itself "
+                  "[VETO]): that row of the register, verbatim, calls the ageless word "
+                  "\"MISLEADING on a Board whose word the operator reads as 'the entry alert is "
+                  "live now'\", and a headline is read before any row. So only a fresh trigger earns the "
+                  "words 'Business possible' (F-BR-15). It restates words and marks already "
+                  "printed in the rows beneath it: it reads no level, no ratio, no range and no "
+                  "mover, adds no judgement, and is a pure function of the view (F-BR-6 renders "
+                  "it twice and compares the bytes).",
     },
 }
 
@@ -909,6 +1054,15 @@ def _f(x, nd=6):
     return f"{x:,.{nd}g}"
 
 
+# The Spaghetti's inks (OR-1 STEP F). Hues 35..325 leave out the 35 degrees either side
+# of red; 62% saturation at 34% lightness reads on REGISTER['TYPE_PALETTE']'s paper where
+# the dark page's 55%/58% would wash out. Eighteen hues are not eighteen NAMES: the
+# legend under the panel names every line, and the panel was never the place to read a
+# single symbol off (that is the Board's job).
+SPAG_HUE_LO, SPAG_HUE_HI = 35, 325
+SPAG_SAT_LIGHT = "62%,34%"
+
+
 def svg_spaghetti(view: dict) -> str:
     """C-4. One panel. Each asset's ATR-normalised path from its LAST 89/316
     tide flip. Event-anchored, exactly as the operator's two pins name it."""
@@ -931,25 +1085,28 @@ def svg_spaghetti(view: dict) -> str:
     n_max = max(len(s) for _, s, _ in series)
     v_max = max(float(np.nanmax(np.abs(s))) for _, s, _ in series) or 1.0
     for k, (sym, seg, dirn) in enumerate(series):
-        hue = int(360 * k / max(1, len(series)))
+        # OR-1 STEP F, INK ONLY (the points are untouched): the hue wheel runs
+        # SPAG_HUE_LO..SPAG_HUE_HI and so skips the red band — red is the page's alarm
+        # ink (REGISTER['TYPE_PALETTE']) — and the lines are set dark enough for paper.
+        hue = SPAG_HUE_LO + int((SPAG_HUE_HI - SPAG_HUE_LO) * k / max(1, len(series)))
         pts = []
         for i, v in enumerate(seg):
             x = PAD + (W - 2 * PAD) * (i / max(1, n_max - 1))
             y = H / 2 - (H / 2 - PAD) * (v / v_max)
             pts.append(f"{x:.1f},{y:.1f}")
         paths.append(f'<polyline points="{" ".join(pts)}" fill="none" '
-                     f'stroke="hsl({hue},55%,58%)" stroke-width="1.6" opacity="0.85"/>')
-        legend.append(f'<span style="color:hsl({hue},55%,58%)">■</span> '
+                     f'stroke="hsl({hue},{SPAG_SAT_LIGHT})" stroke-width="1.6" opacity="0.85"/>')
+        legend.append(f'<span style="color:hsl({hue},{SPAG_SAT_LIGHT})">■</span> '
                       f'{html.escape(sym.replace("USDT",""))} '
                       f'<span class="muted">({dirn}, {len(seg)}b)</span>')
     axis = (f'<line x1="{PAD}" y1="{H/2}" x2="{W-PAD}" y2="{H/2}" '
-            f'stroke="#5b5148" stroke-dasharray="3 3"/>')
-    return (f'<svg viewBox="0 0 {W} {H}" width="100%" role="img" '
+            f'stroke="currentColor" stroke-opacity="0.5" stroke-dasharray="3 3"/>')
+    return (f'<svg class="spag" viewBox="0 0 {W} {H}" width="100%" role="img" '
             f'aria-label="ATR-normalised paths since each asset\'s last 89/316 tide flip">'
             f'{axis}{"".join(paths)}'
-            f'<text x="{PAD}" y="16" fill="#8a7f72" font-size="11">'
+            f'<text x="{PAD}" y="16" fill="currentColor" fill-opacity="0.66" font-size="11">'
             f'+{v_max:.2f} ATR</text>'
-            f'<text x="{PAD}" y="{H-6}" fill="#8a7f72" font-size="11">'
+            f'<text x="{PAD}" y="{H-6}" fill="currentColor" fill-opacity="0.66" font-size="11">'
             f'-{v_max:.2f} ATR</text></svg>'
             f'<div class="legend">{" · ".join(legend)}</div>')
 
@@ -1316,10 +1473,297 @@ only that the wire is down and why: an older day's numbers are never shown (F-MV
                      f"({e.__class__.__name__}: {e})")
 
 
-def render_html(view: dict, date_str: str, canon_sha: str) -> str:
+# ═════════════════════════════ OR-1 STEP F · THE DAILY ORACLE, the typesetting
+# The contract: "semantics untouched, template only". Everything from here to the end
+# of render_html is INK AND ORDER. The rows, cards, windows, telegrams, grid rows and
+# stamps are built exactly as they were before STEP F; what is new is a stylesheet, a
+# masthead, eight headings, one caption, and a headline that restates the Board's own
+# posture column. None of these helpers is handed, or may name, a range or a mover
+# (F-BR-14 and F-MV-9 read this file's AST and would go red), and none reads a clock:
+# the Front Page and The Watch are rendered twice and byte-compared every day (F-BR-6,
+# and the wrapper's daily self-check).
+
+# The dateline's stamp format, shared by the band and the colophon so that "<as-of>"
+# is the same string wherever the page prints it.
+AS_OF_FMT = "%Y-%m-%dT%H:%MZ"
+
+# THE STYLESHEET. Plain CSS with four placeholders, so it reads as CSS and not as an
+# f-string of doubled braces; page_css() fills them from the REGISTER. WHAT THE RULES
+# ARE FOR, since a style block carries no why of its own:
+#   · hairline column rules — `column-rule` on the lead, the Docket, the Watch, the
+#     Telegrams, The Market Page and the colophon; `td+td` rules inside every table.
+#   · small-caps section heads — on the h2 ELEMENT. An attribute on <h2> would break
+#     every selector that splits the page on the literal '<h2>'.
+#   · the drop cap — `.lead::first-letter`, a float, because `initial-letter` is not
+#     in every browser the operator may open the page with.
+#   · red — ONLY under the alarm classes: div.stale (the band), .chip.stale, .pend,
+#     .wire. F-BR-15 parses this block and goes red on the red anywhere else.
+#   · the strip's ground is a hairline hatch, not a dark plate: an unwoven hole shows
+#     the hatch, a knot stays a dark pinch, and the two cannot be confused on paper.
+#   · the one media query is a WIDTH query (the masthead stacks on a phone). There is
+#     no colour-scheme query and no second palette: light paper only [D-7a].
+PAGE_CSS = """
+:root{--paper:__PAPER__;--ink:__INK__;--red:__RED__;
+  --mut:rgba(__INK_RGB__,.66);--rule:rgba(__INK_RGB__,.32);--tint:rgba(__INK_RGB__,.06)}
+*{box-sizing:border-box}
+html,body{background:var(--paper)}
+body{margin:0;color:var(--ink);font:15px/1.5 __SERIF__;font-variant-numeric:lining-nums;
+  text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 24px 72px}
+main{overflow-x:auto}
+.masthead{border-top:1px solid var(--ink);padding-top:12px}
+.nameplate{display:grid;grid-template-columns:minmax(150px,1fr) auto minmax(150px,1fr);
+  gap:10px 22px;align-items:center}
+h1{margin:0;font-size:clamp(30px,5.2vw,62px);line-height:1;font-weight:700;
+  letter-spacing:.045em;text-align:center;white-space:nowrap}
+.ear{max-width:240px;border:1px solid var(--ink);padding:7px 10px;font-size:12px;
+  line-height:1.4;font-variant:small-caps;letter-spacing:.07em;text-align:center;
+  text-wrap:balance}
+.ear span{white-space:nowrap}
+.ear-l{justify-self:start} .ear-r{justify-self:end}
+.folio{margin-top:12px;padding:5px 6px;border-top:3px double var(--ink);
+  border-bottom:1px solid var(--ink);font-size:11.5px;letter-spacing:.09em;
+  font-variant:small-caps;text-align:center}
+div.stale{background:var(--red);color:var(--paper);padding:10px 16px;text-align:center;
+  font-size:13.5px;line-height:1.45}
+div.stale b{display:block;font-size:18px;letter-spacing:.14em;text-transform:uppercase}
+.dateline{margin:8px 0 0;padding-bottom:8px;border-bottom:1px solid var(--rule);
+  text-align:center;font-size:12px;color:var(--mut);word-break:break-word}
+h2{margin:46px 0 14px;padding:7px 0 6px;border-top:3px double var(--ink);
+  border-bottom:1px solid var(--ink);font-size:20px;font-weight:700;
+  font-variant:small-caps;letter-spacing:.1em;text-align:center}
+h3{margin:26px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--rule);
+  font-size:14.5px;font-weight:700;font-variant:small-caps;letter-spacing:.08em}
+.headline{margin:20px auto 8px;max-width:1000px;font-size:clamp(26px,3.6vw,46px);
+  line-height:1.08;font-weight:700;text-align:center;text-wrap:balance}
+.deck{margin:0 auto 18px;max-width:900px;text-align:center;font-style:italic;
+  font-size:16.5px;line-height:1.35}
+.cols{columns:3 250px;column-gap:32px;column-rule:1px solid var(--rule);margin:0 0 20px;
+  text-align:justify;hyphens:auto;-webkit-hyphens:auto}
+.cols p{margin:0 0 .75em}
+.lead::first-letter{float:left;font-size:4.1em;line-height:.78;font-weight:700;
+  padding:.06em .1em 0 0}
+table{width:100%;border-collapse:collapse;font-size:13px;
+  font-variant-numeric:lining-nums tabular-nums;border-top:2px solid var(--ink);
+  border-bottom:1px solid var(--ink)}
+th{text-align:left;vertical-align:bottom;font-weight:700;font-size:11.5px;
+  font-variant:small-caps;letter-spacing:.08em;border-bottom:1px solid var(--ink);
+  padding:5px 8px}
+td{padding:5px 8px;border-bottom:1px solid var(--rule);vertical-align:top}
+th+th,td+td{border-left:1px solid var(--rule)}
+tr:last-child td{border-bottom:0}
+.num{text-align:right}
+.board td.num{white-space:nowrap}
+.muted{color:var(--mut)} .small{font-size:12px;color:var(--mut)}
+.sym{font-weight:700;letter-spacing:.05em}
+code{font-family:"Courier New",Courier,monospace;font-size:.92em}
+.chip{display:inline-block;padding:0 6px;border:1px solid var(--ink);font-size:10.5px;
+  line-height:1.6;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;
+  vertical-align:1px}
+.chip.defer{border-style:dashed}
+.t-short,.d-short{background:var(--ink);color:var(--paper)}
+.t-none,.prov{border-style:dotted;color:var(--mut)}
+.chip.stale{color:var(--red);border-color:var(--red);font-weight:700}
+.pend{color:var(--red);border-color:var(--red);font-weight:700}
+.wire{border:2px solid var(--red);color:var(--red);font-weight:700;font-size:16px;
+  letter-spacing:.12em;text-align:center;padding:10px 14px;margin:10px 0 6px}
+.rng{font-size:12px}
+.post{font-weight:700;letter-spacing:.1em;white-space:nowrap}
+tr.w-triggered{background:var(--tint)}
+td.post.w-triggered{text-decoration:underline;text-decoration-thickness:2px;
+  text-underline-offset:3px}
+td.post.w-stalking{font-weight:400;color:var(--mut)}
+td.post.w-dead{font-weight:400;font-style:italic;color:var(--mut)}
+.chip.w-triggered{border:3px double var(--ink);font-weight:700}
+.chip.w-armed{font-weight:700}
+.chip.w-stalking{color:var(--mut);border-color:var(--rule)}
+.chip.w-dead{color:var(--mut);border-style:dotted}
+.docket,.watchgrid{columns:2 440px;column-gap:34px;column-rule:1px solid var(--rule)}
+.card,.wcell{break-inside:avoid;margin:0 0 16px;padding:0 0 14px;
+  border-bottom:1px solid var(--rule)}
+.card{margin-bottom:24px;padding-bottom:0;border-bottom:0}
+.card-h,.wh{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:6px}
+.card-h b,.wh b{font-size:19px;letter-spacing:.04em}
+.kv td:first-child{width:128px;font-size:10.5px;font-weight:700;letter-spacing:.08em}
+.kv td.num{text-align:left}
+.big{font-size:18px;font-weight:700;line-height:1.3}
+.big .muted{font-size:12.5px;font-weight:400}
+figure.mantle{margin:8px 0 0}
+.strip{width:100%;height:auto;display:block;border:1px solid var(--ink);
+  background:repeating-linear-gradient(45deg,var(--rule) 0 1px,transparent 1px 5px)}
+.stripfoot{margin-top:4px;font-size:10.5px;color:var(--mut);word-break:break-all}
+.stripcap{margin-top:2px;font-size:11.5px;font-style:italic;line-height:1.35}
+svg.spag{display:block;color:var(--ink);border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule)}
+.legend{margin-top:6px;font-size:12px;line-height:1.7;color:var(--ink)}
+pre.r1{margin:0;padding:12px 14px;border:1px solid var(--ink);columns:300px;
+  column-gap:28px;column-rule:1px solid var(--rule);white-space:pre;
+  font:12.5px/1.55 "Courier New",Courier,monospace}
+.mkt{columns:2 340px;column-gap:34px;column-rule:1px solid var(--rule)}
+.mkt>div{break-inside:avoid}
+.mkt h3{margin-top:0;font-size:12.5px;letter-spacing:.03em;min-height:2.9em}
+.returns td:nth-child(2){white-space:nowrap}
+.veto td.num{text-align:left}
+footer{margin-top:22px;padding-top:12px;border-top:1px solid var(--ink);columns:2 420px;
+  column-gap:34px;column-rule:1px solid var(--rule);font-size:11.5px;line-height:1.55;
+  color:var(--mut);word-break:break-word}
+@media (max-width:760px){.nameplate{grid-template-columns:1fr 1fr}
+  h1{grid-column:1/-1;grid-row:1;white-space:normal}
+  .ear{max-width:none;justify-self:stretch}}
+"""
+
+
+def page_css() -> str:
+    """PAGE_CSS with the REGISTER's three inks and its serif stack filled in. The muted
+    ink, the hairline and the tint are the INK at an alpha, so no fourth colour exists."""
+    pal = REGISTER["TYPE_PALETTE"]["value"]
+    ink = pal["ink"].lstrip("#")
+    ink_rgb = ",".join(str(int(ink[i:i + 2], 16)) for i in (0, 2, 4))
+    return (PAGE_CSS.replace("__PAPER__", pal["paper"]).replace("__INK__", pal["ink"])
+            .replace("__RED__", pal["red"]).replace("__INK_RGB__", ink_rgb)
+            .replace("__SERIF__", REGISTER["TYPE_SERIF_STACK"]["value"]))
+
+
+def mantle_caption() -> str:
+    """The contract's caption, the strip's bar count read from REGISTER['MANTLE_BARS']:
+    the same row mantle_payload() is cut by, never a second literal."""
+    return REGISTER["MANTLE_CAPTION"]["value"].format(bars=REGISTER["MANTLE_BARS"]["value"])
+
+
+def edition_name(slot: str) -> str:
+    """'Refresh Edition' for any slot that names a refresh (the 16:00 'refresh', the
+    skill's 'on-demand-refresh'); 'Morning Edition' for every other slot."""
+    return "Refresh Edition" if "refresh" in str(slot).lower() else "Morning Edition"
+
+
+def edition_count(date_str: str) -> int:
+    """REGISTER['EDITION_COUNT'], [VETO]: the distinct DATES among TAPE_DIR's
+    oracle_tape_<date>.parquet files, `date_str` included. A pure read of file NAMES
+    (no parquet is opened, nothing is written); a name whose date does not parse is not
+    an edition; a missing directory counts this edition alone. Called by run(), never
+    by render_html."""
+    dates = {date_str}
+    for p in TAPE_DIR.glob("oracle_tape_*.parquet"):
+        stamp = p.stem.removeprefix("oracle_tape_")
+        try:
+            datetime.strptime(stamp, "%Y-%m-%d")
+        except ValueError:
+            continue
+        dates.add(stamp)
+    return len(dates)
+
+
+def _names(symbols) -> str:
+    """'BTC' · 'BTC and ETH' · 'BTC, ETH and SOL': symbols print without their quote."""
+    xs = [s.replace("USDT", "") for s in symbols]
+    return xs[0] if len(xs) == 1 else f"{', '.join(xs[:-1])} and {xs[-1]}"
+
+
+def front_page(view: dict) -> dict:
+    """The Front Page's headline, deck and lead: REGISTER['FRONT_PAGE_HEADLINE'], [VETO].
+
+    The day's answer to the canon's one morning question, "where is business possible
+    today", READ OFF THE BOARD'S OWN POSTURE COLUMN and nothing else. The two words that
+    answer it are taken from posture_engine.CANON by station number, never retyped:
+    station 3 (an open window holds its entry alert) and station 2 (a window is open).
+    A TRIGGERED row whose trigger the Board prints STALE is set apart, by the Board's
+    own test (posture_engine.stations_for: the row's FRESHEST in-window trigger is
+    stale), and only a FRESH trigger earns the words 'Business possible'.
+    A pure function of the view: no clock, no IO. Returns HTML-escaped strings."""
+    assets = view["assets"]
+    word_of = {v["station"]: k for k, v in PE.CANON.items()}
+    w_trig, w_armed = word_of[3], word_of[2]
+    by: dict[str, list[str]] = {}
+    for a in assets:                               # the Board's own order (heat)
+        by.setdefault(a["station"].board_word, []).append(a["symbol"])
+    trig, armed = by.get(w_trig, []), by.get(w_armed, [])
+
+    def _stale(a) -> bool:                         # the Board's own test, not a second one
+        trg = [w for w in a["station"].open_windows if w.trigger_i is not None]
+        return bool(trg) and bool(min(trg, key=lambda w: w.trigger_age_bars).trigger_stale)
+
+    stale = [a["symbol"] for a in assets
+             if a["station"].board_word == w_trig and _stale(a)]
+    fresh = [s for s in trig if s not in stale]
+    said_h = ([f"{_names(fresh)} {w_trig.lower()}"] if fresh else []) \
+        + ([f"{_names(stale)} {w_trig.lower()} but stale"] if stale else []) \
+        + ([f"{_names(armed)} {w_armed.lower()} and waiting"] if armed else [])
+    if fresh:
+        headline = "Business possible: " + "; ".join(said_h)
+    elif said_h:
+        headline = "No fresh trigger on the roster: " + "; ".join(said_h)
+    else:
+        headline = (f"No business possible today: nothing on the roster is "
+                    f"{w_trig.lower()} or {w_armed.lower()}")
+
+    order = [w_trig, w_armed] + [w for w in PE.STATION_WORDS if w not in (w_trig, w_armed)]
+    order += sorted(w for w in by if w not in order)
+    n_cards = sum(1 for a in assets if a["card"])
+    n_win = sum(len(a["station"].open_windows) for a in assets)
+    n_win_sym = sum(1 for a in assets if a["station"].open_windows)
+    deck = (f"{len(assets)} on the roster, {view['lens']} lens: "
+            + " · ".join(f"{len(by.get(w, []))} {w}" for w in order)
+            + f" — {n_cards} Trap Card{'' if n_cards == 1 else 's'} on The Docket")
+
+    counts = [f"{len(by.get(w, []))} {w}" for w in order]
+    first = len(by.get(order[0], []))
+    counts[0] = f"{first} {'is' if first == 1 else 'are'} {order[0]}"
+    as_of = datetime.fromtimestamp(view["as_of_ms"] / 1000, timezone.utc).strftime(AS_OF_FMT)
+    said = []
+    if trig:
+        said.append(f"{w_trig}: {_names(trig)} — an open 12/89 window that holds its "
+                    f"in-window 12/26 cross, the entry alert.")
+    if stale:
+        said.append(f"Printed STALE, the cross older than "
+                    f"{PE.REGISTER['TRIGGER_FRESH_BARS']['value']} bars [VETO]: {_names(stale)}.")
+    if armed:
+        said.append(f"{w_armed}: {_names(armed)} — the window is open and the cross has "
+                    f"not come.")
+    if not said:
+        said.append("No symbol holds an open window, with its trigger or without: by the "
+                    "Board's own words there is no business possible today.")
+    lead = (f"Of the {len(assets)} symbol{'' if len(assets) == 1 else 's'} on the roster, read "
+            f"on the {view['lens']} lens at the bar of {as_of}, {', '.join(counts[:-1])} and "
+            f"{counts[-1]}. " + " ".join(said))
+    inside = (f"The Docket carries {n_cards} Trap Card{'' if n_cards == 1 else 's'}, one for "
+              f"each symbol with an admitted open window: pre-framed if-thens, never "
+              f"recommendations. The Watch follows {n_win} living 12/89 "
+              f"window{'' if n_win == 1 else 's'} on {n_win_sym} "
+              f"symbol{'' if n_win_sym == 1 else 's'}, with a mantle strip for every symbol "
+              f"on the roster. Then the Tide Tables, the Telegrams, The Market Page and "
+              f"Yesterday's Returns; the Colophon carries the provenance and the rows still "
+              f"unruled.")
+    creed = ("Every posture word on this page is the posture engine's, printed and never "
+             "scored. The Board is sorted by heat, which is proposed and not ruled. This "
+             "page renders; it does not rule, and nothing on it is advice.")
+    esc = lambda s: html.escape(s, quote=False)    # noqa: E731
+    return {"headline": esc(headline), "deck": esc(deck),
+            "lead": (f'<p class="lead">{esc(lead)}</p><p>{esc(inside)}</p>'
+                     f'<p>{esc(creed)}</p>')}
+
+
+def render_html(view: dict, date_str: str, canon_sha: str, *,
+                edition_no: int | None = None, slot: str = "full") -> str:
+    """The page. `edition_no` and `slot` are the masthead's two variables and are
+    KEYWORDS so that every older caller — the fixtures, the wrapper's daily self-check,
+    the movers fixtures — still calls render_html(view, date_str, canon_sha) and still
+    gets a page. A render nobody numbered is a PROOF, not an edition, and says so:
+    'No. —'. run() numbers the real ones (edition_count)."""
     lens = view["lens"]
     a0 = view["assets"]
     as_of = datetime.fromtimestamp(view["as_of_ms"] / 1000, timezone.utc)
+    mast = REGISTER["MASTHEAD"]["value"]
+    sec = [html.escape(s, quote=False) for s in REGISTER["SECTIONS"]["value"]]
+    caption = html.escape(mantle_caption(), quote=False)
+    fp = front_page(view)
+
+    # each ear item in its own no-wrap span, so a narrow ear breaks BETWEEN items and
+    # never inside the date; the ear's text is still the contract's, " · "-joined
+    def _ear(*items) -> str:
+        return " · ".join(f"<span>{html.escape(str(x), quote=False)}</span>" for x in items)
+
+    ear_left = _ear(mast["volume"], f"No. {'—' if edition_no is None else int(edition_no)}")
+    ear_right = _ear(mast["city"], date_str, edition_name(slot), mast["price"])
 
     board = []
     for a in a0:
@@ -1387,11 +1831,11 @@ def render_html(view: dict, date_str: str, canon_sha: str) -> str:
   <div class="wh"><b>{html.escape(a['symbol'].replace('USDT',''))}</b>
       <span class="chip w-{st.board_word.lower()}">{st.board_word}</span></div>
   {tbl}
-  <canvas width="960" height="180" class="strip"
+  <figure class="mantle"><canvas width="960" height="180" class="strip"
           data-payload="{html.escape(a['payload_name'])}"></canvas>
   <div class="stripfoot">payload {html.escape(a['payload_name'])} sha256
-      {a['payload_sha']} · rod 5000 top, hem 9 bottom · dark pinch = knot ·
-      holes = unwoven</div>
+      {a['payload_sha']}</div>
+  <figcaption class="stripcap">{caption}</figcaption></figure>
 </div>""")
 
     fired = []
@@ -1441,66 +1885,27 @@ def render_html(view: dict, date_str: str, canon_sha: str) -> str:
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>THE ORACLE — {date_str}</title>
-<style>
-:root{{--bg:#14120f;--ink:#e9dcc3;--mut:#8a7f72;--line:#2b2620;--teal:#55949b;--terra:#c67139;--sage:#a3b581}}
-*{{box-sizing:border-box}}
-body{{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}}
-.wrap{{max-width:1180px;margin:0 auto;padding:28px 20px 80px}}
-h1{{font-size:20px;letter-spacing:.14em;margin:0 0 4px}}
-h2{{font-size:13px;letter-spacing:.18em;color:var(--mut);margin:34px 0 10px;
-   border-bottom:1px solid var(--line);padding-bottom:6px;text-transform:uppercase}}
-.banner{{border:1px solid var(--terra);color:var(--terra);padding:8px 12px;
-   font-size:11px;letter-spacing:.1em;margin:14px 0 6px}}
-.stale{{border:2px solid var(--terra);background:rgba(198,113,57,.14);color:var(--terra);
-   padding:10px 12px;font-size:12px;font-weight:700;letter-spacing:.1em;margin:14px 0 6px}}
-.chip.defer{{color:var(--sage);border-color:var(--sage)}}
-table{{width:100%;border-collapse:collapse;font-size:12.5px}}
-th{{text-align:left;color:var(--mut);font-weight:400;font-size:11px;
-   letter-spacing:.1em;border-bottom:1px solid var(--line);padding:6px 8px}}
-td{{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}}
-.num{{text-align:right;font-variant-numeric:tabular-nums}}
-.muted,.small{{color:var(--mut)}} .small{{font-size:11px}}
-.sym{{font-weight:700;letter-spacing:.06em}}
-.chip{{display:inline-block;padding:1px 7px;border:1px solid var(--line);
-   border-radius:9px;font-size:10.5px;letter-spacing:.08em}}
-.t-long{{color:var(--teal);border-color:var(--teal)}}
-.t-short{{color:var(--terra);border-color:var(--terra)}}
-.d-long{{color:var(--teal);border-color:var(--teal)}}
-.d-short{{color:var(--terra);border-color:var(--terra)}}
-.stale{{color:var(--terra);border-color:var(--terra);font-weight:700}}
-.prov{{color:var(--mut);border-color:var(--mut)}}
-.pend{{color:var(--terra);border-color:var(--terra);font-weight:700}}
-.rng{{font-size:11.5px}}
-.wire{{border:1px solid var(--terra);color:var(--terra);font-weight:700;padding:8px 12px;
-   letter-spacing:.1em;margin:10px 0 6px}}
-.mkt{{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:4px 28px}}
-h3{{font-size:12px;letter-spacing:.14em;color:var(--mut);margin:22px 0 8px;text-transform:uppercase}}
-.post{{font-weight:700;letter-spacing:.1em}}
-.w-triggered{{color:var(--sage)}} .w-armed{{color:var(--teal)}}
-.w-dead{{color:var(--terra)}} .w-stalking{{color:var(--mut)}}
-.card{{border:1px solid var(--line);padding:12px 14px;margin:10px 0}}
-.card-h{{display:flex;gap:10px;align-items:center;margin-bottom:8px}}
-.kv td:first-child{{color:var(--mut);width:190px;font-size:11px;letter-spacing:.08em}}
-.big{{font-size:17px}}
-.wcell{{border:1px solid var(--line);padding:12px 14px;margin:10px 0}}
-.wh{{display:flex;gap:10px;align-items:center;margin-bottom:6px}}
-.strip{{width:100%;height:auto;display:block;margin-top:8px;background:#181512;border-radius:6px}}
-.stripfoot{{font-size:10px;color:var(--mut);word-break:break-all;margin-top:4px}}
-.legend{{font-size:11px;color:var(--mut);margin-top:6px}}
-pre.r1{{background:#0e0c0a;border:1px solid var(--line);padding:12px;
-   font-size:12px;overflow-x:auto;white-space:pre}}
-footer{{margin-top:40px;border-top:1px solid var(--line);padding-top:14px;
-   font-size:10.5px;color:var(--mut);word-break:break-word}}
-</style></head><body><div class="wrap">
-<h1>THE ORACLE — {date_str}</h1>
-{stale_banner}<div class="banner">DISPLAY-ONLY · OPERATIONS · not study evidence · no journal is read ·
+<meta name="color-scheme" content="light only">
+<title>{html.escape(mast['title'])} — {date_str}</title>
+<style>{page_css()}</style></head><body><div class="wrap">
+<header class="masthead">
+<div class="nameplate">
+<div class="ear ear-l">{ear_left}</div>
+<h1>{html.escape(mast['title'])}</h1>
+<div class="ear ear-r">{ear_right}</div>
+</div>
+<div class="folio">DISPLAY-ONLY · OPERATIONS · not study evidence · no journal is read ·
 no outcome is scored · rules are born only under G-7 on exploration-classic</div>
-<p class="small muted">lens {lens} · as-of bar {as_of.strftime('%Y-%m-%dT%H:%MZ')} ·
+</header>
+{stale_banner}<p class="dateline">lens {lens} · as-of bar {as_of.strftime(AS_OF_FMT)} ·
 roster {len(a0)} · posture canon v1 sha256 {canon_sha}</p>
+<main>
 
-<h2>The Board — where is business possible today</h2>
-<table><tr><th>asset</th><th>regime</th><th>dist</th><th>score</th>
+<h2>{sec[0]} — where is business possible today</h2>
+<p class="headline">{fp['headline']}</p>
+<p class="deck">{fp['deck']}</p>
+<div class="cols">{fp['lead']}</div>
+<table class="board"><tr><th>asset</th><th>regime</th><th>dist</th><th>score</th>
 <th>two lines in the sand</th><th>posture</th><th>why</th><th>heat</th><th>range</th></tr>
 {''.join(board)}</table>
 <p class="small muted">heat = {html.escape(REGISTER['HEAT']['value'])} [VETO — proposed,
@@ -1508,42 +1913,42 @@ not ruled]. Both inputs print in the row so the sort is auditable. RANGE is the 
 range from the Tide Tables below, printed LAST because it is display-only: it enters no
 heat, no sort, no posture word and no card.</p>
 
-<h2>Trap Cards — pre-framed if-thens</h2>
-{''.join(cards) or '<p class="muted">no admitted open window on the roster.</p>'}
+<h2>{sec[1]} — Trap Cards, pre-framed if-thens</h2>
+<div class="docket">{''.join(cards) or '<p class="muted">no admitted open window on the roster.</p>'}</div>
 
-<h2>The Watch — living 12/89 windows</h2>
-{''.join(watch)}
-
-<h2>Tide Tables — macro ranges, display-only</h2>
-{tide_tables(view)}
-
-<h2>Spaghetti — anchored at each asset's last 89/316 tide flip</h2>
+<h2>{sec[2]} — living 12/89 windows</h2>
+<div class="watchgrid">{''.join(watch)}</div>
+<h3>Spaghetti — anchored at each asset's last 89/316 tide flip</h3>
 {svg_spaghetti(view)}
 
-<h2>ORACLE GRID footer — the last {view['fired']['hours']}h of fired events</h2>
-<table><tr><th>lens</th><th>class</th><th>fired</th><th>toll ATR</th>
+<h2>{sec[3]} — macro ranges, display-only</h2>
+{tide_tables(view)}
+
+<h2>{sec[4]} — R1 alert prices, paste-ready</h2>
+<pre class="r1">{html.escape(r1)}</pre>
+
+<h2>{sec[5]} — overnight and the week, display-only</h2>
+{market_page(date_str)}
+
+<h2>{sec[6]} — the ORACLE GRID footer, the last {view['fired']['hours']}h of fired events</h2>
+<table class="returns"><tr><th>lens</th><th>class</th><th>fired</th><th>toll ATR</th>
 <th>GRID NET H20</th><th>GRID NET H100</th><th>assets</th></tr>{''.join(fired)}</table>
 <p class="small muted">NET is the ORACLE GRID's own filed median-minus-toll for that
 (lens, class) cell — panel-pooled over 5 assets, m=0, unranked. It is NOT an outcome
 computed from these events; this organ records events and reads the grid. Toll is not
 comparable across assets. H20 at 4h is infeasible by construction (0 bars) and prints —.</p>
 
-<h2>R1 — alert prices, paste-ready</h2>
-<pre class="r1">{html.escape(r1)}</pre>
-
-<h2>The Market Page — overnight and the week, display-only</h2>
-{market_page(date_str)}
-
-<h2>Appendix — posture canon v1 · the rows still open</h2>
+<h2>{sec[7]} — display-only: the provenance, and the rows still open</h2>
+<h3>Appendix — posture canon v1 · the rows still open</h3>
 <p class="small muted">BR-1 Amendment A2 (operator, 2026-08-16) ruled the naming, the trigger
 pair, the net R:R form and the schedule. The rows below are what remains: each is
 DEFERRED-TO-BR2, which proposes a measured value from a week of D-7 distributions.
 Nothing self-adopts.</p>
-<table><tr><th>constant</th><th>disposition</th><th>value</th><th>why it is not law</th></tr>
+<table class="veto"><tr><th>constant</th><th>disposition</th><th>value</th><th>why it is not law</th></tr>
 {''.join(veto)}</table>
 
 <footer>
-DISPLAY-ONLY · operations · {date_str} · lens {lens} ·
+DISPLAY-ONLY · operations · {date_str} · lens {lens} · as-of bar {as_of.strftime(AS_OF_FMT)} ·
 posture canon v1 sha256 {canon_sha} · {shas} ·
 displacements are (EMA−price)/ATR · analytics {ANALYTICS_VERSION} sha {analytics_sha()} ·
 net R:R = {html.escape(REGISTER['NET_RR_FORM']['value'])}, toll from the ORACLE GRID
@@ -1552,7 +1957,8 @@ CERTIFIED: {html.escape(' · '.join(CERTIFIED))}.<br>
 NOT CERTIFIED: {html.escape(' · '.join(NOT_CERTIFIED))}.<br>
 No claim is made or implied. Nothing here is scored. Promotion requires registration
 under G-7 on exploration-classic.
-</footer></div>
+</footer>
+</main></div>
 <script>{''.join(pay_js)}</script>
 <script>{MANTLE_JS}</script>
 </body></html>"""
@@ -1583,7 +1989,13 @@ def staleness_banner(view: dict) -> str:
     limit = STALE_LENS_PERIODS * step
     if age_ms <= limit:
         return ""
-    return (f'<div class="stale">STALE DATA — the newest {view["lens"]} bar is '
+    # OR-1 STEP F: the contract's opening words, then A2-7's own sentence, unchanged.
+    # ONE <div class="stale"> WITH NO <div> INSIDE IT, on purpose: the movers fixture
+    # cuts the band out of a page with a non-greedy `<div class="stale">.*?</div>`
+    # (its age ticks between two renders), and a nested div would end that cut early.
+    as_of = datetime.fromtimestamp(int(view["as_of_ms"]) / 1000, timezone.utc)
+    head = REGISTER["LATE_EDITION"]["value"].format(as_of=as_of.strftime(AS_OF_FMT))
+    return (f'<div class="stale"><b>{html.escape(head)}</b> The newest {view["lens"]} bar is '
             f'{age_ms / 3_600_000:.1f}h old, over the {STALE_LENS_PERIODS}-lens-period '
             f'limit of {limit / 3_600_000:.1f}h. The top-up may not have run. Every '
             f'number below is computed from that bar, and the as-of stamp names it.</div>')
@@ -1937,7 +2349,13 @@ def run(slot: str = "full", as_of_ms: int | None = None, log=print) -> dict:
         (PAYLOAD_DIR / name).write_bytes(
             json.dumps(pl, separators=(",", ":"), ensure_ascii=False).encode("utf-8"))
 
-    doc = render_html(view, date_str, canon_sha)
+    # OR-1 STEP F: the masthead's number and the edition's name. Counted HERE, not in
+    # render_html, which stays a function of what it is handed: a fixture that points
+    # TAPE_DIR somewhere else between two renders must get the same page twice.
+    edition_no = edition_count(date_str)
+    log(f"  edition {REGISTER['MASTHEAD']['value']['volume']} · No. {edition_no} · "
+        f"{edition_name(slot)}")
+    doc = render_html(view, date_str, canon_sha, edition_no=edition_no, slot=slot)
     out = OUT_DIR / f"oracle_{date_str}.html"
     out.write_text(doc, encoding="utf-8")
     sha = hashlib.sha256(out.read_bytes()).hexdigest()
