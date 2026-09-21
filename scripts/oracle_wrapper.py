@@ -45,6 +45,17 @@ last 15 traceback lines — and any run that actually did work and ended rc == 0
 removes it again. The flag is gitignored: it is for the operator standing at
 the machine, never for the bus.
 
+THE ON-DEMAND EDITION (OR-1 STEP A, 2026-09-21). The operator suspended the five
+agents above — booted out AND disabled, plists retained unedited — and ruled that
+the /oracle skill replaces the clock. `--job ondemand` is what that skill runs:
+identity gate, the standing flag printed FIRST, the movers fetch in its own
+process, the in-scope top-up, the cache-only Oracle, a Front Page summary — one
+lock, one exit code, one flag decision, and NO schedule-drift check (on drift
+that check rewrites a plist and bootstraps it, which the suspension forbids).
+ONDEMAND_STEPS is the chain; `--job ondemand --dry-run` prints it and touches
+nothing. See THE ON-DEMAND EDITION below. The four legacy paths (oracle, topup,
+catchup, --install) are unchanged.
+
 NO DELETION, EVER (CADENCE §4). Re-arming is bootout + bootstrap; the plist
 stays on disk. This wrapper never removes a plist. (The flag above is not a
 plist; it is the alarm's own body, and clearing it IS the all-clear.)
@@ -54,6 +65,7 @@ from __future__ import annotations
 import json
 import os
 import plistlib
+import re
 import subprocess
 import sys
 import traceback
@@ -682,6 +694,485 @@ def _argv_job_slot(argv: list[str]) -> tuple[str, str]:
     return job, slot
 
 
+# ═══════════════════════════════════════════════════ THE ON-DEMAND EDITION
+# OR-1 STEP A (ratified 2026-09-21). The same day the operator SUSPENDED the
+# five-agent clock — all five labels booted out AND `launchctl disable`d, the
+# plists RETAINED UNEDITED, rollback card at
+# research_outputs/oracle/SUSPENDED_2026-09-21.txt — and ruled that the /oracle
+# skill replaces it. This job is what the skill runs: "the chain the clock ran",
+# as ONE command, under ONE lock, with ONE exit code and ONE flag decision.
+#
+# WHY A JOB AND NOT TWO HAND-RUN COMMANDS. Until now the only way to print an
+# edition by hand was `--job topup` followed by `--job oracle`, and that pair
+# carries a hazard MEASURED on 2026-09-21 itself: the 06:45 top-up FAILED (40 of
+# 40 pairs, the wire was down) and raised ORACLE_DOWN.flag; the 07:00 Oracle then
+# rendered cleanly ON THE STALE CACHE, exited 0, and CLEARED the flag. The alarm
+# about the wire was erased fifteen minutes later by a job that never touches the
+# wire. Any clean job cleared a flag raised by a different job. Here the top-up
+# and the render share one rc (rc_topup or rc_oracle), so a failed top-up followed
+# by a clean render ends nonzero WITH THE FLAG STANDING. F-SK-2c holds that shut.
+#
+# WHY THE SCHEDULE CHECK IS NOT RUN HERE. reschedule_if_drifted() reads the
+# retained plists and, ON DRIFT, calls arm() — which REWRITES the plist and runs
+# launchctl bootout + bootstrap. While the clock is suspended that is exactly the
+# thing the ruling forbids: a laptop that changes timezone, or a plist that fails
+# to parse, would have an on-demand run edit a retained plist and try to re-arm a
+# disabled label. So job=ondemand never enters that loop; it prints one line
+# saying so. The legacy jobs keep the loop, byte-for-byte: they only run if the
+# operator rolls the clock back, and then the check is wanted again.
+#
+# THE FIREWALL IS UNCHANGED. The Oracle stays cache-only (BR-1b: "it may never
+# fetch inside a firewalled run"). Fetching is done by two OTHER organs — the
+# top-up (klines, in scope) and the movers script (STEP E, its own process) —
+# and this wrapper only orders them. Nothing here reads a range or a mover; the
+# Front Page summary below is three display strings per Board row, lifted from
+# the Oracle's own log lines.
+
+# The rows a ruling has not yet touched are [VETO]: builder defaults, named so
+# the operator can overrule one number without reading the chain. --dry-run
+# prints every unruled row (this module has no rendered appendix of its own).
+ONDEMAND_REGISTER = {
+    "ONDEMAND_SLOTS": {
+        "value": ("on-demand-full", "on-demand-refresh"), "ruled": True,
+        "source": "OR-1 STEP A, verbatim: 'Selfcheck rows tagged slot=\"on-demand-"
+                  "full\"|\"on-demand-refresh\" so run-based gates can read them.' "
+                  "The FIRST entry is the default when --slot is not given."},
+    "TOPUP_SLOT": {
+        "value": "on-demand", "ruled": False,
+        "source": "[VETO] builder default. The topup_log.jsonl slot string for a "
+                  "top-up run by this chain. It does not start with 'fixture-', so "
+                  "oracle_topup_fixtures.last_real_run() counts it as a REAL run — "
+                  "which it is."},
+    "MOVERS_TIMEOUT_S": {
+        "value": 600, "ruled": False,
+        "source": "[VETO] builder default. Wall-clock ceiling on the movers "
+                  "subprocess. Sized against the one measured wire-down figure this "
+                  "lane has: a fully failing 40-pair top-up took ~10 min on "
+                  "2026-09-21 (06:45 -> 06:55). A movers fetch that outlives this is "
+                  "logged WIRE DOWN and the edition goes on."},
+    "MOVERS_LOG_TAIL": {
+        "value": 12, "ruled": False,
+        "source": "[VETO] builder default. How many trailing lines of the movers "
+                  "organ's own output are echoed into this log; STEP E enumerates a "
+                  "universe of hundreds of symbols and the edition log is not the "
+                  "place for them."},
+    "FRONT_PAGE_ROWS": {
+        "value": 5, "ruled": False,
+        "source": "[VETO] builder default. OR-1 STEP A says 'print the Front "
+                  "Page's top rows' and names no count."},
+    "BANNER_MARKERS": {
+        "value": ("LATE EDITION", "STALE DATA"), "ruled": True,
+        "source": "OR-1 STEP F: 'Staleness banner => red band under the masthead "
+                  "\"LATE EDITION — wire stale since <as-of>\"'; and BR-1 A2-7's "
+                  "'STALE DATA — ...' div, the wording before the STEP F typesetting. "
+                  "Either one found in the render's TEXT (style, script, comments and "
+                  "tags stripped) reads as banner UP. Loose on purpose: a false "
+                  "'banner up' costs the operator a glance, a false 'none' is the "
+                  "A2-7 silence again."},
+    "CLOUD_MARKERS": {
+        "value": ("OneDrive", "com~apple~CloudDocs", "Mobile Documents"),
+        "ruled": True,
+        "source": "exchange/status/CONVENTIONS.md §0 THE IDENTITY GATE, the three "
+                  "patterns of its case statement, verbatim."},
+}
+ONDEMAND_SLOTS = ONDEMAND_REGISTER["ONDEMAND_SLOTS"]["value"]
+TOPUP_SLOT = ONDEMAND_REGISTER["TOPUP_SLOT"]["value"]
+MOVERS_TIMEOUT_S = ONDEMAND_REGISTER["MOVERS_TIMEOUT_S"]["value"]
+MOVERS_LOG_TAIL = ONDEMAND_REGISTER["MOVERS_LOG_TAIL"]["value"]
+FRONT_PAGE_ROWS = ONDEMAND_REGISTER["FRONT_PAGE_ROWS"]["value"]
+BANNER_MARKERS = ONDEMAND_REGISTER["BANNER_MARKERS"]["value"]
+CLOUD_MARKERS = ONDEMAND_REGISTER["CLOUD_MARKERS"]["value"]
+
+# Module-level PATHS, like FLAG / LOCK / SELFCHECK above, so a fixture can point
+# them into a TemporaryDirectory (the F-BR-12 pattern) and drive the real main().
+MOVERS_SCRIPT = ROOT / "scripts" / "oracle_movers.py"
+MOVERS_DIR = ROOT / "research_outputs" / "oracle" / "movers"
+# Printed, never opened: a repo-relative STRING, so the line reads the same from
+# any tree and no fixture that redirects ROOT can trip over it.
+SUSPENDED_CARD = "research_outputs/oracle/SUSPENDED_2026-09-21.txt"
+
+# THE CHAIN, ONCE. (step id, who performs it, one line). This tuple is the single
+# source of truth: --dry-run prints it, every "STEP n <id>" log tag below is
+# looked up in it, .claude/skills/oracle/SKILL.md walks it in the same order with
+# the same ids, and F-SK-1 fails if any of the three disagree. The contract's own
+# seven — identity gate -> flag FIRST -> movers fetch -> top-up -> oracle_daily ->
+# open the render -> print the Front Page + verdict — are here in that order;
+# `front-page` and `alarm` are the wrapper's half of the last one, made explicit
+# because they print lines the skill has to be able to quote. The two `skill`
+# rows are NOT performed by this process: a wrapper that opened a browser would
+# open one under every fixture run.
+ONDEMAND_STEPS = (
+    ("identity-gate", "wrapper",
+     "CONVENTIONS §0 two-sided gate: ROOT is $HOME/Naiad AND no cloud-tree marker "
+     "in ROOT or cwd; HALT nonzero before ANY action"),
+    ("flag-first", "wrapper",
+     "if ORACLE_DOWN.flag is standing, print its body verbatim FIRST, before any work"),
+    ("movers-fetch", "wrapper",
+     "scripts/oracle_movers.py in its OWN process (STEP E organ); skipped on refresh "
+     "and on --no-fetch; a failure is WIRE DOWN for movers, never a failed edition"),
+    ("scope-topup", "wrapper",
+     "in-scope kline top-up (oracle_topup, slot 'on-demand'); skipped on --no-fetch; "
+     "a failed top-up does NOT block the render (ruling T-3)"),
+    ("oracle-render", "wrapper",
+     "oracle_daily, cache-only: render + the three self-checks + ONE selfcheck row "
+     "tagged slot=on-demand-full|on-demand-refresh"),
+    ("front-page", "wrapper",
+     "print the Board's top rows by heat, the self-check verdict, the render's "
+     "path / bytes / sha256 and the banner state"),
+    ("alarm", "wrapper",
+     "one rc (top-up or Oracle), one ORACLE_DOWN.flag decision; the schedule-drift "
+     "check is SKIPPED (clock suspended by operator ruling 2026-09-21)"),
+    ("open-render", "skill",
+     "open the render (macOS: open <path>)"),
+    ("report-back", "skill",
+     "print back to the operator: Front Page top rows + self-check verdict + "
+     "banner state"),
+)
+
+
+def _step(step_id: str) -> str:
+    """The log tag for a step: '  STEP n <id>'. Looked up, never typed twice."""
+    ids = [s[0] for s in ONDEMAND_STEPS]
+    return f"  STEP {ids.index(step_id) + 1} {step_id}"
+
+
+def ondemand_skips(slot: str, no_fetch: bool) -> dict:
+    """{step id: why it is skipped on THIS invocation}. One function, read by both
+    the dry run and the real chain, so the plan printed is the plan executed."""
+    skips: dict[str, str] = {}
+    if no_fetch:
+        why = "--no-fetch: a cache-only edition fetches nothing"
+        skips["movers-fetch"] = why
+        skips["scope-topup"] = why
+    elif slot == "on-demand-refresh":
+        skips["movers-fetch"] = ("refresh edition: Watch/Board only — the Market "
+                                 "Page keeps whatever movers json the day already has")
+    return skips
+
+
+def ondemand_plan_lines(slot: str, no_fetch: bool) -> list[str]:
+    """What --dry-run prints. Pure: it reads two constants and touches nothing."""
+    skips = ondemand_skips(slot, no_fetch)
+    out = [f"ORACLE ON-DEMAND · DRY RUN · slot={slot}"
+           f"{' · --no-fetch' if no_fetch else ''} · NOTHING IS TOUCHED "
+           f"(no lock, no flag, no fetch, no render)"]
+    for i, (sid, who, desc) in enumerate(ONDEMAND_STEPS, 1):
+        out.append(f"  STEP {i} {sid:14} [{who}] {desc}")
+        if sid in skips:
+            out.append(f"         SKIPPED on this invocation — {skips[sid]}")
+    out.append("  schedule: SUSPENDED by operator ruling 2026-09-21 — no run of this "
+               "job checks, rewrites or re-arms a plist")
+    for k, v in ONDEMAND_REGISTER.items():
+        if not v["ruled"]:
+            out.append(f"  [VETO] unruled constant {k} = {v['value']!r}")
+    return out
+
+
+def identity_gate(root: Path | None = None, home: Path | None = None,
+                  cwd: Path | None = None) -> tuple[bool, str]:
+    """CONVENTIONS §0 THE IDENTITY GATE, for a local run. BOTH sides, because the
+    rule's own text says why: checking only the path passes a copy left behind in
+    a cloud-synced tree, and checking only for the absence of markers passes any
+    directory on the machine. The shell gate tests `pwd`; this process is located
+    by ROOT (where the code that is about to run actually lives), and cwd is held
+    to the marker side as well — a run started from inside a synced tree is
+    misrouted even when the script path is right."""
+    root = Path(ROOT if root is None else root).resolve()
+    home = Path(Path.home() if home is None else home).resolve()
+    cwd = Path(Path.cwd() if cwd is None else cwd).resolve()
+    for where, p in (("ROOT", root), ("cwd", cwd)):
+        hit = [m for m in CLOUD_MARKERS if m in str(p)]
+        if hit:
+            return False, f"cloud tree — {where} {p} carries {hit}"
+    if root != home / "Naiad":
+        return False, f"not $HOME/Naiad — ROOT is {root}, $HOME/Naiad is {home / 'Naiad'}"
+    return True, f"ROOT {root} is $HOME/Naiad; no cloud-tree marker in ROOT or cwd ({cwd})"
+
+
+def show_standing_flag(log=print) -> bool:
+    """Step 2. The alarm is read BEFORE the work, not discovered after it: an
+    operator asking for an edition while the flag stands must be told, first, that
+    the last run failed and why. Verbatim means verbatim — the body is printed
+    unindented between two rules, byte for byte as raise_flag() wrote it."""
+    tag = _step("flag-first")
+    if not FLAG.exists():
+        log(f"{tag}: no {FLAG.name} standing")
+        return False
+    try:
+        body = FLAG.read_text(encoding="utf-8")
+    except Exception as e:
+        log(f"{tag}: {FLAG.name} IS STANDING at {FLAG} but could not be read: {e}")
+        return True
+    log(f"{tag}: {FLAG.name} IS STANDING — its body, verbatim, before any work:")
+    log(f"  -------- {FLAG} --------")
+    log(body.rstrip("\n"))
+    log(f"  -------- end of {FLAG.name} --------")
+    return True
+
+
+def run_movers(log=print) -> dict:
+    """Step 3. The Market Page's fetch — STEP E's organ, in ITS OWN PROCESS, so the
+    wrapper never imports a module that talks to the network and the Oracle's
+    cache-only property cannot be bent from here. CLI contract (OR-1 STEP E): no
+    arguments; exit 0 = movers json written; exit 1 = fetch failed and the organ
+    wrote its own status-FAIL json.
+
+    A MOVERS FAILURE IS NOT AN ORACLE FAILURE. The page prints 'WIRE DOWN — no
+    movers this edition' and the rest of the paper is whole, so nothing here
+    touches rc and nothing here raises the flag. It is logged plainly instead."""
+    tag = _step("movers-fetch")
+    out = {"ran": False, "ok": False, "rc": None}
+    if not MOVERS_SCRIPT.exists():
+        log(f"{tag}: WIRE DOWN for movers — {MOVERS_SCRIPT} does not exist; the "
+            f"edition goes on without a fresh Market Page")
+        return out
+    log(f"{tag}: running {MOVERS_SCRIPT.name} in its own process "
+        f"(timeout {MOVERS_TIMEOUT_S} s)")
+    t0 = datetime.now(timezone.utc)
+    try:
+        r = subprocess.run([PY, str(MOVERS_SCRIPT)], cwd=str(ROOT),
+                           capture_output=True, text=True, timeout=MOVERS_TIMEOUT_S)
+    except subprocess.TimeoutExpired:
+        log(f"{tag}: WIRE DOWN for movers — no answer inside {MOVERS_TIMEOUT_S} s, "
+            f"process killed; the edition goes on")
+        return {**out, "ran": True}
+    except Exception as e:
+        log(f"{tag}: WIRE DOWN for movers — could not start the organ: "
+            f"{e.__class__.__name__}: {e}; the edition goes on")
+        return out
+    secs = (datetime.now(timezone.utc) - t0).total_seconds()
+    for line in ((r.stdout or "") + (r.stderr or "")).splitlines()[-MOVERS_LOG_TAIL:]:
+        log(f"    movers| {line}")
+    if r.returncode != 0:
+        log(f"{tag}: WIRE DOWN for movers — {MOVERS_SCRIPT.name} exited "
+            f"{r.returncode} after {secs:.1f} s; the Market Page will say so; the "
+            f"edition goes on (a movers failure never fails the edition and never "
+            f"raises the flag)")
+        return {"ran": True, "ok": False, "rc": r.returncode}
+    newest = sorted(MOVERS_DIR.glob("movers_*.json")) if MOVERS_DIR.exists() else []
+    if not newest:
+        # Reported, not judged: the organ said OK, and what the Market Page makes
+        # of an empty directory is the Oracle's call (it prints WIRE DOWN).
+        log(f"{tag}: exit 0 after {secs:.1f} s, but there is NO movers_*.json under "
+            f"{MOVERS_DIR} — the Market Page will have nothing to read")
+        return {"ran": True, "ok": False, "rc": 0}
+    log(f"{tag}: OK (exit 0, {secs:.1f} s) — {newest[-1]} "
+        f"{newest[-1].stat().st_size:,} B")
+    return {"ran": True, "ok": True, "rc": 0}
+
+
+# The Oracle's own per-asset log line (oracle_daily.build_view):
+#   "  BTCUSDT        ARMED      heat= 6.248 levels= 35 clusters= 14 atr_d=2376.77"
+# and this wrapper's own render line (run_oracle):
+#   "  render /…/oracle_2026-09-21.html sha256 <64 hex>"
+# WHY THE LOG AND NOT THE TAPE: the tape's `station` column is the WINDOW's
+# station for any asset that has a window, so the Board word is not recoverable
+# from it; the log line carries exactly the three strings the Board row shows.
+# Anything after `heat=` is ignored, so a later column on that line costs nothing.
+_BOARD_LINE = re.compile(r"^\s+(?P<sym>[A-Z0-9]+)\s+(?P<station>[A-Z][A-Z_-]*)\s+"
+                         r"heat=\s*(?P<heat>-?\d+(?:\.\d+)?|nan|inf)\b")
+_RENDER_LINE = re.compile(r"^\s+render (?P<path>.+) sha256 (?P<sha>[0-9a-f]{64})\s*$")
+
+
+def banner_state(html_path: Path) -> str:
+    """UP or none, read from the render's TEXT. Display-only: it changes nothing,
+    it only lets the log say what the operator is about to see under the masthead."""
+    text = Path(html_path).read_text(encoding="utf-8", errors="replace")
+    text = re.sub(r"(?is)<(style|script)\b.*?</\1\s*>|<!--.*?-->", " ", text)
+    text = re.sub(r"\s+", " ", re.sub(r"(?s)<[^>]+>", " ", text))
+    for marker in BANNER_MARKERS:
+        i = text.find(marker)
+        if i >= 0:
+            return f"UP — {text[i:i + 200].strip()}"
+    return "none — no staleness band in this render"
+
+
+def front_page(lines: list[str], slot: str, started: datetime, log=print) -> None:
+    """Step 6. `lines` is everything run_oracle logged for THIS run (a tee)."""
+    log(f"{_step('front-page')}:")
+    rows = []
+    for ln in lines:
+        m = _BOARD_LINE.match(ln)
+        if m:
+            h = float(m.group("heat"))
+            rows.append((m.group("sym"), m.group("station"), h))
+    rows.sort(key=lambda r: -(r[2] if r[2] == r[2] else float("-inf")))
+    if rows:
+        top = rows[:FRONT_PAGE_ROWS]
+        log(f"  FRONT PAGE — top {len(top)} of {len(rows)} Board rows by heat")
+        for i, (sym, station, heat) in enumerate(top, 1):
+            log(f"    {i:>2}  {sym:14} {station:10} heat={heat:6.3f}")
+    else:
+        log("  FRONT PAGE — no Board row was logged by this run (the Oracle did "
+            "not get as far as the Board)")
+
+    # parsed, not string-compared: isoformat() drops the fraction on a whole second
+    mine = [r for r in selfcheck_rows() if r.get("slot") == slot
+            for t in [_row_time(r, timezone.utc)] if t and t >= started]
+    if mine:
+        row = mine[-1]
+        parts = " · ".join(f"{k} {'PASS' if v.get('pass') else 'FAIL'}"
+                           for k, v in sorted(row.get("checks", {}).items()))
+        log(f"  SELF-CHECK VERDICT: {row.get('verdict')} — {parts} "
+            f"(row slot={row.get('slot')})")
+    else:
+        log(f"  SELF-CHECK VERDICT: NONE — no selfcheck row for slot={slot} was "
+            f"written by this run")
+
+    hit = next((m for m in map(_RENDER_LINE.match, reversed(lines)) if m), None)
+    if hit is None:
+        log("  RENDER none — the Oracle did not render on this run")
+        log("  BANNER unknown — there is no render to read")
+        return
+    p = Path(hit.group("path"))
+    size = f"{p.stat().st_size:,} B" if p.exists() else "MISSING ON DISK"
+    log(f"  RENDER {p} · {size} · sha256 {hit.group('sha')}")
+    try:
+        log(f"  BANNER {banner_state(p)}")
+    except Exception as e:
+        log(f"  BANNER unknown — {e.__class__.__name__}: {e}")
+
+
+def ondemand_flag_action(rc: int, no_fetch: bool) -> str:
+    """'raise' | 'clear' | 'stand'. The whole alarm policy of this job, as a pure
+    function so F-SK-2 can replant the old rule and watch it go red.
+
+    raise — rc != 0. rc is (rc_topup or rc_oracle), so a failed top-up under a
+            clean render raises: the 2026-09-21 hazard, closed.
+    stand — a --no-fetch run. It read the cache only; it PROVES NOTHING ABOUT THE
+            WIRE, and the wire is what most standing flags are about. It can raise
+            an alarm (a render that crashes is a render that crashes) but it has no
+            all-clear to give.
+    clear — rc == 0 on a run that fetched: the top-up AND the Oracle both ran and
+            both came back clean. The movers organ is outside this on purpose, in
+            both directions — it never raises the flag, so it never holds it up;
+            the flag's sentence is 'The Oracle is down', and the Market Page says
+            WIRE DOWN for itself."""
+    if rc != 0:
+        return "raise"
+    if no_fetch:
+        return "stand"
+    return "clear"
+
+
+def run_ondemand(argv: list[str], log=print) -> int:
+    """--job ondemand. The chain in ONDEMAND_STEPS, steps 1-7, in that order."""
+    _, slot = _argv_job_slot(argv)
+    if "--slot" not in argv:
+        slot = ONDEMAND_SLOTS[0]
+    no_fetch = "--no-fetch" in argv
+    if slot not in ONDEMAND_SLOTS:
+        # A free slot string here would write a selfcheck row no run-based gate
+        # knows how to read — refuse it before anything is touched.
+        log(f"HALT: --job ondemand takes --slot {' | '.join(ONDEMAND_SLOTS)} "
+            f"(got {slot!r}). Nothing was touched.")
+        return 2
+    stray = [a for a in argv if a not in
+             ("--job", "ondemand", "--slot", slot, "--no-fetch", "--dry-run")]
+    if stray:
+        # `--nofetch` must not quietly become a run that fetches. The legacy jobs
+        # ignore what they do not know; this one is typed by hand, so it refuses.
+        log(f"HALT: --job ondemand does not know {stray}. It takes --slot "
+            f"{' | '.join(ONDEMAND_SLOTS)}, --no-fetch, --dry-run. Nothing was touched.")
+        return 2
+    if "--dry-run" in argv:
+        for line in ondemand_plan_lines(slot, no_fetch):
+            log(line)
+        return 0
+
+    started = datetime.now(timezone.utc)
+    log(f"=== ORACLE WRAPPER · job=ondemand slot={slot}"
+        f"{' --no-fetch' if no_fetch else ''} · {started.isoformat()} ===")
+    zr = zone_report()
+    log(f"  zone: {zr}")
+
+    ok, why = identity_gate()
+    if not ok:
+        # "halts before ANY action" — so no lock, and NO FLAG either: the flag
+        # lives at ROOT, and writing into a tree the gate has just refused is the
+        # misrouted write the gate exists to stop.
+        log(f"{_step('identity-gate')}: HALT: {why}")
+        log("=== exit 2 (identity gate — nothing was touched: no lock, no flag, "
+            "no fetch, no render) ===")
+        return 2
+    log(f"{_step('identity-gate')}: PASS — {why}")
+
+    show_standing_flag(log=log)
+
+    if not acquire_lock(f"ondemand/{slot}", log=log):
+        log("=== exit 0 (no-op: another Oracle run holds the lock — NO EDITION "
+            "WAS PRINTED by this run) ===")
+        return 0
+
+    skips = ondemand_skips(slot, no_fetch)
+    rc_t = rc_o = 0
+    lines: list[str] = []
+
+    def tee(msg="") -> None:
+        lines.append(str(msg))
+        log(msg)
+
+    try:
+        if "movers-fetch" in skips:
+            log(f"{_step('movers-fetch')}: SKIPPED — {skips['movers-fetch']}")
+        else:
+            run_movers(log=log)
+
+        if "scope-topup" in skips:
+            log(f"{_step('scope-topup')}: SKIPPED — {skips['scope-topup']}")
+        else:
+            log(f"{_step('scope-topup')}: slot={TOPUP_SLOT}")
+            noted = len(FAILURES)
+            rc_t = run_topup(TOPUP_SLOT, log=log)
+            if rc_t != 0:
+                if len(FAILURES) == noted:
+                    # A top-up whose pairs ERROR returns verdict FAIL without
+                    # raising, so the alarm would otherwise have nothing to show.
+                    note_failure(f"TOP-UP DID NOT PASS (rc {rc_t}, slot {TOPUP_SLOT}) "
+                                 f"— per-pair detail is the newest row of "
+                                 f"research_outputs/oracle/calibration/topup_log.jsonl")
+                log(f"{_step('scope-topup')}: NOT CLEAN (rc {rc_t}) — the edition "
+                    f"renders anyway, on the cache as it stands (ruling T-3); the "
+                    f"banner tells the truth and this run will exit nonzero")
+
+        log(f"{_step('oracle-render')}: slot={slot}")
+        rc_o = run_oracle(slot, zr, started, log=tee)
+
+        try:
+            front_page(lines, slot, started, log=log)
+        except Exception as e:
+            # The summary is a courtesy printed AFTER the edition and its row are
+            # on disk. It may fail to print; it may not fail the edition.
+            log(f"  front page summary unavailable: {e.__class__.__name__}: {e}")
+        rc = rc_t or rc_o
+    except Exception:
+        rc = 1
+        log("  WRAPPER FAILED:\n" + note_failure())
+    finally:
+        release_lock(log=log)
+
+    log(f"{_step('alarm')}: rc_topup={rc_t} rc_oracle={rc_o} -> exit {rc}")
+    log(f"  schedule: SUSPENDED by operator ruling 2026-09-21 — the drift check is "
+        f"SKIPPED for job=ondemand (on drift it would rewrite a retained plist and "
+        f"bootstrap it); rollback card {SUSPENDED_CARD}")
+    action = ondemand_flag_action(rc, no_fetch)
+    if action == "raise":
+        raise_flag("ondemand", slot, rc, log=log)
+    elif action == "clear":
+        if FLAG.exists():
+            clear_flag(log=log)          # says CLEARED, or says why it could not
+        else:
+            log(f"  no {FLAG.name} standing — nothing to clear")
+    elif FLAG.exists():
+        log(f"  alarm left standing: {FLAG.name} — a --no-fetch run reads the cache "
+            f"only and proves nothing about the wire, so it has no all-clear to give")
+    else:
+        log(f"  no {FLAG.name} standing (a --no-fetch run could not have cleared one)")
+
+    log(f"=== exit {rc} ===")
+    return rc
+
+
 def main(argv=None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     log = print
@@ -698,6 +1189,11 @@ def main(argv=None) -> int:
         return 0
 
     job, slot = _argv_job_slot(argv)
+    if job == "ondemand":
+        # OR-1 STEP A. Its own chain, its own flag rule, and NO schedule loop —
+        # it returns here so nothing below (the legacy path, byte-for-byte as
+        # it was) can run on its behalf. See THE ON-DEMAND EDITION.
+        return run_ondemand(argv, log=log)
 
     started = datetime.now(timezone.utc)
     log(f"=== ORACLE WRAPPER · job={job} slot={slot} · {started.isoformat()} ===")
