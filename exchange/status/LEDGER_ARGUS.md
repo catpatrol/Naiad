@@ -484,3 +484,39 @@ PENDING: unchanged from the entry above.
 NEXT: unchanged — write the /oracle skill, or rule on disable. Owner: operator.
 METRICS: operator actions this session = 1 · files re-ingested = 9
 === END STATUS ===
+
+=== STATUS_ARGUS — 2026-09-21 (DISABLE APPLIED · SUSPENSION NOW REBOOT-DURABLE) ===
+NOW: This entry SUPERSEDES two things in STATUS_ARGUS — 2026-09-21 (ORACLE SCHEDULE
+     SUSPENDED · FIVE AGENTS BOOTED OUT): the "NOT APPLIED" clause on the disable overrides,
+     and the ⚠ missing-render item. The operator ruled to apply disable; it is applied. The
+     render was never lost. The suspension now survives a reboot.
+LAST EVENT: 2026-09-21 — five `launchctl disable gui/501/<label>` calls, all rc=0; five
+     overrides read back `=> disabled`; SUSPENDED_2026-09-21.txt amended to match.
+FACTS:
+- DISABLE APPLIED AND VERIFIED, all five: `launchctl print-disabled gui/501` returns exactly
+  5 oracle rows, each `=> disabled`. There was NO prior override on any of them (the domain
+  listed none before the call), so this is a clean set, not a flip [verified]
+- REBOOT-DURABILITY CLOSED — the gap this lane flagged is shut. launchd still re-bootstraps
+  the retained plists at login, but the override refuses each one, oracle-catchup's RunAtLoad
+  included. Plists remain present and unedited; daily · estate · workflow carry no override
+  and are untouched [verified]
+- ROLLBACK GREW A MANDATORY FIRST HALF: `enable` x5 THEN `bootstrap` x5 — bootstrap alone
+  will not re-arm a disabled label. SUSPENDED_2026-09-21.txt rewritten to lead with it,
+  3,189 B sha a28f2e73…, and it now carries the both-ways verify lines [verified]
+- ⚠ WITHDRAWN — THE 2026-09-21 RENDER WAS NOT LOST. A home-wide search found it at
+  ~/Desktop/oracle_2026-09-21.html, 237,943 B, sha 5a2c5467… — an exact match to the sha
+  oracle-0700.log and selfcheck both recorded, mtime 07:00 preserved. It was MOVED out of
+  briefs/oracle/ before this session, not deleted. Left in place; briefs/oracle/ is
+  gitignored, so the Desktop copy is the only one [verified]
+- THE PRIOR ENTRY'S OTHER FACTS STAND UNCHANGED: the five bootouts, the retained plists,
+  and every STEP-2 number (last html 2026-09-20 in place · selfcheck 68 lines, last 5 PASS ·
+  ORACLE_DOWN.flag absent · 57 calibration JSONs · 35 tape parquets) [verified]
+PENDING: 1. /oracle on-demand skill — still not written; no oracle output exists until it is
+         2. scripts/oracle_wrapper.py (+186) and oracle_fixtures.py (+95) sit uncommitted in
+         the worktree — whatever /oracle wraps is mid-edit, and unreviewed
+         3. prior, unchanged: operator TV-eyeball on SS12_RangeFinder_v2.pine · PARITY line
+         · BR-2 on gates · V-7 rails (APOLLO F-C3-e)
+NEXT: write the /oracle skill against the uncommitted wrapper, or commit the wrapper first.
+     Owner: operator.
+METRICS: operator actions this session = 2 · files re-ingested = 9
+=== END STATUS ===
