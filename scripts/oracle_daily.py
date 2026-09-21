@@ -23,6 +23,19 @@ Emits briefs/oracle/oracle_<date>.html containing, per BR-1 §3 as amended:
     PROVENANCE   F-BR-8  DISPLAY-ONLY header, payload shas, date, both the
                       certified and the not-certified lists.
 
+and, beside the render, per run: the D-4 tape parquet and the D-7 calibration
+JSON (display-machinery distributions only, A1-4).
+
+C-0, CLOSED AT OR-1 STEP B (2026-09-21). From 2026-08-16 the D-7 logger wrote
+the LITERAL `"maturity_withheld_fraction": 0.0` for every asset on every run,
+and recorded neither family-cap binding nor target buckets, although BR-2
+WORK(1) names all three as families to recalibrate. The three are now MEASURED
+(see "D-7 THE CALIBRATION LOGGER" below; F-BR-13 pins it). Every calibration
+JSON written before this change — 57 files on the day it landed, none carrying
+`schema_version` — is HOLLOW for those three families and is excluded from any
+recalibration. Measuring is display-only: no level, score, heat, station or
+card moved (old-vs-new tape, payloads, Board and Cards compared byte-identical).
+
 ════════════════════════════════════════════════════════════════════════════
 CLASS AND FIREWALL — BR-1 §2, binding, reprinted in the rendered footer.
 
@@ -67,6 +80,19 @@ from analytics import ANALYTICS_VERSION, analytics_sha  # noqa: E402
 import posture_engine as PE                           # noqa: E402
 import census2b_program as P                          # noqa: E402
 import tierc3_rules as V3                             # noqa: E402
+# THE TARGET BUCKETS ARE IMPORTED, NEVER COPIED (CONVENTIONS §6.4: "live
+# consumers IMPORT from the one definition"). brief_render.TARGET_BUCKETS is
+# the only bucket definition in the estate (NEAR 0-2 · MID 2-6 · FAR 6+ ATR).
+# The pin-vs-import decision was MEASURED at OR-1 STEP B, 2026-09-21, not
+# assumed: brief_render's import closure in a clean subprocess is 14 modules,
+# all stdlib (argparse, html, json, pathlib, ...) — no engine, no analytics,
+# no forward_log, no positions — so F-BR-3's firewall stays green and the
+# import costs ~3 ms (3.2-3.6 ms over four clean-subprocess runs).
+# THE COUPLING THIS BUYS: the Oracle lane now imports a BRIEF-2 render module,
+# so any import brief_render.py gains tomorrow lands in the Oracle's closure.
+# F-BR-13 therefore re-measures that closure on every run and goes red on an
+# estate component, and re-asserts that no local copy is ever assigned.
+from brief_render import TARGET_BUCKETS, target_bucket  # noqa: E402
 
 ZONE = "America/Argentina/Buenos_Aires"
 OUT_DIR = ROOT / "briefs" / "oracle"
@@ -153,6 +179,20 @@ REGISTER: dict[str, dict] = {
         "ruled": True,
         "source": "tierc3_rules.REGISTER['PIVOT_LOOKBACK_4H'] = 200 bars on the 4h lens.",
     },
+    "TARGET_BUCKET_ATR": {
+        "value": "lens",
+        "ruled": False,
+        "source": "PROPOSED by the OR-1 STEP B build 2026-09-21 — UNRULED [VETO]. The contract "
+                  "says 'record target-bucket occupancy' and names no ATR. A Trap Card "
+                  "prices its toll in the LENS ATR (trap_card: toll_price = toll_atr x "
+                  "st.atr), so the D-7 logger buckets the card's target distance in that "
+                  "same ATR. The bucket EDGES, though, are brief_render.TARGET_BUCKETS, and "
+                  "the BRIEF-2 lane that wrote them measures target_distance_atr in the "
+                  "DAILY ATR (brief2.py). Two honest bases, one ruling owed: so the logger "
+                  "records the distance and the bucket on BOTH ('lens' and 'daily') every "
+                  "run and only the headline `target_bucket` follows this row. Display-only: "
+                  "nothing on the page, the tape or any card reads a bucket.",
+    },
 }
 
 CERTIFIED = (
@@ -197,7 +237,26 @@ def daily_atr(h1: pd.DataFrame) -> float:
 
 # ═══════════════════════════════════════════════════════════════ LEVELS
 
-def level_registry(sym: str, h4: pd.DataFrame, h1: pd.DataFrame, atr_d: float):
+def window_bars(open_time_ms, window_days) -> int:
+    """How many bars sit inside a rolling VWAP window at the decision bar.
+
+    analytics.vwap.rolling_vwap returns no sample depth, and analytics.vwap.
+    maturity() needs one. The count uses the SAME membership rule rolling_vwap
+    applies — "bar_open_time > current_bar_open_time - W, current included" —
+    written the way brief2's rvwap block already writes it
+    (`count_nonzero(t > t[-1] - need)`), so the number says how deep the sample
+    behind the printed line really is. (rolling_vwap also floors its slice at
+    the MIN_BARS = 10 most recent bars; 10 is below both maturity floors, so a
+    window that thin classifies the same either way.)
+    """
+    t = np.asarray(open_time_ms, dtype="int64")
+    if t.size == 0:
+        return 0
+    return int(np.count_nonzero(t > t[-1] - int(window_days) * VW.DAY_MS))
+
+
+def level_registry(sym: str, h4: pd.DataFrame, h1: pd.DataFrame, atr_d: float,
+                   maturity_out: list | None = None):
     """A level pool for the Board's clusters. analytics/ is the only arithmetic.
 
     Two families only, and both are causal at the decision bar:
@@ -207,6 +266,16 @@ def level_registry(sym: str, h4: pd.DataFrame, h1: pd.DataFrame, atr_d: float):
     analytics/levels has no time axis and cannot police causality, so the
     slicing is done HERE: confirmed_pivots carries CONFIRMATION_LAG = 5 and
     prior_period_extremes reads only completed days.
+
+    `maturity_out` (C-0, OR-1 STEP B) is a MEASURING side-channel and nothing
+    else. When a list is passed, one record per rolling window is appended:
+    the bars inside the window, analytics.vwap.maturity()'s verdict on them,
+    and how many line/band candidates this function offered to the registry.
+    It WITHHOLDS NOTHING — every finite line and band is still added exactly
+    as before (rolling windows take no floor by ruling, REGISTER
+    ['VWAP_WINDOWS_D']). Withholding would be a semantic change to the Board;
+    counting what the 16/60 floors WOULD withhold is display machinery, which
+    is what A1-4 asked D-7 to log and what it never did until now.
     """
     reg = L.LevelRegistry()
     look = REGISTER["PIVOT_LOOKBACK_BARS"]["value"]
@@ -242,10 +311,12 @@ def level_registry(sym: str, h4: pd.DataFrame, h1: pd.DataFrame, atr_d: float):
     for wd in REGISTER["VWAP_WINDOWS_D"]["value"]:
         rv = VW.rolling_vwap(h1["open_time"].to_numpy("int64"), src,
                              h1["volume"].to_numpy("float64"), wd)
+        n_line = n_band = 0                   # candidates OFFERED — counted, never gated
         v = float(np.asarray(rv["vwap"])[-1])
         if np.isfinite(v):
             reg.add("vwap_rolling", f"rVWAP {wd}d", v, "rolling_vwap(1h, hlc3)",
                     timeframe="1h")
+            n_line += 1
         for k in (1, 2):
             for side in ("up", "dn"):
                 band = rv.get(f"band_{side}_{k}")
@@ -255,6 +326,14 @@ def level_registry(sym: str, h4: pd.DataFrame, h1: pd.DataFrame, atr_d: float):
                 if np.isfinite(b):
                     reg.add("vwap_rolling", f"rVWAP {wd}d {side}{k}σ", b,
                             "vw_sigma_bands(1h)", timeframe="1h")
+                    n_band += 1
+        if maturity_out is not None:
+            mat = VW.maturity(window_bars(h1["open_time"].to_numpy("int64"), wd))
+            maturity_out.append({"window_d": int(wd), "bars": mat["bars"],
+                                 "line_ok": bool(mat["line_ok"]),
+                                 "band_ok": bool(mat["band_ok"]),
+                                 "line_candidates": n_line,
+                                 "band_candidates": n_band})
 
     members = L.collapse_same_family(reg.as_list(), atr_d)
     clusters = L.cluster(members, atr_d)
@@ -398,7 +477,9 @@ def build_view(as_of_ms: int | None = None, log=print) -> dict:
             h1 = h1[h1["open_time"] <= as_of_ms].reset_index(drop=True)
         atr_d = daily_atr(h1)
         st = PE.stations_for(sym, h4)
-        reg, members, clusters = level_registry(sym, h4, h1, atr_d)
+        vwap_maturity: list[dict] = []        # C-0: measured here, logged by D-7
+        reg, members, clusters = level_registry(sym, h4, h1, atr_d,
+                                                maturity_out=vwap_maturity)
         price = st.close
         lis = L.lines_in_sand(clusters, price, atr_d)
 
@@ -413,6 +494,7 @@ def build_view(as_of_ms: int | None = None, log=print) -> dict:
         assets.append({
             "symbol": sym, "station": st, "atr_d": atr_d, "price": price,
             "clusters": clusters, "n_levels": len(reg), "lis": lis,
+            "vwap_maturity": vwap_maturity,
             "nearest": nearest, "nearest_d": nearest_d, "heat": heat,
             "payload_name": pay["meta"]["payload"], "payload_sha": pay["meta"]["sha256"],
             "card": trap_card(sym, h4, st, clusters, atr_d, card_toll_atr),
@@ -1006,9 +1088,119 @@ BANNED_CALIBRATION_KEYS = (
     "term_h100", "sharpe", "edge", "score_of_signal", "accuracy", "precision",
 )
 
+# ─────────────────────────────────────── C-0, AND WHY THIS BLOCK EXISTS
+# FINDING C-0 (ORACLE_CHAIN_CLOSE_2026-08-16 §C-0, reported-not-fixed; closed
+# by queue OR-1 STEP B, 2026-09-21). A1-4 lists "maturity-withheld fractions"
+# among the things D-7 logs, and BR-2 WORK(1) recalibrates "family cap 3 ·
+# maturity floors 16/60 · target buckets" FROM these files. For five weeks the
+# logger wrote the LITERAL 0.0 for maturity on every asset on every run, and
+# wrote nothing at all for the other two. A recalibration run on those files
+# would have "measured" a constant the code typed and found it perfectly stable.
+#
+# So the three families are now MEASURED, each by its own small function below,
+# and write_calibration only assembles them. The rule that keeps this honest:
+# a family that could not be measured records None, NEVER 0.0 — an uncountable
+# sample is not evidence of a clean one (the analytics.vwap.maturity() rule for
+# `bars is None`, applied one level up).
+#
+# MEASURING IS NOT WITHHOLDING. Nothing here changes which levels enter the
+# registry, any score, heat, station or card. On 7d/30d windows over 1h bars
+# the windows hold ~168/~720 bars against floors of 16/60, so the measured
+# fraction is EXPECTED to be a true 0.0 on a healthy cache; the per-window bar
+# counts are logged beside it as the evidence that it was counted, not typed.
+#
+# THE CALIBRATION CLOCK RESTARTS HERE. Every calibration JSON written before
+# this change is HOLLOW for these three families and is EXCLUDED from any
+# recalibration. They are told apart by content, not by file date: a measured
+# document carries `schema_version` >= CAL_SCHEMA_VERSION; a hollow one carries
+# no `schema_version` at all.
+CAL_SCHEMA_VERSION = 2
+
+# The two target-bucket names this logger adds to brief_render's NEAR/MID/FAR.
+# They are different facts and are counted apart: an asset with no open admitted
+# window has NO CARD; a card that exists but names no target (NOT TAKEN, or no
+# scored cluster on the trade's side) has NO TARGET.
+BUCKET_NO_CARD = "NONE"
+BUCKET_NO_TARGET = "NO_TARGET"
+ATR_BASES = ("lens", "daily")
+
+
+def maturity_withheld(vwap_maturity) -> dict:
+    """What the 16/60 floors WOULD withhold from the VWAP family — counted.
+
+    The brief2 `_admit` precedent: the LINE is withheld when `line_ok` is
+    False, and each BAND when `band_ok` is False. Candidates are the finite
+    lines and bands level_registry actually offered. `fraction` is None when
+    nothing was measured (no record, or no candidate) — never a typed 0.0.
+    """
+    cand = held = 0
+    for w in vwap_maturity or []:
+        cand += w["line_candidates"] + w["band_candidates"]
+        held += ((0 if w["line_ok"] else w["line_candidates"])
+                 + (0 if w["band_ok"] else w["band_candidates"]))
+    return {"candidates": cand, "withheld": held,
+            "fraction": (round(held / cand, 6) if cand else None)}
+
+
+def family_cap_binding(clusters) -> dict:
+    """How often analytics.levels.FAMILY_CAP touches a cluster — two tests.
+
+    `at_cap`   some family has >= FAMILY_CAP members: the cap is REACHED. This
+               is the brief_calibration_c4.py precedent ("BINDS on n of N").
+    `over_cap` some family has >  FAMILY_CAP members: the cap actually REDUCED
+               the score (levels.score() takes min(count, FAMILY_CAP)).
+    The two differ exactly when a family sits on the cap, so both are logged and
+    BR-2 chooses. `at_cap` includes every `over_cap` cluster. The cap is read
+    from analytics.levels — the 3 is never copied here.
+    """
+    at = over = 0
+    for c in clusters:
+        per: dict[str, int] = {}
+        for m in c["members"]:
+            per[m["family"]] = per.get(m["family"], 0) + 1
+        top = max(per.values()) if per else 0
+        at += int(top >= L.FAMILY_CAP)
+        over += int(top > L.FAMILY_CAP)
+    return {"clusters": len(clusters), "at_cap": at, "over_cap": over}
+
+
+def card_target_bucket(a: dict) -> dict:
+    """Which brief_render.TARGET_BUCKETS bucket the open Trap Card's target is in.
+
+    distance = card['reward'] (= |target - entry|) over an ATR. 'lens' is the
+    ATR the card itself prices its toll in (trap_card: atr_l = st.atr — F-BR-13
+    re-derives toll_price from it so a change there cannot pass silently);
+    'daily' is the ATR the BRIEF-2 lane measured its buckets in. Both are
+    recorded; REGISTER['TARGET_BUCKET_ATR'] [VETO] picks the headline.
+    """
+    card = a.get("card")
+    atrs = {"lens": a["station"].atr, "daily": a["atr_d"]}
+    dist: dict[str, float | None] = {}
+    bucket: dict[str, str] = {}
+    for basis in ATR_BASES:
+        atr = atrs[basis]
+        reward = card.get("reward") if card else None
+        d = (float(reward) / float(atr)
+             if reward is not None and atr and np.isfinite(atr) and atr > 0 else None)
+        dist[basis] = round(d, 6) if d is not None and np.isfinite(d) else None
+        bucket[basis] = (BUCKET_NO_CARD if not card
+                         else BUCKET_NO_TARGET if dist[basis] is None
+                         else target_bucket(dist[basis]))
+    return {"distance_atr": dist, "bucket": bucket}
+
+
+def _occupancy(names) -> dict:
+    """Roster-wide counts, every bucket printed even at zero so a week of files
+    lines up column for column."""
+    order = [n for n, _lo, _hi in TARGET_BUCKETS] + [BUCKET_NO_TARGET, BUCKET_NO_CARD]
+    names = list(names)
+    return {n: sum(1 for x in names if x == n) for n in order}
+
+
 
 def write_calibration(view: dict, date_str: str, slot: str) -> tuple[Path, str, int]:
     CAL_DIR.mkdir(parents=True, exist_ok=True)
+    basis = REGISTER["TARGET_BUCKET_ATR"]["value"]
     per_asset = []
     for a in view["assets"]:
         st = a["station"]
@@ -1016,6 +1208,9 @@ def write_calibration(view: dict, date_str: str, slot: str) -> tuple[Path, str, 
                     min(m["level"] for m in c["members"])) / a["atr_d"]
                    for c in a["clusters"] if c["member_count"] > 1 ]
         lis = a["lis"] if isinstance(a["lis"], dict) else {}
+        mw = maturity_withheld(a.get("vwap_maturity"))
+        cap = family_cap_binding(a["clusters"])
+        tb = card_target_bucket(a)
         per_asset.append({
             "asset": a["symbol"],
             "level_count": a["n_levels"],
@@ -1041,7 +1236,19 @@ def write_calibration(view: dict, date_str: str, slot: str) -> tuple[Path, str, 
             "lis_fallback_used": {k: (None if not lis.get(k)
                                       else lis[k].get("source") == "fallback")
                                   for k in ("above", "below")},
-            "maturity_withheld_fraction": 0.0,
+            # C-0 (closed OR-1 STEP B): MEASURED. This line read the literal
+            # 0.0 from 2026-08-16 to 2026-09-21. F-BR-13 fails the build if a
+            # numeric literal is ever assigned to this key again.
+            "maturity_withheld_fraction": mw["fraction"],
+            "maturity_candidate_levels": mw["candidates"],
+            "maturity_withheld_levels": mw["withheld"],
+            "maturity_windows": [{"window_d": w["window_d"], "bars": w["bars"],
+                                  "line_ok": w["line_ok"], "band_ok": w["band_ok"]}
+                                 for w in (a.get("vwap_maturity") or [])],
+            "family_cap_binding": cap,
+            "target_bucket": tb["bucket"][basis],
+            "target_bucket_by_atr": tb["bucket"],
+            "target_distance_atr": tb["distance_atr"],
             "open_window_ages_bars": [w.age_bars for w in st.open_windows],
             "open_window_disp_atr": [round(w.disp, 6) for w in st.open_windows],
             "station": st.board_word,
@@ -1049,9 +1256,16 @@ def write_calibration(view: dict, date_str: str, slot: str) -> tuple[Path, str, 
                                     if np.isfinite(a["nearest_d"]) else None),
             "heat": round(a["heat"], 6),
         })
+    cand = sum(r["maturity_candidate_levels"] for r in per_asset)
+    held = sum(r["maturity_withheld_levels"] for r in per_asset)
     doc = {
         "class": "DISPLAY-MACHINERY DISTRIBUTIONS ONLY — no outcome fields, no "
                  "signal-performance fields (BR-1 Amendment A1-4, enforced by F-BR-10)",
+        "schema_version": CAL_SCHEMA_VERSION,
+        "schema_note": "C-0 closed at OR-1 STEP B (2026-09-21): maturity, family-cap "
+                       "binding and target buckets are MEASURED. A calibration JSON "
+                       "with no schema_version is hollow for those three families "
+                       "and is excluded from recalibration.",
         "date": date_str, "slot": slot, "lens": view["lens"],
         "as_of_ms": view["as_of_ms"],
         "generated_utc": datetime.now(timezone.utc).isoformat(),
@@ -1060,6 +1274,11 @@ def write_calibration(view: dict, date_str: str, slot: str) -> tuple[Path, str, 
             "collapse_atr": L.COLLAPSE_ATR, "cluster_atr": L.CLUSTER_ATR,
             "lis_atr": L.LIS_ATR, "family_cap": L.FAMILY_CAP,
             "maturity_line_min": VW.LINE_MIN_BARS, "maturity_band_min": VW.BAND_MIN_BARS,
+            "vwap_windows_d": list(REGISTER["VWAP_WINDOWS_D"]["value"]),
+            # [lo, hi) in ATR; the open top of FAR is null — JSON has no infinity
+            "target_buckets_atr": {n: [lo, (None if np.isinf(hi) else hi)]
+                                   for n, lo, hi in TARGET_BUCKETS},
+            "target_bucket_atr_basis": basis,
             "d_displacement": PE.REGISTER["D_DISPLACEMENT"]["value"],
             "dead_memory_bars": PE.REGISTER["DEAD_MEMORY_BARS"]["value"],
         },
@@ -1071,6 +1290,15 @@ def write_calibration(view: dict, date_str: str, slot: str) -> tuple[Path, str, 
                                         if a["station"].board_word == w)
                                  for w in PE.STATION_WORDS},
         "fired_event_cells": len(view["fired"]["rows"]),
+        # the three C-0 families, whole roster — sums of the per-asset records
+        "maturity_roster": {"candidate_levels": cand, "withheld_levels": held,
+                            "withheld_fraction": (round(held / cand, 6) if cand else None)},
+        "family_cap_binding": {k: sum(r["family_cap_binding"][k] for r in per_asset)
+                               for k in ("clusters", "at_cap", "over_cap")},
+        "target_bucket_occupancy": _occupancy(r["target_bucket"] for r in per_asset),
+        "target_bucket_occupancy_by_atr": {
+            b: _occupancy(r["target_bucket_by_atr"][b] for r in per_asset)
+            for b in ATR_BASES},
         "per_asset": per_asset,
     }
     p = CAL_DIR / f"oracle_calibration_{date_str}_{slot}.json"
