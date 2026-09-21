@@ -25,6 +25,16 @@ Emits briefs/oracle/oracle_<date>.html containing, per BR-1 §3 as amended:
     PROVENANCE   F-BR-8  DISPLAY-ONLY header, payload shas, date, both the
                       certified and the not-certified lists.
 
+and, since OR-1 STEP D (2026-09-21), one section that is not BR-1's:
+
+    TIDE TABLES  OR-1 D  the RangeFinder v2 MACRO range per ROSTER symbol on the 4h
+                      lens: state · top/bottom · % position · ATR-distance to the
+                      nearest boundary · PENDING breach · last event + age; the
+                      EDGE WATCH sub-list; and a RANGE cell on every Board row.
+                      DISPLAY AND TAPE ONLY: see "THE RANGE LAYER" below. No
+                      gate, filter, heat, station, card or sizing reads a range
+                      (F-BR-14).
+
 and, beside the render, per run: the D-4 tape parquet and the D-7 calibration
 JSON (display-machinery distributions only, A1-4).
 
@@ -72,6 +82,13 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from engine.data import cache_dir                     # noqa: E402
+# THE RANGE MACHINE (OR-1 STEP D). A display organ. engine/rangefinder.py imports
+# numpy, pandas and engine.indicators and nothing else, so it brings no journal, no
+# outcome package and no decision module into this file's closure (F-BR-14 measures
+# that, it is not taken on trust). THE ALIAS IS FENCED: F-BR-14 reads this file's AST
+# and goes red on any use of `RNG` outside range_layer(), the render functions,
+# write_tape() and the one REGISTER row that imports the machine's window.
+from engine import rangefinder as RNG                 # noqa: E402
 from analytics import levels as L                     # noqa: E402
 from analytics import structure as ST                 # noqa: E402
 from analytics import volatility as VOL               # noqa: E402
@@ -234,6 +251,47 @@ REGISTER: dict[str, dict] = {
                   "records the distance and the bucket on BOTH ('lens' and 'daily') every "
                   "run and only the headline `target_bucket` follows this row. Display-only: "
                   "nothing on the page, the tape or any card reads a bucket.",
+    },
+    # THE RANGE LAYER'S THREE CONSTANTS (OR-1 STEP D, 2026-09-21). All three are read
+    # by range_layer() and the render functions and by NOTHING that gates: see "THE
+    # RANGE LAYER" above build_view, and F-BR-14. Two are the contract's own [VETO]
+    # defaults and print in the rendered [VETO] appendix until the operator rules.
+    "RANGE_LENS": {
+        "value": "4h",
+        "ruled": False,
+        "source": "PROPOSED by the OR-1 contract's own default — UNRULED [VETO]. STEP D, "
+                  "verbatim: 'oracle_daily runs it per roster symbol on the 4h lens [VETO "
+                  "default — the system's lens]'. 4h is the lens the v2 pins were calibrated "
+                  "on (BTC 4h, KEY-C) and the lens build_view has ALREADY loaded, so the range "
+                  "layer adds no cache read and the top-up scope gains no pair. THE BINDING IS "
+                  "MEASURED, NOT NAMED: range_layer() checks the bar spacing of the frame it is "
+                  "handed against this row and prints RANGE UNAVAILABLE rather than run a 4h "
+                  "calibration over another lens's bars. A different range lens needs its own "
+                  "cache read, a scope re-enumeration and a ruling. Display-only: no gate, "
+                  "filter, heat, station, card or sizing reads a range (F-BR-14).",
+    },
+    "RANGE_WINDOW_BARS": {
+        "value": RNG.V2_WINDOW_BARS,
+        "ruled": True,
+        "source": "engine.rangefinder.V2_WINDOW_BARS = 1700, IMPORTED, never copied "
+                  "(CONVENTIONS §6.4): the RangeFinder twin's V2 window, the last 1,700 4h "
+                  "bars, which is the tape the v2 calibration of record (KEY-C) was measured "
+                  "on. OR-1 STEP D fixes it with 'same v2 pins, same event log': the event log "
+                  "is a function of the window (the machine's ATR seeds at the window's first "
+                  "bar), so a different window is a different machine. A symbol whose cache is "
+                  "shorter runs on what it has, and the Tide Tables print its true bar count.",
+    },
+    "RANGE_WATCH_ATR": {
+        "value": 0.5,
+        "ruled": False,
+        "source": "PROPOSED by the OR-1 contract's own default — UNRULED [VETO]. STEP D, "
+                  "verbatim: 'EDGE WATCH sub-list = distance ≤ 0.5 ATR [VETO] OR pending breach "
+                  "open, sorted by distance'. The ATR is the range machine's own — "
+                  "engine.indicators ATR(14) on the RANGE_LENS tape, the ATR its pins are "
+                  "multiples of — NOT the daily ATR the Board's level distances use. '≤' is "
+                  "inclusive, as written. The threshold picks rows for a display list and does "
+                  "nothing else: no gate, filter, heat, station, card or sizing reads it, or "
+                  "the list (F-BR-14).",
     },
 }
 
@@ -498,6 +556,88 @@ def mantle_payload(sym: str, h4: pd.DataFrame, bars: int) -> dict:
     return {"meta": meta, "data": data}
 
 
+# ═════════════════════════════════════════════════════════ THE RANGE LAYER
+# OR-1 STEP D (RATIFIED operator 2026-09-21). The contract: "oracle_daily runs it per
+# roster symbol on the 4h lens [VETO default — the system's lens] and emits per
+# symbol: macro state · macro top/bottom · %position · ATR-distance to nearest macro
+# boundary · PENDING-breach flag · last event + age."
+#
+# THE WALL, which is the point of the step (OR-1 §2): "no gate, filter, or sizing
+# reads a range or a mover." The range object is WRITTEN once, by build_view, into
+# a["range"], AFTER that asset's levels, clusters, heat, station and card exist. It
+# is READ by the render functions and by write_tape, and by nothing else: never
+# level_registry, never trap_card, never net_rr, never fired_events, never r1_block,
+# never write_calibration, never the Board's sort. F-BR-14 holds the wall four ways:
+# posture_engine.py's sha256; the import closures of the decision modules; an AST
+# scan of THIS file against an allow-list of reader functions; and a behavioural run
+# in which the whole decision side of build_view must come out identical with the
+# layer stubbed EMPTY, stubbed HOT (every symbol pinned on a boundary with a breach
+# pending) and REAL.
+#
+# NO NEW READ. The machine runs on the 4h frame build_view has ALREADY loaded, so the
+# top-up scope gains no pair and no read. (The pin still moves, because this file's
+# sha moved: oracle_topup.py --enumerate re-pins it and prints the same pairs.)
+#
+# A DISPLAY ORGAN MAY NOT TAKE THE PAGE DOWN EITHER. "Renders, never rules" cuts both
+# ways: a fault inside the range machine on one symbol must not cost the operator
+# his Board. range_layer() therefore CONTAINS its own failure and hands back
+# range_empty(error=...): the Tide Tables print RANGE UNAVAILABLE with the reason in
+# the alarm colour, the tape records range_state = "UNAVAILABLE", and every other
+# section renders as if the layer did not exist. Contained is not silent.
+#
+# UNCALIBRATED OFF BTC. The micro pins were calibrated on BTC 1D (KEY-A) and the v2
+# pins on BTC 4h (KEY-C). On every other symbol they are borrowed numbers, and the
+# page says so under the table on every edition.
+
+RANGE_UNAVAILABLE = "UNAVAILABLE"
+# What a reader prints for an asset whose view carries no range at all (a view built
+# by older code, or by a fixture): an absence with a reason, never a blank.
+RANGE_ABSENT = "this view carries no range for the asset"
+
+
+def range_empty(state: str = RANGE_UNAVAILABLE, error: str | None = None) -> dict:
+    """The range object of a symbol with NOTHING to show: engine.rangefinder.snapshot's
+    own key set (F-BR-14 pins the two equal) plus `error`. Used when the machine could
+    not run (`error` says why), as the reader's default for a view that carries no
+    range at all, and by F-BR-14 as the EMPTY stub."""
+    return {"state": state, "has_range": False,
+            "top": None, "bottom": None, "top0": None, "bottom0": None, "mid": None,
+            "pos_pct": None, "atr": None, "dist_atr": None, "nearest_side": None,
+            "pending": None, "n_pending_open": 0, "n_potential": 0,
+            "last_event": None, "status_line": "",
+            "as_of": None, "close": None, "n_bars": 0, "error": error}
+
+
+def range_layer(h4: pd.DataFrame) -> dict:
+    """One symbol's MACRO range as of the last bar of `h4`: the frame build_view has
+    already loaded (and already cut to as_of_ms). No cache read, no network, no wall
+    clock; `h4` is not mutated (tape_from_klines copies).
+
+    The three calls are the RangeFinder twin's own, with its own v2 pins: the tape,
+    the machine, the snapshot. Prices come from the full-precision Range fields,
+    never from the 2-dp event log (see the hazard note in engine/rangefinder.py).
+
+    REGISTER['RANGE_LENS'] is enforced by MEASUREMENT: the median bar spacing of the
+    tape must equal that lens's period, or the layer refuses. The pins are a 4h
+    calibration; run over 1h bars they would draw confident boxes that mean nothing.
+
+    NEVER RAISES. Any fault is returned as range_empty(error=...) and printed."""
+    try:
+        d = RNG.tape_from_klines(h4, n_bars=REGISTER["RANGE_WINDOW_BARS"]["value"])
+        want = REGISTER["RANGE_LENS"]["value"]
+        t0 = d["t0"].to_numpy("int64")
+        if len(t0) >= 2:
+            step = int(np.median(np.diff(t0)))
+            if step != LENS_MS[want]:
+                raise ValueError(
+                    f"REGISTER['RANGE_LENS'] is {want} ({LENS_MS[want]} ms) but the frame "
+                    f"build_view loaded steps {step} ms; the pins are a {want} calibration")
+        v2 = RNG.run_v2(d, RNG.PINS_V2)
+        return {**RNG.snapshot(d, v2), "error": None}
+    except Exception as e:                     # contained, never silent: it prints
+        return range_empty(error=f"{e.__class__.__name__}: {e}")
+
+
 # ═══════════════════════════════════════════════════════════════ THE VIEW
 
 def build_view(as_of_ms: int | None = None, log=print) -> dict:
@@ -541,6 +681,11 @@ def build_view(as_of_ms: int | None = None, log=print) -> dict:
             "payload_name": pay["meta"]["payload"], "payload_sha": pay["meta"]["sha256"],
             "card": trap_card(sym, h4, st, clusters, atr_d, card_toll_atr),
         })
+        # OR-1 STEP D: THE ONE PLACE A RANGE IS WRITTEN. Deliberately the LAST thing
+        # done for this asset, after its levels, heat, station and card exist, and
+        # nothing below reads it back: the sort is on heat, fired_events takes the
+        # roster. F-BR-14 goes red on any other mention of a range inside build_view.
+        assets[-1]["range"] = range_layer(h4)
         log(f"  {sym:14} {st.board_word:10} heat={heat:6.3f} levels={len(reg):3d} "
             f"clusters={len(clusters):3d} atr_d={atr_d:.6g}")
 
@@ -791,6 +936,160 @@ document.addEventListener('DOMContentLoaded',paintStrips);
 """
 
 
+# ─────────────────────────────── OR-1 STEP D · the range layer's three readers
+# range_cell (the Board), range_watch + tide_tables (the Tide Tables section). With
+# write_tape they are the ONLY functions that may read a["range"] (F-BR-14's
+# allow-list). All three are pure functions of the view: no wall clock, no IO. The
+# Board cell sits inside the section F-BR-6 renders twice and byte-compares.
+
+def range_cell(a: dict) -> str:
+    """The Board row's RANGE cell: the macro state; if a macro range is live, its
+    bottom – top and the % position; a PENDING mark while a breach is open."""
+    r = a.get("range") or range_empty(error=RANGE_ABSENT)
+    if r.get("error"):
+        return "<td class='rng'><span class='chip pend'>RANGE UNAVAILABLE</span></td>"
+    bits = [f"<span class='chip'>{html.escape(str(r['state']))}</span>"]
+    if r.get("has_range"):
+        bits.append(f"<span class='muted'>{_f(r['bottom'])} – {_f(r['top'])}</span>")
+        if r.get("pos_pct") is not None:
+            bits.append(f"{r['pos_pct']:.0f}%")
+    p = r.get("pending")
+    if p:
+        bits.append(f"<span class='chip pend'>PENDING {html.escape(str(p['side']))} "
+                    f"· {p['bars_out']}b</span>")
+    return f"<td class='rng'>{' '.join(bits)}</td>"
+
+
+def range_watch(view: dict) -> list[dict]:
+    """EDGE WATCH, as data. The contract: 'distance ≤ 0.5 ATR [VETO] OR pending breach
+    open, sorted by distance'. The 0.5 is REGISTER['RANGE_WATCH_ATR']. A pending
+    breach whose distance cannot be measured (no usable ATR) sorts LAST; ties break on
+    the symbol so the list is deterministic. A DISPLAY LIST: nothing may act on it."""
+    lim = REGISTER["RANGE_WATCH_ATR"]["value"]
+    out = []
+    for a in view["assets"]:
+        r = a.get("range") or range_empty(error=RANGE_ABSENT)
+        d, p = r.get("dist_atr"), r.get("pending")
+        near = d is not None and d <= lim
+        if near or p:
+            out.append({"symbol": a["symbol"], "dist_atr": d, "near": near,
+                        "nearest_side": r.get("nearest_side"),
+                        "pos_pct": r.get("pos_pct"), "pending": p})
+    out.sort(key=lambda w: (w["dist_atr"] is None,
+                            w["dist_atr"] if w["dist_atr"] is not None else 0.0,
+                            w["symbol"]))
+    return out
+
+
+def tide_tables(view: dict) -> str:
+    """The TIDE TABLES section body: every roster symbol, then EDGE WATCH, then what
+    this is not. Rows are in the OPERATOR'S roster order, not the Board's heat order:
+    the table reads the same way every morning, and heat has no say in it."""
+    lens = REGISTER["RANGE_LENS"]["value"]
+    lim = REGISTER["RANGE_WATCH_ATR"]["value"]
+    window = REGISTER["RANGE_WINDOW_BARS"]["value"]
+    order = {s: i for i, s in enumerate(REGISTER["ROSTER"]["value"])}
+    assets = sorted(view["assets"], key=lambda a: order.get(a["symbol"], len(order)))
+
+    def _pos(r) -> str:
+        v = r.get("pos_pct")
+        if v is None:
+            return "—"
+        out = " <span class='pend'>outside, above the top</span>" if v > 100 else (
+            " <span class='pend'>outside, below the bottom</span>" if v < 0 else "")
+        return f"{v:.1f}%{out}"
+
+    def _pending(p) -> str:
+        if not p:
+            return "—"
+        return (f"<span class='chip pend'>PENDING</span> {html.escape(str(p['side']))} · "
+                f"{p['bars_out']} bar(s) out · {p['closes']} close(s) beyond · opened "
+                f"{html.escape(str(p['open_ts']))}Z")
+
+    def _last(r) -> str:
+        e = r.get("last_event")
+        if not e:
+            return "<span class='muted'>none yet</span>"
+        return (f"{html.escape(str(e['event']))} <span class='muted'>· {e['age_bars']} "
+                f"bar(s) ago · {html.escape(str(e['ts']))}Z</span>")
+
+    def _bars(r) -> str:
+        n = int(r.get("n_bars") or 0)
+        return f"{n:,}" + (" <span class='muted'>(short)</span>" if n < window else "")
+
+    rows, n_live, n_pend, n_fail = [], 0, 0, 0
+    for a in assets:
+        r = a.get("range") or range_empty(error=RANGE_ABSENT)
+        sym = html.escape(a["symbol"].replace("USDT", ""))
+        if r.get("error"):
+            n_fail += 1
+            rows.append(f"<tr><td class='sym'>{sym}</td><td><span class='chip pend'>"
+                        f"{RANGE_UNAVAILABLE}</span></td><td colspan='6' class='pend'>RANGE "
+                        f"LAYER FAILED on this symbol — {html.escape(str(r['error']))}. Every "
+                        f"other section is unaffected.</td></tr>")
+            continue
+        state = f"<span class='chip'>{html.escape(str(r['state']))}</span>"
+        if not r.get("has_range"):
+            rows.append(f"<tr><td class='sym'>{sym}</td><td>{state}</td>"
+                        f"<td colspan='4' class='muted'>no live macro range</td>"
+                        f"<td>{_last(r)}</td><td class='num'>{_bars(r)}</td></tr>")
+            continue
+        n_live += 1
+        n_pend += 1 if r.get("pending") else 0
+        dist = ("—" if r.get("dist_atr") is None else
+                f"{r['dist_atr']:.2f}<span class='muted'> ATR to the "
+                f"{html.escape(str(r['nearest_side']))}</span>")
+        rows.append(f"<tr><td class='sym'>{sym}</td><td>{state}</td>"
+                    f"<td class='num'>{_f(r['bottom'])} – {_f(r['top'])}</td>"
+                    f"<td class='num'>{_pos(r)}</td><td class='num'>{dist}</td>"
+                    f"<td>{_pending(r.get('pending'))}</td>"
+                    f"<td>{_last(r)}</td><td class='num'>{_bars(r)}</td></tr>")
+
+    watch = range_watch(view)
+    if watch:
+        wrows = []
+        for w in watch:
+            why = " · ".join(x for x in (
+                f"within {lim:g} ATR of the {w['nearest_side']}" if w["near"] else "",
+                "breach PENDING" if w["pending"] else "") if x)
+            dist = "—" if w["dist_atr"] is None else f"{w['dist_atr']:.2f}"
+            pos = "—" if w["pos_pct"] is None else f"{w['pos_pct']:.1f}%"
+            wrows.append(f"<tr><td class='sym'>{html.escape(w['symbol'].replace('USDT', ''))}"
+                         f"</td><td class='num'>{dist}</td>"
+                         f"<td>{html.escape(str(w['nearest_side'] or '—'))}</td>"
+                         f"<td class='num'>{pos}</td><td>{html.escape(why)}</td>"
+                         f"<td>{_pending(w['pending'])}</td></tr>")
+        watch_html = ("<table><tr><th>asset</th><th>dist ATR</th><th>boundary</th>"
+                      "<th>position</th><th>why it is here</th><th>pending breach</th></tr>"
+                      + "".join(wrows) + "</table>")
+    else:
+        watch_html = (f"<p class='muted'>EDGE WATCH is empty: no roster symbol is within "
+                      f"{lim:g} ATR of a live macro boundary, and no breach is pending.</p>")
+
+    return f"""<p class="small muted">RangeFinder v2, MACRO scale, on the {lens} lens, over the
+last {window:,} bars of the frame the Board already reads. {n_live} of {len(assets)} roster
+symbol(s) hold a live macro range · {n_pend} breach(es) pending{f' · {n_fail} UNAVAILABLE' if n_fail else ''}.
+Rows are in the operator's roster order. ("Tide Tables" is this section's name; it is not
+the 89/316 tide of the Board's regime chip.)</p>
+<table><tr><th>asset</th><th>macro state</th><th>macro bottom – top</th><th>position</th>
+<th>nearest boundary</th><th>pending breach</th><th>last event</th><th>bars</th></tr>
+{''.join(rows)}</table>
+<h3>EDGE WATCH — {len(watch)} of {len(assets)} · within {lim:g} ATR of a macro boundary [VETO], or a breach pending · sorted by distance</h3>
+{watch_html}
+<p class="small muted">WHAT THIS IS NOT. The range pins were calibrated on BTC alone — the
+micro pins on BTC 1D (KEY-A), the v2 macro pins on BTC 4h (KEY-C) — and are UNCALIBRATED on
+every other symbol: off BTC these are borrowed numbers drawing boxes, not a measured
+structure. DISPLAY-ONLY · renders, never rules: no gate, filter, heat, station, card or
+sizing reads a range; the Board's sort and every posture word exist before the range does
+(F-BR-14). KNOWN PRECISION HAZARD: the range twin's event log rounds prices to 2 dp, which
+distorts MICRO containment on sub-dollar assets; this layer reads only the full-precision
+MACRO Range fields and prints no micro range. ATR here is the range machine's own ATR(14) on
+the {lens} tape, not the daily ATR behind the Board's dist column. A position above 100% or
+below 0% is a close outside the box while a breach is pending. Each row is measured at that
+symbol's own last cached {lens} bar; "(short)" marks a cache holding fewer than {window:,} bars.
+RANGE_LENS and RANGE_WATCH_ATR are [VETO]: see the appendix.</p>"""
+
+
 def render_html(view: dict, date_str: str, canon_sha: str) -> str:
     lens = view["lens"]
     a0 = view["assets"]
@@ -814,7 +1113,8 @@ def render_html(view: dict, date_str: str, canon_sha: str) -> str:
             f"<td class='lis'>{' · '.join(lis_txt) or '<span class=muted>—</span>'}</td>"
             f"<td class='post w-{w.lower()}'>{w}</td>"
             f"<td class='muted small'>{html.escape(st.board_reason)}</td>"
-            f"<td class='num muted'>{a['heat']:.3f}</td></tr>")
+            f"<td class='num muted'>{a['heat']:.3f}</td>"
+            f"{range_cell(a)}</tr>")
 
     cards = []
     for a in a0:
@@ -944,6 +1244,9 @@ td{{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}}
 .d-short{{color:var(--terra);border-color:var(--terra)}}
 .stale{{color:var(--terra);border-color:var(--terra);font-weight:700}}
 .prov{{color:var(--mut);border-color:var(--mut)}}
+.pend{{color:var(--terra);border-color:var(--terra);font-weight:700}}
+.rng{{font-size:11.5px}}
+h3{{font-size:12px;letter-spacing:.14em;color:var(--mut);margin:22px 0 8px;text-transform:uppercase}}
 .post{{font-weight:700;letter-spacing:.1em}}
 .w-triggered{{color:var(--sage)}} .w-armed{{color:var(--teal)}}
 .w-dead{{color:var(--terra)}} .w-stalking{{color:var(--mut)}}
@@ -969,16 +1272,21 @@ roster {len(a0)} · posture canon v1 sha256 {canon_sha}</p>
 
 <h2>The Board — where is business possible today</h2>
 <table><tr><th>asset</th><th>regime</th><th>dist</th><th>score</th>
-<th>two lines in the sand</th><th>posture</th><th>why</th><th>heat</th></tr>
+<th>two lines in the sand</th><th>posture</th><th>why</th><th>heat</th><th>range</th></tr>
 {''.join(board)}</table>
 <p class="small muted">heat = {html.escape(REGISTER['HEAT']['value'])} [VETO — proposed,
-not ruled]. Both inputs print in the row so the sort is auditable.</p>
+not ruled]. Both inputs print in the row so the sort is auditable. RANGE is the 4h macro
+range from the Tide Tables below, printed LAST because it is display-only: it enters no
+heat, no sort, no posture word and no card.</p>
 
 <h2>Trap Cards — pre-framed if-thens</h2>
 {''.join(cards) or '<p class="muted">no admitted open window on the roster.</p>'}
 
 <h2>The Watch — living 12/89 windows</h2>
 {''.join(watch)}
+
+<h2>Tide Tables — macro ranges, display-only</h2>
+{tide_tables(view)}
 
 <h2>Spaghetti — anchored at each asset's last 89/316 tide flip</h2>
 {svg_spaghetti(view)}
@@ -1076,12 +1384,29 @@ TAPE_COLS = ["as_of_ms", "as_of_iso", "asset", "lens", "station", "tide",
              "d_ok", "trigger_ms", "trigger_on_arming_bar", "closed_by",
              "close_px", "atr_lens", "atr_daily", "n_levels", "n_clusters",
              "nearest_cluster_atr", "nearest_cluster_score", "heat",
-             "payload_sha"]
+             "payload_sha",
+             # OR-1 STEP D: the range layer, APPENDED. The 24 names above keep their
+             # order and their meaning, so a reader of the old tapes reads the new ones.
+             # RECORDING only: what the Tide Tables printed, per asset, at the as-of
+             # bar. Every name clears the banned-token matcher the wrapper's daily
+             # self-check runs over this list (F-BR-14 re-runs it; "edge" is banned, so
+             # nothing here is called that).
+             "range_state", "range_top", "range_bottom", "range_pos_pct",
+             "range_dist_atr", "range_pending_side", "range_last_event",
+             "range_last_event_age_bars"]
+# float64 even on a day when no roster symbol holds a range: an all-None column would
+# land in the parquet as a null-typed column and change dtype from one day to the next.
+RANGE_TAPE_FLOATS = ("range_top", "range_bottom", "range_pos_pct", "range_dist_atr",
+                     "range_last_event_age_bars")
 
 
 def write_tape(view: dict, date_str: str) -> tuple[Path, str, int]:
     """C-10 / D-4. One event stream, two renders — HTML for the operator,
-    parquet for TC4. RECORDING only: not one outcome column exists here."""
+    parquet for TC4. RECORDING only: not one outcome column exists here.
+
+    OR-1 STEP D appends the range layer's eight columns. They RECORD what the Tide
+    Tables printed; nothing downstream of this file may treat them as a filter or a
+    score without its own registration under G-7."""
     TAPE_DIR.mkdir(parents=True, exist_ok=True)
     rows = []
     for a in view["assets"]:
@@ -1097,6 +1422,17 @@ def write_tape(view: dict, date_str: str) -> tuple[Path, str, int]:
             "nearest_cluster_score": (a["nearest"]["score"] if a["nearest"] else None),
             "heat": a["heat"], "payload_sha": a["payload_sha"],
         }
+        # OR-1 STEP D: the asset's range, the same on every row of that asset (like
+        # heat). write_tape is one of the range object's two permitted readers.
+        rg = a.get("range") or range_empty(error=RANGE_ABSENT)
+        base.update({
+            "range_state": rg.get("state"),
+            "range_top": rg.get("top"), "range_bottom": rg.get("bottom"),
+            "range_pos_pct": rg.get("pos_pct"), "range_dist_atr": rg.get("dist_atr"),
+            "range_pending_side": (rg.get("pending") or {}).get("side"),
+            "range_last_event": (rg.get("last_event") or {}).get("event"),
+            "range_last_event_age_bars": (rg.get("last_event") or {}).get("age_bars"),
+        })
         wins = list(st.open_windows) + list(st.recent_dead)
         if not wins:
             rows.append({**base, "direction": None, "arm_ms": None, "age_bars": None,
@@ -1109,6 +1445,8 @@ def write_tape(view: dict, date_str: str) -> tuple[Path, str, int]:
                          "trigger_on_arming_bar": w.trigger_on_arming_bar,
                          "closed_by": w.closed_by or None})
     df = pd.DataFrame(rows, columns=TAPE_COLS)
+    for col in RANGE_TAPE_FLOATS:
+        df[col] = df[col].astype("float64")
     p = TAPE_DIR / f"oracle_tape_{date_str}.parquet"
     df.to_parquet(p, index=False)
     b = p.read_bytes()

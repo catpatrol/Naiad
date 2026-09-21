@@ -1,7 +1,8 @@
 """ORACLE FIXTURES — F-BR-1 .. F-BR-12 of queue BR-1 (as amended by A1-4, A2-8, T-7),
-F-BR-13 of queue OR-1 STEP B (finding C-0: the D-7 logger must MEASURE), and
-F-BR-16 of queue OR-1 STEP C (the roster is ONE literal definition; 14 and 15 are
-the numbers the OR-1 contract gives to STEP D and STEP F).
+F-BR-13 of queue OR-1 STEP B (finding C-0: the D-7 logger must MEASURE),
+F-BR-14 of queue OR-1 STEP D (the range layer renders and never rules), and
+F-BR-16 of queue OR-1 STEP C (the roster is ONE literal definition; 15 is the
+number the OR-1 contract gives to STEP F).
 
 BR-1 §4, verbatim: "FIXTURES (numbered; each shown FAILING on a deliberate
 break before trusted)". So every fixture here runs TWICE:
@@ -1756,6 +1757,670 @@ def f_br_13() -> None:
           _break, lambda: _c0_measured())
 
 
+# ═════════ F-BR-14 · THE RANGE LAYER RENDERS, NEVER RULES (OR-1 STEP D, 2026-09-21)
+#
+# WHAT THIS GUARDS. OR-1 §2, from the operator's ratification line: "no gate, filter,
+# or sizing reads a range or a mover." STEP D put a RangeFinder macro range on every
+# roster symbol: a RANGE cell on the Board, the TIDE TABLES, the EDGE WATCH list and
+# eight tape columns. A range is the most tempting number on the page to act on
+# ("it is 0.4 ATR from the top, so damp the heat"), and the day one line does that,
+# a display organ calibrated on ONE symbol (BTC; KEY-A on 1D, KEY-C on 4h) is steering
+# posture words on eighteen. The contract's words for this fixture: "posture_engine.py
+# byte-unchanged (sha printed); the range object appears only in render + tape, never
+# in any gate path (component-wise import scan); planted gate read ⇒ red."
+#
+# FOUR LEGS, because each one alone has a hole the next one covers:
+#   (a) THE SHA      scripts/posture_engine.py is byte-for-byte the file pinned below.
+#                    Every station word on the page comes from it; STEP D had no
+#                    business in it and this proves it had none. A later RATIFIED
+#                    edit to posture_engine.py re-pins the constant in the same commit
+#                    (the F-TU-1 idiom): the red is the point, not an accident.
+#   (b) THE IMPORTS  in clean subprocesses, the closure of every decision module holds
+#                    no module with the component `rangefinder` (nor `oracle_daily`:
+#                    a gate that imported the Oracle could read a view), and the range
+#                    machine's own closure holds no trading / journal / outcome-package
+#                    component. Component-wise, the F-BR-3 repair: `engine.rangefinder`
+#                    cannot hide behind a top-level-only test. A raw-text import scan
+#                    covers the rule modules this suite never IMPORTS (another lane's
+#                    live work is read, never executed).
+#   (c) THE AST      oracle_daily.py, scanned as CODE: every mention of the asset-dict
+#                    key 'range', of the snapshot's own key names, of the `RNG` alias
+#                    and of the layer's five functions must sit inside an ALLOW-LIST of
+#                    function names. build_view is on it for exactly ONE statement, of
+#                    exactly one shape. By VALUE, not by spelling: `k = "range"; a[k]`
+#                    is caught, and so is a gate that calls range_watch(). Fails
+#                    CLOSED: if the key it hunts is no longer read by write_tape or by
+#                    a render function, the scan is hunting a stale name and says so.
+#   (d) THE RUN      what no static scan can promise (`for v in a.values()` names
+#                    nothing). build_view runs three times over the live roster:
+#                    REAL, the layer stubbed EMPTY, and stubbed HOT (every symbol
+#                    pinned ON a macro boundary with a breach pending: the input a gate
+#                    would react to hardest). Sort order, heat, station, card, lines,
+#                    clusters, fired events, R1, the WHOLE D-7 document and the 24
+#                    pre-existing tape columns must come out identical; the range
+#                    columns must NOT, or the stub never reached build_view and the
+#                    comparison is empty. THE PAGE IS COMPARED TOO, because leg (c)
+#                    lets render_html read a range and a reader can misbehave (a Board
+#                    re-sorted by distance inside the render moves no field of the
+#                    view): every rendered section but the Tide Tables, the Board with
+#                    its RANGE cells cut out, identical across the three runs.
+# and three small pins that belong to the same wall: the new tape names clear the
+# banned-token matcher the wrapper's self-check runs ("edge" is banned); no D-7 key
+# carries the token `range`; and range_layer() CONTAINS a fault (a display organ may
+# not take the Board down) and REFUSES a frame that is not on REGISTER['RANGE_LENS'].
+#
+# WHAT IT DOES NOT PROVE. That the ranges are RIGHT (F-RF-*, and only on BTC). That a
+# human will not act on the number (nothing can). That code OUTSIDE oracle_daily.py
+# and the modules in (b) never reads a tape column: the tape is a recording, and what
+# a later study does with it is that study's registration under G-7.
+#
+# LIKE F-BR-16, IT AUDITS THE NEWEST ARTIFACT SET TOO: the edition under test must
+# carry the Tide Tables, EDGE WATCH, both [VETO] rows in its appendix and the eight
+# range columns on its tape. Run bare against an edition printed before STEP D it is
+# RED on exactly those, on purpose, until an edition is printed by this code.
+#
+# BREAK LEG: one plant per guard, judged ONE AT A TIME (the F-BR-13 idiom): each
+# must go red on its own and for its own reason, named beside it.
+
+POSTURE_ENGINE_SHA256 = "1e3b3ba28e251d1fa3ef6ab8add5f1841164312e061e94686f7e3e8c8fc666b4"
+
+# The contract's six, plus engine.htf (it feeds the signal layer; engine/rangefinder.py's
+# own docstring names it a stranger).
+RANGE_DECISION_MODULES = ("posture_engine", "tierc2_rules", "tierc3_rules",
+                          "engine.signals", "engine.trading", "engine.replay", "engine.htf")
+RANGE_MACHINE = "engine.rangefinder"
+RANGE_BANNED_IN_DECISION = ("rangefinder", "oracle_daily")
+RANGE_BANNED_IN_MACHINE = ("trading", "journal", "analytics", "signals", "replay",
+                           "forward_log", "positions")
+# Read as TEXT only, never imported: every engine module but the machine itself, the
+# posture engine, and every tierc*_rules module (tierc6 is another lane's live work).
+RANGE_IMPORT_LINE = re.compile(r"(?m)^[ \t]*(?:from|import)[ \t]+[^\n#]*\brangefinder\b")
+
+RANGE_KEY = "range"
+RANGE_ALIAS = "RNG"
+RANGE_PRODUCER = "range_layer"
+RANGE_HELPERS = ("range_layer", "range_empty", "range_cell", "range_watch", "tide_tables")
+# THE ALLOW-LIST. The layer's own five functions, the page, the tape. Nothing else.
+RANGE_READERS = (*RANGE_HELPERS, "render_html", "write_tape")
+RANGE_WRITER = "build_view"                     # one statement, one shape
+# named by the OR-1 STEP D build order: each must EXIST and hold zero mentions
+RANGE_NAMED_GATES = ("level_registry", "trap_card", "net_rr", "fired_events",
+                     "r1_block", "write_calibration")
+# snapshot keys no other code in the file has a reason to spell. Checked against the
+# live snapshot, so a rename over there cannot quietly blind the scan over here.
+RANGE_ONLY_KEYS = ("has_range", "pos_pct", "dist_atr", "nearest_side",
+                   "n_pending_open", "n_potential", "last_event", "status_line")
+RANGE_REGISTER_IMPORTS = ("V2_WINDOW_BARS",)    # the one thing REGISTER may read off RNG
+RANGE_GATE_TEXT = ('if assets[-1]["range"]["dist_atr"] is not None and '
+                   'assets[-1]["range"]["dist_atr"] < 0.5: assets[-1]["heat"] *= 2')
+RANGE_MUTANT_ROSTER = 3          # the behavioural BREAK runs on the first 3 roster rows
+
+
+def _range_sha(pe_bytes: bytes | None = None) -> tuple[list[str], str]:
+    b = (ROOT / "scripts" / "posture_engine.py").read_bytes() if pe_bytes is None else pe_bytes
+    got = hashlib.sha256(b).hexdigest()
+    if got != POSTURE_ENGINE_SHA256:
+        return [f"posture_engine.py is not the pinned file: sha256 {got} != pinned "
+                f"{POSTURE_ENGINE_SHA256}"], got
+    return [], got
+
+
+def _closure_src(modname: str, src: str) -> set[str]:
+    """_closure() of a PLANTED copy: `src` is written as <modname>.py into a throwaway
+    directory that goes FIRST on the subprocess's path, so it shadows the real module
+    there and nowhere else. No file in the repo is touched."""
+    with tempfile.TemporaryDirectory(prefix="f-br-14-") as td:
+        (Path(td) / f"{modname}.py").write_text(src, encoding="utf-8")
+        code = ("import sys, json; sys.dont_write_bytecode = True; "
+                "sys.path.insert(0,'.'); sys.path.insert(0,'scripts'); "
+                f"sys.path.insert(0,{td!r}); import {modname}; "
+                "print(json.dumps(sorted(set(sys.modules))))")
+        out = subprocess.run([sys.executable, "-c", code], cwd=ROOT,
+                             capture_output=True, text=True)
+    if out.returncode != 0:
+        raise RuntimeError(out.stderr[-400:])
+    return set(json.loads(out.stdout.strip().splitlines()[-1]))
+
+
+def _range_reach(who: str, closure: set[str], banned) -> list[str]:
+    hits = sorted(x for x in closure if set(x.split(".")) & set(banned))
+    return [f"{who} reaches {hits[:4]} (component-wise match on {sorted(banned)})"] if hits else []
+
+
+def _range_static_sources() -> dict[str, str]:
+    files = [p for p in sorted((ROOT / "engine").glob("*.py")) if p.name != "rangefinder.py"]
+    files += [ROOT / "scripts" / "posture_engine.py"]
+    files += sorted((ROOT / "scripts").glob("tierc*_rules.py"))
+    return {str(p.relative_to(ROOT)): p.read_text(encoding="utf-8", errors="replace")
+            for p in files}
+
+
+def _range_static(sources: dict[str, str]) -> list[str]:
+    bad = []
+    for name, text in sources.items():
+        m = RANGE_IMPORT_LINE.search(text)
+        if m:
+            bad.append(f"{name} imports the range machine: `{m.group(0).strip()}`")
+    return bad
+
+
+def _range_closures() -> tuple[list[str], dict]:
+    """Leg (b), the real thing: one clean subprocess per module, run side by side."""
+    from concurrent.futures import ThreadPoolExecutor
+    mods = (*RANGE_DECISION_MODULES, RANGE_MACHINE)
+    with ThreadPoolExecutor(max_workers=len(mods)) as ex:
+        clos = dict(zip(mods, ex.map(_closure, mods)))
+    bad: list[str] = []
+    for m in RANGE_DECISION_MODULES:
+        bad += _range_reach(m, clos[m], RANGE_BANNED_IN_DECISION)
+    bad += _range_reach(f"the range machine ({RANGE_MACHINE})", clos[RANGE_MACHINE],
+                        RANGE_BANNED_IN_MACHINE)
+    if RANGE_MACHINE not in clos[RANGE_MACHINE]:
+        bad.append(f"{RANGE_MACHINE} is absent from its own closure — the probe imported nothing")
+    if RANGE_MACHINE not in _closure("oracle_daily"):
+        bad.append(f"oracle_daily does not import {RANGE_MACHINE} — this leg is guarding a "
+                   f"layer that is not there")
+    sources = _range_static_sources()
+    bad += _range_static(sources)
+    return bad, {"sizes": {m: len(c) for m, c in clos.items()}, "static": len(sources)}
+
+
+def _range_mentions(node):
+    """(lineno, what) for every way a range can be NAMED under `node`. Docstrings are
+    whole-string constants and never equal a key, so prose cannot trip this."""
+    for n in ast.walk(node):
+        if isinstance(n, ast.Constant) and isinstance(n.value, str) and (
+                n.value == RANGE_KEY or n.value in RANGE_ONLY_KEYS):
+            yield n, f"the key {n.value!r}"
+        elif isinstance(n, ast.Name) and (n.id == RANGE_ALIAS or n.id in RANGE_HELPERS):
+            yield n, f"the name `{n.id}`"
+        elif isinstance(n, ast.Attribute) and n.attr in RANGE_HELPERS:
+            yield n, f"the attribute `.{n.attr}`"
+
+
+def _range_ast(src: str | None = None) -> tuple[list[str], dict]:
+    """Leg (c). Scans CODE, not prose: comments and docstrings cannot satisfy or trip it."""
+    src = (ROOT / "scripts" / "oracle_daily.py").read_text(encoding="utf-8") if src is None else src
+    tree = ast.parse(src)
+    bad: list[str] = []
+    fns = {n.name: n for n in tree.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))}
+
+    binds = [(n, a) for n in ast.walk(tree) if isinstance(n, (ast.Import, ast.ImportFrom))
+             for a in n.names if (a.asname or a.name) == RANGE_ALIAS]
+    ok_bind = [1 for n, a in binds if isinstance(n, ast.ImportFrom)
+               and n.module == "engine" and a.name == "rangefinder"]
+    if len(binds) != 1 or len(ok_bind) != 1:
+        bad.append(f"`{RANGE_ALIAS}` must be bound exactly once, by `from engine import "
+                   f"rangefinder as {RANGE_ALIAS}` (found {len(binds)} binding(s)) — fail closed")
+    for n in ast.walk(tree):
+        if isinstance(n, (ast.Import, ast.ImportFrom)):
+            for a in n.names:
+                full = f"{getattr(n, 'module', None) or ''}.{a.name}".strip(".")
+                if "rangefinder" in full.split(".") and (a.asname or a.name) != RANGE_ALIAS:
+                    bad.append(f"line {n.lineno}: the range machine is imported a second way "
+                               f"(`{full}` as `{a.asname or a.name}`) — the scan fences one alias")
+
+    for stmt in tree.body:
+        if isinstance(stmt, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            if stmt.name in RANGE_READERS or stmt.name == RANGE_WRITER:
+                continue
+            for n, what in _range_mentions(stmt):
+                bad.append(f"{stmt.name}() mentions {what} at line {n.lineno} — it is not on the "
+                           f"allow-list: a range may be read by the render and the tape and by "
+                           f"nothing that gates")
+            continue
+        tgt = (stmt.targets if isinstance(stmt, ast.Assign)
+               else [stmt.target] if isinstance(stmt, ast.AnnAssign) else [])
+        is_register = any(isinstance(t, ast.Name) and t.id == "REGISTER" for t in tgt)
+        parent = {c: p for p in ast.walk(stmt) for c in ast.iter_child_nodes(p)}
+        for n, what in _range_mentions(stmt):
+            p = parent.get(n)
+            if (is_register and isinstance(n, ast.Name) and n.id == RANGE_ALIAS
+                    and isinstance(p, ast.Attribute) and p.attr in RANGE_REGISTER_IMPORTS):
+                continue                           # REGISTER importing the window: §6.4
+            bad.append(f"module level mentions {what} at line {n.lineno} — outside every "
+                       f"function, only REGISTER may read {RANGE_ALIAS}."
+                       f"{'/'.join(RANGE_REGISTER_IMPORTS)}")
+
+    bv = fns.get(RANGE_WRITER)
+    writes = []
+    if bv is None:
+        bad.append(f"{RANGE_WRITER}() not found — fail closed")
+    else:
+        for n in ast.walk(bv):
+            if not (isinstance(n, ast.Assign) and len(n.targets) == 1):
+                continue
+            t, v = n.targets[0], n.value
+            if (isinstance(t, ast.Subscript) and isinstance(t.ctx, ast.Store)
+                    and isinstance(t.slice, ast.Constant) and t.slice.value == RANGE_KEY
+                    and isinstance(v, ast.Call) and isinstance(v.func, ast.Name)
+                    and v.func.id == RANGE_PRODUCER and not v.keywords
+                    and len(v.args) == 1 and isinstance(v.args[0], ast.Name)
+                    and v.args[0].id == "h4"):
+                writes.append(n)
+        if len(writes) != 1:
+            bad.append(f"{RANGE_WRITER}() must hold exactly ONE write of the shape "
+                       f"`<asset>[{RANGE_KEY!r}] = {RANGE_PRODUCER}(h4)`; found {len(writes)}")
+        inside = {id(x) for w in writes for x in ast.walk(w)}
+        for n, what in _range_mentions(bv):
+            if id(n) not in inside:
+                bad.append(f"{RANGE_WRITER}() mentions {what} at line {n.lineno} OUTSIDE the "
+                           f"one assignment — heat, the sort, the station and the card are "
+                           f"computed here, and none of them may see a range")
+
+    for g in RANGE_NAMED_GATES:
+        if g not in fns:
+            bad.append(f"{g}() not found — it is named as range-free and cannot be checked; "
+                       f"fail closed")
+    for r in RANGE_READERS:
+        if r not in fns:
+            bad.append(f"allow-listed reader {r}() not found — fail closed")
+    # fail closed: the key this scan hunts must be the key the code really reads
+    reads = {r: sum(1 for n, what in _range_mentions(fns[r]) if what == f"the key {RANGE_KEY!r}")
+             for r in ("write_tape", "range_cell", "range_watch", "tide_tables") if r in fns}
+    dead = [r for r, k in reads.items() if not k]
+    if dead:
+        bad.append(f"{dead} never read the key {RANGE_KEY!r} — the scan is hunting a stale "
+                   f"name; fail closed")
+    return bad, {"write_line": writes[0].lineno if writes else None, "reads": reads,
+                 "functions": len(fns)}
+
+
+def _range_plant_in(src: str, fn_name: str, stmt_src: str) -> str | None:
+    """`stmt_src` planted as the first statement of `fn_name` (after its docstring)."""
+    tree = ast.parse(src)
+    fn = next((n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == fn_name), None)
+    if fn is None:
+        return None
+    doc = (fn.body and isinstance(fn.body[0], ast.Expr)
+           and isinstance(fn.body[0].value, ast.Constant) and isinstance(fn.body[0].value.value, str))
+    at = 1 if doc else 0
+    fn.body[at:at] = ast.parse(stmt_src).body
+    return ast.unparse(ast.fix_missing_locations(tree))
+
+
+def _range_plant_narrow_except(src: str) -> str | None:
+    """range_layer's `except Exception` narrowed to ZeroDivisionError: the pre-containment
+    world, in which a fault in the display organ escapes into build_view."""
+    tree = ast.parse(src)
+    fn = next((n for n in tree.body if isinstance(n, ast.FunctionDef)
+               and n.name == RANGE_PRODUCER), None)
+    hs = [h for n in ast.walk(fn) if isinstance(n, ast.Try) for h in n.handlers] if fn else []
+    if len(hs) != 1:
+        return None
+    hs[0].type = ast.Name(id="ZeroDivisionError", ctx=ast.Load())
+    return ast.unparse(ast.fix_missing_locations(tree))
+
+
+def _range_plant_after_write(src: str, text: str) -> str | None:
+    """`text` planted on the line after build_view's one range write, same indent."""
+    want = f'assets[-1]["{RANGE_KEY}"] = {RANGE_PRODUCER}(h4)'
+    lines = src.split("\n")
+    at = [i for i, ln in enumerate(lines) if ln.strip() == want]
+    if len(at) != 1:
+        return None
+    pad = lines[at[0]][: len(lines[at[0]]) - len(lines[at[0]].lstrip())]
+    return "\n".join(lines[: at[0] + 1] + [pad + text] + lines[at[0] + 1:])
+
+
+def _range_mutant(src: str):
+    """oracle_daily.py's SOURCE, edited, run as a throwaway module. It is never put in
+    sys.modules and writes nothing: only build_view / r1_block / range_layer are called."""
+    import types
+    mod = types.ModuleType("oracle_daily_f_br_14_mutant")
+    mod.__file__ = str(ROOT / "scripts" / "oracle_daily.py")
+    exec(compile(src, mod.__file__, "exec"), mod.__dict__)
+    return mod
+
+
+def _range_stub_empty(h4) -> dict:
+    return OD.range_empty(state="NEUTRAL")
+
+
+def _range_stub_hot(h4) -> dict:
+    """Every symbol pinned ON its macro top with a breach pending, distance 0.0 ATR."""
+    c = float(h4["close"].to_numpy("float64")[-1])
+    ts = "1970-01-01T00:00"
+    s = OD.range_empty(state="NEUTRAL")
+    s.update(has_range=True, top=c, bottom=0.9 * c, top0=c, bottom0=0.9 * c, mid=0.95 * c,
+             pos_pct=100.0, atr=0.01 * c, dist_atr=0.0, nearest_side="top",
+             pending={"side": "top", "open_ts": ts, "bars_out": 1, "closes": 1},
+             n_pending_open=1, last_event={"event": "breach-open", "ts": ts, "age_bars": 1},
+             status_line="F-BR-14 HOT STUB", as_of=ts, close=c, n_bars=int(len(h4)))
+    return s
+
+
+RANGE_DECISION_FIELDS = ("heat", "station", "card", "lis", "nearest", "nearest_d",
+                         "clusters", "n_levels", "atr_d", "price", "payload_sha",
+                         "vwap_maturity")
+
+
+def _range_decision_side(mod, view: dict) -> dict[str, str]:
+    """Everything a gate COULD have moved, as repr() text keyed so a difference names
+    itself (repr makes NaN equal NaN). The D-7 document and the tape are WRITTEN, into
+    a throwaway directory, and read back: what is compared is what would be filed."""
+    out = {"the Board's sort order": repr([a["symbol"] for a in view["assets"]]),
+           "as_of_ms": repr(view["as_of_ms"]), "card_toll_atr": repr(view["card_toll_atr"]),
+           "fired events": repr(view["fired"]), "R1 block": mod.r1_block(view)}
+    for a in view["assets"]:
+        for k in RANGE_DECISION_FIELDS:
+            out[f"{a['symbol']}.{k}"] = repr(a[k])
+    real_cal, real_tape = mod.CAL_DIR, mod.TAPE_DIR
+    try:
+        with tempfile.TemporaryDirectory(prefix="f-br-14-") as td:
+            mod.CAL_DIR, mod.TAPE_DIR = Path(td) / "cal", Path(td) / "tape"
+            cal_p, _, _ = mod.write_calibration(view, "0000-00-00", "fixture")
+            doc = json.loads(Path(cal_p).read_text())
+            tape_p, _, _ = mod.write_tape(view, "0000-00-00")
+            tape = pd.read_parquet(tape_p)
+    finally:
+        mod.CAL_DIR, mod.TAPE_DIR = real_cal, real_tape
+    doc.pop("generated_utc", None)                 # the one wall-clock field
+    out["the D-7 document"] = json.dumps(doc, sort_keys=True)
+    out["D-7 keys carrying the token `range`"] = repr(sorted(
+        k for k in set(_keys_deep(doc)) if RANGE_KEY in re.split(r"[^a-z0-9]+", k.lower())))
+    rcols = [c for c in tape.columns if c.startswith("range_")]
+    out["the pre-existing tape columns"] = tape[[c for c in tape.columns
+                                                 if c not in rcols]].to_csv(index=False)
+    out["__range_columns__"] = tape[rcols].to_csv(index=False)       # MUST differ
+    # THE PAGE, because render_html is on the allow-list and a reader can misbehave
+    # too (a Board re-sorted by distance inside the render would move no field
+    # above). Every section but the Tide Tables, up to the footer; the Board with
+    # its RANGE cells cut out. What is left may not know a range exists.
+    page = mod.render_html(view, "0000-00-00", PE.canon_sha()).split("<footer>")[0]
+    for part in re.split(r"<h2>", page)[1:]:
+        title = part.split("</h2>")[0]
+        if title.lower().startswith("tide tables"):
+            continue
+        if title.lower().startswith("the board"):
+            part, n_cells = re.subn(r"<td class='rng'>.*?</td>", "", part, flags=re.S)
+            out["__range_cells__"] = str(n_cells)
+        out[f"the rendered section '{title[:40]}'"] = part
+    return out
+
+
+def _range_behaviour(mod=None, n_roster: int | None = None) -> tuple[list[str], dict]:
+    """Leg (d). `mod` is oracle_daily, or a mutant of it for the break leg."""
+    mod = OD if mod is None else mod
+    quiet = lambda *a, **k: None                   # noqa: E731
+    full = mod.REGISTER["ROSTER"]["value"]
+    layer = mod.range_layer
+    sides, views = {}, {}
+    try:
+        if n_roster:
+            mod.REGISTER["ROSTER"]["value"] = tuple(full[:n_roster])   # a slice, never a list
+        for name, stub in (("REAL", None), ("EMPTY", _range_stub_empty), ("HOT", _range_stub_hot)):
+            mod.range_layer = layer if stub is None else stub
+            views[name] = mod.build_view(log=quiet)
+            mod.range_layer = layer
+            sides[name] = _range_decision_side(mod, views[name])
+    finally:
+        mod.range_layer = layer
+        mod.REGISTER["ROSTER"]["value"] = full
+    bad: list[str] = []
+    for name in ("EMPTY", "HOT"):
+        moved = [k for k in sides["REAL"] if k != "__range_columns__"
+                 and sides["REAL"][k] != sides[name].get(k)]
+        moved += [k for k in sides[name] if k not in sides["REAL"]]
+        if moved:
+            bad.append(f"decision side moved with the range layer stubbed {name}: "
+                       f"{len(moved)} field(s) differ from the REAL run, first {moved[:4]} — "
+                       f"something that gates is reading a range")
+    # the comparison is only worth something if the stubs REACHED build_view
+    hot = [a["range"] for a in views["HOT"]["assets"]]
+    if not hot or any(r.get("dist_atr") != 0.0 or not r.get("pending") for r in hot):
+        bad.append("the HOT stub never reached build_view — leg (d) compared nothing")
+    if any(a["range"].get("has_range") for a in views["EMPTY"]["assets"]):
+        bad.append("the EMPTY stub never reached build_view — leg (d) compared nothing")
+    rc = "__range_columns__"
+    if sides["HOT"][rc] in (sides["REAL"][rc], sides["EMPTY"][rc]):
+        bad.append("the tape's range columns under the HOT stub equal another run's — the "
+                   "range never reaches the tape, or the stub never reached the view")
+    if sides["REAL"].get("__range_cells__") != str(len(views["REAL"]["assets"])):
+        bad.append(f"the Board carries {sides['REAL'].get('__range_cells__')} RANGE cell(s) for "
+                   f"{len(views['REAL']['assets'])} row(s) — the cut that lets the Board be "
+                   f"compared found the wrong number of cells")
+    if sides["REAL"]["D-7 keys carrying the token `range`"] != "[]":
+        bad.append("range data reached the calibration JSON: "
+                   + sides["REAL"]["D-7 keys carrying the token `range`"])
+    real = [a["range"] for a in views["REAL"]["assets"]]
+    return bad, {"assets": len(real), "fields": len(sides["REAL"]) - 2,
+                 "sections": sorted(k for k in sides["REAL"] if k.startswith("the rendered")),
+                 "live": sum(1 for r in real if r.get("has_range")),
+                 "pending": sum(1 for r in real if r.get("pending")),
+                 "failed": sum(1 for r in real if r.get("error")),
+                 "keys": sorted({k for r in real if not r.get("error") for k in r})}
+
+
+def _range_tape_names(cols=None) -> list[str]:
+    """Every range column is a RECORDING name: it clears the banned-token matcher the
+    wrapper's daily self-check runs over oracle_daily.TAPE_COLS."""
+    cols = list(OD.TAPE_COLS) if cols is None else list(cols)
+    new = [c for c in cols if c.startswith("range_")]
+    bad = []
+    for c in new:
+        ok, detail = _calibration({c: 0})
+        if not ok:
+            bad.append(f"tape column {c!r} trips the banned vocabulary: {detail}")
+    if not new:
+        bad.append("TAPE_COLS carries no range_* column — the tape half of STEP D is missing")
+    if TAPE is not None:
+        missing = [c for c in new if c not in TAPE.columns]
+        if missing:
+            bad.append(f"artifact set {DATE}: the tape lacks {missing} — it was not written by "
+                       f"this code")
+    return bad
+
+
+def _range_containment(mod=None) -> tuple[list[str], dict]:
+    """A display organ may not take the Board down, and may not run off its lens."""
+    mod = OD if mod is None else mod
+    sym = mod.REGISTER["ROSTER"]["value"][0]
+    h4 = mod.load_lens(sym, "4h")
+    bad, got = [], {}
+    for name, frame, must in (
+            ("an EMPTY frame", h4.iloc[0:0], None),
+            ("a 1h frame", mod.load_lens(sym, "1h", tail=400), "RANGE_LENS")):
+        try:
+            r = mod.range_layer(frame)
+        except Exception as e:
+            bad.append(f"range_layer RAISED on {name} ({e.__class__.__name__}: {e}) — a fault in "
+                       f"a display organ would have cost the operator the whole edition")
+            continue
+        got[name] = r.get("error")
+        if not r.get("error") or r.get("has_range") or r.get("state") != mod.RANGE_UNAVAILABLE:
+            bad.append(f"range_layer on {name} returned state={r.get('state')!r} "
+                       f"error={r.get('error')!r} — it must say UNAVAILABLE and why")
+        elif must and must not in r["error"]:
+            bad.append(f"range_layer refused {name} without naming {must}: {r['error']!r}")
+    ok = mod.range_layer(h4)
+    if ok.get("error"):
+        bad.append(f"range_layer FAILED on the real {sym} 4h frame: {ok['error']}")
+    return bad, got
+
+
+def f_br_14() -> None:
+    od_src = (ROOT / "scripts" / "oracle_daily.py").read_text(encoding="utf-8")
+    pe_path = ROOT / "scripts" / "posture_engine.py"
+    rf_src = (ROOT / "engine" / "rangefinder.py").read_text(encoding="utf-8")
+    gate_src = _range_plant_after_write(od_src, RANGE_GATE_TEXT)
+    narrow = _range_plant_narrow_except(od_src)
+    # a READER misbehaving: legal to the AST leg (render_html is on the allow-list),
+    # so only the run can see it — the page quietly drops every row with a breach open
+    drop_src = _range_plant_in(od_src, "render_html",
+                               f"view = dict(view, assets=[a for a in view['assets'] "
+                               f"if not a['{RANGE_KEY}'].get('pending')])")
+    drop_ast = len(_range_ast(drop_src)[0]) if drop_src else -1
+    rules = ROOT / "scripts" / "tierc3_rules.py"
+
+    def ast_plant(src):
+        return None if src is None else (lambda: _range_ast(src)[0])
+
+    def gate_plant(fn, stmt):
+        return (f"AST PLANT (a range read planted in {fn}(): `{stmt}`)", f"{fn}() mentions",
+                ast_plant(_range_plant_in(od_src, fn, stmt)))
+
+    # (name, the finding it MUST produce, how it is judged). One at a time.
+    plants = [
+        ("SHA PLANT (one comment line appended to a copy of posture_engine.py)",
+         "is not the pinned file",
+         lambda: _range_sha(pe_path.read_bytes() + b"\n# F-BR-14 planted byte\n")[0]),
+        ("CLOSURE PLANT (`import engine.rangefinder` planted in a copy of posture_engine.py)",
+         "posture_engine reaches",
+         lambda: _range_reach("posture_engine", _closure_src(
+             "posture_engine", pe_path.read_text(encoding="utf-8") + "\nimport engine.rangefinder\n"),
+             RANGE_BANNED_IN_DECISION)),
+        ("CLOSURE PLANT (`from engine import journal` planted in a copy of engine/rangefinder.py)",
+         "the range machine reaches",
+         lambda: _range_reach("the range machine", _closure_src(
+             "rangefinder_f_br_14_planted", rf_src + "\nfrom engine import journal\n"),
+             RANGE_BANNED_IN_MACHINE)),
+        (f"STATIC PLANT (`from engine.rangefinder import run_v2` appended to the TEXT of "
+         f"{rules.name}, never executed)",
+         "imports the range machine",
+         lambda: _range_static({rules.name: rules.read_text(encoding="utf-8")
+                                + "\nfrom engine.rangefinder import run_v2\n"})),
+        (f"AST PLANT (the contract's gate read, planted after build_view's one write: "
+         f"`{RANGE_GATE_TEXT}`)",
+         "OUTSIDE the one assignment", ast_plant(gate_src)),
+        ("AST PLANT (the one write made conditional on heat — not the permitted shape)",
+         "exactly ONE write",
+         ast_plant(od_src.replace(f'assets[-1]["{RANGE_KEY}"] = {RANGE_PRODUCER}(h4)',
+                                  f'assets[-1]["{RANGE_KEY}"] = ({RANGE_PRODUCER}(h4) if heat '
+                                  f'> 1 else {RANGE_PRODUCER}(h1))', 1)
+                   if od_src.count(f'assets[-1]["{RANGE_KEY}"] = {RANGE_PRODUCER}(h4)') == 1
+                   else None)),
+        gate_plant("level_registry", f"_p = {RANGE_ALIAS}.run_v2({RANGE_ALIAS}.tape_from_klines(h4), "
+                                     f"{RANGE_ALIAS}.PINS_V2)['state']"),
+        gate_plant("trap_card", f"_p = {RANGE_PRODUCER}(h4)['dist_atr']"),
+        gate_plant("net_rr", f"reward = reward * (1 if {RANGE_PRODUCER} else 0)"),
+        gate_plant("fired_events", f"_p = {RANGE_ALIAS}.ATR_LEN"),
+        gate_plant("r1_block", f"view = dict(view, assets=[a for a in view['assets'] "
+                               f"if not a['{RANGE_KEY}']['has_range']])"),
+        gate_plant("write_calibration", f"_p = [a.get('{RANGE_KEY}') for a in view['assets']]"),
+        ("AST PLANT (the key smuggled BY VALUE through a name, in a new function)",
+         "_planted_smuggle() mentions",
+         ast_plant(od_src + f'\n\ndef _planted_smuggle(a):\n    k = "{RANGE_KEY}"\n    return a[k]\n')),
+        ("AST PLANT (a gate that never names the key: it calls range_watch())",
+         "_planted_watch_gate() mentions",
+         ast_plant(od_src + "\n\ndef _planted_watch_gate(view):\n"
+                            "    return {w['symbol'] for w in range_watch(view)}\n")),
+        (f"AST PLANT (`{RANGE_ALIAS}` read at module level, outside REGISTER)",
+         "module level mentions",
+         ast_plant(od_src + f"\n_PLANTED_PINS = {RANGE_ALIAS}.PINS_V2\n")),
+        (f"BEHAVIOUR PLANT (the same gate read, RUN: a mutant of oracle_daily.py built from "
+         f"source, build_view over the first {RANGE_MUTANT_ROSTER} roster rows, REAL vs EMPTY vs HOT)",
+         "decision side moved",
+         (lambda: _range_behaviour(_range_mutant(gate_src), n_roster=RANGE_MUTANT_ROSTER)[0])
+         if gate_src else None),
+        (f"RENDER PLANT (a reader misbehaving: render_html drops every row with a breach "
+         f"pending. The AST leg finds {drop_ast} problem(s) in it — render_html is on the "
+         f"allow-list — so only the run can object; mutant, first {RANGE_MUTANT_ROSTER} roster rows)",
+         "the rendered section",
+         (lambda: _range_behaviour(_range_mutant(drop_src), n_roster=RANGE_MUTANT_ROSTER)[0])
+         if drop_src else None),
+        ("TAPE-NAME PLANT (a column called range_edge_atr)",
+         "trips the banned vocabulary",
+         lambda: _range_tape_names([*OD.TAPE_COLS, "range_edge_atr"])),
+        ("CONTAINMENT PLANT (range_layer's `except Exception` narrowed to ZeroDivisionError, "
+         "in a mutant built from source)",
+         "range_layer RAISED",
+         (lambda: _range_containment(_range_mutant(narrow))[0]) if narrow else None),
+    ]
+
+    def _break() -> tuple[bool, str]:
+        green, out = False, []
+        for name, must, judge in plants:
+            if judge is None:
+                green = True
+                out.append(f"{name} -> GREEN: the plant could not be planted")
+                continue
+            bad = judge()
+            hits = [b for b in bad if must in b]
+            if hits:
+                rest = [b for b in bad if must not in b]
+                out.append(f"{name} -> RED: {hits[0]}"
+                           + (f" (+{len(hits) - 1} more of its kind)" if len(hits) > 1 else "")
+                           + (f" [and {len(rest)} other finding(s), first: {rest[0]}]" if rest else ""))
+            else:
+                green = True
+                out.append(f"{name} -> " + ("GREEN" if not bad else
+                           f"RED FOR THE WRONG REASON (no finding says {must!r}; first: {bad[0]})"))
+        return green, " ‖ ".join(out)
+
+    def _real() -> tuple[bool, str]:
+        bad_sha, sha = _range_sha()
+        bad_clo, clo = _range_closures()
+        bad_ast, a = _range_ast()
+        bad_run, run = _range_behaviour()
+        bad_tape = _range_tape_names()
+        bad_con, con = _range_containment()
+        bad = bad_sha + bad_clo + bad_ast + bad_run + bad_tape + bad_con
+        want = set(OD.range_empty())
+        if run["keys"] and set(run["keys"]) != want:
+            bad.append(f"range_empty()'s key set is not engine.rangefinder.snapshot()'s + 'error': "
+                       f"{sorted(set(run['keys']) ^ want)}")
+        stale = [k for k in RANGE_ONLY_KEYS if k not in want]
+        if stale:
+            bad.append(f"RANGE_ONLY_KEYS names {stale}, which the snapshot no longer carries — "
+                       f"the by-value scan is hunting stale names")
+        unruled = [k for k in ("RANGE_LENS", "RANGE_WATCH_ATR") if OD.REGISTER[k]["ruled"]]
+        if unruled:
+            bad.append(f"{unruled} read 'ruled': True — they are the contract's [VETO] defaults "
+                       f"and no ruling is on record")
+        if HTML is not None:
+            veto = _sec(HTML, "Appendix")
+            gone = [k for k in ("RANGE_LENS", "RANGE_WATCH_ATR") if f"<code>{k}</code>" not in veto]
+            if gone:
+                bad.append(f"artifact set {DATE}: the rendered [VETO] appendix does not list {gone}")
+            if not _sec(HTML, "Tide Tables") or "EDGE WATCH" not in _sec(HTML, "Tide Tables"):
+                bad.append(f"artifact set {DATE}: no Tide Tables section carrying EDGE WATCH")
+        if OD.REGISTER["RANGE_WINDOW_BARS"]["value"] != OD.RNG.V2_WINDOW_BARS:
+            bad.append("REGISTER['RANGE_WINDOW_BARS'] is not the machine's V2_WINDOW_BARS")
+        if bad:
+            return False, "; ".join(bad[:6]) + (f" (+{len(bad) - 6} more)" if len(bad) > 6 else "")
+        new_cols = [c for c in OD.TAPE_COLS if c.startswith("range_")]
+        return True, (
+            f"(a) scripts/posture_engine.py sha256 {sha} == the pinned constant: byte-unchanged. "
+            f"(b) component-wise, in clean subprocesses: no `rangefinder` and no `oracle_daily` "
+            f"component in the closure of "
+            + ", ".join(f"{m} ({clo['sizes'][m]})" for m in RANGE_DECISION_MODULES)
+            + f"; {RANGE_MACHINE}'s own closure ({clo['sizes'][RANGE_MACHINE]} modules) holds none "
+            f"of {list(RANGE_BANNED_IN_MACHINE)}; oracle_daily DOES import it; and no import line "
+            f"names the machine in the text of {clo['static']} decision-side source files (every "
+            f"engine module but the machine, posture_engine.py, every tierc*_rules.py — read, "
+            f"never executed). "
+            f"(c) AST of oracle_daily.py ({a['functions']} functions): `{RANGE_ALIAS}` is bound once; "
+            f"the key {RANGE_KEY!r}, the {len(RANGE_ONLY_KEYS)} snapshot-only keys, the alias and the "
+            f"{len(RANGE_HELPERS)} layer functions are mentioned ONLY inside {list(RANGE_READERS)}, "
+            f"plus ONE statement of {RANGE_WRITER}() (line {a['write_line']}: `<asset>[{RANGE_KEY!r}] "
+            f"= {RANGE_PRODUCER}(h4)`) and REGISTER's import of the window; zero mentions in "
+            f"{list(RANGE_NAMED_GATES)}, each of which exists; the key is really read "
+            f"({', '.join(f'{k} x{v}' for k, v in a['reads'].items())}). "
+            f"(d) build_view run three times over the {run['assets']}-symbol roster — REAL "
+            f"({run['live']} live macro range(s), {run['pending']} pending, {run['failed']} "
+            f"unavailable), stubbed EMPTY, stubbed HOT (every symbol ON a boundary, breach "
+            f"pending): {run['fields']} decision-side fields identical across all three — sort "
+            f"order, heat, station, card, lines, clusters, fired events, R1, the whole D-7 "
+            f"document, the {len(OD.TAPE_COLS) - len(new_cols)} pre-existing tape columns and "
+            f"{len(run['sections'])} rendered sections (every one but the Tide Tables, the Board "
+            f"with its {run['assets']} RANGE cells cut out) — "
+            f"while the {len(new_cols)} range columns under HOT differ from both other runs and "
+            f"every HOT asset carries the stub, so the stubs were live. "
+            f"No D-7 key carries the token `range`. The {len(new_cols)} new tape names "
+            f"({', '.join(new_cols)}) clear the {len(OD.BANNED_CALIBRATION_KEYS)}-term banned "
+            f"vocabulary and are on artifact set {DATE}'s tape. range_layer contains a fault "
+            f"(EMPTY frame -> {con.get('an EMPTY frame')!r}) and refuses a frame off its lens "
+            f"(1h -> {con.get('a 1h frame')!r}). RANGE_LENS and RANGE_WATCH_ATR are 'ruled': False "
+            f"and print in the rendered [VETO] appendix; RANGE_WINDOW_BARS = "
+            f"{OD.REGISTER['RANGE_WINDOW_BARS']['value']} is the machine's own constant, imported.")
+
+    prove("F-BR-14", "THE RANGE LAYER RENDERS, NEVER RULES — posture_engine.py byte-unchanged; "
+                     "the range object in render + tape only, never in a gate path; a planted "
+                     "gate read must go red",
+          _break, _real)
+
+
 # ═════════════════ F-BR-16 · THE ROSTER IS ONE LITERAL DEFINITION (OR-1 STEP C)
 #
 # WHAT THIS GUARDS. Until 2026-09-21 the Oracle's roster was tuple(<engine/cells.py's
@@ -2065,7 +2730,8 @@ def main() -> int:
     print(f"  cal   {len(CAL.get('per_asset', [])) if CAL else 0} per-asset records")
     print("=" * 78)
     fixtures = (f_br_1, f_br_2, f_br_3, f_br_4, f_br_5, f_br_6,
-                f_br_7, f_br_8, f_br_9, f_br_10, f_br_11, f_br_12, f_br_13, f_br_16)
+                f_br_7, f_br_8, f_br_9, f_br_10, f_br_11, f_br_12, f_br_13, f_br_14,
+                f_br_16)
     for fn in fixtures:
         try:
             fn()
