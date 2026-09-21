@@ -466,3 +466,21 @@ PENDING: 1. operator ruling on the five `launchctl disable` overrides (reboot-du
 NEXT: write the /oracle skill, or rule on disable. Owner: operator.
 METRICS: operator actions this session = 1 · files re-ingested = 9
 === END STATUS ===
+
+=== STATUS_ARGUS — 2026-09-21 (CORRECTION · PUSH IS UP) ===
+NOW: This entry SUPERSEDES the "⚠ PUSH IS DOWN" fact in STATUS_ARGUS — 2026-09-21 (ORACLE
+     SCHEDULE SUSPENDED · FIVE AGENTS BOOTED OUT), directly above. That fact was written
+     from the 07:00 daily log before the publish ran. The publish then ran and PUSHED.
+LAST EVENT: 2026-09-21 10:20 BA — publish committed f8c6caf (2 paths) and pushed to
+     origin/v12-v1-census; local HEAD and remote both f8c6caf.
+FACTS:
+- PUSH SUCCEEDED. The SSH-22 egress failure was transient and had cleared by 10:20 BA; the
+  same push carried 5d1e8a5 (the 07:00 commit that failed) up with it. Remote is current
+  [verified]
+- WHAT STANDS UNCHANGED from the superseded entry: the five bootouts, the retained plists,
+  the STEP-2 numbers, the missing 2026-09-21 render, and the reboot-durability gap. Only
+  the push fact is withdrawn [verified]
+PENDING: unchanged from the entry above.
+NEXT: unchanged — write the /oracle skill, or rule on disable. Owner: operator.
+METRICS: operator actions this session = 1 · files re-ingested = 9
+=== END STATUS ===
