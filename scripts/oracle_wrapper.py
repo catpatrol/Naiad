@@ -38,8 +38,16 @@ launchd replays a missed calendar job on WAKE but not on BOOT — measured on th
 host, see THE CATCH-UP below — so a laptop that was shut down over a slot lost
 that slot silently, twice in the six days to 2026-08-21.
 
+THE ALARM (T-7, ruled 2026-08-22). A wrapper that exits nonzero into a log
+nobody opens is the 2026-08-20 silence. Any run that ends rc != 0 now writes
+ORACLE_DOWN.flag at the top of the repo — timestamp, job, slot, exit code, the
+last 15 traceback lines — and any run that actually did work and ended rc == 0
+removes it again. The flag is gitignored: it is for the operator standing at
+the machine, never for the bus.
+
 NO DELETION, EVER (CADENCE §4). Re-arming is bootout + bootstrap; the plist
-stays on disk. This wrapper never removes a file.
+stays on disk. This wrapper never removes a plist. (The flag above is not a
+plist; it is the alarm's own body, and clearing it IS the all-clear.)
 """
 from __future__ import annotations
 
@@ -284,6 +292,93 @@ def release_lock(log=print) -> None:
         log(f"  could not release {LOCK}: {e}")
 
 
+# ═════════════════════════════════════════════════════════════════ THE ALARM
+# T-7 of the 2026-08-20 incident, RULED "flagfile" by the operator on 2026-08-22.
+#
+# WHAT THE SILENCE COST. The Oracle died on six consecutive runs from 2026-08-20
+# and nothing said so. launchd recorded the nonzero exit and moved on; the brief
+# on disk had been written BEFORE the crash line, so it looked current; the only
+# honest evidence was a FAIL row inside a jsonl nobody opens at 07:00. Two days
+# passed. An alarm that lives inside the machinery the operator does not read is
+# not an alarm.
+#
+# So: ONE FILE, at the top of the repo, where it cannot be walked past. Its
+# presence IS the alarm; its absence IS the all-clear. No daemon, no notification
+# service, no second process that can itself die quietly.
+#
+# IT MUST NEVER REACH THE BUS. The flag is gitignored. A published exchange
+# carrying ORACLE_DOWN.flag would tell every reader of the bus that a laptop in
+# Buenos Aires had a bad morning; the flag is for the operator at the machine.
+#
+# SELF-CLEARING — BUT NOT BY A RUN THAT DID NOTHING. rc == 0 alone is not an
+# all-clear. The lock stand-down exits 0 having done no work; --install exits 0
+# without running the Oracle at all; a catch-up that finds nothing missed exits 0
+# by design. If any of those cleared the flag, a login could silently cancel a
+# real alarm — the same class of mistake as D1/D2, where a file a FAILED run also
+# writes was taken as proof the run succeeded. The flag is therefore cleared only
+# by a run that PERFORMED A JOB and reached rc == 0, which is exactly what the
+# flag's own last sentence promises: the next CLEAN RUN.
+FLAG = ROOT / "ORACLE_DOWN.flag"
+FLAG_SENTENCE = ("The Oracle is down. Read logs/launchd/oracle-*.log. "
+                 "This file self-clears on the next clean run.")
+FLAG_TB_LINES = 15
+
+# Why a module-level list and not a return value: the except blocks that HOLD a
+# traceback sit three frames below main(), and by the time the alarm is written
+# the stack is gone. Those blocks already format the text for the log; this keeps
+# the same text for the flag. APPENDED, never replaced — one run can fail twice
+# (the render, then a missing agent) and the operator wants to see both.
+FAILURES: list[str] = []
+
+
+def note_failure(text: str | None = None) -> str:
+    """Remember WHY, for the alarm. `None` means: format the live traceback."""
+    t = (traceback.format_exc() if text is None else text).rstrip()
+    FAILURES.append(t)
+    return t
+
+
+def raise_flag(job: str, slot: str, rc: int, log=print) -> Path:
+    """Write the alarm. Overwrites any older flag: the newest failure is the one
+    the operator should read first, and the log keeps the rest."""
+    joined = ("\n".join(FAILURES) if FAILURES else
+              "(no traceback captured — the run returned nonzero without raising)")
+    tail = joined.splitlines()[-FLAG_TB_LINES:]
+    body = "\n".join([
+        f"UTC   {datetime.now(timezone.utc).isoformat()}",
+        f"JOB   {job}",
+        f"SLOT  {slot}",
+        f"EXIT  {rc}",
+        "",
+        f"LAST {len(tail)} TRACEBACK LINE(S), NEWEST FAILURE LAST:",
+        *tail,
+        "",
+        FLAG_SENTENCE,
+        "",
+    ])
+    try:
+        FLAG.parent.mkdir(parents=True, exist_ok=True)
+        FLAG.write_text(body, encoding="utf-8")
+    except Exception as e:                    # an alarm that raises is no alarm
+        log(f"  COULD NOT RAISE THE ALARM at {FLAG}: {e}")
+        return FLAG
+    log(f"  ALARM RAISED — {FLAG}")
+    return FLAG
+
+
+def clear_flag(log=print) -> bool:
+    """The all-clear. True if a flag was actually standing and is now gone."""
+    try:
+        FLAG.unlink()
+    except FileNotFoundError:
+        return False
+    except Exception as e:
+        log(f"  could not clear {FLAG}: {e}")
+        return False
+    log(f"  ALARM CLEARED — {FLAG.name} removed by a clean run")
+    return True
+
+
 # ═══════════════════════════════════════════════════════════════ THE CATCH-UP
 # A2-8 (2026-08-21), the SHUTDOWN half of finding T-3. A2-7 gave the sleep half
 # a banner; this gives the shutdown half a run.
@@ -490,10 +585,10 @@ def run_topup(slot: str, log=print) -> int:
             f"{doc['pairs']} pair(s), {doc['gaps']} gap(s)")
     except SystemExit as e:
         rc = 1
-        log(f"  TOP-UP HALTED: {e}")
+        log("  TOP-UP HALTED: " + note_failure(f"TOP-UP HALTED: {e}"))
     except Exception:
         rc = 1
-        log("  TOP-UP FAILED:\n" + traceback.format_exc())
+        log("  TOP-UP FAILED:\n" + note_failure())
         try:
             import oracle_topup as TU
             TU.append_log({"ts": datetime.now(timezone.utc).isoformat(),
@@ -524,17 +619,22 @@ def run_oracle(slot: str, zr: dict, started: datetime, log=print,
         log(f"  render {result['html']} sha256 {result['html_sha']}")
     except Exception:
         rc = 1
-        log("  RUN FAILED:\n" + traceback.format_exc())
+        log("  RUN FAILED:\n" + note_failure())
 
     res = {}
     if rc == 0:
         try:
             res = self_checks(log=log)
-            if not all(v["pass"] for v in res.values()):
+            bad = [k for k, v in res.items() if not v["pass"]]
+            if bad:
                 rc = 1
+                # A red self-check raises no exception, so the alarm would have
+                # nothing to show without this line.
+                note_failure("SELF-CHECKS FAILED: " + "; ".join(
+                    f"{k}: {res[k].get('detail')}" for k in bad))
         except Exception:
             rc = 1
-            log("  SELF-CHECKS FAILED:\n" + traceback.format_exc())
+            log("  SELF-CHECKS FAILED:\n" + note_failure())
 
     p = append_selfcheck(slot, res or {"run": {"pass": rc == 0,
                                                "detail": "run failed"}},
@@ -547,19 +647,39 @@ def run_oracle(slot: str, zr: dict, started: datetime, log=print,
     return rc
 
 
-def run_catchup(zr: dict, started: datetime, log=print) -> int:
-    """A2-8. Fires at every login/boot; runs something only when a slot was missed."""
+def run_catchup(zr: dict, started: datetime, log=print) -> tuple[int, bool]:
+    """A2-8. Fires at every login/boot; runs something only when a slot was missed.
+
+    Returns (rc, ran). `ran` is False when nothing was missed — a correct, clean,
+    entirely idle exit, and therefore NOT the clean run that clears the T-7 flag."""
     d = catchup_due()
     log(f"  catch-up: most recent Oracle boundary {d['boundary']} [{d['slot']}], "
         f"{d['age_min']:.0f} min ago")
     log(f"  evidence: {d['reason']}")
     if not d["due"]:
         log("  NOTHING MISSED — no catch-up run")
-        return 0
+        return 0, False
     log(f"  MISSED SLOT [{d['slot']}] — running the top-up first, then the Oracle")
     rc_t = run_topup("topup", log=log)
     rc_o = run_oracle(d["slot"], zr, started, log=log, catchup=True)
-    return rc_t or rc_o
+    return rc_t or rc_o, True
+
+
+def _argv_job_slot(argv: list[str]) -> tuple[str, str]:
+    """Read --job/--slot defensively, and from one place, because the outermost
+    alarm net needs them too. `--slot` as the final argument used to be an
+    IndexError: a wrapper that crashes parsing its own arguments cannot raise the
+    alarm that says it crashed."""
+    job, slot = "oracle", "full"
+    if "--slot" in argv:
+        i = argv.index("--slot") + 1
+        if i < len(argv):
+            slot = argv[i]
+    if "--job" in argv:
+        i = argv.index("--job") + 1
+        if i < len(argv):
+            job = argv[i]
+    return job, slot
 
 
 def main(argv=None) -> int:
@@ -577,27 +697,32 @@ def main(argv=None) -> int:
         print(json.dumps({"armed": armed, "zone": zr}, indent=1))
         return 0
 
-    slot = "full"
-    if "--slot" in argv:
-        slot = argv[argv.index("--slot") + 1]
-    job = "oracle"
-    if "--job" in argv:
-        job = argv[argv.index("--job") + 1]
+    job, slot = _argv_job_slot(argv)
 
     started = datetime.now(timezone.utc)
     log(f"=== ORACLE WRAPPER · job={job} slot={slot} · {started.isoformat()} ===")
     zr = zone_report()
     log(f"  zone: {zr}")
     if not acquire_lock(f"{job}/{slot}", log=log):
+        # No work done, so no all-clear to give: a standing alarm stays standing.
         log("=== exit 0 (no-op: another Oracle run holds the lock) ===")
         return 0
+    worked = False
     try:
         if job == "topup":
             rc = run_topup(slot, log=log)
+            worked = True
         elif job == "catchup":
-            rc = run_catchup(zr, started, log=log)
+            rc, worked = run_catchup(zr, started, log=log)
         else:
             rc = run_oracle(slot, zr, started, log=log)
+            worked = True
+    except Exception:
+        # run_topup and run_oracle catch their own, so nothing should reach here.
+        # An alarm that only fires on the failures we anticipated is the
+        # 2026-08-20 silence wearing a different coat.
+        rc = 1
+        log("  WRAPPER FAILED:\n" + note_failure())
     finally:
         release_lock(log=log)
 
@@ -608,14 +733,39 @@ def main(argv=None) -> int:
             d = reschedule_if_drifted(label, log=log)
             if d.get("missing"):
                 rc = rc or 1
+                note_failure(f"AGENT MISSING — {label} has no plist; the slot it "
+                             f"carries will not fire. Re-arm: oracle_wrapper.py "
+                             f"--install")
             elif not d["drift"]:
                 log(f"  schedule OK on {label}: {d['want']}")
         except Exception as e:
             log(f"  reschedule check failed on {label}: {e}")
+
+    # ── T-7 · THE ALARM. From here every exit tells the operator one of exactly
+    # two things: the flag is up, or the flag is down.
+    if rc != 0:
+        raise_flag(job, slot, rc, log=log)
+    elif worked:
+        clear_flag(log=log)
+    elif FLAG.exists():
+        log(f"  alarm left standing: {FLAG.name} — this run did no work, so it "
+            f"has no all-clear to give")
 
     log(f"=== exit {rc} ===")
     return rc
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    # THE OUTERMOST NET (T-7). main() carries no top-level try of its own — argv
+    # parsing, zone_report() and acquire_lock() all sit outside one — so a crash
+    # in any of them would exit nonzero with the alarm silent, which is precisely
+    # the failure T-7 exists to end. KeyboardInterrupt is deliberately NOT caught:
+    # an operator who stops a manual run has not discovered an outage.
+    try:
+        _rc = main()
+    except Exception:
+        _job, _slot = _argv_job_slot(list(sys.argv[1:]))
+        print("  WRAPPER CRASHED BEFORE IT COULD REPORT:\n" + note_failure())
+        raise_flag(_job, _slot, 1)
+        raise
+    raise SystemExit(_rc)

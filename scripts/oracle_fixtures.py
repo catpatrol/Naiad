@@ -1,4 +1,4 @@
-"""ORACLE FIXTURES — F-BR-1 .. F-BR-11 of queue BR-1 (as amended by A1-4, A2-8).
+"""ORACLE FIXTURES — F-BR-1 .. F-BR-12 of queue BR-1 (as amended by A1-4, A2-8, T-7).
 
 BR-1 §4, verbatim: "FIXTURES (numbered; each shown FAILING on a deliberate
 break before trusted)". So every fixture here runs TWICE:
@@ -15,7 +15,9 @@ Exit: 0 if every fixture is green on REAL and red on BREAK; 1 otherwise.
 from __future__ import annotations
 
 import ast
+import contextlib
 import hashlib
+import io
 import json
 import re
 import subprocess
@@ -806,6 +808,95 @@ def f_br_11() -> None:
           lambda: _lis_provenance(doc, view))
 
 
+# ═════════════════════════ F-BR-12 · THE ALARM (T-7, ruled 2026-08-22)
+# The operator's ruling of 2026-08-22 was "flagfile": any run ending rc != 0
+# writes ORACLE_DOWN.flag, and the next clean run removes it.
+#
+# WHAT THIS FIXTURE PROVES, AND WHAT IT REFUSES TO PROVE. It would be easy, and
+# worthless, to call raise_flag() and check that a file appeared. The 2026-08-20
+# outage was never a missing writer — it was a failure path that reached the end
+# of the process without telling anybody. So both legs drive the REAL main(),
+# with the render replaced by a planted failure, and then read the flag off disk.
+# What is under test is the WIRING.
+#
+# Nothing reaches the real lane: FLAG and LOCK are redirected into a
+# TemporaryDirectory and reschedule_if_drifted is stubbed, so no fixture run
+# calls launchctl, touches ~/Library/LaunchAgents, or drops a flag in the repo.
+
+FIXTURE_BOOM = "F-BR-12-BOOM — deliberate render failure planted by the fixture"
+
+
+def _alarm_probe(armed: bool) -> tuple[bool, str]:
+    """Two runs through the real main(): one forced to fail, then one clean.
+
+    `armed=False` replants the PRE-T-7 world — the run still fails, but nothing
+    writes the flag. That is the break leg, and it must go red."""
+    import oracle_wrapper as OW
+    keep = {k: getattr(OW, k) for k in
+            ("FLAG", "LOCK", "run_oracle", "reschedule_if_drifted", "raise_flag")}
+    keep_failures = list(OW.FAILURES)
+
+    def _boom(slot, zr, started, log=print, catchup=False):
+        raise RuntimeError(FIXTURE_BOOM)
+
+    def _clean(slot, zr, started, log=print, catchup=False):
+        return 0
+
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            OW.FLAG = Path(td) / "ORACLE_DOWN.flag"
+            OW.LOCK = Path(td) / ".oracle.lock"
+            OW.reschedule_if_drifted = (
+                lambda label, log=print: {"label": label, "drift": False,
+                                          "missing": False, "want": {}, "had": {}})
+            if not armed:
+                OW.raise_flag = lambda *a, **k: OW.FLAG      # the silence, replanted
+            OW.FAILURES.clear()
+            sink = io.StringIO()
+            with contextlib.redirect_stdout(sink):
+                OW.run_oracle = _boom
+                rc_fail = OW.main(["--job", "oracle", "--slot", "full"])
+                up = OW.FLAG.exists()
+                body = OW.FLAG.read_text(encoding="utf-8") if up else ""
+                OW.run_oracle = _clean
+                rc_ok = OW.main(["--job", "oracle", "--slot", "full"])
+                still_up = OW.FLAG.exists()
+            sentence, cap = OW.FLAG_SENTENCE, OW.FLAG_TB_LINES
+    finally:
+        for k, v in keep.items():
+            setattr(OW, k, v)
+        OW.FAILURES[:] = keep_failures
+
+    if rc_fail == 0:
+        return False, "the planted render failure exited 0 — there is nothing to alarm about"
+    if not up:
+        return False, (f"the run exited {rc_fail} and NO ORACLE_DOWN.flag was written — "
+                       f"the failure is silent, which is the 2026-08-20 outage exactly")
+    want = [("the traceback", FIXTURE_BOOM), ("the job", "JOB   oracle"),
+            ("the slot", "SLOT  full"), ("the exit code", f"EXIT  {rc_fail}"),
+            ("the UTC timestamp", "UTC   "), ("the sentence", sentence)]
+    silent = [n for n, t in want if t not in body]
+    if silent:
+        return False, f"flag written but silent about: {', '.join(silent)}"
+    m = re.search(r"LAST (\d+) TRACEBACK LINE\(S\)", body)
+    if not m or not (1 <= int(m.group(1)) <= cap):
+        return False, f"flag carries no traceback tail of 1..{cap} lines"
+    if rc_ok != 0:
+        return False, f"the follow-up run exited {rc_ok}, so the self-clear was never tested"
+    if still_up:
+        return False, "the clean run left the flag standing — the alarm never self-clears"
+    return True, (f"failed run exited {rc_fail} and raised the flag carrying "
+                  f"{m.group(1)} traceback line(s), job, slot, exit code, UTC stamp "
+                  f"and the sentence; the next clean run exited 0 and the flag was gone")
+
+
+def f_br_12() -> None:
+    prove("F-BR-12", "THE ALARM — a run ending rc != 0 must leave ORACLE_DOWN.flag "
+                     "behind, and the next clean run must take it away",
+          lambda: _alarm_probe(armed=False),
+          lambda: _alarm_probe(armed=True))
+
+
 # ══════════════════════════════════════════════════════════════════ MAIN
 
 def main() -> int:
@@ -817,7 +908,7 @@ def main() -> int:
     print(f"  cal   {len(CAL.get('per_asset', [])) if CAL else 0} per-asset records")
     print("=" * 78)
     fixtures = (f_br_1, f_br_2, f_br_3, f_br_4, f_br_5, f_br_6,
-                f_br_7, f_br_8, f_br_9, f_br_10, f_br_11)
+                f_br_7, f_br_8, f_br_9, f_br_10, f_br_11, f_br_12)
     for fn in fixtures:
         try:
             fn()
