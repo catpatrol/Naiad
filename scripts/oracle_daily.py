@@ -6,7 +6,9 @@ deliverable of this build is `oracle_*`.
 
 Emits briefs/oracle/oracle_<date>.html containing, per BR-1 §3 as amended:
 
-    BOARD        C-5  10 rows, heat-sorted: regime chip · ATR-distance to the
+    BOARD        C-5  one row per ROSTER symbol (REGISTER['ROSTER'], the Oracle's
+                      own constant since OR-1 STEP C — never a typed count),
+                      heat-sorted: regime chip · ATR-distance to the
                       nearest high-score cluster · two lines in the sand ·
                       posture word.
     TRAP CARDS   C-6  entry · structural invalidation (4h-lens anchor + the
@@ -69,7 +71,6 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from engine.cells import SYMBOLS                      # noqa: E402
 from engine.data import cache_dir                     # noqa: E402
 from analytics import levels as L                     # noqa: E402
 from analytics import structure as ST                 # noqa: E402
@@ -106,11 +107,52 @@ GRID_PARQUET = ROOT / "research_outputs" / "census2b" / "oracle" / "oracle_grid.
 # 'ruled': False rows are [VETO] and are logged by D-7 every run.
 
 REGISTER: dict[str, dict] = {
+    # THE ROSTER IS THE ORACLE'S OWN CONSTANT: A LITERAL, IN THE OPERATOR'S ORDER
+    # (OR-1 STEP C, 2026-09-21). Until that day this row read tuple(<the study
+    # basket>), i.e. engine/cells.py's dict, "frozen at ratification (charter §4)".
+    # Two different things were sharing one definition: the basket a study is
+    # pre-registered on may never move, while the list the operator LOOKS at each
+    # morning moves whenever he says so. He said so (ruling 1, verbatim in 'source'),
+    # so the two are now separate definitions. engine/cells.py is untouched and this
+    # file no longer imports the basket at all: F-BR-16 goes red if that binding, or
+    # any second symbol list, comes back.
+    #   NOTHING ON THIS PATH NEEDED THE BASKET. make_cell() raises KeyError for a
+    # symbol outside the frozen ten — correct for the study, and never reached from
+    # here: posture_engine, tierc2/tierc3_rules, analytics and load_lens take the
+    # symbol as a plain string. MEASURED at STEP C, not assumed: build_view over this
+    # roster with a recording spy on the basket and on make_cell logged zero touches.
+    #   ONE DEFINITION (CONVENTIONS §6.4). Every live consumer IMPORTS this row:
+    # build_view and fired_events below; F-BR-1, F-BR-5, F-BR-8 and F-BR-16 in
+    # oracle_fixtures.py. The top-up's scope is never typed either: it is ENUMERATED
+    # from a run over this row (oracle_topup.py --enumerate) and pinned to this
+    # file's sha. So editing this tuple HALTs the top-up until the re-pin (F-TU-1),
+    # and a symbol new to the cache must be BACKFILLED FIRST: load_lens HALTs on a
+    # missing series and the top-up refuses to create one (status ABSENT).
+    #   THE ORDER IS THE OPERATOR'S, not alphabetical: the order he typed his 22 in,
+    # the dropped names removed. The Board re-sorts by heat, so the order shows only
+    # in the run log, the enumeration, the fired-events walk and heat ties.
     "ROSTER": {
-        "value": tuple(SYMBOLS),
+        "value": (
+            "BTCUSDT", "ETHUSDT", "ENAUSDT", "SOLUSDT", "USELESSUSDT", "NEARUSDT",
+            "1000PEPEUSDT", "LITUSDT", "FARTCOINUSDT", "HYPEUSDT", "XPLUSDT", "ZECUSDT",
+            "UNIUSDT", "LTCUSDT", "BNBUSDT", "XMRUSDT", "DOGEUSDT", "1000BONKUSDT",
+        ),
         "ruled": True,
-        "source": "engine/cells.py SYMBOLS — 'Basket frozen at ratification (charter §4)'. "
-                  "BR-1 C-5 'Roster = current 10-asset capture set'; A1-2 'Roster as-is'.",
+        "source": "RATIFIED by operator ruling 1 of 2026-09-21, verbatim: '1-watchlist: drop "
+                  "symbols without data from a binance contract' (queue OR-1 STEP C, "
+                  "exchange/queue/2026-09-21_OR1_daily_oracle_ondemand_ARGUS.md). The "
+                  "operator's 22 — BTC NPC ETH ENA SOL PUMPFUN USELESS NEAR 1000PEPE LIT "
+                  "FARTCOIN HYPE XPL ZEC MNT UNI LTC ZCAT BNB XMR DOGE 1000BONK, as <X>USDT — "
+                  "were probed ONCE against Binance USDT-M exchangeInfo (contractType "
+                  "PERPETUAL, status TRADING) at 2026-09-21T15:45:56Z; the record is "
+                  "research_outputs/oracle/roster_probe_2026-09-21.json. KEPT = this tuple, "
+                  "in the operator's order. DROPPED BY RULING (absent from exchangeInfo: no "
+                  "Binance USDT-M contract by that name): NPCUSDT, PUMPFUNUSDT, MNTUSDT, "
+                  "ZCATUSDT. LEFT THE ROSTER (on it before OR-1, not among the operator's 22; "
+                  "kline caches retained, never deleted): JTOUSDT, TAOUSDT. SUPERSEDES, as "
+                  "history: BR-1 C-5 'Roster = current 10-asset capture set' and A1-2 'Roster "
+                  "as-is', under which this row was the engine/cells.py study basket. That "
+                  "basket stays frozen (charter §4) and is not this list.",
     },
     "LENS": {
         "value": PE.REGISTER["LENS"]["value"],

@@ -1,5 +1,7 @@
 """ORACLE FIXTURES — F-BR-1 .. F-BR-12 of queue BR-1 (as amended by A1-4, A2-8, T-7),
-and F-BR-13 of queue OR-1 STEP B (finding C-0: the D-7 logger must MEASURE).
+F-BR-13 of queue OR-1 STEP B (finding C-0: the D-7 logger must MEASURE), and
+F-BR-16 of queue OR-1 STEP C (the roster is ONE literal definition; 14 and 15 are
+the numbers the OR-1 contract gives to STEP D and STEP F).
 
 BR-1 §4, verbatim: "FIXTURES (numbered; each shown FAILING on a deliberate
 break before trusted)". So every fixture here runs TWICE:
@@ -269,7 +271,13 @@ def _parity_compare(mutate=None, as_of_offsets=(0, 40, 120, 300)) -> tuple[bool,
                  f"{PARITY_WARM_BARS + 400} 4h bars of pre-fixture-day history "
                  f"(the independent EMA is SMA-seeded and needs the warm-up): "
                  f"{', '.join(skipped)}.")
-    return True, (f"{checked}/10 symbols x {len(as_of_offsets)} as-of points = {compared} "
+    # THE DENOMINATOR IS THE ROSTER'S LENGTH, NEVER A TYPED COUNT (OR-1 STEP C,
+    # CONVENTIONS §6.4). This line read "{checked}/10 symbols" while the loop above
+    # already walked REGISTER['ROSTER']: a VALUE dependent with no NAME in it, the
+    # shape a name-only grep reports clean. On the 18-symbol roster of 2026-09-21 it
+    # would have printed "13/10 symbols".
+    n_roster = len(OD.REGISTER["ROSTER"]["value"])
+    return True, (f"{checked}/{n_roster} roster symbols x {len(as_of_offsets)} as-of points = {compared} "
                   f"station-word comparisons against a SECOND state machine with its own "
                   f"EMA/ATR/cross recursions (no engine.indicators, no posture_engine) — "
                   f"mismatch list EMPTY (= pass)." + skip_note + handoff)
@@ -622,10 +630,18 @@ def _footer(doc: str) -> tuple[bool, str]:
         return False, "no footer"
     foot = m.group(1)
     n_sha = len(re.findall(r"sha256 [0-9a-f]{64}", foot))
+    # ONE PAYLOAD SHA PER ROSTER SYMBOL, so the floor IS the roster's length. It read
+    # `n_sha >= 10`, the old roster's size typed as a number (OR-1 STEP C, CONVENTIONS
+    # §6.4: the second of the two VALUE dependents that carried no NAME). Left at 10,
+    # an 18-symbol edition could lose eight payload stamps and stay green here.
+    # CONSEQUENCE, stated: an edition printed from a SHORTER roster than the current
+    # one is red here by design — it is not an edition of this roster (F-BR-16 says
+    # which symbols differ).
+    n_roster = len(OD.REGISTER["ROSTER"]["value"])
     need = {
         "DISPLAY-ONLY header": "DISPLAY-ONLY" in doc.split("<h2>")[0],
         "date": DATE in foot,
-        "payload shas": n_sha >= 10,
+        f"payload shas ({n_sha} stamp(s) for a roster of {n_roster})": n_sha >= n_roster,
         "CERTIFIED list": "CERTIFIED:" in foot,
         "NOT CERTIFIED list": "NOT CERTIFIED:" in foot,
         "posture canon sha": PE.canon_sha() in foot,
@@ -633,7 +649,8 @@ def _footer(doc: str) -> tuple[bool, str]:
     missing = [k for k, v in need.items() if not v]
     if missing:
         return False, "missing: " + ", ".join(missing)
-    return True, (f"DISPLAY-ONLY header, date {DATE}, {n_sha} sha256 stamps, station "
+    return True, (f"DISPLAY-ONLY header, date {DATE}, {n_sha} sha256 stamps (floor = the "
+                  f"roster's {n_roster}, read from REGISTER['ROSTER'], never typed), station "
                   f"canon sha, and BOTH the certified and not-certified lists present")
 
 
@@ -1739,6 +1756,304 @@ def f_br_13() -> None:
           _break, lambda: _c0_measured())
 
 
+# ═════════════════ F-BR-16 · THE ROSTER IS ONE LITERAL DEFINITION (OR-1 STEP C)
+#
+# WHAT THIS GUARDS. Until 2026-09-21 the Oracle's roster was tuple(<engine/cells.py's
+# basket>): the frozen STUDY basket, borrowed. Operator ruling 1 of that day —
+# "1-watchlist: drop symbols without data from a binance contract" — made the roster
+# the Oracle's OWN constant: a literal in oracle_daily.REGISTER['ROSTER'], the
+# probe's KEPT list in the operator's order. The contract's words for the protocol
+# are "one source of truth". A constant nobody checks drifts in three ways, and
+# each has a plant below:
+#   · THE BINDING COMES BACK (a value computed from the study basket, or the import
+#     alone). The basket and the watchlist are one definition again, and the next
+#     roster ruling either mutates a frozen pre-registration or silently fails to
+#     apply.
+#   · A SECOND LIST APPEARS beside it — a fixture, the top-up or the wrapper types
+#     its own symbols. That is the BOX_CAPACITY incident's shape (CONVENTIONS §6.4:
+#     "of five sites depending on BOX_BYTES, two contained no BOX_BYTES string at
+#     all"), so the scan is by VALUE: any literal holding two or more <X>USDT
+#     strings anywhere in the Oracle family, except the ROSTER row itself.
+#   · THE LITERAL STOPS BEING WHAT THE PROBE KEPT: a dropped name typed back in
+#     (load_lens HALTs the whole edition on a series that cannot exist), a leftover
+#     from the old basket, a kept name lost, or the operator's order handed to a
+#     helpful sort.
+# And one drift in the ARTIFACTS: an edition printed from some other roster. This
+# suite audits the NEWEST artifact set on disk; if its mantle strips, its tape and
+# its D-7 record do not carry exactly this roster, every other green in this file
+# is a statement about a different list. So after a roster change the suite is RED
+# against the old editions until one is printed from the new roster — on purpose.
+#
+# WHAT IT DOES NOT PROVE: that the probe is right (it is the record of ONE GET), or
+# that the cache holds every series the roster needs (F-TU-5, against the
+# enumerated scope).
+#
+# THE PROBE JSON IS NAMED ONCE, in the ROSTER row's own 'source' string, and read
+# from there: the next roster ruling re-probes and re-writes that row, and this
+# fixture follows without an edit. The file sits under research_outputs/oracle/**,
+# which .gitignore ignores: ABSENT IS RED, never a skip.
+
+ROSTER_RULING = "1-watchlist: drop symbols without data from a binance contract"
+# Where a live consumer of the roster can live. NOT the movers organ: its universe
+# is the exchange's, by design not the roster's (OR-1 STEP E).
+ROSTER_FAMILY = ("oracle_daily.py", "oracle_fixtures.py", "oracle_topup.py",
+                 "oracle_topup_fixtures.py", "oracle_wrapper.py", "posture_engine.py")
+_ROSTER_SYM = re.compile(r"^[0-9A-Z]{2,20}USDT$")
+_ROSTER_PROBE = re.compile(r"research_outputs/oracle/roster_probe_\d{4}-\d{2}-\d{2}\.json")
+_ROSTER_BASKET = "SYM" + "BOLS"      # spelt in two halves so this file never NAMES it
+
+
+def _roster_node(tree: ast.AST):
+    """The AST node of REGISTER['ROSTER']['value'] in an oracle_daily source, or None."""
+    for n in ast.walk(tree):
+        tgt = (n.targets[0] if isinstance(n, ast.Assign) and n.targets else
+               n.target if isinstance(n, ast.AnnAssign) else None)
+        if not (isinstance(tgt, ast.Name) and tgt.id == "REGISTER"
+                and isinstance(n.value, ast.Dict)):
+            continue
+        for k, v in zip(n.value.keys, n.value.values):
+            if not (isinstance(k, ast.Constant) and k.value == "ROSTER" and isinstance(v, ast.Dict)):
+                continue
+            for kk, vv in zip(v.keys, v.values):
+                if isinstance(kk, ast.Constant) and kk.value == "value":
+                    return vv
+    return None
+
+
+def _roster_symbol_lists(tree: ast.AST, skip=None) -> list[tuple[int, list[str]]]:
+    """(line, symbols) of every literal container typing TWO OR MORE <X>USDT strings."""
+    out = []
+    for n in ast.walk(tree):
+        if n is skip:
+            continue
+        els = (n.elts if isinstance(n, (ast.Tuple, ast.List, ast.Set)) else
+               [k for k in n.keys if k is not None] if isinstance(n, ast.Dict) else [])
+        syms = [e.value for e in els if isinstance(e, ast.Constant)
+                and isinstance(e.value, str) and _ROSTER_SYM.match(e.value)]
+        if len(syms) >= 2:
+            out.append((n.lineno, syms))
+    return out
+
+
+def _roster_probe_doc() -> tuple[str | None, dict | None]:
+    """(repo-relative path named by the ROSTER row, its JSON) — (path, None) if absent."""
+    m = _ROSTER_PROBE.search(OD.REGISTER["ROSTER"].get("source", ""))
+    if not m:
+        return None, None
+    pp = ROOT / m.group(0)
+    return m.group(0), (json.loads(pp.read_text(encoding="utf-8")) if pp.exists() else None)
+
+
+def _roster_judge(src: str | None = None, html_doc: str | None = None,
+                  tape_assets=None, cal_assets=None) -> tuple[list[str], dict]:
+    """Every finding against the roster; [] = clean. `src` swaps in a planted
+    oracle_daily.py TEXT; the three artifact arguments swap in planted artifacts.
+    The ARTIFACTS are always held against the LIVE row — they were printed by the
+    imported module, not by a planted text."""
+    bad: list[str] = []
+    real_src = src is None
+    text = (ROOT / "scripts" / "oracle_daily.py").read_text(encoding="utf-8") if real_src else src
+    tree = ast.parse(text)
+    row = OD.REGISTER["ROSTER"]
+    live = tuple(row["value"])
+
+    # ── (a) THE SOURCE: a literal, and the study basket not so much as named
+    node, literal = _roster_node(tree), None
+    if node is None:
+        bad.append("oracle_daily.REGISTER has no ['ROSTER']['value']")
+    elif not (isinstance(node, ast.Tuple) and node.elts and all(
+            isinstance(e, ast.Constant) and isinstance(e.value, str) for e in node.elts)):
+        seg = " ".join((ast.get_source_segment(text, node) or "?").split())
+        bad.append(f"ROSTER value is not a literal tuple of strings: oracle_daily.py:{node.lineno} "
+                   f"reads `{seg[:60]}` — a roster computed from something else has a second owner")
+    else:
+        literal = tuple(e.value for e in node.elts)
+    named = sorted({n.lineno for n in ast.walk(tree)
+                    if (isinstance(n, ast.Name) and n.id == _ROSTER_BASKET)
+                    or (isinstance(n, ast.Attribute) and n.attr == _ROSTER_BASKET)
+                    or (isinstance(n, ast.ImportFrom)
+                        and any(a.name == _ROSTER_BASKET for a in n.names))})
+    if named:
+        bad.append(f"oracle_daily.py names the study basket ({_ROSTER_BASKET}) at line(s) {named} — "
+                   f"engine/cells.py is the frozen STUDY basket (charter §4), not the watchlist")
+
+    # ── (b) NO SECOND LIST anywhere in the family (by VALUE, not by name)
+    for fname in ROSTER_FAMILY:
+        t = tree if fname == "oracle_daily.py" else ast.parse(
+            (ROOT / "scripts" / fname).read_text(encoding="utf-8"))
+        skip = node if fname == "oracle_daily.py" and literal is not None else None
+        for ln, syms in _roster_symbol_lists(t, skip=skip):
+            bad.append(f"a second symbol list: {fname}:{ln} types {len(syms)} symbols "
+                       f"({', '.join(syms[:3])}{', …' if len(syms) > 3 else ''}) — live consumers "
+                       f"IMPORT REGISTER['ROSTER'], they never retype it")
+
+    # ── (c) THE ROW AND THE PROBE
+    if row.get("ruled") is not True:
+        bad.append("the ROSTER row is not 'ruled': True — the roster IS ruled (operator, 2026-09-21)")
+    if ROSTER_RULING not in row.get("source", ""):
+        bad.append(f"the ROSTER row's source does not quote ruling 1 verbatim ({ROSTER_RULING!r})")
+    probe_path, probe = _roster_probe_doc()
+    kept = dropped = ()
+    if probe_path is None:
+        bad.append("the ROSTER row's source names no research_outputs/oracle/roster_probe_<date>.json")
+    elif probe is None:
+        bad.append(f"the probe record {probe_path} is ABSENT — the roster cannot be held against "
+                   f"what Binance answered (gitignored path: it must be restored, never skipped)")
+    else:
+        kept, dropped = tuple(probe.get("kept", ())), tuple(probe.get("dropped", ()))
+        recs = probe.get("records", {})
+        for s in dropped:
+            if s not in row.get("source", ""):
+                bad.append(f"the ROSTER row's source does not name the dropped {s}")
+        if literal is not None:
+            dups = sorted({s for s in literal if literal.count(s) > 1})
+            back = [s for s in literal if s in dropped]
+            stray = [s for s in literal if s not in kept and s not in dropped]
+            lost = [s for s in kept if s not in literal]
+            soft = [s for s in literal if s in kept and not (
+                recs.get(s, {}).get("verdict") == "KEEP"
+                and recs.get(s, {}).get("contractType") == "PERPETUAL"
+                and recs.get(s, {}).get("status") == "TRADING")]
+            if dups:
+                bad.append(f"duplicate symbol(s) on the roster: {dups}")
+            if back:
+                bad.append(f"DROPPED BY RULING yet on the roster: {back} — {probe_path} records no "
+                           f"Binance USDT-M contract by that name")
+            if stray:
+                bad.append(f"on the roster but not KEPT by the probe: {stray} — not among the "
+                           f"operator's 22 as probed in {probe_path}")
+            if lost:
+                bad.append(f"KEPT by the probe but missing from the roster: {lost}")
+            if soft:
+                bad.append(f"listed as kept but the probe's own record is not KEEP/PERPETUAL/"
+                           f"TRADING: {soft}")
+            if not (dups or back or stray or lost) and literal != kept:
+                i = next(j for j, (a, b) in enumerate(zip(literal, kept)) if a != b)
+                bad.append(f"not in the operator's order: position {i + 1} reads {literal[i]}, "
+                           f"the probe's KEPT list (his order, dropped names removed) reads {kept[i]}")
+    if real_src and literal is not None and literal != live:
+        bad.append(f"the live REGISTER['ROSTER'] ({len(live)}) is not the literal in the source "
+                   f"({len(literal)}) — something rebinds the row after it is defined")
+
+    # ── (d) THE ARTIFACT SET under test was printed from THIS roster
+    doc = HTML if html_doc is None else html_doc
+    strips = re.findall(r'<canvas[^>]*data-payload="oracle_mantle_([0-9A-Z]+)_[^"]*"', doc or "")
+    t_assets = (sorted(set(TAPE["asset"])) if TAPE is not None else None) \
+        if tape_assets is None else sorted(set(tape_assets))
+    c_assets = (sorted(r.get("asset") for r in CAL.get("per_asset", [])) if CAL else None) \
+        if cal_assets is None else sorted(cal_assets)
+    for art, what, got in (("render", "mantle strips in the render", sorted(strips)),
+                           ("tape", "assets on the tape", t_assets),
+                           ("D-7 record", "assets in the D-7 record", c_assets)):
+        if got is None:
+            bad.append(f"the {art} is ABSENT from artifact set {DATE}")
+        elif got != sorted(live):
+            bad.append(f"{what}: {len(got)} symbol(s) against a roster of {len(live)} — missing "
+                       f"{[x for x in live if x not in got]}, not on the roster "
+                       f"{[x for x in got if x not in live]}; artifact set {DATE} was not printed "
+                       f"from this roster")
+    return bad, {"literal": literal, "line": getattr(node, "lineno", None), "kept": kept,
+                 "dropped": dropped, "probe": probe_path, "strips": len(strips),
+                 "tape": len(t_assets or ()), "cal": len(c_assets or ())}
+
+
+def f_br_16() -> None:
+    src = (ROOT / "scripts" / "oracle_daily.py").read_text(encoding="utf-8")
+    node = _roster_node(ast.parse(src))
+    seg = ast.get_source_segment(src, node) if node is not None else None
+    live = tuple(OD.REGISTER["ROSTER"]["value"])
+    _pp, probe = _roster_probe_doc()
+    dropped = tuple((probe or {}).get("dropped", ()))
+    left = tuple((probe or {}).get("leaves_roster_not_in_operator_22", {}).get("symbols", ()))
+
+    def lit(symbols) -> str:
+        return "(" + ", ".join(f'"{x}"' for x in symbols) + ",)"
+
+    def swap(new_seg: str | None):
+        """The source with the ROSTER literal replaced — None if it cannot be planted."""
+        if not seg or new_seg is None or src.count(seg) != 1:
+            return None
+        return dict(src=src.replace(seg, new_seg, 1))
+
+    anchor = "from engine.data import cache_dir"
+    alpha = tuple(sorted(live))
+    # The strip to cut is one the page under test actually CARRIES (an edition printed
+    # from an older roster has no strip for the newest symbols, and a plant that cannot
+    # be planted voids the fixture for a reason that is not the code's).
+    on_page = re.findall(r'<canvas[^>]*data-payload="oracle_mantle_([0-9A-Z]+)_[^"]*"', HTML or "")
+    cut = ([x for x in on_page if x in live] or on_page or [live[-1]])[-1]
+    strip_cut, n_cut = re.subn(
+        rf'<canvas[^>]*data-payload="oracle_mantle_{re.escape(cut)}_[^"]*"[^>]*>', "", HTML or "", count=1)
+    other = (left or dropped or ("NOTONROSTERUSDT",))[0]
+
+    # (name, the finding it MUST produce, how it is planted). Judged one at a time,
+    # the F-BR-13 idiom: a red plant must not carry a green one through, and a plant
+    # red for some OTHER reason has not shown its own guard working.
+    plants = (
+        ("SOURCE PLANT (the old binding: the value computed from the study basket)",
+         "is not a literal tuple", swap(f"tuple({_ROSTER_BASKET})")),
+        ("SOURCE PLANT (the study basket imported again, the literal left alone)",
+         "names the study basket",
+         dict(src=src.replace(anchor, f"from engine.cells import {_ROSTER_BASKET}\n{anchor}", 1))
+         if src.count(anchor) == 1 else None),
+        ("SOURCE PLANT (a second list typed beside the row)",
+         "a second symbol list", dict(src=src + f"\n_SHADOW_ROSTER = {lit(live[:3])}\n")),
+        (f"SOURCE PLANT (a DROPPED name typed back in: {dropped[0] if dropped else '—'})",
+         "DROPPED BY RULING yet on the roster", swap(lit(live + dropped[:1])) if dropped else None),
+        (f"SOURCE PLANT (a leftover of the old basket typed back in: {left[0] if left else '—'})",
+         "on the roster but not KEPT by the probe", swap(lit(live + left[:1])) if left else None),
+        (f"SOURCE PLANT (a kept name lost: {live[-1]})",
+         "KEPT by the probe but missing", swap(lit(live[:-1]))),
+        ("SOURCE PLANT (the operator's order handed to sorted())",
+         "not in the operator's order", swap(lit(alpha)) if alpha != live else None),
+        (f"RENDER PLANT ({cut}'s mantle strip cut from the page)",
+         "mantle strips in the render", dict(html_doc=strip_cut) if n_cut else None),
+        (f"TAPE PLANT ({live[0]} swapped for {other})",
+         "assets on the tape", dict(tape_assets=(other,) + live[1:])),
+        (f"D-7 PLANT (one record short: {live[0]} gone)",
+         "assets in the D-7 record", dict(cal_assets=live[1:])),
+    )
+
+    def _break() -> tuple[bool, str]:
+        green, out = False, []
+        for name, must, kw in plants:
+            if kw is None:
+                green = True
+                out.append(f"{name} -> GREEN: the plant could not be planted")
+                continue
+            bad, _x = _roster_judge(**kw)
+            hits = [b for b in bad if must in b]
+            if hits:
+                rest = [b for b in bad if must not in b]
+                out.append(f"{name} -> RED: {hits[0]}"
+                           + (f" [and {len(rest)} other finding(s), first: {rest[0]}]" if rest else ""))
+            else:
+                green = True
+                out.append(f"{name} -> " + ("GREEN" if not bad else
+                           f"RED FOR THE WRONG REASON (no finding says {must!r}; first: {bad[0]})"))
+        return green, " ‖ ".join(out)
+
+    def _real() -> tuple[bool, str]:
+        bad, x = _roster_judge()
+        if bad:
+            return False, "; ".join(bad[:6]) + (f" (+{len(bad) - 6} more)" if len(bad) > 6 else "")
+        n = len(x["literal"])
+        return True, (
+            f"REGISTER['ROSTER'] is a LITERAL tuple of {n} at oracle_daily.py:{x['line']}, equal IN "
+            f"ORDER to the {len(x['kept'])} KEPT of {x['probe']} (every record KEEP · PERPETUAL · "
+            f"TRADING); the {len(x['dropped'])} DROPPED BY RULING ({', '.join(x['dropped'])}) are off "
+            f"it and named in the row's source, which quotes ruling 1 verbatim and is 'ruled': True; "
+            f"oracle_daily.py does not name the study basket; no second symbol list in "
+            f"{len(ROSTER_FAMILY)} family files ({', '.join(ROSTER_FAMILY)}); the live row equals "
+            f"the source literal; and artifact set {DATE} was printed from exactly this roster — "
+            f"{x['strips']} mantle strips, {x['tape']} tape assets, {x['cal']} D-7 records. "
+            f"Roster: {' '.join(x['literal'])}")
+
+    prove("F-BR-16", "ROSTER — one literal definition: the probe's KEPT list in the operator's "
+                     "order, no second list, and the edition under test printed from it",
+          _break, _real)
+
+
 # ══════════════════════════════════════════════════════════════════ MAIN
 
 def main() -> int:
@@ -1750,7 +2065,7 @@ def main() -> int:
     print(f"  cal   {len(CAL.get('per_asset', [])) if CAL else 0} per-asset records")
     print("=" * 78)
     fixtures = (f_br_1, f_br_2, f_br_3, f_br_4, f_br_5, f_br_6,
-                f_br_7, f_br_8, f_br_9, f_br_10, f_br_11, f_br_12, f_br_13)
+                f_br_7, f_br_8, f_br_9, f_br_10, f_br_11, f_br_12, f_br_13, f_br_16)
     for fn in fixtures:
         try:
             fn()
