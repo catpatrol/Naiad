@@ -428,3 +428,41 @@ PENDING: 1. operator TV-eyeball on SS12_RangeFinder_v2.pine (NEW, the final fixt
          (unchanged) 4. V-7 rails (APOLLO F-C3-e) (unchanged)
 NEXT: eyeball verdict, or RF-4 fires on the zone-edge boundary grammar. Owner: operator.
 === END STATUS ===
+
+=== STATUS_ARGUS — 2026-09-21 (ORACLE SCHEDULE SUSPENDED · FIVE AGENTS BOOTED OUT) ===
+NOW: ORACLE SCHEDULE SUSPENDED 2026-09-21 by operator ruling; on-demand /oracle skill to
+     replace; five agents booted out, plists retained. The clockwork that ran since ruling
+     W4 (2026-08-22) is off the machine; nothing was deleted, and the rollback is one paste.
+LAST EVENT: 2026-09-21 — five `launchctl bootout gui/501/<label>` calls, all rc=0; absence
+     re-verified per label against `launchctl list`.
+FACTS:
+- BOOTED OUT, rc=0 each, verified ABSENT: com.naiad.oracle-topup-0645 · oracle-0700 ·
+  oracle-topup-1545 · oracle-1600 · oracle-catchup. Surviving launchd agents, untouched:
+  com.naiad.daily · com.naiad.estate · com.naiad.workflow [verified]
+- PLISTS RETAINED, all five, unedited in ~/Library/LaunchAgents (1049–1069 B, mtimes
+  2026-08-16/2026-08-22 unchanged). Re-arm commands filed verbatim at
+  research_outputs/oracle/SUSPENDED_2026-09-21.txt, 1,961 B [verified]
+- STATE AT SUSPENSION: last oracle_*.html on disk = 2026-09-20 (237,943 B) · selfcheck_log
+  .jsonl 68 lines, last 5 all verdict PASS / zone_agree true, newest 2026-09-21T10:00Z slot
+  full · ORACLE_DOWN.flag ABSENT (cleared by that 07:00 run) · calibration JSONs = 57 ·
+  tape parquets = 35 (newest oracle_tape_2026-09-21.parquet) [verified]
+- ⚠ TODAY'S RENDER IS MISSING FROM DISK. oracle-0700.log records writing briefs/oracle/
+  oracle_2026-09-21.html 237,943 B sha 5a2c5467…, and selfcheck logged the same sha at
+  10:00Z; the file is not there now. briefs/oracle/ is gitignored, so git holds no copy.
+  Not diagnosed — the last artifact of the retired schedule is unaccounted for [open]
+- ⚠ PUSH IS DOWN, third-party: the 07:00 daily committed 5d1e8a5 and failed to push —
+  "ssh: connect to host github.com port 22: Undefined error: 0". The §3.4 publish of this
+  entry hits the same wall; bytes are committed locally, not on the remote [verified]
+- SUSPENSION IS NOT REBOOT-DURABLE BY ITSELF: plists left in ~/Library/LaunchAgents are
+  re-bootstrapped by launchd at the next login, and oracle-catchup carries RunAtLoad, so it
+  fires on that re-bootstrap. `launchctl disable gui/501/<label>` x5 makes it survive
+  without touching a plist; the commands are in the SUSPENDED file. NOT APPLIED — the
+  ruling said bootout and retain, and disable was not in it. Operator rules [open]
+PENDING: 1. operator ruling on the five `launchctl disable` overrides (reboot-durability)
+         2. /oracle on-demand skill — not yet written; no oracle output exists until it is
+         3. the missing 2026-09-21 render 4. push credentials / SSH-22 egress
+         5. prior, unchanged: operator TV-eyeball on SS12_RangeFinder_v2.pine · PARITY line
+         · BR-2 on gates · V-7 rails (APOLLO F-C3-e)
+NEXT: write the /oracle skill, or rule on disable. Owner: operator.
+METRICS: operator actions this session = 1 · files re-ingested = 9
+=== END STATUS ===
