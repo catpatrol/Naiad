@@ -1,4 +1,5 @@
-"""ORACLE MOVERS FIXTURES — F-MV-1 .. F-MV-7 of queue OR-1 (STEP E, fetch half).
+"""ORACLE MOVERS FIXTURES — F-MV-1 .. F-MV-9 of queue OR-1 (STEP E: F-MV-1..7 the fetch
+half, F-MV-8..9 the render half).
 
 Same law as the BR-1 and BR-1b sets: every fixture runs BOTH legs through
 `prove()`, the BREAK leg first, and a fixture whose break leg passes is counted
@@ -46,6 +47,20 @@ F-MV-1, the closure half of F-MV-2 — were sound but unproven by the suite.)
           REGISTER and endpoints and fetches nothing") that the first build left
           to a by-hand check, and that died with a ValueError whenever the
           output dir was redirected outside the repo
+  F-MV-8  THE RENDER HALF. WIRE DOWN honesty through the Oracle's REAL render path
+          (oracle_daily.build_view once, render_html per case), MOVERS_DIR pointed
+          into a TemporaryDirectory: the directory missing, today's json absent, a
+          FAIL document (the organ's own placeholder, and one CARRYING numbers), an
+          OK document still in flight, a healthy YESTERDAY document with today's absent, today's file name with
+          yesterday's date inside, garbage bytes, an OK document with a text pct —
+          each prints "WIRE DOWN — no movers this edition", its reason, and NOT ONE
+          row; an OK document prints exactly min(top_n, n) rows per table by signed
+          pct DESC. The build order for the render half calls this "F-MV-4"; that id
+          was already taken (see the note above F-MV-8)             (contract)
+  F-MV-9  no gate reads a mover: an AST allow-list over scripts/oracle_daily.py
+          (a mover is named in three functions, four module constants and ONE call
+          in render_html, and nowhere else) plus the MEASURED import closure, which
+          holds no oracle_movers component. The build order's "F-MV-5"  (contract)
 
 WHAT THIS SUITE DOES TO THE WORLD. F-MV-1's real leg performs ONE real fetch
 (~530 calls, ~570 request weight) in a SUBPROCESS whose output directory is
@@ -57,8 +72,12 @@ nothing. F-MV-5 drives the organ IN-PROCESS against a STUB network (no real
 call) with its output dir redirected into a TemporaryDirectory. F-MV-6 does the
 same in CHILD processes (no real call either: requests.get itself is replaced in
 the child) and costs about two minutes of backoff, because waiting out the real
-backoff is the point. F-MV-7 is in-process on a counting stub. Nothing here
-writes the cache, the live lane, or the bus.
+backoff is the point. F-MV-7 is in-process on a counting stub. F-MV-8 imports
+oracle_daily LAZILY (the only fixture here that does), READS the kline cache through one
+real build_view, and writes only inside its own TemporaryDirectory: the planted json
+files, one tape and one calibration record, twice. F-MV-9 reads one source file and
+measures one import closure in a subprocess. Nothing here writes the cache, the live
+lane, or the bus.
 
     F-MV-1 MUST NOT BE RUN CONCURRENTLY WITH A TOP-UP OR A BACKFILL. It
     fingerprints the whole kline cache (~632 MB) before and after the run; any
@@ -76,6 +95,7 @@ import ast
 import contextlib
 import copy
 import hashlib
+import html
 import io
 import json
 import math
@@ -376,6 +396,8 @@ BANNED_DIR_LITERALS = ("exchange", "briefs", "klines", "funding", "data_cache",
 # than imported: importing oracle_daily here would put the Oracle in the movers
 # suite's process, and that file is under concurrent edit during the OR-1 build.
 # _banned_vocabulary() unions this with the live tuple read by AST, no import.
+# (F-MV-8 DOES import the Oracle — lazily, inside the fixture, after F-MV-1..7 have
+# run: it has to drive the real render. See the note above F-MV-8.)
 BANNED_TOKENS = (
     "win", "loss", "pnl", "r_multiple", "net_r", "gross_r", "return", "outcome",
     "hit_rate", "expectancy", "profit", "equity", "mfe", "mae", "term_h20",
@@ -1316,10 +1338,672 @@ def f_mv_7() -> None:
           lambda: _dry_run([]), lambda: _dry_run(["--dry-run"]))
 
 
+# ══════════════════════════════════ THE RENDER HALF (OR-1 STEP E part 2) · F-MV-8, F-MV-9
+#
+# THE NUMBERING, said once. The build order for the render half calls its two fixtures
+# "F-MV-4" and "F-MV-5". Those ids were already taken when it was written down: the
+# fetch half's fix rounds had added key purity (F-MV-4), the failure path (F-MV-5), the
+# killed run (F-MV-6) and the dry run (F-MV-7), and scripts/oracle_movers.py cites them
+# by those numbers in its own docstring. Renumbering a fixture that a committed file and
+# a saved transcript cite would make both lie, so the render half's two take the next
+# free ids: the order's "F-MV-4" (WIRE DOWN honesty) is F-MV-8, its "F-MV-5" (the AST
+# wall) is F-MV-9.
+#
+# THE ORACLE IS IMPORTED HERE, LAZILY, AND NOWHERE ELSE IN THIS FILE. F-MV-1..7 never
+# import it (see the note above BANNED_TOKENS). F-MV-8 has to: "through the real render
+# path" means oracle_daily.build_view once and oracle_daily.render_html once per case.
+# The import happens inside _oracle(), after F-MV-1..7 have run, and it cannot colour
+# F-MV-2: that fixture measures the organ's closure in a SUBPROCESS.
+
+ORACLE_SRC = ROOT / "scripts" / "oracle_daily.py"
+# The contract's sentence, COPIED from the queue file and not read off the module under
+# test: a page that prints whatever oracle_daily.WIRE_DOWN happens to say proves nothing.
+WIRE_DOWN_TEXT = "WIRE DOWN — no movers this edition"
+MP_HEAD = "The Market Page"
+MP_TABLES = (("overnight", "OVERNIGHT"), ("weekly", "THE WEEK"))
+
+# A SYNTHETIC EDITION, so the fixture depends on no wire and on no real json: one fixed
+# instant, the edition date it falls on, and the day before. Buenos Aires has been UTC-3
+# with no daylight saving since 2009, so the local stamp is derived HERE with a plain
+# three-hour offset and the page's zoneinfo arithmetic is checked against it.
+MP_STARTED = datetime(2030, 1, 2, 12, 0, 0, tzinfo=timezone.utc)
+MP_DATE = "2030-01-02"
+MP_YESTERDAY = "2030-01-01"
+MP_UTC_STAMP = "2030-01-02T12:00:00Z"
+MP_BA_STAMP = "2030-01-02 09:00 Buenos Aires"
+MP_N_BIG = 60            # more symbols than TOP_N: the cut must bind
+MP_N_SMALL = 7           # fewer: every row prints, and no more
+# Symbol prefixes of the planted documents — today's OK, yesterday's OK, a FAIL document
+# that carries numbers, an OK document with a malformed row — chosen to occur nowhere in
+# a real edition, so ONE hit anywhere on the page is a number from the wrong document.
+# (The first draft tagged the FAIL document "FAIL"; the honest reason line prints
+# "status 'FAIL'", and the real leg went red on its own reason.)
+MP_TAGS = ("ZQTD", "ZQYS", "ZQFD", "ZQMF")
+MP_FAULTS_SHOWN = 6      # faults printed per checker run; the rest are counted
+MP_BANNER_PHRASES = ("LATE EDITION", "STALE DATA")
+MP_ABS_TRAP = -999.0     # the largest ABSOLUTE overnight move and the smallest SIGNED one
+
+_OD = None
+_OD_VIEW = None
+
+
+def _oracle():
+    global _OD
+    if _OD is None:
+        import oracle_daily                      # lazy ON PURPOSE — see the block comment
+        _OD = oracle_daily
+    return _OD
+
+
+def _oracle_view():
+    """ONE real build_view over the real cache (~6 s), shared by every case and both
+    legs. No movers document can change it: build_view is never handed one (F-MV-9)."""
+    global _OD_VIEW
+    if _OD_VIEW is None:
+        _OD_VIEW = _oracle().build_view(log=lambda *a, **k: None)
+    return _OD_VIEW
+
+
+def _mp_doc(date_str: str, n: int, tag: str, status: str = "OK") -> dict:
+    """A document born where the organ's are (OM._base_doc: every DOC_KEY), then filled
+    with n synthetic symbols named after `tag`, so that a number from the wrong document
+    is recognisable anywhere on the page by its symbol.
+
+    TWO TRAPS ARE BUILT IN. (1) The tables are stored WORST FIRST, the reverse of print
+    order, so a reader that trusts the file's order prints the wrong fifty. (2) One
+    symbol carries pct -999: the largest ABSOLUTE move and the smallest SIGNED one. With
+    n > top_n it must not print at all."""
+    doc = OM._base_doc(MP_STARTED)
+    syms = [f"{tag}{i:03d}USDT" for i in range(n)]
+    over = [{"symbol": s, "pct": round(((i * 37) % n) * 1.5 - n * 0.4, 3),
+             "last_price": 1000.5 + i} for i, s in enumerate(syms)]
+    over[0]["pct"] = MP_ABS_TRAP
+    if n > 3:
+        over[3]["pct"] = over[2]["pct"]            # a tie: the symbol breaks it
+    week = [{"symbol": r["symbol"], "pct": round(-r["pct"] / 3.0, 3),
+             "last_price": r["last_price"]} for r in over]
+    doc.update({
+        "date": date_str, "status": status, "in_flight": False,
+        "fail_reasons": [] if status == "OK" else ["simulated: exchangeInfo failed (F-MV-8)"],
+        "universe": sorted(syms), "universe_count": n,
+        "overnight": OM.sort_rows(over)[::-1], "overnight_top": OM.sort_rows(over)[:OM.TOP_N],
+        "weekly": OM.sort_rows(week)[::-1], "weekly_top": OM.sort_rows(week)[:OM.TOP_N],
+    })
+    return doc
+
+
+def _mp_json(doc: dict) -> bytes:
+    return json.dumps(doc, indent=1, sort_keys=True, ensure_ascii=False).encode("utf-8")
+
+
+def html_text(fragment: str) -> str:
+    """Tags out, entities back, whitespace collapsed: what the operator READS."""
+    return re.sub(r"\s+", " ", html.unescape(re.sub(r"(?s)<[^>]+>", " ", fragment))).strip()
+
+
+def _mp_section(page: str) -> str:
+    """The HTML between the Market Page's <h2> and the next one ('' if there is none)."""
+    for part in re.split(r"<h2>", page)[1:]:
+        if part.lower().startswith(MP_HEAD.lower()):
+            return part
+    return ""
+
+
+def _mp_rest(page: str) -> str:
+    """The page WITHOUT the Market Page section and without the A2-7 staleness div, whose
+    text carries a wall-clock age that can tick between two renders."""
+    sec = _mp_section(page)
+    rest = page.replace("<h2>" + sec, "", 1) if sec else page
+    return re.sub(r'(?s)<div class="stale">.*?</div>', "", rest)
+
+
+def _mp_rows(sec: str, key: str) -> list[tuple[str, str, str, str]] | None:
+    """(rank, symbol, pct, last price) as PRINTED, for one table; None if no such table."""
+    m = re.search(rf"(?s)<table class='movers' data-table='{key}'>(.*?)</table>", sec)
+    if not m:
+        return None
+    out = []
+    for row in re.findall(r"(?s)<tr class='mv'>(.*?)</tr>", m.group(1)):
+        cells = [re.sub(r"<[^>]+>", "", c).strip() for c in re.findall(r"(?s)<td[^>]*>(.*?)</td>", row)]
+        out.append(tuple(cells) if len(cells) == 4 else ("?", "?", "?", "?"))
+    return out
+
+
+def _mp_case_faults(label: str, page: str, expect: dict) -> list[str]:
+    """One rendered edition, held to what its case says it must be."""
+    bad = []
+    sec = _mp_section(page)
+    if not sec:
+        return [f"{label}: the edition has no '{MP_HEAD}' section"]
+    # The on-demand wrapper decides "staleness banner UP" by finding one of these two
+    # phrases ANYWHERE in the edition's text (oracle_wrapper BANNER_MARKERS, loose on
+    # purpose). A Market Page that spelt either would raise a false banner every day.
+    loud = [m for m in MP_BANNER_PHRASES if m in html_text(sec)]
+    if loud:
+        bad.append(f"{label}: the section prints {loud}, which the wrapper reads as the "
+                   f"staleness banner")
+    n_tr = len(re.findall(r"<tr\b", sec))
+    n_mv = len(re.findall(r"<tr class='mv'>", sec))
+    if expect["down"]:
+        if page.count(WIRE_DOWN_TEXT) != 1 or WIRE_DOWN_TEXT not in html_text(sec):
+            bad.append(f"{label}: the contract's line {WIRE_DOWN_TEXT!r} prints "
+                       f"{page.count(WIRE_DOWN_TEXT)} time(s) in the edition, not once in the section")
+        if n_tr or "<table" in sec:
+            bad.append(f"{label}: WIRE DOWN, yet the section holds {n_tr} table row(s) "
+                       f"({n_mv} of them mover rows)")
+        m = re.search(r"reason: ([^<]+)", sec)
+        if not m or expect["reason"] not in html_text(m.group(1)):
+            bad.append(f"{label}: the printed reason is {m.group(1)[:90] if m else None!r}, "
+                       f"which does not say {expect['reason']!r}")
+        for tag in expect["absent_tags"]:
+            if tag in page:
+                bad.append(f"{label}: a symbol of the {tag!r} document is ON THE PAGE — a number "
+                           f"from a document that may not be printed")
+        return bad
+    # ── an OK document ───────────────────────────────────────────────────────
+    if WIRE_DOWN_TEXT in page:
+        bad.append(f"{label}: an OK document, yet the page prints {WIRE_DOWN_TEXT!r}")
+    doc, total = expect["doc"], 0
+    for key, title in MP_TABLES:
+        want = sorted(doc[key], key=lambda r: (-r["pct"], r["symbol"]))[: min(OM.TOP_N, len(doc[key]))]
+        got = _mp_rows(sec, key)
+        if got is None:
+            bad.append(f"{label}: no {title} table")
+            continue
+        total += len(got)
+        if len(got) != len(want):
+            bad.append(f"{label}: {title} prints {len(got)} row(s), want min({OM.TOP_N}, "
+                       f"{len(doc[key])}) = {len(want)}")
+            continue
+        want_cells = [(str(i), r["symbol"].removesuffix("USDT"), f"{r['pct']:+,.3f}%",
+                       f"{r['last_price']:g}") for i, r in enumerate(want, 1)]
+        if got != want_cells:
+            i = next(i for i in range(len(got)) if got[i] != want_cells[i])
+            bad.append(f"{label}: {title} row {i + 1} prints {got[i]}, want {want_cells[i]} — "
+                       f"not the top {len(want)} by SIGNED pct, largest first")
+        printed = [float(c[2].rstrip("%").replace(",", "")) for c in got if c[2] != "?"]
+        if any(a < b for a, b in zip(printed, printed[1:])):
+            bad.append(f"{label}: {title} is not in DESCENDING order as printed")
+        if key == "overnight" and len(doc[key]) > OM.TOP_N and MP_ABS_TRAP in printed:
+            bad.append(f"{label}: {title} prints the {MP_ABS_TRAP:+.0f}% row — the largest "
+                       f"ABSOLUTE move, which is the LAST of {len(doc[key])} by signed pct")
+        if title not in sec:
+            bad.append(f"{label}: the title {title!r} is not printed")
+    if n_mv != total or n_tr != total + len(MP_TABLES):
+        bad.append(f"{label}: {n_mv} mover row(s) and {n_tr} <tr> in the section, but the two "
+                   f"tables hold {total} + {len(MP_TABLES)} header(s) — a row outside the tables")
+    text = html_text(sec)
+    for what, frag in (("the universe size", f"UNIVERSE {doc['universe_count']:,} contract"),
+                       ("the fetch time, UTC", MP_UTC_STAMP),
+                       ("the fetch time, Buenos Aires", MP_BA_STAMP),
+                       ("the overnight method string", doc["method"]["overnight"]),
+                       ("the weekly method string", doc["method"]["weekly"])):
+        if frag not in text:
+            bad.append(f"{label}: the footnote lacks {what} ({frag[:60]!r})")
+    for tag in expect["absent_tags"]:
+        if tag in page:
+            bad.append(f"{label}: a symbol of the {tag!r} document is ON THE PAGE beside today's")
+    return bad
+
+
+def _mp_tree(root: Path) -> list[tuple[str, int]]:
+    return sorted((p.relative_to(root).as_posix(), p.stat().st_size)
+                  for p in root.rglob("*")) if root.exists() else []
+
+
+def _mp_cases() -> list[tuple[str, dict, dict]]:
+    """(label, {file name: bytes} planted in MOVERS_DIR, what the edition must then be)."""
+    today, yday = f"movers_{MP_DATE}.json", f"movers_{MP_YESTERDAY}.json"
+    ok_big, ok_small = _mp_doc(MP_DATE, MP_N_BIG, MP_TAGS[0]), _mp_doc(MP_DATE, MP_N_SMALL, MP_TAGS[0])
+    healthy_yesterday = _mp_json(_mp_doc(MP_YESTERDAY, MP_N_BIG, MP_TAGS[1]))
+    placeholder = OM.placeholder_doc(MP_STARTED)
+    placeholder["date"] = MP_DATE
+    text_pct = _mp_doc(MP_DATE, MP_N_BIG, MP_TAGS[3])
+    text_pct["overnight"][5]["pct"] = "12.5"
+    unfinished = _mp_doc(MP_DATE, MP_N_BIG, MP_TAGS[2])
+    unfinished["in_flight"] = True
+    down = lambda reason, *tags: {"down": True, "reason": reason,           # noqa: E731
+                                  "absent_tags": tags or MP_TAGS}
+    return [
+        ("(a) today's file ABSENT, directory empty", {}, down("is absent")),
+        ("(b) today's file is the organ's own FAIL placeholder (in flight, empty tables)",
+         {today: _mp_json(placeholder)}, down("says status 'FAIL'")),
+        ("(b') today's file says FAIL but CARRIES sixty numbers",
+         {today: _mp_json(_mp_doc(MP_DATE, MP_N_BIG, MP_TAGS[2], status="FAIL"))},
+         down("says status 'FAIL'")),
+        ("(b'') today's file says OK, carries sixty numbers, and is still IN FLIGHT",
+         {today: _mp_json(unfinished)}, down("but in_flight is True")),
+        ("(c) a healthy YESTERDAY document present, today's absent",
+         {yday: healthy_yesterday}, down("is absent")),
+        ("(c') today's FILE NAME, yesterday's date inside it",
+         {today: healthy_yesterday}, down(f"carries the date '{MP_YESTERDAY}'")),
+        ("(d) today's file is garbage bytes",
+         {today: b"\x00\xff\xfe{{{ not json \x80", yday: healthy_yesterday}, down("is unparseable")),
+        ("(d') today's file says OK but one pct is text",
+         {today: _mp_json(text_pct)}, down("says OK but is malformed")),
+        (f"(e) an OK document of {MP_N_BIG} symbols, stored worst-first, yesterday's beside it",
+         {today: _mp_json(ok_big), yday: healthy_yesterday},
+         {"down": False, "doc": ok_big, "absent_tags": MP_TAGS[1:]}),
+        (f"(f) an OK document of {MP_N_SMALL} symbols",
+         {today: _mp_json(ok_small)}, {"down": False, "doc": ok_small, "absent_tags": MP_TAGS[1:]}),
+    ]
+
+
+def _mp_loader_plant(kind: str):
+    """A FAULTY LOADER, handed to the real render in place of oracle_daily.load_movers.
+    Each is the one-line mistake its name says, and each starts from the real loader so
+    that nothing but the mistake differs."""
+    od = _oracle()
+    real = od.load_movers
+
+    def newest_ok():
+        for p in sorted(od.MOVERS_DIR.glob("movers_*.json"), reverse=True):
+            try:
+                d = json.loads(p.read_text())
+            except Exception:
+                continue
+            if isinstance(d, dict) and d.get("status") == "OK":
+                return d
+        return None
+
+    def today_raw(date_str):
+        try:
+            return json.loads((od.MOVERS_DIR / f"movers_{date_str}.json").read_text())
+        except Exception:
+            return None
+
+    def fallback_to_latest(date_str):
+        # the classic: today's file is not there, so serve the newest one that is.
+        # Deliberately NOTHING ELSE: with today's file present (FAIL, garbage, in flight)
+        # it behaves like the real loader, so the only case it can turn red is (c).
+        doc, why = real(date_str)
+        if doc is None and not (od.MOVERS_DIR / f"movers_{date_str}.json").exists():
+            older = newest_ok()
+            if older is not None:
+                return older, ""                   # "better yesterday's list than none"
+        return doc, why
+
+    def status_blind(date_str):
+        doc, why = real(date_str)
+        raw = today_raw(date_str)
+        if doc is None and isinstance(raw, dict) and raw.get("date") == date_str \
+                and isinstance(raw.get("overnight"), list) and raw["overnight"]:
+            return raw, ""                         # never looked at `status`
+        return doc, why
+
+    def date_blind(date_str):
+        doc, why = real(date_str)
+        raw = today_raw(date_str)
+        if doc is None and isinstance(raw, dict) and raw.get("status") == "OK":
+            return raw, ""                         # trusted the file name for the date
+        return doc, why
+
+    return {"fallback_to_latest": fallback_to_latest, "status_blind": status_blind,
+            "date_blind": date_blind}[kind]
+
+
+def _market_page(loader_plant: str = "", cut_plant: str = "") -> tuple[bool, str]:
+    """Every case through the REAL render: oracle_daily.render_html over ONE real view,
+    with oracle_daily.MOVERS_DIR pointed into a TemporaryDirectory. The break legs swap in
+    a faulty loader or a faulty cut by module attribute and run THIS SAME function."""
+    od = _oracle()
+    bad = []
+    if od.MOVERS_DIR != OM.MOVERS_DIR:
+        bad.append(f"oracle_daily.MOVERS_DIR is {od.MOVERS_DIR} but the organ writes "
+                   f"{OM.MOVERS_DIR}: the page would be WIRE DOWN for ever")
+    if od.WIRE_DOWN != WIRE_DOWN_TEXT:
+        bad.append(f"oracle_daily.WIRE_DOWN is {od.WIRE_DOWN!r}, not the contract's sentence")
+    view, canon = _oracle_view(), od.PE.canon_sha()
+    saved = {k: getattr(od, k) for k in ("MOVERS_DIR", "load_movers", "movers_top",
+                                         "TAPE_DIR", "CAL_DIR")}
+    real_cut = od.movers_top
+    rests, ledgers, n_rows = {}, {}, {}
+    try:
+        if loader_plant:
+            od.load_movers = _mp_loader_plant(loader_plant)
+        if cut_plant == "file_order":
+            od.movers_top = lambda rows, n: list(rows)[:n]           # trusted the file's order
+        elif cut_plant == "no_cut":
+            od.movers_top = lambda rows, n: real_cut(rows, len(rows))  # forgot top_n
+        with tempfile.TemporaryDirectory(prefix="oracle-market-page-") as td:
+            # (a0) the directory itself missing: WIRE DOWN, and the render must not create it
+            od.MOVERS_DIR = Path(td) / "never-made"
+            page = od.render_html(view, MP_DATE, canon)
+            bad += _mp_case_faults("(a0) the movers directory does not exist", page,
+                                   {"down": True, "reason": "is absent", "absent_tags": ()})
+            if od.MOVERS_DIR.exists():
+                bad.append("(a0): the render CREATED the movers directory — this file may "
+                           "only read it")
+            rests["(a0)"] = _mp_rest(page)
+            cases = _mp_cases()
+            for i, (label, files, expect) in enumerate(cases):
+                d = Path(td) / f"case{i}"
+                d.mkdir()
+                for name, blob in files.items():
+                    (d / name).write_bytes(blob)
+                od.MOVERS_DIR = d
+                before = _mp_tree(d)
+                page = od.render_html(view, MP_DATE, canon)
+                if _mp_tree(d) != before:
+                    bad.append(f"{label}: the render changed the movers directory")
+                bad += _mp_case_faults(label, page, expect)
+                rests[label.split(" ")[0]] = _mp_rest(page)
+                n_rows[label.split(" ")[0]] = len(re.findall(r"<tr class='mv'>", page))
+                # NOTHING OF A MOVER ON THE TAPE OR IN THE CALIBRATION RECORD: written into
+                # the sandbox under the FIRST and the LAST case (wire down / sixty numbers on
+                # the page) and compared, then searched for the documents' symbols.
+                if i in (0, len(cases) - 2):
+                    import pandas as pd            # lazy, with the Oracle: F-MV-1..7 need neither
+                    od.TAPE_DIR, od.CAL_DIR = d / "tape", d / "calibration"
+                    tape_p, _, _ = od.write_tape(view, MP_DATE)
+                    cal_p, _, _ = od.write_calibration(view, MP_DATE, "fixture")
+                    cal = json.loads(cal_p.read_text())
+                    cal.pop("generated_utc", None)   # the one wall-clock field of the record
+                    tape_txt = pd.read_parquet(tape_p).to_csv(index=False)   # header + every cell
+                    cal_txt = json.dumps(cal, sort_keys=True)
+                    ledgers[label.split(" ")[0]] = (tape_txt, cal_txt)
+                    for txt, what in ((tape_txt, "tape"), (cal_txt, "calibration record")):
+                        hit = [t for t in (*MP_TAGS, "mover", "overnight", "weekly") if t in txt]
+                        if hit:
+                            bad.append(f"{label}: the {what} carries {hit}")
+    finally:
+        for k, v in saved.items():
+            setattr(od, k, v)
+    ref = next(iter(rests.values()))
+    moved = [k for k, v in rests.items() if v != ref]
+    if moved:
+        bad.append(f"the REST of the edition (everything outside the Market Page) differs in "
+                   f"case(s) {moved}: a movers document reached another section")
+    if len(set(ledgers.values())) > 1:
+        bad.append("the tape or the calibration record differs between a WIRE DOWN edition "
+                   "and one that printed sixty movers")
+    if bad:
+        return False, ("; ".join(bad[:MP_FAULTS_SHOWN])
+                       + (f"; … and {len(bad) - MP_FAULTS_SHOWN} more fault(s)"
+                          if len(bad) > MP_FAULTS_SHOWN else ""))
+    return True, (
+        f"real render path (oracle_daily.build_view once over the real cache, render_html "
+        f"{len(rests)} times, MOVERS_DIR in a TemporaryDirectory, edition {MP_DATE}): the directory "
+        f"missing, (a) absent, (b) the organ's FAIL placeholder, (b') a FAIL document carrying "
+        f"{MP_N_BIG} numbers, (b'') an OK document still in flight, (c) a healthy {MP_YESTERDAY} document with today's absent, (c') "
+        f"today's file name with {MP_YESTERDAY} inside, (d) garbage bytes beside a healthy "
+        f"yesterday, (d') an OK document with a text pct — EACH prints {WIRE_DOWN_TEXT!r} exactly "
+        f"once, its own reason, zero <tr> and no symbol of any planted document anywhere in "
+        f"the edition, and creates or changes nothing in the directory; (e) an OK document of "
+        f"{MP_N_BIG}, stored worst-first, prints min({OM.TOP_N}, {MP_N_BIG}) = "
+        f"{n_rows.get('(e)', 0) // 2} rows per table and (f) one of {MP_N_SMALL} prints "
+        f"{n_rows.get('(f)', 0) // 2}, each table cell-for-cell the top by SIGNED pct DESC, ties "
+        f"on the symbol, and the {MP_ABS_TRAP:+.0f}% row (the largest ABSOLUTE overnight move) "
+        f"absent from OVERNIGHT in (e); the section never prints {list(MP_BANNER_PHRASES)}; with universe "
+        f"size, {MP_UTC_STAMP} UTC, {MP_BA_STAMP} and both method strings in the footnote and no "
+        f"WIRE DOWN line; everything OUTSIDE the Market Page is byte-identical across all "
+        f"{len(rests)} editions ({len(ref):,} B, staleness div aside); tape and calibration "
+        f"written under a wire-down edition and under a {MP_N_BIG}-mover edition are identical "
+        f"and carry no mover token")
+
+
+def f_mv_8() -> None:
+    prove("F-MV-8", "THE MARKET PAGE — WIRE DOWN honesty through the real render, never a stale number",
+          lambda: _every_plant_red([
+              # the contract's own break: yesterday's list served when today's is missing
+              ("a fallback-to-latest loader (serves yesterday's document)",
+               lambda: _market_page(loader_plant="fallback_to_latest")),
+              ("a loader that never reads `status`",
+               lambda: _market_page(loader_plant="status_blind")),
+              ("a loader that trusts the file name for the date",
+               lambda: _market_page(loader_plant="date_blind")),
+              ("a cut that trusts the file's row order",
+               lambda: _market_page(cut_plant="file_order")),
+              ("a cut that forgets top_n",
+               lambda: _market_page(cut_plant="no_cut")),
+          ]),
+          lambda: _market_page())
+
+
+# ══════════════════════════════════ F-MV-9 · NO GATE READS A MOVER (AST + closure)
+#
+# OR-1 §2: "no gate, filter, or sizing reads a range or a mover." The range layer's wall
+# (F-BR-14) needed an allow-list of readers because a range rides in the view. A mover
+# rides nowhere, so this wall is simpler and tighter: in scripts/oracle_daily.py a mover
+# may be NAMED in three functions and four module constants, render_html may make ONE
+# call, and every other statement in the file must be silent. Scans CODE, not prose.
+
+MP_LOADER, MP_CUT, MP_RENDER, MP_PAGE = "load_movers", "movers_top", "market_page", "render_html"
+MP_FUNCS = (MP_LOADER, MP_CUT, MP_RENDER)
+MP_MODULE_CONSTANTS = ("MOVERS_DIR", "WIRE_DOWN", "MOVERS_TABLES", "MOVERS_REASON_MAX")
+# Keys only a movers document has. "date", "status", "symbol", "method", "register" and
+# "class" are left out on purpose: the Oracle spells those for its own reasons.
+MP_KEYS = ("overnight", "weekly", "overnight_top", "weekly_top", "overnight_null",
+           "weekly_null", "top_n", "universe_count", "universe", "fetched_utc",
+           "fetched_local", "last_price", "pct", "fail_reasons", "in_flight")
+MP_KEYS_MUST_BE_READ = ("top_n", "fetched_utc", "universe_count", "pct", "last_price")
+MP_PATH_FRAGMENT = re.compile(r"(^|/)movers(_|/|$)")
+# every function the build order names as mover-free, plus the rest of the decision and
+# ledger side: each must EXIST (fail closed) and mention nothing
+MP_STRANGERS = ("level_registry", "build_view", "trap_card", "net_rr", "fired_events",
+                "r1_block", "write_tape", "write_calibration", "range_layer", "range_cell",
+                "range_watch", "tide_tables", "staleness_banner", "mantle_payload", "run")
+MP_LISTING_CALLS = ("glob", "rglob", "iterdir", "listdir", "scandir", "walk")
+MP_NET_NAMES = ("_get", "requests", "urlopen", "urllib", "socket", "REST_BASE", "httpx",
+                "aiohttp", "http")
+MP_LEDGER_TOKENS = ("mover", "movers", "overnight", "weekly", "wire")
+_MP_CLOSURES: dict[str, dict] = {}
+
+
+def _mp_mentions(node):
+    """(node, what) for every way a mover can be NAMED under `node`. A docstring is one
+    whole-string constant and never EQUALS a key or a path fragment, so prose cannot trip it."""
+    for n in ast.walk(node):
+        if isinstance(n, ast.Name) and ("mover" in n.id.lower() or n.id in MP_MODULE_CONSTANTS
+                                        or n.id in MP_FUNCS):
+            yield n, f"the name `{n.id}`"
+        elif isinstance(n, ast.Attribute) and ("mover" in n.attr.lower() or n.attr in MP_FUNCS
+                                               or n.attr in MP_MODULE_CONSTANTS):
+            yield n, f"the attribute `.{n.attr}`"
+        elif isinstance(n, ast.arg) and "mover" in n.arg.lower():
+            yield n, f"the argument `{n.arg}`"
+        elif isinstance(n, ast.Constant) and isinstance(n.value, str):
+            if n.value in MP_KEYS:
+                yield n, f"the movers key {n.value!r}"
+            elif n.value == WIRE_DOWN_TEXT:
+                yield n, "the WIRE DOWN sentence"
+            elif not re.search(r"\s", n.value) and MP_PATH_FRAGMENT.search(n.value):
+                yield n, f"the path fragment {n.value!r}"
+
+
+def _mp_plant_in(src: str, fn_name: str, stmt_src: str) -> str:
+    """`stmt_src` planted as the first statement of top-level `fn_name`, after its docstring."""
+    tree = ast.parse(src)
+    fn = next(n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name == fn_name)
+    doc = (fn.body and isinstance(fn.body[0], ast.Expr)
+           and isinstance(fn.body[0].value, ast.Constant) and isinstance(fn.body[0].value.value, str))
+    at = 1 if doc else 0
+    fn.body[at:at] = ast.parse(stmt_src).body
+    return ast.unparse(ast.fix_missing_locations(tree))
+
+
+def _mover_wall(src: str | None = None, closure_plant: str = "") -> tuple[bool, str]:
+    src = ORACLE_SRC.read_text(encoding="utf-8") if src is None else src
+    tree = ast.parse(src)
+    bad = []
+    fns = {n.name: n for n in tree.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))}
+
+    # ── (1) imports, anywhere in the tree, lazy ones included ────────────────
+    lazy = []
+    for n in ast.walk(tree):
+        if isinstance(n, (ast.Import, ast.ImportFrom)):
+            for a in n.names:
+                full = f"{getattr(n, 'module', None) or ''}.{a.name}".strip(".")
+                if any("mover" in part.lower() for part in full.split(".")):
+                    bad.append(f"line {n.lineno}: oracle_daily.py imports `{full}` — the Oracle "
+                               f"may read the organ's json, never the organ")
+        elif isinstance(n, ast.Constant) and n.value == "oracle_movers":
+            bad.append(f"line {n.lineno}: the string 'oracle_movers' — an import by name")
+    for fn in ast.walk(tree):
+        if isinstance(fn, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            for n in ast.walk(fn):
+                if isinstance(n, ast.Import):
+                    lazy += [a.name for a in n.names]
+                elif isinstance(n, ast.ImportFrom) and n.module:
+                    lazy.append(n.module)
+    lazy = sorted({m for m in lazy if re.fullmatch(r"[A-Za-z_][\w.]*", m)
+                   and not any("mover" in p.lower() for p in m.split("."))})
+
+    # ── (2) the closure, measured: the module AND the imports it makes lazily ─
+    plant = "; ".join([f"import {m}" for m in lazy] + ([closure_plant] if closure_plant else []))
+    if plant not in _MP_CLOSURES:
+        _MP_CLOSURES[plant] = _closure("oracle_daily", plant)
+    clo = _MP_CLOSURES[plant]
+    reach = sorted(m for m in clo["all"] if any("oracle_movers" == p for p in m.split(".")))
+    if reach:
+        bad.append(f"the import closure of oracle_daily reaches {reach}")
+
+    # ── (3) who may name a mover ──────────────────────────────────────────────
+    binds = {c: 0 for c in MP_MODULE_CONSTANTS}
+    for stmt in tree.body:
+        if isinstance(stmt, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            if stmt.name in MP_FUNCS:
+                continue
+            if stmt.name == MP_PAGE:
+                calls = [n for n in ast.walk(stmt) if isinstance(n, ast.Call)
+                         and isinstance(n.func, ast.Name) and n.func.id == MP_RENDER
+                         and not n.keywords and len(n.args) == 1
+                         and isinstance(n.args[0], ast.Name) and n.args[0].id == "date_str"]
+                if len(calls) != 1:
+                    bad.append(f"{MP_PAGE}() must make exactly ONE call of the shape "
+                               f"`{MP_RENDER}(date_str)`; found {len(calls)}")
+                inside = {id(x) for c in calls for x in ast.walk(c)}
+                for n, what in _mp_mentions(stmt):
+                    if id(n) not in inside:
+                        bad.append(f"{MP_PAGE}() mentions {what} at line {n.lineno} OUTSIDE its one "
+                                   f"call of {MP_RENDER}(date_str) — the appendix, the footer and "
+                                   f"the header may not see a movers document")
+                continue
+            for n, what in _mp_mentions(stmt):
+                bad.append(f"{stmt.name}() mentions {what} at line {n.lineno} — a mover may be "
+                           f"named only in {list(MP_FUNCS)} and in {MP_PAGE}()'s one call")
+            continue
+        tgt = (stmt.targets if isinstance(stmt, ast.Assign)
+               else [stmt.target] if isinstance(stmt, ast.AnnAssign) else [])
+        names = [t.id for t in tgt if isinstance(t, ast.Name)]
+        if len(names) == 1 and names[0] in MP_MODULE_CONSTANTS:
+            binds[names[0]] += 1
+            continue
+        if isinstance(stmt, (ast.Import, ast.ImportFrom)):
+            continue                                  # judged by (1)
+        for n, what in _mp_mentions(stmt):
+            bad.append(f"module level mentions {what} at line {n.lineno} — outside every "
+                       f"function only {list(MP_MODULE_CONSTANTS)} may be bound")
+    for c, k in binds.items():
+        if k != 1:
+            bad.append(f"`{c}` is bound {k} time(s) at module level, want exactly 1 — fail closed")
+
+    # ── (4) the three functions themselves ────────────────────────────────────
+    for f in (*MP_FUNCS, MP_PAGE):
+        if f not in fns:
+            bad.append(f"{f}() not found — fail closed")
+    for g in MP_STRANGERS:
+        if g not in fns:
+            bad.append(f"{g}() not found — it is named as mover-free and cannot be checked; "
+                       f"fail closed")
+    for f, want in ((MP_LOADER, ["date_str"]), (MP_RENDER, ["date_str"])):
+        if f in fns:
+            a = fns[f].args
+            got = [x.arg for x in (*a.posonlyargs, *a.args, *a.kwonlyargs)]
+            if got != want or a.vararg or a.kwarg:
+                bad.append(f"{f}() takes {got}{' + *args/**kw' if a.vararg or a.kwarg else ''}, "
+                           f"want exactly {want}: it is handed a date and NO view")
+    for f in MP_FUNCS:
+        for n in ast.walk(fns[f]) if f in fns else ():
+            if isinstance(n, ast.Name) and n.id == "MOVERS_DIR" and f != MP_LOADER:
+                bad.append(f"{f}() names MOVERS_DIR at line {n.lineno} — only {MP_LOADER}() may "
+                           f"touch the directory")
+            if isinstance(n, (ast.Name, ast.Attribute)):
+                nm = n.id if isinstance(n, ast.Name) else n.attr
+                if nm in MP_NET_NAMES:
+                    bad.append(f"{f}() names `{nm}` at line {n.lineno} — the Oracle never fetches")
+            if isinstance(n, ast.Call):
+                fn_ = n.func
+                nm = fn_.id if isinstance(fn_, ast.Name) else fn_.attr if isinstance(fn_, ast.Attribute) else None
+                if nm in MP_LISTING_CALLS:
+                    bad.append(f"{f}() calls {nm}() at line {n.lineno} — a loader that can LIST "
+                               f"the directory can fall back to its newest file")
+                if nm in WRITE_CALLS:
+                    bad.append(f"{f}() makes the write-capable call {nm}() at line {n.lineno} — "
+                               f"the Oracle reads the movers directory and never writes it")
+    # fail closed: the keys this scan hunts must be keys the organ really writes, and keys
+    # the allow-listed functions really read — or the scan is hunting a stale name
+    stale = sorted(set(MP_KEYS) - set(OM.DOC_KEYS) - ROW_KEYS)
+    if stale:
+        bad.append(f"MP_KEYS {stale} are not keys of a movers document — the scan is blind")
+    read = {what for f in MP_FUNCS if f in fns for _n, what in _mp_mentions(fns[f])}
+    unread = [k for k in MP_KEYS_MUST_BE_READ if f"the movers key {k!r}" not in read]
+    if unread:
+        bad.append(f"{list(MP_FUNCS)} never read the key(s) {unread} — the scan is hunting "
+                   f"stale names; fail closed")
+
+    # ── (5) the ledgers: no mover column, by name ─────────────────────────────
+    cols = None
+    for stmt in tree.body:
+        if isinstance(stmt, ast.Assign) and any(isinstance(t, ast.Name) and t.id == "TAPE_COLS"
+                                                for t in stmt.targets):
+            cols = ast.literal_eval(stmt.value)
+    if cols is None:
+        bad.append("TAPE_COLS not found as a literal — fail closed")
+    else:
+        hit = [c for c in cols if {*re.split(r"[^a-z0-9]+", c.lower())} & set(MP_LEDGER_TOKENS)]
+        if hit:
+            bad.append(f"tape column(s) named after a mover: {hit}")
+
+    if bad:
+        return False, "; ".join(sorted(set(bad)))
+    n_named = {f: sum(1 for _ in _mp_mentions(fns[f])) for f in MP_FUNCS}
+    return True, (
+        f"oracle_daily.py ({len(fns)} top-level functions, AST): no import with a 'mover' "
+        f"component at any depth, lazy imports included, and no 'oracle_movers' string; the "
+        f"MEASURED closure of oracle_daily plus its lazy import(s) {lazy} is {len(clo['all'])} "
+        f"modules with no oracle_movers component. A mover is named ONLY in {n_named} and in "
+        f"{MP_PAGE}()'s single call `{MP_RENDER}(date_str)`; {list(MP_MODULE_CONSTANTS)} are each "
+        f"bound once at module level; the {len(MP_STRANGERS)} named strangers {list(MP_STRANGERS)} "
+        f"all exist and mention none of {len(MP_KEYS)} movers keys, no movers path fragment, no "
+        f"mover name. {MP_LOADER}() and {MP_RENDER}() each take exactly (date_str) — no view; "
+        f"only {MP_LOADER}() names MOVERS_DIR; none of {list(MP_FUNCS)} lists a directory "
+        f"({list(MP_LISTING_CALLS)}), makes any of {len(WRITE_CALLS)} write-capable calls or "
+        f"names a network thing; TAPE_COLS ({len(cols)} columns) holds no mover-named column")
+
+
+def f_mv_9() -> None:
+    src = ORACLE_SRC.read_text(encoding="utf-8")
+    prove("F-MV-9", "NO GATE READS A MOVER — AST allow-list of oracle_daily.py + its import closure",
+          lambda: _every_plant_red([
+              ("source: `import oracle_movers` at module level",
+               lambda: _mover_wall(src + "\nimport oracle_movers\n")),
+              ("source: a LAZY `from oracle_movers import TOP_N` inside the allow-listed render",
+               lambda: _mover_wall(_mp_plant_in(src, MP_RENDER, "from oracle_movers import TOP_N"))),
+              ("closure REALLY holds oracle_movers, source clean",
+               lambda: _mover_wall(closure_plant="import oracle_movers")),
+              ("a read planted in build_view",
+               lambda: _mover_wall(_mp_plant_in(src, "build_view",
+                                                "_mv, _why = load_movers('2030-01-02')"))),
+              ("the directory rebuilt by hand in write_tape",
+               lambda: _mover_wall(_mp_plant_in(
+                   src, "write_tape", "_p = ROOT / 'research_outputs' / 'oracle' / 'movers'"))),
+              ("a movers key read in write_calibration",
+               lambda: _mover_wall(_mp_plant_in(
+                   src, "write_calibration", "_x = (view.get('mkt') or {}).get('overnight')"))),
+              ("a second read in render_html, outside the one call",
+               lambda: _mover_wall(_mp_plant_in(src, MP_PAGE, "_doc, _ = load_movers(date_str)"))),
+              ("a directory listing inside the loader (the road to fallback-to-latest)",
+               lambda: _mover_wall(_mp_plant_in(
+                   src, MP_LOADER, "_newest = sorted(MOVERS_DIR.glob('movers_*.json'))"))),
+          ]),
+          lambda: _mover_wall())
+
+
 # ══════════════════════════════════════════════════════════════════ MAIN
 
 def main() -> int:
-    fixtures = (f_mv_1, f_mv_2, f_mv_3, f_mv_4, f_mv_5, f_mv_6, f_mv_7)
+    fixtures = (f_mv_1, f_mv_2, f_mv_3, f_mv_4, f_mv_5, f_mv_6, f_mv_7, f_mv_8, f_mv_9)
     print("=" * 78)
     print(f"ORACLE MOVERS FIXTURES — {datetime.now(timezone.utc).isoformat()[:19]}Z")
     print(f"  organ       {ORGAN_SRC.relative_to(ROOT)}  sha256 {OM.sha256_file(ORGAN_SRC)}")

@@ -35,6 +35,18 @@ and, since OR-1 STEP D (2026-09-21), one section that is not BR-1's:
                       gate, filter, heat, station, card or sizing reads a range
                       (F-BR-14).
 
+and, since OR-1 STEP E (2026-09-21), one more that is not BR-1's:
+
+    MARKET PAGE  OR-1 E  operator ruling 7: the top movers of the Binance USDT-M
+                      perpetual universe, OVERNIGHT and THE WEEK, printed from the
+                      ONE json the fetch-only organ scripts/oracle_movers.py wrote
+                      for THIS edition's date. This file never imports that organ
+                      and never fetches; any other document, or none, prints WIRE
+                      DOWN and no numbers. DISPLAY ONLY: see "THE MARKET PAGE"
+                      below. Nothing of it reaches the view, the tape or the
+                      calibration record, and no gate, filter, heat, station, card
+                      or sizing reads a mover (F-MV-8, F-MV-9).
+
 and, beside the render, per run: the D-4 tape parquet and the D-7 calibration
 JSON (display-machinery distributions only, A1-4).
 
@@ -73,6 +85,7 @@ import json
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import numpy as np
 import pandas as pd
@@ -118,6 +131,13 @@ TAPE_DIR = ROOT / "research_outputs" / "oracle" / "tape"
 CAL_DIR = ROOT / "research_outputs" / "oracle" / "calibration"
 PAYLOAD_DIR = ROOT / "research_outputs" / "oracle" / "payloads"
 GRID_PARQUET = ROOT / "research_outputs" / "census2b" / "oracle" / "oracle_grid.parquet"
+# THE ONE THING THAT CROSSES THE MOVERS WALL (OR-1 STEP E): a directory this file
+# READS one json from, by path. A module-level PATH like the four above so a fixture can
+# point it into a TemporaryDirectory (F-MV-8); unlike the four above it is NEVER created
+# and NEVER written from here: scripts/oracle_movers.py, a separate fetch-only process
+# this file does not import, is the directory's only writer. The name is FENCED: F-MV-9
+# reads this file's AST and goes red on any use of it outside load_movers().
+MOVERS_DIR = ROOT / "research_outputs" / "oracle" / "movers"
 
 # ═══════════════════════════════════════════════════════ THE CLOSED REGISTER
 # Same law as tierc2/tierc3/posture_engine: nothing invented without saying so.
@@ -292,6 +312,29 @@ REGISTER: dict[str, dict] = {
                   "inclusive, as written. The threshold picks rows for a display list and does "
                   "nothing else: no gate, filter, heat, station, card or sizing reads it, or "
                   "the list (F-BR-14).",
+    },
+    # THE MARKET PAGE'S ONE CONSTANT (OR-1 STEP E, 2026-09-21), AND WHY ITS VALUE IS A
+    # POINTER. The fifty of ruling 7 is typed ONCE in the estate: oracle_movers.TOP_N, in
+    # the organ that cuts the tables. CONVENTIONS §6.4 says a live consumer IMPORTS the
+    # one definition, and this consumer may not: the Oracle is cache-only and the organ
+    # fetches, so importing it would put the fetching organ inside a firewalled run (F-MV-9
+    # goes red on exactly that). The number therefore crosses the wall the only way
+    # anything does, inside the json, as `top_n`, and market_page() prints that many
+    # rows. A second fifty typed here would be a second definition, free to drift from
+    # the first; F-MV-3 holds the json's number to the ruling, F-MV-8 holds the page to
+    # the json's number.
+    "MARKET_PAGE_TOP_N": {
+        "value": "read from the movers json (its own top_n field), never typed here",
+        "ruled": True,
+        "source": "RATIFIED by operator ruling 7 of 2026-09-21, verbatim: '7-add a list at the "
+                  "end of the oracle with the top 50 coins by %change overnight and weekly' "
+                  "(queue OR-1 STEP E: 'Render two tables, top 50 by signed % change each'). "
+                  "SIGNED, largest first: the head of each table is the largest gain, not the "
+                  "largest absolute move. The one definition of the number is "
+                  "oracle_movers.REGISTER['TOP_N'], which the organ copies into every json it "
+                  "writes; load_movers() refuses a document whose top_n is not a positive "
+                  "integer, and market_page() cuts each table at it. Display-only: no gate, "
+                  "filter, heat, station, card or sizing reads a mover (F-MV-9).",
     },
 }
 
@@ -1090,6 +1133,189 @@ symbol's own last cached {lens} bar; "(short)" marks a cache holding fewer than 
 RANGE_LENS and RANGE_WATCH_ATR are [VETO]: see the appendix.</p>"""
 
 
+# ─────────────────────────────── OR-1 STEP E · THE MARKET PAGE (operator ruling 7)
+# The contract: "oracle_daily reads the json only (cache-only stays true). Render two
+# tables, top 50 by signed % change each: OVERNIGHT and THE WEEK; footnote universe size
+# + fetch time; if the fetch failed, the page prints 'WIRE DOWN — no movers this
+# edition', never stale numbers."
+#
+# THE WALL, both halves of it. (1) The Oracle is CACHE-ONLY (BR-1b: "it may never fetch
+# inside a firewalled run") and a top-50 of ~530 contracts cannot be built from a cache
+# that holds only the roster, so the fetching lives in scripts/oracle_movers.py, its
+# own process, which this file NEVER imports. One json crosses, read by path. (2) OR-1
+# §2: "no gate, filter, or sizing reads a range or a mover." The range layer needed an
+# allow-list of seven readers because a range rides in the view. A mover does not ride
+# anywhere: it is never put in the view, so build_view, the tape, the calibration
+# record and every card CANNOT see one. load_movers() reads the file, movers_top()
+# orders its rows, market_page() prints them, and render_html() calls
+# market_page(date_str) ONCE; outside those, and the module constants just below, this
+# file does not name a mover. F-MV-9 holds that by AST and by import closure; F-MV-8
+# renders the page against every kind of bad document.
+#
+# NEVER A STALE NUMBER, which is the reader's half of the organ's contract ("a reader may
+# print numbers ONLY from a document whose status is OK AND whose date is the edition's
+# own date"). The loader opens EXACTLY ONE path, the one named for the edition's date.
+# It never lists the directory, so there is no "newest file" for it to fall back to:
+# yesterday's document, however healthy, is not reachable from here. Absent, unparseable,
+# dated otherwise, status not OK, a fetch still in flight, or a table that is not what
+# the organ promises: each is WIRE DOWN with its reason, and not one row.
+#
+# WHAT THE EDITION DATE IS: run()'s date_str, the machine-local date the edition is
+# named by, which is the same clock the organ names its json by (oracle_movers.
+# local_date). A json fetched at 09:00 is still "today's" at 16:00: the ruling asks for
+# the day's list, not a live ticker, and the fetch time prints under the tables so the
+# age is never hidden.
+#
+# A DISPLAY ORGAN MAY NOT TAKE THE PAGE DOWN (the range layer's rule, same reason):
+# neither function raises. A fault is a WIRE DOWN line with the fault in it.
+
+WIRE_DOWN = "WIRE DOWN — no movers this edition"
+# (json table key, printed title): the contract's two tables, in the contract's order.
+MOVERS_TABLES = (("overnight", "OVERNIGHT"), ("weekly", "THE WEEK"))
+MOVERS_REASON_MAX = 600          # characters of a reason the page will print
+
+
+def load_movers(date_str: str) -> tuple[dict | None, str]:
+    """The movers document for the EDITION DATE, or None and the honest reason.
+
+    PURE READ of one path: MOVERS_DIR / movers_<date_str>.json. No directory listing,
+    no glob, no "latest", no network, no wall clock, no write; MOVERS_DIR is not created
+    if it is missing. Returns (doc, "") only for a document that is parseable, dated
+    `date_str`, status "OK", not in flight, and whose printable parts are what the
+    organ's docstring promises: top_n a positive integer, fetched_utc an aware ISO
+    stamp, the two method strings, and both tables lists of {symbol, pct, last_price}
+    with finite numbers. Anything else is (None, reason). NEVER RAISES."""
+    name = f"movers_{date_str}.json"
+    try:
+        p = MOVERS_DIR / name
+        if not p.is_file():
+            return None, (f"{name} is absent — the movers organ has written no document for "
+                          f"this edition's date (it did not run, or it ran on another date)")
+        try:
+            doc = json.loads(p.read_bytes().decode("utf-8"))
+        except ValueError as e:        # JSONDecodeError and UnicodeDecodeError both are
+            return None, f"{name} is unparseable ({e.__class__.__name__})"
+        if not isinstance(doc, dict):
+            return None, f"{name} is unparseable (a json {type(doc).__name__}, not an object)"
+        if doc.get("date") != date_str:
+            return None, (f"{name} carries the date {doc.get('date')!r}, not this edition's "
+                          f"{date_str}")
+        if doc.get("status") != "OK":
+            said = "; ".join(str(x) for x in (doc.get("fail_reasons") or [])) or "no reason recorded"
+            return None, (f"{name} says status {doc.get('status')!r}"
+                          + (", in flight or never finished" if doc.get("in_flight") else "")
+                          + f" — {said}")
+        if doc.get("in_flight") is not False:
+            # the organ writes true only on its pre-fetch placeholder, which says FAIL; an
+            # OK document that is not plainly finished contradicts itself and is not printed
+            return None, (f"{name} says status 'OK' but in_flight is {doc.get('in_flight')!r} — "
+                          f"only a run that says it finished is printed")
+
+        def _num(x) -> bool:
+            return isinstance(x, (int, float)) and not isinstance(x, bool) and bool(np.isfinite(x))
+
+        bad = []
+        if not (isinstance(doc.get("top_n"), int) and not isinstance(doc.get("top_n"), bool)
+                and doc["top_n"] > 0):
+            bad.append(f"top_n is {doc.get('top_n')!r}")
+        if not (isinstance(doc.get("universe_count"), int)
+                and not isinstance(doc.get("universe_count"), bool)):
+            bad.append(f"universe_count is {doc.get('universe_count')!r}")
+        try:
+            if datetime.fromisoformat(doc["fetched_utc"]).tzinfo is None:
+                bad.append("fetched_utc carries no UTC offset")
+        except Exception:
+            bad.append(f"fetched_utc is {doc.get('fetched_utc')!r}")
+        method = doc.get("method")
+        for key, _title in MOVERS_TABLES:
+            if not (isinstance(method, dict) and isinstance(method.get(key), str) and method[key]):
+                bad.append(f"no method string for {key}")
+            rows = doc.get(key)
+            if not isinstance(rows, list):
+                bad.append(f"{key} is not a list")
+            elif not all(isinstance(r, dict) and isinstance(r.get("symbol"), str) and r["symbol"]
+                         and _num(r.get("pct")) and _num(r.get("last_price")) for r in rows):
+                bad.append(f"{key} holds a row that is not {{symbol, pct, last_price}} with "
+                           f"finite numbers")
+        if bad:
+            return None, f"{name} says OK but is malformed: " + "; ".join(bad)
+        return doc, ""
+    except Exception as e:                     # contained, never silent: it prints
+        return None, f"{name} could not be read ({e.__class__.__name__}: {e})"
+
+
+def movers_top(rows: list[dict], n: int) -> list[dict]:
+    """The first n rows by SIGNED pct, largest first, ties on the symbol: the organ's
+    own rule (oracle_movers.sort_rows), re-applied HERE so the order on the page is this
+    file's guarantee and not an assumption about the file it was handed."""
+    return sorted(rows, key=lambda r: (-r["pct"], r["symbol"]))[:n]
+
+
+def market_page(date_str: str) -> str:
+    """The Market Page section body. A pure function of (MOVERS_DIR, date_str): no wall
+    clock, no network, no write, and NO VIEW: it takes no asset, no heat, no station, and
+    hands nothing back to anything but the page. Prints the two tables for a document
+    load_movers() accepts; otherwise exactly the WIRE DOWN line, the reason, and no row."""
+    def _down(why: str) -> str:
+        return (f"<p class='wire'>{html.escape(WIRE_DOWN)}</p>"
+                f"<p class='small muted'>reason: {html.escape(why[:MOVERS_REASON_MAX])}</p>")
+
+    doc, why = load_movers(date_str)
+    if doc is None:
+        return _down(why)
+    try:
+        n = doc["top_n"]
+        fetched = datetime.fromisoformat(doc["fetched_utc"]).astimezone(timezone.utc)
+        try:
+            local = f"{fetched.astimezone(ZoneInfo(ZONE)).strftime('%Y-%m-%d %H:%M')} Buenos Aires"
+        except Exception:                      # no tz database: the organ's own stamp
+            local = f"{doc.get('fetched_local')} machine-local"
+        tables, counts = [], []
+        for key, title in MOVERS_TABLES:
+            rows = movers_top(doc[key], n)
+            body = "".join(
+                f"<tr class='mv'><td class='num muted'>{i}</td>"
+                f"<td class='sym'>{html.escape(r['symbol'].removesuffix('USDT'))}</td>"
+                f"<td class='num'>{r['pct']:+,.3f}%</td>"
+                f"<td class='num'>"
+                f"{np.format_float_positional(r['last_price'], precision=10, unique=True, trim='-')}"
+                f"</td></tr>" for i, r in enumerate(rows, 1))
+            tables.append(
+                f"<div><h3>{title} — top {len(rows)} of {len(doc[key]):,} by signed % change, "
+                f"largest first</h3><table class='movers' data-table='{key}'><tr><th>#</th>"
+                f"<th>symbol</th><th>% change</th><th>last price</th></tr>{body}</table></div>")
+            nulls = doc.get(f"{key}_null")
+            counts.append(f"{title}: {len(doc[key]):,} with a number, "
+                          f"{len(nulls) if isinstance(nulls, list) else '—'} listed without one")
+        reg = doc.get("register") if isinstance(doc.get("register"), dict) else {}
+        # The organ's UNRULED rows surface HERE and not in the appendix table: the
+        # appendix is built by render_html, which may not read a movers document.
+        veto = [f"{k} = {v.get('value')}" for k, v in reg.items()
+                if isinstance(v, dict) and not v.get("ruled", True)]
+        veto_html = ("<p class='small muted'><span class='chip'>[VETO]</span> unruled in the "
+                     "movers organ's own register, as this json carries it (operator defaults, "
+                     "standing until vetoed): " + html.escape(" · ".join(veto)) + "</p>"
+                     ) if veto else ""
+        return f"""<p class="small muted">The day's list, not a live ticker: the {n} largest SIGNED
+percent changes in each of two windows, largest gain first, over the whole Binance USDT-M
+perpetual universe. Symbols print without their USDT quote.</p>
+<div class="mkt">{''.join(tables)}</div>
+<p class="small muted">UNIVERSE {doc['universe_count']:,} contract(s) — counted by the organ,
+never asserted · {' · '.join(counts)}. FETCHED {fetched.strftime('%Y-%m-%dT%H:%M:%SZ')} UTC ·
+{html.escape(local)}, by scripts/oracle_movers.py, a separate fetch-only organ: the Oracle read
+movers_{html.escape(date_str)}.json and fetched nothing. OVERNIGHT, the method of record:
+{html.escape(doc['method']['overnight'])}. THE WEEK, the method of record:
+{html.escape(doc['method']['weekly'])}. The cut at {n} is the json's own top_n (operator ruling
+7). DISPLAY-ONLY · renders, never rules: no gate, filter, heat, station, card or sizing reads a
+mover, and nothing on this page reaches the tape or the calibration record (F-MV-9). A
+document that is absent, unparseable, dated otherwise or not status OK prints no row at all,
+only that the wire is down and why: an older day's numbers are never shown (F-MV-8).</p>
+{veto_html}"""
+    except Exception as e:                     # contained, never silent: it prints
+        return _down(f"the Market Page could not be set from movers_{date_str}.json "
+                     f"({e.__class__.__name__}: {e})")
+
+
 def render_html(view: dict, date_str: str, canon_sha: str) -> str:
     lens = view["lens"]
     a0 = view["assets"]
@@ -1246,6 +1472,9 @@ td{{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}}
 .prov{{color:var(--mut);border-color:var(--mut)}}
 .pend{{color:var(--terra);border-color:var(--terra);font-weight:700}}
 .rng{{font-size:11.5px}}
+.wire{{border:1px solid var(--terra);color:var(--terra);font-weight:700;padding:8px 12px;
+   letter-spacing:.1em;margin:10px 0 6px}}
+.mkt{{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:4px 28px}}
 h3{{font-size:12px;letter-spacing:.14em;color:var(--mut);margin:22px 0 8px;text-transform:uppercase}}
 .post{{font-weight:700;letter-spacing:.1em}}
 .w-triggered{{color:var(--sage)}} .w-armed{{color:var(--teal)}}
@@ -1301,6 +1530,9 @@ comparable across assets. H20 at 4h is infeasible by construction (0 bars) and p
 
 <h2>R1 — alert prices, paste-ready</h2>
 <pre class="r1">{html.escape(r1)}</pre>
+
+<h2>The Market Page — overnight and the week, display-only</h2>
+{market_page(date_str)}
 
 <h2>Appendix — posture canon v1 · the rows still open</h2>
 <p class="small muted">BR-1 Amendment A2 (operator, 2026-08-16) ruled the naming, the trigger
