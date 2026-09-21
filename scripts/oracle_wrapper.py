@@ -42,8 +42,10 @@ THE ALARM (T-7, ruled 2026-08-22). A wrapper that exits nonzero into a log
 nobody opens is the 2026-08-20 silence. Any run that ends rc != 0 now writes
 ORACLE_DOWN.flag at the top of the repo — timestamp, job, slot, exit code, the
 last 15 traceback lines — and any run that actually did work and ended rc == 0
-removes it again. The flag is gitignored: it is for the operator standing at
-the machine, never for the bus.
+removes it again. (ONE EXCEPTION, OR-1 STEP A: a clean `--job ondemand --no-fetch`
+run leaves a standing flag STANDING — it read the cache only and has no all-clear
+to give about the wire. See ondemand_flag_action.) The flag is gitignored: it is
+for the operator standing at the machine, never for the bus.
 
 THE ON-DEMAND EDITION (OR-1 STEP A, 2026-09-21). The operator suspended the five
 agents above — booted out AND disabled, plists retained unedited — and ruled that
@@ -54,7 +56,11 @@ lock, one exit code, one flag decision, and NO schedule-drift check (on drift
 that check rewrites a plist and bootstraps it, which the suspension forbids).
 ONDEMAND_STEPS is the chain; `--job ondemand --dry-run` prints it and touches
 nothing. See THE ON-DEMAND EDITION below. The four legacy paths (oracle, topup,
-catchup, --install) are unchanged.
+catchup, --install) are unchanged for every argv the clock ever wrote. The one
+thing that changed for --install: an argv that NAMES THE ON-DEMAND EDITION is
+dispatched to the on-demand job FIRST, and that job REFUSES --install (exit 2,
+nothing touched) — `--job ondemand --dry-run --install` used to arm all five
+suspended agents and print no dry run at all (fix round 1, F-SK-2e).
 
 NO DELETION, EVER (CADENCE §4). Re-arming is bootout + bootstrap; the plist
 stays on disk. This wrapper never removes a plist. (The flag above is not a
@@ -330,6 +336,12 @@ def release_lock(log=print) -> None:
 # writes was taken as proof the run succeeded. The flag is therefore cleared only
 # by a run that PERFORMED A JOB and reached rc == 0, which is exactly what the
 # flag's own last sentence promises: the next CLEAN RUN.
+#
+# THE SENTENCE IS LEFT BYTE-FOR-BYTE (it is in every flag the legacy jobs write, and
+# F-BR-12 reads it). What "the next clean run" means for job=ondemand is narrower
+# than rc == 0: a clean `--no-fetch` edition is NOT that run — it never touched the
+# wire — and it says so in its own log ("alarm left standing … no all-clear to
+# give") at the moment the operator is reading. See ondemand_flag_action.
 FLAG = ROOT / "ORACLE_DOWN.flag"
 FLAG_SENTENCE = ("The Oracle is down. Read logs/launchd/oracle-*.log. "
                  "This file self-clears on the next clean run.")
@@ -760,6 +772,33 @@ ONDEMAND_REGISTER = {
         "value": 5, "ruled": False,
         "source": "[VETO] builder default. OR-1 STEP A says 'print the Front "
                   "Page's top rows' and names no count."},
+    "MOVERS_FAILURE_HOLDS_FLAG": {
+        "value": False, "ruled": False,
+        "source": "[VETO] builder default, and a DEVIATION the operator should rule "
+                  "on. The builder brief said the flag is 'cleared ONLY if every job "
+                  "that was supposed to run ran clean'. With False, a movers failure "
+                  "is outside the flag's jurisdiction in BOTH directions: it never "
+                  "raises the flag (contract: a movers failure does not fail the "
+                  "edition) and it never holds one up — a clean top-up + clean render "
+                  "CLEARS a standing flag even when the movers organ failed, because "
+                  "the flag's sentence is 'The Oracle is down' and the Market Page "
+                  "prints WIRE DOWN for itself. With True, a run whose movers fetch "
+                  "was SUPPOSED to run and failed leaves a standing flag STANDING (it "
+                  "still never raises one). F-SK-2g holds both readings to the "
+                  "constant."},
+    "CUT_OFF_SIGNALS": {
+        "value": ("SIGTERM", "SIGHUP"), "ruled": False,
+        "source": "[VETO] builder default (fix round 1, 2026-09-21). The polite ways "
+                  "a harness, a shell or a logout ends a process. MEASURED by the "
+                  "verifier: SIGTERM 3 s into a chain left `.oracle.lock` behind, no "
+                  "flag, no selfcheck row and NOT ONE LINE of output, and every retry "
+                  "was then locked out (exit 0, no edition) for LOCK_STALE_MIN. The "
+                  "chain now turns these into a CUT OFF exit: lock released, flag "
+                  "raised, exit 128+signum. A signal that arrives IGNORED (nohup) is "
+                  "left ignored. SIGINT is deliberately absent — the __main__ net's "
+                  "own ruling: an operator who stops a manual run has not discovered "
+                  "an outage (the lock is still released, by the chain's finally). "
+                  "SIGKILL cannot be trapped; reclaim_dead_lock is its answer."},
     "BANNER_MARKERS": {
         "value": ("LATE EDITION", "STALE DATA"), "ruled": True,
         "source": "OR-1 STEP F: 'Staleness banner => red band under the masthead "
@@ -780,6 +819,8 @@ TOPUP_SLOT = ONDEMAND_REGISTER["TOPUP_SLOT"]["value"]
 MOVERS_TIMEOUT_S = ONDEMAND_REGISTER["MOVERS_TIMEOUT_S"]["value"]
 MOVERS_LOG_TAIL = ONDEMAND_REGISTER["MOVERS_LOG_TAIL"]["value"]
 FRONT_PAGE_ROWS = ONDEMAND_REGISTER["FRONT_PAGE_ROWS"]["value"]
+MOVERS_FAILURE_HOLDS_FLAG = ONDEMAND_REGISTER["MOVERS_FAILURE_HOLDS_FLAG"]["value"]
+CUT_OFF_SIGNALS = ONDEMAND_REGISTER["CUT_OFF_SIGNALS"]["value"]
 BANNER_MARKERS = ONDEMAND_REGISTER["BANNER_MARKERS"]["value"]
 CLOUD_MARKERS = ONDEMAND_REGISTER["CLOUD_MARKERS"]["value"]
 
@@ -862,6 +903,8 @@ def ondemand_plan_lines(slot: str, no_fetch: bool) -> list[str]:
             out.append(f"         SKIPPED on this invocation — {skips[sid]}")
     out.append("  schedule: SUSPENDED by operator ruling 2026-09-21 — no run of this "
                "job checks, rewrites or re-arms a plist")
+    out.append("  --install: REFUSED by this job (exit 2, nothing touched) — arming is "
+               "the clock's verb, and rolling the clock back is the operator's action")
     for k, v in ONDEMAND_REGISTER.items():
         if not v["ruled"]:
             out.append(f"  [VETO] unruled constant {k} = {v['value']!r}")
@@ -1033,7 +1076,7 @@ def front_page(lines: list[str], slot: str, started: datetime, log=print) -> Non
         log(f"  BANNER unknown — {e.__class__.__name__}: {e}")
 
 
-def ondemand_flag_action(rc: int, no_fetch: bool) -> str:
+def ondemand_flag_action(rc: int, no_fetch: bool, movers_failed: bool = False) -> str:
     """'raise' | 'clear' | 'stand'. The whole alarm policy of this job, as a pure
     function so F-SK-2 can replant the old rule and watch it go red.
 
@@ -1047,16 +1090,144 @@ def ondemand_flag_action(rc: int, no_fetch: bool) -> str:
             both came back clean. The movers organ is outside this on purpose, in
             both directions — it never raises the flag, so it never holds it up;
             the flag's sentence is 'The Oracle is down', and the Market Page says
-            WIRE DOWN for itself."""
+            WIRE DOWN for itself. THAT HALF IS UNRULED: it is the [VETO] row
+            MOVERS_FAILURE_HOLDS_FLAG, and set True it turns this clear into a
+            'stand' when the movers fetch was supposed to run and failed. Either
+            way a movers failure NEVER returns 'raise' — that half is the contract's."""
     if rc != 0:
         return "raise"
     if no_fetch:
         return "stand"
+    if movers_failed and MOVERS_FAILURE_HOLDS_FLAG:
+        return "stand"
     return "clear"
+
+
+# ── THE CUT-OFF RUN (fix round 1, 2026-09-21). The edition is typed by hand and
+# usually run by an agent under a harness with a foreground ceiling; with the wire
+# down the chain outlives that ceiling (72 pairs at the measured 2026-09-21 rate is
+# ~19 min). MEASURED before this block existed: SIGTERM three seconds in left the
+# lock on disk, no flag, no selfcheck row and an EMPTY capture — stdout is
+# block-buffered on a pipe — and the next run, `--no-fetch` included, stood down on
+# that lock with exit 0 and no edition. Silence, then a lock-out, in exactly the
+# wire-down case T-3 and T-7 were built for. Three answers, all scoped to this job:
+#   1. every line this job logs is FLUSHED as it is logged (run_ondemand's `log`);
+#   2. CUT_OFF_SIGNALS become an exception the chain's own try/finally sees, so the
+#      lock is released, the flag is raised saying which step was cut, exit 128+n;
+#   3. a lock whose holder's pid is NOT RUNNING is reclaimed before acquire_lock is
+#      asked — the answer to SIGKILL and power loss, which nothing can trap.
+# acquire_lock itself is untouched (age-only, as the legacy jobs have always had it).
+
+class CutOff(BaseException):
+    """BaseException ON PURPOSE: run_topup and run_oracle catch Exception (and
+    run_topup SystemExit), and a run that is being ended must not be swallowed by
+    the nets built for a run that failed."""
+
+    def __init__(self, signum: int):
+        super().__init__(signum)
+        self.signum = int(signum)
+
+
+def trap_cut_off() -> dict:
+    """Install the CUT_OFF_SIGNALS handlers; return what was there, for untrap.
+    ONE CutOff per run: the handler sets every trapped signal to IGNORE before it
+    raises, so the clean-up it triggers (release the lock, raise the flag) cannot
+    itself be cut by a second, impatient signal."""
+    import signal
+    prev: dict = {}
+
+    def _cut(signum, frame):
+        for s in prev:
+            signal.signal(s, signal.SIG_IGN)
+        raise CutOff(signum)
+
+    for name in CUT_OFF_SIGNALS:
+        s = getattr(signal, name, None)
+        if s is None:
+            continue
+        try:
+            if signal.getsignal(s) == signal.SIG_IGN:
+                continue                  # nohup said ignore it; it stays ignored
+            prev[s] = signal.signal(s, _cut)
+        except (ValueError, OSError):     # not the main thread: nothing to trap
+            pass
+    return prev
+
+
+def untrap_cut_off(prev: dict) -> None:
+    import signal
+    for s, handler in prev.items():
+        try:
+            signal.signal(s, signal.SIG_DFL if handler is None else handler)
+        except (ValueError, OSError):
+            pass
+
+
+def _pid_running(pid) -> bool:
+    """False ONLY on proof. Anything that is not a positive int, or any answer other
+    than 'no such process', reads as running — so a doubt falls back to
+    acquire_lock's age rule and never to a reclaim. (pid <= 0 is refused before
+    os.kill sees it: kill(0, …) addresses the whole process group.)"""
+    if isinstance(pid, bool) or not isinstance(pid, int) or pid <= 0:
+        return True
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except Exception:                     # PermissionError: running, someone else's
+        return True
+    return True
+
+
+def reclaim_dead_lock(log=print) -> bool:
+    """True if a lock was standing whose holder is PROVABLY not running, and it is
+    now gone. A lock that cannot be read is left to acquire_lock (unreadable =
+    stale, its own rule). The body is re-read immediately before the unlink so a
+    lock some other run took in between is not the one removed."""
+    try:
+        raw = LOCK.read_text()
+        held = json.loads(raw)
+    except Exception:
+        return False
+    if not isinstance(held, dict) or _pid_running(held.get("pid")):
+        return False
+    try:
+        if LOCK.read_text() != raw:
+            return False
+        LOCK.unlink()
+    except Exception:
+        return False
+    log(f"  DEAD LOCK from {held.get('who')} (pid {held.get('pid')} is not running — "
+        f"that run was cut off before it could release; stamped {held.get('ts')}) — "
+        f"reclaiming it")
+    return True
 
 
 def run_ondemand(argv: list[str], log=print) -> int:
     """--job ondemand. The chain in ONDEMAND_STEPS, steps 1-7, in that order."""
+    say = log
+
+    def log(msg="") -> None:              # THE CUT-OFF RUN, answer 1: line by line
+        # A reader that went away (a harness that stopped listening, a closed pipe)
+        # must not take the edition or the flag decision with it: the log is the
+        # least of the three, so a line that cannot be written is dropped.
+        try:
+            say(msg)
+            sys.stdout.flush()
+        except OSError:
+            pass
+
+    if "--install" in argv:
+        # Refused FIRST and by name, not left to the stray-argument net below: this
+        # is the one flag whose legacy meaning is "rewrite five plists, bootout,
+        # bootstrap". main() sends every argv that names the on-demand edition here
+        # BEFORE it looks for --install, so this line is the only thing --install
+        # can reach from such an argv — `--dry-run` alongside it included.
+        log(f"HALT: --job ondemand REFUSES --install. The five com.naiad.oracle-* "
+            f"agents are SUSPENDED by operator ruling 2026-09-21 and this job never "
+            f"arms, rewrites or bootstraps one; rolling the clock back is the "
+            f"operator's action (rollback card {SUSPENDED_CARD}). Nothing was touched.")
+        return 2
     _, slot = _argv_job_slot(argv)
     if "--slot" not in argv:
         slot = ONDEMAND_SLOTS[0]
@@ -1099,13 +1270,23 @@ def run_ondemand(argv: list[str], log=print) -> int:
 
     show_standing_flag(log=log)
 
-    if not acquire_lock(f"ondemand/{slot}", log=log):
-        log("=== exit 0 (no-op: another Oracle run holds the lock — NO EDITION "
-            "WAS PRINTED by this run) ===")
-        return 0
+    prev = trap_cut_off()                 # THE CUT-OFF RUN, answer 2
+    try:
+        return _ondemand_locked(slot, no_fetch, zr, started, log)
+    finally:
+        untrap_cut_off(prev)
 
+
+def _ondemand_locked(slot: str, no_fetch: bool, zr: dict, started: datetime,
+                     log=print) -> int:
+    """Steps 3-7: everything that happens under the lock, and the alarm after it.
+    Split from run_ondemand only so the signal trap can wrap ALL of it — the flag
+    decision included — in one try/finally."""
     skips = ondemand_skips(slot, no_fetch)
     rc_t = rc_o = 0
+    rc: int | None = None
+    locked = rendered = movers_failed = False
+    doing: str | None = None              # the step a CutOff lands in, for the flag
     lines: list[str] = []
 
     def tee(msg="") -> None:
@@ -1113,11 +1294,20 @@ def run_ondemand(argv: list[str], log=print) -> int:
         log(msg)
 
     try:
+        reclaim_dead_lock(log=log)        # THE CUT-OFF RUN, answer 3
+        locked = acquire_lock(f"ondemand/{slot}", log=log)
+        if not locked:
+            log("=== exit 0 (no-op: another Oracle run holds the lock — NO EDITION "
+                "WAS PRINTED by this run) ===")
+            return 0
+
+        doing = "movers-fetch"
         if "movers-fetch" in skips:
             log(f"{_step('movers-fetch')}: SKIPPED — {skips['movers-fetch']}")
         else:
-            run_movers(log=log)
+            movers_failed = not run_movers(log=log)["ok"]
 
+        doing = "scope-topup"
         if "scope-topup" in skips:
             log(f"{_step('scope-topup')}: SKIPPED — {skips['scope-topup']}")
         else:
@@ -1135,9 +1325,12 @@ def run_ondemand(argv: list[str], log=print) -> int:
                     f"renders anyway, on the cache as it stands (ruling T-3); the "
                     f"banner tells the truth and this run will exit nonzero")
 
+        doing = "oracle-render"
         log(f"{_step('oracle-render')}: slot={slot}")
         rc_o = run_oracle(slot, zr, started, log=tee)
+        rendered = True
 
+        doing = "front-page"
         try:
             front_page(lines, slot, started, log=log)
         except Exception as e:
@@ -1145,17 +1338,32 @@ def run_ondemand(argv: list[str], log=print) -> int:
             # on disk. It may fail to print; it may not fail the edition.
             log(f"  front page summary unavailable: {e.__class__.__name__}: {e}")
         rc = rc_t or rc_o
+    except CutOff as cut:
+        import signal
+        rc = 128 + cut.signum
+        where = (_step(doing).strip() if doing else
+                 "the lock acquisition (after STEP 2, before STEP 3)")
+        log("  " + note_failure(
+            f"CUT OFF by signal {cut.signum} ({signal.Signals(cut.signum).name}) "
+            f"during {where} — "
+            + ("the edition and its selfcheck row were already on disk"
+               if rendered else
+               "NO EDITION WAS PRINTED by this run and no selfcheck row was written")
+            + f"; the lock is released and the run exits {rc}. Run it again DETACHED "
+              f"(.claude/skills/oracle/SKILL.md): with the wire down a full edition "
+              f"outlives any foreground timeout"))
     except Exception:
         rc = 1
         log("  WRAPPER FAILED:\n" + note_failure())
     finally:
-        release_lock(log=log)
+        if locked:
+            release_lock(log=log)
 
     log(f"{_step('alarm')}: rc_topup={rc_t} rc_oracle={rc_o} -> exit {rc}")
     log(f"  schedule: SUSPENDED by operator ruling 2026-09-21 — the drift check is "
         f"SKIPPED for job=ondemand (on drift it would rewrite a retained plist and "
         f"bootstrap it); rollback card {SUSPENDED_CARD}")
-    action = ondemand_flag_action(rc, no_fetch)
+    action = ondemand_flag_action(rc, no_fetch, movers_failed)
     if action == "raise":
         raise_flag("ondemand", slot, rc, log=log)
     elif action == "clear":
@@ -1163,6 +1371,13 @@ def run_ondemand(argv: list[str], log=print) -> int:
             clear_flag(log=log)          # says CLEARED, or says why it could not
         else:
             log(f"  no {FLAG.name} standing — nothing to clear")
+    elif not no_fetch:
+        # 'stand' on a run that fetched: only MOVERS_FAILURE_HOLDS_FLAG gets here.
+        head = (f"alarm left standing: {FLAG.name}" if FLAG.exists()
+                else f"no {FLAG.name} standing")
+        log(f"  {head} — the movers fetch was supposed to run and did not come back "
+            f"clean, and MOVERS_FAILURE_HOLDS_FLAG is set: this run has no all-clear "
+            f"to give")
     elif FLAG.exists():
         log(f"  alarm left standing: {FLAG.name} — a --no-fetch run reads the cache "
             f"only and proves nothing about the wire, so it has no all-clear to give")
@@ -1173,9 +1388,30 @@ def run_ondemand(argv: list[str], log=print) -> int:
     return rc
 
 
+def names_ondemand(argv: list[str]) -> bool:
+    """Does this argv NAME THE ON-DEMAND EDITION? `--job ondemand` does — and so,
+    for the ONE purpose of keeping --install away from it, does any token spelling
+    'ondemand' or 'on-demand' (`--job=ondemand`, a bare `--slot on-demand-full`):
+    an argv typed for the edition must never be read as the clock's arming verb
+    because its --job was mistyped. No argv the clock or its plists ever wrote
+    carries either spelling, so every legacy argv is judged exactly as before."""
+    if _argv_job_slot(argv)[0] == "ondemand":
+        return True
+    return "--install" in argv and any(
+        "ondemand" in a.lower() or "on-demand" in a.lower() for a in argv)
+
+
 def main(argv=None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     log = print
+    if names_ondemand(argv):
+        # OR-1 STEP A — and FIRST, ahead of --install (fix round 1, 2026-09-21).
+        # Its own chain, its own flag rule, NO schedule loop and NO arming: it
+        # returns here so nothing below (the legacy path, byte-for-byte as it
+        # was) can run on its behalf. Dispatched after --install, as it first
+        # was, `--job ondemand --dry-run --install` armed all five suspended
+        # agents and printed no dry run. See THE ON-DEMAND EDITION; F-SK-2e.
+        return run_ondemand(argv, log=log)
     if "--install" in argv:
         log(f"ORACLE — arming {len(SLOTS)} slots")
         zr = zone_report()
@@ -1189,12 +1425,6 @@ def main(argv=None) -> int:
         return 0
 
     job, slot = _argv_job_slot(argv)
-    if job == "ondemand":
-        # OR-1 STEP A. Its own chain, its own flag rule, and NO schedule loop —
-        # it returns here so nothing below (the legacy path, byte-for-byte as
-        # it was) can run on its behalf. See THE ON-DEMAND EDITION.
-        return run_ondemand(argv, log=log)
-
     started = datetime.now(timezone.utc)
     log(f"=== ORACLE WRAPPER · job={job} slot={slot} · {started.isoformat()} ===")
     zr = zone_report()

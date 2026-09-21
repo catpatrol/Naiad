@@ -15,35 +15,83 @@ Pick the verb from what the operator typed (`$ARGUMENTS`):
   under the masthead tells the truth about how old the wire is. Combines with
   either of the other two (`/oracle refresh --no-fetch`).
 
-Run from the repo root, `~/Naiad`. Full edition:
+Run from the repo root, `~/Naiad`, and run it DETACHED: start the command with the
+Bash tool's `run_in_background: true`, unbuffered (`python -u`), appending to the
+edition's own log, and read that log while it grows. NEVER run an edition that
+fetches under a foreground timeout. Full edition:
 
 ```
-~/venvs/naiad/bin/python scripts/oracle_wrapper.py --job ondemand --slot on-demand-full
+~/venvs/naiad/bin/python -u scripts/oracle_wrapper.py --job ondemand --slot on-demand-full >> logs/launchd/oracle-ondemand.log 2>&1
 ```
 
 Refresh:
 
 ```
-~/venvs/naiad/bin/python scripts/oracle_wrapper.py --job ondemand --slot on-demand-refresh
+~/venvs/naiad/bin/python -u scripts/oracle_wrapper.py --job ondemand --slot on-demand-refresh >> logs/launchd/oracle-ondemand.log 2>&1
 ```
 
-Cache-only (append `--no-fetch` to either command):
+Cache-only (append `--no-fetch` to either command; it renders in well under a
+minute, but start it the same way — one habit, one log):
 
 ```
-~/venvs/naiad/bin/python scripts/oracle_wrapper.py --job ondemand --slot on-demand-full --no-fetch
+~/venvs/naiad/bin/python -u scripts/oracle_wrapper.py --job ondemand --slot on-demand-full --no-fetch >> logs/launchd/oracle-ondemand.log 2>&1
 ```
 
-To see the chain without touching anything — no lock, no flag, no fetch, no render:
+Then follow the run. The log is APPENDED to, so read from the LAST
+`=== ORACLE WRAPPER · job=ondemand` line down; the run is over when that block ends
+in an `=== exit N` line (the harness also tells you when the background command
+exits, with the same code):
+
+```
+tail -n 120 logs/launchd/oracle-ondemand.log
+```
+
+To see the chain without touching anything — no lock, no flag, no fetch, no render
+(this one prints a dozen lines and may run in the foreground):
 
 ```
 ~/venvs/naiad/bin/python scripts/oracle_wrapper.py --job ondemand --dry-run
 ```
 
-With the wire down a full edition is SLOW, not stuck: every top-up pair retries
-before it gives up (measured 2026-09-21: a fully failing 40-pair top-up took about
-10 minutes, and the roster has grown since), and the movers organ is allowed 600 s.
-Give the command a long timeout and let it finish; the render is attempted whatever
-the fetches did.
+WHY DETACHED. With the wire down a full edition is SLOW, not stuck: every top-up
+pair retries before it gives up. MEASURED: a fully failing 40-pair top-up took
+10 min 19 s on 2026-09-21 (09:45:03Z -> 09:55:22Z) and again on 2026-09-20; the
+pinned scope has since grown to 72 pairs, which at that rate is about 19 minutes,
+and the movers organ is allowed 600 s before it. A CLEAN 40-pair top-up took
+2 min 29 s (2026-09-19), so about 4.5 minutes for 72. The Bash tool's foreground
+ceiling is 600000 ms and its default is 120000: a clean full edition already
+overruns the default, and a wire-down one CANNOT finish under the ceiling. The
+render is attempted whatever the fetches did (ruling T-3) — but only if the run is
+still alive to attempt it.
+
+WHAT A CUT-OFF RUN LEAVES BEHIND, and what to tell the operator:
+
+- Cut off POLITELY (SIGTERM or SIGHUP — a timeout, a closed session): the chain says
+  so, releases its lock, RAISES THE FLAG and exits 128+signal. Expect:
+
+```
+  CUT OFF by signal 15 (SIGTERM) during STEP 4 scope-topup — NO EDITION WAS PRINTED by this run and no selfcheck row was written; the lock is released and the run exits 143. Run it again DETACHED (.claude/skills/oracle/SKILL.md): with the wire down a full edition outlives any foreground timeout
+  STEP 7 alarm: rc_topup=0 rc_oracle=0 -> exit 143
+  ALARM RAISED — /Users/luis/Naiad/ORACLE_DOWN.flag
+=== exit 143 ===
+```
+
+- Cut off HARD (SIGKILL, power loss): nothing is said, NO flag is raised, NO selfcheck
+  row is written, and `logs/launchd/.oracle.lock` is left on disk. The log block
+  simply stops with no `=== exit` line. The NEXT on-demand run reclaims a lock whose
+  pid is not running and goes on:
+
+```
+  DEAD LOCK from ondemand/on-demand-full (pid <pid> is not running — that run was cut off before it could release; stamped <iso>) — reclaiming it
+```
+
+  A lock whose pid IS running is another edition in progress: `LOCK HELD by …`
+  (step 2 below), for at most `LOCK_STALE_MIN` = 30 minutes. NEVER delete the lock
+  by hand while its pid is alive.
+- Tell the operator, in these words: the run was CUT OFF at step <n>, NO EDITION
+  was printed (or: the edition was already on disk), whether the flag is standing,
+  and that you are running it again detached — or `/oracle --no-fetch` if they
+  want a cache-only edition NOW and the wire can wait.
 
 ## The chain, step by step
 
@@ -93,8 +141,11 @@ A standing flag does not stop the run. Tell the operator it was standing, and
 quote its JOB, SLOT, UTC and last traceback line in your report.
 
 If the next line is `LOCK HELD by … — standing down`, another Oracle run holds the
-lock: NO EDITION WAS PRINTED by this run and the exit code is still 0. Say so, wait,
-and run again; a lock older than 30 minutes is reclaimed automatically.
+lock and its pid is RUNNING: NO EDITION WAS PRINTED by this run and the exit code is
+still 0. Say so, wait for that run, and run again; a lock older than 30 minutes is
+reclaimed automatically. A lock left by a run that is no longer running never gets
+this far — it is reclaimed on the spot with a `DEAD LOCK from …` line (see WHAT A
+CUT-OFF RUN LEAVES BEHIND).
 
 ### STEP 3 · movers-fetch
 
@@ -163,6 +214,7 @@ ORACLE on-demand-full · <date> · lens 4h
   BTCUSDT        ARMED      heat= 6.248 levels= 35 clusters= 14 atr_d=2376.77
   …one line per roster symbol…
   fired events in the last 24h: <n> across <m> (lens, class) cells
+  edition Vol. I · No. <n> · Morning Edition
   /Users/luis/Naiad/briefs/oracle/oracle_<date>.html <bytes> B sha256 <sha>
   /Users/luis/Naiad/research_outputs/oracle/tape/oracle_tape_<date>.parquet <bytes> B sha256 <sha>
   /Users/luis/Naiad/research_outputs/oracle/calibration/oracle_calibration_<date>_on-demand-full.json <bytes> B sha256 <sha>
@@ -173,8 +225,9 @@ ORACLE on-demand-full · <date> · lens 4h
   selfcheck log -> /Users/luis/Naiad/research_outputs/oracle/calibration/selfcheck_log.jsonl
 ```
 
-`RUN FAILED:` followed by a traceback means there is no new render; the row is
-still written, with verdict FAIL.
+The `edition` line reads `Refresh Edition` on `on-demand-refresh`. `RUN FAILED:`
+followed by a traceback means there is no new render; the row is still written,
+with verdict FAIL.
 
 ### STEP 6 · front-page
 
@@ -246,15 +299,23 @@ Notes for the run:
   or `kickstart` any `com.naiad.oracle-*` label. The clock is SUSPENDED by operator
   ruling; the five plists stay on disk UNEDITED. The rollback card is
   `research_outputs/oracle/SUSPENDED_2026-09-21.txt` and rolling back is the
-  OPERATOR's action, never this skill's.
+  OPERATOR's action, never this skill's. Beside the on-demand job the wrapper
+  refuses it for you — `HALT: --job ondemand REFUSES --install. …`, exit 2, nothing
+  touched — but `--install` typed ALONE is still the clock's arming verb and still
+  arms all five. Do not type it.
+- ALWAYS DETACHED (`run_in_background: true`, `python -u`, the log at
+  `logs/launchd/oracle-ondemand.log`). A foreground timeout that fires mid-chain
+  ends the run before the render; see WHAT A CUT-OFF RUN LEAVES BEHIND.
 - The Oracle is DISPLAY-ONLY and CACHE-ONLY. It never fetches; the top-up and the
   movers organ fetch, each in its own lane. No gate, filter or sizing reads a range
   or a mover. Do not present a number from the edition as a signal or as advice.
 - The exit code is `rc_topup or rc_oracle`. A movers failure NEVER changes it and
   NEVER raises the flag.
-- `ORACLE_DOWN.flag` is RAISED by any run ending nonzero, CLEARED only by a run that
-  fetched and came back clean, and NEVER cleared by `--no-fetch` — a cache-only run
-  proves nothing about the wire.
+- `ORACLE_DOWN.flag` is RAISED by any run ending nonzero (a CUT OFF run included),
+  CLEARED only by a run that fetched and came back clean, and NEVER cleared by
+  `--no-fetch` — a cache-only run proves nothing about the wire. The flag's own last
+  sentence says "self-clears on the next clean run"; a clean `--no-fetch` edition is
+  NOT that run, and its log says so (`alarm left standing: …`).
 - The job REFUSES what it does not know: any other `--slot`, or a mistyped flag
   such as `--nofetch`, HALTs with exit 2 and touches nothing. Fix the command;
   do not fall back to `--job oracle` or `--job topup` (those are the clock's jobs
@@ -267,8 +328,9 @@ Notes for the run:
 - The renders, the tape, the movers json and the flag are OFF-BUS (gitignored).
   Nothing this skill produces is committed or pushed.
 
-Report: verb run and exit code; whether a flag was standing at the start (JOB, SLOT,
-UTC, last traceback line) and its state at the end (CLEARED, RAISED, left standing,
-none); movers OK / WIRE DOWN / SKIPPED; top-up verdict with rows added and gaps, or
-SKIPPED; render path, bytes, sha256; the Front Page top rows; the self-check verdict
-with the slot tag on its row; the banner state.
+Report: verb run and exit code (or CUT OFF at which step, and whether an edition was
+printed); whether a flag was standing at the start (JOB, SLOT, UTC, last traceback
+line) and its state at the end (CLEARED, RAISED, left standing, none); a DEAD LOCK
+reclaimed, if one was; movers OK / WIRE DOWN / SKIPPED; top-up verdict with rows
+added and gaps, or SKIPPED; render path, bytes, sha256; the Front Page top rows; the
+self-check verdict with the slot tag on its row; the banner state.
