@@ -660,9 +660,20 @@ over 64,000 B. The tick set is `exchange/**` plus `LEDGER.md`.
 | `~/.cache/naiad/data_cache/klines/*.parquet` (40 new) | yes | **no — outside the repo** | n/a | no | **NOT PROTECTED** | n/a — 632 MB → 792 MB |
 | `~/Library/LaunchAgents/com.naiad.oracle-*.plist` (5) | yes | **no — outside the repo** | n/a | no | **NOT PROTECTED** | n/a — retained, unedited |
 
-**NAMING TRIP-WIRE.** One file created by this build is over 64,000 B and box-bound: this build
-document itself. Its intended home is `exchange/reports/`, where the lane's build documents live
-and where the operator and APOLLO read them; it is prose, not data, and it stays.
+**NAMING TRIP-WIRE — no file created by this build trips it.** The wire flags box-bound files
+strictly over 64,000 B. This build document is **43,963 B**, the OR-1 queue file 8,297 B, the
+CADENCE edit +2,219 B and the BR-2 amendment +1,818 B: all four are under the wire. The ten files
+the publish named are the standing list and none of them is new here (`LEDGER.md` 259,298 B ·
+`LEDGER_APOLLO.md` 174,090 · `LEDGER_ATHENA.md` 143,605 · four CENSUS/TIERC build documents ·
+`CONVENTIONS.md` 67,814 · `queue/008_sail-skeleton.md` 66,843). Every OR-1 file's intended home is
+`exchange/reports/` or `exchange/queue/`, where the lane's documents live and where the operator
+and APOLLO read them; they are prose, not data, and they stay.
+
+> **CORRECTION, 2026-09-21, same session.** The first published version of this section asserted
+> that this build document was over 64,000 B and tripped the naming wire. It is 43,963 B and does
+> not. The claim was written before the document was finished and was never re-measured; the
+> paragraph above replaces it. Nothing else in §8 changed. (CONVENTIONS §0 correction rule: the
+> assertion is rewritten where it was made, and this note records what changed and why.)
 
 Two off-bus artifacts are large enough to name: the edition (451,533 B) and the transcript set
 (924 KB). Both are correctly off-bus — the edition is regenerable from the cache in minutes
@@ -676,10 +687,12 @@ Flagged for the operator; moving them under an estate-backed path is a ruling, n
 | | exchange/** | LEDGER.md | TICK SET | % of 16,000,000 | level |
 |---|---|---|---|---|---|
 | before OR-1 (`cc82ca1`) | 2,486,908 B | 259,298 B | 2,746,206 B | 17.16% | OK |
-| after OR-1 | *see the publish line* | 259,298 B | *see the publish line* | ~17.5% | **OK — below warn** |
+| after OR-1 (publish `ea3be0b`) | 2,520,574 B in 110 files | 259,298 B | **2,779,872 B** | **17.37%** | **OK — below warn** |
 
-Warn is 6,400,000 B (40%) and refuse is above 11,200,000 B (70%). The build adds roughly 45 KB of
-prose to a 2.7 MB tick set: **0.3 of a percentage point.** G-11 holds with a wide margin.
+Warn is 6,400,000 B (40%) and refuse is above 11,200,000 B (70%). The build added 33,666 B of
+prose to a 2.75 MB tick set: **0.21 of a percentage point.** G-11 holds with a wide margin.
+The publish line, verbatim: `publish: box OK -- TICK SET 2,779,872 B (2.78 MB) = 17.37% of
+16,000,000 B (16.00 MB) [governs]`.
 
 ### 8.2 · Transcript pointers — path + sha256, never copied onto the bus
 
