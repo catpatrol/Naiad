@@ -2087,6 +2087,1566 @@ def _null_summary(variant: str) -> pd.DataFrame | None:
     return pd.read_parquet(p) if p.exists() else None
 
 
+# ══════════════════════ 7 · [Q-R4] ACCEPTANCE · [Q-R3] HEIGHT-vs-TOLL ═══════
+# The two contract clauses R0 (2026-09-22) measured as ABSENT from the engine,
+# the port and CENSUS_R_DIGEST.md:
+#   LEDGER.md:835  Q-R4 ACCEPTANCE DEFINITION: (a) — the census measures four
+#                  candidate operationalisations head-to-head (2-close /
+#                  3-close / 6-outside-close stale-run / time-beyond); the
+#                  engine default is chosen FROM DATA.
+#   LEDGER.md:834  Q-R3 PLAYBOOK-R TIMING: (a) — detection and gating first; a
+#                  range-trading contract is drafted ONLY IF the height-vs-toll
+#                  feasibility gate AND the edge-fade outcome leg both pass.
+# BOTH ARE TIER-E MEASUREMENT.  Q-R4 NAMES what the data favours and PROMOTES
+# NOTHING: no pin moves, no engine default changes, no registration is scored.
+# Q-R3 is a GATE and states PASS/FAIL — a gate on whether a contract may later
+# be DRAFTED, which is not itself a scored row for any P-* registration.
+R34_STAGE = "TIER-C10 · STAGE 0c · CENSUS-R — [Q-R4] acceptance · [Q-R3] height-vs-toll"
+
+# ── the four acceptance operationalisations, beside the RangeFinder DIE rule ──
+ACC_2C, ACC_3C = "2-close", "3-close"
+ACC_STALE, ACC_TIME = "6-outside-close-stale-run", "time-beyond"
+ACC_DIE = "RangeFinder-DIE"
+ACCEPTANCE_VARIANTS = (ACC_2C, ACC_3C, ACC_STALE, ACC_TIME, ACC_DIE)
+
+PCT_MEDIAN, PCT_STEP = 50, 10                   # percentile points, NAMED so that no
+                                                # numeric literal can ever sit in a
+                                                # toll position [F-C10-TOLL]
+STALE_RUN_N = 6                                 # the contract's own literal
+TIME_BEYOND_T = RC.PINS["DEV_RETURN_BARS"]      # 7 — READ from the frozen pin,
+                                                # never typed [LEAN-HEPHAESTUS R4-b]
+ACC_N = {ACC_2C: 2, ACC_3C: 3, ACC_STALE: STALE_RUN_N}
+
+ACCEPTANCE_LAW = {
+    ACC_2C: ("N CONSECUTIVE closes beyond the boundary, N=2. Declared on the 2nd "
+             "consecutive beyond-close of a breach episode."),
+    ACC_3C: ("N CONSECUTIVE closes beyond the boundary, N=3. Declared on the 3rd "
+             "consecutive beyond-close of a breach episode."),
+    ACC_STALE: (f"a RUN of {STALE_RUN_N} closes outside WITHOUT A RETURN — i.e. "
+                f"{STALE_RUN_N} consecutive beyond-closes inside ONE episode; any "
+                "close back inside ends the run and the episode [machine law]."),
+    ACC_TIME: (f"TIME SPENT beyond the boundary crossing a threshold: the CUMULATIVE "
+               f"count of BEYOND-CLOSES INSIDE AN OPEN BREACH EPISODE on that SIDE, "
+               f"summed over the confirmed range's whole life and TOLERANT of returns "
+               f"inside (the count survives the episode that ends), declared when the "
+               f"cumulative count reaches T={TIME_BEYOND_T}. THE CLOCK TICKS ONLY WHILE "
+               f"AN EPISODE IS OPEN — the machine's own episode law: the bar that ENDS "
+               f"an episode by closing back inside does not tick, and neither does a bar "
+               f"that closes through the OPPOSITE boundary on that same bar. MEASURED, "
+               f"not assumed: over BTCUSDT 5m / SOLUSDT 5m / ETHUSDT 4h / BTCUSDT 1d the "
+               f"clock ticks 31,807 times, while the wider reading 'every bar whose "
+               f"close is beyond that side's boundary' would tick 31,810 — a difference "
+               f"of 3 ticks, 0.0094%, all three on 5m. Harmless, and it is the machine's "
+               f"own episode law; the DEFINITION now says what the code does and the law "
+               f"sha moves with it [review 2026-09-22, non-blocking #7]."),
+    ACC_DIE: ("the RangeFinder's OWN rule, unchanged: BREAK_CONFIRM_N="
+              f"{RC.PINS['BREAK_CONFIRM_N']} consecutive beyond-closes OR "
+              f"|close - boundary| >= BREAK_MARGIN={RC.PINS['BREAK_MARGIN']} x ATR."),
+}
+ACCEPTANCE_LAW_SHA = hashlib.sha256(
+    json.dumps(ACCEPTANCE_LAW, sort_keys=True).encode("utf-8")).hexdigest()
+
+# ── [Q-R3] the feasibility gate's pinned thresholds ──────────────────────────
+HEIGHT_CAPTURE_FRAC = 2.0 / 3.0     # kappa: the share of the height a boundary-to-
+                                    # boundary trade can realistically capture
+HEIGHT_RATIO_MIN = 3.0              # = 2 / kappa  (derived below, not typed twice)
+INFEASIBLE_MAX_SHARE = 0.10         # max share of confirmed ranges with ratio < 1
+# ── THE SAMPLE FLOOR UNDER BOTH LEGS [LEAN-HEPHAESTUS R3-e] ─────────────────
+# The estate ALREADY has one declared sample floor — PROVISIONAL_MIN_N = 30,
+# imported from tierc5_rules and fixtured — and lean C-g says a statistic under
+# it is flagged provisional.  A GATE that governs whether a contract may be
+# DRAFTED must not merely flag: it must not PASS on a sample the estate's own
+# floor calls provisional.  So BOTH legs carry that same 30, and the edge leg
+# counts its floor in CONFIRMED RANGES, never in in-range BARS: 181 bars drawn
+# from 3 ranges is 3 observations wearing 181 hats.
+HEIGHT_MIN_N_RANGES = PROVISIONAL_MIN_N     # gate_height needs this many ranges
+EDGE_MIN_N_RANGES = PROVISIONAL_MIN_N       # gate_edge_fade needs this many ranges
+EDGE_MIN_N_BARS = PROVISIONAL_MIN_N         # ...and this many in-range entries
+EDGE_NEAR_FRAC = 0.2                # "near boundary" = outer 20% of the range
+AGE_BUCKETS = ((0, 5), (5, 10), (10, 20), (20, 40), (40, 80), (80, 1 << 30))
+AGE_LABELS = tuple(f"{a}-{'inf' if b >= (1 << 30) else b}" for a, b in AGE_BUCKETS)
+# ── THE MARGIN SENTINELS [LEAN-HEPHAESTUS R3-d] ─────────────────────────────
+# The (entry_decile x age_bucket) grid CANNOT be collapsed after the fact: the
+# cells carry medians and, on a pooled row, DIFFERENT binding tolls, and a
+# median of a union is not a function of the parts' medians [census lean C-h].
+# So the two margins a reader actually wants are FILED as rows of their own,
+# each computed by _edge_stats on the RAW terms with the row's own binding
+# toll — never averaged out of the cells.
+EDGE_DEC_ALL = -1                   # entry_decile: ALL deciles, NEAR EDGE ONLY
+EDGE_AGE_ALL = "ALL"                # age_bucket: pooled over range age
+MARGIN_CELL = "cell — one entry decile x one age bucket"
+MARGIN_BY_DEC = "MARGIN — one entry decile, ALL ages, from the RAW terms"
+MARGIN_BY_AGE = "MARGIN — NEAR EDGE (all deciles), one age bucket, from the RAW terms"
+MARGIN_NEAR = ("MARGIN — NEAR EDGE, ALL ages: the EDGE-FADE GATE's own "
+               "statistic, filed so the gate can be read off the table")
+
+HEIGHT_GATE_LAW = {
+    "ratio": ("confirmed-range HEIGHT / ROUND-TRIP TOLL, both in the SAME ATR units "
+              "at the CONFIRM bar: height_atr = (top0 - bottom0) / atr[confirm_i], "
+              "toll_atr = (toll_bps / 10 000) * close[confirm_i] / atr[confirm_i]. "
+              "The ATR CANCELS ALGEBRAICALLY, so the ratio is scale-free AND "
+              "multiplier-free: no 1000PEPE / 1000BONK contract multiplier can bite "
+              "it, and the choice of ATR cannot flatter it."),
+    "height_basis": ("the boundary AS OF THE CONFIRM BAR (top0 / bottom0). "
+                     "inception-deviation NEVER moves a boundary (it only records "
+                     "dev_*_ext), so the confirm-bar boundary IS (top0, bottom0) "
+                     "exactly. The post-harden FINAL height is filed beside it as "
+                     "ratio_final_median and is DIAGNOSTIC ONLY: a harden is future "
+                     "information at the confirm bar."),
+    "gate_height": (f"PASS iff n_ranges >= {HEIGHT_MIN_N_RANGES} AND "
+                    f"median(ratio) >= {HEIGHT_RATIO_MIN} AND "
+                    f"share(ratio < 1) <= {INFEASIBLE_MAX_SHARE}."),
+    "gate_height_why": (
+        f"[LEAN-HEPHAESTUS R3-a] A boundary-to-boundary trade cannot capture the whole "
+        f"height: the entry sits inside the near boundary and the exit inside the far "
+        f"one. Take a capture fraction kappa = {HEIGHT_CAPTURE_FRAC:.4f} (two thirds). "
+        f"Require the NET capture to be at least what the trade COSTS — a 1:1 "
+        f"net-to-cost floor, which is a bare-survival bar and not a comfortable one: "
+        f"kappa*H - T >= T  =>  H >= 2T/kappa  =>  H >= {HEIGHT_RATIO_MIN}*T. "
+        f"SENSITIVITY, printed so the bar cannot be quietly moved: kappa=0.50 -> 4.0x, "
+        f"kappa=0.6667 -> 3.0x, kappa=1.00 -> 2.0x. The second condition "
+        f"(share(ratio < 1) <= {INFEASIBLE_MAX_SHARE}) is the floor under the floor: a "
+        f"range whose whole height does not cover ONE round trip is untradeable at any "
+        f"capture fraction, and more than one in ten such ranges makes the lens a "
+        f"coin-flip on geometry alone."),
+    "gate_min_n": (f"BOTH legs carry a SAMPLE FLOOR: gate_height needs n_ranges >= "
+                   f"{HEIGHT_MIN_N_RANGES}, gate_edge_fade needs edge_n_ranges >= "
+                   f"{EDGE_MIN_N_RANGES} confirmed ranges AND edge_n >= "
+                   f"{EDGE_MIN_N_BARS} in-range entries."),
+    "gate_min_n_why": (
+        f"[LEAN-HEPHAESTUS R3-e] The floor is {PROVISIONAL_MIN_N} because that is "
+        f"PROVISIONAL_MIN_N, the estate's ALREADY-DECLARED floor (tierc5_rules, "
+        f"fixtured, and printed in census lean C-g three lines from here) — it is not a "
+        f"number chosen after seeing which rows would pass. Lean C-g flags a statistic "
+        f"under it as provisional; a GATE cannot merely flag, so a row under the floor "
+        f"FAILS its leg and is FILED with provisional = True and the reason named. The "
+        f"edge leg's floor is counted in CONFIRMED RANGES and not in in-range bars: the "
+        f"bars inside one range are one observation seen many times, and a 181-bar edge "
+        f"drawn from 3 ranges is 3 ranges. SENSITIVITY, printed so the floor cannot be "
+        f"quietly moved: the count of verdict_pass rows at floors 0 / 10 / 30 / 100 is "
+        f"printed in the digest's B.3 and asserted by F-C10-HT's break plant."),
+    "gate_edge_fade": (
+        f"[LEAN-HEPHAESTUS R3-b] PASS iff trading TOWARD THE FAR BOUNDARY from the NEAR "
+        f"{EDGE_NEAR_FRAC:.0%} of the range is NET POSITIVE at H20, pooled over the "
+        f"lens, in the ALL era: net = median(term) - toll_atr > 0, AND the sample clears "
+        f"the floor (edge_n_ranges >= {EDGE_MIN_N_RANGES}, edge_n >= {EDGE_MIN_N_BARS}). "
+        f"The near edge is where a range trade is actually taken; if the edge is not "
+        f"there it is nowhere."),
+    "combined": ("LEDGER.md:834 — 'a range-trading contract is drafted ONLY IF the "
+                 "height-vs-toll feasibility gate AND the edge-fade outcome leg both "
+                 "pass'. verdict_pass = gate_height_pass AND gate_edge_fade_pass."),
+}
+HEIGHT_GATE_LAW_SHA = hashlib.sha256(
+    json.dumps(HEIGHT_GATE_LAW, sort_keys=True).encode("utf-8")).hexdigest()
+
+LEANS_R34 = (
+    f"[LEAN-HEPHAESTUS R4-a] The 'time-beyond' threshold the contract left unpinned is "
+    f"T = {TIME_BEYOND_T} bars, READ from RC.PINS['DEV_RETURN_BARS'] and never typed. "
+    f"REASONING: {TIME_BEYOND_T} is the machine's OWN frozen boundary between a "
+    f"DEVIATION (a return within DEV_RETURN_BARS hardens the range) and a LAPSE. "
+    f"Re-using it imports NO new free parameter into the estate and fits nothing to "
+    f"the outcome; any other number would be a fresh degree of freedom chosen after "
+    f"seeing the tape.",
+    f"[LEAN-HEPHAESTUS R4-b] 'time-beyond' is the ONLY one of the four that is "
+    f"RETURN-TOLERANT and therefore the only one that is not a rename of an N-close "
+    f"rule at a different N. Its clock is CUMULATIVE over the confirmed range's life "
+    f"per side; consequently it can declare AT MOST ONCE per (range, side), while the "
+    f"three close-count rules can declare once per EPISODE. That asymmetry is a "
+    f"PROPERTY OF THE OPERATIONALISATION, not an artefact: it is printed beside every "
+    f"count and never netted away.",
+    f"[LEAN-HEPHAESTUS R4-c] The head-to-head unit is the BREACH EPISODE (one "
+    f"breach-open to its end), because that is the object all five rules see "
+    f"identically. The denominator n_episodes is therefore the SAME for every variant, "
+    f"so declare-rates are comparable. Episodes are reconstructed from the tape and "
+    f"the machine's own ranges; the reconstruction is PROVED equal to the machine's "
+    f"breakout-die log, bar for bar, by F-C10-ACC-REPLAY.",
+    f"[LEAN-HEPHAESTUS R3-c] The edge-fade AGE axis is measured in BARS SINCE CONFIRM, "
+    f"never as a fraction of the range's eventual life: the death bar is future "
+    f"information at the entry bar and an age-fraction feature would read a value "
+    f"stamped after its own bar [AS-OF WARRANTY].",
+    f"[LEAN-HEPHAESTUS R3-d] THE TWO MARGINS OF THE EDGE-FADE GRID ARE FILED ROWS, "
+    f"NEVER AN AVERAGE OF THE CELLS. Each margin — by entry decile over all ages, and "
+    f"NEAR-EDGE by range age over all deciles, plus the near-edge/all-ages row that IS "
+    f"the gate's own statistic — is _edge_stats on the RAW terms under the mask that "
+    f"names it, with that row's own binding toll. REASONING: a cell's `net` is "
+    f"median(term) - toll and the cells of a pooled panel carry DIFFERENT binding "
+    f"tolls, so a weighted mean of cell nets is a median-of-medians-minus-different-"
+    f"tolls — exactly what LEAN R3-b forbade for the gate and what census lean C-h "
+    f"says is impossible in principle. FOUND BY MEASUREMENT, not argued: the previous "
+    f"digest published that mean for all 60 B.2 numbers; against the raw margins it "
+    f"flipped the sign of 1d decile 9 (+0.0286 filed as -0.3061) and of 4h near-edge "
+    f"age 20-40 (-0.0121 filed as +0.0487), was off by 0.3398 ATR at 1d decile 8, and "
+    f"put a spurious tick UP at 5m age 40-80 that made the monotonicity check say the "
+    f"5m fade is not monotone when on the raw terms it decreases AT EVERY STEP "
+    f"[review 2026-09-22, finding 1].",
+    f"[LEAN-HEPHAESTUS R3-e] BOTH GATE LEGS CARRY A SAMPLE FLOOR OF "
+    f"{PROVISIONAL_MIN_N}, AND THE EDGE LEG COUNTS ITS FLOOR IN CONFIRMED RANGES. "
+    f"{PROVISIONAL_MIN_N} is PROVISIONAL_MIN_N, the estate's already-declared floor "
+    f"(tierc5_rules, fixtured, printed in census lean C-g) — not a number picked after "
+    f"seeing which rows would pass. REASONING: lean C-g says a statistic under the "
+    f"floor is FLAGGED provisional, but a gate that decides whether a contract may be "
+    f"DRAFTED cannot merely flag, so under the floor the leg FAILS and the row is filed "
+    f"provisional=True with its reason. The edge leg's floor is in RANGES because "
+    f"in-range bars are not independent: the previous law let XMRUSDT 1d frozen3.0 PASS "
+    f"on edge_n = 181 bars drawn from 3 confirmed ranges, and ENAUSDT 1d frozen3.0 "
+    f"carry a height verdict built on ONE range. height_vs_toll_verdict() now REFUSES "
+    f"a provisional row unless the caller asks for it by name "
+    f"[review 2026-09-22, finding 2].",
+)
+
+
+def _r34_walk(tape: "Tape", macro: dict, pins: dict) -> dict:
+    """ONE pass over every CONFIRMED range: the machine's breach lifecycle,
+    replicated EXACTLY, plus the four acceptance clocks and the per-bar
+    in-range geometry the edge-fade leg needs.
+
+    EXACTNESS.  The confirm-bar boundary IS (top0, bottom0): a seed sets
+    top=top0=body_hi and bottom=bottom0=body_lo, and neither confirmation nor
+    the inception-deviation log ever moves them (inception-deviation records
+    dev_*_ext only).  From the confirm bar on, the ONLY writer of a boundary is
+    the harden redraw, which this walk reproduces from the tape at full
+    precision — never from the event log, whose floats are rounded to 2 dp.
+    PROVED by F-C10-ACC-REPLAY: this walk's (bar, rid, side, cause, closes)
+    equals the machine's breakout-die log exactly, on every cell.
+    """
+    o, h, l, c, atr = tape.o, tape.h, tape.l, tape.c, tape.atr
+    body_hi = np.maximum(o, c)
+    body_lo = np.minimum(o, c)
+    dev_ret = pins["DEV_RETURN_BARS"]
+    brk_n, brk_m = pins["BREAK_CONFIRM_N"], pins["BREAK_MARGIN"]
+    redraw_body = pins.get("REDRAW_BASIS", "wick") == "body"
+    n = tape.n
+    episodes: list[dict] = []
+    ranges: list[dict] = []
+    ir_t: list[np.ndarray] = []
+    ir_pct: list[np.ndarray] = []
+    ir_age: list[np.ndarray] = []
+    ir_rid: list[np.ndarray] = []
+    n_tie, n_outside = 0, 0
+
+    for r in macro["ranges"]:
+        if r.confirm_i < 0:
+            continue
+        top, bot = float(r.top0), float(r.bottom0)
+        end = r.die_i if r.die_i >= 0 else n - 1
+        cum_beyond = {"top": 0, "bottom": 0}
+        time_decl = {"top": -1, "bottom": -1}
+        pending = None
+        eps_here: list[dict] = []
+        bt, bp, ba = [], [], []
+        for i in range(r.confirm_i, end + 1):
+            c_i, h_i, l_i, atr_i = c[i], h[i], l[i], atr[i]
+            # ── the machine's breach lifecycle, verbatim ──────────────────
+            if pending is None:
+                if c_i > top:
+                    pending = {"side": "top", "open_i": i, "extreme": h_i,
+                               "body_ext": body_hi[i], "closes": 1, "bnd": top}
+                elif c_i < bot:
+                    pending = {"side": "bottom", "open_i": i, "extreme": l_i,
+                               "body_ext": body_lo[i], "closes": 1, "bnd": bot}
+                if pending is not None:
+                    eps_here.append({"rid": r.rid, "side": pending["side"],
+                                     "open_i": i, "bnd_open": pending["bnd"],
+                                     "atr_open": float(atr_i), "max_closes": 1,
+                                     "end_i": -1, "end_kind": "open",
+                                     "die_by": "", "die_i": -1})
+            else:
+                beyond = c_i > top if pending["side"] == "top" else c_i < bot
+                if pending["side"] == "top":
+                    pending["extreme"] = max(pending["extreme"], h_i)
+                    pending["body_ext"] = max(pending["body_ext"], body_hi[i])
+                else:
+                    pending["extreme"] = min(pending["extreme"], l_i)
+                    pending["body_ext"] = min(pending["body_ext"], body_lo[i])
+                if beyond:
+                    pending["closes"] += 1
+                    eps_here[-1]["max_closes"] = pending["closes"]
+                else:
+                    bars_out = i - pending["open_i"]
+                    if bars_out <= dev_ret:
+                        rd = pending["body_ext"] if redraw_body else pending["extreme"]
+                        if pending["side"] == "top":
+                            top = max(top, rd)
+                        else:
+                            bot = min(bot, rd)
+                        eps_here[-1]["end_kind"] = "harden"
+                    else:
+                        eps_here[-1]["end_kind"] = "lapse"
+                    eps_here[-1]["end_i"] = i
+                    pending = None
+            # ── the acceptance clocks ─────────────────────────────────────
+            if pending is not None:
+                # CHECKED, never assumed: inside one episode the consecutive
+                # close count IS the bar offset — the episode ends on the
+                # first non-beyond close, so there is no gap to skip.
+                if pending["closes"] != i - pending["open_i"] + 1:
+                    raise SystemExit(
+                        "HALT (F-C10-ACC-REPLAY premise): episode close count "
+                        f"{pending['closes']} != bar offset "
+                        f"{i - pending['open_i'] + 1} at rid {r.rid} bar {i}")
+                sd = pending["side"]
+                cum_beyond[sd] += 1
+                if cum_beyond[sd] == TIME_BEYOND_T and time_decl[sd] < 0:
+                    time_decl[sd] = i
+                bnd = top if sd == "top" else bot
+                die_n = pending["closes"] >= brk_n
+                die_m = (abs(c_i - bnd) >= brk_m * atr_i
+                         and ((c_i > bnd) if sd == "top" else (c_i < bnd)))
+                if die_n or die_m:
+                    eps_here[-1].update(end_i=i, end_kind="die", die_i=i,
+                                        die_by="n_closes" if die_n else "margin")
+                    pending = None
+                    break
+            # ── the edge-fade geometry, AS OF THIS BAR ────────────────────
+            if top > bot:
+                if bot <= c_i <= top:
+                    p = (c_i - bot) / (top - bot)
+                    if p == 0.5:
+                        n_tie += 1
+                    else:
+                        bt.append(i)
+                        bp.append(p)
+                        ba.append(i - r.confirm_i)
+                else:
+                    n_outside += 1
+        episodes.extend(eps_here)
+        for sd in ("top", "bottom"):
+            if time_decl[sd] >= 0:
+                for e in eps_here:
+                    if (e["side"] == sd and e["open_i"] <= time_decl[sd]
+                            and (e["end_i"] < 0 or time_decl[sd] <= e["end_i"])):
+                        e["time_decl_i"] = time_decl[sd]
+                        break
+        a_c = float(atr[r.confirm_i])
+        ranges.append({
+            "rid": int(r.rid), "confirm_i": int(r.confirm_i),
+            "die_i": int(r.die_i), "close_ms": int(tape.t0[r.confirm_i] + tape.step),
+            "height_px": float(r.top0) - float(r.bottom0),
+            "height_px_final": float(top) - float(bot),
+            "close_at_confirm": float(c[r.confirm_i]), "atr_at_confirm": a_c,
+            "life_bars": int(end - r.confirm_i),
+        })
+        if bt:
+            ir_t.append(np.asarray(bt, np.int64))
+            ir_pct.append(np.asarray(bp, float))
+            ir_age.append(np.asarray(ba, np.int64))
+            # the CONFIRMED RANGE each in-range bar belongs to: in-range bars
+            # are NOT independent observations, and the edge leg's sample floor
+            # is counted in RANGES, never in bars [LEAN R3-e].
+            ir_rid.append(np.full(len(bt), int(r.rid), np.int64))
+    cat = (lambda xs, dt: np.concatenate(xs) if xs else np.empty(0, dt))
+    return {"episodes": episodes, "ranges": ranges,
+            "ir_t": cat(ir_t, np.int64), "ir_pct": cat(ir_pct, float),
+            "ir_age": cat(ir_age, np.int64), "ir_rid": cat(ir_rid, np.int64),
+            "n_mid_tie": n_tie, "n_bar_outside": n_outside}
+
+
+ACC_LEDGER_KEY = ["asset", "lens", "scale_kind", "variant", "rid", "side", "open_i"]
+ACC_GRID_KEY = ["asset", "lens", "scale_kind", "variant", "era", "horizon"]
+HT_GRID_KEY = ["asset", "lens", "scale_kind", "era"]
+EF_GRID_KEY = ["asset", "lens", "scale_kind", "era", "entry_decile", "age_bucket", "horizon"]
+VERDICT_KEY = ["lens", "scale_kind", "asset"]
+R34_TABLES = ("acceptance_head_to_head", "height_toll", "edge_fade", "height_toll_verdict")
+
+
+def _fwd(tape: "Tape", k: np.ndarray, sgn: np.ndarray, H: int):
+    """term over H bars from the CLOSE of bar k, in bar-k ATR units, signed —
+    the census's own horizon law [L4], verbatim.  CENSORED, never shortened."""
+    n, c, atr = tape.n, tape.c, tape.atr
+    k = np.asarray(k, np.int64)
+    live = (k >= 0) & (k <= n - 1)
+    ks = np.where(live, k, 0)
+    live = live & (atr[ks] > 0) & (k + H <= n - 1)
+    e = np.where(live, np.minimum(k + H, n - 1), 0)
+    with np.errstate(invalid="ignore", divide="ignore"):
+        term = np.asarray(sgn, float) * (c[e] - c[ks]) / atr[ks]
+    return np.where(live, term, np.nan), live
+
+
+def _toll_at(tape: "Tape", k: np.ndarray, bps: float) -> np.ndarray:
+    n, c, atr = tape.n, tape.c, tape.atr
+    k = np.asarray(k, np.int64)
+    ok = (k >= 0) & (k <= n - 1)
+    ks = np.where(ok, k, 0)
+    ok = ok & (atr[ks] > 0)
+    with np.errstate(invalid="ignore", divide="ignore"):
+        return np.where(ok, (bps / BPS_PER_UNIT) * c[ks] / atr[ks], np.nan)
+
+
+def acceptance_rows(tape: "Tape", walk: dict, asset: str, lens: str,
+                    kind: str, bps: float) -> pd.DataFrame:
+    """One row per (breach episode x variant).  The denominator n_episodes is
+    the SAME for all five rules [LEAN R4-c]; a rule that never declared on an
+    episode is filed with declared=False, NEVER dropped."""
+    eps = walk["episodes"]
+    if not eps:
+        return pd.DataFrame(columns=ACC_LEDGER_KEY)
+    rec = []
+    for e in eps:
+        died = e["end_kind"] == "die"
+        sgn = 1.0 if e["side"] == "top" else -1.0
+        for v in ACCEPTANCE_VARIANTS:
+            if v == ACC_DIE:
+                k = e["die_i"] if died else -1
+            elif v == ACC_TIME:
+                k = int(e.get("time_decl_i", -1))
+            else:
+                k = (e["open_i"] + ACC_N[v] - 1) if e["max_closes"] >= ACC_N[v] else -1
+            rec.append((asset, lens, kind, v, e["rid"], e["side"], e["open_i"],
+                        int(k), sgn, died, e["end_kind"], e["die_by"],
+                        int(e["die_i"]), int(e["max_closes"])))
+    d = pd.DataFrame(rec, columns=ACC_LEDGER_KEY + [
+        "declare_i", "sgn", "ep_died", "ep_end_kind", "die_by", "die_i", "max_closes"])
+    k = d["declare_i"].to_numpy(np.int64)
+    d["declared"] = k >= 0
+    # the EPISODE's own era — the common anchor, identical for every variant
+    op = d["open_i"].to_numpy(np.int64)
+    d["era"] = era_of(tape.t0[op] + tape.step)
+    d["declare_close_ms"] = np.where(k >= 0, tape.t0[np.where(k >= 0, k, 0)]
+                                     + tape.step, -1)
+    # EARLY (+) / LATE (-) relative to the DIE rule, on episodes the DIE killed
+    lead = np.where(d["ep_died"].to_numpy() & (k >= 0),
+                    d["die_i"].to_numpy(np.int64) - k, np.nan).astype(float)
+    d["lead_bars_vs_die"] = lead
+    d["toll_atr_evt"] = _toll_at(tape, k, bps)
+    for name, H in HORIZONS:
+        t, live = _fwd(tape, k, d["sgn"].to_numpy(float), H)
+        d[f"term_{name}"] = t
+        d[f"cens_{name}"] = ~live
+    return d
+
+
+def _q(x: np.ndarray, p: float) -> float:
+    x = np.asarray(x, float)
+    x = x[np.isfinite(x)]
+    return float(np.percentile(x, p)) if len(x) else _NAN
+
+
+def _outcome_block(sub: pd.DataFrame, name: str, pooled: bool) -> dict:
+    """median / hit-rate / toll / NET on one horizon — the census's identity
+    NET = median - toll_atr, struck on the ROUNDED pair so it holds on the row
+    a reader opens.  THE TOLL IS THIS ROW'S OWN [census law C-f]: the median
+    over THIS row's uncensored anchors, and on a POOLED row the BINDING (max)
+    of the member assets' medians over THAT SAME subset — never one toll
+    borrowed from another row, and never a pooled median (which would be one
+    asset's toll wearing the pool's name)."""
+    ok = sub[~sub[f"cens_{name}"] & sub["declared"] & sub["toll_atr_evt"].notna()]
+    n = int(len(ok))
+    if not n:
+        return {"n_outcome": 0, "median_term": _NAN, "hit_rate_net": _NAN,
+                "toll_atr": _NAN, "net": _NAN}
+    t = ok[f"term_{name}"]
+    toll = (_binding_toll(ok) if pooled else float(ok["toll_atr_evt"].median()))
+    return {"n_outcome": n, "median_term": float(t.median()),
+            "hit_rate_net": float((t - ok["toll_atr_evt"] > 0).mean()),
+            "toll_atr": toll,
+            "net": float(np.round(float(t.median()), ROUND_ND)
+                         - np.round(toll, ROUND_ND))}
+
+
+def acceptance_grid(led: pd.DataFrame, asset: str, lens: str,
+                    pooled: bool = False) -> list[dict]:
+    out = []
+    for kind in sorted(led["scale_kind"].unique()):
+        K = led[led["scale_kind"] == kind]
+        for era in ERAS:
+            E = K if era == ERA_ALL else K[K["era"] == era]
+            n_eps = int(len(E)) // len(ACCEPTANCE_VARIANTS)
+            for v in ACCEPTANCE_VARIANTS:
+                S = E[E["variant"] == v]
+                dec = S[S["declared"]]
+                nd = int(len(dec))
+                dd = int(dec["ep_died"].sum())
+                lead = dec["lead_bars_vs_die"].to_numpy(float)
+                for name, _H in HORIZONS:
+                    r = {"asset": asset, "lens": lens, "scale_kind": kind,
+                         "variant": v, "era": era, "horizon": name,
+                         "definition": ACCEPTANCE_LAW[v],
+                         "n_episodes": n_eps, "n_declared": nd,
+                         "declare_rate": (nd / n_eps) if n_eps else _NAN,
+                         "n_never_declared": n_eps - nd,
+                         "n_declared_died": dd,
+                         "n_declared_survived": nd - dd,
+                         "precision_died": (dd / nd) if nd else _NAN,
+                         "lead_bars_median": _q(lead, PCT_MEDIAN),
+                         "lead_bars_p10": _q(lead, PCT_STEP),
+                         "lead_bars_p90": _q(lead, 100 - PCT_STEP),
+                         "n_lead_compared": int(np.isfinite(lead).sum()),
+                         "n_die_by_margin": int((dec["die_by"] == "margin").sum()),
+                         "n_die_by_n_closes": int((dec["die_by"] == "n_closes").sum())}
+                    r.update(_outcome_block(S, name, pooled))
+                    # LEAN C-g ON THIS TABLE TOO [review 2026-09-22, non-blocking
+                    # #4]: the digest NAMES the data's default off these rows, and
+                    # it named two of them on n = 16 and n = 21 with no flag. The
+                    # flag now rides the row the digest reads.
+                    r["provisional"] = bool(
+                        int(r["n_declared"]) < PROVISIONAL_MIN_N
+                        or int(r["n_outcome"]) < PROVISIONAL_MIN_N)
+                    r["provisional_law"] = "" if not r["provisional"] else (
+                        "; ".join(x for x in (
+                            (f"n_declared {int(r['n_declared'])} < PROVISIONAL_MIN_N "
+                             f"({PROVISIONAL_MIN_N})"
+                             if int(r["n_declared"]) < PROVISIONAL_MIN_N else ""),
+                            (f"n_outcome {int(r['n_outcome'])} < PROVISIONAL_MIN_N "
+                             f"({PROVISIONAL_MIN_N})"
+                             if int(r["n_outcome"]) < PROVISIONAL_MIN_N else ""),
+                        ) if x) + " [census lean C-g]")
+                    out.append(r)
+    return out
+
+
+def height_rows(walk: dict, tape: "Tape", asset: str, lens: str,
+                kind: str, bps: float) -> pd.DataFrame:
+    """One row per CONFIRMED range: height and round-trip toll in the SAME
+    ATR units at the confirm bar.  The ATR cancels in the ratio — asserted,
+    not asserted-in-prose, by F-C10-HT-SCALEFREE."""
+    R = walk["ranges"]
+    if not R:
+        return pd.DataFrame()
+    d = pd.DataFrame(R)
+    a = d["atr_at_confirm"].to_numpy(float)
+    ok = a > 0
+    with np.errstate(invalid="ignore", divide="ignore"):
+        d["height_atr"] = np.where(ok, d["height_px"] / a, np.nan)
+        d["height_atr_final"] = np.where(ok, d["height_px_final"] / a, np.nan)
+        d["toll_atr"] = np.where(ok, (bps / BPS_PER_UNIT)
+                                 * d["close_at_confirm"].to_numpy(float) / a, np.nan)
+        d["ratio"] = d["height_atr"] / d["toll_atr"]
+        d["ratio_final"] = d["height_atr_final"] / d["toll_atr"]
+    d["asset"], d["lens"], d["scale_kind"] = asset, lens, kind
+    d["era"] = era_of(d["close_ms"].to_numpy(np.int64))
+    return d
+
+
+def height_grid(hl: pd.DataFrame, asset: str, lens: str) -> list[dict]:
+    out = []
+    for kind in sorted(hl["scale_kind"].unique()):
+        K = hl[hl["scale_kind"] == kind]
+        for era in ERAS:
+            E = K if era == ERA_ALL else K[K["era"] == era]
+            x = E["ratio"].to_numpy(float)
+            x = x[np.isfinite(x)]
+            n = int(len(x))
+            toll_med = _q(E["toll_atr"].to_numpy(float), PCT_MEDIAN)
+            r = {"asset": asset, "lens": lens, "scale_kind": kind, "era": era,
+                 "n_ranges": n,
+                 "height_atr_median": _q(E["height_atr"].to_numpy(float), PCT_MEDIAN),
+                 "toll_atr_median": toll_med,
+                 "ratio_median": _q(x, PCT_MEDIAN),
+                 "ratio_mean": float(np.mean(x)) if n else _NAN,
+                 "ratio_final_median": _q(E["ratio_final"].to_numpy(float), PCT_MEDIAN),
+                 "share_ratio_lt_1": float((x < 1.0).mean()) if n else _NAN,
+                 "share_ratio_lt_min": float((x < HEIGHT_RATIO_MIN).mean()) if n else _NAN,
+                 "ratio_min_pinned": HEIGHT_RATIO_MIN,
+                 "infeasible_max_share": INFEASIBLE_MAX_SHARE,
+                 "capture_frac": HEIGHT_CAPTURE_FRAC,
+                 "min_n_ranges_pinned": HEIGHT_MIN_N_RANGES,
+                 "provisional": bool(n < PROVISIONAL_MIN_N),
+                 "provisional_law": (
+                     f"n_ranges < PROVISIONAL_MIN_N ({PROVISIONAL_MIN_N}) [census lean C-g]"
+                     if n < PROVISIONAL_MIN_N else ""),
+                 "gate_law": HEIGHT_GATE_LAW["gate_height"],
+                 "gate_law_sha": HEIGHT_GATE_LAW_SHA}
+            for pc in range(PCT_STEP, 100, PCT_STEP):
+                r[f"ratio_d{pc // PCT_STEP}"] = _q(x, pc)
+            r["gate_height_pass"] = bool(
+                n >= HEIGHT_MIN_N_RANGES and r["ratio_median"] >= HEIGHT_RATIO_MIN
+                and r["share_ratio_lt_1"] <= INFEASIBLE_MAX_SHARE)
+            r["gate_height_fail_reason"] = (
+                "" if r["gate_height_pass"] else
+                "; ".join(x for x in (
+                    (f"n_ranges {n} < floor {HEIGHT_MIN_N_RANGES}"
+                     if n < HEIGHT_MIN_N_RANGES else ""),
+                    (f"median(ratio) < {HEIGHT_RATIO_MIN}"
+                     if not (r["ratio_median"] >= HEIGHT_RATIO_MIN) else ""),
+                    (f"share(ratio<1) > {INFEASIBLE_MAX_SHARE}"
+                     if not (r["share_ratio_lt_1"] <= INFEASIBLE_MAX_SHARE) else ""),
+                ) if x))
+            out.append(r)
+    return out
+
+
+_AGE_EDGES = [b for _a, b in AGE_BUCKETS[:-1]]
+
+
+def edge_arrays(tape: "Tape", walk: dict, bps: float, aid: int = 0) -> dict:
+    """THE EDGE-FADE LEG's raw per-bar ledger: every bar whose close sits
+    INSIDE the alive confirmed range, the direction that faces the FAR
+    boundary, and what price did over H20 / H100 from that close.  WHOLE —
+    every in-range bar of every confirmed range, no sampling and no top-N.
+    Bars whose close is OUTSIDE are excluded and COUNTED (they are breach
+    bars, not range-trading entries); an exact mid (pct == 0.5) has no far
+    boundary and is excluded and COUNTED."""
+    t, pct, age = walk["ir_t"], walk["ir_pct"], walk["ir_age"]
+    if not len(t):
+        return {"n": 0}
+    rid = walk["ir_rid"]
+    sgn = np.where(pct < 0.5, 1.0, -1.0)
+    out = {"n": int(len(t)),
+           "era": np.where(era_of(tape.t0[t] + tape.step) == ERA_TUNING, 0, 1).astype(np.int8),
+           "dec": np.minimum((pct * 10).astype(np.int64), 9).astype(np.int8),
+           "age": np.digitize(age, _AGE_EDGES).astype(np.int8),
+           "sgn": sgn.astype(np.int8),
+           "aid": np.full(len(t), aid, np.int16),
+           "rid": rid.astype(np.int64),
+           "toll": _toll_at(tape, t, bps)}
+    for name, H in HORIZONS:
+        term, live = _fwd(tape, t, sgn, H)
+        out[f"term_{name}"] = term
+        out[f"live_{name}"] = live
+    return out
+
+
+def _edge_cat(parts: list[dict]) -> dict:
+    parts = [p for p in parts if p.get("n")]
+    if not parts:
+        return {"n": 0}
+    keys = [k for k in parts[0] if k != "n"]
+    return {"n": sum(p["n"] for p in parts),
+            **{k: np.concatenate([p[k] for p in parts]) for k in keys}}
+
+
+def _near_mask(dec: np.ndarray) -> np.ndarray:
+    """the NEAR boundary: the outer EDGE_NEAR_FRAC of the range on each side."""
+    k = int(round(EDGE_NEAR_FRAC * 10))
+    return (dec < k) | (dec >= 10 - k)
+
+
+def _edge_stats(A: dict, m: np.ndarray, name: str, pooled: bool) -> dict:
+    live = A[f"live_{name}"] & m & np.isfinite(A["toll"])
+    n = int(live.sum())
+    if not n:
+        return {"n": 0, "n_ranges": 0, "median_term": _NAN, "hit_rate_net": _NAN,
+                "toll_atr": _NAN, "net": _NAN}
+    t = A[f"term_{name}"][live]
+    tl = A["toll"][live]
+    # HOW MANY INDEPENDENT RANGES the n bars come from [LEAN R3-e]: 181 bars
+    # drawn from 3 confirmed ranges is 3 observations wearing 181 hats.
+    nr = int(len(np.unique(np.asarray(A["aid"][live], np.int64) * (1 << 32)
+                           + np.asarray(A["rid"][live], np.int64))))
+    if pooled:                      # BINDING (max) per-asset median [census law]
+        aid = A["aid"][live]
+        toll = float(max(np.median(tl[aid == u]) for u in np.unique(aid)))
+    else:
+        toll = float(np.median(tl))
+    return {"n": n, "n_ranges": nr, "median_term": float(np.median(t)),
+            "hit_rate_net": float(np.mean(t - tl > 0)), "toll_atr": toll,
+            "net": float(np.round(float(np.median(t)), ROUND_ND)
+                         - np.round(toll, ROUND_ND))}
+
+
+def edge_grid(A: dict, asset: str, lens: str, kind: str,
+              pooled: bool) -> list[dict]:
+    """THE CELLS **AND** THE TWO MARGINS [LEAN-HEPHAESTUS R3-d].  Every row —
+    cell or margin — is _edge_stats on the RAW terms under the mask that names
+    it.  A margin is NEVER an average of the cells: the cells hold medians and,
+    on a pooled row, different binding tolls, so collapsing them afterwards is
+    the median-of-medians that census lean C-h forbids and that LEAN R3-b
+    already ruled out for the gate itself.  WHOLE: 10 x 6 cells + 10 by-decile
+    margins + 6 near-edge-by-age margins + 1 near-edge pooled margin, per era
+    per horizon, no sampling and no top-N."""
+    if not A.get("n"):
+        return []
+    out = []
+    near = _near_mask(A["dec"])
+    for era in ERAS:
+        em = (np.ones(A["n"], bool) if era == ERA_ALL
+              else (A["era"] == (0 if era == ERA_TUNING else 1)))
+        for name, _H in HORIZONS:
+            base = {"asset": asset, "lens": lens, "scale_kind": kind,
+                    "era": era, "horizon": name}
+            for dec in range(10):
+                dm = em & (A["dec"] == dec)
+                dirn = "long-toward-top" if dec < 5 else "short-toward-bottom"
+                isnear = bool(_near_mask(np.array([dec]))[0])
+                for ab in range(len(AGE_BUCKETS)):
+                    r = dict(base, entry_decile=dec, age_bucket=AGE_LABELS[ab],
+                             direction=dirn, is_near_boundary=isnear,
+                             age_bars_lo=AGE_BUCKETS[ab][0],
+                             age_bars_hi=(None if ab == len(AGE_BUCKETS) - 1
+                                          else AGE_BUCKETS[ab][1]),
+                             margin=MARGIN_CELL)
+                    r.update(_edge_stats(A, dm & (A["age"] == ab), name, pooled))
+                    out.append(r)
+                # MARGIN 1: this decile, ALL ages — the by-decile row the
+                # digest publishes, computed from the raw terms.
+                r = dict(base, entry_decile=dec, age_bucket=EDGE_AGE_ALL,
+                         direction=dirn, is_near_boundary=isnear,
+                         age_bars_lo=-1, age_bars_hi=None, margin=MARGIN_BY_DEC)
+                r.update(_edge_stats(A, dm, name, pooled))
+                out.append(r)
+            # MARGIN 2: the NEAR EDGE, by range age — the fade profile.
+            nm = em & near
+            for ab in range(len(AGE_BUCKETS)):
+                r = dict(base, entry_decile=EDGE_DEC_ALL,
+                         age_bucket=AGE_LABELS[ab],
+                         direction="both — toward the far boundary",
+                         is_near_boundary=True,
+                         age_bars_lo=AGE_BUCKETS[ab][0],
+                         age_bars_hi=(None if ab == len(AGE_BUCKETS) - 1
+                                      else AGE_BUCKETS[ab][1]),
+                         margin=MARGIN_BY_AGE)
+                r.update(_edge_stats(A, nm & (A["age"] == ab), name, pooled))
+                out.append(r)
+            # MARGIN 3: the NEAR EDGE, ALL ages — bit-for-bit the EDGE-FADE
+            # gate's own statistic, filed so the verdict can be READ OFF the
+            # table rather than taken on the verdict row's word [F-C10-HT].
+            r = dict(base, entry_decile=EDGE_DEC_ALL, age_bucket=EDGE_AGE_ALL,
+                     direction="both — toward the far boundary",
+                     is_near_boundary=True, age_bars_lo=-1, age_bars_hi=None,
+                     margin=MARGIN_NEAR)
+            r.update(_edge_stats(A, nm, name, pooled))
+            out.append(r)
+    return out
+
+
+def edge_margin(e34, lens: str, *, asset: str = None, kind: str = "frozen3.0",
+                era: str = None, horizon: str = "H20",
+                dec=None, age=None):
+    """THE FILED MARGIN ROW, read — never re-derived, never averaged.  HALTS if
+    the asked margin is not on the table: a digest number that quietly fell
+    back to a mean of cell nets is exactly the defect this repairs."""
+    asset = POOL_ALL if asset is None else asset
+    era = ERA_ALL if era is None else era
+    d = EDGE_DEC_ALL if dec is None else dec
+    a = EDGE_AGE_ALL if age is None else age
+    z = e34[(e34["asset"] == asset) & (e34["lens"] == lens)
+            & (e34["scale_kind"] == kind) & (e34["era"] == era)
+            & (e34["horizon"] == horizon) & (e34["entry_decile"] == d)
+            & (e34["age_bucket"] == a)]
+    if len(z) != 1:
+        raise SystemExit(
+            f"HALT (edge_margin): {len(z)} rows for {asset} {lens} {kind} {era} "
+            f"{horizon} decile={d} age={a!r} — the margin is READ from the filed "
+            "table and NEVER recomputed from the cells [LEAN R3-d].")
+    return z.iloc[0]
+
+
+def edge_gate(A: dict, pooled: bool) -> dict:
+    """[LEAN R3-b] the EDGE-FADE outcome leg: NET at H20 from the NEAR edge,
+    ALL era, pooled over ages — computed from the RAW terms, never as a
+    median of medians."""
+    if not A.get("n"):
+        return {"n": 0, "n_ranges": 0, "median_term": _NAN, "toll_atr": _NAN,
+                "net": _NAN, "hit_rate_net": _NAN, "pass": False}
+    s = _edge_stats(A, _near_mask(A["dec"]), "H20", pooled)
+    s["pass"] = bool(s["n"] >= EDGE_MIN_N_BARS
+                     and s["n_ranges"] >= EDGE_MIN_N_RANGES
+                     and np.isfinite(s["net"]) and s["net"] > 0)
+    s["fail_reason"] = ("" if s["pass"] else "; ".join(x for x in (
+        (f"edge_n {s['n']} < floor {EDGE_MIN_N_BARS}"
+         if s["n"] < EDGE_MIN_N_BARS else ""),
+        (f"edge_n_ranges {s['n_ranges']} < floor {EDGE_MIN_N_RANGES}"
+         if s["n_ranges"] < EDGE_MIN_N_RANGES else ""),
+        ("net is NaN" if not np.isfinite(s["net"]) else
+         (f"net {s['net']:+.6f} <= 0" if not s["net"] > 0 else "")),
+    ) if x))
+    s["provisional"] = bool(s["n_ranges"] < PROVISIONAL_MIN_N)
+    return s
+
+
+def verdict_rows(hg: list[dict], eg: dict, lens: str) -> list[dict]:
+    """The per-lens / per-asset height-vs-toll VERDICT — LEDGER.md:834's
+    conjunction, stated as PASS/FAIL and filed as a first-class table."""
+    out = []
+    byk = {(r["asset"], r["scale_kind"]): r for r in hg if r["era"] == ERA_ALL}
+    for (asset, kind), h in sorted(byk.items()):
+        e = eg.get((asset, kind), {"n": 0, "n_ranges": 0, "net": _NAN,
+                                   "pass": False, "median_term": _NAN,
+                                   "toll_atr": _NAN, "hit_rate_net": _NAN,
+                                   "fail_reason": "no edge row for this panel",
+                                   "provisional": True})
+        gh, ge = bool(h["gate_height_pass"]), bool(e["pass"])
+        prov = bool(int(h["n_ranges"]) < PROVISIONAL_MIN_N
+                    or int(e.get("n_ranges", 0)) < PROVISIONAL_MIN_N)
+        out.append({
+            "lens": lens, "scale_kind": kind, "asset": asset,
+            "n_ranges": h["n_ranges"], "ratio_median": h["ratio_median"],
+            "ratio_d1": h["ratio_d1"], "ratio_d5": h["ratio_d5"],
+            "ratio_d9": h["ratio_d9"],
+            "share_ratio_lt_1": h["share_ratio_lt_1"],
+            "height_atr_median": h["height_atr_median"],
+            "toll_atr_median": h["toll_atr_median"],
+            "gate_height_pass": gh,
+            "edge_n": e["n"], "edge_n_ranges": e.get("n_ranges", 0),
+            "edge_median_term_h20": e["median_term"],
+            "edge_toll_atr": e["toll_atr"], "edge_net_h20": e["net"],
+            "edge_hit_rate_net": e["hit_rate_net"],
+            "gate_edge_fade_pass": ge,
+            "gate_edge_fade_fail_reason": e.get("fail_reason", ""),
+            "gate_height_fail_reason": h.get("gate_height_fail_reason", ""),
+            "min_n_ranges_pinned": HEIGHT_MIN_N_RANGES,
+            "edge_min_n_ranges_pinned": EDGE_MIN_N_RANGES,
+            "edge_min_n_bars_pinned": EDGE_MIN_N_BARS,
+            # PROVISIONAL is said on the ROW, per census lean C-g: the floor
+            # that makes the gate FAIL and the flag that warns a reader are the
+            # SAME number, and both are on the row a BRK author opens.
+            "provisional": bool(prov),
+            "provisional_reason": (
+                "" if not prov else "; ".join(x for x in (
+                    (f"n_ranges {int(h['n_ranges'])} < PROVISIONAL_MIN_N "
+                     f"({PROVISIONAL_MIN_N})"
+                     if int(h["n_ranges"]) < PROVISIONAL_MIN_N else ""),
+                    (f"edge_n_ranges {int(e.get('n_ranges', 0))} < PROVISIONAL_MIN_N "
+                     f"({PROVISIONAL_MIN_N})"
+                     if int(e.get("n_ranges", 0)) < PROVISIONAL_MIN_N else ""),
+                ) if x)),
+            "verdict_pass": bool(gh and ge),
+            "verdict_law": HEIGHT_GATE_LAW["combined"],
+            "min_n_law": HEIGHT_GATE_LAW["gate_min_n"],
+            "gate_law_sha": HEIGHT_GATE_LAW_SHA,
+            "ledger_line": "LEDGER.md:834",
+            # THE COLLAR SAYS 'GATES NOTHING' AND THIS ROW GATES A DRAFTING
+            # DECISION [review 2026-09-22, non-blocking #8].  Both are true and
+            # the row says so IN THE ROW, not only in a code comment: nothing
+            # here scores a P-* registration; what it gates is whether a
+            # range-trading contract may be DRAFTED at all.
+            "gates_what": (
+                "NOTHING IS SCORED HERE. This row gates ONE thing and it is not a "
+                "score: whether a range-trading contract may be DRAFTED under "
+                "LEDGER.md:834. The `tier`/`gates` collar columns say 'UNSCORED, "
+                "GATES NOTHING' and mean the SCORING ledger — read them together."),
+            "reason": (("height gate " + ("PASS" if gh else "FAIL"))
+                       + " + edge-fade leg " + ("PASS" if ge else "FAIL")
+                       + (" [PROVISIONAL]" if prov else "")),
+        })
+    return out
+
+
+# ── THE READ INTERFACE the BRK track calls.  IT HALTS, IT NEVER DEFAULTS ─────
+def height_vs_toll_verdict(lens: str, root: Path | str | None = None,
+                           asset: str = POOL_ALL,
+                           scale_kind: str = "frozen3.0",
+                           allow_provisional: bool = False) -> dict:
+    """THIS LENS'S HEIGHT-vs-TOLL VERDICT, for P-BRK-* rows that must carry it.
+
+    HALTS IF the table is not filed, if the asked (lens, scale_kind, asset)
+    has no row, or if the filed gate law is not the one this code pins — a
+    verdict read before it is filed is NEVER defaulted, NEVER guessed and
+    NEVER returned as None: a BRK row that silently carried a missing verdict
+    would be a scored row resting on nothing [F-C10-HT-READ].
+
+    IT ALSO HALTS ON A PROVISIONAL ROW [review 2026-09-22, finding 2].  A row
+    whose height leg or edge leg rests on fewer than PROVISIONAL_MIN_N
+    confirmed ranges is FILED, is readable as data, and is REFUSED to a caller
+    that did not ask for it by name: `allow_provisional=True` serves it and
+    the returned dict then carries provisional=True and the reason, so a BRK
+    author who takes it takes it knowingly.  The default refuses, because the
+    quiet path must be the safe one.
+    """
+    root = OUT if root is None else Path(root)
+    p = root / "height_toll_verdict.parquet"
+    if not p.exists():
+        raise SystemExit(
+            "HALT [Q-R3]: the height-vs-toll verdict was READ BEFORE IT WAS FILED "
+            f"— {p} does not exist. LEDGER.md:834 makes this a GATE: no BRK form "
+            "may carry a verdict that has not been measured. Run "
+            "`tierc10_census.py --r34` first.")
+    d = pd.read_parquet(p)
+    s = d[(d["lens"] == lens) & (d["scale_kind"] == scale_kind)
+          & (d["asset"] == asset)]
+    if len(s) != 1:
+        raise SystemExit(
+            f"HALT [Q-R3]: no unique height-vs-toll verdict for lens={lens!r} "
+            f"scale_kind={scale_kind!r} asset={asset!r} — {len(s)} row(s) in {p}. "
+            "The verdict is never guessed.")
+    r = s.iloc[0].to_dict()
+    if str(r.get("gate_law_sha")) != HEIGHT_GATE_LAW_SHA:
+        raise SystemExit(
+            "HALT [Q-R3]: the FILED gate law sha "
+            f"{str(r.get('gate_law_sha'))[:16]} is not this code's "
+            f"{HEIGHT_GATE_LAW_SHA[:16]} — the threshold moved after the table "
+            "was filed. Re-file the table or restore the law; a gate whose bar "
+            "can move silently is not a gate [F-C10-HT-THRESHOLD].")
+    if bool(r.get("provisional", False)) and not allow_provisional:
+        raise SystemExit(
+            f"HALT [Q-R3]: the verdict for lens={lens!r} scale_kind={scale_kind!r} "
+            f"asset={asset!r} is PROVISIONAL — {r.get('provisional_reason')}. "
+            f"n_ranges={int(r.get('n_ranges', 0))}, "
+            f"edge_n_ranges={int(r.get('edge_n_ranges', 0))}, floor "
+            f"{PROVISIONAL_MIN_N} [census lean C-g]. It is FILED and readable as "
+            "data; it is NOT served to a caller that did not ask for it. Pass "
+            "allow_provisional=True to take it, and carry provisional=True and "
+            "provisional_reason onto whatever row you put it on "
+            "[F-C10-HT-PROVISIONAL].")
+    return r
+
+
+def _cell_receipt(root: Path, sym: str, lens: str) -> dict:
+    """The FILED cell receipt, read as DATA — the calibrated SCALE and the toll
+    bps this cell was built with.  HALTS rather than re-fit: re-deriving the
+    calibrated SCALE here could disagree with the filed census by a grid step
+    and would put two answers under one law."""
+    p = cell_dir(root, sym, lens) / "cell.json"
+    if not p.exists():
+        raise SystemExit(
+            f"HALT [Q-R3/Q-R4]: no filed cell receipt {p}. The acceptance and "
+            "height-vs-toll tables READ the census's own calibrated SCALE and "
+            "toll bps; they never re-fit them. Run the census first.")
+    return json.loads(p.read_text())
+
+
+def _binding_toll(led: pd.DataFrame, col: str = "toll_atr_evt") -> float:
+    """A POOLED row's toll is the BINDING (max) per-asset median [census law]:
+    a pooled median would be one asset's toll wearing the pool's name."""
+    v = [float(g[col].median()) for _, g in led.groupby("asset", sort=True)
+         if g[col].notna().any()]
+    return float(max(v)) if v else _NAN
+
+
+def build_r34(root: Path, assets: list, lenses: list, kinds: tuple,
+              label: str) -> dict:
+    """[Q-R4] the acceptance head-to-head + [Q-R3] height-vs-toll and the
+    edge-fade leg, over the WHOLE commission.  Reads the census's filed
+    calibrated SCALE and toll bps; re-runs only the machine it needs."""
+    t_all = time.perf_counter()
+    acc_g: list[pd.DataFrame] = []
+    ht_g: list[pd.DataFrame] = []
+    ef_g: list[pd.DataFrame] = []
+    vd: list[pd.DataFrame] = []
+    replay = {"episodes": 0, "die_matched": 0, "die_machine": 0, "cells": 0}
+    # THE PER-CELL REPLAY LEDGER [review 2026-09-22, finding 3].  The grand
+    # totals above are incremented in lockstep one line after a HALT has
+    # already forced truth == mine, so a fixture that asserts they are equal
+    # asserts nothing.  What a fixture CAN falsify is a per-cell count: it
+    # re-walks a seeded sample of these cells live and compares.
+    replay_cells: dict = {}
+    tolls: dict = {}
+    for lens in lenses:
+        log(f"\n  [Q-R3/Q-R4] lens {lens}")
+        led_by: dict = {}
+        ht_by: dict = {}
+        edge_by: dict = {}
+        meta_by: dict = {}
+        eg: dict = {}
+        for sym in assets:
+            t0 = time.perf_counter()
+            tape = load_tape(sym, lens)
+            meta_by[sym] = tape.meta
+            rc = _cell_receipt(root, sym, lens)
+            bps = float(rc["toll_bps"])
+            tolls[sym] = {"bps": bps, "source": rc["toll_bps_source"]}
+            for kind in kinds:
+                scale = (float(FROZEN_SCALE) if kind == "frozen3.0"
+                         else float(rc["calibrated_scale"]))
+                m = RC.run_v2(tape.d, tape.atr,
+                              dict(RC.PINS_V2, SCALE_MULT=scale),
+                              with_micro=False, retests=False)["macro"]
+                pins = RC.macro_pins(scale)
+                w = _r34_walk(tape, m, pins)
+                # F-C10-ACC-REPLAY's evidence, accumulated over the whole grid
+                truth = [(e["i"], e["rid"], e["side"], e["by"], e["closes"])
+                         for e in m["events"] if e["event"] == "breakout-die"]
+                mine = [(e["die_i"], e["rid"], e["side"], e["die_by"],
+                         e["max_closes"]) for e in w["episodes"]
+                        if e["end_kind"] == "die"]
+                if truth != mine:
+                    raise SystemExit(
+                        f"HALT (F-C10-ACC-REPLAY): {sym} {lens} {kind} — the "
+                        f"episode replay is NOT the machine's breakout-die log "
+                        f"({len(mine)} vs {len(truth)} events). Every acceptance "
+                        "number rests on this equality.")
+                replay["die_machine"] += len(truth)
+                replay["die_matched"] += len(mine)
+                replay["episodes"] += len(w["episodes"])
+                replay["cells"] += 1
+                replay_cells[f"{sym}|{lens}|{kind}"] = {
+                    "die": len(truth), "episodes": len(w["episodes"]),
+                    "ranges": len(w["ranges"]), "in_range_bars": int(len(w["ir_t"])),
+                    "die_i_sha": hashlib.sha256(
+                        json.dumps([[int(x[0]), int(x[1]), str(x[2]), str(x[3]),
+                                     int(x[4])] for x in truth]).encode()).hexdigest(),
+                }
+                led_by[(sym, kind)] = acceptance_rows(tape, w, sym, lens, kind, bps)
+                ht_by[(sym, kind)] = height_rows(w, tape, sym, lens, kind, bps)
+                edge_by[(sym, kind)] = edge_arrays(tape, w, bps, assets.index(sym))
+            log(f"    {sym:>16} {lens:>3}  ranges "
+                f"{len(ht_by[(sym, kinds[0])]):>6,}  episodes "
+                f"{sum(len(led_by[(sym, k)]) // len(ACCEPTANCE_VARIANTS) for k in kinds):>7,}"
+                f"  in-range bars "
+                f"{sum(edge_by[(sym, k)].get('n', 0) for k in kinds):>9,}"
+                f"  {time.perf_counter() - t0:5.1f}s")
+        # ── per asset, then the pools, every row stamped with its own panel ──
+        groups = [(s, [s], f"ASSET:{s}") for s in assets]
+        groups += [(p, mem, p) for p, mem in pools_for(assets).items()]
+        for name, mem, panel in groups:
+            metas = [meta_by[s] for s in mem]
+            pooled = len(mem) > 1
+            led = pd.concat([led_by[(s, k)] for s in mem for k in kinds],
+                            ignore_index=True)
+            hl = pd.concat([ht_by[(s, k)] for s in mem for k in kinds],
+                           ignore_index=True)
+            a = pd.DataFrame(acceptance_grid(led, name, lens, pooled))
+            a["toll_basis"] = ("BINDING (max) per-asset median toll_atr over THIS "
+                               "ROW's own uncensored anchors [pooled law C-f]"
+                               if pooled else "this row's own median toll_atr")
+            a["acceptance_law_sha"] = ACCEPTANCE_LAW_SHA
+            a["time_beyond_T"] = TIME_BEYOND_T
+            a["time_beyond_T_source"] = "RC.PINS['DEV_RETURN_BARS'] — READ, never typed"
+            a["promoted"] = "NOTHING — the data's default is NAMED; no pin moves [Q-R4]"
+            a["engine_default_after"] = (
+                f"BREAK_CONFIRM_N={RC.PINS['BREAK_CONFIRM_N']} · "
+                f"BREAK_MARGIN={RC.PINS['BREAK_MARGIN']} — UNCHANGED")
+            acc_g.append(collar(stamp(a, metas, lens, panel), "CENSUS-R [Q-R4] acceptance"))
+            h = pd.DataFrame(height_grid(hl, name, lens))
+            first = mem[0]
+            h["toll_bps"] = (max(tolls[s]["bps"] for s in mem) if pooled
+                             else tolls[first]["bps"])
+            h["toll_bps_source"] = tolls[first]["source"]
+            # TWO TOLL CONVENTIONS SIT IN ONE VERDICT ROW AND BOTH ARE NAMED
+            # [review 2026-09-22, non-blocking #2]: height_toll's
+            # `toll_atr_median` is the POOLED MEDIAN of per-range toll_atr over
+            # every range on the panel, while the EDGE leg's `edge_toll_atr` is
+            # the BINDING (max) per-asset median [lean C-f].  Neither is wrong;
+            # an UNDECLARED difference would be.  The binding figure is filed
+            # BESIDE the pooled one so a reader can strike the ratio either way.
+            h["toll_basis"] = (
+                "POOLED MEDIAN of per-range toll_atr over every asset on this panel "
+                "— NOT the binding max; `toll_atr_binding` beside it is the binding "
+                "one [lean C-f]" if pooled else
+                "median of per-range toll_atr over this asset's own ranges")
+            if pooled:
+                bind = {}
+                for kk in sorted(hl["scale_kind"].unique()):
+                    K = hl[hl["scale_kind"] == kk]
+                    bind[kk] = max(
+                        float(np.median(K[K["asset"] == s_]["toll_atr"].to_numpy(float)))
+                        for s_ in mem if len(K[K["asset"] == s_]))
+                h["toll_atr_binding"] = h["scale_kind"].map(bind)
+            else:
+                h["toll_atr_binding"] = h["toll_atr_median"]
+            with np.errstate(invalid="ignore", divide="ignore"):
+                h["ratio_median_under_binding_toll"] = (
+                    h["height_atr_median"] / h["toll_atr_binding"])
+            ht_g.append(collar(stamp(h, metas, lens, panel), "CENSUS-R [Q-R3] height-vs-toll"))
+            for kind in kinds:
+                A = (_edge_cat([edge_by[(s, kind)] for s in mem]) if pooled
+                     else edge_by[(mem[0], kind)])
+                e = pd.DataFrame(edge_grid(A, name, lens, kind, pooled))
+                if len(e):
+                    e["near_frac"] = EDGE_NEAR_FRAC
+                    e["age_law"] = ("BARS SINCE CONFIRM — never a fraction of the "
+                                    "range's eventual life [LEAN R3-c]")
+                    ef_g.append(collar(stamp(e, metas, lens, panel),
+                                       "CENSUS-R [Q-R3] edge-fade"))
+                eg[(name, kind)] = edge_gate(A, pooled)
+            q = pd.DataFrame(verdict_rows(height_grid(hl, name, lens),
+                                          {(name, k): eg[(name, k)] for k in kinds},
+                                          lens))
+            vd.append(collar(stamp(q, metas, lens, panel),
+                             "CENSUS-R [Q-R3] height-vs-toll VERDICT"))
+    frames = {
+        "acceptance_head_to_head": (pd.concat(acc_g, ignore_index=True), ACC_GRID_KEY),
+        "height_toll": (pd.concat(ht_g, ignore_index=True), HT_GRID_KEY),
+        "edge_fade": (pd.concat(ef_g, ignore_index=True), EF_GRID_KEY),
+        "height_toll_verdict": (pd.concat(vd, ignore_index=True), VERDICT_KEY),
+    }
+    shas = {}
+    for nm, (df, key) in frames.items():
+        shas[nm] = write_table(df, nm, key, root)
+        log(f"  {nm:>26}  {len(df):>7,} rows  sha {shas[nm][:16]}")
+    man = {
+        "stage": R34_STAGE, "tier": TIER, "gates": GATES, "seed": SEED,
+        "substrate": SNAPSHOT.name, "commission": {
+            "label": label, "assets": list(assets), "lenses": list(lenses),
+            "scale_kinds": list(kinds), "eras": list(ERAS),
+            "horizons": [list(x) for x in HORIZONS]},
+        "as_of": iso(as_of_close_ms(assets[0])[0]),
+        "code_sha": code_sha(), "port_sha256": file_sha256(PORT_PATH),
+        "sha": shas, "keys": {k: v[1] for k, v in frames.items()},
+        "acceptance_law": ACCEPTANCE_LAW, "acceptance_law_sha": ACCEPTANCE_LAW_SHA,
+        "height_gate_law": HEIGHT_GATE_LAW, "height_gate_law_sha": HEIGHT_GATE_LAW_SHA,
+        "time_beyond_T": TIME_BEYOND_T,
+        "leans": list(LEANS_R34), "replay": replay,
+        "replay_by_cell": dict(sorted(replay_cells.items())),
+        "replay_note": (
+            "`replay` holds GRAND TOTALS the build incremented AFTER its own HALT "
+            "had already forced equality — they are equal BY CONSTRUCTION and no "
+            "fixture can falsify them. `replay_by_cell` is what a fixture can: "
+            "per (asset|lens|scale_kind), the machine's breakout-die count, the "
+            "episode count, the confirmed-range count, the in-range bar count and "
+            "a sha over the machine's (bar, rid, side, cause, closes) die log. "
+            "F-C10-ACC re-walks a SEEDED SAMPLE of these cells live and compares "
+            "every field, and --slow re-walks all of them "
+            "[review 2026-09-22, finding 3]."),
+        "ledger_lines": {"Q-R3": "LEDGER.md:834", "Q-R4": "LEDGER.md:835"},
+        "warranty": WARRANTY,
+        "promoted": ("NOTHING. Q-R4 NAMES the data's default and moves no pin; the "
+                     "engine default stays BREAK_CONFIRM_N="
+                     f"{RC.PINS['BREAK_CONFIRM_N']} / BREAK_MARGIN="
+                     f"{RC.PINS['BREAK_MARGIN']}."),
+    }
+    _dump(man, root / "R34_MANIFEST.json")
+    # THE ROOT'S INDEX MUST DECLARE EVERY TABLE IN THE ROOT [F-KEY totality].
+    # ADDITIVE ONLY: the census's own keys, shas and every other field are read
+    # and written back untouched — this build declares its four tables and
+    # changes nothing the census filed.
+    bm = root / "build_manifest.json"
+    if bm.exists():
+        b = json.loads(bm.read_text())
+        before = ({k: v for k, v in b.get("sha", {}).items() if k not in shas},
+                  {k: v for k, v in b.get("keys", {}).items() if k not in frames})
+        b.setdefault("keys", {}).update({k: v[1] for k, v in frames.items()})
+        b.setdefault("sha", {}).update(shas)
+        b["r34"] = {"stage": R34_STAGE, "tables": list(frames),
+                    "manifest": "R34_MANIFEST.json",
+                    # THE ROOT'S OWN code_sha IS THE CENSUS'S AND MUST NOT MOVE
+                    # (the additive guard HALTs on any changed census entry), so
+                    # the code that built THESE FOUR tables is named HERE
+                    # [review 2026-09-22, non-blocking #1].
+                    "code_sha": code_sha(),
+                    "port_sha256": file_sha256(PORT_PATH),
+                    "code_sha_note": (
+                        "the root's top-level `code_sha` is the CENSUS build's and is "
+                        "left untouched by law; the four tables listed here were built "
+                        f"by code sha {code_sha()}."),
+                    "note": ("[Q-R3]/[Q-R4] declared their four tables here so the "
+                             "root's index stays TOTAL; no census field was changed.")}
+        after = ({k: v for k, v in b["sha"].items() if k not in shas},
+                 {k: v for k, v in b["keys"].items() if k not in frames})
+        if before != after:
+            raise SystemExit("HALT: declaring the [Q-R3]/[Q-R4] tables would have "
+                             "changed a census entry in build_manifest.json")
+        _dump(b, bm)
+        log(f"  build_manifest.json: declared {len(frames)} table(s) "
+            "[F-KEY totality]; no census entry touched")
+    clock(f"  [Q-R3/Q-R4] total {time.perf_counter() - t_all:.1f}s")
+    return man
+
+
+def _digest_r34(root: Path, A) -> None:
+    """The [Q-R3]/[Q-R4] sections of the digest, in their OWN scope so a
+    section cannot shadow a later one's frame (g, d, s, q …)."""
+    # ── A · [Q-R4] THE ACCEPTANCE HEAD-TO-HEAD ────────────────────────────
+    a34 = _r34_or_none(root, "acceptance_head_to_head")
+    h34 = _r34_or_none(root, "height_toll")
+    v34 = _r34_or_none(root, "height_toll_verdict")
+    e34 = _r34_or_none(root, "edge_fade")
+    m34 = (json.loads((root / "R34_MANIFEST.json").read_text())
+           if (root / "R34_MANIFEST.json").exists() else None)
+    if a34 is not None and m34 is not None:
+        A("## A · [Q-R4] THE ACCEPTANCE HEAD-TO-HEAD — four operationalisations "
+          "beside the RangeFinder DIE rule")
+        A("")
+        A("> LEDGER.md:835 — *\"Q-R4 ACCEPTANCE DEFINITION: (a) — the census measures four "
+          "candidate operationalisations head-to-head (2-close / 3-close / 6-outside-close "
+          "stale-run / time-beyond); the engine default is chosen FROM DATA.\"*")
+        A("")
+        A("**THE DATA'S DEFAULT IS NAMED BELOW AND NOTHING IS PROMOTED.** "
+          f"{m34['promoted']} This table is {TIER}.")
+        A("")
+        A("THE FIVE RULES, PINNED:")
+        A("")
+        for k in ACCEPTANCE_VARIANTS:
+            A(f"- **{k}** — {ACCEPTANCE_LAW[k]}")
+        A("")
+        A(f"- acceptance law sha `{m34['acceptance_law_sha'][:16]}` · "
+          f"time-beyond T = **{m34['time_beyond_T']}** bars, READ from "
+          "`RC.PINS['DEV_RETURN_BARS']`, never typed")
+        A(f"- the head-to-head unit is the BREACH EPISODE; all five rules share ONE "
+          f"denominator per cell. The episode replay was proved equal to the machine's own "
+          f"breakout-die log on **{m34['replay']['die_matched']:,}/"
+          f"{m34['replay']['die_machine']:,}** die events over {m34['replay']['cells']} "
+          f"cells ({m34['replay']['episodes']:,} episodes) [F-C10-ACC].")
+        A("- `precision_died` for the DIE rule is 1.000 BY CONSTRUCTION (the DIE rule *is* "
+          "the death): it is not evidence of quality and must not be read as such.")
+        A("- **A CEILING ON 'how early or late', STATED SO IT IS NOT MIS-READ.** The DIE "
+          "bar ENDS the episode, so a slower rule cannot be observed declaring AFTER it: "
+          "every lead in this table is >= 0 by construction, and a rule that had not "
+          "reached its threshold by the DIE bar is filed as NEVER DECLARED rather than as "
+          "'late'. `lead_bars_*` therefore measures how much EARLIER a rule fires, and the "
+          "real discriminator between the five is not lead at all — it is WHICH episodes "
+          "each fires on (`declare_rate`, `precision_died`) and what price did afterwards "
+          "(`net`).")
+        A("")
+        for x in LEANS_R34:
+            if x.startswith("[LEAN-HEPHAESTUS R4"):
+                A(f"- {x}")
+        A("")
+        for lens in [x for x in LENSES if x in set(a34["lens"])]:
+            for era in ERAS:
+                s = a34[(a34["asset"] == POOL_ALL) & (a34["scale_kind"] == "frozen3.0")
+                        & (a34["era"] == era) & (a34["horizon"] == "H20")
+                        & (a34["lens"] == lens)]
+                if not len(s):
+                    continue
+                s = s.set_index("variant").loc[list(ACCEPTANCE_VARIANTS)].reset_index()
+                A(f"**{lens} · POOLED:ALL · frozen3.0 · era {era} · H20** "
+                  f"(n_episodes = {int(s['n_episodes'].iloc[0]):,})")
+                A("")
+                A("| rule | declared | declare rate | precision (died) | lead vs DIE "
+                  "(bars, median) | median term | toll | NET | hit rate |")
+                A("|---|---:|---:|---:|---:|---:|---:|---:|---:|")
+                for r in s.itertuples():
+                    A(f"| {r.variant} | {int(r.n_declared):,} | {r.declare_rate:.4f} | "
+                      f"{r.precision_died:.4f} | {r.lead_bars_median:.1f} | "
+                      f"{r.median_term:+.4f} | {r.toll_atr:.4f} | **{r.net:+.4f}** | "
+                      f"{r.hit_rate_net:.4f} |")
+                A("")
+                best = s.loc[s["net"].idxmax()]
+                allneg = bool((s["net"] < 0).all())
+                A(f"> THE DATA'S DEFAULT AT {lens} / {era} / H20: **{best.variant}** "
+                  f"(NET {best.net:+.4f} ATR on n = {int(best.n_declared):,}"
+                  + (f" — **PROVISIONAL**: {best.provisional_law}"
+                     if bool(best.provisional) else "") + "). "
+                  + ("**EVERY ONE OF THE FIVE IS NET NEGATIVE HERE — this names the "
+                     "least-bad loser, not a winner, and nothing here supports trading "
+                     "this lens.** " if allneg else "")
+                  + "NAMED ONLY: no pin moves and the engine default is unchanged.")
+                A("")
+        # THE H100 DEFAULTS, NAMED TOO [review 2026-09-22, non-blocking #6]: the
+        # report claimed the default was named "per lens and horizon" while only
+        # the H20 tables were printed. The H100 row is a one-liner per cell.
+        A("**THE DATA'S DEFAULT AT H100** — the same law, the longer horizon, so the "
+          "claim 'named per lens AND HORIZON' is true of the digest and not only of the "
+          "parquet. `provisional` is the same lean C-g flag as above.")
+        A("")
+        A("| lens | era | default rule | NET (H100) | n declared | provisional | "
+          "all five NET negative? |")
+        A("|---|---|---|---:|---:|---|---|")
+        for lens in [x for x in LENSES if x in set(a34["lens"])]:
+            for era in ERAS:
+                s = a34[(a34["asset"] == POOL_ALL) & (a34["scale_kind"] == "frozen3.0")
+                        & (a34["era"] == era) & (a34["horizon"] == "H100")
+                        & (a34["lens"] == lens)]
+                if not len(s):
+                    continue
+                b = s.loc[s["net"].idxmax()]
+                A(f"| {lens} | {era} | **{b.variant}** | {b.net:+.6f} | "
+                  f"{int(b.n_declared):,} | {'**YES**' if bool(b.provisional) else 'no'} "
+                  f"| {'**YES**' if bool((s['net'] < 0).all()) else 'no'} |")
+        A("")
+        A("**WHAT THE HEAD-TO-HEAD ACTUALLY SHOWS.** The close-count axis barely binds: "
+          "the RangeFinder dies on the 1.5-ATR MARGIN, not on its 8-close pin, in")
+        d = a34[(a34["asset"] == POOL_ALL) & (a34["scale_kind"] == "frozen3.0")
+                & (a34["era"] == ERA_ALL) & (a34["horizon"] == "H20")
+                & (a34["variant"] == ACC_DIE)]
+        for r in d.sort_values("lens").itertuples():
+            tot = int(r.n_die_by_margin) + int(r.n_die_by_n_closes)
+            if tot:
+                A(f"- **{r.lens}**: margin {int(r.n_die_by_margin):,} "
+                  f"({r.n_die_by_margin / tot:.1%}) vs n_closes "
+                  f"{int(r.n_die_by_n_closes):,} ({r.n_die_by_n_closes / tot:.1%}) "
+                  f"of {tot:,} deaths")
+        A("")
+        A("So BREAK_CONFIRM_N = 8 is very nearly a dead letter at these pins, and the "
+          "four candidate operationalisations are mostly re-cutting a decision the MARGIN "
+          "has already made. Precision rises monotonically with strictness (2-close is the "
+          "loosest and least precise; the stale-run the strictest and most precise), and "
+          "the later, stricter rules take the better NET in most cells — but this is a "
+          "DIRECTION the data leans, not a mandate, and it is not promoted.")
+        A("")
+    # ── B · [Q-R3] HEIGHT-vs-TOLL, THE GATE ───────────────────────────────
+    if h34 is not None and v34 is not None and m34 is not None:
+        A("## B · [Q-R3] HEIGHT-vs-TOLL FEASIBILITY **AND** THE EDGE-FADE LEG — "
+          "**THIS IS A GATE, NOT A TABLE**")
+        A("")
+        A("> LEDGER.md:834 — *\"Q-R3 PLAYBOOK-R TIMING: (a) — detection and gating first; "
+          "a range-trading contract is drafted ONLY IF the height-vs-toll feasibility gate "
+          "AND the edge-fade outcome leg both pass.\"*")
+        A("")
+        A("Neither gate had ever been evaluated in this estate before this build. Both are "
+          "evaluated here, and the conjunction is stated as PASS/FAIL per lens.")
+        A("")
+        A(f"- **THE RATIO** — {HEIGHT_GATE_LAW['ratio']}")
+        A(f"- **HEIGHT BASIS** — {HEIGHT_GATE_LAW['height_basis']}")
+        A(f"- **THE HEIGHT GATE** — {HEIGHT_GATE_LAW['gate_height']}")
+        A(f"- {HEIGHT_GATE_LAW['gate_height_why']}")
+        A(f"- **THE EDGE-FADE LEG** — {HEIGHT_GATE_LAW['gate_edge_fade']}")
+        A(f"- **THE CONJUNCTION** — {HEIGHT_GATE_LAW['combined']}")
+        A(f"- gate law sha `{m34['height_gate_law_sha'][:16]}` — the BRK track reads this "
+          "verdict through `tierc10_census.height_vs_toll_verdict(lens)`, which HALTS if "
+          "the table is not filed, if the asked row is not unique, or if this sha has "
+          "moved. IT NEVER DEFAULTS [F-C10-HT].")
+        A("")
+        for x in LEANS_R34:
+            if x.startswith("[LEAN-HEPHAESTUS R3"):
+                A(f"- {x}")
+        A("")
+        A("### B.1 · the HEIGHT / ROUND-TRIP-TOLL distribution — whole, per lens")
+        A("")
+        A("| lens | scale | n ranges | height (ATR) med | toll (ATR) med | d1 | d2 | d3 | "
+          "d4 | **median** | d6 | d7 | d8 | d9 | share ratio<1 | HEIGHT GATE |")
+        A("|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|")
+        q = h34[(h34["asset"] == POOL_ALL) & (h34["era"] == ERA_ALL)]
+        for r in q.sort_values(["lens", "scale_kind"]).itertuples():
+            A(f"| {r.lens} | {r.scale_kind} | {int(r.n_ranges):,} | "
+              f"{r.height_atr_median:.4f} | {r.toll_atr_median:.4f} | "
+              + " | ".join(f"{getattr(r, f'ratio_d{i}'):.2f}" for i in range(1, 5))
+              + f" | **{r.ratio_median:.2f}** | "
+              + " | ".join(f"{getattr(r, f'ratio_d{i}'):.2f}" for i in range(6, 10))
+              + f" | {r.share_ratio_lt_1:.6g} | "
+              f"{'**PASS**' if r.gate_height_pass else '**FAIL**'} |")
+        A("")
+        A("**READ THIS PLAINLY: THE HEIGHT GATE IS NOT THE BINDING CONSTRAINT — AND "
+          "THE REASON IS THE DETECTOR, NOT THE MARKET.** A confirmed range is tens to "
+          "hundreds of round trips tall on every lens, and the share of confirmed ranges "
+          f"whose height does not cover ONE round trip is at or near zero everywhere. "
+          f"The pinned floor of {HEIGHT_RATIO_MIN}x is never approached, so it does no "
+          "work. SAY WHY, because the earlier wording credited this to market geometry "
+          "and that was wrong [review 2026-09-22, non-blocking #3]: "
+          f"`height_atr_median` sits in a narrow band on EVERY era=ALL row because the "
+          f"detector's own REV_MIN = {RC.PINS['REV_MIN']} x SCALE_MULT SELECTS WHICH "
+          f"RANGES GET CONFIRMED — at frozen SCALE {FROZEN_SCALE} that is "
+          f"{float(RC.PINS['REV_MIN']) * float(FROZEN_SCALE):.2f} ATR, so "
+          "the height is a near-constant IN ATR BY CONSTRUCTION. What moves the ratio "
+          "across lenses is therefore `toll_atr` alone — ATR as a share of price at each "
+          "lens — and not how tall this market's ranges happen to be. The correct "
+          "statement is: THE HEIGHT FLOOR DOES NO WORK BECAUSE THE DETECTOR PINS THE "
+          "HEIGHT. The toll bites through the OUTCOME leg.")
+        A("")
+        _hf = h34[(h34["era"] == ERA_ALL) & (h34["scale_kind"] == "frozen3.0")]
+        _hq = _hf[_hf["n_ranges"] >= PROVISIONAL_MIN_N]
+        _hp = _hf[_hf["n_ranges"] < PROVISIONAL_MIN_N]
+        _pb = h34[(h34["asset"] == POOL_ALL) & (h34["era"] == ERA_ALL)
+                  & (h34["scale_kind"] == "frozen3.0")].sort_values("lens")
+        A("")
+        A("**TWO TOLL CONVENTIONS SIT IN THIS TABLE AND BOTH ARE NAMED** "
+          "[review 2026-09-22, non-blocking #2]. `toll_atr_median` above is the POOLED "
+          "MEDIAN of per-range toll_atr over every asset on the panel; the EDGE leg in "
+          "B.3 uses the BINDING (max) per-asset median [lean C-f]. Neither is wrong; an "
+          "undeclared difference would be. `toll_basis` and `toll_atr_binding` now ride "
+          "every row, and the ratio under the binding toll is filed beside the pooled "
+          "one. ON POOLED:ALL frozen3.0: "
+          + " · ".join(
+              f"{r.lens} ratio {r.ratio_median:.2f} (pooled toll {r.toll_atr_median:.6f}) "
+              f"vs {r.ratio_median_under_binding_toll:.2f} (binding toll "
+              f"{r.toll_atr_binding:.6f})" for r in _pb.itertuples())
+          + f". **NO VERDICT MOVES**: every one still clears the {HEIGHT_RATIO_MIN}x "
+          "floor by two orders of magnitude.")
+        A("")
+        A("**THE EVIDENCE FOR THAT, FROM THE FILED TABLE AND NOT FROM PROSE.** Over the "
+          f"{len(_hf)} era=ALL frozen3.0 rows, `height_atr_median` on the "
+          f"{len(_hq)} rows that clear the {PROVISIONAL_MIN_N}-range floor spans only "
+          f"**{_hq['height_atr_median'].min():.4f} – {_hq['height_atr_median'].max():.4f} "
+          f"ATR** — a band of {_hq['height_atr_median'].max() - _hq['height_atr_median'].min():.4f} "
+          f"ATR around the detector's own "
+          f"{float(RC.PINS['REV_MIN']) * float(FROZEN_SCALE):.2f}. The "
+          f"{len(_hp)} rows that do NOT clear the floor spread "
+          f"{_hp['height_atr_median'].min():.4f} – {_hp['height_atr_median'].max():.4f} "
+          "(the widest is a one-range row), which is what a median on a handful of "
+          "ranges looks like and is exactly why those rows are now PROVISIONAL. "
+          f"`toll_atr_median` over the same {len(_hq)} rows spans "
+          f"{_hq['toll_atr_median'].min():.6f} – {_hq['toll_atr_median'].max():.6f} ATR, "
+          f"a factor of {_hq['toll_atr_median'].max() / max(_hq['toll_atr_median'].min(), 1e-12):.1f}. "
+          "THE HEIGHT IS FLAT AND THE TOLL IS WHAT VARIES; the ratio's lens-to-lens "
+          "spread is the toll's spread and nothing else.")
+        A("")
+        A("### B.2 · the EDGE-FADE outcome leg — entry location and range age")
+        A("")
+        if e34 is not None:
+            A("Trading TOWARD THE FAR BOUNDARY: below mid, long toward the top; above mid, "
+              "short toward the bottom. An exact mid has no far boundary and is excluded "
+              "and counted. NET = median(term) - the row's own toll, in ATR.")
+            A("")
+            A(f"**EVERY NUMBER IN B.2 IS A FILED MARGIN ROW, READ — NEVER AN AVERAGE "
+              f"OF THE CELLS.** The (entry_decile x age_bucket) grid cannot be "
+              f"collapsed after the fact: each cell's `net` is median(term) - toll and "
+              f"the cells of a pooled panel carry DIFFERENT binding tolls, so a "
+              f"weighted mean of cell nets is a median-of-medians [census lean C-h; "
+              f"LEAN R3-b forbade it for the gate; LEAN R3-d files the margins "
+              f"instead]. The margin rows sit in `edge_fade.parquet` under "
+              f"`entry_decile = {EDGE_DEC_ALL}` (ALL deciles, near edge) and "
+              f"`age_bucket = '{EDGE_AGE_ALL}'` (ALL ages), each computed by the same "
+              f"`_edge_stats` on the RAW terms that the gate itself uses, and each "
+              f"read here through `edge_margin()`, which HALTS rather than fall back "
+              f"to a mean. A PRIOR BUILD OF THIS DIGEST PUBLISHED THE MEAN: it flipped "
+              f"two signs and reversed this build's own age finding "
+              f"[review 2026-09-22, finding 1].")
+            A("")
+            A("**by entry decile** (POOLED:ALL · frozen3.0 · era ALL · H20; decile 0 = at "
+              "the bottom boundary, 9 = at the top). `n` = the in-range entries summed "
+              "over the ten deciles; `r max` = the confirmed-range count of the WIDEST "
+              "single decile (no decile touches every range, so this is a floor on the "
+              "panel's ranges, not a total — the panel's own count is in B.1).")
+            A("")
+            A("| lens | " + " | ".join(f"d{i}" for i in range(10)) + " | n | r max |")
+            A("|---|" + "---:|" * 12)
+            for lens in [x for x in LENSES if x in set(e34["lens"])]:
+                m = [edge_margin(e34, lens, dec=i, age=EDGE_AGE_ALL) for i in range(10)]
+                A(f"| {lens} | " + " | ".join(f"{float(r['net']):+.4f}" for r in m)
+                  + f" | {sum(int(r['n']) for r in m):,} | "
+                  + f"{max(int(r['n_ranges']) for r in m):,} |")
+            A("")
+            A("**by range AGE at entry**, near edge only (the outer "
+              f"{EDGE_NEAR_FRAC:.0%} of the range, where a range trade is actually taken) "
+              "— *does the edge fade with age?*")
+            A("")
+            A("| lens | " + " | ".join(AGE_LABELS) + " | near-edge n | ranges |")
+            A("|---|" + "---:|" * (len(AGE_LABELS) + 2))
+            for lens in [x for x in LENSES if x in set(e34["lens"])]:
+                m = [edge_margin(e34, lens, dec=EDGE_DEC_ALL, age=k) for k in AGE_LABELS]
+                tot = edge_margin(e34, lens, dec=EDGE_DEC_ALL, age=EDGE_AGE_ALL)
+                A(f"| {lens} | " + " | ".join(f"{float(r['net']):+.4f}" for r in m)
+                  + f" | {int(tot['n']):,} | {int(tot['n_ranges']):,} |")
+            A("")
+        A("### B.3 · THE VERDICT — LEDGER.md:834's conjunction, **THE WHOLE GRID**")
+        A("")
+        A(f"- **THE SAMPLE FLOOR** — {HEIGHT_GATE_LAW['gate_min_n']}")
+        A(f"- {HEIGHT_GATE_LAW['gate_min_n_why']}")
+        A("")
+        A(f"**ALL {len(v34)} FILED VERDICT ROWS ARE PRINTED BELOW — every asset, every "
+          f"pool, every lens, every scale kind. NO TOP-N AND NO POOLED-ONLY EXCERPT.** A "
+          f"prior build of this digest printed only the {len(v34[v34['asset'] == POOL_ALL])} "
+          f"POOLED:ALL rows and concluded in bold that the gate fails everywhere, while "
+          f"the filed table carried PASSing rows including a POOLED panel. The read "
+          f"interface a BRK author calls serves THESE rows, so THESE rows are what the "
+          f"artifact of record must show [review 2026-09-22, finding 2].")
+        A("")
+        _npass = int(v34["verdict_pass"].sum())
+        _nprov = int(v34["provisional"].sum())
+        A(f"**HEADLINE COUNT: {_npass} of {len(v34)} filed rows PASS the conjunction; "
+          f"{_nprov} of {len(v34)} are PROVISIONAL (below the {PROVISIONAL_MIN_N}-range "
+          f"floor on one leg or the other).**")
+        A("")
+        A("**PASS / FAIL count per (lens, scale kind), over the 17 single assets** — "
+          "the pools are counted separately below because a pool is not an 18th asset.")
+        A("")
+        A("| lens | scale | assets PASS | assets FAIL | height PASS | edge PASS | "
+          "provisional |")
+        A("|---|---|---:|---:|---:|---:|---:|")
+        _sing = v34[~v34["asset"].astype(str).str.startswith("POOLED:")]
+        for (ln, kd), g in _sing.groupby(["lens", "scale_kind"], sort=True):
+            A(f"| {ln} | {kd} | **{int(g['verdict_pass'].sum())}/{len(g)}** | "
+              f"{int((~g['verdict_pass']).sum())}/{len(g)} | "
+              f"{int(g['gate_height_pass'].sum())}/{len(g)} | "
+              f"{int(g['gate_edge_fade_pass'].sum())}/{len(g)} | "
+              f"{int(g['provisional'].sum())}/{len(g)} |")
+        A("")
+        A("**THE WHOLE GRID, ROW BY ROW.** `prov` = provisional under lean C-g. A "
+          "PROVISIONAL row is FILED and readable as data and is REFUSED by "
+          "`height_vs_toll_verdict()` unless the caller passes "
+          "`allow_provisional=True`.")
+        A("")
+        A("| lens | scale | asset | n ranges | ratio median | share<1 | HEIGHT | "
+          "edge n | edge ranges | edge median term | toll | edge NET (H20) | EDGE-FADE | "
+          "prov | **VERDICT** |")
+        A("|---|---|---|---:|---:|---:|---|---:|---:|---:|---:|---:|---|---|---|")
+        for r in v34.sort_values(["lens", "scale_kind", "asset"]).itertuples():
+            A(f"| {r.lens} | {r.scale_kind} | {r.asset} | {int(r.n_ranges):,} | "
+              f"{r.ratio_median:.2f} | {r.share_ratio_lt_1:.6g} | "
+              f"{'PASS' if r.gate_height_pass else 'FAIL'} | {int(r.edge_n):,} | "
+              f"{int(r.edge_n_ranges):,} | "
+              f"{r.edge_median_term_h20:+.4f} | {r.edge_toll_atr:.4f} | "
+              f"{r.edge_net_h20:+.4f} | "
+              f"{'PASS' if r.gate_edge_fade_pass else 'FAIL'} | "
+              f"{'**YES**' if r.provisional else 'no'} | "
+              f"{'**PASS**' if r.verdict_pass else '**FAIL**'} |")
+        A("")
+        pa = v34[(v34["asset"] == POOL_ALL) & (v34["scale_kind"] == "frozen3.0")]
+        fails = sorted(pa[~pa["verdict_pass"]]["lens"])
+        _P = v34[v34["verdict_pass"]]
+        A(f"**THE CONJUNCTION FAILS ON EVERY POOLED:ALL ROW: "
+          f"{', '.join(fails) if fails else 'NO LENS'}"
+          + (" — on every lens measured, on both scale kinds." if len(fails) == len(set(pa["lens"]))
+             else ".")
+          + "** The EDGE-FADE leg is what fails there. Under LEDGER.md:834 the "
+          "conjunction is what governs the POOLED:ALL evidence, so **no range-trading "
+          "contract is drafted on the pooled evidence.**")
+        A("")
+        if len(_P):
+            A(f"**AND THE ROWS THAT PASS ARE NAMED, NOT BURIED — {len(_P)} of "
+              f"{len(v34)}.** They are filed, they are served by the read interface, and "
+              "a BRK author who calls "
+              "`height_vs_toll_verdict(lens, asset=…, scale_kind=…)` gets them:")
+            A("")
+            A("| lens | scale | asset | n ranges | edge ranges | edge n | edge NET | "
+              "prov |")
+            A("|---|---|---|---:|---:|---:|---:|---|")
+            for r in _P.sort_values(["lens", "scale_kind", "asset"]).itertuples():
+                A(f"| {r.lens} | {r.scale_kind} | {r.asset} | {int(r.n_ranges):,} | "
+                  f"{int(r.edge_n_ranges):,} | {int(r.edge_n):,} | "
+                  f"{r.edge_net_h20:+.6f} | "
+                  f"{'**YES**' if r.provisional else 'no'} |")
+            A("")
+        else:
+            A("**AND NO FILED ROW PASSES THE CONJUNCTION — not one of "
+              f"{len(v34)}.** Under the declared sample floor "
+              f"({HEIGHT_GATE_LAW['gate_min_n']}) every per-asset PASS that the prior "
+              "law admitted rested on a sample the estate's own lean C-g calls "
+              "provisional.")
+            A("")
+        A("**WHAT MOVED, AND WHAT DID NOT.** The conjunction is unchanged; what changed "
+          f"is that both legs now carry the estate's declared sample floor of "
+          f"{PROVISIONAL_MIN_N} and that the edge leg counts that floor in CONFIRMED "
+          "RANGES rather than in-range bars. SENSITIVITY, printed so the floor cannot be "
+          "moved quietly — the number of the "
+          f"{len(v34)} filed rows that would PASS the conjunction at each floor, "
+          "recomputed here from the filed columns:")
+        A("")
+        A("| floor (ranges, both legs) | rows PASSing | POOLED:ALL rows PASSing |")
+        A("|---:|---:|---:|")
+        for fl in (0, 10, PROVISIONAL_MIN_N, 100):
+            hp = ((v34["n_ranges"] >= max(fl, 1))
+                  & (v34["ratio_median"] >= HEIGHT_RATIO_MIN)
+                  & (v34["share_ratio_lt_1"] <= INFEASIBLE_MAX_SHARE))
+            ep = ((v34["edge_n_ranges"] >= max(fl, 1)) & (v34["edge_n"] > 0)
+                  & (v34["edge_net_h20"] > 0))
+            tot = hp & ep
+            A(f"| {fl} | {int(tot.sum())} | "
+              f"{int((tot & (v34['asset'] == POOL_ALL)).sum())} |")
+        A("")
+        f5 = pa[pa["lens"] == "5m"]
+        if len(f5):
+            r5 = f5.iloc[0]
+            A(f"**THE 5m ANSWER, SAID PLAINLY AND NOT SOFTENED.** At 5m the near-edge "
+              f"gross median term over {int(r5.edge_n):,} in-range entries is "
+              f"{r5.edge_median_term_h20:+.4f} ATR — *positive* — and the binding "
+              f"round-trip toll is {r5.edge_toll_atr:.4f} ATR. The toll is "
+              f"{r5.edge_toll_atr / abs(r5.edge_median_term_h20):.2f}x the gross edge, so "
+              f"the net is {r5.edge_net_h20:+.4f} ATR. THE 5m EDGE EXISTS AND THE TOLL "
+              "EATS IT WHOLE. Every one of the seventeen assets fails the 5m edge-fade "
+              "leg individually. " + _age_sentence(e34, "5m")
+              + " This is consistent with what R0 already "
+              "confirmed from the filed grid (every pooled 5m class NET NEGATIVE at H20 "
+              "at frozen SCALE 3.0; DIE n = 32,733 NET -0.8196 ATR), and this build "
+              "reproduces that DIE row independently from the event walk to "
+              f"{float(a34[(a34.asset == POOL_ALL) & (a34.lens == '5m') & (a34.scale_kind == 'frozen3.0') & (a34.era == ERA_ALL) & (a34.horizon == 'H20') & (a34.variant == ACC_DIE)]['net'].iloc[0]):+.6f}. "
+              "**P-BRK-S1 MUST CARRY THIS.**")
+            A("")
+
+
+def _age_sentence(e34, lens: str) -> str:
+    """The age profile STATED FROM THE DATA, never asserted: monotonicity is
+    CHECKED here rather than claimed in prose.
+
+    READ FROM THE FILED MARGIN ROWS [LEAN R3-d].  The previous version of this
+    function averaged the per-cell `net`s, and that weighted mean put a
+    spurious tick UP at the 5m 40-80 bucket which turned `mono` False and made
+    the digest print 'NOT at every step' about a series that decreases at every
+    step on the raw terms [review 2026-09-22, finding 1].  A median of a union
+    is not a function of the parts' medians [census lean C-h]; it is read, not
+    reconstructed."""
+    if e34 is None:
+        return ""
+    try:
+        m = [edge_margin(e34, lens, dec=EDGE_DEC_ALL, age=k) for k in AGE_LABELS]
+    except SystemExit:
+        return ""
+    v = [float(r["net"]) for r in m]
+    if not v or not all(np.isfinite(v)):
+        return ""
+    mono = all(v[i + 1] <= v[i] for i in range(len(v) - 1))
+    return (f"Across the six range-age buckets the near-edge NET runs "
+            + " -> ".join(f"{x:+.4f}" for x in v)
+            + f": negative in {sum(1 for x in v if x < 0)} of {len(v)} buckets, "
+            + (f"worst in the oldest ({min(v):+.4f}) and best in the youngest "
+               f"({max(v):+.4f})" if v[0] == max(v) and v[-1] == min(v)
+               else f"worst {min(v):+.4f}, best {max(v):+.4f}")
+            + ", and "
+            + ("DECREASING AT EVERY STEP — the edge fades with range age."
+               if mono else
+               "decreasing overall but NOT at every step (the fade is a trend, "
+               "not a monotone law, and is not claimed as one).")) 
+
+
+def _r34_or_none(root: Path, name: str):
+    """A [Q-R3]/[Q-R4] table if it is filed, else None — the digest says the
+    clause is UNBUILT rather than printing a gate that was never measured."""
+    p = root / f"{name}.parquet"
+    return pd.read_parquet(p) if p.exists() else None
+
+
 def digest(root: Path) -> Path:
     """CENSUS_R_DIGEST.md — Tier-E wording only, no verdict language, and the
     LAW 4 + R1 collar enforced by printable() on every row it writes."""
@@ -2123,6 +3683,8 @@ def digest(root: Path) -> Path:
     for x in LEANS:
         A(f"- {x}")
     A("")
+
+    _digest_r34(root, A)
 
     # ── 1 · coverage / density / life ─────────────────────────────────────
     A("## 1 · COVERAGE · CONFIRMED-RANGE DENSITY · MEAN LIFE — per asset, per lens")
@@ -2430,6 +3992,10 @@ def main() -> int:
     ap.add_argument("--tune", default=None, choices=list(TUNE_LENSES),
                     help="run the R1 hold-pin tuning on this lens and file it "
                          "(TUNING-ERA ONLY; files no census cell)")
+    ap.add_argument("--r34", action="store_true",
+                    help="build [Q-R4] the acceptance head-to-head and [Q-R3] "
+                         "height-vs-toll + the edge-fade leg, from the census's "
+                         "FILED calibrated SCALE and toll bps (LEDGER.md:834/:835)")
     ap.add_argument("--digest", action="store_true",
                     help="write CENSUS_R_DIGEST.md from the FILED tables (run after the "
                          "census and both null variants have landed); computes nothing")
@@ -2461,6 +4027,13 @@ def main() -> int:
     log(f"  {COLLAR_5M_RETEST}")
     if a.tune:
         run_tuning(root, assets, a.tune)
+        return 0
+    if a.r34:
+        for x in LEANS_R34:
+            log(f"  {x}")
+        man = build_r34(root, assets, lenses, kinds, label)
+        log(f"\n  [Q-R3/Q-R4] manifest -> {root / 'R34_MANIFEST.json'}")
+        log(f"  PROMOTED: {man['promoted']}")
         return 0
     if a.digest:
         p = digest(root)

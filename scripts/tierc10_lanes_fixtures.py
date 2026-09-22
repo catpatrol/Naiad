@@ -72,6 +72,9 @@ LANES_OUT = TP.OUT / "lanes"
 MS_4H, MS_5M, N5 = LN.MS_4H, LN.MS_5M, LN.N_5M_PER_4H
 SEED = LN.SEED                                  # 20260921, threaded explicitly
 
+_SELF = sys.modules[__name__]   # so a break leg can plant a wrong into
+#                                 THIS module's own stand-ins, the same
+#                                 way `mutated` plants one into LN
 T: list[str] = []
 RESULTS: dict[str, bool] = {}
 NOT_RUN: dict[str, str] = {}
@@ -317,11 +320,21 @@ def base_signal(side: str, om, h, l) -> LN.SpringSignal:
 # THE BE TAPE.  The four bars after the entry are authored in units of R, so
 # the known answers are stated in R and not in prices that depend on an ATR.
 BE_SYM = "SYN-BE-4H"            # the BE and MONO tapes share this symbol
+BE_SYM_TOP = "SYN-BE-TOP-4H"    # its MIRROR: the same rows, ridden SHORT
+BE_SYM_OF = {"bottom": BE_SYM, "top": BE_SYM_TOP}
 SPR_SYM = {"bottom": "SYN-SPR-BOT-4H", "top": "SYN-SPR-TOP-4H"}
 
 
-def be_tape(rows) -> tuple:
-    """The bottom spring base + `rows` of (high, low, close) offsets in R.
+def be_tape(rows, side: str = "bottom") -> tuple:
+    """The spring base + `rows` of (favourable, adverse, close) offsets in R.
+
+    `side="bottom"` is the LONG tape every leg written before 2026-09-22
+    rides, and its arithmetic is UNCHANGED (`d == 1` collapses every term
+    below to what was there before), which is why those legs' transcript
+    lines are byte-identical across this edit.  `side="top"` is the MIRROR:
+    the same rows, read as a SHORT — the favourable offset becomes the bar's
+    LOW and the adverse offset its HIGH — so one authored row set proves both
+    directions instead of two hand-tuned ones.
 
     R is NOT known before the base exists (it comes from the sweep extreme
     and the ATR at the reclaim bar, neither of which any later bar can move),
@@ -330,20 +343,21 @@ def be_tape(rows) -> tuple:
     downstream of bar `BASE_BARS + 3` can change `entry`, `stop` or `R`, and
     the real leg asserts exactly that by re-measuring them on the full tape.
     """
-    o, h, l, c = spring_base("bottom")
-    st, om = install_frame(BE_SYM, o, h, l, c)
+    sym, d = BE_SYM_OF[side], (1 if side == "bottom" else -1)
+    o, h, l, c = spring_base(side)
+    st, om = install_frame(sym, o, h, l, c)
     f = st["f"]
     i = BASE_BARS + 3
-    sig = base_signal("bottom", om, h, l)
+    sig = base_signal(side, om, h, l)
     e, atr = float(f.c[i]), float(f.atr[i])
     stp = RC.spring_stop(sig, e, atr, LN.Card().entry_rail_atr)
     R = float(stp.r_dist)
     for hh, ll, cc in rows:
-        o.append(e + cc * R)
-        h.append(e + hh * R)
-        l.append(e + ll * R)
-        c.append(e + cc * R)
-    st, om = install_frame(BE_SYM, o, h, l, c)
+        o.append(e + d * cc * R)
+        h.append(e + (hh * R if d == 1 else -ll * R))
+        l.append(e + (ll * R if d == 1 else -hh * R))
+        c.append(e + d * cc * R)
+    st, om = install_frame(sym, o, h, l, c)
     return st, om, np.asarray(h), np.asarray(l), np.asarray(c), sig, e, R, stp
 
 
@@ -749,22 +763,71 @@ LATCH_ROWS = ((0.20, -0.55, -0.45),      # 364
               (2.05, 0.15, 1.20),        # 369 — the BE latch at 2 R, NO dip
               (1.30, 0.00, 0.10),        # 370 — dips EXACTLY to entry
               (0.40, 0.20, 0.30), (0.40, 0.20, 0.30))
+# NOTOUCH_ROWS is A_ROWS with bar 369's low lifted to +0.50 R — ABOVE the
+# ratchet's +0.4122 R — so that bar prints the latch and touches NOTHING.
+NOTOUCH_ROWS = tuple(list(MONO_ROWS)[:5] + [(2.05, 0.50, 1.20)]
+                     + list(MONO_ROWS)[6:])
 A_LATCH, L_LATCH = BASE_BARS + 9, BASE_BARS + 9      # bar 369, both tapes
 
 
-def latch_ride(rows, be_r):
-    """One synthetic campaign on `rows`, children DEFAULT (the parent's two
-    extremes in child 0), floor at `be_r` (None = OFF)."""
-    st, om, h, l, c, sig, e, R, stp = be_tape(rows)
+def latch_ride(rows, be_r, side: str = "bottom", plan_kids=None,
+               latch_bar: int | None = None):
+    """One synthetic campaign on `rows`, floor at `be_r` (None = OFF).
+
+    With `plan_kids` None the children are DEFAULT (the parent's two extremes
+    both in child 0, so the latch bar's order is a TIE if it dips at all and
+    `plus1r_first` if it does not) — which is what every leg written before
+    2026-09-22 asked for, and this call is byte-identical to that one.  With
+    `plan_kids` given, that bar's 48 children are authored by hand, which is
+    the only way to put the +1R print BEFORE the dip.
+    """
+    st, om, h, l, c, sig, e, R, stp = be_tape(rows, side)
+    sym = BE_SYM_OF[side]
+    j = A_LATCH if latch_bar is None else int(latch_bar)
+    plan = ({j: plan_kids(float(h[j]), float(l[j]), float(c[j]))}
+            if plan_kids else {})
     old = LN._FIVE_SOURCE
-    LN._FIVE_SOURCE = five_source(om, h, l, c, {})
+    LN._FIVE_SOURCE = five_source(om, h, l, c, plan)
     try:
         card = LN.Card(name="syn-latch", lane="spring", be_floor_after_r=be_r)
-        _, tr = LN.replay10(BE_SYM, card, T9.V6_ROLES, int(om[0]),
+        _, tr = LN.replay10(sym, card, T9.V6_ROLES, int(om[0]),
                             int(om[-1]) + MS_4H - 1, springs=[sig])
     finally:
         LN._FIVE_SOURCE = old
-    return tr, {"e": e, "R": R, "stp": stp, "f": st["f"], "om": om}
+    return tr, {"e": e, "R": R, "stp": stp, "f": st["f"], "om": om,
+                "sym": sym, "d": 1 if side == "bottom" else -1,
+                "h": h, "l": l, "c": c}
+
+
+# ── THE BAR NO LEG DROVE [R0 2026-09-22] ─────────────────────────────────────
+# A_ROWS' latch bar prints +2.05 R and bottoms at +0.15 R — it NEVER reaches
+# entry — so `be_latch_decision` answers `old_stop` and the FILL half of the
+# branch is never entered.  DIP_ROWS is A_ROWS with that one low carried
+# THROUGH entry to -0.05 R: the bar now prints the latch AND dips to entry,
+# over a ratchet already standing at +0.4122 R.  The tape cannot get from
+# +2.05 R down to entry without crossing +0.4122 R, so the honest exit is the
+# ratcheted stop — and the pre-repair fill branch paid entry.
+DIP_ROWS = tuple(list(MONO_ROWS)[:5] + [(2.05, -0.05, 1.20)]
+                 + list(MONO_ROWS)[6:])
+
+
+def print_then_dip(d: int):
+    """48 children with the FAVOURABLE extreme at child 3 and the ADVERSE
+    extreme at child 10 — the +1R print FIRST, the dip to entry AFTER, which
+    is the one shape that routes to the fill branch.
+
+    For a long the favourable extreme is the bar's HIGH, for a short its LOW,
+    so the two children swap: the plan is written from the POSITION's side,
+    never from the tape's."""
+    return (lambda h, l, c: kids(h, l, c, i_hi=3, i_lo=10)) if d == 1 \
+        else (lambda h, l, c: kids(h, l, c, i_hi=10, i_lo=3))
+
+
+def dip_then_print(d: int):
+    """The CONTROL plan: the same bar with the two children SWAPPED, so the
+    walk answers `dip_first` and the OLD_STOP branch decides it instead."""
+    return (lambda h, l, c: kids(h, l, c, i_hi=10, i_lo=3)) if d == 1 \
+        else (lambda h, l, c: kids(h, l, c, i_hi=3, i_lo=10))
 
 
 def _latch_checks() -> tuple:
@@ -813,6 +876,43 @@ def _latch_checks() -> tuple:
                  f"one: ratchet_exit OFF={a.ratchet_exit} ON={b.ratchet_exit}"
                  f", be_bound_at_exit={b.be_bound_at_exit}")
 
+    # ── 1b · A LATCH BAR THAT TOUCHES NOTHING ────────────────────────────
+    # NOTOUCH_ROWS prints the latch at +2.05 R and bottoms at +0.50 R — above
+    # the ratchet's +0.4122 R — so the bar dips to neither entry NOR the
+    # stop and the honest ride simply CONTINUES.  It is here because the
+    # repaired `be_latch_fill` makes a wrongly-FILLed no-dip bar harmless
+    # wherever the bar pierced the stop anyway (both answers price the same
+    # effective stop); this tape is the one where it is NOT harmless, and it
+    # is what keeps the `no dip called a FILL` break leg honest at 2.0.
+    for side, dd in (("bottom", 1), ("top", -1)):
+        noff, cno = latch_ride(NOTOUCH_ROWS, None, side)
+        non, cn = latch_ride(NOTOUCH_ROWS, 2.0, side)
+        if not (len(noff) == len(non) == 1):
+            ok = False
+            lines.append(f"[BAD] {side} no-touch: campaign counts "
+                         f"{len(noff)}/{len(non)}")
+            continue
+        m, nn = noff[0], non[0]
+        en, Rn = cn["e"], cn["R"]
+        lo_r = (float(cn["l" if dd == 1 else "h"][A_LATCH]) - en) * dd / Rn
+        st_r = (float(nn.stop_path[A_LATCH - int(nn.entry_i) - 1]) - en) * dd / Rn
+        g = (nn.be_bar == A_LATCH and nn.be_order == "plus1r_first"
+             and lo_r > st_r + 1e-9 and lo_r > 1e-9
+             and m.exit_i == nn.exit_i and m.exit_reason == nn.exit_reason
+             and abs(float(m.exit_px) - float(nn.exit_px)) <= 1e-12
+             and nn.exit_i > A_LATCH)
+        ok &= g
+        lines.append(f"[{'OK ' if g else 'BAD'}] {side} A LATCH BAR THAT "
+                     f"TOUCHES NOTHING: bar {A_LATCH} prints the 2 R latch, "
+                     f"its adverse extreme stops at {lo_r:+.4f} R ABOVE both "
+                     f"entry and the ratcheted stop {st_r:+.4f} R, so the "
+                     f"ride CONTINUES — floor OFF ({m.exit_i}, "
+                     f"{m.exit_reason!r}) and floor ON ({nn.exit_i}, "
+                     f"{nn.exit_reason!r}) @ "
+                     f"{(float(nn.exit_px) - en) * dd / Rn:+.4f} R, the same "
+                     f"bar; a bar decided a FILL here would exit a campaign "
+                     f"the tape never stopped out")
+
     # ── 2 · a FLOOR-bound exit with advances already on the record ────────
     foff, cfo = latch_ride(LATCH_ROWS, None)
     fon, cf = latch_ride(LATCH_ROWS, 2.0)
@@ -851,6 +951,108 @@ def _latch_checks() -> tuple:
                  f"the floor OFF exits ({p.exit_i}, {p.exit_reason!r}) @ "
                  f"{(float(p.exit_px) - e2) / R2:+.4f} R — the floor MOVED "
                  f"the answer")
+
+    # ── 3 · THE FILL BRANCH, over a ratchet ABOVE entry, BOTH DIRECTIONS ──
+    # The bar no leg drove until 2026-09-22.  `plus1r_first` WITH a dip on a
+    # latch bar whose ratchet already stands at +0.4122 R: the tape cannot
+    # reach entry without crossing that stop, so the honest exit IS that
+    # stop, and the floor-ON ride must land exactly where the floor-OFF ride
+    # does.  The pre-repair branch paid `entry_px` and fabricated -0.4120 R.
+    for side, dd in (("bottom", 1), ("top", -1)):
+        pk, ck = print_then_dip(dd), dip_then_print(dd)
+        xoff, cxo3 = latch_ride(DIP_ROWS, None, side, pk)
+        xon, cx3 = latch_ride(DIP_ROWS, 2.0, side, pk)
+        xctl, _cc = latch_ride(DIP_ROWS, 2.0, side, ck)
+        if not (len(xoff) == len(xon) == len(xctl) == 1):
+            ok = False
+            lines.append(f"[BAD] {side}: campaign counts {len(xoff)}/"
+                         f"{len(xon)}/{len(xctl)}, expected 1 each")
+            continue
+        u, v, w = xoff[0], xon[0], xctl[0]
+        e3, R3 = cx3["e"], cx3["R"]
+        # NON-VACUITY, asserted at the decision itself: the sequencer really
+        # does answer `plus1r_first` WITH a dip on that bar, so the FILL
+        # branch really is the branch under test.
+        om3, h3, l3 = cx3["om"], cx3["h"], cx3["l"]
+        oldf = LN._FIVE_SOURCE
+        LN._FIVE_SOURCE = five_source(
+            om3, h3, l3, cx3["c"],
+            {A_LATCH: pk(float(h3[A_LATCH]), float(l3[A_LATCH]),
+                         float(cx3["c"][A_LATCH]))})
+        try:
+            seq = LN.be_sequence(cx3["sym"], int(om3[A_LATCH]), dd, e3,
+                                 e3 + dd * 2.0 * R3, float(h3[A_LATCH]),
+                                 float(l3[A_LATCH]))
+        finally:
+            LN._FIVE_SOURCE = oldf
+        dec = LN.be_latch_decision(seq)
+        g = (seq["order"] == "plus1r_first" and seq["dip"]
+             and seq["i_up"] < seq["i_dip"] and dec == LN.BE_LATCH_FILL
+             and v.be_bar == A_LATCH and v.be_order == "plus1r_first")
+        ok &= g
+        lines.append(f"[{'OK ' if g else 'BAD'}] {side} d={dd:+d}: the latch "
+                     f"bar IS a FILL — order {seq['order']!r}, print child "
+                     f"{seq['i_up']} before dip child {seq['i_dip']}, "
+                     f"decision {dec!r}; the checks below drive the FILL "
+                     f"branch and not the old-stop one")
+        ratch = float(v.stop_path[-1])
+        g = (v.exit_i == u.exit_i and v.exit_reason == u.exit_reason
+             and abs(float(v.exit_px) - float(u.exit_px)) <= 1e-12
+             and u.exit_reason == "stop"
+             and (float(u.exit_px) - e3) * dd > 1e-9
+             and abs(float(v.exit_px) - ratch) <= 1e-12
+             and not bool(v.be_exit) and not bool(v.be_bound_at_exit))
+        ok &= g
+        lines.append(f"[{'OK ' if g else 'BAD'}] {side} THE RATCHET IS "
+                     f"HONOURED ON THE LATCH BAR: floor OFF exits "
+                     f"({u.exit_i}, {u.exit_reason!r}) @ "
+                     f"{(float(u.exit_px) - e3) * dd / R3:+.6f} R and floor "
+                     f"ON at 2 R exits ({v.exit_i}, {v.exit_reason!r}) @ "
+                     f"{(float(v.exit_px) - e3) * dd / R3:+.6f} R, which is "
+                     f"its OWN stop_path tail "
+                     f"{(ratch - e3) * dd / R3:+.6f} R — be_exit="
+                     f"{v.be_exit}, be_bound_at_exit={v.be_bound_at_exit}")
+        g = (abs(float(v.net_r) - float(u.net_r)) <= 1e-12
+             and abs(float(v.mfe_r) - float(u.mfe_r)) <= 1e-12
+             and int(v.bars_held) == int(u.bars_held))
+        ok &= g
+        lines.append(f"[{'OK ' if g else 'BAD'}] {side} and the ACCOUNTING "
+                     f"agrees, not just the exit: net_r ON "
+                     f"{float(v.net_r):+.6f} vs OFF {float(u.net_r):+.6f}, "
+                     f"mfe_r {float(v.mfe_r):+.6f} vs "
+                     f"{float(u.mfe_r):+.6f}, bars_held {v.bars_held} vs "
+                     f"{u.bars_held} — the pre-repair branch fabricated "
+                     f"{(e3 - float(u.exit_px)) * dd / R3:+.6f} R here")
+        g = (w.be_order == "dip_first" and w.exit_i == v.exit_i
+             and w.exit_reason == v.exit_reason
+             and abs(float(w.exit_px) - float(v.exit_px)) <= 1e-12
+             and abs(float(w.net_r) - float(v.net_r)) <= 1e-12)
+        ok &= g
+        lines.append(f"[{'OK ' if g else 'BAD'}] {side} AND THE 5m ORDER NO "
+                     f"LONGER DECIDES IT: the same bar with the two children "
+                     f"SWAPPED answers {w.be_order!r} and exits ({w.exit_i}, "
+                     f"{w.exit_reason!r}) @ "
+                     f"{(float(w.exit_px) - e3) * dd / R3:+.6f} R — the same "
+                     f"exit, because a tape that must cross the stop to "
+                     f"reach entry crosses it whichever order the walk reads")
+        f3 = cx3["f"]
+        i3 = BASE_BARS + 3
+        edge3 = RC.harvest_edge(float(f3.e89[i3]), float(f3.e316[i3]), dd)
+        stack = ((float(f3.e12[i3]) < float(f3.e89[i3]) < float(f3.e316[i3]))
+                 if dd == 1 else
+                 (float(f3.e12[i3]) > float(f3.e89[i3]) > float(f3.e316[i3])))
+        g = (stack and not RC.harvest_outside(float(f3.c[i3]), edge3, dd)
+             and not bool(v.harvested) and not bool(u.harvested)
+             and v.exit_reason in ("stop", LN.BE_REASON)
+             and u.exit_reason in ("stop", LN.BE_REASON))
+        ok &= g
+        lines.append(f"[{'OK ' if g else 'BAD'}] {side} tape INERT over this "
+                     f"ride: EMA stack {float(f3.e12[i3]):.2f} / "
+                     f"{float(f3.e89[i3]):.2f} / {float(f3.e316[i3]):.2f} is "
+                     f"ordered away from every bell a {'long' if dd == 1 else 'short'} "
+                     f"could ring, harvest edge {edge3:.2f} vs close "
+                     f"{float(f3.c[i3]):.2f} never arms, harvested="
+                     f"{bool(v.harvested)}, no bell in either exit reason")
     return ok, lines
 
 
@@ -870,19 +1072,34 @@ def f_be_latch() -> bool:
 
     return prove(
         "F-BE-LATCH",
-        "the latch bar ALWAYS gets a stop decision — a `plus1r_first` that "
-        "never dipped leaves the OLD stop standing, and a floor-bound exit "
-        "is not a ratchet exit (both at be_floor_after_r = 2.0, ABOVE v6's "
-        "trail_arm_after_r)",
+        "the latch bar ALWAYS gets a stop decision AND a stop-honest price — "
+        "a `plus1r_first` that never dipped leaves the OLD stop standing, a "
+        "`plus1r_first` that DID dip fills at the EFFECTIVE stop and not at "
+        "entry (both directions), and a floor-bound exit is not a ratchet "
+        "exit (all at be_floor_after_r = 2.0, ABOVE v6's trail_arm_after_r)",
         "the floor-ON ride does not exit exactly where the floor-OFF ride "
         "does on a latch bar that pierces a ratcheted stop without reaching "
         "entry; the latch never fires (the check would be vacuous); the "
         "registered pin 1.0 rides a different exit, or rides the SAME ride "
         "as 2.0 (the two pins would not be distinguished); a floor-bound "
         "stop exit is labelled ratchet_exit, or a true ratchet exit is not; "
-        "stop_advanced_atr stops counting the floor's lift; or the floor "
-        "does not move the answer at all.",
-        [("a `plus1r_first` with NO dip called a FILL",
+        "stop_advanced_atr stops counting the floor's lift; the floor does "
+        "not move the answer at all; a latch bar that touches NEITHER entry "
+        "NOR the ratcheted stop fails to ride on, or rides on differently "
+        "with the floor ON than with it OFF; OR, on a latch bar that DOES dip to "
+        "entry over a ratchet standing above it, the sequencer does not "
+        "answer `plus1r_first` with a dip (the fill branch would not be "
+        "under test), the floor-ON ride exits anywhere but the floor-OFF "
+        "ride's bar / price / reason / net_r / mfe_r, the exit price is not "
+        "the ride's own stop_path tail, the same bar with its two children "
+        "SWAPPED exits somewhere else, or the synthetic tape turns out to "
+        "ring a bell or arm the harvest in either direction.",
+        [("the latch bar's fill priced at `entry_px` UNCONDITIONALLY — the "
+          "code of record until 2026-09-22, and the blocking defect itself",
+          mutated(LN, "be_latch_fill",
+                  lambda stop, entry_px, d: (float(entry_px), LN.BE_REASON),
+                  _latch_checks)),
+         ("a `plus1r_first` with NO dip called a FILL",
           mutated(LN, "be_latch_decision",
                   lambda seq: (LN.BE_LATCH_FILL
                                if seq["order"] == "plus1r_first"
@@ -902,6 +1119,398 @@ def f_be_latch() -> bool:
           mutated(LN, "apply_floor", lambda s, fl, d: float(s),
                   _latch_checks))],
         _latch_checks)
+
+
+# ═════ F-BE-NOWORSE · a stop-class exit is never worse than its own stop
+# THE CHEAPEST INVARIANT IN THE FILE, AND IT WOULD HAVE CAUGHT THE DEFECT.
+# `stop_path[-1]` is the stop standing at the START of the exit bar — the
+# ratchet may advance again later in the bar, but the stop TEST runs before
+# that, so at the moment of a stop-class exit the two are the same number.  A
+# campaign may therefore exit AT that stop or BETTER (the floor can only
+# raise it), never WORSE.  The pre-repair fill branch exited at +0.000000 R
+# with `stop_path[-1]` at +0.412163 R and no leg looked.
+NOWORSE_CASES = (
+    ("BE_ROWS · dip-after · pin 1.0", BE_ROWS, 1.0, 3, 10, LATCH),
+    ("BE_ROWS · dip-before · pin 1.0", BE_ROWS, 1.0, 10, 3, LATCH),
+    ("BE_ROWS · tie · pin 1.0", BE_ROWS, 1.0, 7, 7, LATCH),
+    ("MONO_ROWS · pin 1.0", MONO_ROWS, 1.0, None, None, LATCH),
+    ("A_ROWS · no dip · pin 2.0", A_ROWS, 2.0, None, None, A_LATCH),
+    ("LATCH_ROWS · floor-bound · pin 2.0", LATCH_ROWS, 2.0, None, None,
+     L_LATCH),
+    ("DIP_ROWS · dip over a ratchet · pin 2.0", DIP_ROWS, 2.0, 3, 10,
+     A_LATCH),
+    ("DIP_ROWS · dip over a ratchet · floor OFF", DIP_ROWS, None, 3, 10,
+     A_LATCH),
+)
+
+
+def _noworse_rides() -> list:
+    """Every ride in NOWORSE_CASES, in BOTH directions.  WHOLE: no sampling,
+    no top-N — the list is the grid, and the count is printed."""
+    out = []
+    for name, rows, be_r, i_hi, i_lo, bar in NOWORSE_CASES:
+        for side, dd in (("bottom", 1), ("top", -1)):
+            if i_hi is None:
+                pk = None
+            elif dd == 1:
+                pk = (lambda h, l, c, a=i_hi, b=i_lo:
+                      kids(h, l, c, i_hi=a, i_lo=b))
+            else:
+                pk = (lambda h, l, c, a=i_lo, b=i_hi:
+                      kids(h, l, c, i_hi=a, i_lo=b))
+            tr, cx = latch_ride(rows, be_r, side, pk, latch_bar=bar)
+            for t in tr:
+                out.append((f"{name} · {side}", dd, t, cx))
+    return out
+
+
+def _noworse_checks() -> tuple:
+    rides = _noworse_rides()
+    lines, ok = [], True
+    stopclass = [(n, dd, t, cx) for n, dd, t, cx in rides
+                 if t.exit_reason in ("stop", LN.BE_REASON)]
+    g = len(rides) == 2 * len(NOWORSE_CASES) and len(stopclass) >= 12
+    ok &= g
+    lines.append(f"[{'OK ' if g else 'BAD'}] the grid is WHOLE: "
+                 f"{len(NOWORSE_CASES)} authored cases x 2 directions = "
+                 f"{len(rides)} campaigns, of which {len(stopclass)} exit "
+                 f"stop-class (the invariant would be vacuous under ~12)")
+    worst, worst_name = float("inf"), ""
+    for n, dd, t, cx in stopclass:
+        R = cx["R"]
+        slack = (float(t.exit_px) - float(t.stop_path[-1])) * dd / R
+        if slack < worst:
+            worst, worst_name = slack, n
+        g = slack >= -1e-12
+        ok &= g
+        if not g:
+            lines.append(f"[BAD] {n}: exit ({t.exit_i}, {t.exit_reason!r}) "
+                         f"@ {(float(t.exit_px) - cx['e']) * dd / R:+.6f} R "
+                         f"is {slack:+.6f} R WORSE than its own stop_path "
+                         f"tail {(float(t.stop_path[-1]) - cx['e']) * dd / R:+.6f} R")
+    g = worst >= -1e-12
+    ok &= g
+    lines.append(f"[{'OK ' if g else 'BAD'}] EVERY stop-class exit is at or "
+                 f"better than `stop_path[-1]` for its position: worst slack "
+                 f"{worst:+.6f} R on {worst_name!r} (>= 0 required; a "
+                 f"negative number is money the tape had already taken away)")
+    # THE SECOND HALF, so the first cannot be satisfied by a floor that never
+    # binds: at least one ride must exit STRICTLY BETTER than its own tail —
+    # otherwise the invariant is an equality in disguise and a `>=` would
+    # never be tested.
+    strict = [(n, (float(t.exit_px) - float(t.stop_path[-1])) * dd / cx["R"])
+              for n, dd, t, cx in stopclass
+              if (float(t.exit_px) - float(t.stop_path[-1])) * dd > 1e-9]
+    g = len(strict) >= 2
+    ok &= g
+    lines.append(f"[{'OK ' if g else 'BAD'}] and {len(strict)} of them exit "
+                 f"STRICTLY BETTER than the tail (the floor lifting the "
+                 f"latch bar's own fill), so the bound is a real `>=` and "
+                 f"not an equality wearing one: "
+                 f"{[(n, round(v, 6)) for n, v in strict[:3]]}")
+    return ok, lines
+
+
+def f_be_noworse() -> bool:
+    return prove(
+        "F-BE-NOWORSE",
+        "a stop-class exit is NEVER worse for the position than the stop "
+        "already on its own `stop_path` — every case, both directions",
+        "any stop-class exit prices worse than `stop_path[-1]` for its "
+        "position; fewer than twelve of the authored campaigns exit "
+        "stop-class (the invariant would be vacuous); or none of them exits "
+        "STRICTLY better than its own tail (the bound would be an equality "
+        "in disguise and the `>=` would never be exercised).",
+        [("a WORSE fill planted in the latch bar (one price unit against the "
+          "position, below the stop it already holds)",
+          mutated(LN, "be_latch_fill",
+                  lambda stop, entry_px, d: (float(stop) - d * 1.0, "stop"),
+                  _noworse_checks)),
+         ("the latch bar's fill priced at `entry_px` unconditionally — the "
+          "pre-repair code, which is exactly a worse-than-stop fill whenever "
+          "the ratchet stands above entry",
+          mutated(LN, "be_latch_fill",
+                  lambda stop, entry_px, d: (float(entry_px), LN.BE_REASON),
+                  _noworse_checks))],
+        _noworse_checks)
+
+
+# ══ F-BE-IDENT · the repair is BYTE-IDENTICAL at the registered pin 1.0
+# THE SAFETY PROPERTY OF THE REPAIR, PROVEN AND NOT ASSERTED.  At
+# `be_floor_after_r = 1.0` — which is v6's own `trail_arm_after_r` — no
+# advance can precede the latch, so on the latch bar `stop` is still `stop0`
+# (adverse) and `apply_floor(stop0, entry_px, d)` returns `entry_px`.  The
+# repaired branch and the pre-repair branch therefore compute the SAME number
+# there, and the whole scenario set must digest the same both ways.  Above
+# the pin they must DIFFER, or the repair changed nothing and the identity is
+# the identity of a dead branch.
+PRE_REPAIR_FILL = (lambda stop, entry_px, d: (float(entry_px), LN.BE_REASON))
+
+IDENT_PIN_CASES = (
+    ("BE_ROWS · dip-after", BE_ROWS, 3, 10, LATCH),
+    ("BE_ROWS · dip-before", BE_ROWS, 10, 3, LATCH),
+    ("BE_ROWS · tie", BE_ROWS, 7, 7, LATCH),
+    ("MONO_ROWS", MONO_ROWS, None, None, LATCH),
+    ("A_ROWS", A_ROWS, None, None, A_LATCH),
+    ("LATCH_ROWS", LATCH_ROWS, None, None, L_LATCH),
+    ("DIP_ROWS", DIP_ROWS, 3, 10, A_LATCH),
+)
+IDENT_FIELDS = ("exit_i", "exit_reason", "exit_px", "net_r", "gross_r",
+                "fee_r", "funding_r", "mfe_r", "mae_r", "bars_held",
+                "final_stop_px", "stop_advanced_atr", "ratchet_exit",
+                "be_on", "be_reached", "be_bar", "be_order", "be_exit",
+                "be_bound_at_exit", "n_be_tie", "n_be_mismatch")
+
+
+def _ident_digest(be_r: float) -> str:
+    """The whole scenario set at one pin, both directions, digested."""
+    rows = []
+    for name, rows_, i_hi, i_lo, bar in IDENT_PIN_CASES:
+        for side, dd in (("bottom", 1), ("top", -1)):
+            if i_hi is None:
+                pk = None
+            elif dd == 1:
+                pk = (lambda h, l, c, a=i_hi, b=i_lo:
+                      kids(h, l, c, i_hi=a, i_lo=b))
+            else:
+                pk = (lambda h, l, c, a=i_lo, b=i_hi:
+                      kids(h, l, c, i_hi=a, i_lo=b))
+            tr, _cx = latch_ride(rows_, be_r, side, pk, latch_bar=bar)
+            for t in tr:
+                rows.append([name, side, be_r]
+                            + [(round(float(getattr(t, k)), 12)
+                                if isinstance(getattr(t, k), float)
+                                else getattr(t, k)) for k in IDENT_FIELDS]
+                            + [[round(float(x), 12) for x in t.stop_path]])
+    return _digest(rows)
+
+
+def _ident_checks() -> tuple:
+    lines, ok = [], True
+    old = LN.be_latch_fill
+    try:
+        a1 = _ident_digest(1.0)
+        a2 = _ident_digest(2.0)
+        LN.be_latch_fill = PRE_REPAIR_FILL
+        b1 = _ident_digest(1.0)
+        b2 = _ident_digest(2.0)
+    finally:
+        LN.be_latch_fill = old
+    g = a1 == b1
+    ok &= g
+    lines.append(f"[{'OK ' if g else 'BAD'}] AT THE REGISTERED PIN 1.0 THE "
+                 f"REPAIR IS BYTE-IDENTICAL: repaired {a1[:16]} / "
+                 f"pre-repair {b1[:16]} over {len(IDENT_PIN_CASES)} tapes x "
+                 f"2 directions x {len(IDENT_FIELDS)} journal fields + the "
+                 f"whole stop_path")
+    g = a2 != b2
+    ok &= g
+    lines.append(f"[{'OK ' if g else 'BAD'}] AND AT 2.0 THEY DIFFER, so the "
+                 f"identity above is not the identity of a dead branch: "
+                 f"repaired {a2[:16]} / pre-repair {b2[:16]}")
+    # THE STRUCTURAL REASON, asserted over the WHOLE set rather than
+    # observed on the exits: at pin 1.0 the stop standing at the START of
+    # every latch bar is still `stop0` — no advance ever precedes the latch,
+    # because 1.0 IS v6's `trail_arm_after_r`.  That is why `apply_floor` can
+    # only return entry there, and it is checked on every campaign, not only
+    # on the ones that happened to fill.
+    n_latch, n_moved, n_fill, n_bad = 0, 0, 0, 0
+    for name, rows_, i_hi, i_lo, bar in IDENT_PIN_CASES:
+        for side, dd in (("bottom", 1), ("top", -1)):
+            if i_hi is None:
+                pk = None
+            elif dd == 1:
+                pk = (lambda h, l, c, a=i_hi, b=i_lo:
+                      kids(h, l, c, i_hi=a, i_lo=b))
+            else:
+                pk = (lambda h, l, c, a=i_lo, b=i_hi:
+                      kids(h, l, c, i_hi=a, i_lo=b))
+            tr, cx = latch_ride(rows_, 1.0, side, pk, latch_bar=bar)
+            for t in tr:
+                if t.be_bar is not None:
+                    n_latch += 1
+                    k = int(t.be_bar) - int(t.entry_i) - 1
+                    at_latch = float(t.stop_path[k]) if 0 <= k < len(
+                        t.stop_path) else float("nan")
+                    n_moved += int(abs(at_latch - float(t.stop_px)) > 1e-12)
+                if t.exit_reason == LN.BE_REASON:
+                    n_fill += 1
+                    n_bad += int(abs(float(t.exit_px)
+                                     - float(cx["e"])) > 1e-12)
+    g = n_latch >= 12 and n_moved == 0 and n_fill >= 2 and n_bad == 0
+    ok &= g
+    lines.append(f"[{'OK ' if g else 'BAD'}] THE REASON, over the whole set: "
+                 f"{n_latch} campaigns latched at pin 1.0 and in {n_moved} "
+                 f"of them had the ratchet moved the stop off stop0 before "
+                 f"the latch bar (0 required — 1.0 == v6's "
+                 f"trail_arm_after_r, so no advance can precede the latch "
+                 f"and apply_floor can only return entry); the "
+                 f"{n_fill} `be_floor` fills that resulted all landed "
+                 f"EXACTLY at entry ({n_bad} did not)")
+    # and the CLASSIC5 control, floor OFF: the branch is dead there, so the
+    # repair cannot have touched the one real-data book this module rides.
+    b = books()
+    j1 = TP.journal_frame(LN.run_lane(LN.CARD_TC10_CONTROL, T9.V6_ROLES,
+                                      TP.CLASSIC5, b["lo"], b["hi"]))
+    h1 = hashlib.sha256(j1.to_csv(index=False).encode()).hexdigest()
+    try:
+        LN.be_latch_fill = PRE_REPAIR_FILL
+        j2 = TP.journal_frame(LN.run_lane(LN.CARD_TC10_CONTROL, T9.V6_ROLES,
+                                          TP.CLASSIC5, b["lo"], b["hi"]))
+    finally:
+        LN.be_latch_fill = old
+    h2 = hashlib.sha256(j2.to_csv(index=False).encode()).hexdigest()
+    g = h1 == h2 and len(j1) == len(b["want"]) and len(j1) > 0
+    ok &= g
+    lines.append(f"[{'OK ' if g else 'BAD'}] and the CLASSIC5 CONTROL "
+                 f"journal ({len(j1)} campaigns) is byte-identical both "
+                 f"ways — {h1[:16]} / {h2[:16]} — because with the floor OFF "
+                 f"the branch is dead code")
+    return ok, lines
+
+
+def f_be_ident() -> bool:
+    return prove(
+        "F-BE-IDENT",
+        "the latch-bar repair is BYTE-IDENTICAL to the pre-repair ride at "
+        "the REGISTERED pin be_floor_after_r = 1.0, and DIFFERS at 2.0",
+        "the repaired and pre-repair digests differ at pin 1.0 (the repair "
+        "would have moved the registered ride); they AGREE at 2.0 (the "
+        "repair would be a no-op and the identity above would be the "
+        "identity of a dead branch); any `be_floor` fill at pin 1.0 lands "
+        "anywhere but exactly entry; or the CLASSIC5 control journal moves "
+        "between the two.",
+        [("the PRE-REPAIR stand-in replaced by the REPAIRED function itself "
+          "(the comparison would compare a thing with itself)",
+          mutated(_SELF, "PRE_REPAIR_FILL", LN.be_latch_fill,
+                  _ident_checks)),
+         ("the latch decision forced to `old_stop`, so the fill branch never "
+          "runs at 2.0 either", mutated(LN, "be_latch_decision",
+                                        lambda seq: LN.BE_LATCH_OLD_STOP,
+                                        _ident_checks)),
+         ("the floor neutered (apply_floor returns the ratchet untouched), "
+          "so repaired and pre-repair agree nowhere they should differ",
+          mutated(LN, "apply_floor", lambda s, fl, d: float(s),
+                  _ident_checks))],
+        _ident_checks)
+
+
+# ═══ F-BE-SPEC · the WORDS of record match the LEGS that exist
+# THE HALF OF THE 2026-09-22 FINDING THAT IS NOT CODE.  `LANE_SPEC['P-BE-1']
+# ['latch_bar_totality']` claimed F-BE-LATCH proved the 2.0 ride "exits
+# exactly where the floor-OFF ride does — so a sensitivity run off the
+# registered 1.0 is proven, not assumed", and a builder DECLINED a reviewer's
+# protective HALT on that sentence.  The sentence was false: the leg drove
+# only the OLD_STOP half.  This fixture makes the prose checkable:
+#   · the prose is PINNED BY SHA, so strengthening the words without
+#     re-pinning goes RED;
+#   · every claim in it is listed against the fixture that drives it, and
+#     that fixture must have PASSED in this same run;
+#   · the retracted sentences must not reappear anywhere in LANE_SPEC.
+def _spec_text(spec) -> str:
+    return json.dumps(spec, sort_keys=True, default=str)
+
+
+def _spec_checks() -> tuple:
+    lines, ok = [], True
+    prose = str(LN.LANE_SPEC["P-BE-1"]["latch_bar_totality"])
+    got = hashlib.sha256(prose.encode()).hexdigest()
+    g = got == LN.LATCH_TOTALITY_SHA
+    ok &= g
+    lines.append(f"[{'OK ' if g else 'BAD'}] the prose of record is PINNED: "
+                 f"sha256 {got[:24]}… vs LATCH_TOTALITY_SHA "
+                 f"{str(LN.LATCH_TOTALITY_SHA)[:24]}… ({len(prose)} chars) — "
+                 f"changing the words without re-pinning turns this RED")
+    for phrase, fid in LN.LATCH_TOTALITY_CLAIMS:
+        n = prose.count(phrase)
+        got_res = RESULTS.get(fid)
+        g = (n == 1 and got_res is True)
+        ok &= g
+        lines.append(f"[{'OK ' if g else 'BAD'}] claim {phrase[:46]!r} "
+                     f"appears {n}x (1 required) and is driven by {fid}, "
+                     f"which is "
+                     + ("PASS" if got_res is True else
+                        "FAILED" if got_res is False else
+                        "NOT IN THIS RUN — F-BE-SPEC checks the words "
+                        "against the legs and needs the WHOLE suite"))
+    whole = _spec_text(LN.LANE_SPEC)
+    g = len(LN.LATCH_TOTALITY_RETRACTED) >= 2 and all(
+        isinstance(x, str) and len(x) > 40
+        for x in LN.LATCH_TOTALITY_RETRACTED)
+    ok &= g
+    lines.append(f"[{'OK ' if g else 'BAD'}] the RETRACTION REGISTRY still "
+                 f"holds both halves of the 2026-09-21 sentence "
+                 f"({len(LN.LATCH_TOTALITY_RETRACTED)} entries, >= 2 "
+                 f"required) — an emptied registry would let the false "
+                 f"claim return unnoticed")
+    for retracted in LN.LATCH_TOTALITY_RETRACTED:
+        g = retracted not in whole and retracted not in prose
+        ok &= g
+        lines.append(f"[{'OK ' if g else 'BAD'}] the RETRACTED sentence "
+                     f"{retracted[:52]!r}… appears nowhere in LANE_SPEC")
+    g = ("NOT a sensitivity run" in prose
+         and "nothing here says the 2.0 book equals the 1.0 book on real "
+             "bars" in prose)
+    ok &= g
+    lines.append(f"[{'OK ' if g else 'BAD'}] and the prose DISCLAIMS what it "
+                 f"does not prove, in its own words: it says the four bars "
+                 f"are NOT a sensitivity run and that nothing here equates "
+                 f"the 2.0 and 1.0 books on real bars")
+    named = sorted({fid for _p, fid in LN.LATCH_TOTALITY_CLAIMS})
+    g = len(named) == 3 and set(named) == {"F-BE-LATCH", "F-BE-IDENT",
+                                           "F-BE-NOWORSE"}
+    ok &= g
+    lines.append(f"[{'OK ' if g else 'BAD'}] the claim registry names "
+                 f"exactly the three legs that exist for this branch: "
+                 f"{named}")
+    return ok, lines
+
+
+def f_be_spec() -> bool:
+    strengthened = {k: (dict(v) if isinstance(v, dict) else v)
+                    for k, v in LN.LANE_SPEC.items()}
+    strengthened["P-BE-1"] = dict(LN.LANE_SPEC["P-BE-1"])
+    strengthened["P-BE-1"]["latch_bar_totality"] = (
+        LN.LATCH_TOTALITY + " A sensitivity run off the registered 1.0 is "
+        "therefore proven, not assumed.")
+    restored = {k: (dict(v) if isinstance(v, dict) else v)
+                for k, v in LN.LANE_SPEC.items()}
+    restored["P-BE-1"] = dict(LN.LANE_SPEC["P-BE-1"])
+    restored["P-BE-1"]["latch_bar_totality"] = (
+        "the latch bar's stop slot is TOTAL: `be_latch_decision` maps every "
+        "5m answer onto a fill or the old stop, a third answer HALTs, and "
+        "F-BE-LATCH proves the ride at be_floor_after_r = 2.0 (ABOVE v6's "
+        "trail_arm_after_r 1.0, where the ratchet can precede the latch) "
+        "exits exactly where the floor-OFF ride does — so a sensitivity run "
+        "off the registered 1.0 is proven, not assumed [review 2026-09-21]")
+    return prove(
+        "F-BE-SPEC",
+        "the latch-bar WORDS OF RECORD are pinned by sha, every claim in "
+        "them names a fixture that PASSED in this run, and the retracted "
+        "2026-09-21 sentence cannot return",
+        "the prose's sha does not match LATCH_TOTALITY_SHA (someone "
+        "strengthened the words without re-pinning them beside a leg); any "
+        "claim phrase is missing, duplicated, or names a fixture that did "
+        "not pass in THIS run; either retracted sentence reappears anywhere "
+        "in LANE_SPEC; the prose stops disclaiming the sensitivity run it "
+        "does not perform; or the claim registry names a set of legs other "
+        "than {F-BE-LATCH, F-BE-IDENT, F-BE-NOWORSE}. It also fails on a "
+        "FILTERED run that skips those three legs — the words are checked "
+        "against the legs, so the legs must have run.",
+        [("the prose STRENGTHENED by one sentence, sha not re-pinned (the "
+          "exact move this fixture exists to stop)",
+          mutated(LN, "LANE_SPEC", strengthened, _spec_checks)),
+         ("the FALSE CLAIM OF 2026-09-21 restored verbatim",
+          mutated(LN, "LANE_SPEC", restored, _spec_checks)),
+         ("a claim that names a fixture which does not exist",
+          mutated(LN, "LATCH_TOTALITY_CLAIMS",
+                  tuple(list(LN.LATCH_TOTALITY_CLAIMS)
+                        + [("a third answer HALTs", "F-BE-NOSUCHLEG")]),
+                  _spec_checks)),
+         ("the retraction forgotten (LATCH_TOTALITY_RETRACTED emptied), so "
+          "the false sentence could return unnoticed",
+          mutated(LN, "LATCH_TOTALITY_RETRACTED", (), _spec_checks))],
+        _spec_checks)
 
 
 # ══════════════════════ F-SPR-SYN · a planted deviation-confirm, both sides
@@ -2080,8 +2689,10 @@ def f_det() -> bool:
 
 
 # ═══════════════════════════════════════════════════════ the suite
-LEGS = (f_lanes_off, f_be_seq, f_be_mono, f_be_latch, f_spr_syn, f_spr_build,
-        f_lanes_gate, f_lanes_closure, f_c10_be_harness, f_c10_be, f_det)
+# F-BE-SPEC checks the WORDS against the LEGS, so it runs LAST of the four.
+LEGS = (f_lanes_off, f_be_seq, f_be_mono, f_be_latch, f_be_noworse,
+        f_be_ident, f_be_spec, f_spr_syn, f_spr_build, f_lanes_gate,
+        f_lanes_closure, f_c10_be_harness, f_c10_be, f_det)
 
 
 def main() -> int:
@@ -2099,7 +2710,7 @@ def main() -> int:
                 continue
             leg()
     finally:
-        for s in (BE_SYM, BUILD_SYM, BUILD_SYM + "-SHIFTED",
+        for s in (BE_SYM, BE_SYM_TOP, BUILD_SYM, BUILD_SYM + "-SHIFTED",
                   BUILD_SYM + "-CUT", *SPR_SYM.values()):
             drop_frame(s)
     n = sum(RESULTS.values())
@@ -2114,6 +2725,18 @@ def main() -> int:
         (LANES_OUT / name).write_text(
             f"as_of_last_closed_4h: {meta['last_closed_4h_close']}\n"
             + "\n".join(T) + "\n")
+        # THE STAGE MANIFEST — LAW 1(b)'s on-disk record, and it is written
+        # ONLY after a WHOLE run.  A filtered run files a partial transcript
+        # and a manifest built over a partial transcript would attest a
+        # book that was never ridden [R0 2026-09-22: `lanes/` had no
+        # manifest at all, so clause (b) had nothing to verify against].
+        if not only:
+            q = LN.write_manifest(RESULTS, NOT_RUN)
+            print(f"(build manifest -> {q}: "
+                  f"{hashlib.sha256(q.read_bytes()).hexdigest()[:16]}…)")
+        else:
+            print("(no build_manifest.json: this was a FILTERED run and a "
+                  "manifest may only attest a whole one)")
     except BaseException as e:                              # noqa: BLE001
         print(f"(transcript filing failed, non-fatal: {e})")
     if n != len(RESULTS):

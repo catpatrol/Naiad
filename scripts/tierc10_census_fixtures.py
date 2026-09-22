@@ -67,6 +67,7 @@ Run: NAIAD_CACHE_DIR=~/.cache/naiad/snapshots/tc10_20260921 \\
 from __future__ import annotations
 
 import ast
+import hashlib
 import json
 import os
 import re
@@ -94,6 +95,9 @@ from engine.data import cache_dir                                    # noqa: E40
 import tierc2_rules as R2                                            # noqa: E402
 
 SEED = 20260921
+# --slow: F-C10-ACC re-walks EVERY cell of the per-cell replay ledger instead of
+# the seeded sample.  Stated in the transcript either way, never silent.
+ACC_SLOW = any(a == "--slow" for a in sys.argv[1:])
 PY = str(Path.home() / "venvs" / "naiad" / "bin" / "python")
 say, clock, prove, plants = RFX.say, RFX.clock, RFX.prove, RFX.plants
 
@@ -1943,6 +1947,617 @@ def tune_real():
         if not bad else f"{len(bad)} finding(s): " + "; ".join(bad[:4]))
 
 
+# ═════════════════ F-C10-ACC (Q-R4) · F-C10-HT (Q-R3) — the two absent clauses
+R34_CELL = ("BTCUSDT", "4h")          # a REAL cell, re-walked live by both legs
+
+
+def _r34(name: str) -> pd.DataFrame:
+    p = CROOT / f"{name}.parquet"
+    if not p.exists():
+        raise SystemExit(f"HALT: {p} is not filed — run `tierc10_census.py --r34`")
+    return pd.read_parquet(p)
+
+
+def _law_sha(obj) -> str:
+    return hashlib.sha256(json.dumps(obj, sort_keys=True).encode("utf-8")).hexdigest()
+
+
+def _walk_cell(sym: str = R34_CELL[0], lens: str = R34_CELL[1], kind: str = "frozen3.0"):
+    """The live machine + the live episode walk on one real cell."""
+    tape = C.load_tape(sym, lens)
+    rc = C._cell_receipt(CROOT, sym, lens)
+    scale = (float(C.FROZEN_SCALE) if kind == "frozen3.0"
+             else float(rc["calibrated_scale"]))
+    m = RC.run_v2(tape.d, tape.atr, dict(RC.PINS_V2, SCALE_MULT=scale),
+                  with_micro=False, retests=False)["macro"]
+    w = C._r34_walk(tape, m, RC.macro_pins(scale))
+    return tape, m, w, float(rc["toll_bps"])
+
+
+def _replay_gap(w, m) -> list:
+    truth = [(e["i"], e["rid"], e["side"], e["by"], e["closes"])
+             for e in m["events"] if e["event"] == "breakout-die"]
+    mine = [(e["die_i"], e["rid"], e["side"], e["die_by"], e["max_closes"])
+            for e in w["episodes"] if e["end_kind"] == "die"]
+    return [] if truth == mine else [f"{len(mine)} replayed vs {len(truth)} machine"]
+
+
+
+# ── THE MARGIN / FLOOR HELPERS [review 2026-09-22, findings 1 and 2] ─────────
+def _live_edge(sym: str, lens: str, kind: str = "frozen3.0"):
+    """The RAW edge arrays of ONE real cell, re-walked live — the independent
+    object every margin assertion below is judged against."""
+    tape, m, w, bps = _walk_cell(sym, lens, kind)
+    return C.edge_arrays(tape, w, bps, 0), tape, w
+
+
+def _cellmean(e, lens, asset, kind, era, hz, *, near_only, by):
+    """THE DEFECT, RECONSTRUCTED: the weighted mean of per-cell `net`s that the
+    prior digest published. Kept HERE, in the fixture, as the thing the real
+    leg must prove the filed margins are NOT."""
+    z = e[(e["asset"] == asset) & (e["lens"] == lens) & (e["scale_kind"] == kind)
+          & (e["era"] == era) & (e["horizon"] == hz)
+          & (e["margin"] == C.MARGIN_CELL)]
+    if near_only:
+        z = z[z["is_near_boundary"]]
+    g = z.groupby(by).apply(
+        lambda x: float(np.average(x["net"], weights=x["n"].clip(lower=1))),
+        include_groups=False)
+    return g
+
+
+ACC_SAMPLE_N = 6          # cells re-walked LIVE by F-C10-ACC; --slow does all of them
+
+
+def _replay_sample(man: dict, n: int | None = None) -> list[str]:
+    """THE SEEDED SAMPLE of (asset|lens|kind) cells F-C10-ACC re-walks live.
+    Seeded from SEED so the sample is the same on every run and the leg is
+    deterministic; the WHOLE list under --slow."""
+    keys = sorted(man["replay_by_cell"])
+    if n is None or n >= len(keys):
+        return keys
+    rng = np.random.default_rng(SEED)
+    return [keys[i] for i in sorted(rng.choice(len(keys), size=n, replace=False))]
+
+
+def _replay_live(key: str) -> dict:
+    """Re-walk ONE cell and return the same five fields the build filed for it
+    — computed here from the machine + the walk, never read from a manifest."""
+    sym, lens, kind = key.split("|")
+    tape, m, w, _ = _walk_cell(sym, lens, kind)
+    truth = [(e["i"], e["rid"], e["side"], e["by"], e["closes"])
+             for e in m["events"] if e["event"] == "breakout-die"]
+    mine = [(e["die_i"], e["rid"], e["side"], e["die_by"], e["max_closes"])
+            for e in w["episodes"] if e["end_kind"] == "die"]
+    return {"die": len(truth), "episodes": len(w["episodes"]),
+            "ranges": len(w["ranges"]), "in_range_bars": int(len(w["ir_t"])),
+            "die_i_sha": hashlib.sha256(
+                json.dumps([[int(x[0]), int(x[1]), str(x[2]), str(x[3]), int(x[4])]
+                            for x in truth]).encode()).hexdigest(),
+            "_gap": [] if truth == mine else
+                    [f"{len(mine)} replayed vs {len(truth)} machine"]}
+
+
+def acc_break():
+    """SIX deliberate sabotages of the acceptance head-to-head, ONE AT A TIME."""
+    a = _r34("acceptance_head_to_head")
+
+    def definition_edited():
+        keep = dict(C.ACCEPTANCE_LAW)
+        try:
+            C.ACCEPTANCE_LAW[C.ACC_2C] = keep[C.ACC_2C] + " (edited)"
+            live = _law_sha(C.ACCEPTANCE_LAW)
+            bad = sorted(set(a["acceptance_law_sha"]) - {live})
+            txt = set(a[a["variant"] == C.ACC_2C]["definition"])
+            return ([f"filed law sha {bad[0][:16]} is not the live {live[:16]}"] if bad
+                    else []) + ([f"filed definition is not the live one"]
+                                if txt != {C.ACCEPTANCE_LAW[C.ACC_2C]} else [])
+        finally:
+            C.ACCEPTANCE_LAW.clear()
+            C.ACCEPTANCE_LAW.update(keep)
+
+    def variant_N_edited():
+        keep = dict(C.ACC_N)
+        try:
+            C.ACC_N[C.ACC_2C] = 4                      # "2-close" silently becomes 4
+            tape, m, w, bps = _walk_cell()
+            led = C.acceptance_rows(tape, w, R34_CELL[0], R34_CELL[1], "frozen3.0", bps)
+            got = int(led[(led["variant"] == C.ACC_2C) & led["declared"]].shape[0])
+            f = a[(a["asset"] == R34_CELL[0]) & (a["lens"] == R34_CELL[1])
+                  & (a["scale_kind"] == "frozen3.0") & (a["era"] == C.ERA_ALL)
+                  & (a["horizon"] == "H20") & (a["variant"] == C.ACC_2C)]
+            want = int(f["n_declared"].iloc[0])
+            return [f"2-close re-declares {got}, filed says {want}"] if got != want else []
+        finally:
+            C.ACC_N.clear()
+            C.ACC_N.update(keep)
+
+    def variant_promoted():
+        keep = RC.PINS["BREAK_CONFIRM_N"]
+        try:
+            RC.PINS["BREAK_CONFIRM_N"] = 3             # the pins MOVE = a promotion
+            live = (f"BREAK_CONFIRM_N={RC.PINS['BREAK_CONFIRM_N']} · "
+                    f"BREAK_MARGIN={RC.PINS['BREAK_MARGIN']} — UNCHANGED")
+            bad = sorted(set(a["engine_default_after"]) - {live})
+            return [f"the engine default MOVED: filed {bad[0][:60]!r}"] if bad else []
+        finally:
+            RC.PINS["BREAK_CONFIRM_N"] = keep
+
+    def replay_sabotaged():
+        tape, m, w, _ = _walk_cell()
+        w2 = dict(w, episodes=[e for e in w["episodes"]
+                               if not (e["end_kind"] == "die" and e is w["episodes"][-1])])
+        w2["episodes"] = [e for e in w["episodes"] if e["end_kind"] != "die"][:1] + \
+                         [e for e in w["episodes"] if e["end_kind"] == "die"][:-1]
+        return _replay_gap(w2, m) or []
+
+    def per_cell_log_corrupted():
+        """ONE CELL'S FILED REPLAY LEDGER IS CORRUPTED and the leg must find it
+        by RE-WALKING, not by reading the manifest back to itself
+        [review 2026-09-22, finding 3]. The plant edits a COPY of the manifest
+        dict; nothing on disk is touched."""
+        man = json.loads((CROOT / "R34_MANIFEST.json").read_text())
+        if "replay_by_cell" not in man:
+            return ["VACUOUS: the manifest files no per-cell replay ledger"]
+        sample = _replay_sample(man, ACC_SAMPLE_N)
+        k = sample[0]
+        bad_man = json.loads(json.dumps(man))
+        bad_man["replay_by_cell"][k] = dict(
+            bad_man["replay_by_cell"][k],
+            die=int(bad_man["replay_by_cell"][k]["die"]) + 1,
+            die_i_sha="0" * 64)
+        live = _replay_live(k)
+        f = bad_man["replay_by_cell"][k]
+        found = [f"{fld}: filed {f[fld]!r} != re-walked {live[fld]!r}"
+                 for fld in ("die", "episodes", "ranges", "in_range_bars",
+                             "die_i_sha")
+                 if f[fld] != live[fld]]
+        return found
+
+    def grand_totals_cannot_go_red():
+        """THE TAUTOLOGY, NAMED. `die_machine` and `die_matched` are
+        incremented in lockstep one line after the build's own HALT has
+        already forced truth == mine, so no arrangement of the data can make
+        them differ. The plant tries: it drives the build's own accumulation
+        with a DELIBERATELY UNEQUAL pair and shows the HALT fires first, which
+        is why the equality assertion is worthless as evidence and why this
+        leg no longer rests on it."""
+        truth = [(1, 0, "top", "margin", 3)]
+        mine = [(1, 0, "top", "margin", 4)]           # DIFFERENT, on purpose
+        rep = {"die_machine": 0, "die_matched": 0}
+        halted = False
+        try:
+            if truth != mine:
+                raise SystemExit("HALT (F-C10-ACC-REPLAY): 1 vs 1 events")
+            rep["die_machine"] += len(truth)
+            rep["die_matched"] += len(mine)
+        except SystemExit:
+            halted = True
+        if not halted:
+            return ["the build's HALT did NOT fire on an unequal replay"]
+        if rep["die_machine"] != rep["die_matched"]:
+            return ["the counters diverged — they are not lockstep after all"]
+        return ["`die_machine == die_matched` is TRUE BY CONSTRUCTION (the HALT "
+                "fires first and the two += lines are unreachable when they "
+                "would differ) — it is not evidence and is no longer asserted"]
+
+    return plants([("an acceptance DEFINITION is edited", definition_edited),
+                   ("a variant's N is edited (2-close -> 4-close)", variant_N_edited),
+                   ("a variant is PROMOTED (BREAK_CONFIRM_N moved 8 -> 3)", variant_promoted),
+                   ("the episode replay is sabotaged", replay_sabotaged),
+                   ("ONE CELL'S FILED REPLAY LEDGER IS CORRUPTED (the sampled "
+                    "re-walk must catch it)", per_cell_log_corrupted),
+                   ("the manifest's GRAND TOTAL equality is asserted as evidence",
+                    grand_totals_cannot_go_red)])
+
+
+def acc_real():
+    a = _r34("acceptance_head_to_head")
+    man = json.loads((CROOT / "R34_MANIFEST.json").read_text())
+    bad: list[str] = []
+    com = man["commission"]
+    pools = list(C.pools_for(com["assets"]))
+    want = (len(com["assets"]) + len(pools)) * len(com["lenses"]) \
+        * len(com["scale_kinds"]) * len(C.ACCEPTANCE_VARIANTS) * len(C.ERAS) \
+        * len(C.HORIZONS)
+    if len(a) != want:
+        bad.append(f"grid is {len(a)} rows, the whole declared grid is {want}")
+    if int(a.duplicated(subset=C.ACC_GRID_KEY).sum()):
+        bad.append("the acceptance key is not unique")
+    live = _law_sha(C.ACCEPTANCE_LAW)
+    if set(a["acceptance_law_sha"]) != {live}:
+        bad.append("a row's acceptance_law_sha is not the live law's")
+    # NOTHING WAS PROMOTED: the engine's own pins are where R0 left them
+    if (RC.PINS["BREAK_CONFIRM_N"], RC.PINS["BREAK_MARGIN"]) != (8, 1.5):
+        bad.append(f"the engine default MOVED to {RC.PINS['BREAK_CONFIRM_N']} / "
+                   f"{RC.PINS['BREAK_MARGIN']} — Q-R4 promotes NOTHING")
+    if set(a["engine_default_after"]) != {
+            f"BREAK_CONFIRM_N={RC.PINS['BREAK_CONFIRM_N']} · "
+            f"BREAK_MARGIN={RC.PINS['BREAK_MARGIN']} — UNCHANGED"}:
+        bad.append("a row does not carry the UNCHANGED engine default")
+    # the time-beyond threshold is READ from the frozen pin, never typed
+    if C.TIME_BEYOND_T != RC.PINS["DEV_RETURN_BARS"] or set(a["time_beyond_T"]) != {
+            RC.PINS["DEV_RETURN_BARS"]}:
+        bad.append("time_beyond_T is not RC.PINS['DEV_RETURN_BARS']")
+    src = Path(C.__file__).read_text()
+    if "TIME_BEYOND_T = RC.PINS[\"DEV_RETURN_BARS\"]" not in src:
+        bad.append("TIME_BEYOND_T is no longer READ from the pin")
+    # the five rules share ONE denominator, so their declare-rates compare
+    g = a.groupby(["asset", "lens", "scale_kind", "era", "horizon"])["n_episodes"].nunique()
+    if int((g != 1).sum()):
+        bad.append(f"{int((g != 1).sum())} cell(s) give the five variants different "
+                   "n_episodes — the head-to-head is not like-for-like")
+    # the DIE rule declares exactly the machine's deaths, and is never 'survived'
+    d = a[a["variant"] == C.ACC_DIE]
+    if int((d["n_declared_survived"] != 0).sum()):
+        bad.append("the DIE rule declared on an episode that did not die")
+    if not (d["precision_died"].dropna() == 1.0).all():
+        bad.append("the DIE rule's precision is not 1.0 by construction")
+    # and the live walk still IS the machine, bar for bar
+    tape, m, w, _ = _walk_cell()
+    gap = _replay_gap(w, m)
+    if gap:
+        bad.append(f"the episode replay is not the machine's die log: {gap[0]}")
+    n_die = len([e for e in w["episodes"] if e["end_kind"] == "die"])
+    # THE REPLAY EVIDENCE IS RE-WALKED, NEVER READ BACK OUT OF THE ARTIFACT
+    # UNDER TEST [review 2026-09-22, finding 3].  The manifest's GRAND TOTALS
+    # are equal BY CONSTRUCTION (the build HALTs before the two counters can
+    # diverge), so asserting their equality asserts nothing and this leg does
+    # not.  What it asserts is the FILED PER-CELL LEDGER, against a live
+    # re-walk of a SEEDED SAMPLE of those cells — the whole 102 under --slow.
+    if "replay_by_cell" not in man:
+        bad.append("the manifest files no per-cell replay ledger to verify")
+        sample, walked = [], {}
+    else:
+        allk = sorted(man["replay_by_cell"])
+        if len(allk) != int(man["replay"]["cells"]):
+            bad.append(f"the per-cell ledger has {len(allk)} cells, the build "
+                       f"counted {man['replay']['cells']}")
+        tot_die = sum(int(x["die"]) for x in man["replay_by_cell"].values())
+        tot_eps = sum(int(x["episodes"]) for x in man["replay_by_cell"].values())
+        if tot_die != int(man["replay"]["die_machine"]):
+            bad.append(f"the per-cell die counts sum to {tot_die:,}, the grand "
+                       f"total says {int(man['replay']['die_machine']):,}")
+        if tot_eps != int(man["replay"]["episodes"]):
+            bad.append(f"the per-cell episode counts sum to {tot_eps:,}, the "
+                       f"grand total says {int(man['replay']['episodes']):,}")
+        sample = _replay_sample(man, None if ACC_SLOW else ACC_SAMPLE_N)
+        walked = {}
+        for k in sample:
+            liv = _replay_live(k)
+            walked[k] = liv
+            if liv["_gap"]:
+                bad.append(f"{k}: the replay is not the machine's die log "
+                           f"({liv['_gap'][0]})")
+            f_ = man["replay_by_cell"][k]
+            for fld in ("die", "episodes", "ranges", "in_range_bars", "die_i_sha"):
+                if f_[fld] != liv[fld]:
+                    bad.append(f"{k}: filed {fld} {f_[fld]!r} != re-walked "
+                               f"{liv[fld]!r}")
+    return (not bad, "; ".join(bad) if bad else
+            f"{len(a):,} rows = the whole declared grid · law sha {live[:16]} · "
+            f"{len(C.ACCEPTANCE_VARIANTS)} rules, ONE denominator per cell · engine default "
+            f"BREAK_CONFIRM_N={RC.PINS['BREAK_CONFIRM_N']}/BREAK_MARGIN="
+            f"{RC.PINS['BREAK_MARGIN']} UNCHANGED (nothing promoted) · T="
+            f"{C.TIME_BEYOND_T} READ from DEV_RETURN_BARS · RE-WALKED LIVE HERE: "
+            f"{len(sample)} of {int(man['replay']['cells'])} cells "
+            f"({'ALL — --slow' if ACC_SLOW else f'seeded sample, seed {SEED}'}) — "
+            + "; ".join(f"{k} die {walked[k]['die']:,} eps "
+                        f"{walked[k]['episodes']:,} ranges {walked[k]['ranges']:,}"
+                        for k in sample)
+            + f" — every one bar-for-bar the machine's own breakout-die log, and "
+            f"every field equal to the FILED per-cell ledger including a sha over "
+            f"the (bar, rid, side, cause, closes) tuples. THE BUILD'S GRAND TOTALS "
+            f"({man['replay']['die_matched']:,}/{man['replay']['die_machine']:,} over "
+            f"{man['replay']['cells']} cells, {man['replay']['episodes']:,} episodes) "
+            f"ARE NOT EVIDENCE AND ARE NOT ASSERTED HERE: they are incremented after "
+            f"the build's own HALT has already forced equality. What IS asserted is "
+            f"that the per-cell ledger SUMS to them ({int(man['replay']['cells'])} "
+            f"cells checked) and that the sampled cells re-walk true; "
+            f"{R34_CELL[0]} {R34_CELL[1]} re-walked live: {n_die} deaths, bar for bar")
+
+
+def ht_break():
+    """FOUR deliberate sabotages of the height-vs-toll GATE, ONE AT A TIME."""
+    v = _r34("height_toll_verdict")
+    h = _r34("height_toll")
+
+    def threshold_moved():
+        keep = C.HEIGHT_RATIO_MIN
+        try:
+            C.HEIGHT_RATIO_MIN = 500.0             # the bar moves, silently
+            re = ((h["ratio_median"] >= C.HEIGHT_RATIO_MIN)
+                  & (h["share_ratio_lt_1"] <= C.INFEASIBLE_MAX_SHARE))
+            n = int((re != h["gate_height_pass"]).sum())
+            return [f"{n} filed gate verdict(s) disagree with the live threshold"] if n else []
+        finally:
+            C.HEIGHT_RATIO_MIN = keep
+
+    def gate_law_sha_moved():
+        keep = dict(C.HEIGHT_GATE_LAW)
+        try:
+            C.HEIGHT_GATE_LAW["gate_height"] = "PASS iff someone says so"
+            C.HEIGHT_GATE_LAW_SHA_LIVE = _law_sha(C.HEIGHT_GATE_LAW)
+            k = C.HEIGHT_GATE_LAW_SHA
+            C.HEIGHT_GATE_LAW_SHA = C.HEIGHT_GATE_LAW_SHA_LIVE
+            try:
+                C.height_vs_toll_verdict("4h", root=CROOT)
+                return []
+            except SystemExit as e:
+                return [f"the read HALTED: {str(e)[:90]}"]
+            finally:
+                C.HEIGHT_GATE_LAW_SHA = k
+        finally:
+            C.HEIGHT_GATE_LAW.clear()
+            C.HEIGHT_GATE_LAW.update(keep)
+
+    def read_before_filed():
+        with tempfile.TemporaryDirectory() as td:
+            try:
+                C.height_vs_toll_verdict("4h", root=Path(td))
+                return []
+            except SystemExit as e:
+                return [f"the read HALTED instead of defaulting: {str(e)[:90]}"]
+
+    def conjunction_broken():
+        q = v.copy()
+        q.loc[q.index[0], "verdict_pass"] = True       # a verdict without its gates
+        q.loc[q.index[0], "gate_edge_fade_pass"] = False
+        q.loc[q.index[0], "gate_height_pass"] = False
+        n = int((q["verdict_pass"] != (q["gate_height_pass"] & q["gate_edge_fade_pass"])).sum())
+        return [f"{n} verdict(s) are not the conjunction LEDGER.md:834 orders"] if n else []
+
+    def margin_is_a_mean_of_cells():
+        """THE DEFECT ITSELF, PLANTED: the margin rows are replaced by the
+        weighted mean of the per-cell nets that the prior digest published.
+        The leg must find it — on a real lens, with real numbers, and without
+        being told where to look [review 2026-09-22, finding 1]."""
+        e = _r34("edge_fade")
+        found = []
+        for lens in sorted(set(e["lens"])):
+            filed = [float(C.edge_margin(e, lens, dec=i, age=C.EDGE_AGE_ALL)["net"])
+                     for i in range(10)]
+            mean = _cellmean(e, lens, C.POOL_ALL, "frozen3.0", C.ERA_ALL, "H20",
+                             near_only=False, by="entry_decile")
+            bad = [i for i in range(10)
+                   if not np.isclose(filed[i], float(mean.get(i, np.nan)),
+                                     rtol=0, atol=1e-9)]
+            if bad:
+                i = bad[0]
+                found.append(f"{lens} d{i}: RAW margin {filed[i]:+.4f} vs the "
+                             f"mean-of-cells {float(mean[i]):+.4f} "
+                             f"({len(bad)}/10 deciles differ)")
+        filedm, meanm = {}, {}
+        for lens in sorted(set(e["lens"])):
+            filedm[lens] = [float(C.edge_margin(e, lens, dec=C.EDGE_DEC_ALL,
+                                                age=k)["net"]) for k in C.AGE_LABELS]
+            g = _cellmean(e, lens, C.POOL_ALL, "frozen3.0", C.ERA_ALL, "H20",
+                          near_only=True, by="age_bucket")
+            meanm[lens] = [float(g[k]) for k in C.AGE_LABELS]
+        mono = {k: all(v[i + 1] <= v[i] for i in range(len(v) - 1))
+                for k, v in filedm.items()}
+        mono_mean = {k: all(v[i + 1] <= v[i] for i in range(len(v) - 1))
+                     for k, v in meanm.items()}
+        flip = [k for k in mono if mono[k] != mono_mean[k]]
+        if flip:
+            found.append(f"the monotonicity VERDICT itself flips on {flip}: RAW "
+                         f"{mono[flip[0]]}, mean-of-cells {mono_mean[flip[0]]}")
+        return found
+
+    def floor_moved():
+        """The declared sample floor is moved on the MODULE; the filed
+        verdicts must then disagree with the live law [as F-C10-HT does for
+        the 3.0x threshold]."""
+        keep = (C.HEIGHT_MIN_N_RANGES, C.EDGE_MIN_N_RANGES, C.EDGE_MIN_N_BARS)
+        try:
+            C.HEIGHT_MIN_N_RANGES = 1
+            C.EDGE_MIN_N_RANGES = 1
+            C.EDGE_MIN_N_BARS = 1
+            hp = ((v["n_ranges"] >= C.HEIGHT_MIN_N_RANGES)
+                  & (v["ratio_median"] >= C.HEIGHT_RATIO_MIN)
+                  & (v["share_ratio_lt_1"] <= C.INFEASIBLE_MAX_SHARE))
+            ep = ((v["edge_n_ranges"] >= C.EDGE_MIN_N_RANGES)
+                  & (v["edge_n"] >= C.EDGE_MIN_N_BARS) & (v["edge_net_h20"] > 0))
+            n = int(((hp & ep) != v["verdict_pass"]).sum())
+            return [f"{n} filed verdict(s) disagree with the live floor"] if n else []
+        finally:
+            (C.HEIGHT_MIN_N_RANGES, C.EDGE_MIN_N_RANGES,
+             C.EDGE_MIN_N_BARS) = keep
+
+    def provisional_served():
+        """The read interface must REFUSE a provisional row by default. The
+        plant asks for one by name and proves the default path HALTs."""
+        pr = v[v["provisional"]]
+        if not len(pr):
+            return ["VACUOUS: no provisional row is filed to refuse"]
+        r0 = pr.iloc[0]
+        try:
+            C.height_vs_toll_verdict(r0["lens"], root=CROOT, asset=r0["asset"],
+                                     scale_kind=r0["scale_kind"])
+            return []
+        except SystemExit as ex:
+            got = C.height_vs_toll_verdict(r0["lens"], root=CROOT,
+                                           asset=r0["asset"],
+                                           scale_kind=r0["scale_kind"],
+                                           allow_provisional=True)
+            if not bool(got.get("provisional")):
+                return ["the row served under allow_provisional does not say so"]
+            return [f"the read REFUSED a provisional row: {str(ex)[:90]}"]
+
+    def floor_counted_in_bars():
+        """THE FLOOR COUNTED IN IN-RANGE BARS ON **BOTH** LEGS instead of in
+        CONFIRMED RANGES — the reading LEAN R3-e rejects, since the bars inside
+        one range are one observation seen many times. Filed verdicts must
+        move, and the rows that move must be the thin ones; otherwise counting
+        in ranges buys nothing and the lean is decoration."""
+        alt = ((v["edge_n"] >= C.EDGE_MIN_N_BARS)
+               & (v["ratio_median"] >= C.HEIGHT_RATIO_MIN)
+               & (v["share_ratio_lt_1"] <= C.INFEASIBLE_MAX_SHARE)
+               & (v["edge_net_h20"] > 0))
+        d = v[alt != v["verdict_pass"]]
+        if not len(d):
+            return []                       # VOID: the break leg goes GREEN
+        thin = d[d["n_ranges"] < C.PROVISIONAL_MIN_N]
+        w = d.sort_values("n_ranges").iloc[0]
+        return [f"{len(d)} filed verdict(s) move when the floor is counted in "
+                f"BARS ({len(thin)} of them below {C.PROVISIONAL_MIN_N} ranges) "
+                f"— e.g. {w['asset']} {w['lens']} {w['scale_kind']} would PASS on "
+                f"{int(w['n_ranges'])} confirmed range(s) / {int(w['edge_n']):,} "
+                f"in-range bars"]
+
+    return plants([("the gate THRESHOLD is silently changed", threshold_moved),
+                   ("the filed gate law sha no longer matches the code", gate_law_sha_moved),
+                   ("the verdict is READ BEFORE IT IS FILED", read_before_filed),
+                   ("a verdict is not its two gates' conjunction", conjunction_broken),
+                   ("A MARGIN IS A WEIGHTED MEAN OF THE CELLS (the prior digest's "
+                    "own arithmetic)", margin_is_a_mean_of_cells),
+                   ("the declared SAMPLE FLOOR is moved", floor_moved),
+                   ("the SAMPLE FLOOR is counted in BARS, not CONFIRMED RANGES",
+                    floor_counted_in_bars),
+                   ("a PROVISIONAL verdict is asked for on the default path",
+                    provisional_served)])
+
+
+def ht_real():
+    h = _r34("height_toll")
+    v = _r34("height_toll_verdict")
+    e = _r34("edge_fade")
+    man = json.loads((CROOT / "R34_MANIFEST.json").read_text())
+    com = man["commission"]
+    npan = len(com["assets"]) + len(C.pools_for(com["assets"]))
+    bad: list[str] = []
+    for nm, df, want in (
+            ("height_toll", h, npan * len(com["lenses"]) * len(com["scale_kinds"])
+             * len(C.ERAS)),
+            ("height_toll_verdict", v, npan * len(com["lenses"]) * len(com["scale_kinds"])),
+            # 10 x 6 CELLS + 10 by-decile margins + 6 near-edge-by-age margins
+            # + 1 near-edge/all-ages margin, per era per horizon [LEAN R3-d]
+            ("edge_fade", e, npan * len(com["lenses"]) * len(com["scale_kinds"])
+             * len(C.ERAS) * len(C.HORIZONS)
+             * (10 * len(C.AGE_BUCKETS) + 10 + len(C.AGE_BUCKETS) + 1))):
+        if len(df) != want:
+            bad.append(f"{nm} is {len(df)} rows, the whole declared grid is {want}")
+    # the gate is the DECLARED arithmetic on every row — no hand-set verdicts
+    re = ((h["ratio_median"] >= C.HEIGHT_RATIO_MIN)
+          & (h["share_ratio_lt_1"] <= C.INFEASIBLE_MAX_SHARE)
+          & (h["n_ranges"] >= C.HEIGHT_MIN_N_RANGES))
+    if int((re != h["gate_height_pass"]).sum()):
+        bad.append("a filed gate_height_pass is not the declared arithmetic")
+    # THE SAMPLE FLOOR IS REAL ON EVERY ROW [review 2026-09-22, finding 2]
+    if int((h["n_ranges"] < C.HEIGHT_MIN_N_RANGES).sum() and
+           (h[h["n_ranges"] < C.HEIGHT_MIN_N_RANGES]["gate_height_pass"]).sum()):
+        bad.append("a height gate PASSES below the declared floor")
+    ev = ((v["edge_n_ranges"] >= C.EDGE_MIN_N_RANGES)
+          & (v["edge_n"] >= C.EDGE_MIN_N_BARS) & (v["edge_net_h20"] > 0))
+    if int((ev != v["gate_edge_fade_pass"]).sum()):
+        bad.append("a filed gate_edge_fade_pass is not the declared arithmetic")
+    pl = ((v["n_ranges"] < C.PROVISIONAL_MIN_N)
+          | (v["edge_n_ranges"] < C.PROVISIONAL_MIN_N))
+    if int((pl != v["provisional"]).sum()):
+        bad.append("a filed `provisional` is not lean C-g's declared law")
+    if int((v["provisional"] & v["verdict_pass"]).sum()):
+        bad.append("a PROVISIONAL row carries verdict_pass = True")
+    for col in ("provisional", "provisional_reason", "edge_n_ranges",
+                "min_n_ranges_pinned", "gates_what"):
+        if col not in v.columns:
+            bad.append(f"height_toll_verdict has no `{col}` column")
+    if "toll_basis" not in h.columns or "toll_atr_binding" not in h.columns:
+        bad.append("height_toll does not declare its toll convention")
+    # THE MARGINS ARE RAW, NOT A COLLAPSE OF THE CELLS [LEAN R3-d, finding 1].
+    # Judged against a LIVE re-walk of a real cell, not against the table.
+    A_live, _tp, _w = _live_edge(R34_CELL[0], R34_CELL[1], "frozen3.0")
+    near_live = C._near_mask(A_live["dec"])
+    for dec in range(10):
+        want = C._edge_stats(A_live, A_live["dec"] == dec, "H20", False)
+        got = C.edge_margin(e, R34_CELL[1], asset=R34_CELL[0], dec=dec,
+                            age=C.EDGE_AGE_ALL)
+        if not (np.isclose(float(got["net"]), want["net"], rtol=0, atol=1e-12)
+                and int(got["n"]) == want["n"]
+                and int(got["n_ranges"]) == want["n_ranges"]):
+            bad.append(f"the filed by-decile margin d{dec} on {R34_CELL[0]} "
+                       f"{R34_CELL[1]} is not the live raw statistic "
+                       f"({float(got['net']):+.6f} vs {want['net']:+.6f})")
+    for ab, lab in enumerate(C.AGE_LABELS):
+        want = C._edge_stats(A_live, near_live & (A_live["age"] == ab), "H20", False)
+        got = C.edge_margin(e, R34_CELL[1], asset=R34_CELL[0],
+                            dec=C.EDGE_DEC_ALL, age=lab)
+        if not (np.isclose(float(got["net"]), want["net"], rtol=0, atol=1e-12)
+                and int(got["n"]) == want["n"]):
+            bad.append(f"the filed near-edge age margin {lab} on {R34_CELL[0]} "
+                       f"{R34_CELL[1]} is not the live raw statistic")
+    # and the near-edge / ALL-ages margin IS the gate's own statistic, bit for bit
+    n_gate = 0
+    for lens in com["lenses"]:
+        for kind in com["scale_kinds"]:
+            for asset in sorted(set(v["asset"])):
+                m = C.edge_margin(e, lens, asset=asset, kind=kind,
+                                  dec=C.EDGE_DEC_ALL, age=C.EDGE_AGE_ALL)
+                r = v[(v["lens"] == lens) & (v["scale_kind"] == kind)
+                      & (v["asset"] == asset)].iloc[0]
+                n_gate += 1
+                if not (float(m["net"]) == float(r["edge_net_h20"])
+                        and int(m["n"]) == int(r["edge_n"])
+                        and int(m["n_ranges"]) == int(r["edge_n_ranges"])
+                        and float(m["toll_atr"]) == float(r["edge_toll_atr"])):
+                    bad.append(f"the near-edge margin for {asset} {lens} {kind} is "
+                               "not the verdict row's own edge statistic")
+    # A MARGIN IS NOT THE MEAN OF ITS CELLS, and the difference is not cosmetic
+    worst = 0.0
+    for lens in com["lenses"]:
+        g = _cellmean(e, lens, C.POOL_ALL, "frozen3.0", C.ERA_ALL, "H20",
+                      near_only=False, by="entry_decile")
+        for i in range(10):
+            f_ = float(C.edge_margin(e, lens, dec=i, age=C.EDGE_AGE_ALL)["net"])
+            worst = max(worst, abs(f_ - float(g.get(i, np.nan))))
+    if not worst > 1e-6:
+        bad.append("the filed margins are indistinguishable from a mean of the "
+                   "cells — the leg that caught finding 1 has gone vacuous")
+    if set(h["ratio_min_pinned"]) != {C.HEIGHT_RATIO_MIN}:
+        bad.append("a row's pinned ratio floor is not the code's")
+    if set(h["gate_law_sha"]) != {_law_sha(C.HEIGHT_GATE_LAW)}:
+        bad.append("a row's gate_law_sha is not the live law's")
+    # LEDGER.md:834's conjunction, on every row
+    if int((v["verdict_pass"] != (v["gate_height_pass"] & v["gate_edge_fade_pass"])).sum()):
+        bad.append("a verdict is not height AND edge-fade")
+    # the ratio is ATR-FREE: re-derived from price and the fee object alone
+    tape, m, w, bps = _walk_cell()
+    hl = C.height_rows(w, tape, R34_CELL[0], R34_CELL[1], "frozen3.0", bps)
+    alt = (hl["height_px"] / ((bps / C.BPS_PER_UNIT) * hl["close_at_confirm"]))
+    if not np.allclose(hl["ratio"], alt, rtol=1e-12, atol=0):
+        bad.append("the ratio is NOT ATR-free — the ATR does not cancel")
+    f = h[(h["asset"] == R34_CELL[0]) & (h["lens"] == R34_CELL[1])
+          & (h["scale_kind"] == "frozen3.0") & (h["era"] == C.ERA_ALL)]
+    if int(f["n_ranges"].iloc[0]) != int(len(hl)):
+        bad.append(f"filed n_ranges {int(f['n_ranges'].iloc[0])} != re-walked {len(hl)}")
+    # the READ INTERFACE hands back the filed row, for every lens
+    got = {}
+    for lens in com["lenses"]:
+        r = C.height_vs_toll_verdict(lens, root=CROOT)
+        got[lens] = bool(r["verdict_pass"])
+        row = v[(v["lens"] == lens) & (v["scale_kind"] == "frozen3.0")
+                & (v["asset"] == C.POOL_ALL)]
+        if bool(row["verdict_pass"].iloc[0]) != got[lens]:
+            bad.append(f"the read interface disagrees with the filed row on {lens}")
+    nm = int((e["margin"] != C.MARGIN_CELL).sum())
+    return (not bad, "; ".join(bad) if bad else
+            f"{len(h)} height rows + {len(v)} verdicts + {len(e):,} edge-fade rows "
+            f"({len(e) - nm:,} cells + {nm:,} MARGIN rows) = the whole declared grid · "
+            f"gate = n_ranges >= {C.HEIGHT_MIN_N_RANGES} AND median(ratio) >= "
+            f"{C.HEIGHT_RATIO_MIN} AND share(ratio<1) <= {C.INFEASIBLE_MAX_SHARE} (sha "
+            f"{_law_sha(C.HEIGHT_GATE_LAW)[:16]}) · edge leg floor edge_n_ranges >= "
+            f"{C.EDGE_MIN_N_RANGES} confirmed ranges · the ratio is ATR-free to 1e-12 on "
+            f"{R34_CELL[0]} {R34_CELL[1]} ({len(hl)} ranges) · verdict = height AND "
+            f"edge-fade on every row · {int(v['verdict_pass'].sum())}/{len(v)} rows PASS "
+            f"and {int(v['provisional'].sum())}/{len(v)} are PROVISIONAL, all filed and "
+            f"all printed in the digest · every one of the {n_gate} near-edge/ALL-ages "
+            f"MARGIN rows is bit-identical to its verdict row's edge statistic, and the "
+            f"{len(com['lenses']) * 10} by-decile margins differ from a mean of their "
+            f"cells by up to {worst:.4f} ATR · the by-decile and near-edge-age margins on "
+            f"{R34_CELL[0]} {R34_CELL[1]} equal a LIVE raw re-walk to 1e-12 · read "
+            f"interface POOLED:ALL frozen3.0: "
+            + ", ".join(f"{k} {'PASS' if x else 'FAIL'}" for k, x in got.items()))
+
+
 # ═══════════════════════════════════ F-C10-COLLAR (LAW 4 + R1's print collar)
 def _report_lines(root: Path) -> list[str]:
     keep = list(C.LOG_LINES)
@@ -2100,6 +2715,40 @@ LEGS = (
      "(on the stand-in grid or on the FILED 5m grid); the census's RETEST_PINS are not the "
      "filed TUNING_RESULT.json's.",
      tune_break, tune_real),
+    ("F-C10-ACC", "[Q-R4] the four acceptance operationalisations head-to-head beside the "
+     "RangeFinder DIE rule — the data's default NAMED, nothing promoted [LEDGER.md:835]",
+     "the filed grid is not the whole declared grid, or its key repeats; a row's "
+     "acceptance_law_sha is not the live law's, or an acceptance DEFINITION is edited "
+     "without the sha moving; a variant's N is edited and the filed declaration count "
+     "still stands; the engine default BREAK_CONFIRM_N/BREAK_MARGIN MOVES (a promotion); "
+     "time_beyond_T is typed rather than READ from RC.PINS['DEV_RETURN_BARS']; the five "
+     "rules are given different n_episodes so the head-to-head is not like-for-like; the "
+     "DIE rule declares on an episode that did not die; the episode replay is not the "
+     "machine's own breakout-die log, bar for bar ON EVERY CELL THIS LEG RE-WALKS LIVE; "
+     "the FILED per-cell replay ledger disagrees with that live re-walk in the die "
+     "count, the episode count, the confirmed-range count, the in-range bar count or the "
+     "sha over the machine's (bar, rid, side, cause, closes) die tuples; that ledger's "
+     "per-cell counts do not sum to the build's own grand totals, or name a different "
+     "number of cells. NOT ASSERTED, BECAUSE IT CANNOT GO RED: the manifest's "
+     "die_machine == die_matched, which the build increments only after its own HALT has "
+     "forced the equality [review 2026-09-22, finding 3].",
+     acc_break, acc_real),
+    ("F-C10-HT", "[Q-R3] height-vs-toll feasibility + the EDGE-FADE outcome leg — a GATE, "
+     "and the BRK track's READ INTERFACE [LEDGER.md:834]",
+     "a filed grid is not whole (cells AND both margins); a filed gate_height_pass or "
+     "gate_edge_fade_pass is not the declared arithmetic on its own row; either gate "
+     "PASSES below its declared sample floor; the filed `provisional` is not lean C-g's "
+     "law, or a provisional row carries verdict_pass; the gate THRESHOLD or the SAMPLE "
+     "FLOOR is changed without the filed verdicts disagreeing; the edge floor counted in "
+     "BARS moves no filed verdict (the range floor would then be decoration); a row's "
+     "gate_law_sha is not the live law's; a verdict is not the conjunction of its two "
+     "gates; the height/toll ratio is not ATR-free; A FILED MARGIN ROW IS NOT THE RAW "
+     "STATISTIC A LIVE RE-WALK COMPUTES, or is indistinguishable from the weighted mean "
+     "of its own cells, or the near-edge/ALL-ages margin is not bit-identical to the "
+     "verdict row's edge statistic; a verdict is READ BEFORE IT IS FILED and a default is "
+     "returned instead of a HALT; a PROVISIONAL verdict is served on the default read "
+     "path; the read interface disagrees with the filed row.",
+     ht_break, ht_real),
     ("F-C10-COLLAR", "P-BRK-S1's scoring ground is FILED and never PRINTED [LAW 4 + R1]",
      "print_report emits a 5m retest-hold row outside the tuning era; the filed `printable` "
      "column disagrees with the declared law on any row; a six-decimal figure carried by a "
@@ -2127,7 +2776,8 @@ LEGS = (
 
 
 def main() -> int:
-    want = [a.lower().replace("_", "-") for a in sys.argv[1:] if not a.startswith("--root=")]
+    want = [a.lower().replace("_", "-") for a in sys.argv[1:]
+            if not a.startswith("--root=") and a != "--slow"]
     legs = [x for x in LEGS if not want or any(w in x[0].lower() for w in want)]
     man = manifest()
     say(f"as_of_last_closed_4h: {man['as_of']}")

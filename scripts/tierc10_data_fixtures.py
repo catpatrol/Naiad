@@ -26,6 +26,18 @@ daily zips) — for EVERY sampled bar, so each bar is named rest-only,
 archive-only or both.  `--offline` skips F-D-1 / F-D-1b and the attribution
 leg of F-D-2 and reports them NOT RUN (never PASS).
 
+ADDED 2026-09-22 (the four RESUME-contract artifacts R0 proved ABSENT): F-D-MULT
+(the venue's contract multiplier, captured and printed, and the normalization
+proven a PURE SCALING on the real 1000PEPEUSDT / 1000BONKUSDT tapes), F-D-4 (the
+two-token trap: the intended asset, the hard floor at the listing instant, and
+price continuity AT the floor proven as an IDENTITY — the floor bar rebuilt from
+its own native 5m children), F-D-5 (the data-spend audit, {never-touched /
+display-only / scored} with the evidence line, the HARD DEPENDENCY of P-GEN-1's
+"LOAO printed twice · never-touched only" clause) and F-D-HAIRCUT (the charter
+cost model as an ADDED column beside the TC-series toll, never a replacement).
+NONE of them scores a row: no registration is filed, so every number here is
+mechanics or measurement.
+
 ADDED BY THE REVIEW REPAIR: F-D-SEAL (write-once is code, not a word),
 F-D-CLOSURE (importing the data module drags no range machine along), the
 funding-hour law inside F-D-3, the edge-only exemption inside F-D-ASOF, and
@@ -1056,7 +1068,8 @@ TOP_FIELDS = ("as_of_last_closed_4h", "as_of_last_closed_4h_open", "as_of_last_c
               "warranty", "snapshot_root", "venues", "panels", "admission", "gap_policy", "files",
               "prefix_attestation", "mirror", "leans", "seed", "complete",
               "venue_publications_disagree", "contract_premise_checks", "operator_rulings_needed",
-              "as_of_hazards", "write_once")
+              "as_of_hazards", "write_once", "contract_multipliers", "two_token_trap",
+              "data_spend", "tiered_costs_haircut_twin", "standing_disclosures")
 
 
 def _manifest_faults(man: dict, root: Path) -> list[str]:
@@ -1098,7 +1111,8 @@ def _manifest_faults(man: dict, root: Path) -> list[str]:
 
 
 STAMPED_ARTIFACTS = ("STAGE_D_MANIFEST.json", "fee_schedule.json", "VENUE_PROBE.json", "PRE_STATE.json",
-                     D.REST_AUDIT, D.ARCHIVE_AUDIT, D.ARCHIVE_FORMS, D.SEAL)
+                     D.REST_AUDIT, D.ARCHIVE_AUDIT, D.ARCHIVE_FORMS, D.SEAL,
+                     D.CONTRACT_SPECS, D.DATA_SPEND)
 
 
 def _md_faults(md: str, man: dict) -> list[str]:
@@ -1106,7 +1120,13 @@ def _md_faults(md: str, man: dict) -> list[str]:
     in JSON: the stale premise, the heterogeneity, the rulings, the disclosure."""
     need = [c["verdict"] for c in man.get("contract_premise_checks", [])]
     need += ["PUBLICATION-HETEROGENEOUS", "Operator rulings needed at CLOSE", "RE-STAMPED",
-             "As-of hazards for downstream loaders"]
+             "As-of hazards for downstream loaders",
+             "Contract multipliers — printed and normalized",
+             "EVERY PRICE ON 1000PEPEUSDT IS QUOTED PER 1000 TOKENS",
+             "EVERY PRICE ON 1000BONKUSDT IS QUOTED PER 1000 TOKENS",
+             "The two-token trap", "The tiered costs haircut twin",
+             "Data-spend audit", "NEVER-TOUCHED",
+             "Standing disclosures", "F-D-1b's VENUE CENSUS DRIFTS OVERNIGHT"]
     return [f"STAGE_D_MANIFEST.md does not say: {x[:60]!r}" for x in need if x not in md]
 
 
@@ -1197,7 +1217,8 @@ def fdmanifest_real():
 
 
 # ══════════════════════════════════ F-D-SEAL · WRITE-ONCE, IN CODE
-WRITE_ONCE_WRITERS = ("pin_as_of", "probe_venues", "write_pre_state", "seal_provenance")
+WRITE_ONCE_WRITERS = ("pin_as_of", "probe_venues", "write_pre_state", "seal_provenance",
+                      "capture_contract_specs")
 
 
 def _plain_dump_calls(src: str) -> list[str]:
@@ -1226,9 +1247,18 @@ def fdseal_break():
         (root / D.FETCH_LOG).write_text("\n".join([lines[0].replace("BINANCE", "BYBIT", 1)] + lines[1:]) + "\n")
         r = D.verify_seal(D.OUT, root)
         res.append(("one sealed fetch-log row edited in a COPY", not r, str(r[:1])))
-        (root / D.FETCH_LOG).write_text("\n".join(lines[:-1]) + "\n")
+        # REPAIRED 2026-09-22 [FINDING]: this plant used to drop the log's LAST line.
+        # That was a sealed line only while the log had exactly as many lines as the
+        # seal pinned; the lawful append of the contract-spec capture row grew it past
+        # that, and the plant started removing an UNSEALED line — leaving the sealed
+        # prefix whole, the leg GREEN, and the whole fixture VOID.  The CLAIM is
+        # unchanged ("a sealed fetch-log line changed or is gone"); the plant now
+        # targets the sealed prefix explicitly, whatever the log has grown to.
+        sealed_n = json.loads((D.OUT / D.SEAL).read_text())["fetch_log"]["sealed_lines"]
+        (root / D.FETCH_LOG).write_text("\n".join(lines[: sealed_n - 1]) + "\n")
         r = D.verify_seal(D.OUT, root)
-        res.append(("the last sealed fetch-log row dropped in a COPY", not r, str(r[:1])))
+        res.append((f"one of the {sealed_n} SEALED fetch-log rows dropped in a COPY (the log has "
+                    f"lawfully grown to {len(lines)} lines since the seal)", not r, str(r[:1])))
         try:
             D._dump_once({"x": 1}, root / "AS_OF_PIN.json")                 # exists (a COPY)
             res.append(("_dump_once over an existing record (COPY)", True, "overwrote instead of HALTing"))
@@ -1377,8 +1407,718 @@ def fdfee_real():
                        f"observed funding interval")
 
 
+# ══════════════════════════════════ F-D-MULT · THE CONTRACT MULTIPLIER, AND THE SCALING
+SCALED_SYMBOLS = ("1000PEPEUSDT", "1000BONKUSDT")
+RATIO_RTOL = 1e-9                 # float64 round-off, not a tolerance on the claim
+MIN_DEN_FRAC = 1e-6               # a denominator below this fraction of price is cancellation noise
+
+
+def _lead_int(name: str) -> int:
+    """The leading integer of a venue baseAsset name, by a plain scan — zero
+    shared code with D.base_multiplier's regex."""
+    digits = ""
+    for ch in name or "":
+        if ch.isdigit():
+            digits += ch
+        else:
+            break
+    return int(digits) if digits else 1
+
+
+def _ratio_stats(d: pd.DataFrame) -> dict:
+    """Ratio-valued statistics of a tape: an R (a price difference over a price
+    difference), an ATR-normalized bar height, and a log return.  Every one is
+    a pure ratio, so a pure scaling of the price series must leave it alone."""
+    o, h, l, c = (d[k].to_numpy(np.float64) for k in ("open", "high", "low", "close"))
+    tr = h - l
+    atr = pd.Series(tr).rolling(14).mean().to_numpy()
+    den = o - l
+    keep = (den > MIN_DEN_FRAC * np.abs(o)) & np.isfinite(den)
+    ok_atr = np.isfinite(atr) & (atr > 0)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        return {
+            "R = (close-open)/(open-low)": ((c - o)[keep] / den[keep]),
+            "ATR-normalized height = (high-low)/ATR14": (tr[ok_atr] / atr[ok_atr]),
+            "log return ln(c_t/c_t-1)": np.log(c[1:] / c[:-1]),
+            "notional px*qty (1 contract)": c * 1.0,
+        }
+
+
+def _scale_tape(d: pd.DataFrame, k: float) -> pd.DataFrame:
+    """A PURE SCALING of the price columns (what normalization is)."""
+    e = d.copy()
+    for col in ("open", "high", "low", "close"):
+        e[col] = e[col].to_numpy(np.float64) / k
+    return e
+
+
+def _shift_tape(d: pd.DataFrame, k: float) -> pd.DataFrame:
+    """NOT a scaling: an additive shift, the wrong way to 'normalize'."""
+    e = d.copy()
+    for col in ("open", "high", "low", "close"):
+        e[col] = e[col].to_numpy(np.float64) - k
+    return e
+
+
+def _drift_tape(d: pd.DataFrame, k: float) -> pd.DataFrame:
+    """NOT a scaling either: a multiplier that VARIES bar by bar."""
+    e = d.copy()
+    f = k * (1.0 + np.linspace(0.0, 0.5, len(d)))
+    for col in ("open", "high", "low", "close"):
+        e[col] = e[col].to_numpy(np.float64) / f
+    return e
+
+
+def _scaling_faults(stem: str, transform, k: float) -> tuple[list[str], float]:
+    """Every ratio-valued statistic of the WHOLE 4h tape, before and after.
+    FAILS IF any of them moves by more than float64 round-off."""
+    raw = D.load_asof(stem, "4h")
+    got = transform(raw, k)
+    a, b = _ratio_stats(raw), _ratio_stats(got)
+    bad, worst = [], 0.0
+    for name in a:
+        x, y = a[name], b[name]
+        if name.startswith("notional"):
+            y = y * k                     # 1 contract -> k tokens: the qty scales the other way
+        if len(x) != len(y):
+            bad.append(f"{stem} {name}: {len(x)} values became {len(y)}")
+            continue
+        m = np.isfinite(x) & np.isfinite(y) & (np.abs(x) > 0)
+        rel = np.abs(y[m] - x[m]) / np.abs(x[m])
+        worst = max(worst, float(rel.max()) if len(rel) else 0.0)
+        if len(rel) and rel.max() > RATIO_RTOL:
+            j = int(np.argmax(rel))
+            bad.append(f"{stem} {name}: {int((rel > RATIO_RTOL).sum())} of {len(rel)} moved "
+                       f"(worst {rel.max():.3e}: {x[m][j]!r} -> {y[m][j]!r})")
+    return bad, worst
+
+
+def _mult_faults(doc: dict, man: dict) -> list[str]:
+    """The filed multiplier must BE the venue's own baseAsset's leading integer,
+    for every panel symbol, and the capture's bytes must be the ones the
+    manifest pins."""
+    bad, by_stem = [], {a["stem"]: a for a in doc["assets"]}
+    for stem in PANEL:
+        a = by_stem.get(stem)
+        if a is None:
+            bad.append(f"{stem}: no row in {D.CONTRACT_SPECS}")
+            continue
+        venue_base = (a["venue_object"].get("baseAsset") or a["venue_object"].get("baseCoin"))
+        if venue_base != a["base_asset"]:
+            bad.append(f"{stem}: filed base_asset {a['base_asset']!r} != the venue object's "
+                       f"{venue_base!r}")
+        want = _lead_int(venue_base)
+        if int(a["multiplier_tokens_per_contract_unit"]) != want:
+            bad.append(f"{stem}: filed multiplier {a['multiplier_tokens_per_contract_unit']} != "
+                       f"the leading integer {want} of the venue's baseAsset {venue_base!r}")
+        blob = json.dumps(a["venue_object"])
+        found = [k for k in D.MULTIPLIER_FIELDS if f'"{k}"' in blob]
+        if found != (doc["multiplier_fields_found_per_symbol"].get(a["symbol"]) or []):
+            bad.append(f"{stem}: the filed multiplier-field census {doc['multiplier_fields_found_per_symbol'].get(a['symbol'])} "
+                       f"is not a recount of its own venue object {found}")
+        if want != 1 and "PER 1000 TOKENS" not in a["price_is_per_tokens"]:
+            bad.append(f"{stem}: multiplier {want} but the row does not say PER 1000 TOKENS")
+    scaled = sorted(a["symbol"] for a in doc["assets"]
+                    if int(a["multiplier_tokens_per_contract_unit"]) != 1)
+    if scaled != sorted(SCALED_SYMBOLS):
+        bad.append(f"symbols with a multiplier != 1 are {scaled}, expected {sorted(SCALED_SYMBOLS)}")
+    cm = man.get("contract_multipliers") or {}
+    if cm.get("artifact_sha256") != D.file_sha256(D.OUT / D.CONTRACT_SPECS):
+        bad.append("the manifest's contract_multipliers.artifact_sha256 does not re-hash the capture")
+    if sorted(cm.get("symbols_quoting_per_1000_tokens") or []) != sorted(SCALED_SYMBOLS):
+        bad.append(f"the manifest names {cm.get('symbols_quoting_per_1000_tokens')} as quoting per "
+                   f"1000 tokens, the capture says {scaled}")
+    if len(cm.get("rows") or []) != len(PANEL):
+        bad.append(f"the manifest table has {len(cm.get('rows') or [])} rows for {len(PANEL)} assets")
+    return bad
+
+
+def fdmult_break():
+    doc = json.loads((D.OUT / D.CONTRACT_SPECS).read_text())
+    res = []
+    d = copy.deepcopy(doc)                                        # COPIES from here on
+    next(a for a in d["assets"] if a["symbol"] == "1000PEPEUSDT")[
+        "multiplier_tokens_per_contract_unit"] = 100
+    r = _mult_faults(d, MAN)
+    res.append(("1000PEPEUSDT's multiplier planted as 100 in a COPY of the capture", not r, str(r[:1])))
+    d = copy.deepcopy(doc)
+    next(a for a in d["assets"] if a["symbol"] == "BTCUSDT")[
+        "multiplier_tokens_per_contract_unit"] = 1000
+    r = _mult_faults(d, MAN)
+    res.append(("a multiplier of 1000 planted on BTCUSDT, whose baseAsset has no prefix (COPY)",
+                not r, str(r[:1])))
+    d = copy.deepcopy(doc)
+    next(a for a in d["assets"] if a["symbol"] == "1000BONKUSDT")["venue_object"]["baseAsset"] = "BONK"
+    r = _mult_faults(d, MAN)
+    res.append(("the venue object's baseAsset rewritten to BONK under a filed multiplier of 1000 "
+                "(COPY)", not r, str(r[:1])))
+    d = copy.deepcopy(doc)
+    d["multiplier_fields_found_per_symbol"]["1000PEPEUSDT"] = ["contractSize"]
+    r = _mult_faults(d, MAN)
+    res.append(("a contractSize claimed for 1000PEPEUSDT that its own venue object does not hold "
+                "(COPY)", not r, str(r[:1])))
+    m = copy.deepcopy(MAN)
+    m["contract_multipliers"]["artifact_sha256"] = "0" * 64
+    r = _mult_faults(doc, m)
+    res.append(("the manifest's pin of the capture's sha moved (COPY)", not r, str(r[:1])))
+    bad, _ = _scaling_faults("1000PEPEUSDT", _shift_tape, 1000.0)
+    res.append(("'normalization' planted as an additive SHIFT of 1000 on the real 1000PEPEUSDT "
+                "tape (a COPY of the frame)", not bad, str(bad[:1])))
+    bad, _ = _scaling_faults("1000BONKUSDT", _drift_tape, 1000.0)
+    res.append(("a multiplier that DRIFTS bar by bar on the real 1000BONKUSDT tape (a COPY)",
+                not bad, str(bad[:1])))
+    return plants(res)
+
+
+def fdmult_real():
+    doc = json.loads((D.OUT / D.CONTRACT_SPECS).read_text())
+    bad = _mult_faults(doc, MAN)
+    worst, n = 0.0, 0
+    for stem in PANEL:
+        k = float(D.multiplier_of(stem))
+        b, w = _scaling_faults(stem, _scale_tape, k if k != 1 else 1.0)
+        bad += b
+        worst = max(worst, w)
+        n += len(D.load_asof(stem, "4h"))
+    for stem in SCALED_SYMBOLS:
+        say(f"      {stem}: venue baseAsset "
+            f"{next(a for a in doc['assets'] if a['symbol'] == stem)['base_asset']}, multiplier "
+            f"{D.multiplier_of(stem)} — EVERY PRICE ON THIS TAPE IS QUOTED PER 1000 TOKENS; "
+            f"normalized price = venue price / 1000, normalized qty = venue qty x 1000")
+    fields = {s: v for s, v in doc["multiplier_fields_found_per_symbol"].items() if v}
+    say(f"      MULTIPLIER FIELDS THE VENUE PUBLISHES, over all {len(PANEL)} symbols and "
+        f"{list(D.MULTIPLIER_FIELDS)}: {fields or 'NONE — the multiplier is in the baseAsset NAME'}")
+    return (not bad), (
+        f"{len(PANEL)} symbols: every filed multiplier IS the leading integer of the venue's own "
+        f"baseAsset in the captured symbol object ({sorted(SCALED_SYMBOLS)} are the only two != 1, "
+        f"and both say PER 1000 TOKENS); the venue publishes none of {list(D.MULTIPLIER_FIELDS)} for "
+        f"any of them, recounted from the raw objects; the capture re-hashes to the sha the manifest "
+        f"pins. NORMALIZATION IS A PURE SCALING: over {n} real 4h bars of the whole panel, every "
+        f"ratio-valued statistic (R, ATR-normalized height, log return, notional) is IDENTICAL "
+        f"before and after — largest relative move {worst:.3e}, float64 round-off, against a "
+        f"round-off allowance of {RATIO_RTOL:.0e}: {bad[:3] or 'no fault'}."
+        f"  FAILS IF a filed multiplier is not the leading integer of the venue's baseAsset, a "
+        f"scaled symbol's row does not say PER 1000 TOKENS, the multiplier-field census is not a "
+        f"recount of the raw venue objects, the manifest's sha pin does not re-hash the capture, or "
+        f"applying the normalization moves ANY ratio-valued statistic of ANY panel tape")
+
+
+# ══════════════════════════════════ F-D-4 · THE TWO-TOKEN TRAP (LIT precedent)
+def _fd4_ground() -> dict:
+    """(stem -> intended asset, intended base, listing instant, its source) —
+    from the write-once probe and the contract's own UNSEEN12 table."""
+    probe = json.loads((D.OUT / "VENUE_PROBE.json").read_text())
+    specs = json.loads((D.OUT / D.CONTRACT_SPECS).read_text())
+    base = {a["stem"]: a["base_asset"] for a in specs["assets"]}
+    want = {name: b for name, _s, b in D.UNSEEN12}
+    out = {}
+    for a in probe["classic5"] + probe["unseen12"]:
+        if not a.get("stem"):
+            continue
+        out[a["stem"]] = {"asset": a["asset"], "symbol": a["symbol"],
+                          "intended_base": want.get(a["asset"], a["asset"]),
+                          "venue_base": base.get(a["stem"]),
+                          "listing_ms": int(a["listing_ms"]),
+                          "source": ("Binance exchangeInfo onboardDate"
+                                     if a["venue"] == "BINANCE_USDTM"
+                                     else "Bybit instruments-info launchTime")}
+    return out
+
+
+def _fd4_measure(stem: str, g: dict, frames: dict | None = None) -> dict:
+    """An INDEPENDENT re-measurement: plain floor arithmetic and a plain loop
+    over the 5m children, sharing no code with D.listing_audit.  `frames`
+    overrides what would be read from the snapshot — that is where a plant goes."""
+    frames = frames or {}
+    L = g["listing_ms"]
+    per_lens, pre_total = {}, 0
+    for iv in ALL_IVS:
+        step = D.STEP_MS[iv]
+        anch = D.GRID_ANCHOR_MS.get(iv, 0)
+        fl = ((L - anch) // step) * step + anch
+        d = frames.get(iv)
+        t = (d["open_time"].to_numpy(np.int64) if d is not None else
+             pd.read_parquet(D.kline_path(stem, iv), columns=["open_time"])["open_time"]
+             .to_numpy(np.int64))
+        pre = int((t < fl).sum())
+        pre_total += pre
+        per_lens[iv] = {"floor": fl, "bars_before_the_floor": pre, "first": int(t.min())}
+    f4 = frames.get("4h") if frames.get("4h") is not None else D.load_asof(stem, "4h")
+    f4 = f4.sort_values("open_time")
+    fl4 = (L // D.MS_4H) * D.MS_4H
+    at = f4[f4["open_time"] == fl4]
+    subject = at.iloc[0] if len(at) else f4.iloc[0]
+    t0 = int(subject["open_time"])
+    m5 = frames.get("5m") if frames.get("5m") is not None else D.load_asof(stem, "5m")
+    kids = m5[(m5["open_time"] >= t0) & (m5["open_time"] < t0 + D.MS_4H)].sort_values("open_time")
+    rebuild = None
+    if len(kids):
+        rows = [tuple(r) for r in kids[D.KLINE_COLS].itertuples(index=False)]
+        rebuild = {"open": float(rows[0][1]), "high": max(float(r[2]) for r in rows),
+                   "low": min(float(r[3]) for r in rows), "close": float(rows[-1][4]),
+                   "volume": float(np.sum([r[5] for r in rows]))}
+    before = f4[f4["open_time"] < fl4]
+    after = f4[f4["open_time"] >= fl4]
+    seam = (D.seam_jump(float(before["close"].iloc[-1]), float(after["open"].iloc[0]))
+            if len(before) and len(after) else None)
+    return {"stem": stem, "per_lens": per_lens, "bars_before_any_floor": pre_total,
+            "listing_ms": L, "listing_source": g["source"],
+            "floor_open_4h": fl4, "subject_open": t0, "children": len(kids),
+            "bar": {k: float(subject[k]) for k in D.KLINE_COLS[1:]}, "rebuild": rebuild,
+            "floor_seam": seam, "venue_base": g["venue_base"], "intended_base": g["intended_base"]}
+
+
+def _fd4_faults(measured: list[dict], man: dict, whole_panel: bool = True) -> list[str]:
+    """`whole_panel` False when a BREAK leg judges ONE planted symbol: the
+    cardinality checks would be red on their own then, and a leg that goes red
+    for a reason other than its plant proves nothing."""
+    bad = []
+    tt = man.get("two_token_trap") or {}
+    filed = {r["stem"]: r for r in tt.get("rows", [])}
+    for m in measured:
+        stem = m["stem"]
+        for iv, v in m["per_lens"].items():
+            if v["bars_before_the_floor"]:
+                bad.append(f"{stem} {iv}: {v['bars_before_the_floor']} bar(s) BEFORE the listing "
+                           f"floor {D.iso(v['floor'])} — history that predates the intended "
+                           f"listing, UNFLOORED")
+        if m["rebuild"] is None:
+            bad.append(f"{stem}: the floor bar has NO 5m children — price continuity at the floor "
+                       f"is unproven")
+        else:
+            for k, v in m["rebuild"].items():
+                got = m["bar"][k]
+                same = (got == v if k != "volume"
+                        else bool(np.isclose(got, v, rtol=1e-12, atol=0.0)))
+                if not same:
+                    bad.append(f"{stem}: the floor bar's {k} is {got!r} but its own 5m children "
+                               f"give {v!r} — the bar carries a trade its children do not "
+                               f"(a two-token splice)")
+        if m["floor_seam"] is not None and m["floor_seam"] > D.SPLICE_JUMP_LIMIT_LN:
+            bad.append(f"{stem}: |ln jump| {m['floor_seam']:.4f} across the listing floor > "
+                       f"{D.SPLICE_JUMP_LIMIT_LN} — a SPLICE")
+        if m["venue_base"] != m["intended_base"]:
+            bad.append(f"{stem}: the venue's baseAsset {m['venue_base']!r} is not the intended "
+                       f"asset's base {m['intended_base']!r}")
+        f = filed.get(stem)
+        if f is None:
+            bad.append(f"{stem}: no row in the manifest's two_token_trap table")
+            continue
+        if int(f.get("listing_ms", -1)) != int(m["listing_ms"]):
+            bad.append(f"{stem}: the filed listing_ms {f.get('listing_ms')} "
+                       f"({D.iso(f.get('listing_ms'))}) is not the probe's {m['listing_ms']} "
+                       f"({D.iso(m['listing_ms'])})")
+        if not f.get("listing_source"):
+            bad.append(f"{stem}: the filed row prints NO source for its listing instant")
+        if f["hard_floored_every_lens"] != (m["bars_before_any_floor"] == 0):
+            bad.append(f"{stem}: filed hard_floored_every_lens={f['hard_floored_every_lens']} but "
+                       f"{m['bars_before_any_floor']} bar(s) precede a floor")
+        if bool(f["floor_bar"].get("rebuilt")) != bool(
+                m["rebuild"] is not None and all(
+                    (m["bar"][k] == v if k != "volume"
+                     else bool(np.isclose(m["bar"][k], v, rtol=1e-12, atol=0.0)))
+                    for k, v in (m["rebuild"] or {}).items())):
+            bad.append(f"{stem}: the filed floor-bar rebuild disagrees with an independent rebuild")
+    if whole_panel and len(filed) != len(measured):
+        bad.append(f"the filed table has {len(filed)} rows for {len(measured)} panel assets")
+    rej = [r["rejected_symbol"] for r in tt.get("rejections_carried", [])]
+    if "PUMPBTCUSDT" not in rej:
+        bad.append(f"the REJECTED PUMPBTCUSDT (baseAsset PUMPBTC != PUMP) is not carried into the "
+                   f"two-token table: {rej}")
+    return bad
+
+
+def fd4_break():
+    G = _fd4_ground()
+    res = []
+    victim = "PUMPUSDT" if "PUMPUSDT" in PANEL else PANEL[-1]
+    g = G[victim]
+    f4 = D.load_asof(victim, "4h")                                  # COPIES from here on
+    fl4 = (g["listing_ms"] // D.MS_4H) * D.MS_4H
+
+    def judge(name, needle, measured=None, man=None):
+        """ONE plant, judged ALONE: only the fault the plant is supposed to
+        raise counts, so a cardinality fault of the one-symbol call can never
+        stand in for a detection."""
+        r = [x for x in _fd4_faults(measured or [_fd4_measure(victim, g)], man or MAN,
+                                    whole_panel=False) if needle in x]
+        res.append((name, not r, str(r[:1])[:210] or "NOT DETECTED"))
+
+    pre = f4.iloc[[0]].assign(open_time=fl4 - D.MS_4H)
+    holed = pd.concat([pre, f4], ignore_index=True).sort_values("open_time")
+    judge(f"{victim}'s tape given one bar BEFORE its listing floor, unfloored (COPY)",
+          "BEFORE the listing floor", [_fd4_measure(victim, g, {"4h": holed})])
+    jump = f4.iloc[[0]].assign(open_time=fl4 - D.MS_4H)
+    for c in ("open", "high", "low", "close"):
+        jump[c] = jump[c].to_numpy(np.float64) / 1000.0            # a PRIOR TOKEN's price
+    spliced = pd.concat([jump, f4], ignore_index=True).sort_values("open_time")
+    judge(f"a prior-token bar at 1/1000 the price spliced in before {victim}'s floor — the "
+          f"CONTINUITY arm, which the filed panel gives no subject (COPY)",
+          "a SPLICE", [_fd4_measure(victim, g, {"4h": spliced})])
+    low = f4.copy()
+    k = int(np.flatnonzero(low["open_time"].to_numpy(np.int64) == fl4)[0]) if (
+        low["open_time"] == fl4).any() else 0
+    low.loc[low.index[k], "low"] = float(low["low"].iloc[k]) / 2.0   # a prior asset's low
+    judge(f"{victim}'s floor bar given a low its own 5m children never traded (COPY)",
+          "its children do not", [_fd4_measure(victim, g, {"4h": low})])
+    m5 = D.load_asof(victim, "5m")
+    late = m5[m5["open_time"] >= fl4 + D.MS_4H]                      # the floor bar loses its children
+    judge(f"{victim}'s floor bar stripped of its 5m children (COPY) — continuity unprovable",
+          "NO 5m children", [_fd4_measure(victim, g, {"5m": late})])
+    judge("the venue's baseAsset read as PUMPBTC — the REJECTED two-token twin (COPY)",
+          "is not the intended asset's base",
+          [_fd4_measure(victim, dict(g, venue_base="PUMPBTC"))])
+    mm = copy.deepcopy(MAN)
+    mm["two_token_trap"]["rejections_carried"] = []
+    judge("the PUMPBTCUSDT rejection dropped from a COPY of the manifest",
+          "is not carried into the two-token table", None, mm)
+    mm = copy.deepcopy(MAN)
+    next(x for x in mm["two_token_trap"]["rows"] if x["stem"] == victim)["floor_bar"]["rebuilt"] = False
+    judge("the filed rebuild flag flipped in a COPY of the manifest",
+          "disagrees with an independent rebuild", None, mm)
+    mm = copy.deepcopy(MAN)
+    next(x for x in mm["two_token_trap"]["rows"] if x["stem"] == victim)["listing_ms"] = 0
+    judge("the filed listing instant moved to the epoch in a COPY of the manifest",
+          "is not the probe's", None, mm)
+    mm = copy.deepcopy(MAN)
+    next(x for x in mm["two_token_trap"]["rows"] if x["stem"] == victim)["listing_source"] = ""
+    judge("the filed row's listing SOURCE blanked in a COPY of the manifest",
+          "prints NO source", None, mm)
+    res.append(("a whole panel row dropped from a COPY of the manifest table",
+                not [x for x in _fd4_faults([_fd4_measure(s2, G[s2]) for s2 in PANEL],
+                                            _drop_row(MAN, PANEL[-1])) if "rows for" in x
+                     or "no row in the manifest" in x],
+                str([x for x in _fd4_faults([_fd4_measure(s2, G[s2]) for s2 in PANEL],
+                                            _drop_row(MAN, PANEL[-1])) if "rows for" in x
+                     or "no row in the manifest" in x][:1])[:210] or "NOT DETECTED"))
+    return plants(res)
+
+
+def _drop_row(man: dict, stem: str) -> dict:
+    m = copy.deepcopy(man)
+    m["two_token_trap"]["rows"] = [r for r in m["two_token_trap"]["rows"] if r["stem"] != stem]
+    return m
+
+
+def fd4_real():
+    G = _fd4_ground()
+    measured = [_fd4_measure(s, G[s]) for s in PANEL]
+    bad = _fd4_faults(measured, MAN)
+    tt = MAN["two_token_trap"]
+    cells = sum(len(m["per_lens"]) for m in measured)
+    say("      per symbol: intended asset · listing instant (source) · first bar · floor · "
+        "hard-floored · floor bar rebuilt from its own 5m children")
+    for m in measured:
+        g = G[m["stem"]]
+        f = next(r for r in tt["rows"] if r["stem"] == m["stem"])
+        say(f"      [{'OK ' if not m['bars_before_any_floor'] else 'BAD'}] {m['stem']:14s} "
+            f"{g['asset']:8s} base {m['venue_base']:10s} listing {D.iso(g['listing_ms'])} "
+            f"({g['source']})  first {f['first_bar_4h']}  floor {D.iso(m['floor_open_4h'])}  "
+            f"pre-floor bars {m['bars_before_any_floor']}  children {m['children']}  "
+            f"rebuilt {m['rebuild'] is not None and f['floor_bar']['rebuilt']}  "
+            f"floor seam {'none (no bar before the floor)' if m['floor_seam'] is None else round(m['floor_seam'], 6)}")
+    seams = [m["stem"] for m in measured if m["floor_seam"] is not None]
+    say(f"      CONTINUITY AT THE FLOOR: {len(seams)} of {len(measured)} symbols have a bar BEFORE "
+        f"their floor at all, so the {D.SPLICE_JUMP_LIMIT_LN} splice limit [LEAN D-i] binds on "
+        f"{len(seams)} seam(s): that arm is proven by this fixture's BREAK leg, NOT by the filed "
+        f"panel. The arm that rides real values is the floor-bar IDENTITY above ({len(measured)} "
+        f"rebuilds from {sum(m['children'] for m in measured)} native 5m children).")
+    say(f"      WHOLE-TAPE 4h SEAM CENSUS (context): {tt['whole_tape_4h_seams_total']} adjacent "
+        f"seams, largest real |ln(open/close)| {tt['whole_tape_4h_max_abs_ln_jump']:.4f}")
+    return (not bad), (
+        f"{len(measured)} symbols x {len(ALL_IVS)} lenses = {cells} cells, none sampled: every "
+        f"symbol's INTENDED asset is the venue's own baseAsset ({tt['intended_asset_confirmed']}/"
+        f"{tt['assets']}), its listing instant and SOURCE are printed per row, and NO tape holds a "
+        f"single bar before its listing floor ({tt['bars_before_a_floor'] or 'zero'}). Price "
+        f"continuity AT the floor is proven as an IDENTITY, not a bound: all "
+        f"{tt['floor_bars_rebuilt_from_5m']}/{tt['assets']} floor bars rebuild EXACTLY from their "
+        f"own native 5m children at or after the listing instant. The REJECTED PUMPBTCUSDT "
+        f"(baseAsset PUMPBTC != PUMP) is carried in the table: {bad[:2] or 'no fault'}."
+        f"  FAILS IF any symbol's history predates its intended listing unfloored, a floor bar "
+        f"differs from a rebuild out of its own 5m children, a floor seam exceeds "
+        f"{D.SPLICE_JUMP_LIMIT_LN}, the venue's baseAsset is not the intended asset's, the filed "
+        f"table disagrees with this independent re-measurement, or the PUMPBTCUSDT rejection is "
+        f"not carried")
+
+
+# ══════════════════════════════════ F-D-5 · THE DATA-SPEND AUDIT
+ROSTER_RX = re.compile(r'"ROSTER":\s*\{\s*"value":\s*\(([^)]*)\)', re.S)
+SYM_RX = re.compile(r'"([A-Z0-9]+USDT)"')
+
+
+def _live_registers() -> dict:
+    """The three universes, read WITHOUT D.literal_path: two as live objects,
+    the Oracle's roster by a plain regex over its source (importing it would
+    drag analytics into this process)."""
+    import tierc2_rules as R2
+    from engine.cells import SYMBOLS as BASKET
+    src = (ROOT / "scripts" / "oracle_daily.py").read_text(encoding="utf-8")
+    mo = ROSTER_RX.search(src)
+    roster = tuple(SYM_RX.findall(mo.group(1))) if mo else ()
+    return {"universe": tuple(R2.UNIVERSE), "roster": roster, "basket": dict(BASKET)}
+
+
+def _spend_faults(doc: dict, man: dict) -> list[str]:
+    reg = _live_registers()
+    bad = []
+    if not reg["roster"]:
+        bad.append("the Oracle's ROSTER could not be read out of scripts/oracle_daily.py")
+    filed_reg = doc["registers_read_not_imported"]
+    if tuple(filed_reg["tc_series_scored_universe"]["value"]) != reg["universe"]:
+        bad.append(f"the filed scored universe {filed_reg['tc_series_scored_universe']['value']} "
+                   f"!= the live tierc2_rules.UNIVERSE {list(reg['universe'])}")
+    if tuple(filed_reg["oracle_display_roster"]["value"]) != reg["roster"]:
+        bad.append("the filed Oracle roster != the roster read from oracle_daily.py's source")
+    if dict(filed_reg["frozen_study_basket"]["value"]) != reg["basket"]:
+        bad.append("the filed study basket != engine/cells.py SYMBOLS")
+    rows = {r["stem"]: r for r in doc["rows"]}
+    if sorted(rows) != sorted(PANEL):
+        bad.append(f"the audit covers {sorted(rows)}, the panel is {sorted(PANEL)}")
+    corpus = {c["file"]: c["class"] for c in doc["corpus"]}
+    for rel, cls in corpus.items():
+        if any(rel.startswith(x) for x in D.SPEND_EXCLUDED_DIRS):
+            bad.append(f"corpus holds an EXCLUDED path: {rel}")
+        if not (ROOT / rel).is_file():
+            bad.append(f"corpus names a file that is not there: {rel}")
+    # only files that are actually there — a planted path is already a fault above
+    books = sorted(f for f, c in corpus.items() if c == "root_book" and (ROOT / f).is_file())
+    text = {f: (ROOT / f).read_text(encoding="utf-8", errors="replace").splitlines() for f in books}
+    for stem, r in rows.items():
+        want = {"scored": stem in reg["universe"],
+                "display-only": stem not in reg["universe"] and (stem in reg["roster"]
+                                                                 or stem in reg["basket"]),
+                "never-touched": stem not in reg["universe"] and stem not in reg["roster"]
+                and stem not in reg["basket"]}
+        cls = [k for k, v in want.items() if v]
+        if r["class"] not in cls:
+            bad.append(f"{stem}: classified {r['class']!r}, the live registers say {cls}")
+        if not r.get("evidence"):
+            bad.append(f"{stem}: classified with no evidence line")
+        toks = set(r["grep_tokens"])
+        sym = next((v["symbol"] for v in man["venues"] if v["stem"] == stem), None)
+        miss = [x for x in (stem, r["asset"], sym) if x and x not in toks]
+        if miss:
+            bad.append(f"{stem}: {miss} not among its grep tokens {sorted(toks)} — a spelling the "
+                       f"estate could have used would be invisible to the audit")
+        if r["class"] == "never-touched":
+            rx = re.compile(r"(?<![A-Za-z0-9])(" + "|".join(sorted(toks, key=len, reverse=True))
+                            + r")(?![A-Za-z0-9])")
+            hit = [f"{f}:{i}: {ln.strip()[:120]}" for f in books
+                   for i, ln in enumerate(text[f], 1) if rx.search(ln)]
+            if hit:
+                bad.append(f"{stem} is classified NEVER-TOUCHED but a grep finds it in the "
+                           f"estate's own books: {hit[0]}")
+    ds = man.get("data_spend") or {}
+    if ds.get("counts") != doc["counts"] or ds.get("never_touched") != doc["never_touched"]:
+        bad.append("the manifest's data_spend summary disagrees with the filed artifact")
+    if sum(doc["counts"].values()) != len(PANEL):
+        bad.append(f"the classes sum to {sum(doc['counts'].values())}, not {len(PANEL)}")
+    return bad
+
+
+def fd5_break():
+    doc = json.loads((D.OUT / D.DATA_SPEND).read_text())
+    res = []
+    d = copy.deepcopy(doc)                                          # COPIES from here on
+    victim = next(r for r in d["rows"] if r["stem"] == "BTCUSDT")
+    victim["class"] = "never-touched"
+    d["counts"] = {"scored": 4, "display-only": 9, "never-touched": 4}
+    d["never_touched"] = sorted(d["never_touched"] + ["BTC"])
+    r = _spend_faults(d, MAN)
+    hit = [x for x in r if "NEVER-TOUCHED but a grep finds it" in x]
+    res.append(("BTC re-classified never-touched in a COPY — an asset every scored book names",
+                not hit, str(hit[:1])[:220] or f"NOT DETECTED by the grep leg (other faults: {r[:1]})"))
+    d = copy.deepcopy(doc)
+    next(r for r in d["rows"] if r["stem"] == "HYPEUSDT")["class"] = "scored"
+    r = _spend_faults(d, MAN)
+    res.append(("HYPE re-classified scored in a COPY — the ledger says '7 scored + HYPE, FARTCOIN, "
+                "LIT'", not r, str(r[:1])[:200]))
+    d = copy.deepcopy(doc)
+    next(r for r in d["rows"] if r["stem"] == "PUMPUSDT")["class"] = "display-only"
+    r = _spend_faults(d, MAN)
+    res.append(("PUMPFUN re-classified display-only in a COPY — it was DROPPED from the roster by "
+                "ruling", not r, str(r[:1])[:200]))
+    d = copy.deepcopy(doc)
+    d["registers_read_not_imported"]["oracle_display_roster"]["value"] = ["BTCUSDT"]
+    r = _spend_faults(d, MAN)
+    res.append(("the filed Oracle roster replaced in a COPY", not r, str(r[:1])[:200]))
+    d = copy.deepcopy(doc)
+    d["corpus"].append({"class": "root_book", "file": "_reviewer_box/whatever.json", "lines": 1})
+    r = _spend_faults(d, MAN)
+    res.append(("an EXCLUDED grep-hazard path put back in a COPY of the corpus", not r, str(r[:1])[:200]))
+    d = copy.deepcopy(doc)
+    d["rows"] = [r for r in d["rows"] if r["stem"] != PANEL[-1]]
+    r = _spend_faults(d, MAN)
+    res.append(("one panel asset dropped from a COPY of the audit — silence must not read as "
+                "never-touched", not r, str(r[:1])[:200]))
+    return plants(res)
+
+
+def fd5_real():
+    doc = json.loads((D.OUT / D.DATA_SPEND).read_text())
+    bad = _spend_faults(doc, MAN)
+    say(f"      corpus: {doc['corpus_files']} files, grepped WHOLE (no sampling, no top-N); "
+        f"excluded {doc['corpus_excluded']}")
+    for r in doc["rows"]:
+        say(f"      {r['asset']:8s} {r['stem']:14s} {r['class']:14s} hits {r['grep_hits']:4d} "
+            f"{r['grep_hits_by_class']}")
+    for name in ("PUMPFUN", "HYPE"):
+        r = next(x for x in doc["rows"] if x["asset"] == name)
+        say(f"      {name} — READ, not assumed: {r['evidence']}")
+        for h in r["evidence_lines"][:4]:
+            say(f"        {h['file']}:{h['line']} [{h['class']}] {h['text'][:150]}")
+        if not r["evidence_lines"]:
+            say("        no line of the corpus names it at all")
+    say(f"      NEVER-TOUCHED (the list P-GEN-1's 'LOAO printed twice · never-touched only' clause "
+        f"needs): {doc['never_touched']}")
+    return (not bad), (
+        f"{len(doc['rows'])} admitted assets classified {doc['counts']} from {doc['corpus_files']} "
+        f"files grepped whole; every class is re-derived here from the LIVE registers "
+        f"(tierc2_rules.UNIVERSE, engine.cells.SYMBOLS, and the Oracle ROSTER read by this "
+        f"fixture's own regex over oracle_daily.py) and agrees with the filed one; every row "
+        f"carries an evidence line; and every NEVER-TOUCHED asset {doc['never_touched']} is absent "
+        f"from every line of the estate's own root-level books — a conservative test that can only "
+        f"be too strict. PUMPFUN and HYPE are READ from the evidence: {bad[:2] or 'no fault'}."
+        f"  FAILS IF a filed class disagrees with the live registers, a row has no evidence, the "
+        f"classes do not partition the panel, an asset classified never-touched can be found by a "
+        f"grep of the estate's books, a register in the artifact differs from the live one, the "
+        f"corpus names a file that is gone or an EXCLUDED grep-hazard path, or the manifest's "
+        f"summary disagrees with the artifact")
+
+
+# ══════════════════════════════════ F-D-HAIRCUT · THE TIERED COSTS TWIN [VETO "tiers"]
+CLAUSE_RX = re.compile(r"tier ([A-Z]) \{([^}]*)\} (\d+)")
+
+
+def _reparse(clause: str) -> dict:
+    """The contract clause -> tiers, by this fixture's OWN regex."""
+    return {t: {"bps": float(b), "assets": tuple(a.split())}
+            for t, a, b in CLAUSE_RX.findall(clause)}
+
+
+def _haircut_faults(man: dict, fees: dict, clause: str) -> list[str]:
+    bad = []
+    ht = man.get("tiered_costs_haircut_twin") or {}
+    want = _reparse(clause)
+    got = {t: {"bps": b["bps_per_side"], "assets": tuple(b["assets"])}
+           for t, b in (ht.get("tiers") or {}).items()}
+    if got != want:
+        bad.append(f"the filed tier table {got} is not the contract clause re-parsed {want}")
+    tier_of = {a: t for t, b in want.items() for a in b["assets"]}
+    admitted = [r["asset"] for r in man["admission"]["rows"] if r["admitted"]]
+    missing = [a for a in admitted if a not in tier_of]
+    if missing:
+        bad.append(f"admitted asset(s) with NO slippage tier: {missing}")
+    sizes = {t: len(b["assets"]) for t, b in sorted(want.items())}
+    if sum(sizes.values()) != len(admitted):
+        bad.append(f"the tiers cover {sum(sizes.values())} assets ({sizes}) for {len(admitted)} "
+                   f"admitted")
+    import tierc2_rules as R2
+    for r in fees["assets"]:
+        if r["round_trip_bps_used"] != float(R2.FEE_BPS_ROUND_TRIP):
+            bad.append(f"{r['asset']}: round_trip_bps_used is {r['round_trip_bps_used']}, not the "
+                       f"TC-series {float(R2.FEE_BPS_ROUND_TRIP)} — the twin has REPLACED the toll")
+        if r["asset"] not in tier_of:
+            continue
+        slip = want[tier_of[r["asset"]]]["bps"]
+        if r.get("haircut_twin_slippage_bps_side") != slip:
+            bad.append(f"{r['asset']}: filed twin slippage {r.get('haircut_twin_slippage_bps_side')} "
+                       f"!= tier {tier_of[r['asset']]}'s {slip}")
+        if r.get("haircut_twin_bps_side") != float(R2.FEE_BPS_SIDE) + slip:
+            bad.append(f"{r['asset']}: twin bps/side is not FEE_BPS_SIDE + slippage")
+        if r.get("haircut_twin_round_trip_bps") == r["round_trip_bps_used"] and slip:
+            bad.append(f"{r['asset']}: the twin round trip equals the TC-series toll although its "
+                       f"tier charges {slip} bps of slippage — the twin is not an ADDED column")
+    if not ht.get("tc_series_toll_untouched"):
+        bad.append("the manifest does not attest that the TC-series toll is untouched")
+    for r in (ht.get("rows") or []):
+        if r["tc_series_round_trip_bps_used"] != float(R2.FEE_BPS_ROUND_TRIP):
+            bad.append(f"{r['asset']}: the twin table's TC-series column is not the TC-series toll")
+    return bad
+
+
+def fdhaircut_break():
+    fees = json.loads((D.OUT / "fee_schedule.json").read_text())
+    res = []
+    edited = D.CONTRACT_SLIPPAGE_CLAUSE.replace("{BTC ETH} 2 bps", "{BTC ETH} 3 bps")
+    r = _haircut_faults(MAN, fees, edited)
+    res.append(("tier A edited from 2 to 3 bps in a COPY of the contract clause", not r, str(r[:1])[:200]))
+    dropped = D.CONTRACT_SLIPPAGE_CLAUSE.replace(" SUI", "")
+    r = _haircut_faults(MAN, fees, dropped)
+    hit = [x for x in r if "NO slippage tier" in x]
+    res.append(("SUI dropped from the tiers in a COPY of the clause — an admitted asset unassigned",
+                not hit, str(hit[:1])[:200] or f"NOT DETECTED ({r[:1]})"))
+    f2 = copy.deepcopy(fees)
+    for a in f2["assets"]:
+        a["round_trip_bps_used"] = a["haircut_twin_round_trip_bps"]
+    r = _haircut_faults(MAN, f2, D.CONTRACT_SLIPPAGE_CLAUSE)
+    hit = [x for x in r if "REPLACED the toll" in x]
+    res.append(("the twin written OVER round_trip_bps_used in a COPY of fee_schedule.json",
+                not hit, str(hit[:1])[:200] or "NOT DETECTED"))
+    f3 = copy.deepcopy(fees)
+    next(a for a in f3["assets"] if a["asset"] == "PEPE")["haircut_twin_slippage_bps_side"] = 2.0
+    r = _haircut_faults(MAN, f3, D.CONTRACT_SLIPPAGE_CLAUSE)
+    res.append(("PEPE given tier A's 2 bps in a COPY of the filed schedule", not r, str(r[:1])[:200]))
+    m = copy.deepcopy(MAN)
+    m["tiered_costs_haircut_twin"]["tiers"]["C"]["bps_per_side"] = 5.0
+    r = _haircut_faults(m, fees, D.CONTRACT_SLIPPAGE_CLAUSE)
+    res.append(("tier C's bps edited in a COPY of the filed manifest table", not r, str(r[:1])[:200]))
+    try:
+        D.haircut_twin_net_r("BTC", 1.0, 100.0, 101.0, 0.0)
+        res.append(("haircut_twin_net_r with risk_px = 0", True, "returned instead of HALTing"))
+    except SystemExit as e:
+        res.append(("haircut_twin_net_r with risk_px = 0", False, str(e)[:90]))
+    try:
+        D.haircut_twin_net_r("FARTCOIN", 1.0, 100.0, 101.0, 1.0)
+        res.append(("haircut_twin_net_r on an asset in NO tier", True, "guessed instead of HALTing"))
+    except SystemExit as e:
+        res.append(("haircut_twin_net_r on an asset in NO tier", False, str(e)[:90]))
+    return plants(res)
+
+
+def fdhaircut_real():
+    fees = json.loads((D.OUT / "fee_schedule.json").read_text())
+    bad = _haircut_faults(MAN, fees, D.CONTRACT_SLIPPAGE_CLAUSE)
+    ht = MAN["tiered_costs_haircut_twin"]
+    say(f"      clause, re-parsed by this fixture: "
+        f"{ {t: (b['bps'], b['assets']) for t, b in _reparse(D.CONTRACT_SLIPPAGE_CLAUSE).items()} }")
+    say(f"      {ht['arithmetic']}; charter source: {ht['charter_source'][:140]}")
+    # MECHANICS ONLY — a worked example per tier on real bars, NOT a scored row:
+    # no registration is filed, no lane rides these numbers, nothing is a verdict.
+    for t in sorted(D.SLIPPAGE_TIERS):
+        asset = D.SLIPPAGE_TIERS[t]["assets"][0]
+        stem = next(v["stem"] for v in MAN["venues"] if v["asset"] == asset)
+        b = D.load_asof(stem, "4h").iloc[-1]
+        entry, exit_, risk = float(b["open"]), float(b["close"]), float(b["high"] - b["low"])
+        tw = D.haircut_twin_net_r(asset, 1.0, entry, exit_, risk)
+        chk = ((tw["fee_bps_side"] + tw["slippage_bps_side"]) / 10_000.0) * (entry + exit_) / risk
+        if abs(tw["cost_r"] - chk) > 1e-12 or tw["net_r_twin"] != 1.0 - tw["cost_r"]:
+            bad.append(f"{asset}: haircut_twin_net_r's arithmetic does not reproduce")
+        if tw["tc_series_round_trip_bps_used"] != float(json.loads(
+                (D.OUT / "fee_schedule.json").read_text())["assets"][0]["round_trip_bps_used"]):
+            bad.append(f"{asset}: the twin's TC-series column is not the filed toll")
+        say(f"      MECHANICS (no registration, no verdict) tier {t} {asset} {stem} last closed 4h "
+            f"bar: entry {entry} exit {exit_} risk {risk} -> slippage {tw['slippage_bps_side']} "
+            f"bps/side, charter round trip {tw['charter_round_trip_bps']} bps, cost_r "
+            f"{tw['cost_r']:.6f}, gross 1.0 -> net_r_twin {tw['net_r_twin']:.6f}; TC-series toll "
+            f"beside it, UNTOUCHED: {tw['tc_series_round_trip_bps_used']} bps")
+    return (not bad), (
+        f"the tier table is the contract clause RE-PARSED by this fixture, not a typed copy "
+        f"({ht['arithmetic']}); every admitted asset is in exactly one tier; on all "
+        f"{len(fees['assets'])} filed rows round_trip_bps_used is still the TC-series "
+        f"FEE_BPS_ROUND_TRIP and the haircut_twin_* keys sit BESIDE it; "
+        f"tierc10_data.haircut_twin_net_r reproduces its own arithmetic on real bars of one asset "
+        f"per tier and returns the untouched toll in the same dict: {bad[:2] or 'no fault'}."
+        f"  NOTHING HERE IS A SCORED ROW — no registration is filed, so this is mechanics only."
+        f"  FAILS IF the filed tier table differs from a re-parse of the contract clause, an "
+        f"admitted asset is in no tier, the tiers do not cover exactly the admitted set, any row's "
+        f"round_trip_bps_used has been overwritten by the twin, a filed twin rate differs from its "
+        f"tier's, the twin round trip equals the TC-series toll on a slippage-charging tier, or "
+        f"haircut_twin_net_r returns without HALTing on a zero risk or an untiered asset")
+
+
 # ══════════════════════════════════ F-DET · SAME SNAPSHOT, SAME BYTES (last)
-DET_FILES = ("STAGE_D_MANIFEST.json", "STAGE_D_MANIFEST.md", "fee_schedule.json")
+DET_FILES = ("STAGE_D_MANIFEST.json", "STAGE_D_MANIFEST.md", "fee_schedule.json", D.DATA_SPEND)
 _DET: dict = {}
 
 
@@ -1393,7 +2133,8 @@ def _det_run() -> Path:
 
 CLOCK_KEYS = ("wall_clock", "sealed_utc", "probed_utc", "audited_", "elapsed")
 PROVENANCE_FILES = ("AS_OF_PIN.json", "VENUE_PROBE.json", "PRE_STATE.json", "FETCH_LOG.jsonl",
-                    D.REST_AUDIT, D.ARCHIVE_AUDIT, D.ARCHIVE_FORMS, D.SEAL)   # run-time clocks BY DESIGN
+                    D.REST_AUDIT, D.ARCHIVE_AUDIT, D.ARCHIVE_FORMS, D.SEAL,
+                    D.CONTRACT_SPECS)                                 # run-time clocks BY DESIGN
 
 
 def _det_diff(filed_dir: Path, rerun_dir: Path) -> list[str]:
@@ -1462,6 +2203,14 @@ LEGS = [
     ("F-D-SEAL", "write-once records: sealed, re-hashed, and unwritable in code", fdseal_break, fdseal_real, False),
     ("F-D-CLOSURE", "the data module's import closure is range-free", fdclosure_break, fdclosure_real, False),
     ("F-D-FEE", "fee schedule read from the estate's object, never typed", fdfee_break, fdfee_real, False),
+    ("F-D-MULT", "contract multipliers captured, printed, and normalized as a pure scaling",
+     fdmult_break, fdmult_real, False),
+    ("F-D-4", "the two-token trap: intended asset, hard floor, continuity at the floor",
+     fd4_break, fd4_real, False),
+    ("F-D-5", "data spend {never-touched / display-only / scored}, with the evidence line",
+     fd5_break, fd5_real, False),
+    ("F-D-HAIRCUT", "the tiered costs haircut twin, ADDED beside the TC-series toll",
+     fdhaircut_break, fdhaircut_real, False),
     ("F-DET", "same snapshot -> byte-identical artifacts (last)", fdet_break, fdet_real, False),
 ]
 

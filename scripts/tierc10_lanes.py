@@ -34,14 +34,23 @@ not a 4h question at all — a 4h bar that both printed +1R and dipped back to
 entry is two different campaigns depending on the ORDER — so the latch bar is
 SEQUENCED by walking its 48 native 5m children in tape order:
     dip-to-entry BEFORE the +1R print   -> the OLD stop stands for that bar;
-    +1R print THEN dip-to-entry         -> BE exit AT ENTRY inside the bar;
+    +1R print THEN dip-to-entry         -> the floor FILLS inside the bar, at
+                                           the EFFECTIVE stop
+                                           max(ratchet, entry) — which IS
+                                           entry wherever the ratchet still
+                                           sits below it [`be_latch_fill`];
     both inside ONE 5m child            -> adverse-first, and COUNTED;
     the +1R print and NO dip at all     -> the OLD stop stands TOO, and the
                                            parent's stop test runs on it.
-The last line is not decoration: once the ratchet has carried the stop ABOVE
-entry, a latch bar can pierce that stop without ever reaching entry, and a
-branch that tested only "dip_first / tie / mismatch" left that bar with NO
-stop decision [review 2026-09-21, BLOCKING; `be_latch_decision`].
+The last two lines are not decoration, and BOTH were written wrong once.
+Once the ratchet has carried the stop ABOVE entry, a latch bar can pierce
+that stop without ever reaching entry, and a branch that tested only
+"dip_first / tie / mismatch" left that bar with NO stop decision [review
+2026-09-21, BLOCKING; `be_latch_decision`].  And a latch bar that DOES reach
+entry over such a ratchet must have crossed the ratchet on the way, so a fill
+priced at `entry_px` unconditionally paid a price the tape had taken away
+[review 2026-09-21 / R0 2026-09-22, BLOCKING; `be_latch_fill`, measured at
+-0.411957 R long / -0.412369 R short on one campaign].
 From bar j+1 the floor is an ordinary stop: `stop = max(floor, ratchet)` for
 a long (min for a short), monotone, so the ratchet may pass the floor but
 never fall back through it.
@@ -100,6 +109,8 @@ Run:  NAIAD_CACHE_DIR=~/.cache/naiad/snapshots/tc10_20260921 \\
 from __future__ import annotations
 
 import dataclasses
+import hashlib
+import json
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -147,6 +158,33 @@ LEANS = {
                     "labelled `stop`, with `be_bound_at_exit` printed beside "
                     "— the contract's own words, 'from bar j+1 the floor is "
                     "an ordinary stop'"),
+    "L-be-latch-fill": ("THE CONTRACT DOES NOT PIN THIS AND CANNOT REACH IT "
+                        "AT THE REGISTERED PIN.  Its words for the latch bar "
+                        "are 'BE exit AT ENTRY inside the bar'; they are "
+                        "silent on a latch bar reached when the RATCHET "
+                        "already stands past entry, because at "
+                        "be_floor_after_r = 1.0 (== v6's trail_arm_after_r) "
+                        "no advance can precede the latch.  Above 1.0 it is "
+                        "reachable, and the tape coming down from the latch "
+                        "print to entry MUST cross that ratchet first.  SO: "
+                        "the latch bar's fill is the EFFECTIVE stop "
+                        "max(ratchet, entry) for a long, min for a short "
+                        "[`be_latch_fill`], labelled `be_floor` only when it "
+                        "IS entry and `stop` otherwise.  At the registered "
+                        "pin this is BYTE-IDENTICAL to a bare entry fill and "
+                        "F-BE-IDENT proves it; above it the two differ and "
+                        "F-BE-IDENT proves THAT too"),
+    "L-be-mfe-ratchet": ("a RATCHET-BOUND latch-bar fill advances no MFE.  "
+                         "[L-be-mfe] runs the held extreme to the child that "
+                         "DIPPED to entry; a ratchet-bound fill exits at an "
+                         "EARLIER child than that, so crediting the held "
+                         "extreme would credit tape after the exit and "
+                         "breach the lineage's HELD law.  It also makes the "
+                         "latch bar agree, field for field, with the same "
+                         "bar reached through the OLD_STOP branch — which is "
+                         "the honest answer, since on such a bar the tape "
+                         "forces the same exit whichever order the 5m walk "
+                         "reports"),
     "L-spr-floor": ("the spring lane's warm-up floor is `roles.floor_bars` "
                     "(316 under v6) — the same floor the card lane rides, so "
                     "a standalone-vs-card comparison is over one window"),
@@ -398,6 +436,48 @@ def be_latch_decision(seq: dict) -> str:
             else BE_LATCH_OLD_STOP)
 
 
+def be_latch_fill(stop: float, entry_px: float, d: int) -> tuple:
+    """WHAT THE LATCH BAR'S FILL PAYS — the EFFECTIVE stop, never `entry_px`
+    unconditionally [review 2026-09-21 / R0 2026-09-22, BLOCKING, REPAIRED].
+
+    THE DEFECT THIS REPLACES.  The fill branch used to read
+
+        exit_i, exit_px, exit_reason = j, float(entry_px), BE_REASON
+
+    and `break`.  `stop` was never consulted, and because the branch broke out
+    of the loop the parent's stop test never ran on that bar either — so a
+    `plus1r_first` WITH a dip ALWAYS filled at entry, even when the ratchet
+    had already carried `stop` PAST entry.  The tape cannot get from the latch
+    print down to entry without crossing a stop that sits between them, so
+    that fill paid a price the tape had already taken away.  MEASURED on the
+    synthetic latch tape at `be_floor_after_r = 2.0`: floor OFF exits
+    (369, 'stop') at +0.412163 R; floor ON exited (369, 'be_floor') at
+    +0.000000 R while its OWN `stop_path` ended at +0.412163 R — a fabricated
+    -0.411957 R long / -0.412369 R short on ONE campaign.
+
+    THE REPAIR, IN ONE LINE.  The fill is `apply_floor(stop, entry_px, d)` —
+    max(ratchet, floor) for a long, min for a short — and it is labelled
+    `be_floor` only when it IS the floor.  Above the floor it is an ordinary
+    `stop`, which is the contract's own words for every bar after the latch,
+    applied to the latch bar itself.
+
+    THE SAFETY PROPERTY, AND IT IS PROVEN NOT ASSERTED [F-BE-IDENT].  At the
+    REGISTERED pin `be_floor_after_r = 1.0` — which equals v6's
+    `trail_arm_after_r` — no advance can precede the latch, so `stop` is still
+    `stop0` (adverse), `apply_floor` returns `entry_px`, and the ride is
+    BYTE-IDENTICAL to the pre-repair ride.  F-BE-IDENT digests the whole
+    scenario set both ways and requires equality at 1.0 and INEQUALITY at 2.0.
+
+    WHAT WOULD MAKE THIS WRONG: returning `entry_px` unconditionally (the
+    defect); labelling a fill above the floor `be_floor` (it would then count
+    as a breakeven exit and `be_bound_at_exit` would lie); or letting the fill
+    be WORSE for the position than the stop already on the record, which is
+    the cheap invariant F-BE-NOWORSE drives.
+    """
+    fill = apply_floor(float(stop), float(entry_px), int(d))
+    return float(fill), (BE_REASON if fill == float(entry_px) else "stop")
+
+
 # ═══════════════════════════════════════════════════ THE RIDE, TC10 · ONE LEG
 def _ride_leg10(sym, card, roles, d, ti, entry_px, stop0, r_dist, hi_i):
     """`tierc9._ride_leg9`, with ONE new branch: the breakeven floor.
@@ -415,10 +495,12 @@ def _ride_leg10(sym, card, roles, d, ti, entry_px, stop0, r_dist, hi_i):
         the threshold is a knob and the diagnostic is hardwired at 1.0;
       · on the LATCH BAR the 5m sequencer decides, and it decides in the STOP
         slot, TOTALLY: `be_latch_decision` maps every sequencer answer onto
-        `fill` (BE fill at entry, inside the bar) or `old_stop` (the OLD stop
-        stands and the parent's stop test runs unchanged), and a decision
-        this leg does not know HALTs rather than skipping the stop slot
-        [review 2026-09-21, BLOCKING — see `be_latch_decision`];
+        `fill` (the floor fills inside the bar, PRICED BY `be_latch_fill` at
+        the EFFECTIVE stop max(ratchet, entry) and labelled `be_floor` only
+        when that is entry) or `old_stop` (the OLD stop stands and the
+        parent's stop test runs unchanged), and a decision this leg does not
+        know HALTs rather than skipping the stop slot [review 2026-09-21,
+        BLOCKING — see `be_latch_decision` and `be_latch_fill`];
       · at the END of every bar from the latch bar on, `stop` is floored at
         entry, so bar j+1's stop test, and `matched_step`'s advance-only
         comparison, both see `max(floor, ratchet)`.
@@ -426,8 +508,10 @@ def _ride_leg10(sym, card, roles, d, ti, entry_px, stop0, r_dist, hi_i):
     WHAT WOULD MAKE THIS WRONG: flooring the stop BEFORE the latch bar's own
     stop test (the floor would exit a bar it was not yet armed on); taking
     the BE fill after the bell (a stop is not a close); letting the floor
-    LOWER a ratchet that had already passed it; or answering the latch bar
-    on 4h extremes, which is the question the 5m walk exists to answer.
+    LOWER a ratchet that had already passed it; pricing the latch bar's fill
+    at `entry_px` without consulting `stop` (the repaired defect); or
+    answering the latch bar on 4h extremes, which is the question the 5m walk
+    exists to answer.
     """
     st = T9.frame(sym)
     f = st["f"]
@@ -497,12 +581,26 @@ def _ride_leg10(sym, card, roles, d, ti, entry_px, stop0, r_dist, hi_i):
             n_be_mismatch += int(seq["order"] == "mismatch")
             decision = be_latch_decision(seq)
             if decision == BE_LATCH_FILL:
-                exit_i, exit_px, exit_reason = j, float(entry_px), BE_REASON
+                # THE EFFECTIVE STOP, never entry unconditionally.  Below the
+                # floor this IS entry and the ride is unmoved; above it the
+                # ratchet is what the tape crossed on the way down, and the
+                # ratchet is what the campaign is paid [be_latch_fill].
+                fill, reason = be_latch_fill(stop, entry_px, d)
+                exit_i, exit_px, exit_reason = j, float(fill), reason
                 if touch:
-                    blocked = BE_REASON
-                held = float(seq["mfe_held"])
-                if np.isfinite(held) and (held - entry_px) * d > (mfe - entry_px) * d:
-                    mfe = held
+                    blocked = reason
+                if reason == BE_REASON:
+                    # [LEAN L-be-mfe] applies to a BE fill AT ENTRY only: the
+                    # held extreme runs to the child that DIPPED, and on a
+                    # ratchet-bound fill the exit is an EARLIER child than
+                    # that, so crediting it would credit tape after the exit.
+                    # A ratchet-bound latch bar therefore advances no MFE —
+                    # exactly as the OLD_STOP branch below does not, which is
+                    # what makes the two orders agree on that bar.
+                    held = float(seq["mfe_held"])
+                    if np.isfinite(held) \
+                            and (held - entry_px) * d > (mfe - entry_px) * d:
+                        mfe = held
                 break
             elif decision == BE_LATCH_OLD_STOP:
                 # dip_first / tie / mismatch / a plus1r_first that never
@@ -1299,6 +1397,76 @@ def be_campaign_evidence(sym: str, bar_open_ms: int, d: int, entry_px: float,
                           and mine["i_dip"] == hand["i_dip"])}
 
 
+# ═════════════════ THE LATCH BAR'S WORDS — NARROWED TO WHAT THE LEGS PROVE
+# THE CLAIM THAT STOOD HERE UNTIL 2026-09-22 WAS FALSE AS WRITTEN, and a
+# builder DECLINED a reviewer's protective HALT on the strength of it.  It
+# said F-BE-LATCH "proves the ride at be_floor_after_r = 2.0 ... exits exactly
+# where the floor-OFF ride does — so a sensitivity run off the registered 1.0
+# is proven, not assumed".  F-BE-LATCH's A_ROWS authors the latch bar as
+# (high +2.05 R, low +0.15 R, close +1.20 R): the low NEVER reaches entry, so
+# `be_latch_decision` answered `old_stop` and only the OLD_STOP half of the
+# branch was ever driven.  The FILL half — the half that carried the blocking
+# defect — was untested, and the words covered for it.
+#
+# The prose below is PINNED BY SHA (`LATCH_TOTALITY_SHA`) and every claim it
+# makes is listed in `LATCH_TOTALITY_CLAIMS` against the fixture that drives
+# it.  F-BE-SPEC checks all three together, so the words cannot be
+# STRENGTHENED without either re-pinning the sha beside a new leg, or going
+# RED.  That is the whole mechanism: a sentence here is a promise about a leg
+# somewhere else, and nothing but a fixture can keep the two honest.
+LATCH_TOTALITY = (
+    "the latch bar's stop slot is TOTAL: `be_latch_decision` maps every 5m "
+    "answer onto a fill or the old stop, and a third answer HALTs. The fill "
+    "is PRICED by `be_latch_fill` at the EFFECTIVE stop — max(ratchet, "
+    "entry) for a long, min for a short — and labelled `be_floor` only when "
+    "that IS entry, so a latch bar the tape could only reach by crossing a "
+    "ratcheted stop exits at that stop [repaired 2026-09-22; the branch used "
+    "to pay `entry_px` unconditionally]. AT be_floor_after_r = 2.0 (ABOVE "
+    "v6's trail_arm_after_r 1.0, where the ratchet CAN precede the latch) "
+    "F-BE-LATCH drives TWO hand-authored latch bars over a ratchet standing "
+    "above entry — `plus1r_first` with NO dip, and `plus1r_first` WITH a dip "
+    "— in both directions, and in every one of the four the floor-ON ride "
+    "exits on the same bar, at the same price, for the same reason as the "
+    "floor-OFF ride. THAT IS ALL IT PROVES: four hand-authored bars, NOT a "
+    "sensitivity run, and nothing here says the 2.0 book equals the 1.0 book "
+    "on real bars. At the REGISTERED pin 1.0 the repair is BYTE-IDENTICAL to "
+    "the pre-repair ride and F-BE-IDENT digests the whole scenario set both "
+    "ways to prove it, and proves the two DIFFER at 2.0 so the identity is "
+    "not vacuous. F-BE-NOWORSE carries the cheap invariant underneath all of "
+    "it: a stop-class exit is never worse for the position than the stop "
+    "already on its own `stop_path`."
+)
+
+# Each claim is (a phrase that must appear VERBATIM in LATCH_TOTALITY, the
+# fixture that drives it).  F-BE-SPEC requires the phrase to occur EXACTLY
+# ONCE and the fixture to have PASSED in the same run.
+LATCH_TOTALITY_CLAIMS = (
+    ("a third answer HALTs", "F-BE-LATCH"),
+    ("`plus1r_first` with NO dip", "F-BE-LATCH"),
+    ("`plus1r_first` WITH a dip", "F-BE-LATCH"),
+    ("in both directions", "F-BE-LATCH"),
+    ("BYTE-IDENTICAL to the pre-repair ride", "F-BE-IDENT"),
+    ("proves the two DIFFER at 2.0", "F-BE-IDENT"),
+    ("never worse for the position than the stop already on its own "
+     "`stop_path`", "F-BE-NOWORSE"),
+)
+
+# The exact sentence that was RETRACTED on 2026-09-22.  It is kept verbatim so
+# the retraction is checkable: F-BE-SPEC refuses to find it anywhere in
+# LANE_SPEC again.
+LATCH_TOTALITY_RETRACTED = (
+    "F-BE-LATCH proves the ride at be_floor_after_r = 2.0 (ABOVE v6's "
+    "trail_arm_after_r 1.0, where the ratchet can precede the latch) exits "
+    "exactly where the floor-OFF ride does",
+    "so a sensitivity run off the registered 1.0 is proven, not assumed",
+)
+
+# sha256 of LATCH_TOTALITY.  Re-pinning it is the deliberate, greppable act a
+# reviewer looks for when the words change [F-BE-SPEC].
+LATCH_TOTALITY_SHA = ("54867daf9101ae14da90f5c38ceefbe345329669"
+                      "b700fb319e0d46f1b97a23c4")
+
+
 # ═══════════════════════════════════════════════════════════ THE LANE SPEC
 LANE_SPEC = {
     "P-BE-1": {
@@ -1317,16 +1485,7 @@ LANE_SPEC = {
         "after_the_latch_bar": ("stop = max(floor, ratchet) for a long, min "
                                 "for a short; monotone; exits labelled "
                                 "`stop` with be_bound_at_exit beside"),
-        "latch_bar_totality": ("the latch bar's stop slot is TOTAL: "
-                               "`be_latch_decision` maps every 5m answer "
-                               "onto a fill or the old stop, a third answer "
-                               "HALTs, and F-BE-LATCH proves the ride at "
-                               "be_floor_after_r = 2.0 (ABOVE v6's "
-                               "trail_arm_after_r 1.0, where the ratchet can "
-                               "precede the latch) exits exactly where the "
-                               "floor-OFF ride does — so a sensitivity run "
-                               "off the registered 1.0 is proven, not "
-                               "assumed [review 2026-09-21]"),
+        "latch_bar_totality": LATCH_TOTALITY,
         "ratchet_vs_floor": ("`ratchet_exit` excludes a floor-bound stop "
                              "exit; `stop_advanced_atr` counts both lifts "
                              "and `be_bound_at_exit` / `stop_path` say "
@@ -1364,6 +1523,169 @@ LANE_SPEC = {
 }
 
 
+# ═══════════════════════════ THE STAGE MANIFEST — LAW 1(b)'s ON-DISK RECORD
+# R0 (2026-09-22) found `lanes/` one of only two stage directories with no
+# `build_manifest.json`, so clause (b) of the LAW OF RESUMPTION — "its
+# manifest shas verify" — had NOTHING to verify against: the transcript was
+# self-consistent and unattested.  This is that record, in the shape
+# `census/`, `panel/` and `stamps/` already use.
+#
+# IT CARRIES NO WALL CLOCK.  A manifest with a timestamp in it cannot be
+# re-derived, and LAW 1(b) is a RE-DERIVATION law: a second run must produce
+# this file byte for byte [F-DET's own law, applied to the evidence].
+LANES_WARRANTY = (
+    "these mechanics are true AS OF the bar named in `as_of_last_closed_4h` "
+    "and of no other; the corridor advances with the cache [TC6V-a, carried "
+    "by TIER-C10]. The 5m children the BE sequencer walks are read through "
+    "`tierc10_data.load_asof`, which CLOSES them at the same pin — the 5m "
+    "parquet files hold rows past it and a sequencer that read one would be "
+    "judging a campaign on a bar stamped after it."
+)
+LANES_GATES = (
+    "NOTHING. This stage is MECHANICS. No registration is filed, no P-* "
+    "number is computed, and the only book ridden on real bars is the KNOWN "
+    "CONTROL (card v6, every new knob OFF, CLASSIC5), ridden to prove it is "
+    "UNCHANGED [LAW 4, F-LANES-OFF]. F-C10-BE, the contract's own "
+    "three-campaign fixture, is NOT RUN and cannot run until P-BE-1 is "
+    "FILED; it is never reported PASS."
+)
+LANES_COMMISSION = {
+    "P-BE-1": (
+        "the BREAKEVEN FLOOR mechanism for the 4h card lane: "
+        "`Card.be_floor_after_r` (registered pin 1.0, default None = OFF), "
+        "the latch bar SEQUENCED on its 48 native 5m children, and from bar "
+        "j+1 stop = max(floor, ratchet). Mechanism only — no arm, no book, "
+        "no number."),
+    "P-SPR-2": (
+        "the SPRING / UPTHRUST lane for the 4h card: signals handed in as a "
+        "PRECOMPUTED LIST and verified against the raw tape, entry at the "
+        "harden bar's close, stop on the RAW sweep extreme. Mechanism only."),
+    "P-SPR-2_population_of_record": (
+        "OPERATOR RULING R3 (2026-09-21, verbatim): 'Full corridor, "
+        "standalone vs zero, top side in, we trade both ways' — RATIFIED by "
+        "ruling R9 (2026-09-22): 'R3 governs — full corridor, both ways', "
+        "which supersedes the contract's frozen text '4h, 5-asset "
+        "exploration-classic, vs card/standalone'. NOTE that "
+        "'exploration-classic' is an ERA (<= 2024-06-30), not a panel: the "
+        "superseded reading kept the CLASSIC5 panel and added an era collar, "
+        "and R3/R9 drop the collar and keep the panel. THIS MODULE SERVES "
+        "EITHER: the era is a WINDOW argument (`replay10(lo_ms, hi_ms)` / "
+        "`run_lane`) and the signal list is built per-window "
+        "(`spring_signals_from_census(lo_i, hi_i)`), so no code changes when "
+        "a registration names one. TODAY IT SERVES R3/R9 — LANE_SPEC's "
+        "`population` reads 'CLASSIC5 x full corridor x 4h [R3]' and no era "
+        "collar exists anywhere in this file."),
+    "not_commissioned": (
+        "a registration text, a scored row, an arm, a verdict, or any "
+        "P-BE-1 / P-SPR-2 number. TEXT BEFORE RESULT."),
+}
+
+
+def file_sha256(p: Path) -> str:
+    return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+
+
+def code_sha() -> str:
+    return file_sha256(Path(__file__))
+
+
+def lanes_input_sha(panel=None) -> dict:
+    """sha256 of every input file a LANE reads.
+
+    `tierc10_panel.input_sha` names the 4h klines and the funding tapes.  It
+    does NOT name the native 5m tapes, and the BE sequencer walks those on
+    every latch bar — a 5m parquet that moved would move a latch-bar answer
+    with nothing in any manifest to attribute it to.  So they are added here,
+    by the same path function the loader uses (`tierc10_data.kline_path`),
+    never by a hand-built string."""
+    panel = tuple(panel or TP.CLASSIC5)
+    out = dict(TP.input_sha(panel))
+    for sym in panel:
+        q = D.kline_path(sym, "5m")
+        out[f"{q.parent.name}/{q.name}"] = (file_sha256(q) if q.exists()
+                                            else "ABSENT")
+    return out
+
+
+def build_manifest(fixture_results=None, not_run=None, panel=None) -> dict:
+    """The stage record: code shas, the as-of, the seed, the commission, and
+    the content sha of EVERY artifact in `research_outputs/tierc10/lanes/`.
+
+    `build_manifest.json` itself is excluded — a file cannot carry its own
+    sha — and every other file in the directory is listed, WHOLE: no
+    filtering, no "the ones I wrote".  A stray artifact is recorded, not
+    hidden, because the point of the record is to make the directory
+    checkable by someone who did not build it."""
+    panel = tuple(panel or TP.CLASSIC5)
+    meta = TP.corridor_n(panel)[2]
+    arts, shas = {}, {}
+    if OUT.exists():
+        for q in sorted(OUT.iterdir()):
+            if not q.is_file() or q.name == "build_manifest.json":
+                continue
+            arts[q.name] = {"bytes": q.stat().st_size, "sha256": file_sha256(q)}
+            shas[q.name] = arts[q.name]["sha256"]
+    fx = dict(fixture_results or {})
+    return {
+        "tier": "TIER-C10",
+        "stage": "TIER-C10 · STAGE B MECHANICS · LANES (P-BE-1, P-SPR-2)",
+        "seed": SEED,
+        "seed_lineage": getattr(TP, "SEED_LINEAGE", None),
+        "substrate": TP.substrate()["substrate"],
+        "as_of_last_closed_4h": meta["last_closed_4h_close"],
+        "as_of_source": "Stage D AS_OF_PIN.json, via tierc10_panel.corridor_n",
+        "panel_name": "CLASSIC5",
+        "panel": list(panel),
+        "book": ("card v6 · V6_ROLES · CLASSIC5 — the KNOWN CONTROL, the "
+                 "ONLY real-data book this stage rides, ridden unregistered "
+                 "by run_lane's own gate to prove it is UNCHANGED"),
+        "commission": LANES_COMMISSION,
+        "gates": LANES_GATES,
+        "warranty": LANES_WARRANTY,
+        "code_sha": code_sha(),
+        "fixtures_code_sha": file_sha256(ROOT / "scripts"
+                                         / "tierc10_lanes_fixtures.py"),
+        "panel_code_sha": file_sha256(ROOT / "scripts" / "tierc10_panel.py"),
+        "data_code_sha": file_sha256(ROOT / "scripts" / "tierc10_data.py"),
+        "census_code_sha": file_sha256(ROOT / "scripts"
+                                       / "tierc10_census.py"),
+        "input_sha": lanes_input_sha(panel),
+        "artifacts": arts,
+        "sha": shas,
+        "new_knobs": {k: repr(_KNOB_OFF[k]) for k in NEW_KNOBS},
+        "pins": {"FROZEN_SCALE_MULT": float(FROZEN_SCALE),
+                 "DEV_RETURN_BARS": 7,
+                 "N_5M_PER_4H": int(N_5M_PER_4H),
+                 "REPR_TOL": float(REPR_TOL),
+                 "BE_REASON": BE_REASON,
+                 "be_floor_after_r_registered": 1.0,
+                 "lanes": list(LANES)},
+        "lane_spec": {k: dict(v) for k, v in LANE_SPEC.items()},
+        "latch_bar_totality_sha": LATCH_TOTALITY_SHA,
+        "latch_bar_totality_claims": [list(c) for c in LATCH_TOTALITY_CLAIMS],
+        "latch_bar_totality_retracted": list(LATCH_TOTALITY_RETRACTED),
+        "leans": dict(LEANS),
+        "lean_tag": LEAN_TAG,
+        "fixtures": {"results": fx, "not_run": dict(not_run or {}),
+                     "n_pass": sum(1 for v in fx.values() if v),
+                     "n_total": len(fx)},
+        "be_campaigns": list(BE_CAMPAIGNS),
+        "be_campaigns_note": BE_CAMPAIGNS_NOTE,
+        "registry_of_record": str(TP.REG_DIR),
+        "registry_present": bool(TP.REG_DIR.exists()),
+    }
+
+
+def write_manifest(fixture_results=None, not_run=None, panel=None) -> Path:
+    """File it.  Sorted keys, indent 2, trailing newline — the estate's own
+    shape, so two runs give one sha."""
+    OUT.mkdir(parents=True, exist_ok=True)
+    q = OUT / "build_manifest.json"
+    q.write_text(json.dumps(build_manifest(fixture_results, not_run, panel),
+                            indent=2, sort_keys=True, default=str) + "\n")
+    return q
+
+
 def main() -> int:
     """Print the lane spec and file NOTHING.  No registration may be filed in
     this workflow and no registered lane may ride, so there is nothing for a
@@ -1392,6 +1714,12 @@ def main() -> int:
           "and rides no real book but the known control.")
     print(f"F-C10-BE campaigns: {BE_CAMPAIGNS or 'NOT NAMED'} — "
           f"{BE_CAMPAIGNS_NOTE}")
+    q = OUT / "build_manifest.json"
+    print(f"stage manifest {q}: "
+          + (f"PRESENT, sha {file_sha256(q)[:16]}…" if q.exists()
+             else "ABSENT — run tierc10_lanes_fixtures.py WHOLE; it files "
+                  "the manifest after the transcript, and this function "
+                  "files nothing [LAW 4]"))
     return 0
 
 

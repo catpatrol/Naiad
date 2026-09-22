@@ -35,7 +35,16 @@ WHAT IT DOES, IN ORDER
      ASSUMPTION with its source line; funding interval OBSERVED per asset)
      and STAGE_D_MANIFEST.json/.md (sha256 per file, rows, edges, gaps,
      venue, listing date, snapshot root, AS_OF).
-  8. AUDITS (--audit-rest / --audit-archive, read-only): the venue publishes
+  8. FILES the four RESUME-contract artifacts of 2026-09-22: CONTRACT_SPECS.json
+     (the venue's own contract spec per symbol — the multiplier printed and
+     normalized, 1000PEPEUSDT and 1000BONKUSDT quoting PER 1000 TOKENS), the
+     TWO-TOKEN TRAP table (intended asset, listing instant + source, the hard
+     floor, and price continuity AT the floor proven by rebuilding the floor bar
+     from its own native 5m children), DATA_SPEND_AUDIT.json ({never-touched /
+     display-only / scored} per asset with the evidence line — P-GEN-1's hard
+     dependency) and the TIERED COSTS HAIRCUT TWIN (the charter model as an
+     ADDED column beside the TC-series toll, never a replacement).
+  9. AUDITS (--audit-rest / --audit-archive, read-only): the venue publishes
      every native bar TWICE — its REST API and its BULK ARCHIVE — and the two
      disagree on a few incident bars.  WHICH of the two a pre-existing file
      carries is MEASURED per (file, lens) over the WHOLE history, both ways
@@ -60,6 +69,7 @@ Re-describe (no network, e.g. F-DET):  ... scripts/tierc10_data.py --offline [--
 Audit (read-only, network):  ... scripts/tierc10_data.py --audit-rest 4h,1h
                              ... scripts/tierc10_data.py --audit-archive 4h,1h
 Seal (once, no network):     ... scripts/tierc10_data.py --seal
+Contract specs (ONE venue reach, write-once):  ... scripts/tierc10_data.py --contract-specs
 Exit: 0 complete · 2 fetch incomplete (re-run resumes) · 1 HALT.
 """
 from __future__ import annotations
@@ -69,6 +79,7 @@ import ast
 import hashlib
 import json
 import os
+import re
 import sys
 import time
 import zipfile
@@ -140,6 +151,46 @@ def pin_literal(path: Path, table: str, key: str):
                                  f"literal pin ({e!r})")
     raise SystemExit(f"HALT: no literal table {table} in {path}")
 
+
+def literal_path(path: Path, table: str, *keys: str):
+    """ONE nested value out of a CLOSED REGISTER in another module's SOURCE,
+    without importing that module.  pin_literal's sibling: it literal_evals
+    only the requested SUBTREE, so a register whose OTHER rows hold expressions
+    (oracle_daily's REGISTER does) is still readable, and it accepts the
+    annotated form `TABLE: dict = {...}` (ast.AnnAssign) as well as a plain
+    assignment.  Used to read the estate's universes — the TC-series scored
+    UNIVERSE, the Oracle's display ROSTER, the frozen study basket — for the
+    data-spend audit, which must NOT drag those modules into this one's import
+    closure (F-D-CLOSURE).
+
+    HALTS IF: the table is absent, a key is absent, or the subtree is not a
+    literal.
+    """
+    src = path.read_text(encoding="utf-8")
+    node = None
+    for n in ast.walk(ast.parse(src)):
+        tg = (n.targets if isinstance(n, ast.Assign) else
+              [n.target] if isinstance(n, ast.AnnAssign) else [])
+        if any(isinstance(t, ast.Name) and t.id == table for t in tg):
+            node = n.value
+            break
+    if node is None:
+        raise SystemExit(f"HALT: no table {table} in {path}")
+    for k in keys:
+        hit = None
+        if isinstance(node, ast.Dict):
+            for kk, vv in zip(node.keys, node.values):
+                if isinstance(kk, ast.Constant) and kk.value == k:
+                    hit = vv
+        if hit is None:
+            raise SystemExit(f"HALT: {path.name}:{table}[{k!r}] not found")
+        node = hit
+    try:
+        return ast.literal_eval(node)
+    except ValueError as e:
+        raise SystemExit(f"HALT: {path.name}:{table}{list(keys)} is not a literal ({e!r})")
+
+
 MS_1H = 3_600_000
 MS_4H = 4 * MS_1H
 DAY_MS = 86_400_000
@@ -157,6 +208,53 @@ GRID_ANCHOR_MS = {"1w": MONDAY_EPOCH_OFFSET_MS}     # every other lens: 0
 FUNDING_JITTER_MS = 60_000                   # study/census.py FUNDING_JITTER_MAX_MS
 MEM_TTL_BARS = int(pin_literal(RANGE_PINS_SOURCE, "PINS_V2", "MEM_TTL_BARS"))
 ADMISSION_MIN_4H = int(R2.TIDE_SLOW) + MEM_TTL_BARS                       # 316 + 400
+
+# ── the charter's tiered cost model, as a HAIRCUT TWIN [VETO "tiers"] ─────
+# The TC-series toll (FEE_BPS_ROUND_TRIP, the ['accounting'] figure) is NEVER
+# replaced; the twin is an ADDED column.  The tier table is not TYPED here: it
+# is PARSED out of the contract's own clause below, so editing a number in the
+# table without editing the contract sentence is impossible (F-D-HAIRCUT).
+CONTRACT_SLIPPAGE_CLAUSE = (
+    "every row gets the charter model as a HAIRCUT TWIN beside the TC-series toll — "
+    "slippage/side tier A {BTC ETH} 2 bps · tier B {SOL NEAR ZEC LTC BNB DOGE UNI SUI XMR} 5 · "
+    "tier C {ENA PUMPFUN HYPE MNT PEPE BONK} 10")
+CHARTER_SOURCE = ROOT / "Naiad_Phase0_Charter.md"
+CHARTER_SLIPPAGE_NEEDLE = "**Slippage** per side"
+_TIER_RX = re.compile(r"tier ([A-Z]) \{([^}]*)\} (\d+)")
+
+
+def parse_slippage_clause(clause: str) -> dict:
+    """The contract's slippage sentence -> {tier: {'bps': float, 'assets': (...)}}.
+    READ, never typed.  HALTS IF the sentence carries no tier at all, or names
+    one asset in two tiers."""
+    tiers, seen = {}, {}
+    for name, assets, bps in _TIER_RX.findall(clause):
+        a = tuple(assets.split())
+        for x in a:
+            if x in seen:
+                raise SystemExit(f"HALT: asset {x} is in tier {seen[x]} AND tier {name}")
+            seen[x] = name
+        tiers[name] = {"bps": float(bps), "assets": a}
+    if not tiers:
+        raise SystemExit(f"HALT: no tier found in the slippage clause: {clause!r}")
+    return tiers
+
+
+SLIPPAGE_TIERS = parse_slippage_clause(CONTRACT_SLIPPAGE_CLAUSE)
+TIER_OF_ASSET = {a: t for t, b in SLIPPAGE_TIERS.items() for a in b["assets"]}
+
+# ── contract multipliers ─────────────────────────────────────────────────
+CONTRACT_SPECS = "CONTRACT_SPECS.json"
+DATA_SPEND = "DATA_SPEND_AUDIT.json"
+_MULT_PREFIX = re.compile(r"^(\d+)(?=[A-Z])")
+
+# ── the two-token trap ───────────────────────────────────────────────────
+# |ln(open_after / close_before)| across the listing floor.  There is no
+# identity available for a price seam, so the limit is a LEAN [D-i]: it is set
+# from the WHOLE-TAPE seam census printed in the manifest (largest real 4h seam
+# over the panel: ETHUSDT 2019-11-27T08:00Z, |ln| 0.1551 of 179,996 seams) and
+# sits an order of magnitude BELOW the ~6.9 a 1000x token swap would show.
+SPLICE_JUMP_LIMIT_LN = 1.0
 
 # ── panels [LEAN L6] ──────────────────────────────────────────────────────
 CLASSIC5 = tuple(R2.UNIVERSE)
@@ -237,6 +335,71 @@ LEANS = (
     "From the repair on, write-once is CODE: _dump_once refuses to overwrite, "
     "probe_venues re-reads like the pin, and WRITE_ONCE_SEAL.json pins the "
     "three files' shas and the fetch log's line prefix (F-D-SEAL).",
+    "[LEAN-HEPHAESTUS] D-i THE SPLICE LIMIT. Price continuity across the listing "
+    "floor has no IDENTITY to check against, so the limit is a lean: a seam is a "
+    f"SPLICE if |ln(open_after / close_before)| > {SPLICE_JUMP_LIMIT_LN}. Chosen from "
+    "the WHOLE-TAPE seam census filed in the manifest (every adjacent 4h seam of every "
+    "panel asset, 179,996 of them; largest real seam ETHUSDT 2019-11-27T08:00Z at "
+    "0.1551 — the bar after its own listing bar), and an order of magnitude below the "
+    "~6.9 a 1000x token swap prints. On the FILED panel the limit binds on NOTHING: no "
+    "asset's tape holds a bar before its floor, so no floor seam exists. That arm of "
+    "F-D-4 is therefore proven by its BREAK leg alone and says so; the arm that rides "
+    "real values is the floor-bar IDENTITY (below).",
+    "[LEAN-HEPHAESTUS] D-j THE FLOOR BAR IS RECONSTRUCTED, NOT ASSUMED. A grid bar that "
+    "CONTAINS the listing instant opens before it (BTCUSDT's first 4h bar opens 17:55 -> "
+    "16:00). That is the venue's grid, not prior-asset history — and it is PROVEN so, "
+    "per asset, by rebuilding the floor bar from its OWN native 5m children at or after "
+    "the listing instant: open == the first child's open, high == max, low == min, close "
+    "== the last child's close, volume == the sum. A bar carrying one trade of a previous "
+    "token could not survive that rebuild. Where the venue serves no bar AT the floor "
+    "(SUIUSDT, 1000PEPEUSDT: the tape begins hours after the listing instant), the "
+    "subject is the tape's FIRST bar instead, and that is printed.",
+    "[LEAN-HEPHAESTUS] D-k DATA-SPEND CLASSES ARE READ FROM CLOSED REGISTERS, not from "
+    "prose. scored = the stem is in the TC-series scored universe (scripts/tierc2_rules.py "
+    "REGISTER['UNIVERSE']); display-only = not scored AND in the Oracle's display ROSTER "
+    "(scripts/oracle_daily.py REGISTER['ROSTER']) or the frozen study basket "
+    "(engine/cells.py SYMBOLS); never-touched = neither, and no grep of the contract's "
+    "corpus places it in a scored book. All three registers are READ as literals "
+    "(literal_path) — importing them would drag analytics / the range machine into this "
+    "module's closure (F-D-CLOSURE). The grep corpus is NAMED whole in the artifact and "
+    "EXCLUDES _reviewer_box/, docs/history/ and research_outputs/tierc10*/ (this build's "
+    "own outputs — a self-reference would make the audit unreproducible).",
+    "[LEAN-HEPHAESTUS] D-l THE MULTIPLIER IS IN THE NAME. MEASURED at the venue: Binance "
+    "USDT-M exchangeInfo publishes NO contractSize / contract_size / quantity_multiplier "
+    "field for a linear perpetual, and neither does Bybit v5 instruments-info for a "
+    "LinearPerpetual (contractSize there is an INVERSE-contract field). The only place "
+    "the venue states the multiplier is the baseAsset NAME: baseAsset '1000PEPE' means "
+    "one contract unit is 1000 PEPE, so every quoted price is PER 1000 TOKENS. The "
+    "multiplier is therefore READ off the captured baseAsset's leading integer (1 when "
+    "there is none), the ABSENCE of the fields is filed as a measured fact, and "
+    "CONTRACT_SPECS.json carries the venue's whole symbol object so the reading can be "
+    "re-checked without a second network reach.",
+)
+
+# The four RESUME-contract artifacts of Stage D that R0 proved ABSENT were built
+# on 2026-09-22 (this file's second pass).  What the reader must not mistake for
+# tampering is recorded here, in the artifact, once.
+STANDING_DISCLOSURES = (
+    "F-D-1b's VENUE CENSUS DRIFTS OVERNIGHT, BY DESIGN OF THE VENUE, NOT BY OURS. The "
+    "bulk archive BACKFILLS: a stamp the archive did not publish when the census ran is "
+    "published later, and a bar that was 'rest' (equal to REST, no archive twin to "
+    "compare) becomes 'both' (equal to REST and to the archive). R0 re-ran F-D-1b on "
+    "2026-09-22 and measured the kinds move from {both: 215, rest: 28} to {both: 223, "
+    "rest: 20} — 8 bars migrated, none changed value, none became 'neither'. NO CACHED "
+    "BAR MOVED: a prefix is never rewritten and F-D-PREFIX re-proves it every run. A "
+    "future run seeing different both/rest counts is seeing the archive catch up, NOT "
+    "tampering; what would be a finding is a bar equal to NEITHER publication, or any "
+    "movement in 'neither' / 'REST-sourced rows differing from REST'.",
+    "F-D-1 IS DESIGNED RED and stays RED until the operator rules. It is kept "
+    "contract-literal ('vs the venue API ... FAILS IF any OHLCV field differs') while the "
+    "venue's REST API and its BULK ARCHIVE disagree on incident bars and operator ruling "
+    "R5 ('The USDT pair, either on Binance or Bybit') does not distinguish the two "
+    "publications. Re-cutting the claim after the result to make it green would be a "
+    "check whose claim is not the design's claim. F-D-1b carries the attribution.",
+    f"{CONTRACT_SPECS} IS WRITE-ONCE IN CODE (_dump_once) BUT IS NOT IN THE FILED SEAL. "
+    "WRITE_ONCE_SEAL.json is itself write-once and was filed before this capture existed, "
+    "so it cannot name it. The capture's own bytes are pinned instead by the manifest's "
+    "contract_multipliers.artifact_sha256, which F-D-MULT re-hashes.",
 )
 
 LOG_LINES: list[str] = []
@@ -958,6 +1121,16 @@ def fee_schedule(assets: list[dict], funding: dict, pin: dict) -> dict:
             "round_trip_bps_used": float(R2.FEE_BPS_ROUND_TRIP),
             "kind": "ASSUMPTION — the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
             "source": src,
+            # ── the HAIRCUT TWIN [VETO "tiers"]: ADDED keys, beside
+            # round_trip_bps_used, which is NEVER replaced or recomputed here.
+            "haircut_twin_tier": tier_of(a["asset"]),
+            "haircut_twin_slippage_bps_side": slippage_bps_side(a["asset"]),
+            "haircut_twin_bps_side": charter_bps_side(a["asset"]),
+            "haircut_twin_round_trip_bps": charter_round_trip_bps(a["asset"]),
+            "haircut_twin_kind": ("CHARTER MODEL — an ADDED column beside the TC-series toll; "
+                                  "round_trip_bps_used above is untouched and stays the "
+                                  "accounting figure of record [VETO 'tiers']"),
+            "haircut_twin_source": CONTRACT_SLIPPAGE_CLAUSE,
             "venue_note": ("Bybit's published base taker rate for linear perpetuals is NOT "
                            "fetched here (signed endpoint) and is widely quoted ABOVE 5.0 bps "
                            "[UNVERIFIED, general knowledge]; the estate figure is applied "
@@ -973,12 +1146,670 @@ def fee_schedule(assets: list[dict], funding: dict, pin: dict) -> dict:
             "as_of_last_closed_4h_open": pin["as_of_last_closed_4h_open"],
             "warranty": WARRANTY, "fee_law": "fee = (FEE_BPS_SIDE / 10_000) * (entry_px + exit_px) "
                                             "(scripts/tierc2_baseline.py)",
+            "haircut_twin_law": ("ADDED, never a replacement: haircut_twin_* keys carry the "
+                                 "charter model (per-side taker fee + the charter's per-side "
+                                 "slippage tier) beside round_trip_bps_used, which stays the "
+                                 "TC-series accounting figure on every row [VETO 'tiers']. "
+                                 "twin cost_px = ((FEE_BPS_SIDE + slippage_bps_side) / 10_000) * "
+                                 "(entry_px + exit_px); net_r_twin = gross_r - cost_px / risk_px "
+                                 "(tierc10_data.haircut_twin_net_r)"),
+            "haircut_twin_clause": CONTRACT_SLIPPAGE_CLAUSE,
+            "haircut_twin_tiers": {t: {"bps_per_side": b["bps"], "assets": list(b["assets"])}
+                                   for t, b in sorted(SLIPPAGE_TIERS.items())},
             "assets": rows}
 
 
 WARRANTY = ("these files are described AS OF the pinned last closed 4h bar named "
             "here and of no other; bars stamped after it are counted, never read "
             "[TC6V-a, carried by TIER-C10]")
+
+
+# ═══════════════════════════════════════════════ 7b · CONTRACT MULTIPLIERS
+MULTIPLIER_FIELDS = ("multiplier", "contractSize", "contract_size", "quantity_multiplier",
+                     "contractMultiplier", "multiplierSize")
+
+
+def base_multiplier(base_asset: str) -> int:
+    """TOKENS per contract unit, READ off the venue's own baseAsset name
+    [LEAN D-l]: '1000PEPE' -> 1000, 'BTC' -> 1.  Never typed per symbol."""
+    m = _MULT_PREFIX.match(base_asset or "")
+    return int(m.group(1)) if m else 1
+
+
+def normalize_price(px, multiplier: int):
+    """Venue price (per contract unit) -> price PER ONE TOKEN.  A PURE SCALING
+    by the constant 1/multiplier."""
+    return px / multiplier
+
+
+def normalize_qty(q, multiplier: int):
+    """Venue quantity (contract units) -> quantity in TOKENS.  The inverse
+    scaling, so notional px*q is invariant."""
+    return q * multiplier
+
+
+NORMALIZATION_LAW = (
+    "NORMALIZED PRICE = venue price / multiplier (USDT per ONE token); NORMALIZED "
+    "QUANTITY = venue quantity x multiplier (tokens). For 1000PEPEUSDT and "
+    "1000BONKUSDT the multiplier is 1000, i.e. EVERY PRICE THE VENUE QUOTES ON THOSE "
+    "TWO TAPES IS PER 1000 TOKENS; for the other fifteen it is 1 and normalization is "
+    "the identity. THE NORMALIZATION IS A PURE SCALING OF THE PRICE SERIES BY A "
+    "CONSTANT, AND THEREFORE CANNOT MOVE ANY RATIO-VALUED STATISTIC: for a constant "
+    "k > 0, R = (exit - entry) / (entry - stop) has k in numerator and denominator and "
+    "is unchanged; an ATR-normalized height (high - low) / ATR is a price over a price "
+    "and is unchanged; a log return ln(p_t / p_{t-1}) is unchanged; the notional "
+    "price x quantity is unchanged because the quantity scales by 1/k. What DOES move "
+    "is anything quoted in absolute price units — a tick size, a MIN_NOTIONAL, a "
+    "per-unit fee in USDT — and those are filed per symbol here, unnormalized, as the "
+    "venue states them. NAIAD DOES NOT REWRITE THE TAPE: the parquet holds the venue's "
+    "own numbers; normalization is a READING, applied by whoever needs per-token units, "
+    "and F-D-MULT proves on the real 1000PEPEUSDT and 1000BONKUSDT tapes that applying "
+    "it leaves every ratio-valued statistic identical.")
+
+
+def capture_contract_specs(out: Path, pin: dict) -> dict:
+    """THE ONE VENUE REACH OF THIS PASS.  Binance USDT-M exchangeInfo (the whole
+    symbol object, filters included) for every Binance-venue stem, Bybit v5
+    instruments-info for the alternate-venue one.  Write-once like the pin and
+    the probe: a contract spec is captured before it is quoted, and quoted from
+    the file afterwards — no fixture and no re-description ever asks the venue
+    again (F-DET would not survive it).
+
+    The MEASURED absence of every multiplier field is part of the record
+    [LEAN D-l]: R0 found zero occurrences of multiplier / contractSize /
+    contract_size / quantity_multiplier in STAGE_D_MANIFEST.json and zero in
+    VENUE_PROBE.json, and the venue is the reason — it publishes none.
+
+    HALTS IF: the venue does not serve a stem's symbol at all.
+    """
+    p = out / CONTRACT_SPECS
+    if p.exists():
+        doc = json.loads(p.read_text())
+        log(f"CONTRACT SPECS (re-read, captured {doc['captured_wall_clock_utc']})")
+        return doc
+    probe = json.loads((out / "VENUE_PROBE.json").read_text())
+    assets = [a for a in probe["classic5"] + probe["unseen12"] if a.get("stem")]
+    r = ED._get(ED.REST_BASE + "/fapi/v1/exchangeInfo")
+    info = r.json()
+    by_sym = {s["symbol"]: s for s in info["symbols"]}
+    rows, absent = [], {}
+    for a in assets:
+        if a["venue"] == "BINANCE_USDTM":
+            s = by_sym.get(a["symbol"])
+            if s is None:
+                raise SystemExit(f"HALT: {a['symbol']} absent from exchangeInfo at capture")
+            filt = {f["filterType"]: f for f in s["filters"]}
+            base = s["baseAsset"]
+            row = {
+                "asset": a["asset"], "stem": a["stem"], "symbol": s["symbol"],
+                "venue": "BINANCE_USDTM", "base_asset": base, "quote_asset": s["quoteAsset"],
+                "contract_type": s["contractType"], "status": s["status"],
+                "price_tick": filt["PRICE_FILTER"]["tickSize"],
+                "qty_step": filt["LOT_SIZE"]["stepSize"],
+                "min_qty": filt["LOT_SIZE"]["minQty"],
+                "min_notional_usdt": filt.get("MIN_NOTIONAL", {}).get("notional"),
+                "price_precision": s["pricePrecision"], "quantity_precision": s["quantityPrecision"],
+                "venue_object": s,
+            }
+        else:
+            inst = _bybit_get("/v5/market/instruments-info",
+                              {"category": "linear", "symbol": a["symbol"]})["list"]
+            if not inst:
+                raise SystemExit(f"HALT: bybit serves no instrument {a['symbol']} at capture")
+            s = inst[0]
+            base = s["baseCoin"]
+            row = {
+                "asset": a["asset"], "stem": a["stem"], "symbol": s["symbol"],
+                "venue": "BYBIT_V5_LINEAR", "base_asset": base, "quote_asset": s["quoteCoin"],
+                "contract_type": s["contractType"], "status": s["status"],
+                "price_tick": s["priceFilter"]["tickSize"],
+                "qty_step": s["lotSizeFilter"]["qtyStep"],
+                "min_qty": s["lotSizeFilter"]["minOrderQty"],
+                "min_notional_usdt": s["lotSizeFilter"].get("minNotionalValue"),
+                "price_precision": s.get("priceScale"), "quantity_precision": None,
+                "funding_interval_minutes": s.get("fundingInterval"),
+                "venue_object": s,
+            }
+        mult = base_multiplier(base)
+        blob = json.dumps(row["venue_object"])
+        present = [k for k in MULTIPLIER_FIELDS if f'"{k}"' in blob]
+        absent[row["symbol"]] = present
+        row.update(
+            multiplier_tokens_per_contract_unit=mult,
+            quotes_per_tokens=mult,
+            multiplier_source=(f"baseAsset {base!r} -> leading integer {mult} [LEAN D-l]; the "
+                               f"venue publishes NO {list(MULTIPLIER_FIELDS)} field for this "
+                               f"contract (fields found in its object: {present or 'none'})"),
+            price_is_per_tokens=(f"EVERY PRICE ON {row['symbol']} IS QUOTED PER {mult} TOKENS"
+                                 if mult != 1 else
+                                 f"prices on {row['symbol']} are per ONE {base} (multiplier 1)"),
+            normalized_price_law=(f"normalized price = venue price / {mult} (USDT per one "
+                                  f"{base.lstrip('0123456789') or base})"),
+            normalized_qty_law=(f"normalized quantity = venue quantity x {mult} "
+                                f"({base.lstrip('0123456789') or base} tokens)"))
+        rows.append(row)
+    doc = {
+        "as_of_last_closed_4h": pin["as_of_last_closed_4h"],
+        "as_of_last_closed_4h_open": pin["as_of_last_closed_4h_open"],
+        "warranty": WARRANTY, "seed": SEED,
+        "captured_wall_clock_utc": iso(time.time() * 1000),
+        "binance_endpoint": ED.REST_BASE + "/fapi/v1/exchangeInfo",
+        "binance_response_sha256": hashlib.sha256(r.content).hexdigest(),
+        "binance_symbols_in_response": len(info["symbols"]),
+        "bybit_endpoint": BYBIT_BASE + "/v5/market/instruments-info?category=linear",
+        "law": "the venue's OWN contract spec per panel symbol, captured ONCE; the multiplier is "
+               "READ off baseAsset because the venue publishes no multiplier field [LEAN D-l]",
+        "multiplier_fields_searched": list(MULTIPLIER_FIELDS),
+        "multiplier_fields_found_per_symbol": absent,
+        "normalization": NORMALIZATION_LAW,
+        "assets": rows,
+    }
+    _dump_once(doc, p)
+    _fetch_log(out, {"kind": "contract_specs", "stem": "ALL",
+                     "venue": "BINANCE_USDTM+BYBIT_V5_LINEAR",
+                     "symbols": len(rows),
+                     "binance_response_sha256": doc["binance_response_sha256"]})
+    log(f"CONTRACT SPECS captured for {len(rows)} symbols -> {p}")
+    return doc
+
+
+def load_contract_specs(out: Path | None = None) -> dict | None:
+    p = (out or OUT) / CONTRACT_SPECS
+    return json.loads(p.read_text()) if p.exists() else None
+
+
+def multiplier_of(stem: str, out: Path | None = None) -> int:
+    """TOKENS per contract unit for a file stem, from the CAPTURE — never
+    re-derived from the stem's own spelling.  HALTS IF the capture is missing
+    or does not name the stem."""
+    doc = load_contract_specs(out)
+    if doc is None:
+        raise SystemExit(f"HALT: no {CONTRACT_SPECS} — run tierc10_data.py --contract-specs")
+    for a in doc["assets"]:
+        if a["stem"] == stem:
+            return int(a["multiplier_tokens_per_contract_unit"])
+    raise SystemExit(f"HALT: {CONTRACT_SPECS} names no stem {stem}")
+
+
+def contract_multiplier_table(out: Path | None = None) -> dict | None:
+    """The manifest's view of the capture: per symbol, and the two that quote
+    per 1000 tokens named out loud."""
+    doc = load_contract_specs(out)
+    if doc is None:
+        return None
+    rows = [{k: a[k] for k in ("asset", "stem", "symbol", "venue", "base_asset", "quote_asset",
+                               "multiplier_tokens_per_contract_unit", "multiplier_source",
+                               "price_is_per_tokens", "normalized_price_law",
+                               "normalized_qty_law", "price_tick", "qty_step", "min_qty",
+                               "min_notional_usdt", "price_precision", "quantity_precision")}
+            for a in doc["assets"]]
+    scaled = [a["symbol"] for a in rows if a["multiplier_tokens_per_contract_unit"] != 1]
+    return {
+        "artifact": f"research_outputs/tierc10/data/{CONTRACT_SPECS}",
+        "artifact_sha256": file_sha256((out or OUT) / CONTRACT_SPECS),
+        "capture_instant": ("NOT carried here, and not by name either: no run-time clock key "
+                            "enters a deterministic artifact (F-DET scans these files for the "
+                            f"key names themselves). The capture's own stamp lives in "
+                            f"{CONTRACT_SPECS} — a PROVENANCE file, which holds clocks by design "
+                            "and is never in the determinism set. This row pins that file's BYTES "
+                            "by sha256 instead, and F-D-MULT re-hashes it every run."),
+        "binance_response_sha256": doc["binance_response_sha256"],
+        "finding": (f"the venue publishes NO {list(MULTIPLIER_FIELDS)} field for any of these "
+                    f"contracts — the multiplier lives in the baseAsset NAME and is read from it "
+                    f"[LEAN D-l]. Symbols whose multiplier is not 1: {scaled or 'none'}. "
+                    f"{' AND '.join(a['price_is_per_tokens'] for a in rows if a['multiplier_tokens_per_contract_unit'] != 1) or 'no symbol is scaled'}."),
+        "multiplier_fields_found_per_symbol": doc["multiplier_fields_found_per_symbol"],
+        "normalization": doc["normalization"],
+        "symbols_quoting_per_1000_tokens": scaled,
+        "rows": rows,
+    }
+
+
+# ═══════════════════════════════════════════════ 7c · THE HAIRCUT TWIN [VETO "tiers"]
+def tier_of(asset: str) -> str:
+    """The charter tier of a CONTRACT asset name.  HALTS IF unassigned — an
+    unassigned asset must stop the build, never default to the cheapest tier."""
+    t = TIER_OF_ASSET.get(asset)
+    if t is None:
+        raise SystemExit(f"HALT: asset {asset!r} is in NO slippage tier of the contract clause "
+                         f"({sorted(TIER_OF_ASSET)}) — the haircut twin refuses to guess")
+    return t
+
+
+def slippage_bps_side(asset: str) -> float:
+    """Charter slippage, bps PER SIDE, for a contract asset name."""
+    return float(SLIPPAGE_TIERS[tier_of(asset)]["bps"])
+
+
+def charter_bps_side(asset: str) -> float:
+    """The charter model's per-side rate: the estate's taker fee PLUS the
+    charter slippage of the asset's tier.  Never a replacement for the
+    TC-series toll — the caller keeps both."""
+    return float(R2.FEE_BPS_SIDE) + slippage_bps_side(asset)
+
+
+def charter_round_trip_bps(asset: str) -> float:
+    return 2.0 * charter_bps_side(asset)
+
+
+def assert_tiers_cover(assets: list[str]) -> dict:
+    """Every admitted asset is in exactly one tier and the tiers name nothing
+    else.  HALTS IF an admitted asset is unassigned."""
+    missing = [a for a in assets if a not in TIER_OF_ASSET]
+    if missing:
+        raise SystemExit(f"HALT: admitted asset(s) with no slippage tier: {missing}")
+    sizes = {t: len(b["assets"]) for t, b in sorted(SLIPPAGE_TIERS.items())}
+    extra = sorted(set(TIER_OF_ASSET) - set(assets))
+    return {"tier_sizes": sizes, "tier_total": sum(sizes.values()),
+            "admitted": len(assets), "covers_all_admitted": not missing,
+            "tiered_but_not_admitted": extra}
+
+
+def haircut_twin_net_r(asset: str, gross_r: float, entry_px: float, exit_px: float,
+                       risk_px: float) -> dict:
+    """THE ADDED COLUMN.  The charter cost model — the estate's own fee law's
+    shape with the charter's per-side SLIPPAGE added to the per-side fee —
+    expressed as an R haircut, so a Stage B row can carry a twin net_r beside
+    its TC-series net_r WITHOUT re-deriving the tiers.
+
+    The TC-series toll is returned UNCHANGED in the same dict and is never
+    replaced: a caller that drops `tc_series_round_trip_bps_used` or writes the
+    twin over it is caught by F-D-HAIRCUT.
+
+    cost_px = ((FEE_BPS_SIDE + slip_side) / 10_000) * (entry_px + exit_px)
+              — tierc2_baseline's fee law, with slippage folded into the side rate
+    cost_r  = cost_px / risk_px            (risk_px = |entry - stop|, price units)
+    net_r_twin = gross_r - cost_r
+
+    HALTS IF: risk_px is not positive (an R with no denominator is not an R).
+    """
+    if not (risk_px > 0):
+        raise SystemExit(f"HALT: haircut twin for {asset}: risk_px {risk_px!r} is not positive")
+    slip = slippage_bps_side(asset)
+    fee = float(R2.FEE_BPS_SIDE)
+    cost_px = ((fee + slip) / 10_000.0) * (float(entry_px) + float(exit_px))
+    cost_r = cost_px / float(risk_px)
+    return {
+        "asset": asset, "tier": tier_of(asset), "slippage_bps_side": slip,
+        "fee_bps_side": fee, "charter_bps_side": fee + slip,
+        "charter_round_trip_bps": 2.0 * (fee + slip),
+        "tc_series_round_trip_bps_used": float(R2.FEE_BPS_ROUND_TRIP),
+        "cost_px": cost_px, "cost_r": cost_r,
+        "gross_r": float(gross_r), "net_r_twin": float(gross_r) - cost_r,
+        "law": "HAIRCUT TWIN — an ADDED column beside the TC-series toll, never a "
+               "replacement for it [VETO 'tiers']",
+    }
+
+
+def haircut_twin_for_stem(stem: str, gross_r: float, entry_px: float, exit_px: float,
+                          risk_px: float, out: Path | None = None) -> dict:
+    """The same, addressed by file stem: the stem -> contract asset map is READ
+    from the filed manifest's venue table, never typed."""
+    by = {v["stem"]: v["asset"] for v in load_manifest(out)["venues"] if v["stem"]}
+    if stem not in by:
+        raise SystemExit(f"HALT: the manifest's venue table names no stem {stem}")
+    return haircut_twin_net_r(by[stem], gross_r, entry_px, exit_px, risk_px)
+
+
+def haircut_twin_table(assets: list[dict], fees: dict) -> dict:
+    """The filed table: the contract clause, the tiers parsed out of it, the
+    charter line the model comes from, and the per-asset twin rate beside the
+    UNTOUCHED TC-series toll."""
+    names = [a["asset"] for a in assets]
+    cover = assert_tiers_cover(names)
+    line = _source_line(CHARTER_SOURCE, CHARTER_SLIPPAGE_NEEDLE)
+    rows = [{"asset": a["asset"], "stem": a["stem"], "tier": tier_of(a["asset"]),
+             "slippage_bps_side": slippage_bps_side(a["asset"]),
+             "fee_bps_side": float(R2.FEE_BPS_SIDE),
+             "charter_bps_side": float(R2.FEE_BPS_SIDE) + slippage_bps_side(a["asset"]),
+             "charter_round_trip_bps": 2.0 * (float(R2.FEE_BPS_SIDE)
+                                              + slippage_bps_side(a["asset"])),
+             "tc_series_round_trip_bps_used": float(R2.FEE_BPS_ROUND_TRIP)}
+            for a in assets]
+    return {
+        "law": "every row gets the charter model as a HAIRCUT TWIN BESIDE the TC-series toll. "
+               "The 5-asset control's TC-series accounting stays UNTOUCHED — round_trip_bps_used "
+               "is the same object it always was, on every one of the 17 rows; the twin is an "
+               "ADDED column and nothing reads it unless it asks for it [VETO 'tiers'].",
+        "contract_clause": CONTRACT_SLIPPAGE_CLAUSE,
+        "tier_table_source": "PARSED from contract_clause at import (parse_slippage_clause); no "
+                             "bps figure is typed anywhere in this module",
+        "charter_source": (f"Naiad_Phase0_Charter.md:{line} — "
+                           f"{CHARTER_SOURCE.read_text(encoding='utf-8').splitlines()[line - 1].strip()}"
+                           if line else "Naiad_Phase0_Charter.md: slippage line NOT FOUND"),
+        "charter_note": "the charter's own tiers name the ratification basket (BTC ETH | SOL NEAR "
+                        "ZEC JTO TAO | HYPE FARTCOIN LIT); the TIER-C10 contract clause EXTENDS "
+                        "the same model to the seventeen, and it is the contract clause — not the "
+                        "charter line — that this table is parsed from",
+        "tiers": {t: {"bps_per_side": b["bps"], "assets": list(b["assets"])}
+                  for t, b in sorted(SLIPPAGE_TIERS.items())},
+        "coverage": cover,
+        "arithmetic": f"{' + '.join(str(v) for _, v in sorted(cover['tier_sizes'].items()))} = "
+                      f"{cover['tier_total']} assets, admitted {cover['admitted']}",
+        "cost_law": "cost_px = ((FEE_BPS_SIDE + slippage_bps_side) / 10_000) * (entry_px + "
+                    "exit_px); cost_r = cost_px / risk_px; net_r_twin = gross_r - cost_r "
+                    "(tierc10_data.haircut_twin_net_r / haircut_twin_for_stem — importable, so "
+                    "Stage B never re-derives a tier)",
+        "tc_series_toll_untouched": all(
+            r["round_trip_bps_used"] == float(R2.FEE_BPS_ROUND_TRIP) for r in fees["assets"]),
+        "rows": rows,
+    }
+
+
+# ═══════════════════════════════════════════════ 7d · THE TWO-TOKEN TRAP [F-D-4]
+def floor_open(listing_ms: int, iv: str) -> int:
+    """The HARD FLOOR of lens `iv`: the open of the grid bar that CONTAINS the
+    listing instant.  A bar opening before this is prior-asset history."""
+    step, anchor = STEP_MS[iv], GRID_ANCHOR_MS.get(iv, 0)
+    return ((int(listing_ms) - anchor) // step) * step + anchor
+
+
+def seam_jump(close_before: float, open_after: float) -> float:
+    """|ln(open_after / close_before)| — the quantity a token splice shows up in."""
+    if not (close_before > 0 and open_after > 0):
+        return float("inf")
+    return float(abs(np.log(float(open_after) / float(close_before))))
+
+
+def _floor_bar_rebuild(stem: str, listing_ms: int, close_ms: int) -> dict:
+    """[LEAN D-j] Rebuild the 4h floor bar (or, where the venue serves none at
+    the floor, the tape's FIRST bar) out of its OWN native 5m children at or
+    after the listing instant, and report every field's agreement."""
+    fl = floor_open(listing_ms, "4h")
+    f4 = load_asof(stem, "4h")
+    at = f4[f4["open_time"] == fl]
+    subject_kind = "the bar AT the listing floor"
+    if not len(at):
+        at = f4.iloc[[0]]
+        subject_kind = ("the tape's FIRST bar — the venue serves NO bar at the floor "
+                        "(the tape begins after the listing instant)")
+    b = at.iloc[0]
+    t0 = int(b["open_time"])
+    m5 = load_asof(stem, "5m")
+    kids = m5[(m5["open_time"] >= t0) & (m5["open_time"] < t0 + MS_4H)].sort_values("open_time")
+    out = {"subject": subject_kind, "subject_open": iso(t0), "subject_open_ms": t0,
+           "floor_open": iso(fl), "children_5m": int(len(kids))}
+    if not len(kids):
+        out.update(rebuilt=False, why="the 5m tape serves no child of this bar — NOT rebuilt",
+                   fields_equal=None)
+        return out
+    re_ = {"open": float(kids["open"].iloc[0]), "high": float(kids["high"].max()),
+           "low": float(kids["low"].min()), "close": float(kids["close"].iloc[-1]),
+           "volume": float(kids["volume"].sum())}
+    got = {k: float(b[k]) for k in KLINE_COLS[1:]}
+    eq = {k: (got[k] == re_[k] if k != "volume"
+              else bool(np.isclose(got[k], re_[k], rtol=1e-12, atol=0.0))) for k in re_}
+    out.update(first_child_open=iso(int(kids["open_time"].iloc[0])),
+               first_child_at_or_after_listing=bool(int(kids["open_time"].iloc[0]) >= floor_open(listing_ms, "5m")),
+               bar=got, rebuilt_from_5m_children=re_, fields_equal=eq,
+               rebuilt=bool(all(eq.values())))
+    return out
+
+
+def listing_audit(probe: dict, pin: dict) -> dict:
+    """F-D-4's table.  Per symbol: the INTENDED asset, its listing instant and
+    the SOURCE of that instant, the first bar in our tape, whether the tape
+    predates the listing, whether it is HARD-FLOORED at the listing instant,
+    and the price continuity AT the floor.
+
+    Nothing here is sampled: every lens of every asset is counted, and the
+    whole-tape 4h seam census is summarised per asset so the reader can see
+    what a REAL seam is worth beside SPLICE_JUMP_LIMIT_LN [LEAN D-i].
+    """
+    close_ms = pin["as_of_last_closed_4h_close_ms"]
+    by_stem = {a["stem"]: a for a in probe["classic5"] + probe["unseen12"] if a.get("stem")}
+    expected = {name: base for name, _sym, base in UNSEEN12}
+    # the venue's OWN baseAsset for all seventeen, from the contract-spec capture
+    # (VENUE_PROBE keeps the raw symbol object only for the twelve) — so the
+    # intended-asset check is real for the classics too, with no escape hatch.
+    specs = load_contract_specs()
+    specs_base = {a["stem"]: a["base_asset"] for a in (specs or {}).get("assets", [])}
+    rows, cells, unfloored, discontinuous = [], 0, [], []
+    for stem, a in by_stem.items():
+        L = int(a["listing_ms"])
+        src = ("Binance USDT-M exchangeInfo['symbols'][].onboardDate, captured in "
+               "VENUE_PROBE.json (write-once)" if a["venue"] == "BINANCE_USDTM" else
+               "Bybit v5 instruments-info['list'][].launchTime, captured in "
+               "VENUE_PROBE.json (write-once)")
+        lenses = {}
+        for iv in NATIVE_IVS + DERIVED_IVS:
+            fl = floor_open(L, iv)
+            t = pd.read_parquet(kline_path(stem, iv), columns=["open_time"])["open_time"] \
+                .to_numpy(np.int64)
+            pre = int((t < fl).sum())
+            cells += 1
+            lenses[iv] = {"floor_open": iso(fl), "first_open": iso(int(t.min())),
+                          "bars_before_the_floor": pre,
+                          "hard_floored": bool(pre == 0),
+                          "tape_begins_at_the_floor": bool(int(t.min()) == fl)}
+            if pre:
+                unfloored.append(f"{stem} {iv}: {pre} bar(s) before {iso(fl)}")
+        f4 = load_asof(stem, "4h")
+        o = f4["open"].to_numpy(np.float64)
+        c = f4["close"].to_numpy(np.float64)
+        j = np.abs(np.log(o[1:] / c[:-1]))
+        k = int(np.argmax(j))
+        fl4 = floor_open(L, "4h")
+        before = f4[f4["open_time"] < fl4]
+        after = f4[f4["open_time"] >= fl4]
+        if len(before) and len(after):
+            fs = seam_jump(float(before["close"].iloc[-1]), float(after["open"].iloc[0]))
+            cont = {"floor_seam_exists": True, "floor_seam_abs_ln_jump": fs,
+                    "limit": SPLICE_JUMP_LIMIT_LN, "continuous": bool(fs <= SPLICE_JUMP_LIMIT_LN)}
+            if not cont["continuous"]:
+                discontinuous.append(f"{stem}: |ln jump| {fs:.4f} at the floor {iso(fl4)}")
+        else:
+            cont = {"floor_seam_exists": False, "floor_seam_abs_ln_jump": None,
+                    "limit": SPLICE_JUMP_LIMIT_LN, "continuous": None,
+                    "why": "the tape holds NO bar before the floor — there is no floor seam to be "
+                           "discontinuous, and no splice is possible [LEAN D-i]"}
+        probe_base = specs_base.get(stem) or (a.get("binance") or {}).get("baseAsset") \
+            or (a.get("bybit") or {}).get("baseCoin")
+        rows.append({
+            "asset": a["asset"], "stem": stem, "symbol": a["symbol"], "venue": a["venue"],
+            "intended_asset": a["asset"],
+            "intended_base_expected": expected.get(a["asset"], a["asset"]),
+            "probe_base_asset": probe_base,
+            "probe_base_asset_source": ("CONTRACT_SPECS.json (the venue's own symbol object)"
+                                        if stem in specs_base else "VENUE_PROBE.json"),
+            "intended_asset_confirmed": bool(probe_base == expected.get(a["asset"], a["asset"])),
+            "listing": iso(L), "listing_ms": L, "listing_source": src,
+            "first_bar_4h": iso(int(f4["open_time"].iloc[0])),
+            "tape_predates_listing_instant_4h": bool(int(f4["open_time"].iloc[0]) < L),
+            "tape_predates_the_hard_floor": bool(int(f4["open_time"].iloc[0]) < fl4),
+            "hard_floored_every_lens": all(v["hard_floored"] for v in lenses.values()),
+            "per_lens": lenses,
+            "floor_bar": _floor_bar_rebuild(stem, L, close_ms),
+            "continuity_at_the_floor": cont,
+            "whole_tape_4h_seams": {
+                "seams": int(len(j)), "max_abs_ln_jump": float(j.max()) if len(j) else None,
+                "at": iso(int(f4["open_time"].iloc[k + 1])) if len(j) else None},
+        })
+    rej = probe.get("rejections", [])
+    return {
+        "law": "FAILS IF any symbol's history predates its intended listing unfloored. The floor "
+               "of a lens is the open of the grid bar that CONTAINS the listing instant; a bar "
+               "opening before it is prior-asset history and is a HALT-grade finding.",
+        "listing_source": "the VENUE's own onboardDate / launchTime, captured write-once in "
+                          "VENUE_PROBE.json before the first bar was fetched",
+        "cells_checked": cells, "assets": len(rows), "lenses": list(NATIVE_IVS + DERIVED_IVS),
+        "bars_before_a_floor": unfloored,
+        "all_hard_floored": not unfloored,
+        "discontinuous_floor_seams": discontinuous,
+        "floor_bars_rebuilt_from_5m": sum(1 for r in rows if r["floor_bar"].get("rebuilt")),
+        "intended_asset_confirmed": sum(1 for r in rows if r["intended_asset_confirmed"]),
+        "intended_asset_unconfirmed": [f"{r['stem']}: venue baseAsset {r['probe_base_asset']!r} "
+                                       f"!= intended {r['intended_base_expected']!r}"
+                                       for r in rows if not r["intended_asset_confirmed"]],
+        "floor_seams_that_exist": sum(1 for r in rows
+                                      if r["continuity_at_the_floor"]["floor_seam_exists"]),
+        "splice_jump_limit_ln": SPLICE_JUMP_LIMIT_LN,
+        "whole_tape_4h_seams_total": sum(r["whole_tape_4h_seams"]["seams"] for r in rows),
+        "whole_tape_4h_max_abs_ln_jump": max(
+            (r["whole_tape_4h_seams"]["max_abs_ln_jump"] for r in rows), default=None),
+        "lit_precedent": "engine/cells.py LIT_FLOOR_MS (2025-12-23T00:00Z) — LITUSDT carried "
+                         "Litentry before the Lighter perpetual listing and the loader asserts a "
+                         "hard floor for it. THE LIVE RISK ON THIS PANEL IS PUMPFUN: the venue "
+                         "probe recorded a REJECTED PUMPBTCUSDT (baseAsset PUMPBTC != PUMP, 'a "
+                         "different asset') and PUMPFUN is mapped to PUMPUSDT by [LEAN D-d]. The "
+                         "rejection is carried here so the two tokens can never be confused.",
+        "rejections_carried": rej,
+        "rows": rows,
+    }
+
+
+# ═══════════════════════════════════════════════ 7e · DATA-SPEND AUDIT [F-D-5]
+SPEND_TOKENS = {
+    "BTC": ("BTCUSDT", "BTC"), "ETH": ("ETHUSDT", "ETH"), "SOL": ("SOLUSDT", "SOL"),
+    "NEAR": ("NEARUSDT", "NEAR"), "ZEC": ("ZECUSDT", "ZEC"), "ENA": ("ENAUSDT", "ENA"),
+    "PUMPFUN": ("PUMPUSDT", "PUMPFUNUSDT", "PUMPFUN", "PUMP"),
+    "HYPE": ("HYPEUSDT", "HYPE"), "MNT": ("MNTUSDT", "MNT"), "SUI": ("SUIUSDT", "SUI"),
+    "LTC": ("LTCUSDT", "LTC"), "XMR": ("XMRUSDT", "XMR"), "BNB": ("BNBUSDT", "BNB"),
+    "UNI": ("UNIUSDT", "UNI"), "PEPE": ("1000PEPEUSDT", "PEPEUSDT", "PEPE"),
+    "DOGE": ("DOGEUSDT", "DOGE"), "BONK": ("1000BONKUSDT", "BONKUSDT", "BONK"),
+}
+SPEND_EXCLUDED_DIRS = ("_reviewer_box", "docs/history", "research_outputs/tierc10",
+                       "research_outputs/tierc10_run2", ".git")
+SPEND_LINE_CAP = 240                     # the GREP HAZARD: multi-MB single-line JSON
+
+
+def _spend_corpus() -> list[tuple[str, str]]:
+    """(class, repo-relative path), sorted and whole.  The contract's five
+    sources, plus the estate's ROOT-LEVEL result books so that 'never-touched'
+    is a claim about SCORED RESULTS and not only about ledgers [LEAN D-k]."""
+    out: list[tuple[str, str]] = [("ledger", "LEDGER.md"), ("charter", "Naiad_Phase0_Charter.md"),
+                                  ("probe_ledger", "exchange/reports/CENSUS2A_PROBE_LEDGER.md"),
+                                  ("probe_ledger", "research_outputs/oracle/roster_probe_2026-09-21.json")]
+    out += [("ledger", f"exchange/status/{q.name}")
+            for q in sorted((ROOT / "exchange" / "status").glob("LEDGER_*.md"))]
+    out += [("rangefinder_build", f"research_outputs/rangefinder/{q.name}")
+            for q in sorted((ROOT / "research_outputs" / "rangefinder").glob("*"))
+            if q.is_file()]
+    out += [("root_book", q.name) for q in sorted(ROOT.glob("*.md"))]
+    out += [("root_book", q.name) for q in sorted(ROOT.glob("*.json"))]
+    seen, keep = set(), []
+    for cls, rel in out:
+        if rel in seen or any(rel.startswith(x) for x in SPEND_EXCLUDED_DIRS):
+            continue
+        if not (ROOT / rel).is_file():
+            continue
+        seen.add(rel)
+        keep.append((cls, rel))
+    return sorted(keep, key=lambda x: x[1])
+
+
+def data_spend_audit(probe: dict, pin: dict) -> dict:
+    """{never-touched / display-only / scored} per admitted asset, WITH the
+    evidence line that justifies the class [LEAN D-k].  PUMPFUN and HYPE are
+    READ out of the evidence, never assumed.
+
+    THE CLASSES COME FROM CLOSED REGISTERS, READ AS LITERALS (no import):
+      scored        the stem is in the TC-series scored universe
+      display-only  not scored, but in the Oracle's display ROSTER or the
+                    frozen study basket — it was LOOKED at, never scored
+      never-touched neither, and no grep hit places it in a scored book
+    """
+    universe = literal_path(ROOT / "scripts" / "tierc2_rules.py", "REGISTER", "UNIVERSE", "value")
+    roster = literal_path(ROOT / "scripts" / "oracle_daily.py", "REGISTER", "ROSTER", "value")
+    roster_src = literal_path(ROOT / "scripts" / "oracle_daily.py", "REGISTER", "ROSTER", "source")
+    basket = literal_path(ROOT / "engine" / "cells.py", "SYMBOLS")
+    corpus = _spend_corpus()
+    text = {}
+    for cls, rel in corpus:
+        text[rel] = (cls, (ROOT / rel).read_text(encoding="utf-8", errors="replace").splitlines())
+    by_stem = {a["stem"]: a for a in probe["classic5"] + probe["unseen12"] if a.get("stem")}
+    rows = []
+    for stem, a in by_stem.items():
+        name = a["asset"]
+        # the DECLARED tokens, plus the asset's own three names, so no spelling
+        # the estate could have used is missing (F-D-5 asserts that coverage).
+        toks = tuple(sorted(set(SPEND_TOKENS[name]) | {name, a["symbol"], stem},
+                            key=lambda x: (-len(x), x)))
+        rx = re.compile(r"(?<![A-Za-z0-9])(" + "|".join(toks) + r")(?![A-Za-z0-9])")
+        hits, per_class = [], {}
+        for rel, (cls, lines) in text.items():
+            for i, line in enumerate(lines, 1):
+                if rx.search(line):
+                    hits.append({"class": cls, "file": rel, "line": i,
+                                 "text": line.strip()[:SPEND_LINE_CAP]})
+                    per_class[cls] = per_class.get(cls, 0) + 1
+        in_universe = stem in universe
+        in_roster = stem in roster
+        in_basket = stem in basket
+        if in_universe:
+            cls = "scored"
+            why = (f"{stem} is in the TC-series SCORED UNIVERSE "
+                   f"(scripts/tierc2_rules.py REGISTER['UNIVERSE']['value'] = {list(universe)}); "
+                   f"every registered TC-series result rides it")
+        elif in_roster or in_basket:
+            cls = "display-only"
+            where = ([f"the Oracle's display ROSTER (scripts/oracle_daily.py "
+                      f"REGISTER['ROSTER']['value'], {len(roster)} symbols)"] if in_roster else []) \
+                + ([f"the FROZEN STUDY BASKET (engine/cells.py SYMBOLS, tier "
+                    f"{basket[stem]})"] if in_basket else [])
+            why = (f"{stem} is NOT in the TC-series scored universe, and IS in "
+                   + " and ".join(where) + " — looked at, never scored")
+        else:
+            cls = "never-touched"
+            why = (f"{stem} is in NO estate register: not the TC-series scored universe, not the "
+                   f"Oracle's display ROSTER, not the frozen study basket; and no line of the "
+                   f"{len(corpus)}-file corpus places it in a scored book")
+        rows.append({
+            "asset": name, "stem": stem, "venue": a["venue"], "class": cls,
+            "evidence": why,
+            "in_tc_series_scored_universe": in_universe,
+            "in_oracle_display_roster": in_roster,
+            "in_frozen_study_basket": in_basket,
+            "grep_tokens": list(toks),
+            "grep_hits": len(hits), "grep_hits_by_class": per_class,
+            "evidence_lines": hits,
+        })
+    classes = {k: [r["asset"] for r in rows if r["class"] == k]
+               for k in ("scored", "display-only", "never-touched")}
+    return {
+        "law": "grep the contract's corpus WHOLE and classify every admitted asset "
+               "{never-touched / display-only / scored} with the evidence line that justifies "
+               "the class. HARD DEPENDENCY of P-GEN-1, whose text must promise 'LOAO printed "
+               "twice (all admitted · never-touched only)' — without the never-touched list "
+               "that clause cannot be honoured.",
+        "as_of_last_closed_4h": pin["as_of_last_closed_4h"],
+        "as_of_last_closed_4h_open": pin["as_of_last_closed_4h_open"],
+        "warranty": WARRANTY, "seed": SEED,
+        "definitions": {
+            "never-touched": "the asset has never appeared in any scored result in this estate",
+            "display-only": "it appeared in a chart / brief / census print but never in a scored book",
+            "scored": "a registered or TC-series result rode it",
+        },
+        "corpus_class_note": "'root_book' is every root-level .md and .json — the estate's result "
+                             "books, its builder contracts and its change logs together. A HIT "
+                             "THERE IS NOT PROOF OF SCORING (HYPE is named 53 times there and is "
+                             "display-only): the class of an asset is decided by the registers "
+                             "below, not by a hit count. The one-directional rule F-D-5 asserts "
+                             "is the conservative one — a NEVER-TOUCHED asset must have ZERO "
+                             "root_book hits. That is stricter than the definition, so it can be "
+                             "too strict, never too lenient: it cannot pass an asset a scored "
+                             "result rode.",
+        "registers_read_not_imported": {
+            "tc_series_scored_universe": {"source": "scripts/tierc2_rules.py REGISTER['UNIVERSE']['value']",
+                                          "value": list(universe)},
+            "oracle_display_roster": {"source": "scripts/oracle_daily.py REGISTER['ROSTER']['value']",
+                                      "value": list(roster), "ruling": roster_src},
+            "frozen_study_basket": {"source": "engine/cells.py SYMBOLS (charter §4)",
+                                    "value": basket},
+        },
+        "corpus": [{"class": c, "file": f, "lines": len(text[f][1])} for c, f in corpus],
+        "corpus_files": len(corpus),
+        "corpus_excluded": list(SPEND_EXCLUDED_DIRS),
+        "corpus_exclusion_reason": "_reviewer_box/ and docs/history/ hold multi-megabyte "
+                                   "single-line JSON (the GREP HAZARD; every kept line is also "
+                                   f"cut at {SPEND_LINE_CAP} chars); research_outputs/tierc10*/ is "
+                                   "THIS BUILD's own output and would make the audit "
+                                   "self-referential and unreproducible",
+        "classes": classes,
+        "never_touched": classes["never-touched"],
+        "counts": {k: len(v) for k, v in classes.items()},
+        "rows": rows,
+    }
 
 
 # ═══════════════════════════════════════════════ 8 · THE MANIFEST
@@ -1140,7 +1971,31 @@ def publications(files: list[dict], pre: dict) -> dict | None:
         "entries_audited": len(rent), "archive_entries_audited": len(aent)}
 
 
-def build_manifest(probe: dict, pin: dict, pre: dict) -> dict:
+def spend_summary(spend: dict) -> dict:
+    """The manifest's view of the data-spend audit: the classes whole, and the
+    first three evidence lines per asset (the rest live in the artifact)."""
+    def head(lines: list[dict]) -> list[dict]:
+        """The first TWO lines of EACH corpus class, so a ledger hit is never
+        pushed out of the manifest by a run of result-book hits.  The whole
+        list — every hit, uncut in number — lives in the artifact."""
+        seen, out = {}, []
+        for h in lines:
+            if seen.get(h["class"], 0) < 2:
+                seen[h["class"]] = seen.get(h["class"], 0) + 1
+                out.append(h)
+        return out
+
+    return {k: v for k, v in spend.items() if k != "rows"} | {
+        "artifact": f"research_outputs/tierc10/data/{DATA_SPEND}",
+        "rows": [{k: v for k, v in r.items() if k != "evidence_lines"}
+                 | {"evidence_lines_shown": head(r["evidence_lines"]),
+                    "evidence_lines_shown_rule": "the first two hits of each corpus class; the "
+                                                 "whole list is in the artifact",
+                    "evidence_lines_total": len(r["evidence_lines"])}
+                 for r in spend["rows"]]}
+
+
+def build_manifest(probe: dict, pin: dict, pre: dict, spend: dict | None = None) -> dict:
     close_ms = pin["as_of_last_closed_4h_close_ms"]
     assets = probe["classic5"] + probe["unseen12"]
     files, funding, admission, derived, excluded = [], {}, [], {}, []
@@ -1264,6 +2119,10 @@ def build_manifest(probe: dict, pin: dict, pre: dict) -> dict:
             if f["kind"] == "klines" and f["native"]:
                 f["publication"] = vd["carries"].get(f["path"])
     man["contract_premise_checks"] = premise_checks(probe)
+    man["contract_multipliers"] = contract_multiplier_table()
+    man["two_token_trap"] = listing_audit(probe, pin)
+    man["data_spend"] = spend_summary(spend) if spend is not None else None
+    man["standing_disclosures"] = list(STANDING_DISCLOSURES)
     man["operator_rulings_needed"] = list(OPERATOR_RULINGS)
     late = [{"path": f["path"], "rows_after_as_of": f["rows_after_as_of"]} for f in files
             if f["kind"] == "klines" and f.get("rows_after_as_of")]
@@ -1291,10 +2150,153 @@ def build_manifest(probe: dict, pin: dict, pre: dict) -> dict:
         "fetch_log_sealed_lines": seal.get("fetch_log", {}).get("sealed_lines"),
         "faults": seal_faults, "all_ok": not seal_faults,
         "disclosure": seal.get("disclosure", [])}
-    man["complete"] = all(f["present"] and (f["kind"] == "funding" or f["complete_to_as_of"])
-                          for f in files) and all(
-        f["coverage"]["ok"] for f in files if f["kind"] == "funding" and f["present"])
+    man["complete"] = (all(f["present"] and (f["kind"] == "funding" or f["complete_to_as_of"])
+                           for f in files)
+                       and all(f["coverage"]["ok"] for f in files
+                               if f["kind"] == "funding" and f["present"])
+                       and man["contract_multipliers"] is not None
+                       and man["data_spend"] is not None
+                       and man["two_token_trap"]["all_hard_floored"]
+                       and not man["two_token_trap"]["discontinuous_floor_seams"]
+                       and not man["two_token_trap"]["intended_asset_unconfirmed"])
     return man
+
+
+def _md_contract_multipliers(man: dict) -> list[str]:
+    cm = man.get("contract_multipliers")
+    if not cm:
+        return ["", "## Contract multipliers", "",
+                f"NOT CAPTURED — {CONTRACT_SPECS} is absent. Run "
+                f"`scripts/tierc10_data.py --contract-specs` (one venue reach).", ""]
+    L = ["", "## Contract multipliers — printed and normalized", "", cm["finding"], "",
+         f"Capture: `{cm['artifact']}` sha256 `{cm['artifact_sha256']}` (exchangeInfo response "
+         f"sha256 `{cm['binance_response_sha256']}`). {cm['capture_instant']}", "",
+         "| asset | symbol | venue | baseAsset | multiplier (tokens / contract unit) | tokens a "
+         "quoted price covers | tick | qty step | min qty | min notional | multiplier fields the "
+         "venue publishes |",
+         "|---|---|---|---|---:|---|---|---|---|---|---|"]
+    for r in cm["rows"]:
+        found = cm["multiplier_fields_found_per_symbol"].get(r["symbol"]) or []
+        L.append(f"| {r['asset']} | {r['symbol']} | {r['venue']} | {r['base_asset']} | "
+                 f"{r['multiplier_tokens_per_contract_unit']} | "
+                 f"{r['multiplier_tokens_per_contract_unit']} | {r['price_tick']} | "
+                 f"{r['qty_step']} | {r['min_qty']} | {r['min_notional_usdt']} | "
+                 f"{' '.join(found) if found else 'NONE'} |")
+    L += ["", "### Normalization", "", cm["normalization"], "",
+          "Per symbol, the reading:", ""]
+    for r in cm["rows"]:
+        if r["multiplier_tokens_per_contract_unit"] != 1:
+            L.append(f"- **{r['symbol']}** — {r['price_is_per_tokens']}. "
+                     f"{r['normalized_price_law']}; {r['normalized_qty_law']}.")
+    L.append("")
+    return L
+
+
+def _md_two_token_trap(man: dict) -> list[str]:
+    tt = man.get("two_token_trap")
+    if not tt:
+        return []
+    L = ["", "## The two-token trap — F-D-4 (the LIT precedent)", "", tt["law"], "",
+         f"Listing source: {tt['listing_source']}.", "", tt["lit_precedent"], "",
+         "| asset | symbol | intended base | probe baseAsset | listing | first 4h bar | tape "
+         "predates the listing INSTANT | tape predates the HARD FLOOR | hard-floored, every lens "
+         "| floor bar rebuilt from its 5m children | floor seam |",
+         "|---|---|---|---|---|---|---|---|---|---|---|"]
+    for r in tt["rows"]:
+        fb = r["floor_bar"]
+        c = r["continuity_at_the_floor"]
+        seam = (f"{c['floor_seam_abs_ln_jump']:.4f} vs limit {c['limit']}"
+                if c["floor_seam_exists"] else "NO seam (no bar before the floor)")
+        L.append(f"| {r['asset']} | {r['symbol']} | {r['intended_base_expected']} | "
+                 f"{r['probe_base_asset']} | {r['listing']} | {r['first_bar_4h']} | "
+                 f"{r['tape_predates_listing_instant_4h']} | {r['tape_predates_the_hard_floor']} | "
+                 f"{r['hard_floored_every_lens']} | "
+                 f"{fb.get('rebuilt')} ({fb.get('children_5m')} children, {fb['subject']}) | "
+                 f"{seam} |")
+    L += ["", f"{tt['cells_checked']} (asset, lens) cells over {tt['lenses']}: the INTENDED asset "
+          f"is confirmed against the venue's own baseAsset on "
+          f"**{tt['intended_asset_confirmed']} / {tt['assets']}** "
+          f"({tt['intended_asset_unconfirmed'] or 'no mismatch'}); bars before a "
+          f"floor: **{tt['bars_before_a_floor'] or 'NONE'}**; floor bars rebuilt exactly from "
+          f"their own 5m children: **{tt['floor_bars_rebuilt_from_5m']} / {tt['assets']}**; floor "
+          f"seams that EXIST at all: **{tt['floor_seams_that_exist']}** (a seam can only exist "
+          f"where the tape holds a bar BEFORE the floor — none does, so the continuity limit "
+          f"binds on nothing and that arm of F-D-4 is proven by its BREAK leg alone [LEAN D-i]); "
+          f"discontinuous floor seams: **{tt['discontinuous_floor_seams'] or 'none'}**.", "",
+          f"Whole-tape 4h seam census (context for the limit {tt['splice_jump_limit_ln']}): "
+          f"{tt['whole_tape_4h_seams_total']} adjacent seams over the panel, largest real "
+          f"|ln(open/close)| = {tt['whole_tape_4h_max_abs_ln_jump']:.4f}.", ""]
+    for rj in tt["rejections_carried"]:
+        L.append(f"REJECTED and carried: **{rj['asset']}** `{rj['rejected_symbol']}` — {rj['reason']}")
+    L.append("")
+    return L
+
+
+def _md_data_spend(man: dict) -> list[str]:
+    ds = man.get("data_spend")
+    if not ds:
+        return ["", "## Data-spend audit", "",
+                f"NOT FILED — {DATA_SPEND} is absent; P-GEN-1's 'never-touched only' clause "
+                f"cannot be honoured without it.", ""]
+    L = ["", "## Data-spend audit — F-D-5 {never-touched / display-only / scored}", "",
+         ds["law"], "",
+         f"Corpus: {ds['corpus_files']} files, whole, no sampling. Excluded: "
+         f"{ds['corpus_excluded']} — {ds['corpus_exclusion_reason']}.", "",
+         ds["corpus_class_note"], "", "Definitions of record: "
+         + " · ".join(f"**{k}** = {v}" for k, v in ds["definitions"].items()), "",
+         "Registers READ as literals (never imported):", ""]
+    for k, v in ds["registers_read_not_imported"].items():
+        val = v["value"] if not isinstance(v["value"], dict) else sorted(v["value"])
+        L.append(f"- `{k}` — {v['source']} = {val}")
+    L += ["", "| asset | stem | class | in TC-series scored universe | in Oracle display roster | "
+          "in frozen study basket | grep hits | evidence |",
+          "|---|---|---|---|---|---|---:|---|"]
+    for r in ds["rows"]:
+        L.append(f"| {r['asset']} | {r['stem']} | **{r['class']}** | "
+                 f"{r['in_tc_series_scored_universe']} | {r['in_oracle_display_roster']} | "
+                 f"{r['in_frozen_study_basket']} | {r['grep_hits']} | {r['evidence']} |")
+    L += ["", f"COUNTS: {ds['counts']}. **NEVER-TOUCHED: {ds['never_touched'] or 'none'}** — this "
+          f"is the list P-GEN-1's 'LOAO printed twice (all admitted · never-touched only)' "
+          f"clause needs, and without it that clause cannot be honoured.", "",
+          "The evidence lines that decide the two the contract says must be READ, not assumed:", ""]
+    for r in ds["rows"]:
+        if r["asset"] in ("PUMPFUN", "HYPE"):
+            L.append(f"- **{r['asset']}** -> `{r['class']}`. {r['evidence']}")
+            for h in r["evidence_lines_shown"]:
+                L.append(f"    - `{h['file']}:{h['line']}` [{h['class']}] {h['text']}")
+            if not r["evidence_lines_shown"]:
+                L.append(f"    - no line of the corpus names it at all "
+                         f"({r['evidence_lines_total']} hits)")
+    L.append("")
+    return L
+
+
+def _md_haircut_twin(man: dict) -> list[str]:
+    ht = man.get("tiered_costs_haircut_twin")
+    if not ht:
+        return []
+    L = ["", "## The tiered costs haircut twin [VETO \"tiers\"]", "", ht["law"], "",
+         f"Contract clause, parsed (never typed): `{ht['contract_clause']}`", "",
+         f"Charter source of the model: {ht['charter_source']}", "", ht["charter_note"], "",
+         "| tier | bps per side | assets |", "|---|---:|---|"]
+    for t, b in ht["tiers"].items():
+        L.append(f"| {t} | {b['bps_per_side']} | {' '.join(b['assets'])} |")
+    L += ["", f"COVERAGE: {ht['arithmetic']}; every admitted asset assigned: "
+          f"**{ht['coverage']['covers_all_admitted']}**; tiered but not admitted: "
+          f"{ht['coverage']['tiered_but_not_admitted'] or 'none'}.", "",
+          f"Cost law: `{ht['cost_law']}`", "",
+          f"THE TC-SERIES TOLL IS UNTOUCHED ON EVERY ROW: **{ht['tc_series_toll_untouched']}** "
+          f"(round_trip_bps_used == FEE_BPS_ROUND_TRIP for all 17; the twin is an ADDED column).",
+          "",
+          "| asset | stem | tier | slippage bps/side | fee bps/side | charter bps/side | charter "
+          "round trip bps | TC-series round trip bps (UNTOUCHED) |",
+          "|---|---|---|---:|---:|---:|---:|---:|"]
+    for r in ht["rows"]:
+        L.append(f"| {r['asset']} | {r['stem']} | {r['tier']} | {r['slippage_bps_side']} | "
+                 f"{r['fee_bps_side']} | {r['charter_bps_side']} | "
+                 f"{r['charter_round_trip_bps']} | {r['tc_series_round_trip_bps_used']} |")
+    L.append("")
+    return L
 
 
 def manifest_md(man: dict, fees: dict) -> str:
@@ -1370,6 +2372,8 @@ def manifest_md(man: dict, fees: dict) -> str:
     for r in fees["assets"]:
         L.append(f"| {r['asset']} | {r['venue']} | {r['taker_bps_side_used']} | ASSUMPTION | "
                  f"{'; '.join(r['source'])} |")
+    L += _md_contract_multipliers(man) + _md_two_token_trap(man) \
+        + _md_data_spend(man) + _md_haircut_twin(man)
     pa = man["prefix_attestation"]
     ext = [r for r in pa["rows"] if r.get("extended_by")]
     L += ["", "## Old-prefix attestation", "",
@@ -1442,6 +2446,8 @@ def manifest_md(man: dict, fees: dict) -> str:
           f"{wo['fetch_log_sealed_lines']} sealed lines: **{wo['all_ok']}**"
           + (f" — FAULTS: {wo['faults']}" if wo["faults"] else "") + "", ""]
     L += [f"- {x}" for x in wo["disclosure"]]
+    L += ["", "## Standing disclosures — what a later run must not mistake for tampering", ""]
+    L += [f"{i}. {x}" for i, x in enumerate(man.get("standing_disclosures", []), 1)]
     L += ["", "## Operator rulings needed at CLOSE", ""]
     L += [f"{i}. {x}" for i, x in enumerate(man["operator_rulings_needed"], 1)]
     L.append("")
@@ -1834,6 +2840,7 @@ def run(offline: bool, out: Path) -> int:
     else:
         pin = pin_as_of(out)
         probe = probe_venues(out, pin)
+        capture_contract_specs(out, pin)      # write-once; re-read on a resumed run
     print_venues(probe)
     assets = [a for a in probe["classic5"] + probe["unseen12"] if a.get("stem")]
     incomplete: list[str] = []
@@ -1874,9 +2881,26 @@ def run(offline: bool, out: Path) -> int:
                 incomplete.append(f"{a['stem']} 5m: {e}")
                 log(f"  !! {a['stem']} 5m: {e}")
         assert close_ms == pin["as_of_last_closed_4h_close_ms"]
-    man = build_manifest(probe, pin, pre)
+    spend = data_spend_audit(probe, pin)
+    _dump(spend, out / DATA_SPEND)
+    log(f"DATA SPEND ({spend['corpus_files']} files grepped whole): {spend['counts']}; "
+        f"never-touched: {spend['never_touched'] or 'none'}")
+    man = build_manifest(probe, pin, pre, spend)
     fees = fee_schedule(assets, {f["stem"]: f for f in man["files"]
                                  if f["kind"] == "funding" and f["present"]}, pin)
+    man["tiered_costs_haircut_twin"] = haircut_twin_table(
+        [a for a in assets if a["asset"] in {r["asset"] for r in man["admission"]["rows"]
+                                             if r["admitted"]}], fees)
+    ht = man["tiered_costs_haircut_twin"]
+    log(f"HAIRCUT TWIN [VETO 'tiers']: {ht['arithmetic']}; TC-series toll untouched on every "
+        f"row: {ht['tc_series_toll_untouched']}")
+    tt = man["two_token_trap"]
+    log(f"TWO-TOKEN TRAP: {tt['cells_checked']} (asset, lens) cells, bars before a floor "
+        f"{tt['bars_before_a_floor'] or 'NONE'}; floor bars rebuilt from their 5m children "
+        f"{tt['floor_bars_rebuilt_from_5m']}/{tt['assets']}")
+    cm = man["contract_multipliers"]
+    log(f"CONTRACT MULTIPLIERS: quoting per 1000 tokens: "
+        f"{(cm or {}).get('symbols_quoting_per_1000_tokens') if cm else 'NOT CAPTURED'}")
     _dump(man, out / "STAGE_D_MANIFEST.json")
     _dump(fees, out / "fee_schedule.json")
     (out / "STAGE_D_MANIFEST.md").write_text(manifest_md(man, fees), encoding="utf-8")
@@ -1930,7 +2954,13 @@ def main() -> int:
                     help="fold a second audit worker's --out DIR into the filed censuses (never replaces an entry)")
     ap.add_argument("--seal", action="store_true",
                     help="file WRITE_ONCE_SEAL.json (once): shas of the provenance records + the fetch-log prefix")
+    ap.add_argument("--contract-specs", action="store_true",
+                    help="ONE venue reach: capture CONTRACT_SPECS.json (write-once) — the venue's own "
+                         "contract spec per panel symbol, from which the multiplier is read")
     a = ap.parse_args()
+    if a.contract_specs:
+        capture_contract_specs(Path(a.out), load_pin(OUT))
+        return 0
     stems = [x for x in a.audit_stems.split(",") if x] or None
     if a.audit_rest:
         audit_vs_rest(tuple(x for x in a.audit_rest.split(",") if x), Path(a.out), stems)
