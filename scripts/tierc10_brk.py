@@ -95,6 +95,7 @@ Run (mechanics card only; no lane rides, none can):
 from __future__ import annotations
 
 import dataclasses
+import hashlib
 import itertools
 import json
 import sys
@@ -153,6 +154,26 @@ ANCHORS = (ANCHOR_BAND, ANCHOR_MEMORY)
 # BRK forms also printed with the OTHER anchor" asks for.
 LANE_ANCHOR = {LANE_S1: ANCHOR_BAND, LANE_I1: ANCHOR_MEMORY}
 LANE_TIER_E_ANCHOR = {LANE_S1: ANCHOR_MEMORY, LANE_I1: ANCHOR_BAND}
+LANE_ORDER = (LANE_S1, LANE_I1)     # the order every grid and row list rides
+FORM_OF = {LANE_S1: "P-BRK-S1", LANE_I1: "P-BRK-I1"}    # the registration name
+
+# ── THE PANEL: DECLARED vs SERVED.  These are two different things and the
+# ── module has only ever OWNED the second one.
+PANEL_DECLARED = (
+    "CLASSIC5 — the 5-asset book, per operator ruling R8 of 2026-09-22 ('5-"
+    "asset book — the PANEL PIN governs'), which SUPERSEDES ruling R2 of "
+    "2026-09-21 ('All 17') on the operator's own word.  LOAO above-half bar = "
+    "3/5.  The 17-asset view prints as TIER-E beside each BRK row [R8], which "
+    "is the `tier_e_panel17` slot of the row.")
+PANEL_SERVED_LAW = (
+    "EITHER PANEL, WITHOUT A CODE CHANGE.  Neither runner names a panel: both "
+    "score on `g['panel']` — the panel the REGISTRATION names, checked by "
+    "`TP.require_arm` — and every object downstream is keyed on that same "
+    "tuple (`TP.corridor_era(g['panel'], era)` for the window, "
+    "`TP.panel_name` for the label, `stamp_toll` per asset out of the filed "
+    "grid, `TP.external_book` for the door).  So the panel is a "
+    "REGISTRATION-TEXT decision and always was; R8 changes the text, not this "
+    "file.")
 
 # ── THE ERA [R1/R2] — BOUND TO THE PANEL MODULE, NEVER RESTATED ──────────────
 # The panel module owns the era: `ERA_CUT_ISO`, `era_window`, `in_era`,
@@ -261,6 +282,178 @@ TUNING_RESULT = TUNING_RESULT_FOR["5m"]     # P-BRK-S1's own, kept by name
 # A lane's own toll is the toll of the EVENT CLASS it enters on.
 TOLL_CLASS_PREFIX = {ANCHOR_BAND: "retest-hold-", ANCHOR_MEMORY: "flip-hold"}
 
+ROW_ROUND_ND = 8                    # every filed float, census house rounding
+
+# ── THE [Q-R3] INTERFACE — DECLARED HERE, OWNED BY THE CENSUS TRACK ──────────
+# This is the ONE place the BRK side names the height-vs-toll tables.  If the
+# census track files them under other names or other schemas, exactly these
+# constants move and nothing else in this module does.
+#
+# REPOINTED 2026-09-22 (review, blocking finding 2).  The interface declared in
+# the last round was a GUESS made at 10:15 and the census filed at 10:25: one
+# table `height_vs_toll.parquet` with columns (toll_atr, height_over_toll_
+# median, verdict, n).  What exists is TWO tables under other column names —
+#   census/height_toll.parquet          360 rows, key (asset, lens,
+#                                       scale_kind, era), the FIGURES;
+#   census/height_toll_verdict.parquet  120 rows, key (asset, lens,
+#                                       scale_kind) — NO era — the VERDICT,
+#                                       which is not a string but
+#                                       verdict_pass (bool) + verdict_law +
+#                                       reason.
+# The vocabulary (POOLED:ALL / POOLED:CLASSIC5 / POOLED:UNSEEN12, lens
+# {5m,4h,1d}, scale_kind {frozen3.0,calibrated}, era {ALL,tuning,holdout})
+# matched the guess exactly; only the names and the table split were wrong.
+# The guess was `.exists() == False` and always would have been, so every BRK
+# row's verdict slot was a PendingVerdict FOREVER and contract line 112's
+# second half was unsatisfiable BY CONSTRUCTION.  The three verbatim verdict
+# fields are carried through unread, so the "this module pins no vocabulary"
+# lean [B10] survives the repoint intact.
+HEIGHT_VS_TOLL_PATH = TP.OUT / "census" / "height_toll.parquet"
+HEIGHT_VS_TOLL_VERDICT_PATH = TP.OUT / "census" / "height_toll_verdict.parquet"
+HEIGHT_VS_TOLL_KEY = ("asset", "lens", "scale_kind", "era")
+HEIGHT_VS_TOLL_VERDICT_KEY = ("asset", "lens", "scale_kind")
+HEIGHT_VS_TOLL_FIELDS = ("height_atr_median", "toll_atr_median",
+                         "ratio_median", "n_ranges")
+HEIGHT_VS_TOLL_VERDICT_FIELDS = ("verdict_pass", "verdict_law", "reason")
+# the columns BOTH tables carry: the join is keyed differently on each side
+# (the verdict has no era), so the figures they share are the only thing that
+# can prove the two rows are about the SAME measurement.  They agree today.
+HEIGHT_VS_TOLL_AGREE = ("n_ranges", "height_atr_median", "toll_atr_median")
+HEIGHT_VS_TOLL_INT_FIELDS = ("n_ranges",)
+# THE AS-OF WARRANTY, ENFORCED ACROSS THE TRACK BOUNDARY [LEAN-HEPHAESTUS H3].
+# Both filed census tables carry this column.  A measurement stamped at any
+# other instant is not one a BRK row may carry, so the read HALTs on it.
+HEIGHT_VS_TOLL_ASOF_COL = "as_of_last_closed_4h"
+HEIGHT_VS_TOLL_SCALE = "frozen3.0"  # the pin of record [L2]; `calibrated` is
+#                                     in-sample by construction and may not
+#                                     reach a scored lane's row
+HEIGHT_VS_TOLL_ERA = "ALL"          # the census's full-history row; the era
+#                                     column exists so a later reading can ask
+#                                     for 'holdout' without a schema change
+HEIGHT_VS_TOLL_OWNER = ("the CENSUS track, contract item [Q-R3] — 'HEIGHT-vs-"
+                        "TOLL feasibility per lens (confirmed-range height / "
+                        "round-trip toll, distribution)'")
+HEIGHT_VS_TOLL_STATUS = ("FILED by the census track on 2026-09-22T10:25, "
+                         "RE-FILED 2026-09-22T11:26 with a `provisional` flag "
+                         "and a minimum-n floor, and READ here; this module "
+                         "computes none of it.")
+# ── THE LAW HALF OF THE CROSS-CHECK [review round 2, finding 2] ────────────
+# HEIGHT_VS_TOLL_AGREE above is the NUMERIC half.  Both filed tables also
+# carry `gate_law_sha` — the sha of the gate law that produced the row — and
+# two rows built under different laws are not one measurement however well
+# their numbers line up.  This module pins NO sha of its own: it compares the
+# two tables to each other, which is a join check and not a second copy of
+# another track's law.
+HEIGHT_VS_TOLL_AGREE_STR = ("gate_law_sha",)
+# ── THE SAMPLE FLOOR, READ OFF THE ROW AND NEVER RE-PINNED HERE ────────────
+# The census re-filed [Q-R3] on 2026-09-22 with a `provisional` flag and a
+# minimum-n floor (its PROVISIONAL_MIN_N = 30); the PASS count fell 22 -> 9 of
+# 120 rows and a new `edge_n_ranges` column counts the EDGE leg's floor in
+# confirmed ranges.  This module keeps NO second copy of that 30: the row
+# carries `min_n_ranges_pinned` / `edge_min_n_ranges_pinned` and those are
+# what the HALT quotes.  All five columns are REQUIRED of the verdict table,
+# so a table re-filed WITHOUT the flag stops the read instead of reading as
+# "not provisional".
+HEIGHT_VS_TOLL_PROVISIONAL_FIELDS = (
+    "provisional", "provisional_reason", "edge_n_ranges",
+    "min_n_ranges_pinned", "edge_min_n_ranges_pinned")
+
+# ── THE VERDICT ROW'S ASSET IS DERIVED FROM THE BOOK, NEVER DEFAULTED ──────
+# [review round 2, 2026-09-22, finding 1]  `brk_row` used to read
+#     asset = str(verdict_asset) if verdict_asset else "POOLED:CLASSIC5"
+# and `verdict_asset` was never derived from anything: it was a caller
+# argument, a literal, a docstring and a pass-through.  So a row built on ANY
+# book silently received POOLED:CLASSIC5's census figures under its own
+# panel's name.  REPRODUCED before the fix, on the real filed tables: a
+# one-asset BTCUSDT book (panel_name CUSTOM1:19aa16ae) took POOLED:CLASSIC5's
+# 1d row — n_ranges 53, ratio_median 413.99176955, verdict_pass TRUE, reason
+# 'height gate PASS + edge-fade leg PASS' — while BTCUSDT's OWN 1d row is
+# n_ranges 11, verdict_pass False and PROVISIONAL.  The harm landed on the
+# most favourable side, with no HALT and no note on the row.
+# R8 makes the BRK panel of record CLASSIC5, which makes that default LOOK
+# right today and is exactly why it must still be DERIVED: the Tier-E 17-asset
+# row R8 also orders must not silently wear CLASSIC5's verdict.
+CENSUS_ASSET_OF_PANEL = {"CLASSIC5": "POOLED:CLASSIC5",
+                         "UNSEEN12": "POOLED:UNSEEN12"}
+CENSUS_POOL_LABELS = ("POOLED:ALL", "POOLED:CLASSIC5", "POOLED:UNSEEN12")
+VERDICT_ASSET_LAW = (
+    "THE VERDICT ROW'S ASSET IS DERIVED FROM THE BOOK'S PANEL, NEVER "
+    "DEFAULTED. TP.panel_name(book.spec['panel']) -> the census's own label: "
+    "CLASSIC5 -> POOLED:CLASSIC5, UNSEEN12 -> POOLED:UNSEEN12, a one-asset "
+    "panel -> that symbol's own census row. A panel the census files no "
+    "counterpart for HALTs, naming the panel and the labels the census does "
+    "carry. PANEL17 has NO counterpart today: the census's POOLED:ALL is the "
+    "CENSUS COMMISSION's pool and nothing filed proves its membership is this "
+    "panel's, so mapping PANEL17 onto it would be the same assumption in a "
+    "new coat. `verdict_asset=` remains as an EXPLICIT OVERRIDE only, and an "
+    "override that disagrees with the derived label HALTs unless the caller "
+    "states `verdict_asset_why=`. The choice and its provenance ride the row "
+    "as `height_vs_toll_asset` and print on it.")
+
+
+
+# ── WHAT "NET OF MEASURED 5m TOLL" ACTUALLY DOES TODAY, SAID ON THE ROW ──────
+# REPORTED, NOT CHANGED.  The contract calls P-BRK-S1's result "NET OF
+# MEASURED 5m TOLL"; `account_l` books fee and funding and subtracts NEITHER
+# the grid toll nor anything derived from it, and `stamp_toll`'s own docstring
+# says so verbatim ("as a PRINT beside the book").  Turning the print into a
+# DEDUCTION is a contract reading with a UNIT question inside it, so it is the
+# operator's to settle and not an executor's to perform.  The reading rides on
+# every row so nobody has to reconstruct it from two docstrings.
+TOLL_ACCOUNTING = {
+    "status": ("PRINT, NOT A DEDUCTION — reported, not changed. The contract "
+               "reads 'NET OF MEASURED 5m TOLL'; today's net_r is net of FEE "
+               "and FUNDING only."),
+    "net_r_formula": ("account_l: net_r = gross_r - fee_r - funding_r_eff, "
+                      "all in R units (divided by r_dist). fee_r is the "
+                      "estate's FEE_BPS_SIDE a side on both legs; "
+                      "funding_r_eff is the interval sum under the card's 1R "
+                      "ceiling [B4]."),
+    "grid_toll": ("stamp_toll stamps toll_atr_grid (the census grid's median "
+                  "round-trip toll for this lane's event class, in ATR of "
+                  "the lens) and toll_pct_of_1r = toll_atr / (r_dist / "
+                  "atr_at_entry) x 100, BESIDE the book. Neither ever enters "
+                  "net_r."),
+    "unit_question": ("toll_atr is a CENSUS-MEASURED MEDIAN over a class's "
+                      "anchors, in ATR units, not this campaign's own cost; "
+                      "net_r is in R units. toll_pct_of_1r already converts "
+                      "it (R and ATR are both known at the entry bar), so "
+                      "net_r - toll_pct_of_1r/100 is dimensionally legal. "
+                      "What is NOT obvious is whether it is MEANT: the fee "
+                      "leg of the same round trip is ALREADY inside net_r "
+                      "via fee_r, and the census toll is built from the "
+                      "filed fee schedule (toll_bps_source = "
+                      "data/fee_schedule.json[...].round_trip_bps_used), so "
+                      "a subtraction would charge the spread/fee twice for "
+                      "any asset whose grid toll is fee-derived."),
+    "what_a_deduction_would_take": (
+        "one line in account_l (or a wrapper on its return) subtracting "
+        "toll_pct_of_1r/100 from net_r, plus a decision on the double-count "
+        "above, plus a re-reading of MISMATCH: I1's text says 'net of 10 bps "
+        "+ funding' and S1's says 'NET OF MEASURED 5m TOLL' and does not "
+        "mention funding at all."),
+    "authority": ("a CONTRACT READING. Not changed on executor authority; "
+                  "the operator settles it. Until then the toll is printed "
+                  "on every row, labelled, and the row says it is a print."),
+}
+
+
+def as_of_of_record(path: Path | None = None) -> str:
+    """THE AS-OF WARRANTY'S VALUE — Stage D's WRITE-ONCE pin, read, never
+    restated.  Every row this module files carries it.
+
+    HALTS IF: the pin is absent or carries no `as_of_last_closed_4h`.  A row
+    with an invented as-of is a row whose numbers are true of no bars."""
+    p = Path(path) if path is not None else TP.AS_OF_PIN
+    if not p.exists():
+        raise SystemExit(
+            f"HALT: no Stage D as-of pin at {p}; every BRK artifact carries "
+            f"as_of_last_closed_4h and this module does not invent one.")
+    v = json.loads(p.read_text()).get("as_of_last_closed_4h")
+    if not v:
+        raise SystemExit(f"HALT: {p} carries no 'as_of_last_closed_4h'.")
+    return str(v)
+
 FEE_BPS_SIDE = RC.FEE_BPS_SIDE      # 5.0, BY OBJECT — never a literal here
 FUNDING_CEILING_R = RC.FUNDING_CEILING_R
 ATR_LEN = RC.ATR_LEN
@@ -273,8 +466,17 @@ RULINGS = (
     'defaults" -> the five bands in R1_BANDS; (band, margin_atr, hold_bars) '
     'come from the census builder\'s TUNING_RESULT file FOR THE LENS at run '
     'time (5m = the scored arm, 1d = the Tier-E print), never from this file.',
-    'R2 (verbatim): "All 17" -> PANEL17 for both lanes; P-BRK-S1 is scored on '
-    'the HOLDOUT era only; P-BRK-I1 rides the full corridor.',
+    'R2 (verbatim, 2026-09-21): "All 17" -> PANEL17 for both lanes. '
+    'SUPERSEDED by R8 (below) on the operator\'s own word; the era half of '
+    'the reading stands — P-BRK-S1 is scored on the HOLDOUT era only, '
+    'P-BRK-I1 rides the full corridor, and require_lane_era now ENFORCES '
+    'both against the filed arm [B9].',
+    'R8 (verbatim, 2026-09-22): "5-asset book - the PANEL PIN governs" -> '
+    'P-BRK-S1 and P-BRK-I1 score on CLASSIC5 (LOAO above-half = 3/5); the '
+    '17-asset view prints as Tier-E beside each BRK row. This module scores '
+    'on whatever panel the REGISTRATION names (g["panel"]), so R8 is a '
+    'registration-text decision and no code changed for it; what changed is '
+    'the DECLARATION (PANEL_DECLARED) and the row\'s tier_e_panel17 slot.',
     'R4 (verbatim): "It means we observe the transition from expansion of the '
     'bands, into consolidation and closing of the bands. This is followed by '
     'new expansion, either as continuation or as reversal, a final cross after '
@@ -319,6 +521,100 @@ LEANS = (
     f"the reverse — the conservative side, named (FINDINGS, mismatch 4).",
     f"{LEAN_TAG} B7 every permission is read AT the entry bar, from bars "
     f"CLOSED at that instant.",
+    f"{LEAN_TAG} B9 LANE_ERA IS ENFORCED, NOT MERELY DECLARED.  "
+    f"require_lane_era compares LANE_ERA[lane] to the era of the FILED ARM "
+    f"(gate()['era']) inside BOTH runners, immediately after the gate and "
+    f"BEFORE corridor_era or frame_l — so a P-BRK-S1 arm filed at era='full' "
+    f"HALTs without one bar or one bar-stamp being read.  The alternative — "
+    f"NARROWING a 'full' arm's window to the holdout — is NOT taken: a runner "
+    f"that silently rides a window its registration does not name has made "
+    f"the registration text stop meaning anything.  The registration is "
+    f"refiled, or the lane does not ride.",
+    f"{LEAN_TAG} B10 THE ROW CARRIES ITS VERDICT; IT DOES NOT COMPUTE ONE.  "
+    f"The height-vs-toll figures are the CENSUS track's [Q-R3] measurement "
+    f"and are READ through height_vs_toll() from "
+    f"{HEIGHT_VS_TOLL_PATH.name} under key {list(HEIGHT_VS_TOLL_KEY)} with "
+    f"fields {list(HEIGHT_VS_TOLL_FIELDS)}, and the verdict from "
+    f"{HEIGHT_VS_TOLL_VERDICT_PATH.name} under key "
+    f"{list(HEIGHT_VS_TOLL_VERDICT_KEY)} with fields "
+    f"{list(HEIGHT_VS_TOLL_VERDICT_FIELDS)}; this module pins no verdict "
+    f"vocabulary and files no default.  Until [Q-R3] exists the slot holds a "
+    f"PendingVerdict whose every read — str, repr, format, float, bool, len, "
+    f"iteration, indexing, EQUALITY AND ORDERING, json.dumps(default=str) — "
+    f"raises SystemExit, so a row with an unread verdict cannot be printed, "
+    f"filed, or silently compared to a string.  The scale read "
+    f"is {HEIGHT_VS_TOLL_SCALE!r} (the frozen pin of record [L2]; "
+    f"'calibrated' is in-sample by construction and may not reach a scored "
+    f"lane's row) and the era read is {HEIGHT_VS_TOLL_ERA!r}.  WHICH ROW is "
+    f"read is DERIVED, see H4.",
+    f"{LEAN_TAG} H4 THE VERDICT ROW'S ASSET IS DERIVED FROM THE BOOK, NEVER "
+    f"DEFAULTED.  {VERDICT_ASSET_LAW}  The shipped defect it replaces: "
+    f"`asset = str(verdict_asset) if verdict_asset else \"POOLED:CLASSIC5\"` "
+    f"with `verdict_asset` derived from nothing, so a one-asset BTCUSDT book "
+    f"took POOLED:CLASSIC5's 1d row (n_ranges 53, ratio_median 413.99176955, "
+    f"verdict_pass TRUE) instead of BTCUSDT's own (n_ranges 11, verdict_pass "
+    f"False, PROVISIONAL) — the harm on the most favourable side, with no "
+    f"HALT and no note.  R8 makes CLASSIC5 the BRK panel of record, which "
+    f"makes that default LOOK right today and is exactly why it is derived "
+    f"and not assumed: the Tier-E 17-asset row R8 also orders must never "
+    f"silently wear CLASSIC5's verdict.",
+    f"{LEAN_TAG} H5 THE CENSUS'S SAMPLE FLOOR IS HONOURED ACROSS THE TRACK "
+    f"BOUNDARY, AND ITS NUMBER IS NOT COPIED.  [Q-R3] was re-filed with a "
+    f"`provisional` flag, an `edge_n_ranges` column and a minimum-n floor; "
+    f"the census's own reader refuses a flagged row to a caller that did not "
+    f"ask for it by name, and this module reads the PARQUET DIRECTLY, so it "
+    f"would have bypassed that refusal entirely.  height_vs_toll() now HALTs "
+    f"on a provisional row unless allow_provisional=True, and a row taken by "
+    f"name carries provisional / provisional_reason / sample_floor and PRINTS "
+    f"them in a starred block.  The floor itself is READ off the census row "
+    f"({list(HEIGHT_VS_TOLL_PROVISIONAL_FIELDS)}) and never re-pinned here — "
+    f"a second copy of another track's threshold is a threshold that can "
+    f"drift in silence.",
+    f"{LEAN_TAG} H1 THE [Q-R3] READ IS A TWO-TABLE JOIN, KEYED DIFFERENTLY "
+    f"ON EACH SIDE.  The census filed its FIGURES with an `era` column and "
+    f"its VERDICT without one, so the figures are selected on "
+    f"{list(HEIGHT_VS_TOLL_KEY)} and the verdict on "
+    f"{list(HEIGHT_VS_TOLL_VERDICT_KEY)}.  Nothing in that join proves the "
+    f"two rows are one measurement, so the columns BOTH tables carry "
+    f"({list(HEIGHT_VS_TOLL_AGREE)}, plus the law half "
+    f"{list(HEIGHT_VS_TOLL_AGREE_STR)}) are compared and any disagreement "
+    f"HALTs.  AN ABSENT SHARED COLUMN IS ALSO A HALT, NOT A SKIP [review "
+    f"round 2, finding 2].  It used to `continue`, and those columns were "
+    f"not required of the verdict table, so a verdict table re-filed without "
+    f"them passed every column check, the cross-check compared NOTHING, and "
+    f"`cross_checked` still attested all three from the constant — an "
+    f"attestation for a check that never ran.  Reproduced on the two REAL "
+    f"filed tables: drop n_ranges / height_atr_median / toll_atr_median from "
+    f"the verdict copy and flip 5m POOLED:CLASSIC5 to verdict_pass=True with "
+    f"reason 'INVENTED', and the reader returned it.  TWO GUARDS NOW: the "
+    f"shared columns are REQUIRED of the verdict side (_hvt_required), and "
+    f"`cross_checked` is the list the comparison ACTUALLY built, so the "
+    f"attestation cannot outrun the check.  The alternative — asking the "
+    f"census for an era column on the verdict table, or for a single joined "
+    f"table — was NOT taken: it is another track's file, the cross-check is "
+    f"cheap and real, and the figures agree today (13025 / 6.480873 / "
+    f"0.292654 on both sides for 5m POOLED:CLASSIC5).",
+    f"{LEAN_TAG} H2 THE CENSUS'S VERDICT IS CARRIED AS THREE FIELDS, NOT "
+    f"FLATTENED TO A STRING.  [Q-R3] files verdict_pass (bool) + verdict_law "
+    f"+ reason, not the single verdict string the last round's interface "
+    f"guessed at.  All three ride the row verbatim rather than being "
+    f"collapsed into a word of this module's choosing — collapsing them "
+    f"would be exactly the verdict vocabulary B10 refuses to pin.  "
+    f"verdict_pass must be an actual boolean and verdict_law/reason must be "
+    f"non-blank, or the read HALTs.",
+    f"{LEAN_TAG} H3 THE AS-OF WARRANTY IS ENFORCED ACROSS THE TRACK "
+    f"BOUNDARY.  Both filed census tables carry "
+    f"{HEIGHT_VS_TOLL_ASOF_COL!r}; height_vs_toll() requires that column on "
+    f"both and HALTs unless it equals this corridor's as-of.  A census "
+    f"measurement re-filed after the corridor moves therefore cannot ride a "
+    f"BRK row silently — it stops the read instead.",
+    f"{LEAN_TAG} B11 THE ROW COMPUTES NO REGISTRATION VERDICT EITHER.  "
+    f"brk_row carries the Book, its gate, the counts and the journal's own "
+    f"per-campaign sums; the ruler, the LOAO line and the p against the FDR "
+    f"bar stay tierc10_panel's (TP.score / TP.headline_n).  A row can only be "
+    f"assembled from a TP.Book — the journal WEARING its gate — so a row "
+    f"without a filed registration behind it cannot be built at all, which "
+    f"is the state of the estate today [LAW 4].",
     f"{LEAN_TAG} B8 one object, two house styles: the operator's band names "
     f"({BAND_EXAMPLE}) and the census's ({census_band(BAND_EXAMPLE)}) are "
     f"translated at the boundary by band_key/census_band, which are algebra "
@@ -369,6 +665,34 @@ FINDINGS = (
     "so no bar of any lens straddles the cut inside a holdout window and no "
     "legal entry is refused.  One law, one object, one direction of error — "
     "but the direction is now named rather than implied.",
+    "OPEN (THE TOLL IS A PRINT, NOT A DEDUCTION) — reported, not changed, "
+    "and NOT an executor's to change.  The contract calls P-BRK-S1's result "
+    "'NET OF MEASURED 5m TOLL'.  `account_l` returns net_r = gross_r - fee_r "
+    "- funding_r_eff and SUBTRACTS NO TOLL; `stamp_toll` stamps "
+    "`toll_atr_grid` and `toll_pct_of_1r` BESIDE the book and its own "
+    "docstring says so ('as a PRINT beside the book').  A deduction is "
+    "dimensionally legal — toll_pct_of_1r already converts the grid's "
+    "ATR-unit median into a share of 1R at the entry bar — but it may DOUBLE "
+    "COUNT: the census toll is built from the filed fee schedule "
+    "(toll_bps_source = data/fee_schedule.json[...].round_trip_bps_used) and "
+    "the same round trip's fee is ALREADY inside net_r via fee_r.  It is "
+    "also a MEDIAN OVER A CLASS, not this campaign's cost.  The whole "
+    "reading rides on every row as TOLL_ACCOUNTING; the operator settles it.",
+    "THE DRAFTING ERROR IN THE RESUME PASTE (reported, nothing built on it).  "
+    "The contract's P-BRK-S1 line reads 'first HOLD retest of the 5m 89 or "
+    "200/300 band (FLIP_HOLD pins)'.  BOTH halves name the wrong objects.  "
+    "(a) FLIP_HOLD (FLIP_HOLD_MARGIN 1.0 ATR / FLIP_HOLD_BARS 6 bars, read "
+    "out of engine/rangefinder.py) is the MEMORY-LINE pin set — P-BRK-I1's "
+    "anchor — and is not P-BRK-S1's.  (b) '89 or 200/300' is the FOUNDATIONS' "
+    "provisional band pair; the band set actually built and tuned under "
+    "operator ruling R1 is the five {ribbon89_127, ribbon127_200, tap89, "
+    "tap127, tap200}, and the 5m cell the census TUNED and FILED is band "
+    "'ribbon127_200' at margin_atr 1.0 / hold_bars 3 / ttl_bars 400 "
+    "(census/TUNING_RESULT.json).  The 1d Tier-E cell is a DIFFERENT one: "
+    "band 'ribbon89_127' at margin_atr 0.25 / hold_bars 6 / ttl_bars 400 "
+    "(census/TUNING_RESULT_1d.json).  No registration text may quote the "
+    "contract's wording; the pins are READ from the tuning file at run time "
+    "(tuned_pins) and never typed.",
     "OPEN: P-BRK-S1's contract text says 'NET OF MEASURED 5m TOLL' and does "
     "not mention funding; P-BRK-I1 says 'net of 10 bps + funding'.  The estate "
     "default is that every book pays journaled funding, so both lanes do here, "
@@ -1493,6 +1817,81 @@ def require_era(entry_ms: int, sym: str, lane: str, era: str) -> None:
             f"applied after the fact would hide that the window was wrong.")
 
 
+# ──────────── 9b · THE DECLARED ERA PIN, HELD AGAINST THE FILED ARM [B9] ────
+LANE_ERA_REASON = {
+    LANE_S1: ("P-BRK-S1's (band, margin_atr, hold_bars) were CHOSEN by the "
+              "census builder's R1 tuning on entries AT OR BEFORE the cut.  "
+              "Scoring the scalper on 'full' — or on 'tuning' — would score "
+              "it IN SAMPLE on the very grid that picked its pins, and the "
+              "row would read as a result when it is a fit."),
+    LANE_I1: ("P-BRK-I1 tunes nothing and is declared on the FULL corridor "
+              "[R2].  An arm that collars it to one era would score the "
+              "investor on a window its own text does not name, and the "
+              "holdout half of that window is P-BRK-S1's collar, not its."),
+}
+LANE_ERA_LAW = (
+    "LANE_ERA is a PIN, and a pin nothing checks is a comment.  The era a "
+    "lane actually rides comes from the FILED ARM (`gate()['era']`, i.e. "
+    "`arm_spec(..., era=...)`), so the declared pin and the filed arm are two "
+    "different objects that can disagree — and the disagreement that matters "
+    "is silent: a P-BRK-S1 arm filed at era='full' rides the whole corridor, "
+    "passes `external_book`'s door (which only holds the journal to the arm's "
+    "OWN era) and prints a number that looks out of sample and is not.  "
+    "`require_lane_era` closes that: it runs INSIDE both runners, immediately "
+    "after the gate and BEFORE the corridor is read, so not one bar is "
+    "touched on a mismatch.")
+
+
+def require_lane_era(lane: str, gate_: dict) -> str:
+    """THE DECLARED ERA PIN vs THE FILED ARM — a HALT, named [B9].
+
+    `LANE_ERA` says which era each BRK lane is scored on: brk-s1 the HOLDOUT
+    (its pins are tuned at or before the R1 cut, so that is the only era on
+    which they are out of sample), brk-i1 the FULL corridor (it tunes
+    nothing).  Until this function existed the pin was DECLARED and nothing
+    compared it to anything: both runners took `era = g["era"]` from the arm
+    and rode it.
+
+    WHY THE HALT AND NOT A NARROWING.  `corridor_era` would happily cut a
+    'full' arm's window to the holdout, and that would be the WRONG repair:
+    the arm's TEXT is what is registered, and a runner that silently rides a
+    window its registration does not name has made the text stop meaning
+    anything.  The registration is refiled, or the lane does not ride.
+
+    WHERE IT SITS.  Immediately after `gate()` in both runners, before
+    `corridor_era` (which reads bar stamps) and long before `frame_l` (which
+    reads bars).  F-BRK-LANE-ERA proves the HALT fires with ZERO calls to
+    either.
+
+    HALTS IF: `lane` has no declared era; the gate is not a gate; or the filed
+    arm's era is not `LANE_ERA[lane]` — e.g. P-BRK-S1 filed at era='full'.
+    """
+    if lane not in LANE_ERA:
+        raise SystemExit(
+            f"HALT: lane {lane!r} has no declared era in LANE_ERA "
+            f"({dict(sorted(LANE_ERA.items()))}); a lane whose era is not "
+            f"DECLARED may not ride, because there is then nothing for the "
+            f"filed arm to be held against. {LANE_ERA_LAW}")
+    if not isinstance(gate_, dict) or "era" not in gate_:
+        raise SystemExit(
+            f"HALT: require_lane_era({lane!r}) was handed "
+            f"{type(gate_).__name__} and not the dict `gate()` returns; the "
+            f"era must come from the FILED ARM, never from the caller.")
+    want, got = str(LANE_ERA[lane]), str(gate_["era"])
+    if got != want:
+        raise SystemExit(
+            f"HALT: {lane} is DECLARED to ride the {want!r} era (LANE_ERA), "
+            f"but the filed arm {str(gate_.get('registration'))!r} / "
+            f"{str(gate_.get('arm'))!r} names {got!r}. "
+            f"{LANE_ERA_REASON[lane]} {TP.era_note(want)} Not one bar has "
+            f"been read. REFILE the arm at era={want!r} (TP.arm_spec(..., "
+            f"era={want!r})) — the window is NOT narrowed here, because a "
+            f"runner that rides a window its registration does not name has "
+            f"made the registration text stop meaning anything. "
+            f"{LANE_ERA_LAW}")
+    return want
+
+
 # ═══════════════════════════════════════════════════ 10 · THE CORE REPLAY
 @dataclass
 class Leg:
@@ -1689,11 +2088,11 @@ def run_lane_s1(panel, reg_id: str, text: str, arm: str, signals: dict,
     may narrow it further but never widen it.
     """
     g = gate(reg_id, text, arm, panel, LANE_S1, head_of_record, reg_root)
-    card = card or TP.CONTROL_CARD
-    roles = roles or T9.V6_ROLES
+    era = require_lane_era(LANE_S1, g)      # [B9] the DECLARED pin, ENFORCED
+    card = card or TP.CONTROL_CARD          # — before one bar, one stamp or
+    roles = roles or T9.V6_ROLES            #   one tuning file is read
     tuned = tuned or tuned_pins("5m")
     band = r1_band(tuned["band"])
-    era = g["era"]
     e_lo, e_hi, e_meta = TP.corridor_era(g["panel"], era)
     lo_ms = e_lo if lo_ms is None else max(int(lo_ms), e_lo)
     hi_ms = e_hi if hi_ms is None else min(int(hi_ms), e_hi)
@@ -1751,9 +2150,9 @@ def run_lane_i1(panel, reg_id: str, text: str, arm: str, signals: dict,
     funding by interval sum.
     """
     g = gate(reg_id, text, arm, panel, LANE_I1, head_of_record, reg_root)
+    era = require_lane_era(LANE_I1, g)      # [B9] the DECLARED pin, ENFORCED
     card = card or TP.CONTROL_CARD
     roles = roles or T9.V6_ROLES
-    era = g["era"]
     e_lo, e_hi, e_meta = TP.corridor_era(g["panel"], era)
     lo_ms = e_lo if lo_ms is None else max(int(lo_ms), e_lo)
     hi_ms = e_hi if hi_ms is None else min(int(hi_ms), e_hi)
@@ -1876,14 +2275,932 @@ def stamp_toll(trades: list, lens: str, anchor: str, band: str | None = None,
     return {"cls": cls, "lens": lens, "horizon": horizon, "per_asset": seen}
 
 
+# ═══════════════════════ 14 · THE ROW — THE CONTRACT'S LINE 112, ASSEMBLED
+# "Each BRK form also prints the OTHER anchor (EMA band <-> memory-line) as
+#  Tier-E, and carries its lens's height-vs-toll verdict ON ITS ROW."
+#      — RESUME contract 2026-09-22, line 112.
+# "The 17-asset view prints as Tier-E beside each BRK row." — operator R8.
+#
+# THE MECHANISM ALREADY EXISTED AND THE ASSEMBLY DID NOT.  `LANE_ANCHOR` /
+# `LANE_TIER_E_ANCHOR` name the two anchors, both runners take `anchor=`, and
+# `stamp_toll` stamps the toll — but nothing put the three of them on one row,
+# so there was no row for a verdict to ride on and `brk/` held no table at all.
+#
+# WHAT THIS SECTION MAY NOT DO, AND DOES NOT.  It computes NO verdict.  The
+# height-vs-toll verdict is the CENSUS track's measurement ([Q-R3]) and is
+# READ from its filed table through `height_vs_toll()`; until that table
+# exists the slot holds a `PendingVerdict` whose every read HALTs.  The
+# REGISTRATION's own verdict (the ruler, the p against the FDR bar) is the
+# panel module's and is not computed here either: the row carries the journal
+# and its provenance, and `TP.score` / `TP.headline_n` remain the only things
+# that turn a journal into a verdict.  LAW 4 is the reason: no BRK
+# registration exists, so no real Book can be offered to this function at all,
+# and every row built today is built on a SYNTHETIC campaign.
+
+def verdict_asset_of(panel, override: str | None = None,
+                     why: str | None = None) -> dict:
+    """WHICH CENSUS ROW THIS BOOK'S VERDICT IS, DERIVED FROM THE BOOK.
+
+    [review round 2, 2026-09-22, finding 1]  The verdict slot used to default
+    to POOLED:CLASSIC5 for ANY book.  It is now derived:
+
+        TP.panel_name(panel) == 'CLASSIC5' -> 'POOLED:CLASSIC5'
+        TP.panel_name(panel) == 'UNSEEN12' -> 'POOLED:UNSEEN12'
+        a ONE-ASSET panel                  -> that symbol's own census row
+        anything else                      -> HALT
+
+    PANEL17 falls in the HALT case on purpose.  The census does file a
+    POOLED:ALL row whose `as_of_n_assets` is 17, but POOLED:ALL is the CENSUS
+    COMMISSION's pool: nothing filed states its membership is this panel's,
+    and quietly mapping PANEL17 onto it would be the very assumption this
+    repair exists to remove — the same default wearing a new coat.  R8 orders
+    a Tier-E 17-asset print beside each BRK row; when that arm is filed the
+    operator names its census counterpart with `verdict_asset=` and says why,
+    or the census files a PANEL17 row.
+
+    `override` is an EXPLICIT OVERRIDE and never a fallback: an override that
+    disagrees with the derived label HALTs unless `why` states the reason,
+    and an override where nothing can be derived REQUIRES `why`.
+
+    Returns the choice AND its provenance, which rides the row as
+    `height_vs_toll_asset` and prints on it.
+    """
+    pnl = tuple(str(x) for x in (panel or ()))
+    if not pnl:
+        raise SystemExit(
+            "HALT: a BRK row's [Q-R3] verdict asset is DERIVED from the "
+            "Book's panel, and the Book offered an EMPTY panel. A row with no "
+            "panel has no census counterpart to read, and a default would be "
+            "an invented measurement wearing a census row's name [B10].")
+    name = TP.panel_name(pnl)
+    if name in CENSUS_ASSET_OF_PANEL:
+        derived = CENSUS_ASSET_OF_PANEL[name]
+        how = (f"panel {name} -> the census's pooled label {derived!r} "
+               f"(CENSUS_ASSET_OF_PANEL)")
+    elif len(pnl) == 1:
+        derived = pnl[0]
+        how = (f"a ONE-ASSET panel reads that symbol's OWN census row "
+               f"({derived!r}), not a pool's")
+    else:
+        derived, how = None, None
+    ov = str(override) if override else None
+    wy = str(why).strip() if why and str(why).strip() else None
+    if derived is None and ov is None:
+        raise SystemExit(
+            f"HALT: the [Q-R3] verdict row for a BRK row on panel {name} "
+            f"({len(pnl)} assets: {list(pnl)}) cannot be DERIVED. The census "
+            f"files its rows under the pooled labels "
+            f"{list(CENSUS_POOL_LABELS)} and under single symbols; this "
+            f"module maps {sorted(CENSUS_ASSET_OF_PANEL)} onto "
+            f"{[CENSUS_ASSET_OF_PANEL[k] for k in sorted(CENSUS_ASSET_OF_PANEL)]} "
+            f"and a one-asset panel onto its own symbol, and it has NO "
+            f"counterpart for this one. PANEL17 has none today: the census's "
+            f"{CENSUS_POOL_LABELS[0]!r} is the CENSUS COMMISSION's pool and "
+            f"nothing filed proves its membership is this panel's. Name the "
+            f"row explicitly with verdict_asset= AND state verdict_asset_why=, "
+            f"or have the census file the counterpart. A DEFAULT here is what "
+            f"this HALT replaced: before the repair every book, this one "
+            f"included, silently received POOLED:CLASSIC5's figures. "
+            f"{VERDICT_ASSET_LAW}")
+    if ov is not None and derived is not None and ov != derived and wy is None:
+        raise SystemExit(
+            f"HALT: the [Q-R3] verdict asset was OVERRIDDEN to {ov!r} for a "
+            f"row on panel {name} ({list(pnl)}), whose DERIVED census "
+            f"counterpart is {derived!r} ({how}). An override that disagrees "
+            f"with the derivation is a deliberate act and must say why: pass "
+            f"verdict_asset_why='...'. Silence here is how a row comes to "
+            f"wear another panel's verdict. {VERDICT_ASSET_LAW}")
+    if ov is not None and derived is None and wy is None:
+        raise SystemExit(
+            f"HALT: the [Q-R3] verdict asset was set to {ov!r} for a row on "
+            f"panel {name} ({list(pnl)}), for which NOTHING can be derived. "
+            f"An override standing in for an impossible derivation must say "
+            f"why: pass verdict_asset_why='...'. {VERDICT_ASSET_LAW}")
+    asset = ov if ov is not None else derived
+    return {
+        "asset": str(asset),
+        "panel_name": name,
+        "n_panel_assets": len(pnl),
+        "derived": derived,
+        "derived_how": (how if derived is not None else
+                        "NOTHING DERIVABLE — the census files no counterpart "
+                        "for this panel"),
+        "override": ov,
+        "override_why": wy,
+        "source": ("DERIVED FROM THE BOOK" if ov is None else
+                   ("EXPLICIT OVERRIDE, agreeing with the derivation"
+                    if ov == derived else "EXPLICIT OVERRIDE, stated")),
+        "law": VERDICT_ASSET_LAW,
+    }
+
+
+def height_vs_toll_spec() -> dict:
+    """THE INTERFACE, AS A PRINTABLE CLAIM — what this module will read, from
+    where, under which key, and who owns it.  It rides the mechanics card and
+    the build manifest so the census track can read the requirement off the
+    artifact instead of off a conversation."""
+    return {
+        "status": HEIGHT_VS_TOLL_STATUS,
+        "path": str(HEIGHT_VS_TOLL_PATH),
+        "verdict_path": str(HEIGHT_VS_TOLL_VERDICT_PATH),
+        "two_tables_why": ("the census keys its FIGURES on "
+                           + str(list(HEIGHT_VS_TOLL_KEY)) + " and its "
+                           "VERDICT on " + str(list(HEIGHT_VS_TOLL_VERDICT_KEY))
+                           + " — the verdict table carries NO era column — so "
+                           "this is a two-table read keyed differently on each "
+                           "side, cross-checked on the figures both carry."),
+        "key": list(HEIGHT_VS_TOLL_KEY),
+        "verdict_key": list(HEIGHT_VS_TOLL_VERDICT_KEY),
+        "required_fields": list(HEIGHT_VS_TOLL_FIELDS),
+        "required_verdict_fields": list(HEIGHT_VS_TOLL_VERDICT_FIELDS),
+        "required_verdict_columns": _hvt_required("VERDICT"),
+        "required_figures_columns": _hvt_required("FIGURES"),
+        "cross_checked_fields": list(HEIGHT_VS_TOLL_AGREE),
+        "cross_checked_law_fields": list(HEIGHT_VS_TOLL_AGREE_STR),
+        "cross_check_on_absence": (
+            "HALT. An absent shared column SEVERS the join between the "
+            "era-keyed figures row and the era-less verdict row, so it stops "
+            "the read; it used to be SKIPPED while `cross_checked` went on "
+            "attesting the constant. `cross_checked` on a returned row is "
+            "the list the comparison ACTUALLY built [review round 2, "
+            "finding 2]."),
+        "as_of_column_required": HEIGHT_VS_TOLL_ASOF_COL,
+        "as_of_required_value": as_of_of_record(),
+        "asset_values": ("a PANEL symbol, or the census's pooled labels "
+                         "POOLED:ALL / POOLED:CLASSIC5 / POOLED:UNSEEN12"),
+        "lens_values": list(LENSES),
+        "scale_kind_read": HEIGHT_VS_TOLL_SCALE,
+        "era_read": HEIGHT_VS_TOLL_ERA,
+        "asset_read": {
+            "law": VERDICT_ASSET_LAW,
+            "derived_by": ("tierc10_brk.verdict_asset_of("
+                           "book.spec['panel'], verdict_asset, "
+                           "verdict_asset_why)"),
+            "panel_to_census_label": dict(sorted(
+                CENSUS_ASSET_OF_PANEL.items())),
+            "one_asset_panel": ("reads that symbol's OWN census row, not a "
+                                "pool's"),
+            "no_counterpart": ("HALT, naming the panel and the labels the "
+                               "census carries. PANEL17 has none today."),
+            "census_pool_labels": list(CENSUS_POOL_LABELS),
+            "override": ("verdict_asset= is an EXPLICIT OVERRIDE only; one "
+                         "that disagrees with the derived label HALTs unless "
+                         "verdict_asset_why= states the reason"),
+            "printed_on_the_row": "height_vs_toll_asset",
+            "was": ("DEFAULTED to 'POOLED:CLASSIC5' for any book until "
+                    "2026-09-22 [review round 2, finding 1]"),
+        },
+        "provisional_policy": (
+            "the census files a `provisional` flag and a minimum-n floor; a "
+            "flagged row HALTs here unless allow_provisional=True, and when "
+            "taken by name it rides the row as provisional / "
+            "provisional_reason / sample_floor and PRINTS. The floor itself "
+            "is READ off the row (min_n_ranges_pinned, "
+            "edge_min_n_ranges_pinned) and is not re-pinned by this module."),
+        "provisional_columns_required": list(
+            HEIGHT_VS_TOLL_PROVISIONAL_FIELDS),
+        "verdict_vocabulary": ("NOT PINNED HERE — the census's own three "
+                               "fields (verdict_pass, verdict_law, reason) "
+                               "are carried through VERBATIM. This module "
+                               "reads a verdict; it never names one, never "
+                               "restates one as a string of its own, and "
+                               "never computes one."),
+        "owner": HEIGHT_VS_TOLL_OWNER,
+        "on_absence": ("HALT. The row's verdict slot holds a PendingVerdict "
+                       "whose every read raises SystemExit, so a row can be "
+                       "assembled and named PENDING but can never be printed "
+                       "or serialised as though the verdict existed."),
+    }
+
+
+class PendingVerdict:
+    """THE VERDICT SLOT BEFORE [Q-R3] EXISTS — an object that cannot be read.
+
+    A `None` in this slot would serialise to `null` and print as a blank, and
+    a blank in a verdict column is the kind of thing a later reader fills in
+    from memory.  So the empty slot is an OBJECT whose every read — `str`,
+    `repr`, `format`, `float`, `int`, `bool`, `len`, iteration, indexing, and
+    any attribute but the key it was built with — raises SystemExit naming the
+    table that is missing.  `json.dumps(..., default=str)` therefore HALTs
+    too, which is the point: a row with an unread verdict cannot be filed.
+
+    COMPARISON IS A READ TOO (review, 2026-09-22).  `__eq__`/`__ne__` were
+    left at object identity, so `pv == 'PASS'` came back False SILENTLY and a
+    downstream `if row['height_vs_toll'] != 'TOLL DOMINATES': ship()` would
+    have proceeded on an UNREAD verdict.  Asking whether an absent
+    measurement equals something is asking what it says, so the six rich
+    comparisons HALT as well.  `pv is None` still answers False — identity is
+    not a read, and the module's own `is not None` printing path needs it.
+
+    The KEY fields stay readable (`lens`, `asset`, `scale_kind`, `era`,
+    `path`, `verdict_path`) because they are the request, not the answer — a
+    reporter must be able to say WHICH verdict is missing without tripping
+    the guard.
+    """
+    __slots__ = ("lens", "asset", "scale_kind", "era", "path", "verdict_path")
+
+    def __init__(self, lens: str, asset: str, scale_kind: str, era: str,
+                 path, verdict_path=None) -> None:
+        self.lens, self.asset = str(lens), str(asset)
+        self.scale_kind, self.era = str(scale_kind), str(era)
+        self.path = str(path)
+        self.verdict_path = str(verdict_path if verdict_path is not None
+                                else HEIGHT_VS_TOLL_VERDICT_PATH)
+
+    def _halt(self, *a, **k):
+        raise SystemExit(
+            f"HALT: the height-vs-toll VERDICT for lens {self.lens!r} "
+            f"(asset {self.asset!r}, scale {self.scale_kind!r}, era "
+            f"{self.era!r}) was READ, but {HEIGHT_VS_TOLL_OWNER} has filed no "
+            f"readable table at {self.path} (verdict table "
+            f"{self.verdict_path}). The BRK row CARRIES its lens's verdict; "
+            f"it does not compute one, and a default would be an invented "
+            f"measurement wearing a census row's name. Expected key "
+            f"{list(HEIGHT_VS_TOLL_KEY)} and fields "
+            f"{list(HEIGHT_VS_TOLL_FIELDS)}, plus verdict key "
+            f"{list(HEIGHT_VS_TOLL_VERDICT_KEY)} and fields "
+            f"{list(HEIGHT_VS_TOLL_VERDICT_FIELDS)}. Either file [Q-R3] or "
+            f"leave the slot PENDING and unread.")
+
+    __str__ = __repr__ = __format__ = __float__ = __int__ = _halt
+    __bool__ = __len__ = __iter__ = __getitem__ = __hash__ = _halt
+    # COMPARISON IS A READ: identity-equality here is a SILENT False, which
+    # is the one answer an unread verdict must never give.  `__hash__` above
+    # stays a HALT and is in this namespace, so defining `__eq__` does not
+    # get it replaced with None.
+    __eq__ = __ne__ = __lt__ = __le__ = __gt__ = __ge__ = _halt
+
+    def __getattr__(self, name):                # slots resolve before this
+        if name.startswith("_"):
+            raise AttributeError(name)
+        self._halt()
+
+
+def _hvt_required(what: str) -> list:
+    """THE COLUMNS A [Q-R3] TABLE MUST CARRY, BY SIDE OF THE JOIN.
+
+    [review round 2, finding 2]  This used to be `key + fields + as_of` on
+    BOTH sides, and HEIGHT_VS_TOLL_AGREE was NOT in the verdict side's set —
+    so a verdict table lacking n_ranges / height_atr_median / toll_atr_median
+    passed every column check and the two-table cross-check then compared
+    NOTHING while still attesting all three.  The shared figures are now
+    REQUIRED of the verdict table, which is the first of the two guards: the
+    absent column cannot reach the comparison loop at all.
+    """
+    if what == "VERDICT":
+        want = (list(HEIGHT_VS_TOLL_VERDICT_KEY)
+                + list(HEIGHT_VS_TOLL_VERDICT_FIELDS)
+                + list(HEIGHT_VS_TOLL_AGREE)
+                + list(HEIGHT_VS_TOLL_AGREE_STR)
+                + list(HEIGHT_VS_TOLL_PROVISIONAL_FIELDS)
+                + [HEIGHT_VS_TOLL_ASOF_COL])
+    else:
+        want = (list(HEIGHT_VS_TOLL_KEY) + list(HEIGHT_VS_TOLL_FIELDS)
+                + list(HEIGHT_VS_TOLL_AGREE)
+                + list(HEIGHT_VS_TOLL_AGREE_STR)
+                + [HEIGHT_VS_TOLL_ASOF_COL])
+    out: list = []
+    for c in want:
+        if c not in out:
+            out.append(c)
+    return out
+
+
+def _hvt_shared_or_halt(r, v, p: Path, vp: Path, sel: dict) -> list:
+    """THE ONLY EVIDENCE THE TWO ROWS ARE ONE MEASUREMENT [H1] — compared,
+    never skipped, and the list it RETURNS is what was ACTUALLY compared.
+
+    The figures table is keyed with an `era` and the verdict table without
+    one, so nothing in the join proves the two rows describe the same
+    measurement except the columns they share.  An ABSENT shared column
+    SEVERS that join, so it HALTs; it used to `continue`, which turned the
+    cross-check into a no-op while `out['cross_checked']` went on attesting
+    all three fields from the constant.  The attestation can no longer
+    outrun the check, because the attestation IS the check's own output.
+    """
+    shared = list(HEIGHT_VS_TOLL_AGREE) + list(HEIGHT_VS_TOLL_AGREE_STR)
+    missing = [f_ for f_ in shared
+               if f_ not in v.index or f_ not in r.index]
+    if missing:
+        raise SystemExit(
+            f"HALT: the [Q-R3] cross-check cannot run — the shared column(s) "
+            f"{missing} are absent from the FIGURES row in {p} and/or the "
+            f"VERDICT row in {vp} for "
+            f"{ {k: sel[k] for k in HEIGHT_VS_TOLL_KEY} }. The figures are "
+            f"keyed on {list(HEIGHT_VS_TOLL_KEY)} and the verdict on "
+            f"{list(HEIGHT_VS_TOLL_VERDICT_KEY)} — the verdict table carries "
+            f"NO era — so the columns BOTH tables carry "
+            f"({shared}) are the ONLY evidence the two rows are one "
+            f"measurement. Their absence SEVERS the join, and a severed join "
+            f"read anyway is a verdict of unknown provenance riding a BRK "
+            f"row. This is a HALT and not a skip [review round 2, finding 2].")
+    compared, disagree = [], {}
+    for f_ in HEIGHT_VS_TOLL_AGREE:
+        a_, b_ = _num(r[f_]), _num(v[f_])
+        compared.append(f_)
+        if a_ != b_:
+            disagree[f_] = (a_, b_)
+    for f_ in HEIGHT_VS_TOLL_AGREE_STR:
+        a_, b_ = str(r[f_]), str(v[f_])
+        compared.append(f_)
+        if a_ != b_:
+            disagree[f_] = (a_, b_)
+    if disagree:
+        raise SystemExit(
+            f"HALT: the [Q-R3] FIGURES row in {p} and the VERDICT row in "
+            f"{vp} disagree on {sorted(disagree)} "
+            f"(figures vs verdict: {disagree}) for "
+            f"{ {k: sel[k] for k in HEIGHT_VS_TOLL_KEY} }. The verdict table "
+            f"carries no era, so the shared figures are the ONLY evidence "
+            f"the two rows are one measurement; without it a BRK row would "
+            f"carry an 'ALL'-era height beside some other era's verdict.")
+    return compared
+
+
+def _hvt_provisional_or_halt(v, sel: dict, vp: Path, allow: bool) -> tuple:
+    """A PROVISIONAL CENSUS ROW NEVER REACHES A BRK ROW QUIETLY.
+
+    The census re-filed [Q-R3] with a `provisional` flag and a minimum-n
+    floor, and its own reader HALTs on such a row unless the caller asks for
+    it by name.  This module reads the PARQUET directly, so it would have
+    bypassed that refusal entirely: BTCUSDT 1d (n_ranges 11, edge_n_ranges
+    11, floor 30) read clean here before this guard existed.  The floor is
+    READ OFF THE ROW (`min_n_ranges_pinned` / `edge_min_n_ranges_pinned`) and
+    never re-pinned here — one law, one copy.
+    """
+    prov = v["provisional"]
+    if not isinstance(prov, (bool, np.bool_)):
+        raise SystemExit(
+            f"HALT: the [Q-R3] VERDICT row for "
+            f"{ {k: sel[k] for k in HEIGHT_VS_TOLL_VERDICT_KEY} } in {vp} "
+            f"carries provisional={prov!r} ({type(prov).__name__}), which is "
+            f"not a boolean. A sample-floor flag read from a non-boolean is a "
+            f"flag this module decided, not one the census filed.")
+    prov = bool(prov)
+    reason = str(v["provisional_reason"] if v["provisional_reason"] is not None
+                 else "")
+    if reason.strip().lower() in ("nan", "none"):
+        reason = ""
+    if prov and not reason.strip():
+        raise SystemExit(
+            f"HALT: the [Q-R3] VERDICT row for "
+            f"{ {k: sel[k] for k in HEIGHT_VS_TOLL_VERDICT_KEY} } in {vp} is "
+            f"flagged provisional=True but carries no provisional_reason. A "
+            f"flag with no stated floor behind it is not one a BRK row can "
+            f"print.")
+    if prov and not allow:
+        raise SystemExit(
+            f"HALT: the [Q-R3] VERDICT row for "
+            f"{ {k: sel[k] for k in HEIGHT_VS_TOLL_VERDICT_KEY} } in {vp} is "
+            f"PROVISIONAL — {reason}. n_ranges {int(v['n_ranges'])} against "
+            f"the filed floor min_n_ranges_pinned "
+            f"{int(v['min_n_ranges_pinned'])}; edge_n_ranges "
+            f"{int(v['edge_n_ranges'])} against edge_min_n_ranges_pinned "
+            f"{int(v['edge_min_n_ranges_pinned'])}. The census files it and "
+            f"it is readable AS DATA; it is NOT served to a BRK row that did "
+            f"not ask for it by name. Pass allow_provisional=True to take it "
+            f"— the row then CARRIES provisional=True and this reason and "
+            f"PRINTS them — or read a row that clears the floor. The quiet "
+            f"path is the safe one [census F-C10-HT-PROVISIONAL].")
+    return prov, reason
+
+
+def _hvt_one(p: Path, key: tuple, fields: tuple, sel: dict, what: str):
+    """EXACTLY ONE ROW of a filed census table, under `key`, or a HALT.
+
+    HALTS IF: the table is absent; a declared key/field/as-of column is
+    missing; the key selects zero or more than one row; or the row's as-of
+    stamp is not this corridor's.  Shared by the FIGURES table and the
+    VERDICT table, which are keyed differently and must be read the same way.
+    """
+    import pandas as pd                                       # noqa: PLC0415
+    if not p.exists():
+        raise SystemExit(
+            f"HALT: no height-vs-toll {what} table at {p}. It is owned by "
+            f"{HEIGHT_VS_TOLL_OWNER}; the BRK row READS it and computes "
+            f"nothing. Expected key {list(key)} and fields {list(fields)}.")
+    df = pd.read_parquet(p)
+    want = _hvt_required(what)
+    missing = [c for c in want if c not in df.columns]
+    if missing:
+        raise SystemExit(
+            f"HALT: the {what} table {p} is missing the declared column(s) "
+            f"{missing}; it holds {sorted(df.columns)}. The BRK row's "
+            f"interface to [Q-R3] on the {what} side is {want} — key "
+            f"{list(key)} + fields {list(fields)} + the shared cross-check "
+            f"columns {list(HEIGHT_VS_TOLL_AGREE)} / "
+            f"{list(HEIGHT_VS_TOLL_AGREE_STR)}"
+            + (f" + the sample-floor columns "
+               f"{list(HEIGHT_VS_TOLL_PROVISIONAL_FIELDS)}"
+               if what == "VERDICT" else "")
+            + f" + the as-of stamp {HEIGHT_VS_TOLL_ASOF_COL!r}.")
+    m = np.ones(len(df), dtype=bool)
+    for k in key:
+        m &= (df[k].astype(str) == str(sel[k])).to_numpy()
+    q = df[m]
+    if len(q) != 1:
+        raise SystemExit(
+            f"HALT: the {what} table {p} holds {len(q)} row(s) for "
+            f"{ {k: str(sel[k]) for k in key} } — a verdict must be exactly "
+            f"one row of the table, and a repeated key is as unreadable as "
+            f"an absent one.")
+    r = q.iloc[0]
+    stamp = str(r[HEIGHT_VS_TOLL_ASOF_COL])
+    if stamp != as_of_of_record():
+        raise SystemExit(
+            f"HALT: the {what} row in {p} is stamped "
+            f"{HEIGHT_VS_TOLL_ASOF_COL}={stamp!r}, not this corridor's "
+            f"{as_of_of_record()!r}. A BRK row carries the AS-OF WARRANTY; a "
+            f"measurement true of another instant may not ride on it.")
+    return r
+
+
+def height_vs_toll(lens: str, asset: str,
+                   scale_kind: str = HEIGHT_VS_TOLL_SCALE,
+                   era: str = HEIGHT_VS_TOLL_ERA,
+                   path: Path | None = None,
+                   verdict_path: Path | None = None,
+                   allow_provisional: bool = False) -> dict:
+    """THE [Q-R3] VERDICT, READ FROM THE CENSUS TRACK'S TWO FILED TABLES —
+    never computed, never defaulted, never guessed.
+
+    The same law `grid_toll_atr` is held to, for the same reason: a
+    measurement that cannot be READ is not one that may be invented.  The
+    census's own verdict fields — `verdict_pass` (bool), `verdict_law`,
+    `reason` — are carried through VERBATIM; this module pins no vocabulary,
+    because the vocabulary is [Q-R3]'s.
+
+    TWO TABLES, TWO KEYS, ONE CROSS-CHECK.  The FIGURES carry `era` and the
+    VERDICT does not, so the figures are keyed on (asset, lens, scale_kind,
+    era) and the verdict on (asset, lens, scale_kind) alone.  Nothing in that
+    join guarantees the two rows are about the same measurement, so the
+    columns BOTH tables carry (HEIGHT_VS_TOLL_AGREE, plus the law half
+    HEIGHT_VS_TOLL_AGREE_STR) are REQUIRED of the verdict table, are
+    compared, and a disagreement HALTs.  `cross_checked` is the list the
+    comparison actually built, never the constant, so the attestation cannot
+    outrun the check [review round 2, finding 2].  They agree today: 13025 /
+    6.480873 / 0.292654 on both sides for 5m POOLED:CLASSIC5.
+
+    THE SAMPLE FLOOR.  The census re-filed [Q-R3] with a `provisional` flag;
+    a flagged row HALTs unless `allow_provisional=True`, and when taken
+    knowingly it rides the returned dict as provisional / provisional_reason
+    and PRINTS on the row.
+
+    HALTS IF: either table is absent; a declared key, field, shared
+    cross-check column, sample-floor column or as-of column is missing;
+    either key selects zero or more than one row; either row is stamped at
+    another as-of; the two rows disagree on a shared figure or on
+    gate_law_sha; the row is provisional and was not asked for by name; or
+    the verdict fields are null/blank/non-boolean.
+    """
+    p = Path(path) if path is not None else HEIGHT_VS_TOLL_PATH
+    vp = (Path(verdict_path) if verdict_path is not None
+          else HEIGHT_VS_TOLL_VERDICT_PATH)
+    sel = {"asset": str(asset), "lens": str(lens),
+           "scale_kind": str(scale_kind), "era": str(era)}
+    r = _hvt_one(p, HEIGHT_VS_TOLL_KEY, HEIGHT_VS_TOLL_FIELDS, sel, "FIGURES")
+    v = _hvt_one(vp, HEIGHT_VS_TOLL_VERDICT_KEY, HEIGHT_VS_TOLL_VERDICT_FIELDS,
+                 sel, "VERDICT")
+    # ── the two rows are about the SAME measurement, or neither is read ──
+    compared = _hvt_shared_or_halt(r, v, p, vp, sel)
+    # ── and the row clears the census's own sample floor, or is taken by
+    # ── NAME and carries the flag onto whatever it rides ─────────────────
+    prov, prov_reason = _hvt_provisional_or_halt(v, sel, vp,
+                                                 bool(allow_provisional))
+    vp_ = v["verdict_pass"]
+    if isinstance(vp_, (bool, np.bool_)):
+        passed = bool(vp_)
+    else:
+        raise SystemExit(
+            f"HALT: the height-vs-toll VERDICT row for lens {lens!r} / asset "
+            f"{asset!r} in {vp} carries verdict_pass={vp_!r} "
+            f"({type(vp_).__name__}), which is not a boolean. A verdict slot "
+            f"filled from a non-boolean is a verdict this module invented.")
+    for f_ in ("verdict_law", "reason"):
+        t = v[f_]
+        if t is None or (isinstance(t, float) and not np.isfinite(t)) \
+                or not str(t).strip() \
+                or str(t).strip().lower() in ("nan", "none"):
+            raise SystemExit(
+                f"HALT: the height-vs-toll row for lens {lens!r} / asset "
+                f"{asset!r} exists in {vp} but carries no {f_} ({t!r}). A "
+                f"verdict with no law and no reason behind it is not a "
+                f"verdict a BRK row may print.")
+    out = {k: str(r[k]) for k in HEIGHT_VS_TOLL_KEY}
+    for f_ in HEIGHT_VS_TOLL_FIELDS:
+        val = r[f_]
+        out[f_] = (None if val is None
+                   or (isinstance(val, float) and not np.isfinite(val))
+                   else (int(val) if f_ in HEIGHT_VS_TOLL_INT_FIELDS
+                         else round(float(val), ROW_ROUND_ND)))
+    out["verdict_pass"] = passed
+    out["verdict_law"] = str(v["verdict_law"])
+    out["reason"] = str(v["reason"])
+    out["provisional"] = prov
+    out["provisional_reason"] = prov_reason
+    out["provisional_taken_by_name"] = bool(allow_provisional) if prov else False
+    out["sample_floor"] = {
+        "n_ranges": int(v["n_ranges"]),
+        "min_n_ranges_pinned": int(v["min_n_ranges_pinned"]),
+        "edge_n_ranges": int(v["edge_n_ranges"]),
+        "edge_min_n_ranges_pinned": int(v["edge_min_n_ranges_pinned"]),
+        "read_not_pinned_here": ("the floor is READ off the census row; this "
+                                 "module keeps no second copy of it"),
+    }
+    out["gate_law_sha"] = str(v["gate_law_sha"])
+    out["as_of_last_closed_4h"] = as_of_of_record()
+    out["source"] = str(p)
+    out["verdict_source"] = str(vp)
+    # THE ATTESTATION IS THE CHECK'S OWN OUTPUT, never the constant
+    # [review round 2, finding 2].
+    out["cross_checked"] = compared
+    out["read_not_computed"] = True
+    return out
+
+
+# ── THE FIGURES ONE RUN CONTRIBUTES TO A ROW ────────────────────────────────
+def _num(x):
+    """A float rounded to the house precision, or None — so two assemblies of
+    the same journal are the same bytes (DETERMINISM)."""
+    if x is None:
+        return None
+    x = float(x)
+    return None if not np.isfinite(x) else round(x, ROW_ROUND_ND)
+
+
+def _figures(run: dict, tier: str) -> dict:
+    """WHAT ONE RUN OF ONE ANCHOR CONTRIBUTES — counts, the journal's own
+    per-campaign sums, and the refusal tallies.  No ruler, no p, no verdict:
+    turning a journal into a verdict is `TP.score`'s job and nobody else's.
+
+    HALTS IF: `run` carries no `TP.Book`.  A Book is the journal WEARING the
+    gate it entered through; a plain list has no registration behind it, and
+    a row assembled on one would be a number with no text before it.  No BRK
+    registration exists today, so no real Book can be offered at all — which
+    is exactly why every row built today is built on a synthetic campaign.
+    """
+    book = run.get("book")
+    if not isinstance(book, TP.Book):
+        raise SystemExit(
+            f"HALT: a BRK row is assembled from a TP.Book — the journal "
+            f"wearing the gate it entered through (TP.external_book) — and "
+            f"from nothing else; got {type(book).__name__}. A filtered book, "
+            f"a list or a hand-built record has no registration behind it. "
+            f"[LAW 4] No BRK registration is filed, so no real Book exists "
+            f"today and every row is a SYNTHETIC one.")
+    tr = list(book)
+    per: dict = {}
+    for t in tr:
+        per[str(t.symbol)] = per.get(str(t.symbol), 0) + 1
+    nets = [float(t.net_r) for t in tr if t.net_r is not None]
+    tolls = [float(getattr(t, "toll_pct_of_1r", float("nan"))) for t in tr]
+    tolls = [x for x in tolls if np.isfinite(x)]
+    ref: dict = {}
+    for _sym, d in sorted((run.get("refused") or {}).items()):
+        for k_, v_ in sorted(dict(d).items()):
+            ref[k_] = ref.get(k_, 0) + int(v_)
+    return {
+        "tier": tier,
+        "anchor": str(run["anchor"]),
+        "era": str(run["era"]),
+        "window_iso": [TP.iso(int(run["window"][0])),
+                       TP.iso(int(run["window"][1]))],
+        "n_campaigns": len(tr),
+        "n_assets_with_campaigns": len(per),
+        "per_asset_n_campaigns": dict(sorted(per.items())),
+        "gross_r_sum": _num(sum(float(t.gross_r) for t in tr
+                                if t.gross_r is not None)) if tr else None,
+        "fee_r_sum": _num(sum(float(t.fee_r) for t in tr
+                              if t.fee_r is not None)) if tr else None,
+        "funding_r_sum": _num(sum(float(t.funding_r) for t in tr
+                                  if t.funding_r is not None)) if tr else None,
+        "net_r_sum": _num(sum(nets)) if nets else None,
+        "net_r_median": _num(np.median(nets)) if nets else None,
+        "toll_pct_of_1r_median": _num(np.median(tolls)) if tolls else None,
+        "n_inactive_components": int(sum(int(t.n_inactive_components)
+                                         for t in tr)),
+        "refused": ref,
+        "book_spec": {k: run["book"].spec.get(k) for k in
+                      ("runner", "registration", "arm", "era",
+                       "registration_sha256")},
+        "scored_statistic": None,
+        "scored_statistic_note": (
+            "NOT COMPUTED HERE. The ruler, the LOAO line and the p against "
+            "the FDR bar are tierc10_panel's (TP.score / TP.headline_n) and "
+            "are applied to this Book by the registration's own scorer. This "
+            "row carries the journal and its provenance."),
+    }
+
+
+# ── EVERY GRID WHOLE: the row's fields are DECLARED, and `brk_row` proves the
+# ── dict it built carries exactly them — no silent extra, no silent drop.
+ROW_FIELDS = (
+    "form", "lane", "lens", "era", "era_note",
+    "registration", "arm", "registration_sha256",
+    "panel", "panel_name", "n_panel_assets",
+    "anchor_scored", "anchor_tier_e",
+    "tuned", "tuned_note", "flip_hold_pins",
+    "toll", "toll_accounting",
+    "scored_figures",
+    "tier_e_other_anchor", "tier_e_other_anchor_note",
+    "tier_e_panel17", "tier_e_panel17_note",
+    "height_vs_toll", "height_vs_toll_asset", "height_vs_toll_interface",
+    "as_of_last_closed_4h", "seed", "law4",
+)
+
+
+def brk_row(lane: str, scored: dict, tier_e: dict | None = None,
+            panel_tier_e: dict | None = None,
+            verdict_asset: str | None = None,
+            hvt_path: Path | None = None,
+            require_verdict: bool = True,
+            hvt_verdict_path: Path | None = None,
+            verdict_asset_why: str | None = None,
+            allow_provisional: bool = False) -> dict:
+    """ONE BRK FORM'S ROW — the scored anchor, the OTHER anchor as Tier-E, the
+    lens, the era, the panel, the toll `stamp_toll` already stamped, and the
+    slot for that lens's height-vs-toll verdict [contract line 112].
+
+    `scored` and `tier_e` are `run_lane_s1` / `run_lane_i1` returns — the
+    SAME runner, called twice with the two `anchor=` values.  `panel_tier_e`
+    is the optional 17-asset print R8 orders beside the 5-asset row; it is a
+    third run of the same runner on a PANEL17 arm, and is None (with a stated
+    reason) when no such arm is filed.
+
+    `require_verdict=False` builds the row with a `PendingVerdict` in the
+    verdict slot instead of HALTing — the row can then be assembled and
+    NAMED, but any read of the slot, `json.dumps` included, HALTs.
+
+    WHICH CENSUS ROW THE VERDICT IS, IS DERIVED FROM THE BOOK — never
+    defaulted [review round 2, finding 1].  `verdict_asset_of(spec['panel'])`
+    decides it, `verdict_asset=` is an explicit override that must be
+    explained when it disagrees, and the choice plus its provenance ride the
+    row as `height_vs_toll_asset` and PRINT on it.
+
+    HALTS IF: the lane is unknown; a run's lens/era/lane does not match the
+    row's; `tier_e` is not the lane's declared OTHER anchor; a run carries no
+    Book; the Book's panel has no census counterpart (or an unexplained
+    override disagrees with it); `require_verdict` and [Q-R3] is not filed;
+    or the derived census row is PROVISIONAL and `allow_provisional` is not
+    set — a row under the census's own sample floor is never carried quietly.
+    """
+    if lane not in LANE_LENS:
+        raise SystemExit(f"HALT: unknown BRK lane {lane!r}; "
+                         f"{sorted(LANE_LENS)}.")
+    lens = LANE_LENS[lane]
+    if str(scored["anchor"]) != LANE_ANCHOR[lane]:
+        raise SystemExit(
+            f"HALT: {lane}'s SCORED anchor is {LANE_ANCHOR[lane]!r} "
+            f"(LANE_ANCHOR); the run offered as scored carries "
+            f"{scored['anchor']!r}. The scored arm and the Tier-E print are "
+            f"not interchangeable.")
+    if str(scored["era"]) != LANE_ERA[lane]:
+        raise SystemExit(
+            f"HALT: {lane} is declared on the {LANE_ERA[lane]!r} era "
+            f"(LANE_ERA) and the scored run carries {scored['era']!r}. "
+            f"{LANE_ERA_LAW}")
+    fig = _figures(scored, "SCORED")
+    other = None
+    if tier_e is not None:
+        if str(tier_e["anchor"]) != LANE_TIER_E_ANCHOR[lane]:
+            raise SystemExit(
+                f"HALT: {lane}'s Tier-E print is the OTHER anchor, "
+                f"{LANE_TIER_E_ANCHOR[lane]!r} (LANE_TIER_E_ANCHOR); the run "
+                f"offered as Tier-E carries {tier_e['anchor']!r}. The "
+                f"contract's 'also prints the OTHER anchor' is not satisfied "
+                f"by printing the same one twice.")
+        other = _figures(tier_e, "TIER-E — UNSCORED, GATES NOTHING")
+    panel17 = None
+    if panel_tier_e is not None:
+        a_ = list(scored["book"].spec.get("panel") or [])
+        b_ = list(panel_tier_e["book"].spec.get("panel") or []) \
+            if isinstance(panel_tier_e.get("book"), TP.Book) else []
+        if set(a_) == set(b_):
+            raise SystemExit(
+                f"HALT: the Tier-E PANEL print [R8] is a SECOND VIEW — the "
+                f"17-asset one beside the scored 5-asset book. The run "
+                f"offered rides {TP.panel_name(b_)} ({len(b_)} assets), the "
+                f"same panel as the scored arm ({TP.panel_name(a_)}); "
+                f"printing the same panel twice satisfies nothing.")
+        panel17 = _figures(panel_tier_e, "TIER-E — UNSCORED, GATES NOTHING")
+    spec = scored["book"].spec
+    # THE VERDICT SLOT'S ASSET IS DERIVED FROM THE BOOK, NEVER DEFAULTED
+    # [review round 2, finding 1].  It used to read
+    #     asset = str(verdict_asset) if verdict_asset else "POOLED:CLASSIC5"
+    # with `verdict_asset` derived from nothing.
+    va = verdict_asset_of(list(spec.get("panel") or []),
+                          verdict_asset, verdict_asset_why)
+    asset = va["asset"]
+    if require_verdict:
+        hv = height_vs_toll(lens, asset, path=hvt_path,
+                            verdict_path=hvt_verdict_path,
+                            allow_provisional=bool(allow_provisional))
+    else:
+        hv = PendingVerdict(lens, asset, HEIGHT_VS_TOLL_SCALE,
+                            HEIGHT_VS_TOLL_ERA,
+                            hvt_path or HEIGHT_VS_TOLL_PATH,
+                            hvt_verdict_path or HEIGHT_VS_TOLL_VERDICT_PATH)
+    row = {
+        "form": FORM_OF[lane],
+        "lane": lane,
+        "lens": lens,
+        "era": str(scored["era"]),
+        "era_note": TP.era_note(str(scored["era"])),
+        "registration": spec.get("registration"),
+        "arm": spec.get("arm"),
+        "registration_sha256": spec.get("registration_sha256"),
+        "panel": list(spec.get("panel") or []),
+        "panel_name": TP.panel_name(spec.get("panel") or []),
+        "n_panel_assets": len(spec.get("panel") or []),
+        "anchor_scored": LANE_ANCHOR[lane],
+        "anchor_tier_e": LANE_TIER_E_ANCHOR[lane],
+        "tuned": dict(scored.get("tuned") or {}) or None,
+        "tuned_note": (None if scored.get("tuned") else
+                       "the memory-line anchor has no tuned pins: its margin "
+                       "and hold are the FROZEN range pins (FLIP_HOLD)"),
+        "flip_hold_pins": {"margin_atr": FLIP_HOLD_MARGIN,
+                           "hold_bars": FLIP_HOLD_BARS,
+                           "ttl_bars": MEM_TTL_BARS},
+        "toll": (dict(scored["toll"]) if scored.get("toll") else
+                 {"stamped": False,
+                  "why": ("this runner stamps no toll; 'NET OF MEASURED 5m "
+                          "TOLL' is P-BRK-S1's contract clause and "
+                          "stamp_toll is called only there")}),
+        "toll_accounting": TOLL_ACCOUNTING,
+        "scored_figures": fig,
+        "tier_e_other_anchor": other,
+        "tier_e_other_anchor_note": (
+            None if other is not None else
+            "ABSENT — the contract's line 112 requires the OTHER anchor as a "
+            "Tier-E print beside this row; assemble it by calling the SAME "
+            "runner with anchor=" + repr(LANE_TIER_E_ANCHOR[lane])),
+        "tier_e_panel17": panel17,
+        "tier_e_panel17_note": (
+            None if panel17 is not None else
+            "ABSENT — operator R8 (2026-09-22) orders the 17-asset view "
+            "printed as Tier-E beside each BRK row; it is a third run of the "
+            "same runner on a PANEL17 arm, and no such arm is filed."),
+        "height_vs_toll": hv,
+        "height_vs_toll_asset": va,
+        "height_vs_toll_interface": height_vs_toll_spec(),
+        "as_of_last_closed_4h": as_of_of_record(),
+        "seed": SEED,
+        "law4": ("this row's Book carries a filed registration or it does not "
+                 "exist; no BRK registration is filed today"),
+    }
+    if tuple(row) != ROW_FIELDS:
+        raise SystemExit(
+            f"HALT: the assembled row's fields are {tuple(row)}, not the "
+            f"DECLARED {ROW_FIELDS}. Extra "
+            f"{sorted(set(row) - set(ROW_FIELDS))}, missing "
+            f"{sorted(set(ROW_FIELDS) - set(row))}. A row whose shape drifts "
+            f"from its declaration is a row a reader cannot trust a column of.")
+    return row
+
+
+def brk_rows(runs: dict, hvt_path: Path | None = None,
+             require_verdict: bool = True,
+             hvt_verdict_path: Path | None = None) -> list:
+    """ONE ROW PER BRK FORM, in lane order.
+
+    `runs` = {lane: {"scored": run, "tier_e": run | None,
+                     "panel_tier_e": run | None, "verdict_asset": str | None,
+                     "verdict_asset_why": str | None,
+                     "allow_provisional": bool}}.
+    `verdict_asset` is an OVERRIDE, not a default: with it absent the census
+    row is DERIVED from the Book's panel [review round 2, finding 1].
+    EVERY GRID WHOLE: every lane present is emitted, in `LANE_ORDER`, and a
+    lane `runs` does not carry is NAMED as absent rather than dropped.
+    """
+    unknown = sorted(set(runs) - set(LANE_ORDER))
+    if unknown:
+        raise SystemExit(f"HALT: brk_rows was handed lane(s) {unknown}; the "
+                         f"BRK forms are {list(LANE_ORDER)}.")
+    out = []
+    for lane in LANE_ORDER:
+        if lane not in runs:
+            continue
+        r = runs[lane]
+        out.append(brk_row(lane, r["scored"], r.get("tier_e"),
+                           r.get("panel_tier_e"), r.get("verdict_asset"),
+                           hvt_path=hvt_path,
+                           require_verdict=require_verdict,
+                           hvt_verdict_path=hvt_verdict_path,
+                           verdict_asset_why=r.get("verdict_asset_why"),
+                           allow_provisional=bool(
+                               r.get("allow_provisional", False))))
+    return out
+
+
+def row_schema() -> dict:
+    """THE ROW'S SHAPE, printable with NO book in hand — which is the only
+    state this estate is in today.  It is what `main()` prints in place of
+    rows, so the absence of a BRK table is a described absence and not a
+    silence."""
+    return {
+        "contract": ("RESUME 2026-09-22 line 112: 'Each BRK form also prints "
+                     "the OTHER anchor (EMA band <-> memory-line) as Tier-E, "
+                     "and carries its lens's height-vs-toll verdict ON ITS "
+                     "ROW.'  Operator R8: 'The 17-asset view prints as "
+                     "Tier-E beside each BRK row.'"),
+        "one_row_per": "BRK form",
+        "forms": {lane: {"form": FORM_OF[lane], "lens": LANE_LENS[lane],
+                         "era": LANE_ERA[lane],
+                         "anchor_scored": LANE_ANCHOR[lane],
+                         "anchor_tier_e": LANE_TIER_E_ANCHOR[lane],
+                         "toll_stamped": lane == LANE_S1}
+                  for lane in LANE_ORDER},
+        "fields": list(ROW_FIELDS),
+        "assembled_by": "tierc10_brk.brk_rows(runs)",
+        "needs": ("a TP.Book per anchor, i.e. a FILED registration — none "
+                  "exists, so no row can be built on real bars today [LAW 4]"),
+        "height_vs_toll": height_vs_toll_spec(),
+        "computes_no_verdict": (
+            "the height-vs-toll verdict is READ from [Q-R3]; the "
+            "registration's own verdict is TP.score's and is not computed "
+            "here"),
+    }
+
+
+def print_rows(rows: list, out=None) -> None:
+    """THE PRINTER.  One block per form; the Tier-E print is LABELLED Tier-E
+    on every line it appears on, and the verdict slot prints PENDING (naming
+    the table it waits on) rather than a blank."""
+    w = (out.write if out is not None else
+         (lambda s: print(s, end="")))
+    for r in rows:
+        w(f"\n{'=' * 78}\n{r['form']} · {r['lane']} · lens {r['lens']} · era "
+          f"{r['era']}\n{'=' * 78}\n")
+        w(f"  registration {r['registration']!r} arm {r['arm']!r} "
+          f"(sha {str(r['registration_sha256'])[:16]})\n")
+        w(f"  panel {r['panel_name']} ({r['n_panel_assets']} assets): "
+          f"{', '.join(r['panel'])}\n")
+        f_ = r["scored_figures"]
+        w(f"  SCORED anchor {r['anchor_scored']!r}: {f_['n_campaigns']} "
+          f"campaigns on {f_['n_assets_with_campaigns']} assets, net_r sum "
+          f"{f_['net_r_sum']}, median {f_['net_r_median']} "
+          f"(verdict: {f_['scored_statistic_note']})\n")
+        o = r["tier_e_other_anchor"]
+        w(f"  TIER-E other anchor {r['anchor_tier_e']!r}: "
+          + (f"{o['n_campaigns']} campaigns, net_r sum {o['net_r_sum']} "
+             f"[{o['tier']}]\n" if o else
+             f"{r['tier_e_other_anchor_note']}\n"))
+        p17 = r["tier_e_panel17"]
+        w(f"  TIER-E 17-asset view [R8]: "
+          + (f"{p17['n_campaigns']} campaigns on "
+             f"{p17['n_assets_with_campaigns']} assets [{p17['tier']}]\n"
+             if p17 else f"{r['tier_e_panel17_note']}\n"))
+        t = r["toll"]
+        w("  TOLL: " + (f"cls {t['cls']!r} lens {t['lens']!r}, per asset "
+                        f"{t['per_asset']}, median "
+                        f"{f_['toll_pct_of_1r_median']} % of 1R\n"
+                        if t.get("cls") else f"{t['why']}\n"))
+        w(f"        {TOLL_ACCOUNTING['status']}\n")
+        va = r["height_vs_toll_asset"]
+        w(f"  [Q-R3] CENSUS ROW READ: asset {va['asset']!r} — {va['source']}"
+          f" ({va['derived_how']})"
+          + (f"; OVERRIDE {va['override']!r} because {va['override_why']!r}"
+             if va["override"] else "") + "\n")
+        hv = r["height_vs_toll"]
+        if isinstance(hv, PendingVerdict):
+            w(f"  HEIGHT-vs-TOLL [Q-R3]: PENDING — no readable table at "
+              f"{HEIGHT_VS_TOLL_PATH} / {HEIGHT_VS_TOLL_VERDICT_PATH}; owned "
+              f"by {HEIGHT_VS_TOLL_OWNER}. Reading this slot HALTs.\n")
+        else:
+            w(f"  HEIGHT-vs-TOLL [Q-R3] for {hv['asset']!r}: verdict_pass "
+              f"{hv['verdict_pass']} "
+              f"— {hv['reason']!r} (height/toll ratio_median "
+              f"{hv['ratio_median']}, height_atr_median "
+              f"{hv['height_atr_median']}, toll_atr_median "
+              f"{hv['toll_atr_median']}, n_ranges {hv['n_ranges']}) READ "
+              f"from {hv['source']} + {hv['verdict_source']}, cross-checked "
+              f"on {hv['cross_checked']}\n")
+            if hv["provisional"]:
+                w(f"  *** PROVISIONAL [Q-R3] ROW, TAKEN BY NAME: "
+                  f"{hv['provisional_reason']} — n_ranges "
+                  f"{hv['sample_floor']['n_ranges']} / floor "
+                  f"{hv['sample_floor']['min_n_ranges_pinned']}, "
+                  f"edge_n_ranges "
+                  f"{hv['sample_floor']['edge_n_ranges']} / floor "
+                  f"{hv['sample_floor']['edge_min_n_ranges_pinned']}. This "
+                  f"verdict rests UNDER the census's own sample floor and "
+                  f"gates nothing. ***\n")
+        w(f"  as_of {r['as_of_last_closed_4h']} · seed {r['seed']}\n")
+
+
 # ══════════════════════════════════════════════════════ 13 · THE MECHANICS CARD
 def mechanics_card(disk: bool = True, out_root: Path | None = None) -> dict:
     """WHAT THIS MODULE PINS, as a deterministic record — no clocks, no bars,
     no result.  F-DET compares two runs of it byte for byte.
 
     TWO BLOCKS, AND THE LINE BETWEEN THEM IS THE POINT.  `pins` is a pure
-    function of THIS SOURCE and of the estate objects it binds: same bytes on
-    any disk, in any order, whatever else has or has not been filed.
+    function of THIS SOURCE, of the estate objects it binds, and of ONE
+    write-once pin off disk — Stage D's AS_OF_PIN.json, read through
+    `as_of_of_record()`: same bytes on any disk, in any order, whatever else
+    has or has not been filed.  The as-of is in `pins` and not in
+    `environment` deliberately — a pin that happens to live in a file is
+    still a pin, and `out_root` (which re-points the OUTPUT-directory reads)
+    does not and must not redirect it.
     `environment` is a READING OF THE DISK AT THE INSTANT OF THE RUN — has the
     census filed its tuning results yet, does Stage D's fee schedule agree
     with the fee object — and is therefore deterministic only across an
@@ -1913,6 +3230,11 @@ def mechanics_card(disk: bool = True, out_root: Path | None = None) -> dict:
             "tuning_result_present": {
                 k: (root / v.relative_to(TP.OUT)).exists()
                 for k, v in sorted(TUNING_RESULT_FOR.items())},
+            "height_vs_toll_filed": (
+                root / HEIGHT_VS_TOLL_PATH.relative_to(TP.OUT)).exists(),
+            "height_vs_toll_verdict_filed": (
+                root / HEIGHT_VS_TOLL_VERDICT_PATH.relative_to(TP.OUT)
+            ).exists(),
         }
     return {
         "module": "scripts/tierc10_brk.py",
@@ -1921,7 +3243,9 @@ def mechanics_card(disk: bool = True, out_root: Path | None = None) -> dict:
                             "anchor_tier_e": LANE_TIER_E_ANCHOR[LANE_S1],
                             "era": LANE_ERA[LANE_S1],
                             "era_note": TP.era_note(LANE_ERA[LANE_S1]),
-                            "permission": "4h tide aligned, engine.htf visibility"},
+                            "permission": "4h tide aligned, engine.htf visibility",
+                            "panel_declared": PANEL_DECLARED,
+                            "panel_served": PANEL_SERVED_LAW},
                   LANE_I1: {"lens": LANE_LENS[LANE_I1],
                             "anchor_scored": LANE_ANCHOR[LANE_I1],
                             "anchor_tier_e": LANE_TIER_E_ANCHOR[LANE_I1],
@@ -1929,8 +3253,23 @@ def mechanics_card(disk: bool = True, out_root: Path | None = None) -> dict:
                             "era_note": TP.era_note(LANE_ERA[LANE_I1]),
                             "permission": ("weekly 12/25 posture on the last "
                                            "CLOSED Monday-week AND daily "
-                                           "DIRECTION from the R4 lifecycle")}},
+                                           "DIRECTION from the R4 lifecycle"),
+                            "panel_declared": PANEL_DECLARED,
+                            "panel_served": PANEL_SERVED_LAW}},
         "pins": {
+            # THE AS-OF WARRANTY, ON THE CARD OF RECORD (review, 2026-09-22,
+            # blocking finding 1).  This card was filed with NO as-of stamp
+            # at any depth while the report attested it carried one, so the
+            # stage's pinned statement of mechanics was true of no stated
+            # instant and could be re-read after the corridor moved and
+            # silently believed.  It belongs in `pins` and NOT in
+            # `environment`: the as-of is a WRITE-ONCE PIN read through
+            # as_of_of_record() from Stage D's AS_OF_PIN.json, not a reading
+            # of this stage's output directory — which is exactly why
+            # `out_root` does not redirect it and why F-DET's empty-root leg
+            # still sees this value.
+            "as_of_last_closed_4h": as_of_of_record(),
+            "as_of_source": "Stage D AS_OF_PIN.json (write-once)",
             "fee_bps_side": FEE_BPS_SIDE, "fee_object": "tierc7_rules.FEE_BPS_SIDE",
             "funding_ceiling_r": FUNDING_CEILING_R,
             "funding_law": ("interval sum: entry_ms < funding_hour_ms <= "
@@ -1956,6 +3295,12 @@ def mechanics_card(disk: bool = True, out_root: Path | None = None) -> dict:
                                     sorted(TUNING_RESULT_FOR.items())},
             "tuned_lenses": list(TUNED_LENSES),
             "gate_helper": GATE_HELPER,
+            "lane_era": dict(sorted(LANE_ERA.items())),
+            "lane_era_enforced": "require_lane_era(lane, gate()) [B9]",
+            "lane_era_law": LANE_ERA_LAW,
+            "lane_era_reason": dict(sorted(LANE_ERA_REASON.items())),
+            "row_schema": row_schema(),
+            "toll_accounting": dict(sorted(TOLL_ACCOUNTING.items())),
             "toll_class_band": (TOLL_CLASS_PREFIX[ANCHOR_BAND]
                                 + "<band, in the CENSUS's spelling>"),
             "toll_class_band_example": toll_class(ANCHOR_BAND, BAND_EXAMPLE),
@@ -1970,6 +3315,174 @@ def mechanics_card(disk: bool = True, out_root: Path | None = None) -> dict:
         "law4": ("no registration for P-BRK-S1 or P-BRK-I1 exists; every "
                  "runner HALTs at its gate, which is its first statement"),
         "environment": env,
+    }
+
+
+# ══════════════════════════════════════════════════ 15 · THE BUILD MANIFEST
+# LAW 1(b) WANTS AN ON-DISK RECORD PER STAGE, and `brk/` was one of only two
+# stage directories without one (R0, 2026-09-22).  This is that record, in the
+# shape `census/`, `panel/` and `stamps/` already use: stage, as-of, substrate,
+# seed, code shas, the commission, and the content sha of EVERY artifact the
+# directory holds.
+MANIFEST_NAME = "build_manifest.json"
+DECLARED_ARTIFACTS = ("BRK_MECHANICS.json", "FIXTURES_BRK.txt")
+# THIS STAGE'S OWN CODE — the two files this track owns, and the only two
+# whose sha this manifest may present as a REPRODUCIBLE pin.
+CODE_FILES = ("scripts/tierc10_brk.py", "scripts/tierc10_brk_fixtures.py")
+# EVERY OTHER MODULE THIS STAGE DEPENDS ON — read at the instant of the run
+# and NOT a pin (review, 2026-09-22).  tierc10_census.py and tierc10_data.py
+# are being edited by two live parallel tracks: the sha filed in the last
+# round (census f52cc906 / data e6e82f93) had already moved twice within
+# minutes, so a manifest that presents them beside its own code sha claims a
+# byte-reproducibility it does not have.  Moved here WITH the disclaimer
+# inline rather than dropped, because naming the dependency is the point.
+SIBLING_CODE_FILES = ("scripts/tierc10_panel.py", "scripts/tierc10_census.py",
+                      "scripts/tierc10_data.py")
+SIBLING_CODE_NOTE = (
+    "READ AT THE INSTANT OF THE RUN — a reading, not a pin, and the ONE "
+    "part of this manifest that is not byte-reproducible. These modules "
+    "belong to other tracks and are edited while this stage builds; two "
+    "runs of tierc10_brk.main() minutes apart will differ here and nowhere "
+    "else but the directory enumeration. `code_sha` above is this track's "
+    "own two files and IS reproducible.")
+
+
+def sha_of(path: Path) -> str | None:
+    """A file's content sha256, or None when it is not there.  None is a
+    STATEMENT (the artifact is absent) and never a blank."""
+    p = Path(path)
+    return (hashlib.sha256(p.read_bytes()).hexdigest() if p.is_file()
+            else None)
+
+
+def _summary_line(p: Path) -> str | None:
+    """The `FIXTURE SUMMARY n/n PASS {...}` line out of a filed transcript —
+    LAW 1(b)'s evidence, quoted rather than retyped."""
+    if not p.is_file():
+        return None
+    for ln in reversed(p.read_text(encoding="utf-8").splitlines()):
+        if ln.startswith("FIXTURE SUMMARY"):
+            return ln.strip()
+    return None
+
+
+def build_manifest(out: Path, card: dict | None = None) -> dict:
+    """THIS STAGE'S RECORD.  Every float is already rounded upstream, every
+    sha is read off the disk at the instant of the run, and the manifest never
+    hashes ITSELF (a record that contains its own digest cannot be written).
+
+    EVERY GRID WHOLE: `sha` is built by ENUMERATING the directory, so an
+    artifact nobody declared still appears; `declared_artifacts` says which
+    ones were expected and whether each is there.
+    """
+    out = Path(out)
+    card = card if card is not None else mechanics_card(out_root=None)
+    tuned = {}
+    for lens_, path_ in sorted(TUNING_RESULT_FOR.items()):
+        tuned[lens_] = ({k: v for k, v in sorted(tuned_pins(lens_).items())}
+                        if path_.is_file() else None)
+    files = sorted(q.name for q in out.iterdir()
+                   if q.is_file() and q.name != MANIFEST_NAME) \
+        if out.is_dir() else []
+    fixtures_txt = out / "FIXTURES_BRK.txt"
+    return {
+        "stage": "TIER-C10 · BRK LANE MECHANICS — P-BRK-S1 / P-BRK-I1",
+        "as_of_last_closed_4h": as_of_of_record(),
+        "as_of_source": "Stage D AS_OF_PIN.json (write-once)",
+        "substrate": substrate()["substrate"],
+        "seed": SEED, "seed_sensitivity": SEED_LINEAGE,
+        "lean_tag": LEAN_TAG,
+        "tier": ("MECHANICS ONLY — no P-BRK number is computed, printed or "
+                 "filed anywhere in this stage [LAW 4]"),
+        "gates": ("NOTHING. Every runner's first statement is the panel gate "
+                  "(TP.require_arm); no registration for P-BRK-S1 or "
+                  "P-BRK-I1 is filed, so no runner can reach a bar."),
+        "law4": card["law4"],
+        "code_sha": {f: sha_of(ROOT / f) for f in CODE_FILES},
+        "sibling_code_sha_read_at": {
+            "note": SIBLING_CODE_NOTE,
+            "read_at": str(ROOT),
+            "sha": {f: sha_of(ROOT / f) for f in SIBLING_CODE_FILES},
+        },
+        "commission": {
+            "forms": [FORM_OF[ln] for ln in LANE_ORDER],
+            "lanes": {ln: {"form": FORM_OF[ln], "lens": LANE_LENS[ln],
+                           "era": LANE_ERA[ln],
+                           "era_enforced_against_filed_arm": True,
+                           "anchor_scored": LANE_ANCHOR[ln],
+                           "anchor_tier_e": LANE_TIER_E_ANCHOR[ln],
+                           "toll_stamped": ln == LANE_S1}
+                      for ln in LANE_ORDER},
+            "panel_declared": PANEL_DECLARED,
+            "panel_served": PANEL_SERVED_LAW,
+            "r1_bands": list(R1_BANDS),
+            "r1_bands_census_spelling": {b: census_band(b) for b in R1_BANDS},
+            "tuned_pins_of_record": tuned,
+            "era_cut_iso": ERA_CUT_ISO, "era_cut_ms": ERA_CUT_MS,
+            "toll_accounting": dict(sorted(TOLL_ACCOUNTING.items())),
+            "row": row_schema(),
+            "height_vs_toll": height_vs_toll_spec(),
+            "n_rows_filed": 0,
+            "why_no_rows": ("a row is assembled from a TP.Book and a Book "
+                            "needs a FILED registration; none exists, so "
+                            "this stage files a ROW SCHEMA and no rows "
+                            "[LAW 4 — text before result]"),
+            "parquet_filed": 0,
+            "parquet_note": ("this stage files NO parquet: everything it "
+                             "holds is a pin, a schema or a transcript, and "
+                             "the one table it would file (the BRK rows) "
+                             "cannot exist until a registration does"),
+        },
+        "input_sha": {
+            str(v.relative_to(ROOT)): sha_of(v)
+            for v in list(TUNING_RESULT_FOR.values())
+            + [TP.OUT / "census" / "outcome_grid.parquet",
+               HEIGHT_VS_TOLL_PATH, HEIGHT_VS_TOLL_VERDICT_PATH,
+               TP.AS_OF_PIN]},
+        "sha": {n: sha_of(out / n) for n in files},
+        "declared_artifacts": {n: {"present": (out / n).is_file(),
+                                   "sha": sha_of(out / n)}
+                               for n in DECLARED_ARTIFACTS},
+        "undeclared_artifacts_present": [n for n in files
+                                         if n not in DECLARED_ARTIFACTS],
+        "fixtures": {
+            "module": "scripts/tierc10_brk_fixtures.py",
+            "module_sha": sha_of(ROOT / "scripts" / "tierc10_brk_fixtures.py"),
+            "transcript": "FIXTURES_BRK.txt",
+            "transcript_sha": sha_of(fixtures_txt),
+            "summary_line": _summary_line(fixtures_txt),
+            "law": ("break legs FIRST and judged one at a time; a break leg "
+                    "that comes back GREEN voids its fixture"),
+        },
+        "cross_track_dependencies": {
+            "census [Q-R3] height-vs-toll": dict(
+                height_vs_toll_spec(),
+                request_to_census_track=(
+                    "RETRACTED 2026-09-22. The last manifest asked the census "
+                    "track to file a table it had ALREADY FILED ten minutes "
+                    "after this manifest was written, under other names and "
+                    "split in two. Nothing is asked of the census track: this "
+                    "module was repointed at what is on disk."),
+                read_today={
+                    "figures": {"path": str(HEIGHT_VS_TOLL_PATH),
+                                "present": HEIGHT_VS_TOLL_PATH.is_file()},
+                    "verdict": {"path": str(HEIGHT_VS_TOLL_VERDICT_PATH),
+                                "present":
+                                    HEIGHT_VS_TOLL_VERDICT_PATH.is_file()}}),
+            "census TUNING_RESULT": {lens_: str(v) for lens_, v
+                                     in sorted(TUNING_RESULT_FOR.items())},
+            "census outcome_grid (the toll)": str(
+                TP.OUT / "census" / "outcome_grid.parquet"),
+            "panel (gate, corridor, era, book)": "scripts/tierc10_panel.py",
+        },
+        "rulings": list(RULINGS),
+        "leans": list(LEANS),
+        "findings_not_fixed": list(FINDINGS),
+        "skipped_empty": ["rows (no registration filed)",
+                          "parquet (nothing to file)"],
+        "warranty": ("every artifact in this directory is true AS OF "
+                     "2026-09-21T16:00:00Z and of no other instant; no "
+                     "feature reads a value stamped after its own bar"),
     }
 
 
@@ -2004,8 +3517,62 @@ def main(argv=None) -> int:
     print("\nFINDINGS NOT FIXED")
     for f_ in FINDINGS:
         print("  · " + f_)
+    print("\nTHE ERA PIN, ENFORCED [B9]")
+    for ln_ in LANE_ORDER:
+        print(f"  · {FORM_OF[ln_]} ({ln_}) is DECLARED on the "
+              f"{LANE_ERA[ln_]!r} era; require_lane_era holds the FILED ARM "
+              f"to it inside the runner, before one bar or one bar-stamp is "
+              f"read. {LANE_ERA_REASON[ln_]}")
+    print("\nTHE PANEL")
+    print(f"  DECLARED: {PANEL_DECLARED}")
+    print(f"  SERVED:   {PANEL_SERVED_LAW}")
+    print("\nTHE ROW [contract line 112 · R8]")
+    rs = row_schema()
+    print(f"  {rs['contract']}")
+    for ln_ in LANE_ORDER:
+        f_ = rs["forms"][ln_]
+        print(f"  · {f_['form']}: lens {f_['lens']}, era {f_['era']}, scored "
+              f"anchor {f_['anchor_scored']!r}, TIER-E other anchor "
+              f"{f_['anchor_tier_e']!r}, toll stamped {f_['toll_stamped']}")
+    print(f"  fields ({len(ROW_FIELDS)}): {list(ROW_FIELDS)}")
+    print(f"  rows filed: 0 — {rs['needs']}")
+    print("\nTHE [Q-R3] INTERFACE — READ, NEVER COMPUTED HERE")
+    hv = height_vs_toll_spec()
+    print(f"  status  {hv['status']}")
+    print(f"  figures {hv['path']}  (filed today: "
+          f"{HEIGHT_VS_TOLL_PATH.is_file()})")
+    print(f"          key {hv['key']}  fields {hv['required_fields']}")
+    print(f"  verdict {hv['verdict_path']}  (filed today: "
+          f"{HEIGHT_VS_TOLL_VERDICT_PATH.is_file()})")
+    print(f"          key {hv['verdict_key']}  fields "
+          f"{hv['required_verdict_fields']}")
+    print(f"  cross-checked on {hv['cross_checked_fields']} + the law half "
+          f"{hv['cross_checked_law_fields']}; an ABSENT shared column is a "
+          f"HALT, and `cross_checked` on a row is what was actually "
+          f"compared; as-of column "
+          f"{hv['as_of_column_required']!r} must read "
+          f"{hv['as_of_required_value']!r}")
+    print(f"  scale {hv['scale_kind_read']!r} era {hv['era_read']!r}")
+    print(f"  asset READ is DERIVED from the Book's panel, never defaulted: "
+          f"{hv['asset_read']['panel_to_census_label']}, a one-asset panel "
+          f"-> its own symbol, anything else HALTs "
+          f"({hv['asset_read']['no_counterpart']})")
+    print(f"  provisional: {hv['provisional_policy'][:120]}")
+    print(f"  owner {hv['owner']}")
+    print(f"  absent -> {hv['on_absence']}")
+    print("\nTHE TOLL, SAID PLAINLY")
+    print(f"  {TOLL_ACCOUNTING['status']}")
+    print(f"  {TOLL_ACCOUNTING['net_r_formula']}")
+    print(f"  {TOLL_ACCOUNTING['grid_toll']}")
     print(f"\nLAW 4: {card['law4']}.")
+    man = build_manifest(out, card)
+    (out / MANIFEST_NAME).write_text(
+        json.dumps(man, indent=1, sort_keys=True, default=str) + "\n")
     print(f"filed: {out / 'BRK_MECHANICS.json'}")
+    print(f"filed: {out / MANIFEST_NAME}  (LAW 1(b): "
+          f"{len(man['sha'])} artifact sha(s), "
+          f"{len(man['code_sha'])} code sha(s), as-of "
+          f"{man['as_of_last_closed_4h']})")
     return 0
 
 

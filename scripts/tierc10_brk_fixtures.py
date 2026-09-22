@@ -128,12 +128,44 @@ def say(s: str = "") -> None:
     T.append(s)
 
 
+def _halts(fn) -> bool:
+    """True iff `fn` raises SystemExit.  ANY other exception is False, so a
+    guard that merely CRASHES never passes for a guard that HALTS — which is
+    what tells a readable-slot mutation apart from the real PendingVerdict."""
+    try:
+        fn()
+    except SystemExit:
+        return True
+    except BaseException:                                   # noqa: BLE001
+        return False
+    return False
+
+
 def refused(fn) -> tuple[bool, str]:
     """(True, why) iff `fn` HALTed.  The estate's guards raise SystemExit."""
     try:
         fn()
     except SystemExit as e:
         return True, _norm(str(e))[:220]
+    return False, "ran to completion"
+
+
+def refused_long(fn) -> tuple[bool, str]:
+    """(True, the WHOLE HALT text) — `refused` truncates at 220 characters,
+    which is shorter than the evidence some [Q-R3] HALTs carry (the census
+    row's key, the two table paths, the sample floor and both n's).
+
+    A CRASH IS NOT A HALT.  Any other exception comes back False and NAMED,
+    so a guard that merely falls over on a malformed table never passes for
+    one that refuses it — which is the difference between the repair and a
+    KeyError standing in for it."""
+    try:
+        fn()
+    except SystemExit as e:
+        return True, _norm(str(e))
+    except BaseException as e:                              # noqa: BLE001
+        return False, (f"CRASHED rather than HALTed: {type(e).__name__}: "
+                       f"{_norm(str(e))[:160]}")
     return False, "ran to completion"
 
 
@@ -154,6 +186,37 @@ def mutated(obj, attr: str, wrong, checks):
                                 f"{type(e).__name__}: {_norm(str(e))[:120]}"]
         finally:
             setattr(obj, attr, old)
+        bad = [ln for ln in lines if ln.startswith("[BAD]")]
+        return ok, ("the REAL leg's checks under the mutation: "
+                    + (bad[0][:160] if bad else "no BAD line"))
+    return leg
+
+
+def mutated2(obj, pairs: list, checks):
+    """A BREAK LEG BY MUTATION, TWO ATTRIBUTES AT ONCE.
+
+    Some defects are a PAIR of guards, and restoring only one of them leaves
+    the other catching the wrong — which would make the break leg go RED for
+    a reason that proves nothing about the guard under test.  The two-table
+    cross-check is exactly that: the shipped defect was BOTH that the shared
+    columns were not required of the verdict table AND that an absent one was
+    skipped rather than HALTed.  This restores both, together, so the leg is
+    the defect as it actually shipped.
+    """
+    def leg():
+        old = [(a, getattr(obj, a)) for a, _ in pairs]
+        for a, wrong in pairs:
+            setattr(obj, a, wrong)
+        try:
+            ok, lines = checks()
+        except SystemExit as e:
+            ok, lines = False, [f"[BAD] the checks HALTed: {_norm(str(e))}"]
+        except Exception as e:                              # noqa: BLE001
+            ok, lines = False, [f"[BAD] the checks crashed: "
+                                f"{type(e).__name__}: {_norm(str(e))[:120]}"]
+        finally:
+            for a, o in old:
+                setattr(obj, a, o)
         bad = [ln for ln in lines if ln.startswith("[BAD]")]
         return ok, ("the REAL leg's checks under the mutation: "
                     + (bad[0][:160] if bad else "no BAD line"))
@@ -2348,6 +2411,13 @@ def f_det() -> bool:
             (empty / "data").mkdir(parents=True)
             J = dict(sort_keys=True, default=str)
             pure_here = json.dumps(B.mechanics_card(disk=False), **J)
+            # THE AS-OF IS A PIN, NOT A DISK READING (review, 2026-09-22).
+            # `out_root` re-points the OUTPUT-directory reads and must NOT
+            # re-point `as_of_of_record()`, which reads Stage D's write-once
+            # AS_OF_PIN.json.  So the card computed against a root where
+            # NOTHING is filed still carries the REAL as-of, and that is
+            # correct behaviour, not a leak: the two `pure_*` strings below
+            # are identical BECAUSE the as-of is the same pin on both.
             pure_there = json.dumps(
                 B.mechanics_card(disk=False, out_root=empty), **J)
             env_here = B.mechanics_card()["environment"]
@@ -2369,6 +2439,50 @@ def f_det() -> bool:
                                   f"on the empty root "
                                   f"{env_there['tuning_result_present']} / "
                                   f"{env_there['fee_matches_stage_d_schedule']}"))
+            # ── THE AS-OF WARRANTY, ON THE CARD OF RECORD ───────────────────
+            # THE LEG THAT WAS MISSING.  BRK_MECHANICS.json was filed with NO
+            # as_of_last_closed_4h at any depth, at any key, while the report
+            # attested it carried one.  A card true of no stated instant can
+            # be re-read after the corridor moves and silently believed.
+            card = B.mechanics_card()
+            filed = json.loads((a / "BRK_MECHANICS.json").read_text())
+            man = json.loads((a / B.MANIFEST_NAME).read_text())
+
+            def _scan(o, p=""):
+                """EVERY as-of stamp in the tree, at any depth."""
+                hit = {}
+                if isinstance(o, dict):
+                    for k, v in o.items():
+                        if k == "as_of_last_closed_4h":
+                            hit[p + "/" + k] = v
+                        hit.update(_scan(v, p + "/" + str(k)))
+                elif isinstance(o, list):
+                    for i, v in enumerate(o):
+                        hit.update(_scan(v, p + f"[{i}]"))
+                return hit
+            stamps = _scan(filed)
+            g3 = (card["pins"]["as_of_last_closed_4h"] == ASOF
+                  and card["pins"]["as_of_source"].startswith("Stage D")
+                  and filed["pins"]["as_of_last_closed_4h"] == ASOF
+                  and bool(stamps)
+                  and all(v == ASOF for v in stamps.values())
+                  and man["as_of_last_closed_4h"] == ASOF
+                  and json.loads(pure_there)["pins"]
+                  ["as_of_last_closed_4h"] == ASOF)
+            g = g and g3
+            lines.append(mark(g3, f"the FILED card of record carries the "
+                                  f"AS-OF WARRANTY in `pins` (a pin, not the "
+                                  f"`environment` reading): "
+                                  f"pins.as_of_last_closed_4h "
+                                  f"{filed['pins'].get('as_of_last_closed_4h')!r} "
+                                  f"from {filed['pins'].get('as_of_source')!r}; "
+                                  f"{len(stamps)} as-of stamp(s) at any depth "
+                                  f"in the card, all == {ASOF} "
+                                  f"({sorted(stamps)}); the manifest agrees "
+                                  f"({man['as_of_last_closed_4h']}); and the "
+                                  f"EMPTY-root card still carries it, because "
+                                  f"`out_root` re-points disk READINGS and "
+                                  f"the as-of is a WRITE-ONCE PIN"))
             return g, lines
 
     def corrupt():
@@ -2397,17 +2511,1191 @@ def f_det() -> bool:
             return a == b, (f"the WHOLE card (environment included) on two "
                             f"different disks: {verdict}")
 
+    _real_card = B.mechanics_card
+
+    def _card_without_asof(disk: bool = True, out_root=None) -> dict:
+        """A named wrong: THE SHIPPED DEFECT — the card of record filed with
+        no as-of stamp anywhere in it, true of no stated instant."""
+        c = dict(_real_card(disk=disk, out_root=out_root))
+        c["pins"] = {k: v for k, v in c["pins"].items()
+                     if k != "as_of_last_closed_4h"}
+        return c
+
     return prove(
         "F-DET",
         "the mechanics card is deterministic — no clock, no bar, no result — "
-        "and its `pins` half is the same bytes on ANY disk",
+        "its `pins` half is the same bytes on ANY disk, and it CARRIES THE "
+        "AS-OF WARRANTY it is filed under",
         "two runs of main() into separate roots differ in any byte, write "
-        "different file sets, or the card minus its environment block changes "
-        "when what is filed on disk changes",
+        "different file sets, the card minus its environment block changes "
+        "when what is filed on disk changes, the filed card carries no "
+        "as_of_last_closed_4h at any depth, it carries one that is not "
+        "2026-09-21T16:00:00Z, or the as-of stops being a pin and starts "
+        "following `out_root`",
         [("one byte changed in a COPY of the second run's card", corrupt),
          ("the disk reads treated as pins (whole card, two disks)",
-          pure_is_not_pure)],
+          pure_is_not_pure),
+         ("the AS-OF STAMP stripped from the card of record (the shipped "
+          "defect)", mutated(B, "mechanics_card", _card_without_asof, real))],
         real)
+
+
+# ══════════════════ F-BRK-LANE-ERA · the DECLARED era pin vs the FILED arm
+# WHY THIS FIXTURE EXISTS (R0, 2026-09-22).  `LANE_ERA = {brk-s1: "holdout",
+# brk-i1: "full"}` was a DECLARED PIN THAT NOTHING CHECKED: both runners took
+# `era = g["era"]` from the filed arm and never compared it to the pin.  The
+# holdout collar is the whole reason P-BRK-S1's tuned pins are honest — R1's
+# protocol is "tune on era <= 2024-06-30, score on the holdout" — so an arm
+# filed at era='full' would have scored the scalper IN SAMPLE on the very grid
+# that chose its band, its margin and its hold, and `external_book`'s door
+# would NOT have caught it: that door holds the journal to the ARM's own era,
+# which is exactly the thing that was wrong.
+ERA_SYM = "BTCUSDT"
+ERA_PANEL = (ERA_SYM,)
+ERA_TEXT = (GATE_TEXT + "  This arm exists to offer the BRK runners a WRONG "
+            "era and prove they refuse it before reading a bar; it is filed "
+            "in a temp registry and scores nothing." + _CL)
+
+
+@contextlib.contextmanager
+def watched(pairs):
+    """Replace each (obj, attr) with a probe that COUNTS its calls and then
+    calls the real thing, and put every one back in a finally.  It is how
+    "not one bar was read" becomes a MEASURED ZERO instead of a hope: the
+    guard must fire with frame_l and corridor_era both at 0 calls."""
+    saved = [(o, a, getattr(o, a)) for o, a in pairs]
+    hits = {a: 0 for _, a in pairs}
+
+    def make(a, real):
+        def probe(*args, **kw):
+            hits[a] += 1
+            return real(*args, **kw)
+        return probe
+
+    for o, a, real in saved:
+        setattr(o, a, make(a, real))
+    try:
+        yield hits
+    finally:
+        for o, a, real in saved:
+            setattr(o, a, real)
+
+
+def _call_order(fn_name: str) -> dict:
+    """The FIRST line number at which each named call appears inside a named
+    function of the module under test — read out of the AST, so "the pin is
+    tested before the corridor is read" is a claim about the SOURCE and not
+    about one lucky run."""
+    import ast                                               # noqa: PLC0415
+    tree = ast.parse((ROOT / "scripts" / "tierc10_brk.py").read_text(
+        encoding="utf-8"))
+    want = ("require_lane_era", "corridor_era", "frame_l", "tuned_pins",
+            "gate")
+    for fn in ast.walk(tree):
+        if not isinstance(fn, ast.FunctionDef) or fn.name != fn_name:
+            continue
+        got: dict = {}
+        for sub in ast.walk(fn):
+            if not isinstance(sub, ast.Call):
+                continue
+            f = sub.func
+            nm = (f.attr if isinstance(f, ast.Attribute)
+                  else (f.id if isinstance(f, ast.Name) else None))
+            if nm in want and nm not in got:
+                got[nm] = int(sub.lineno)
+        return got
+    raise SystemExit(f"HALT: no function {fn_name!r} in tierc10_brk.py")
+
+
+def _era_pin_checks() -> tuple:
+    lines, ok = [], True
+    # ── 1 · the DECLARATION is total and legal ──────────────────────────────
+    g = (set(B.LANE_ERA) == set(B.LANE_LENS) == set(B.LANE_ORDER)
+         and B.LANE_ERA == {B.LANE_S1: "holdout", B.LANE_I1: "full"}
+         and not (set(B.LANE_ERA.values()) - set(TP.ERAS))
+         and set(B.LANE_ERA_REASON) == set(B.LANE_ERA))
+    ok &= g
+    lines.append(mark(g, f"LANE_ERA declares EVERY lane and only legal eras: "
+                         f"{dict(sorted(B.LANE_ERA.items()))} out of "
+                         f"{list(TP.ERAS)}, with a NAMED reason per lane"))
+    # ── 2 · the pin is tested BEFORE the corridor and the bars, IN SOURCE ───
+    for fn_name in ("run_lane_s1", "run_lane_i1"):
+        o = _call_order(fn_name)
+        g = ("require_lane_era" in o and "gate" in o
+             and o["gate"] < o["require_lane_era"]
+             and o["require_lane_era"] < o.get("corridor_era", 10 ** 9)
+             and o["require_lane_era"] < o.get("frame_l", 10 ** 9)
+             and o["require_lane_era"] < o.get("tuned_pins", 10 ** 9))
+        ok &= g
+        lines.append(mark(g, f"{fn_name}: gate at line {o.get('gate')} -> "
+                             f"require_lane_era at "
+                             f"{o.get('require_lane_era')} -> tuned_pins "
+                             f"{o.get('tuned_pins')} / corridor_era "
+                             f"{o.get('corridor_era')} / frame_l "
+                             f"{o.get('frame_l')} — the pin is tested BEFORE "
+                             f"anything reads a bar or a bar stamp"))
+    # ── 3 · the live HALT, with the bar readers COUNTED at zero ─────────────
+    with tempfile.TemporaryDirectory(prefix="f-brk-era-pin-") as td:
+        root = Path(td) / "registrations"
+        root.mkdir(parents=True)
+        cases = (
+            ("P-BRK-X-ERA-S1-FULL", B.LANE_S1, "full", B.run_lane_s1,
+             "the SCALPER filed on the FULL corridor — in sample on its own "
+             "tuning grid"),
+            ("P-BRK-X-ERA-S1-TUNE", B.LANE_S1, "tuning", B.run_lane_s1,
+             "the SCALPER filed on the TUNING era — wholly in sample"),
+            ("P-BRK-X-ERA-I1-HOLD", B.LANE_I1, "holdout", B.run_lane_i1,
+             "the INVESTOR collared to the holdout — a window its text does "
+             "not name"),
+        )
+        for reg_id, lane, era, runner, why in cases:
+            TP.register(reg_id, ERA_TEXT, 30, root=root, arms=[
+                TP.arm_spec("wrong era", ERA_PANEL, "vs_zero", lanes=(lane,),
+                            loao_line="lineage", era=era)])
+            with watched([(B, "frame_l"), (TP, "corridor_era")]) as hits:
+                did, msg = refused(lambda _r=runner, _i=reg_id: _r(
+                    ERA_PANEL, _i, ERA_TEXT, "wrong era", {},
+                    head_of_record=TP.UNPINNED, reg_root=root))
+            g = (did and "LANE_ERA" in msg and repr(era) in msg
+                 and repr(B.LANE_ERA[lane]) in msg
+                 and hits["frame_l"] == 0 and hits["corridor_era"] == 0)
+            ok &= g
+            lines.append(mark(g, f"{lane} filed at era={era!r} ({why}) -> "
+                                 f"{'HALT' if did else 'RODE IT'}; frame_l "
+                                 f"called {hits['frame_l']}x, corridor_era "
+                                 f"{hits['corridor_era']}x (want 0 and 0). "
+                                 f"{msg[:150]}"))
+        # ── 4 · and the DECLARED era is let through, at the same door ───────
+        for lane in B.LANE_ORDER:
+            good = {"runner": "external", "registration": "P-BRK-X-ERA-OK",
+                    "arm": "right era", "panel": list(ERA_PANEL),
+                    "lanes": [lane], "era": B.LANE_ERA[lane],
+                    "registration_sha256": "0" * 64}
+            got = B.require_lane_era(lane, good)
+            g = got == B.LANE_ERA[lane]
+            ok &= g
+            lines.append(mark(g, f"{lane} filed at era="
+                                 f"{B.LANE_ERA[lane]!r} passes the pin and "
+                                 f"the runner rides on (require_lane_era "
+                                 f"-> {got!r}); F-BRK-SPINE then drives both "
+                                 f"runners all the way to a Book at exactly "
+                                 f"these eras"))
+    # ── 5 · the pin refuses what is not a lane and what is not a gate ───────
+    did, why = refused(lambda: B.require_lane_era("card", {"era": "full"}))
+    g = did and "LANE_ERA" in why
+    ok &= g
+    lines.append(mark(g, f"a lane with NO declared era -> "
+                         f"{'HALT' if did else 'ran'}: {why[:110]}"))
+    did, why = refused(lambda: B.require_lane_era(B.LANE_S1, "holdout"))
+    g = did and "FILED ARM" in why
+    ok &= g
+    lines.append(mark(g, f"an era handed in as a STRING instead of the "
+                         f"gate -> {'HALT' if did else 'ran'}: {why[:110]} — "
+                         f"the era must come from the filing, never from the "
+                         f"caller"))
+    return ok, lines
+
+
+def f_brk_lane_era() -> bool:
+    def _noop(lane, gate_):
+        """A named wrong: the pin DECLARED and not enforced — the module as
+        R0 found it, where `era = g['era']` was taken on trust."""
+        return str(gate_["era"] if isinstance(gate_, dict) else gate_)
+
+    def _pin_is_the_arm(lane, gate_):
+        """A named wrong that is subtler and worse: the pin looked up with a
+        default of whatever the arm happens to say, so it can never disagree."""
+        e = gate_["era"] if isinstance(gate_, dict) else gate_
+        return str(B.LANE_ERA.get(lane, e))
+
+    return prove(
+        "F-BRK-LANE-ERA",
+        "LANE_ERA is ENFORCED against the filed arm inside both runners, and "
+        "the HALT fires before one bar or one bar-stamp is read",
+        "a P-BRK-S1 arm filed at era='full' (or 'tuning') rides, a P-BRK-I1 "
+        "arm collared to one era rides, the refusal comes after the corridor "
+        "or a frame has been read, the declared era is itself refused, or "
+        "require_lane_era is called anywhere but before corridor_era / "
+        "tuned_pins / frame_l in BOTH runners",
+        [("the era pin declared but not enforced (the defect R0 found)",
+          mutated(B, "require_lane_era", _noop, _era_pin_checks)),
+         ("LANE_ERA rewritten so both lanes ride 'full'",
+          mutated(B, "LANE_ERA", {B.LANE_S1: "full", B.LANE_I1: "full"},
+                  _era_pin_checks)),
+         ("the pin looked up with the ARM's own era as its default",
+          mutated(B, "require_lane_era", _pin_is_the_arm, _era_pin_checks))],
+        _era_pin_checks)
+
+
+# ═══════════════ F-BRK-ROW · the row, the OTHER anchor, and the [Q-R3] slot
+# WHY THIS FIXTURE EXISTS (R0, 2026-09-22).  `research_outputs/tierc10/brk/`
+# held NO parquet at all, so the contract's line 112 — "Each BRK form also
+# prints the OTHER anchor as Tier-E, and carries its lens's height-vs-toll
+# verdict ON ITS ROW" — had no row to ride on.  The MECHANISM existed
+# (LANE_TIER_E_ANCHOR, `anchor=` on both runners, `stamp_toll`); the ASSEMBLY
+# did not.
+#
+# WHAT IS REAL AND WHAT IS NOT.  Exactly F-BRK-SPINE's settlement: a THROWAWAY
+# registry in a temp root, a REAL panel name (so the corridor, the era and the
+# filed census grid are the real ones), and SYNTHETIC BARS — no real OHLC
+# value reaches any campaign here.  The [Q-R3] table this fixture reads is
+# likewise a TEMP-ROOT FIXTURE FILE carrying the obviously-fake verdict string
+# `SYN-FIXTURE-VERDICT`: it proves the READ PATH and invents no measurement.
+# Nothing is written to the census directory and no BRK row is filed anywhere.
+ROW_VERDICT_PASS = False
+ROW_VERDICT_LAW = "SYN-FIXTURE-LAW — no measurement produced this"
+ROW_VERDICT_REASON = "SYN-FIXTURE-REASON"
+# THE ASSET THE SPINE'S BOOK ACTUALLY DERIVES [review round 2, finding 1].
+# This constant used to read "POOLED:CLASSIC5" while every row in this fixture
+# is built on SPINE_PANEL = ('BTCUSDT',) — which is precisely the substitution
+# the finding is about, written into the fixture's own expectations.  It is
+# now the label the Book's panel DERIVES, so the synthetic tables are keyed on
+# the row the reader will actually ask for.
+ROW_ASSET = "BTCUSDT"
+ASOF = "2026-09-21T16:00:00Z"
+# the SHARED figures, written into BOTH synthetic tables so the cross-check
+# has something true to agree on
+SYN_FIG = {"n_ranges": 1234, "height_atr_median": 3.25,
+           "toll_atr_median": 0.41061594}
+# the LAW half of the cross-check, and the census's sample-floor columns —
+# both REQUIRED of the verdict table since the round-2 repair
+SYN_SHA = {"gate_law_sha": "SYN-FIXTURE-GATE-LAW-SHA-not-a-real-sha"}
+SYN_FLOOR = {"provisional": False, "provisional_reason": "",
+             "edge_n_ranges": 1200, "min_n_ranges_pinned": 30,
+             "edge_min_n_ranges_pinned": 30}
+# WHAT THE CENSUS FILED FOR THE SPINE'S OWN BOOK, at both lenses.  The 1d row
+# is PROVISIONAL, which is why a BRK row on this book cannot take it quietly.
+REAL_BTC_5M = {"n_ranges": 2832, "height_atr_median": 6.33176614,
+               "toll_atr_median": 0.5042885, "ratio_median": 13.0844195,
+               "verdict_pass": False,
+               "reason": "height gate PASS + edge-fade leg FAIL"}
+REAL_BTC_1D_N = 11
+REAL_BTC_1D_EDGE_N = 11
+REAL_BTC_1D_FLOOR = 30
+REAL_CLASSIC5_5M_N = 13025          # what the DEFAULT used to hand this book
+REAL_CLASSIC5_1D_N = 53
+
+# ── WHAT THE CENSUS TRACK ACTUALLY FILED, READ AND ASSERTED VERBATIM ────────
+# The last round's interface was a GUESS (`census/height_vs_toll.parquet`,
+# columns toll_atr / height_over_toll_median / verdict / n) that matched
+# NOTHING on disk, and it survived 22 green checks because every [Q-R3] leg
+# ran against a synthetic temp-root twin the fixture wrote itself in its own
+# declared schema.  These are the REAL filed numbers, and the leg below reads
+# them through the module's own reader.
+REAL_HVT = {
+    ("5m", "POOLED:CLASSIC5"): {
+        "n_ranges": 13025, "height_atr_median": 6.48087293,
+        "toll_atr_median": 0.29265442, "ratio_median": 23.25581395,
+        "verdict_pass": False,
+        "reason": "height gate PASS + edge-fade leg FAIL"},
+    ("1d", "POOLED:CLASSIC5"): {
+        "n_ranges": 53, "height_atr_median": 6.23716024,
+        "toll_atr_median": 0.01718173, "ratio_median": 413.99176955,
+        "verdict_pass": True,
+        "reason": "height gate PASS + edge-fade leg PASS"},
+}
+
+
+def _hvt_table(path: Path, lens: str = "5m", asset: str = ROW_ASSET,
+               drop: str | None = None, dupe: bool = False,
+               asof: str = ASOF, drop_many: tuple = (), **fig) -> Path:
+    """A SYNTHETIC [Q-R3] FIGURES table in the DECLARED schema, in a temp
+    root — key (asset, lens, scale_kind, era), the census's own column
+    names, the gate-law sha the cross-check compares, and the as-of stamp the
+    reader requires."""
+    import pandas as pd                                      # noqa: PLC0415
+    row = {"asset": asset, "lens": lens,
+           "scale_kind": B.HEIGHT_VS_TOLL_SCALE,
+           "era": B.HEIGHT_VS_TOLL_ERA,
+           "ratio_median": 7.9148,
+           B.HEIGHT_VS_TOLL_ASOF_COL: asof, **SYN_FIG, **SYN_SHA, **fig}
+    for c in ((drop,) if drop else ()) + tuple(drop_many):
+        row.pop(c)
+    pd.DataFrame([row, row] if dupe else [row]).to_parquet(path, index=False)
+    return path
+
+
+def _hvt_verdict(path: Path, lens: str = "5m", asset: str = ROW_ASSET,
+                 drop: str | None = None, dupe: bool = False,
+                 asof: str = ASOF, verdict_pass=ROW_VERDICT_PASS,
+                 verdict_law: str = ROW_VERDICT_LAW,
+                 reason: str = ROW_VERDICT_REASON,
+                 drop_many: tuple = (), **fig) -> Path:
+    """A SYNTHETIC [Q-R3] VERDICT table — key (asset, lens, scale_kind) with
+    NO era column, exactly as the census files it, carrying the three verdict
+    fields verbatim, the figures and the gate-law sha the cross-check
+    compares, and the sample-floor columns the round-2 repair requires."""
+    import pandas as pd                                      # noqa: PLC0415
+    row = {"asset": asset, "lens": lens,
+           "scale_kind": B.HEIGHT_VS_TOLL_SCALE,
+           "verdict_pass": verdict_pass, "verdict_law": verdict_law,
+           "reason": reason,
+           B.HEIGHT_VS_TOLL_ASOF_COL: asof,
+           **SYN_FIG, **SYN_SHA, **SYN_FLOOR, **fig}
+    for c in ((drop,) if drop else ()) + tuple(drop_many):
+        row.pop(c)
+    pd.DataFrame([row, row] if dupe else [row]).to_parquet(path, index=False)
+    return path
+
+
+def _hvt_pair(d: Path, tag: str = "ok", fig: dict | None = None,
+              ver: dict | None = None) -> tuple:
+    """Both [Q-R3] tables, written side by side under a distinct tag."""
+    f = _hvt_table(d / f"hvt_fig_{tag}.parquet", **(fig or {}))
+    v = _hvt_verdict(d / f"hvt_ver_{tag}.parquet", **(ver or {}))
+    return f, v
+
+
+def _shared_cols(fig_path: Path, ver_path: Path) -> list:
+    """THE FIELDS A CROSS-CHECK COULD ACTUALLY COMPARE, computed by the
+    FIXTURE from the two files on disk — so `cross_checked` is judged against
+    what is there, never against the module's own constant.  The constant is
+    what the shipped defect attested from while comparing nothing."""
+    import pandas as pd                                      # noqa: PLC0415
+    fc = set(pd.read_parquet(fig_path).columns)
+    vc = set(pd.read_parquet(ver_path).columns)
+    return [f for f in (list(B.HEIGHT_VS_TOLL_AGREE)
+                        + list(B.HEIGHT_VS_TOLL_AGREE_STR))
+            if f in fc and f in vc]
+
+
+def _real_hvt_copy(d: Path, drop_many: tuple = (), flip: bool = False,
+                   lens: str = "5m", asset: str = "POOLED:CLASSIC5") -> tuple:
+    """THE REVIEWER'S OWN REPRODUCTION, AS A LEG.  The two REAL filed census
+    tables are COPIED into a temp dir (the filed ones are never touched), the
+    named columns are dropped from the VERDICT copy, and the asked row's
+    verdict is flipped to True with a reason that says so out loud.  Before
+    the round-2 repair this pair read clean: verdict_pass True, reason
+    'INVENTED', cross_checked ['n_ranges', 'height_atr_median',
+    'toll_atr_median'] — an attestation for a check that never ran."""
+    import pandas as pd                                      # noqa: PLC0415
+    f = pd.read_parquet(B.HEIGHT_VS_TOLL_PATH)
+    v = pd.read_parquet(B.HEIGHT_VS_TOLL_VERDICT_PATH)
+    fp, vp = d / "real_fig.parquet", d / "real_ver.parquet"
+    f.to_parquet(fp, index=False)
+    if drop_many:
+        v = v.drop(columns=list(drop_many))
+    if flip:
+        m = ((v["lens"] == lens) & (v["asset"] == asset)
+             & (v["scale_kind"] == B.HEIGHT_VS_TOLL_SCALE))
+        v.loc[m, "verdict_pass"] = True
+        v.loc[m, "reason"] = "INVENTED — this row is not the figures row"
+    v.to_parquet(vp, index=False)
+    return fp, vp
+
+
+def _orphan_scan() -> list:
+    """THE ORPHAN GUARD.  Names every parquet in `census/` that carries the
+    DECLARED key columns of a [Q-R3] table whose declared path is NOT filed.
+
+    This is the leg whose absence let the last round's interface pass: the
+    declaration pointed at `census/height_vs_toll.parquet`, which has never
+    existed, while `census/height_toll.parquet` and
+    `census/height_toll_verdict.parquet` sat in the same directory carrying
+    exactly those key columns.  Empty list = the declaration points at what
+    is filed, or the measurement is genuinely absent from the directory.
+    """
+    import pandas as pd                                      # noqa: PLC0415
+    out = []
+    for declared, key in ((B.HEIGHT_VS_TOLL_PATH, B.HEIGHT_VS_TOLL_KEY),
+                          (B.HEIGHT_VS_TOLL_VERDICT_PATH,
+                           B.HEIGHT_VS_TOLL_VERDICT_KEY)):
+        if declared.is_file():
+            continue
+        d = declared.parent
+        for q in sorted(d.glob("*.parquet")) if d.is_dir() else []:
+            try:
+                cols = set(pd.read_parquet(q, columns=None).columns)
+            except Exception:                               # noqa: BLE001
+                continue
+            if set(key) <= cols:
+                out.append(f"{declared.name} is NOT filed, but {q.name} "
+                           f"carries its declared key {list(key)}")
+    return out
+
+
+def _row_runs(root: Path) -> dict:
+    """Both BRK forms, each run TWICE — once on its scored anchor and once on
+    the OTHER one — on synthetic tapes under a real panel name."""
+    out: dict = {}
+    s_lo, _s_hi, _ = TP.corridor_era(SPINE_PANEL, "holdout")
+    tuned = B.tuned_pins("5m")
+    lf, f4, dies, touch = _spine_s1_tapes(int(s_lo) + 30 * MS_1D, tuned)
+    flips = [{"i": 600, "polarity": "support", "rid": 11}]
+    TP.register("P-BRK-X-ROW-S1", SPINE_TEXT, 30, root=root, arms=[
+        TP.arm_spec("row s1", SPINE_PANEL, "vs_zero", lanes=(B.LANE_S1,),
+                    loao_line="lineage", era="holdout")])
+    sig = {SPINE_SYM: {"dies": dies, "flips": flips}}
+    with planted_frames({(SPINE_SYM, "5m", True): lf,
+                         (SPINE_SYM, "4h", False): f4}):
+        for key, anc in (("scored", B.ANCHOR_BAND),
+                         ("tier_e", B.ANCHOR_MEMORY)):
+            out[(B.LANE_S1, key)] = B.run_lane_s1(
+                SPINE_PANEL, "P-BRK-X-ROW-S1", SPINE_TEXT, "row s1", sig,
+                head_of_record=TP.UNPINNED, reg_root=root, anchor=anc)
+    i_lo, _i_hi, _ = TP.corridor_era(SPINE_PANEL, "full")
+    lfd, w1, d_dies, d_flips, _want = _spine_i1_tapes(int(i_lo) + 500 * MS_1D)
+    TP.register("P-BRK-X-ROW-I1", SPINE_TEXT, 30, root=root, arms=[
+        TP.arm_spec("row i1", SPINE_PANEL, "vs_zero", lanes=(B.LANE_I1,),
+                    loao_line="lineage", era="full")])
+    sig1 = {SPINE_SYM: {"dies": d_dies, "flips": d_flips}}
+    with planted_frames({(SPINE_SYM, "1d", True): lfd,
+                         (SPINE_SYM, "1w", False): w1}):
+        for key, anc in (("scored", B.ANCHOR_MEMORY),
+                         ("tier_e", B.ANCHOR_BAND)):
+            out[(B.LANE_I1, key)] = B.run_lane_i1(
+                SPINE_PANEL, "P-BRK-X-ROW-I1", SPINE_TEXT, "row i1", sig1,
+                head_of_record=TP.UNPINNED, reg_root=root, anchor=anc)
+    return out
+
+
+def _row_checks() -> tuple:
+    lines, ok = [], True
+    J = dict(sort_keys=True, default=str)
+    with tempfile.TemporaryDirectory(prefix="f-brk-row-") as td:
+        root = Path(td) / "registrations"
+        root.mkdir(parents=True)
+        runs = _row_runs(root)
+        s_sc, s_te = runs[(B.LANE_S1, "scored")], runs[(B.LANE_S1, "tier_e")]
+        i_sc, i_te = runs[(B.LANE_I1, "scored")], runs[(B.LANE_I1, "tier_e")]
+        # ── 0 · a row can only be built on a Book, i.e. on a FILED arm ──────
+        bare = dict(s_sc, book=list(s_sc["book"]))
+        did, why = refused(lambda: B.brk_row(B.LANE_S1, bare, s_te,
+                                             require_verdict=False))
+        g = did and "TP.Book" in why
+        ok &= g
+        lines.append(mark(g, f"a row offered a PLAIN LIST instead of the Book "
+                             f"-> {'HALT' if did else 'assembled anyway'}: "
+                             f"{why[:130]} — [LAW 4] no BRK registration "
+                             f"exists, so no real Book can be offered at all"))
+        # ── 1 · the row itself, with the verdict slot left PENDING ──────────
+        r = B.brk_row(B.LANE_S1, s_sc, s_te, require_verdict=False)
+        spec = s_sc["book"].spec
+        g = (tuple(r) == B.ROW_FIELDS
+             and r["form"] == "P-BRK-S1" and r["lane"] == B.LANE_S1
+             and r["lens"] == "5m" and r["era"] == "holdout"
+             and r["anchor_scored"] == B.ANCHOR_BAND
+             and r["anchor_tier_e"] == B.ANCHOR_MEMORY
+             and r["registration"] == spec["registration"]
+             and r["arm"] == spec["arm"]
+             and r["registration_sha256"] == spec["registration_sha256"]
+             and r["panel"] == list(spec["panel"])
+             and r["panel_name"] == TP.panel_name(spec["panel"])
+             and r["as_of_last_closed_4h"] == "2026-09-21T16:00:00Z"
+             and r["seed"] == B.SEED)
+        ok &= g
+        lines.append(mark(g, f"P-BRK-S1's row carries EXACTLY the "
+                             f"{len(B.ROW_FIELDS)} declared fields: lens "
+                             f"{r['lens']}, era {r['era']}, panel "
+                             f"{r['panel_name']} {r['panel']}, registration "
+                             f"{r['registration']!r}/{r['arm']!r} (sha "
+                             f"{str(r['registration_sha256'])[:16]}), as_of "
+                             f"{r['as_of_last_closed_4h']}"))
+        # ── 2 · the SCORED figures are the journal's, and no ruler ran ──────
+        tr = list(s_sc["book"])
+        f_ = r["scored_figures"]
+        hand = round(sum(float(t.net_r) for t in tr), B.ROW_ROUND_ND)
+        g = (f_["tier"] == "SCORED" and f_["anchor"] == B.ANCHOR_BAND
+             and f_["n_campaigns"] == len(tr) == 1
+             and f_["net_r_sum"] == hand
+             and f_["scored_statistic"] is None
+             and "TP.score" in f_["scored_statistic_note"]
+             and f_["book_spec"]["registration"] == spec["registration"])
+        ok &= g
+        lines.append(mark(g, f"the SCORED block is the journal and NOT a "
+                             f"verdict: {f_['n_campaigns']} campaign(s), "
+                             f"net_r sum {f_['net_r_sum']} (hand {hand}), "
+                             f"fee_r {f_['fee_r_sum']}, funding_r "
+                             f"{f_['funding_r_sum']}, scored_statistic "
+                             f"{f_['scored_statistic']} — the ruler stays "
+                             f"tierc10_panel's"))
+        # ── 3 · the OTHER anchor, as Tier-E, on the same row [line 112] ─────
+        o = r["tier_e_other_anchor"]
+        g = (o is not None and o["anchor"] == B.ANCHOR_MEMORY
+             and o["anchor"] != f_["anchor"]
+             and o["tier"].startswith("TIER-E")
+             and o["n_campaigns"] == len(list(s_te["book"]))
+             and r["tier_e_other_anchor_note"] is None)
+        ok &= g
+        lines.append(mark(g, f"the OTHER anchor rides the SAME row, labelled "
+                             f"Tier-E: scored {f_['anchor']!r} "
+                             f"({f_['n_campaigns']} campaigns) vs Tier-E "
+                             f"{o['anchor'] if o else '-'!r} "
+                             f"({o['n_campaigns'] if o else '-'} campaigns), "
+                             f"tier {o['tier'] if o else '-'}"))
+        did, why = refused(lambda: B.brk_row(B.LANE_S1, s_sc, s_sc,
+                                             require_verdict=False))
+        g = did and "OTHER anchor" in why
+        ok &= g
+        lines.append(mark(g, f"the SAME anchor offered twice -> "
+                             f"{'HALT' if did else 'accepted'}: {why[:130]}"))
+        did, why = refused(lambda: B.brk_row(B.LANE_S1, s_sc, s_te, s_te,
+                                             require_verdict=False))
+        g = did and "SECOND VIEW" in why
+        ok &= g
+        lines.append(mark(g, f"an R8 17-asset Tier-E slot fed the SAME panel "
+                             f"-> {'HALT' if did else 'accepted'}: "
+                             f"{why[:130]}"))
+        g = (r["tier_e_panel17"] is None
+             and "R8" in r["tier_e_panel17_note"])
+        ok &= g
+        lines.append(mark(g, f"and with no PANEL17 arm filed the 17-asset "
+                             f"Tier-E slot is a NAMED ABSENCE, not a blank: "
+                             f"{r['tier_e_panel17_note'][:110]}"))
+        # ── 4 · the era pin rides the row too ──────────────────────────────
+        did, why = refused(lambda: B.brk_row(B.LANE_S1, dict(s_sc, era="full"),
+                                             s_te, require_verdict=False))
+        g = did and "LANE_ERA" in why
+        ok &= g
+        lines.append(mark(g, f"a row assembled from a 'full'-era P-BRK-S1 run "
+                             f"-> {'HALT' if did else 'assembled'}: "
+                             f"{why[:120]}"))
+        # ── 5 · the toll, as stamp_toll left it, and said to be a PRINT ─────
+        t = r["toll"]
+        med = f_["toll_pct_of_1r_median"]
+        hand_med = float(np.median([float(x.toll_pct_of_1r) for x in tr]))
+        g = (t["cls"] == s_sc["toll"]["cls"]
+             and t["per_asset"] == s_sc["toll"]["per_asset"]
+             and med is not None and abs(med - round(hand_med, 8)) < 1e-9
+             and r["toll_accounting"]["status"].startswith("PRINT, NOT A "
+                                                           "DEDUCTION"))
+        ok &= g
+        lines.append(mark(g, f"the toll on the row is the one stamp_toll "
+                             f"stamped: cls {t['cls']!r}, per asset "
+                             f"{t['per_asset']}, median {med} % of 1R — and "
+                             f"the row SAYS what it is: "
+                             f"{r['toll_accounting']['status'][:70]}"))
+        # ── 6 · P-BRK-I1's row: the mirror, and NO toll block ──────────────
+        r1 = B.brk_row(B.LANE_I1, i_sc, i_te, require_verdict=False)
+        g = (r1["form"] == "P-BRK-I1" and r1["lens"] == "1d"
+             and r1["era"] == "full"
+             and r1["anchor_scored"] == B.ANCHOR_MEMORY
+             and r1["tier_e_other_anchor"]["anchor"] == B.ANCHOR_BAND
+             and r1["toll"].get("stamped") is False
+             and "P-BRK-S1's contract clause" in r1["toll"]["why"]
+             and r1["scored_figures"]["n_campaigns"]
+             == len(list(i_sc["book"])))
+        ok &= g
+        lines.append(mark(g, f"P-BRK-I1's row mirrors it: lens "
+                             f"{r1['lens']}, era {r1['era']}, scored anchor "
+                             f"{r1['anchor_scored']!r}, Tier-E "
+                             f"{r1['tier_e_other_anchor']['anchor']!r}, and "
+                             f"the toll block is a STATED ABSENCE "
+                             f"({r1['toll']['why'][:70]})"))
+        # ── 7 · the VERDICT SLOT, before [Q-R3] exists ─────────────────────
+        gone = Path(td) / "not_filed.parquet"
+        try:
+            B.brk_row(B.LANE_S1, s_sc, s_te, hvt_path=gone)
+            did, full = False, "ran to completion — a verdict was INVENTED"
+        except SystemExit as e:                             # noqa: PERF203
+            did, full = True, _norm(str(e))
+        g = (did and "height-vs-toll" in full and _norm(str(gone)) in full
+             and all(w in full for w in B.HEIGHT_VS_TOLL_FIELDS)
+             and all(w in full for w in B.HEIGHT_VS_TOLL_KEY))
+        ok &= g
+        lines.append(mark(g, f"with [Q-R3] unfiled, assembling a row that "
+                             f"REQUIRES the verdict -> "
+                             f"{'HALT naming the whole expected schema'
+                                if did else 'a default'}: {full[:230]}"))
+        pv = r["height_vs_toll"]
+        # COMPARISON IS A READ TOO (review, 2026-09-22): `pv == 'PASS'` used
+        # to answer False SILENTLY, so `if row['height_vs_toll'] != 'TOLL
+        # DOMINATES': ship()` proceeded on an unread verdict.  Twelve reads,
+        # not ten.
+        reads = {"str": lambda: str(pv), "repr": lambda: repr(pv),
+                 "format": lambda: f"{pv}", "float": lambda: float(pv),
+                 "bool": lambda: bool(pv), "len": lambda: len(pv),
+                 "iter": lambda: list(pv), "getitem": lambda: pv["verdict"],
+                 "getattr": lambda: pv.verdict,
+                 "json": lambda: json.dumps(r, **J),
+                 "eq": lambda: pv == "PASS", "ne": lambda: pv != "FAIL",
+                 "in_list": lambda: pv in ["PASS", "FAIL"],
+                 "reflected_eq": lambda: "PASS" in [pv],
+                 "lt": lambda: pv < 1, "hash": lambda: hash(pv)}
+        red = {k: _halts(v) for k, v in reads.items()}
+        g = (isinstance(pv, B.PendingVerdict) and all(red.values())
+             and (pv is None) is False          # identity is NOT a read
+             and pv.lens == "5m" and pv.asset == ROW_ASSET)
+        ok &= g
+        lines.append(mark(g, f"and the slot itself CANNOT BE READ: every one "
+                             f"of {sorted(red)} HALTs ({red}) — including "
+                             f"EQUALITY, which used to answer False silently "
+                             f"— while `is None` stays False and the REQUEST "
+                             f"stays legible (lens {pv.lens!r}, asset "
+                             f"{pv.asset!r}, scale {pv.scale_kind!r}, era "
+                             f"{pv.era!r}, verdict table "
+                             f"{Path(pv.verdict_path).name}), so a reporter "
+                             f"can say WHICH verdict is missing without "
+                             f"tripping the guard"))
+        # ── 8 · and once [Q-R3] IS filed, the verdict is READ, verbatim ────
+        hp, hvp = _hvt_pair(Path(td))
+        r2 = B.brk_row(B.LANE_S1, s_sc, s_te, hvt_path=hp,
+                       hvt_verdict_path=hvp)
+        hv = r2["height_vs_toll"]
+        g = (hv["verdict_pass"] is ROW_VERDICT_PASS
+             and hv["verdict_law"] == ROW_VERDICT_LAW
+             and hv["reason"] == ROW_VERDICT_REASON
+             and hv["lens"] == "5m" and hv["asset"] == ROW_ASSET
+             and hv["scale_kind"] == B.HEIGHT_VS_TOLL_SCALE
+             and hv["era"] == B.HEIGHT_VS_TOLL_ERA
+             and hv["ratio_median"] == 7.9148
+             and hv["n_ranges"] == 1234
+             and hv["height_atr_median"] == SYN_FIG["height_atr_median"]
+             and hv["toll_atr_median"] == SYN_FIG["toll_atr_median"]
+             and hv["as_of_last_closed_4h"] == ASOF
+             and hv["read_not_computed"] is True
+             and hv["source"] == str(hp) and hv["verdict_source"] == str(hvp)
+             # THE ATTESTATION IS THE CHECK'S OWN OUTPUT [round 2, finding 2]:
+             # `cross_checked` is compared against the fields THIS FIXTURE
+             # can see in both filed tables, computed independently of the
+             # module's constant.
+             and hv["cross_checked"] == _shared_cols(hp, hvp)
+             and hv["provisional"] is False)
+        ok &= g
+        lines.append(mark(g, f"with BOTH [Q-R3] tables in the declared "
+                             f"schemas the slot FILLS FROM THEM: "
+                             f"verdict_pass {hv['verdict_pass']}, law "
+                             f"{hv['verdict_law'][:40]!r}, reason "
+                             f"{hv['reason']!r} (all three carried verbatim "
+                             f"— this module pins no vocabulary), "
+                             f"ratio_median {hv['ratio_median']}, n_ranges "
+                             f"{hv['n_ranges']}, as_of "
+                             f"{hv['as_of_last_closed_4h']}, sources "
+                             f"{Path(hv['source']).name} + "
+                             f"{Path(hv['verdict_source']).name}, "
+                             f"cross-checked on {hv['cross_checked']}, "
+                             f"read_not_computed {hv['read_not_computed']}"))
+        # ── 8b · THE INTERFACE AGAINST THE REAL FILED CENSUS TABLES ────────
+        # THE LEG THAT WAS MISSING.  Every [Q-R3] check above reads a table
+        # THIS FIXTURE WROTE, in the schema THIS MODULE declared — which is
+        # exactly how an interface pointed at a filename that has never
+        # existed collected 22 green checks.  This leg reads what the CENSUS
+        # TRACK actually filed, through the module's own reader, and asserts
+        # its numbers.
+        for (lens_, asset_), want in sorted(REAL_HVT.items()):
+            got = B.height_vs_toll(lens_, asset_)
+            g = (all(got[k] == v for k, v in want.items())
+                 and got["source"] == str(B.HEIGHT_VS_TOLL_PATH)
+                 and got["verdict_source"] == str(
+                     B.HEIGHT_VS_TOLL_VERDICT_PATH)
+                 and got["as_of_last_closed_4h"] == ASOF
+                 and got["read_not_computed"] is True)
+            ok &= g
+            lines.append(mark(g, f"the REAL filed [Q-R3] read, lens {lens_} / "
+                                 f"{asset_} / {B.HEIGHT_VS_TOLL_SCALE} / "
+                                 f"era {B.HEIGHT_VS_TOLL_ERA}: n_ranges "
+                                 f"{got['n_ranges']}, height_atr_median "
+                                 f"{got['height_atr_median']}, "
+                                 f"toll_atr_median {got['toll_atr_median']}, "
+                                 f"ratio_median {got['ratio_median']}, "
+                                 f"verdict_pass {got['verdict_pass']} "
+                                 f"({got['reason']}) — expected "
+                                 f"{ {k: want[k] for k in sorted(want)} }"))
+        # ── 8c · THE DECLARED PATHS ARE THE FILED PATHS, OR AN ORPHAN IS
+        # ──      NAMED.  The guard that would have caught the dead interface
+        # ──      the moment the census filed at 10:25: either the declared
+        # ──      table exists, or NO other parquet in census/ carries the
+        # ──      declared key columns (i.e. the measurement really is absent
+        # ──      rather than sitting ten characters away under another name).
+        orph = _orphan_scan()
+        g = not orph
+        ok &= g
+        lines.append(mark(g, f"the DECLARED [Q-R3] paths are the FILED ones: "
+                             f"figures {B.HEIGHT_VS_TOLL_PATH.name} "
+                             f"present={B.HEIGHT_VS_TOLL_PATH.is_file()}, "
+                             f"verdict {B.HEIGHT_VS_TOLL_VERDICT_PATH.name} "
+                             f"present="
+                             f"{B.HEIGHT_VS_TOLL_VERDICT_PATH.is_file()}; "
+                             f"orphan candidates in census/ carrying the "
+                             f"declared key columns while the declaration "
+                             f"points elsewhere: {orph or 'none'}"))
+        # ── 8d · THE VERDICT ROW'S ASSET IS DERIVED FROM THE BOOK ─────────
+        # [review round 2, finding 1]  brk_row used to read
+        #   asset = str(verdict_asset) if verdict_asset else "POOLED:CLASSIC5"
+        # with `verdict_asset` derived from NOTHING.  These are the
+        # derivations, the HALT where nothing can be derived, and the
+        # override rules.
+        for pnl, want_a, tag in (
+                (TP.CLASSIC5, "POOLED:CLASSIC5", "the 5-asset book [R8]"),
+                (TP.UNSEEN12, "POOLED:UNSEEN12", "the twelve"),
+                ((SPINE_SYM,), SPINE_SYM, "a ONE-ASSET book")):
+            va = B.verdict_asset_of(pnl)
+            g = (va["asset"] == want_a and va["derived"] == want_a
+                 and va["override"] is None
+                 and va["source"] == "DERIVED FROM THE BOOK")
+            ok &= g
+            lines.append(mark(g, f"{tag}: panel {va['panel_name']} "
+                                 f"({va['n_panel_assets']} assets) -> census "
+                                 f"row {va['asset']!r} — {va['derived_how']}"))
+        did, why = refused_long(lambda: B.verdict_asset_of(TP.PANEL17))
+        g = (did and "PANEL17" in why and "POOLED:ALL" in why
+             and "cannot be DERIVED" in why)
+        ok &= g
+        lines.append(mark(g, f"PANEL17 — the view R8 orders printed as "
+                             f"Tier-E — has NO census counterpart and "
+                             f"-> {'HALT' if did else 'a default'}: "
+                             f"{why[:200]}"))
+        did, why = refused_long(lambda: B.verdict_asset_of(()))
+        g = did and "EMPTY panel" in why
+        ok &= g
+        lines.append(mark(g, f"an EMPTY panel -> "
+                             f"{'HALT' if did else 'a default'}: "
+                             f"{why[:120]}"))
+        did, why = refused_long(
+            lambda: B.verdict_asset_of((SPINE_SYM,), "POOLED:CLASSIC5"))
+        g = did and "OVERRIDDEN" in why and "verdict_asset_why" in why
+        ok &= g
+        lines.append(mark(g, f"an OVERRIDE that disagrees with the "
+                             f"derivation and says nothing -> "
+                             f"{'HALT' if did else 'accepted'}: {why[:170]}"))
+        va = B.verdict_asset_of((SPINE_SYM,), "POOLED:CLASSIC5",
+                                "a stated reason, filed on the row")
+        g = (va["asset"] == "POOLED:CLASSIC5" and va["derived"] == SPINE_SYM
+             and va["override"] == "POOLED:CLASSIC5"
+             and va["override_why"] == "a stated reason, filed on the row"
+             and va["source"].startswith("EXPLICIT OVERRIDE"))
+        ok &= g
+        lines.append(mark(g, f"and the SAME override WITH a stated reason is "
+                             f"taken and RECORDED: asset {va['asset']!r}, "
+                             f"derived {va['derived']!r}, why "
+                             f"{va['override_why']!r} ({va['source']})"))
+        did, why = refused_long(
+            lambda: B.verdict_asset_of(TP.PANEL17, "POOLED:ALL"))
+        g = did and "NOTHING can be derived" in why
+        ok &= g
+        lines.append(mark(g, f"PANEL17 named POOLED:ALL with no reason -> "
+                             f"{'HALT' if did else 'accepted'}: {why[:150]}"))
+        # ── 8e · A ROW ON A NON-CLASSIC5 BOOK DOES NOT RECEIVE CLASSIC5'S
+        # ──      FIGURES.  The REAL filed census tables, the real reader,
+        # ──      and the spine's real one-asset Book.
+        r_real = B.brk_row(B.LANE_S1, s_sc, s_te)
+        vaq, hvq = r_real["height_vs_toll_asset"], r_real["height_vs_toll"]
+        c5 = B.height_vs_toll("5m", "POOLED:CLASSIC5")
+        g = (tuple(r_real) == B.ROW_FIELDS
+             and r_real["panel"] == [SPINE_SYM]
+             and vaq["asset"] == SPINE_SYM
+             and vaq["source"] == "DERIVED FROM THE BOOK"
+             and hvq["asset"] == SPINE_SYM
+             and all(hvq[k] == v for k, v in REAL_BTC_5M.items())
+             and c5["n_ranges"] == REAL_CLASSIC5_5M_N
+             and hvq["n_ranges"] != c5["n_ranges"]
+             and hvq["provisional"] is False)
+        ok &= g
+        lines.append(mark(g, f"a row on the NON-CLASSIC5 book "
+                             f"{r_real['panel_name']} {r_real['panel']} reads "
+                             f"its OWN census row {hvq['asset']!r}: n_ranges "
+                             f"{hvq['n_ranges']}, height_atr_median "
+                             f"{hvq['height_atr_median']}, toll_atr_median "
+                             f"{hvq['toll_atr_median']}, ratio_median "
+                             f"{hvq['ratio_median']}, verdict_pass "
+                             f"{hvq['verdict_pass']} — and NOT "
+                             f"POOLED:CLASSIC5's {c5['n_ranges']} / "
+                             f"{c5['ratio_median']} / {c5['verdict_pass']}, "
+                             f"which is what the literal default handed it "
+                             f"before the repair"))
+        bufa = io.StringIO()
+        B.print_rows([r_real], out=bufa)
+        ta = bufa.getvalue()
+        g = (f"asset {SPINE_SYM!r}" in ta and "DERIVED FROM THE BOOK" in ta)
+        ok &= g
+        lines.append(mark(g, f"and the choice PRINTS ON THE ROW: "
+                             f"\"asset {SPINE_SYM!r}\" present="
+                             f"{f'asset {SPINE_SYM!r}' in ta}, "
+                             f"'DERIVED FROM THE BOOK' present="
+                             f"{'DERIVED FROM THE BOOK' in ta}"))
+        # ── 8f · A PROVISIONAL CENSUS ROW CANNOT REACH A BRK ROW SILENTLY ──
+        # The census re-filed [Q-R3] with a sample floor; BTCUSDT 1d rests on
+        # 11 confirmed ranges against a floor of 30.  P-BRK-I1's lens IS 1d,
+        # so this is not a hypothetical.
+        did, why = refused_long(lambda: B.brk_row(B.LANE_I1, i_sc, i_te))
+        g = (did and "PROVISIONAL" in why and "edge_n_ranges" in why
+             and str(REAL_BTC_1D_FLOOR) in why
+             and "allow_provisional" in why)
+        ok &= g
+        lines.append(mark(g, f"P-BRK-I1's row on the 1d census row for "
+                             f"{SPINE_SYM} (n_ranges {REAL_BTC_1D_N} against "
+                             f"floor {REAL_BTC_1D_FLOOR}) -> "
+                             f"{'HALT' if did else 'carried silently'}: "
+                             f"{why[:230]}"))
+        r_prov = B.brk_row(B.LANE_I1, i_sc, i_te, allow_provisional=True)
+        hpv = r_prov["height_vs_toll"]
+        g = (hpv["provisional"] is True
+             and hpv["provisional_taken_by_name"] is True
+             and "PROVISIONAL_MIN_N" in hpv["provisional_reason"]
+             and hpv["sample_floor"]["n_ranges"] == REAL_BTC_1D_N
+             and hpv["sample_floor"]["edge_n_ranges"] == REAL_BTC_1D_EDGE_N
+             and hpv["sample_floor"]["min_n_ranges_pinned"]
+             == REAL_BTC_1D_FLOOR)
+        ok &= g
+        lines.append(mark(g, f"taken BY NAME it rides the row FLAGGED: "
+                             f"provisional {hpv['provisional']}, reason "
+                             f"{hpv['provisional_reason']!r}, floor block "
+                             f"{ {k: hpv['sample_floor'][k] for k in
+                                  ('n_ranges', 'min_n_ranges_pinned',
+                                   'edge_n_ranges',
+                                   'edge_min_n_ranges_pinned')} }"))
+        bufb = io.StringIO()
+        B.print_rows([r_prov], out=bufb)
+        tb = bufb.getvalue()
+        star = "*** PROVISIONAL [Q-R3] ROW, TAKEN BY NAME"
+        g = star in tb and "gates nothing" in tb
+        ok &= g
+        lines.append(mark(g, f"and it PRINTS LOUDLY: the starred PROVISIONAL "
+                             f"block is present={star in tb}, "
+                             f"'gates nothing' present="
+                             f"{'gates nothing' in tb}"))
+        # ── 8g · THE REVIEWER'S OWN REPRODUCTION, ON THE REAL FILED TABLES ─
+        d_rv = Path(td) / "real_copy"
+        d_rv.mkdir()
+        fpx, vpx = _real_hvt_copy(
+            d_rv, drop_many=("n_ranges", "height_atr_median",
+                             "toll_atr_median"), flip=True)
+        did, why = refused_long(
+            lambda: B.height_vs_toll("5m", "POOLED:CLASSIC5", path=fpx,
+                                     verdict_path=vpx))
+        g = (did and all(w in why for w in ("n_ranges", "height_atr_median",
+                                            "toll_atr_median")))
+        ok &= g
+        shipped_said = ("verdict_pass True with an attestation for a check "
+                        "that never ran")
+        lines.append(mark(g, f"the two REAL filed tables, with "
+                             f"['n_ranges', 'height_atr_median', "
+                             f"'toll_atr_median'] dropped from the VERDICT "
+                             f"copy AND 5m/POOLED:CLASSIC5/frozen3.0 flipped "
+                             f"to verdict_pass=True, reason 'INVENTED' -> "
+                             f"{'HALT' if did else shipped_said}: "
+                             f"{why[:210]}"))
+        g = (c5["verdict_pass"] is False
+             and c5["reason"] != "INVENTED — this row is not the figures row")
+        ok &= g
+        lines.append(mark(g, f"so the flipped verdict never reaches a row: "
+                             f"the UNMODIFIED filed pair still reads "
+                             f"verdict_pass {c5['verdict_pass']} "
+                             f"({c5['reason']!r}) for 5m POOLED:CLASSIC5. "
+                             f"STATED LIMIT: the cross-check proves the two "
+                             f"rows are ONE MEASUREMENT (figures + "
+                             f"gate_law_sha); it does not audit verdict_pass "
+                             f"itself — that is the census's own gate, and "
+                             f"[B10] says this row carries a verdict and "
+                             f"computes none. A verdict re-filed wrong WITH "
+                             f"consistent figures and the same gate law is "
+                             f"invisible here and visible only to [Q-R3]."))
+        # ── 9 · every way those tables can be wrong is a HALT, not a default ─
+        for k_, (name, mk, word) in enumerate((
+                ("a missing declared FIGURES column",
+                 lambda d: (_hvt_table(d / "f.parquet", drop="ratio_median"),
+                            _hvt_verdict(d / "v.parquet")),
+                 "ratio_median"),
+                ("a missing declared VERDICT column",
+                 lambda d: (_hvt_table(d / "f.parquet"),
+                            _hvt_verdict(d / "v.parquet", drop="reason")),
+                 "reason"),
+                ("no as-of stamp on the FIGURES table",
+                 lambda d: (_hvt_table(d / "f.parquet",
+                                       drop=B.HEIGHT_VS_TOLL_ASOF_COL),
+                            _hvt_verdict(d / "v.parquet")),
+                 B.HEIGHT_VS_TOLL_ASOF_COL),
+                ("a FIGURES row stamped at another as-of",
+                 lambda d: (_hvt_table(d / "f.parquet",
+                                       asof="2026-09-22T00:00:00Z"),
+                            _hvt_verdict(d / "v.parquet")),
+                 "AS-OF WARRANTY"),
+                ("a VERDICT row stamped at another as-of",
+                 lambda d: (_hvt_table(d / "f.parquet"),
+                            _hvt_verdict(d / "v.parquet",
+                                         asof="2026-09-22T00:00:00Z")),
+                 "AS-OF WARRANTY"),
+                ("no FIGURES row for this lens",
+                 lambda d: (_hvt_table(d / "f.parquet", lens="4h"),
+                            _hvt_verdict(d / "v.parquet")), "0 row(s)"),
+                ("no VERDICT row for this lens",
+                 lambda d: (_hvt_table(d / "f.parquet"),
+                            _hvt_verdict(d / "v.parquet", lens="4h")),
+                 "0 row(s)"),
+                ("the FIGURES key repeated",
+                 lambda d: (_hvt_table(d / "f.parquet", dupe=True),
+                            _hvt_verdict(d / "v.parquet")), "2 row(s)"),
+                ("the VERDICT key repeated",
+                 lambda d: (_hvt_table(d / "f.parquet"),
+                            _hvt_verdict(d / "v.parquet", dupe=True)),
+                 "2 row(s)"),
+                ("the two tables DISAGREEING on a shared figure",
+                 lambda d: (_hvt_table(d / "f.parquet"),
+                            _hvt_verdict(d / "v.parquet", n_ranges=9999)),
+                 "disagree"),
+                ("a non-boolean verdict_pass",
+                 lambda d: (_hvt_table(d / "f.parquet"),
+                            _hvt_verdict(d / "v.parquet",
+                                         verdict_pass=float("nan"))),
+                 "not a boolean"),
+                ("a blank verdict_law",
+                 lambda d: (_hvt_table(d / "f.parquet"),
+                            _hvt_verdict(d / "v.parquet", verdict_law="   ")),
+                 "carries no verdict_law"),
+                ("a blank reason",
+                 lambda d: (_hvt_table(d / "f.parquet"),
+                            _hvt_verdict(d / "v.parquet", reason="   ")),
+                 "carries no reason"),
+                ("the VERDICT table not filed at all",
+                 lambda d: (_hvt_table(d / "f.parquet"), d / "gone.parquet"),
+                 "no height-vs-toll VERDICT table"),
+                # ── THE ROUND-2 FINDING-2 LEG.  The VERDICT table re-filed
+                # ── WITHOUT the shared figures AND with its verdict flipped:
+                # ── the drop is what severed the join, and the flip is what
+                # ── the severed join used to let through.
+                ("the VERDICT table RE-FILED WITHOUT THE SHARED FIGURES and "
+                 "its verdict FLIPPED to PASS",
+                 lambda d: (_hvt_table(d / "f.parquet"),
+                            _hvt_verdict(
+                                d / "v.parquet",
+                                drop_many=tuple(B.HEIGHT_VS_TOLL_AGREE),
+                                verdict_pass=True,
+                                reason=("INVENTED — this row is not the "
+                                        "figures row"))),
+                 "missing the declared column(s)"),
+                ("the VERDICT table re-filed WITHOUT the gate-law sha",
+                 lambda d: (_hvt_table(d / "f.parquet"),
+                            _hvt_verdict(d / "v.parquet",
+                                         drop="gate_law_sha")),
+                 "missing the declared column(s)"),
+                ("the two tables built under DIFFERENT gate laws",
+                 lambda d: (_hvt_table(d / "f.parquet"),
+                            _hvt_verdict(d / "v.parquet",
+                                         gate_law_sha="A-DIFFERENT-LAW")),
+                 "disagree"),
+                ("the VERDICT table re-filed WITHOUT the census's "
+                 "provisional flag",
+                 lambda d: (_hvt_table(d / "f.parquet"),
+                            _hvt_verdict(d / "v.parquet",
+                                         drop="provisional")),
+                 "missing the declared column(s)"),
+                ("the VERDICT table re-filed without edge_n_ranges",
+                 lambda d: (_hvt_table(d / "f.parquet"),
+                            _hvt_verdict(d / "v.parquet",
+                                         drop="edge_n_ranges")),
+                 "missing the declared column(s)"),
+                ("a PROVISIONAL verdict row not asked for by name",
+                 lambda d: (_hvt_table(d / "f.parquet"),
+                            _hvt_verdict(d / "v.parquet", provisional=True,
+                                         provisional_reason=(
+                                             "n_ranges 5 < "
+                                             "PROVISIONAL_MIN_N (30)"))),
+                 "PROVISIONAL"),
+                ("a provisional flag with NO reason behind it",
+                 lambda d: (_hvt_table(d / "f.parquet"),
+                            _hvt_verdict(d / "v.parquet", provisional=True,
+                                         provisional_reason="   ")),
+                 "no provisional_reason"),
+                ("a non-boolean provisional flag",
+                 lambda d: (_hvt_table(d / "f.parquet"),
+                            _hvt_verdict(d / "v.parquet",
+                                         provisional=float("nan"))),
+                 "not a boolean"))):
+            # the name is an INDEX, never hash(str): Python salts string
+            # hashing per process, and a filed transcript must be the same
+            # bytes on every run (DETERMINISM — the law applies to the
+            # evidence too, F-DET's own reason for `_norm`).
+            d_ = Path(td) / f"hvt_{k_}"
+            d_.mkdir()
+            fq, vq = mk(d_)
+            did, why = refused_long(
+                lambda _f=fq, _v=vq: B.height_vs_toll("5m", ROW_ASSET,
+                                                      path=_f,
+                                                      verdict_path=_v))
+            g = did and word in why
+            ok &= g
+            lines.append(mark(g, f"[Q-R3] with {name} -> "
+                                 f"{'HALT' if did else 'a number'}: "
+                                 f"{why[:150]}"))
+        # ── 10 · DETERMINISM: two assemblies, one byte string ──────────────
+        a = json.dumps(B.brk_row(B.LANE_S1, s_sc, s_te, hvt_path=hp,
+                                 hvt_verdict_path=hvp), **J)
+        b = json.dumps(B.brk_row(B.LANE_S1, s_sc, s_te, hvt_path=hp,
+                                 hvt_verdict_path=hvp), **J)
+        g = a == b and len(a) > 2000
+        ok &= g
+        lines.append(mark(g, f"two assemblies of the same runs are the same "
+                             f"bytes ({len(a)} B, identical={a == b})"))
+        # ── 11 · brk_rows: every form, in order, nothing dropped ───────────
+        rows = B.brk_rows({B.LANE_S1: {"scored": s_sc, "tier_e": s_te},
+                           B.LANE_I1: {"scored": i_sc, "tier_e": i_te}},
+                          require_verdict=False)
+        g = ([x["lane"] for x in rows] == list(B.LANE_ORDER)
+             and [x["form"] for x in rows] == ["P-BRK-S1", "P-BRK-I1"])
+        ok &= g
+        lines.append(mark(g, f"brk_rows emits ONE ROW PER FORM in "
+                             f"LANE_ORDER: {[x['form'] for x in rows]}"))
+        did, why = refused(lambda: B.brk_rows({"brk-x9": {"scored": s_sc}}))
+        g = did and "brk-x9" in why
+        ok &= g
+        lines.append(mark(g, f"a lane the module does not carry -> "
+                             f"{'HALT' if did else 'silently dropped'}: "
+                             f"{why[:100]}"))
+        # ── 12 · the PRINTER prints PENDING rather than a blank ────────────
+        buf = io.StringIO()
+        B.print_rows(rows, out=buf)
+        txt = buf.getvalue()
+        g = ("PENDING" in txt and "Reading this slot HALTs" in txt
+             and "TIER-E" in txt and "P-BRK-S1" in txt and "P-BRK-I1" in txt)
+        ok &= g
+        lines.append(mark(g, f"print_rows on PENDING rows names the absence "
+                             f"({len(txt)} B; 'PENDING' present={'PENDING' in txt}, "
+                             f"Tier-E labelled={'TIER-E' in txt})"))
+        buf2 = io.StringIO()
+        B.print_rows([r2], out=buf2)
+        t2 = buf2.getvalue()
+        g = (ROW_VERDICT_REASON in t2
+             and f"verdict_pass {ROW_VERDICT_PASS}" in t2)
+        ok &= g
+        lines.append(mark(g, f"and on a filled row it prints the verdict it "
+                             f"READ (verdict_pass {ROW_VERDICT_PASS} "
+                             f"present={f'verdict_pass {ROW_VERDICT_PASS}' in t2}, "
+                             f"reason {ROW_VERDICT_REASON!r} "
+                             f"present={ROW_VERDICT_REASON in t2})"))
+    return ok, lines
+
+
+def f_brk_row() -> bool:
+    class _Readable:
+        """A named wrong: the empty verdict slot made READABLE — the `None`
+        that serialises to `null` and prints as a blank, which is the kind of
+        blank a later reader fills in from memory."""
+        def __init__(self, *a, **k):
+            self.lens, self.asset = "5m", ROW_ASSET
+            self.scale_kind, self.era, self.path = "frozen3.0", "ALL", ""
+            self.verdict_path = ""      # so this leg goes RED on READABILITY
+            self.verdict = "UNKNOWN"    # and not on a missing attribute
+
+        def __str__(self):
+            return "UNKNOWN"
+
+    class _IdentityEq(B.PendingVerdict):
+        """A named wrong: the empty verdict slot left at OBJECT IDENTITY for
+        comparison — the shipped defect (review, 2026-09-22).  Every OTHER
+        read still HALTs, so only a leg that actually compares can see it."""
+        __eq__ = object.__eq__
+        __ne__ = object.__ne__
+        __hash__ = B.PendingVerdict.__hash__
+
+    def _defaulted(lens, asset, scale_kind=B.HEIGHT_VS_TOLL_SCALE,
+                   era=B.HEIGHT_VS_TOLL_ERA, path=None, verdict_path=None,
+                   allow_provisional=False):
+        """A named wrong: a verdict INVENTED when [Q-R3] is not filed."""
+        return {"asset": asset, "lens": lens, "scale_kind": scale_kind,
+                "era": era, "height_atr_median": None,
+                "toll_atr_median": None, "ratio_median": None,
+                "n_ranges": 0, "verdict_pass": True,
+                "verdict_law": "(default)", "reason": "(default)",
+                "provisional": False, "provisional_reason": "",
+                "provisional_taken_by_name": False,
+                "sample_floor": {"n_ranges": 0, "min_n_ranges_pinned": 0,
+                                 "edge_n_ranges": 0,
+                                 "edge_min_n_ranges_pinned": 0,
+                                 "read_not_pinned_here": "(default)"},
+                "gate_law_sha": "(default)",
+                "as_of_last_closed_4h": ASOF, "source": "(default)",
+                "verdict_source": "(default)",
+                "cross_checked": list(B.HEIGHT_VS_TOLL_AGREE),
+                "read_not_computed": False}
+
+    def _shipped_asset(panel, override=None, why=None):
+        """A named wrong: THE SHIPPED DEFECT of round 2, finding 1 — the
+        verdict row's asset DEFAULTED to POOLED:CLASSIC5 for any book.  It is
+        `brk_row`'s old line, moved behind the new seam:
+            asset = str(verdict_asset) if verdict_asset else "POOLED:CLASSIC5"
+        R8 makes CLASSIC5 the BRK panel of record, so this looks right today
+        and is wrong for every other book — which is the whole finding."""
+        a = str(override) if override else "POOLED:CLASSIC5"
+        return {"asset": a, "panel_name": TP.panel_name(tuple(panel or ())),
+                "n_panel_assets": len(tuple(panel or ())),
+                "derived": a, "derived_how": "(defaulted)",
+                "override": str(override) if override else None,
+                "override_why": why, "source": "DERIVED FROM THE BOOK",
+                "law": "(defaulted)"}
+
+    def _shipped_required(what):
+        """A named wrong, half one of the round-2 finding-2 pair: the shared
+        cross-check columns NOT required of the VERDICT table, so a verdict
+        table lacking them passes every column check."""
+        if what == "VERDICT":
+            return (list(B.HEIGHT_VS_TOLL_VERDICT_KEY)
+                    + list(B.HEIGHT_VS_TOLL_VERDICT_FIELDS)
+                    + list(B.HEIGHT_VS_TOLL_PROVISIONAL_FIELDS)
+                    + [B.HEIGHT_VS_TOLL_ASOF_COL])
+        return (list(B.HEIGHT_VS_TOLL_KEY) + list(B.HEIGHT_VS_TOLL_FIELDS)
+                + [B.HEIGHT_VS_TOLL_ASOF_COL])
+
+    def _shipped_shared(r, v, p_, vp_, sel):
+        """A named wrong, half two of the pair: an ABSENT shared column
+        SKIPPED (`continue`) instead of HALTing, and `cross_checked` attested
+        from the CONSTANT instead of from what was compared."""
+        for f_ in B.HEIGHT_VS_TOLL_AGREE:
+            if f_ not in v.index:
+                continue
+            if B._num(r[f_]) != B._num(v[f_]):
+                raise SystemExit(f"HALT: disagree on {f_}")
+        return list(B.HEIGHT_VS_TOLL_AGREE)
+
+    def _no_floor(v, sel, vp_, allow):
+        """A named wrong: the census's PROVISIONAL flag ignored, so a row
+        resting under the filed sample floor rides a BRK row in silence."""
+        return False, ""
+
+    return prove(
+        "F-BRK-ROW",
+        "each BRK form's row carries the scored anchor, the OTHER anchor as "
+        "Tier-E, the lens, era, panel, the stamped toll, and a [Q-R3] verdict "
+        "slot that cannot be read before the census files it — the census "
+        "row it reads is DERIVED FROM THE BOOK'S PANEL and never defaulted, "
+        "a row under the census's sample floor HALTs or prints its flag, and "
+        "the declared [Q-R3] interface is the one the CENSUS ACTUALLY FILED",
+        "a row is assembled without a Book, the Tier-E block is not the OTHER "
+        "anchor, the toll on the row is not the one stamp_toll stamped, the "
+        "verdict slot is defaulted, readable or silently COMPARABLE while "
+        "[Q-R3] is unfiled, a malformed [Q-R3] pair yields a number instead "
+        "of a HALT, the two census tables disagree on a shared figure and are "
+        "read anyway, the declared [Q-R3] paths are not the filed ones while "
+        "another file in census/ carries the declared keys, the REAL filed "
+        "census numbers are not what this reader returns, a form is dropped "
+        "from brk_rows, two assemblies of one journal differ, THE VERDICT "
+        "ROW'S ASSET IS DEFAULTED RATHER THAN DERIVED FROM THE BOOK'S PANEL "
+        "(or a panel with no census counterpart yields one anyway, or an "
+        "unexplained override is taken), A VERDICT TABLE RE-FILED WITHOUT THE "
+        "SHARED FIGURES IS READ ANYWAY OR `cross_checked` ATTESTS MORE THAN "
+        "WAS COMPARED, or A PROVISIONAL CENSUS ROW REACHES A BRK ROW WITHOUT "
+        "a HALT or a printed flag",
+        [("the verdict row's ASSET defaulted to POOLED:CLASSIC5 for any "
+          "book (the shipped defect, round 2 finding 1)",
+          mutated(B, "verdict_asset_of", _shipped_asset, _row_checks)),
+         ("the two-table cross-check disarmed exactly as it shipped: the "
+          "shared figures NOT required of the VERDICT table AND an absent "
+          "one SKIPPED, with `cross_checked` attested from the constant "
+          "(round 2 finding 2)",
+          mutated2(B, [("_hvt_required", _shipped_required),
+                       ("_hvt_shared_or_halt", _shipped_shared)],
+                   _row_checks)),
+         ("the census's PROVISIONAL flag ignored, so a row under the filed "
+          "sample floor rides in silence",
+          mutated(B, "_hvt_provisional_or_halt", _no_floor, _row_checks)),
+         ("the height-vs-toll verdict DEFAULTED when [Q-R3] is absent",
+          mutated(B, "height_vs_toll", _defaulted, _row_checks)),
+         ("the empty verdict slot made readable (a blank, not a HALT)",
+          mutated(B, "PendingVerdict", _Readable, _row_checks)),
+         ("the empty verdict slot left COMPARABLE at object identity "
+          "(`pv == 'PASS'` answering False silently)",
+          mutated(B, "PendingVerdict", _IdentityEq, _row_checks)),
+         ("the [Q-R3] interface pointed back at the filename the census "
+          "never filed (the shipped defect)",
+          mutated(B, "HEIGHT_VS_TOLL_PATH",
+                  B.TP.OUT / "census" / "height_vs_toll.parquet",
+                  _row_checks)),
+         ("the two-table cross-check disarmed (no shared figure compared)",
+          mutated(B, "HEIGHT_VS_TOLL_AGREE", (), _row_checks)),
+         ("the OTHER anchor declared to be the SAME anchor",
+          mutated(B, "LANE_TIER_E_ANCHOR",
+                  {B.LANE_S1: B.ANCHOR_BAND, B.LANE_I1: B.ANCHOR_MEMORY},
+                  _row_checks))],
+        _row_checks)
 
 
 # ═══════════════════════════════════════════ THE LEANS + RULINGS, PRINTED [L*]
@@ -2428,8 +3716,9 @@ def f_leans() -> bool:
 
 
 LEGS = (f_brk_ride_4h, f_brk_hold_syn, f_c10_hold_harness, f_brk_tuned,
-        f_brk_perm, f_brk_fund, f_brk_era, f_brk_warm, f_brk_lane_syn,
-        f_brk_gate, f_brk_spine, f_c10_toll, f_brk_closure, f_det, f_leans)
+        f_brk_perm, f_brk_fund, f_brk_era, f_brk_lane_era, f_brk_warm,
+        f_brk_lane_syn, f_brk_gate, f_brk_spine, f_brk_row, f_c10_toll,
+        f_brk_closure, f_det, f_leans)
 
 
 def main() -> int:
@@ -2449,11 +3738,28 @@ def main() -> int:
     say(f"\nFIXTURE SUMMARY  {n}/{len(RESULTS)} PASS  {json.dumps(RESULTS)}")
     try:
         meta = _B["meta"] if _B else TP.corridor_n(TP.CLASSIC5)[2]
-        BRK_OUT.mkdir(parents=True, exist_ok=True)
-        name = "FIXTURES_BRK.txt" if not only else "FIXTURES_BRK_partial.txt"
-        (BRK_OUT / name).write_text(
-            f"as_of_last_closed_4h: {meta['last_closed_4h_close']}\n"
-            + "\n".join(T) + "\n")
+        body = (f"as_of_last_closed_4h: {meta['last_closed_4h_close']}\n"
+                + "\n".join(T) + "\n")
+        if only:
+            # ── THE LAW-2 MECHANISM, CLOSED (review, 2026-09-22) ───────────
+            # This line used to write FIXTURES_BRK_partial.txt straight into
+            # research_outputs/tierc10/brk/ on ANY filtered run — a KILL-
+            # PARTIAL filed beside the artifacts of record, which is the
+            # exact class R0 has quarantined three times.  The already-filed
+            # FIXTURES_BRK_partial.txt is NOT deleted (a filed artifact is
+            # never removed by an executor) and stays named in the
+            # manifest's `undeclared_artifacts_present`; what is closed here
+            # is the MECHANISM that recreates it.  A filtered run is a debug
+            # run: its transcript goes to the system temp directory and the
+            # path is printed.
+            p = Path(tempfile.gettempdir()) / "FIXTURES_BRK_partial.txt"
+            p.write_text(body)
+            print(f"FILTERED RUN ({only}) — transcript NOT filed into "
+                  f"{BRK_OUT} [LAW 2: a partial transcript is not a stage "
+                  f"record]. Written to {p} instead.")
+        else:
+            BRK_OUT.mkdir(parents=True, exist_ok=True)
+            (BRK_OUT / "FIXTURES_BRK.txt").write_text(body)
     except BaseException as e:                              # noqa: BLE001
         print(f"(transcript filing failed, non-fatal: {e})")
     if n != len(RESULTS):
