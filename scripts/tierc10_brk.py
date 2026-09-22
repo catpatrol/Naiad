@@ -295,11 +295,12 @@ ROW_ROUND_ND = 8                    # every filed float, census house rounding
 # median, verdict, n).  What exists is TWO tables under other column names —
 #   census/height_toll.parquet          360 rows, key (asset, lens,
 #                                       scale_kind, era), the FIGURES;
-#   census/height_toll_verdict.parquet  120 rows, key (asset, lens,
-#                                       scale_kind) — NO era — the VERDICT,
+#   census/height_toll_verdict.parquet  360 rows, key (asset, lens,
+#                                       scale_kind, era) — RE-FILED PER
+#                                       ERA on 2026-09-22 — the VERDICT,
 #                                       which is not a string but
-#                                       verdict_pass (bool) + verdict_law +
-#                                       reason.
+#                                       verdict_pass (bool) + verdict_law
+#                                       + reason, each NAMING its era.
 # The vocabulary (POOLED:ALL / POOLED:CLASSIC5 / POOLED:UNSEEN12, lens
 # {5m,4h,1d}, scale_kind {frozen3.0,calibrated}, era {ALL,tuning,holdout})
 # matched the guess exactly; only the names and the table split were wrong.
@@ -311,13 +312,25 @@ ROW_ROUND_ND = 8                    # every filed float, census house rounding
 HEIGHT_VS_TOLL_PATH = TP.OUT / "census" / "height_toll.parquet"
 HEIGHT_VS_TOLL_VERDICT_PATH = TP.OUT / "census" / "height_toll_verdict.parquet"
 HEIGHT_VS_TOLL_KEY = ("asset", "lens", "scale_kind", "era")
-HEIGHT_VS_TOLL_VERDICT_KEY = ("asset", "lens", "scale_kind")
+# RE-KEYED 2026-09-22 [review round 3, finding 1].  The census RE-FILED
+# the verdict PER ERA (360 rows), so the three-column key selected THREE
+# rows for one lens/asset/scale and `_hvt_one` HALTed on it — the
+# cross-track break landing exactly where it was aimed, instead of one of
+# the three rows being taken in silence.  The repair CONSUMES the era the
+# census now files; the guard is not loosened.
+HEIGHT_VS_TOLL_VERDICT_KEY = ("asset", "lens", "scale_kind", "era")
 HEIGHT_VS_TOLL_FIELDS = ("height_atr_median", "toll_atr_median",
                          "ratio_median", "n_ranges")
 HEIGHT_VS_TOLL_VERDICT_FIELDS = ("verdict_pass", "verdict_law", "reason")
-# the columns BOTH tables carry: the join is keyed differently on each side
-# (the verdict has no era), so the figures they share are the only thing that
-# can prove the two rows are about the SAME measurement.  They agree today.
+# the columns BOTH tables carry.  THE TWO SIDES ARE NOW KEYED THE SAME
+# (the census re-filed the verdict per era), so the key alone selects one
+# row on each side — but a key that MATCHES is not evidence the two rows
+# were MEASURED TOGETHER.  They are two files, written by two passes and
+# re-filable independently: one can move while the other does not, and a
+# stale verdict beside a fresh figure wears a matching key perfectly.  So
+# the figures they share stay the evidence, they cost one comparison, and
+# they agree today (5m POOLED:CLASSIC5 era ALL 13025 / 6.480873 /
+# 0.292654; era holdout 4584 / 6.528238 / 0.327680).
 HEIGHT_VS_TOLL_AGREE = ("n_ranges", "height_atr_median", "toll_atr_median")
 HEIGHT_VS_TOLL_INT_FIELDS = ("n_ranges",)
 # THE AS-OF WARRANTY, ENFORCED ACROSS THE TRACK BOUNDARY [LEAN-HEPHAESTUS H3].
@@ -327,16 +340,45 @@ HEIGHT_VS_TOLL_ASOF_COL = "as_of_last_closed_4h"
 HEIGHT_VS_TOLL_SCALE = "frozen3.0"  # the pin of record [L2]; `calibrated` is
 #                                     in-sample by construction and may not
 #                                     reach a scored lane's row
-HEIGHT_VS_TOLL_ERA = "ALL"          # the census's full-history row; the era
-#                                     column exists so a later reading can ask
-#                                     for 'holdout' without a schema change
+# ── THE ERA READ IS PER FORM [review round 3, finding 1] ─────────────────
+# There is NO module-wide era any more.  `HEIGHT_VS_TOLL_ERA = "ALL"` was
+# one constant BOTH forms silently took, which made P-BRK-S1 — the lane
+# LANE_ERA scores on the HOLDOUT — answer its gate question out of the
+# FULL-HISTORY row.  The era a form reads is the era it is SCORED on: the
+# lane vocabulary (LANE_ERA: full | tuning | holdout) mapped onto the
+# census's (ALL | tuning | holdout).  `height_vs_toll()` takes `era` as a
+# REQUIRED argument, so no caller can take an era it did not name.
+CENSUS_ERA_OF_LANE_ERA = {"full": "ALL", "tuning": "tuning",
+                          "holdout": "holdout"}
+if set(CENSUS_ERA_OF_LANE_ERA) != set(ERAS):
+    raise SystemExit(
+        f"HALT: CENSUS_ERA_OF_LANE_ERA maps "
+        f"{sorted(CENSUS_ERA_OF_LANE_ERA)}; the panel module publishes "
+        f"{list(ERAS)}. An era a lane can be declared on but this module "
+        f"cannot name to the census is an era whose verdict row would be "
+        f"guessed at.")
+HEIGHT_VS_TOLL_ERA_OF_LANE = {ln: CENSUS_ERA_OF_LANE_ERA[e]
+                              for ln, e in sorted(LANE_ERA.items())}
+HEIGHT_VS_TOLL_ERA_LAW = (
+    "THE ERA A FORM READS IS THE ERA IT IS SCORED ON. P-BRK-S1 is "
+    "declared on the HOLDOUT (LANE_ERA, [R1]: its band/margin/hold pins "
+    "were tuned on the tuning era), so its [Q-R3] row is the census's "
+    "era='holdout' row; P-BRK-I1 rides the full corridor and tunes "
+    "nothing, so its row is era='ALL'. The vocabularies differ by one "
+    "word and are translated in ONE place "
+    "(CENSUS_ERA_OF_LANE_ERA: full -> ALL), never typed at a call site. "
+    "Until 2026-09-22 a single module constant HEIGHT_VS_TOLL_ERA='ALL' "
+    "answered for both forms, so P-BRK-S1's gate question was answered "
+    "out of a window its own registration does not ride.")
 HEIGHT_VS_TOLL_OWNER = ("the CENSUS track, contract item [Q-R3] — 'HEIGHT-vs-"
                         "TOLL feasibility per lens (confirmed-range height / "
                         "round-trip toll, distribution)'")
 HEIGHT_VS_TOLL_STATUS = ("FILED by the census track on 2026-09-22T10:25, "
                          "RE-FILED 2026-09-22T11:26 with a `provisional` flag "
-                         "and a minimum-n floor, and READ here; this module "
-                         "computes none of it.")
+                         "and a minimum-n floor, RE-FILED AGAIN PER ERA "
+                         "(both tables 360 rows, the verdict now keyed on "
+                         "era too, era in {ALL, tuning, holdout}), and READ "
+                         "here; this module computes none of it.")
 # ── THE LAW HALF OF THE CROSS-CHECK [review round 2, finding 2] ────────────
 # HEIGHT_VS_TOLL_AGREE above is the NUMERIC half.  Both filed tables also
 # carry `gate_law_sha` — the sha of the gate law that produced the row — and
@@ -545,8 +587,11 @@ LEANS = (
     f"filed, or silently compared to a string.  The scale read "
     f"is {HEIGHT_VS_TOLL_SCALE!r} (the frozen pin of record [L2]; "
     f"'calibrated' is in-sample by construction and may not reach a scored "
-    f"lane's row) and the era read is {HEIGHT_VS_TOLL_ERA!r}.  WHICH ROW is "
-    f"read is DERIVED, see H4.",
+    f"lane's row) and the era read is PER FORM, never one constant: "
+    f"{dict(sorted(HEIGHT_VS_TOLL_ERA_OF_LANE.items()))} "
+    f"(FORM_OF: {dict(sorted(FORM_OF.items()))}), derived from LANE_ERA "
+    f"through CENSUS_ERA_OF_LANE_ERA.  WHICH ROW is read is DERIVED, see "
+    f"H4 for the asset and H6 for the era.",
     f"{LEAN_TAG} H4 THE VERDICT ROW'S ASSET IS DERIVED FROM THE BOOK, NEVER "
     f"DEFAULTED.  {VERDICT_ASSET_LAW}  The shipped defect it replaces: "
     f"`asset = str(verdict_asset) if verdict_asset else \"POOLED:CLASSIC5\"` "
@@ -558,24 +603,40 @@ LEANS = (
     f"makes that default LOOK right today and is exactly why it is derived "
     f"and not assumed: the Tier-E 17-asset row R8 also orders must never "
     f"silently wear CLASSIC5's verdict.",
-    f"{LEAN_TAG} H5 THE CENSUS'S SAMPLE FLOOR IS HONOURED ACROSS THE TRACK "
-    f"BOUNDARY, AND ITS NUMBER IS NOT COPIED.  [Q-R3] was re-filed with a "
-    f"`provisional` flag, an `edge_n_ranges` column and a minimum-n floor; "
-    f"the census's own reader refuses a flagged row to a caller that did not "
-    f"ask for it by name, and this module reads the PARQUET DIRECTLY, so it "
-    f"would have bypassed that refusal entirely.  height_vs_toll() now HALTs "
-    f"on a provisional row unless allow_provisional=True, and a row taken by "
-    f"name carries provisional / provisional_reason / sample_floor and PRINTS "
-    f"them in a starred block.  The floor itself is READ off the census row "
-    f"({list(HEIGHT_VS_TOLL_PROVISIONAL_FIELDS)}) and never re-pinned here — "
-    f"a second copy of another track's threshold is a threshold that can "
-    f"drift in silence.",
-    f"{LEAN_TAG} H1 THE [Q-R3] READ IS A TWO-TABLE JOIN, KEYED DIFFERENTLY "
-    f"ON EACH SIDE.  The census filed its FIGURES with an `era` column and "
-    f"its VERDICT without one, so the figures are selected on "
-    f"{list(HEIGHT_VS_TOLL_KEY)} and the verdict on "
-    f"{list(HEIGHT_VS_TOLL_VERDICT_KEY)}.  Nothing in that join proves the "
-    f"two rows are one measurement, so the columns BOTH tables carry "
+    f"{LEAN_TAG} H5 THE CENSUS'S PROVISIONAL FLAG IS REFUSED UNLESS ASKED "
+    f"FOR BY NAME, AND IT IS CHECKED AGAINST THE FLOOR IT QUOTES.  STATED "
+    f"NARROWLY, because the earlier wording ('THE SAMPLE FLOOR IS "
+    f"HONOURED') claimed more than the code did [review round 3, finding "
+    f"2]: only the BOOLEAN was honoured, so a row whose flag was cleared "
+    f"while n stayed under the floor rode a BRK row in silence — "
+    f"reproduced on the REAL filed tables (BTCUSDT 1d era ALL, n_ranges 11 "
+    f"and edge_n_ranges 11 against floors 30/30, provisional set False: no "
+    f"HALT, no flag, no starred print), with all four numbers already in "
+    f"_hvt_provisional_or_halt's hand.  WHAT THE CODE NOW ENFORCES, and "
+    f"nothing wider: (a) the flag must be an actual boolean and a True one "
+    f"must carry a reason; (b) the flag must AGREE with the row's own "
+    f"filed counts against its own filed floors — under = n_ranges < "
+    f"min_n_ranges_pinned or edge_n_ranges < edge_min_n_ranges_pinned — "
+    f"and a disagreement HALTs in EITHER direction, because a row that "
+    f"contradicts itself is unreadable whichever way it leans; (c) a "
+    f"flagged row HALTs unless allow_provisional=True, and taken by name "
+    f"it rides the row as provisional / provisional_reason / sample_floor "
+    f"and PRINTS in a starred block.  The floor is READ off the census row "
+    f"({list(HEIGHT_VS_TOLL_PROVISIONAL_FIELDS)}) and never re-pinned here "
+    f"— a second copy of another track's threshold can drift in silence.  "
+    f"WHAT IT DOES NOT DO: it does not recount ranges and does not re-"
+    f"judge the census's floor LAW, so a row whose counts AND flag are "
+    f"both wrong in the same direction is invisible here and visible only "
+    f"to [Q-R3].",
+    f"{LEAN_TAG} H1 THE [Q-R3] READ IS A TWO-TABLE JOIN, AND A MATCHING KEY "
+    f"IS NOT EVIDENCE OF ONE MEASUREMENT.  The census now files BOTH "
+    f"tables per era, so the figures are selected on "
+    f"{list(HEIGHT_VS_TOLL_KEY)} and the verdict on the SAME "
+    f"{list(HEIGHT_VS_TOLL_VERDICT_KEY)} (it was keyed without the era "
+    f"until 2026-09-22, and that re-filing is what took the read RED "
+    f"rather than wrong).  Two files written by two passes can be re-filed "
+    f"independently, so an equal key proves only that both rows answer to "
+    f"the same NAME; the columns BOTH tables carry "
     f"({list(HEIGHT_VS_TOLL_AGREE)}, plus the law half "
     f"{list(HEIGHT_VS_TOLL_AGREE_STR)}) are compared and any disagreement "
     f"HALTs.  AN ABSENT SHARED COLUMN IS ALSO A HALT, NOT A SKIP [review "
@@ -589,11 +650,28 @@ LEANS = (
     f"reason 'INVENTED', and the reader returned it.  TWO GUARDS NOW: the "
     f"shared columns are REQUIRED of the verdict side (_hvt_required), and "
     f"`cross_checked` is the list the comparison ACTUALLY built, so the "
-    f"attestation cannot outrun the check.  The alternative — asking the "
-    f"census for an era column on the verdict table, or for a single joined "
-    f"table — was NOT taken: it is another track's file, the cross-check is "
-    f"cheap and real, and the figures agree today (13025 / 6.480873 / "
-    f"0.292654 on both sides for 5m POOLED:CLASSIC5).",
+    f"attestation cannot outrun the check.  The cross-check was KEPT when "
+    f"the era arrived on the verdict table [review round 3, finding 1]: it "
+    f"costs one comparison, it still guards a real join between two "
+    f"independently re-filable files, and only its RATIONALE changed — the "
+    f"old one ('the verdict carries NO era, so the shared columns are the "
+    f"ONLY evidence') is now FALSE and a stale claim about another track's "
+    f"schema may not stand as a guard's reason.  The figures agree today: "
+    f"5m POOLED:CLASSIC5 era ALL 13025 / 6.480873 / 0.292654, era holdout "
+    f"4584 / 6.528238 / 0.327680, on both sides.",
+    f"{LEAN_TAG} H6 THE ERA READ IS PER FORM, DERIVED FROM LANE_ERA "
+    f"[review round 3, finding 1].  {HEIGHT_VS_TOLL_ERA_LAW}  Measured, so "
+    f"the change is not a surprise: 5m / frozen3.0 / POOLED:CLASSIC5 reads "
+    f"n_ranges 13025, height_atr_median 6.480873, toll_atr_median 0.292654, "
+    f"verdict FAIL on era ALL and n_ranges 4584, 6.528238, 0.327680, "
+    f"verdict FAIL on era holdout — P-BRK-S1's gate answer does not change "
+    f"SIGN, it becomes the answer to the RIGHT question, and provisional is "
+    f"False on both so nothing is taken by name.  The 1d panel row moves "
+    f"further: verdict_pass True / provisional False on ALL, verdict_pass "
+    f"False / provisional True on holdout (n_ranges 18, edge_n_ranges 21, "
+    f"floor 30) — a holdout read of it HALTs unless it is asked for by "
+    f"name.  height_vs_toll() takes `era` REQUIRED so that no call site can "
+    f"inherit an era nobody named.",
     f"{LEAN_TAG} H2 THE CENSUS'S VERDICT IS CARRIED AS THREE FIELDS, NOT "
     f"FLATTENED TO A STRING.  [Q-R3] files verdict_pass (bool) + verdict_law "
     f"+ reason, not the single verdict string the last round's interface "
@@ -2406,9 +2484,12 @@ def height_vs_toll_spec() -> dict:
         "two_tables_why": ("the census keys its FIGURES on "
                            + str(list(HEIGHT_VS_TOLL_KEY)) + " and its "
                            "VERDICT on " + str(list(HEIGHT_VS_TOLL_VERDICT_KEY))
-                           + " — the verdict table carries NO era column — so "
-                           "this is a two-table read keyed differently on each "
-                           "side, cross-checked on the figures both carry."),
+                           + " — the same key since the per-era re-filing of "
+                           "2026-09-22 — so this is a two-table read whose "
+                           "sides are two independently re-filable files: an "
+                           "equal key proves only a shared NAME, and the "
+                           "figures both tables carry are cross-checked to "
+                           "prove they are one measurement."),
         "key": list(HEIGHT_VS_TOLL_KEY),
         "verdict_key": list(HEIGHT_VS_TOLL_VERDICT_KEY),
         "required_fields": list(HEIGHT_VS_TOLL_FIELDS),
@@ -2418,19 +2499,35 @@ def height_vs_toll_spec() -> dict:
         "cross_checked_fields": list(HEIGHT_VS_TOLL_AGREE),
         "cross_checked_law_fields": list(HEIGHT_VS_TOLL_AGREE_STR),
         "cross_check_on_absence": (
-            "HALT. An absent shared column SEVERS the join between the "
-            "era-keyed figures row and the era-less verdict row, so it stops "
-            "the read; it used to be SKIPPED while `cross_checked` went on "
-            "attesting the constant. `cross_checked` on a returned row is "
-            "the list the comparison ACTUALLY built [review round 2, "
-            "finding 2]."),
+            "HALT. BOTH tables are keyed on "
+            "['asset','lens','scale_kind','era'] since the census filed the "
+            "verdict per era on 2026-09-22, so an equal key proves only that "
+            "the two rows answer to the same NAME. They are two files "
+            "written by two passes and re-filable independently, so the "
+            "figures they SHARE are REQUIRED of the verdict side and an "
+            "absent one stops the read; it used to be SKIPPED while "
+            "`cross_checked` went on attesting the constant. `cross_checked` "
+            "on a returned row is the list the comparison ACTUALLY built "
+            "[review round 2, finding 2; rationale corrected round 4]."),
         "as_of_column_required": HEIGHT_VS_TOLL_ASOF_COL,
         "as_of_required_value": as_of_of_record(),
         "asset_values": ("a PANEL symbol, or the census's pooled labels "
                          "POOLED:ALL / POOLED:CLASSIC5 / POOLED:UNSEEN12"),
         "lens_values": list(LENSES),
         "scale_kind_read": HEIGHT_VS_TOLL_SCALE,
-        "era_read": HEIGHT_VS_TOLL_ERA,
+        "era_read": {
+            "law": HEIGHT_VS_TOLL_ERA_LAW,
+            "per_form": {FORM_OF[ln]: e for ln, e in
+                         sorted(HEIGHT_VS_TOLL_ERA_OF_LANE.items())},
+            "per_lane": dict(sorted(HEIGHT_VS_TOLL_ERA_OF_LANE.items())),
+            "lane_era": dict(sorted(LANE_ERA.items())),
+            "lane_to_census_vocabulary": dict(
+                sorted(CENSUS_ERA_OF_LANE_ERA.items())),
+            "argument": ("REQUIRED on height_vs_toll(); there is no module "
+                         "default era, so no call site can inherit one"),
+            "was": ("ONE module constant 'ALL' for both forms until "
+                    "2026-09-22 [review round 3, finding 1]"),
+        },
         "asset_read": {
             "law": VERDICT_ASSET_LAW,
             "derived_by": ("tierc10_brk.verdict_asset_of("
@@ -2456,7 +2553,14 @@ def height_vs_toll_spec() -> dict:
             "taken by name it rides the row as provisional / "
             "provisional_reason / sample_floor and PRINTS. The floor itself "
             "is READ off the row (min_n_ranges_pinned, "
-            "edge_min_n_ranges_pinned) and is not re-pinned by this module."),
+            "edge_min_n_ranges_pinned) and is not re-pinned by this module. "
+            "THE FLAG IS ALSO HELD AGAINST THAT FLOOR [review round 3, "
+            "finding 2]: under = n_ranges < min_n_ranges_pinned or "
+            "edge_n_ranges < edge_min_n_ranges_pinned, and `under != "
+            "provisional` HALTs in EITHER direction, naming both counts, "
+            "both floors and the flag. Until 2026-09-22 only the boolean was "
+            "read, so a flag cleared while n stayed under the floor rode a "
+            "BRK row in silence."),
         "provisional_columns_required": list(
             HEIGHT_VS_TOLL_PROVISIONAL_FIELDS),
         "verdict_vocabulary": ("NOT PINNED HERE — the census's own three "
@@ -2567,16 +2671,27 @@ def _hvt_required(what: str) -> list:
 
 
 def _hvt_shared_or_halt(r, v, p: Path, vp: Path, sel: dict) -> list:
-    """THE ONLY EVIDENCE THE TWO ROWS ARE ONE MEASUREMENT [H1] — compared,
+    """THE EVIDENCE THE TWO ROWS ARE ONE MEASUREMENT [H1] — compared,
     never skipped, and the list it RETURNS is what was ACTUALLY compared.
 
-    The figures table is keyed with an `era` and the verdict table without
-    one, so nothing in the join proves the two rows describe the same
-    measurement except the columns they share.  An ABSENT shared column
-    SEVERS that join, so it HALTs; it used to `continue`, which turned the
-    cross-check into a no-op while `out['cross_checked']` went on attesting
-    all three fields from the constant.  The attestation can no longer
-    outrun the check, because the attestation IS the check's own output.
+    THE RATIONALE WAS REWRITTEN 2026-09-22 [review round 3, finding 1].
+    It used to read 'the verdict table carries NO era ... so the columns
+    BOTH tables carry are the ONLY evidence'.  The census then re-filed
+    the verdict PER ERA and that sentence became FALSE — and a stale claim
+    about another track's schema standing as a guard's reason is how a
+    guard gets deleted later by someone who checks the claim.  THE CHECK
+    STAYS, on a reason that is true now: the figures and the verdict are
+    TWO FILES, written by two passes of the census and re-filable
+    independently, so one can move while the other does not and a stale
+    verdict wears a matching key perfectly.  The shared figures (and
+    gate_law_sha) are what proves the pair is one measurement rather than
+    two rows answering to the same name, and they cost one comparison.
+
+    An ABSENT shared column SEVERS that evidence, so it HALTs; it used to
+    `continue`, which turned the cross-check into a no-op while
+    `out['cross_checked']` went on attesting all three fields from the
+    constant.  The attestation can no longer outrun the check, because the
+    attestation IS the check's own output.
     """
     shared = list(HEIGHT_VS_TOLL_AGREE) + list(HEIGHT_VS_TOLL_AGREE_STR)
     missing = [f_ for f_ in shared
@@ -2588,12 +2703,13 @@ def _hvt_shared_or_halt(r, v, p: Path, vp: Path, sel: dict) -> list:
             f"VERDICT row in {vp} for "
             f"{ {k: sel[k] for k in HEIGHT_VS_TOLL_KEY} }. The figures are "
             f"keyed on {list(HEIGHT_VS_TOLL_KEY)} and the verdict on "
-            f"{list(HEIGHT_VS_TOLL_VERDICT_KEY)} — the verdict table carries "
-            f"NO era — so the columns BOTH tables carry "
-            f"({shared}) are the ONLY evidence the two rows are one "
-            f"measurement. Their absence SEVERS the join, and a severed join "
-            f"read anyway is a verdict of unknown provenance riding a BRK "
-            f"row. This is a HALT and not a skip [review round 2, finding 2].")
+            f"{list(HEIGHT_VS_TOLL_VERDICT_KEY)}, but they are TWO FILES "
+            f"re-filable independently, so an equal key proves only that "
+            f"both rows answer to the same NAME — the columns BOTH tables "
+            f"carry ({shared}) are what proves they are one MEASUREMENT. "
+            f"Their absence SEVERS that evidence, and a severed join read "
+            f"anyway is a verdict of unknown provenance riding a BRK row. "
+            f"This is a HALT and not a skip [review round 2, finding 2].")
     compared, disagree = [], {}
     for f_ in HEIGHT_VS_TOLL_AGREE:
         a_, b_ = _num(r[f_]), _num(v[f_])
@@ -2610,15 +2726,18 @@ def _hvt_shared_or_halt(r, v, p: Path, vp: Path, sel: dict) -> list:
             f"HALT: the [Q-R3] FIGURES row in {p} and the VERDICT row in "
             f"{vp} disagree on {sorted(disagree)} "
             f"(figures vs verdict: {disagree}) for "
-            f"{ {k: sel[k] for k in HEIGHT_VS_TOLL_KEY} }. The verdict table "
-            f"carries no era, so the shared figures are the ONLY evidence "
-            f"the two rows are one measurement; without it a BRK row would "
-            f"carry an 'ALL'-era height beside some other era's verdict.")
+            f"{ {k: sel[k] for k in HEIGHT_VS_TOLL_KEY} }. Both tables are "
+            f"keyed on the era, so these two rows NAME the same measurement "
+            f"and disagree about it anyway: one of the two files is stale, "
+            f"or they were built by different passes. A BRK row would then "
+            f"carry one era's height beside another's verdict, which is the "
+            f"provenance failure this cross-check exists for.")
     return compared
 
 
 def _hvt_provisional_or_halt(v, sel: dict, vp: Path, allow: bool) -> tuple:
-    """A PROVISIONAL CENSUS ROW NEVER REACHES A BRK ROW QUIETLY.
+    """A PROVISIONAL CENSUS ROW NEVER REACHES A BRK ROW QUIETLY, AND THE
+    FLAG IS HELD AGAINST THE FLOOR IT QUOTES.
 
     The census re-filed [Q-R3] with a `provisional` flag and a minimum-n
     floor, and its own reader HALTs on such a row unless the caller asks for
@@ -2627,6 +2746,17 @@ def _hvt_provisional_or_halt(v, sel: dict, vp: Path, allow: bool) -> tuple:
     11, floor 30) read clean here before this guard existed.  The floor is
     READ OFF THE ROW (`min_n_ranges_pinned` / `edge_min_n_ranges_pinned`) and
     never re-pinned here — one law, one copy.
+
+    THE FLAG ALONE WAS NOT ENOUGH [review round 3, finding 2].  Until
+    2026-09-22 only the BOOLEAN was read, while all four numbers sat in
+    this function's hand: on the REAL filed tables, clearing `provisional`
+    on BTCUSDT 1d (era ALL) while n_ranges stayed 11 against a filed floor
+    of 30 returned verdict_pass=True with no HALT, no flag and no starred
+    print.  So the flag is now held against the row's OWN counts and its
+    OWN floors, and a DISAGREEMENT HALTs IN EITHER DIRECTION: a row that
+    contradicts itself is unreadable whichever way it leans, and this
+    module does not get to decide which half of another track's row to
+    believe.  Nothing is re-pinned: the floors are still the row's.
     """
     prov = v["provisional"]
     if not isinstance(prov, (bool, np.bool_)):
@@ -2637,6 +2767,41 @@ def _hvt_provisional_or_halt(v, sel: dict, vp: Path, allow: bool) -> tuple:
             f"not a boolean. A sample-floor flag read from a non-boolean is a "
             f"flag this module decided, not one the census filed.")
     prov = bool(prov)
+    # ── THE FLAG AGAINST THE FLOOR IT QUOTES [review round 3, finding 2] ─
+    try:
+        n_, fl_ = int(v["n_ranges"]), int(v["min_n_ranges_pinned"])
+        en_, ef_ = int(v["edge_n_ranges"]), int(v["edge_min_n_ranges_pinned"])
+    except (TypeError, ValueError) as e:
+        raise SystemExit(
+            f"HALT: the [Q-R3] VERDICT row for "
+            f"{ {k: sel[k] for k in HEIGHT_VS_TOLL_VERDICT_KEY} } in {vp} "
+            f"carries a sample-floor field that is not an integer "
+            f"(n_ranges={v['n_ranges']!r}, "
+            f"min_n_ranges_pinned={v['min_n_ranges_pinned']!r}, "
+            f"edge_n_ranges={v['edge_n_ranges']!r}, "
+            f"edge_min_n_ranges_pinned={v['edge_min_n_ranges_pinned']!r}): "
+            f"{e}. A floor that cannot be read is a floor that cannot be "
+            f"checked, and the flag is not taken on trust.") from e
+    under = (n_ < fl_) or (en_ < ef_)
+    if under != prov:
+        raise SystemExit(
+            f"HALT: the [Q-R3] VERDICT row for "
+            f"{ {k: sel[k] for k in HEIGHT_VS_TOLL_VERDICT_KEY} } in {vp} "
+            f"DISAGREES WITH ITS OWN FILED FLOOR: provisional={prov} while "
+            f"n_ranges {n_} against min_n_ranges_pinned {fl_} and "
+            f"edge_n_ranges {en_} against edge_min_n_ranges_pinned {ef_} "
+            f"say under_floor={under}. Both the counts and the floors are "
+            f"the CENSUS'S OWN, quoted off this row; this module re-pins "
+            f"nothing and recounts nothing. A row whose flag contradicts "
+            f"the floor it quotes is unreadable in EITHER direction — a "
+            f"cleared flag over a short sample would ride a BRK row in "
+            f"silence (reproduced on the filed tables: BTCUSDT 1d, "
+            f"n_ranges 11 and edge_n_ranges 11 against 30/30, flag cleared "
+            f"-> verdict_pass True, no HALT [review round 3, finding 2]), "
+            f"and a flag set over a sample that clears the floor would "
+            f"refuse a row the census did not refuse. [Q-R3] settles which "
+            f"half is wrong; this read stops."
+        )
     reason = str(v["provisional_reason"] if v["provisional_reason"] is not None
                  else "")
     if reason.strip().lower() in ("nan", "none"):
@@ -2715,9 +2880,8 @@ def _hvt_one(p: Path, key: tuple, fields: tuple, sel: dict, what: str):
     return r
 
 
-def height_vs_toll(lens: str, asset: str,
+def height_vs_toll(lens: str, asset: str, era: str,
                    scale_kind: str = HEIGHT_VS_TOLL_SCALE,
-                   era: str = HEIGHT_VS_TOLL_ERA,
                    path: Path | None = None,
                    verdict_path: Path | None = None,
                    allow_provisional: bool = False) -> dict:
@@ -2730,28 +2894,36 @@ def height_vs_toll(lens: str, asset: str,
     `reason` — are carried through VERBATIM; this module pins no vocabulary,
     because the vocabulary is [Q-R3]'s.
 
-    TWO TABLES, TWO KEYS, ONE CROSS-CHECK.  The FIGURES carry `era` and the
-    VERDICT does not, so the figures are keyed on (asset, lens, scale_kind,
-    era) and the verdict on (asset, lens, scale_kind) alone.  Nothing in that
-    join guarantees the two rows are about the same measurement, so the
-    columns BOTH tables carry (HEIGHT_VS_TOLL_AGREE, plus the law half
-    HEIGHT_VS_TOLL_AGREE_STR) are REQUIRED of the verdict table, are
-    compared, and a disagreement HALTs.  `cross_checked` is the list the
-    comparison actually built, never the constant, so the attestation cannot
-    outrun the check [review round 2, finding 2].  They agree today: 13025 /
-    6.480873 / 0.292654 on both sides for 5m POOLED:CLASSIC5.
+    TWO TABLES, ONE KEY, ONE CROSS-CHECK.  Since the census's per-era
+    re-filing of 2026-09-22 BOTH tables are keyed on (asset, lens,
+    scale_kind, era) [review round 3, finding 1].  An equal key still does
+    not prove the two rows are one measurement — they are two files, two
+    passes, re-filable independently — so the columns BOTH tables carry
+    (HEIGHT_VS_TOLL_AGREE, plus the law half HEIGHT_VS_TOLL_AGREE_STR) are
+    REQUIRED of the verdict table, are compared, and a disagreement HALTs.
+    `cross_checked` is the list the comparison actually built, never the
+    constant, so the attestation cannot outrun the check [review round 2,
+    finding 2].  They agree today for 5m POOLED:CLASSIC5: era 'ALL' 13025 /
+    6.480873 / 0.292654, era 'holdout' 4584 / 6.528238 / 0.327680.
+
+    `era` IS REQUIRED and has no default.  The era a form reads is the era
+    it is SCORED on (HEIGHT_VS_TOLL_ERA_LAW); a module-wide default is how
+    P-BRK-S1 came to answer its gate question out of the full-history row.
 
     THE SAMPLE FLOOR.  The census re-filed [Q-R3] with a `provisional` flag;
     a flagged row HALTs unless `allow_provisional=True`, and when taken
     knowingly it rides the returned dict as provisional / provisional_reason
-    and PRINTS on the row.
+    and PRINTS on the row.  The flag is also held AGAINST the floors the row
+    quotes, and a row whose flag contradicts its own counts HALTs in either
+    direction [review round 3, finding 2].
 
     HALTS IF: either table is absent; a declared key, field, shared
     cross-check column, sample-floor column or as-of column is missing;
     either key selects zero or more than one row; either row is stamped at
     another as-of; the two rows disagree on a shared figure or on
-    gate_law_sha; the row is provisional and was not asked for by name; or
-    the verdict fields are null/blank/non-boolean.
+    gate_law_sha; the row's provisional flag disagrees with the floor it
+    quotes; the row is provisional and was not asked for by name; or the
+    verdict fields are null/blank/non-boolean.
     """
     p = Path(path) if path is not None else HEIGHT_VS_TOLL_PATH
     vp = (Path(verdict_path) if verdict_path is not None
@@ -2991,13 +3163,19 @@ def brk_row(lane: str, scored: dict, tier_e: dict | None = None,
     va = verdict_asset_of(list(spec.get("panel") or []),
                           verdict_asset, verdict_asset_why)
     asset = va["asset"]
+    # THE ERA IS THE FORM'S OWN, NEVER A MODULE DEFAULT [review round 3,
+    # finding 1].  This call used to pass no era at all and take 'ALL',
+    # so P-BRK-S1 — scored on the HOLDOUT — read the full-history row.
+    hv_era = HEIGHT_VS_TOLL_ERA_OF_LANE[lane]
     if require_verdict:
-        hv = height_vs_toll(lens, asset, path=hvt_path,
+        hv = height_vs_toll(lens, asset, hv_era, path=hvt_path,
                             verdict_path=hvt_verdict_path,
                             allow_provisional=bool(allow_provisional))
     else:
+        # the PENDING slot names the era it WAITS FOR, or a reporter would
+        # say which verdict is missing and get the window wrong
         hv = PendingVerdict(lens, asset, HEIGHT_VS_TOLL_SCALE,
-                            HEIGHT_VS_TOLL_ERA,
+                            hv_era,
                             hvt_path or HEIGHT_VS_TOLL_PATH,
                             hvt_verdict_path or HEIGHT_VS_TOLL_VERDICT_PATH)
     row = {
@@ -3552,7 +3730,12 @@ def main(argv=None) -> int:
           f"compared; as-of column "
           f"{hv['as_of_column_required']!r} must read "
           f"{hv['as_of_required_value']!r}")
-    print(f"  scale {hv['scale_kind_read']!r} era {hv['era_read']!r}")
+    print(f"  scale {hv['scale_kind_read']!r}; the era read is PER FORM "
+          f"{hv['era_read']['per_form']} — derived from LANE_ERA "
+          f"{hv['era_read']['lane_era']} through "
+          f"{hv['era_read']['lane_to_census_vocabulary']}, and "
+          f"{hv['era_read']['argument']} (was: "
+          f"{hv['era_read']['was']})")
     print(f"  asset READ is DERIVED from the Book's panel, never defaulted: "
           f"{hv['asset_read']['panel_to_census_label']}, a one-asset panel "
           f"-> its own symbol, anything else HALTs "

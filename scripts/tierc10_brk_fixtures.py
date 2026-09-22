@@ -2753,6 +2753,16 @@ ROW_VERDICT_REASON = "SYN-FIXTURE-REASON"
 # the row the reader will actually ask for.
 ROW_ASSET = "BTCUSDT"
 ASOF = "2026-09-21T16:00:00Z"
+# THE ERA EACH FORM READS [review round 3, finding 1].  Read off the
+# module ONCE, at import, so a break leg that mutates the module's map
+# cannot also move the tables this fixture writes: the synthetic pair
+# stays keyed at the era P-BRK-S1 is SCORED on, and a module that asks
+# for another one selects zero rows and HALTs.
+ROW_ERA_S1 = B.HEIGHT_VS_TOLL_ERA_OF_LANE[B.LANE_S1]        # 'holdout'
+ROW_ERA_I1 = B.HEIGHT_VS_TOLL_ERA_OF_LANE[B.LANE_I1]        # 'ALL'
+SYN_ERA = ROW_ERA_S1        # every synthetic [Q-R3] pair below is the
+#                             S1 form's era, because the rows built on
+#                             them are S1 rows
 # the SHARED figures, written into BOTH synthetic tables so the cross-check
 # has something true to agree on
 SYN_FIG = {"n_ranges": 1234, "height_atr_median": 3.25,
@@ -2765,14 +2775,23 @@ SYN_FLOOR = {"provisional": False, "provisional_reason": "",
              "edge_min_n_ranges_pinned": 30}
 # WHAT THE CENSUS FILED FOR THE SPINE'S OWN BOOK, at both lenses.  The 1d row
 # is PROVISIONAL, which is why a BRK row on this book cannot take it quietly.
-REAL_BTC_5M = {"n_ranges": 2832, "height_atr_median": 6.33176614,
-               "toll_atr_median": 0.5042885, "ratio_median": 13.0844195,
-               "verdict_pass": False,
-               "reason": "height gate PASS + edge-fade leg FAIL"}
-REAL_BTC_1D_N = 11
+# THE HOLDOUT ROW, because P-BRK-S1 is SCORED on the holdout and now
+# READS it [review round 3, finding 1].  The era-ALL row for the same
+# cell is kept beside it: it is what the module returned for this form
+# before the repair, and the two are not the same measurement.
+REAL_BTC_5M = {"n_ranges": 993, "height_atr_median": 6.532468,
+               "toll_atr_median": 0.61686475,
+               "ratio_median": 11.25009808,
+               "verdict_pass": False, "era": ROW_ERA_S1,
+               "reason": ("era holdout: height gate PASS + edge-fade "
+                          "leg FAIL")}
+REAL_BTC_5M_ALL_N = 2832            # the era P-BRK-S1 used to be handed
+REAL_BTC_1D_N = 11                  # P-BRK-I1's era ('ALL'), PROVISIONAL
 REAL_BTC_1D_EDGE_N = 11
 REAL_BTC_1D_FLOOR = 30
-REAL_CLASSIC5_5M_N = 13025          # what the DEFAULT used to hand this book
+REAL_CLASSIC5_5M_N = 13025          # what the DEFAULT used to hand this
+#                                     book, at the era it also defaulted
+REAL_CLASSIC5_5M_HOLDOUT_N = 4584   # the same pool at S1's OWN era
 REAL_CLASSIC5_1D_N = 53
 
 # ── WHAT THE CENSUS TRACK ACTUALLY FILED, READ AND ASSERTED VERBATIM ────────
@@ -2782,31 +2801,48 @@ REAL_CLASSIC5_1D_N = 53
 # ran against a synthetic temp-root twin the fixture wrote itself in its own
 # declared schema.  These are the REAL filed numbers, and the leg below reads
 # them through the module's own reader.
+# KEYED ON THE ERA TOO since the census re-filed per era, and the three
+# rows below are the two ERAS of the same 5m cell plus the 1d one — so
+# this leg would go RED if the reader silently answered one era's
+# question out of another's row.  (1d / holdout is PROVISIONAL and is
+# read in its own leg, by name.)
 REAL_HVT = {
-    ("5m", "POOLED:CLASSIC5"): {
+    ("5m", "POOLED:CLASSIC5", "ALL"): {
         "n_ranges": 13025, "height_atr_median": 6.48087293,
         "toll_atr_median": 0.29265442, "ratio_median": 23.25581395,
-        "verdict_pass": False,
-        "reason": "height gate PASS + edge-fade leg FAIL"},
-    ("1d", "POOLED:CLASSIC5"): {
+        "verdict_pass": False, "provisional": False,
+        "reason": "era ALL: height gate PASS + edge-fade leg FAIL"},
+    ("5m", "POOLED:CLASSIC5", "holdout"): {
+        "n_ranges": 4584, "height_atr_median": 6.52823762,
+        "toll_atr_median": 0.32768035, "ratio_median": 20.67111284,
+        "verdict_pass": False, "provisional": False,
+        "reason": "era holdout: height gate PASS + edge-fade leg FAIL"},
+    ("1d", "POOLED:CLASSIC5", "ALL"): {
         "n_ranges": 53, "height_atr_median": 6.23716024,
         "toll_atr_median": 0.01718173, "ratio_median": 413.99176955,
-        "verdict_pass": True,
-        "reason": "height gate PASS + edge-fade leg PASS"},
+        "verdict_pass": True, "provisional": False,
+        "reason": "era ALL: height gate PASS + edge-fade leg PASS"},
 }
+# THE SAME PANEL, THE SAME LENS, THE OTHER ERA — filed PROVISIONAL, so a
+# holdout read of it HALTs unless it is asked for by name [handoff of the
+# census track, 2026-09-22].
+REAL_HVT_1D_HOLDOUT = {"n_ranges": 18, "edge_n_ranges": 21,
+                       "floor": 30, "verdict_pass": False}
 
 
 def _hvt_table(path: Path, lens: str = "5m", asset: str = ROW_ASSET,
                drop: str | None = None, dupe: bool = False,
-               asof: str = ASOF, drop_many: tuple = (), **fig) -> Path:
+               asof: str = ASOF, era: str = SYN_ERA,
+               drop_many: tuple = (), **fig) -> Path:
     """A SYNTHETIC [Q-R3] FIGURES table in the DECLARED schema, in a temp
     root — key (asset, lens, scale_kind, era), the census's own column
     names, the gate-law sha the cross-check compares, and the as-of stamp the
-    reader requires."""
+    reader requires.  The era defaults to SYN_ERA — the era P-BRK-S1 is
+    SCORED on — because the rows built on these tables are S1 rows."""
     import pandas as pd                                      # noqa: PLC0415
     row = {"asset": asset, "lens": lens,
            "scale_kind": B.HEIGHT_VS_TOLL_SCALE,
-           "era": B.HEIGHT_VS_TOLL_ERA,
+           "era": era,
            "ratio_median": 7.9148,
            B.HEIGHT_VS_TOLL_ASOF_COL: asof, **SYN_FIG, **SYN_SHA, **fig}
     for c in ((drop,) if drop else ()) + tuple(drop_many):
@@ -2820,14 +2856,17 @@ def _hvt_verdict(path: Path, lens: str = "5m", asset: str = ROW_ASSET,
                  asof: str = ASOF, verdict_pass=ROW_VERDICT_PASS,
                  verdict_law: str = ROW_VERDICT_LAW,
                  reason: str = ROW_VERDICT_REASON,
+                 era: str = SYN_ERA,
                  drop_many: tuple = (), **fig) -> Path:
-    """A SYNTHETIC [Q-R3] VERDICT table — key (asset, lens, scale_kind) with
-    NO era column, exactly as the census files it, carrying the three verdict
-    fields verbatim, the figures and the gate-law sha the cross-check
-    compares, and the sample-floor columns the round-2 repair requires."""
+    """A SYNTHETIC [Q-R3] VERDICT table — key (asset, lens, scale_kind,
+    era), exactly as the census files it SINCE THE PER-ERA RE-FILING of
+    2026-09-22 (it carried no era column before, and that is what took the
+    read RED), carrying the three verdict fields verbatim, the figures and
+    the gate-law sha the cross-check compares, and the sample-floor columns
+    the round-2 repair requires."""
     import pandas as pd                                      # noqa: PLC0415
     row = {"asset": asset, "lens": lens,
-           "scale_kind": B.HEIGHT_VS_TOLL_SCALE,
+           "scale_kind": B.HEIGHT_VS_TOLL_SCALE, "era": era,
            "verdict_pass": verdict_pass, "verdict_law": verdict_law,
            "reason": reason,
            B.HEIGHT_VS_TOLL_ASOF_COL: asof,
@@ -2882,6 +2921,59 @@ def _real_hvt_copy(d: Path, drop_many: tuple = (), flip: bool = False,
         v.loc[m, "reason"] = "INVENTED — this row is not the figures row"
     v.to_parquet(vp, index=False)
     return fp, vp
+
+
+def _hvt_floor_copy(d: Path, lens: str, asset: str, era: str,
+                    flag: bool, tag: str = "clear") -> tuple:
+    """THE ROUND-3 FINDING-2 REPRODUCTION, AS A FIXTURE INPUT.  The two
+    REAL filed census tables are COPIED into a temp dir (the filed ones are
+    never touched) and ONE row's `provisional` flag is set to `flag` while
+    EVERY FIGURE — n_ranges, the medians, the floors, gate_law_sha — is
+    left exactly as filed.  So the cross-check still passes, the as-of
+    still matches, and the ONLY thing that can catch the row is the flag-
+    against-floor check.  Clearing it on BTCUSDT 1d (n_ranges 11, floor 30)
+    returned verdict_pass=True with no HALT before the repair.
+    """
+    import pandas as pd                                      # noqa: PLC0415
+    f = pd.read_parquet(B.HEIGHT_VS_TOLL_PATH)
+    v = pd.read_parquet(B.HEIGHT_VS_TOLL_VERDICT_PATH)
+    fp, vp = d / f"floor_fig_{tag}.parquet", d / f"floor_ver_{tag}.parquet"
+    f.to_parquet(fp, index=False)
+    m = ((v["lens"] == lens) & (v["asset"] == asset) & (v["era"] == era)
+         & (v["scale_kind"] == B.HEIGHT_VS_TOLL_SCALE))
+    v.loc[m, "provisional"] = bool(flag)
+    v.loc[m, "provisional_reason"] = (
+        "a reason invented by the fixture" if flag else "")
+    if not flag:
+        v.loc[m, "verdict_pass"] = True
+        v.loc[m, "reason"] = ("UNEARNED — the flag was cleared, n stayed "
+                              "under the floor")
+    v.to_parquet(vp, index=False)
+    return fp, vp
+
+
+class _KeyedConst(dict):
+    """A mapping that answers ONE value for every lane — the module
+    constant, wearing the per-lane map's interface.  It is how the round-3
+    era defect is planted without changing the call site's shape.
+    """
+    def __init__(self, fn):
+        super().__init__()
+        self._fn = fn
+
+    def __getitem__(self, k):
+        return self._fn(k)
+
+    def items(self):
+        return [(ln, self._fn(ln)) for ln in sorted(B.LANE_ERA)]
+
+    def __eq__(self, other):
+        return dict(self.items()) == other
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    __hash__ = None
 
 
 def _orphan_scan() -> list:
@@ -3115,7 +3207,13 @@ def _row_checks() -> tuple:
         red = {k: _halts(v) for k, v in reads.items()}
         g = (isinstance(pv, B.PendingVerdict) and all(red.values())
              and (pv is None) is False          # identity is NOT a read
-             and pv.lens == "5m" and pv.asset == ROW_ASSET)
+             and pv.lens == "5m" and pv.asset == ROW_ASSET
+             # THE PENDING SLOT NAMES THE ERA IT WAITS FOR [round 3,
+             # finding 1]: it used to name the module constant 'ALL' for
+             # both forms, so a reporter reading it would have named the
+             # wrong window as the missing one.
+             and pv.era == ROW_ERA_S1
+             and r1["height_vs_toll"].era == ROW_ERA_I1)
         ok &= g
         lines.append(mark(g, f"and the slot itself CANNOT BE READ: every one "
                              f"of {sorted(red)} HALTs ({red}) — including "
@@ -3123,7 +3221,8 @@ def _row_checks() -> tuple:
                              f"— while `is None` stays False and the REQUEST "
                              f"stays legible (lens {pv.lens!r}, asset "
                              f"{pv.asset!r}, scale {pv.scale_kind!r}, era "
-                             f"{pv.era!r}, verdict table "
+                             f"{pv.era!r} — P-BRK-I1's pending slot names "
+                             f"{r1['height_vs_toll'].era!r}, verdict table "
                              f"{Path(pv.verdict_path).name}), so a reporter "
                              f"can say WHICH verdict is missing without "
                              f"tripping the guard"))
@@ -3137,7 +3236,7 @@ def _row_checks() -> tuple:
              and hv["reason"] == ROW_VERDICT_REASON
              and hv["lens"] == "5m" and hv["asset"] == ROW_ASSET
              and hv["scale_kind"] == B.HEIGHT_VS_TOLL_SCALE
-             and hv["era"] == B.HEIGHT_VS_TOLL_ERA
+             and hv["era"] == SYN_ERA == ROW_ERA_S1
              and hv["ratio_median"] == 7.9148
              and hv["n_ranges"] == 1234
              and hv["height_atr_median"] == SYN_FIG["height_atr_median"]
@@ -3172,9 +3271,10 @@ def _row_checks() -> tuple:
         # existed collected 22 green checks.  This leg reads what the CENSUS
         # TRACK actually filed, through the module's own reader, and asserts
         # its numbers.
-        for (lens_, asset_), want in sorted(REAL_HVT.items()):
-            got = B.height_vs_toll(lens_, asset_)
+        for (lens_, asset_, era_), want in sorted(REAL_HVT.items()):
+            got = B.height_vs_toll(lens_, asset_, era_)
             g = (all(got[k] == v for k, v in want.items())
+                 and got["era"] == era_
                  and got["source"] == str(B.HEIGHT_VS_TOLL_PATH)
                  and got["verdict_source"] == str(
                      B.HEIGHT_VS_TOLL_VERDICT_PATH)
@@ -3183,7 +3283,7 @@ def _row_checks() -> tuple:
             ok &= g
             lines.append(mark(g, f"the REAL filed [Q-R3] read, lens {lens_} / "
                                  f"{asset_} / {B.HEIGHT_VS_TOLL_SCALE} / "
-                                 f"era {B.HEIGHT_VS_TOLL_ERA}: n_ranges "
+                                 f"era {era_}: n_ranges "
                                  f"{got['n_ranges']}, height_atr_median "
                                  f"{got['height_atr_median']}, "
                                  f"toll_atr_median {got['toll_atr_median']}, "
@@ -3191,6 +3291,119 @@ def _row_checks() -> tuple:
                                  f"verdict_pass {got['verdict_pass']} "
                                  f"({got['reason']}) — expected "
                                  f"{ {k: want[k] for k in sorted(want)} }"))
+        # ── 8b-ii · THE ERA IS PER FORM, AND IT IS REQUIRED ───────────────
+        # [review round 3, finding 1]  There is no module-wide era left to
+        # inherit: the map is derived from LANE_ERA through the census's own
+        # vocabulary, and `height_vs_toll` takes the era with NO DEFAULT.
+        import inspect                                      # noqa: PLC0415
+        par = inspect.signature(B.height_vs_toll).parameters["era"]
+        g = (B.HEIGHT_VS_TOLL_ERA_OF_LANE
+             == {B.LANE_S1: "holdout", B.LANE_I1: "ALL"}
+             and B.CENSUS_ERA_OF_LANE_ERA
+             == {"full": "ALL", "tuning": "tuning", "holdout": "holdout"}
+             and set(B.CENSUS_ERA_OF_LANE_ERA) == set(TP.ERAS)
+             and all(B.HEIGHT_VS_TOLL_ERA_OF_LANE[ln]
+                     == B.CENSUS_ERA_OF_LANE_ERA[B.LANE_ERA[ln]]
+                     for ln in B.LANE_ERA)
+             and par.default is inspect.Parameter.empty
+             and not hasattr(B, "HEIGHT_VS_TOLL_ERA"))
+        ok &= g
+        era_by_form = {B.FORM_OF[ln]: e for ln, e in
+                       sorted(B.HEIGHT_VS_TOLL_ERA_OF_LANE.items())}
+        lines.append(mark(g, f"the era read is PER FORM and DERIVED: "
+                             f"{era_by_form} "
+                             f"out of LANE_ERA "
+                             f"{dict(sorted(B.LANE_ERA.items()))} through "
+                             f"{dict(sorted(B.CENSUS_ERA_OF_LANE_ERA.items()))}"
+                             f"; height_vs_toll's `era` has no default "
+                             f"(default={par.default!r}) and the module "
+                             f"constant HEIGHT_VS_TOLL_ERA is GONE "
+                             f"(present={hasattr(B, 'HEIGHT_VS_TOLL_ERA')})"))
+        # the SAME panel and lens at the OTHER era is a DIFFERENT row, and
+        # the one P-BRK-S1 used to be handed
+        a_, h_ = (B.height_vs_toll("5m", "POOLED:CLASSIC5", "ALL"),
+                  B.height_vs_toll("5m", "POOLED:CLASSIC5", "holdout"))
+        g = (a_["n_ranges"] == REAL_CLASSIC5_5M_N
+             and h_["n_ranges"] == REAL_CLASSIC5_5M_HOLDOUT_N
+             and a_["height_atr_median"] != h_["height_atr_median"]
+             and a_["toll_atr_median"] != h_["toll_atr_median"]
+             and a_["verdict_pass"] is h_["verdict_pass"] is False)
+        ok &= g
+        lines.append(mark(g, f"and the two eras of ONE cell are two "
+                             f"measurements: 5m POOLED:CLASSIC5 era ALL "
+                             f"n_ranges {a_['n_ranges']} / height "
+                             f"{a_['height_atr_median']} / toll "
+                             f"{a_['toll_atr_median']} vs era holdout "
+                             f"n_ranges {h_['n_ranges']} / height "
+                             f"{h_['height_atr_median']} / toll "
+                             f"{h_['toll_atr_median']} — both verdict_pass "
+                             f"False, so P-BRK-S1's gate answer does not "
+                             f"change SIGN; it becomes the answer to the "
+                             f"RIGHT question"))
+        # NO STALE SCHEMA CLAIM MAY RIDE THE DECLARED INTERFACE.  The card
+        # is serialised into BRK_MECHANICS.json and build_manifest.json and
+        # rides every assembled row as `height_vs_toll_interface`, so a
+        # sentence in it is FILED, not a comment.  Round 4 found
+        # `cross_check_on_absence` still calling the verdict row "era-less"
+        # two keys below a `verdict_key` that carries 'era' — the card
+        # contradicting itself inside one object.  A guard's stated reason
+        # must be true [H1].
+        def _strings(o):
+            if isinstance(o, str):
+                yield o
+            elif isinstance(o, dict):
+                for k, v in o.items():
+                    yield str(k)
+                    yield from _strings(v)
+            elif isinstance(o, (list, tuple, set)):
+                for v in o:
+                    yield from _strings(v)
+        spec = B.height_vs_toll_spec()
+        blob = " ".join(_strings(spec))
+        stale = [w for w in ("era-less", "era less", "carries NO era",
+                             "carries no era", "has no era", "lacks an era",
+                             "without an era") if w in blob]
+        g = (not stale
+             and "era" in [c.lower() for c in spec["verdict_key"]]
+             and "era" in [c.lower() for c in spec["key"]])
+        ok &= g
+        lines.append(mark(g, f"the DECLARED INTERFACE makes no stale claim "
+                             f"that the verdict table is era-less: "
+                             f"{len(list(_strings(spec)))} strings scanned, "
+                             f"stale phrases found {stale!r}; key "
+                             f"{spec['key']} and verdict_key "
+                             f"{spec['verdict_key']} BOTH carry 'era'"))
+
+        # the 1d panel row at S1's era is PROVISIONAL, and is refused by a
+        # caller that did not ask for it by name — the census's handoff
+        did, why = refused_long(
+            lambda: B.height_vs_toll("1d", "POOLED:CLASSIC5", "holdout"))
+        g = did and "PROVISIONAL" in why and str(
+            REAL_HVT_1D_HOLDOUT["n_ranges"]) in why
+        ok &= g
+        byname = B.height_vs_toll("1d", "POOLED:CLASSIC5", "holdout",
+                                  allow_provisional=True)
+        g2 = (byname["provisional"] is True
+              and byname["verdict_pass"] is False
+              and byname["sample_floor"]["n_ranges"]
+              == REAL_HVT_1D_HOLDOUT["n_ranges"]
+              and byname["sample_floor"]["edge_n_ranges"]
+              == REAL_HVT_1D_HOLDOUT["edge_n_ranges"]
+              and byname["provisional_reason"].strip() != "")
+        ok &= g2
+        lines.append(mark(g and g2, f"the SAME 1d panel cell is "
+                             f"verdict_pass TRUE / provisional False on "
+                             f"era ALL and verdict_pass "
+                             f"{byname['verdict_pass']} / provisional "
+                             f"{byname['provisional']} on era holdout "
+                             f"(n_ranges {byname['sample_floor']['n_ranges']}"
+                             f", edge_n_ranges "
+                             f"{byname['sample_floor']['edge_n_ranges']} "
+                             f"against floor "
+                             f"{byname['sample_floor']['min_n_ranges_pinned']}"
+                             f"), so the holdout read -> "
+                             f"{'HALT' if did else 'a number'} unless taken "
+                             f"by name: {why[:120]}"))
         # ── 8c · THE DECLARED PATHS ARE THE FILED PATHS, OR AN ORPHAN IS
         # ──      NAMED.  The guard that would have caught the dead interface
         # ──      the moment the census filed at 10:25: either the declared
@@ -3270,15 +3483,24 @@ def _row_checks() -> tuple:
         # ──      and the spine's real one-asset Book.
         r_real = B.brk_row(B.LANE_S1, s_sc, s_te)
         vaq, hvq = r_real["height_vs_toll_asset"], r_real["height_vs_toll"]
-        c5 = B.height_vs_toll("5m", "POOLED:CLASSIC5")
+        c5 = B.height_vs_toll("5m", "POOLED:CLASSIC5", "ALL")
+        c5h = B.height_vs_toll("5m", "POOLED:CLASSIC5", ROW_ERA_S1)
+        own_all = B.height_vs_toll("5m", SPINE_SYM, "ALL")
         g = (tuple(r_real) == B.ROW_FIELDS
              and r_real["panel"] == [SPINE_SYM]
              and vaq["asset"] == SPINE_SYM
              and vaq["source"] == "DERIVED FROM THE BOOK"
              and hvq["asset"] == SPINE_SYM
              and all(hvq[k] == v for k, v in REAL_BTC_5M.items())
+             # NEITHER the pool's row NOR its own row at the WRONG era
+             # [review round 3, finding 1]
+             and hvq["era"] == ROW_ERA_S1
              and c5["n_ranges"] == REAL_CLASSIC5_5M_N
-             and hvq["n_ranges"] != c5["n_ranges"]
+             and c5h["n_ranges"] == REAL_CLASSIC5_5M_HOLDOUT_N
+             and own_all["n_ranges"] == REAL_BTC_5M_ALL_N
+             and hvq["n_ranges"] not in (c5["n_ranges"],
+                                         c5h["n_ranges"],
+                                         own_all["n_ranges"])
              and hvq["provisional"] is False)
         ok &= g
         lines.append(mark(g, f"a row on the NON-CLASSIC5 book "
@@ -3288,11 +3510,16 @@ def _row_checks() -> tuple:
                              f"{hvq['height_atr_median']}, toll_atr_median "
                              f"{hvq['toll_atr_median']}, ratio_median "
                              f"{hvq['ratio_median']}, verdict_pass "
-                             f"{hvq['verdict_pass']} — and NOT "
-                             f"POOLED:CLASSIC5's {c5['n_ranges']} / "
-                             f"{c5['ratio_median']} / {c5['verdict_pass']}, "
-                             f"which is what the literal default handed it "
-                             f"before the repair"))
+                             f"{hvq['verdict_pass']}, AT ITS FORM'S OWN ERA "
+                             f"{hvq['era']!r} — and NOT POOLED:CLASSIC5's "
+                             f"{c5['n_ranges']} / {c5['ratio_median']} / "
+                             f"{c5['verdict_pass']}, which is what the "
+                             f"literal default handed it before round 2's "
+                             f"repair, and not its OWN era-ALL row "
+                             f"({own_all['n_ranges']} / "
+                             f"{own_all['ratio_median']}), which is what "
+                             f"the module constant handed it before round "
+                             f"3's"))
         bufa = io.StringIO()
         B.print_rows([r_real], out=bufa)
         ta = bufa.getvalue()
@@ -3321,6 +3548,7 @@ def _row_checks() -> tuple:
         hpv = r_prov["height_vs_toll"]
         g = (hpv["provisional"] is True
              and hpv["provisional_taken_by_name"] is True
+             and hpv["era"] == ROW_ERA_I1      # I1 rides the full corridor
              and "PROVISIONAL_MIN_N" in hpv["provisional_reason"]
              and hpv["sample_floor"]["n_ranges"] == REAL_BTC_1D_N
              and hpv["sample_floor"]["edge_n_ranges"] == REAL_BTC_1D_EDGE_N
@@ -3351,8 +3579,8 @@ def _row_checks() -> tuple:
             d_rv, drop_many=("n_ranges", "height_atr_median",
                              "toll_atr_median"), flip=True)
         did, why = refused_long(
-            lambda: B.height_vs_toll("5m", "POOLED:CLASSIC5", path=fpx,
-                                     verdict_path=vpx))
+            lambda: B.height_vs_toll("5m", "POOLED:CLASSIC5", "ALL",
+                                     path=fpx, verdict_path=vpx))
         g = (did and all(w in why for w in ("n_ranges", "height_atr_median",
                                             "toll_atr_median")))
         ok &= g
@@ -3380,6 +3608,73 @@ def _row_checks() -> tuple:
                              f"computes none. A verdict re-filed wrong WITH "
                              f"consistent figures and the same gate law is "
                              f"invisible here and visible only to [Q-R3]."))
+        # ── 8h · THE FLAG IS CHECKED AGAINST THE FLOOR IT QUOTES ──────────
+        # [review round 3, finding 2]  Until today only the BOOLEAN was
+        # read, so a flag CLEARED while n stayed under the filed floor rode
+        # a BRK row in silence.  This is the reviewer's own reproduction,
+        # on COPIES of the two REAL filed tables: BTCUSDT 1d era ALL,
+        # n_ranges 11 and edge_n_ranges 11 against floors 30 / 30, the flag
+        # cleared and verdict_pass flipped, EVERY FIGURE LEFT UNTOUCHED so
+        # the cross-check still passes and only the floor guard can see it.
+        d_fl = Path(td) / "floor_copy"
+        d_fl.mkdir()
+        fpf, vpf = _hvt_floor_copy(d_fl, lens="1d", asset=SPINE_SYM,
+                                   era="ALL", flag=False)
+        did, why = refused_long(
+            lambda: B.height_vs_toll("1d", SPINE_SYM, "ALL", path=fpf,
+                                     verdict_path=vpf))
+        g = (did and "DISAGREES WITH ITS OWN FILED FLOOR" in why
+             and all(str(x) in why for x in (REAL_BTC_1D_N,
+                                             REAL_BTC_1D_EDGE_N,
+                                             REAL_BTC_1D_FLOOR))
+             and "min_n_ranges_pinned" in why
+             and "edge_min_n_ranges_pinned" in why
+             and "provisional=False" in why)
+        ok &= g
+        verdict_word = ("HALT naming both counts, both floors and the flag"
+                        if did else
+                        "the row rode with verdict_pass True and no flag")
+        lines.append(mark(g, f"the census's flag CLEARED on {SPINE_SYM} 1d "
+                             f"while n_ranges stays {REAL_BTC_1D_N} and "
+                             f"edge_n_ranges {REAL_BTC_1D_EDGE_N} against "
+                             f"floors {REAL_BTC_1D_FLOOR}/"
+                             f"{REAL_BTC_1D_FLOOR} (every FIGURE left "
+                             f"untouched, so the cross-check still passes) "
+                             f"-> {verdict_word}: {why[:210]}"))
+        # AND THE OTHER DIRECTION: a flag SET over a sample that clears the
+        # floor is equally unreadable — this module does not get to pick
+        # which half of another track's row to believe.
+        fpg, vpg = _hvt_floor_copy(d_fl, lens="5m", asset=SPINE_SYM,
+                                   era="ALL", flag=True, tag="set")
+        did2, why2 = refused_long(
+            lambda: B.height_vs_toll("5m", SPINE_SYM, "ALL", path=fpg,
+                                     verdict_path=vpg,
+                                     allow_provisional=True))
+        g = (did2 and "DISAGREES WITH ITS OWN FILED FLOOR" in why2
+             and "provisional=True" in why2
+             and str(REAL_BTC_5M_ALL_N) in why2)
+        ok &= g
+        lines.append(mark(g, f"and the flag SET on {SPINE_SYM} 5m era ALL, "
+                             f"whose n_ranges {REAL_BTC_5M_ALL_N} clears "
+                             f"the floor {REAL_BTC_1D_FLOOR}, even when "
+                             f"asked for BY NAME -> "
+                             f"{'HALT' if did2 else 'accepted'}: "
+                             f"{why2[:170]}"))
+        # and the UNTOUCHED filed pair still reads clean, so the guard is
+        # not refusing what the census actually filed
+        clean = B.height_vs_toll("1d", SPINE_SYM, "ALL",
+                                 allow_provisional=True)
+        g = (clean["provisional"] is True
+             and clean["sample_floor"]["n_ranges"] == REAL_BTC_1D_N)
+        ok &= g
+        lines.append(mark(g, f"while the UNMODIFIED filed pair still reads: "
+                             f"provisional {clean['provisional']}, "
+                             f"n_ranges "
+                             f"{clean['sample_floor']['n_ranges']} against "
+                             f"floor "
+                             f"{clean['sample_floor']['min_n_ranges_pinned']}"
+                             f" — the guard refuses a CONTRADICTION, not a "
+                             f"short sample"))
         # ── 9 · every way those tables can be wrong is a HALT, not a default ─
         for k_, (name, mk, word) in enumerate((
                 ("a missing declared FIGURES column",
@@ -3474,18 +3769,46 @@ def _row_checks() -> tuple:
                             _hvt_verdict(d / "v.parquet",
                                          drop="edge_n_ranges")),
                  "missing the declared column(s)"),
+                # THE PROVISIONAL CASES ARE COHERENT ROWS [review round 3,
+                # finding 2].  They used to carry provisional=True beside
+                # n_ranges 1234 against a floor of 30 — a row that
+                # contradicts itself, which the floor check now refuses
+                # BEFORE any of these guards can be reached.  A fixture that
+                # feeds an impossible row proves nothing about the guard it
+                # names, so the sample is put under the floor it quotes.
                 ("a PROVISIONAL verdict row not asked for by name",
-                 lambda d: (_hvt_table(d / "f.parquet"),
+                 lambda d: (_hvt_table(d / "f.parquet", n_ranges=5),
                             _hvt_verdict(d / "v.parquet", provisional=True,
+                                         n_ranges=5, edge_n_ranges=4,
                                          provisional_reason=(
                                              "n_ranges 5 < "
                                              "PROVISIONAL_MIN_N (30)"))),
                  "PROVISIONAL"),
                 ("a provisional flag with NO reason behind it",
-                 lambda d: (_hvt_table(d / "f.parquet"),
+                 lambda d: (_hvt_table(d / "f.parquet", n_ranges=5),
                             _hvt_verdict(d / "v.parquet", provisional=True,
+                                         n_ranges=5, edge_n_ranges=4,
                                          provisional_reason="   ")),
                  "no provisional_reason"),
+                # ── THE ROUND-3 FINDING-2 PAIR, on the synthetic tables:
+                # ── the flag CLEARED under the row's own floor, and the flag
+                # ── SET over a sample that clears it.  Both unreadable.
+                ("the provisional flag CLEARED while the row's own counts "
+                 "rest under the floor the row itself quotes",
+                 lambda d: (_hvt_table(d / "f.parquet", n_ranges=5),
+                            _hvt_verdict(d / "v.parquet", provisional=False,
+                                         n_ranges=5, edge_n_ranges=4,
+                                         verdict_pass=True,
+                                         provisional_reason="")),
+                 "DISAGREES WITH ITS OWN FILED FLOOR"),
+                ("the provisional flag SET over a sample that CLEARS the "
+                 "floor the row quotes",
+                 lambda d: (_hvt_table(d / "f.parquet"),
+                            _hvt_verdict(d / "v.parquet", provisional=True,
+                                         provisional_reason=(
+                                             "a reason with no floor "
+                                             "behind it"))),
+                 "DISAGREES WITH ITS OWN FILED FLOOR"),
                 ("a non-boolean provisional flag",
                  lambda d: (_hvt_table(d / "f.parquet"),
                             _hvt_verdict(d / "v.parquet",
@@ -3500,7 +3823,7 @@ def _row_checks() -> tuple:
             fq, vq = mk(d_)
             did, why = refused_long(
                 lambda _f=fq, _v=vq: B.height_vs_toll("5m", ROW_ASSET,
-                                                      path=_f,
+                                                      SYN_ERA, path=_f,
                                                       verdict_path=_v))
             g = did and word in why
             ok &= g
@@ -3562,7 +3885,9 @@ def f_brk_row() -> bool:
         blank a later reader fills in from memory."""
         def __init__(self, *a, **k):
             self.lens, self.asset = "5m", ROW_ASSET
-            self.scale_kind, self.era, self.path = "frozen3.0", "ALL", ""
+            self.scale_kind, self.path = "frozen3.0", ""
+            self.era = ROW_ERA_S1   # the RIGHT era, so this leg goes RED
+            #                         on READABILITY and nothing else
             self.verdict_path = ""      # so this leg goes RED on READABILITY
             self.verdict = "UNKNOWN"    # and not on a missing attribute
 
@@ -3577,8 +3902,8 @@ def f_brk_row() -> bool:
         __ne__ = object.__ne__
         __hash__ = B.PendingVerdict.__hash__
 
-    def _defaulted(lens, asset, scale_kind=B.HEIGHT_VS_TOLL_SCALE,
-                   era=B.HEIGHT_VS_TOLL_ERA, path=None, verdict_path=None,
+    def _defaulted(lens, asset, era, scale_kind=B.HEIGHT_VS_TOLL_SCALE,
+                   path=None, verdict_path=None,
                    allow_provisional=False):
         """A named wrong: a verdict INVENTED when [Q-R3] is not filed."""
         return {"asset": asset, "lens": lens, "scale_kind": scale_kind,
@@ -3641,6 +3966,63 @@ def f_brk_row() -> bool:
         resting under the filed sample floor rides a BRK row in silence."""
         return False, ""
 
+    def _flag_trusted(v, sel, vp_, allow):
+        """A named wrong, and the one that SHIPPED [review round 3, finding
+        2]: the census's provisional flag READ AND OBEYED, but never checked
+        against the floor the same row quotes.  Every number
+        `_hvt_provisional_or_halt` needs is in hand here and none is
+        compared, so a flag cleared over a short sample passes.  This is the
+        real function with exactly the floor-vs-flag clause removed — not a
+        weaker guard, the PREVIOUS guard."""
+        prov = v["provisional"]
+        if not isinstance(prov, (bool, np.bool_)):
+            raise SystemExit("HALT: provisional is not a boolean.")
+        prov = bool(prov)
+        reason = str(v["provisional_reason"]
+                     if v["provisional_reason"] is not None else "")
+        if reason.strip().lower() in ("nan", "none"):
+            reason = ""
+        if prov and not reason.strip():
+            raise SystemExit("HALT: flagged provisional with no "
+                             "provisional_reason.")
+        if prov and not allow:
+            key_ = {k: sel[k] for k in B.HEIGHT_VS_TOLL_VERDICT_KEY}
+            raise SystemExit(f"HALT: the [Q-R3] VERDICT row for "
+                             f"{key_} in {vp_} is "
+                             f"PROVISIONAL — {reason}. n_ranges "
+                             f"{int(v['n_ranges'])} against the filed floor "
+                             f"min_n_ranges_pinned "
+                             f"{int(v['min_n_ranges_pinned'])}; "
+                             f"edge_n_ranges {int(v['edge_n_ranges'])} "
+                             f"against edge_min_n_ranges_pinned "
+                             f"{int(v['edge_min_n_ranges_pinned'])}. Pass "
+                             f"allow_provisional=True to take it.")
+        return prov, reason
+
+    def _era_one_constant(lane_):
+        """A named wrong, and the one that SHIPPED [review round 3, finding
+        1]: ONE era for both forms — the module constant 'ALL' — so
+        P-BRK-S1, which LANE_ERA scores on the holdout, answers its gate
+        question out of the full-history row."""
+        return "ALL"
+
+    def _stale_spec():
+        """A named wrong, and the one that SHIPPED [review round 4]: the
+        DECLARED INTERFACE still calling the verdict row "era-less", two
+        keys below a `verdict_key` that carries 'era'.  The guard's
+        BEHAVIOUR was right; its stated REASON was a claim about another
+        track's schema that the census had already changed — and because the
+        card is serialised into BRK_MECHANICS.json and build_manifest.json
+        and rides every assembled row, that claim was FILED, not commented."""
+        d = dict(_TRUE_SPEC())
+        d["cross_check_on_absence"] = (
+            "HALT. An absent shared column SEVERS the join between the "
+            "era-keyed figures row and the era-less verdict row, so it "
+            "stops the read.")
+        return d
+
+    _TRUE_SPEC = B.height_vs_toll_spec
+
     return prove(
         "F-BRK-ROW",
         "each BRK form's row carries the scored anchor, the OTHER anchor as "
@@ -3664,7 +4046,23 @@ def f_brk_row() -> bool:
         "SHARED FIGURES IS READ ANYWAY OR `cross_checked` ATTESTS MORE THAN "
         "WAS COMPARED, or A PROVISIONAL CENSUS ROW REACHES A BRK ROW WITHOUT "
         "a HALT or a printed flag",
-        [("the verdict row's ASSET defaulted to POOLED:CLASSIC5 for any "
+        [("the verdict row's ERA taken from ONE module constant 'ALL' for "
+          "both forms, so P-BRK-S1 — scored on the HOLDOUT — answers out "
+          "of the full-history row (the shipped defect, round 3 finding 1)",
+          mutated(B, "HEIGHT_VS_TOLL_ERA_OF_LANE",
+                  _KeyedConst(_era_one_constant), _row_checks)),
+         ("the DECLARED INTERFACE re-asserting that the verdict table is "
+          "era-less, two keys below a verdict_key that carries 'era' — a "
+          "stale claim about another track's schema standing as a guard's "
+          "reason, FILED into BRK_MECHANICS.json and riding every row "
+          "(the shipped defect, round 4)",
+          mutated(B, "height_vs_toll_spec", _stale_spec, _row_checks)),
+         ("the census's provisional flag TRUSTED without checking it "
+          "against the floor it quotes — the flag obeyed, the four numbers "
+          "beside it never compared (the shipped defect, round 3 finding 2)",
+          mutated(B, "_hvt_provisional_or_halt", _flag_trusted,
+                  _row_checks)),
+         ("the verdict row's ASSET defaulted to POOLED:CLASSIC5 for any "
           "book (the shipped defect, round 2 finding 1)",
           mutated(B, "verdict_asset_of", _shipped_asset, _row_checks)),
          ("the two-table cross-check disarmed exactly as it shipped: the "
