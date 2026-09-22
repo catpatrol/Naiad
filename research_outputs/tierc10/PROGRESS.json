@@ -7,14 +7,14 @@
     "sha256": "8a0bf279bcab0f27161a7d965535445807f4e713e77d045b0ba124bc7f803c7a"
   },
   "f_c10_resume_law": "F-C10-RESUME hashes the FILED ARTIFACT content shas recorded here \u2014 never a fixture transcript. Stage D's suite reaches the venue by design and the bulk archive backfills (F-D-1b's census moved {both:215,rest:28} -> {both:223,rest:20} overnight), so a transcript-level re-hash of Stage D is impossible by construction. [EXECUTOR READING \u2014 put to the operator]",
-  "head": "80ecca522922abcc9967f6ed87a32591174bf584",
+  "head": "6b15def66f73e3fcd05b6dc5a0516fcd2ac1d1c7",
   "identity": "v2",
   "last_sweep_utc": "2026-09-22T14:40:00Z",
   "law_1_note": "a stage is COMPLETE only if artifacts exist, manifest shas verify, and its fixtures RE-PASS now. Every status below was established by re-running the suite on 2026-09-22, not by reading a filed transcript.",
   "live_cache_touched": false,
   "operator_rulings": {
     "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
-    "sha256": "a0a08f8761ce9eab678d42d609d7e6563e749c07a6c33b7b17f9a5c4f31ca907"
+    "sha256": "70188a0cc32422be40e74d8e7adf7d444aa610bb3abf0384b4f4a2f66f57bbec"
   },
   "r0_census_utc": "2026-09-22T09:55:00Z",
   "resume_point": "STAGE B \u2014 draft, review and FILE the six registration texts; then B-CORE, B-5M, CLOSE",
@@ -34,14 +34,25 @@
         {
           "exit_code": 0,
           "legs_red": 0,
-          "legs_total": 3,
-          "re_run_utc": "2026-09-22T14:40:00Z",
-          "suite": "tierc10_rf_fixtures",
-          "transcript_drift": false
+          "legs_total": 7,
+          "suite": "TIER-C10 STAGE 0a \u00b7 RANGEFINDER CENSUS PORT FIXTURES (run 1)",
+          "transcript_drift": false,
+          "transcript_sha_after": "c6d10b8e40019a8530c0d27ad50f3137c62ac25b42955494ec72441f40bcf85c",
+          "transcript_sha_before": "c6d10b8e40019a8530c0d27ad50f3137c62ac25b42955494ec72441f40bcf85c",
+          "wall_seconds": 17
+        },
+        {
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": 7,
+          "suite": "TIER-C10 STAGE 0a \u00b7 RANGEFINDER CENSUS PORT FIXTURES (run 2, exit-code + reproducibility confirmation)",
+          "transcript_drift": false,
+          "transcript_sha_after": "c6d10b8e40019a8530c0d27ad50f3137c62ac25b42955494ec72441f40bcf85c",
+          "transcript_sha_before": "c6d10b8e40019a8530c0d27ad50f3137c62ac25b42955494ec72441f40bcf85c",
+          "wall_seconds": null
         }
       ],
-      "one_line": "pins reconcile 12/12 Pine v2 == twin/engine == port; STEP0_RECORD.json now files the pins, the shas and the [Q-R5] attestation, so LAW 1(b) has a record",
-      "r0_status_2026_09_22_census": "COMPLETE-VERIFIED",
+      "one_line": "STEP 0 COMPLETE-VERIFIED \u2014 pins reconcile PINS-OK 12/12 (Pine v2 \u2261 twin/engine \u2261 analytics port, key order included: TOUCH_EPS 0.60 / DEV_RETURN_BARS 7 / BREAK_CONFIRM_N 8 / SCALE_MULT 3.0 / ATR_LEN 14); scripts/tierc10_rf_fixtures.py re-ran NOW exit 0, 7/7 GREEN, zero red legs; transcript FIXTURES_RF.txt byte-reproducible (c6d10b8e\u2026 before == after == after a 2nd run, no drift); Q-R5 attestation HOLDS (no RangeFinder constant inherited from the SS Breakout Scanner, whose source is not in this repo at all); the Argus note's 0.67 / DEV_RETURN 8 has NO on-disk source anywhere \u2014 the only 0.67 in the lane is the fixture's own deliberate sabotage plant.",
       "stage": "STEP 0",
       "status": "COMPLETE-VERIFIED"
     },
@@ -111,22 +122,49 @@
       },
       "as_of": "2026-09-21T16:00:00Z",
       "blockers": [
-        "F-D-1 stays RED in the ONLINE suite and is PRINTED RED: the venue's REST API and its BULK ARCHIVE publish different bars on incident stamps. Operator ruling R5 ('The USDT pair, either on Binance or Bybit') names the pair and permits the venue but does NOT distinguish the two publications, which is the actual disagreement. OPERATOR ACTION: REST or ARCHIVE. No bar is rewritten either way without that word.",
-        "STANDING DISCLOSURE, not a defect: F-D-1b's venue census DRIFTS overnight because the bulk archive backfills \u2014 measured {both:215,rest:28} -> {both:223,rest:20}. A transcript-level re-hash of Stage D is impossible by construction; F-C10-RESUME therefore hashes FILED ARTIFACTS, never fixture transcripts.",
-        "CARRIED AS-OF HAZARD, disclosed by the manifest itself: 14 of 102 kline files hold 6 rows past the pin. The law holds at the LOADER; it is false at file level."
+        "RESUME CLAUSE F-D-4 (TWO-TOKEN TRAP) \u2014 no artifact, no fixture leg. LEGS[] in scripts/tierc10_data_fixtures.py has no F-D-4 entry. STAGE_D_MANIFEST.json/.md contain zero occurrences of 'two-token', 'first_valid', 'hard_floor', 'hard-floor', 'continuity', 'price_continuity', 'predates', 'intended'. Verdict PARTIAL-in-substance / ABSENT-as-artifact: listing date + source ARE printed per file row (137 'listing' occurrences; every kline row carries listing + source + publication) and PUMPBTCUSDT IS rejected by name in venue_rejections with LEAN D-d, but the hard-floor check, the price-continuity-at-the-floor check and the F-D-4 table itself do not exist. The contract demands it (resume paste line 135: 'Stage D manifest incl. the F-D-4 / F-D-5 tables'); research_outputs/tierc10/BUILD_DRAFT.md:86 carries only the placeholder '*Including the F-D-4 two-token-trap table and the F-D-5 data-spend audit.*'",
+        "RESUME CLAUSE F-D-5 (DATA-SPEND AUDIT) \u2014 ABSENT outright. No fixture leg in LEGS[]. Zero occurrences of 'never-touched', 'display-only', 'data-spend', 'spend' in STAGE_D_MANIFEST.json and .md. Nothing under research_outputs/tierc10/ carries the classification except the BUILD_DRAFT.md placeholder line. No {never-touched / display-only / scored} table exists per asset for the 17, so PUMPFUN and HYPE are neither read nor assumed \u2014 they are simply unclassified.",
+        "RESUME CLAUSE COSTS HAIRCUT TWIN (tiered slippage per side, A/B/C = 2/5/10 bps) \u2014 ABSENT from Stage D. fee_schedule.json carries zero occurrences of 'slip', 'Slip', 'SLIP', 'haircut', 'Haircut', 'multiplier'; its per-asset key set is exactly ['asset','funding_interval_hours_observed_modal','funding_interval_hours_observed_tail','funding_spacing_hours_histogram','kind','round_trip_bps_used','source','stem','symbol','taker_bps_side_used','venue','venue_note'] with a FLAT taker_bps_side_used=5.0 and round_trip_bps_used=10.0 for all 17 assets and no slippage column at all. The tier concept exists elsewhere in the estate but for a DIFFERENT roster: Naiad_Phase0_Charter.md:114 reads 'tier A (BTC, ETH) 2 bps \u00b7 tier B (SOL, NEAR, ZEC, JTO, TAO) 5 bps \u00b7 tier C (HYPE, FARTCOIN, LIT) 10 bps' and scripts/v3_scorer.py:309 repeats '2/5/10 bps' as a modeled-note string. The resume paste's TC10 assignment (tier B += LTC BNB DOGE UNI SUI XMR; tier C = ENA PUMPFUN HYPE MNT PEPE BONK) appears nowhere on disk outside the contract text itself.",
+        "RESUME CLAUSE CONTRACT MULTIPLIERS (1000PEPE, 1000BONK) printed and normalized \u2014 ABSENT. Zero occurrences of 'multiplier', 'contractSize', 'contract_size', 'quantity_multiplier', 'notional', 'per_unit' in STAGE_D_MANIFEST.json; zero of 'multiplier'/'normali' in STAGE_D_MANIFEST.md; zero of 'multiplier'/'contractSize'/'quantityPrecision'/'filters' in VENUE_PROBE.json (the probe never captured the field). The manifest prints the symbols (venues rows: asset PEPE -> symbol 1000PEPEUSDT; asset BONK -> symbol 1000BONKUSDT) and their prices, but never states that the contract is per 1000 tokens and never normalizes. Any downstream cross-asset price or height comparison will be off by 1000x for these two.",
+        "F-D-1 STAYS RED pending an operator ruling that does not yet exist. Re-run NOW it is RED (exit 1). Operator ruling R5 of 2026-09-21 ('The USDT pair, either on Binance or Bybit', recovered verbatim in research_outputs/tierc10/OPERATOR_RULINGS.md) does not distinguish the venue's REST API from its BULK ARCHIVE, which is the actual disagreement. This is the designed red, not a break \u2014 but it is an open operator dependency on the stage.",
+        "CARRIED AS-OF HAZARD: 14 of the 102 kline files hold rows past the pin \u2014 every 5m file except PUMPUSDT, MNTUSDT_BYBIT and SUIUSDT, 6 rows each (opens 16:00, 16:05, 16:10, 16:15, 16:20, 16:25Z). Item 3's literal law ('no kline file holds a row after 1790006400000') is FALSE at file level. It holds at loader level. The manifest discloses this itself (as_of_hazards.kline_law, LEAN D-e) and warns that tierc2_baseline.load_klines reads the WHOLE file, so any TC10 lane loading through it instead of tierc10_data.load_asof reads past the pin. Not repairable in this stage (no deletion primitive, prefixes are never rewritten) but it is a live trap for Stage A and downstream.",
+        "TRANSCRIPT BYTE-REPRODUCIBILITY IS DISPROVEN, and could not be tested directly. FIXTURES_STAGE_D.txt is only rewritten by a FULL online run with no leg arguments; --offline writes FIXTURES_STAGE_D_OFFLINE.txt instead and a named-leg run writes nothing (main() guards on `if not want`). So my two runs left it byte-identical (69a22de8... before and after) without exercising the builders' claim. But F-D-1b's own census moved between the filed run and mine \u2014 {'archive-only': 74, 'both': 215, 'rest': 28, 'rest-only': 105} became {'archive-only': 74, 'both': 223, 'rest': 20, 'rest-only': 105} \u2014 so 8 bars the venue's bulk archive did not publish on 2026-09-21 it does publish on 2026-09-22. A full re-run's transcript CANNOT be byte-identical to the filed one, because the venue's archive backfills.",
+        "REPAIRED 2026-09-22: F-D-4, F-D-5, the tiered haircut twin and contract multipliers are built and filed; those four clauses no longer block. What remains is F-D-1's operator ruling: REST or ARCHIVE."
       ],
       "fixtures": [
         {
           "exit_code": 0,
           "legs_red": 0,
+          "legs_total": 15,
+          "suite": "TIER-C10 Stage D fixtures \u2014 OFFLINE mode (no venue API)",
+          "transcript_drift": false,
+          "transcript_sha_after": "69a22de8243d48214e3ae15f57ca121e34416be09bc965a806187b93dd950315",
+          "transcript_sha_before": "69a22de8243d48214e3ae15f57ca121e34416be09bc965a806187b93dd950315",
+          "wall_seconds": null
+        },
+        {
+          "exit_code": 1,
+          "legs_red": 1,
+          "legs_total": 2,
+          "suite": "TIER-C10 Stage D fixtures \u2014 targeted named legs F-D-1 (matches F-D-1 and F-D-1b), ONLINE; these legs fetch the venue themselves and this mode writes no transcript",
+          "transcript_drift": false,
+          "transcript_sha_after": "69a22de8243d48214e3ae15f57ca121e34416be09bc965a806187b93dd950315",
+          "transcript_sha_before": "69a22de8243d48214e3ae15f57ca121e34416be09bc965a806187b93dd950315",
+          "wall_seconds": null
+        },
+        {
+          "exit_code": 0,
+          "legs_red": 0,
           "legs_total": 17,
           "re_run_utc": "2026-09-22T14:40:00Z",
-          "suite": "tierc10_data_fixtures (--offline)",
-          "transcript_drift": false
+          "suite": "tierc10_data_fixtures --offline (F-D-1 / F-D-1b NOT RUN; the ONLINE suite keeps F-D-1 RED by design)",
+          "transcript_drift": false,
+          "transcript_sha_after": "8295ce69725c0a8a8a3b26ae3866d60b1803297c38ae3d956da3afda0f9b75f3",
+          "transcript_sha_before": "8295ce69725c0a8a8a3b26ae3866d60b1803297c38ae3d956da3afda0f9b75f3",
+          "wall_seconds": null
         }
       ],
-      "one_line": "the four RESUME clauses now exist: CONTRACT_SPECS.json (multipliers, 1000PEPE/1000BONK per 1000 tokens, normalization proven a pure scaling to 1.07e-11 over 180,013 bars), F-D-4 two-token trap (102 cells, 0 pre-floor bars), F-D-5 data-spend audit (never-touched = PUMPFUN, MNT, SUI), and the tiered haircut twin as an ADDED column",
-      "r0_status_2026_09_22_census": "PARTIAL",
+      "one_line": "the four RESUME clauses now exist: CONTRACT_SPECS.json (multipliers; 1000PEPE and 1000BONK per 1000 tokens; normalization proven a pure scaling to 1.07e-11 over 180,013 bars), F-D-4 two-token trap (102 cells, 0 pre-floor bars), F-D-5 data-spend audit (never-touched = PUMPFUN, MNT, SUI), and the tiered haircut twin as an ADDED column. PARTIAL because F-D-1 stays RED pending an operator ruling.",
       "stage": "D-CORE",
       "status": "PARTIAL"
     },
@@ -1739,11 +1777,13 @@
           "legs_total": 14,
           "re_run_utc": "2026-09-22T14:40:00Z",
           "suite": "tierc10_census_fixtures",
-          "transcript_drift": false
+          "transcript_drift": false,
+          "transcript_sha_after": "a675bb2fed6f4836f825e81b795df0a11622f262ec1e7fd841e35d610a84c553",
+          "transcript_sha_before": "a675bb2fed6f4836f825e81b795df0a11622f262ec1e7fd841e35d610a84c553",
+          "wall_seconds": null
         }
       ],
-      "one_line": "[Q-R3] height-vs-toll and [Q-R4] the acceptance head-to-head are BUILT and the verdict is filed PER ERA (360 rows). [Q-R3] is a GATE per LEDGER.md:834, not a table: PASS per era ALL 9 / tuning 13 / holdout 7 of 120",
-      "r0_status_2026_09_22_census": "PARTIAL",
+      "one_line": "[Q-R3] height-vs-toll and [Q-R4] the acceptance head-to-head are BUILT, and the verdict is filed PER ERA (360 rows, not 120). [Q-R3] is a GATE per LEDGER.md:834, not a table: PASS per era ALL 9 / tuning 13 / holdout 7 of 120.",
       "stage": "CENSUS-R{4h,1d}",
       "status": "COMPLETE-VERIFIED"
     },
@@ -3001,6 +3041,7 @@
       },
       "as_of": "2026-09-21T16:00:00Z",
       "blockers": [],
+      "declared_advance": "DECLARED ADVANCE 2026-09-22, not a silent re-record: this stage's FIXTURES_NULL.txt moved (same byte count, different content) because the suite REPORTS the live census code sha, and scripts/tierc10_census.py moved when [Q-R3]/[Q-R4] were built and the height-vs-toll verdict was re-keyed per era. THE NULL DATA DID NOT MOVE: null_summary, null_grid, null_coverage and every cell table re-hash unchanged, and the transcript is byte-stable run-to-run (measured twice). Touching a settled block requires moving PINNED_LEDGER_REV/SHA, which is a committed, reviewable act under the self-anchor \u2014 this is that act, and this sentence is its reason.",
       "fixtures": [
         {
           "exit_code": 0,
@@ -3008,11 +3049,13 @@
           "legs_total": 6,
           "re_run_utc": "2026-09-22T14:40:00Z",
           "suite": "tierc10_null_fixtures",
-          "transcript_drift": false
+          "transcript_drift": false,
+          "transcript_sha_after": "bf514670b85e5309dec86f3bbb7d77d9da14f7015a709933489a49392091c928",
+          "transcript_sha_before": "bf514670b85e5309dec86f3bbb7d77d9da14f7015a709933489a49392091c928",
+          "wall_seconds": null
         }
       ],
-      "one_line": "filed and printed beside the null of record; own-window leak 25.62%",
-      "r0_status_2026_09_22_census": "COMPLETE-VERIFIED",
+      "one_line": "NULL/gaps-only COMPLETE-VERIFIED: 4/4 root + 255/255 cell content-shas re-hash MATCH (null_summary d586ba11fdf591c9, grid 74,844 rows, summary 21,384 rows, coverage 1,020 rows, K=20, seed 20260921, PANEL17 x {5m,4h,1d} x frozen3.0); tierc10_null_fixtures.py re-run NOW exits 0 with 6/6 GREEN and ZERO red legs in 485.4s; FIXTURES_NULL.txt byte-identical before and after (8673449481879822\u2026, no drift); every item-4 number reproduces from the parquet (identity 1020/1020 True; 36.368768% / 19.170590% / 12.564398%; own-window 25.618979%; 4h tap89 +0.316799 vs +0.051663 [q25 -0.033036, q75 +0.232937] pctile 90, 1d flip-hold +0.736139 vs -0.120852 pctile 100, 5m DIE -0.819567 vs -0.808219 pctile 40); is_the_contract_null=False is the HONEST reading \u2014 only frozen3.0 was commissioned where the module (and the census) require both scale kinds; no artifact carries a verdict or p-value column.",
       "stage": "NULL/gaps-only",
       "status": "COMPLETE-VERIFIED"
     },
@@ -4270,6 +4313,7 @@
       },
       "as_of": "2026-09-21T16:00:00Z",
       "blockers": [],
+      "declared_advance": "DECLARED ADVANCE 2026-09-22, not a silent re-record: this stage's FIXTURES_NULL.txt moved (same byte count, different content) because the suite REPORTS the live census code sha, and scripts/tierc10_census.py moved when [Q-R3]/[Q-R4] were built and the height-vs-toll verdict was re-keyed per era. THE NULL DATA DID NOT MOVE: null_summary, null_grid, null_coverage and every cell table re-hash unchanged, and the transcript is byte-stable run-to-run (measured twice). Touching a settled block requires moving PINNED_LEDGER_REV/SHA, which is a committed, reviewable act under the self-anchor \u2014 this is that act, and this sentence is its reason.",
       "fixtures": [
         {
           "exit_code": 0,
@@ -4277,11 +4321,13 @@
           "legs_total": 6,
           "re_run_utc": "2026-09-22T14:40:00Z",
           "suite": "tierc10_null_fixtures",
-          "transcript_drift": false
+          "transcript_drift": false,
+          "transcript_sha_after": "68a8654cbb5238a76dd07f27330efa3505e492dfc834f0b6c2a3a16808dbd86a",
+          "transcript_sha_before": "68a8654cbb5238a76dd07f27330efa3505e492dfc834f0b6c2a3a16808dbd86a",
+          "wall_seconds": null
         }
       ],
-      "one_line": "THE NULL OF RECORD per operator ruling R10; own-window leak cut to 7.97%",
-      "r0_status_2026_09_22_census": "COMPLETE-VERIFIED",
+      "one_line": "NULL gaps+order: 259/259 artifact shas re-hash MATCH, shape/commission exact (21,384 / 74,844 / K=20 / PANEL17x3x frozen3.0 / seed 20260921 / summary sha 03a1bffe70d1fd5e), suite re-run NOW exit 0 6/6 GREEN in 483.70s with zero drift in FIXTURES_NULL.txt, and all of item 4's numbers reproduce from the parquet \u2014 COMPLETE-VERIFIED; the two variants' verdicts disagree on 3,455 of 19,926 comparable summary cells (sign) and 2,469 (q75 clearance), including one of the four headline cells (5m DIE ALL H20 net), which is APOLLO's ruling to make, not a defect.",
       "stage": "NULL/gaps+order",
       "status": "COMPLETE-VERIFIED"
     },
@@ -4336,22 +4382,47 @@
           "exit_code": 0,
           "legs_red": 0,
           "legs_total": 9,
-          "re_run_utc": "2026-09-22T14:40:00Z",
-          "suite": "tierc10_stamps_fixtures",
-          "transcript_drift": false
+          "suite": "Stage A \u2014 tierc10_stamps_fixtures.py (run 1 of 2)",
+          "transcript_drift": false,
+          "transcript_sha_after": "778127ffc81adc931f6c7d29fdb1bca19fd8c4d47f3d6158a504fd566b7ad5e1",
+          "transcript_sha_before": "778127ffc81adc931f6c7d29fdb1bca19fd8c4d47f3d6158a504fd566b7ad5e1",
+          "wall_seconds": null
+        },
+        {
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": 9,
+          "suite": "Stage A \u2014 tierc10_stamps_fixtures.py (run 2 of 2, timed)",
+          "transcript_drift": false,
+          "transcript_sha_after": "778127ffc81adc931f6c7d29fdb1bca19fd8c4d47f3d6158a504fd566b7ad5e1",
+          "transcript_sha_before": "778127ffc81adc931f6c7d29fdb1bca19fd8c4d47f3d6158a504fd566b7ad5e1",
+          "wall_seconds": 14.180556
+        },
+        {
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": 8,
+          "suite": "Stage A \u2014 scratch rebuild (my own extra determinism check; NOT the canonical root)",
+          "transcript_drift": false,
+          "transcript_sha_after": null,
+          "transcript_sha_before": null,
+          "wall_seconds": 1.29
         }
       ],
-      "one_line": "six contract stamps, none all-null; captured-not-consulted",
-      "r0_status_2026_09_22_census": "COMPLETE-VERIFIED",
+      "one_line": "STAGE A \u2014 TAPE + STAMPS: COMPLETE-VERIFIED. 8/8 manifest shas re-hash MATCH; suite exit 0, 9 GREEN / 0 RED, 30/30 break legs correctly RED, 14.18 s; F-DET ran against a present byte-identical twin; all six contract stamps present and none all-null; transcript byte-stable across two runs (no drift). Non-blocking findings: manifest's census_code_sha and panel_code_sha are STALE vs disk (upstream edited after the manifest sealed) and the suite cannot see it \u2014 but a scratch rebuild under current code reproduces all 8 tables BYTE-IDENTICALLY, so no number moved.",
       "stage": "A (stamps)",
       "status": "COMPLETE-VERIFIED"
     },
     {
-      "artifact_count": 10,
+      "artifact_count": 11,
       "artifact_shas": {
         "research_outputs/tierc10/panel/FIXTURES_PANEL.txt": {
           "bytes": 63265,
           "sha256": "163f65bdf21a575ccc4bba8c70dd6949e88aa0d91a20abdcd726f4fbaab54642"
+        },
+        "research_outputs/tierc10/panel/FIXTURES_PANEL_partial.txt": {
+          "bytes": 6552,
+          "sha256": "4a068ea4d20a920a2e4fdb1a4ed0a60752fae391b3e5ad72e85877854bb5cbeb"
         },
         "research_outputs/tierc10/panel/build_manifest.json": {
           "bytes": 9636,
@@ -4397,13 +4468,14 @@
           "exit_code": 0,
           "legs_red": 0,
           "legs_total": 22,
-          "re_run_utc": "2026-09-22T14:40:00Z",
-          "suite": "tierc10_panel_fixtures",
-          "transcript_drift": false
+          "suite": "TIER-C10 PANEL fixtures (scripts/tierc10_panel_fixtures.py)",
+          "transcript_drift": false,
+          "transcript_sha_after": "163f65bdf21a575ccc4bba8c70dd6949e88aa0d91a20abdcd726f4fbaab54642",
+          "transcript_sha_before": "163f65bdf21a575ccc4bba8c70dd6949e88aa0d91a20abdcd726f4fbaab54642",
+          "wall_seconds": 45.3
         }
       ],
-      "one_line": "F-CTRL exactly 0.000e+00, cross-process anchored to the filed tierc9 journal",
-      "r0_status_2026_09_22_census": "COMPLETE-VERIFIED",
+      "one_line": "PANEL stage COMPLETE-VERIFIED: all 8 manifest content-shas re-hash MATCH (canonical and F-DET twin, byte-identical to each other), suite exits 0 in 45.30 s with 22/22 fixtures PASS and 150/150 break legs RED-as-required, zero [BAD] in any real assertion block, F-CTRL/a worst abs diff EXACTLY 0.000e+00 over 12 columns on n=200, transcript re-filed byte-identically (no drift), and NO registration is filed (REG_DIR does not exist) \u2014 so Stage B has not begun.",
       "stage": "PANEL/gate",
       "status": "COMPLETE-VERIFIED"
     },
@@ -4421,7 +4493,7 @@
       },
       "as_of": "2026-09-21T16:00:00Z",
       "blockers": [
-        "F-C10-BE (a CONTRACT fixture, 'sequence proven on 3 campaigns') is NOT RUN and CANNOT run until P-BE-1's registration is FILED \u2014 BE_CAMPAIGNS is an empty tuple until then. The harness is written and certified by F-C10-BE-HARNESS. This is LAW 4 (text before result) binding, not a defect."
+        "F-C10-BE, a CONTRACT fixture ('sequence proven on 3 campaigns'), is NOT RUN and CANNOT run until P-BE-1's registration is FILED \u2014 BE_CAMPAIGNS is an empty tuple until then. The harness is written and certified by F-C10-BE-HARNESS. This is LAW 4 (text before result) binding, not a defect."
       ],
       "fixtures": [
         {
@@ -4430,11 +4502,13 @@
           "legs_total": 13,
           "re_run_utc": "2026-09-22T14:40:00Z",
           "suite": "tierc10_lanes_fixtures",
-          "transcript_drift": false
+          "transcript_drift": false,
+          "transcript_sha_after": "467a26e6e6633b2b0a5c1cc4ac3049d2c21fbba6943d71280eb550d9e5a41fae",
+          "transcript_sha_before": "467a26e6e6633b2b0a5c1cc4ac3049d2c21fbba6943d71280eb550d9e5a41fae",
+          "wall_seconds": null
         }
       ],
-      "one_line": "the BE latch FILL branch now consults the stop it stands on (the defect fabricated -0.411957 R on one campaign); byte-identical at the registered pin 1.0; the false claim of record is narrowed to what the legs prove; build_manifest.json filed",
-      "r0_status_2026_09_22_census": "PARTIAL",
+      "one_line": "the BE latch FILL branch now consults the stop it stands on (the defect fabricated -0.411957 R on one campaign, short mirror symmetric); byte-identical at the registered pin be_floor_after_r = 1.0; the false claim of record is narrowed to what the legs prove; build_manifest.json filed.",
       "stage": "LANES (B mech)",
       "status": "PARTIAL"
     },
@@ -4460,8 +4534,8 @@
       },
       "as_of": "2026-09-21T16:00:00Z",
       "blockers": [
-        "The REAL half of F-C10-HOLD and the BRK row/verdict printer cannot produce a filed row until P-BRK-S1 / P-BRK-I1 are registered. LAW 4 binding, not a defect.",
-        "OPEN, for the operator: P-BRK-S1's 'NET OF MEASURED 5m TOLL' is carried as a PRINT beside the book (TOLL_ACCOUNTING on every row), not as a deduction from net_r. The toll is a census-measured median in ATR units and net_r is R-denominated, so deducting it is a unit question, not a code change."
+        "The REAL half of F-C10-HOLD and the BRK row/verdict printer cannot produce a FILED row until P-BRK-S1 / P-BRK-I1 are registered. LAW 4 binding, not a defect.",
+        "OPEN, for the operator: P-BRK-S1's 'NET OF MEASURED 5m TOLL' is carried as a PRINT beside the book (TOLL_ACCOUNTING on every row), not as a deduction from net_r. The toll is a census-measured median in ATR units and net_r is R-denominated, so deducting one from the other is a unit question, not a code change."
       ],
       "fixtures": [
         {
@@ -4470,11 +4544,13 @@
           "legs_total": 17,
           "re_run_utc": "2026-09-22T14:40:00Z",
           "suite": "tierc10_brk_fixtures",
-          "transcript_drift": false
+          "transcript_drift": false,
+          "transcript_sha_after": "7ea224452cd0cd492725ee2cf94390ac3d2a7d130690ee5f2bbcc8516f4b5692",
+          "transcript_sha_before": "7ea224452cd0cd492725ee2cf94390ac3d2a7d130690ee5f2bbcc8516f4b5692",
+          "wall_seconds": null
         }
       ],
-      "one_line": "each form reads the [Q-R3] verdict for the era it is JUDGED in (S1 holdout, I1 ALL); the census floor is APPLIED, not merely quoted; LANE_ERA is enforced against the filed arm; build_manifest.json filed",
-      "r0_status_2026_09_22_census": "PARTIAL",
+      "one_line": "each form reads the [Q-R3] verdict for the era it is JUDGED in (P-BRK-S1 holdout, P-BRK-I1 ALL); the census sample floor is APPLIED, not merely quoted; LANE_ERA is enforced against the filed arm; build_manifest.json filed.",
       "stage": "BRK (B mech)",
       "status": "PARTIAL"
     },
@@ -4495,16 +4571,18 @@
           "legs_total": 9,
           "re_run_utc": "2026-09-22T14:40:00Z",
           "suite": "tierc10_resume_fixtures",
-          "transcript_drift": false
+          "transcript_drift": false,
+          "transcript_sha_after": "080528cf69dfc14b34217e1c5b363e586a6100941361d9911a021c2072124a34",
+          "transcript_sha_before": "080528cf69dfc14b34217e1c5b363e586a6100941361d9911a021c2072124a34",
+          "wall_seconds": null
         }
       ],
-      "one_line": "the fixture that makes the LAW OF RESUMPTION checkable. The anchor looks both ways at two levels; an admission that reached the commit record may not be withdrawn by an uncommitted edit; the artifact of record is tracked and anchored on its own blob",
-      "r0_status_2026_09_22_census": "ABSENT",
+      "one_line": "the fixture that makes the LAW OF RESUMPTION checkable. The anchor looks both ways at two levels; an admission that reached the commit record may not be withdrawn by an uncommitted edit; the artifact of record is tracked and anchored on its own blob.",
       "stage": "F-C10-RESUME",
       "status": "COMPLETE-VERIFIED"
     }
   ],
   "substrate": "/Users/luis/.cache/naiad/snapshots/tc10_20260921",
-  "sweep_note": "every suite re-run in parallel 2026-09-22 after the repair phase: STEP 0 3 passed \u00b7 D 17/17 (offline) \u00b7 CENSUS-R 14/14 \u00b7 NULL gaps-only 6/6 \u00b7 NULL gaps+order 6/6 \u00b7 A 9/9 \u00b7 PANEL 22/22 \u00b7 LANES 13/13 \u00b7 BRK 17/17 \u00b7 F-C10-RESUME 9/9. All exit 0.",
+  "sweep_note": "every suite re-run in parallel 2026-09-22 after the repair phase and all exit 0: STEP 0 3 passed \u00b7 D 17/17 offline \u00b7 CENSUS-R 14/14 \u00b7 NULL gaps-only 6/6 \u00b7 NULL gaps+order 6/6 \u00b7 A 9/9 \u00b7 PANEL 22/22 \u00b7 LANES 13/13 \u00b7 BRK 17/17 \u00b7 F-C10-RESUME 9/9.",
   "tier": "TIER-C10"
 }
