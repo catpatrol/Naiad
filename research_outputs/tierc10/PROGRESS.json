@@ -4480,11 +4480,15 @@
       "status": "COMPLETE-VERIFIED"
     },
     {
-      "artifact_count": 2,
+      "artifact_count": 3,
       "artifact_shas": {
         "research_outputs/tierc10/lanes/FIXTURES_LANES.txt": {
           "bytes": 42996,
           "sha256": "467a26e6e6633b2b0a5c1cc4ac3049d2c21fbba6943d71280eb550d9e5a41fae"
+        },
+        "research_outputs/tierc10/lanes/FIXTURES_LANES_partial.txt": {
+          "bytes": 4692,
+          "sha256": "d531b43b7248bc6a44d11a31d154be1b5f8dd6f77bb54d5aeaf80736de50e009"
         },
         "research_outputs/tierc10/lanes/build_manifest.json": {
           "bytes": 13309,
