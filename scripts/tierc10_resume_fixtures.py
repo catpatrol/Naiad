@@ -30,7 +30,40 @@ THE LEGS
                   anchor, an uncommitted ledger, a settled stage DEMOTED in the
                   working tree, a settled stage DELETED from it, and
                   DEMOTE-THEN-TAMPER — the laundering case where the demotion
-                  hides a re-recorded sha [LEAN R10].
+                  hides a re-recorded sha [LEAN R10].  A FOURTH LOOP applies the
+                  same rule ONE LEVEL DOWN, at the FIXTURE RECORD and at the
+                  STAGE'S OWN ADMISSIONS, over every stage at HEAD REGARDLESS OF
+                  STATUS (standing down only where loops 2-3 already demand the
+                  strictly stronger BYTE-IDENTITY):
+                  NO ADMISSION THAT REACHED THE COMMIT RECORD MAY BE TAKEN BACK
+                  BY AN EDIT NOBODY COMMITTED [LEAN R17, widened to its general
+                  shape by R18].  The anchored vocabulary is named in
+                  ADMISSION_FIELDS — a transcript drift, a nonzero exit_code, a
+                  legs_red count, a named red leg, a wall clock, a stage's
+                  blockers list by COUNT, and a PARTIAL stage un-claimed to
+                  ABSENT — and a record at HEAD may not VANISH from the working
+                  tree, its whole block being gone counting as gone.  WITHDRAWAL
+                  ONLY: a new drift, a NEW failure, a red leg newly NAMED, a
+                  costlier run, an added blocker, an appended record, a born
+                  stage and a CLAIMED stage are a build advancing, and eight
+                  controls assert each of them is SILENT.  AND IT NEVER RAISES —
+                  every run drives a WHOLE GRID of twelve deletion shapes across
+                  every stage and demands a NAMED FINDING, never an exception,
+                  from each [LEAN R18].
+  F-C10-RESUME-S  THE SELF-ANCHOR.  This module carries PINNED_LEDGER_SHA,
+                  PINNED_LEDGER_REV, the two LAW-2 quarantine literals, the
+                  EXEMPTIONS registry and its breadth law, the STEP 0 pins, the
+                  root allowlist and the corridor constants — and until round 3
+                  it never read its own bytes.  It is now TRACKED, and this leg
+                  demands that the bytes being EXECUTED are the bytes that are
+                  COMMITTED.  Planted: eight one-edit bends of a copy of the
+                  HEAD blob (the ledger anchor sha, its rev, a quarantine sha,
+                  the re-widened waiver, a lowered breadth floor, a widened
+                  allowlist, STEP0_COMMIT, the corridor's close_ms), a
+                  whitespace-only edit, an untracked path, three unreachable
+                  revs and a vanished subject.  THE LIMIT IS PRINTED IN THE
+                  TRANSCRIPT: a self-anchor against HEAD cannot catch an edit
+                  that is itself committed.
   F-C10-RESUME-1  every artifact a COMPLETE-VERIFIED stage records re-hashes to
                   the recorded sha and the recorded byte count; and no file sits
                   inside a completed stage's directory that the ledger does not
@@ -46,7 +79,7 @@ THE LEGS
                   1790006400000, and every stage record carries it.  Planted:
                   a re-stamped stage, a moved manifest, a shifted close_ms, a
                   stage with no as_of at all.
-  F-C10-RESUME-4  THE VENUE EXEMPTION IS NAMED, NOT SILENT.  Every waiver of
+  F-C10-RESUME-4  THE VENUE EXEMPTION IS NAMED, BOUND AND NARROW.  Every waiver of
                   byte-reproducibility is a record with a scope, a reason and
                   EVIDENCE that is corroborated on disk; the exempted legs are
                   exactly the legs the exempted suite itself declares as
@@ -55,8 +88,12 @@ THE LEGS
                   COMPLETE on an exemption's strength.  Planted: an empty reason,
                   a sourceless evidence block, a bent number, an unexempted
                   drifting suite, a leg that does not exist, a stage promoted
-                  while its exemption stands, and a BORROWED SUITE — a verbatim
-                  copy of the real waiver re-pointed at another stage.
+                  while its exemption stands, a BORROWED SUITE — a verbatim
+                  copy of the real waiver re-pointed at another stage — and
+                  FOUR WIDENED PATTERNS, each the real waiver with one string
+                  changed ('', 'TIER-C10', 'D-CORE' and the stage-name substring
+                  this file shipped in round 2), judged both on their own fields
+                  and on the real drift they were planted over [LEAN R12].
   F-C10-RESUME-5  PROGRESS.json IS WELL-FORMED AND HONEST.  Every stage carries
                   {stage, status, as_of, artifact_shas, fixtures, blockers};
                   status is one of the three legal values; COMPLETE-VERIFIED
@@ -71,12 +108,19 @@ THE LEGS
                   Planted: a bent Pine sha, the phantom 0.67 pin, a source that
                   does not exist, a bent twin blob sha, a source whose DISK sha
                   has left its STEP 0 literal, a deleted record.
-  F-C10-RESUME-T  THE TRANSCRIPT OF RECORD IS NEVER CLOBBERED.  A whole-suite
-                  run that does not reproduce the filed FIXTURES_RESUME.txt to
-                  the byte writes FIXTURES_RESUME_rerun.txt, prints the delta,
-                  LEAVES the artifact of record untouched and exits 1.
-                  Planted: a non-reproducing run, a truncated run, an empty run,
-                  an appended byte.
+  F-C10-RESUME-T  THE TRANSCRIPT OF RECORD IS NEVER CLOBBERED, AND NEVER
+                  QUIETLY REPLACED BY DELETING IT.  A whole-suite run that does
+                  not reproduce the filed FIXTURES_RESUME.txt to the byte writes
+                  FIXTURES_RESUME_rerun.txt, prints the delta, LEAVES the
+                  artifact of record untouched and exits 1.  An ABSENT artifact
+                  of record is a NAMED FINDING, not a blank page to fill: it is
+                  written only on an explicit --refile-transcript.  AND IT IS
+                  ANCHORED: the filed transcript is TRACKED and judged against
+                  its own HEAD blob, so an erasure or an uncommitted replacement
+                  is named rather than passed [LEAN R19].  Planted: a
+                  non-reproducing run, a truncated run, an empty run, an appended
+                  byte, the absent-artifact escape, an untracked anchor path, an
+                  unreachable rev, a bent artifact, an erased artifact.
 
 HOUSE LAWS OBSERVED HERE
   · TEXT BEFORE RESULT — nothing here rides a bar, scores a row or touches a
@@ -124,6 +168,11 @@ LEDGER_REL = "research_outputs/tierc10/PROGRESS.json"
 PROGRESS_PATH = ROOT / LEDGER_REL
 STEP0_RECORD_PATH = TC / "STEP0_RECORD.json"
 TRANSCRIPT = "FIXTURES_RESUME.txt"
+# the artifact of record's repo-relative path. F-C10-RESUME-T anchors on the
+# HEAD BLOB of this path the way F-C10-RESUME-0 anchors on PROGRESS.json's: the
+# tierc10 tree is gitignored, so the orchestrator commits it with `git add -f`,
+# exactly as PROGRESS.json is tracked. [LEAN-HEPHAESTUS] R19
+TRANSCRIPT_REL = "research_outputs/tierc10/FIXTURES_RESUME.txt"
 
 # ── THE EXTERNAL ANCHOR ────────────────────────────────────────────────────
 # F-C10-RESUME-1, -4 and -5 all read their answer out of PROGRESS.json, so a
@@ -149,6 +198,17 @@ TC_ROOT_ALLOWLIST = (
     "FIXTURES_RF.txt",
     "OPERATOR_RULINGS.md",
     "PROGRESS.json",
+    # ORCHESTRATOR RULING OF 2026-09-22 (a RULING, not a lean, and not a
+    # weakening). research_outputs/tierc10/REGISTRATION_PLAN.md is a FILED BUILD
+    # DOCUMENT of exactly the same class as the four names above: Stage B's
+    # structural plan, filed 2026-09-22 and COMMITTED at 54cfd60, pinning the
+    # panel / era / ruler / base / runner / LOAO line of all six registrations
+    # BEFORE any text is written. The executor refused to silence the standing
+    # RED unilaterally and was right to; the operator ruled the file admissible.
+    # NOTE THE PRICE OF ADMITTING IT: this tuple is itself under the self-anchor
+    # F-C10-RESUME-S, so adding a name to it is NOT a free edit — it reaches a
+    # GREEN run only through the commit record, where a reviewer can diff it.
+    "REGISTRATION_PLAN.md",
     "STEP0_RECORD.json",
 )
 
@@ -164,6 +224,51 @@ RF_CODE_FILES = (
     "engine/rangefinder.py",
     "pine/SS12_RangeFinder_v2.pine",
     "scripts/rangefinder_twin.py",
+)
+
+# ── EVERY FILE THAT MAY JOIN THE EXEMPTION CHAIN, RECORDED.  [LEAN R16]
+#    NOTHING IN THIS SUITE SWEPT scripts/ — that was the hole that made the
+#    review's second forgery cheap.  It built a full symlink mirror of the repo,
+#    ADDED ONE FILE under scripts/, and that file bound itself to a stage for
+#    free because `_binding_field` matched by substring and no leg ever asked
+#    whether a scripts/ file was RECORDED anywhere at all.
+#
+#    WHAT "RECORDED" MEANS HERE, AND WHY.  Two registers, BOTH required, neither
+#    of which a working-tree edit can write:
+#      · THE GIT INDEX — `git ls-files` must know the path.  This is the primary
+#        register because it is the one answer that exists OUTSIDE the working
+#        tree; an added file is free, `git add` is not, and a COMMIT (which the
+#        exemption chain additionally requires, below) is less free still.
+#      · THIS MODULE LITERAL — a name typed here, under F-C10-RESUME-S, so a new
+#        participant cannot APPEAR without an edit that must itself be committed
+#        before any run of this suite goes green.
+#    REJECTED: PROGRESS.json (it records research_outputs/ artifacts, not code,
+#    and it is the very document under audit — recording the auditor's inputs in
+#    the audited file is the circle this track exists to break) and RF_CODE_FILES
+#    (that tuple is STEP 0's RangeFinder pin and means something else entirely;
+#    overloading it would make leg 6 red for reasons with nothing to do with
+#    STEP 0, which is the exact mistake [LEAN R6] was written to undo).
+#
+#    THE COST, STATED: a teammate who adds a new scripts/tierc10_*.py turns this
+#    leg RED until the name is added here and committed. That is the leg working.
+TC_SUITE_GLOB = "tierc10_*.py"
+TC_SUITE_FILES = (
+    "scripts/tierc10_brk.py",
+    "scripts/tierc10_brk_fixtures.py",
+    "scripts/tierc10_census.py",
+    "scripts/tierc10_census_fixtures.py",
+    "scripts/tierc10_data.py",
+    "scripts/tierc10_data_fixtures.py",
+    "scripts/tierc10_lanes.py",
+    "scripts/tierc10_lanes_fixtures.py",
+    "scripts/tierc10_null.py",
+    "scripts/tierc10_null_fixtures.py",
+    "scripts/tierc10_panel.py",
+    "scripts/tierc10_panel_fixtures.py",
+    "scripts/tierc10_resume_fixtures.py",
+    "scripts/tierc10_rf_fixtures.py",
+    "scripts/tierc10_stamps.py",
+    "scripts/tierc10_stamps_fixtures.py",
 )
 
 REWRITE_STEP0 = False                # set by main(); see step0_record_presence_findings
@@ -229,16 +334,48 @@ PINE_NUM_VARS = {"LEG_MIN": "legMin", "REV_MIN": "revMin", "TOUCH_EPS": "touchEp
 # ═══════════════════════════════════════════ THE EXEMPTION REGISTRY
 # A waiver of byte-reproducibility lives HERE or it does not exist.
 # F-C10-RESUME-4 forces every field below to be filled and CORROBORATED.
+#
+# ── THE BREADTH OF A WAIVER IS POLICED, NOT TRUSTED [LEAN-HEPHAESTUS] R12 ──
+# covers_record_match used to be checked for being DEAD (matching no record) and
+# for nothing else. Nothing checked it for OVER-matching, so one widened string
+# on an otherwise legitimately-bound exemption was a blanket escape over its
+# whole stage. MEASURED against the real, properly-bound X-STAGE-D-VENUE:
+#   covers_record_match = ("",)         -> 0 findings, a planted drift silenced
+#   covers_record_match = ("TIER-C10",) -> 0 findings, a planted drift silenced
+# Both cleared field presence (a non-empty tuple is truthy), both cleared the
+# dead-pattern check (each matches at least one record), both cleared the legs,
+# venue-client, evidence and R11-binding checks. The two floors below are the
+# breadth law; `_coverage_findings` enforces them.
+COVERAGE_MIN_CHARS = 4
+TIER_WIDE_TOKENS = (
+    "TIER-C10", "TIER C10", "TIERC10", "tierc10", "TC10",
+    "research_outputs/tierc10", "NAIAD", "fixtures", "FIXTURES", "suite",
+)
 EXEMPTIONS = (
     {
         "id": "X-STAGE-D-VENUE",
         "suite": "scripts/tierc10_data_fixtures.py",
         "stage": "D-CORE",
         "transcript": "research_outputs/tierc10/data/FIXTURES_STAGE_D.txt",
+        # ── THE WAIVER IS BOUND TO THE WAIVED LEGS, NOT TO A STAGE NAME ──
         # the substring(s) by which a PROGRESS.json fixture record is recognised
-        # as falling under this waiver — each one must match at least one real
-        # record of the named stage, or it is a dead pattern and the leg is RED
-        "covers_record_match": ("Stage D fixtures",),
+        # as falling under this waiver. Each one must match at least one real
+        # record of the named stage (or it is a DEAD pattern), and — the law
+        # added in round 3 — every record it SELECTS must itself name one of
+        # `legs` below, which are in turn forced to be EXACTLY the legs the
+        # suite's own LEGS table declares venue-reaching.
+        #
+        # THE HOLE THIS CLOSES. This read ("Stage D fixtures",) — the stage's
+        # NAME — and D-CORE carries TWO fixture records, both of which contain
+        # that substring: the ONLINE run that fetches the venue AND the OFFLINE
+        # run that, by its own name, reaches no venue API at all. MEASURED: a
+        # drift planted on the OFFLINE record yielded 0 findings, and so did
+        # transcript_sha_after='9'*64 on it. The waiver exists ONLY because
+        # F-D-1/F-D-1b fetch from a venue that backfills; it may not cover the
+        # offline run. ("F-D-1",) selects the ONLINE record alone — the OFFLINE
+        # record does not name F-D-1 and is no longer silenced (1 finding).
+        # [LEAN-HEPHAESTUS] R12
+        "covers_record_match": ("F-D-1",),
         "legs": ("F-D-1", "F-D-1b"),
         "conditional_legs": ("F-D-2",),
         "waives": ("transcript byte-reproducibility of the Stage D ONLINE "
@@ -270,6 +407,33 @@ EXEMPTIONS = (
         "ruling_status": ("EXECUTOR READING — PUT TO THE OPERATOR, UNRULED. "
                           "See [LEAN-HEPHAESTUS] R1."),
     },
+)
+
+# ══ RULINGS OF RECORD ═══════════════════════════════════════════════════════
+# NOT LEANS. A lean is an executor's reading, offered for the operator to
+# overturn. A ruling is the operator's answer, and it binds this module.
+RULINGS = (
+    "[RULING · ORCHESTRATOR · 2026-09-22] REGISTRATION_PLAN.md IS A FILED BUILD "
+    "DOCUMENT. F-C10-RESUME-1's root sweep [LEAN R7] stood RED on "
+    "research_outputs/tierc10/REGISTRATION_PLAN.md: a loose file in the tierc10 "
+    "root that no stage records and TC_ROOT_ALLOWLIST did not carry. The executor "
+    "refused to silence it unilaterally — adding a name to an escape list to make "
+    "one's own suite green is the exact move this track exists to catch — and put "
+    "it to the operator. THE RULING: REGISTRATION_PLAN.md is a filed build "
+    "document of EXACTLY the same class as the four names already in the list "
+    "(BUILD_DRAFT.md, OPERATOR_RULINGS.md, PROGRESS.json, STEP0_RECORD.json). It "
+    "is Stage B's structural plan, filed 2026-09-22 and COMMITTED at 54cfd60, "
+    "pinning the panel / era / ruler / base / runner / LOAO line of all six "
+    "registrations BEFORE any text is written. It is therefore ADMITTED to "
+    "TC_ROOT_ALLOWLIST. THE RED IS RESOLVED BY RULING, NOT BY WEAKENING, AND HERE "
+    "IS WHY THAT DISTINCTION IS CHECKABLE RATHER THAN RHETORICAL: "
+    "TC_ROOT_ALLOWLIST is itself under the self-anchor F-C10-RESUME-S, so adding "
+    "a name to it is NOT a free edit — it reaches a green run only through the "
+    "commit record, where a reviewer can diff it, and F-C10-RESUME-S's break leg "
+    "plants a WIDENED ROOT ALLOWLIST and proves that plant goes RED. The escape "
+    "list is still a list of five named files, still swept non-recursively "
+    "against the union of every recorded artifact, and every other loose file in "
+    "that directory is still a finding.",
 )
 
 LEANS = (
@@ -418,6 +582,302 @@ LEANS = (
     "without naming the suite, this leg goes RED for a reason that is not a tamper — "
     "a false red, not a false green, and the honest trade. CROSS-TRACK REQUEST: keep "
     "each stage block naming the suite that produced its fixture records.",
+    "[LEAN-HEPHAESTUS] R12 A WAIVER IS BOUND TO THE WAIVED LEGS, NOT TO A STAGE-NAME "
+    "SUBSTRING. Round 2 shipped covers_record_match=('Stage D fixtures',) — the STAGE'S "
+    "OWN NAME — and D-CORE carries TWO fixture records, BOTH of which contain it: the "
+    "ONLINE run that fetches the venue AND the OFFLINE run that, by its own name, "
+    "reaches no venue API at all. MEASURED against the real unwidened registry: a drift "
+    "planted on the OFFLINE record gave 0 findings, and so did transcript_sha_after="
+    "'9'*64 on it — a blanket escape over all of D-CORE, and the leg's own NEGATIVE "
+    "CONTROL certified it as healthy, because a negative control alone cannot tell a "
+    "narrow waiver from a blanket one. WORSE, breadth was ENTIRELY UNPOLICED: the only "
+    "test on a pattern was that it is not DEAD. Taking the real, properly-bound "
+    "X-STAGE-D-VENUE and changing ONE string, covers_record_match=('',) and "
+    "('TIER-C10',) each scored 0 findings and each silenced a planted drift, clearing "
+    "field presence (a non-empty tuple is truthy), the dead-pattern check (each matches "
+    "at least one record), the legs, venue-client, evidence and R11-binding checks. "
+    "THE FIX IS A LAW, NOT A VALUE. The registry now reads ('F-D-1',), and "
+    "_coverage_findings makes the narrowing enforceable: (a) a pattern must be at "
+    "least COVERAGE_MIN_CHARS=4 characters and may not be a substring of its stage's "
+    "own name nor of any of the 10 tier-wide tokens; (b) EVERY record a pattern "
+    "SELECTS must NAME one of the waived legs. I chose leg-naming over an explicit "
+    "covers_record_ids list: an id list is more PRECISE but not STRONGER — it is a "
+    "second free author-written field with nothing outside the registry corroborating "
+    "it, so widening it is exactly as cheap as widening covers_record_match was, and "
+    "the hole moves rather than closes. x['legs'] is already forced to equal EXACTLY "
+    "the set the exempted suite's OWN LEGS table declares venue-reaching, parsed out "
+    "of that suite's source with ast — so widening the waiver's reach now requires a "
+    "ledger record to name a leg AND a foreign suite's source to declare that leg "
+    "venue-reaching, a chain no single string in this file can forge. A POSITIVE "
+    "CONTROL was added beside the negative one: a drift is planted, one at a time, on "
+    "every record of an exempted stage the registry does NOT select, and each must be "
+    "SPOKEN ALOUD. Eight new plants, including the round-2 value itself. THE LIMIT: (b) "
+    "reads the record's NAME, so a genuinely venue-reaching record whose name never "
+    "spells its legs goes FALSE RED — a false red, not a false green. CROSS-TRACK "
+    "REQUEST: keep a venue-reaching fixture record's suite string naming the legs that "
+    "reach the venue, as D-CORE's ONLINE record already does.",
+    "[LEAN-HEPHAESTUS] R13 THE MODULE NOW READS ITS OWN BYTES. R10 ended on 'it "
+    "cannot defend itself against an edit to THIS FILE, where the pin and the three "
+    "loops live' and fell back on 'only the commit record and a reader can catch that'. "
+    "AT REVIEW TIME THERE WAS NO COMMIT RECORD — this module was untracked — so the "
+    "fallback fell back to nothing, and the file that holds PINNED_LEDGER_SHA, "
+    "PINNED_LEDGER_REV, the two LAW-2 quarantine literals, EXEMPTIONS and its breadth "
+    "law, the STEP 0 pins, TC_ROOT_ALLOWLIST and the corridor constants used __file__ "
+    "for exactly one thing: ROOT = Path(__file__).resolve().parents[1]. The module is "
+    "now TRACKED (added at d8a6f81 on v12-v1-census) and F-C10-RESUME-S demands that "
+    "the path be in the index, that its HEAD blob be readable, and that the bytes "
+    "being EXECUTED be byte-identical to that blob. Fourteen plants: eight one-edit "
+    "bends of a COPY OF THE HEAD BLOB (the plants are judged against the committed "
+    "blob, not the working tree — a bent copy of an already-divergent working tree "
+    "would go red for free and prove nothing), a whitespace-only edit, an untracked "
+    "path, three unreachable revs and a vanished subject; the negative control is a "
+    "copy of the HEAD blob at ZERO findings. THE LIMIT IS PRINTED IN THE TRANSCRIPT "
+    "AND IT IS REAL: a self-anchor against HEAD cannot catch an edit that is ITSELF "
+    "COMMITTED, nor a rewritten history that moves blob and working tree together. "
+    "It cannot be repaired by pinning either — a literal holding the sha of the file "
+    "that contains it is a fixed point no author can type. What this leg buys is "
+    "narrow and worth having: an edit to any of the 15 pinned literals (TC_SUITE_FILES "
+    "joined them in round 4) can no longer "
+    "reach a GREEN run without first reaching the commit record, where a reviewer "
+    "can diff it. OPERATOR / ORCHESTRATOR NOTE: this leg is RED for as long as the "
+    "round-3 and round-4 repairs sit uncommitted in the working tree. That is the "
+    "leg working, not the leg broken. Commit scripts/tierc10_resume_fixtures.py and "
+    "re-run with --refile-transcript; the executor is forbidden to commit and "
+    "cannot close it.",
+    "[LEAN-HEPHAESTUS] R14 THE TIE IS ANCHORED, AND ONLY THE TIE. Floor (b) of the "
+    "breadth law says every record an exemption's pattern SELECTS must NAME one of "
+    "the waived legs. That tie is only as strong as the text it reads, and in round "
+    "3 the text it read was a PARTIAL stage's WORKING-TREE prose — which "
+    "F-C10-RESUME-0 deliberately leaves unanchored so a build in progress can "
+    "advance. The review wrote that evidence for free. MEASURED: append the single "
+    "clause ' (shares fixture plumbing with F-D-1)' to D-CORE's OFFLINE fixture "
+    "record and a drift planted on that record goes from 1 finding to 0 — no module "
+    "edit, no new file, one clause. The record then NAMES a waived leg (floor (b) "
+    "satisfied) and the pattern then SELECTS it (the closure calls the drift "
+    "covered). THE REPAIR: the FIELDS THE TIE READS — each selected fixture "
+    "record's `suite` string, and the block the suite-to-stage binding is found in "
+    "— are now read out of the COMMITTED PROGRESS.json at HEAD, for EVERY stage "
+    "REGARDLESS OF STATUS. The pattern must select the record at HEAD too, and it "
+    "must be the HEAD text that names the leg. The rest of a PARTIAL block stays "
+    "free to move and a move in the anchored fields is REPORTED, not forbidden "
+    "(the per-record IDENTICAL / CHANGED / NOT AT HEAD line is printed to stdout "
+    "beside each exemption); it becomes a FINDING only when the change is what "
+    "CREATES the tie. WHY NOT THE OTHER TWO OPTIONS. Deriving the tie from the "
+    "suite's own AST does not reach: D-CORE's ONLINE and OFFLINE records are TWO "
+    "RUNS OF THE SAME FILE, so no parse of scripts/tierc10_data_fixtures.py can "
+    "tell them apart — what the AST already fixes is the LEG NAMES (x['legs'] is "
+    "forced to equal the suite's own needs_net set), which left the RECORD TEXT as "
+    "the only forgeable half, and that is the half anchored here. A STRUCTURED "
+    "FIELD emitted by the suite is the better shape and this track cannot build it: "
+    "PROGRESS.json is not ours to write. CROSS-TRACK REQUEST, FILED: have each "
+    "fixture record carry an explicit `legs_reaching_venue: [...]` emitted by the "
+    "suite itself, and (b) can read a field instead of a sentence. THE NEW LIMIT "
+    "THIS INTRODUCES, STATED: a stage whose block is NOT YET AT HEAD cannot carry "
+    "an exemption at all, and a legitimately new fixture record cannot tie one "
+    "until it is committed. That is a false RED, not a false green, and it is the "
+    "trade this house takes every time. AND THE OLD LIMIT IS UNCHANGED AND STILL "
+    "TRUE: an anchor against HEAD cannot catch an edit that is ITSELF COMMITTED. "
+    "Commit the forged clause and this guard is green on it. What the anchor buys "
+    "is that the forgery must pass through the commit record first. AND THE "
+    "MATCHING LIMIT, STATED: HEAD fixture-record counterparts are matched BY INDEX, so an INSERTION or a RE-ORDER of a stage's fixture records goes FALSE RED — a false red, not a false green, and the honest trade. The clean repair is a stable per-record id emitted by each suite, which is PROGRESS.json's to write and not this track's; FILED AS A CROSS-TRACK REQUEST. [LEAN R17]'s fourth loop matches the "
+    "same way and INHERITS this limit verbatim.",
+    "[LEAN-HEPHAESTUS] R15 THE BINDING MATCHES EXACTLY. `_binding_field` asked "
+    "`stem in <the stage's block>` — a SUBSTRING test — so every name that merely "
+    "SAT INSIDE a name the ledger did spell bound for free. MEASURED against "
+    "D-CORE, whose blockers name scripts/tierc10_data_fixtures.py: a brand-new "
+    "scripts/tierc10_dat.py (stem 'tierc10_dat') returned the binding field "
+    "'blockers' though the ledger never names it once; the review proved the same "
+    "thing on a full symlink mirror of the repo with one added file. The block is "
+    "now TOKENISED and the suite matched as a WHOLE NAME — its full relative path, "
+    "its basename or its stem — and nothing shorter. NOTE WHAT THIS DOES NOT DO: "
+    "FRESH C2 reaches the same binding by APPENDING 'see "
+    "scripts/tierc10_venue_extra.py' to D-CORE's unanchored blockers list, which is "
+    "an exact name and which exact matching cannot touch. That one is closed by "
+    "R14's HEAD anchor and by R16's sweep, not by this. Exactness is necessary "
+    "here and it was never sufficient.",
+    "[LEAN-HEPHAESTUS] R16 NOTHING SWEPT scripts/. Every sweep in this suite "
+    "looked at research_outputs/tierc10 — the OUTPUT side — and the exemption "
+    "chain runs through CODE: a waiver names a scripts/ file, that file's own LEGS "
+    "table decides which legs may be waived, and its name is what the ledger must "
+    "spell for the binding to hold. So a scripts/ file could APPEAR — untracked, "
+    "recorded nowhere, named by nobody — and join that chain, which is exactly "
+    "what the review built. WHAT 'RECORDED' MEANS, AND WHY: TWO REGISTERS, BOTH "
+    "REQUIRED. (1) THE GIT INDEX — it is the one answer that exists OUTSIDE the "
+    "working tree; adding a file is free, `git add` is not. (2) A MODULE LITERAL, "
+    "TC_SUITE_FILES, which lives under F-C10-RESUME-S, so a new participant cannot "
+    "appear without an edit that must be COMMITTED before this suite goes green. "
+    "An exemption's own suite must additionally have a READABLE HEAD BLOB: the "
+    "legs it may waive are read from that source, and an uncommitted source is a "
+    "file only its author has seen. REJECTED AS THE REGISTER: PROGRESS.json, "
+    "because it records research_outputs/ artifacts rather than code and because "
+    "it is the very document under audit — recording the auditor's inputs in the "
+    "audited file is the circle this track exists to break; and RF_CODE_FILES, "
+    "because that tuple is STEP 0's RangeFinder pin and overloading it would turn "
+    "leg 6 red for reasons with nothing to do with STEP 0, the exact mistake "
+    "[LEAN R6] was written to undo. WHAT IS DELIBERATELY NOT CHECKED: the suites' "
+    "CONTENT shas. Those files belong to other tracks and move under this one; "
+    "their live shas stay on stdout only [LEAN R8]. THE COST, STATED PLAINLY: a "
+    "teammate who adds a new scripts/tierc10_*.py turns this leg RED until the "
+    "name is added here and committed. That is the leg working, not the leg "
+    "broken, and it is one line under an anchor.",
+    "[LEAN-HEPHAESTUS] R17 R14 ANCHORED THE WAIVER'S EVIDENCE AND LEFT THE "
+    "FAILURE'S EVIDENCE FREE. Round 4 spent itself closing FORGERY 1 — appending "
+    "' (shares fixture plumbing with F-D-1)' to D-CORE's OFFLINE fixture record, "
+    "which bought a waiver over a real drift — and the whole time a cheaper move "
+    "was open beside it and nowhere stated: DO NOT BUY A WAIVER, ERASE THE CLAIM. "
+    "One boolean and one string copy inside a PARTIAL stage's block, no module "
+    "edit, no new file, no exemption and no pattern: "
+    "for f in D-CORE['fixtures']: if 'OFFLINE' in f['suite']: "
+    "f['transcript_drift'] = False; f['transcript_sha_after'] = "
+    "f['transcript_sha_before']. MEASURED through main(), load_progress() "
+    "returning the tampered ledger and --root in a scratchpad: drift HONESTLY "
+    "RECORDED -> exit 1, 7 GREEN 2 RED, leg 4 raising 2 findings; drift ERASED -> "
+    "exit 1, 8 GREEN 1 RED, leg 4 PASS, leg 0 zero findings, leg 5 zero findings, "
+    "and the erased run's transcript BYTE-IDENTICAL to the filed artifact of "
+    "record. The leg round 4 was spent repairing stood GREEN over a real, hidden "
+    "transcript drift, and this suite's own output carried no trace of it. ON THE "
+    "IDENTICAL RECORD: forging the clause cost 2 findings, erasing the fields cost "
+    "0 — the cheaper move was the one left open, and it is BROADER, because the "
+    "forgery only ever worked on the one stage carrying an exemption while erasure "
+    "works on all four non-complete stages. THE SECOND HALF, SAME ROOT: delete a "
+    "PARTIAL stage's fixture record outright (LANES (B mech) 1 -> 0) and leg 4's "
+    "REAL leg PASSES, leg 0 finds 0 and leg 5 finds 0; the suite goes red only on "
+    "'F-C10-RESUME-4 (break leg did not go RED — fixture proves nothing)', which "
+    "fired because LANES happens to be a break-leg plant subject. That is an "
+    "ACCIDENT reporting that a fixture proved nothing, not a guard catching a "
+    "tamper, and it would evaporate the moment the plant moved. THE REPAIR is "
+    "leg 0's own third loop [LEAN R10] — 'a settled claim may not be QUIETLY "
+    "WITHDRAWN' — applied ONE LEVEL DOWN, at the FIXTURE-RECORD level, using the "
+    "same index-matching against the committed ledger that _coverage_findings "
+    "already implements. For every stage REGARDLESS OF STATUS, working-tree "
+    "record #i is paired with HEAD's record #i and a finding is raised on "
+    "WITHDRAWAL ONLY: (i) HEAD's #i admits a transcript drift and the working "
+    "tree's #i admits none — a claim that existed in the commit record and does "
+    "not exist this afternoon; (ii) HEAD carries #i and the working tree does "
+    "not — a record that was in the commit record and has vanished, which also "
+    "gives LANES a REAL guard in place of the accidental one. 'Admits a drift' is "
+    "read BOTH ways, the flag and the two shas disagreeing, because the attack "
+    "rewrites both halves in one move; and a MISSING field reads as NO CLAIM, "
+    "never as a claim of health. WITHDRAWAL-ONLY IS DELIBERATE AND IT KEEPS THE "
+    "BUILD ADVANCING: a NEW drift appearing, a record being ADDED and a stage "
+    "being BORN are normal progress and must not go red — that is the same trade "
+    "[LEAN R5] made at the stage level — and all three are planted in the REAL "
+    "leg as controls that must stay SILENT, because a guard that reddens on "
+    "progress is a guard the next builder deletes, and they would be right to. "
+    "Six plants prove both halves RED: the shas, the flag, the fields removed, "
+    "the record deleted, the drifting record deleted, the whole block deleted; "
+    "each is planted on a NON-COMPLETE stage, where the three loops above are "
+    "silent by design, so nothing but the fourth loop can be what catches them. "
+    "THE LIMIT INHERITED FROM R14, IN R14'S OWN WORDS: HEAD fixture-record "
+    "counterparts are matched BY INDEX, so an INSERTION or a RE-ORDER of a "
+    "stage's fixture records goes FALSE RED — a false red, not a false green, and "
+    "the honest trade. The clean repair is a stable per-record id emitted by each "
+    "suite, which is PROGRESS.json's to write and not this track's; FILED AS A "
+    "CROSS-TRACK REQUEST. MEASURED, both halves: inserting one new D-CORE record "
+    "at #0 and re-ordering D-CORE's two records each gave leg 4 ONE false-RED "
+    "finding; and with a drift honestly carried forward, an insertion at #0 gave "
+    "the fourth loop ONE false-RED finding. A PLAIN insertion with no drift at "
+    "HEAD is SILENT here (0 findings), so this loop pays the index tax only where "
+    "a drift claim is actually in play. AND A SECOND LIMIT THIS LOOP HAS, MEASURED "
+    "AND STATED RATHER THAN IMPLIED: the pairing tests DRIFT-PRESENCE at an index, "
+    "not RECORD IDENTITY, so SUBSTITUTING a different record that also admits a "
+    "drift at the same index is 0 findings in this loop — the admission at #i "
+    "survives, the record it belonged to does not. That substitution is NOT a free "
+    "escape and the numbers say why: keeping the drift alive costs a leg-4 RED "
+    "(measured, 1 finding: the substitute names no waived leg, so no exemption "
+    "covers it), and dropping the drift costs a leg-0 RED (measured, 1 finding: it "
+    "is then an ordinary erasure). The only silent substitution is one that keeps "
+    "a drift admission alive AND gets it exempted, which is the chain [LEAN R11], "
+    "[LEAN R14], [LEAN R15] and [LEAN R16] already police. Closing it here would "
+    "mean demanding a record's TEXT never change, which would go false RED on "
+    "every legitimate rename; the reviewer's WITHDRAWAL-ONLY shape is deliberately "
+    "narrower than that, and this is the price of the shape, named. THE LIMIT THIS LOOP ADDS: it anchors on HEAD like every "
+    "other loop here, so a drift that appears and is erased BETWEEN TWO COMMITS "
+    "leaves no committed claim to withdraw and this guard never sees it, and an "
+    "erasure that is ITSELF COMMITTED is a commit's act, which this fixture does "
+    "not judge. What the anchor buys is that the erasure must pass through the "
+    "commit record first, where a reviewer can diff it.",
+    "[LEAN-HEPHAESTUS] R18 R17 ANCHORED ONE ADMISSION AND CRASHED ON THE REST. "
+    "TWO DEFECTS, ONE SHAPE. (a) THE LOOP RAISED INSTEAD OF ACCUSING. Driving the "
+    "deletion attacks R17 had just repaired — delete a record at #0, at the end, "
+    "the only record, the whole fixtures list, the whole stage block — produced "
+    "KeyError: 'BRK (B mech)', KeyError: 'fixtures', KeyError: 0, IndexError and "
+    "TypeError in place of the accusation AND the whole evidence block. MEASURED: "
+    "every one of the 8 deletion shapes on the stage that sorts first crashed "
+    "resume0_real, because the withdrawal-only CONTROLS indexed a HEAD-derived "
+    "stage name into the DISK document, and every plant in resume0_break crashed "
+    "with it, so the break leg went NOT-RED — void — in exactly the state where a "
+    "break leg matters. An exception name where a finding should be is "
+    "indistinguishable from a bug in the fixture. (b) THE SCOPE SENTENCE WAS "
+    "FALSE. Leg 0 printed 'CANNOT judge a stage that is COMPLETE-VERIFIED on "
+    "NEITHER side … this leg says nothing about them' while the fourth loop was "
+    "judging exactly those stages; a reader trusting that sentence would have "
+    "believed the opposite of what the code did. THE REPAIR IS THE GENERAL SHAPE, "
+    "NOT ONE MORE FIELD: no admission that reached the commit record may be taken "
+    "back by an edit nobody committed — it may APPEAR, it may GROW, it may not "
+    "SHRINK or VANISH — over a NAMED vocabulary (drift, exit_code, legs_red, "
+    "red_leg_names, wall_seconds, the stage's blockers by COUNT, PARTIAL "
+    "un-claimed to ABSENT). THE RESIDUE WAS NOT HYPOTHETICAL: the committed "
+    "ledger carries ONE live admission of failure, D-CORE's ONLINE record at exit "
+    "1 with 1 red leg, and on the R17 shape erasing it cost 0 findings, emptying "
+    "all 23 blockers cost 0, un-claiming a PARTIAL stage cost 0 — the reviewer's "
+    "8 GREEN / 1 RED was the same count the pre-R17 ERASE attack produced. On the "
+    "R18 shape: 2, 4 and 1. TOTALITY IS NOW ASSERTED, NOT CLAIMED: every run "
+    "drives 12 deletion shapes against all 9 stages and demands a NAMED finding "
+    "and no exception from every cell that changes the ledger; it caught a real "
+    "hole on its first run (a record replaced by a non-dict was silent whenever "
+    "the record admitted nothing) and that is repaired. WITHDRAWAL ONLY IS "
+    "ASSERTED TOO: 8 controls run the leg over a build ADVANCING and every one is "
+    "silent. WHAT IS STILL OPEN IS STATED AND PRICED IN THE TRANSCRIPT: index "
+    "matching (and its use as CAMOUFLAGE — an attacker can provoke the known "
+    "false RED on purpose until a reader learns to wave the leg through), "
+    "admission-presence-at-an-index rather than record identity, a vocabulary "
+    "that is a list, and blockers matched by COUNT. All four share one clean "
+    "repair — a stable per-record id emitted by each suite — which is "
+    "PROGRESS.json's to write and NOT this track's. CROSS-TRACK REQUEST, FILED.",
+    "[LEAN-HEPHAESTUS] R19 TWO HOLES AT THE EDGES OF A SUITE THAT WAS TOTAL IN "
+    "THE MIDDLE. (a) main()'s HEADER WAS NOT TOTAL, so the process died before "
+    "any fixture ran. R18 made anchor_findings, resume0_real and resume0_break "
+    "total and drove 12 deletion shapes x 9 stages through them; the header "
+    "above them still read prog['stages'], s['status'] and s['artifact_shas'] "
+    "directly. MEASURED THROUGH main(): 40 of 45 cells gave leg-0 RED with a "
+    "named finding and 5 DIED — KeyError: 'stages', and TypeError: string "
+    "indices must be integers on EVERY stage for 'the stage ROW is not an "
+    "object'. THE CONSEQUENCE WAS THE WORST AVAILABLE ONE: a traceback, no leg, "
+    "no accusation, F-C10-RESUME-T never reached, and NO TRANSCRIPT WRITTEN AT "
+    "ALL — so the stale FIXTURES_RESUME.txt stood as the artifact of record "
+    "while the ledger it describes had been gutted. The header now reads the "
+    "ledger exactly as the display loop does: _stage_list(), isinstance-guarded "
+    ".get(), an UNREADABLE row printed for a stage row that is not an object, "
+    "and a named line for a ledger that is not an object at all. RE-MEASURED "
+    "THROUGH main() AFTER THE REPAIR: 12 shapes x 9 stages = 108 cells, plus 3 "
+    "whole-ledger shapes; 0 crashes. (b) THE ABSENT-TRANSCRIPT ESCAPE. The "
+    "no-clobber guard of R9 answered 'may this run overwrite the filed "
+    "transcript?' and never 'is the filed transcript still there?'. MEASURED: "
+    "with a foreign filed transcript present the guard was correct — RED, the "
+    "delta named, the artifact preserved, the run diverted to "
+    "FIXTURES_RESUME_rerun.txt; after `rm FIXTURES_RESUME.txt "
+    "FIXTURES_RESUME_rerun.txt` the SAME run went SILENT, ZERO findings "
+    "anywhere, '[NEW]' on stdout only, and its own bytes became the artifact of "
+    "record. Total cost: one rm of a file git does not track. AND THE [PASS] "
+    "LINE WAS OVERSTATED — it called --refile-transcript 'the one deliberate, "
+    "named escape' while the ABSENT branch was a second escape needing no flag; "
+    "a sentence claiming a scope the code lacks is worse than the hole it "
+    "hides. BOTH HALVES TAKEN: the ABSENT branch now REFUSES and names the "
+    "absence as a finding, mirroring STEP0_RECORD.json's refusal, and the "
+    "artifact of record is ANCHORED on its own HEAD blob the way the ledger is "
+    "— the orchestrator commits it with `git add -f`, the tierc10 tree being "
+    "gitignored exactly as it is for PROGRESS.json. An erasure, an uncommitted "
+    "replacement, an untracked path and an unreachable blob are four named "
+    "findings where there was one blank page. THE PRICE, STATED: this leg now "
+    "shares F-C10-RESUME-S's standing one-step-behind condition — a re-file "
+    "moves the working tree ahead of the blob until the next commit, and a run "
+    "inside that window is a FALSE RED, never a false green. NO SHA OF THE "
+    "TRANSCRIPT PATH IS PRINTED ON THE GREEN PATH: the next commit makes this "
+    "file that blob, so a line carrying the blob's sha would have to contain "
+    "the sha of the bytes containing it. The VERDICT is printed instead, which "
+    "is a fact about two files that both existed before the run and converges "
+    "in one commit.",
 )
 
 # ═══════════════════════════════════════════════════════ transcript plumbing
@@ -534,9 +994,270 @@ def _stage_bytes(stage: dict) -> bytes:
     return _jb(stage).encode("utf-8")
 
 
-def _stages_by_name(doc: dict) -> dict:
-    return {s.get("stage"): s for s in (doc.get("stages") or [])
-            if isinstance(s, dict)}
+def _drifted(rec) -> bool:
+    """DOES THIS FIXTURE RECORD ADMIT A TRANSCRIPT DRIFT?
+
+    Read TWO ways, because the erasure attack rewrites both halves in one move
+    and either half left standing is still a claim: the record's own
+    `transcript_drift` flag, and the DISAGREEMENT of the two shas it records.
+    A record carrying neither is NOT drifted — the absence of the fields is the
+    absence of a claim, never a claim of health."""
+    if not isinstance(rec, dict):
+        return False
+    if rec.get("transcript_drift"):
+        return True
+    b, a = rec.get("transcript_sha_before"), rec.get("transcript_sha_after")
+    return bool(b) and bool(a) and b != a
+
+
+def _stage_list(doc) -> tuple[list, str | None]:
+    """A LEDGER'S STAGE ROWS, TOTAL.  Returns the list to walk and, when the
+    document does not carry one, a NAMED description of what it carries instead.
+
+    NOTHING IN THIS FAMILY RAISES.  [LEAN R18]  A guard that raises instead of
+    accusing tells the reader nothing, and an exception name where a finding
+    should be is indistinguishable from a bug in the fixture itself — so every
+    malformed shape below becomes a NAMED FINDING and never a traceback."""
+    if not isinstance(doc, dict):
+        return [], f"the ledger is {type(doc).__name__}, not an object"
+    s = doc.get("stages")
+    if isinstance(s, list):
+        return s, None
+    if s is None:
+        return [], "the ledger has no 'stages' key at all"
+    return [], f"the ledger's 'stages' is {type(s).__name__}, not a list"
+
+
+def _stages_by_name(doc) -> dict:
+    rows, _ = _stage_list(doc)
+    return {s.get("stage"): s for s in rows if isinstance(s, dict)}
+
+
+def _malformed_rows(doc, side: str) -> list[str]:
+    """The rows `_stages_by_name` HAD TO DROP, named.  A stage row that is not an
+    object carries no stage name, so every by-name comparison in this leg looks
+    straight past it and its absence reads as health — which is precisely what a
+    deletion buys.  It is named here instead."""
+    rows, why = _stage_list(doc)
+    out: list[str] = []
+    if why:
+        out.append(f"{side}: {why} — a ledger this leg cannot walk is a ledger "
+                   f"that cannot contradict anything, and silence is not health")
+    for i, row in enumerate(rows):
+        if not isinstance(row, dict):
+            out.append(f"{side}: stage row #{i} is {type(row).__name__}, not an "
+                       f"object — it carries no stage name, so every by-name guard "
+                       f"in this leg looks straight past it and the stage it "
+                       f"replaced reads as simply absent")
+    return out
+
+
+def _reclist(stage) -> tuple[list, str | None]:
+    """A STAGE'S FIXTURE RECORDS, TOTAL.  Returns the list to pair over and, when
+    the block does not carry one, a NAMED description of what it carries instead.
+
+    EVERY DELETION SHAPE ARRIVES HERE: a missing 'fixtures' key, a null, a dict
+    or a string in place of the list, a short list, an empty list.  Each returns
+    a list and a name; none raises."""
+    if not isinstance(stage, dict):
+        return [], f"the stage entry is {type(stage).__name__}, not an object"
+    if "fixtures" not in stage:
+        return [], "the stage block has NO 'fixtures' key at all"
+    f = stage["fixtures"]
+    if isinstance(f, list):
+        return f, None
+    if f is None:
+        return [], "the stage block's 'fixtures' is null"
+    return [], (f"the stage block's 'fixtures' is {type(f).__name__}, not a list, "
+                f"so it holds no records this leg can pair against HEAD's")
+
+
+def _blockerlist(stage) -> tuple[list, str | None]:
+    """A STAGE'S BLOCKERS, TOTAL.  Same contract as `_reclist`."""
+    if not isinstance(stage, dict):
+        return [], f"the stage entry is {type(stage).__name__}, not an object"
+    if "blockers" not in stage:
+        return [], "the stage block has NO 'blockers' key at all"
+    b = stage["blockers"]
+    if isinstance(b, list):
+        return b, None
+    if b is None:
+        return [], "the stage block's 'blockers' is null"
+    return [], f"the stage block's 'blockers' is {type(b).__name__}, not a list"
+
+
+# ══ WHAT A LEDGER CAN CONFESS, AND THE ONE DIRECTION IT MAY MOVE [LEAN R18] ══
+# The fourth loop was born anchoring ONE admission — a transcript drift — and a
+# review measured exactly what that left standing: 8 GREEN, 1 RED, the identical
+# count the round-5 ERASE attack produced BEFORE it was repaired, because
+# exit_code, legs_red, red_leg_names, wall_seconds and the stage's whole blockers
+# list were all still free to be taken back by an uncommitted edit, and a stage
+# could move PARTIAL -> ABSENT with nothing said.
+#
+# THE REPAIR IS THE GENERAL SHAPE, NOT ONE MORE FIELD: AN ADMISSION THAT REACHED
+# THE COMMIT RECORD MAY NOT BE TAKEN BACK BY AN EDIT NOBODY COMMITTED.  It may
+# APPEAR, it may GROW, it may not SHRINK or VANISH.
+#
+# THE VOCABULARY IS A NAMED LIST AND THAT IS ITSELF A LIMIT — a confession made
+# in a field not named here is not anchored.  It is stated and measured on the
+# LIMIT lines in resume0_real, not left for a reader to discover.
+ADMISSION_FIELDS = ("transcript_drift/transcript_sha_before/transcript_sha_after",
+                    "exit_code", "legs_red", "red_leg_names", "wall_seconds",
+                    "blockers (stage-level, by COUNT)", "status (PARTIAL -> ABSENT)")
+
+
+def _num(v):
+    """A real number, or None.  A bool is not a number and the string '3' is not
+    a number: a field whose TYPE changed has stopped saying what it said, and the
+    callers read that as a withdrawal rather than coerce it into agreement."""
+    if isinstance(v, bool) or not isinstance(v, (int, float)):
+        return None
+    return v
+
+
+def _nameset(v) -> set:
+    """The set of NAMED failures a field carries, out of whatever shape it is."""
+    if isinstance(v, str):
+        return {v}
+    if isinstance(v, (list, tuple, set)):
+        return {str(x) for x in v}
+    return set()
+
+
+def _record_admissions(rec) -> list[str]:
+    """EVERY ADMISSION a fixture record makes, rendered for a reader.  Used to
+    say what a DELETED or UNREADABLE record was carrying when it went."""
+    if not isinstance(rec, dict):
+        return []
+    out: list[str] = []
+    if _drifted(rec):
+        out.append(f"a transcript drift (drift={rec.get('transcript_drift')!r}, "
+                   f"{str(rec.get('transcript_sha_before'))[:12]}\u2026 -> "
+                   f"{str(rec.get('transcript_sha_after'))[:12]}\u2026)")
+    ec = _num(rec.get("exit_code"))
+    if ec is not None and ec != 0:
+        out.append(f"exit_code={ec!r}")
+    lr = _num(rec.get("legs_red"))
+    if lr is not None and lr > 0:
+        out.append(f"legs_red={lr!r}")
+    rn = _nameset(rec.get("red_leg_names"))
+    if rn:
+        out.append(f"red_leg_names={sorted(rn)}")
+    ws = _num(rec.get("wall_seconds"))
+    if ws is not None and ws > 0:
+        out.append(f"wall_seconds={ws!r}")
+    return out
+
+
+def _where(name, i, hrec, drec) -> str:
+    """How a paired record is NAMED in a finding: the stage, the index, and the
+    suite string as the WORKING TREE spells it when it has one, as HEAD spells it
+    otherwise.  Total: either side may be any object."""
+    src = drec if isinstance(drec, dict) and drec.get("suite") is not None else hrec
+    suite = src.get("suite") if isinstance(src, dict) else None
+    return f"{name!r}: fixture record #{i} {str(suite)[:64]!r}"
+
+
+def _record_withdrawals(h, d, where: str) -> list[str]:
+    """THE ONE-WAY TEST, FIELD BY FIELD, on one HEAD/disk record pair.
+
+    TOTAL BY CONSTRUCTION: `h` and `d` may be ANY object.  Every path returns a
+    NAMED FINDING or nothing and none of them raises.
+
+    WITHDRAWAL ONLY, DELIBERATELY.  A failure APPEARING, a count GROWING, a name
+    being ADDED, a run costing MORE — all of that is a build advancing and is
+    SILENT here, and the controls in resume0_real assert it rather than promise
+    it.  A guard that reddens on progress is a guard the next builder deletes."""
+    if not isinstance(h, dict):
+        return []                      # HEAD admits nothing legible to withdraw
+    if not isinstance(d, dict):
+        # UNCONDITIONAL, and the totality probe is why.  A record that admits no
+        # failure is still the EVIDENCE that its stage was run and what it ran —
+        # the suite it was, how many legs it had, the transcript shas it stood
+        # on — so a record replaced by a string is GONE as a record whether or
+        # not it happened to be confessing anything.  This branch returned []
+        # when the record admitted nothing, and the probe caught it on its first
+        # run against D-CORE's record #0.  [LEAN R18]
+        adm = _record_admissions(h)
+        return [f"{where}: HEAD CARRIES A FIXTURE RECORD HERE AND THE WORKING "
+                f"TREE CARRIES {type(d).__name__} — a record that cannot be READ "
+                f"as a record is gone as surely as one that was deleted, and with "
+                f"it the evidence that this stage was run at all"
+                + (f". HEAD's record ADMITS {'; '.join(adm)}" if adm
+                   else ". HEAD's record admits no failure, which is not a reason "
+                        "to let it vanish: it is the proof the suite ran")]
+    out: list[str] = []
+    if _drifted(h) and not _drifted(d):
+        out.append(f"{where}: ADMITS A TRANSCRIPT DRIFT AT HEAD AND ADMITS NONE IN "
+                   f"THE WORKING TREE — HEAD drift={h.get('transcript_drift')!r} "
+                   f"{str(h.get('transcript_sha_before'))[:12]}\u2026 -> "
+                   f"{str(h.get('transcript_sha_after'))[:12]}\u2026, disk "
+                   f"drift={d.get('transcript_drift')!r} "
+                   f"{str(d.get('transcript_sha_before'))[:12]}\u2026 -> "
+                   f"{str(d.get('transcript_sha_after'))[:12]}\u2026. THE DRIFT "
+                   f"CLAIM WAS WITHDRAWN BY AN EDIT NOBODY COMMITTED — one boolean "
+                   f"and one string copy, cheaper than any forgery and needing no "
+                   f"exemption at all")
+    he, de = _num(h.get("exit_code")), _num(d.get("exit_code"))
+    if he is not None and he != 0 and (de is None or de == 0):
+        out.append(f"{where}: EXITS {he!r} AT HEAD AND {d.get('exit_code')!r} IN "
+                   f"THE WORKING TREE — a suite that FAILED is being recorded as a "
+                   f"suite that passed, and the nonzero exit is the plainest "
+                   f"admission of failure a fixture record can make")
+    hr, dr = _num(h.get("legs_red")), _num(d.get("legs_red"))
+    if hr is not None and hr > 0 and (dr is None or dr < hr):
+        out.append(f"{where}: legs_red {hr!r} AT HEAD AND {d.get('legs_red')!r} IN "
+                   f"THE WORKING TREE — a red leg is not un-run by an uncommitted "
+                   f"edit; it is re-run, and a re-run APPENDS a record")
+    hn, dn_ = _nameset(h.get("red_leg_names")), _nameset(d.get("red_leg_names"))
+    lost = sorted(hn - dn_)
+    if lost:
+        out.append(f"{where}: {len(lost)} NAMED RED LEG(S) UN-NAMED in the working "
+                   f"tree, e.g. {lost[0]!r} — HEAD names {sorted(hn)}, the working "
+                   f"tree {sorted(dn_)}. A named failure is the one a reader can "
+                   f"chase, so un-naming it is the withdrawal that costs least")
+    hw, dw = _num(h.get("wall_seconds")), _num(d.get("wall_seconds"))
+    if hw is not None and hw > 0 and (dw is None or dw < hw):
+        out.append(f"{where}: wall_seconds {hw!r} AT HEAD AND {d.get('wall_seconds')!r} "
+                   f"IN THE WORKING TREE. This is an admission of COST rather than "
+                   f"of failure and it is anchored the same ONE way: a run may be "
+                   f"recorded as costing MORE than the commit record says, never "
+                   f"LESS — a stage shrunk from hours to milliseconds reads as "
+                   f"cheap to redo, and that is a claim about the build")
+    return out
+
+
+def _stage_withdrawals(h, d, name) -> list[str]:
+    """THE ONE-WAY TEST AT THE STAGE LEVEL: the blockers list and the status.
+
+    Total in the same sense: `h` and `d` may be any object."""
+    out: list[str] = []
+    if not isinstance(h, dict):
+        return out
+    hb, hb_why = _blockerlist(h)
+    db, db_why = _blockerlist(d)
+    if hb and db_why:
+        out.append(f"{name!r}: HEAD lists {len(hb)} BLOCKER(S) and in the working "
+                   f"tree {db_why} — blockers that cannot be read are blockers that "
+                   f"no longer block, e.g. {str(hb[0])[:80]!r}")
+    elif len(db) < len(hb):
+        out.append(f"{name!r}: BLOCKERS WITHDRAWN — HEAD lists {len(hb)}, the "
+                   f"working tree {len(db)}"
+                   + (" (the list is EMPTIED)" if not db else "")
+                   + f". A blocker that reached the commit record is cleared by a "
+                     f"commit or it is not cleared; e.g. HEAD's first is "
+                     f"{str(hb[0])[:80]!r}")
+    hs = h.get("status")
+    ds = d.get("status") if isinstance(d, dict) else None
+    if hs == "PARTIAL" and ds not in ("PARTIAL", "COMPLETE-VERIFIED"):
+        out.append(f"{name!r}: PARTIAL AT HEAD AND {ds!r} IN THE WORKING TREE — the "
+                   f"stage is being UN-CLAIMED rather than finished. PARTIAL is an "
+                   f"admission that work was started and did not complete; "
+                   f"retreating to ABSENT erases the fact that it was ever "
+                   f"attempted, and every blocker and record under it with it")
+    return out
+
+
 
 
 def _stage_delta(d: dict, h: dict) -> str:
@@ -608,6 +1329,33 @@ def anchor_findings(disk: dict, head_blob: bytes | None, pinned_blob: bytes | No
     carries the build forward: D-CORE, CENSUS-R, LANES and BRK are NOT
     COMPLETE-VERIFIED at the pinned rev, so when they complete, the pinned loop
     can never guard them and this loop is the only thing that will.
+
+    R17/R18-REPAIR — AND ONE LEVEL DOWN, FOR EVERY STAGE.  The three loops above
+    leave a non-complete stage FREE TO MOVE, which is what lets the build
+    advance, and a review turned that freedom into an ERASURE: the admissions of
+    failure inside a PARTIAL stage's block could simply be taken back in an
+    uncommitted edit.  The FOURTH loop is the rule that closes it, stated once
+    and generally rather than field by field:
+
+        AN ADMISSION THAT REACHED THE COMMIT RECORD MAY NOT BE TAKEN BACK BY AN
+        EDIT NOBODY COMMITTED.  It may APPEAR, it may GROW, it may not SHRINK or
+        VANISH.
+
+    The anchored vocabulary is `ADMISSION_FIELDS`; the fact that it IS a
+    vocabulary is a limit, and resume0_real states and measures it.  Where either
+    side calls a stage COMPLETE-VERIFIED the fourth loop STANDS DOWN, because
+    loops 2 and 3 already demand something strictly stronger and one tamper
+    should print one finding.
+
+    TOTAL BY CONSTRUCTION [LEAN R18].  Every pairing path goes through
+    `_stage_list`, `_reclist`, `_blockerlist`, `_record_withdrawals` and
+    `_stage_withdrawals`, none of which raises: a missing stage, a missing
+    fixtures list, a null, a dict where a list belongs, a short list, a record
+    that is not a dict and a stage row that is not an object each produce a
+    NAMED FINDING.  Round 6 opened because they did not — they produced
+    KeyError, IndexError and TypeError in place of the accusation and the whole
+    evidence block, on two of the exact deletion attacks round 5 had just
+    repaired.
     """
     bad: list[str] = []
     if pinned_blob is None:
@@ -693,6 +1441,138 @@ def anchor_findings(disk: dict, head_blob: bytes | None, pinned_blob: bytes | No
         # BYTE-IDENTITY when BOTH sides call it COMPLETE-VERIFIED is asserted by
         # the working-tree loop above; it is deliberately NOT repeated here, so a
         # single tamper prints a single finding and the count stays readable.
+    # ── THE FOURTH LOOP — THE SAME RULE ONE LEVEL DOWN, AT THE FIXTURE RECORD
+    #    AND AT THE STAGE'S OWN ADMISSIONS, FOR EVERY STAGE REGARDLESS OF STATUS.
+    #    [LEAN-HEPHAESTUS] R17, WIDENED TO ITS GENERAL SHAPE BY R18
+    #
+    # THE HOLE R17 CLOSED.  R14 anchored the WAIVER'S evidence — the record text
+    # that floor (b) reads — and left THE FAILURE'S EVIDENCE FREE.  A drift claim
+    # on any non-complete stage could therefore simply be ERASED: one boolean and
+    # one string copy inside a PARTIAL stage's block, with no module edit, no new
+    # file, no exemption and no pattern.
+    #     for f in D-CORE['fixtures']:
+    #         if 'OFFLINE' in f['suite']:
+    #             f['transcript_drift'] = False
+    #             f['transcript_sha_after'] = f['transcript_sha_before']
+    # MEASURED through main(), load_progress() returning the tampered ledger and
+    # --root in a scratchpad:
+    #     drift HONESTLY RECORDED : exit 1 · 7 GREEN 2 RED · leg 4 -> 2 findings
+    #     drift ERASED            : exit 1 · 8 GREEN 1 RED · leg 4 PASS,
+    #                               leg 0 -> 0 findings, leg 5 -> 0 findings
+    # The leg round 4 was spent repairing was GREEN over a real, hidden drift, and
+    # the erased run's transcript was BYTE-IDENTICAL to the filed artifact of
+    # record — the erasure left no trace anywhere in this suite's output.
+    #
+    # THE HOLE R17 LEFT, AND WHY ONE MORE FIELD WAS THE WRONG REPAIR.  Anchoring
+    # the DRIFT ADMISSION alone left every other admission of failure on a
+    # non-complete stage free — exit_code, legs_red, red_leg_names, wall_seconds,
+    # the stage's whole blockers list — and left a stage free to move PARTIAL ->
+    # ABSENT with nothing said.  A review measured the residue at 8 GREEN, 1 RED:
+    # THE SAME COUNT THE ERASE ATTACK PRODUCED BEFORE R17 REPAIRED IT.  So the
+    # rule below is stated once, generally, over a NAMED VOCABULARY of admissions
+    # (`ADMISSION_FIELDS`), and not patched field by field:
+    #
+    #     AN ADMISSION THAT REACHED THE COMMIT RECORD MAY NOT BE TAKEN BACK BY AN
+    #     EDIT NOBODY COMMITTED.  It may APPEAR, it may GROW, it may not SHRINK
+    #     or VANISH.
+    #
+    # IT IS CHEAPER AND BROADER THAN THE FORGERY ROUND 4 CLOSED.  On the identical
+    # record: appending ' (shares fixture plumbing with F-D-1)' -> 2 findings;
+    # erasing the drift fields instead -> 0.  The forgery only ever worked on the
+    # one stage carrying an exemption; erasure needs no exemption and works on all
+    # four non-complete stages.  DELETING the record outright is the same attack
+    # one step cruder, and it was red only BY ACCIDENT: LANES happens to be a
+    # break-leg plant subject, so the suite went red on "F-C10-RESUME-4 (break leg
+    # did not go RED — fixture proves nothing)", which is a fixture reporting that
+    # it proved nothing, not a guard catching a tamper.
+    #
+    # WITHDRAWAL ONLY, AND DELIBERATELY SO.  A NEW drift appearing, a NEW failure
+    # appearing, a blocker being ADDED, a record being ADDED, a stage being BORN
+    # or CLAIMED (ABSENT -> PARTIAL), a run costing MORE — every one of those is a
+    # build ADVANCING and must not go red, the same trade [LEAN R5] made at the
+    # stage level so that work can proceed.  What may not happen is a claim that
+    # REACHED THE COMMIT RECORD leaving it in an uncommitted edit.  All of it is
+    # ASSERTED by controls in resume0_real, not promised in prose.
+    #
+    # TOTAL BY CONSTRUCTION [LEAN R18].  Every pairing path below goes through
+    # `_stage_list`, `_reclist`, `_blockerlist`, `_record_withdrawals` and
+    # `_stage_withdrawals`, none of which raises.  A missing stage, a missing
+    # 'fixtures' key, a null, a dict where a list belongs, a short list, a record
+    # that is not a dict, a stage row that is not an object — each yields a NAMED
+    # FINDING.  R18 was opened because the previous shape did NOT: driving the
+    # deletion attacks this same loop was written to catch produced KeyError,
+    # IndexError and TypeError in place of the accusation and the whole evidence
+    # block, and an exception name where a finding should be is indistinguishable
+    # from a bug in the fixture.
+    bad += _malformed_rows(head, "HEAD")
+    bad += _malformed_rows(disk, "the working tree")
+    for name in sorted(head_st, key=str):
+        h = head_st[name]
+        hf, hf_why = _reclist(h)
+        hb, _ = _blockerlist(h)
+        if hf_why:
+            bad.append(f"{name!r}: HEAD'S OWN BLOCK CARRIES NO FIXTURE LIST — "
+                       f"{hf_why}. The anchor cannot pair what it cannot read, so "
+                       f"this stage's records are unguarded at the source")
+        d = disk_st.get(name)
+        if d is None:
+            # The whole block is gone from the working tree, which withdraws every
+            # admission it carried at once.  A COMPLETE-VERIFIED stage is already
+            # named by the third loop; naming it twice only makes the count harder
+            # to read, so this speaks for the stages that loop deliberately leaves
+            # free.  A stage that admitted NOTHING — ABSENT, no blockers, no
+            # records — is tidying, not withdrawal, and stays silent.
+            if h.get("status") == "COMPLETE-VERIFIED":
+                continue
+            adm = sorted({a for r in hf for a in _record_admissions(r)})
+            if h.get("status") == "PARTIAL" or hf or hb:
+                bad.append(f"{name!r}: HEAD carries this stage as "
+                           f"{h.get('status')!r} with {len(hf)} fixture record(s) "
+                           f"and {len(hb)} blocker(s), and THE WORKING TREE CARRIES "
+                           f"NO SUCH STAGE — deleting a block deletes every record "
+                           f"and every blocker in it, and with them everything they "
+                           f"admitted"
+                           + (f" (namely {'; '.join(adm[:3])})" if adm else "")
+                           + f". A claim that reached the commit record is "
+                             f"withdrawn by a commit or it is not withdrawn")
+            continue
+        # WHERE LOOPS 2 AND 3 ALREADY RULE, THIS ONE STANDS DOWN — not because
+        # it has nothing to say, but because they say something STRICTLY
+        # STRONGER and one tamper should print one finding.  If EITHER side
+        # calls the stage COMPLETE-VERIFIED then either both do, and loop 2
+        # demands the two blocks be BYTE-IDENTICAL (which forbids every
+        # withdrawal below and every edit besides), or they disagree, and loop 2
+        # or loop 3 has already named the promotion or the demotion.  There is
+        # no shape that reaches here unjudged.
+        if "COMPLETE-VERIFIED" in (h.get("status"),
+                                   d.get("status") if isinstance(d, dict) else None):
+            continue
+        bad += _stage_withdrawals(h, d, name)
+        df, df_why = _reclist(d)
+        if df_why and hf:
+            adm = sorted({a for r in hf for a in _record_admissions(r)})
+            bad.append(f"{name!r}: HEAD carries {len(hf)} fixture record(s) and in "
+                       f"the working tree {df_why} — records that cannot be read "
+                       f"are records that cannot contradict anything, which is "
+                       f"exactly what deleting them buys"
+                       + (f"; HEAD's records admit {'; '.join(adm[:3])}" if adm
+                          else ""))
+        for i, hrec in enumerate(hf):
+            if i >= len(df):
+                adm = _record_admissions(hrec)
+                bad.append(f"{name!r}: fixture record #{i} "
+                           f"{str(hrec.get('suite') if isinstance(hrec, dict) else hrec)[:64]!r} "
+                           f"IS AT HEAD AND IS GONE FROM THE WORKING TREE (HEAD "
+                           f"carries {len(hf)} record(s), the working tree "
+                           f"{len(df)})"
+                           + (f" — AND THE RECORD THAT VANISHED ADMITTED "
+                              f"{'; '.join(adm)}" if adm else "")
+                           + f". A fixture record is the evidence that its stage "
+                             f"was actually run and what that run cost; deleting "
+                             f"one deletes whatever it admitted, and without this "
+                             f"loop the suite goes GREEN over the hole")
+                continue
+            bad += _record_withdrawals(hrec, df[i], _where(name, i, hrec, df[i]))
     return bad
 
 
@@ -701,15 +1581,250 @@ def resume0_break():
     head_blob = _git_blob("HEAD", LEDGER_REL)
     pin_blob = _git_blob(PINNED_LEDGER_REV, LEDGER_REL)
 
-    def mutated(fn) -> list[str]:
+    head_doc = json.loads(head_blob.decode("utf-8")) if head_blob else {"stages": []}
+
+    # ── EVERY PLANT PATH IS TOTAL, AND ITS SUBJECT IS SEEDED FROM HEAD.
+    #    [LEAN-HEPHAESTUS] R18
+    # Round 6 drove the deletion attacks this leg was written to catch and found
+    # EVERY plant below raising KeyError / IndexError / TypeError the moment the
+    # WORKING TREE was itself the thing under investigation — which is the only
+    # state in which a break leg matters at all.  `_seed`/`_rec` restore HEAD's
+    # own block for the plant's subject into the deep copy before the plant runs,
+    # so a plant proves ITS GUARD against a known shape and never depends on what
+    # the tree happens to hold today.  A break leg that crashes because the tree
+    # was tampered with is a break leg that proved nothing exactly when it
+    # mattered.  NO REPO FILE IS WRITTEN BY ANY OF THIS.
+    def _pick(pred, why: str) -> str:
+        names = sorted(n for n, st in _stages_by_name(head_doc).items()
+                       if pred(st))
+        return names[0] if names else f"<SYNTHESISED SUBJECT — {why}>"
+
+    NC = _pick(lambda st: st.get("status") != "COMPLETE-VERIFIED"
+               and (st.get("fixtures") or []),
+               "no non-complete stage with a fixture record exists at HEAD")
+    CV = _pick(lambda st: st.get("status") == "COMPLETE-VERIFIED",
+               "no COMPLETE-VERIFIED stage exists at HEAD")
+    PB = _pick(lambda st: st.get("status") == "PARTIAL" and (st.get("blockers") or []),
+               "no blockered PARTIAL stage exists at HEAD")
+
+    def _synth_rec(i: int) -> dict:
+        return {"suite": f"SYNTHESISED FIXTURE RECORD #{i}", "exit_code": 0,
+                "legs_red": 0, "legs_total": 1, "transcript_drift": False,
+                "transcript_sha_before": "0" * 64,
+                "transcript_sha_after": "0" * 64, "wall_seconds": 1.0}
+
+    def _blk(name: str) -> dict:
+        b = _stages_by_name(head_doc).get(name)
+        if isinstance(b, dict):
+            return copy.deepcopy(b)
+        return {"stage": name, "status": "PARTIAL", "as_of": AS_OF,
+                "artifact_shas": {}, "fixtures": [_synth_rec(0)],
+                "blockers": ["SYNTHESISED BLOCKER"]}
+
+    def _put(doc: dict, block: dict) -> None:
+        rows, _ = _stage_list(doc)
+        out, done = [], False
+        for r in rows:
+            if isinstance(r, dict) and r.get("stage") == block.get("stage"):
+                out.append(copy.deepcopy(block))
+                done = True
+            else:
+                out.append(r)
+        if not done:
+            out.append(copy.deepcopy(block))
+        doc["stages"] = out
+
+    def _stage(doc: dict, name: str) -> dict:
+        st = _stages_by_name(doc).get(name)
+        if not isinstance(st, dict):
+            _put(doc, _blk(name))
+            st = _stages_by_name(doc)[name]
+        return st
+
+    def _recs(doc: dict, name: str = None) -> list:
+        st = _stage(doc, name or NC)
+        if not isinstance(st.get("fixtures"), list):
+            st["fixtures"] = []
+        return st["fixtures"]
+
+    def _rec(doc: dict, idx: int = 0, name: str = None) -> dict:
+        f = _recs(doc, name)
+        while len(f) <= idx:
+            f.append(_synth_rec(len(f)))
+        if not isinstance(f[idx], dict):
+            f[idx] = _synth_rec(idx)
+        return f[idx]
+
+    def _blockers(doc: dict, name: str = None) -> list:
+        st = _stage(doc, name or NC)
+        if not isinstance(st.get("blockers"), list):
+            st["blockers"] = []
+        if not st["blockers"]:
+            st["blockers"] = ["SYNTHESISED BLOCKER A", "SYNTHESISED BLOCKER B"]
+        return st["blockers"]
+
+    def mutated(fn, *seed: str) -> list[str]:
         d = copy.deepcopy(disk)
+        for nm in seed:
+            _put(d, _blk(nm))
         fn(d)
         return anchor_findings(d, head_blob, pin_blob)
 
+    def against(head_fn, disk_fn=None) -> list[str]:
+        """A WITHDRAWAL NEEDS SOMETHING TO WITHDRAW.  The committed ledger admits
+        no failure today — every record exits 0 with 0 red legs, no drift, no
+        named red leg — so the HONEST record, the one a truthful builder would
+        have filed and committed, is synthesised HERE inside the plant, and the
+        working tree is the WITHDRAWN one.  The plant is therefore the real
+        attack run against a real anchor, not a mutation of the anchor itself.
+
+        BOTH sides start from HEAD's own block for the subject stage, so the
+        plant is the SAME plant whatever state the working tree is in."""
+        h = copy.deepcopy(head_doc)
+        d = copy.deepcopy(disk)
+        _put(h, _blk(NC))
+        _put(d, _blk(NC))
+        head_fn(h)
+        if disk_fn is not None:
+            disk_fn(d)
+        return anchor_findings(d, _jb(h).encode("utf-8"), pin_blob)
+
+    # ── the HONEST HEAD halves: what a truthful builder committed ──────────
+    def honest_flag(h):
+        """HEAD records the drift the honest way: the record's own flag."""
+        _rec(h)["transcript_drift"] = True
+
+    def honest_shas(h):
+        """HEAD records the drift the OTHER honest way: the two shas disagree,
+        with the flag left alone.  Both halves of `_drifted` are exercised
+        because the attack rewrites both halves in one move."""
+        _rec(h)["transcript_sha_after"] = "9" * 64
+
+    def honest_exit(h):
+        """HEAD records a suite that FAILED: nonzero exit, red legs, names."""
+        r = _rec(h)
+        r["exit_code"] = 1
+        r["legs_red"] = 4
+        r["legs_total"] = 11
+        r["red_leg_names"] = ["F-SYN-1", "F-SYN-2", "F-SYN-3", "F-SYN-4"]
+
+    def honest_wall(h):
+        """HEAD records what the run COST."""
+        _rec(h)["wall_seconds"] = 3600.5
+
+    # ── the WITHDRAWALS: the working tree takes the admission back ─────────
+    def erase_shas(d):
+        """THE ATTACK, VERBATIM: one boolean and one string copy."""
+        r = _rec(d)
+        r["transcript_drift"] = False
+        r["transcript_sha_after"] = r.get("transcript_sha_before")
+
+    def erase_fields(d):
+        """THE ATTACK, CRUDER: the fields that carry the admission are simply
+        removed.  A missing field must read as NO CLAIM, never as health."""
+        for k in ("transcript_drift", "transcript_sha_before",
+                  "transcript_sha_after"):
+            _rec(d).pop(k, None)
+
+    def erase_exit(d):
+        """THE SAME MOVE ON THE PLAINEST ADMISSION THERE IS: a suite that exited
+        nonzero is recorded as one that exited 0."""
+        _rec(d)["exit_code"] = 0
+
+    def erase_exit_field(d):
+        _rec(d).pop("exit_code", None)
+
+    def erase_legs_red(d):
+        """The count of red legs goes to zero and the names go with it."""
+        r = _rec(d)
+        r["legs_red"] = 0
+        r["red_leg_names"] = []
+
+    def shrink_legs_red(d):
+        """PARTIAL withdrawal: 4 red legs become 1.  Shrinking is withdrawing."""
+        r = _rec(d)
+        r["legs_red"] = 1
+        r["red_leg_names"] = ["F-SYN-1"]
+
+    def unname_one_leg(d):
+        """THE CHEAPEST OF ALL: the COUNT is left alone and ONE NAME is dropped,
+        so a reader can no longer chase the leg that failed."""
+        r = _rec(d)
+        r["red_leg_names"] = ["F-SYN-1", "F-SYN-2", "F-SYN-3"]
+
+    def shrink_wall(d):
+        """A run that cost an hour is recorded as costing a tenth of a second."""
+        _rec(d)["wall_seconds"] = 0.1
+
+    def empty_blockers(d):
+        """THE STAGE-LEVEL ERASURE: the whole blockers list goes."""
+        st = _stage(d, NC)
+        _blockers(d)
+        st["blockers"] = []
+
+    def shrink_blockers(d):
+        b = _blockers(d)
+        _stage(d, NC)["blockers"] = list(b)[:-1]
+
+    def drop_blockers_key(d):
+        _blockers(d)
+        _stage(d, NC).pop("blockers", None)
+
+    def unclaim(d):
+        """PARTIAL -> ABSENT: the stage is UN-CLAIMED rather than finished."""
+        _stage(d, NC)["status"] = "ABSENT"
+
+    def delete_record(d):
+        """THE SECOND HALF: the record itself is gone.  Before this loop, leg 4's
+        REAL leg PASSED on exactly this, leg 0 found 0 and leg 5 found 0; the
+        suite went red only on a break-leg plant that stopped firing."""
+        _stage(d, NC)["fixtures"] = []
+
+    def delete_record_at_0(d):
+        """THE SHORT-LIST SHAPE: one record is popped and the rest slide up, so
+        every later pairing is off by one AND record #n-1 has no counterpart."""
+        f = _recs(d)
+        while len(f) < 2:
+            f.append(_synth_rec(len(f)))
+        f.pop(0)
+
+    def drop_fixtures_key(d):
+        """THE LIST ITSELF IS GONE.  This raised KeyError before R18."""
+        _stage(d, NC).pop("fixtures", None)
+
+    def fixtures_not_a_list(d):
+        """A DICT WHERE THE LIST BELONGS.  This raised KeyError: 0 before R18 —
+        `len()` answered, `[0]` did not."""
+        _stage(d, NC)["fixtures"] = {"0": "not a list"}
+
+    def fixtures_null(d):
+        _stage(d, NC)["fixtures"] = None
+
+    def record_not_a_dict(d):
+        """A STRING WHERE THE RECORD BELONGS."""
+        _recs(d)[0] = "this is not a fixture record"
+
+    def stage_row_not_an_object(d):
+        """A STRING WHERE THE STAGE ROW BELONGS — it carries no stage name, so
+        every by-name guard in this leg looks straight past it."""
+        _stage(d, NC)
+        d["stages"] = [("THIS ROW IS NOT AN OBJECT"
+                        if isinstance(r, dict) and r.get("stage") == NC else r)
+                       for r in _stage_list(d)[0]]
+
+    def delete_block(d):
+        """THE SECOND HALF, ONE STEP CRUDER: the whole non-complete stage block
+        leaves the working tree, taking every fixture record with it.  The third
+        loop guards only COMPLETE-VERIFIED stages, so nothing above sees this."""
+        _stage(d, NC)
+        d["stages"] = [t for t in _stage_list(d)[0]
+                       if not (isinstance(t, dict) and t.get("stage") == NC)]
+
+    # ── the STAGE-LEVEL plants (loops 1-3) ────────────────────────────────
     def rerecord(d):
         """ATTACK 1 — tamper a filed artifact, then re-record its sha and bytes
         exactly as a lying builder would. Legs 1 and 5 see nothing."""
-        st = next(s for s in d["stages"] if s["status"] == "COMPLETE-VERIFIED")
+        st = _stage(d, CV)
         k = sorted(st["artifact_shas"])[0]
         st["artifact_shas"][k]["sha256"] = "0" * 64
         st["artifact_shas"][k]["bytes"] = st["artifact_shas"][k]["bytes"] + 1
@@ -717,47 +1832,34 @@ def resume0_break():
     def promote(d):
         """ATTACK 2 — flip a blockered PARTIAL stage to COMPLETE-VERIFIED, empty
         its blockers, and clean its fixture record. wellformed_findings -> []."""
-        st = next(s for s in d["stages"]
-                  if s["status"] == "PARTIAL" and s["blockers"])
+        st = _stage(d, PB)
         st["status"] = "COMPLETE-VERIFIED"
         st["blockers"] = []
-        for f in st["fixtures"]:
-            f["exit_code"] = 0
-            f["legs_red"] = 0
-            f["legs_total"] = f.get("legs_total") or 1
-
-    def _settled() -> str:
-        """The name of a stage that HEAD itself calls COMPLETE-VERIFIED, chosen
-        DETERMINISTICALLY (first in sort order) so the plant, and the transcript
-        line it produces, are the same on every run."""
-        h = json.loads(head_blob.decode("utf-8")) if head_blob else {}
-        names = sorted(n for n, st in _stages_by_name(h).items()
-                       if st.get("status") == "COMPLETE-VERIFIED")
-        if not names:
-            raise AssertionError("no COMPLETE-VERIFIED stage exists at HEAD to "
-                                 "withdraw — this plant cannot be planted")
-        return names[0]
+        for f in (st.get("fixtures") or []):
+            if isinstance(f, dict):
+                f["exit_code"] = 0
+                f["legs_red"] = 0
+                f["legs_total"] = f.get("legs_total") or 1
 
     def demote(d):
         """ATTACK 4 — WITHDRAW a settled claim in the working tree. Leg 1
         re-hashes COMPLETE-VERIFIED stages, so a demoted stage's artifacts leave
         every guard in the suite at once and the old anchor said nothing."""
-        st = next(s for s in d["stages"] if s["stage"] == _settled())
-        st["status"] = "PARTIAL"
+        _stage(d, CV)["status"] = "PARTIAL"
 
     def delete_stage(d):
         """ATTACK 5 — delete the settled stage's block outright. Same hole, one
         step cruder: nothing is left on disk to compare, and absence was health."""
-        name = _settled()
-        d["stages"] = [s for s in d["stages"] if s["stage"] != name]
+        _stage(d, CV)
+        d["stages"] = [t for t in _stage_list(d)[0]
+                       if not (isinstance(t, dict) and t.get("stage") == CV)]
 
     def demote_then_tamper(d):
         """ATTACK 6 — THE LAUNDERING CASE. Demote the stage AND re-record one of
         its artifact shas. Under the old anchor the demotion hid the tamper: the
         re-record loop only ran over stages the working tree still called
         COMPLETE-VERIFIED."""
-        name = _settled()
-        st = next(s for s in d["stages"] if s["stage"] == name)
+        st = _stage(d, CV)
         st["status"] = "PARTIAL"
         k = sorted(st["artifact_shas"])[0]
         st["artifact_shas"][k]["sha256"] = "0" * 64
@@ -766,28 +1868,28 @@ def resume0_break():
     def derecord(d):
         """ATTACK 3 — de-record an artifact. The re-hash then has nothing to
         re-hash and the sweep's commonpath NARROWS to match."""
-        st = next(s for s in d["stages"] if s["status"] == "COMPLETE-VERIFIED")
+        st = _stage(d, CV)
         st["artifact_shas"].pop(sorted(st["artifact_shas"])[0])
         if "artifact_count" in st:
             st["artifact_count"] = len(st["artifact_shas"])
 
     return plants([
         ("RE-RECORDED SHA (ATTACK 1: a COMPLETE-VERIFIED stage's artifact sha and "
-         "byte count rewritten in the working tree)", lambda: mutated(rerecord)),
+         "byte count rewritten in the working tree)", lambda: mutated(rerecord, CV)),
         ("PROMOTED STAGE (ATTACK 2: a blockered PARTIAL flipped to "
          "COMPLETE-VERIFIED, blockers emptied, fixture record cleaned)",
-         lambda: mutated(promote)),
+         lambda: mutated(promote, PB)),
         ("DE-RECORDED ARTIFACT (ATTACK 3: an artifact dropped from a "
-         "COMPLETE-VERIFIED stage's record)", lambda: mutated(derecord)),
+         "COMPLETE-VERIFIED stage's record)", lambda: mutated(derecord, CV)),
         ("DEMOTED IN THE WORKING TREE (ATTACK 4: a stage COMPLETE-VERIFIED at "
          "HEAD flipped to PARTIAL on disk — its artifacts then leave every "
-         "re-hash in this suite)", lambda: mutated(demote)),
+         "re-hash in this suite)", lambda: mutated(demote, CV)),
         ("DELETED FROM THE WORKING TREE (ATTACK 5: the settled stage's whole "
-         "block removed from the ledger on disk)", lambda: mutated(delete_stage)),
+         "block removed from the ledger on disk)", lambda: mutated(delete_stage, CV)),
         ("DEMOTE-THEN-TAMPER (ATTACK 6, THE LAUNDERING CASE: the settled stage "
          "is demoted AND one of its artifact shas re-recorded, so the demotion "
          "hides the tamper from every COMPLETE-VERIFIED-only guard)",
-         lambda: mutated(demote_then_tamper)),
+         lambda: mutated(demote_then_tamper, CV)),
         ("BENT ANCHOR LITERAL (the module's PINNED_LEDGER_SHA replaced by 64 "
          "zeros — the anchor must check itself)",
          lambda: anchor_findings(disk, head_blob, pin_blob, "0" * 64)),
@@ -796,7 +1898,157 @@ def resume0_break():
         ("UNCOMMITTED LEDGER (HEAD carries no ledger at all, so nothing outside "
          "the working tree can contradict it)",
          lambda: anchor_findings(disk, None, pin_blob)),
+        # ── THE FOURTH LOOP'S PLANTS [LEAN R17, WIDENED R18] — one per
+        #    ADMISSION in the named vocabulary, each on a NON-COMPLETE stage,
+        #    where the three loops above are silent by design and only the
+        #    fourth can speak ──
+        ("ERASED DRIFT CLAIM — THE SHAS (ATTACK 7, THE CHEAPEST MOVE IN THIS "
+         "SUITE: a record ADMITS a transcript drift at HEAD and the working "
+         "tree copies transcript_sha_before over transcript_sha_after and sets "
+         "transcript_drift False — one boolean and one string copy, no module "
+         "edit, no new file, no exemption)",
+         lambda: against(honest_shas, erase_shas)),
+        ("ERASED DRIFT CLAIM — THE FLAG (ATTACK 7b: HEAD's record carries "
+         "transcript_drift True and the working tree's does not — the other "
+         "half of what 'drifted' means, so neither half alone is the guard)",
+         lambda: against(honest_flag, erase_shas)),
+        ("ERASED DRIFT CLAIM — THE FIELDS REMOVED (ATTACK 7c: the working-tree "
+         "record simply drops transcript_drift and the two shas — a MISSING "
+         "field must read as NO CLAIM, never as a claim of health)",
+         lambda: against(honest_flag, erase_fields)),
+        ("WITHDRAWN NONZERO EXIT (ATTACK 9: HEAD's record exits 1 and the "
+         "working tree's exits 0 — the plainest admission of failure a fixture "
+         "record can make, and until R18 it was free)",
+         lambda: against(honest_exit, erase_exit)),
+        ("WITHDRAWN NONZERO EXIT — THE FIELD REMOVED (ATTACK 9b: exit_code is "
+         "simply dropped; a missing field is no claim, not a claim of health)",
+         lambda: against(honest_exit, erase_exit_field)),
+        ("WITHDRAWN RED LEGS (ATTACK 9c: legs_red 4 -> 0 and red_leg_names "
+         "emptied — the suite is recorded as having passed)",
+         lambda: against(honest_exit, erase_legs_red)),
+        ("SHRUNK RED LEGS (ATTACK 9d: legs_red 4 -> 1 — a PARTIAL withdrawal is "
+         "a withdrawal, and a count that only ever shrinks under an uncommitted "
+         "edit is a count nobody can trust)",
+         lambda: against(honest_exit, shrink_legs_red)),
+        ("UN-NAMED RED LEG (ATTACK 9e, THE CHEAPEST OF THIS FAMILY: the COUNT is "
+         "left alone at 4 and ONE NAME is dropped, so the leg that failed is the "
+         "one a reader can no longer chase)",
+         lambda: against(honest_exit, unname_one_leg)),
+        ("SHRUNK WALL CLOCK (ATTACK 9f: wall_seconds 3600.5 -> 0.1 — an "
+         "admission of COST, anchored the same one way: a stage shrunk from an "
+         "hour to a tenth of a second reads as cheap to redo)",
+         lambda: against(honest_wall, shrink_wall)),
+        ("EMPTIED BLOCKERS (ATTACK 10: a non-complete stage's whole blockers "
+         "list is cleared in the working tree — the list is the stage's standing "
+         "admission of what it has NOT done)",
+         lambda: against(lambda h: None, empty_blockers)),
+        ("SHRUNK BLOCKERS (ATTACK 10b: one blocker of several is dropped)",
+         lambda: against(lambda h: None, shrink_blockers)),
+        ("BLOCKERS KEY REMOVED (ATTACK 10c: the list is not emptied, it is "
+         "deleted — a list that cannot be read is a list that no longer blocks)",
+         lambda: against(lambda h: None, drop_blockers_key)),
+        ("UN-CLAIMED STAGE (ATTACK 11: PARTIAL at HEAD, ABSENT in the working "
+         "tree — the stage is not finished, it is retreated from, and every "
+         "blocker and record under it goes with it)",
+         lambda: against(lambda h: None, unclaim)),
+        ("DELETED FIXTURE RECORD (ATTACK 8: a record that is at HEAD is gone "
+         "from the working tree — MEASURED before this loop: leg 4's real leg "
+         "PASSED, leg 0 found 0, leg 5 found 0, and the suite went red only on "
+         "an unrelated break-leg plant that stopped firing)",
+         lambda: against(lambda h: None, delete_record)),
+        ("DELETED THE RECORD THAT ADMITTED THE DRIFT (ATTACK 8b, THE "
+         "LAUNDERING CASE: HEAD's record admits a transcript drift and the "
+         "working tree deletes that record outright rather than erasing its "
+         "fields — the admission and its evidence leave together)",
+         lambda: against(honest_shas, delete_record)),
+        ("DELETED RECORD #0 OF SEVERAL (ATTACK 8d, THE SHORT-LIST SHAPE: one "
+         "record is popped and the rest slide up, so the last index has no "
+         "counterpart at all — this raised IndexError before R18)",
+         lambda: against(honest_exit, delete_record_at_0)),
+        ("DELETED STAGE BLOCK (ATTACK 8c: a NON-COMPLETE stage's whole block "
+         "leaves the working tree with every fixture record in it — the third "
+         "loop guards COMPLETE-VERIFIED stages only, so nothing above sees it. "
+         "This raised KeyError before R18)",
+         lambda: against(honest_shas, delete_block)),
+        # ── R18's MALFORMED SHAPES.  Each of these replaced the accusation and
+        #    the whole evidence block with an exception name before round 6 ──
+        ("FIXTURES KEY REMOVED (ATTACK 12: the stage keeps its block and loses "
+         "its whole fixtures list — raised KeyError: 'fixtures' before R18)",
+         lambda: against(honest_exit, drop_fixtures_key)),
+        ("FIXTURES IS NOT A LIST (ATTACK 12b: a dict where the list belongs, so "
+         "len() answers and [0] does not — raised KeyError: 0 before R18)",
+         lambda: against(honest_exit, fixtures_not_a_list)),
+        ("FIXTURES IS NULL (ATTACK 12c — raised TypeError: 'NoneType' object is "
+         "not subscriptable before R18)",
+         lambda: against(honest_exit, fixtures_null)),
+        ("RECORD IS NOT A DICT (ATTACK 12d: a string where the record belongs — "
+         "an admission that cannot be READ is withdrawn as surely as one that "
+         "was deleted)",
+         lambda: against(honest_exit, record_not_a_dict)),
+        ("STAGE ROW IS NOT AN OBJECT (ATTACK 12e: a string in the stages list "
+         "carries no stage name, so every by-name guard in this leg looks "
+         "straight past it and the stage it replaced reads as simply absent)",
+         lambda: against(honest_exit, stage_row_not_an_object)),
     ])
+
+
+# ── THE TOTALITY PROBE'S GRID.  [LEAN-HEPHAESTUS] R18
+#    Every shape a DELETION can take in this ledger, driven against EVERY stage
+#    at HEAD by resume0_real.  Round 6 opened because the fourth loop crashed on
+#    two of these on the stage that happens to sort first; the answer is not two
+#    guards but a grid that is WHOLE, run on every run, and asserted.
+PROBE_SHAPES = (
+    "delete fixture record #0",
+    "delete the LAST fixture record",
+    "delete EVERY fixture record (the list is emptied)",
+    "delete the 'fixtures' KEY",
+    "'fixtures' is null",
+    "'fixtures' is a dict, not a list",
+    "fixture record #0 is not a dict",
+    "delete the WHOLE stage block",
+    "the stage ROW is not an object",
+    "empty the blockers list",
+    "delete the 'blockers' KEY",
+    "status -> ABSENT",
+)
+
+
+def probe_apply(shape: str, doc: dict, name: str) -> None:
+    """Apply one PROBE_SHAPES deletion to `doc`'s `name` stage, in place.  Total:
+    a shape that has nothing to delete leaves the document alone and the caller
+    scores it a NO-OP rather than demanding a finding for it."""
+    st = _stages_by_name(doc).get(name)
+    if not isinstance(st, dict):
+        return
+    f = st.get("fixtures")
+    have = isinstance(f, list) and bool(f)
+    if shape == "delete fixture record #0" and have:
+        f.pop(0)
+    elif shape == "delete the LAST fixture record" and have:
+        f.pop()
+    elif shape == "delete EVERY fixture record (the list is emptied)":
+        st["fixtures"] = []
+    elif shape == "delete the 'fixtures' KEY":
+        st.pop("fixtures", None)
+    elif shape == "'fixtures' is null":
+        st["fixtures"] = None
+    elif shape == "'fixtures' is a dict, not a list":
+        st["fixtures"] = {"0": "not a list"}
+    elif shape == "fixture record #0 is not a dict" and have:
+        f[0] = "this is not a fixture record"
+    elif shape == "delete the WHOLE stage block":
+        doc["stages"] = [r for r in _stage_list(doc)[0]
+                         if not (isinstance(r, dict) and r.get("stage") == name)]
+    elif shape == "the stage ROW is not an object":
+        doc["stages"] = [("THIS ROW IS NOT AN OBJECT"
+                          if isinstance(r, dict) and r.get("stage") == name else r)
+                         for r in _stage_list(doc)[0]]
+    elif shape == "empty the blockers list":
+        st["blockers"] = []
+    elif shape == "delete the 'blockers' KEY":
+        st.pop("blockers", None)
+    elif shape == "status -> ABSENT":
+        st["status"] = "ABSENT"
 
 
 def resume0_real():
@@ -805,6 +2057,227 @@ def resume0_real():
     head_blob = _git_blob("HEAD", LEDGER_REL)
     pin_blob = _git_blob(PINNED_LEDGER_REV, LEDGER_REL)
     bad = anchor_findings(disk, head_blob, pin_blob)
+
+    def _parse(blob):
+        try:
+            doc = json.loads(blob.decode("utf-8"))
+            return doc if isinstance(doc, dict) else {}
+        except Exception:
+            return {}
+
+    head_doc = _parse(head_blob) if head_blob is not None else {}
+    head_st = _stages_by_name(head_doc)
+    disk_st = _stages_by_name(disk)
+
+    # ── THE TOTALITY PROBE — EVERY DELETION SHAPE, EVERY STAGE, EVERY RUN.
+    #    [LEAN-HEPHAESTUS] R18  A guard that RAISES instead of accusing tells the
+    #    reader nothing, and an exception name where a finding should be is
+    #    indistinguishable from a bug in this fixture.  Round 6 opened on exactly
+    #    that: driving the deletion attacks round 5 had just repaired produced
+    #    KeyError, IndexError and TypeError in place of the accusation and the
+    #    whole evidence block.  The repair is not two more guards; it is this
+    #    grid, WHOLE and asserted on every run.  Each cell demands BOTH that the
+    #    shape does not raise AND that it yields at least one NAMED finding.
+    n_probe = n_probe_noop = n_hdr = 0
+
+    def _hdr_total(label: str, doc) -> None:
+        """main()'s HEADER, driven over the same shape. [LEAN R19] The header
+        runs BEFORE any fixture, so a shape it cannot read costs the whole run:
+        no leg, no accusation, and NO TRANSCRIPT WRITTEN — the stale artifact of
+        record then stands over a gutted ledger. It is asserted here, every run,
+        and not merely measured once by whoever happened to look."""
+        nonlocal n_hdr
+        n_hdr += 1
+        try:
+            lines = header_ledger_lines(doc)
+        except Exception as e:
+            bad.append(f"HEADER TOTALITY: {label} -> header_ledger_lines RAISED "
+                       f"{e.__class__.__name__}: {e}. main() prints this block "
+                       f"BEFORE any fixture runs, so this is not one leg lost — it "
+                       f"is the whole run, the transcript included")
+            return
+        if not lines:
+            bad.append(f"HEADER TOTALITY: {label} -> the header printed NOTHING at "
+                       f"all; a silent header over a broken ledger is the same "
+                       f"blank page this suite exists to refuse")
+
+    # the WHOLE-LEDGER shapes, which no per-stage probe can reach: they are the
+    # two that actually killed main() (KeyError: 'stages') plus the ledger that
+    # is not an object at all.
+    for _lbl, _mk in (
+            ("the ledger's 'stages' KEY is deleted",
+             lambda: {k: v for k, v in disk.items() if k != "stages"}),
+            ("the ledger's 'stages' is a STRING, not a list",
+             lambda: dict(disk, stages="not a list at all")),
+            ("the LEDGER ITSELF is not an object",
+             lambda: ["the whole ledger is a list"]),
+            ("the ledger is EMPTY", lambda: {}),
+    ):
+        _d = _mk()
+        _hdr_total(_lbl, _d)
+        try:
+            _f = anchor_findings(_d, head_blob, pin_blob)
+        except Exception as e:
+            bad.append(f"TOTALITY: {_lbl} -> RAISED {e.__class__.__name__}: {e}")
+            _f = ["raised"]
+        if not _f:
+            bad.append(f"TOTALITY: {_lbl} -> 0 findings. A ledger this leg cannot "
+                       f"walk cannot contradict anything, and silence is not health")
+
+    for name in sorted(head_st, key=str):
+        for shape in PROBE_SHAPES:
+            d2 = copy.deepcopy(disk)
+            before = _jb(d2)
+            probe_apply(shape, d2, name)
+            _hdr_total(f"{name!r} · {shape}", d2)
+            if _jb(d2) == before:
+                # nothing to delete (an empty blockers list, an absent key): the
+                # cell is honestly a NO-OP and demanding a finding for it would
+                # be demanding a finding over an unchanged ledger.
+                n_probe_noop += 1
+                continue
+            n_probe += 1
+            try:
+                found = anchor_findings(d2, head_blob, pin_blob)
+            except Exception as e:
+                bad.append(f"TOTALITY: {name!r} · {shape} -> RAISED "
+                           f"{e.__class__.__name__}: {e}. A guard that raises "
+                           f"instead of accusing replaces the finding AND the "
+                           f"whole evidence block with an exception name, which "
+                           f"a reader cannot tell from a bug in this fixture")
+                continue
+            if not found:
+                bad.append(f"TOTALITY: {name!r} · {shape} -> 0 findings. The shape "
+                           f"was applied to the ledger and this leg said NOTHING; "
+                           f"silence over a deletion is the hole this loop exists "
+                           f"to close")
+
+    # ── WITHDRAWAL ONLY, AND THAT IS ASSERTED, NOT PROMISED.  [LEAN R17/R18]
+    #    A guard that goes red on a build ADVANCING is a guard the next person
+    #    who needs to advance the build will delete, and they will be right to.
+    #    Eight ADVANCES are planted here, one at a time, and every one of them
+    #    must be SILENT.  Where a control needs HEAD to say something the
+    #    committed ledger does not (a stage it calls ABSENT), that half is
+    #    synthesised here, exactly as the break leg's `against` does.
+    n_pairs = n_head_drift = n_head_fail = n_head_wall = 0
+    n_ctl = 0
+    ctl_subject = None
+    for _n, _h in head_st.items():
+        _hf, _ = _reclist(_h)
+        _df, _ = _reclist(disk_st.get(_n))
+        for _i, _r in enumerate(_hf):
+            if _i < len(_df):
+                n_pairs += 1
+            if _drifted(_r):
+                n_head_drift += 1
+            if [a for a in _record_admissions(_r)
+                    if not a.startswith("wall_seconds")]:
+                n_head_fail += 1
+            if isinstance(_r, dict) and (_num(_r.get("wall_seconds")) or 0) > 0:
+                n_head_wall += 1
+    if head_blob is not None:
+        def _ctl(head_fn, disk_fn) -> list[str]:
+            hh = copy.deepcopy(head_doc)
+            dd = copy.deepcopy(disk)
+            head_fn(hh)
+            disk_fn(dd)
+            return anchor_findings(dd, _jb(hh).encode("utf-8"), pin_blob)
+
+        def _fail_rec(tag: str) -> dict:
+            return {"suite": f"A SUITE THAT HAS JUST RUN AND FAILED ({tag})",
+                    "exit_code": 1, "legs_red": 2, "legs_total": 9,
+                    "red_leg_names": ["F-NEW-1", "F-NEW-2"],
+                    "transcript_drift": True,
+                    "transcript_sha_before": "0" * 64,
+                    "transcript_sha_after": "9" * 64, "wall_seconds": 12.5}
+
+        _cands = sorted(
+            n for n in (set(head_st) & set(disk_st))
+            if head_st[n].get("status") != "COMPLETE-VERIFIED"
+            and _reclist(head_st[n])[0] and _reclist(disk_st[n])[0]
+            and isinstance(_reclist(head_st[n])[0][0], dict)
+            and isinstance(_reclist(disk_st[n])[0][0], dict))
+        controls: list[tuple[str, object, object]] = []
+        if _cands:
+            ctl_subject = _cands[0]
+            _nm = ctl_subject
+
+            def _drec(dd):
+                return _stages_by_name(dd)[_nm]["fixtures"][0]
+
+            controls += [
+                ("A NEW DRIFT APPEARS in the working tree on a record HEAD calls "
+                 "clean — a suite that has just started drifting is a build "
+                 "advancing, and leg 4 is what judges whether that drift is named",
+                 lambda h: None,
+                 lambda d: _drec(d).update({"transcript_drift": True,
+                                            "transcript_sha_after": "9" * 64})),
+                ("A NEW FAILURE APPEARS — exit_code 0 -> 1, legs_red 0 -> 3, two "
+                 "red legs NAMED where none were named before",
+                 lambda h: None,
+                 lambda d: _drec(d).update({"exit_code": 1, "legs_red": 3,
+                                            "red_leg_names": ["F-NEW-1",
+                                                              "F-NEW-2"]})),
+                ("A RED LEG THAT WAS ONLY COUNTED IS NOW NAMED — HEAD carries a "
+                 "count with no names, the working tree carries the same count "
+                 "WITH them; naming a failure is not withdrawing it",
+                 lambda h: _stages_by_name(h)[_nm]["fixtures"][0].update(
+                     {"legs_red": 2, "red_leg_names": []}),
+                 lambda d: _drec(d).update({"legs_red": 2,
+                                            "red_leg_names": ["F-A", "F-B"]})),
+                ("A RUN COST MORE — wall_seconds grows; the cost admission is "
+                 "anchored one way and up is the free direction",
+                 lambda h: None,
+                 lambda d: _drec(d).update(
+                     {"wall_seconds": (_num(_drec(d).get("wall_seconds")) or 0) + 1000})),
+                ("A BLOCKER IS ADDED to a non-complete stage — discovering what "
+                 "is in the way is the work, not a retreat from it",
+                 lambda h: None,
+                 lambda d: _stages_by_name(d)[_nm]["blockers"].append(
+                     "a blocker discovered today")),
+                ("A FIXTURE RECORD IS ADDED to a non-complete stage, AND THE "
+                 "ADDED RECORD ADMITS A DRIFT AND TWO RED LEGS — another run of "
+                 "a suite in progress, failing honestly",
+                 lambda h: None,
+                 lambda d: _stages_by_name(d)[_nm]["fixtures"].append(
+                     _fail_rec("appended"))),
+            ]
+        controls += [
+            ("A WHOLE STAGE IS BORN in the working tree, carrying blockers and a "
+             "failing record",
+             lambda h: None,
+             lambda d: d.__setitem__("stages", list(_stage_list(d)[0]) + [
+                 {"stage": "A STAGE THE WORKING TREE HAS AND HEAD DOES NOT",
+                  "status": "PARTIAL", "as_of": AS_OF, "artifact_shas": {},
+                  "fixtures": [_fail_rec("born")],
+                  "blockers": ["not finished yet"]}])),
+            ("A STAGE IS CLAIMED — ABSENT at HEAD, PARTIAL in the working tree, "
+             "with blockers and a failing record under it. Starting work is the "
+             "opposite of withdrawing a claim and must be silent",
+             lambda h: h.__setitem__("stages", list(_stage_list(h)[0]) + [
+                 {"stage": "A STAGE HEAD CALLS ABSENT", "status": "ABSENT",
+                  "as_of": AS_OF, "artifact_shas": {}, "fixtures": [],
+                  "blockers": []}]),
+             lambda d: d.__setitem__("stages", list(_stage_list(d)[0]) + [
+                 {"stage": "A STAGE HEAD CALLS ABSENT", "status": "PARTIAL",
+                  "as_of": AS_OF, "artifact_shas": {},
+                  "fixtures": [_fail_rec("claimed")],
+                  "blockers": ["not finished yet"]}])),
+        ]
+        for _label, _hfn, _dfn in controls:
+            n_ctl += 1
+            try:
+                _f = _ctl(_hfn, _dfn)
+            except Exception as e:
+                bad.append(f"CONTROL: {_label} — and this leg RAISED "
+                           f"{e.__class__.__name__}: {e}. A control that cannot "
+                           f"be run proves nothing about the trade this loop makes")
+                continue
+            if _f:
+                bad.append(f"CONTROL: {_label} — and this leg called it a "
+                           f"WITHDRAWAL: {_f[:1]}. The fourth loop is WITHDRAWAL "
+                           f"ONLY or it is a brake on the build")
+
     say(f"      working tree  {LEDGER_REL}")
     say(f"        {dsha}  {dn:>9,} B")
     say(f"      HEAD blob     {sha_bytes(head_blob) if head_blob is not None else 'UNREACHABLE'}"
@@ -812,14 +2285,21 @@ def resume0_real():
     say(f"      pinned blob   {sha_bytes(pin_blob) if pin_blob is not None else 'UNREACHABLE'}"
         f"  {len(pin_blob) if pin_blob is not None else 0:>9,} B  @{PINNED_LEDGER_REV}")
     say(f"      module literal{PINNED_LEDGER_SHA}  PINNED_LEDGER_SHA")
-    head_st = _stages_by_name(json.loads(head_blob.decode("utf-8"))) if head_blob else {}
     pinned_blob_cv = sorted(
-        n for n, st in _stages_by_name(
-            json.loads(pin_blob.decode("utf-8"))).items()
+        n for n, st in _stages_by_name(_parse(pin_blob)).items()
         if st.get("status") == "COMPLETE-VERIFIED") if pin_blob else None
     n_cv = n_free = 0
     say(f"      {'stage':<20} {'HEAD':<18} {'working tree':<18} block vs HEAD")
-    for st in disk.get("stages", []):
+    rows, rows_why = _stage_list(disk)
+    if rows_why:
+        say(f"      THE WORKING-TREE LEDGER CANNOT BE WALKED: {rows_why}")
+    for st in rows:
+        if not isinstance(st, dict):
+            # a row that is not an object carries no stage name, so it appears in
+            # no by-name comparison at all; it is PRINTED rather than skipped.
+            say(f"      {'<STAGE ROW IS NOT AN OBJECT>':<20} {'—':<18} "
+                f"{str(type(st).__name__):<18} UNREADABLE")
+            continue
         name = st.get("stage")
         h = head_st.get(name)
         same = h is not None and _stage_bytes(st) == _stage_bytes(h)
@@ -836,7 +2316,7 @@ def resume0_real():
             clock(f"        [stdout only] {name}: {_stage_delta(st, h)}")
     # EVERY GRID WHOLE — a stage that exists at HEAD and NOT on disk would never
     # appear in the loop above, and that is precisely the deletion attack.
-    disk_names = {st.get("stage") for st in disk.get("stages", [])}
+    disk_names = set(disk_st)
     for name in sorted(head_st, key=str):
         if name in disk_names:
             continue
@@ -844,20 +2324,24 @@ def resume0_real():
             f"{'— NOT IN THE WORKING TREE':<18} ABSENT")
     n_head_cv = sum(1 for st in head_st.values()
                     if st.get("status") == "COMPLETE-VERIFIED")
-    pin_cv = []
-    if pinned_blob_cv is not None:
-        pin_cv = pinned_blob_cv
-    say(f"      WHAT THIS ANCHOR PROVES, AND WHAT IT DOES NOT [LEAN R10]")
+    n_free_ncs = sum(1 for st in head_st.values()
+                     if st.get("status") != "COMPLETE-VERIFIED")
+    n_head_blk = sum(len(_blockerlist(st)[0]) for st in head_st.values())
+    pin_cv = pinned_blob_cv if pinned_blob_cv is not None else []
+    say(f"      WHAT THIS ANCHOR PROVES, AND WHAT IT DOES NOT [LEAN R10/R17/R18]")
     say(f"        PROVES   {LEDGER_REL} is TRACKED, so an answer to 'what does the "
         f"record say' exists OUTSIDE the working tree; the {PINNED_LEDGER_REV} blob "
         f"still hashes to a literal typed in this module, so a rewritten history is "
         f"caught; and a COMPLETE-VERIFIED block cannot be BORN, PROMOTED, EDITED, "
         f"DEMOTED or DELETED by a working-tree edit — all of those are planted in "
         f"the break leg and every one of them is RED.")
-    say(f"        CANNOT   judge a stage that is COMPLETE-VERIFIED on NEITHER side: "
-        f"{n_free} stage(s) are free to move on disk and this leg says nothing about "
-        f"them (leg 1 does not hash them either — that is the cost of letting the "
-        f"build advance).")
+    say(f"        CANNOT   hold a stage that is COMPLETE-VERIFIED on NEITHER side to "
+        f"its BYTES. {n_free} stage(s) are free to move in the working tree: their "
+        f"artifact_shas, their as_of, the TEXT of their blockers and of their "
+        f"fixture records may all change with no finding here, and leg 1 does not "
+        f"re-hash them either — that is the cost of letting the build advance. THIS "
+        f"LEG IS NOT SILENT ABOUT THEM: the fourth loop below judges every stage at "
+        f"HEAD regardless of status, in ONE DIRECTION ONLY.")
     say(f"        CANNOT   judge a COMMIT. {len(pin_cv)} stage(s) were "
         f"COMPLETE-VERIFIED at the pinned rev and are anchored to a sha a later "
         f"commit cannot move; the other {n_head_cv - len(pin_cv)} COMPLETE-VERIFIED "
@@ -867,10 +2351,131 @@ def resume0_real():
     say(f"        CANNOT   prove the ledger DESCRIBES THE WORLD. That the recorded "
         f"sha is the artifact's real sha is F-C10-RESUME-1's job, on disk; this leg "
         f"only proves the RECORD did not move.")
-    say(f"        CANNOT   defend itself against an edit to THIS FILE. The pin and "
-        f"the three loops live here; whoever may rewrite scripts/"
-        f"tierc10_resume_fixtures.py may weaken them, and only the commit record "
-        f"and a reader can catch that.")
+    say(f"        PROVES   AND ONE LEVEL DOWN — NO ADMISSION THAT REACHED THE "
+        f"COMMIT RECORD MAY BE TAKEN BACK BY AN EDIT NOBODY COMMITTED [LEAN R18]. "
+        f"Over ALL {len(head_st)} stage(s) at HEAD regardless of status, pairing "
+        f"fixture record #i at HEAD with #i on disk, this loop raises a finding on "
+        f"the WITHDRAWAL of any of: a transcript drift; a nonzero exit_code going "
+        f"to zero or missing; legs_red decreasing; a named red leg UN-NAMED; "
+        f"wall_seconds decreasing (a COST admission, anchored the same one way); "
+        f"the stage's blockers list shrinking or becoming unreadable; and a stage "
+        f"PARTIAL at HEAD reading anything but PARTIAL-or-COMPLETE on disk — a "
+        f"stage UN-CLAIMED rather than finished. A record that is at HEAD may not "
+        f"be GONE from the working tree, its whole stage block being gone counting "
+        f"as gone. WHERE EITHER SIDE CALLS A STAGE COMPLETE-VERIFIED THIS LOOP "
+        f"STANDS DOWN AND LOOPS 2-3 RULE INSTEAD — they demand the two blocks be "
+        f"BYTE-IDENTICAL, or they have already named the promotion or the "
+        f"demotion, which is strictly stronger than anything below; the scope is "
+        f"whole and one tamper still prints one finding. "
+        f"{n_pairs} record pair(s) matched, {n_head_drift} admitting a "
+        f"drift at HEAD and {n_head_fail} admitting a FAILURE; {n_head_blk} "
+        f"blocker(s) under {n_free_ncs} non-complete stage(s). THE RESIDUE R17 LEFT "
+        f"WAS NOT HYPOTHETICAL: the committed ledger carries ONE live admission of "
+        f"failure — D-CORE's ONLINE record, exit 1 with 1 red leg — and MEASURED on "
+        f"the R17 shape, erasing it cost 0 findings, emptying all 23 blockers cost "
+        f"0, and un-claiming a PARTIAL stage cost 0. On this shape: 2, 4 and 1.")
+    say(f"        PROVES   AND IT NEVER RAISES [LEAN R18]. A guard that raises "
+        f"instead of accusing replaces the finding AND the evidence with an "
+        f"exception name, which a reader cannot tell from a bug in the fixture. "
+        f"Round 6 opened on exactly that. EVERY RUN drives a WHOLE GRID: {len(PROBE_SHAPES)} "
+        f"deletion shape(s) — record #0, the last record, every record, the "
+        f"'fixtures' key, a null, a dict where the list belongs, a record that is "
+        f"not a dict, the whole stage block, a stage row that is not an object, the "
+        f"blockers list, the 'blockers' key, status -> ABSENT — against EVERY one "
+        f"of the {len(head_st)} stage(s) at HEAD, COMPLETE-VERIFIED and not. "
+        f"{n_probe} cell(s) changed the ledger and EVERY ONE yielded a NAMED "
+        f"finding and no exception; {n_probe_noop} cell(s) had nothing to delete "
+        f"and are scored NO-OP rather than counted as caught. AND THE SAME IS NOW "
+        f"DEMANDED OF main()'s HEADER [LEAN R19], which runs BEFORE any fixture "
+        f"and whose failure costs not one leg but the whole run, the transcript "
+        f"included: {n_hdr} cell(s) — the {len(PROBE_SHAPES)} deletion shapes x "
+        f"{len(head_st)} stages plus 4 WHOLE-LEDGER shapes no per-stage probe can "
+        f"reach (the 'stages' key deleted, 'stages' a string, the ledger not an "
+        f"object, the ledger empty) — were driven through header_ledger_lines() "
+        f"and not one raised. MEASURED BEFORE THE REPAIR, at the main() boundary: "
+        f"40 of 45 cells gave leg-0 RED with a named finding and 5 DIED, "
+        f"KeyError: 'stages' and TypeError: string indices must be integers.")
+    say(f"        PROVES   WITHDRAWAL ONLY, AND IT IS ASSERTED HERE, NOT PROMISED: "
+        f"{n_ctl} control(s) ran this leg over a build ADVANCING — a NEW drift, a "
+        f"NEW failure (exit 0 -> 1, legs_red 0 -> 3, two legs newly NAMED), a red "
+        f"leg that was only counted now being NAMED, a run costing MORE, a blocker "
+        f"ADDED, a failing record APPENDED, a stage BORN, and a stage CLAIMED "
+        f"(ABSENT at HEAD, PARTIAL on disk) — and every one of them was SILENT. A "
+        f"guard that reddens on progress is a guard the next builder deletes.")
+    say(f"        CANNOT   catch an admission that NEVER REACHED A COMMIT. This "
+        f"loop anchors on HEAD like every other loop here, so a failure that "
+        f"appears and is erased between two commits leaves no committed claim to "
+        f"withdraw; and an erasure that is ITSELF COMMITTED is a commit's act, "
+        f"which this fixture does not judge [LEAN R10]. What the anchor buys is "
+        f"that the erasure must pass through the commit record first.")
+    say(f"        LIMIT    HEAD fixture-record counterparts are matched BY INDEX, "
+        f"so an INSERTION or a RE-ORDER of a stage's fixture records goes FALSE "
+        f"RED — a false red, not a false green, and the honest trade. The clean "
+        f"repair is a stable per-record id emitted by each suite, which is "
+        f"PROGRESS.json's to write and not this track's; FILED AS A CROSS-TRACK "
+        f"REQUEST. This loop INHERITS the limit from [LEAN R14]'s floor-(b) "
+        f"anchor, which matches the same way. MEASURED on today's ledger: a PLAIN "
+        f"insertion at #0 where HEAD's #0 admits nothing is SILENT (0 findings); "
+        f"an insertion at #0 where HEAD's #0 admits a drift costs 1; an insertion "
+        f"at #0 where HEAD's #0 exits nonzero costs 2; and RE-ORDERING D-CORE's "
+        f"two records costs 2, because HEAD's #1 is the one live admission of "
+        f"failure in this ledger and index #1 then reads clean.")
+    say(f"        LIMIT    AND THAT FALSE RED IS USABLE AS CAMOUFLAGE. Say it "
+        f"plainly: an attacker who wants this leg IGNORED can PROVOKE the false "
+        f"red on purpose — re-order two fixture records, or insert one at #0 — "
+        f"and the leg goes RED for a reason that is genuinely innocent. Do that "
+        f"two or three times and a reader learns to wave the fourth loop through, "
+        f"which is the state in which a real withdrawal passes unread. The finding "
+        f"TEXT is the only defence this fixture has: it names the stage, the index "
+        f"and the exact field that moved, so an innocent re-order and a withdrawn "
+        f"failure do not read alike to anyone who actually reads them. THE "
+        f"STRUCTURAL REPAIR IS THE SAME ONE: stable per-record ids, PROGRESS.json's "
+        f"to write, FILED AS A CROSS-TRACK REQUEST.")
+    say(f"        LIMIT    THE PAIRING TESTS ADMISSION-PRESENCE AT AN INDEX, NOT "
+        f"RECORD IDENTITY. SUBSTITUTING a different record at the same index that "
+        f"repeats every admission — same drift, same exit_code, same legs_red, the "
+        f"same red_leg_names, no less wall clock — is 0 findings HERE: MEASURED. "
+        f"The admission at #i survives; the record it belonged to does not. It is "
+        f"not a free escape and the numbers say why: keeping the drift alive costs "
+        f"a leg-4 RED (the substitute names no waived leg, so no exemption covers "
+        f"it) and dropping it costs a leg-0 RED (it is then an ordinary erasure). "
+        f"Closing it here would mean demanding a record's TEXT never change, which "
+        f"goes false RED on every legitimate rename; WITHDRAWAL ONLY is "
+        f"deliberately narrower, and this is the price of the shape, named rather "
+        f"than implied.")
+    say(f"        LIMIT    THE ADMISSION VOCABULARY IS A NAMED LIST, AND A "
+        f"CONFESSION MADE OUTSIDE IT IS NOT ANCHORED. Anchored: "
+        f"{'; '.join(ADMISSION_FIELDS)}. NOT anchored, and MEASURED at 0 findings "
+        f"each on today's ledger: legs_total shrinking (177 -> 3, so a suite that "
+        f"ran 177 legs is recorded as having run 3); the `suite` TEXT of a record "
+        f"being rewritten; and any field a future suite invents. WHAT IT COSTS AN "
+        f"ATTACKER: nothing at all — these are one-line edits with no finding "
+        f"anywhere in this leg. WHAT IT BUYS THEM: less than the fields above, "
+        f"because none of them is the claim that a suite PASSED; a shrunken "
+        f"legs_total under a record that still exits 1 with 1 red leg hides scope, "
+        f"not failure. AND A FIELD THAT IS ABSENT ADMITS NOTHING, SO THERE IS "
+        f"NOTHING TO ANCHOR: only {n_head_wall} of the {n_pairs} paired record(s) "
+        f"at HEAD carry a positive wall_seconds at all — for the rest the cost "
+        f"guard is vacuous, not broken, and a suite that never records what it "
+        f"cost can never be caught shrinking it. THE CLEAN REPAIR IS A "
+        f"WHOLE-RECORD ONE-WAY DIFF keyed on a stable per-record id, over a "
+        f"record shape every suite is required to fill — the SAME cross-track "
+        f"request as the two limits above, and the reason it is filed once and "
+        f"named three times.")
+    say(f"        LIMIT    BLOCKERS ARE MATCHED BY COUNT, NOT BY TEXT. A list that "
+        f"SHRINKS or becomes unreadable is a finding; a list whose entries are "
+        f"SWAPPED for different text at the same length is 0 findings, MEASURED. "
+        f"THAT IS A DELIBERATE CHOICE, NOT AN OVERSIGHT: blockers on a PARTIAL "
+        f"stage are working notes that a builder legitimately re-words as "
+        f"understanding improves, and matching them by text would go FALSE RED on "
+        f"every honest re-wording — the brake this loop must not be. WHAT IT COSTS "
+        f"AN ATTACKER: one extra line, swapping a real blocker for a harmless one "
+        f"instead of deleting it. THE CLEAN REPAIR is again stable ids, this time "
+        f"per blocker, PROGRESS.json's to write.")
+    say(f"        CANNOT   defend itself against an edit to THIS FILE. The pin, the "
+        f"four loops, the admission vocabulary and the probe grid all live here; "
+        f"whoever may rewrite scripts/tierc10_resume_fixtures.py may weaken them, "
+        f"and only F-C10-RESUME-S, the commit record and a reader can catch that.")
     ok = not bad
     return ok, (f"the ledger is anchored OUTSIDE itself, BOTH WAYS: {LEDGER_REL} is "
                 f"TRACKED, its {PINNED_LEDGER_REV} blob hashes to the module literal "
@@ -881,8 +2486,281 @@ def resume0_real():
                 f"COMPLETE-VERIFIED in the working tree (so a settled claim cannot be "
                 f"quietly WITHDRAWN either), and every stage the pinned rev called "
                 f"COMPLETE-VERIFIED still is; {n_free} non-complete stage(s) are free "
-                f"to move in the working tree"
+                f"to move in the working tree — FREE TO ADVANCE, NOT FREE TO "
+                f"WITHDRAW: across ALL {len(head_st)} stage(s) at HEAD regardless of "
+                f"status, {n_pairs} fixture record pair(s) were matched by index and "
+                f"NO ADMISSION AT HEAD IS TAKEN BACK ON DISK — not a drift "
+                f"({n_head_drift} admit one), not a nonzero exit or a red leg or a "
+                f"red leg's NAME ({n_head_fail} admit a failure), not a wall clock "
+                f"(of the ones that record a positive one), not one of the "
+                f"{n_head_blk} blocker(s) BY COUNT, and no PARTIAL stage is "
+                f"un-claimed to ABSENT; no record at HEAD is missing from the "
+                f"working tree; {n_probe} totality cell(s) ({len(PROBE_SHAPES)} "
+                f"deletion shapes x {len(head_st)} stages, {n_probe_noop} no-op) each "
+                f"yielded a NAMED finding and not one raised; and {n_ctl} "
+                f"withdrawal-only control(s) — a new drift, a new failure, a red leg "
+                f"newly named, a costlier run, an added blocker, an appended failing "
+                f"record, a born stage, a claimed stage — were each SILENT"
                 if ok else f"{len(bad)} finding(s): " + " · ".join(bad[:4]))
+
+
+# ═══════════════════════════ F-C10-RESUME-S · THE SELF-ANCHOR
+# [LEAN-HEPHAESTUS] R10 ended on a named limit: "it cannot defend itself against
+# an edit to THIS FILE, where the pin and the three loops live", and fell back on
+# "only the commit record and a reader can catch that". At review time NO COMMIT
+# RECORD EXISTED — this module was untracked — so the fallback was a fallback to
+# nothing. The module is now tracked on v12-v1-census (added at d8a6f81), a HEAD
+# blob exists, and this leg is the guard that uses it.
+SELF_REL = "scripts/tierc10_resume_fixtures.py"
+SELF_PATH = Path(__file__).resolve()
+
+# WHAT IS UNDER THE ANCHOR — every module literal that is the last word on a
+# fact no other file in this build can contradict. Named here so the transcript
+# says what an unrecorded edit to this file would buy.
+SELF_ANCHORED_LITERALS = (
+    "PINNED_LEDGER_REV", "PINNED_LEDGER_SHA",     # F-C10-RESUME-0's external anchor
+    "QUARANTINED_PARTIALS",                        # the two LAW-2 kill-partial shas
+    "STEP0_COMMIT", "STEP0_SOURCES", "RF_CODE_FILES",   # STEP 0's pins
+    "EXEMPTIONS", "COVERAGE_MIN_CHARS", "TIER_WIDE_TOKENS",  # the waiver + its breadth law
+    "TC_ROOT_ALLOWLIST",                           # the loose-file escape list
+    "TC_SUITE_FILES",                              # the scripts/ sweep inventory
+    "AS_OF", "CLOSE_MS", "SEED",                   # the corridor
+    "_T_FILED",                                    # the no-clobber stand-in
+    "TRANSCRIPT_REL",                              # the artifact of record's anchor path
+)
+
+
+def _git_tracked(rel: str) -> tuple[bool, str]:
+    """`git ls-files --error-unmatch` — the only question git answers plainly
+    about whether a path is under version control at all. A path that is merely
+    PRESENT on disk and absent from the index has no answer outside the working
+    tree, which is exactly the condition this leg exists to refuse."""
+    try:
+        out = subprocess.run(
+            ["git", "-C", str(ROOT), "ls-files", "--error-unmatch", "--", rel],
+            capture_output=True, check=False)
+    except Exception as e:
+        return False, f"git ls-files could not run: {e.__class__.__name__}: {e}"
+    if out.returncode != 0:
+        msg = (out.stderr or out.stdout).decode("utf-8", errors="replace").strip()
+        return False, (msg.splitlines() or ["no such entry in the index"])[0]
+    return True, "in the index"
+
+
+def selfanchor_findings(subject: Path, rel: str = SELF_REL,
+                        rev: str = "HEAD") -> list[str]:
+    """THE MODULE IS JUDGED AGAINST ITS OWN COMMITTED BLOB.
+
+    FAILS IF: `rel` is NOT TRACKED by git; the `rev` blob of `rel` CANNOT BE
+    READ; or the SUBJECT's bytes are not BYTE-IDENTICAL to that blob.
+
+    `subject`, `rel` and `rev` are parameters ONLY so the break legs can plant a
+    bent copy, an untracked path and an unreachable rev WITHOUT writing one byte
+    into the repository or making one git write. The real leg passes the
+    module's own file, its own repo-relative path, and HEAD."""
+    bad: list[str] = []
+    if not subject.exists() or not subject.is_file():
+        return [f"SELF-ANCHOR: the subject {subject.name} does not exist — a module "
+                f"that cannot read its own bytes anchors nothing, and a check with "
+                f"no subject must be RED, never silently green"]
+    wsha, wn = file_sha(subject)
+    ok_tracked, why = _git_tracked(rel)
+    if not ok_tracked:
+        bad.append(f"SELF-ANCHOR: {rel!r} IS NOT TRACKED by git ({why}) — an "
+                   f"untracked fixture module has NO answer outside the working "
+                   f"tree, so each of the {len(SELF_ANCHORED_LITERALS)} pinned "
+                   f"literals it carries can be edited with no trace any reader "
+                   f"can chase. This is the exact condition [LEAN R10] was written "
+                   f"under and it must not recur silently")
+    blob = _git_blob(rev, rel)
+    if blob is None:
+        bad.append(f"SELF-ANCHOR: the {rev} blob of {rel!r} IS UNREACHABLE — the "
+                   f"anchor has nothing to anchor against. A guard whose reference "
+                   f"cannot be read is RED, not green")
+    if ok_tracked and blob is not None:
+        bsha = sha_bytes(blob)
+        if bsha != wsha:
+            bad.append(
+                f"SELF-ANCHOR: DIVERGENCE — the working-tree module hashes to "
+                f"{wsha} ({wn:,} B), the {rev} blob of {rel} to {bsha} "
+                f"({len(blob):,} B). The literals in this file are the last word "
+                f"on {len(SELF_ANCHORED_LITERALS)} pinned facts "
+                f"({', '.join(SELF_ANCHORED_LITERALS[:4])}, …); an edit to them "
+                f"that is NOT in the commit record is precisely the tamper "
+                f"F-C10-RESUME-0 refuses to accept for PROGRESS.json, and this "
+                f"module may not hold itself to a lower standard than the ledger "
+                f"it audits")
+    return bad
+
+
+def _self_plant(body: bytes) -> Path:
+    """one throwaway copy of the module, in a temp tree. NO REPO FILE IS
+    EDITED and NO GIT WRITE IS MADE by any plant below."""
+    d = Path(tempfile.mkdtemp(prefix="tc10_resume_s_"))
+    p = d / "tierc10_resume_fixtures.py"
+    p.write_bytes(body)
+    return p
+
+
+def resumeS_break():
+    """THE PLANTS ARE JUDGED AGAINST THE COMMITTED BLOB, NOT THE WORKING TREE.
+
+    WHY THAT MATTERS.  If a plant were a bent copy of the WORKING-TREE bytes,
+    then during any round in which this module has uncommitted edits EVERY plant
+    would go red for free — the copy would diverge from HEAD whether or not the
+    plant did anything — and the break leg would prove nothing at all.  Each
+    plant is therefore ONE EDIT to a copy of the HEAD BLOB ITSELF, whose
+    unedited twin is the real leg's negative control at ZERO findings.  The bend
+    is then the only thing that can be making it red."""
+    blob = _git_blob("HEAD", SELF_REL)
+    if blob is None:
+        raise AssertionError(
+            f"PLANT BASELINE UNAVAILABLE: HEAD:{SELF_REL} cannot be read, so no "
+            f"plant can be judged against it")
+
+    def bend(*cands: tuple[bytes, bytes]):
+        """CANDIDATE PAIRS, first present in the blob wins.
+
+        The HEAD blob MOVES — it is this module's own history — so a plant
+        pinned to one exact byte string silently becomes a CRASH (and, under
+        plants(), a FIXTURE DEFECT that voids the whole break leg) the moment
+        the orchestrator commits a round.  Each plant therefore offers the same
+        tamper in every spelling this file has carried."""
+        def go():
+            for find, repl in cands:
+                if find in blob:
+                    p = _self_plant(blob.replace(find, repl, 1))
+                    try:
+                        return selfanchor_findings(p, SELF_REL, "HEAD")
+                    finally:
+                        shutil.rmtree(p.parent, ignore_errors=True)
+            raise AssertionError(
+                f"NO spelling of this plant's target is in the HEAD blob of "
+                f"{SELF_REL} ({[c[0][:40] for c in cands]}) — the plant would "
+                f"prove nothing and a plant that proves nothing is a defect")
+        return go
+
+    def at(rel: str, rev: str):
+        def go():
+            p = _self_plant(blob)            # byte-identical to HEAD: 0 findings
+            try:
+                return selfanchor_findings(p, rel, rev)
+            finally:
+                shutil.rmtree(p.parent, ignore_errors=True)
+        return go
+
+    def no_subject():
+        p = _self_plant(blob)
+        shutil.rmtree(p.parent, ignore_errors=True)
+        return selfanchor_findings(p, SELF_REL, "HEAD")
+
+    return plants([
+        ("BENT PINNED_LEDGER_SHA (F-C10-RESUME-0's external anchor literal "
+         "replaced by 64 zeros on a copy of the committed module — the one edit "
+         "that turns the ledger anchor into whatever git says today)",
+         bend((PINNED_LEDGER_SHA.encode(), b"0" * 64))),
+        ("BENT PINNED_LEDGER_REV (the anchor's rev moved off f97cded)",
+         bend((b'PINNED_LEDGER_REV = "f97cded"',
+               b'PINNED_LEDGER_REV = "d8a6f81"'))),
+        ("BENT QUARANTINE LITERAL (one of the two LAW-2 kill-partial shas "
+         "re-typed — the three-way check becomes one number counted twice)",
+         bend((QUARANTINED_PARTIALS["lanes/FIXTURES_LANES_partial.txt"].encode(),
+               b"f" * 64))),
+        ("RE-WIDENED WAIVER (the venue exemption's covers_record_match widened "
+         "by one string — the round-3 narrowing put back to the round-2 "
+         "stage-name substring, or the round-2 value widened to a tier-wide "
+         "token, whichever spelling the committed blob carries)",
+         bend((b'"covers_record_match": ("F-D-1",)',
+               b'"covers_record_match": ("Stage D fixtures",)'),
+              (b'"covers_record_match": ("Stage D fixtures",)',
+               b'"covers_record_match": ("TIER-C10",)'))),
+        ("LOWERED FLOOR (a numeric threshold in the waiver law dropped to 0 — "
+         "COVERAGE_MIN_CHARS, which re-admits the empty pattern, or the reason "
+         "floor, which re-admits a label in place of a reason)",
+         bend((b"COVERAGE_MIN_CHARS = 4", b"COVERAGE_MIN_CHARS = 0"),
+              (b'"reason", ""))) < 120', b'"reason", ""))) < 0'))),
+        ("WIDENED ROOT ALLOWLIST (one more loose file waved through the "
+         "unrecorded-file sweep)",
+         bend((b'TC_ROOT_ALLOWLIST = (\n    "BUILD_DRAFT.md",',
+               b'TC_ROOT_ALLOWLIST = (\n    "ANYTHING_AT_ALL.md",'
+               b'\n    "BUILD_DRAFT.md",'))),
+        ("BENT STEP0_COMMIT (STEP 0's commit of record moved)",
+         bend((b'STEP0_COMMIT = "d63592f"', b'STEP0_COMMIT = "f97cded"'))),
+        ("BENT CORRIDOR (CLOSE_MS moved by one millisecond — the corridor NEVER "
+         "MOVES, and a one-byte edit here moves it)",
+         bend((b"CLOSE_MS = 1790006400000", b"CLOSE_MS = 1790006400001"))),
+        ("WHITESPACE ONLY (one newline appended — the anchor is BYTE-level, not "
+         "semantic, and must not be fooled by a meaningless edit)",
+         bend((b"from __future__ import annotations",
+               b"from __future__ import annotations\n"))),
+        ("UNTRACKED PATH (the subject is byte-identical to HEAD, but the path is "
+         "not in the index — the review-time condition, where this module had no "
+         "commit record at all)",
+         at("scripts/tierc10_resume_fixtures_UNTRACKED.py", "HEAD")),
+        ("UNREACHABLE BLOB · NONEXISTENT REV (the subject is byte-identical to "
+         "HEAD and the path is tracked, but the rev cannot be resolved — the leg "
+         "must go RED, not silently pass on a missing reference)",
+         at(SELF_REL, "0" * 40)),
+        ("UNREACHABLE BLOB · REV OUT OF RANGE (HEAD~9999)", at(SELF_REL, "HEAD~9999")),
+        ("UNREACHABLE BLOB · GHOST REF (a branch nobody created)",
+         at(SELF_REL, "refs/heads/tc10-no-such-branch")),
+        ("NO SUBJECT AT ALL (the module's own file is gone from under the leg)",
+         no_subject),
+    ])
+
+
+def resumeS_real():
+    blob = _git_blob("HEAD", SELF_REL)
+    tracked, why = _git_tracked(SELF_REL)
+    wsha, wn = file_sha(SELF_PATH)
+    bad: list[str] = []
+    # NEGATIVE CONTROL — a guard that fires on everything guards nothing. A copy
+    # that IS byte-identical to the committed blob must yield ZERO findings.
+    if blob is None:
+        bad.append("CONTROL: HEAD blob unreadable, so the negative control could "
+                   "not be run — see the live verdict below")
+    else:
+        p = _self_plant(blob)
+        try:
+            ctrl = selfanchor_findings(p, SELF_REL, "HEAD")
+            if ctrl:
+                bad.append(f"CONTROL: bytes byte-identical to the HEAD blob were "
+                           f"reported as a divergence: {ctrl[:1]}")
+        finally:
+            shutil.rmtree(p.parent, ignore_errors=True)
+    say(f"      subject   {SELF_REL}")
+    say(f"      worktree  {wsha}  {wn:,} B")
+    say(f"      HEAD blob {sha_bytes(blob) if blob is not None else 'UNREACHABLE':<64}  "
+        f"{len(blob) if blob is not None else 0:,} B")
+    say(f"      tracked   {'YES' if tracked else 'NO'} ({why})")
+    say(f"      under the anchor: {len(SELF_ANCHORED_LITERALS)} module literal(s) "
+        f"{list(SELF_ANCHORED_LITERALS)}")
+    # ── THE HONEST LIMIT, PRINTED IN THE TRANSCRIPT ────────────────────────
+    say(f"      LIMIT, STATED PLAINLY. THIS LEG PROVES: this module is under "
+        f"version control, its HEAD blob is readable, and the bytes being "
+        f"EXECUTED right now are the bytes that are COMMITTED — so an edit to any "
+        f"of the {len(SELF_ANCHORED_LITERALS)} literals above cannot reach a run "
+        f"without first reaching the commit record, where a reviewer can diff it. "
+        f"IT DOES NOT PROVE: that the COMMITTED bytes are honest. A self-anchor "
+        f"against HEAD cannot catch an edit that is ITSELF COMMITTED — bend "
+        f"PINNED_LEDGER_SHA and commit it and this leg is green on a bent pin. "
+        f"Nor can it catch a rewritten history (amend, force-push) that moves the "
+        f"blob and the working tree together. AND IT CANNOT BE FIXED BY PINNING: "
+        f"the module cannot carry its own sha as a literal the way "
+        f"PINNED_LEDGER_SHA pins the ledger's, because a literal holding the sha "
+        f"of the file that contains it is a fixed point no author can write — "
+        f"typing the sha changes the sha. HEAD is therefore the only external "
+        f"answer available to this file, and what stands behind HEAD is review, "
+        f"not arithmetic. An accurate statement of a limit is worth more than a "
+        f"guard that pretends.")
+    bad += selfanchor_findings(SELF_PATH, SELF_REL, "HEAD")
+    ok = not bad
+    return ok, (f"this module ({wn:,} B, sha {wsha[:16]}…) is TRACKED at {SELF_REL} "
+                f"and its working-tree bytes are BYTE-IDENTICAL to the HEAD blob, so "
+                f"the {len(SELF_ANCHORED_LITERALS)} literals this file pins are the "
+                f"committed ones; negative control: bytes equal to the HEAD blob "
+                f"yield zero findings"
+                if ok else f"{len(bad)} finding(s): " + " · ".join(bad[:3]))
 
 
 # ═══════════════════════════════ F-C10-RESUME-1 · the re-hash and the sweep
@@ -1515,16 +3393,323 @@ def evidence_findings(xid: str, ev: dict, root: Path = ROOT) -> list[str]:
     return bad
 
 
+# a path/identifier token. NOT a word-boundary regex over the raw prose: the
+# ledger names its suites as PATHS ("LEGS[] in scripts/tierc10_data_fixtures.py"),
+# and a token must be able to be a whole path, a whole basename or a whole stem —
+# and NOTHING SHORTER.
+_NAME_TOKEN = re.compile(r"[A-Za-z0-9_][A-Za-z0-9_./\\-]*")
+
+
+def _name_tokens(blob: str) -> set[str]:
+    """Every WHOLE name the text contains, plus each one's basename and stem.
+
+    THE HOLE THIS CLOSES.  `_binding_field` used to ask `stem in <blob>` — a
+    SUBSTRING test.  D-CORE's block names `scripts/tierc10_data_fixtures.py`, so
+    EVERY shorter stem inside it bound for free: MEASURED, a brand-new
+    `scripts/tierc10_dat.py` (stem 'tierc10_dat') and the unrelated, already
+    existing `scripts/tierc10_data.py` (stem 'tierc10_data') each returned the
+    binding field 'blockers' without the ledger naming either of them once.  The
+    review proved it on a full symlink mirror of the repo with ONE added file.
+    Tokenising and comparing WHOLE names removes the free ride: a stem now binds
+    only when the ledger actually spells that name."""
+    out: set[str] = set()
+    for t in _NAME_TOKEN.findall(blob):
+        t = t.strip("./-")
+        if not t:
+            continue
+        out.add(t)
+        base = t.rsplit("/", 1)[-1]
+        out.add(base)
+        out.add(base.rsplit(".", 1)[0] if "." in base else base)
+        out.add(base.split(".", 1)[0])       # `tierc10_data.load_asof` names
+    return out                               # the module tierc10_data
+
+
 def _binding_field(stage: dict, srel: str) -> str | None:
     """WHICH FIELD of the stage's own ledger block names the exempted suite —
-    the binding, printed by name so a reader can chase it. None = not bound."""
-    stem = Path(srel).stem
-    if not stem:
+    the binding, printed by name so a reader can chase it. None = not bound.
+
+    MATCHES EXACTLY, NEVER BY SUBSTRING. [LEAN-HEPHAESTUS] R15"""
+    if not isinstance(stage, dict) or not srel:
+        return None
+    want = {srel, Path(srel).name, Path(srel).stem} - {""}
+    if not want:
         return None
     for key in sorted(stage, key=str):
-        if stem in _jb(stage[key]):
+        if _name_tokens(_jb(stage[key])) & want:
             return key
     return None
+
+
+# ── THE TIE'S EVIDENCE IS ANCHORED, WHATEVER THE STAGE'S STATUS [LEAN R14] ──
+_HEAD_LEDGER_CACHE: dict = {}
+
+
+def _head_ledger() -> tuple[dict | None, str | None]:
+    """The COMMITTED PROGRESS.json, parsed — the text the exemption tie is
+    allowed to read.
+
+    WHY THIS EXISTS.  F-C10-RESUME-0 anchors COMPLETE-VERIFIED blocks to HEAD
+    and deliberately lets a PARTIAL stage move in the working tree, because a
+    build in progress must be able to advance.  The exemption tie then read
+    exactly that unanchored prose as its evidence, and the review wrote the
+    evidence for free: ONE CLAUSE appended to D-CORE's OFFLINE fixture record —
+    ' (shares fixture plumbing with F-D-1)' — took a planted drift from 1
+    finding to 0 with no module edit and no new file.  So the FIELDS THE TIE
+    READS are anchored here for EVERY stage, PARTIAL included, while the rest of
+    a PARTIAL block stays free to move.  A change in those fields is REPORTED,
+    not forbidden; it is a FINDING only when the change is what CREATES the
+    tie."""
+    if "v" not in _HEAD_LEDGER_CACHE:
+        blob = _git_blob("HEAD", LEDGER_REL)
+        if blob is None:
+            _HEAD_LEDGER_CACHE["v"] = (
+                None, f"the HEAD blob of {LEDGER_REL} is UNREACHABLE")
+        else:
+            try:
+                _HEAD_LEDGER_CACHE["v"] = (
+                    json.loads(blob.decode("utf-8")), None)
+            except Exception as e:
+                _HEAD_LEDGER_CACHE["v"] = (
+                    None, f"the HEAD blob of {LEDGER_REL} will not parse as JSON "
+                          f"({e.__class__.__name__})")
+    return _HEAD_LEDGER_CACHE["v"]
+
+
+def _head_stage(name) -> tuple[dict | None, str | None]:
+    doc, err = _head_ledger()
+    if err:
+        return None, err
+    st = _stages_by_name(doc).get(name)
+    if st is None:
+        return None, (f"stage {name!r} is NOT IN THE COMMITTED LEDGER at HEAD — a "
+                      f"stage that exists only in the working tree carries no "
+                      f"anchored text, so nothing it says can tie a waiver")
+    return st, None
+
+
+def _coverage_findings(xid: str, x: dict, stage: dict,
+                       head_stage: dict | None = None,
+                       head_err: str | None = None) -> list[str]:
+    """HOW WIDE MAY A WAIVER REACH?  [LEAN-HEPHAESTUS] R12
+
+    THE HOLE THIS CLOSES.  `covers_record_match` was checked only for being
+    DEAD.  Nothing checked it for OVER-matching, and a free substring is a
+    blanket escape one keystroke wide: ("",) and ("TIER-C10",) each swallowed
+    every D-CORE record with ZERO findings and silenced a planted drift.
+
+    TWO FLOORS, BOTH REQUIRED.
+
+    (a) THE PATTERN ITSELF may not be a generic selector: at least
+        COVERAGE_MIN_CHARS characters, and not a substring of the stage's own
+        name nor of any tier-wide token.  This is the cheap floor and it catches
+        the two measured escapes on sight.
+
+    (b) EVERY RECORD THE PATTERN SELECTS must be POSITIVELY TIED to the waiver:
+        the record's own suite/name string must name one of the waived legs.
+
+    WHY (b) IS LEG-NAMING AND NOT AN EXPLICIT `covers_record_ids` LIST.  Both
+    forms were on the table.  An id list checked by exact membership is more
+    PRECISE, but it is not STRONGER: it is a second free, author-written field
+    with nothing outside the registry corroborating it, so widening it is
+    exactly as cheap as widening covers_record_match was — the hole moves, it
+    does not close.  Leg-naming binds coverage to a fact the exemption's author
+    does NOT control: `legs` is already forced, above, to equal EXACTLY the set
+    that the exempted suite's OWN LEGS table declares venue-reaching, parsed out
+    of that suite's source with ast.  So to widen the waiver's reach you must
+    make a ledger record name a leg, and to add a leg you must make a foreign
+    suite's own source declare that leg venue-reaching.  That is a chain no
+    single string in this file can forge, which is the whole point.
+
+    (b·HEAD) AND THE TEXT (b) READS IS THE COMMITTED TEXT. [LEAN R14]
+
+    THE HOLE THIS CLOSES.  (b) is only as strong as the string it reads, and in
+    round 3 that string was a PARTIAL stage's working-tree prose, which
+    F-C10-RESUME-0 deliberately leaves unanchored so a build in progress can
+    advance.  MEASURED: append ' (shares fixture plumbing with F-D-1)' to
+    D-CORE's OFFLINE fixture record in the working tree and a planted drift on
+    that record goes from 1 finding to 0 — no module edit, no new file, one
+    clause.  The record now NAMES a waived leg, so (b) is satisfied; the pattern
+    now SELECTS it, so the closure calls the drift covered.  A guard whose
+    evidence is free text the attacker also writes is not a guard.
+
+    SO THE TIE IS ANCHORED, AND ONLY THE TIE.  For every record a pattern
+    SELECTS, the pattern must select it in the COMMITTED text too, and the
+    committed text must be what names the waived leg.  The rest of a PARTIAL
+    block stays free to move; a change in the anchored field is REPORTED (see
+    resume4_real's per-record `anchored` lines), not forbidden — it is a FINDING
+    only when the change is what CREATES the tie.
+
+    WHY NOT DERIVE THE TIE FROM THE SUITE'S OWN AST INSTEAD.  It was the other
+    live option and it does not reach: D-CORE's ONLINE and OFFLINE records are
+    TWO RUNS OF THE SAME FILE, so no parse of scripts/tierc10_data_fixtures.py
+    can tell them apart.  What the AST already fixes is the LEG NAMES — x['legs']
+    is forced, above, to equal exactly the suite's own needs_net set — so the
+    only forgeable half left was the RECORD TEXT, and that is the half anchored
+    here.  WHY NOT A STRUCTURED FIELD EMITTED BY THE SUITE.  It is the better
+    shape and this track cannot build it: PROGRESS.json is not ours to write.
+    FILED AS A CROSS-TRACK REQUEST — have each fixture record carry an explicit
+    `legs_reaching_venue: [...]` emitted by the suite, and (b) can read a field
+    instead of a sentence.
+
+    THE HONEST LIMIT.  (b) reads the record's name, so a genuinely
+    venue-reaching record whose name never spells its legs goes FALSE RED here.
+    That is a false red, not a false green, and it is the trade this house takes
+    every time.  CROSS-TRACK REQUEST: keep a venue-reaching fixture record's
+    `suite` string naming the legs that reach the venue — D-CORE's ONLINE record
+    already does ('targeted named legs F-D-1 …')."""
+    bad: list[str] = []
+    suites = [str(f.get("suite", "")) for f in stage.get("fixtures", [])]
+    head_suites = ([str(f.get("suite", "")) for f in head_stage.get("fixtures", [])]
+                   if isinstance(head_stage, dict) else None)
+    legs = tuple(str(g) for g in x.get("legs", ()) if str(g))
+    sname = str(stage.get("stage", ""))
+    for pat in x.get("covers_record_match", ()):
+        p = str(pat)
+        pcf = p.strip().casefold()
+        # (a) THE PATTERN MAY NOT BE A GENERIC SELECTOR
+        if len(p.strip()) < COVERAGE_MIN_CHARS:
+            bad.append(f"{xid}: covers_record_match {p!r} is {len(p.strip())} "
+                       f"character(s) — a waiver pattern under {COVERAGE_MIN_CHARS} "
+                       f"selects by accident, and the empty string selects "
+                       f"EVERYTHING its stage carries")
+        if pcf and pcf in sname.casefold():
+            bad.append(f"{xid}: covers_record_match {p!r} is a substring of the "
+                       f"stage's OWN NAME {sname!r} — a waiver named after its "
+                       f"stage is a waiver over the whole stage, which is the one "
+                       f"thing an exemption may never be")
+        for tok in TIER_WIDE_TOKENS:
+            if pcf and pcf in tok.casefold():
+                bad.append(f"{xid}: covers_record_match {p!r} is a substring of the "
+                           f"tier-wide token {tok!r} — a pattern every record in "
+                           f"TIER-C10 matches waives TIER-C10, not two legs")
+                break
+        # (b) EVERY SELECTED RECORD MUST BE TIED TO A WAIVED LEG
+        for i, s in enumerate(suites):
+            if p not in s:
+                continue
+            if not any(g in s for g in legs):
+                bad.append(f"{xid}: covers_record_match {p!r} SELECTS the record "
+                           f"{s[:80]!r}, which names NONE of the waived legs "
+                           f"{sorted(legs)} — an exemption that selects a record no "
+                           f"waived leg can explain is a BLANKET ESCAPE over that "
+                           f"record, and the record's own name is usually telling "
+                           f"you so")
+            # ── (b·HEAD) THE TIE IS READ OUT OF THE COMMITTED TEXT [LEAN R14] ──
+            if head_err:
+                bad.append(f"{xid}: covers_record_match {p!r} SELECTS record #{i} of "
+                           f"stage {sname!r}, but the tie CANNOT BE ANCHORED — "
+                           f"{head_err}. Floor (b)'s whole evidence is the record's "
+                           f"own text; with no committed copy to read it against, "
+                           f"that text is whatever the working tree says today, and "
+                           f"a waiver resting on it is resting on nothing")
+            elif head_suites is None:
+                bad.append(f"{xid}: covers_record_match {p!r} SELECTS record #{i} of "
+                           f"stage {sname!r}, whose ledger block is NOT AT HEAD — an "
+                           f"uncommitted stage carries no anchored text, so floor "
+                           f"(b) has no evidence it did not read out of the working "
+                           f"tree")
+            elif i >= len(head_suites):
+                bad.append(f"{xid}: covers_record_match {p!r} SELECTS record #{i} "
+                           f"{s[:64]!r}, which HAS NO COMMITTED COUNTERPART (stage "
+                           f"{sname!r} carries {len(head_suites)} fixture record(s) "
+                           f"at HEAD, {len(suites)} in the working tree) — a record "
+                           f"that appeared since the last commit may not be what "
+                           f"ties a waiver to a leg")
+            else:
+                h = head_suites[i]
+                if p not in h:
+                    bad.append(f"{xid}: covers_record_match {p!r} SELECTS record #{i} "
+                               f"{s[:80]!r} ONLY IN THE WORKING TREE — the COMMITTED "
+                               f"text of that record is {h[:80]!r}, which this "
+                               f"pattern does NOT select. THE SELECTION WAS CREATED "
+                               f"BY AN EDIT NOBODY COMMITTED. That is one appended "
+                               f"clause in an unanchored PARTIAL block, and it is "
+                               f"exactly how a drift on a record the waiver may not "
+                               f"cover goes from a finding to silence")
+                elif not any(g in h for g in legs):
+                    bad.append(f"{xid}: covers_record_match {p!r} SELECTS record #{i}, "
+                               f"and it is only the WORKING-TREE text that names a "
+                               f"waived leg: the COMMITTED text {h[:80]!r} names NONE "
+                               f"of {sorted(legs)}. Floor (b) reads the committed "
+                               f"record, not today's prose")
+    out: list[str] = []
+    for f in bad:                      # deterministic, de-duplicated
+        if f not in out:
+            out.append(f)
+    return out
+
+
+def scripts_sweep_findings(exemptions, root: Path = ROOT,
+                           pinned: tuple = TC_SUITE_FILES) -> list[str]:
+    """NOTHING IN THIS SUITE SWEPT scripts/. THAT WAS THE HOLE. [LEAN R16]
+
+    Every other sweep in this module looks at research_outputs/tierc10 — the
+    OUTPUT side. The exemption chain, though, runs through CODE: an exemption
+    names a scripts/ file, that file's own LEGS table decides which legs may be
+    waived, and its stem is what the ledger must name for the binding to hold.
+    A scripts/ file could therefore APPEAR — untracked, unrecorded, named by
+    nobody — and join that chain. The review built exactly that: a full symlink
+    mirror of the repo plus ONE added file.
+
+    THE LAW, in three parts:
+      · EVERY scripts/tierc10_*.py ON DISK is RECORDED — present in the pinned
+        TC_SUITE_FILES literal (which lives under F-C10-RESUME-S, so adding a
+        name is not a free edit) AND known to the git index.
+      · EVERY PINNED NAME IS STILL THERE — a sweep that only looks at what it
+        finds cannot see a deletion.
+      · EVERY FILE THE REGISTRY NAMES AS A `suite` is pinned AND has a readable
+        HEAD BLOB. The exemption chain may not be validated against a file that
+        exists only in somebody's working tree.
+
+    WHAT IS DELIBERATELY *NOT* CHECKED: the suite's CONTENT sha. Those files
+    belong to other tracks and move under this one; pinning their bytes here
+    would make this leg red for somebody else's honest commit, and their live
+    shas stay on stdout only [LEAN R8]."""
+    bad: list[str] = []
+    d = root / "scripts"
+    if not d.is_dir():
+        return [f"SCRIPTS SWEEP: {d} is not a directory — the sweep has nothing to "
+                f"read, and a sweep that reads nothing must be RED, not silent"]
+    on_disk = sorted(f"scripts/{q.name}" for q in d.glob(TC_SUITE_GLOB) if q.is_file())
+    pin = tuple(pinned)
+    for rel in on_disk:
+        if rel not in pin:
+            bad.append(f"SCRIPTS SWEEP: {rel} sits in scripts/ and NO module literal "
+                       f"records it. A TIER-C10 script that can name itself into an "
+                       f"exemption's chain — as the suite, or as the stem a ledger "
+                       f"block names — may not simply APPEAR; it is added to "
+                       f"TC_SUITE_FILES, and that edit must be COMMITTED before this "
+                       f"suite goes green")
+        ok, why = _git_tracked(rel)
+        if not ok:
+            bad.append(f"SCRIPTS SWEEP: {rel} is UNTRACKED ({why}) — a file with no "
+                       f"answer outside the working tree may not participate in a "
+                       f"waiver, because nothing a reader can chase says it exists")
+    for rel in pin:
+        if rel not in on_disk:
+            bad.append(f"SCRIPTS SWEEP: {rel} is PINNED in TC_SUITE_FILES and is NOT "
+                       f"ON DISK — a recorded file that vanished is a finding; a "
+                       f"sweep that only inspects what it finds cannot see a deletion")
+    for x in exemptions:
+        xid = x.get("id") or "<unnamed exemption>"
+        srel = str(x.get("suite") or "")
+        if not srel:
+            continue
+        if srel not in pin:
+            bad.append(f"{xid}: its suite {srel!r} is not in TC_SUITE_FILES — a file "
+                       f"that carries a waiver must be RECORDED under the self-anchor "
+                       f"first")
+        if _git_blob("HEAD", srel) is None:
+            bad.append(f"{xid}: its suite {srel!r} has NO READABLE HEAD BLOB — the "
+                       f"legs this exemption may waive are read from that file's own "
+                       f"source, so an uncommitted suite means the waiver's authority "
+                       f"is a file only its author has seen")
+    out: list[str] = []
+    for f in bad:
+        if f not in out:
+            out.append(f)
+    return out
 
 
 def exemption_findings(exemptions, prog: dict, root: Path = ROOT) -> list[str]:
@@ -1616,6 +3801,10 @@ def exemption_findings(exemptions, prog: dict, root: Path = ROOT) -> list[str]:
                     bad.append(f"{xid}: covers_record_match {pat!r} matches none of "
                                f"stage {x['stage']!r}'s {len(suites)} fixture record(s) "
                                f"— a dead pattern covers nothing and hides everything")
+            # ── AND THE OTHER DIRECTION: A PATTERN MAY NOT OVER-MATCH ──
+            # DEAD was policed; OVER-BROAD was not. [LEAN-HEPHAESTUS] R12
+            h_stage, h_err = _head_stage(x.get("stage"))
+            bad += _coverage_findings(xid, x, stage, h_stage, h_err)
             # ── THE SUITE IS BOUND TO THE STAGE IT EXEMPTS [LEAN R11] ──
             # THE HOLE THIS CLOSES. Everything above validates the exemption's
             # OWN suite — its LEGS table, its venue client, its evidence — and
@@ -1630,6 +3819,24 @@ def exemption_findings(exemptions, prog: dict, root: Path = ROOT) -> list[str]:
             # suite. It worked for LANES, BRK, D-CORE and CENSUS-R.
             # THE FIX. The ledger already carries the binding: each stage's own
             # block names the suite that produced its records. Demand it.
+            # ── AND THE BINDING IS ANCHORED TOO [LEAN R14/R15] ──
+            # FRESH C2, reproduced: appending 'see scripts/tierc10_venue_extra.py'
+            # to D-CORE's (PARTIAL, hence unanchored) blockers list makes
+            # _binding_field return 'blockers' for a file that does not exist.
+            # The binding must be found in the COMMITTED block or it is not a
+            # binding, it is a sentence somebody typed this afternoon.
+            fld_head = _binding_field(h_stage, srel) if h_stage is not None else None
+            if srel and h_err:
+                bad.append(f"{xid}: the suite-to-stage binding CANNOT BE ANCHORED — "
+                           f"{h_err}. A binding read only out of the working tree is "
+                           f"free to whoever holds the editor")
+            elif srel and fld_head is None and _binding_field(stage, srel) is not None:
+                bad.append(f"{xid}: stage {x['stage']!r} names the exempted suite "
+                           f"{Path(srel).stem!r} ONLY IN THE WORKING TREE — the "
+                           f"COMMITTED block at HEAD does not name it. A binding that "
+                           f"exists only in an uncommitted edit is not a binding: it "
+                           f"is the same free text floor (b) was forged with, one "
+                           f"field over")
             if srel and _binding_field(stage, srel) is None:
                 bad.append(f"{xid}: stage {x['stage']!r}'s ledger block does not name "
                            f"the exempted suite {Path(srel).stem!r} — this exemption "
@@ -1744,6 +3951,41 @@ def resume4_break():
         return exemption_findings(mut(covers_record_match=("a suite nobody ran",)),
                                   prog)
 
+    # ── THE BREADTH LAW [LEAN-HEPHAESTUS] R12 ──────────────────────────────
+    # Each of these is the REAL, properly-bound X-STAGE-D-VENUE with ONE string
+    # changed. Every one of them scored ZERO findings before round 3 and every
+    # one of them silenced a real planted drift.
+    def widened(pat: str):
+        return lambda: exemption_findings(mut(covers_record_match=(pat,)), prog)
+
+    def _drift_offline():
+        """the drift planted on D-CORE's OFFLINE record — the run that, by its
+        own name, reaches no venue API and may not be covered by a venue
+        waiver."""
+        p = copy.deepcopy(prog)
+        for s in p["stages"]:
+            if s.get("stage") != "D-CORE":
+                continue
+            for f in s["fixtures"]:
+                if "OFFLINE" in str(f.get("suite", "")):
+                    f["transcript_drift"] = True
+                    f["transcript_sha_after"] = "9" * 64
+        return p
+
+    def widened_hides_offline_drift(pat: str):
+        """judged on the COVERED DRIFT ALONE: a widened pattern may not be the
+        reason the OFFLINE record's drift goes unspoken."""
+        return lambda: [f for f in
+                        exemption_findings(mut(covers_record_match=(pat,)),
+                                           _drift_offline())
+                        if "DRIFTED" in f]
+
+    def offline_drift_unnamed():
+        """THE ROUND-2 REGRESSION ITSELF: with covers_record_match narrowed to
+        the waived leg, a drift on the OFFLINE record is no longer covered by
+        anything and must be spoken aloud."""
+        return exemption_findings(EXEMPTIONS, _drift_offline())
+
     def _fabricated(stage_name: str, suite_rel: str, src_file: str) -> dict:
         return {
             "id": "X-FABRICATED", "suite": suite_rel, "stage": stage_name,
@@ -1836,10 +4078,126 @@ def resume4_break():
         xs, _ = _borrowed()
         return exemption_findings(xs, prog)
 
+    # ══ ROUND 4 · THE TWO FORGERIES OF FLOOR (b), REPRODUCED [LEAN R14/R15/R16]
+    FORGED_CLAUSE = " (shares fixture plumbing with F-D-1)"
+
+    def _clause_forgery() -> dict:
+        """FORGERY 1, EXACTLY AS THE REVIEW WROTE IT. One clause appended to
+        D-CORE's OFFLINE fixture record — a PARTIAL stage's ledger block, which
+        F-C10-RESUME-0 deliberately leaves unanchored — makes the waiver's
+        pattern SELECT that record and makes the record NAME a waived leg. No
+        module edit. No new file. MEASURED at round 3: 1 finding -> 0."""
+        q = _drift_offline()
+        for st in q["stages"]:
+            if st.get("stage") != "D-CORE":
+                continue
+            for f in st["fixtures"]:
+                if "OFFLINE" in str(f.get("suite", "")):
+                    f["suite"] = str(f["suite"]) + FORGED_CLAUSE
+        return q
+
+    def clause_forgery_drift_only():
+        """Judged on the COVERED FAILURE alone: the OFFLINE drift the round-3
+        repair spoke aloud must STILL be spoken aloud after the clause."""
+        return [f for f in exemption_findings(EXEMPTIONS, _clause_forgery())
+                if "DRIFTED" in f]
+
+    def clause_forgery_anchor_only():
+        """Judged on the ANCHOR finding alone: the plant must go red because the
+        selection exists only in the working tree, not for some other reason."""
+        return [f for f in exemption_findings(EXEMPTIONS, _clause_forgery())
+                if "ONLY IN THE WORKING TREE" in f and "SELECTS record" in f]
+
+    def clause_forgery_no_drift():
+        """The same appended clause with NOTHING to hide: an unanchored tie is a
+        standing finding, not a consequence of the drift."""
+        q = copy.deepcopy(prog)
+        for st in q["stages"]:
+            if st.get("stage") != "D-CORE":
+                continue
+            for f in st["fixtures"]:
+                if "OFFLINE" in str(f.get("suite", "")):
+                    f["suite"] = str(f["suite"]) + FORGED_CLAUSE
+        return exemption_findings(EXEMPTIONS, q)
+
+    def substring_binding():
+        """FORGERY 2, THE BINDING HALF. `_binding_field` matched the exempted
+        suite's stem by SUBSTRING, so a NEWLY ADDED scripts/ file whose stem is
+        a substring of the bound suite's stem bound itself to the stage for
+        free: MEASURED, 'scripts/tierc10_dat.py' (stem a substring of
+        'tierc10_data_fixtures') returned the binding field 'blockers' though
+        D-CORE's block never names it. The match is now EXACT."""
+        return [f for f in exemption_findings(mut(suite="scripts/tierc10_dat.py"),
+                                             prog)
+                if "does not name the exempted suite" in f]
+
+    def fresh_c2_unanchored_blocker():
+        """FRESH C2: the substring trick is convenience, not necessity — the
+        same binding is reachable by APPENDING 'see scripts/tierc10_venue_extra.py'
+        to D-CORE's (PARTIAL, hence unanchored) blockers list. Exact matching
+        does not touch this one; anchoring the binding to HEAD does."""
+        q = copy.deepcopy(prog)
+        for st in q["stages"]:
+            if st.get("stage") == "D-CORE":
+                st["blockers"].append("see scripts/tierc10_venue_extra.py")
+        y = mut(id="X-C2-FRESH", suite="scripts/tierc10_venue_extra.py")
+        return [f for f in exemption_findings(y, q)
+                if "COMMITTED block at HEAD does not name it" in f]
+
+    # ── THE scripts/ SWEEP [LEAN R16] ──
+    def _scripts_mirror(add: tuple = (), drop: tuple = ()) -> Path:
+        """A throwaway scripts/ tree of SYMLINKS to the real files — the review's
+        own apparatus. NO REPO FILE IS WRITTEN, MOVED OR DELETED by any plant."""
+        d = Path(tempfile.mkdtemp(prefix="tc10_scripts_sweep_"))
+        sd = d / "scripts"
+        sd.mkdir()
+        for q in sorted((ROOT / "scripts").glob(TC_SUITE_GLOB)):
+            if f"scripts/{q.name}" in drop:
+                continue
+            (sd / q.name).symlink_to(q)
+        for name in add:
+            (sd / name).write_text("# planted\n", encoding="utf-8")
+        return d
+
+    def sweep(add=(), drop=(), pinned=TC_SUITE_FILES, xs=EXEMPTIONS, grep=None):
+        def go():
+            d = _scripts_mirror(add, drop)
+            try:
+                found = scripts_sweep_findings(xs, root=d, pinned=pinned)
+            finally:
+                shutil.rmtree(d, ignore_errors=True)
+            return [f for f in found if grep is None or grep in f]
+        return go
+
+    _UNPINNED = "scripts/tierc10_venue_extra.py"
+
     return plants([
         ("GHOST STAGE (the exemption names a stage the ledger does not carry)", ghost_stage),
         ("DEAD PATTERN (covers_record_match matches no record of its own stage)",
          dead_pattern),
+        ("WIDENED TO THE EMPTY STRING (covers_record_match=('',) — a non-empty "
+         "tuple, not a dead pattern, and a blanket escape over the whole stage; "
+         "MEASURED at 0 findings before R12)", widened("")),
+        ("WIDENED TO A TIER-WIDE TOKEN (covers_record_match=('TIER-C10',) — every "
+         "record in the tier matches it; MEASURED at 0 findings before R12)",
+         widened("TIER-C10")),
+        ("WIDENED TO THE STAGE'S OWN NAME (covers_record_match=('D-CORE',) — a "
+         "waiver named after its stage is a waiver over its stage)",
+         widened("D-CORE")),
+        ("WIDENED TO THE ROUND-2 VALUE (covers_record_match=('Stage D fixtures',) "
+         "— the exact string this module shipped in round 2, which selects the "
+         "OFFLINE record that names no waived leg)", widened("Stage D fixtures")),
+        ("WIDENED, JUDGED ON THE COVERED DRIFT ALONE (('',) standing over a REAL "
+         "drift planted on the OFFLINE record — the drift must still be spoken)",
+         widened_hides_offline_drift("")),
+        ("WIDENED, JUDGED ON THE COVERED DRIFT ALONE (('TIER-C10',) over the same "
+         "real OFFLINE drift)", widened_hides_offline_drift("TIER-C10")),
+        ("WIDENED, JUDGED ON THE COVERED DRIFT ALONE (('Stage D fixtures',) — the "
+         "round-2 value — over the same real OFFLINE drift)",
+         widened_hides_offline_drift("Stage D fixtures")),
+        ("THE OFFLINE RECORD DRIFTS AND NO WAIVER REACHES IT (the venue waiver "
+         "covers F-D-1/F-D-1b only; the run that reaches no venue API has no "
+         "excuse and must go RED)", offline_drift_unnamed),
         ("EMPTY REASON (an exemption with no reason at all)", no_reason),
         ("LABEL, NOT A REASON (reason='venue' — 5 chars)", label_not_reason),
         ("SOURCELESS EVIDENCE (evidence.source blanked — unchaseable)", no_source),
@@ -1878,12 +4236,57 @@ def resume4_break():
         ("BORROWED SUITE WITH NOTHING TO HIDE (no drift planted — the binding is "
          "a standing requirement, not a consequence of the drift)",
          borrowed_suite_no_drift),
+        ("FORGERY 1 · ONE CLAUSE APPENDED TO A PARTIAL STAGE'S FIXTURE RECORD, "
+         "JUDGED ON THE COVERED DRIFT ALONE (' (shares fixture plumbing with "
+         "F-D-1)' on D-CORE's OFFLINE record; MEASURED at round 3: 1 finding -> "
+         "0, no module edit and no new file — the drift must be spoken again)",
+         clause_forgery_drift_only),
+        ("FORGERY 1, JUDGED ON THE ANCHOR FINDING ALONE (the tie must go red "
+         "because the pattern selects that record ONLY IN THE WORKING TREE, not "
+         "for some incidental reason)", clause_forgery_anchor_only),
+        ("FORGERY 1 WITH NOTHING TO HIDE (the appended clause with no drift "
+         "planted — an unanchored tie is a standing finding)",
+         clause_forgery_no_drift),
+        ("FORGERY 2 · SUBSTRING BINDING (an exemption over 'scripts/"
+         "tierc10_dat.py', whose stem is a SUBSTRING of the bound suite's — "
+         "MEASURED to bind to D-CORE's 'blockers' for free before R15)",
+         substring_binding),
+        ("FRESH C2 · THE BINDING WRITTEN INTO AN UNANCHORED BLOCKERS LIST ('see "
+         "scripts/tierc10_venue_extra.py' appended to D-CORE's blockers — exact "
+         "matching does not touch this one; the HEAD anchor does)",
+         fresh_c2_unanchored_blocker),
+        ("SCRIPTS SWEEP · A NEW FILE APPEARS UNRECORDED (one added "
+         "scripts/tierc10_*.py in a symlink mirror of scripts/ — the review's own "
+         "apparatus, and the hole that made forgery 2 cheap)",
+         sweep(add=(Path(_UNPINNED).name,), grep="NO module literal records it")),
+        ("SCRIPTS SWEEP · THE NEW FILE IS ALSO UNTRACKED (the same added file, "
+         "judged on the git-index half of 'recorded' alone)",
+         sweep(add=(Path(_UNPINNED).name,), grep="is UNTRACKED")),
+        ("SCRIPTS SWEEP · A RECORDED FILE VANISHES (a pinned name dropped from "
+         "the mirror — a sweep that only inspects what it finds cannot see a "
+         "deletion)",
+         sweep(drop=("scripts/tierc10_data_fixtures.py",), grep="is PINNED in")),
+        ("SCRIPTS SWEEP · AN EXEMPTION OVER AN UNRECORDED SUITE (the waiver names "
+         "a scripts/ file no literal carries)",
+         sweep(xs=mut(suite=_UNPINNED), grep="is not in TC_SUITE_FILES")),
+        ("SCRIPTS SWEEP · AN EXEMPTION OVER A SUITE WITH NO HEAD BLOB (the file "
+         "is pinned and on disk, but exists only in the working tree — the legs "
+         "it may waive are read from a source nobody has committed)",
+         sweep(add=(Path(_UNPINNED).name,),
+               pinned=TC_SUITE_FILES + (_UNPINNED,),
+               xs=mut(suite=_UNPINNED), grep="NO READABLE HEAD BLOB")),
+        ("SCRIPTS SWEEP · NO scripts/ AT ALL (the sweep's own subject is gone — a "
+         "sweep that reads nothing must be RED, not silent)",
+         sweep(drop=tuple(TC_SUITE_FILES), grep="is PINNED in")),
     ])
 
 
 def resume4_real():
     prog = load_progress()
     bad = exemption_findings(EXEMPTIONS, prog)
+    # ── THE scripts/ SWEEP [LEAN R16] — nothing in this suite swept scripts/,
+    #    and that is the hole that made the review's second forgery cheap.
+    bad += scripts_sweep_findings(EXEMPTIONS)
     # NEGATIVE CONTROL: the waiver must actually COVER the thing it claims to.
     # Plant the drift the exemption exists for, on the record it names, and
     # demand SILENCE — a registry that fires on everything covers nothing.
@@ -1905,6 +4308,38 @@ def resume4_real():
         if ctrl:
             bad.append(f"CONTROL: the exemption does NOT cover the drift it exists for "
                        f"— {ctrl[:2]}")
+    # POSITIVE CONTROL — THE OTHER HALF, AND THE ONE ROUND 2 DID NOT HAVE.
+    # A negative control alone certifies a BLANKET waiver as healthy: round 2's
+    # covers_record_match was the stage's name, it selected BOTH D-CORE records,
+    # and this control watched both go silent and called it a pass. So the
+    # UNSELECTED records of every exempted stage are now planted ONE AT A TIME
+    # and each one MUST be spoken aloud. [LEAN-HEPHAESTUS] R12
+    uncovered = 0
+    for x in EXEMPTIONS:
+        for s in prog["stages"]:
+            if s.get("stage") != x.get("stage"):
+                continue
+            for i, f in enumerate(s.get("fixtures", [])):
+                suite = str(f.get("suite", ""))
+                if any(p in suite for p in x.get("covers_record_match", ())):
+                    continue                       # this one IS waived; tested above
+                probe = copy.deepcopy(prog)
+                for t in probe["stages"]:
+                    if t.get("stage") != s.get("stage"):
+                        continue
+                    t["fixtures"][i]["transcript_drift"] = True
+                    t["transcript_sha_after"] = "9" * 64
+                spoken = [q for q in exemption_findings(EXEMPTIONS, probe)
+                          if "DRIFTED" in q]
+                uncovered += 1
+                if not spoken:
+                    bad.append(
+                        f"CONTROL: {x['id']} SILENCED a drift on stage "
+                        f"{s['stage']!r}'s record {suite[:64]!r}, which none of its "
+                        f"patterns {list(x.get('covers_record_match', ()))} select — "
+                        f"a waiver that covers records it does not name is a "
+                        f"BLANKET ESCAPE, and a negative control alone would call "
+                        f"it healthy")
     n_fix = sum(len(s.get("fixtures", [])) for s in prog["stages"])
     n_drift = sum(1 for s in prog["stages"] for f in s.get("fixtures", [])
                   if f.get("transcript_drift")
@@ -1918,6 +4353,26 @@ def resume4_real():
         say(f"        waives     {x['waives']}")
         say(f"        covers     records of stage {x['stage']} matching "
             f"{list(x['covers_record_match'])}")
+        _sel = [str(f.get("suite", ""))
+                for t in prog["stages"] if t.get("stage") == x["stage"]
+                for f in t.get("fixtures", [])
+                if any(p in str(f.get("suite", "")) for p in x["covers_record_match"])]
+        _unsel = [str(f.get("suite", ""))
+                  for t in prog["stages"] if t.get("stage") == x["stage"]
+                  for f in t.get("fixtures", [])
+                  if not any(p in str(f.get("suite", "")) for p in x["covers_record_match"])]
+        say(f"        selects    {len(_sel)} record(s), EACH naming a waived leg; "
+            f"{len(_unsel)} record(s) of the same stage are NOT reached and a drift "
+            f"planted on each of them is spoken aloud (positive control)")
+        for _s in _sel:
+            say(f"          reached  {_s[:96]!r}")
+        for _s in _unsel:
+            say(f"          NOT      {_s[:96]!r}")
+        say(f"        breadth    every pattern is >= {COVERAGE_MIN_CHARS} chars, is "
+            f"not a substring of the stage name {x['stage']!r} nor of any of the "
+            f"{len(TIER_WIDE_TOKENS)} tier-wide tokens, and SELECTS ONLY records "
+            f"that name one of the waived legs — the waiver is bound to the WAIVED "
+            f"LEGS, not to a stage-name substring [LEAN R12]")
         say(f"        legs       {sorted(x['legs'])} — VERIFIED this run to be EXACTLY "
             f"the set {srel} itself declares needs_net=True")
         # THE SUITE IS A FOREIGN FILE THIS TRACK DOES NOT OWN, and another track
@@ -1938,10 +4393,45 @@ def resume4_real():
             f"[{x['evidence']['source']['stage']}].{x['evidence']['source']['field']}")
         stg = next((t for t in prog["stages"] if t.get("stage") == x["stage"]), None)
         fld = _binding_field(stg, srel) if stg is not None else None
+        h_stage, h_err = _head_stage(x["stage"])
+        fld_h = _binding_field(h_stage, srel) if h_stage is not None else None
         say(f"        bound      stage {x['stage']}'s OWN ledger block names the "
             f"exempted suite {Path(srel).stem!r} (in its {fld!r}) — a waiver may not "
             f"be validated against a suite that produced none of the records it "
-            f"covers [LEAN R11]")
+            f"covers [LEAN R11]. The name is matched EXACTLY, never by substring: a "
+            f"new scripts/ file whose stem merely SITS INSIDE this one bound here "
+            f"for free before R15. And the binding is read out of the COMMITTED "
+            f"block too (HEAD names it in its {fld_h!r}), so it cannot be typed into "
+            f"an unanchored PARTIAL block this afternoon [LEAN R14]")
+        say(f"        anchored   floor (b)'s evidence is the COMMITTED text of every "
+            f"record the pattern SELECTS — for EVERY stage, PARTIAL included. The "
+            f"pattern must select the record at HEAD as well, and it is the HEAD "
+            f"text that must name a waived leg. A PARTIAL block may still move; a "
+            f"move in these fields is REPORTED (stdout) and is a FINDING only when "
+            f"it is what CREATES the tie. MEASURED before R14: one clause appended "
+            f"to D-CORE's OFFLINE record took a planted drift from 1 finding to 0 "
+            f"with no module edit and no new file")
+        say(f"        LIMIT      HEAD fixture-record counterparts are matched BY INDEX, so an INSERTION or a RE-ORDER of a stage's fixture records goes FALSE RED — a false red, not a false green, and the honest trade. The clean repair is a stable per-record id emitted by each suite, which is PROGRESS.json's to write and not this track's; FILED AS A CROSS-TRACK REQUEST. [LEAN R17]'s fourth loop, which "
+            f"anchors the FAILURE'S evidence the way this anchors the WAIVER'S, "
+            f"matches the same way and INHERITS this limit verbatim")
+        _hs = ([str(f.get("suite", "")) for f in h_stage.get("fixtures", [])]
+               if h_stage is not None else [])
+        for _i, _f in enumerate([f for t in prog["stages"]
+                                 if t.get("stage") == x["stage"]
+                                 for f in t.get("fixtures", [])]):
+            _w = str(_f.get("suite", ""))
+            _h = _hs[_i] if _i < len(_hs) else None
+            clock(f"        [stdout only, live] record #{_i} vs HEAD: "
+                  f"{'IDENTICAL' if _h == _w else 'CHANGED' if _h is not None else 'NOT AT HEAD'}"
+                  f"  selected_wt={any(q in _w for q in x['covers_record_match'])} "
+                  f"selected_head={None if _h is None else any(q in _h for q in x['covers_record_match'])}")
+        say(f"        sweep      scripts/ is swept: all {len(TC_SUITE_FILES)} pinned "
+            f"TIER-C10 script(s) are on disk and in the git index, no unrecorded "
+            f"scripts/{TC_SUITE_GLOB} sits beside them, and this exemption's suite is "
+            f"pinned in TC_SUITE_FILES with a readable HEAD blob. 'Recorded' means "
+            f"BOTH registers — the git index and a module literal under "
+            f"F-C10-RESUME-S — because neither can be written by a working-tree edit "
+            f"[LEAN R16]")
         say(f"        ruling     {x['ruling_status']}")
     ok = not bad
     return ok, (f"{len(EXEMPTIONS)} exemption(s), each with a scope, a reason "
@@ -1951,14 +4441,20 @@ def resume4_real():
                 f"{len(EXEMPTIONS[0]['legs'])} that the suite ITSELF declares "
                 f"venue-reaching, read from that suite's own source; the suite is "
                 f"BOUND to the stage it exempts — {EXEMPTIONS[0]['stage']}'s own "
-                f"ledger block names "
-                f"{Path(EXEMPTIONS[0]['suite']).stem!r}, so the waiver cannot be a "
-                f"borrowed one; no stage is "
+                f"COMMITTED ledger block names "
+                f"{Path(EXEMPTIONS[0]['suite']).stem!r} EXACTLY, so the waiver cannot "
+                f"be a borrowed one and cannot be bound by a substring nor by an "
+                f"uncommitted edit; floor (b)'s tie is read out of the COMMITTED "
+                f"record text for every selected record, whatever the stage's status; "
+                f"all {len(TC_SUITE_FILES)} pinned TIER-C10 script(s) are on disk, in "
+                f"the index and unaccompanied by any unrecorded sibling; no stage is "
                 f"COMPLETE on an exemption's strength (stage {EXEMPTIONS[0]['stage']} "
                 f"reads PARTIAL); {n_fix} fixture record(s) scanned across "
                 f"{len(prog['stages'])} stages, {n_drift} drifting, 0 of them unnamed; "
                 f"negative control: the planted drift on the {hit} record(s) the "
-                f"registry names is SILENTLY covered"
+                f"registry names is SILENTLY covered; POSITIVE control: a drift "
+                f"planted on each of the {uncovered} record(s) of an exempted stage "
+                f"that the registry does NOT name is SPOKEN ALOUD"
                 if ok else f"{len(bad)} finding(s): " + " · ".join(bad[:4]))
 
 
@@ -2573,7 +5069,7 @@ def _first_diff(old: bytes, new: bytes, limit: int = 6) -> list[str]:
 
 # ════════════════ F-C10-RESUME-T · the transcript of record is never clobbered
 def file_transcript(out: Path, body: bytes, refile: bool,
-                    quiet: bool = False) -> list[str]:
+                    quiet: bool = False, of_record: bool = True) -> list[str]:
     """THE TRANSCRIPT OF RECORD IS NEVER CLOBBERED.
 
     THE DEFECT THIS REPLACES.  main() wrote the transcript UNCONDITIONALLY at the
@@ -2584,19 +5080,93 @@ def file_transcript(out: Path, body: bytes, refile: bool,
     reproduce to the byte; the failure mode must therefore be loud and
     non-destructive, not silent and destructive.
 
-    The artifact of record is written only when it is ABSENT, when the new bytes
-    are IDENTICAL to it, or when --refile-transcript asks for a re-file by name.
-    Otherwise this run goes to <name>_rerun.txt, the delta is printed, the
+    THE SECOND DEFECT, AND THE REASON `of_record` EXISTS.  The ABSENT branch
+    used to write this run's bytes as the new artifact of record, silently, with
+    no flag and ZERO findings anywhere.  MEASURED: with a foreign filed
+    transcript present the guard was correct — RED, delta named, artifact
+    preserved, the run diverted to FIXTURES_RESUME_rerun.txt; after one
+    `rm FIXTURES_RESUME.txt FIXTURES_RESUME_rerun.txt` the very same run went
+    SILENT and its own bytes became the record, at a total cost of one rm of a
+    file git does not track.  A MISSING ARTIFACT OF RECORD IS A FACT TO ACCUSE,
+    NOT A BLANK PAGE TO FILL: the ABSENT branch now mirrors STEP0_RECORD.json's
+    refusal — it names the absence as a FINDING and writes nothing unless
+    --refile-transcript asks for the first filing by name.  `of_record` is False
+    only for a PARTIAL run's FIXTURES_RESUME_partial.txt, which is a scratch
+    by-product and was never the record of anything.
+
+    The artifact of record is written only when the new bytes are IDENTICAL to
+    it, or when --refile-transcript asks for a re-file (or a first filing) by
+    name.  Otherwise this run goes to <name>_rerun.txt, the delta is printed, the
     artifact of record is left exactly as it was, and the finding is RED."""
     def note(line: str) -> None:
         if not quiet:
             clock(line)
     out.parent.mkdir(parents=True, exist_ok=True)
+    # THE PATH ITSELF IS EVIDENCE.  `out.exists()` and `read_bytes()` both
+    # FOLLOW SYMLINKS, and both RAISE on a path that is not a readable regular
+    # file, so three filesystem shapes used to get past this guard with no
+    # finding at all [close-out audit, round 8]:
+    #   SYMLINK   — silent and GREEN.  The anchor hashed the TARGET, a re-file
+    #               wrote THROUGH it, and the record moved somewhere this suite
+    #               never names while the tracked path kept only a pointer.
+    #   DIRECTORY — IsADirectoryError, uncaught, out of main()'s writer.
+    #   chmod 000 — PermissionError, the same way.
+    # The two raising shapes are the worse pair: the process dies before the
+    # transcript is written, so NO accusation is filed and the STALE artifact
+    # stands as the record of a run that never finished.  A record that can be
+    # RELOCATED or made UNREADABLE is not a record.  Each shape is now a NAMED
+    # FINDING, and nothing is written in any of them.
+    if out.is_symlink():
+        _tgt = os.readlink(out)
+        note(f"\n  transcript path is a SYMLINK at {out} -> {_tgt} "
+             f"— NOT WRITTEN, NOT FILED [F-C10-RESUME-T]")
+        return [f"{out.name}: THE ARTIFACT OF RECORD IS A SYMLINK to "
+                f"{_tgt!r}. A read FOLLOWS it and a --refile-transcript writes "
+                f"THROUGH it, so the record would live at a path this suite "
+                f"never names while the tracked path keeps only the pointer — "
+                f"silently, and GREEN. Nothing was written. Restore a regular "
+                f"file from the commit record ({TRANSCRIPT_REL})"]
+    if out.exists() and not out.is_file():
+        _what = "a DIRECTORY" if out.is_dir() else "a SPECIAL FILE"
+        note(f"\n  transcript path is NOT A REGULAR FILE at {out} ({_what}) "
+             f"— NOT WRITTEN, NOT FILED [F-C10-RESUME-T]")
+        return [f"{out.name}: THE ARTIFACT OF RECORD IS NOT A REGULAR FILE — "
+                f"it is {_what}. Nothing was read and nothing was written; "
+                f"before this guard the read raised and killed the writer, so "
+                f"no transcript was filed at all and the stale artifact stood "
+                f"as the record. Restore it from the commit record "
+                f"({TRANSCRIPT_REL})"]
     if not out.exists():
+        if of_record and not refile:
+            note(f"\n  transcript ABSENT at {out} — NOT WRITTEN, NOT FILED "
+                 f"[F-C10-RESUME-T]")
+            return [f"{out.name}: THE ARTIFACT OF RECORD IS ABSENT and no "
+                    f"--refile-transcript was given, so this run's {len(body):,} "
+                    f"bytes were NOT written in its place and NOTHING was filed. A "
+                    f"transcript of record that can be REPLACED by deleting it is "
+                    f"not a record: `rm` costs nothing, leaves no trace in a tree "
+                    f"git does not track by default, and the next ordinary run "
+                    f"would have made its own bytes the artifact with ZERO findings "
+                    f"anywhere. Either restore the filed artifact from the commit "
+                    f"record ({TRANSCRIPT_REL}) or file this run deliberately with "
+                    f"--refile-transcript"]
         out.write_bytes(body)
-        note(f"\n  transcript -> {out}  {len(body):,} B  sha {sha_bytes(body)}  [NEW]")
+        note(f"\n  transcript -> {out}  {len(body):,} B  sha {sha_bytes(body)}  "
+             f"[NEW{' on --refile-transcript' if of_record else ''}]")
         return []
-    filed = out.read_bytes()
+    try:
+        filed = out.read_bytes()
+    except OSError as _exc:
+        note(f"\n  transcript UNREADABLE at {out} "
+             f"({type(_exc).__name__}) — NOT WRITTEN, NOT FILED "
+             f"[F-C10-RESUME-T]")
+        return [f"{out.name}: THE ARTIFACT OF RECORD IS UNREADABLE "
+                f"({type(_exc).__name__}: {_exc}). Nothing was written. Before "
+                f"this guard the read raised out of main()'s writer, so the "
+                f"run died with a traceback, NO transcript was filed and the "
+                f"stale artifact stood as the record of a run that never "
+                f"finished. Restore it from the commit record "
+                f"({TRANSCRIPT_REL})"]
     if filed == body:
         note(f"\n  transcript == {out}  {len(body):,} B  sha {sha_bytes(body)}  "
              f"BYTE-IDENTICAL to the filed artifact; not rewritten")
@@ -2635,6 +5205,96 @@ _T_FILED = (b"TIER-C10 FIXTURES_RESUME (stand-in)\n"
             b"  line three\n")
 
 
+
+
+# ── THE ARTIFACT OF RECORD IS ANCHORED OUTSIDE THE WORKING TREE ────────────
+# The no-clobber guard above answers "may this run overwrite the filed
+# transcript?".  It cannot answer "IS THE FILED TRANSCRIPT STILL THE ONE THAT
+# WAS FILED?", because nothing in this module records what the artifact of
+# record said — _T_FILED is a 93 B stand-in on purpose [LEAN R8], and embedding
+# the live sha would be a fixed point no author can write.  git can answer it,
+# the way it answers it for the ledger: the orchestrator commits
+# research_outputs/tierc10/FIXTURES_RESUME.txt with `git add -f` (the tierc10
+# tree is gitignored; PROGRESS.json is tracked the same way), and this leg holds
+# the working-tree artifact against that blob.  [LEAN-HEPHAESTUS] R19
+def transcript_anchor_findings(subject: Path, rel: str = TRANSCRIPT_REL,
+                               rev: str = "HEAD") -> list[str]:
+    """THE ARTIFACT OF RECORD IS JUDGED AGAINST ITS OWN COMMITTED BLOB.
+
+    FAILS IF: `rel` is NOT TRACKED by git; the `rev` blob of `rel` CANNOT BE
+    READ; the SUBJECT is ABSENT from the working tree while the blob remembers
+    it; or the subject's bytes are not BYTE-IDENTICAL to that blob.
+
+    `subject`, `rel` and `rev` are parameters ONLY so the break legs can plant an
+    untracked path, an unreachable rev, a bent copy and an erasure WITHOUT
+    writing one byte into the repository and WITHOUT one git write.  The real leg
+    passes the filed transcript, its own repo-relative path, and HEAD.
+
+    NOTHING THIS FUNCTION RETURNS CARRIES THE TRANSCRIPT'S OWN SHA WHEN IT IS
+    GREEN, and the real leg prints only the VERDICT.  A transcript that printed
+    the sha of the blob it is about to become could never converge [LEAN R8]; a
+    verdict over two files that both exist BEFORE this run is a fact about the
+    environment, not about these bytes, so it converges in one commit."""
+    bad: list[str] = []
+    ok_tracked, why = _git_tracked(rel)
+    blob = _git_blob(rev, rel)
+    if not ok_tracked:
+        bad.append(f"TRANSCRIPT ANCHOR: {rel!r} IS NOT TRACKED by git ({why}) — the "
+                   f"artifact of record has NO answer outside the working tree, so "
+                   f"deleting it costs one `rm` of a file git never reports as "
+                   f"missing and leaves NO trace a reader can chase. The no-clobber "
+                   f"guard cannot help here: it only decides whether a run may "
+                   f"overwrite a file that is THERE. `git add -f {rel}` is the "
+                   f"repair, and it is the orchestrator's to make")
+    if blob is None:
+        bad.append(f"TRANSCRIPT ANCHOR: the {rev} blob of {rel!r} IS UNREACHABLE — "
+                   f"the anchor has nothing to anchor against, and a guard whose "
+                   f"reference cannot be read is RED, not green")
+    if not subject.exists() or not subject.is_file():
+        # the BASENAME, never the absolute path: a break-leg plant lives in a
+        # randomly named temp tree, and printing it would put a fresh random
+        # string in the transcript on every run — a DETERMINISM break introduced
+        # by the guard itself. The repo-relative path is the identifying fact.
+        bad.append(f"TRANSCRIPT ANCHOR: the artifact of record is ABSENT from the "
+                   f"working tree — {rel} (looked for as {subject.name}) — an "
+                   f"erasure, named. The whole point of the anchor is that this "
+                   f"sentence gets printed instead of a blank page being filled "
+                   f"in silence")
+        return bad
+    if ok_tracked and blob is not None:
+        wsha, wn = file_sha(subject)
+        if sha_bytes(blob) != wsha:
+            bad.append(
+                f"TRANSCRIPT ANCHOR: DIVERGENCE — the working-tree artifact of "
+                f"record hashes to {wsha[:16]}… ({wn:,} B), the {rev} blob of {rel} "
+                f"to {sha_bytes(blob)[:16]}… ({len(blob):,} B). EITHER the filed "
+                f"transcript was edited or re-filed and not committed — the standing "
+                f"ONE-STEP-BEHIND condition this leg shares with F-C10-RESUME-S, a "
+                f"FALSE RED that a commit clears — OR the artifact of record was "
+                f"replaced by bytes nobody filed. This leg cannot tell those apart "
+                f"and does not pretend to; it is RED for both, which is a false RED "
+                f"and NEVER a false green")
+    return bad
+
+
+def _ledger_blob_or(default: bytes) -> bytes:
+    """HEAD's ledger blob, or `default` if it cannot be read. The plants that
+    need A TRACKED PATH WITH A READABLE BLOB borrow the ledger's; a run in which
+    even that is unreadable still has a plant, it just has less of one."""
+    b = _git_blob("HEAD", LEDGER_REL)
+    return b if b is not None else default
+
+
+def _t_plant(body: bytes | None) -> Path:
+    """one throwaway file (or one deliberately absent path) in a temp tree. NO
+    REPO FILE IS WRITTEN and NO GIT WRITE IS MADE by any plant below."""
+    d = Path(tempfile.mkdtemp(prefix="tc10_resume_ta_"))
+    p = d / TRANSCRIPT
+    if body is not None:
+        p.write_bytes(body)
+    return p
+
+
 def resumeT_break():
     filed = _T_FILED
 
@@ -2648,6 +5308,20 @@ def resumeT_break():
         finally:
             shutil.rmtree(p.parent, ignore_errors=True)
 
+    def absent_no_refile() -> list[str]:
+        """THE PLANT RETURNS ONLY THE GUARD'S OWN FINDINGS, DELIBERATELY. If it
+        also asserted "and the file was not written" it would MANUFACTURE a
+        finding in exactly the state where the guard had regressed, and the
+        break leg would go green over the hole. Returning the guard's findings
+        alone means a regression makes this plant PASS — which voids the break
+        leg and turns the fixture RED — while the REAL leg's (d) asserts both
+        halves directly."""
+        p = _t_plant(None)
+        try:
+            return file_transcript(p, filed, refile=False, quiet=True)
+        finally:
+            shutil.rmtree(p.parent, ignore_errors=True)
+
     return plants([
         ("NON-REPRODUCING RUN (one line of the filed transcript changed — exactly "
          "what a foreign file's live count does to this artifact)",
@@ -2658,6 +5332,26 @@ def resumeT_break():
          lambda: attempt(b"")),
         ("APPENDED BYTE (one newline more than the filed artifact)",
          lambda: attempt(filed + b"\n")),
+        # ── the ABSENT escape: one `rm` and this run's bytes became the record
+        ("THE ARTIFACT OF RECORD IS ABSENT and no --refile-transcript (the `rm` "
+         "escape: a blank page offered in place of a record)", absent_no_refile),
+        # ── the anchor. LEDGER_REL stands in as A TRACKED PATH OF THIS BUILD so
+        #    the divergence and erasure limbs are exercised against a real blob
+        #    even on a round in which TRANSCRIPT_REL itself is not yet committed.
+        ("ANCHOR · UNTRACKED PATH (a transcript git was never told about)",
+         lambda: transcript_anchor_findings(
+             _t_plant(b"present on disk, absent from the index\n"),
+             "research_outputs/tierc10/A_TRANSCRIPT_NEVER_COMMITTED.txt", "HEAD")),
+        ("ANCHOR · UNREACHABLE REV (the blob cannot be read — silence is not "
+         "health)",
+         lambda: transcript_anchor_findings(_t_plant(_ledger_blob_or(b"x")),
+                                            LEDGER_REL, "HEAD~9999")),
+        ("ANCHOR · BENT ARTIFACT (one byte on top of the committed blob)",
+         lambda: transcript_anchor_findings(
+             _t_plant(_ledger_blob_or(b"") + b"\nONE BYTE NOBODY COMMITTED\n"),
+             LEDGER_REL, "HEAD")),
+        ("ANCHOR · ERASED ARTIFACT (tracked, blob readable, working tree gone)",
+         lambda: transcript_anchor_findings(_t_plant(None), LEDGER_REL, "HEAD")),
     ])
 
 
@@ -2695,7 +5389,7 @@ def resumeT_real():
                        "<name>_rerun.txt — the evidence is gone either way")
     finally:
         shutil.rmtree(p.parent, ignore_errors=True)
-    # (c) --refile-transcript is the ONE deliberate escape, and it is silent
+    # (c) --refile-transcript is a deliberate, named escape, and it is silent
     p = _tmp_transcript(filed)
     try:
         f = file_transcript(p, other, refile=True, quiet=True)
@@ -2705,6 +5399,56 @@ def resumeT_real():
             bad.append("--refile-transcript did not actually re-file")
     finally:
         shutil.rmtree(p.parent, ignore_errors=True)
+    # (d) THE ABSENT BRANCH, BOTH WAYS. An absent artifact of record is a FINDING
+    #     and nothing is written; with --refile-transcript the first filing is
+    #     deliberate and silent. A refusal that also refused the deliberate
+    #     filing would leave no way to file at all, so both halves are asserted.
+    p = _t_plant(None)
+    try:
+        f = file_transcript(p, filed, refile=False, quiet=True)
+        if not f:
+            bad.append("an ABSENT artifact of record produced NO finding — the `rm` "
+                       "escape is open")
+        if p.exists():
+            bad.append("an ABSENT artifact of record was WRITTEN with no "
+                       "--refile-transcript — the refusal does not refuse")
+    finally:
+        shutil.rmtree(p.parent, ignore_errors=True)
+    p = _t_plant(None)
+    try:
+        f = file_transcript(p, filed, refile=True, quiet=True)
+        if f:
+            bad.append(f"CONTROL: a deliberate FIRST FILING on --refile-transcript "
+                       f"still reported a finding: {f[:1]}")
+        if not p.exists() or p.read_bytes() != filed:
+            bad.append("CONTROL: --refile-transcript did not file the absent "
+                       "artifact — the refusal has no door")
+    finally:
+        shutil.rmtree(p.parent, ignore_errors=True)
+    # (e) A PARTIAL run's by-product is NOT the record and must stay writable
+    p = _t_plant(None)
+    try:
+        f = file_transcript(p, filed, refile=False, quiet=True, of_record=False)
+        if f or not p.exists():
+            bad.append(f"CONTROL: a non-of-record transcript (the _partial.txt "
+                       f"by-product) was refused: {f[:1]}")
+    finally:
+        shutil.rmtree(p.parent, ignore_errors=True)
+    # (f) THE ANCHOR'S NEGATIVE CONTROL — a copy that IS the committed blob of a
+    #     tracked path yields ZERO findings, so the anchor is not red-on-sight
+    lb = _git_blob("HEAD", LEDGER_REL)
+    if lb is None:
+        bad.append("CONTROL: HEAD's ledger blob is unreadable, so the anchor's "
+                   "negative control could not be run")
+    else:
+        p = _t_plant(lb)
+        try:
+            ctrl = transcript_anchor_findings(p, LEDGER_REL, "HEAD")
+            if ctrl:
+                bad.append(f"CONTROL: bytes byte-identical to a tracked path's HEAD "
+                           f"blob were reported as a divergence: {ctrl[:1]}")
+        finally:
+            shutil.rmtree(p.parent, ignore_errors=True)
     say(f"      stand-in filed artifact  {sha_bytes(_T_FILED)}  {len(_T_FILED)} B "
         f"(a module literal — reading the LIVE transcript here would embed its own "
         f"previous sha in itself [LEAN R8])")
@@ -2712,15 +5456,78 @@ def resumeT_real():
           f"{filed_p if filed_p.exists() else '(none yet)'} "
           f"{file_sha(filed_p)[0] if filed_p.exists() else '—'}")
     say(f"      the writer main() uses IS file_transcript(); it writes the artifact "
-        f"of record only when it is ABSENT, when the bytes are IDENTICAL, or on an "
-        f"explicit --refile-transcript [LEAN R9]")
+        f"of record ONLY when the bytes are IDENTICAL to the filed ones or on an "
+        f"explicit --refile-transcript. An ABSENT artifact of record is a NAMED "
+        f"FINDING and is not filled in silence [LEAN R9/R19]")
+    # ── THE ANCHOR, LIVE. VERDICTS ONLY: NO SHA OF THIS PATH REACHES THE PAGE
+    #    WHEN IT IS GREEN. Printing the HEAD blob's sha here would be the fixed
+    #    point [LEAN R8] — the next commit makes THIS file that blob, so the
+    #    line would have to contain the sha of the bytes that contain it.
+    t_tracked, t_why = _git_tracked(TRANSCRIPT_REL)
+    t_blob = _git_blob("HEAD", TRANSCRIPT_REL)
+    t_bad = transcript_anchor_findings(filed_p, TRANSCRIPT_REL, "HEAD")
+    say(f"      ANCHOR   the artifact of record {TRANSCRIPT_REL}")
+    say(f"        tracked      {'YES' if t_tracked else 'NO'} ({t_why})")
+    say(f"        HEAD blob    {'READABLE' if t_blob is not None else 'UNREACHABLE'}")
+    say(f"        working tree {'PRESENT' if filed_p.exists() else 'ABSENT'}")
+    say(f"        verdict      "
+        f"{'AGREES with the HEAD blob' if not t_bad else 'NOT ANCHORED — see the finding(s) below'}")
+    say(f"        NO SHA OF THIS PATH IS PRINTED WHEN THE VERDICT IS 'AGREES', and "
+        f"that is not squeamishness: the next commit makes THIS transcript that "
+        f"blob, so a line carrying the blob's sha would have to contain the sha of "
+        f"the bytes containing it — the fixed point [LEAN R8] names. The VERDICT is "
+        f"a fact about two files that both existed BEFORE this run, so it converges "
+        f"in one commit and the live sha still goes to stdout above.")
+    say(f"      EVERY ESCAPE THAT EXISTS, NAMED [LEAN R19]. (1) --refile-transcript: "
+        f"a deliberate flag, typed by a human, that re-files over a delta and is "
+        f"SILENT by design. (2) THE FIRST FILING of an absent artifact — the same "
+        f"flag, and ONLY that flag: until this round the ABSENT branch was a second "
+        f"escape needing no flag at all, and the [PASS] line that called "
+        f"--refile-transcript 'the one deliberate, named escape' was OVERSTATED. "
+        f"MEASURED, before the repair: with a foreign filed transcript present the "
+        f"guard was correct (RED, delta named, artifact preserved, run diverted to "
+        f"FIXTURES_RESUME_rerun.txt); after `rm FIXTURES_RESUME.txt "
+        f"FIXTURES_RESUME_rerun.txt` the same run was SILENT, ZERO findings "
+        f"anywhere, and its own bytes became the record. (3) A COMMITTED erasure or "
+        f"a COMMITTED edit: the anchor is HEAD, so whoever may commit may move the "
+        f"blob and the working tree together and this leg is green over it — the "
+        f"same limit F-C10-RESUME-S states about this module and F-C10-RESUME-0 "
+        f"about the ledger. What the anchor buys is that the erasure must pass "
+        f"through the commit record first, where a reviewer can diff it.")
+    say(f"      LIMIT    THIS LEG SHARES F-C10-RESUME-S'S STANDING ONE-STEP-BEHIND "
+        f"CONDITION. A re-file moves the working tree AHEAD of the blob and the "
+        f"anchor is RED until the next commit lands; a run inside that window is a "
+        f"FALSE RED, never a false green. The sequence that converges is: commit "
+        f"the transcript, run --refile-transcript, commit the re-filed transcript, "
+        f"re-run — the fourth step is byte-identical and silent.")
+    say(f"      LIMIT    THE RERUN FILE IS ITSELF CLOBBERED. Two non-reproducing "
+        f"runs in a row leave only the SECOND one's bytes in "
+        f"FIXTURES_RESUME_rerun.txt; the first run's evidence is gone. The artifact "
+        f"of RECORD survives both, which is what this leg is for, but the diverted "
+        f"bytes are a scratch lane and are not a record.")
+    say(f"      LIMIT    A RUN THAT NEVER HAPPENS IS NOT CAUGHT HERE. Nothing in "
+        f"this module can make a suite run; --root= diverts this run's own writing "
+        f"somewhere else entirely. The ANCHOR is root-independent — it reads "
+        f"{TRANSCRIPT_REL} and HEAD whatever --root says — so a diverted run still "
+        f"names an erasure it finds, but a run nobody starts accuses nobody.")
+    bad += t_bad
     ok = not bad
-    return ok, ("the transcript of record cannot be clobbered: identical bytes are "
-                "silent and do not rewrite the file (negative control); a "
-                "non-reproducing run yields a RED finding naming the first differing "
-                "lines, LEAVES the filed artifact byte-for-byte as it was, and "
-                "preserves its own bytes in FIXTURES_RESUME_rerun.txt; and "
-                "--refile-transcript is the one deliberate, named escape"
+    return ok, ("the transcript of record cannot be clobbered AND cannot be "
+                "quietly replaced by deleting it: identical bytes are silent and do "
+                "not rewrite the file (negative control); a non-reproducing run "
+                "yields a RED finding naming the first differing lines, LEAVES the "
+                "filed artifact byte-for-byte as it was, and preserves its own bytes "
+                "in FIXTURES_RESUME_rerun.txt; an ABSENT artifact of record is a "
+                "NAMED FINDING and is NOT filled in silence (the `rm` escape, shut); "
+                "the artifact of record is TRACKED and its working-tree bytes are "
+                "BYTE-IDENTICAL to its HEAD blob, so an erasure or an uncommitted "
+                "replacement is named rather than passed; negative control: bytes "
+                "equal to a tracked path's HEAD blob yield zero findings; and the "
+                "escapes THIS MODULE'S WRITER OFFERS are EXACTLY TWO, both spelled "
+                "--refile-transcript — a deliberate re-file and a deliberate first "
+                "filing — while the one escape it does NOT close, and says so "
+                "above, is an erasure or an edit that is ITSELF COMMITTED, which "
+                "the anchor is green over by construction"
                 if ok else f"{len(bad)} finding(s): " + " · ".join(bad[:4]))
 
 
@@ -2738,8 +5545,27 @@ FIXTURES = (
      "WAY, any stage HEAD calls COMPLETE-VERIFIED is MISSING from the working tree or "
      "is no longer COMPLETE-VERIFIED there — a demotion or a deletion drops every one "
      "of that stage's artifacts out of every re-hash in this suite, so silence over "
-     "it is not health",
+     "it is not health; OR, ONE LEVEL DOWN AND FOR EVERY STAGE REGARDLESS OF STATUS, "
+     "a fixture record that ADMITS A TRANSCRIPT DRIFT at HEAD admits none in the "
+     "working tree (its flag cleared, its two shas made equal, or the fields removed "
+     "outright), or a fixture record that is at HEAD is MISSING from the working tree "
+     "— its whole stage block being gone counting as missing. IT DOES NOT FAIL ON A "
+     "BUILD ADVANCING, AND THAT IS DELIBERATE: a NEW drift, an ADDED record and a "
+     "BORN stage are each planted as a control that must stay SILENT, because a "
+     "guard that reddens on progress is a guard the next builder deletes. THE "
+     "STATED LIMIT: HEAD fixture-record counterparts are matched BY INDEX, so an INSERTION or a RE-ORDER of a stage's fixture records goes FALSE RED — a false red, not a false green, and the honest trade. The clean repair is a stable per-record id emitted by each suite, which is PROGRESS.json's to write and not this track's; FILED AS A CROSS-TRACK REQUEST.",
      resume0_break, resume0_real),
+    ("F-C10-RESUME-S", "THE SELF-ANCHOR — this module's own bytes are judged "
+     "against its own COMMITTED blob",
+     "scripts/tierc10_resume_fixtures.py is NOT TRACKED by git, so the "
+     "PINNED_LEDGER_SHA / PINNED_LEDGER_REV anchor, the two LAW-2 quarantine "
+     "literals, the EXEMPTIONS registry and its breadth law, the STEP 0 pins, the "
+     "root allowlist and the corridor constants can all be edited with no trace a "
+     "reader can chase; OR the HEAD blob of that path cannot be read, so the anchor "
+     "has no reference; OR the working-tree bytes are not BYTE-IDENTICAL to that "
+     "blob, which is an edit to this file that never reached the commit record — "
+     "the one tamper [LEAN R10] named and could not catch",
+     resumeS_break, resumeS_real),
     ("F-C10-RESUME-1", "every artifact a COMPLETE-VERIFIED stage records re-hashes, "
      "and nothing unrecorded sits in a completed stage's directory",
      "any recorded content sha does not re-hash, any recorded byte count moves, a "
@@ -2772,8 +5598,19 @@ FIXTURES = (
      "that does not exist; THE LEDGER BLOCK OF THE STAGE IT EXEMPTS DOES NOT NAME THE "
      "EXEMPTED SUITE, so the exemption was validated against a suite that produced "
      "none of the records it covers; a stage is COMPLETE-VERIFIED while an exemption "
-     "stands over its suite; or any fixture record drifts between runs with no "
-     "exemption naming it",
+     "stands over its suite; ANY covers_record_match PATTERN IS OVER-BROAD — under "
+     "4 characters, a substring of the stage's own name or of a tier-wide token, or "
+     "SELECTING a fixture record that names none of the waived legs, each of which "
+     "is a blanket escape one keystroke wide; THE TIE FLOOR (b) RESTS ON IS NOT IN "
+     "THE COMMITTED LEDGER — a pattern selects a record only in the working tree, or "
+     "only the working-tree text of a selected record names a waived leg, or the "
+     "stage's block is not at HEAD at all, or the HEAD ledger cannot be read; the "
+     "suite-to-stage binding is found only in an UNCOMMITTED edit, or is found only "
+     "by SUBSTRING rather than by the ledger naming the file exactly; a "
+     "scripts/tierc10_*.py sits on disk that TC_SUITE_FILES does not record or that "
+     "git does not track, a pinned one has vanished, or an exemption's suite is "
+     "unrecorded or has no readable HEAD blob; or any fixture record drifts between "
+     "runs with no exemption naming it",
      resume4_break, resume4_real),
     ("F-C10-RESUME-5", "PROGRESS.json is well-formed and HONEST",
      "a stage is missing one of {stage, status, as_of, artifact_shas, fixtures, "
@@ -2794,14 +5631,99 @@ FIXTURES = (
      "the pinned set or in the live pine/ sweep; or a deterministic rebuild is not "
      "byte-identical to the filed file",
      resume6_break, resume6_real),
-    ("F-C10-RESUME-T", "THE TRANSCRIPT OF RECORD IS NEVER CLOBBERED",
+    ("F-C10-RESUME-T", "THE TRANSCRIPT OF RECORD IS NEVER CLOBBERED, AND NEVER "
+     "QUIETLY REPLACED BY DELETING IT",
      "a whole-suite run produces bytes that are not byte-identical to the filed "
      "FIXTURES_RESUME.txt and no --refile-transcript was given; or the filed artifact "
      "is overwritten by such a run; or the non-reproducing run's own bytes are not "
      "preserved in FIXTURES_RESUME_rerun.txt; or the guard fires on a run that IS "
-     "byte-identical",
+     "byte-identical; OR the artifact of record is ABSENT and this run's bytes are "
+     "written in its place without an explicit --refile-transcript, or that absence "
+     "raises no finding at all; OR, THE ANCHOR, research_outputs/tierc10/"
+     "FIXTURES_RESUME.txt is NOT TRACKED by git, its HEAD blob cannot be read, the "
+     "path is ABSENT from the working tree while the blob remembers it, or the "
+     "working-tree bytes are not byte-identical to that blob — the last of which is "
+     "ALSO RED for one commit after a legitimate re-file (the standing "
+     "one-step-behind condition this leg shares with F-C10-RESUME-S: a false RED, "
+     "never a false green); or a deliberate --refile-transcript first filing is "
+     "refused, or a PARTIAL run's _partial.txt by-product is refused",
      resumeT_break, resumeT_real),
 )
+
+
+# ══════════════════════ main()'s LEDGER HEADER — TOTAL, AND ASSERTED
+# [LEAN-HEPHAESTUS] R19.  This block runs BEFORE any fixture, so a ledger shape
+# it cannot read used to kill the process with a traceback: no leg ran, no
+# accusation was printed, F-C10-RESUME-T never fired, and NO TRANSCRIPT WAS
+# WRITTEN AT ALL — leaving a stale FIXTURES_RESUME.txt standing as the artifact
+# of record over a ledger that had been gutted.  MEASURED at the boundary
+# before the repair: of 45 cells driven through main(), 40 gave leg-0 RED with a
+# named finding and 5 DIED — KeyError: 'stages', and TypeError: string indices
+# must be integers on EVERY stage for "the stage ROW is not an object".
+# anchor_findings, resume0_real and resume0_break were already total and named
+# all of it when driven directly; the hole was four lines of convenience
+# indexing in the header above them.
+#
+# IT IS A MODULE-LEVEL FUNCTION SO THAT IT CAN BE ASSERTED RATHER THAN MERELY
+# MEASURED: F-C10-RESUME-0's probe grid drives every deletion shape through THIS
+# function on every run and demands that it never raises, exactly as it demands
+# of anchor_findings.  A header whose totality is only measured once by whoever
+# happened to look is a header that stops being total on the next edit.
+def header_ledger_lines(prog) -> list[str]:
+    """THE LEDGER LINES main() PRINTS BEFORE ANY FIXTURE RUNS, TOTAL.
+
+    NOTHING HERE RAISES.  Every field goes through an isinstance-guarded .get(),
+    the stage rows go through _stage_list(), and a stage row that is not an
+    object is PRINTED as UNREADABLE exactly as resume0_real's display loop
+    prints it — never skipped, never allowed to raise."""
+    def _pg(key, default=None):
+        return prog.get(key, default) if isinstance(prog, dict) else default
+
+    def _n_shas(st) -> int:
+        a = st.get("artifact_shas") if isinstance(st, dict) else None
+        try:
+            return len(a)
+        except TypeError:
+            return 0
+
+    out: list[str] = []
+    contract = _pg("contract_of_record")
+    if not isinstance(contract, dict):
+        contract = {}
+    if not isinstance(prog, dict):
+        out.append(f"  ledger   THE LEDGER IS {type(prog).__name__.upper()}, NOT AN "
+                   f"OBJECT — every field below reads as None and this header does "
+                   f"NOT die; F-C10-RESUME-0 is the leg that accuses it")
+    out.append(f"  as_of_last_closed_4h {_pg('as_of_of_record')}  ·  close_ms "
+               f"{_pg('as_of_last_closed_4h_close_ms')}  ·  seed {_pg('seed')}")
+    out.append(f"  substrate {_pg('substrate')}  ·  branch {_pg('branch')}  ·  "
+               f"head {str(_pg('head'))[:12]}")
+    out.append(f"  contract  {contract.get('path')}  sha "
+               f"{str(contract.get('sha256'))[:16]}…")
+    rows, rows_why = _stage_list(prog)
+    if rows_why:
+        out.append(f"  ledger   THE LEDGER'S STAGE ROWS CANNOT BE WALKED: "
+                   f"{rows_why}. The header reads ZERO stage(s) and RUNS ON — a "
+                   f"header that died here would take every leg, every accusation "
+                   f"and the transcript itself with it [LEAN R19]")
+    n_c = sum(1 for st in rows
+              if isinstance(st, dict) and st.get("status") == "COMPLETE-VERIFIED")
+    n_p = sum(1 for st in rows
+              if isinstance(st, dict) and st.get("status") == "PARTIAL")
+    n_a = sum(1 for st in rows
+              if isinstance(st, dict) and st.get("status") == "ABSENT")
+    n_u = sum(1 for st in rows if not isinstance(st, dict))
+    out.append(f"  ledger   {len(rows)} stage(s): {n_c} COMPLETE-VERIFIED, "
+               f"{n_p} PARTIAL, {n_a} ABSENT"
+               f"{f', {n_u} UNREADABLE' if n_u else ''} · "
+               f"{sum(_n_shas(st) for st in rows):,} artifact sha(s)")
+    for i, st in enumerate(rows):
+        if not isinstance(st, dict):
+            out.append(f"  ledger   stage row #{i} is {type(st).__name__}, not an "
+                       f"object — UNREADABLE. It carries no stage name, so every "
+                       f"by-name guard below looks straight past it and the stage "
+                       f"it replaced reads as simply absent")
+    return out
 
 
 def main() -> int:
@@ -2838,19 +5760,11 @@ def main() -> int:
     say("=" * 78)
     prog = load_progress()
     psha, pn = file_sha(PROGRESS_PATH)
+    # THE HEADER IS TOTAL, AND ITS TOTALITY IS ASSERTED ON EVERY RUN by
+    # F-C10-RESUME-0's probe grid, not merely measured once. [LEAN R19]
     say(f"  ledger   research_outputs/tierc10/PROGRESS.json  {pn:,} B  sha {psha}")
-    say(f"  as_of_last_closed_4h {prog.get('as_of_of_record')}  ·  close_ms "
-        f"{prog.get('as_of_last_closed_4h_close_ms')}  ·  seed {prog.get('seed')}")
-    say(f"  substrate {prog.get('substrate')}  ·  branch {prog.get('branch')}  ·  "
-        f"head {str(prog.get('head'))[:12]}")
-    say(f"  contract  {(prog.get('contract_of_record') or {}).get('path')}  sha "
-        f"{str((prog.get('contract_of_record') or {}).get('sha256'))[:16]}…")
-    n_c = sum(1 for s in prog["stages"] if s["status"] == "COMPLETE-VERIFIED")
-    n_p = sum(1 for s in prog["stages"] if s["status"] == "PARTIAL")
-    n_a = sum(1 for s in prog["stages"] if s["status"] == "ABSENT")
-    say(f"  ledger   {len(prog['stages'])} stage(s): {n_c} COMPLETE-VERIFIED, "
-        f"{n_p} PARTIAL, {n_a} ABSENT · "
-        f"{sum(len(s['artifact_shas']) for s in prog['stages']):,} artifact sha(s)")
+    for _hl in header_ledger_lines(prog):
+        say(_hl)
     if STEP0_RECORD_PATH.exists():
         s0sha, s0n = file_sha(STEP0_RECORD_PATH)
         say(f"  step0    research_outputs/tierc10/STEP0_RECORD.json  {s0n:,} B  "
@@ -2861,6 +5775,9 @@ def main() -> int:
     clock(f"  step0    {born}")
     say(f"  NOTHING HERE RIDES A BAR. No lane, no verdict, no scored P-* row — "
         f"bookkeeping mechanics only.")
+    say("")
+    for s in RULINGS:
+        say(f"  {s}")
     say("")
     for s in LEANS:
         say(f"  {s}")
@@ -2882,11 +5799,14 @@ def main() -> int:
     out = root / name
     body = ("\n".join(LINES) + "\n").encode("utf-8")
     rc = 1 if FAILED else 0
-    clobber = file_transcript(out, body, refile)
+    # a PARTIAL run's FIXTURES_RESUME_partial.txt is a by-product, not the
+    # record of anything, so the absent-artifact refusal does not apply to it.
+    clobber = file_transcript(out, body, refile, of_record=not pick)
     if clobber:
         clock(f"\n  F-C10-RESUME-T — THE TRANSCRIPT OF RECORD · RED")
         clock(f"    FAILS IF: a whole-suite run produces a transcript that is not "
-              f"byte-identical to the filed one.")
+              f"byte-identical to the filed one, or the filed one is ABSENT and no "
+              f"--refile-transcript was given.")
         for f in clobber:
             clock(f"    {f}")
         clock(f"    Understand the delta, then re-file deliberately with "
