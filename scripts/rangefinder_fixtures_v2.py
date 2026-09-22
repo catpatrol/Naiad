@@ -43,7 +43,14 @@ def prove(fixture, title, break_leg, real_leg):
         PASSED.append(fixture)
 
 
-D = RF.bars_4h()
+# THE TAPE OF RECORD [TIER-C10 Stage 0a]: the 1700 4h bars ending at the bar
+# that OPENS 2026-08-22T04:00Z (RF.RECORD_ANCHOR_MS) — the v2 export's own
+# window and the tape the five event shas of record were measured on — not
+# the sliding live tail that turned F-RF-9 / F-RF-7c RED (and made F-RF-8's
+# "kept == 3" flicker) on an unmoved machine. `--live` rides the live tail: a
+# record-free look, on which the record legs are EXPECTED to drift.
+ANCHOR_MS = None if "--live" in sys.argv else RF.RECORD_ANCHOR_MS
+D = RF.bars_4h(anchor_ms=ANCHOR_MS)
 V2 = RF.run_v2(D, RF.PINS_V2)
 MAC, MIC = V2["macro"], V2["micro"]
 LOG_M = json.dumps(MAC["events"], sort_keys=True)
@@ -474,6 +481,11 @@ def main() -> int:
     print("=" * 74)
     print("SS12-RANGEFINDER v2 FIXTURES — break leg first, RED or void")
     print("=" * 74)
+    print(f"TAPE: {D['ts'].iloc[0]} → {D['ts'].iloc[-1]} ({len(D)} 4h bars) — "
+          + (f"THE WINDOW OF RECORD, open_time <= {ANCHOR_MS}"
+             if ANCHOR_MS is not None else
+             "LIVE tail (--live): F-RF-8 / F-RF-9 / F-RF-7c hold RECORD "
+             "literals and are expected to drift"))
     prove("F-RF-1v2", "DETERMINISM, both scales", rf1_break, rf1_real)
     prove("F-RF-8", "HIERARCHY — containment law, macro-only state/lines",
           rf8_break, rf8_real)

@@ -47,7 +47,13 @@ def prove(fixture: str, title: str, break_leg, real_leg) -> None:
         PASSED.append(fixture)
 
 
-D = RF.daily_bars()
+# THE TAPE OF RECORD [TIER-C10 Stage 0a]: the suite rides the window its
+# records were measured on (RF.RECORD_ANCHOR_MS — last complete day
+# 2026-08-21, 420 days), not the sliding live tail that turned F-RF-2 and
+# F-RF-7 RED on an unmoved machine. `--live` rides the live tail instead: a
+# record-free look, on which the record legs are EXPECTED to drift.
+ANCHOR_MS = None if "--live" in sys.argv else RF.RECORD_ANCHOR_MS
+D = RF.daily_bars(anchor_ms=ANCHOR_MS)
 M = RF.run_machine(D, RF.PINS)
 LOG = json.dumps(M["events"], sort_keys=True)
 
@@ -463,7 +469,8 @@ def rf7_real():
 # either drifting from the twin, goes red here.
 def _sim_chapters(mode):
     import rangefinder_pine_sim as PS
-    r = PS.run_pine_repaired(boundaryMode=mode,
+    r = PS.run_pine_repaired(tape=D, boundaryMode=mode,   # the SAME tape:
+                             # the sim's own default is the live tail
                              legMin=RF.PINS["LEG_MIN"],
                              revMin=RF.PINS["REV_MIN"],
                              touchEps=RF.PINS["TOUCH_EPS"],
@@ -482,7 +489,7 @@ def _twin_chapters(mode):
 
 def rf8_break():
     import rangefinder_pine_sim as PS
-    r = PS.run_pine_repaired(boundaryMode="body",
+    r = PS.run_pine_repaired(tape=D, boundaryMode="body",
                              revMin=RF.PINS["REV_MIN"] * 2)
     _, tw = _twin_chapters("body")
     sim = [(x["conf"], x["die"], round(x["bot"], 1), round(x["top"], 1))
@@ -519,6 +526,12 @@ def main() -> int:
     print("=" * 74)
     print("SS12-RANGEFINDER v1 FIXTURES — break leg first, RED or void")
     print("=" * 74)
+    print(f"TAPE: {D['ts'].iloc[0]} → {D['ts'].iloc[-1]} ({len(D)} bars; "
+          f"{D.attrs['dropped_incomplete_days']} incomplete day(s) dropped) — "
+          + (f"THE WINDOW OF RECORD, 4h open_time <= {ANCHOR_MS}"
+             if ANCHOR_MS is not None else
+             "LIVE tail (--live): F-RF-2 / F-RF-7 hold RECORD literals and "
+             "are expected to drift"))
     prove("F-RF-1", "DETERMINISM — identical input, byte-identical log",
           rf1_break, rf1_real)
     prove("F-RF-2", "TARGETS — the disclosed subset, break = REV_MIN×3",

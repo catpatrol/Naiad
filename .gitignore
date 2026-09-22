@@ -260,3 +260,5 @@ ORACLE_DOWN.flag
 # would break for every reader whose clone sits at a different absolute path. It exists
 # for one person standing at this machine, dragging one folder into the Finder sidebar.
 MAILBOX/
+research_outputs/tierc10/**
+research_outputs/tierc10_run2/**

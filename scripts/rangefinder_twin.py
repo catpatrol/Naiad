@@ -65,11 +65,32 @@ WINDOW_BARS = 420          # covers KEY-B's Jul-2025 opening [C6, disclosed]
 
 
 # ═══════════════════════════════════════════════════ the tape, cache-only
-def daily_bars() -> pd.DataFrame:
+# THE RECORD ANCHOR [TIER-C10 Stage 0a]. Both loaders read tail(N) of a LIVE
+# parquet, and every record the fixtures hold — KEY-A's 71.19 / 7.78 / 1.19 /
+# 68.2, KEY-B, KEY-C, the five event shas in engine/rangefinder.py — was
+# measured on ONE window: the 4h tape whose last bar OPENS 2026-08-22T04:00Z.
+# That is the v2 export's own window.end (1700 bars from 2025-11-12T00:00),
+# and cut there the 1D resample ends 2026-08-21 (Aug 22 holds two 4h bars and
+# is dropped as incomplete) — the v1 export's window.end, 420 days from
+# 2025-06-28, "dropped_incomplete_days": 2. As the tail slid, four fixtures
+# went RED on a machine that had not moved; the fixtures lacked an as-of.
+# [LEAN-HEPHAESTUS] anchor_ms DEFAULTS TO None = the live tail, so every
+# caller that is not a fixture (this CLI, the pine-sim run standalone,
+# calibrate / calibrate_v2 by import) behaves exactly as before; the two
+# fixture suites pass RECORD_ANCHOR_MS and ride the window of record. The cut
+# is applied BEFORE tail(N): the records depend on the window START as much as
+# its end (ATR seed, the visible-left shelf).
+RECORD_ANCHOR_MS = 1_787_371_200_000       # 2026-08-22T04:00Z, a bar OPEN
+
+
+def daily_bars(anchor_ms: int | None = None) -> pd.DataFrame:
     """BTCUSDT 4h → 1D UTC, COMPLETE days only (six 4h bars — the AN-2
     head-bucket law applied at birth rather than repaired later); the true
-    window is printed, never assumed."""
+    window is printed, never assumed. anchor_ms keeps only 4h bars whose
+    open_time <= anchor_ms (None = live)."""
     f = pd.read_parquet(cache_dir() / "klines" / "BTCUSDT_4h.parquet")
+    if anchor_ms is not None:
+        f = f[f["open_time"] <= int(anchor_ms)].copy()
     f["day"] = f["open_time"] // 86_400_000
     g = f.groupby("day").agg(n=("open_time", "size"), o=("open", "first"),
                              h=("high", "max"), l=("low", "min"),
@@ -369,9 +390,14 @@ if __name__ == "__main__":
 # below, KEY-C, calibration and the v2 export of record.
 
 
-def bars_4h(n_bars: int = V2_WINDOW_BARS) -> pd.DataFrame:
-    """The raw 4h tape, no resample — KEY-C is a 4h transcription."""
+def bars_4h(n_bars: int = V2_WINDOW_BARS,
+            anchor_ms: int | None = None) -> pd.DataFrame:
+    """The raw 4h tape, no resample — KEY-C is a 4h transcription.
+    anchor_ms keeps only bars whose open_time <= anchor_ms, THEN takes the
+    last n_bars (None = live) [RECORD_ANCHOR_MS, above]."""
     f = pd.read_parquet(cache_dir() / "klines" / "BTCUSDT_4h.parquet")
+    if anchor_ms is not None:
+        f = f[f["open_time"] <= int(anchor_ms)]
     # the rename/ts step lives in the core now (the Oracle needs it without
     # the IO); one body, so the twin's tape and the Oracle's cannot drift
     return tape_from_klines(f, n_bars)
