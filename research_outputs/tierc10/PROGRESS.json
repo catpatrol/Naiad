@@ -4559,13 +4559,9 @@
       "status": "PARTIAL"
     },
     {
-      "artifact_count": 1,
-      "artifact_shas": {
-        "research_outputs/tierc10/FIXTURES_RESUME.txt": {
-          "bytes": 108451,
-          "sha256": "080528cf69dfc14b34217e1c5b363e586a6100941361d9911a021c2072124a34"
-        }
-      },
+      "artifact_count": 0,
+      "artifact_note": "THIS STAGE RECORDS NO ARTIFACT SHA, DELIBERATELY. Its only artifact is research_outputs/tierc10/FIXTURES_RESUME.txt \u2014 the transcript OF THE SUITE THAT AUDITS THIS LEDGER. Recording its sha here is circular: every re-file changes the transcript, which invalidates the ledger's record of it, which changes the next run's output, which changes the transcript again. Measured: the loop does not converge. The transcript is anchored instead by F-C10-RESUME-T on its own git blob, which is the right anchor for it \u2014 a committed answer that lives outside the working tree \u2014 and is strictly stronger than a self-recorded sha would be.",
+      "artifact_shas": {},
       "as_of": "2026-09-21T16:00:00Z",
       "blockers": [],
       "fixtures": [
