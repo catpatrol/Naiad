@@ -977,9 +977,20 @@ def quarantine_dirs(base: Path = TC) -> list[Path]:
                   key=lambda d: d.name)
 
 
-def stage_root(recorded: dict) -> str:
-    """The stage's own directory: the common parent of its recorded artifacts."""
+def stage_root(recorded: dict) -> str | None:
+    """The stage's own directory: the common parent of its recorded artifacts.
+
+    None for a stage that RECORDS NOTHING.  A stage may legitimately record no
+    artifact — F-C10-RESUME records none, because its only artifact is THIS
+    suite's own transcript and a ledger recording the sha of the transcript that
+    audits it does not converge (measured: re-file -> sha moves -> the record is
+    stale -> leg 1 red -> the next run differs -> re-file).  os.path.commonpath
+    RAISES on an empty sequence, and a guard that raises instead of accusing
+    tells a reader nothing — the same defect round 7 repaired in main()'s header.
+    The caller sweeps no directory for such a stage and says so."""
     parents = {str(Path(p).parent) for p in recorded}
+    if not parents:
+        return None
     return os.path.commonpath(sorted(parents)).replace(os.sep, "/")
 
 
@@ -2945,7 +2956,21 @@ def resume1_real():
         rec = st["artifact_shas"]
         root_rel = stage_root(rec)
         bad += rehash_findings(rec, ROOT, quars, redirects=redirects)
-        if root_rel == "research_outputs/tierc10":
+        if root_rel is None:
+            # A stage that RECORDS NOTHING has no directory to sweep.  This is
+            # legitimate and is F-C10-RESUME's own case: its only artifact is
+            # THIS suite's transcript, and a ledger that records the sha of the
+            # transcript auditing it does not converge.  The stage must still
+            # SAY SO — silence here would let a stage hide by recording nothing.
+            sweep = ("NO ARTIFACT RECORDED — no directory to sweep. The stage's "
+                     "ledger block must say why it records none; leg 5 holds it "
+                     "to the required keys either way [LEAN R19]")
+            if not str(st.get("artifact_note") or "").strip():
+                bad.append(f"{st['stage']!r}: COMPLETE-VERIFIED and records NO "
+                           f"artifact, with no 'artifact_note' saying why — a "
+                           f"stage that records nothing and explains nothing is "
+                           f"indistinguishable from one whose record was emptied")
+        elif root_rel == "research_outputs/tierc10":
             sweep = ("SWEEP EXEMPT — the stage's own directory IS the tierc10 root, "
                      "shared by every stage [LEAN R3]")
         else:
