@@ -1,0 +1,76 @@
+{
+  "as_of_of_record": "2026-09-21T16:00:00Z",
+  "family_m": 6,
+  "n_boot": 4000,
+  "order_of_filing": [
+    "P-GEN-1",
+    "P-SPR-2",
+    "P-BE-1",
+    "P-TRG-2",
+    "P-BRK-I1",
+    "P-BRK-S1"
+  ],
+  "registrations": {
+    "P-BE-1": {
+      "already_filed": true,
+      "prior_pct": 40,
+      "registry_head": "7621a85727969299eb03a481fdf4a61e5455177762286a29695e7d9347d651cd",
+      "registry_len": 6,
+      "seq": 3,
+      "sha256": "cf35b3e3b111d7baf2b353b41ee32023e1e0669dcc52f3adc414a43f73e24ae9",
+      "text_sha256": "32418fef82f20854a385fd2e44435fddecbf19df195274a32865641833c7e87a"
+    },
+    "P-BRK-I1": {
+      "already_filed": true,
+      "prior_pct": 35,
+      "registry_head": "7621a85727969299eb03a481fdf4a61e5455177762286a29695e7d9347d651cd",
+      "registry_len": 6,
+      "seq": 5,
+      "sha256": "b41f24887eee7c40cbde82dcaf0c0c6e6e4ccda659a3e3e86659005a61de2aa0",
+      "text_sha256": "8e4e6830ff5e5aa7b9cd3fdad5eddf3abfe70a85b71212fad88de081a39ee31a"
+    },
+    "P-BRK-S1": {
+      "already_filed": true,
+      "prior_pct": 30,
+      "registry_head": "7621a85727969299eb03a481fdf4a61e5455177762286a29695e7d9347d651cd",
+      "registry_len": 6,
+      "seq": 6,
+      "sha256": "f5551333fd9975fdcc3400d4aa7bdc7a4e400663b2aec8a3e9299fe1bd2d4131",
+      "text_sha256": "186748953d47bdf727d8a330d33ca9a0e228bd13d57c669eaa427c9d3288e83e"
+    },
+    "P-GEN-1": {
+      "already_filed": true,
+      "prior_pct": 45,
+      "registry_head": "7621a85727969299eb03a481fdf4a61e5455177762286a29695e7d9347d651cd",
+      "registry_len": 6,
+      "seq": 1,
+      "sha256": "7761410605da78dffecd277a015b7202980581d9bd442a79d6c6955c6da2b35f",
+      "text_sha256": "c64438bafd033c86425ecefc917983d7024b446fb4ea8dfc1dc493c5372792c7"
+    },
+    "P-SPR-2": {
+      "already_filed": true,
+      "prior_pct": 45,
+      "registry_head": "7621a85727969299eb03a481fdf4a61e5455177762286a29695e7d9347d651cd",
+      "registry_len": 6,
+      "seq": 2,
+      "sha256": "0c6b26c4c5390ac99844efb9a1c51cba0aa09c7a8fb702780e6787061818aff9",
+      "text_sha256": "4f5ad6066a2e3874e9f8c272667682f5d715919565ab6bcce7081233d086d02c"
+    },
+    "P-TRG-2": {
+      "already_filed": true,
+      "prior_pct": 40,
+      "registry_head": "7621a85727969299eb03a481fdf4a61e5455177762286a29695e7d9347d651cd",
+      "registry_len": 6,
+      "seq": 4,
+      "sha256": "1699746cba1805d19134485e05fcebb98209087ea782f47335af50f681ffb061",
+      "text_sha256": "97db9ca8c9f700f857cd7c0e39b781021f07cd20e91bbb8f6c2f7945f2f5ec5c"
+    }
+  },
+  "registry_head": "7621a85727969299eb03a481fdf4a61e5455177762286a29695e7d9347d651cd",
+  "registry_len": 6,
+  "seed": 20260921,
+  "stage": "B",
+  "texts_artifact": "research_outputs/tierc10/REGISTRATION_TEXTS.json",
+  "tier": "TIER-C10",
+  "witness_law": "the registrations directory is gitignored and git is NOT the witness; these pins are the witness and this file is committed TRACKED"
+}
