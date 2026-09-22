@@ -182,8 +182,8 @@ TRANSCRIPT_REL = "research_outputs/tierc10/FIXTURES_RESUME.txt"
 # answer exists OUTSIDE the working tree, and the pinned sha is typed here as a
 # module literal so the anchor itself is pinned and not merely "whatever git
 # says today".  F-C10-RESUME-0 is that check.  [LEAN-HEPHAESTUS] R5
-PINNED_LEDGER_REV = "f97cded"
-PINNED_LEDGER_SHA = "b85eacc44a366359b718d0e0b13ca21bc9bafb0be79cda351875f8837c50b845"
+PINNED_LEDGER_REV = "2e4d959"
+PINNED_LEDGER_SHA = "62b219e8334d48b1829e6d8943b5a3956789aab7a13a5541e714d102d790aeb8"
 
 # ── the ONLY files that may sit LOOSE in the tierc10 root with no ledger
 #    record.  STEP 0's own directory IS this root and is sweep-exempt [LEAN R3],
