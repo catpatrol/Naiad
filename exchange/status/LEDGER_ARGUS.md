@@ -520,3 +520,46 @@ NEXT: write the /oracle skill against the uncommitted wrapper, or commit the wra
      Owner: operator.
 METRICS: operator actions this session = 2 · files re-ingested = 9
 === END STATUS ===
+
+=== STATUS_ARGUS — 2026-09-21 (OR-1 BUILT · THE DAILY ORACLE ON DEMAND · C-0 CLOSED) ===
+NOW: The Oracle's clock is off and its paper is printed on demand. /oracle is live, the roster is
+     the operator's own eighteen, C-0 is closed after five weeks open, the page carries a range
+     layer and a market page that render and never rule, and it is typeset as a newspaper.
+LAST EVENT: 2026-09-21 — first on-demand edition printed, exit 0; build doc filed; OR-1 stamped BUILT.
+FACTS:
+- ELEVEN COMMITS, 3a5e6e7..26a27c7, 11,784 insertions / 11 files. Every step built by one agent,
+  refused or passed by a second that did not write it, committed by a third staging by explicit
+  path; four steps were refused on the first pass and repaired. The five re-pins each ran LAST in
+  their own commit; oracle_daily.py sha 6f456576… == the topup_scope pin [verified]
+- FIRST EDITION: briefs/oracle/oracle_2026-09-21.html 451,533 B sha 241d401b…, Vol. I No. 35,
+  as-of 2026-09-21T20:00Z, roster 18, BANNER none. movers OK (universe 528, 27.1 s) · top-up PASS
+  +2,745 rows / 72 pairs / 0 gaps · self-checks 3/3 PASS, row slot="on-demand-full" · 234.4 s,
+  exit 0. Edge Watch 1 of 18 (BNB, breach pending). Suites: F-BR 17/17 · F-SK 11/11 · F-MV 9/9 ·
+  F-TU 6/6 · F-RF 8/8 + 8/8 frozen · pytest 261 [verified]
+- C-0 CLOSED, AND THE CALIBRATION CLOCK RESTARTS TODAY. maturity_withheld_fraction was a typed
+  0.0 on every asset of every run; it is measured now and is a TRUE 0.0 (168/720 bars vs floors
+  16/60 — the floors cannot bind). The information is in family_cap_binding, 16 distinct values
+  across 18 assets. Hollow files are told apart by CONTENT: schema_version >= 2. All 57 older
+  files are hollow, today's 07:00 one included [verified]
+- ROSTER 18 KEPT / 4 DROPPED by one exchangeInfo probe (528 PERPETUAL·TRADING·USDT). Dropped:
+  NPC PUMPFUN MNT ZCAT, none has a Binance perpetual. JTO and TAO leave the roster (not in the
+  22); caches retained. engine.cells.SYMBOLS untouched. 10 symbols backfilled: 40 files,
+  6,504,861 rows, 0 gaps, 0 clobbers, 0 pre-existing files touched [verified]
+- THE REVIEW FOUND REAL HOLES BEFORE THE PUBLISH. Five lenses, 32 findings, 7 refuted by
+  independent skeptics, 25 confirmed, 22 repaired in 26a27c7. The range wall had THREE live
+  bypasses (via rangefinder_twin, a bare `import engine`, sys.modules) that passed both legs;
+  F-BR-14 wrote the ledgers BEFORE it rendered, so an in-place view mutation was invisible while
+  corrupting the real tape; and NOTHING enforced the Oracle's never-fetch rule — F-BR-17 does now
+  [verified]
+- ⚠ THE AS-OF STAMP READS ONLY THE HOTTEST ASSET, reproduced: one symbol's tape cut back 3 days,
+  the dateline still said as-of 2026-09-21T12:00Z, the band stayed SILENT, and that symbol's
+  Board row, Trap Card and R1 ALERT PRICES printed from an 84h-old bar with no mark. Predates
+  OR-1; the roster going 10 -> 18 widens it. Fixing it is semantic — operator rules [open]
+PENDING: 1. operator eye on the first edition (the final fixture) 2. rulings on EIGHT [VETO]
+         defaults + the Front Page headline's wording (build doc §6) 3. ruling on the as-of
+         finding above 4. PARITY line — still owed, still the last human gate 5. prior,
+         unchanged: TV-eyeball on SS12_RangeFinder_v2.pine · BR-2 on gates · V-7 rails
+         6. RF-1/RF-2/RF-3 still read BUILT: PENDING though all three build docs exist
+NEXT: open the edition and rule. Owner: operator.
+METRICS: operator actions this session = 2 · files re-ingested = 31
+=== END STATUS ===

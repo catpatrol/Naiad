@@ -43,3 +43,42 @@ A-BR2-1b THE TAPE'S `station` COLUMN IS UNCHANGED BY DESIGN. Renaming it would b
 A-BR2-1c THE BODY ABOVE IS OTHERWISE UNTOUCHED. Gates, WORK items and fixtures stand as
      ratified. This block records a mapping and rules nothing new; revert it alone if the
      operator disagrees.
+
+## AMENDMENT A-BR2-2 (records operator ruling D-1a and the OR-1 consequences, 2026-09-21; appended by the executor)
+Recording — not inventing — the operator's ruling delivered with the OR-1 execution paste of
+2026-09-21 (queue `2026-09-21_OR1_daily_oracle_ondemand_ARGUS.md`, STEP G), so the ratified
+gates above stop counting days on a clock that no longer runs. The five launchd Oracle agents
+were suspended by operator ruling on 2026-09-21; editions are now printed on demand by the
+`/oracle` skill. Operator, verbatim:
+
+    "STEP G — BR-2 AMENDMENT A-BR2-2 (append to the BR-2 queue file, body untouched): gates
+    restated in RUNS by ruling D-1a — G-BR2-1 ≥7 dated editions; G-BR2-2 PASS on ≥5 of the
+    last 7 RUNS (on-demand slots count; fixture rows excluded as last_real_run() does);
+    G-BR2-3 the PARITY line, unchanged and still owed; WORK(1) uses only calibration JSONs
+    dated after the STEP B commit."
+
+A-BR2-2a G-BR2-1 IS COUNTED IN DATED EDITIONS: >=7 dated editions exist. An edition is one
+     dated oracle_<date>.html; several on-demand runs on one date are one edition.
+A-BR2-2b G-BR2-2 IS COUNTED IN RUNS, NOT DAYS: selfcheck_log.jsonl shows PASS on >=5 of the
+     last 7 RUNS. On-demand rows count (slot "on-demand-full" | "on-demand-refresh", tagged
+     by the wrapper's ondemand job for exactly this reader), as do the clock's historical
+     "full" | "refresh" rows. Fixture rows are excluded the way last_real_run() excludes them
+     (a slot beginning "fixture-" is not a run). Print the log verbatim, as before.
+A-BR2-2c G-BR2-3 THE PARITY LINE IS UNCHANGED AND STILL OWED. A line "PARITY: OK <date>" or
+     "PARITY: mismatches: ..." in exchange/status/LEDGER_ARGUS.md remains the one human gate;
+     as of 2026-09-21 no such line exists.
+A-BR2-2d WORK(1) READS ONLY CALIBRATION JSONs DATED AFTER THE STEP B COMMIT. STEP B of OR-1
+     (the C-0 fix, commit 34e19e8, 2026-09-21) made the D-7 logger MEASURE
+     maturity_withheld_fraction (it had been the literal 0.0 on every asset of every run) and
+     added family-cap binding counts and target-bucket occupancy, which had been absent.
+     Every oracle_calibration_*.json written before that commit is hollow for those three
+     families and is EXCLUDED from any recalibration; the calibration clock restarts
+     2026-09-21. The older files stay on disk, never deleted, never read by WORK(1).
+     TELL THEM APART BY CONTENT, NOT BY FILENAME DATE: a measured document carries
+     `schema_version` >= 2; a hollow one carries no `schema_version` at all. The clock's last
+     file, oracle_calibration_2026-09-21_full.json (07:00, before the commit), is dated the
+     same day as the fix and is hollow.
+A-BR2-2e THE BODY ABOVE IS OTHERWISE UNTOUCHED. WORK items (2)-(4), the fixtures F-R2-1..4,
+     NOT THIS CONTRACT, and Amendment A-BR2-1 stand as ratified. This block restates how two
+     gates are counted and which inputs WORK(1) may read, by operator ruling; revert it alone
+     if the operator disagrees.

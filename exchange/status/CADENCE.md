@@ -13,11 +13,12 @@ workflow backup and the F4 finding.
 | 3 | **Naiad weekly workflow backup** | Sundays 08:30 local | machine (**launchd** `com.naiad.workflow`) | **ARMED** | 2026-08-15 |
 | 4 | **Hermes scheduled run** | 2×/day | HERMES (Cowork, scheduled) | **NOT ARMED — Hermes-side** | — |
 | 5 | **Sync now** (project GitHub sync) | on demand, ~1×/day | **operator** | **MANUAL — no automation exists** | — |
-| 6 | **Oracle top-up 06:45** (BR-1b, fetch-only) | every day 06:45 BA | machine (**launchd** `com.naiad.oracle-topup-0645`) | **ARMED — operator ruling W4, 2026-08-22** | 2026-08-22 |
-| 7 | **Oracle 07:00** (full render) | every day 07:00 BA | machine (**launchd** `com.naiad.oracle-0700`) | **ARMED — operator ruling W4, 2026-08-22** | 2026-08-22 |
-| 8 | **Oracle top-up 15:45** (BR-1b, fetch-only) | every day 15:45 BA | machine (**launchd** `com.naiad.oracle-topup-1545`) | **ARMED — operator ruling W4, 2026-08-22** | 2026-08-22 |
-| 9 | **Oracle 16:00** (refresh) | every day 16:00 BA | machine (**launchd** `com.naiad.oracle-1600`) | **ARMED — operator ruling W4, 2026-08-22** | 2026-08-22 |
-| 10 | **Oracle catch-up** (boundary coverage, single-flight locked) | clockless — every login/boot (`RunAtLoad`) | machine (**launchd** `com.naiad.oracle-catchup`) | **ARMED — operator ruling W4, 2026-08-22** | 2026-08-22 |
+| 6 | **Oracle top-up 06:45** (BR-1b, fetch-only) | every day 06:45 BA | machine (**launchd** `com.naiad.oracle-topup-0645`) | **SUSPENDED — operator ruling 2026-09-21** (booted out + `launchctl disable`; plists RETAINED) | 2026-09-21 |
+| 7 | **Oracle 07:00** (full render) | every day 07:00 BA | machine (**launchd** `com.naiad.oracle-0700`) | **SUSPENDED — operator ruling 2026-09-21** (booted out + `launchctl disable`; plists RETAINED) | 2026-09-21 |
+| 8 | **Oracle top-up 15:45** (BR-1b, fetch-only) | every day 15:45 BA | machine (**launchd** `com.naiad.oracle-topup-1545`) | **SUSPENDED — operator ruling 2026-09-21** (booted out + `launchctl disable`; plists RETAINED) | 2026-09-21 |
+| 9 | **Oracle 16:00** (refresh) | every day 16:00 BA | machine (**launchd** `com.naiad.oracle-1600`) | **SUSPENDED — operator ruling 2026-09-21** (booted out + `launchctl disable`; plists RETAINED) | 2026-09-21 |
+| 10 | **Oracle catch-up** (boundary coverage, single-flight locked) | clockless — every login/boot (`RunAtLoad`) | machine (**launchd** `com.naiad.oracle-catchup`) | **SUSPENDED — operator ruling 2026-09-21** (booted out + `launchctl disable`; plists RETAINED) | 2026-09-21 |
+| 11 | **The Daily Oracle — on-demand edition** (`/oracle`, `/oracle refresh`, `/oracle --no-fetch`) | on demand, operator-fired | **operator** via the `/oracle` skill → `scripts/oracle_wrapper.py --job ondemand` | **MANUAL BY RULING — replaces rows 6–10** (queue OR-1, 2026-09-21) | 2026-09-21 |
 
 > ### CORRECTION 2026-08-15 (queue 005 M4) — launchd replaces Task Scheduler
 >
@@ -181,3 +182,35 @@ schtasks /delete /tn "Naiad daily routine" /f
 schtasks /delete /tn "Naiad weekly backup" /f
 schtasks /delete /tn "Naiad weekly workflow backup" /f
 ```
+
+> ### CORRECTION 2026-09-21 (queue OR-1) — the Oracle's clock is SUSPENDED; `/oracle` replaces it
+>
+> Rows 6–10 read **ARMED — operator ruling W4, 2026-08-22** until today. By operator ruling of
+> 2026-09-21 the five Oracle agents were **booted out of `gui/501` and persistently disabled**;
+> their plists are **RETAINED, unedited**, in `~/Library/LaunchAgents`. Nothing was deleted
+> (CADENCE §4, NO DELETION EVER). The schedule is replaced by row 11, the on-demand `/oracle`
+> skill built under queue `2026-09-21_OR1_daily_oracle_ondemand_ARGUS.md`.
+>
+> | label | listed? | override | plist |
+> |---|---|---|---|
+> | `com.naiad.oracle-topup-0645` | no | `disabled` | retained, unedited |
+> | `com.naiad.oracle-0700` | no | `disabled` | retained, unedited |
+> | `com.naiad.oracle-topup-1545` | no | `disabled` | retained, unedited |
+> | `com.naiad.oracle-1600` | no | `disabled` | retained, unedited |
+> | `com.naiad.oracle-catchup` | no | `disabled` | retained, unedited |
+>
+> **The suspension survives a reboot.** launchd re-bootstraps a retained plist at every login, so
+> the bootout alone would have re-armed the clock on the next boot — and `oracle-catchup` carries
+> `RunAtLoad`, so it would have fired on that re-bootstrap. The `launchctl disable` override is
+> what makes the ruling durable without editing a plist.
+>
+> **ROLLBACK is two halves, in this order** — `launchctl enable gui/501/<label>` ×5, THEN
+> `launchctl bootstrap gui/501 <plist>` ×5. Bootstrap alone will not re-arm a disabled label.
+> The card, with the verify lines both ways, is at `research_outputs/oracle/SUSPENDED_2026-09-21.txt`
+> (local only — `research_outputs/oracle/**` is gitignored).
+>
+> **VERIFY THE SUSPENSION IS HOLDING:** `launchctl print-disabled gui/501 | grep -c "com.naiad.oracle.* => disabled"` = 5
+> and `launchctl list | grep -ci oracle` = 0.
+>
+> Rows 1–3 (`com.naiad.daily`, `com.naiad.estate`, `com.naiad.workflow`) are **untouched and still
+> ARMED**; they carry no disable override.
