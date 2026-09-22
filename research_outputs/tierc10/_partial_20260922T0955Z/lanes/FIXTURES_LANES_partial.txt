@@ -1,0 +1,30 @@
+as_of_last_closed_4h: 2026-09-21T16:00:00Z
+==============================================================================
+TIER-C10 LANE FIXTURE TRANSCRIPT — break legs first, RED or void
+==============================================================================
+substrate tc10_20260921 · seed 20260921 · frozen SCALE_MULT 3.0 · registry of record ABSENT (nothing filed)
+
+--- F-SPR-BUILD — the signal harness: macro `harden` events at the FROZEN pins become SpringSignals — bottom to long, top to short — and survive the round trip builder -> checker -> runner
+  [BREAK] a harden with no same-side breach-open before it -> RED (correct): refused: HALT: harden at bar 5 on rid 1 side bottom has no same-side breach-open before it; the episode law is broken.
+  [BREAK] a harden paired with the OTHER side's open -> RED (correct): refused: HALT: harden at bar 5 on rid 1 side bottom has no same-side breach-open before it; the episode law is broken.
+  [BREAK] the boundary read AFTER the redraw instead of as-of at the breach -> RED (correct): refused: HALT: the injected spring signal list does not survive the raw tape:
+  signal[0] 'redrawn': not a bottom deviation-confirm — extreme 956.4288705913661 vs level 956.428870
+  [BREAK] a signal whose stamp the frame does not hold -> RED (correct): refused: HALT: signal 'census/SYN-CENSUS-4H/4h/scale3.0' stamps sweep 1503748800000 / reclaim 1503763200000, and the ride's frame holds no bar opening at one of them.
+  [BREAK] the episode pairing returns nothing -> RED (correct): the REAL leg's checks under the mutation: [BAD] the checks crashed: IndexError: list index out of range
+  [BREAK] signals_on_frame REPAIRS a corrupted signal instead of refusing it (the pre-review implementation, planted) -> RED (correct): the REAL leg's checks under the mutation: [BAD] a signal carrying a corrupted sweep_extreme is REFUSED, not repaired: ran to completion
+  [BREAK] the episode pairing CONSUMES its open, so the second of two hardens is dropped -> RED (correct): the REAL leg's checks under the mutation: [BAD] the checks HALTed: HALT: harden at bar 9 has no same-side breach-open before it.
+  [BREAK] bottom mapped to SHORT and top to LONG -> RED (correct): the REAL leg's checks under the mutation: [BAD] the checks HALTed: HALT: the injected spring signal list does not survive the raw tape:
+  signal[0] 'census/SYN-CENSUS-4H/4h/scale3.0': sweep_ex
+    [OK ] the episode pairing equals an independent plain-loop walk of the SAME event list: 4 episodes [(2, 'bottom', 103, 104), (2, 'bottom', 108, 109), (3, 'top', 261, 262), (3, 'bottom', 350, 353)] vs [(2, 'bottom', 103, 104), (2, 'bottom', 108, 109), (3, 'top', 261, 262), (3, 'bottom', 350, 353)]
+    [OK ] BOTH SIDES are built and the mapping is the ruling's: bottom -> long (3), top -> short (1)
+    [OK ] every signal's extreme is the RAW tape's over [sweep, reclaim], its level is the AS-OF boundary AT THE BREACH BAR, and the shape is a deviation-confirm: 4 of 4 (none bad)
+    [OK ] the built list survives check_signals unchanged on a frame of the same bars: {'n_signals': 4, 'n_long': 3, 'n_short': 1}
+    [OK ] signals_on_frame re-indexes by MILLISECOND: 20 earlier bars prepended -> every index moves by exactly 20 and every stamp is unchanged
+    [OK ] a signal carrying a corrupted sweep_extreme is REFUSED, not repaired: HALT: signal 'census/SYN-CENSUS-4H/4h/scale3.0' carries sweep_extreme 1.0; the ride's own tape says 
+    [OK ] a signal carrying a corrupted known_at is REFUSED, not repaired: HALT: signal 'census/SYN-CENSUS-4H/4h/scale3.0' carries known_at -999 against reclaim_i 104 — a sign
+    [OK ] a signal carrying a corrupted bars_to_reclaim is REFUSED, not repaired: HALT: signal 'census/SYN-CENSUS-4H/4h/scale3.0' carries bars_to_reclaim 4 against reclaim_i - sweep_
+    [OK ] TWO HARDENS, ONE OPEN: the second pairs with the SAME open (the census's own law, tierc10_census.py:778-786) and a later breach-open replaces it — module [(7, 'bottom', 3, 5), (7, 'bottom', 3, 9), (7, 'bottom', 11, 14)] / independent walk [(7, 'bottom', 3, 5), (7, 'bottom', 3, 9), (7, 'bottom', 11, 14)]
+      FAILS IF: the episode pairing differs from an independent plain-loop walk of the same events; either side is missing; any signal's extreme is not the raw tape's, or its level is not the AS-OF boundary at the breach; the built list does not survive check_signals; signals_on_frame carries an index over instead of matching a millisecond stamp, or REPAIRS a corrupted extreme / stamp instead of refusing it; or two hardens on one open stop pairing the way the census itself pairs them.
+  [PASS] F-SPR-BUILD
+
+FIXTURE SUMMARY  1/1 PASS  {"F-SPR-BUILD": true}
