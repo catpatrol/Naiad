@@ -1,4 +1,11 @@
 """THE ORACLE WRAPPER — D-3 of queue BR-1. Slot-anchored, self-rescheduling.
+THE CLOCK IT WAS BUILT FOR IS SUSPENDED (operator ruling 2026-09-21): all five
+agents are booted out AND `launchctl disable`d, so NOTHING here fires by itself
+and no slot boundary is covered automatically. The live path is `--job ondemand`,
+what the /oracle skill runs — see THE ON-DEMAND EDITION below. Everything between
+here and there describes the clock AS IT WAS ARMED, and is live code again the day
+the operator rolls it back (rollback card
+research_outputs/oracle/SUSPENDED_2026-09-21.txt).
 
 C-1, verbatim: "CADENCE = 07:00 local America/Argentina/Buenos_Aires full brief
 + 16:00 local Watch/Board refresh ... Delivered via slot-anchored launchd
@@ -25,15 +32,23 @@ machine-local hour for the Buenos Aires slot, compares it with what the plist
 actually says, and REWRITES + RELOADS the plist if they have drifted apart.
 The day the laptop travels, or the day Argentina reinstates DST, the schedule
 corrects itself on the next run instead of silently firing at the wrong hour.
+(That check runs for the legacy jobs only; job=ondemand skips it — on drift it
+would rewrite a retained plist and try to bootstrap a disabled label. See the
+`schedule: SUSPENDED` line near the end of _ondemand_locked and WHY THE SCHEDULE
+CHECK IS NOT RUN HERE.)
 
-It also runs the daily self-checks and appends PASS/FAIL to
+It also runs the self-checks once per edition and appends PASS/FAIL to
 research_outputs/oracle/calibration/selfcheck_log.jsonl — the log BR-2 gate
-G-BR2-2 reads.
+G-BR2-2 reads. (Until the 2026-09-21 suspension that was once per clock slot;
+now it is once per on-demand edition — see THE ON-DEMAND EDITION below. G-BR2-2
+counts the last 7 RUNS, not the last 7 days, and always did.)
 
 FIVE AGENTS, NOT FOUR (A2-8, 2026-08-21). The four above are clock agents. The
-fifth, com.naiad.oracle-catchup, has no clock at all: it carries RunAtLoad and
-fires once per login/boot, asks whether the most recent slot boundary actually
-produced a brief, and runs the missed slot if it did not. It exists because
+fifth, com.naiad.oracle-catchup, has no clock at all: it carried RunAtLoad and
+fired once per login/boot WHILE ARMED, asking whether the most recent slot
+boundary actually produced a brief and running the missed slot if it did not.
+SUSPENDED SINCE 2026-09-21 — the disable override refuses it, RunAtLoad included,
+so a missed boundary is now the operator's /oracle to fire. It exists because
 launchd replays a missed calendar job on WAKE but not on BOOT — measured on this
 host, see THE CATCH-UP below — so a laptop that was shut down over a slot lost
 that slot silently, twice in the six days to 2026-08-21.
@@ -59,8 +74,14 @@ nothing. See THE ON-DEMAND EDITION below. The four legacy paths (oracle, topup,
 catchup, --install) are unchanged for every argv the clock ever wrote. The one
 thing that changed for --install: an argv that NAMES THE ON-DEMAND EDITION is
 dispatched to the on-demand job FIRST, and that job REFUSES --install (exit 2,
-nothing touched) — `--job ondemand --dry-run --install` used to arm all five
-suspended agents and print no dry run at all (fix round 1, F-SK-2e).
+nothing touched) — `--job ondemand --dry-run --install` used to reach the arming
+branch for all five suspended labels and print no dry run at all (fix round 1,
+F-SK-2e). What that branch DOES was only ever observed with arm() replaced by a
+recorder: against the real, persistently `launchctl disable`d labels each
+bootstrap should be refused, so the effect is five REWRITTEN plists (same bytes,
+new mtimes — which is what the suspension audit's "five plists present and
+unedited" checks) and five `ARMED <label>` lines that are not true, since
+bootstrap_rc never reaches the exit code.
 
 NO DELETION, EVER (CADENCE §4). Re-arming is bootout + bootstrap; the plist
 stays on disk. This wrapper never removes a plist. (The flag above is not a
@@ -92,8 +113,10 @@ SELFCHECK = ROOT / "research_outputs" / "oracle" / "calibration" / "selfcheck_lo
 
 # label -> {slot, hour, minute, job}. Times are in the ORACLE's zone, never the
 # machine's; `machine_local_time_for` resolves them through the zone each run.
-# job "oracle" renders the organ; job "topup" is BR-1b's fetch-and-store, armed
-# 15 minutes ahead of each Oracle slot so the cache is fresh before it is read.
+# job "oracle" renders the organ; job "topup" is BR-1b's fetch-and-store, which
+# WAS armed 15 minutes ahead of each Oracle slot so the cache was fresh before it
+# was read. All five labels are SUSPENDED since 2026-09-21; this table is what the
+# retained plists say, not what the machine is running.
 SLOTS = {
     "com.naiad.oracle-topup-0645": {"slot": "topup", "hour": 6, "minute": 45,
                                     "job": "topup"},
@@ -105,7 +128,7 @@ SLOTS = {
                               "job": "oracle"},
     # A2-8 · THE CATCH-UP. Not a clock slot: hour is None, so no
     # StartCalendarInterval is written and the self-reschedule skips it. It
-    # carries RunAtLoad instead and fires once at every login/boot. See THE
+    # carried RunAtLoad instead and fired once at every login/boot while armed. See THE
     # CATCH-UP below for why the other four are not enough.
     "com.naiad.oracle-catchup": {"slot": "catchup", "hour": None, "minute": None,
                                  "job": "catchup", "run_at_load": True},
@@ -256,13 +279,34 @@ def reschedule_if_drifted(label: str, log=print) -> dict:
 # ══════════════════════════════════════════════════════════════ SINGLE FLIGHT
 # D4 of the 2026-08-22 incident audit. Before the catch-up existed, every Oracle
 # job was a distinct calendar slot and two could not overlap. The catch-up can
-# fire at a login that lands while a clock slot is still running — a top-up takes
-# ~130 s wall-clock (measured: 09:45:04 -> 09:47:14) — and both paths append to
-# the SAME dated tape parquet and the same selfcheck log. One writer at a time.
+# fire at a login that lands while a clock slot is still running, and both paths
+# append to the SAME dated tape parquet and the same selfcheck log. One writer at
+# a time.
 #
 # A plain O_EXCL file, not flock: the holder must survive being inspected by an
 # operator, and a stale lock from a killed run must be recoverable without a
-# reboot. STALE_MIN is generous — the longest observed run is well under it.
+# reboot.
+#
+# LOCK_STALE_MIN IS NO LONGER ABOVE THE WORST CASE (review finding, 2026-09-21).
+# The words here read "STALE_MIN is generous — the longest observed run is well
+# under it", and "a top-up takes ~130 s wall-clock (measured: 09:45:04 ->
+# 09:47:14)". Both were true when the scope was 40 pairs. The pinned scope is now
+# 72 (research_outputs/oracle/topup_scope.json) and the roster went 10 -> 18
+# symbols on 2026-09-21. MEASURED on this lane's own logs: a FAILING pair costs
+# >= 15 s (engine.data._get's 1.5 + 3 + 4.5 + 6 s of backoff; 2026-09-18
+# 09:45:03 -> 09:55:21 = 618.7 s for 40 pairs = 15.47 s/pair, and 2026-09-20
+# reproduces it), so a wire-down top-up over 72 pairs is >= 18 min on its own;
+# MOVERS_TIMEOUT_S = 600 s sits in front of it and the render ~20 s behind it,
+# i.e. ~29 min against LOCK_STALE_MIN = 30. acquire_lock's stale rule is AGE
+# ONLY — it never asks whether the holder is alive — so past 30 minutes it would
+# take the lock from a run that is still working, and two editions would then
+# write one oracle_<date>.html and one oracle_tape_<date>.parquet, neither write
+# atomic, and two selfcheck rows for one operator request.
+# THAT RULE IS LEGACY AND SHARED with the (suspended) clock jobs, and the
+# constant is incident-earned (2026-08-22 audit D4) with no REGISTER row, so it
+# is NOT changed here: raising it is an operator matter and wants a ruled row
+# carrying the arithmetic above. What job=ondemand does instead is stand down on
+# a live pid at any age — live_lock_holder(), called from _ondemand_locked.
 LOCK = LOGDIR / ".oracle.lock"
 LOCK_STALE_MIN = 30
 
@@ -532,8 +576,11 @@ def catchup_due(now: datetime | None = None) -> dict:
 # ═════════════════════════════════════════════════════════ THE SELF-CHECKS
 
 def self_checks(log=print) -> dict:
-    """Three daily checks, per D-3: refresh idempotence, thumbnail provenance,
-    tape append integrity. Results append to selfcheck_log.jsonl for BR-2 G-BR2-2."""
+    """Three per-edition checks, per D-3 (one run per on-demand edition since the clock
+    was suspended 2026-09-21; they were once per clock slot while it was armed): refresh
+    idempotence, thumbnail provenance, tape append integrity. Results append to
+    selfcheck_log.jsonl for BR-2 G-BR2-2. The three KEY LITERALS below are what those
+    rows are keyed on: they are the log's schema and do not move with this wording."""
     import oracle_fixtures as OF
     import oracle_daily as OD
     res: dict[str, object] = {}
@@ -599,8 +646,11 @@ def undo_lines() -> list[str]:
 
 def run_topup(slot: str, log=print) -> int:
     """BR-1b. Fetch-and-store only: no render, no self-checks, no publish. A
-    failure here logs to topup_log.jsonl and exits nonzero; the Oracle 15 minutes
-    later is unaffected and stamps whatever as-of it finds."""
+    failure here logs to topup_log.jsonl and exits nonzero; the Oracle is
+    unaffected and stamps whatever as-of it finds — 15 minutes later under the
+    legacy topup slot, SECONDS later in the on-demand chain, where this is step
+    'scope-topup' and the render follows in the same process (ruling T-3: it
+    renders on a stale cache with the banner showing)."""
     try:
         import oracle_topup as TU
         doc = TU.run(slot=slot, log=log)
@@ -1004,7 +1054,11 @@ def run_movers(log=print) -> dict:
     return {"ran": True, "ok": True, "rc": 0}
 
 
-# The Oracle's own per-asset log line (oracle_daily.build_view):
+# The Oracle's own per-asset log line (oracle_daily.build_view). F-SK-1 renders this
+# very f-string OUT OF oracle_daily.build_view by AST and asserts this regex matches
+# it and recovers symbol/station/heat; a format change over there reddens the suite,
+# which is the point — front_page() would otherwise report "the Oracle did not get as
+# far as the Board" for a run that logged all 18 rows and printed the edition.
 #   "  BTCUSDT        ARMED      heat= 6.248 levels= 35 clusters= 14 atr_d=2376.77"
 # and this wrapper's own render line (run_oracle):
 #   "  render /…/oracle_2026-09-21.html sha256 <64 hex>"
@@ -1015,6 +1069,24 @@ def run_movers(log=print) -> dict:
 _BOARD_LINE = re.compile(r"^\s+(?P<sym>[A-Z0-9]+)\s+(?P<station>[A-Z][A-Z_-]*)\s+"
                          r"heat=\s*(?P<heat>-?\d+(?:\.\d+)?|nan|inf)\b")
 _RENDER_LINE = re.compile(r"^\s+render (?P<path>.+) sha256 (?P<sha>[0-9a-f]{64})\s*$")
+
+# oracle_daily.run()'s OWN line, logged immediately after it writes the html:
+#   "  /…/oracle_2026-09-21.html 451,312 B sha256 <64 hex>"
+_CUT_HTML_LINE = re.compile(
+    r"^\s+(?P<path>.+?oracle_\d{4}-\d\d-\d\d\.html) [\d,]+ B sha256 [0-9a-f]{64}\s*$")
+
+
+def _cut_render_path(lines: list[str]) -> str | None:
+    """The edition oracle_daily.run() had ALREADY WRITTEN when a signal landed.
+    Read from the tee — run()'s own `  <path> <n> B sha256 <sha>` line (logged at
+    oracle_daily.py:2396, immediately after the write at :2394) or the wrapper's
+    later `render` line — because a boolean set after run_oracle RETURNS cannot
+    see a cut that happened inside it."""
+    for ln in reversed(lines):
+        m = _CUT_HTML_LINE.match(ln) or _RENDER_LINE.match(ln)
+        if m:
+            return m.group("path")
+    return None
 
 
 def banner_state(html_path: Path) -> str:
@@ -1203,6 +1275,28 @@ def reclaim_dead_lock(log=print) -> bool:
     return True
 
 
+def live_lock_holder(log=print) -> dict | None:
+    """The lock's body when a lock is standing whose pid is PROVABLY running.
+
+    SCOPED TO job=ondemand, the same precedent as THE CUT-OFF RUN answer 3.
+    acquire_lock's stale rule is AGE ONLY (legacy, shared with the clock jobs):
+    past LOCK_STALE_MIN it would take the lock from a holder that is still
+    working, and two editions would then write one oracle_<date>.html and one
+    oracle_tape_<date>.parquet, neither write atomic, plus two selfcheck rows
+    for one operator request — and the FIRST run's `finally: release_lock()`
+    would then unlink the SECOND run's lock and let a third in. A wire-down full
+    edition is no longer well inside 30 min: 72 pinned pairs x >= 15 s per
+    failing engine.data._get (MEASURED floor: 1.5+3+4.5+6 s of backoff) = >= 18
+    min, plus MOVERS_TIMEOUT_S = 600 s and the render. So this job never reclaims
+    on age from a live pid; a DEAD holder is still reclaimed, by
+    reclaim_dead_lock, on the spot."""
+    try:
+        held = json.loads(LOCK.read_text())
+    except Exception:
+        return None                  # unreadable: acquire_lock's own rule decides
+    return held if isinstance(held, dict) and _pid_running(held.get("pid")) else None
+
+
 def run_ondemand(argv: list[str], log=print) -> int:
     """--job ondemand. The chain in ONDEMAND_STEPS, steps 1-7, in that order."""
     say = log
@@ -1295,6 +1389,22 @@ def _ondemand_locked(slot: str, no_fetch: bool, zr: dict, started: datetime,
 
     try:
         reclaim_dead_lock(log=log)        # THE CUT-OFF RUN, answer 3
+        held = live_lock_holder(log=log)  # SINGLE FLIGHT: never reclaim from a LIVE pid
+        if held is not None:
+            age = "unknown"
+            try:
+                held_for = datetime.now(timezone.utc) - datetime.fromisoformat(held["ts"])
+                age = f"{held_for.total_seconds() / 60.0:.1f}"
+            except Exception:
+                pass
+            log(f"  LOCK HELD by a LIVE pid: {held.get('who')} (pid {held.get('pid')}, "
+                f"{age} min old) — standing down. Past {LOCK_STALE_MIN} min this is "
+                f"LONGER THAN EXPECTED but NOT reclaimable: with the wire down a full "
+                f"edition can outlive that. Wait, or end that run (its pid) and run "
+                f"again — the dead lock is then reclaimed on the spot.")
+            log("=== exit 0 (no-op: another Oracle run holds the lock — NO EDITION "
+                "WAS PRINTED by this run) ===")
+            return 0
         locked = acquire_lock(f"ondemand/{slot}", log=log)
         if not locked:
             log("=== exit 0 (no-op: another Oracle run holds the lock — NO EDITION "
@@ -1343,12 +1453,37 @@ def _ondemand_locked(slot: str, no_fetch: bool, zr: dict, started: datetime,
         rc = 128 + cut.signum
         where = (_step(doing).strip() if doing else
                  "the lock acquisition (after STEP 2, before STEP 3)")
+        # THREE WAYS, NOT TWO (review finding, 2026-09-21). `rendered` is a boolean
+        # set only AFTER run_oracle RETURNS, but oracle_daily.run() writes the whole
+        # HTML at :2394 and only then the tape (:2398), the calibration (:2400) and —
+        # back here — the selfcheck row. A signal landing anywhere in that window (a
+        # closed session, a harness stopping the background job, a logout) used to
+        # print "NO EDITION WAS PRINTED by this run" one line below the log line
+        # naming the edition it had just written — an orphan, current-dated, that
+        # G-BR2-1's count of dated editions will pick up and that catchup_due()'s own
+        # docstring warns about ("a file a FAILED run also writes cannot be the
+        # evidence that the run succeeded"). The sentence matters TWICE: it is also
+        # the ORACLE_DOWN.flag body, which the next run's STEP 2 prints verbatim, and
+        # SKILL.md:73 quotes it and tells the agent to relay it in these words. So the
+        # no-render sentence stays BYTE-IDENTICAL, and the new middle case says only
+        # what the log can actually see: an edition exists, it is UNVERIFIED, and
+        # whether the tape row and the calibration record were written is unknown.
+        on_disk = _cut_render_path(lines)
+        if rendered:
+            said = "the edition and its selfcheck row were already on disk"
+        elif on_disk is not None:
+            said = (f"NO SELFCHECK ROW WAS WRITTEN, so no run-based gate counts this "
+                    f"run — but an edition was already written to {on_disk} before "
+                    f"the signal landed. It is UNVERIFIED: the self-checks did not "
+                    f"run, and the tape row and the calibration record may or may "
+                    f"not have been written. It is not the record of a completed "
+                    f"run; print the edition again")
+        else:
+            said = ("NO EDITION WAS PRINTED by this run and no selfcheck row was "
+                    "written")
         log("  " + note_failure(
             f"CUT OFF by signal {cut.signum} ({signal.Signals(cut.signum).name}) "
-            f"during {where} — "
-            + ("the edition and its selfcheck row were already on disk"
-               if rendered else
-               "NO EDITION WAS PRINTED by this run and no selfcheck row was written")
+            f"during {where} — " + said
             + f"; the lock is released and the run exits {rc}. Run it again DETACHED "
               f"(.claude/skills/oracle/SKILL.md): with the wire down a full edition "
               f"outlives any foreground timeout"))
@@ -1409,8 +1544,10 @@ def main(argv=None) -> int:
         # Its own chain, its own flag rule, NO schedule loop and NO arming: it
         # returns here so nothing below (the legacy path, byte-for-byte as it
         # was) can run on its behalf. Dispatched after --install, as it first
-        # was, `--job ondemand --dry-run --install` armed all five suspended
-        # agents and printed no dry run. See THE ON-DEMAND EDITION; F-SK-2e.
+        # was, `--job ondemand --dry-run --install` reached the arming branch for
+        # all five suspended labels and printed no dry run (what that branch does
+        # against a DISABLED label is a rewritten plist and an untrue ARMED line,
+        # not an armed agent). See THE ON-DEMAND EDITION; F-SK-2e.
         return run_ondemand(argv, log=log)
     if "--install" in argv:
         log(f"ORACLE — arming {len(SLOTS)} slots")

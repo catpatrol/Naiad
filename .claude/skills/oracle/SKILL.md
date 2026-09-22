@@ -37,14 +37,24 @@ minute, but start it the same way — one habit, one log):
 ~/venvs/naiad/bin/python -u scripts/oracle_wrapper.py --job ondemand --slot on-demand-full --no-fetch >> logs/launchd/oracle-ondemand.log 2>&1
 ```
 
-Then follow the run. The log is APPENDED to, so read from the LAST
-`=== ORACLE WRAPPER · job=ondemand` line down; the run is over when that block ends
-in an `=== exit N` line (the harness also tells you when the background command
-exits, with the same code):
+Then follow the run. The log is APPENDED to, so read THIS run's block: from the
+LAST `=== ORACLE WRAPPER · job=ondemand` line down to its `=== exit N` line (the
+harness also tells you when the background command exits, with the same code).
+A FIXED TAIL IS NOT ENOUGH, and the number is not worth maintaining: on the
+pinned 72-pair / 18-symbol scope a full edition logs about 139 lines (150 with a
+standing flag's verbatim body) and a refresh about 126, so `tail -n 120` cut off
+the header this rule keys on, STEP 1, STEP 2 — the flag body included — and all
+of STEP 3. Print the whole last block instead:
 
 ```
-tail -n 120 logs/launchd/oracle-ondemand.log
+awk '/^=== ORACLE WRAPPER · job=ondemand/{b=""} {b=b $0 ORS} END{printf "%s", b}' logs/launchd/oracle-ondemand.log
 ```
+
+Re-run that same command to see how far the run has got; while it is still going
+the block has no `=== exit` line yet. For a quick glance at the step in progress,
+`tail -n 40 logs/launchd/oracle-ondemand.log`. A HALT (an unknown `--slot`, a
+mistyped flag, `--install`) prints its one line BEFORE any header, so it shows up
+appended after the previous run's block — that one line is the whole result.
 
 To see the chain without touching anything — no lock, no flag, no fetch, no render
 (this one prints a dozen lines and may run in the foreground):
@@ -72,8 +82,18 @@ WHAT A CUT-OFF RUN LEAVES BEHIND, and what to tell the operator:
 ```
   CUT OFF by signal 15 (SIGTERM) during STEP 4 scope-topup — NO EDITION WAS PRINTED by this run and no selfcheck row was written; the lock is released and the run exits 143. Run it again DETACHED (.claude/skills/oracle/SKILL.md): with the wire down a full edition outlives any foreground timeout
   STEP 7 alarm: rc_topup=0 rc_oracle=0 -> exit 143
+  schedule: SUSPENDED by operator ruling 2026-09-21 — the drift check is SKIPPED for job=ondemand (on drift it would rewrite a retained plist and bootstrap it); rollback card research_outputs/oracle/SUSPENDED_2026-09-21.txt
   ALARM RAISED — /Users/luis/Naiad/ORACLE_DOWN.flag
 === exit 143 ===
+```
+
+  A cut that lands INSIDE STEP 5 is the other shape, and it does NOT deny the
+  edition: oracle_daily writes the whole HTML before it writes the tape, the
+  calibration record and the selfcheck row, so a signal in that window leaves an
+  edition on disk that no self-check ever saw. The chain names it:
+
+```
+  CUT OFF by signal 15 (SIGTERM) during STEP 5 oracle-render — NO SELFCHECK ROW WAS WRITTEN, so no run-based gate counts this run — but an edition was already written to /Users/luis/Naiad/briefs/oracle/oracle_<date>.html before the signal landed. It is UNVERIFIED: the self-checks did not run, and the tape row and the calibration record may or may not have been written. It is not the record of a completed run; print the edition again; the lock is released and the run exits 143. …
 ```
 
 - Cut off HARD (SIGKILL, power loss): nothing is said, NO flag is raised, NO selfcheck
@@ -85,13 +105,19 @@ WHAT A CUT-OFF RUN LEAVES BEHIND, and what to tell the operator:
   DEAD LOCK from ondemand/on-demand-full (pid <pid> is not running — that run was cut off before it could release; stamped <iso>) — reclaiming it
 ```
 
-  A lock whose pid IS running is another edition in progress: `LOCK HELD by …`
-  (step 2 below), for at most `LOCK_STALE_MIN` = 30 minutes. NEVER delete the lock
-  by hand while its pid is alive.
+  A lock whose pid IS running is another edition in progress: `LOCK HELD by a LIVE
+  pid: …` (step 2 below). A lock whose pid is ALIVE is NEVER reclaimed by an
+  on-demand run, at ANY age: past `LOCK_STALE_MIN` = 30 minutes the line says so
+  and names the pid, because with the wire down a full edition can outlive 30
+  minutes and two editions writing one `oracle_<date>.html` and one
+  `oracle_tape_<date>.parquet` is worse than waiting. NEVER delete the lock by
+  hand while its pid is alive.
 - Tell the operator, in these words: the run was CUT OFF at step <n>, NO EDITION
   was printed (or: the edition was already on disk), whether the flag is standing,
   and that you are running it again detached — or `/oracle --no-fetch` if they
-  want a cache-only edition NOW and the wire can wait.
+  want a cache-only edition NOW and the wire can wait. An edition NAMED BY A
+  CUT-OFF LINE is UNVERIFIED and is NOT today's edition: say so, and reprint it.
+  Never report it as printed.
 
 ## The chain, step by step
 
@@ -140,12 +166,15 @@ The Oracle is down. Read logs/launchd/oracle-*.log. This file self-clears on the
 A standing flag does not stop the run. Tell the operator it was standing, and
 quote its JOB, SLOT, UTC and last traceback line in your report.
 
-If the next line is `LOCK HELD by … — standing down`, another Oracle run holds the
-lock and its pid is RUNNING: NO EDITION WAS PRINTED by this run and the exit code is
-still 0. Say so, wait for that run, and run again; a lock older than 30 minutes is
-reclaimed automatically. A lock left by a run that is no longer running never gets
-this far — it is reclaimed on the spot with a `DEAD LOCK from …` line (see WHAT A
-CUT-OFF RUN LEAVES BEHIND).
+If the next line is `LOCK HELD by a LIVE pid: … — standing down`, another Oracle run
+holds the lock and its pid is RUNNING: NO EDITION WAS PRINTED by this run and the exit
+code is still 0; the run makes no flag decision, so a flag that was standing is still
+standing, unchanged. Say so, wait for that run, and run again — if it is still running
+the next run stands down again, at any age. Do NOT delete the lock by hand while its
+pid is alive. If that run must be ended, end THAT PID and run again: the dead lock is
+then reclaimed on the spot with a `DEAD LOCK from …` line (see WHAT A CUT-OFF RUN
+LEAVES BEHIND), which is also what happens to a lock left by a run that is no longer
+running.
 
 ### STEP 3 · movers-fetch
 
@@ -253,7 +282,21 @@ or, when the cache is stale:
 
 One exit code (`rc_topup or rc_oracle`), one flag decision, and NO schedule check.
 Expect the `STEP 7` line and the `schedule:` line always, then exactly one of the
-five that follow:
+five that follow — except on the two exits that do NO WORK and never reach this
+step: the lock stand-down (`LOCK HELD by a LIVE pid: … — standing down`, which ends
+on `=== exit 0 (no-op: another Oracle run holds the lock …) ===`) and the
+identity-gate HALT (`=== exit 2 (identity gate — nothing was touched: no lock, no
+flag, no fetch, no render) ===`). Neither prints a `STEP 7`, a `schedule:` or a flag
+line, and neither makes a flag decision: report the flag exactly as STEP 2 printed
+it, left standing untouched (or none).
+
+Five while `MOVERS_FAILURE_HOLDS_FLAG` is `False`, its [VETO] default, which
+`--dry-run` prints. Should the operator ever rule it True, a full edition whose
+movers fetch failed ends instead in `alarm left standing: ORACLE_DOWN.flag — the
+movers fetch was supposed to run and did not come back clean, and
+MOVERS_FAILURE_HOLDS_FLAG is set: this run has no all-clear to give`, or its `no
+ORACLE_DOWN.flag standing — …` variant; report that as "left standing" or "none"
+like any other.
 
 ```
   STEP 7 alarm: rc_topup=0 rc_oracle=0 -> exit 0
@@ -272,6 +315,7 @@ report both. That run ends:
 
 ```
   STEP 7 alarm: rc_topup=1 rc_oracle=0 -> exit 1
+  schedule: SUSPENDED by operator ruling 2026-09-21 — the drift check is SKIPPED for job=ondemand (on drift it would rewrite a retained plist and bootstrap it); rollback card research_outputs/oracle/SUSPENDED_2026-09-21.txt
   ALARM RAISED — /Users/luis/Naiad/ORACLE_DOWN.flag
 === exit 1 ===
 ```
@@ -301,8 +345,15 @@ Notes for the run:
   `research_outputs/oracle/SUSPENDED_2026-09-21.txt` and rolling back is the
   OPERATOR's action, never this skill's. Beside the on-demand job the wrapper
   refuses it for you — `HALT: --job ondemand REFUSES --install. …`, exit 2, nothing
-  touched — but `--install` typed ALONE is still the clock's arming verb and still
-  arms all five. Do not type it.
+  touched — but `--install` typed ALONE is still the clock's arming verb and is NOT
+  guarded: for each of the five labels it rewrites the retained plist, then runs
+  `launchctl bootout` + `bootstrap`, and prints `ARMED <label>` whatever happens —
+  `bootstrap_rc` never reaches the exit code, so the run exits 0. The persistent
+  `disable` overrides should refuse each bootstrap (rollback card: "bootstrap alone
+  will not re-arm a disabled label"), so the likely result is NOT five armed agents
+  but five rewritten plists — same bytes today, new mtimes — which is exactly what
+  the suspension audit checks ("five plists present and unedited"), plus five ARMED
+  lines that are not true. Do not type it.
 - ALWAYS DETACHED (`run_in_background: true`, `python -u`, the log at
   `logs/launchd/oracle-ondemand.log`). A foreground timeout that fires mid-chain
   ends the run before the render; see WHAT A CUT-OFF RUN LEAVES BEHIND.

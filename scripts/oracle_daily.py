@@ -1480,16 +1480,22 @@ only that the wire is down and why: an older day's numbers are never shown (F-MV
 # masthead, eight headings, one caption, and a headline that restates the Board's own
 # posture column. None of these helpers is handed, or may name, a range or a mover
 # (F-BR-14 and F-MV-9 read this file's AST and would go red), and none reads a clock:
-# the Front Page and The Watch are rendered twice and byte-compared every day (F-BR-6,
-# and the wrapper's daily self-check).
+# the Front Page and The Watch are rendered twice and byte-compared on every edition
+# (F-BR-6, and the wrapper's per-edition self-check — once per on-demand edition since
+# the clock was suspended 2026-09-21, which may be no times on a day and five on another).
 
 # The dateline's stamp format, shared by the band and the colophon so that "<as-of>"
 # is the same string wherever the page prints it.
 AS_OF_FMT = "%Y-%m-%dT%H:%MZ"
 
-# THE STYLESHEET. Plain CSS with four placeholders, so it reads as CSS and not as an
-# f-string of doubled braces; page_css() fills them from the REGISTER. WHAT THE RULES
-# ARE FOR, since a style block carries no why of its own:
+# THE STYLESHEET. Plain CSS with FIVE placeholders — __PAPER__, __INK__, __RED__,
+# __INK_RGB__ and __SERIF__ — so it reads as CSS and not as an f-string of doubled
+# braces; page_css() fills them from the REGISTER (three inks, the ink again as r,g,b
+# for the alpha rules, and the serif stack). The comment read "four": page_css() does
+# plain str.replace and raises nothing on a miss, so an editor who trusted a short
+# inventory would ship a literal `__SERIF__` inside a `font:` shorthand and drop the
+# whole declaration in silence. WHAT THE RULES ARE FOR, since a style block carries no
+# why of its own:
 #   · hairline column rules — `column-rule` on the lead, the Docket, the Watch, the
 #     Telegrams, The Market Page and the colophon; `td+td` rules inside every table.
 #   · small-caps section heads — on the h2 ELEMENT. An attribute on <h2> would break
@@ -1745,7 +1751,7 @@ def front_page(view: dict) -> dict:
 def render_html(view: dict, date_str: str, canon_sha: str, *,
                 edition_no: int | None = None, slot: str = "full") -> str:
     """The page. `edition_no` and `slot` are the masthead's two variables and are
-    KEYWORDS so that every older caller — the fixtures, the wrapper's daily self-check,
+    KEYWORDS so that every older caller — the fixtures, the wrapper's per-edition self-check,
     the movers fixtures — still calls render_html(view, date_str, canon_sha) and still
     gets a page. A render nobody numbered is a PROOF, not an edition, and says so:
     'No. —'. run() numbers the real ones (edition_count)."""
@@ -1871,6 +1877,20 @@ def render_html(view: dict, date_str: str, canon_sha: str, *,
                     f"<td>{_chip(src)}</td>"
                     f"<td class='num'>{html.escape(str(src.get('value', 'gate')))}</td>"
                     f"<td class='small'>{html.escape(src['source'])}</td></tr>")
+    # THE FOOTNOTE COUNTS THE TABLE, it does not assert about it. It read "each is
+    # DEFERRED-TO-BR2" — true of 9 rows and false of 5 (TARGET_BUCKET_ATR from STEP B,
+    # RANGE_LENS and RANGE_WATCH_ATR from STEP D, EDITION_COUNT and FRONT_PAGE_HEADLINE
+    # from STEP F), which carry no `deferred_to` key, print a bare [VETO] and are this
+    # build's own defaults waiting on THIS operator, now. Sending him to BR-2 for them
+    # sends him to a ruling that was never asked to cover them. Both integers come from
+    # `rows`, the same list the table is built from, so the sentence cannot drift again.
+    n_defer = sum(1 for _n, _s in rows if _s.get("deferred_to") == "BR-2")
+    n_veto = len(rows) - n_defer
+    veto_note = (
+        f"{n_defer} of the {len(rows)} rows below are DEFERRED-TO-BR2, which proposes a "
+        f"measured value from a week of D-7 distributions. {n_veto} carry a bare [VETO]: "
+        f"builder defaults of this build, unruled, awaiting the operator's own ruling — "
+        f"each row's last column names the step that proposed it. Nothing self-adopts.")
 
     pay_js = []
     for name, pl in view["payloads"].items():
@@ -1940,10 +1960,9 @@ comparable across assets. H20 at 4h is infeasible by construction (0 bars) and p
 
 <h2>{sec[7]} — display-only: the provenance, and the rows still open</h2>
 <h3>Appendix — posture canon v1 · the rows still open</h3>
-<p class="small muted">BR-1 Amendment A2 (operator, 2026-08-16) ruled the naming, the trigger
-pair, the net R:R form and the schedule. The rows below are what remains: each is
-DEFERRED-TO-BR2, which proposes a measured value from a week of D-7 distributions.
-Nothing self-adopts.</p>
+<p class="small muted">BR-1 Amendment A2 (operator, 2026-08-16) ruled the naming, the
+trigger pair, the net R:R form and the schedule; the schedule was SUSPENDED by operator
+ruling 2026-09-21 and the Oracle now prints on demand. {veto_note}</p>
 <table class="veto"><tr><th>constant</th><th>disposition</th><th>value</th><th>why it is not law</th></tr>
 {''.join(veto)}</table>
 
@@ -2042,6 +2061,19 @@ TAPE_COLS = ["as_of_ms", "as_of_iso", "asset", "lens", "station", "tide",
 # land in the parquet as a null-typed column and change dtype from one day to the next.
 RANGE_TAPE_FLOATS = ("range_top", "range_bottom", "range_pos_pct", "range_dist_atr",
                      "range_last_event_age_bars")
+# THE SAME HAZARD, STRING SIDE (review finding, 2026-09-21 — the two OBJECT columns
+# were left out of the guard above). `range_pending_side` is None on every row of any
+# day when no roster symbol holds a pending macro breach (today 1 of 18 holds one), and
+# `range_last_event` is None on a day when none holds a range at all — the F-BR-14
+# EMPTY stub is exactly that day. Plain object dtype lands those in the parquet as type
+# `null`, and a multi-day read in DATE ORDER then raises before it returns a row:
+# ArrowNotImplementedError: Unsupported cast from string to null using function
+# cast_null — which kills pd.read_parquet(<tape dir>), pyarrow.dataset and
+# pq.ParquetDataset, i.e. every normal read of the D-4 tape these columns exist to
+# feed. pandas' nullable string dtype lands as `string` even when every value is NA, so
+# the schema does not move from one day to the next. `range_state` is already always a
+# string (snapshot and range_empty both return one) and is named here to PIN that.
+RANGE_TAPE_STRINGS = ("range_state", "range_pending_side", "range_last_event")
 
 
 def write_tape(view: dict, date_str: str) -> tuple[Path, str, int]:
@@ -2091,6 +2123,8 @@ def write_tape(view: dict, date_str: str) -> tuple[Path, str, int]:
     df = pd.DataFrame(rows, columns=TAPE_COLS)
     for col in RANGE_TAPE_FLOATS:
         df[col] = df[col].astype("float64")
+    for col in RANGE_TAPE_STRINGS:
+        df[col] = df[col].astype("string")
     p = TAPE_DIR / f"oracle_tape_{date_str}.parquet"
     df.to_parquet(p, index=False)
     b = p.read_bytes()

@@ -16,7 +16,11 @@ WHY THIS EXISTS. Finding V-8 of the ORACLE REBIRTH build: the kline estate was
 a day stale and nothing scheduled refreshed it, because the network top-up job
 was retired 2026-08-05 (ruling D-3). The Oracle is CACHE-ONLY BY DESIGN — a
 firewalled run must never reach the network — so the fetching cannot live
-inside it. It lives here, 15 minutes ahead of each Oracle slot.
+inside it. It lives here. It used to live 15 minutes ahead of each Oracle slot
+(06:45/15:45, BR-1b); since the schedule was suspended 2026-09-21 it is step
+'scope-topup' of `oracle_wrapper.py --job ondemand` — same process, immediately
+before the render, slot string from
+oracle_wrapper.ONDEMAND_REGISTER['TOPUP_SLOT']. See the SLOTS row in REGISTER.
 
 ════════════════════════════════════════════════════════════════════════════
 "TO CLAIM THE SET, ENUMERATE THE SET."
@@ -82,7 +86,15 @@ REGISTER: dict[str, dict] = {
         "ruled": True,
         "source": "BR-1b verbatim: 'Slots 06:45 + 15:45 America/Argentina/Buenos_Aires "
                   "via the slot-anchored wrapper' — 15 minutes ahead of the Oracle's "
-                  "07:00 and 16:00 so the cache is fresh before the organ reads it.",
+                  "07:00 and 16:00 so the cache is fresh before the organ reads it. "
+                  "SUSPENDED 2026-09-21 by operator ruling: both labels booted out of "
+                  "gui/501 AND persistently disabled, plists retained unedited "
+                  "(rollback card research_outputs/oracle/SUSPENDED_2026-09-21.txt). "
+                  "NO CLOCK LEADS THIS FILE ANY MORE. Since OR-1 STEP A the top-up is "
+                  "run by scripts/oracle_wrapper.py --job ondemand (step 'scope-topup'), "
+                  "in-process and seconds before the render, with the slot string "
+                  "oracle_wrapper.ONDEMAND_REGISTER['TOPUP_SLOT'] (unruled [VETO]). "
+                  "These times remain law for the retained plists, i.e. for a rollback.",
     },
     "SCOPE_SOURCE": {
         "value": "instrumented oracle_daily.load_lens",
@@ -116,8 +128,12 @@ def enumerate_scope(log=print) -> dict:
     # THE ENUMERATION MUST NOT WRITE ANYTHING REAL.
     #
     # oracle_daily.run() unconditionally emits FIVE artifact sets — the canon
-    # JSON, ten mantle payloads, the day's HTML, the tape parquet and the
-    # calibration JSON. An earlier version of this function deleted only the
+    # JSON, ONE MANTLE PAYLOAD PER ROSTER SYMBOL, the day's HTML, the tape
+    # parquet and the calibration JSON. (This read "ten mantle payloads": the
+    # pre-OR-1 roster's size typed as a WORD, which is why the STEP C sweep's
+    # value greps for "10" / "10 symbols" walked past it — OR-1 STEP C,
+    # CONVENTIONS §6.4. The five redirected paths below are that list.)
+    # An earlier version of this function deleted only the
     # calibration file, which meant every `--enumerate` (and every F-TU-1 leg,
     # twice per fixture pass) silently overwrote the day's real Oracle render
     # and its tape. Nothing was corrupted, but the deliverables were being

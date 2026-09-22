@@ -1,4 +1,4 @@
-"""ORACLE ON-DEMAND FIXTURES — F-SK-1, F-SK-2a..2h, F-SK-3 of queue OR-1, STEP A.
+"""ORACLE ON-DEMAND FIXTURES — F-SK-1, F-SK-2a..2i, F-SK-3 of queue OR-1, STEP A.
 
 Same law as the BR-1 and BR-1b sets: every fixture runs BOTH legs, and `prove()`
 refuses to count a fixture whose break leg passed. A fixture that cannot be made
@@ -45,7 +45,7 @@ import sys
 import tempfile
 import time
 import types
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -355,6 +355,113 @@ def oracle_log_leads() -> list[str]:
     return leads
 
 
+
+# ── THE BOARD ROW, READ OFF ITS PRODUCER ──────────────────────────────────────
+# oracle_wrapper.front_page() (chain step 6, the summary the skill tells the operator
+# to read back) recovers the Board rows by matching the Oracle's stdout with
+# OW._BOARD_LINE. Until 2026-09-21 the ONLY producer of such a line anywhere in this
+# suite was BOARD_LINES below — three string literals typed here and commented
+# "oracle_daily.build_view's real line format" — with nothing tying them to
+# oracle_daily.py:877, and oracle_log_leads() skips that line BY DESIGN (its lead is
+# only whitespace, so it names nothing). Measured in a mirror: change `heat={heat:6.3f}`
+# to `heat: {heat:6.3f}` and 0 of 18 real Board lines match, front_page() prints "no
+# Board row was logged by this run (the Oracle did not get as far as the Board)" for a
+# run that logged all 18 and rendered the edition — and every fixture here stays green,
+# because F-SK-2a..h feed the stand-in's own literals and F-SK-1's drift detector
+# returns an identical lead list for both sources. The loop closed on itself: SKILL.md
+# quotes the same literal, and F-SK-1 validated the skill against this file's copy.
+#
+# So the f-string is RENDERED OUT OF THE PRODUCER'S SOURCE, by AST, and the wrapper's
+# regex is run against THAT. Source read as TEXT: oracle_daily is never imported here.
+BOARD_LOG_FN = "build_view"        # the one place a Board row is logged
+
+
+def board_line_from_source(text: str) -> str:
+    """oracle_daily's OWN per-asset log f-string (the whitespace-lead JoinedStr inside
+    build_view), rendered with stand-in values."""
+    tree = ast.parse(text)
+    fn = next(n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)
+              and n.name == BOARD_LOG_FN)
+    segs = [ast.get_source_segment(text, n.args[0])
+            for n in ast.walk(fn)
+            if isinstance(n, ast.Call) and isinstance(n.func, ast.Name)
+            and n.func.id == "log" and n.args
+            and isinstance(n.args[0], ast.JoinedStr)]
+    if len(segs) != 1:
+        raise ValueError(f"{BOARD_LOG_FN} has {len(segs)} f-string log() calls, "
+                         f"expected exactly 1 — the Board row")
+    src = "(" + "\n".join(l.strip() for l in segs[0].splitlines()) + ")"
+
+    class _St:
+        board_word = "ARMED"
+
+    return eval(src, {}, {"sym": "BTCUSDT", "st": _St(), "heat": 6.248,
+                          "reg": [0] * 35, "clusters": [0] * 14,
+                          "atr_d": 2376.77, "len": len})
+
+
+def _board_coupling() -> list[str]:
+    """The wrapper's _BOARD_LINE against the line oracle_daily really logs, and the
+    three literals below against the same line's column layout."""
+    bad = []
+    try:
+        line = board_line_from_source(ORACLE_SRC.read_text(encoding="utf-8"))
+    except Exception as e:
+        return [f"the Board row could not be rendered from {BOARD_LOG_FN}() in "
+                f"{ORACLE_SRC.name}: {e.__class__.__name__}: {e} — front_page() reads "
+                f"that line and this suite can no longer say whether it still matches"]
+    m = OW._BOARD_LINE.match(line)
+    if not m:
+        bad.append(f"oracle_wrapper._BOARD_LINE does not match the line "
+                   f"{BOARD_LOG_FN}() really logs ({line!r}) — front_page() would say "
+                   f"'the Oracle did not get as far as the Board' for a run that "
+                   f"logged every row")
+        return bad
+    got = (m.group("sym"), m.group("station"), float(m.group("heat")))
+    if got != ("BTCUSDT", "ARMED", 6.248):
+        bad.append(f"oracle_wrapper._BOARD_LINE matched the producer's line but "
+                   f"recovered {got}, not ('BTCUSDT', 'ARMED', 6.248) — the summary "
+                   f"would print the wrong symbol, station or heat")
+    for lit in BOARD_LINES:
+        if not OW._BOARD_LINE.match(lit):
+            bad.append(f"this file's stand-in Board literal {lit!r} does not match "
+                       f"_BOARD_LINE — the sandbox is feeding the wrapper a line the "
+                       f"wrapper cannot read")
+    ref = OW._BOARD_LINE.match(BOARD_LINES[1])
+    if ref and (ref.group("sym"), ref.group("station"), float(ref.group("heat"))) != got:
+        bad.append(f"this file's BOARD_LINES[1] parses to "
+                   f"{(ref.group('sym'), ref.group('station'), float(ref.group('heat')))} "
+                   f"and the producer's own line to {got} — the stand-in is STANDING IN "
+                   f"FOR the producer instead of being PINNED TO it")
+    return bad
+
+
+def _board_coupling_break() -> list[str]:
+    """Two perturbations a real edit could produce. If either still matches, the leg
+    passed and this fixture is void."""
+    text = ORACLE_SRC.read_text(encoding="utf-8")
+    out = []
+    for name, mut in (
+            ("`heat={heat:6.3f}` -> `heat: {heat:6.3f}` (the one reproduced: 0 of 18 "
+             "real rows match)",
+             text.replace("heat={heat:6.3f}", "heat: {heat:6.3f}")),
+            ("the leading two spaces dropped from the row",
+             text.replace('f"  {sym:14}', 'f"{sym:14}'))):
+        if mut == text:
+            out.append(f"BOARD PLANT ({name}) -> GREEN: the plant could not be planted")
+            continue
+        try:
+            line = board_line_from_source(mut)
+        except Exception as e:
+            out.append(f"BOARD PLANT ({name}) -> RED: {e.__class__.__name__}: {e}")
+            continue
+        m = OW._BOARD_LINE.match(line)
+        out.append(f"BOARD PLANT ({name}) -> "
+                   + (f"GREEN (FIXTURE IS VOID): _BOARD_LINE still matches {line!r}"
+                      if m else f"RED: _BOARD_LINE does not match {line!r}"))
+    return out
+
+
 def _skill_real() -> tuple[bool, str]:
     if not SKILL.exists():
         return False, f"{SKILL.relative_to(ROOT)} does not exist"
@@ -371,8 +478,19 @@ def _skill_real() -> tuple[bool, str]:
         return False, dry_detail
     ok, detail = _skill_probe(SKILL.read_text(encoding="utf-8"), dry,
                               wrapper_static_lines())
+    board = _board_coupling()
+    if board:
+        return False, "; ".join(board)
+    line = board_line_from_source(ORACLE_SRC.read_text(encoding="utf-8"))
     return ok, detail + (f"; every labelled Oracle log lead {oracle_log_leads()} is in "
-                         f"the skill; live flag, lock and selfcheck log byte-untouched "
+                         f"the skill; the Board row rendered OUT OF "
+                         f"{BOARD_LOG_FN}()'s own f-string in {ORACLE_SRC.name} is "
+                         f"{line!r}, oracle_wrapper._BOARD_LINE matches it and "
+                         f"recovers ('BTCUSDT', 'ARMED', 6.248), and all "
+                         f"{len(BOARD_LINES)} stand-in literals in this file match it "
+                         f"with the same column layout — the sandbox's Board lines are "
+                         f"PINNED TO the producer, not typed beside it; live flag, "
+                         f"lock and selfcheck log byte-untouched "
                          f"from before the first dry run of the suite; {dry_detail}"
                          if ok else "")
 
@@ -420,9 +538,13 @@ def _skill_break() -> tuple[bool, str]:
     ok, dry_detail = _dry_in_sandbox(plant=True)
     if ok:
         slipped.append("a dry run that takes the lock")
+    board = _board_coupling_break()
+    if any("GREEN" in b for b in board):
+        return True, " ‖ ".join(board)
     if slipped:
         return True, f"a skill missing {slipped} still passed"
-    return False, (f"{len(step_ids())} planted copies, each with one step removed, "
+    return False, (" ‖ ".join(board)
+                   + f" || {len(step_ids())} planted copies, each with one step removed, "
                    f"all red; e.g. without movers-fetch: {reasons[0]} || 1 planted "
                    f"copy with one quoted log line altered, red: {drift_detail[:200]} "
                    f"|| 1 without the Oracle's edition line, red: {lead_detail[:160]} "
@@ -459,20 +581,23 @@ class Sandbox:
     """The real wrapper module, with its far ends replaced and its paths moved."""
     ATTRS = ("ROOT", "FLAG", "LOCK", "SELFCHECK", "MOVERS_SCRIPT", "MOVERS_DIR",
              "MOVERS_TIMEOUT_S", "MOVERS_FAILURE_HOLDS_FLAG",
-             "acquire_lock", "reclaim_dead_lock", "trap_cut_off",
+             "acquire_lock", "reclaim_dead_lock", "live_lock_holder",
+             "_cut_render_path", "trap_cut_off",
              "run_topup", "run_oracle", "run_movers", "self_checks",
              "reschedule_if_drifted", "arm", "write_plist", "names_ondemand",
              "show_standing_flag", "ondemand_flag_action", "ondemand_skips",
              "ondemand_plan_lines", "identity_gate")
     MOVERS_MODES = ("ok", "no-json", "exit1", "absent", "hang")
     TOPUP_STARTED = "topup.started"          # F-SK-2h: the child's "cut me now" marker
+    ORACLE_STARTED = "oracle.started"        # the same, for a cut INSIDE STEP 5
 
     def __init__(self, topup_rc: int = 0, late_flag: bool = False, movers: str = "ok",
                  arm_raises: bool = True, topup_hangs: bool = False,
-                 td: Path | None = None):
+                 oracle_hangs: bool = False, td: Path | None = None):
         assert movers in self.MOVERS_MODES, movers
         self.topup_rc, self.late_flag, self.movers = topup_rc, late_flag, movers
         self.arm_raises, self.topup_hangs, self.given_td = arm_raises, topup_hangs, td
+        self.oracle_hangs = oracle_hangs
         self.ran: list[str] = []            # jobs that actually ran, in order
         self.schedule_calls: list[str] = []  # any call into the schedule machinery
         self.arm_calls: list[str] = []       # every arm()/write_plist() call, by label
@@ -569,6 +694,16 @@ class Sandbox:
                            "</style></head><body><h1>THE DAILY ORACLE</h1>"
                            "<div class=\"stale\">LATE EDITION — wire stale since "
                            "2026-09-20T20:00Z</div></body></html>", encoding="utf-8")
+            if self.oracle_hangs:
+                # RUN()'S OWN ORDER, the window the review found: oracle_daily.run()
+                # writes the WHOLE html (oracle_daily.py:2360) and logs this line
+                # (:2361) BEFORE it writes the tape (:2364), the calibration (:2366)
+                # and — back in the wrapper — the selfcheck row. A signal here leaves
+                # an edition on disk that no self-check ever saw.
+                b = out.read_bytes()
+                log(f"  {out} {len(b):,} B sha256 {hashlib.sha256(b).hexdigest()}")
+                (td / self.ORACLE_STARTED).write_text(str(os.getpid()))
+                time.sleep(120)
             return {"html": out,
                     "html_sha": hashlib.sha256(out.read_bytes()).hexdigest()}
         sys.modules["oracle_daily"] = types.SimpleNamespace(run=_od_run)
@@ -1020,14 +1155,19 @@ def f_sk_2g() -> None:
 
 # ── F-SK-2h · the cut-off run
 
-def _child(td: Path, no_trap: bool, sig: int, no_flush: bool = False) -> dict:
-    """Start this file as `--child-cutoff`, wait until its top-up stub is hanging
-    under the lock, send `sig`, and report what is left."""
+def _child(td: Path, no_trap: bool, sig: int, no_flush: bool = False,
+           where: str = "topup", flat_denial: bool = False) -> dict:
+    """Start this file as `--child-cutoff`, wait until its stub is hanging under the
+    lock — in the TOP-UP (`where='topup'`, STEP 4) or INSIDE STEP 5 with the edition
+    already written (`where='render'`) — send `sig`, and report what is left."""
     cmd = [sys.executable, str(Path(__file__).resolve()), "--child-cutoff", str(td)]
     cmd += (["--no-trap"] if no_trap else []) + (["--no-flush"] if no_flush else [])
+    cmd += (["--hang-render"] if where == "render" else [])
+    cmd += (["--flat-denial"] if flat_denial else [])
     p = subprocess.Popen(cmd, cwd=str(ROOT),
                          stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-    marker, t0 = td / Sandbox.TOPUP_STARTED, time.monotonic()
+    marker = td / (Sandbox.ORACLE_STARTED if where == "render" else Sandbox.TOPUP_STARTED)
+    t0 = time.monotonic()
     while not marker.exists() and p.poll() is None and time.monotonic() - t0 < 60:
         time.sleep(0.05)
     reached = marker.exists()
@@ -1115,6 +1255,37 @@ def _cut_off(plant: str | None) -> tuple[bool, str]:
             or "NO EDITION WAS PRINTED" not in out3:
         return False, (f"a lock held by a RUNNING pid was not respected: jobs {ran3}, "
                        f"lock kept={kept3}, exit {rc3}")
+    # (iv) THE CUT INSIDE STEP 5, with the edition already on disk (review finding,
+    # 2026-09-21). `rendered` is set only after run_oracle RETURNS, but oracle_daily
+    # writes the whole html before the tape, the calibration and the selfcheck row —
+    # so this run used to be told "NO EDITION WAS PRINTED by this run" one line below
+    # the log line naming the edition it had just written. Plant 'flat-denial' is that
+    # behaviour: _cut_render_path stubbed to None inside the child.
+    with tempfile.TemporaryDirectory(prefix="oracle-ondemand-cut5-") as d:
+        r = _child(Path(d), no_trap=False, sig=signal.SIGTERM, where="render",
+                   flat_denial=(plant == "flat-denial"))
+        html_left = (Path(d) / "oracle_2026-09-21.html").exists()
+    if not r["reached"]:
+        return plant is not None, f"could not plant: the child never hung inside STEP 5: {r}"
+    if not html_left:
+        return plant is not None, ("could not plant: the child wrote no edition "
+                                   "before the signal")
+    said5 = [s for s in ("CUT OFF by signal 15 (SIGTERM) during STEP 5 oracle-render",
+                         "an edition was already written to",
+                         "It is UNVERIFIED", "oracle_2026-09-21.html",
+                         "NO SELFCHECK ROW WAS WRITTEN") if s not in r["out"]]
+    flag5 = r["flag"] or ""
+    if said5 or r["rows"] or "NO EDITION WAS PRINTED" in r["out"] \
+            or "oracle_2026-09-21.html" not in flag5 \
+            or "NO EDITION WAS PRINTED" in flag5:
+        return False, (f"SIGTERM inside STEP 5 with the edition ALREADY on disk: never "
+                       f"said {said5}, said 'NO EDITION WAS PRINTED'="
+                       f"{'NO EDITION WAS PRINTED' in r['out']}, the flag body names "
+                       f"the file={'oracle_2026-09-21.html' in flag5}, selfcheck "
+                       f"row={r['rows']} — the operator is told there is no edition "
+                       f"while a whole, current-dated one sits in briefs/oracle with "
+                       f"no selfcheck row behind it")
+
     return True, (f"SIGTERM while the top-up hung under the lock: the child's piped "
                   f"output said 'CUT OFF by signal 15 (SIGTERM) during "
                   f"STEP 4 scope-topup' and 'NO EDITION WAS PRINTED', released the lock, "
@@ -1125,11 +1296,16 @@ def _cut_off(plant: str | None) -> tuple[bool, str]:
                   f"and the next --no-fetch run said 'DEAD LOCK from ondemand/on-demand-full "
                   f"(pid {k['pid']} is not running …' reclaimed it and printed its "
                   f"edition (exit 0, 1 selfcheck row); a lock held by a RUNNING pid "
-                  f"still stood the chain down")
+                  f"still stood the chain down; and SIGTERM INSIDE STEP 5, with the "
+                  f"edition already written, did NOT say 'NO EDITION WAS PRINTED' — "
+                  f"it named the file, said NO SELFCHECK ROW WAS WRITTEN and called "
+                  f"it UNVERIFIED, in the log and in the flag body, with no selfcheck "
+                  f"row on disk")
 
 
 def _cut_off_break() -> tuple[bool, str]:
-    legs = {p: _cut_off(p) for p in ("no-trap", "age-only-lock", "no-flush")}
+    legs = {p: _cut_off(p) for p in ("no-trap", "age-only-lock", "no-flush",
+                                    "flat-denial")}
     slipped = [p for p, (ok, _) in legs.items() if ok]
     if slipped:
         return True, f"plant(s) {slipped} passed"
@@ -1157,14 +1333,87 @@ def f_sk_2h() -> None:
           _cut_off_break, lambda: _cut_off(None))
 
 
+# ── F-SK-2i · a lock whose pid is ALIVE is never reclaimed on age
+
+def _live_holder(plant: str | None) -> tuple[bool, str]:
+    """Review finding, 2026-09-21. acquire_lock's stale rule is AGE ONLY: past
+    LOCK_STALE_MIN it takes the lock from a holder that is STILL WORKING, and never
+    asks _pid_running. That was safe at 40 pinned pairs and a 10-symbol roster; on
+    the pinned 72 pairs and 18 symbols a wire-down full edition is ~29 min against
+    LOCK_STALE_MIN = 30 (72 x >= 15 s per failing pair + MOVERS_TIMEOUT_S 600 s +
+    the render), so the two would overlap: both write one briefs/oracle/
+    oracle_<date>.html and one oracle_tape_<date>.parquet, neither write atomic,
+    both append a selfcheck row, and then the FIRST run's unconditional
+    release_lock() deletes the SECOND's lock and lets a third in.
+    The holder here is a REAL live child process, and the lock is stamped
+    LOCK_STALE_MIN + 1 minutes old, i.e. squarely inside the reclaim branch.
+    Plant 'age-only': live_lock_holder never consulted, so the age rule is reached
+    again — exactly the shipped-before behaviour."""
+    holder = subprocess.Popen([sys.executable, "-c", "import time; time.sleep(120)"])
+    age = OW.LOCK_STALE_MIN + 1
+    try:
+        with Sandbox() as sb:
+            if plant == "age-only":
+                OW.live_lock_holder = lambda log=print: None
+            stamp = (datetime.now(timezone.utc) - timedelta(minutes=age)).isoformat()
+            body = json.dumps({"who": "ondemand/on-demand-full", "pid": holder.pid,
+                               "ts": stamp})
+            OW.LOCK.write_text(body)
+            alive = holder.poll() is None     # the holder really is running, now
+            rc, out = sb.main(list(FULL))
+            ran, rows = list(sb.ran), sb.rows()
+            kept = OW.LOCK.exists() and OW.LOCK.read_text() == body
+            edition = (sb.td / "oracle_2026-09-21.html").exists()
+            movers = sb.movers_ran()
+    finally:
+        holder.terminate()
+        try:
+            holder.wait(timeout=30)
+        except subprocess.TimeoutExpired:
+            holder.kill()
+    if not alive:
+        return plant is not None, ("could not plant: the holder process was not "
+                                   "running when the chain started")
+    if rc != 0 or ran or rows or edition or movers or not kept \
+            or "LOCK HELD by a LIVE pid" not in out or "STALE LOCK" in out:
+        return False, (f"a lock stamped {age} min old (> LOCK_STALE_MIN = "
+                       f"{OW.LOCK_STALE_MIN}) whose pid {holder.pid} was ALIVE was "
+                       f"RECLAIMED: exit {rc}, jobs {ran}, movers started={movers}, "
+                       f"selfcheck rows {len(rows)}, an edition was written={edition}, "
+                       f"the holder's lock body survived={kept}, said 'LOCK HELD by a "
+                       f"LIVE pid'={'LOCK HELD by a LIVE pid' in out}, said 'STALE "
+                       f"LOCK'={'STALE LOCK' in out} — two editions are now writing "
+                       f"one oracle_<date>.html and one oracle_tape_<date>.parquet, "
+                       f"and the first run's release_lock() will delete this one's lock")
+    return True, (f"a lock stamped {age} min old — PAST LOCK_STALE_MIN = "
+                  f"{OW.LOCK_STALE_MIN}, i.e. inside acquire_lock's reclaim branch — "
+                  f"whose pid {holder.pid} was a REAL running process: the chain stood "
+                  f"down, exit 0, no job ran, the movers organ was never started, no "
+                  f"selfcheck row was written, no edition was rendered, the holder's "
+                  f"lock body is byte-identical at exit, and the log says 'LOCK HELD "
+                  f"by a LIVE pid' and never 'STALE LOCK'")
+
+
+def f_sk_2i() -> None:
+    prove("F-SK-2i", "THE LIVE HOLDER — a lock PAST LOCK_STALE_MIN whose pid is still "
+                     "running is never reclaimed by an on-demand run: it stands down "
+                     "and leaves the holder's lock untouched",
+          lambda: _live_holder("age-only"), lambda: _live_holder(None))
+
+
 def child_cutoff(argv: list[str]) -> int:
     """`--child-cutoff <dir> [--no-trap]` — F-SK-2h's child. The real wrapper's real
     main(), in the sandbox, in its own process, stdout a PIPE (so block-buffered
     unless the chain flushes), with a top-up that hangs until it is cut."""
     td = Path(argv[argv.index("--child-cutoff") + 1])
-    with Sandbox(topup_hangs=True, td=td) as sb:
+    render = "--hang-render" in argv
+    with Sandbox(topup_hangs=not render, oracle_hangs=render, td=td) as sb:
         if "--no-trap" in argv:
             OW.trap_cut_off = lambda: {}
+        if "--flat-denial" in argv:
+            # the shipped-before-2026-09-21 behaviour: `rendered` is the only thing
+            # consulted, so a cut inside STEP 5 denies an edition that is on disk
+            OW._cut_render_path = lambda lines: None
         if "--no-flush" in argv:
             sys.stdout = _BlockBuffered(sys.stdout)
         assert OW.arm is not sb.keep["arm"]
@@ -1319,7 +1568,7 @@ def main() -> int:
     print(f"  chain    {' -> '.join(step_ids())}")
     print("=" * 78)
     fixtures = (f_sk_1, f_sk_2a, f_sk_2b, f_sk_2c, f_sk_2d, f_sk_2e, f_sk_2f,
-                f_sk_2g, f_sk_2h, f_sk_3)
+                f_sk_2g, f_sk_2h, f_sk_2i, f_sk_3)
     for fn in fixtures:
         try:
             fn()
