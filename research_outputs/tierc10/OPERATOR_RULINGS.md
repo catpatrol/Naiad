@@ -76,3 +76,76 @@ the lean is marked as such and is NOT the ruling.
   era collar the outcome rows have).
 - PUMPFUN → PUMPUSDT and MNT → Bybit are printed LEANS, not rulings; they need the nod at CLOSE.
 - The LaCie destination.
+
+---
+
+# RULINGS OF 2026-09-22 (R7–R10)
+
+Given by the operator during the RESUME-AND-FINISH session, in answer to the four conflicts R0's
+completeness census surfaced. Filed the moment they were given.
+
+## R7 · LAW 4 governs the CORRIDOR PIN, not stage completeness
+
+**Ruled: "Corridor pin only."** LAW 4's clause — *"if Stage D is not complete, re-pin at resume and
+redo everything downstream"* — protects the as-of pin. It does **not** order the destruction of
+stages that verify clean merely because Stage D lacks four *report* artifacts.
+
+Nothing is re-pinned. Nothing downstream is recomputed. The five COMPLETE-VERIFIED stages
+(STEP 0 · NULL/gaps-only · NULL/gaps+order · A · PANEL) stand. The corridor remains
+**AS_OF 2026-09-21T16:00:00Z**, substrate frozen at `tc10_20260921`, `live_cache_touched: false`.
+
+*Basis:* all 119 Stage D manifest shas re-hash (twice), the write-once seal holds on all four
+records, and the corridor never moved. What Stage D lacks — F-D-4, F-D-5, the haircut twin,
+contract multipliers — are report artifacts that cannot move an as-of.
+
+## R8 · The BRK panel is the 5-ASSET BOOK — the PANEL PIN governs
+
+**Ruled: "5-asset book — the PANEL PIN governs."** This **supersedes ruling R2 of 2026-09-21
+("All 17")**, on the operator's own word.
+
+- P-BRK-S1 and P-BRK-I1 score on CLASSIC5 (BTC ETH SOL NEAR ZEC), per G-7.
+- LOAO above-half bar = **3/5**.
+- The 17-asset view prints as **Tier-E** beside each BRK row.
+- The gap against R2 is filed as a finding in the build doc, as the contract's PANEL PIN requires.
+
+`scripts/tierc10_brk.py` scores on whatever panel the *registration* names (`g["panel"]`), so this
+is a registration-text decision, not a code change.
+
+## R9 · P-SPR-2 rides R3 — FULL CORRIDOR, BOTH WAYS
+
+**Ruled: "R3 governs — full corridor, both ways."** Ruling R3 of 2026-09-21 is later than the
+contract's frozen text and **supersedes** it.
+
+- Population: the **full corridor** — *not* the exploration-classic era (≤ 2024-06-30).
+- Scored arm: **standalone vs zero**.
+- **Top-side upthrusts are IN**; both directions are traded.
+- The contract's frozen wording — *"4h, 5-asset exploration-classic, vs card/standalone"* — prints
+  as the **superseded draft**, recorded so the change is visible and not silent.
+
+## R10 · The NULL of record is `gaps+order`
+
+**Ruled: "gaps+order — the leak-reduced one."**
+
+- `gaps+order` is the null of record. It cuts the measured own-window overlap from **25.62% to
+  7.97%** over 1,020 draws, so the foil is fairer.
+- `gaps-only` — the contract-literal design — remains **filed and printed beside it**, never deleted.
+- The two disagree on **3,455 of 19,926** comparable summary cells by sign and 2,469 by q75
+  clearance, including the headline cell *5m DIE, era ALL, H20 net*. Every such disagreement is
+  printed, not hidden.
+- Under the null of record, 4h retest-hold-tap89 sits at **percentile 100** (real +0.3168 vs null
+  median +0.0689, q25 −0.026, q75 +0.162) rather than 90.
+- **K=20 resolves a percentile to 5 points at best. It is a DESCRIPTION, never a p-value.**
+
+## Still blocked on the operator after R7–R10
+
+- **F-D-1 / R5.** "The USDT pair, either on Binance or Bybit" names the pair and permits the venue,
+  but the actual disagreement is the venue's **REST API vs its BULK ARCHIVE**, which publish
+  different bars on incident stamps. F-D-1 stays RED and is **printed RED**; F-D-1b carries. No bar
+  is rewritten either way without the narrower word: **REST or ARCHIVE?**
+- **The 5m HOLD RATE.** If it is part of P-BRK-S1's scoring ground it needs the same holdout-era
+  collar the outcome rows carry. Executor is proceeding on the **conservative** reading (collar it),
+  and will say so on the row.
+- **PUMPFUN → PUMPUSDT** and **MNT → Bybit** remain printed LEANS, not rulings; they need the nod at
+  CLOSE.
+- **The LaCie destination** (R6 granted permission to push; the destination is still unnamed, and the
+  default would create an empty vault — the real one is `/Volumes/LaCie/Repo Clone/naiad-backups`).
