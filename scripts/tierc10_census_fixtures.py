@@ -1984,6 +1984,14 @@ def _replay_gap(w, m) -> list:
 
 
 # ── THE MARGIN / FLOOR HELPERS [review 2026-09-22, findings 1 and 2] ─────────
+def _bitsame(a, b) -> bool:
+    """Two filed floats are the SAME number — and two ABSENCES are the same
+    absence. An empty era files NaN on both sides; a NaN facing a number is a
+    disagreement, not a match [LEAN R3-f]."""
+    x, y = float(a), float(b)
+    return (np.isnan(x) and np.isnan(y)) or x == y
+
+
 def _live_edge(sym: str, lens: str, kind: str = "frozen3.0"):
     """The RAW edge arrays of ONE real cell, re-walked live — the independent
     object every margin assertion below is judged against."""
@@ -2373,12 +2381,14 @@ def ht_break():
         r0 = pr.iloc[0]
         try:
             C.height_vs_toll_verdict(r0["lens"], root=CROOT, asset=r0["asset"],
-                                     scale_kind=r0["scale_kind"])
+                                     scale_kind=r0["scale_kind"],
+                                     era=r0["era"])
             return []
         except SystemExit as ex:
             got = C.height_vs_toll_verdict(r0["lens"], root=CROOT,
                                            asset=r0["asset"],
                                            scale_kind=r0["scale_kind"],
+                                           era=r0["era"],
                                            allow_provisional=True)
             if not bool(got.get("provisional")):
                 return ["the row served under allow_provisional does not say so"]
@@ -2429,7 +2439,10 @@ def ht_real():
     for nm, df, want in (
             ("height_toll", h, npan * len(com["lenses"]) * len(com["scale_kinds"])
              * len(C.ERAS)),
-            ("height_toll_verdict", v, npan * len(com["lenses"]) * len(com["scale_kinds"])),
+            # THE VERDICT IS KEYED ON THE ERA TOO [LEAN R3-f; review round 3]:
+            # three rows per panel per lens per scale kind, never one.
+            ("height_toll_verdict", v, npan * len(com["lenses"])
+             * len(com["scale_kinds"]) * len(C.ERAS)),
             # 10 x 6 CELLS + 10 by-decile margins + 6 near-edge-by-age margins
             # + 1 near-edge/all-ages margin, per era per horizon [LEAN R3-d]
             ("edge_fade", e, npan * len(com["lenses"]) * len(com["scale_kinds"])
@@ -2490,17 +2503,27 @@ def ht_real():
     for lens in com["lenses"]:
         for kind in com["scale_kinds"]:
             for asset in sorted(set(v["asset"])):
-                m = C.edge_margin(e, lens, asset=asset, kind=kind,
-                                  dec=C.EDGE_DEC_ALL, age=C.EDGE_AGE_ALL)
-                r = v[(v["lens"] == lens) & (v["scale_kind"] == kind)
-                      & (v["asset"] == asset)].iloc[0]
-                n_gate += 1
-                if not (float(m["net"]) == float(r["edge_net_h20"])
-                        and int(m["n"]) == int(r["edge_n"])
-                        and int(m["n_ranges"]) == int(r["edge_n_ranges"])
-                        and float(m["toll_atr"]) == float(r["edge_toll_atr"])):
-                    bad.append(f"the near-edge margin for {asset} {lens} {kind} is "
-                               "not the verdict row's own edge statistic")
+                for era in C.ERAS:
+                    m = C.edge_margin(e, lens, asset=asset, kind=kind, era=era,
+                                      dec=C.EDGE_DEC_ALL, age=C.EDGE_AGE_ALL)
+                    q = v[(v["lens"] == lens) & (v["scale_kind"] == kind)
+                          & (v["asset"] == asset) & (v["era"] == era)]
+                    if len(q) != 1:
+                        bad.append(f"{len(q)} verdict row(s) for {asset} {lens} "
+                                   f"{kind} era {era}")
+                        continue
+                    r = q.iloc[0]
+                    n_gate += 1
+                    # NaN faces NaN on an EMPTY era (HYPEUSDT / PUMPUSDT have no
+                    # tuning-era bars): absent together is equal; absent facing a
+                    # number is NOT [LEAN R3-f].
+                    if not (_bitsame(m["net"], r["edge_net_h20"])
+                            and int(m["n"]) == int(r["edge_n"])
+                            and int(m["n_ranges"]) == int(r["edge_n_ranges"])
+                            and _bitsame(m["toll_atr"], r["edge_toll_atr"])):
+                        bad.append(f"the near-edge margin for {asset} {lens} {kind} "
+                                   f"era {era} is not the verdict row's own edge "
+                                   "statistic")
     # A MARGIN IS NOT THE MEAN OF ITS CELLS, and the difference is not cosmetic
     worst = 0.0
     for lens in com["lenses"]:
@@ -2532,12 +2555,17 @@ def ht_real():
     # the READ INTERFACE hands back the filed row, for every lens
     got = {}
     for lens in com["lenses"]:
-        r = C.height_vs_toll_verdict(lens, root=CROOT)
-        got[lens] = bool(r["verdict_pass"])
-        row = v[(v["lens"] == lens) & (v["scale_kind"] == "frozen3.0")
-                & (v["asset"] == C.POOL_ALL)]
-        if bool(row["verdict_pass"].iloc[0]) != got[lens]:
-            bad.append(f"the read interface disagrees with the filed row on {lens}")
+        for era in C.ERAS:
+            r = C.height_vs_toll_verdict(lens, root=CROOT, era=era)
+            if era == C.ERA_ALL:
+                got[lens] = bool(r["verdict_pass"])
+            row = v[(v["lens"] == lens) & (v["scale_kind"] == "frozen3.0")
+                    & (v["asset"] == C.POOL_ALL) & (v["era"] == era)]
+            if bool(row["verdict_pass"].iloc[0]) != bool(r["verdict_pass"]):
+                bad.append("the read interface disagrees with the filed row on "
+                           f"{lens} era {era}")
+            if str(r.get("era")) != era or str(r.get("era_judged")) != era:
+                bad.append(f"the served row does not state its era on {lens} {era}")
     nm = int((e["margin"] != C.MARGIN_CELL).sum())
     return (not bad, "; ".join(bad) if bad else
             f"{len(h)} height rows + {len(v)} verdicts + {len(e):,} edge-fade rows "
@@ -2556,6 +2584,372 @@ def ht_real():
             f"{R34_CELL[0]} {R34_CELL[1]} equal a LIVE raw re-walk to 1e-12 · read "
             f"interface POOLED:ALL frozen3.0: "
             + ", ".join(f"{k} {'PASS' if x else 'FAIL'}" for k, x in got.items()))
+
+
+# ═════════════ F-C10-HT-ERA (Q-R3) — THE VERDICT GRID IS KEYED ON THE ERA
+# [review round 3, blocking finding].  The verdict used to be filed 120 rows
+# deep on (lens, scale_kind, asset), silently judged on full history, while
+# BOTH of its inputs were filed three ways per era.  The split is not cosmetic:
+# it reverses this digest's own headline, and the ONE pooled row that passes on
+# full history FAILS on the holdout era — the era P-BRK-S1 is scored in.
+DIGEST_NAME = "CENSUS_R_DIGEST.md"
+NEAR_KW = dict(dec=C.EDGE_DEC_ALL, age=C.EDGE_AGE_ALL)
+
+
+def _era_counts(v) -> dict:
+    """PASS per era, computed HERE from the filed table and from nothing else."""
+    return {era: int(v[v["era"] == era]["verdict_pass"].sum()) for era in C.ERAS}
+
+
+def _era_grid_findings(q, want_rows: int) -> list[str]:
+    """EVERY GRID WHOLE, on the era axis: the era is a column, it is never
+    null, it names only declared eras, the key is unique WITH it, and every
+    (lens, scale_kind, asset) carries all three eras."""
+    f = []
+    if "era" not in q.columns:
+        return ["the verdict table has NO `era` column — a whole declared "
+                "dimension is missing and no row can say what it was judged on"]
+    if int(q["era"].isna().sum()) or int((q["era"].astype(str) == "").sum()):
+        f.append("a verdict row carries no era")
+    unk = sorted(set(q["era"].astype(str)) - set(C.ERAS))
+    if unk:
+        f.append(f"a verdict row names an undeclared era: {unk}")
+    if len(q) != want_rows:
+        f.append(f"the verdict table is {len(q)} rows; the whole declared grid "
+                 f"is {want_rows} ({want_rows // len(C.ERAS)} panels x "
+                 f"{len(C.ERAS)} eras)")
+    key = ["lens", "scale_kind", "asset", "era"]
+    dup = int(q.duplicated(subset=key).sum())
+    if dup:
+        f.append(f"{dup} duplicate row(s) under the declared key {key}")
+    g = q.groupby(["lens", "scale_kind", "asset"], sort=True)["era"].nunique()
+    short = g[g != len(C.ERAS)]
+    if len(short):
+        f.append(f"{len(short)} panel(s) do not carry all {len(C.ERAS)} eras, "
+                 f"e.g. {short.index[0]} carries {int(short.iloc[0])}")
+    return f
+
+
+def _digest_era_findings(text: str, v) -> list[str]:
+    """WHAT §B.3 MUST SAY ABOUT THE ERA, judged against the FILED table —
+    every number below is recomputed here, never read out of the prose and
+    compared to itself."""
+    f = []
+    for era, n in _era_counts(v).items():
+        m = re.search(rf"era {re.escape(era)} = (\d+) PASS", text)
+        if not m:
+            f.append(f"the digest prints no PASS count for era {era}")
+        elif int(m.group(1)) != n:
+            f.append(f"the digest says {m.group(1)} PASS on era {era}; the filed "
+                     f"table says {n}")
+    if re.search(r"\*\*THE CONJUNCTION FAILS ON EVERY POOLED:ALL ROW", text):
+        f.append("the digest still carries the UNQUALIFIED bold headline 'THE "
+                 "CONJUNCTION FAILS ON EVERY POOLED:ALL ROW' — a sentence true "
+                 "of era ALL alone and false of the grid")
+    if "ON FULL HISTORY (era = ALL)" not in text:
+        f.append("the full-history headline does not name the era it is true of")
+    by = {}
+    for r in v.itertuples():
+        by.setdefault((r.lens, r.scale_kind, r.asset), {})[r.era] = r
+    moves = [k for k, g in by.items()
+             if len({bool(g[e].verdict_pass) for e in C.ERAS if e in g}) > 1]
+    m = re.search(r"CHANGES WITH THE ERA — ALL (\d+) OF THEM", text)
+    if not m:
+        f.append("the digest does not name the rows whose verdict changes with era")
+    elif int(m.group(1)) != len(moves):
+        f.append(f"the digest names {m.group(1)} era-dependent rows; the filed "
+                 f"table has {len(moves)}")
+    for lens, kind, asset in (("1d", "frozen3.0", C.POOL_CLASSIC5),
+                              ("1d", "frozen3.0", C.POOL_ALL),
+                              ("1d", "calibrated", C.POOL_ALL),
+                              ("4h", "frozen3.0", C.POOL_CLASSIC5),
+                              ("1d", "frozen3.0", C.POOL_UNSEEN12)):
+        z = v[(v["lens"] == lens) & (v["scale_kind"] == kind)
+              & (v["asset"] == asset)]
+        if not len(z):
+            continue
+        head = f"- **{lens} | {kind} | {asset}**"
+        line = next((ln for ln in text.splitlines() if ln.startswith(head)), None)
+        if line is None:
+            f.append(f"the digest does not name {lens} | {kind} | {asset} among "
+                     "the panels the era split moves")
+            continue
+        for r in z.itertuples():
+            if f"net {float(r.edge_net_h20):+.6f}" not in line:
+                f.append(f"the digest's line for {lens} | {kind} | {asset} does "
+                         f"not carry its filed era-{r.era} net "
+                         f"{float(r.edge_net_h20):+.6f}")
+        np_ = int(z["verdict_pass"].sum())
+        if line.count("**PASS**") != np_:
+            f.append(f"the digest's line for {lens} | {kind} | {asset} shows "
+                     f"{line.count('**PASS**')} PASS verdicts; the filed table "
+                     f"has {np_}")
+    return f
+
+
+def ht_era_break():
+    """FOUR deliberate sabotages of the ERA KEYING, one at a time."""
+    v = _r34("height_toll_verdict")
+    man = json.loads((CROOT / "R34_MANIFEST.json").read_text())
+    com = man["commission"]
+    npan = len(com["assets"]) + len(C.pools_for(com["assets"]))
+    want = npan * len(com["lenses"]) * len(com["scale_kinds"]) * len(C.ERAS)
+    txt = (CROOT / DIGEST_NAME).read_text() if (CROOT / DIGEST_NAME).exists() else ""
+
+    def collapsed_to_all():
+        """THE DEFECT ITSELF: the era rows are dropped and the table collapses
+        to the 120 full-history rows the prior build filed."""
+        return _era_grid_findings(v[v["era"] == C.ERA_ALL].copy(), want)
+
+    def era_column_gone():
+        """A verdict row with no era at all — in the table AND at the read."""
+        q = v.drop(columns=["era"])
+        found = _era_grid_findings(q, want)
+        with tempfile.TemporaryDirectory() as td:
+            q.to_parquet(Path(td) / "height_toll_verdict.parquet", index=False)
+            try:
+                C.height_vs_toll_verdict(com["lenses"][0], root=Path(td))
+                found.append("BUT the read interface SERVED the era-less table")
+            except SystemExit as ex:
+                found.append(f"and the read HALTED: {str(ex)[:80]}")
+        return found
+
+    def one_era_from_anothers_inputs():
+        """A verdict recomputed for the HOLDOUT from the ALL era's inputs —
+        live, on a real cell, both as the HALT the builder owes and as the
+        number it would otherwise have filed."""
+        tape, m, w, bps = _walk_cell()
+        sym, lens = R34_CELL
+        hl = C.height_rows(w, tape, sym, lens, "frozen3.0", bps)
+        hg = C.height_grid(hl, sym, lens)
+        A_ = C.edge_arrays(tape, w, bps, 0)
+        honest = {(sym, "frozen3.0", e): C.edge_gate(A_, False, e) for e in C.ERAS}
+        wrong = dict(honest)
+        wrong[(sym, "frozen3.0", C.ERA_HOLDOUT)] = honest[(sym, "frozen3.0", C.ERA_ALL)]
+        found = []
+        try:
+            C.verdict_rows(hg, wrong, lens)
+            found.append("BUT verdict_rows FILED a holdout verdict built from the "
+                         "ALL era's edge gate")
+        except SystemExit as ex:
+            found.append(f"verdict_rows HALTED: {str(ex)[:90]}")
+        a, h = (honest[(sym, "frozen3.0", C.ERA_ALL)],
+                honest[(sym, "frozen3.0", C.ERA_HOLDOUT)])
+        if (int(a["n"]) == int(h["n"]) and int(a["n_ranges"]) == int(h["n_ranges"])
+                and float(a["net"]) == float(h["net"])):
+            found.append("VACUOUS: the ALL and holdout edge gates are the same "
+                         f"statistic on {sym} {lens}")
+        else:
+            found.append(f"and the two are different statistics on {sym} {lens}: "
+                         f"ALL n {int(a['n']):,} / ranges {int(a['n_ranges'])} / net "
+                         f"{float(a['net']):+.6f} vs holdout n {int(h['n']):,} / "
+                         f"ranges {int(h['n_ranges'])} / net {float(h['net']):+.6f}")
+        return found
+
+    def digest_headline_wrong():
+        """The digest's own sentences, mutated one at a time against the filed
+        table: a PASS count bumped by one, the era-dependent row count bumped,
+        and the old unqualified headline restored."""
+        if not txt:
+            return ["VACUOUS: no digest is filed to check"]
+        found = []
+        for era, n in _era_counts(v).items():
+            bad = txt.replace(f"era {era} = {n} PASS", f"era {era} = {n + 1} PASS", 1)
+            got = _digest_era_findings(bad, v)
+            found += [f"[{era} count bumped] {got[0]}"] if got else []
+            if not got:
+                return []                       # a mutation nothing caught: VOID
+        m = re.search(r"CHANGES WITH THE ERA — ALL (\d+) OF THEM", txt)
+        if m:
+            bad = txt.replace(m.group(0), f"CHANGES WITH THE ERA — ALL "
+                              f"{int(m.group(1)) + 1} OF THEM", 1)
+            got = _digest_era_findings(bad, v)
+            if not got:
+                return []
+            found.append(f"[era-dependent row count bumped] {got[0]}")
+        bad = txt.replace("ON FULL HISTORY (era = ALL) THE CONJUNCTION FAILS",
+                          "THE CONJUNCTION FAILS", 1)
+        got = _digest_era_findings(bad, v)
+        if not got:
+            return []
+        found.append(f"[the old unqualified headline restored] {got[0]}")
+        return found
+
+    return plants([
+        ("THE DEFECT ITSELF: the verdict grid collapsed to era = ALL", collapsed_to_all),
+        ("a verdict row carries no era (table AND read interface)", era_column_gone),
+        ("a verdict recomputed for one era from ANOTHER era's inputs",
+         one_era_from_anothers_inputs),
+        ("the digest's headline does not match the filed per-era counts",
+         digest_headline_wrong)])
+
+
+def ht_era_real():
+    v = _r34("height_toll_verdict")
+    h = _r34("height_toll")
+    e = _r34("edge_fade")
+    man = json.loads((CROOT / "R34_MANIFEST.json").read_text())
+    com = man["commission"]
+    npan = len(com["assets"]) + len(C.pools_for(com["assets"]))
+    want = npan * len(com["lenses"]) * len(com["scale_kinds"]) * len(C.ERAS)
+    bad = _era_grid_findings(v, want)
+    if bad:
+        return False, "; ".join(bad)
+    if man["keys"]["height_toll_verdict"] != ["lens", "scale_kind", "asset", "era"]:
+        bad.append(f"the manifest declares the verdict key as "
+                   f"{man['keys']['height_toll_verdict']}, not the era-keyed one")
+    # ── EVERY ROW IS ITS OWN ERA'S CONJUNCTION, recomputed from the two INPUT
+    # ── tables — the reviewer's own independent recompute, on all 360 rows ──
+    near = e[(e["margin"] == C.MARGIN_NEAR) & (e["horizon"] == "H20")]
+    j = h.merge(near[["asset", "lens", "scale_kind", "era", "n", "n_ranges", "net",
+                      "median_term", "toll_atr", "hit_rate_net"]],
+                on=["asset", "lens", "scale_kind", "era"], how="left",
+                suffixes=("", "_e"))
+    ep = ((j["n_ranges_e"] >= C.EDGE_MIN_N_RANGES) & (j["n"] >= C.EDGE_MIN_N_BARS)
+          & (j["net"] > 0))
+    j["want_pass"] = j["gate_height_pass"].astype(bool) & ep
+    j["want_edge"] = ep
+    k = ["lens", "scale_kind", "asset", "era"]
+    z = v.merge(j[k + ["want_pass", "want_edge", "n", "n_ranges_e", "net",
+                       "n_ranges", "gate_height_pass"]], on=k, how="left",
+                suffixes=("", "_w"))
+    if len(z) != len(v):
+        bad.append(f"the recompute joined {len(z)} rows onto {len(v)} verdicts")
+    for col, wcol, nm in (("verdict_pass", "want_pass", "verdict"),
+                          ("gate_edge_fade_pass", "want_edge", "edge leg"),
+                          ("gate_height_pass", "gate_height_pass_w", "height leg")):
+        n = int((z[col].astype(bool) != z[wcol].astype(bool)).sum())
+        if n:
+            bad.append(f"{n} filed {nm}(s) are not the per-era conjunction of the "
+                       "filed height row and the filed near-edge margin of the SAME era")
+    for a, b_, nm in (("edge_n", "n", "edge_n"), ("edge_n_ranges", "n_ranges_e",
+                                                  "edge_n_ranges"),
+                      ("n_ranges", "n_ranges_w", "n_ranges")):
+        n = int((z[a].astype("int64") != z[b_].astype("int64")).sum())
+        if n:
+            bad.append(f"{n} verdict row(s) carry a {nm} that is not their own era's")
+    # NaN faces NaN on an EMPTY era (HYPEUSDT / PUMPUSDT have no tuning-era
+    # bars at all): the two must be absent TOGETHER, and finite where both are.
+    a_ = z["edge_net_h20"].to_numpy(float)
+    b_ = z["net"].to_numpy(float)
+    n = int(((np.isnan(a_) != np.isnan(b_))
+             | (~np.isnan(a_) & ~np.isnan(b_)
+                & ~np.isclose(a_, b_, rtol=0, atol=1e-9))).sum())
+    if n:
+        bad.append(f"{n} verdict row(s) carry an edge NET that is not their own era's")
+    # ── THE FLOORS ARE APPLIED WITHIN THE ERA, not inherited from ALL ──────
+    pl = ((v["n_ranges"] < C.PROVISIONAL_MIN_N)
+          | (v["edge_n_ranges"] < C.PROVISIONAL_MIN_N))
+    if int((pl != v["provisional"]).sum()):
+        bad.append("a filed `provisional` is not lean C-g's law ON ITS OWN ERA's n")
+    # ── A LIVE RE-WALK OF ONE REAL CELL, PER ERA ──────────────────────────
+    tape, m, w, bps = _walk_cell()
+    sym, lens = R34_CELL
+    A_ = C.edge_arrays(tape, w, bps, 0)
+    hl = C.height_rows(w, tape, sym, lens, "frozen3.0", bps)
+    hgl = {r["era"]: r for r in C.height_grid(hl, sym, lens)
+           if r["scale_kind"] == "frozen3.0"}
+    live = {}
+    for era in C.ERAS:
+        g = C.edge_gate(A_, False, era)
+        live[era] = g
+        r = v[(v["lens"] == lens) & (v["scale_kind"] == "frozen3.0")
+              & (v["asset"] == sym) & (v["era"] == era)].iloc[0]
+        if not (int(g["n"]) == int(r["edge_n"])
+                and int(g["n_ranges"]) == int(r["edge_n_ranges"])
+                and np.isclose(float(g["net"]), float(r["edge_net_h20"]),
+                               rtol=0, atol=1e-8)):
+            bad.append(f"the filed {sym} {lens} era-{era} edge leg is not the LIVE "
+                       f"re-walk ({float(r['edge_net_h20']):+.6f} vs "
+                       f"{float(g['net']):+.6f})")
+        if bool(hgl[era]["gate_height_pass"]) != bool(r["gate_height_pass"]):
+            bad.append(f"the filed {sym} {lens} era-{era} height leg is not the LIVE "
+                       "re-walk")
+        if int(hgl[era]["n_ranges"]) != int(r["n_ranges"]):
+            bad.append(f"the filed {sym} {lens} era-{era} n_ranges is not the LIVE "
+                       "re-walk")
+    if (int(live[C.ERA_ALL]["n"]) == int(live[C.ERA_HOLDOUT]["n"])
+            and int(live[C.ERA_ALL]["n"]) == int(live[C.ERA_TUNING]["n"])):
+        bad.append("VACUOUS: the three eras are the same sample on the live cell")
+    if int(live[C.ERA_TUNING]["n"]) + int(live[C.ERA_HOLDOUT]["n"]) != int(
+            live[C.ERA_ALL]["n"]):
+        bad.append("the two eras do not partition the ALL sample on the live cell")
+    # ── THE THREE ERAS ARE THREE DIFFERENT ROW SETS, or the split is décor ──
+    sets = {era: set(map(tuple, v[(v["era"] == era) & v["verdict_pass"]]
+                         [["lens", "scale_kind", "asset"]].to_numpy().tolist()))
+            for era in C.ERAS}
+    if sets[C.ERA_ALL] == sets[C.ERA_TUNING] == sets[C.ERA_HOLDOUT]:
+        bad.append("VACUOUS: the three eras PASS on exactly the same rows")
+    # ── THE READ INTERFACE TAKES THE ERA AND SAYS WHICH ERA IT SERVED ─────
+    for lens_ in com["lenses"]:
+        for era in C.ERAS:
+            r = C.height_vs_toll_verdict(lens_, root=CROOT, era=era,
+                                         allow_provisional=True)
+            row = v[(v["lens"] == lens_) & (v["scale_kind"] == "frozen3.0")
+                    & (v["asset"] == C.POOL_ALL) & (v["era"] == era)].iloc[0]
+            if str(r.get("era")) != era or str(r.get("era_judged")) != era:
+                bad.append(f"the served {lens_} row does not state era {era}")
+            if bool(r["verdict_pass"]) != bool(row["verdict_pass"]):
+                bad.append(f"the read interface disagrees with the filed "
+                           f"{lens_} era-{era} row")
+    try:
+        C.height_vs_toll_verdict(com["lenses"][0], root=CROOT, era="full")
+        bad.append("the read interface served an era the census never filed")
+    except SystemExit:
+        pass
+    d = C.height_vs_toll_verdict(com["lenses"][0], root=CROOT,
+                                 allow_provisional=True)
+    if str(d.get("era_judged")) != C.ERA_ALL:
+        bad.append("the DEFAULT read does not state that it judged on era ALL")
+    # ── THE FLOOR BITES WITHIN THE ERA: a row clean on ALL, provisional on an
+    # ── era, is REFUSED for that era and served for ALL ───────────────────
+    split = None
+    for key, g in v.groupby(["lens", "scale_kind", "asset"], sort=True):
+        s = g.set_index("era")
+        if (not bool(s.loc[C.ERA_ALL, "provisional"])
+                and any(bool(s.loc[x, "provisional"]) for x in
+                        (C.ERA_TUNING, C.ERA_HOLDOUT) if x in s.index)):
+            split = (key, s)
+            break
+    if split is None:
+        bad.append("VACUOUS: no panel is clean on ALL and provisional on an era")
+    else:
+        (ln_, kd_, as_), s = split
+        era_ = next(x for x in (C.ERA_TUNING, C.ERA_HOLDOUT)
+                    if bool(s.loc[x, "provisional"]))
+        C.height_vs_toll_verdict(ln_, root=CROOT, asset=as_, scale_kind=kd_)
+        try:
+            C.height_vs_toll_verdict(ln_, root=CROOT, asset=as_, scale_kind=kd_,
+                                     era=era_)
+            bad.append(f"the read served the PROVISIONAL era-{era_} row for {as_} "
+                       f"{ln_} {kd_} on the default path")
+        except SystemExit:
+            pass
+    # ── AND THE DIGEST SAYS THE SAME NUMBERS ──────────────────────────────
+    if not (CROOT / DIGEST_NAME).exists():
+        bad.append(f"no {DIGEST_NAME} is filed to check")
+    else:
+        bad += _digest_era_findings((CROOT / DIGEST_NAME).read_text(), v)
+    cnt = _era_counts(v)
+    return (not bad, "; ".join(bad[:6]) if bad else (
+        f"{len(v)} verdict rows = {npan} panels x {len(com['lenses'])} lenses x "
+        f"{len(com['scale_kinds'])} scale kinds x {len(C.ERAS)} ERAS, key "
+        f"{man['keys']['height_toll_verdict']}, every row carrying its era · the "
+        f"conjunction on ALL {len(v)} rows is its OWN era's filed height row AND "
+        f"its OWN era's near-edge MARGIN row, recomputed here from the two input "
+        f"tables · PASS per era: "
+        + " · ".join(f"{k} {cnt[k]}/{len(v) // len(C.ERAS)}" for k in C.ERAS)
+        + f" — {len(sets[C.ERA_ALL] ^ sets[C.ERA_TUNING])} rows differ between ALL "
+        f"and tuning, {len(sets[C.ERA_ALL] ^ sets[C.ERA_HOLDOUT])} between ALL and "
+        f"holdout · LIVE re-walk of {sym} {lens}: the three era gates are "
+        + ", ".join(f"{k} n {int(live[k]['n']):,}/ranges "
+                    f"{int(live[k]['n_ranges'])}/net {float(live[k]['net']):+.6f}"
+                    for k in C.ERAS)
+        + f" and tuning + holdout = ALL exactly · the read takes era= and states it "
+        f"back in `era` and `era_judged`, HALTS on an era the census never filed, "
+        f"and REFUSES a row provisional in ITS OWN era · §B.3's per-era counts, its "
+        f"count of era-dependent rows and the five named panels' nets all equal the "
+        f"filed table"))
 
 
 # ═══════════════════════════════════ F-C10-COLLAR (LAW 4 + R1's print collar)
@@ -2749,6 +3143,24 @@ LEGS = (
      "returned instead of a HALT; a PROVISIONAL verdict is served on the default read "
      "path; the read interface disagrees with the filed row.",
      ht_break, ht_real),
+    ("F-C10-HT-ERA", "[Q-R3] THE VERDICT GRID IS KEYED ON THE ERA — 360 rows, three per "
+     "panel, each judged WITHIN its own era [LEDGER.md:834 · LEAN R3-f]",
+     "the filed verdict table is not the whole declared grid on the era axis (fewer "
+     "than panels x lenses x scale kinds x 3 rows, a repeated key, a panel missing an "
+     "era); a verdict row carries no era, or an undeclared one, or the table has no "
+     "`era` column at all and the read interface serves it instead of HALTing; a filed "
+     "verdict, height leg, edge leg, n_ranges, edge_n, edge_n_ranges or edge NET is not "
+     "its OWN era's — recomputed on every row from the filed height row and the filed "
+     "near-edge MARGIN row of the same era, and re-walked LIVE per era on a real cell; "
+     "a verdict is recomputed for one era from ANOTHER era's inputs without a HALT; the "
+     "provisional floor is inherited from ALL instead of applied within the era; the "
+     "three eras PASS on exactly the same rows (the split would then be decoration); "
+     "the read interface does not take an era, does not state the era it judged on, "
+     "serves an era the census never filed, or serves a row provisional in the era "
+     "asked for; the digest's §B.3 per-era PASS counts, its count of era-dependent "
+     "rows or the nets on the panels it names disagree with the filed table, or it "
+     "still carries the unqualified bold headline about POOLED:ALL.",
+     ht_era_break, ht_era_real),
     ("F-C10-COLLAR", "P-BRK-S1's scoring ground is FILED and never PRINTED [LAW 4 + R1]",
      "print_report emits a 5m retest-hold row outside the tuning era; the filed `printable` "
      "column disagrees with the declared law on any row; a six-decimal figure carried by a "

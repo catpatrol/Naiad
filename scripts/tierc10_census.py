@@ -467,6 +467,9 @@ def panels() -> dict:
 
 POOL_ALL = "POOLED:ALL"
 SUB_POOLS = ("CLASSIC5", "UNSEEN12")            # [L6] filed BESIDE POOLED:ALL
+# the two sub-pool labels by name, so a digest line naming the SEEN panel and
+# its out-of-sample sister spells neither of them as a literal [LEAN R3-f]
+POOL_CLASSIC5, POOL_UNSEEN12 = (f"POOLED:{p}" for p in SUB_POOLS)
 
 
 def pools_for(assets: list) -> dict:
@@ -2228,10 +2231,23 @@ HEIGHT_GATE_LAW = {
     "gate_edge_fade": (
         f"[LEAN-HEPHAESTUS R3-b] PASS iff trading TOWARD THE FAR BOUNDARY from the NEAR "
         f"{EDGE_NEAR_FRAC:.0%} of the range is NET POSITIVE at H20, pooled over the "
-        f"lens, in the ALL era: net = median(term) - toll_atr > 0, AND the sample clears "
-        f"the floor (edge_n_ranges >= {EDGE_MIN_N_RANGES}, edge_n >= {EDGE_MIN_N_BARS}). "
-        f"The near edge is where a range trade is actually taken; if the edge is not "
-        f"there it is nowhere."),
+        f"lens, WITHIN THE ROW'S OWN ERA: net = median(term) - toll_atr > 0, AND the "
+        f"sample clears the floor (edge_n_ranges >= {EDGE_MIN_N_RANGES}, edge_n >= "
+        f"{EDGE_MIN_N_BARS}) IN THAT ERA. The near edge is where a range trade is "
+        f"actually taken; if the edge is not there it is nowhere."),
+    "gate_era": (
+        f"[LEAN-HEPHAESTUS R3-f] THE VERDICT IS JUDGED WITHIN ONE ERA AND THE ROW SAYS "
+        f"WHICH. Both legs are computed on the bars of the row's own era — the height "
+        f"leg over that era's confirmed ranges, the edge leg over that era's in-range "
+        f"entries — and BOTH sample floors are applied WITHIN the era, never inherited "
+        f"from 'ALL'. {ERA_LAW} 'ALL' is the full-history row the contract orders; it is "
+        f"NOT a default and it is not the sum of the other two. REASONING: the verdict "
+        f"used to be filed once per (lens, scale_kind, asset) with no era column at all, "
+        f"silently on full history, while both of its inputs were filed three ways per "
+        f"era as census lean C-h orders. That collapse hid a REVERSAL: on full history "
+        f"the 1d / frozen3.0 / POOLED:CLASSIC5 panel PASSES at net +0.044074 ATR, and on "
+        f"the HOLDOUT era — the era P-BRK-S1 is scored in — the same panel is "
+        f"-0.436030 and FAILS both legs [review round 3, blocking finding]."),
     "combined": ("LEDGER.md:834 — 'a range-trading contract is drafted ONLY IF the "
                  "height-vs-toll feasibility gate AND the edge-fade outcome leg both "
                  "pass'. verdict_pass = gate_height_pass AND gate_edge_fade_pass."),
@@ -2292,6 +2308,26 @@ LEANS_R34 = (
     f"carry a height verdict built on ONE range. height_vs_toll_verdict() now REFUSES "
     f"a provisional row unless the caller asks for it by name "
     f"[review 2026-09-22, finding 2].",
+    f"[LEAN-HEPHAESTUS R3-f] THE HEIGHT-vs-TOLL VERDICT IS KEYED ON THE ERA, AND EVERY "
+    f"FILED ROW SAYS WHICH ERA IT WAS JUDGED ON. The verdict table is filed on "
+    f"(lens, scale_kind, asset, era) — three rows per panel — exactly as height_toll and "
+    f"the edge-fade margins already were, and BOTH sample floors ({PROVISIONAL_MIN_N} "
+    f"confirmed ranges) are applied WITHIN the era rather than inherited from 'ALL'. "
+    f"height_vs_toll_verdict() takes an `era` argument (default '{ERA_ALL}' for the "
+    f"callers written against the old table) and the dict it returns carries `era` and "
+    f"`era_judged`, so no consumer can hold a verdict and be unaware of its era. "
+    f"REASONING: the verdict used to be filed once per (lens, scale_kind, asset) with NO "
+    f"era column at all, silently judged on full history, while BOTH of its inputs were "
+    f"filed three ways per era as census lean C-h orders — a whole declared dimension "
+    f"dropped from the grid with no declaration on the row, under a gate that decides "
+    f"whether a range-trading contract may be DRAFTED. FOUND BY MEASUREMENT, not argued: "
+    f"the conjunction PASSES on 9 rows over full history, 13 on the tuning era and 7 on "
+    f"the holdout — three different row sets, with 21 panels whose verdict changes with "
+    f"the era. The ONE pooled row that passes on full history, 1d / frozen3.0 / "
+    f"POOLED:CLASSIC5, is +0.044074 ATR on ALL and -0.436030 on the HOLDOUT, where it "
+    f"fails BOTH legs on 18 confirmed ranges; the seen-panel's out-of-sample sister "
+    f"POOLED:UNSEEN12 never passes on any era. P-BRK-S1 is scored on the HOLDOUT and "
+    f"must read the holdout row [review round 3, blocking finding].",
 )
 
 
@@ -2445,7 +2481,9 @@ ACC_LEDGER_KEY = ["asset", "lens", "scale_kind", "variant", "rid", "side", "open
 ACC_GRID_KEY = ["asset", "lens", "scale_kind", "variant", "era", "horizon"]
 HT_GRID_KEY = ["asset", "lens", "scale_kind", "era"]
 EF_GRID_KEY = ["asset", "lens", "scale_kind", "era", "entry_decile", "age_bucket", "horizon"]
-VERDICT_KEY = ["lens", "scale_kind", "asset"]
+# THE VERDICT IS KEYED ON THE ERA, exactly as height_toll and edge_fade are
+# [LEAN R3-f; review round 3, blocking finding].  360 rows, not 120.
+VERDICT_KEY = ["lens", "scale_kind", "asset", "era"]
 R34_TABLES = ("acceptance_head_to_head", "height_toll", "edge_fade", "height_toll_verdict")
 
 
@@ -2822,14 +2860,27 @@ def edge_margin(e34, lens: str, *, asset: str = None, kind: str = "frozen3.0",
     return z.iloc[0]
 
 
-def edge_gate(A: dict, pooled: bool) -> dict:
+def edge_gate(A: dict, pooled: bool, era: str = ERA_ALL) -> dict:
     """[LEAN R3-b] the EDGE-FADE outcome leg: NET at H20 from the NEAR edge,
-    ALL era, pooled over ages — computed from the RAW terms, never as a
-    median of medians."""
+    pooled over ages, WITHIN ONE ERA — computed from the RAW terms, never as a
+    median of medians.
+
+    THE ERA IS AN ARGUMENT AND THE ANSWER CARRIES IT [LEAN R3-f; review round 3].
+    This took no era at all and always answered on full history, so the gate that
+    decides whether a range-trading contract may be DRAFTED was judged over a
+    window that INCLUDES the tuning era while P-BRK-S1 is scored on the HOLDOUT.
+    The era mask here is the SAME one edge_grid files its MARGIN_NEAR row under,
+    so the gate and the filed margin stay bit-for-bit one statistic, per era."""
+    if str(era) not in ERAS:
+        raise SystemExit(f"HALT (edge_gate): era {era!r} is not one of "
+                         f"{list(ERAS)} — the era is never guessed.")
     if not A.get("n"):
         return {"n": 0, "n_ranges": 0, "median_term": _NAN, "toll_atr": _NAN,
-                "net": _NAN, "hit_rate_net": _NAN, "pass": False}
-    s = _edge_stats(A, _near_mask(A["dec"]), "H20", pooled)
+                "net": _NAN, "hit_rate_net": _NAN, "pass": False, "era": era}
+    em = (np.ones(A["n"], bool) if era == ERA_ALL
+          else (A["era"] == (0 if era == ERA_TUNING else 1)))
+    s = _edge_stats(A, _near_mask(A["dec"]) & em, "H20", pooled)
+    s["era"] = era
     s["pass"] = bool(s["n"] >= EDGE_MIN_N_BARS
                      and s["n_ranges"] >= EDGE_MIN_N_RANGES
                      and np.isfinite(s["net"]) and s["net"] > 0)
@@ -2846,21 +2897,50 @@ def edge_gate(A: dict, pooled: bool) -> dict:
 
 
 def verdict_rows(hg: list[dict], eg: dict, lens: str) -> list[dict]:
-    """The per-lens / per-asset height-vs-toll VERDICT — LEDGER.md:834's
-    conjunction, stated as PASS/FAIL and filed as a first-class table."""
+    """The per-lens / per-asset / PER-ERA height-vs-toll VERDICT —
+    LEDGER.md:834's conjunction, stated as PASS/FAIL and filed as a first-class
+    table, THREE WAYS PER PANEL as census lean C-h orders [LEAN R3-f].
+
+    WHAT THIS USED TO DO AND WHY IT WAS WRONG [review round 3, blocking
+    finding]: it kept only the era == ALL height row, took an edge gate that
+    had no era at all, and filed ONE row per (lens, scale_kind, asset) with no
+    era column — so the whole era dimension was dropped from the grid without a
+    word on the row, and the only verdict a BRK author could read was full
+    history, tuning era included, for a registration scored on the HOLDOUT.
+    Both legs are now judged WITHIN the row's era and both sample floors are
+    applied within it: nothing is inherited from ALL."""
     out = []
-    byk = {(r["asset"], r["scale_kind"]): r for r in hg if r["era"] == ERA_ALL}
-    for (asset, kind), h in sorted(byk.items()):
-        e = eg.get((asset, kind), {"n": 0, "n_ranges": 0, "net": _NAN,
-                                   "pass": False, "median_term": _NAN,
-                                   "toll_atr": _NAN, "hit_rate_net": _NAN,
-                                   "fail_reason": "no edge row for this panel",
-                                   "provisional": True})
+    byk = {(r["asset"], r["scale_kind"], r["era"]): r for r in hg}
+    for (asset, kind, era), h in sorted(byk.items()):
+        if str(h["era"]) != str(era):
+            raise SystemExit(
+                f"HALT (verdict_rows): the height row for {asset} {kind} says era "
+                f"{h['era']!r} under key era {era!r} — a verdict must never be "
+                "built from another era's inputs [LEAN R3-f].")
+        e = eg.get((asset, kind, era), {"n": 0, "n_ranges": 0, "net": _NAN,
+                                        "pass": False, "median_term": _NAN,
+                                        "toll_atr": _NAN, "hit_rate_net": _NAN,
+                                        "fail_reason": "no edge row for this panel",
+                                        "era": era, "provisional": True})
+        if str(e.get("era", era)) != str(era):
+            raise SystemExit(
+                f"HALT (verdict_rows): the edge gate handed in for {asset} {kind} "
+                f"era {era!r} was computed on era {e.get('era')!r} — a verdict is "
+                "never recomputed for one era from another era's inputs "
+                "[LEAN R3-f].")
         gh, ge = bool(h["gate_height_pass"]), bool(e["pass"])
         prov = bool(int(h["n_ranges"]) < PROVISIONAL_MIN_N
                     or int(e.get("n_ranges", 0)) < PROVISIONAL_MIN_N)
         out.append({
             "lens": lens, "scale_kind": kind, "asset": asset,
+            # THE ERA IS ON THE ROW, NOT IN A CODE COMMENT [LEAN R3-f].
+            "era": era, "era_law": ERA_LAW,
+            "era_boundary_ms": ERA_BOUNDARY_MS,
+            "era_window": ("the FULL corridor — both eras, tuning included"
+                           if era == ERA_ALL else
+                           f"anchors closing <= {ERA_BOUNDARY_ISO}" if era == ERA_TUNING
+                           else f"anchors closing after {ERA_BOUNDARY_ISO}"),
+            "era_judged_law": HEIGHT_GATE_LAW["gate_era"],
             "n_ranges": h["n_ranges"], "ratio_median": h["ratio_median"],
             "ratio_d1": h["ratio_d1"], "ratio_d5": h["ratio_d5"],
             "ratio_d9": h["ratio_d9"],
@@ -2892,7 +2972,10 @@ def verdict_rows(hg: list[dict], eg: dict, lens: str) -> list[dict]:
                      if int(e.get("n_ranges", 0)) < PROVISIONAL_MIN_N else ""),
                 ) if x)),
             "verdict_pass": bool(gh and ge),
-            "verdict_law": HEIGHT_GATE_LAW["combined"],
+            "verdict_law": (HEIGHT_GATE_LAW["combined"]
+                            + f" JUDGED ON ERA = {era!r}, AND ON NO OTHER: both legs "
+                            f"are computed on this era's bars and both sample floors "
+                            f"are applied within it [LEAN R3-f]."),
             "min_n_law": HEIGHT_GATE_LAW["gate_min_n"],
             "gate_law_sha": HEIGHT_GATE_LAW_SHA,
             "ledger_line": "LEDGER.md:834",
@@ -2905,8 +2988,13 @@ def verdict_rows(hg: list[dict], eg: dict, lens: str) -> list[dict]:
                 "NOTHING IS SCORED HERE. This row gates ONE thing and it is not a "
                 "score: whether a range-trading contract may be DRAFTED under "
                 "LEDGER.md:834. The `tier`/`gates` collar columns say 'UNSCORED, "
-                "GATES NOTHING' and mean the SCORING ledger — read them together."),
-            "reason": (("height gate " + ("PASS" if gh else "FAIL"))
+                "GATES NOTHING' and mean the SCORING ledger — read them together. "
+                f"AND IT GATES THAT FOR ERA = {era!r} ONLY: the same panel is filed "
+                "three ways (ALL / tuning / holdout) and the three verdicts differ. "
+                "A form scored on the holdout must read the holdout row "
+                "[LEAN R3-f; review round 3]."),
+            "reason": (f"era {era}: "
+                       + ("height gate " + ("PASS" if gh else "FAIL"))
                        + " + edge-fade leg " + ("PASS" if ge else "FAIL")
                        + (" [PROVISIONAL]" if prov else "")),
         })
@@ -2917,6 +3005,7 @@ def verdict_rows(hg: list[dict], eg: dict, lens: str) -> list[dict]:
 def height_vs_toll_verdict(lens: str, root: Path | str | None = None,
                            asset: str = POOL_ALL,
                            scale_kind: str = "frozen3.0",
+                           era: str = ERA_ALL,
                            allow_provisional: bool = False) -> dict:
     """THIS LENS'S HEIGHT-vs-TOLL VERDICT, for P-BRK-* rows that must carry it.
 
@@ -2933,6 +3022,16 @@ def height_vs_toll_verdict(lens: str, root: Path | str | None = None,
     the returned dict then carries provisional=True and the reason, so a BRK
     author who takes it takes it knowingly.  The default refuses, because the
     quiet path must be the safe one.
+
+    IT TAKES AN ERA, AND THE ROW IT HANDS BACK SAYS WHICH ERA IT WAS JUDGED ON
+    — every time, in `era` and in `era_judged`, and again in verdict_law,
+    reason and gates_what [LEAN R3-f; review round 3, blocking finding].  The
+    default is ERA_ALL for compatibility with the callers written against the
+    era-less table, and the default is NOT silent: no consumer can hold this
+    dict and be unaware of the era, and the HALTs name it.  THE FLOORS ARE
+    APPLIED WITHIN THE ERA — a holdout verdict is not an ALL verdict with a
+    holdout label, and PROVISIONAL_MIN_N bites on the era's own n_ranges.
+    P-BRK-S1 is scored on the HOLDOUT and must ask for era=ERA_HOLDOUT.
     """
     root = OUT if root is None else Path(root)
     p = root / "height_toll_verdict.parquet"
@@ -2942,15 +3041,34 @@ def height_vs_toll_verdict(lens: str, root: Path | str | None = None,
             f"— {p} does not exist. LEDGER.md:834 makes this a GATE: no BRK form "
             "may carry a verdict that has not been measured. Run "
             "`tierc10_census.py --r34` first.")
+    if str(era) not in ERAS:
+        raise SystemExit(
+            f"HALT [Q-R3]: era={era!r} is not one of {list(ERAS)}. The verdict is "
+            "filed three ways per panel and is never judged on an era the census "
+            "did not measure [LEAN R3-f].")
     d = pd.read_parquet(p)
+    if "era" not in d.columns:
+        raise SystemExit(
+            f"HALT [Q-R3]: the filed verdict table {p} carries NO `era` column — it "
+            "is the collapsed 120-row table this repair replaced. Every verdict row "
+            "states the era it was judged on; a table that cannot say which era it "
+            "means is not served [LEAN R3-f; review round 3].")
     s = d[(d["lens"] == lens) & (d["scale_kind"] == scale_kind)
-          & (d["asset"] == asset)]
+          & (d["asset"] == asset) & (d["era"] == era)]
     if len(s) != 1:
         raise SystemExit(
             f"HALT [Q-R3]: no unique height-vs-toll verdict for lens={lens!r} "
-            f"scale_kind={scale_kind!r} asset={asset!r} — {len(s)} row(s) in {p}. "
-            "The verdict is never guessed.")
+            f"scale_kind={scale_kind!r} asset={asset!r} era={era!r} — {len(s)} "
+            f"row(s) in {p}. The verdict is never guessed.")
     r = s.iloc[0].to_dict()
+    if str(r.get("era")) != str(era):
+        raise SystemExit(
+            f"HALT [Q-R3]: the selected verdict row says era={r.get('era')!r} but "
+            f"era={era!r} was asked for — a verdict never wears another era's label.")
+    # THE ERA IS STATED ON EVERY SERVED ROW, unconditionally [LEAN R3-f].
+    r["era_judged"] = str(era)
+    r["era_read_law"] = (
+        f"THIS VERDICT WAS JUDGED ON ERA {era!r} AND ON NO OTHER. {ERA_LAW}")
     if str(r.get("gate_law_sha")) != HEIGHT_GATE_LAW_SHA:
         raise SystemExit(
             "HALT [Q-R3]: the FILED gate law sha "
@@ -2961,7 +3079,8 @@ def height_vs_toll_verdict(lens: str, root: Path | str | None = None,
     if bool(r.get("provisional", False)) and not allow_provisional:
         raise SystemExit(
             f"HALT [Q-R3]: the verdict for lens={lens!r} scale_kind={scale_kind!r} "
-            f"asset={asset!r} is PROVISIONAL — {r.get('provisional_reason')}. "
+            f"asset={asset!r} era={era!r} is PROVISIONAL — "
+            f"{r.get('provisional_reason')}. "
             f"n_ranges={int(r.get('n_ranges', 0))}, "
             f"edge_n_ranges={int(r.get('edge_n_ranges', 0))}, floor "
             f"{PROVISIONAL_MIN_N} [census lean C-g]. It is FILED and readable as "
@@ -3129,10 +3248,15 @@ def build_r34(root: Path, assets: list, lenses: list, kinds: tuple,
                                     "range's eventual life [LEAN R3-c]")
                     ef_g.append(collar(stamp(e, metas, lens, panel),
                                        "CENSUS-R [Q-R3] edge-fade"))
-                eg[(name, kind)] = edge_gate(A, pooled)
-            q = pd.DataFrame(verdict_rows(height_grid(hl, name, lens),
-                                          {(name, k): eg[(name, k)] for k in kinds},
-                                          lens))
+                # THE GATE, ONCE PER ERA [LEAN R3-f] — the same mask the
+                # MARGIN_NEAR rows are filed under, so gate and margin stay one
+                # statistic per era.
+                for era in ERAS:
+                    eg[(name, kind, era)] = edge_gate(A, pooled, era)
+            q = pd.DataFrame(verdict_rows(
+                height_grid(hl, name, lens),
+                {(name, k, era): eg[(name, k, era)]
+                 for k in kinds for era in ERAS}, lens))
             vd.append(collar(stamp(q, metas, lens, panel),
                              "CENSUS-R [Q-R3] height-vs-toll VERDICT"))
     frames = {
@@ -3354,10 +3478,16 @@ def _digest_r34(root: Path, A) -> None:
         A(f"- {HEIGHT_GATE_LAW['gate_height_why']}")
         A(f"- **THE EDGE-FADE LEG** — {HEIGHT_GATE_LAW['gate_edge_fade']}")
         A(f"- **THE CONJUNCTION** — {HEIGHT_GATE_LAW['combined']}")
+        A(f"- **THE ERA** — {HEIGHT_GATE_LAW['gate_era']}")
         A(f"- gate law sha `{m34['height_gate_law_sha'][:16]}` — the BRK track reads this "
-          "verdict through `tierc10_census.height_vs_toll_verdict(lens)`, which HALTS if "
-          "the table is not filed, if the asked row is not unique, or if this sha has "
-          "moved. IT NEVER DEFAULTS [F-C10-HT].")
+          "verdict through `tierc10_census.height_vs_toll_verdict(lens, asset=…, "
+          "scale_kind=…, era=…)`, which HALTS if the table is not filed, if it carries no "
+          "`era` column, if the asked (lens, scale_kind, asset, era) row is not unique, if "
+          "the era is not one the census filed, or if this sha has moved. IT NEVER "
+          "DEFAULTS, and the row it hands back states the era it was judged on "
+          "[F-C10-HT · F-C10-HT-ERA]. **THE SHA MOVED IN THIS BUILD**: the gate law's own "
+          "text used to say the edge leg was measured \"in the ALL era\", and that is no "
+          "longer what the code does.")
         A("")
         for x in LEANS_R34:
             if x.startswith("[LEAN-HEPHAESTUS R3"):
@@ -3480,50 +3610,193 @@ def _digest_r34(root: Path, A) -> None:
                 A(f"| {lens} | " + " | ".join(f"{float(r['net']):+.4f}" for r in m)
                   + f" | {int(tot['n']):,} | {int(tot['n_ranges']):,} |")
             A("")
-        A("### B.3 · THE VERDICT — LEDGER.md:834's conjunction, **THE WHOLE GRID**")
+        A("### B.3 · THE VERDICT — LEDGER.md:834's conjunction, **THE WHOLE GRID, "
+          "ERA BY ERA**")
         A("")
         A(f"- **THE SAMPLE FLOOR** — {HEIGHT_GATE_LAW['gate_min_n']}")
         A(f"- {HEIGHT_GATE_LAW['gate_min_n_why']}")
+        A(f"- **THE ERA** — {HEIGHT_GATE_LAW['gate_era']}")
         A("")
-        A(f"**ALL {len(v34)} FILED VERDICT ROWS ARE PRINTED BELOW — every asset, every "
-          f"pool, every lens, every scale kind. NO TOP-N AND NO POOLED-ONLY EXCERPT.** A "
-          f"prior build of this digest printed only the {len(v34[v34['asset'] == POOL_ALL])} "
-          f"POOLED:ALL rows and concluded in bold that the gate fails everywhere, while "
-          f"the filed table carried PASSing rows including a POOLED panel. The read "
-          f"interface a BRK author calls serves THESE rows, so THESE rows are what the "
-          f"artifact of record must show [review 2026-09-22, finding 2].")
+        if "era" not in v34.columns:
+            raise SystemExit(
+                "HALT (digest B.3): the filed verdict table carries no `era` column. "
+                "EVERY GRID WHOLE — the verdict is filed three ways per panel and the "
+                "digest never prints a grid that dropped a dimension [LEAN R3-f].")
+        _eras = [e for e in ERAS if e in set(v34["era"])]
+        _vall = v34[v34["era"] == ERA_ALL]
+        _nnear = (0 if e34 is None else
+                  int(((e34["margin"] == MARGIN_NEAR) & (e34["horizon"] == "H20")).sum()))
+        A(f"**THE VERDICT IS KEYED ON THE ERA AND EVERY FILED ROW SAYS WHICH ERA IT WAS "
+          f"JUDGED ON.** A prior build of this table filed {len(_vall)} rows keyed "
+          f"(lens, scale_kind, asset) with NO era column at all, silently judged on full "
+          f"history, while BOTH of its inputs were filed three ways per era exactly as "
+          f"census lean C-h orders: `height_toll` {len(h34)} rows keyed "
+          f"(asset, lens, scale_kind, era), and the edge leg's near-edge MARGIN rows "
+          f"{_nnear} at H20 on the same key. The collapse dropped a whole dimension of "
+          f"the grid with no declaration on the row — and the split REVERSES this "
+          f"section's own former headline. The table now carries {len(v34)} rows and "
+          f"EVERY ONE OF THEM IS PRINTED BELOW [review round 3, blocking finding].")
         A("")
-        _npass = int(v34["verdict_pass"].sum())
-        _nprov = int(v34["provisional"].sum())
-        A(f"**HEADLINE COUNT: {_npass} of {len(v34)} filed rows PASS the conjunction; "
-          f"{_nprov} of {len(v34)} are PROVISIONAL (below the {PROVISIONAL_MIN_N}-range "
-          f"floor on one leg or the other).**")
+        A("**THE HEADLINE COUNT IS NOT ONE NUMBER — IT IS THREE, AND THEY ARE THREE "
+          "DIFFERENT ROW SETS.**")
         A("")
-        A("**PASS / FAIL count per (lens, scale kind), over the 17 single assets** — "
+        A("| era | window | rows | **PASS** | FAIL | provisional | POOLED rows PASSing |")
+        A("|---|---|---:|---:|---:|---:|---:|")
+        _npass_era = {}
+        for era in _eras:
+            g = v34[v34["era"] == era]
+            _npass_era[era] = int(g["verdict_pass"].sum())
+            _pool = g[g["asset"].astype(str).str.startswith("POOLED:")]
+            A(f"| {era} | "
+              + ("the FULL corridor (tuning + holdout)" if era == ERA_ALL
+                 else (f"anchors closing <= {ERA_BOUNDARY_ISO}" if era == ERA_TUNING
+                       else f"anchors closing after {ERA_BOUNDARY_ISO}"))
+              + f" | {len(g)} | **{_npass_era[era]}** | "
+              f"{len(g) - _npass_era[era]} | {int(g['provisional'].sum())} | "
+              f"{int(_pool['verdict_pass'].sum())} of {len(_pool)} |")
+        A("")
+        A("**THE PASS COUNT PER ERA: "
+          + " · ".join(f"era {era} = {_npass_era[era]} PASS" for era in _eras)
+          + f", out of {len(_vall)} rows each; {int(v34['verdict_pass'].sum())} of "
+          f"{len(v34)} filed rows in all.** The era is not a filter over one answer; "
+          "it is part of the question, and the three answers name different rows.")
+        A("")
+        A("**PASS / FAIL count per (lens, scale kind, ERA), over the 17 single assets** — "
           "the pools are counted separately below because a pool is not an 18th asset.")
         A("")
-        A("| lens | scale | assets PASS | assets FAIL | height PASS | edge PASS | "
+        A("| lens | scale | era | assets PASS | assets FAIL | height PASS | edge PASS | "
           "provisional |")
-        A("|---|---|---:|---:|---:|---:|---:|")
+        A("|---|---|---|---:|---:|---:|---:|---:|")
         _sing = v34[~v34["asset"].astype(str).str.startswith("POOLED:")]
-        for (ln, kd), g in _sing.groupby(["lens", "scale_kind"], sort=True):
-            A(f"| {ln} | {kd} | **{int(g['verdict_pass'].sum())}/{len(g)}** | "
-              f"{int((~g['verdict_pass']).sum())}/{len(g)} | "
-              f"{int(g['gate_height_pass'].sum())}/{len(g)} | "
-              f"{int(g['gate_edge_fade_pass'].sum())}/{len(g)} | "
-              f"{int(g['provisional'].sum())}/{len(g)} |")
+        for (ln, kd), g0 in _sing.groupby(["lens", "scale_kind"], sort=True):
+            for era in _eras:
+                g = g0[g0["era"] == era]
+                if not len(g):
+                    continue
+                A(f"| {ln} | {kd} | {era} | **{int(g['verdict_pass'].sum())}/{len(g)}** | "
+                  f"{int((~g['verdict_pass']).sum())}/{len(g)} | "
+                  f"{int(g['gate_height_pass'].sum())}/{len(g)} | "
+                  f"{int(g['gate_edge_fade_pass'].sum())}/{len(g)} | "
+                  f"{int(g['provisional'].sum())}/{len(g)} |")
         A("")
-        A("**THE WHOLE GRID, ROW BY ROW.** `prov` = provisional under lean C-g. A "
-          "PROVISIONAL row is FILED and readable as data and is REFUSED by "
-          "`height_vs_toll_verdict()` unless the caller passes "
-          "`allow_provisional=True`.")
+        # ── THE ROWS WHOSE VERDICT MOVES WITH THE ERA, NAMED FROM THE TABLE ──
+        _by: dict = {}
+        for r in v34.itertuples():
+            _by.setdefault((r.lens, r.scale_kind, r.asset), {})[r.era] = r
+        _moves = sorted(k for k, g in _by.items()
+                        if len({bool(g[e].verdict_pass) for e in _eras if e in g}) > 1)
+        A(f"**THE ROWS WHOSE VERDICT CHANGES WITH THE ERA — ALL {len(_moves)} OF THEM, "
+          f"NAMED.** Computed here from the filed table, not asserted: every "
+          f"(lens, scale_kind, asset) whose `verdict_pass` is not the same on all "
+          f"{len(_eras)} eras. A reader who takes one of these rows without its era has "
+          f"taken the wrong answer.")
         A("")
-        A("| lens | scale | asset | n ranges | ratio median | share<1 | HEIGHT | "
-          "edge n | edge ranges | edge median term | toll | edge NET (H20) | EDGE-FADE | "
-          "prov | **VERDICT** |")
-        A("|---|---|---|---:|---:|---:|---|---:|---:|---:|---:|---:|---|---|---|")
-        for r in v34.sort_values(["lens", "scale_kind", "asset"]).itertuples():
-            A(f"| {r.lens} | {r.scale_kind} | {r.asset} | {int(r.n_ranges):,} | "
+        A("| lens | scale | asset | " + " | ".join(f"**{e}**" for e in _eras)
+          + " | " + " | ".join(f"net {e}" for e in _eras)
+          + " | " + " | ".join(f"n_ranges {e}" for e in _eras) + " |")
+        A("|---|---|---|" + "---|" * len(_eras) + "---:|" * (2 * len(_eras)))
+        for k in _moves:
+            g = _by[k]
+            A(f"| {k[0]} | {k[1]} | {k[2]} | "
+              + " | ".join(("**PASS**" if bool(g[e].verdict_pass) else "FAIL")
+                           if e in g else "—" for e in _eras)
+              + " | " + " | ".join(f"{float(g[e].edge_net_h20):+.6f}" if e in g else "—"
+                                   for e in _eras)
+              + " | " + " | ".join(f"{int(g[e].n_ranges):,}" if e in g else "—"
+                                   for e in _eras) + " |")
+        A("")
+        # ── the three rows the review named, said plainly ─────────────────────
+        def _vrow(lens_, kind_, asset_, era_):
+            z = v34[(v34["lens"] == lens_) & (v34["scale_kind"] == kind_)
+                    & (v34["asset"] == asset_) & (v34["era"] == era_)]
+            return z.iloc[0] if len(z) else None
+
+        A("**WHAT THE ERA SPLIT DOES TO THE POOLED PANELS — the three reversals, by "
+          "name.**")
+        A("")
+        for lens_, kind_, asset_, what in (
+                ("1d", "frozen3.0", POOL_CLASSIC5,
+                 "the ONE pooled row that PASSES on full history"),
+                ("1d", "frozen3.0", POOL_ALL, "the pooled 1d panel at the frozen pin"),
+                ("1d", "calibrated", POOL_ALL, "the pooled 1d panel at the fitted SCALE"),
+                ("4h", "frozen3.0", POOL_CLASSIC5,
+                 "a pooled panel that FAILS on full history and PASSES OUT OF SAMPLE"),
+                ("1d", "frozen3.0", POOL_UNSEEN12,
+                 "the out-of-sample sister of the sole pooled PASS")):
+            rs = {e: _vrow(lens_, kind_, asset_, e) for e in _eras}
+            if any(r is None for r in rs.values()):
+                continue
+            A(f"- **{lens_} | {kind_} | {asset_}** — {what}: "
+              + " · ".join(
+                  f"**{e}** n_ranges {int(rs[e]['n_ranges']):,} / edge_n_ranges "
+                  f"{int(rs[e]['edge_n_ranges']):,} / edge_n {int(rs[e]['edge_n']):,} / "
+                  f"net {float(rs[e]['edge_net_h20']):+.6f} / HEIGHT "
+                  f"{'PASS' if bool(rs[e]['gate_height_pass']) else 'FAIL'} / EDGE "
+                  f"{'PASS' if bool(rs[e]['gate_edge_fade_pass']) else 'FAIL'} -> "
+                  f"**{'PASS' if bool(rs[e]['verdict_pass']) else 'FAIL'}**"
+                  for e in _eras))
+        A("")
+        _c5 = {e: _vrow("1d", "frozen3.0", POOL_CLASSIC5, e) for e in _eras}
+        _u12 = {e: _vrow("1d", "frozen3.0", POOL_UNSEEN12, e) for e in _eras}
+        if all(x is not None for x in list(_c5.values()) + list(_u12.values())):
+            A(f"**THE SOLE POOLED PASS ON FULL HISTORY IS A SEEN-PANEL, TUNING-ERA "
+              f"ARTEFACT, AND THIS SECTION SAYS SO.** 1d | frozen3.0 | "
+              f"{POOL_CLASSIC5} is the only pooled row that clears the conjunction on "
+              f"era ALL ({float(_c5[ERA_ALL]['edge_net_h20']):+.6f} ATR over "
+              f"{int(_c5[ERA_ALL]['edge_n']):,} near-edge entries from "
+              f"{int(_c5[ERA_ALL]['edge_n_ranges']):,} confirmed ranges). Split by era it "
+              f"is {float(_c5[ERA_TUNING]['edge_net_h20']):+.6f} on the TUNING era "
+              f"(PASS) and {float(_c5[ERA_HOLDOUT]['edge_net_h20']):+.6f} on the "
+              f"HOLDOUT (FAIL — both legs fail: "
+              f"{str(_c5[ERA_HOLDOUT]['gate_height_fail_reason'])}; "
+              f"{str(_c5[ERA_HOLDOUT]['gate_edge_fade_fail_reason'])}). "
+              f"{POOL_CLASSIC5} is the SEEN panel. Its out-of-sample sister at the same "
+              f"lens and scale, {POOL_UNSEEN12}, is "
+              f"{float(_u12[ERA_ALL]['edge_net_h20']):+.6f} on ALL and "
+              f"{float(_u12[ERA_HOLDOUT]['edge_net_h20']):+.6f} on the HOLDOUT and "
+              f"NEVER PASSES on any era. **P-BRK-S1 IS SCORED ON THE HOLDOUT; the "
+              f"holdout row is the row it must read, and that row FAILS.**")
+            A("")
+        pa = v34[(v34["asset"] == POOL_ALL) & (v34["scale_kind"] == "frozen3.0")
+                 & (v34["era"] == ERA_ALL)]
+        fails = sorted(pa[~pa["verdict_pass"]]["lens"])
+        _P = v34[v34["verdict_pass"]]
+        _pa_any = v34[v34["asset"] == POOL_ALL]
+        _pa_pass = _pa_any[_pa_any["verdict_pass"]]
+        A(f"**ON FULL HISTORY (era = ALL) THE CONJUNCTION FAILS ON EVERY POOLED:ALL ROW: "
+          f"{', '.join(fails) if fails else 'NO LENS'}"
+          + (" — on every lens measured, on both scale kinds." if len(fails) == len(set(pa["lens"]))
+             else ".")
+          + "** The EDGE-FADE leg is what fails there. **AND THAT SENTENCE IS TRUE OF "
+          "era = ALL ALONE — IT IS NOT TRUE OF THE GRID.** A prior build of this digest "
+          "printed it in bold with no era named at all, over a verdict table that had "
+          "silently collapsed to full history. On the TUNING era "
+          + (" · ".join(
+              f"1d {r.scale_kind} POOLED:ALL PASSES (n_ranges {int(r.n_ranges):,}, "
+              f"edge_n_ranges {int(r.edge_n_ranges):,}, net {float(r.edge_net_h20):+.6f})"
+              for r in _pa_pass.sort_values(["lens", "scale_kind", "era"]).itertuples())
+             if len(_pa_pass) else "no POOLED:ALL row passes on any era")
+          + ". Under LEDGER.md:834 the conjunction is what governs the POOLED:ALL "
+          "evidence, so **no range-trading contract is drafted on the pooled evidence "
+          "of the full corridor** — and any drafting argument built on the tuning era "
+          "is an in-sample argument and must say so.")
+        A("")
+        A("**THE WHOLE GRID, ROW BY ROW, EVERY ERA.** `prov` = provisional under lean "
+          "C-g, applied WITHIN the era. A PROVISIONAL row is FILED and readable as data "
+          "and is REFUSED by `height_vs_toll_verdict()` unless the caller passes "
+          "`allow_provisional=True`. The reader takes the era as an argument — "
+          "`height_vs_toll_verdict(lens, asset=…, scale_kind=…, era=…)` — and the dict "
+          "it returns states the era it was judged on in `era` and `era_judged`.")
+        A("")
+        A("| lens | scale | asset | **era** | n ranges | ratio median | share<1 | "
+          "HEIGHT | edge n | edge ranges | edge median term | toll | edge NET (H20) | "
+          "EDGE-FADE | prov | **VERDICT** |")
+        A("|---|---|---|---|---:|---:|---:|---|---:|---:|---:|---:|---:|---|---|---|")
+        _eord = {e: i for i, e in enumerate(ERAS)}
+        for r in v34.assign(_eo=v34["era"].map(_eord)).sort_values(
+                ["lens", "scale_kind", "asset", "_eo"]).itertuples():
+            A(f"| {r.lens} | {r.scale_kind} | {r.asset} | {r.era} | "
+              f"{int(r.n_ranges):,} | "
               f"{r.ratio_median:.2f} | {r.share_ratio_lt_1:.6g} | "
               f"{'PASS' if r.gate_height_pass else 'FAIL'} | {int(r.edge_n):,} | "
               f"{int(r.edge_n_ranges):,} | "
@@ -3533,28 +3806,22 @@ def _digest_r34(root: Path, A) -> None:
               f"{'**YES**' if r.provisional else 'no'} | "
               f"{'**PASS**' if r.verdict_pass else '**FAIL**'} |")
         A("")
-        pa = v34[(v34["asset"] == POOL_ALL) & (v34["scale_kind"] == "frozen3.0")]
-        fails = sorted(pa[~pa["verdict_pass"]]["lens"])
-        _P = v34[v34["verdict_pass"]]
-        A(f"**THE CONJUNCTION FAILS ON EVERY POOLED:ALL ROW: "
-          f"{', '.join(fails) if fails else 'NO LENS'}"
-          + (" — on every lens measured, on both scale kinds." if len(fails) == len(set(pa["lens"]))
-             else ".")
-          + "** The EDGE-FADE leg is what fails there. Under LEDGER.md:834 the "
-          "conjunction is what governs the POOLED:ALL evidence, so **no range-trading "
-          "contract is drafted on the pooled evidence.**")
-        A("")
         if len(_P):
             A(f"**AND THE ROWS THAT PASS ARE NAMED, NOT BURIED — {len(_P)} of "
-              f"{len(v34)}.** They are filed, they are served by the read interface, and "
-              "a BRK author who calls "
-              "`height_vs_toll_verdict(lens, asset=…, scale_kind=…)` gets them:")
+              f"{len(v34)} filed rows ("
+              + " / ".join(f"{era} {_npass_era[era]}" for era in _eras)
+              + ").** They are filed, they are served by the read interface, and a BRK "
+              "author who calls "
+              "`height_vs_toll_verdict(lens, asset=…, scale_kind=…, era=…)` gets them — "
+              "FOR THE ERA HE ASKS FOR, and for no other:")
             A("")
-            A("| lens | scale | asset | n ranges | edge ranges | edge n | edge NET | "
-              "prov |")
-            A("|---|---|---|---:|---:|---:|---:|---|")
-            for r in _P.sort_values(["lens", "scale_kind", "asset"]).itertuples():
-                A(f"| {r.lens} | {r.scale_kind} | {r.asset} | {int(r.n_ranges):,} | "
+            A("| lens | scale | asset | **era** | n ranges | edge ranges | edge n | "
+              "edge NET | prov |")
+            A("|---|---|---|---|---:|---:|---:|---:|---|")
+            for r in _P.assign(_eo=_P["era"].map(_eord)).sort_values(
+                    ["lens", "scale_kind", "asset", "_eo"]).itertuples():
+                A(f"| {r.lens} | {r.scale_kind} | {r.asset} | {r.era} | "
+                  f"{int(r.n_ranges):,} | "
                   f"{int(r.edge_n_ranges):,} | {int(r.edge_n):,} | "
                   f"{r.edge_net_h20:+.6f} | "
                   f"{'**YES**' if r.provisional else 'no'} |")
@@ -3566,16 +3833,21 @@ def _digest_r34(root: Path, A) -> None:
               "law admitted rested on a sample the estate's own lean C-g calls "
               "provisional.")
             A("")
-        A("**WHAT MOVED, AND WHAT DID NOT.** The conjunction is unchanged; what changed "
-          f"is that both legs now carry the estate's declared sample floor of "
-          f"{PROVISIONAL_MIN_N} and that the edge leg counts that floor in CONFIRMED "
-          "RANGES rather than in-range bars. SENSITIVITY, printed so the floor cannot be "
-          "moved quietly — the number of the "
-          f"{len(v34)} filed rows that would PASS the conjunction at each floor, "
-          "recomputed here from the filed columns:")
+        A("**WHAT MOVED, AND WHAT DID NOT.** The conjunction is unchanged; the floors "
+          f"are unchanged ({PROVISIONAL_MIN_N} confirmed ranges on both legs, the edge "
+          "leg counting in RANGES and not in in-range bars). WHAT MOVED is the KEY: the "
+          "verdict is filed on (lens, scale_kind, asset, ERA) and the floors are applied "
+          "WITHIN the era rather than inherited from full history. The gate law's sha "
+          "moved with it, because the law's own text used to say the edge leg was "
+          "measured 'in the ALL era' and that is no longer what the code does. "
+          "SENSITIVITY, printed so the floor cannot be moved quietly — the number of "
+          "filed rows that would PASS the conjunction at each floor, recomputed here "
+          "from the filed columns, PER ERA:")
         A("")
-        A("| floor (ranges, both legs) | rows PASSing | POOLED:ALL rows PASSing |")
-        A("|---:|---:|---:|")
+        A("| floor (ranges, both legs) | "
+          + " | ".join(f"rows PASSing ({e})" for e in _eras)
+          + " | " + " | ".join(f"POOLED:ALL ({e})" for e in _eras) + " |")
+        A("|---:|" + "---:|" * (2 * len(_eras)))
         for fl in (0, 10, PROVISIONAL_MIN_N, 100):
             hp = ((v34["n_ranges"] >= max(fl, 1))
                   & (v34["ratio_median"] >= HEIGHT_RATIO_MIN)
@@ -3583,13 +3855,18 @@ def _digest_r34(root: Path, A) -> None:
             ep = ((v34["edge_n_ranges"] >= max(fl, 1)) & (v34["edge_n"] > 0)
                   & (v34["edge_net_h20"] > 0))
             tot = hp & ep
-            A(f"| {fl} | {int(tot.sum())} | "
-              f"{int((tot & (v34['asset'] == POOL_ALL)).sum())} |")
+            A(f"| {fl} | "
+              + " | ".join(f"{int((tot & (v34['era'] == e)).sum())}" for e in _eras)
+              + " | " + " | ".join(
+                  f"{int((tot & (v34['era'] == e) & (v34['asset'] == POOL_ALL)).sum())}"
+                  for e in _eras) + " |")
         A("")
         f5 = pa[pa["lens"] == "5m"]
         if len(f5):
             r5 = f5.iloc[0]
-            A(f"**THE 5m ANSWER, SAID PLAINLY AND NOT SOFTENED.** At 5m the near-edge "
+            _h5 = _vrow("5m", "frozen3.0", POOL_ALL, ERA_HOLDOUT)
+            A(f"**THE 5m ANSWER, SAID PLAINLY AND NOT SOFTENED (era = ALL).** At 5m the "
+              f"near-edge "
               f"gross median term over {int(r5.edge_n):,} in-range entries is "
               f"{r5.edge_median_term_h20:+.4f} ATR — *positive* — and the binding "
               f"round-trip toll is {r5.edge_toll_atr:.4f} ATR. The toll is "
@@ -3602,9 +3879,13 @@ def _digest_r34(root: Path, A) -> None:
               "at frozen SCALE 3.0; DIE n = 32,733 NET -0.8196 ATR), and this build "
               "reproduces that DIE row independently from the event walk to "
               f"{float(a34[(a34.asset == POOL_ALL) & (a34.lens == '5m') & (a34.scale_kind == 'frozen3.0') & (a34.era == ERA_ALL) & (a34.horizon == 'H20') & (a34.variant == ACC_DIE)]['net'].iloc[0]):+.6f}. "
-              "**P-BRK-S1 MUST CARRY THIS.**")
+              + (f"AND ON THE ERA P-BRK-S1 IS ACTUALLY SCORED IN — the HOLDOUT — the "
+                 f"same panel is net {float(_h5['edge_net_h20']):+.6f} ATR over "
+                 f"{int(_h5['edge_n']):,} entries and FAILS too; the 5m answer does not "
+                 f"depend on the era, and this section now shows that rather than "
+                 f"asserting it. " if _h5 is not None else "")
+              + "**P-BRK-S1 MUST CARRY THIS.**")
             A("")
-
 
 def _age_sentence(e34, lens: str) -> str:
     """The age profile STATED FROM THE DATA, never asserted: monotonicity is
