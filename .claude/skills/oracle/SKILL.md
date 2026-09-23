@@ -243,7 +243,7 @@ ORACLE on-demand-full · <date> · lens 4h
   BTCUSDT        ARMED      heat= 6.248 levels= 35 clusters= 14 atr_d=2376.77
   …one line per roster symbol…
   fired events in the last 24h: <n> across <m> (lens, class) cells
-  edition Vol. I · No. <n> · Morning Edition
+  edition Vol. I · No. <n> · <Morning|Evening> Edition
   /Users/luis/Naiad/briefs/oracle/oracle_<date>.html <bytes> B sha256 <sha>
   /Users/luis/Naiad/research_outputs/oracle/tape/oracle_tape_<date>.parquet <bytes> B sha256 <sha>
   /Users/luis/Naiad/research_outputs/oracle/tape_ranges/oracle_tape_ranges_<date>.parquet <bytes> B sha256 <sha>
@@ -255,7 +255,11 @@ ORACLE on-demand-full · <date> · lens 4h
   selfcheck log -> /Users/luis/Naiad/research_outputs/oracle/calibration/selfcheck_log.jsonl
 ```
 
-The `edition` line reads `Refresh Edition` on `on-demand-refresh`. `RUN FAILED:`
+The `edition` line reads `Refresh Edition` on `on-demand-refresh`, at any hour. On
+`on-demand-full` the word follows the hour the edition is printed, on the Buenos Aires
+clock (AMENDMENT A-OR1-1 vii: "full before 12:00 BA = Morning, after = Evening"): a
+full edition printed at 22:26 is the `Evening Edition`, and the Colophon's `Printed
+<date> <HH:MM> Buenos Aires (…)` line says when. `RUN FAILED:`
 followed by a traceback means there is no new render; the row is still written,
 with verdict FAIL.
 

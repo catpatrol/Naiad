@@ -79,6 +79,15 @@ only markup, order, headings and ink. The build document carries the block-by-bl
 comparison of this template against the pre-STEP-F one over one view; F-BR-15 pins
 the sections, the captions, the colophon, the inks and the LATE EDITION band.
 
+THE EDITION'S WORD — AMENDMENT A-OR1-1 clause vii (operator, 2026-09-22), verbatim:
+"Edition word follows verb and hour: full before 12:00 BA = Morning, after = Evening;
+refresh = Refresh. A paper printed at night does not call itself the morning's."
+run() takes the print time ONCE, from the same `now` its date comes from, and hands it
+to render_html; edition_name() reads its hour on the Buenos Aires wall clock
+(print_time_ba: ZoneInfo(ZONE), never the machine's zone), and the Colophon prints
+that time and the word it gave (print_line), so the edition carries its own evidence.
+Template only: the ear's format is STEP F's, only its word follows the law (F-BR-15).
+
 C-0, CLOSED AT OR-1 STEP B (2026-09-21). From 2026-08-16 the D-7 logger wrote
 the LITERAL `"maturity_withheld_fraction": 0.0` for every asset on every run,
 and recorded neither family-cap binding nor target buckets, although BR-2
@@ -387,8 +396,9 @@ REGISTER: dict[str, dict] = {
     },
     # THE TYPESETTING'S CONSTANTS (OR-1 STEP F, 2026-09-21): THE DAILY ORACLE. STEP F is
     # "semantics untouched, template only", so every row below is read by render_html,
-    # its typesetting helpers (page_css, mantle_caption, edition_name, edition_count,
-    # front_page, staleness_banner, svg_spaghetti) and run()'s one masthead number, and
+    # its typesetting helpers (page_css, mantle_caption, edition_verb, print_time_ba,
+    # edition_name, print_line, edition_count, front_page, staleness_banner,
+    # svg_spaghetti) and run()'s one masthead number and one print time, and
     # by NOTHING that computes a level, a word, a card or a row of the tape. Six rows
     # are the contract's own words and are 'ruled': True. Two are this build's reading
     # of words the contract leaves open: 'ruled': False, so they print in the rendered
@@ -429,10 +439,20 @@ REGISTER: dict[str, dict] = {
         "value": {"title": "THE DAILY ORACLE", "volume": "Vol. I", "city": "Buenos Aires",
                   "price": "Price: one toll"},
         "ruled": True,
-        "source": "OR-1 STEP F, verbatim: 'MASTHEAD \"THE DAILY ORACLE\" · ears: left \"Vol. I · "
-                  "No. <edition count>\", right \"Buenos Aires · <date> · <Morning|Refresh> "
-                  "Edition · Price: one toll\"'. <date> is run()'s date_str; the edition's "
-                  "name is edition_name(slot); the count is REGISTER['EDITION_COUNT'].",
+        "source": "OR-1 STEP F as amended by A-OR1-1 vii: 'MASTHEAD \"THE DAILY ORACLE\" · "
+                  "ears: left \"Vol. I · No. <edition count>\", right \"Buenos Aires · <date> "
+                  "· <Morning|Evening|Refresh> Edition · Price: one toll\"'. AMENDMENT "
+                  "A-OR1-1 clause vii (operator, 2026-09-22), verbatim: \"Edition word "
+                  "follows verb and hour: full before 12:00 BA = Morning, after = Evening; "
+                  "refresh = Refresh. A paper printed at night does not call itself the "
+                  "morning's.\" <date> is run()'s date_str; the edition's word is "
+                  "edition_name(slot, printed_at): the refresh verb (a slot naming "
+                  "'refresh') is Refresh at any hour; the full verb (every other slot) is "
+                  "Morning while the print time's Buenos Aires wall-clock hour is before 12 "
+                  "and Evening from 12:00:00 on. run() takes the print time ONCE and the "
+                  "Colophon prints it: 'Printed <YYYY-MM-DD HH:MM> Buenos Aires (<word> "
+                  "Edition: <verb>, slot <slot> · A-OR1-1 vii)'. The count is "
+                  "REGISTER['EDITION_COUNT'].",
     },
     "SECTIONS": {
         "value": ("Front Page", "The Docket", "The Watch", "Tide Tables", "Telegrams",
@@ -1665,10 +1685,61 @@ def mantle_caption() -> str:
     return REGISTER["MANTLE_CAPTION"]["value"].format(bars=REGISTER["MANTLE_BARS"]["value"])
 
 
-def edition_name(slot: str) -> str:
-    """'Refresh Edition' for any slot that names a refresh (the 16:00 'refresh', the
-    skill's 'on-demand-refresh'); 'Morning Edition' for every other slot."""
-    return "Refresh Edition" if "refresh" in str(slot).lower() else "Morning Edition"
+# AMENDMENT A-OR1-1 clause vii (operator, 2026-09-22), verbatim: "Edition word follows
+# verb and hour: full before 12:00 BA = Morning, after = Evening; refresh = Refresh. A
+# paper printed at night does not call itself the morning's." Until this clause the word
+# followed the verb alone ('Morning Edition' for every slot that was not a refresh), and
+# the one on-demand edition on disk, briefs/oracle/oracle_2026-09-21.html, printed at
+# 22:26 Buenos Aires, calls itself the Morning Edition. It is REPORTED, never rewritten.
+EDITION_NOON_BA = 12      # vii's "12:00 BA": the first hour of the Evening Edition
+
+
+def edition_verb(slot: str) -> str:
+    """vii's VERB, read off the slot: 'refresh' for any slot that names a refresh (the
+    historical 16:00 'refresh', the skill's 'on-demand-refresh'); 'full' for every other
+    slot ('full', 'on-demand-full', a catch-up, a --no-fetch full, a fixture's)."""
+    return "refresh" if "refresh" in str(slot).lower() else "full"
+
+
+def print_time_ba(printed_at: datetime) -> datetime:
+    """The print time on the BUENOS AIRES wall clock: converted EXPLICITLY to
+    ZoneInfo(ZONE), never read in the machine's local zone (vii's hour is BA's, whatever
+    zone the laptop is set to). A NAIVE datetime is refused (ValueError): its zone would be
+    whatever the machine says, which is exactly what vii's hour may not depend on."""
+    if printed_at.tzinfo is None or printed_at.utcoffset() is None:
+        raise ValueError(f"A-OR1-1 vii: the print time {printed_at!r} is naive — its hour "
+                         f"would be the machine's zone's, not Buenos Aires'; hand an aware "
+                         f"datetime")
+    return printed_at.astimezone(ZoneInfo(ZONE))
+
+
+def edition_name(slot: str, printed_at: datetime | None) -> str:
+    """The edition's word under A-OR1-1 vii: VERB and HOUR.
+
+    The refresh verb (edition_verb) -> 'Refresh Edition', at any hour; `printed_at` is
+    not read. The full verb -> by the HOUR of `printed_at` on the Buenos Aires wall clock
+    (print_time_ba): 'Morning Edition' while that hour is before EDITION_NOON_BA,
+    'Evening Edition' from it on.
+    THE BOUNDARY, stated: 12:00:00 Buenos Aires EXACTLY is EVENING (noon is not "before
+    12:00"); 11:59:59.999999 is Morning; 00:00:00 is Morning again. A full verb with no
+    print time has no hour for vii to read and is REFUSED (ValueError), never defaulted:
+    run() hands every edition its print time, and render_html hands a proof its as-of."""
+    if edition_verb(slot) == "refresh":
+        return "Refresh Edition"
+    if printed_at is None:
+        raise ValueError(f"A-OR1-1 vii: slot {slot!r} is the full verb and no print time was "
+                         f"handed — the edition word follows the hour, and there is none")
+    return ("Morning Edition" if print_time_ba(printed_at).hour < EDITION_NOON_BA
+            else "Evening Edition")
+
+
+def print_line(slot: str, printed_at: datetime) -> str:
+    """The edition's own evidence for its word, printed in the Colophon: the print time in
+    Buenos Aires to the minute, the word vii gave, the verb and the slot. Plain text (the
+    caller escapes it). F-BR-15 reads it back and holds the ear to it."""
+    return (f"Printed {print_time_ba(printed_at).strftime('%Y-%m-%d %H:%M')} Buenos Aires "
+            f"({edition_name(slot, printed_at)}: {edition_verb(slot)}, slot {slot} · "
+            f"A-OR1-1 vii)")
 
 
 def edition_count(date_str: str) -> int:
@@ -1778,12 +1849,25 @@ def front_page(view: dict) -> dict:
 
 
 def render_html(view: dict, date_str: str, canon_sha: str, *,
-                edition_no: int | None = None, slot: str = "full") -> str:
-    """The page. `edition_no` and `slot` are the masthead's two variables and are
-    KEYWORDS so that every older caller — the fixtures, the wrapper's per-edition self-check,
-    the movers fixtures — still calls render_html(view, date_str, canon_sha) and still
-    gets a page. A render nobody numbered is a PROOF, not an edition, and says so:
-    'No. —'. run() numbers the real ones (edition_count)."""
+                edition_no: int | None = None, slot: str = "full",
+                printed_at: datetime | None = None) -> str:
+    """The page. `edition_no`, `slot` and `printed_at` are the masthead's three variables
+    and are KEYWORDS so that every older caller — the fixtures, the wrapper's per-edition
+    self-check, the movers fixtures — still calls render_html(view, date_str, canon_sha)
+    and still gets a page. A render nobody numbered is a PROOF, not an edition, and says
+    so: 'No. —'. run() numbers the real ones (edition_count).
+
+    `printed_at` is the print time (A-OR1-1 vii), an AWARE datetime taken ONCE by run():
+    the ear's word follows its Buenos Aires hour and the Colophon prints it (print_line).
+    render_html NEVER READS THE CLOCK FOR THE PRINT TIME, so the ear's word and the
+    'Printed' line are functions of what it is handed. That is the whole claim — the page
+    is NOT byte for byte a function of its inputs: the A2-7 LATE EDITION band
+    (staleness_banner) is judged against the wall clock AT RENDER TIME, so it can rise
+    between two renders of the same inputs, and while it is up its printed age ticks.
+    A render handed no print time is UNTIMED (a second, separate property from the
+    PROOF above, which is about the number): it prints no 'Printed' line, the Colophon
+    says it is untimed, and its ear reads vii at the view's as-of bar — a stamp it was
+    handed, not the wall clock."""
     lens = view["lens"]
     a0 = view["assets"]
     as_of = datetime.fromtimestamp(view["as_of_ms"] / 1000, timezone.utc)
@@ -1798,7 +1882,18 @@ def render_html(view: dict, date_str: str, canon_sha: str, *,
         return " · ".join(f"<span>{html.escape(str(x), quote=False)}</span>" for x in items)
 
     ear_left = _ear(mast["volume"], f"No. {'—' if edition_no is None else int(edition_no)}")
-    ear_right = _ear(mast["city"], date_str, edition_name(slot), mast["price"])
+    # A-OR1-1 vii: the word follows the verb and the print time's Buenos Aires hour
+    ear_right = _ear(mast["city"], date_str,
+                     edition_name(slot, as_of if printed_at is None else printed_at),
+                     mast["price"])
+    if printed_at is None:
+        printed = html.escape(
+            f"UNTIMED: this render was handed no print time (run() hands every "
+            f"edition its own), so it carries no print line; its ear reads A-OR1-1 vii at "
+            f"the as-of bar, {print_time_ba(as_of).strftime('%Y-%m-%d %H:%M')} Buenos Aires.",
+            quote=False)
+    else:
+        printed = html.escape(print_line(slot, printed_at), quote=False)
 
     board = []
     for a in a0:
@@ -2001,6 +2096,7 @@ posture canon v1 sha256 {canon_sha} · {shas} ·
 displacements are (EMA−price)/ATR · analytics {ANALYTICS_VERSION} sha {analytics_sha()} ·
 net R:R = {html.escape(REGISTER['NET_RR_FORM']['value'])}, toll from the ORACLE GRID
 (census-2B, oracle_grid.parquet) — no cost-free number prints on this page.<br>
+{printed}<br>
 CERTIFIED: {html.escape(' · '.join(CERTIFIED))}.<br>
 NOT CERTIFIED: {html.escape(' · '.join(NOT_CERTIFIED))}.<br>
 No claim is made or implied. Nothing here is scored. Promotion requires registration
@@ -2464,10 +2560,15 @@ def run(slot: str = "full", as_of_ms: int | None = None, log=print) -> dict:
     # OR-1 STEP F: the masthead's number and the edition's name. Counted HERE, not in
     # render_html, which stays a function of what it is handed: a fixture that points
     # TAPE_DIR somewhere else between two renders must get the same page twice.
+    # A-OR1-1 vii: the PRINT TIME is `now_ba` above, taken ONCE — the same instant the
+    # date comes from — and handed to render_html, which never reads the clock for it;
+    # edition_name reads its hour on the Buenos Aires wall clock, whatever the machine's
+    # zone. date_str is derived exactly as before (no semantics move).
     edition_no = edition_count(date_str)
     log(f"  edition {REGISTER['MASTHEAD']['value']['volume']} · No. {edition_no} · "
-        f"{edition_name(slot)}")
-    doc = render_html(view, date_str, canon_sha, edition_no=edition_no, slot=slot)
+        f"{edition_name(slot, now_ba)}")
+    doc = render_html(view, date_str, canon_sha, edition_no=edition_no, slot=slot,
+                      printed_at=now_ba)
     out = OUT_DIR / f"oracle_{date_str}.html"
     out.write_text(doc, encoding="utf-8")
     sha = hashlib.sha256(out.read_bytes()).hexdigest()

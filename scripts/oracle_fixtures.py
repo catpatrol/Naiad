@@ -5377,10 +5377,26 @@ def f_br_14() -> None:
 #   · NO WALL CLOCK in the Front Page or The Watch. F-BR-6 renders twice a few
 #     milliseconds apart and cannot see a stamp with minute resolution; here the
 #     module's clock is pushed 400 days on and both sections must not move a byte.
-#   · THE MASTHEAD. The contract's ears; 'Refresh Edition' for a refresh slot, 'Morning
-#     Edition' otherwise; an un-numbered render says 'No. —'; render_html still takes
-#     (view, date_str, canon_sha) — the wrapper's per-edition self-check calls it that way —
-#     and run() is what numbers an edition.
+#   · THE MASTHEAD. The contract's ears, the word per A-OR1-1 vii (below); an un-numbered
+#     render says 'No. —'; render_html still takes (view, date_str, canon_sha) — the
+#     wrapper's per-edition self-check calls it that way — and run() is what numbers an
+#     edition and what times it.
+#   · THE EDITION'S WORD — AMENDMENT A-OR1-1 clause vii (operator, 2026-09-22), verbatim:
+#     "Edition word follows verb and hour: full before 12:00 BA = Morning, after =
+#     Evening; refresh = Refresh. A paper printed at night does not call itself the
+#     morning's." TWO LEGS. (i) THE EDITION UNDER TEST carries its own evidence: exactly
+#     one print line in the Colophon ('Printed <YYYY-MM-DD HH:MM> Buenos Aires (<word>
+#     Edition: <verb>, slot <slot> · A-OR1-1 vii)'), whose word is vii's for its verb
+#     and its hour, and the ear says that word; when the wrapper's selfcheck log holds a
+#     row carrying the page's sha256, that row's slot is the print line's and it was
+#     written no earlier than the printed minute. (ii) THE LAW ITSELF, over a table of
+#     synthetic calls AND real renders (TS_VII_TABLE: 07:00, 11:59, 12:00, 19:17 full,
+#     22:26 on-demand-full, 09:00 refresh, 20:00 on-demand-refresh), the print time
+#     handed in UTC and the PROCESS's local zone forced to UTC for the length of the leg,
+#     so a module that reads the hour in the machine's zone — or reads it off the handed
+#     datetime unconverted — says the wrong word or prints the wrong minute; a naive
+#     print time is refused. And a render handed no print time is UNTIMED: no print line,
+#     and its ear reads vii at the view's as-of bar (the 'plain' render, time-aware).
 #   · THE HEADLINE. "Business possible" is earned by a FRESH trigger only. The posture
 #     engine's own register calls TRIGGERED without its age "MISLEADING on a Board whose
 #     word the operator reads as 'the entry alert is live now'", and the headline is
@@ -5399,12 +5415,20 @@ def f_br_14() -> None:
 # caption and the dark inks, so it is RED here — and in F-BR-14's appendix lookup,
 # which now reads the Colophon — until one edition is printed by the new template.
 # On purpose: a green here about an old page would be a statement about another page.
+# LIKEWISE vii's leg (i): run bare against an edition printed before A-OR1-1 vii (the
+# 2026-09-21 set: printed 22:26 Buenos Aires, its ear says 'Morning Edition', and it
+# carries no print line) it is RED on exactly that — no print line, the selfcheck row
+# and the file's mtime named as witnesses — on purpose, until an edition is printed by
+# this code. That edition is REPORTED, never rewritten. The sandbox suite prints one
+# first.
 #
 # WHAT IT DOES NOT PROVE: that no number moved. That is EVERY OTHER fixture in this
 # file staying green on a fresh render (F-BR-15 is this one; F-BR-16 is the one that
 # says the edition under test was printed from the CURRENT roster), and the
 # block-by-block old-template/new-template comparison in the build document
-# (scratchpad semantic_diff.py); nor that the page is handsome.
+# (or1_transcripts/semantic_diff.py, STEP F over 7a1df59 — its footer declaration
+# predates A-OR1-1 vii — and or1_transcripts/semantic_diff_vii.py, vii's ear word and
+# Colophon line over 3d55988, byte for byte); nor that the page is handsome.
 
 TS_CAPTION = ("rows = threads, rod 5000 top → hem 9 bottom · columns = last 96 bars · "
               "hue = thread above/below price in ATR · dark pinch = knot · hole = unwoven")
@@ -5412,8 +5436,29 @@ TS_PAPER, TS_INK, TS_RED = "#F4ECD8", "#1A1A1A", "#B3261E"
 TS_SERIF = '"Iowan Old Style", Palatino, Georgia, serif'
 TS_TITLE = "THE DAILY ORACLE"
 TS_EAR_LEFT = re.compile(r"^Vol\. I · No\. (\d+|—)$")
-TS_EAR_RIGHT = re.compile(r"^Buenos Aires · (\d{4}-\d{2}-\d{2}) · (Morning|Refresh) Edition · "
-                          r"Price: one toll$")
+TS_EAR_RIGHT = re.compile(r"^Buenos Aires · (\d{4}-\d{2}-\d{2}) · (Morning|Evening|Refresh) "
+                          r"Edition · Price: one toll$")
+# A-OR1-1 vii. "BA" is PINNED HERE, not read off oracle_daily.ZONE: a module whose zone
+# drifted would otherwise be judged in its own drifted zone.
+TS_ZONE = "America/Argentina/Buenos_Aires"
+TS_VII = ("Edition word follows verb and hour: full before 12:00 BA = Morning, after = "
+          "Evening; refresh = Refresh. A paper printed at night does not call itself the "
+          "morning's.")
+# The Colophon's print line, as the operator READS it (_page_text of the <footer>).
+TS_PRINT_LINE = re.compile(r"Printed (\d{4}-\d{2}-\d{2}) (\d{2}):(\d{2}) Buenos Aires "
+                           r"\((Morning|Evening|Refresh) Edition: (full|refresh), slot (\S+) "
+                           r"· A-OR1-1 vii\)")
+# Leg (ii): (slot, Buenos Aires wall clock, the word vii gives) — the words TYPED, not
+# computed, so the table pins the law and not whatever the module says. 12:00 is the
+# stated boundary: noon is not "before 12:00".
+TS_VII_DAY = "2030-01-03"
+TS_VII_TABLE = (("full", "07:00", "Morning"), ("full", "11:59", "Morning"),
+                ("full", "12:00", "Evening"), ("full", "19:17", "Evening"),
+                ("on-demand-full", "22:26", "Evening"), ("refresh", "09:00", "Refresh"),
+                ("on-demand-refresh", "20:00", "Refresh"))
+# the process's local zone for the length of leg (ii): NOT Buenos Aires, so a reading in
+# the machine's zone shows (19:17 Buenos Aires is 22:17 there, 22:26 is 01:26 next day)
+TS_MACHINE_ZONE = "UTC"
 TS_BAND = "LATE EDITION"
 TS_BAND_HEAD = "LATE EDITION — wire stale since {as_of}"
 TS_BAND_DETAIL = "The top-up may not have run"
@@ -5564,7 +5609,7 @@ def _ts_static(doc: str, date: str | None) -> tuple[list[str], dict]:
         bad.append(f"masthead: the left ear reads {ears.get('ear-l')!r}, not 'Vol. I · No. <n>'")
     if not mr:
         bad.append(f"masthead: the right ear reads {ears.get('ear-r')!r}, not 'Buenos Aires · "
-                   f"<date> · <Morning|Refresh> Edition · Price: one toll'")
+                   f"<date> · <Morning|Evening|Refresh> Edition · Price: one toll'")
     elif date is not None and mr.group(1) != date:
         bad.append(f"masthead: the right ear is dated {mr.group(1)}, the edition is {date}")
     # ── the band's phrase, only ever inside the band ─────────────────────────
@@ -5590,7 +5635,10 @@ def _ts_band(doc: str) -> str | None:
 
 
 def _ts_renders() -> dict:
-    """ONE view, rendered five ways. The stale and fresh as-ofs straddle A2-7's limit
+    """ONE view, rendered six ways: fresh, stale, plain, numbered, timed and shifted.
+    'timed' is a numbered full-verb edition handed a print time (19:17 Buenos Aires on
+    TS_VII_DAY), the page vii's leg-(i) plants are cut from when the edition under test
+    has no print line to cut. The stale and fresh as-ofs straddle A2-7's limit
     by TS_MARGIN_MS. The limit is recomputed HERE from the two module constants, so a
     banner that fires on some other rule is caught, not mirrored — but the PERIOD COUNT
     is pinned against A2-7 in _ts_live (TS_LENS_PERIODS), because a limit mirrored off
@@ -5604,13 +5652,21 @@ def _ts_renders() -> dict:
     now_ms = int(datetime.now(timezone.utc).timestamp() * 1000)
     fresh = {**view, "as_of_ms": now_ms - limit + TS_MARGIN_MS}
     stale = {**view, "as_of_ms": now_ms - limit - TS_MARGIN_MS}
+    from zoneinfo import ZoneInfo
+    y, mo, d = map(int, TS_VII_DAY.split("-"))
     out = {"limit_h": limit / 3_600_000,
            "stale_as_of": datetime.fromtimestamp(stale["as_of_ms"] / 1000, timezone.utc)
                                   .strftime("%Y-%m-%dT%H:%MZ"),
            "fresh": OD.render_html(fresh, DATE, canon),
            "stale": OD.render_html(stale, DATE, canon),
            "plain": OD.render_html(view, DATE, canon),
-           "numbered": OD.render_html(view, DATE, canon, edition_no=7, slot="on-demand-refresh")}
+           "plain_as_of_ms": view["as_of_ms"],
+           "numbered": OD.render_html(view, DATE, canon, edition_no=7, slot="on-demand-refresh"),
+           # a TIMED edition (A-OR1-1 vii), printed 19:17 Buenos Aires on the full verb: the
+           # page vii's leg-(i) plants are cut from when the edition under test has no
+           # print line to cut (an edition printed before vii)
+           "timed": OD.render_html(view, DATE, canon, edition_no=7, slot="on-demand-full",
+                                   printed_at=datetime(y, mo, d, 19, 17, tzinfo=ZoneInfo(TS_ZONE)))}
     real_dt = OD.datetime
 
     class _Shifted(real_dt):                       # the module's clock, 400 days on
@@ -5656,13 +5712,25 @@ def _ts_live(renders: dict) -> tuple[list[str], dict]:
                        f"wall-clock is typeset into it")
     _b, plain = _ts_static(renders["plain"], DATE)
     _b, numbered = _ts_static(renders["numbered"], DATE)
-    if (plain["edition"], plain["name"]) != ("—", "Morning"):
-        bad.append(f"masthead: a render nobody numbered reads No. {plain['edition']} · "
-                   f"{plain['name']} Edition, want 'No. —' and 'Morning Edition'")
+    # TIME-AWARE (A-OR1-1 vii): a render nobody numbered and nobody timed is a PROOF on
+    # the full verb, and its ear reads vii at the view's as-of bar, in Buenos Aires —
+    # the hour computed HERE in TS_ZONE, not read off the module
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+    p_at = datetime.fromtimestamp(renders["plain_as_of_ms"] / 1000, ZoneInfo(TS_ZONE))
+    plain_word = _vii_word("full", p_at.hour)
+    if (plain["edition"], plain["name"]) != ("—", plain_word):
+        bad.append(f"masthead: a render nobody numbered or timed (a PROOF, the full verb, as-of "
+                   f"bar {p_at:%Y-%m-%d %H:%M} Buenos Aires) reads No. {plain['edition']} · "
+                   f"{plain['name']} Edition, want 'No. —' and '{plain_word} Edition'")
+    if _ts_vii_read(renders["plain"])[1]:
+        bad.append("masthead: a render handed no print time carries a print line — an "
+                   "UNTIMED render claims a print time nobody gave it")
     if (numbered["edition"], numbered["name"]) != ("7", "Refresh"):
         bad.append(f"masthead: edition_no=7, slot='on-demand-refresh' reads No. "
                    f"{numbered['edition']} · {numbered['name']} Edition, want No. 7 · Refresh")
-    return bad, {"stale_as_of": renders["stale_as_of"], "limit_h": renders["limit_h"]}
+    return bad, {"stale_as_of": renders["stale_as_of"], "limit_h": renders["limit_h"],
+                 "plain_word": plain_word, "plain_at": f"{p_at:%Y-%m-%d %H:%M}"}
 
 
 def _ts_edition_count(counter=None) -> list[str]:
@@ -5727,9 +5795,222 @@ def _ts_headline(fn=None) -> list[str]:
     return bad
 
 
+def _vii_verb(slot: str) -> str:
+    """vii's verb, the fixture's own reading: a slot naming 'refresh' is the refresh verb."""
+    return "refresh" if "refresh" in str(slot).lower() else "full"
+
+
+def _vii_word(slot: str, hour: int) -> str:
+    """vii restated HERE: refresh = Refresh; full before 12:00 BA = Morning, from it Evening."""
+    return "Refresh" if _vii_verb(slot) == "refresh" else ("Morning" if hour < 12 else "Evening")
+
+
+@contextlib.contextmanager
+def _ts_machine_zone(tz: str):
+    """The PROCESS's local zone set to `tz` for the length of the block (TZ + tzset), then
+    put back exactly as it was: what a laptop set to another zone would read."""
+    import time
+    old = os.environ.get("TZ")
+    os.environ["TZ"] = tz
+    time.tzset()
+    try:
+        yield
+    finally:
+        if old is None:
+            os.environ.pop("TZ", None)
+        else:
+            os.environ["TZ"] = old
+        time.tzset()
+
+
+def _ts_vii_read(doc: str) -> tuple[str | None, list[tuple]]:
+    """(the right ear's word, every print line in the Colophon's <footer>) as READ."""
+    head = doc.split("<h2>")[0]
+    ears = {k: _page_text(v) for k, v in
+            re.findall(r'(?s)<div class="ear (ear-[lr])">(.*?)</div>', head)}
+    mr = TS_EAR_RIGHT.match(ears.get("ear-r", ""))
+    foot = re.search(r"(?s)<footer>(.*?)</footer>", _sec(doc, SEC_COLOPHON))
+    lines = TS_PRINT_LINE.findall(_page_text(foot.group(1))) if foot else []
+    return (mr.group(2) if mr else None), lines
+
+
+def _ts_vii_selfcheck(doc: str) -> dict | None:
+    """The wrapper's selfcheck row (the log G-BR2-2 reads) carrying this page's sha256 —
+    the one per-edition record that names the slot the edition was printed under — or
+    None when there is none (a sandbox render, a planted copy, an edition whose checks
+    did not run). A pure read of the log."""
+    import oracle_wrapper as OW
+    if not OW.SELFCHECK.exists():
+        return None
+    sha = hashlib.sha256(doc.encode("utf-8")).hexdigest()
+    rows = []
+    for ln in OW.SELFCHECK.read_text(encoding="utf-8").splitlines():
+        try:
+            r = json.loads(ln)
+        except ValueError:
+            continue
+        if isinstance(r, dict) and r.get("html_sha") == sha:
+            rows.append(r)
+    return rows[-1] if rows else None
+
+
+def _ts_vii_witnesses(doc: str) -> str:
+    """For an edition with no print line: what the disk says about when it was printed —
+    its selfcheck row and its file's mtime, each read in Buenos Aires — so the RED line
+    names the hour vii would have read."""
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+    ba, out = ZoneInfo(TS_ZONE), []
+    row = _ts_vii_selfcheck(doc)
+    if row is not None and row.get("ts"):
+        t = datetime.fromisoformat(row["ts"]).astimezone(ba)
+        out.append(f"the selfcheck row carrying its sha256 (slot {row.get('slot')}) was "
+                   f"written {t:%Y-%m-%d %H:%M} Buenos Aires, which vii calls the "
+                   f"{_vii_word(str(row.get('slot')), t.hour)} Edition")
+    p = OD.OUT_DIR / f"oracle_{DATE}.html"
+    if p.exists() and p.read_text(encoding="utf-8") == doc:
+        t = datetime.fromtimestamp(p.stat().st_mtime, ba)
+        out.append(f"{p.name}'s mtime reads {t:%Y-%m-%d %H:%M} Buenos Aires")
+    return (" (witnesses: " + "; ".join(out) + ")") if out else ""
+
+
+def _ts_vii_page(doc: str, witnesses: bool = False) -> tuple[list[str], dict]:
+    """vii LEG (i), THE EDITION UNDER TEST: its ear's word agrees with the verb and the
+    Buenos Aires hour of its OWN print line; the selfcheck row, when there is one, agrees
+    with the print line's slot and was written no earlier than the printed minute."""
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+    bad: list[str] = []
+    ear, lines = _ts_vii_read(doc)
+    if len(lines) != 1:
+        if lines:
+            bad.append(f"vii (the edition under test): {len(lines)} print lines in the Colophon, "
+                       f"want exactly one")
+        else:
+            bad.append(f"vii (the edition under test): no print line in the Colophon — the "
+                       f"edition carries no evidence of the hour it was printed, so its ear's "
+                       f"'{ear} Edition' cannot be held to A-OR1-1 vii"
+                       + (_ts_vii_witnesses(doc) if witnesses else "")
+                       + ". An edition printed before vii has none: RED by design until one "
+                       "is printed by this code (the sandbox suite prints one)")
+        return bad, {"vii_print": None, "vii_selfcheck": None}
+    day, hh, mm, word, verb, slot = lines[0]
+    want = _vii_word(slot, int(hh))
+    at = f"{day} {hh}:{mm} Buenos Aires"
+    if verb != _vii_verb(slot):
+        bad.append(f"vii (the edition under test): the print line names the {verb} verb for "
+                   f"slot {slot!r}, which is the {_vii_verb(slot)} verb")
+    if word != want:
+        bad.append(f"vii (the edition under test): the print line says the {word} Edition for "
+                   f"{at} on the {_vii_verb(slot)} verb — vii makes that the {want} Edition")
+    if ear != want:
+        bad.append(f"vii (the edition under test): the ear says '{ear} Edition'; its own print "
+                   f"line ({at}, the {_vii_verb(slot)} verb, slot {slot}) makes it the {want} "
+                   f"Edition under vii")
+    row = _ts_vii_selfcheck(doc)
+    seen = None
+    if row is not None:
+        seen = f"slot {row.get('slot')}, written {row.get('ts')}"
+        if row.get("slot") != slot:
+            bad.append(f"vii (the edition under test): the selfcheck row carrying this page's "
+                       f"sha256 names slot {row.get('slot')!r}; the print line says {slot!r}")
+        try:
+            t = datetime.fromisoformat(str(row.get("ts"))).astimezone(ZoneInfo(TS_ZONE))
+            floor = datetime(*map(int, day.split("-")), int(hh), int(mm), tzinfo=ZoneInfo(TS_ZONE))
+            if t < floor:
+                bad.append(f"vii (the edition under test): its selfcheck row was written "
+                           f"{t:%Y-%m-%d %H:%M} Buenos Aires, BEFORE the printed {at} — the "
+                           f"print line is not this edition's print time")
+        except (TypeError, ValueError) as e:
+            bad.append(f"vii (the edition under test): the selfcheck row's ts {row.get('ts')!r} "
+                       f"does not parse ({e}) — fail closed")
+    return bad, {"vii_print": (at, word, _vii_verb(slot), slot, ear), "vii_selfcheck": seen}
+
+
+_TS_VII = None
+
+
+def _ts_vii_table(namer=None, zoner=None) -> tuple[list[str], dict]:
+    """vii LEG (ii), THE LAW: every row of TS_VII_TABLE through oracle_daily.edition_name
+    AND through a real render (the ear, and the Colophon's print line read back), with the
+    print time handed in UTC and the process's local zone forced to TS_MACHINE_ZONE; then
+    a naive print time, which must be refused. `namer` / `zoner` swap in a planted
+    edition_name / print_time_ba by module attribute — render_html and print_line reach
+    them by that name — for the length of ONE judgement, and are always put back. The
+    unplanted result is computed once."""
+    global _TS_VII
+    planted = namer is not None or zoner is not None
+    if not planted and _TS_VII is not None:
+        return list(_TS_VII[0]), dict(_TS_VII[1])
+    from datetime import datetime, timezone
+    from zoneinfo import ZoneInfo
+    ba = ZoneInfo(TS_ZONE)
+    view, canon = _pristine_view(), PE.canon_sha()
+    y, mo, d = map(int, TS_VII_DAY.split("-"))
+    saved = (OD.edition_name, OD.print_time_ba)
+    bad: list[str] = []
+    try:
+        if namer is not None:
+            OD.edition_name = namer
+        if zoner is not None:
+            OD.print_time_ba = zoner
+        with _ts_machine_zone(TS_MACHINE_ZONE):
+            for slot, hhmm, want in TS_VII_TABLE:
+                hh, mm = map(int, hhmm.split(":"))
+                at = datetime(y, mo, d, hh, mm, tzinfo=ba).astimezone(timezone.utc)
+                where = f"{slot} printed {hhmm} Buenos Aires"
+                try:
+                    got = OD.edition_name(slot, at)
+                except Exception as e:                       # noqa: BLE001 — judged, not raised
+                    got = f"raised {e.__class__.__name__}"
+                if got != f"{want} Edition":
+                    bad.append(f"vii table: edition_name, {where} -> {got!r}, want "
+                               f"'{want} Edition'")
+                try:
+                    doc = OD.render_html(view, TS_VII_DAY, canon, edition_no=7, slot=slot,
+                                         printed_at=at)
+                except Exception as e:                       # noqa: BLE001
+                    bad.append(f"vii table: the render, {where} raised "
+                               f"{e.__class__.__name__}: {e}")
+                    continue
+                ear, lines = _ts_vii_read(doc)
+                if ear != want:
+                    bad.append(f"vii table: the render, {where} -> the ear says '{ear} Edition', "
+                               f"want '{want} Edition'")
+                if len(lines) != 1:
+                    bad.append(f"vii table: the render, {where} -> {len(lines)} print line(s) in "
+                               f"the Colophon, want exactly one")
+                    continue
+                p_day, p_hh, p_mm, p_word, p_verb, p_slot = lines[0]
+                if (p_day, f"{p_hh}:{p_mm}") != (TS_VII_DAY, hhmm):
+                    bad.append(f"vii table: the render, {where} -> the Colophon's print line reads "
+                               f"{p_day} {p_hh}:{p_mm}, want {TS_VII_DAY} {hhmm} Buenos Aires")
+                if (p_word, p_verb, p_slot) != (want, _vii_verb(slot), slot):
+                    bad.append(f"vii table: the render, {where} -> the print line names the "
+                               f"{p_word} Edition, the {p_verb} verb, slot {p_slot}; want the "
+                               f"{want} Edition, the {_vii_verb(slot)} verb, slot {slot}")
+            try:
+                got = OD.edition_name("full", datetime(y, mo, d, 19, 17))
+                bad.append(f"vii table: a naive print time ({TS_VII_DAY} 19:17, no zone) was "
+                           f"ACCEPTED by edition_name ({got!r}) — its hour would be the "
+                           f"machine's zone's; it must be refused")
+            except ValueError:
+                pass
+            except Exception as e:                           # noqa: BLE001
+                bad.append(f"vii table: a naive print time raised {e.__class__.__name__}, not "
+                           f"the ValueError that refuses it")
+    finally:
+        OD.edition_name, OD.print_time_ba = saved
+    info = {"vii_rows": len(TS_VII_TABLE)}
+    if not planted:
+        _TS_VII = (list(bad), dict(info))
+    return bad, info
+
+
 def _ts_source(src: str | None = None) -> list[str]:
     """Scans CODE, not prose: the bar count typed once, the signature the wrapper calls,
-    and run() numbering the edition."""
+    run() numbering the edition, and run() timing it (A-OR1-1 vii) with the one instant
+    its date comes from."""
     src = (ROOT / "scripts" / "oracle_daily.py").read_text(encoding="utf-8") if src is None else src
     tree = ast.parse(src)
     bad = []
@@ -5745,11 +6026,17 @@ def _ts_source(src: str | None = None) -> list[str]:
     else:
         pos = [a.arg for a in (*rh.args.posonlyargs, *rh.args.args)]
         kwo = [a.arg for a in rh.args.kwonlyargs]
-        if pos != ["view", "date_str", "canon_sha"] or sorted(kwo) != ["edition_no", "slot"] \
+        if pos != ["view", "date_str", "canon_sha"] \
+                or sorted(kwo) != ["edition_no", "printed_at", "slot"] \
                 or any(d is None for d in rh.args.kw_defaults):
             bad.append(f"signature: render_html takes {pos} + keyword-only {kwo}; the fixtures "
                        f"and the wrapper's per-edition self-check call render_html(view, date_str, "
-                       f"canon_sha), and the masthead's two are optional keywords")
+                       f"canon_sha), and the masthead's three are optional keywords")
+    en = fns.get("edition_name")
+    en_args = [a.arg for a in (*en.args.posonlyargs, *en.args.args)] if en is not None else None
+    if en_args != ["slot", "printed_at"]:
+        bad.append(f"signature: edition_name takes {en_args}; A-OR1-1 vii makes the word follow "
+                   f"the verb AND the hour — edition_name(slot, printed_at)")
     run = fns.get("run")
     calls = [n for n in ast.walk(run) if isinstance(n, ast.Call)
              and isinstance(n.func, ast.Name)] if run is not None else []
@@ -5759,6 +6046,26 @@ def _ts_source(src: str | None = None) -> list[str]:
                for c in calls):
         bad.append("run(): does not hand render_html BOTH edition_no and slot — a real edition "
                    "would go to press as 'No. —' or as the wrong edition")
+    # A-OR1-1 vii: run() hands render_html the print time, and it is the ONE instant the
+    # date comes from — a Name X with `date_str = X.strftime(...)` in run() — never a
+    # second read of the clock
+    handed = [k.value for c in calls if c.func.id == "render_html"
+              for k in c.keywords if k.arg == "printed_at"]
+    if not handed:
+        bad.append("run(): does not hand render_html the print time (printed_at) — the edition "
+                   "would go to press as a PROOF, its word read off the as-of bar")
+    else:
+        date_src = {a.value.func.value.id for a in ast.walk(run) if isinstance(a, ast.Assign)
+                    and any(isinstance(t, ast.Name) and t.id == "date_str" for t in a.targets)
+                    and isinstance(a.value, ast.Call) and isinstance(a.value.func, ast.Attribute)
+                    and a.value.func.attr == "strftime" and isinstance(a.value.func.value, ast.Name)}
+        off = [ast.unparse(v) for v in handed
+               if not (isinstance(v, ast.Name) and v.id in date_src)]
+        if off or not date_src:
+            bad.append(f"run(): the print time handed to render_html ({', '.join(off) or '?'}) is "
+                       f"not the instant the date comes from (date_str = "
+                       f"{'/'.join(sorted(date_src)) or '?'}.strftime(...)) — vii's hour and the "
+                       f"edition's date must be read off ONE `now`")
     return bad
 
 
@@ -5767,24 +6074,32 @@ _TS_RENDERS = None
 
 def _typeset_judge(html_doc: str | None = None, renders: dict | None = None,
                    src: str | None = None, counter=None, headliner=None,
-                   periods: int | None = None) -> tuple[list[str], dict]:
+                   periods: int | None = None, namer=None, zoner=None,
+                   masthead_src: str | None = None) -> tuple[list[str], dict]:
     """`periods` raises OD.STALE_LENS_PERIODS for the duration of ONE judgement — the
-    THRESHOLD PLANT, the only way to drive A2-7's ruled number itself out of true."""
+    THRESHOLD PLANT, the only way to drive A2-7's ruled number itself out of true.
+    `namer` / `zoner` are A-OR1-1 vii's plants (see _ts_vii_table)."""
     global _TS_RENDERS
     real_periods = OD.STALE_LENS_PERIODS
+    doc = HTML if html_doc is None else html_doc
     try:
         if periods is not None:
             OD.STALE_LENS_PERIODS = periods
             _TS_RENDERS = None                     # the limit moved; re-render
         if _TS_RENDERS is None:
             _TS_RENDERS = _ts_renders()
-        bad, page = _ts_static(HTML if html_doc is None else html_doc, DATE)
+        bad, page = _ts_static(doc, DATE)
         live_bad, live = _ts_live({**_TS_RENDERS, **(renders or {})})
     finally:
         if periods is not None:
             OD.STALE_LENS_PERIODS = real_periods
             _TS_RENDERS = None                     # never leave a planted limit cached
-    bad = bad + live_bad + _ts_edition_count(counter) + _ts_source(src) + _ts_headline(headliner)
+    # A-OR1-1 vii: leg (i) on the page under test (witnesses read for the edition itself
+    # only), leg (ii) over the table
+    vii_bad, vii = _ts_vii_page(doc, witnesses=html_doc is None)
+    tbl_bad, tbl = _ts_vii_table(namer, zoner)
+    bad = (bad + live_bad + vii_bad + tbl_bad + _ts_edition_count(counter) + _ts_source(src)
+           + _ts_headline(headliner))
     m = re.search(r"columns = last (\d+) bars", TS_CAPTION)
     bars = OD.REGISTER["MANTLE_BARS"]["value"]
     if int(m.group(1)) != bars:
@@ -5801,9 +6116,14 @@ def _typeset_judge(html_doc: str | None = None, renders: dict | None = None,
         if OD.REGISTER[k]["ruled"]:
             bad.append(f"{k} reads 'ruled': True — it is this build's reading and no ruling is "
                        f"on record")
-        if f"<code>{k}</code>" not in _sec(HTML if html_doc is None else html_doc, SEC_COLOPHON):
+        if f"<code>{k}</code>" not in _sec(doc, SEC_COLOPHON):
             bad.append(f"colophon: the rendered [VETO] appendix does not list {k}")
-    return bad, {**page, **live}
+    # the MASTHEAD row names the three words and quotes vii to the letter
+    m_src = OD.REGISTER["MASTHEAD"]["source"] if masthead_src is None else masthead_src
+    if "<Morning|Evening|Refresh>" not in m_src or TS_VII not in m_src:
+        bad.append("masthead register: REGISTER['MASTHEAD']['source'] does not say "
+                   "'<Morning|Evening|Refresh>' and quote A-OR1-1 vii verbatim")
+    return bad, {**page, **live, **vii, **tbl}
 
 
 def f_br_15() -> None:
@@ -5847,6 +6167,42 @@ def f_br_15() -> None:
     loud = base.replace(cap_html, cap_html + " · LATE EDITION strips are re-cut hourly", 1)
     kw_anchor = "edition_no=edition_no, slot=slot"
     cap_anchor = "columns = last {bars} bars"
+
+    # A-OR1-1 vii. Leg (i)'s plants are cut from the edition under test when it carries
+    # its print line; otherwise from a fresh TIMED render (19:17 Buenos Aires, the full
+    # verb) — an edition printed before vii has no line to remove (the F-BR-16 rule
+    # again: a plant that cannot be planted voids the fixture for a reason that is not
+    # the code's). The REAL leg still audits the edition under test, and is red on it.
+    from zoneinfo import ZoneInfo
+    vii_page = len(_ts_vii_read(HTML)[1]) == 1
+    vbase = HTML if vii_page else _ensure()["timed"]
+    vii_from = (f"artifact set {DATE}" if vii_page else
+                "a fresh timed render — the artifact carries no print line (printed before vii)")
+    _pl = re.search(r"Printed [^<]*?A-OR1-1 vii\)", vbase)
+    no_print = vbase.replace(_pl.group(0), "", 1) if _pl else None
+    _ear_div = re.search(r'(?s)<div class="ear ear-r">.*?</div>', vbase)
+    _w = _ts_vii_read(vbase)[0]
+    _flip = {"Morning": "Evening", "Evening": "Morning", "Refresh": "Morning"}.get(_w)
+    ear_flipped = (vbase.replace(_ear_div.group(0), _ear_div.group(0).replace(
+                   f"{_w} Edition", f"{_flip} Edition", 1), 1) if _ear_div and _flip else None)
+    _pa = list(re.finditer(r",\s*printed_at=\w+\s*\)", src))
+    no_time_src = clock_src = None
+    if len(_pa) == 1:
+        _s, _e = _pa[0].span()
+        no_time_src = src[:_s] + ")" + src[_e:]
+        clock_src = src[:_s] + ", printed_at=datetime.now(timezone.utc))" + src[_e:]
+    _en_def = "def edition_name(slot: str, printed_at: datetime | None) -> str:"
+    one_arg_src = (src.replace(_en_def, "def edition_name(slot: str) -> str:", 1)
+                   if src.count(_en_def) == 1 else None)
+
+    def _old_rule(slot, printed_at=None):          # HEAD 3d55988's edition_name, verbatim
+        return "Refresh Edition" if "refresh" in str(slot).lower() else "Morning Edition"
+
+    def _noon_is_morning(slot, printed_at):         # the boundary moved: noon read as "before"
+        if "refresh" in str(slot).lower():
+            return "Refresh Edition"
+        t = OD.print_time_ba(printed_at)
+        return "Morning Edition" if (t.hour, t.minute) <= (12, 0) else "Evening Edition"
 
     def _stamped(r):                                # a wall-clock stamp set into the Front Page
         from datetime import datetime
@@ -5900,6 +6256,35 @@ def f_br_15() -> None:
         ("COUNTER PLANT (editions counted from briefs/oracle, the render the operator moved)",
          "edition count",
          lambda: dict(counter=lambda d: len({p.stem for p in OD.OUT_DIR.glob("oracle_*.html")} | {d}))),
+        # A-OR1-1 vii, LEG (ii) — the law over TS_VII_TABLE, calls and renders
+        ("VII PLANT, the OLD RULE re-planted (edition_name back to HEAD 3d55988's: 'Morning "
+         "Edition' for every slot that is not a refresh, whatever the hour)",
+         "19:17 Buenos Aires -> 'Morning Edition'", lambda: dict(namer=_old_rule)),
+        (f"VII PLANT, the machine's LOCAL ZONE (print_time_ba reads t.astimezone(), the "
+         f"laptop's zone, here {TS_MACHINE_ZONE}: 19:17 Buenos Aires reads 22:17)",
+         f"print line reads {TS_VII_DAY} 22:17", lambda: dict(zoner=lambda t: t.astimezone())),
+        ("VII PLANT, the BOUNDARY moved (12:00:00 Buenos Aires read as before noon)",
+         "12:00 Buenos Aires -> 'Morning Edition'", lambda: dict(namer=_noon_is_morning)),
+        ("VII PLANT, a NAIVE print time accepted (converted as if it were the machine's zone)",
+         "naive print time", lambda: dict(zoner=lambda t: t.astimezone(ZoneInfo(TS_ZONE)))),
+        # A-OR1-1 vii, LEG (i) — the edition under test carries its own evidence
+        (f"VII PLANT, the Colophon's print line REMOVED (cut from {vii_from})",
+         "no print line in the Colophon", lambda: dict(html_doc=no_print) if no_print else None),
+        (f"VII PLANT, the ear's word FLIPPED against its own print line (cut from {vii_from})",
+         "the ear says", lambda: dict(html_doc=ear_flipped) if ear_flipped else None),
+        # A-OR1-1 vii — the source and the register row
+        ("SOURCE PLANT (run() stops handing render_html the print time)",
+         "does not hand render_html the print time",
+         lambda: dict(src=no_time_src) if no_time_src else None),
+        ("SOURCE PLANT (run() hands render_html a SECOND clock read, not the instant its date "
+         "comes from)",
+         "not the instant the date comes from", lambda: dict(src=clock_src) if clock_src else None),
+        ("SOURCE PLANT (edition_name back to one argument, the verb alone)",
+         "edition_name(slot, printed_at)", lambda: dict(src=one_arg_src) if one_arg_src else None),
+        ("REGISTER PLANT (the MASTHEAD row's words back to STEP F's '<Morning|Refresh>')",
+         "masthead register",
+         lambda: dict(masthead_src=OD.REGISTER["MASTHEAD"]["source"].replace(
+             "<Morning|Evening|Refresh>", "<Morning|Refresh>"))),
         # LAST on purpose: it clears the render cache on its way out, so anything after
         # it would pay for a second set of renders.
         ("THRESHOLD PLANT (A2-7's ruled 2 lens periods quietly raised to 2000: the limit "
@@ -5931,6 +6316,7 @@ def f_br_15() -> None:
         bad, x = _typeset_judge()
         if bad:
             return False, "; ".join(bad[:6]) + (f" (+{len(bad) - 6} more)" if len(bad) > 6 else "")
+        at, word, verb, slot, ear = x["vii_print"]
         return True, (
             f"artifact set {DATE}: exactly {x['sections']} bare <h2> sections in the contract's "
             f"order ({' · '.join(SECTIONS)}); each of {x['strips']} mantle strips carries the "
@@ -5943,7 +6329,7 @@ def f_br_15() -> None:
             f"{len(TS_DARK_REMNANTS)} pre-STEP-F colours on the page, no theme switch, the red "
             f"only under {list(TS_ALARM_CLASSES)}, Spaghetti hues {x['hues'][0]}..{x['hues'][-1]} "
             f"clear of the red band. Masthead: '{TS_TITLE}', left ear No. {x['edition']}, right "
-            f"ear {DATE} · {x['name']} Edition; an un-numbered render says 'No. —' · Morning, "
+            f"ear {DATE} · {x['name']} Edition; an un-numbered render says 'No. —', "
             f"edition_no=7 + a refresh slot says No. 7 · Refresh; render_html(view, date_str, "
             f"canon_sha) still stands; over four synthetic boards the headline opens 'Business "
             f"possible' for a FRESH trigger only ('No fresh trigger on the roster' over stale or "
@@ -5954,11 +6340,27 @@ def f_br_15() -> None:
             f"phrase nowhere in the text; {TS_MARGIN_MS // 60_000} min past it -> the band directly "
             f"under the masthead, opening 'LATE EDITION — wire stale since {x['stale_as_of']}', "
             f"A2-7's sentence after it, the phrase exactly once. The Front Page and The Watch do "
-            f"not move a byte with the module's clock pushed {TS_CLOCK_SHIFT_DAYS} days on")
+            f"not move a byte with the module's clock pushed {TS_CLOCK_SHIFT_DAYS} days on. "
+            f"A-OR1-1 vii (\"{TS_VII}\"): (i) artifact set {DATE}'s Colophon carries ONE print "
+            f"line, printed {at}, the {verb} verb, slot {slot} -> the {word} Edition, and the "
+            f"ear says the {ear} Edition; "
+            + (f"its selfcheck row ({x['vii_selfcheck']}) names the same slot and was written no "
+               f"earlier than the printed minute; " if x["vii_selfcheck"] else
+               "no selfcheck row carries its sha256 (a sandbox render, or an edition whose "
+               "self-checks did not run), so the slot cross-check had nothing to read; ")
+            + f"(ii) over {x['vii_rows']} rows (" + ", ".join(
+                f"{s} {t} -> {w}" for s, t, w in TS_VII_TABLE)
+            + f"), each through edition_name AND a real render, the print time handed in UTC "
+              f"and the process's zone forced to {TS_MACHINE_ZONE}, the ear and the print line "
+              f"say vii's word and the Buenos Aires minute; 12:00:00 is Evening; a naive print "
+              f"time is refused; run() hands render_html the one instant its date comes from; "
+              f"an un-numbered, untimed render (a PROOF) says 'No. —', carries no print line and "
+              f"reads vii at its as-of bar ({x['plain_at']} Buenos Aires -> {x['plain_word']}).")
 
     prove("F-BR-15", "THE DAILY ORACLE — eight sections in order, a caption under every strip, "
                      "DISPLAY-ONLY in the colophon, three inks, the LATE EDITION band when and "
-                     "only when the wire is stale",
+                     "only when the wire is stale, and the edition's word per A-OR1-1 vii "
+                     "(verb and Buenos Aires hour, the print time in the Colophon)",
           _break, _real)
 
 
