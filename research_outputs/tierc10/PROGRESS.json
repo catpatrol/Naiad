@@ -13,8 +13,9 @@
   "law_1_note": "a stage is COMPLETE only if artifacts exist, manifest shas verify, and its fixtures RE-PASS now. Every status below was established by re-running the suite on 2026-09-22, not by reading a filed transcript.",
   "live_cache_touched": false,
   "operator_rulings": {
+    "note": "re-pinned 2026-09-23 to the R1\u2013R10 file (ffdffce); the previous pin 70188a0c\u2026 was the R1\u2013R6 file of c7b157d and went stale when R7\u2013R10 were filed.",
     "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
-    "sha256": "70188a0cc32422be40e74d8e7adf7d444aa610bb3abf0384b4f4a2f66f57bbec"
+    "sha256": "a0a08f8761ce9eab678d42d609d7e6563e749c07a6c33b7b17f9a5c4f31ca907"
   },
   "r0_census_utc": "2026-09-22T09:55:00Z",
   "resume_point": "CLOSE \u2014 operator's word on push + LaCie destination; then: move BUILD_DRAFT.md to exchange/reports/BUILD_2026-09-21_TIERC10_UNSEEN_RANGES.md, commit, push, fill the append stamp + re-run tierc10_close_ledger_append_root.py, append LEDGER_APOLLO_APPEND.md to exchange/status/LEDGER_APOLLO.md, publish_exchange, bright paths",
@@ -4828,8 +4829,8 @@
           "sha256": "9fa07a0fa1b832ef7a1012a796cfd7fdd73ab2e1275d4faa4340666493c340c8"
         },
         "research_outputs/tierc10/scores/SCORE_P-BE-1.txt": {
-          "bytes": 2125,
-          "sha256": "5e59f255bbd3a480492ab4885612c3efadda17ca6528070f32466bfd3405b065"
+          "bytes": 2136,
+          "sha256": "89c3c87249988aafb02c4459c1301113b57acade958a3118af6609103afa012d"
         },
         "research_outputs/tierc10/scores/SCORE_P-BRK-I1.txt": {
           "bytes": 1529,
@@ -4840,12 +4841,12 @@
           "sha256": "8b2d87a4ab5ee9af3f498dd3300b069e5b606da00c6f5d788533b18106dfad8d"
         },
         "research_outputs/tierc10/scores/SCORE_P-SPR-2.txt": {
-          "bytes": 1588,
-          "sha256": "72a363e3fa2479a492a29ae6ab6c5ca2334587d87fb282cdeb1dc67982ad0e0f"
+          "bytes": 1591,
+          "sha256": "9e32890055a29b55f1f16ed0ea49db470ce2ed9617c9b6b50185d591d370aab1"
         },
         "research_outputs/tierc10/scores/SCORE_P-TRG-2.txt": {
-          "bytes": 1598,
-          "sha256": "88708f755db13656a0c1ae346880a71760535161f4cea3135e78b32b1805afd5"
+          "bytes": 1608,
+          "sha256": "437bd0fad699a06b85061e6ddb2f76d4cc1f7810eb46b342d5866130fe18f88e"
         }
       },
       "as_of": "2026-09-21T16:00:00Z",
@@ -4866,9 +4867,10 @@
       ],
       "notes": [
         "P-BE-1's SCORED arm A1 HALTed at TP.score, as its filed \u00a74 prescribes: the two-sample premise failed (200/200 campaign keys shared with card v6; the floor moves exits only). P-BE-1 has NO verdict and does not become the paired row. \u00a711: 'a new id must be filed under set_change and the reason disclosed' \u2014 adding a registration is outside the contract ('no registration re-worded or added'), so that filing is the OPERATOR's to order. Its three Tier-E arms (A2 tuning, A3 holdout, A4 2R) were scored as report-only views, registered for that purpose; none may stand in for A1 (\u00a711).",
-        "Clause (c) \u2014 the BH family bar q/m = 0.1/6 \u2014 is not on these rows yet; finish_family runs after B-5M."
+        "The family bar q/m = 0.1/6 is not on these rows yet; finish_family runs after B-5M. (Lettered clauses (a)(b)(c) are P-BE-1's structure; P-TRG-2's text makes the CI its only deciding clause.)",
+        "2026-09-23: SCORE_<id>.txt printouts regenerated after the console fix (twin rows now print the \u0394 point for both the raw and the equal-asset-risk CI; they had printed the arm LEVEL beside the CI of the DIFFERENCE). Every rows.json, .scored.json, FAMILY.json and FINISH.txt re-wrote BYTE-IDENTICAL."
       ],
-      "one_line": "B-CORE scored through the filed doors against the pinned dry-run: P-GEN-1 NOT SUPPORTED (UNSEEN12 +0.0998 R, CI [-0.155, 0.316], LOAO 0/12); P-SPR-2 NOT SUPPORTED (-0.0059 R, CI [-0.175, 0.165], LOAO 0/5); P-BE-1 HALT (prescribed, \u00a74) \u2014 no verdict; P-TRG-2 clause (a) SUPPORTED (\u0394 vs v6 +0.2577 R, CI [0.109, 0.384], p 0.00525, LOAO 5/5) pending the BH bar; P-BRK-I1 NOT SUPPORTED (n 7, +0.718 R, CI [-0.603, 1.452], LOAO 1/5). Re-score byte-identical.",
+      "one_line": "B-CORE scored through the filed doors against the pinned dry-run: P-GEN-1 NOT SUPPORTED (UNSEEN12 +0.0998 R, CI [-0.155, 0.316], LOAO 0/12); P-SPR-2 NOT SUPPORTED (-0.0059 R, CI [-0.175, 0.165], LOAO 0/5); P-BE-1 HALT (prescribed, \u00a74) \u2014 no verdict; P-TRG-2 SUPPORTED (its text's one deciding clause is the CI: \u0394 vs v6 +0.2577 R, CI [0.109, 0.384]; LOAO 5/5 and p 0.00525 are reported beside, deciding nothing); P-BRK-I1 NOT SUPPORTED (n 7, +0.718 R, CI [-0.603, 1.452], LOAO 1/5). Re-score byte-identical.",
       "stage": "B-CORE",
       "status": "COMPLETE-VERIFIED"
     },
@@ -4914,9 +4916,10 @@
       ],
       "notes": [
         "finish_family ran with P-BE-1's slot HALTed (--allow-halted-slot P-BE-1). This is PRESCRIBED by the filed texts, not an executor choice: P-BE-1 \u00a77 'CLAUSE (c) RESOLVES ON THIS ROW ALONE and does not wait for siblings\u2026 if a sibling registration HALTs or is never filed, this row still reads clears_bh_bar against 0.016667'; P-TRG-2 \u00a75 'at that one fixed bar to EVERY scored row it is handed, whatever number of the declared six actually run'. m stays 6 DECLARED (5 run): fewer tests never loosen the bar.",
-        "P-BRK-S1's net_r is net of FEE and FUNDING only; the measured 5m toll is a PRINT beside it (TOLL_ACCOUNTING), per its filed \u00a77 which names the print-vs-deduction question OPEN for the operator. The row is already significantly negative before any toll."
+        "P-BRK-S1's net_r is net of FEE and FUNDING only; the measured 5m toll is a PRINT beside it (TOLL_ACCOUNTING), per its filed \u00a77 which names the print-vs-deduction question OPEN for the operator. The row is already significantly negative before any toll.",
+        "2026-09-23: SCORE_<id>.txt printouts regenerated after the console fix (twin rows now print the \u0394 point for both the raw and the equal-asset-risk CI; they had printed the arm LEVEL beside the CI of the DIFFERENCE). Every rows.json, .scored.json, FAMILY.json and FINISH.txt re-wrote BYTE-IDENTICAL."
       ],
-      "one_line": "P-BRK-S1 NOT SUPPORTED \u2014 significantly NEGATIVE: holdout CLASSIC5 n 1836, -0.2111 R, CI [-0.298, -0.144], LOAO 0/5 above, 5/5 BELOW; 17-asset view -0.170 R [-0.205, -0.137]; memory-line anchor -0.199 R [-0.335, -0.073]; 5m height-vs-toll (holdout) FAIL. FAMILY (m = 6 declared, 5 run, bar 0.016667): P-TRG-2 is the ONLY row that clears all three clauses \u2014 CI lo 0.109 > 0, LOAO 5/5, p 0.005249 <= 0.016667. P-GEN-1, P-SPR-2, P-BRK-I1, P-BRK-S1 NOT SUPPORTED; P-BE-1 HALT (no verdict).",
+      "one_line": "P-BRK-S1 NOT SUPPORTED \u2014 significantly NEGATIVE: holdout CLASSIC5 n 1836, -0.2111 R, CI [-0.298, -0.144], LOAO 0/5 above, 5/5 BELOW; 17-asset view -0.170 R [-0.205, -0.137]; memory-line anchor -0.199 R [-0.335, -0.073]; 5m height-vs-toll (holdout) FAIL. FAMILY (m = 6 declared, 5 run, bar 0.016667): P-TRG-2 is the ONLY SUPPORTED row (CI lo 0.109 > 0, its text's one deciding clause) and the only row under the bar (p 0.005249 <= 0.016667); LOAO 5/5 beside. P-GEN-1, P-SPR-2, P-BRK-I1, P-BRK-S1 NOT SUPPORTED; P-BE-1 HALT (no verdict).",
       "stage": "B-5M",
       "status": "COMPLETE-VERIFIED"
     },
@@ -4925,7 +4928,7 @@
       "artifact_shas": {
         "research_outputs/tierc10/LEDGER_APOLLO_APPEND.md": {
           "bytes": 14925,
-          "sha256": "d6a58f5c2901f177edb712c7acce208bf5055225d0f46391189635eba4cab3d1"
+          "sha256": "1288b59bae687f6a56f31cd75d958dc53400af78f4c7ff77ede3965972d5021e"
         },
         "research_outputs/tierc10/close/FIXTURES_CLOSE_box_cost.txt": {
           "bytes": 6034,
@@ -4936,8 +4939,8 @@
           "sha256": "bc339a7df7830f791d09efb025b0854760983b19c3667a1c0289d9cd999635c5"
         },
         "research_outputs/tierc10/close/FIXTURES_CLOSE_findings.txt": {
-          "bytes": 13613,
-          "sha256": "89395614fc8c0fe76aaaf0d8a73d88ef0ce11766aa543ab6eb7c136725c93b11"
+          "bytes": 13620,
+          "sha256": "222127bd3a9dd7229bd0dc91f10377f176978ad98e73fc2ce54c2d2650a4abe2"
         },
         "research_outputs/tierc10/close/FIXTURES_CLOSE_forward_strip.txt": {
           "bytes": 17191,
@@ -4949,7 +4952,7 @@
         },
         "research_outputs/tierc10/close/FIXTURES_CLOSE_ledger_append_root.txt": {
           "bytes": 15919,
-          "sha256": "d2bdc68e0511caef7f590d6f1cfa783e1b6761bb9e175e60abd25823a1da52dc"
+          "sha256": "3e1f62785c182358b1e8888c8c77a460011fd188599a481bf87a2cdbe4d9a582"
         },
         "research_outputs/tierc10/close/FIXTURES_CLOSE_p_age_1.txt": {
           "bytes": 11002,
@@ -5048,12 +5051,12 @@
           "sha256": "eca4257650d82c301f5627476f324cb55ff3b084a3122ef3a8b645010c81711c"
         },
         "research_outputs/tierc10/close/S5_FINDINGS_NOT_FIXED.json": {
-          "bytes": 104680,
-          "sha256": "f771a60175aefcb81fd8ccf976e8948660deb57a99bfcf9fe264b4bd7734dbe8"
+          "bytes": 108526,
+          "sha256": "82122fc9d9a1f59867cb33583b5c7c936ae44ce86c2b9fa1109e60914ab40608"
         },
         "research_outputs/tierc10/close/S5_FINDINGS_NOT_FIXED.md": {
-          "bytes": 84441,
-          "sha256": "782ca3f39789ccdcb80c67ab1acfdadccc2a627e5144770ed8330de5b96102f9"
+          "bytes": 87624,
+          "sha256": "d941699b3c83fc98106bf81dbae59a972023f096f314e80e15d90d80b1b93f5f"
         },
         "research_outputs/tierc10/close/S8_DISPOSITION_BOX_COST.json": {
           "bytes": 138197,
@@ -5093,11 +5096,11 @@
         },
         "research_outputs/tierc10/close/_det_ledger_append_root/seed_1/FIXTURES_CLOSE_ledger_append_root.txt": {
           "bytes": 15364,
-          "sha256": "559e22432f2e65888dc132d2ba80e59a6d1ce4cbfa262e8107d91312232d3cb9"
+          "sha256": "376d08848974044033085b7d6b578bf75711c8702bbe8ebf2014efe840e852f9"
         },
         "research_outputs/tierc10/close/_det_ledger_append_root/seed_20260921/FIXTURES_CLOSE_ledger_append_root.txt": {
           "bytes": 15364,
-          "sha256": "559e22432f2e65888dc132d2ba80e59a6d1ce4cbfa262e8107d91312232d3cb9"
+          "sha256": "376d08848974044033085b7d6b578bf75711c8702bbe8ebf2014efe840e852f9"
         },
         "research_outputs/tierc10/close/_det_p_age_1/run_a/P_AGE_1_BAR_BANDS.parquet": {
           "bytes": 29592,
@@ -5157,7 +5160,7 @@
           "exit_code": 0,
           "legs_red": 0,
           "legs_total": null,
-          "re_run_utc": "2026-09-23T03:30:00Z",
+          "re_run_utc": "2026-09-23T15:30:00Z",
           "suite": "tierc10_close box_cost",
           "transcript_drift": false,
           "transcript_sha_after": "c44d9bb44c072ac3f7b00e4e307573b5088560f0f6674e24dff7b3400dace792",
@@ -5168,7 +5171,7 @@
           "exit_code": 0,
           "legs_red": 0,
           "legs_total": null,
-          "re_run_utc": "2026-09-23T03:30:00Z",
+          "re_run_utc": "2026-09-23T15:30:00Z",
           "suite": "tierc10_close census_r",
           "transcript_drift": false,
           "transcript_sha_after": "bc339a7df7830f791d09efb025b0854760983b19c3667a1c0289d9cd999635c5",
@@ -5179,18 +5182,18 @@
           "exit_code": 0,
           "legs_red": 0,
           "legs_total": null,
-          "re_run_utc": "2026-09-23T03:30:00Z",
+          "re_run_utc": "2026-09-23T15:30:00Z",
           "suite": "tierc10_close findings",
           "transcript_drift": false,
-          "transcript_sha_after": "89395614fc8c0fe76aaaf0d8a73d88ef0ce11766aa543ab6eb7c136725c93b11",
-          "transcript_sha_before": "89395614fc8c0fe76aaaf0d8a73d88ef0ce11766aa543ab6eb7c136725c93b11",
+          "transcript_sha_after": "222127bd3a9dd7229bd0dc91f10377f176978ad98e73fc2ce54c2d2650a4abe2",
+          "transcript_sha_before": "222127bd3a9dd7229bd0dc91f10377f176978ad98e73fc2ce54c2d2650a4abe2",
           "wall_seconds": null
         },
         {
           "exit_code": 0,
           "legs_red": 0,
           "legs_total": null,
-          "re_run_utc": "2026-09-23T03:30:00Z",
+          "re_run_utc": "2026-09-23T15:30:00Z",
           "suite": "tierc10_close forward_strip",
           "transcript_drift": false,
           "transcript_sha_after": "e321d0d43eb13d0d05f4e1f016e043c4945d14138d43d77848827df86cd21694",
@@ -5201,7 +5204,7 @@
           "exit_code": 0,
           "legs_red": 0,
           "legs_total": null,
-          "re_run_utc": "2026-09-23T03:30:00Z",
+          "re_run_utc": "2026-09-23T15:30:00Z",
           "suite": "tierc10_close ledger_append",
           "transcript_drift": false,
           "transcript_sha_after": "18d49d1eb050d3d31cb660bbaead0fe07f8581ffbe5a933113520c6d3bd1544d",
@@ -5212,18 +5215,18 @@
           "exit_code": 0,
           "legs_red": 0,
           "legs_total": null,
-          "re_run_utc": "2026-09-23T03:30:00Z",
+          "re_run_utc": "2026-09-23T15:30:00Z",
           "suite": "tierc10_close ledger_append_root",
           "transcript_drift": false,
-          "transcript_sha_after": "d2bdc68e0511caef7f590d6f1cfa783e1b6761bb9e175e60abd25823a1da52dc",
-          "transcript_sha_before": "d2bdc68e0511caef7f590d6f1cfa783e1b6761bb9e175e60abd25823a1da52dc",
+          "transcript_sha_after": "3e1f62785c182358b1e8888c8c77a460011fd188599a481bf87a2cdbe4d9a582",
+          "transcript_sha_before": "3e1f62785c182358b1e8888c8c77a460011fd188599a481bf87a2cdbe4d9a582",
           "wall_seconds": null
         },
         {
           "exit_code": 0,
           "legs_red": 0,
           "legs_total": null,
-          "re_run_utc": "2026-09-23T03:30:00Z",
+          "re_run_utc": "2026-09-23T15:30:00Z",
           "suite": "tierc10_close p_age_1",
           "transcript_drift": false,
           "transcript_sha_after": "06ad1d050be09d67142f19aec8d15bdfe4673ff29b0dcb698b0361d22f427511",
@@ -5234,7 +5237,7 @@
           "exit_code": 0,
           "legs_red": 0,
           "legs_total": null,
-          "re_run_utc": "2026-09-23T03:30:00Z",
+          "re_run_utc": "2026-09-23T15:30:00Z",
           "suite": "tierc10_close p_trg_2_seen_share",
           "transcript_drift": false,
           "transcript_sha_after": "780034a0dccd412511a50e51f4b02533843ecf5f41ce6b6c3bb039272491c4d4",
@@ -5245,7 +5248,7 @@
           "exit_code": 0,
           "legs_red": 0,
           "legs_total": null,
-          "re_run_utc": "2026-09-23T03:30:00Z",
+          "re_run_utc": "2026-09-23T15:30:00Z",
           "suite": "tierc10_close regime_prior",
           "transcript_drift": false,
           "transcript_sha_after": "994adcf4ed30ce17d8fd6cf2abeadbc4bb7651fa613a7b6ff22a3e35680e1c8f",
@@ -5256,7 +5259,7 @@
           "exit_code": 0,
           "legs_red": 0,
           "legs_total": null,
-          "re_run_utc": "2026-09-23T03:30:00Z",
+          "re_run_utc": "2026-09-23T15:30:00Z",
           "suite": "tierc10_close s0_verdicts",
           "transcript_drift": false,
           "transcript_sha_after": "206990af93e2e964313678dd65159d998be302339f40d9a7fb17c22f91ae19dc",
@@ -5267,7 +5270,7 @@
           "exit_code": 0,
           "legs_red": 0,
           "legs_total": null,
-          "re_run_utc": "2026-09-23T03:30:00Z",
+          "re_run_utc": "2026-09-23T15:30:00Z",
           "suite": "tierc10_close stage_d",
           "transcript_drift": false,
           "transcript_sha_after": "73ec9e10ac3cf8560e61fa40247ac1d2d23d46f827b5a4e6d0564b26dbd240f4",
@@ -5278,7 +5281,7 @@
           "exit_code": 0,
           "legs_red": 0,
           "legs_total": null,
-          "re_run_utc": "2026-09-23T03:30:00Z",
+          "re_run_utc": "2026-09-23T15:30:00Z",
           "suite": "tierc10_close stage_log",
           "transcript_drift": false,
           "transcript_sha_after": "ab964b6582a05b849ef77c237aaf446b83b03892bfa97f6f7851d83ede230488",
@@ -5289,7 +5292,7 @@
           "exit_code": 0,
           "legs_red": 0,
           "legs_total": null,
-          "re_run_utc": "2026-09-23T03:30:00Z",
+          "re_run_utc": "2026-09-23T15:30:00Z",
           "suite": "tierc10_close v6_control_twin",
           "transcript_drift": false,
           "transcript_sha_after": "d8925ddd79433a5d2b88d4fc3be2eddbc7eee2df4d0dd628f4ba0534dbbb3d38",
@@ -5298,8 +5301,10 @@
         }
       ],
       "notes": [
-        "All 14 CLOSE builders re-run by the orchestrator: exit 0. FIXTURES_CLOSE_box_cost and _ledger_append_root read LIVE repo/git state and move with every commit by design; they are regenerated in the CLOSE commit sequence.",
-        "P-AGE-1 (tide-youth) and regime-prior had NO definition anywhere in the estate; both tables are Tier-E, gate nothing, and carry their definition as an EXECUTOR READING, NO NEW PIN."
+        "All 13 CLOSE builder suites (14 scripts; one is regime_prior's fixture twin) re-run by the orchestrator: exit 0. FIXTURES_CLOSE_box_cost and _ledger_append_root read LIVE repo/git state and move with every commit by design; they are regenerated in the CLOSE commit sequence.",
+        "P-AGE-1 (tide-youth) and regime-prior had NO definition anywhere in the estate; both tables are Tier-E, gate nothing, and carry their definition as an EXECUTOR READING, NO NEW PIN.",
+        "tierc10_close_close_stage_log.py is a ONE-SHOT: it measured what the PRE-CLOSE draft's '## 1 \u00b7 STAGE LOG' lacked, and its fragment (close/STAGE_LOG.md, close/R0_ADDENDUM.md) was spliced into the draft's \u00a7R0.5. The CLOSE repair pass restructured the draft, so a re-run now HALTs ('no ## 1 \u00b7 STAGE LOG section') before writing anything; its filed outputs are unchanged. Reported, not fixed.",
+        "FILES THAT MOVE WITH GIT STATE BY DESIGN \u2014 their shas here are as of this record and are expected to go stale: close/FIXTURES_CLOSE_box_cost.txt, close/S8_DISPOSITION_BOX_COST.{md,json} (they measure the live tree), close/FIXTURES_CLOSE_ledger_append_root.txt and LEDGER_APOLLO_APPEND.md (the stamp is filled after the push). CLOSE is PARTIAL, so F-C10-RESUME does not re-hash them."
       ],
       "one_line": "CLOSE prepared: six verdicts adversarially verified under their own texts (560 + 340 numbers traced; 1 + 3 wrong, all repaired); P-TRG-2 selection hazard persisted (196/198 campaigns already seen by TC9's sweep, which picked 9/12 on its p); forward strip (report-only), P-AGE-1, regime-prior, v6-control haircut twin built; BUILD_DRAFT.md + LEDGER_APOLLO_APPEND.md (certified 9/9) written. Waiting on the operator for push / LaCie / publish.",
       "stage": "CLOSE",

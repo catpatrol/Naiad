@@ -189,7 +189,7 @@ CLASS     SIX REGISTRATIONS, TEXT FROZEN, FILED BEFORE THE LOOK (371123f;
       exchange/reports/BUILD_2026-09-21_TIERC10_UNSEEN_RANGES.md.
 
   INTEGRITY
-    - 15 stages: 13 COMPLETE-VERIFIED, 2 PARTIAL (PROGRESS.json).
+    - 16 stages: 13 COMPLETE-VERIFIED, 3 PARTIAL (PROGRESS.json).
       D-CORE and D-5M are PARTIAL on F-D-1 alone.
     - F-CTRL/a, in process against tierc6:
       «research_outputs/tierc10/panel/FIXTURES_PANEL.txt:13»
@@ -201,9 +201,9 @@ CLASS     SIX REGISTRATIONS, TEXT FROZEN, FILED BEFORE THE LOOK (371123f;
       That drift is why v6 at or before TC9's as-of re-nets +38.7901 R
       here against TC9's filed +38.8044 R (close/P_TRG_2_SEEN_SHARE.json).
     - F-C10-RESUME:
-      «research_outputs/tierc10/FIXTURES_RESUME.txt:224»
+      «research_outputs/tierc10/FIXTURES_RESUME.txt:226»
         | 9 GREEN, 0 RED (9 fixture(s) run)
-      «research_outputs/tierc10/FIXTURES_RESUME.txt:120»
+      «research_outputs/tierc10/FIXTURES_RESUME.txt:121»
         | 1,090 recorded artifact content-sha(s) across 13 COMPLETE-VERIFIED stage(s) re-hashed, every one a MATCH
     - Scores re-write byte-identical on re-score:
       «research_outputs/tierc10/PROGRESS.json#stages[stage=B-CORE].fixtures[0].note»

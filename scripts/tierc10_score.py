@@ -1392,7 +1392,8 @@ def score_registration(ctx: dict, rid: str, expect: dict | None,
           f"{row['loao_above_of_record']}/{row['loao_panels']}, bar "
           f"{row['loao_bar_above_half']}, clears "
           f"{row['loao_clears_line_of_record']}) · EAR "
-          f"{row['ear_expectancy_r']} [{row['ear_ci_lo']}, "
+          f"{'' if row.get('arm_base', 'zero') == 'zero' else 'Δ '}"
+          f"{row.get('ear_ci_point', row['ear_expectancy_r'])} [{row['ear_ci_lo']}, "
           f"{row['ear_ci_hi']}] · twin sign flag "
           f"{beside['haircut_twin']['sign_disagrees_with_tc']}")
     reg_beside: dict = {}

@@ -1,14 +1,14 @@
 TIER-C10 · CLOSE · F-LAR — THE LEDGER_APOLLO APPEND OF RECORD, CERTIFIED
 REPORT-ONLY: reads the root append and its sources; writes nothing under exchange/ and never the root file
-APPEND OF RECORD (sha256 · bytes): d6a58f5c2901f177edb712c7acce208bf5055225d0f46391189635eba4cab3d1 · 14925 · research_outputs/tierc10/LEDGER_APOLLO_APPEND.md
+APPEND OF RECORD (sha256 · bytes): 1288b59bae687f6a56f31cd75d958dc53400af78f4c7ff77ede3965972d5021e · 14925 · research_outputs/tierc10/LEDGER_APOLLO_APPEND.md
 NOT THE APPEND: research_outputs/tierc10/close/LEDGER_APOLLO_APPEND.draft.md (F-LA's source-quote render) fea0d6519bfea0349d3524f216bb15a1c8a1c5544ac7570954f0f9030e74c3fb · 22653
 SOURCES READ (sha256[:16] · bytes · path)
   4d58d591668badff · 259298 · LEDGER.md
   8a0bf279bcab0f27 · 9441 · exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md
   cd6ad43a0fe48906 · 174090 · exchange/status/LEDGER_APOLLO.md
-  d36cf42e8dc40deb · 111005 · research_outputs/tierc10/FIXTURES_RESUME.txt
+  1622ea6bf1699adc · 111161 · research_outputs/tierc10/FIXTURES_RESUME.txt
   a0a08f8761ce9eab · 8696 · research_outputs/tierc10/OPERATOR_RULINGS.md
-  0d66f2d7fe6c3383 · 267607 · research_outputs/tierc10/PROGRESS.json
+  310d4dd6bc6784da · 288648 · research_outputs/tierc10/PROGRESS.json
   3afce07714680712 · 178729 · research_outputs/tierc10/REGISTRATION_TEXTS.json
   4facddb8b6d2ee00 · 2897 · research_outputs/tierc10/REGISTRY_PIN.json
   29fdc2c30c223e52 · 211125 · research_outputs/tierc10/census/acceptance_head_to_head.parquet
@@ -19,7 +19,7 @@ SOURCES READ (sha256[:16] · bytes · path)
   b68083aa19b0955a · 60968 · research_outputs/tierc10/close/P_TRG_2_SEEN_SHARE.json
   d401eee939866c4d · 64492 · research_outputs/tierc10/close/S2_CENSUS_R.md
   eca4257650d82c30 · 59087 · research_outputs/tierc10/close/S3_STAGE_D.md
-  f771a60175aefcb8 · 104680 · research_outputs/tierc10/close/S5_FINDINGS_NOT_FIXED.json
+  82122fc9d9a1f598 · 108526 · research_outputs/tierc10/close/S5_FINDINGS_NOT_FIXED.json
   499f3843de176fbe · 19355 · research_outputs/tierc10/close/V6_CONTROL_HAIRCUT_TWIN.parquet
   24cd11f1a882de52 · 249025 · research_outputs/tierc10/data/DATA_SPEND_AUDIT.json
   de2e8663bbf101df · 405715 · research_outputs/tierc10/data/STAGE_D_MANIFEST.json
@@ -117,7 +117,7 @@ TRACE TABLE (literal ⇐ source)
   "v6 after TC9's as-of, 4 campaigns." ×1 ⇐ FORWARD_STRIP.parquet rows
   '3 closed for -0.689692 R; 1 open, marked +3.642965 R' ×1 ⇐ FORWARD_STRIP.parquet net_r by exit_reason
   'F-D-4: 102 cells, 0 pre-floor bars.' ×1 ⇐ close/S3_STAGE_D.md 'F-D-4 RE-MEASURED'
-  '15 stages: 13 COMPLETE-VERIFIED, 2 PARTIAL' ×1 ⇐ PROGRESS.json stages[].status
+  '16 stages: 13 COMPLETE-VERIFIED, 3 PARTIAL' ×1 ⇐ PROGRESS.json stages[].status
   're-nets +38.7901 R' ×1 ⇐ P_TRG_2_SEEN_SHARE.json v6_base_vs_tc9_filed.here_pre_net_r
   "TC9's filed +38.8044 R" ×1 ⇐ P_TRG_2_SEEN_SHARE.json v6_base_vs_tc9_filed.tc9_filed_net_r
   'all 28 review worktrees' ×1 ⇐ S5_FINDINGS_NOT_FIXED.json measured.v.value.worktrees_besides_main
@@ -173,7 +173,7 @@ F-LAR-NOWRITE · FAILS IF LEDGER_APOLLO.md or the root append changes during the
   => F-LAR-NOWRITE GREEN
 
 F-DET · FAILS IF two subprocess runs (PYTHONHASHSEED 1, 20260921) print a different transcript through F-LAR-NOWRITE, or differ from this run's
-  real      GREEN — exit [0, 0]; sha 559e22432f2e6588…; all three byte-identical: True
+  real      GREEN — exit [0, 0]; sha 376d088489740440…; all three byte-identical: True
   sabotage  a process-dependent salt: RED (as required) — salted transcript differs
   => F-DET GREEN
 

@@ -35,8 +35,8 @@
    "sha256": "a0a08f8761ce9eab678d42d609d7e6563e749c07a6c33b7b17f9a5c4f31ca907"
   },
   "research_outputs/tierc10/PROGRESS.json": {
-   "bytes": 267607,
-   "sha256": "0d66f2d7fe6c338339880368ff854e58bbb2533be54cf2f7448f71d129752afc"
+   "bytes": 287206,
+   "sha256": "1789f57e40f13e4930cd778e7b604c990dc16db4e6c90c6577352378913ebb3f"
   },
   "research_outputs/tierc10/REGISTRATION_PLAN.md": {
    "bytes": 7242,
@@ -107,7 +107,7 @@
   "findings[id=FN-M-v].text"
  ],
  "git": {
-  "head_at_build": "3d55988dfcbb6b7ffb53855c325545ae642c763e"
+  "head_at_build": "22a1c065a0a7799391ed0cc997c0f98a0b19994d"
  },
  "cross_references": {
   "panel_pin_gap_filed_as": [
@@ -118,13 +118,17 @@
   "harvested_texts_recording_their_own_repair": [
    "FN-PROG-01-B8"
   ],
-  "owners_by_default_rule": []
+  "owners_by_default_rule": [
+   "FN-PROG-15-B1",
+   "FN-PROG-15-N1",
+   "FN-PROG-15-N2"
+  ]
  },
  "counts": {
   "HARVESTED": {
-   "operator": 29,
-   "executor": 15,
-   "total": 44
+   "operator": 30,
+   "executor": 17,
+   "total": 47
   },
   "MEASURED": {
    "operator": 2,
@@ -401,12 +405,32 @@
    "method": "git rev-parse HEAD; git merge-base --is-ancestor; git log ph..HEAD",
    "value": {
     "progress_head": "6b15def66f73e3fcd05b6dc5a0516fcd2ac1d1c7",
-    "git_head": "3d55988dfcbb6b7ffb53855c325545ae642c763e",
+    "git_head": "22a1c065a0a7799391ed0cc997c0f98a0b19994d",
     "equal": false,
     "progress_head_is_ancestor": true,
-    "commits_after_progress_head": 18
+    "commits_after_progress_head": 23
    },
    "commits_after_progress_head": [
+    {
+     "sha7": "22a1c06",
+     "subject": "exchange: auto-publish 2026-09-23"
+    },
+    {
+     "sha7": "fea73bd",
+     "subject": "exchange: auto-publish 2026-09-23"
+    },
+    {
+     "sha7": "4c896a3",
+     "subject": "tierc10(F-C10-RESUME): transcript of record after CLOSE prep — 9 GREEN, 0 RED"
+    },
+    {
+     "sha7": "d575a7d",
+     "subject": "tierc10(CLOSE prep): verdicts verified under their own texts, the missing report-only items built, the build doc drafted"
+    },
+    {
+     "sha7": "ff74a90",
+     "subject": "or1: step F — the edition word follows the verb and the Buenos Aires hour (A-OR1-1 vii)"
+    },
     {
      "sha7": "3d55988",
      "subject": "or1: step D — range module to scripts/rangefinder_core.py; range records to tape_ranges/; F-BR-14 re-pointed (A-OR1-1 iv, v)"
@@ -485,7 +509,7 @@
    "measure": "`git worktree list` HEADs vs the tierc10 commits reachable from HEAD",
    "method": "git worktree list --porcelain; tierc10 commits = commits reachable from HEAD whose subject starts with 'tierc10'; per worktree HEAD, |that set ∩ git rev-list <head>|",
    "value": {
-    "tierc10_commits_on_HEAD": 28,
+    "tierc10_commits_on_HEAD": 30,
     "worktrees_total": 29,
     "worktrees_besides_main": 28,
     "worktrees_besides_main_with_zero_tierc10": 28,
@@ -500,9 +524,9 @@
    "worktrees": [
     {
      "path": ".",
-     "head": "3d55988dfcbb6b7ffb53855c325545ae642c763e",
+     "head": "22a1c065a0a7799391ed0cc997c0f98a0b19994d",
      "branch": "v12-v1-census",
-     "tierc10_commits_reachable": 28
+     "tierc10_commits_reachable": 30
     },
     {
      "path": ".claude/worktrees/wf_8995cf0d-ab5-1",
@@ -678,8 +702,8 @@
    "measure": "PROGRESS.json stages absent from BUILD_DRAFT.md §1",
    "method": "a stage is PRESENT iff its PROGRESS `stage` string occurs inside the bold label that opens a §1 bullet ('- **label**'); §1 = the text after the '## 1 · STAGE LOG' heading up to the next '## ' heading",
    "value": {
-    "absent": 15,
-    "stages": 15
+    "absent": 16,
+    "stages": 16
    },
    "absent_stages": [
     "STEP 0",
@@ -696,7 +720,8 @@
     "CENSUS-R{5m}",
     "B-REG (the six filed)",
     "B-CORE",
-    "B-5M"
+    "B-5M",
+    "CLOSE"
    ],
    "section1_labels": [],
    "absent_but_mentioned_in_section1_body": []
@@ -1005,7 +1030,7 @@
    "class": "HARVESTED",
    "harvest_key": "PROGRESS",
    "label": "REPORT-ONLY · Tier-E",
-   "text": "Clause (c) — the BH family bar q/m = 0.1/6 — is not on these rows yet; finish_family runs after B-5M.",
+   "text": "The family bar q/m = 0.1/6 is not on these rows yet; finish_family runs after B-5M. (Lettered clauses (a)(b)(c) are P-BE-1's structure; P-TRG-2's text makes the CI its only deciding clause.)",
    "text_form": "verbatim string",
    "source": {
     "path": "research_outputs/tierc10/PROGRESS.json",
@@ -1066,6 +1091,75 @@
     "path": "research_outputs/tierc10/PROGRESS.json",
     "quote": "names the print-vs-deduction question OPEN for the operator",
     "reading": "the text names the operator as the one who settles it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-PROG-15-B1",
+   "class": "HARVESTED",
+   "harvest_key": "PROGRESS",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "OPERATOR: push + the LaCie destination (R6 granted push but the operator said they would be asked again at CLOSE; the destination is unnamed — '/Volumes/LaCie/Repo Clone/naiad-backups' is an EXECUTOR LEAN). Until then: the build doc stays at research_outputs/tierc10/BUILD_DRAFT.md (LAW 5 — it moves to exchange/reports/ only at close, and exchange/** auto-publishes, which pushes the branch), LEDGER_APOLLO_APPEND.md is NOT appended, publish_exchange is NOT run.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "field": "stages[15].blockers[0]",
+    "context": {
+     "stage": "CLOSE",
+     "stage_status": "PARTIAL"
+    }
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "OPERATOR: push + the LaCie destination (R6 granted push but ",
+    "reading": "DEFAULT RULE: no declared owner rule matched; owner is 'operator' iff the word 'operator' occurs in the text"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-PROG-15-N1",
+   "class": "HARVESTED",
+   "harvest_key": "PROGRESS",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "All 13 CLOSE builder suites (14 scripts; one is regime_prior's fixture twin) re-run by the orchestrator: exit 0. FIXTURES_CLOSE_box_cost and _ledger_append_root read LIVE repo/git state and move with every commit by design; they are regenerated in the CLOSE commit sequence.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "field": "stages[15].notes[0]",
+    "context": {
+     "stage": "CLOSE",
+     "stage_status": "PARTIAL"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "All 13 CLOSE builder suites (14 scripts; one is regime_prior",
+    "reading": "DEFAULT RULE: no declared owner rule matched; owner is 'operator' iff the word 'operator' occurs in the text"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-PROG-15-N2",
+   "class": "HARVESTED",
+   "harvest_key": "PROGRESS",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "P-AGE-1 (tide-youth) and regime-prior had NO definition anywhere in the estate; both tables are Tier-E, gate nothing, and carry their definition as an EXECUTOR READING, NO NEW PIN.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "field": "stages[15].notes[1]",
+    "context": {
+     "stage": "CLOSE",
+     "stage_status": "PARTIAL"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "P-AGE-1 (tide-youth) and regime-prior had NO definition anyw",
+    "reading": "DEFAULT RULE: no declared owner rule matched; owner is 'operator' iff the word 'operator' occurs in the text"
    },
    "status": "REPORTED, NOT FIXED"
   },
@@ -1746,7 +1840,7 @@
    "class": "MEASURED",
    "harvest_key": "MEASURED",
    "label": "REPORT-ONLY · Tier-E",
-   "text": "PROGRESS.json head 6b15def66f73e3fcd05b6dc5a0516fcd2ac1d1c7 vs git rev-parse HEAD 3d55988dfcbb6b7ffb53855c325545ae642c763e: equal = False; the ledger's head is an ancestor of HEAD = True; commits on HEAD after the ledger's head = 18.",
+   "text": "PROGRESS.json head 6b15def66f73e3fcd05b6dc5a0516fcd2ac1d1c7 vs git rev-parse HEAD 22a1c065a0a7799391ed0cc997c0f98a0b19994d: equal = False; the ledger's head is an ancestor of HEAD = True; commits on HEAD after the ledger's head = 23.",
    "text_form": "rendered from measured values recomputed this run",
    "source": {
     "path": [
@@ -1768,7 +1862,7 @@
    "class": "MEASURED",
    "harvest_key": "MEASURED",
    "label": "REPORT-ONLY · Tier-E",
-   "text": "28 worktree(s) besides the main one; 28 of them reach 0 of the 28 tierc10 commits reachable from HEAD, 0 reach all of them. Their HEADs: a6da1b97e95c × 28. The main working tree reaches 28 of 28.",
+   "text": "28 worktree(s) besides the main one; 28 of them reach 0 of the 30 tierc10 commits reachable from HEAD, 0 reach all of them. Their HEADs: a6da1b97e95c × 28. The main working tree reaches 30 of 30.",
    "text_form": "rendered from measured values recomputed this run",
    "source": {
     "path": [
@@ -1789,7 +1883,7 @@
    "class": "MEASURED",
    "harvest_key": "MEASURED",
    "label": "REPORT-ONLY · Tier-E",
-   "text": "15 of 15 PROGRESS.json stages have no stage line in BUILD_DRAFT.md §1: STEP 0, D-CORE, CENSUS-R{4h,1d}, NULL/gaps-only, NULL/gaps+order, A (stamps), PANEL/gate, LANES (B mech), BRK (B mech), F-C10-RESUME, D-5M, CENSUS-R{5m}, B-REG (the six filed), B-CORE, B-5M. §1's bullet labels are: .",
+   "text": "16 of 16 PROGRESS.json stages have no stage line in BUILD_DRAFT.md §1: STEP 0, D-CORE, CENSUS-R{4h,1d}, NULL/gaps-only, NULL/gaps+order, A (stamps), PANEL/gate, LANES (B mech), BRK (B mech), F-C10-RESUME, D-5M, CENSUS-R{5m}, B-REG (the six filed), B-CORE, B-5M, CLOSE. §1's bullet labels are: .",
    "text_form": "rendered from measured values recomputed this run",
    "source": {
     "path": [

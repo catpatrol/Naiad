@@ -11,7 +11,7 @@
 - **The contract's PANEL PIN gap ('the gap is filed as a finding'):** filed here as `FN-RUL-L1-1`; OPERATOR_RULINGS.md settles it at its `## R8` heading (line 101).
 - **Order of the two 'Still blocked' lists:** list 1 is headed at line 69, BEFORE `# RULINGS OF 2026-09-22 (R7–R10)` at line 82; list 2 is headed at line 139. List 1 is printed because the spec harvests both; where R7–R10 settled an item, list 2 is the later word.
 - **Harvested texts that record their own repair:** `FN-PROG-01-B8` — read those beside the items they repair.
-- **Owners assigned by the DEFAULT RULE (no declared rule matched):** none.
+- **Owners assigned by the DEFAULT RULE (no declared rule matched):** `FN-PROG-15-B1`, `FN-PROG-15-N1`, `FN-PROG-15-N2`.
 
 ## 0 · Inputs, read-only
 
@@ -22,7 +22,7 @@
 | `exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md` | 9441 | `8a0bf279bcab0f27161a7d965535445807f4e713e77d045b0ba124bc7f803c7a` |
 | `research_outputs/tierc10/BUILD_DRAFT.md` | 111105 | `244ad5a46a4f73c522361990638499206c9ef3c341d436e2aa67bdd898791149` |
 | `research_outputs/tierc10/OPERATOR_RULINGS.md` | 8696 | `a0a08f8761ce9eab678d42d609d7e6563e749c07a6c33b7b17f9a5c4f31ca907` |
-| `research_outputs/tierc10/PROGRESS.json` | 267607 | `0d66f2d7fe6c338339880368ff854e58bbb2533be54cf2f7448f71d129752afc` |
+| `research_outputs/tierc10/PROGRESS.json` | 287206 | `1789f57e40f13e4930cd778e7b604c990dc16db4e6c90c6577352378913ebb3f` |
 | `research_outputs/tierc10/REGISTRATION_PLAN.md` | 7242 | `cbb85a214de536598d7e06575b32eac6e266b051cf279f244988245829b2a5e8` |
 | `research_outputs/tierc10/REGISTRATION_TEXTS.json` | 178729 | `3afce077146807127072ae68f9c816e0263505aa625cf1610763ea37eb91ca94` |
 | `research_outputs/tierc10/REGISTRATION_TEXTS.md` | 128673 | `eef76eedda56aef32da1cb5656f5c0a93ffb878f0ad09fa37898efe0a3da40b1` |
@@ -45,10 +45,10 @@
 
 | class | operator | executor | total |
 |---|---:|---:|---:|
-| HARVESTED | 29 | 15 | 44 |
+| HARVESTED | 30 | 17 | 47 |
 | MEASURED | 2 | 4 | 6 |
 | LEAN | 0 | 31 | 31 |
-| **all** | **31** | **50** | **81** |
+| **all** | **32** | **52** | **84** |
 
 *REPORT-ONLY · Tier-E — the index: one row per finding, in document order.*
 
@@ -69,6 +69,9 @@
 | `FN-PROG-13-N2` | HARVESTED | executor | `research_outputs/tierc10/PROGRESS.json` | `stages[13].notes[1]` |
 | `FN-PROG-14-N1` | HARVESTED | executor | `research_outputs/tierc10/PROGRESS.json` | `stages[14].notes[0]` |
 | `FN-PROG-14-N2` | HARVESTED | operator | `research_outputs/tierc10/PROGRESS.json` | `stages[14].notes[1]` |
+| `FN-PROG-15-B1` | HARVESTED | operator | `research_outputs/tierc10/PROGRESS.json` | `stages[15].blockers[0]` |
+| `FN-PROG-15-N1` | HARVESTED | executor | `research_outputs/tierc10/PROGRESS.json` | `stages[15].notes[0]` |
+| `FN-PROG-15-N2` | HARVESTED | executor | `research_outputs/tierc10/PROGRESS.json` | `stages[15].notes[1]` |
 | `FN-RUL-L1-1` | HARVESTED | operator | `research_outputs/tierc10/OPERATOR_RULINGS.md` | `lines 71-71` |
 | `FN-RUL-L1-2` | HARVESTED | operator | `research_outputs/tierc10/OPERATOR_RULINGS.md` | `lines 72-72` |
 | `FN-RUL-L1-3` | HARVESTED | operator | `research_outputs/tierc10/OPERATOR_RULINGS.md` | `lines 73-74` |
@@ -147,7 +150,7 @@
 | (iii) | os.path.exists for analytics/rangefinder.py and analytics/rangefinder_census.py | `analytics/rangefinder.py` False; `analytics/rangefinder_census.py` True | operator |
 | (iv) | PROGRESS.json head vs `git rev-parse HEAD` | git-volatile — see §2.iv | executor |
 | (v) | `git worktree list` HEADs vs the tierc10 commits reachable from HEAD | git-volatile — see §2.v | executor |
-| (vi) | PROGRESS.json stages absent from BUILD_DRAFT.md §1 | absent 15 / stages 15 | executor |
+| (vi) | PROGRESS.json stages absent from BUILD_DRAFT.md §1 | absent 16 / stages 16 | executor |
 
 ### 2.i
 
@@ -229,13 +232,18 @@ os.path.exists(analytics/rangefinder.py) = False; os.path.exists(analytics/range
 - owner basis: `exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md` — "after EVERY stage: commit + update research_outputs/tierc10/PROGRESS.json" — *LAW 6 puts the ledger update on the executor*
 
 ~~~text
-PROGRESS.json head 6b15def66f73e3fcd05b6dc5a0516fcd2ac1d1c7 vs git rev-parse HEAD 3d55988dfcbb6b7ffb53855c325545ae642c763e: equal = False; the ledger's head is an ancestor of HEAD = True; commits on HEAD after the ledger's head = 18.
+PROGRESS.json head 6b15def66f73e3fcd05b6dc5a0516fcd2ac1d1c7 vs git rev-parse HEAD 22a1c065a0a7799391ed0cc997c0f98a0b19994d: equal = False; the ledger's head is an ancestor of HEAD = True; commits on HEAD after the ledger's head = 23.
 ~~~
 
 *REPORT-ONLY · Tier-E — commits on HEAD after the ledger's recorded head.*
 
 | sha | subject |
 |---|---|
+| `22a1c06` | exchange: auto-publish 2026-09-23 |
+| `fea73bd` | exchange: auto-publish 2026-09-23 |
+| `4c896a3` | tierc10(F-C10-RESUME): transcript of record after CLOSE prep — 9 GREEN, 0 RED |
+| `d575a7d` | tierc10(CLOSE prep): verdicts verified under their own texts, the missing report-only items built, the build doc drafted |
+| `ff74a90` | or1: step F — the edition word follows the verb and the Buenos Aires hour (A-OR1-1 vii) |
 | `3d55988` | or1: step D — range module to scripts/rangefinder_core.py; range records to tape_ranges/; F-BR-14 re-pointed (A-OR1-1 iv, v) |
 | `2416a15` | tierc10(F-C10-RESUME): transcript of record after B-5M — 9 GREEN, 0 RED |
 | `08a6fce` | tierc10(B-5M): P-BRK-S1 scored, the family finished at m = 6 — P-TRG-2 alone clears all three clauses |
@@ -269,14 +277,14 @@ PROGRESS.json head 6b15def66f73e3fcd05b6dc5a0516fcd2ac1d1c7 vs git rev-parse HEA
 - owner basis: `exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md` — "Read-only worktrees for review" — *the contract's worktree attestation is the executor's*
 
 ~~~text
-28 worktree(s) besides the main one; 28 of them reach 0 of the 28 tierc10 commits reachable from HEAD, 0 reach all of them. Their HEADs: a6da1b97e95c × 28. The main working tree reaches 28 of 28.
+28 worktree(s) besides the main one; 28 of them reach 0 of the 30 tierc10 commits reachable from HEAD, 0 reach all of them. Their HEADs: a6da1b97e95c × 28. The main working tree reaches 30 of 30.
 ~~~
 
 *REPORT-ONLY · Tier-E — every worktree `git worktree list` names.*
 
 | path | head | branch | tierc10 commits reachable |
 |---|---|---|---:|
-| `.` | `3d55988dfcbb` | `v12-v1-census` | 28 |
+| `.` | `22a1c065a0a7` | `v12-v1-census` | 30 |
 | `.claude/worktrees/wf_8995cf0d-ab5-1` | `a6da1b97e95c` | `worktree-wf_8995cf0d-ab5-1` | 0 |
 | `.claude/worktrees/wf_8995cf0d-ab5-10` | `a6da1b97e95c` | `worktree-wf_8995cf0d-ab5-10` | 0 |
 | `.claude/worktrees/wf_8995cf0d-ab5-11` | `a6da1b97e95c` | `worktree-wf_8995cf0d-ab5-11` | 0 |
@@ -319,7 +327,7 @@ PROGRESS.json head 6b15def66f73e3fcd05b6dc5a0516fcd2ac1d1c7 vs git rev-parse HEA
 - owner basis: `exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md` — "+ one line to the draft" — *LAW 6 puts the draft line on the executor*
 
 ~~~text
-15 of 15 PROGRESS.json stages have no stage line in BUILD_DRAFT.md §1: STEP 0, D-CORE, CENSUS-R{4h,1d}, NULL/gaps-only, NULL/gaps+order, A (stamps), PANEL/gate, LANES (B mech), BRK (B mech), F-C10-RESUME, D-5M, CENSUS-R{5m}, B-REG (the six filed), B-CORE, B-5M. §1's bullet labels are: .
+16 of 16 PROGRESS.json stages have no stage line in BUILD_DRAFT.md §1: STEP 0, D-CORE, CENSUS-R{4h,1d}, NULL/gaps-only, NULL/gaps+order, A (stamps), PANEL/gate, LANES (B mech), BRK (B mech), F-C10-RESUME, D-5M, CENSUS-R{5m}, B-REG (the six filed), B-CORE, B-5M, CLOSE. §1's bullet labels are: .
 ~~~
 
 ## 3 · Harvested — verbatim, by source
@@ -453,7 +461,7 @@ P-BE-1's SCORED arm A1 HALTed at TP.score, as its filed §4 prescribes: the two-
 - owner basis: `research_outputs/tierc10/PROGRESS.json` — "finish_family runs after B-5M" — *an executor sequencing note (B-5M has since run: see PROGRESS stage B-5M)*
 
 ~~~text
-Clause (c) — the BH family bar q/m = 0.1/6 — is not on these rows yet; finish_family runs after B-5M.
+The family bar q/m = 0.1/6 is not on these rows yet; finish_family runs after B-5M. (Lettered clauses (a)(b)(c) are P-BE-1's structure; P-TRG-2's text makes the CI its only deciding clause.)
 ~~~
 
 #### FN-PROG-14-N1
@@ -474,6 +482,36 @@ finish_family ran with P-BE-1's slot HALTed (--allow-halted-slot P-BE-1). This i
 
 ~~~text
 P-BRK-S1's net_r is net of FEE and FUNDING only; the measured 5m toll is a PRINT beside it (TOLL_ACCOUNTING), per its filed §7 which names the print-vs-deduction question OPEN for the operator. The row is already significantly negative before any toll.
+~~~
+
+#### FN-PROG-15-B1
+
+- **HARVESTED** · owner **operator** · status **REPORTED, NOT FIXED** · stage **CLOSE** (PARTIAL)
+- source: `research_outputs/tierc10/PROGRESS.json` · `stages[15].blockers[0]`
+- owner basis: `research_outputs/tierc10/PROGRESS.json` — "OPERATOR: push + the LaCie destination (R6 granted push but " — *DEFAULT RULE: no declared owner rule matched; owner is 'operator' iff the word 'operator' occurs in the text*
+
+~~~text
+OPERATOR: push + the LaCie destination (R6 granted push but the operator said they would be asked again at CLOSE; the destination is unnamed — '/Volumes/LaCie/Repo Clone/naiad-backups' is an EXECUTOR LEAN). Until then: the build doc stays at research_outputs/tierc10/BUILD_DRAFT.md (LAW 5 — it moves to exchange/reports/ only at close, and exchange/** auto-publishes, which pushes the branch), LEDGER_APOLLO_APPEND.md is NOT appended, publish_exchange is NOT run.
+~~~
+
+#### FN-PROG-15-N1
+
+- **HARVESTED** · owner **executor** · status **REPORTED, NOT FIXED** · stage **CLOSE** (PARTIAL)
+- source: `research_outputs/tierc10/PROGRESS.json` · `stages[15].notes[0]`
+- owner basis: `research_outputs/tierc10/PROGRESS.json` — "All 13 CLOSE builder suites (14 scripts; one is regime_prior" — *DEFAULT RULE: no declared owner rule matched; owner is 'operator' iff the word 'operator' occurs in the text*
+
+~~~text
+All 13 CLOSE builder suites (14 scripts; one is regime_prior's fixture twin) re-run by the orchestrator: exit 0. FIXTURES_CLOSE_box_cost and _ledger_append_root read LIVE repo/git state and move with every commit by design; they are regenerated in the CLOSE commit sequence.
+~~~
+
+#### FN-PROG-15-N2
+
+- **HARVESTED** · owner **executor** · status **REPORTED, NOT FIXED** · stage **CLOSE** (PARTIAL)
+- source: `research_outputs/tierc10/PROGRESS.json` · `stages[15].notes[1]`
+- owner basis: `research_outputs/tierc10/PROGRESS.json` — "P-AGE-1 (tide-youth) and regime-prior had NO definition anyw" — *DEFAULT RULE: no declared owner rule matched; owner is 'operator' iff the word 'operator' occurs in the text*
+
+~~~text
+P-AGE-1 (tide-youth) and regime-prior had NO definition anywhere in the estate; both tables are Tier-E, gate nothing, and carry their definition as an EXECUTOR READING, NO NEW PIN.
 ~~~
 
 ### 3.2 · OPERATOR_RULINGS.md — the first 'Still blocked' list
