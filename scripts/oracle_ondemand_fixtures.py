@@ -1,4 +1,5 @@
-"""ORACLE ON-DEMAND FIXTURES — F-SK-1, F-SK-2a..2i, F-SK-3 of queue OR-1, STEP A.
+"""ORACLE ON-DEMAND FIXTURES — F-SK-1, F-SK-2a..2i, F-SK-3 of queue OR-1, STEP A;
+F-SK-4 of queue OR-2, STEP 2 (R-4, the stray arming command).
 
 Same law as the BR-1 and BR-1b sets: every fixture runs BOTH legs, and `prove()`
 refuses to count a fixture whose break leg passed. A fixture that cannot be made
@@ -27,6 +28,13 @@ sandbox in its own process with a top-up stub that hangs, so the parent can send
 a real SIGTERM / SIGKILL and read what is left in <dir>. It is not a test mode of
 the wrapper; the wrapper it drives is the real module.
 
+F-SK-4 STARTS CHILDREN TOO (`--child-install <dir> [plants] -- <argv>`), and it is
+the one fixture that lets the REAL arm() run: in a child whose PATH holds only two
+recording shell shims (`launchctl`, `plutil`) and whose HOME is the sandbox, so the
+real launchctl cannot be found and the real plists are only ever READ (copied in).
+The child refuses to start unless all of that holds; the five real plists and the
+sentinel are stamped before and compared after. See F-SK-4.
+
 Run:  ~/venvs/naiad/bin/python scripts/oracle_ondemand_fixtures.py
 Exit: 0 if every fixture is green on REAL and red on BREAK; 1 otherwise.
 """
@@ -39,6 +47,7 @@ import io
 import json
 import os
 import re
+import shutil
 import signal
 import subprocess
 import sys
@@ -586,7 +595,7 @@ class Sandbox:
              "run_topup", "run_oracle", "run_movers", "self_checks",
              "reschedule_if_drifted", "arm", "write_plist", "names_ondemand",
              "show_standing_flag", "ondemand_flag_action", "ondemand_skips",
-             "ondemand_plan_lines", "identity_gate")
+             "ondemand_plan_lines", "identity_gate", "install_refusal")
     MOVERS_MODES = ("ok", "no-json", "exit1", "absent", "hang")
     TOPUP_STARTED = "topup.started"          # F-SK-2h: the child's "cut me now" marker
     ORACLE_STARTED = "oracle.started"        # the same, for a cut INSIDE STEP 5
@@ -659,7 +668,7 @@ class Sandbox:
         OW.reschedule_if_drifted = _schedule("reschedule_if_drifted")
 
         def _arming(name):
-            def _stub(label, log=print):
+            def _stub(label, log=print, **_kw):     # **_kw: arm(enable=) since OR-2 R-4
                 self.arm_calls.append(f"{name}({label})")
                 self.schedule_calls.append(f"{name}({label})")
                 if self.arm_raises:
@@ -975,6 +984,10 @@ def _install_refused(install_first: bool) -> tuple[bool, str]:
             OW.FLAG.write_text(body, encoding="utf-8")
             if install_first:
                 OW.names_ondemand = lambda argv: False
+                # OR-2 R-4: the world this plant rebuilds had no sentinel guard
+                # either. Left in place, the guard would refuse these argvs on its
+                # own and the plant would go red for a reason that is not B1's.
+                OW.install_refusal = lambda argv: None
             rc, out = sb.main(argv, allow_install=True)
             seen.append({"argv": " ".join(argv), "rc": rc, "armed": len(sb.arm_calls),
                          "lock_takes": len(sb.lock_takes), "ran": list(sb.ran),
@@ -1557,6 +1570,301 @@ def f_sk_3() -> None:
           _identity_break, lambda: _identity(None))
 
 
+# ══════════════════════════════════ F-SK-4 · THE STRAY ARMING COMMAND (OR-2 R-4)
+#
+# WHAT THIS GUARDS. OR-1 finding OR1-b: `oracle_wrapper.py --install` typed alone
+# was still the clock's arming verb. It rewrote the five retained plists, ran
+# `launchctl bootout` + `bootstrap` on labels the operator had suspended, and
+# printed `ARMED <label>` whatever bootstrap answered. Operator ruling R-4
+# (2026-09-22): while research_outputs/oracle/SCHEDULE_SUSPENDED exists, --install
+# alone REFUSES (exit 2, nothing touched) and names `--install --rearm`; on that
+# explicit path every rc reaches the exit code and ARMED prints only on rc 0.
+#
+# HOW IT IS SAFE. The real gui domain is never reached, by construction:
+#   · every scenario runs the REAL main() in a CHILD process (this file, run as
+#     `--child-install <dir> [plants] -- <argv>`), whose PATH holds ONLY a
+#     directory of two shell shims — `launchctl` and `plutil` — that RECORD their
+#     argv, answer, and forward nothing. A missing shim raises FileNotFoundError;
+#     it can never fall through to the real binary;
+#   · the child's HOME is the sandbox, so Path.home()-derived AGENTS is too, and
+#     the plists it may write are COPIES of the five real ones;
+#   · the child refuses to start (exit 99, "F-SK-4 UNSAFE") unless PATH, both
+#     `shutil.which` answers, HOME and AGENTS all point into the sandbox;
+#   · the five REAL plists and the REAL sentinel are stamped (size, mtime_ns,
+#     sha256) BEFORE prove() and compared after both legs; any change is a BREACH,
+#     whatever the legs said, and their mtimes are held against the G-1 baseline
+#     the OR-2 queue file recorded at STEP 0.
+
+G1_QUEUE = ROOT / "exchange" / "queue" / "2026-09-22_OR2_oracle_rulings_ARGUS.md"
+G1_LINE = re.compile(r"^\s+(com\.naiad\.oracle-[0-9a-z-]+)\.plist\s+(\d+)\s+·", re.M)
+SK4_FAIL_ENV = "F_SK4_FAIL"
+SK4_FAIL_LABEL = "com.naiad.oracle-1600"
+SK4_REFUSED_ARGVS = (
+    ["--install"],                                    # the stray command itself
+    ["--install", "--job", "oracle", "--slot", "full"],
+    ["--install", "--dry-run"],                       # looks harmless, is not
+    ["--slot", "full", "--install"],
+    ["--rearm"],                                      # would fall to the legacy job
+    ["--install", "--rearm", "--dry-run"],            # the explicit path, disguised
+)
+SK4_LAUNCHCTL_SHIM = """#!/bin/sh
+# F-SK-4's fake launchctl: records, answers, NEVER forwards. Shell builtins only.
+printf '%s\\n' "$*" >> "{calls}"
+case "$1" in
+  bootstrap)
+    p="$3"; p="${{p##*/}}"; l="${{p%.plist}}"
+    if [ -n "$F_SK4_FAIL" ] && [ "$l" = "$F_SK4_FAIL" ]; then
+      echo "Bootstrap failed: 5: Input/output error" >&2
+      exit 5
+    fi
+    exit 0 ;;
+  print) exit 113 ;;
+  *) exit 0 ;;
+esac
+"""
+SK4_PLUTIL_SHIM = """#!/bin/sh
+printf '%s\\n' "$*" >> "{calls}"
+echo "$2: OK"
+exit 0
+"""
+
+
+def _real_agents() -> Path:
+    """The REAL LaunchAgents directory, from the password database — not from $HOME,
+    which a sandbox may have moved."""
+    import pwd
+    return Path(pwd.getpwuid(os.getuid()).pw_dir) / "Library" / "LaunchAgents"
+
+
+def _stamp_real() -> dict:
+    out = {}
+    files = [_real_agents() / f"{label}.plist" for label in OW.SLOTS]
+    files.append(ROOT / OW.SCHEDULE_SENTINEL_REL)
+    for f in files:
+        out[f.name] = ((f.stat().st_size, f.stat().st_mtime_ns,
+                        hashlib.sha256(f.read_bytes()).hexdigest()) if f.exists() else None)
+    return out
+
+
+def _g1_baseline() -> dict:
+    """label -> mtime (epoch seconds) as the OR-2 queue file recorded it at STEP 0."""
+    txt = G1_QUEUE.read_text(encoding="utf-8") if G1_QUEUE.exists() else ""
+    i = txt.find("G-1 BASELINE")
+    return {} if i < 0 else {m.group(1): int(m.group(2)) for m in G1_LINE.finditer(txt[i:])}
+
+
+def _sk4_run(argv: list[str], plants: tuple = (), fail_label: str | None = None) -> dict:
+    """One scenario: the real main() in a child whose PATH is only the shims."""
+    with tempfile.TemporaryDirectory(prefix="oracle-sk4-") as tds:
+        td = Path(tds)
+        (td / "bin").mkdir()
+        agents = td / "home" / "Library" / "LaunchAgents"
+        agents.mkdir(parents=True)
+        calls, pcalls = td / "launchctl.calls", td / "plutil.calls"
+        for name, body in (("launchctl", SK4_LAUNCHCTL_SHIM.format(calls=calls)),
+                           ("plutil", SK4_PLUTIL_SHIM.format(calls=pcalls))):
+            f = td / "bin" / name
+            f.write_text(body, encoding="utf-8")
+            f.chmod(0o755)
+        for label in OW.SLOTS:
+            src = _real_agents() / f"{label}.plist"
+            if src.exists():
+                shutil.copy2(src, agents / src.name)      # the real ones are only READ
+        before = {f.name: f.stat().st_mtime_ns for f in agents.iterdir()}
+        env = {"PATH": str(td / "bin"), "HOME": str(td / "home"),
+               "PYTHONDONTWRITEBYTECODE": "1", "PYTHONIOENCODING": "utf-8"}
+        if fail_label:
+            env[SK4_FAIL_ENV] = fail_label
+        r = subprocess.run([sys.executable, str(Path(__file__).resolve()), "--child-install",
+                            str(td), *plants, "--", *argv],
+                           cwd=ROOT, env=env, capture_output=True, text=True, timeout=120)
+        after = {f.name: f.stat().st_mtime_ns for f in agents.iterdir()}
+        return {"argv": " ".join(argv), "plants": plants, "rc": r.returncode,
+                "out": r.stdout + r.stderr,
+                "calls": calls.read_text().splitlines() if calls.exists() else [],
+                "pcalls": pcalls.read_text().splitlines() if pcalls.exists() else [],
+                "touched": sorted(k for k in after if after[k] != before.get(k))}
+
+
+def _sk4_refusal_faults(r: dict) -> list[str]:
+    tag = f"`{r['argv']}`"
+    if "F-SK-4 UNSAFE" in r["out"] or r["rc"] == 99:
+        return [f"{tag}: the child refused to start — the safety net did not hold: "
+                f"{r['out'][:200]}"]
+    bad = []
+    if r["rc"] != 2:
+        bad.append(f"{tag} -> exit {r['rc']}, not 2")
+    if r["calls"]:
+        verbs = sorted({c.split(" ", 1)[0] for c in r["calls"]})
+        bad.append(f"{tag}: the shim recorded {len(r['calls'])} launchctl call(s) "
+                   f"({', '.join(verbs)}; first `{r['calls'][0]}`) — a suspended label was "
+                   f"booted out and bootstrapped")
+    if r["pcalls"]:
+        bad.append(f"{tag}: plutil ran {len(r['pcalls'])}x — a plist was written")
+    if r["touched"]:
+        bad.append(f"{tag}: sandbox plist(s) rewritten: {r['touched'][:2]}")
+    if "Nothing was touched" not in r["out"]:
+        bad.append(f"{tag}: the refusal does not say 'Nothing was touched'")
+    if "--install --rearm" not in r["out"]:
+        bad.append(f"{tag}: the refusal does not name the explicit path `--install --rearm`")
+    if "ORACLE — arming" in r["out"] or re.search(r"^  ARMED com\.naiad\.", r["out"], re.M):
+        bad.append(f"{tag}: an arming line printed")
+    return bad
+
+
+def _sk4_rearm_faults(r: dict, fail: str | None) -> list[str]:
+    tag = f"`{r['argv']}`" + (f" (shim: {fail} bootstrap -> 5)" if fail else "")
+    if "F-SK-4 UNSAFE" in r["out"] or r["rc"] == 99:
+        return [f"{tag}: the child refused to start — the safety net did not hold"]
+    bad = []
+    armed = re.findall(r"^  ARMED (com\.naiad\.oracle-[0-9a-z-]+) ", r["out"], re.M)
+    not_armed = re.findall(r"^  NOT ARMED (com\.naiad\.oracle-[0-9a-z-]+) ", r["out"], re.M)
+    want_armed = [lb for lb in OW.SLOTS if lb != fail]
+    if fail:
+        if r["rc"] == 0:
+            bad.append(f"{tag} -> exit 0 although a bootstrap answered 5 — the rc never "
+                       f"reached the exit code")
+        if fail in armed:
+            bad.append(f"{tag}: `ARMED {fail}` printed for a label whose bootstrap answered 5")
+        if not_armed != [fail]:
+            bad.append(f"{tag}: NOT ARMED lines {not_armed}, want [{fail}]")
+        elif not re.search(rf"^  NOT ARMED {re.escape(fail)} .*bootstrap rc 5", r["out"], re.M):
+            bad.append(f"{tag}: the NOT ARMED line does not carry `bootstrap rc 5`")
+    elif r["rc"] != 0 or not_armed:
+        bad.append(f"{tag} -> exit {r['rc']}, NOT ARMED {not_armed}: a clean shim must arm all")
+    if sorted(armed) != sorted(want_armed):
+        bad.append(f"{tag}: ARMED lines for {sorted(armed)}, want {sorted(want_armed)}")
+    for lb in OW.SLOTS:
+        verbs = [c.split(" ", 1)[0] for c in r["calls"] if lb in c]
+        if verbs[:4] != ["enable", "bootout", "bootstrap", "list"]:
+            bad.append(f"{tag}: launchctl calls for {lb} read {verbs} — the explicit path is "
+                       f"enable, (bootout), bootstrap, list")
+            break
+    if len(r["pcalls"]) != len(OW.SLOTS):
+        bad.append(f"{tag}: plutil ran {len(r['pcalls'])}x, want {len(OW.SLOTS)}")
+    return bad
+
+
+def _sk4_real() -> tuple[bool, str]:
+    bad = []
+    sentinel = ROOT / OW.SCHEDULE_SENTINEL_REL
+    if OW.SCHEDULE_SENTINEL != sentinel:
+        bad.append(f"OW.SCHEDULE_SENTINEL is {OW.SCHEDULE_SENTINEL}, not the repo sentinel")
+    if not sentinel.exists():
+        bad.append(f"the sentinel {OW.SCHEDULE_SENTINEL_REL} is ABSENT — the guard is OFF")
+    else:
+        rl = [ln.split(None, 1)[1].strip() for ln in sentinel.read_text(encoding="utf-8").splitlines()
+              if ln.startswith("REARM ")]
+        if rl != [OW.REARM_COMMAND]:
+            bad.append(f"the sentinel's REARM line {rl} is not OW.REARM_COMMAND byte for byte")
+    src = WRAPPER.read_text(encoding="utf-8")
+    if "/bin/launchctl" in src or OW.LAUNCHCTL != "launchctl":
+        bad.append("the wrapper names launchctl by an absolute path — a PATH shim could be "
+                   "bypassed")
+    refused = [_sk4_run(a) for a in SK4_REFUSED_ARGVS]
+    for r in refused:
+        bad += _sk4_refusal_faults(r)
+    r_fail = _sk4_run(["--install", "--rearm"], fail_label=SK4_FAIL_LABEL)
+    r_ok = _sk4_run(["--install", "--rearm"])
+    bad += _sk4_rearm_faults(r_fail, SK4_FAIL_LABEL) + _sk4_rearm_faults(r_ok, None)
+    if bad:
+        return False, "; ".join(bad[:6]) + (f" (+{len(bad) - 6} more)" if len(bad) > 6 else "")
+    return True, (
+        f"sentinel present, its REARM line == OW.REARM_COMMAND; {len(refused)} argvs "
+        f"({' | '.join(r['argv'] for r in refused)}) each exit 2 saying 'Nothing was "
+        f"touched' and naming `--install --rearm`: 0 launchctl calls, 0 plutil calls, 0 "
+        f"plists rewritten. The explicit path against the shim: with {SK4_FAIL_LABEL}'s "
+        f"bootstrap answering 5 -> exit {r_fail['rc']}, {len(OW.SLOTS) - 1} ARMED + 1 NOT "
+        f"ARMED (bootstrap rc 5); clean -> exit 0, {len(OW.SLOTS)} ARMED; every label "
+        f"enable -> bootout -> bootstrap -> list. The real gui domain was never reached: "
+        f"PATH held only the shims")
+
+
+def _sk4_break() -> tuple[bool, str]:
+    plants = (
+        ("GUARD PLANT (the sentinel guard removed: `--install` alone, as before R-4)",
+         "the shim recorded",
+         lambda: _sk4_refusal_faults(_sk4_run(["--install"], plants=("--no-guard",)))),
+        ("RC-BLIND PLANT (ARMED whatever bootstrap said — OR1-b's false ARMED)",
+         "whose bootstrap answered 5",
+         lambda: _sk4_rearm_faults(_sk4_run(["--install", "--rearm"], plants=("--rc-blind",),
+                                            fail_label=SK4_FAIL_LABEL), SK4_FAIL_LABEL)),
+    )
+    green, out = False, []
+    for name, must, judge in plants:
+        bad = judge()
+        hits = [b for b in bad if must in b]
+        if hits:
+            out.append(f"{name} -> RED: {hits[0]}" + (f" [+{len(bad) - 1} more]" if len(bad) > 1 else ""))
+        else:
+            green = True
+            out.append(f"{name} -> " + ("GREEN" if not bad else
+                       f"RED FOR THE WRONG REASON (no finding says {must!r}; first: {bad[0]})"))
+    return green, " ‖ ".join(out)
+
+
+def child_install(args: list[str]) -> int:
+    """F-SK-4's child: the REAL oracle_wrapper.main(), in a process whose PATH holds
+    only the shims and whose HOME is the sandbox. It will not start unless every one
+    of those holds, so no mistake in the parent can reach the real launchctl."""
+    i, j = args.index("--child-install"), args.index("--")
+    td = Path(args[i + 1])
+    plants, wargv = args[i + 2:j], args[j + 1:]
+    shim = td / "bin" / "launchctl"
+    net = {"PATH is only the shim dir": os.environ.get("PATH") == str(td / "bin"),
+           "launchctl resolves to the shim": shutil.which("launchctl") == str(shim),
+           "plutil resolves to the shim": shutil.which("plutil") == str(td / "bin" / "plutil"),
+           "HOME is the sandbox": Path.home() == td / "home",
+           "AGENTS is in the sandbox": str(OW.AGENTS).startswith(str(td) + os.sep)}
+    unsafe = [k for k, v in net.items() if not v]
+    if unsafe:
+        print(f"F-SK-4 UNSAFE — refusing to drive main(): {unsafe}")
+        return 99
+    OW.AGENTS = td / "home" / "Library" / "LaunchAgents"
+    OW.LOGDIR = td / "logs"
+    OW.FLAG, OW.LOCK, OW.SELFCHECK = (td / "ORACLE_DOWN.flag", td / ".oracle.lock",
+                                       td / "selfcheck_log.jsonl")
+    OW.LAUNCHCTL = str(shim)
+    for pl in plants:
+        if pl == "--no-guard":
+            OW.install_refusal = lambda argv: None
+        elif pl == "--rc-blind":
+            OW.arm_ok = lambda rcs: True
+        else:
+            print(f"F-SK-4 child: unknown plant {pl!r}")
+            return 98
+    return OW.main(wargv)
+
+
+def f_sk_4() -> None:
+    before, base = _stamp_real(), _g1_baseline()
+    prove("F-SK-4", "THE STRAY ARMING COMMAND — --install alone refuses while the "
+                    "schedule is suspended; the explicit path says ARMED only on rc 0 "
+                    "(against a fake launchctl, never the gui domain)",
+          _sk4_break, _sk4_real)
+    after = _stamp_real()
+    breach = [k for k in before if before[k] != after.get(k)]
+    g1 = []
+    if sorted(base) != sorted(OW.SLOTS):
+        g1.append(f"the G-1 baseline in {G1_QUEUE.name} names {sorted(base)}, the wrapper "
+                  f"{sorted(OW.SLOTS)}")
+    for lb, want in base.items():
+        f = _real_agents() / f"{lb}.plist"
+        got = int(f.stat().st_mtime) if f.exists() else None
+        if got != want:
+            g1.append(f"{lb}.plist mtime {got} != the STEP 0 baseline {want}")
+    if breach or g1:
+        msg = "; ".join([f"{k} changed during the fixture" for k in breach] + g1)
+        print(f"  [BREACH] {msg}")
+        if "F-SK-4" in PASSED:
+            PASSED.remove("F-SK-4")
+        FAILED.append(f"F-SK-4 (BREACH: {msg})")
+    else:
+        print(f"  [G-1] the {len(OW.SLOTS)} real plists and the sentinel: size, mtime and "
+              f"sha256 unchanged across both legs; plist mtimes equal the STEP 0 baseline "
+              f"recorded in {G1_QUEUE.name}")
+
+
 # ══════════════════════════════════════════════════════════════════ MAIN
 
 def main() -> int:
@@ -1568,7 +1876,7 @@ def main() -> int:
     print(f"  chain    {' -> '.join(step_ids())}")
     print("=" * 78)
     fixtures = (f_sk_1, f_sk_2a, f_sk_2b, f_sk_2c, f_sk_2d, f_sk_2e, f_sk_2f,
-                f_sk_2g, f_sk_2h, f_sk_2i, f_sk_3)
+                f_sk_2g, f_sk_2h, f_sk_2i, f_sk_3, f_sk_4)
     for fn in fixtures:
         try:
             fn()
@@ -1587,4 +1895,6 @@ def main() -> int:
 if __name__ == "__main__":
     if "--child-cutoff" in sys.argv:
         raise SystemExit(child_cutoff(sys.argv[1:]))
+    if "--child-install" in sys.argv:
+        raise SystemExit(child_install(sys.argv[1:]))
     raise SystemExit(main())

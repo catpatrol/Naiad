@@ -230,6 +230,11 @@ research_outputs/oracle/**
 # enumerated from. Tracking it makes a scope change visible in git history
 # instead of only on disk.
 !research_outputs/oracle/topup_scope.json
+# SCHEDULE_SUSPENDED is the third (OR-2 R-4, 2026-09-23): while it exists,
+# `oracle_wrapper.py --install` alone refuses (exit 2, nothing touched). A guard
+# that lives only on one disk vanishes in every fresh clone, which would re-open
+# the stray arming command the ruling closed — so the sentinel is versioned.
+!research_outputs/oracle/SCHEDULE_SUSPENDED
 
 research_outputs/tierc6/**
 research_outputs/tierc6_run2/**

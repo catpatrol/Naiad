@@ -350,15 +350,13 @@ Notes for the run:
   `research_outputs/oracle/SUSPENDED_2026-09-21.txt` and rolling back is the
   OPERATOR's action, never this skill's. Beside the on-demand job the wrapper
   refuses it for you — `HALT: --job ondemand REFUSES --install. …`, exit 2, nothing
-  touched — but `--install` typed ALONE is still the clock's arming verb and is NOT
-  guarded: for each of the five labels it rewrites the retained plist, then runs
-  `launchctl bootout` + `bootstrap`, and prints `ARMED <label>` whatever happens —
-  `bootstrap_rc` never reaches the exit code, so the run exits 0. The persistent
-  `disable` overrides should refuse each bootstrap (rollback card: "bootstrap alone
-  will not re-arm a disabled label"), so the likely result is NOT five armed agents
-  but five rewritten plists — same bytes today, new mtimes — which is exactly what
-  the suspension audit checks ("five plists present and unedited"), plus five ARMED
-  lines that are not true. Do not type it.
+  touched — and since OR-2 R-4 (2026-09-23) `--install` typed ALONE refuses too,
+  while the sentinel `research_outputs/oracle/SCHEDULE_SUSPENDED` exists: `HALT:
+  --install REFUSED — the five com.naiad.oracle-* agents are SUSPENDED …`, exit 2, no
+  plist written, no launchctl call. The explicit path it names, `--install --rearm`
+  (enable, bootstrap, verify with `launchctl list`; `ARMED <label>` only when every rc
+  is 0, and any nonzero rc reaches the exit code), is the OPERATOR's to type, never
+  this skill's. Do not type either.
 - ALWAYS DETACHED (`run_in_background: true`, `python -u`, the log at
   `logs/launchd/oracle-ondemand.log`). A foreground timeout that fires mid-chain
   ends the run before the render; see WHAT A CUT-OFF RUN LEAVES BEHIND.

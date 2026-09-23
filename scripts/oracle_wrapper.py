@@ -76,12 +76,23 @@ thing that changed for --install: an argv that NAMES THE ON-DEMAND EDITION is
 dispatched to the on-demand job FIRST, and that job REFUSES --install (exit 2,
 nothing touched) — `--job ondemand --dry-run --install` used to reach the arming
 branch for all five suspended labels and print no dry run at all (fix round 1,
-F-SK-2e). What that branch DOES was only ever observed with arm() replaced by a
+F-SK-2e). What that branch DID was only ever observed with arm() replaced by a
 recorder: against the real, persistently `launchctl disable`d labels each
-bootstrap should be refused, so the effect is five REWRITTEN plists (same bytes,
+bootstrap should be refused, so the effect was five REWRITTEN plists (same bytes,
 new mtimes — which is what the suspension audit's "five plists present and
-unedited" checks) and five `ARMED <label>` lines that are not true, since
-bootstrap_rc never reaches the exit code.
+unedited" checks) and five `ARMED <label>` lines that were not true, since
+bootstrap_rc never reached the exit code (OR-1 finding OR1-b).
+
+THE STRAY ARMING COMMAND IS GUARDED (OR-2 R-4, operator 2026-09-22). While the
+sentinel research_outputs/oracle/SCHEDULE_SUSPENDED exists, `--install` alone
+REFUSES — exit 2, nothing touched: no plist written, no launchctl call — and names
+the explicit path, `--install --rearm`. That path (the operator's, never a
+skill's) enables each label, bootstraps it and verifies it with `launchctl list`;
+every rc reaches the exit code, and `ARMED <label>` prints only when all of them
+answered 0 (arm_ok). The drift re-arm of the legacy post-run loop is held by the
+same sentinel. launchctl is called by its bare name through LAUNCHCTL, resolved on
+PATH, so F-SK-4 can run the explicit path against a recording shim and never the
+real gui domain.
 
 NO DELETION, EVER (CADENCE §4). Re-arming is bootout + bootstrap; the plist
 stays on disk. This wrapper never removes a plist. (The flag above is not a
@@ -110,6 +121,20 @@ PY = "/Users/luis/venvs/naiad/bin/python"
 AGENTS = Path.home() / "Library" / "LaunchAgents"
 LOGDIR = ROOT / "logs" / "launchd"
 SELFCHECK = ROOT / "research_outputs" / "oracle" / "calibration" / "selfcheck_log.jsonl"
+
+# OR-2 R-4 · THE GUARD ON THE STRAY ARMING COMMAND. Plain module constants, not
+# ONDEMAND_REGISTER rows: the ruling fixed them, so there is nothing [VETO] to show.
+# The sentinel is a module-level Path so a fixture can point it elsewhere; its
+# EXISTENCE is the guard, its text is for the operator (it carries REARM_COMMAND
+# byte for byte, which F-SK-4 checks).
+SCHEDULE_SENTINEL = ROOT / "research_outputs" / "oracle" / "SCHEDULE_SUSPENDED"
+SCHEDULE_SENTINEL_REL = "research_outputs/oracle/SCHEDULE_SUSPENDED"
+REARM_FLAG = "--rearm"
+REARM_COMMAND = ("cd ~/Naiad && ~/venvs/naiad/bin/python scripts/oracle_wrapper.py "
+                 "--install --rearm")
+# BARE ON PURPOSE: resolved through PATH at call time, never an absolute path, so
+# F-SK-4's recording shim is what answers under the fixture.
+LAUNCHCTL = "launchctl"
 
 # label -> {slot, hour, minute, job}. Times are in the ORACLE's zone, never the
 # machine's; `machine_local_time_for` resolves them through the zone each run.
@@ -209,7 +234,7 @@ def write_plist(label: str) -> tuple[Path, int | None, int | None]:
 
 
 def loaded_schedule(label: str) -> dict | None:
-    out = subprocess.run(["launchctl", "print", f"gui/{UID}/{label}"],
+    out = subprocess.run([LAUNCHCTL, "print", f"gui/{UID}/{label}"],
                          capture_output=True, text=True)
     if out.returncode != 0:
         return None
@@ -224,25 +249,76 @@ def loaded_schedule(label: str) -> dict | None:
     return sched or {"loaded": True}
 
 
-def arm(label: str, log=print) -> dict:
+def arm_ok(rcs: dict) -> bool:
+    """OR-2 R-4 · ARMED IS SAID ONLY ON rc 0. `rcs` holds the return code of every
+    launchctl step that decides the question — `enable` (the explicit re-arm path
+    only), `bootstrap`, and the `list` that verifies the label is loaded. The
+    bootout's rc is NOT among them: a label that is not loaded answers nonzero, and
+    unloading it first is housekeeping, not arming. Before R-4 the bootstrap rc went
+    into a dict and a stderr line only, and `ARMED <label>` printed whatever it said
+    (OR1-b's false-ARMED half). A pure function, so F-SK-4 can replant the old
+    rc-blind rule and watch it go red."""
+    return bool(rcs) and all(rc == 0 for rc in rcs.values())
+
+
+def arm(label: str, log=print, enable: bool = False) -> dict:
+    """Write the plist, (enable), bootout, bootstrap, verify. `enable=True` is the
+    explicit re-arm path (`--install --rearm`): the five labels were persistently
+    `launchctl disable`d on 2026-09-21, and bootstrap alone will not re-arm a
+    disabled label (the rollback card), so enable goes FIRST."""
     p, h, m = write_plist(label)
-    subprocess.run(["launchctl", "bootout", f"gui/{UID}/{label}"],
+    rcs: dict = {}
+    if enable:
+        rcs["enable"] = subprocess.run([LAUNCHCTL, "enable", f"gui/{UID}/{label}"],
+                                       capture_output=True, text=True).returncode
+    subprocess.run([LAUNCHCTL, "bootout", f"gui/{UID}/{label}"],
                    capture_output=True, text=True)
-    r = subprocess.run(["launchctl", "bootstrap", f"gui/{UID}", str(p)],
+    r = subprocess.run([LAUNCHCTL, "bootstrap", f"gui/{UID}", str(p)],
                        capture_output=True, text=True)
+    rcs["bootstrap"] = r.returncode
     lint = subprocess.run(["plutil", "-lint", str(p)], capture_output=True, text=True)
+    rcs["list"] = subprocess.run([LAUNCHCTL, "list", label],
+                                 capture_output=True, text=True).returncode
     sched = loaded_schedule(label)
+    ok = arm_ok(rcs)
     cfg = SLOTS[label]
     when = (f"machine-local {h:02d}:{m:02d} "
             f"(= {cfg['hour']:02d}:{cfg['minute']:02d} {ZONE})"
             if h is not None else "no clock · RunAtLoad, once per login/boot")
-    log(f"  ARMED {label} [{cfg['job']}]: {when} · plist {p}")
+    rc_txt = " · ".join(f"{k} rc {v}" for k, v in rcs.items())
+    if ok:
+        log(f"  ARMED {label} [{cfg['job']}]: {when} · plist {p} · {rc_txt}")
+    else:
+        log(f"  NOT ARMED {label} [{cfg['job']}]: {rc_txt} — every one must be 0 · plist {p}")
     log(f"    plutil: {lint.stdout.strip() or lint.stderr.strip()}")
     log(f"    launchd reports: {sched}")
     if r.returncode != 0:
         log(f"    bootstrap stderr: {r.stderr.strip()}")
     return {"label": label, "plist": str(p), "hour": h, "minute": m,
-            "bootstrap_rc": r.returncode, "schedule_from_launchd": sched}
+            "bootstrap_rc": r.returncode, "rcs": rcs, "armed": ok,
+            "schedule_from_launchd": sched}
+
+
+def install_refusal(argv: list[str]) -> str | None:
+    """OR-2 R-4 · the one decision on the arming verb; None means "go ahead".
+    While SCHEDULE_SENTINEL exists, `--install` alone REFUSES and names the explicit
+    path. The explicit path takes EXACTLY `--install --rearm`: a stray token beside
+    it (a `--dry-run`, a `--job`) would otherwise arm for real while looking like
+    something else. `--rearm` without `--install` would otherwise fall through to
+    the legacy job (a full render plus the drift loop), so it refuses too."""
+    if REARM_FLAG in argv and "--install" not in argv:
+        return (f"HALT: {REARM_FLAG} means nothing without --install; the explicit re-arm "
+                f"is `{REARM_COMMAND}`. Nothing was touched.")
+    if REARM_FLAG in argv and set(argv) - {"--install", REARM_FLAG}:
+        extra = sorted(set(argv) - {"--install", REARM_FLAG})
+        return (f"HALT: the explicit re-arm takes exactly `--install --rearm`; this argv "
+                f"also carries {extra}. Nothing was touched.")
+    if "--install" in argv and REARM_FLAG not in argv and SCHEDULE_SENTINEL.exists():
+        return (f"HALT: --install REFUSED — the five com.naiad.oracle-* agents are SUSPENDED "
+                f"(sentinel {SCHEDULE_SENTINEL_REL}, OR-2 R-4). Nothing was touched: no plist "
+                f"written, no launchctl call. Re-arming is the operator's explicit path, "
+                f"`--install --rearm`: `{REARM_COMMAND}` (rollback card {SUSPENDED_CARD}).")
+    return None
 
 
 def reschedule_if_drifted(label: str, log=print) -> dict:
@@ -256,7 +332,8 @@ def reschedule_if_drifted(label: str, log=print) -> dict:
         gone = not p.exists()
         if gone:
             log(f"  AGENT MISSING: {label} has no plist at {p} — the catch-up is "
-                f"NOT armed. Re-arm with: oracle_wrapper.py --install")
+                f"NOT armed. Re-arm with: oracle_wrapper.py --install (while "
+                f"{SCHEDULE_SENTINEL_REL} exists: --install --rearm)")
         return {"label": label, "drift": False, "missing": gone,
                 "want": {"RunAtLoad": True, "installed": not gone}, "had": {}}
     want_h, want_m = machine_local_time_for(cfg["hour"], cfg["minute"])
@@ -268,7 +345,14 @@ def reschedule_if_drifted(label: str, log=print) -> dict:
         except Exception:
             have = {}
     drift = (int(have.get("Hour", -1)) != want_h) or (int(have.get("Minute", -1)) != want_m)
-    if drift:
+    if drift and SCHEDULE_SENTINEL.exists():
+        # OR-2 R-4: the second route into arm(). A hand-run legacy job would
+        # otherwise rewrite and bootstrap a suspended label on drift.
+        log(f"  SCHEDULE DRIFT on {label}: plist says {have}, the zone says "
+            f"{{'Hour': {want_h}, 'Minute': {want_m}}} — NOT re-armed: the schedule "
+            f"is SUSPENDED ({SCHEDULE_SENTINEL_REL}); the explicit re-arm is "
+            f"`{REARM_COMMAND}`")
+    elif drift:
         log(f"  SCHEDULE DRIFT on {label}: plist says {have}, the zone says "
             f"{{'Hour': {want_h}, 'Minute': {want_m}}} — rewriting and reloading")
         arm(label, log=log)
@@ -667,7 +751,9 @@ def undo_lines() -> list[str]:
            "# operator action, never a scheduled-lane one (CADENCE §4, no-delete)."]
     for label in SLOTS:
         out.append(f"launchctl bootout gui/{UID}/{label}")
-    out.append("# re-arm:")
+    out.append("# re-arm: enable FIRST (a disabled label refuses a bootstrap), then bootstrap:")
+    for label in SLOTS:
+        out.append(f"launchctl enable gui/{UID}/{label}")
     for label in SLOTS:
         out.append(f"launchctl bootstrap gui/{UID} ~/Library/LaunchAgents/{label}.plist")
     return out
@@ -1579,17 +1665,32 @@ def main(argv=None) -> int:
         # against a DISABLED label is a rewritten plist and an untrue ARMED line,
         # not an armed agent). See THE ON-DEMAND EDITION; F-SK-2e.
         return run_ondemand(argv, log=log)
-    if "--install" in argv:
-        log(f"ORACLE — arming {len(SLOTS)} slots")
+    if "--install" in argv or REARM_FLAG in argv:
+        # OR-2 R-4 — the guard answers BEFORE anything is printed or touched.
+        refusal = install_refusal(argv)
+        if refusal is not None:
+            log(refusal)
+            return 2
+        rearm = REARM_FLAG in argv
+        log(f"ORACLE — arming {len(SLOTS)} slots"
+            + (" · EXPLICIT RE-ARM (enable, bootstrap, verify)" if rearm else ""))
         zr = zone_report()
         log(f"  zone check: oracle {zr['oracle_now']} · machine {zr['machine_now']} · "
             f"agree={zr['zones_agree']}")
-        armed = [arm(label, log=log) for label in SLOTS]
+        armed = [arm(label, log=log, enable=rearm) for label in SLOTS]
         log("")
         for line in undo_lines():
             log(line)
         print(json.dumps({"armed": armed, "zone": zr}, indent=1))
-        return 0
+        bad = [a["label"] for a in armed if not a.get("armed")]
+        if rearm and SCHEDULE_SENTINEL.exists():
+            log(f"  the sentinel {SCHEDULE_SENTINEL_REL} is LEFT IN PLACE: removing it is "
+                f"the operator's act, once `launchctl list | grep -c com.naiad.oracle` "
+                f"reads {len(SLOTS)}")
+        # lower case ON PURPOSE: this line is not an `  ARMED <label>` line
+        log(f"  armed {len(armed) - len(bad)} of {len(armed)} · exit {1 if bad else 0}"
+            + (f" · not armed: {', '.join(bad)}" if bad else ""))
+        return 1 if bad else 0
 
     job, slot = _argv_job_slot(argv)
     started = datetime.now(timezone.utc)
@@ -1628,7 +1729,8 @@ def main(argv=None) -> int:
                 rc = rc or 1
                 note_failure(f"AGENT MISSING — {label} has no plist; the slot it "
                              f"carries will not fire. Re-arm: oracle_wrapper.py "
-                             f"--install")
+                             f"--install (while {SCHEDULE_SENTINEL_REL} exists: "
+                             f"--install --rearm)")
             elif not d["drift"]:
                 log(f"  schedule OK on {label}: {d['want']}")
         except Exception as e:
