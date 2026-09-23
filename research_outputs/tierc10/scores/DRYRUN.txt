@@ -1,0 +1,336 @@
+TIER-C10 · STAGE B · SCORING DRIVER · --dry-run
+DRY-RUN — NOT A RESULT. Every arm is ridden to its Book through the door its registration names and bound as TP.score would bind it AHEAD of its result marker; TP.score, TP.finish_family and TP._mark_scored are never called, no .scored.json is written, and no outcome (no sum, no mean, no CI, no p) is computed or printed. The campaign counts are a SCHEDULE, not an outcome — but one campaign rides per asset at a time, so a count is a function of the exits, and it is printed as such [tierc10_brk B12].
+substrate tc10_20260921 · as_of_last_closed_4h 2026-09-21T16:00:00Z · seed 20260921 · n_boot 4000 · family m 6
+registry of record /Users/luis/Naiad/research_outputs/tierc10/registrations · len 6 · head 7621a85727969299eb03a481fdf4a61e5455177762286a29695e7d9347d651cd (== REGISTRY_PIN.json) · order P-GEN-1 > P-SPR-2 > P-BE-1 > P-TRG-2 > P-BRK-I1 > P-BRK-S1
+  P-GEN-1: seq 1 · payload sha 7761410605da78df · text sha c64438bafd033c86 · prior 45% · 3 arm(s) · text of record verified at the door with the pinned head
+  P-SPR-2: seq 2 · payload sha 0c6b26c4c5390ac9 · text sha 4f5ad6066a2e3874 · prior 45% · 4 arm(s) · text of record verified at the door with the pinned head
+  P-BE-1: seq 3 · payload sha cf35b3e3b111d7ba · text sha 32418fef82f20854 · prior 40% · 4 arm(s) · text of record verified at the door with the pinned head
+  P-TRG-2: seq 4 · payload sha 1699746cba1805d1 · text sha 97db9ca8c9f700f8 · prior 40% · 4 arm(s) · text of record verified at the door with the pinned head
+  P-BRK-I1: seq 5 · payload sha b41f24887eee7c40 · text sha 8e4e6830ff5e5aa7 · prior 35% · 3 arm(s) · text of record verified at the door with the pinned head
+  P-BRK-S1: seq 6 · payload sha f5551333fd9975fd · text sha 186748953d47bdf7 · prior 30% · 3 arm(s) · text of record verified at the door with the pinned head
+  .scored.json on file: NONE
+
+==============================================================================
+P-GEN-1 · seq 1 · 3 filed arm(s), in filed order
+==============================================================================
+── P-GEN-1 · arm 1/3 · 'unseen12-card-v6'
+   scored_in_family True · panel UNSEEN12 (N=12) · era full · ruler vs_zero · base zero · runner run_cell_n · lanes ['card'] · LOAO line lineage (bar 7/12)
+   door run_cell_n → Book · spec registration 'P-GEN-1' · arm 'unseen12-card-v6' · era 'full'
+   window [2020-01-09T08:00:00Z, 2026-09-21T16:00:00Z) (full: FULL CORRIDOR — every bar the panel's corridor holds.…)
+   card/roles REBUILT from the filed ride and round-tripped: card 'tc10-gen1-card-v6', roles 'v6-roles' (89, 316, 12, 89, 12, 26)
+   n_campaigns 286 · per lane {'card': 286} · per asset: ENAUSDT 15 · PUMPUSDT 8 · HYPEUSDT 4 · MNTUSDT_BYBIT 18 · SUIUSDT 21 · LTCUSDT 43 · XMRUSDT 36 · BNBUSDT 44 · UNIUSDT 39 · 1000PEPEUSDT 19 · DOGEUSDT 27 · 1000BONKUSDT 12
+   zero-campaign assets: none
+   book sha (TP._book_sha) 7bff86e06aacd346ae14142737cbe835d3d64a8aa30822ee7e2e205b13fa1050 · content sha f86a0c15c95b7547
+   base: zero — no base book (vs_zero)
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance) | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'full': every entry of book inside it; the book was ridden on it
+── P-GEN-1 · arm 2/3 · 'panel17-card-v6'
+   scored_in_family False · panel PANEL17 (N=17) · era full · ruler vs_zero · base zero · runner run_cell_n · lanes ['card'] · LOAO line lineage (bar 9/17)
+   door run_cell_n → Book · spec registration 'P-GEN-1' · arm 'panel17-card-v6' · era 'full'
+   window [2019-09-08T16:00:00Z, 2026-09-21T16:00:00Z) (full: FULL CORRIDOR — every bar the panel's corridor holds.…)
+   card/roles REBUILT from the filed ride and round-tripped: card 'tc10-gen1-card-v6', roles 'v6-roles' (89, 316, 12, 89, 12, 26)
+   n_campaigns 486 · per lane {'card': 486} · per asset: BTCUSDT 39 · ETHUSDT 48 · SOLUSDT 36 · NEARUSDT 40 · ZECUSDT 37 · ENAUSDT 15 · PUMPUSDT 8 · HYPEUSDT 4 · MNTUSDT_BYBIT 18 · SUIUSDT 21 · LTCUSDT 43 · XMRUSDT 36 · BNBUSDT 44 · UNIUSDT 39 · 1000PEPEUSDT 19 · DOGEUSDT 27 · 1000BONKUSDT 12
+   zero-campaign assets: none
+   book sha (TP._book_sha) b4f06ef9d5cb9f34280457d1c39e3d0bdd3e10ceede3d500b74bebfbd5e7ea8b · content sha 4b55933994d76942
+   base: zero — no base book (vs_zero)
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance) | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'full': every entry of book inside it; the book was ridden on it
+── P-GEN-1 · arm 3/3 · 'never-touched-card-v6'
+   scored_in_family False · panel CUSTOM3:6bf107e8 (N=3) · era full · ruler vs_zero · base zero · runner run_cell_n · lanes ['card'] · LOAO line lineage (bar 2/3)
+   door run_cell_n → Book · spec registration 'P-GEN-1' · arm 'never-touched-card-v6' · era 'full'
+   window [2023-05-03T16:00:00Z, 2026-09-21T16:00:00Z) (full: FULL CORRIDOR — every bar the panel's corridor holds.…)
+   card/roles REBUILT from the filed ride and round-tripped: card 'tc10-gen1-card-v6', roles 'v6-roles' (89, 316, 12, 89, 12, 26)
+   n_campaigns 47 · per lane {'card': 47} · per asset: PUMPUSDT 8 · MNTUSDT_BYBIT 18 · SUIUSDT 21
+   zero-campaign assets: none
+   book sha (TP._book_sha) c5c998c7ed4057f83591c6ffa554c06d6cbe34b832269376b0a5ebb6b4476af6 · content sha 45bfea0bfde4bed3
+   base: zero — no base book (vs_zero)
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance) | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'full': every entry of book inside it; the book was ridden on it
+── BESIDE P-GEN-1 · §5 ARM 3 ASSERTION (arm 3 == the three-symbol subset of arm 1): keys equal True · book sha equal True · content sha equal True (arm-1 subset n 47 / arm 3 n 47) → HOLDS
+   LOAO will print TWICE at --score: arm 1 (all admitted, bar 7/12) and arm 3 (never-touched only, bar 2/3); the 17-asset arm's bar is 9/17.
+── BESIDE P-GEN-1 · HAIRCUT TWIN wired (tierc10_data.haircut_twin_net_r, charter round trip bps per asset; computed at --score only): ENAUSDT C/30 · PUMPUSDT C/30 · HYPEUSDT C/30 · MNTUSDT_BYBIT C/30 · SUIUSDT B/20 · LTCUSDT B/20 · XMRUSDT B/20 · BNBUSDT B/20 · UNIUSDT B/20 · 1000PEPEUSDT C/30 · DOGEUSDT B/20 · 1000BONKUSDT C/30 · BTCUSDT A/14 · ETHUSDT A/14 · SOLUSDT B/20 · NEARUSDT B/20 · ZECUSDT B/20
+
+==============================================================================
+P-SPR-2 · seq 2 · 4 filed arm(s), in filed order
+==============================================================================
+── P-SPR-2 · arm 1/4 · 'standalone vs zero · full corridor'
+   scored_in_family True · panel CLASSIC5 (N=5) · era full · ruler vs_zero · base zero · runner external · lanes ['spring'] · LOAO line lineage (bar 3/5)
+   door lanes → Book · spec registration 'P-SPR-2' · arm 'standalone vs zero · full corridor' · era 'full'
+   window [2019-09-08T16:00:00Z, 2026-09-21T16:00:00Z) (full: FULL CORRIDOR — every bar the panel's corridor holds.…)
+   card Card(name='tc10-spring-standalone', grid='card', entry_rail_atr=1.0, lane='spring', limit_ae_mult=None, trail=True, trail_l=2, trail_r=2, trail_extra_buf_atr=0.0, trail_arm_after_r=1.0, harvest='band', harvest_fixed_r=2.0, harvest_min_unit_r=-inf, time_stop_bars=None, funding_ceiling_r=1.0, adds_max=0, add_size=1.0, seal_open=True, trail_min_advance_atr=0.05, harvest_frac=0.5, wall_exit_atr=None, wall_tf='12h', hybrid_anchor=False, weave=False, reentry=False, ae_abort_r=None, weave_k=6, stop_grid_offset_atr=0.0, anchor_kind='pivot', anchor_offset=0.5, be_floor_after_r=None)
+   n_campaigns 261 · per lane {'spring': 261} · per asset: BTCUSDT 57 · ETHUSDT 50 · SOLUSDT 50 · NEARUSDT 55 · ZECUSDT 49
+   zero-campaign assets: none
+   book sha (TP._book_sha) acb7971ebded4c09783cc58dabb2fde646ceb4e26888dfecf01cf2d15f38bc1c · content sha f0577bd9958bf520
+   base: zero — no base book (vs_zero)
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance) | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'full': every entry of book inside it; the book was ridden on it
+   spring signals handed in / refusals COUNTED [P-SPR-2 §5] (reconstructed from the signals and the Book's schedule; consistent=True):
+     BTCUSDT: signals 60 · long 33 · short 27 · entered 57 · position_open 3 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     ETHUSDT: signals 53 · long 23 · short 30 · entered 50 · position_open 3 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     NEARUSDT: signals 60 · long 38 · short 22 · entered 55 · position_open 5 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     SOLUSDT: signals 57 · long 33 · short 24 · entered 50 · position_open 7 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     ZECUSDT: signals 52 · long 18 · short 34 · entered 49 · position_open 3 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     TOTAL: signals 282 · long 145 · short 137 · entered 261 · position_open 21 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0 · spring campaigns in book 261
+── P-SPR-2 · arm 2/4 · 'standalone vs zero · tuning era'
+   scored_in_family False · panel CLASSIC5 (N=5) · era tuning · ruler vs_zero · base zero · runner external · lanes ['spring'] · LOAO line lineage (bar 3/5)
+   door lanes → Book · spec registration 'P-SPR-2' · arm 'standalone vs zero · tuning era' · era 'tuning'
+   window [2019-09-08T16:00:00Z, 2024-06-30T20:00:00Z) (tuning: TUNING ERA [R1] — entries at or before 2024-06-30T23:59:59Z …)
+   card Card(name='tc10-spring-standalone', grid='card', entry_rail_atr=1.0, lane='spring', limit_ae_mult=None, trail=True, trail_l=2, trail_r=2, trail_extra_buf_atr=0.0, trail_arm_after_r=1.0, harvest='band', harvest_fixed_r=2.0, harvest_min_unit_r=-inf, time_stop_bars=None, funding_ceiling_r=1.0, adds_max=0, add_size=1.0, seal_open=True, trail_min_advance_atr=0.05, harvest_frac=0.5, wall_exit_atr=None, wall_tf='12h', hybrid_anchor=False, weave=False, reentry=False, ae_abort_r=None, weave_k=6, stop_grid_offset_atr=0.0, anchor_kind='pivot', anchor_offset=0.5, be_floor_after_r=None)
+   n_campaigns 165 · per lane {'spring': 165} · per asset: BTCUSDT 33 · ETHUSDT 35 · SOLUSDT 29 · NEARUSDT 35 · ZECUSDT 33
+   zero-campaign assets: none
+   book sha (TP._book_sha) 96867b63c7bc2406950c46d555ae861e3ca8f5959bb5914e15b05dfb1a231d5b · content sha d27bbee8913f11e9
+   base: zero — no base book (vs_zero)
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance) | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'tuning': every entry of book inside it; the book was ridden on it
+   spring signals handed in / refusals COUNTED [P-SPR-2 §5] (reconstructed from the signals and the Book's schedule; consistent=True):
+     BTCUSDT: signals 35 · long 19 · short 16 · entered 33 · position_open 2 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     ETHUSDT: signals 38 · long 17 · short 21 · entered 35 · position_open 3 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     NEARUSDT: signals 38 · long 22 · short 16 · entered 35 · position_open 3 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     SOLUSDT: signals 36 · long 21 · short 15 · entered 29 · position_open 7 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     ZECUSDT: signals 35 · long 8 · short 27 · entered 33 · position_open 2 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     TOTAL: signals 182 · long 87 · short 95 · entered 165 · position_open 17 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0 · spring campaigns in book 165
+── P-SPR-2 · arm 3/4 · 'standalone vs zero · holdout era'
+   scored_in_family False · panel CLASSIC5 (N=5) · era holdout · ruler vs_zero · base zero · runner external · lanes ['spring'] · LOAO line lineage (bar 3/5)
+   door lanes → Book · spec registration 'P-SPR-2' · arm 'standalone vs zero · holdout era' · era 'holdout'
+   window [2024-07-01T00:00:00Z, 2026-09-21T16:00:00Z) (holdout: HOLDOUT ERA [R1] — entries AFTER 2024-06-30T23:59:59Z; the e…)
+   card Card(name='tc10-spring-standalone', grid='card', entry_rail_atr=1.0, lane='spring', limit_ae_mult=None, trail=True, trail_l=2, trail_r=2, trail_extra_buf_atr=0.0, trail_arm_after_r=1.0, harvest='band', harvest_fixed_r=2.0, harvest_min_unit_r=-inf, time_stop_bars=None, funding_ceiling_r=1.0, adds_max=0, add_size=1.0, seal_open=True, trail_min_advance_atr=0.05, harvest_frac=0.5, wall_exit_atr=None, wall_tf='12h', hybrid_anchor=False, weave=False, reentry=False, ae_abort_r=None, weave_k=6, stop_grid_offset_atr=0.0, anchor_kind='pivot', anchor_offset=0.5, be_floor_after_r=None)
+   n_campaigns 96 · per lane {'spring': 96} · per asset: BTCUSDT 24 · ETHUSDT 15 · SOLUSDT 21 · NEARUSDT 20 · ZECUSDT 16
+   zero-campaign assets: none
+   book sha (TP._book_sha) bd79d6fa1127af0635936e443fbeade24c23eec53b997451d49bda6fd67dc70e · content sha 4ace92d856845499
+   base: zero — no base book (vs_zero)
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance) | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'holdout': every entry of book inside it; the book was ridden on it
+   spring signals handed in / refusals COUNTED [P-SPR-2 §5] (reconstructed from the signals and the Book's schedule; consistent=True):
+     BTCUSDT: signals 25 · long 14 · short 11 · entered 24 · position_open 1 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     ETHUSDT: signals 15 · long 6 · short 9 · entered 15 · position_open 0 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     NEARUSDT: signals 22 · long 16 · short 6 · entered 20 · position_open 2 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     SOLUSDT: signals 21 · long 12 · short 9 · entered 21 · position_open 0 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     ZECUSDT: signals 17 · long 10 · short 7 · entered 16 · position_open 1 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     TOTAL: signals 100 · long 58 · short 42 · entered 96 · position_open 4 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0 · spring campaigns in book 96
+── P-SPR-2 · arm 4/4 · 'union with card v6 vs card v6'
+   scored_in_family False · panel CLASSIC5 (N=5) · era full · ruler set_change · base card-v6 · runner external · lanes ['card', 'spring'] · LOAO line lineage (bar 3/5)
+   door lanes → Book · spec registration 'P-SPR-2' · arm 'union with card v6 vs card v6' · era 'full'
+   window [2019-09-08T16:00:00Z, 2026-09-21T16:00:00Z) (full: FULL CORRIDOR — every bar the panel's corridor holds.…)
+   card Card(name='tc10-spring-union', grid='card', entry_rail_atr=1.0, lane='union', limit_ae_mult=None, trail=True, trail_l=2, trail_r=2, trail_extra_buf_atr=0.0, trail_arm_after_r=1.0, harvest='band', harvest_fixed_r=2.0, harvest_min_unit_r=-inf, time_stop_bars=None, funding_ceiling_r=1.0, adds_max=0, add_size=1.0, seal_open=True, trail_min_advance_atr=0.05, harvest_frac=0.5, wall_exit_atr=None, wall_tf='12h', hybrid_anchor=False, weave=False, reentry=False, ae_abort_r=None, weave_k=6, stop_grid_offset_atr=0.0, anchor_kind='pivot', anchor_offset=0.5, be_floor_after_r=None)
+   n_campaigns 425 · per lane {'card': 188, 'spring': 237} · per asset: BTCUSDT 92 · ETHUSDT 90 · SOLUSDT 74 · NEARUSDT 91 · ZECUSDT 78
+   zero-campaign assets: none
+   book sha (TP._book_sha) 7580e3bfa944075396a3a87bf2a3325ee3f271d9ef12a24a12305b10bbf54ac4 · content sha 71186b8c2ee25783
+   base card-v6: TP.run_cell_n(CONTROL_CARD, V6_ROLES, CLASSIC5, same window) · n 200 · per asset: BTCUSDT 39 · ETHUSDT 48 · SOLUSDT 36 · NEARUSDT 40 · ZECUSDT 37
+   base sha (TP._book_sha) 2bd244bfa0a1349ee73aa51e61619e3dda1257eafe3f613df4524a4d87909acd · content sha 523158857de960d8
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance, base ride/panel/window) | set_change law on keys: the set MOVED -> the TWO-SAMPLE interval (paired 188 · book-only 237 · base-only 12) | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'full': every entry of book and base inside it; the book was ridden on it
+   spring signals handed in / refusals COUNTED [P-SPR-2 §5] (reconstructed from the signals and the Book's schedule; consistent=True):
+     BTCUSDT: signals 60 · long 33 · short 27 · entered 56 · position_open 4 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     ETHUSDT: signals 53 · long 23 · short 30 · entered 42 · position_open 11 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     NEARUSDT: signals 60 · long 38 · short 22 · entered 52 · position_open 8 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     SOLUSDT: signals 57 · long 33 · short 24 · entered 44 · position_open 13 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     ZECUSDT: signals 52 · long 18 · short 34 · entered 43 · position_open 9 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0
+     TOTAL: signals 282 · long 145 · short 137 · entered 237 · position_open 45 · degenerate_R 0 · no_struct_anchor 0 · UNEXPLAINED 0 · spring campaigns in book 237
+── BESIDE P-SPR-2 · HAIRCUT TWIN wired (tierc10_data.haircut_twin_net_r, charter round trip bps per asset; computed at --score only): BTCUSDT A/14 · ETHUSDT A/14 · SOLUSDT B/20 · NEARUSDT B/20 · ZECUSDT B/20
+
+==============================================================================
+P-BE-1 · seq 3 · 4 filed arm(s), in filed order
+==============================================================================
+── P-BE-1 · arm 1/4 · 'be-floor-1R vs card-v6 (CLASSIC5, full)'
+   scored_in_family True · panel CLASSIC5 (N=5) · era full · ruler two_sample · base card-v6 · runner external · lanes ['card'] · LOAO line lineage (bar 3/5)
+   door lanes → Book · spec registration 'P-BE-1' · arm 'be-floor-1R vs card-v6 (CLASSIC5, full)' · era 'full'
+   window [2019-09-08T16:00:00Z, 2026-09-21T16:00:00Z) (full: FULL CORRIDOR — every bar the panel's corridor holds.…)
+   card Card(name='tc10-be-floor-1R', grid='card', entry_rail_atr=1.0, lane='card', limit_ae_mult=None, trail=True, trail_l=2, trail_r=2, trail_extra_buf_atr=0.0, trail_arm_after_r=1.0, harvest='band', harvest_fixed_r=2.0, harvest_min_unit_r=-inf, time_stop_bars=None, funding_ceiling_r=1.0, adds_max=0, add_size=1.0, seal_open=True, trail_min_advance_atr=0.05, harvest_frac=0.5, wall_exit_atr=None, wall_tf='12h', hybrid_anchor=False, weave=False, reentry=False, ae_abort_r=None, weave_k=6, stop_grid_offset_atr=0.0, anchor_kind='pivot', anchor_offset=0.5, be_floor_after_r=1.0)
+   n_campaigns 200 · per lane {'card': 200} · per asset: BTCUSDT 39 · ETHUSDT 48 · SOLUSDT 36 · NEARUSDT 40 · ZECUSDT 37
+   zero-campaign assets: none
+   book sha (TP._book_sha) f72c08159aa36691f2b8e519c0fad782c760cb5e64fe8970a387685960360e3f · content sha 9e842dd38aa8d904
+   base card-v6: TP.run_cell_n(CONTROL_CARD, V6_ROLES, CLASSIC5, same window) · n 200 · per asset: BTCUSDT 39 · ETHUSDT 48 · SOLUSDT 36 · NEARUSDT 40 · ZECUSDT 37
+   base sha (TP._book_sha) 2bd244bfa0a1349ee73aa51e61619e3dda1257eafe3f613df4524a4d87909acd · content sha 523158857de960d8
+   *** BINDING WOULD HALT at TP.score — verbatim: HALT: P-BE-1 — the arm shares the WHOLE campaign set with its base; the commissioned two-sample ruler's premise failed.
+       (passed before it: TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance, base ride/panel/window))
+       THE FILED TEXT PRESCRIBES THIS (verified verbatim in P-BE-1's text of record): "If it does not move, this registration does NOT quietly become the narrower paired row — it HALTs. That HALT is part of the claim, and it is why the ruler is registered rather than left to the scorer."
+       THE FILED TEXT PRESCRIBES THIS (verified verbatim in P-BE-1's text of record): "If A1's two-sample premise fails and A1 HALTs, there is no report-only row on the same population to read instead; a new id must be filed under `set_change` and the reason disclosed."
+── P-BE-1 · arm 2/4 · 'be-floor-1R vs card-v6 (CLASSIC5, tuning) [Tier-E]'
+   scored_in_family False · panel CLASSIC5 (N=5) · era tuning · ruler set_change · base card-v6 · runner external · lanes ['card'] · LOAO line lineage (bar 3/5)
+   door lanes → Book · spec registration 'P-BE-1' · arm 'be-floor-1R vs card-v6 (CLASSIC5, tuning) [Tier-E]' · era 'tuning'
+   window [2019-09-08T16:00:00Z, 2024-06-30T20:00:00Z) (tuning: TUNING ERA [R1] — entries at or before 2024-06-30T23:59:59Z …)
+   card Card(name='tc10-be-floor-1R', grid='card', entry_rail_atr=1.0, lane='card', limit_ae_mult=None, trail=True, trail_l=2, trail_r=2, trail_extra_buf_atr=0.0, trail_arm_after_r=1.0, harvest='band', harvest_fixed_r=2.0, harvest_min_unit_r=-inf, time_stop_bars=None, funding_ceiling_r=1.0, adds_max=0, add_size=1.0, seal_open=True, trail_min_advance_atr=0.05, harvest_frac=0.5, wall_exit_atr=None, wall_tf='12h', hybrid_anchor=False, weave=False, reentry=False, ae_abort_r=None, weave_k=6, stop_grid_offset_atr=0.0, anchor_kind='pivot', anchor_offset=0.5, be_floor_after_r=1.0)
+   n_campaigns 123 · per lane {'card': 123} · per asset: BTCUSDT 26 · ETHUSDT 29 · SOLUSDT 23 · NEARUSDT 23 · ZECUSDT 22
+   zero-campaign assets: none
+   book sha (TP._book_sha) f43fbe0073d93dcbcfb91d176903128be3f36343fac67ed38b04c996bbc8e563 · content sha c801744323bdf104
+   base card-v6: TP.run_cell_n(CONTROL_CARD, V6_ROLES, CLASSIC5, same window) · n 123 · per asset: BTCUSDT 26 · ETHUSDT 29 · SOLUSDT 23 · NEARUSDT 23 · ZECUSDT 22
+   base sha (TP._book_sha) 985f11213765efdb8e2235434a202c9939de1988d5dd845849d41abbacbcdfae · content sha 1ecade491c7147da
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance, base ride/panel/window) | set_change law on keys: the set did NOT move -> the PAIRED interval (paired 123 · book-only 0 · base-only 0) | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'tuning': every entry of book and base inside it; the book was ridden on it
+── P-BE-1 · arm 3/4 · 'be-floor-1R vs card-v6 (CLASSIC5, holdout) [Tier-E]'
+   scored_in_family False · panel CLASSIC5 (N=5) · era holdout · ruler set_change · base card-v6 · runner external · lanes ['card'] · LOAO line lineage (bar 3/5)
+   door lanes → Book · spec registration 'P-BE-1' · arm 'be-floor-1R vs card-v6 (CLASSIC5, holdout) [Tier-E]' · era 'holdout'
+   window [2024-07-01T00:00:00Z, 2026-09-21T16:00:00Z) (holdout: HOLDOUT ERA [R1] — entries AFTER 2024-06-30T23:59:59Z; the e…)
+   card Card(name='tc10-be-floor-1R', grid='card', entry_rail_atr=1.0, lane='card', limit_ae_mult=None, trail=True, trail_l=2, trail_r=2, trail_extra_buf_atr=0.0, trail_arm_after_r=1.0, harvest='band', harvest_fixed_r=2.0, harvest_min_unit_r=-inf, time_stop_bars=None, funding_ceiling_r=1.0, adds_max=0, add_size=1.0, seal_open=True, trail_min_advance_atr=0.05, harvest_frac=0.5, wall_exit_atr=None, wall_tf='12h', hybrid_anchor=False, weave=False, reentry=False, ae_abort_r=None, weave_k=6, stop_grid_offset_atr=0.0, anchor_kind='pivot', anchor_offset=0.5, be_floor_after_r=1.0)
+   n_campaigns 77 · per lane {'card': 77} · per asset: BTCUSDT 13 · ETHUSDT 19 · SOLUSDT 13 · NEARUSDT 17 · ZECUSDT 15
+   zero-campaign assets: none
+   book sha (TP._book_sha) 7d0ec7d68be7dd096108871dc59985515cbcec7cec05ade476bc4a959860de4e · content sha 33d5501bc318a5f2
+   base card-v6: TP.run_cell_n(CONTROL_CARD, V6_ROLES, CLASSIC5, same window) · n 77 · per asset: BTCUSDT 13 · ETHUSDT 19 · SOLUSDT 13 · NEARUSDT 17 · ZECUSDT 15
+   base sha (TP._book_sha) ec4f591f58585bcbc82dd5e4f865e59fbc90b121d38b0fdbf5074897b5db00b8 · content sha ea9f4eef54243b10
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance, base ride/panel/window) | set_change law on keys: the set did NOT move -> the PAIRED interval (paired 77 · book-only 0 · base-only 0) | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'holdout': every entry of book and base inside it; the book was ridden on it
+── P-BE-1 · arm 4/4 · 'be-floor-2R sensitivity vs card-v6 (CLASSIC5, full) [Tier-E]'
+   scored_in_family False · panel CLASSIC5 (N=5) · era full · ruler set_change · base card-v6 · runner external · lanes ['card'] · LOAO line lineage (bar 3/5)
+   door lanes → Book · spec registration 'P-BE-1' · arm 'be-floor-2R sensitivity vs card-v6 (CLASSIC5, full) [Tier-E]' · era 'full'
+   window [2019-09-08T16:00:00Z, 2026-09-21T16:00:00Z) (full: FULL CORRIDOR — every bar the panel's corridor holds.…)
+   card Card(name='tc10-be-floor-2R', grid='card', entry_rail_atr=1.0, lane='card', limit_ae_mult=None, trail=True, trail_l=2, trail_r=2, trail_extra_buf_atr=0.0, trail_arm_after_r=1.0, harvest='band', harvest_fixed_r=2.0, harvest_min_unit_r=-inf, time_stop_bars=None, funding_ceiling_r=1.0, adds_max=0, add_size=1.0, seal_open=True, trail_min_advance_atr=0.05, harvest_frac=0.5, wall_exit_atr=None, wall_tf='12h', hybrid_anchor=False, weave=False, reentry=False, ae_abort_r=None, weave_k=6, stop_grid_offset_atr=0.0, anchor_kind='pivot', anchor_offset=0.5, be_floor_after_r=2.0)
+   n_campaigns 200 · per lane {'card': 200} · per asset: BTCUSDT 39 · ETHUSDT 48 · SOLUSDT 36 · NEARUSDT 40 · ZECUSDT 37
+   zero-campaign assets: none
+   book sha (TP._book_sha) ae635bbd4287667d416cd9434079d83cd7530520c1743800435b4c2dd1444665 · content sha 60d793f41c9037ea
+   base card-v6: TP.run_cell_n(CONTROL_CARD, V6_ROLES, CLASSIC5, same window) · n 200 · per asset: BTCUSDT 39 · ETHUSDT 48 · SOLUSDT 36 · NEARUSDT 40 · ZECUSDT 37
+   base sha (TP._book_sha) 2bd244bfa0a1349ee73aa51e61619e3dda1257eafe3f613df4524a4d87909acd · content sha 523158857de960d8
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance, base ride/panel/window) | set_change law on keys: the set did NOT move -> the PAIRED interval (paired 200 · book-only 0 · base-only 0) | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'full': every entry of book and base inside it; the book was ridden on it
+── BESIDE P-BE-1 · HAIRCUT TWIN wired (tierc10_data.haircut_twin_net_r, charter round trip bps per asset; computed at --score only): BTCUSDT A/14 · ETHUSDT A/14 · SOLUSDT B/20 · NEARUSDT B/20 · ZECUSDT B/20
+── BESIDE P-BE-1 · F-C10-BE (re-derived from arm 'be-floor-1R vs card-v6 (CLASSIC5, full)''s ridden Book): NOT RUN [P-BE-1 §9] · census re-derived 96dfd0b7eae957c4 vs filed 96dfd0b7eae957c4 · byte-identical True
+   reason (verbatim): P-BE-1 §9 (filed text): "if P-BE-1's filed book contains no tie and no 4h/5m mismatch latch bar, the leg must report NOT RUN with that reason. It must NOT substitute a synthetic bar or relabel a dip_first case to reach three." — P-BE-1's filed book (scored arm A1) contains NO tie and NO 4h/5m mismatch latch bar: 103 latch bars of 200 campaigns: dip-before 36, dip-after 0, print-no-dip 67, tie 0, 4h/5m mismatch 0; three-way agreement 103/103. Required classes absent: ['dip_after', 'tie_or_mismatch']. No synthetic bar is substituted and no dip_first case is relabelled; BE_CAMPAIGNS stays empty.
+
+==============================================================================
+P-TRG-2 · seq 4 · 4 filed arm(s), in filed order
+==============================================================================
+── P-TRG-2 · arm 1/4 · 'trg-9/12 vs card v6 · CLASSIC5 · full'
+   scored_in_family True · panel CLASSIC5 (N=5) · era full · ruler two_sample · base card-v6 · runner run_cell_n · lanes ['card'] · LOAO line lineage (bar 3/5)
+   door run_cell_n → Book · spec registration 'P-TRG-2' · arm 'trg-9/12 vs card v6 · CLASSIC5 · full' · era 'full'
+   window [2019-09-08T16:00:00Z, 2026-09-21T16:00:00Z) (full: FULL CORRIDOR — every bar the panel's corridor holds.…)
+   card/roles REBUILT from the filed ride and round-tripped: card 'v6-control', roles 'trigger-9/12' (89, 316, 12, 89, 9, 12)
+   n_campaigns 198 · per lane {'card': 198} · per asset: BTCUSDT 40 · ETHUSDT 48 · SOLUSDT 34 · NEARUSDT 39 · ZECUSDT 37
+   zero-campaign assets: none
+   book sha (TP._book_sha) b2276fa487119ef12a8e0434e54f9b77efbfb7ee387b3cb35d2955043c371a8f · content sha b899e0ee2eb9b368
+   base card-v6: TP.run_cell_n(CONTROL_CARD, V6_ROLES, CLASSIC5, same window) · n 200 · per asset: BTCUSDT 39 · ETHUSDT 48 · SOLUSDT 36 · NEARUSDT 40 · ZECUSDT 37
+   base sha (TP._book_sha) 2bd244bfa0a1349ee73aa51e61619e3dda1257eafe3f613df4524a4d87909acd · content sha 523158857de960d8
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance, base ride/panel/window) | two-sample PREMISE holds on keys: paired 19 · book-only 179 · base-only 181 | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'full': every entry of book and base inside it; the book was ridden on it
+   ride vs CONTROL_RIDE: ['roles_fields.trg_f: filed 12 / offered 9', 'roles_fields.trg_s: filed 26 / offered 12'] · exactly the two trigger fields: True · tierc9.SWEEP_CELLS member: ['trigger-9/12']
+── P-TRG-2 · arm 2/4 · 'trg-9/12 vs zero · CLASSIC5 · full'
+   scored_in_family False · panel CLASSIC5 (N=5) · era full · ruler vs_zero · base zero · runner run_cell_n · lanes ['card'] · LOAO line lineage (bar 3/5)
+   door run_cell_n → Book · spec registration 'P-TRG-2' · arm 'trg-9/12 vs zero · CLASSIC5 · full' · era 'full'
+   window [2019-09-08T16:00:00Z, 2026-09-21T16:00:00Z) (full: FULL CORRIDOR — every bar the panel's corridor holds.…)
+   card/roles REBUILT from the filed ride and round-tripped: card 'v6-control', roles 'trigger-9/12' (89, 316, 12, 89, 9, 12)
+   n_campaigns 198 · per lane {'card': 198} · per asset: BTCUSDT 40 · ETHUSDT 48 · SOLUSDT 34 · NEARUSDT 39 · ZECUSDT 37
+   zero-campaign assets: none
+   book sha (TP._book_sha) b2276fa487119ef12a8e0434e54f9b77efbfb7ee387b3cb35d2955043c371a8f · content sha b899e0ee2eb9b368
+   base: zero — no base book (vs_zero)
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance) | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'full': every entry of book inside it; the book was ridden on it
+   ride vs CONTROL_RIDE: ['roles_fields.trg_f: filed 12 / offered 9', 'roles_fields.trg_s: filed 26 / offered 12'] · exactly the two trigger fields: True · tierc9.SWEEP_CELLS member: ['trigger-9/12']
+── P-TRG-2 · arm 3/4 · 'trg-9/12 vs card v6 · CLASSIC5 · tuning era'
+   scored_in_family False · panel CLASSIC5 (N=5) · era tuning · ruler two_sample · base card-v6 · runner run_cell_n · lanes ['card'] · LOAO line lineage (bar 3/5)
+   door run_cell_n → Book · spec registration 'P-TRG-2' · arm 'trg-9/12 vs card v6 · CLASSIC5 · tuning era' · era 'tuning'
+   window [2019-09-08T16:00:00Z, 2024-06-30T20:00:00Z) (tuning: TUNING ERA [R1] — entries at or before 2024-06-30T23:59:59Z …)
+   card/roles REBUILT from the filed ride and round-tripped: card 'v6-control', roles 'trigger-9/12' (89, 316, 12, 89, 9, 12)
+   n_campaigns 132 · per lane {'card': 132} · per asset: BTCUSDT 29 · ETHUSDT 32 · SOLUSDT 22 · NEARUSDT 26 · ZECUSDT 23
+   zero-campaign assets: none
+   book sha (TP._book_sha) 62284c33f7853170d46b4707d99ca602faa4dc9d958ec58183bf6a61f7b5a8b9 · content sha a8d03771b65d22db
+   base card-v6: TP.run_cell_n(CONTROL_CARD, V6_ROLES, CLASSIC5, same window) · n 123 · per asset: BTCUSDT 26 · ETHUSDT 29 · SOLUSDT 23 · NEARUSDT 23 · ZECUSDT 22
+   base sha (TP._book_sha) 985f11213765efdb8e2235434a202c9939de1988d5dd845849d41abbacbcdfae · content sha 1ecade491c7147da
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance, base ride/panel/window) | two-sample PREMISE holds on keys: paired 12 · book-only 120 · base-only 111 | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'tuning': every entry of book and base inside it; the book was ridden on it
+   ride vs CONTROL_RIDE: ['roles_fields.trg_f: filed 12 / offered 9', 'roles_fields.trg_s: filed 26 / offered 12'] · exactly the two trigger fields: True · tierc9.SWEEP_CELLS member: ['trigger-9/12']
+── P-TRG-2 · arm 4/4 · 'trg-9/12 vs card v6 · CLASSIC5 · holdout era'
+   scored_in_family False · panel CLASSIC5 (N=5) · era holdout · ruler two_sample · base card-v6 · runner run_cell_n · lanes ['card'] · LOAO line lineage (bar 3/5)
+   door run_cell_n → Book · spec registration 'P-TRG-2' · arm 'trg-9/12 vs card v6 · CLASSIC5 · holdout era' · era 'holdout'
+   window [2024-07-01T00:00:00Z, 2026-09-21T16:00:00Z) (holdout: HOLDOUT ERA [R1] — entries AFTER 2024-06-30T23:59:59Z; the e…)
+   card/roles REBUILT from the filed ride and round-tripped: card 'v6-control', roles 'trigger-9/12' (89, 316, 12, 89, 9, 12)
+   n_campaigns 66 · per lane {'card': 66} · per asset: BTCUSDT 11 · ETHUSDT 16 · SOLUSDT 12 · NEARUSDT 13 · ZECUSDT 14
+   zero-campaign assets: none
+   book sha (TP._book_sha) b1fd4188284affd59684fe3ce8b985b47d925d8fecdc2748ef412b07210e398d · content sha b1c2317d5296deef
+   base card-v6: TP.run_cell_n(CONTROL_CARD, V6_ROLES, CLASSIC5, same window) · n 77 · per asset: BTCUSDT 13 · ETHUSDT 19 · SOLUSDT 13 · NEARUSDT 17 · ZECUSDT 15
+   base sha (TP._book_sha) ec4f591f58585bcbc82dd5e4f865e59fbc90b121d38b0fdbf5074897b5db00b8 · content sha ea9f4eef54243b10
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance, base ride/panel/window) | two-sample PREMISE holds on keys: paired 7 · book-only 59 · base-only 70 | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'holdout': every entry of book and base inside it; the book was ridden on it
+   ride vs CONTROL_RIDE: ['roles_fields.trg_f: filed 12 / offered 9', 'roles_fields.trg_s: filed 26 / offered 12'] · exactly the two trigger fields: True · tierc9.SWEEP_CELLS member: ['trigger-9/12']
+── BESIDE P-TRG-2 · HAIRCUT TWIN wired (tierc10_data.haircut_twin_net_r, charter round trip bps per asset; computed at --score only): BTCUSDT A/14 · ETHUSDT A/14 · SOLUSDT B/20 · NEARUSDT B/20 · ZECUSDT B/20
+
+==============================================================================
+P-BRK-I1 · seq 5 · 3 filed arm(s), in filed order
+==============================================================================
+── P-BRK-I1 · arm 1/3 · 'CLASSIC5-memory-line'
+   scored_in_family True · panel CLASSIC5 (N=5) · era full · ruler vs_zero · base zero · runner external · lanes ['brk-i1'] · LOAO line lineage (bar 3/5)
+   door brk → Book · spec registration 'P-BRK-I1' · arm 'CLASSIC5-memory-line' · era 'full'
+   window [2019-09-08T16:00:00Z, 2026-09-21T16:00:00Z) (full: FULL CORRIDOR — every bar the panel's corridor holds.…)
+   n_campaigns 7 · per lane {'brk-i1': 7} · per asset: BTCUSDT 2 · ETHUSDT 4 · SOLUSDT 1 · NEARUSDT 0 · ZECUSDT 0
+   zero-campaign assets: ['NEARUSDT', 'ZECUSDT']
+   book sha (TP._book_sha) 06bfdaff799de49501982c6fe709766e0df15056a5e6dba6f8a6ff9aabd99978 · content sha 0119f198989cfb82
+   base: zero — no base book (vs_zero)
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance) | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'full': every entry of book inside it; the book was ridden on it
+   held against BRK_READY_BOOKS.json: score-binding sha MATCH · content sha MATCH (filed n 7)
+── P-BRK-I1 · arm 2/3 · 'CLASSIC5-tierE-band'
+   scored_in_family False · panel CLASSIC5 (N=5) · era full · ruler vs_zero · base zero · runner external · lanes ['brk-i1'] · LOAO line lineage (bar 3/5)
+   door brk → Book · spec registration 'P-BRK-I1' · arm 'CLASSIC5-tierE-band' · era 'full'
+   window [2019-09-08T16:00:00Z, 2026-09-21T16:00:00Z) (full: FULL CORRIDOR — every bar the panel's corridor holds.…)
+   n_campaigns 3 · per lane {'brk-i1': 3} · per asset: BTCUSDT 1 · ETHUSDT 1 · SOLUSDT 0 · NEARUSDT 0 · ZECUSDT 1
+   zero-campaign assets: ['SOLUSDT', 'NEARUSDT']
+   book sha (TP._book_sha) cabea9b7e65af9ccea0fbc79a0e5c613f7dafea58781a13a1e5fd2b91d5be9e7 · content sha 201c67b2a4e7cdc0
+   base: zero — no base book (vs_zero)
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance) | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'full': every entry of book inside it; the book was ridden on it
+   held against BRK_READY_BOOKS.json: score-binding sha MATCH · content sha MATCH (filed n 3)
+── P-BRK-I1 · arm 3/3 · 'PANEL17-tierE-memory-line'
+   scored_in_family False · panel PANEL17 (N=17) · era full · ruler vs_zero · base zero · runner external · lanes ['brk-i1'] · LOAO line lineage (bar 9/17)
+   door brk → Book · spec registration 'P-BRK-I1' · arm 'PANEL17-tierE-memory-line' · era 'full'
+   window [2019-09-08T16:00:00Z, 2026-09-21T16:00:00Z) (full: FULL CORRIDOR — every bar the panel's corridor holds.…)
+   n_campaigns 17 · per lane {'brk-i1': 17} · per asset: BTCUSDT 2 · ETHUSDT 4 · SOLUSDT 1 · NEARUSDT 0 · ZECUSDT 0 · ENAUSDT 0 · PUMPUSDT 0 · HYPEUSDT 0 · MNTUSDT_BYBIT 1 · SUIUSDT 0 · LTCUSDT 5 · XMRUSDT 0 · BNBUSDT 1 · UNIUSDT 0 · 1000PEPEUSDT 1 · DOGEUSDT 2 · 1000BONKUSDT 0
+   zero-campaign assets: ['NEARUSDT', 'ZECUSDT', 'ENAUSDT', 'PUMPUSDT', 'HYPEUSDT', 'SUIUSDT', 'XMRUSDT', 'UNIUSDT', '1000BONKUSDT']
+   book sha (TP._book_sha) 1b4cf1e67f02c9903c20d8bf9cb2c44b4ff1305887711619f6e2cb3d526a32aa · content sha 03d3f465cff59994
+   base: zero — no base book (vs_zero)
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance) | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'full': every entry of book inside it; the book was ridden on it
+   held against BRK_READY_BOOKS.json: score-binding sha MATCH · content sha MATCH (filed n 17)
+── BESIDE P-BRK-I1 · HAIRCUT TWIN wired (tierc10_data.haircut_twin_net_r, charter round trip bps per asset; computed at --score only): BTCUSDT A/14 · ETHUSDT A/14 · SOLUSDT B/20 · NEARUSDT B/20 · ZECUSDT B/20 · ENAUSDT C/30 · PUMPUSDT C/30 · HYPEUSDT C/30 · MNTUSDT_BYBIT C/30 · SUIUSDT B/20 · LTCUSDT B/20 · XMRUSDT B/20 · BNBUSDT B/20 · UNIUSDT B/20 · 1000PEPEUSDT C/30 · DOGEUSDT B/20 · 1000BONKUSDT C/30
+── BESIDE P-BRK-I1 · SEALED BRK ROW [B12] · lens 1d · era full · scored anchor 'memory-line' · Tier-E other anchor 'band'
+   HEIGHT-vs-TOLL [Q-R3], READ at the form's own era (ALL), POOLED:CLASSIC5 / 1d / frozen3.0: verdict_pass True — 'era ALL: height gate PASS + edge-fade leg PASS' · provisional False · n_ranges 53
+   Tier-E other anchor: 3 campaigns {'BTCUSDT': 1, 'ETHUSDT': 1, 'ZECUSDT': 1} · Tier-E 17-asset view: 17 campaigns on 8 assets
+   TOLL: {'stamped': False, 'why': "this runner stamps no toll; 'NET OF MEASURED 5m TOLL' is P-BRK-S1's contract clause and stamp_toll is called only there"} · toll_pct_of_1r median None
+   TOLL_ACCOUNTING: PRINT, NOT A DEDUCTION — reported, not changed. The contract reads 'NET OF MEASURED 5m TOLL'; today's net_r is net of FEE and FUNDING only.
+
+==============================================================================
+P-BRK-S1 · seq 6 · 3 filed arm(s), in filed order
+==============================================================================
+── P-BRK-S1 · arm 1/3 · 'P-BRK-S1 vs zero'
+   scored_in_family True · panel CLASSIC5 (N=5) · era holdout · ruler vs_zero · base zero · runner external · lanes ['brk-s1'] · LOAO line excl_zero_campaign (bar 3/5)
+   door brk → Book · spec registration 'P-BRK-S1' · arm 'P-BRK-S1 vs zero' · era 'holdout'
+   window [2024-07-01T00:00:00Z, 2026-09-21T16:00:00Z) (holdout: HOLDOUT ERA [R1] — entries AFTER 2024-06-30T23:59:59Z; the e…)
+   n_campaigns 1836 · per lane {'brk-s1': 1836} · per asset: BTCUSDT 389 · ETHUSDT 393 · SOLUSDT 349 · NEARUSDT 339 · ZECUSDT 366
+   zero-campaign assets: none
+   book sha (TP._book_sha) e09eefaf94072db984e246c6890cb1c109abf0cf88ec0ba13e03ecd20448e5f3 · content sha d0efaec071711dd5
+   base: zero — no base book (vs_zero)
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance) | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'holdout': every entry of book inside it; the book was ridden on it
+   held against BRK_READY_BOOKS.json: score-binding sha MATCH · content sha MATCH (filed n 1836)
+── P-BRK-S1 · arm 2/3 · 'P-BRK-S1 17-asset view'
+   scored_in_family False · panel PANEL17 (N=17) · era holdout · ruler vs_zero · base zero · runner external · lanes ['brk-s1'] · LOAO line excl_zero_campaign (bar 9/17)
+   door brk → Book · spec registration 'P-BRK-S1' · arm 'P-BRK-S1 17-asset view' · era 'holdout'
+   window [2024-07-01T00:00:00Z, 2026-09-21T16:00:00Z) (holdout: HOLDOUT ERA [R1] — entries AFTER 2024-06-30T23:59:59Z; the e…)
+   n_campaigns 6016 · per lane {'brk-s1': 6016} · per asset: BTCUSDT 389 · ETHUSDT 393 · SOLUSDT 349 · NEARUSDT 339 · ZECUSDT 366 · ENAUSDT 364 · PUMPUSDT 216 · HYPEUSDT 216 · MNTUSDT_BYBIT 437 · SUIUSDT 346 · LTCUSDT 355 · XMRUSDT 359 · BNBUSDT 407 · UNIUSDT 381 · 1000PEPEUSDT 348 · DOGEUSDT 372 · 1000BONKUSDT 379
+   zero-campaign assets: none
+   book sha (TP._book_sha) 37550b6040d6bd2078c9ea39f1786085036d2c710f8b06016e2f9bc8c2a01c39 · content sha 7891f4dddbfd2f02
+   base: zero — no base book (vs_zero)
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance) | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'holdout': every entry of book inside it; the book was ridden on it
+   held against BRK_READY_BOOKS.json: score-binding sha MATCH · content sha MATCH (filed n 6016)
+── P-BRK-S1 · arm 3/3 · 'P-BRK-S1 memory-line anchor'
+   scored_in_family False · panel CLASSIC5 (N=5) · era holdout · ruler vs_zero · base zero · runner external · lanes ['brk-s1'] · LOAO line excl_zero_campaign (bar 3/5)
+   door brk → Book · spec registration 'P-BRK-S1' · arm 'P-BRK-S1 memory-line anchor' · era 'holdout'
+   window [2024-07-01T00:00:00Z, 2026-09-21T16:00:00Z) (holdout: HOLDOUT ERA [R1] — entries AFTER 2024-06-30T23:59:59Z; the e…)
+   n_campaigns 1300 · per lane {'brk-s1': 1300} · per asset: BTCUSDT 274 · ETHUSDT 279 · SOLUSDT 251 · NEARUSDT 239 · ZECUSDT 257
+   zero-campaign assets: none
+   book sha (TP._book_sha) 5ee8377098fdb20399cbbece46b3b258f188952b752d0a1357050e825468aa09 · content sha 12ded7f0ec4c5f25
+   base: zero — no base book (vs_zero)
+   BINDING OK — TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance) | no symbol outside the declared panel (book + base) | every campaign's net_r is finite (a finiteness test; nothing is summed) | era 'holdout': every entry of book inside it; the book was ridden on it
+   held against BRK_READY_BOOKS.json: score-binding sha MATCH · content sha MATCH (filed n 1300)
+── BESIDE P-BRK-S1 · HAIRCUT TWIN wired (tierc10_data.haircut_twin_net_r, charter round trip bps per asset; computed at --score only): BTCUSDT A/14 · ETHUSDT A/14 · SOLUSDT B/20 · NEARUSDT B/20 · ZECUSDT B/20 · ENAUSDT C/30 · PUMPUSDT C/30 · HYPEUSDT C/30 · MNTUSDT_BYBIT C/30 · SUIUSDT B/20 · LTCUSDT B/20 · XMRUSDT B/20 · BNBUSDT B/20 · UNIUSDT B/20 · 1000PEPEUSDT C/30 · DOGEUSDT B/20 · 1000BONKUSDT C/30
+── BESIDE P-BRK-S1 · SEALED BRK ROW [B12] · lens 5m · era holdout · scored anchor 'band' · Tier-E other anchor 'memory-line'
+   HEIGHT-vs-TOLL [Q-R3], READ at the form's own era (holdout), POOLED:CLASSIC5 / 5m / frozen3.0: verdict_pass False — 'era holdout: height gate PASS + edge-fade leg FAIL' · provisional False · n_ranges 4584
+   Tier-E other anchor: 1300 campaigns {'BTCUSDT': 274, 'ETHUSDT': 279, 'NEARUSDT': 239, 'SOLUSDT': 251, 'ZECUSDT': 257} · Tier-E 17-asset view: 6016 campaigns on 17 assets
+   TOLL: {'cls': 'retest-hold-ribbon127_200', 'lens': '5m', 'per_asset': {'BTCUSDT': 0.46555286, 'ETHUSDT': 0.35253641, 'SOLUSDT': 0.24410209, 'NEARUSDT': 0.20944241, 'ZECUSDT': 0.23793258}} · toll_pct_of_1r median 17.76028128
+   TOLL_ACCOUNTING: PRINT, NOT A DEDUCTION — reported, not changed. The contract reads 'NET OF MEASURED 5m TOLL'; today's net_r is net of FEE and FUNDING only.
+
+==============================================================================
+SUMMARY — per arm: registration · arm · scored · n · book sha · base sha · binding
+==============================================================================
+  P-GEN-1   unseen12-card-v6                                     SCORED n=286   7bff86e06aacd346 zero             BIND-OK
+  P-GEN-1   panel17-card-v6                                      tier-E n=486   b4f06ef9d5cb9f34 zero             BIND-OK
+  P-GEN-1   never-touched-card-v6                                tier-E n=47    c5c998c7ed4057f8 zero             BIND-OK
+  P-SPR-2   standalone vs zero · full corridor                   SCORED n=261   acb7971ebded4c09 zero             BIND-OK
+  P-SPR-2   standalone vs zero · tuning era                      tier-E n=165   96867b63c7bc2406 zero             BIND-OK
+  P-SPR-2   standalone vs zero · holdout era                     tier-E n=96    bd79d6fa1127af06 zero             BIND-OK
+  P-SPR-2   union with card v6 vs card v6                        tier-E n=425   7580e3bfa9440753 2bd244bfa0a1349e BIND-OK
+  P-BE-1    be-floor-1R vs card-v6 (CLASSIC5, full)              SCORED n=200   f72c08159aa36691 2bd244bfa0a1349e BIND-HALT
+  P-BE-1    be-floor-1R vs card-v6 (CLASSIC5, tuning) [Tier-E]   tier-E n=123   f43fbe0073d93dcb 985f11213765efdb BIND-OK
+  P-BE-1    be-floor-1R vs card-v6 (CLASSIC5, holdout) [Tier-E]  tier-E n=77    7d0ec7d68be7dd09 ec4f591f58585bcb BIND-OK
+  P-BE-1    be-floor-2R sensitivity vs card-v6 (CLASSIC5, full)  tier-E n=200   ae635bbd4287667d 2bd244bfa0a1349e BIND-OK
+  P-TRG-2   trg-9/12 vs card v6 · CLASSIC5 · full                SCORED n=198   b2276fa487119ef1 2bd244bfa0a1349e BIND-OK
+  P-TRG-2   trg-9/12 vs zero · CLASSIC5 · full                   tier-E n=198   b2276fa487119ef1 zero             BIND-OK
+  P-TRG-2   trg-9/12 vs card v6 · CLASSIC5 · tuning era          tier-E n=132   62284c33f7853170 985f11213765efdb BIND-OK
+  P-TRG-2   trg-9/12 vs card v6 · CLASSIC5 · holdout era         tier-E n=66    b1fd4188284affd5 ec4f591f58585bcb BIND-OK
+  P-BRK-I1  CLASSIC5-memory-line                                 SCORED n=7     06bfdaff799de495 zero             BIND-OK
+  P-BRK-I1  CLASSIC5-tierE-band                                  tier-E n=3     cabea9b7e65af9cc zero             BIND-OK
+  P-BRK-I1  PANEL17-tierE-memory-line                            tier-E n=17    1b4cf1e67f02c990 zero             BIND-OK
+  P-BRK-S1  P-BRK-S1 vs zero                                     SCORED n=1836  e09eefaf94072db9 zero             BIND-OK
+  P-BRK-S1  P-BRK-S1 17-asset view                               tier-E n=6016  37550b6040d6bd20 zero             BIND-OK
+  P-BRK-S1  P-BRK-S1 memory-line anchor                          tier-E n=1300  5ee8377098fdb203 zero             BIND-OK
+HALTS: 1
+  P-BE-1 'be-floor-1R vs card-v6 (CLASSIC5, full)': HALT: P-BE-1 — the arm shares the WHOLE campaign set with its base; the commissioned two-sample ruler's premise failed.
+.scored.json on file after the dry-run: NONE

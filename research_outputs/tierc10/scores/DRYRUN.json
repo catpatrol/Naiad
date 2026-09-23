@@ -1,0 +1,2901 @@
+{
+ "arms": [
+  {
+   "arm": "unseen12-card-v6",
+   "arm_index": 1,
+   "base": "zero",
+   "base_content_sha": null,
+   "base_n": null,
+   "base_per_asset": null,
+   "base_sha": null,
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance)",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'full': every entry of book inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "f86a0c15c95b7547d85995b4ea4b72a2d210a2cefc237e43ae6a16e06cdc5e46",
+   "book_sha": "7bff86e06aacd346ae14142737cbe835d3d64a8aa30822ee7e2e205b13fa1050",
+   "book_spec": {
+    "arm": "unseen12-card-v6",
+    "era": "full",
+    "hi_ms": 1790006399999,
+    "lo_ms": 1578556800000,
+    "registration": "P-GEN-1",
+    "runner": null
+   },
+   "card": {
+    "class": "tierc8.Card",
+    "fields": {
+     "add_size": "1.0",
+     "adds_max": "0",
+     "ae_abort_r": "None",
+     "anchor_kind": "'pivot'",
+     "anchor_offset": "0.5",
+     "entry_rail_atr": "1.0",
+     "funding_ceiling_r": "1.0",
+     "grid": "'card'",
+     "harvest": "'band'",
+     "harvest_fixed_r": "2.0",
+     "harvest_frac": "0.5",
+     "harvest_min_unit_r": "-inf",
+     "hybrid_anchor": "False",
+     "lane": "'card'",
+     "limit_ae_mult": "None",
+     "name": "'tc10-gen1-card-v6'",
+     "reentry": "False",
+     "seal_open": "True",
+     "stop_grid_offset_atr": "0.0",
+     "time_stop_bars": "None",
+     "trail": "True",
+     "trail_arm_after_r": "1.0",
+     "trail_extra_buf_atr": "0.0",
+     "trail_l": "2",
+     "trail_min_advance_atr": "0.05",
+     "trail_r": "2",
+     "wall_exit_atr": "None",
+     "wall_tf": "'12h'",
+     "weave": "False",
+     "weave_k": "6"
+    }
+   },
+   "door": "run_cell_n",
+   "era": "full",
+   "halt": null,
+   "keys": null,
+   "lanes": [
+    "card"
+   ],
+   "loao_bar": 7,
+   "loao_line": "lineage",
+   "n_campaigns": 286,
+   "n_panel": 12,
+   "panel_name": "UNSEEN12",
+   "per_asset": {
+    "1000BONKUSDT": 12,
+    "1000PEPEUSDT": 19,
+    "BNBUSDT": 44,
+    "DOGEUSDT": 27,
+    "ENAUSDT": 15,
+    "HYPEUSDT": 4,
+    "LTCUSDT": 43,
+    "MNTUSDT_BYBIT": 18,
+    "PUMPUSDT": 8,
+    "SUIUSDT": 21,
+    "UNIUSDT": 39,
+    "XMRUSDT": 36
+   },
+   "per_lane": {
+    "card": 286
+   },
+   "registration": "P-GEN-1",
+   "ruler": "vs_zero",
+   "runner": "run_cell_n",
+   "scored_in_family": true,
+   "seq": 1,
+   "window": [
+    "2020-01-09T08:00:00Z",
+    "2026-09-21T16:00:00Z"
+   ],
+   "window_ms": [
+    1578556800000,
+    1790006399999
+   ],
+   "zero_campaign_assets": []
+  },
+  {
+   "arm": "panel17-card-v6",
+   "arm_index": 2,
+   "base": "zero",
+   "base_content_sha": null,
+   "base_n": null,
+   "base_per_asset": null,
+   "base_sha": null,
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance)",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'full': every entry of book inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "4b55933994d76942ac020da7ffbd35d7754b0c60c4d3ca1771d4ad521f39cb1a",
+   "book_sha": "b4f06ef9d5cb9f34280457d1c39e3d0bdd3e10ceede3d500b74bebfbd5e7ea8b",
+   "book_spec": {
+    "arm": "panel17-card-v6",
+    "era": "full",
+    "hi_ms": 1790006399999,
+    "lo_ms": 1567958400000,
+    "registration": "P-GEN-1",
+    "runner": null
+   },
+   "card": {
+    "class": "tierc8.Card",
+    "fields": {
+     "add_size": "1.0",
+     "adds_max": "0",
+     "ae_abort_r": "None",
+     "anchor_kind": "'pivot'",
+     "anchor_offset": "0.5",
+     "entry_rail_atr": "1.0",
+     "funding_ceiling_r": "1.0",
+     "grid": "'card'",
+     "harvest": "'band'",
+     "harvest_fixed_r": "2.0",
+     "harvest_frac": "0.5",
+     "harvest_min_unit_r": "-inf",
+     "hybrid_anchor": "False",
+     "lane": "'card'",
+     "limit_ae_mult": "None",
+     "name": "'tc10-gen1-card-v6'",
+     "reentry": "False",
+     "seal_open": "True",
+     "stop_grid_offset_atr": "0.0",
+     "time_stop_bars": "None",
+     "trail": "True",
+     "trail_arm_after_r": "1.0",
+     "trail_extra_buf_atr": "0.0",
+     "trail_l": "2",
+     "trail_min_advance_atr": "0.05",
+     "trail_r": "2",
+     "wall_exit_atr": "None",
+     "wall_tf": "'12h'",
+     "weave": "False",
+     "weave_k": "6"
+    }
+   },
+   "door": "run_cell_n",
+   "era": "full",
+   "halt": null,
+   "keys": null,
+   "lanes": [
+    "card"
+   ],
+   "loao_bar": 9,
+   "loao_line": "lineage",
+   "n_campaigns": 486,
+   "n_panel": 17,
+   "panel_name": "PANEL17",
+   "per_asset": {
+    "1000BONKUSDT": 12,
+    "1000PEPEUSDT": 19,
+    "BNBUSDT": 44,
+    "BTCUSDT": 39,
+    "DOGEUSDT": 27,
+    "ENAUSDT": 15,
+    "ETHUSDT": 48,
+    "HYPEUSDT": 4,
+    "LTCUSDT": 43,
+    "MNTUSDT_BYBIT": 18,
+    "NEARUSDT": 40,
+    "PUMPUSDT": 8,
+    "SOLUSDT": 36,
+    "SUIUSDT": 21,
+    "UNIUSDT": 39,
+    "XMRUSDT": 36,
+    "ZECUSDT": 37
+   },
+   "per_lane": {
+    "card": 486
+   },
+   "registration": "P-GEN-1",
+   "ruler": "vs_zero",
+   "runner": "run_cell_n",
+   "scored_in_family": false,
+   "seq": 1,
+   "window": [
+    "2019-09-08T16:00:00Z",
+    "2026-09-21T16:00:00Z"
+   ],
+   "window_ms": [
+    1567958400000,
+    1790006399999
+   ],
+   "zero_campaign_assets": []
+  },
+  {
+   "arm": "never-touched-card-v6",
+   "arm_index": 3,
+   "base": "zero",
+   "base_content_sha": null,
+   "base_n": null,
+   "base_per_asset": null,
+   "base_sha": null,
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance)",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'full': every entry of book inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "45bfea0bfde4bed38a4b4ec2d65661086a32d8003e1a76a06f0fc424f2250dce",
+   "book_sha": "c5c998c7ed4057f83591c6ffa554c06d6cbe34b832269376b0a5ebb6b4476af6",
+   "book_spec": {
+    "arm": "never-touched-card-v6",
+    "era": "full",
+    "hi_ms": 1790006399999,
+    "lo_ms": 1683129600000,
+    "registration": "P-GEN-1",
+    "runner": null
+   },
+   "card": {
+    "class": "tierc8.Card",
+    "fields": {
+     "add_size": "1.0",
+     "adds_max": "0",
+     "ae_abort_r": "None",
+     "anchor_kind": "'pivot'",
+     "anchor_offset": "0.5",
+     "entry_rail_atr": "1.0",
+     "funding_ceiling_r": "1.0",
+     "grid": "'card'",
+     "harvest": "'band'",
+     "harvest_fixed_r": "2.0",
+     "harvest_frac": "0.5",
+     "harvest_min_unit_r": "-inf",
+     "hybrid_anchor": "False",
+     "lane": "'card'",
+     "limit_ae_mult": "None",
+     "name": "'tc10-gen1-card-v6'",
+     "reentry": "False",
+     "seal_open": "True",
+     "stop_grid_offset_atr": "0.0",
+     "time_stop_bars": "None",
+     "trail": "True",
+     "trail_arm_after_r": "1.0",
+     "trail_extra_buf_atr": "0.0",
+     "trail_l": "2",
+     "trail_min_advance_atr": "0.05",
+     "trail_r": "2",
+     "wall_exit_atr": "None",
+     "wall_tf": "'12h'",
+     "weave": "False",
+     "weave_k": "6"
+    }
+   },
+   "door": "run_cell_n",
+   "era": "full",
+   "halt": null,
+   "keys": null,
+   "lanes": [
+    "card"
+   ],
+   "loao_bar": 2,
+   "loao_line": "lineage",
+   "n_campaigns": 47,
+   "n_panel": 3,
+   "panel_name": "CUSTOM3:6bf107e8",
+   "per_asset": {
+    "MNTUSDT_BYBIT": 18,
+    "PUMPUSDT": 8,
+    "SUIUSDT": 21
+   },
+   "per_lane": {
+    "card": 47
+   },
+   "registration": "P-GEN-1",
+   "ruler": "vs_zero",
+   "runner": "run_cell_n",
+   "scored_in_family": false,
+   "seq": 1,
+   "window": [
+    "2023-05-03T16:00:00Z",
+    "2026-09-21T16:00:00Z"
+   ],
+   "window_ms": [
+    1683129600000,
+    1790006399999
+   ],
+   "zero_campaign_assets": []
+  },
+  {
+   "arm": "standalone vs zero · full corridor",
+   "arm_index": 1,
+   "base": "zero",
+   "base_content_sha": null,
+   "base_n": null,
+   "base_per_asset": null,
+   "base_sha": null,
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance)",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'full': every entry of book inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "f0577bd9958bf52072c8cdf6c880ce73d4ef69a5501847fbfea3d4051d6fdde9",
+   "book_sha": "acb7971ebded4c09783cc58dabb2fde646ceb4e26888dfecf01cf2d15f38bc1c",
+   "book_spec": {
+    "arm": "standalone vs zero · full corridor",
+    "era": "full",
+    "hi_ms": 1790006399999,
+    "lo_ms": 1567958400000,
+    "registration": "P-SPR-2",
+    "runner": "external"
+   },
+   "card": {
+    "class": "tierc10_lanes.Card",
+    "fields": {
+     "add_size": "1.0",
+     "adds_max": "0",
+     "ae_abort_r": "None",
+     "anchor_kind": "'pivot'",
+     "anchor_offset": "0.5",
+     "be_floor_after_r": "None",
+     "entry_rail_atr": "1.0",
+     "funding_ceiling_r": "1.0",
+     "grid": "'card'",
+     "harvest": "'band'",
+     "harvest_fixed_r": "2.0",
+     "harvest_frac": "0.5",
+     "harvest_min_unit_r": "-inf",
+     "hybrid_anchor": "False",
+     "lane": "'spring'",
+     "limit_ae_mult": "None",
+     "name": "'tc10-spring-standalone'",
+     "reentry": "False",
+     "seal_open": "True",
+     "stop_grid_offset_atr": "0.0",
+     "time_stop_bars": "None",
+     "trail": "True",
+     "trail_arm_after_r": "1.0",
+     "trail_extra_buf_atr": "0.0",
+     "trail_l": "2",
+     "trail_min_advance_atr": "0.05",
+     "trail_r": "2",
+     "wall_exit_atr": "None",
+     "wall_tf": "'12h'",
+     "weave": "False",
+     "weave_k": "6"
+    }
+   },
+   "door": "lanes",
+   "era": "full",
+   "halt": null,
+   "keys": null,
+   "lanes": [
+    "spring"
+   ],
+   "loao_bar": 3,
+   "loao_line": "lineage",
+   "n_campaigns": 261,
+   "n_panel": 5,
+   "panel_name": "CLASSIC5",
+   "per_asset": {
+    "BTCUSDT": 57,
+    "ETHUSDT": 50,
+    "NEARUSDT": 55,
+    "SOLUSDT": 50,
+    "ZECUSDT": 49
+   },
+   "per_lane": {
+    "spring": 261
+   },
+   "registration": "P-SPR-2",
+   "ruler": "vs_zero",
+   "runner": "external",
+   "scored_in_family": true,
+   "seq": 2,
+   "spring_refusals": {
+    "consistent": true,
+    "per_asset": {
+     "BTCUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 57,
+      "long": 33,
+      "no_struct_anchor": 0,
+      "position_open": 3,
+      "short": 27,
+      "signals": 60
+     },
+     "ETHUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 50,
+      "long": 23,
+      "no_struct_anchor": 0,
+      "position_open": 3,
+      "short": 30,
+      "signals": 53
+     },
+     "NEARUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 55,
+      "long": 38,
+      "no_struct_anchor": 0,
+      "position_open": 5,
+      "short": 22,
+      "signals": 60
+     },
+     "SOLUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 50,
+      "long": 33,
+      "no_struct_anchor": 0,
+      "position_open": 7,
+      "short": 24,
+      "signals": 57
+     },
+     "ZECUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 49,
+      "long": 18,
+      "no_struct_anchor": 0,
+      "position_open": 3,
+      "short": 34,
+      "signals": 52
+     }
+    },
+    "spring_campaigns_in_book": 261,
+    "total": {
+     "UNEXPLAINED": 0,
+     "degenerate_R": 0,
+     "entered": 261,
+     "long": 145,
+     "no_struct_anchor": 0,
+     "position_open": 21,
+     "short": 137,
+     "signals": 282
+    }
+   },
+   "window": [
+    "2019-09-08T16:00:00Z",
+    "2026-09-21T16:00:00Z"
+   ],
+   "window_ms": [
+    1567958400000,
+    1790006399999
+   ],
+   "zero_campaign_assets": []
+  },
+  {
+   "arm": "standalone vs zero · tuning era",
+   "arm_index": 2,
+   "base": "zero",
+   "base_content_sha": null,
+   "base_n": null,
+   "base_per_asset": null,
+   "base_sha": null,
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance)",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'tuning': every entry of book inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "d27bbee8913f11e95713d27baa1a2d3add28ec789872dc446cb27340e25a9d58",
+   "book_sha": "96867b63c7bc2406950c46d555ae861e3ca8f5959bb5914e15b05dfb1a231d5b",
+   "book_spec": {
+    "arm": "standalone vs zero · tuning era",
+    "era": "tuning",
+    "hi_ms": 1719777599999,
+    "lo_ms": 1567958400000,
+    "registration": "P-SPR-2",
+    "runner": "external"
+   },
+   "card": {
+    "class": "tierc10_lanes.Card",
+    "fields": {
+     "add_size": "1.0",
+     "adds_max": "0",
+     "ae_abort_r": "None",
+     "anchor_kind": "'pivot'",
+     "anchor_offset": "0.5",
+     "be_floor_after_r": "None",
+     "entry_rail_atr": "1.0",
+     "funding_ceiling_r": "1.0",
+     "grid": "'card'",
+     "harvest": "'band'",
+     "harvest_fixed_r": "2.0",
+     "harvest_frac": "0.5",
+     "harvest_min_unit_r": "-inf",
+     "hybrid_anchor": "False",
+     "lane": "'spring'",
+     "limit_ae_mult": "None",
+     "name": "'tc10-spring-standalone'",
+     "reentry": "False",
+     "seal_open": "True",
+     "stop_grid_offset_atr": "0.0",
+     "time_stop_bars": "None",
+     "trail": "True",
+     "trail_arm_after_r": "1.0",
+     "trail_extra_buf_atr": "0.0",
+     "trail_l": "2",
+     "trail_min_advance_atr": "0.05",
+     "trail_r": "2",
+     "wall_exit_atr": "None",
+     "wall_tf": "'12h'",
+     "weave": "False",
+     "weave_k": "6"
+    }
+   },
+   "door": "lanes",
+   "era": "tuning",
+   "halt": null,
+   "keys": null,
+   "lanes": [
+    "spring"
+   ],
+   "loao_bar": 3,
+   "loao_line": "lineage",
+   "n_campaigns": 165,
+   "n_panel": 5,
+   "panel_name": "CLASSIC5",
+   "per_asset": {
+    "BTCUSDT": 33,
+    "ETHUSDT": 35,
+    "NEARUSDT": 35,
+    "SOLUSDT": 29,
+    "ZECUSDT": 33
+   },
+   "per_lane": {
+    "spring": 165
+   },
+   "registration": "P-SPR-2",
+   "ruler": "vs_zero",
+   "runner": "external",
+   "scored_in_family": false,
+   "seq": 2,
+   "spring_refusals": {
+    "consistent": true,
+    "per_asset": {
+     "BTCUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 33,
+      "long": 19,
+      "no_struct_anchor": 0,
+      "position_open": 2,
+      "short": 16,
+      "signals": 35
+     },
+     "ETHUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 35,
+      "long": 17,
+      "no_struct_anchor": 0,
+      "position_open": 3,
+      "short": 21,
+      "signals": 38
+     },
+     "NEARUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 35,
+      "long": 22,
+      "no_struct_anchor": 0,
+      "position_open": 3,
+      "short": 16,
+      "signals": 38
+     },
+     "SOLUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 29,
+      "long": 21,
+      "no_struct_anchor": 0,
+      "position_open": 7,
+      "short": 15,
+      "signals": 36
+     },
+     "ZECUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 33,
+      "long": 8,
+      "no_struct_anchor": 0,
+      "position_open": 2,
+      "short": 27,
+      "signals": 35
+     }
+    },
+    "spring_campaigns_in_book": 165,
+    "total": {
+     "UNEXPLAINED": 0,
+     "degenerate_R": 0,
+     "entered": 165,
+     "long": 87,
+     "no_struct_anchor": 0,
+     "position_open": 17,
+     "short": 95,
+     "signals": 182
+    }
+   },
+   "window": [
+    "2019-09-08T16:00:00Z",
+    "2024-06-30T20:00:00Z"
+   ],
+   "window_ms": [
+    1567958400000,
+    1719777599999
+   ],
+   "zero_campaign_assets": []
+  },
+  {
+   "arm": "standalone vs zero · holdout era",
+   "arm_index": 3,
+   "base": "zero",
+   "base_content_sha": null,
+   "base_n": null,
+   "base_per_asset": null,
+   "base_sha": null,
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance)",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'holdout': every entry of book inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "4ace92d856845499e75dc2962e124a703bd753e00a63f411172d580fc95d671e",
+   "book_sha": "bd79d6fa1127af0635936e443fbeade24c23eec53b997451d49bda6fd67dc70e",
+   "book_spec": {
+    "arm": "standalone vs zero · holdout era",
+    "era": "holdout",
+    "hi_ms": 1790006399999,
+    "lo_ms": 1719792000000,
+    "registration": "P-SPR-2",
+    "runner": "external"
+   },
+   "card": {
+    "class": "tierc10_lanes.Card",
+    "fields": {
+     "add_size": "1.0",
+     "adds_max": "0",
+     "ae_abort_r": "None",
+     "anchor_kind": "'pivot'",
+     "anchor_offset": "0.5",
+     "be_floor_after_r": "None",
+     "entry_rail_atr": "1.0",
+     "funding_ceiling_r": "1.0",
+     "grid": "'card'",
+     "harvest": "'band'",
+     "harvest_fixed_r": "2.0",
+     "harvest_frac": "0.5",
+     "harvest_min_unit_r": "-inf",
+     "hybrid_anchor": "False",
+     "lane": "'spring'",
+     "limit_ae_mult": "None",
+     "name": "'tc10-spring-standalone'",
+     "reentry": "False",
+     "seal_open": "True",
+     "stop_grid_offset_atr": "0.0",
+     "time_stop_bars": "None",
+     "trail": "True",
+     "trail_arm_after_r": "1.0",
+     "trail_extra_buf_atr": "0.0",
+     "trail_l": "2",
+     "trail_min_advance_atr": "0.05",
+     "trail_r": "2",
+     "wall_exit_atr": "None",
+     "wall_tf": "'12h'",
+     "weave": "False",
+     "weave_k": "6"
+    }
+   },
+   "door": "lanes",
+   "era": "holdout",
+   "halt": null,
+   "keys": null,
+   "lanes": [
+    "spring"
+   ],
+   "loao_bar": 3,
+   "loao_line": "lineage",
+   "n_campaigns": 96,
+   "n_panel": 5,
+   "panel_name": "CLASSIC5",
+   "per_asset": {
+    "BTCUSDT": 24,
+    "ETHUSDT": 15,
+    "NEARUSDT": 20,
+    "SOLUSDT": 21,
+    "ZECUSDT": 16
+   },
+   "per_lane": {
+    "spring": 96
+   },
+   "registration": "P-SPR-2",
+   "ruler": "vs_zero",
+   "runner": "external",
+   "scored_in_family": false,
+   "seq": 2,
+   "spring_refusals": {
+    "consistent": true,
+    "per_asset": {
+     "BTCUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 24,
+      "long": 14,
+      "no_struct_anchor": 0,
+      "position_open": 1,
+      "short": 11,
+      "signals": 25
+     },
+     "ETHUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 15,
+      "long": 6,
+      "no_struct_anchor": 0,
+      "position_open": 0,
+      "short": 9,
+      "signals": 15
+     },
+     "NEARUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 20,
+      "long": 16,
+      "no_struct_anchor": 0,
+      "position_open": 2,
+      "short": 6,
+      "signals": 22
+     },
+     "SOLUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 21,
+      "long": 12,
+      "no_struct_anchor": 0,
+      "position_open": 0,
+      "short": 9,
+      "signals": 21
+     },
+     "ZECUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 16,
+      "long": 10,
+      "no_struct_anchor": 0,
+      "position_open": 1,
+      "short": 7,
+      "signals": 17
+     }
+    },
+    "spring_campaigns_in_book": 96,
+    "total": {
+     "UNEXPLAINED": 0,
+     "degenerate_R": 0,
+     "entered": 96,
+     "long": 58,
+     "no_struct_anchor": 0,
+     "position_open": 4,
+     "short": 42,
+     "signals": 100
+    }
+   },
+   "window": [
+    "2024-07-01T00:00:00Z",
+    "2026-09-21T16:00:00Z"
+   ],
+   "window_ms": [
+    1719792000000,
+    1790006399999
+   ],
+   "zero_campaign_assets": []
+  },
+  {
+   "arm": "union with card v6 vs card v6",
+   "arm_index": 4,
+   "base": "card-v6",
+   "base_content_sha": "523158857de960d8cdbd0c3ce935029e5a585d3ba432360eaba05e934330bbf2",
+   "base_n": 200,
+   "base_per_asset": {
+    "BTCUSDT": 39,
+    "ETHUSDT": 48,
+    "NEARUSDT": 40,
+    "SOLUSDT": 36,
+    "ZECUSDT": 37
+   },
+   "base_sha": "2bd244bfa0a1349ee73aa51e61619e3dda1257eafe3f613df4524a4d87909acd",
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance, base ride/panel/window)",
+    "set_change law on keys: the set MOVED -> the TWO-SAMPLE interval (paired 188 · book-only 237 · base-only 12)",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'full': every entry of book and base inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "71186b8c2ee25783eb893144e84c0a04504149f71953564611d36b0c18575cc0",
+   "book_sha": "7580e3bfa944075396a3a87bf2a3325ee3f271d9ef12a24a12305b10bbf54ac4",
+   "book_spec": {
+    "arm": "union with card v6 vs card v6",
+    "era": "full",
+    "hi_ms": 1790006399999,
+    "lo_ms": 1567958400000,
+    "registration": "P-SPR-2",
+    "runner": "external"
+   },
+   "card": {
+    "class": "tierc10_lanes.Card",
+    "fields": {
+     "add_size": "1.0",
+     "adds_max": "0",
+     "ae_abort_r": "None",
+     "anchor_kind": "'pivot'",
+     "anchor_offset": "0.5",
+     "be_floor_after_r": "None",
+     "entry_rail_atr": "1.0",
+     "funding_ceiling_r": "1.0",
+     "grid": "'card'",
+     "harvest": "'band'",
+     "harvest_fixed_r": "2.0",
+     "harvest_frac": "0.5",
+     "harvest_min_unit_r": "-inf",
+     "hybrid_anchor": "False",
+     "lane": "'union'",
+     "limit_ae_mult": "None",
+     "name": "'tc10-spring-union'",
+     "reentry": "False",
+     "seal_open": "True",
+     "stop_grid_offset_atr": "0.0",
+     "time_stop_bars": "None",
+     "trail": "True",
+     "trail_arm_after_r": "1.0",
+     "trail_extra_buf_atr": "0.0",
+     "trail_l": "2",
+     "trail_min_advance_atr": "0.05",
+     "trail_r": "2",
+     "wall_exit_atr": "None",
+     "wall_tf": "'12h'",
+     "weave": "False",
+     "weave_k": "6"
+    }
+   },
+   "door": "lanes",
+   "era": "full",
+   "halt": null,
+   "keys": {
+    "moved": true,
+    "n_base_only": 12,
+    "n_book_only": 237,
+    "n_pair_score_law": 188,
+    "n_paired": 188
+   },
+   "lanes": [
+    "card",
+    "spring"
+   ],
+   "loao_bar": 3,
+   "loao_line": "lineage",
+   "n_campaigns": 425,
+   "n_panel": 5,
+   "panel_name": "CLASSIC5",
+   "per_asset": {
+    "BTCUSDT": 92,
+    "ETHUSDT": 90,
+    "NEARUSDT": 91,
+    "SOLUSDT": 74,
+    "ZECUSDT": 78
+   },
+   "per_lane": {
+    "card": 188,
+    "spring": 237
+   },
+   "registration": "P-SPR-2",
+   "ruler": "set_change",
+   "runner": "external",
+   "scored_in_family": false,
+   "seq": 2,
+   "spring_refusals": {
+    "consistent": true,
+    "per_asset": {
+     "BTCUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 56,
+      "long": 33,
+      "no_struct_anchor": 0,
+      "position_open": 4,
+      "short": 27,
+      "signals": 60
+     },
+     "ETHUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 42,
+      "long": 23,
+      "no_struct_anchor": 0,
+      "position_open": 11,
+      "short": 30,
+      "signals": 53
+     },
+     "NEARUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 52,
+      "long": 38,
+      "no_struct_anchor": 0,
+      "position_open": 8,
+      "short": 22,
+      "signals": 60
+     },
+     "SOLUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 44,
+      "long": 33,
+      "no_struct_anchor": 0,
+      "position_open": 13,
+      "short": 24,
+      "signals": 57
+     },
+     "ZECUSDT": {
+      "UNEXPLAINED": 0,
+      "degenerate_R": 0,
+      "entered": 43,
+      "long": 18,
+      "no_struct_anchor": 0,
+      "position_open": 9,
+      "short": 34,
+      "signals": 52
+     }
+    },
+    "spring_campaigns_in_book": 237,
+    "total": {
+     "UNEXPLAINED": 0,
+     "degenerate_R": 0,
+     "entered": 237,
+     "long": 145,
+     "no_struct_anchor": 0,
+     "position_open": 45,
+     "short": 137,
+     "signals": 282
+    }
+   },
+   "window": [
+    "2019-09-08T16:00:00Z",
+    "2026-09-21T16:00:00Z"
+   ],
+   "window_ms": [
+    1567958400000,
+    1790006399999
+   ],
+   "zero_campaign_assets": []
+  },
+  {
+   "arm": "be-floor-1R vs card-v6 (CLASSIC5, full)",
+   "arm_index": 1,
+   "base": "card-v6",
+   "base_content_sha": "523158857de960d8cdbd0c3ce935029e5a585d3ba432360eaba05e934330bbf2",
+   "base_n": 200,
+   "base_per_asset": {
+    "BTCUSDT": 39,
+    "ETHUSDT": 48,
+    "NEARUSDT": 40,
+    "SOLUSDT": 36,
+    "ZECUSDT": 37
+   },
+   "base_sha": "2bd244bfa0a1349ee73aa51e61619e3dda1257eafe3f613df4524a4d87909acd",
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance, base ride/panel/window)"
+   ],
+   "bind_halt": "HALT: P-BE-1 — the arm shares the WHOLE campaign set with its base; the commissioned two-sample ruler's premise failed.",
+   "bind_ok": false,
+   "book_content_sha": "9e842dd38aa8d9043d9f2d991b1571536710dfd39641fec0f6dccdf1b54a3d85",
+   "book_sha": "f72c08159aa36691f2b8e519c0fad782c760cb5e64fe8970a387685960360e3f",
+   "book_spec": {
+    "arm": "be-floor-1R vs card-v6 (CLASSIC5, full)",
+    "era": "full",
+    "hi_ms": 1790006399999,
+    "lo_ms": 1567958400000,
+    "registration": "P-BE-1",
+    "runner": "external"
+   },
+   "card": {
+    "class": "tierc10_lanes.Card",
+    "fields": {
+     "add_size": "1.0",
+     "adds_max": "0",
+     "ae_abort_r": "None",
+     "anchor_kind": "'pivot'",
+     "anchor_offset": "0.5",
+     "be_floor_after_r": "1.0",
+     "entry_rail_atr": "1.0",
+     "funding_ceiling_r": "1.0",
+     "grid": "'card'",
+     "harvest": "'band'",
+     "harvest_fixed_r": "2.0",
+     "harvest_frac": "0.5",
+     "harvest_min_unit_r": "-inf",
+     "hybrid_anchor": "False",
+     "lane": "'card'",
+     "limit_ae_mult": "None",
+     "name": "'tc10-be-floor-1R'",
+     "reentry": "False",
+     "seal_open": "True",
+     "stop_grid_offset_atr": "0.0",
+     "time_stop_bars": "None",
+     "trail": "True",
+     "trail_arm_after_r": "1.0",
+     "trail_extra_buf_atr": "0.0",
+     "trail_l": "2",
+     "trail_min_advance_atr": "0.05",
+     "trail_r": "2",
+     "wall_exit_atr": "None",
+     "wall_tf": "'12h'",
+     "weave": "False",
+     "weave_k": "6"
+    }
+   },
+   "door": "lanes",
+   "era": "full",
+   "halt": null,
+   "keys": {
+    "moved": false,
+    "n_base_only": 0,
+    "n_book_only": 0,
+    "n_pair_score_law": 200,
+    "n_paired": 200
+   },
+   "lanes": [
+    "card"
+   ],
+   "loao_bar": 3,
+   "loao_line": "lineage",
+   "n_campaigns": 200,
+   "n_panel": 5,
+   "panel_name": "CLASSIC5",
+   "per_asset": {
+    "BTCUSDT": 39,
+    "ETHUSDT": 48,
+    "NEARUSDT": 40,
+    "SOLUSDT": 36,
+    "ZECUSDT": 37
+   },
+   "per_lane": {
+    "card": 200
+   },
+   "registration": "P-BE-1",
+   "ruler": "two_sample",
+   "runner": "external",
+   "scored_in_family": true,
+   "seq": 3,
+   "text_prescribes": [
+    "If it does not move, this registration does NOT quietly become the narrower paired row — it HALTs. That HALT is part of the claim, and it is why the ruler is registered rather than left to the scorer.",
+    "If A1's two-sample premise fails and A1 HALTs, there is no report-only row on the same population to read instead; a new id must be filed under `set_change` and the reason disclosed."
+   ],
+   "window": [
+    "2019-09-08T16:00:00Z",
+    "2026-09-21T16:00:00Z"
+   ],
+   "window_ms": [
+    1567958400000,
+    1790006399999
+   ],
+   "zero_campaign_assets": []
+  },
+  {
+   "arm": "be-floor-1R vs card-v6 (CLASSIC5, tuning) [Tier-E]",
+   "arm_index": 2,
+   "base": "card-v6",
+   "base_content_sha": "1ecade491c7147daefe0cd31c4cf4d828e25813c2c91afd9ad3d1a25177a899b",
+   "base_n": 123,
+   "base_per_asset": {
+    "BTCUSDT": 26,
+    "ETHUSDT": 29,
+    "NEARUSDT": 23,
+    "SOLUSDT": 23,
+    "ZECUSDT": 22
+   },
+   "base_sha": "985f11213765efdb8e2235434a202c9939de1988d5dd845849d41abbacbcdfae",
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance, base ride/panel/window)",
+    "set_change law on keys: the set did NOT move -> the PAIRED interval (paired 123 · book-only 0 · base-only 0)",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'tuning': every entry of book and base inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "c801744323bdf1047e27a8be4ac098de7220cf26948e506ceb6fc6cb1c8df3c6",
+   "book_sha": "f43fbe0073d93dcbcfb91d176903128be3f36343fac67ed38b04c996bbc8e563",
+   "book_spec": {
+    "arm": "be-floor-1R vs card-v6 (CLASSIC5, tuning) [Tier-E]",
+    "era": "tuning",
+    "hi_ms": 1719777599999,
+    "lo_ms": 1567958400000,
+    "registration": "P-BE-1",
+    "runner": "external"
+   },
+   "card": {
+    "class": "tierc10_lanes.Card",
+    "fields": {
+     "add_size": "1.0",
+     "adds_max": "0",
+     "ae_abort_r": "None",
+     "anchor_kind": "'pivot'",
+     "anchor_offset": "0.5",
+     "be_floor_after_r": "1.0",
+     "entry_rail_atr": "1.0",
+     "funding_ceiling_r": "1.0",
+     "grid": "'card'",
+     "harvest": "'band'",
+     "harvest_fixed_r": "2.0",
+     "harvest_frac": "0.5",
+     "harvest_min_unit_r": "-inf",
+     "hybrid_anchor": "False",
+     "lane": "'card'",
+     "limit_ae_mult": "None",
+     "name": "'tc10-be-floor-1R'",
+     "reentry": "False",
+     "seal_open": "True",
+     "stop_grid_offset_atr": "0.0",
+     "time_stop_bars": "None",
+     "trail": "True",
+     "trail_arm_after_r": "1.0",
+     "trail_extra_buf_atr": "0.0",
+     "trail_l": "2",
+     "trail_min_advance_atr": "0.05",
+     "trail_r": "2",
+     "wall_exit_atr": "None",
+     "wall_tf": "'12h'",
+     "weave": "False",
+     "weave_k": "6"
+    }
+   },
+   "door": "lanes",
+   "era": "tuning",
+   "halt": null,
+   "keys": {
+    "moved": false,
+    "n_base_only": 0,
+    "n_book_only": 0,
+    "n_pair_score_law": 123,
+    "n_paired": 123
+   },
+   "lanes": [
+    "card"
+   ],
+   "loao_bar": 3,
+   "loao_line": "lineage",
+   "n_campaigns": 123,
+   "n_panel": 5,
+   "panel_name": "CLASSIC5",
+   "per_asset": {
+    "BTCUSDT": 26,
+    "ETHUSDT": 29,
+    "NEARUSDT": 23,
+    "SOLUSDT": 23,
+    "ZECUSDT": 22
+   },
+   "per_lane": {
+    "card": 123
+   },
+   "registration": "P-BE-1",
+   "ruler": "set_change",
+   "runner": "external",
+   "scored_in_family": false,
+   "seq": 3,
+   "window": [
+    "2019-09-08T16:00:00Z",
+    "2024-06-30T20:00:00Z"
+   ],
+   "window_ms": [
+    1567958400000,
+    1719777599999
+   ],
+   "zero_campaign_assets": []
+  },
+  {
+   "arm": "be-floor-1R vs card-v6 (CLASSIC5, holdout) [Tier-E]",
+   "arm_index": 3,
+   "base": "card-v6",
+   "base_content_sha": "ea9f4eef54243b106542248ade1bf14570a174fe74bcbce1c64ee903ade6ff14",
+   "base_n": 77,
+   "base_per_asset": {
+    "BTCUSDT": 13,
+    "ETHUSDT": 19,
+    "NEARUSDT": 17,
+    "SOLUSDT": 13,
+    "ZECUSDT": 15
+   },
+   "base_sha": "ec4f591f58585bcbc82dd5e4f865e59fbc90b121d38b0fdbf5074897b5db00b8",
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance, base ride/panel/window)",
+    "set_change law on keys: the set did NOT move -> the PAIRED interval (paired 77 · book-only 0 · base-only 0)",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'holdout': every entry of book and base inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "33d5501bc318a5f24ee1339464a78c653536321055a99139c92c862dc1cf0c87",
+   "book_sha": "7d0ec7d68be7dd096108871dc59985515cbcec7cec05ade476bc4a959860de4e",
+   "book_spec": {
+    "arm": "be-floor-1R vs card-v6 (CLASSIC5, holdout) [Tier-E]",
+    "era": "holdout",
+    "hi_ms": 1790006399999,
+    "lo_ms": 1719792000000,
+    "registration": "P-BE-1",
+    "runner": "external"
+   },
+   "card": {
+    "class": "tierc10_lanes.Card",
+    "fields": {
+     "add_size": "1.0",
+     "adds_max": "0",
+     "ae_abort_r": "None",
+     "anchor_kind": "'pivot'",
+     "anchor_offset": "0.5",
+     "be_floor_after_r": "1.0",
+     "entry_rail_atr": "1.0",
+     "funding_ceiling_r": "1.0",
+     "grid": "'card'",
+     "harvest": "'band'",
+     "harvest_fixed_r": "2.0",
+     "harvest_frac": "0.5",
+     "harvest_min_unit_r": "-inf",
+     "hybrid_anchor": "False",
+     "lane": "'card'",
+     "limit_ae_mult": "None",
+     "name": "'tc10-be-floor-1R'",
+     "reentry": "False",
+     "seal_open": "True",
+     "stop_grid_offset_atr": "0.0",
+     "time_stop_bars": "None",
+     "trail": "True",
+     "trail_arm_after_r": "1.0",
+     "trail_extra_buf_atr": "0.0",
+     "trail_l": "2",
+     "trail_min_advance_atr": "0.05",
+     "trail_r": "2",
+     "wall_exit_atr": "None",
+     "wall_tf": "'12h'",
+     "weave": "False",
+     "weave_k": "6"
+    }
+   },
+   "door": "lanes",
+   "era": "holdout",
+   "halt": null,
+   "keys": {
+    "moved": false,
+    "n_base_only": 0,
+    "n_book_only": 0,
+    "n_pair_score_law": 77,
+    "n_paired": 77
+   },
+   "lanes": [
+    "card"
+   ],
+   "loao_bar": 3,
+   "loao_line": "lineage",
+   "n_campaigns": 77,
+   "n_panel": 5,
+   "panel_name": "CLASSIC5",
+   "per_asset": {
+    "BTCUSDT": 13,
+    "ETHUSDT": 19,
+    "NEARUSDT": 17,
+    "SOLUSDT": 13,
+    "ZECUSDT": 15
+   },
+   "per_lane": {
+    "card": 77
+   },
+   "registration": "P-BE-1",
+   "ruler": "set_change",
+   "runner": "external",
+   "scored_in_family": false,
+   "seq": 3,
+   "window": [
+    "2024-07-01T00:00:00Z",
+    "2026-09-21T16:00:00Z"
+   ],
+   "window_ms": [
+    1719792000000,
+    1790006399999
+   ],
+   "zero_campaign_assets": []
+  },
+  {
+   "arm": "be-floor-2R sensitivity vs card-v6 (CLASSIC5, full) [Tier-E]",
+   "arm_index": 4,
+   "base": "card-v6",
+   "base_content_sha": "523158857de960d8cdbd0c3ce935029e5a585d3ba432360eaba05e934330bbf2",
+   "base_n": 200,
+   "base_per_asset": {
+    "BTCUSDT": 39,
+    "ETHUSDT": 48,
+    "NEARUSDT": 40,
+    "SOLUSDT": 36,
+    "ZECUSDT": 37
+   },
+   "base_sha": "2bd244bfa0a1349ee73aa51e61619e3dda1257eafe3f613df4524a4d87909acd",
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance, base ride/panel/window)",
+    "set_change law on keys: the set did NOT move -> the PAIRED interval (paired 200 · book-only 0 · base-only 0)",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'full': every entry of book and base inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "60d793f41c9037eaa3829c7f4d6de3c3bd42a0ded669bea7994bdff0af1bc3e6",
+   "book_sha": "ae635bbd4287667d416cd9434079d83cd7530520c1743800435b4c2dd1444665",
+   "book_spec": {
+    "arm": "be-floor-2R sensitivity vs card-v6 (CLASSIC5, full) [Tier-E]",
+    "era": "full",
+    "hi_ms": 1790006399999,
+    "lo_ms": 1567958400000,
+    "registration": "P-BE-1",
+    "runner": "external"
+   },
+   "card": {
+    "class": "tierc10_lanes.Card",
+    "fields": {
+     "add_size": "1.0",
+     "adds_max": "0",
+     "ae_abort_r": "None",
+     "anchor_kind": "'pivot'",
+     "anchor_offset": "0.5",
+     "be_floor_after_r": "2.0",
+     "entry_rail_atr": "1.0",
+     "funding_ceiling_r": "1.0",
+     "grid": "'card'",
+     "harvest": "'band'",
+     "harvest_fixed_r": "2.0",
+     "harvest_frac": "0.5",
+     "harvest_min_unit_r": "-inf",
+     "hybrid_anchor": "False",
+     "lane": "'card'",
+     "limit_ae_mult": "None",
+     "name": "'tc10-be-floor-2R'",
+     "reentry": "False",
+     "seal_open": "True",
+     "stop_grid_offset_atr": "0.0",
+     "time_stop_bars": "None",
+     "trail": "True",
+     "trail_arm_after_r": "1.0",
+     "trail_extra_buf_atr": "0.0",
+     "trail_l": "2",
+     "trail_min_advance_atr": "0.05",
+     "trail_r": "2",
+     "wall_exit_atr": "None",
+     "wall_tf": "'12h'",
+     "weave": "False",
+     "weave_k": "6"
+    }
+   },
+   "door": "lanes",
+   "era": "full",
+   "halt": null,
+   "keys": {
+    "moved": false,
+    "n_base_only": 0,
+    "n_book_only": 0,
+    "n_pair_score_law": 200,
+    "n_paired": 200
+   },
+   "lanes": [
+    "card"
+   ],
+   "loao_bar": 3,
+   "loao_line": "lineage",
+   "n_campaigns": 200,
+   "n_panel": 5,
+   "panel_name": "CLASSIC5",
+   "per_asset": {
+    "BTCUSDT": 39,
+    "ETHUSDT": 48,
+    "NEARUSDT": 40,
+    "SOLUSDT": 36,
+    "ZECUSDT": 37
+   },
+   "per_lane": {
+    "card": 200
+   },
+   "registration": "P-BE-1",
+   "ruler": "set_change",
+   "runner": "external",
+   "scored_in_family": false,
+   "seq": 3,
+   "window": [
+    "2019-09-08T16:00:00Z",
+    "2026-09-21T16:00:00Z"
+   ],
+   "window_ms": [
+    1567958400000,
+    1790006399999
+   ],
+   "zero_campaign_assets": []
+  },
+  {
+   "arm": "trg-9/12 vs card v6 · CLASSIC5 · full",
+   "arm_index": 1,
+   "base": "card-v6",
+   "base_content_sha": "523158857de960d8cdbd0c3ce935029e5a585d3ba432360eaba05e934330bbf2",
+   "base_n": 200,
+   "base_per_asset": {
+    "BTCUSDT": 39,
+    "ETHUSDT": 48,
+    "NEARUSDT": 40,
+    "SOLUSDT": 36,
+    "ZECUSDT": 37
+   },
+   "base_sha": "2bd244bfa0a1349ee73aa51e61619e3dda1257eafe3f613df4524a4d87909acd",
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance, base ride/panel/window)",
+    "two-sample PREMISE holds on keys: paired 19 · book-only 179 · base-only 181",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'full': every entry of book and base inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "b899e0ee2eb9b36809530855213d31f1176c02ce116eaefb1bc7184f505b7700",
+   "book_sha": "b2276fa487119ef12a8e0434e54f9b77efbfb7ee387b3cb35d2955043c371a8f",
+   "book_spec": {
+    "arm": "trg-9/12 vs card v6 · CLASSIC5 · full",
+    "era": "full",
+    "hi_ms": 1790006399999,
+    "lo_ms": 1567958400000,
+    "registration": "P-TRG-2",
+    "runner": null
+   },
+   "card": {
+    "class": "tierc8.Card",
+    "fields": {
+     "add_size": "1.0",
+     "adds_max": "0",
+     "ae_abort_r": "None",
+     "anchor_kind": "'pivot'",
+     "anchor_offset": "0.5",
+     "entry_rail_atr": "1.0",
+     "funding_ceiling_r": "1.0",
+     "grid": "'card'",
+     "harvest": "'band'",
+     "harvest_fixed_r": "2.0",
+     "harvest_frac": "0.5",
+     "harvest_min_unit_r": "-inf",
+     "hybrid_anchor": "False",
+     "lane": "'card'",
+     "limit_ae_mult": "None",
+     "name": "'v6-control'",
+     "reentry": "False",
+     "seal_open": "True",
+     "stop_grid_offset_atr": "0.0",
+     "time_stop_bars": "None",
+     "trail": "True",
+     "trail_arm_after_r": "1.0",
+     "trail_extra_buf_atr": "0.0",
+     "trail_l": "2",
+     "trail_min_advance_atr": "0.05",
+     "trail_r": "2",
+     "wall_exit_atr": "None",
+     "wall_tf": "'12h'",
+     "weave": "False",
+     "weave_k": "6"
+    }
+   },
+   "door": "run_cell_n",
+   "era": "full",
+   "halt": null,
+   "keys": {
+    "moved": true,
+    "n_base_only": 181,
+    "n_book_only": 179,
+    "n_pair_score_law": 19,
+    "n_paired": 19
+   },
+   "lanes": [
+    "card"
+   ],
+   "loao_bar": 3,
+   "loao_line": "lineage",
+   "n_campaigns": 198,
+   "n_panel": 5,
+   "panel_name": "CLASSIC5",
+   "per_asset": {
+    "BTCUSDT": 40,
+    "ETHUSDT": 48,
+    "NEARUSDT": 39,
+    "SOLUSDT": 34,
+    "ZECUSDT": 37
+   },
+   "per_lane": {
+    "card": 198
+   },
+   "registration": "P-TRG-2",
+   "ruler": "two_sample",
+   "runner": "run_cell_n",
+   "scored_in_family": true,
+   "seq": 4,
+   "trg2_ride_diff": {
+    "diff": [
+     "roles_fields.trg_f: filed 12 / offered 9",
+     "roles_fields.trg_s: filed 26 / offered 12"
+    ],
+    "exactly_two_trigger_fields": true,
+    "sweep_cell": [
+     "trigger-9/12"
+    ]
+   },
+   "window": [
+    "2019-09-08T16:00:00Z",
+    "2026-09-21T16:00:00Z"
+   ],
+   "window_ms": [
+    1567958400000,
+    1790006399999
+   ],
+   "zero_campaign_assets": []
+  },
+  {
+   "arm": "trg-9/12 vs zero · CLASSIC5 · full",
+   "arm_index": 2,
+   "base": "zero",
+   "base_content_sha": null,
+   "base_n": null,
+   "base_per_asset": null,
+   "base_sha": null,
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance)",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'full': every entry of book inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "b899e0ee2eb9b36809530855213d31f1176c02ce116eaefb1bc7184f505b7700",
+   "book_sha": "b2276fa487119ef12a8e0434e54f9b77efbfb7ee387b3cb35d2955043c371a8f",
+   "book_spec": {
+    "arm": "trg-9/12 vs zero · CLASSIC5 · full",
+    "era": "full",
+    "hi_ms": 1790006399999,
+    "lo_ms": 1567958400000,
+    "registration": "P-TRG-2",
+    "runner": null
+   },
+   "card": {
+    "class": "tierc8.Card",
+    "fields": {
+     "add_size": "1.0",
+     "adds_max": "0",
+     "ae_abort_r": "None",
+     "anchor_kind": "'pivot'",
+     "anchor_offset": "0.5",
+     "entry_rail_atr": "1.0",
+     "funding_ceiling_r": "1.0",
+     "grid": "'card'",
+     "harvest": "'band'",
+     "harvest_fixed_r": "2.0",
+     "harvest_frac": "0.5",
+     "harvest_min_unit_r": "-inf",
+     "hybrid_anchor": "False",
+     "lane": "'card'",
+     "limit_ae_mult": "None",
+     "name": "'v6-control'",
+     "reentry": "False",
+     "seal_open": "True",
+     "stop_grid_offset_atr": "0.0",
+     "time_stop_bars": "None",
+     "trail": "True",
+     "trail_arm_after_r": "1.0",
+     "trail_extra_buf_atr": "0.0",
+     "trail_l": "2",
+     "trail_min_advance_atr": "0.05",
+     "trail_r": "2",
+     "wall_exit_atr": "None",
+     "wall_tf": "'12h'",
+     "weave": "False",
+     "weave_k": "6"
+    }
+   },
+   "door": "run_cell_n",
+   "era": "full",
+   "halt": null,
+   "keys": null,
+   "lanes": [
+    "card"
+   ],
+   "loao_bar": 3,
+   "loao_line": "lineage",
+   "n_campaigns": 198,
+   "n_panel": 5,
+   "panel_name": "CLASSIC5",
+   "per_asset": {
+    "BTCUSDT": 40,
+    "ETHUSDT": 48,
+    "NEARUSDT": 39,
+    "SOLUSDT": 34,
+    "ZECUSDT": 37
+   },
+   "per_lane": {
+    "card": 198
+   },
+   "registration": "P-TRG-2",
+   "ruler": "vs_zero",
+   "runner": "run_cell_n",
+   "scored_in_family": false,
+   "seq": 4,
+   "trg2_ride_diff": {
+    "diff": [
+     "roles_fields.trg_f: filed 12 / offered 9",
+     "roles_fields.trg_s: filed 26 / offered 12"
+    ],
+    "exactly_two_trigger_fields": true,
+    "sweep_cell": [
+     "trigger-9/12"
+    ]
+   },
+   "window": [
+    "2019-09-08T16:00:00Z",
+    "2026-09-21T16:00:00Z"
+   ],
+   "window_ms": [
+    1567958400000,
+    1790006399999
+   ],
+   "zero_campaign_assets": []
+  },
+  {
+   "arm": "trg-9/12 vs card v6 · CLASSIC5 · tuning era",
+   "arm_index": 3,
+   "base": "card-v6",
+   "base_content_sha": "1ecade491c7147daefe0cd31c4cf4d828e25813c2c91afd9ad3d1a25177a899b",
+   "base_n": 123,
+   "base_per_asset": {
+    "BTCUSDT": 26,
+    "ETHUSDT": 29,
+    "NEARUSDT": 23,
+    "SOLUSDT": 23,
+    "ZECUSDT": 22
+   },
+   "base_sha": "985f11213765efdb8e2235434a202c9939de1988d5dd845849d41abbacbcdfae",
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance, base ride/panel/window)",
+    "two-sample PREMISE holds on keys: paired 12 · book-only 120 · base-only 111",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'tuning': every entry of book and base inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "a8d03771b65d22db599b15acdae34784c05b788f5ecbbfcef4f028e94032d4e6",
+   "book_sha": "62284c33f7853170d46b4707d99ca602faa4dc9d958ec58183bf6a61f7b5a8b9",
+   "book_spec": {
+    "arm": "trg-9/12 vs card v6 · CLASSIC5 · tuning era",
+    "era": "tuning",
+    "hi_ms": 1719777599999,
+    "lo_ms": 1567958400000,
+    "registration": "P-TRG-2",
+    "runner": null
+   },
+   "card": {
+    "class": "tierc8.Card",
+    "fields": {
+     "add_size": "1.0",
+     "adds_max": "0",
+     "ae_abort_r": "None",
+     "anchor_kind": "'pivot'",
+     "anchor_offset": "0.5",
+     "entry_rail_atr": "1.0",
+     "funding_ceiling_r": "1.0",
+     "grid": "'card'",
+     "harvest": "'band'",
+     "harvest_fixed_r": "2.0",
+     "harvest_frac": "0.5",
+     "harvest_min_unit_r": "-inf",
+     "hybrid_anchor": "False",
+     "lane": "'card'",
+     "limit_ae_mult": "None",
+     "name": "'v6-control'",
+     "reentry": "False",
+     "seal_open": "True",
+     "stop_grid_offset_atr": "0.0",
+     "time_stop_bars": "None",
+     "trail": "True",
+     "trail_arm_after_r": "1.0",
+     "trail_extra_buf_atr": "0.0",
+     "trail_l": "2",
+     "trail_min_advance_atr": "0.05",
+     "trail_r": "2",
+     "wall_exit_atr": "None",
+     "wall_tf": "'12h'",
+     "weave": "False",
+     "weave_k": "6"
+    }
+   },
+   "door": "run_cell_n",
+   "era": "tuning",
+   "halt": null,
+   "keys": {
+    "moved": true,
+    "n_base_only": 111,
+    "n_book_only": 120,
+    "n_pair_score_law": 12,
+    "n_paired": 12
+   },
+   "lanes": [
+    "card"
+   ],
+   "loao_bar": 3,
+   "loao_line": "lineage",
+   "n_campaigns": 132,
+   "n_panel": 5,
+   "panel_name": "CLASSIC5",
+   "per_asset": {
+    "BTCUSDT": 29,
+    "ETHUSDT": 32,
+    "NEARUSDT": 26,
+    "SOLUSDT": 22,
+    "ZECUSDT": 23
+   },
+   "per_lane": {
+    "card": 132
+   },
+   "registration": "P-TRG-2",
+   "ruler": "two_sample",
+   "runner": "run_cell_n",
+   "scored_in_family": false,
+   "seq": 4,
+   "trg2_ride_diff": {
+    "diff": [
+     "roles_fields.trg_f: filed 12 / offered 9",
+     "roles_fields.trg_s: filed 26 / offered 12"
+    ],
+    "exactly_two_trigger_fields": true,
+    "sweep_cell": [
+     "trigger-9/12"
+    ]
+   },
+   "window": [
+    "2019-09-08T16:00:00Z",
+    "2024-06-30T20:00:00Z"
+   ],
+   "window_ms": [
+    1567958400000,
+    1719777599999
+   ],
+   "zero_campaign_assets": []
+  },
+  {
+   "arm": "trg-9/12 vs card v6 · CLASSIC5 · holdout era",
+   "arm_index": 4,
+   "base": "card-v6",
+   "base_content_sha": "ea9f4eef54243b106542248ade1bf14570a174fe74bcbce1c64ee903ade6ff14",
+   "base_n": 77,
+   "base_per_asset": {
+    "BTCUSDT": 13,
+    "ETHUSDT": 19,
+    "NEARUSDT": 17,
+    "SOLUSDT": 13,
+    "ZECUSDT": 15
+   },
+   "base_sha": "ec4f591f58585bcbc82dd5e4f865e59fbc90b121d38b0fdbf5074897b5db00b8",
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance, base ride/panel/window)",
+    "two-sample PREMISE holds on keys: paired 7 · book-only 59 · base-only 70",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'holdout': every entry of book and base inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "b1c2317d5296deefc2a7e488ad0bb3628afcc39e6edd591994e4239e6f6ed309",
+   "book_sha": "b1fd4188284affd59684fe3ce8b985b47d925d8fecdc2748ef412b07210e398d",
+   "book_spec": {
+    "arm": "trg-9/12 vs card v6 · CLASSIC5 · holdout era",
+    "era": "holdout",
+    "hi_ms": 1790006399999,
+    "lo_ms": 1719792000000,
+    "registration": "P-TRG-2",
+    "runner": null
+   },
+   "card": {
+    "class": "tierc8.Card",
+    "fields": {
+     "add_size": "1.0",
+     "adds_max": "0",
+     "ae_abort_r": "None",
+     "anchor_kind": "'pivot'",
+     "anchor_offset": "0.5",
+     "entry_rail_atr": "1.0",
+     "funding_ceiling_r": "1.0",
+     "grid": "'card'",
+     "harvest": "'band'",
+     "harvest_fixed_r": "2.0",
+     "harvest_frac": "0.5",
+     "harvest_min_unit_r": "-inf",
+     "hybrid_anchor": "False",
+     "lane": "'card'",
+     "limit_ae_mult": "None",
+     "name": "'v6-control'",
+     "reentry": "False",
+     "seal_open": "True",
+     "stop_grid_offset_atr": "0.0",
+     "time_stop_bars": "None",
+     "trail": "True",
+     "trail_arm_after_r": "1.0",
+     "trail_extra_buf_atr": "0.0",
+     "trail_l": "2",
+     "trail_min_advance_atr": "0.05",
+     "trail_r": "2",
+     "wall_exit_atr": "None",
+     "wall_tf": "'12h'",
+     "weave": "False",
+     "weave_k": "6"
+    }
+   },
+   "door": "run_cell_n",
+   "era": "holdout",
+   "halt": null,
+   "keys": {
+    "moved": true,
+    "n_base_only": 70,
+    "n_book_only": 59,
+    "n_pair_score_law": 7,
+    "n_paired": 7
+   },
+   "lanes": [
+    "card"
+   ],
+   "loao_bar": 3,
+   "loao_line": "lineage",
+   "n_campaigns": 66,
+   "n_panel": 5,
+   "panel_name": "CLASSIC5",
+   "per_asset": {
+    "BTCUSDT": 11,
+    "ETHUSDT": 16,
+    "NEARUSDT": 13,
+    "SOLUSDT": 12,
+    "ZECUSDT": 14
+   },
+   "per_lane": {
+    "card": 66
+   },
+   "registration": "P-TRG-2",
+   "ruler": "two_sample",
+   "runner": "run_cell_n",
+   "scored_in_family": false,
+   "seq": 4,
+   "trg2_ride_diff": {
+    "diff": [
+     "roles_fields.trg_f: filed 12 / offered 9",
+     "roles_fields.trg_s: filed 26 / offered 12"
+    ],
+    "exactly_two_trigger_fields": true,
+    "sweep_cell": [
+     "trigger-9/12"
+    ]
+   },
+   "window": [
+    "2024-07-01T00:00:00Z",
+    "2026-09-21T16:00:00Z"
+   ],
+   "window_ms": [
+    1719792000000,
+    1790006399999
+   ],
+   "zero_campaign_assets": []
+  },
+  {
+   "arm": "CLASSIC5-memory-line",
+   "arm_index": 1,
+   "base": "zero",
+   "base_content_sha": null,
+   "base_n": null,
+   "base_per_asset": null,
+   "base_sha": null,
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance)",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'full': every entry of book inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "0119f198989cfb8209cd646ac825382ffa6931882e742a57bc5c042629aba068",
+   "book_sha": "06bfdaff799de49501982c6fe709766e0df15056a5e6dba6f8a6ff9aabd99978",
+   "book_spec": {
+    "arm": "CLASSIC5-memory-line",
+    "era": "full",
+    "hi_ms": 1790006399999,
+    "lo_ms": 1567958400000,
+    "registration": "P-BRK-I1",
+    "runner": "external"
+   },
+   "brk_ready_books_match": true,
+   "card": null,
+   "door": "brk",
+   "era": "full",
+   "halt": null,
+   "keys": null,
+   "lanes": [
+    "brk-i1"
+   ],
+   "loao_bar": 3,
+   "loao_line": "lineage",
+   "n_campaigns": 7,
+   "n_panel": 5,
+   "panel_name": "CLASSIC5",
+   "per_asset": {
+    "BTCUSDT": 2,
+    "ETHUSDT": 4,
+    "NEARUSDT": 0,
+    "SOLUSDT": 1,
+    "ZECUSDT": 0
+   },
+   "per_lane": {
+    "brk-i1": 7
+   },
+   "registration": "P-BRK-I1",
+   "ruler": "vs_zero",
+   "runner": "external",
+   "scored_in_family": true,
+   "seq": 5,
+   "window": [
+    "2019-09-08T16:00:00Z",
+    "2026-09-21T16:00:00Z"
+   ],
+   "window_ms": [
+    1567958400000,
+    1790006399999
+   ],
+   "zero_campaign_assets": [
+    "NEARUSDT",
+    "ZECUSDT"
+   ]
+  },
+  {
+   "arm": "CLASSIC5-tierE-band",
+   "arm_index": 2,
+   "base": "zero",
+   "base_content_sha": null,
+   "base_n": null,
+   "base_per_asset": null,
+   "base_sha": null,
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance)",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'full': every entry of book inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "201c67b2a4e7cdc0f8156c2e570240b974e7b7f5eccf73c650a3801c4804909c",
+   "book_sha": "cabea9b7e65af9ccea0fbc79a0e5c613f7dafea58781a13a1e5fd2b91d5be9e7",
+   "book_spec": {
+    "arm": "CLASSIC5-tierE-band",
+    "era": "full",
+    "hi_ms": 1790006399999,
+    "lo_ms": 1567958400000,
+    "registration": "P-BRK-I1",
+    "runner": "external"
+   },
+   "brk_ready_books_match": true,
+   "card": null,
+   "door": "brk",
+   "era": "full",
+   "halt": null,
+   "keys": null,
+   "lanes": [
+    "brk-i1"
+   ],
+   "loao_bar": 3,
+   "loao_line": "lineage",
+   "n_campaigns": 3,
+   "n_panel": 5,
+   "panel_name": "CLASSIC5",
+   "per_asset": {
+    "BTCUSDT": 1,
+    "ETHUSDT": 1,
+    "NEARUSDT": 0,
+    "SOLUSDT": 0,
+    "ZECUSDT": 1
+   },
+   "per_lane": {
+    "brk-i1": 3
+   },
+   "registration": "P-BRK-I1",
+   "ruler": "vs_zero",
+   "runner": "external",
+   "scored_in_family": false,
+   "seq": 5,
+   "window": [
+    "2019-09-08T16:00:00Z",
+    "2026-09-21T16:00:00Z"
+   ],
+   "window_ms": [
+    1567958400000,
+    1790006399999
+   ],
+   "zero_campaign_assets": [
+    "SOLUSDT",
+    "NEARUSDT"
+   ]
+  },
+  {
+   "arm": "PANEL17-tierE-memory-line",
+   "arm_index": 3,
+   "base": "zero",
+   "base_content_sha": null,
+   "base_n": null,
+   "base_per_asset": null,
+   "base_sha": null,
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance)",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'full': every entry of book inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "03d3f465cff59994aa4ee6d90055b39266c2938eb9b237f28064162b76d4ceb2",
+   "book_sha": "1b4cf1e67f02c9903c20d8bf9cb2c44b4ff1305887711619f6e2cb3d526a32aa",
+   "book_spec": {
+    "arm": "PANEL17-tierE-memory-line",
+    "era": "full",
+    "hi_ms": 1790006399999,
+    "lo_ms": 1567958400000,
+    "registration": "P-BRK-I1",
+    "runner": "external"
+   },
+   "brk_ready_books_match": true,
+   "card": null,
+   "door": "brk",
+   "era": "full",
+   "halt": null,
+   "keys": null,
+   "lanes": [
+    "brk-i1"
+   ],
+   "loao_bar": 9,
+   "loao_line": "lineage",
+   "n_campaigns": 17,
+   "n_panel": 17,
+   "panel_name": "PANEL17",
+   "per_asset": {
+    "1000BONKUSDT": 0,
+    "1000PEPEUSDT": 1,
+    "BNBUSDT": 1,
+    "BTCUSDT": 2,
+    "DOGEUSDT": 2,
+    "ENAUSDT": 0,
+    "ETHUSDT": 4,
+    "HYPEUSDT": 0,
+    "LTCUSDT": 5,
+    "MNTUSDT_BYBIT": 1,
+    "NEARUSDT": 0,
+    "PUMPUSDT": 0,
+    "SOLUSDT": 1,
+    "SUIUSDT": 0,
+    "UNIUSDT": 0,
+    "XMRUSDT": 0,
+    "ZECUSDT": 0
+   },
+   "per_lane": {
+    "brk-i1": 17
+   },
+   "registration": "P-BRK-I1",
+   "ruler": "vs_zero",
+   "runner": "external",
+   "scored_in_family": false,
+   "seq": 5,
+   "window": [
+    "2019-09-08T16:00:00Z",
+    "2026-09-21T16:00:00Z"
+   ],
+   "window_ms": [
+    1567958400000,
+    1790006399999
+   ],
+   "zero_campaign_assets": [
+    "NEARUSDT",
+    "ZECUSDT",
+    "ENAUSDT",
+    "PUMPUSDT",
+    "HYPEUSDT",
+    "SUIUSDT",
+    "XMRUSDT",
+    "UNIUSDT",
+    "1000BONKUSDT"
+   ]
+  },
+  {
+   "arm": "P-BRK-S1 vs zero",
+   "arm_index": 1,
+   "base": "zero",
+   "base_content_sha": null,
+   "base_n": null,
+   "base_per_asset": null,
+   "base_sha": null,
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance)",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'holdout': every entry of book inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "d0efaec071711dd51cbb1ca68296485b3bed59396b62d70b2616c8b5d97424b3",
+   "book_sha": "e09eefaf94072db984e246c6890cb1c109abf0cf88ec0ba13e03ecd20448e5f3",
+   "book_spec": {
+    "arm": "P-BRK-S1 vs zero",
+    "era": "holdout",
+    "hi_ms": 1790006399999,
+    "lo_ms": 1719792000000,
+    "registration": "P-BRK-S1",
+    "runner": "external"
+   },
+   "brk_ready_books_match": true,
+   "card": null,
+   "door": "brk",
+   "era": "holdout",
+   "halt": null,
+   "keys": null,
+   "lanes": [
+    "brk-s1"
+   ],
+   "loao_bar": 3,
+   "loao_line": "excl_zero_campaign",
+   "n_campaigns": 1836,
+   "n_panel": 5,
+   "panel_name": "CLASSIC5",
+   "per_asset": {
+    "BTCUSDT": 389,
+    "ETHUSDT": 393,
+    "NEARUSDT": 339,
+    "SOLUSDT": 349,
+    "ZECUSDT": 366
+   },
+   "per_lane": {
+    "brk-s1": 1836
+   },
+   "registration": "P-BRK-S1",
+   "ruler": "vs_zero",
+   "runner": "external",
+   "scored_in_family": true,
+   "seq": 6,
+   "window": [
+    "2024-07-01T00:00:00Z",
+    "2026-09-21T16:00:00Z"
+   ],
+   "window_ms": [
+    1719792000000,
+    1790006399999
+   ],
+   "zero_campaign_assets": []
+  },
+  {
+   "arm": "P-BRK-S1 17-asset view",
+   "arm_index": 2,
+   "base": "zero",
+   "base_content_sha": null,
+   "base_n": null,
+   "base_per_asset": null,
+   "base_sha": null,
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance)",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'holdout': every entry of book inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "7891f4dddbfd2f02ff04c8149014336a60b4e2bbb9d8a11ac0a821e8d3e3fde8",
+   "book_sha": "37550b6040d6bd2078c9ea39f1786085036d2c710f8b06016e2f9bc8c2a01c39",
+   "book_spec": {
+    "arm": "P-BRK-S1 17-asset view",
+    "era": "holdout",
+    "hi_ms": 1790006399999,
+    "lo_ms": 1719792000000,
+    "registration": "P-BRK-S1",
+    "runner": "external"
+   },
+   "brk_ready_books_match": true,
+   "card": null,
+   "door": "brk",
+   "era": "holdout",
+   "halt": null,
+   "keys": null,
+   "lanes": [
+    "brk-s1"
+   ],
+   "loao_bar": 9,
+   "loao_line": "excl_zero_campaign",
+   "n_campaigns": 6016,
+   "n_panel": 17,
+   "panel_name": "PANEL17",
+   "per_asset": {
+    "1000BONKUSDT": 379,
+    "1000PEPEUSDT": 348,
+    "BNBUSDT": 407,
+    "BTCUSDT": 389,
+    "DOGEUSDT": 372,
+    "ENAUSDT": 364,
+    "ETHUSDT": 393,
+    "HYPEUSDT": 216,
+    "LTCUSDT": 355,
+    "MNTUSDT_BYBIT": 437,
+    "NEARUSDT": 339,
+    "PUMPUSDT": 216,
+    "SOLUSDT": 349,
+    "SUIUSDT": 346,
+    "UNIUSDT": 381,
+    "XMRUSDT": 359,
+    "ZECUSDT": 366
+   },
+   "per_lane": {
+    "brk-s1": 6016
+   },
+   "registration": "P-BRK-S1",
+   "ruler": "vs_zero",
+   "runner": "external",
+   "scored_in_family": false,
+   "seq": 6,
+   "window": [
+    "2024-07-01T00:00:00Z",
+    "2026-09-21T16:00:00Z"
+   ],
+   "window_ms": [
+    1719792000000,
+    1790006399999
+   ],
+   "zero_campaign_assets": []
+  },
+  {
+   "arm": "P-BRK-S1 memory-line anchor",
+   "arm_index": 3,
+   "base": "zero",
+   "base_content_sha": null,
+   "base_n": null,
+   "base_per_asset": null,
+   "base_sha": null,
+   "bind_checks": [
+    "TP._bind_arm: the offered book IS the filed arm (panel, ruler, scored slot, lanes, provenance)",
+    "no symbol outside the declared panel (book + base)",
+    "every campaign's net_r is finite (a finiteness test; nothing is summed)",
+    "era 'holdout': every entry of book inside it; the book was ridden on it"
+   ],
+   "bind_halt": null,
+   "bind_ok": true,
+   "book_content_sha": "12ded7f0ec4c5f250422384e63bea9f5a5958ada3ede3ec524ea19cb08e17691",
+   "book_sha": "5ee8377098fdb20399cbbece46b3b258f188952b752d0a1357050e825468aa09",
+   "book_spec": {
+    "arm": "P-BRK-S1 memory-line anchor",
+    "era": "holdout",
+    "hi_ms": 1790006399999,
+    "lo_ms": 1719792000000,
+    "registration": "P-BRK-S1",
+    "runner": "external"
+   },
+   "brk_ready_books_match": true,
+   "card": null,
+   "door": "brk",
+   "era": "holdout",
+   "halt": null,
+   "keys": null,
+   "lanes": [
+    "brk-s1"
+   ],
+   "loao_bar": 3,
+   "loao_line": "excl_zero_campaign",
+   "n_campaigns": 1300,
+   "n_panel": 5,
+   "panel_name": "CLASSIC5",
+   "per_asset": {
+    "BTCUSDT": 274,
+    "ETHUSDT": 279,
+    "NEARUSDT": 239,
+    "SOLUSDT": 251,
+    "ZECUSDT": 257
+   },
+   "per_lane": {
+    "brk-s1": 1300
+   },
+   "registration": "P-BRK-S1",
+   "ruler": "vs_zero",
+   "runner": "external",
+   "scored_in_family": false,
+   "seq": 6,
+   "window": [
+    "2024-07-01T00:00:00Z",
+    "2026-09-21T16:00:00Z"
+   ],
+   "window_ms": [
+    1719792000000,
+    1790006399999
+   ],
+   "zero_campaign_assets": []
+  }
+ ],
+ "beside_registration": {
+  "P-BE-1": {
+   "f_c10_be": {
+    "byte_identical_to_filed": true,
+    "census_sha_filed": "96dfd0b7eae957c458eafb024d527e0de62cab3d8e21fdcbae56f76557237d71",
+    "census_sha_rederived": "96dfd0b7eae957c458eafb024d527e0de62cab3d8e21fdcbae56f76557237d71",
+    "counts": {
+     "by_class": {
+      "dip_after": 0,
+      "dip_before": 36,
+      "mismatch": 0,
+      "print_no_dip": 67,
+      "tie": 0
+     },
+     "by_symbol": {
+      "BTCUSDT": 15,
+      "ETHUSDT": 21,
+      "NEARUSDT": 24,
+      "SOLUSDT": 19,
+      "ZECUSDT": 24
+     },
+     "n_campaigns": 200,
+     "n_converse_agree": 103,
+     "n_converse_ok": 103,
+     "n_latch": 103,
+     "n_module_eq_hand": 103,
+     "n_module_eq_journal": 103,
+     "n_three_way": 103,
+     "tie_or_mismatch": 0
+    },
+    "decision": "NOT RUN",
+    "governed_by": "P-BE-1 §9",
+    "missing": [
+     "dip_after",
+     "tie_or_mismatch"
+    ],
+    "operator_question": false,
+    "reason": "P-BE-1 §9 (filed text): \"if P-BE-1's filed book contains no tie and no 4h/5m mismatch latch bar, the leg must report NOT RUN with that reason. It must NOT substitute a synthetic bar or relabel a dip_first case to reach three.\" — P-BE-1's filed book (scored arm A1) contains NO tie and NO 4h/5m mismatch latch bar: 103 latch bars of 200 campaigns: dip-before 36, dip-after 0, print-no-dip 67, tie 0, 4h/5m mismatch 0; three-way agreement 103/103. Required classes absent: ['dip_after', 'tie_or_mismatch']. No synthetic bar is substituted and no dip_first case is relabelled; BE_CAMPAIGNS stays empty."
+   },
+   "haircut_twin_tiers": {
+    "BTCUSDT": {
+     "asset": "BTC",
+     "charter_round_trip_bps": 14.0,
+     "tier": "A"
+    },
+    "ETHUSDT": {
+     "asset": "ETH",
+     "charter_round_trip_bps": 14.0,
+     "tier": "A"
+    },
+    "NEARUSDT": {
+     "asset": "NEAR",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "SOLUSDT": {
+     "asset": "SOL",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "ZECUSDT": {
+     "asset": "ZEC",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    }
+   }
+  },
+  "P-BRK-I1": {
+   "brk_sealed_row": {
+    "anchor_scored": "memory-line",
+    "anchor_tier_e": "band",
+    "as_of_last_closed_4h": "2026-09-21T16:00:00Z",
+    "era": "full",
+    "flip_hold_pins": {
+     "hold_bars": 6,
+     "margin_atr": 1.0,
+     "ttl_bars": 400
+    },
+    "form": "P-BRK-I1",
+    "height_vs_toll": {
+     "asset": "POOLED:CLASSIC5",
+     "era": "ALL",
+     "height_atr_median": 6.23716024,
+     "lens": "1d",
+     "n_ranges": 53,
+     "provisional": false,
+     "ratio_median": 413.99176955,
+     "reason": "era ALL: height gate PASS + edge-fade leg PASS",
+     "scale_kind": "frozen3.0",
+     "toll_atr_median": 0.01718173,
+     "verdict_pass": true
+    },
+    "height_vs_toll_asset": {
+     "asset": "POOLED:CLASSIC5",
+     "derived_how": "panel CLASSIC5 -> the census's pooled label 'POOLED:CLASSIC5' (CENSUS_ASSET_OF_PANEL)",
+     "override": null,
+     "source": "DERIVED FROM THE BOOK"
+    },
+    "lens": "1d",
+    "tier_e_other_anchor": {
+     "anchor": "band",
+     "book_sha256_score_binding": "cabea9b7e65af9ccea0fbc79a0e5c613f7dafea58781a13a1e5fd2b91d5be9e7",
+     "n_campaigns": 3,
+     "per_asset_n_campaigns": {
+      "BTCUSDT": 1,
+      "ETHUSDT": 1,
+      "ZECUSDT": 1
+     },
+     "tier": "TIER-E — UNSCORED, GATES NOTHING"
+    },
+    "tier_e_panel17": {
+     "anchor": "memory-line",
+     "book_sha256_score_binding": "1b4cf1e67f02c9903c20d8bf9cb2c44b4ff1305887711619f6e2cb3d526a32aa",
+     "n_assets_with_campaigns": 8,
+     "n_campaigns": 17,
+     "tier": "TIER-E — UNSCORED, GATES NOTHING"
+    },
+    "toll": {
+     "stamped": false,
+     "why": "this runner stamps no toll; 'NET OF MEASURED 5m TOLL' is P-BRK-S1's contract clause and stamp_toll is called only there"
+    },
+    "toll_accounting": {
+     "authority": "a CONTRACT READING. Not changed on executor authority; the operator settles it. Until then the toll is printed on every row, labelled, and the row says it is a print.",
+     "grid_toll": "stamp_toll stamps toll_atr_grid (the census grid's median round-trip toll for this lane's event class, in ATR of the lens) and toll_pct_of_1r = toll_atr / (r_dist / atr_at_entry) x 100, BESIDE the book. Neither ever enters net_r.",
+     "net_r_formula": "account_l: net_r = gross_r - fee_r - funding_r_eff, all in R units (divided by r_dist). fee_r is the estate's FEE_BPS_SIDE a side on both legs; funding_r_eff is the interval sum under the card's 1R ceiling [B4].",
+     "status": "PRINT, NOT A DEDUCTION — reported, not changed. The contract reads 'NET OF MEASURED 5m TOLL'; today's net_r is net of FEE and FUNDING only.",
+     "unit_question": "toll_atr is a CENSUS-MEASURED MEDIAN over a class's anchors, in ATR units, not this campaign's own cost; net_r is in R units. toll_pct_of_1r already converts it (R and ATR are both known at the entry bar), so net_r - toll_pct_of_1r/100 is dimensionally legal. What is NOT obvious is whether it is MEANT: the fee leg of the same round trip is ALREADY inside net_r via fee_r, and the census toll is built from the filed fee schedule (toll_bps_source = data/fee_schedule.json[...].round_trip_bps_used), so a subtraction would charge the spread/fee twice for any asset whose grid toll is fee-derived.",
+     "what_a_deduction_would_take": "one line in account_l (or a wrapper on its return) subtracting toll_pct_of_1r/100 from net_r, plus a decision on the double-count above, plus a re-reading of MISMATCH: I1's text says 'net of 10 bps + funding' and S1's says 'NET OF MEASURED 5m TOLL' and does not mention funding at all."
+    },
+    "toll_accounting_status": "PRINT, NOT A DEDUCTION — reported, not changed. The contract reads 'NET OF MEASURED 5m TOLL'; today's net_r is net of FEE and FUNDING only.",
+    "toll_pct_of_1r_median": null,
+    "tuned": null
+   },
+   "haircut_twin_tiers": {
+    "1000BONKUSDT": {
+     "asset": "BONK",
+     "charter_round_trip_bps": 30.0,
+     "tier": "C"
+    },
+    "1000PEPEUSDT": {
+     "asset": "PEPE",
+     "charter_round_trip_bps": 30.0,
+     "tier": "C"
+    },
+    "BNBUSDT": {
+     "asset": "BNB",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "BTCUSDT": {
+     "asset": "BTC",
+     "charter_round_trip_bps": 14.0,
+     "tier": "A"
+    },
+    "DOGEUSDT": {
+     "asset": "DOGE",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "ENAUSDT": {
+     "asset": "ENA",
+     "charter_round_trip_bps": 30.0,
+     "tier": "C"
+    },
+    "ETHUSDT": {
+     "asset": "ETH",
+     "charter_round_trip_bps": 14.0,
+     "tier": "A"
+    },
+    "HYPEUSDT": {
+     "asset": "HYPE",
+     "charter_round_trip_bps": 30.0,
+     "tier": "C"
+    },
+    "LTCUSDT": {
+     "asset": "LTC",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "MNTUSDT_BYBIT": {
+     "asset": "MNT",
+     "charter_round_trip_bps": 30.0,
+     "tier": "C"
+    },
+    "NEARUSDT": {
+     "asset": "NEAR",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "PUMPUSDT": {
+     "asset": "PUMPFUN",
+     "charter_round_trip_bps": 30.0,
+     "tier": "C"
+    },
+    "SOLUSDT": {
+     "asset": "SOL",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "SUIUSDT": {
+     "asset": "SUI",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "UNIUSDT": {
+     "asset": "UNI",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "XMRUSDT": {
+     "asset": "XMR",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "ZECUSDT": {
+     "asset": "ZEC",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    }
+   }
+  },
+  "P-BRK-S1": {
+   "brk_sealed_row": {
+    "anchor_scored": "band",
+    "anchor_tier_e": "memory-line",
+    "as_of_last_closed_4h": "2026-09-21T16:00:00Z",
+    "era": "holdout",
+    "flip_hold_pins": {
+     "hold_bars": 6,
+     "margin_atr": 1.0,
+     "ttl_bars": 400
+    },
+    "form": "P-BRK-S1",
+    "height_vs_toll": {
+     "asset": "POOLED:CLASSIC5",
+     "era": "holdout",
+     "height_atr_median": 6.52823762,
+     "lens": "5m",
+     "n_ranges": 4584,
+     "provisional": false,
+     "ratio_median": 20.67111284,
+     "reason": "era holdout: height gate PASS + edge-fade leg FAIL",
+     "scale_kind": "frozen3.0",
+     "toll_atr_median": 0.32768035,
+     "verdict_pass": false
+    },
+    "height_vs_toll_asset": {
+     "asset": "POOLED:CLASSIC5",
+     "derived_how": "panel CLASSIC5 -> the census's pooled label 'POOLED:CLASSIC5' (CENSUS_ASSET_OF_PANEL)",
+     "override": null,
+     "source": "DERIVED FROM THE BOOK"
+    },
+    "lens": "5m",
+    "tier_e_other_anchor": {
+     "anchor": "memory-line",
+     "book_sha256_score_binding": "5ee8377098fdb20399cbbece46b3b258f188952b752d0a1357050e825468aa09",
+     "n_campaigns": 1300,
+     "per_asset_n_campaigns": {
+      "BTCUSDT": 274,
+      "ETHUSDT": 279,
+      "NEARUSDT": 239,
+      "SOLUSDT": 251,
+      "ZECUSDT": 257
+     },
+     "tier": "TIER-E — UNSCORED, GATES NOTHING"
+    },
+    "tier_e_panel17": {
+     "anchor": "band",
+     "book_sha256_score_binding": "37550b6040d6bd2078c9ea39f1786085036d2c710f8b06016e2f9bc8c2a01c39",
+     "n_assets_with_campaigns": 17,
+     "n_campaigns": 6016,
+     "tier": "TIER-E — UNSCORED, GATES NOTHING"
+    },
+    "toll": {
+     "cls": "retest-hold-ribbon127_200",
+     "lens": "5m",
+     "per_asset": {
+      "BTCUSDT": 0.46555286,
+      "ETHUSDT": 0.35253641,
+      "NEARUSDT": 0.20944241,
+      "SOLUSDT": 0.24410209,
+      "ZECUSDT": 0.23793258
+     }
+    },
+    "toll_accounting": {
+     "authority": "a CONTRACT READING. Not changed on executor authority; the operator settles it. Until then the toll is printed on every row, labelled, and the row says it is a print.",
+     "grid_toll": "stamp_toll stamps toll_atr_grid (the census grid's median round-trip toll for this lane's event class, in ATR of the lens) and toll_pct_of_1r = toll_atr / (r_dist / atr_at_entry) x 100, BESIDE the book. Neither ever enters net_r.",
+     "net_r_formula": "account_l: net_r = gross_r - fee_r - funding_r_eff, all in R units (divided by r_dist). fee_r is the estate's FEE_BPS_SIDE a side on both legs; funding_r_eff is the interval sum under the card's 1R ceiling [B4].",
+     "status": "PRINT, NOT A DEDUCTION — reported, not changed. The contract reads 'NET OF MEASURED 5m TOLL'; today's net_r is net of FEE and FUNDING only.",
+     "unit_question": "toll_atr is a CENSUS-MEASURED MEDIAN over a class's anchors, in ATR units, not this campaign's own cost; net_r is in R units. toll_pct_of_1r already converts it (R and ATR are both known at the entry bar), so net_r - toll_pct_of_1r/100 is dimensionally legal. What is NOT obvious is whether it is MEANT: the fee leg of the same round trip is ALREADY inside net_r via fee_r, and the census toll is built from the filed fee schedule (toll_bps_source = data/fee_schedule.json[...].round_trip_bps_used), so a subtraction would charge the spread/fee twice for any asset whose grid toll is fee-derived.",
+     "what_a_deduction_would_take": "one line in account_l (or a wrapper on its return) subtracting toll_pct_of_1r/100 from net_r, plus a decision on the double-count above, plus a re-reading of MISMATCH: I1's text says 'net of 10 bps + funding' and S1's says 'NET OF MEASURED 5m TOLL' and does not mention funding at all."
+    },
+    "toll_accounting_status": "PRINT, NOT A DEDUCTION — reported, not changed. The contract reads 'NET OF MEASURED 5m TOLL'; today's net_r is net of FEE and FUNDING only.",
+    "toll_pct_of_1r_median": 17.76028128,
+    "tuned": {
+     "band": "ribbon-127/200",
+     "band_as_filed": "ribbon127_200",
+     "band_census": "ribbon127_200",
+     "hold_bars": 3,
+     "lens": "5m",
+     "margin_atr": 1.0,
+     "source": "/Users/luis/Naiad/research_outputs/tierc10/census/TUNING_RESULT.json",
+     "ttl_bars": 400
+    }
+   },
+   "haircut_twin_tiers": {
+    "1000BONKUSDT": {
+     "asset": "BONK",
+     "charter_round_trip_bps": 30.0,
+     "tier": "C"
+    },
+    "1000PEPEUSDT": {
+     "asset": "PEPE",
+     "charter_round_trip_bps": 30.0,
+     "tier": "C"
+    },
+    "BNBUSDT": {
+     "asset": "BNB",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "BTCUSDT": {
+     "asset": "BTC",
+     "charter_round_trip_bps": 14.0,
+     "tier": "A"
+    },
+    "DOGEUSDT": {
+     "asset": "DOGE",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "ENAUSDT": {
+     "asset": "ENA",
+     "charter_round_trip_bps": 30.0,
+     "tier": "C"
+    },
+    "ETHUSDT": {
+     "asset": "ETH",
+     "charter_round_trip_bps": 14.0,
+     "tier": "A"
+    },
+    "HYPEUSDT": {
+     "asset": "HYPE",
+     "charter_round_trip_bps": 30.0,
+     "tier": "C"
+    },
+    "LTCUSDT": {
+     "asset": "LTC",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "MNTUSDT_BYBIT": {
+     "asset": "MNT",
+     "charter_round_trip_bps": 30.0,
+     "tier": "C"
+    },
+    "NEARUSDT": {
+     "asset": "NEAR",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "PUMPUSDT": {
+     "asset": "PUMPFUN",
+     "charter_round_trip_bps": 30.0,
+     "tier": "C"
+    },
+    "SOLUSDT": {
+     "asset": "SOL",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "SUIUSDT": {
+     "asset": "SUI",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "UNIUSDT": {
+     "asset": "UNI",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "XMRUSDT": {
+     "asset": "XMR",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "ZECUSDT": {
+     "asset": "ZEC",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    }
+   }
+  },
+  "P-GEN-1": {
+   "arm3_is_subset_of_arm1": {
+    "arm1": "unseen12-card-v6",
+    "arm3": "never-touched-card-v6",
+    "book_sha_equal": true,
+    "broken": false,
+    "checked": true,
+    "content_sha_equal": true,
+    "keys_equal": true,
+    "keys_only_in_arm1": [],
+    "keys_only_in_arm3": [],
+    "n_arm3": 47,
+    "n_subset_of_arm1": 47
+   },
+   "haircut_twin_tiers": {
+    "1000BONKUSDT": {
+     "asset": "BONK",
+     "charter_round_trip_bps": 30.0,
+     "tier": "C"
+    },
+    "1000PEPEUSDT": {
+     "asset": "PEPE",
+     "charter_round_trip_bps": 30.0,
+     "tier": "C"
+    },
+    "BNBUSDT": {
+     "asset": "BNB",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "BTCUSDT": {
+     "asset": "BTC",
+     "charter_round_trip_bps": 14.0,
+     "tier": "A"
+    },
+    "DOGEUSDT": {
+     "asset": "DOGE",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "ENAUSDT": {
+     "asset": "ENA",
+     "charter_round_trip_bps": 30.0,
+     "tier": "C"
+    },
+    "ETHUSDT": {
+     "asset": "ETH",
+     "charter_round_trip_bps": 14.0,
+     "tier": "A"
+    },
+    "HYPEUSDT": {
+     "asset": "HYPE",
+     "charter_round_trip_bps": 30.0,
+     "tier": "C"
+    },
+    "LTCUSDT": {
+     "asset": "LTC",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "MNTUSDT_BYBIT": {
+     "asset": "MNT",
+     "charter_round_trip_bps": 30.0,
+     "tier": "C"
+    },
+    "NEARUSDT": {
+     "asset": "NEAR",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "PUMPUSDT": {
+     "asset": "PUMPFUN",
+     "charter_round_trip_bps": 30.0,
+     "tier": "C"
+    },
+    "SOLUSDT": {
+     "asset": "SOL",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "SUIUSDT": {
+     "asset": "SUI",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "UNIUSDT": {
+     "asset": "UNI",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "XMRUSDT": {
+     "asset": "XMR",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "ZECUSDT": {
+     "asset": "ZEC",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    }
+   }
+  },
+  "P-SPR-2": {
+   "haircut_twin_tiers": {
+    "BTCUSDT": {
+     "asset": "BTC",
+     "charter_round_trip_bps": 14.0,
+     "tier": "A"
+    },
+    "ETHUSDT": {
+     "asset": "ETH",
+     "charter_round_trip_bps": 14.0,
+     "tier": "A"
+    },
+    "NEARUSDT": {
+     "asset": "NEAR",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "SOLUSDT": {
+     "asset": "SOL",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "ZECUSDT": {
+     "asset": "ZEC",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    }
+   }
+  },
+  "P-TRG-2": {
+   "haircut_twin_tiers": {
+    "BTCUSDT": {
+     "asset": "BTC",
+     "charter_round_trip_bps": 14.0,
+     "tier": "A"
+    },
+    "ETHUSDT": {
+     "asset": "ETH",
+     "charter_round_trip_bps": 14.0,
+     "tier": "A"
+    },
+    "NEARUSDT": {
+     "asset": "NEAR",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "SOLUSDT": {
+     "asset": "SOL",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    },
+    "ZECUSDT": {
+     "asset": "ZEC",
+     "charter_round_trip_bps": 20.0,
+     "tier": "B"
+    }
+   }
+  }
+ },
+ "halts": [
+  [
+   "P-BE-1",
+   "be-floor-1R vs card-v6 (CLASSIC5, full)",
+   "HALT: P-BE-1 — the arm shares the WHOLE campaign set with its base; the commissioned two-sample ruler's premise failed."
+  ]
+ ],
+ "law": "DRY-RUN — NOT A RESULT. Every arm is ridden to its Book through the door its registration names and bound as TP.score would bind it AHEAD of its result marker; TP.score, TP.finish_family and TP._mark_scored are never called, no .scored.json is written, and no outcome (no sum, no mean, no CI, no p) is computed or printed. The campaign counts are a SCHEDULE, not an outcome — but one campaign rides per asset at a time, so a count is a function of the exits, and it is printed as such [tierc10_brk B12]."
+}
