@@ -33,9 +33,10 @@ and, since OR-1 STEP D (2026-09-21), one section that is not BR-1's:
                       lens: state · top/bottom · % position · ATR-distance to the
                       nearest boundary · PENDING breach · last event + age; the
                       EDGE WATCH sub-list; and a RANGE cell on every Board row.
-                      DISPLAY AND TAPE ONLY: see "THE RANGE LAYER" below. No
-                      gate, filter, heat, station, card or sizing reads a range
-                      (F-BR-14).
+                      DISPLAY AND SIBLING-TAPE ONLY: see "THE RANGE LAYER" below.
+                      No gate, filter, heat, station, card or sizing reads a range
+                      (F-BR-14). The machine is scripts/rangefinder_core.py
+                      (A-OR1-1 iv), never engine/.
 
 and, since OR-1 STEP E (2026-09-21), one more that is not BR-1's:
 
@@ -50,7 +51,12 @@ and, since OR-1 STEP E (2026-09-21), one more that is not BR-1's:
                       or sizing reads a mover (F-MV-8, F-MV-9).
 
 and, beside the render, per run: the D-4 tape parquet and the D-7 calibration
-JSON (display-machinery distributions only, A1-4).
+JSON (display-machinery distributions only, A1-4) — and, since AMENDMENT A-OR1-1
+clause v (operator, 2026-09-22), the range layer's SIBLING tape, one row per roster
+symbol under research_outputs/oracle/tape_ranges/. The D-4 tape is TC4's event
+tape and its schema is untouched (A-BR2-1b doctrine): its 24 columns are the
+pre-OR-1 24, and from A-OR1-1 on it carries no range column (the one D-4 tape
+written with 32, 2026-09-21's, is disclosed under "D-4 THE TAPE" below).
 
 THE TYPESETTING — OR-1 STEP F (2026-09-21), "semantics untouched, template only". The
 page is set as a newspaper, light paper only [D-7a], in the operator's eight sections
@@ -118,13 +124,6 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from engine.data import cache_dir                     # noqa: E402
-# THE RANGE MACHINE (OR-1 STEP D). A display organ. engine/rangefinder.py imports
-# numpy, pandas and engine.indicators and nothing else, so it brings no journal, no
-# outcome package and no decision module into this file's closure (F-BR-14 measures
-# that, it is not taken on trust). THE ALIAS IS FENCED: F-BR-14 reads this file's AST
-# and goes red on any use of `RNG` outside range_layer(), the render functions,
-# write_tape() and the one REGISTER row that imports the machine's window.
-from engine import rangefinder as RNG                 # noqa: E402
 from analytics import levels as L                     # noqa: E402
 from analytics import structure as ST                 # noqa: E402
 from analytics import volatility as VOL               # noqa: E402
@@ -134,6 +133,22 @@ from analytics import ANALYTICS_VERSION, analytics_sha  # noqa: E402
 import posture_engine as PE                           # noqa: E402
 import census2b_program as P                          # noqa: E402
 import tierc3_rules as V3                             # noqa: E402
+# THE RANGE MACHINE (OR-1 STEP D; its home since AMENDMENT A-OR1-1 clause iv, operator
+# 2026-09-22: "The range module lives at scripts/rangefinder_core.py; engine/ is outside
+# this lane's write authority (BR-1 §2 clause 3); promotion into engine/ is APOLLO's
+# call"). A display organ, imported the way this file imports its other siblings in
+# scripts/. rangefinder_core imports numpy, pandas, dataclasses and engine.indicators
+# (read-only) and nothing else, so it brings no journal, no outcome package and no
+# decision module into this file's closure (F-BR-14 measures that, it is not taken on
+# trust). engine/rangefinder.py — the copy OR-1 STEP D1 created — is NOT imported here
+# any more and F-BR-14 goes red if it comes back: it stays byte-frozen as TIER-C10's
+# machine of record, and F-RF-1c/d/e (scripts/rangefinder_core_fixtures.py: the event
+# logs, snapshot parity, source equivalence) hold the two copies to one machine. THE
+# ALIAS IS FENCED: F-BR-14 reads this file's AST and goes red on any use of `RNG`, or
+# of a name the machine defines, outside range_layer() and the one REGISTER row that
+# imports the machine's window, and on any route to a module that no import statement
+# names (importlib, __import__, globals(), sys.modules, frames, gc, ...).
+import rangefinder_core as RNG                        # noqa: E402
 # THE TARGET BUCKETS ARE IMPORTED, NEVER COPIED (CONVENTIONS §6.4: "live
 # consumers IMPORT from the one definition"). brief_render.TARGET_BUCKETS is
 # the only bucket definition in the estate (NEAR 0-2 · MID 2-6 · FAR 6+ ATR).
@@ -151,6 +166,16 @@ from brief_render import TARGET_BUCKETS, target_bucket  # noqa: E402
 ZONE = "America/Argentina/Buenos_Aires"
 OUT_DIR = ROOT / "briefs" / "oracle"
 TAPE_DIR = ROOT / "research_outputs" / "oracle" / "tape"
+# THE RANGE LAYER'S SIBLING TAPE (A-OR1-1 clause v, operator 2026-09-22, verbatim:
+# "Range records go to a sibling tape, research_outputs/oracle/tape_ranges/; the TC4
+# event tape's schema is untouched (A-BR2-1b doctrine)"). A module-level PATH like the
+# others, so that any sandbox that calls run() can redirect it (oracle_topup --enumerate,
+# the sandbox suite and F-BR-14's behaviour leg do). The name is FENCED: F-BR-14
+# goes red on any use of it outside write_range_tape() — run() may only CALL that
+# writer, once, and hand what it returns to log() and its return dict — and on any
+# decision module that spells it or the directory's name. So are the lane's other paths
+# (F-BR-14 leg (h)): each is named only by the functions that name it today.
+TAPE_RANGES_DIR = ROOT / "research_outputs" / "oracle" / "tape_ranges"
 CAL_DIR = ROOT / "research_outputs" / "oracle" / "calibration"
 PAYLOAD_DIR = ROOT / "research_outputs" / "oracle" / "payloads"
 GRID_PARQUET = ROOT / "research_outputs" / "census2b" / "oracle" / "oracle_grid.parquet"
@@ -316,7 +341,8 @@ REGISTER: dict[str, dict] = {
     "RANGE_WINDOW_BARS": {
         "value": RNG.V2_WINDOW_BARS,
         "ruled": True,
-        "source": "engine.rangefinder.V2_WINDOW_BARS = 1700, IMPORTED, never copied "
+        "source": "rangefinder_core.V2_WINDOW_BARS = 1700 (scripts/rangefinder_core.py, the "
+                  "Oracle's machine since A-OR1-1 iv), IMPORTED, never copied "
                   "(CONVENTIONS §6.4): the RangeFinder twin's V2 window, the last 1,700 4h "
                   "bars, which is the tape the v2 calibration of record (KEY-C) was measured "
                   "on. OR-1 STEP D fixes it with 'same v2 pins, same event log': the event log "
@@ -753,14 +779,17 @@ def mantle_payload(sym: str, h4: pd.DataFrame, bars: int) -> dict:
 # THE WALL, which is the point of the step (OR-1 §2): "no gate, filter, or sizing
 # reads a range or a mover." The range object is WRITTEN once, by build_view, into
 # a["range"], AFTER that asset's levels, clusters, heat, station and card exist. It
-# is READ by the render functions and by write_tape, and by nothing else: never
-# level_registry, never trap_card, never net_rr, never fired_events, never r1_block,
-# never write_calibration, never the Board's sort. F-BR-14 holds the wall four ways:
-# posture_engine.py's sha256; the import closures of the decision modules; an AST
-# scan of THIS file against an allow-list of reader functions; and a behavioural run
-# in which the whole decision side of build_view must come out identical with the
-# layer stubbed EMPTY, stubbed HOT (every symbol pinned on a boundary with a breach
-# pending) and REAL.
+# is READ by the render functions and by write_range_tape (the SIBLING tape, A-OR1-1
+# v), and by nothing else: never level_registry, never trap_card, never net_rr, never
+# fired_events, never r1_block, never write_calibration, never write_tape (the D-4
+# tape carries no range column since A-OR1-1), never the Board's sort. F-BR-14 holds
+# the wall four ways: posture_engine.py's sha256; the import closures of the decision
+# modules; an AST scan of THIS file against an allow-list of reader functions; and a
+# behavioural run in which the whole decision side of build_view must come out
+# identical with the layer stubbed EMPTY, stubbed HOT (every symbol pinned on a
+# boundary with a breach pending) and REAL. Since A-OR1-1 it also holds the machine
+# (rangefinder_core, never engine.rangefinder, in this file's closure), both tapes'
+# schemas, and a scan that no decision module names the sibling tape.
 #
 # NO NEW READ. The machine runs on the 4h frame build_view has ALREADY loaded, so the
 # top-up scope gains no pair and no read. (The pin still moves, because this file's
@@ -770,7 +799,7 @@ def mantle_payload(sym: str, h4: pd.DataFrame, bars: int) -> dict:
 # ways: a fault inside the range machine on one symbol must not cost the operator
 # his Board. range_layer() therefore CONTAINS its own failure and hands back
 # range_empty(error=...): the Tide Tables print RANGE UNAVAILABLE with the reason in
-# the alarm colour, the tape records range_state = "UNAVAILABLE", and every other
+# the alarm colour, the sibling tape records range_state = "UNAVAILABLE", and every other
 # section renders as if the layer did not exist. Contained is not silent.
 #
 # UNCALIBRATED OFF BTC. The micro pins were calibrated on BTC 1D (KEY-A) and the v2
@@ -784,7 +813,7 @@ RANGE_ABSENT = "this view carries no range for the asset"
 
 
 def range_empty(state: str = RANGE_UNAVAILABLE, error: str | None = None) -> dict:
-    """The range object of a symbol with NOTHING to show: engine.rangefinder.snapshot's
+    """The range object of a symbol with NOTHING to show: rangefinder_core.snapshot's
     own key set (F-BR-14 pins the two equal) plus `error`. Used when the machine could
     not run (`error` says why), as the reader's default for a view that carries no
     range at all, and by F-BR-14 as the EMPTY stub."""
@@ -803,7 +832,7 @@ def range_layer(h4: pd.DataFrame) -> dict:
 
     The three calls are the RangeFinder twin's own, with its own v2 pins: the tape,
     the machine, the snapshot. Prices come from the full-precision Range fields,
-    never from the 2-dp event log (see the hazard note in engine/rangefinder.py).
+    never from the 2-dp event log (see the hazard note in scripts/rangefinder_core.py).
 
     REGISTER['RANGE_LENS'] is enforced by MEASUREMENT: the median bar spacing of the
     tape must equal that lens's period, or the layer refuses. The pins are a 4h
@@ -1138,7 +1167,7 @@ document.addEventListener('DOMContentLoaded',paintStrips);
 
 # ─────────────────────────────── OR-1 STEP D · the range layer's three readers
 # range_cell (the Board), range_watch + tide_tables (the Tide Tables section). With
-# write_tape they are the ONLY functions that may read a["range"] (F-BR-14's
+# write_range_tape they are the ONLY functions that may read a["range"] (F-BR-14's
 # allow-list). All three are pure functions of the view: no wall clock, no IO. The
 # Board cell sits inside the section F-BR-6 renders twice and byte-compares.
 
@@ -2041,48 +2070,33 @@ def r1_block(view: dict) -> str:
 
 
 # ═══════════════════════════════════════════════════════════ D-4 THE TAPE
+# TC4'S EVENT TAPE, AND ITS SCHEMA IS UNTOUCHED. AMENDMENT A-OR1-1 clause v (operator,
+# 2026-09-22), verbatim: "Range records go to a sibling tape,
+# research_outputs/oracle/tape_ranges/; the TC4 event tape's schema is untouched
+# (A-BR2-1b doctrine)." So TAPE_COLS is again EXACTLY the pre-OR-1 24 names in the
+# pre-OR-1 order (`git show ee93644^:scripts/oracle_daily.py`), and write_tape is again
+# exactly the pre-OR-1 function. From OR-1 STEP D2 (ee93644, 2026-09-21) until this
+# amendment the list carried eight range_* columns APPENDED, and ONE tape was written
+# that way: research_outputs/oracle/tape/oracle_tape_2026-09-21.parquet, 32 columns.
+# It is REPORTED, never rewritten, never deleted: its first 24 columns are this schema,
+# and a reader of the D-4 tape takes those. F-BR-14 goes red on a TAPE_COLS, or on a
+# written D-4 tape, that is anything but these 24 names in this order.
 
 TAPE_COLS = ["as_of_ms", "as_of_iso", "asset", "lens", "station", "tide",
              "tide_flip_ms", "direction", "arm_ms", "age_bars", "disp_atr",
              "d_ok", "trigger_ms", "trigger_on_arming_bar", "closed_by",
              "close_px", "atr_lens", "atr_daily", "n_levels", "n_clusters",
              "nearest_cluster_atr", "nearest_cluster_score", "heat",
-             "payload_sha",
-             # OR-1 STEP D: the range layer, APPENDED. The 24 names above keep their
-             # order and their meaning, so a reader of the old tapes reads the new ones.
-             # RECORDING only: what the Tide Tables printed, per asset, at the as-of
-             # bar. Every name clears the banned-token matcher the wrapper's daily
-             # self-check runs over this list (F-BR-14 re-runs it; "edge" is banned, so
-             # nothing here is called that).
-             "range_state", "range_top", "range_bottom", "range_pos_pct",
-             "range_dist_atr", "range_pending_side", "range_last_event",
-             "range_last_event_age_bars"]
-# float64 even on a day when no roster symbol holds a range: an all-None column would
-# land in the parquet as a null-typed column and change dtype from one day to the next.
-RANGE_TAPE_FLOATS = ("range_top", "range_bottom", "range_pos_pct", "range_dist_atr",
-                     "range_last_event_age_bars")
-# THE SAME HAZARD, STRING SIDE (review finding, 2026-09-21 — the two OBJECT columns
-# were left out of the guard above). `range_pending_side` is None on every row of any
-# day when no roster symbol holds a pending macro breach (today 1 of 18 holds one), and
-# `range_last_event` is None on a day when none holds a range at all — the F-BR-14
-# EMPTY stub is exactly that day. Plain object dtype lands those in the parquet as type
-# `null`, and a multi-day read in DATE ORDER then raises before it returns a row:
-# ArrowNotImplementedError: Unsupported cast from string to null using function
-# cast_null — which kills pd.read_parquet(<tape dir>), pyarrow.dataset and
-# pq.ParquetDataset, i.e. every normal read of the D-4 tape these columns exist to
-# feed. pandas' nullable string dtype lands as `string` even when every value is NA, so
-# the schema does not move from one day to the next. `range_state` is already always a
-# string (snapshot and range_empty both return one) and is named here to PIN that.
-RANGE_TAPE_STRINGS = ("range_state", "range_pending_side", "range_last_event")
+             "payload_sha"]
 
 
 def write_tape(view: dict, date_str: str) -> tuple[Path, str, int]:
     """C-10 / D-4. One event stream, two renders — HTML for the operator,
     parquet for TC4. RECORDING only: not one outcome column exists here.
 
-    OR-1 STEP D appends the range layer's eight columns. They RECORD what the Tide
-    Tables printed; nothing downstream of this file may treat them as a filter or a
-    score without its own registration under G-7."""
+    Since A-OR1-1 (2026-09-22) this is again, line for line, the pre-OR-1
+    function: it reads no range. The range layer records to its own sibling
+    tape, write_range_tape() below."""
     TAPE_DIR.mkdir(parents=True, exist_ok=True)
     rows = []
     for a in view["assets"]:
@@ -2098,17 +2112,6 @@ def write_tape(view: dict, date_str: str) -> tuple[Path, str, int]:
             "nearest_cluster_score": (a["nearest"]["score"] if a["nearest"] else None),
             "heat": a["heat"], "payload_sha": a["payload_sha"],
         }
-        # OR-1 STEP D: the asset's range, the same on every row of that asset (like
-        # heat). write_tape is one of the range object's two permitted readers.
-        rg = a.get("range") or range_empty(error=RANGE_ABSENT)
-        base.update({
-            "range_state": rg.get("state"),
-            "range_top": rg.get("top"), "range_bottom": rg.get("bottom"),
-            "range_pos_pct": rg.get("pos_pct"), "range_dist_atr": rg.get("dist_atr"),
-            "range_pending_side": (rg.get("pending") or {}).get("side"),
-            "range_last_event": (rg.get("last_event") or {}).get("event"),
-            "range_last_event_age_bars": (rg.get("last_event") or {}).get("age_bars"),
-        })
         wins = list(st.open_windows) + list(st.recent_dead)
         if not wins:
             rows.append({**base, "direction": None, "arm_ms": None, "age_bars": None,
@@ -2121,11 +2124,86 @@ def write_tape(view: dict, date_str: str) -> tuple[Path, str, int]:
                          "trigger_on_arming_bar": w.trigger_on_arming_bar,
                          "closed_by": w.closed_by or None})
     df = pd.DataFrame(rows, columns=TAPE_COLS)
+    p = TAPE_DIR / f"oracle_tape_{date_str}.parquet"
+    df.to_parquet(p, index=False)
+    b = p.read_bytes()
+    return p, hashlib.sha256(b).hexdigest(), len(b)
+
+
+# ═══════════════════════════════════════ THE RANGE LAYER'S SIBLING TAPE (A-OR1-1 v)
+# research_outputs/oracle/tape_ranges/oracle_tape_ranges_<date>.parquet (TAPE_RANGES_DIR):
+# ONE ROW PER ROSTER SYMBOL per edition, in the D-4 tape's asset order. The D-4 tape's
+# date, its overwrite-per-date semantics and its directory-creation behaviour, and run()
+# writes it RIGHT AFTER the D-4 tape: after the render, in run()'s order, which F-BR-14
+# leg (d) runs itself. A reader's in-place re-order would reach this record; F-BR-14's
+# repr guard around the render is what catches it. RECORDING only: what the Tide Tables
+# printed, per asset, at that asset's as-of bar. Nothing downstream may treat a column as
+# a filter or a score without its own G-7 registration; no decision module may name it.
+#
+# THE ROW KEYS ARE THE D-4 TAPE'S OWN: as_of_ms, as_of_iso, asset, lens, built from the
+# same station the D-4 rows are built from, so the two tapes join on (as_of_ms, asset,
+# lens). `lens` is the D-4 tape's column — the station's lens; the range machine's own
+# lens is REGISTER['RANGE_LENS'], which range_layer() enforces by measurement on that
+# same frame.
+# THE EIGHT FIELDS are the eight OR-1 STEP D appended to the D-4 tape, same names, same
+# meaning, so the 2026-09-21 tape's range columns read as this tape's. Every name clears
+# the banned-token matcher the wrapper's per-edition self-check runs over this list
+# (F-BR-14 re-runs it; "edge" is banned, so nothing here is called that).
+RANGE_TAPE_KEYS = ("as_of_ms", "as_of_iso", "asset", "lens")
+RANGE_TAPE_COLS = [*RANGE_TAPE_KEYS,
+                   "range_state", "range_top", "range_bottom", "range_pos_pct",
+                   "range_dist_atr", "range_pending_side", "range_last_event",
+                   "range_last_event_age_bars"]
+# THE DTYPE PINS — the eight fields, partitioned: five float64, three string.
+# float64 even on a day when no roster symbol holds a range: an all-None column would
+# land in the parquet as a null-typed column and change dtype from one day to the next.
+RANGE_TAPE_FLOATS = ("range_top", "range_bottom", "range_pos_pct", "range_dist_atr",
+                     "range_last_event_age_bars")
+# THE SAME HAZARD, STRING SIDE (review finding, 2026-09-21 — the two OBJECT columns
+# were left out of the guard above). `range_pending_side` is None on every row of any
+# day when no roster symbol holds a pending macro breach (today 1 of 18 holds one), and
+# `range_last_event` is None on a day when none holds a range at all — the F-BR-14
+# EMPTY stub is exactly that day. Plain object dtype lands those in the parquet as type
+# `null`, and a multi-day read in DATE ORDER then raises before it returns a row:
+# ArrowNotImplementedError: Unsupported cast from string to null using function
+# cast_null — which kills pd.read_parquet(<tape dir>), pyarrow.dataset and
+# pq.ParquetDataset, i.e. every normal read of the tape these columns exist to feed.
+# pandas' nullable string dtype lands as `string` even when every value is NA, so
+# the schema does not move from one day to the next. `range_state` is already always a
+# string (snapshot and range_empty both return one) and is named here to PIN that.
+RANGE_TAPE_STRINGS = ("range_state", "range_pending_side", "range_last_event")
+
+
+def write_range_tape(view: dict, date_str: str) -> tuple[Path, str, int]:
+    """A-OR1-1 v. The range layer's sibling tape: one row per roster symbol, keyed
+    as the D-4 tape keys its rows, carrying the eight range fields with their
+    dtypes PINNED (RANGE_TAPE_FLOATS / RANGE_TAPE_STRINGS). Overwrites the day's
+    file and creates its directory, exactly as write_tape does. RECORDING only.
+
+    One of the range object's permitted readers (F-BR-14's allow-list), and the
+    ONLY function that may name TAPE_RANGES_DIR."""
+    TAPE_RANGES_DIR.mkdir(parents=True, exist_ok=True)
+    rows = []
+    for a in view["assets"]:
+        st = a["station"]
+        rg = a.get("range") or range_empty(error=RANGE_ABSENT)
+        rows.append({
+            "as_of_ms": st.as_of_ms,
+            "as_of_iso": datetime.fromtimestamp(st.as_of_ms / 1000, timezone.utc).isoformat(),
+            "asset": a["symbol"], "lens": st.lens,
+            "range_state": rg.get("state"),
+            "range_top": rg.get("top"), "range_bottom": rg.get("bottom"),
+            "range_pos_pct": rg.get("pos_pct"), "range_dist_atr": rg.get("dist_atr"),
+            "range_pending_side": (rg.get("pending") or {}).get("side"),
+            "range_last_event": (rg.get("last_event") or {}).get("event"),
+            "range_last_event_age_bars": (rg.get("last_event") or {}).get("age_bars"),
+        })
+    df = pd.DataFrame(rows, columns=RANGE_TAPE_COLS)
     for col in RANGE_TAPE_FLOATS:
         df[col] = df[col].astype("float64")
     for col in RANGE_TAPE_STRINGS:
         df[col] = df[col].astype("string")
-    p = TAPE_DIR / f"oracle_tape_{date_str}.parquet"
+    p = TAPE_RANGES_DIR / f"oracle_tape_ranges_{date_str}.parquet"
     df.to_parquet(p, index=False)
     b = p.read_bytes()
     return p, hashlib.sha256(b).hexdigest(), len(b)
@@ -2397,11 +2475,16 @@ def run(slot: str = "full", as_of_ms: int | None = None, log=print) -> dict:
 
     tape_p, tape_sha, tape_b = write_tape(view, date_str)
     log(f"  {tape_p} {tape_b:,} B sha256 {tape_sha}")
+    # A-OR1-1 v: the range layer's sibling tape, beside the D-4 tape and after the
+    # render, like it. The D-4 tape above carries no range column.
+    rtape_p, rtape_sha, rtape_b = write_range_tape(view, date_str)
+    log(f"  {rtape_p} {rtape_b:,} B sha256 {rtape_sha}")
     cal_p, cal_sha, cal_b = write_calibration(view, date_str, slot)
     log(f"  {cal_p} {cal_b:,} B sha256 {cal_sha}")
 
     return {"html": out, "html_sha": sha, "html_bytes": out.stat().st_size,
             "tape": tape_p, "tape_sha": tape_sha,
+            "tape_ranges": rtape_p, "tape_ranges_sha": rtape_sha,
             "calibration": cal_p, "calibration_sha": cal_sha,
             "canon": canon_p, "canon_sha": canon_sha, "view": view}
 

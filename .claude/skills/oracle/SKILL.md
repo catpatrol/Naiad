@@ -88,12 +88,12 @@ WHAT A CUT-OFF RUN LEAVES BEHIND, and what to tell the operator:
 ```
 
   A cut that lands INSIDE STEP 5 is the other shape, and it does NOT deny the
-  edition: oracle_daily writes the whole HTML before it writes the tape, the
+  edition: oracle_daily writes the whole HTML before it writes the two tapes, the
   calibration record and the selfcheck row, so a signal in that window leaves an
   edition on disk that no self-check ever saw. The chain names it:
 
 ```
-  CUT OFF by signal 15 (SIGTERM) during STEP 5 oracle-render — NO SELFCHECK ROW WAS WRITTEN, so no run-based gate counts this run — but an edition was already written to /Users/luis/Naiad/briefs/oracle/oracle_<date>.html before the signal landed. It is UNVERIFIED: the self-checks did not run, and the tape row and the calibration record may or may not have been written. It is not the record of a completed run; print the edition again; the lock is released and the run exits 143. …
+  CUT OFF by signal 15 (SIGTERM) during STEP 5 oracle-render — NO SELFCHECK ROW WAS WRITTEN, so no run-based gate counts this run — but an edition was already written to /Users/luis/Naiad/briefs/oracle/oracle_<date>.html before the signal landed. It is UNVERIFIED: the self-checks did not run, and the D-4 tape row, the sibling range tape and the calibration record may or may not have been written. It is not the record of a completed run; print the edition again; the lock is released and the run exits 143. …
 ```
 
 - Cut off HARD (SIGKILL, power loss): nothing is said, NO flag is raised, NO selfcheck
@@ -246,6 +246,7 @@ ORACLE on-demand-full · <date> · lens 4h
   edition Vol. I · No. <n> · Morning Edition
   /Users/luis/Naiad/briefs/oracle/oracle_<date>.html <bytes> B sha256 <sha>
   /Users/luis/Naiad/research_outputs/oracle/tape/oracle_tape_<date>.parquet <bytes> B sha256 <sha>
+  /Users/luis/Naiad/research_outputs/oracle/tape_ranges/oracle_tape_ranges_<date>.parquet <bytes> B sha256 <sha>
   /Users/luis/Naiad/research_outputs/oracle/calibration/oracle_calibration_<date>_on-demand-full.json <bytes> B sha256 <sha>
   render /Users/luis/Naiad/briefs/oracle/oracle_<date>.html sha256 <sha>
   selfcheck refresh_idempotence: PASS
@@ -376,7 +377,9 @@ Notes for the run:
   the record.
 - Do NOT run `scripts/oracle_daily.py` or `scripts/oracle_topup.py` directly to
   "save time": they take no lock, write no selfcheck row and know nothing of the flag.
-- The renders, the tape, the movers json and the flag are OFF-BUS (gitignored).
+- The renders, the two tapes (the D-4 tape and, since A-OR1-1, the range layer's
+  sibling tape under `research_outputs/oracle/tape_ranges/`), the movers json and the
+  flag are OFF-BUS (gitignored).
   Nothing this skill produces is committed or pushed.
 
 Report: verb run and exit code (or CUT OFF at which step, and whether an edition was

@@ -593,22 +593,51 @@ def self_checks(log=print) -> dict:
             ok, detail = False, f"{e.__class__.__name__}: {e}"
         res[name] = {"pass": bool(ok), "detail": detail[:400]}
 
+    # TWO TAPES, ONE CHECK (A-OR1-1 v, 2026-09-22). The D-4 tape is TC4's event tape
+    # and its schema is untouched: exactly OD.TAPE_COLS, the pre-OR-1 24, so a column
+    # beyond them (a range column come back) FAILS the check. The range layer records
+    # to its sibling, research_outputs/oracle/tape_ranges/, and that file gets the same
+    # existence / columns / banned-vocabulary / row-count check plus one row per roster
+    # symbol. Both fold into the ONE key "tape_append_integrity": the key literals are
+    # the selfcheck log's schema and do not move (see the docstring).
     try:
         import pandas as pd
-        t = sorted(OD.TAPE_DIR.glob("oracle_tape_*.parquet"))
-        df = pd.read_parquet(t[-1])
-        missing = [c for c in OD.TAPE_COLS if c not in df.columns]
         # the same stemmed, component-wise matcher the fixture uses — the first
         # version split on "_" only and let plurals through
         import oracle_fixtures as _OF
+        t = sorted(OD.TAPE_DIR.glob("oracle_tape_*.parquet"))
+        if not t:
+            raise FileNotFoundError(f"no D-4 tape (oracle_tape_*.parquet) under {OD.TAPE_DIR}")
+        df = pd.read_parquet(t[-1])
+        missing = [c for c in OD.TAPE_COLS if c not in df.columns]
+        extra = [c for c in df.columns if c not in OD.TAPE_COLS]
         banned = [c for c in df.columns
                   if _OF._calibration({c: 0})[0] is False]
-        ok = (not missing) and (not banned) and len(df) > 0
+        rt = sorted(OD.TAPE_RANGES_DIR.glob("oracle_tape_ranges_*.parquet"))
+        if not rt:
+            raise FileNotFoundError(f"no sibling range tape (oracle_tape_ranges_*.parquet) "
+                                    f"under {OD.TAPE_RANGES_DIR} — the D-4 tape "
+                                    f"{t[-1].name} has {len(df.columns)} columns, extra={extra}")
+        rdf = pd.read_parquet(rt[-1])
+        r_missing = [c for c in OD.RANGE_TAPE_COLS if c not in rdf.columns]
+        r_extra = [c for c in rdf.columns if c not in OD.RANGE_TAPE_COLS]
+        r_banned = [c for c in rdf.columns
+                    if _OF._calibration({c: 0})[0] is False]
+        roster = list(OD.REGISTER["ROSTER"]["value"])
+        r_assets = sorted(rdf["asset"].astype(str)) if "asset" in rdf.columns else []
+        per_symbol = r_assets == sorted(roster)
+        ok = ((not missing) and (not extra) and (not banned) and len(df) > 0
+              and (not r_missing) and (not r_extra) and (not r_banned) and len(rdf) > 0
+              and per_symbol)
         detail = (f"{len(t)} tape file(s), newest {t[-1].name} with {len(df)} rows, "
-                  f"{len(df.columns)} columns; missing={missing}; outcome_columns={banned}")
+                  f"{len(df.columns)} columns; missing={missing}; extra={extra}; "
+                  f"outcome_columns={banned} ‖ {len(rt)} sibling range tape file(s), newest "
+                  f"{rt[-1].name} with {len(rdf)} rows for {len(roster)} roster symbols "
+                  f"(one per symbol: {per_symbol}), {len(rdf.columns)} columns; "
+                  f"missing={r_missing}; extra={r_extra}; outcome_columns={r_banned}")
     except Exception as e:
         ok, detail = False, f"{e.__class__.__name__}: {e}"
-    res["tape_append_integrity"] = {"pass": bool(ok), "detail": detail[:400]}
+    res["tape_append_integrity"] = {"pass": bool(ok), "detail": detail[:600]}
 
     for k, v in res.items():
         log(f"  selfcheck {k}: {'PASS' if v['pass'] else 'FAIL'}")
@@ -1079,7 +1108,7 @@ _CUT_HTML_LINE = re.compile(
 def _cut_render_path(lines: list[str]) -> str | None:
     """The edition oracle_daily.run() had ALREADY WRITTEN when a signal landed.
     Read from the tee — run()'s own `  <path> <n> B sha256 <sha>` line (logged at
-    oracle_daily.py:2396, immediately after the write at :2394) or the wrapper's
+    oracle_daily.py:2474, immediately after the write at :2472) or the wrapper's
     later `render` line — because a boolean set after run_oracle RETURNS cannot
     see a cut that happened inside it."""
     for ln in reversed(lines):
@@ -1455,8 +1484,9 @@ def _ondemand_locked(slot: str, no_fetch: bool, zr: dict, started: datetime,
                  "the lock acquisition (after STEP 2, before STEP 3)")
         # THREE WAYS, NOT TWO (review finding, 2026-09-21). `rendered` is a boolean
         # set only AFTER run_oracle RETURNS, but oracle_daily.run() writes the whole
-        # HTML at :2394 and only then the tape (:2398), the calibration (:2400) and —
-        # back here — the selfcheck row. A signal landing anywhere in that window (a
+        # HTML at :2472 and only then the D-4 tape (:2476), the sibling range tape
+        # (:2480, A-OR1-1 v), the calibration (:2482) and — back here — the selfcheck
+        # row. A signal landing anywhere in that window (a
         # closed session, a harness stopping the background job, a logout) used to
         # print "NO EDITION WAS PRINTED by this run" one line below the log line
         # naming the edition it had just written — an orphan, current-dated, that
@@ -1467,7 +1497,7 @@ def _ondemand_locked(slot: str, no_fetch: bool, zr: dict, started: datetime,
         # SKILL.md:73 quotes it and tells the agent to relay it in these words. So the
         # no-render sentence stays BYTE-IDENTICAL, and the new middle case says only
         # what the log can actually see: an edition exists, it is UNVERIFIED, and
-        # whether the tape row and the calibration record were written is unknown.
+        # whether the two tapes and the calibration record were written is unknown.
         on_disk = _cut_render_path(lines)
         if rendered:
             said = "the edition and its selfcheck row were already on disk"
@@ -1475,9 +1505,9 @@ def _ondemand_locked(slot: str, no_fetch: bool, zr: dict, started: datetime,
             said = (f"NO SELFCHECK ROW WAS WRITTEN, so no run-based gate counts this "
                     f"run — but an edition was already written to {on_disk} before "
                     f"the signal landed. It is UNVERIFIED: the self-checks did not "
-                    f"run, and the tape row and the calibration record may or may "
-                    f"not have been written. It is not the record of a completed "
-                    f"run; print the edition again")
+                    f"run, and the D-4 tape row, the sibling range tape and the "
+                    f"calibration record may or may not have been written. It is "
+                    f"not the record of a completed run; print the edition again")
         else:
             said = ("NO EDITION WAS PRINTED by this run and no selfcheck row was "
                     "written")

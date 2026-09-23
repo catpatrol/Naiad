@@ -127,12 +127,15 @@ def enumerate_scope(log=print) -> dict:
 
     # THE ENUMERATION MUST NOT WRITE ANYTHING REAL.
     #
-    # oracle_daily.run() unconditionally emits FIVE artifact sets — the canon
+    # oracle_daily.run() unconditionally emits SIX artifact sets — the canon
     # JSON, ONE MANTLE PAYLOAD PER ROSTER SYMBOL, the day's HTML, the tape
-    # parquet and the calibration JSON. (This read "ten mantle payloads": the
-    # pre-OR-1 roster's size typed as a WORD, which is why the STEP C sweep's
-    # value greps for "10" / "10 symbols" walked past it — OR-1 STEP C,
-    # CONVENTIONS §6.4. The five redirected paths below are that list.)
+    # parquet, the range layer's SIBLING tape parquet (A-OR1-1 v, 2026-09-22:
+    # research_outputs/oracle/tape_ranges/) and the calibration JSON. (This
+    # read "ten mantle payloads": the pre-OR-1 roster's size typed as a WORD,
+    # which is why the STEP C sweep's value greps for "10" / "10 symbols"
+    # walked past it — OR-1 STEP C, CONVENTIONS §6.4. The six redirected paths
+    # below are that list; a seventh output path in oracle_daily that is not
+    # added here would be written for real by every --enumerate.)
     # An earlier version of this function deleted only the
     # calibration file, which meant every `--enumerate` (and every F-TU-1 leg,
     # twice per fixture pass) silently overwrote the day's real Oracle render
@@ -145,12 +148,14 @@ def enumerate_scope(log=print) -> dict:
     # BYTE-IDENTICAL — and this manifest pins its sha256, so touching it would
     # invalidate the very pin the top-up relies on.
     saved = {"OUT_DIR": OD.OUT_DIR, "TAPE_DIR": OD.TAPE_DIR, "CAL_DIR": OD.CAL_DIR,
-             "PAYLOAD_DIR": OD.PAYLOAD_DIR, "CANON": PE.CANON_JSON_PATH}
+             "PAYLOAD_DIR": OD.PAYLOAD_DIR, "CANON": PE.CANON_JSON_PATH,
+             "TAPE_RANGES_DIR": OD.TAPE_RANGES_DIR}
     OD.load_lens = spy
     with tempfile.TemporaryDirectory(prefix="oracle-scope-") as td:
         sandbox = Path(td)
         OD.OUT_DIR = sandbox / "briefs"
         OD.TAPE_DIR = sandbox / "tape"
+        OD.TAPE_RANGES_DIR = sandbox / "tape_ranges"
         OD.CAL_DIR = sandbox / "calibration"
         OD.PAYLOAD_DIR = sandbox / "payloads"
         PE.CANON_JSON_PATH = sandbox / "posture_canon.json"
@@ -159,6 +164,7 @@ def enumerate_scope(log=print) -> dict:
         finally:
             OD.load_lens = orig
             OD.OUT_DIR, OD.TAPE_DIR = saved["OUT_DIR"], saved["TAPE_DIR"]
+            OD.TAPE_RANGES_DIR = saved["TAPE_RANGES_DIR"]
             OD.CAL_DIR, OD.PAYLOAD_DIR = saved["CAL_DIR"], saved["PAYLOAD_DIR"]
             PE.CANON_JSON_PATH = saved["CANON"]
 
