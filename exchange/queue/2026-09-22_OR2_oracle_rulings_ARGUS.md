@@ -2,7 +2,8 @@
 RATIFIED: operator, 2026-09-22 — verbatim "leans", adopting ARGUS's stated leans on
 R-1..R-8 of 2026-09-22. Executor HEPHAESTUS, reviewer ARGUS. Operations/display-only;
 BR-1 §2 firewall and OR-1's clause (no gate, filter or sizing reads a range or a
-mover) binding. BUILT: PENDING
+mover) binding.
+BUILT: exchange/reports/BUILD_2026-09-22_ORACLE_RULINGS.md · or2 commits 00de4e0 5d15d04 862c9f8 21e70b3 76fc19a 7797827 b372cb7 d71b2fc 1b1b4b6 5c5167e 11bec23 + the STEP 12 publish · F-BR 21/21 (default + sandbox) · F-SK 12/12 · F-MV 9/9 · F-TU 6/6 · F-RF 3/3 + 8/8 + 8/8 · pytest 261 · 11(a) semantic diff CLEAN · edition briefs/oracle/oracle_2026-09-23.html 472,646 B, Evening, 19 rows, 0 stale, exit 0 · push WITHHELD (Q-3)
 
 ## SPECIFICATION OF RECORD (the operator's paste, verbatim)
 

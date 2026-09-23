@@ -588,3 +588,25 @@ PENDING: 1. PARITY line (still owed) 2. operator verdict on the recovery edition
 NEXT: open the recovery edition and rule. Owner: operator.
 METRICS: operator actions this session = 1 · files re-ingested = 0
 === END STATUS ===
+
+=== STATUS_ARGUS — 2026-09-23 (OR-2 BUILT · THE FIRST EDITION'S RULINGS) ===
+NOW: OR-2 is built: R-1..R-8 executed, one commit per step, each proved by a two-legged fixture, and
+     today's Evening edition printed by /oracle's own command (exit 0, self-checks 3/3 PASS). Three
+     collisions with the OR-1 recovery were ruled in-session (Q-1..Q-3) before any code moved.
+LAST EVENT: 2026-09-23 — edition 95e4b107… · or2 commits 00de4e0..11bec23 · this publish · push WITHHELD (Q-3).
+FACTS:
+- R-1 per-row staleness · R-2 posture-first Board · R-3 EDITION_NOON · R-4 stray --install guarded (the
+  explicit path never run on the real gui domain; 0 agents loaded; plist mtimes = the STEP 0 baseline) [verified]
+- R-7 roster 19 (one ruled mapping, one probe, parity backfill under the lock, 76-pair re-pin) · R-8 the
+  eleven ruled, unruled rows 28 -> 17 · RF-1..3 stamped BUILT; queue_ratified_unbuilt 4 (live) [verified]
+- R-6 tape schema registered (v1 · v2 = the one 2026-09-21 file · sibling ranges-1) · R-5's docstring on the
+  scripts/ copy, engine/rangefinder.py untouched (Q-1) · APOLLO note filed [verified]
+- F-BR 21/21 (default + sandbox) · F-SK 12/12 · F-MV 9/9 · F-TU 6/6 · F-RF 3/3+8/8+8/8 · pytest 261 ·
+  11(a) semantic diff CLEAN vs 26a27c7 and ff74a90 [verified]
+- ⚠ TIER-C10: F-D-5 RED by ruling (Q-2) and its fixture + pending close append need TC10's edit (build doc
+  F-6); this block moves F-DET's LEDGER_ARGUS line count again · push WITHHELD [open]
+PENDING: 1. PARITY line (today's edition exists; the gate can close today) 2. headline voice verdict
+         3. V-7 (APOLLO F-C3-e) 4. the push, with TIER-C10's CLOSE 5. R-7's three near-name mappings
+NEXT: open today's edition and rule the headline voice. Owner: operator.
+METRICS: operator actions this session = 1 · files re-ingested = 0
+=== END STATUS ===
