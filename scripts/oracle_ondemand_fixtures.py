@@ -110,6 +110,9 @@ SKILL_MUST_CARRY = (
 
 FAILED: list[str] = []
 PASSED: list[str] = []
+# OR-2 R-8, verbatim from the queue: the six wrapper rows the operator ruled on 2026-09-22
+R8_WRAPPER_ROWS = ("TOPUP_SLOT", "MOVERS_TIMEOUT_S", "MOVERS_LOG_TAIL", "FRONT_PAGE_ROWS",
+                   "MOVERS_FAILURE_HOLDS_FLAG", "CUT_OFF_SIGNALS")
 
 
 def prove(fixture: str, title: str, break_leg, real_leg) -> None:
@@ -1088,7 +1091,7 @@ def _movers_failure(plant: str | None) -> tuple[bool, str]:
     does NOT fail the edition and does not raise the flag' was asserted nowhere
     (mutation M9 — a movers failure forcing rc 1 — stayed GREEN 8/8).
     Plants: 'fails-the-edition' is M9; 'policy-ignored' is a flag rule that never
-    hears about the movers verdict, so the [VETO] row MOVERS_FAILURE_HOLDS_FLAG
+    hears about the movers verdict, so the row MOVERS_FAILURE_HOLDS_FLAG (ruled R-8)
     would be a constant nothing reads."""
     real_movers, real_action = OW.run_movers, OW.ondemand_flag_action
 
@@ -1152,11 +1155,13 @@ def _movers_failure(plant: str | None) -> tuple[bool, str]:
         diff = {k: (policy[k], want[k]) for k in want if policy[k] != want[k]}
         return False, (f"MOVERS_FAILURE_HOLDS_FLAG is not what decides — (holds, "
                        f"movers, slot) -> (got, want): {diff}")
-    # OR-2 R-8 (operator 2026-09-22) ruled the row: until then this read "still [VETO]"
-    row = OW.ONDEMAND_REGISTER["MOVERS_FAILURE_HOLDS_FLAG"]
-    if row["ruled"] is not True or not str(row["source"]).startswith(OW.R8_RULED):
-        return False, (f"MOVERS_FAILURE_HOLDS_FLAG is not ruled by R-8 — 'ruled': {row['ruled']!r}, "
-                       f"source opens {str(row['source'])[:40]!r}")
+    # OR-2 R-8 (operator 2026-09-22) ruled the row — and the wrapper's five others: until
+    # then this read "still [VETO]"
+    for k in R8_WRAPPER_ROWS:
+        row = OW.ONDEMAND_REGISTER[k]
+        if row["ruled"] is not True or not str(row["source"]).startswith(OW.R8_RULED):
+            return False, (f"{k} is not ruled by R-8 — 'ruled': {row['ruled']!r}, source opens "
+                           f"{str(row['source'])[:40]!r}")
     return True, (f"movers exit 1, script absent, a 1 s timeout and exit-0-without-a-"
                   f"json each: said plainly, chain exit 0, NO flag, jobs {want_ran}, "
                   f"selfcheck PASS; and on a STANDING flag the constant (ruled R-8) decides: "
@@ -1667,11 +1672,25 @@ def _g1_baseline() -> dict:
     return {} if i < 0 else {m.group(1): int(m.group(2)) for m in G1_LINE.finditer(txt[i:])}
 
 
-def _sk4_run(argv: list[str], plants: tuple = (), fail_label: str | None = None) -> dict:
+def _sk4_sentinel_text() -> str:
+    """The sentinel the child is handed: the REAL one's bytes while it exists, else the same
+    card rebuilt from the wrapper's constants — so the guard is proved whether or not the
+    operator has since re-armed (and removed the real one)."""
+    real = ROOT / OW.SCHEDULE_SENTINEL_REL
+    if real.exists():
+        return real.read_text(encoding="utf-8")
+    return (f"ORACLE SCHEDULE SUSPENDED — sentinel (F-SK-4's sandbox copy)\n"
+            f"REARM     {OW.REARM_COMMAND}\n")
+
+
+def _sk4_run(argv: list[str], plants: tuple = (), fail_label: str | None = None,
+             sentinel: bool = True) -> dict:
     """One scenario: the real main() in a child whose PATH is only the shims."""
     with tempfile.TemporaryDirectory(prefix="oracle-sk4-") as tds:
         td = Path(tds)
         (td / "bin").mkdir()
+        if sentinel:
+            (td / "SCHEDULE_SUSPENDED").write_text(_sk4_sentinel_text(), encoding="utf-8")
         agents = td / "home" / "Library" / "LaunchAgents"
         agents.mkdir(parents=True)
         calls, pcalls = td / "launchctl.calls", td / "plutil.calls"
@@ -1764,9 +1783,11 @@ def _sk4_real() -> tuple[bool, str]:
     sentinel = ROOT / OW.SCHEDULE_SENTINEL_REL
     if OW.SCHEDULE_SENTINEL != sentinel:
         bad.append(f"OW.SCHEDULE_SENTINEL is {OW.SCHEDULE_SENTINEL}, not the repo sentinel")
-    if not sentinel.exists():
-        bad.append(f"the sentinel {OW.SCHEDULE_SENTINEL_REL} is ABSENT — the guard is OFF")
-    else:
+    # The REAL sentinel's presence is the schedule's STATE, not this fixture's claim: after
+    # the operator's sanctioned re-arm it is gone by design (G-1 checks it for this build).
+    state = "PRESENT (the schedule is SUSPENDED)" if sentinel.exists() else \
+        "ABSENT (the operator has re-armed; the guard is dormant on this disk)"
+    if sentinel.exists():
         rl = [ln.split(None, 1)[1].strip() for ln in sentinel.read_text(encoding="utf-8").splitlines()
               if ln.startswith("REARM ")]
         if rl != [OW.REARM_COMMAND]:
@@ -1781,6 +1802,12 @@ def _sk4_real() -> tuple[bool, str]:
     r_fail = _sk4_run(["--install", "--rearm"], fail_label=SK4_FAIL_LABEL)
     r_ok = _sk4_run(["--install", "--rearm"])
     bad += _sk4_rearm_faults(r_fail, SK4_FAIL_LABEL) + _sk4_rearm_faults(r_ok, None)
+    # the guard is KEYED ON THE SENTINEL: without it, --install arms (against the shim)
+    r_free = _sk4_run(["--install"], sentinel=False)
+    if r_free["rc"] != 0 or not any(c.startswith("bootstrap ") for c in r_free["calls"]):
+        bad.append(f"with no sentinel `--install` did not arm against the shim (exit "
+                   f"{r_free['rc']}, {len(r_free['calls'])} call(s)) — the guard is not keyed on "
+                   f"the sentinel")
     if bad:
         return False, "; ".join(bad[:6]) + (f" (+{len(bad) - 6} more)" if len(bad) > 6 else "")
     return True, (
@@ -1790,8 +1817,9 @@ def _sk4_real() -> tuple[bool, str]:
         f"plists rewritten. The explicit path against the shim: with {SK4_FAIL_LABEL}'s "
         f"bootstrap answering 5 -> exit {r_fail['rc']}, {len(OW.SLOTS) - 1} ARMED + 1 NOT "
         f"ARMED (bootstrap rc 5); clean -> exit 0, {len(OW.SLOTS)} ARMED; every label "
-        f"enable -> bootout -> bootstrap -> list. The real gui domain was never reached: "
-        f"PATH held only the shims")
+        f"enable -> bootout -> bootstrap -> list; with NO sentinel `--install` arms against the "
+        f"shim (the guard is keyed on the file). The real sentinel: {state}. The real gui domain "
+        f"was never reached: PATH held only the shims")
 
 
 def _sk4_break() -> tuple[bool, str]:
@@ -1839,6 +1867,8 @@ def child_install(args: list[str]) -> int:
     OW.FLAG, OW.LOCK, OW.SELFCHECK = (td / "ORACLE_DOWN.flag", td / ".oracle.lock",
                                        td / "selfcheck_log.jsonl")
     OW.LAUNCHCTL = str(shim)
+    # the sentinel the guard reads: the sandbox's (planted, or absent on purpose)
+    OW.SCHEDULE_SENTINEL = td / "SCHEDULE_SUSPENDED"
     for pl in plants:
         if pl == "--no-guard":
             OW.install_refusal = lambda argv: None
@@ -1862,7 +1892,9 @@ def f_sk_4() -> None:
     if sorted(base) != sorted(OW.SLOTS):
         g1.append(f"the G-1 baseline in {G1_QUEUE.name} names {sorted(base)}, the wrapper "
                   f"{sorted(OW.SLOTS)}")
-    for lb, want in base.items():
+    # the STEP 0 baseline binds only while the schedule is SUSPENDED: the operator's own
+    # re-arm (which removes the sentinel) rewrites the plists by design
+    for lb, want in (base.items() if (ROOT / OW.SCHEDULE_SENTINEL_REL).exists() else ()):
         f = _real_agents() / f"{lb}.plist"
         got = int(f.stat().st_mtime) if f.exists() else None
         if got != want:

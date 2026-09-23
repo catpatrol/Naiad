@@ -358,7 +358,9 @@ def reschedule_if_drifted(label: str, log=print) -> dict:
     elif drift:
         log(f"  SCHEDULE DRIFT on {label}: plist says {have}, the zone says "
             f"{{'Hour': {want_h}, 'Minute': {want_m}}} — rewriting and reloading")
-        arm(label, log=log)
+        # OR-2 R-4: the re-arm's verdict is kept, and main() turns a failed one into rc 1
+        return {"label": label, "drift": drift, "want": {"Hour": want_h, "Minute": want_m},
+                "had": have, "armed": bool(arm(label, log=log).get("armed"))}
     return {"label": label, "drift": drift, "want": {"Hour": want_h, "Minute": want_m},
             "had": have}
 
@@ -384,7 +386,9 @@ def reschedule_if_drifted(label: str, log=print) -> dict:
 # 09:45:03 -> 09:55:21 = 618.7 s for 40 pairs = 15.47 s/pair, and 2026-09-20
 # reproduces it), so a wire-down top-up over 72 pairs is >= 18 min on its own;
 # MOVERS_TIMEOUT_S = 600 s sits in front of it and the render ~20 s behind it,
-# i.e. ~29 min against LOCK_STALE_MIN = 30. acquire_lock's stale rule is AGE
+# i.e. ~29 min against LOCK_STALE_MIN = 30. SINCE OR-2 R-7 THE SCOPE IS 76 PAIRS
+# (19 symbols): 76 x 15.47 s + 600 s + ~20 s = ~1,796 s = ~29.9 min — 0.1 min
+# under the limit. The next roster addition crosses it (reported, OR-2). acquire_lock's stale rule is AGE
 # ONLY — it never asks whether the holder is alive — so past 30 minutes it would
 # take the lock from a run that is still working, and two editions would then
 # write one oracle_<date>.html and one oracle_tape_<date>.parquet, neither write
@@ -460,8 +464,8 @@ def release_lock(log=print) -> None:
 # Buenos Aires had a bad morning; the flag is for the operator at the machine.
 #
 # SELF-CLEARING — BUT NOT BY A RUN THAT DID NOTHING. rc == 0 alone is not an
-# all-clear. The lock stand-down exits 0 having done no work; --install exits 0
-# without running the Oracle at all; a catch-up that finds nothing missed exits 0
+# all-clear. The lock stand-down exits 0 having done no work; --install exits
+# without running the Oracle at all (2 while the schedule is SUSPENDED, OR-2 R-4); a catch-up that finds nothing missed exits 0
 # by design. If any of those cleared the flag, a login could silently cancel a
 # real alarm — the same class of mistake as D1/D2, where a file a FAILED run also
 # writes was taken as proof the run succeeded. The flag is therefore cleared only
@@ -1062,7 +1066,7 @@ def ondemand_skips(slot: str, no_fetch: bool) -> dict:
 
 
 def ondemand_plan_lines(slot: str, no_fetch: bool) -> list[str]:
-    """What --dry-run prints. Pure: it reads two constants and touches nothing."""
+    """What --dry-run prints. Pure: it reads module constants and touches nothing."""
     skips = ondemand_skips(slot, no_fetch)
     out = [f"ORACLE ON-DEMAND · DRY RUN · slot={slot}"
            f"{' · --no-fetch' if no_fetch else ''} · NOTHING IS TOUCHED "
@@ -1267,8 +1271,10 @@ def front_page_rows(lines: list[str], order: tuple) -> list[tuple]:
 def front_page(lines: list[str], slot: str, started: datetime, log=print) -> None:
     """Step 6. `lines` is everything run_oracle logged for THIS run (a tee)."""
     log(f"{_step('front-page')}:")
-    order = board_order()
-    rows = front_page_rows(lines, order)
+    # the order is read ONLY when this run logged Board rows: a run whose oracle_daily
+    # failed to import has none, and must still print SELF-CHECK / RENDER / BANNER / STALE
+    order = board_order() if any(_BOARD_LINE.match(ln) for ln in lines) else ()
+    rows = front_page_rows(lines, order) if order else []
     if rows:
         top = rows[:FRONT_PAGE_ROWS]
         log(f"  FRONT PAGE — top {len(top)} of {len(rows)} Board rows, posture first "
@@ -1779,6 +1785,10 @@ def main(argv=None) -> int:
                              f"carries will not fire. Re-arm: oracle_wrapper.py "
                              f"--install (while {SCHEDULE_SENTINEL_REL} exists: "
                              f"--install --rearm)")
+            elif d.get("armed") is False:
+                rc = rc or 1
+                note_failure(f"SCHEDULE DRIFT on {label}: the re-arm FAILED (see NOT ARMED "
+                             f"above) — the label was booted out and is not loaded")
             elif not d["drift"]:
                 log(f"  schedule OK on {label}: {d['want']}")
         except Exception as e:

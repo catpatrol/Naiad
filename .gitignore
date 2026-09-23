@@ -230,17 +230,6 @@ research_outputs/oracle/**
 # enumerated from. Tracking it makes a scope change visible in git history
 # instead of only on disk.
 !research_outputs/oracle/topup_scope.json
-# SCHEDULE_SUSPENDED is the third (OR-2 R-4, 2026-09-23): while it exists,
-# `oracle_wrapper.py --install` alone refuses (exit 2, nothing touched). A guard
-# that lives only on one disk vanishes in every fresh clone, which would re-open
-# the stray arming command the ruling closed — so the sentinel is versioned.
-!research_outputs/oracle/SCHEDULE_SUSPENDED
-# tape/SCHEMA.json is the fourth (OR-2 R-6, 2026-09-23): the registry of every version
-# the Oracle's tapes carry, with each column's meaning and the reader's rule. The tapes
-# stay DATA (ignored); the registry that says how to read them is a document. Two lines,
-# because `**` also hides the directory itself.
-!research_outputs/oracle/tape/
-!research_outputs/oracle/tape/SCHEMA.json
 
 research_outputs/tierc6/**
 research_outputs/tierc6_run2/**
@@ -273,3 +262,22 @@ ORACLE_DOWN.flag
 MAILBOX/
 research_outputs/tierc10/**
 research_outputs/tierc10_run2/**
+
+# ─── THE ORACLE, continued (OR-2, 2026-09-23). Four more exceptions to the
+# `research_outputs/oracle/**` rule of the Oracle block above, APPENDED HERE rather than
+# inserted there so every line number above keeps the value other lanes cite
+# (TIER-C10's records cite `.gitignore:263`). A negation works from anywhere below the
+# rule it negates.
+# SCHEDULE_SUSPENDED (OR-2 R-4): while it exists, `oracle_wrapper.py --install` alone
+# refuses (exit 2, nothing touched). A guard that lives only on one disk vanishes in every
+# fresh clone, which would re-open the stray arming command the ruling closed.
+!research_outputs/oracle/SCHEDULE_SUSPENDED
+# tape/SCHEMA.json (OR-2 R-6): the registry of every version the Oracle's tapes carry,
+# with each column's meaning and the reader's rule. The tapes stay DATA (ignored); the
+# registry that says how to read them is a document. Two lines, because `**` also hides
+# the directory itself.
+!research_outputs/oracle/tape/
+!research_outputs/oracle/tape/SCHEMA.json
+# roster_mapping_<date>.json (OR-2 R-7): the record a RULED roster mapping is held to by
+# F-BR-16 (PUMPFUNUSDT -> PUMPUSDT). Evidence a fixture requires must survive a clone.
+!research_outputs/oracle/roster_mapping_*.json

@@ -293,7 +293,7 @@
       },
       {
        "name": "lens",
-       "meaning": "the range layer's lens (REGISTER['RANGE_LENS'], '4h')"
+       "meaning": "the STATION's lens (REGISTER['LENS'], '4h') — the D-4 tape's own column, so the join key is the D-4 tape's; the range machine's lens is REGISTER['RANGE_LENS'] (also '4h'; were it ever another, range_layer prints UNAVAILABLE and this column still carries the station's lens)"
       },
       {
        "name": "range_state",

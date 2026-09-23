@@ -650,7 +650,7 @@ def f_br_6() -> None:
     view = _pristine_view()
     # (name, the finding it MUST produce, how it is planted) — judged one at a time
     plants = (
-        ("DATA PLANT (the first Board row's heat moved between the two renders)",
+        ("DATA PLANT (the hottest row's heat moved between the two renders)",
          f"{SEC_BOARD}:", dict(tamper=True, view=view)),
         ("SELECTOR PLANT (the pre-STEP-F heading names: 'The Board' matches nothing)",
          "VACUOUS", dict(sections=PRE_STEP_F_SECTIONS, view=view)),
@@ -6135,7 +6135,7 @@ def _typeset_judge(html_doc: str | None = None, renders: dict | None = None,
         bad.append("sections: REGISTER['SECTIONS'] is not the contract's eight, in order")
     # OR-2 R-8 (operator 2026-09-22) ruled both — FRONT_PAGE_HEADLINE with the note "voice
     # under operator review"; until then this read "'ruled': False, in the [VETO] appendix"
-    bad += _r8_faults(("EDITION_COUNT", "FRONT_PAGE_HEADLINE"), doc, "colophon")
+    bad += _r8_faults(("EDITION_COUNT", "FRONT_PAGE_HEADLINE", "TARGET_BUCKET_ATR"), doc, "colophon")
     # the MASTHEAD row names the three words and quotes vii to the letter
     m_src = OD.REGISTER["MASTHEAD"]["source"] if masthead_src is None else masthead_src
     if "<Morning|Evening|Refresh>" not in m_src or TS_VII not in m_src:
@@ -6433,6 +6433,17 @@ ROSTER_RULING = "1-watchlist: drop symbols without data from a binance contract"
 ROSTER_MAPPING_RULING = "R-7"
 _ROSTER_MAPPING = re.compile(r"research_outputs/oracle/roster_mapping_\d{4}-\d{2}-\d{2}\.json")
 _UNSET = object()
+# the pairs the ROSTER row's TRACKED source rules, between "RULED MAPPING" and "NOT MAPPED":
+# the record (gitignored) may carry a MAP only for a pair written here (pre-proof review)
+_ROSTER_RULED_PAIR = re.compile(r"([0-9A-Z]{2,20}USDT) -> ([0-9A-Z]{2,20}USDT)")
+
+
+def _roster_ruled_pairs(source: str) -> set:
+    i = source.find("RULED MAPPING")
+    if i < 0:
+        return set()
+    j = source.find("NOT MAPPED", i)
+    return set(_ROSTER_RULED_PAIR.findall(source[i:j if j > 0 else None]))
 # Where a live consumer of the roster can live. NOT the movers organ: its universe
 # is the exchange's, by design not the roster's (OR-1 STEP E).
 ROSTER_FAMILY = ("oracle_daily.py", "oracle_fixtures.py", "oracle_topup.py",
@@ -6526,7 +6537,7 @@ def _roster_expected(probe: dict, maps: dict) -> tuple:
 
 def _roster_judge(src: str | None = None, html_doc: str | None = None,
                   tape_assets=None, cal_assets=None,
-                  mapping_doc=_UNSET) -> tuple[list[str], dict]:
+                  mapping_doc=_UNSET, src_row: str | None = None) -> tuple[list[str], dict]:
     """Every finding against the roster; [] = clean. `src` swaps in a planted
     oracle_daily.py TEXT; the three artifact arguments swap in planted artifacts.
     The ARTIFACTS are always held against the LIVE row — they were printed by the
@@ -6595,6 +6606,14 @@ def _roster_judge(src: str | None = None, html_doc: str | None = None,
             bad.append(f"the mapping record {map_path} is ABSENT — a mapped name cannot be "
                        f"held against its ruling (gitignored path: restore it, never skip)")
         elif mdoc is not None:
+            ruled_pairs = _roster_ruled_pairs(src_row if src_row is not None else row.get("source", ""))
+            rec_pairs = {(m.get("dropped"), m.get("live")) for m in mdoc.get("mappings", ())
+                         if m.get("verdict") == "MAP"}
+            for d, lv in sorted(rec_pairs - ruled_pairs):
+                bad.append(f"the mapping record carries {d} -> {lv}, a mapping the ROSTER row "
+                           f"does not rule (its RULED MAPPING clause names {sorted(ruled_pairs)})")
+            for d, lv in sorted(ruled_pairs - rec_pairs):
+                bad.append(f"the ROSTER row rules {d} -> {lv} and the record carries no MAP for it")
             if mdoc.get("ruling") != ROSTER_MAPPING_RULING:
                 bad.append(f"the mapping record's ruling reads {mdoc.get('ruling')!r}, not "
                            f"{ROSTER_MAPPING_RULING!r}")
@@ -6604,6 +6623,8 @@ def _roster_judge(src: str | None = None, html_doc: str | None = None,
                     continue
                 if d not in dropped:
                     bad.append(f"the mapping {d} -> {lv} maps a name the probe did not drop")
+                    continue
+                if (d, lv) not in ruled_pairs:
                     continue
                 if not (rr.get("symbol") == lv and rr.get("contractType") == "PERPETUAL"
                         and rr.get("status") == "TRADING" and rr.get("quoteAsset") == "USDT"):
@@ -6632,7 +6653,7 @@ def _roster_judge(src: str | None = None, html_doc: str | None = None,
             if stray:
                 bad.append(f"on the roster but not KEPT by the probe: {stray} — not among the "
                            f"operator's 22 as probed in {probe_path}, nor carried by a ruled "
-                           f"mapping record (a mapping applied without its record)")
+                           f"mapping record")
             if lost:
                 bad.append(f"KEPT by the probe but missing from the roster: {lost}")
             if soft:
@@ -6741,11 +6762,11 @@ def f_br_16() -> None:
         (f"SOURCE PLANT (a kept name lost: {live[-1]})",
          "KEPT by the probe but missing", swap(lit(live[:-1]))),
         (f"MAPPING PLANT, the contract's ({mlive} on the roster, its mapping record emptied: "
-         f"a mapping applied without its record)", "a mapping applied without its record",
+         f"a mapping applied without its record)", "nor carried by a ruled mapping record",
          dict(mapping_doc={**mdoc, "mappings": []}) if mdoc and mlive else None),
         (f"MAPPING PLANT (the unmapped near-name {near_live} typed in at "
          f"{near['dropped'] if near else '—'}'s place, no ruling, no record)",
-         "a mapping applied without its record", _near_swap()),
+         "nor carried by a ruled mapping record", _near_swap()),
         (f"MAPPING PLANT ({mlive}'s record reading SETTLING)", "not PERPETUAL/TRADING",
          dict(mapping_doc={**mdoc, "mappings": [{**m, "record": {**m["record"], "status": "SETTLING"}}
                                                 for m in ruled]}) if mdoc and ruled else None),
@@ -6755,6 +6776,14 @@ def f_br_16() -> None:
         (f"MAPPING PLANT ({mlive} moved from its dropped name's place to the end)",
          "not in the operator's order",
          swap(lit(tuple(x for x in live if x != mlive) + (mlive,))) if mlive in live and near_at != len(live) - 1 else None),
+        (f"MAPPING PLANT (a near-name, {near_live}, typed into the roster AND the record AND "
+         f"the row's source — the operator ruled one pair)", "a mapping the ROSTER row does not rule",
+         (lambda nd: dict(**nd, mapping_doc={**mdoc, "mappings": list(mdoc["mappings"]) + [
+             {"dropped": near["dropped"], "live": near_live, "verdict": "MAP",
+              "record": {"symbol": near_live, "contractType": "PERPETUAL", "status": "TRADING",
+                         "quoteAsset": "USDT"}}]},
+                           src_row=OD.REGISTER["ROSTER"]["source"] + f" NOT MAPPED: {near_live}."))(
+             _near_swap() or {}) if near and mdoc and _near_swap() else None),
         ("MAPPING PLANT (the mapping record ABSENT)", "is ABSENT",
          dict(mapping_doc=None) if mdoc else None),
         ("SOURCE PLANT (the operator's order handed to sorted())",
@@ -7481,21 +7510,44 @@ def _br19_page_faults(doc: str, label: str) -> list[str]:
     if stray:
         bad.append(f"{label} Docket: card(s) {stray} have no Board row")
     bad += _br19_order_faults([(c, *by[c]) for c in cards if c in by], f"{label} The Docket")
-    watch = [w for w in re.findall(r'<div class="wh"><b>([^<]+)</b>', _sec(doc, SEC_WATCH)) if w in by]
     hv = lambda h: h if h == h else float("-inf")          # noqa: E731
-    if any(hv(by[b][1]) > hv(by[a][1]) for a, b in zip(watch, watch[1:])):
-        bad.append(f"{label} The Watch is no longer in heat order — R-2 re-orders the Board, The "
-                   f"Docket and the report-back ONLY")
+    firsts = lambda seq: list(dict.fromkeys(x for x in seq if x in by))    # noqa: E731
+    others = (
+        ("The Watch", firsts(re.findall(r'<div class="wh"><b>([^<]+)</b>', _sec(doc, SEC_WATCH)))),
+        ("the Spaghetti legend", firsts(re.findall(r"■ ([0-9A-Z]+) \(", _page_text(_sec(doc, SEC_WATCH))))),
+    )
+    tel = _sec(doc, SEC_TELEGRAMS)
+    for cls in ("r1", "held"):                   # the paste block and the HELD block, each
+        m = re.search(rf'(?s)<pre class="{cls}">(.*?)</pre>', tel)
+        seq = [ln.split(" ", 1)[0].replace("USDT", "") for ln in
+               _page_text(m.group(1)).replace(" USDT", "USDT").split() if ln.endswith("USDT")] if m else []
+        others += ((f"the Telegrams ({'paste' if cls == 'r1' else 'HELD'} block)", firsts(seq)),)
+    for what, seq in others:
+        if any(hv(by[b][1]) > hv(by[a][1]) for a, b in zip(seq, seq[1:])):
+            bad.append(f"{label} {what} is no longer in heat order — R-2 re-orders the Board, The "
+                       f"Docket and the report-back ONLY")
     return bad
 
 
 def _br19_hard_view() -> dict:
     """The real view with heats reassigned so heat order INVERTS posture order, re-sorted
     by heat the way build_view sorts it. A copy: the shared view is not touched."""
+    import copy
     view = _pristine_view()
     rank = {w: i for i, w in enumerate(F19_ORDER)}
+    assets = [dict(a) for a in view["assets"]]
+    # every one of the four words on the page, whatever the day's view holds: a word the
+    # day lacks is given to a card-less row (its station COPIED — the shared view untouched)
+    have = {a["station"].board_word for a in assets}
+    spare = [a for a in reversed(assets) if not a["card"]]
+    for w in [w for w in F19_ORDER if w not in have]:
+        if spare:
+            a = spare.pop(0)
+            st = copy.copy(a["station"])
+            st.board_word = w
+            a["station"] = st
     assets = [dict(a, heat=10.0 * (1 + rank.get(a["station"].board_word, 4)) + 0.001 * i)
-              for i, a in enumerate(view["assets"])]
+              for i, a in enumerate(assets)]
     assets.sort(key=lambda a: -a["heat"])
     return {**view, "assets": assets}
 
@@ -7522,6 +7574,15 @@ def _br19_judge(render=None) -> list[str]:
     hv = _br19_hard_view()
     doc = (render or (lambda v: OD.render_html(v, DATE, PE.canon_sha())))(hv)
     bad += _br19_page_faults(doc, "the hard render (heat inverted against posture)")
+    words = {w for _s, w, _h in _br19_board(doc)}
+    if words != set(F19_ORDER):
+        bad.append(f"the hard render carries {sorted(words)}, not all four postures — fail closed")
+    printed = {s_: h for s_, _w, h in _br19_board(doc)}
+    moved = [a["symbol"] for a in hv["assets"]
+             if f"{printed.get(a['symbol'].replace('USDT', ''), float('nan')):.3f}" != f"{a['heat']:.3f}"]
+    if moved:
+        bad.append(f"the hard render prints heat values that are not the view's: {moved[:3]} — "
+                   f"R-2 moves rows, never a heat value")
     # (c) the helper on synthetic rows
     synth = [{"symbol": n, "station": NS(board_word=w), "heat": h} for n, w, h in F19_SYNTH]
     got = tuple(a["symbol"] for a in OD.board_rows(synth))
@@ -7535,6 +7596,18 @@ def _br19_judge(render=None) -> list[str]:
     rep = tuple(r[0] for r in _OW.front_page_rows(lines, _OW.board_order()))
     if rep != F19_SYNTH_WANT:
         bad.append(f"the front-page report-back orders {rep}, want {F19_SYNTH_WANT}")
+    printed_rep: list[str] = []
+    from datetime import datetime, timezone
+    keep_rows = _OW.FRONT_PAGE_ROWS
+    try:
+        _OW.FRONT_PAGE_ROWS = len(F19_SYNTH)
+        _OW.front_page(lines, "fixture-F-BR-19", datetime.now(timezone.utc), log=printed_rep.append)
+    finally:
+        _OW.FRONT_PAGE_ROWS = keep_rows
+    shown = tuple(m.group(1) for m in (re.match(r"^\s+\d+\s+([A-Z0-9]+)\s", ln) for ln in printed_rep) if m)
+    if shown != F19_SYNTH_WANT or not any("posture first" in ln for ln in printed_rep):
+        bad.append(f"the front-page report-back PRINTS {shown}, want {F19_SYNTH_WANT} under a "
+                   f"'posture first' header")
     return bad
 
 
@@ -7559,11 +7632,25 @@ def f_br_19() -> None:
         mod = _range_mutant(src.replace(anchor, '    cards = []\n    for a in a0:\n', 1))
         return _br19_judge(render=lambda v: mod.render_html(v, DATE, PE.canon_sha()))
 
+    def _printer_on_heat(lines, slot, started, log=print, _real=_OW.front_page):
+        """The printer left on heat: it calls the helper, then re-sorts on heat."""
+        keep = _OW.front_page_rows
+        try:
+            _OW.front_page_rows = lambda ls, order: sorted(keep(ls, order), key=lambda r: -r[2])
+            return _real(lines, slot, started, log=log)
+        finally:
+            _OW.front_page_rows = keep
+
     plants = (
+        ("PRINTER PLANT (the report-back printer re-sorting the helper's rows on heat)",
+         "report-back PRINTS", _swap(_OW, "front_page", _printer_on_heat)),
+        ("TELEGRAMS PLANT (the R1 lines put in Board order — R-2 names three consumers only)",
+         "the Telegrams (",
+         _swap(OD, "r1_block", lambda v, _r=OD.r1_block: _r({**v, "assets": OD.board_rows(v["assets"])}))),
         ("THE CONTRACT'S PLANT (the heat-only sort put back under the Board)",
          "sits ABOVE", _swap(OD, "board_rows", lambda xs: sorted(xs, key=lambda a: -a["heat"]))),
         ("WRAPPER PLANT (the report-back left on heat)",
-         "report-back orders",
+         "report-back",
          _swap(_OW, "front_page_rows",
                lambda lines, order: sorted(
                    [(m.group("sym"), m.group("station"), float(m.group("heat")))
@@ -7605,7 +7692,10 @@ def f_br_19() -> None:
             f"Docket's cards follow the Board's word for their symbol; The Watch still runs by heat. "
             f"A hard render (heat inverted against posture) comes out posture-first too; "
             f"board_rows and the wrapper's report-back order a synthetic board "
-            f"{' '.join(F19_SYNTH_WANT)}. Heat values print unchanged")
+            f"{' '.join(F19_SYNTH_WANT)} — the helper AND the wrapper's real front_page() "
+            f"printer. The hard render carries all four postures and prints every heat value "
+            f"as the view holds it; The Watch, the Spaghetti legend and the Telegrams keep the "
+            f"heat order (R-2's 'only')")
 
     prove("F-BR-19", "POSTURE-FIRST BOARD — TRIGGERED, ARMED, STALKING, DEAD, heat descending "
                      "within; the Board, The Docket and the report-back, and nothing else",
@@ -7856,6 +7946,11 @@ def _f21_judge(reg=_UNSET, files=None, writers=None) -> tuple[list[str], dict]:
             bad.append(f"{key}: sha {sha[:12]}… — the v2 file was REWRITTEN (it is registered by name, "
                        f"never rewritten)")
         seen[kind][want] = seen[kind].get(want, 0) + 1
+    by_name = {(kind, n) for kind, t in tapes.items() for n in t.get("date_rule", {}).get("by_name", {})}
+    on_disk = {(k.split("/", 1)[0], k.split("/", 1)[1].split(" ")[0]) for k in files}
+    for kind, n in sorted(by_name - on_disk):
+        bad.append(f"{kind}/{n} is registered BY NAME and is ABSENT from the archive — the one "
+                   f"file its version exists for is gone (gitignored data: restore it, never skip)")
     # ── both writers
     for kind, vid in (("tape", "1"), ("tape_ranges", "ranges-1")):
         got = writers.get(kind)
@@ -7905,6 +8000,8 @@ def f_br_21() -> None:
         ("WRITER PLANT (the tape writer stamping '2' over v1's columns)", "the tape writer stamps",
          dict(writers={**writers, "tape": (writers["tape"][0], "2")})),
         ("ABSENT PLANT (the registry gone)", "is ABSENT", dict(reg=None)),
+        ("V2-GONE PLANT (the 2026-09-21 file removed from the archive)", "registered BY NAME and is ABSENT",
+         dict(files={k: v for k, v in files.items() if F21_V2_NAME not in k})),
     )
 
     def _break() -> tuple[bool, str]:

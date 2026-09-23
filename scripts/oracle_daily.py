@@ -345,8 +345,9 @@ REGISTER: dict[str, dict] = {
     },
     # THE RANGE LAYER'S THREE CONSTANTS (OR-1 STEP D, 2026-09-21). All three are read
     # by range_layer() and the render functions and by NOTHING that gates: see "THE
-    # RANGE LAYER" above build_view, and F-BR-14. Two are the contract's own [VETO]
-    # defaults and print in the rendered [VETO] appendix until the operator rules.
+    # RANGE LAYER" above build_view, and F-BR-14. Two were the contract's own [VETO]
+    # defaults, printed in the rendered [VETO] appendix until the operator ruled them
+    # (OR-2 R-8, 2026-09-22); they now print in the Colophon's R-8 table.
     "RANGE_LENS": {
         "value": "4h",
         "ruled": True,
@@ -414,11 +415,12 @@ REGISTER: dict[str, dict] = {
     # edition_name, print_line, edition_count, front_page, staleness_banner,
     # svg_spaghetti) and run()'s one masthead number and one print time, and
     # by NOTHING that computes a level, a word, a card or a row of the tape. Six rows
-    # are the contract's own words and are 'ruled': True. Two are this build's reading
-    # of words the contract leaves open: 'ruled': False, so they print in the rendered
-    # [VETO] appendix and in D-7's veto_rows_awaiting_ruling until the operator rules.
-    #   ONE PHRASE MAY NOT BE SPELT IN AN UNRULED ROW'S 'source': the band's two opening
-    # words (REGISTER['LATE_EDITION']). An unruled source PRINTS in the appendix, and
+    # are the contract's own words and are 'ruled': True. Two were this build's reading
+    # of words the contract leaves open, 'ruled': False until the operator ruled them
+    # (OR-2 R-8, 2026-09-22): they now print in the Colophon's R-8 table.
+    #   ONE PHRASE MAY NOT BE SPELT IN A PRINTED ROW'S 'source': the band's two opening
+    # words (REGISTER['LATE_EDITION']). An unruled source PRINTS in the appendix, an
+    # R-8-ruled one in the R-8 table beneath it, and
     # the on-demand wrapper reads "banner UP" off that phrase anywhere in the page's
     # text. F-BR-15 holds the page to it: the phrase only inside the band.
     "TYPE_PALETTE": {
@@ -1717,7 +1719,10 @@ def mantle_caption() -> str:
 # vii's "12:00 BA": the first hour of the Evening Edition. OR-2 R-3 (operator 2026-09-22)
 # names it: '"Morning" when render time in America/Argentina/Buenos_Aires is before
 # EDITION_NOON = 12, else "Evening"; the refresh verb keeps "Refresh"'. Built as
-# EDITION_NOON_BA by ff74a90 (A-OR1-1 vii), renamed to the ruling's name by OR-2.
+# EDITION_NOON_BA by ff74a90 (A-OR1-1 vii), renamed to the ruling's name by OR-2. "Render
+# time" is read as the PRINT TIME run() takes as it starts (now_ba), seconds before the
+# render: the ear, the Colophon's print line and the rows' ages all read that one instant,
+# so the page agrees with itself (a run started at 11:59:55 prints Morning).
 EDITION_NOON = 12
 
 
@@ -1770,7 +1775,7 @@ def print_line(slot: str, printed_at: datetime) -> str:
 
 
 def edition_count(date_str: str) -> int:
-    """REGISTER['EDITION_COUNT'], [VETO]: the distinct DATES among TAPE_DIR's
+    """REGISTER['EDITION_COUNT'] (ruled, OR-2 R-8): the distinct DATES among TAPE_DIR's
     oracle_tape_<date>.parquet files, `date_str` included. A pure read of file NAMES
     (no parquet is opened, nothing is written); a name whose date does not parse is not
     an edition; a missing directory counts this edition alone. Called by run(), never
@@ -2182,6 +2187,7 @@ trigger pair, the net R:R form and the schedule; the schedule was SUSPENDED by o
 ruling 2026-09-21 and the Oracle now prints on demand. {veto_note}</p>
 <table class="veto"><tr><th>constant</th><th>disposition</th><th>value</th><th>why it is not law</th></tr>
 {''.join(veto)}</table>
+<h3>Appendix — ruled by the operator 2026-09-22 (R-8)</h3>
 <p class="small muted">Ruled by the operator on 2026-09-22 (queue OR-2, ruling R-8, verbatim
 "leans"), and so no longer open: the {len(ruled_rows)} rows of this register below, and six
 constants of the on-demand wrapper (its <code>--dry-run</code> lists them).</p>

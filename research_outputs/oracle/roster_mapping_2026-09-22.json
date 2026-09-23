@@ -1,0 +1,159 @@
+{
+ "class": "DISPLAY-ONLY / operations \u2014 ROSTER MAPPING (OR-2 STEP 6)",
+ "ruling": "R-7",
+ "ruling_source": "exchange/queue/2026-09-22_OR2_oracle_rulings_ARGUS.md STEP 6 (RATIFIED operator 2026-09-22, verbatim \"leans\")",
+ "probe_of_record": "research_outputs/oracle/roster_probe_2026-09-21.json",
+ "endpoint": "https://fapi.binance.com/fapi/v1/exchangeInfo",
+ "http_status": 200,
+ "probed_utc": "2026-09-23T16:52:23.560796+00:00",
+ "server_time_ms": 1790157374191,
+ "response_bytes": 1125460,
+ "response_sha256": "742a7158bf1808e4fbf18c1792ed212b6adad3b48294bcdf01ff348812b65485",
+ "symbols_in_response": 907,
+ "live_usdt_perpetual_trading": 528,
+ "used_weight_1m": "1",
+ "weight_limit_1m": 2400,
+ "rule": "MAP = the live contract present AND contractType == PERPETUAL AND status == TRADING AND quoteAsset == USDT; the operator named the pair (R-7)",
+ "mappings": [
+  {
+   "dropped": "PUMPFUNUSDT",
+   "live": "PUMPUSDT",
+   "verdict": "MAP",
+   "operator_index": 5,
+   "record": {
+    "symbol": "PUMPUSDT",
+    "baseAsset": "PUMP",
+    "quoteAsset": "USDT",
+    "marginAsset": "USDT",
+    "contractType": "PERPETUAL",
+    "status": "TRADING",
+    "onboardDate": 1752132600000,
+    "onboardDate_iso": "2025-07-10T07:30Z"
+   }
+  }
+ ],
+ "not_mapped": [
+  {
+   "dropped": "NPCUSDT",
+   "near_name_live_contracts": [
+    {
+     "symbol": "NXPCUSDT",
+     "match_rules": [
+      "difflib ratio 0.86 >= 0.70"
+     ],
+     "string_match": "rule-match (substring / prefix>=4 / difflib>=0.70)",
+     "now": {
+      "symbol": "NXPCUSDT",
+      "baseAsset": "NXPC",
+      "quoteAsset": "USDT",
+      "marginAsset": "USDT",
+      "contractType": "PERPETUAL",
+      "status": "TRADING",
+      "onboardDate": 1747290600000,
+      "onboardDate_iso": "2025-05-15T06:30Z"
+     }
+    }
+   ],
+   "note": "NOT MAPPED \u2014 a near-name is a string likeness, not an identity; mapping it is the operator's ruling, never this script's."
+  },
+  {
+   "dropped": "MNTUSDT",
+   "near_name_live_contracts": [
+    {
+     "symbol": "MANTAUSDT",
+     "match_rules": [
+      "difflib ratio 0.75 >= 0.70"
+     ],
+     "string_match": "rule-match (substring / prefix>=4 / difflib>=0.70)",
+     "now": {
+      "symbol": "MANTAUSDT",
+      "baseAsset": "MANTA",
+      "quoteAsset": "USDT",
+      "marginAsset": "USDT",
+      "contractType": "PERPETUAL",
+      "status": "TRADING",
+      "onboardDate": 1705586400000,
+      "onboardDate_iso": "2024-01-18T14:00Z"
+     }
+    }
+   ],
+   "note": "NOT MAPPED \u2014 a near-name is a string likeness, not an identity; mapping it is the operator's ruling, never this script's."
+  },
+  {
+   "dropped": "ZCATUSDT",
+   "near_name_live_contracts": [
+    {
+     "symbol": "1000CATUSDT",
+     "match_rules": [
+      "baseAsset is a substring of dropped-name",
+      "difflib ratio 0.86 >= 0.70"
+     ],
+     "string_match": "rule-match (substring / prefix>=4 / difflib>=0.70)",
+     "now": {
+      "symbol": "1000CATUSDT",
+      "baseAsset": "1000CAT",
+      "quoteAsset": "USDT",
+      "marginAsset": "USDT",
+      "contractType": "PERPETUAL",
+      "status": "TRADING",
+      "onboardDate": 1729513800000,
+      "onboardDate_iso": "2024-10-21T12:30Z"
+     }
+    },
+    {
+     "symbol": "CATIUSDT",
+     "match_rules": [
+      "difflib ratio 0.75 >= 0.70"
+     ],
+     "string_match": "rule-match (substring / prefix>=4 / difflib>=0.70)",
+     "now": {
+      "symbol": "CATIUSDT",
+      "baseAsset": "CATI",
+      "quoteAsset": "USDT",
+      "marginAsset": "USDT",
+      "contractType": "PERPETUAL",
+      "status": "TRADING",
+      "onboardDate": 1726831800000,
+      "onboardDate_iso": "2024-09-20T11:30Z"
+     }
+    },
+    {
+     "symbol": "CATUSDT",
+     "match_rules": [
+      "baseAsset is a substring of dropped-name",
+      "difflib ratio 0.86 >= 0.70"
+     ],
+     "string_match": "rule-match (substring / prefix>=4 / difflib>=0.70)",
+     "now": {
+      "symbol": "CATUSDT",
+      "baseAsset": "CAT",
+      "quoteAsset": "USDT",
+      "marginAsset": "USDT",
+      "contractType": "TRADIFI_PERPETUAL",
+      "status": "TRADING",
+      "onboardDate": 1782984000000,
+      "onboardDate_iso": "2026-07-02T09:20Z"
+     }
+    },
+    {
+     "symbol": "POPCATUSDT",
+     "match_rules": [
+      "shares 3-gram(s) CAT"
+     ],
+     "string_match": "3-gram only",
+     "now": {
+      "symbol": "POPCATUSDT",
+      "baseAsset": "POPCAT",
+      "quoteAsset": "USDT",
+      "marginAsset": "USDT",
+      "contractType": "PERPETUAL",
+      "status": "TRADING",
+      "onboardDate": 1724331600000,
+      "onboardDate_iso": "2024-08-22T13:00Z"
+     }
+    }
+   ],
+   "note": "NOT MAPPED \u2014 a near-name is a string likeness, not an identity; mapping it is the operator's ruling, never this script's."
+  }
+ ]
+}

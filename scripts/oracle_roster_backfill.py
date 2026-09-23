@@ -28,7 +28,8 @@ basket.
 
 It REFUSES a scoped NAIAD_CACHE_DIR (TIER-C10's frozen snapshot lives behind that
 variable), never reads or writes oracle_daily.py, the top-up's manifest or its log, and
-names no ticker: every symbol comes from its argv or its records.
+names no ticker but BTCUSDT (the parity anchor): every other symbol comes from its argv or
+its records.
 
   ~/venvs/naiad/bin/python scripts/oracle_roster_backfill.py probe --ruling R-7 \\
       --map PUMPFUNUSDT=PUMPUSDT --out research_outputs/oracle/roster_mapping_2026-09-22.json
@@ -312,10 +313,12 @@ def backfill(mapping: Path) -> int:
         print(f"weight: {Weight.calls} fapi/bulk call(s), peak used-weight {Weight.peak}/"
               f"{Weight.limit}, {Weight.backoffs} back-off(s)")
         if not fail:
-            roster = list(state["roster"])
-            for m in doc["mappings"]:
-                if m["verdict"] == "MAP" and m["live"] not in roster:
-                    roster.append(m["live"])
+            # the OPERATOR's order (the probe of record's 22), each mapped name in its dropped
+            # name's place — never appended at the end
+            rec = json.loads(PROBE_OF_RECORD.read_text(encoding="utf-8"))
+            maps = {m["dropped"]: m["live"] for m in doc["mappings"] if m["verdict"] == "MAP"}
+            kept = set(rec.get("kept", ()))
+            roster = [maps.get(x, x) for x in rec.get("operator_22", ()) if x in kept or x in maps]
             state.update(
                 written_utc=datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ"),
                 roster=roster,
