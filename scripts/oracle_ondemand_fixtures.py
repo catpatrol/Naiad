@@ -586,6 +586,15 @@ def planted_flag_body() -> str:
         FLAG_SENTINEL, "", OW.FLAG_SENTENCE, ""])
 
 
+def _board_order_src() -> tuple:
+    """oracle_daily.BOARD_ORDER read out of the SOURCE (this file never imports it)."""
+    for n in ast.parse(ORACLE_SRC.read_text(encoding="utf-8")).body:
+        if isinstance(n, ast.Assign) and any(isinstance(t, ast.Name) and t.id == "BOARD_ORDER"
+                                             for t in n.targets):
+            return tuple(ast.literal_eval(n.value))
+    raise RuntimeError("oracle_daily.py defines no BOARD_ORDER")
+
+
 class Sandbox:
     """The real wrapper module, with its far ends replaced and its paths moved."""
     ATTRS = ("ROOT", "FLAG", "LOCK", "SELFCHECK", "MOVERS_SCRIPT", "MOVERS_DIR",
@@ -715,7 +724,10 @@ class Sandbox:
                 time.sleep(120)
             return {"html": out,
                     "html_sha": hashlib.sha256(out.read_bytes()).hexdigest()}
-        sys.modules["oracle_daily"] = types.SimpleNamespace(run=_od_run)
+        # OR-2 R-2: the wrapper's report-back reads oracle_daily.BOARD_ORDER; the stand-in
+        # carries the REAL tuple, read out of the source by AST (never imported, never typed)
+        sys.modules["oracle_daily"] = types.SimpleNamespace(run=_od_run,
+                                                            BOARD_ORDER=_board_order_src())
 
         def _checks(log=print):
             res = {k: {"pass": True, "detail": "stub"} for k in

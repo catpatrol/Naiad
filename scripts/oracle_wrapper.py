@@ -1025,7 +1025,7 @@ ONDEMAND_STEPS = (
      "oracle_daily, cache-only: render + the three self-checks + ONE selfcheck row "
      "tagged slot=on-demand-full|on-demand-refresh"),
     ("front-page", "wrapper",
-     "print the Board's top rows by heat, the self-check verdict, the render's "
+     "print the Board's top rows (posture first, heat within), the self-check verdict, the render's "
      "path / bytes / sha256, the banner state and the stale-row count"),
     ("alarm", "wrapper",
      "one rc (top-up or Oracle), one ORACLE_DOWN.flag decision; the schedule-drift "
@@ -1237,19 +1237,37 @@ def stale_state(html_path: Path) -> str:
             + (" — their R1 lines are HELD out of the paste block" if n else ""))
 
 
-def front_page(lines: list[str], slot: str, started: datetime, log=print) -> None:
-    """Step 6. `lines` is everything run_oracle logged for THIS run (a tee)."""
-    log(f"{_step('front-page')}:")
+def board_order() -> tuple:
+    """OR-2 R-2 · the Board's posture order, read off oracle_daily's ONE definition
+    (BOARD_ORDER) — never retyped here. Imported lazily, like everything this module
+    takes from the Oracle: run_oracle has already loaded it by the time step 6 runs."""
+    import oracle_daily as OD
+    return tuple(OD.BOARD_ORDER)
+
+
+def front_page_rows(lines: list[str], order: tuple) -> list[tuple]:
+    """The Board rows this run logged, in Board order: posture first by `order`, heat
+    descending within a posture (NaN last). Pure, so F-BR-19 can hold it to the page."""
+    rank = {w: i for i, w in enumerate(order)}
     rows = []
     for ln in lines:
         m = _BOARD_LINE.match(ln)
         if m:
-            h = float(m.group("heat"))
-            rows.append((m.group("sym"), m.group("station"), h))
-    rows.sort(key=lambda r: -(r[2] if r[2] == r[2] else float("-inf")))
+            rows.append((m.group("sym"), m.group("station"), float(m.group("heat"))))
+    rows.sort(key=lambda r: (rank.get(r[1], len(order)),
+                             -(r[2] if r[2] == r[2] else float("-inf"))))
+    return rows
+
+
+def front_page(lines: list[str], slot: str, started: datetime, log=print) -> None:
+    """Step 6. `lines` is everything run_oracle logged for THIS run (a tee)."""
+    log(f"{_step('front-page')}:")
+    order = board_order()
+    rows = front_page_rows(lines, order)
     if rows:
         top = rows[:FRONT_PAGE_ROWS]
-        log(f"  FRONT PAGE — top {len(top)} of {len(rows)} Board rows by heat")
+        log(f"  FRONT PAGE — top {len(top)} of {len(rows)} Board rows, posture first "
+            f"({' · '.join(order)}), heat within")
         for i, (sym, station, heat) in enumerate(top, 1):
             log(f"    {i:>2}  {sym:14} {station:10} heat={heat:6.3f}")
     else:

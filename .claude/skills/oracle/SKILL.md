@@ -269,7 +269,7 @@ The wrapper's summary of what it just printed. Expect:
 
 ```
   STEP 6 front-page:
-  FRONT PAGE — top 5 of <n> Board rows by heat
+  FRONT PAGE — top 5 of <n> Board rows, posture first (TRIGGERED · ARMED · STALKING · DEAD), heat within
      1  BTCUSDT        ARMED      heat= 6.248
      2  …
   SELF-CHECK VERDICT: PASS — refresh_idempotence PASS · tape_append_integrity PASS · thumbnail_provenance PASS (row slot=on-demand-full)

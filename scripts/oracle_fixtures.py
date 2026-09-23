@@ -2,8 +2,9 @@
 F-BR-13 of queue OR-1 STEP B (finding C-0: the D-7 logger must MEASURE),
 F-BR-14 of queue OR-1 STEP D (the range layer renders and never rules),
 F-BR-15 of queue OR-1 STEP F (THE DAILY ORACLE: typeset, semantics untouched),
-F-BR-16 of queue OR-1 STEP C (the roster is ONE literal definition), and
-F-BR-18 of queue OR-2 STEP 3 (R-1: per-row staleness, OR1-a replayed).
+F-BR-16 of queue OR-1 STEP C (the roster is ONE literal definition),
+F-BR-18 of queue OR-2 STEP 3 (R-1: per-row staleness, OR1-a replayed), and
+F-BR-19 of queue OR-2 STEP 4 (R-2: the posture-first Board).
 
 BR-1 §4, verbatim: "FIXTURES (numbered; each shown FAILING on a deliberate
 break before trusted)". So every fixture here runs TWICE:
@@ -7288,6 +7289,204 @@ def f_br_18() -> None:
                      "the count (OR1-a replayed)",
           _break, _real)
 
+# ═════════════════ F-BR-19 · POSTURE-FIRST BOARD (OR-2 STEP 4, R-2)
+#
+# WHAT THIS GUARDS. Operator ruling R-2 (2026-09-22): named constant BOARD_ORDER =
+# (TRIGGERED, ARMED, STALKING, DEAD); the Board, The Docket and the wrapper's
+# front-page report-back list rows posture FIRST and heat descending within a
+# posture; heat values unchanged and still printed; nothing else re-ordered. On the
+# day this was built the recovery edition's Board, sorted by heat alone, had six
+# rows sitting above rows of a higher posture — two TRIGGERED Trap Cards below ARMED
+# ones on The Docket.
+#
+# HOW. (a) the edition under test, parsed by its own header (robust to added
+# columns): no row sits above a row of higher posture, heat descends within one; the
+# Docket's cards follow the Board's word for their symbol; and The Watch still runs
+# by heat (R-2's "only"). (b) a HARD render: the real view with its heats reassigned
+# so heat order INVERTS posture order, rendered fresh and judged the same way. (c)
+# OD.board_rows on six synthetic rows with a typed expected order. (d) the wrapper's
+# front_page_rows on synthetic log lines. (e) the constant itself, typed here from the
+# queue, set-equal to posture_engine's words, and defined once (no four-word list in
+# the wrapper). Break: the contract's heat-only sort; the wrapper left on heat; The
+# Docket left on the view's order (a source mutant); BOARD_PRECEDENCE's order.
+
+F19_ORDER = ("TRIGGERED", "ARMED", "STALKING", "DEAD")   # the ruling, typed from the queue
+F19_SYNTH = (("AAA", "STALKING", 9.0), ("BBB", "TRIGGERED", 1.0), ("CCC", "DEAD", 8.0),
+             ("DDD", "ARMED", 5.0), ("EEE", "TRIGGERED", 3.0), ("FFF", "ARMED", 7.0))
+F19_SYNTH_WANT = ("EEE", "BBB", "FFF", "DDD", "AAA", "CCC")
+
+
+def _br19_board(doc: str) -> list[tuple[str, str, float]]:
+    """(symbol, posture word, printed heat) of every Board row, in page order."""
+    board = _sec(doc, SEC_BOARD)
+    hdr = re.search(r'(?s)<table class="board"><tr>(.*?)</tr>', board)
+    ths = [_page_text(t) for t in re.findall(r"(?s)<th>(.*?)</th>", hdr.group(1))] if hdr else []
+    if "posture" not in ths or "heat" not in ths:
+        return []
+    ip, ih = ths.index("posture"), ths.index("heat")
+    out = []
+    for sym, body in re.findall(r"(?s)<tr class='w-[a-z_-]+'><td class='sym'>([^<]+)</td>(.*?)</tr>",
+                                board):
+        cells = [sym] + [_page_text(t) for t in re.findall(r"(?s)<td[^>]*>(.*?)</td>", body)]
+        out.append((sym, cells[ip], float(cells[ih])))
+    return out
+
+
+def _br19_order_faults(rows, what: str, order=F19_ORDER) -> list[str]:
+    rank = {w: i for i, w in enumerate(order)}
+    hv = lambda h: h if h == h else float("-inf")          # noqa: E731  (NaN sorts last)
+    bad = []
+    for (s1, w1, h1), (s2, w2, h2) in zip(rows, rows[1:]):
+        r1, r2 = rank.get(w1, len(order)), rank.get(w2, len(order))
+        if r2 < r1:
+            bad.append(f"{what}: {s1} ({w1}) sits ABOVE {s2} ({w2}), a row of higher posture")
+        elif r1 == r2 and hv(h2) > hv(h1):
+            bad.append(f"{what}: within {w1}, {s2} (heat {h2:.3f}) sits below {s1} (heat {h1:.3f})")
+    return bad
+
+
+def _br19_page_faults(doc: str, label: str) -> list[str]:
+    rows = _br19_board(doc)
+    if not rows:
+        return [f"{label}: no Board rows could be read (no 'posture'/'heat' header) — fail closed"]
+    bad = _br19_order_faults(rows, f"{label} Board")
+    by = {s: (w, h) for s, w, h in rows}
+    cards = re.findall(r'<div class="card-h"><b>([^<]+)</b>', _sec(doc, SEC_DOCKET))
+    stray = [c for c in cards if c not in by]
+    if stray:
+        bad.append(f"{label} Docket: card(s) {stray} have no Board row")
+    bad += _br19_order_faults([(c, *by[c]) for c in cards if c in by], f"{label} The Docket")
+    watch = [w for w in re.findall(r'<div class="wh"><b>([^<]+)</b>', _sec(doc, SEC_WATCH)) if w in by]
+    hv = lambda h: h if h == h else float("-inf")          # noqa: E731
+    if any(hv(by[b][1]) > hv(by[a][1]) for a, b in zip(watch, watch[1:])):
+        bad.append(f"{label} The Watch is no longer in heat order — R-2 re-orders the Board, The "
+                   f"Docket and the report-back ONLY")
+    return bad
+
+
+def _br19_hard_view() -> dict:
+    """The real view with heats reassigned so heat order INVERTS posture order, re-sorted
+    by heat the way build_view sorts it. A copy: the shared view is not touched."""
+    view = _pristine_view()
+    rank = {w: i for i, w in enumerate(F19_ORDER)}
+    assets = [dict(a, heat=10.0 * (1 + rank.get(a["station"].board_word, 4)) + 0.001 * i)
+              for i, a in enumerate(view["assets"])]
+    assets.sort(key=lambda a: -a["heat"])
+    return {**view, "assets": assets}
+
+
+def _br19_judge(render=None) -> list[str]:
+    """Every finding against R-2; [] = clean. `render` swaps the renderer of the hard view."""
+    import oracle_wrapper as _OW
+    from types import SimpleNamespace as NS
+    bad = []
+    # (e) the constant, once
+    if tuple(OD.BOARD_ORDER) != F19_ORDER:
+        bad.append(f"BOARD_ORDER reads {tuple(OD.BOARD_ORDER)}, the ruling is {F19_ORDER}")
+    if set(OD.BOARD_ORDER) != set(PE.STATION_WORDS) or len(set(OD.BOARD_ORDER)) != len(OD.BOARD_ORDER):
+        bad.append(f"BOARD_ORDER {tuple(OD.BOARD_ORDER)} is not posture_engine's four words, once each")
+    wt = ast.parse((ROOT / "scripts" / "oracle_wrapper.py").read_text(encoding="utf-8"))
+    for n in ast.walk(wt):
+        if isinstance(n, (ast.Tuple, ast.List)) and {e.value for e in n.elts if isinstance(e, ast.Constant)
+                                                     and isinstance(e.value, str)} >= set(F19_ORDER):
+            bad.append(f"oracle_wrapper.py:{n.lineno} types the four posture words — a second "
+                       f"BOARD_ORDER; it must read oracle_daily's")
+    # (a) the edition under test
+    bad += _br19_page_faults(HTML or "", f"artifact set {DATE}")
+    # (b) the hard render
+    hv = _br19_hard_view()
+    doc = (render or (lambda v: OD.render_html(v, DATE, PE.canon_sha())))(hv)
+    bad += _br19_page_faults(doc, "the hard render (heat inverted against posture)")
+    # (c) the helper on synthetic rows
+    synth = [{"symbol": n, "station": NS(board_word=w), "heat": h} for n, w, h in F19_SYNTH]
+    got = tuple(a["symbol"] for a in OD.board_rows(synth))
+    if got != F19_SYNTH_WANT:
+        bad.append(f"board_rows orders the synthetic board {got}, want {F19_SYNTH_WANT} — a row "
+                   f"sits ABOVE a row of higher posture or heat is not descending within one")
+    # (d) the wrapper's report-back, on log lines in the Oracle's own format
+    lines = [f"  {n:14} {w:10} heat={h:6.3f} levels=  1 clusters=  1 atr_d=1" for n, w, h in F19_SYNTH]
+    if tuple(_OW.board_order()) != tuple(OD.BOARD_ORDER):
+        bad.append("the wrapper's board_order() is not oracle_daily.BOARD_ORDER")
+    rep = tuple(r[0] for r in _OW.front_page_rows(lines, _OW.board_order()))
+    if rep != F19_SYNTH_WANT:
+        bad.append(f"the front-page report-back orders {rep}, want {F19_SYNTH_WANT}")
+    return bad
+
+
+def f_br_19() -> None:
+    import oracle_wrapper as _OW
+
+    def _swap(obj, name, value, judge_kw=None):
+        def _run():
+            keep = getattr(obj, name)
+            try:
+                setattr(obj, name, value)
+                return _br19_judge(**(judge_kw or {}))
+            finally:
+                setattr(obj, name, keep)
+        return _run
+
+    def _docket_left_on_view_order():
+        src = (ROOT / "scripts" / "oracle_daily.py").read_text(encoding="utf-8")
+        anchor = '    cards = []\n    for a in ordered:\n'
+        if src.count(anchor) != 1:
+            return ["DOCKET PLANT could not be planted — anchor moved (fail closed)"]
+        mod = _range_mutant(src.replace(anchor, '    cards = []\n    for a in a0:\n', 1))
+        return _br19_judge(render=lambda v: mod.render_html(v, DATE, PE.canon_sha()))
+
+    plants = (
+        ("THE CONTRACT'S PLANT (the heat-only sort put back under the Board)",
+         "sits ABOVE", _swap(OD, "board_rows", lambda xs: sorted(xs, key=lambda a: -a["heat"]))),
+        ("WRAPPER PLANT (the report-back left on heat)",
+         "report-back orders",
+         _swap(_OW, "front_page_rows",
+               lambda lines, order: sorted(
+                   [(m.group("sym"), m.group("station"), float(m.group("heat")))
+                    for m in map(_OW._BOARD_LINE.match, lines) if m], key=lambda r: -r[2]))),
+        ("DOCKET PLANT (a source mutant: the Board posture-first, The Docket on the view's order)",
+         "The Docket", _docket_left_on_view_order),
+        ("CONSTANT PLANT (posture_engine's BOARD_PRECEDENCE — DEAD above STALKING — as the order)",
+         "BOARD_ORDER reads", _swap(OD, "BOARD_ORDER", PE.REGISTER["BOARD_PRECEDENCE"]["value"])),
+    )
+
+    def _break() -> tuple[bool, str]:
+        green, out = False, []
+        for name, must, judge in plants:
+            bad = judge()
+            hits = [b for b in bad if must in b]
+            if hits:
+                rest = [b for b in bad if must not in b]
+                out.append(f"{name} -> RED: {hits[0]}" + (f" [+{len(rest)} other]" if rest else ""))
+            else:
+                green = True
+                out.append(f"{name} -> " + ("GREEN" if not bad else
+                           f"RED FOR THE WRONG REASON (no finding says {must!r}; first: {bad[0]})"))
+        return green, " ‖ ".join(out)
+
+    def _real() -> tuple[bool, str]:
+        bad = _br19_judge()
+        if bad:
+            return False, "; ".join(bad[:6]) + (f" (+{len(bad) - 6} more)" if len(bad) > 6 else "")
+        rows = _br19_board(HTML)
+        words = []
+        for _s, w, _h in rows:
+            if not words or words[-1][0] != w:
+                words.append([w, 0])
+            words[-1][1] += 1
+        return True, (
+            f"BOARD_ORDER == {F19_ORDER} (the ruling, typed here), posture_engine's four words once "
+            f"each, and the wrapper types no second list. Artifact set {DATE}: {len(rows)} Board rows "
+            f"run {' → '.join(f'{w} ×{n}' for w, n in words)}, heat descending within each; The "
+            f"Docket's cards follow the Board's word for their symbol; The Watch still runs by heat. "
+            f"A hard render (heat inverted against posture) comes out posture-first too; "
+            f"board_rows and the wrapper's report-back order a synthetic board "
+            f"{' '.join(F19_SYNTH_WANT)}. Heat values print unchanged")
+
+    prove("F-BR-19", "POSTURE-FIRST BOARD — TRIGGERED, ARMED, STALKING, DEAD, heat descending "
+                     "within; the Board, The Docket and the report-back, and nothing else",
+          _break, _real)
+
+
 # ══════════════════════════════════════════════════════════════════ MAIN
 
 def main() -> int:
@@ -7302,7 +7501,7 @@ def main() -> int:
     print("=" * 78)
     fixtures = (f_br_1, f_br_2, f_br_3, f_br_4, f_br_5, f_br_6,
                 f_br_7, f_br_8, f_br_9, f_br_10, f_br_11, f_br_12, f_br_13, f_br_14,
-                f_br_15, f_br_16, f_br_17, f_br_18)
+                f_br_15, f_br_16, f_br_17, f_br_18, f_br_19)
     for fn in fixtures:
         try:
             fn()

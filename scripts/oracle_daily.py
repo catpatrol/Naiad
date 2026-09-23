@@ -10,7 +10,7 @@ Emits briefs/oracle/oracle_<date>.html containing, per BR-1 §3 as amended:
 
     BOARD        C-5  one row per ROSTER symbol (REGISTER['ROSTER'], the Oracle's
                       own constant since OR-1 STEP C — never a typed count),
-                      heat-sorted: regime chip · ATR-distance to the
+                      posture first, heat within (OR-2 R-2): regime chip · ATR-distance to the
                       nearest high-score cluster · two lines in the sand ·
                       posture word · since OR-2 R-1 the row's OWN as-of bar
                       and age, STALE past A2-7's limit (row_ages).
@@ -1238,7 +1238,7 @@ def range_watch(view: dict) -> list[dict]:
 
 def tide_tables(view: dict) -> str:
     """The TIDE TABLES section body: every roster symbol, then EDGE WATCH, then what
-    this is not. Rows are in the OPERATOR'S roster order, not the Board's heat order:
+    this is not. Rows are in the OPERATOR'S roster order, not the Board's order:
     the table reads the same way every morning, and heat has no say in it."""
     lens = REGISTER["RANGE_LENS"]["value"]
     lim = REGISTER["RANGE_WATCH_ATR"]["value"]
@@ -1775,6 +1775,29 @@ def _names(symbols) -> str:
     return xs[0] if len(xs) == 1 else f"{', '.join(xs[:-1])} and {xs[-1]}"
 
 
+# OR-2 R-2 · POSTURE-FIRST BOARD (operator, 2026-09-22). The Board, The Docket and the
+# wrapper's front-page report-back list rows posture FIRST, in this order, and heat
+# descending WITHIN a posture; heat values are unchanged and still printed. The ruling
+# typed the order, so it is typed here once; the wrapper reads THIS object (never a
+# second list), and F-BR-19 holds it against posture_engine.STATION_WORDS. NOT
+# posture_engine's BOARD_PRECEDENCE (TRIGGERED, ARMED, DEAD, STALKING): that is the
+# unruled rule for collapsing several windows into ONE word, a different question.
+# Only the three consumers above follow it. build_view still sorts view["assets"] by
+# heat, and everything that inherits that order keeps it (The Watch, the Spaghetti and
+# its hues, the Telegrams, both tapes, the D-7 record).
+BOARD_ORDER = ("TRIGGERED", "ARMED", "STALKING", "DEAD")
+
+
+def board_rows(assets: list[dict]) -> list[dict]:
+    """R-2: the rows in Board order — posture by BOARD_ORDER, heat descending within a
+    posture. A sorted COPY, never an in-place sort (the view is read, not written); a
+    word outside BOARD_ORDER sorts after all four; a NaN heat sorts last within its
+    posture; stable, so equal keys keep the view's (heat) order."""
+    rank = {w: i for i, w in enumerate(BOARD_ORDER)}
+    return sorted(assets, key=lambda a: (rank.get(a["station"].board_word, len(BOARD_ORDER)),
+                                         -a["heat"] if a["heat"] == a["heat"] else float("inf")))
+
+
 def front_page(view: dict, ages: dict | None = None) -> dict:
     """The Front Page's headline, deck and lead: REGISTER['FRONT_PAGE_HEADLINE'], [VETO].
 
@@ -1793,7 +1816,7 @@ def front_page(view: dict, ages: dict | None = None) -> dict:
     word_of = {v["station"]: k for k, v in PE.CANON.items()}
     w_trig, w_armed = word_of[3], word_of[2]
     by: dict[str, list[str]] = {}
-    for a in assets:                               # the Board's own order (heat)
+    for a in assets:                               # view order (heat); grouped by word below
         by.setdefault(a["station"].board_word, []).append(a["symbol"])
     trig, armed = by.get(w_trig, []), by.get(w_armed, [])
 
@@ -1858,8 +1881,9 @@ def front_page(view: dict, ages: dict | None = None) -> dict:
               f"Yesterday's Returns; the Colophon carries the provenance and the rows still "
               f"unruled.")
     creed = ("Every posture word on this page is the posture engine's, printed and never "
-             "scored. The Board is sorted by heat, which is proposed and not ruled. This "
-             "page renders; it does not rule, and nothing on it is advice.")
+             "scored. The Board lists rows posture first — TRIGGERED, ARMED, STALKING, DEAD "
+             "(ruling R-2) — and by heat within each posture; heat is proposed and not ruled. "
+             "This page renders; it does not rule, and nothing on it is advice.")
     esc = lambda s: html.escape(s, quote=False)    # noqa: E731
     return {"headline": esc(headline), "deck": esc(deck),
             "lead": (f'<p class="lead">{esc(lead)}</p><p>{esc(inside)}</p>'
@@ -1896,6 +1920,7 @@ def render_html(view: dict, date_str: str, canon_sha: str, *,
     # OR-2 R-1: every row aged ONCE, against the print time (positional on purpose)
     ages = row_ages(view, printed_at)
     fp = front_page(view, ages)
+    ordered = board_rows(a0)                       # OR-2 R-2: the Board and The Docket only
     ag_rows = ages["rows"]
     newest_s, oldest_s = as_of_stamp(ages["newest_ms"]), as_of_stamp(ages["oldest_ms"])
 
@@ -1919,7 +1944,7 @@ def render_html(view: dict, date_str: str, canon_sha: str, *,
         printed = html.escape(print_line(slot, printed_at), quote=False)
 
     board = []
-    for a in a0:
+    for a in ordered:
         st = a["station"]
         w = st.board_word
         lis_txt = []
@@ -1941,7 +1966,7 @@ def render_html(view: dict, date_str: str, canon_sha: str, *,
             f"{range_cell(a)}</tr>")
 
     cards = []
-    for a in a0:
+    for a in ordered:
         c = a["card"]
         if not c:
             continue
@@ -2083,7 +2108,9 @@ own newest row); past A2-7's limit of {STALE_LENS_PERIODS} lens periods
 ({ages['limit_ms'] / 3_600_000:g}h) the row reads STALE, its Trap Card says so and its
 R1 prices are HELD out of the Telegrams' paste block (OR-2 R-1).
 heat = {html.escape(REGISTER['HEAT']['value'])} [VETO — proposed,
-not ruled]. Both inputs print in the row so the sort is auditable. RANGE is the 4h macro
+not ruled]. Rows run posture first — TRIGGERED, ARMED, STALKING, DEAD — and by heat
+within each posture (OR-2 R-2); both heat inputs print in the row so the order is
+auditable. RANGE is the 4h macro
 range from the Tide Tables below, printed LAST because it is display-only: it enters no
 heat, no sort, no posture word and no card.</p>
 
