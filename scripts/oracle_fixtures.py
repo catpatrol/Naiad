@@ -1,8 +1,9 @@
 """ORACLE FIXTURES — F-BR-1 .. F-BR-12 of queue BR-1 (as amended by A1-4, A2-8, T-7),
 F-BR-13 of queue OR-1 STEP B (finding C-0: the D-7 logger must MEASURE),
 F-BR-14 of queue OR-1 STEP D (the range layer renders and never rules),
-F-BR-15 of queue OR-1 STEP F (THE DAILY ORACLE: typeset, semantics untouched), and
-F-BR-16 of queue OR-1 STEP C (the roster is ONE literal definition).
+F-BR-15 of queue OR-1 STEP F (THE DAILY ORACLE: typeset, semantics untouched),
+F-BR-16 of queue OR-1 STEP C (the roster is ONE literal definition), and
+F-BR-18 of queue OR-2 STEP 3 (R-1: per-row staleness, OR1-a replayed).
 
 BR-1 §4, verbatim: "FIXTURES (numbered; each shown FAILING on a deliberate
 break before trusted)". So every fixture here runs TWICE:
@@ -683,12 +684,21 @@ def _r1(doc: str) -> tuple[bool, str]:
         return False, "no R1 block in the document"
     import html as _h
     lines = [ln for ln in _h.unescape(m.group(1)).strip().splitlines() if ln.strip()]
-    bad = [ln for ln in lines if not R1_LINE.match(ln.strip())]
+    # OR-2 R-1: a stale row's lines are HELD beneath the block, struck through. They are
+    # read too — an all-stale edition has an EMPTY paste block, and "0 lines, every one
+    # conforming" would otherwise be the whole of this fixture's evidence that day.
+    mh = re.search(r'<pre class="held">(.*?)</pre>', doc, re.S)
+    held = [re.sub(r"</?s>", "", ln) for ln in (mh.group(1).splitlines() if mh else [])
+            if ln.strip()]
+    held = [_h.unescape(ln) for ln in held]
+    bad = [ln for ln in lines + held if not R1_LINE.match(ln.strip())]
     if bad:
         return False, f"{len(bad)} non-conforming line(s), first: {bad[0]!r}"
-    return True, (f"{len(lines)} alert lines, every one matching "
-                  f"<SYMBOL> <TAG> <PRICE> — prices only, no prose, no advice, "
-                  f"paste-ready")
+    if not lines and not held:
+        return False, "the R1 block and the HELD block are both empty — nothing to check"
+    return True, (f"{len(lines)} paste-ready alert lines + {len(held)} HELD (stale wire), "
+                  f"every one matching <SYMBOL> <TAG> <PRICE> — prices only, no prose, "
+                  f"no advice")
 
 
 def f_br_7() -> None:
@@ -5368,9 +5378,11 @@ def f_br_14() -> None:
 #     no theme switch; and the red under an ALARM selector only (the band, WIRE DOWN,
 #     STALE TRIGGER, the range layer's PENDING). A red posture word is an alarm that
 #     cries every morning. The Spaghetti's hues are data and stay OUT of the red band.
-#   · THE BAND. "LATE EDITION — wire stale since <as-of>" directly under the masthead
-#     WHEN AND ONLY WHEN A2-7's rule fires. Driven, not assumed: one view rendered with
-#     an as-of five minutes INSIDE the limit and five minutes PAST it. And the phrase
+#   · THE BAND. "LATE EDITION — N of R rows on a stale wire (oldest <as-of>)" (OR-2 R-1;
+#     until then "LATE EDITION — wire stale since <as-of>") directly under the masthead
+#     WHEN AND ONLY WHEN A2-7's rule fires for some row. Driven, not assumed: one view
+#     printed five minutes INSIDE the limit for its OLDEST row and five minutes PAST it
+#     for its NEWEST (every row stale: R of R). And the phrase
 #     nowhere else in the page's text: the on-demand wrapper reads "banner UP" off it
 #     (oracle_wrapper BANNER_MARKERS), so a caption or a [VETO] source that spelt it
 #     would raise a false alarm in the log every day.
@@ -5460,7 +5472,10 @@ TS_VII_TABLE = (("full", "07:00", "Morning"), ("full", "11:59", "Morning"),
 # the machine's zone shows (19:17 Buenos Aires is 22:17 there, 22:26 is 01:26 next day)
 TS_MACHINE_ZONE = "UTC"
 TS_BAND = "LATE EDITION"
-TS_BAND_HEAD = "LATE EDITION — wire stale since {as_of}"
+# OR-2 R-1, verbatim from the queue (operator 2026-09-22): "LATE EDITION — N of R rows on
+# a stale wire (oldest <as-of>)". Superseded OR-1 STEP F's "LATE EDITION — wire stale
+# since {as_of}", which read the hottest asset's bar alone (OR1-a).
+TS_BAND_HEAD = "LATE EDITION — {n} of {r} rows on a stale wire (oldest {as_of})"
 TS_BAND_DETAIL = "The top-up may not have run"
 # A2-7 verbatim (operator, ratified 2026-08-16): "older than 2 lens periods at render
 # time". PINNED HERE, not read off the module, for the same reason the band's words are
@@ -5638,27 +5653,32 @@ def _ts_renders() -> dict:
     """ONE view, rendered six ways: fresh, stale, plain, numbered, timed and shifted.
     'timed' is a numbered full-verb edition handed a print time (19:17 Buenos Aires on
     TS_VII_DAY), the page vii's leg-(i) plants are cut from when the edition under test
-    has no print line to cut. The stale and fresh as-ofs straddle A2-7's limit
-    by TS_MARGIN_MS. The limit is recomputed HERE from the two module constants, so a
-    banner that fires on some other rule is caught, not mirrored — but the PERIOD COUNT
-    is pinned against A2-7 in _ts_live (TS_LENS_PERIODS), because a limit mirrored off
-    the module proves the band fires relative to whatever the module currently says and
-    never that the module says something useful. Only the lens STEP is read from the
-    module: OD.LENS_MS is physical fact (4h = 14,400,000 ms), not a ruling."""
+    has no print line to cut. OR-2 R-1: a row is aged against the PRINT TIME, so the band
+    is driven by the print time handed in, never by moving the view's as-of: 'fresh' is
+    printed TS_MARGIN_MS INSIDE A2-7's limit for the view's OLDEST row (so every row is
+    fresh), 'stale' TS_MARGIN_MS PAST it for its NEWEST (so every row is stale, R of R).
+    The limit is recomputed HERE from the two module constants, so a banner that fires on
+    some other rule is caught, not mirrored — but the PERIOD COUNT is pinned against A2-7
+    in _ts_live (TS_LENS_PERIODS), because a limit mirrored off the module proves the band
+    fires relative to whatever the module currently says and never that the module says
+    something useful. Only the lens STEP is read from the module: OD.LENS_MS is physical
+    fact (4h = 14,400,000 ms), not a ruling."""
     from datetime import datetime, timedelta, timezone
     view = _pristine_view()
     canon = PE.canon_sha()
     limit = OD.STALE_LENS_PERIODS * OD.LENS_MS[view["lens"]]
-    now_ms = int(datetime.now(timezone.utc).timestamp() * 1000)
-    fresh = {**view, "as_of_ms": now_ms - limit + TS_MARGIN_MS}
-    stale = {**view, "as_of_ms": now_ms - limit - TS_MARGIN_MS}
+    bars = [int(a["station"].as_of_ms) for a in view["assets"]]
+    newest, oldest = max(bars), min(bars)
+    fresh_at = datetime.fromtimestamp((oldest + limit - TS_MARGIN_MS) / 1000, timezone.utc)
+    stale_at = datetime.fromtimestamp((newest + limit + TS_MARGIN_MS) / 1000, timezone.utc)
     from zoneinfo import ZoneInfo
     y, mo, d = map(int, TS_VII_DAY.split("-"))
     out = {"limit_h": limit / 3_600_000,
-           "stale_as_of": datetime.fromtimestamp(stale["as_of_ms"] / 1000, timezone.utc)
+           "stale_as_of": datetime.fromtimestamp(oldest / 1000, timezone.utc)
                                   .strftime("%Y-%m-%dT%H:%MZ"),
-           "fresh": OD.render_html(fresh, DATE, canon),
-           "stale": OD.render_html(stale, DATE, canon),
+           "stale_n": len(bars),
+           "fresh": OD.render_html(view, DATE, canon, printed_at=fresh_at),
+           "stale": OD.render_html(view, DATE, canon, printed_at=stale_at),
            "plain": OD.render_html(view, DATE, canon),
            "plain_as_of_ms": view["as_of_ms"],
            "numbered": OD.render_html(view, DATE, canon, edition_no=7, slot="on-demand-refresh"),
@@ -5691,7 +5711,8 @@ def _ts_live(renders: dict) -> tuple[list[str], dict]:
     if fresh is not None or TS_BAND in _page_text(renders["fresh"]):
         bad.append(f"late edition: the band prints on a wire {TS_MARGIN_MS // 60_000} min INSIDE "
                    f"the {renders['limit_h']:.1f}h limit — it must print only when the rule fires")
-    want = TS_BAND_HEAD.format(as_of=renders["stale_as_of"])
+    want = TS_BAND_HEAD.format(n=renders["stale_n"], r=renders["stale_n"],
+                               as_of=renders["stale_as_of"])
     if stale is None:
         bad.append(f"late edition: no band on a wire {TS_MARGIN_MS // 60_000} min PAST the "
                    f"{renders['limit_h']:.1f}h limit — the rule fired and the page is silent")
@@ -5730,6 +5751,7 @@ def _ts_live(renders: dict) -> tuple[list[str], dict]:
         bad.append(f"masthead: edition_no=7, slot='on-demand-refresh' reads No. "
                    f"{numbered['edition']} · {numbered['name']} Edition, want No. 7 · Refresh")
     return bad, {"stale_as_of": renders["stale_as_of"], "limit_h": renders["limit_h"],
+                 "stale_n": renders["stale_n"],
                  "plain_word": plain_word, "plain_at": f"{p_at:%Y-%m-%d %H:%M}"}
 
 
@@ -6335,10 +6357,11 @@ def f_br_15() -> None:
             f"possible' for a FRESH trigger only ('No fresh trigger on the roster' over stale or "
             f"armed rows, 'No business possible today' over none); run() numbers the edition from the TAPE's dates "
             f"(3 of 2 tapes + today, 2 on a reprint, 1 with no directory; a misnamed file and an "
-            f"empty briefs/oracle change nothing). LATE EDITION: one view rendered "
-            f"{TS_MARGIN_MS // 60_000} min inside the {x['limit_h']:.1f}h limit -> no band and the "
-            f"phrase nowhere in the text; {TS_MARGIN_MS // 60_000} min past it -> the band directly "
-            f"under the masthead, opening 'LATE EDITION — wire stale since {x['stale_as_of']}', "
+            f"empty briefs/oracle change nothing). LATE EDITION: one view printed "
+            f"{TS_MARGIN_MS // 60_000} min inside the {x['limit_h']:.1f}h limit for its oldest row -> "
+            f"no band and the phrase nowhere in the text; {TS_MARGIN_MS // 60_000} min past it for its "
+            f"newest -> the band directly under the masthead, opening '"
+            f"{TS_BAND_HEAD.format(n=x['stale_n'], r=x['stale_n'], as_of=x['stale_as_of'])}', "
             f"A2-7's sentence after it, the phrase exactly once. The Front Page and The Watch do "
             f"not move a byte with the module's clock pushed {TS_CLOCK_SHIFT_DAYS} days on. "
             f"A-OR1-1 vii (\"{TS_VII}\"): (i) artifact set {DATE}'s Colophon carries ONE print "
@@ -6862,6 +6885,409 @@ def f_br_17() -> None:
           _break, _real)
 
 
+# ═════════════════ F-BR-18 · PER-ROW STALENESS (OR-2 STEP 3, R-1)
+#
+# WHAT THIS GUARDS. OR-1 finding OR1-a, the skeptic's plant: with ONE symbol's tape
+# cut back 3 days in memory, the dateline still named the hottest asset's bar, the
+# LATE EDITION band stayed silent, and that symbol's Board row, Trap Card and R1
+# alert prices printed from an 84-hour-old bar with no mark. Operator ruling R-1
+# (2026-09-22): every row carries its own as-of bar and age; past A2-7's limit it
+# reads STALE on the Board and on its Docket card header (with its age); its R1
+# lines LEAVE the paste-ready block and print beneath it under "HELD — stale wire",
+# struck through; the dateline prints the newest AND the oldest row's bar; the band
+# fires when ANY row is stale and names the count; the wrapper's report-back prints
+# the count.
+#
+# HOW. The plant, replayed: OD.load_lens wrapped so the victim's every interval ends
+# 3 days before the OTHER rows' common last bar T0 — and the others are held at T0
+# too, so a ragged live cache (a pair the top-up missed) cannot leak a second stale
+# row into the control — then a fresh build_view, and renders PRINTED at T0 + one
+# lens period. The victim is DERIVED (the coolest row with a Trap Card whose cut view
+# keeps an R1 line and is not the hottest), never typed. Four pages are judged, each
+# against an expectation computed HERE from the rows' own bars and A2-7's pinned
+# period count (TS_LENS_PERIODS), never read off the module:
+#   REPLAY   the contract's plant: 1 of R stale;
+#   HOTTEST  the same view with the victim's heat raised above every other row, so the
+#            view's (hottest) as-of IS the stale bar — the dateline's "newest" must
+#            still be T0 and the lead must still name the span;
+#   CARDLESS a second row, one WITHOUT a Trap Card, set 3 days back as well (its bar
+#            only) — its LIS lines must leave the paste block too: 2 of R;
+#   FRESH    the victim's bar put back to T0 — 0 of R, no band, no HELD block.
+# On each: every Board row's own bar and age (floor bars, hours to 0.1) and a STALE
+# chip exactly where stale; every Trap Card header's chip and age exactly where
+# stale; the paste block = the fresh rows' lines in order, the HELD block = the stale
+# rows' lines, EACH struck through; band, dateline, lead; and the wrapper's real
+# front_page() report-back over a planted log. Plus A2-7's arithmetic on a synthetic
+# row: exactly at the limit is fresh, one ms past it stale, whole bars elapsed (floor:
+# 4h24m is 1 bar · 4.4h), and the limit follows
+# OD.STALE_LENS_PERIODS (never a retyped number).
+
+BR18_CUT_MS = 3 * 86_400_000
+BR18_HELD = "HELD — stale wire"
+BR18_CHIP_BOARD = "<span class='chip stale'>STALE</span>"
+BR18_CHIP_CARD = '<span class="chip stale">STALE</span>'
+BR18_SCENES = ("REPLAY", "HOTTEST", "CARDLESS", "FRESH")
+_BR18 = None
+
+
+def _br18_restation(a: dict, as_of_ms: int) -> dict:
+    """A COPY of a row whose station reads another as-of bar (the shared view untouched)."""
+    import copy
+    st = copy.copy(a["station"])
+    st.as_of_ms = int(as_of_ms)
+    return dict(a, station=st)
+
+
+def _br18_setup() -> dict:
+    """The cut view and its four scene views, built ONCE per suite run (fails closed)."""
+    global _BR18
+    if _BR18 is not None:
+        return _BR18
+    from datetime import datetime, timezone
+    base = _pristine_view()                        # cached BEFORE the loader is wrapped
+    step = OD.LENS_MS[base["lens"]]
+    hottest = base["assets"][0]["symbol"]
+    lasts = {a["symbol"]: int(a["station"].as_of_ms) for a in base["assets"]}
+    cands = [a["symbol"] for a in reversed(base["assets"]) if a["card"] and a["symbol"] != hottest]
+    real_ll = OD.load_lens
+    for victim in cands:
+        t0 = min(t for sym, t in lasts.items() if sym != victim)
+
+        def _cut(sym, tf, tail=None, _v=victim, _t0=t0):
+            lim = (_t0 - BR18_CUT_MS if sym == _v else _t0) + step   # every bar opening before
+            df = real_ll(sym, tf)                                     # the NEXT lens bar
+            df = df[df["open_time"] < lim].reset_index(drop=True)
+            return df if tail is None or len(df) <= tail else df.iloc[-tail:].reset_index(drop=True)
+        try:
+            OD.load_lens = _cut
+            view = OD.build_view(log=lambda *a, **k: None)
+        finally:
+            OD.load_lens = real_ll
+        vic = next(a for a in view["assets"] if a["symbol"] == victim)
+        vic_lines = [ln for ln in OD.r1_block(view).split("\n") if ln.startswith(victim + " ")]
+        if not vic_lines or not vic["card"] or view["assets"][0]["symbol"] == victim:
+            continue
+        other = next((a for a in reversed(view["assets"]) if not a["card"] and a["symbol"] != victim
+                      and any(ln.startswith(a["symbol"] + " ")
+                              for ln in OD.r1_block(view).split("\n"))), None)
+        if other is None:
+            continue
+        top = max(a["heat"] for a in view["assets"])
+        hot = [dict(a, heat=top + 1.0) if a["symbol"] == victim else a for a in view["assets"]]
+        hot.sort(key=lambda a: -a["heat"])
+        scenes = {
+            "REPLAY": view,
+            "HOTTEST": {**view, "assets": hot, "as_of_ms": int(vic["station"].as_of_ms)},
+            "CARDLESS": {**view, "assets": [_br18_restation(a, t0 - BR18_CUT_MS)
+                                            if a["symbol"] == other["symbol"] else a
+                                            for a in view["assets"]]},
+            "FRESH": {**view, "assets": [_br18_restation(a, t0) if a["symbol"] == victim else a
+                                         for a in view["assets"]]},
+        }
+        at_ms = t0 + step
+        state = {"view": view, "scenes": scenes, "victim": victim, "other": other["symbol"],
+                 "t0": t0, "at_ms": at_ms, "step": step, "loader": _cut,
+                 "at": datetime.fromtimestamp(at_ms / 1000, timezone.utc),
+                 "hottest_ms": int(view["assets"][0]["station"].as_of_ms)}
+        _BR18 = state                              # published only once complete
+        return _BR18
+    raise RuntimeError("F-BR-18 cannot be planted: no roster symbol keeps a Trap Card and an "
+                       "R1 line with its tape cut back 3 days beside a card-less row with R1 "
+                       "lines — fail closed")
+
+
+def _br18_render(scene: str) -> str:
+    """One scene printed at the setup's instant, under the cut loader (the Spaghetti
+    reads load_lens again while it renders)."""
+    real_ll = OD.load_lens
+    try:
+        OD.load_lens = _BR18["loader"]
+        return OD.render_html(_BR18["scenes"][scene], DATE, PE.canon_sha(), printed_at=_BR18["at"])
+    finally:
+        OD.load_lens = real_ll
+
+
+def _br18_arith() -> list[str]:
+    """A2-7's arithmetic on one synthetic row, through OD.row_ages: at the limit fresh,
+    one ms past it stale, floor bars, and the limit FOLLOWS OD.STALE_LENS_PERIODS."""
+    from datetime import datetime, timezone
+    from types import SimpleNamespace as NS
+    step = OD.LENS_MS["4h"]
+    limit = TS_LENS_PERIODS * step
+    view = {"lens": "4h", "assets": [{"symbol": "AAA", "station": NS(as_of_ms=0)}]}
+    at = lambda ms: datetime.fromtimestamp(ms / 1000, timezone.utc)   # noqa: E731
+    bad = []
+    if OD.row_ages(view, at(limit))["rows"]["AAA"]["stale"]:
+        bad.append(f"boundary: a bar exactly {limit / 3.6e6:g}h old reads STALE — A2-7 is 'older than'")
+    if not OD.row_ages(view, at(limit + 1))["rows"]["AAA"]["stale"]:
+        bad.append("boundary: a bar 1 ms past A2-7's limit reads fresh")
+    r = OD.row_ages(view, at(step + 24 * 60_000))["rows"]["AAA"]
+    if (r["age_bars"], f"{r['age_h']:.1f}") != (1, "4.4"):
+        bad.append(f"age: 4h24m reads {r['age_bars']} bar(s) · {r['age_h']:.1f}h, want 1 bar · 4.4h "
+                   f"(whole bars elapsed, floor)")
+    keep = OD.STALE_LENS_PERIODS
+    try:
+        OD.STALE_LENS_PERIODS = keep + 1
+        moved = OD.row_ages(view, at(limit + 1))
+    finally:
+        OD.STALE_LENS_PERIODS = keep
+    if moved["rows"]["AAA"]["stale"] or moved["limit_ms"] != (keep + 1) * step:
+        bad.append("the limit does not follow OD.STALE_LENS_PERIODS — a retyped number")
+    return bad
+
+
+def _br18_expect(scene: str) -> dict:
+    """The expectation for a scene, computed HERE from its rows' own bars."""
+    x = _BR18
+    v = x["scenes"][scene]
+    limit = TS_LENS_PERIODS * x["step"]
+    rows = {}
+    for a in v["assets"]:
+        t = int(a["station"].as_of_ms)
+        age = x["at_ms"] - t
+        n = age // x["step"]
+        rows[a["symbol"]] = {"t": t, "stale": age > limit, "card": bool(a["card"]),
+                             "age": f"{n} bar{'' if n == 1 else 's'} · {age / 3_600_000:.1f}h"}
+    ts = [r["t"] for r in rows.values()]
+    lines = [ln for ln in OD.r1_block(v).split("\n") if ln]
+    stale = {sym for sym, r in rows.items() if r["stale"]}
+    return {"rows": rows, "stale": stale, "newest": max(ts), "oldest": min(ts), "R": len(rows),
+            "paste": [ln for ln in lines if ln.split(" ", 1)[0] not in stale],
+            "held": [ln for ln in lines if ln.split(" ", 1)[0] in stale]}
+
+
+BR18_WANT_STALE = {"REPLAY": 1, "HOTTEST": 1, "CARDLESS": 2, "FRESH": 0}
+
+
+def _br18_judge(scene: str, page: str) -> list[str]:
+    import html as _h
+    from datetime import datetime, timezone
+    x, e = _BR18, _br18_expect(scene)
+    st = OD.as_of_stamp
+    tag = f"[{scene}]"
+    bad: list[str] = []
+    if len(e["stale"]) != BR18_WANT_STALE[scene]:
+        return [f"{tag} the plant made {sorted(e['stale'])} stale, want {BR18_WANT_STALE[scene]} "
+                f"row(s) — the scene is not what it claims (fail closed)"]
+    # ── the Board: EVERY row's own bar and age, and the chip exactly where stale
+    rows = dict(re.findall(r"(?s)<tr class='w-[a-z_-]+'><td class='sym'>([^<]+)</td>(.*?)</tr>",
+                           _sec(page, SEC_BOARD)))
+    for sym, r in e["rows"].items():
+        k = sym.replace("USDT", "")
+        body = rows.get(k)
+        if body is None:
+            bad.append(f"{tag} the Board carries no row for {k}")
+            continue
+        if st(r["t"]) not in body or r["age"] not in body:
+            bad.append(f"{tag} {k}'s Board row does not print its own bar {st(r['t'])} and age "
+                       f"'{r['age']}'")
+        if r["stale"] and BR18_CHIP_BOARD not in body:
+            bad.append(f"{tag} {k}'s Board row reads no STALE mark — its bar is past A2-7's limit")
+        if not r["stale"] and BR18_CHIP_BOARD in body:
+            bad.append(f"{tag} {k}'s Board row reads STALE on a fresh bar — the control is broken")
+    # ── The Docket: every card's header, chip and age exactly where stale
+    for k, head in re.findall(r'(?s)<div class="card-h"><b>([^<]+)</b>(.*?)</div>', page):
+        r = e["rows"].get(k + "USDT") or e["rows"].get(k)
+        if r is None:
+            continue
+        if r["stale"] and (BR18_CHIP_CARD not in head or f"bar {st(r['t'])} · {r['age']}" not in head):
+            bad.append(f"{tag} {k}'s Trap Card header does not read STALE with its bar and age")
+        if not r["stale"] and BR18_CHIP_CARD in head:
+            bad.append(f"{tag} {k} reads STALE on its Trap Card on a fresh bar")
+    # ── the Telegrams: routed, never retyped; every HELD line struck through
+    tel = _sec(page, SEC_TELEGRAMS)
+    mp = re.search(r'(?s)<pre class="r1">(.*?)</pre>', tel)
+    mh = re.search(r'(?s)<pre class="held">(.*?)</pre>', tel)
+    paste = [ln for ln in _h.unescape(mp.group(1)).split("\n") if ln.strip()] if mp else None
+    raw = [ln for ln in mh.group(1).split("\n") if ln.strip()] if mh else []
+    held = [_h.unescape(re.sub(r"</?s>", "", ln)) for ln in raw]
+    if paste is None:
+        bad.append(f"{tag} no paste-ready R1 block in the Telegrams")
+    else:
+        inside = [ln for ln in e["held"] if ln in paste]
+        if inside:
+            bad.append(f"{tag} {len(inside)} stale line(s) are in the paste block: {inside[0]!r}")
+        elif paste != e["paste"]:
+            bad.append(f"{tag} the paste block is not the fresh rows' R1 lines, in order, byte for byte")
+    if held != e["held"]:
+        bad.append(f"{tag} the HELD block reads {held[:2]}, want {e['held'][:2]} "
+                   f"({len(e['held'])} line(s))")
+    if e["held"]:
+        if BR18_HELD not in tel or tel.find(BR18_HELD) < tel.find('<pre class="r1">'):
+            bad.append(f"{tag} the HELD lines are not under '{BR18_HELD}', beneath the paste block")
+        unstruck = [ln for ln in raw if not re.fullmatch(r"<s>[^<]*</s>", ln.strip())]
+        if unstruck:
+            bad.append(f"{tag} {len(unstruck)} HELD line(s) are not struck through: {unstruck[0][:60]!r}")
+    elif mh or BR18_HELD in tel:
+        bad.append(f"{tag} a HELD block prints with no stale row")
+    # ── the band, the dateline, the lead
+    band = _ts_band(page)
+    if e["stale"]:
+        want = TS_BAND_HEAD.format(n=len(e["stale"]), r=e["R"], as_of=st(e["oldest"]))
+        if band is None or not band.startswith(want):
+            bad.append(f"{tag} the band opens {(band or 'nothing')[:70]!r}, want {want!r}")
+    elif band is not None:
+        bad.append(f"{tag} the band is up with no stale row: {band[:60]!r}")
+    dl = re.search(r'(?s)<p class="dateline">(.*?)</p>', page)
+    dtxt = _page_text(dl.group(1)) if dl else ""
+    for frag in (f"newest {st(e['newest'])}", f"oldest {st(e['oldest'])}",
+                 f"{len(e['stale'])} of {e['R']} rows stale"):
+        if frag not in dtxt:
+            bad.append(f"{tag} the dateline does not say '{frag}' ({dtxt[:90]!r})")
+    ld = re.search(r'(?s)<p class="lead">(.*?)</p>', page)
+    ltxt = _page_text(ld.group(1)) if ld else ""
+    want_lead = (f"at the bar of {st(e['newest'])}" if e["newest"] == e["oldest"] else
+                 f"from {st(e['oldest'])} to {st(e['newest'])}")
+    if want_lead not in ltxt:
+        bad.append(f"{tag} the lead does not say '{want_lead}' ({ltxt[:110]!r})")
+    # ── the wrapper's REAL report-back, over a planted log of this page
+    import oracle_wrapper as _OW
+    with tempfile.TemporaryDirectory(prefix="f-br-18-") as td:
+        fp = Path(td) / "page.html"
+        fp.write_text(page, encoding="utf-8")
+        logged: list[str] = []
+        lines = [f"  {a['symbol']:14} {a['station'].board_word:10} heat={a['heat']:6.3f}"
+                 for a in x["scenes"][scene]["assets"]]
+        lines.append(f"  render {fp} sha256 {hashlib.sha256(page.encode()).hexdigest()}")
+        _OW.front_page(lines, "fixture-F-BR-18", datetime.now(timezone.utc), log=logged.append)
+    want_rep = f"  STALE {len(e['stale'])} of {e['R']} Board rows on a stale wire"
+    if not any(ln.startswith(want_rep) for ln in logged):
+        got = [ln for ln in logged if ln.startswith("  STALE")]
+        bad.append(f"{tag} the wrapper's report-back says {got[:1] or 'nothing'}, want {want_rep.strip()!r}")
+    return bad
+
+
+def _br18_all(scenes=BR18_SCENES, arith: bool = True) -> list[str]:
+    bad = []
+    for sc in scenes:
+        bad += _br18_judge(sc, _br18_render(sc))
+    return bad + (_br18_arith() if arith else [])
+
+
+def f_br_18() -> None:
+    x = _br18_setup()
+    real_ages, real_held, real_split = OD.row_ages, OD.held_block, OD.r1_split
+
+    def _planted(scenes, od=None, ow=None, late=None) -> list[str]:
+        """Re-render the scenes with module attributes swapped, then judge."""
+        import oracle_wrapper as _OW
+        keep_od = {k: getattr(OD, k) for k in (od or {})}
+        keep_ow = {k: getattr(_OW, k) for k in (ow or {})}
+        keep_late = OD.REGISTER["LATE_EDITION"]["value"]
+        try:
+            for k, v in (od or {}).items():
+                setattr(OD, k, v)
+            for k, v in (ow or {}).items():
+                setattr(_OW, k, v)
+            if late is not None:
+                OD.REGISTER["LATE_EDITION"]["value"] = late
+            return _br18_all(scenes, arith=not scenes)     # a scene plant judges its scene only
+        finally:
+            for k, v in keep_od.items():
+                setattr(OD, k, v)
+            for k, v in keep_ow.items():
+                setattr(_OW, k, v)
+            OD.REGISTER["LATE_EDITION"]["value"] = keep_late
+
+    def _ages_ge(view, printed_at=None):            # A2-7's boundary moved to >=
+        r = real_ages(view, printed_at)
+        for row in r["rows"].values():
+            row["stale"] = row["age_ms"] >= r["limit_ms"]
+        return {**r, "stale": [k for k, row in r["rows"].items() if row["stale"]]}
+
+    def _ages_typed(view, printed_at=None):         # the limit retyped, not read
+        r = real_ages(view, printed_at)
+        lim = 2 * 14_400_000
+        for row in r["rows"].values():
+            row["stale"] = row["age_ms"] > lim
+        return {**r, "limit_ms": lim, "stale": [k for k, row in r["rows"].items() if row["stale"]]}
+
+    def _strike_first(held, ages, lens):             # only the first HELD line struck
+        out = real_held(held, ages, lens)
+        head, sep, tail = out.partition("</s>")
+        return head + sep + tail.replace("<s>", "").replace("</s>", "") if sep else out
+
+    def _cards_only(view, stale):                    # holds only rows that carry a card
+        carded = {a["symbol"] for a in view["assets"] if a["card"]}
+        return real_split(view, [k for k in stale if k in carded])
+
+    plants = (
+        ("THE CONTRACT'S PLANT (the hottest-asset-only as-of restored: every row judged by the "
+         "hottest asset's bar)", "reads no STALE mark",
+         dict(scenes=("REPLAY",), od=dict(row_as_of_ms=lambda a, _t=x["hottest_ms"]: _t))),
+        ("ROUTING PLANT (the stale row's R1 lines left in the paste block)", "in the paste block",
+         dict(scenes=("REPLAY",), od=dict(r1_split=lambda view, stale: (OD.r1_block(view), "")))),
+        ("CARDLESS PLANT (only rows with a Trap Card held; a stale STALKING/DEAD row's LIS lines "
+         "stay pasteable)", "in the paste block",
+         dict(scenes=("CARDLESS",), od=dict(r1_split=_cards_only))),
+        ("WORDING PLANT (OR-1's band: 'LATE EDITION — wire stale since <as-of>')", "the band opens",
+         dict(scenes=("REPLAY",), late="LATE EDITION — wire stale since {as_of}")),
+        ("NEWEST PLANT (the dateline's 'newest' taken from the view's — the hottest row's — as-of)",
+         "the dateline does not say 'newest",
+         dict(scenes=("HOTTEST",), od=dict(row_ages=lambda v, p=None: {**real_ages(v, p),
+                                                                          "newest_ms": int(v["as_of_ms"])}))),
+        ("AGE-CELL PLANT (fresh rows print the epoch instead of their own bar)",
+         "does not print its own bar",
+         dict(scenes=("REPLAY",), od=dict(age_cell=lambda r, _real=OD.age_cell: _real(
+             r if r["stale"] else {**r, "as_of_ms": 0})))),
+        ("DOCKET PLANT (every Trap Card marked STALE, fresh or not)", "on its Trap Card on a fresh bar",
+         dict(scenes=("REPLAY",), od=dict(age_chip=lambda r, _real=OD.age_chip: _real({**r, "stale": True})))),
+        ("DOCKET-AGE PLANT (the card's chip without its bar and age)", "Trap Card header does not read",
+         dict(scenes=("REPLAY",), od=dict(age_chip=lambda r: BR18_CHIP_CARD if r["stale"] else ""))),
+        ("STRIKE PLANT (only the first HELD line struck through)", "not struck through",
+         dict(scenes=("REPLAY",), od=dict(held_block=_strike_first))),
+        ("REPORT-BACK PLANT (the wrapper's STALE line gone quiet)", "the wrapper's report-back",
+         dict(scenes=("FRESH",), ow=dict(stale_state=lambda p: "unknown — planted"))),
+        ("BOUNDARY PLANT (A2-7's 'older than' read as '>=')", "boundary",
+         dict(scenes=(), od=dict(row_ages=_ages_ge))),
+        ("RETYPED PLANT (the limit typed as 2 x 4h, not read off STALE_LENS_PERIODS)",
+         "a retyped number", dict(scenes=(), od=dict(row_ages=_ages_typed))),
+    )
+
+    def _break() -> tuple[bool, str]:
+        green, out = False, []
+        for name, must, kw in plants:
+            bad = _planted(**kw)
+            hits = [b for b in bad if must in b]
+            if hits:
+                rest = [b for b in bad if must not in b]
+                out.append(f"{name} -> RED: {hits[0]}"
+                           + (f" [and {len(rest)} other finding(s)]" if rest else ""))
+            else:
+                green = True
+                out.append(f"{name} -> " + ("GREEN" if not bad else
+                           f"RED FOR THE WRONG REASON (no finding says {must!r}; first: {bad[0]})"))
+        return green, " ‖ ".join(out)
+
+    def _real() -> tuple[bool, str]:
+        bad = _br18_all()
+        if bad:
+            return False, "; ".join(bad[:6]) + (f" (+{len(bad) - 6} more)" if len(bad) > 6 else "")
+        v, o = x["victim"].replace("USDT", ""), x["other"].replace("USDT", "")
+        R = len(x["view"]["assets"])
+        e = _br18_expect("REPLAY")
+        return True, (
+            f"OR1-a replayed: {v}'s tape cut back 3 days in memory below the other rows' common "
+            f"bar {OD.as_of_stamp(x['t0'])}, printed at {x['at']:%Y-%m-%dT%H:%MZ} (+1 lens period). "
+            f"REPLAY: {v} reads STALE with its own bar and age "
+            f"({e['rows'][x['victim']]['age']}) on the Board and on its Trap Card header, every "
+            f"other of the {R} Board rows prints its own bar and age with no mark, and no other card "
+            f"reads STALE; {v}'s {len(e['held'])} R1 line(s) are out of the paste block (every fresh "
+            f"row's line, in order, byte for byte) and beneath it under '{BR18_HELD}', each struck "
+            f"through; the band opens '{TS_BAND_HEAD.format(n=1, r=R, as_of=OD.as_of_stamp(e['oldest']))}'; "
+            f"the dateline names newest and oldest and '1 of {R} rows stale'; the lead names the span; "
+            f"the wrapper's real front_page() logs 'STALE 1 of {R} Board rows on a stale wire'. "
+            f"HOTTEST ({v} made the hottest row): the dateline's newest is still "
+            f"{OD.as_of_stamp(x['t0'])}. CARDLESS ({o}, no Trap Card, set 3 days back too): 2 of {R}, "
+            f"its LIS lines HELD. FRESH ({v}'s bar restored): 0 of {R}, no band, no HELD block, "
+            f"report-back 'STALE 0 of {R}'. A2-7 arithmetic: exactly at the limit fresh, 1 ms past "
+            f"it stale, 4h24m = 1 bar · 4.4h, and the limit follows OD.STALE_LENS_PERIODS")
+
+    prove("F-BR-18", "PER-ROW STALENESS — a row whose own bar is past A2-7's limit reads "
+                     "STALE, its R1 lines are HELD out of the paste block, and the band names "
+                     "the count (OR1-a replayed)",
+          _break, _real)
+
 # ══════════════════════════════════════════════════════════════════ MAIN
 
 def main() -> int:
@@ -6876,7 +7302,7 @@ def main() -> int:
     print("=" * 78)
     fixtures = (f_br_1, f_br_2, f_br_3, f_br_4, f_br_5, f_br_6,
                 f_br_7, f_br_8, f_br_9, f_br_10, f_br_11, f_br_12, f_br_13, f_br_14,
-                f_br_15, f_br_16, f_br_17)
+                f_br_15, f_br_16, f_br_17, f_br_18)
     for fn in fixtures:
         try:
             fn()

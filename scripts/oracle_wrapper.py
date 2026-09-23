@@ -966,8 +966,10 @@ ONDEMAND_REGISTER = {
                   "SIGKILL cannot be trapped; reclaim_dead_lock is its answer."},
     "BANNER_MARKERS": {
         "value": ("LATE EDITION", "STALE DATA"), "ruled": True,
-        "source": "OR-1 STEP F: 'Staleness banner => red band under the masthead "
-                  "\"LATE EDITION — wire stale since <as-of>\"'; and BR-1 A2-7's "
+        "source": "OR-2 R-1 (2026-09-22): 'LATE EDITION — N of R rows on a stale wire "
+                  "(oldest <as-of>)', which superseded OR-1 STEP F's 'Staleness banner => "
+                  "red band under the masthead \"LATE EDITION — wire stale since "
+                  "<as-of>\"'; and BR-1 A2-7's "
                   "'STALE DATA — ...' div, the wording before the STEP F typesetting. "
                   "Either one found in the render's TEXT (style, script, comments and "
                   "tags stripped) reads as banner UP. Loose on purpose: a false "
@@ -1024,7 +1026,7 @@ ONDEMAND_STEPS = (
      "tagged slot=on-demand-full|on-demand-refresh"),
     ("front-page", "wrapper",
      "print the Board's top rows by heat, the self-check verdict, the render's "
-     "path / bytes / sha256 and the banner state"),
+     "path / bytes / sha256, the banner state and the stale-row count"),
     ("alarm", "wrapper",
      "one rc (top-up or Oracle), one ORACLE_DOWN.flag decision; the schedule-drift "
      "check is SKIPPED (clock suspended by operator ruling 2026-09-21)"),
@@ -1032,7 +1034,7 @@ ONDEMAND_STEPS = (
      "open the render (macOS: open <path>)"),
     ("report-back", "skill",
      "print back to the operator: Front Page top rows + self-check verdict + "
-     "banner state"),
+     "banner state + stale-row count"),
 )
 
 
@@ -1217,6 +1219,24 @@ def banner_state(html_path: Path) -> str:
     return "none — no staleness band in this render"
 
 
+_STALE_COUNT = re.compile(r"\b(\d+) of (\d+) rows stale\b")
+
+
+def stale_state(html_path: Path) -> str:
+    """OR-2 R-1 · how many Board rows went to press on a stale wire, read off the
+    render's DATELINE ('<n> of <R> rows stale'). The page, not oracle_daily's
+    constants: this process never judges staleness itself, and a render printed
+    before R-1 carries no count and says so."""
+    text = Path(html_path).read_text(encoding="utf-8", errors="replace")
+    m = re.search(r'(?s)<p class="dateline">(.*?)</p>', text)
+    c = _STALE_COUNT.search(re.sub(r"\s+", " ", m.group(1))) if m else None
+    if c is None:
+        return "unknown — this render prints no stale-row count (printed before OR-2 R-1?)"
+    n, r = int(c.group(1)), int(c.group(2))
+    return (f"{n} of {r} Board rows on a stale wire"
+            + (" — their R1 lines are HELD out of the paste block" if n else ""))
+
+
 def front_page(lines: list[str], slot: str, started: datetime, log=print) -> None:
     """Step 6. `lines` is everything run_oracle logged for THIS run (a tee)."""
     log(f"{_step('front-page')}:")
@@ -1253,6 +1273,7 @@ def front_page(lines: list[str], slot: str, started: datetime, log=print) -> Non
     if hit is None:
         log("  RENDER none — the Oracle did not render on this run")
         log("  BANNER unknown — there is no render to read")
+        log("  STALE unknown — there is no render to read")
         return
     p = Path(hit.group("path"))
     size = f"{p.stat().st_size:,} B" if p.exists() else "MISSING ON DISK"
@@ -1261,6 +1282,10 @@ def front_page(lines: list[str], slot: str, started: datetime, log=print) -> Non
         log(f"  BANNER {banner_state(p)}")
     except Exception as e:
         log(f"  BANNER unknown — {e.__class__.__name__}: {e}")
+    try:
+        log(f"  STALE {stale_state(p)}")
+    except Exception as e:
+        log(f"  STALE unknown — {e.__class__.__name__}: {e}")
 
 
 def ondemand_flag_action(rc: int, no_fetch: bool, movers_failed: bool = False) -> str:

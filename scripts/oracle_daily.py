@@ -12,7 +12,8 @@ Emits briefs/oracle/oracle_<date>.html containing, per BR-1 §3 as amended:
                       own constant since OR-1 STEP C — never a typed count),
                       heat-sorted: regime chip · ATR-distance to the
                       nearest high-score cluster · two lines in the sand ·
-                      posture word.
+                      posture word · since OR-2 R-1 the row's OWN as-of bar
+                      and age, STALE past A2-7's limit (row_ages).
     TRAP CARDS   C-6  entry · structural invalidation (4h-lens anchor + the
                       min 1.0 ATR rail) · target · net R:R after toll · what
                       proves me wrong. Derivation in the appendix.
@@ -484,13 +485,18 @@ REGISTER: dict[str, dict] = {
                   "sha within 900 characters of the tag), the caption after them.",
     },
     "LATE_EDITION": {
-        "value": "LATE EDITION — wire stale since {as_of}",
+        "value": "LATE EDITION — {n} of {r} rows on a stale wire (oldest {as_of})",
         "ruled": True,
-        "source": "OR-1 STEP F, verbatim: 'Staleness banner => red band under the masthead \"LATE "
-                  "EDITION — wire stale since <as-of>\"'. ONLY THE WORDS AND THE INK MOVED: "
-                  "WHEN the band prints is still A2-7's arithmetic, STALE_LENS_PERIODS lens "
-                  "periods at render time, and A2-7's detail sentence still follows the new "
-                  "opening. <as-of> is the view's as-of bar, in the dateline's own format.",
+        "source": "OR-2 R-1 (operator 2026-09-22, ratified 'leans'), verbatim: 'The LATE "
+                  "EDITION band fires when ANY row is stale and names the count: \"LATE "
+                  "EDITION — N of R rows on a stale wire (oldest <as-of>)\"'. WHEN a row is "
+                  "stale is still A2-7's arithmetic — its own as-of bar older than "
+                  "STALE_LENS_PERIODS lens periods, measured from the bar's open — now judged "
+                  "for EVERY row at the print time run() takes as it starts (A2-7 said 'at "
+                  "render time'; the render follows within seconds), and A2-7's detail sentence still "
+                  "follows the opening. <as-of> is the OLDEST row's bar, in the dateline's own "
+                  "format. SUPERSEDES OR-1 STEP F's 'LATE EDITION — wire stale since <as-of>', "
+                  "which judged the hottest asset's bar alone (finding OR1-a).",
     },
     "EDITION_COUNT": {
         "value": "distinct dates among tape/oracle_tape_<date>.parquet, this edition's date included",
@@ -1654,6 +1660,10 @@ svg.spag{display:block;color:var(--ink);border-top:1px solid var(--rule);
 pre.r1{margin:0;padding:12px 14px;border:1px solid var(--ink);columns:300px;
   column-gap:28px;column-rule:1px solid var(--rule);white-space:pre;
   font:12.5px/1.55 "Courier New",Courier,monospace}
+pre.held{margin:0;padding:10px 14px;border:1px dashed var(--rule);columns:300px;
+  column-gap:28px;white-space:pre;color:var(--mut);
+  font:12.5px/1.55 "Courier New",Courier,monospace}
+td.asof{font-size:12px;line-height:1.3}
 .mkt{columns:2 340px;column-gap:34px;column-rule:1px solid var(--rule)}
 .mkt>div{break-inside:avoid}
 .mkt h3{margin-top:0;font-size:12.5px;letter-spacing:.03em;min-height:2.9em}
@@ -1765,7 +1775,7 @@ def _names(symbols) -> str:
     return xs[0] if len(xs) == 1 else f"{', '.join(xs[:-1])} and {xs[-1]}"
 
 
-def front_page(view: dict) -> dict:
+def front_page(view: dict, ages: dict | None = None) -> dict:
     """The Front Page's headline, deck and lead: REGISTER['FRONT_PAGE_HEADLINE'], [VETO].
 
     The day's answer to the canon's one morning question, "where is business possible
@@ -1775,7 +1785,10 @@ def front_page(view: dict) -> dict:
     A TRIGGERED row whose trigger the Board prints STALE is set apart, by the Board's
     own test (posture_engine.stations_for: the row's FRESHEST in-window trigger is
     stale), and only a FRESH trigger earns the words 'Business possible'.
-    A pure function of the view: no clock, no IO. Returns HTML-escaped strings."""
+    A pure function of the view: no clock, no IO. Returns HTML-escaped strings.
+    `ages` (OR-2 R-1, row_ages) names the bars the lead says the roster was read at: one
+    bar when every row shares it — the text is then what it always was — and the
+    oldest-to-newest span when they differ, never the hottest row's bar alone (OR1-a)."""
     assets = view["assets"]
     word_of = {v["station"]: k for k, v in PE.CANON.items()}
     w_trig, w_armed = word_of[3], word_of[2]
@@ -1814,7 +1827,12 @@ def front_page(view: dict) -> dict:
     counts = [f"{len(by.get(w, []))} {w}" for w in order]
     first = len(by.get(order[0], []))
     counts[0] = f"{first} {'is' if first == 1 else 'are'} {order[0]}"
-    as_of = datetime.fromtimestamp(view["as_of_ms"] / 1000, timezone.utc).strftime(AS_OF_FMT)
+    if ages is None or ages["newest_ms"] == ages["oldest_ms"]:
+        at_bar = "at the bar of " + as_of_stamp(view["as_of_ms"] if ages is None
+                                                 else ages["newest_ms"])
+    else:
+        at_bar = (f"each at its own bar, from {as_of_stamp(ages['oldest_ms'])} to "
+                  f"{as_of_stamp(ages['newest_ms'])}")
     said = []
     if trig:
         said.append(f"{w_trig}: {_names(trig)} — an open 12/89 window that holds its "
@@ -1829,7 +1847,7 @@ def front_page(view: dict) -> dict:
         said.append("No symbol holds an open window, with its trigger or without: by the "
                     "Board's own words there is no business possible today.")
     lead = (f"Of the {len(assets)} symbol{'' if len(assets) == 1 else 's'} on the roster, read "
-            f"on the {view['lens']} lens at the bar of {as_of}, {', '.join(counts[:-1])} and "
+            f"on the {view['lens']} lens {at_bar}, {', '.join(counts[:-1])} and "
             f"{counts[-1]}. " + " ".join(said))
     inside = (f"The Docket carries {n_cards} Trap Card{'' if n_cards == 1 else 's'}, one for "
               f"each symbol with an admitted open window: pre-framed if-thens, never "
@@ -1860,21 +1878,26 @@ def render_html(view: dict, date_str: str, canon_sha: str, *,
     `printed_at` is the print time (A-OR1-1 vii), an AWARE datetime taken ONCE by run():
     the ear's word follows its Buenos Aires hour and the Colophon prints it (print_line).
     render_html NEVER READS THE CLOCK FOR THE PRINT TIME, so the ear's word and the
-    'Printed' line are functions of what it is handed. That is the whole claim — the page
-    is NOT byte for byte a function of its inputs: the A2-7 LATE EDITION band
-    (staleness_banner) is judged against the wall clock AT RENDER TIME, so it can rise
-    between two renders of the same inputs, and while it is up its printed age ticks.
+    'Printed' line are functions of what it is handed. Since OR-2 R-1 the A2-7 staleness
+    is too: every row's age (and so its STALE mark, its HELD R1 lines, the dateline's
+    count and the LATE EDITION band) is measured to the print time it is handed
+    (row_ages), where until then the band alone was judged against the wall clock at
+    render time and could rise between two renders of the same inputs.
     A render handed no print time is UNTIMED (a second, separate property from the
     PROOF above, which is about the number): it prints no 'Printed' line, the Colophon
-    says it is untimed, and its ear reads vii at the view's as-of bar — a stamp it was
-    handed, not the wall clock."""
+    says it is untimed, its ear reads vii at the view's as-of bar — a stamp it was
+    handed, not the wall clock — and it ages every row against its OWN newest row."""
     lens = view["lens"]
     a0 = view["assets"]
     as_of = datetime.fromtimestamp(view["as_of_ms"] / 1000, timezone.utc)
     mast = REGISTER["MASTHEAD"]["value"]
     sec = [html.escape(s, quote=False) for s in REGISTER["SECTIONS"]["value"]]
     caption = html.escape(mantle_caption(), quote=False)
-    fp = front_page(view)
+    # OR-2 R-1: every row aged ONCE, against the print time (positional on purpose)
+    ages = row_ages(view, printed_at)
+    fp = front_page(view, ages)
+    ag_rows = ages["rows"]
+    newest_s, oldest_s = as_of_stamp(ages["newest_ms"]), as_of_stamp(ages["oldest_ms"])
 
     # each ear item in its own no-wrap span, so a narrow ear breaks BETWEEN items and
     # never inside the date; the ear's text is still the contract's, " · "-joined
@@ -1913,6 +1936,7 @@ def render_html(view: dict, date_str: str, canon_sha: str, *,
             f"<td class='lis'>{' · '.join(lis_txt) or '<span class=muted>—</span>'}</td>"
             f"<td class='post w-{w.lower()}'>{w}</td>"
             f"<td class='muted small'>{html.escape(st.board_reason)}</td>"
+            f"{age_cell(ag_rows[a['symbol']])}"
             f"<td class='num muted'>{a['heat']:.3f}</td>"
             f"{range_cell(a)}</tr>")
 
@@ -1928,6 +1952,7 @@ def render_html(view: dict, date_str: str, canon_sha: str, *,
     <span class="chip w-{c['station'].lower()}">{c['station']}</span>
     {'<span class="chip stale">STALE TRIGGER</span>' if c.get('trigger_stale') else ''}
     {'<span class="chip prov">PROVISIONAL</span>' if c.get('provisional') else ''}
+    {age_chip(ag_rows[a['symbol']])}
     <span class="muted small">displacement {c['disp']:.2f} ATR at the arming</span></div>
   <table class="kv">
     <tr><td>IF</td><td>{html.escape(c['entry_rule'])}</td></tr>
@@ -1980,7 +2005,7 @@ def render_html(view: dict, date_str: str, canon_sha: str, *,
                      f"<td class='num'>{h100_s}</td>"
                      f"<td class='muted small'>{html.escape(', '.join(r['assets']))}</td></tr>")
 
-    r1 = r1_block(view)
+    r1, r1_held = r1_split(view, ages["stale"])
 
     def _chip(src):
         return ('<span class="chip defer">DEFERRED-TO-BR2</span>'
@@ -2024,7 +2049,7 @@ def render_html(view: dict, date_str: str, canon_sha: str, *,
 
     shas = " · ".join(f"payload {n} sha256 {p['meta']['sha256']}"
                       for n, p in view["payloads"].items())
-    stale_banner = staleness_banner(view)
+    stale_banner = staleness_banner(view, ages)
 
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
@@ -2041,8 +2066,8 @@ def render_html(view: dict, date_str: str, canon_sha: str, *,
 <div class="folio">DISPLAY-ONLY · OPERATIONS · not study evidence · no journal is read ·
 no outcome is scored · rules are born only under G-7 on exploration-classic</div>
 </header>
-{stale_banner}<p class="dateline">lens {lens} · as-of bar {as_of.strftime(AS_OF_FMT)} ·
-roster {len(a0)} · posture canon v1 sha256 {canon_sha}</p>
+{stale_banner}<p class="dateline">lens {lens} · as-of bar newest {newest_s} · oldest {oldest_s} ·
+{len(ages['stale'])} of {ages['n']} rows stale · roster {len(a0)} · posture canon v1 sha256 {canon_sha}</p>
 <main>
 
 <h2>{sec[0]} — where is business possible today</h2>
@@ -2050,9 +2075,14 @@ roster {len(a0)} · posture canon v1 sha256 {canon_sha}</p>
 <p class="deck">{fp['deck']}</p>
 <div class="cols">{fp['lead']}</div>
 <table class="board"><tr><th>asset</th><th>regime</th><th>dist</th><th>score</th>
-<th>two lines in the sand</th><th>posture</th><th>why</th><th>heat</th><th>range</th></tr>
+<th>two lines in the sand</th><th>posture</th><th>why</th><th>as-of · age</th><th>heat</th><th>range</th></tr>
 {''.join(board)}</table>
-<p class="small muted">heat = {html.escape(REGISTER['HEAT']['value'])} [VETO — proposed,
+<p class="small muted">AS-OF · AGE is each row's own last {lens} bar and its age, measured
+from the bar's open to the print time (a proof handed no print time measures it to its
+own newest row); past A2-7's limit of {STALE_LENS_PERIODS} lens periods
+({ages['limit_ms'] / 3_600_000:g}h) the row reads STALE, its Trap Card says so and its
+R1 prices are HELD out of the Telegrams' paste block (OR-2 R-1).
+heat = {html.escape(REGISTER['HEAT']['value'])} [VETO — proposed,
 not ruled]. Both inputs print in the row so the sort is auditable. RANGE is the 4h macro
 range from the Tide Tables below, printed LAST because it is display-only: it enters no
 heat, no sort, no posture word and no card.</p>
@@ -2069,7 +2099,7 @@ heat, no sort, no posture word and no card.</p>
 {tide_tables(view)}
 
 <h2>{sec[4]} — R1 alert prices, paste-ready</h2>
-<pre class="r1">{html.escape(r1)}</pre>
+<pre class="r1">{html.escape(r1)}</pre>{held_block(r1_held, ages, lens)}
 
 <h2>{sec[5]} — overnight and the week, display-only</h2>
 {market_page(date_str)}
@@ -2091,7 +2121,7 @@ ruling 2026-09-21 and the Oracle now prints on demand. {veto_note}</p>
 {''.join(veto)}</table>
 
 <footer>
-DISPLAY-ONLY · operations · {date_str} · lens {lens} · as-of bar {as_of.strftime(AS_OF_FMT)} ·
+DISPLAY-ONLY · operations · {date_str} · lens {lens} · as-of bar newest {newest_s} · oldest {oldest_s} ·
 posture canon v1 sha256 {canon_sha} · {shas} ·
 displacements are (EMA−price)/ATR · analytics {ANALYTICS_VERSION} sha {analytics_sha()} ·
 net R:R = {html.escape(REGISTER['NET_RR_FORM']['value'])}, toll from the ORACLE GRID
@@ -2123,26 +2153,115 @@ LENS_MS = {"5m": 300_000, "15m": 900_000, "30m": 1_800_000,
            "1h": 3_600_000, "4h": 14_400_000, "12h": 43_200_000}
 
 
-def staleness_banner(view: dict) -> str:
-    """A2-7. Fires when the newest cache bar is older than STALE_LENS_PERIODS
-    lens periods AT RENDER TIME. The as-of stamp prints regardless — the banner
-    adds an alarm, it never replaces the provenance."""
+# OR-2 R-1 · PER-ROW STALENESS (operator, 2026-09-22). A2-7's rule applied to EVERY row
+# at its own as-of bar, where it was applied to the hottest asset's bar alone (OR-1
+# finding OR1-a: with one symbol's tape cut back 3 days, the page printed that row's
+# Trap Card and R1 alert prices from an 84-hour-old bar with no mark, and the band
+# stayed silent). The limit is A2-7's own — STALE_LENS_PERIODS x LENS_MS[lens], read at
+# call time, never retyped — and a row's age is measured from its bar's OPEN, as A2-7
+# measures it. The instant rows are aged against is the PRINT TIME run() hands the
+# render; a render handed none (a PROOF: the fixtures, the wrapper's self-check
+# re-render) ages them against its own NEWEST row and reads no clock at all, so two
+# renders of one view are byte-identical (F-BR-6, F-MV-8).
+
+def row_as_of_ms(a: dict) -> int:
+    """A row's as-of bar: the open time (ms UTC) of its last cached bar on the lens."""
+    return int(a["station"].as_of_ms)
+
+
+def row_ages(view: dict, printed_at: datetime | None = None) -> dict:
+    """Every row's age and STALE verdict at one instant. Pure: never writes the view."""
     step = LENS_MS[view["lens"]]
-    now_ms = int(datetime.now(timezone.utc).timestamp() * 1000)
-    age_ms = now_ms - int(view["as_of_ms"])
     limit = STALE_LENS_PERIODS * step
-    if age_ms <= limit:
+    bars = {a["symbol"]: row_as_of_ms(a) for a in view["assets"]}
+    newest = max(bars.values()) if bars else 0
+    oldest = min(bars.values()) if bars else 0
+    at = newest if printed_at is None else int(printed_at.timestamp() * 1000)
+    rows = {}
+    for sym, t in bars.items():
+        age = at - t
+        rows[sym] = {"as_of_ms": t, "age_ms": age, "age_bars": age // step,
+                     "age_h": age / 3_600_000, "stale": age > limit}
+    return {"at_ms": at, "timed": printed_at is not None, "limit_ms": limit,
+            "rows": rows, "newest_ms": newest, "oldest_ms": oldest,
+            "stale": [sym for sym, r in rows.items() if r["stale"]], "n": len(rows)}
+
+
+def as_of_stamp(ms: int) -> str:
+    """An as-of bar in the dateline's own format."""
+    return datetime.fromtimestamp(int(ms) / 1000, timezone.utc).strftime(AS_OF_FMT)
+
+
+def _age_words(r: dict) -> str:
+    n = r["age_bars"]
+    return f"{n} bar{'' if n == 1 else 's'} · {r['age_h']:.1f}h"
+
+
+def age_cell(r: dict) -> str:
+    """The Board's AS-OF · AGE cell: the row's own bar, its age, and STALE past A2-7."""
+    chip = "<span class='chip stale'>STALE</span> " if r["stale"] else ""
+    return (f"<td class='num asof'>{chip}{as_of_stamp(r['as_of_ms'])}<br>"
+            f"<span class='muted small'>{_age_words(r)}</span></td>")
+
+
+def age_chip(r: dict) -> str:
+    """The Docket card header's mark: nothing on a fresh row."""
+    if not r["stale"]:
+        return ""
+    return (f'<span class="chip stale">STALE</span> '
+            f'<span class="muted small">bar {as_of_stamp(r["as_of_ms"])} · {_age_words(r)}</span>')
+
+
+def r1_split(view: dict, stale) -> tuple[str, str]:
+    """The Telegrams' two blocks, cut from ONE r1_block(view): the paste-ready lines of
+    the fresh rows, and the HELD lines of the stale ones. A line is only ROUTED, never
+    re-typed, so a fresh row's prices are byte-identical to r1_block's."""
+    held_syms = set(stale)
+    paste, held = [], []
+    for ln in r1_block(view).split("\n"):
+        if ln:
+            (held if ln.split(" ", 1)[0] in held_syms else paste).append(ln)
+    return "\n".join(paste), "\n".join(held)
+
+
+def held_block(held: str, ages: dict, lens: str) -> str:
+    """R-1 · a stale row's R1 lines LEAVE the paste-ready block and print beneath it,
+    struck through, for reference only. The strike is for the eye; the exclusion is what
+    protects the operator, because formatting dies on copy-paste and exclusion does not."""
+    if not held:
+        return ""
+    lines = "\n".join(f"<s>{html.escape(ln)}</s>" for ln in held.split("\n"))
+    names = _names([s for s in ages["stale"]])
+    empty = ("The paste-ready block above is EMPTY: no row is on a fresh wire. "
+             if len(ages["stale"]) == ages["n"] else "")
+    return (f'\n<h3>HELD — stale wire</h3>\n<p class="small muted">{empty}Reference only, NOT '
+            f'paste-ready: the last {lens} bar of {html.escape(names)} is older than A2-7\'s '
+            f'{ages["limit_ms"] / 3_600_000:g}h limit, so these prices are left OUT of the block '
+            f'above. Struck through here for the eye; copying would strip the strike, so they '
+            f'are not in the block at all.</p>\n<pre class="held">{lines}</pre>')
+
+
+def staleness_banner(view: dict, ages: dict | None = None) -> str:
+    """A2-7, per row since OR-2 R-1. Fires when ANY row's as-of bar is older than
+    STALE_LENS_PERIODS lens periods at the print time (row_ages) and names how many,
+    and the oldest bar. The as-of stamps print regardless — the band adds an alarm, it
+    never replaces the provenance."""
+    ages = row_ages(view) if ages is None else ages
+    if not ages["stale"]:
         return ""
     # OR-1 STEP F: the contract's opening words, then A2-7's own sentence, unchanged.
     # ONE <div class="stale"> WITH NO <div> INSIDE IT, on purpose: the movers fixture
-    # cuts the band out of a page with a non-greedy `<div class="stale">.*?</div>`
-    # (its age ticks between two renders), and a nested div would end that cut early.
-    as_of = datetime.fromtimestamp(int(view["as_of_ms"]) / 1000, timezone.utc)
-    head = REGISTER["LATE_EDITION"]["value"].format(as_of=as_of.strftime(AS_OF_FMT))
-    return (f'<div class="stale"><b>{html.escape(head)}</b> The newest {view["lens"]} bar is '
+    # cuts the band out of a page with a non-greedy `<div class="stale">.*?</div>`,
+    # and a nested div would end that cut early.
+    age_ms = ages["at_ms"] - ages["oldest_ms"]
+    limit = ages["limit_ms"]
+    head = REGISTER["LATE_EDITION"]["value"].format(
+        n=len(ages["stale"]), r=ages["n"], as_of=as_of_stamp(ages["oldest_ms"]))
+    return (f'<div class="stale"><b>{html.escape(head)}</b> The oldest {view["lens"]} bar is '
             f'{age_ms / 3_600_000:.1f}h old, over the {STALE_LENS_PERIODS}-lens-period '
-            f'limit of {limit / 3_600_000:.1f}h. The top-up may not have run. Every '
-            f'number below is computed from that bar, and the as-of stamp names it.</div>')
+            f'limit of {limit / 3_600_000:.1f}h. The top-up may not have run. Those rows read '
+            f'STALE on the Board and The Docket and their R1 prices are HELD out of the '
+            f'paste-ready block; every row is computed from its own bar and names it.</div>')
 
 
 def r1_block(view: dict) -> str:

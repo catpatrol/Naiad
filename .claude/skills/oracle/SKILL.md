@@ -275,13 +275,19 @@ The wrapper's summary of what it just printed. Expect:
   SELF-CHECK VERDICT: PASS — refresh_idempotence PASS · tape_append_integrity PASS · thumbnail_provenance PASS (row slot=on-demand-full)
   RENDER /Users/luis/Naiad/briefs/oracle/oracle_<date>.html · <bytes> B · sha256 <sha>
   BANNER none — no staleness band in this render
+  STALE 0 of <n> Board rows on a stale wire
 ```
 
-or, when the cache is stale:
+or, when ANY row's own 4h bar is older than A2-7's limit at the print time (OR-2 R-1):
 
 ```
-  BANNER UP — LATE EDITION — wire stale since <as-of>
+  BANNER UP — LATE EDITION — <k> of <n> rows on a stale wire (oldest <as-of>) …
+  STALE <k> of <n> Board rows on a stale wire — their R1 lines are HELD out of the paste block
 ```
+
+A stale row reads STALE (with its own as-of bar and age) on the Board and on its Trap
+Card; its R1 prices are NOT in the Telegrams' paste-ready block but beneath it, struck
+through, under "HELD — stale wire". Never copy a HELD line into an alert.
 
 ### STEP 7 · alarm
 
@@ -340,8 +346,8 @@ its banner tells the truth.
 ### STEP 9 · report-back
 
 Print back to the operator, from the step 6 block and nothing else: the FRONT PAGE
-top rows exactly as logged (symbol, station, heat), the SELF-CHECK VERDICT line, and
-the BANNER state.
+top rows exactly as logged (symbol, station, heat), the SELF-CHECK VERDICT line, the
+BANNER state and the STALE count.
 
 Notes for the run:
 - NEVER run `oracle_wrapper.py --install`, and NEVER `launchctl bootstrap`, `enable`
@@ -389,4 +395,4 @@ printed); whether a flag was standing at the start (JOB, SLOT, UTC, last traceba
 line) and its state at the end (CLEARED, RAISED, left standing, none); a DEAD LOCK
 reclaimed, if one was; movers OK / WIRE DOWN / SKIPPED; top-up verdict with rows
 added and gaps, or SKIPPED; render path, bytes, sha256; the Front Page top rows; the
-self-check verdict with the slot tag on its row; the banner state.
+self-check verdict with the slot tag on its row; the banner state; the stale-row count.
