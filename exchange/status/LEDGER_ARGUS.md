@@ -563,3 +563,28 @@ PENDING: 1. operator eye on the first edition (the final fixture) 2. rulings on 
 NEXT: open the edition and rule. Owner: operator.
 METRICS: operator actions this session = 2 · files re-ingested = 31
 === END STATUS ===
+
+=== STATUS_ARGUS — 2026-09-23 (OR-1 RECOVERED UNDER A-OR1-1 · SPEC OF RECORD IN THE REPO) ===
+NOW: OR-1 is complete against AMENDMENT A-OR1-1. The Oracle runs its own range machine
+     (scripts/rangefinder_core.py), range records sit on a sibling tape, and the edition word
+     follows the Buenos Aires hour. OR-1's text now lives in the repo (queue file, SPECIFICATION OF RECORD).
+LAST EVENT: 2026-09-23 — recovery edition by /oracle, exit 0 · commits 3d55988 (D) + ff74a90 (F) · push withheld.
+FACTS:
+- schedule SUSPENDED (5 agents out + disabled, plists retained) · /oracle live (slot on-demand-full) ·
+  C-0 closed (34e19e8) · roster 18 kept / 4 dropped · ranges + Market Page in · BR-2 A-BR2-2 filed [verified]
+- A-OR1-1 iv only half-applied, of necessity: engine/rangefinder.py and the twin are byte-frozen by
+  TIER-C10's filed pins; the Oracle's copy is held to them by F-RF-1c/d/e; the engine copy is APOLLO's call [verified]
+- recovery edition briefs/oracle/oracle_2026-09-23.html 452,747 B sha 622b6420…, Vol. I No. 36,
+  Morning (printed 00:27 BA), as-of 2026-09-22T20:00Z, banner none, Edge Watch 2 of 18, movers universe 528,
+  self-checks 3/3 PASS, F-BR 17/17 default mode [verified]
+- R6 COMPLETE: backfill_state.json 72/72 at parity, 0 gaps, nothing fetched [verified]
+- REPORTED, never rewritten: oracle_tape_2026-09-21.parquet carries the 8 range columns (sha eb6991a3…);
+  the 09-21 edition reads Morning at 22:26 BA; a run crossing BA midnight prints WIRE DOWN [verified]
+- ⚠ this block moves TIER-C10's F-DET (DATA_SPEND_AUDIT records this file at 565 lines), appended by
+  operator ruling 2026-09-22 — TC10 re-files · push WITHHELD by ruling: branch carries TC10 commits [open]
+PENDING: 1. PARITY line (still owed) 2. operator verdict on the recovery edition 3. V-7 rails
+         4. APOLLO: engine/rangefinder.py retire or ratify 5. push, with TIER-C10's CLOSE
+         6. restore the file the audit overwrote: ! printf 'RF v2 FIXTURES: 6/8 GREEN\n' > research_outputs/rangefinder/FIXTURES_v2.txt
+NEXT: open the recovery edition and rule. Owner: operator.
+METRICS: operator actions this session = 1 · files re-ingested = 0
+=== END STATUS ===

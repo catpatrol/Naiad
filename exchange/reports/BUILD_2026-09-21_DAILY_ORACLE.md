@@ -10,6 +10,13 @@ extended by OR-1's own clause: *no gate, filter, or sizing reads a range or a mo
 
 ## 0 · THE ONE THING TO READ FIRST
 
+> **§0 · RECOVERY LINE, 2026-09-22.** Built 2026-09-21 under the original text. **Re-opened
+> 2026-09-22 by AMENDMENT A-OR1-1, completed 2026-09-23** — see **§9**. The recovery paste
+> presumed the 2026-09-21 session was interrupted; the repo says it was not (it ended on its
+> own publish, `088d475`). What A-OR1-1 superseded here — `engine/rangefinder.py` as the
+> Oracle's machine, range columns on the D-4 tape, "Morning" for every full edition — is
+> repaired in §9. §1–§8 stay as the record of what was built that day.
+
 The Oracle's clock is off. Five launchd agents used to print the paper at 06:45, 07:00, 15:45
 and 16:00 Buenos Aires time, plus a catch-up at every login. On 2026-09-21 the operator
 suspended them. They are booted out of `gui/501` **and** persistently disabled, and their five
@@ -721,3 +728,241 @@ is the operator's own eighteen; the calibration record measures what it had been
 page shows where price sits in its range and what moved overnight, and neither of those numbers
 can reach a gate. What it still wants is the operator's eye on the first edition, his ruling on
 eight defaults, and the PARITY line it has been owed since August.*
+
+---
+
+## 9 · RECOVERY, 2026-09-22 — AMENDMENT A-OR1-1
+
+**Why this section exists.** On 2026-09-22 the operator fired a recovery paste. It carried
+**AMENDMENT A-OR1-1** [VETO-by-firing] and ordered a fresh session to audit the repo, then finish
+the work. Until then OR-1's full text lived only in a chat paste. It now lives in the repo: the
+queue file ends with `## SPECIFICATION OF RECORD`, which holds A-OR1-1 and the steps S–H verbatim.
+Any future recovery reads that section, not a chat.
+
+**What the audit found about "interrupted".** The paste assumed that the 2026-09-21 session had
+been cut off mid-step. The repo says it was not. That session committed every step
+(`3a5e6e7`..`26a27c7`), stamped OR-1 BUILT, and ended on its publish (`088d475`, 22:31 BA). It
+left no uncommitted hunk and no stash. R3 (half-applied triage) therefore had nothing to act on.
+What A-OR1-1 changed is the **spec**. Three things built on 2026-09-21 are superseded by it and
+are repaired below. §1–§8 above stay as the record of what was built that day.
+
+### 9.1 · The completion table (R2), before and after
+
+| step | BEFORE (audit, 2026-09-22 22:17Z) | AFTER | evidence |
+|---|---|---|---|
+| S | DONE | DONE | 0 oracle labels loaded · 5 plists retained · 5 `=> disabled` · SUSPENDED file 5 bootstrap lines · LEDGER_ARGUS:433 |
+| 1 | DONE (A-OR1-1 recorded nowhere) | DONE | queue RATIFIED line; `## SPECIFICATION OF RECORD` appended (R4) |
+| A | DONE | DONE | SKILL.md tracked, `name: oracle`; all 3 verbs run `oracle_wrapper.py --job ondemand`; F-SK 11/11 |
+| B | DONE | DONE | `VW.maturity()` call, no literal; schema_version 2; F-BR-13 green; pin == sha(oracle_daily.py) |
+| C | DONE | DONE | probe json; REGISTER['ROSTER'] the one literal; engine/cells.py = `4257067`; 72 pairs, pairs_sha256 recomputes; 72/72 series 0 gaps; F-TU 6/6 |
+| D | **PARTIAL** — machine in `engine/`; 8 range columns on the D-4 tape; F-BR-14 tested the superseded design | **DONE** `3d55988` | see 9.2 |
+| E | DONE | DONE | F-MV 9/9; `movers_2026-09-23.json` universe 528 |
+| F | **PARTIAL** — every full edition said "Morning" (vii); F-BR-15 locked the old rule | **DONE** `ff74a90` | see 9.2 |
+| G | DONE | DONE | BR-2 queue:47 `A-BR2-2`, append-only |
+| H | **PARTIAL** — owed a re-run once D/F moved | **DONE** | this section; edition 9.4; ledger STATUS; publish below (push withheld) |
+| R6 | **no state file** | **COMPLETE** | `backfill_state.json`: 72/72 AT_PARITY; R6 scope (the new pairs' 5m/15m) 20/20; remaining NONE |
+
+### 9.2 · What changed, one commit per step (A-OR1-1 vi)
+
+- **R4 — the spec of record.** Appended to the queue file (exchange/, so it rides this section's
+  publish). **`or1: step X` cannot be the subject of an exchange/ commit.** CONVENTIONS §3.4
+  routes exchange/ files only through `publish()`, whose subject is fixed. The code steps carry
+  the `or1:` form; the exchange changes carry `exchange: auto-publish`.
+- **`3d55988` or1: step D** (A-OR1-1 iv, v).
+  - New `scripts/rangefinder_core.py`: the v2 machine, copied byte for byte from
+    `engine/rangefinder.py` from its `from __future__` line down. `oracle_daily` now runs
+    `import rangefinder_core as RNG`.
+  - New `scripts/rangefinder_core_fixtures.py`:
+    - F-RF-1c: the five event shas of record (92/573/153/17/152), equal to engine.rangefinder's
+      and to a second run.
+    - F-RF-1d: snapshot parity on all 18 symbols.
+    - F-RF-1e: source equivalence.
+  - The D-4 tape is again exactly the pre-OR-1 24 columns and the pre-OR-1 `write_tape`. The new
+    `write_range_tape()` writes `research_outputs/oracle/tape_ranges/oracle_tape_ranges_<date>.parquet`:
+    one row per roster symbol, keyed (as_of_ms, as_of_iso, asset, lens), eight range fields with
+    their dtypes pinned.
+  - F-BR-14 is re-pointed at the Oracle's own machine (`ORACLE_RANGE_MODULE`), with legs (e)–(h):
+    the machine, the D-4 schema, the sibling schema, and no gate reads the sibling tape.
+  - The wrapper self-check fails a D-4 tape wider than 24 columns and checks the sibling tape.
+  - `oracle_topup.enumerate_scope` redirects the sibling directory too. Without that, every
+    re-pin would have written a live sibling tape.
+  - Re-pinned in the same commit.
+- **`ff74a90` or1: step F** (A-OR1-1 vii).
+  - `edition_name(slot, printed_at)`: refresh prints Refresh; the full verb prints Morning
+    before 12:00 Buenos Aires and Evening from 12:00:00 on. The hour is read after an explicit
+    zone conversion; a naive time is refused.
+  - `run()` takes the print time once.
+  - The Colophon carries `Printed <date HH:MM> Buenos Aires (<word> Edition: <verb>, slot <slot>
+    · A-OR1-1 vii)`.
+  - F-BR-15 gains the page leg, the law table (07:00, 11:59, 12:00, 19:17, 22:26 and both
+    refresh slots), and ten break plants.
+  - Re-pinned in the same commit.
+- **R6.** Read-only: nothing was fetched and the lock was not needed. Step C had already
+  backfilled every new symbol from its first candle. `research_outputs/oracle/backfill_state.json`
+  (38,241 B, sha `eafa6b02…`) records all 72 pairs:
+  - parity target = max(BTC's first bar, onboardDate floored to the bar), or the venue's first
+    candle where it is later (1000PEPE: +0.67 d vs onboardDate, confirmed by GET);
+  - 0 gaps, 0 duplicates, 0 off-grid bars, 11,988,059 rows.
+  - A future roster addition resumes from its SHORT rows.
+
+**FROZEN, NOT TOUCHED — and why A-OR1-1 iv could only be half-applied.** Between OR-1 and this
+recovery, the TIER-C10 lane made `engine/rangefinder.py` its machine of record. Its filed
+registrations pin that file's bytes (`bbae464f…`, F-C10-RESUME-6) and the twin's (`168d6229…`).
+They read `RANGE_MACHINE="engine.rangefinder"` and four sibling constants out of
+`oracle_fixtures.py` by AST, and REGISTER['ROSTER'] out of `oracle_daily.py` by AST and regex.
+Deleting or editing either file breaks a ratified lane, and the paste's own FOREIGN rule and G-2
+forbid it. So:
+
+- the Oracle now runs its own copy of the machine, held to the engine's by F-RF-1c/d/e;
+- `engine/rangefinder.py` stays byte-identical. Whether it is retired or its promotion ratified is **APOLLO's call**;
+- `rangefinder_twin.py` stays byte-identical and **still calls engine.rangefinder**. The step's
+  "twin becomes a thin caller [of the core]" is **reported, not done**.
+
+OR-1's `1695a69` engine hunk is recorded at
+`research_outputs/oracle/recovery/D1_engine_rangefinder_1695a69.patch` (51,672 B, sha `ed6d5170…`,
+off-bus). Nothing was removed.
+
+### 9.3 · Roster (unchanged by the recovery)
+
+- **KEPT 18**, in the operator's order: BTCUSDT ETHUSDT ENAUSDT SOLUSDT USELESSUSDT NEARUSDT
+  1000PEPEUSDT LITUSDT FARTCOINUSDT HYPEUSDT XPLUSDT ZECUSDT UNIUSDT LTCUSDT BNBUSDT XMRUSDT
+  DOGEUSDT 1000BONKUSDT.
+- **DROPPED 4** by ruling 1: NPCUSDT PUMPFUNUSDT MNTUSDT ZCATUSDT.
+
+### 9.4 · The recovery edition — `/oracle`, run for real
+
+**Path that ran:** the registered `/oracle` skill, loaded in this session through the Skill
+tool, following SKILL.md's chain: `oracle_wrapper.py --job ondemand --slot on-demand-full`, run
+detached. It was not a hand-run of `oracle_daily`.
+
+| | |
+|---|---|
+| edition | `briefs/oracle/oracle_2026-09-23.html` · **452,747 B** · sha256 `622b64200a5e50c413cbd9e044a2f95fcfb049f2ab703374c9e4c12874085d5f` |
+| ear | `Vol. I · No. 36` · `Buenos Aires · 2026-09-23 · Morning Edition · Price: one toll` |
+| Colophon | `Printed 2026-09-23 00:27 Buenos Aires (Morning Edition: full, slot on-demand-full · A-OR1-1 vii)`. Before 12:00 is Morning, as vii rules; this paper crossed midnight |
+| as-of · banner | as-of bar `2026-09-22T20:00Z` (4h lens) · **BANNER none** |
+| Edge Watch | **2 of 18** |
+| movers | OK · universe **528** · 0 errors · 27.1 s · `movers_2026-09-23.json` 104,845 B |
+| top-up | PASS · +136 rows · 72 pairs · 0 gaps |
+| self-checks | 3/3 PASS, row `slot=on-demand-full` · exit **0** · flag none, before and after |
+| roster | **18** |
+| D-4 tape | `oracle_tape_2026-09-23.parquet` 16,487 B · sha `6230e46e…` · **24 columns** |
+| sibling tape | `tape_ranges/oracle_tape_ranges_2026-09-23.parquet` 7,996 B · sha `8c856b66…` · 18 rows |
+| calibration | `oracle_calibration_2026-09-23_on-demand-full.json` 21,440 B · sha `cd79693b…` |
+| G-4 on the page | eight `<h2>` in the contract's order · 18 strips / 18 captions · DISPLAY-ONLY in the Colophon · both Market Page tables present |
+
+The Front Page's top five by heat, as logged:
+
+- XPLUSDT STALKING 5.415
+- USELESSUSDT STALKING 3.608
+- ZECUSDT TRIGGERED 3.376
+- SOLUSDT TRIGGERED 2.438
+- LTCUSDT TRIGGERED 2.263
+
+**The first print was reprinted.** The first run started at 23:48 BA on 2026-09-22.
+- The cache was 26 hours stale, so its top-up (+7,937 rows) ran about 33 minutes, and the render
+  landed at 00:22 BA on **2026-09-23**.
+- Its movers json was dated 2026-09-22, so the Market Page honestly printed **WIRE DOWN** rather
+  than stale numbers.
+- It was reprinted at 00:24 BA, following the skill's same-day rule. Its F-BR default run is kept as
+  `H_default_mode_2026-09-23_first_print_wire_down.txt` (17/17).
+- See finding 12.
+
+### 9.5 · Fixture transcripts — two-leg, every break RED for its own named reason
+
+All transcripts are under `research_outputs/oracle/or1_transcripts/recovery_2026-09-22/` (off-bus).
+The `D_verify_*`/`F_verify_*` rounds (`.r1`, `.r2`, final) are kept beside them.
+
+| suite | result | transcript · sha256 |
+|---|---|---|
+| F-BR-1..17, sandbox fresh render, after F | **17/17**, live lane untouched | `F_final_sandbox.txt` · `1cf12ceb…` |
+| F-BR-1..17, default mode, on the recovery edition | **17/17** · 17 RED (correct) · 0 VOID · wall 29 min 43 s | `H_default_mode_2026-09-23_reprint.txt` · `b826b10f…` |
+| F-RF-1c/d/e (core ≡ engine) | **3/3** | `F_final_rfcore.txt` · `85973dea…` |
+| F-TU-1..6 (pin) | **6/6** | `F_final_topup.txt` · `96feae7a…` |
+| F-SK-1..3 | **11/11** | `F_final_ondemand.txt` · `8679cc4b…` |
+| F-MV-1..9 | **9/9** | `F_verify_oracle_movers_fixtures.txt` |
+| pytest tests | **261** passed | `F_final_pytest.txt` · `f1bac951…` |
+| re-pin after F | pin `6c03af96…` == sha(oracle_daily.py) | `F_final_repin.txt` · `149ac0bd…` |
+| TC10 read-only checks | F-RF-WALLS/PINS, F-C10-RESUME-6, F-D-5/ADMIT: break RED, real PASS · F-DET proxy **IDENTICAL** (24cd11f1…), before the ledger append | this session, after D and after F |
+| R2 audit baseline (before any change) | F-BR 17/17 · F-SK 11/11 · F-MV 9/9 · F-TU 6/6 · RF v1/v2 8/8 · pytest 261 | `audit_*.txt` |
+
+**F-BR-14 was hardened across three adversarial verify rounds**, ending at 83 break plants.
+The rounds found real bypasses: a gate in `run()` exempt from the text scan, a side channel
+out of an allow-listed reader, dynamic imports, derived paths to the sibling tape, and
+decision-side dependencies no scan covered. Each was reproduced, then repaired. The third round
+still reached a gate by **deliberate obfuscation**:
+
+- a private copy of the machine compiled from source;
+- a range read by value;
+- the tape read through `pyarrow.fs` via a path spelt in fragments;
+- `exec`.
+
+These are **disclosed residuals, written into the fixture**. No static-plus-behavioural fixture
+closes them; a diff that spells one is a review finding on sight.
+
+### 9.6 · Findings — reported, not fixed
+
+1. **Main-tape parquet carrying new columns, REPORTED, never rewritten.**
+   - The file: `research_outputs/oracle/tape/oracle_tape_2026-09-21.parquet`, 21,579 B, sha
+     `eb6991a33e056baa9eeb350c17392668c95e5e40e3563a432ebcbdbc296895cf`, 18 rows, 32 columns.
+   - The extra columns: the pre-OR-1 24 plus range_state · range_top · range_bottom ·
+     range_pos_pct · range_dist_atr · range_pending_side · range_last_event ·
+     range_last_event_age_bars.
+   - It overwrote in place the 07:00 scheduled run's 24-column file of the same name (15,524 B,
+     sha `5fc17119…`). That file's bytes equal `oracle_tape_2026-09-20.parquet`, so the 07:00
+     edition carried a stale as-of. Cause unverified.
+2. **The 2026-09-21 edition says "Morning Edition"**, but it was printed at 22:26 Buenos Aires.
+   It stays as printed. Run bare against that set, F-BR-14 (f)/(g) and F-BR-15 (vii) are RED by
+   design; the recovery edition is the set of record.
+3. **`engine/rangefinder.py` and the twin**: see 9.2. APOLLO's call.
+4. **A-OR1-1 i machinery is unbuilt.** No Oracle fetch path honours `X-MBX-USED-WEIGHT` or backs
+   off at 80%: `engine/data._get` ignores headers and retries 429/418 blindly, and step C's
+   backfill ran outside the wrapper lock. Nothing is owed today, because R6 found no pair short.
+   A future roster addition needs a lane-local, header-aware backfiller under `scripts/`.
+5. **Latent bypass of A-OR1-1 ii.** `names_ondemand` (oracle_wrapper.py) sends `--job=ondemand`,
+   or a bare `--slot on-demand-full`, without `--install` down the legacy path. That path skips
+   the identity gate, flag-first, movers and top-up, and uses an age-only lock. The T-7 flag
+   decision also runs just after the lock is released. Both are low severity; they need a
+   ruling to harden.
+6. **The as-of stamp reads only the hottest asset** (§5 of this document). Still open; it is
+   semantic.
+7. **The sandbox suite of record is gitignored.** `research_outputs/oracle/or1_transcripts/sandbox_suite.py`
+   runs F-BR on a fresh render; it lives only on disk.
+8. **Corrections to §8.**
+   - The before-row is 2,458,674 B, so OR-1 added **+61,900 B**, not +33,666.
+   - At publish this document was 45,048 B, not 43,963.
+   - The queue file was 8,770 B, not 8,297.
+9. **TC10 coupling, for that lane.** TC10's four "verbatim" copies of `RANGE_IMPORT_LINE` spell
+   `\brangefinder\b`; OR-1's spells `\brangefinder\w*\b`. That drift is older than this recovery.
+10. **The audit wrote into another lane's file.** Running `rangefinder_fixtures_v2.py`'s main
+    rewrote `research_outputs/rangefinder/FIXTURES_v2.txt`:
+    - before: `RF v2 FIXTURES: 6/8 GREEN`, sha `43c9e331…`, mtime 2026-09-21 14:39;
+    - after: `8/8 GREEN`, sha `68d5d3b3…`.
+    - TC10 records only `{lines: 1}` for it, so the F-DET proxy stayed IDENTICAL.
+    - Restoring it was refused by this session's permission guard. The operator's one-liner is in the ledger STATUS.
+11. **The ledger append moves TC10's F-DET.** TC10's `DATA_SPEND_AUDIT.json` records
+    `LEDGER_ARGUS.md` at 565 lines. The STATUS block below is appended by operator ruling
+    (2026-09-22) and names no asset, so only the line count moves. TIER-C10 must re-file F-DET.
+
+12. **An edition whose run crosses BA midnight loses its Market Page.** The movers json is dated at
+    STEP 3 and the edition at STEP 5. If the wall clock passes 00:00 BA in between, `load_movers`
+    finds no json for the edition's date and prints WIRE DOWN. That is honest, but avoidable: pin
+    one date at the wrapper's start, or date the movers fetch by the edition. Operator rules.
+13. **F-BR default mode is slow.** The run of record took 29 min 43 s (00:43 to 01:13 BA), almost
+    all of it in F-BR-14's hardened legs; the sandbox suite's whole F-BR run takes about 90 s.
+    Not diagnosed.
+
+### 9.7 · Disposition and BOX COST
+
+- **On the bus**, through `publish()`: this document, the queue file (spec of record + BUILT
+  stamp) and the LEDGER_ARGUS STATUS. The tick set goes from 2,784,027 B (17.40%) to about 2,811,500 B (**17.57%**), a delta of about
+  +27.5 KB: this document +16.8 KB (to about 61.8 KB, under the 64,000 B naming wire), the queue
+  file +8.5 KB, and the ledger +2.2 KB. Warn is 6,400,000 B (40%): **below warn, with a wide margin**.
+- **Code**, in `3d55988` and `ff74a90` (tracked, non-box): `scripts/rangefinder_core.py`,
+  `scripts/rangefinder_core_fixtures.py`, `oracle_daily.py`, `oracle_fixtures.py`,
+  `oracle_wrapper.py`, `oracle_topup.py`, `SKILL.md`, `topup_scope.json`.
+- **Off-bus, NOT PROTECTED** (gitignored): the recovery edition and its two tapes, calibration
+  and movers json; `backfill_state.json`; the recovery patch; about 80 transcripts.
+- **PUSH WITHHELD by operator ruling (2026-09-22).** `publish()` always pushes the whole branch,
+  and the branch carries TIER-C10's unpushed commits, whose push awaits the operator's word at
+  that lane's CLOSE. This publish committed locally and pushed nothing.
