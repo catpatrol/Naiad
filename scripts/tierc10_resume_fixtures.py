@@ -257,6 +257,20 @@ TC_SUITE_FILES = (
     "scripts/tierc10_brk_fixtures.py",
     "scripts/tierc10_census.py",
     "scripts/tierc10_census_fixtures.py",
+    "scripts/tierc10_close_close_box_cost.py",   # CLOSE (2026-09-23)
+    "scripts/tierc10_close_close_census_r.py",   # CLOSE (2026-09-23)
+    "scripts/tierc10_close_close_findings.py",   # CLOSE (2026-09-23)
+    "scripts/tierc10_close_close_ledger_append.py",   # CLOSE (2026-09-23)
+    "scripts/tierc10_close_close_s0_verdicts.py",   # CLOSE (2026-09-23)
+    "scripts/tierc10_close_close_stage_d.py",   # CLOSE (2026-09-23)
+    "scripts/tierc10_close_close_stage_log.py",   # CLOSE (2026-09-23)
+    "scripts/tierc10_close_forward_strip.py",   # CLOSE (2026-09-23)
+    "scripts/tierc10_close_ledger_append_root.py",   # CLOSE (2026-09-23)
+    "scripts/tierc10_close_p_age_1_tide_youth.py",   # CLOSE (2026-09-23)
+    "scripts/tierc10_close_p_trg_2_seen_share.py",   # CLOSE (2026-09-23)
+    "scripts/tierc10_close_regime_prior.py",   # CLOSE (2026-09-23)
+    "scripts/tierc10_close_regime_prior_fixtures.py",   # CLOSE (2026-09-23)
+    "scripts/tierc10_close_v6_control_twin.py",   # CLOSE (2026-09-23)
     "scripts/tierc10_data.py",
     "scripts/tierc10_data_fixtures.py",
     "scripts/tierc10_file_registrations.py",   # Stage B's filer (371123f)

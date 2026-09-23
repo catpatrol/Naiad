@@ -1,0 +1,94 @@
+==============================================================================
+TIER-C10 · CLOSE · LAW 6 STAGE LOG — FIXTURES (F-SL-*, F-DET)
+REPORT-ONLY: a ledger reprint. No registration scored or consulted; no bar read;
+tierc10_data.load_asof not needed (this script opens no klines file).
+script   scripts/tierc10_close_close_stage_log.py  sha256 43498cf7fa9623c67a4e727b17faef533ec92e3859083e321c291f81e88bb9db
+substrate NAIAD_CACHE_DIR = /Users/luis/.cache/naiad/snapshots/tc10_20260921  (guard passed)
+==============================================================================
+INPUTS (read-only)
+  research_outputs/tierc10/PROGRESS.json  sha256 0d66f2d7fe6c338339880368ff854e58bbb2533be54cf2f7448f71d129752afc  267,607 B
+  research_outputs/tierc10/FIXTURES_RESUME.txt  sha256 d36cf42e8dc40deb11cbea3d5553bb93967750968c59658858082fb241e2b9ab  111,005 B
+  research_outputs/tierc10/BUILD_DRAFT.md  sha256 1ec7b93c5b4590ded7aa7f02621938b101001df9ccdd25c2ef808338a554fa97  10,750 B
+  git log --grep='^tierc10' --format='%h %cI %s' : 28 commits; 25 after f97cded; 0 already in §1
+  committed ledgers (git log -- PROGRESS.json): 8 — f97cded 6b15def 3453c87 2e4d959 2e92972 899d3e7 ab7306a 08a6fce
+  PROGRESS.json working tree == newest committed blob: True
+  BUILD_DRAFT.md working tree == HEAD blob: True  (last changed f97cded)
+  §1 STAGE LOG holds 5 lines; §R0.2 table = draft lines 64–74
+OUTPUTS (research_outputs/tierc10/close/)
+  STAGE_LOG.md     sha256 0186583894921519351fb726f2aad1826d39c1a22bb7b2d1d1afd3d7f04c9dee  12,329 B  62 lines
+  R0_ADDENDUM.md   sha256 0df7a920ee88a34ae35e6d87b38699ccda123a0bc1fc2eb0dbc31e2ba926a14a  16,734 B  117 lines
+  STAGE_LOG.md: §A 15 stage lines · §B 25 commit lines
+  R0.2 history: 5 CV / 4 PARTIAL of 9; now: 13 CV / 2 PARTIAL of 15
+  moved PARTIAL -> CV: CENSUS-R{4h,1d} at 6b15def (last PARTIAL record f97cded; window 8 tierc10 commits)
+  moved PARTIAL -> CV: LANES (B mech) at 899d3e7 (last PARTIAL record 2e92972; window 6 tierc10 commits)
+  moved PARTIAL -> CV: BRK (B mech) at 899d3e7 (last PARTIAL record 2e92972; window 6 tierc10 commits)
+  remains PARTIAL: D-CORE (8 blockers, verbatim in §D)
+  remains PARTIAL: D-5M (1 blockers, verbatim in §D)
+==============================================================================
+F-SL-COVER
+  FAILS IF   : any PROGRESS stage, or any tierc10 commit after f97cded, is absent from STAGE_LOG.md (and not already in §1), is printed twice, a line names a stage/commit the record does not hold, or a bullet is malformed
+  real       : GREEN — 15/15 stages, 25/25 commits
+  sabotage 1 : RED as required — remove stage 'LANES (B mech)' from a COPY of PROGRESS.json, emit
+               · stage ABSENT: LANES (B mech)
+  sabotage 2 : RED as required — drop commit 2e92972 from the commit record, emit
+               · commit ABSENT: 2e92972
+  verdict    : GREEN
+F-SL-VERBATIM
+  FAILS IF   : any stage line's text differs from its PROGRESS one_line by one byte, or names a commit whose committed ledger does not carry it (or is not where it began to stand), or a commit line does not re-join to its git subject, or a date is not the %cI of its sha
+  real       : GREEN — 15 stage lines and 25 commit lines byte-equal to the record
+  sabotage 1 : RED as required — edit word 3 ('COMPLETE-VERIFIED') of 'STEP 0''s one_line in a COPY of PROGRESS.json, emit
+               · one_line differs from PROGRESS: STEP 0 (first difference at char 7)  (+1 more)
+  sabotage 2 : RED as required — edit word 1 of commit line ffdffce in the emitted log
+               · commit line ffdffce does not re-join to its git subject
+  sabotage 3 : RED as required — re-attribute 'STEP 0' from 3453c87 to the earlier ledger 6b15def
+               · STEP 0: ledger 6b15def (on/after 6b15def) does not carry the one_line  (+1 more)
+  verdict    : GREEN
+F-SL-HISTORY
+  FAILS IF   : R0_ADDENDUM.md's §A HISTORY does not carry the R0.2 table text of BUILD_DRAFT.md exactly once, byte-for-byte, as whole contiguous lines (altered or omitted)
+  real       : GREEN — R0.2 table (draft lines 64–74, 11 lines) verbatim once in §A HISTORY
+  sabotage 1 : RED as required — alter one cell of the emitted history (first PARTIAL -> COMPLETE-VERIFIED)
+               · the R0.2 table (draft lines 64–74) appears 0x in §A HISTORY, not once verbatim
+  sabotage 2 : RED as required — emit from a COPY of the draft with R0.2 row 2 ('D-CORE') deleted
+               · the R0.2 table (draft lines 64–74) appears 0x in §A HISTORY, not once verbatim
+  sabotage 3 : RED as required — omit the table from the emitted history
+               · the R0.2 table (draft lines 64–74) appears 0x in §A HISTORY, not once verbatim
+  verdict    : GREEN
+F-SL-R0SEAL
+  FAILS IF   : the R0.2 table does not re-render byte-identically from PROGRESS.json AS COMMITTED AT f97cded — the history printed is not the ledger it claims to be
+  real       : GREEN — 9/9 rows re-render byte-identically
+  sabotage 1 : RED as required — the f97cded ledger with 'D-CORE' flipped PARTIAL -> COMPLETE-VERIFIED
+               · R0.2 table differs from the f97cded ledger's rendering at table line(s) [4]
+  sabotage 2 : RED as required — a COPY of the draft with 'STEP 0''s blocker count bent by +1
+               · R0.2 table differs from the f97cded ledger's rendering at table line(s) [3]
+  verdict    : GREEN
+F-SL-INPUTS
+  FAILS IF   : while gathering and emitting, the run opens any repo file but PROGRESS.json and BUILD_DRAFT.md (registrations/, scores/, *.scored.json above all), anything under ~/.cache/naiad, anything for writing, mutates any path, or starts any subprocess but git with a read-only subcommand (log, show, rev-list, rev-parse); or the hook did not observe the two declared reads and a git call (blind)
+  real       : GREEN — observed reads: research_outputs/tierc10/BUILD_DRAFT.md, research_outputs/tierc10/PROGRESS.json; git calls: logx3, rev-listx2, rev-parsex2, showx10 — 0 violations
+  sabotage 1 : RED as required — a full gather + a planted read of research_outputs/tierc10/scores/<plant>.json (blocked before the open)
+               · violation: opened research_outputs/tierc10/scores/__SABOTAGE_PLANT_NEVER_EXISTS__.json
+  sabotage 2 : RED as required — a full gather + a planted `git status` (blocked before exec)
+               · violation: git status is not on the read-only allowlist ['log', 'rev-list', 'rev-parse', 'show']
+  sabotage 3 : RED as required — a full gather + a planted write-mode open in scratch (blocked before the open)
+               · violation: write-mode open of planted_write.txt
+  sabotage 4 : RED as required — a BLIND hook: the canonical run's violations with nothing observed
+               · the hook observed reads [], not the two declared inputs — a blind hook cannot certify anything  (+1 more)
+  verdict    : GREEN
+F-DET
+  FAILS IF   : STAGE_LOG.md or R0_ADDENDUM.md differ by one byte between the in-process emission, the files on disk, and two emissions in two fresh processes (fresh hash seeds)
+  real       : GREEN — 4 emissions byte-identical (STAGE_LOG.md 0186583894921519 · R0_ADDENDUM.md 0df7a920ee88a34a)
+  sabotage 1 : RED as required — an emission with a clock stamped into R0_ADDENDUM.md
+               · R0_ADDENDUM.md: stamped run differs from the in-process emission
+  verdict    : GREEN
+F-SL-READONLY
+  FAILS IF   : the bytes (sha256) — or, stricter, the size or the mtime — of PROGRESS.json, FIXTURES_RESUME.txt or BUILD_DRAFT.md change between the start of the run and the end of the last leg
+  real       : GREEN — 3 files: sha256, size and mtime unchanged
+  sabotage 1 : RED as required — append one byte to the PROGRESS.json copy during a watched emission
+               · PROGRESS.json bytes changed  (+2 more)
+  sabotage 2 : RED as required — `touch` the FIXTURES_RESUME.txt copy (mtime only) during a watched emission
+               · FIXTURES_RESUME.txt mtime changed
+  sabotage 3 : RED as required — flip one byte of the BUILD_DRAFT.md copy, size and mtime kept during a watched emission
+               · BUILD_DRAFT.md bytes changed
+  verdict    : GREEN
+==============================================================================
+FIXTURE SUMMARY 7/7 GREEN · 0 RED · sabotages 18/18 RED as required
+==============================================================================

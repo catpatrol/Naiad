@@ -1,0 +1,85 @@
+TIER-C10 · CLOSE §0 · SIX VERDICT ROWS + THE ADMITTED LIST + THE FORWARD STRIP — FIXTURES
+
+RUN · scripts/tierc10_close_close_s0_verdicts.py
+RUN · NAIAD_CACHE_DIR=/Users/luis/.cache/naiad/snapshots/tc10_20260921 · PYTHONDONTWRITEBYTECODE=1 · interpreter ~/venvs/naiad
+RUN · REPORT-ONLY TRANSCRIPTION: scores nothing, reads no bar, never edits BUILD_DRAFT.md, writes only under research_outputs/tierc10/close/
+
+INPUTS (read-only)
+  pin            research_outputs/tierc10/REGISTRY_PIN.json  sha256 4facddb8b6d2ee0017cccb46fc59187494af5591b8760b0245507c6621f17244  2897 bytes
+  rows:P-GEN-1   research_outputs/tierc10/scores/P-GEN-1.rows.json  sha256 047097ec5aeefbe8aa63cf2b1a677015540497a41e43b0152e609426a2baf87d  123091 bytes
+  rows:P-SPR-2   research_outputs/tierc10/scores/P-SPR-2.rows.json  sha256 febff33a1ad91e3663cb75fc7db54fe7901d7a8493503e3e6e6aa065da6bc23e  111310 bytes
+  rows:P-BE-1    research_outputs/tierc10/scores/P-BE-1.rows.json  sha256 b40af065177695e36e755d183ef74e7328d77eb799ed3abbb668ff7d69b6b678  84044 bytes
+  rows:P-TRG-2   research_outputs/tierc10/scores/P-TRG-2.rows.json  sha256 9fa07a0fa1b832ef7a1012a796cfd7fdd73ab2e1275d4faa4340666493c340c8  102709 bytes
+  rows:P-BRK-I1  research_outputs/tierc10/scores/P-BRK-I1.rows.json  sha256 f3ae88d0be366f127bacfe0f8092cdef07d17559ea3b3db6d6c1edd6c306111a  111150 bytes
+  rows:P-BRK-S1  research_outputs/tierc10/scores/P-BRK-S1.rows.json  sha256 994bcaa69906aae8a1659d953c0984da636cb496808dd17ab91ddf3ea3c33ff0  118556 bytes
+  family         research_outputs/tierc10/scores/FAMILY.json  sha256 aa0e8c496fd6b883a3c01947047c4845eb72935ca17368cffee9c8593a7bc4a2  113715 bytes
+  texts          research_outputs/tierc10/REGISTRATION_TEXTS.json  sha256 3afce077146807127072ae68f9c816e0263505aa625cf1610763ea37eb91ca94  178729 bytes
+  manifest       research_outputs/tierc10/data/STAGE_D_MANIFEST.json  sha256 de2e8663bbf101dfb46ad9f77a4969ca73648e78373646c0d17b81b9f9a87421  405715 bytes
+  plan           research_outputs/tierc10/REGISTRATION_PLAN.md  sha256 cbb85a214de536598d7e06575b32eac6e266b051cf279f244988245829b2a5e8  7242 bytes
+  draft          research_outputs/tierc10/BUILD_DRAFT.md  sha256 244ad5a46a4f73c522361990638499206c9ef3c341d436e2aa67bdd898791149  111105 bytes
+  contract       exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md  sha256 8a0bf279bcab0f27161a7d965535445807f4e713e77d045b0ba124bc7f803c7a  9441 bytes
+  rulings        research_outputs/tierc10/OPERATOR_RULINGS.md  sha256 a0a08f8761ce9eab678d42d609d7e6563e749c07a6c33b7b17f9a5c4f31ca907  8696 bytes
+  strip          research_outputs/tierc10/close/FORWARD_STRIP.md  sha256 a59e438c690987eb69bf24f805c54a4d36ae533d03e7422d499372c19d3872c4  5786 bytes
+
+OUTPUTS
+  research_outputs/tierc10/close/S0_VERDICTS.md  sha256 6952417e6bda33b0763c5079bdfa70b98063d6a4f3dc417c2284cc66b355c7b6  16670 bytes
+  research_outputs/tierc10/close/S0_VERDICTS.json  sha256 43b3221538dd4fa24665b78b2fda1c04cb377f4f8b1a9592cb217c505627d36c  81280 bytes
+
+F-S0-READ  FAILS IF any printed value differs string-for-string from a fresh read of its source field.
+  [GREEN] real build: 221 printed values and 7 quotes re-read by an independent route; 0 differ
+  [BREAK] ci_lo of P-GEN-1's scored arm perturbed -0.154991 -> -0.154992 in a COPY of its rows file -> RED (correct): line 13: rows:P-GEN-1/rows/0/score_row/ci_lo printed '-0.154992', source reads '-0.154991'
+  => F-S0-READ GREEN
+
+F-S0-SIX  FAILS IF there are not exactly 6 rows in REGISTRY_PIN order.
+  [GREEN] real build: 6 rows · order P-GEN-1 → P-SPR-2 → P-BE-1 → P-TRG-2 → P-BRK-I1 → P-BRK-S1
+  [BREAK] P-BE-1 dropped from the filing order -> RED (correct): 5 verdict rows printed, not 6
+  => F-S0-SIX GREEN
+
+F-S0-BAR  FAILS IF clears_bh_bar is true where p > fdr_bar_q_over_m, or where the CI straddles 0 (or lies below it), or where LOAO is below its bar — or false where p <= the bar.
+  [GREEN] real build: P-GEN-1: clears false, p 0.271682 > bar, CI [-0.154991, 0.315921], LOAO 0 vs 7
+    real build: P-SPR-2: clears false, p 0.56036 > bar, CI [-0.174617, 0.165338], LOAO 0 vs 3
+    real build: P-TRG-2: clears true, p 0.005249 <= bar, CI [0.108587, 0.383892], LOAO 5 vs 3
+    real build: P-BRK-I1: clears false, p 0.269683 > bar, CI [-0.602912, 1.452261], LOAO 1 vs 3
+    real build: P-BRK-S1: clears false, p 1.0 > bar, CI [-0.298366, -0.144105], LOAO 0 vs 3
+  [BREAK] P-GEN-1's clears_bh_bar set true in a COPY of FAMILY.json -> RED (correct): P-GEN-1: clears true but p 0.271682 > bar 0.016666666666666666
+  => F-S0-BAR GREEN
+
+F-S0-HALT  FAILS IF P-BE-1 shows a point, CI or p (or any result field, or a verdict cell other than FAMILY.json's HALT text).
+  [GREEN] real build: P-BE-1 prints no n / point / CI / p; its verdict cell is FAMILY.json scored_slots_halted verbatim; 0 problems
+  [BREAK] P-BE-1's Tier-E A2 numbers injected into its row -> RED (correct): P-BE-1 shows n = '`123`'
+  => F-S0-HALT GREEN
+
+F-S0-ADMIT  FAILS IF the admitted list differs from STAGE_D_MANIFEST admission.
+  [GREEN] real build: 12 rows in P-GEN-1's panel + 5 other admission rows = 17 vs manifest 17
+  [BREAK] the last asset dropped from the admitted list -> RED (correct): UNSEEN12 table: 11 rows printed vs 12 in panels.UNSEEN_admitted_stems order; differ at ['`1000BONKUSDT`']
+  => F-S0-ADMIT GREEN
+
+F-S0-STRIP  FAILS IF close/FORWARD_STRIP.md is absent or not byte-inlined.
+  [GREEN] real build: close/FORWARD_STRIP.md present, 5786 bytes, sha256 a59e438c690987eb69bf24f805c54a4d36ae533d03e7422d499372c19d3872c4; 0 problems
+  [BREAK] the strip absent -> RED (correct): close/FORWARD_STRIP.md is ABSENT
+  [BREAK] the inlined bytes one byte short (the strip of record) -> RED (correct): close/FORWARD_STRIP.md (5786 bytes, sha256 a59e438c690987eb…) is not byte-inlined between its markers
+  => F-S0-STRIP GREEN
+
+F-S0-NOTYPE  FAILS IF a float literal appears in the module, or a float() / round() call or a format spec on the table code path (AST scan).
+  [GREEN] real module: AST scan of the whole module for float literals, and of 29 table-path definitions for float()/round()/format specs; 0 found
+  [BREAK] a float literal planted in verdict_cells -> RED (correct): float literal 2.5 at line 315
+  [BREAK] a round() planted in render -> RED (correct): round() in render at line 139
+  => F-S0-NOTYPE GREEN
+
+F-S0-CLOSURE  FAILS IF the module imports outside the stdlib allowlist or names a scorer, registrar or bar loader.
+  [GREEN] real module: imports within the stdlib allowlist (13 names); no scorer, registrar or bar loader named; 0 found
+  [BREAK] an estate import planted in assemble -> RED (correct): import tierc10_panel (line 478)
+  [BREAK] a TP.score call planted in assemble -> RED (correct): .score (line 478)
+  => F-S0-CLOSURE GREEN
+
+F-S0-WRITES  FAILS IF a build writes anything but the two named outputs, or BUILD_DRAFT.md's sha moves across a build.
+  [GREEN] real writer: exactly S0_VERDICTS.md + S0_VERDICTS.json written; BUILD_DRAFT.md sha unchanged across a build; the guard refuses BUILD_DRAFT.md; 0 problems
+  [BREAK] a writer that drops a third file -> RED (correct): the build wrote ['EXTRA.md', 'S0_VERDICTS.json', 'S0_VERDICTS.md'], not exactly ['S0_VERDICTS.json', 'S0_VERDICTS.md']
+  => F-S0-WRITES GREEN
+
+F-DET  FAILS IF two builds (in-process, and a fresh process) are not byte-identical.
+  [GREEN] real: two in-process builds and one fresh-process build; MD sha256 6952417e6bda33b0763c5079bdfa70b98063d6a4f3dc417c2284cc66b355c7b6, JSON sha256 43b3221538dd4fa24665b78b2fda1c04cb377f4f8b1a9592cb217c505627d36c; 0 differ
+  [BREAK] a build stamp that counts -> RED (correct): MD differs: a911ea8ba0f85fed… vs 218fb73e38ca8344…
+  => F-DET GREEN
+
+FIXTURE SUMMARY  legs GREEN 10/10 · breaks RED 13/13 · exit 0

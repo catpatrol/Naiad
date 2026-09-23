@@ -1,0 +1,94 @@
+==============================================================================
+TIER-C10 CLOSE · S2 CENSUS-R — Tier-E · A SELECTION, not a result · m logged
+fixtures: break leg first, RED or void
+==============================================================================
+substrate NAIAD_CACHE_DIR=/Users/luis/.cache/naiad/snapshots/tc10_20260921 (the frozen snapshot; live cache untouched)
+as_of_last_closed_4h 2026-09-21T16:00:00Z (research_outputs/tierc10/data/AS_OF_PIN.json); no bar is read by this script
+source research_outputs/tierc10/census/CENSUS_R_DIGEST.md sha256 281e61639ad6dcb41ee088e9959191feeb02ebfe6b9eaabbb5ed2398fe600dc8 206,251 B 1,896 lines
+source research_outputs/tierc10/OPERATOR_RULINGS.md sha256 a0a08f8761ce9eab678d42d609d7e6563e749c07a6c33b7b17f9a5c4f31ca907 8,696 B 151 lines
+publish_exchange BOX_BYTES 16,000,000 · FLAG_BYTES 64,000 (ast.literal_eval of scripts/publish_exchange.py)
+wrote research_outputs/tierc10/close/S2_CENSUS_R.md sha256 d401eee939866c4d4bd5940cefcbad9616a0cbb465e5ab4e6e89c1d2f9b0db18 64,492 B
+  verbatim CENSUS_R_DIGEST.md    1,173 B sha256 61c249de61c2d8f9 [banner] L3–L4 + L9–L14
+  verbatim CENSUS_R_DIGEST.md      478 B sha256 a88b46a08b1d5af7 [acceptance] L34–L37
+  verbatim CENSUS_R_DIGEST.md    1,635 B sha256 236466ca9a36f7fb [acceptance] L55–L66 + L77–L78 + L89–L90
+  verbatim CENSUS_R_DIGEST.md    1,310 B sha256 80ff52185805aade [acceptance] L91–L102 + L113–L114 + L125–L126
+  verbatim CENSUS_R_DIGEST.md    1,386 B sha256 c5ead8fe53fadb22 [acceptance] L127–L138 + L149–L150 + L161–L162
+  verbatim CENSUS_R_DIGEST.md    1,803 B sha256 d65c0adcd9686c80 [acceptance] L163–L183
+  verbatim CENSUS_R_DIGEST.md    1,127 B sha256 1fd9d127dde7c1b2 [height-vs-toll] L186–L187 + L192–L192 + L194–L195 + L246–L246
+  verbatim CENSUS_R_DIGEST.md    8,265 B sha256 0dab9cb102a06cbf [height-vs-toll] L323–L326 + L360–L368 + L420–L428 + L480–L488 + L540–L548 + L600–L608 + L660–L668
+  verbatim CENSUS_R_DIGEST.md      695 B sha256 ef0e6a758cc15d53 [outcome] L1047–L1051
+  verbatim OPERATOR_RULINGS.md     395 B sha256 c5ed366bc5e2a9dc [ruling] L127–L131 + L137–L137
+  verbatim CENSUS_R_DIGEST.md      706 B sha256 cd99b280a08b40a8 [outcome] L1321–L1331
+  computed null beside POOLED:CLASSIC5 · 5m · frozen3.0 · ALL
+  verbatim CENSUS_R_DIGEST.md      706 B sha256 30c42702aeb4525b [outcome] L1589–L1599
+  computed null beside POOLED:UNSEEN12 · 5m · frozen3.0 · ALL
+  verbatim CENSUS_R_DIGEST.md      700 B sha256 53a52dd0efe02e7b [outcome] L1348–L1358
+  computed null beside POOLED:CLASSIC5 · 5m · frozen3.0 · holdout
+  verbatim CENSUS_R_DIGEST.md      708 B sha256 b2e66c4631b00182 [outcome] L1616–L1626
+  computed null beside POOLED:UNSEEN12 · 5m · frozen3.0 · holdout
+  verbatim CENSUS_R_DIGEST.md    1,157 B sha256 d334651d51c39bc7 [outcome] L1359–L1374
+  computed null beside POOLED:CLASSIC5 · 4h · frozen3.0 · ALL
+  verbatim CENSUS_R_DIGEST.md    1,157 B sha256 0db943aa482a8825 [outcome] L1627–L1642
+  computed null beside POOLED:UNSEEN12 · 4h · frozen3.0 · ALL
+  verbatim CENSUS_R_DIGEST.md    1,148 B sha256 0077187efafb3275 [outcome] L1391–L1406
+  computed null beside POOLED:CLASSIC5 · 4h · frozen3.0 · holdout
+  verbatim CENSUS_R_DIGEST.md    1,161 B sha256 d40f184d174c0056 [outcome] L1659–L1674
+  computed null beside POOLED:UNSEEN12 · 4h · frozen3.0 · holdout
+  verbatim CENSUS_R_DIGEST.md    1,145 B sha256 1687845305e4b575 [outcome] L1407–L1422
+  computed null beside POOLED:CLASSIC5 · 1d · frozen3.0 · ALL
+  verbatim CENSUS_R_DIGEST.md    1,145 B sha256 f95a4481b05d346d [outcome] L1675–L1690
+  computed null beside POOLED:UNSEEN12 · 1d · frozen3.0 · ALL
+  verbatim CENSUS_R_DIGEST.md    1,193 B sha256 5e40c7b9023b76a7 [outcome] L1439–L1454
+  computed null beside POOLED:CLASSIC5 · 1d · frozen3.0 · holdout
+  verbatim CENSUS_R_DIGEST.md    1,190 B sha256 ea0f844349f0d5ed [outcome] L1707–L1722
+  computed null beside POOLED:UNSEEN12 · 1d · frozen3.0 · holdout
+  verbatim CENSUS_R_DIGEST.md    5,157 B sha256 46a7e2301a4e5bcd [coverage] L735–L802
+  verbatim CENSUS_R_DIGEST.md    1,162 B sha256 98847c70a2a6646d [F-RF-4] L863–L879
+
+F-S2-SLICE — every spliced block is the digest's bytes, never retyped
+  FAILS IF: any spliced block is not byte-identical to its digest (or R10) span; the header does not name the digest's full path and on-disk sha256; a label cites a span outside its source.
+  [BREAK] deliberate violation -> RED (correct): all 3 plants caught, one at a time: one digit flipped inside a spliced block -> CENSUS_R_DIGEST.md L34–L37: not byte-identical (first difference at block byte 12) · the header names another digest's sha -> header sha a0cc8349c039912a… != digest on disk 281e61639ad6dcb4… · a label cites its span shifted by one line -> CENSUS_R_DIGEST.md L56–L67 + L77–L78 + L89–L90: not byte-identical (first difference at block byte 0)
+  [PASS] F-S2-SLICE: 24 verbatim blocks · 41 spans · 36,702 of 64,492 B byte-identical to their sources; digest sha256 281e61639ad6dcb4… = the header's
+
+F-S2-PARQUET — the B.3 POOLED verdict rows = height_toll_verdict.parquet
+  FAILS IF: any printed verdict_pass / ratio_median / edge_net_h20 differs from height_toll_verdict.parquet on key (lens, scale_kind, asset, era) — ratio / NET beyond half a unit of the printed digit, verdict at all; a POOLED key is missing, doubled, or a non-POOLED row is printed.
+  [BREAK] deliberate violation -> RED (correct): all 5 plants caught, one at a time: parquet: one ratio_median cell +0.01 -> ('1d', 'calibrated', 'POOLED:CLASSIC5', 'holdout'): ratio median printed 276.26 vs ratio_median 276.271230 · parquet: one edge_net_h20 cell +0.001 -> ('1d', 'calibrated', 'POOLED:CLASSIC5', 'holdout'): edge NET printed -0.6945 vs edge_net_h20 -0.693473 · parquet: one verdict_pass flipped -> ('1d', 'calibrated', 'POOLED:CLASSIC5', 'holdout'): verdict printed **FAIL** vs verdict_pass True · section: one edge NET sign flipped -> ('1d', 'calibrated', 'POOLED:ALL', 'ALL'): edge NET printed +0.1644 vs edge_net_h20 -0.164374 · section: one POOLED row deleted -> 1 POOLED key(s) of the parquet not printed, e.g. ('4h', 'frozen3.0', 'POOLED:ALL', 'ALL')
+  [PASS] F-S2-PARQUET: 54 POOLED verdict rows printed = every POOLED key of research_outputs/tierc10/census/height_toll_verdict.parquet; verdict_pass exact, ratio_median / edge_net_h20 within half a unit of the printed digit
+
+F-S2-ORDER — the prominent tables come first
+  FAILS IF: outcome-after-event, the acceptance head-to-head and height-vs-toll do not all precede coverage and F-RF-4 (or any of the five is absent).
+  [BREAK] deliberate violation -> RED (correct): all 2 plants caught, one at a time: F-RF-4 moved to the front -> ['acceptance', 'height-vs-toll', 'outcome'] sit(s) after the first coverage/F-RF-4 block (byte 3,570) · coverage moved ahead of the outcome tables -> ['outcome'] sit(s) after the first coverage/F-RF-4 block (byte 21,871)
+  [PASS] F-S2-ORDER: blocks per kind {'F-RF-4': 1, 'acceptance': 5, 'banner': 1, 'coverage': 1, 'height-vs-toll': 2, 'outcome': 25, 'ruling': 1}; every acceptance / height-vs-toll / outcome block precedes the first coverage and F-RF-4 block
+
+F-S2-NULL — every outcome block has the gaps+order null beside it
+  FAILS IF: an outcome block lacks the gaps+order null beside it — no null table immediately after it, a table keyed to another block, a missing gaps+order / gaps-only column at H20 or H100, a row missing, a gaps+order cell not a number, a cell not the close-time computation, or the null's REAL (n, median) not the block's printed n / median.
+  [BREAK] deliberate violation -> RED (correct): all 3 plants caught, one at a time: one null table removed -> POOLED:CLASSIC5 · 5m · frozen3.0 · ALL: no null table immediately beside the block · one gaps+order cell blanked to an em dash -> POOLED:CLASSIC5 · 5m · frozen3.0 · ALL breach H20: gaps+order cell '—' · the gaps+order columns renamed away -> POOLED:CLASSIC5 · 5m · frozen3.0 · ALL: the null table has no 'null gaps+order (H20)' column
+  [PASS] F-S2-NULL: 12 of 12 outcome blocks (112 class rows) carry their pooled null beside them — gaps+order (of record) and gaps-only, H20 and H100, one row per block row, every cell = the close-time computation, the null's REAL (n, median) = the block's printed n / median
+
+F-S2-NULL-ANCHOR — the close-time pooling path is the null build's own
+  FAILS IF: the path does not reproduce every filed POOLED:ALL null_summary row exactly (both variants, every lens), or its REAL draw differs from the census outcome_grid row of the same pool.
+  [BREAK] deliberate violation -> RED (correct): all 3 plants caught, one at a time: POOLED:ALL 1d pooled over 16 of 17 members -> POOLED:ALL 1d gaps+order: computed != filed null_summary (columns differ: ['real', 'real_n', 'null_n_events_median', 'nu · the gaps-only computation held against the filed gaps+order -> POOLED:ALL 1d gaps+order: computed != filed null_summary (columns differ: ['null_n_events_median', 'null_median', 'null_ · POOLED:CLASSIC5's REAL held against the census's POOLED:UNSEEN12 -> POOLED:CLASSIC5 1d gaps+order: REAL draw != census outcome_grid POOLED:UNSEEN12 (columns differ: ['n_events', 'n', 'n_ce
+  [PASS] F-S2-NULL-ANCHOR: the close-time path reproduces all 2,376 filed POOLED:ALL null_summary rows (frozen3.0, 3 lenses, both variants, 15 columns, exact) and its REAL draw equals 792 census outcome_grid rows of POOLED:CLASSIC5/POOLED:UNSEEN12 (15 columns, exact); filed commission.pooled = {'gaps+order': ['POOLED:ALL'], 'gaps-only': ['POOLED:ALL']}
+
+F-S2-PROMOTE — the data's default is named, nothing is promoted
+  FAILS IF: a named default (H20 or H100) is not the max-NET rule of acceptance_head_to_head.parquet at its (lens, era, horizon), its NET / n disagree, a cell is left unnamed, it is named without 'NAMED ONLY: no pin moves', any row's `promoted` is not NOTHING or `engine_default_after` not UNCHANGED.
+  [BREAK] deliberate violation -> RED (correct): all 3 plants caught, one at a time: parquet: one row's `promoted` names a pin move -> 1 row(s) promote something: 'BREAK_CONFIRM_N=6 — PROMOTED' · parquet: another rule made the max-NET rule -> 4h/ALL/H20: named 'RangeFinder-DIE' but the max-NET rule is '6-outside-close-stale-run' · section: a named default swapped for another rule -> 5m/ALL/H20: named '2-close' but the max-NET rule is '6-outside-close-stale-run'
+  [PASS] F-S2-PROMOTE: 18 named defaults (H20 + H100, every lens x era) = the max-NET rule of research_outputs/tierc10/census/acceptance_head_to_head.parquet; `promoted` NOTHING and `engine_default_after` UNCHANGED on all 3,600 rows
+
+F-S2-COLLAR — LAW 4 + R1: the 5m retest-hold rows outside tuning stay unprinted
+  FAILS IF: any printed outcome or null row is a 5m retest-hold class outside the tuning era.
+  [BREAK] deliberate violation -> RED (correct): all 1 plants caught, one at a time: the null tables rendered with the collar off -> POOLED:CLASSIC5 · 5m · era ALL: collared class retest-hold-ribbon89_127 printed (null)
+  [PASS] F-S2-COLLAR: 224 outcome/null rows printed, none a 5m retest-hold row outside the tuning era (tierc10_census.printable)
+
+F-S2-SIZE — the naming trip-wire, read from publish_exchange.py
+  FAILS IF: the size exceeds FLAG_BYTES unflagged; the SIZE line misstates the file's bytes, or FLAG_BYTES / BOX_BYTES as ast.literal_eval reads them from scripts/publish_exchange.py; a file at or under FLAG_BYTES is flagged.
+  [BREAK] deliberate violation -> RED (correct): all 3 plants caught, one at a time: a copy over FLAG_BYTES, unflagged -> 64,265 B > FLAG_BYTES 64,000 B and NOT flagged · the SIZE line off by one byte -> the SIZE line says 64,493 B; the file is 64,492 B · FLAG_BYTES re-read from a doctored publish_exchange.py -> the SIZE line says FLAG_BYTES 64,000 / BOX_BYTES 16,000,000; publish_exchange.py has 1,000,000 / 16,000,000
+  [PASS] F-S2-SIZE: 64,492 B · FLAG_BYTES 64,000 · BOX_BYTES 16,000,000 (0.403% of the box) · OVER, FLAGGED
+
+F-DET — byte-identical on two builds
+  FAILS IF: a second build from scratch (the null recomputed from the ledgers) differs by one byte from the first or from the file on disk.
+  [BREAK] deliberate violation -> RED (correct): all 1 plants caught, one at a time: a wall-clock stamp in the build -> a build carrying a wall-clock stamp differs
+  [PASS] F-DET: a second build from scratch (null recomputed from the ledgers) is byte-identical to the first and to research_outputs/tierc10/close/S2_CENSUS_R.md: sha256 d401eee939866c4d… 64,492 B
+
+TIER-C10 CLOSE census_r FIXTURES: 9/9 GREEN
+warranty: these lines are true AS OF the substrate and the files named above and of no other; the corridor advances with the cache [TC6V-a]

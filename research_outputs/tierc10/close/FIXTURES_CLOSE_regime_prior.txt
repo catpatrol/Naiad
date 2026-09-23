@@ -1,0 +1,159 @@
+==============================================================================
+TIER-C10 · CLOSE · REGIME-PRIOR — FIXTURES (Tier-E · report-only)
+==============================================================================
+  module   scripts/tierc10_close_regime_prior.py  sha256 c478e29c4af28a8a759851b70cfd1efa5b1fa1b24afd384daebf6e333f039e12
+  fixtures scripts/tierc10_close_regime_prior_fixtures.py  sha256 a7ef18fe25a52b899028bbecd135ef308af0f2871dad7fc026a7659d1e0c9313
+  filed outputs under research_outputs/tierc10/close/:
+    REGIME_PRIOR_TIME_IN_RANGE.parquet     sha256 a2c3ed8e42e464c6b8bcd91b85788a2656ff11b1868dec7cdd5741e3f1034f8d
+    REGIME_PRIOR_V6_BY_STATE.parquet       sha256 ad7bed5953f4418a08168aaebc2e152bc4caa349c9fa86d59bb2b74db6984c41
+    REGIME_PRIOR.md                        sha256 cb793efc5f9a0a655da0fefa5648f3100a6a4cac21e4def1ddbbed07534c8844
+  inputs (read-only):
+    research_outputs/tierc10/census/coverage.parquet  [CENSUS-R{4h,1d}]  sha256 f126eb24906ad27463cc68d99b3ef88edec55684f3b6d0c6af513cc94422677e
+    research_outputs/tierc10/stamps/control_v6_stamped.parquet  [A (stamps)]  sha256 6b5649b534d73a49469fac2cb5d41ada64571d4ed95e0d7c37a895ad6e5a6f20
+    research_outputs/tierc10/stamps/control_entry_by_state.parquet  [A (stamps)]  sha256 e8a5df1cc233c6308907546373b1a3a6007279704c960a2b1a274a202ed27d47
+    research_outputs/tierc10/stamps/build_manifest.json  [A (stamps)]  sha256 026d80135ccaae1fa82953449a5b6c98c0e5aa455ede37a56f9a796106c46849
+    research_outputs/tierc10/panel/control_journal.parquet  [PANEL/gate]  sha256 fcbf5db0480416b0a5c7f704987980aea220650cb0764d5dd4095611fae64c1c
+
+------------------------------------------------------------------------------
+LEG F-RP-SHA
+  FAILS IF: any input's sha256 differs from its PROGRESS.json stage record, the contract from contract_of_record, or the ARGUS note from its committed blob at HEAD
+  SABOTAGE: a copy of census/coverage.parquet with one byte appended, offered in its place — must go RED
+  real: GREEN
+    [OK ] research_outputs/tierc10/census/coverage.parquet  stage 'CENSUS-R{4h,1d}'  record f126eb24906ad27463cc68d99b3ef88edec55684f3b6d0c6af513cc94422677e  disk f126eb24906ad27463cc68d99b3ef88edec55684f3b6d0c6af513cc94422677e
+    [OK ] research_outputs/tierc10/stamps/control_v6_stamped.parquet  stage 'A (stamps)'  record 6b5649b534d73a49469fac2cb5d41ada64571d4ed95e0d7c37a895ad6e5a6f20  disk 6b5649b534d73a49469fac2cb5d41ada64571d4ed95e0d7c37a895ad6e5a6f20
+    [OK ] research_outputs/tierc10/stamps/control_entry_by_state.parquet  stage 'A (stamps)'  record e8a5df1cc233c6308907546373b1a3a6007279704c960a2b1a274a202ed27d47  disk e8a5df1cc233c6308907546373b1a3a6007279704c960a2b1a274a202ed27d47
+    [OK ] research_outputs/tierc10/stamps/build_manifest.json  stage 'A (stamps)'  record 026d80135ccaae1fa82953449a5b6c98c0e5aa455ede37a56f9a796106c46849  disk 026d80135ccaae1fa82953449a5b6c98c0e5aa455ede37a56f9a796106c46849
+    [OK ] research_outputs/tierc10/panel/control_journal.parquet  stage 'PANEL/gate'  record fcbf5db0480416b0a5c7f704987980aea220650cb0764d5dd4095611fae64c1c  disk fcbf5db0480416b0a5c7f704987980aea220650cb0764d5dd4095611fae64c1c
+    [OK ] exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md  contract_of_record 8a0bf279bcab0f27161a7d965535445807f4e713e77d045b0ba124bc7f803c7a  disk 8a0bf279bcab0f27161a7d965535445807f4e713e77d045b0ba124bc7f803c7a
+    [OK ] exchange/reports/NOTE_ARGUS_to_APOLLO_2026-08-22_P-RNG_slate.md  blob at HEAD 0eda2821baf34ed97d816c56dd9e1512e6d85a0c  working 0eda2821baf34ed97d816c56dd9e1512e6d85a0c
+  sabotage: RED (as required)
+    [BAD] research_outputs/tierc10/census/coverage.parquet  stage 'CENSUS-R{4h,1d}'  record f126eb24906ad27463cc68d99b3ef88edec55684f3b6d0c6af513cc94422677e  disk 484680f3582867f38458829d395c00e0d6829d080dd6a36771e956b30f006bee
+    [OK ] research_outputs/tierc10/stamps/control_v6_stamped.parquet  stage 'A (stamps)'  record 6b5649b534d73a49469fac2cb5d41ada64571d4ed95e0d7c37a895ad6e5a6f20  disk 6b5649b534d73a49469fac2cb5d41ada64571d4ed95e0d7c37a895ad6e5a6f20
+    [OK ] research_outputs/tierc10/stamps/control_entry_by_state.parquet  stage 'A (stamps)'  record e8a5df1cc233c6308907546373b1a3a6007279704c960a2b1a274a202ed27d47  disk e8a5df1cc233c6308907546373b1a3a6007279704c960a2b1a274a202ed27d47
+    [OK ] research_outputs/tierc10/stamps/build_manifest.json  stage 'A (stamps)'  record 026d80135ccaae1fa82953449a5b6c98c0e5aa455ede37a56f9a796106c46849  disk 026d80135ccaae1fa82953449a5b6c98c0e5aa455ede37a56f9a796106c46849
+    [OK ] research_outputs/tierc10/panel/control_journal.parquet  stage 'PANEL/gate'  record fcbf5db0480416b0a5c7f704987980aea220650cb0764d5dd4095611fae64c1c  disk fcbf5db0480416b0a5c7f704987980aea220650cb0764d5dd4095611fae64c1c
+    [OK ] exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md  contract_of_record 8a0bf279bcab0f27161a7d965535445807f4e713e77d045b0ba124bc7f803c7a  disk 8a0bf279bcab0f27161a7d965535445807f4e713e77d045b0ba124bc7f803c7a
+    [OK ] exchange/reports/NOTE_ARGUS_to_APOLLO_2026-08-22_P-RNG_slate.md  blob at HEAD 0eda2821baf34ed97d816c56dd9e1512e6d85a0c  working 0eda2821baf34ed97d816c56dd9e1512e6d85a0c
+  => F-RP-SHA GREEN
+------------------------------------------------------------------------------
+LEG F-RP-JOIN
+  FAILS IF: a journal campaign lacks exactly one entry stamp and exactly one exit stamp, or an entry/exit stamp joins no campaign, or an exit stamp is off its campaign's journal exit_ms
+  SABOTAGE: one exit stamp duplicated in a copy of the stamps — must go RED
+  real: GREEN
+    [OK ] journal key (asset, entry_ms) unique: 200 rows, 0 duplicate(s)
+    [OK ] every campaign has exactly one entry stamp: 200/200 (counts seen [1])
+    [OK ] every entry stamp joins a campaign: 200/200 (0 stray)
+    [OK ] each campaign's entry stamp names one campaign_id, none shared: 0 null, 0 shared
+    [OK ] every campaign has exactly one exit stamp (same campaign_id): 200/200 (counts seen [1])
+    [OK ] every exit stamp joins a campaign: 200/200 (0 stray)
+    [OK ] each exit stamp sits on its campaign's journal (asset, exit_ms): 0 off
+  sabotage: RED (as required)
+    [OK ] journal key (asset, entry_ms) unique: 200 rows, 0 duplicate(s)
+    [OK ] every campaign has exactly one entry stamp: 200/200 (counts seen [1])
+    [OK ] every entry stamp joins a campaign: 200/200 (0 stray)
+    [OK ] each campaign's entry stamp names one campaign_id, none shared: 0 null, 0 shared
+    [BAD] every campaign has exactly one exit stamp (same campaign_id): 199/200 (counts seen [1, 2])
+    [OK ] every exit stamp joins a campaign: 201/201 (0 stray)
+    [OK ] each exit stamp sits on its campaign's journal (asset, exit_ms): 0 off
+  => F-RP-JOIN GREEN
+------------------------------------------------------------------------------
+LEG F-RP-ANCHOR
+  FAILS IF: Table 2's entry-state marginal (n, net_r_sum, expectancy_r, win_rate_pct per state, incl. __ALL__) differs by any amount from stamps/control_entry_by_state.parquet
+  SABOTAGE: one entry stamp's state relabelled in a copy of the stamps; Table 2 rebuilt from the copy — must go RED
+  real: GREEN
+    [OK ] state vocabulary: anchor ['BEAR_EXP', 'BULL_EXP', 'NEUTRAL', 'NONE'] vs stamps MACRO_STATES ['BEAR_EXP', 'BULL_EXP', 'NEUTRAL', 'NONE']
+    [OK ] no Table-2 entry state outside the anchor: none
+    [OK ] BEAR_EXP  n 40==40 · net_r_sum -0.651001==-0.651001 · expectancy_r -0.016275==-0.016275 · win_rate_pct 37.5==37.5
+    [OK ] BULL_EXP  n 66==66 · net_r_sum 14.509604==14.509604 · expectancy_r 0.219842==0.219842 · win_rate_pct 28.787879==28.787879
+    [OK ] NEUTRAL   n 94==94 · net_r_sum 27.884748==27.884748 · expectancy_r 0.296646==0.296646 · win_rate_pct 37.234043==37.234043
+    [OK ] NONE      n 0==0 · net_r_sum None==None · expectancy_r None==None · win_rate_pct None==None
+    [OK ] __ALL__   n 200==200 · net_r_sum 41.743351==41.743351 · expectancy_r 0.208717==0.208717 · win_rate_pct 34.5==34.5
+  sabotage: RED (as required)
+    [info] relabelled entry stamp BTCUSDT:card:20200127T0000: BULL_EXP -> NEUTRAL
+    [OK ] state vocabulary: anchor ['BEAR_EXP', 'BULL_EXP', 'NEUTRAL', 'NONE'] vs stamps MACRO_STATES ['BEAR_EXP', 'BULL_EXP', 'NEUTRAL', 'NONE']
+    [OK ] no Table-2 entry state outside the anchor: none
+    [OK ] BEAR_EXP  n 40==40 · net_r_sum -0.651001==-0.651001 · expectancy_r -0.016275==-0.016275 · win_rate_pct 37.5==37.5
+    [BAD] BULL_EXP  n 65!=66 · net_r_sum 12.696489!=14.509604 · expectancy_r 0.195331!=0.219842 · win_rate_pct 27.692308!=28.787879
+    [BAD] NEUTRAL   n 95!=94 · net_r_sum 29.697863!=27.884748 · expectancy_r 0.312609!=0.296646 · win_rate_pct 37.894737!=37.234043
+    [OK ] NONE      n 0==0 · net_r_sum None==None · expectancy_r None==None · win_rate_pct None==None
+    [OK ] __ALL__   n 200==200 · net_r_sum 41.743351==41.743351 · expectancy_r 0.208717==0.208717 · win_rate_pct 34.5==34.5
+  => F-RP-ANCHOR GREEN
+------------------------------------------------------------------------------
+LEG F-RP-VERBATIM
+  FAILS IF: any Table 1 value in a verbatim column differs from census/coverage.parquet (exact: dtype and value)
+  SABOTAGE: +0.01 on one bars_in_live_range_pct in a copy of the filed Table 1 — must go RED
+  real: GREEN
+    [OK ] verbatim columns present: 19/19 (missing none)
+    [OK ] row set: Table 1 102 rows vs coverage 102 rows, keys identical and unique: True
+    [OK ] 19 verbatim column(s) x 102 rows equal to coverage.parquet exactly; differing: none
+  sabotage: RED (as required)
+    [info] +0.01 on bars_in_live_range_pct of 1000BONKUSDT 1d calibrated
+    [OK ] verbatim columns present: 19/19 (missing none)
+    [OK ] row set: Table 1 102 rows vs coverage 102 rows, keys identical and unique: True
+    [BAD] 19 verbatim column(s) x 102 rows equal to coverage.parquet exactly; differing: ['bars_in_live_range_pct (1 cell(s), worst |diff| 0.01)']
+  => F-RP-VERBATIM GREEN
+------------------------------------------------------------------------------
+LEG F-RP-EXIT-ASOF
+  FAILS IF: any exit stamp's rf4h_bar_close_ms is later than its instant_close_ms (or null)
+  SABOTAGE: one exit stamp moved one 4h bar later in a copy of the stamps — must go RED
+  real: GREEN
+    [OK ] exit stamps 200: bar closed AFTER the instant on 0, null on 0; lag ms min 0 max 0
+    [info] entry stamps 200: bar closed AFTER the instant on 0 (printed beside; the leg is the exit law)
+  sabotage: RED (as required)
+    [info] exit stamp BTCUSDT:card:20200127T0000 moved one bar (14400000 ms, the stamps' own bar width) later
+    [BAD] exit stamps 200: bar closed AFTER the instant on 1, null on 0; lag ms min -14400000 max 0
+    [info] entry stamps 200: bar closed AFTER the instant on 0 (printed beside; the leg is the exit law)
+  => F-RP-EXIT-ASOF GREEN
+------------------------------------------------------------------------------
+LEG F-RP-COLLAR
+  FAILS IF: a Tier-E collar column (tier / selection_not_a_result / m_selections_this_table / in_sample / gates='nothing') is missing, null or off-law on either filed table, or a verdict / ci / p column exists
+  SABOTAGE: a 'verdict' column added to a copy of the filed Table 2 — must go RED
+  real: GREEN
+    [OK ] Table 1: collar ['tier', 'selection_not_a_result', 'm_selections_this_table', 'in_sample', 'gates'] missing none, null none; verdict/ci/p columns none
+    [OK ] Table 2: collar ['tier', 'selection_not_a_result', 'm_selections_this_table', 'in_sample', 'gates'] missing none, null none; verdict/ci/p columns none
+  sabotage: RED (as required)
+    [OK ] Table 1: collar ['tier', 'selection_not_a_result', 'm_selections_this_table', 'in_sample', 'gates'] missing none, null none; verdict/ci/p columns none
+    [BAD] Table 2: collar ['tier', 'selection_not_a_result', 'm_selections_this_table', 'in_sample', 'gates'] missing none, null none; verdict/ci/p columns ['verdict']
+  => F-RP-COLLAR GREEN
+------------------------------------------------------------------------------
+LEG F-RP-QUOTE
+  FAILS IF: the ARGUS note's item 2 is not whole in the filed md and on every Table 1 row, or Table 1's columns are not the declared set
+  SABOTAGE: the quote's last character dropped in a copy of the filed md — must go RED
+  real: GREEN
+    [OK ] item 2 whole in REGIME_PRIOR.md (235 chars, sha256 a76c0f53d6cd0911…)
+    [OK ] item 2 whole on every Table 1 row (102/102)
+    [OK ] Table 1 columns == declared (26 vs 26; extra none, missing none)
+  sabotage: RED (as required)
+    [BAD] item 2 whole in REGIME_PRIOR.md (235 chars, sha256 a76c0f53d6cd0911…)
+    [OK ] item 2 whole on every Table 1 row (102/102)
+    [OK ] Table 1 columns == declared (26 vs 26; extra none, missing none)
+  => F-RP-QUOTE GREEN
+------------------------------------------------------------------------------
+LEG F-DET
+  FAILS IF: two whole subprocess runs of the build (each into its own temp dir outside the repo) differ from each other or from the filed outputs by one byte, or either exits non-zero
+  SABOTAGE: one byte of run 2's Table 2 flipped in a copy — must go RED
+  real: GREEN
+    [OK ] subprocess exit codes [0, 0]
+    [OK ] REGIME_PRIOR_TIME_IN_RANGE.parquet     run1 a2c3ed8e42e464c6b8bcd91b85788a2656ff11b1868dec7cdd5741e3f1034f8d · run2 a2c3ed8e42e464c6b8bcd91b85788a2656ff11b1868dec7cdd5741e3f1034f8d
+    [OK ] REGIME_PRIOR_V6_BY_STATE.parquet       run1 ad7bed5953f4418a08168aaebc2e152bc4caa349c9fa86d59bb2b74db6984c41 · run2 ad7bed5953f4418a08168aaebc2e152bc4caa349c9fa86d59bb2b74db6984c41
+    [OK ] REGIME_PRIOR.md                        run1 cb793efc5f9a0a655da0fefa5648f3100a6a4cac21e4def1ddbbed07534c8844 · run2 cb793efc5f9a0a655da0fefa5648f3100a6a4cac21e4def1ddbbed07534c8844
+    [OK ] REGIME_PRIOR_TIME_IN_RANGE.parquet     run2 a2c3ed8e42e464c6b8bcd91b85788a2656ff11b1868dec7cdd5741e3f1034f8d · filed a2c3ed8e42e464c6b8bcd91b85788a2656ff11b1868dec7cdd5741e3f1034f8d
+    [OK ] REGIME_PRIOR_V6_BY_STATE.parquet       run2 ad7bed5953f4418a08168aaebc2e152bc4caa349c9fa86d59bb2b74db6984c41 · filed ad7bed5953f4418a08168aaebc2e152bc4caa349c9fa86d59bb2b74db6984c41
+    [OK ] REGIME_PRIOR.md                        run2 cb793efc5f9a0a655da0fefa5648f3100a6a4cac21e4def1ddbbed07534c8844 · filed cb793efc5f9a0a655da0fefa5648f3100a6a4cac21e4def1ddbbed07534c8844
+  sabotage: RED (as required)
+    [info] one byte (the middle one) of run 2's REGIME_PRIOR_V6_BY_STATE.parquet flipped
+    [OK ] REGIME_PRIOR_TIME_IN_RANGE.parquet     run1 a2c3ed8e42e464c6b8bcd91b85788a2656ff11b1868dec7cdd5741e3f1034f8d · run2-flipped a2c3ed8e42e464c6b8bcd91b85788a2656ff11b1868dec7cdd5741e3f1034f8d
+    [BAD] REGIME_PRIOR_V6_BY_STATE.parquet       run1 ad7bed5953f4418a08168aaebc2e152bc4caa349c9fa86d59bb2b74db6984c41 · run2-flipped f954a3ab50608e87e5da6d63da250f440dfdc5ab57baa754f1bf823c7669827c
+    [OK ] REGIME_PRIOR.md                        run1 cb793efc5f9a0a655da0fefa5648f3100a6a4cac21e4def1ddbbed07534c8844 · run2-flipped cb793efc5f9a0a655da0fefa5648f3100a6a4cac21e4def1ddbbed07534c8844
+  => F-DET GREEN
+------------------------------------------------------------------------------
+SUMMARY: 8 legs · 8 GREEN · 0 RED · 8/8 sabotages RED
+  F-RP-SHA         GREEN   real GREEN · sabotage RED
+  F-RP-JOIN        GREEN   real GREEN · sabotage RED
+  F-RP-ANCHOR      GREEN   real GREEN · sabotage RED
+  F-RP-VERBATIM    GREEN   real GREEN · sabotage RED
+  F-RP-EXIT-ASOF   GREEN   real GREEN · sabotage RED
+  F-RP-COLLAR      GREEN   real GREEN · sabotage RED
+  F-RP-QUOTE       GREEN   real GREEN · sabotage RED
+  F-DET            GREEN   real GREEN · sabotage RED
+exit 0

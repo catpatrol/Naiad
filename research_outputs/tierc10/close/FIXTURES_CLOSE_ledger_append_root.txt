@@ -1,0 +1,180 @@
+TIER-C10 · CLOSE · F-LAR — THE LEDGER_APOLLO APPEND OF RECORD, CERTIFIED
+REPORT-ONLY: reads the root append and its sources; writes nothing under exchange/ and never the root file
+APPEND OF RECORD (sha256 · bytes): d6a58f5c2901f177edb712c7acce208bf5055225d0f46391189635eba4cab3d1 · 14925 · research_outputs/tierc10/LEDGER_APOLLO_APPEND.md
+NOT THE APPEND: research_outputs/tierc10/close/LEDGER_APOLLO_APPEND.draft.md (F-LA's source-quote render) fea0d6519bfea0349d3524f216bb15a1c8a1c5544ac7570954f0f9030e74c3fb · 22653
+SOURCES READ (sha256[:16] · bytes · path)
+  4d58d591668badff · 259298 · LEDGER.md
+  8a0bf279bcab0f27 · 9441 · exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md
+  cd6ad43a0fe48906 · 174090 · exchange/status/LEDGER_APOLLO.md
+  d36cf42e8dc40deb · 111005 · research_outputs/tierc10/FIXTURES_RESUME.txt
+  a0a08f8761ce9eab · 8696 · research_outputs/tierc10/OPERATOR_RULINGS.md
+  0d66f2d7fe6c3383 · 267607 · research_outputs/tierc10/PROGRESS.json
+  3afce07714680712 · 178729 · research_outputs/tierc10/REGISTRATION_TEXTS.json
+  4facddb8b6d2ee00 · 2897 · research_outputs/tierc10/REGISTRY_PIN.json
+  29fdc2c30c223e52 · 211125 · research_outputs/tierc10/census/acceptance_head_to_head.parquet
+  f3682df0be96e131 · 88248 · research_outputs/tierc10/census/height_toll_verdict.parquet
+  2fe46ddcd2b9dc12 · 675998 · research_outputs/tierc10/census/outcome_grid.parquet
+  780034a0dccd4125 · 5069 · research_outputs/tierc10/close/FIXTURES_CLOSE_p_trg_2_seen_share.txt
+  4e118dc1e3f0873f · 20475 · research_outputs/tierc10/close/FORWARD_STRIP.parquet
+  b68083aa19b0955a · 60968 · research_outputs/tierc10/close/P_TRG_2_SEEN_SHARE.json
+  d401eee939866c4d · 64492 · research_outputs/tierc10/close/S2_CENSUS_R.md
+  eca4257650d82c30 · 59087 · research_outputs/tierc10/close/S3_STAGE_D.md
+  f771a60175aefcb8 · 104680 · research_outputs/tierc10/close/S5_FINDINGS_NOT_FIXED.json
+  499f3843de176fbe · 19355 · research_outputs/tierc10/close/V6_CONTROL_HAIRCUT_TWIN.parquet
+  24cd11f1a882de52 · 249025 · research_outputs/tierc10/data/DATA_SPEND_AUDIT.json
+  de2e8663bbf101df · 405715 · research_outputs/tierc10/data/STAGE_D_MANIFEST.json
+  3a18b84e0211110b · 23925 · research_outputs/tierc10/data/fee_schedule.json
+  96dfd0b7eae957c4 · 83030 · research_outputs/tierc10/lanes/BE_LATCH_CENSUS.json
+  163f65bdf21a575c · 63265 · research_outputs/tierc10/panel/FIXTURES_PANEL.txt
+  60cd026651bfa89c · 45392 · research_outputs/tierc10/panel/control_reference.parquet
+  13958abb0c75ee2c · 77280 · research_outputs/tierc10/scores/DRYRUN.json
+  aa0e8c496fd6b883 · 113715 · research_outputs/tierc10/scores/FAMILY.json
+  b40af065177695e3 · 84044 · research_outputs/tierc10/scores/P-BE-1.rows.json
+  f3ae88d0be366f12 · 111150 · research_outputs/tierc10/scores/P-BRK-I1.rows.json
+  994bcaa69906aae8 · 118556 · research_outputs/tierc10/scores/P-BRK-S1.rows.json
+  047097ec5aeefbe8 · 123091 · research_outputs/tierc10/scores/P-GEN-1.rows.json
+  febff33a1ad91e36 · 111310 · research_outputs/tierc10/scores/P-SPR-2.rows.json
+  9fa07a0fa1b832ef · 102709 · research_outputs/tierc10/scores/P-TRG-2.rows.json
+  40b660cdc943a947 · 154338 · scripts/tierc10_panel.py
+TRACE TABLE (literal ⇐ source)
+  '3 NEVER-TOUCHED' ×2 ⇐ DATA_SPEND_AUDIT.json counts.never-touched
+  '9 DISPLAY-ONLY' ×1 ⇐ DATA_SPEND_AUDIT.json counts.display-only
+  'seed 20260921' ×1 ⇐ PROGRESS.json seed
+  'registry len 6' ×1 ⇐ REGISTRY_PIN.json registry_len
+  'm = 6' ×1 ⇐ FAMILY.json family_m_declared
+  '5 scored' ×1 ⇐ FAMILY.json rows[].scored_in_family
+  '1 slot HALTed' ×1 ⇐ FAMILY.json scored_slots_halted
+  'q/m = 0.016667' ×1 ⇐ FAMILY.json fdr_bar_q_over_m
+  'As-of 2026-09-21T16:00:00Z' ×1 ⇐ PROGRESS.json as_of_of_record
+  'P-GEN-1  [45%]' ×1 ⇐ exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md B list, P-GEN-1's prior
+  'P-SPR-2  [45%]' ×1 ⇐ exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md B list, P-SPR-2's prior
+  'P-BE-1   [40%]' ×1 ⇐ exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md B list, P-BE-1's prior
+  'P-TRG-2  [40%]' ×1 ⇐ exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md B list, P-TRG-2's prior
+  'P-BRK-I1 [35%]' ×1 ⇐ exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md B list, P-BRK-I1's prior
+  'P-BRK-S1 [30%]' ×1 ⇐ exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md B list, P-BRK-S1's prior
+  'n 286, +0.099777 R/campaign, CI [-0.154991, +0.315921],' ×1 ⇐ P-GEN-1.rows.json rows[0].score_row
+  'p 0.271682, LOAO 0/12 above (bar 7).' ×1 ⇐ P-GEN-1.rows.json rows[0].score_row p_one_sided, loao_line, loao_bar_above_half
+  'BNB nets +33.4686 R of the' ×1 ⇐ P-GEN-1.rows.json rows[0].beside.per_asset_rows BNBUSDT net_r
+  "arm's +28.5362 R" ×1 ⇐ P-GEN-1.rows.json rows[0].score_row.net_r
+  'n 47, -0.232839, CI [-0.351183, -0.160879], LOAO 0/3 above, 3/3 BELOW.' ×1 ⇐ P-GEN-1.rows.json rows[2].score_row
+  'PUMP -0.4182,' ×1 ⇐ P-GEN-1.rows.json rows[2].beside.per_asset_rows PUMPUSDT expectancy_r
+  'MNT -0.2916,' ×1 ⇐ P-GEN-1.rows.json rows[2].beside.per_asset_rows MNTUSDT_BYBIT expectancy_r
+  'SUI -0.1119 R/campaign' ×1 ⇐ P-GEN-1.rows.json rows[2].beside.per_asset_rows SUIUSDT expectancy_r
+  '3 never-touched (PUMPFUN MNT SUI)' ×1 ⇐ DATA_SPEND_AUDIT.json counts, classes
+  '9 display-only' ×1 ⇐ DATA_SPEND_AUDIT.json counts.display-only
+  'n 261, -0.005930 R,' ×1 ⇐ P-SPR-2.rows.json rows[0].score_row
+  'CI [-0.174617, +0.165338], LOAO 0/5 above.' ×1 ⇐ P-SPR-2.rows.json rows[0].score_row
+  'arm (+0.239998)' ×1 ⇐ P-SPR-2.rows.json rows[2].score_row.ci_point
+  '(CI lo > 0)' ×1 ⇐ REGISTRATION_TEXTS.json P-SPR-2 §7 'STRICTLY greater than zero' (the clause's threshold)
+  'ATTESTED at STEP 0' ×1 ⇐ PROGRESS.json stages[].stage 'STEP 0' (the stage's name)
+  '200/200 campaign keys paired with v6, 0 book-only,' ×1 ⇐ DRYRUN.json P-BE-1 scored arm .keys
+  '0 base-only' ×1 ⇐ DRYRUN.json P-BE-1 scored arm .keys.n_base_only
+  'dip-before 36, dip-after 0, tie 0, mismatch 0, of 103 latch bars' ×1 ⇐ BE_LATCH_CENSUS.json counts
+  '9/12' ×3 ⇐ FAMILY.json rows[10].arm (the cell's name)
+  'n 198 vs base 200, Δ +0.257697 R, CI [+0.108587, +0.383892],' ×1 ⇐ P-TRG-2.rows.json rows[0].score_row; beside.haircut_twin.base_n
+  'p 0.005249 <= 0.016667, LOAO 5/5 above (4/5 at the sensitivity' ×1 ⇐ P-TRG-2.rows.json rows[0].score_row p_one_sided, loao_line, sens_loao_line; FAMILY fdr bar
+  'n 7 on 3 of 5 assets, +0.718270 R, CI [-0.602912, +1.452261],' ×1 ⇐ P-BRK-I1.rows.json rows[0].score_row; beside.per_asset_n
+  'p 0.269683, LOAO 1/5 above.' ×1 ⇐ P-BRK-I1.rows.json rows[0].score_row
+  '(+6.1259 R)' ×1 ⇐ P-BRK-I1.rows.json per_asset_rows ETHUSDT best_r
+  '(+5.0279 R)' ×1 ⇐ P-BRK-I1.rows.json rows[0].score_row.net_r
+  'edge NET -0.4360, 18 ranges, provisional' ×1 ⇐ height_toll_verdict.parquet 1d POOLED:CLASSIC5 frozen3.0 holdout
+  'n 1836, -0.211069 R,' ×1 ⇐ P-BRK-S1.rows.json rows[0].score_row
+  'CI [-0.298366, -0.144105], LOAO 0/5 above, 5/5 BELOW, p 1.0.' ×1 ⇐ P-BRK-S1.rows.json rows[0].score_row
+  '(edge NET -0.5885 ATR)' ×1 ⇐ height_toll_verdict.parquet 5m POOLED:CLASSIC5 frozen3.0 holdout
+  '(median 17.76% of 1R)' ×1 ⇐ P-BRK-S1.rows.json beside_registration.brk_sealed_row.toll_pct_of_1r_median
+  '196 of its 198 campaigns' ×1 ⇐ P_TRG_2_SEEN_SHARE.json pre.n, book.n
+  '(2026-08-22T00:00:00Z)' ×1 ⇐ P_TRG_2_SEEN_SHARE.json tc9_asof.iso
+  're-net +94.3989 R' ×1 ⇐ P_TRG_2_SEEN_SHARE.json pre.net_r
+  '(19 shared)' ×1 ⇐ P_TRG_2_SEEN_SHARE.json keys_vs_tc9_filed_v6_journal.shared
+  'F-SS 9/9 GREEN' ×1 ⇐ close/FIXTURES_CLOSE_p_trg_2_seen_share.txt FIXTURE SUMMARY
+  'holds 2 of its campaigns' ×1 ⇐ P_TRG_2_SEEN_SHARE.json post.n
+  "and 4 of v6's" ×1 ⇐ FORWARD_STRIP.parquet rows == P_TRG_2_SEEN_SHARE.json v6 here_post_n
+  'Δ +0.188419,' ×1 ⇐ P-TRG-2.rows.json rows[2].score_row.ci_point
+  'CI [-0.014369, +0.384652], LOAO 1/5 above.' ×1 ⇐ P-TRG-2.rows.json rows[2].score_row
+  "64 of the book's 66" ×1 ⇐ P_TRG_2_SEEN_SHARE.json era_cut
+  '(v6 vs zero CI [-0.012774, +0.463319],' ×1 ⇐ panel/control_reference.parquet ci_lo, ci_hi
+  '+52.9031 of its +92.3499 R' ×1 ⇐ P-TRG-2.rows.json per_asset_rows ZECUSDT net_r; score_row.net_r
+  'THE 2026-07-29 RS RULINGS' ×1 ⇐ LEDGER.md RS heading
+  '"BREAK_CONFIRM_N=8 · BREAK_MARGIN=1.5 — UNCHANGED"' ×1 ⇐ acceptance_head_to_head.parquet engine_default_after (single value)
+  'on all 3,600 rows' ×1 ⇐ acceptance_head_to_head.parquet rows
+  '81.9% / 82.4% / 87.2%' ×1 ⇐ close/S2_CENSUS_R.md §2.1 'margin N (x%)' lines
+  'pass 0/17 on the holdout and 0/17 on ALL' ×1 ⇐ height_toll_verdict.parquet 5m single-asset, both scales
+  '(2/17 frozen3.0, 1/17 calibrated)' ×1 ⇐ height_toll_verdict.parquet 5m single-asset tuning
+  '(CLASSIC5 holdout, frozen3.0, +0.0062)' ×1 ⇐ height_toll_verdict.parquet 4h pooled passes
+  '(19 at 4h; 6 of the 7' ×1 ⇐ height_toll_verdict.parquet single-asset 4h passes; holdout passes
+  'over 360 rows' ×1 ⇐ height_toll_verdict.parquet rows
+  'history (+0.0441)' ×1 ⇐ height_toll_verdict.parquet 1d POOLED:CLASSIC5 frozen3.0 ALL
+  'reverses on the holdout (-0.4360)' ×1 ⇐ height_toll_verdict.parquet 1d POOLED:CLASSIC5 frozen3.0 holdout
+  'tier A 2.0 / B 5.0 / C 10.0 bps' ×1 ⇐ fee_schedule.json haircut_twin_tiers
+  '14.0 / 20.0 / 30.0 bps' ×1 ⇐ fee_schedule.json assets[].haircut_twin_round_trip_bps
+  '10.0 bps, which is left untouched' ×1 ⇐ fee_schedule.json assets[].round_trip_bps_used
+  '8 of 20 arms' ×1 ⇐ S5_FINDINGS_NOT_FIXED.json measured.ii.value
+  '+0.475588 against +0.466414' ×1 ⇐ P-TRG-2.rows.json rows[0].beside.haircut_twin
+  'TC -0.010763, twin +0.014494, with funding -0.030517' ×1 ⇐ V6_CONTROL_HAIRCUT_TWIN.parquet era tuning, key ALL
+  '(0/20)' ×1 ⇐ rows.json beside.haircut_twin.sign_disagrees_with_tc, every twin row
+  '7,920 outcome cells' ×1 ⇐ outcome_grid.parquet m_looks_this_table
+  "Admitted 12/12 (P-GEN-1's panel) + CLASSIC5 5/5; none excluded" ×1 ⇐ STAGE_D_MANIFEST.json admission rows, excluded; DATA_SPEND_AUDIT classes
+  "v6 after TC9's as-of, 4 campaigns." ×1 ⇐ FORWARD_STRIP.parquet rows
+  '3 closed for -0.689692 R; 1 open, marked +3.642965 R' ×1 ⇐ FORWARD_STRIP.parquet net_r by exit_reason
+  'F-D-4: 102 cells, 0 pre-floor bars.' ×1 ⇐ close/S3_STAGE_D.md 'F-D-4 RE-MEASURED'
+  '15 stages: 13 COMPLETE-VERIFIED, 2 PARTIAL' ×1 ⇐ PROGRESS.json stages[].status
+  're-nets +38.7901 R' ×1 ⇐ P_TRG_2_SEEN_SHARE.json v6_base_vs_tc9_filed.here_pre_net_r
+  "TC9's filed +38.8044 R" ×1 ⇐ P_TRG_2_SEEN_SHARE.json v6_base_vs_tc9_filed.tc9_filed_net_r
+  'all 28 review worktrees' ×1 ⇐ S5_FINDINGS_NOT_FIXED.json measured.v.value.worktrees_besides_main
+  '(1719791999000 ms = 2024-06-30T23:59:59Z)' ×1 ⇐ scripts/tierc10_panel.py ERA_CUT_ISO (and its ms)
+  '(P-TRG-2, 196/198 SEEN)' ×1 ⇐ P_TRG_2_SEEN_SHARE.json pre.n, book.n
+EXEMPTIONS (literal ×count — reason)
+  '2026-09-22' ×1 — the block's own date in its header line (the CLOSE day), not a measured value
+
+F-LAR-FORMAT · FAILS IF the block does not open on the ledger separator, mirror the header / LANE / CLASS lines, end on exactly one '=== END ===' with nothing after it, or carries the session's final line
+  real      GREEN — opens on '\n---\n\n'; header / LANE / CLASS mirror the ledger; ends on one '=== END ===' with nothing after; no session line inside
+  sabotage  the session line appended after END: RED (as required) — does not END on exactly one '=== END ===' line with nothing after it; the session's final line is inside the appended bytes
+  sabotage  the END line dropped: RED (as required) — does not END on exactly one '=== END ===' line with nothing after it
+  => F-LAR-FORMAT GREEN
+
+F-LAR-CITE · FAILS IF any «cite» in the block does not verify against its source (F-LA's own verify_quote)
+  real      GREEN — 25 quote(s) verify through F-LA's verify_quote
+  sabotage  TC9's last word bent (NINE -> TEN): RED (as required) — 1 bad: ['line 247 «exchange/status/LEDGER_APOLLO.md:2422-2423»: line(s) 2422-2423 do not hold the quoted text']
+  sabotage  a cite re-pointed (:2-3 -> :3-4): RED (as required) — 1 bad: ['line 18 «exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md:3-4»: line(s) 3-4 do not hold the quoted text']
+  => F-LAR-CITE GREEN
+
+F-LAR-REQUIRED · FAILS IF a commissioned item (contract :137-139) or TC9's last word is absent
+  real      GREEN — the contract's five commissioned items (Q6 verbatim · m · the 07-29 RS rulings · the slippage-twin question · CENSUS-3 next) and TC9's last word are present
+  sabotage  CENSUS-3's cite removed: RED (as required) — missing: ['CENSUS-3 next :139']
+  sabotage  the question re-worded: RED (as required) — missing: ['the slippage-twin question, verbatim']
+  => F-LAR-REQUIRED GREEN
+
+F-LAR-TRACE · FAILS IF a traced literal differs from its source, or is present other than its declared number of times
+  real      GREEN — 86 traced literals, each equal to its source and present its declared number of times
+  sabotage  P-GEN-1's point bent (+0.099777 -> +0.099778): RED (as required) — 1 bad: ["'n 286, +0.099777 R/campaign, CI [-0.154991, +0.315921],' [P-GEN-1.rows.json rows[0].score_row]: in prose 0x, declared 1x"]
+  sabotage  the seen share bent (196 of its 198 -> 197 of its 198): RED (as required) — 1 bad: ["'196 of its 198 campaigns' [P_TRG_2_SEEN_SHARE.json pre.n, book.n]: in prose 0x, declared 1x"]
+  sabotage  a traced literal duplicated: RED (as required) — 1 bad: ["'(0/20)' [rows.json beside.haircut_twin.sign_disagrees_with_tc, every twin row]: in prose 2x, declared 1x"]
+  => F-LAR-TRACE GREEN
+
+F-LAR-COVER · FAILS IF any digit in the prose is covered by no trace, mask or exemption
+  real      GREEN — every digit in the prose lies inside a traced literal, a masked token or a listed exemption
+  sabotage  an untraced number planted (n 999): RED (as required) — ["line 216: '999' in «Named, n 999.»"]
+  sabotage  an untraced date planted: RED (as required) — ["line 216: '2026' in «Named 2026-09-30.»", "line 216: '09' in «Named 2026-09-30.»", "line 216: '30' in «Named 2026-09-30.»"]
+  => F-LAR-COVER GREEN
+
+F-LAR-CLAIM · FAILS IF a word claim of the prose is false against its source
+  real      GREEN — 18 word claims hold against their sources
+  sabotage  a copy where PUMP's never-touched expectancy is positive: RED (as required) — FALSE: ['each never-touched asset negative / ALL SIT BELOW ZERO ([0.4182, -0.2916, -0.1119])']
+  => F-LAR-CLAIM GREEN
+
+F-LAR-STAMP · FAILS IF a pending stamp is malformed (unclosed, or not '⟦STAMP AT CLOSE …⟧')
+  real      GREEN — 1 PENDING stamp(s), each '⟦STAMP AT CLOSE …⟧', none certified — fill, then re-run: ⟦STAMP AT CLOSE — replace this bracket with 'N tierc10 commi
+  sabotage  an unclosed stamp: RED (as required) — malformed stamp: 1 opened, 0 well-formed
+  => F-LAR-STAMP GREEN
+
+F-LAR-NOWRITE · FAILS IF LEDGER_APOLLO.md or the root append changes during the run, or an output leaves close/
+  real      GREEN — LEDGER_APOLLO.md cd6ad43a0fe48906… unchanged; the root append unchanged; output under close/ only
+  sabotage  an output path under exchange/status/: RED (as required) — guard refuses ['/Users/luis/Naiad/exchange/status/LEDGER_APOLLO.md']
+  => F-LAR-NOWRITE GREEN
+
+F-DET · FAILS IF two subprocess runs (PYTHONHASHSEED 1, 20260921) print a different transcript through F-LAR-NOWRITE, or differ from this run's
+  real      GREEN — exit [0, 0]; sha 559e22432f2e6588…; all three byte-identical: True
+  sabotage  a process-dependent salt: RED (as required) — salted transcript differs
+  => F-DET GREEN
+
+FIXTURE SUMMARY 9/9 GREEN {"F-LAR-FORMAT": true, "F-LAR-CITE": true, "F-LAR-REQUIRED": true, "F-LAR-TRACE": true, "F-LAR-COVER": true, "F-LAR-CLAIM": true, "F-LAR-STAMP": true, "F-LAR-NOWRITE": true, "F-DET": true}

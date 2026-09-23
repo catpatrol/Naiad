@@ -1,0 +1,56 @@
+TIER-C10 · CLOSE · P-TRG-2 SEEN SHARE — FIXTURES (F-SS)
+substrate tc10_20260921 · REPORT-ONLY — TIER-E — NEVER SCORED · counts and sums only; no CI, no p, no verdict
+OUTPUT (sha256 · bytes)
+  b68083aa19b0955a3082966987da2388970ab31cc9dd536f2f8a56e996e30f30 · 60968 · research_outputs/tierc10/close/P_TRG_2_SEEN_SHARE.json
+  5b7ef5d1720f5f07aa31c9fe97b808b4686532bcc8454eef3870c2b3bb412914 · 5677 · research_outputs/tierc10/close/P_TRG_2_SEEN_SHARE.md
+book sha b2276fa487119ef12a8e0434e54f9b77efbfb7ee387b3cb35d2955043c371a8f · n 198 · pre 196 (+94.3989 R) · post 2 (-2.0490 R) · open across 0
+
+F-SS-SUBSTRATE · FAILS IF the guard accepts an unset, live-cache or foreign NAIAD_CACHE_DIR
+  real      GREEN — HALTs on ['foreign dir', 'live cache', 'unset'] of 3; the snapshot passes: True
+  sabotage  a guard that accepts any directory: RED (as required) — HALTs on [] of 3; the snapshot passes: True
+  => F-SS-SUBSTRATE GREEN
+
+F-SS-BOOK · FAILS IF the ridden book's sha differs from the dry-run pin or the scored row's book_sha256
+  real      GREEN — book sha b2276fa487119ef1… vs dry-run pin b2276fa487119ef1… and scored row b2276fa487119ef1…
+  sabotage  one net_r bent 1e-9 in a copy: RED (as required) — book sha fefeabfb83e94949… vs dry-run pin b2276fa487119ef1… and scored row b2276fa487119ef1…
+  => F-SS-BOOK GREEN
+
+F-SS-SPLIT · FAILS IF a campaign sits on the wrong side of TC9's as-of, on both sides, or on neither
+  real      GREEN — 198 campaigns, each on exactly one side; misplaced 0
+  sabotage  one AFTER campaign relabelled AT-OR-BEFORE: RED (as required) — 198 campaigns, each on exactly one side; misplaced 1 e.g. ZECUSDT 2026-08-27T20:00:00Z labelled AT-OR-BEFORE-TC9-ASOF
+  sabotage  the split taken at TC10's corridor end 2026-09-21T16:00:00Z instead of TC9's as-of: RED (as required) — 198 campaigns, each on exactly one side; misplaced 2 e.g. ZECUSDT 2026-08-27T20:00:00Z labelled AT-OR-BEFORE-TC9-ASOF
+  => F-SS-SPLIT GREEN
+
+F-SS-GRID · FAILS IF the AT-OR-BEFORE part differs from TC9's grid row on n, net_r, gross_r, fee_r, funding_r, best_r or win_rate_pct (4 dp)
+  real      GREEN — 7/7 fields equal the grid row
+  sabotage  one campaign dropped: RED (as required) — differ: {'n': (195, 196), 'net_r': (95.2896, 94.3989), 'gross_r': (106.9887, 106.2883), 'fee_r': (6.0898, 6.1309), 'funding_r': (5.6093, 5.7584), 'win_rate_pct': (40.5128, 40.3061)}
+  sabotage  one net_r bent +1e-4: RED (as required) — differ: {'net_r': (94.399, 94.3989)}
+  sabotage  the split taken at TC10's corridor end instead of TC9's as-of: RED (as required) — differ: {'n': (198, 196), 'net_r': (92.3499, 94.3989), 'gross_r': (104.2883, 106.2883), 'fee_r': (6.1782, 6.1309), 'funding_r': (5.7602, 5.7584), 'win_rate_pct': (39.899, 40.3061)}
+  => F-SS-GRID GREEN
+
+F-SS-KEYS · FAILS IF the key overlap with TC9's filed v6 journal differs from the grid's n_shared / n_cell_only / n_base_only
+  real      GREEN — shared/cell-only/base-only equal the grid row: shared 19, cell_only 177, base_only 177
+  sabotage  one shared book key's entry moved one 4h bar: RED (as required) — differ: {'shared': (18, 19), 'cell_only': (178, 177), 'base_only': (178, 177)}
+  => F-SS-KEYS GREEN
+
+F-SS-V6 · FAILS IF a v6 campaign is on one side only, a net_r difference is not carried by funding_r alone (gross_r, fee_r exact), or the attributed set differs from F-CTRL/b's [NB] line
+  real      GREEN — both 196, one-side 0, funding-attributed [('ZECUSDT', '2026-08-17T04:00:00Z')], unattributed 0, matches F-CTRL/b [NB]: True
+  sabotage  a TC9 gross_r (and net_r) bent 1e-6 in a copy: RED (as required) — both 196, one-side 0, funding-attributed [('ZECUSDT', '2026-08-17T04:00:00Z')], unattributed 1, matches F-CTRL/b [NB]: True
+  => F-SS-V6 GREEN
+
+F-SS-CLOSURE · FAILS IF this module references score / finish_family / register / _mark_scored
+  real      GREEN — no score / finish_family / register / _mark_scored reference
+  sabotage  a planted TP.score(book) call: RED (as required) — forbidden: ['.score']
+  => F-SS-CLOSURE GREEN
+
+F-SS-NOWRITE · FAILS IF a byte of scores/, registrations/, REGISTRY*, PROGRESS.json, FIXTURES_RESUME.txt or an input moves during the run, or an output path leaves close/
+  real      GREEN — 39 protected files unchanged; outputs under close/ only
+  sabotage  an output path under exchange/status/: RED (as required) — guard refuses ['/Users/luis/Naiad/exchange/status/LEDGER_APOLLO.md']
+  => F-SS-NOWRITE GREEN
+
+F-DET · FAILS IF two subprocess builds (PYTHONHASHSEED 1, 20260921) differ from each other or from this run's bytes
+  real      GREEN — exit {1: 0, 20260921: 0}; json b68083aa19b0955a… == b68083aa19b0955a…: True; == this run: True
+  sabotage  a process-dependent salt in the JSON: RED (as required) — salted build byte-identical: False
+  => F-DET GREEN
+
+FIXTURE SUMMARY 9/9 GREEN {"F-SS-SUBSTRATE": true, "F-SS-BOOK": true, "F-SS-SPLIT": true, "F-SS-GRID": true, "F-SS-KEYS": true, "F-SS-V6": true, "F-SS-CLOSURE": true, "F-SS-NOWRITE": true, "F-DET": true}

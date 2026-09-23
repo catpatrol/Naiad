@@ -1,0 +1,67 @@
+TIER-C10 · CLOSE · BOX-COST — FIXTURES (scripts/tierc10_close_close_box_cost.py)
+PRE-CLOSE SNAPSHOT — regenerate after the CLOSE commit/push
+REPORT-ONLY · Tier-E bookkeeping — paths, bytes and git metadata; no bar read, nothing scored, no verdict consulted
+substrate NAIAD_CACHE_DIR=/Users/luis/.cache/naiad/snapshots/tc10_20260921 (guarded) · bytecode off · no bar read · no randomness
+constants (AST, never imported): BOX_BYTES 16,000,000 [scripts/publish_exchange.py:95] · FLAG_BYTES 64,000 [scripts/publish_exchange.py:160] · SCOPE 'exchange/' · TICK_EXTRA ['LEDGER.md']
+git (volatile): HEAD 3d55988 · v12-v1-census · upstream origin/v12-v1-census 088d475 · ahead 29 · tierc10 commits 0/28 pushed · no fetch
+table: (a) 53 · (b) 102 · (b-cells) 4 · (c) 1 · (d) 1 · box-bound 2 (444,261 B) · FLAGGED 1
+
+── F-BC-CONST
+   FAILS IF: the table's BOX_BYTES / FLAG_BYTES (and SCOPE, TICK_EXTRA, SUBJECT, WORKFLOW_*) differ from a FRESH AST read of the files NOW; or publish_exchange / backup_estate was imported; or an assignment is duplicated or non-literal
+   control · fresh AST read == the table's constants: GREEN — BOX_BYTES 16,000,000 · FLAG_BYTES 64,000 · SCOPE 'exchange/' · TICK_EXTRA ['LEDGER.md'] · 14 workflow roots
+   control · never imported (sys.modules + this source): GREEN — in sys.modules [] · import statements []
+   control · a row's % recomputes from the fresh BOX_BYTES: GREEN — `exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md`
+   SABOTAGE · BOX_BYTES typed 16_000_001 into the table: RED (as required)
+   SABOTAGE · a copy of publish_exchange carrying BOX_BYTES = 16_000_001: RED (as required)
+   SABOTAGE · a duplicated FLAG_BYTES assignment: RED (as required) — both readers refuse
+   SABOTAGE · a non-literal FLAG_BYTES: RED (as required)
+   SABOTAGE · a planted `import publish_exchange` in a source copy: RED (as required)
+   F-BC-CONST: GREEN (controls ok; sabotages RED 5/5)
+
+── F-BC-COVER
+   FAILS IF: any tierc10-commit path, any PROGRESS artifact outside a cells root, or any PROGRESS artifact DIRECTORY has no row; a collapsed row's count disagrees with PROGRESS; or the PLANNED (c) or snapshot (d) row is missing
+   control · every commit path, artifact, artifact directory and (c)/(d) has its row: GREEN — 53 commit paths · 1105 PROGRESS artifacts in 167 directories
+   SABOTAGE · drop one (a) row: RED (as required) — `.gitignore`
+   SABOTAGE · drop one (b) row: RED (as required) — `research_outputs/tierc10/FIXTURES_RF.txt`
+   SABOTAGE · drop the census/cells row (whole artifact directories vanish): RED (as required) — 51 directories uncovered
+   SABOTAGE · bend a collapsed row's count by one: RED (as required)
+   SABOTAGE · drop the PLANNED (c) row: RED (as required)
+   F-BC-COVER: GREEN (controls ok; sabotages RED 5/5)
+
+── F-BC-FLAG
+   FAILS IF: a box-bound path over FLAG_BYTES (64,000 B, read by AST) is unflagged — bytes re-measured from disk, not trusted from the row — or a flag fires at/under the wire, or an exchange/ path is classed unsynced
+   control · every box-bound row flagged iff strictly over the wire: GREEN — 2 box-bound rows re-measured
+   control · boundary: a 64,000 B temp file is NOT flagged, a 64,001 B one IS: GREEN
+   SABOTAGE · a 64,001 B temp file listed unflagged: RED (as required)
+   SABOTAGE · the same file through a flagger bent to 65,000 B: RED (as required)
+   SABOTAGE · the same file recorded stale at 64,000 B (disk holds 64,001): RED (as required)
+   SABOTAGE · the same exchange/ file classed unsynced: RED (as required)
+   F-BC-FLAG: GREEN (controls ok; sabotages RED 4/4)
+
+── F-DET
+   FAILS IF: two whole builds in one process, taken while every input held still (HEAD, upstream, and the stat of every input path — the named-volatile inputs), differ by a byte (MD or JSON); or the inputs never held still; or the outputs carry a temp path; or a git/disk-sourced field is not NAMED volatile
+   control · the input fingerprint held still across both builds: GREEN
+   control · second whole build: MD byte-identical: GREEN — sha256 48e3fb7d897ecfd3…
+   control · second whole build: JSON byte-identical: GREEN — sha256 9a3732d0f039d2ec…
+   control · no temp path in the outputs: GREEN
+   control · every git/disk-sourced field is named volatile: GREEN — git 12 · disk 5
+   SABOTAGE · a wall clock injected into the second render: RED (as required)
+   SABOTAGE · PUSHED dropped from the named-volatile list: RED (as required)
+   F-DET: GREEN (controls ok; sabotages RED 2/2)
+
+── F-BC-GIT
+   FAILS IF: any git invocation this run made (recorded at `_git` BEFORE it runs) uses a verb outside {log, ls-files, check-ignore, branch -r --contains, rev-parse}, or `log --output`; or this source calls `_git` with a non-literal / disallowed verb, spawns a process outside `_git`, or spawns before the gate
+   control · every recorded git call is an allowed verb (all builds, all legs): GREEN — one build = branch -r --contains 28 · check-ignore 160 · log 162 · ls-files 266 · rev-parse 4
+   control · static: this source's `_git` calls and process spawns: GREEN
+   SABOTAGE · plant 'add' in the call record: RED (as required)
+   SABOTAGE · plant `branch -a` in the call record: RED (as required)
+   SABOTAGE · plant `push` in the call record: RED (as required)
+   SABOTAGE · plant `log --output=x` in the call record: RED (as required)
+   SABOTAGE · plant `_git(["add", "-A"])` in a source copy: RED (as required)
+   SABOTAGE · plant a raw `subprocess.run(["git", "add", "."])` in a source copy: RED (as required)
+   F-BC-GIT: GREEN (controls ok; sabotages RED 6/6)
+
+OUTPUT S8_DISPOSITION_BOX_COST.md · 48,990 B · sha256 48e3fb7d897ecfd37274b5993f2c5260aa2ae3abd8742ea0762a53b2c5f0232a
+OUTPUT S8_DISPOSITION_BOX_COST.json · 138,197 B · sha256 9a3732d0f039d2ec92bd6efb0a005f66db1e44ad40bcd96a517d013cae2c0fa4
+SUMMARY 5/5 GREEN · F-BC-CONST GREEN · F-BC-COVER GREEN · F-BC-FLAG GREEN · F-DET GREEN · F-BC-GIT GREEN
+EXIT 0

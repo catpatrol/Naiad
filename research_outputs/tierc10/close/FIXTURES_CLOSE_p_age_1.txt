@@ -1,0 +1,103 @@
+as_of_last_closed_4h: 2026-09-21T16:00:00Z
+==============================================================================
+RUN  TIER-C10 · CLOSE · P-AGE-1 (tide-youth) · TIER-E MEASUREMENT — UNSCORED, GATES NOTHING
+==============================================================================
+  contract of record exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md:113 — 'P-AGE-1 (tide-youth), boundary-fade, regime-prior: Tier-E tables only.' (sha256 8a0bf279bcab0f27 == PROGRESS contract_of_record)
+  substrate tc10_20260921 (loaders bound to the snapshot; the live cache is refused on the path string) · PYTHONDONTWRITEBYTECODE=1 · no registration, score or verdict read
+  PROGRESS.as_of_of_record 2026-09-21T16:00:00Z · as_of_last_closed_4h_close_ms 1790006400000 · research_outputs/tierc10/data/AS_OF_PIN.json agrees
+  book anchor research_outputs/tierc10/panel/control_journal.parquet sha256 fcbf5db0480416b0a5c7f704987980aea220650cb0764d5dd4095611fae64c1c == PROGRESS 'PANEL/gate' record
+  corridor_n(CLASSIC5): lo 2019-09-08T16:00:00Z · hi 2026-09-21T15:59:59Z (hi+1 = 2026-09-21T16:00:00Z) · last_closed_4h_close 2026-09-21T16:00:00Z == as_of_of_record: HELD
+  [spec note] the build spec's literal 'iso(hi) == as_of_of_record' cannot hold: hi is the close minus 1 ms (iso(hi) = 2026-09-21T15:59:59Z). The assertion taken is meta['last_closed_4h_close'] == as_of_of_record AND hi + 1 == as_of_last_closed_4h_close_ms.
+  lab 4h frames == tierc10_data.load_asof bars, exact (open_time, OHLC): BTCUSDT 15420 · ETHUSDT 14943 · SOLUSDT 13191 · NEARUSDT 13004 · ZECUSDT 14522: HELD
+  definition: EXECUTOR READING, NO NEW PIN: tide-youth = tierc7_lab_regime.tide_streak(sym)[1] (the run length of sign(e89 - e316) on the 4h frame) at the campaign's ENTRY bar, counted from TIDE_WARM_BARS = 316. It is banded by STREAK_BAND_QUANTILES = (0.25, 0.5, 0.75) of the panel-pooled bar distribution into STREAK_LABELS = ('B1 YOUNG tide', 'B2 EARLY tide', 'B3 MATURE tide', 'B4 OLD tide') (B1 = 'B1 YOUNG tide'). The edges are TRAILING: causal, expanding and panel-pooled over the bars with open_ms <= the entry bar, inclusive. The prefix floor is n >= RC.PROVISIONAL_MIN_N = 30. This is exactly TC9's TC7-g (tierc9.tc7g_tables).
+  HALT conditions: env not the snapshot · PYTHONDONTWRITEBYTECODE unset · PROGRESS as-of != AS_OF_PIN · contract sha != PROGRESS · contract line moved · journal sha != PANEL/gate · corridor != as_of_of_record · lab frame != load_asof · F-AGE-BOOK RED (the lab card is not the TC10 control) · output dir outside close/
+  F-AGE-BOOK precondition: HELD
+    [OK ] count: lab v6 book 200 · control_journal.parquet 200
+    [OK ] asset: exact on every row (0 differ)
+    [OK ] entry_ms: exact on every row (0 differ)
+    [OK ] direction: exact on every row (0 differ)
+    [OK ] exit_ms: exact on every row (0 differ)
+    [OK ] exit_reason: exact on every row (0 differ)
+    [OK ] net_r: exact on every row (0 differ) · worst |diff| 0.000e+00
+  tc7g_tables(lo, hi): 6 frames · recorders inert (all 6 frames equal by content sha, plain vs spied)
+  wrote P_AGE_1_TIDE_YOUTH.parquet rows=5 content_sha=3fd85b3b94b3f23bf1881783061413746a41a4d3ea2284df06dca9a27c78dc75 · dropped none
+  wrote P_AGE_1_BAR_BANDS.parquet rows=8 content_sha=89dad4fb277537d753c6f2e814422a7673b58f7395b0c2818f2813761df3013b · dropped ['n_campaigns_hybrid']
+  wrote P_AGE_1_EDGES.parquet rows=7 content_sha=1770355966bf4c8b85e52c2c8c9593fcfeb57f9c81c252bcc814720f5403863b · dropped none
+  wrote P_AGE_1_TIDE_YOUTH.md sha256=b1c5a7bc5c4f5c7db98187dc6ca1720329cb6d6e0b21d1360d9449ed6512a56f
+
+── F-AGE-SUBSTRATE
+   FAILS IF: the RUN/HALT gate passes on an env that is not the frozen TC10 snapshot with PYTHONDONTWRITEBYTECODE=1, or a run with NAIAD_CACHE_DIR unset writes a byte (the forward strip's F-FS-SUBSTRATE, carried)
+   [OK ] RUN/HALT gate passes: NAIAD_CACHE_DIR -> tc10_20260921 · PYTHONDONTWRITEBYTECODE=1
+   [OK ] a subprocess with NAIAD_CACHE_DIR unset: exit 1, HALT printed, wrote nothing
+   [BREAK] NAIAD_CACHE_DIR unset -> RED (correct): [BAD] HALT: NAIAD_CACHE_DIR is unset; P-AGE-1 runs only on the frozen snapshot /Users/luis/.cache/naiad/snapshots/tc10_20260921; export it BEFORE python starts.
+   [BREAK] NAIAD_CACHE_DIR names the live cache (path string, never stat'ed) -> RED (correct): [BAD] HALT: NAIAD_CACHE_DIR names the LIVE cache: READ-NEVER, WRITE-NEVER.
+   [BREAK] NAIAD_CACHE_DIR at a non-snapshot path -> RED (correct): [BAD] HALT: NAIAD_CACHE_DIR=research_outputs/tierc10/close is not the TC10 snapshot /Users/luis/.cache/naiad/snapshots/tc10_20260921.
+   [BREAK] PYTHONDONTWRITEBYTECODE unset -> RED (correct): [BAD] HALT: PYTHONDONTWRITEBYTECODE is not '1'.
+   PASS F-AGE-SUBSTRATE
+
+── F-AGE-BOOK
+   FAILS IF: tierc7_lab_regime.books(lo,hi)['v6'] differs from research_outputs/tierc10/panel/control_journal.parquet in count or in any of (asset, entry_ms, direction, exit_ms, exit_reason, net_r), compared exactly
+   [OK ] count: lab v6 book 200 · control_journal.parquet 200
+   [OK ] asset: exact on every row (0 differ)
+   [OK ] entry_ms: exact on every row (0 differ)
+   [OK ] direction: exact on every row (0 differ)
+   [OK ] exit_ms: exact on every row (0 differ)
+   [OK ] exit_reason: exact on every row (0 differ)
+   [OK ] net_r: exact on every row (0 differ) · worst |diff| 0.000e+00
+   [BREAK] drop one campaign from a copy -> RED (correct): [BAD] count: lab v6 book 199 · control_journal.parquet 200
+   [BREAK] nudge one campaign's net_r by 1e-6 in a copy -> RED (correct): [BAD] net_r: exact on every row (1 differ) · worst |diff| 1.000e-06
+   PASS F-AGE-BOOK
+
+── F-AGE-WHOLE
+   FAILS IF: the band n's do not sum to the ALL row's n, or that n differs from the journal count, or any campaign is unbanded under warm edges, or a band's table n differs from its per-campaign tag count
+   [OK ] grid whole: bands ['01', '02', '03', '04'] labelled from LR.STREAK_LABELS + one ALL row
+   [OK ] band n's sum 200 == ALL row n 200
+   [OK ] ALL row n 200 == control_journal count 200
+   [OK ] campaigns unbanded under warm edges: 0 (of 200 tagged; 200 with warm edges; 0 unbanded in all)
+   [OK ] per-band table n == per-campaign tag count (B1 YOUNG tide 25, B2 EARLY tide 60, B3 MATURE tide 56, B4 OLD tide 59)
+   [BREAK] relabel one campaign's band (B1 -> B2) in a copy -> RED (correct): [BAD] per-band table n == per-campaign tag count (B1 YOUNG tide 25, B2 EARLY tide 60, B3 MATURE tide 56, B4 OLD tide 59); MISMATCH ['01: table 25 vs campaigns 24', '02: table 60 vs campaigns 61']
+   [BREAK] unband one campaign under warm edges in a copy -> RED (correct): [BAD] campaigns unbanded under warm edges: 1 (of 200 tagged; 200 with warm edges; 1 unbanded in all)
+   PASS F-AGE-WHOLE
+
+── F-AGE-CAUSAL
+   FAILS IF: for some campaign, the edges re-derived from the pooled prefix (open_ms <= its entry bar) differ from the tagger's, or the re-derived band differs from the tagger's band
+   [OK ] edges re-derived == tagger's on 200/200 campaigns (0 differ, 0 missing, worst |diff| 0.000e+00)
+   [OK ] band re-derived (np.digitize(run at entry, re-derived edges)) == tagger's band on 200/200 campaigns
+   [OK ] entry bar open_ms (load_asof) == campaign entry_ms on 200/200
+   [OK ] causality has teeth: at the median entry 2023-09-10T12:00:00Z the prefix excludes 33210 future pooled bars of 69500
+   [BREAK] substitute the whole-corridor edges LR.cuts(lo,hi)['streak_bar'] -> RED (correct): [BAD] edges re-derived == tagger's on 2/200 campaigns (198 differ, 0 missing, worst |diff| 2.080e+02); first: BTCUSDT 2020-01-27T00:00:00Z: re-derived [31.0, 80.0, 206.0] vs tagger [88.0, 206.0, 396.0]
+   [BREAK] substitute edges that see ONE bar past the entry bar -> RED (correct): [BAD] edges re-derived == tagger's on 153/200 campaigns (47 differ, 0 missing, worst |diff| 1.000e+00); first: BTCUSDT 2020-01-27T00:00:00Z: re-derived [31.0, 80.0, 206.0] vs tagger [31.0, 80.0, 205.5]
+   PASS F-AGE-CAUSAL
+
+── F-AGE-COLLAR
+   FAILS IF: a row lacks the Tier-E columns (tier, selection_not_a_result, m_selections_this_table == its table's band rows, in_sample) or carries verdict / clears_bh_bar / p_one_sided (or any p/ci column)
+   [OK ] P_AGE_1_TIDE_YOUTH: 5 rows · tier True · selection True · m == 4 band rows True · in_sample True
+   [OK ] P_AGE_1_BAR_BANDS: 8 rows · tier True · selection True · m == 8 band rows True · in_sample True
+   [OK ] P_AGE_1_EDGES: 7 rows · tier True · selection True · m == 0 band rows True · in_sample True
+   [BREAK] add 'verdict' to a copy of the tide-youth table -> RED (correct): [BAD] P_AGE_1_TIDE_YOUTH: 5 rows · missing [] · banned present ['verdict']
+   [BREAK] blank one row's tier in a copy of the bar-bands table -> RED (correct): [BAD] P_AGE_1_BAR_BANDS: 8 rows · tier False · selection True · m == 8 band rows True · in_sample True
+   PASS F-AGE-COLLAR
+
+── F-AGE-ASOF
+   FAILS IF: any as_of_last_closed_4h != PROGRESS.as_of_of_record (or the lens/bar/panel/substrate stamps drift)
+   [OK ] P_AGE_1_TIDE_YOUTH: as_of_last_closed_4h != 2026-09-21T16:00:00Z on 0/5 rows · last_closed_bar off 0 · lens off 0 · panel off 0 · substrate off 0
+   [OK ] P_AGE_1_BAR_BANDS: as_of_last_closed_4h != 2026-09-21T16:00:00Z on 0/8 rows · last_closed_bar off 0 · lens off 0 · panel off 0 · substrate off 0
+   [OK ] P_AGE_1_EDGES: as_of_last_closed_4h != 2026-09-21T16:00:00Z on 0/7 rows · last_closed_bar off 0 · lens off 0 · panel off 0 · substrate off 0
+   [BREAK] restamp one row one 4h bar earlier in a copy -> RED (correct): [BAD] P_AGE_1_TIDE_YOUTH: as_of_last_closed_4h != 2026-09-21T16:00:00Z on 1/5 rows · last_closed_bar off 0 · lens off 0 · panel off 0 · substrate off 0
+   PASS F-AGE-ASOF
+
+── F-DET
+   FAILS IF: two subprocess --build-only runs are not byte-identical to each other and to the filed outputs, file for file
+   [OK ] two subprocess --build-only runs exit 0 (A True PYTHONHASHSEED=1, B True PYTHONHASHSEED=20260921)
+   [OK ] file sets equal and exactly the four outputs (4 / 4)
+   [OK ] P_AGE_1_TIDE_YOUTH.parquet: bytes A==B True · A==filed True (sha A 377c73effb1d23af)
+   [OK ] P_AGE_1_BAR_BANDS.parquet: bytes A==B True · A==filed True (sha A b501e543226fae5e)
+   [OK ] P_AGE_1_EDGES.parquet: bytes A==B True · A==filed True (sha A 8c2395703bd0eee6)
+   [OK ] P_AGE_1_TIDE_YOUTH.md: bytes A==B True · A==filed True (sha A b1c5a7bc5c4f5c7d)
+   [BREAK] run B stamps the wall clock into the md -> RED (correct): [BAD] P_AGE_1_TIDE_YOUTH.md: bytes A==B False · A==filed True (sha A <sha>)
+   PASS F-DET
+
+FIXTURE SUMMARY  7/7 PASS · 14/14 break legs RED · failed []
+UNTOUCHED  36 protected files (scores/, registrations/, REGISTRY*, PROGRESS.json, FIXTURES_RESUME.txt, the inputs) hashed before and after: moved none
+NOSCORE    static: calls of TP.score / finish_family / register / _mark_scored / require_arm in this source: 0
+RESULT GREEN · outputs under research_outputs/tierc10/close/ · TIER-E MEASUREMENT — UNSCORED, GATES NOTHING

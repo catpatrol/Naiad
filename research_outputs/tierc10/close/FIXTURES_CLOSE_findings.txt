@@ -1,0 +1,120 @@
+==============================================================================
+TIER-C10 · CLOSE · §5 FINDINGS — REPORTED, NOT FIXED · fixtures (break legs RED or void)
+==============================================================================
+RUN · TIER-C10 CLOSE §5 findings-not-fixed · branch v12-v1-census (== PROGRESS.json branch)
+RUN · substrate NAIAD_CACHE_DIR=/Users/luis/.cache/naiad/snapshots/tc10_20260921 (the frozen snapshot; no bar is read by this module)
+RUN · PYTHONDONTWRITEBYTECODE=1 · inputs present 19/19
+RUN · contract exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md sha256 8a0bf279bcab0f27161a7d965535445807f4e713e77d045b0ba124bc7f803c7a (== PROGRESS.json contract_of_record.sha256)
+RUN · as_of_of_record 2026-09-21T16:00:00Z (PROGRESS.json as_of_of_record) · seed 20260921 (PROGRESS.json seed)
+inputs (read-only): 19 files
+  exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md  9441 B  sha256 8a0bf279bcab0f27161a7d965535445807f4e713e77d045b0ba124bc7f803c7a
+  research_outputs/tierc10/BUILD_DRAFT.md  111105 B  sha256 244ad5a46a4f73c522361990638499206c9ef3c341d436e2aa67bdd898791149
+  research_outputs/tierc10/OPERATOR_RULINGS.md  8696 B  sha256 a0a08f8761ce9eab678d42d609d7e6563e749c07a6c33b7b17f9a5c4f31ca907
+  research_outputs/tierc10/PROGRESS.json  267607 B  sha256 0d66f2d7fe6c338339880368ff854e58bbb2533be54cf2f7448f71d129752afc
+  research_outputs/tierc10/REGISTRATION_PLAN.md  7242 B  sha256 cbb85a214de536598d7e06575b32eac6e266b051cf279f244988245829b2a5e8
+  research_outputs/tierc10/REGISTRATION_TEXTS.json  178729 B  sha256 3afce077146807127072ae68f9c816e0263505aa625cf1610763ea37eb91ca94
+  research_outputs/tierc10/REGISTRATION_TEXTS.md  128673 B  sha256 eef76eedda56aef32da1cb5656f5c0a93ffb878f0ad09fa37898efe0a3da40b1
+  research_outputs/tierc10/census/leans.parquet  17481 B  sha256 a93dc1dbad3c7593c8257f378e60b44d4a9b186565eae68e639d26e9804a0ab7
+  research_outputs/tierc10/data/STAGE_D_MANIFEST.json  405715 B  sha256 de2e8663bbf101dfb46ad9f77a4969ca73648e78373646c0d17b81b9f9a87421
+  research_outputs/tierc10/panel/leans.parquet  10618 B  sha256 faf0c986b232e150d7dfa375ba2400b185eddee3178fe1c2a6371af0ac7d2920
+  research_outputs/tierc10/scores/DRYRUN.json  77280 B  sha256 13958abb0c75ee2cfaa8bf2df9d0f7569bbb286d85fa49a32339d8b90c15672c
+  research_outputs/tierc10/scores/FAMILY.json  113715 B  sha256 aa0e8c496fd6b883a3c01947047c4845eb72935ca17368cffee9c8593a7bc4a2
+  research_outputs/tierc10/scores/P-BE-1.rows.json  84044 B  sha256 b40af065177695e36e755d183ef74e7328d77eb799ed3abbb668ff7d69b6b678
+  research_outputs/tierc10/scores/P-BRK-I1.rows.json  111150 B  sha256 f3ae88d0be366f127bacfe0f8092cdef07d17559ea3b3db6d6c1edd6c306111a
+  research_outputs/tierc10/scores/P-BRK-S1.rows.json  118556 B  sha256 994bcaa69906aae8a1659d953c0984da636cb496808dd17ab91ddf3ea3c33ff0
+  research_outputs/tierc10/scores/P-GEN-1.rows.json  123091 B  sha256 047097ec5aeefbe8aa63cf2b1a677015540497a41e43b0152e609426a2baf87d
+  research_outputs/tierc10/scores/P-SPR-2.rows.json  111310 B  sha256 febff33a1ad91e3663cb75fc7db54fe7901d7a8493503e3e6e6aa065da6bc23e
+  research_outputs/tierc10/scores/P-TRG-2.rows.json  102709 B  sha256 9fa07a0fa1b832ef7a1012a796cfd7fdd73ab2e1275d4faa4340666493c340c8
+  research_outputs/tierc10/stamps/leans.parquet  10632 B  sha256 91ee065223f58d9197396abfeb7444b07de2aac3628ae6d9a0479bcd425e6c67
+built: research_outputs/tierc10/close/S5_FINDINGS_NOT_FIXED.json sha256 f771a60175aefcb81fd8ccf976e8948660deb57a99bfcf9fe264b4bd7734dbe8 (104680 B)
+built: research_outputs/tierc10/close/S5_FINDINGS_NOT_FIXED.md sha256 782ca3f39789ccdcb80c67ab1acfdadccc2a627e5144770ed8330de5b96102f9 (84441 B)
+findings: 81 · counts {"HARVESTED": {"executor": 15, "operator": 29, "total": 44}, "LEAN": {"executor": 31, "operator": 0, "total": 31}, "MEASURED": {"executor": 4, "operator": 2, "total": 6}}
+git_volatile_fields (excluded from F-DET): git, measured.iv, measured.v, findings[id=FN-M-iv].text, findings[id=FN-M-v].text
+measured (i): 0 of 6 REGISTRATION_TEXTS.json texts are found verbatim in REGISTRATION_TEXTS.md. P-GEN-1: NOT verbatim — only its first 274 of 26,111 characters occur in the .md; P-SPR-2: NOT verbatim — only its first 129 of 32,179 characters occur in the .md; P-BE-1: NOT verbatim — only its first 95 of 30,811 characters occur in the .md; P-TRG-2: NOT verbatim — only its first 1,373 of 23,317 characters occur in the .md; P-BRK-I1: NOT verbatim — only its first 418 of 28,082 characters occur in the .md; P-BRK-S1: NOT verbatim — only its first 772 of 29,113 characters occur in the .md.
+measured (ii): 8 of 20 arms that carry a haircut twin show beside.haircut_twin.twin_expectancy_r > tc_expectancy_r: P-BE-1 rows[1] 'be-floor-1R vs card-v6 (CLASSIC5, tuning) [Tier-E]': tc -0.0250 R, twin -0.0002 R; P-BE-1 rows[3] 'be-floor-2R sensitivity vs card-v6 (CLASSIC5, full) [Tier-E]': tc +0.1889 R, twin +0.1979 R; P-BRK-I1 rows[0] 'CLASSIC5-memory-line': tc +0.7183 R, twin +0.8946 R; P-BRK-I1 rows[1] 'CLASSIC5-tierE-band': tc +0.3518 R, twin +0.5100 R; P-BRK-I1 rows[2] 'PANEL17-tierE-memory-line': tc +0.4219 R, twin +0.5172 R; P-TRG-2 rows[0] 'trg-9/12 vs card v6 · CLASSIC5 · full': tc +0.4664 R, twin +0.4756 R; P-TRG-2 rows[1] 'trg-9/12 vs zero · CLASSIC5 · full': tc +0.4664 R, twin +0.4756 R; P-TRG-2 rows[2] 'trg-9/12 vs card v6 · CLASSIC5 · tuning era': tc +0.1777 R, twin +0.1989 R. 1 of 21 arms carry no haircut twin: P-BE-1 rows[0] 'be-floor-1R vs card-v6 (CLASSIC5, full)'.
+measured (iii): os.path.exists(analytics/rangefinder.py) = False; os.path.exists(analytics/rangefinder_census.py) = True.
+measured (iv) [git-volatile]: PROGRESS.json head 6b15def66f73e3fcd05b6dc5a0516fcd2ac1d1c7 vs git rev-parse HEAD 3d55988dfcbb6b7ffb53855c325545ae642c763e: equal = False; the ledger's head is an ancestor of HEAD = True; commits on HEAD after the ledger's head = 18.
+measured (v) [git-volatile]: 28 worktree(s) besides the main one; 28 of them reach 0 of the 28 tierc10 commits reachable from HEAD, 0 reach all of them. Their HEADs: a6da1b97e95c × 28. The main working tree reaches 28 of 28.
+measured (vi): 15 of 15 PROGRESS.json stages have no stage line in BUILD_DRAFT.md §1: STEP 0, D-CORE, CENSUS-R{4h,1d}, NULL/gaps-only, NULL/gaps+order, A (stamps), PANEL/gate, LANES (B mech), BRK (B mech), F-C10-RESUME, D-5M, CENSUS-R{5m}, B-REG (the six filed), B-CORE, B-5M. §1's bullet labels are: .
+------------------------------------------------------------------------------
+F-FN-HARVEST
+  FAILS IF: any PROGRESS.json stages[].blockers / stages[].notes string (re-read independently) is absent from the findings verbatim, the PROGRESS-sourced findings are not exactly that multiset, or a declared harvest source contributed zero findings
+  real: GREEN
+  sabotage · a blocker added to a COPY of PROGRESS.json: RED (as required)
+    first: HARVEST: PROGRESS string absent from the findings: "PLANTED BLOCKER — added to a COPY of PROGRESS.json by F-FN-HARVEST's sabotage"…
+  sabotage · one PROGRESS finding dropped from a copy of the findings: RED (as required)
+    first: HARVEST: PROGRESS string absent from the findings: 'RESUME CLAUSE F-D-4 (TWO-TOKEN TRAP) — no artifact, no fixture leg. LEGS[] in scripts/tier'…
+  sabotage · every stamps lean dropped (a silent empty source): RED (as required)
+    first: HARVEST: declared source LEAN-STAMPS contributed ZERO findings
+  => F-FN-HARVEST: PASS
+------------------------------------------------------------------------------
+F-FN-SOURCE
+  FAILS IF: a finding's source path does not exist, its field does not re-resolve to its text verbatim, its owner is not operator|executor, its owner-basis quote is not verbatim at the basis path, its status is not 'REPORTED, NOT FIXED', or an id repeats
+  real: GREEN
+  sabotage · a source path that does not exist: RED (as required)
+    first: SOURCE: FN-PROG-01-B1 source path 'research_outputs/tierc10/NO_SUCH_FILE.json' does not exist
+  sabotage · the text bent by one character: RED (as required)
+    first: SOURCE: FN-PROG-01-B1 text is not VERBATIM at research_outputs/tierc10/PROGRESS.json · stages[1].blockers[0]
+  sabotage · the owner-basis quote bent: RED (as required)
+    first: SOURCE: FN-PROG-01-B1 owner-basis quote is not verbatim at 'research_outputs/tierc10/PROGRESS.json'
+  sabotage · status set to 'FIXED': RED (as required)
+    first: SOURCE: FN-PROG-01-B1 status 'FIXED' is not 'REPORTED, NOT FIXED'
+  sabotage · owner set to 'nobody': RED (as required)
+    first: SOURCE: FN-PROG-01-B1 owner 'nobody' is not one of ('operator', 'executor')
+  sabotage · a duplicated id: RED (as required)
+    first: SOURCE: id 'FN-PROG-01-B1' is missing or repeated
+  => F-FN-SOURCE: PASS
+  independent recomputation: (i) (0, 6) · (ii) (8, 20) · (iii) (('analytics/rangefinder.py', False), ('analytics/rangefinder_census.py', True)) · (iv) ('6b15def66f73e3fcd05b6dc5a0516fcd2ac1d1c7', '3d55988dfcbb6b7ffb53855c325545ae642c763e') · (v) 28 · (vi) 15
+------------------------------------------------------------------------------
+F-FN-MEASURED
+  FAILS IF: any of (i)-(vi) in the filed JSON differs from a second, independent recomputation (bytes search · Decimal parse · os.listdir · raw .git refs + rev-list sets · cat-file subjects + merge-base · a line scanner), or a measured finding's text is not the render of its filed value
+  real: GREEN
+  sabotage · (i) a stale verbatim count: RED (as required)
+    first: MEASURED (i): filed (1, 6, (('P-BE-1', False), ('P-BRK-I1', False), ('P-BRK-S1', False), ('P-GEN-1', False), ('P-SPR-2', False), ('P-TRG-2', != indepe
+  sabotage · (ii) a stale twin>tc count: RED (as required)
+    first: MEASURED (ii): filed (9, 20, 21, (('research_outputs/tierc10/scores/P-BE-1.rows.json', 1, True), ('research_outputs/tierc10/scores/P-BE-1.row != indep
+  sabotage · (iii) a flipped existence: RED (as required)
+    first: MEASURED (iii): filed (('analytics/rangefinder.py', True), ('analytics/rangefinder_census.py', True)) != independent (('analytics/rangefinder.py', Fal
+  sabotage · (iv) a stale commits-after count: RED (as required)
+    first: MEASURED (iv): filed ('6b15def66f73e3fcd05b6dc5a0516fcd2ac1d1c7', '3d55988dfcbb6b7ffb53855c325545ae642c763e', False, True, 19) != independent ('6b15de
+  sabotage · (v) a stale per-worktree reach: RED (as required)
+    first: MEASURED (v): filed (28, (('.', '3d55988dfcbb6b7ffb53855c325545ae642c763e', 28), ('.claude/worktrees/wf_8995cf0d-ab5-1', 'a6da1b97e95ce94752 != indepe
+  sabotage · (vi) a stale absent-stage list: RED (as required)
+    first: MEASURED (vi): filed (('D-CORE', 'CENSUS-R{4h,1d}', 'NULL/gaps-only', 'NULL/gaps+order', 'A (stamps)', 'PANEL/gate', 'LANES (B mech)', 'BRK ( != indep
+  => F-FN-MEASURED: PASS
+------------------------------------------------------------------------------
+F-FN-NOSCORE
+  FAILS IF: this module's AST imports a scoring / registration / bar-loading module, calls score / finish_family / register / load_klines / load_asof, or reads a 'verdict' key
+  real: GREEN
+  sabotage · an import of tierc10_score planted in a COPY of the source: RED (as required)
+    first: NOSCORE: imports tierc10_score
+  sabotage · a call to finish_family planted: RED (as required)
+    first: NOSCORE: calls finish_family() at line 1639
+  sabotage · a ['verdict'] read planted: RED (as required)
+    first: NOSCORE: ['verdict'] at line 1639
+  => F-FN-NOSCORE: PASS
+  run-a JSON sha256 f771a60175aefcb81fd8ccf976e8948660deb57a99bfcf9fe264b4bd7734dbe8 · run-b f771a60175aefcb81fd8ccf976e8948660deb57a99bfcf9fe264b4bd7734dbe8 · canonical f771a60175aefcb81fd8ccf976e8948660deb57a99bfcf9fe264b4bd7734dbe8 · unmasked identical: True
+  run-a MD   sha256 782ca3f39789ccdcb80c67ab1acfdadccc2a627e5144770ed8330de5b96102f9 · run-b 782ca3f39789ccdcb80c67ab1acfdadccc2a627e5144770ed8330de5b96102f9 · canonical 782ca3f39789ccdcb80c67ab1acfdadccc2a627e5144770ed8330de5b96102f9 · unmasked identical: True
+------------------------------------------------------------------------------
+F-DET
+  FAILS IF: two cross-process builds, and the canonical on-disk build, are not byte-identical once the NAMED git-volatile fields are masked, or the mask is wider than named
+  real: GREEN
+  sabotage · a non-volatile JSON byte bent (findings[0].text): RED (as required)
+    first: DET: the two JSON builds differ outside the named git-volatile fields
+  sabotage · a non-volatile Markdown byte bent: RED (as required)
+    first: DET: the two Markdown builds differ outside the git-volatile blocks
+  sabotage · a field NEXT TO the volatile ones bent (FN-M-iii text): RED (as required)
+    first: DET: the two JSON builds differ outside the named git-volatile fields
+  control · only named git-volatile fields bent: GREEN (as required)
+  => F-DET: PASS
+------------------------------------------------------------------------------
+F-FN-READONLY
+  FAILS IF: any input's bytes change between the start and the end of the run, or the build run against a COPY of the inputs leaves the copy changed
+  real: GREEN
+  sabotage · one byte appended to a COPY of PROGRESS.json: RED (as required)
+    first: READONLY: research_outputs/tierc10/PROGRESS.json changed (0d66f2d7fe6c338339880368ff854e58bbb2533be54cf2f7448f71d129752afc -> fee50c4091fb49b81c9283f0
+  control · the build run against the input COPY leaves it byte-identical: GREEN (as required)
+  => F-FN-READONLY: PASS
+==============================================================================
+SUMMARY: 6/6 legs PASS · F-FN-HARVEST PASS · F-FN-SOURCE PASS · F-FN-MEASURED PASS · F-FN-NOSCORE PASS · F-DET PASS · F-FN-READONLY PASS
+EXIT 0

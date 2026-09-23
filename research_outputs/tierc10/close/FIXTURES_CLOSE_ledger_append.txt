@@ -1,0 +1,83 @@
+TIER-C10 · CLOSE · LEDGER_APOLLO APPEND — FIXTURES (F-LA)
+substrate tc10_20260921 · as-of 2026-09-21T16:00:00Z · REPORT-ONLY: drafts only; scores nothing; reads no bars; writes nothing under exchange/ and no sibling's file
+contract exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md sha 8a0bf279bcab0f27161a7d965535445807f4e713e77d045b0ba124bc7f803c7a (= PROGRESS.json contract_of_record: True)
+§0 of record research_outputs/tierc10/close/S0_VERDICTS.json sha 469a08756913c2855a5d80419842b34e50a04b0efb0d4e2f8d579d0c4cfbcf92 (builder scripts/tierc10_close_close_s0_verdicts.py) — agrees cell-for-cell with FAMILY.json/rows.json
+located this run: Q6 hold :2-3 · Q6 phrase :137 · CENSUS-3 :139 · LEDGER.md RS heading :829 · Q-R3 :834 · Q-R4 :835 · Q-R5 :836 · LEDGER_APOLLO last block :2355
+OUTPUT (sha256 · bytes)
+  fea0d6519bfea0349d3524f216bb15a1c8a1c5544ac7570954f0f9030e74c3fb · 22653 · research_outputs/tierc10/close/LEDGER_APOLLO_APPEND.draft.md
+
+F-LA-Q6 · FAILS IF a quoted Q6 text is not a byte substring of the contract file, its cited lines do not hold it, or either located hold (the ':2-3' hold and the ':137' phrase) is absent from the block
+  real      GREEN — 11 quote(s) verify; the hold located at :2-3 and the phrase at :137 both present in the block
+  sabotage  paraphrase :137 ('until' -> 'till'): RED (as required) — 1 bad ['line 18 «exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md:137»: line(s) 137-137 do not hold the quoted text'] · missing ['«exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md:137»']
+  sabotage  paraphrase :2-3 ('until TC10 autopsied' -> 'until TC10 is autopsied'): RED (as required) — 1 bad ['line 15 «exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md:2-3»: line(s) 2-3 do not hold the quoted text'] · missing ['«exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md:2-3»']
+  sabotage  mis-cite the hold :2-3 -> :3-4: RED (as required) — 1 bad ['line 15 «exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md:3-4»: line(s) 3-4 do not hold the quoted text'] · missing ['«exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md:2-3»']
+  => F-LA-Q6 GREEN
+
+F-LA-M · FAILS IF the draft's m != FAMILY.json family_m_declared (or the bar, the N scored rows, the halted slot's quoted text, the CLASS line, or any m the draft quotes disagrees with FAMILY.json)
+  real      GREEN — m = 6 = family_m_declared; bar 0.016666666666666666; 5/20 scored; halted P-BE-1 quoted verbatim; the contract's and the record's quoted m agree
+  sabotage  m = 6 -> m = 5 on the FAMILY line: RED (as required) — m 5 != family_m_declared 6
+  sabotage  the bar bent (x1.1): RED (as required) — bar 0.018333333333333333 != 0.016666666666666666
+  sabotage  the scored-row count bent (+1): RED (as required) — rows 6/20 != 5/20
+  => F-LA-M GREEN
+
+F-LA-RS · FAILS IF a cited LEDGER.md line does not contain its quoted text, or the 07-29 RS heading / Q-R3 / Q-R4 / Q-R5 citation is absent, or PROGRESS's Q-R3 pointer is not grep's line
+  real      GREEN — 5 quote(s) verify; heading :829, Q-R3 :834, Q-R4 :835, Q-R5 :836, ratified :846; PROGRESS's Q-R3 pointer agrees
+  sabotage  off-by-one: LEDGER.md:834 -> :835: RED (as required) — 1 bad ['line 86 «LEDGER.md:835»: line(s) 835-835 do not hold the quoted text'] · missing ['«LEDGER.md:834»']
+  sabotage  Q-R4's quoted ruling bent ((a) -> (b)): RED (as required) — 1 bad ['line 90 «LEDGER.md:835»: line(s) 835-835 do not hold the quoted text'] · missing ['«LEDGER.md:835»']
+  => F-LA-RS GREEN
+
+F-LA-TWIN · FAILS IF the slippage-twin question is absent or re-worded, or any twin number, Δ, count, tier or toll figure differs from a fresh read of rows.json / fee_schedule.json / V6_CONTROL_HAIRCUT_TWIN.parquet
+  real      GREEN — question present verbatim; 20 twin rows, 7 Δ rows and 3 v6 ALL rows equal a fresh read of rows.json / the parquet; counts, tiers and tolls equal fee_schedule.json
+  sabotage  one number bent (first row's TC +0.099777 -> +0.099778): RED (as required) — twin row ('P-GEN-1', 0): draft (True, 286, '+0.099778', '+0.084601', '+0.067733', 'twin<=TC', 'False', 'False', 'unseen12-card-v6') != rows.json (True, 286, '+0.099777', '+0.084601', '+0.067733', 'twin<=TC', 'False', 'False', 'unseen12-card-v6')
+  sabotage  the question withheld: RED (as required) — the question is absent or re-worded
+  sabotage  a count bent (sign_disagrees_with_tc +1): RED (as required) — missing/bent: 'flags: sign_disagrees_with_tc 0/20'
+  sabotage  a tier's bps bent (tier A -> 99.0): RED (as required) — missing/bent: 'tier A {BTC ETH} 2.0 bps/side'
+  sabotage  a v6 control number bent (tuning-era twin sign flipped): RED (as required) — v6 ALL rows: draft {'full': ('200', '+0.208717', '+0.217150', '+0.188157', 'twin>TC', 'False', 'False'), 'tuning': ('123', '-0.010763', '-0.014494', '-0.030517', 'twin>TC', 'True', 'False'), 'holdout': ('77', '+0.559314', '+0.540874', '+0.537466', 'twin<=TC', 'False', 'False')} != parquet {'full': ('200', '+0.208717', '+0.217150', '+0.188157', 'twin>TC', 'False', 'False'), 'tuning': ('123', '-0.010763', '+0.014494', '-0.030517', 'twin>TC', 'True', 'False'), 'holdout': ('77', '+0.559314', '+0.540874', '+0.537466', 'twin<=TC', 'False', 'False')}
+  => F-LA-TWIN GREEN
+
+F-LA-NOWRITE · FAILS IF exchange/status/LEDGER_APOLLO.md's bytes (or size or mtime) change during the run, the S0 of record changes, or any output path lies outside research_outputs/tierc10/close/ or onto a sibling's file
+  real      GREEN — LEDGER_APOLLO.md sha cd6ad43a0fe48906… size 174090, and the S0 of record, unchanged in bytes AND mtime since run start: True; a whole re-build + write bracketed: sha cd6ad43a0fe48906… before == after; outputs only under close/ and never a sibling's file: True
+  sabotage  a planted APPEND of the draft block to an in-memory ledger copy: RED (as required) — sha cd6ad43a0fe48906… -> 17ada20033c3092f… — CHANGED
+  sabotage  an output path under exchange/status/: RED (as required) — guard refuses ['/Users/luis/Naiad/exchange/status/LEDGER_APOLLO.md']
+  sabotage  an output path onto the sibling's S0_VERDICTS.json: RED (as required) — guard refuses ['research_outputs/tierc10/close/S0_VERDICTS.json']
+  => F-LA-NOWRITE GREEN
+
+F-DET · FAILS IF two builds from the same bytes differ, or a build differs from the draft this run wrote
+  real      GREEN — draft fea0d6519bfea034… vs fea0d6519bfea034…; == the file on disk: True
+  sabotage  a wall-clock salt in the header (time.perf_counter_ns): RED (as required) — two salted builds byte-identical: False
+  => F-DET GREEN
+
+F-LA-S0 · FAILS IF the §0 of record (close/S0_VERDICTS.json), a fresh read of FAMILY.json/rows.json and the draft's §0 lines disagree on any slot (verdict or HALT text, arm, n, point, CI, p, BH column, LOAO line, prior)
+  real      GREEN — 6 slots agree three ways — FAMILY.json/rows.json (fresh) == research_outputs/tierc10/close/S0_VERDICTS.json == the draft
+  sabotage  the §0 file flips P-GEN-1 to SUPPORTED: RED (as required) — P-GEN-1: §0 {'arm': 'unseen12-card-v6', 'n': '286', 'ci_point': '+0.099777', 'ci_lo': '-0.154991', 'ci_hi': '+0.315921', 'p_one_sided': '0.271682', 'verdict': 'SUPPORTED', 'clears_bh_bar': 'false', 'loao_line': '0/12 above', 'prior_pct': '45'} != derived {'arm': 'unseen12-card-v6', 'n': '286', 'ci_point': '+0.099777', 'ci_lo': '-0.154991', 'ci_hi': '+0.315921', 'p_one_sided': '0.271682', 'verdict': 'NOT SUPPORTED', 'clears_bh_bar': 'false', 'loao_line': '0/12 above', 'prior_pct': '45'}
+  sabotage  the §0 file drops the HALTed slot: RED (as required) — P-BE-1: §0 None != derived {'arm': 'be-floor-1R vs card-v6 (CLASSIC5, full)', 'halt': "HALT: P-BE-1 — the arm shares the WHOLE campaign set with its base; the commissioned two-sample ruler's premise failed. File a NEW id under ruler='set_change' and disclose.", 'prior_pct': '40'}
+  sabotage  the draft types P-GEN-1 SUPPORTED: RED (as required) — the draft's §0 lines != the fresh derivation on ['P-GEN-1']
+  => F-LA-S0 GREEN
+
+F-LA-TIER · FAILS IF the tier line's count, any clause value, or the tuning-era arm's verdict differs from FAMILY.json / P-TRG-2.rows.json, or the clearing registration's own filed IN-SAMPLE caveat is not carried
+  real      GREEN — 1 of m = 6 SUPPORTED (CI-only) with LOAO and BH beside, both clear; each line and the tuning-era arm's verdict equal FAMILY.json / rows.json
+  sabotage  the tuning-era verdict typed SUPPORTED: RED (as required) — the tuning-era line ('trg-9/12 vs card v6 · CLASSIC5 · tuning era', 'SUPPORTED', '+0.188419', '-0.014369', '+0.384652', '0.064484', '1/5 above', 'P-TRG-2', '2') != rows.json ('trg-9/12 vs card v6 · CLASSIC5 · tuning era', 'NOT SUPPORTED', '+0.188419', '-0.014369', '+0.384652', '0.064484', '1/5 above', 'P-TRG-2', '2')
+  sabotage  the BH column typed clears_bh_bar false: RED (as required) — clause line missing/bent: 'BH (beside, deciding nothing) p 0.005249 <= bar 0.016667 — c'
+  sabotage  the filed IN-SAMPLE caveat dropped from the tier line: RED (as required) — P-TRG-2's own filed IN-SAMPLE caveat is not carried
+  => F-LA-TIER GREEN
+
+F-LA-CITE · FAILS IF ANY «cite» in the draft (contract, LEDGER.md, LEDGER_APOLLO.md, PROGRESS.json, FAMILY.json, rows.json, fee_schedule.json, REGISTRATION_TEXTS.json) does not verify against its source
+  real      GREEN — 37 quote(s) verify
+  sabotage  TC9's closing words bent ('NINE' -> 'TEN'): RED (as required) — 1 bad ['line 217 «exchange/status/LEDGER_APOLLO.md:2422»: line(s) 2422-2422 do not hold the quoted text'] · missing []
+  sabotage  a JSON cite re-pointed (text_prescribes[1] -> [0]): RED (as required) — 1 bad ['line 52 «research_outputs/tierc10/scores/P-BE-1.rows.json#rows[0].text_prescribes[0]»: quote is not a substring of the field'] · missing []
+  sabotage  a PROGRESS quote bent (HOLDS -> FAILS): RED (as required) — 1 bad ['line 105 «research_outputs/tierc10/PROGRESS.json#stages[stage=STEP 0].one_line»: quote is not a substring of the field'] · missing []
+  => F-LA-CITE GREEN
+
+F-LA-FORMAT · FAILS IF the block does not open on the ledger's own inter-block separator, mirror the last block's header / LANE / CLASS lines, and close on exactly one '=== END ==='
+  real      GREEN — opens on the ledger's own separator '\n---\n\n'; header / LANE / CLASS mirror the block at LEDGER_APOLLO.md:2355; closes on one '=== END ==='
+  sabotage  the '=== END ===' terminator dropped: RED (as required) — does not close on exactly one '=== END ===' line
+  sabotage  the separator dropped: RED (as required) — does not open with the ledger's separator '\n---\n\n'; header / LANE / CLASS lines do not mirror the last block
+  => F-LA-FORMAT GREEN
+
+F-LA-CLOSURE · FAILS IF this module imports a bar loader or the engine, or names score / finish_family / register / _mark_scored / load_klines / load_funding
+  real      GREEN — no bar loader, no engine import, no score / finish_family / register reference
+  sabotage  a bar read planted (import tierc2_baseline; TB.load_klines): RED (as required) — forbidden: ['.load_klines', 'import tierc2_baseline']
+  sabotage  a score call planted (TP.score): RED (as required) — forbidden: ['.score']
+  => F-LA-CLOSURE GREEN
+
+SUMMARY  11/11 GREEN · 0 RED · sabotages 30/30 RED as required

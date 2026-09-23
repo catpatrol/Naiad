@@ -17,7 +17,7 @@
     "sha256": "70188a0cc32422be40e74d8e7adf7d444aa610bb3abf0384b4f4a2f66f57bbec"
   },
   "r0_census_utc": "2026-09-22T09:55:00Z",
-  "resume_point": "CLOSE \u2014 build doc to exchange/reports/BUILD_2026-09-21_TIERC10_UNSEEN_RANGES.md, LEDGER_APOLLO append, publish_exchange; push + LaCie destination need the operator's word",
+  "resume_point": "CLOSE \u2014 operator's word on push + LaCie destination; then: move BUILD_DRAFT.md to exchange/reports/BUILD_2026-09-21_TIERC10_UNSEEN_RANGES.md, commit, push, fill the append stamp + re-run tierc10_close_ledger_append_root.py, append LEDGER_APOLLO_APPEND.md to exchange/status/LEDGER_APOLLO.md, publish_exchange, bright paths",
   "seed": 20260921,
   "stages": [
     {
@@ -4919,6 +4919,391 @@
       "one_line": "P-BRK-S1 NOT SUPPORTED \u2014 significantly NEGATIVE: holdout CLASSIC5 n 1836, -0.2111 R, CI [-0.298, -0.144], LOAO 0/5 above, 5/5 BELOW; 17-asset view -0.170 R [-0.205, -0.137]; memory-line anchor -0.199 R [-0.335, -0.073]; 5m height-vs-toll (holdout) FAIL. FAMILY (m = 6 declared, 5 run, bar 0.016667): P-TRG-2 is the ONLY row that clears all three clauses \u2014 CI lo 0.109 > 0, LOAO 5/5, p 0.005249 <= 0.016667. P-GEN-1, P-SPR-2, P-BRK-I1, P-BRK-S1 NOT SUPPORTED; P-BE-1 HALT (no verdict).",
       "stage": "B-5M",
       "status": "COMPLETE-VERIFIED"
+    },
+    {
+      "artifact_count": 56,
+      "artifact_shas": {
+        "research_outputs/tierc10/LEDGER_APOLLO_APPEND.md": {
+          "bytes": 14925,
+          "sha256": "d6a58f5c2901f177edb712c7acce208bf5055225d0f46391189635eba4cab3d1"
+        },
+        "research_outputs/tierc10/close/FIXTURES_CLOSE_box_cost.txt": {
+          "bytes": 6034,
+          "sha256": "c44d9bb44c072ac3f7b00e4e307573b5088560f0f6674e24dff7b3400dace792"
+        },
+        "research_outputs/tierc10/close/FIXTURES_CLOSE_census_r.txt": {
+          "bytes": 12827,
+          "sha256": "bc339a7df7830f791d09efb025b0854760983b19c3667a1c0289d9cd999635c5"
+        },
+        "research_outputs/tierc10/close/FIXTURES_CLOSE_findings.txt": {
+          "bytes": 13613,
+          "sha256": "89395614fc8c0fe76aaaf0d8a73d88ef0ce11766aa543ab6eb7c136725c93b11"
+        },
+        "research_outputs/tierc10/close/FIXTURES_CLOSE_forward_strip.txt": {
+          "bytes": 17191,
+          "sha256": "e321d0d43eb13d0d05f4e1f016e043c4945d14138d43d77848827df86cd21694"
+        },
+        "research_outputs/tierc10/close/FIXTURES_CLOSE_ledger_append.txt": {
+          "bytes": 11285,
+          "sha256": "18d49d1eb050d3d31cb660bbaead0fe07f8581ffbe5a933113520c6d3bd1544d"
+        },
+        "research_outputs/tierc10/close/FIXTURES_CLOSE_ledger_append_root.txt": {
+          "bytes": 15919,
+          "sha256": "d2bdc68e0511caef7f590d6f1cfa783e1b6761bb9e175e60abd25823a1da52dc"
+        },
+        "research_outputs/tierc10/close/FIXTURES_CLOSE_p_age_1.txt": {
+          "bytes": 11002,
+          "sha256": "06ad1d050be09d67142f19aec8d15bdfe4673ff29b0dcb698b0361d22f427511"
+        },
+        "research_outputs/tierc10/close/FIXTURES_CLOSE_p_trg_2_seen_share.txt": {
+          "bytes": 5069,
+          "sha256": "780034a0dccd412511a50e51f4b02533843ecf5f41ce6b6c3bb039272491c4d4"
+        },
+        "research_outputs/tierc10/close/FIXTURES_CLOSE_regime_prior.txt": {
+          "bytes": 15516,
+          "sha256": "994adcf4ed30ce17d8fd6cf2abeadbc4bb7651fa613a7b6ff22a3e35680e1c8f"
+        },
+        "research_outputs/tierc10/close/FIXTURES_CLOSE_s0_verdicts.txt": {
+          "bytes": 7738,
+          "sha256": "206990af93e2e964313678dd65159d998be302339f40d9a7fb17c22f91ae19dc"
+        },
+        "research_outputs/tierc10/close/FIXTURES_CLOSE_stage_d.txt": {
+          "bytes": 11451,
+          "sha256": "73ec9e10ac3cf8560e61fa40247ac1d2d23d46f827b5a4e6d0564b26dbd240f4"
+        },
+        "research_outputs/tierc10/close/FIXTURES_CLOSE_stage_log.txt": {
+          "bytes": 8398,
+          "sha256": "ab964b6582a05b849ef77c237aaf446b83b03892bfa97f6f7851d83ede230488"
+        },
+        "research_outputs/tierc10/close/FIXTURES_CLOSE_v6_control_twin.txt": {
+          "bytes": 17604,
+          "sha256": "d8925ddd79433a5d2b88d4fc3be2eddbc7eee2df4d0dd628f4ba0534dbbb3d38"
+        },
+        "research_outputs/tierc10/close/FORWARD_STRIP.md": {
+          "bytes": 5786,
+          "sha256": "a59e438c690987eb69bf24f805c54a4d36ae533d03e7422d499372c19d3872c4"
+        },
+        "research_outputs/tierc10/close/FORWARD_STRIP.parquet": {
+          "bytes": 20475,
+          "sha256": "4e118dc1e3f0873f655ab9869c647baff8ea0057113eeb6f6d80f5a785abba53"
+        },
+        "research_outputs/tierc10/close/LEDGER_APOLLO_APPEND.draft.md": {
+          "bytes": 22653,
+          "sha256": "fea0d6519bfea0349d3524f216bb15a1c8a1c5544ac7570954f0f9030e74c3fb"
+        },
+        "research_outputs/tierc10/close/P_AGE_1_BAR_BANDS.parquet": {
+          "bytes": 29592,
+          "sha256": "b501e543226fae5ea16d7abbd845c222b1bfa5fef1376967435adbf0fa67ea69"
+        },
+        "research_outputs/tierc10/close/P_AGE_1_EDGES.parquet": {
+          "bytes": 15881,
+          "sha256": "8c2395703bd0eee6f8bca1fb3c65bbb6b683941930a77b9c1ebb4cabb3d424d1"
+        },
+        "research_outputs/tierc10/close/P_AGE_1_TIDE_YOUTH.md": {
+          "bytes": 7589,
+          "sha256": "b1c5a7bc5c4f5c7db98187dc6ca1720329cb6d6e0b21d1360d9449ed6512a56f"
+        },
+        "research_outputs/tierc10/close/P_AGE_1_TIDE_YOUTH.parquet": {
+          "bytes": 39578,
+          "sha256": "377c73effb1d23af95075bb53a297fc6387c515db5769cabb41684b293b3750f"
+        },
+        "research_outputs/tierc10/close/P_TRG_2_SEEN_SHARE.json": {
+          "bytes": 60968,
+          "sha256": "b68083aa19b0955a3082966987da2388970ab31cc9dd536f2f8a56e996e30f30"
+        },
+        "research_outputs/tierc10/close/P_TRG_2_SEEN_SHARE.md": {
+          "bytes": 5677,
+          "sha256": "5b7ef5d1720f5f07aa31c9fe97b808b4686532bcc8454eef3870c2b3bb412914"
+        },
+        "research_outputs/tierc10/close/R0_ADDENDUM.md": {
+          "bytes": 16734,
+          "sha256": "0df7a920ee88a34ae35e6d87b38699ccda123a0bc1fc2eb0dbc31e2ba926a14a"
+        },
+        "research_outputs/tierc10/close/REGIME_PRIOR.md": {
+          "bytes": 19419,
+          "sha256": "cb793efc5f9a0a655da0fefa5648f3100a6a4cac21e4def1ddbbed07534c8844"
+        },
+        "research_outputs/tierc10/close/REGIME_PRIOR_TIME_IN_RANGE.parquet": {
+          "bytes": 26662,
+          "sha256": "a2c3ed8e42e464c6b8bcd91b85788a2656ff11b1868dec7cdd5741e3f1034f8d"
+        },
+        "research_outputs/tierc10/close/REGIME_PRIOR_V6_BY_STATE.parquet": {
+          "bytes": 23334,
+          "sha256": "ad7bed5953f4418a08168aaebc2e152bc4caa349c9fa86d59bb2b74db6984c41"
+        },
+        "research_outputs/tierc10/close/S0_VERDICTS.json": {
+          "bytes": 81280,
+          "sha256": "43b3221538dd4fa24665b78b2fda1c04cb377f4f8b1a9592cb217c505627d36c"
+        },
+        "research_outputs/tierc10/close/S0_VERDICTS.md": {
+          "bytes": 16670,
+          "sha256": "6952417e6bda33b0763c5079bdfa70b98063d6a4f3dc417c2284cc66b355c7b6"
+        },
+        "research_outputs/tierc10/close/S2_CENSUS_R.md": {
+          "bytes": 64492,
+          "sha256": "d401eee939866c4d4bd5940cefcbad9616a0cbb465e5ab4e6e89c1d2f9b0db18"
+        },
+        "research_outputs/tierc10/close/S3_STAGE_D.md": {
+          "bytes": 59087,
+          "sha256": "eca4257650d82c301f5627476f324cb55ff3b084a3122ef3a8b645010c81711c"
+        },
+        "research_outputs/tierc10/close/S5_FINDINGS_NOT_FIXED.json": {
+          "bytes": 104680,
+          "sha256": "f771a60175aefcb81fd8ccf976e8948660deb57a99bfcf9fe264b4bd7734dbe8"
+        },
+        "research_outputs/tierc10/close/S5_FINDINGS_NOT_FIXED.md": {
+          "bytes": 84441,
+          "sha256": "782ca3f39789ccdcb80c67ab1acfdadccc2a627e5144770ed8330de5b96102f9"
+        },
+        "research_outputs/tierc10/close/S8_DISPOSITION_BOX_COST.json": {
+          "bytes": 138197,
+          "sha256": "9a3732d0f039d2ec92bd6efb0a005f66db1e44ad40bcd96a517d013cae2c0fa4"
+        },
+        "research_outputs/tierc10/close/S8_DISPOSITION_BOX_COST.md": {
+          "bytes": 48990,
+          "sha256": "48e3fb7d897ecfd37274b5993f2c5260aa2ae3abd8742ea0762a53b2c5f0232a"
+        },
+        "research_outputs/tierc10/close/STAGE_LOG.md": {
+          "bytes": 12329,
+          "sha256": "0186583894921519351fb726f2aad1826d39c1a22bb7b2d1d1afd3d7f04c9dee"
+        },
+        "research_outputs/tierc10/close/V6_CONTROL_HAIRCUT_TWIN.md": {
+          "bytes": 8838,
+          "sha256": "515ead1fde4f6a491baf351be0f3e4e2317718a3848ec311de14e9b819350378"
+        },
+        "research_outputs/tierc10/close/V6_CONTROL_HAIRCUT_TWIN.parquet": {
+          "bytes": 19355,
+          "sha256": "499f3843de176fbe6ec175d0fdae788bb3bc182ee2a1deaff762a19f7098ba8e"
+        },
+        "research_outputs/tierc10/close/_det_forward_strip/seed_1/FORWARD_STRIP.md": {
+          "bytes": 5786,
+          "sha256": "a59e438c690987eb69bf24f805c54a4d36ae533d03e7422d499372c19d3872c4"
+        },
+        "research_outputs/tierc10/close/_det_forward_strip/seed_1/FORWARD_STRIP.parquet": {
+          "bytes": 20475,
+          "sha256": "4e118dc1e3f0873f655ab9869c647baff8ea0057113eeb6f6d80f5a785abba53"
+        },
+        "research_outputs/tierc10/close/_det_forward_strip/seed_20260921/FORWARD_STRIP.md": {
+          "bytes": 5786,
+          "sha256": "a59e438c690987eb69bf24f805c54a4d36ae533d03e7422d499372c19d3872c4"
+        },
+        "research_outputs/tierc10/close/_det_forward_strip/seed_20260921/FORWARD_STRIP.parquet": {
+          "bytes": 20475,
+          "sha256": "4e118dc1e3f0873f655ab9869c647baff8ea0057113eeb6f6d80f5a785abba53"
+        },
+        "research_outputs/tierc10/close/_det_ledger_append_root/seed_1/FIXTURES_CLOSE_ledger_append_root.txt": {
+          "bytes": 15364,
+          "sha256": "559e22432f2e65888dc132d2ba80e59a6d1ce4cbfa262e8107d91312232d3cb9"
+        },
+        "research_outputs/tierc10/close/_det_ledger_append_root/seed_20260921/FIXTURES_CLOSE_ledger_append_root.txt": {
+          "bytes": 15364,
+          "sha256": "559e22432f2e65888dc132d2ba80e59a6d1ce4cbfa262e8107d91312232d3cb9"
+        },
+        "research_outputs/tierc10/close/_det_p_age_1/run_a/P_AGE_1_BAR_BANDS.parquet": {
+          "bytes": 29592,
+          "sha256": "b501e543226fae5ea16d7abbd845c222b1bfa5fef1376967435adbf0fa67ea69"
+        },
+        "research_outputs/tierc10/close/_det_p_age_1/run_a/P_AGE_1_EDGES.parquet": {
+          "bytes": 15881,
+          "sha256": "8c2395703bd0eee6f8bca1fb3c65bbb6b683941930a77b9c1ebb4cabb3d424d1"
+        },
+        "research_outputs/tierc10/close/_det_p_age_1/run_a/P_AGE_1_TIDE_YOUTH.md": {
+          "bytes": 7589,
+          "sha256": "b1c5a7bc5c4f5c7db98187dc6ca1720329cb6d6e0b21d1360d9449ed6512a56f"
+        },
+        "research_outputs/tierc10/close/_det_p_age_1/run_a/P_AGE_1_TIDE_YOUTH.parquet": {
+          "bytes": 39578,
+          "sha256": "377c73effb1d23af95075bb53a297fc6387c515db5769cabb41684b293b3750f"
+        },
+        "research_outputs/tierc10/close/_det_p_age_1/run_b/P_AGE_1_BAR_BANDS.parquet": {
+          "bytes": 29592,
+          "sha256": "b501e543226fae5ea16d7abbd845c222b1bfa5fef1376967435adbf0fa67ea69"
+        },
+        "research_outputs/tierc10/close/_det_p_age_1/run_b/P_AGE_1_EDGES.parquet": {
+          "bytes": 15881,
+          "sha256": "8c2395703bd0eee6f8bca1fb3c65bbb6b683941930a77b9c1ebb4cabb3d424d1"
+        },
+        "research_outputs/tierc10/close/_det_p_age_1/run_b/P_AGE_1_TIDE_YOUTH.md": {
+          "bytes": 7589,
+          "sha256": "b1c5a7bc5c4f5c7db98187dc6ca1720329cb6d6e0b21d1360d9449ed6512a56f"
+        },
+        "research_outputs/tierc10/close/_det_p_age_1/run_b/P_AGE_1_TIDE_YOUTH.parquet": {
+          "bytes": 39578,
+          "sha256": "377c73effb1d23af95075bb53a297fc6387c515db5769cabb41684b293b3750f"
+        },
+        "research_outputs/tierc10/close/_det_p_trg_2_seen_share/seed_1/P_TRG_2_SEEN_SHARE.json": {
+          "bytes": 60968,
+          "sha256": "b68083aa19b0955a3082966987da2388970ab31cc9dd536f2f8a56e996e30f30"
+        },
+        "research_outputs/tierc10/close/_det_p_trg_2_seen_share/seed_1/P_TRG_2_SEEN_SHARE.md": {
+          "bytes": 5677,
+          "sha256": "5b7ef5d1720f5f07aa31c9fe97b808b4686532bcc8454eef3870c2b3bb412914"
+        },
+        "research_outputs/tierc10/close/_det_p_trg_2_seen_share/seed_20260921/P_TRG_2_SEEN_SHARE.json": {
+          "bytes": 60968,
+          "sha256": "b68083aa19b0955a3082966987da2388970ab31cc9dd536f2f8a56e996e30f30"
+        },
+        "research_outputs/tierc10/close/_det_p_trg_2_seen_share/seed_20260921/P_TRG_2_SEEN_SHARE.md": {
+          "bytes": 5677,
+          "sha256": "5b7ef5d1720f5f07aa31c9fe97b808b4686532bcc8454eef3870c2b3bb412914"
+        }
+      },
+      "as_of": "2026-09-21T16:00:00Z",
+      "blockers": [
+        "OPERATOR: push + the LaCie destination (R6 granted push but the operator said they would be asked again at CLOSE; the destination is unnamed \u2014 '/Volumes/LaCie/Repo Clone/naiad-backups' is an EXECUTOR LEAN). Until then: the build doc stays at research_outputs/tierc10/BUILD_DRAFT.md (LAW 5 \u2014 it moves to exchange/reports/ only at close, and exchange/** auto-publishes, which pushes the branch), LEDGER_APOLLO_APPEND.md is NOT appended, publish_exchange is NOT run."
+      ],
+      "fixtures": [
+        {
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": null,
+          "re_run_utc": "2026-09-23T03:30:00Z",
+          "suite": "tierc10_close box_cost",
+          "transcript_drift": false,
+          "transcript_sha_after": "c44d9bb44c072ac3f7b00e4e307573b5088560f0f6674e24dff7b3400dace792",
+          "transcript_sha_before": "c44d9bb44c072ac3f7b00e4e307573b5088560f0f6674e24dff7b3400dace792",
+          "wall_seconds": null
+        },
+        {
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": null,
+          "re_run_utc": "2026-09-23T03:30:00Z",
+          "suite": "tierc10_close census_r",
+          "transcript_drift": false,
+          "transcript_sha_after": "bc339a7df7830f791d09efb025b0854760983b19c3667a1c0289d9cd999635c5",
+          "transcript_sha_before": "bc339a7df7830f791d09efb025b0854760983b19c3667a1c0289d9cd999635c5",
+          "wall_seconds": null
+        },
+        {
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": null,
+          "re_run_utc": "2026-09-23T03:30:00Z",
+          "suite": "tierc10_close findings",
+          "transcript_drift": false,
+          "transcript_sha_after": "89395614fc8c0fe76aaaf0d8a73d88ef0ce11766aa543ab6eb7c136725c93b11",
+          "transcript_sha_before": "89395614fc8c0fe76aaaf0d8a73d88ef0ce11766aa543ab6eb7c136725c93b11",
+          "wall_seconds": null
+        },
+        {
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": null,
+          "re_run_utc": "2026-09-23T03:30:00Z",
+          "suite": "tierc10_close forward_strip",
+          "transcript_drift": false,
+          "transcript_sha_after": "e321d0d43eb13d0d05f4e1f016e043c4945d14138d43d77848827df86cd21694",
+          "transcript_sha_before": "e321d0d43eb13d0d05f4e1f016e043c4945d14138d43d77848827df86cd21694",
+          "wall_seconds": null
+        },
+        {
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": null,
+          "re_run_utc": "2026-09-23T03:30:00Z",
+          "suite": "tierc10_close ledger_append",
+          "transcript_drift": false,
+          "transcript_sha_after": "18d49d1eb050d3d31cb660bbaead0fe07f8581ffbe5a933113520c6d3bd1544d",
+          "transcript_sha_before": "18d49d1eb050d3d31cb660bbaead0fe07f8581ffbe5a933113520c6d3bd1544d",
+          "wall_seconds": null
+        },
+        {
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": null,
+          "re_run_utc": "2026-09-23T03:30:00Z",
+          "suite": "tierc10_close ledger_append_root",
+          "transcript_drift": false,
+          "transcript_sha_after": "d2bdc68e0511caef7f590d6f1cfa783e1b6761bb9e175e60abd25823a1da52dc",
+          "transcript_sha_before": "d2bdc68e0511caef7f590d6f1cfa783e1b6761bb9e175e60abd25823a1da52dc",
+          "wall_seconds": null
+        },
+        {
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": null,
+          "re_run_utc": "2026-09-23T03:30:00Z",
+          "suite": "tierc10_close p_age_1",
+          "transcript_drift": false,
+          "transcript_sha_after": "06ad1d050be09d67142f19aec8d15bdfe4673ff29b0dcb698b0361d22f427511",
+          "transcript_sha_before": "06ad1d050be09d67142f19aec8d15bdfe4673ff29b0dcb698b0361d22f427511",
+          "wall_seconds": null
+        },
+        {
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": null,
+          "re_run_utc": "2026-09-23T03:30:00Z",
+          "suite": "tierc10_close p_trg_2_seen_share",
+          "transcript_drift": false,
+          "transcript_sha_after": "780034a0dccd412511a50e51f4b02533843ecf5f41ce6b6c3bb039272491c4d4",
+          "transcript_sha_before": "780034a0dccd412511a50e51f4b02533843ecf5f41ce6b6c3bb039272491c4d4",
+          "wall_seconds": null
+        },
+        {
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": null,
+          "re_run_utc": "2026-09-23T03:30:00Z",
+          "suite": "tierc10_close regime_prior",
+          "transcript_drift": false,
+          "transcript_sha_after": "994adcf4ed30ce17d8fd6cf2abeadbc4bb7651fa613a7b6ff22a3e35680e1c8f",
+          "transcript_sha_before": "994adcf4ed30ce17d8fd6cf2abeadbc4bb7651fa613a7b6ff22a3e35680e1c8f",
+          "wall_seconds": null
+        },
+        {
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": null,
+          "re_run_utc": "2026-09-23T03:30:00Z",
+          "suite": "tierc10_close s0_verdicts",
+          "transcript_drift": false,
+          "transcript_sha_after": "206990af93e2e964313678dd65159d998be302339f40d9a7fb17c22f91ae19dc",
+          "transcript_sha_before": "206990af93e2e964313678dd65159d998be302339f40d9a7fb17c22f91ae19dc",
+          "wall_seconds": null
+        },
+        {
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": null,
+          "re_run_utc": "2026-09-23T03:30:00Z",
+          "suite": "tierc10_close stage_d",
+          "transcript_drift": false,
+          "transcript_sha_after": "73ec9e10ac3cf8560e61fa40247ac1d2d23d46f827b5a4e6d0564b26dbd240f4",
+          "transcript_sha_before": "73ec9e10ac3cf8560e61fa40247ac1d2d23d46f827b5a4e6d0564b26dbd240f4",
+          "wall_seconds": null
+        },
+        {
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": null,
+          "re_run_utc": "2026-09-23T03:30:00Z",
+          "suite": "tierc10_close stage_log",
+          "transcript_drift": false,
+          "transcript_sha_after": "ab964b6582a05b849ef77c237aaf446b83b03892bfa97f6f7851d83ede230488",
+          "transcript_sha_before": "ab964b6582a05b849ef77c237aaf446b83b03892bfa97f6f7851d83ede230488",
+          "wall_seconds": null
+        },
+        {
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": null,
+          "re_run_utc": "2026-09-23T03:30:00Z",
+          "suite": "tierc10_close v6_control_twin",
+          "transcript_drift": false,
+          "transcript_sha_after": "d8925ddd79433a5d2b88d4fc3be2eddbc7eee2df4d0dd628f4ba0534dbbb3d38",
+          "transcript_sha_before": "d8925ddd79433a5d2b88d4fc3be2eddbc7eee2df4d0dd628f4ba0534dbbb3d38",
+          "wall_seconds": null
+        }
+      ],
+      "notes": [
+        "All 14 CLOSE builders re-run by the orchestrator: exit 0. FIXTURES_CLOSE_box_cost and _ledger_append_root read LIVE repo/git state and move with every commit by design; they are regenerated in the CLOSE commit sequence.",
+        "P-AGE-1 (tide-youth) and regime-prior had NO definition anywhere in the estate; both tables are Tier-E, gate nothing, and carry their definition as an EXECUTOR READING, NO NEW PIN."
+      ],
+      "one_line": "CLOSE prepared: six verdicts adversarially verified under their own texts (560 + 340 numbers traced; 1 + 3 wrong, all repaired); P-TRG-2 selection hazard persisted (196/198 campaigns already seen by TC9's sweep, which picked 9/12 on its p); forward strip (report-only), P-AGE-1, regime-prior, v6-control haircut twin built; BUILD_DRAFT.md + LEDGER_APOLLO_APPEND.md (certified 9/9) written. Waiting on the operator for push / LaCie / publish.",
+      "stage": "CLOSE",
+      "status": "PARTIAL"
     }
   ],
   "substrate": "/Users/luis/.cache/naiad/snapshots/tc10_20260921",

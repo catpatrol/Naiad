@@ -1,0 +1,2424 @@
+{
+ "arm": "trg-9/12 vs card v6 · CLASSIC5 · full",
+ "book": {
+  "dryrun_arm_index": 11,
+  "dryrun_pin": "b2276fa487119ef12a8e0434e54f9b77efbfb7ee387b3cb35d2955043c371a8f",
+  "equal_dryrun": true,
+  "equal_rows_json": true,
+  "exit_reasons": {
+   "bell_12_89": 7,
+   "stop": 191
+  },
+  "n": 198,
+  "net_r": 92.3499,
+  "rows_json_book_sha256": "b2276fa487119ef12a8e0434e54f9b77efbfb7ee387b3cb35d2955043c371a8f",
+  "sha256": "b2276fa487119ef12a8e0434e54f9b77efbfb7ee387b3cb35d2955043c371a8f"
+ },
+ "campaigns": [
+  {
+   "direction": "1",
+   "entry_ms": 1580616000000,
+   "entry_ts": "2020-02-02T04:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2020-02-04T08:00:00Z",
+   "lane": "card",
+   "net_r": -0.8906438208842016,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1582056000000,
+   "entry_ts": "2020-02-18T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2020-02-19T20:00:00Z",
+   "lane": "card",
+   "net_r": -1.1245239901407498,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1585742400000,
+   "entry_ts": "2020-04-01T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2020-04-01T20:00:00Z",
+   "lane": "card",
+   "net_r": -1.0275694177867887,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1590163200000,
+   "entry_ts": "2020-05-22T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2020-05-24T12:00:00Z",
+   "lane": "card",
+   "net_r": -1.030344450247254,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1591171200000,
+   "entry_ts": "2020-06-03T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2020-06-11T16:00:00Z",
+   "lane": "card",
+   "net_r": -1.0715988624900896,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1591272000000,
+   "entry_ts": "2020-06-04T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2020-06-11T16:00:00Z",
+   "lane": "card",
+   "net_r": -0.9088947603210116,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1594540800000,
+   "entry_ts": "2020-07-12T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2020-07-16T04:00:00Z",
+   "lane": "card",
+   "net_r": 0.7974769535274624,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1594584000000,
+   "entry_ts": "2020-07-12T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2020-07-13T16:00:00Z",
+   "lane": "card",
+   "net_r": -0.8459365374705129,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1594598400000,
+   "entry_ts": "2020-07-13T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2020-07-16T04:00:00Z",
+   "lane": "card",
+   "net_r": -0.9257487689395583,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1596614400000,
+   "entry_ts": "2020-08-05T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2020-08-10T08:00:00Z",
+   "lane": "card",
+   "net_r": -0.13301318055237388,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1596916800000,
+   "entry_ts": "2020-08-08T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2020-08-16T00:00:00Z",
+   "lane": "card",
+   "net_r": -0.033539868742121844,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1601582400000,
+   "entry_ts": "2020-10-01T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2020-10-04T16:00:00Z",
+   "lane": "card",
+   "net_r": -0.22591341085073435,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1605571200000,
+   "entry_ts": "2020-11-17T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2020-11-25T20:00:00Z",
+   "lane": "card",
+   "net_r": 6.91595465728777,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1607212800000,
+   "entry_ts": "2020-12-06T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2020-12-08T20:00:00Z",
+   "lane": "card",
+   "net_r": -0.7604399910143799,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1607299200000,
+   "entry_ts": "2020-12-07T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2020-12-08T12:00:00Z",
+   "lane": "card",
+   "net_r": -0.9305940054404038,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1608278400000,
+   "entry_ts": "2020-12-18T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2020-12-28T20:00:00Z",
+   "lane": "card",
+   "net_r": 0.47533856473735164,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1608336000000,
+   "entry_ts": "2020-12-19T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2020-12-23T08:00:00Z",
+   "lane": "card",
+   "net_r": 1.286669920560448,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1608667200000,
+   "entry_ts": "2020-12-22T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-01-04T04:00:00Z",
+   "lane": "card",
+   "net_r": 3.336177529565535,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1609228800000,
+   "entry_ts": "2020-12-29T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-01-03T12:00:00Z",
+   "lane": "card",
+   "net_r": 0.33411513142418825,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1609848000000,
+   "entry_ts": "2021-01-05T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-01-11T12:00:00Z",
+   "lane": "card",
+   "net_r": -0.3217455467235021,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1612051200000,
+   "entry_ts": "2021-01-31T00:00:00Z",
+   "exit_reason": "bell_12_89",
+   "exit_ts": "2021-01-31T16:00:00Z",
+   "lane": "card",
+   "net_r": -0.8044833165957127,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1612166400000,
+   "entry_ts": "2021-02-01T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-02-10T12:00:00Z",
+   "lane": "card",
+   "net_r": 2.9494608717034088,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1612512000000,
+   "entry_ts": "2021-02-05T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-02-15T00:00:00Z",
+   "lane": "card",
+   "net_r": 1.8481661981911177,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1615104000000,
+   "entry_ts": "2021-03-07T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-03-08T12:00:00Z",
+   "lane": "card",
+   "net_r": -1.063245200904049,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1615622400000,
+   "entry_ts": "2021-03-13T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-03-15T08:00:00Z",
+   "lane": "card",
+   "net_r": -1.124634111298094,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1615996800000,
+   "entry_ts": "2021-03-17T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-03-22T20:00:00Z",
+   "lane": "card",
+   "net_r": -0.49443590569599655,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1617364800000,
+   "entry_ts": "2021-04-02T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-04-06T12:00:00Z",
+   "lane": "card",
+   "net_r": 1.2968408624569279,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1617408000000,
+   "entry_ts": "2021-04-03T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-04-03T16:00:00Z",
+   "lane": "card",
+   "net_r": -1.0919044098220339,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1617638400000,
+   "entry_ts": "2021-04-05T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-04-06T12:00:00Z",
+   "lane": "card",
+   "net_r": -1.0953145968904248,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1617926400000,
+   "entry_ts": "2021-04-09T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-04-18T00:00:00Z",
+   "lane": "card",
+   "net_r": 1.1912600914530151,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1617926400000,
+   "entry_ts": "2021-04-09T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-04-12T16:00:00Z",
+   "lane": "card",
+   "net_r": 0.9081763048654383,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1618948800000,
+   "entry_ts": "2021-04-20T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-04-23T00:00:00Z",
+   "lane": "card",
+   "net_r": -0.7261691741687729,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1620172800000,
+   "entry_ts": "2021-05-05T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-05-10T20:00:00Z",
+   "lane": "card",
+   "net_r": 1.0044710511294817,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1620244800000,
+   "entry_ts": "2021-05-05T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-05-06T16:00:00Z",
+   "lane": "card",
+   "net_r": -1.129982302735846,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1620792000000,
+   "entry_ts": "2021-05-12T04:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-05-13T00:00:00Z",
+   "lane": "card",
+   "net_r": -0.523101555313549,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1621123200000,
+   "entry_ts": "2021-05-16T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-05-19T08:00:00Z",
+   "lane": "card",
+   "net_r": -0.8324835331341084,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1623844800000,
+   "entry_ts": "2021-06-16T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-06-27T20:00:00Z",
+   "lane": "card",
+   "net_r": 6.684707464027104,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1623844800000,
+   "entry_ts": "2021-06-16T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-06-18T08:00:00Z",
+   "lane": "card",
+   "net_r": -0.7626264610096618,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1624492800000,
+   "entry_ts": "2021-06-24T00:00:00Z",
+   "exit_reason": "bell_12_89",
+   "exit_ts": "2021-06-29T12:00:00Z",
+   "lane": "card",
+   "net_r": -0.7304971662608071,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1625457600000,
+   "entry_ts": "2021-07-05T04:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-07-07T04:00:00Z",
+   "lane": "card",
+   "net_r": -0.5393018959549931,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1625702400000,
+   "entry_ts": "2021-07-08T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-07-18T00:00:00Z",
+   "lane": "card",
+   "net_r": 0.08254457290424182,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1626076800000,
+   "entry_ts": "2021-07-12T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-07-18T00:00:00Z",
+   "lane": "card",
+   "net_r": 1.099898778272197,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1626105600000,
+   "entry_ts": "2021-07-12T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-07-17T12:00:00Z",
+   "lane": "card",
+   "net_r": 0.4982148308014782,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1630080000000,
+   "entry_ts": "2021-08-27T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-09-07T08:00:00Z",
+   "lane": "card",
+   "net_r": 1.6711967225334452,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1633363200000,
+   "entry_ts": "2021-10-04T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-10-06T04:00:00Z",
+   "lane": "card",
+   "net_r": -0.8458825121544707,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1633694400000,
+   "entry_ts": "2021-10-08T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-10-08T20:00:00Z",
+   "lane": "card",
+   "net_r": -1.0230432445623145,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1634731200000,
+   "entry_ts": "2021-10-20T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-10-24T08:00:00Z",
+   "lane": "card",
+   "net_r": 2.110357160829389,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1635465600000,
+   "entry_ts": "2021-10-29T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-11-01T04:00:00Z",
+   "lane": "card",
+   "net_r": -0.8513317889508971,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1636257600000,
+   "entry_ts": "2021-11-07T04:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-11-10T20:00:00Z",
+   "lane": "card",
+   "net_r": 2.0329190192217923,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1636891200000,
+   "entry_ts": "2021-11-14T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-11-16T00:00:00Z",
+   "lane": "card",
+   "net_r": -1.0390259611671635,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1638000000000,
+   "entry_ts": "2021-11-27T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-11-28T00:00:00Z",
+   "lane": "card",
+   "net_r": -1.007701058306547,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1638518400000,
+   "entry_ts": "2021-12-03T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-12-03T12:00:00Z",
+   "lane": "card",
+   "net_r": -1.0291950715027496,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1640664000000,
+   "entry_ts": "2021-12-28T04:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2021-12-31T08:00:00Z",
+   "lane": "card",
+   "net_r": 0.12047790006623932,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1641096000000,
+   "entry_ts": "2022-01-02T04:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-01-11T16:00:00Z",
+   "lane": "card",
+   "net_r": 2.583242396779484,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1641182400000,
+   "entry_ts": "2022-01-03T04:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-01-12T12:00:00Z",
+   "lane": "card",
+   "net_r": 5.117830681349427,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1641398400000,
+   "entry_ts": "2022-01-05T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-01-11T16:00:00Z",
+   "lane": "card",
+   "net_r": 2.0295645038501373,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1645099200000,
+   "entry_ts": "2022-02-17T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-02-21T00:00:00Z",
+   "lane": "card",
+   "net_r": 0.853013038455572,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1645128000000,
+   "entry_ts": "2022-02-17T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-02-26T00:00:00Z",
+   "lane": "card",
+   "net_r": 1.3269508441302718,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1645632000000,
+   "entry_ts": "2022-02-23T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-02-24T20:00:00Z",
+   "lane": "card",
+   "net_r": -1.0275739873825267,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1645646400000,
+   "entry_ts": "2022-02-23T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-02-24T20:00:00Z",
+   "lane": "card",
+   "net_r": -1.0237645031783926,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1645992000000,
+   "entry_ts": "2022-02-27T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-02-28T08:00:00Z",
+   "lane": "card",
+   "net_r": -1.02471729414265,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1646899200000,
+   "entry_ts": "2022-03-10T08:00:00Z",
+   "exit_reason": "bell_12_89",
+   "exit_ts": "2022-03-17T12:00:00Z",
+   "lane": "card",
+   "net_r": -0.5232667702654272,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1646913600000,
+   "entry_ts": "2022-03-10T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-03-16T00:00:00Z",
+   "lane": "card",
+   "net_r": -0.7577388037430999,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1650326400000,
+   "entry_ts": "2022-04-19T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-04-20T16:00:00Z",
+   "lane": "card",
+   "net_r": -0.3497338104117324,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1656892800000,
+   "entry_ts": "2022-07-04T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-07-04T12:00:00Z",
+   "lane": "card",
+   "net_r": -1.0179444820880015,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1662480000000,
+   "entry_ts": "2022-09-06T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-09-09T12:00:00Z",
+   "lane": "card",
+   "net_r": -0.7768732574075203,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1662494400000,
+   "entry_ts": "2022-09-06T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-09-07T20:00:00Z",
+   "lane": "card",
+   "net_r": -0.8895287538652267,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1662508800000,
+   "entry_ts": "2022-09-07T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-09-07T20:00:00Z",
+   "lane": "card",
+   "net_r": -1.0169242847299194,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1663502400000,
+   "entry_ts": "2022-09-18T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-09-21T16:00:00Z",
+   "lane": "card",
+   "net_r": -0.2684605137660851,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1663516800000,
+   "entry_ts": "2022-09-18T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-09-21T16:00:00Z",
+   "lane": "card",
+   "net_r": -1.0366123900209705,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1664323200000,
+   "entry_ts": "2022-09-28T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-09-28T20:00:00Z",
+   "lane": "card",
+   "net_r": -0.9119214030103635,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1664568000000,
+   "entry_ts": "2022-09-30T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-10-01T08:00:00Z",
+   "lane": "card",
+   "net_r": -1.0356483601724582,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1665072000000,
+   "entry_ts": "2022-10-06T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-10-16T04:00:00Z",
+   "lane": "card",
+   "net_r": 3.6286265427292874,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1665144000000,
+   "entry_ts": "2022-10-07T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-10-12T08:00:00Z",
+   "lane": "card",
+   "net_r": 1.0209185367348186,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1665806400000,
+   "entry_ts": "2022-10-15T04:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-10-17T12:00:00Z",
+   "lane": "card",
+   "net_r": -0.7515252070527528,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1666123200000,
+   "entry_ts": "2022-10-18T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-10-23T00:00:00Z",
+   "lane": "card",
+   "net_r": 0.9711141398317813,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1666915200000,
+   "entry_ts": "2022-10-28T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-10-28T20:00:00Z",
+   "lane": "card",
+   "net_r": -0.9792085687009305,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1668585600000,
+   "entry_ts": "2022-11-16T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-11-22T12:00:00Z",
+   "lane": "card",
+   "net_r": 3.1716514075106117,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1668600000000,
+   "entry_ts": "2022-11-16T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-11-20T08:00:00Z",
+   "lane": "card",
+   "net_r": -1.0051348953049255,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1669593600000,
+   "entry_ts": "2022-11-28T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-11-29T04:00:00Z",
+   "lane": "card",
+   "net_r": -1.1614524510373654,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1670414400000,
+   "entry_ts": "2022-12-07T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-12-09T08:00:00Z",
+   "lane": "card",
+   "net_r": -0.6193168861743467,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1671451200000,
+   "entry_ts": "2022-12-19T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-12-26T04:00:00Z",
+   "lane": "card",
+   "net_r": 1.5330519877828797,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1671710400000,
+   "entry_ts": "2022-12-22T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-12-22T20:00:00Z",
+   "lane": "card",
+   "net_r": -1.100176602906432,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1671724800000,
+   "entry_ts": "2022-12-22T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2022-12-22T20:00:00Z",
+   "lane": "card",
+   "net_r": -1.0727368394524783,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1675296000000,
+   "entry_ts": "2023-02-02T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-02-05T12:00:00Z",
+   "lane": "card",
+   "net_r": -0.9329705924433028,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1675814400000,
+   "entry_ts": "2023-02-08T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-02-09T16:00:00Z",
+   "lane": "card",
+   "net_r": -1.0376718439831194,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1678910400000,
+   "entry_ts": "2023-03-15T20:00:00Z",
+   "exit_reason": "bell_12_89",
+   "exit_ts": "2023-03-17T16:00:00Z",
+   "lane": "card",
+   "net_r": -0.5777000459582234,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1678910400000,
+   "entry_ts": "2023-03-15T20:00:00Z",
+   "exit_reason": "bell_12_89",
+   "exit_ts": "2023-03-17T20:00:00Z",
+   "lane": "card",
+   "net_r": -0.5941676351614362,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1679644800000,
+   "entry_ts": "2023-03-24T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-03-31T12:00:00Z",
+   "lane": "card",
+   "net_r": -0.16137586043487917,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1680451200000,
+   "entry_ts": "2023-04-02T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-04-03T16:00:00Z",
+   "lane": "card",
+   "net_r": -1.0166411126317414,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1680451200000,
+   "entry_ts": "2023-04-02T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-04-05T00:00:00Z",
+   "lane": "card",
+   "net_r": -0.7953499939588693,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1684929600000,
+   "entry_ts": "2023-05-24T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-05-26T12:00:00Z",
+   "lane": "card",
+   "net_r": -1.0340635106446188,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1685836800000,
+   "entry_ts": "2023-06-04T00:00:00Z",
+   "exit_reason": "bell_12_89",
+   "exit_ts": "2023-06-04T16:00:00Z",
+   "lane": "card",
+   "net_r": -0.567668798429732,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1685908800000,
+   "entry_ts": "2023-06-04T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-06-11T16:00:00Z",
+   "lane": "card",
+   "net_r": 13.891637603430121,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1685966400000,
+   "entry_ts": "2023-06-05T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-06-13T08:00:00Z",
+   "lane": "card",
+   "net_r": 1.6496364579005134,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1687464000000,
+   "entry_ts": "2023-06-22T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-06-23T00:00:00Z",
+   "lane": "card",
+   "net_r": -1.0376738533678436,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1688889600000,
+   "entry_ts": "2023-07-09T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-07-13T12:00:00Z",
+   "lane": "card",
+   "net_r": -0.67000076223912,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1689840000000,
+   "entry_ts": "2023-07-20T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-07-20T12:00:00Z",
+   "lane": "card",
+   "net_r": -1.0908394257375904,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1690804800000,
+   "entry_ts": "2023-07-31T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-08-01T16:00:00Z",
+   "lane": "card",
+   "net_r": -1.0300786717907824,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1692014400000,
+   "entry_ts": "2023-08-14T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-08-14T16:00:00Z",
+   "lane": "card",
+   "net_r": -1.1627283697395199,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1692014400000,
+   "entry_ts": "2023-08-14T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-08-15T16:00:00Z",
+   "lane": "card",
+   "net_r": -1.097129351936926,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1692057600000,
+   "entry_ts": "2023-08-15T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-08-20T20:00:00Z",
+   "lane": "card",
+   "net_r": 6.144920318294439,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1693497600000,
+   "entry_ts": "2023-08-31T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-09-06T16:00:00Z",
+   "lane": "card",
+   "net_r": 0.056000000095497826,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1694275200000,
+   "entry_ts": "2023-09-09T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-09-12T08:00:00Z",
+   "lane": "card",
+   "net_r": -1.1014080493648022,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1694318400000,
+   "entry_ts": "2023-09-10T04:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-09-12T00:00:00Z",
+   "lane": "card",
+   "net_r": -0.7442239539369621,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1696651200000,
+   "entry_ts": "2023-10-07T04:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-10-13T20:00:00Z",
+   "lane": "card",
+   "net_r": 1.841856955530894,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1696824000000,
+   "entry_ts": "2023-10-09T04:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-10-15T16:00:00Z",
+   "lane": "card",
+   "net_r": 1.7890298877215836,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1698566400000,
+   "entry_ts": "2023-10-29T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-11-09T16:00:00Z",
+   "lane": "card",
+   "net_r": 5.576421543903686,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1699128000000,
+   "entry_ts": "2023-11-04T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-11-13T20:00:00Z",
+   "lane": "card",
+   "net_r": 1.0535307555445854,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1700424000000,
+   "entry_ts": "2023-11-19T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-11-20T12:00:00Z",
+   "lane": "card",
+   "net_r": -1.0794896454381184,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1702512000000,
+   "entry_ts": "2023-12-14T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-12-15T20:00:00Z",
+   "lane": "card",
+   "net_r": -0.3374210734709462,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1702944000000,
+   "entry_ts": "2023-12-19T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2023-12-19T12:00:00Z",
+   "lane": "card",
+   "net_r": -1.0697128867280419,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1703678400000,
+   "entry_ts": "2023-12-27T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-01-03T12:00:00Z",
+   "lane": "card",
+   "net_r": -0.809693362833573,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1704484800000,
+   "entry_ts": "2024-01-05T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-01-12T12:00:00Z",
+   "lane": "card",
+   "net_r": -0.08462669840549383,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1705406400000,
+   "entry_ts": "2024-01-16T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-01-18T16:00:00Z",
+   "lane": "card",
+   "net_r": -1.038284977267488,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1706860800000,
+   "entry_ts": "2024-02-02T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-02-03T12:00:00Z",
+   "lane": "card",
+   "net_r": -1.0341322924061584,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1707336000000,
+   "entry_ts": "2024-02-07T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-02-12T00:00:00Z",
+   "lane": "card",
+   "net_r": 0.6399636602400631,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1708761600000,
+   "entry_ts": "2024-02-24T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-02-28T16:00:00Z",
+   "lane": "card",
+   "net_r": 1.73589063319282,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1709740800000,
+   "entry_ts": "2024-03-06T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-03-10T20:00:00Z",
+   "lane": "card",
+   "net_r": 1.2047114672551984,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1711310400000,
+   "entry_ts": "2024-03-24T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-03-27T12:00:00Z",
+   "lane": "card",
+   "net_r": 0.3999832801178019,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1711612800000,
+   "entry_ts": "2024-03-28T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-03-29T12:00:00Z",
+   "lane": "card",
+   "net_r": -0.6976582123734103,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1711785600000,
+   "entry_ts": "2024-03-30T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-04-01T12:00:00Z",
+   "lane": "card",
+   "net_r": -1.1752142529377727,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1711857600000,
+   "entry_ts": "2024-03-31T04:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-04-01T04:00:00Z",
+   "lane": "card",
+   "net_r": -1.1095321401237612,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1712534400000,
+   "entry_ts": "2024-04-08T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-04-10T00:00:00Z",
+   "lane": "card",
+   "net_r": 0.14529370991535578,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1712793600000,
+   "entry_ts": "2024-04-11T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-04-12T16:00:00Z",
+   "lane": "card",
+   "net_r": -1.0694207089751517,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1712793600000,
+   "entry_ts": "2024-04-11T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-04-11T12:00:00Z",
+   "lane": "card",
+   "net_r": -1.0572392905563677,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1713974400000,
+   "entry_ts": "2024-04-24T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-05-01T16:00:00Z",
+   "lane": "card",
+   "net_r": 0.29116671715697146,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1713988800000,
+   "entry_ts": "2024-04-24T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-04-27T16:00:00Z",
+   "lane": "card",
+   "net_r": -1.021544732923324,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1713988800000,
+   "entry_ts": "2024-04-24T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-05-02T08:00:00Z",
+   "lane": "card",
+   "net_r": 1.1284671441087073,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1715025600000,
+   "entry_ts": "2024-05-06T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-05-13T08:00:00Z",
+   "lane": "card",
+   "net_r": 0.563610172454447,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1715284800000,
+   "entry_ts": "2024-05-09T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-05-11T08:00:00Z",
+   "lane": "card",
+   "net_r": -1.0238974806311922,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1717531200000,
+   "entry_ts": "2024-06-04T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-06-07T16:00:00Z",
+   "lane": "card",
+   "net_r": -0.9871796736045012,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1720008000000,
+   "entry_ts": "2024-07-03T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-07-10T08:00:00Z",
+   "lane": "card",
+   "net_r": 1.3935046541024028,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1720382400000,
+   "entry_ts": "2024-07-07T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-07-08T08:00:00Z",
+   "lane": "card",
+   "net_r": -1.017893582278838,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1722124800000,
+   "entry_ts": "2024-07-28T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-08-08T20:00:00Z",
+   "lane": "card",
+   "net_r": 4.530884368287515,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1725364800000,
+   "entry_ts": "2024-09-03T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-09-08T20:00:00Z",
+   "lane": "card",
+   "net_r": 2.8640403179197,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1725364800000,
+   "entry_ts": "2024-09-03T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-09-08T20:00:00Z",
+   "lane": "card",
+   "net_r": 0.7922546385844954,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1725537600000,
+   "entry_ts": "2024-09-05T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-09-08T20:00:00Z",
+   "lane": "card",
+   "net_r": -0.08678293252359909,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1726430400000,
+   "entry_ts": "2024-09-15T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-09-19T00:00:00Z",
+   "lane": "card",
+   "net_r": -0.8785645104563797,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1727553600000,
+   "entry_ts": "2024-09-28T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-10-04T12:00:00Z",
+   "lane": "card",
+   "net_r": 3.024213451483178,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1728388800000,
+   "entry_ts": "2024-10-08T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-10-08T20:00:00Z",
+   "lane": "card",
+   "net_r": -1.054642939464637,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1729252800000,
+   "entry_ts": "2024-10-18T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-10-25T20:00:00Z",
+   "lane": "card",
+   "net_r": 1.1845302879061193,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1729785600000,
+   "entry_ts": "2024-10-24T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-10-25T04:00:00Z",
+   "lane": "card",
+   "net_r": -1.0972458931080036,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1730073600000,
+   "entry_ts": "2024-10-28T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-10-29T04:00:00Z",
+   "lane": "card",
+   "net_r": -1.026793372472567,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1730808000000,
+   "entry_ts": "2024-11-05T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-11-17T20:00:00Z",
+   "lane": "card",
+   "net_r": 7.0680190539899845,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1731528000000,
+   "entry_ts": "2024-11-13T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-11-20T00:00:00Z",
+   "lane": "card",
+   "net_r": 0.5921201016667718,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1732204800000,
+   "entry_ts": "2024-11-21T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2024-11-25T20:00:00Z",
+   "lane": "card",
+   "net_r": 0.25308925856852743,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1737475200000,
+   "entry_ts": "2025-01-21T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-01-27T04:00:00Z",
+   "lane": "card",
+   "net_r": -0.8444694168765535,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1737576000000,
+   "entry_ts": "2025-01-22T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-01-28T12:00:00Z",
+   "lane": "card",
+   "net_r": 2.0702331058621386,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1737921600000,
+   "entry_ts": "2025-01-26T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-01-30T00:00:00Z",
+   "lane": "card",
+   "net_r": 0.490661426649122,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1738440000000,
+   "entry_ts": "2025-02-01T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-02-12T20:00:00Z",
+   "lane": "card",
+   "net_r": 2.174325769669383,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1739894400000,
+   "entry_ts": "2025-02-18T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-02-19T04:00:00Z",
+   "lane": "card",
+   "net_r": -0.8395223360369385,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1740182400000,
+   "entry_ts": "2025-02-22T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-03-02T12:00:00Z",
+   "lane": "card",
+   "net_r": 7.412744400580927,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1740355200000,
+   "entry_ts": "2025-02-24T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-03-01T16:00:00Z",
+   "lane": "card",
+   "net_r": 0.7791777483894999,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1741017600000,
+   "entry_ts": "2025-03-03T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-03-15T20:00:00Z",
+   "lane": "card",
+   "net_r": 0.6969982496350853,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1741017600000,
+   "entry_ts": "2025-03-03T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-03-05T20:00:00Z",
+   "lane": "card",
+   "net_r": -0.15652394565827743,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1743552000000,
+   "entry_ts": "2025-04-02T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-04-02T12:00:00Z",
+   "lane": "card",
+   "net_r": -1.023399188042771,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1743566400000,
+   "entry_ts": "2025-04-02T04:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-04-02T12:00:00Z",
+   "lane": "card",
+   "net_r": -1.0131641494907804,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1743667200000,
+   "entry_ts": "2025-04-03T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-04-04T08:00:00Z",
+   "lane": "card",
+   "net_r": -1.0487937106398777,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1745150400000,
+   "entry_ts": "2025-04-20T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-04-21T12:00:00Z",
+   "lane": "card",
+   "net_r": -1.0128787134447883,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1750147200000,
+   "entry_ts": "2025-06-17T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-06-28T16:00:00Z",
+   "lane": "card",
+   "net_r": 0.3640627492497427,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1751457600000,
+   "entry_ts": "2025-07-02T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-07-15T04:00:00Z",
+   "lane": "card",
+   "net_r": 1.093367504126012,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1751803200000,
+   "entry_ts": "2025-07-06T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-07-22T08:00:00Z",
+   "lane": "card",
+   "net_r": 12.71375222782018,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1755014400000,
+   "entry_ts": "2025-08-12T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-08-14T12:00:00Z",
+   "lane": "card",
+   "net_r": 0.12761695727897193,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1755028800000,
+   "entry_ts": "2025-08-12T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-08-15T12:00:00Z",
+   "lane": "card",
+   "net_r": -0.6887018253968454,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1755432000000,
+   "entry_ts": "2025-08-17T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-08-18T00:00:00Z",
+   "lane": "card",
+   "net_r": -1.019649915171406,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1755460800000,
+   "entry_ts": "2025-08-17T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-08-20T04:00:00Z",
+   "lane": "card",
+   "net_r": 0.3463995252695585,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1755734400000,
+   "entry_ts": "2025-08-21T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-08-25T04:00:00Z",
+   "lane": "card",
+   "net_r": 0.8518647706434447,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1755864000000,
+   "entry_ts": "2025-08-22T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-08-29T12:00:00Z",
+   "lane": "card",
+   "net_r": 0.1711246012065082,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1757044800000,
+   "entry_ts": "2025-09-05T04:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-09-11T12:00:00Z",
+   "lane": "card",
+   "net_r": 0.7512919812496008,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1758153600000,
+   "entry_ts": "2025-09-18T00:00:00Z",
+   "exit_reason": "bell_12_89",
+   "exit_ts": "2025-09-21T04:00:00Z",
+   "lane": "card",
+   "net_r": -0.7758289913184474,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1760083200000,
+   "entry_ts": "2025-10-10T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-10-10T16:00:00Z",
+   "lane": "card",
+   "net_r": -1.0222252644587375,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1762084800000,
+   "entry_ts": "2025-11-02T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-11-07T16:00:00Z",
+   "lane": "card",
+   "net_r": 5.204661301078942,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1762603200000,
+   "entry_ts": "2025-11-08T12:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-11-09T20:00:00Z",
+   "lane": "card",
+   "net_r": -1.0177895612253973,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1763654400000,
+   "entry_ts": "2025-11-20T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-11-24T16:00:00Z",
+   "lane": "card",
+   "net_r": 1.2482997031934633,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1765224000000,
+   "entry_ts": "2025-12-08T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-12-09T16:00:00Z",
+   "lane": "card",
+   "net_r": -0.8373171923274811,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1765411200000,
+   "entry_ts": "2025-12-11T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-12-22T00:00:00Z",
+   "lane": "card",
+   "net_r": -0.2502601364227383,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1766606400000,
+   "entry_ts": "2025-12-24T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-12-31T12:00:00Z",
+   "lane": "card",
+   "net_r": 5.156630875645615,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1767024000000,
+   "entry_ts": "2025-12-29T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2026-01-01T12:00:00Z",
+   "lane": "card",
+   "net_r": -0.7336736527111893,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1767038400000,
+   "entry_ts": "2025-12-29T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2025-12-30T12:00:00Z",
+   "lane": "card",
+   "net_r": -0.7981847418012228,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1767211200000,
+   "entry_ts": "2025-12-31T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2026-01-01T20:00:00Z",
+   "lane": "card",
+   "net_r": -0.9636810926509066,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1769644800000,
+   "entry_ts": "2026-01-29T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2026-02-02T12:00:00Z",
+   "lane": "card",
+   "net_r": 2.922255984829423,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1772121600000,
+   "entry_ts": "2026-02-26T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2026-03-04T08:00:00Z",
+   "lane": "card",
+   "net_r": 0.8832509526267744,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1772208000000,
+   "entry_ts": "2026-02-27T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2026-03-01T00:00:00Z",
+   "lane": "card",
+   "net_r": -1.0248108853967812,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1772208000000,
+   "entry_ts": "2026-02-27T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2026-03-01T00:00:00Z",
+   "lane": "card",
+   "net_r": -0.7656504237708833,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1774497600000,
+   "entry_ts": "2026-03-26T04:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2026-03-30T04:00:00Z",
+   "lane": "card",
+   "net_r": 0.24711668329640446,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1774886400000,
+   "entry_ts": "2026-03-30T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2026-04-01T16:00:00Z",
+   "lane": "card",
+   "net_r": -1.0347097877832458,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "SOLUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1774900800000,
+   "entry_ts": "2026-03-30T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2026-03-31T00:00:00Z",
+   "lane": "card",
+   "net_r": -1.0681343207940999,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1775116800000,
+   "entry_ts": "2026-04-02T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2026-04-02T16:00:00Z",
+   "lane": "card",
+   "net_r": -1.0503325665053782,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1777449600000,
+   "entry_ts": "2026-04-29T08:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2026-04-29T12:00:00Z",
+   "lane": "card",
+   "net_r": -1.0367601410400562,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1777564800000,
+   "entry_ts": "2026-04-30T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2026-05-10T20:00:00Z",
+   "lane": "card",
+   "net_r": 24.806133223561034,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1778601600000,
+   "entry_ts": "2026-05-12T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2026-05-26T16:00:00Z",
+   "lane": "card",
+   "net_r": 2.5403196474750915,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1782072000000,
+   "entry_ts": "2026-06-21T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2026-06-22T00:00:00Z",
+   "lane": "card",
+   "net_r": -1.068075904802495,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1782187200000,
+   "entry_ts": "2026-06-23T04:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2026-07-01T20:00:00Z",
+   "lane": "card",
+   "net_r": 1.0472755071837254,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "BTCUSDT"
+  },
+  {
+   "direction": "-1",
+   "entry_ms": 1784678400000,
+   "entry_ts": "2026-07-22T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2026-07-26T20:00:00Z",
+   "lane": "card",
+   "net_r": 2.0212078971900507,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "NEARUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1786060800000,
+   "entry_ts": "2026-08-07T00:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2026-08-11T08:00:00Z",
+   "lane": "card",
+   "net_r": -0.6186769629619899,
+   "side": "AT-OR-BEFORE-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1787860800000,
+   "entry_ts": "2026-08-27T20:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2026-08-28T12:00:00Z",
+   "lane": "card",
+   "net_r": -1.0258477258875378,
+   "side": "AFTER-TC9-ASOF",
+   "symbol": "ZECUSDT"
+  },
+  {
+   "direction": "1",
+   "entry_ms": 1788105600000,
+   "entry_ts": "2026-08-30T16:00:00Z",
+   "exit_reason": "stop",
+   "exit_ts": "2026-08-30T20:00:00Z",
+   "lane": "card",
+   "net_r": -1.0231952058253608,
+   "side": "AFTER-TC9-ASOF",
+   "symbol": "ETHUSDT"
+  }
+ ],
+ "claim": "196 of the 198 campaigns of P-TRG-2's scored book ENTERED AT OR BEFORE TIER-C9's as-of (2026-08-22T00:00:00Z); their count, net_r, gross_r, fee_r, funding_r, best_r and win rate EQUAL the TIER-C9 grid row for trigger-9/12 at its 4-dp precision, and their key overlap with TIER-C9's FILED v6 journal equals the grid's shared / cell-only / base-only. TIER-C9 filed no per-campaign trigger-9/12 journal, so this is an aggregate-and-overlap match, not a key-for-key match against a TC9 9/12 book.",
+ "era_cut": {
+  "base_holdout_inside_tc9": 73,
+  "base_holdout_n": 77,
+  "book_holdout_inside_tc9": 64,
+  "book_holdout_n": 66,
+  "iso": "2024-06-30T23:59:59Z"
+ },
+ "fctrl_b_nb": {
+  "line": 34,
+  "path": "research_outputs/tierc10/panel/FIXTURES_PANEL.txt",
+  "text": "[NB ] FILED tierc9/trade_journal_control: funding_r moved on 1 closed campaign(s) — ZECUSDT 2026-08-17T04:00:00Z: funding_r 0.0 -> 0.014324, net_r -1.039899 -> -1.054223 [ATTRIBUTION: the referee rode on funding stale at 2026-08-15; Stage D's top-up supplied the stamps. Substrate drift, not code.]"
+ },
+ "grid_all_equal": true,
+ "grid_compare": {
+  "best_r": {
+   "equal": true,
+   "grid": 24.8061,
+   "here": 24.8061
+  },
+  "fee_r": {
+   "equal": true,
+   "grid": 6.1309,
+   "here": 6.1309
+  },
+  "funding_r": {
+   "equal": true,
+   "grid": 5.7584,
+   "here": 5.7584
+  },
+  "gross_r": {
+   "equal": true,
+   "grid": 106.2883,
+   "here": 106.2883
+  },
+  "n": {
+   "equal": true,
+   "grid": 196,
+   "here": 196
+  },
+  "net_r": {
+   "equal": true,
+   "grid": 94.3989,
+   "here": 94.3989
+  },
+  "win_rate_pct": {
+   "equal": true,
+   "grid": 40.3061,
+   "here": 40.3061
+  }
+ },
+ "grid_row": {
+  "as_of_span_days": 2539.3,
+  "best_r": 24.8061,
+  "cell": "trigger-9/12",
+  "fee_r": 6.1309,
+  "funding_r": 5.7584,
+  "gross_r": 106.2883,
+  "n": 196,
+  "n_base_only": 177,
+  "n_cell_only": 177,
+  "n_shared": 19,
+  "net_r": 94.3989,
+  "path": "research_outputs/tierc9/sweep_grid.parquet",
+  "win_rate_pct": 40.3061
+ },
+ "keys_all_equal": true,
+ "keys_compare": {
+  "base_only": {
+   "equal": true,
+   "grid": 177,
+   "here": 177
+  },
+  "cell_only": {
+   "equal": true,
+   "grid": 177,
+   "here": 177
+  },
+  "shared": {
+   "equal": true,
+   "grid": 19,
+   "here": 19
+  }
+ },
+ "keys_vs_tc9_filed_v6_journal": {
+  "base_only": 177,
+  "cell_only": 177,
+  "path": "research_outputs/tierc9/trade_journal_control.parquet",
+  "shared": 19
+ },
+ "open_across_asof": 0,
+ "per_asset": {
+  "BTCUSDT": {
+   "AFTER-TC9-ASOF": 0,
+   "AT-OR-BEFORE-TC9-ASOF": 40
+  },
+  "ETHUSDT": {
+   "AFTER-TC9-ASOF": 1,
+   "AT-OR-BEFORE-TC9-ASOF": 47
+  },
+  "NEARUSDT": {
+   "AFTER-TC9-ASOF": 0,
+   "AT-OR-BEFORE-TC9-ASOF": 39
+  },
+  "SOLUSDT": {
+   "AFTER-TC9-ASOF": 0,
+   "AT-OR-BEFORE-TC9-ASOF": 34
+  },
+  "ZECUSDT": {
+   "AFTER-TC9-ASOF": 1,
+   "AT-OR-BEFORE-TC9-ASOF": 36
+  }
+ },
+ "post": {
+  "campaigns": [
+   {
+    "direction": "1",
+    "entry_ts": "2026-08-27T20:00:00Z",
+    "exit_reason": "stop",
+    "exit_ts": "2026-08-28T12:00:00Z",
+    "net_r": -1.0258477258875378,
+    "symbol": "ZECUSDT"
+   },
+   {
+    "direction": "1",
+    "entry_ts": "2026-08-30T16:00:00Z",
+    "exit_reason": "stop",
+    "exit_ts": "2026-08-30T20:00:00Z",
+    "net_r": -1.0231952058253608,
+    "symbol": "ETHUSDT"
+   }
+  ],
+  "n": 2,
+  "net_r": -2.049
+ },
+ "pre": {
+  "best_r": 24.8061,
+  "fee_r": 6.1309,
+  "funding_r": 5.7584,
+  "gross_r": 106.2883,
+  "n": 196,
+  "net_r": 94.3989,
+  "net_r_full_precision": "94.39893463748082",
+  "win_rate_pct": 40.3061
+ },
+ "registration": "P-TRG-2",
+ "sources": {
+  "research_outputs/tierc10/PROGRESS.json": {
+   "bytes": 267607,
+   "sha256": "0d66f2d7fe6c338339880368ff854e58bbb2533be54cf2f7448f71d129752afc"
+  },
+  "research_outputs/tierc10/REGISTRATION_TEXTS.json": {
+   "bytes": 178729,
+   "sha256": "3afce077146807127072ae68f9c816e0263505aa625cf1610763ea37eb91ca94"
+  },
+  "research_outputs/tierc10/REGISTRY_PIN.json": {
+   "bytes": 2897,
+   "sha256": "4facddb8b6d2ee0017cccb46fc59187494af5591b8760b0245507c6621f17244"
+  },
+  "research_outputs/tierc10/panel/FIXTURES_PANEL.txt": {
+   "bytes": 63265,
+   "sha256": "163f65bdf21a575ccc4bba8c70dd6949e88aa0d91a20abdcd726f4fbaab54642"
+  },
+  "research_outputs/tierc10/panel/control_journal.parquet": {
+   "bytes": 70102,
+   "sha256": "fcbf5db0480416b0a5c7f704987980aea220650cb0764d5dd4095611fae64c1c"
+  },
+  "research_outputs/tierc10/scores/DRYRUN.json": {
+   "bytes": 77280,
+   "sha256": "13958abb0c75ee2cfaa8bf2df9d0f7569bbb286d85fa49a32339d8b90c15672c"
+  },
+  "research_outputs/tierc10/scores/P-TRG-2.rows.json": {
+   "bytes": 102709,
+   "sha256": "9fa07a0fa1b832ef7a1012a796cfd7fdd73ab2e1275d4faa4340666493c340c8"
+  },
+  "research_outputs/tierc9/build_manifest.json": {
+   "bytes": 10919,
+   "sha256": "4b39053ec87d4317e196a7d04d8fa77353b4b056e0bdfcab3f2668af86ebdc78"
+  },
+  "research_outputs/tierc9/sweep_grid.parquet": {
+   "bytes": 40012,
+   "sha256": "6246de7a2704ef9df88a8eec56cb67a2a678265230148f59c6c1a888753afd35"
+  },
+  "research_outputs/tierc9/trade_journal_control.parquet": {
+   "bytes": 66511,
+   "sha256": "bb630003a313d62f5fa04895d9288deb80e265dffafa2267365cabf0bc14f1d8"
+  }
+ },
+ "tc9_asof": {
+  "iso": "2026-08-22T00:00:00Z",
+  "ms": 1787356800000,
+  "source": "research_outputs/tierc9/build_manifest.json .as_of == research_outputs/tierc9/sweep_grid.parquet as_of_last_closed_4h"
+ },
+ "tc9_journals_on_disk": [
+  "trade_journal_control.csv",
+  "trade_journal_control.parquet",
+  "trade_journal_p_trg_1.parquet"
+ ],
+ "tier": "REPORT-ONLY — TIER-E — NEVER SCORED",
+ "v6_base_vs_tc9_filed": {
+  "both": 196,
+  "funding_attributed": [
+   {
+    "asset": "ZECUSDT",
+    "carried_by_funding_alone": true,
+    "entry_ts": "2026-08-17T04:00:00Z",
+    "funding_r_here": 0.014324,
+    "funding_r_tc9": 0.0,
+    "net_r_here": -1.054223,
+    "net_r_tc9": -1.039899
+   }
+  ],
+  "here_full_n": 200,
+  "here_holdout_inside_tc9": 73,
+  "here_holdout_n": 77,
+  "here_post_n": 4,
+  "here_pre_n": 196,
+  "here_pre_net_r": 38.7901,
+  "one_side_only": 0,
+  "tc9_filed_n": 196,
+  "tc9_filed_net_r": 38.8044,
+  "unattributed": []
+ },
+ "window": {
+  "hi_close": "2026-09-21T16:00:00Z",
+  "lo": "2019-09-08T16:00:00Z"
+ }
+}

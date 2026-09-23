@@ -1,0 +1,101 @@
+as_of_last_closed_4h: 2026-09-21T16:00:00Z
+==============================================================================
+TIER-C10 CLOSE · FORWARD STRIP TRANSCRIPT · REPORT-ONLY — FORWARD STRIP — NEVER SCORED
+==============================================================================
+substrate tc10_20260921 · seed 20260921 · no kline read · no registration/score read
+TC9 as-of    : 2026-08-22T00:00:00Z  (research_outputs/tierc9/build_manifest.json .as_of == research_outputs/tierc9/trade_journal_control.parquet as_of_last_closed_4h, 196 rows)
+contract lit : 2026-08-22T00:00Z  (exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md:115, sha 8a0bf279bcab0f27) — compared, equal, not used
+corridor end : 2026-09-21T16:00:00Z  (research_outputs/tierc10/PROGRESS.json as_of_of_record; close ms 1790006400000)
+book         : research_outputs/tierc10/panel/control_journal.parquet sha fcbf5db0480416b0a5c7f704987980aea220650cb0764d5dd4095611fae64c1c == PROGRESS 'PANEL/gate'; 200 campaigns, CLASSIC5 ['BTCUSDT', 'ETHUSDT', 'NEARUSDT', 'SOLUSDT', 'ZECUSDT'], lane ['card']
+anchor       : research_outputs/tierc10/panel/FIXTURES_PANEL.txt:35 (sha 163f65bdf21a575c == PROGRESS) — 4 live-only [('BTCUSDT', '2026-09-14T16:00:00Z'), ('ETHUSDT', '2026-08-30T12:00:00Z'), ('ETHUSDT', '2026-09-18T08:00:00Z'), ('SOLUSDT', '2026-09-18T00:00:00Z')], referee's last bar 2026-08-21T20:00:00Z
+strip        : 4 row(s) — 4 ENTERED-IN-STRIP, 0 CONTINUATION, 1 OPEN-AT-CORRIDOR-END
+  ENTERED-IN-STRIP / CLOSED — realized | ETHUSDT long armed 2026-08-17T08:00:00Z entry 2026-08-30T12:00:00Z exit 2026-08-30T20:00:00Z stop bars 2 | gross -1.0 fee 0.029816 funding 0.001248 net -1.031064 | twin -1.0417423396773202 (A)
+  ENTERED-IN-STRIP / CLOSED — realized | BTCUSDT long armed 2026-09-14T16:00:00Z entry 2026-09-14T16:00:00Z exit 2026-09-14T20:00:00Z stop bars 1 | gross -1.0 fee 0.10553 funding 0.0 net -1.10553 | twin -1.1477424601980053 (A)
+  ENTERED-IN-STRIP / CLOSED — realized | SOLUSDT long armed 2026-09-18T00:00:00Z entry 2026-09-18T00:00:00Z exit 2026-09-20T00:00:00Z stop bars 12 | gross 1.498796 fee 0.032033 funding 0.019861 net 1.446902 | twin 1.4347296114580608 (B)
+  ENTERED-IN-STRIP / OPEN-AT-CORRIDOR-END — marked to the pin, not realized | ETHUSDT long armed 2026-09-18T08:00:00Z entry 2026-09-18T08:00:00Z exit 2026-09-21T12:00:00Z corridor_end bars 19 | gross 3.710075 fee 0.039565 funding 0.027544 net 3.642965 | twin 3.654683918882855 (A)
+sum net_r +2.953273 (TC-series) · sum twin +2.899929 (ADDED) — REPORT-ONLY — FORWARD STRIP — NEVER SCORED
+wrote research_outputs/tierc10/close/FORWARD_STRIP.parquet  sha256 4e118dc1e3f0873f655ab9869c647baff8ea0057113eeb6f6d80f5a785abba53
+wrote research_outputs/tierc10/close/FORWARD_STRIP.md  sha256 a59e438c690987eb69bf24f805c54a4d36ae533d03e7422d499372c19d3872c4
+
+FIXTURE LEGS — judged on the parquet read back from disk; every sabotage on a COPY
+
+--- F-FS-SUBSTRATE — the run HALTs off the frozen snapshot, before it writes anything
+  [BREAK] a subprocess with NAIAD_CACHE_DIR unset -> RED (correct): exit 1, wrote nothing: True, 'HALT: NAIAD_CACHE_DIR is unset — the forward strip runs only on the frozen snapshot /Users/luis/.cache/naiad/s'
+  [BREAK] a subprocess with NAIAD_CACHE_DIR at a non-snapshot path -> RED (correct): exit 1, wrote nothing: True, 'HALT: NAIAD_CACHE_DIR=/Users/luis/Naiad/research_outputs/tierc10/close/_not_a_snapshot is not the TC10 snapsho'
+  [BREAK] the guard handed the live cache path -> RED (correct): 'HALT: NAIAD_CACHE_DIR names the LIVE cache — READ-NEVER, WRITE-NEVER for TC10' (decided on the path string; the live cache is not stat'ed)
+    [OK ] this process: NAIAD_CACHE_DIR resolves to /Users/luis/.cache/naiad/snapshots/tc10_20260921
+      FAILS IF: the script proceeds (or writes a byte) with NAIAD_CACHE_DIR unset, naming the live cache, or naming any path but the TC10 snapshot.
+  [PASS] F-FS-SUBSTRATE
+
+--- F-FS-WINDOW — membership is exactly ENTERED (entry_ms >= tc9) + CONTINUATION (entry_ms < tc9 <= exit_ms)
+  [BREAK] tc9_asof shifted +1 4h bar in a copy (planted campaign entered AND stopped in the first bar after TC9's as-of) -> RED (correct): [planted entry=exit=2026-08-22T00:00:00Z; membership changed: True] 3 strip row(s) vs 4 journal row(s) meeting a predicate at tc9 as-of 2026-08-22T00:00:00Z (4 ENTERED-IN-STRIP, 0 CONTINUATION) — journal campaign ETHUSDT 2026-08-22T00:00:00Z meets ENTERED-IN-STRIP but is ABSENT
+  [BREAK] tc9_asof shifted -1 4h bar in a copy (planted campaign entered AND stopped in the referee's last bar) -> RED (correct): [planted entry=exit=2026-08-21T20:00:00Z; membership changed: True] 4 strip row(s) vs 3 journal row(s) meeting a predicate at tc9 as-of 2026-08-22T00:00:00Z (3 ENTERED-IN-STRIP, 0 CONTINUATION) — strip row ETHUSDT entry 2026-08-21T20:00:00Z exit 2026-08-21T20:00:00Z fails BOTH predicates
+  [BREAK] the journal's latest pre-as-of campaign planted into a copy of the strip -> RED (correct): 5 strip row(s) vs 4 journal row(s) meeting a predicate at tc9 as-of 2026-08-22T00:00:00Z (4 ENTERED-IN-STRIP, 0 CONTINUATION) — strip row ZECUSDT entry 2026-08-17T04:00:00Z exit 2026-08-18T12:00:00Z fails BOTH predicates
+  [BREAK] a copy of TC9's journal with its last campaign relabelled corridor_end -> RED (correct): TC9's journal corridor_end rows [('ZECUSDT', '2026-08-17T04:00:00Z')] == the strip's CONTINUATION rows []: False
+    [OK ] the strip vs the journal at TC9's as-of: 4 strip row(s) vs 4 journal row(s) meeting a predicate at tc9 as-of 2026-08-22T00:00:00Z (4 ENTERED-IN-STRIP, 0 CONTINUATION)
+    [OK ] cross-process: TC9's journal vs the CONTINUATION set: TC9's journal corridor_end rows [] == the strip's CONTINUATION rows []: True
+    [NB ] on the UNTOUCHED journal a one-bar shift leaves membership unchanged (+1 bar: True, -1 bar: True). The first entry at or after TC9's as-of is 2026-08-30T12:00:00Z (51 bars after it), and the latest exit before it is 2026-08-18T12:00:00Z (21 bars before it). The data does not stress the boundary, so each shift sabotage PLANTS one boundary campaign (the earliest ENTERED row, restamped) in a COPY. The shift must change membership there, or the break is VOID.
+      FAILS IF: a strip row fails both predicates, carries a window label for a predicate it does not meet, or is duplicated; or a journal row meeting either predicate is absent; or TC9's own 'corridor_end' rows (the campaigns TC9 saw open at its as-of) are not exactly the CONTINUATION rows.
+  [PASS] F-FS-WINDOW
+
+--- F-FS-ANCHOR — the ENTERED set is F-CTRL/b's live-only list, parsed from the filed transcript
+  [BREAK] one ENTERED row dropped from a copy -> RED (correct): ENTERED-IN-STRIP (asset, entry_ts) x3 vs F-CTRL/b live-only x4: equal as multisets False (missing [('ETHUSDT', '2026-08-30T12:00:00Z')], extra []); referee's last bar 2026-08-21T20:00:00Z + one 4h bar == TC9's as-of 2026-08-22T00:00:00Z: True
+  [BREAK] one ENTERED row duplicated in a copy -> RED (correct): ENTERED-IN-STRIP (asset, entry_ts) x5 vs F-CTRL/b live-only x4: equal as multisets False (missing [], extra []); referee's last bar 2026-08-21T20:00:00Z + one 4h bar == TC9's as-of 2026-08-22T00:00:00Z: True
+  [BREAK] the referee's last bar moved one 4h bar in a copy of the parsed line -> RED (correct): ENTERED-IN-STRIP (asset, entry_ts) x4 vs F-CTRL/b live-only x4: equal as multisets True (missing [], extra []); referee's last bar 2026-08-22T00:00:00Z + one 4h bar == TC9's as-of 2026-08-22T00:00:00Z: False
+    [OK ] research_outputs/tierc10/panel/FIXTURES_PANEL.txt:35 (4 listed): ENTERED-IN-STRIP (asset, entry_ts) x4 vs F-CTRL/b live-only x4: equal as multisets True (missing [], extra []); referee's last bar 2026-08-21T20:00:00Z + one 4h bar == TC9's as-of 2026-08-22T00:00:00Z: True
+      FAILS IF: the ENTERED-IN-STRIP (asset, entry_ts) multiset differs from the list on research_outputs/tierc10/panel/FIXTURES_PANEL.txt:35, or that line's referee's last bar + one 4h bar is not TC9's as-of.
+  [PASS] F-FS-ANCHOR
+
+--- F-FS-VERBATIM — every carried column is the journal's, read back from the written parquet
+  [BREAK] +1e-9 on one net_r in a copy -> RED (correct): 4 row(s) x 26 carried column(s) (R columns ['gross_r', 'fee_r', 'funding_r', 'net_r']); worst abs diff 1.000e-09 (bar: EXACTLY 0) — ETHUSDT 2026-09-18T08:00:00Z net_r: strip 3.642965001 vs journal 3.642965
+  [BREAK] +1e-12 on one funding_r in a copy -> RED (correct): 4 row(s) x 26 carried column(s) (R columns ['gross_r', 'fee_r', 'funding_r', 'net_r']); worst abs diff 1.000e-12 (bar: EXACTLY 0) — ETHUSDT 2026-09-18T08:00:00Z funding_r: strip 0.027544000000999998 vs journal 0.027544
+  [BREAK] one exit_reason relabelled in a copy -> RED (correct): 4 row(s) x 26 carried column(s) (R columns ['gross_r', 'fee_r', 'funding_r', 'net_r']); worst abs diff 0.000e+00 (bar: EXACTLY 0) — ETHUSDT 2026-08-30T12:00:00Z exit_reason: strip 'bell_12_89' vs journal 'stop'
+    [OK ] research_outputs/tierc10/close/FORWARD_STRIP.parquet vs research_outputs/tierc10/panel/control_journal.parquet: 4 row(s) x 26 carried column(s) (R columns ['gross_r', 'fee_r', 'funding_r', 'net_r']); worst abs diff 0.000e+00 (bar: EXACTLY 0)
+      FAILS IF: any of gross_r/fee_r/funding_r/net_r (or any other carried column: stamps, prices, exit_reason, bars_held, the as_of_* warranty columns) differs from the journal by ANY amount or dtype.
+  [PASS] F-FS-VERBATIM
+
+--- F-FS-ASOF — every row is stamped the corridor of record, and nothing exits past the pin
+  [BREAK] one row restamped to TC9's as-of in a copy -> RED (correct): 4 row(s) stamped vs 2026-09-21T16:00:00Z; latest exit bar 2026-09-21T12:00:00Z (+4h = 2026-09-21T16:00:00Z) vs pin close 2026-09-21T16:00:00Z — ETHUSDT 2026-08-30T12:00:00Z stamped 2026-08-22T00:00:00Z != as_of_of_record 2026-09-21T16:00:00Z
+  [BREAK] one exit_ms moved one bar PAST the pin's close in a copy -> RED (correct): 4 row(s) stamped vs 2026-09-21T16:00:00Z; latest exit bar 2026-09-21T20:00:00Z (+4h = 2026-09-22T00:00:00Z) vs pin close 2026-09-21T16:00:00Z — ETHUSDT 2026-09-18T08:00:00Z exit_ms 2026-09-21T20:00:00Z > the pin's close 2026-09-21T16:00:00Z
+  [BREAK] one exit_ms moved to the pin's close (a bar the pin has not closed) in a copy -> RED (correct): 4 row(s) stamped vs 2026-09-21T16:00:00Z; latest exit bar 2026-09-21T16:00:00Z (+4h = 2026-09-21T20:00:00Z) vs pin close 2026-09-21T16:00:00Z — ETHUSDT 2026-09-18T08:00:00Z exit bar 2026-09-21T16:00:00Z closes 2026-09-21T20:00:00Z, after the pin
+    [OK ] vs research_outputs/tierc10/PROGRESS.json (2026-09-21T16:00:00Z, close ms 1790006400000): 4 row(s) stamped vs 2026-09-21T16:00:00Z; latest exit bar 2026-09-21T12:00:00Z (+4h = 2026-09-21T16:00:00Z) vs pin close 2026-09-21T16:00:00Z
+      FAILS IF: any row's as_of_last_closed_4h != research_outputs/tierc10/PROGRESS.json as_of_of_record, or any exit_ms > as_of_last_closed_4h_close_ms, or (stricter) any exit bar closes after the pin (exit_ms + 4h > close_ms).
+  [PASS] F-FS-ASOF
+
+--- F-FS-TWIN — the haircut twin is an ADDED column on every row; net_r is untouched
+  [BREAK] net_r overwritten with the twin in a copy -> RED (correct): 4 row(s): twin present, finite and == tierc10_data.haircut_twin_net_r recomputed from the JOURNAL's gross_r/entry_px/exit_px/r_dist; net_r == the journal's — ETHUSDT 2026-08-30T12:00:00Z: net_r -1.0417423396773202 is not the journal's -1.031064 (the twin was written over it); BTCUSDT 2026-09-14T16:00:00Z: net_r -1.1477424601980053 is not the journal's -1.10553 (the twin was written over it); SOLUSDT 2026-09-18T00:00:00Z: net_r 1.4347296114580608 is not the journal's 1.446902 (the twin was written over it)
+  [BREAK] the twin NaN on one row of a copy -> RED (correct): 4 row(s): twin present, finite and == tierc10_data.haircut_twin_net_r recomputed from the JOURNAL's gross_r/entry_px/exit_px/r_dist; net_r == the journal's — ETHUSDT 2026-08-30T12:00:00Z: twin missing (np.float64(nan))
+  [BREAK] the twin column dropped from a copy -> RED (correct): the twin column haircut_twin_net_r is missing
+    [OK ] the written parquet: 4 row(s): twin present, finite and == tierc10_data.haircut_twin_net_r recomputed from the JOURNAL's gross_r/entry_px/exit_px/r_dist; net_r == the journal's
+      FAILS IF: haircut_twin_net_r is missing or non-finite on any row, differs from tierc10_data.haircut_twin_net_r recomputed from the journal's own columns, or net_r is not the journal's (the twin written over it).
+  [PASS] F-FS-TWIN
+
+--- F-FS-CLOSURE — no bar loader, no scorer, no registry is reachable from this file
+  [BREAK] tierc2_baseline.load_klines injected into a copy of the source -> RED (correct): AST: no call named ['finish_family', 'load_klines', 'register', 'score'], no import of ['tierc10_file_registrations', 'tierc10_panel', 'tierc10_score', 'tierc2_baseline']; sys.modules holds none of them — line 1088: imports tierc2_baseline; line 1089: calls load_klines()
+  [BREAK] tierc10_panel planted in a copy of sys.modules -> RED (correct): AST: no call named ['finish_family', 'load_klines', 'register', 'score'], no import of ['tierc10_file_registrations', 'tierc10_panel', 'tierc10_score', 'tierc2_baseline']; sys.modules holds none of them — loaded at run time: ['tierc10_panel']
+    [OK ] this file + sys.modules: AST: no call named ['finish_family', 'load_klines', 'register', 'score'], no import of ['tierc10_file_registrations', 'tierc10_panel', 'tierc10_score', 'tierc2_baseline']; sys.modules holds none of them
+    [NB ] this build reads NO kline file: every market number is a column of the filed journal. tierc10_data.load_asof is not reached, and neither is tierc2_baseline.load_klines.
+      FAILS IF: this file's AST calls anything named ['finish_family', 'load_klines', 'register', 'score'] or imports ['tierc10_file_registrations', 'tierc10_panel', 'tierc10_score', 'tierc2_baseline'], or any of those modules is loaded in this process.
+  [PASS] F-FS-CLOSURE
+
+--- F-DET — two subprocess runs, different PYTHONHASHSEED, byte-identical parquet and md
+  [BREAK] one byte flipped in a copy of the FORWARD_STRIP.md -> RED (correct): seed 1 vs a byte-flipped copy of seed 20260921: FORWARD_STRIP.md a59e438c690987eb, FORWARD_STRIP.parquet 4e118dc1e3f0873f — DIFFER: ['FORWARD_STRIP.md']
+  [BREAK] one byte flipped in a copy of the FORWARD_STRIP.parquet -> RED (correct): seed 1 vs a byte-flipped copy of seed 20260921: FORWARD_STRIP.md a59e438c690987eb, FORWARD_STRIP.parquet 4e118dc1e3f0873f — DIFFER: ['FORWARD_STRIP.parquet']
+    [OK ] both subprocess runs: PYTHONHASHSEED=1 exit 0 wrote ['FORWARD_STRIP.md', 'FORWARD_STRIP.parquet']; PYTHONHASHSEED=20260921 exit 0 wrote ['FORWARD_STRIP.md', 'FORWARD_STRIP.parquet']
+    [OK ] seed 1 vs seed 20260921: twin runs: FORWARD_STRIP.md a59e438c690987eb, FORWARD_STRIP.parquet 4e118dc1e3f0873f
+    [OK ] seed runs vs the canonical outputs: canonical vs seed 1: FORWARD_STRIP.md a59e438c690987eb, FORWARD_STRIP.parquet 4e118dc1e3f0873f
+      FAILS IF: the runs under PYTHONHASHSEED 1 and 20260921 (written to research_outputs/tierc10/close/_det_forward_strip/seed_*/) differ by one byte in FORWARD_STRIP.parquet or FORWARD_STRIP.md, from each other or from the canonical outputs, or either run fails.
+  [PASS] F-DET
+
+--- F-FS-NOSCORE — nothing here is scored, and not one protected byte moved
+  [BREAK] a 'verdict' column added to a copy -> RED (correct): 34 column(s), 1 scoring-shaped, scored=True rows 0; 39 protected file(s) re-hashed (17 under scores/, 13 under registrations/): 0 moved — scoring column(s) present: ['verdict']
+  [BREAK] a 'ci_lo' column added to a copy -> RED (correct): 34 column(s), 1 scoring-shaped, scored=True rows 0; 39 protected file(s) re-hashed (17 under scores/, 13 under registrations/): 0 moved — scoring column(s) present: ['ci_lo']
+  [BREAK] one row scored=True in a copy -> RED (correct): 33 column(s), 0 scoring-shaped, scored=True rows 1; 39 protected file(s) re-hashed (17 under scores/, 13 under registrations/): 0 moved — 1 row(s) scored=True
+  [BREAK] a scores/ file's sha changed in a copy of the after-snapshot -> RED (correct): 33 column(s), 0 scoring-shaped, scored=True rows 0; 39 protected file(s) re-hashed (17 under scores/, 13 under registrations/): 1 moved — 1 protected file(s) changed bytes: ['research_outputs/tierc10/scores/DRYRUN.json']
+    [OK ] the written parquet + the protected set: 33 column(s), 0 scoring-shaped, scored=True rows 0; 39 protected file(s) re-hashed (17 under scores/, 13 under registrations/): 0 moved
+      FAILS IF: any verdict / ci_* / p_one_sided / clears_bh_bar / loao_* column exists, or a scored=True row, or a tier other than the report-only label; or any file under scores/ or registrations/, REGISTRY*, PROGRESS.json, FIXTURES_RESUME.txt or an input changes bytes between the start of this run and now (after F-DET's subprocesses).
+  [PASS] F-FS-NOSCORE
+
+FIXTURE SUMMARY  9/9 PASS  {"F-FS-SUBSTRATE": true, "F-FS-WINDOW": true, "F-FS-ANCHOR": true, "F-FS-VERBATIM": true, "F-FS-ASOF": true, "F-FS-TWIN": true, "F-FS-CLOSURE": true, "F-DET": true, "F-FS-NOSCORE": true}
+BREAK LEGS  27/27 RED-as-required
+REPORT-ONLY — FORWARD STRIP — NEVER SCORED

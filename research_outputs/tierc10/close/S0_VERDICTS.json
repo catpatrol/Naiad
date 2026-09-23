@@ -1,0 +1,4158 @@
+{
+ "fragment": "TIER-C10 CLOSE §0 — six verdict rows + the admitted list + the forward strip",
+ "contract": "exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md:131",
+ "label": "REPORT-ONLY TRANSCRIPTION — scores nothing, gates nothing; every value at source precision",
+ "builder": "scripts/tierc10_close_close_s0_verdicts.py",
+ "splice": "over BUILD_DRAFT.md '## 0 · VERDICTS' at CLOSE; this script never edits BUILD_DRAFT.md",
+ "md": {
+  "path": "research_outputs/tierc10/close/S0_VERDICTS.md",
+  "sha256": "6952417e6bda33b0763c5079bdfa70b98063d6a4f3dc417c2284cc66b355c7b6",
+  "bytes": 16670
+ },
+ "inputs": {
+  "pin": {
+   "path": "research_outputs/tierc10/REGISTRY_PIN.json",
+   "sha256": "4facddb8b6d2ee0017cccb46fc59187494af5591b8760b0245507c6621f17244",
+   "bytes": 2897
+  },
+  "rows:P-GEN-1": {
+   "path": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+   "sha256": "047097ec5aeefbe8aa63cf2b1a677015540497a41e43b0152e609426a2baf87d",
+   "bytes": 123091
+  },
+  "rows:P-SPR-2": {
+   "path": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+   "sha256": "febff33a1ad91e3663cb75fc7db54fe7901d7a8493503e3e6e6aa065da6bc23e",
+   "bytes": 111310
+  },
+  "rows:P-BE-1": {
+   "path": "research_outputs/tierc10/scores/P-BE-1.rows.json",
+   "sha256": "b40af065177695e36e755d183ef74e7328d77eb799ed3abbb668ff7d69b6b678",
+   "bytes": 84044
+  },
+  "rows:P-TRG-2": {
+   "path": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+   "sha256": "9fa07a0fa1b832ef7a1012a796cfd7fdd73ab2e1275d4faa4340666493c340c8",
+   "bytes": 102709
+  },
+  "rows:P-BRK-I1": {
+   "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+   "sha256": "f3ae88d0be366f127bacfe0f8092cdef07d17559ea3b3db6d6c1edd6c306111a",
+   "bytes": 111150
+  },
+  "rows:P-BRK-S1": {
+   "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+   "sha256": "994bcaa69906aae8a1659d953c0984da636cb496808dd17ab91ddf3ea3c33ff0",
+   "bytes": 118556
+  },
+  "family": {
+   "path": "research_outputs/tierc10/scores/FAMILY.json",
+   "sha256": "aa0e8c496fd6b883a3c01947047c4845eb72935ca17368cffee9c8593a7bc4a2",
+   "bytes": 113715
+  },
+  "texts": {
+   "path": "research_outputs/tierc10/REGISTRATION_TEXTS.json",
+   "sha256": "3afce077146807127072ae68f9c816e0263505aa625cf1610763ea37eb91ca94",
+   "bytes": 178729
+  },
+  "manifest": {
+   "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+   "sha256": "de2e8663bbf101dfb46ad9f77a4969ca73648e78373646c0d17b81b9f9a87421",
+   "bytes": 405715
+  },
+  "plan": {
+   "path": "research_outputs/tierc10/REGISTRATION_PLAN.md",
+   "sha256": "cbb85a214de536598d7e06575b32eac6e266b051cf279f244988245829b2a5e8",
+   "bytes": 7242
+  },
+  "draft": {
+   "path": "research_outputs/tierc10/BUILD_DRAFT.md",
+   "sha256": "244ad5a46a4f73c522361990638499206c9ef3c341d436e2aa67bdd898791149",
+   "bytes": 111105
+  },
+  "contract": {
+   "path": "exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md",
+   "sha256": "8a0bf279bcab0f27161a7d965535445807f4e713e77d045b0ba124bc7f803c7a",
+   "bytes": 9441
+  },
+  "rulings": {
+   "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+   "sha256": "a0a08f8761ce9eab678d42d609d7e6563e749c07a6c33b7b17f9a5c4f31ca907",
+   "bytes": 8696
+  }
+ },
+ "forward_strip": {
+  "path": "research_outputs/tierc10/close/FORWARD_STRIP.md",
+  "present": true,
+  "sha256": "a59e438c690987eb69bf24f805c54a4d36ae533d03e7422d499372c19d3872c4",
+  "bytes": 5786
+ },
+ "order_of_filing": [
+  "P-GEN-1",
+  "P-SPR-2",
+  "P-BE-1",
+  "P-TRG-2",
+  "P-BRK-I1",
+  "P-BRK-S1"
+ ],
+ "verdict_header": "| # | registration | prior | arm | panel | era | ruler | n | point | [CI lo, CI hi] | p (one-sided) | verdict | clears BH bar | LOAO above / present vs bar · line | haircut twin E[R] | height-vs-toll (BRK) |",
+ "lines": [
+  {
+   "line": 5,
+   "kind": "corridor",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "Corridor as-of of record `"
+    },
+    {
+     "t": "val",
+     "src": "pin",
+     "path": "research_outputs/tierc10/REGISTRY_PIN.json",
+     "ptr": "/as_of_of_record",
+     "s": "2026-09-21T16:00:00Z"
+    },
+    {
+     "t": "lit",
+     "s": "` · registry len `"
+    },
+    {
+     "t": "val",
+     "src": "pin",
+     "path": "research_outputs/tierc10/REGISTRY_PIN.json",
+     "ptr": "/registry_len",
+     "s": "6"
+    },
+    {
+     "t": "lit",
+     "s": "` · registry head `"
+    },
+    {
+     "t": "val",
+     "src": "pin",
+     "path": "research_outputs/tierc10/REGISTRY_PIN.json",
+     "ptr": "/registry_head",
+     "s": "7621a85727969299eb03a481fdf4a61e5455177762286a29695e7d9347d651cd"
+    },
+    {
+     "t": "lit",
+     "s": "` · seed `"
+    },
+    {
+     "t": "val",
+     "src": "pin",
+     "path": "research_outputs/tierc10/REGISTRY_PIN.json",
+     "ptr": "/seed",
+     "s": "20260921"
+    },
+    {
+     "t": "lit",
+     "s": "` (`REGISTRY_PIN.json`)."
+    }
+   ]
+  },
+  {
+   "line": 13,
+   "kind": "verdict_row",
+   "reg": "P-GEN-1",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "pin",
+     "path": "research_outputs/tierc10/REGISTRY_PIN.json",
+     "ptr": "/registrations/P-GEN-1/seq",
+     "s": "1",
+     "col": "seq"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "pin",
+     "path": "research_outputs/tierc10/REGISTRY_PIN.json",
+     "ptr": "/order_of_filing/0",
+     "s": "P-GEN-1",
+     "col": "registration"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "texts",
+     "path": "research_outputs/tierc10/REGISTRATION_TEXTS.json",
+     "ptr": "/P-GEN-1/prior_pct",
+     "s": "45",
+     "col": "prior_pct"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": "%"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-GEN-1",
+     "path": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+     "ptr": "/rows/0/arm",
+     "s": "unseen12-card-v6",
+     "col": "arm"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-GEN-1",
+     "path": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+     "ptr": "/rows/0/score_row/panel_name",
+     "s": "UNSEEN12",
+     "col": "panel_name"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-GEN-1",
+     "path": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+     "ptr": "/rows/0/score_row/arm_era",
+     "s": "full",
+     "col": "arm_era"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-GEN-1",
+     "path": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+     "ptr": "/rows/0/score_row/ruler",
+     "s": "VS ZERO (one-sample asset-cluster)",
+     "col": "ruler"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-GEN-1",
+     "path": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+     "ptr": "/rows/0/score_row/n",
+     "s": "286",
+     "col": "n"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-GEN-1",
+     "path": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+     "ptr": "/rows/0/score_row/ci_point",
+     "s": "0.099777",
+     "col": "ci_point"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "[`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-GEN-1",
+     "path": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+     "ptr": "/rows/0/score_row/ci_lo",
+     "s": "-0.154991",
+     "col": "ci_lo"
+    },
+    {
+     "t": "lit",
+     "s": "`, `"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-GEN-1",
+     "path": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+     "ptr": "/rows/0/score_row/ci_hi",
+     "s": "0.315921",
+     "col": "ci_hi"
+    },
+    {
+     "t": "lit",
+     "s": "`]"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-GEN-1",
+     "path": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+     "ptr": "/rows/0/score_row/p_one_sided",
+     "s": "0.271682",
+     "col": "p_one_sided"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "**"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-GEN-1",
+     "path": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+     "ptr": "/rows/0/score_row/verdict",
+     "s": "NOT SUPPORTED",
+     "col": "verdict"
+    },
+    {
+     "t": "lit",
+     "s": "**"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "family",
+     "path": "research_outputs/tierc10/scores/FAMILY.json",
+     "ptr": "/rows/0/clears_bh_bar",
+     "s": "false",
+     "col": "clears_bh_bar"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-GEN-1",
+     "path": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+     "ptr": "/rows/0/score_row/loao_above_of_record",
+     "s": "0",
+     "col": "loao_above_of_record"
+    },
+    {
+     "t": "lit",
+     "s": "/"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-GEN-1",
+     "path": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+     "ptr": "/rows/0/score_row/loao_assets_present",
+     "s": "12",
+     "col": "loao_assets_present"
+    },
+    {
+     "t": "lit",
+     "s": "` vs bar `"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-GEN-1",
+     "path": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+     "ptr": "/rows/0/score_row/loao_bar_above_half",
+     "s": "7",
+     "col": "loao_bar_above_half"
+    },
+    {
+     "t": "lit",
+     "s": "` · "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-GEN-1",
+     "path": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+     "ptr": "/rows/0/score_row/loao_line",
+     "s": "0/12 above",
+     "col": "loao_line"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-GEN-1",
+     "path": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+     "ptr": "/rows/0/beside/haircut_twin/twin_expectancy_r",
+     "s": "0.08460102968246902",
+     "col": "twin_expectancy_r"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "—",
+     "col": "height_vs_toll"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 14,
+   "kind": "verdict_row",
+   "reg": "P-SPR-2",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "pin",
+     "path": "research_outputs/tierc10/REGISTRY_PIN.json",
+     "ptr": "/registrations/P-SPR-2/seq",
+     "s": "2",
+     "col": "seq"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "pin",
+     "path": "research_outputs/tierc10/REGISTRY_PIN.json",
+     "ptr": "/order_of_filing/1",
+     "s": "P-SPR-2",
+     "col": "registration"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "texts",
+     "path": "research_outputs/tierc10/REGISTRATION_TEXTS.json",
+     "ptr": "/P-SPR-2/prior_pct",
+     "s": "45",
+     "col": "prior_pct"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": "%"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-SPR-2",
+     "path": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+     "ptr": "/rows/0/arm",
+     "s": "standalone vs zero · full corridor",
+     "col": "arm"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-SPR-2",
+     "path": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+     "ptr": "/rows/0/score_row/panel_name",
+     "s": "CLASSIC5",
+     "col": "panel_name"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-SPR-2",
+     "path": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+     "ptr": "/rows/0/score_row/arm_era",
+     "s": "full",
+     "col": "arm_era"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-SPR-2",
+     "path": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+     "ptr": "/rows/0/score_row/ruler",
+     "s": "VS ZERO (one-sample asset-cluster)",
+     "col": "ruler"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-SPR-2",
+     "path": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+     "ptr": "/rows/0/score_row/n",
+     "s": "261",
+     "col": "n"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-SPR-2",
+     "path": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+     "ptr": "/rows/0/score_row/ci_point",
+     "s": "-0.00593",
+     "col": "ci_point"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "[`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-SPR-2",
+     "path": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+     "ptr": "/rows/0/score_row/ci_lo",
+     "s": "-0.174617",
+     "col": "ci_lo"
+    },
+    {
+     "t": "lit",
+     "s": "`, `"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-SPR-2",
+     "path": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+     "ptr": "/rows/0/score_row/ci_hi",
+     "s": "0.165338",
+     "col": "ci_hi"
+    },
+    {
+     "t": "lit",
+     "s": "`]"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-SPR-2",
+     "path": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+     "ptr": "/rows/0/score_row/p_one_sided",
+     "s": "0.56036",
+     "col": "p_one_sided"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "**"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-SPR-2",
+     "path": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+     "ptr": "/rows/0/score_row/verdict",
+     "s": "NOT SUPPORTED",
+     "col": "verdict"
+    },
+    {
+     "t": "lit",
+     "s": "**"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "family",
+     "path": "research_outputs/tierc10/scores/FAMILY.json",
+     "ptr": "/rows/3/clears_bh_bar",
+     "s": "false",
+     "col": "clears_bh_bar"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-SPR-2",
+     "path": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+     "ptr": "/rows/0/score_row/loao_above_of_record",
+     "s": "0",
+     "col": "loao_above_of_record"
+    },
+    {
+     "t": "lit",
+     "s": "/"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-SPR-2",
+     "path": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+     "ptr": "/rows/0/score_row/loao_assets_present",
+     "s": "5",
+     "col": "loao_assets_present"
+    },
+    {
+     "t": "lit",
+     "s": "` vs bar `"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-SPR-2",
+     "path": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+     "ptr": "/rows/0/score_row/loao_bar_above_half",
+     "s": "3",
+     "col": "loao_bar_above_half"
+    },
+    {
+     "t": "lit",
+     "s": "` · "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-SPR-2",
+     "path": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+     "ptr": "/rows/0/score_row/loao_line",
+     "s": "0/5 above",
+     "col": "loao_line"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-SPR-2",
+     "path": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+     "ptr": "/rows/0/beside/haircut_twin/twin_expectancy_r",
+     "s": "-0.024325017149030344",
+     "col": "twin_expectancy_r"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "—",
+     "col": "height_vs_toll"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 15,
+   "kind": "verdict_row",
+   "reg": "P-BE-1",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "pin",
+     "path": "research_outputs/tierc10/REGISTRY_PIN.json",
+     "ptr": "/registrations/P-BE-1/seq",
+     "s": "3",
+     "col": "seq"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "pin",
+     "path": "research_outputs/tierc10/REGISTRY_PIN.json",
+     "ptr": "/order_of_filing/2",
+     "s": "P-BE-1",
+     "col": "registration"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "texts",
+     "path": "research_outputs/tierc10/REGISTRATION_TEXTS.json",
+     "ptr": "/P-BE-1/prior_pct",
+     "s": "40",
+     "col": "prior_pct"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": "%"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BE-1",
+     "path": "research_outputs/tierc10/scores/P-BE-1.rows.json",
+     "ptr": "/rows/0/arm",
+     "s": "be-floor-1R vs card-v6 (CLASSIC5, full)",
+     "col": "arm"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "—",
+     "col": "panel_name"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "—",
+     "col": "arm_era"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "—",
+     "col": "ruler"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "—",
+     "col": "n"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "—",
+     "col": "ci_point"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "—",
+     "col": "ci"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "—",
+     "col": "p_one_sided"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "family",
+     "path": "research_outputs/tierc10/scores/FAMILY.json",
+     "ptr": "/scored_slots_halted/P-BE-1",
+     "s": "HALT: P-BE-1 — the arm shares the WHOLE campaign set with its base; the commissioned two-sample ruler's premise failed. File a NEW id under ruler='set_change' and disclose.",
+     "col": "halt"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "—",
+     "col": "clears_bh_bar"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "—",
+     "col": "loao"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "—",
+     "col": "twin"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "—",
+     "col": "height_vs_toll"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 16,
+   "kind": "verdict_row",
+   "reg": "P-TRG-2",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "pin",
+     "path": "research_outputs/tierc10/REGISTRY_PIN.json",
+     "ptr": "/registrations/P-TRG-2/seq",
+     "s": "4",
+     "col": "seq"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "pin",
+     "path": "research_outputs/tierc10/REGISTRY_PIN.json",
+     "ptr": "/order_of_filing/3",
+     "s": "P-TRG-2",
+     "col": "registration"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "texts",
+     "path": "research_outputs/tierc10/REGISTRATION_TEXTS.json",
+     "ptr": "/P-TRG-2/prior_pct",
+     "s": "40",
+     "col": "prior_pct"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": "%"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-TRG-2",
+     "path": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "ptr": "/rows/0/arm",
+     "s": "trg-9/12 vs card v6 · CLASSIC5 · full",
+     "col": "arm"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-TRG-2",
+     "path": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "ptr": "/rows/0/score_row/panel_name",
+     "s": "CLASSIC5",
+     "col": "panel_name"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-TRG-2",
+     "path": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "ptr": "/rows/0/score_row/arm_era",
+     "s": "full",
+     "col": "arm_era"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-TRG-2",
+     "path": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "ptr": "/rows/0/score_row/ruler",
+     "s": "TWO-SAMPLE (the arm CHANGES the campaign set)",
+     "col": "ruler"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-TRG-2",
+     "path": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "ptr": "/rows/0/score_row/n",
+     "s": "198",
+     "col": "n"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-TRG-2",
+     "path": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "ptr": "/rows/0/score_row/ci_point",
+     "s": "0.257697",
+     "col": "ci_point"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "[`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-TRG-2",
+     "path": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "ptr": "/rows/0/score_row/ci_lo",
+     "s": "0.108587",
+     "col": "ci_lo"
+    },
+    {
+     "t": "lit",
+     "s": "`, `"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-TRG-2",
+     "path": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "ptr": "/rows/0/score_row/ci_hi",
+     "s": "0.383892",
+     "col": "ci_hi"
+    },
+    {
+     "t": "lit",
+     "s": "`]"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-TRG-2",
+     "path": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "ptr": "/rows/0/score_row/p_one_sided",
+     "s": "0.005249",
+     "col": "p_one_sided"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "**"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-TRG-2",
+     "path": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "ptr": "/rows/0/score_row/verdict",
+     "s": "SUPPORTED",
+     "col": "verdict"
+    },
+    {
+     "t": "lit",
+     "s": "**"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "family",
+     "path": "research_outputs/tierc10/scores/FAMILY.json",
+     "ptr": "/rows/10/clears_bh_bar",
+     "s": "true",
+     "col": "clears_bh_bar"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-TRG-2",
+     "path": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "ptr": "/rows/0/score_row/loao_above_of_record",
+     "s": "5",
+     "col": "loao_above_of_record"
+    },
+    {
+     "t": "lit",
+     "s": "/"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-TRG-2",
+     "path": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "ptr": "/rows/0/score_row/loao_assets_present",
+     "s": "5",
+     "col": "loao_assets_present"
+    },
+    {
+     "t": "lit",
+     "s": "` vs bar `"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-TRG-2",
+     "path": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "ptr": "/rows/0/score_row/loao_bar_above_half",
+     "s": "3",
+     "col": "loao_bar_above_half"
+    },
+    {
+     "t": "lit",
+     "s": "` · "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-TRG-2",
+     "path": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "ptr": "/rows/0/score_row/loao_line",
+     "s": "5/5 above",
+     "col": "loao_line"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-TRG-2",
+     "path": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "ptr": "/rows/0/beside/haircut_twin/twin_expectancy_r",
+     "s": "0.47558820524675305",
+     "col": "twin_expectancy_r"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " · Δ "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-TRG-2",
+     "path": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "ptr": "/rows/0/beside/haircut_twin/twin_difference_r",
+     "s": "0.2584377545781942",
+     "col": "twin_difference_r"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "—",
+     "col": "height_vs_toll"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 17,
+   "kind": "verdict_row",
+   "reg": "P-BRK-I1",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "pin",
+     "path": "research_outputs/tierc10/REGISTRY_PIN.json",
+     "ptr": "/registrations/P-BRK-I1/seq",
+     "s": "5",
+     "col": "seq"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "pin",
+     "path": "research_outputs/tierc10/REGISTRY_PIN.json",
+     "ptr": "/order_of_filing/4",
+     "s": "P-BRK-I1",
+     "col": "registration"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "texts",
+     "path": "research_outputs/tierc10/REGISTRATION_TEXTS.json",
+     "ptr": "/P-BRK-I1/prior_pct",
+     "s": "35",
+     "col": "prior_pct"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": "%"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/arm",
+     "s": "CLASSIC5-memory-line",
+     "col": "arm"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/score_row/panel_name",
+     "s": "CLASSIC5",
+     "col": "panel_name"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/score_row/arm_era",
+     "s": "full",
+     "col": "arm_era"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/score_row/ruler",
+     "s": "VS ZERO (one-sample asset-cluster)",
+     "col": "ruler"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/score_row/n",
+     "s": "7",
+     "col": "n"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/score_row/ci_point",
+     "s": "0.71827",
+     "col": "ci_point"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "[`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/score_row/ci_lo",
+     "s": "-0.602912",
+     "col": "ci_lo"
+    },
+    {
+     "t": "lit",
+     "s": "`, `"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/score_row/ci_hi",
+     "s": "1.452261",
+     "col": "ci_hi"
+    },
+    {
+     "t": "lit",
+     "s": "`]"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/score_row/p_one_sided",
+     "s": "0.269683",
+     "col": "p_one_sided"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "**"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/score_row/verdict",
+     "s": "NOT SUPPORTED",
+     "col": "verdict"
+    },
+    {
+     "t": "lit",
+     "s": "**"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "family",
+     "path": "research_outputs/tierc10/scores/FAMILY.json",
+     "ptr": "/rows/14/clears_bh_bar",
+     "s": "false",
+     "col": "clears_bh_bar"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/score_row/loao_above_of_record",
+     "s": "1",
+     "col": "loao_above_of_record"
+    },
+    {
+     "t": "lit",
+     "s": "/"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/score_row/loao_assets_present",
+     "s": "3",
+     "col": "loao_assets_present"
+    },
+    {
+     "t": "lit",
+     "s": "` vs bar `"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/score_row/loao_bar_above_half",
+     "s": "3",
+     "col": "loao_bar_above_half"
+    },
+    {
+     "t": "lit",
+     "s": "` · "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/score_row/loao_line",
+     "s": "1/5 above",
+     "col": "loao_line"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/beside/haircut_twin/twin_expectancy_r",
+     "s": "0.8946008804619946",
+     "col": "twin_expectancy_r"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/beside/brk_sealed_row/height_vs_toll/lens",
+     "s": "1d",
+     "col": "hvt_lens"
+    },
+    {
+     "t": "lit",
+     "s": " · verdict_pass `"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/beside/brk_sealed_row/height_vs_toll/verdict_pass",
+     "s": "true",
+     "col": "hvt_verdict_pass"
+    },
+    {
+     "t": "lit",
+     "s": "` · "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/beside/brk_sealed_row/height_vs_toll/reason",
+     "s": "era ALL: height gate PASS + edge-fade leg PASS",
+     "col": "hvt_reason"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 18,
+   "kind": "verdict_row",
+   "reg": "P-BRK-S1",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "pin",
+     "path": "research_outputs/tierc10/REGISTRY_PIN.json",
+     "ptr": "/registrations/P-BRK-S1/seq",
+     "s": "6",
+     "col": "seq"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "pin",
+     "path": "research_outputs/tierc10/REGISTRY_PIN.json",
+     "ptr": "/order_of_filing/5",
+     "s": "P-BRK-S1",
+     "col": "registration"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "texts",
+     "path": "research_outputs/tierc10/REGISTRATION_TEXTS.json",
+     "ptr": "/P-BRK-S1/prior_pct",
+     "s": "30",
+     "col": "prior_pct"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": "%"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/arm",
+     "s": "P-BRK-S1 vs zero",
+     "col": "arm"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/score_row/panel_name",
+     "s": "CLASSIC5",
+     "col": "panel_name"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/score_row/arm_era",
+     "s": "holdout",
+     "col": "arm_era"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/score_row/ruler",
+     "s": "VS ZERO (one-sample asset-cluster)",
+     "col": "ruler"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/score_row/n",
+     "s": "1836",
+     "col": "n"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/score_row/ci_point",
+     "s": "-0.211069",
+     "col": "ci_point"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "[`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/score_row/ci_lo",
+     "s": "-0.298366",
+     "col": "ci_lo"
+    },
+    {
+     "t": "lit",
+     "s": "`, `"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/score_row/ci_hi",
+     "s": "-0.144105",
+     "col": "ci_hi"
+    },
+    {
+     "t": "lit",
+     "s": "`]"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/score_row/p_one_sided",
+     "s": "1.0",
+     "col": "p_one_sided"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "**"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/score_row/verdict",
+     "s": "NOT SUPPORTED",
+     "col": "verdict"
+    },
+    {
+     "t": "lit",
+     "s": "**"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "family",
+     "path": "research_outputs/tierc10/scores/FAMILY.json",
+     "ptr": "/rows/17/clears_bh_bar",
+     "s": "false",
+     "col": "clears_bh_bar"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/score_row/loao_above_of_record",
+     "s": "0",
+     "col": "loao_above_of_record"
+    },
+    {
+     "t": "lit",
+     "s": "/"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/score_row/loao_assets_present",
+     "s": "5",
+     "col": "loao_assets_present"
+    },
+    {
+     "t": "lit",
+     "s": "` vs bar `"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/score_row/loao_bar_above_half",
+     "s": "3",
+     "col": "loao_bar_above_half"
+    },
+    {
+     "t": "lit",
+     "s": "` · "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/score_row/loao_line",
+     "s": "0/5 above, 5/5 BELOW",
+     "col": "loao_line"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/beside/haircut_twin/twin_expectancy_r",
+     "s": "-0.3727569778166333",
+     "col": "twin_expectancy_r"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/beside/brk_sealed_row/height_vs_toll/lens",
+     "s": "5m",
+     "col": "hvt_lens"
+    },
+    {
+     "t": "lit",
+     "s": " · verdict_pass `"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/beside/brk_sealed_row/height_vs_toll/verdict_pass",
+     "s": "false",
+     "col": "hvt_verdict_pass"
+    },
+    {
+     "t": "lit",
+     "s": "` · "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/beside/brk_sealed_row/height_vs_toll/reason",
+     "s": "era holdout: height gate PASS + edge-fade leg FAIL",
+     "col": "hvt_reason"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 22,
+   "kind": "beside",
+   "what": "m",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "- **m = `"
+    },
+    {
+     "t": "val",
+     "src": "family",
+     "path": "research_outputs/tierc10/scores/FAMILY.json",
+     "ptr": "/family_m_declared",
+     "s": "6",
+     "col": "m_declared"
+    },
+    {
+     "t": "lit",
+     "s": "` declared / `"
+    },
+    {
+     "t": "der",
+     "what": "n_run",
+     "s": "5",
+     "col": "n_run"
+    },
+    {
+     "t": "lit",
+     "s": "` run** — N counts the FAMILY.json rows whose `clears_bh_bar` is not null. One fixed bar q/m = `"
+    },
+    {
+     "t": "val",
+     "src": "family",
+     "path": "research_outputs/tierc10/scores/FAMILY.json",
+     "ptr": "/fdr_bar_q_over_m",
+     "s": "0.016666666666666666",
+     "col": "fdr_bar_q_over_m"
+    },
+    {
+     "t": "lit",
+     "s": "` (FAMILY.json `fdr_bar_q_over_m`), no step-up."
+    }
+   ]
+  },
+  {
+   "line": 23,
+   "kind": "beside",
+   "what": "clears_true",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "- `clears_bh_bar` is `true` on: **"
+    },
+    {
+     "t": "der",
+     "what": "clears_true",
+     "s": "P-TRG-2"
+    },
+    {
+     "t": "lit",
+     "s": "**."
+    }
+   ]
+  },
+  {
+   "line": 24,
+   "kind": "beside",
+   "what": "law",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "- FAMILY.json `law`: "
+    },
+    {
+     "t": "val",
+     "src": "family",
+     "path": "research_outputs/tierc10/scores/FAMILY.json",
+     "ptr": "/law",
+     "s": "TP.finish_family over every row of the six rows files; clears_bh_bar is a SEPARATE column beside the CI verdict"
+    }
+   ]
+  },
+  {
+   "line": 25,
+   "kind": "beside",
+   "what": "halt",
+   "reg": "P-BE-1",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "- **"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BE-1",
+     "path": "research_outputs/tierc10/scores/P-BE-1.rows.json",
+     "ptr": "/registration",
+     "s": "P-BE-1"
+    },
+    {
+     "t": "lit",
+     "s": "** HALTed at `"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BE-1",
+     "path": "research_outputs/tierc10/scores/P-BE-1.rows.json",
+     "ptr": "/rows/0/at",
+     "s": "TP.score"
+    },
+    {
+     "t": "lit",
+     "s": "`: its row prints FAMILY.json `scored_slots_halted` verbatim and no point, CI or p. Its Tier-E arms are report-only and are not in §0. The filed text, as the rows file carries it: “"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BE-1",
+     "path": "research_outputs/tierc10/scores/P-BE-1.rows.json",
+     "ptr": "/rows/0/text_prescribes/1",
+     "s": "If A1's two-sample premise fails and A1 HALTs, there is no report-only row on the same population to read instead; a new id must be filed under `set_change` and the reason disclosed."
+    },
+    {
+     "t": "lit",
+     "s": "”"
+    }
+   ]
+  },
+  {
+   "line": 26,
+   "kind": "beside",
+   "what": "twin_law",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "- **Haircut twin** (`beside.haircut_twin.twin_expectancy_r`; the two-sample row adds `twin_difference_r` as Δ): "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-GEN-1",
+     "path": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+     "ptr": "/rows/0/beside/haircut_twin/law",
+     "s": "HAIRCUT TWIN — an ADDED column beside the TC-series toll, never a replacement; the verdict, CI, p and LOAO are the TC-series row's [VETO 'tiers']"
+    }
+   ]
+  },
+  {
+   "line": 27,
+   "kind": "beside",
+   "what": "loao_present",
+   "reg": "P-BRK-I1",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "- **"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/registration",
+     "s": "P-BRK-I1"
+    },
+    {
+     "t": "lit",
+     "s": "** LOAO: `"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/score_row/loao_assets_present",
+     "s": "3"
+    },
+    {
+     "t": "lit",
+     "s": "` assets present of `"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/score_row/loao_panels",
+     "s": "5"
+    },
+    {
+     "t": "lit",
+     "s": "` declared panels; zero-campaign assets `"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/score_row/loao_zero_campaign_assets",
+     "s": "NEARUSDT,ZECUSDT"
+    },
+    {
+     "t": "lit",
+     "s": "`; the line of record reads `"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/score_row/loao_line",
+     "s": "1/5 above"
+    },
+    {
+     "t": "lit",
+     "s": "` — "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-I1",
+     "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "ptr": "/rows/0/score_row/loao_zero_campaign_note",
+     "s": "dropping an asset with no campaign reproduces the headline; such a panel is counted by the line (N = the DECLARED panel, the lineage's law) and EXCLUDED from loao_above_excl_zero_campaign_panels — both printed; where they disagree the row says so here."
+    }
+   ]
+  },
+  {
+   "line": 28,
+   "kind": "beside",
+   "what": "toll",
+   "reg": "P-BRK-S1",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "- **"
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/registration",
+     "s": "P-BRK-S1"
+    },
+    {
+     "t": "lit",
+     "s": "** toll: "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/beside/brk_sealed_row/toll_accounting_status",
+     "s": "PRINT, NOT A DEDUCTION — reported, not changed. The contract reads 'NET OF MEASURED 5m TOLL'; today's net_r is net of FEE and FUNDING only."
+    },
+    {
+     "t": "lit",
+     "s": " Authority: "
+    },
+    {
+     "t": "val",
+     "src": "rows:P-BRK-S1",
+     "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "ptr": "/rows/0/beside/brk_sealed_row/toll_accounting/authority",
+     "s": "a CONTRACT READING. Not changed on executor authority; the operator settles it. Until then the toll is printed on every row, labelled, and the row says it is a print."
+    }
+   ]
+  },
+  {
+   "line": 74,
+   "kind": "admit_rule",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "- Admission rule (`admission.rule`): "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rule",
+     "s": ">= TIDE_SLOW (316) + MEM_TTL_BARS (400) = 716 closed 4h bars"
+    }
+   ]
+  },
+  {
+   "line": 75,
+   "kind": "admit_excluded",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "- Excluded: "
+    },
+    {
+     "t": "der",
+     "what": "excluded_none",
+     "s": "none — `admission.excluded` is empty"
+    }
+   ]
+  },
+  {
+   "line": 88,
+   "kind": "admit_row",
+   "table": "A",
+   "stem_ptr": "/panels/UNSEEN_admitted_stems/0",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/5/asset",
+     "s": "ENA",
+     "col": "asset"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/5/stem",
+     "s": "ENAUSDT",
+     "col": "stem"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/5/venue",
+     "s": "BINANCE_USDTM",
+     "col": "venue"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/5/closed_4h_bars",
+     "s": "5413",
+     "col": "closed_4h_bars"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/5/admitted",
+     "s": "true",
+     "col": "admitted"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 89,
+   "kind": "admit_row",
+   "table": "A",
+   "stem_ptr": "/panels/UNSEEN_admitted_stems/1",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/6/asset",
+     "s": "PUMPFUN",
+     "col": "asset"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/6/stem",
+     "s": "PUMPUSDT",
+     "col": "stem"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/6/venue",
+     "s": "BINANCE_USDTM",
+     "col": "venue"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/6/closed_4h_bars",
+     "s": "2631",
+     "col": "closed_4h_bars"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/6/admitted",
+     "s": "true",
+     "col": "admitted"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 90,
+   "kind": "admit_row",
+   "table": "A",
+   "stem_ptr": "/panels/UNSEEN_admitted_stems/2",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/7/asset",
+     "s": "HYPE",
+     "col": "asset"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/7/stem",
+     "s": "HYPEUSDT",
+     "col": "stem"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/7/venue",
+     "s": "BINANCE_USDTM",
+     "col": "venue"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/7/closed_4h_bars",
+     "s": "2876",
+     "col": "closed_4h_bars"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/7/admitted",
+     "s": "true",
+     "col": "admitted"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 91,
+   "kind": "admit_row",
+   "table": "A",
+   "stem_ptr": "/panels/UNSEEN_admitted_stems/3",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/8/asset",
+     "s": "MNT",
+     "col": "asset"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/8/stem",
+     "s": "MNTUSDT_BYBIT",
+     "col": "stem"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/8/venue",
+     "s": "BYBIT_V5_LINEAR",
+     "col": "venue"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/8/closed_4h_bars",
+     "s": "6513",
+     "col": "closed_4h_bars"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/8/admitted",
+     "s": "true",
+     "col": "admitted"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 92,
+   "kind": "admit_row",
+   "table": "A",
+   "stem_ptr": "/panels/UNSEEN_admitted_stems/4",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/9/asset",
+     "s": "SUI",
+     "col": "asset"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/9/stem",
+     "s": "SUIUSDT",
+     "col": "stem"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/9/venue",
+     "s": "BINANCE_USDTM",
+     "col": "venue"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/9/closed_4h_bars",
+     "s": "7422",
+     "col": "closed_4h_bars"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/9/admitted",
+     "s": "true",
+     "col": "admitted"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 93,
+   "kind": "admit_row",
+   "table": "A",
+   "stem_ptr": "/panels/UNSEEN_admitted_stems/5",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/10/asset",
+     "s": "LTC",
+     "col": "asset"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/10/stem",
+     "s": "LTCUSDT",
+     "col": "stem"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/10/venue",
+     "s": "BINANCE_USDTM",
+     "col": "venue"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/10/closed_4h_bars",
+     "s": "14684",
+     "col": "closed_4h_bars"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/10/admitted",
+     "s": "true",
+     "col": "admitted"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 94,
+   "kind": "admit_row",
+   "table": "A",
+   "stem_ptr": "/panels/UNSEEN_admitted_stems/6",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/11/asset",
+     "s": "XMR",
+     "col": "asset"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/11/stem",
+     "s": "XMRUSDT",
+     "col": "stem"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/11/venue",
+     "s": "BINANCE_USDTM",
+     "col": "venue"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/11/closed_4h_bars",
+     "s": "14534",
+     "col": "closed_4h_bars"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/11/admitted",
+     "s": "true",
+     "col": "admitted"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 95,
+   "kind": "admit_row",
+   "table": "A",
+   "stem_ptr": "/panels/UNSEEN_admitted_stems/7",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/12/asset",
+     "s": "BNB",
+     "col": "asset"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/12/stem",
+     "s": "BNBUSDT",
+     "col": "stem"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/12/venue",
+     "s": "BINANCE_USDTM",
+     "col": "venue"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/12/closed_4h_bars",
+     "s": "14492",
+     "col": "closed_4h_bars"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/12/admitted",
+     "s": "true",
+     "col": "admitted"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 96,
+   "kind": "admit_row",
+   "table": "A",
+   "stem_ptr": "/panels/UNSEEN_admitted_stems/8",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/13/asset",
+     "s": "UNI",
+     "col": "asset"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/13/stem",
+     "s": "UNIUSDT",
+     "col": "stem"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/13/venue",
+     "s": "BINANCE_USDTM",
+     "col": "venue"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/13/closed_4h_bars",
+     "s": "13167",
+     "col": "closed_4h_bars"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/13/admitted",
+     "s": "true",
+     "col": "admitted"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 97,
+   "kind": "admit_row",
+   "table": "A",
+   "stem_ptr": "/panels/UNSEEN_admitted_stems/9",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/14/asset",
+     "s": "PEPE",
+     "col": "asset"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/14/stem",
+     "s": "1000PEPEUSDT",
+     "col": "stem"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/14/venue",
+     "s": "BINANCE_USDTM",
+     "col": "venue"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/14/closed_4h_bars",
+     "s": "7410",
+     "col": "closed_4h_bars"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/14/admitted",
+     "s": "true",
+     "col": "admitted"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 98,
+   "kind": "admit_row",
+   "table": "A",
+   "stem_ptr": "/panels/UNSEEN_admitted_stems/10",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/15/asset",
+     "s": "DOGE",
+     "col": "asset"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/15/stem",
+     "s": "DOGEUSDT",
+     "col": "stem"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/15/venue",
+     "s": "BINANCE_USDTM",
+     "col": "venue"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/15/closed_4h_bars",
+     "s": "13586",
+     "col": "closed_4h_bars"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/15/admitted",
+     "s": "true",
+     "col": "admitted"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 99,
+   "kind": "admit_row",
+   "table": "A",
+   "stem_ptr": "/panels/UNSEEN_admitted_stems/11",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/16/asset",
+     "s": "BONK",
+     "col": "asset"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/16/stem",
+     "s": "1000BONKUSDT",
+     "col": "stem"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/16/venue",
+     "s": "BINANCE_USDTM",
+     "col": "venue"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/16/closed_4h_bars",
+     "s": "6205",
+     "col": "closed_4h_bars"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/16/admitted",
+     "s": "true",
+     "col": "admitted"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 105,
+   "kind": "admit_row",
+   "table": "B",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/0/asset",
+     "s": "BTC",
+     "col": "asset"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/0/stem",
+     "s": "BTCUSDT",
+     "col": "stem"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/0/venue",
+     "s": "BINANCE_USDTM",
+     "col": "venue"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/0/closed_4h_bars",
+     "s": "15420",
+     "col": "closed_4h_bars"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/0/admitted",
+     "s": "true",
+     "col": "admitted"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "der",
+     "what": "classic5_member",
+     "s": "CLASSIC5",
+     "arg": "BTCUSDT",
+     "col": "panel"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 106,
+   "kind": "admit_row",
+   "table": "B",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/1/asset",
+     "s": "ETH",
+     "col": "asset"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/1/stem",
+     "s": "ETHUSDT",
+     "col": "stem"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/1/venue",
+     "s": "BINANCE_USDTM",
+     "col": "venue"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/1/closed_4h_bars",
+     "s": "14943",
+     "col": "closed_4h_bars"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/1/admitted",
+     "s": "true",
+     "col": "admitted"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "der",
+     "what": "classic5_member",
+     "s": "CLASSIC5",
+     "arg": "ETHUSDT",
+     "col": "panel"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 107,
+   "kind": "admit_row",
+   "table": "B",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/2/asset",
+     "s": "SOL",
+     "col": "asset"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/2/stem",
+     "s": "SOLUSDT",
+     "col": "stem"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/2/venue",
+     "s": "BINANCE_USDTM",
+     "col": "venue"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/2/closed_4h_bars",
+     "s": "13191",
+     "col": "closed_4h_bars"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/2/admitted",
+     "s": "true",
+     "col": "admitted"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "der",
+     "what": "classic5_member",
+     "s": "CLASSIC5",
+     "arg": "SOLUSDT",
+     "col": "panel"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 108,
+   "kind": "admit_row",
+   "table": "B",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/3/asset",
+     "s": "NEAR",
+     "col": "asset"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/3/stem",
+     "s": "NEARUSDT",
+     "col": "stem"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/3/venue",
+     "s": "BINANCE_USDTM",
+     "col": "venue"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/3/closed_4h_bars",
+     "s": "13004",
+     "col": "closed_4h_bars"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/3/admitted",
+     "s": "true",
+     "col": "admitted"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "der",
+     "what": "classic5_member",
+     "s": "CLASSIC5",
+     "arg": "NEARUSDT",
+     "col": "panel"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  },
+  {
+   "line": 109,
+   "kind": "admit_row",
+   "table": "B",
+   "parts": [
+    {
+     "t": "lit",
+     "s": "| "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/4/asset",
+     "s": "ZEC",
+     "col": "asset"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/4/stem",
+     "s": "ZECUSDT",
+     "col": "stem"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/4/venue",
+     "s": "BINANCE_USDTM",
+     "col": "venue"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/4/closed_4h_bars",
+     "s": "14522",
+     "col": "closed_4h_bars"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "val",
+     "src": "manifest",
+     "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+     "ptr": "/admission/rows/4/admitted",
+     "s": "true",
+     "col": "admitted"
+    },
+    {
+     "t": "lit",
+     "s": "`"
+    },
+    {
+     "t": "lit",
+     "s": " | "
+    },
+    {
+     "t": "der",
+     "what": "classic5_member",
+     "s": "CLASSIC5",
+     "arg": "ZECUSDT",
+     "col": "panel"
+    },
+    {
+     "t": "lit",
+     "s": " |"
+    }
+   ]
+  }
+ ],
+ "quotes": [
+  {
+   "src": "contract",
+   "path": "exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md",
+   "loc": {
+    "lines": [
+     16,
+     18
+    ]
+   },
+   "style": "fence",
+   "hdr_line": 32,
+   "md_lines": [
+    34,
+    39
+   ],
+   "text": " 3 · registration texts below are FROZEN since 2026-09-21; any verdict the\n     interrupted run computed is re-computed and printed BESIDE the fresh value —\n     never re-worded, never re-chosen."
+  },
+  {
+   "src": "draft",
+   "path": "research_outputs/tierc10/BUILD_DRAFT.md",
+   "loc": {
+    "lines": [
+     402,
+     403
+    ]
+   },
+   "style": "bq",
+   "hdr_line": 40,
+   "md_lines": [
+    42,
+    44
+   ],
+   "text": "- `draft:registrations`: **no registration text had been drafted, for any of the six lanes.**\n  `research_outputs/tierc10/registrations/` did not exist, and Stage B had not begun."
+  },
+  {
+   "src": "texts",
+   "path": "research_outputs/tierc10/REGISTRATION_TEXTS.json",
+   "loc": {
+    "reg": "P-SPR-2",
+    "chars": [
+     2369,
+     2901
+    ]
+   },
+   "style": "bq",
+   "hdr_line": 49,
+   "md_lines": [
+    51,
+    52
+   ],
+   "text": "THE SUPERSEDED DRAFT, printed so the change is visible and not silent. The RESUME contract of 2026-09-22 (exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md, §B) carries P-SPR-2 as: \"sharpened spring = deviation-confirm at a CONFIRMED macro boundary, 4h, 5-asset exploration-classic, vs card/standalone\" (:94-95; the contract wraps that sentence over two indented lines and the wrap is closed up here — no word is added, removed or reordered). That wording is SUPERSEDED. R3 is later than the contract's frozen text and R9 confirms it."
+  },
+  {
+   "src": "texts",
+   "path": "research_outputs/tierc10/REGISTRATION_TEXTS.json",
+   "loc": {
+    "reg": "P-BRK-I1",
+    "chars": [
+     1246,
+     2133
+    ]
+   },
+   "style": "bq",
+   "hdr_line": 53,
+   "md_lines": [
+    55,
+    65
+   ],
+   "text": "WHY CLASSIC5, AND THE SUPERSESSION, ON THE RECORD. Operator ruling R8 of 2026-09-22 — \"5-asset\nbook — the PANEL PIN governs\" — SUPERSEDES operator ruling R2 of 2026-09-21 — \"All 17\" — on the\noperator's own word. Both are filed verbatim in research_outputs/tierc10/OPERATOR_RULINGS.md.\nThe RESUME contract of 2026-09-22 (exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md:107) carries\na PANEL PIN reading \"both BRK forms score on the 5-asset book per G-7; the 17-asset view is\nTier-E\", and requires the gap against R2 to be filed as a finding rather than silently resolved.\nIT IS FILED HERE, IN THE REGISTRATION ITSELF: this form scores on CLASSIC5 and NOT on the\nseventeen, because R8 says so; the seventeen ride as a report-only arm (§7).\nscripts/tierc10_brk.py scores on whatever panel the registration names (g[\"panel\"]), so this is\na registration-text decision and no code moved for it."
+  },
+  {
+   "src": "texts",
+   "path": "research_outputs/tierc10/REGISTRATION_TEXTS.json",
+   "loc": {
+    "reg": "P-BRK-S1",
+    "chars": [
+     1213,
+     1843
+    ]
+   },
+   "style": "bq",
+   "hdr_line": 66,
+   "md_lines": [
+    68,
+    69
+   ],
+   "text": "The scored panel is CLASSIC5 = (BTCUSDT, ETHUSDT, SOLUSDT, NEARUSDT, ZECUSDT), per operator ruling R8 of 2026-09-22 (\"5-asset book — the PANEL PIN governs\"). R8 SUPERSEDES ruling R2 of 2026-09-21 (\"All 17\") on the operator's own word, and that supersession is recorded here so the change is visible and not silent. The seventeen-asset view — CLASSIC5 plus ENAUSDT, PUMPUSDT, HYPEUSDT, MNTUSDT_BYBIT, SUIUSDT, LTCUSDT, XMRUSDT, BNBUSDT, UNIUSDT, 1000PEPEUSDT, DOGEUSDT, 1000BONKUSDT — is filed as a Tier-E arm beside the scored row. It is a view. It owns no slot in m and may never be promoted to evidence, whichever way it prints."
+  },
+  {
+   "src": "plan",
+   "path": "research_outputs/tierc10/REGISTRATION_PLAN.md",
+   "loc": {
+    "lines": [
+     55,
+     58
+    ]
+   },
+   "style": "bq",
+   "hdr_line": 77,
+   "md_lines": [
+    79,
+    83
+   ],
+   "text": "`UNSEEN12 admitted = (ENAUSDT, PUMPUSDT, HYPEUSDT, MNTUSDT_BYBIT, SUIUSDT, LTCUSDT, XMRUSDT,\nBNBUSDT, UNIUSDT, 1000PEPEUSDT, DOGEUSDT, 1000BONKUSDT)` — `panels.UNSEEN_admitted_stems`, the only\nreading under which the contract's \"the ADMITTED twelve\" (line 92) and \"the ADMITTED LIST ... IS\nP-GEN-1's panel\" (line 50) agree, since the admitted list on disk is all **seventeen**."
+  },
+  {
+   "src": "rulings",
+   "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+   "loc": {
+    "lines": [
+     148,
+     149
+    ]
+   },
+   "style": "bq",
+   "hdr_line": 111,
+   "md_lines": [
+    113,
+    115
+   ],
+   "text": "- **PUMPFUN → PUMPUSDT** and **MNT → Bybit** remain printed LEANS, not rulings; they need the nod at\n  CLOSE."
+  }
+ ]
+}

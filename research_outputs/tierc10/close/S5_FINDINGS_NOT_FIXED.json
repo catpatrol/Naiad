@@ -1,0 +1,2523 @@
+{
+ "schema": "tierc10.close.S5_FINDINGS_NOT_FIXED.v1",
+ "label": "REPORT-ONLY · Tier-E — findings harvested verbatim and measured at build time; nothing here is scored, no registration verdict is read, no bar is read, and nothing is fixed.",
+ "status_law": "every finding's status is 'REPORTED, NOT FIXED': it records what THIS build did (report, never fix); it does not claim the item is still open",
+ "tier": "TIER-C10",
+ "as_of_of_record": "2026-09-21T16:00:00Z",
+ "contract": {
+  "path": "exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md",
+  "sha256": "8a0bf279bcab0f27161a7d965535445807f4e713e77d045b0ba124bc7f803c7a",
+  "clauses": [
+   {
+    "needle": "· findings-not-fixed",
+    "line": 136,
+    "text": "  · findings-not-fixed · BOX-COST"
+   },
+   {
+    "needle": "the gap is filed as a finding",
+    "line": 110,
+    "text": "    governs, and the gap is filed as a finding."
+   }
+  ]
+ },
+ "built_by": "scripts/tierc10_close_close_findings.py",
+ "inputs": {
+  "exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md": {
+   "bytes": 9441,
+   "sha256": "8a0bf279bcab0f27161a7d965535445807f4e713e77d045b0ba124bc7f803c7a"
+  },
+  "research_outputs/tierc10/BUILD_DRAFT.md": {
+   "bytes": 111105,
+   "sha256": "244ad5a46a4f73c522361990638499206c9ef3c341d436e2aa67bdd898791149"
+  },
+  "research_outputs/tierc10/OPERATOR_RULINGS.md": {
+   "bytes": 8696,
+   "sha256": "a0a08f8761ce9eab678d42d609d7e6563e749c07a6c33b7b17f9a5c4f31ca907"
+  },
+  "research_outputs/tierc10/PROGRESS.json": {
+   "bytes": 267607,
+   "sha256": "0d66f2d7fe6c338339880368ff854e58bbb2533be54cf2f7448f71d129752afc"
+  },
+  "research_outputs/tierc10/REGISTRATION_PLAN.md": {
+   "bytes": 7242,
+   "sha256": "cbb85a214de536598d7e06575b32eac6e266b051cf279f244988245829b2a5e8"
+  },
+  "research_outputs/tierc10/REGISTRATION_TEXTS.json": {
+   "bytes": 178729,
+   "sha256": "3afce077146807127072ae68f9c816e0263505aa625cf1610763ea37eb91ca94"
+  },
+  "research_outputs/tierc10/REGISTRATION_TEXTS.md": {
+   "bytes": 128673,
+   "sha256": "eef76eedda56aef32da1cb5656f5c0a93ffb878f0ad09fa37898efe0a3da40b1"
+  },
+  "research_outputs/tierc10/census/leans.parquet": {
+   "bytes": 17481,
+   "sha256": "a93dc1dbad3c7593c8257f378e60b44d4a9b186565eae68e639d26e9804a0ab7"
+  },
+  "research_outputs/tierc10/data/STAGE_D_MANIFEST.json": {
+   "bytes": 405715,
+   "sha256": "de2e8663bbf101dfb46ad9f77a4969ca73648e78373646c0d17b81b9f9a87421"
+  },
+  "research_outputs/tierc10/panel/leans.parquet": {
+   "bytes": 10618,
+   "sha256": "faf0c986b232e150d7dfa375ba2400b185eddee3178fe1c2a6371af0ac7d2920"
+  },
+  "research_outputs/tierc10/scores/DRYRUN.json": {
+   "bytes": 77280,
+   "sha256": "13958abb0c75ee2cfaa8bf2df9d0f7569bbb286d85fa49a32339d8b90c15672c"
+  },
+  "research_outputs/tierc10/scores/FAMILY.json": {
+   "bytes": 113715,
+   "sha256": "aa0e8c496fd6b883a3c01947047c4845eb72935ca17368cffee9c8593a7bc4a2"
+  },
+  "research_outputs/tierc10/scores/P-BE-1.rows.json": {
+   "bytes": 84044,
+   "sha256": "b40af065177695e36e755d183ef74e7328d77eb799ed3abbb668ff7d69b6b678"
+  },
+  "research_outputs/tierc10/scores/P-BRK-I1.rows.json": {
+   "bytes": 111150,
+   "sha256": "f3ae88d0be366f127bacfe0f8092cdef07d17559ea3b3db6d6c1edd6c306111a"
+  },
+  "research_outputs/tierc10/scores/P-BRK-S1.rows.json": {
+   "bytes": 118556,
+   "sha256": "994bcaa69906aae8a1659d953c0984da636cb496808dd17ab91ddf3ea3c33ff0"
+  },
+  "research_outputs/tierc10/scores/P-GEN-1.rows.json": {
+   "bytes": 123091,
+   "sha256": "047097ec5aeefbe8aa63cf2b1a677015540497a41e43b0152e609426a2baf87d"
+  },
+  "research_outputs/tierc10/scores/P-SPR-2.rows.json": {
+   "bytes": 111310,
+   "sha256": "febff33a1ad91e3663cb75fc7db54fe7901d7a8493503e3e6e6aa065da6bc23e"
+  },
+  "research_outputs/tierc10/scores/P-TRG-2.rows.json": {
+   "bytes": 102709,
+   "sha256": "9fa07a0fa1b832ef7a1012a796cfd7fdd73ab2e1275d4faa4340666493c340c8"
+  },
+  "research_outputs/tierc10/stamps/leans.parquet": {
+   "bytes": 10632,
+   "sha256": "91ee065223f58d9197396abfeb7444b07de2aac3628ae6d9a0479bcd425e6c67"
+  }
+ },
+ "git_volatile_fields": [
+  "git",
+  "measured.iv",
+  "measured.v",
+  "findings[id=FN-M-iv].text",
+  "findings[id=FN-M-v].text"
+ ],
+ "git": {
+  "head_at_build": "3d55988dfcbb6b7ffb53855c325545ae642c763e"
+ },
+ "cross_references": {
+  "panel_pin_gap_filed_as": [
+   "FN-RUL-L1-1"
+  ],
+  "rulings_r7_r10_heading_line": 82,
+  "rulings_r8_heading_line": 101,
+  "harvested_texts_recording_their_own_repair": [
+   "FN-PROG-01-B8"
+  ],
+  "owners_by_default_rule": []
+ },
+ "counts": {
+  "HARVESTED": {
+   "operator": 29,
+   "executor": 15,
+   "total": 44
+  },
+  "MEASURED": {
+   "operator": 2,
+   "executor": 4,
+   "total": 6
+  },
+  "LEAN": {
+   "operator": 0,
+   "executor": 31,
+   "total": 31
+  }
+ },
+ "measured": {
+  "i": {
+   "measure": "REGISTRATION_TEXTS.json texts found verbatim in REGISTRATION_TEXTS.md",
+   "method": "Python `text in md` over every <reg>.text of the JSON",
+   "value": {
+    "verbatim": 0,
+    "total": 6
+   },
+   "per_registration": [
+    {
+     "reg_id": "P-GEN-1",
+     "chars": 26111,
+     "verbatim": false,
+     "longest_verbatim_prefix_chars": 274
+    },
+    {
+     "reg_id": "P-SPR-2",
+     "chars": 32179,
+     "verbatim": false,
+     "longest_verbatim_prefix_chars": 129
+    },
+    {
+     "reg_id": "P-BE-1",
+     "chars": 30811,
+     "verbatim": false,
+     "longest_verbatim_prefix_chars": 95
+    },
+    {
+     "reg_id": "P-TRG-2",
+     "chars": 23317,
+     "verbatim": false,
+     "longest_verbatim_prefix_chars": 1373
+    },
+    {
+     "reg_id": "P-BRK-I1",
+     "chars": 28082,
+     "verbatim": false,
+     "longest_verbatim_prefix_chars": 418
+    },
+    {
+     "reg_id": "P-BRK-S1",
+     "chars": 29113,
+     "verbatim": false,
+     "longest_verbatim_prefix_chars": 772
+    }
+   ]
+  },
+  "ii": {
+   "measure": "arms where beside.haircut_twin.twin_expectancy_r > tc_expectancy_r",
+   "method": "rows[].beside.haircut_twin of every scores/P-*.rows.json; float compare",
+   "value": {
+    "twin_above_tc": 8,
+    "arms_with_twin": 20,
+    "arms_total": 21
+   },
+   "arms": [
+    {
+     "file": "research_outputs/tierc10/scores/P-BE-1.rows.json",
+     "row": 1,
+     "arm": "be-floor-1R vs card-v6 (CLASSIC5, tuning) [Tier-E]",
+     "tc_expectancy_r": -0.025042414550453734,
+     "twin_expectancy_r": -0.00023934426948118032,
+     "twin_minus_tc_r": 0.024803070280972554,
+     "twin_above_tc": true
+    },
+    {
+     "file": "research_outputs/tierc10/scores/P-BE-1.rows.json",
+     "row": 2,
+     "arm": "be-floor-1R vs card-v6 (CLASSIC5, holdout) [Tier-E]",
+     "tc_expectancy_r": 0.5110802090344896,
+     "twin_expectancy_r": 0.4937174098225593,
+     "twin_minus_tc_r": -0.01736279921193029,
+     "twin_above_tc": false
+    },
+    {
+     "file": "research_outputs/tierc10/scores/P-BE-1.rows.json",
+     "row": 3,
+     "arm": "be-floor-2R sensitivity vs card-v6 (CLASSIC5, full) [Tier-E]",
+     "tc_expectancy_r": 0.18893695334341679,
+     "twin_expectancy_r": 0.19793993611279767,
+     "twin_minus_tc_r": 0.009002982769380885,
+     "twin_above_tc": true
+    },
+    {
+     "file": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "row": 0,
+     "arm": "CLASSIC5-memory-line",
+     "tc_expectancy_r": 0.7182702903352108,
+     "twin_expectancy_r": 0.8946008804619946,
+     "twin_minus_tc_r": 0.17633059012678376,
+     "twin_above_tc": true
+    },
+    {
+     "file": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "row": 1,
+     "arm": "CLASSIC5-tierE-band",
+     "tc_expectancy_r": 0.35176888844178844,
+     "twin_expectancy_r": 0.5100483255471927,
+     "twin_minus_tc_r": 0.15827943710540426,
+     "twin_above_tc": true
+    },
+    {
+     "file": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+     "row": 2,
+     "arm": "PANEL17-tierE-memory-line",
+     "tc_expectancy_r": 0.4219031257008162,
+     "twin_expectancy_r": 0.5172253459583621,
+     "twin_minus_tc_r": 0.09532222025754594,
+     "twin_above_tc": true
+    },
+    {
+     "file": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "row": 0,
+     "arm": "P-BRK-S1 vs zero",
+     "tc_expectancy_r": -0.21106894580843585,
+     "twin_expectancy_r": -0.3727569778166333,
+     "twin_minus_tc_r": -0.16168803200819745,
+     "twin_above_tc": false
+    },
+    {
+     "file": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "row": 1,
+     "arm": "P-BRK-S1 17-asset view",
+     "tc_expectancy_r": -0.17015579224077498,
+     "twin_expectancy_r": -0.42768321788827096,
+     "twin_minus_tc_r": -0.257527425647496,
+     "twin_above_tc": false
+    },
+    {
+     "file": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+     "row": 2,
+     "arm": "P-BRK-S1 memory-line anchor",
+     "tc_expectancy_r": -0.19888926982321803,
+     "twin_expectancy_r": -0.32525838427999904,
+     "twin_minus_tc_r": -0.126369114456781,
+     "twin_above_tc": false
+    },
+    {
+     "file": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+     "row": 0,
+     "arm": "unseen12-card-v6",
+     "tc_expectancy_r": 0.09977695178033455,
+     "twin_expectancy_r": 0.08460102968246902,
+     "twin_minus_tc_r": -0.01517592209786553,
+     "twin_above_tc": false
+    },
+    {
+     "file": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+     "row": 1,
+     "arm": "panel17-card-v6",
+     "tc_expectancy_r": 0.1446081433997918,
+     "twin_expectancy_r": 0.13914811650802036,
+     "twin_minus_tc_r": -0.005460026891771441,
+     "twin_above_tc": false
+    },
+    {
+     "file": "research_outputs/tierc10/scores/P-GEN-1.rows.json",
+     "row": 2,
+     "arm": "never-touched-card-v6",
+     "tc_expectancy_r": -0.23283884547103328,
+     "twin_expectancy_r": -0.2659441811636973,
+     "twin_minus_tc_r": -0.033105335692663995,
+     "twin_above_tc": false
+    },
+    {
+     "file": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+     "row": 0,
+     "arm": "standalone vs zero · full corridor",
+     "tc_expectancy_r": -0.00592976594599946,
+     "twin_expectancy_r": -0.024325017149030344,
+     "twin_minus_tc_r": -0.018395251203030885,
+     "twin_above_tc": false
+    },
+    {
+     "file": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+     "row": 1,
+     "arm": "standalone vs zero · tuning era",
+     "tc_expectancy_r": -0.14901512867778421,
+     "twin_expectancy_r": -0.16897015820240152,
+     "twin_minus_tc_r": -0.019955029524617307,
+     "twin_above_tc": false
+    },
+    {
+     "file": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+     "row": 2,
+     "arm": "standalone vs zero · holdout era",
+     "tc_expectancy_r": 0.23999820124925555,
+     "twin_expectancy_r": 0.22428381903645134,
+     "twin_minus_tc_r": -0.015714382212804218,
+     "twin_above_tc": false
+    },
+    {
+     "file": "research_outputs/tierc10/scores/P-SPR-2.rows.json",
+     "row": 3,
+     "arm": "union with card v6 vs card v6",
+     "tc_expectancy_r": 0.09755488746475217,
+     "twin_expectancy_r": 0.09069711031754026,
+     "twin_minus_tc_r": -0.006857777147211919,
+     "twin_above_tc": false
+    },
+    {
+     "file": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "row": 0,
+     "arm": "trg-9/12 vs card v6 · CLASSIC5 · full",
+     "tc_expectancy_r": 0.4664135944735754,
+     "twin_expectancy_r": 0.47558820524675305,
+     "twin_minus_tc_r": 0.00917461077317766,
+     "twin_above_tc": true
+    },
+    {
+     "file": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "row": 1,
+     "arm": "trg-9/12 vs zero · CLASSIC5 · full",
+     "tc_expectancy_r": 0.4664135944735754,
+     "twin_expectancy_r": 0.47558820524675305,
+     "twin_minus_tc_r": 0.00917461077317766,
+     "twin_above_tc": true
+    },
+    {
+     "file": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "row": 2,
+     "arm": "trg-9/12 vs card v6 · CLASSIC5 · tuning era",
+     "tc_expectancy_r": 0.17765639218405105,
+     "twin_expectancy_r": 0.19894916171000607,
+     "twin_minus_tc_r": 0.02129276952595502,
+     "twin_above_tc": true
+    },
+    {
+     "file": "research_outputs/tierc10/scores/P-TRG-2.rows.json",
+     "row": 3,
+     "arm": "trg-9/12 vs card v6 · CLASSIC5 · holdout era",
+     "tc_expectancy_r": 1.0439279990526238,
+     "twin_expectancy_r": 1.0288662923202472,
+     "twin_minus_tc_r": -0.015061706732376612,
+     "twin_above_tc": false
+    }
+   ],
+   "arms_without_twin": [
+    {
+     "file": "research_outputs/tierc10/scores/P-BE-1.rows.json",
+     "row": 0,
+     "arm": "be-floor-1R vs card-v6 (CLASSIC5, full)"
+    }
+   ]
+  },
+  "iii": {
+   "measure": "os.path.exists for analytics/rangefinder.py and analytics/rangefinder_census.py",
+   "method": "os.path.exists",
+   "value": [
+    {
+     "path": "analytics/rangefinder.py",
+     "exists": false
+    },
+    {
+     "path": "analytics/rangefinder_census.py",
+     "exists": true
+    }
+   ]
+  },
+  "iv": {
+   "measure": "PROGRESS.json head vs `git rev-parse HEAD`",
+   "method": "git rev-parse HEAD; git merge-base --is-ancestor; git log ph..HEAD",
+   "value": {
+    "progress_head": "6b15def66f73e3fcd05b6dc5a0516fcd2ac1d1c7",
+    "git_head": "3d55988dfcbb6b7ffb53855c325545ae642c763e",
+    "equal": false,
+    "progress_head_is_ancestor": true,
+    "commits_after_progress_head": 18
+   },
+   "commits_after_progress_head": [
+    {
+     "sha7": "3d55988",
+     "subject": "or1: step D — range module to scripts/rangefinder_core.py; range records to tape_ranges/; F-BR-14 re-pointed (A-OR1-1 iv, v)"
+    },
+    {
+     "sha7": "2416a15",
+     "subject": "tierc10(F-C10-RESUME): transcript of record after B-5M — 9 GREEN, 0 RED"
+    },
+    {
+     "sha7": "08a6fce",
+     "subject": "tierc10(B-5M): P-BRK-S1 scored, the family finished at m = 6 — P-TRG-2 alone clears all three clauses"
+    },
+    {
+     "sha7": "dc30015",
+     "subject": "tierc10(F-C10-RESUME): transcript of record after B-CORE — 9 GREEN, 0 RED"
+    },
+    {
+     "sha7": "ab7306a",
+     "subject": "tierc10(B-CORE): five registrations scored against the pinned dry-run — one SUPPORTED on (a), one prescribed HALT"
+    },
+    {
+     "sha7": "b29774e",
+     "subject": "tierc10(B-CORE): the reviewed dry-run, pinned BEFORE any score — 21 arms, one prescribed HALT"
+    },
+    {
+     "sha7": "be157e9",
+     "subject": "tierc10(F-C10-RESUME): transcript of record after the Stage B mech ledger — 9 GREEN, 0 RED"
+    },
+    {
+     "sha7": "899d3e7",
+     "subject": "tierc10(STAGE B mech): F-C10-HOLD real, F-C10-BE NOT RUN per P-BE-1 §9, the scoring driver"
+    },
+    {
+     "sha7": "371123f",
+     "subject": "tierc10(STAGE B): the six registrations are FILED — text before result"
+    },
+    {
+     "sha7": "74d9b39",
+     "subject": "tierc10(F-C10-RESUME): transcript of record — 9 GREEN, 0 RED"
+    },
+    {
+     "sha7": "fa205c8",
+     "subject": "tierc10(F-C10-RESUME): leg 1 accuses instead of raising when a stage records no artifact"
+    },
+    {
+     "sha7": "83f5e29",
+     "subject": "tierc10(F-C10-RESUME): transcript of record after the re-pin"
+    },
+    {
+     "sha7": "41a5070",
+     "subject": "tierc10(F-C10-RESUME): re-pin onto the ledger that drops the circular self-record"
+    },
+    {
+     "sha7": "2e92972",
+     "subject": "tierc10(LAW 6): the resume stage records no artifact sha — the self-reference does not converge"
+    },
+    {
+     "sha7": "ad34e6e",
+     "subject": "tierc10(F-C10-RESUME): re-file the transcript after the re-pin — 9 GREEN, 0 RED"
+    },
+    {
+     "sha7": "54c519d",
+     "subject": "tierc10(F-C10-RESUME): move the anchor to the post-repair ledger, deliberately"
+    },
+    {
+     "sha7": "2e4d959",
+     "subject": "tierc10(LAW 2): restore the quarantined kill-partial's ledger record"
+    },
+    {
+     "sha7": "3453c87",
+     "subject": "tierc10(LAW 6): the ledger after the repair phase, rebuilt from the committed R0 base"
+    }
+   ]
+  },
+  "v": {
+   "measure": "`git worktree list` HEADs vs the tierc10 commits reachable from HEAD",
+   "method": "git worktree list --porcelain; tierc10 commits = commits reachable from HEAD whose subject starts with 'tierc10'; per worktree HEAD, |that set ∩ git rev-list <head>|",
+   "value": {
+    "tierc10_commits_on_HEAD": 28,
+    "worktrees_total": 29,
+    "worktrees_besides_main": 28,
+    "worktrees_besides_main_with_zero_tierc10": 28,
+    "worktrees_besides_main_with_all_tierc10": 0
+   },
+   "heads_besides_main": [
+    {
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "worktrees": 28
+    }
+   ],
+   "worktrees": [
+    {
+     "path": ".",
+     "head": "3d55988dfcbb6b7ffb53855c325545ae642c763e",
+     "branch": "v12-v1-census",
+     "tierc10_commits_reachable": 28
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-1",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-1",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-10",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-10",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-11",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-11",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-12",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-12",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-13",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-13",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-15",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-15",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-16",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-16",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-17",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-17",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-18",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-18",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-19",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-19",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-2",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-2",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-20",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-20",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-22",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-22",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-23",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-23",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-24",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-24",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-25",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-25",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-26",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-26",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-27",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-27",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-28",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-28",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-29",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-29",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-3",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-3",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-30",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-30",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-4",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-4",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-5",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-5",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-6",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-6",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-7",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-7",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-8",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-8",
+     "tierc10_commits_reachable": 0
+    },
+    {
+     "path": ".claude/worktrees/wf_8995cf0d-ab5-9",
+     "head": "a6da1b97e95ce9475290083ec1639cfb93c84d11",
+     "branch": "worktree-wf_8995cf0d-ab5-9",
+     "tierc10_commits_reachable": 0
+    }
+   ]
+  },
+  "vi": {
+   "measure": "PROGRESS.json stages absent from BUILD_DRAFT.md §1",
+   "method": "a stage is PRESENT iff its PROGRESS `stage` string occurs inside the bold label that opens a §1 bullet ('- **label**'); §1 = the text after the '## 1 · STAGE LOG' heading up to the next '## ' heading",
+   "value": {
+    "absent": 15,
+    "stages": 15
+   },
+   "absent_stages": [
+    "STEP 0",
+    "D-CORE",
+    "CENSUS-R{4h,1d}",
+    "NULL/gaps-only",
+    "NULL/gaps+order",
+    "A (stamps)",
+    "PANEL/gate",
+    "LANES (B mech)",
+    "BRK (B mech)",
+    "F-C10-RESUME",
+    "D-5M",
+    "CENSUS-R{5m}",
+    "B-REG (the six filed)",
+    "B-CORE",
+    "B-5M"
+   ],
+   "section1_labels": [],
+   "absent_but_mentioned_in_section1_body": []
+  }
+ },
+ "findings": [
+  {
+   "id": "FN-PROG-01-B1",
+   "class": "HARVESTED",
+   "harvest_key": "PROGRESS",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "RESUME CLAUSE F-D-4 (TWO-TOKEN TRAP) — no artifact, no fixture leg. LEGS[] in scripts/tierc10_data_fixtures.py has no F-D-4 entry. STAGE_D_MANIFEST.json/.md contain zero occurrences of 'two-token', 'first_valid', 'hard_floor', 'hard-floor', 'continuity', 'price_continuity', 'predates', 'intended'. Verdict PARTIAL-in-substance / ABSENT-as-artifact: listing date + source ARE printed per file row (137 'listing' occurrences; every kline row carries listing + source + publication) and PUMPBTCUSDT IS rejected by name in venue_rejections with LEAN D-d, but the hard-floor check, the price-continuity-at-the-floor check and the F-D-4 table itself do not exist. The contract demands it (resume paste line 135: 'Stage D manifest incl. the F-D-4 / F-D-5 tables'); research_outputs/tierc10/BUILD_DRAFT.md:86 carries only the placeholder '*Including the F-D-4 two-token-trap table and the F-D-5 data-spend audit.*'",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "field": "stages[1].blockers[0]",
+    "context": {
+     "stage": "D-CORE",
+     "stage_status": "PARTIAL",
+     "repair_line_in_same_list": [
+      "FN-PROG-01-B8"
+     ]
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "RESUME CLAUSE F-D-4 (TWO-TOKEN TRAP)",
+    "reading": "a Stage D report clause the executor builds"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-PROG-01-B2",
+   "class": "HARVESTED",
+   "harvest_key": "PROGRESS",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "RESUME CLAUSE F-D-5 (DATA-SPEND AUDIT) — ABSENT outright. No fixture leg in LEGS[]. Zero occurrences of 'never-touched', 'display-only', 'data-spend', 'spend' in STAGE_D_MANIFEST.json and .md. Nothing under research_outputs/tierc10/ carries the classification except the BUILD_DRAFT.md placeholder line. No {never-touched / display-only / scored} table exists per asset for the 17, so PUMPFUN and HYPE are neither read nor assumed — they are simply unclassified.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "field": "stages[1].blockers[1]",
+    "context": {
+     "stage": "D-CORE",
+     "stage_status": "PARTIAL",
+     "repair_line_in_same_list": [
+      "FN-PROG-01-B8"
+     ]
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "RESUME CLAUSE F-D-5 (DATA-SPEND AUDIT)",
+    "reading": "a Stage D report clause the executor builds"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-PROG-01-B3",
+   "class": "HARVESTED",
+   "harvest_key": "PROGRESS",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "RESUME CLAUSE COSTS HAIRCUT TWIN (tiered slippage per side, A/B/C = 2/5/10 bps) — ABSENT from Stage D. fee_schedule.json carries zero occurrences of 'slip', 'Slip', 'SLIP', 'haircut', 'Haircut', 'multiplier'; its per-asset key set is exactly ['asset','funding_interval_hours_observed_modal','funding_interval_hours_observed_tail','funding_spacing_hours_histogram','kind','round_trip_bps_used','source','stem','symbol','taker_bps_side_used','venue','venue_note'] with a FLAT taker_bps_side_used=5.0 and round_trip_bps_used=10.0 for all 17 assets and no slippage column at all. The tier concept exists elsewhere in the estate but for a DIFFERENT roster: Naiad_Phase0_Charter.md:114 reads 'tier A (BTC, ETH) 2 bps · tier B (SOL, NEAR, ZEC, JTO, TAO) 5 bps · tier C (HYPE, FARTCOIN, LIT) 10 bps' and scripts/v3_scorer.py:309 repeats '2/5/10 bps' as a modeled-note string. The resume paste's TC10 assignment (tier B += LTC BNB DOGE UNI SUI XMR; tier C = ENA PUMPFUN HYPE MNT PEPE BONK) appears nowhere on disk outside the contract text itself.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "field": "stages[1].blockers[2]",
+    "context": {
+     "stage": "D-CORE",
+     "stage_status": "PARTIAL",
+     "repair_line_in_same_list": [
+      "FN-PROG-01-B8"
+     ]
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "RESUME CLAUSE COSTS HAIRCUT TWIN",
+    "reading": "a Stage D report clause the executor builds"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-PROG-01-B4",
+   "class": "HARVESTED",
+   "harvest_key": "PROGRESS",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "RESUME CLAUSE CONTRACT MULTIPLIERS (1000PEPE, 1000BONK) printed and normalized — ABSENT. Zero occurrences of 'multiplier', 'contractSize', 'contract_size', 'quantity_multiplier', 'notional', 'per_unit' in STAGE_D_MANIFEST.json; zero of 'multiplier'/'normali' in STAGE_D_MANIFEST.md; zero of 'multiplier'/'contractSize'/'quantityPrecision'/'filters' in VENUE_PROBE.json (the probe never captured the field). The manifest prints the symbols (venues rows: asset PEPE -> symbol 1000PEPEUSDT; asset BONK -> symbol 1000BONKUSDT) and their prices, but never states that the contract is per 1000 tokens and never normalizes. Any downstream cross-asset price or height comparison will be off by 1000x for these two.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "field": "stages[1].blockers[3]",
+    "context": {
+     "stage": "D-CORE",
+     "stage_status": "PARTIAL",
+     "repair_line_in_same_list": [
+      "FN-PROG-01-B8"
+     ]
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "RESUME CLAUSE CONTRACT MULTIPLIERS",
+    "reading": "a Stage D report clause the executor builds"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-PROG-01-B5",
+   "class": "HARVESTED",
+   "harvest_key": "PROGRESS",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "F-D-1 STAYS RED pending an operator ruling that does not yet exist. Re-run NOW it is RED (exit 1). Operator ruling R5 of 2026-09-21 ('The USDT pair, either on Binance or Bybit', recovered verbatim in research_outputs/tierc10/OPERATOR_RULINGS.md) does not distinguish the venue's REST API from its BULK ARCHIVE, which is the actual disagreement. This is the designed red, not a break — but it is an open operator dependency on the stage.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "field": "stages[1].blockers[4]",
+    "context": {
+     "stage": "D-CORE",
+     "stage_status": "PARTIAL",
+     "repair_line_in_same_list": [
+      "FN-PROG-01-B8"
+     ]
+    }
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "pending an operator ruling that does not yet exist",
+    "reading": "the text names an operator ruling as the dependency"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-PROG-01-B6",
+   "class": "HARVESTED",
+   "harvest_key": "PROGRESS",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "CARRIED AS-OF HAZARD: 14 of the 102 kline files hold rows past the pin — every 5m file except PUMPUSDT, MNTUSDT_BYBIT and SUIUSDT, 6 rows each (opens 16:00, 16:05, 16:10, 16:15, 16:20, 16:25Z). Item 3's literal law ('no kline file holds a row after 1790006400000') is FALSE at file level. It holds at loader level. The manifest discloses this itself (as_of_hazards.kline_law, LEAN D-e) and warns that tierc2_baseline.load_klines reads the WHOLE file, so any TC10 lane loading through it instead of tierc10_data.load_asof reads past the pin. Not repairable in this stage (no deletion primitive, prefixes are never rewritten) but it is a live trap for Stage A and downstream.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "field": "stages[1].blockers[5]",
+    "context": {
+     "stage": "D-CORE",
+     "stage_status": "PARTIAL",
+     "repair_line_in_same_list": [
+      "FN-PROG-01-B8"
+     ]
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "CARRIED AS-OF HAZARD",
+    "reading": "a load-path trap for executor code, not a question for the operator"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-PROG-01-B7",
+   "class": "HARVESTED",
+   "harvest_key": "PROGRESS",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "TRANSCRIPT BYTE-REPRODUCIBILITY IS DISPROVEN, and could not be tested directly. FIXTURES_STAGE_D.txt is only rewritten by a FULL online run with no leg arguments; --offline writes FIXTURES_STAGE_D_OFFLINE.txt instead and a named-leg run writes nothing (main() guards on `if not want`). So my two runs left it byte-identical (69a22de8... before and after) without exercising the builders' claim. But F-D-1b's own census moved between the filed run and mine — {'archive-only': 74, 'both': 215, 'rest': 28, 'rest-only': 105} became {'archive-only': 74, 'both': 223, 'rest': 20, 'rest-only': 105} — so 8 bars the venue's bulk archive did not publish on 2026-09-21 it does publish on 2026-09-22. A full re-run's transcript CANNOT be byte-identical to the filed one, because the venue's archive backfills.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "field": "stages[1].blockers[6]",
+    "context": {
+     "stage": "D-CORE",
+     "stage_status": "PARTIAL",
+     "repair_line_in_same_list": [
+      "FN-PROG-01-B8"
+     ]
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "TRANSCRIPT BYTE-REPRODUCIBILITY IS DISPROVEN",
+    "reading": "a property of the executor's fixture transcripts against a backfilling venue"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-PROG-01-B8",
+   "class": "HARVESTED",
+   "harvest_key": "PROGRESS",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "REPAIRED 2026-09-22: F-D-4, F-D-5, the tiered haircut twin and contract multipliers are built and filed; those four clauses no longer block. What remains is F-D-1's operator ruling: REST or ARCHIVE.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "field": "stages[1].blockers[7]",
+    "context": {
+     "stage": "D-CORE",
+     "stage_status": "PARTIAL"
+    }
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "What remains is F-D-1's operator ruling: REST or ARCHIVE.",
+    "reading": "the text names the operator's REST-or-ARCHIVE word as what remains"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-PROG-07-N1",
+   "class": "HARVESTED",
+   "harvest_key": "PROGRESS",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "F-C10-BE is NOT RUN — PRESCRIBED by P-BE-1's filed §9 ('if P-BE-1's filed book contains no tie and no 4h/5m mismatch latch bar, the leg must report NOT RUN with that reason. It must NOT substitute a synthetic bar or relabel a dip_first case to reach three.'). BE_LATCH_CENSUS.json (outcome-free) on A1: 200 campaigns, 103 latch bars — dip_before 36, dip_after 0, print_no_dip 67, tie 0, mismatch 0; journal == module == hand walk 103/103. Not a defect and not an operator question: the text decided it before the look.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "field": "stages[7].notes[0]",
+    "context": {
+     "stage": "LANES (B mech)",
+     "stage_status": "COMPLETE-VERIFIED"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "Not a defect and not an operator question",
+    "reading": "the text itself rules the operator out; disclosure of prescribed mechanics"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-PROG-08-N1",
+   "class": "HARVESTED",
+   "harvest_key": "PROGRESS",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "OPEN, for the operator: P-BRK-S1's 'NET OF MEASURED 5m TOLL' is carried as a PRINT beside the book (TOLL_ACCOUNTING on every row), not as a deduction from net_r. The toll is a census-measured median in ATR units and net_r is R-denominated, so deducting one from the other is a unit question, not a code change.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "field": "stages[8].notes[0]",
+    "context": {
+     "stage": "BRK (B mech)",
+     "stage_status": "COMPLETE-VERIFIED"
+    }
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "OPEN, for the operator",
+    "reading": "the text names the operator as the one who settles it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-PROG-10-B1",
+   "class": "HARVESTED",
+   "harvest_key": "PROGRESS",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "F-D-1 (online) stays RED pending the operator's REST-or-ARCHIVE word (R5's narrower question); one of its three differing bars is XMRUSDT 5m. Does NOT reach B-5M: P-BRK-S1 pins substrate tc10_20260921.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "field": "stages[10].blockers[0]",
+    "context": {
+     "stage": "D-5M",
+     "stage_status": "PARTIAL"
+    }
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "pending the operator's REST-or-ARCHIVE word",
+    "reading": "the text names the operator's word as the dependency"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-PROG-13-N1",
+   "class": "HARVESTED",
+   "harvest_key": "PROGRESS",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "P-BE-1's SCORED arm A1 HALTed at TP.score, as its filed §4 prescribes: the two-sample premise failed (200/200 campaign keys shared with card v6; the floor moves exits only). P-BE-1 has NO verdict and does not become the paired row. §11: 'a new id must be filed under set_change and the reason disclosed' — adding a registration is outside the contract ('no registration re-worded or added'), so that filing is the OPERATOR's to order. Its three Tier-E arms (A2 tuning, A3 holdout, A4 2R) were scored as report-only views, registered for that purpose; none may stand in for A1 (§11).",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "field": "stages[13].notes[0]",
+    "context": {
+     "stage": "B-CORE",
+     "stage_status": "COMPLETE-VERIFIED"
+    }
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "that filing is the OPERATOR's to order",
+    "reading": "the text names the operator as the one who orders the new filing"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-PROG-13-N2",
+   "class": "HARVESTED",
+   "harvest_key": "PROGRESS",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "Clause (c) — the BH family bar q/m = 0.1/6 — is not on these rows yet; finish_family runs after B-5M.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "field": "stages[13].notes[1]",
+    "context": {
+     "stage": "B-CORE",
+     "stage_status": "COMPLETE-VERIFIED"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "finish_family runs after B-5M",
+    "reading": "an executor sequencing note (B-5M has since run: see PROGRESS stage B-5M)"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-PROG-14-N1",
+   "class": "HARVESTED",
+   "harvest_key": "PROGRESS",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "finish_family ran with P-BE-1's slot HALTed (--allow-halted-slot P-BE-1). This is PRESCRIBED by the filed texts, not an executor choice: P-BE-1 §7 'CLAUSE (c) RESOLVES ON THIS ROW ALONE and does not wait for siblings… if a sibling registration HALTs or is never filed, this row still reads clears_bh_bar against 0.016667'; P-TRG-2 §5 'at that one fixed bar to EVERY scored row it is handed, whatever number of the declared six actually run'. m stays 6 DECLARED (5 run): fewer tests never loosen the bar.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "field": "stages[14].notes[0]",
+    "context": {
+     "stage": "B-5M",
+     "stage_status": "COMPLETE-VERIFIED"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "finish_family ran with P-BE-1's slot HALTed",
+    "reading": "disclosure of the executor's finish_family invocation, prescribed by the texts"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-PROG-14-N2",
+   "class": "HARVESTED",
+   "harvest_key": "PROGRESS",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "P-BRK-S1's net_r is net of FEE and FUNDING only; the measured 5m toll is a PRINT beside it (TOLL_ACCOUNTING), per its filed §7 which names the print-vs-deduction question OPEN for the operator. The row is already significantly negative before any toll.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "field": "stages[14].notes[1]",
+    "context": {
+     "stage": "B-5M",
+     "stage_status": "COMPLETE-VERIFIED"
+    }
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "names the print-vs-deduction question OPEN for the operator",
+    "reading": "the text names the operator as the one who settles it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-RUL-L1-1",
+   "class": "HARVESTED",
+   "harvest_key": "RULINGS-L1",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "- The PANEL conflict (R2 \"all 17\" vs the resume contract's PANEL PIN \"5-asset book\").",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "field": "lines 71-71",
+    "context": {
+     "list": 1,
+     "heading": "## Still blocked on the operator (no text exists on disk)",
+     "heading_line": 69
+    }
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "Still blocked on the operator",
+    "reading": "the list's own heading assigns every bullet to the operator"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-RUL-L1-2",
+   "class": "HARVESTED",
+   "harvest_key": "RULINGS-L1",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "- The P-SPR-2 population conflict (R3 \"full corridor\" vs the contract's \"exploration-classic\").",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "field": "lines 72-72",
+    "context": {
+     "list": 1,
+     "heading": "## Still blocked on the operator (no text exists on disk)",
+     "heading_line": 69
+    }
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "Still blocked on the operator",
+    "reading": "the list's own heading assigns every bullet to the operator"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-RUL-L1-3",
+   "class": "HARVESTED",
+   "harvest_key": "RULINGS-L1",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "- Which NULL variant is the record (`gaps-only`, the contract-literal design, vs `gaps+order`,\n  which reduces a measured own-window leak from 25.62% to 7.97%). Both are filed side by side.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "field": "lines 73-74",
+    "context": {
+     "list": 1,
+     "heading": "## Still blocked on the operator (no text exists on disk)",
+     "heading_line": 69
+    }
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "Still blocked on the operator",
+    "reading": "the list's own heading assigns every bullet to the operator"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-RUL-L1-4",
+   "class": "HARVESTED",
+   "harvest_key": "RULINGS-L1",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "- Whether the 5m HOLD RATE is part of P-BRK-S1's scoring ground (if so it needs the same\n  era collar the outcome rows have).",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "field": "lines 75-76",
+    "context": {
+     "list": 1,
+     "heading": "## Still blocked on the operator (no text exists on disk)",
+     "heading_line": 69
+    }
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "Still blocked on the operator",
+    "reading": "the list's own heading assigns every bullet to the operator"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-RUL-L1-5",
+   "class": "HARVESTED",
+   "harvest_key": "RULINGS-L1",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "- PUMPFUN → PUMPUSDT and MNT → Bybit are printed LEANS, not rulings; they need the nod at CLOSE.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "field": "lines 77-77",
+    "context": {
+     "list": 1,
+     "heading": "## Still blocked on the operator (no text exists on disk)",
+     "heading_line": 69
+    }
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "Still blocked on the operator",
+    "reading": "the list's own heading assigns every bullet to the operator"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-RUL-L1-6",
+   "class": "HARVESTED",
+   "harvest_key": "RULINGS-L1",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "- The LaCie destination.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "field": "lines 78-78",
+    "context": {
+     "list": 1,
+     "heading": "## Still blocked on the operator (no text exists on disk)",
+     "heading_line": 69
+    }
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "Still blocked on the operator",
+    "reading": "the list's own heading assigns every bullet to the operator"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-RUL-L2-1",
+   "class": "HARVESTED",
+   "harvest_key": "RULINGS-L2",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "- **F-D-1 / R5.** \"The USDT pair, either on Binance or Bybit\" names the pair and permits the venue,\n  but the actual disagreement is the venue's **REST API vs its BULK ARCHIVE**, which publish\n  different bars on incident stamps. F-D-1 stays RED and is **printed RED**; F-D-1b carries. No bar\n  is rewritten either way without the narrower word: **REST or ARCHIVE?**",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "field": "lines 141-144",
+    "context": {
+     "list": 2,
+     "heading": "## Still blocked on the operator after R7–R10",
+     "heading_line": 139
+    }
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "Still blocked on the operator",
+    "reading": "the list's own heading assigns every bullet to the operator"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-RUL-L2-2",
+   "class": "HARVESTED",
+   "harvest_key": "RULINGS-L2",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "- **The 5m HOLD RATE.** If it is part of P-BRK-S1's scoring ground it needs the same holdout-era\n  collar the outcome rows carry. Executor is proceeding on the **conservative** reading (collar it),\n  and will say so on the row.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "field": "lines 145-147",
+    "context": {
+     "list": 2,
+     "heading": "## Still blocked on the operator after R7–R10",
+     "heading_line": 139
+    }
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "Still blocked on the operator",
+    "reading": "the list's own heading assigns every bullet to the operator"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-RUL-L2-3",
+   "class": "HARVESTED",
+   "harvest_key": "RULINGS-L2",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "- **PUMPFUN → PUMPUSDT** and **MNT → Bybit** remain printed LEANS, not rulings; they need the nod at\n  CLOSE.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "field": "lines 148-149",
+    "context": {
+     "list": 2,
+     "heading": "## Still blocked on the operator after R7–R10",
+     "heading_line": 139
+    }
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "Still blocked on the operator",
+    "reading": "the list's own heading assigns every bullet to the operator"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-RUL-L2-4",
+   "class": "HARVESTED",
+   "harvest_key": "RULINGS-L2",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "- **The LaCie destination** (R6 granted permission to push; the destination is still unnamed, and the\n  default would create an empty vault — the real one is `/Volumes/LaCie/Repo Clone/naiad-backups`).",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "field": "lines 150-151",
+    "context": {
+     "list": 2,
+     "heading": "## Still blocked on the operator after R7–R10",
+     "heading_line": 139
+    }
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "Still blocked on the operator",
+    "reading": "the list's own heading assigns every bullet to the operator"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-SDM-ORN-1",
+   "class": "HARVESTED",
+   "harvest_key": "SDM-ORN",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "F-D-1 IS RED and stays RED: the venue's REST API and its BULK ARCHIVE publish different bars on incident stamps and the panel is publication-heterogeneous on them (see venue_publications_disagree). RULING NEEDED: which publication is the record. Ruling ARCHIVE makes the REST-carrying files the odd ones out; ruling REST the ARCHIVE-carrying ones. The archive is no clean alternative: it lacks whole days, publishes nothing before 2020, and its monthly and daily zips disagree with each other on BTC incident bars. No bar is rewritten either way without the operator's word.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "field": "operator_rulings_needed[0]"
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "quote": "RULING NEEDED",
+    "reading": "the manifest files it under operator_rulings_needed"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-SDM-ORN-2",
+   "class": "HARVESTED",
+   "harvest_key": "SDM-ORN",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "PUMPFUN -> PUMPUSDT [LEAN D-d]: a printed lean, not a ruling. The roster probe recorded the near-match and explicitly did NOT map it; TC10 maps it because baseAsset PUMP is a TRADING perpetual and PUMPBTCUSDT is rejected by name. Needs the operator's nod at CLOSE.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "field": "operator_rulings_needed[1]"
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "quote": "Needs the operator's",
+    "reading": "the manifest files it under operator_rulings_needed"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-SDM-ORN-3",
+   "class": "HARVESTED",
+   "harvest_key": "SDM-ORN",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "MNT -> Bybit v5 linear, whole tape, stem MNTUSDT_BYBIT [LEAN D-c]: a printed lean, not a ruling (no Binance USDT-M contract exists). The fee charged to it is the estate's flat Binance-era taker figure — an ASSUMPTION; Bybit's own base taker rate is widely quoted higher [UNVERIFIED]. Needs the operator's nod at CLOSE, or a named exclusion.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "field": "operator_rulings_needed[2]"
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "quote": "Needs the operator's",
+    "reading": "the manifest files it under operator_rulings_needed"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-SDM-ORN-4",
+   "class": "HARVESTED",
+   "harvest_key": "SDM-ORN",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "LaCie mirror [LEAN L5]: not done. Every file TC10 fetched exists only in the snapshot on this laptop; the mirror command PUSHES and its default destination would create an empty vault. Needs the operator's destination and consent at CLOSE.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "field": "operator_rulings_needed[3]"
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "quote": "Needs the operator's",
+    "reading": "the manifest files it under operator_rulings_needed"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-SDM-HAZ-funding_files_with_a_print_stamped_after_the_as_of_close",
+   "class": "HARVESTED",
+   "harvest_key": "SDM-HAZ",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "[\"funding/BTCUSDT.parquet\", \"funding/ETHUSDT.parquet\", \"funding/SOLUSDT.parquet\", \"funding/NEARUSDT.parquet\", \"funding/ZECUSDT.parquet\", \"funding/ENAUSDT.parquet\", \"funding/PUMPUSDT.parquet\", \"funding/HYPEUSDT.parquet\", \"funding/SUIUSDT.parquet\", \"funding/LTCUSDT.parquet\", \"funding/XMRUSDT.parquet\", \"funding/BNBUSDT.parquet\", \"funding/UNIUSDT.parquet\", \"funding/1000PEPEUSDT.parquet\", \"funding/DOGEUSDT.parquet\", \"funding/1000BONKUSDT.parquet\"]",
+   "text_form": "canonical JSON of a non-string value",
+   "source": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "field": "as_of_hazards.funding_files_with_a_print_stamped_after_the_as_of_close"
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "quote": "an interval-sum funding law must sum on funding_hour_ms, never on the raw stamp",
+    "reading": "an as-of hazard binds the executor's load path; the manifest's own law says how"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-SDM-HAZ-funding_floor_hour_equals_nearest_hour_on_every_file",
+   "class": "HARVESTED",
+   "harvest_key": "SDM-HAZ",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "true",
+   "text_form": "canonical JSON of a non-string value",
+   "source": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "field": "as_of_hazards.funding_floor_hour_equals_nearest_hour_on_every_file"
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "quote": "an interval-sum funding law must sum on funding_hour_ms, never on the raw stamp",
+    "reading": "an as-of hazard binds the executor's load path; the manifest's own law says how"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-SDM-HAZ-funding_law",
+   "class": "HARVESTED",
+   "harvest_key": "SDM-HAZ",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "[LEAN D-g] a print belongs to the hour its stamp FLOORS to; load_funding_asof returns funding_hour_ms and cuts on it; an interval-sum funding law must sum on funding_hour_ms, never on the raw stamp",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "field": "as_of_hazards.funding_law"
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "quote": "an interval-sum funding law must sum on funding_hour_ms, never on the raw stamp",
+    "reading": "an as-of hazard binds the executor's load path; the manifest's own law says how"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-SDM-HAZ-funding_ms_past_hour_max_over_panel",
+   "class": "HARVESTED",
+   "harvest_key": "SDM-HAZ",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "47",
+   "text_form": "canonical JSON of a non-string value",
+   "source": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "field": "as_of_hazards.funding_ms_past_hour_max_over_panel"
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "quote": "an interval-sum funding law must sum on funding_hour_ms, never on the raw stamp",
+    "reading": "an as-of hazard binds the executor's load path; the manifest's own law says how"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-SDM-HAZ-kline_files_holding_rows_after_as_of",
+   "class": "HARVESTED",
+   "harvest_key": "SDM-HAZ",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "[{\"path\": \"klines/BTCUSDT_5m.parquet\", \"rows_after_as_of\": 6}, {\"path\": \"klines/ETHUSDT_5m.parquet\", \"rows_after_as_of\": 6}, {\"path\": \"klines/SOLUSDT_5m.parquet\", \"rows_after_as_of\": 6}, {\"path\": \"klines/NEARUSDT_5m.parquet\", \"rows_after_as_of\": 6}, {\"path\": \"klines/ZECUSDT_5m.parquet\", \"rows_after_as_of\": 6}, {\"path\": \"klines/ENAUSDT_5m.parquet\", \"rows_after_as_of\": 6}, {\"path\": \"klines/HYPEUSDT_5m.parquet\", \"rows_after_as_of\": 6}, {\"path\": \"klines/LTCUSDT_5m.parquet\", \"rows_after_as_of\": 6}, {\"path\": \"klines/XMRUSDT_5m.parquet\", \"rows_after_as_of\": 6}, {\"path\": \"klines/BNBUSDT_5m.parquet\", \"rows_after_as_of\": 6}, {\"path\": \"klines/UNIUSDT_5m.parquet\", \"rows_after_as_of\": 6}, {\"path\": \"klines/1000PEPEUSDT_5m.parquet\", \"rows_after_as_of\": 6}, {\"path\": \"klines/DOGEUSDT_5m.parquet\", \"rows_after_as_of\": 6}, {\"path\": \"klines/1000BONKUSDT_5m.parquet\", \"rows_after_as_of\": 6}]",
+   "text_form": "canonical JSON of a non-string value",
+   "source": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "field": "as_of_hazards.kline_files_holding_rows_after_as_of"
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "quote": "a TC10 lane that loads one of these files through it without an as-of cut reads past the pin",
+    "reading": "an as-of hazard binds the executor's load path; the manifest's own law says how"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-SDM-HAZ-kline_law",
+   "class": "HARVESTED",
+   "harvest_key": "SDM-HAZ",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "these rows PRE-DATE TC10 and are never deleted [LEAN D-e]; tierc10_data.load_asof cuts them, but tierc2_baseline.load_klines reads the WHOLE file — a TC10 lane that loads one of these files through it without an as-of cut reads past the pin",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "field": "as_of_hazards.kline_law"
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "quote": "a TC10 lane that loads one of these files through it without an as-of cut reads past the pin",
+    "reading": "an as-of hazard binds the executor's load path; the manifest's own law says how"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-FAM-HALT-P-BE-1",
+   "class": "HARVESTED",
+   "harvest_key": "FAMILY",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "HALT: P-BE-1 — the arm shares the WHOLE campaign set with its base; the commissioned two-sample ruler's premise failed. File a NEW id under ruler='set_change' and disclose.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/scores/FAMILY.json",
+    "field": "scored_slots_halted.P-BE-1"
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "that filing is the OPERATOR's to order",
+    "reading": "the ledger's B-CORE note assigns the new set_change filing to the operator"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-TOLL-DRYRUN-1",
+   "class": "HARVESTED",
+   "harvest_key": "TOLL",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "PRINT, NOT A DEDUCTION — reported, not changed. The contract reads 'NET OF MEASURED 5m TOLL'; today's net_r is net of FEE and FUNDING only.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/scores/DRYRUN.json",
+    "field": "beside_registration.P-BRK-I1.brk_sealed_row.toll_accounting_status"
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "OPEN, for the operator",
+    "reading": "the ledger's BRK note leaves print-vs-deduction OPEN for the operator"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-TOLL-DRYRUN-2",
+   "class": "HARVESTED",
+   "harvest_key": "TOLL",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "PRINT, NOT A DEDUCTION — reported, not changed. The contract reads 'NET OF MEASURED 5m TOLL'; today's net_r is net of FEE and FUNDING only.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/scores/DRYRUN.json",
+    "field": "beside_registration.P-BRK-S1.brk_sealed_row.toll_accounting_status"
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "OPEN, for the operator",
+    "reading": "the ledger's BRK note leaves print-vs-deduction OPEN for the operator"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-TOLL-P-BRK-I1-1",
+   "class": "HARVESTED",
+   "harvest_key": "TOLL",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "PRINT, NOT A DEDUCTION — reported, not changed. The contract reads 'NET OF MEASURED 5m TOLL'; today's net_r is net of FEE and FUNDING only.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+    "field": "beside_registration.brk_sealed_row.toll_accounting_status"
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "OPEN, for the operator",
+    "reading": "the ledger's BRK note leaves print-vs-deduction OPEN for the operator"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-TOLL-P-BRK-I1-2",
+   "class": "HARVESTED",
+   "harvest_key": "TOLL",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "PRINT, NOT A DEDUCTION — reported, not changed. The contract reads 'NET OF MEASURED 5m TOLL'; today's net_r is net of FEE and FUNDING only.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/scores/P-BRK-I1.rows.json",
+    "field": "rows[0].beside.brk_sealed_row.toll_accounting_status"
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "OPEN, for the operator",
+    "reading": "the ledger's BRK note leaves print-vs-deduction OPEN for the operator"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-TOLL-P-BRK-S1-1",
+   "class": "HARVESTED",
+   "harvest_key": "TOLL",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "PRINT, NOT A DEDUCTION — reported, not changed. The contract reads 'NET OF MEASURED 5m TOLL'; today's net_r is net of FEE and FUNDING only.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+    "field": "beside_registration.brk_sealed_row.toll_accounting_status"
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "OPEN, for the operator",
+    "reading": "the ledger's BRK note leaves print-vs-deduction OPEN for the operator"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-TOLL-P-BRK-S1-2",
+   "class": "HARVESTED",
+   "harvest_key": "TOLL",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "PRINT, NOT A DEDUCTION — reported, not changed. The contract reads 'NET OF MEASURED 5m TOLL'; today's net_r is net of FEE and FUNDING only.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/scores/P-BRK-S1.rows.json",
+    "field": "rows[0].beside.brk_sealed_row.toll_accounting_status"
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/PROGRESS.json",
+    "quote": "OPEN, for the operator",
+    "reading": "the ledger's BRK note leaves print-vs-deduction OPEN for the operator"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-PLAN-DRAFTERR",
+   "class": "HARVESTED",
+   "harvest_key": "PLAN",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "**The resume paste's \"(FLIP_HOLD pins)\" is a drafting error** — FLIP_HOLD (1.0 ATR / 6 bars) is\nP-BRK-I1's *memory-line* pin set. The band set actually built and tuned per R1 is\n`{ribbon89_127, ribbon127_200, tap89, tap127, tap200}`, tuned to **ribbon127_200 / margin 1.0 ATR /\nhold 3 bars / ttl 400**. No text may quote FLIP_HOLD for S1.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/REGISTRATION_PLAN.md",
+    "field": "lines 95-98",
+    "context": {
+     "paragraph_rule": "from the line containing 'drafting error' through the last following non-blank line that does not open a new '**' lead"
+    }
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md",
+    "quote": "no registration re-worded or added",
+    "reading": "the error sits in the contract paste, which the executor may not re-word; amending it is the operator's"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-DRAFT-SMOKE",
+   "class": "HARVESTED",
+   "harvest_key": "DRAFT",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "**Disclosed, not moved:** `census/smoke/` and `null/smoke/`.\n- They are legitimate smoke roots with their own manifests, but they carry full lookalike filenames.\n- They were built before the R1 bands and the era split, so their contents are now wrong in substance.\n- Both suites fall back to a smoke root only when the full root has no manifest, so the default resolves correctly\n  today.\n- **Still in place at this draft.** At CLOSE: rebuild them, or quarantine them under `_partial_<ts>/` per LAW 2. The\n  operator chooses; nothing is deleted (§5.12).",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/BUILD_DRAFT.md",
+    "field": "lines 481-487",
+    "context": {
+     "section": "### R0.3 · Quarantined, disclosed, restored",
+     "section_line": 466
+    }
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/BUILD_DRAFT.md",
+    "quote": "operator chooses; nothing is deleted (§5.12).",
+    "reading": "rebuild or quarantine under _partial_<ts>/ is the operator's choice; THIS build discloses only and moves or deletes nothing (LAW 2)"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-M-i",
+   "class": "MEASURED",
+   "harvest_key": "MEASURED",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "0 of 6 REGISTRATION_TEXTS.json texts are found verbatim in REGISTRATION_TEXTS.md. P-GEN-1: NOT verbatim — only its first 274 of 26,111 characters occur in the .md; P-SPR-2: NOT verbatim — only its first 129 of 32,179 characters occur in the .md; P-BE-1: NOT verbatim — only its first 95 of 30,811 characters occur in the .md; P-TRG-2: NOT verbatim — only its first 1,373 of 23,317 characters occur in the .md; P-BRK-I1: NOT verbatim — only its first 418 of 28,082 characters occur in the .md; P-BRK-S1: NOT verbatim — only its first 772 of 29,113 characters occur in the .md.",
+   "text_form": "rendered from measured values recomputed this run",
+   "source": {
+    "path": [
+     "research_outputs/tierc10/REGISTRATION_TEXTS.json",
+     "research_outputs/tierc10/REGISTRATION_TEXTS.md"
+    ],
+    "field": "measured.i"
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/REGISTRATION_TEXTS.md",
+    "quote": "These are the exact bytes",
+    "reading": "the document asserts byte-identity with the filing; re-rendering it is the executor's"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-M-ii",
+   "class": "MEASURED",
+   "harvest_key": "MEASURED",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "8 of 20 arms that carry a haircut twin show beside.haircut_twin.twin_expectancy_r > tc_expectancy_r: P-BE-1 rows[1] 'be-floor-1R vs card-v6 (CLASSIC5, tuning) [Tier-E]': tc -0.0250 R, twin -0.0002 R; P-BE-1 rows[3] 'be-floor-2R sensitivity vs card-v6 (CLASSIC5, full) [Tier-E]': tc +0.1889 R, twin +0.1979 R; P-BRK-I1 rows[0] 'CLASSIC5-memory-line': tc +0.7183 R, twin +0.8946 R; P-BRK-I1 rows[1] 'CLASSIC5-tierE-band': tc +0.3518 R, twin +0.5100 R; P-BRK-I1 rows[2] 'PANEL17-tierE-memory-line': tc +0.4219 R, twin +0.5172 R; P-TRG-2 rows[0] 'trg-9/12 vs card v6 · CLASSIC5 · full': tc +0.4664 R, twin +0.4756 R; P-TRG-2 rows[1] 'trg-9/12 vs zero · CLASSIC5 · full': tc +0.4664 R, twin +0.4756 R; P-TRG-2 rows[2] 'trg-9/12 vs card v6 · CLASSIC5 · tuning era': tc +0.1777 R, twin +0.1989 R. 1 of 21 arms carry no haircut twin: P-BE-1 rows[0] 'be-floor-1R vs card-v6 (CLASSIC5, full)'.",
+   "text_form": "rendered from measured values recomputed this run",
+   "source": {
+    "path": [
+     "research_outputs/tierc10/scores"
+    ],
+    "field": "measured.ii"
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md",
+    "quote": "the slippage-twin question named for the autopsy",
+    "reading": "the contract routes the slippage-twin question to the autopsy"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-M-iii",
+   "class": "MEASURED",
+   "harvest_key": "MEASURED",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "os.path.exists(analytics/rangefinder.py) = False; os.path.exists(analytics/rangefinder_census.py) = True.",
+   "text_form": "rendered from measured values recomputed this run",
+   "source": {
+    "path": [
+     "analytics"
+    ],
+    "field": "measured.iii"
+   },
+   "owner": "operator",
+   "owner_basis": {
+    "path": "exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md",
+    "quote": "twin module-ized as analytics/rangefinder.py",
+    "reading": "the contract names analytics/rangefinder.py; the executor's lean L3 names analytics/rangefinder_census.py; accepting the lean or ordering the rename is the operator's"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-M-iv",
+   "class": "MEASURED",
+   "harvest_key": "MEASURED",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "PROGRESS.json head 6b15def66f73e3fcd05b6dc5a0516fcd2ac1d1c7 vs git rev-parse HEAD 3d55988dfcbb6b7ffb53855c325545ae642c763e: equal = False; the ledger's head is an ancestor of HEAD = True; commits on HEAD after the ledger's head = 18.",
+   "text_form": "rendered from measured values recomputed this run",
+   "source": {
+    "path": [
+     "research_outputs/tierc10/PROGRESS.json",
+     ".git"
+    ],
+    "field": "measured.iv"
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md",
+    "quote": "after EVERY stage: commit + update research_outputs/tierc10/PROGRESS.json",
+    "reading": "LAW 6 puts the ledger update on the executor"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-M-v",
+   "class": "MEASURED",
+   "harvest_key": "MEASURED",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "28 worktree(s) besides the main one; 28 of them reach 0 of the 28 tierc10 commits reachable from HEAD, 0 reach all of them. Their HEADs: a6da1b97e95c × 28. The main working tree reaches 28 of 28.",
+   "text_form": "rendered from measured values recomputed this run",
+   "source": {
+    "path": [
+     ".git"
+    ],
+    "field": "measured.v"
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md",
+    "quote": "Read-only worktrees for review",
+    "reading": "the contract's worktree attestation is the executor's"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "FN-M-vi",
+   "class": "MEASURED",
+   "harvest_key": "MEASURED",
+   "label": "REPORT-ONLY · Tier-E",
+   "text": "15 of 15 PROGRESS.json stages have no stage line in BUILD_DRAFT.md §1: STEP 0, D-CORE, CENSUS-R{4h,1d}, NULL/gaps-only, NULL/gaps+order, A (stamps), PANEL/gate, LANES (B mech), BRK (B mech), F-C10-RESUME, D-5M, CENSUS-R{5m}, B-REG (the six filed), B-CORE, B-5M. §1's bullet labels are: .",
+   "text_form": "rendered from measured values recomputed this run",
+   "source": {
+    "path": [
+     "research_outputs/tierc10/PROGRESS.json",
+     "research_outputs/tierc10/BUILD_DRAFT.md"
+    ],
+    "field": "measured.vi"
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md",
+    "quote": "+ one line to the draft",
+    "reading": "LAW 6 puts the draft line on the executor"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-CENSUS-00",
+   "class": "LEAN",
+   "harvest_key": "LEAN-CENSUS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] L1 1d = exactly SIX complete native-4h bars per UTC day (the twin's law); 1w = seven such complete days, MONDAY-anchored UTC, complete weeks only. Source = native 4h, never 1h/5m aggregates.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/census/leans.parquet",
+    "field": "row 0 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "00"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-CENSUS-01",
+   "class": "LEAN",
+   "harvest_key": "LEAN-CENSUS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] L2 SCALE_MULT: every registered lane and every Stage-A stamp uses the FROZEN 3.0 (Pine/twin pin of record). CENSUS-R prints the self-calibrated SCALE tables WITH the frozen-3.0 tables beside. Calibrator = grid 1.5..4.0 step 0.25 (Pine minval/step), nearest confirmed-macro-range density to 0.75 per 100 bars, tie-break toward 3.0 then lower; the whole grid printed (F-GRID: every grid whole).",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/census/leans.parquet",
+    "field": "row 1 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "01"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-CENSUS-02",
+   "class": "LEAN",
+   "harvest_key": "LEAN-CENSUS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] L3 analytics module = analytics/rangefinder_census.py: a PURE numpy port (no engine import, no IO, ATR passed IN as an argument), NOT added to analytics._MODULES (analytics_sha stays put) — printed as a finding.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/census/leans.parquet",
+    "field": "row 2 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "02"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-CENSUS-03",
+   "class": "LEAN",
+   "harvest_key": "LEAN-CENSUS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] L4 Outcome horizons H20/H100 = BARS OF THE LENS; censor (require k+H <= n-1), never shorten; anchor = close of the bar the event is KNOWN (known_at); signs and toll law per map_critic.md §4.6.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/census/leans.parquet",
+    "field": "row 3 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "03"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-CENSUS-04",
+   "class": "LEAN",
+   "harvest_key": "LEAN-CENSUS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] L6 Panels: CLASSIC5 = BTC ETH SOL NEAR ZEC; UNSEEN12 = the contract's twelve; PANEL17 = CLASSIC5 + admitted UNSEEN12.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/census/leans.parquet",
+    "field": "row 4 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "04"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-CENSUS-05",
+   "class": "LEAN",
+   "harvest_key": "LEAN-CENSUS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] C-a BOUNDARY AGE = bars since the AS-OF boundary VALUE on that side last changed: set at the confirm bar, moved by each same-side harden's redraw FROM the harden bar; 0 on the bar it changes. bnd_age = the NEAREST boundary's (tie -> top, the snapshot's law). range_age = t - confirm_i rides beside. Never from backdated_from: the back-dated left edge is render-only and lies in the past of its own knowledge.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/census/leans.parquet",
+    "field": "row 5 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "05"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-CENSUS-06",
+   "class": "LEAN",
+   "harvest_key": "LEAN-CENSUS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] C-b with NO live confirmed macro range (most bars at SCALE 3.0) %-of-range, dist-to-boundary, ages and deviations read NaN / -1 — never the last corpse's box; in_range says which.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/census/leans.parquet",
+    "field": "row 6 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "06"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-CENSUS-07",
+   "class": "LEAN",
+   "harvest_key": "LEAN-CENSUS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] C-c memory-touch is filed under BOTH definitions: `memory-touch-v1` (the machine's one-sided first touch per side) and `memory-touch-2s` (the first two-sided touch of the leash line, verdict unread, anchored at the touch bar).",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/census/leans.parquet",
+    "field": "row 7 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "07"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-CENSUS-08",
+   "class": "LEAN",
+   "harvest_key": "LEAN-CENSUS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] C-d retest-hold rides the OPERATOR's five R1 bands — ribbon 89/127, ribbon 127/200, tap 89, tap 127, tap 200 — EMAs of CLOSE on the lens's own bars, the warm-up NaN and never imputed. The hold pins (margin_atr, hold_bars) are TUNED under the R1 protocol on the 5m lens, TUNING ERA ONLY, and ONE pin pair rules all five bands and all three lenses; the 1d tuning is filed SEPARATELY for the Tier-E P-BRK-I1 print and never mixed into this grid. The candidacy TTL (400 bars, superseded at the next macro DIE) and the band warm-up remain executor pins.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/census/leans.parquet",
+    "field": "row 8 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "08"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-CENSUS-09",
+   "class": "LEAN",
+   "harvest_key": "LEAN-CENSUS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] C-h THE ERA SPLIT [R1]: every ledger and grid row carries the era of its ANCHOR bar's close — 'tuning' <= 2024-06-30T23:59:59Z, 'holdout' after. The grid is filed three ways per class: 'ALL' (the contract's full-history row) with 'tuning' and 'holdout' BESIDE it. They are not addends: an anchor is in exactly one era, and ALL is the union, but a median of a union is not a function of the parts' medians.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/census/leans.parquet",
+    "field": "row 9 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "09"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-CENSUS-10",
+   "class": "LEAN",
+   "harvest_key": "LEAN-CENSUS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] C-i THE COLLAR ON P-BRK-S1's SCORING GROUND [LAW 4 + R1]: the 5m retest-hold rows outside the TUNING era are FILED and never printed, summarised or quoted — not in a digest, not in a log line, not in a report field. printable(lens, cls, era) is the one gate and F-C10-COLLAR scans every artifact this build writes.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/census/leans.parquet",
+    "field": "row 10 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "10"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-CENSUS-11",
+   "class": "LEAN",
+   "harvest_key": "LEAN-CENSUS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] C-e the leash runs LEAN (retests=False) on EVERY lens: the two per-bar spam classes feed none of the six classes and the port's fixture proves the lean log is the full log minus them. The micro scale is not run: it writes no state, line or flip.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/census/leans.parquet",
+    "field": "row 11 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "11"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-CENSUS-12",
+   "class": "LEAN",
+   "harvest_key": "LEAN-CENSUS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] C-f the toll bps is READ per asset from Stage D's fee_schedule.json (round_trip_bps_used) and, absent that file, from tierc2_rules.FEE_BPS_ROUND_TRIP; the source rides every row. toll_atr on a row = median over THAT row's uncensored anchors; toll_atr_all = median over all of the class's anchors; pooled rows print the BINDING (max) per-asset toll.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/census/leans.parquet",
+    "field": "row 12 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "12"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-CENSUS-13",
+   "class": "LEAN",
+   "harvest_key": "LEAN-CENSUS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] C-g n below PROVISIONAL_MIN_N (30) is PRINTED and flagged provisional, the lineage's law; a statistic is NaN only when n = 0, and then nan_reason says why (no events / all anchors censored).",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/census/leans.parquet",
+    "field": "row 13 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "13"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-PANEL-L1",
+   "class": "LEAN",
+   "harvest_key": "LEAN-PANEL",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "1d = exactly SIX complete native-4h bars per UTC day (the twin's law); 1w = seven such complete days, MONDAY-anchored UTC, complete weeks only. Source = native 4h, never 1h/5m aggregates.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/panel/leans.parquet",
+    "field": "row 0 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "L1"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-PANEL-L2",
+   "class": "LEAN",
+   "harvest_key": "LEAN-PANEL",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "SCALE_MULT: every registered lane and every Stage-A stamp uses the FROZEN 3.0 (Pine/twin pin of record). CENSUS-R prints the self-calibrated SCALE tables WITH the frozen-3.0 tables beside. Calibrator = grid 1.5..4.0 step 0.25 (Pine minval/step), nearest confirmed-macro-range density to 0.75 per 100 bars, tie-break toward 3.0 then lower; the whole grid printed (F-GRID: every grid whole).",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/panel/leans.parquet",
+    "field": "row 1 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "L2"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-PANEL-L3",
+   "class": "LEAN",
+   "harvest_key": "LEAN-PANEL",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "analytics module = analytics/rangefinder_census.py: a PURE numpy port (no engine import, no IO, ATR passed IN as an argument), NOT added to analytics._MODULES (analytics_sha stays put) — printed as a finding.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/panel/leans.parquet",
+    "field": "row 2 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "L3"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-PANEL-L4",
+   "class": "LEAN",
+   "harvest_key": "LEAN-PANEL",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "Outcome horizons H20/H100 = BARS OF THE LENS; censor (require k+H <= n-1), never shorten; anchor = close of the bar the event is KNOWN (known_at); signs and toll law per map_critic.md §4.6.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/panel/leans.parquet",
+    "field": "row 3 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "L4"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-PANEL-L5",
+   "class": "LEAN",
+   "harvest_key": "LEAN-PANEL",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "All TC10 fetching lands in the snapshot only; promotion to the live cache and the LaCie mirror happen at CLOSE (the mirror command pushes — map_critic §4.2).",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/panel/leans.parquet",
+    "field": "row 4 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "L5"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-PANEL-L6",
+   "class": "LEAN",
+   "harvest_key": "LEAN-PANEL",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "Panels: CLASSIC5 = BTC ETH SOL NEAR ZEC; UNSEEN12 = the contract's twelve; PANEL17 = CLASSIC5 + admitted UNSEEN12. LOAO \"above-half\": 3/5 generalises to strict majority ceil((N+1)/2) → 7/12.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/panel/leans.parquet",
+    "field": "row 5 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "L6"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-PANEL-L7",
+   "class": "LEAN",
+   "harvest_key": "LEAN-PANEL",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "FDR: ONE fixed bar q/m = 0.10/6 = 0.016667 per scored row (no step-up) — that is what makes the six independently failable.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/panel/leans.parquet",
+    "field": "row 6 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "L7"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-PANEL-L8",
+   "class": "LEAN",
+   "harvest_key": "LEAN-PANEL",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "Rulers seeded 20260921; a sensitivity block re-runs with the lineage seed 20260816.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/panel/leans.parquet",
+    "field": "row 7 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "L8"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-PANEL-panel-verdict",
+   "class": "LEAN",
+   "harvest_key": "LEAN-PANEL",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "the SCORED statistic (verdict, p vs the BH bar) is the RAW panel expectancy — the lineage's ruler since TIER-C5; the equal-asset-risk co-headline carries its own NEW cluster-bootstrap CI and a would-be verdict beside it and gates nothing; disagreement is flagged on the row.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/panel/leans.parquet",
+    "field": "row 8 · column text",
+    "context": {
+     "lean_id_column": "lean",
+     "lean_id": "panel-verdict"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-STAMPS-1",
+   "class": "LEAN",
+   "harvest_key": "LEAN-STAMPS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] L2 SCALE_MULT: every Stage-A stamp uses the FROZEN 3.0 (Pine/twin pin of record), read BY OBJECT from tierc10_census.FROZEN_SCALE. The self-calibrated SCALE is a CENSUS-R report-only object and may not reach a stamp.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/stamps/leans.parquet",
+    "field": "row 0 · column lean",
+    "context": {
+     "lean_id_column": "n",
+     "lean_id": "1"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-STAMPS-2",
+   "class": "LEAN",
+   "harvest_key": "LEAN-STAMPS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] L4 as-of anchoring: an instant is stamped at the close of ITS OWN bar (instant_ms + the LANE lens's step), and the stamp bar is the last bar of the STAMP lens closed at or before that instant. A bar still forming at the instant is never read.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/stamps/leans.parquet",
+    "field": "row 1 · column lean",
+    "context": {
+     "lean_id_column": "n",
+     "lean_id": "2"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-STAMPS-3",
+   "class": "LEAN",
+   "harvest_key": "LEAN-STAMPS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] L6 Panels: the control is card v6 on CLASSIC5 = BTC ETH SOL NEAR ZEC; the twelve unseen assets are NOT ridden here and no lane but the known control is ridden anywhere in this module.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/stamps/leans.parquet",
+    "field": "row 2 · column lean",
+    "context": {
+     "lean_id_column": "n",
+     "lean_id": "3"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-STAMPS-4",
+   "class": "LEAN",
+   "harvest_key": "LEAN-STAMPS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] L8 seed 20260921 threaded explicitly; sensitivity echo 20260816. Nothing in Stage A draws at random — the seeds ride the manifest so a later consumer cannot invent one.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/stamps/leans.parquet",
+    "field": "row 3 · column lean",
+    "context": {
+     "lean_id_column": "n",
+     "lean_id": "4"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-STAMPS-5",
+   "class": "LEAN",
+   "harvest_key": "LEAN-STAMPS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] S-a MACRO STATE IS FOUR-VALUED. The contract says the stamps are explicit nulls with macro_state='NONE' when no macro range is alive. Taken to the letter that would collapse BULL_EXP and BEAR_EXP — the machine's post-DIE expansion latch, a genuine as-of fact and the most useful half of the column — into 'NONE', because at SCALE 3.0 the latch is non-zero on exactly the bars where no range is alive. So: every GEOMETRY stamp is null the moment no range is alive (the forward-fill ban in full), and macro_state reads 'NONE' only when no range is alive AND the machine has sealed no pivot — nothing known. `in_range` is filed beside it, so the strict two-valued reading is one filter away and nothing is lost either way.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/stamps/leans.parquet",
+    "field": "row 4 · column lean",
+    "context": {
+     "lean_id_column": "n",
+     "lean_id": "5"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-STAMPS-6",
+   "class": "LEAN",
+   "harvest_key": "LEAN-STAMPS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] S-b THE +1R INSTANT is the card's OWN latch bar, not a breakeven floor: the first bar j in (entry_i, exit_i] whose FAVOURABLE extreme reaches entry + 1R — the bar `trail_arm_after_r = 1.0` arms the ratchet on. It is re-derived from the raw 4h bars because the ride records the latch (`reached_1r`) and not its bar, and the extractor HALTS if its re-derivation and the ride's latch ever disagree on one campaign.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/stamps/leans.parquet",
+    "field": "row 5 · column lean",
+    "context": {
+     "lean_id_column": "n",
+     "lean_id": "6"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-STAMPS-7",
+   "class": "LEAN",
+   "harvest_key": "LEAN-STAMPS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] S-c A REJECT IS STAMPED WHERE IT BECAME KNOWABLE, not at the arming bar: tide/d at the arming bar, no_trigger at the last bar the window searched, position_open at the trigger bar. REJECT_BAR_LAW carries the rule per reason and rides every reject row.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/stamps/leans.parquet",
+    "field": "row 6 · column lean",
+    "context": {
+     "lean_id_column": "n",
+     "lean_id": "7"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  },
+  {
+   "id": "LEAN-STAMPS-8",
+   "class": "LEAN",
+   "harvest_key": "LEAN-STAMPS",
+   "label": "LEAN — an executor operationalisation, labelled as such; not a ruling, not a defect, not a result.",
+   "text": "[LEAN-HEPHAESTUS] S-d `window_open` is emitted as its own instant although card v6 opens the window AT the arming bar (the 12/89 cross is both). The two rows are equal BY CONSTRUCTION on v6 and a fixture leg demands it; they are kept apart so a later card whose arming and window differ needs no new vocabulary.",
+   "text_form": "verbatim string",
+   "source": {
+    "path": "research_outputs/tierc10/stamps/leans.parquet",
+    "field": "row 7 · column lean",
+    "context": {
+     "lean_id_column": "n",
+     "lean_id": "8"
+    }
+   },
+   "owner": "executor",
+   "owner_basis": {
+    "path": "research_outputs/tierc10/OPERATOR_RULINGS.md",
+    "quote": "the lean is marked as such and is NOT the ruling",
+    "reading": "a lean is the executor's operationalisation; the operator may overrule it"
+   },
+   "status": "REPORTED, NOT FIXED"
+  }
+ ]
+}

@@ -1,0 +1,168 @@
+TIER-C10 · CLOSE · v6 CONTROL HAIRCUT TWIN (ADDED column, book level) — FIXTURES
+REPORT-ONLY · Tier-E · v6 control haircut twin (ADDED column) · no CI / p / verdict · no registration scored or read for its verdict
+script: scripts/tierc10_close_v6_control_twin.py
+substrate: tc10_20260921 (NAIAD_CACHE_DIR guard held at import) · PYTHONDONTWRITEBYTECODE=1
+contract: exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md sha 8a0bf279bcab0f27161a7d965535445807f4e713e77d045b0ba124bc7f803c7a == PROGRESS contract_of_record
+clause (exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md:53-55): "The 5-asset control's TC-series accounting stays untouched; its twin is an ADDED column."
+as_of_of_record (PROGRESS): 2026-09-21T16:00:00Z
+INPUTS — every sha == its PROGRESS.json stage record:
+  research_outputs/tierc10/panel/control_journal.parquet PANEL/gate    70102 B  fcbf5db0480416b0a5c7f704987980aea220650cb0764d5dd4095611fae64c1c
+  research_outputs/tierc10/panel/control_headline.parquet PANEL/gate    31449 B  602b10ef525a829d1b0c6267949243c092e732e33faa173b21bbb21eec1c3e20
+  research_outputs/tierc10/data/fee_schedule.json  D-CORE        23925 B  3a18b84e0211110b69eb09661b7e9a39db08f41c69ebdc4cc8ca8eb54a07e5cc
+  research_outputs/tierc10/data/STAGE_D_MANIFEST.json D-CORE       405715 B  de2e8663bbf101dfb46ad9f77a4969ca73648e78373646c0d17b81b9f9a87421
+  research_outputs/tierc10/scores/P-TRG-2.rows.json B-CORE       102709 B  9fa07a0fa1b832ef7a1012a796cfd7fdd73ab2e1275d4faa4340666493c340c8
+journal as-of 2026-09-21T16:00:00Z == as_of_of_record · schema/tier/rate preamble held
+
+OUTPUTS (written):
+  research_outputs/tierc10/close/V6_CONTROL_HAIRCUT_TWIN.parquet   19355 B  499f3843de176fbe6ec175d0fdae788bb3bc182ee2a1deaff762a19f7098ba8e
+  research_outputs/tierc10/close/V6_CONTROL_HAIRCUT_TWIN.md       8838 B  515ead1fde4f6a491baf351be0f3e4e2317718a3848ec311de14e9b819350378
+
+TABLE (REPORT-ONLY · Tier-E · v6 control haircut twin (ADDED column)) — 18 rows = 3 eras x (5 assets + ALL):
+  full    BTCUSDT  A   n  39 · tc -0.126742 · twin -0.115436 · companion -0.148491 · sign≠ False / companion sign≠ False
+  full    ETHUSDT  A   n  48 · tc +0.145862 · twin +0.175217 · companion +0.131589 · sign≠ False / companion sign≠ False
+  full    NEARUSDT B   n  40 · tc -0.039190 · twin -0.045286 · companion -0.060217 · sign≠ False / companion sign≠ False
+  full    SOLUSDT  B   n  36 · tc +0.270521 · twin +0.279882 · companion +0.247858 · sign≠ False / companion sign≠ False
+  full    ZECUSDT  B   n  37 · tc +0.851723 · twin +0.844793 · companion +0.826811 · sign≠ False / companion sign≠ False
+  full    ALL      A|B n 200 · tc +0.208717 · twin +0.217150 · companion +0.188157 · sign≠ False / companion sign≠ False
+  tuning  BTCUSDT  A   n  26 · tc -0.468208 · twin -0.442146 · companion -0.488706 · sign≠ False / companion sign≠ False
+  tuning  ETHUSDT  A   n  29 · tc -0.006406 · twin +0.054767 · companion -0.019956 · sign≠ True / companion sign≠ False
+  tuning  NEARUSDT B   n  23 · tc -0.258726 · twin -0.255816 · companion -0.279791 · sign≠ False / companion sign≠ False
+  tuning  SOLUSDT  B   n  23 · tc +0.631394 · twin +0.655377 · companion +0.609517 · sign≠ False / companion sign≠ False
+  tuning  ZECUSDT  B   n  22 · tc +0.112000 · twin +0.113655 · companion +0.088537 · sign≠ False / companion sign≠ False
+  tuning  ALL      A|B n 123 · tc -0.010763 · twin +0.014494 · companion -0.030517 · sign≠ True / companion sign≠ False
+  holdout BTCUSDT  A   n  13 · tc +0.556192 · twin +0.537984 · companion +0.531940 · sign≠ False / companion sign≠ False
+  holdout ETHUSDT  A   n  19 · tc +0.378271 · twin +0.359062 · companion +0.362895 · sign≠ False / companion sign≠ False
+  holdout NEARUSDT B   n  17 · tc +0.257830 · twin +0.239548 · companion +0.236854 · sign≠ False / companion sign≠ False
+  holdout SOLUSDT  B   n  13 · tc -0.367947 · twin -0.384454 · companion -0.392001 · sign≠ False / companion sign≠ False
+  holdout ZECUSDT  B   n  15 · tc +1.936649 · twin +1.917129 · companion +1.909612 · sign≠ False / companion sign≠ False
+  holdout ALL      A|B n  77 · tc +0.559314 · twin +0.540874 · companion +0.537466 · sign≠ False / companion sign≠ False
+
+── F-VT-TC ───────────────────────────────────────────────────────────
+FAILS IF: tc_expectancy_r for any asset / ALL row differs from panel/control_headline.parquet expectancy_r (aggregation 'raw_panel', same key) at the headline's filed precision (r4), or any row's n differs from the headline's; OR any row's n / tc_expectancy_r differs, bit for bit, from the count / np.mean of the sha-verified journal's net_r over the same era and key.
+[REAL] GREEN
+    full/BTCUSDT  n  39 = headline  39 · r4(tc -0.12674169230769233) = -0.1267 = headline -0.1267
+    full/ETHUSDT  n  48 = headline  48 · r4(tc 0.14586229166666664) = 0.1459 = headline 0.1459
+    full/NEARUSDT n  40 = headline  40 · r4(tc -0.039189925) = -0.0392 = headline -0.0392
+    full/SOLUSDT  n  36 = headline  36 · r4(tc 0.2705207777777777) = 0.2705 = headline 0.2705
+    full/ZECUSDT  n  37 = headline  37 · r4(tc 0.8517225945945947) = 0.8517 = headline 0.8517
+    full/ALL      n 200 = headline 200 · r4(tc 0.20871675500000003) = 0.2087 = headline 0.2087
+    (a) EXACT vs sha-verified journal: 18/18 rows bit-equal (n and mean)
+    (b) HEADLINE at its filed 4 dp: 6/6 full-era rows agree
+[SABOTAGE] +1e-9 on one net_r (first BTCUSDT campaign), build re-run: RED (as required)
+    (a) EXACT vs sha-verified journal: 14/18 rows bit-equal (n and mean)
+    (b) HEADLINE at its filed 4 dp: 6/6 full-era rows agree
+    [BAD a] full/BTCUSDT: n 39 vs 39, tc -0.1267416922820513 vs journal -0.12674169230769233
+    [BAD a] full/ALL: n 200 vs 200, tc 0.208716755005 vs journal 0.20871675500000003
+    [BAD a] tuning/BTCUSDT: n 26 vs 26, tc -0.4682083076538462 vs journal -0.46820830769230776
+    [BAD a] tuning/ALL: n 123 vs 123, tc -0.010762772349593488 vs journal -0.01076277235772357
+    caught by: (a) EXACT YES · (b) HEADLINE no — the headline is filed at 4 dp and cannot see 1e-9; the exact clause does
+[SABOTAGE] +1e-2 on one net_r (first BTCUSDT campaign) — proves the headline clause is live: RED (as required)
+    (a) EXACT vs sha-verified journal: 14/18 rows bit-equal (n and mean)
+    (b) HEADLINE at its filed 4 dp: 4/6 full-era rows agree
+    [BAD a] full/BTCUSDT: n 39 vs 39, tc -0.12648528205128207 vs journal -0.12674169230769233
+    [BAD a] full/ALL: n 200 vs 200, tc 0.208766755 vs journal 0.20871675500000003
+    [BAD a] tuning/BTCUSDT: n 26 vs 26, tc -0.4678236923076924 vs journal -0.46820830769230776
+    [BAD a] tuning/ALL: n 123 vs 123, tc -0.010681471544715455 vs journal -0.01076277235772357
+    [BAD b] full/BTCUSDT: n 39 vs headline 39; r4(tc) -0.1265 vs headline -0.1267
+    [BAD b] full/ALL: n 200 vs headline 200; r4(tc) 0.2088 vs headline 0.2087
+    caught by: (a) EXACT YES · (b) HEADLINE YES — the BTCUSDT mean moves by more than one 4-dp step
+LEG F-VT-TC: GREEN (real pass; 2 sabotage(s), all RED: True)
+
+── F-VT-REUSE ────────────────────────────────────────────────────────
+FAILS IF: for the full era (the auditor's leg; tuning and holdout are extensions): |ALL twin_expectancy_r - (P-TRG-2 beside.haircut_twin.twin_expectancy_r - twin_difference_r)| exceeds the bound DERIVED from the journal's measured filing precision (mean per-campaign half-unit propagation + 1e-12), or the n differs from base_n; or the TC / companion residual exceeds its bound; or any asset's twin rate / tier differs from fee_schedule.json's; or the precision cannot be measured. [FINDING F-VT-REUSE-TOL: the literal 1e-12 is printed, not asserted]
+[REAL] GREEN
+    P-TRG-2 twin function per era: {'full': 'tierc10_data.haircut_twin_net_r (as filed)', 'tuning': 'tierc10_data.haircut_twin_net_r (as filed)', 'holdout': 'tierc10_data.haircut_twin_net_r (as filed)'}
+    filed precision MEASURED: every gross_r/entry_px/exit_px/r_dist/funding_r/net_r value is a fixed point of round(., 6) -> half-unit 5.0e-07
+    [OK ] full    (AUDITOR'S LEG) n 200 vs base_n 200 · twin 0.21715046024043008 vs P-TRG-2 base 0.21715045066855887 |Δ| 9.572e-09 <= bound 5.630e-07: True
+          tc |Δ| 7.584e-09 <= 5.000e-07: True · companion |Δ| 3.112e-09 <= 1.063e-06: True
+          literal 1e-12 (NOT asserted, [FINDING F-VT-REUSE-TOL]): does not hold (|Δ| 9.572e-09)
+    [OK ] tuning  (extension) n 123 vs base_n 123 · twin 0.014494025338718585 vs P-TRG-2 base 0.014494013867787509 |Δ| 1.147e-08 <= bound 5.672e-07: True
+          tc |Δ| 7.250e-09 <= 5.000e-07: True · companion |Δ| 1.200e-08 <= 1.067e-06: True
+          literal 1e-12 (NOT asserted, [FINDING F-VT-REUSE-TOL]): does not hold (|Δ| 1.147e-08)
+    [OK ] holdout (extension) n 77 vs base_n 77 · twin 0.5408743757327745 vs P-TRG-2 base 0.5408743691944663 |Δ| 6.538e-09 <= bound 5.562e-07: True
+          tc |Δ| 8.119e-09 <= 5.000e-07: True · companion |Δ| 1.108e-08 <= 1.056e-06: True
+          literal 1e-12 (NOT asserted, [FINDING F-VT-REUSE-TOL]): does not hold (|Δ| 6.538e-09)
+    [OK ] per asset, the twin's rate and tier == fee_schedule.json's haircut_twin_bps_side / haircut_twin_tier
+[SABOTAGE] BTC moved to tier C in a COPY of the tier map: RED (as required)
+    filed precision MEASURED: every gross_r/entry_px/exit_px/r_dist/funding_r/net_r value is a fixed point of round(., 6) -> half-unit 5.0e-07
+    [BAD] full    (AUDITOR'S LEG) n 200 vs base_n 200 · twin 0.20020425939921105 vs P-TRG-2 base 0.21715045066855887 |Δ| 1.695e-02 <= bound 5.630e-07: False
+          tc |Δ| 7.584e-09 <= 5.000e-07: True · companion |Δ| 1.695e-02 <= 1.063e-06: False
+          literal 1e-12 (NOT asserted, [FINDING F-VT-REUSE-TOL]): does not hold (|Δ| 1.695e-02)
+    [BAD] tuning  (extension) n 123 vs base_n 123 · twin -0.002846922748982128 vs P-TRG-2 base 0.014494013867787509 |Δ| 1.734e-02 <= bound 5.672e-07: False
+          tc |Δ| 7.250e-09 <= 5.000e-07: True · companion |Δ| 1.734e-02 <= 1.067e-06: False
+          literal 1e-12 (NOT asserted, [FINDING F-VT-REUSE-TOL]): does not hold (|Δ| 1.734e-02)
+    [BAD] holdout (extension) n 77 vs base_n 77 · twin 0.5245587451684027 vs P-TRG-2 base 0.5408743691944663 |Δ| 1.632e-02 <= bound 5.562e-07: False
+          tc |Δ| 8.119e-09 <= 5.000e-07: True · companion |Δ| 1.632e-02 <= 1.056e-06: False
+          literal 1e-12 (NOT asserted, [FINDING F-VT-REUSE-TOL]): does not hold (|Δ| 1.632e-02)
+    [BAD] rate/tier: BTCUSDT: function rate [15.0] tier ['C'] vs fee_schedule 7.0 tier A
+    tier map restored: BTC -> A
+[SABOTAGE] one campaign dropped from the book: RED (as required)
+    filed precision MEASURED: every gross_r/entry_px/exit_px/r_dist/funding_r/net_r value is a fixed point of round(., 6) -> half-unit 5.0e-07
+    [BAD] full    (AUDITOR'S LEG) n 199 vs base_n 200 · twin 0.20772223839346926 vs P-TRG-2 base 0.21715045066855887 |Δ| 9.428e-03 <= bound 5.630e-07: False
+          tc |Δ| 8.062e-03 <= 5.000e-07: False · companion |Δ| 8.099e-03 <= 1.063e-06: False
+          literal 1e-12 (NOT asserted, [FINDING F-VT-REUSE-TOL]): does not hold (|Δ| 9.428e-03)
+    [BAD] tuning  (extension) n 122 vs base_n 123 · twin -0.002545913861666057 vs P-TRG-2 base 0.014494013867787509 |Δ| 1.704e-02 <= bound 5.672e-07: False
+          tc |Δ| 1.495e-02 <= 5.000e-07: False · companion |Δ| 1.500e-02 <= 1.067e-06: False
+          literal 1e-12 (NOT asserted, [FINDING F-VT-REUSE-TOL]): does not hold (|Δ| 1.704e-02)
+    [OK ] holdout (extension) n 77 vs base_n 77 · twin 0.5408743757327745 vs P-TRG-2 base 0.5408743691944663 |Δ| 6.538e-09 <= bound 5.562e-07: True
+          tc |Δ| 8.119e-09 <= 5.000e-07: True · companion |Δ| 1.108e-08 <= 1.056e-06: True
+          literal 1e-12 (NOT asserted, [FINDING F-VT-REUSE-TOL]): does not hold (|Δ| 6.538e-09)
+    [OK ] per asset, the twin's rate and tier == fee_schedule.json's haircut_twin_bps_side / haircut_twin_tier
+LEG F-VT-REUSE: GREEN (real pass; 2 sabotage(s), all RED: True)
+
+── F-VT-UNTOUCHED ────────────────────────────────────────────────────
+FAILS IF: net_r in the build's campaign frame is not bit-identical (same keys, same order) to the sha-verified journal's, or the twin is not in its own column; or fee_schedule.json's bytes hash to anything but the sha taken before the build AND its PROGRESS D-CORE record; or control_journal.parquet's sha left its PANEL/gate record; or the TC-series toll printed beside a row is not fee_schedule's round_trip_bps_used.
+[REAL] GREEN
+    [OK ] net_r carried bit-for-bit from the sha-verified journal on all 200 campaigns, same keys, same order
+    [OK ] the twin lives in its OWN column net_r_twin (not equal to net_r)
+    [OK ] fee_schedule.json sha now 3a18b84e0211110b… vs before the build 3a18b84e0211110b… vs PROGRESS D-CORE 3a18b84e0211110b… (must be one value)
+    [OK ] control_journal.parquet sha now fcbf5db0480416b0… vs PROGRESS PANEL/gate fcbf5db0480416b0… (must be equal)
+    [OK ] the TC-series toll printed beside every row [10.0] == fee_schedule round_trip_bps_used [10.0]
+[SABOTAGE] the twin written over net_r: RED (as required)
+    [BAD] net_r carried bit-for-bit from the sha-verified journal on all 200 campaigns, same keys, same order
+    [BAD] the twin lives in its OWN column net_r_twin (not equal to net_r)
+    [OK ] fee_schedule.json sha now 3a18b84e0211110b… vs before the build 3a18b84e0211110b… vs PROGRESS D-CORE 3a18b84e0211110b… (must be one value)
+    [OK ] control_journal.parquet sha now fcbf5db0480416b0… vs PROGRESS PANEL/gate fcbf5db0480416b0… (must be equal)
+    [OK ] the TC-series toll printed beside every row [10.0] == fee_schedule round_trip_bps_used [10.0]
+[SABOTAGE] one byte of (an in-memory copy of) fee_schedule.json flipped: RED (as required)
+    [OK ] net_r carried bit-for-bit from the sha-verified journal on all 200 campaigns, same keys, same order
+    [OK ] the twin lives in its OWN column net_r_twin (not equal to net_r)
+    [BAD] fee_schedule.json sha now 4d6c090555931033… vs before the build 3a18b84e0211110b… vs PROGRESS D-CORE 3a18b84e0211110b… (must be one value)
+    [OK ] control_journal.parquet sha now fcbf5db0480416b0… vs PROGRESS PANEL/gate fcbf5db0480416b0… (must be equal)
+    [OK ] the TC-series toll printed beside every row [10.0] == fee_schedule round_trip_bps_used [10.0]
+LEG F-VT-UNTOUCHED: GREEN (real pass; 2 sabotage(s), all RED: True)
+
+── F-VT-LABEL ────────────────────────────────────────────────────────
+FAILS IF: any row is not report_only / not labelled REPORT-ONLY, any column name is a ci / p / verdict / loao column, or an era table in the .md lacks the REPORT-ONLY caption.
+[REAL] GREEN
+    [OK ] every row report_only True and labelled 'REPORT-ONLY · Tier-E · v6 control haircut twin (ADDED column)' (18/18)
+    [OK ] no ci / p / verdict / loao column (offenders: none)
+    [OK ] every era table in the .md carries the REPORT-ONLY caption (3/3 tables, 3 eras)
+[SABOTAGE] a 'verdict' column added: RED (as required)
+    [OK ] every row report_only True and labelled 'REPORT-ONLY · Tier-E · v6 control haircut twin (ADDED column)' (18/18)
+    [BAD] no ci / p / verdict / loao column (offenders: ['verdict'])
+    [OK ] every era table in the .md carries the REPORT-ONLY caption (3/3 tables, 3 eras)
+[SABOTAGE] one row un-marked report_only: RED (as required)
+    [BAD] every row report_only True and labelled 'REPORT-ONLY · Tier-E · v6 control haircut twin (ADDED column)' (17/18)
+    [OK ] no ci / p / verdict / loao column (offenders: none)
+    [OK ] every era table in the .md carries the REPORT-ONLY caption (3/3 tables, 3 eras)
+LEG F-VT-LABEL: GREEN (real pass; 2 sabotage(s), all RED: True)
+
+── F-DET ─────────────────────────────────────────────────────────────
+FAILS IF: two in-process builds, each from a fresh read of every input, are not byte-identical to each other (parquet and md), or the filed outputs are not byte-identical to them.
+[REAL] GREEN
+    [OK ] parquet: build 1 499f3843de176fbe… vs build 2 499f3843de176fbe… (must be equal)
+    [OK ] md: build 1 515ead1fde4f6a49… vs build 2 515ead1fde4f6a49… (must be equal)
+    [OK ] filed parquet 499f3843de176fbe… vs fresh build 499f3843de176fbe… (must be equal)
+    [OK ] filed md 515ead1fde4f6a49… vs fresh build 515ead1fde4f6a49… (must be equal)
+[SABOTAGE] second build emits its rows in reverse order: RED (as required)
+    [BAD] parquet: build 1 499f3843de176fbe… vs build 2 c2d5e9413f02db19… (must be equal)
+    [OK ] md: build 1 515ead1fde4f6a49… vs build 2 515ead1fde4f6a49… (must be equal)
+    [OK ] filed parquet 499f3843de176fbe… vs fresh build 499f3843de176fbe… (must be equal)
+    [OK ] filed md 515ead1fde4f6a49… vs fresh build 515ead1fde4f6a49… (must be equal)
+LEG F-DET: GREEN (real pass; 1 sabotage(s), all RED: True)
+
+POST: every input re-hashes to its PROGRESS record after the run (moved: none)
+
+TALLY: 5 legs · 5 GREEN · 0 RED
+EXIT 0
