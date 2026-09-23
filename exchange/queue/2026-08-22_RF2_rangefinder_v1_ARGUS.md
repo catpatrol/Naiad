@@ -2,7 +2,9 @@
 
 RATIFIED: operator, 2026-08-22 — by firing; field-test verdict "ok, make it better";
 standing leans authorization. Reviewer ARGUS, executor HEPHAESTUS. Display-only;
-renders-never-rules. BUILT: PENDING
+renders-never-rules.
+BUILT: exchange/reports/BUILD_2026-08-22_RANGEFINDER_V1.md · 6c21a05
+(stamped by OR-2 STEP 10 — queue hygiene, OR1-g — 2026-09-23. The build document names no commit — its disposition row reads 'hand commit this session' — so the commit is read from git log: 6c21a05 'rangefinder: SS12-RangeFinder v1 — the operator's grammar (RF-2)' 2026-08-22 07:26:38; the build document published in 366701e)
 
 ## CHANGES vs v0 (each traceable to a field divergence, recorded in the build doc)
 

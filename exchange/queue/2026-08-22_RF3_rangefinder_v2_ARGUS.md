@@ -3,7 +3,9 @@
 RATIFIED: operator, 2026-08-22 — by firing; field verdict "improving but not quite
 there"; operator diagnoses of record: micro-only detection misses macro balances;
 grey-arrow flips wanted; dashed-line clutter leashed. Executor HEPHAESTUS, reviewer
-ARGUS. Display-only; renders-never-rules. BUILT: PENDING
+ARGUS. Display-only; renders-never-rules.
+BUILT: exchange/reports/BUILD_2026-08-22_RANGEFINDER_V2.md · 374b9ef
+(stamped by OR-2 STEP 10 — queue hygiene, OR1-g — 2026-09-23. The build document names no commit — its disposition row reads 'hand commit this session' — so the commit is read from git log: 374b9ef 'rangefinder: SS12-RangeFinder v2 — hierarchy + flips + the leash (RF-3)' 2026-08-22 11:36:01, the build document published in 1d10bd9; follow-ups 70ca5c1 (Pine v2 compile fix), fab5e67 (F-RF-6v2 declaration-order clause), 6837ce0 (short titles, all three versions))
 
 ## CHANGES vs v1
 

@@ -5,7 +5,8 @@ RATIFIED: operator, 2026-08-22 — by firing; rulings D-R1a/D-R2a/D-R3b/D-R4 + n
 "SS12-RangeFinder". SOURCE: public artifacts of a closed-source system (@sergio_tesla_,
 2026-08-10 post + two screenshots); reconstruction, not code access. Display-only;
 renders-never-rules; hypotheses route to APOLLO under G-7.
-BUILT: PENDING
+BUILT: exchange/reports/BUILD_2026-08-22_RANGEFINDER_V0.md · 974e9be
+(stamped by OR-2 STEP 10 — queue hygiene, OR1-g — 2026-09-23. The build document names no commit — its disposition row reads 'hand commit this session' — so the commit is read from git log: 974e9be 'rangefinder: SS12-RangeFinder v0 — range lifecycle with deviations (RF-1 v2)' 2026-08-22 05:22:59; the build document published in 7e7bec0)
 IDEMPOTENCE NOTE: no prior RF1 queue file existed at firing; this v2 is filed fresh
 (the fresh-file path), carrying the v2 designation from the commission itself.
 
