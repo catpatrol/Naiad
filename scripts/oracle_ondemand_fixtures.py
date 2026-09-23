@@ -1152,12 +1152,14 @@ def _movers_failure(plant: str | None) -> tuple[bool, str]:
         diff = {k: (policy[k], want[k]) for k in want if policy[k] != want[k]}
         return False, (f"MOVERS_FAILURE_HOLDS_FLAG is not what decides — (holds, "
                        f"movers, slot) -> (got, want): {diff}")
-    if OW.ONDEMAND_REGISTER["MOVERS_FAILURE_HOLDS_FLAG"]["ruled"] is not False or \
-            "[VETO]" not in OW.ONDEMAND_REGISTER["MOVERS_FAILURE_HOLDS_FLAG"]["source"]:
-        return False, "MOVERS_FAILURE_HOLDS_FLAG is no longer flagged unruled [VETO]"
+    # OR-2 R-8 (operator 2026-09-22) ruled the row: until then this read "still [VETO]"
+    row = OW.ONDEMAND_REGISTER["MOVERS_FAILURE_HOLDS_FLAG"]
+    if row["ruled"] is not True or not str(row["source"]).startswith(OW.R8_RULED):
+        return False, (f"MOVERS_FAILURE_HOLDS_FLAG is not ruled by R-8 — 'ruled': {row['ruled']!r}, "
+                       f"source opens {str(row['source'])[:40]!r}")
     return True, (f"movers exit 1, script absent, a 1 s timeout and exit-0-without-a-"
                   f"json each: said plainly, chain exit 0, NO flag, jobs {want_ran}, "
-                  f"selfcheck PASS; and on a STANDING flag the [VETO] constant decides: "
+                  f"selfcheck PASS; and on a STANDING flag the constant (ruled R-8) decides: "
                   f"False (default) -> CLEARED by the clean top-up + render; True -> "
                   f"left STANDING byte-identical and said so; True with a clean organ, "
                   f"or on a refresh (organ not supposed to run) -> CLEARED")
@@ -1173,7 +1175,7 @@ def _movers_break() -> tuple[bool, str]:
 
 def f_sk_2g() -> None:
     prove("F-SK-2g", "WIRE DOWN FOR MOVERS — a failing movers organ never fails the "
-                     "edition, never raises the flag, and the [VETO] row decides "
+                     "edition, never raises the flag, and the R-8-ruled row decides "
                      "whether it holds one",
           _movers_break, lambda: _movers_failure(None))
 

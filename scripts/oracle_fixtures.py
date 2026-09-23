@@ -5238,15 +5238,10 @@ def f_br_14() -> None:
         if stale:
             bad.append(f"RANGE_ONLY_KEYS names {stale}, which the snapshot no longer carries — "
                        f"the by-value scan is hunting stale names")
-        unruled = [k for k in ("RANGE_LENS", "RANGE_WATCH_ATR") if OD.REGISTER[k]["ruled"]]
-        if unruled:
-            bad.append(f"{unruled} read 'ruled': True — they are the contract's [VETO] defaults "
-                       f"and no ruling is on record")
+        # OR-2 R-8 (operator 2026-09-22) ruled both: until then this read "'ruled': False,
+        # listed in the [VETO] appendix"; now ruled with the R-8 record, in the RULED table
+        bad += _r8_faults(("RANGE_LENS", "RANGE_WATCH_ATR"), HTML, f"artifact set {DATE}")
         if HTML is not None:
-            veto = _sec(HTML, SEC_COLOPHON)       # the appendix is its <h3> since STEP F
-            gone = [k for k in ("RANGE_LENS", "RANGE_WATCH_ATR") if f"<code>{k}</code>" not in veto]
-            if gone:
-                bad.append(f"artifact set {DATE}: the rendered [VETO] appendix does not list {gone}")
             if not _sec(HTML, SEC_TIDE) or "EDGE WATCH" not in _sec(HTML, SEC_TIDE):
                 bad.append(f"artifact set {DATE}: no Tide Tables section carrying EDGE WATCH")
         # the window IMPORTED, proved on the source (the AST node IS RNG.V2_WINDOW_BARS),
@@ -5358,8 +5353,8 @@ def f_br_14() -> None:
             f"({', '.join(new_cols)}) clear the {len(OD.BANNED_CALIBRATION_KEYS)}-term banned "
             f"vocabulary and are on artifact set {DATE}'s sibling tape. range_layer contains a "
             f"fault (EMPTY frame -> {con.get('an EMPTY frame')!r}) and refuses a frame off its lens "
-            f"(1h -> {con.get('a 1h frame')!r}). RANGE_LENS and RANGE_WATCH_ATR are 'ruled': False "
-            f"and print in the rendered [VETO] appendix; RANGE_WINDOW_BARS = "
+            f"(1h -> {con.get('a 1h frame')!r}). RANGE_LENS and RANGE_WATCH_ATR are ruled by R-8 "
+            f"(operator 2026-09-22) and print in the Colophon's R-8 table, not the open one; RANGE_WINDOW_BARS = "
             f"{OD.REGISTER['RANGE_WINDOW_BARS']['value']} is the machine's own constant, imported: "
             f"its REGISTER value is the AST node `{RANGE_ALIAS}.{RANGE_REGISTER_IMPORTS[0]}`, and "
             f"it evaluates to {ORACLE_RANGE_MODULE}.{RANGE_REGISTER_IMPORTS[0]}.")
@@ -6138,12 +6133,9 @@ def _typeset_judge(html_doc: str | None = None, renders: dict | None = None,
         bad.append("caption: oracle_daily.mantle_caption() is not the contract's sentence")
     if tuple(OD.REGISTER["SECTIONS"]["value"]) != SECTIONS:
         bad.append("sections: REGISTER['SECTIONS'] is not the contract's eight, in order")
-    for k in ("EDITION_COUNT", "FRONT_PAGE_HEADLINE"):
-        if OD.REGISTER[k]["ruled"]:
-            bad.append(f"{k} reads 'ruled': True — it is this build's reading and no ruling is "
-                       f"on record")
-        if f"<code>{k}</code>" not in _sec(doc, SEC_COLOPHON):
-            bad.append(f"colophon: the rendered [VETO] appendix does not list {k}")
+    # OR-2 R-8 (operator 2026-09-22) ruled both — FRONT_PAGE_HEADLINE with the note "voice
+    # under operator review"; until then this read "'ruled': False, in the [VETO] appendix"
+    bad += _r8_faults(("EDITION_COUNT", "FRONT_PAGE_HEADLINE"), doc, "colophon")
     # the MASTHEAD row names the three words and quotes vii to the letter
     m_src = OD.REGISTER["MASTHEAD"]["source"] if masthead_src is None else masthead_src
     if "<Morning|Evening|Refresh>" not in m_src or TS_VII not in m_src:
@@ -6249,7 +6241,7 @@ def f_br_15() -> None:
         ("RENDER PLANT (a dark-theme sage left in the style block)",
          "dark-theme remnant", lambda: dict(html_doc=dark)),
         ("RENDER PLANT (the colophon footnote back to its fixed clause, 'each is "
-         "DEFERRED-TO-BR2', over a table 5 of whose rows print a bare [VETO])",
+         "DEFERRED-TO-BR2', over a table whose rows the footnote must COUNT)",
          "the [VETO] footnote", lambda: dict(html_doc=old_note) if old_note else None),
         ("RENDER PLANT (one row's chip flipped DEFERRED-TO-BR2 -> [VETO], which is what "
          "dropping that row's `deferred_to` key does, while the prose above does not move)",
@@ -6350,7 +6342,7 @@ def f_br_15() -> None:
             f"{OD.REGISTER['MANTLE_BARS']['value']} and typed nowhere else in oracle_daily.py; the "
             f"<footer> sits inside the Colophon and carries {TS_FRAGMENT} and the as-of; the "
             f"Spaghetti is an <h3> of The Watch and the [VETO] appendix an <h3> of the Colophon, "
-            f"listing EDITION_COUNT and FRONT_PAGE_HEADLINE ('ruled': False). Inks: {TS_PAPER}, "
+            f"its R-8 table listing EDITION_COUNT and FRONT_PAGE_HEADLINE (ruled 2026-09-22, the headline's voice under operator review). Inks: {TS_PAPER}, "
             f"{TS_INK}, {TS_RED} and the serif stack in the style block, none of the "
             f"{len(TS_DARK_REMNANTS)} pre-STEP-F colours on the page, no theme switch, the red "
             f"only under {list(TS_ALARM_CLASSES)}, Spaghetti hues {x['hues'][0]}..{x['hues'][-1]} "
@@ -6448,6 +6440,31 @@ ROSTER_FAMILY = ("oracle_daily.py", "oracle_fixtures.py", "oracle_topup.py",
 _ROSTER_SYM = re.compile(r"^[0-9A-Z]{2,20}USDT$")
 _ROSTER_PROBE = re.compile(r"research_outputs/oracle/roster_probe_\d{4}-\d{2}-\d{2}\.json")
 _ROSTER_BASKET = "SYM" + "BOLS"      # spelt in two halves so this file never NAMES it
+
+
+def _r8_faults(keys, doc: str | None, what: str) -> list[str]:
+    """OR-2 R-8 (operator 2026-09-22): each row reads 'ruled': True with OD.R8_RULED at the
+    head of its source, and the rendered Colophon lists it in its RULED table (class
+    "ruled") and no longer in the open [VETO] table. FRONT_PAGE_HEADLINE also carries
+    the ruling's note, 'voice under operator review'."""
+    bad = []
+    for k in keys:
+        row = OD.REGISTER[k]
+        if row.get("ruled") is not True or not str(row.get("source", "")).startswith(OD.R8_RULED):
+            bad.append(f"{k} is not ruled by R-8 — 'ruled': {row.get('ruled')!r}, source opens "
+                       f"{str(row.get('source', ''))[:40]!r}, want {OD.R8_RULED!r}")
+        if k == "FRONT_PAGE_HEADLINE" and "voice under operator review" not in row.get("source", ""):
+            bad.append("FRONT_PAGE_HEADLINE is ruled without the note 'voice under operator review'")
+    if doc is not None:
+        col = _sec(doc, SEC_COLOPHON)
+        veto = re.search(r'(?s)<table class="veto">(.*?)</table>', col)
+        ruled = re.search(r'(?s)<table class="ruled">(.*?)</table>', col)
+        for k in keys:
+            if veto and f"<code>{k}</code>" in veto.group(1):
+                bad.append(f"{what}: {k} still prints in the Colophon's OPEN [VETO] table")
+            if not ruled or f"<code>{k}</code>" not in ruled.group(1):
+                bad.append(f"{what}: the Colophon's R-8 table does not list {k}")
+    return bad
 
 
 def _roster_node(tree: ast.AST):

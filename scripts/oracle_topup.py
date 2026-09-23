@@ -93,7 +93,7 @@ REGISTER: dict[str, dict] = {
                   "NO CLOCK LEADS THIS FILE ANY MORE. Since OR-1 STEP A the top-up is "
                   "run by scripts/oracle_wrapper.py --job ondemand (step 'scope-topup'), "
                   "in-process and seconds before the render, with the slot string "
-                  "oracle_wrapper.ONDEMAND_REGISTER['TOPUP_SLOT'] (unruled [VETO]). "
+                  "oracle_wrapper.ONDEMAND_REGISTER['TOPUP_SLOT'] (ruled R-8, operator 2026-09-22). "
                   "These times remain law for the retained plists, i.e. for a rollback.",
     },
     "SCOPE_SOURCE": {

@@ -331,8 +331,8 @@ REGISTER: dict[str, dict] = {
     },
     "TARGET_BUCKET_ATR": {
         "value": "lens",
-        "ruled": False,
-        "source": "PROPOSED by the OR-1 STEP B build 2026-09-21 — UNRULED [VETO]. The contract "
+        "ruled": True,
+        "source": "ruled: operator 2026-09-22 (R-8) — RATIFIED by operator ruling R-8 of 2026-09-22 (queue OR-2, verbatim \"leans\": ARGUS's stated lean adopted). ORIGINALLY: PROPOSED by the OR-1 STEP B build 2026-09-21 — UNRULED [VETO]. The contract "
                   "says 'record target-bucket occupancy' and names no ATR. A Trap Card "
                   "prices its toll in the LENS ATR (trap_card: toll_price = toll_atr x "
                   "st.atr), so the D-7 logger buckets the card's target distance in that "
@@ -349,8 +349,8 @@ REGISTER: dict[str, dict] = {
     # defaults and print in the rendered [VETO] appendix until the operator rules.
     "RANGE_LENS": {
         "value": "4h",
-        "ruled": False,
-        "source": "PROPOSED by the OR-1 contract's own default — UNRULED [VETO]. STEP D, "
+        "ruled": True,
+        "source": "ruled: operator 2026-09-22 (R-8) — RATIFIED by operator ruling R-8 of 2026-09-22 (queue OR-2, verbatim \"leans\": ARGUS's stated lean adopted). ORIGINALLY: PROPOSED by the OR-1 contract's own default — UNRULED [VETO]. STEP D, "
                   "verbatim: 'oracle_daily runs it per roster symbol on the 4h lens [VETO "
                   "default — the system's lens]'. 4h is the lens the v2 pins were calibrated "
                   "on (BTC 4h, KEY-C) and the lens build_view has ALREADY loaded, so the range "
@@ -375,8 +375,8 @@ REGISTER: dict[str, dict] = {
     },
     "RANGE_WATCH_ATR": {
         "value": 0.5,
-        "ruled": False,
-        "source": "PROPOSED by the OR-1 contract's own default — UNRULED [VETO]. STEP D, "
+        "ruled": True,
+        "source": "ruled: operator 2026-09-22 (R-8) — RATIFIED by operator ruling R-8 of 2026-09-22 (queue OR-2, verbatim \"leans\": ARGUS's stated lean adopted). ORIGINALLY: PROPOSED by the OR-1 contract's own default — UNRULED [VETO]. STEP D, "
                   "verbatim: 'EDGE WATCH sub-list = distance ≤ 0.5 ATR [VETO] OR pending breach "
                   "open, sorted by distance'. The ATR is the range machine's own — "
                   "engine.indicators ATR(14) on the RANGE_LENS tape, the ATR its pins are "
@@ -513,8 +513,8 @@ REGISTER: dict[str, dict] = {
     },
     "EDITION_COUNT": {
         "value": "distinct dates among tape/oracle_tape_<date>.parquet, this edition's date included",
-        "ruled": False,
-        "source": "PROPOSED by the OR-1 STEP F build 2026-09-21 — UNRULED [VETO]. The contract "
+        "ruled": True,
+        "source": "ruled: operator 2026-09-22 (R-8) — RATIFIED by operator ruling R-8 of 2026-09-22 (queue OR-2, verbatim \"leans\": ARGUS's stated lean adopted). ORIGINALLY: PROPOSED by the OR-1 STEP F build 2026-09-21 — UNRULED [VETO]. The contract "
                   "prints 'Vol. I · No. <edition count>' and does not say what is counted. "
                   "Counted here: the DATES the Oracle has gone to press on, read off the D-4 "
                   "tape directory (one parquet per date), with this edition's own date added "
@@ -528,8 +528,8 @@ REGISTER: dict[str, dict] = {
         "value": "'Business possible' needs a FRESH trigger; then TRIGGERED-but-stale, then "
                  "ARMED, in the Board's own order; neither word on the Board => 'No business "
                  "possible today'",
-        "ruled": False,
-        "source": "PROPOSED by the OR-1 STEP F build 2026-09-21 — UNRULED [VETO]. The contract: "
+        "ruled": True,
+        "source": "ruled: operator 2026-09-22 (R-8) — voice under operator review — RATIFIED by operator ruling R-8 of 2026-09-22 (queue OR-2, verbatim \"leans\": ARGUS's stated lean adopted). ORIGINALLY: PROPOSED by the OR-1 STEP F build 2026-09-21 — UNRULED [VETO]. The contract: "
                   "'headline = the day's answer to \"where is business possible today\"', the "
                   "canon's one morning question (posture_engine.CANON_QUOTE_ENUMERATION), and "
                   "no rule for answering it. front_page() answers from the Board's POSTURE "
@@ -1342,7 +1342,7 @@ the 89/316 tide of the Board's regime chip.)</p>
 <table><tr><th>asset</th><th>macro state</th><th>macro bottom – top</th><th>position</th>
 <th>nearest boundary</th><th>pending breach</th><th>last event</th><th>bars</th></tr>
 {''.join(rows)}</table>
-<h3>EDGE WATCH — {len(watch)} of {len(assets)} · within {lim:g} ATR of a macro boundary [VETO], or a breach pending · sorted by distance</h3>
+<h3>EDGE WATCH — {len(watch)} of {len(assets)} · within {lim:g} ATR of a macro boundary (R-8), or a breach pending · sorted by distance</h3>
 {watch_html}
 <p class="small muted">WHAT THIS IS NOT. The range pins were calibrated on BTC alone — the
 micro pins on BTC 1D (KEY-A), the v2 macro pins on BTC 4h (KEY-C) — and are UNCALIBRATED on
@@ -1355,7 +1355,7 @@ MACRO Range fields and prints no micro range. ATR here is the range machine's ow
 the {lens} tape, not the daily ATR behind the Board's dist column. A position above 100% or
 below 0% is a close outside the box while a breach is pending. Each row is measured at that
 symbol's own last cached {lens} bar; "(short)" marks a cache holding fewer than {window:,} bars.
-RANGE_LENS and RANGE_WATCH_ATR are [VETO]: see the appendix.</p>"""
+RANGE_LENS and RANGE_WATCH_ATR were ruled on 2026-09-22 (R-8): see the appendix.</p>"""
 
 
 # ─────────────────────────────── OR-1 STEP E · THE MARKET PAGE (operator ruling 7)
@@ -1681,7 +1681,7 @@ td.asof{font-size:12px;line-height:1.3}
 .mkt>div{break-inside:avoid}
 .mkt h3{margin-top:0;font-size:12.5px;letter-spacing:.03em;min-height:2.9em}
 .returns td:nth-child(2){white-space:nowrap}
-.veto td.num{text-align:left}
+.veto td.num,.ruled td.num{text-align:left}
 footer{margin-top:22px;padding-top:12px;border-top:1px solid var(--ink);columns:2 420px;
   column-gap:34px;column-rule:1px solid var(--rule);font-size:11.5px;line-height:1.55;
   color:var(--mut);word-break:break-word}
@@ -1790,6 +1790,13 @@ def _names(symbols) -> str:
     """'BTC' · 'BTC and ETH' · 'BTC, ETH and SOL': symbols print without their quote."""
     xs = [s.replace("USDT", "") for s in symbols]
     return xs[0] if len(xs) == 1 else f"{', '.join(xs[:-1])} and {xs[-1]}"
+
+
+# OR-2 R-8 · THE ELEVEN RULED (operator, 2026-09-22): five rows of this register and six of
+# the on-demand wrapper's, until then [VETO] builder defaults, read 'ruled': True and
+# carry this marker at the head of their source. The Colophon lists them in their own
+# table under the open rows (render_html), so the flip is visible where the [VETO] was.
+R8_RULED = "ruled: operator 2026-09-22 (R-8)"
 
 
 # OR-2 R-2 · POSTURE-FIRST BOARD (operator, 2026-09-22). The Board, The Docket and the
@@ -2075,6 +2082,18 @@ def render_html(view: dict, date_str: str, canon_sha: str, *,
     # build's own defaults waiting on THIS operator, now. Sending him to BR-2 for them
     # sends him to a ruling that was never asked to cover them. Both integers come from
     # `rows`, the same list the table is built from, so the sentence cannot drift again.
+    # OR-2 R-8: the rows the operator ruled on 2026-09-22 leave the open table above and
+    # are listed in a table of their own, so the flip shows where the [VETO] was
+    ruled_rows = [(k, v) for k, v in REGISTER.items()
+                  if v["ruled"] and str(v.get("source", "")).startswith(R8_RULED)]
+    ruled_html = "".join(
+        f"<tr><td><code>{html.escape(k)}</code></td>"
+        f"<td><span class='chip'>{html.escape(R8_RULED)}</span>"
+        + (" <span class='small'>voice under operator review</span>"
+           if "voice under operator review" in v["source"] else "")
+        + f"</td><td class='num'>{html.escape(str(v.get('value')))}</td>"
+          f"<td class='small'>{html.escape(v['source'])}</td></tr>"
+        for k, v in ruled_rows)
     n_defer = sum(1 for _n, _s in rows if _s.get("deferred_to") == "BR-2")
     n_veto = len(rows) - n_defer
     veto_note = (
@@ -2163,6 +2182,11 @@ trigger pair, the net R:R form and the schedule; the schedule was SUSPENDED by o
 ruling 2026-09-21 and the Oracle now prints on demand. {veto_note}</p>
 <table class="veto"><tr><th>constant</th><th>disposition</th><th>value</th><th>why it is not law</th></tr>
 {''.join(veto)}</table>
+<p class="small muted">Ruled by the operator on 2026-09-22 (queue OR-2, ruling R-8, verbatim
+"leans"), and so no longer open: the {len(ruled_rows)} rows of this register below, and six
+constants of the on-demand wrapper (its <code>--dry-run</code> lists them).</p>
+<table class="ruled"><tr><th>constant</th><th>disposition</th><th>value</th><th>the ruling, and what it ruled</th></tr>
+{ruled_html}</table>
 
 <footer>
 DISPLAY-ONLY · operations · {date_str} · lens {lens} · as-of bar newest {newest_s} · oldest {oldest_s} ·

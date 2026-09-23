@@ -301,8 +301,8 @@ flag, no fetch, no render) ===`). Neither prints a `STEP 7`, a `schedule:` or a 
 line, and neither makes a flag decision: report the flag exactly as STEP 2 printed
 it, left standing untouched (or none).
 
-Five while `MOVERS_FAILURE_HOLDS_FLAG` is `False`, its [VETO] default, which
-`--dry-run` prints. Should the operator ever rule it True, a full edition whose
+Five while `MOVERS_FAILURE_HOLDS_FLAG` is `False` — the value the operator ruled on
+2026-09-22 (R-8), which `--dry-run` prints. Should the operator ever rule it True, a full edition whose
 movers fetch failed ends instead in `alarm left standing: ORACLE_DOWN.flag — the
 movers fetch was supposed to run and did not come back clean, and
 MOVERS_FAILURE_HOLDS_FLAG is set: this run has no all-clear to give`, or its `no

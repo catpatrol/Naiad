@@ -130,6 +130,9 @@ SELFCHECK = ROOT / "research_outputs" / "oracle" / "calibration" / "selfcheck_lo
 SCHEDULE_SENTINEL = ROOT / "research_outputs" / "oracle" / "SCHEDULE_SUSPENDED"
 SCHEDULE_SENTINEL_REL = "research_outputs/oracle/SCHEDULE_SUSPENDED"
 REARM_FLAG = "--rearm"
+# OR-2 R-8: the marker at the head of a register row the operator ruled on 2026-09-22
+# (the same words oracle_daily.R8_RULED carries; this module never imports it at load).
+R8_RULED = "ruled: operator 2026-09-22 (R-8)"
 REARM_COMMAND = ("cd ~/Naiad && ~/venvs/naiad/bin/python scripts/oracle_wrapper.py "
                  "--install --rearm")
 # BARE ON PURPOSE: resolved through PATH at call time, never an absolute path, so
@@ -915,31 +918,31 @@ ONDEMAND_REGISTER = {
                   "full\"|\"on-demand-refresh\" so run-based gates can read them.' "
                   "The FIRST entry is the default when --slot is not given."},
     "TOPUP_SLOT": {
-        "value": "on-demand", "ruled": False,
-        "source": "[VETO] builder default. The topup_log.jsonl slot string for a "
+        "value": "on-demand", "ruled": True,
+        "source": "ruled: operator 2026-09-22 (R-8) — RATIFIED by operator ruling R-8 of 2026-09-22 (queue OR-2, verbatim \"leans\": ARGUS's stated lean adopted). ORIGINALLY: [VETO] builder default. The topup_log.jsonl slot string for a "
                   "top-up run by this chain. It does not start with 'fixture-', so "
                   "oracle_topup_fixtures.last_real_run() counts it as a REAL run — "
                   "which it is."},
     "MOVERS_TIMEOUT_S": {
-        "value": 600, "ruled": False,
-        "source": "[VETO] builder default. Wall-clock ceiling on the movers "
+        "value": 600, "ruled": True,
+        "source": "ruled: operator 2026-09-22 (R-8) — RATIFIED by operator ruling R-8 of 2026-09-22 (queue OR-2, verbatim \"leans\": ARGUS's stated lean adopted). ORIGINALLY: [VETO] builder default. Wall-clock ceiling on the movers "
                   "subprocess. Sized against the one measured wire-down figure this "
                   "lane has: a fully failing 40-pair top-up took ~10 min on "
                   "2026-09-21 (06:45 -> 06:55). A movers fetch that outlives this is "
                   "logged WIRE DOWN and the edition goes on."},
     "MOVERS_LOG_TAIL": {
-        "value": 12, "ruled": False,
-        "source": "[VETO] builder default. How many trailing lines of the movers "
+        "value": 12, "ruled": True,
+        "source": "ruled: operator 2026-09-22 (R-8) — RATIFIED by operator ruling R-8 of 2026-09-22 (queue OR-2, verbatim \"leans\": ARGUS's stated lean adopted). ORIGINALLY: [VETO] builder default. How many trailing lines of the movers "
                   "organ's own output are echoed into this log; STEP E enumerates a "
                   "universe of hundreds of symbols and the edition log is not the "
                   "place for them."},
     "FRONT_PAGE_ROWS": {
-        "value": 5, "ruled": False,
-        "source": "[VETO] builder default. OR-1 STEP A says 'print the Front "
+        "value": 5, "ruled": True,
+        "source": "ruled: operator 2026-09-22 (R-8) — RATIFIED by operator ruling R-8 of 2026-09-22 (queue OR-2, verbatim \"leans\": ARGUS's stated lean adopted). ORIGINALLY: [VETO] builder default. OR-1 STEP A says 'print the Front "
                   "Page's top rows' and names no count."},
     "MOVERS_FAILURE_HOLDS_FLAG": {
-        "value": False, "ruled": False,
-        "source": "[VETO] builder default, and a DEVIATION the operator should rule "
+        "value": False, "ruled": True,
+        "source": "ruled: operator 2026-09-22 (R-8) — RATIFIED by operator ruling R-8 of 2026-09-22 (queue OR-2, verbatim \"leans\": ARGUS's stated lean adopted). ORIGINALLY: [VETO] builder default, and a DEVIATION the operator should rule "
                   "on. The builder brief said the flag is 'cleared ONLY if every job "
                   "that was supposed to run ran clean'. With False, a movers failure "
                   "is outside the flag's jurisdiction in BOTH directions: it never "
@@ -952,8 +955,8 @@ ONDEMAND_REGISTER = {
                   "still never raises one). F-SK-2g holds both readings to the "
                   "constant."},
     "CUT_OFF_SIGNALS": {
-        "value": ("SIGTERM", "SIGHUP"), "ruled": False,
-        "source": "[VETO] builder default (fix round 1, 2026-09-21). The polite ways "
+        "value": ("SIGTERM", "SIGHUP"), "ruled": True,
+        "source": "ruled: operator 2026-09-22 (R-8) — RATIFIED by operator ruling R-8 of 2026-09-22 (queue OR-2, verbatim \"leans\": ARGUS's stated lean adopted). ORIGINALLY: [VETO] builder default (fix round 1, 2026-09-21). The polite ways "
                   "a harness, a shell or a logout ends a process. MEASURED by the "
                   "verifier: SIGTERM 3 s into a chain left `.oracle.lock` behind, no "
                   "flag, no selfcheck row and NOT ONE LINE of output, and every retry "
@@ -1075,6 +1078,8 @@ def ondemand_plan_lines(slot: str, no_fetch: bool) -> list[str]:
     for k, v in ONDEMAND_REGISTER.items():
         if not v["ruled"]:
             out.append(f"  [VETO] unruled constant {k} = {v['value']!r}")
+        elif str(v.get("source", "")).startswith(R8_RULED):
+            out.append(f"  ruled constant {k} = {v['value']!r} — {R8_RULED}")
     return out
 
 
@@ -1320,8 +1325,8 @@ def ondemand_flag_action(rc: int, no_fetch: bool, movers_failed: bool = False) -
             both came back clean. The movers organ is outside this on purpose, in
             both directions — it never raises the flag, so it never holds it up;
             the flag's sentence is 'The Oracle is down', and the Market Page says
-            WIRE DOWN for itself. THAT HALF IS UNRULED: it is the [VETO] row
-            MOVERS_FAILURE_HOLDS_FLAG, and set True it turns this clear into a
+            WIRE DOWN for itself. THAT HALF IS THE ROW MOVERS_FAILURE_HOLDS_FLAG
+            (a [VETO] default until the operator ruled it, R-8, 2026-09-22), and set True it turns this clear into a
             'stand' when the movers fetch was supposed to run and failed. Either
             way a movers failure NEVER returns 'raise' — that half is the contract's."""
     if rc != 0:
