@@ -1,0 +1,7 @@
+  *** P-BE-1: NO SCORED ROW — its scored arm HALTED (named by --allow-halted-slot): HALT: P-BE-1 — the arm shares the WHOLE campaign set with its base; the commissioned two-sample ruler's premise failed. File a NEW id under ruler='set_change' and disclose.
+  P-GEN-1   verdict NOT SUPPORTED · p 0.271682 · clears_bh_bar False (bar 0.016667) · LOAO line of record clears False
+  P-SPR-2   verdict NOT SUPPORTED · p 0.56036 · clears_bh_bar False (bar 0.016667) · LOAO line of record clears False
+  P-TRG-2   verdict SUPPORTED · p 0.005249 · clears_bh_bar True (bar 0.016667) · LOAO line of record clears True
+  P-BRK-I1  verdict NOT SUPPORTED · p 0.269683 · clears_bh_bar False (bar 0.016667) · LOAO line of record clears False
+  P-BRK-S1  verdict NOT SUPPORTED · p 1.0 · clears_bh_bar False (bar 0.016667) · LOAO line of record clears False
+  FILED /Users/luis/Naiad/research_outputs/tierc10/scores/FAMILY.json · sha aa0e8c496fd6b883a3c01947047c4845eb72935ca17368cffee9c8593a7bc4a2

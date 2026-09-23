@@ -17,7 +17,7 @@
     "sha256": "70188a0cc32422be40e74d8e7adf7d444aa610bb3abf0384b4f4a2f66f57bbec"
   },
   "r0_census_utc": "2026-09-22T09:55:00Z",
-  "resume_point": "B-5M \u2014 P-BRK-S1 via scripts/tierc10_score.py --stage B-5M (score S1, then finish_family at m = 6 with P-BE-1's slot HALTed); then CLOSE",
+  "resume_point": "CLOSE \u2014 build doc to exchange/reports/BUILD_2026-09-21_TIERC10_UNSEEN_RANGES.md, LEDGER_APOLLO append, publish_exchange; push + LaCie destination need the operator's word",
   "seed": 20260921,
   "stages": [
     {
@@ -4752,8 +4752,8 @@
           "sha256": "8bae99c09dfefc8afd91d8a5c5cf9782a497d0f11429ad17d38c888d6055997e"
         },
         "research_outputs/tierc10/scores/FIXTURES_SCORE.txt": {
-          "bytes": 19215,
-          "sha256": "0bff32c124fed2567af1c9d9e0c9d70cbd6f3bff4712c7853e92eb307657aad7"
+          "bytes": 19239,
+          "sha256": "9a83da67a91a36bd96c616127534cd5637862361e093c353142c22066f8567d5"
         }
       },
       "as_of": "2026-09-21T16:00:00Z",
@@ -4767,8 +4767,8 @@
           "re_run_utc": "2026-09-22T23:30:00Z",
           "suite": "tierc10_score_fixtures (F-SC-RECORD holds the filed record against REGISTRY_PIN.json: length, head, order, per-reg seq/payload/text sha; run whole twice)",
           "transcript_drift": false,
-          "transcript_sha_after": "0bff32c124fed2567af1c9d9e0c9d70cbd6f3bff4712c7853e92eb307657aad7",
-          "transcript_sha_before": "0bff32c124fed2567af1c9d9e0c9d70cbd6f3bff4712c7853e92eb307657aad7",
+          "transcript_sha_after": "9a83da67a91a36bd96c616127534cd5637862361e093c353142c22066f8567d5",
+          "transcript_sha_before": "9a83da67a91a36bd96c616127534cd5637862361e093c353142c22066f8567d5",
           "wall_seconds": null
         }
       ],
@@ -4859,8 +4859,8 @@
           "re_run_utc": "2026-09-23T00:30:00Z",
           "suite": "tierc10_score_fixtures (driver certification; run whole twice)",
           "transcript_drift": false,
-          "transcript_sha_after": "0bff32c124fed2567af1c9d9e0c9d70cbd6f3bff4712c7853e92eb307657aad7",
-          "transcript_sha_before": "0bff32c124fed2567af1c9d9e0c9d70cbd6f3bff4712c7853e92eb307657aad7",
+          "transcript_sha_after": "9a83da67a91a36bd96c616127534cd5637862361e093c353142c22066f8567d5",
+          "transcript_sha_before": "9a83da67a91a36bd96c616127534cd5637862361e093c353142c22066f8567d5",
           "wall_seconds": null
         }
       ],
@@ -4870,6 +4870,54 @@
       ],
       "one_line": "B-CORE scored through the filed doors against the pinned dry-run: P-GEN-1 NOT SUPPORTED (UNSEEN12 +0.0998 R, CI [-0.155, 0.316], LOAO 0/12); P-SPR-2 NOT SUPPORTED (-0.0059 R, CI [-0.175, 0.165], LOAO 0/5); P-BE-1 HALT (prescribed, \u00a74) \u2014 no verdict; P-TRG-2 clause (a) SUPPORTED (\u0394 vs v6 +0.2577 R, CI [0.109, 0.384], p 0.00525, LOAO 5/5) pending the BH bar; P-BRK-I1 NOT SUPPORTED (n 7, +0.718 R, CI [-0.603, 1.452], LOAO 1/5). Re-score byte-identical.",
       "stage": "B-CORE",
+      "status": "COMPLETE-VERIFIED"
+    },
+    {
+      "artifact_count": 5,
+      "artifact_shas": {
+        "research_outputs/tierc10/registrations/P-BRK-S1.scored.json": {
+          "bytes": 967,
+          "sha256": "d768beb303a38652c821b83c84dca312a1365007993e3eff537ba428800d3e8c"
+        },
+        "research_outputs/tierc10/scores/FAMILY.json": {
+          "bytes": 113715,
+          "sha256": "aa0e8c496fd6b883a3c01947047c4845eb72935ca17368cffee9c8593a7bc4a2"
+        },
+        "research_outputs/tierc10/scores/FINISH.txt": {
+          "bytes": 1001,
+          "sha256": "54e4e46c63993d8f58b2c16e9888ad54974d1bff2a0441a6d6b7f257d616a1e6"
+        },
+        "research_outputs/tierc10/scores/P-BRK-S1.rows.json": {
+          "bytes": 118556,
+          "sha256": "994bcaa69906aae8a1659d953c0984da636cb496808dd17ab91ddf3ea3c33ff0"
+        },
+        "research_outputs/tierc10/scores/SCORE_P-BRK-S1.txt": {
+          "bytes": 1613,
+          "sha256": "bf8fa7774a22476ae94c1b2dbfc6f6804234e483710afe1f61539100aafe619d"
+        }
+      },
+      "as_of": "2026-09-21T16:00:00Z",
+      "blockers": [],
+      "fixtures": [
+        {
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": 16,
+          "note": "LAW 1's re-pass for a scoring stage: --stage B-5M re-run in full (S1 re-scored against the pinned dry-run + finish) re-wrote P-BRK-S1.rows.json, P-BRK-S1.scored.json and FAMILY.json BYTE-IDENTICAL.",
+          "re_run_utc": "2026-09-23T01:10:00Z",
+          "suite": "tierc10_score_fixtures (driver certification; run whole after B-5M)",
+          "transcript_drift": false,
+          "transcript_sha_after": "9a83da67a91a36bd96c616127534cd5637862361e093c353142c22066f8567d5",
+          "transcript_sha_before": "9a83da67a91a36bd96c616127534cd5637862361e093c353142c22066f8567d5",
+          "wall_seconds": null
+        }
+      ],
+      "notes": [
+        "finish_family ran with P-BE-1's slot HALTed (--allow-halted-slot P-BE-1). This is PRESCRIBED by the filed texts, not an executor choice: P-BE-1 \u00a77 'CLAUSE (c) RESOLVES ON THIS ROW ALONE and does not wait for siblings\u2026 if a sibling registration HALTs or is never filed, this row still reads clears_bh_bar against 0.016667'; P-TRG-2 \u00a75 'at that one fixed bar to EVERY scored row it is handed, whatever number of the declared six actually run'. m stays 6 DECLARED (5 run): fewer tests never loosen the bar.",
+        "P-BRK-S1's net_r is net of FEE and FUNDING only; the measured 5m toll is a PRINT beside it (TOLL_ACCOUNTING), per its filed \u00a77 which names the print-vs-deduction question OPEN for the operator. The row is already significantly negative before any toll."
+      ],
+      "one_line": "P-BRK-S1 NOT SUPPORTED \u2014 significantly NEGATIVE: holdout CLASSIC5 n 1836, -0.2111 R, CI [-0.298, -0.144], LOAO 0/5 above, 5/5 BELOW; 17-asset view -0.170 R [-0.205, -0.137]; memory-line anchor -0.199 R [-0.335, -0.073]; 5m height-vs-toll (holdout) FAIL. FAMILY (m = 6 declared, 5 run, bar 0.016667): P-TRG-2 is the ONLY row that clears all three clauses \u2014 CI lo 0.109 > 0, LOAO 5/5, p 0.005249 <= 0.016667. P-GEN-1, P-SPR-2, P-BRK-I1, P-BRK-S1 NOT SUPPORTED; P-BE-1 HALT (no verdict).",
+      "stage": "B-5M",
       "status": "COMPLETE-VERIFIED"
     }
   ],

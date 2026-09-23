@@ -85,7 +85,7 @@ the real TP.score / finish_family / _mark_scored / register are never called; no
 
 ── F-SC-NOSCORE
    FAILS IF: the dry-run reaches TP.score / finish_family / _mark_scored / register, writes a .scored.json, or prints an outcome
-   [OK ] tripwires on TP.score / finish_family / _mark_scored / register: 0 hit; .scored.json UNCHANGED by the dry-run (5 on file before, byte-identical after: True)
+   [OK ] tripwires on TP.score / finish_family / _mark_scored / register: 0 hit; .scored.json UNCHANGED by the dry-run (6 on file before, byte-identical after: True)
    [OK ] the stubbed dry-run of all 21 arms prints no outcome token (none) and no campaign net_r or sum of them (none)
    [BREAK] the binding step calls TP.score -> RED (correct): [BAD] TRIPWIRE: TP.score
    [BREAK] the per-asset line prints each asset's net_r sum -> RED (correct): [BAD] the stubbed dry-run of all 21 arms prints no outcome token (none) and no campaign net_r or sum of them (['7.123457', '7.12'])
@@ -93,7 +93,7 @@ the real TP.score / finish_family / _mark_scored / register are never called; no
 
 ── F-SC-DET
    FAILS IF: two dry-runs differ by one byte
-   [OK ] two stubbed dry-runs: sha 038c5f7ad6af9b5c / 038c5f7ad6af9b5c
+   [OK ] two stubbed dry-runs: sha c71543a2ef04b4e4 / c71543a2ef04b4e4
    [BREAK] a clock in the header -> RED (correct): [BAD] two stubbed dry-runs: sha <sha> / <sha>
    PASS F-SC-DET
 
@@ -170,4 +170,4 @@ the real TP.score / finish_family / _mark_scored / register are never called; no
    [BREAK] no conversion (NaN and numpy ride raw) -> RED (correct): [BAD] TypeError: Object of type int64 is not JSON serializable
    PASS F-SC-JSON
 
-FIXTURE SUMMARY  16/16 PASS · 26/26 break legs RED · failed [] · .scored.json on file ['P-BE-1.scored.json', 'P-BRK-I1.scored.json', 'P-GEN-1.scored.json', 'P-SPR-2.scored.json', 'P-TRG-2.scored.json'] · untouched by this suite: True
+FIXTURE SUMMARY  16/16 PASS · 26/26 break legs RED · failed [] · .scored.json on file ['P-BE-1.scored.json', 'P-BRK-I1.scored.json', 'P-BRK-S1.scored.json', 'P-GEN-1.scored.json', 'P-SPR-2.scored.json', 'P-TRG-2.scored.json'] · untouched by this suite: True
