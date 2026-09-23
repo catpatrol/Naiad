@@ -3,8 +3,9 @@ F-BR-13 of queue OR-1 STEP B (finding C-0: the D-7 logger must MEASURE),
 F-BR-14 of queue OR-1 STEP D (the range layer renders and never rules),
 F-BR-15 of queue OR-1 STEP F (THE DAILY ORACLE: typeset, semantics untouched),
 F-BR-16 of queue OR-1 STEP C (the roster is ONE literal definition),
-F-BR-18 of queue OR-2 STEP 3 (R-1: per-row staleness, OR1-a replayed), and
-F-BR-19 of queue OR-2 STEP 4 (R-2: the posture-first Board).
+F-BR-18 of queue OR-2 STEP 3 (R-1: per-row staleness, OR1-a replayed),
+F-BR-19 of queue OR-2 STEP 4 (R-2: the posture-first Board), and
+F-BR-20 of queue OR-2 STEP 5 (R-3: the edition word, EDITION_NOON).
 
 BR-1 §4, verbatim: "FIXTURES (numbered; each shown FAILING on a deliberate
 break before trusted)". So every fixture here runs TWICE:
@@ -7487,6 +7488,119 @@ def f_br_19() -> None:
           _break, _real)
 
 
+# ═════════════════ F-BR-20 · THE EDITION WORD (OR-2 STEP 5, R-3)
+#
+# WHAT THIS GUARDS. Operator ruling R-3 (2026-09-22): full editions read "Morning" when
+# the render time in America/Argentina/Buenos_Aires is before EDITION_NOON = 12, else
+# "Evening"; the refresh verb keeps "Refresh". A-OR1-1 vii had already built the rule
+# (ff74a90; F-BR-15 leg (ii) walks its own table); R-3 names the constant and asks for
+# these two plants: 09:00 BA -> Morning, 22:22 BA -> Evening, and a break leg that
+# hardcodes "Morning". 22:22 BA is 01:22Z the NEXT day, so a reading in UTC or on the
+# UTC date is caught; the process zone is forced to UTC for the whole judgement.
+# Each row is read twice: from edition_name, and off a REAL render's ear and Colophon
+# print line. Break: the hardcoded Morning; EDITION_NOON moved to 23; a source copy of
+# edition_name with the noon typed as a number.
+
+F20_NOON = 12                                   # the ruling's number, typed from the queue
+F20_DAY = "2030-01-04"
+F20_TABLE = (("on-demand-full", "09:00", "Morning"), ("on-demand-full", "22:22", "Evening"),
+             ("full", "09:00", "Morning"), ("full", "22:22", "Evening"),
+             ("on-demand-refresh", "09:00", "Refresh"), ("on-demand-refresh", "22:22", "Refresh"))
+
+
+def _br20_judge(src: str | None = None) -> list[str]:
+    from datetime import datetime, timezone
+    from zoneinfo import ZoneInfo
+    bad = []
+    if OD.EDITION_NOON != F20_NOON:
+        bad.append(f"EDITION_NOON reads {OD.EDITION_NOON}, the ruling is {F20_NOON}")
+    text = (ROOT / "scripts" / "oracle_daily.py").read_text(encoding="utf-8") if src is None else src
+    fn = next((n for n in ast.walk(ast.parse(text))
+               if isinstance(n, ast.FunctionDef) and n.name == "edition_name"), None)
+    if fn is None:
+        bad.append("oracle_daily.py defines no edition_name — fail closed")
+    else:
+        names = {n.id for n in ast.walk(fn) if isinstance(n, ast.Name)}
+        typed = [n.value for n in ast.walk(fn) if isinstance(n, ast.Constant)
+                 and isinstance(n.value, int) and not isinstance(n.value, bool)]
+        if "EDITION_NOON" not in names or typed:
+            bad.append(f"edition_name does not read EDITION_NOON (names it: "
+                       f"{'EDITION_NOON' in names}; numbers typed in it: {typed}) — the noon typed "
+                       f"a second time")
+    view = _pristine_view()
+    y, mo, d = map(int, F20_DAY.split("-"))
+    with _ts_machine_zone(TS_MACHINE_ZONE):
+        for slot, hhmm, word in F20_TABLE:
+            h, m = map(int, hhmm.split(":"))
+            at = datetime(y, mo, d, h, m, tzinfo=ZoneInfo(TS_ZONE)).astimezone(timezone.utc)
+            got = OD.edition_name(slot, at)
+            if got != f"{word} Edition":
+                bad.append(f"slot {slot}, {hhmm} Buenos Aires -> {got!r}, want '{word} Edition'")
+            page = OD.render_html(view, F20_DAY, PE.canon_sha(), edition_no=7, slot=slot,
+                                  printed_at=at)
+            ear, lines = _ts_vii_read(page)
+            if ear != word:
+                bad.append(f"slot {slot}, {hhmm} Buenos Aires: the rendered ear reads {ear!r}, want {word!r}")
+            if len(lines) != 1 or lines[0][:4] != (F20_DAY, f"{h:02d}", f"{m:02d}", word):
+                bad.append(f"slot {slot}, {hhmm} Buenos Aires: the Colophon print line reads "
+                           f"{lines[:1]}, want {F20_DAY} {hhmm} Buenos Aires ({word} Edition …)")
+    return bad
+
+
+def f_br_20() -> None:
+    def _swap(name, value):
+        def _run():
+            keep = getattr(OD, name)
+            try:
+                setattr(OD, name, value)
+                return _br20_judge()
+            finally:
+                setattr(OD, name, keep)
+        return _run
+
+    src = (ROOT / "scripts" / "oracle_daily.py").read_text(encoding="utf-8")
+    anchor = ".hour < EDITION_NOON"
+    plants = (
+        ("THE CONTRACT'S PLANT (the edition word hardcoded: 'Morning' for every full edition)",
+         "22:22 Buenos Aires -> 'Morning Edition'",
+         _swap("edition_name", lambda slot, printed_at=None: "Refresh Edition"
+               if "refresh" in str(slot).lower() else "Morning Edition")),
+        ("CONSTANT PLANT (EDITION_NOON moved to 23)", "EDITION_NOON reads 23",
+         _swap("EDITION_NOON", 23)),
+        ("SOURCE PLANT (edition_name with the noon typed as a number)", "the noon typed a second time",
+         (lambda: _br20_judge(src=src.replace(anchor, ".hour < 12", 1)))
+         if src.count(anchor) == 1 else (lambda: [])),
+    )
+
+    def _break() -> tuple[bool, str]:
+        green, out = False, []
+        for name, must, judge in plants:
+            bad = judge()
+            hits = [b for b in bad if must in b]
+            if hits:
+                out.append(f"{name} -> RED: {hits[0]}" + (f" [+{len(bad) - 1} more]" if len(bad) > 1 else ""))
+            else:
+                green = True
+                out.append(f"{name} -> " + ("GREEN (or could not be planted)" if not bad else
+                           f"RED FOR THE WRONG REASON (no finding says {must!r}; first: {bad[0]})"))
+        return green, " ‖ ".join(out)
+
+    def _real() -> tuple[bool, str]:
+        bad = _br20_judge()
+        if bad:
+            return False, "; ".join(bad[:6]) + (f" (+{len(bad) - 6} more)" if len(bad) > 6 else "")
+        return True, (
+            f"EDITION_NOON == {F20_NOON} and edition_name reads it (no number typed in it). With the "
+            f"process zone forced to {TS_MACHINE_ZONE}, on {F20_DAY}: "
+            + "; ".join(f"{sl} {hm} BA -> {w}" for sl, hm, w in F20_TABLE)
+            + " — each from edition_name AND off a real render's ear and its one Colophon print "
+              "line (22:22 BA is 01:22Z the next day)")
+
+    prove("F-BR-20", "THE EDITION WORD — full: Morning before EDITION_NOON = 12 Buenos Aires, "
+                     "Evening from it; refresh: Refresh",
+          _break, _real)
+
+
 # ══════════════════════════════════════════════════════════════════ MAIN
 
 def main() -> int:
@@ -7501,7 +7615,7 @@ def main() -> int:
     print("=" * 78)
     fixtures = (f_br_1, f_br_2, f_br_3, f_br_4, f_br_5, f_br_6,
                 f_br_7, f_br_8, f_br_9, f_br_10, f_br_11, f_br_12, f_br_13, f_br_14,
-                f_br_15, f_br_16, f_br_17, f_br_18, f_br_19)
+                f_br_15, f_br_16, f_br_17, f_br_18, f_br_19, f_br_20)
     for fn in fixtures:
         try:
             fn()

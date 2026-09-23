@@ -1701,7 +1701,11 @@ def mantle_caption() -> str:
 # followed the verb alone ('Morning Edition' for every slot that was not a refresh), and
 # the one on-demand edition on disk, briefs/oracle/oracle_2026-09-21.html, printed at
 # 22:26 Buenos Aires, calls itself the Morning Edition. It is REPORTED, never rewritten.
-EDITION_NOON_BA = 12      # vii's "12:00 BA": the first hour of the Evening Edition
+# vii's "12:00 BA": the first hour of the Evening Edition. OR-2 R-3 (operator 2026-09-22)
+# names it: '"Morning" when render time in America/Argentina/Buenos_Aires is before
+# EDITION_NOON = 12, else "Evening"; the refresh verb keeps "Refresh"'. Built as
+# EDITION_NOON_BA by ff74a90 (A-OR1-1 vii), renamed to the ruling's name by OR-2.
+EDITION_NOON = 12
 
 
 def edition_verb(slot: str) -> str:
@@ -1728,7 +1732,7 @@ def edition_name(slot: str, printed_at: datetime | None) -> str:
 
     The refresh verb (edition_verb) -> 'Refresh Edition', at any hour; `printed_at` is
     not read. The full verb -> by the HOUR of `printed_at` on the Buenos Aires wall clock
-    (print_time_ba): 'Morning Edition' while that hour is before EDITION_NOON_BA,
+    (print_time_ba): 'Morning Edition' while that hour is before EDITION_NOON,
     'Evening Edition' from it on.
     THE BOUNDARY, stated: 12:00:00 Buenos Aires EXACTLY is EVENING (noon is not "before
     12:00"); 11:59:59.999999 is Morning; 00:00:00 is Morning again. A full verb with no
@@ -1739,7 +1743,7 @@ def edition_name(slot: str, printed_at: datetime | None) -> str:
     if printed_at is None:
         raise ValueError(f"A-OR1-1 vii: slot {slot!r} is the full verb and no print time was "
                          f"handed — the edition word follows the hour, and there is none")
-    return ("Morning Edition" if print_time_ba(printed_at).hour < EDITION_NOON_BA
+    return ("Morning Edition" if print_time_ba(printed_at).hour < EDITION_NOON
             else "Evening Edition")
 
 
