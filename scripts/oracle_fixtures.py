@@ -5,8 +5,9 @@ F-BR-15 of queue OR-1 STEP F (THE DAILY ORACLE: typeset, semantics untouched),
 F-BR-16 of queue OR-1 STEP C (the roster is ONE literal definition; amended by OR-2
 STEP 6, R-7: KEPT ∪ ruled mappings),
 F-BR-18 of queue OR-2 STEP 3 (R-1: per-row staleness, OR1-a replayed),
-F-BR-19 of queue OR-2 STEP 4 (R-2: the posture-first Board), and
-F-BR-20 of queue OR-2 STEP 5 (R-3: the edition word, EDITION_NOON).
+F-BR-19 of queue OR-2 STEP 4 (R-2: the posture-first Board),
+F-BR-20 of queue OR-2 STEP 5 (R-3: the edition word, EDITION_NOON), and
+F-BR-21 of queue OR-2 STEP 7 (R-6: the tape schema registry).
 
 BR-1 §4, verbatim: "FIXTURES (numbered; each shown FAILING on a deliberate
 break before trusted)". So every fixture here runs TWICE:
@@ -7707,6 +7708,227 @@ def f_br_20() -> None:
           _break, _real)
 
 
+# ═════════════════ F-BR-21 · THE TAPE SCHEMA REGISTRY (OR-2 STEP 7, R-6)
+#
+# WHAT THIS GUARDS. Operator ruling R-6 (2026-09-22), as ruled in-session 2026-09-23
+# (Q-1: A-OR1-1 stands): research_outputs/oracle/tape/SCHEMA.json registers every
+# version the Oracle's tapes carry — v1 (the TC4 tape's 24 columns: every file before
+# 2026-09-21 and from 2026-09-23 on), v2 (the ONE 2026-09-21 file, by name, 32 columns,
+# never rewritten) and the sibling's ranges-1 — each column with its meaning, plus the
+# reader's rule; and every tape written from OR-2 on names its version in parquet
+# key-value metadata. The contract's leg: every tape file's column set matches exactly
+# one registered version for its date; a planted unregistered column is RED.
+#
+# HOW. The registry and the LIVE archive are read from fixed paths (never OD.TAPE_DIR,
+# which the sandbox redirects), the edition under test is added, and both writers are
+# run into throwaway directories. Checked: the registry's own coherence against the
+# module (TAPE_COLS, RANGE_TAPE_COLS) and F-BR-14's independent witnesses
+# (PRE_OR1_TAPE_COLS, RANGE_SIBLING_TYPES); every file's NAMES AND ORDER against the
+# version its date assigns (types are NOT pinned — the writer does not pin them, and
+# 'closed_by' is null-typed in some files, string in others: see the reader rule);
+# the v2 file's sha; metadata where present, and required after the registry's date.
+
+TAPE_REGISTRY = ROOT / "research_outputs" / "oracle" / "tape" / "SCHEMA.json"
+TAPE_LIVE = ROOT / "research_outputs" / "oracle" / "tape"
+F21_V2_NAME = "oracle_tape_2026-09-21.parquet"        # typed here: the second witness
+F21_V2_SHA = "eb6991a33e056baa9eeb350c17392668c95e5e40e3563a432ebcbdbc296895cf"
+_F21_NAME = {"tape": re.compile(r"^oracle_tape_(\d{4}-\d{2}-\d{2})\.parquet$"),
+             "tape_ranges": re.compile(r"^oracle_tape_ranges_(\d{4}-\d{2}-\d{2})\.parquet$")}
+
+
+def _f21_meta(sch) -> str | None:
+    md = sch.metadata or {}
+    v = md.get(OD.TAPE_SCHEMA_KEY.encode())
+    return None if v is None else v.decode()
+
+
+def _f21_files() -> dict:
+    """{'tape/<name>' | 'tape_ranges/<name>': (columns, metadata id, sha256)} — the live
+    archive, plus the artifact set under test (the sandbox's own tapes)."""
+    out = {}
+    dirs = (("tape", TAPE_LIVE), ("tape_ranges", RANGE_LIVE_SIBLING),
+            ("tape", OD.TAPE_DIR), ("tape_ranges", OD.TAPE_RANGES_DIR))
+    for kind, d in dirs:
+        for f in sorted(Path(d).glob("*.parquet")) if Path(d).exists() else []:
+            key = f"{kind}/{f.name}"
+            if key in out and Path(d) not in (TAPE_LIVE, RANGE_LIVE_SIBLING):
+                key = f"{kind}/{f.name} (under test)"
+            sch = pq.read_schema(f)
+            out[key] = (list(sch.names), _f21_meta(sch), hashlib.sha256(f.read_bytes()).hexdigest())
+    return out
+
+
+def _f21_writers() -> dict:
+    """Both REAL writers, run into throwaway directories over the shared view."""
+    view = _pristine_view()
+    keep = (OD.TAPE_DIR, OD.TAPE_RANGES_DIR)
+    out = {}
+    try:
+        with tempfile.TemporaryDirectory(prefix="f-br-21-") as td:
+            OD.TAPE_DIR, OD.TAPE_RANGES_DIR = Path(td) / "tape", Path(td) / "tape_ranges"
+            for kind, fn in (("tape", OD.write_tape), ("tape_ranges", OD.write_range_tape)):
+                path, _sha, _b = fn(view, "2099-12-31")
+                sch = pq.read_schema(path)
+                out[kind] = (list(sch.names), _f21_meta(sch))
+    finally:
+        OD.TAPE_DIR, OD.TAPE_RANGES_DIR = keep
+    return out
+
+
+def _f21_judge(reg=_UNSET, files=None, writers=None) -> tuple[list[str], dict]:
+    bad: list[str] = []
+    if reg is _UNSET:
+        reg = json.loads(TAPE_REGISTRY.read_text(encoding="utf-8")) if TAPE_REGISTRY.exists() else None
+    if reg is None:
+        return [f"the registry {TAPE_REGISTRY.relative_to(ROOT)} is ABSENT — no tape can be held "
+                f"to a version (ABSENT IS RED, never a skip)"], {}
+    files = _f21_files() if files is None else files
+    writers = _f21_writers() if writers is None else writers
+    tapes = reg.get("tapes", {})
+    cols = {(kind, vid): [c.get("name") for c in v.get("columns", [])]
+            for kind, t in tapes.items() for vid, v in t.get("versions", {}).items()}
+    # ── the registry itself, held to the module and to F-BR-14's witnesses
+    v1, v2, r1 = cols.get(("tape", "1")), cols.get(("tape", "2")), cols.get(("tape_ranges", "ranges-1"))
+    rng8 = list(OD.RANGE_TAPE_COLS[len(OD.RANGE_TAPE_KEYS):])
+    if v1 != list(PRE_OR1_TAPE_COLS) or v1 != list(OD.TAPE_COLS):
+        bad.append("the registry's v1 is not the TC4 tape's 24 columns in order (TAPE_COLS / "
+                   "PRE_OR1_TAPE_COLS)")
+    if v2 != list(PRE_OR1_TAPE_COLS) + rng8:
+        bad.append("the registry's v2 is not v1 + the eight range fields, in order")
+    if r1 != list(RANGE_SIBLING_TYPES) or r1 != list(OD.RANGE_TAPE_COLS):
+        bad.append("the registry's ranges-1 is not the sibling's 12 columns (RANGE_TAPE_COLS)")
+    blank = [f"{k[0]}/{k[1]}:{c.get('name')}" for kind, t in tapes.items()
+             for vid, v in t.get("versions", {}).items() for c in v.get("columns", [])
+             for k in [(kind, vid)] if not str(c.get("meaning", "")).strip()]
+    if blank:
+        bad.append(f"columns registered without a meaning: {blank[:3]}")
+    fr = tapes.get("tape", {}).get("versions", {}).get("2", {}).get("file", {})
+    if (fr.get("name"), fr.get("sha256")) != (F21_V2_NAME, F21_V2_SHA):
+        bad.append(f"the registry's v2 file record {fr.get('name')} {str(fr.get('sha256'))[:12]}… is "
+                   f"not {F21_V2_NAME} {F21_V2_SHA[:12]}…")
+    if "column UNION" not in reg.get("reader_rule", "") or "null" not in reg.get("reader_rule", ""):
+        bad.append("the registry carries no reader rule (concatenate by column union; v1 rows read null)")
+    if reg.get("metadata_key") != OD.TAPE_SCHEMA_KEY:
+        bad.append(f"the registry's metadata key {reg.get('metadata_key')!r} is not the writer's "
+                   f"{OD.TAPE_SCHEMA_KEY!r}")
+    after = reg.get("metadata_required_after", "9999-12-31")
+    # ── every file on disk, and the edition under test
+    seen = {"tape": {}, "tape_ranges": {}}
+    for key, (names, meta, sha) in files.items():
+        kind, fname = key.split("/", 1)
+        fname = fname.split(" ")[0]
+        m = _F21_NAME.get(kind, re.compile("(?!)")).match(fname)
+        if not m:
+            bad.append(f"{key}: the name is not a registered file pattern — no version can be assigned")
+            continue
+        t = tapes.get(kind, {})
+        rule = t.get("date_rule", {})
+        want = rule.get("by_name", {}).get(fname, rule.get("otherwise"))
+        match = [vid for (k, vid), c in cols.items() if k == kind and c == names]
+        if not match:
+            extra = [c for c in names if all(c not in cc for (k, _v), cc in cols.items() if k == kind)]
+            bad.append(f"{key}: its columns match NO registered version"
+                       + (f" (unregistered: {extra[:3]})" if extra else " (order or membership differs)"))
+        elif match != [want]:
+            bad.append(f"{key}: its columns are version {match}, the date rule assigns {want!r}")
+        if meta is not None and meta != want:
+            bad.append(f"{key}: metadata {OD.TAPE_SCHEMA_KEY}={meta!r}, the registry assigns {want!r}")
+        if meta is None and m.group(1) > after:
+            bad.append(f"{key}: written after {after} with no {OD.TAPE_SCHEMA_KEY} metadata")
+        if fname == F21_V2_NAME and kind == "tape" and sha != F21_V2_SHA:
+            bad.append(f"{key}: sha {sha[:12]}… — the v2 file was REWRITTEN (it is registered by name, "
+                       f"never rewritten)")
+        seen[kind][want] = seen[kind].get(want, 0) + 1
+    # ── both writers
+    for kind, vid in (("tape", "1"), ("tape_ranges", "ranges-1")):
+        got = writers.get(kind)
+        if got is None or got[0] != cols.get((kind, vid)) or got[1] != vid:
+            bad.append(f"the {kind} writer stamps {got[1] if got else '—'!r} over "
+                       f"{len(got[0]) if got else 0} columns — want version {vid!r}, its columns")
+    return bad, {"files": len(files), "seen": seen}
+
+
+def f_br_21() -> None:
+    reg = json.loads(TAPE_REGISTRY.read_text(encoding="utf-8")) if TAPE_REGISTRY.exists() else None
+    files, writers = _f21_files(), _f21_writers()
+    v1_key = next((k for k in files if k.startswith("tape/") and F21_V2_NAME not in k), None)
+    rng_key = next((k for k in files if k.startswith("tape_ranges/")), None)
+
+    def fplant(key, names=None, meta=_UNSET, sha=None, rename=None):
+        if key is None:
+            return None
+        n0, m0, s0 = files[key]
+        f2 = dict(files)
+        del f2[key]
+        f2[rename or key] = (n0 if names is None else names, m0 if meta is _UNSET else meta,
+                             s0 if sha is None else sha)
+        return dict(files=f2)
+
+    v2_key = f"tape/{F21_V2_NAME}"
+    plants = (
+        ("THE CONTRACT'S PLANT (an unregistered column added to a v1 tape)", "match NO registered version",
+         fplant(v1_key, names=(files[v1_key][0] + ["range_edge_atr"]) if v1_key else None)),
+        ("DATE PLANT (v2's 32 columns under a 2026-09-23 name)", "the date rule assigns",
+         fplant(v2_key, rename="tape/oracle_tape_2026-09-23.parquet") if v2_key in files else None),
+        ("REWRITE PLANT (the 2026-09-21 file's bytes changed)", "REWRITTEN",
+         fplant(v2_key, sha="0" * 64) if v2_key in files else None),
+        ("SIBLING PLANT (an unregistered column on a range tape)", "match NO registered version",
+         fplant(rng_key, names=(files[rng_key][0] + ["range_edge_atr"]) if rng_key else None)),
+        ("METADATA PLANT (a v1 file stamped '2')", "the registry assigns",
+         fplant(v1_key, meta="2")),
+        ("ORDER PLANT (two v1 columns swapped)", "match NO registered version",
+         fplant(v1_key, names=[files[v1_key][0][1], files[v1_key][0][0]] + files[v1_key][0][2:]) if v1_key else None),
+        ("REGISTRY PLANT (v1 with 'heat' dropped)", "the registry's v1 is not",
+         dict(reg={**reg, "tapes": {**reg["tapes"], "tape": {**reg["tapes"]["tape"], "versions": {
+             **reg["tapes"]["tape"]["versions"], "1": {**reg["tapes"]["tape"]["versions"]["1"], "columns": [
+                 c for c in reg["tapes"]["tape"]["versions"]["1"]["columns"] if c["name"] != "heat"]}}}}})
+         if reg else None),
+        ("NAME PLANT (a tape named off the pattern)", "not a registered file pattern",
+         fplant(v1_key, rename="tape/oracle_tape_notadate.parquet")),
+        ("WRITER PLANT (the tape writer stamping '2' over v1's columns)", "the tape writer stamps",
+         dict(writers={**writers, "tape": (writers["tape"][0], "2")})),
+        ("ABSENT PLANT (the registry gone)", "is ABSENT", dict(reg=None)),
+    )
+
+    def _break() -> tuple[bool, str]:
+        green, out = False, []
+        for name, must, kw in plants:
+            if kw is None:
+                green = True
+                out.append(f"{name} -> GREEN: the plant could not be planted")
+                continue
+            bad, _x = _f21_judge(**{"files": files, "writers": writers, "reg": reg, **kw})
+            hits = [b for b in bad if must in b]
+            if hits:
+                rest = [b for b in bad if must not in b]
+                out.append(f"{name} -> RED: {hits[0]}" + (f" [+{len(rest)} other]" if rest else ""))
+            else:
+                green = True
+                out.append(f"{name} -> " + ("GREEN" if not bad else
+                           f"RED FOR THE WRONG REASON (no finding says {must!r}; first: {bad[0]})"))
+        return green, " ‖ ".join(out)
+
+    def _real() -> tuple[bool, str]:
+        bad, x = _f21_judge(reg=reg, files=files, writers=writers)
+        if bad:
+            return False, "; ".join(bad[:6]) + (f" (+{len(bad) - 6} more)" if len(bad) > 6 else "")
+        tv = ", ".join(f"v{k} x{n}" for k, n in sorted(x["seen"]["tape"].items()))
+        rv = ", ".join(f"{k} x{n}" for k, n in sorted(x["seen"]["tape_ranges"].items()))
+        return True, (
+            f"{TAPE_REGISTRY.relative_to(ROOT)}: v1 == TAPE_COLS == PRE_OR1_TAPE_COLS (24), v2 == v1 "
+            f"+ the eight range fields (the one file {F21_V2_NAME}, sha {F21_V2_SHA[:12]}… — not "
+            f"rewritten), ranges-1 == RANGE_TAPE_COLS == RANGE_SIBLING_TYPES (12), every column with "
+            f"its meaning, and the reader rule. {x['files']} tape file(s) on disk and under test, "
+            f"each matching exactly the version its date assigns — tape: {tv}; tape_ranges: {rv}; "
+            f"metadata, where present, names that version. Both writers stamp "
+            f"{OD.TAPE_SCHEMA_KEY}='{OD.TAPE_SCHEMA_ID}' / '{OD.SIBLING_SCHEMA_ID}' over their "
+            f"registered columns")
+
+    prove("F-BR-21", "THE TAPE SCHEMA REGISTRY — every tape file matches exactly one registered "
+                     "version for its date; an unregistered column is RED",
+          _break, _real)
+
+
 # ══════════════════════════════════════════════════════════════════ MAIN
 
 def main() -> int:
@@ -7721,7 +7943,7 @@ def main() -> int:
     print("=" * 78)
     fixtures = (f_br_1, f_br_2, f_br_3, f_br_4, f_br_5, f_br_6,
                 f_br_7, f_br_8, f_br_9, f_br_10, f_br_11, f_br_12, f_br_13, f_br_14,
-                f_br_15, f_br_16, f_br_17, f_br_18, f_br_19, f_br_20)
+                f_br_15, f_br_16, f_br_17, f_br_18, f_br_19, f_br_20, f_br_21)
     for fn in fixtures:
         try:
             fn()

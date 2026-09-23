@@ -1,0 +1,335 @@
+{
+ "registry": "THE ORACLE'S TAPES — schema registry (OR-2 STEP 7, ruling R-6)",
+ "ruled": "R-6 (operator 2026-09-22, ratified 'leans'): register v1 and v2, the reader rule, parquet key-value metadata on new tapes; the 2026-09-21 file registered by name and NOT rewritten. AS RULED IN-SESSION 2026-09-23 (Q-1, 'A-OR1-1 stands'): v1 covers the files before 2026-09-21 AND from 2026-09-23 on, v2 the 2026-09-21 file only, and the tape_ranges/ sibling has its own version; no column goes back into the main tape (A-OR1-1 v: range records go to the sibling; the TC4 tape's schema is untouched).",
+ "spec": "exchange/queue/2026-09-22_OR2_oracle_rulings_ARGUS.md (STEP 7 + IN-SESSION RULINGS Q-1)",
+ "metadata_key": "naiad_tape_schema",
+ "metadata_rule": "every tape written by oracle_daily from OR-2 STEP 7 on carries parquet key-value metadata naiad_tape_schema=<its version id>; files written before carry none and are registered by their date (and 2026-09-21 by its name). Required on every file dated after 2026-09-23.",
+ "metadata_required_after": "2026-09-23",
+ "reader_rule": "Concatenate by column UNION; a v1 row reads null in every v2-only column. Read FILE BY FILE (glob the file pattern, pd.read_parquet each, pd.concat) — NEVER a directory as one dataset: this JSON is not parquet, a dataset read takes the FIRST file's schema and silently drops the 2026-09-21 range columns, and 'closed_by' is typed null in some files and string in others (cast it to string). Range records for any other date are in the sibling tape (tape_ranges/), joined on (as_of_ms, asset, lens).",
+ "tapes": {
+  "tape": {
+   "dir": "research_outputs/oracle/tape",
+   "file_pattern": "oracle_tape_<YYYY-MM-DD>.parquet",
+   "writer": "scripts/oracle_daily.py write_tape",
+   "date_rule": {
+    "by_name": {
+     "oracle_tape_2026-09-21.parquet": "2"
+    },
+    "otherwise": "1"
+   },
+   "absent_dates": [
+    "2026-09-02",
+    "2026-09-05",
+    "2026-09-22"
+   ],
+   "versions": {
+    "1": {
+     "status": "CURRENT — the TC4 event tape (D-4), the pre-OR-1 24 columns",
+     "dates": "2026-08-16 .. 2026-09-20, and 2026-09-23 on",
+     "rows": "one per asset with no window, else one per open window + each window dead within DEAD_MEMORY_BARS",
+     "columns": [
+      {
+       "name": "as_of_ms",
+       "meaning": "open time (ms UTC) of the station's as-of bar on the lens — the row's own last cached bar"
+      },
+      {
+       "name": "as_of_iso",
+       "meaning": "the same instant, ISO-8601 UTC"
+      },
+      {
+       "name": "asset",
+       "meaning": "the roster symbol (<X>USDT)"
+      },
+      {
+       "name": "lens",
+       "meaning": "the station's lens (REGISTER['LENS'], '4h')"
+      },
+      {
+       "name": "station",
+       "meaning": "the posture word: the asset's Board word on a no-window row, else that window's own word (TRIGGERED / ARMED / STALKING / DEAD); unchanged by design (A-BR2-1b)"
+      },
+      {
+       "name": "tide",
+       "meaning": "the 89/316 tide: 'long', 'short' or 'none'"
+      },
+      {
+       "name": "tide_flip_ms",
+       "meaning": "open time of the last 89/316 tide flip (the C-4 anchor)"
+      },
+      {
+       "name": "direction",
+       "meaning": "the window's direction, +1 long / -1 short; null on a no-window row"
+      },
+      {
+       "name": "arm_ms",
+       "meaning": "open time of the 12/89 arming bar"
+      },
+      {
+       "name": "age_bars",
+       "meaning": "bars from the arming to the as-of bar (alive) or to the close (dead)"
+      },
+      {
+       "name": "disp_atr",
+       "meaning": "|close - e89| / ATR at the cross (Window.disp)"
+      },
+      {
+       "name": "d_ok",
+       "meaning": "the displacement test passed"
+      },
+      {
+       "name": "trigger_ms",
+       "meaning": "open time of the in-window 12/26 trigger bar; null if untriggered"
+      },
+      {
+       "name": "trigger_on_arming_bar",
+       "meaning": "the trigger fired on the arming bar itself"
+      },
+      {
+       "name": "closed_by",
+       "meaning": "'counter-12_89' or 'bell-89_316'; null while alive or on a no-window row"
+      },
+      {
+       "name": "close_px",
+       "meaning": "close of the as-of bar"
+      },
+      {
+       "name": "atr_lens",
+       "meaning": "ATR on the lens"
+      },
+      {
+       "name": "atr_daily",
+       "meaning": "daily ATR (daily_atr of the 1h tape)"
+      },
+      {
+       "name": "n_levels",
+       "meaning": "size of the level registry"
+      },
+      {
+       "name": "n_clusters",
+       "meaning": "number of level clusters"
+      },
+      {
+       "name": "nearest_cluster_atr",
+       "meaning": "|nearest scored cluster mean - price| / atr_daily; NaN if none"
+      },
+      {
+       "name": "nearest_cluster_score",
+       "meaning": "that cluster's score"
+      },
+      {
+       "name": "heat",
+       "meaning": "score / (1 + nearest_cluster_atr), 0.0 with no cluster (REGISTER['HEAT'], [VETO], deferred to BR-2)"
+      },
+      {
+       "name": "payload_sha",
+       "meaning": "sha256 of the asset's mantle payload"
+      }
+     ]
+    },
+    "2": {
+     "status": "REGISTERED BY NAME, NEVER REWRITTEN — written once, by OR-1 STEP D2 code (ee93644..26a27c7), superseded by A-OR1-1 v the next day",
+     "file": {
+      "name": "oracle_tape_2026-09-21.parquet",
+      "bytes": 21579,
+      "sha256": "eb6991a33e056baa9eeb350c17392668c95e5e40e3563a432ebcbdbc296895cf"
+     },
+     "columns": [
+      {
+       "name": "as_of_ms",
+       "meaning": "open time (ms UTC) of the station's as-of bar on the lens — the row's own last cached bar"
+      },
+      {
+       "name": "as_of_iso",
+       "meaning": "the same instant, ISO-8601 UTC"
+      },
+      {
+       "name": "asset",
+       "meaning": "the roster symbol (<X>USDT)"
+      },
+      {
+       "name": "lens",
+       "meaning": "the station's lens (REGISTER['LENS'], '4h')"
+      },
+      {
+       "name": "station",
+       "meaning": "the posture word: the asset's Board word on a no-window row, else that window's own word (TRIGGERED / ARMED / STALKING / DEAD); unchanged by design (A-BR2-1b)"
+      },
+      {
+       "name": "tide",
+       "meaning": "the 89/316 tide: 'long', 'short' or 'none'"
+      },
+      {
+       "name": "tide_flip_ms",
+       "meaning": "open time of the last 89/316 tide flip (the C-4 anchor)"
+      },
+      {
+       "name": "direction",
+       "meaning": "the window's direction, +1 long / -1 short; null on a no-window row"
+      },
+      {
+       "name": "arm_ms",
+       "meaning": "open time of the 12/89 arming bar"
+      },
+      {
+       "name": "age_bars",
+       "meaning": "bars from the arming to the as-of bar (alive) or to the close (dead)"
+      },
+      {
+       "name": "disp_atr",
+       "meaning": "|close - e89| / ATR at the cross (Window.disp)"
+      },
+      {
+       "name": "d_ok",
+       "meaning": "the displacement test passed"
+      },
+      {
+       "name": "trigger_ms",
+       "meaning": "open time of the in-window 12/26 trigger bar; null if untriggered"
+      },
+      {
+       "name": "trigger_on_arming_bar",
+       "meaning": "the trigger fired on the arming bar itself"
+      },
+      {
+       "name": "closed_by",
+       "meaning": "'counter-12_89' or 'bell-89_316'; null while alive or on a no-window row"
+      },
+      {
+       "name": "close_px",
+       "meaning": "close of the as-of bar"
+      },
+      {
+       "name": "atr_lens",
+       "meaning": "ATR on the lens"
+      },
+      {
+       "name": "atr_daily",
+       "meaning": "daily ATR (daily_atr of the 1h tape)"
+      },
+      {
+       "name": "n_levels",
+       "meaning": "size of the level registry"
+      },
+      {
+       "name": "n_clusters",
+       "meaning": "number of level clusters"
+      },
+      {
+       "name": "nearest_cluster_atr",
+       "meaning": "|nearest scored cluster mean - price| / atr_daily; NaN if none"
+      },
+      {
+       "name": "nearest_cluster_score",
+       "meaning": "that cluster's score"
+      },
+      {
+       "name": "heat",
+       "meaning": "score / (1 + nearest_cluster_atr), 0.0 with no cluster (REGISTER['HEAT'], [VETO], deferred to BR-2)"
+      },
+      {
+       "name": "payload_sha",
+       "meaning": "sha256 of the asset's mantle payload"
+      },
+      {
+       "name": "range_state",
+       "meaning": "RangeFinder v2 MACRO state: NEUTRAL, BULL_EXP or BEAR_EXP; 'UNAVAILABLE' if the machine failed or the view carried no range — asset-level, repeated on each of the asset's rows"
+      },
+      {
+       "name": "range_top",
+       "meaning": "top of the live CONFIRMED macro range (redrawn so far); null when there is none — asset-level, repeated on each of the asset's rows"
+      },
+      {
+       "name": "range_bottom",
+       "meaning": "bottom of the same range; null when there is none — asset-level, repeated on each of the asset's rows"
+      },
+      {
+       "name": "range_pos_pct",
+       "meaning": "100 * (close - bottom) / (top - bottom), unclamped (below 0 or above 100 during a breach) — asset-level, repeated on each of the asset's rows"
+      },
+      {
+       "name": "range_dist_atr",
+       "meaning": "distance to the nearest macro boundary in ATR(14) on the 4h tape; null with no range or no valid ATR — asset-level, repeated on each of the asset's rows"
+      },
+      {
+       "name": "range_pending_side",
+       "meaning": "'top' or 'bottom' while a breach is open, else null — asset-level, repeated on each of the asset's rows"
+      },
+      {
+       "name": "range_last_event",
+       "meaning": "the last non-pivot macro event (breach-open, memory-touch, redraw, potential-invalidate, potential-superseded, inception-deviation …) — asset-level, repeated on each of the asset's rows"
+      },
+      {
+       "name": "range_last_event_age_bars",
+       "meaning": "bars since that event (n - 1 - i) — asset-level, repeated on each of the asset's rows"
+      }
+     ]
+    }
+   }
+  },
+  "tape_ranges": {
+   "dir": "research_outputs/oracle/tape_ranges",
+   "file_pattern": "oracle_tape_ranges_<YYYY-MM-DD>.parquet",
+   "writer": "scripts/oracle_daily.py write_range_tape",
+   "date_rule": {
+    "by_name": {},
+    "otherwise": "ranges-1"
+   },
+   "versions": {
+    "ranges-1": {
+     "status": "CURRENT — the range layer's sibling tape (A-OR1-1 v), from 2026-09-23",
+     "rows": "one per roster symbol; join key (as_of_ms, asset, lens)",
+     "columns": [
+      {
+       "name": "as_of_ms",
+       "meaning": "open time (ms UTC) of the station's as-of bar on the lens — the row's own last cached bar"
+      },
+      {
+       "name": "as_of_iso",
+       "meaning": "the same instant, ISO-8601 UTC"
+      },
+      {
+       "name": "asset",
+       "meaning": "the roster symbol (<X>USDT)"
+      },
+      {
+       "name": "lens",
+       "meaning": "the range layer's lens (REGISTER['RANGE_LENS'], '4h')"
+      },
+      {
+       "name": "range_state",
+       "meaning": "RangeFinder v2 MACRO state: NEUTRAL, BULL_EXP or BEAR_EXP; 'UNAVAILABLE' if the machine failed or the view carried no range"
+      },
+      {
+       "name": "range_top",
+       "meaning": "top of the live CONFIRMED macro range (redrawn so far); null when there is none"
+      },
+      {
+       "name": "range_bottom",
+       "meaning": "bottom of the same range; null when there is none"
+      },
+      {
+       "name": "range_pos_pct",
+       "meaning": "100 * (close - bottom) / (top - bottom), unclamped (below 0 or above 100 during a breach)"
+      },
+      {
+       "name": "range_dist_atr",
+       "meaning": "distance to the nearest macro boundary in ATR(14) on the 4h tape; null with no range or no valid ATR"
+      },
+      {
+       "name": "range_pending_side",
+       "meaning": "'top' or 'bottom' while a breach is open, else null"
+      },
+      {
+       "name": "range_last_event",
+       "meaning": "the last non-pivot macro event (breach-open, memory-touch, redraw, potential-invalidate, potential-superseded, inception-deviation …)"
+      },
+      {
+       "name": "range_last_event_age_bars",
+       "meaning": "bars since that event (n - 1 - i)"
+      }
+     ]
+    }
+   }
+  }
+ }
+}

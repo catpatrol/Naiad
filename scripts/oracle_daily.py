@@ -128,6 +128,7 @@ from zoneinfo import ZoneInfo
 
 import numpy as np
 import pandas as pd
+import pyarrow as pa
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
@@ -2339,6 +2340,15 @@ def r1_block(view: dict) -> str:
 # It is REPORTED, never rewritten, never deleted: its first 24 columns are this schema,
 # and a reader of the D-4 tape takes those. F-BR-14 goes red on a TAPE_COLS, or on a
 # written D-4 tape, that is anything but these 24 names in this order.
+#
+# THE SCHEMA IS REGISTERED (OR-2 R-6, operator 2026-09-22, as ruled in-session 2026-09-23:
+# A-OR1-1 stands). research_outputs/oracle/tape/SCHEMA.json names every version a tape
+# on disk carries — v1 (these 24), v2 (the one 2026-09-21 file, by name) and the
+# sibling's ranges-1 — with each column's meaning and the reader's rule. From OR-2 on,
+# every tape this module writes carries parquet key-value metadata naming its version
+# (TAPE_SCHEMA_KEY): the COLUMNS do not move; only a self-describing key is added, so a
+# reader never has to infer a tape's version from its date. F-BR-21 holds every file on
+# disk, and both writers, to the registry.
 
 TAPE_COLS = ["as_of_ms", "as_of_iso", "asset", "lens", "station", "tide",
              "tide_flip_ms", "direction", "arm_ms", "age_bars", "disp_atr",
@@ -2346,15 +2356,28 @@ TAPE_COLS = ["as_of_ms", "as_of_iso", "asset", "lens", "station", "tide",
              "close_px", "atr_lens", "atr_daily", "n_levels", "n_clusters",
              "nearest_cluster_atr", "nearest_cluster_score", "heat",
              "payload_sha"]
+TAPE_SCHEMA_KEY = "naiad_tape_schema"
+TAPE_SCHEMA_ID = "1"                 # SCHEMA.json version "1": the 24 above, unchanged
+SIBLING_SCHEMA_ID = "ranges-1"       # SCHEMA.json version "ranges-1": the sibling's 12
+
+
+def tape_schema(df: pd.DataFrame, schema_id: str) -> pa.Schema:
+    """The arrow schema the writer's own parquet call would infer for `df` — the same
+    columns, the same types, the same pandas metadata — plus ONE key-value pair naming
+    the registered version. Handed to that same call as schema=, so the writer stays
+    the writer."""
+    sch = pa.Schema.from_pandas(df, preserve_index=False)
+    return sch.with_metadata({**(sch.metadata or {}),
+                              TAPE_SCHEMA_KEY.encode(): schema_id.encode()})
 
 
 def write_tape(view: dict, date_str: str) -> tuple[Path, str, int]:
     """C-10 / D-4. One event stream, two renders — HTML for the operator,
     parquet for TC4. RECORDING only: not one outcome column exists here.
 
-    Since A-OR1-1 (2026-09-22) this is again, line for line, the pre-OR-1
-    function: it reads no range. The range layer records to its own sibling
-    tape, write_range_tape() below."""
+    Since A-OR1-1 (2026-09-22) it again reads no range and writes the pre-OR-1 24
+    columns; the range layer records to its own sibling tape, write_range_tape()
+    below. Since OR-2 R-6 the file also names its registered version (tape_schema)."""
     TAPE_DIR.mkdir(parents=True, exist_ok=True)
     rows = []
     for a in view["assets"]:
@@ -2383,7 +2406,7 @@ def write_tape(view: dict, date_str: str) -> tuple[Path, str, int]:
                          "closed_by": w.closed_by or None})
     df = pd.DataFrame(rows, columns=TAPE_COLS)
     p = TAPE_DIR / f"oracle_tape_{date_str}.parquet"
-    df.to_parquet(p, index=False)
+    df.to_parquet(p, index=False, schema=tape_schema(df, TAPE_SCHEMA_ID))
     b = p.read_bytes()
     return p, hashlib.sha256(b).hexdigest(), len(b)
 
@@ -2462,7 +2485,7 @@ def write_range_tape(view: dict, date_str: str) -> tuple[Path, str, int]:
     for col in RANGE_TAPE_STRINGS:
         df[col] = df[col].astype("string")
     p = TAPE_RANGES_DIR / f"oracle_tape_ranges_{date_str}.parquet"
-    df.to_parquet(p, index=False)
+    df.to_parquet(p, index=False, schema=tape_schema(df, SIBLING_SCHEMA_ID))
     b = p.read_bytes()
     return p, hashlib.sha256(b).hexdigest(), len(b)
 

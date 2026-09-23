@@ -235,6 +235,12 @@ research_outputs/oracle/**
 # that lives only on one disk vanishes in every fresh clone, which would re-open
 # the stray arming command the ruling closed — so the sentinel is versioned.
 !research_outputs/oracle/SCHEDULE_SUSPENDED
+# tape/SCHEMA.json is the fourth (OR-2 R-6, 2026-09-23): the registry of every version
+# the Oracle's tapes carry, with each column's meaning and the reader's rule. The tapes
+# stay DATA (ignored); the registry that says how to read them is a document. Two lines,
+# because `**` also hides the directory itself.
+!research_outputs/oracle/tape/
+!research_outputs/oracle/tape/SCHEMA.json
 
 research_outputs/tierc6/**
 research_outputs/tierc6_run2/**
