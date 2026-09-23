@@ -1,0 +1,173 @@
+TIER-C10 · STAGE B · FIXTURES — scripts/tierc10_score.py
+the real TP.score / finish_family / _mark_scored / register are never called; no .scored.json is added, removed or rewritten; nothing written under research_outputs/
+
+── F-SC-RECORD
+   FAILS IF: load_record accepts a registry, pin or text that is not the record of record, or an arm that is not the filed JSON's
+   [OK ] the registry of record: len 6, head 7621a85727969299…, order ['P-GEN-1', 'P-SPR-2', 'P-BE-1', 'P-TRG-2', 'P-BRK-I1', 'P-BRK-S1'] == REGISTRY_PIN.json
+   [OK ] every arm is the FILED JSON's book_spec arm, byte for byte (21 arms over six filings)
+   [OK ] REFUSED: a filing tampered after filing — HALT: registration file P-TRG-2.json does NOT verify against its own sha256 — the filed text was altered after filing.
+   [OK ] REFUSED: the pin's order of filing swapped — HALT: the registry under /Users/luis/Naiad/research_outputs/tierc10/registrations is NOT the registry of record: order ['P-GEN-1', 'P-SPR-2', 'P-BE-1'
+   [OK ] REFUSED: P-GEN-1's text of record amended — HALT: the text offered for P-GEN-1 is not the text on file (sha 8231aafb690b0e97 vs filed c64438bafd033c86). The claim moved after it was registered.
+   [OK ] REFUSED: a pin whose P-SPR-2 payload sha is wrong — HALT: P-SPR-2 is not the pinned filing: payload sha != pinned
+   [BREAK] the door accepts any text (require_registered neutered) -> RED (correct): [BAD] REFUSED: P-GEN-1's text of record amended — ACCEPTED
+   [BREAK] the pin's order/length/head are not compared -> RED (correct): [BAD] REFUSED: the pin's order of filing swapped — ACCEPTED
+   [BREAK] a filing is not held against its pin -> RED (correct): [BAD] REFUSED: a pin whose P-SPR-2 payload sha is wrong — ACCEPTED
+   PASS F-SC-RECORD
+
+── F-SC-CARD
+   FAILS IF: a run_cell_n arm's rebuilt card/roles do not round-trip the filed ride, or an unbuildable ride is accepted
+   [OK ] P-GEN-1 'unseen12-card-v6': card 'tc10-gen1-card-v6' roles 'v6-roles' (89, 316, 12, 89, 12, 26) round-trips the filed ride
+   [OK ] P-GEN-1 'panel17-card-v6': card 'tc10-gen1-card-v6' roles 'v6-roles' (89, 316, 12, 89, 12, 26) round-trips the filed ride
+   [OK ] P-GEN-1 'never-touched-card-v6': card 'tc10-gen1-card-v6' roles 'v6-roles' (89, 316, 12, 89, 12, 26) round-trips the filed ride
+   [OK ] P-TRG-2 'trg-9/12 vs card v6 · CLASSIC5 · full': card 'v6-control' roles 'trigger-9/12' (89, 316, 12, 89, 9, 12) round-trips the filed ride
+   [OK ] P-TRG-2 'trg-9/12 vs zero · CLASSIC5 · full': card 'v6-control' roles 'trigger-9/12' (89, 316, 12, 89, 9, 12) round-trips the filed ride
+   [OK ] P-TRG-2 'trg-9/12 vs card v6 · CLASSIC5 · tuning era': card 'v6-control' roles 'trigger-9/12' (89, 316, 12, 89, 9, 12) round-trips the filed ride
+   [OK ] P-TRG-2 'trg-9/12 vs card v6 · CLASSIC5 · holdout era': card 'v6-control' roles 'trigger-9/12' (89, 316, 12, 89, 9, 12) round-trips the filed ride
+   [OK ] REFUSED: an unknown card class — HALT: a filed ride names classes 'tierc8.Unknown' / 'tierc9.Roles'; this driver rebuilds ['tierc8.Card', 'tierc9.Roles'] only.
+   [OK ] REFUSED: a field the class does not have — HALT: the filed ride does not rebuild into tierc8.Card / tierc9.Roles: TypeError("Card.__init__() got an unexpected keyword argument 'bogus_knob'")
+   [OK ] REFUSED: a value that is not a literal — HALT: the filed ride does not rebuild into tierc8.Card / tierc9.Roles: SyntaxError("'(' was never closed", ('<unknown>', 1, 5, 'nine(', 1, 0))
+   [BREAK] field values are not parsed (strings ride) -> RED (correct): [BAD] HALT: HALT: the card/roles rebuilt from the filed ride do NOT round-trip it: card_fields.add_size: filed 1.0 / offered '1.0'; card_fields.adds_m
+   [BREAK] -inf is parsed as 0.0 -> RED (correct): [BAD] HALT: HALT: the card/roles rebuilt from the filed ride do NOT round-trip it: card_fields.harvest_min_unit_r: filed -inf / offered 0.0
+   PASS F-SC-CARD
+
+── F-SC-LANES-CARD
+   FAILS IF: an external arm's card is not derived by rule from its filed lanes and name, or P-BE-1's pin is not held against the filed text
+   [OK ] P-BE-1 pins from the FILED arm names [1.0, 1.0, 1.0, 2.0]; A1-A3 ride CARD_BE1, A4 is CARD_BE1 with be_floor_after_r 2.0 and nothing else moved
+   [OK ] P-SPR-2: arms 1-3 ride CARD_SPR2 (lane spring); arm 4 rides CARD_SPR2 on lane 'union' and nothing else moved
+   [OK ] the door of every filed arm, from its filed runner + lanes: {'P-GEN-1': ['run_cell_n'], 'P-SPR-2': ['lanes'], 'P-BE-1': ['lanes'], 'P-TRG-2': ['run_cell_n'], 'P-BRK-I1': ['brk'], 'P-BRK-S1': ['brk']}
+   [OK ] every BRK arm maps to ONE tierc10_brk role by its filed name: [('brk-i1', 'scored'), ('brk-i1', 'tier_e_other'), ('brk-i1', 'tier_e_panel17'), ('brk-s1', 'scored'), ('brk-s1', 'tier_e_panel17'), ('brk-s1', 'tier_e_other')]
+   [OK ] REFUSED: a floor pin the text never quotes (be-floor-3R) — HALT: arm 'be-floor-3R vs card-v6 (CLASSIC5, full)' names the pin 3.0, and the filed text does not quote 'be_floor_after_r = 3.0'.
+   [OK ] REFUSED: a card-lane arm naming no pin — HALT: external card-lane arm 'floor vs card-v6' names no 'be-floor-<pin>R' — this driver will not guess its card.
+   [OK ] REFUSED: a lane set no lanes card rides — HALT: no lanes card for lanes ['brk-s1', 'card'].
+   [BREAK] the pin is taken from the name without the text's quote -> RED (correct): [BAD] REFUSED: a floor pin the text never quotes (be-floor-3R) — ACCEPTED
+   PASS F-SC-LANES-CARD
+
+── F-SC-BIND
+   FAILS IF: the dry-run binding accepts a book TP.score's pre-marker checks would refuse, or refuses the filed book
+   [OK ] a synthetic P-TRG-2 A1 book wearing the filed ride binds: {'n_paired': 1, 'n_book_only': 2, 'n_base_only': 1, 'n_pair_score_law': 1, 'moved': True}
+   [OK ] the premise is TP.score's arithmetic (len(base) 2 > n_pair 1 -> moved) even where the key SETS are equal: {'n_paired': 1, 'n_book_only': 0, 'n_base_only': 0, 'n_pair_score_law': 1, 'moved': True}
+   [OK ] REFUSED: identical campaign keys (two-sample premise) — HALT: P-TRG-2 — the arm shares the WHOLE campaign set with its base; the commissioned two-sample ruler's premise failed.
+   [OK ] REFUSED: a campaign on a lane the arm never filed — HALT: score(P-TRG-2) — the offered book is NOT the book registered as arm 'trg-9/12 vs card v6 · CLASSIC5 · full': lanes: filed ['
+   [OK ] REFUSED: a base ridden over a different window — HALT: score(P-TRG-2) — the offered book is NOT the book registered as arm 'trg-9/12 vs card v6 · CLASSIC5 · full': base: ridden ov
+   [OK ] REFUSED: a book whose provenance is the control's ride — HALT: score(P-TRG-2) — the offered book is NOT the book registered as arm 'trg-9/12 vs card v6 · CLASSIC5 · full': book provenance
+   [OK ] REFUSED: a non-finite net_r — HALT: 1 campaign(s) carry a non-finite net_r.
+   [OK ] REFUSED: a symbol outside the declared panel — HALT: the book holds ['DOGEUSDT'], outside the declared panel CLASSIC5.
+   [OK ] REFUSED: a holdout arm's book with an entry before the cut — HALT: 1 campaigns ENTER outside the filed 'holdout' era.
+   [OK ] REFUSED: a plain list for a run_cell_n arm — HALT: score(P-TRG-2) — the offered book is NOT the book registered as arm 'trg-9/12 vs card v6 · CLASSIC5 · full': book: the arm i
+   [OK ] REFUSED: an external arm offered a Book wearing another arm's gate — HALT: score(P-SPR-2) — the offered book is NOT the book registered as arm 'standalone vs zero · full corridor': book gate (require
+   [BREAK] TP._bind_arm neutered -> RED (correct): [BAD] REFUSED: a campaign on a lane the arm never filed — ACCEPTED
+   [BREAK] the two-sample premise is not measured -> RED (correct): [BAD] a synthetic P-TRG-2 A1 book wearing the filed ride binds: {'n_paired': 0, 'n_book_only': 1, 'n_base_only': 1, 'n_pair_score_law': 0, 'moved': Tr
+   [BREAK] the era is not held against the campaigns -> RED (correct): [BAD] REFUSED: a holdout arm's book with an entry before the cut — ACCEPTED
+   [BREAK] the premise decided by key SETS, not the scorer's arithmetic -> RED (correct): [BAD] the premise is TP.score's arithmetic (len(base) 2 > n_pair 1 -> moved) even where the key SETS are equal: {'n_paired': 1, 'n_book_only': 0, 'n_b
+   PASS F-SC-BIND
+
+── F-SC-DOOR-FIRST
+   FAILS IF: any bar is read (corridor_era, a frame, a signal, the runner) before the arm's door has opened
+   [OK ] P-TRG-2 'trg-9/12 vs card v6 · CLASSIC5 · full': door:require_registered > bars:corridor_era > runner:run_cell_n
+   [OK ] P-GEN-1 'never-touched-card-v6': door:require_registered > bars:corridor_era > runner:run_cell_n
+   [OK ] P-SPR-2 'standalone vs zero · tuning era': door:require_arm > door:require_registered > bars:corridor_era > bars:spring_signals > bars:frame > bars:frame > bars:spring_signals > bars:frame > bars:frame > bars:spring_signals > bars:frame > bars:frame > bars:spring_signals > bars:frame > bars:frame > bars:spring_signals > bars:frame > bars:frame > runner:run_lane
+   [OK ] P-BE-1 'be-floor-2R sensitivity vs card-v6 (CLASSIC5, full) [Tier-E]': door:require_arm > door:require_registered > bars:corridor_era > runner:run_lane
+   [OK ] P-BRK-I1 'CLASSIC5-memory-line': door:require_arm > door:require_registered > runner:ready_run
+   [OK ] P-BRK-S1 'P-BRK-S1 vs zero': door:require_arm > door:require_registered > runner:ready_run
+   [BREAK] the corridor is cut BEFORE the door -> RED (correct): [BAD] P-TRG-2 'trg-9/12 vs card v6 · CLASSIC5 · full': bars:corridor_era > door:require_registered > bars:corridor_era > runner:run_cell_n
+   PASS F-SC-DOOR-FIRST
+
+── F-SC-SPRING
+   FAILS IF: the spring list handed in is not exactly replay10's window, or the refusal count is inconsistent with the Book
+   [OK ] BTCUSDT tuning window [316, 10542] (independently re-derived): 35 of 61 whole-tape signals handed in
+   [OK ] the list survives replay10's own check_signals: {'n_signals': 35, 'n_long': 19, 'n_short': 16}
+   [OK ] REFUSED: one signal past the window handed in — HALT: the injected spring signal list does not survive the raw tape:
+   [OK ] the real tuning-arm ride: {'signals': 182, 'long': 87, 'short': 95, 'entered': 165, 'position_open': 17, 'degenerate_R': 0, 'no_struct_anchor': 0, 'UNEXPLAINED': 0} consistent=True
+   [OK ] REFUSED: a book with one campaign dropped reads inconsistent (UNEXPLAINED 1)
+   [BREAK] the whole-tape list is handed in unfiltered -> RED (correct): [BAD] HALT: HALT: the injected spring signal list does not survive the raw tape: / signal[0] 'census/BTCUSDT/4h/scale3.0': reclaim bar 240 outside the
+   [BREAK] the window drops the warm-up floor -> RED (correct): [BAD] HALT: HALT: the injected spring signal list does not survive the raw tape: / signal[0] 'census/BTCUSDT/4h/scale3.0': reclaim bar 240 outside the
+   PASS F-SC-SPRING
+
+── F-SC-NOSCORE
+   FAILS IF: the dry-run reaches TP.score / finish_family / _mark_scored / register, writes a .scored.json, or prints an outcome
+   [OK ] tripwires on TP.score / finish_family / _mark_scored / register: 0 hit; .scored.json UNCHANGED by the dry-run (5 on file before, byte-identical after: True)
+   [OK ] the stubbed dry-run of all 21 arms prints no outcome token (none) and no campaign net_r or sum of them (none)
+   [BREAK] the binding step calls TP.score -> RED (correct): [BAD] TRIPWIRE: TP.score
+   [BREAK] the per-asset line prints each asset's net_r sum -> RED (correct): [BAD] the stubbed dry-run of all 21 arms prints no outcome token (none) and no campaign net_r or sum of them (['7.123457', '7.12'])
+   PASS F-SC-NOSCORE
+
+── F-SC-DET
+   FAILS IF: two dry-runs differ by one byte
+   [OK ] two stubbed dry-runs: sha 038c5f7ad6af9b5c / 038c5f7ad6af9b5c
+   [BREAK] a clock in the header -> RED (correct): [BAD] two stubbed dry-runs: sha <sha> / <sha>
+   PASS F-SC-DET
+
+── F-SC-GEN1
+   FAILS IF: P-GEN-1 §5's arm-3 assertion misses a missing or changed campaign
+   [OK ] arm 3 == the three-symbol subset of arm 1: HOLDS (n 3/3)
+   [OK ] REFUSED: arm 3 missing a campaign reads BROKEN (only in arm 1 [['MNTUSDT_BYBIT', 'card', 1690043200000]])
+   [OK ] REFUSED: arm 3 with one campaign's content changed reads BROKEN (keys equal True, shas equal False/False)
+   [BREAK] both shas blinded (keys alone decide) -> RED (correct): [BAD] REFUSED: arm 3 with one campaign's content changed reads BROKEN (keys equal True, shas equal True/True)
+   PASS F-SC-GEN1
+
+── F-SC-TWIN
+   FAILS IF: the haircut twin beside a row is not tierc10_data's filed law, or it touches the TC-series net_r
+   [OK ] tierc10_data's parsed tiers == the fixture's typed contract tiers {'A': 2.0, 'B': 5.0, 'C': 10.0}
+   [OK ] synthetic twin == the hand's (fee 5 bps/side + tier slippage, on (entry + exit) / r_dist, NO funding) and the TC-series column is the book's own net_r; the funding companion subtracts funding_r
+   [OK ] the driver's stem->asset map == tierc10_data.haircut_twin_for_stem on all 17 stems (no disagreement)
+   [OK ] a twin-ruled row carries the twin DIFFERENCE and a sign flag
+   [BREAK] the charter slippage is dropped -> RED (correct): [BAD] synthetic twin == the hand's (fee 5 bps/side + tier slippage, on (entry + exit) / r_dist, NO funding) and the TC-series column is the book's own
+   PASS F-SC-TWIN
+
+── F-SC-FINISH
+   FAILS IF: finish_family is reached without all six scored rows (or an operator-named scored-arm HALT), or a whole family is refused
+   [OK ] six canonical scored rows: finish_family (stub) called once with [6]
+   [OK ] REFUSED: five rows files — HALT: --finish needs ALL SIX registrations with exactly one canonical scored row (or a scored-arm HALT the operator name
+   [OK ] REFUSED: a scored row from a throwaway registry — HALT: --finish needs ALL SIX registrations with exactly one canonical scored row (or a scored-arm HALT the operator name
+   [OK ] REFUSED: two scored rows in one registration — HALT: --finish needs ALL SIX registrations with exactly one canonical scored row (or a scored-arm HALT the operator name
+   [OK ] REFUSED: a scored-arm HALT the operator did not name — HALT: --finish needs ALL SIX registrations with exactly one canonical scored row (or a scored-arm HALT the operator name
+   [OK ] REFUSED: --allow-halted-slot naming no filed id — HALT: --allow-halted-slot names ['P-XYZ-9'].
+   [OK ] finish_family was reached by none of the refused families
+   [OK ] the operator NAMES P-BE-1's recorded HALT: finish_family runs on 5 scored rows at the declared m, and FAMILY.json names the halted slot
+   [BREAK] the gate admits whatever rows files exist -> RED (correct): [BAD] REFUSED: five rows files — ACCEPTED
+   PASS F-SC-FINISH
+
+── F-SC-ROWS
+   FAILS IF: --score overwrites a differing rows file, scores a Book the reviewed dry-run did not name, or scores Tier-E arms behind a scored-arm HALT by default
+   [OK ] a re-score reproduces the rows file byte for byte (0e1ad428a6f04c70 / 0e1ad428a6f04c70; 8 stub score calls over 2 x 4 arms)
+   [OK ] REFUSED: a re-score whose bytes differ never overwrites the filed rows — HALT: <tmp>/P-TRG-2.rows.json exists and the re-score's bytes DIFFER (filed 0e1ad428a6f04c70 / now 5
+   [OK ] REFUSED: a Book whose sha is not the reviewed dry-run's, BEFORE TP.score (0 score calls) — HALT: --expect — P-TRG-2 'trg-9/12 vs card v6 · CLASSIC5 · full' re-rode to book 8ca193eca
+   [OK ] P-BE-1's scored arm HALTs (the text's prescribed premise HALT, recorded with its 2 quotes and F-C10-BE's status beside it): continue=False -> 1 score call(s), 1 row entr(ies), rc 2
+   [OK ] P-BE-1's scored arm HALTs (the text's prescribed premise HALT, recorded with its 2 quotes and F-C10-BE's status beside it): continue=True -> 4 score call(s), 4 row entr(ies), rc 2
+   [BREAK] the rows bytes carry a clock -> RED (correct): [BAD] HALT: HALT: <tmp>/P-TRG-2.rows.json exists and the re-score's bytes DIFFER (filed <sha> / now <sha>). A re-score must reproduce the first; the f
+   [BREAK] the --expect check is skipped -> RED (correct): [BAD] REFUSED: a Book whose sha is not the reviewed dry-run's, BEFORE TP.score (4 score calls) —
+   [BREAK] Tier-E arms are scored behind a scored-arm HALT by default -> RED (correct): [BAD] P-BE-1's scored arm HALTs (the text's prescribed premise HALT, recorded with its 2 quotes and F-C10-BE's status beside it): continue=False -> 4 
+   PASS F-SC-ROWS
+
+── F-SC-PRESCRIBED
+   FAILS IF: a sentence printed as the filed text's prescription is not in the text of record
+   [OK ] P-BE-1's premise HALT carries 2 quotes of its own text (§4, §11)
+   [OK ] another registration's HALT is given no borrowed prescription
+   [OK ] REFUSED: a quote the text no longer carries — HALT: the quote 'If it does not move, this registration does NOT quietly beco'… is not in P-BE-1's t
+   [BREAK] the quote check compares nothing -> RED (correct): [BAD] REFUSED: a quote the text no longer carries — ACCEPTED
+   PASS F-SC-PRESCRIBED
+
+── F-SC-TRG2
+   FAILS IF: P-TRG-2's filed ride is not exactly the two trigger fields off CONTROL_RIDE, or a third moved field passes
+   [OK ] 'trg-9/12 vs card v6 · CLASSIC5 · full': ['roles_fields.trg_f: filed 12 / offered 9', 'roles_fields.trg_s: filed 26 / offered 12']
+   [OK ] 'trg-9/12 vs zero · CLASSIC5 · full': ['roles_fields.trg_f: filed 12 / offered 9', 'roles_fields.trg_s: filed 26 / offered 12']
+   [OK ] 'trg-9/12 vs card v6 · CLASSIC5 · tuning era': ['roles_fields.trg_f: filed 12 / offered 9', 'roles_fields.trg_s: filed 26 / offered 12']
+   [OK ] 'trg-9/12 vs card v6 · CLASSIC5 · holdout era': ['roles_fields.trg_f: filed 12 / offered 9', 'roles_fields.trg_s: filed 26 / offered 12']
+   [OK ] REFUSED: a third moved field (win_f) — ['roles_fields.trg_f: filed 12 / offered 9', 'roles_fields.trg_s: filed 26 / offered 12', 'roles_fields.win_f: filed 12 / offered 9']
+   [BREAK] the diff sees trigger fields only -> RED (correct): [BAD] REFUSED: a third moved field (win_f) — ['roles_fields.trg_f: filed 12 / offered 9', 'roles_fields.trg_s: filed 26 / offered 12']
+   PASS F-SC-TRG2
+
+── F-SC-BESIDE
+   FAILS IF: the per-asset rows beside a scored row drop a declared asset with no campaign, or the twin does not ride the same book
+   [OK ] per-asset rows name all 12 declared assets, 8 of them at n = 0 ['1000BONKUSDT', '1000PEPEUSDT', 'DOGEUSDT', 'HYPEUSDT', 'MNTUSDT_BYBIT', 'PUMPUSDT', 'SUIUSDT', 'UNIUSDT']
+   [OK ] the twin rides the same book (n 6, per asset ['BNBUSDT', 'ENAUSDT', 'LTCUSDT', 'XMRUSDT'])
+   [BREAK] the headline lists the assets PRESENT, not the declared panel -> RED (correct): [BAD] per-asset rows name all 4 declared assets, 0 of them at n = 0 []
+   PASS F-SC-BESIDE
+
+── F-SC-JSON
+   FAILS IF: the rows bytes are not strict, deterministic JSON
+   [OK ] { / "a": 3, / "b": null, / "c": [ / true, / null, / [ / 1, / 2 / ] / ], / "d": [ / { / "x": 1.5 / } / ]
+   [BREAK] no conversion (NaN and numpy ride raw) -> RED (correct): [BAD] TypeError: Object of type int64 is not JSON serializable
+   PASS F-SC-JSON
+
+FIXTURE SUMMARY  16/16 PASS · 26/26 break legs RED · failed [] · .scored.json on file ['P-BE-1.scored.json', 'P-BRK-I1.scored.json', 'P-GEN-1.scored.json', 'P-SPR-2.scored.json', 'P-TRG-2.scored.json'] · untouched by this suite: True

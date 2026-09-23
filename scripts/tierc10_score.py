@@ -1383,7 +1383,9 @@ def score_registration(ctx: dict, rid: str, expect: dict | None,
                      "scored_in_family": bool(arm["scored_in_family"])})
         P(f"  SCORED {rid} · {arm['arm']!r} · "
           f"{'SCORED' if arm['scored_in_family'] else 'Tier-E'} · n "
-          f"{row['n']} · expectancy {row['expectancy_r']} · CI "
+          f"{row['n']} · arm expectancy {row['expectancy_r']} · "
+          f"{'vs zero' if row.get('arm_base', 'zero') == 'zero' else 'Δ vs ' + str(row.get('arm_base'))}"
+          f" point {row.get('ci_point')} CI "
           f"[{row['ci_lo']}, {row['ci_hi']}] · p {row['p_one_sided']} · "
           f"verdict: {row['verdict']} · LOAO {row['loao_line']} (line of "
           f"record {row['loao_line_of_record']}: "

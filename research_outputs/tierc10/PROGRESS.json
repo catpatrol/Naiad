@@ -17,7 +17,7 @@
     "sha256": "70188a0cc32422be40e74d8e7adf7d444aa610bb3abf0384b4f4a2f66f57bbec"
   },
   "r0_census_utc": "2026-09-22T09:55:00Z",
-  "resume_point": "STAGE B SCORING \u2014 B-CORE (P-GEN-1, P-SPR-2, P-BE-1, P-TRG-2, P-BRK-I1) via scripts/tierc10_score.py --score --only <REG> --expect <reviewed dry-run>; then B-5M (P-BRK-S1 + --finish), then CLOSE",
+  "resume_point": "B-5M \u2014 P-BRK-S1 via scripts/tierc10_score.py --stage B-5M (score S1, then finish_family at m = 6 with P-BE-1's slot HALTed); then CLOSE",
   "seed": 20260921,
   "stages": [
     {
@@ -4752,8 +4752,8 @@
           "sha256": "8bae99c09dfefc8afd91d8a5c5cf9782a497d0f11429ad17d38c888d6055997e"
         },
         "research_outputs/tierc10/scores/FIXTURES_SCORE.txt": {
-          "bytes": 18989,
-          "sha256": "622b750582fcb3a9355119b61212ec0593d683446862f02d1a77e53344cba8b1"
+          "bytes": 19215,
+          "sha256": "0bff32c124fed2567af1c9d9e0c9d70cbd6f3bff4712c7853e92eb307657aad7"
         }
       },
       "as_of": "2026-09-21T16:00:00Z",
@@ -4763,16 +4763,113 @@
           "exit_code": 0,
           "legs_red": 0,
           "legs_total": 16,
+          "note": "Re-certified after B-CORE: F-SC-NOSCORE's 'no .scored.json exists' was a PRE-SCORING invariant (false by design once five are scored); restated as 'nothing this suite runs adds, removes or rewrites a .scored.json' (byte-level). 16/16 twice.",
           "re_run_utc": "2026-09-22T23:30:00Z",
           "suite": "tierc10_score_fixtures (F-SC-RECORD holds the filed record against REGISTRY_PIN.json: length, head, order, per-reg seq/payload/text sha; run whole twice)",
           "transcript_drift": false,
-          "transcript_sha_after": "622b750582fcb3a9355119b61212ec0593d683446862f02d1a77e53344cba8b1",
-          "transcript_sha_before": "622b750582fcb3a9355119b61212ec0593d683446862f02d1a77e53344cba8b1",
+          "transcript_sha_after": "0bff32c124fed2567af1c9d9e0c9d70cbd6f3bff4712c7853e92eb307657aad7",
+          "transcript_sha_before": "0bff32c124fed2567af1c9d9e0c9d70cbd6f3bff4712c7853e92eb307657aad7",
           "wall_seconds": null
         }
       ],
       "one_line": "commit 371123f filed the six registrations (registry len 6, head 7621a857\u2026, m = 6); this stage records the texts of record, the tracked pin and the gitignored registry files so they are re-hashed, and the scoring driver's record fixture re-passes 16/16 twice, byte-identical. No registration is scored here.",
       "stage": "B-REG (the six filed)",
+      "status": "COMPLETE-VERIFIED"
+    },
+    {
+      "artifact_count": 17,
+      "artifact_shas": {
+        "research_outputs/tierc10/registrations/P-BE-1.scored.json": {
+          "bytes": 1243,
+          "sha256": "2efc53eec3742934818133a70b98e2d1919c54ce936f03c62c962dc9203f77af"
+        },
+        "research_outputs/tierc10/registrations/P-BRK-I1.scored.json": {
+          "bytes": 958,
+          "sha256": "1abd57207c97d6769381eab5cb34ac12bbb83594a112a7b3ec6648823b9bfae3"
+        },
+        "research_outputs/tierc10/registrations/P-GEN-1.scored.json": {
+          "bytes": 949,
+          "sha256": "42a6508123d4a8c910e6f0d9e00f829ab4bda143ffce1b9e68b5c8a1449d4ebd"
+        },
+        "research_outputs/tierc10/registrations/P-SPR-2.scored.json": {
+          "bytes": 1294,
+          "sha256": "651927135004644a3c16e96088c6cb18aa7accd87f5c58cfc2156566d514c5a9"
+        },
+        "research_outputs/tierc10/registrations/P-TRG-2.scored.json": {
+          "bytes": 1475,
+          "sha256": "5ebffd59b3218321441d10e741e642806f313721b5eff967fee96aa4da863bf4"
+        },
+        "research_outputs/tierc10/scores/DRYRUN.json": {
+          "bytes": 77280,
+          "sha256": "13958abb0c75ee2cfaa8bf2df9d0f7569bbb286d85fa49a32339d8b90c15672c"
+        },
+        "research_outputs/tierc10/scores/DRYRUN.txt": {
+          "bytes": 49536,
+          "sha256": "3b49a0edbc78a3ad5f49b8ad489dc7d56f728a7ed8649c5001ac7f11c079b2ab"
+        },
+        "research_outputs/tierc10/scores/P-BE-1.rows.json": {
+          "bytes": 84044,
+          "sha256": "b40af065177695e36e755d183ef74e7328d77eb799ed3abbb668ff7d69b6b678"
+        },
+        "research_outputs/tierc10/scores/P-BRK-I1.rows.json": {
+          "bytes": 111150,
+          "sha256": "f3ae88d0be366f127bacfe0f8092cdef07d17559ea3b3db6d6c1edd6c306111a"
+        },
+        "research_outputs/tierc10/scores/P-GEN-1.rows.json": {
+          "bytes": 123091,
+          "sha256": "047097ec5aeefbe8aa63cf2b1a677015540497a41e43b0152e609426a2baf87d"
+        },
+        "research_outputs/tierc10/scores/P-SPR-2.rows.json": {
+          "bytes": 111310,
+          "sha256": "febff33a1ad91e3663cb75fc7db54fe7901d7a8493503e3e6e6aa065da6bc23e"
+        },
+        "research_outputs/tierc10/scores/P-TRG-2.rows.json": {
+          "bytes": 102709,
+          "sha256": "9fa07a0fa1b832ef7a1012a796cfd7fdd73ab2e1275d4faa4340666493c340c8"
+        },
+        "research_outputs/tierc10/scores/SCORE_P-BE-1.txt": {
+          "bytes": 2125,
+          "sha256": "5e59f255bbd3a480492ab4885612c3efadda17ca6528070f32466bfd3405b065"
+        },
+        "research_outputs/tierc10/scores/SCORE_P-BRK-I1.txt": {
+          "bytes": 1529,
+          "sha256": "2492bfd46dd7a4be01353bc3386a22e6da4374c46cab6e29103ed625a6db67b8"
+        },
+        "research_outputs/tierc10/scores/SCORE_P-GEN-1.txt": {
+          "bytes": 1391,
+          "sha256": "8b2d87a4ab5ee9af3f498dd3300b069e5b606da00c6f5d788533b18106dfad8d"
+        },
+        "research_outputs/tierc10/scores/SCORE_P-SPR-2.txt": {
+          "bytes": 1588,
+          "sha256": "72a363e3fa2479a492a29ae6ab6c5ca2334587d87fb282cdeb1dc67982ad0e0f"
+        },
+        "research_outputs/tierc10/scores/SCORE_P-TRG-2.txt": {
+          "bytes": 1598,
+          "sha256": "88708f755db13656a0c1ae346880a71760535161f4cea3135e78b32b1805afd5"
+        }
+      },
+      "as_of": "2026-09-21T16:00:00Z",
+      "blockers": [],
+      "fixtures": [
+        {
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": 16,
+          "note": "LAW 1's re-pass for a scoring stage: every B-CORE registration was --score'd a SECOND time against the committed dry-run (b29774e) and all 5 rows files + all 5 .scored.json re-wrote BYTE-IDENTICAL (TP.score's own law; the driver refuses a differing re-score). Re-certified after B-CORE: F-SC-NOSCORE's 'no .scored.json exists' was a PRE-SCORING invariant (false by design once five are scored); restated as 'nothing this suite runs adds, removes or rewrites a .scored.json' (byte-level). 16/16 twice.",
+          "re_run_utc": "2026-09-23T00:30:00Z",
+          "suite": "tierc10_score_fixtures (driver certification; run whole twice)",
+          "transcript_drift": false,
+          "transcript_sha_after": "0bff32c124fed2567af1c9d9e0c9d70cbd6f3bff4712c7853e92eb307657aad7",
+          "transcript_sha_before": "0bff32c124fed2567af1c9d9e0c9d70cbd6f3bff4712c7853e92eb307657aad7",
+          "wall_seconds": null
+        }
+      ],
+      "notes": [
+        "P-BE-1's SCORED arm A1 HALTed at TP.score, as its filed \u00a74 prescribes: the two-sample premise failed (200/200 campaign keys shared with card v6; the floor moves exits only). P-BE-1 has NO verdict and does not become the paired row. \u00a711: 'a new id must be filed under set_change and the reason disclosed' \u2014 adding a registration is outside the contract ('no registration re-worded or added'), so that filing is the OPERATOR's to order. Its three Tier-E arms (A2 tuning, A3 holdout, A4 2R) were scored as report-only views, registered for that purpose; none may stand in for A1 (\u00a711).",
+        "Clause (c) \u2014 the BH family bar q/m = 0.1/6 \u2014 is not on these rows yet; finish_family runs after B-5M."
+      ],
+      "one_line": "B-CORE scored through the filed doors against the pinned dry-run: P-GEN-1 NOT SUPPORTED (UNSEEN12 +0.0998 R, CI [-0.155, 0.316], LOAO 0/12); P-SPR-2 NOT SUPPORTED (-0.0059 R, CI [-0.175, 0.165], LOAO 0/5); P-BE-1 HALT (prescribed, \u00a74) \u2014 no verdict; P-TRG-2 clause (a) SUPPORTED (\u0394 vs v6 +0.2577 R, CI [0.109, 0.384], p 0.00525, LOAO 5/5) pending the BH bar; P-BRK-I1 NOT SUPPORTED (n 7, +0.718 R, CI [-0.603, 1.452], LOAO 1/5). Re-score byte-identical.",
+      "stage": "B-CORE",
       "status": "COMPLETE-VERIFIED"
     }
   ],

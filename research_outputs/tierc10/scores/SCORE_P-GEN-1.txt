@@ -1,0 +1,6 @@
+TIER-C10 · STAGE B · --score ['P-GEN-1'] — IRREVERSIBLE: TP.score binds each arm's first score in <REG>.scored.json
+  SCORED P-GEN-1 · 'unseen12-card-v6' · SCORED · n 286 · arm expectancy 0.099777 · vs zero point 0.099777 CI [-0.154991, 0.315921] · p 0.271682 · verdict: NOT SUPPORTED · LOAO 0/12 above (line of record lineage: 0/12, bar 7, clears False) · EAR -0.017156 [-0.182654, 0.159051] · twin sign flag False
+  SCORED P-GEN-1 · 'panel17-card-v6' · Tier-E · n 486 · arm expectancy 0.144608 · vs zero point 0.144608 CI [-0.021461, 0.30915] · p 0.07823 · verdict: NOT SUPPORTED · LOAO 1/17 above (line of record lineage: 1/17, bar 9, clears False) · EAR 0.052724 [-0.091113, 0.204938] · twin sign flag False
+  SCORED P-GEN-1 · 'never-touched-card-v6' · Tier-E · n 47 · arm expectancy -0.232839 · vs zero point -0.232839 CI [-0.351183, -0.160879] · p 1.0 · verdict: NOT SUPPORTED · LOAO 0/3 above, 3/3 BELOW (line of record lineage: 0/3, bar 2, clears False) · EAR -0.273892 [-0.376016, -0.171768] · twin sign flag False
+  LOAO, PRINTED TWICE [P-GEN-1]: {'unseen12-card-v6': ('0/12 above', False), 'panel17-card-v6': ('1/17 above', False), 'never-touched-card-v6': ('0/3 above, 3/3 BELOW', False)}
+  FILED /Users/luis/Naiad/research_outputs/tierc10/scores/P-GEN-1.rows.json · sha 047097ec5aeefbe8aa63cf2b1a677015540497a41e43b0152e609426a2baf87d · rc 0

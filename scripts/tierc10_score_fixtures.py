@@ -605,21 +605,31 @@ def _dry_text() -> tuple:
     return P.text(), res
 
 
+def _scored_state() -> dict:
+    """{name: sha256} of every .scored.json on file.  After B-CORE the set is
+    NOT empty (five registrations are scored); the law this suite holds is
+    that NOTHING IT RUNS adds, removes or rewrites one."""
+    import hashlib
+    return {n: hashlib.sha256((SC.REG_DIR / n).read_bytes()).hexdigest()
+            for n in SC.scored_json_on_file()}
+
+
 def leg_noscore():
     """F-SC-NOSCORE — the dry-run path never reaches TP.score, finish_family,
     _mark_scored or register, writes no .scored.json and prints no outcome:
     no outcome token, and not one campaign's net_r nor any sum of them."""
     lines, ok = [], True
     _TRIPS.clear()
-    before = SC.scored_json_on_file()
+    before = _scored_state()
     with stubbed_dry_run():
         txt, res = _dry_text()
-    after = SC.scored_json_on_file()
-    g = not _TRIPS and before == after == []
+    after = _scored_state()
+    g = not _TRIPS and before == after
     ok &= g
     lines.append(f"[{'OK ' if g else 'BAD'}] tripwires on TP.score / "
                  f"finish_family / _mark_scored / register: {len(_TRIPS)} "
-                 f"hit; .scored.json before {before} / after {after}")
+                 f"hit; .scored.json UNCHANGED by the dry-run ({len(before)} "
+                 f"on file before, byte-identical after: {before == after})")
     toks = [t for t in SC.OUTCOME_TOKENS if t in txt]
     nums = [x for x in (f"{SEAL_R}", f"{SEAL_R:.4f}", f"{SEAL_R:.2f}",
                         f"{3 * SEAL_R:.6f}", f"{3 * SEAL_R:.4f}",
@@ -1240,6 +1250,7 @@ def main(argv=None) -> int:
     a = ap.parse_args(argv)
     TMP_ROOT = a.tmp
     TP.substrate()
+    scored_at_start = _scored_state()
     buf = io.StringIO()
 
     def P(s=""):
@@ -1247,7 +1258,8 @@ def main(argv=None) -> int:
         print(s, flush=True)
     P("TIER-C10 · STAGE B · FIXTURES — scripts/tierc10_score.py")
     P("the real TP.score / finish_family / _mark_scored / register are never "
-      "called; no .scored.json; nothing written under research_outputs/")
+      "called; no .scored.json is added, removed or rewritten; nothing "
+      "written under research_outputs/")
     n_pass = n_legs = n_red = n_breaks = 0
     failed = []
     for name, fails_if, fn, breaks in LEGS:
@@ -1280,14 +1292,16 @@ def main(argv=None) -> int:
         if not leg_ok:
             failed.append(name)
         P(f"   {'PASS' if leg_ok else 'FAIL'} {name}")
-    after = SC.scored_json_on_file()
+    after = _scored_state()
     P("")
     P(f"FIXTURE SUMMARY  {n_pass}/{n_legs} PASS · {n_red}/{n_breaks} break "
       f"legs RED · failed {failed or []} · .scored.json on file "
-      f"{after or 'NONE'}")
+      f"{sorted(after) or 'NONE'} · untouched by this suite: "
+      f"{after == scored_at_start}")
     if a.out:
         Path(a.out).write_text(buf.getvalue(), encoding="utf-8")
-    return 0 if (n_pass == n_legs and n_red == n_breaks and not after) else 1
+    return 0 if (n_pass == n_legs and n_red == n_breaks
+                 and after == scored_at_start) else 1
 
 
 if __name__ == "__main__":
