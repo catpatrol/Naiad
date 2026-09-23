@@ -259,6 +259,7 @@ TC_SUITE_FILES = (
     "scripts/tierc10_census_fixtures.py",
     "scripts/tierc10_data.py",
     "scripts/tierc10_data_fixtures.py",
+    "scripts/tierc10_file_registrations.py",   # Stage B's filer (371123f)
     "scripts/tierc10_lanes.py",
     "scripts/tierc10_lanes_fixtures.py",
     "scripts/tierc10_null.py",
@@ -267,6 +268,8 @@ TC_SUITE_FILES = (
     "scripts/tierc10_panel_fixtures.py",
     "scripts/tierc10_resume_fixtures.py",
     "scripts/tierc10_rf_fixtures.py",
+    "scripts/tierc10_score.py",                # Stage B's scoring driver
+    "scripts/tierc10_score_fixtures.py",
     "scripts/tierc10_stamps.py",
     "scripts/tierc10_stamps_fixtures.py",
 )

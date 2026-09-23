@@ -1,0 +1,1737 @@
+{
+ "ledger": "LEDGER_5M — the LAW-1 status of D-5M and CENSUS-R{5m}",
+ "tier": "TIER-C10",
+ "executor": "HEPHAESTUS",
+ "identity": "v2",
+ "written_utc": "2026-09-22T23:12:26Z",
+ "head": "371123fdcf178752b0e350cad835901b87b22661",
+ "branch": "v12-v1-census",
+ "seed": 20260921,
+ "as_of_of_record": "2026-09-21T16:00:00Z",
+ "substrate": "/Users/luis/.cache/naiad/snapshots/tc10_20260921",
+ "live_cache_touched": false,
+ "contract_of_record": {
+  "path": "exchange/queue/2026-09-22_TC10_RESUME_APOLLO.md",
+  "sha256": "8a0bf279bcab0f27161a7d965535445807f4e713e77d045b0ba124bc7f803c7a"
+ },
+ "contract_order": "STEP 0 → D-CORE → CENSUS-R{4h,1d} → A → B-CORE → D-5M → CENSUS-R{5m} → B-5M → CLOSE",
+ "contract_clause": "D-5M → CENSUS-R{5m} → B-5M: 5m klines for the admitted twelve (heaviest fetch, resumable per asset), then the 5m census tables, then P-BRK-S1.",
+ "law_1": "a stage is COMPLETE only if its artifacts exist, manifest shas verify, and its fixtures RE-PASS now; anything else is PARTIAL.",
+ "what_this_ledger_did_not_do": [
+  "edited no PROGRESS.json, BUILD_DRAFT.md, registration text, REGISTRY.jsonl or REGISTRY_PIN.json; made no commit",
+  "ran no whole suite that writes a transcript of record: every suite ran in named-leg mode, which writes nothing, and the transcripts of record were re-hashed unchanged afterward",
+  "called no tierc10_panel.score() / finish_family(), wrote no *.scored.json, and computed, read or printed no outcome sum or table value; only file shas, content shas, row counts and key membership were read",
+  "never read the live cache"
+ ],
+ "stages": {
+  "D-5M": {
+   "status": "PARTIAL",
+   "status_reason": "LAW 1 is met on two of its three legs and missed on one fixture. ARTIFACTS EXIST: 5m klines for all 17 — the admitted twelve (admission excluded none) and CLASSIC5 — none missing. MANIFEST SHAS VERIFY: STAGE_D_MANIFEST.json (sha256 de2e8663…, equal to PROGRESS D-CORE's record) names all 17 5m files, and 17/17 re-hash, with byte counts and row counts recounted equal. FIXTURES: the Stage D suite in OFFLINE mode re-passes now, 17/17 GREEN, with every break leg RED, run twice. F-D-1 is ONLINE and is RED now (re-run this session). Its sample includes 5m bars (SUIUSDT, MNTUSDT_BYBIT and XMRUSDT), and one of its three differing bars is a 5m bar: XMRUSDT 5m 2024-10-28T20:00Z. That file carries the venue's ARCHIVE bar, and REST disagrees. This is the designed RED that waits on the operator's narrower R5 word, REST or ARCHIVE, which OPERATOR_RULINGS.md already lists as still blocked after R7-R10. It is the same single blocker that holds D-CORE PARTIAL, and nothing else stands in the way.",
+   "as_of": "2026-09-21T16:00:00Z",
+   "as_of_last_closed_5m_bar": {
+    "close": "2026-09-21T16:00:00Z",
+    "open": "2026-09-21T15:55:00Z"
+   },
+   "manifest_of_record": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "sha256": "de2e8663bbf101dfb46ad9f77a4969ca73648e78373646c0d17b81b9f9a87421",
+    "progress_record_sha256": "de2e8663bbf101dfb46ad9f77a4969ca73648e78373646c0d17b81b9f9a87421",
+    "rows_5m": 17,
+    "rows_total_in_scope": 119
+   },
+   "coverage": {
+    "required": "the admitted twelve + CLASSIC5 (P-BRK-S1's scored panel)",
+    "admitted_twelve": [
+     "ENAUSDT",
+     "PUMPUSDT",
+     "HYPEUSDT",
+     "MNTUSDT_BYBIT",
+     "SUIUSDT",
+     "LTCUSDT",
+     "XMRUSDT",
+     "BNBUSDT",
+     "UNIUSDT",
+     "1000PEPEUSDT",
+     "DOGEUSDT",
+     "1000BONKUSDT"
+    ],
+    "classic5": [
+     "BTCUSDT",
+     "ETHUSDT",
+     "SOLUSDT",
+     "NEARUSDT",
+     "ZECUSDT"
+    ],
+    "excluded_by_admission": [],
+    "present": 17,
+    "missing": [],
+    "sha_ok": 17,
+    "gaps_total": 0,
+    "provenance": {
+     "pre_existing_before_tc10_PRE_STATE": [
+      "1000BONKUSDT",
+      "1000PEPEUSDT",
+      "BNBUSDT",
+      "BTCUSDT",
+      "DOGEUSDT",
+      "ENAUSDT",
+      "ETHUSDT",
+      "HYPEUSDT",
+      "LTCUSDT",
+      "NEARUSDT",
+      "SOLUSDT",
+      "UNIUSDT",
+      "XMRUSDT",
+      "ZECUSDT"
+     ],
+     "pre_existing_extended": [],
+     "fetched_whole_by_tc10": [
+      "MNTUSDT_BYBIT",
+      "PUMPUSDT",
+      "SUIUSDT"
+     ],
+     "fetch_log_5m_rows": 54
+    }
+   },
+   "artifact_shas": {
+    "/Users/luis/.cache/naiad/snapshots/tc10_20260921/klines/BTCUSDT_5m.parquet": {
+     "sha256": "74319e9782cc883b5a126e58c999e9148681283814b9e93323c6ffb9e8280fd3",
+     "manifest_sha256": "74319e9782cc883b5a126e58c999e9148681283814b9e93323c6ffb9e8280fd3",
+     "sha_ok": true,
+     "bytes_ok": true,
+     "venue": "BINANCE_USDTM",
+     "panel": "CLASSIC5",
+     "rows_file": 740143,
+     "rows_as_of": 740137,
+     "rows_after_pin": 6,
+     "first_open": "2019-09-08T17:55:00Z",
+     "last_open_in_file": "2026-09-21T16:25:00Z",
+     "gap_count": 0,
+     "duplicates": 0,
+     "publication_carries": "REST",
+     "differs_from_archive_bars": 46,
+     "differs_from_rest_bars": 0
+    },
+    "/Users/luis/.cache/naiad/snapshots/tc10_20260921/klines/ETHUSDT_5m.parquet": {
+     "sha256": "61c0f0427ccbf35cf974d651c20ffb9a4444ab846b4632e7350e40da87642ced",
+     "manifest_sha256": "61c0f0427ccbf35cf974d651c20ffb9a4444ab846b4632e7350e40da87642ced",
+     "sha_ok": true,
+     "bytes_ok": true,
+     "venue": "BINANCE_USDTM",
+     "panel": "CLASSIC5",
+     "rows_file": 717225,
+     "rows_as_of": 717219,
+     "rows_after_pin": 6,
+     "first_open": "2019-11-27T07:45:00Z",
+     "last_open_in_file": "2026-09-21T16:25:00Z",
+     "gap_count": 0,
+     "duplicates": 0,
+     "publication_carries": "REST",
+     "differs_from_archive_bars": 28,
+     "differs_from_rest_bars": 0
+    },
+    "/Users/luis/.cache/naiad/snapshots/tc10_20260921/klines/SOLUSDT_5m.parquet": {
+     "sha256": "0dfda5c7154a03c26035655a0d187dfc51c954bfa373ed09e5b08972655bfc40",
+     "manifest_sha256": "0dfda5c7154a03c26035655a0d187dfc51c954bfa373ed09e5b08972655bfc40",
+     "sha_ok": true,
+     "bytes_ok": true,
+     "venue": "BINANCE_USDTM",
+     "panel": "CLASSIC5",
+     "rows_file": 633138,
+     "rows_as_of": 633132,
+     "rows_after_pin": 6,
+     "first_open": "2020-09-14T07:00:00Z",
+     "last_open_in_file": "2026-09-21T16:25:00Z",
+     "gap_count": 0,
+     "duplicates": 0,
+     "publication_carries": "REST",
+     "differs_from_archive_bars": 1469,
+     "differs_from_rest_bars": 0
+    },
+    "/Users/luis/.cache/naiad/snapshots/tc10_20260921/klines/NEARUSDT_5m.parquet": {
+     "sha256": "89682896240f3b7a32098a5618a9721db33c0731c6df0abd68c60ae7be90aacb",
+     "manifest_sha256": "89682896240f3b7a32098a5618a9721db33c0731c6df0abd68c60ae7be90aacb",
+     "sha_ok": true,
+     "bytes_ok": true,
+     "venue": "BINANCE_USDTM",
+     "panel": "CLASSIC5",
+     "rows_file": 624198,
+     "rows_as_of": 624192,
+     "rows_after_pin": 6,
+     "first_open": "2020-10-15T08:00:00Z",
+     "last_open_in_file": "2026-09-21T16:25:00Z",
+     "gap_count": 0,
+     "duplicates": 0,
+     "publication_carries": "REST",
+     "differs_from_archive_bars": 1468,
+     "differs_from_rest_bars": 0
+    },
+    "/Users/luis/.cache/naiad/snapshots/tc10_20260921/klines/ZECUSDT_5m.parquet": {
+     "sha256": "b5363ee6e9585c4d80abd4ef2be69e7d42fedfe43fb6985f721870d78458d992",
+     "manifest_sha256": "b5363ee6e9585c4d80abd4ef2be69e7d42fedfe43fb6985f721870d78458d992",
+     "sha_ok": true,
+     "bytes_ok": true,
+     "venue": "BINANCE_USDTM",
+     "panel": "CLASSIC5",
+     "rows_file": 697062,
+     "rows_as_of": 697056,
+     "rows_after_pin": 6,
+     "first_open": "2020-02-05T08:00:00Z",
+     "last_open_in_file": "2026-09-21T16:25:00Z",
+     "gap_count": 0,
+     "duplicates": 0,
+     "publication_carries": "REST",
+     "differs_from_archive_bars": 1466,
+     "differs_from_rest_bars": 0
+    },
+    "/Users/luis/.cache/naiad/snapshots/tc10_20260921/klines/ENAUSDT_5m.parquet": {
+     "sha256": "316128479ba330f432eab79f522504146087b35bace3d35bb05c71df5ed6160f",
+     "manifest_sha256": "316128479ba330f432eab79f522504146087b35bace3d35bb05c71df5ed6160f",
+     "sha_ok": true,
+     "bytes_ok": true,
+     "venue": "BINANCE_USDTM",
+     "panel": "UNSEEN12 (admitted)",
+     "rows_file": 259824,
+     "rows_as_of": 259818,
+     "rows_after_pin": 6,
+     "first_open": "2024-04-02T12:30:00Z",
+     "last_open_in_file": "2026-09-21T16:25:00Z",
+     "gap_count": 0,
+     "duplicates": 0,
+     "publication_carries": "ARCHIVE",
+     "differs_from_archive_bars": 0,
+     "differs_from_rest_bars": 21
+    },
+    "/Users/luis/.cache/naiad/snapshots/tc10_20260921/klines/PUMPUSDT_5m.parquet": {
+     "sha256": "41d5600e6403247ee0094e26bd1a704ce744b9a26e580ddc5d48704167650d80",
+     "manifest_sha256": "41d5600e6403247ee0094e26bd1a704ce744b9a26e580ddc5d48704167650d80",
+     "sha_ok": true,
+     "bytes_ok": true,
+     "venue": "BINANCE_USDTM",
+     "panel": "UNSEEN12 (admitted)",
+     "rows_file": 126246,
+     "rows_as_of": 126246,
+     "rows_after_pin": 0,
+     "first_open": "2025-07-10T07:30:00Z",
+     "last_open_in_file": "2026-09-21T15:55:00Z",
+     "gap_count": 0,
+     "duplicates": 0,
+     "publication_carries": "BOTH",
+     "differs_from_archive_bars": 0,
+     "differs_from_rest_bars": null
+    },
+    "/Users/luis/.cache/naiad/snapshots/tc10_20260921/klines/HYPEUSDT_5m.parquet": {
+     "sha256": "21da81858fc9b876032cdb2537e0ae6c7e0b10ea65b3162b29b79cb1070a5707",
+     "manifest_sha256": "21da81858fc9b876032cdb2537e0ae6c7e0b10ea65b3162b29b79cb1070a5707",
+     "sha_ok": true,
+     "bytes_ok": true,
+     "venue": "BINANCE_USDTM",
+     "panel": "UNSEEN12 (admitted)",
+     "rows_file": 138024,
+     "rows_as_of": 138018,
+     "rows_after_pin": 6,
+     "first_open": "2025-05-30T10:30:00Z",
+     "last_open_in_file": "2026-09-21T16:25:00Z",
+     "gap_count": 0,
+     "duplicates": 0,
+     "publication_carries": "BOTH",
+     "differs_from_archive_bars": 0,
+     "differs_from_rest_bars": 0
+    },
+    "/Users/luis/.cache/naiad/snapshots/tc10_20260921/klines/MNTUSDT_BYBIT_5m.parquet": {
+     "sha256": "4dde955a65086b0a4b76f864b020c9749bc88dd4eba1681142630678d3eb92d5",
+     "manifest_sha256": "4dde955a65086b0a4b76f864b020c9749bc88dd4eba1681142630678d3eb92d5",
+     "sha_ok": true,
+     "bytes_ok": true,
+     "venue": "BYBIT_V5_LINEAR",
+     "panel": "UNSEEN12 (admitted)",
+     "rows_file": 312593,
+     "rows_as_of": 312593,
+     "rows_after_pin": 0,
+     "first_open": "2023-10-02T06:35:00Z",
+     "last_open_in_file": "2026-09-21T15:55:00Z",
+     "gap_count": 0,
+     "duplicates": 0,
+     "publication_carries": "BYBIT-REST",
+     "differs_from_archive_bars": null,
+     "differs_from_rest_bars": null
+    },
+    "/Users/luis/.cache/naiad/snapshots/tc10_20260921/klines/SUIUSDT_5m.parquet": {
+     "sha256": "d8206c0d367fa2cb52ffabbe02a682f5f06f47d3190fbda6078407eb07c1778a",
+     "manifest_sha256": "d8206c0d367fa2cb52ffabbe02a682f5f06f47d3190fbda6078407eb07c1778a",
+     "sha_ok": true,
+     "bytes_ok": true,
+     "venue": "BINANCE_USDTM",
+     "panel": "UNSEEN12 (admitted)",
+     "rows_file": 356256,
+     "rows_as_of": 356256,
+     "rows_after_pin": 0,
+     "first_open": "2023-05-03T16:00:00Z",
+     "last_open_in_file": "2026-09-21T15:55:00Z",
+     "gap_count": 0,
+     "duplicates": 0,
+     "publication_carries": "REST",
+     "differs_from_archive_bars": 31,
+     "differs_from_rest_bars": null
+    },
+    "/Users/luis/.cache/naiad/snapshots/tc10_20260921/klines/LTCUSDT_5m.parquet": {
+     "sha256": "4fb0cd41cfab9253765dda3db5d7394600caa1ca861197414fede34e59393be8",
+     "manifest_sha256": "4fb0cd41cfab9253765dda3db5d7394600caa1ca861197414fede34e59393be8",
+     "sha_ok": true,
+     "bytes_ok": true,
+     "venue": "BINANCE_USDTM",
+     "panel": "UNSEEN12 (admitted)",
+     "rows_file": 704837,
+     "rows_as_of": 704831,
+     "rows_after_pin": 6,
+     "first_open": "2020-01-09T08:05:00Z",
+     "last_open_in_file": "2026-09-21T16:25:00Z",
+     "gap_count": 0,
+     "duplicates": 0,
+     "publication_carries": "REST",
+     "differs_from_archive_bars": 1467,
+     "differs_from_rest_bars": 0
+    },
+    "/Users/luis/.cache/naiad/snapshots/tc10_20260921/klines/XMRUSDT_5m.parquet": {
+     "sha256": "0272fffa5c90aaf64a0429ea12e6339c5bfc749a7052d58d72dfe50ced763e62",
+     "manifest_sha256": "0272fffa5c90aaf64a0429ea12e6339c5bfc749a7052d58d72dfe50ced763e62",
+     "sha_ok": true,
+     "bytes_ok": true,
+     "venue": "BINANCE_USDTM",
+     "panel": "UNSEEN12 (admitted)",
+     "rows_file": 697638,
+     "rows_as_of": 697632,
+     "rows_after_pin": 6,
+     "first_open": "2020-02-03T08:00:00Z",
+     "last_open_in_file": "2026-09-21T16:25:00Z",
+     "gap_count": 0,
+     "duplicates": 0,
+     "publication_carries": "ARCHIVE",
+     "differs_from_archive_bars": 0,
+     "differs_from_rest_bars": 27
+    },
+    "/Users/luis/.cache/naiad/snapshots/tc10_20260921/klines/BNBUSDT_5m.parquet": {
+     "sha256": "d4c94612b91b3c7f7b5878d0c69563699db7b05426142ac1169d70af6666e191",
+     "manifest_sha256": "d4c94612b91b3c7f7b5878d0c69563699db7b05426142ac1169d70af6666e191",
+     "sha_ok": true,
+     "bytes_ok": true,
+     "venue": "BINANCE_USDTM",
+     "panel": "UNSEEN12 (admitted)",
+     "rows_file": 695622,
+     "rows_as_of": 695616,
+     "rows_after_pin": 6,
+     "first_open": "2020-02-10T08:00:00Z",
+     "last_open_in_file": "2026-09-21T16:25:00Z",
+     "gap_count": 0,
+     "duplicates": 0,
+     "publication_carries": "ARCHIVE",
+     "differs_from_archive_bars": 0,
+     "differs_from_rest_bars": 25
+    },
+    "/Users/luis/.cache/naiad/snapshots/tc10_20260921/klines/UNIUSDT_5m.parquet": {
+     "sha256": "3b3684ac9bc688f78c76abb8288773bfc31a67dfa33a50dda98694e30fc2c89e",
+     "manifest_sha256": "3b3684ac9bc688f78c76abb8288773bfc31a67dfa33a50dda98694e30fc2c89e",
+     "sha_ok": true,
+     "bytes_ok": true,
+     "venue": "BINANCE_USDTM",
+     "panel": "UNSEEN12 (admitted)",
+     "rows_file": 631986,
+     "rows_as_of": 631980,
+     "rows_after_pin": 6,
+     "first_open": "2020-09-18T07:00:00Z",
+     "last_open_in_file": "2026-09-21T16:25:00Z",
+     "gap_count": 0,
+     "duplicates": 0,
+     "publication_carries": "ARCHIVE",
+     "differs_from_archive_bars": 0,
+     "differs_from_rest_bars": 28
+    },
+    "/Users/luis/.cache/naiad/snapshots/tc10_20260921/klines/1000PEPEUSDT_5m.parquet": {
+     "sha256": "822ce1fc9832f004bcf0bb49806ed075e3099c7bb0f71d9ebf6d97542fd583a6",
+     "manifest_sha256": "822ce1fc9832f004bcf0bb49806ed075e3099c7bb0f71d9ebf6d97542fd583a6",
+     "sha_ok": true,
+     "bytes_ok": true,
+     "venue": "BINANCE_USDTM",
+     "panel": "UNSEEN12 (admitted)",
+     "rows_file": 355680,
+     "rows_as_of": 355674,
+     "rows_after_pin": 6,
+     "first_open": "2023-05-05T16:30:00Z",
+     "last_open_in_file": "2026-09-21T16:25:00Z",
+     "gap_count": 0,
+     "duplicates": 0,
+     "publication_carries": "ARCHIVE",
+     "differs_from_archive_bars": 0,
+     "differs_from_rest_bars": 29
+    },
+    "/Users/luis/.cache/naiad/snapshots/tc10_20260921/klines/DOGEUSDT_5m.parquet": {
+     "sha256": "67f9d282df57efb47230de96447986ee2e38f46698c5cbeda0689f29edfae532",
+     "manifest_sha256": "67f9d282df57efb47230de96447986ee2e38f46698c5cbeda0689f29edfae532",
+     "sha_ok": true,
+     "bytes_ok": true,
+     "venue": "BINANCE_USDTM",
+     "panel": "UNSEEN12 (admitted)",
+     "rows_file": 652122,
+     "rows_as_of": 652116,
+     "rows_after_pin": 6,
+     "first_open": "2020-07-10T09:00:00Z",
+     "last_open_in_file": "2026-09-21T16:25:00Z",
+     "gap_count": 0,
+     "duplicates": 0,
+     "publication_carries": "ARCHIVE",
+     "differs_from_archive_bars": 0,
+     "differs_from_rest_bars": 29
+    },
+    "/Users/luis/.cache/naiad/snapshots/tc10_20260921/klines/1000BONKUSDT_5m.parquet": {
+     "sha256": "1d738a5cd662bb08548e8e63e3b082db5c8e74708cb6f6fbcdeb0c9c3539a150",
+     "manifest_sha256": "1d738a5cd662bb08548e8e63e3b082db5c8e74708cb6f6fbcdeb0c9c3539a150",
+     "sha_ok": true,
+     "bytes_ok": true,
+     "venue": "BINANCE_USDTM",
+     "panel": "UNSEEN12 (admitted)",
+     "rows_file": 297822,
+     "rows_as_of": 297816,
+     "rows_after_pin": 6,
+     "first_open": "2023-11-22T14:00:00Z",
+     "last_open_in_file": "2026-09-21T16:25:00Z",
+     "gap_count": 0,
+     "duplicates": 0,
+     "publication_carries": "ARCHIVE",
+     "differs_from_archive_bars": 0,
+     "differs_from_rest_bars": 26
+    }
+   },
+   "where_recorded_in_progress": "NO D-5M ENTRY EXISTS. The 5m klines were fetched and described in the same Stage D run as D-CORE. Their shas live inside STAGE_D_MANIFEST.json, which PROGRESS records only under D-CORE, and no 5m KLINE file is named in any stage's artifact_shas (no stage names any kline file; the manifest carries them).",
+   "fixture_legs_covering_5m": {
+    "tierc10_data_fixtures.py (offline)": {
+     "F-D-0": "the substrate guard behind every 5m read (lens-agnostic)",
+     "F-D-2": "17 assets x 6 lenses including 5m: grid faults 0, and the 5m venue flat bars recounted equal to the manifest",
+     "F-D-ASOF": "the 14 pre-existing 5m files holding +6 rows past the pin are counted, and load_asof cuts them; load_asof leaks 0",
+     "F-D-PREFIX": "the 54 pre-existing files include all 14 pre-existing 5m files; no old prefix moved",
+     "F-D-VENUE": "MNTUSDT_BYBIT 5m from Bybit only; the break leg plants a Binance 5m fetch row",
+     "F-D-MANIFEST": "119 rows including the 17 5m rows, every sha re-hashes; the break leg flips a nibble of klines/BTCUSDT_5m.parquet",
+     "F-D-4": "102 cells = 17 x 6 lenses including 5m; all 17 floor bars rebuild EXACTLY from their native 5m children",
+     "F-DET": "an offline re-description writes STAGE_D_MANIFEST.json, which carries the 5m rows, byte-identical"
+    },
+    "tierc10_data_fixtures.py (ONLINE only; NOT RUN offline)": {
+     "F-D-1": "samples 5m bars of SUIUSDT, MNTUSDT_BYBIT and XMRUSDT against the venue REST API; RED",
+     "F-D-1b": "the whole-history REST/ARCHIVE census includes 5m (7,845,237 REST-compared 5m bars)"
+    },
+    "not_5m": [
+     "F-D-L1",
+     "F-D-3",
+     "F-D-ADMIT",
+     "F-D-SEAL",
+     "F-D-CLOSURE",
+     "F-D-FEE",
+     "F-D-MULT",
+     "F-D-5",
+     "F-D-HAIRCUT"
+    ]
+   },
+   "fixtures": [
+    {
+     "command": "export NAIAD_CACHE_DIR=/Users/luis/.cache/naiad/snapshots/tc10_20260921 PYTHONDONTWRITEBYTECODE=1; ~/venvs/naiad/bin/python scripts/tierc10_data_fixtures.py --offline F-D-0 F-D-1 F-D-2 F-D-L1 F-D-3 F-D-ASOF F-D-PREFIX F-D-VENUE F-D-ADMIT F-D-MANIFEST F-D-SEAL F-D-CLOSURE F-D-FEE F-D-MULT F-D-4 F-D-5 F-D-HAIRCUT F-DET",
+     "mode": "OFFLINE, every leg NAMED (run 1 of 2) — a named run writes NO transcript (main(): `if not want`), so FIXTURES_STAGE_D_OFFLINE.txt was not touched",
+     "exit_code": 0,
+     "green": 17,
+     "red": 0,
+     "not_run": [
+      "F-D-1",
+      "F-D-1b"
+     ],
+     "break_legs_red": 17,
+     "break_legs_void": 0,
+     "transcript_sha": "307fab1e349c56f65a1729078ca0015c8b8453b9c1738e7788d2c472b4f553e3",
+     "transcript_path": "/private/tmp/claude-501/-Users-luis-Naiad/8f5aa9c8-3090-4f28-a470-26de01a49ae1/scratchpad/data_offline_run1.txt",
+     "transcript_sha_normalized": "c0c897864ef5b283095561374e008049a9e1513ceaad921c781cffb04534a80e",
+     "filed_transcript_sha_normalized": "c0c897864ef5b283095561374e008049a9e1513ceaad921c781cffb04534a80e",
+     "identical_to_filed_modulo_tempdir_token": true,
+     "identical_to_filed_raw": false,
+     "wall_seconds": 8
+    },
+    {
+     "command": "export NAIAD_CACHE_DIR=/Users/luis/.cache/naiad/snapshots/tc10_20260921 PYTHONDONTWRITEBYTECODE=1; ~/venvs/naiad/bin/python scripts/tierc10_data_fixtures.py --offline F-D-0 F-D-1 F-D-2 F-D-L1 F-D-3 F-D-ASOF F-D-PREFIX F-D-VENUE F-D-ADMIT F-D-MANIFEST F-D-SEAL F-D-CLOSURE F-D-FEE F-D-MULT F-D-4 F-D-5 F-D-HAIRCUT F-DET",
+     "mode": "OFFLINE, every leg NAMED (run 2 of 2) — a named run writes NO transcript (main(): `if not want`), so FIXTURES_STAGE_D_OFFLINE.txt was not touched",
+     "exit_code": 0,
+     "green": 17,
+     "red": 0,
+     "not_run": [
+      "F-D-1",
+      "F-D-1b"
+     ],
+     "break_legs_red": 17,
+     "break_legs_void": 0,
+     "transcript_sha": "c39736084eee7078cc3cd80de52811e395ee41ca269429263bd8ddab566130d2",
+     "transcript_path": "/private/tmp/claude-501/-Users-luis-Naiad/8f5aa9c8-3090-4f28-a470-26de01a49ae1/scratchpad/data_offline_run2.txt",
+     "transcript_sha_normalized": "c0c897864ef5b283095561374e008049a9e1513ceaad921c781cffb04534a80e",
+     "filed_transcript_sha_normalized": "c0c897864ef5b283095561374e008049a9e1513ceaad921c781cffb04534a80e",
+     "identical_to_filed_modulo_tempdir_token": true,
+     "identical_to_filed_raw": false,
+     "wall_seconds": 9
+    },
+    {
+     "command": "export NAIAD_CACHE_DIR=/Users/luis/.cache/naiad/snapshots/tc10_20260921 PYTHONDONTWRITEBYTECODE=1; ~/venvs/naiad/bin/python scripts/tierc10_data_fixtures.py F-D-1",
+     "mode": "ONLINE, targeted (matches F-D-1 and F-D-1b); asks the venue's REST API and bulk archive; writes NO transcript",
+     "exit_code": 1,
+     "wall_seconds": 425,
+     "green": 1,
+     "red": 1,
+     "break_legs_red": 2,
+     "break_legs_void": 0,
+     "transcript_sha": "31678222d6ca99c6a3eacb59e2ecf20964d253e3f8578b5803bba8fe28dbdd6b",
+     "transcript_path": "/private/tmp/claude-501/-Users-luis-Naiad/8f5aa9c8-3090-4f28-a470-26de01a49ae1/scratchpad/ledger5m/data_fd1_online.txt"
+    }
+   ],
+   "f_d_1_now": {
+    "verdict_line": "[FAIL] F-D-1: 65 bars x 3 assets ['MNTUSDT_BYBIT', 'SUIUSDT', 'XMRUSDT'] x lenses ['5m', '1h', '4h', '12h']: every O,H,L,C,V EQUAL to the venue's own native bar at the SAME interval (3 differ).  FAILS IF any OHLCV field of any sampled bar differs from the venue, the venue serves no bar at a cached stamp, or fewer than three assets could be checked.  DIFFERING: ['XMRUSDT 4h 2025-01-14T12:00:00Z: volume: cache 25939.288 != venue 26708.366', 'XMRUSDT 1h 2024-10-28T20:00:00Z: open: cache 161.17 != venue 161.16; high: cache 161.17 != venue 161.36; low: cache 161.17 != venue 159.90; close: cache 161.17 != venue 160.55; volume: cache 0.0 != venue 2813.545', 'XMRUSDT 5m 2024-10-28T20:00:00Z: open: cache 161.17 != venue 161.16; high: cache 161.17 != venue 161.36; low: cache 161.17 != venue 160.96; close: cache 161.17 != venue 160.99; volume: cache 0.0 != venue 322.376'] — the manifest's MEASURED publication label of each differing file: {'XMRUSDT 4h': 'ARCHIVE', 'XMRUSDT 1h': 'ARCHIVE', 'XMRUSDT 5m': 'ARCHIVE'} (a file that carries the venue's ARCHIVE bar cannot equal its REST API on an incident stamp; attribution is F-D-1b's claim, not this one's, and THIS leg stays RED until the operator rules which publication is the record)",
+    "differing_bars": [
+     "[BAD] XMRUSDT        4h  2025-01-14T12:00:00Z  seeded, off-incident  volume: cache 25939.288 != venue 26708.366",
+     "[BAD] XMRUSDT        1h  2024-10-28T20:00:00Z  incident hour (venue zero-volume flat)  open: cache 161.17 != venue 161.16; high: cache 161.17 != venue 161.36; low: cache 161.17 != venue 159.90; close: cache 161.17 != venue 160.55; volume: cache 0.0 != venue 2813.545",
+     "[BAD] XMRUSDT        5m  2024-10-28T20:00:00Z  incident 5m  open: cache 161.17 != venue 161.16; high: cache 161.17 != venue 161.36; low: cache 161.17 != venue 160.96; close: cache 161.17 != venue 160.99; volume: cache 0.0 != venue 322.376"
+    ],
+    "f_d_1b_line": "[PASS] F-D-1b: 422 bars asked of BOTH venue publications: {'archive-only': 74, 'both': 223, 'rest': 20, 'rest-only': 105} — every bar is field-equal to at least one of them (equal to NEITHER: 0; REST-sourced rows differing from REST: 0), and no file's MEASURED publication label is contradicted by a sampled bar (0 contradictions).  THE PANEL IS PUBLICATION-HETEROGENEOUS — Naiad changed nothing; the record is the operator's ruling.  FAILS IF any bar is equal to neither venue publication, a row TC10 itself fetched over REST differs from REST (no archive fallback there), a sampled file has no label, or a file labelled REST / ARCHIVE / BOTH holds a bar only the OTHER publication carries"
+   },
+   "blockers": [
+    "F-D-1 is RED now, on the operator's open R5 question (REST vs ARCHIVE). It is already on file and is not new. No bar is rewritten either way without that word (OPERATOR_RULINGS.md, 'Still blocked on the operator after R7-R10')."
+   ]
+  },
+  "CENSUS-R{5m}": {
+   "status": "COMPLETE-VERIFIED",
+   "status_reason": "ARTIFACTS EXIST. All 17 5m census cells are present, 7 files each, 119 files. The root tables carry their 5m rows: the outcome grid, height-vs-toll with its per-era verdict, edge-fade, the acceptance head-to-head, coverage, the SCALE grid, hold tally, spring overlap, and the 5m R1 TUNING_GRID/RESULT. Both NULL variants carry their 17 5m cells. MANIFEST SHAS VERIFY: every 5m cell table's content sha equals both census/build_manifest.json and its own cell.json (102/102). Every cell's n_bars equals Stage D's rows_as_of, and its as-of equals the pin (17/17). The census input_sha of each 5m tape equals Stage D's sha and the re-hash (17/17). The root tables re-hash against build_manifest.json and R34_MANIFEST.json. All 119 5m cell files re-hash to the PROGRESS record. The six artifact shas the FILED P-BRK-S1 text pins re-hash. The NULL 5m cells re-hash under both variants. FIXTURES RE-PASS NOW: tierc10_census_fixtures.py 14/14 GREEN, 14 break legs RED, run twice, and each transcript is byte-identical to the filed FIXTURES_CENSUS.txt once its stdout-only clock lines are removed. The three NULL legs that walk 5m cells are GREEN on both variants.",
+   "as_of": "2026-09-21T16:00:00Z",
+   "where_recorded_in_progress": "NO CENSUS-R{5m} ENTRY EXISTS, but the stage is NOT unbuilt. The census commission was ['5m', '4h', '1d'] x PANEL17 from the first build. The 119 5m cell files already sit inside PROGRESS 'CENSUS-R{4h,1d}' artifact_shas (399 = 126 4h + 126 1d + 119 5m + 28 root), so the {4h,1d} label understates what that record holds. The NULL records likewise hold 102 5m cell files each (PANEL17 x {5m,4h,1d}).",
+   "artifact_shas": {
+    "cells_5m": {
+     "research_outputs/tierc10/census/cells/1000BONKUSDT__5m/cell.json": {
+      "sha256": "e833dc6a08e00e4931d1855b240ec1e4b91afe0e17c1c5ae840da0aac8c14e6e",
+      "progress_sha256": "e833dc6a08e00e4931d1855b240ec1e4b91afe0e17c1c5ae840da0aac8c14e6e",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/1000BONKUSDT__5m/coverage.parquet": {
+      "sha256": "e5fc0a1b7015c15a54f861e387b35bc2086ee78da46149c5b41d4f103f709dcb",
+      "progress_sha256": "e5fc0a1b7015c15a54f861e387b35bc2086ee78da46149c5b41d4f103f709dcb",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/1000BONKUSDT__5m/events.parquet": {
+      "sha256": "5b9870030cb97355a1f4828c1602e94d7285cc7327e2e4fb32803d02eb3a58d0",
+      "progress_sha256": "5b9870030cb97355a1f4828c1602e94d7285cc7327e2e4fb32803d02eb3a58d0",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/1000BONKUSDT__5m/grid.parquet": {
+      "sha256": "7e1a03764e008d26c8090e6e72778829a8e813c33debfc3ffaa3bd0c70921444",
+      "progress_sha256": "7e1a03764e008d26c8090e6e72778829a8e813c33debfc3ffaa3bd0c70921444",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/1000BONKUSDT__5m/hold_tally.parquet": {
+      "sha256": "4d19601085ee3dd4061d44638dd8eda58360568206b9d411cde40113a187857a",
+      "progress_sha256": "4d19601085ee3dd4061d44638dd8eda58360568206b9d411cde40113a187857a",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/1000BONKUSDT__5m/scale_grid.parquet": {
+      "sha256": "648dc7bd01fcca15b82a6f16c5c6019381db9b1c9a3fe64b7671488dd544a7f7",
+      "progress_sha256": "648dc7bd01fcca15b82a6f16c5c6019381db9b1c9a3fe64b7671488dd544a7f7",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/1000BONKUSDT__5m/spring_overlap.parquet": {
+      "sha256": "22acd255fb210840f544c818d8c282ce04166dacfe92be10d5ff2679f7efb0eb",
+      "progress_sha256": "22acd255fb210840f544c818d8c282ce04166dacfe92be10d5ff2679f7efb0eb",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/1000PEPEUSDT__5m/cell.json": {
+      "sha256": "3abfd5252409a3de2594ee603089aacb09878501c7a7be4c560de728331f5a4c",
+      "progress_sha256": "3abfd5252409a3de2594ee603089aacb09878501c7a7be4c560de728331f5a4c",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/1000PEPEUSDT__5m/coverage.parquet": {
+      "sha256": "355f43d77d0abb7a18950c909ed17fae4d4eae72cf265ff0270f9a9e3e77fe4b",
+      "progress_sha256": "355f43d77d0abb7a18950c909ed17fae4d4eae72cf265ff0270f9a9e3e77fe4b",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/1000PEPEUSDT__5m/events.parquet": {
+      "sha256": "9a13b8fe85f2ddbb71f90b2bfa5b68df87e45856852eccaf226e3b8f0b153191",
+      "progress_sha256": "9a13b8fe85f2ddbb71f90b2bfa5b68df87e45856852eccaf226e3b8f0b153191",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/1000PEPEUSDT__5m/grid.parquet": {
+      "sha256": "d45df465c61972d67b5fda4b673561ecce8eeeedf4cf5f649217083fee28c30b",
+      "progress_sha256": "d45df465c61972d67b5fda4b673561ecce8eeeedf4cf5f649217083fee28c30b",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/1000PEPEUSDT__5m/hold_tally.parquet": {
+      "sha256": "63ed29ef7539fdeb3609ff3ad5c6f42a09d221a0a86fcd70c3c44c0a4bf155f8",
+      "progress_sha256": "63ed29ef7539fdeb3609ff3ad5c6f42a09d221a0a86fcd70c3c44c0a4bf155f8",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/1000PEPEUSDT__5m/scale_grid.parquet": {
+      "sha256": "8fd809c0bf341d304fa50301b7e22407ee5fe6dcebb6ede5e2efa37b669609f4",
+      "progress_sha256": "8fd809c0bf341d304fa50301b7e22407ee5fe6dcebb6ede5e2efa37b669609f4",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/1000PEPEUSDT__5m/spring_overlap.parquet": {
+      "sha256": "017f33aee6cf3a95aaab9659271a95f1a54b89a247ce899dfe64ce745aa59547",
+      "progress_sha256": "017f33aee6cf3a95aaab9659271a95f1a54b89a247ce899dfe64ce745aa59547",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/BNBUSDT__5m/cell.json": {
+      "sha256": "b64b21bdb8925d4d74ffbde9bb8133a8497cc22ca888dc01ce7241985db104df",
+      "progress_sha256": "b64b21bdb8925d4d74ffbde9bb8133a8497cc22ca888dc01ce7241985db104df",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/BNBUSDT__5m/coverage.parquet": {
+      "sha256": "f36c3bef8447eb5c69e71a41bf01cd98c3bc6e1d76fff8c3ab4d28333ed07d60",
+      "progress_sha256": "f36c3bef8447eb5c69e71a41bf01cd98c3bc6e1d76fff8c3ab4d28333ed07d60",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/BNBUSDT__5m/events.parquet": {
+      "sha256": "d1cf4d655ea76ee65dd40f9d61c0c02e72a374b4af969a83ec28b2ee8837e895",
+      "progress_sha256": "d1cf4d655ea76ee65dd40f9d61c0c02e72a374b4af969a83ec28b2ee8837e895",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/BNBUSDT__5m/grid.parquet": {
+      "sha256": "6c4e59112559de22ed1166fab7b5472db4d980735aff325da2e467e79cd89893",
+      "progress_sha256": "6c4e59112559de22ed1166fab7b5472db4d980735aff325da2e467e79cd89893",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/BNBUSDT__5m/hold_tally.parquet": {
+      "sha256": "12474ee3523154af6a3af4eae9a4eb7d9d816146d74bca0a551e11f6f7c4eb33",
+      "progress_sha256": "12474ee3523154af6a3af4eae9a4eb7d9d816146d74bca0a551e11f6f7c4eb33",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/BNBUSDT__5m/scale_grid.parquet": {
+      "sha256": "84799d2b89ef99bd58cd86d0b6d3df2b1702e5bed5d21f6144b9b2a918f69957",
+      "progress_sha256": "84799d2b89ef99bd58cd86d0b6d3df2b1702e5bed5d21f6144b9b2a918f69957",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/BNBUSDT__5m/spring_overlap.parquet": {
+      "sha256": "853e240cf9391ecfb60b6f51f51a9489d39e8eea29e3a490ee03b71f2bc2283c",
+      "progress_sha256": "853e240cf9391ecfb60b6f51f51a9489d39e8eea29e3a490ee03b71f2bc2283c",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/BTCUSDT__5m/cell.json": {
+      "sha256": "1e550f9fa0b2e068793928d443d21001c22321078225589ccfa17a9d668a42eb",
+      "progress_sha256": "1e550f9fa0b2e068793928d443d21001c22321078225589ccfa17a9d668a42eb",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/BTCUSDT__5m/coverage.parquet": {
+      "sha256": "85bc5b4747f459a7d7b950df1dc72c4b5c542294c3f01e90cc074c4628d092b2",
+      "progress_sha256": "85bc5b4747f459a7d7b950df1dc72c4b5c542294c3f01e90cc074c4628d092b2",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/BTCUSDT__5m/events.parquet": {
+      "sha256": "40eed9b434cd4aa15169710f647fc124a732aeea2200ed2614441c589ad720f8",
+      "progress_sha256": "40eed9b434cd4aa15169710f647fc124a732aeea2200ed2614441c589ad720f8",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/BTCUSDT__5m/grid.parquet": {
+      "sha256": "bd6dcd4beaa4747fe207d2420e795ee3f6921e782dd140b1d26a9fd6e814921a",
+      "progress_sha256": "bd6dcd4beaa4747fe207d2420e795ee3f6921e782dd140b1d26a9fd6e814921a",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/BTCUSDT__5m/hold_tally.parquet": {
+      "sha256": "7a5dfb6c50a817fe005c9ddb34a6d647d82908c01fb1049b5b68fd5aa25d6384",
+      "progress_sha256": "7a5dfb6c50a817fe005c9ddb34a6d647d82908c01fb1049b5b68fd5aa25d6384",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/BTCUSDT__5m/scale_grid.parquet": {
+      "sha256": "ac5097e2c1941fe1e858ad65ff32b1fcdadb77e18b619f71550cd56678f98326",
+      "progress_sha256": "ac5097e2c1941fe1e858ad65ff32b1fcdadb77e18b619f71550cd56678f98326",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/BTCUSDT__5m/spring_overlap.parquet": {
+      "sha256": "b254afb4b88a82d26859edd90f9d77c1879fe2026b523abd2a0ff8283c327cb1",
+      "progress_sha256": "b254afb4b88a82d26859edd90f9d77c1879fe2026b523abd2a0ff8283c327cb1",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/DOGEUSDT__5m/cell.json": {
+      "sha256": "bff50df584e0827e6a52a350aa0ef2b06c955ca915b46cae8b499bd41964cee8",
+      "progress_sha256": "bff50df584e0827e6a52a350aa0ef2b06c955ca915b46cae8b499bd41964cee8",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/DOGEUSDT__5m/coverage.parquet": {
+      "sha256": "b3fad5fdbb40a11dd4c2fce8f2c52a1c9704d33906b414d8d3356ef75983d9b0",
+      "progress_sha256": "b3fad5fdbb40a11dd4c2fce8f2c52a1c9704d33906b414d8d3356ef75983d9b0",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/DOGEUSDT__5m/events.parquet": {
+      "sha256": "33eb09ecbbb4f5449e43150e57d4cf6f680956649b0c402bee9b9ec413f8d223",
+      "progress_sha256": "33eb09ecbbb4f5449e43150e57d4cf6f680956649b0c402bee9b9ec413f8d223",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/DOGEUSDT__5m/grid.parquet": {
+      "sha256": "c65d875dbba8b2aadd6babd3f71a497435e424e7eae1cfffeb45005dfbca174f",
+      "progress_sha256": "c65d875dbba8b2aadd6babd3f71a497435e424e7eae1cfffeb45005dfbca174f",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/DOGEUSDT__5m/hold_tally.parquet": {
+      "sha256": "997ed4f7f87c7b8964e56cac496d15f2c0c1c8d218a505eef11dd750ecade5d6",
+      "progress_sha256": "997ed4f7f87c7b8964e56cac496d15f2c0c1c8d218a505eef11dd750ecade5d6",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/DOGEUSDT__5m/scale_grid.parquet": {
+      "sha256": "17297c8051e761440f11467a202f8349bb9ce7f78b45da1717225270996785fc",
+      "progress_sha256": "17297c8051e761440f11467a202f8349bb9ce7f78b45da1717225270996785fc",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/DOGEUSDT__5m/spring_overlap.parquet": {
+      "sha256": "90efdceabcc60cad59cd4147374218caabc3ef235ab8b5f739f4dff55cd5d9ec",
+      "progress_sha256": "90efdceabcc60cad59cd4147374218caabc3ef235ab8b5f739f4dff55cd5d9ec",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ENAUSDT__5m/cell.json": {
+      "sha256": "6737385e44462709e4fa13e94db3cc968cb4c0beb0240ebffb0ee27a54dafaa4",
+      "progress_sha256": "6737385e44462709e4fa13e94db3cc968cb4c0beb0240ebffb0ee27a54dafaa4",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ENAUSDT__5m/coverage.parquet": {
+      "sha256": "4eb9114d8d35c29525896d75ab75a7a1730fc5f7aab128f34412385793db5cec",
+      "progress_sha256": "4eb9114d8d35c29525896d75ab75a7a1730fc5f7aab128f34412385793db5cec",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ENAUSDT__5m/events.parquet": {
+      "sha256": "a3c3f36cc99e4d0e79fe01a2a4615b921b20152c57b4c402e673dd4e3a28167d",
+      "progress_sha256": "a3c3f36cc99e4d0e79fe01a2a4615b921b20152c57b4c402e673dd4e3a28167d",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ENAUSDT__5m/grid.parquet": {
+      "sha256": "c63a7790a9e7059d28aee3f34f8b1b2b98c922e77c818faaacf75981623b394f",
+      "progress_sha256": "c63a7790a9e7059d28aee3f34f8b1b2b98c922e77c818faaacf75981623b394f",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ENAUSDT__5m/hold_tally.parquet": {
+      "sha256": "bef990403f9983a681e7e58b3c03403309496d460ea9ec715e57fe9b654f561c",
+      "progress_sha256": "bef990403f9983a681e7e58b3c03403309496d460ea9ec715e57fe9b654f561c",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ENAUSDT__5m/scale_grid.parquet": {
+      "sha256": "234195d0f6514c11e27e4e0524464d55c4ae90ba6a377059c2e610cd8a50b708",
+      "progress_sha256": "234195d0f6514c11e27e4e0524464d55c4ae90ba6a377059c2e610cd8a50b708",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ENAUSDT__5m/spring_overlap.parquet": {
+      "sha256": "73659e594cfffded2488b668364440c395f3a2090da78699c180dd058b05bcc5",
+      "progress_sha256": "73659e594cfffded2488b668364440c395f3a2090da78699c180dd058b05bcc5",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ETHUSDT__5m/cell.json": {
+      "sha256": "9e8b35604820a4d0cb901d1bf6dc96769cadac4ee0bff56a5bc8377bbba989d2",
+      "progress_sha256": "9e8b35604820a4d0cb901d1bf6dc96769cadac4ee0bff56a5bc8377bbba989d2",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ETHUSDT__5m/coverage.parquet": {
+      "sha256": "13f4581580f8390a308072c53b8e82366dc01db5027ee236b77bbd143230f53f",
+      "progress_sha256": "13f4581580f8390a308072c53b8e82366dc01db5027ee236b77bbd143230f53f",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ETHUSDT__5m/events.parquet": {
+      "sha256": "1bf2397758a38f8f057cd73d9707e6e64ad44e0377446117a30c4a98408f87ed",
+      "progress_sha256": "1bf2397758a38f8f057cd73d9707e6e64ad44e0377446117a30c4a98408f87ed",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ETHUSDT__5m/grid.parquet": {
+      "sha256": "e4c176d184433fb37b7d3e7423d67816b7bce1b77a2befa540aee96dcfddcd9e",
+      "progress_sha256": "e4c176d184433fb37b7d3e7423d67816b7bce1b77a2befa540aee96dcfddcd9e",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ETHUSDT__5m/hold_tally.parquet": {
+      "sha256": "f60d881cc314332d05c101e79118d8480d1122844daffca4b1fd092af78180d3",
+      "progress_sha256": "f60d881cc314332d05c101e79118d8480d1122844daffca4b1fd092af78180d3",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ETHUSDT__5m/scale_grid.parquet": {
+      "sha256": "f10a6d94958fb8c6380bccdc5fe2252c2dbf5549dc456d9c5625fca113062927",
+      "progress_sha256": "f10a6d94958fb8c6380bccdc5fe2252c2dbf5549dc456d9c5625fca113062927",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ETHUSDT__5m/spring_overlap.parquet": {
+      "sha256": "c5fd3f382f80318335010619788065562000497c434807531a480de54fe6b325",
+      "progress_sha256": "c5fd3f382f80318335010619788065562000497c434807531a480de54fe6b325",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/HYPEUSDT__5m/cell.json": {
+      "sha256": "30d6c9b20739ae4c237d0761d3dab0499563cd1904203ae98ff0d472237e1fef",
+      "progress_sha256": "30d6c9b20739ae4c237d0761d3dab0499563cd1904203ae98ff0d472237e1fef",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/HYPEUSDT__5m/coverage.parquet": {
+      "sha256": "d7935082a3cb74a4b3a25a80afbcdf51a644bf108436801a43df854c652f4e5d",
+      "progress_sha256": "d7935082a3cb74a4b3a25a80afbcdf51a644bf108436801a43df854c652f4e5d",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/HYPEUSDT__5m/events.parquet": {
+      "sha256": "e31897ae8fc436617cc2e33713a6925012a36bea06a33db3c2a70c9afbc84e68",
+      "progress_sha256": "e31897ae8fc436617cc2e33713a6925012a36bea06a33db3c2a70c9afbc84e68",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/HYPEUSDT__5m/grid.parquet": {
+      "sha256": "404321d505bb9a8e884f63afba0dc31e8ac2646798dad8900e69cec14f7d4115",
+      "progress_sha256": "404321d505bb9a8e884f63afba0dc31e8ac2646798dad8900e69cec14f7d4115",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/HYPEUSDT__5m/hold_tally.parquet": {
+      "sha256": "0dd8d173d9923a22afcf0563da6270b7022507f14558a89ea8d0d1953af2d4d8",
+      "progress_sha256": "0dd8d173d9923a22afcf0563da6270b7022507f14558a89ea8d0d1953af2d4d8",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/HYPEUSDT__5m/scale_grid.parquet": {
+      "sha256": "b847fcedc7c1e1d4b26982445c0c79b965dc2778fe4cbdc44139954d63009ac0",
+      "progress_sha256": "b847fcedc7c1e1d4b26982445c0c79b965dc2778fe4cbdc44139954d63009ac0",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/HYPEUSDT__5m/spring_overlap.parquet": {
+      "sha256": "a3ffe9429c16220800b51bdb519f589c7c9ae8b3f315ddfc34bb2ff29d642bbc",
+      "progress_sha256": "a3ffe9429c16220800b51bdb519f589c7c9ae8b3f315ddfc34bb2ff29d642bbc",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/LTCUSDT__5m/cell.json": {
+      "sha256": "006f6cc6cef318b9cbee326023eea98093629072bd2550df6a960bc085354ea3",
+      "progress_sha256": "006f6cc6cef318b9cbee326023eea98093629072bd2550df6a960bc085354ea3",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/LTCUSDT__5m/coverage.parquet": {
+      "sha256": "48c92dc5016447c9129d79018841538cd35b8feb33f17110fdecbd8bcd4989ff",
+      "progress_sha256": "48c92dc5016447c9129d79018841538cd35b8feb33f17110fdecbd8bcd4989ff",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/LTCUSDT__5m/events.parquet": {
+      "sha256": "4951a8dc11c55f6c649ab23a062c79907ff76ce9d33d896013999d2809e2264d",
+      "progress_sha256": "4951a8dc11c55f6c649ab23a062c79907ff76ce9d33d896013999d2809e2264d",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/LTCUSDT__5m/grid.parquet": {
+      "sha256": "b705b6043640b7191db2905080476886026dd5e161d831d0d9f8341240c8990e",
+      "progress_sha256": "b705b6043640b7191db2905080476886026dd5e161d831d0d9f8341240c8990e",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/LTCUSDT__5m/hold_tally.parquet": {
+      "sha256": "5539fc36b0b5763aaf92156ce8416fcb6f1751358d0650363f93263f311fbe86",
+      "progress_sha256": "5539fc36b0b5763aaf92156ce8416fcb6f1751358d0650363f93263f311fbe86",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/LTCUSDT__5m/scale_grid.parquet": {
+      "sha256": "3aac2f569c987d3389564a5c261ca1debcc243a5713df86626b519119816f291",
+      "progress_sha256": "3aac2f569c987d3389564a5c261ca1debcc243a5713df86626b519119816f291",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/LTCUSDT__5m/spring_overlap.parquet": {
+      "sha256": "16fa5e44f183de278066ad5573723a282ddcbe9e59884d8107c4de7768fde49a",
+      "progress_sha256": "16fa5e44f183de278066ad5573723a282ddcbe9e59884d8107c4de7768fde49a",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/MNTUSDT_BYBIT__5m/cell.json": {
+      "sha256": "59613bf2af9e974376cd3e1194b4f852f1b3e9f1a353e1fe31463dafe57a607b",
+      "progress_sha256": "59613bf2af9e974376cd3e1194b4f852f1b3e9f1a353e1fe31463dafe57a607b",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/MNTUSDT_BYBIT__5m/coverage.parquet": {
+      "sha256": "3b75950771ae1d33e78c2bba57ed33318cb762cd01804af9e262ab3c4dc90744",
+      "progress_sha256": "3b75950771ae1d33e78c2bba57ed33318cb762cd01804af9e262ab3c4dc90744",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/MNTUSDT_BYBIT__5m/events.parquet": {
+      "sha256": "6841878aa030bd4c7586582124a816e18ff6cd0b66464ea38334ce4e9032693d",
+      "progress_sha256": "6841878aa030bd4c7586582124a816e18ff6cd0b66464ea38334ce4e9032693d",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/MNTUSDT_BYBIT__5m/grid.parquet": {
+      "sha256": "a5bf7c7e09639dea318110deba8788a9c17c41465bef26765d14452d3a6d1bbc",
+      "progress_sha256": "a5bf7c7e09639dea318110deba8788a9c17c41465bef26765d14452d3a6d1bbc",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/MNTUSDT_BYBIT__5m/hold_tally.parquet": {
+      "sha256": "366a18364a5d681ba8532c0691915cca1d21c3a021ef7c21e7c9f33d3a18eee0",
+      "progress_sha256": "366a18364a5d681ba8532c0691915cca1d21c3a021ef7c21e7c9f33d3a18eee0",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/MNTUSDT_BYBIT__5m/scale_grid.parquet": {
+      "sha256": "1e3f19a64d8ae8d94a1cf454b529f7cb4085f10b535cdc58bff90d325d554782",
+      "progress_sha256": "1e3f19a64d8ae8d94a1cf454b529f7cb4085f10b535cdc58bff90d325d554782",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/MNTUSDT_BYBIT__5m/spring_overlap.parquet": {
+      "sha256": "bfd98afde384da8cb610edf0f2ac0bdf1e309b6ddf9f791ffac65ec2f37bb12d",
+      "progress_sha256": "bfd98afde384da8cb610edf0f2ac0bdf1e309b6ddf9f791ffac65ec2f37bb12d",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/NEARUSDT__5m/cell.json": {
+      "sha256": "d8d74e4ea180616c40d5b84b28661bfaca04bf8d65a0db9c768b2673bde68bc0",
+      "progress_sha256": "d8d74e4ea180616c40d5b84b28661bfaca04bf8d65a0db9c768b2673bde68bc0",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/NEARUSDT__5m/coverage.parquet": {
+      "sha256": "0d5f9a4d4a4a4826658e7f4f07e100f90ec42addc3a6258c02e01328d361cca7",
+      "progress_sha256": "0d5f9a4d4a4a4826658e7f4f07e100f90ec42addc3a6258c02e01328d361cca7",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/NEARUSDT__5m/events.parquet": {
+      "sha256": "bf770f8eb45ea23f3c3b66cdbfd47a78691d479bf53a76eadc436638c9143f40",
+      "progress_sha256": "bf770f8eb45ea23f3c3b66cdbfd47a78691d479bf53a76eadc436638c9143f40",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/NEARUSDT__5m/grid.parquet": {
+      "sha256": "daedeb9d6282e6f0f76e95c9605851ab5cb33551aeb4b3da0426771aeb387f3c",
+      "progress_sha256": "daedeb9d6282e6f0f76e95c9605851ab5cb33551aeb4b3da0426771aeb387f3c",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/NEARUSDT__5m/hold_tally.parquet": {
+      "sha256": "1474b6fd5c1656d69c398fd125cedbef05f22f0bcf89bcbb47a6b7c2605c4dd6",
+      "progress_sha256": "1474b6fd5c1656d69c398fd125cedbef05f22f0bcf89bcbb47a6b7c2605c4dd6",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/NEARUSDT__5m/scale_grid.parquet": {
+      "sha256": "8571eb7c2b9631eb77bd15e49ec466fd521721b1001cdfcc6effd330606866fe",
+      "progress_sha256": "8571eb7c2b9631eb77bd15e49ec466fd521721b1001cdfcc6effd330606866fe",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/NEARUSDT__5m/spring_overlap.parquet": {
+      "sha256": "9449ecebd4e4905007c511db4679eb541497202248ede0510811a4434f9c0a72",
+      "progress_sha256": "9449ecebd4e4905007c511db4679eb541497202248ede0510811a4434f9c0a72",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/PUMPUSDT__5m/cell.json": {
+      "sha256": "51d8cb43f39b67d331d3570333206b0612112744d5ebf8b93b1f3497999b5386",
+      "progress_sha256": "51d8cb43f39b67d331d3570333206b0612112744d5ebf8b93b1f3497999b5386",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/PUMPUSDT__5m/coverage.parquet": {
+      "sha256": "fdb5cdbd9d0dc9d85011e1d6e7f69764f274a15475df785abdb9d0f17c234f75",
+      "progress_sha256": "fdb5cdbd9d0dc9d85011e1d6e7f69764f274a15475df785abdb9d0f17c234f75",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/PUMPUSDT__5m/events.parquet": {
+      "sha256": "ce278a204325e36933a693ebb49e1ec8ca8876aef866f2a6e124d3ec8213d2ed",
+      "progress_sha256": "ce278a204325e36933a693ebb49e1ec8ca8876aef866f2a6e124d3ec8213d2ed",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/PUMPUSDT__5m/grid.parquet": {
+      "sha256": "d6b1c38731ae29dcb02f74891ed2119cc431acd14bcf9cda6da9cdf2117a4541",
+      "progress_sha256": "d6b1c38731ae29dcb02f74891ed2119cc431acd14bcf9cda6da9cdf2117a4541",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/PUMPUSDT__5m/hold_tally.parquet": {
+      "sha256": "79d3e76ac3e90f85f83840e26785a65213a74120c0253cbb63ba31101a90b151",
+      "progress_sha256": "79d3e76ac3e90f85f83840e26785a65213a74120c0253cbb63ba31101a90b151",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/PUMPUSDT__5m/scale_grid.parquet": {
+      "sha256": "87aec8dd0ed0f4bab41aacfde000ca20cb960b17e5ed6e93436d1ed624158985",
+      "progress_sha256": "87aec8dd0ed0f4bab41aacfde000ca20cb960b17e5ed6e93436d1ed624158985",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/PUMPUSDT__5m/spring_overlap.parquet": {
+      "sha256": "38b5b28e330336d7724f6ac5337e8ae4aeeccabf2ea6c10c996f3a325a90bf32",
+      "progress_sha256": "38b5b28e330336d7724f6ac5337e8ae4aeeccabf2ea6c10c996f3a325a90bf32",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/SOLUSDT__5m/cell.json": {
+      "sha256": "bc5ff7a80d10ea885c66c5d15cb6557714bb3e884cb01e938ada6ee433091330",
+      "progress_sha256": "bc5ff7a80d10ea885c66c5d15cb6557714bb3e884cb01e938ada6ee433091330",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/SOLUSDT__5m/coverage.parquet": {
+      "sha256": "233bfbb2ac305a585a81be5d04565e65cd4e39cd1f419e7d5c1fb21726ef1905",
+      "progress_sha256": "233bfbb2ac305a585a81be5d04565e65cd4e39cd1f419e7d5c1fb21726ef1905",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/SOLUSDT__5m/events.parquet": {
+      "sha256": "646b55645789708f1da28c8f744ceeea5393a94e7f690e991dec2a8ae33cd229",
+      "progress_sha256": "646b55645789708f1da28c8f744ceeea5393a94e7f690e991dec2a8ae33cd229",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/SOLUSDT__5m/grid.parquet": {
+      "sha256": "44c7ec01375994fbdbb4ceb8ddd7910568f76c8038b3f65ce84ec0be6858885e",
+      "progress_sha256": "44c7ec01375994fbdbb4ceb8ddd7910568f76c8038b3f65ce84ec0be6858885e",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/SOLUSDT__5m/hold_tally.parquet": {
+      "sha256": "f7e2a5c67b0e4cb887175426b0cb5558643ec06611f51854c8d041c17b24b3f5",
+      "progress_sha256": "f7e2a5c67b0e4cb887175426b0cb5558643ec06611f51854c8d041c17b24b3f5",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/SOLUSDT__5m/scale_grid.parquet": {
+      "sha256": "66b06f5861c18269be0cfc2c3d8764d817b80472cec56aa05fd4a07e2a26bf06",
+      "progress_sha256": "66b06f5861c18269be0cfc2c3d8764d817b80472cec56aa05fd4a07e2a26bf06",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/SOLUSDT__5m/spring_overlap.parquet": {
+      "sha256": "f2975603fcef285defee0806f9ffe281ece09b020f4822f5f7a4ee3cc7687971",
+      "progress_sha256": "f2975603fcef285defee0806f9ffe281ece09b020f4822f5f7a4ee3cc7687971",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/SUIUSDT__5m/cell.json": {
+      "sha256": "28fa4ee5ea89df38aa5f3316431bd4804c20471021b18741701585cddb6cbdb1",
+      "progress_sha256": "28fa4ee5ea89df38aa5f3316431bd4804c20471021b18741701585cddb6cbdb1",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/SUIUSDT__5m/coverage.parquet": {
+      "sha256": "c96847dfe899f6a32676320677823118065da626ccf2b1ba1bc1e6169af432a1",
+      "progress_sha256": "c96847dfe899f6a32676320677823118065da626ccf2b1ba1bc1e6169af432a1",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/SUIUSDT__5m/events.parquet": {
+      "sha256": "ab846f21aa462210efb20f2da658dc65f560bbf2a28db7034cd0870be4ffab70",
+      "progress_sha256": "ab846f21aa462210efb20f2da658dc65f560bbf2a28db7034cd0870be4ffab70",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/SUIUSDT__5m/grid.parquet": {
+      "sha256": "d9aaadf98dfc75875a0da530cb1c9275b72039dd9a6eb7093b7aaa6dadc555c7",
+      "progress_sha256": "d9aaadf98dfc75875a0da530cb1c9275b72039dd9a6eb7093b7aaa6dadc555c7",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/SUIUSDT__5m/hold_tally.parquet": {
+      "sha256": "d2a7f152f332c13af833d6ee9675a9a9f2920e733ce15c5d7dbb47bdf6ee4076",
+      "progress_sha256": "d2a7f152f332c13af833d6ee9675a9a9f2920e733ce15c5d7dbb47bdf6ee4076",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/SUIUSDT__5m/scale_grid.parquet": {
+      "sha256": "6c7f7bd33501ee9e3f37d0c3fa8849afe793541db401c8e8bef12274ac8c60ee",
+      "progress_sha256": "6c7f7bd33501ee9e3f37d0c3fa8849afe793541db401c8e8bef12274ac8c60ee",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/SUIUSDT__5m/spring_overlap.parquet": {
+      "sha256": "e4ab9e93ad0580b0193c57b8e73958149b84a166bb9dfc344ae4e29f959978a3",
+      "progress_sha256": "e4ab9e93ad0580b0193c57b8e73958149b84a166bb9dfc344ae4e29f959978a3",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/UNIUSDT__5m/cell.json": {
+      "sha256": "b991fb1d98777545117bc21357b7abd4f46d64fd690ea3773168b1f61353928d",
+      "progress_sha256": "b991fb1d98777545117bc21357b7abd4f46d64fd690ea3773168b1f61353928d",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/UNIUSDT__5m/coverage.parquet": {
+      "sha256": "74753f48b3f557c600be8dff7bcfad10501778ad22371a2a3ada6c12f2b10740",
+      "progress_sha256": "74753f48b3f557c600be8dff7bcfad10501778ad22371a2a3ada6c12f2b10740",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/UNIUSDT__5m/events.parquet": {
+      "sha256": "015025e2ac042e62ce7a31ebecfe19e2e733cc84fa57d560634aec6c208263a3",
+      "progress_sha256": "015025e2ac042e62ce7a31ebecfe19e2e733cc84fa57d560634aec6c208263a3",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/UNIUSDT__5m/grid.parquet": {
+      "sha256": "f2daf84aa33e825ca99f71c1e807aa3c52535ae4d84a7a01a0f377b957ed2eee",
+      "progress_sha256": "f2daf84aa33e825ca99f71c1e807aa3c52535ae4d84a7a01a0f377b957ed2eee",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/UNIUSDT__5m/hold_tally.parquet": {
+      "sha256": "09d7d2e0adc0e8894a91609b59c1a7372a98128e8d003249e7e73d4808c27e17",
+      "progress_sha256": "09d7d2e0adc0e8894a91609b59c1a7372a98128e8d003249e7e73d4808c27e17",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/UNIUSDT__5m/scale_grid.parquet": {
+      "sha256": "d041518dc283bcfb59f301ca2669db6858ced2458884b87f7b2b8142120640e5",
+      "progress_sha256": "d041518dc283bcfb59f301ca2669db6858ced2458884b87f7b2b8142120640e5",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/UNIUSDT__5m/spring_overlap.parquet": {
+      "sha256": "ef11507039278277a0651c46683f176adb1936120e2f847bf940ffb84de18cb5",
+      "progress_sha256": "ef11507039278277a0651c46683f176adb1936120e2f847bf940ffb84de18cb5",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/XMRUSDT__5m/cell.json": {
+      "sha256": "8ad1f378eaa51bb96d8d91988b64198ebc960854bf19961152d090166cf01636",
+      "progress_sha256": "8ad1f378eaa51bb96d8d91988b64198ebc960854bf19961152d090166cf01636",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/XMRUSDT__5m/coverage.parquet": {
+      "sha256": "915821262b2f46fdf45819c62435c0474cea24e2c1a9e27ed88ee0475e5539de",
+      "progress_sha256": "915821262b2f46fdf45819c62435c0474cea24e2c1a9e27ed88ee0475e5539de",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/XMRUSDT__5m/events.parquet": {
+      "sha256": "f24319b6414c481df189e754222ddd7de5c545e744f4553351acccc5d6677b53",
+      "progress_sha256": "f24319b6414c481df189e754222ddd7de5c545e744f4553351acccc5d6677b53",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/XMRUSDT__5m/grid.parquet": {
+      "sha256": "34e4cc7be79f75e2bdef3b6999d49c817e96afe81a614c96a5557f2d8ae144e2",
+      "progress_sha256": "34e4cc7be79f75e2bdef3b6999d49c817e96afe81a614c96a5557f2d8ae144e2",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/XMRUSDT__5m/hold_tally.parquet": {
+      "sha256": "997f0c4677ae4f16f7dbe87791f5e2da8c6c19224d8820954b8eb4ce4049471d",
+      "progress_sha256": "997f0c4677ae4f16f7dbe87791f5e2da8c6c19224d8820954b8eb4ce4049471d",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/XMRUSDT__5m/scale_grid.parquet": {
+      "sha256": "7f5b24993cbcdd1069fa5cfa1839bf06e13c7f76937cba7e32549766c27e4d4f",
+      "progress_sha256": "7f5b24993cbcdd1069fa5cfa1839bf06e13c7f76937cba7e32549766c27e4d4f",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/XMRUSDT__5m/spring_overlap.parquet": {
+      "sha256": "89bf5524a29d8446d78bf0a8f918e5d1fc039280dd5aab438c2453173e944e3a",
+      "progress_sha256": "89bf5524a29d8446d78bf0a8f918e5d1fc039280dd5aab438c2453173e944e3a",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ZECUSDT__5m/cell.json": {
+      "sha256": "db0e8a6a9d874daa81b815e172707393949276f46983ca91431e5ebd845f1af2",
+      "progress_sha256": "db0e8a6a9d874daa81b815e172707393949276f46983ca91431e5ebd845f1af2",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ZECUSDT__5m/coverage.parquet": {
+      "sha256": "4bb9fc56470dad9cee090ed50e15f33305630fe1db50c67455335eb7b8f8dc6d",
+      "progress_sha256": "4bb9fc56470dad9cee090ed50e15f33305630fe1db50c67455335eb7b8f8dc6d",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ZECUSDT__5m/events.parquet": {
+      "sha256": "87b5673c230565c271fcb9aa136dc4689646e717c09fffc4dd53b349fdf19f90",
+      "progress_sha256": "87b5673c230565c271fcb9aa136dc4689646e717c09fffc4dd53b349fdf19f90",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ZECUSDT__5m/grid.parquet": {
+      "sha256": "669230776cd309139d333cfeaddb0cf957aa01d85357290de74a6c06af9b6451",
+      "progress_sha256": "669230776cd309139d333cfeaddb0cf957aa01d85357290de74a6c06af9b6451",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ZECUSDT__5m/hold_tally.parquet": {
+      "sha256": "2b5105632413eff9db41cf7884770e762b7d6588ff045930cb19df0e309bd6b1",
+      "progress_sha256": "2b5105632413eff9db41cf7884770e762b7d6588ff045930cb19df0e309bd6b1",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ZECUSDT__5m/scale_grid.parquet": {
+      "sha256": "0927de7eec881fdbb3ab8fe10febbaa26c9d7ab0db4c47813a622dccd4f315dd",
+      "progress_sha256": "0927de7eec881fdbb3ab8fe10febbaa26c9d7ab0db4c47813a622dccd4f315dd",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/cells/ZECUSDT__5m/spring_overlap.parquet": {
+      "sha256": "8e8ec6102c03c37e5d15aa611744766e1c9f99c8b197b7742ca5ad28ab9874a6",
+      "progress_sha256": "8e8ec6102c03c37e5d15aa611744766e1c9f99c8b197b7742ca5ad28ab9874a6",
+      "ok": true
+     }
+    },
+    "root_tables_with_5m_rows": {
+     "research_outputs/tierc10/census/TUNING_GRID.parquet": {
+      "sha256": "1f9db883383f7f467feda7ca2cb427452d9ff1017486f6f82407c784c28d92fc",
+      "content_sha": "2135ca663a7c407ca1a2a99165692bd3a9a9cd90de458e03dabdc2e32855e7b3",
+      "build_manifest_content_sha": "2135ca663a7c407ca1a2a99165692bd3a9a9cd90de458e03dabdc2e32855e7b3",
+      "r34_content_sha": null,
+      "ok": true,
+      "rows": 45,
+      "rows_lens_5m": 45
+     },
+     "research_outputs/tierc10/census/acceptance_head_to_head.parquet": {
+      "sha256": "29fdc2c30c223e527f9cb67e8a1e2760f297859a3df4727f5aaa127d82114137",
+      "content_sha": "8e4ba0b904f4194ce391b36c6898fd6d50b9c7d199e292425df04f045b717f46",
+      "build_manifest_content_sha": "8e4ba0b904f4194ce391b36c6898fd6d50b9c7d199e292425df04f045b717f46",
+      "r34_content_sha": "8e4ba0b904f4194ce391b36c6898fd6d50b9c7d199e292425df04f045b717f46",
+      "ok": true,
+      "rows": 3600,
+      "rows_lens_5m": 1200
+     },
+     "research_outputs/tierc10/census/coverage.parquet": {
+      "sha256": "f126eb24906ad27463cc68d99b3ef88edec55684f3b6d0c6af513cc94422677e",
+      "content_sha": "48cca7d1f4e0d2eee54b9ca8dfed5e8f718f59471f924eeb509b1b65b6625eb5",
+      "build_manifest_content_sha": "48cca7d1f4e0d2eee54b9ca8dfed5e8f718f59471f924eeb509b1b65b6625eb5",
+      "r34_content_sha": null,
+      "ok": true,
+      "rows": 102,
+      "rows_lens_5m": 34
+     },
+     "research_outputs/tierc10/census/edge_fade.parquet": {
+      "sha256": "a1479632079b3191fecbd02a33af89541b5941209ccb71626410a422cd7900e9",
+      "content_sha": "0683340311d1a3980b945a5e3dde5ee1c21bf6ab802a609053538619a07c6c1f",
+      "build_manifest_content_sha": "0683340311d1a3980b945a5e3dde5ee1c21bf6ab802a609053538619a07c6c1f",
+      "r34_content_sha": "0683340311d1a3980b945a5e3dde5ee1c21bf6ab802a609053538619a07c6c1f",
+      "ok": true,
+      "rows": 55440,
+      "rows_lens_5m": 18480
+     },
+     "research_outputs/tierc10/census/height_toll.parquet": {
+      "sha256": "cdfa976bc82447a9b1e2af0d41ccbfcdd11ef8aad4f61b31f6db86fdf71ee0d6",
+      "content_sha": "3027d55c8f8722683667c9341ab0f50ec807d8974dc8333420148bce6d2d7e11",
+      "build_manifest_content_sha": "3027d55c8f8722683667c9341ab0f50ec807d8974dc8333420148bce6d2d7e11",
+      "r34_content_sha": "3027d55c8f8722683667c9341ab0f50ec807d8974dc8333420148bce6d2d7e11",
+      "ok": true,
+      "rows": 360,
+      "rows_lens_5m": 120
+     },
+     "research_outputs/tierc10/census/height_toll_verdict.parquet": {
+      "sha256": "f3682df0be96e1315304f868deb0a450ef1e9ba667bb13ddf068b062c16d7d7e",
+      "content_sha": "15f901abca17249dc952929ddcb4cf53056a8b9f0297fdb1b58a9413ddfdf6ef",
+      "build_manifest_content_sha": "15f901abca17249dc952929ddcb4cf53056a8b9f0297fdb1b58a9413ddfdf6ef",
+      "r34_content_sha": "15f901abca17249dc952929ddcb4cf53056a8b9f0297fdb1b58a9413ddfdf6ef",
+      "ok": true,
+      "rows": 360,
+      "rows_lens_5m": 120
+     },
+     "research_outputs/tierc10/census/hold_tally.parquet": {
+      "sha256": "49fe2aff7cc456bf9d1256406a948d7ab0628f34bc0149d3e470249df2cab5c0",
+      "content_sha": "f552567cf4b8d617959776034a942fa869fde6693f855375a4773d1f544a410e",
+      "build_manifest_content_sha": "f552567cf4b8d617959776034a942fa869fde6693f855375a4773d1f544a410e",
+      "r34_content_sha": null,
+      "ok": true,
+      "rows": 612,
+      "rows_lens_5m": 204
+     },
+     "research_outputs/tierc10/census/outcome_grid.parquet": {
+      "sha256": "2fe46ddcd2b9dc129e0496c11a871d4d31caf78bc5b7b1bb0b68c1b385f6ee96",
+      "content_sha": "e63150d17c41cf099047424c6f4a108bf34f1fc2a9316abaffd598050390452f",
+      "build_manifest_content_sha": "e63150d17c41cf099047424c6f4a108bf34f1fc2a9316abaffd598050390452f",
+      "r34_content_sha": null,
+      "ok": true,
+      "rows": 7920,
+      "rows_lens_5m": 2640
+     },
+     "research_outputs/tierc10/census/scale_grid.parquet": {
+      "sha256": "955aae4502c2075879d136bf493f012344ecf1138789859ef00e8a5784f1a2e9",
+      "content_sha": "6de084dc2e70c3ce318de2e9ed32ecabd065caa0904cc504134eff41c46faa84",
+      "build_manifest_content_sha": "6de084dc2e70c3ce318de2e9ed32ecabd065caa0904cc504134eff41c46faa84",
+      "r34_content_sha": null,
+      "ok": true,
+      "rows": 561,
+      "rows_lens_5m": 187
+     },
+     "research_outputs/tierc10/census/spring_overlap.parquet": {
+      "sha256": "f2deee848f2863443f5f63e9cf7dc656e02024037cb00652bdb04601826ceb57",
+      "content_sha": "4f6e2189a3c09fde31b474f5d57e8636250a5243c9d37e1586712cf867c06873",
+      "build_manifest_content_sha": "4f6e2189a3c09fde31b474f5d57e8636250a5243c9d37e1586712cf867c06873",
+      "r34_content_sha": null,
+      "ok": true,
+      "rows": 204,
+      "rows_lens_5m": 68
+     }
+    },
+    "control_files": {
+     "research_outputs/tierc10/census/build_manifest.json": {
+      "sha256": "54959c7be3e6be65fd4e767c27534ac6f70b02904def893a69c19a722e76841d",
+      "progress_sha256": "54959c7be3e6be65fd4e767c27534ac6f70b02904def893a69c19a722e76841d",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/R34_MANIFEST.json": {
+      "sha256": "2663d9230a890b6b7f3ab251a68f4817ad1de33d2a3cf93ff9948675b0891c13",
+      "progress_sha256": "2663d9230a890b6b7f3ab251a68f4817ad1de33d2a3cf93ff9948675b0891c13",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/TUNING_RESULT.json": {
+      "sha256": "da6483fe38b49fdaa7b516b45902693488dfffe5041bd3925ecf2c7fe90994fd",
+      "progress_sha256": "da6483fe38b49fdaa7b516b45902693488dfffe5041bd3925ecf2c7fe90994fd",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/TUNING_GRID.md": {
+      "sha256": "7fe38f04eba2a0be7fed1ef7d05789a9ff923806608a26caff9af08b412ce0c6",
+      "progress_sha256": "7fe38f04eba2a0be7fed1ef7d05789a9ff923806608a26caff9af08b412ce0c6",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/CENSUS_R_DIGEST.md": {
+      "sha256": "281e61639ad6dcb41ee088e9959191feeb02ebfe6b9eaabbb5ed2398fe600dc8",
+      "progress_sha256": "281e61639ad6dcb41ee088e9959191feeb02ebfe6b9eaabbb5ed2398fe600dc8",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/FIXTURES_CENSUS.txt": {
+      "sha256": "a675bb2fed6f4836f825e81b795df0a11622f262ec1e7fd841e35d610a84c553",
+      "progress_sha256": "a675bb2fed6f4836f825e81b795df0a11622f262ec1e7fd841e35d610a84c553",
+      "ok": true
+     }
+    }
+   },
+   "artifact_checks": {
+    "cell_files_5m_rehash_vs_progress": "119/119",
+    "cell_tables_5m_content_sha": {
+     "all_tables_ok": 17,
+     "as_of_eq_pin": 17,
+     "in_manifest": 17,
+     "n_bars_eq_stage_d": 17,
+     "required": 17,
+     "tables_checked": 102
+    },
+    "input_sha_5m_eq_stage_d_eq_rehash": "17/17",
+    "root_tables_content_sha_ok": {
+     "TUNING_GRID.parquet": true,
+     "acceptance_head_to_head.parquet": true,
+     "coverage.parquet": true,
+     "edge_fade.parquet": true,
+     "height_toll.parquet": true,
+     "height_toll_verdict.parquet": true,
+     "hold_tally.parquet": true,
+     "outcome_grid.parquet": true,
+     "scale_grid.parquet": true,
+     "spring_overlap.parquet": true
+    },
+    "p_brk_s1_filed_text_pins": {
+     "research_outputs/tierc10/STEP0_RECORD.json": {
+      "filed": "3801e1c72149851de37b12775fe77f103fc47ab3fb1f08349dcbce709a97b5aa",
+      "now": "3801e1c72149851de37b12775fe77f103fc47ab3fb1f08349dcbce709a97b5aa",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/TUNING_GRID.parquet": {
+      "filed": "1f9db883383f7f467feda7ca2cb427452d9ff1017486f6f82407c784c28d92fc",
+      "now": "1f9db883383f7f467feda7ca2cb427452d9ff1017486f6f82407c784c28d92fc",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/TUNING_RESULT.json": {
+      "filed": "da6483fe38b49fdaa7b516b45902693488dfffe5041bd3925ecf2c7fe90994fd",
+      "now": "da6483fe38b49fdaa7b516b45902693488dfffe5041bd3925ecf2c7fe90994fd",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/height_toll_verdict.parquet": {
+      "filed": "f3682df0be96e1315304f868deb0a450ef1e9ba667bb13ddf068b062c16d7d7e",
+      "now": "f3682df0be96e1315304f868deb0a450ef1e9ba667bb13ddf068b062c16d7d7e",
+      "ok": true
+     },
+     "research_outputs/tierc10/census/outcome_grid.parquet": {
+      "filed": "2fe46ddcd2b9dc129e0496c11a871d4d31caf78bc5b7b1bb0b68c1b385f6ee96",
+      "now": "2fe46ddcd2b9dc129e0496c11a871d4d31caf78bc5b7b1bb0b68c1b385f6ee96",
+      "ok": true
+     },
+     "research_outputs/tierc10/data/DATA_SPEND_AUDIT.json": {
+      "filed": "24cd11f1a882de527128c73c76fa7aaa61bd755599829aa9df1001157fa8fd89",
+      "now": "24cd11f1a882de527128c73c76fa7aaa61bd755599829aa9df1001157fa8fd89",
+      "ok": true
+     }
+    },
+    "null_5m": {
+     "gaps_order": {
+      "progress_stage": "NULL/gaps+order",
+      "progress_status": "COMPLETE-VERIFIED",
+      "cell_files_5m": 102,
+      "cell_files_5m_rehash_ok": 102,
+      "cell_tables_5m_content_sha_ok": 85,
+      "cell_tables_5m_content_sha_bad": 0,
+      "build_manifest_sha256": "75c1af518f43fda683b50d5e4df6ccd773ab9f14ec38f0e1310b4b9118874cb6",
+      "commission_lenses": [
+       "5m",
+       "4h",
+       "1d"
+      ],
+      "of_record": true
+     },
+     "gaps_only": {
+      "progress_stage": "NULL/gaps-only",
+      "progress_status": "COMPLETE-VERIFIED",
+      "cell_files_5m": 102,
+      "cell_files_5m_rehash_ok": 102,
+      "cell_tables_5m_content_sha_ok": 85,
+      "cell_tables_5m_content_sha_bad": 0,
+      "build_manifest_sha256": "c7c758cdafb3baa8d99ecee1be5819d99cd9d218b173d876abb5d2ae0d9471f3",
+      "commission_lenses": [
+       "5m",
+       "4h",
+       "1d"
+      ],
+      "of_record": false
+     }
+    }
+   },
+   "code_lineage": {
+    "cells_built_by_code_sha": "629d2863399720473cb28fbb14ba7c5c3e903dd588cc98241dc42a4c6cbdcb82",
+    "cells_code_commit": "d19f857 (scripts/tierc10_census.py + analytics/rangefinder_census.py hash to 629d2863…)",
+    "current_code_sha": "5c63aadd6ee509f28e196c03cc3ac7e987dec49112ef1b2fa4d26543dd6e12b8",
+    "current_code_commit": "a58bafc",
+    "diff": "git diff d19f857 a58bafc: scripts/tierc10_census.py +1854 insertions, 0 deletions; analytics/rangefinder_census.py unchanged. No line that built a 5m cell was edited. The R34 tables were built by 5c63aadd."
+   },
+   "fixture_legs_covering_5m": {
+    "tierc10_census_fixtures.py": {
+     "F-CEN-TAPE": "the BTCUSDT 5m tape equals the snapshot cut at the pin; the break leg plants the UNCUT 5m file and goes RED (5m coverage = BTC only)",
+     "F-RNG-ASOF": "prefix stability on SOLUSDT 5m[:60000] (with 4h/1d)",
+     "F-RNG-ASOF-SEAL": "knowable_at=-1 pivots on SOLUSDT 5m[:60000]",
+     "F-RF-4": "204 filed spring rows, 68 of them 5m",
+     "F-CEN-OUTCOME": "commission assets[:2] (BTC, ETH) x all 3 lenses: 5m events re-walked on raw bars; censor law checked on every row",
+     "F-C10-TUNE": "the 5m R1 tuning grid (45 cells), the tuning era only; the census RETEST_PINS equal TUNING_RESULT.json",
+     "F-C10-ACC": "3 of the 6 cells re-walked live are 5m (1000BONK, ENA, SOL calibrated); the per-cell ledger sums over all 102 cells",
+     "F-C10-HT": "the whole height-vs-toll grid including 120 5m verdict rows; read interface 5m FAIL",
+     "F-C10-HT-ERA": "the 360 era-keyed verdict rows, 120 of them 5m",
+     "F-C10-COLLAR": "P-BRK-S1's scoring ground (5m retest-hold outside the tuning era) is filed and never printed",
+     "F-GRID": "7,920 outcome rows, 2,640 of them 5m",
+     "F-C10-TOLL": "every get_toll quote including 5m equals the toll re-derived from raw bars + the fee object"
+    },
+    "tierc10_null_fixtures.py": {
+     "F-NULL-COV": "the alive-bar identity on all 1,020 filed draws (17 x 3 lenses x 20), including 5m",
+     "F-NULL-BOX": "all 671,360 filed boxes re-walked on raw bars, including 5m",
+     "F-NULL-GRID": "the whole null grid including 5m; the REAL rows equal the census grid"
+    },
+    "not_5m": {
+     "census": [
+      "F-CEN-HOLD (BTC 4h, BTC 1d, ETH 4h)",
+      "F-DET (BTC/ETH 1d)"
+     ],
+     "null": [
+      "F-NULL-ASOF (4h/1d)",
+      "F-NULL-SANE (synthetic)",
+      "F-NULL-DET (4h)"
+     ]
+    },
+    "coverage_gaps_named": [
+     "No census leg hand-walks a 5m retest-HOLD. That is F-C10-HOLD in the BRK suite (outside this stage; its filed half is being built by the concurrent BRK workflow). F-CEN-HOLD proves the lens-agnostic detector on 4h/1d.",
+     "F-CEN-TAPE reads only BTCUSDT among the 5m tapes; this ledger's own scratch check covers all 17 (as_of_hazard below)."
+    ]
+   },
+   "fixtures": [
+    {
+     "command": "export NAIAD_CACHE_DIR=/Users/luis/.cache/naiad/snapshots/tc10_20260921 PYTHONDONTWRITEBYTECODE=1; ~/venvs/naiad/bin/python scripts/tierc10_census_fixtures.py F-CEN-TAPE F-RNG-ASOF F-RF-4 F-CEN-OUTCOME F-CEN-HOLD F-C10-TUNE F-C10-ACC F-C10-HT F-C10-COLLAR F-GRID F-C10-TOLL F-DET",
+     "mode": "every leg NAMED (run 1 of 2; F-RNG-ASOF also selects F-RNG-ASOF-SEAL, F-C10-HT also selects F-C10-HT-ERA) — a named run writes NO transcript, so FIXTURES_CENSUS.txt was not touched",
+     "exit_code": 0,
+     "wall_seconds": 208,
+     "green": 14,
+     "red": 0,
+     "break_legs_red": 14,
+     "break_legs_void": 0,
+     "transcript_sha": "ecd11e5a66905f35e7cb26f68de353d9f070f6c7875b5cac8bb4a4d0a21b3918",
+     "transcript_path": "/private/tmp/claude-501/-Users-luis-Naiad/8f5aa9c8-3090-4f28-a470-26de01a49ae1/scratchpad/census_run1.txt",
+     "transcript_sha_clock_lines_removed": "a675bb2fed6f4836f825e81b795df0a11622f262ec1e7fd841e35d610a84c553",
+     "filed_transcript_sha": "a675bb2fed6f4836f825e81b795df0a11622f262ec1e7fd841e35d610a84c553",
+     "byte_identical_to_filed_after_removing_stdout_only_clock_lines": true
+    },
+    {
+     "command": "export NAIAD_CACHE_DIR=/Users/luis/.cache/naiad/snapshots/tc10_20260921 PYTHONDONTWRITEBYTECODE=1; ~/venvs/naiad/bin/python scripts/tierc10_census_fixtures.py F-CEN-TAPE F-RNG-ASOF F-RF-4 F-CEN-OUTCOME F-CEN-HOLD F-C10-TUNE F-C10-ACC F-C10-HT F-C10-COLLAR F-GRID F-C10-TOLL F-DET",
+     "mode": "every leg NAMED (run 2 of 2; F-RNG-ASOF also selects F-RNG-ASOF-SEAL, F-C10-HT also selects F-C10-HT-ERA) — a named run writes NO transcript, so FIXTURES_CENSUS.txt was not touched",
+     "exit_code": 0,
+     "wall_seconds": 218,
+     "green": 14,
+     "red": 0,
+     "break_legs_red": 14,
+     "break_legs_void": 0,
+     "transcript_sha": "a798f82b7226dfdf208fdb40b14291602690637b0c06f58f1dab213a61b85d52",
+     "transcript_path": "/private/tmp/claude-501/-Users-luis-Naiad/8f5aa9c8-3090-4f28-a470-26de01a49ae1/scratchpad/ledger5m/census_run2.txt",
+     "transcript_sha_clock_lines_removed": "a675bb2fed6f4836f825e81b795df0a11622f262ec1e7fd841e35d610a84c553",
+     "filed_transcript_sha": "a675bb2fed6f4836f825e81b795df0a11622f262ec1e7fd841e35d610a84c553",
+     "byte_identical_to_filed_after_removing_stdout_only_clock_lines": true
+    },
+    {
+     "command": "export NAIAD_CACHE_DIR=/Users/luis/.cache/naiad/snapshots/tc10_20260921 PYTHONDONTWRITEBYTECODE=1; ~/venvs/naiad/bin/python scripts/tierc10_null_fixtures.py --null-root=research_outputs/tierc10/null/gaps_order F-NULL-COV F-NULL-BOX F-NULL-GRID",
+     "mode": "the three NULL legs that walk 5m cells, NAMED, null variant gaps_order — writes NO transcript",
+     "exit_code": 0,
+     "wall_seconds": 441,
+     "green": 3,
+     "red": 0,
+     "break_legs_red": 3,
+     "break_legs_void": 0,
+     "transcript_sha": "aa64f33ab0f7ae9e69930bb7dea13ad6a161ddd2c19227e37714a9e729c310a3",
+     "transcript_path": "/private/tmp/claude-501/-Users-luis-Naiad/8f5aa9c8-3090-4f28-a470-26de01a49ae1/scratchpad/ledger5m/null_gaps_order.txt"
+    },
+    {
+     "command": "export NAIAD_CACHE_DIR=/Users/luis/.cache/naiad/snapshots/tc10_20260921 PYTHONDONTWRITEBYTECODE=1; ~/venvs/naiad/bin/python scripts/tierc10_null_fixtures.py --null-root=research_outputs/tierc10/null/gaps_only F-NULL-COV F-NULL-BOX F-NULL-GRID",
+     "mode": "the three NULL legs that walk 5m cells, NAMED, null variant gaps_only — writes NO transcript",
+     "exit_code": 0,
+     "wall_seconds": 440,
+     "green": 3,
+     "red": 0,
+     "break_legs_red": 3,
+     "break_legs_void": 0,
+     "transcript_sha": "78101967ca247f694f70b3034e21611b8cfbc8e55b04be65e82aae8712b497c5",
+     "transcript_path": "/private/tmp/claude-501/-Users-luis-Naiad/8f5aa9c8-3090-4f28-a470-26de01a49ae1/scratchpad/ledger5m/null_gaps_only.txt"
+    }
+   ],
+   "blockers": [],
+   "law4_note": "R7 (operator, 2026-09-22): LAW 4 governs the CORRIDOR PIN only. D-5M's PARTIAL (F-D-1) re-pins nothing and demotes no downstream stage, which is the same standing CENSUS-R{4h,1d} holds beside a PARTIAL D-CORE."
+  }
+ },
+ "as_of_hazard": {
+  "hazard": "14 of the 17 5m files hold 6 rows past the pin (opens 16:00-16:25Z); PUMPUSDT, MNTUSDT_BYBIT and SUIUSDT hold 0",
+  "files_with_rows_past_pin": [
+   "BTCUSDT",
+   "ETHUSDT",
+   "SOLUSDT",
+   "NEARUSDT",
+   "ZECUSDT",
+   "ENAUSDT",
+   "HYPEUSDT",
+   "LTCUSDT",
+   "XMRUSDT",
+   "BNBUSDT",
+   "UNIUSDT",
+   "1000PEPEUSDT",
+   "DOGEUSDT",
+   "1000BONKUSDT"
+  ],
+  "consumers": {
+   "census  scripts/tierc10_census.py load_tape (:574)": "pd.read_parquet + its OWN inline cut `open_time + 5m <= Stage D pin` (pin read from AS_OF_PIN.json). This is NOT tierc10_data.load_asof by name, but it is the same law, proven bar-identical below",
+   "null    scripts/tierc10_null.py (:834)": "tierc10_census.load_tape",
+   "stamps  scripts/tierc10_stamps.py (:382, :678)": "tierc10_census.load_tape",
+   "lanes   scripts/tierc10_lanes.py (:249, :1247)": "tierc10_data.load_asof(sym, '5m') + tierc10_census.load_tape",
+   "brk     scripts/tierc10_brk.py frame_l (:916)": "tierc10_data.load_asof: the price frame every BRK campaign rides",
+   "brk     scripts/tierc10_brk.py macro_signals (:2333)": "tierc10_census.load_tape: the DIE/flip detector"
+  },
+  "tierc2_baseline_load_klines": "NOT reached for 5m by any consumer. Statically, TB.load_klines is reached only through tierc5 (_tf_frame, frame) and tierc10_panel.frame_n -> tierc5.frame. That path is 4h-only, and frame_n HALTs on a non-4h grid; the 4h files hold no row past the pin. Dynamically, a spy on tierc2_baseline.load_klines (and on tierc5's by-name binding) recorded 0 calls while the three loaders read all 17 5m tapes.",
+  "check": {
+   "what": "per stem: D.load_asof, C.load_tape and (CLASSIC5) B.frame_l return no bar closing after the pin, agree bar-for-bar (open_ms, O, H, L, C), and count = Stage D rows_as_of",
+   "result": "PASS 17/17, 0 faults",
+   "sabotage": "the uncut whole-file read (tierc2_baseline.load_klines) through the same judge: RED on 14/14 hazard files, and correctly not red on the 3 files with no post-pin row",
+   "evidence": "/private/tmp/claude-501/-Users-luis-Naiad/8f5aa9c8-3090-4f28-a470-26de01a49ae1/scratchpad/asof_5m.json",
+   "evidence_sha256": "3e6bed8203e98eb2908004fc5269f8c19717414096fddff0b8905b42c268ad5f",
+   "script": "/private/tmp/claude-501/-Users-luis-Naiad/8f5aa9c8-3090-4f28-a470-26de01a49ae1/scratchpad/asof_5m.py",
+   "script_sha256": "9a865c033bf549df6906c070b1f13578bd00a7ae7fb03e38b1060e04defa4fe8",
+   "per_stem": {
+    "BTCUSDT": {
+     "n_load_asof": 740137,
+     "n_load_tape": 740137,
+     "rows_as_of_manifest": 740137,
+     "last_open_load_asof": "2026-09-21T15:55:00Z",
+     "last_open_load_tape": "2026-09-21T15:55:00Z",
+     "census_as_of_source": "Stage D AS_OF_PIN.json",
+     "n_frame_l": 740137,
+     "last_open_frame_l": "2026-09-21T15:55:00Z",
+     "sabotage_uncut_rows_after_pin": 6,
+     "sabotage_red": true,
+     "sabotage_ok": true
+    },
+    "ETHUSDT": {
+     "n_load_asof": 717219,
+     "n_load_tape": 717219,
+     "rows_as_of_manifest": 717219,
+     "last_open_load_asof": "2026-09-21T15:55:00Z",
+     "last_open_load_tape": "2026-09-21T15:55:00Z",
+     "census_as_of_source": "Stage D AS_OF_PIN.json",
+     "n_frame_l": 717219,
+     "last_open_frame_l": "2026-09-21T15:55:00Z",
+     "sabotage_uncut_rows_after_pin": 6,
+     "sabotage_red": true,
+     "sabotage_ok": true
+    },
+    "SOLUSDT": {
+     "n_load_asof": 633132,
+     "n_load_tape": 633132,
+     "rows_as_of_manifest": 633132,
+     "last_open_load_asof": "2026-09-21T15:55:00Z",
+     "last_open_load_tape": "2026-09-21T15:55:00Z",
+     "census_as_of_source": "Stage D AS_OF_PIN.json",
+     "n_frame_l": 633132,
+     "last_open_frame_l": "2026-09-21T15:55:00Z",
+     "sabotage_uncut_rows_after_pin": 6,
+     "sabotage_red": true,
+     "sabotage_ok": true
+    },
+    "NEARUSDT": {
+     "n_load_asof": 624192,
+     "n_load_tape": 624192,
+     "rows_as_of_manifest": 624192,
+     "last_open_load_asof": "2026-09-21T15:55:00Z",
+     "last_open_load_tape": "2026-09-21T15:55:00Z",
+     "census_as_of_source": "Stage D AS_OF_PIN.json",
+     "n_frame_l": 624192,
+     "last_open_frame_l": "2026-09-21T15:55:00Z",
+     "sabotage_uncut_rows_after_pin": 6,
+     "sabotage_red": true,
+     "sabotage_ok": true
+    },
+    "ZECUSDT": {
+     "n_load_asof": 697056,
+     "n_load_tape": 697056,
+     "rows_as_of_manifest": 697056,
+     "last_open_load_asof": "2026-09-21T15:55:00Z",
+     "last_open_load_tape": "2026-09-21T15:55:00Z",
+     "census_as_of_source": "Stage D AS_OF_PIN.json",
+     "n_frame_l": 697056,
+     "last_open_frame_l": "2026-09-21T15:55:00Z",
+     "sabotage_uncut_rows_after_pin": 6,
+     "sabotage_red": true,
+     "sabotage_ok": true
+    },
+    "ENAUSDT": {
+     "n_load_asof": 259818,
+     "n_load_tape": 259818,
+     "rows_as_of_manifest": 259818,
+     "last_open_load_asof": "2026-09-21T15:55:00Z",
+     "last_open_load_tape": "2026-09-21T15:55:00Z",
+     "census_as_of_source": "Stage D AS_OF_PIN.json",
+     "sabotage_uncut_rows_after_pin": 6,
+     "sabotage_red": true,
+     "sabotage_ok": true
+    },
+    "PUMPUSDT": {
+     "n_load_asof": 126246,
+     "n_load_tape": 126246,
+     "rows_as_of_manifest": 126246,
+     "last_open_load_asof": "2026-09-21T15:55:00Z",
+     "last_open_load_tape": "2026-09-21T15:55:00Z",
+     "census_as_of_source": "Stage D AS_OF_PIN.json",
+     "sabotage_uncut_rows_after_pin": 0,
+     "sabotage_red": false,
+     "sabotage_ok": true
+    },
+    "HYPEUSDT": {
+     "n_load_asof": 138018,
+     "n_load_tape": 138018,
+     "rows_as_of_manifest": 138018,
+     "last_open_load_asof": "2026-09-21T15:55:00Z",
+     "last_open_load_tape": "2026-09-21T15:55:00Z",
+     "census_as_of_source": "Stage D AS_OF_PIN.json",
+     "sabotage_uncut_rows_after_pin": 6,
+     "sabotage_red": true,
+     "sabotage_ok": true
+    },
+    "MNTUSDT_BYBIT": {
+     "n_load_asof": 312593,
+     "n_load_tape": 312593,
+     "rows_as_of_manifest": 312593,
+     "last_open_load_asof": "2026-09-21T15:55:00Z",
+     "last_open_load_tape": "2026-09-21T15:55:00Z",
+     "census_as_of_source": "Stage D AS_OF_PIN.json",
+     "sabotage_uncut_rows_after_pin": 0,
+     "sabotage_red": false,
+     "sabotage_ok": true
+    },
+    "SUIUSDT": {
+     "n_load_asof": 356256,
+     "n_load_tape": 356256,
+     "rows_as_of_manifest": 356256,
+     "last_open_load_asof": "2026-09-21T15:55:00Z",
+     "last_open_load_tape": "2026-09-21T15:55:00Z",
+     "census_as_of_source": "Stage D AS_OF_PIN.json",
+     "sabotage_uncut_rows_after_pin": 0,
+     "sabotage_red": false,
+     "sabotage_ok": true
+    },
+    "LTCUSDT": {
+     "n_load_asof": 704831,
+     "n_load_tape": 704831,
+     "rows_as_of_manifest": 704831,
+     "last_open_load_asof": "2026-09-21T15:55:00Z",
+     "last_open_load_tape": "2026-09-21T15:55:00Z",
+     "census_as_of_source": "Stage D AS_OF_PIN.json",
+     "sabotage_uncut_rows_after_pin": 6,
+     "sabotage_red": true,
+     "sabotage_ok": true
+    },
+    "XMRUSDT": {
+     "n_load_asof": 697632,
+     "n_load_tape": 697632,
+     "rows_as_of_manifest": 697632,
+     "last_open_load_asof": "2026-09-21T15:55:00Z",
+     "last_open_load_tape": "2026-09-21T15:55:00Z",
+     "census_as_of_source": "Stage D AS_OF_PIN.json",
+     "sabotage_uncut_rows_after_pin": 6,
+     "sabotage_red": true,
+     "sabotage_ok": true
+    },
+    "BNBUSDT": {
+     "n_load_asof": 695616,
+     "n_load_tape": 695616,
+     "rows_as_of_manifest": 695616,
+     "last_open_load_asof": "2026-09-21T15:55:00Z",
+     "last_open_load_tape": "2026-09-21T15:55:00Z",
+     "census_as_of_source": "Stage D AS_OF_PIN.json",
+     "sabotage_uncut_rows_after_pin": 6,
+     "sabotage_red": true,
+     "sabotage_ok": true
+    },
+    "UNIUSDT": {
+     "n_load_asof": 631980,
+     "n_load_tape": 631980,
+     "rows_as_of_manifest": 631980,
+     "last_open_load_asof": "2026-09-21T15:55:00Z",
+     "last_open_load_tape": "2026-09-21T15:55:00Z",
+     "census_as_of_source": "Stage D AS_OF_PIN.json",
+     "sabotage_uncut_rows_after_pin": 6,
+     "sabotage_red": true,
+     "sabotage_ok": true
+    },
+    "1000PEPEUSDT": {
+     "n_load_asof": 355674,
+     "n_load_tape": 355674,
+     "rows_as_of_manifest": 355674,
+     "last_open_load_asof": "2026-09-21T15:55:00Z",
+     "last_open_load_tape": "2026-09-21T15:55:00Z",
+     "census_as_of_source": "Stage D AS_OF_PIN.json",
+     "sabotage_uncut_rows_after_pin": 6,
+     "sabotage_red": true,
+     "sabotage_ok": true
+    },
+    "DOGEUSDT": {
+     "n_load_asof": 652116,
+     "n_load_tape": 652116,
+     "rows_as_of_manifest": 652116,
+     "last_open_load_asof": "2026-09-21T15:55:00Z",
+     "last_open_load_tape": "2026-09-21T15:55:00Z",
+     "census_as_of_source": "Stage D AS_OF_PIN.json",
+     "sabotage_uncut_rows_after_pin": 6,
+     "sabotage_red": true,
+     "sabotage_ok": true
+    },
+    "1000BONKUSDT": {
+     "n_load_asof": 297816,
+     "n_load_tape": 297816,
+     "rows_as_of_manifest": 297816,
+     "last_open_load_asof": "2026-09-21T15:55:00Z",
+     "last_open_load_tape": "2026-09-21T15:55:00Z",
+     "census_as_of_source": "Stage D AS_OF_PIN.json",
+     "sabotage_uncut_rows_after_pin": 6,
+     "sabotage_red": true,
+     "sabotage_ok": true
+    }
+   }
+  },
+  "filed_fixture_corroboration": [
+   "F-D-ASOF (load_asof leaks 0; +6 rows counted on 14 files)",
+   "F-CEN-TAPE break leg: UNCUT 5m file -> last bar closes 16:30Z after the pin -> RED"
+  ]
+ },
+ "b_5m_impact": {
+  "missing_5m_for_any_admitted_asset": "NONE — 12/12 admitted + 5/5 CLASSIC5 present and verified",
+  "scored_panel_classic5": {
+   "BTCUSDT": {
+    "sha_ok": true,
+    "gaps": 0,
+    "first_open": "2019-09-08T17:55:00Z",
+    "publication_carries": "REST",
+    "differs_from_archive_bars": 46
+   },
+   "ETHUSDT": {
+    "sha_ok": true,
+    "gaps": 0,
+    "first_open": "2019-11-27T07:45:00Z",
+    "publication_carries": "REST",
+    "differs_from_archive_bars": 28
+   },
+   "SOLUSDT": {
+    "sha_ok": true,
+    "gaps": 0,
+    "first_open": "2020-09-14T07:00:00Z",
+    "publication_carries": "REST",
+    "differs_from_archive_bars": 1469
+   },
+   "NEARUSDT": {
+    "sha_ok": true,
+    "gaps": 0,
+    "first_open": "2020-10-15T08:00:00Z",
+    "publication_carries": "REST",
+    "differs_from_archive_bars": 1468
+   },
+   "ZECUSDT": {
+    "sha_ok": true,
+    "gaps": 0,
+    "first_open": "2020-02-05T08:00:00Z",
+    "publication_carries": "REST",
+    "differs_from_archive_bars": 1466
+   }
+  },
+  "holdout_window": "2024-07-01T00:00:00Z -> 2026-09-21T16:00:00Z (the filed text's section 3); all five CLASSIC5 5m tapes span it with 0 gaps",
+  "tier_e_17_view": "all 17 5m tapes present",
+  "affected_by_d5m_partial": false,
+  "why": "F-D-1's REST-vs-ARCHIVE question cannot move a bar P-BRK-S1 reads. The FILED text fixes 'substrate tc10_20260921' (P-BRK-S1 text, line 3), so the text governs. At most a later ruling becomes a disclosure. F-D-1's sample holds no CLASSIC5 asset. All five CLASSIC5 5m files carry the venue's REST publication, which is the literal object of F-D-1's claim ('vs the venue API'). DISCLOSED, not a blocker: those five differ from the BULK ARCHIVE on BTC 46 / ETH 28 / NEAR 1468 / SOL 1469 / ZEC 1466 bars. Of each of the three large counts, 1,440 are stamps the archive's files do not carry at all (ARCHIVE_VS_SNAPSHOT_AUDIT.json only_in_snapshot = 1440 for NEAR, SOL and ZEC 5m).",
+  "settled_by_the_filed_text_not_operator_questions": [
+   "NET OF MEASURED 5m TOLL: a PRINT beside net_r, never a deduction; a deduction would be a NEW registration id (P-BRK-S1 section 7)",
+   "the 5m HOLD RATE: NOT scored under P-BRK-S1; printed Tier-E, collared to the holdout (P-BRK-S1 section 7)",
+   "the height-vs-toll row it carries: 5m / frozen3.0 / POOLED:CLASSIC5 / era holdout, height_toll_verdict.parquet sha f3682df0…, which re-hashes now (section 6)"
+  ],
+  "inputs_b5m_reads_that_this_ledger_verified": [
+   "CLASSIC5 5m klines (5/5)",
+   "census/TUNING_RESULT.json da6483fe… (pins)",
+   "census/TUNING_GRID.parquet 1f9db883…",
+   "census/outcome_grid.parquet 2fe46ddc… (grid toll, F-C10-TOLL)",
+   "census/height_toll_verdict.parquet f3682df0…",
+   "STEP0_RECORD.json 3801e1c7…"
+  ],
+  "outside_this_ledger": [
+   "Stage BRK (B mech) is PARTIAL in PROGRESS and is being worked by the concurrent BRK workflow (the filed half of F-C10-HOLD). Its artifacts BRK_MECHANICS.json, FIXTURES_BRK.txt and build_manifest.json no longer match the PROGRESS record, because that workflow moved them. This ledger ran no BRK fixture and does not judge that stage.",
+   "The contract order puts B-CORE before B-5M."
+  ]
+ },
+ "findings": [
+  "F5-1 · PROGRESS.json records neither D-5M nor CENSUS-R{5m}, yet both were BUILT inside the D and CENSUS-R runs. The 17 5m kline shas live only inside STAGE_D_MANIFEST.json (recorded under D-CORE). The 119 5m census cell files already sit in the 'CENSUS-R{4h,1d}' record, whose label understates its content.",
+  "F5-2 · research_outputs/tierc10/data/FIXTURES_STAGE_D_OFFLINE.txt is NOT byte-reproducible. F-D-3's break-leg detail embeds a random TemporaryDirectory name ('HALT: missing …/tc10_fd3_<random>', scripts/tierc10_data_fixtures.py ~:765), so ANY whole --offline re-run rewrites it under a new sha and breaks D-CORE's PROGRESS artifact sha 8295ce69…. Both named-leg runs here equal the filed transcript modulo that one token (normalized sha c0c89786… for run 1, run 2 and the filed file alike). That is why this ledger never ran the suite whole.",
+  "F5-3 · The census and three other modules cut 5m at the pin with tierc10_census.load_tape's OWN inline code, not with tierc10_data.load_asof: two implementations of one law. This ledger proves them bar-identical on all 17 5m tapes (and B.frame_l on CLASSIC5). The filed F-CEN-TAPE reads only BTCUSDT among the 5m tapes.",
+  "F5-4 · The 5m census cells were built by census code 629d2863 (d19f857); the current code is 5c63aadd (a58bafc). The diff is +1854/-0 on scripts/tierc10_census.py with the port unchanged, so no cell-building line moved, and the cells stand under the current code.",
+  "F5-5 · F-D-1 is RED NOW, exactly as filed: 3 of 65 bars differ (XMRUSDT 4h 2025-01-14T12:00Z volume; XMRUSDT 1h and 5m 2024-10-28T20:00Z, the venue zero-volume incident, where the file carries the ARCHIVE bar).",
+  "F5-6 · Out of scope, seen while re-hashing every PROGRESS record, not investigated: (a) PROGRESS.operator_rulings.sha256 70188a0c… != the committed OPERATOR_RULINGS.md a0a08f87…; (b) the PANEL/gate record names research_outputs/tierc10/panel/FIXTURES_PANEL_partial.txt, which is absent; (c) the LANES and BRK records drift, because the concurrent workflow moved those artifacts."
+ ],
+ "operator_questions": [
+  "NONE NEW. The one question that keeps D-5M from COMPLETE-VERIFIED is already on file: R5's narrower word, REST or ARCHIVE (F-D-1). It does not reach B-5M, because the filed P-BRK-S1 text pins the substrate."
+ ],
+ "transcripts_of_record_unchanged": {
+  "research_outputs/tierc10/data/FIXTURES_STAGE_D_OFFLINE.txt": "8295ce69725c0a8a8a3b26ae3866d60b1803297c38ae3d956da3afda0f9b75f3",
+  "research_outputs/tierc10/data/FIXTURES_STAGE_D.txt": "fd302025991fe5d59cb7dcc282fd55316fb7449bf5973a7a47c1cfd3c7b699de",
+  "research_outputs/tierc10/census/FIXTURES_CENSUS.txt": "a675bb2fed6f4836f825e81b795df0a11622f262ec1e7fd841e35d610a84c553",
+  "research_outputs/tierc10/null/gaps_order/FIXTURES_NULL.txt": "68a8654cbb5238a76dd07f27330efa3505e492dfc834f0b6c2a3a16808dbd86a",
+  "research_outputs/tierc10/null/gaps_only/FIXTURES_NULL.txt": "bf514670b85e5309dec86f3bbb7d77d9da14f7015a709933489a49392091c928"
+ }
+}

@@ -88,8 +88,8 @@ THE GATE [D].  Every runner in this file calls `tierc10_panel.require_arm`
 BEFORE one real bar is replayed or one frame built — `run_lane` does it as
 its first statement, above every other check — and then the FILED ERA is
 checked at the same door, so an arm filed for the holdout era cannot read a
-tuning-era bar and be refused afterwards.  With no registration filed it
-HALTs, and `F-LANES-GATE` proves it.  The one book that rides unfiled is the
+tuning-era bar and be refused afterwards.  Unfiled, amended or stale-pinned
+it HALTs [F-LANES-GATE, post-371123f].  The one book that rides unfiled is the
 KNOWN CONTROL (card v6, every knob at its default, every new knob OFF, roles
 v6, a non-empty subset of CLASSIC5) — the contract's own exception.
 
@@ -101,7 +101,7 @@ here so nobody mistakes the gate for a property of the replay.
 
 LAW 4, IN THIS FILE.  Nothing here computes a P-GEN-1 / P-SPR-2 / P-BE-1 /
 P-TRG-2 / P-BRK-S1 / P-BRK-I1 number.  `main()` prints the lane spec and
-files nothing.  The fixtures ride synthetic tapes and the known control only.
+files nothing.  Fixture real bars: the control + P-BE-1 A1's latch census.
 
 Run:  NAIAD_CACHE_DIR=~/.cache/naiad/snapshots/tc10_20260921 \\
       ~/venvs/naiad/bin/python scripts/tierc10_lanes.py
@@ -1325,18 +1325,104 @@ def signals_on_frame(f, springs) -> list:
 
 
 # ═══════════════════════════════════ F-C10-BE · THE REAL-CAMPAIGN HARNESS
-# THE THREE CAMPAIGNS ARE NOT NAMED YET AND CANNOT BE.  They must come from
-# P-BE-1's own book, which does not exist until the registration is FILED
-# (LAW 4).  Filling this tuple with (symbol, entry_ms) triples is the whole
-# of what the fixture needs after filing; the hand-walk below is already
-# written and already proven against the module on synthetic tapes.
+# P-BE-1 IS FILED (371123f), AND ITS FILED TEXT GOVERNS THIS LEG.  Until the
+# filing this block said the three campaigns "are not named yet and cannot
+# be", and that was true: they come from P-BE-1's own book, which could not
+# exist before the text.  The text now exists, and its §9 prescribes what
+# happens when the book cannot supply the three orders the contract names:
+#
+#   "if P-BE-1's filed book contains no tie and no 4h/5m mismatch latch bar,
+#    the leg must report NOT RUN with that reason. It must NOT substitute a
+#    synthetic bar or relabel a dip_first case to reach three."
+#
+# So the rows are never TYPED here.  They are DERIVED, by the rule in
+# `be_c10_decision`, from the LATCH CENSUS of the filed book
+# (`be_latch_census`, filed by the fixture suite as
+# research_outputs/tierc10/lanes/BE_LATCH_CENSUS.json).  `BE_CAMPAIGNS` stays
+# an EMPTY tuple on purpose: a hand-typed row is exactly the substitution §9
+# forbids, and the fixture suite asserts it stays empty.
 BE_CAMPAIGNS: tuple = ()
 BE_CAMPAIGNS_NOTE = (
-    "F-C10-BE needs THREE REAL campaigns with one of each 5m order "
-    "(dip-before, dip-after, and a tie or a 4h/5m mismatch) plus the "
-    "converse of each. Their ids come from P-BE-1's filed book; until the "
-    "registration is filed, naming them would be running the lane. The leg "
-    "reports NOT RUN with this reason and never PASS.")
+    "P-BE-1 is FILED (371123f) and its filed text §9 governs F-C10-BE: 'if "
+    "P-BE-1's filed book contains no tie and no 4h/5m mismatch latch bar, "
+    "the leg must report NOT RUN with that reason. It must NOT substitute a "
+    "synthetic bar or relabel a dip_first case to reach three.' The three "
+    "rows (one dip-before, one dip-after, one tie-or-mismatch, each with its "
+    "converse) are DERIVED by rule from the latch census of the filed book "
+    "(BE_LATCH_CENSUS.json, built by `be_latch_census` from P-BE-1's scored "
+    "arm ridden through the filed door) and are never typed here. "
+    "BE_CAMPAIGNS stays EMPTY: a hand-typed row is the substitution §9 "
+    "forbids. The leg is never reported PASS unless the census supplies all "
+    "three classes.")
+
+# ── THE FILED DOOR, READ FROM THE RECORD [371123f] ─────────────────────────
+# The text of record and the pinned head are read from the TRACKED files
+# Stage B filed them into — never typed, never read back out of the
+# registration file itself (offering the door the bytes it holds would be
+# comparing it with itself).  json only: this module's import closure stays
+# range-free [F-LANES-CLOSURE].
+REGISTRY_PIN_PATH = TP.OUT / "REGISTRY_PIN.json"
+REGISTRATION_TEXTS_PATH = TP.OUT / "REGISTRATION_TEXTS.json"
+BE1_REG, SPR2_REG = "P-BE-1", "P-SPR-2"
+LANE_REGS = (BE1_REG, SPR2_REG)
+BE1_SCORED_ARM = "be-floor-1R vs card-v6 (CLASSIC5, full)"
+BE1_SCORED_ERA = "full"
+
+
+def filed_text(reg_id: str, path: Path | None = None) -> str:
+    """THE TEXT OF RECORD for a filed registration, from
+    REGISTRATION_TEXTS.json — the drafted file it was filed FROM."""
+    p = Path(path) if path else REGISTRATION_TEXTS_PATH
+    if not p.is_file():
+        raise SystemExit(f"HALT: no texts of record at {p}.")
+    t = (json.loads(p.read_text(encoding="utf-8")).get(reg_id)
+         or {}).get("text")
+    if not isinstance(t, str) or not t.strip():
+        raise SystemExit(f"HALT: {p.name} carries no text for {reg_id!r}.")
+    return t
+
+
+def filed_head(reg_id: str, path: Path | None = None) -> tuple:
+    """(registry_len, registry_head) as PINNED for `reg_id` in
+    REGISTRY_PIN.json — the witness the door holds the chain against."""
+    p = Path(path) if path else REGISTRY_PIN_PATH
+    if not p.is_file():
+        raise SystemExit(f"HALT: no registry pin at {p}.")
+    r = (json.loads(p.read_text(encoding="utf-8")).get("registrations")
+         or {}).get(reg_id)
+    if not r or not r.get("already_filed"):
+        raise SystemExit(f"HALT: {p.name} pins no FILED head for {reg_id!r}.")
+    return (int(r["registry_len"]), str(r["registry_head"]))
+
+
+# ── THE CLASSES OF A LATCH BAR, AND THE THREE THE CONTRACT REQUIRES ─────────
+# `order` alone cannot carry the contract's classes: `plus1r_first` is BOTH
+# the dip-after bar (the floor FILLS) and the print-with-no-dip bar (the old
+# stop stands), and a closing check written on `order` counted the second
+# as the first.  The class reads the order AND whether a dip happened.
+BE_CLASSES = ("dip_before", "dip_after", "print_no_dip", "tie", "mismatch")
+BE_REQUIRED = ("dip_before", "dip_after", "tie_or_mismatch")
+BE_REQUIRED_QUOTE = "dip-before, dip-after, and a tie or a 4h/5m mismatch"
+BE_SECTION9 = (
+    "if P-BE-1's filed book contains no tie and no 4h/5m mismatch latch bar, "
+    "the leg must report NOT RUN with that reason. It must NOT substitute a "
+    "synthetic bar or relabel a dip_first case to reach three.")
+
+
+def be_class(order: str, dip: bool) -> str:
+    """The latch bar's CLASS from a walk's `order` and whether it dipped."""
+    if order == "dip_first":
+        return "dip_before"
+    if order == "plus1r_first":
+        return "dip_after" if dip else "print_no_dip"
+    if order in ("tie", "mismatch"):
+        return order
+    return f"unknown:{order}"
+
+
+def be_required_class(cls: str) -> str:
+    """The contract's slot a class fills: a tie and a mismatch share one."""
+    return "tie_or_mismatch" if cls in ("tie", "mismatch") else cls
 
 
 def hand_walk_5m(t5, h5, l5, c5, d: int, entry_px: float,
@@ -1374,27 +1460,310 @@ def hand_walk_5m(t5, h5, l5, c5, d: int, entry_px: float,
             "n_children": int(len(t5))}
 
 
+def hand_parent_check(t5, h5, l5, bar_open_ms: int, bar_hi: float,
+                      bar_lo: float) -> dict:
+    """THE HAND'S OWN MISMATCH DETECTOR — so `agree` can hold on a GENUINE
+    4h/5m mismatch campaign instead of failing it by construction.
+
+    `hand_walk_5m` cannot see the parent bar, so on a mismatch campaign it
+    answers the children's order while the module answers `mismatch`; an
+    `agree` written as "the two orders are equal" could therefore NEVER hold
+    on the very class the contract requires one of.  This walks, in plain
+    python loops sharing nothing with `be_sequence`: 48 children
+    ((4 * 60) // 5, recomputed here), each opening exactly 5 minutes after
+    the one before from the parent's own open, and the children's extremes
+    EQUAL to the parent's — EXACT float equality, because both come from
+    the venue's decimal strings and a genuine agreement is bit-equal (the
+    module's 1e-9 REPR_TOL is not borrowed; a bar inside that window would
+    surface as a disagreement, which is the honest answer).
+
+    WHAT WOULD MAKE THIS WRONG: borrowing `_same_px` or `N_5M_PER_4H`
+    (self-comparison), or passing a bar whose children do not reproduce it.
+    """
+    n = int(len(t5))
+    want_n, step = (4 * 60) // 5, 5 * 60 * 1000
+    grid = n == want_n
+    for k in range(n):
+        if int(t5[k]) != int(bar_open_ms) + k * step:
+            grid = False
+    hi = lo = None
+    for k in range(n):
+        hk, lk = float(h5[k]), float(l5[k])
+        hi = hk if hi is None or hk > hi else hi
+        lo = lk if lo is None or lk < lo else lo
+    same_hi = hi is not None and hi == float(bar_hi)
+    same_lo = lo is not None and lo == float(bar_lo)
+    return {"ok": bool(grid and same_hi and same_lo), "n_children": n,
+            "grid": bool(grid), "same_high": bool(same_hi),
+            "same_low": bool(same_lo)}
+
+
+def converse_children(t5, h5, l5, c5) -> tuple:
+    """THE CONVERSE OF A LATCH BAR: the same 48 children with their PRICES
+    (high, low, close) in reverse tape order and their TIMESTAMPS KEPT.
+
+    THE DEFECT THIS REPLACES.  The converse used to reverse all four arrays,
+    timestamps included, and a reversed timestamp array is not the 5m grid —
+    so `be_sequence` answered `mismatch` for EVERY campaign and "the
+    converse moved the order" held by construction, whatever the tape said.
+    Keeping the stamps keeps the grid, keeps the extremes (the same set of
+    prices), and asks the sequencer the one real question: this bar's prices
+    in the other order.  Reversal maps the FIRST child that printed or
+    dipped onto the LAST one, so the converse's answer is predictable from
+    the original children, and the fixtures predict it independently."""
+    return (t5, np.asarray(h5)[::-1].copy(), np.asarray(l5)[::-1].copy(),
+            np.asarray(c5)[::-1].copy())
+
+
+# Which rows are EXEMPT from "the converse flips the order": the ones whose
+# order cannot matter.  A tie is read inside ONE child, so the 5m tape holds
+# no order to flip.  A print with NO dip and a 4h/5m mismatch are INVARIANT
+# under the converse (no child dips in either order; the extremes, the count
+# and the grid are unchanged), and that invariance is ASSERTED, not assumed.
+BE_CONVERSE_EXEMPT = ("tie",)
+BE_CONVERSE_INVARIANT = ("print_no_dip", "mismatch")
+
+
+def be_converse_ok(cls: str, rev_cls: str) -> bool:
+    """Does the converse behave as the class says it must?
+      dip_before / dip_after -> the converse is the OTHER of the two (it
+                                must flip, and it may not land on a mismatch,
+                                which would prove nothing about order);
+      print_no_dip / mismatch -> the converse is the SAME class (invariance);
+      tie                     -> exempt: no order inside one child."""
+    if cls in ("dip_before", "dip_after"):
+        return rev_cls in ("dip_before", "dip_after") and rev_cls != cls
+    if cls in BE_CONVERSE_INVARIANT:
+        return rev_cls == cls
+    return cls in BE_CONVERSE_EXEMPT
+
+
 def be_campaign_evidence(sym: str, bar_open_ms: int, d: int, entry_px: float,
                          r_dist: float, bar_hi: float, bar_lo: float,
-                         be_r: float = 1.0) -> dict:
+                         be_r: float = 1.0, converse: bool = False) -> dict:
     """One real campaign's latch bar, read BOTH ways: the module's sequencer
-    and the hand walk, side by side.  Used by F-C10-BE once the ids exist.
+    and the hand walk (+ the hand's own parent check), side by side.  With
+    `converse=True` the same bar is read with its prices reversed and its
+    stamps kept [`converse_children`].
 
     `bar_hi` / `bar_lo` are the PARENT 4h bar's own extremes and must come
     from the 4h frame, never from the children — feeding the children's own
-    aggregate back in would make the mismatch check tautological."""
-    t5, h5, l5, c5 = children_5m(sym, int(bar_open_ms))
+    aggregate back in would make the mismatch check tautological.
+
+    `agree` IS CLASS AGREEMENT PLUS CHILD-INDEX AGREEMENT: the module's class
+    (`be_class` of its order and dip) equals the hand's (`mismatch` when the
+    hand's parent check fails, else `be_class` of the hand walk), and both
+    walks name the same first print child and first dip child.  It used to
+    be ORDER equality, which a genuine mismatch campaign could never meet.
+
+    The sequencer is asked about exactly these children by rebinding this
+    module's `children_5m` for the one call and restoring it in `finally` —
+    `be_sequence` itself, the registered mechanism, is not touched."""
+    kids = children_5m(sym, int(bar_open_ms))
+    if converse:
+        kids = converse_children(*kids)
+    t5, h5, l5, c5 = kids
     trig = entry_px + d * float(be_r) * float(r_dist)
-    mine = be_sequence(sym, int(bar_open_ms), d, entry_px, trig,
-                       float(bar_hi), float(bar_lo))
+    g = globals()
+    held = g["children_5m"]
+    g["children_5m"] = lambda _s, _b, _k=kids: _k
+    try:
+        mine = be_sequence(sym, int(bar_open_ms), d, entry_px, trig,
+                           float(bar_hi), float(bar_lo))
+    finally:
+        g["children_5m"] = held
     hand = hand_walk_5m(t5, h5, l5, c5, d, entry_px, trig)
+    parent = hand_parent_check(t5, h5, l5, int(bar_open_ms), float(bar_hi),
+                               float(bar_lo))
+    m_cls = be_class(mine["order"], bool(mine["dip"]))
+    h_cls = ("mismatch" if not parent["ok"]
+             else be_class(hand["order"], hand["i_dip"] is not None))
     return {"symbol": sym, "bar_open_ms": int(bar_open_ms),
             "bar_open": iso(int(bar_open_ms)), "direction": int(d),
             "entry_px": float(entry_px), "trigger_px": float(trig),
-            "module": mine, "hand": hand,
-            "agree": bool(mine["order"] == hand["order"]
+            "converse": bool(converse),
+            "module": mine, "hand": hand, "parent": parent,
+            "module_class": m_cls, "hand_class": h_cls,
+            "agree": bool(m_cls == h_cls
                           and mine["i_up"] == hand["i_up"]
                           and mine["i_dip"] == hand["i_dip"])}
+
+
+# ── THE LATCH CENSUS OF THE FILED BOOK — OUTCOME-FREE ──────────────────────
+# Every field a census row carries is IDENTITY (which campaign, which latch
+# bar), ENTRY GEOMETRY fixed at the entry bar's close, or a SEQUENCING FACT
+# about the latch bar's 48 children (the three answers, the class, the
+# agreement flags, the converse).  NO exit, price-after-entry, excursion or
+# outcome field is read into a row or written out, and the fixture suite
+# holds every row's key set against its own whitelist and an outcome
+# denylist [F-C10-BE-CENSUS].
+BE_CENSUS_ROW_FIELDS = (
+    "symbol", "direction", "entry_ms", "entry_px", "r_dist",
+    "latch_bar_open_ms", "latch_bar_open", "trigger_px",
+    "journal_order", "module_order", "hand_order", "parent_reproduced",
+    "i_up", "i_dip", "class", "hand_class",
+    "module_eq_journal", "module_eq_hand", "three_way",
+    "converse_module_class", "converse_hand_class", "converse_agree",
+    "converse_ok")
+BE_CENSUS_RULE = (
+    "Every campaign of P-BE-1's SCORED arm A1 'be-floor-1R vs card-v6 "
+    "(CLASSIC5, full)', ridden by tierc10_lanes.run_lane through "
+    "tierc10_panel.require_arm (the text of record from "
+    "REGISTRATION_TEXTS.json, the head pinned in REGISTRY_PIN.json) and "
+    "tierc10_panel.external_book on CLASSIC5 over corridor_era(CLASSIC5, "
+    "'full'), card CARD_BE1 (be_floor_after_r 1.0), roles v6. A campaign is "
+    "in the census iff its journal says be_reached; its LATCH BAR is the "
+    "journal's be_bar on the ride's own 4h frame. Each latch bar is read "
+    "THREE WAYS: the ride's own answer (journal be_order), the module's "
+    "be_sequence re-run on the bar, and the plain-loop hand_walk_5m with "
+    "the hand's own parent check (48 children, the 5m grid, EXACT "
+    "extremes). CLASS: dip_before = dip_first; dip_after = plus1r_first "
+    "WITH a dip; print_no_dip = plus1r_first with NO dip; tie; mismatch. "
+    "The contract's three required classes are dip_before, dip_after and "
+    "tie_or_mismatch. THE CONVERSE re-reads the bar with its prices "
+    "reversed and its timestamps kept. Rows are ordered by panel position, "
+    "then entry_ms. No exit, price-after-entry, excursion or outcome field "
+    "is read or written, and nothing here is scored.")
+
+
+def be_latch_census(book, be_r: float = 1.0) -> dict:
+    """THE LATCH CENSUS of one ridden Book: per latch bar, identity + class +
+    agreement flags, and the counts.  Pure over the Book and the tapes; it
+    rides nothing and files nothing (the fixture suite files it).
+
+    WHAT WOULD MAKE THIS WRONG: reading the latch bar's extremes from its
+    children (the mismatch check would be tautological); classifying on
+    `order` alone (a print with no dip would count as dip-after); letting
+    one exit or outcome field into a row; or relabelling a class to fill a
+    slot — the census reports what the walks say, and nothing else."""
+    spec = dict(getattr(book, "spec", None) or {})
+    panel = list(spec.get("panel") or [])
+    pos = {s: k for k, s in enumerate(panel)}
+    rows: list = []
+    for t in book:
+        if not bool(getattr(t, "be_reached", False)):
+            continue
+        f = T9.frame(t.symbol)["f"]
+        j, d = int(t.be_bar), int(t.direction)
+        om = int(f.open_ms[j])
+        args = (t.symbol, om, d, float(t.entry_px), float(t.r_dist),
+                float(f.h[j]), float(f.l[j]), float(be_r))
+        ev = be_campaign_evidence(*args)
+        rv = be_campaign_evidence(*args, converse=True)
+        m = ev["module"]
+        full = {
+            "symbol": str(t.symbol), "direction": d,
+            "entry_ms": int(t.entry_ms), "entry_px": float(t.entry_px),
+            "r_dist": float(t.r_dist),
+            "latch_bar_open_ms": om, "latch_bar_open": iso(om),
+            "trigger_px": float(ev["trigger_px"]),
+            "journal_order": str(t.be_order), "module_order": m["order"],
+            "hand_order": ev["hand"]["order"],
+            "parent_reproduced": bool(ev["parent"]["ok"]),
+            "i_up": m["i_up"], "i_dip": m["i_dip"],
+            "class": ev["module_class"], "hand_class": ev["hand_class"],
+            "module_eq_journal": bool(m["order"] == str(t.be_order)),
+            "module_eq_hand": bool(ev["agree"]),
+            "converse_module_class": rv["module_class"],
+            "converse_hand_class": rv["hand_class"],
+            "converse_agree": bool(rv["agree"]),
+            "converse_ok": bool(rv["agree"] and be_converse_ok(
+                ev["module_class"], rv["module_class"]))}
+        full["three_way"] = bool(full["module_eq_journal"]
+                                 and full["module_eq_hand"])
+        rows.append({k: (full[k] if k in full else getattr(t, k))
+                     for k in BE_CENSUS_ROW_FIELDS})
+    rows.sort(key=lambda r: (pos.get(r.get("symbol"), len(pos)),
+                             int(r.get("entry_ms", 0)),
+                             int(r.get("direction", 0))))
+    by = {c: 0 for c in BE_CLASSES}
+    for r in rows:
+        by[r["class"]] = by.get(r["class"], 0) + 1
+    per_sym = {s: sum(1 for r in rows if r["symbol"] == s) for s in panel}
+    counts = {
+        "n_campaigns": len(book), "n_latch": len(rows), "by_class": by,
+        "tie_or_mismatch": int(by.get("tie", 0) + by.get("mismatch", 0)),
+        "by_symbol": per_sym,
+        "n_module_eq_journal": sum(bool(r["module_eq_journal"])
+                                   for r in rows),
+        "n_module_eq_hand": sum(bool(r["module_eq_hand"]) for r in rows),
+        "n_three_way": sum(bool(r["three_way"]) for r in rows),
+        "n_converse_agree": sum(bool(r["converse_agree"]) for r in rows),
+        "n_converse_ok": sum(bool(r["converse_ok"]) for r in rows)}
+    return {"artifact": "BE_LATCH_CENSUS", "tier": "TIER-C10",
+            "registration": spec.get("registration"), "arm": spec.get("arm"),
+            "era": spec.get("era"), "panel": panel,
+            "registration_sha256": spec.get("registration_sha256"),
+            "window_lo": (None if spec.get("lo_ms") is None
+                          else iso(int(spec["lo_ms"]))),
+            "window_hi": (None if spec.get("hi_ms") is None
+                          else iso(int(spec["hi_ms"]) + 1)),
+            "be_floor_after_r": float(be_r), "rule": BE_CENSUS_RULE,
+            "classes": list(BE_CLASSES), "required": list(BE_REQUIRED),
+            "converse_exempt": list(BE_CONVERSE_EXEMPT),
+            "converse_invariant": list(BE_CONVERSE_INVARIANT),
+            "row_fields": list(BE_CENSUS_ROW_FIELDS),
+            "withheld": ("every exit, price-after-entry, excursion and "
+                         "outcome field of the Book; nothing is scored"),
+            "section9": BE_SECTION9, "counts": counts,
+            "f_c10_be": be_c10_decision_of(rows, counts), "rows": rows}
+
+
+def be_census_json(census: dict) -> str:
+    """The census's bytes of record: sorted keys, indent 2, trailing newline,
+    no wall clock — so two runs give one sha."""
+    return json.dumps(census, indent=2, sort_keys=True, default=str) + "\n"
+
+
+def be_c10_decision_of(rows: list, counts: dict) -> dict:
+    """THE RULE THAT DECIDES F-C10-BE FROM THE CENSUS — and the only source
+    of its rows.  Per required class, in BE_REQUIRED order, the FIRST census
+    row (census order) of that class whose three answers agree and whose
+    converse behaves [`be_converse_ok`].  Nothing is chosen by outcome (no
+    outcome is in reach) and nothing is typed.
+
+      · no tie AND no mismatch in the book -> NOT RUN, with P-BE-1 §9's own
+        reason (the filed text prescribes this case);
+      · another required class absent -> NOT RUN, and it is an OPERATOR
+        QUESTION: §9 forbids substitution but prescribes nothing for it;
+      · all three present -> RUN on exactly those three rows."""
+    by = dict(counts.get("by_class") or {})
+    pick, missing = {}, []
+    for req in BE_REQUIRED:
+        ok = [r for r in rows if be_required_class(r["class"]) == req
+              and r["three_way"] and r["converse_ok"]]
+        if ok:
+            pick[req] = ok[0]
+        else:
+            missing.append(req)
+    tally = (f"{counts.get('n_latch')} latch bars of "
+             f"{counts.get('n_campaigns')} campaigns: dip-before "
+             f"{by.get('dip_before', 0)}, dip-after {by.get('dip_after', 0)}, "
+             f"print-no-dip {by.get('print_no_dip', 0)}, tie "
+             f"{by.get('tie', 0)}, 4h/5m mismatch {by.get('mismatch', 0)}; "
+             f"three-way agreement {counts.get('n_three_way')}/"
+             f"{counts.get('n_latch')}")
+    if int(by.get("tie", 0)) + int(by.get("mismatch", 0)) == 0:
+        return {"decision": "NOT RUN", "governed_by": "P-BE-1 §9",
+                "operator_question": False, "missing": missing, "rows": [],
+                "reason": (f"P-BE-1 §9 (filed text): \"{BE_SECTION9}\" — "
+                           f"P-BE-1's filed book (scored arm A1) contains "
+                           f"NO tie and NO 4h/5m mismatch latch bar: "
+                           f"{tally}. Required classes absent: {missing}. "
+                           f"No synthetic bar is substituted and no "
+                           f"dip_first case is relabelled; BE_CAMPAIGNS "
+                           f"stays empty.")}
+    if missing:
+        return {"decision": "NOT RUN", "governed_by": "OPERATOR",
+                "operator_question": True, "missing": missing, "rows": [],
+                "reason": (f"the filed book lacks required class(es) "
+                           f"{missing} ({tally}); §9 forbids substitution "
+                           f"and prescribes nothing for this case — an "
+                           f"OPERATOR QUESTION, not a PASS.")}
+    return {"decision": "RUN", "governed_by": "the census rule",
+            "operator_question": False, "missing": [],
+            "rows": [pick[r] for r in BE_REQUIRED],
+            "reason": f"all three required classes present: {tally}"}
 
 
 # ═════════════════ THE LATCH BAR'S WORDS — NARROWED TO WHAT THE LEGS PROVE
@@ -1542,12 +1911,18 @@ LANES_WARRANTY = (
     "judging a campaign on a bar stamped after it."
 )
 LANES_GATES = (
-    "NOTHING. This stage is MECHANICS. No registration is filed, no P-* "
-    "number is computed, and the only book ridden on real bars is the KNOWN "
-    "CONTROL (card v6, every new knob OFF, CLASSIC5), ridden to prove it is "
-    "UNCHANGED [LAW 4, F-LANES-OFF]. F-C10-BE, the contract's own "
-    "three-campaign fixture, is NOT RUN and cannot run until P-BE-1 is "
-    "FILED; it is never reported PASS."
+    "NOTHING. This stage is MECHANICS, and no P-* number is computed. Since "
+    "371123f P-BE-1 and P-SPR-2 are FILED (with the other four; the registry "
+    "of record is the six lines pinned in REGISTRY_PIN.json), and they open "
+    "ONLY through the filed door — the text of record and the pinned head "
+    "[F-LANES-GATE]. Real bars enter this suite two ways: the KNOWN CONTROL "
+    "(card v6, every new knob OFF, CLASSIC5), ridden to prove it is "
+    "UNCHANGED [LAW 4, F-LANES-OFF]; and P-BE-1's scored arm A1, ridden "
+    "through that door for its LATCH CENSUS alone (BE_LATCH_CENSUS.json: "
+    "identity, class and agreement flags, no exit or outcome field) "
+    "[F-C10-BE-CENSUS]. TP.score is never called and no .scored.json is "
+    "written. F-C10-BE is DECIDED BY P-BE-1 §9 from that census and is "
+    "never reported PASS unless the census supplies all three classes."
 )
 LANES_COMMISSION = {
     "P-BE-1": (
@@ -1636,9 +2011,12 @@ def build_manifest(fixture_results=None, not_run=None, panel=None) -> dict:
         "as_of_source": "Stage D AS_OF_PIN.json, via tierc10_panel.corridor_n",
         "panel_name": "CLASSIC5",
         "panel": list(panel),
-        "book": ("card v6 · V6_ROLES · CLASSIC5 — the KNOWN CONTROL, the "
-                 "ONLY real-data book this stage rides, ridden unregistered "
-                 "by run_lane's own gate to prove it is UNCHANGED"),
+        "book": ("card v6 · V6_ROLES · CLASSIC5 — the KNOWN CONTROL, ridden "
+                 "unregistered by run_lane's own gate to prove it is "
+                 "UNCHANGED; and, since 371123f, P-BE-1's scored arm A1 "
+                 f"{BE1_SCORED_ARM!r} ridden THROUGH THE FILED DOOR for its "
+                 "outcome-free latch census (BE_LATCH_CENSUS.json) and "
+                 "nothing else — no outcome is summed, printed or filed"),
         "commission": LANES_COMMISSION,
         "gates": LANES_GATES,
         "warranty": LANES_WARRANTY,
@@ -1673,7 +2051,21 @@ def build_manifest(fixture_results=None, not_run=None, panel=None) -> dict:
         "be_campaigns_note": BE_CAMPAIGNS_NOTE,
         "registry_of_record": str(TP.REG_DIR),
         "registry_present": bool(TP.REG_DIR.exists()),
+        "registry_pin_of_lanes": _lane_pins(),
     }
+
+
+def _lane_pins() -> dict:
+    """The head each lane registration is held against, AS PINNED — or the
+    reason it could not be read.  Printed, so the manifest names the door."""
+    out = {}
+    for reg in LANE_REGS:
+        try:
+            n, h = filed_head(reg)
+            out[reg] = f"{n}:{h}"
+        except SystemExit as e:
+            out[reg] = f"UNREADABLE: {e}"
+    return out
 
 
 def write_manifest(fixture_results=None, not_run=None, panel=None) -> Path:
@@ -1687,9 +2079,10 @@ def write_manifest(fixture_results=None, not_run=None, panel=None) -> Path:
 
 
 def main() -> int:
-    """Print the lane spec and file NOTHING.  No registration may be filed in
-    this workflow and no registered lane may ride, so there is nothing for a
-    build driver to build [LAW 4]."""
+    """Print the lane spec and file NOTHING.  This module files no
+    registration (the six of record were filed at 371123f, by Stage B) and
+    main() rides nothing; the fixture suite files the transcript, the latch
+    census and the manifest [LAW 4]."""
     print("=" * 78)
     print("TIER-C10 · 4h LANE MECHANICS — P-BE-1 (breakeven) + P-SPR-2 "
           "(spring/upthrust)")
@@ -1710,8 +2103,9 @@ def main() -> int:
     print()
     print("card knobs added by this module: "
           + ", ".join(f"{k} (OFF = {_KNOB_OFF[k]!r})" for k in NEW_KNOBS))
-    print("LAW 4: this module files no registration, computes no P-* number, "
-          "and rides no real book but the known control.")
+    print("LAW 4: this module files no registration and computes no P-* "
+          "number; main() rides nothing. The door `run_lane` opens a FILED "
+          "arm only with the text of record and the pinned head.")
     print(f"F-C10-BE campaigns: {BE_CAMPAIGNS or 'NOT NAMED'} — "
           f"{BE_CAMPAIGNS_NOTE}")
     q = OUT / "build_manifest.json"

@@ -6,12 +6,18 @@ APOLLO · Executor HEPHAESTUS · Seed 20260921.  THIS MODULE IS MECHANICS ONLY.
 
 ═══════════════════════════════════════════════════════════════════════════════
 LAW 4 — TEXT BEFORE RESULT — IS THE FIRST THING IN THIS FILE.
-No registration for P-BRK-S1 or P-BRK-I1 exists.  Until one does, EVERY runner
-in this module HALTs at its first statement, because its first statement is the
-panel gate (`TP.require_arm`).  Nothing here computes a P-BRK number, and the
-only real bars this file's fixtures ever read are the KNOWN CONTROL's (card v6
-on CLASSIC5) — the one run LAW 4 allows, and the one that licenses the phrase
-"v6 management lens-scaled".  Everything else is a synthetic tape.
+P-BRK-S1 and P-BRK-I1 are FILED (commit 371123f; REGISTRY.jsonl len 6, head
+pinned in REGISTRY_PIN.json).  EVERY runner in this module still calls the
+panel gate (`TP.require_arm`) as its FIRST statement, and the gate opens only
+for a FILED arm offered with the text of record (REGISTRATION_TEXTS.json) and
+the pinned head — anything else HALTs before a bar is read.  `main --ready`
+(§12b) rides the six filed arms to their Books and files the rows SEALED
+[B12]: no outcome sum, ruler, p or verdict is computed anywhere in this file,
+TP.score is never called and no .scored.json is written; scoring is B-CORE's.
+The fixtures read real bars only as their header lists (the KNOWN CONTROL —
+card v6 on CLASSIC5, the run that licenses "v6 management lens-scaled" —
+event detection, and the filed arms through the filed door); every other BRK
+campaign they build is on a synthetic tape.
 ═══════════════════════════════════════════════════════════════════════════════
 
 WHAT THIS MODULE IS.  Four things, in this order, each usable without the next:
@@ -88,14 +94,16 @@ THE EIGHT PINS THIS READING ADDS (this module's own; every one printed):
      over `R1_BANDS` and cannot name a sixth band.  Neither module's style is
      corrected; the translator is the only new object.
 
-Run (mechanics card only; no lane rides, none can):
+Run (mechanics card; with --ready, every FILED arm ridden to its Book and
+the rows filed SEALED [B12] — no outcome sum, no scorer):
     export NAIAD_CACHE_DIR=~/.cache/naiad/snapshots/tc10_20260921
-    ~/venvs/naiad/bin/python scripts/tierc10_brk.py [--out DIR]
+    ~/venvs/naiad/bin/python scripts/tierc10_brk.py [--out DIR] [--ready]
 """
 from __future__ import annotations
 
 import dataclasses
 import hashlib
+import io
 import itertools
 import json
 import sys
@@ -691,8 +699,39 @@ LEANS = (
     f"per-campaign sums; the ruler, the LOAO line and the p against the FDR "
     f"bar stay tierc10_panel's (TP.score / TP.headline_n).  A row can only be "
     f"assembled from a TP.Book — the journal WEARING its gate — so a row "
-    f"without a filed registration behind it cannot be built at all, which "
-    f"is the state of the estate today [LAW 4].",
+    f"without a filed registration behind it cannot be built at all.  Both "
+    f"BRK registrations are FILED as of commit 371123f (registry len 6), so "
+    f"real Books now exist; until B-CORE scores them a real row is "
+    f"assembled SEALED [B12].",
+    f"{LEAN_TAG} B12 THE READY ROW IS SEALED — AN EXECUTOR READING OF "
+    f"'text before result, scoring is a LATER stage'.  `ready()` (main "
+    f"--ready) rides every FILED arm of both forms through TP.require_arm "
+    f"(the text in REGISTRATION_TEXTS.json, the head pinned in "
+    f"REGISTRY_PIN.json) -> runner -> TP.external_book, and STOPS AT THE "
+    f"BOOK.  The row it files is brk_row(sealed=True): every field the "
+    f"declared row carries, the [Q-R3] verdict of the form's own era READ, "
+    f"the Tier-E other anchor and the Tier-E 17-asset view, TOLL_ACCOUNTING "
+    f"— but the figures WITHHOLD gross_r_sum, fee_r_sum, funding_r_sum, "
+    f"net_r_sum and net_r_median, "
+    f"because the sum of net_r over n campaigns IS the headline point "
+    f"estimate and B-CORE is where it is first read.  What binds the book "
+    f"instead is TP._book_sha (the digest score() binds on first score) and "
+    f"a content sha over EVERY field of every campaign.  The book file lists "
+    f"each campaign's IDENTITY and ENTRY GEOMETRY only; the exit and outcome "
+    f"FIELDS are withheld and bound by the sha.  THE SEAL IS ON THE SUMS AND "
+    f"THE EXIT FIELDS; IT IS NOT A BLIND, AND IT DOES NOT HIDE WHEN EACH "
+    f"CAMPAIGN ENDED.  One campaign rides per asset at a time, so the entry "
+    f"schedule the book file lists BOUNDS EVERY EXIT: each campaign exited "
+    f"at or before the bar before the next entry on its asset, a hold the "
+    f"gate permitted that the Book did not enter says the previous campaign "
+    f"was still open at that bar, and n_campaigns / per_asset_n_campaigns "
+    f"are themselves functions of the exits.  With the tape in hand a reader "
+    f"can bound — and in part re-derive — every exit bar, and from it the "
+    f"exit price of any campaign that left on its stop.  What the seal does "
+    f"withhold is the per-campaign R and every sum over it; it narrows what "
+    f"can be read before B-CORE, it does not make the Book unreadable.  If "
+    f"the operator prefers the unsealed row at this stage, "
+    f"brk_row(sealed=False) is the whole change.",
     f"{LEAN_TAG} B8 one object, two house styles: the operator's band names "
     f"({BAND_EXAMPLE}) and the census's ({census_band(BAND_EXAMPLE)}) are "
     f"translated at the boundary by band_key/census_band, which are algebra "
@@ -771,12 +810,23 @@ FINDINGS = (
     "(census/TUNING_RESULT_1d.json).  No registration text may quote the "
     "contract's wording; the pins are READ from the tuning file at run time "
     "(tuned_pins) and never typed.",
-    "OPEN: P-BRK-S1's contract text says 'NET OF MEASURED 5m TOLL' and does "
-    "not mention funding; P-BRK-I1 says 'net of 10 bps + funding'.  The estate "
-    "default is that every book pays journaled funding, so both lanes do here, "
-    "and S1 additionally PRINTS toll-as-%-of-1R from the filed grid.  If the "
-    "operator means the scalper to pay no funding, `account_l` takes the "
-    "funding rows as an argument and an empty table is the whole change.",
+    "SETTLED BY THE FILED TEXT (371123f) — was OPEN: P-BRK-S1's contract "
+    "text says 'NET OF MEASURED 5m TOLL' and does not mention funding; "
+    "P-BRK-I1 says 'net of 10 bps + funding'.  P-BRK-S1's FILED text now "
+    "prescribes it: §4 'funding is the journaled interval sum under the "
+    "card's 1R ceiling', and §5 takes the statistic on 'net_r = gross_r − "
+    "fee_r − funding_r_eff'.  The filed text governs, so both lanes pay "
+    "journaled funding, as they already did; S1 additionally PRINTS "
+    "toll-as-%-of-1R from the filed grid (the toll itself stays OPEN — the "
+    "filed text's own §7 names it an open question, above).",
+    "STALE CHECK, REPAIRED (2026-09-22, after 371123f).  F-BRK-GATE carried "
+    "a leg asserting 'the registry of record files NO BRK registration'.  "
+    "Once P-BRK-S1 / P-BRK-I1 were filed that leg went RED (16/17 on the "
+    "first run after the filing) — correctly: it was a claim about the "
+    "estate that had stopped being true.  It now asserts the converse the "
+    "filing makes true: both forms are filed, every filed arm OPENS the door "
+    "with the text of record and the pinned head, and neither carries a "
+    ".scored.json (scoring is B-CORE's).",
 )
 
 
@@ -2136,8 +2186,13 @@ def gate(reg_id: str, text: str, arm: str, panel, lane: str,
     NOT used and does not need to be: `require_arm` exists and is strictly
     stronger.  Said out loud so a reviewer can check the choice.
 
-    HALTS IF: nothing is filed for `reg_id` (which is the case TODAY for both
-    BRK lanes, and F-BRK-GATE proves it).
+    HALTS IF: nothing is filed for `reg_id`; the text offered is not the text
+    on file (the claim moved after filing); the head pin is not the chain's or
+    is STALE (taken before this registration's own line); the arm is not
+    filed, not filed for an external runner, not on this panel, or does not
+    name this lane.  Both BRK forms ARE filed (371123f): F-BRK-GATE proves all
+    six of their filed arms OPEN this door with the text of record and the
+    pinned head, and that an amended text or a stale head HALTs it.
     """
     return TP.require_arm(reg_id, text, arm, panel, lanes=(lane,),
                           head_of_record=head_of_record, root=reg_root)
@@ -2371,9 +2426,11 @@ def stamp_toll(trades: list, lens: str, anchor: str, band: str | None = None,
 # REGISTRATION's own verdict (the ruler, the p against the FDR bar) is the
 # panel module's and is not computed here either: the row carries the journal
 # and its provenance, and `TP.score` / `TP.headline_n` remain the only things
-# that turn a journal into a verdict.  LAW 4 is the reason: no BRK
-# registration exists, so no real Book can be offered to this function at all,
-# and every row built today is built on a SYNTHETIC campaign.
+# that turn a journal into a verdict.  LAW 4 is the reason: a real Book exists
+# only behind a FILED registration.  Both BRK forms are filed (371123f), and
+# their real Books come only through §12b's filed door (`ready_run`); until
+# B-CORE scores them, the rows assembled on them are SEALED [B12].  Every other
+# row this module or its fixtures build is built on a SYNTHETIC campaign.
 
 def verdict_asset_of(panel, override: str | None = None,
                      why: str | None = None) -> dict:
@@ -2392,9 +2449,12 @@ def verdict_asset_of(panel, override: str | None = None,
     COMMISSION's pool: nothing filed states its membership is this panel's,
     and quietly mapping PANEL17 onto it would be the very assumption this
     repair exists to remove — the same default wearing a new coat.  R8 orders
-    a Tier-E 17-asset print beside each BRK row; when that arm is filed the
-    operator names its census counterpart with `verdict_asset=` and says why,
-    or the census files a PANEL17 row.
+    a Tier-E 17-asset print beside each BRK row; that arm IS filed (371123f)
+    and `main --ready` rides it, but it rides as a Tier-E print with NO
+    verdict slot of its own — the row's verdict is the scored CLASSIC5
+    Book's.  Should a PANEL17 verdict ever be wanted, the operator names its
+    census counterpart with `verdict_asset=` and says why, or the census
+    files a PANEL17 row.
 
     `override` is an EXPLICIT OVERRIDE and never a fallback: an override that
     disagrees with the derived label HALTs unless `why` states the reason,
@@ -3007,9 +3067,10 @@ def _figures(run: dict, tier: str) -> dict:
 
     HALTS IF: `run` carries no `TP.Book`.  A Book is the journal WEARING the
     gate it entered through; a plain list has no registration behind it, and
-    a row assembled on one would be a number with no text before it.  No BRK
-    registration exists today, so no real Book can be offered at all — which
-    is exactly why every row built today is built on a synthetic campaign.
+    a row assembled on one would be a number with no text before it.  Both
+    BRK registrations are FILED (371123f); a REAL Book comes only through
+    `ready_run` (the filed door), and until B-CORE scores it the row is
+    assembled with `_sealed_figures` instead of this function [B12].
     """
     book = run.get("book")
     if not isinstance(book, TP.Book):
@@ -3018,8 +3079,8 @@ def _figures(run: dict, tier: str) -> dict:
             f"wearing the gate it entered through (TP.external_book) — and "
             f"from nothing else; got {type(book).__name__}. A filtered book, "
             f"a list or a hand-built record has no registration behind it. "
-            f"[LAW 4] No BRK registration is filed, so no real Book exists "
-            f"today and every row is a SYNTHETIC one.")
+            f"[LAW 4] A real Book comes only through the FILED door "
+            f"(ready_run -> TP.require_arm -> TP.external_book).")
     tr = list(book)
     per: dict = {}
     for t in tr:
@@ -3064,6 +3125,84 @@ def _figures(run: dict, tier: str) -> dict:
     }
 
 
+SEALED_FIGURE_FIELDS = ("gross_r_sum", "fee_r_sum", "funding_r_sum",
+                        "net_r_sum", "net_r_median")
+
+
+def book_content_sha(book) -> str:
+    """sha256 over EVERY field of EVERY campaign of a Book, sorted — binds
+    the whole journal (outcomes included) without revealing a byte of it.
+    Floats are written by `repr`, so the digest is exact, not rounded."""
+    rows = []
+    for t in book:
+        d = dict(vars(t)) if hasattr(t, "__dict__") else dataclasses.asdict(t)
+        rows.append(json.dumps(
+            {k: (repr(v) if isinstance(v, float) else v)
+             for k, v in sorted(d.items())},
+            sort_keys=True, default=repr))
+    return hashlib.sha256(
+        json.dumps(sorted(rows)).encode("utf-8")).hexdigest()
+
+
+def _sealed_figures(run: dict, tier: str) -> dict:
+    """[B12] WHAT A FILED BOOK CONTRIBUTES BEFORE IT IS SCORED — `_figures`
+    with the outcome sums WITHHELD.  Counts, refusals, the toll print (a
+    function of entry geometry only) and the book's two shas; never
+    gross/fee/funding/net.  The sum of net_r over the campaigns IS the
+    headline point estimate, and B-CORE is where it is first read.  The
+    counts it DOES print are not outcome-free: one campaign rides per asset
+    at a time, so n_campaigns is a function of the exits — the seal withholds
+    R, not the schedule (LEANS B12 says so in full).
+
+    HALTS IF: `run` carries no `TP.Book` (the same door as `_figures`)."""
+    book = run.get("book")
+    if not isinstance(book, TP.Book):
+        raise SystemExit(
+            f"HALT: a SEALED BRK row is assembled from a TP.Book and from "
+            f"nothing else; got {type(book).__name__}.")
+    tr = list(book)
+    per: dict = {}
+    for t in tr:
+        per[str(t.symbol)] = per.get(str(t.symbol), 0) + 1
+    tolls = [float(getattr(t, "toll_pct_of_1r", float("nan"))) for t in tr]
+    tolls = [x for x in tolls if np.isfinite(x)]
+    ref: dict = {}
+    for _sym, d in sorted((run.get("refused") or {}).items()):
+        for k_, v_ in sorted(dict(d).items()):
+            ref[k_] = ref.get(k_, 0) + int(v_)
+    return {
+        "tier": tier,
+        "sealed": True,
+        "anchor": str(run["anchor"]),
+        "era": str(run["era"]),
+        "window_iso": [TP.iso(int(run["window"][0])),
+                       TP.iso(int(run["window"][1]))],
+        "n_campaigns": len(tr),
+        "n_assets_with_campaigns": len(per),
+        "per_asset_n_campaigns": dict(sorted(per.items())),
+        "toll_pct_of_1r_median": _num(np.median(tolls)) if tolls else None,
+        "n_inactive_components": int(sum(int(t.n_inactive_components)
+                                         for t in tr)),
+        "refused": ref,
+        "book_spec": {k: book.spec.get(k) for k in
+                      ("runner", "registration", "arm", "era",
+                       "registration_sha256")},
+        "book_sha256_score_binding": TP._book_sha(book),
+        "book_content_sha256": book_content_sha(book),
+        "withheld": list(SEALED_FIGURE_FIELDS),
+        "withheld_note": (
+            "SEALED [B12] — the outcome sums of this Book are not computed "
+            "here. B-CORE scores the Book through TP.score, which binds "
+            "book_sha256_score_binding on first score; a Book that re-rides "
+            "to a different sha is not the Book this row names."),
+        "scored_statistic": None,
+        "scored_statistic_note": (
+            "NOT COMPUTED HERE. The ruler, the LOAO line and the p against "
+            "the FDR bar are tierc10_panel's (TP.score / TP.headline_n) and "
+            "are applied to this Book by the registration's own scorer."),
+    }
+
+
 # ── EVERY GRID WHOLE: the row's fields are DECLARED, and `brk_row` proves the
 # ── dict it built carries exactly them — no silent extra, no silent drop.
 ROW_FIELDS = (
@@ -3088,7 +3227,8 @@ def brk_row(lane: str, scored: dict, tier_e: dict | None = None,
             require_verdict: bool = True,
             hvt_verdict_path: Path | None = None,
             verdict_asset_why: str | None = None,
-            allow_provisional: bool = False) -> dict:
+            allow_provisional: bool = False,
+            sealed: bool = False) -> dict:
     """ONE BRK FORM'S ROW — the scored anchor, the OTHER anchor as Tier-E, the
     lens, the era, the panel, the toll `stamp_toll` already stamped, and the
     slot for that lens's height-vs-toll verdict [contract line 112].
@@ -3097,7 +3237,11 @@ def brk_row(lane: str, scored: dict, tier_e: dict | None = None,
     SAME runner, called twice with the two `anchor=` values.  `panel_tier_e`
     is the optional 17-asset print R8 orders beside the 5-asset row; it is a
     third run of the same runner on a PANEL17 arm, and is None (with a stated
-    reason) when no such arm is filed.
+    reason) when the assembly did not ride it.
+
+    `sealed=True` [B12] builds every figures block with `_sealed_figures`:
+    counts, refusals, the toll print and the book's two shas, and NONE of
+    the outcome sums — the row a filed Book wears before B-CORE scores it.
 
     `require_verdict=False` builds the row with a `PendingVerdict` in the
     verdict slot instead of HALTing — the row can then be assembled and
@@ -3131,7 +3275,8 @@ def brk_row(lane: str, scored: dict, tier_e: dict | None = None,
             f"HALT: {lane} is declared on the {LANE_ERA[lane]!r} era "
             f"(LANE_ERA) and the scored run carries {scored['era']!r}. "
             f"{LANE_ERA_LAW}")
-    fig = _figures(scored, "SCORED")
+    figs = _sealed_figures if sealed else _figures
+    fig = figs(scored, "SCORED")
     other = None
     if tier_e is not None:
         if str(tier_e["anchor"]) != LANE_TIER_E_ANCHOR[lane]:
@@ -3141,7 +3286,7 @@ def brk_row(lane: str, scored: dict, tier_e: dict | None = None,
                 f"offered as Tier-E carries {tier_e['anchor']!r}. The "
                 f"contract's 'also prints the OTHER anchor' is not satisfied "
                 f"by printing the same one twice.")
-        other = _figures(tier_e, "TIER-E — UNSCORED, GATES NOTHING")
+        other = figs(tier_e, "TIER-E — UNSCORED, GATES NOTHING")
     panel17 = None
     if panel_tier_e is not None:
         a_ = list(scored["book"].spec.get("panel") or [])
@@ -3154,7 +3299,7 @@ def brk_row(lane: str, scored: dict, tier_e: dict | None = None,
                 f"offered rides {TP.panel_name(b_)} ({len(b_)} assets), the "
                 f"same panel as the scored arm ({TP.panel_name(a_)}); "
                 f"printing the same panel twice satisfies nothing.")
-        panel17 = _figures(panel_tier_e, "TIER-E — UNSCORED, GATES NOTHING")
+        panel17 = figs(panel_tier_e, "TIER-E — UNSCORED, GATES NOTHING")
     spec = scored["book"].spec
     # THE VERDICT SLOT'S ASSET IS DERIVED FROM THE BOOK, NEVER DEFAULTED
     # [review round 2, finding 1].  It used to read
@@ -3217,14 +3362,19 @@ def brk_row(lane: str, scored: dict, tier_e: dict | None = None,
             None if panel17 is not None else
             "ABSENT — operator R8 (2026-09-22) orders the 17-asset view "
             "printed as Tier-E beside each BRK row; it is a third run of the "
-            "same runner on a PANEL17 arm, and no such arm is filed."),
+            "same runner on the form's FILED PANEL17 arm, and this assembly "
+            "did not ride it."),
         "height_vs_toll": hv,
         "height_vs_toll_asset": va,
         "height_vs_toll_interface": height_vs_toll_spec(),
         "as_of_last_closed_4h": as_of_of_record(),
         "seed": SEED,
-        "law4": ("this row's Book carries a filed registration or it does not "
-                 "exist; no BRK registration is filed today"),
+        "law4": (("SEALED [B12]: this row's Book came through the FILED "
+                  "door (TP.require_arm -> runner -> TP.external_book); its "
+                  "outcome sums are withheld and bound by sha until B-CORE "
+                  "scores it through TP.score") if sealed else
+                 ("this row's Book carries a filed registration or it does "
+                  "not exist")),
     }
     if tuple(row) != ROW_FIELDS:
         raise SystemExit(
@@ -3238,7 +3388,8 @@ def brk_row(lane: str, scored: dict, tier_e: dict | None = None,
 
 def brk_rows(runs: dict, hvt_path: Path | None = None,
              require_verdict: bool = True,
-             hvt_verdict_path: Path | None = None) -> list:
+             hvt_verdict_path: Path | None = None,
+             sealed: bool = False) -> list:
     """ONE ROW PER BRK FORM, in lane order.
 
     `runs` = {lane: {"scored": run, "tier_e": run | None,
@@ -3266,15 +3417,16 @@ def brk_rows(runs: dict, hvt_path: Path | None = None,
                            hvt_verdict_path=hvt_verdict_path,
                            verdict_asset_why=r.get("verdict_asset_why"),
                            allow_provisional=bool(
-                               r.get("allow_provisional", False))))
+                               r.get("allow_provisional", False)),
+                           sealed=sealed))
     return out
 
 
 def row_schema() -> dict:
-    """THE ROW'S SHAPE, printable with NO book in hand — which is the only
-    state this estate is in today.  It is what `main()` prints in place of
-    rows, so the absence of a BRK table is a described absence and not a
-    silence."""
+    """THE ROW'S SHAPE, printable with NO book in hand.  `main()` prints it on
+    every run, so a run without `--ready` still describes the row it did not
+    build; with `--ready` the SEALED rows themselves are filed beside it
+    (BRK_READY.json) [B12]."""
     return {
         "contract": ("RESUME 2026-09-22 line 112: 'Each BRK form also prints "
                      "the OTHER anchor (EMA band <-> memory-line) as Tier-E, "
@@ -3290,8 +3442,9 @@ def row_schema() -> dict:
                   for lane in LANE_ORDER},
         "fields": list(ROW_FIELDS),
         "assembled_by": "tierc10_brk.brk_rows(runs)",
-        "needs": ("a TP.Book per anchor, i.e. a FILED registration — none "
-                  "exists, so no row can be built on real bars today [LAW 4]"),
+        "needs": ("a TP.Book per anchor, i.e. a FILED registration — both "
+                  "forms are filed (371123f); `main --ready` assembles the "
+                  "rows SEALED [B12] and B-CORE scores the Books"),
         "height_vs_toll": height_vs_toll_spec(),
         "computes_no_verdict": (
             "the height-vs-toll verdict is READ from [Q-R3]; the "
@@ -3314,19 +3467,31 @@ def print_rows(rows: list, out=None) -> None:
         w(f"  panel {r['panel_name']} ({r['n_panel_assets']} assets): "
           f"{', '.join(r['panel'])}\n")
         f_ = r["scored_figures"]
+
+        def _res(x):
+            """The outcome half of a figures block — or the SEAL [B12]."""
+            if x.get("sealed"):
+                return (f"SEALED — outcome sums withheld until B-CORE; book "
+                        f"sha (score binding) "
+                        f"{str(x['book_sha256_score_binding'])[:16]}, content "
+                        f"sha {str(x['book_content_sha256'])[:16]}")
+            return (f"net_r sum {x['net_r_sum']}, median "
+                    f"{x['net_r_median']}")
         w(f"  SCORED anchor {r['anchor_scored']!r}: {f_['n_campaigns']} "
-          f"campaigns on {f_['n_assets_with_campaigns']} assets, net_r sum "
-          f"{f_['net_r_sum']}, median {f_['net_r_median']} "
-          f"(verdict: {f_['scored_statistic_note']})\n")
+          f"campaigns on {f_['n_assets_with_campaigns']} assets "
+          f"{f_['per_asset_n_campaigns']}, window {f_['window_iso']}, "
+          f"{_res(f_)} (verdict: {f_['scored_statistic_note']})\n")
         o = r["tier_e_other_anchor"]
         w(f"  TIER-E other anchor {r['anchor_tier_e']!r}: "
-          + (f"{o['n_campaigns']} campaigns, net_r sum {o['net_r_sum']} "
+          + (f"{o['n_campaigns']} campaigns on "
+             f"{o['n_assets_with_campaigns']} assets, {_res(o)} "
              f"[{o['tier']}]\n" if o else
              f"{r['tier_e_other_anchor_note']}\n"))
         p17 = r["tier_e_panel17"]
         w(f"  TIER-E 17-asset view [R8]: "
           + (f"{p17['n_campaigns']} campaigns on "
-             f"{p17['n_assets_with_campaigns']} assets [{p17['tier']}]\n"
+             f"{p17['n_assets_with_campaigns']} assets, {_res(p17)} "
+             f"[{p17['tier']}]\n"
              if p17 else f"{r['tier_e_panel17_note']}\n"))
         t = r["toll"]
         w("  TOLL: " + (f"cls {t['cls']!r} lens {t['lens']!r}, per asset "
@@ -3364,6 +3529,251 @@ def print_rows(rows: list, out=None) -> None:
                   f"verdict rests UNDER the census's own sample floor and "
                   f"gates nothing. ***\n")
         w(f"  as_of {r['as_of_last_closed_4h']} · seed {r['seed']}\n")
+
+
+# ═══════════════════════════ 12b · THE FILED DOOR — BOOKS READY TO SCORE [B12]
+# As of commit 371123f P-BRK-S1 and P-BRK-I1 are FILED.  This section rides
+# every filed arm of both forms through the ONE door the registry allows —
+# TP.require_arm with the text of record and the pinned head -> the lane's
+# runner -> TP.external_book — and STOPS AT THE BOOK.  It never calls
+# TP.score and never writes a .scored.json; the row it assembles is SEALED.
+REGISTRY_PIN_PATH = TP.OUT / "REGISTRY_PIN.json"
+REGISTRATION_TEXTS_PATH = TP.OUT / "REGISTRATION_TEXTS.json"
+ARM_ROLES = ("scored", "tier_e_other", "tier_e_panel17")
+# THE ARM NAMES AS FILED — typed here ONCE so a reader can grep them, and
+# held against the filed book_spec by `filed_arm_specs` on every call: a name
+# the filing does not carry, a scored flag, a panel or an era that disagrees
+# with the role HALTs.
+FILED_ARMS = {
+    LANE_S1: {"scored": "P-BRK-S1 vs zero",
+              "tier_e_other": "P-BRK-S1 memory-line anchor",
+              "tier_e_panel17": "P-BRK-S1 17-asset view"},
+    LANE_I1: {"scored": "CLASSIC5-memory-line",
+              "tier_e_other": "CLASSIC5-tierE-band",
+              "tier_e_panel17": "PANEL17-tierE-memory-line"},
+}
+ROLE_PANEL_NAME = {"scored": "CLASSIC5", "tier_e_other": "CLASSIC5",
+                   "tier_e_panel17": "PANEL17"}
+# The fields a READY book file lists per campaign: IDENTITY and ENTRY
+# GEOMETRY, every one of them fixed at or before the entry bar's close.
+# Exit and outcome fields are WITHHELD and bound by the two shas.
+READY_TRADE_FIELDS = ("symbol", "lane", "lens", "direction", "die_i", "rid",
+                      "touch_i", "entry_i", "entry_ms", "entry_close_ms",
+                      "entry_px", "stop_px", "r_dist", "atr_at_entry",
+                      "anchor_kind", "anchor", "toll_atr_grid",
+                      "toll_pct_of_1r")
+READY_ARTIFACTS = ("BRK_READY.json", "BRK_READY_BOOKS.json", "BRK_READY.txt")
+
+
+def role_anchor(lane: str, role: str) -> str:
+    """The anchor a filed arm rides: the scored one on the scored arm and on
+    the 17-asset view, the OTHER one on the Tier-E other-anchor arm."""
+    if role not in ARM_ROLES:
+        raise SystemExit(f"HALT: unknown arm role {role!r}; {ARM_ROLES}.")
+    return LANE_TIER_E_ANCHOR[lane] if role == "tier_e_other" \
+        else LANE_ANCHOR[lane]
+
+
+def filed_text(reg_id: str, path: Path | None = None) -> str:
+    """THE TEXT OF RECORD, read from REGISTRATION_TEXTS.json — the drafted
+    file the registration was filed FROM, not the registration file itself
+    (offering the door the bytes it holds would be comparing it to itself)."""
+    p = Path(path) if path else REGISTRATION_TEXTS_PATH
+    if not p.is_file():
+        raise SystemExit(f"HALT: no texts of record at {p}.")
+    d = json.loads(p.read_text(encoding="utf-8"))
+    t = (d.get(reg_id) or {}).get("text")
+    if not isinstance(t, str) or not t.strip():
+        raise SystemExit(f"HALT: {p.name} carries no text for {reg_id!r}.")
+    return t
+
+
+def filed_head(reg_id: str, path: Path | None = None) -> tuple:
+    """(registry_len, registry_head) as PINNED in REGISTRY_PIN.json — the
+    witness the door holds the chain against [WITNESS_LAW]."""
+    p = Path(path) if path else REGISTRY_PIN_PATH
+    if not p.is_file():
+        raise SystemExit(f"HALT: no registry pin at {p}.")
+    r = (json.loads(p.read_text(encoding="utf-8")).get("registrations")
+         or {}).get(reg_id)
+    if not r or not r.get("already_filed"):
+        raise SystemExit(f"HALT: {p.name} pins no FILED head for {reg_id!r}.")
+    return (int(r["registry_len"]), str(r["registry_head"]))
+
+
+def filed_arm_specs(lane: str) -> dict:
+    """{role: filed arm dict} for one form, read THROUGH the door
+    (TP.require_registered with the text of record and the pinned head) and
+    held against FILED_ARMS.  HALTS on any disagreement."""
+    if lane not in FILED_ARMS:
+        raise SystemExit(f"HALT: unknown BRK lane {lane!r}.")
+    reg = FORM_OF[lane]
+    rec = TP.require_registered(reg, filed_text(reg),
+                                head_of_record=filed_head(reg))
+    by = {a["arm"]: a for a in rec["book_spec"]["arms"]}
+    out, bad = {}, []
+    for role in ARM_ROLES:
+        name = FILED_ARMS[lane][role]
+        a = by.get(name)
+        if a is None:
+            bad.append(f"{role}: no filed arm {name!r} (filed {sorted(by)})")
+            continue
+        if bool(a["scored_in_family"]) != (role == "scored"):
+            bad.append(f"{role}: scored_in_family={a['scored_in_family']}")
+        if a.get("panel_name") != ROLE_PANEL_NAME[role]:
+            bad.append(f"{role}: panel {a.get('panel_name')} != "
+                       f"{ROLE_PANEL_NAME[role]}")
+        if a.get("era") != LANE_ERA[lane]:
+            bad.append(f"{role}: era {a.get('era')!r} != LANE_ERA "
+                       f"{LANE_ERA[lane]!r}")
+        if list(a.get("lanes") or []) != [lane]:
+            bad.append(f"{role}: lanes {a.get('lanes')} != [{lane!r}]")
+        out[role] = a
+    if len(by) != len(ARM_ROLES):
+        bad.append(f"the filing carries {len(by)} arms, not "
+                   f"{len(ARM_ROLES)}: {sorted(by)}")
+    if bad:
+        raise SystemExit(f"HALT: {reg}'s FILED arms are not the ones this "
+                         f"module rides: " + " | ".join(bad))
+    return out
+
+
+def ready_run(lane: str, role: str, signals: dict | None = None,
+              lo_ms: int | None = None, hi_ms: int | None = None) -> dict:
+    """ONE FILED ARM, RIDDEN THROUGH THE DOOR TO ITS BOOK — and no further.
+
+    THE DOOR IS THE FIRST THING THAT HAPPENS HERE, BEFORE ANY BAR IS READ.
+    `TP.require_arm` is called with the text of record and the pinned head,
+    its gate must say runner 'external' and the lane's declared era
+    (`require_lane_era`), and only THEN are the macro signals built — they
+    load the full tape, so building them first would read every bar of the
+    panel before the registry had been asked.  (The runner calls the same
+    door again as its own first statement; the second call is the runner's
+    law, this one is `ready_run`'s.)
+
+    `signals` may be handed in as a CACHE: a dict the caller owns, filled IN
+    PLACE here — after the door — for any panel asset it lacks, so a caller
+    riding several arms builds each asset's signals once without ever
+    building one before a door has opened.  `lo_ms`/`hi_ms` may NARROW the
+    arm's era window, never widen it (the runner enforces that).  Returns the
+    runner's dict with the TP.Book.
+
+    HALTS IF: the arm is not filed as `filed_arm_specs` holds it; the door
+    refuses (text, head, arm, panel, lane); the gate is not an external
+    runner's; the filed era is not LANE_ERA[lane]."""
+    a = filed_arm_specs(lane)[role]
+    reg = FORM_OF[lane]
+    panel = tuple(a["panel"])
+    lens = LANE_LENS[lane]
+    g = TP.require_arm(reg, filed_text(reg), a["arm"], panel, lanes=(lane,),
+                       head_of_record=filed_head(reg))
+    if g.get("runner") != "external" or g.get("arm") != a["arm"] \
+            or tuple(g.get("panel") or ()) != panel:
+        raise SystemExit(
+            f"HALT: ready_run({lane}, {role}) — the door returned a gate for "
+            f"runner {g.get('runner')!r} / arm {g.get('arm')!r} / panel "
+            f"{TP.panel_name(list(g.get('panel') or []))}; the BRK runners "
+            f"are EXTERNAL and ride only the arm they asked for. Not one bar "
+            f"has been read.")
+    require_lane_era(lane, g)
+    sig = signals if signals is not None else {}
+    for s in panel:
+        if s not in sig:
+            sig[s] = macro_signals(s, lens)
+    runner = run_lane_s1 if lane == LANE_S1 else run_lane_i1
+    return runner(panel, reg, filed_text(reg), a["arm"],
+                  {s: sig[s] for s in panel},
+                  head_of_record=filed_head(reg),
+                  anchor=role_anchor(lane, role), lo_ms=lo_ms, hi_ms=hi_ms)
+
+
+def _plain(v):
+    """A journal value as plain JSON: numpy ints -> int, floats -> the house
+    rounding, bools kept, anything else as it is."""
+    if isinstance(v, (bool, np.bool_)):
+        return bool(v)
+    if isinstance(v, (int, np.integer)):
+        return int(v)
+    if isinstance(v, (float, np.floating)):
+        return _num(v)
+    return v
+
+
+def ready_book_record(run: dict) -> dict:
+    """The BOOK FILE entry for one ridden arm: the spec, the two shas, and
+    each campaign's identity and entry geometry — no exit, no outcome."""
+    book = run["book"]
+    if not isinstance(book, TP.Book):
+        raise SystemExit("HALT: ready_book_record needs a TP.Book.")
+    rows = []
+    for t in sorted(book, key=lambda x: (str(x.symbol), int(x.entry_ms))):
+        rows.append([_plain(getattr(t, k, None)) for k in READY_TRADE_FIELDS])
+    all_fields = sorted(vars(book[0])) if len(book) else []
+    return {
+        "registration": book.spec.get("registration"),
+        "arm": book.spec.get("arm"),
+        "registration_sha256": book.spec.get("registration_sha256"),
+        "era": book.spec.get("era"),
+        "panel": list(book.spec.get("panel") or []),
+        "anchor": str(run["anchor"]),
+        "window_iso": [TP.iso(int(run["window"][0])),
+                       TP.iso(int(run["window"][1]))],
+        "tuned": run.get("tuned"),
+        "n_campaigns": len(book),
+        "book_sha256_score_binding": TP._book_sha(book),
+        "book_content_sha256": book_content_sha(book),
+        "fields": list(READY_TRADE_FIELDS),
+        "withheld_fields": [k for k in all_fields
+                            if k not in READY_TRADE_FIELDS],
+        "campaigns": rows,
+    }
+
+
+def ready(out: Path | None = None, with_panel17: bool = True) -> dict:
+    """RIDE EVERY FILED BRK ARM TO ITS BOOK, ASSEMBLE THE SEALED ROWS, FILE.
+
+    Files BRK_READY.json (the two sealed rows), BRK_READY_BOOKS.json (one
+    book record per arm) and BRK_READY.txt (the printer's output).  Computes
+    no outcome sum, calls no scorer, writes no .scored.json [B12]."""
+    out = Path(out) if out else OUT
+    runs, books = {}, {}
+    for lane in LANE_ORDER:
+        arms = filed_arm_specs(lane)
+        # ONE signal cache per lens, filled by `ready_run` itself AFTER each
+        # arm's door has opened — nothing here reads a bar before a door.
+        cache: dict = {}
+        per_role = {}
+        for role in ARM_ROLES:
+            if role == "tier_e_panel17" and not with_panel17:
+                continue
+            run = ready_run(lane, role, signals=cache)
+            per_role[role] = run
+            books[f"{FORM_OF[lane]} :: {arms[role]['arm']}"] = \
+                ready_book_record(run)
+        runs[lane] = {"scored": per_role["scored"],
+                      "tier_e": per_role["tier_e_other"],
+                      "panel_tier_e": per_role.get("tier_e_panel17")}
+    rows = brk_rows(runs, sealed=True)
+    out.mkdir(parents=True, exist_ok=True)
+    J = dict(indent=1, sort_keys=True, default=str)
+    (out / "BRK_READY.json").write_text(json.dumps({
+        "as_of_last_closed_4h": as_of_of_record(),
+        "status": ("READY TO SCORE — SEALED [B12]. No verdict exists; these "
+                   "rows carry no outcome sum. B-CORE scores the Books."),
+        "rows": rows}, **J) + "\n")
+    (out / "BRK_READY_BOOKS.json").write_text(json.dumps({
+        "as_of_last_closed_4h": as_of_of_record(),
+        "status": ("the Books of every FILED BRK arm, identity and entry "
+                   "geometry only; the exit and outcome FIELDS are withheld "
+                   "and bound by sha — but the entry schedule itself BOUNDS "
+                   "every exit (one campaign per asset at a time), so this "
+                   "is a seal on the sums, not a blind [B12]"),
+        "books": books}, **J) + "\n")
+    buf = io.StringIO()
+    print_rows(rows, out=buf)
+    (out / "BRK_READY.txt").write_text(
+        f"as_of_last_closed_4h: {as_of_of_record()}\n" + buf.getvalue())
+    return {"rows": rows, "books": books}
 
 
 # ══════════════════════════════════════════════════════ 13 · THE MECHANICS CARD
@@ -3490,8 +3900,9 @@ def mechanics_card(disk: bool = True, out_root: Path | None = None) -> dict:
         "seed": SEED, "seed_sensitivity": SEED_LINEAGE,
         "rulings": list(RULINGS), "leans": list(LEANS),
         "findings_not_fixed": list(FINDINGS),
-        "law4": ("no registration for P-BRK-S1 or P-BRK-I1 exists; every "
-                 "runner HALTs at its gate, which is its first statement"),
+        "law4": ("P-BRK-S1 and P-BRK-I1 are FILED (commit 371123f); every "
+                 "runner still calls its gate FIRST, and this card computes "
+                 "no result — the rows `--ready` files are SEALED [B12]"),
         "environment": env,
     }
 
@@ -3503,7 +3914,7 @@ def mechanics_card(disk: bool = True, out_root: Path | None = None) -> dict:
 # seed, code shas, the commission, and the content sha of EVERY artifact the
 # directory holds.
 MANIFEST_NAME = "build_manifest.json"
-DECLARED_ARTIFACTS = ("BRK_MECHANICS.json", "FIXTURES_BRK.txt")
+DECLARED_ARTIFACTS = ("BRK_MECHANICS.json", "FIXTURES_BRK.txt") + READY_ARTIFACTS
 # THIS STAGE'S OWN CODE — the two files this track owns, and the only two
 # whose sha this manifest may present as a REPRODUCIBLE pin.
 CODE_FILES = ("scripts/tierc10_brk.py", "scripts/tierc10_brk_fixtures.py")
@@ -3544,6 +3955,14 @@ def _summary_line(p: Path) -> str | None:
     return None
 
 
+def _ready_rows_filed(out: Path) -> int:
+    """How many SEALED rows BRK_READY.json in `out` holds (0 when absent)."""
+    p = Path(out) / "BRK_READY.json"
+    if not p.is_file():
+        return 0
+    return len(json.loads(p.read_text(encoding="utf-8")).get("rows") or [])
+
+
 def build_manifest(out: Path, card: dict | None = None) -> dict:
     """THIS STAGE'S RECORD.  Every float is already rounded upstream, every
     sha is read off the disk at the instant of the run, and the manifest never
@@ -3570,11 +3989,14 @@ def build_manifest(out: Path, card: dict | None = None) -> dict:
         "substrate": substrate()["substrate"],
         "seed": SEED, "seed_sensitivity": SEED_LINEAGE,
         "lean_tag": LEAN_TAG,
-        "tier": ("MECHANICS ONLY — no P-BRK number is computed, printed or "
-                 "filed anywhere in this stage [LAW 4]"),
-        "gates": ("NOTHING. Every runner's first statement is the panel gate "
-                  "(TP.require_arm); no registration for P-BRK-S1 or "
-                  "P-BRK-I1 is filed, so no runner can reach a bar."),
+        "tier": ("MECHANICS + READY BOOKS — no P-BRK outcome sum, ruler, "
+                 "p or verdict is computed, printed or filed in this stage; "
+                 "the rows `--ready` files are SEALED [B12] and B-CORE "
+                 "scores the Books"),
+        "gates": ("Every runner's first statement is the panel gate "
+                  "(TP.require_arm). P-BRK-S1 and P-BRK-I1 are FILED "
+                  "(371123f), so the filed arms open it with the text of "
+                  "record and the pinned head, and nothing else does."),
         "law4": card["law4"],
         "code_sha": {f: sha_of(ROOT / f) for f in CODE_FILES},
         "sibling_code_sha_read_at": {
@@ -3600,16 +4022,16 @@ def build_manifest(out: Path, card: dict | None = None) -> dict:
             "toll_accounting": dict(sorted(TOLL_ACCOUNTING.items())),
             "row": row_schema(),
             "height_vs_toll": height_vs_toll_spec(),
-            "n_rows_filed": 0,
-            "why_no_rows": ("a row is assembled from a TP.Book and a Book "
-                            "needs a FILED registration; none exists, so "
-                            "this stage files a ROW SCHEMA and no rows "
-                            "[LAW 4 — text before result]"),
+            "n_rows_filed": _ready_rows_filed(out),
+            "rows_law": ("a row is assembled from a TP.Book, and a Book needs "
+                         "a FILED registration; both forms are filed, and "
+                         "the rows `--ready` files (BRK_READY.json) are "
+                         "SEALED — outcome sums withheld until B-CORE [B12]"),
             "parquet_filed": 0,
             "parquet_note": ("this stage files NO parquet: everything it "
                              "holds is a pin, a schema or a transcript, and "
-                             "the one table it would file (the BRK rows) "
-                             "cannot exist until a registration does"),
+                             "the BRK rows are filed as SEALED JSON "
+                             "(BRK_READY.json), not as a table"),
         },
         "input_sha": {
             str(v.relative_to(ROOT)): sha_of(v)
@@ -3656,8 +4078,9 @@ def build_manifest(out: Path, card: dict | None = None) -> dict:
         "rulings": list(RULINGS),
         "leans": list(LEANS),
         "findings_not_fixed": list(FINDINGS),
-        "skipped_empty": ["rows (no registration filed)",
-                          "parquet (nothing to file)"],
+        "skipped_empty": ["parquet (nothing to file)"]
+        + ([] if _ready_rows_filed(out) else
+           ["rows (`main --ready` has not been run into this directory)"]),
         "warranty": ("every artifact in this directory is true AS OF "
                      "2026-09-21T16:00:00Z and of no other instant; no "
                      "feature reads a value stamped after its own bar"),
@@ -3713,7 +4136,8 @@ def main(argv=None) -> int:
               f"anchor {f_['anchor_scored']!r}, TIER-E other anchor "
               f"{f_['anchor_tier_e']!r}, toll stamped {f_['toll_stamped']}")
     print(f"  fields ({len(ROW_FIELDS)}): {list(ROW_FIELDS)}")
-    print(f"  rows filed: 0 — {rs['needs']}")
+    print(f"  rows filed before this run: {_ready_rows_filed(out)} "
+          f"(SEALED) — {rs['needs']}")
     print("\nTHE [Q-R3] INTERFACE — READ, NEVER COMPUTED HERE")
     hv = height_vs_toll_spec()
     print(f"  status  {hv['status']}")
@@ -3748,6 +4172,18 @@ def main(argv=None) -> int:
     print(f"  {TOLL_ACCOUNTING['net_r_formula']}")
     print(f"  {TOLL_ACCOUNTING['grid_toll']}")
     print(f"\nLAW 4: {card['law4']}.")
+    if "--ready" in argv:
+        print("\nREADY — every FILED arm ridden through the door to its "
+              "Book; rows SEALED [B12]")
+        rd = ready(out)
+        print_rows(rd["rows"])
+        for k_, b_ in sorted(rd["books"].items()):
+            print(f"  book {k_}: {b_['n_campaigns']} campaigns, era "
+                  f"{b_['era']} {b_['window_iso']}, score-binding sha "
+                  f"{b_['book_sha256_score_binding']}, content sha "
+                  f"{b_['book_content_sha256']}")
+        for n_ in READY_ARTIFACTS:
+            print(f"filed: {out / n_}")
     man = build_manifest(out, card)
     (out / MANIFEST_NAME).write_text(
         json.dumps(man, indent=1, sort_keys=True, default=str) + "\n")

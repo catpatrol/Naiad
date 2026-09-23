@@ -15,23 +15,45 @@ The banned failure modes remain banned:
   · a TUNED MAGNITUDE BOUND standing in for an identity;
   · a check whose claim is NOT the design's claim.
 
-LAW 4 BINDS THESE FIXTURES, AND REAL BARS ENTER IN EXACTLY TWO WAYS:
+LAW 4 BINDS THESE FIXTURES.  REAL BARS ENTER IN EXACTLY THE WAYS BELOW.  Until
+371123f there were two, (1) and (2); since both BRK forms were FILED there are
+three more, (3)-(5), every one of them behind the FILED door (TP.require_arm
+with the text of record and the pinned head, called BEFORE a bar is read):
   (1) THE KNOWN CONTROL — card v6, all pins frozen, on CLASSIC5 — which
       F-BRK-RIDE-4H rides through the lens-parameterised ride and demands
-      0.000e+00 from.  That is the one real TRADE BOOK the contract allows,
-      and it is what licenses the phrase "v6 management lens-scaled".
-  (2) EVENT DETECTION, REPORT-ONLY — the macro DIE detector and the retest-
-      hold detector read on real bars, with NO stop, NO ride, NO campaign and
-      NO statistic: F-C10-HOLD's REAL half (3 holds hand-verified per lens on
-      real bars, TUNING-ERA only, the bars the R1 tuning had already looked
-      at) and F-BRK-ERA's as-of leg (the dies below the era cut are the same
-      on the full tape and on the cut tape).  LAW 4 names this class ALLOWED;
-      the R1 era rule is honoured by never touching a holdout retest-hold.
-No unseen asset's price is read anywhere in this file.  No BRK lane rides any
-real tape — every BRK campaign here is on a SYNTHETIC one.  No P-BRK-S1 or
-P-BRK-I1 number is computed, printed or filed.  Sabotage operates on COPIES
-(temp roots, copied arrays, a mutated attribute restored in a finally) — never
-on a real artifact.
+      0.000e+00 from.  It was the one real TRADE BOOK the contract allowed
+      before the filing, and it is what licenses the phrase "v6 management
+      lens-scaled".
+  (2) EVENT DETECTION, REPORT-ONLY, TUNING ERA — the macro DIE detector and
+      the retest-hold detector read on real bars, with NO stop, NO ride, NO
+      campaign and NO statistic: F-C10-HOLD's tuning-era REAL half (3 holds
+      hand-verified per lens on tapes CUT at the R1 boundary, the bars the
+      tuning had already read) and F-BRK-ERA's as-of leg (the dies below the
+      era cut are the same on the full tape and on the cut tape).  THIS way
+      touches no holdout retest-hold; (3)-(5) do, through the filed door.
+  (3) F-C10-HOLD's FILED-ERA half — 3 DETECTOR-LEVEL holds per (form, filed
+      arm) NAMED by a printed rule inside the arm's FILED era (S1 holdout 5m,
+      I1 full 1d; both anchors) and walked by hand on the census tape: the
+      hold, the entry bar and the stop the lane would place.  A named hold is
+      what the ANCHOR detects, BEFORE the permission gate and the one-
+      position rule; whether the arm's Book entered on it is REPORTED beside
+      it (the Books ridden in (4)), never used to choose it.
+  (4) F-C10-HOLD's FILED-BOOK half — the filed arms ridden to their Books (I1
+      whole; S1 on the first 7 days of its holdout) and, by the same blind
+      rule, the first 3 BOOK campaigns per (form, arm) named and walked by
+      hand: hold, entry, stop AND the permission, with every earlier hold on
+      the asset shown refused by the hand permission.  Entry geometry only.
+  (5) F-BRK-READY — the same filed arms ridden to their Books and the row
+      assembled SEALED: no outcome sum is computed, printed or filed, every
+      figures block is held to an ALLOWLIST of keys, and TP.score is never
+      called.
+Only CLASSIC5 bars are read here: no unseen asset's price is read anywhere in
+this file (the 17-asset arms are ridden by `tierc10_brk.py --ready`, not
+here).  Apart from the Books ridden through the filed door in (4) and (5),
+every BRK campaign here is on a SYNTHETIC tape.  No P-BRK-S1 or P-BRK-I1
+outcome field or number is read, computed, printed or filed.  Sabotage
+operates on COPIES (temp roots, copied arrays, a mutated attribute restored in
+a finally) — never on a real artifact.
 
 Run: NAIAD_CACHE_DIR=~/.cache/naiad/snapshots/tc10_20260921 \\
      ~/venvs/naiad/bin/python scripts/tierc10_brk_fixtures.py [leg_substring ...]
@@ -40,6 +62,7 @@ DOWNSTREAM IS TRUSTWORTHY.
 """
 from __future__ import annotations
 
+import bisect
 import contextlib
 import dataclasses
 import io
@@ -92,10 +115,14 @@ def census():
 def real_tape(sym: str, lens: str):
     """(tape, tuning-era cut index) from the FROZEN snapshot, loaded once.
 
-    LAW 4: this hands back BARS.  Every caller in this file uses them for
-    EVENT DETECTION ONLY — no stop, no ride, no campaign, no statistic — and
-    the retest-hold callers use only the TUNING-ERA head, which the R1 tuning
-    had already read.  Nothing here touches a holdout retest-hold.
+    LAW 4: this hands back BARS — the census's own loader, the HAND side of
+    every real-bar check.  Its callers: the tuning-era REAL half of F-C10-HOLD
+    (event detection on the TUNING-ERA head only, which the R1 tuning had
+    already read — way (2) in the header), and the FILED halves (ways (3) and
+    (4)), which walk holds, entries, stops and permissions by hand INSIDE the
+    filed era — S1's HOLDOUT included — only after the arm's door
+    (TP.require_arm, text of record, pinned head) has opened.  No caller
+    reads an exit, an outcome or a statistic off these bars.
     """
     key = (sym, lens)
     if key not in _TAPES:
@@ -519,7 +546,8 @@ def f_brk_ride_4h() -> bool:
     return prove(
         "F-BRK-RIDE-4H",
         "the lens-parameterised ride reproduces the CLASSIC5 control book at "
-        "0.000e+00 (the one real-data run LAW 4 allows)",
+        "0.000e+00 (the known control — the one real trade book LAW 4 "
+        "allowed before the BRK filing)",
         "any campaign differs in any exact field, or any numeric field differs "
         "by more than 0.000000000000000e+00 — this is what licenses the phrase "
         "'v6 management lens-scaled'",
@@ -872,6 +900,1612 @@ def f_c10_hold_harness() -> bool:
           mutated(B, "band_hold_candidates", _never_fails,
                   _real_hold_checks))],
         real)
+
+
+# ══════════ F-C10-HOLD · THE FILED HALF — 3 HOLDS PER LENS, IN THE FILED ERA
+# P-BRK-S1 and P-BRK-I1 are FILED (371123f).  Text is before result, so holds
+# may now be NAMED inside the era each FILED ARM names (S1 = holdout, I1 =
+# full), on the lens the form rides, for the scored anchor AND the Tier-E
+# other anchor — and walked BY HAND against the raw bars.  No outcome is read:
+# a hold is an EVENT, fixed at its known bar's close.
+#
+# WHAT A NAMED HOLD IS — AND WHAT IT IS NOT.  It is a DETECTOR-LEVEL hold: the
+# first hold per asset that the arm's ANCHOR detects inside the filed window
+# (a band retest-hold, or a memory-line flip-hold, after a macro DIE), with the
+# entry bar and the stop the lane WOULD place on it.  It is NOT, in general, a
+# hold the arm's BOOK enters on.  Between the detector and the Book stand the
+# permission gate (S1: the 4h tide; I1: the weekly posture AND the daily
+# lifecycle direction) and the one-position rule, and the gate refuses most of
+# the holds this rule names: on the snapshot of record 10 of the 12 are NOT in
+# their arm's Book, and the hand gate refuses every one of the 10.  An earlier
+# version of this comment called them "the holds each form's BOOK enters on";
+# that was FALSE and is withdrawn.  Every named hold now carries, as a
+# REPORTED column that chooses nothing, whether the filed arm's ready Book
+# entered on it and — from the HAND gate — why not; a total line re-counts
+# them on every run.  The Book's OWN first entries are walked by a separate
+# leg, F-C10-HOLD (REAL, FILED BOOK), by the same blind rule.
+#
+# THE NAMING RULE IS UNCHANGED (FILED_HOLD_RULE, byte for byte).  It was fixed
+# before any outcome existed; changing it now would be re-choosing.
+#
+# THE HAND PATH IS INDEPENDENT OF THE MODULE'S, and says where it is not:
+#   · BARS: the census's own loader (`tierc10_census.load_tape`, via
+#     real_tape) — the runner reads `tierc10_brk.frame_l` (Stage D's
+#     load_asof).  The two are proved the SAME BARS before a hold is walked,
+#     which is also the proof that the DIE indices the adapter computes on
+#     the census tape mean the same bars in the runner's frame.
+#   · COVERAGE: the rule names the MODULE's first in-window hold per asset.
+#     The hand RE-DERIVES that first hold (and, for the band, the first
+#     failed evaluation) by walking EVERY DIE window by hand, from this
+#     file's OWN census call and not the adapter's list — so a module that
+#     silently DROPS the earliest hold names a later one and goes RED.  (It
+#     stayed GREEN before the re-derivation: the later hold hand-verifies.)
+#   · EMA / ATR: plain Python loops over the raw closes (`_hand_ema`,
+#     `_hand_atr`) — not engine.indicators.
+#   · PINS: typed from the FILED TEXT (HAND_PINS, HAND_RAIL, HAND_STOP_BUF,
+#     each with the verbatim quote it comes from, checked in the text) — the
+#     module reads them from TUNING_RESULT*.json / engine/rangefinder.py /
+#     tierc7_rules.  They must agree.  ONE PIN CROSSES FILINGS, AND IS SAID
+#     TO: the stop's "beyond" is 0.5 ATR by P-BRK-I1's text ("STOP_BUF_ATR =
+#     0.5"); P-BRK-S1's text says only "beyond the retest extreme railed to
+#     1.0 ATR(5m)" and never numbers it, so S1's hand stop quotes the sibling
+#     filing for the same `brk_stop` (ATR_LEN 14 crosses the other way).
+#   · THE MEMORY LINE's price: the macro range's raw top/bottom (by rid),
+#     never the leash event's 0.1-rounded `px`.
+#   · WHAT IS NOT INDEPENDENT, NAMED: the macro DIEs and the leash's flip
+#     EVALUATIONS are the range machine's (there is no hand DIE detector) —
+#     reached here through this file's OWN census call and held equal to the
+#     adapter's; the per-side line CAP is not re-walked (only the TTL is).
+READY_S1_DAYS = 7           # S1 Books ride the FIRST 7 days of the holdout
+FILED_HOLD_CASES = ((B.LANE_S1, "scored"), (B.LANE_S1, "tier_e_other"),
+                    (B.LANE_I1, "scored"), (B.LANE_I1, "tier_e_other"))
+FILED_HOLD_RULE = (
+    "per (form, filed arm): the arm is opened through TP.require_arm (text "
+    "of record, pinned head) and its era window is TP.corridor_era(panel, "
+    "filed era); the panel is walked in FILED order; per asset the FIRST "
+    "hold (by entry bar) whose ENTRY bar opens inside that window is named, "
+    "and the first THREE assets that yield one give the three holds; the "
+    "FAILED hold is the first failed evaluation (by entry bar) in the same "
+    "window, from the first asset in filed order that has one.  Nothing is "
+    "ridden and no outcome is read, so nothing can be chosen by outcome.")
+FILED_HOLD_WHAT = (
+    "WHAT THE RULE NAMES: DETECTOR-LEVEL holds — the first hold per asset "
+    "the arm's ANCHOR detects in the filed window, BEFORE the permission gate "
+    "and the one-position rule.  They are NOT, in general, holds the Book "
+    "enters on.  Each carries a REPORTED column that chooses nothing: whether "
+    "the filed arm's ready Book (ridden through the filed door — S1 over the "
+    f"first {READY_S1_DAYS} days of its holdout, I1 whole) entered on it, and "
+    "the HAND gate's reading at its entry bar.  The selection above is the "
+    "rule's alone.")
+HAND_PINS = {
+    (B.LANE_S1, B.ANCHOR_BAND): dict(
+        quotes=('lens 5m · band ribbon127_200, label '
+                '"[min,max](EMA127, EMA200)"',
+                "margin_atr 1.0 · hold_bars 3 · ttl_bars 400"),
+        periods=(127, 200), margin=1.0, hold=3, ttl=400),
+    (B.LANE_S1, B.ANCHOR_MEMORY): dict(
+        quotes=("FLIP_HOLD_MARGIN 1.0 / FLIP_HOLD_BARS 6",
+                "margin_atr 1.0 · hold_bars 3 · ttl_bars 400"),
+        periods=None, margin=1.0, hold=6, ttl=400),
+    (B.LANE_I1, B.ANCHOR_MEMORY): dict(
+        quotes=("Pins FLIP_HOLD_MARGIN = 1.0 ATR and FLIP_HOLD_BARS = 6 bars",
+                "MEM_TTL_BARS = 400"),
+        periods=None, margin=1.0, hold=6, ttl=400),
+    (B.LANE_I1, B.ANCHOR_BAND): dict(
+        quotes=("band ribbon89_127 (the operator's spelling: ribbon-89/127), "
+                "margin_atr 0.25, hold_bars 6, ttl_bars 400",),
+        periods=(89, 127), margin=0.25, hold=6, ttl=400),
+}
+HAND_RAIL = {B.LANE_S1: ("railed to 1.0 ATR(5m)", 1.0),
+             B.LANE_I1: ("railed to 1.0 ATR", 1.0)}
+HAND_ERA_CUT = ("1719791999000", 1719791999000)     # quoted in BOTH texts
+HAND_ATR = ("ATR_LEN 14", 14)                        # P-BRK-S1 §4's pin list
+# THE STOP'S "BEYOND" — quoted from P-BRK-I1's filed text (§4 THE STOP).
+# P-BRK-S1's text says only HAND_S1_BEYOND and does not number the buffer.
+HAND_STOP_BUF = ("STOP_BUF_ATR = 0.5", 0.5)
+HAND_S1_BEYOND = ("places its stop beyond the retest extreme railed to 1.0 "
+                  "ATR(5m)")
+# THE HAND GATE — the permission each arm's runner applies, walked by hand.
+# P-BRK-I1's is typed from its filed text (§4; every quote checked).  P-BRK-
+# S1's text says only that the 4h tide must be ALIGNED and does not define the
+# tide, so S1's tide periods and law are the CARD's (tierc9.V6_ROLES
+# tide_f / tide_s; "+1 iff e89 > e316 AND close > e316", the TIER-C2 tide) —
+# typed here, held against V6_ROLES, and NAMED as not from the filing.
+HAND_S1_TIDE = dict(
+    quotes=("the 4h tide, read as of the last CLOSED 4h bar, is aligned with "
+            "the trade's direction",),
+    fast=89, slow=316,
+    source="the CARD (tierc9.V6_ROLES tide_f/tide_s) — NOT the filed text")
+HAND_I1_GATE = dict(
+    quotes=("s[t] = (EMA12[t] - EMA25[t]) / ATR14[t]",
+            "sign(s) unchanged over the whole window s[t-K .. t]",
+            "|s[t]| > |s[t-K]|",
+            "DIRECTION = sign(s) while EXPANDING, else 0",
+            "WARMUP = bar < max(12, 25)",
+            "K = 3",
+            "Monday-anchored week CLOSED at or before that day's OPEN",
+            "EMA12 > EMA25 for a long",
+            "posture 0 IS NO PERMISSION",
+            "the DAILY lifecycle DIRECTION at the entry bar equals the "
+            "trade's direction"),
+    fast=12, slow=25, k=3, atr=14)
+# THE ONLY FIELDS OF A REAL BOOK CAMPAIGN THIS FILE READS — identity and entry
+# geometry, every one fixed at or before the entry bar's close.  No exit, no
+# R, no sum is ever looked at (the campaign objects carry them; this file
+# reads them only through `_entry_view`).
+ENTRY_VIEW = ("symbol", "lane", "direction", "die_i", "rid", "touch_i",
+              "entry_i", "entry_ms", "entry_px", "stop_px", "r_dist")
+_HAND: dict = {}
+_SIG: dict = {}
+_RUNS: dict = {}
+
+
+def _ntext(reg_id: str) -> str:
+    return re.sub(r"\s+", " ", B.filed_text(reg_id))
+
+
+def _hand_ema(c, p: int, upto: int) -> list:
+    a = 2.0 / (p + 1.0)
+    out, prev = [], None
+    for k in range(upto):
+        v = float(c[k])
+        prev = v if prev is None else prev + a * (v - prev)
+        out.append(prev)
+    return out
+
+
+def _hand_atr(h, l, c, n: int, upto: int) -> list:
+    out, prev = [], None
+    for k in range(upto):
+        hk, lk = float(h[k]), float(l[k])
+        if k == 0:
+            tr = hk - lk
+        else:
+            pc = float(c[k - 1])
+            tr = max(hk - lk, max(abs(hk - pc), abs(lk - pc)))
+        prev = tr if prev is None else prev + (1.0 / n) * (tr - prev)
+        out.append(prev)
+    return out
+
+
+def _hand(sym: str, lens: str, what: tuple) -> list:
+    """Hand series on the CENSUS tape, cached — independent of every
+    mutation a break leg plants (it reads no module function)."""
+    key = (sym, lens, what)
+    if key not in _HAND:
+        t = real_tape(sym, lens)[0]
+        if what[0] == "ema":
+            _HAND[key] = _hand_ema(t.c, what[1], t.n)
+        else:
+            _HAND[key] = _hand_atr(t.h, t.l, t.c, what[1], t.n)
+    return _HAND[key]
+
+
+def _sig(sym: str, lens: str) -> dict:
+    """THE RUNNER'S ADAPTER (B.macro_signals), cached per implementation so
+    a break leg that swaps the adapter is served its own output.  The key
+    holds the FUNCTION ITSELF, not its id(): a discarded break-leg function
+    whose id() were reused could otherwise be served a stale cache."""
+    key = (sym, lens, B.macro_signals)
+    if key not in _SIG:
+        _SIG[key] = B.macro_signals(sym, lens)
+    return _SIG[key]
+
+
+def _census_run(sym: str, lens: str) -> dict:
+    """THIS FILE'S OWN census call on the FULL tape, cached — the range
+    machine's macro DIEs, its ranges by rid and its leash, reached WITHOUT
+    the module's adapter.  It is the hand path's source of events (named as
+    the machine's, since there is no hand DIE detector)."""
+    key = ("census_run", sym, lens)
+    if key not in _HAND:
+        m = census().run_scale(real_tape(sym, lens)[0], B.FROZEN_SCALE)
+        rng = {int(r.rid): (float(r.top), float(r.bottom), int(r.die_i))
+               for r in m["macro"]["ranges"]}
+        dies = [(int(e["i"]), int(e["rid"]), str(e["side"]))
+                for e in m["macro"]["events"] if e["event"] == "breakout-die"]
+        dies.sort(key=lambda x: x[0])       # stable: the machine's order in a bar
+        leash = list(m["leash"])
+        flips = [{"i": int(e["i"]), "polarity": str(e["polarity"]),
+                  "rid": int(e["rid"])}
+                 for e in leash if e.get("event") == "flip"]
+        by_i = sorted(flips, key=lambda f: f["i"])
+        _HAND[key] = {"rng": rng, "leash": leash, "dies": dies,
+                      "flips": flips, "flips_by_i": by_i,
+                      "flip_i": [f["i"] for f in by_i]}
+    return _HAND[key]
+
+
+def _machine(sym: str, lens: str) -> tuple:
+    """(range top/bottom/death by rid, the leash) from the census call on
+    the FULL tape — the hand path's line prices and the failed evaluations."""
+    cr = _census_run(sym, lens)
+    return cr["rng"], cr["leash"]
+
+
+def _fkey(f: dict) -> tuple:
+    return (int(f["i"]), str(f["polarity"]), int(f["rid"]))
+
+
+def _hand_window(dies: list, die_i: int, ttl: int, n: int) -> int:
+    ds = sorted(int(d[0]) for d in dies)
+    q = ds.index(int(die_i))
+    nxt = ds[q + 1] if q + 1 < len(ds) else n
+    return min(int(die_i) + ttl, nxt - 1, n - 1)
+
+
+def _hand_windows(dies: list, ttl: int, n: int) -> list:
+    """[(die_i, rid, side, end)] per DIE, BY POSITION — the candidacy law as
+    the filed texts state it (the window runs from the DIE to the next macro
+    DIE or TTL bars, whichever is first, and never past the tape), walked in
+    plain Python."""
+    out = []
+    for q, (d, rid, side) in enumerate(dies):
+        nxt = int(dies[q + 1][0]) if q + 1 < len(dies) else int(n)
+        out.append((int(d), int(rid), str(side),
+                    min(int(d) + int(ttl), nxt - 1, int(n) - 1)))
+    return out
+
+
+def _hand_band_walk(sym, lens, hp, dies, die_i, side, end=None) -> dict:
+    """The band retest, walked by hand: first touch in the window with the
+    prior close beyond, then the hold loop.  Returns the hand verdict."""
+    t = real_tape(sym, lens)[0]
+    p1, p2 = hp["periods"]
+    e1, e2 = _hand(sym, lens, ("ema", p1)), _hand(sym, lens, ("ema", p2))
+    at = _hand(sym, lens, ("atr", HAND_ATR[1]))
+    warm = max(p1, p2)
+
+    def band(k):
+        if k < warm:
+            return float("nan"), float("nan")
+        return min(e1[k], e2[k]), max(e1[k], e2[k])
+    if end is None:
+        end = _hand_window(dies, die_i, hp["ttl"], t.n)
+    j = None
+    for k in range(int(die_i) + 1, end + 1):
+        lo, hi = band(k)
+        if not (float(t.l[k]) <= hi and float(t.h[k]) >= lo):
+            continue
+        plo, phi = band(k - 1)
+        if (float(t.c[k - 1]) > phi) if side == "top" \
+                else (float(t.c[k - 1]) < plo):
+            j = k
+            break
+    if j is None:
+        return {"verdict": None, "touch_i": None}
+    H = hp["hold"]
+    if j + H >= t.n:
+        return {"verdict": "truncated", "touch_i": j}
+    bad = False
+    for k in range(j, j + H + 1):
+        lo, hi = band(k)
+        if not (math.isfinite(lo) and math.isfinite(hi)):
+            bad = True
+            break
+        thr = hp["margin"] * at[k]
+        if (side == "top" and float(t.c[k]) < lo - thr) or \
+                (side == "bottom" and float(t.c[k]) > hi + thr):
+            bad = True
+            break
+    return {"verdict": "failed" if bad else "hold", "touch_i": j,
+            "band_at_touch": band(j)}
+
+
+def _hand_memory_walk(sym, lens, hp, i, rid, side) -> dict:
+    """The memory-line flip evaluation at bar i, walked by hand against the
+    RAW line price (the range's own top/bottom)."""
+    t = real_tape(sym, lens)[0]
+    rng, _ = _machine(sym, lens)
+    top, bot, born = rng[int(rid)]
+    px = top if side == "top" else bot
+    at = _hand(sym, lens, ("atr", HAND_ATR[1]))
+    i = int(i)
+    touched = float(t.l[i]) <= px <= float(t.h[i])
+    above = float(t.c[i - 1]) > px
+    opposite = above if side == "top" else not above
+    # THE TTL, AS THE LEASH'S LAW HAS IT (engine/rangefinder.py §H2/H3): a
+    # line EXPIRES at born + TTL only while still LIVE; its FIRST touch (any
+    # side) FREEZES it, and a frozen line never expires.  So the line is
+    # alive at i iff its first touch k0 came at or before i AND within its
+    # TTL.  (The first draft of this walk tested i - born <= TTL and went RED
+    # on SOLUSDT 1d — a line frozen at its first touch and flipped later.)
+    k0 = next((k for k in range(born + 1, i + 1)
+               if float(t.l[k]) <= px <= float(t.h[k])), None)
+    alive = born < i and k0 is not None and (k0 - born) <= hp["ttl"]
+    H = hp["hold"]
+    if i + H >= t.n:
+        return {"verdict": "truncated", "touched": touched,
+                "opposite": opposite, "alive": alive, "px": px}
+    held = True
+    for k in range(i, i + H + 1):
+        thr = hp["margin"] * at[k]
+        if (side == "top" and float(t.c[k]) < px - thr) or \
+                (side == "bottom" and float(t.c[k]) > px + thr):
+            held = False
+            break
+    return {"verdict": "hold" if held else "failed", "touched": touched,
+            "opposite": opposite, "alive": alive, "px": px, "born": born,
+            "first_touch": k0}
+
+
+def _same_bars(sym: str, lens: str) -> bool:
+    t = real_tape(sym, lens)[0]
+    lf = B.frame_l(sym, lens, with_funding=False)
+    return bool(t.n == lf.n and np.array_equal(t.t0, lf.open_ms)
+                and np.array_equal(t.h, lf.h) and np.array_equal(t.l, lf.l)
+                and np.array_equal(t.c, lf.c))
+
+
+def _win_idx(t0, lo_ms: int, hi_ms: int) -> tuple:
+    """[lo_i, hi_i] of the census-tape bars whose OPEN lies in [lo_ms,
+    hi_ms] (a bisection on the stamps, not the module's idx_range)."""
+    t0 = np.asarray(t0, np.int64)
+    return (int(np.searchsorted(t0, int(lo_ms), side="left")),
+            int(np.searchsorted(t0, int(hi_ms), side="right")) - 1)
+
+
+def _hand_holds(sym: str, lens: str, anchor: str, hp: dict, lo_i: int,
+                hi_i: int, want=None, upto: int | None = None) -> list:
+    """EVERY detector evaluation whose KNOWN (entry) bar lies in [lo_i,
+    hi_i], in bar order, DERIVED BY HAND — this file's own census DIEs and
+    leash flips, the hand candidacy windows, the hand band walk — and never
+    the module's candidate lists.  Band: 'hold' and 'failed' rows; memory:
+    the FIRST leash flip inside each DIE's window ('hold' — a leash flip is a
+    held retest by the leash's law, and every one this file NAMES is walked
+    again by `_hand_memory_walk`).  Stops once `want(out)` is true, or at the
+    first row whose known bar passes `upto`."""
+    cr = _census_run(sym, lens)
+    n = int(real_tape(sym, lens)[0].n)
+    H, ttl = int(hp["hold"]), int(hp["ttl"])
+    wins = _hand_windows(cr["dies"], ttl, n)
+    q0 = bisect.bisect_left([w[0] for w in wins], int(lo_i) - ttl - H - 1)
+    out = []
+    for d, rid, side, end in wins[max(0, q0):]:
+        if end <= d:
+            continue
+        if d + 1 + H > int(hi_i):
+            break
+        if anchor == B.ANCHOR_BAND:
+            hw = _hand_band_walk(sym, lens, hp, cr["dies"], d, side, end=end)
+            if hw["verdict"] not in ("hold", "failed"):
+                continue
+            touch, verdict, r_ = int(hw["touch_i"]), hw["verdict"], rid
+            direction = 1 if side == "top" else -1
+        else:
+            q = bisect.bisect_right(cr["flip_i"], d)
+            if q >= len(cr["flip_i"]) or cr["flip_i"][q] > end:
+                continue
+            f = cr["flips_by_i"][q]
+            touch, verdict, r_ = int(f["i"]), "hold", int(f["rid"])
+            if touch + H >= n:
+                continue                                    # truncated
+            direction = {"support": 1, "resistance": -1}[f["polarity"]]
+        known = touch + H
+        if upto is not None and known > int(upto):
+            break
+        if not (int(lo_i) <= known <= int(hi_i)):
+            continue
+        out.append({"die_i": d, "rid": r_, "side": side, "touch_i": touch,
+                    "known": known, "direction": direction,
+                    "verdict": verdict})
+        if want is not None and want(out):
+            break
+    return out
+
+
+def _hand_stop(sym: str, lens: str, touch: int, e_i: int, d_: int,
+               rail: float) -> tuple:
+    """(stop, retest extreme, entry close) — the farther of {extreme -/+
+    'beyond' x ATR} and {entry -/+ rail x ATR}, every number typed from the
+    filed text, every bar read off the census tape."""
+    t = real_tape(sym, lens)[0]
+    at = _hand(sym, lens, ("atr", HAND_ATR[1]))
+    buf = HAND_STOP_BUF[1]
+    ext = (min(float(v) for v in t.l[touch:e_i + 1]) if d_ == 1
+           else max(float(v) for v in t.h[touch:e_i + 1]))
+    epx = float(t.c[e_i])
+    stop = (min(ext - buf * at[e_i], epx - rail * at[e_i]) if d_ == 1 else
+            max(ext + buf * at[e_i], epx + rail * at[e_i]))
+    return stop, ext, epx
+
+
+def _hand_tide(sym: str, exec_open_ms: int) -> tuple:
+    """(tide, 4h bar) — the 4h tide on the LAST 4h bar CLOSED at or before the
+    exec bar's OPEN, on the census 4h tape: +1 iff EMA_fast > EMA_slow AND
+    close > EMA_slow, -1 on the mirror, 0 otherwise (and 0 before any 4h bar
+    has closed)."""
+    t4 = real_tape(sym, "4h")[0]
+    key = ("close4h", sym)
+    if key not in _HAND:
+        _HAND[key] = np.asarray(t4.t0, np.int64) + np.int64(MS_4H)
+    k = int(np.searchsorted(_HAND[key], int(exec_open_ms), side="right")) - 1
+    if k < 0:
+        return 0, -1
+    ef = _hand(sym, "4h", ("ema", HAND_S1_TIDE["fast"]))
+    es = _hand(sym, "4h", ("ema", HAND_S1_TIDE["slow"]))
+    c = float(t4.c[k])
+    if ef[k] > es[k] and c > es[k]:
+        return 1, k
+    if ef[k] < es[k] and c < es[k]:
+        return -1, k
+    return 0, k
+
+
+def _hand_weeks(sym: str) -> tuple:
+    """(week opens, week closes, posture) — MONDAY-anchored COMPLETE weeks
+    built by hand from the census 1d tape (7 daily bars, Monday 00:00 UTC to
+    Sunday; epoch day 0 was a Thursday), and the weekly 12/25 posture on each
+    (0 while the slower EMA is cold)."""
+    key = ("weeks", sym)
+    if key not in _HAND:
+        t = real_tape(sym, "1d")[0]
+        wk: dict = {}
+        for k in range(t.n):
+            o = int(t.t0[k])
+            wk.setdefault(o - ((o // MS_1D + 3) % 7) * MS_1D, []).append(k)
+        full = [(ws, ks) for ws, ks in sorted(wk.items()) if len(ks) == 7]
+        opens = np.asarray([ws for ws, _ in full], np.int64)
+        closes = [float(t.c[ks[-1]]) for _, ks in full]
+        G = HAND_I1_GATE
+        e_f = _hand_ema(closes, G["fast"], len(closes))
+        e_s = _hand_ema(closes, G["slow"], len(closes))
+        warm = max(G["fast"], G["slow"])
+        post = [0 if w < warm else (1 if e_f[w] > e_s[w] else
+                                    -1 if e_f[w] < e_s[w] else 0)
+                for w in range(len(closes))]
+        _HAND[key] = (opens, closes, post)
+    return _HAND[key]
+
+
+def _hand_daily_dir(sym: str, i: int) -> int:
+    """The DAILY lifecycle DIRECTION at bar i, walked by hand from P-BRK-I1's
+    filed definition: s = (EMA12 - EMA25) / ATR14; EXPANDING iff sign(s) is
+    unchanged over s[i-K .. i] AND |s[i]| > |s[i-K]|; DIRECTION = sign(s)
+    while EXPANDING, else 0; a cold bar (i < 25, or ATR not finite and
+    positive) has no sign."""
+    G = HAND_I1_GATE
+    e1 = _hand(sym, "1d", ("ema", G["fast"]))
+    e2 = _hand(sym, "1d", ("ema", G["slow"]))
+    at = _hand(sym, "1d", ("atr", G["atr"]))
+    warm = max(G["fast"], G["slow"])
+
+    def s_(u):
+        if u < warm or not (math.isfinite(at[u]) and at[u] > 0):
+            return float("nan")
+        return (e1[u] - e2[u]) / at[u]
+
+    def sg(x):
+        return 0 if not math.isfinite(x) else (1 if x > 0 else
+                                               -1 if x < 0 else 0)
+    K, st = int(G["k"]), s_(int(i))
+    s0 = sg(st)
+    if int(i) < K or s0 == 0:
+        return 0
+    if any(sg(s_(u)) != s0 for u in range(int(i) - K, int(i) + 1)):
+        return 0
+    return s0 if abs(st) > abs(s_(int(i) - K)) else 0
+
+
+def _hand_perm(lane: str, sym: str, e_i: int, d_: int) -> dict:
+    """THE HAND GATE at entry bar e_i for direction d_: S1 — the 4h tide
+    aligned; I1 — the weekly posture AND the daily lifecycle direction both
+    equal to the trade's direction."""
+    o_ms = int(real_tape(sym, B.LANE_LENS[lane])[0].t0[int(e_i)])
+    if lane == B.LANE_S1:
+        tide, k4 = _hand_tide(sym, o_ms)
+        return {"ok": tide == int(d_),
+                "why": f"4h tide {tide:+d} (4h bar {k4}), need {int(d_):+d}"}
+    opens, _c, post = _hand_weeks(sym)
+    wi = int(np.searchsorted(opens + np.int64(7 * MS_1D), o_ms,
+                             side="right")) - 1
+    w = int(post[wi]) if wi >= 0 else 0
+    dd = _hand_daily_dir(sym, int(e_i))
+    return {"ok": w == int(d_) and dd == int(d_),
+            "why": (f"weekly {w:+d} (week {wi}), daily {dd:+d}, need "
+                    f"{int(d_):+d} on both")}
+
+
+def _entry_view(t) -> dict:
+    """A real Book campaign, SEEN THROUGH ENTRY_VIEW — identity and entry
+    geometry only.  Every read of a real campaign in this file goes here."""
+    return {k: getattr(t, k) for k in ENTRY_VIEW}
+
+
+def _ride_filed(lane: str, role: str, days: int | None = None,
+                hi_ms: int | None = None) -> dict:
+    """ONE FILED ARM RIDDEN TO ITS BOOK — THE DOOR FIRST.  TP.require_arm is
+    called with the text of record and the pinned head BEFORE a bar or a bar
+    stamp is read, and its gate must be an EXTERNAL runner's; only then is the
+    window cut (`days` narrows it to the first `days` days of the filed era;
+    the runner may narrow a filed window, never widen it), the adapter's
+    signals built (cached per implementation), and B.ready_run called — which
+    opens the same door again as its own first statement."""
+    reg = B.FORM_OF[lane]
+    a_ = B.filed_arm_specs(lane)[role]
+    g_ = TP.require_arm(reg, B.filed_text(reg), a_["arm"], tuple(a_["panel"]),
+                        lanes=(lane,), head_of_record=B.filed_head(reg))
+    if g_.get("runner") != "external":
+        raise SystemExit(f"HALT: {reg} / {a_['arm']!r} opened for runner "
+                         f"{g_.get('runner')!r}, not an external one.")
+    hi = hi_ms
+    if days is not None:
+        e_lo = int(TP.corridor_era(tuple(g_["panel"]), g_["era"])[0])
+        hi = e_lo + int(days) * MS_1D - 1
+    lens = B.LANE_LENS[lane]
+    sig = {s: _sig(s, lens) for s in g_["panel"]}
+    return B.ready_run(lane, role, signals=sig, hi_ms=hi)
+
+
+def _filed_run(lane: str, role: str, cache: bool = False) -> dict:
+    """The filed arm's ready Book as the FILED legs ride it: I1 whole, S1 on
+    its first READY_S1_DAYS days.  `cache` is for REAL legs only (one ride
+    per run); a break leg always rides fresh, under its own mutation."""
+    days = READY_S1_DAYS if lane == B.LANE_S1 else None
+    key = (lane, role, days)
+    if cache and key in _RUNS:
+        return _RUNS[key]
+    run = _ride_filed(lane, role, days=days)
+    if cache:
+        _RUNS[key] = run
+    return run
+
+
+def _filed_books() -> dict:
+    """{(lane, role): run} — the four CLASSIC5 filed arms' ready Books, for
+    the READY-BOOK column (real leg only)."""
+    return {(ln, ro): _filed_run(ln, ro, cache=True)
+            for ln, ro in FILED_HOLD_CASES}
+
+
+def _book_col(books, lane: str, role: str, sym: str, e_i: int, d_: int,
+              lf) -> tuple:
+    """(in_book: True | False | None, text) — THE READY-BOOK COLUMN.  It is
+    REPORTED and chooses nothing: the hold was named before this is read."""
+    if books is None:
+        return None, "not ridden under a break leg"
+    run = books[(lane, role)]
+    w_lo, w_hi = (int(x) for x in run["window"])
+    pm = _hand_perm(lane, sym, e_i, d_)
+    if not (w_lo <= int(lf.open_ms[e_i]) <= w_hi):
+        return None, (f"entry opens beyond the ridden window (to "
+                      f"{TP.iso(w_hi)}); hand gate {pm['why']}")
+    hit = any(str(v["symbol"]) == sym and int(v["entry_i"]) == int(e_i)
+              and int(v["direction"]) == int(d_)
+              for v in map(_entry_view, run["book"]))
+    if hit:
+        return True, f"IN the Book — hand gate OPEN ({pm['why']})"
+    return False, ("NOT in the Book — hand gate "
+                   + ("REFUSES" if not pm["ok"] else
+                      "OPEN, so the one-position rule or the stop refused it")
+                   + f" ({pm['why']})")
+
+
+def _coverage(sym: str, lens: str, anchor: str, hp: dict, e_lo: int,
+              e_hi: int, sig: dict, mod_hold, mod_fail) -> tuple:
+    """COVERAGE — the module's FIRST in-window hold (and, for the band, its
+    first failed evaluation) against the HAND's, re-derived from the census's
+    own DIEs by walking every DIE window; plus the adapter's event lists held
+    to this file's census call.  Returns (ok, text)."""
+    t = real_tape(sym, lens)[0]
+    lo_i, hi_i = _win_idx(t.t0, e_lo, e_hi)
+    cr = _census_run(sym, lens)
+    same_ev = (sorted(sig["dies"]) == sorted(cr["dies"])
+               and sorted(map(_fkey, sig["flips"]))
+               == sorted(map(_fkey, cr["flips"])))
+    band = anchor == B.ANCHOR_BAND
+
+    def enough(o):
+        return (any(x["verdict"] == "hold" for x in o)
+                and (not band or any(x["verdict"] == "failed" for x in o)))
+    hh = _hand_holds(sym, lens, anchor, hp, lo_i, hi_i, want=enough)
+    fh = next((x for x in hh if x["verdict"] == "hold"), None)
+    ff = next((x for x in hh if x["verdict"] == "failed"), None)
+    h_hold = ((fh["die_i"], fh["touch_i"], fh["known"], fh["direction"])
+              if fh else None)
+    h_fail = (ff["die_i"], ff["touch_i"], ff["known"]) if ff else None
+    ok = same_ev and h_hold == mod_hold and (not band or h_fail == mod_fail)
+    return ok, (f"COVERAGE {sym} {lens}: the module's FIRST in-window hold "
+                f"(DIE, touch, entry, dir) {mod_hold} == the hand's, "
+                f"re-derived by walking every DIE window from the census's "
+                f"own DIEs: {h_hold}"
+                + (f"; first failed evaluation module {mod_fail} == hand "
+                   f"{h_fail}" if band else "")
+                + f"; the adapter's DIEs and flips == this file's census "
+                  f"call: {same_ev}")
+
+
+def _filed_case(lane: str, role: str, books: dict | None = None,
+                tally: list | None = None) -> tuple:
+    """ONE (form, filed arm): name 3 holds + 1 failed by FILED_HOLD_RULE and
+    walk every one by hand; re-derive each walked asset's first hold by hand
+    (COVERAGE); and REPORT, per named hold, whether the arm's ready Book
+    entered on it (`books`, ridden once in the real leg; None under a break
+    leg).  Returns (ok, lines)."""
+    lines, ok = [], True
+    reg = B.FORM_OF[lane]
+    arm = B.filed_arm_specs(lane)[role]
+    g = TP.require_arm(reg, B.filed_text(reg), arm["arm"],
+                       tuple(arm["panel"]), lanes=(lane,),
+                       head_of_record=B.filed_head(reg))
+    lens = B.LANE_LENS[lane]
+    anchor = B.role_anchor(lane, role)
+    hp = HAND_PINS[(lane, anchor)]
+    rail_q, rail = HAND_RAIL[lane]
+    txt = _ntext(reg)
+    s1t = _ntext(B.FORM_OF[B.LANE_S1])
+    i1t = _ntext(B.FORM_OF[B.LANE_I1])
+    quotes = list(hp["quotes"]) + [rail_q, HAND_ERA_CUT[0]]
+    missing = [q for q in quotes if q not in txt] \
+        + ([HAND_ATR[0]] if HAND_ATR[0] not in s1t else []) \
+        + ([HAND_STOP_BUF[0]] if HAND_STOP_BUF[0] not in i1t else []) \
+        + ([HAND_S1_BEYOND] if HAND_S1_BEYOND not in s1t else [])
+    g0 = (not missing and g["era"] == B.LANE_ERA[lane]
+          and g["runner"] == "external")
+    ok &= g0
+    e_lo, e_hi, _m = TP.corridor_era(g["panel"], g["era"])
+    # the module's pins, from the module's OWN source, against the text's
+    if anchor == B.ANCHOR_BAND:
+        tp = B.tuned_pins(lens)
+        m_pins = (tuple(B.r1_band(tp["band"]).periods), float(tp["margin_atr"]),
+                  int(tp["hold_bars"]), int(tp["ttl_bars"]))
+    else:
+        ttl_m = (int(B.tuned_pins("5m")["ttl_bars"]) if lane == B.LANE_S1
+                 else int(B.MEM_TTL_BARS))
+        m_pins = (None, float(B.FLIP_HOLD_MARGIN), int(B.FLIP_HOLD_BARS),
+                  ttl_m)
+    h_pins = (hp["periods"], hp["margin"], hp["hold"], hp["ttl"])
+    g1 = (tuple(m_pins) == tuple(h_pins)
+          and float(B.STOP_BUF_ATR) == HAND_STOP_BUF[1])
+    ok &= g1
+    lines.append(mark(g0 and g1,
+                      f"{reg} / {arm['arm']!r} [{role}] opened through "
+                      f"TP.require_arm (pinned head len "
+                      f"{B.filed_head(reg)[0]} "
+                      f"{B.filed_head(reg)[1][:12]}, runner "
+                      f"{g['runner']!r}): lens {lens}, anchor "
+                      f"{anchor!r}, FILED era "
+                      f"{g['era']!r} window {TP.iso(e_lo)}..{TP.iso(e_hi)}; "
+                      f"hand pins from the TEXT {h_pins} == module pins "
+                      f"{tuple(m_pins)}; 'beyond' {HAND_STOP_BUF[1]} ATR "
+                      f"quoted from P-BRK-I1 ({HAND_STOP_BUF[0]!r}) == "
+                      f"module STOP_BUF_ATR {B.STOP_BUF_ATR}"
+                      + (" — P-BRK-S1's own text says only 'beyond the "
+                         "retest extreme' and does not number it"
+                         if lane == B.LANE_S1 else "")
+                      + f"; quotes missing from the texts: "
+                        f"{missing or 'none'}"))
+    holds, failed, same, cover = [], None, [], []
+    for sym in g["panel"]:
+        if len(holds) >= 3 and failed is not None:
+            break
+        lf = B.frame_l(sym, lens, with_funding=False)
+        sm = _same_bars(sym, lens)
+        same.append((sym, sm))
+        sig = _sig(sym, lens)
+        dies = sig["dies"]
+        inw = (lambda k, _o=lf.open_ms: 0 <= k < len(_o)
+               and e_lo <= int(_o[k]) <= e_hi)
+        mod_hold, mod_fail = None, None
+        if anchor == B.ANCHOR_BAND:
+            lo, hi = B.r1_band(tp["band"])(lf.c)
+            cands, tal = B.band_hold_candidates(
+                lf.h, lf.l, lf.c, lf.atr, dies, lo, hi, tp["margin_atr"],
+                tp["hold_bars"], tp["ttl_bars"])
+            hr = sorted((r for r in tal["rows"] if r["verdict"] == "hold"
+                         and inw(r["known_at"])), key=lambda r: r["known_at"])
+            fr = sorted((r for r in tal["rows"] if r["verdict"] == "failed"
+                         and inw(r["known_at"])), key=lambda r: r["known_at"])
+            if hr:
+                mod_hold = (int(hr[0]["die_i"]), int(hr[0]["touch_i"]),
+                            int(hr[0]["known_at"]),
+                            1 if hr[0]["side"] == "top" else -1)
+            if fr:
+                mod_fail = (int(fr[0]["die_i"]), int(fr[0]["touch_i"]),
+                            int(fr[0]["known_at"]))
+            if hr and len(holds) < 3:
+                r = hr[0]
+                cd = [c_ for c_ in cands if c_.die_i == r["die_i"]]
+                holds.append(dict(sym=sym, row=r, cand=cd[0] if cd else None,
+                                  lf=lf, lo=lo, hi=hi, dies=dies))
+            if fr and failed is None:
+                r = fr[0]
+                failed = dict(sym=sym, row=r, dies=dies,
+                              emitted=[c_ for c_ in cands
+                                       if c_.die_i == r["die_i"]])
+        else:
+            cands, tal = B.memory_flip_candidates(
+                lf.h, lf.l, dies, sig["flips"], lf.n, ttl_bars=hp["ttl"])
+            hc = sorted((c_ for c_ in cands if inw(c_.known_i)),
+                        key=lambda c_: c_.known_i)
+            if hc:
+                mod_hold = (int(hc[0].die_i), int(hc[0].touch_i),
+                            int(hc[0].known_i), int(hc[0].direction))
+            if hc and len(holds) < 3:
+                holds.append(dict(sym=sym, cand=hc[0], lf=lf, dies=dies,
+                                  flips=sig["flips"]))
+            if failed is None:
+                _rng, leash = _machine(sym, lens)
+                wins = [(int(d), _hand_window(dies, d, hp["ttl"], lf.n))
+                        for d, _r, _s in dies]
+                ds = np.array([w[0] for w in wins], np.int64)
+                for e in leash:
+                    if e.get("event") != "memory-retest" or not str(
+                            e.get("verdict", "")).startswith("failed through"):
+                        continue
+                    i = int(e["i"])
+                    if not inw(i + hp["hold"]):
+                        continue
+                    q = int(np.searchsorted(ds, i, side="left")) - 1
+                    if q < 0 or not (wins[q][0] < i <= wins[q][1]):
+                        continue
+                    failed = dict(sym=sym, ev=e, die_i=wins[q][0],
+                                  offered=[f_ for f_ in sig["flips"]
+                                           if int(f_["i"]) == i],
+                                  emitted=[c_ for c_ in cands
+                                           if c_.touch_i == i])
+                    break
+        # ── COVERAGE: this asset's first in-window hold, RE-DERIVED BY HAND
+        cover.append(_coverage(sym, lens, anchor, hp, e_lo, e_hi, sig,
+                               mod_hold, mod_fail))
+    g2 = all(sm for _s, sm in same)
+    ok &= g2
+    lines.append(mark(g2, f"the runner's frame and the census tape are the "
+                          f"SAME BARS (open_ms, h, l, c) on every asset "
+                          f"walked: {same} — so the adapter's DIE indices "
+                          f"mean the same bars in both"))
+    for o_, tx_ in cover:
+        ok &= o_
+        lines.append(mark(o_, tx_))
+    g3 = len(holds) == 3 and failed is not None
+    ok &= g3
+    lines.append(mark(g3, f"the rule names {len(holds)} holds on "
+                          f"{[x['sym'] for x in holds]} and "
+                          f"{'1 failed hold on ' + failed['sym'] if failed else 'NO failed hold'}"))
+    for x in holds:
+        sym, lf, cd = x["sym"], x["lf"], x.get("cand")
+        if anchor == B.ANCHOR_BAND:
+            r = x["row"]
+            side = r["side"]
+            hw = _hand_band_walk(sym, lens, hp, x["dies"], r["die_i"], side)
+            mlo, mhi = float(x["lo"][r["touch_i"]]), float(x["hi"][r["touch_i"]])
+            gb = (hw["verdict"] == "hold" == r["verdict"]
+                  and hw["touch_i"] == r["touch_i"]
+                  and r["known_at"] == r["touch_i"] + hp["hold"]
+                  and hw["band_at_touch"] == (mlo, mhi) and cd is not None
+                  and cd.direction == (1 if side == "top" else -1))
+            touch, known = r["touch_i"], r["known_at"]
+            what = (f"DIE {r['die_i']} ({side}) -> touch {touch} (hand "
+                    f"{hw['touch_i']}), module {r['verdict']!r} / hand "
+                    f"{hw['verdict']!r}, band at touch module==hand "
+                    f"{hw['band_at_touch'] == (mlo, mhi)}")
+        else:
+            side = "top" if cd.direction == 1 else "bottom"
+            touch, known = cd.touch_i, cd.known_i
+            hw = _hand_memory_walk(sym, lens, hp, touch, cd.rid, side)
+            end = _hand_window(x["dies"], cd.die_i, hp["ttl"], lf.n)
+            earlier = [f_ for f_ in x["flips"]
+                       if cd.die_i < int(f_["i"]) < touch]
+            gb = (hw["verdict"] == "hold" and hw["touched"]
+                  and hw["opposite"] and hw["alive"]
+                  and cd.die_i < touch <= end and not earlier
+                  and known == touch + hp["hold"])
+            what = (f"DIE {cd.die_i} -> flip at {touch} on range {cd.rid} "
+                    f"{side} line {hw['px']} (raw), window end {end}, hand "
+                    f"{hw['verdict']!r} (touched {hw['touched']}, opposite "
+                    f"approach {hw['opposite']}, line born {hw['born']} first "
+                    f"touched {hw['first_touch']} -> alive {hw['alive']}), "
+                    f"earlier flips in the window {len(earlier)}")
+        legs, _ref = B.legs_from_candidates(lf, [cd], lane, permit=None) \
+            if cd is not None else ([], {})
+        e_i = touch + hp["hold"]
+        d_ = 1 if side == "top" else -1
+        stop, ext, _epx = _hand_stop(sym, lens, touch, e_i, d_, rail)
+        gg = (len(legs) == 1 and legs[0].entry_i == e_i == known
+              and legs[0].direction == d_ and legs[0].stop_px == stop
+              and int(lf.open_ms[e_i]) >= e_lo and int(lf.open_ms[e_i]) <= e_hi
+              and (g["era"] != "holdout"
+                   or int(lf.open_ms[e_i]) > HAND_ERA_CUT[1]))
+        ok &= gb and gg
+        inb, col = _book_col(books, lane, role, sym, e_i, d_, lf)
+        if tally is not None and books is not None:
+            tally.append((reg, role, sym, inb))
+        lines.append(mark(gb and gg,
+                          f"HOLD {sym} {lens}: {what}; entry bar {e_i} = "
+                          f"touch + {hp['hold']} opens "
+                          f"{TP.iso(int(lf.open_ms[e_i]))} inside the FILED "
+                          f"{g['era']!r} window; leg dir {legs[0].direction if legs else None} "
+                          f"stop {legs[0].stop_px if legs else None} == hand "
+                          f"{stop} (extreme {ext}, beyond {HAND_STOP_BUF[1]} "
+                          f"ATR, rail {rail} ATR) | READY BOOK (reported, "
+                          f"chooses nothing): {col}"))
+    if failed is not None:
+        sym = failed["sym"]
+        lf = B.frame_l(sym, lens, with_funding=False)
+        if anchor == B.ANCHOR_BAND:
+            r = failed["row"]
+            hw = _hand_band_walk(sym, lens, hp, failed["dies"], r["die_i"],
+                                 r["side"])
+            gf = (r["verdict"] == "failed" == hw["verdict"]
+                  and hw["touch_i"] == r["touch_i"] and not failed["emitted"])
+            k_ = r["known_at"]
+            what = (f"DIE {r['die_i']} ({r['side']}) touch {r['touch_i']} "
+                    f"(hand {hw['touch_i']}): module {r['verdict']!r}, hand "
+                    f"{hw['verdict']!r}, candidates emitted "
+                    f"{len(failed['emitted'])}")
+        else:
+            e = failed["ev"]
+            hw = _hand_memory_walk(sym, lens, hp, e["i"], e["rid"], e["side"])
+            gf = (hw["verdict"] == "failed" and hw["touched"]
+                  and hw["opposite"] and not failed["offered"]
+                  and not failed["emitted"])
+            k_ = int(e["i"]) + hp["hold"]
+            what = (f"leash retest at {e['i']} on range {e['rid']} "
+                    f"{e['side']} line {hw['px']} (raw) inside DIE "
+                    f"{failed['die_i']}'s window: leash {e['verdict'][:28]!r}"
+                    f", hand {hw['verdict']!r}; offered as a flip "
+                    f"{len(failed['offered'])}, candidates emitted "
+                    f"{len(failed['emitted'])}")
+        ok &= gf
+        lines.append(mark(gf, f"FAILED {sym} {lens}: {what}; known bar {k_} "
+                              f"opens {TP.iso(int(lf.open_ms[k_]))} inside "
+                              f"the FILED window — reported FAIL, no entry"))
+    return ok, lines
+
+
+def _filed_hold_checks(books: dict | None = None) -> tuple:
+    lines, ok = [f"[NB ] THE RULE: {FILED_HOLD_RULE}",
+                 f"[NB ] {FILED_HOLD_WHAT}"], True
+    tally: list = []
+    for lane, role in FILED_HOLD_CASES:
+        o, ls = _filed_case(lane, role, books=books, tally=tally)
+        ok &= o
+        lines += ls
+    if books is not None:
+        yes = [(r_, ro_, s_) for r_, ro_, s_, b_ in tally if b_ is True]
+        unk = [(r_, ro_, s_) for r_, ro_, s_, b_ in tally if b_ is None]
+        lines.append(f"[NB ] READY-BOOK COLUMN, TOTAL (reported; it chose "
+                     f"nothing): {len(yes)} of {len(tally)} named holds are "
+                     f"in their arm's ready Book {yes}; "
+                     f"{len(tally) - len(yes) - len(unk)} are detector-level "
+                     f"holds the Book did NOT enter"
+                     + (f"; {len(unk)} beyond the ridden window {unk}"
+                        if unk else ""))
+    return ok, lines
+
+
+def f_c10_hold_filed() -> bool:
+    true_band_hold = B.band_hold_candidates
+    true_mem_flip = B.memory_flip_candidates
+    true_signals = B.macro_signals
+    true_corridor = TP.corridor_era
+
+    def _never_fails(h, l, c, atr, dies, lo, hi, margin_atr, hold_bars,
+                     ttl_bars=B.MEM_TTL_BARS, anchor_label=B.ANCHOR_BAND):
+        """A named wrong: every evaluated retest is called a HOLD."""
+        cands, tal = true_band_hold(h, l, c, atr, dies, lo, hi, margin_atr,
+                                    hold_bars, ttl_bars, anchor_label)
+        for r in tal["rows"]:
+            r["verdict"] = "hold"
+        return cands, tal
+
+    def _leaky_signals(sym, lens, scale_mult=B.FROZEN_SCALE):
+        """A named wrong: the leash's FAILED-THROUGH retests offered to the
+        memory anchor as flips (a failed hold that does not FAIL)."""
+        s = dict(true_signals(sym, lens, scale_mult))
+        _rng, leash = _machine(sym, lens)
+        extra = [{"i": int(e["i"]), "rid": int(e["rid"]),
+                  "polarity": ("support" if e["side"] == "top"
+                               else "resistance")}
+                 for e in leash if e.get("event") == "memory-retest"
+                 and str(e.get("verdict", "")).startswith("failed through")]
+        s["flips"] = sorted(list(s["flips"]) + extra,
+                            key=lambda x: x["i"])
+        return s
+
+    def _full_window(panel, era="full", *a, **k):
+        """A named wrong: the era collar dropped — every arm handed the
+        FULL corridor whatever era it filed."""
+        return true_corridor(panel, "full", *a, **k)
+
+    def _entry_at_touch(lf, cands, lane, permit=None,
+                        rail_atr=B.MIN_STOP_ATR):
+        return ([B.Leg(direction=cd.direction, entry_i=cd.touch_i,
+                       stop_px=float(lf.c[cd.touch_i]) - 1.0, r_dist=1.0,
+                       touch_i=cd.touch_i) for cd in cands], {})
+
+    # A named wrong: the module SILENTLY DROPS the earliest hold whose entry
+    # bar opens inside the filed window (each lens's own era window).  The
+    # frame is found by the IDENTITY of the array handed in, so the wrong
+    # needs no argument the real function does not take.
+    win: dict = {}          # each lens's filed window, read on first use —
+                            # inside the checks, after their doors opened
+
+    def _frame_of(arr):
+        return next((f for f in B._FRAMES.values()
+                     if f.c is arr or f.h is arr), None)
+
+    def _drop_first(cands, rows, lf, known_of, key_of):
+        lane_of = {B.LANE_LENS[ln]: ln for ln in B.LANE_ORDER}
+        if lf is None or lf.lens not in lane_of:
+            return cands, rows
+        if lf.lens not in win:
+            win[lf.lens] = tuple(int(x) for x in true_corridor(
+                TP.CLASSIC5, B.LANE_ERA[lane_of[lf.lens]])[:2])
+        lo_ms, hi_ms = win[lf.lens]
+        inw = [r for r in rows if r.get("verdict") == "hold"
+               and 0 <= known_of(r) < lf.n
+               and lo_ms <= int(lf.open_ms[known_of(r)]) <= hi_ms]
+        if not inw:
+            return cands, rows
+        r0 = min(inw, key=known_of)
+        return ([c_ for c_ in cands if key_of(c_) != (r0["die_i"],
+                                                     r0["touch_i"])],
+                [r for r in rows if r is not r0])
+
+    def _drops_band(h, l, c, atr, dies, lo, hi, margin_atr, hold_bars,
+                    ttl_bars=B.MEM_TTL_BARS, anchor_label=B.ANCHOR_BAND):
+        cands, tal = true_band_hold(h, l, c, atr, dies, lo, hi, margin_atr,
+                                    hold_bars, ttl_bars, anchor_label)
+        cands, tal["rows"] = _drop_first(
+            cands, tal["rows"], _frame_of(c), lambda r: int(r["known_at"]),
+            lambda c_: (c_.die_i, c_.touch_i))
+        return cands, tal
+
+    def _drops_mem(h, l, dies, flips, n, hold_bars=B.FLIP_HOLD_BARS,
+                   ttl_bars=B.MEM_TTL_BARS, same_range_only=False):
+        cands, tal = true_mem_flip(h, l, dies, flips, n, hold_bars, ttl_bars,
+                                   same_range_only)
+        cands, tal["rows"] = _drop_first(
+            cands, tal["rows"], _frame_of(h), lambda r: int(r["known_at"]),
+            lambda c_: (c_.die_i, c_.touch_i))
+        return cands, tal
+
+    return prove(
+        "F-C10-HOLD (REAL, FILED ERA, per lens)",
+        "3 DETECTOR-LEVEL holds per lens NAMED by a printed rule inside each "
+        "form's FILED era (S1 holdout 5m, I1 full 1d), scored anchor and "
+        "Tier-E other anchor, hand-verified on the census tape against the "
+        "module and the filed text's pins, each asset's first hold "
+        "RE-DERIVED by hand; a real failed hold per case must FAIL; whether "
+        "the Book entered on each is REPORTED, never used",
+        "the door does not open with the text of record, a hand pin quoted "
+        "from the text disagrees with the module's pin, the runner's frame "
+        "is not the census tape's bars, the module's first in-window hold "
+        "(or first failed band evaluation) on any walked asset is not the "
+        "hand's re-derivation, the adapter's DIEs or flips are not the "
+        "census's, fewer than 3 holds or no failed hold is named, any named "
+        "hold's touch / verdict / band / window / first-flip / entry bar / "
+        "direction / stop disagrees with the hand walk, an entry opens "
+        "outside the FILED era window (S1: at or before 1719791999000), or a "
+        "failed evaluation is anything but failed with no entry",
+        [("every evaluated band retest relabelled a HOLD",
+          mutated(B, "band_hold_candidates", _never_fails,
+                  _filed_hold_checks)),
+         ("the leash's failed-through retests offered as flips",
+          mutated(B, "macro_signals", _leaky_signals, _filed_hold_checks)),
+         ("the era collar dropped (every arm handed the full corridor)",
+          mutated(TP, "corridor_era", _full_window, _filed_hold_checks)),
+         ("the entry moved to the TOUCH bar (a look-ahead leak)",
+          mutated(B, "legs_from_candidates", _entry_at_touch,
+                  _filed_hold_checks)),
+         ("the module silently DROPS the earliest in-window hold (band AND "
+          "memory) — the sabotage that stayed GREEN before the hand "
+          "re-derivation",
+          mutated2(B, [("band_hold_candidates", _drops_band),
+                       ("memory_flip_candidates", _drops_mem)],
+                   _filed_hold_checks))],
+        lambda: _filed_hold_checks(books=_filed_books()))
+
+
+# ══════════ F-C10-HOLD · THE FILED BOOK — THE BOOK'S OWN FIRST ENTRIES
+# The leg above names DETECTOR-level holds.  This one names what the BOOK
+# actually entered on, by the same blind rule (panel in filed order, the
+# first campaign per asset by entry bar, the first three assets), and walks
+# each BY HAND end to end: the hold (band walk / memory walk), the entry bar,
+# the entry close, the stop — and the PERMISSION, which is the step between
+# the two legs: the hand gate must OPEN at the campaign's entry bar, and every
+# EARLIER hand-derived hold on that asset inside the ridden window must be
+# REFUSED by the hand gate (the first campaign in a window has no earlier
+# campaign that could hold the position open).  So a Book that entered on a
+# refused hold, or skipped a permitted one, goes RED.
+#
+# ONLY ENTRY GEOMETRY IS READ (`_entry_view`); nothing is scored.  S1's Books
+# ride the first READY_S1_DAYS days of the holdout.  A NARROWED ride cannot
+# change any entry at or before its end — a campaign still open at the end is
+# closed there (`corridor_end`), and no entry can follow it inside the window
+# — and that law is PROVED below where it is cheap, on P-BRK-I1's whole Book.
+FILED_BOOK_RULE = (
+    "per (form, filed arm): the arm is ridden to its Book through the filed "
+    "door (TP.require_arm with the text of record and the pinned head, BEFORE "
+    "a bar is read, then B.ready_run) — P-BRK-I1 over its whole filed era, "
+    f"P-BRK-S1 over the first {READY_S1_DAYS} days of its holdout; the panel "
+    "is walked in FILED order; per asset the FIRST campaign (by entry bar) is "
+    "named, and the first THREE assets that have one give the three.  Only "
+    "identity and entry-geometry fields are read; no exit, R or sum is looked "
+    "at, so nothing can be chosen by outcome.")
+
+
+def _book_case(lane: str, role: str, run: dict) -> tuple:
+    """ONE (form, filed arm)'s ready Book: name its first 3 campaigns by
+    FILED_BOOK_RULE and walk each by hand, hold -> entry -> stop -> gate, with
+    every earlier hand hold on the asset refused by the hand gate."""
+    lines, ok = [], True
+    reg = B.FORM_OF[lane]
+    lens = B.LANE_LENS[lane]
+    anchor = B.role_anchor(lane, role)
+    hp = HAND_PINS[(lane, anchor)]
+    rail = HAND_RAIL[lane][1]
+    g, book = run["gate"], run["book"]
+    w_lo, w_hi = (int(x) for x in run["window"])
+    views = [_entry_view(t) for t in book] if isinstance(book, TP.Book) else []
+    txt = _ntext(reg)
+    if lane == B.LANE_S1:
+        qs = list(HAND_S1_TIDE["quotes"])
+        m_gate = (int(T9.V6_ROLES.tide_f), int(T9.V6_ROLES.tide_s))
+        h_gate = (HAND_S1_TIDE["fast"], HAND_S1_TIDE["slow"])
+        src = HAND_S1_TIDE["source"]
+    else:
+        qs = list(HAND_I1_GATE["quotes"])
+        m_gate = (int(B.RIBBON_FAST), int(B.RIBBON_SLOW), int(B.LIFECYCLE_K),
+                  int(B.ATR_LEN))
+        h_gate = (HAND_I1_GATE["fast"], HAND_I1_GATE["slow"],
+                  HAND_I1_GATE["k"], HAND_I1_GATE["atr"])
+        src = "P-BRK-I1's filed text"
+    missing = [q for q in qs if q not in txt]
+    by: dict = {}
+    for v in views:
+        by.setdefault(str(v["symbol"]), []).append(v)
+    named = []
+    for sym in g["panel"]:
+        vs = sorted(by.get(sym, []), key=lambda v: int(v["entry_i"]))
+        if vs:
+            named.append((sym, vs[0]))
+        if len(named) == 3:
+            break
+    g0 = (isinstance(book, TP.Book) and g["runner"] == "external"
+          and book.spec["registration"] == reg
+          and book.spec["arm"] == B.FILED_ARMS[lane][role]
+          and g["era"] == B.LANE_ERA[lane] and not missing
+          and m_gate == h_gate and len(named) == 3)
+    ok &= g0
+    lines.append(mark(g0, f"{reg} / {B.FILED_ARMS[lane][role]!r} [{role}]: "
+                          f"the Book came through the filed door (runner "
+                          f"{g['runner']!r}, era {g['era']!r}), ridden "
+                          f"{TP.iso(w_lo)}..{TP.iso(w_hi)}, {len(views)} "
+                          f"campaigns; hand gate pins {h_gate} from "
+                          f"{src} == module {m_gate}; gate quotes missing "
+                          f"{missing or 'none'}; the rule names "
+                          f"{[s for s, _ in named]}"))
+    for sym, v in named:
+        t = real_tape(sym, lens)[0]
+        lf = B.frame_l(sym, lens, with_funding=False)
+        lo_i, hi_i = _win_idx(t.t0, w_lo, w_hi)
+        e_i, d_ = int(v["entry_i"]), int(v["direction"])
+        touch, die = int(v["touch_i"]), int(v["die_i"])
+        if lane == B.LANE_S1:
+            bars_ok = _same_bars(sym, lens) and _same_bars(sym, "4h")
+            bars_what = "5m and 4h"
+        else:
+            w1 = B.frame_l(sym, "1w", with_funding=False)
+            wo, wc, _p = _hand_weeks(sym)
+            bars_ok = (_same_bars(sym, lens) and w1.n == len(wo)
+                       and np.array_equal(w1.open_ms, wo)
+                       and np.array_equal(w1.c, np.asarray(wc, float)))
+            bars_what = "1d, and the hand Monday weeks == Stage D's 1w"
+        hh = [x for x in _hand_holds(sym, lens, anchor, hp, lo_i, hi_i,
+                                     upto=e_i) if x["verdict"] == "hold"]
+        own = [x for x in hh if x["known"] == e_i]
+        own_ok = (len(own) == 1 and own[0]["touch_i"] == touch
+                  and own[0]["die_i"] == die and own[0]["direction"] == d_)
+        mem = ""
+        if own_ok and anchor == B.ANCHOR_MEMORY:
+            side = "top" if d_ == 1 else "bottom"
+            mw = _hand_memory_walk(sym, lens, hp, touch, own[0]["rid"], side)
+            own_ok = (mw["verdict"] == "hold" and mw["touched"]
+                      and mw["opposite"] and mw["alive"])
+            mem = (f", line {mw['px']} (raw) walked: {mw['verdict']!r} "
+                   f"alive {mw['alive']}")
+        stop, _ext, epx = _hand_stop(sym, lens, touch, e_i, d_, rail)
+        geo_ok = (float(v["stop_px"]) == stop and float(v["entry_px"]) == epx
+                  and int(v["entry_ms"]) == int(t.t0[e_i])
+                  and float(v["r_dist"]) == abs(epx - stop)
+                  and lo_i <= e_i <= hi_i
+                  and (g["era"] != "holdout"
+                       or int(t.t0[e_i]) > HAND_ERA_CUT[1]))
+        pm = _hand_perm(lane, sym, e_i, d_)
+        earlier = [(x, _hand_perm(lane, sym, x["known"], x["direction"]))
+                   for x in hh if x["known"] < e_i]
+        let_in = [x for x, p_ in earlier if p_["ok"]]
+        gc = bars_ok and own_ok and geo_ok and pm["ok"] and not let_in
+        ok &= gc
+        lines.append(mark(gc, (
+            f"BOOK {sym} {lens}: first campaign enters bar {e_i} "
+            f"({TP.iso(int(t.t0[e_i]))}) dir {d_:+d} — hand hold at DIE "
+            f"{die} touch {touch} {'FOUND' if own_ok else 'NOT FOUND'}{mem}; "
+            f"entry close {v['entry_px']} == hand {epx}, stop {v['stop_px']} "
+            f"== hand {stop}; hand gate at entry {pm['why']} -> "
+            f"{'OPEN' if pm['ok'] else 'REFUSES'}; {len(earlier)} earlier "
+            f"hand hold(s) on the asset in the window, every one REFUSED by "
+            f"the hand gate: {not let_in} "
+            f"{[(x['known'], p_['why']) for x, p_ in earlier][:3]}"
+            f"{' ...' if len(earlier) > 3 else ''}; bars {bars_what} the "
+            f"same: {bars_ok}")))
+    return ok, lines
+
+
+def _book_checks(cache: bool = False) -> tuple:
+    lines, ok = [f"[NB ] THE RULE: {FILED_BOOK_RULE}"], True
+    before = sorted(p_.name for p_ in TP.REG_DIR.glob("*.scored.json"))
+    for lane, role in FILED_HOLD_CASES:
+        o, ls = _book_case(lane, role, _filed_run(lane, role, cache=cache))
+        ok &= o
+        lines += ls
+    # ── THE NARROWING LAW, proved where it is cheap: P-BRK-I1's scored arm,
+    # ── re-ridden to the entry of its middle campaign, keeps EXACTLY the
+    # ── whole Book's entries at or before that instant.
+    whole = _filed_run(B.LANE_I1, "scored", cache=cache)
+    ents = sorted((str(v["symbol"]), int(v["entry_i"]), int(v["direction"]),
+                   int(v["entry_ms"]))
+                  for v in map(_entry_view, whole["book"]))
+    cut = sorted(e[3] for e in ents)[len(ents) // 2] if ents else None
+    narrow = (_ride_filed(B.LANE_I1, "scored", hi_ms=cut)
+              if cut is not None else None)
+    got = sorted((str(v["symbol"]), int(v["entry_i"]), int(v["direction"]),
+                  int(v["entry_ms"]))
+                 for v in map(_entry_view, narrow["book"])) if narrow else []
+    want = [e for e in ents if e[3] <= (cut or 0)]
+    g = bool(ents) and got == want and len(want) < len(ents)
+    ok &= g
+    lines.append(mark(g, f"THE NARROWING LAW: P-BRK-I1's scored arm re-ridden "
+                         f"to {TP.iso(cut) if cut else None} keeps "
+                         f"{len(got)} entries == the whole Book's {len(want)} "
+                         f"at or before it (of {len(ents)}) — so a window "
+                         f"cut short names the same first campaigns"))
+    after = sorted(p_.name for p_ in TP.REG_DIR.glob("*.scored.json"))
+    g = before == after
+    ok &= g
+    lines.append(mark(g, f"no .scored.json written by this leg (before "
+                         f"{before or 'none'}, after {after or 'none'})"))
+    return ok, lines
+
+
+def f_c10_hold_book() -> bool:
+    true_legs = B.legs_from_candidates
+    true_s1 = B.s1_permission
+    true_i1 = B.i1_permission
+    true_camp = B.brk_campaigns
+
+    def _no_gate(lf, cands, lane, permit=None, rail_atr=B.MIN_STOP_ATR):
+        """A named wrong: the permission gate removed — every hold enters."""
+        return true_legs(lf, cands, lane, None, rail_atr)
+
+    def _tide_flipped(entry_i, direction, tide_state_exec):
+        """A named wrong: the 4h tide read with its sign flipped."""
+        return true_s1(entry_i, direction, -np.asarray(tide_state_exec))
+
+    def _daily_flipped(entry_i, direction, daily_direction, weekly_state,
+                       weekly_idx):
+        """A named wrong: the I1 daily lifecycle direction sign-flipped."""
+        return true_i1(entry_i, direction, -np.asarray(daily_direction),
+                       weekly_state, weekly_idx)
+
+    def _drops_first(*a, **k):
+        """A named wrong: the Book silently drops each asset's FIRST
+        campaign in the window (the replay still rides it)."""
+        return true_camp(*a, **k)[1:]
+
+    return prove(
+        "F-C10-HOLD (REAL, FILED BOOK)",
+        "the first 3 campaigns of each filed CLASSIC5 arm's ready Book, named "
+        "by the same blind rule, are walked BY HAND — hold, entry, stop and "
+        "the PERMISSION — and every earlier hold on the asset in the window "
+        "is refused by the hand gate",
+        "a Book did not come through the filed door, a hand gate pin quoted "
+        "from the text (or, for S1's tide, the card's) disagrees with the "
+        "module's, fewer than 3 campaigns are named, a named campaign's hold "
+        "is not a hand-derived hold at its DIE and touch, its entry close / "
+        "stop / r_dist / entry stamp differs from the hand's by any amount, "
+        "the hand gate refuses its entry, an EARLIER hand hold on the asset "
+        "was permitted by the hand gate yet not entered, the bars the hand "
+        "reads are not the runner's, a window cut short changes an entry at "
+        "or before its end, or a .scored.json appears",
+        [("the permission gate removed (every detector hold entered)",
+          mutated(B, "legs_from_candidates", _no_gate, _book_checks)),
+         ("the S1 4h tide read with its sign flipped",
+          mutated(B, "s1_permission", _tide_flipped, _book_checks)),
+         ("the I1 daily lifecycle direction sign-flipped",
+          mutated(B, "i1_permission", _daily_flipped, _book_checks)),
+         ("the Book silently drops each asset's first campaign",
+          mutated(B, "brk_campaigns", _drops_first, _book_checks))],
+        lambda: _book_checks(cache=True))
+
+
+# ═══════════════ F-BRK-READY · the FILED row, assembled SEALED [B12]
+# The row the contract asks for (line 112: the OTHER anchor as Tier-E, the
+# lens's height-vs-toll verdict ON the row; R8: the 17-asset view beside it;
+# TOLL_ACCOUNTING on every row) built from REAL Books that came through the
+# FILED door — and no outcome sum in it.  P-BRK-I1's scored and other-anchor
+# arms are ridden WHOLE (1d); P-BRK-S1's scored and other-anchor arms on the
+# FIRST READY_S1_DAYS days of the holdout (the runner may narrow a filed
+# window, never widen it) so the leg stays cheap — `main --ready` rides them
+# whole.  THE DOOR COMES FIRST, MEASURED: `ready_run` is watched call by call
+# and must open TP.require_arm before any bar reader runs.  THE SEAL IS AN
+# ALLOWLIST TYPED HERE, not the module's own list of withheld names: every
+# key of every figures block, at every depth, must be one this file names,
+# so an outcome leaked under ANY name — not only under a name the module
+# already withholds — goes RED.  The book FILE is held to a typed
+# identity-and-entry-geometry allowlist the same way.
+#
+# THE ERA EACH FORM'S [Q-R3] ROW MUST BE READ AT — in the census's own
+# vocabulary, typed from the FILED TEXTS (S1 §5: "lens 5m / scale_kind
+# frozen3.0 / asset POOLED:CLASSIC5 / era holdout"; I1 §8: the gate at "era
+# ALL"), never from the module's HEIGHT_VS_TOLL_ERA_OF_LANE it is checking.
+WANT_HVT_ERA = {B.LANE_S1: "holdout", B.LANE_I1: "ALL"}
+SEALED_ROW_KEYS = frozenset((
+    "form", "lane", "lens", "era", "era_note", "registration", "arm",
+    "registration_sha256", "panel", "panel_name", "n_panel_assets",
+    "anchor_scored", "anchor_tier_e", "tuned", "tuned_note", "flip_hold_pins",
+    "toll", "toll_accounting", "scored_figures", "tier_e_other_anchor",
+    "tier_e_other_anchor_note", "tier_e_panel17", "tier_e_panel17_note",
+    "height_vs_toll", "height_vs_toll_asset", "height_vs_toll_interface",
+    "as_of_last_closed_4h", "seed", "law4"))
+SEALED_FIG_KEYS = frozenset((
+    "tier", "sealed", "anchor", "era", "window_iso", "n_campaigns",
+    "n_assets_with_campaigns", "per_asset_n_campaigns",
+    "toll_pct_of_1r_median", "n_inactive_components", "refused", "book_spec",
+    "book_sha256_score_binding", "book_content_sha256", "withheld",
+    "withheld_note", "scored_statistic", "scored_statistic_note"))
+SEALED_FIG_SPEC_KEYS = frozenset(("runner", "registration", "arm", "era",
+                                  "registration_sha256"))
+SEALED_FIG_REFUSED_KEYS = frozenset(("permission", "no_atr", "no_stop",
+                                     "out_of_tape"))
+SEALED_TOLL_KEYS = {B.LANE_S1: frozenset(("cls", "lens", "horizon",
+                                          "per_asset")),
+                    B.LANE_I1: frozenset(("stamped", "why"))}
+READY_BOOK_KEYS = frozenset((
+    "registration", "arm", "registration_sha256", "era", "panel", "anchor",
+    "window_iso", "tuned", "n_campaigns", "book_sha256_score_binding",
+    "book_content_sha256", "fields", "withheld_fields", "campaigns"))
+READY_ENTRY_FIELDS = frozenset((
+    "symbol", "lane", "lens", "direction", "die_i", "rid", "touch_i",
+    "entry_i", "entry_ms", "entry_close_ms", "entry_px", "stop_px", "r_dist",
+    "atr_at_entry", "anchor_kind", "anchor", "toll_atr_grid",
+    "toll_pct_of_1r"))
+READY_TUNED_KEYS = frozenset(("lens", "band", "band_as_filed", "band_census",
+                              "margin_atr", "hold_bars", "ttl_bars",
+                              "source"))
+READY_DOOR_WATCH = ((TP, "require_arm"), (B, "macro_signals"),
+                    (B, "frame_l"), (TP, "corridor_era"))
+_HEX64 = re.compile(r"^[0-9a-f]{64}$")
+
+
+def _is_count(x) -> bool:
+    return isinstance(x, (int, np.integer)) \
+        and not isinstance(x, (bool, np.bool_))
+
+
+def _seal_violations(fig, panel) -> list:
+    """Every way a SEALED figures block departs from the typed ALLOWLIST:
+    a key not on it at ANY depth, an allowlisted key missing, or an allowed
+    key carrying a value of the wrong KIND (an outcome can hide under an
+    allowed name as easily as under a new one)."""
+    if not isinstance(fig, dict):
+        return [f"not a dict ({type(fig).__name__})"]
+    bad = []
+    ex, mi = sorted(set(fig) - SEALED_FIG_KEYS), sorted(SEALED_FIG_KEYS
+                                                         - set(fig))
+    if ex:
+        bad.append(f"keys NOT on the allowlist {ex}")
+    if mi:
+        bad.append(f"allowlisted keys missing {mi}")
+    for k in ("n_campaigns", "n_assets_with_campaigns",
+              "n_inactive_components"):
+        if k in fig and not _is_count(fig[k]):
+            bad.append(f"{k} is {type(fig[k]).__name__}, not a count")
+    if fig.get("sealed") is not True:
+        bad.append("sealed is not True")
+    if fig.get("scored_statistic") is not None:
+        bad.append("scored_statistic is not None")
+    for k in ("tier", "anchor", "era", "withheld_note",
+              "scored_statistic_note"):
+        if k in fig and not isinstance(fig[k], str):
+            bad.append(f"{k} is not a string")
+    for k in ("book_sha256_score_binding", "book_content_sha256"):
+        if k in fig and not (isinstance(fig[k], str) and _HEX64.match(fig[k])):
+            bad.append(f"{k} is not a sha256")
+    tm = fig.get("toll_pct_of_1r_median")
+    if tm is not None and not isinstance(tm, float):
+        bad.append("toll_pct_of_1r_median is not a float")
+    wi = fig.get("window_iso")
+    if not (isinstance(wi, list) and len(wi) == 2
+            and all(isinstance(x, str) for x in wi)):
+        bad.append("window_iso is not two stamps")
+    wh = fig.get("withheld")
+    if not (isinstance(wh, list) and all(isinstance(x, str) for x in wh)):
+        bad.append("withheld is not a list of names")
+    bs = fig.get("book_spec")
+    if not (isinstance(bs, dict) and set(bs) == SEALED_FIG_SPEC_KEYS
+            and all(isinstance(x, str) for x in bs.values())):
+        bad.append(f"book_spec keys "
+                   f"{sorted(bs) if isinstance(bs, dict) else bs}")
+    rf = fig.get("refused")
+    if not (isinstance(rf, dict) and set(rf) <= SEALED_FIG_REFUSED_KEYS
+            and all(_is_count(x) for x in rf.values())):
+        bad.append(f"refused keys {sorted(rf) if isinstance(rf, dict) else rf}")
+    pa = fig.get("per_asset_n_campaigns")
+    if not (isinstance(pa, dict) and set(pa) <= set(panel)
+            and all(_is_count(x) for x in pa.values())):
+        bad.append("per_asset_n_campaigns is not counts keyed by panel asset")
+    return bad
+
+
+def _book_file_violations(rec) -> list:
+    """Every way a BOOK FILE record departs from the typed allowlist: a key
+    off it, or a campaign field that is not identity or entry geometry."""
+    if not isinstance(rec, dict):
+        return [f"not a dict ({type(rec).__name__})"]
+    bad = []
+    ex, mi = sorted(set(rec) - READY_BOOK_KEYS), sorted(READY_BOOK_KEYS
+                                                         - set(rec))
+    if ex:
+        bad.append(f"keys NOT on the allowlist {ex}")
+    if mi:
+        bad.append(f"allowlisted keys missing {mi}")
+    f = list(rec.get("fields") or [])
+    xf = sorted(set(f) - READY_ENTRY_FIELDS)
+    if xf:
+        bad.append(f"campaign fields NOT on the entry-geometry allowlist {xf}")
+    rows = list(rec.get("campaigns") or [])
+    if any(len(r) != len(f) for r in rows):
+        bad.append("a campaign row is not the width of `fields`")
+    if not _is_count(rec.get("n_campaigns")) \
+            or int(rec["n_campaigns"]) != len(rows):
+        bad.append("n_campaigns is not the number of campaign rows")
+    tu = rec.get("tuned")
+    if tu is not None and not (isinstance(tu, dict)
+                               and set(tu) <= READY_TUNED_KEYS):
+        bad.append(f"tuned keys {sorted(tu) if isinstance(tu, dict) else tu}")
+    return bad
+
+
+@contextlib.contextmanager
+def call_log(pairs):
+    """Replace each (obj, attr) with a probe that LOGS the call IN ORDER and
+    then calls the real thing; every one is put back in a finally.  It is
+    how 'the door before the bars' becomes a MEASURED ORDER."""
+    saved = [(o, a, getattr(o, a)) for o, a in pairs]
+    log: list = []
+
+    def make(a, real):
+        def probe(*args, **kw):
+            log.append(a)
+            return real(*args, **kw)
+        return probe
+
+    for o, a, real in saved:
+        setattr(o, a, make(a, real))
+    try:
+        yield log
+    finally:
+        for o, a, real in saved:
+            setattr(o, a, real)
+
+
+def _ready_checks() -> tuple:
+    lines, ok = [], True
+    reg_dir = TP.REG_DIR
+    before = sorted(p_.name for p_ in reg_dir.glob("*.scored.json"))
+    # ── 0 · THE DOOR BEFORE THE BARS — ready_run watched call by call, with
+    # ── an EMPTY signal cache, so every bar it needs it must read itself.
+    with call_log(READY_DOOR_WATCH) as log:
+        probe = B.ready_run(B.LANE_I1, "scored", signals={})
+    door = log.index("require_arm") if "require_arm" in log else None
+    first = {a: log.index(a) for a in ("macro_signals", "frame_l",
+                                       "corridor_era") if a in log}
+    g = (door == 0 and all(i > door for i in first.values())
+         and "macro_signals" in first
+         and probe["gate"].get("runner") == "external"
+         and isinstance(probe["book"], TP.Book))
+    ok &= g
+    lines.append(mark(g, f"ready_run(brk-i1, scored) with an EMPTY signal "
+                         f"cache: first watched call {log[0] if log else None!r}"
+                         f"; TP.require_arm at call #{door}, the first bar "
+                         f"readers at {first} — no bar or bar stamp is read "
+                         f"before the door, and the gate is runner "
+                         f"{probe['gate'].get('runner')!r}"))
+    runs, recs = {}, {}
+    for lane, days in ((B.LANE_I1, None), (B.LANE_S1, READY_S1_DAYS)):
+        rr = {role: _ride_filed(lane, role, days=days)
+              for role in ("scored", "tier_e_other")}
+        runs[lane] = {"scored": rr["scored"], "tier_e": rr["tier_e_other"],
+                      "panel_tier_e": None}
+        for role, run in rr.items():
+            recs[(lane, role)] = B.ready_book_record(run)
+    rows = B.brk_rows(runs, sealed=True)
+    pin = json.loads(B.REGISTRY_PIN_PATH.read_text())["registrations"]
+    for r in rows:
+        lane = r["lane"]
+        run = runs[lane]["scored"]
+        hv = r["height_vs_toll"]
+        want_era = WANT_HVT_ERA[lane]
+        g = (tuple(r) == B.ROW_FIELDS
+             and r["registration"] == B.FORM_OF[lane]
+             and r["arm"] == B.FILED_ARMS[lane]["scored"]
+             and r["registration_sha256"] == pin[B.FORM_OF[lane]]["sha256"]
+             and r["era"] == B.LANE_ERA[lane]
+             and r["panel_name"] == "CLASSIC5")
+        ok &= g
+        lines.append(mark(g, f"{r['form']} row: {len(r)} fields == "
+                             f"ROW_FIELDS, arm {r['arm']!r} (the FILED "
+                             f"scored arm), registration sha "
+                             f"{str(r['registration_sha256'])[:16]} == the "
+                             f"pinned one, era {r['era']!r}, panel "
+                             f"{r['panel_name']}"))
+        g = (isinstance(hv, dict) and hv["era"] == want_era
+             and hv["lens"] == B.LANE_LENS[lane]
+             and hv["asset"] == "POOLED:CLASSIC5"
+             and isinstance(hv["verdict_pass"], bool)
+             and hv["read_not_computed"] is True)
+        ok &= g
+        lines.append(mark(g, f"  its [Q-R3] height-vs-toll verdict is the "
+                             f"FORM'S OWN ERA's row: {hv['asset']} / "
+                             f"{hv['lens']} / {hv['scale_kind']} / era "
+                             f"{hv['era']!r} (want {want_era!r}) -> "
+                             f"verdict_pass {hv['verdict_pass']} — "
+                             f"{hv['reason']!r}, provisional "
+                             f"{hv['provisional']}; READ, not computed"))
+        o, p17 = r["tier_e_other_anchor"], r["tier_e_panel17"]
+        g = (o is not None and o["anchor"] == B.LANE_TIER_E_ANCHOR[lane]
+             and o["book_spec"]["arm"] == B.FILED_ARMS[lane]["tier_e_other"]
+             and o["tier"].startswith("TIER-E")
+             and p17 is None and "did not ride" in r["tier_e_panel17_note"])
+        ok &= g
+        lines.append(mark(g, f"  the OTHER anchor rides beside it as Tier-E: "
+                             f"{o['anchor']!r} on the FILED arm "
+                             f"{o['book_spec']['arm']!r}; the 17-asset view "
+                             f"is NOT ridden here (its unseen tapes are "
+                             f"main --ready's to read), and the row SAYS so"))
+        t_ = r["toll"]
+        g = (r["toll_accounting"] is B.TOLL_ACCOUNTING
+             and r["toll_accounting"]["status"].startswith("PRINT, NOT A "
+                                                           "DEDUCTION")
+             and ((t_.get("cls") == "retest-hold-ribbon127_200")
+                  if lane == B.LANE_S1 else t_.get("stamped") is False))
+        ok &= g
+        lines.append(mark(g, f"  TOLL_ACCOUNTING rides the row as the "
+                             f"module's own object ({r['toll_accounting']['status'][:44]}...) "
+                             f"— the operator's question stays OPEN; toll "
+                             + (f"stamped from class {t_.get('cls')!r}"
+                                if lane == B.LANE_S1 else
+                                "not stamped (S1's clause, not I1's)")))
+        fig = r["scored_figures"]
+        panel = list(r["panel"])
+        blocks = [("scored_figures", fig), ("tier_e_other_anchor", o)] \
+            + ([("tier_e_panel17", p17)] if p17 is not None else [])
+        viol = {nm: v_ for nm, blk in blocks
+                for v_ in [_seal_violations(blk, panel)] if v_}
+        rk_x = sorted(set(r) - SEALED_ROW_KEYS)
+        rk_m = sorted(SEALED_ROW_KEYS - set(r))
+        toll_ok = (isinstance(t_, dict) and set(t_) == SEALED_TOLL_KEYS[lane]
+                   and (lane != B.LANE_S1
+                        or (set(t_["per_asset"]) <= set(panel)
+                            and all(isinstance(x, float)
+                                    for x in t_["per_asset"].values()))))
+        g = (not viol and not rk_x and not rk_m and toll_ok
+             and fig.get("book_sha256_score_binding")
+             == TP._book_sha(run["book"])
+             and fig.get("book_content_sha256")
+             == B.book_content_sha(run["book"])
+             and fig["n_campaigns"] == len(run["book"])
+             and isinstance(run["book"], TP.Book)
+             and run["book"].spec["registration"] == B.FORM_OF[lane])
+        ok &= g
+        lines.append(mark(g, f"  SEALED, BY ALLOWLIST: every key of the "
+                             f"{len(blocks)} figures blocks at every depth "
+                             f"is on the typed list ({len(SEALED_FIG_KEYS)} "
+                             f"keys; book_spec {len(SEALED_FIG_SPEC_KEYS)}, "
+                             f"refused within {len(SEALED_FIG_REFUSED_KEYS)}"
+                             f", per-asset counts within the panel) — "
+                             f"violations {viol or 'none'}; row keys off the "
+                             f"list {rk_x or 'none'}, missing "
+                             f"{rk_m or 'none'}; toll block keys "
+                             f"{sorted(t_) if isinstance(t_, dict) else t_} "
+                             f"on its list {toll_ok}; {fig['n_campaigns']} "
+                             f"campaigns in window {fig['window_iso']}, "
+                             f"score-binding sha "
+                             f"{str(fig.get('book_sha256_score_binding'))[:16]}"
+                             f" == TP._book_sha(book)"))
+    for (lane, role), rec in sorted(recs.items()):
+        v_ = _book_file_violations(rec)
+        g = not v_
+        ok &= g
+        lines.append(mark(g, f"BOOK FILE {rec.get('registration')} :: "
+                             f"{rec.get('arm')!r}: {rec.get('n_campaigns')} "
+                             f"campaign rows x {len(rec.get('fields') or [])} "
+                             f"fields, every field on the typed IDENTITY + "
+                             f"ENTRY-GEOMETRY allowlist "
+                             f"({len(READY_ENTRY_FIELDS)} names) — "
+                             f"violations {v_ or 'none'}"))
+    after = sorted(p_.name for p_ in reg_dir.glob("*.scored.json"))
+    g = before == after
+    ok &= g
+    lines.append(mark(g, f"no .scored.json written by this leg (before "
+                         f"{before or 'none'}, after {after or 'none'}) — "
+                         f"TP.score is never called"))
+    return ok, lines
+
+
+def f_brk_ready() -> bool:
+    true_text = B.filed_text
+    true_sealed = B._sealed_figures
+    true_ready_run = B.ready_run
+
+    def _leaky_seal(run, tier):
+        """A named wrong: the seal with ONE outcome key let through.  The
+        value is a PLACEHOLDER — this break leg computes no outcome either;
+        what it proves is that the allowlist sees a key it does not name."""
+        return dict(true_sealed(run, tier),
+                    net_r_sum="PLACEHOLDER — no outcome is computed here")
+
+    def _leaky_seal_new_name(run, tier):
+        """A named wrong: an outcome leaked under a name the module has
+        NEVER withheld ('net_r_mean').  A scan for the module's own
+        SEALED_FIGURE_FIELDS could not see it; the allowlist must."""
+        return dict(true_sealed(run, tier),
+                    net_r_mean="PLACEHOLDER — no outcome is computed here")
+
+    def _amended(reg_id, path=None):
+        return true_text(reg_id, path) + " And it will print positive."
+
+    def _signals_first(lane, role, signals=None, lo_ms=None, hi_ms=None):
+        """A named wrong: ready_run as it shipped — the macro signals (the
+        FULL tape of every panel asset) built BEFORE the door is asked."""
+        a_ = B.filed_arm_specs(lane)[role]
+        sig = signals if signals is not None else {}
+        for s in a_["panel"]:
+            if s not in sig:
+                sig[s] = B.macro_signals(s, B.LANE_LENS[lane])
+        return true_ready_run(lane, role, signals=sig, lo_ms=lo_ms,
+                              hi_ms=hi_ms)
+
+    return prove(
+        "F-BRK-READY",
+        "the BRK row is assembled from the FILED registrations' own Books — "
+        "through TP.require_arm with the text of record and the pinned head, "
+        "opened BEFORE any bar is read — carrying the form's own-era "
+        "height-vs-toll verdict, the Tier-E other anchor and TOLL_ACCOUNTING, "
+        "SEALED by a typed ALLOWLIST (the 17-asset view is main --ready's, "
+        "and the row says so)",
+        "ready_run reads a bar or a bar stamp before TP.require_arm, or its "
+        "gate is not an external runner's; a row field drifts from "
+        "ROW_FIELDS; the row names an arm or sha that is not the filed one; "
+        "the [Q-R3] verdict read is not the form's own era (S1 holdout, I1 "
+        "ALL) on POOLED:CLASSIC5; the other anchor is missing or rides an "
+        "unfiled arm; the absent 17-asset slot does not say why; the toll "
+        "accounting is not the module's object; ANY key of a figures block, "
+        "at any depth, is not on the typed allowlist, or an allowed key "
+        "carries the wrong kind of value; a book-file campaign field is not "
+        "identity or entry geometry; the book sha is not TP._book_sha of the "
+        "Book; or a .scored.json appears",
+        [("the seal broken (one withheld key let through, placeholder value)",
+          mutated(B, "_sealed_figures", _leaky_seal, _ready_checks)),
+         ("the seal broken under a NEW name ('net_r_mean', placeholder) — "
+          "invisible to a scan for the module's own withheld names",
+          mutated(B, "_sealed_figures", _leaky_seal_new_name,
+                  _ready_checks)),
+         ("the text of record amended after filing",
+          mutated(B, "filed_text", _amended, _ready_checks)),
+         ("P-BRK-S1's verdict read from era ALL (the shipped defect)",
+          mutated(B, "HEIGHT_VS_TOLL_ERA_OF_LANE",
+                  {B.LANE_S1: "ALL", B.LANE_I1: "ALL"}, _ready_checks)),
+         ("ready_run builds the signals BEFORE the door (as it shipped)",
+          mutated(B, "ready_run", _signals_first, _ready_checks)),
+         ("the book file lists an EXIT field (exit_px)",
+          mutated(B, "READY_TRADE_FIELDS",
+                  tuple(B.READY_TRADE_FIELDS) + ("exit_px",),
+                  _ready_checks))],
+        _ready_checks)
 
 
 # ═════════════════════════════════════════════ F-BRK-PERM · the permissions
@@ -1356,7 +2990,8 @@ def _gate_checks() -> tuple:
         head_of_record=TP.UNPINNED))
     g = did and "P-BRK-S1" in why and "SYNZZ" not in why
     ok &= g
-    lines.append(mark(g, f"run_lane_s1 with NOTHING filed -> "
+    lines.append(mark(g, f"run_lane_s1 offered a text that is NOT the "
+                         f"filed one -> "
                          f"{'HALT' if did else 'RODE IT'}, and the refusal is "
                          f"the REGISTRY's, not a loader's: {why[:120]}"))
     g = len(B._FRAMES) == n_before
@@ -1369,7 +3004,8 @@ def _gate_checks() -> tuple:
         {}, head_of_record=TP.UNPINNED))
     g = did and "P-BRK-I1" in why
     ok &= g
-    lines.append(mark(g, f"run_lane_i1 with NOTHING filed -> "
+    lines.append(mark(g, f"run_lane_i1 offered a text that is NOT the "
+                         f"filed one -> "
                          f"{'HALT' if did else 'RODE IT'}: {why[:110]}"))
     with tempfile.TemporaryDirectory(prefix="f-brk-gate-") as td:
         root = Path(td) / "registrations"
@@ -1419,11 +3055,38 @@ def _gate_checks() -> tuple:
                    if not p.name.endswith(".scored.json")) \
         if TP.REG_DIR.exists() else []
     brk = [x for x in filed if "BRK" in x.upper()]
-    g = not brk
+    # ── WAS: "no BRK registration is filed" — true until 371123f, and RED on
+    # ── the first run after it (see FINDINGS, 'STALE CHECK, REPAIRED').  The
+    # ── converse is what the filing makes true, and it is checked instead.
+    opened, why_not = [], []
+    for ln_ in B.LANE_ORDER:
+        reg = B.FORM_OF[ln_]
+        try:
+            for role, a_ in B.filed_arm_specs(ln_).items():
+                g_ = TP.require_arm(reg, B.filed_text(reg), a_["arm"],
+                                    tuple(a_["panel"]), lanes=(ln_,),
+                                    head_of_record=B.filed_head(reg))
+                opened.append((reg, role, a_["arm"], g_["era"]))
+        except SystemExit as e:
+            why_not.append(f"{reg}: {_norm(str(e))[:160]}")
+    scored_json = sorted(p_.name for p_ in TP.REG_DIR.glob("*.scored.json")
+                         if "BRK" in p_.name.upper()) \
+        if TP.REG_DIR.exists() else []
+    g = (brk == ["P-BRK-I1", "P-BRK-S1"] and len(opened) == 6
+         and not why_not and not scored_json
+         and all(e_ == B.LANE_ERA[B.LANE_S1 if r_ == "P-BRK-S1"
+                                  else B.LANE_I1]
+                 for r_, _ro, _a, e_ in opened))
     ok &= g
-    lines.append(mark(g, f"LAW 4, as of this run: the registry of record "
-                         f"files {filed or 'nothing'} — no BRK registration "
-                         f"({brk or 'none'}), so no BRK lane can ride"))
+    lines.append(mark(g, f"the registry of record files {filed}: BOTH BRK "
+                         f"forms ({brk}); all {len(opened)} of their filed "
+                         f"arms OPEN the door with the text of record "
+                         f"(REGISTRATION_TEXTS.json) and the pinned head "
+                         f"(REGISTRY_PIN.json), each at its LANE_ERA "
+                         f"({sorted({(r_, e_) for r_, _ro, _a, e_ in opened})})"
+                         f"; refusals {why_not or 'none'}; BRK .scored.json "
+                         f"on file {scored_json or 'none'} (scoring is "
+                         f"B-CORE's)"))
     g = bool(B.GATE_HELPER == "TP.require_arm" and B.gate.__doc__
              and "require_registered" in B.gate.__doc__)
     ok &= g
@@ -1434,6 +3097,19 @@ def _gate_checks() -> tuple:
 
 
 def f_brk_gate() -> bool:
+    true_text, true_head = B.filed_text, B.filed_head
+
+    def _amended(reg_id, path=None):
+        """A named wrong: the claim moved after it was filed."""
+        return true_text(reg_id, path) + " And it will print positive."
+
+    def _stale_head(reg_id, path=None):
+        """A named wrong: the head as it stood at len 4, before either BRK
+        line — it cannot vouch for a registration filed after it."""
+        lines_ = [json.loads(x) for x in (TP.REG_DIR / "REGISTRY.jsonl")
+                  .read_text().splitlines() if x.strip()]
+        return (4, str(lines_[3].get("line_sha256")))
+
     def _open(reg_id, text, arm, panel, lane, head_of_record=None,
               reg_root=None):
         return {"runner": "external", "registration": reg_id, "arm": arm,
@@ -1446,10 +3122,16 @@ def f_brk_gate() -> bool:
         "bar; unregistered -> HALT",
         "a runner rides one bar without a filed arm, the refusal comes from a "
         "loader rather than the registry, a run_cell_n arm or a wrong "
-        "panel/lane opens the external door, or a BRK registration is found in "
-        "the registry of record while this fixture claims none",
+        "panel/lane opens the external door, either BRK form is NOT filed, "
+        "any of its six filed arms fails to open the door with the text of "
+        "record and the pinned head, or a BRK .scored.json exists before "
+        "B-CORE",
         [("the gate replaced by an always-open no-op",
-          mutated(B, "gate", _open, _gate_checks))],
+          mutated(B, "gate", _open, _gate_checks)),
+         ("the text of record amended after filing (one clause appended)",
+          mutated(B, "filed_text", _amended, _gate_checks)),
+         ("a STALE head pin (taken before the BRK lines were filed)",
+          mutated(B, "filed_head", _stale_head, _gate_checks))],
         _gate_checks)
 
 
@@ -2109,8 +3791,9 @@ def f_brk_lane_syn() -> bool:
 # ══════════════ F-BRK-SPINE · the runners, past the gate, all the way to a book
 # WHY THIS FIXTURE EXISTS (review, 2026-09-21).  Fourteen green fixtures and
 # twenty-four RED break legs said NOTHING about the post-gate half of either
-# runner, because no leg had ever executed one past its gate: F-BRK-GATE calls
-# them with NOTHING filed (they must HALT at their first statement) and
+# runner, because no leg had ever executed one past its gate: F-BRK-GATE then
+# called them with NOTHING filed (today: with a text that is not the one on
+# file — either way they must HALT at their first statement) and
 # F-BRK-LANE-SYN rebuilds the lane by hand out of its parts.  So `tuned_pins`,
 # `r1_band(tuned['band'])`, `corridor_era`, `stamp_toll` and `external_book` —
 # the whole spine — were never executed, and three real defects lived there:
@@ -2121,7 +3804,9 @@ def f_brk_lane_syn() -> bool:
 #
 # WHAT IS REAL AND WHAT IS NOT, EXACTLY:
 #   · THE REGISTRY IS A THROWAWAY in a temp root.  The registry of record
-#     files nothing, and F-BRK-GATE re-attests that on every run.
+#     files both BRK forms since 371123f; this fixture does not ride them
+#     (F-C10-HOLD's filed halves and F-BRK-READY do, through the filed door),
+#     and F-BRK-GATE re-attests on every run that their six arms open it.
 #   · THE PANEL IS A REAL NAME (BTCUSDT), because the corridor, the era window
 #     and the filed census grid are all keyed on an asset's NAME — so the
 #     window the runner rides, the era it is held to and the toll it reads are
@@ -3058,8 +4743,10 @@ def _row_checks() -> tuple:
         ok &= g
         lines.append(mark(g, f"a row offered a PLAIN LIST instead of the Book "
                              f"-> {'HALT' if did else 'assembled anyway'}: "
-                             f"{why[:130]} — [LAW 4] no BRK registration "
-                             f"exists, so no real Book can be offered at all"))
+                             f"{why[:130]} — [LAW 4] a real Book comes only "
+                             f"through the FILED door (ready_run -> "
+                             f"TP.require_arm -> TP.external_book), and a "
+                             f"plain list is not one"))
         # ── 1 · the row itself, with the verdict slot left PENDING ──────────
         r = B.brk_row(B.LANE_S1, s_sc, s_te, require_verdict=False)
         spec = s_sc["book"].spec
@@ -3131,7 +4818,8 @@ def _row_checks() -> tuple:
         g = (r["tier_e_panel17"] is None
              and "R8" in r["tier_e_panel17_note"])
         ok &= g
-        lines.append(mark(g, f"and with no PANEL17 arm filed the 17-asset "
+        lines.append(mark(g, f"and when the assembly does not ride the "
+                             f"form's FILED PANEL17 arm, the 17-asset "
                              f"Tier-E slot is a NAMED ABSENCE, not a blank: "
                              f"{r['tier_e_panel17_note'][:110]}"))
         # ── 4 · the era pin rides the row too ──────────────────────────────
@@ -4113,10 +5801,10 @@ def f_leans() -> bool:
     return True
 
 
-LEGS = (f_brk_ride_4h, f_brk_hold_syn, f_c10_hold_harness, f_brk_tuned,
-        f_brk_perm, f_brk_fund, f_brk_era, f_brk_lane_era, f_brk_warm,
-        f_brk_lane_syn, f_brk_gate, f_brk_spine, f_brk_row, f_c10_toll,
-        f_brk_closure, f_det, f_leans)
+LEGS = (f_brk_ride_4h, f_brk_hold_syn, f_c10_hold_harness, f_c10_hold_filed,
+        f_c10_hold_book, f_brk_tuned, f_brk_perm, f_brk_fund, f_brk_era,
+        f_brk_lane_era, f_brk_warm, f_brk_lane_syn, f_brk_gate, f_brk_spine,
+        f_brk_row, f_brk_ready, f_c10_toll, f_brk_closure, f_det, f_leans)
 
 
 def main() -> int:
@@ -4125,8 +5813,14 @@ def main() -> int:
     say("=" * 78)
     say(f"substrate {B.substrate()['substrate']} · seed {B.SEED} "
         f"(sensitivity {B.SEED_LINEAGE}) · gate helper {B.GATE_HELPER}")
-    say(f"LAW 4: the only real bars read here are the CONTROL's "
-        f"(card v6 x CLASSIC5); every BRK lane rides SYNTHETIC tapes only.")
+    say(f"LAW 4 / text before result: P-BRK-S1 and P-BRK-I1 are FILED "
+        f"(371123f). Real BRK Books are ridden ONLY through the filed door, "
+        f"TP.require_arm opened before any bar is read (F-C10-HOLD FILED "
+        f"BOOK, F-BRK-READY), and their rows are SEALED by a typed "
+        f"allowlist; detector-level holds are NAMED and hand-walked in each "
+        f"form's FILED era (F-C10-HOLD, REAL, FILED ERA), with the Book's "
+        f"entry on each REPORTED, never used to choose. No outcome field, "
+        f"sum, ruler, p or verdict is read or computed here.")
     only = [a.lower().replace("-", "_") for a in sys.argv[1:] if a != "--only"]
     for leg in LEGS:
         if only and not any(o in leg.__name__ for o in only):
