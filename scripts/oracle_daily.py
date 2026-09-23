@@ -224,13 +224,18 @@ REGISTER: dict[str, dict] = {
     # and a symbol new to the cache must be BACKFILLED FIRST: load_lens HALTs on a
     # missing series and the top-up refuses to create one (status ABSENT).
     #   THE ORDER IS THE OPERATOR'S, not alphabetical: the order he typed his 22 in,
-    # the dropped names removed. The Board re-sorts by heat, so the order shows only
-    # in the run log, the enumeration, the fired-events walk and heat ties.
+    # the dropped names removed — and, since OR-2 R-7 (2026-09-22), one dropped name
+    # MAPPED to its live contract IN ITS OWN PLACE: PUMPFUNUSDT -> PUMPUSDT, fifth, where
+    # PUMPFUN stood once NPC is gone. The mapping is a ruling with a record
+    # (research_outputs/oracle/roster_mapping_2026-09-22.json, named in 'source'), never
+    # a string likeness; F-BR-16 holds this tuple to KEPT + ruled mappings, in order.
+    # The Board orders rows posture-first (R-2), so the order shows only in the run log,
+    # the enumeration, the fired-events walk, the Tide Tables and ties.
     "ROSTER": {
         "value": (
-            "BTCUSDT", "ETHUSDT", "ENAUSDT", "SOLUSDT", "USELESSUSDT", "NEARUSDT",
-            "1000PEPEUSDT", "LITUSDT", "FARTCOINUSDT", "HYPEUSDT", "XPLUSDT", "ZECUSDT",
-            "UNIUSDT", "LTCUSDT", "BNBUSDT", "XMRUSDT", "DOGEUSDT", "1000BONKUSDT",
+            "BTCUSDT", "ETHUSDT", "ENAUSDT", "SOLUSDT", "PUMPUSDT", "USELESSUSDT",
+            "NEARUSDT", "1000PEPEUSDT", "LITUSDT", "FARTCOINUSDT", "HYPEUSDT", "XPLUSDT",
+            "ZECUSDT", "UNIUSDT", "LTCUSDT", "BNBUSDT", "XMRUSDT", "DOGEUSDT", "1000BONKUSDT",
         ),
         "ruled": True,
         "source": "RATIFIED by operator ruling 1 of 2026-09-21, verbatim: '1-watchlist: drop "
@@ -240,14 +245,21 @@ REGISTER: dict[str, dict] = {
                   "FARTCOIN HYPE XPL ZEC MNT UNI LTC ZCAT BNB XMR DOGE 1000BONK, as <X>USDT — "
                   "were probed ONCE against Binance USDT-M exchangeInfo (contractType "
                   "PERPETUAL, status TRADING) at 2026-09-21T15:45:56Z; the record is "
-                  "research_outputs/oracle/roster_probe_2026-09-21.json. KEPT = this tuple, "
-                  "in the operator's order. DROPPED BY RULING (absent from exchangeInfo: no "
+                  "research_outputs/oracle/roster_probe_2026-09-21.json. KEPT = this tuple "
+                  "less the ruled mapping below, in the operator's order. DROPPED BY RULING "
+                  "(absent from exchangeInfo: no "
                   "Binance USDT-M contract by that name): NPCUSDT, PUMPFUNUSDT, MNTUSDT, "
                   "ZCATUSDT. LEFT THE ROSTER (on it before OR-1, not among the operator's 22; "
                   "kline caches retained, never deleted): JTOUSDT, TAOUSDT. SUPERSEDES, as "
                   "history: BR-1 C-5 'Roster = current 10-asset capture set' and A1-2 'Roster "
                   "as-is', under which this row was the engine/cells.py study basket. That "
-                  "basket stays frozen (charter §4) and is not this list.",
+                  "basket stays frozen (charter §4) and is not this list. RULED MAPPING (OR-2 "
+                  "R-7, RATIFIED operator 2026-09-22, verbatim 'leans'): PUMPFUNUSDT -> "
+                  "PUMPUSDT at PUMPFUN's own place in the operator's order (19 on the roster); "
+                  "one exchangeInfo probe at 2026-09-23T16:52Z confirmed PUMPUSDT PERPETUAL "
+                  "TRADING, quote USDT, base PUMP; record "
+                  "research_outputs/oracle/roster_mapping_2026-09-22.json. NOT MAPPED (the "
+                  "operator's to rule; near-names only): NPCUSDT, MNTUSDT, ZCATUSDT.",
     },
     "LENS": {
         "value": PE.REGISTER["LENS"]["value"],

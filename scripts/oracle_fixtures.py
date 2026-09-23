@@ -2,7 +2,8 @@
 F-BR-13 of queue OR-1 STEP B (finding C-0: the D-7 logger must MEASURE),
 F-BR-14 of queue OR-1 STEP D (the range layer renders and never rules),
 F-BR-15 of queue OR-1 STEP F (THE DAILY ORACLE: typeset, semantics untouched),
-F-BR-16 of queue OR-1 STEP C (the roster is ONE literal definition),
+F-BR-16 of queue OR-1 STEP C (the roster is ONE literal definition; amended by OR-2
+STEP 6, R-7: KEPT ∪ ruled mappings),
 F-BR-18 of queue OR-2 STEP 3 (R-1: per-row staleness, OR1-a replayed),
 F-BR-19 of queue OR-2 STEP 4 (R-2: the posture-first Board), and
 F-BR-20 of queue OR-2 STEP 5 (R-3: the edition word, EDITION_NOON).
@@ -6425,8 +6426,20 @@ def f_br_15() -> None:
 # from there: the next roster ruling re-probes and re-writes that row, and this
 # fixture follows without an edit. The file sits under research_outputs/oracle/**,
 # which .gitignore ignores: ABSENT IS RED, never a skip.
+#
+# AMENDED BY OR-2 STEP 6 (ruling R-7, operator 2026-09-22): a DROPPED name may come back
+# as a DIFFERENT live contract, in its own place, when — and only when — the operator
+# ruled the mapping and a record carries it: roster_mapping_<date>.json, named once in
+# the same 'source' string, one exchangeInfo probe copying the live contract's record
+# (PERPETUAL · TRADING · quote USDT). The roster is then KEPT ∪ ruled mappings, in the
+# operator's order, each mapped name at the dropped name's place. A mapped name with no
+# record, a record that is not PERPETUAL/TRADING, a mapping of a name the probe did not
+# drop, or a mapped name out of place is RED.
 
 ROSTER_RULING = "1-watchlist: drop symbols without data from a binance contract"
+ROSTER_MAPPING_RULING = "R-7"
+_ROSTER_MAPPING = re.compile(r"research_outputs/oracle/roster_mapping_\d{4}-\d{2}-\d{2}\.json")
+_UNSET = object()
 # Where a live consumer of the roster can live. NOT the movers organ: its universe
 # is the exchange's, by design not the roster's (OR-1 STEP E).
 ROSTER_FAMILY = ("oracle_daily.py", "oracle_fixtures.py", "oracle_topup.py",
@@ -6477,8 +6490,25 @@ def _roster_probe_doc() -> tuple[str | None, dict | None]:
     return m.group(0), (json.loads(pp.read_text(encoding="utf-8")) if pp.exists() else None)
 
 
+def _roster_mapping_doc() -> tuple[str | None, dict | None]:
+    """(repo-relative path the ROSTER row names, its JSON) — (path, None) if absent."""
+    m = _ROSTER_MAPPING.search(OD.REGISTER["ROSTER"].get("source", ""))
+    if not m:
+        return None, None
+    pp = ROOT / m.group(0)
+    return m.group(0), (json.loads(pp.read_text(encoding="utf-8")) if pp.exists() else None)
+
+
+def _roster_expected(probe: dict, maps: dict) -> tuple:
+    """KEPT ∪ ruled mappings, in the operator's order: each mapped name in its dropped
+    name's place, every other dropped name gone."""
+    kept = set(probe.get("kept", ()))
+    return tuple(maps.get(x, x) for x in probe.get("operator_22", ()) if x in kept or x in maps)
+
+
 def _roster_judge(src: str | None = None, html_doc: str | None = None,
-                  tape_assets=None, cal_assets=None) -> tuple[list[str], dict]:
+                  tape_assets=None, cal_assets=None,
+                  mapping_doc=_UNSET) -> tuple[list[str], dict]:
     """Every finding against the roster; [] = clean. `src` swaps in a planted
     oracle_daily.py TEXT; the three artifact arguments swap in planted artifacts.
     The ARTIFACTS are always held against the LIVE row — they were printed by the
@@ -6526,6 +6556,10 @@ def _roster_judge(src: str | None = None, html_doc: str | None = None,
     if ROSTER_RULING not in row.get("source", ""):
         bad.append(f"the ROSTER row's source does not quote ruling 1 verbatim ({ROSTER_RULING!r})")
     probe_path, probe = _roster_probe_doc()
+    map_path, mdoc = _roster_mapping_doc()
+    if mapping_doc is not _UNSET:
+        mdoc = mapping_doc                          # a planted record (None = planted ABSENT)
+    maps: dict = {}
     kept = dropped = ()
     if probe_path is None:
         bad.append("the ROSTER row's source names no research_outputs/oracle/roster_probe_<date>.json")
@@ -6538,11 +6572,36 @@ def _roster_judge(src: str | None = None, html_doc: str | None = None,
         for s in dropped:
             if s not in row.get("source", ""):
                 bad.append(f"the ROSTER row's source does not name the dropped {s}")
+        # ── (c') THE RULED MAPPINGS (OR-2 R-7): named in the row, recorded, each clean
+        if map_path is not None and mdoc is None:
+            bad.append(f"the mapping record {map_path} is ABSENT — a mapped name cannot be "
+                       f"held against its ruling (gitignored path: restore it, never skip)")
+        elif mdoc is not None:
+            if mdoc.get("ruling") != ROSTER_MAPPING_RULING:
+                bad.append(f"the mapping record's ruling reads {mdoc.get('ruling')!r}, not "
+                           f"{ROSTER_MAPPING_RULING!r}")
+            for mp in mdoc.get("mappings", ()):
+                d, lv, rr = mp.get("dropped"), mp.get("live"), mp.get("record") or {}
+                if mp.get("verdict") != "MAP":
+                    continue
+                if d not in dropped:
+                    bad.append(f"the mapping {d} -> {lv} maps a name the probe did not drop")
+                    continue
+                if not (rr.get("symbol") == lv and rr.get("contractType") == "PERPETUAL"
+                        and rr.get("status") == "TRADING" and rr.get("quoteAsset") == "USDT"):
+                    bad.append(f"the mapping {d} -> {lv}: its record is not PERPETUAL/TRADING/"
+                               f"USDT for {lv} ({rr.get('contractType')}, {rr.get('status')})")
+                    continue
+                if lv not in row.get("source", ""):
+                    bad.append(f"the ROSTER row's source does not name the mapped {lv}")
+                maps[d] = lv
         if literal is not None:
             dups = sorted({s for s in literal if literal.count(s) > 1})
             back = [s for s in literal if s in dropped]
-            stray = [s for s in literal if s not in kept and s not in dropped]
-            lost = [s for s in kept if s not in literal]
+            ruled = set(maps.values())
+            stray = [s for s in literal if s not in kept and s not in dropped and s not in ruled]
+            want = _roster_expected(probe, maps)
+            lost = [s for s in want if s not in literal]
             soft = [s for s in literal if s in kept and not (
                 recs.get(s, {}).get("verdict") == "KEEP"
                 and recs.get(s, {}).get("contractType") == "PERPETUAL"
@@ -6554,16 +6613,20 @@ def _roster_judge(src: str | None = None, html_doc: str | None = None,
                            f"Binance USDT-M contract by that name")
             if stray:
                 bad.append(f"on the roster but not KEPT by the probe: {stray} — not among the "
-                           f"operator's 22 as probed in {probe_path}")
+                           f"operator's 22 as probed in {probe_path}, nor carried by a ruled "
+                           f"mapping record (a mapping applied without its record)")
             if lost:
                 bad.append(f"KEPT by the probe but missing from the roster: {lost}")
             if soft:
                 bad.append(f"listed as kept but the probe's own record is not KEEP/PERPETUAL/"
                            f"TRADING: {soft}")
-            if not (dups or back or stray or lost) and literal != kept:
-                i = next(j for j, (a, b) in enumerate(zip(literal, kept)) if a != b)
-                bad.append(f"not in the operator's order: position {i + 1} reads {literal[i]}, "
-                           f"the probe's KEPT list (his order, dropped names removed) reads {kept[i]}")
+            if not (dups or back or stray or lost) and literal != want:
+                i = next((j for j, (a, b) in enumerate(zip(literal, want)) if a != b),
+                         min(len(literal), len(want)))
+                bad.append(f"not in the operator's order: position {i + 1} reads "
+                           f"{literal[i] if i < len(literal) else '—'}, KEPT ∪ ruled mappings "
+                           f"(his order, each mapped name in its dropped name's place) reads "
+                           f"{want[i] if i < len(want) else '—'}")
     if real_src and literal is not None and literal != live:
         bad.append(f"the live REGISTER['ROSTER'] ({len(live)}) is not the literal in the source "
                    f"({len(literal)}) — something rebinds the row after it is defined")
@@ -6587,6 +6650,7 @@ def _roster_judge(src: str | None = None, html_doc: str | None = None,
                        f"from this roster")
     return bad, {"literal": literal, "line": getattr(node, "lineno", None), "kept": kept,
                  "dropped": dropped, "probe": probe_path, "strips": len(strips),
+                 "maps": maps, "mapping": map_path,
                  "tape": len(t_assets or ()), "cal": len(c_assets or ())}
 
 
@@ -6618,6 +6682,27 @@ def f_br_16() -> None:
     strip_cut, n_cut = re.subn(
         rf'<canvas[^>]*data-payload="oracle_mantle_{re.escape(cut)}_[^"]*"[^>]*>', "", HTML or "", count=1)
     other = (left or dropped or ("NOTONROSTERUSDT",))[0]
+    # OR-2 R-7 plants: every name READ from the two records, never typed here
+    _mp, mdoc = _roster_mapping_doc()
+    ruled = [m for m in (mdoc or {}).get("mappings", ()) if m.get("verdict") == "MAP"]
+    mlive = ruled[0]["live"] if ruled else None
+    near = next((f for f in (probe or {}).get("findings_reported_not_fixed", ())
+                 if f.get("dropped") not in {m["dropped"] for m in ruled}
+                 and f.get("near_name_live_contracts")), None)
+    near_live = near["near_name_live_contracts"][0]["symbol"] if near else None
+    near_at = (live.index(ruled[0]["live"]) if ruled and ruled[0]["live"] in live else None)
+
+    def _near_swap():
+        """The unmapped near-name typed in at its dropped name's place, no record."""
+        if not near or near["dropped"] not in (probe or {}).get("operator_22", ()):
+            return None
+        op = list(probe["operator_22"])
+        exp = [x for x in op if x in set(probe.get("kept", ())) or x == near["dropped"]
+               or x in {m["dropped"] for m in ruled}]
+        m_of = {m["dropped"]: m["live"] for m in ruled}
+        m_of[near["dropped"]] = near_live
+        return swap(lit(tuple(m_of.get(x, x) for x in exp)))
+    kept_name = next(iter((probe or {}).get("kept", ())), None)
 
     # (name, the finding it MUST produce, how it is planted). Judged one at a time,
     # the F-BR-13 idiom: a red plant must not carry a green one through, and a plant
@@ -6637,6 +6722,23 @@ def f_br_16() -> None:
          "on the roster but not KEPT by the probe", swap(lit(live + left[:1])) if left else None),
         (f"SOURCE PLANT (a kept name lost: {live[-1]})",
          "KEPT by the probe but missing", swap(lit(live[:-1]))),
+        (f"MAPPING PLANT, the contract's ({mlive} on the roster, its mapping record emptied: "
+         f"a mapping applied without its record)", "a mapping applied without its record",
+         dict(mapping_doc={**mdoc, "mappings": []}) if mdoc and mlive else None),
+        (f"MAPPING PLANT (the unmapped near-name {near_live} typed in at "
+         f"{near['dropped'] if near else '—'}'s place, no ruling, no record)",
+         "a mapping applied without its record", _near_swap()),
+        (f"MAPPING PLANT ({mlive}'s record reading SETTLING)", "not PERPETUAL/TRADING",
+         dict(mapping_doc={**mdoc, "mappings": [{**m, "record": {**m["record"], "status": "SETTLING"}}
+                                                for m in ruled]}) if mdoc and ruled else None),
+        (f"MAPPING PLANT (a mapping of the KEPT name {kept_name})", "did not drop",
+         dict(mapping_doc={**mdoc, "mappings": [{**m, "dropped": kept_name} for m in ruled]})
+         if mdoc and ruled and kept_name else None),
+        (f"MAPPING PLANT ({mlive} moved from its dropped name's place to the end)",
+         "not in the operator's order",
+         swap(lit(tuple(x for x in live if x != mlive) + (mlive,))) if mlive in live and near_at != len(live) - 1 else None),
+        ("MAPPING PLANT (the mapping record ABSENT)", "is ABSENT",
+         dict(mapping_doc=None) if mdoc else None),
         ("SOURCE PLANT (the operator's order handed to sorted())",
          "not in the operator's order", swap(lit(alpha)) if alpha != live else None),
         (f"RENDER PLANT ({cut}'s mantle strip cut from the page)",
@@ -6671,10 +6773,13 @@ def f_br_16() -> None:
         if bad:
             return False, "; ".join(bad[:6]) + (f" (+{len(bad) - 6} more)" if len(bad) > 6 else "")
         n = len(x["literal"])
+        mapped = ", ".join(f"{d} -> {lv}" for d, lv in x["maps"].items()) or "none"
         return True, (
             f"REGISTER['ROSTER'] is a LITERAL tuple of {n} at oracle_daily.py:{x['line']}, equal IN "
-            f"ORDER to the {len(x['kept'])} KEPT of {x['probe']} (every record KEEP · PERPETUAL · "
-            f"TRADING); the {len(x['dropped'])} DROPPED BY RULING ({', '.join(x['dropped'])}) are off "
+            f"ORDER to KEPT ∪ ruled mappings: the {len(x['kept'])} KEPT of {x['probe']} (every record "
+            f"KEEP · PERPETUAL · TRADING) + {len(x['maps'])} mapped by {ROSTER_MAPPING_RULING} "
+            f"({mapped}; record {x['mapping']}, PERPETUAL · TRADING · USDT, in the dropped name's "
+            f"place); the {len(x['dropped'])} DROPPED BY RULING ({', '.join(x['dropped'])}) are off "
             f"it and named in the row's source, which quotes ruling 1 verbatim and is 'ruled': True; "
             f"oracle_daily.py does not name the study basket; no second symbol list in "
             f"{len(ROSTER_FAMILY)} family files ({', '.join(ROSTER_FAMILY)}); the live row equals "
@@ -6682,8 +6787,9 @@ def f_br_16() -> None:
             f"{x['strips']} mantle strips, {x['tape']} tape assets, {x['cal']} D-7 records. "
             f"Roster: {' '.join(x['literal'])}")
 
-    prove("F-BR-16", "ROSTER — one literal definition: the probe's KEPT list in the operator's "
-                     "order, no second list, and the edition under test printed from it",
+    prove("F-BR-16", "ROSTER — one literal definition: the probe's KEPT list plus the ruled "
+                     "mappings, in the operator's order, no second list, and the edition "
+                     "under test printed from it",
           _break, _real)
 
 

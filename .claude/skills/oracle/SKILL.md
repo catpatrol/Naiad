@@ -41,7 +41,7 @@ Then follow the run. The log is APPENDED to, so read THIS run's block: from the
 LAST `=== ORACLE WRAPPER · job=ondemand` line down to its `=== exit N` line (the
 harness also tells you when the background command exits, with the same code).
 A FIXED TAIL IS NOT ENOUGH, and the number is not worth maintaining: on the
-pinned 72-pair / 18-symbol scope a full edition logs about 139 lines (150 with a
+pinned 72-pair / 18-symbol scope (76 / 19 since OR-2 R-7) a full edition logged about 139 lines (150 with a
 standing flag's verbatim body) and a refresh about 126, so `tail -n 120` cut off
 the header this rule keys on, STEP 1, STEP 2 — the flag body included — and all
 of STEP 3. Print the whole last block instead:
@@ -66,9 +66,9 @@ To see the chain without touching anything — no lock, no flag, no fetch, no re
 WHY DETACHED. With the wire down a full edition is SLOW, not stuck: every top-up
 pair retries before it gives up. MEASURED: a fully failing 40-pair top-up took
 10 min 19 s on 2026-09-21 (09:45:03Z -> 09:55:22Z) and again on 2026-09-20; the
-pinned scope has since grown to 72 pairs, which at that rate is about 19 minutes,
-and the movers organ is allowed 600 s before it. A CLEAN 40-pair top-up took
-2 min 29 s (2026-09-19), so about 4.5 minutes for 72. The Bash tool's foreground
+pinned scope has since grown to 76 pairs (19 symbols, OR-2 R-7), which at that rate is
+about 20 minutes, and the movers organ is allowed 600 s before it. A CLEAN 40-pair
+top-up took 2 min 29 s (2026-09-19), so about 5 minutes for 76. The Bash tool's foreground
 ceiling is 600000 ms and its default is 120000: a clean full edition already
 overruns the default, and a wire-down one CANNOT finish under the ceiling. The
 render is attempted whatever the fetches did (ruling T-3) — but only if the run is
