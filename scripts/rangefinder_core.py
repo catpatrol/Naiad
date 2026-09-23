@@ -1,4 +1,12 @@
-"""SS12-RANGEFINDER · THE ORACLE'S MACHINE — the RangeFinder v2 state machine
+"""Owner ARGUS · display-only · no gate, filter or sizing may import this module
+without an APOLLO registration under G-7 · exception to BR-1 §2 clause 3 recorded in
+OR-2 — as ruled in-session 2026-09-23 (OR-2 Q-1, A-OR1-1 stands): the exception is this
+machine's engine/ copy, engine/rangefinder.py (created by OR-1 STEP D1, 1695a69, and
+byte-frozen as TIER-C10's machine of record); THIS file lives under scripts/
+(A-OR1-1 iv) and needs none. OR-2 R-5 put these lines here, inside the docstring, so
+that nothing below it moves a byte (F-RF-1e holds the two copies equal below it).
+
+SS12-RANGEFINDER · THE ORACLE'S MACHINE — the RangeFinder v2 state machine
 as an importable module, under scripts/, where the Oracle lane may write.
 
 DISPLAY-ONLY · A MEASUREMENT ORGAN. RENDERS, NEVER RULES: this module

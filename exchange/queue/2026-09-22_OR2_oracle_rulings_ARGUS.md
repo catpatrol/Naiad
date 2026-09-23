@@ -182,3 +182,18 @@ G-1 BASELINE — plist mtimes (epoch · local):
   com.naiad.oracle-catchup.plist     1787367695 · 2026-08-22T00:01:35
   com.naiad.oracle-topup-0645.plist  1786862922 · 2026-08-16T03:48:42
   com.naiad.oracle-topup-1545.plist  1786862922 · 2026-08-16T03:48:42
+
+## EXCEPTION OF RECORD — BR-1 §2 clause 3 (R-5, as ruled in-session: Q-1, A-OR1-1 stands)
+
+BR-1 §2 clause 3: "Engine modules imported read-only, trading disabled, never modified."
+OR-1 STEP D1 (commit 1695a69, 2026-09-21) CREATED engine/rangefinder.py (960 lines, 49,981 B,
+sha256 bbae464fdc8e0e01…) — the one write into engine/ by this lane. It is RECORDED, not undone:
+A-OR1-1 iv moved the Oracle's machine to scripts/rangefinder_core.py (3d55988), and the engine
+copy stays byte-frozen because TIER-C10 pins it (research_outputs/tierc10/STEP0_RECORD.json,
+F-C10-RESUME). The Oracle no longer imports it (F-BR-14 (e)); F-RF-1c/d/e hold the two copies
+to one machine. Its disposition — keep, retire or promote — is APOLLO's
+(exchange/reports/NOTE_ARGUS_to_APOLLO_2026-09-22_rangefinder_engine_tape.md). R-5's docstring
+("Owner ARGUS · display-only · no gate, filter or sizing may import this module without an
+APOLLO registration under G-7 · exception to BR-1 §2 clause 3 recorded in OR-2") stands at the
+head of scripts/rangefinder_core.py's docstring (OR-2 STEP 8), where it moves no byte below it;
+engine/rangefinder.py is untouched (sha256 bbae464f… before and after).

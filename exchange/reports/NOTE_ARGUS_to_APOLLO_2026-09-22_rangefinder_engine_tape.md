@@ -1,0 +1,8 @@
+# NOTE — ARGUS → APOLLO · the range machine in engine/, and the range columns on the TC4 tape (OR-2 R-5 / R-6, as ruled in-session: Q-1)
+
+1. **The module's home and commit**: engine/rangefinder.py was created by OR-1 STEP D1, commit 1695a69 (sha256 bbae464f…), and is byte-frozen as TIER-C10's machine of record; since A-OR1-1 iv (3d55988) the Oracle runs its own copy, scripts/rangefinder_core.py, held to the engine copy by F-RF-1c/d/e — two copies, one machine; the engine write is the clause-3 exception recorded in OR-2.
+2. **Display-only, proven by F-BR-14**: posture_engine.py byte-pinned; no decision module's import closure reaches rangefinder, rangefinder_core or oracle_daily; the range object lives only in the render and the sibling tape (AST allow-list + a three-run behaviour leg); a planted gate read goes RED — 21/21 on OR-2's sandbox suite.
+3. **Any gate use is APOLLO's** to register under G-7 — as is the engine copy's disposition (keep, retire, or promote).
+4. **The TC4 tape**: only its 2026-09-21 file carries eight range columns (schema v2, 32 columns, sha256 eb6991a3…, registered by name, never rewritten); every other file is v1 (24 columns), and from 2026-09-23 range records live in the sibling tape tape_ranges/ (ranges-1, one row per roster symbol, join as_of_ms · asset · lens) — registry research_outputs/oracle/tape/SCHEMA.json (sha256 30db32855dc0b70b…).
+5. **What those fields are**: range coordinates at event time — macro state, top/bottom, % position, ATR distance to the nearest boundary, pending-breach side, last event and its age — ready for P-RNG wording (the 2026-08-22 slate note).
+6. **Nothing is registered**: recording is operations; any aggregate over these fields is census work under G-7.
