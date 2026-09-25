@@ -24,7 +24,7 @@
   "r0_census_utc": "2026-09-25T00:30:00Z",
   "r0_census": "fresh tier: no tierc11 artifact existed before STEP Q (b9ed953); nothing to verify or quarantine. TC10 CLOSE is PARTIAL (operator's close_acts.sh not run): the TC10 build doc is absent from exchange/reports and LEDGER_APOLLO has no TC10 block \u2014 TC11 builds on TC10's filed artifacts read-only and its CLOSE is ordered after TC10's (LEANS L-F.4).",
   "law_1_note": "a stage is COMPLETE only if its artifacts exist, manifest shas verify, and its fixtures RE-PASS now.",
-  "resume_point": "TC11-LANES (instant columns + R3 nest on lane books), the scorer run, the 5-lens worktree-attested review, CLOSE",
+  "resume_point": "TC11-FIX (the final-review repairs: env/data worktree resolution, scorer labels, closure suite, attestation re-hash, T-brk/R4/R/W minors, AM-5 erratum + AM-8) then TC11-CLOSE",
   "stages": [
     {
       "stage": "STEP Q",
@@ -363,8 +363,8 @@
       "artifact_count": 23,
       "artifact_shas": {
         "research_outputs/tierc11/stage_r/FIXTURES_STAGE_R.txt": {
-          "bytes": 26149,
-          "sha256": "7c6723ae42312a63c60f0618bd4d541eaf1ddb51bec31a7961078a9b7dcbcf94"
+          "bytes": 36741,
+          "sha256": "f1bd5e97c17720aac2ffdd3326c8689602ceb80f25892e3593c99ffe121dad5c"
         },
         "research_outputs/tierc11/stage_r/NEST_GRID.md": {
           "bytes": 114211,
@@ -423,16 +423,16 @@
           "sha256": "228ef18bda5e946c1722c31be358a93299371b7597c1a344f978b00c29992fe3"
         },
         "research_outputs/tierc11/stage_r/STAGE_R.md": {
-          "bytes": 736902,
-          "sha256": "ca998784471234c541ea6bcdab7444082a3482c226885801d85041da45434950"
+          "bytes": 740909,
+          "sha256": "b75e570b7e6bbd7a819c174470f4795d2d35fca1cc5e8797dda07a45e7687868"
         },
         "research_outputs/tierc11/stage_r/build_manifest.json": {
-          "bytes": 11480,
-          "sha256": "fccf10c3e3f92b684013a6d62a4e409ecd47e959226fd98b073438b1fb572133"
+          "bytes": 15376,
+          "sha256": "e6fda745ac71cdb896c9050556757c1d2009526339e3445db8e3bc062a7f883c"
         },
         "research_outputs/tierc11/stage_r/nest_books/V6-PROBE__base.json": {
-          "bytes": 3947,
-          "sha256": "eca2f9c966f85f21592e6098b8038e57ba3e4e3276cc170d7b41a90ca178cec1"
+          "bytes": 5246,
+          "sha256": "e14cad6a44cb0924ec9394edd48fcffce0f9b75d1f9642f857ff903c835f9331"
         },
         "research_outputs/tierc11/stage_r/nest_books/V6-PROBE__base.parquet": {
           "bytes": 1422086,
@@ -447,12 +447,12 @@
           "sha256": "e042a040e527a7642872312a664e22838802248348242bb56e3369b73a116001"
         },
         "scripts/tierc11_stage_r.py": {
-          "bytes": 118057,
-          "sha256": "7092e54955df77759136078611cfa3693b4c9d2287c9f2c4b75f4b1ccd4636f9"
+          "bytes": 149959,
+          "sha256": "7e45d46a403478c21d6d8bf7c5e9f0a8b41f0e15ea0d5cb8e863df5bdcf3c48b"
         },
         "scripts/tierc11_stage_r_fixtures.py": {
-          "bytes": 127031,
-          "sha256": "eec65c1bb83af4c905514ee07a9d015848fdb5ac141a43f7778502269fa1da9d"
+          "bytes": 177315,
+          "sha256": "d08e992c591f5a29a155ca6a32b344ab840eb8c1f3233c2920f4e5bb756e4ff6"
         }
       },
       "fixtures": [
@@ -465,6 +465,16 @@
           "transcript_sha_before": "7c6723ae42312a63c60f0618bd4d541eaf1ddb51bec31a7961078a9b7dcbcf94",
           "transcript_sha_after": "7c6723ae42312a63c60f0618bd4d541eaf1ddb51bec31a7961078a9b7dcbcf94",
           "wall_seconds": 124
+        },
+        {
+          "suite": "TIER-C11 TC11-R FIXTURES (after the lanes pass: instant columns / nest-book door)",
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": 8,
+          "transcript_drift": false,
+          "transcript_sha_before": "f1bd5e97c17720aac2ffdd3326c8689602ceb80f25892e3593c99ffe121dad5c",
+          "transcript_sha_after": "f1bd5e97c17720aac2ffdd3326c8689602ceb80f25892e3593c99ffe121dad5c",
+          "wall_seconds": null
         }
       ],
       "one_line": "R1 71 lens cells at their filed picks; R2 1,458 rows \u2014 lens verdicts of record (CLASSIC5 pooled, holdout, calibrated, taker): 5m/15m/1h/4h/12h/1d FAIL, 1w FAIL (provisional, n<30); maker + charter twins FAIL too (no reopening path); height leg never binds, the edge-fade leg fails; R3 nest on v6 (19,386 instants) and 9/12; R5 chop table + TC10's five-row table reproduced exactly \u2014 built, adversarially verified, repaired; fixtures re-run GREEN in the 15-suite sweep"
@@ -593,6 +603,16 @@
           "transcript_sha_before": "ef38f7e836af814c66ec36a4b915b5430a44d367dea35a3b3dcf464e9b1f4717",
           "transcript_sha_after": "ef38f7e836af814c66ec36a4b915b5430a44d367dea35a3b3dcf464e9b1f4717",
           "wall_seconds": 6
+        },
+        {
+          "suite": "TIER-C11 TC11-S FIXTURES (after the lanes pass: instant columns / nest-book door)",
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": 4,
+          "transcript_drift": false,
+          "transcript_sha_before": "ef38f7e836af814c66ec36a4b915b5430a44d367dea35a3b3dcf464e9b1f4717",
+          "transcript_sha_after": "ef38f7e836af814c66ec36a4b915b5430a44d367dea35a3b3dcf464e9b1f4717",
+          "wall_seconds": null
         }
       ],
       "one_line": "Stage S CLOSED BY R2 (1h: FAIL): pooled holdout edge-fade median H20 0.0 \u2212 toll 0.1676 = \u22120.1676; maker twin FAIL; no book, no slot spent \u2014 built, adversarially verified, repaired; fixtures re-run GREEN in the 15-suite sweep"
@@ -739,48 +759,48 @@
           "sha256": "003d8dc21c6ee0d330d9f531fb24e3e44459124bf951a2c2fe5fe833c9e20760"
         },
         "research_outputs/tierc11/regbooks/P-AGE-1/base.parquet": {
-          "bytes": 60681,
-          "sha256": "0b48c7fb656e33bdfe780cd210ba99d43d30ad10936d8e93b5396b3023659feb"
+          "bytes": 61738,
+          "sha256": "dbfe4788610b11cc70ef64be31aac95949b921f086eaeb66b4535fbbad7af4ce"
         },
         "research_outputs/tierc11/regbooks/P-AGE-1/scored.json": {
           "bytes": 1323,
           "sha256": "75ea0a199c2d219667b26f9a62ad8fbb3517fdd3d2716817bb881b4f375bd234"
         },
         "research_outputs/tierc11/regbooks/P-AGE-1/scored.parquet": {
-          "bytes": 50859,
-          "sha256": "0b1b8b41bb92f2a0ea4809c0b67b47292f25d3f58fc8a139bc15814a5e9fa464"
+          "bytes": 51778,
+          "sha256": "6440a6e0d14cfbf1c62df19246a066d0f7086a1e64aae3bb0ced8c2b2a624dca"
         },
         "research_outputs/tierc11/regbooks/P-AGE-1/tierE__holdout.json": {
           "bytes": 1313,
           "sha256": "380c26346cec03b8ca9464812f979fbfb8ed9f4b4489d5c9bff5a4e942f5b83e"
         },
         "research_outputs/tierc11/regbooks/P-AGE-1/tierE__holdout.parquet": {
-          "bytes": 38353,
-          "sha256": "6f6b331760cf69d39826fd4d30b1b646ba5846891320878cb1974da7e218aa60"
+          "bytes": 39077,
+          "sha256": "e9e4bed0b1fe49b06f8b426065e8e5c8d24d968e1e71ee7c55a4cbdbd6843ba0"
         },
         "research_outputs/tierc11/regbooks/P-AGE-1/tierE__refused_cohort.json": {
           "bytes": 1304,
           "sha256": "75868abc998fadaeefa15321c316628094f9007d112037fd85b85aea372ad7f3"
         },
         "research_outputs/tierc11/regbooks/P-AGE-1/tierE__refused_cohort.parquet": {
-          "bytes": 38710,
-          "sha256": "9a462a55dc5a5a77f6e8867a56ccce46361439e24c273a69dc0eb9116a20ed45"
+          "bytes": 39463,
+          "sha256": "71b6444b0dbc8cb87551bb2bc3676d78d987b6e791e49ff2a00cb376344edeb5"
         },
         "research_outputs/tierc11/regbooks/P-AGE-1/tierE__shadow_abs206.json": {
           "bytes": 1458,
           "sha256": "7e36fa29042ba48357ea9915e21782f6bd3eab670e7fa1adf064380c77287a0b"
         },
         "research_outputs/tierc11/regbooks/P-AGE-1/tierE__shadow_abs206.parquet": {
-          "bytes": 42088,
-          "sha256": "567a20aa74acf6fdd8a50ae66d7d7b4ec97a831f9bdbb7b5009c8a7ea393c740"
+          "bytes": 42860,
+          "sha256": "f12cef30cad2f230010d07e2fe1a63fae47c0dbecad38576eb363c97a31726bb"
         },
         "research_outputs/tierc11/regbooks/P-AGE-1/tierE__tuning.json": {
           "bytes": 1308,
           "sha256": "abb2402cc04d650d6f4cb6414662ca5ef19b917e9e2401057cee9deeb61ba0d1"
         },
         "research_outputs/tierc11/regbooks/P-AGE-1/tierE__tuning.parquet": {
-          "bytes": 42557,
-          "sha256": "dd0f6fd0c57ef1ca9f254b11622315ffc93723b40342836426e20e32d5f1922e"
+          "bytes": 43354,
+          "sha256": "0c2efa513e58aec3ee194333f0feba0f614a8d0299dcb371948822c04cb97600"
         },
         "research_outputs/tierc11/regbooks/P-WIN-1/STATUS.json": {
           "bytes": 411,
@@ -791,76 +811,76 @@
           "sha256": "97ef38b8731868397827cdbb8e5458fdbf407890e99968de44486003ec431444"
         },
         "research_outputs/tierc11/regbooks/P-WIN-1/base.parquet": {
-          "bytes": 60681,
-          "sha256": "0b48c7fb656e33bdfe780cd210ba99d43d30ad10936d8e93b5396b3023659feb"
+          "bytes": 61738,
+          "sha256": "dbfe4788610b11cc70ef64be31aac95949b921f086eaeb66b4535fbbad7af4ce"
         },
         "research_outputs/tierc11/regbooks/P-WIN-1/scored.json": {
           "bytes": 1182,
           "sha256": "c9b254f9620937f08a4146ec9d0cadc67127c6365a1ff5974daf5d379128f02f"
         },
         "research_outputs/tierc11/regbooks/P-WIN-1/scored.parquet": {
-          "bytes": 50287,
-          "sha256": "41862ecfbffffc227ecff2abfba278e399c35d61ab94e603f1b5fe09a507bc52"
+          "bytes": 51212,
+          "sha256": "824c5e08ca79511fea96b98d65b74e8e7209f36379d881a2ff02f927db08241c"
         },
         "research_outputs/tierc11/regbooks/P-WIN-1/tierE__holdout.json": {
           "bytes": 1312,
           "sha256": "a0c73bfef3173bdd82f8af25b8f557d9d631735e28c894897ce16bbadb02d779"
         },
         "research_outputs/tierc11/regbooks/P-WIN-1/tierE__holdout.parquet": {
-          "bytes": 37627,
-          "sha256": "984c0f634165a16c0cd153f2da42a90ec9a90ccf456e985e096011695b7b5f2e"
+          "bytes": 38348,
+          "sha256": "797b440c1e7bf89c7a6dcde54a430de5d13fbf2a8d459ce24295cca935569b3b"
         },
         "research_outputs/tierc11/regbooks/P-WIN-1/tierE__ratr_admission.json": {
           "bytes": 1308,
           "sha256": "0c2a0171392230cd81639ed4768395328c566f573663943a071cb6f56d4793d8"
         },
         "research_outputs/tierc11/regbooks/P-WIN-1/tierE__ratr_admission.parquet": {
-          "bytes": 53526,
-          "sha256": "57c70d72e418020f723074f9c3579232b12547cfed85b455c5447152a6de9e77"
+          "bytes": 54413,
+          "sha256": "92be97b10f21e81115c72f43d1cfca94c22662c7f8d0b16ab6c13e45266147b9"
         },
         "research_outputs/tierc11/regbooks/P-WIN-1/tierE__ratr_priority.json": {
           "bytes": 1535,
           "sha256": "ee1e7d57063fcbdf489929e5b2ffadce53eee2257661b958268c7c76d96e632e"
         },
         "research_outputs/tierc11/regbooks/P-WIN-1/tierE__ratr_priority.parquet": {
-          "bytes": 56567,
-          "sha256": "9c5b2e9048282d4c409d3edf8e7edd3af78563dd4a76537ede1fbcd143e619b9"
+          "bytes": 57480,
+          "sha256": "50a2cc140c540f0030e28fbd9865c8a4e93802aca14ec8faada4a83c021befd9"
         },
         "research_outputs/tierc11/regbooks/P-WIN-1/tierE__refused_cohort.json": {
           "bytes": 1290,
           "sha256": "93df057ae5de8269c98f2f67a39b0e605164927ffdcccc798bae84e8b1cc1c43"
         },
         "research_outputs/tierc11/regbooks/P-WIN-1/tierE__refused_cohort.parquet": {
-          "bytes": 39161,
-          "sha256": "ed2166bb93050c1054a80b41b643f2eddd9708dcd8f0a460acefdbcdcb9c6267"
+          "bytes": 39899,
+          "sha256": "a92c5589596490ee5a67cbc688a7a502164eb9a514332e1c201ee6387900d89b"
         },
         "research_outputs/tierc11/regbooks/P-WIN-1/tierE__shadow_lag7_15.json": {
           "bytes": 1242,
           "sha256": "97f31afc420a77270d3d39c98ebc9d8ad033180613a76b48a9fb782de5c53a71"
         },
         "research_outputs/tierc11/regbooks/P-WIN-1/tierE__shadow_lag7_15.parquet": {
-          "bytes": 61751,
-          "sha256": "b6093b01294ae930b4fc99ae267bd7aff5b0036acf053eb8d50b0d2f9af06ec2"
+          "bytes": 62796,
+          "sha256": "4b308d854a30b49b4e7c53282243a41d676f71974439d36612261680778f589c"
         },
         "research_outputs/tierc11/regbooks/P-WIN-1/tierE__tuning.json": {
           "bytes": 1308,
           "sha256": "768a0186855ece3497180753266498de256f476dc6cddfc409aaee3dbcccce31"
         },
         "research_outputs/tierc11/regbooks/P-WIN-1/tierE__tuning.parquet": {
-          "bytes": 42590,
-          "sha256": "81acc37396c582f6e87c1af571f97c19f44e3686c69301c5fa9de54b68bce562"
+          "bytes": 43399,
+          "sha256": "d5dbd141007787c3b10fb37ef2aa25b91697f1315ed35c9b6cf845a76cee66b4"
         },
         "research_outputs/tierc11/stage_g/FIXTURES_STAGE_G.txt": {
-          "bytes": 26094,
-          "sha256": "b653481a6c91b8141b0c0811b55b163ee6fea1e3ca5672daec6dab88ae2470f9"
+          "bytes": 28744,
+          "sha256": "30389af6bd53b557892fc1af085b66eac25bdb8cdd6a03c2c8a9e8229ea179ae"
         },
         "research_outputs/tierc11/stage_g/STAGE_G.md": {
-          "bytes": 145861,
-          "sha256": "3d06da7598545744930d542a87f39ea9989c6ef13f0740e8dd209a4ea5167418"
+          "bytes": 146238,
+          "sha256": "440509bc8c00bc32b48f745a8f76ca1b6c6d6ddb08f708432790ec164e2d0187"
         },
         "research_outputs/tierc11/stage_g/build_manifest.json": {
-          "bytes": 15179,
-          "sha256": "b305cf17f4f5a3094e3c4bc837845e3233c24cd9fb5285d2f6ea2e244edddb83"
+          "bytes": 15561,
+          "sha256": "a9277d05fac2b8000a2b6cc6c2d344417efe183a36d309e718e15e37245e8122"
         },
         "research_outputs/tierc11/stage_g/g_age_crosstab.parquet": {
           "bytes": 13089,
@@ -927,12 +947,12 @@
           "sha256": "ab8235b5b907f55d096bf4a3dae30590288ac42d08e2d33f40c4eeb46bad7ff1"
         },
         "scripts/tierc11_stage_g.py": {
-          "bytes": 80483,
-          "sha256": "d7016cd6c445129379585f109850c1479541df0a4f5b2abbe7bd69897e242175"
+          "bytes": 82484,
+          "sha256": "17235ed2078ad37ab84a241ce9b0c96e30a2ec2ddbbfda545c4638e2b770b77a"
         },
         "scripts/tierc11_stage_g_fixtures.py": {
-          "bytes": 150108,
-          "sha256": "fdf97561077538712d7a0be257d894b5cb60ee753b1c20fb61fe63b48cd4ecb0"
+          "bytes": 158651,
+          "sha256": "4ae782095515f3c149e18413b0a200afbf617dd73b5663b80cc446409e50a1cc"
         }
       },
       "fixtures": [
@@ -945,6 +965,16 @@
           "transcript_sha_before": "b653481a6c91b8141b0c0811b55b163ee6fea1e3ca5672daec6dab88ae2470f9",
           "transcript_sha_after": "b653481a6c91b8141b0c0811b55b163ee6fea1e3ca5672daec6dab88ae2470f9",
           "wall_seconds": 20
+        },
+        {
+          "suite": "TIER-C11 TC11-G FIXTURES (after the lanes pass: instant columns / nest-book door)",
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": 9,
+          "transcript_drift": false,
+          "transcript_sha_before": "30389af6bd53b557892fc1af085b66eac25bdb8cdd6a03c2c8a9e8229ea179ae",
+          "transcript_sha_after": "30389af6bd53b557892fc1af085b66eac25bdb8cdd6a03c2c8a9e8229ea179ae",
+          "wall_seconds": null
         }
       ],
       "one_line": "P-AGE-1 (v6 minus 59 OLD-band) and P-WIN-1 (v6 minus 63 lag>=16) as post-filters; shadows, disclosures, r/ATR admission + priority books, gates crossed 2x2x2 \u2014 built, adversarially verified, repaired; fixtures re-run GREEN in the 15-suite sweep"
@@ -1127,60 +1157,60 @@
           "sha256": "c8d71ad3072036d4c8f2f891c7fb9c72595502a29596b21d748afde7dec8224a"
         },
         "research_outputs/tierc11/regbooks/P-RELAY-1/base.parquet": {
-          "bytes": 52429,
-          "sha256": "f31feb0e9774199479e8421ef75658051b1b29b39bb5541ab52fd17a704a7d65"
+          "bytes": 53486,
+          "sha256": "57842a76417cdf6e77c238cb92172afb9c569d5ac078e9bd8cc73c17480b2e8a"
         },
         "research_outputs/tierc11/regbooks/P-RELAY-1/scored.json": {
           "bytes": 1221,
           "sha256": "5e7015f8f99586a6b87c657e8637606e0497122d453dbc7118ade34c2acc7713"
         },
         "research_outputs/tierc11/regbooks/P-RELAY-1/scored.parquet": {
-          "bytes": 74486,
-          "sha256": "8444fdbf44260cf2c504d2ef01856d0018f8bc8aef6877035e31bf52f1f1ee7c"
+          "bytes": 75484,
+          "sha256": "bc6854ec92dd1635b0be6fbc920eef9a54521368adc4922a83b0d39e657c24f4"
         },
         "research_outputs/tierc11/regbooks/P-RELAY-1/tierE__holdout_slice.json": {
           "bytes": 1114,
           "sha256": "1aa8d89affe76d54839e7e0170ec69d9e3c5f3e78bbbff870533aa09a2719786"
         },
         "research_outputs/tierc11/regbooks/P-RELAY-1/tierE__holdout_slice.parquet": {
-          "bytes": 48628,
-          "sha256": "7fea95e465f88a3684a303828ad8f51d9c9fbbf2fb9733968582765d56f756d8"
+          "bytes": 49364,
+          "sha256": "5b0e0438c346feaa56428a9b1f284ad18fb87af9c441306f23b1b6ffd2638ed8"
         },
         "research_outputs/tierc11/regbooks/P-RELAY-1/tierE__late_relay.json": {
           "bytes": 1172,
           "sha256": "c1c411e93422bc2aef2834545e37d980de64477496daea81285b271ecd207672"
         },
         "research_outputs/tierc11/regbooks/P-RELAY-1/tierE__late_relay.parquet": {
-          "bytes": 100193,
-          "sha256": "bc0bcfea03d608f3ea69a2a78511f3abfb7276d7399152ad770747ae5adc8db8"
+          "bytes": 101513,
+          "sha256": "51b221f34c6862446e26bdc742d05318dda3f035c838d8fd2977986ff196f3b3"
         },
         "research_outputs/tierc11/regbooks/P-RELAY-1/tierE__miss_v6.json": {
           "bytes": 1110,
           "sha256": "15c5a43042db1e3aca60ee361aa13f8e0b513c7eac95212d64605adf98a4ea6a"
         },
         "research_outputs/tierc11/regbooks/P-RELAY-1/tierE__miss_v6.parquet": {
-          "bytes": 42417,
-          "sha256": "662a9a8edfdf36db04f7c21e457a3f6af4d2afff21783f52d154fa5065127e98"
+          "bytes": 43331,
+          "sha256": "7c2dfcbc03f3d0f186afc95b2f49dd980b04245df95a312e7f36aaaac861d8d2"
         },
         "research_outputs/tierc11/regbooks/P-RELAY-1/tierE__tuning_slice.json": {
           "bytes": 1145,
           "sha256": "f3492611373b32430203f5da5350eedfafeab6e3205dc9bcb2f17658193cb49b"
         },
         "research_outputs/tierc11/regbooks/P-RELAY-1/tierE__tuning_slice.parquet": {
-          "bytes": 60852,
-          "sha256": "b6840076cbb3dde5598e4b7074e4ee395387388e277a9ec254ec6684d68dc919"
+          "bytes": 61713,
+          "sha256": "32c020577050b475653d3a47daf8610a062306409646bd82e7705c58767f0b4a"
         },
         "research_outputs/tierc11/stage_t_relay/FIXTURES_STAGE_T_RELAY.txt": {
-          "bytes": 29747,
-          "sha256": "536ae0460988fbeabdd6e735903f84ddea1cb351ff7098a3a0c3e639bf817d41"
+          "bytes": 32289,
+          "sha256": "51cb231a1f00eeb7666a65b1f560af78a120b3f72da685639b6d5ca44338fcf7"
         },
         "research_outputs/tierc11/stage_t_relay/STAGE_T_RELAY.md": {
-          "bytes": 106946,
-          "sha256": "9debd030a2e72d565aaeb9b9dbadb6c9c374ab44c433d57af695a2dc43507730"
+          "bytes": 107321,
+          "sha256": "70a9803cec476427abd040be5fda6a714176202c0889fcff5a0033a08fedd93e"
         },
         "research_outputs/tierc11/stage_t_relay/build_manifest.json": {
-          "bytes": 9679,
-          "sha256": "34339e98be6f638be2e233cfa37c38347b5a1b2c9c4c4d9358ad97377b31daa5"
+          "bytes": 10062,
+          "sha256": "3e251d84bd1d70923669646d203057c7fd8c7cfb372e7ae24b6bfaa394f281e4"
         },
         "research_outputs/tierc11/stage_t_relay/relay_disposition_grid.parquet": {
           "bytes": 16157,
@@ -1207,12 +1237,12 @@
           "sha256": "e33a75fa17971e71f76cc6318ccc88aed74067fd69bfdcc77c5433fcaf3dadfa"
         },
         "scripts/tierc11_stage_t_relay.py": {
-          "bytes": 59756,
-          "sha256": "d82b92c766089decb0583fb92d286a083eb0c9fe932b608305a07320ff2c4974"
+          "bytes": 61550,
+          "sha256": "3654c339c1684a1b3005be566b75c0ec330955a7d2f0e1e45307d23f75a34908"
         },
         "scripts/tierc11_stage_t_relay_fixtures.py": {
-          "bytes": 142789,
-          "sha256": "3effeb7359c3ccd765bbb7a7a2804f858e036e60a412268ff881670f251ecc87"
+          "bytes": 151368,
+          "sha256": "551b6907fd620399fb4844b92400a305efb34d54d8816c39f46b670cea9c24da"
         }
       },
       "fixtures": [
@@ -1225,6 +1255,16 @@
           "transcript_sha_before": "536ae0460988fbeabdd6e735903f84ddea1cb351ff7098a3a0c3e639bf817d41",
           "transcript_sha_after": "536ae0460988fbeabdd6e735903f84ddea1cb351ff7098a3a0c3e639bf817d41",
           "wall_seconds": 30
+        },
+        {
+          "suite": "TIER-C11 TC11-T-RELAY FIXTURES (after the lanes pass: instant columns / nest-book door)",
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": 7,
+          "transcript_drift": false,
+          "transcript_sha_before": "51cb231a1f00eeb7666a65b1f560af78a120b3f72da685639b6d5ca44338fcf7",
+          "transcript_sha_after": "51cb231a1f00eeb7666a65b1f560af78a120b3f72da685639b6d5ca44338fcf7",
+          "wall_seconds": null
         }
       ],
       "one_line": "P-RELAY-1: 350 windows, 173 relayed strictly before the 4h trigger, 131 missed (52 at lag 0); forward ledger opened at 2026-09-21T16:00Z: 0 appended per book, the 9/12 SOL long OPEN, the v6 ETH continuation listed \u2014 built, adversarially verified, repaired; fixtures re-run GREEN in the 15-suite sweep"
@@ -1245,64 +1285,64 @@
           "sha256": "6e5fa97bcd3c82078cd3e4c7125b13268d2cc83758ef2d8cca03ef305bbc76d2"
         },
         "research_outputs/tierc11/regbooks/P-ADD-BRK/base.parquet": {
-          "bytes": 57147,
-          "sha256": "5a51cdc5efe574d73e369b9891e156f15f8878db16856d493ed795da4109075d"
+          "bytes": 58159,
+          "sha256": "16ac0419718c72ee23cce2b30d6bc014bc06b510fc7cf8410fe76b32c5beb377"
         },
         "research_outputs/tierc11/regbooks/P-ADD-BRK/scored.json": {
           "bytes": 1856,
           "sha256": "4c0ccfedc4dee8977d8b47faaf67ced112b039931802ba0fa9de5af06eab6087"
         },
         "research_outputs/tierc11/regbooks/P-ADD-BRK/scored.parquet": {
-          "bytes": 58468,
-          "sha256": "8764f82e665e671b4827efd7423c8c7b2eeda1c911d18e5db9b47cbb093f1d5d"
+          "bytes": 60229,
+          "sha256": "7d44337a459238924f7d6ad71293a5e1b34d786a80d24aaffd1f2308305b01d6"
         },
         "research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__frozen3.json": {
           "bytes": 1508,
           "sha256": "a74829a2f532a48e7c0615e38ef7dfc92778611ca15bd6a2f65e1e909db849d0"
         },
         "research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__frozen3.parquet": {
-          "bytes": 58362,
-          "sha256": "e12a95108efdc9e9f579442deca21e6650890850e84b7a19c52fafd677d13504"
+          "bytes": 59984,
+          "sha256": "79cc28db96641bef6d647486159bc1c3fb8abae01cf169050cca271246d6bb71"
         },
         "research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__head_to_head_vs_p_add_sfp.json": {
           "bytes": 1869,
           "sha256": "6e0c4ee44d8afec471342d521f0a482c08b8a37aab9717b34b72a5a2c3cb0b29"
         },
         "research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__head_to_head_vs_p_add_sfp.parquet": {
-          "bytes": 62702,
-          "sha256": "15ae5e6e911b5342edad018abd6ef0016c6462040b31f63d7853f94f46f1925a"
+          "bytes": 64463,
+          "sha256": "10da26456aca0e03418399eb063b4dca99fb15a5df2fd3393f7e1cc847d90c42"
         },
         "research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__holdout.json": {
           "bytes": 1620,
           "sha256": "18f732a229ffae2904dd81fded1cb05cf5b063e60a6d8a47db51006901d657b4"
         },
         "research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__holdout.parquet": {
-          "bytes": 41113,
-          "sha256": "4f93b33d712fa89c2f58eb3341e614d27efc38536447eb7c428e30f85dd99ed7"
+          "bytes": 42579,
+          "sha256": "5510c1728f33d173fefda3fcb8244e9633f58bdc9d78ea98c5332b0d5aaaa85c"
         },
         "research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__refuse_below_entry.json": {
           "bytes": 1573,
           "sha256": "235a8e0c1feb5fb63ddd422af255a51c9ccf05f3454014bcec9d3f06f3071d6e"
         },
         "research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__refuse_below_entry.parquet": {
-          "bytes": 58468,
-          "sha256": "8764f82e665e671b4827efd7423c8c7b2eeda1c911d18e5db9b47cbb093f1d5d"
+          "bytes": 60229,
+          "sha256": "7d44337a459238924f7d6ad71293a5e1b34d786a80d24aaffd1f2308305b01d6"
         },
         "research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__refuse_post_harvest.json": {
           "bytes": 1575,
           "sha256": "e4e2e69bf8fea9c6f77af050f8e4e461c9f01e57b52456c7e6fa24c8c19d30e7"
         },
         "research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__refuse_post_harvest.parquet": {
-          "bytes": 58318,
-          "sha256": "1a2719985354a5043ad1d899b386267de01a74a8188a757a3eb067600770ec8b"
+          "bytes": 59995,
+          "sha256": "a3a68d3b27b1815d26c0f4e45a0f8e407a3819b845a7aaebb779967730d14283"
         },
         "research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__tuning.json": {
           "bytes": 1564,
           "sha256": "1896415a54785b3ae1fbdecaf95600a0268bd482337f466d11f04f26109cdc85"
         },
         "research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__tuning.parquet": {
-          "bytes": 47377,
-          "sha256": "ceb902d1a573cdeca2ee7e05db2608af9615bafe0e12f844875b6cee3032b784"
+          "bytes": 48849,
+          "sha256": "43256883de920d2e0f33b91488f82003bdf40d12a64cd46795bb31f6311a39d5"
         },
         "research_outputs/tierc11/regbooks/P-ADD-SFP/STATUS.json": {
           "bytes": 525,
@@ -1313,64 +1353,64 @@
           "sha256": "e03cdfbf5c1ac96648c916b40d60063e206e81ed568f24f0fd0a30501991dd5e"
         },
         "research_outputs/tierc11/regbooks/P-ADD-SFP/base.parquet": {
-          "bytes": 57147,
-          "sha256": "5a51cdc5efe574d73e369b9891e156f15f8878db16856d493ed795da4109075d"
+          "bytes": 58159,
+          "sha256": "16ac0419718c72ee23cce2b30d6bc014bc06b510fc7cf8410fe76b32c5beb377"
         },
         "research_outputs/tierc11/regbooks/P-ADD-SFP/scored.json": {
           "bytes": 1856,
           "sha256": "d6e922d923ce871c12a15e79b4566eb36acfe42143317ca9e7a249b77d043db0"
         },
         "research_outputs/tierc11/regbooks/P-ADD-SFP/scored.parquet": {
-          "bytes": 57470,
-          "sha256": "fe230155090212a3271d496fc93a064e2f1547cfc1f0ecdce3a34819aae2b5aa"
+          "bytes": 58778,
+          "sha256": "739d45d76a9cc240d5ce1f11f63bc7befd08bf652f074e561431d49244eeab53"
         },
         "research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__frozen3.json": {
           "bytes": 1508,
           "sha256": "7a6810a440ed969223ca995b90a7bf5852980e59df5325957ce0715596fc91ec"
         },
         "research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__frozen3.parquet": {
-          "bytes": 57239,
-          "sha256": "9e6a843eb8cc3fd41c08ae65cef05ed67b144afff3971846654ee41fe4eeaa97"
+          "bytes": 58457,
+          "sha256": "2ef537b8adfb33b5c0308873eeee586d36316bee65bb9e4c641edbcf1486d937"
         },
         "research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__head_to_head_vs_p_add_brk.json": {
           "bytes": 1869,
           "sha256": "7bd20b35cd1837f201455cce9d058f3fe46517716720a3b628b5d540c0cef4aa"
         },
         "research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__head_to_head_vs_p_add_brk.parquet": {
-          "bytes": 61704,
-          "sha256": "90b233bb1435e537f4656117093837873a1b297f1956e316f9b8731ee21dad97"
+          "bytes": 63012,
+          "sha256": "bc4ba19b1f3a5ed54d7266d9eed76316b9883fd2e82bb1f450c19f8b0babbfcc"
         },
         "research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__holdout.json": {
           "bytes": 1620,
           "sha256": "95baf275958f50a1ac52f961c758dd7678019f1092821cfb450ab13488756d3c"
         },
         "research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__holdout.parquet": {
-          "bytes": 40722,
-          "sha256": "3b36f275ccd4f10a3f0aa49fccd8d227447617e61935a2d3accafa24bda729ab"
+          "bytes": 41999,
+          "sha256": "4212728d5f68662f850c710f1e166904ded1265265c77d77d3916403c8a3bf9d"
         },
         "research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__refuse_below_entry.json": {
           "bytes": 1573,
           "sha256": "17eda526b4b05f76a52def50912cf90fb2cddff33e5baaef002b15600d28cd35"
         },
         "research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__refuse_below_entry.parquet": {
-          "bytes": 57434,
-          "sha256": "609478b9e1f7e5ce71a4465b4917bfbdb40a7c4c746cce798ff663437d116596"
+          "bytes": 58730,
+          "sha256": "4a6ca86d3fe4a3a32a020c2ff30776e498b4b556d6d902285e436b7490bb83b7"
         },
         "research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__refuse_post_harvest.json": {
           "bytes": 1573,
           "sha256": "83a86eca88604cd8d7f436fda27774a58f232786930283aeb3dbfa104de922d5"
         },
         "research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__refuse_post_harvest.parquet": {
-          "bytes": 57367,
-          "sha256": "b33c7a106929d30ab71629261f0e8f77d0cd88f6c9b452bdd708dca0b1b8ee9c"
+          "bytes": 58626,
+          "sha256": "665b0a52905ca3d08ecdac970c786995255749a43b2d81b85c9c15897c6ca90e"
         },
         "research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__tuning.json": {
           "bytes": 1564,
           "sha256": "a77d88683965abbd4921fa3c085dcf8ffbca0737b571048ac03fb6b578c83d28"
         },
         "research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__tuning.parquet": {
-          "bytes": 46759,
-          "sha256": "99dbb625ec3ab38fba9c6eb022c3a0b5ea6815d3bad78ab5246c8568b4ba8684"
+          "bytes": 47876,
+          "sha256": "5281d22ec8a785620c37969ca62d91d33e61b15340b215c845f5902b4606ea55"
         },
         "research_outputs/tierc11/stage_a/ACTED.parquet": {
           "bytes": 28710,
@@ -1393,8 +1433,8 @@
           "sha256": "63140cb8810f3a3d23a1643948f9f387dac1ea7581e79a1ce49d0cd1ab0c4c38"
         },
         "research_outputs/tierc11/stage_a/FIXTURES_STAGE_A.txt": {
-          "bytes": 33018,
-          "sha256": "9f5b1c5a428d1a6feb38b4a07f64240f4306579a943cc7641397dcc972ef101f"
+          "bytes": 35753,
+          "sha256": "5b3e589421c1d936b1134aaaa8c81220a66aa360d602217532282b8d0a2290c3"
         },
         "research_outputs/tierc11/stage_a/HEAD_TO_HEAD.parquet": {
           "bytes": 17737,
@@ -1421,24 +1461,24 @@
           "sha256": "ae958b20f26165af4b58e2bc052c4b630afffd1d46957cfef2c5ffd6f05d0147"
         },
         "research_outputs/tierc11/stage_a/STAGE_A.md": {
-          "bytes": 123971,
-          "sha256": "68929b5a5f3204ca261fd7eb0e264e70c444342583e990e4db671705bc73c458"
+          "bytes": 124369,
+          "sha256": "8528fbe89bc9b8d3ea460f14be325407c7ba223fedf90afb6cfea0219ae6a70f"
         },
         "research_outputs/tierc11/stage_a/STAGE_A_MANIFEST.json": {
-          "bytes": 14479,
-          "sha256": "14d738598898c599bbbb315e95c2ead4a6902e5887def7237d7e104ab63048ba"
+          "bytes": 14880,
+          "sha256": "9f91506e555d2d778f065a1c9ca4cc929a6b8e7839310399ec553eca66c7ea4e"
         },
         "research_outputs/tierc11/stage_a/TIER_E_ARMS.parquet": {
           "bytes": 22540,
           "sha256": "9521a99e8d59cdcb7b99a925e12c127ba223efe1845d6f12b30991b473fb0cba"
         },
         "scripts/tierc11_stage_a.py": {
-          "bytes": 67820,
-          "sha256": "b4650a18987bf094aba0904c851ea5ef0ba64884fcaa2d4ca1de7481f5ae59f3"
+          "bytes": 69720,
+          "sha256": "00cdf4b3b8e093bbf191fa45d7d92215432e44075e633ab45289b25b1d42c407"
         },
         "scripts/tierc11_stage_a_fixtures.py": {
-          "bytes": 121928,
-          "sha256": "24ea79b9198bb36681c1c3418b914a55626571671118f7e1f6365bef68735f46"
+          "bytes": 128606,
+          "sha256": "470bca62dc6eeaff1e5712cd6dcb047d8d314fa716750b6e674e90aceb0b86b8"
         }
       },
       "fixtures": [
@@ -1451,6 +1491,16 @@
           "transcript_sha_before": "9f5b1c5a428d1a6feb38b4a07f64240f4306579a943cc7641397dcc972ef101f",
           "transcript_sha_after": "9f5b1c5a428d1a6feb38b4a07f64240f4306579a943cc7641397dcc972ef101f",
           "wall_seconds": 43
+        },
+        {
+          "suite": "TIER-C11 TC11-A FIXTURES (after the lanes pass: instant columns / nest-book door)",
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": 7,
+          "transcript_drift": false,
+          "transcript_sha_before": "5b3e589421c1d936b1134aaaa8c81220a66aa360d602217532282b8d0a2290c3",
+          "transcript_sha_after": "5b3e589421c1d936b1134aaaa8c81220a66aa360d602217532282b8d0a2290c3",
+          "wall_seconds": null
         }
       ],
       "one_line": "P-ADD-BRK (66 adds in 52 campaigns) and P-ADD-SFP (12 adds in 9) on the v6 set, booked by _account_chain; head-to-head filed \u2014 built, adversarially verified, repaired; fixtures re-run GREEN in the 15-suite sweep"
@@ -1680,11 +1730,117 @@
         }
       ],
       "one_line": "the nine rows of record: P-AGE-1 SUPPORTED \u2014 IN-SAMPLE RE-SCORE, NOT CONFIRMATORY (+0.2461 [+0.1912, +0.2967] p 0.00025); P-WARN-1, P-WIN-1 (p 0.036 > bar), P-BRK-4H, P-RELAY-1, P-ADD-BRK, P-TP-RNG NOT SUPPORTED; P-ADD-SFP NOT SUPPORTED \u2014 CI wholly below zero; P-SCALP-2 CLOSED BY R2 (1h: FAIL), no slot spent; m = 9, bar 0.011111, 8 tests spent"
+    },
+    {
+      "stage": "TC11-LANES",
+      "status": "COMPLETE-VERIFIED",
+      "as_of": "2026-09-25T00:00:00Z",
+      "blockers": [],
+      "artifact_count": 21,
+      "artifact_shas": {
+        "research_outputs/tierc11/stage_r/lanes/LANES_MANIFEST.json": {
+          "bytes": 27156,
+          "sha256": "d6cbaefa5fdbd3d2360ded9578856978a8e4950b1fe09ee9d9a901d904d74042"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_GRID_LANES.md": {
+          "bytes": 580573,
+          "sha256": "696e6832c171636fbcbe12360d47967960deaec00c1b53cb0736ba2f2200d995"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_GRID_LANES_BY_COIN.parquet": {
+          "bytes": 38464,
+          "sha256": "30fb79446e4bf1a0a36eeffff1dcb16cfec3d336d175c67edce89d77f696c718"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_GRID_LANES_BY_STATE.parquet": {
+          "bytes": 35443,
+          "sha256": "4c48c2ca96978005f7f98c6f987fdebaf5b56aa68aef0a1d364b66a3720680ca"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_GRID_LANES_FREQ.parquet": {
+          "bytes": 42154,
+          "sha256": "84d68542ba1c1563a298922423dd6e4c4ce9a748ba1b9874206556d6fb8c3e65"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_P-ADD-BRK.json": {
+          "bytes": 5674,
+          "sha256": "1bf39a318cd4849fd73b6b37d373a4a3e82c88a0123f6f88ad42eecbc047ee17"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_P-ADD-BRK.parquet": {
+          "bytes": 1401055,
+          "sha256": "4f54597bb8e2c0e57ee14d1798088513a951cdb086fa5645a0ca9d569eee9703"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_P-ADD-SFP.json": {
+          "bytes": 5672,
+          "sha256": "dbb620fbd9af8e1f559513b20a6055b3855c2986507afacf1b86341ad1526546"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_P-ADD-SFP.parquet": {
+          "bytes": 1391131,
+          "sha256": "dea84442adf434ffae277c8bbfafa90af1fec5f59e2c644bda685bca624dc481"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_P-AGE-1.json": {
+          "bytes": 4917,
+          "sha256": "a3ef61b611b2faf6f7f5fa9bff34e173e4f1c137bd91657e6fdaa7eda31ac11f"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_P-AGE-1.parquet": {
+          "bytes": 889814,
+          "sha256": "f05db80cc70f08974bc9765d99a8592b6db27bd6e35b4a7314e392b04a68c09b"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_P-BRK-4H.json": {
+          "bytes": 6828,
+          "sha256": "ed0d6f397bf25ba1a384125a92cc1341ed3afe2f77b3b02517c80f48b0775c1c"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_P-BRK-4H.parquet": {
+          "bytes": 3094816,
+          "sha256": "368f0c72159298a0fb02654e58500fc0e033127a1ebe18a14889727376107f7a"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_P-RELAY-1.json": {
+          "bytes": 5171,
+          "sha256": "ec3cdf5b8184dfee37715c6b88e9951fcc863082f44662bc8fcf7008d5900601"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_P-RELAY-1.parquet": {
+          "bytes": 964123,
+          "sha256": "96281143a06813ba89cbdb55f32960e82e4a8c0f94d3c39d629e163b83c25de1"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_P-TP-RNG.json": {
+          "bytes": 5040,
+          "sha256": "312607e942a163dbc0ff60040e8ba30fb6a0a91fe2aecf71d4793f55300c5dbd"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_P-TP-RNG.parquet": {
+          "bytes": 1254523,
+          "sha256": "ea735bb3659ce1558253be751a60183c8d0646f5598a8dc12b9c8a3a66c7dba0"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_P-WARN-1.json": {
+          "bytes": 5313,
+          "sha256": "dee78d9018eab9ceb0736db540a946363458abaed8492aa2b83e5595ee1cf7ec"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_P-WARN-1.parquet": {
+          "bytes": 1277603,
+          "sha256": "6aeb82de03c6138f49b51e97c7e1a0fe54047b2bee9ff1482354d346a928e7fa"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_P-WIN-1.json": {
+          "bytes": 4916,
+          "sha256": "91ee119eef9cf825ca4d0b881eb8e81932f27e53e7f0a5ca363070c15b48306d"
+        },
+        "research_outputs/tierc11/stage_r/lanes/NEST_P-WIN-1.parquet": {
+          "bytes": 641630,
+          "sha256": "5805e7544a5ba8b7470fc597f6aeeb9fa11557bfcf732c0be6bc19f209f10035"
+        }
+      },
+      "fixtures": [
+        {
+          "suite": "TIER-C11 TC11-R FIXTURES incl. F-NEST-LANES",
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": 8,
+          "transcript_drift": false,
+          "transcript_sha_before": "f1bd5e97c17720aac2ffdd3326c8689602ceb80f25892e3593c99ffe121dad5c",
+          "transcript_sha_after": "f1bd5e97c17720aac2ffdd3326c8689602ceb80f25892e3593c99ffe121dad5c",
+          "wall_seconds": null
+        }
+      ],
+      "one_line": "R3 on the lanes: named-event instant columns added (extra columns only; every regbook book_sha256 and the scorer outputs byte-identical); the nest-book door now stamps 55/55 arms; NEST_<REG> for 8 registrations + P-BRK-4H panel17 at both scales; NEST_GRID_LANES whole (3,598 cells), collared; F-NEST-LANES (12 plants)"
     }
   ],
   "amendments_of_record": {
     "path": "research_outputs/tierc11/LEANS_AMENDMENTS.md",
-    "sha256": "0fa0477e3c3bca6b7b85714b98605b3c21b82cf7abafc7232a4b8825ff7e554a"
+    "sha256": "b1c6275b5008fa684af9bebdaeefa2c41a99f40e60f033db71d085c9ba3e10fb"
   },
   "last_sweep_utc": "2026-09-25 (stage-wave commit): 15 suites, 121 fixtures GREEN"
 }

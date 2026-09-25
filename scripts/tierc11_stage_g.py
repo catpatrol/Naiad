@@ -112,6 +112,15 @@ every regbook parquet is byte-identical to the first build):
     (AS_OF_PIN.json latest_closed_4h_at_pin_run) [L-0.1]; the manifest carries each
     regbook file's sha256.
 
+NAMED-EVENT INSTANTS [L-R.5, AM-6; the lanes pass, 2026-09-25]: every regbook arm carries
+the EXTRA column `harvest_close_ms` (Int64) = the CLOSE of the 4h bar whose close slot fired
+the band harvest (Trade.harvest_ms, that bar's OPEN, checked against harvest_i on the 4h
+frame, + 4h), NA when never harvested — a close event, stamped at its close.  It is what
+lets Stage R's nest-book door stamp the harvests of the PRIORITY book's substitutes (not v6
+keys, so no pairing-key join exists for them).  An extra column only: the 16 required
+columns, every number, book_sha256 and every sidecar are unchanged.  FIXTURE SEAM:
+`harvest_close_of`.
+
 Run:  export NAIAD_CACHE_DIR=$HOME/.cache/naiad/snapshots/tc11_20260925 PYTHONDONTWRITEBYTECODE=1
       ~/venvs/naiad/bin/python -B scripts/tierc11_stage_g.py            # canonical build
       ~/venvs/naiad/bin/python -B scripts/tierc11_stage_g.py --out-dir=DIR  # F-DET twin
@@ -234,6 +243,11 @@ READINGS = (
     "[LEAN-HEPHAESTUS] L-1.3 era = the entry bar's CLOSE (E.era_of); L-1.4 no verdict word "
     "here, every non-registered table collared; AM-7 haircut_net_r = net_r - fee_r x "
     "slip_bps_side / 5.0 (charter tier).",
+    "[LEAN-HEPHAESTUS] L-R.5 named-event instants [AM-6; the lanes pass]: every regbook arm "
+    "carries the extra column harvest_close_ms = the close of the 4h bar whose close slot "
+    "fired the band harvest (Trade.harvest_ms + 4h, checked against harvest_i), NA when never "
+    "harvested — a close event, stamped at its close; required columns, numbers, book_sha256 "
+    "and sidecars unchanged.",
 )
 
 
@@ -601,6 +615,19 @@ def haircut(stem: str, net_r: float, fee_r: float) -> float:
     return float(net_r) - float(fee_r) * float(fs["slippage_bps_side"]) / TAKER_BPS_SIDE
 
 
+def harvest_close_of(t) -> int | None:
+    """[L-R.5] (a FIXTURE SEAM): the harvest's named-event instant — a CLOSE event, the
+    close of the 4h bar whose close slot fired the band harvest (Trade.harvest_ms is that
+    bar's OPEN; HALT unless it is the OPEN of harvest_i on the 4h frame); None when the
+    campaign never harvested."""
+    if not bool(t.harvested):
+        return None
+    om = T9.frame(str(t.symbol))["f"].open_ms
+    if t.harvest_i is None or int(om[int(t.harvest_i)]) != int(t.harvest_ms):
+        _halt(f"{t.symbol} {iso(int(t.entry_ms))}: harvest_ms is not the OPEN of harvest_i")
+    return int(t.harvest_ms) + MS_4H
+
+
 def regbook_frame(book: list, pool: dict) -> pd.DataFrame:
     """The REGBOOK INTERFACE's required columns (full precision, from the Trade
     objects) plus the gate facts as extras."""
@@ -633,6 +660,7 @@ def regbook_frame(book: list, pool: dict) -> pd.DataFrame:
             "tide_streak_entry": fx["tide_streak_entry"], "tide_edge_q75": fx["tide_edge_q75"],
             "tide_band": fx["tide_band"], "tide_streak_age_arm": fx["tide_streak_age_arm"],
             "priority_substitute": bool(getattr(t, "priority_substitute", False)),
+            "harvest_close_ms": harvest_close_of(t),                     # L-R.5 named event
         })
     df = pd.DataFrame(rows)
     if not len(df):
@@ -646,6 +674,9 @@ def regbook_frame(book: list, pool: dict) -> pd.DataFrame:
         df[c] = df[c].astype("float64")
     for c in REQ_STR:
         df[c] = df[c].astype(str)
+    if "harvest_close_ms" in df.columns:
+        df["harvest_close_ms"] = pd.array([None if pd.isna(v) else int(v)
+                                           for v in df["harvest_close_ms"]], dtype="Int64")
     return df.sort_values(["symbol", "entry_close_ms"], kind="mergesort").reset_index(drop=True)
 
 

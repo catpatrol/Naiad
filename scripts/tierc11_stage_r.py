@@ -57,6 +57,16 @@ WHAT IT BUILDS (research_outputs/tierc11/stage_r/)
                             schema — NOT a registration).
   STAGE_R.md                the stage report, every table whole.
   build_manifest.json       content shas, keys, input shas, readings (no clock).
+  lanes/ (the `lanes` subcommand, SR-15 — its own manifest; not part of `build`)
+    NEST_<REG>.parquet/.json   the nest vector at every instant of every campaign of every
+                            registered lane book (P-WARN-1, P-AGE-1, P-WIN-1, P-BRK-4H + its
+                            tierE__panel17, P-RELAY-1, P-ADD-BRK, P-ADD-SFP, P-TP-RNG scored),
+                            both scales, each row's named_event and exit_reason beside.
+    NEST_GRID_LANES_{FREQ,BY_STATE,BY_COIN}.parquet + NEST_GRID_LANES.md   the nesting grid
+                            at ENTRY per lane book, whole, collared, SR-12's honesty labels.
+    LANES_MANIFEST.json     content shas, keys, per-book book_sha256 (== the scorer's input)
+                            and the regbook bytes stamped (content + file sha), event
+                            sources, input shas.
 
 THE nest-book DOOR (for the later lanes pass):
   tierc11_stage_r.py nest-book --regbook <dir> --arm scored
@@ -70,8 +80,14 @@ THE nest-book DOOR (for the later lanes pass):
   n_adds) says an event happened that no column stamps — it never files a nest that
   silently drops a named event [L-R.5; verifier MAJOR-4].
 
+THE LANES PASS (SR-15): tierc11_stage_r.py lanes [--out-dir=DIR]  runs the door over
+  every lane book (LANE_BOOKS) after verifying each is the book the scorer scored
+  (scores/SCORE_MANIFEST.json), and writes stage_r/lanes/ (or DIR: a child of
+  _det_stage_r/, or of a `_det_stage_r/` scratch outside the repo).
+
 Run:  export NAIAD_CACHE_DIR=$HOME/.cache/naiad/snapshots/tc11_20260925 PYTHONDONTWRITEBYTECODE=1
       ~/venvs/naiad/bin/python -B scripts/tierc11_stage_r.py build [--out-dir=DIR]
+      ~/venvs/naiad/bin/python -B scripts/tierc11_stage_r.py lanes [--out-dir=DIR]
       ~/venvs/naiad/bin/python -B scripts/tierc11_stage_r.py nest-book --regbook DIR \\
             --arm scored --kind v6transform [--out DIR]
       ~/venvs/naiad/bin/python -B scripts/tierc11_stage_r.py lean      # the lean block
@@ -160,6 +176,10 @@ TIER_E_WORD_COLS = ("would_read", "height_leg_would_pass", "edge_leg_would_pass"
 INTRABAR_STAMP = "bar_open"                      # "bar_open" (record) | "bar_close" (sabotage)
 INTRABAR_EXIT_REASONS = ("stop", "tp", "target")
 CLOSE_EXIT_PREFIXES = ("bell", "corridor_end", "warn", "invalidation", "close")
+EXIT_1H_COLS = ("exit_instant_ms", "exit_close_1h_ms")   # a 1h-walked ride's resolved exit
+# the exit bar's lens CLOSE when exit_close_ms is not it (the relay files its 1h exit instant
+# as exit_close_ms): the anchor of an intrabar exit's post-event twin [SR-15 THE TWIN LAW]
+EXIT_BAR_CLOSE_COLS = ("exit_bar_close_ms",)
 
 # ── THE REGBOOK INTERFACE (the orchestrator's binding schema) ────────────────
 REGBOOK_REQUIRED = ("symbol", "entry_ms", "entry_close_ms", "direction", "entry_px",
@@ -176,16 +196,31 @@ NESTBOOK_COLUMNS = {
            "(v6transform) v6's own arm joined on the pairing key (symbol, entry_ms) [L-1.5]; "
            "kinds v6transform / relay start their bar closes there (a close event)",
     "exit": "exit_stamp_ms (ride11's stamp of record) | exit_event_ms (the books' L-R.5 stamp) "
-            "| derived: an intrabar reason (stop / tp / target) -> the OPEN of the lens bar "
-            "holding exit_close_ms, a close reason (bell* / corridor_end / warn* / "
-            "invalidation* / close*) -> exit_close_ms; any other reason HALTs; an exit stamp "
-            "before exit_close_ms carries the close-stamped twin 'exit_post_event'; a "
-            "corridor_end campaign (OPEN at the pin) is stamped 'as_of_pin', never 'exit'",
+            "| a 1h-walked ride's RESOLVED exit instant exit_instant_ms / exit_close_1h_ms, read "
+            "by exit_resolved_by: '1h' -> the instant as filed (a stop at the close of the 1h "
+            "child that resolves it, a warn exit at its 1h close), 'close' -> a CLOSE reason "
+            "as filed at exit_close_ms (an intrabar reason resolved by 'close', or a 'close' "
+            "exit off exit_close_ms, HALTs), 'parent' -> an intrabar reason at the parent "
+            "bar's OPEN, a close reason at the parent's close (a missing exit_resolved_by "
+            "HALTs) [the lanes pass: the warn exit and the add books' exits at their own "
+            "instant, never the exit bar's 4h close] | derived: an intrabar reason (stop / tp "
+            "/ target) -> the OPEN of the lens bar holding exit_close_ms, a close reason "
+            "(bell* / corridor_end / warn* / invalidation* / close*) -> exit_close_ms; any "
+            "other reason HALTs; THE TWIN LAW: an INTRABAR exit stamped before the close of "
+            "the lens bar holding it (exit_bar_close_ms when filed — the relay, whose "
+            "exit_close_ms is its 1h exit instant — else exit_close_ms; HALT unless it is "
+            "that bar's close) carries the close-stamped twin 'exit_post_event' there; a "
+            "stamp that IS that close (the resolving 1h child is the bar's last) has none, "
+            "and a close event (a 1h warn exit) has none; a corridor_end campaign (OPEN at "
+            "the pin) is stamped 'as_of_pin', never 'exit'",
     "+1R": "latch_stamp_ms (+ latch_post_event_ms) | latch_1h_ms gated by latched_1h: the "
            "resolving 1h child's close, a PARENT-decided latch (latch_1h_by 'parent' | its "
-           "parent bar listed in walk_mismatch_ms) -> the parent's OPEN with its close as the "
-           "twin, an undecidable latch at a parent close HALTs | derived on the lens tape by "
-           "the bar-OPEN law when reached_1r is True (v6transform / lane4h) | none",
+           "parent bar listed in walk_mismatch_ms) -> the parent's OPEN, an undecidable "
+           "latch at a parent close HALTs; its twin by THE TWIN LAW: the close of the lens "
+           "bar holding latch_1h_ms when after the stamp (the parent's close; the bar's close "
+           "for a latch resolved before the bar's last 1h child; none when the resolving "
+           "child is the bar's last) | derived on the lens tape by the bar-OPEN law when "
+           "reached_1r is True (v6transform / lane4h), its twin at that bar's close | none",
     "harvest": "harvest_close_ms | harvest_ms + one lens bar | harvest_i on the lens tape "
                "(checked) | (v6transform) v6's own harvest close joined on the pairing key, "
                "checked per row against `harvested` and the exit stamp — gated by `harvested`; "
@@ -268,6 +303,38 @@ READINGS = (
     "v6_campaigns.parquet (floats at the books table's 6 dp) in the REGBOOK schema — NOT the "
     "full-precision v6 base arm the stages file (its book_sha256 differs), never scored; the "
     "books' full-precision ΣR is read from books/build_manifest.json and printed beside.",
+    "SR-15 THE LANES PASS [contract R3 'at every instant of every campaign of every card (base "
+    "v6, 9/12, the lanes below)'; L-R.5, AM-6]: `lanes` runs the nest-book door (read_regbook "
+    "-> instants_of -> nest_frame, both scales) over every REGISTERED scored arm that is a "
+    "campaign book — P-WARN-1, P-AGE-1, P-WIN-1, P-BRK-4H, P-RELAY-1, P-ADD-BRK, P-ADD-SFP, "
+    "P-TP-RNG (P-SCALP-2 is closed by R2 and files no book) — plus P-BRK-4H tierE__panel17 "
+    "(the twelve: 12h / 1w NA, hence 4h / 12h / 1d coincidence NA). Each book must be the book "
+    "the scorer scored (its sidecar book_sha256 == scores/SCORE_MANIFEST.json's input, HALT "
+    "otherwise). Named events per L-R.5 / AM-6: arm, entry (the relay's 1h entry close: "
+    "'relay_entry'), harvest, add (add1 / add2), bell, a warn exit at its 1h close, a close "
+    "exit at its close — close events at their close; +1R, a stop and a TP fill are intrabar: "
+    "at the OPEN of their bar or at the close of the 1h child that resolves them (the "
+    "regbook's own stamp of record). THE TWIN LAW (one law for every intrabar event — +1R, "
+    "a stop, a TP fill — every book, the relay included): an intrabar event whose stamp "
+    "precedes the close of the 4h bar holding it carries exactly one close-stamped twin, "
+    "labelled post-event, AT that close (a bar-OPEN stamp: the same bar's close; a 1h "
+    "child's close: its parent 4h bar's close — exit_bar_close_ms for the relay, whose "
+    "exit_close_ms is its 1h exit instant); a stamp that IS that close (the resolving 1h "
+    "child is the bar's last) has none — its own instant is the close, a bar_close row "
+    "through the exit stamp; close events (arm, entry, harvest, add, bell, a warn exit, a "
+    "close exit) have none — a warn exit before its 4h bar's close ends the campaign there, "
+    "so that close is not one of its instants. Each row's `stamp_law` names its rule from "
+    "the event's own class (intrabar vs close), never from its position against "
+    "exit_close_ms. An intrabar exit resolved by 'close' HALTs. A "
+    "campaign OPEN at the pin -> 'as_of_pin'. Each row carries `named_event` (the event's "
+    "name, 'bar_close' for a plain lens close) and the campaign's `exit_reason`. The nesting "
+    "grid at ENTRY per book x scale x lens (state x coincidence frequency, outcomes by state, "
+    "outcomes by coincidence: n, E[net R], P(win), sum R, the book's own net_r) is printed "
+    "whole with SR-12's honesty labels, collared; declared cells: STATES4 (+ 'NA' where a "
+    "member lacks the lens) x COIN_CATS (+ 'NA' where a member lacks L or L+1; 1w 'NA' only). "
+    "LANES_MANIFEST.json pins, per book, the regbook bytes it stamped (the parquet's content "
+    "sha — its csv — and its file sha) beside book_sha256, which covers the 16 required "
+    "columns only, not the instant columns the nest reads.",
 )
 
 
@@ -936,6 +1003,10 @@ LAW_P1R_BOOKS = ("intrabar — the OPEN of its 4h bar (the books' UNWALKED 4h ri
                  "latch_1r_open_ms) [L-R.5]")
 LAW_EXIT_BOOKS = ("intrabar — the OPEN of its 4h bar (the books' UNWALKED 4h ride: "
                   "exit_event_ms) [L-R.5]")
+LAW_EXIT_CHILD = ("intrabar — the close of the resolving 1h child ({col}; exit_resolved_by "
+                  "'1h') [L-R.5]")
+LAW_EXIT_PARENT = ("intrabar — the parent {lens} bar's OPEN ({col} − {lens}: exit_resolved_by "
+                   "'parent') [L-R.5, AM-6]")
 LAW_TWIN = "post-event twin (close)"
 LAW_PIN = ("close — the campaign is OPEN at the pin (corridor_end): the as-of instant, NOT an "
            "exit [verifier MINOR-11]")
@@ -982,13 +1053,26 @@ def resolve_events(reg: pd.DataFrame, kind: str) -> tuple[pd.DataFrame, dict]:
         else:
             _halt(f"kind {kind} needs an arm column (arm_close_ms / window_arm_close_ms / "
                   f"arm_ms)")
+    x1h = next((c for c in EXIT_1H_COLS if c in cols), None)
     if "exit_stamp_ms" in cols:
         src["exit"] = "exit_stamp_ms"
     elif "exit_event_ms" in cols:
         src["exit"] = "exit_event_ms"
+    elif x1h is not None:
+        if "exit_resolved_by" not in cols:
+            _halt(f"nest-book: {x1h} without exit_resolved_by — a parent-decided stop cannot "
+                  f"be told from a 1h-resolved one [L-R.5, AM-6]")
+        src["exit"] = (f"{x1h} by exit_resolved_by ('1h' -> as filed; 'close' -> a close "
+                       f"reason as filed at exit_close_ms; 'parent' -> an intrabar reason at "
+                       f"the parent bar's OPEN, a close reason at the parent's close) "
+                       f"[L-R.5, AM-6]")
     else:
         src["exit"] = ("derived per row (intrabar reason -> the OPEN of the lens bar holding "
                        "exit_close_ms; close reason -> exit_close_ms)")
+    xbc = next((c for c in EXIT_BAR_CLOSE_COLS if c in cols), None)
+    src["exit_post_event"] = (f"THE TWIN LAW: an intrabar exit stamped before the close of the "
+                              f"{lens} bar holding it -> that close "
+                              + (f"({xbc})" if xbc else "(exit_close_ms)"))
     ev["_p1r_parent"] = False
     if "latch_stamp_ms" in cols:
         ev["plus_1r"], src["plus_1r"] = _col(reg, "latch_stamp_ms"), "latch_stamp_ms"
@@ -1001,14 +1085,20 @@ def resolve_events(reg: pd.DataFrame, kind: str) -> tuple[pd.DataFrame, dict]:
             lat = lat.where(_flag(reg, "latched_1h"))
         par = _parent_latch(reg, lat, step)
         ev["_p1r_parent"] = par
-        ev["plus_1r"] = lat.where(~par, lat - step)
-        ev["plus_1r_post_event"] = lat.where(par)
+        stamp = lat.where(~par, lat - step)
+        ev["plus_1r"] = stamp
+        hold = ((lat + (step - 1)) // step) * step       # the close of the lens bar holding it
+        ev["plus_1r_post_event"] = hold.where((hold > stamp).fillna(False).astype(bool))
         src["plus_1r"] = ("latch_1h_ms (the resolving 1h child's close; a PARENT-decided latch "
                           "-> the parent's OPEN, source "
                           + next((c for c in ("latch_1h_by", "walk_mismatch_ms",
                                               "n_walk_mismatch") if c in cols),
                                  "none needed: no latch sits at a parent close") + ")")
-        src["plus_1r_post_event"] = "latch_1h_ms of a parent-decided latch (the parent's close)"
+        src["plus_1r_post_event"] = (f"THE TWIN LAW: the close of the {lens} bar holding "
+                                     f"latch_1h_ms, when after the stamp (a parent-decided "
+                                     f"latch: the parent's close; a latch resolved before the "
+                                     f"bar's last 1h child: the bar's close; none when the "
+                                     f"resolving child is the bar's last)")
     elif "reached_1r" in cols and kind in ("v6transform", "lane4h"):
         src["plus_1r"] = f"derived: the OPEN of the first {lens} bar after the entry whose " \
                          f"favourable extreme reaches entry +/- R (reached_1r rows only)"
@@ -1046,22 +1136,68 @@ def resolve_events(reg: pd.DataFrame, kind: str) -> tuple[pd.DataFrame, dict]:
     return ev, src
 
 
-def _exit_stamp(r, tape_closes: np.ndarray, step: int) -> int:
+def _exit_stamp(r, tape_closes: np.ndarray, step: int) -> tuple[int, str]:
+    """(the exit stamp of record, how it was resolved): 'filed' (exit_stamp_ms /
+    exit_event_ms as filed), '1h' (a 1h-walked ride's resolving child's close),
+    'parent' (a parent-resolved exit: an intrabar reason at the parent's OPEN),
+    'close' (a CLOSE reason resolved at exit_close_ms), 'derived' (from exit_reason on
+    the lens tape).  HALTS on an intrabar reason resolved by 'close' — the ride
+    resolves only bell / corridor_end exits at the close [tierc11_ride; verifier
+    MINOR-3] — and on a 'close'-resolved exit off exit_close_ms."""
     for c in ("exit_stamp_ms", "exit_event_ms"):
         if c in r and not pd.isna(r[c]):
-            return int(r[c])
+            return int(r[c]), "filed"
     reason = str(r["exit_reason"])
     ec = int(r["exit_close_ms"])
+    for c in EXIT_1H_COLS:                     # a 1h-walked ride's resolved exit [SR-9]
+        if c in r and not pd.isna(r[c]):
+            x, by = int(r[c]), str(r["exit_resolved_by"])
+            if not (int(r["entry_close_ms"]) < x <= ec):
+                _halt(f"{r['symbol']} {iso(int(r['entry_close_ms']))}: {c} {iso(x)} is not "
+                      f"inside (entry close, exit_close_ms {iso(ec)}]")
+            intr = reason in INTRABAR_EXIT_REASONS
+            if by == "parent":
+                if x % step:
+                    _halt(f"{r['symbol']} {iso(x)}: a parent-resolved exit not at a "
+                          f"{step // 3_600_000}h close")
+                return ((x - step if INTRABAR_STAMP == "bar_open" else x) if intr else x,
+                        "parent")
+            if by == "close":
+                if intr:
+                    _halt(f"{r['symbol']} {iso(int(r['entry_close_ms']))}: an intrabar exit "
+                          f"({reason!r}) resolved by 'close' — a stop / TP fill is resolved "
+                          f"by its 1h child or by the parent, never read at the close "
+                          f"[L-R.5, AM-6]")
+                if x != ec:
+                    _halt(f"{r['symbol']} {iso(int(r['entry_close_ms']))}: a 'close'-resolved "
+                          f"exit {c} {iso(x)} is not exit_close_ms {iso(ec)}")
+                return x, "close"
+            if by == "1h":
+                if intr and INTRABAR_STAMP != "bar_open":   # the close-stamping SABOTAGE
+                    k = int(np.searchsorted(tape_closes, x, side="left"))
+                    return int(tape_closes[k]), "1h"
+                return x, "1h"
+            _halt(f"{r['symbol']} {iso(int(r['entry_close_ms']))}: exit_resolved_by {by!r} "
+                  f"is none of '1h' / 'close' / 'parent'")
     if reason in INTRABAR_EXIT_REASONS:
         k = int(np.searchsorted(tape_closes, ec, side="left"))
         if k >= len(tape_closes):
             _halt(f"{r['symbol']}: exit_close_ms {iso(ec)} beyond the lens tape")
         op = int(tape_closes[k]) - step
-        return op if INTRABAR_STAMP == "bar_open" else int(tape_closes[k])
+        return (op if INTRABAR_STAMP == "bar_open" else int(tape_closes[k])), "derived"
     if reason.startswith(CLOSE_EXIT_PREFIXES):
-        return ec
+        return ec, "derived"
     _halt(f"{r['symbol']} {iso(int(r['entry_close_ms']))}: exit_reason {reason!r} is neither a "
           f"known intrabar nor a known close reason and the regbook carries no exit stamp column")
+
+
+def _exit_bar_close(r, ec: int) -> int:
+    """[SR-15 THE TWIN LAW] the close of the lens bar holding the exit: exit_bar_close_ms
+    when filed (the relay: its exit_close_ms is the 1h exit instant), else exit_close_ms."""
+    for c in EXIT_BAR_CLOSE_COLS:
+        if c in r and not pd.isna(r[c]):
+            return int(r[c])
+    return ec
 
 
 def _derived_latch(r, tape, closes: np.ndarray) -> int | None:
@@ -1122,7 +1258,7 @@ def instants_of(reg: pd.DataFrame, kind: str, laws: dict | None = None
                 _halt(f"{s}: the book's bar indices are not the {lens} tape's (entry_i {bad[:3]})")
         for idx, r in g.iterrows():
             base = (s, int(r["entry_ms"]), int(r["entry_close_ms"]), int(r["direction"]))
-            ex = _exit_stamp(r, closes, step)
+            ex, how = _exit_stamp(r, closes, step)
             ec = int(r["exit_close_ms"])
             e = evs.loc[idx]
             start = int(e["arm"]) if spec["start"] == "arm" else int(r["entry_close_ms"])
@@ -1201,11 +1337,28 @@ def instants_of(reg: pd.DataFrame, kind: str, laws: dict | None = None
             if reason.startswith("corridor_end"):
                 add("as_of_pin", ex, LAW_PIN)
             else:
-                add("exit", ex, laws.get("exit_intrabar", f"intrabar (stamp of record: "
-                                                          f"{src['exit']})") if ex < ec
-                    else LAW_CLOSE)
-                if ex < ec:
-                    add("exit_post_event", ec, LAW_TWIN)
+                # the stamp law is the EVENT's class (intrabar vs close), never its
+                # position against exit_close_ms [SR-15; verifier MINOR-1]
+                intr = reason in INTRABAR_EXIT_REASONS
+                if intr:
+                    x1c = next((c for c in EXIT_1H_COLS if c in cols), "")
+                    law = laws.get("exit_intrabar") or (
+                        LAW_EXIT_CHILD.format(col=x1c) if how == "1h" else
+                        LAW_EXIT_PARENT.format(col=x1c, lens=lens) if how == "parent" else
+                        f"intrabar (stamp of record: {src['exit']})")
+                else:
+                    law = (f"close — a close event at its own instant (stamp of record: "
+                           f"{src['exit']})" if ex < ec else LAW_CLOSE)
+                add("exit", ex, law)
+                xb = _exit_bar_close(r, ec)
+                if intr and ex < xb:            # THE TWIN LAW [SR-15; verifier MINOR-2]
+                    want = ex + step if ex % step == 0 else ((ex + step - 1) // step) * step
+                    if xb != want:
+                        _halt(f"{s} {iso(int(r['entry_close_ms']))}: the exit bar's close "
+                              f"{iso(xb)} is not the close of the {lens} bar holding the "
+                              f"intrabar exit stamp {iso(ex)} ({iso(want)}) — the twin "
+                              f"anchor does not hold")
+                    add("exit_post_event", xb, LAW_TWIN)
     if any(unst.values()):
         _halt("nest-book UNSTAMPED [L-R.5 'plus the named events'; verifier MAJOR-4]: "
               + " · ".join(f"{k} {v}" for k, v in unst.items() if v)
@@ -1877,11 +2030,13 @@ def findings_not_fixed(V: dict, nests: dict) -> list[str]:
     if not prov:
         L.append("- R2: no lens verdict of record is provisional.")
     L.append("- R3 lanes: the contract's R3 covers every card including the lanes; this build "
-             "stamps base v6 and 9/12 only. The lanes are stamped by the nest-book door in the "
-             "lanes pass. The door REFUSES (HALT, naming the counts) a regbook whose own record "
-             "says a harvest / add / +1R happened with no instant to stamp it "
-             "[L-R.5 'plus the named events'] — such regbooks must file the instant columns "
-             "listed in SR-9 first.")
+             "stamps base v6 and 9/12; the lanes are stamped by the `lanes` subcommand "
+             "(stage_r/lanes/: NEST_<REG>.parquet, NEST_GRID_LANES.md, LANES_MANIFEST.json; "
+             "SR-15) through the same nest-book door, after the owning stages filed the "
+             "named-event instant columns (harvest_close_ms, add1_close_ms / add2_close_ms). The "
+             "door still REFUSES (HALT, naming the counts) any regbook whose own record says a "
+             "harvest / add / +1R happened with no instant to stamp it [L-R.5 'plus the named "
+             "events'].")
     L.append("- R3 / R5 / NEST_GRID calibrated reads are IN-SAMPLE on every tuning-era entry "
              "(SCALE-IN-SAMPLE, L-R.2); each aggregated row prints its in-sample count and the "
              "holdout slice beside [SR-12].")
@@ -2058,6 +2213,351 @@ def build(out: Path = OUT) -> dict:
             "manifest": man}
 
 
+# ══════════════════════════════════════════════════════════ 10 · THE LANES PASS [SR-15]
+LANES_DIR = "lanes"
+LANES_OUT = OUT / LANES_DIR
+REGBOOK_ROOT = E.OUT / "regbooks"
+SCORE_MANIFEST_PATH = E.OUT / "scores" / "SCORE_MANIFEST.json"
+LANE_BOOKS = (("P-WARN-1", "scored", "v6transform"), ("P-AGE-1", "scored", "v6transform"),
+              ("P-WIN-1", "scored", "v6transform"), ("P-BRK-4H", "scored", "lane4h"),
+              ("P-BRK-4H", "tierE__panel17", "lane4h"), ("P-RELAY-1", "scored", "relay"),
+              ("P-ADD-BRK", "scored", "v6transform"), ("P-ADD-SFP", "scored", "v6transform"),
+              ("P-TP-RNG", "scored", "v6transform"))              # REGISTRATIONS.json seq order
+LANE_REGS = tuple(dict.fromkeys(r for r, _, _ in LANE_BOOKS))
+LANE_LABELS = tuple(f"{r}/{a}" for r, a, _ in LANE_BOOKS)
+LANES_KEYS = {**{f"NEST_{r}": ["arm"] + NEST_KEY for r in LANE_REGS},
+              "NEST_GRID_LANES_FREQ": ["book", "scale_kind", "lens", "coin_rule", "state",
+                                       "coin_cat"],
+              "NEST_GRID_LANES_BY_STATE": ["book", "scale_kind", "lens", "state"],
+              "NEST_GRID_LANES_BY_COIN": ["book", "scale_kind", "lens", "coin_rule", "coin_cat"]}
+LANES_MANIFEST = "LANES_MANIFEST.json"
+LANES_MD = "NEST_GRID_LANES.md"
+STATES5 = STATES4 + ("NA",)
+EXIT_NAMES = {"stop": "exit: stop", "tp": "TP fill", "target": "TP fill"}
+
+
+def named_event(kind: str, reason: str, nest_kind: str) -> str:
+    """SR-15: the L-R.5 name of an instant row (the door's instant_kind + the exit reason)."""
+    if kind == "exit" or kind == "exit_post_event":
+        base = (EXIT_NAMES.get(reason) or ("warn exit" if reason.startswith("warn") else
+                                           f"exit: {reason}"))
+        return base if kind == "exit" else f"{base} (post-event twin)"
+    return {"bar_close": "bar_close", "arm": "arm",
+            "entry": "relay_entry" if nest_kind == "relay" else "entry",
+            "plus_1r": "+1R", "plus_1r_post_event": "+1R (post-event twin)",
+            "harvest": "harvest", "add1": "add", "add2": "add", "bell": "bell",
+            "as_of_pin": "open at the pin"}.get(kind, kind)
+
+
+def _score_inputs() -> dict:
+    man = json.loads(SCORE_MANIFEST_PATH.read_text(encoding="utf-8"))
+    return {k: v.get("book_sha256") for k, v in man["inputs"].items()}
+
+
+def lane_book(reg: str, arm: str, kind: str, scored: dict) -> tuple[pd.DataFrame, dict,
+                                                                    pd.DataFrame]:
+    """One lane book through the nest-book door [SR-9, SR-15]: (nest frame, sidecar
+    entry, the regbook)."""
+    regdir = REGBOOK_ROOT / reg
+    raw = (regdir / f"{arm}.parquet").read_bytes()
+    df, meta = read_regbook(regdir, arm)
+    if sha_bytes((regdir / f"{arm}.parquet").read_bytes()) != sha_bytes(raw):
+        _halt(f"lanes: {reg}/{arm}.parquet changed while it was read")
+    content = C.content_sha(df)                 # before the door reads it
+    want = scored.get(f"{reg}/{arm}")
+    if want != meta["book_sha256"]:
+        _halt(f"lanes: {reg}/{arm} book_sha256 {meta['book_sha256'][:12]}… is not the book the "
+              f"scorer scored ({str(want)[:12]}… in scores/SCORE_MANIFEST.json)")
+    if df.duplicated(subset=["symbol", "entry_ms"]).any():
+        _halt(f"lanes: {reg}/{arm} (symbol, entry_ms) is not unique")
+    inst, src = instants_of(df, kind)
+    f = nest_frame(inst)
+    x = f.merge(df[["symbol", "entry_ms", "exit_reason"]], on=["symbol", "entry_ms"],
+                how="left", validate="m:1")
+    if x["exit_reason"].isna().any() or len(x) != len(f):
+        _halt(f"lanes: {reg}/{arm}: an instant row joins no campaign")
+    f["exit_reason"] = x["exit_reason"].astype(str).to_numpy()
+    f["named_event"] = [named_event(k, r, kind) for k, r in
+                        zip(f["instant_kind"], f["exit_reason"])]
+    f.insert(1, "registration", reg)
+    f.insert(2, "arm", arm)
+    cal = f[f["scale_kind"] == SCALE_KINDS[0]]
+    side = {"registration": reg, "arm": arm, "kind": kind, "campaign_lens": KINDS[kind]["lens"],
+            "source_regbook": E.rel_of(E._real(regdir)) + f"/{arm}.parquet",
+            "book_sha256": meta["book_sha256"], "book_sha256_is_the_scored_input": True,
+            "sidecar_file_sha256": sha_bytes((regdir / f"{arm}.json").read_bytes()),
+            # the regbook bytes STAMPED (book_sha256 covers the 16 required columns only,
+            # not the instant columns the nest reads) [SR-15; verifier MINOR-4]
+            "regbook_content_sha256": content, "regbook_file_sha256": sha_bytes(raw),
+            "panel": list(meta.get("panel", [])), "n_campaigns": int(len(df)),
+            "n_rows": int(len(f)),
+            "n_rows_by_kind_per_scale": {k: int(v) for k, v in
+                                         cal.groupby("instant_kind").size().items()},
+            "named_events_per_scale": {k: int(v) for k, v in
+                                       cal.groupby("named_event").size().items()},
+            "event_sources": src}
+    return f, side, df
+
+
+def _na_state(v) -> str:
+    return "NA" if (v is None or (isinstance(v, float) and np.isnan(v)) or v is pd.NA) \
+        else str(v)
+
+
+def lane_coin_cat(top, bot, lens: str) -> np.ndarray:
+    """SR-7 with the twelve's NA: a lens whose own or L+1 bundle is absent -> 'NA'."""
+    if lens == "1w":
+        return np.array(["NA"] * len(top), dtype=object)
+    t = pd.array(top, dtype="boolean")
+    b = pd.array(bot, dtype="boolean")
+    na = np.asarray(t.isna() | b.isna(), dtype=bool)
+    tv = np.asarray(t.fillna(False), dtype=bool)
+    bv = np.asarray(b.fillna(False), dtype=bool)
+    out = np.where(tv & bv, "both", np.where(tv, "top", np.where(bv, "bot", "none")))
+    return np.where(na, "NA", out).astype(object)
+
+
+def lane_decl(panel: list, lens: str) -> tuple[tuple, tuple]:
+    """The declared (states, coincidence categories) of a book x lens [SR-15]."""
+    lack = any(lens not in N.LENSES_OF[s] for s in panel)
+    up = N.LADDER[lens]
+    lack_up = up is not None and any(up not in N.LENSES_OF[s] for s in panel)
+    states = STATES5 if lack else STATES4
+    coins = ("NA",) if lens == "1w" else (COIN_CATS + ("NA",) if (lack or lack_up)
+                                          else COIN_CATS)
+    return states, coins
+
+
+def lane_labels(z: pd.DataFrame, lenses: tuple) -> dict:
+    """SR-12's labels over one (book, scale)'s entries, NA lenses skipped."""
+    isin = np.zeros(len(z), bool)
+    stab = np.zeros(len(z), bool)
+    pw, sm = [], []
+    for c in lenses:
+        isin |= _bool_col(z, f"{c}_scale_in_sample")
+        sc = _bool_col(z, f"{c}_stability_changed")
+        stab |= sc
+        w = sorted({str(x) for x in z[f"{c}_pick_window"] if x is not None and not pd.isna(x)})
+        pw.append(f"{c}: " + (" / ".join(w) if w else "NA"))
+        mem = sorted(set(z.loc[sc, "symbol"].astype(str)),
+                     key=lambda x: (PANEL17.index(x) if x in PANEL17 else 99, x))
+        sm.append(f"{c}: " + (",".join(mem) if mem else "none"))
+    return {"lenses_read": "+".join(lenses), "pick_window": "; ".join(pw),
+            "stability_changed_members": "; ".join(sm), "_isin": isin, "_stab": stab}
+
+
+def lane_entries(f: pd.DataFrame, df: pd.DataFrame) -> pd.DataFrame:
+    e = f[f["instant_kind"] == "entry"]
+    j = e.merge(df[["symbol", "entry_ms", "net_r"]], on=["symbol", "entry_ms"], how="left",
+                validate="m:1")
+    if j["net_r"].isna().any() or len(j) != len(SCALE_KINDS) * len(df):
+        _halt("lanes: entry rows do not cover every campaign at both scales")
+    j["era"] = E.era_of(j["entry_close_ms"].to_numpy(np.int64)).astype(str)
+    return j
+
+
+def lane_grid(entries: dict, panels: dict) -> dict:
+    """The nesting grid at ENTRY per lane book, WHOLE [SR-7, SR-12, SR-15]."""
+    freq, bys, byc = [], [], []
+    for book in LANE_LABELS:
+        j = entries[book]
+        for kind in SCALE_KINDS:
+            z = j[j["scale_kind"] == kind].reset_index(drop=True)
+            n_all = len(z)
+            net = z["net_r"].to_numpy(float)
+            hold = (z["era"] == "holdout").to_numpy(bool)
+            for L in NEST_LENSES:
+                states, ccs = lane_decl(panels[book], L)
+                st = np.array([_na_state(v) for v in z[f"{L}_state"]], dtype=object)
+                bad = sorted(set(st) - set(states))
+                if bad:
+                    _halt(f"lanes: {book} {kind} {L}: undeclared state(s) {bad}")
+                cats = {"record": lane_coin_cat(z[f"{L}_coin_top"], z[f"{L}_coin_bot"], L),
+                        "mem_twin": lane_coin_cat(z[f"{L}_coin_top_mem"],
+                                                  z[f"{L}_coin_bot_mem"], L)}
+                for rule, cc in cats.items():
+                    bad = sorted(set(cc) - set(ccs))
+                    if bad:
+                        _halt(f"lanes: {book} {kind} {L} {rule}: undeclared category {bad}")
+                lc = lane_labels(z, _lenses_read(L, coin=True))
+                ls = lane_labels(z, _lenses_read(L, coin=False))
+                labc = {k: v for k, v in lc.items() if not k.startswith("_")}
+                labs = {k: v for k, v in ls.items() if not k.startswith("_")}
+                for rule in COIN_RULES:
+                    cc = cats[rule]
+                    for s4 in states:
+                        for c in ccs:
+                            m = (st == s4) & (cc == c)
+                            freq.append({"cell": f"{book}|{kind}|{L}|{rule}|{s4}|{c}",
+                                         "book": book, "scale_kind": kind, "lens": L,
+                                         "coin_rule": rule, "state": s4, "coin_cat": c,
+                                         "n": int(m.sum()), "n_entries": n_all,
+                                         "share": float(m.sum()) / n_all if n_all else np.nan,
+                                         "n_scale_in_sample": int(lc["_isin"][m].sum()),
+                                         "n_stability_changed": int(lc["_stab"][m].sum()),
+                                         "n_holdout": int(hold[m].sum()), **labc})
+                    for c in ccs:
+                        m = cc == c
+                        byc.append({"cell": f"{book}|{kind}|{L}|{rule}|{c}", "book": book,
+                                    "scale_kind": kind, "lens": L, "coin_rule": rule,
+                                    "coin_cat": c,
+                                    **_cell(net[m], lc["_isin"][m], lc["_stab"][m], hold[m]),
+                                    **labc})
+                for s4 in states + ("__ALL__",):
+                    m = np.ones(len(st), bool) if s4 == "__ALL__" else st == s4
+                    bys.append({"cell": f"{book}|{kind}|{L}|{s4}", "book": book,
+                                "scale_kind": kind, "lens": L, "state": s4,
+                                **_cell(net[m], ls["_isin"][m], ls["_stab"][m], hold[m]),
+                                **labs})
+    out = {}
+    for name, rows in (("NEST_GRID_LANES_FREQ", freq), ("NEST_GRID_LANES_BY_STATE", bys),
+                       ("NEST_GRID_LANES_BY_COIN", byc)):
+        d = pd.DataFrame(rows)
+        for k, v in {**COLLAR, **AS_OF}.items():
+            d[k] = v
+        out[name] = d
+    return out
+
+
+LANE_ORDER = [("book", LANE_LABELS), ("scale_kind", SCALE_KINDS), ("lens", NEST_LENSES)]
+
+
+def lane_facts(G: dict) -> list[str]:
+    """One line per book: the 4h and 12h state at entry (calibrated, the record; frozen
+    beside) — the lane nest's headline distribution."""
+    bs = G["NEST_GRID_LANES_BY_STATE"]
+    L = []
+    for book in LANE_LABELS:
+        parts = []
+        for kind in SCALE_KINDS:
+            for lens in ("4h", "12h"):
+                z = bs[(bs["book"] == book) & (bs["scale_kind"] == kind) & (bs["lens"] == lens)
+                       & (bs["state"] != "__ALL__")]
+                parts.append(f"{kind} {lens} " + " / ".join(
+                    f"{r['state']} {int(r['n'])}" for _, r in ordered(
+                        z, [("state", STATES5)]).iterrows() if int(r["n"]) or r["state"] != "NA"))
+        L.append(f"- {book}: " + " · ".join(parts))
+    return L
+
+
+def lanes_md(G: dict, sides: dict) -> list[str]:
+    head = [f"as_of_last_closed_4h: {PIN_ISO}", "",
+            "# TIER-C11 · STAGE R · R3 THE NEST ON THE LANES — the nesting grid at entry per "
+            "lane book [contract R3; L-R.5, AM-6, SR-15] — Tier-E", "", collar_line(), "",
+            READINGS[14], "", READINGS[5], "", READINGS[6], "", READINGS[8], "", HONESTY_LAW, "",
+            "Stamp laws differ by book and each row's `stamp_law` names its rule: the 4h rides "
+            "without a 1h walk (P-AGE-1, P-WIN-1, P-BRK-4H, P-TP-RNG; P-WARN-1's +1R) stamp +1R "
+            "/ a stop / a TP fill at the OPEN of their 4h bar; the 1h-walked books (P-RELAY-1, "
+            "P-ADD-BRK, P-ADD-SFP; P-WARN-1's exits) at the close of the resolving 1h child "
+            "(a parent-decided event on a walk-mismatch bar at the parent's OPEN) — both lawful "
+            "under L-R.5. One twin law for all: an intrabar event (+1R, a stop, a TP fill) "
+            "stamped before the close of its 4h bar carries one post-event twin at that close "
+            "(the relay's exit bar close = exit_bar_close_ms); a stamp that is itself the 4h "
+            "close (the bar's last 1h child) carries none; close events carry none.", "",
+            "## The lane books", ""]
+    L = list(head)
+    for book in LANE_LABELS:
+        sd = sides[book]
+        L.append(f"- **{book}** ({sd['kind']}, lens {sd['campaign_lens']}; "
+                 f"{len(sd['panel'])} assets): n {sd['n_campaigns']} campaigns · "
+                 f"{sd['n_rows']} nest rows (both scales) · book_sha256 "
+                 f"{sd['book_sha256'][:16]}… (== the scorer's input) · regbook stamped: "
+                 f"content {sd['regbook_content_sha256'][:16]}… / file "
+                 f"{sd['regbook_file_sha256'][:16]}… · instants per scale: "
+                 + " · ".join(f"{k} {v}" for k, v in sd["n_rows_by_kind_per_scale"].items())
+                 + " · named events per scale: "
+                 + " · ".join(f"{k} {v}" for k, v in sd["named_events_per_scale"].items()
+                              if k != "bar_close"))
+        L.append("  - event sources: " + "; ".join(f"{k} = {v}" for k, v in
+                                                   sd["event_sources"].items()))
+    L += ["", "## The 4h / 12h state at ENTRY per lane (n; calibrated = the scale of record, "
+          "IN-SAMPLE on tuning-era entries; frozen3.0 = the causal twin)", ""]
+    L += lane_facts(G)
+    bs = ordered(G["NEST_GRID_LANES_BY_STATE"], LANE_ORDER + [("state", STATES5 +
+                                                              ("__ALL__",))])
+    L += ["", "### Honesty at ENTRY per (book, scale, lens) [L-R.2, AM-4]", ""]
+    L += _honesty_lines(bs, book_col=True)
+    cc = COIN_CATS + ("NA",)
+    L += ["", "### Frequency at ENTRY: state x coincidence, per lens (every lane book, both "
+          "scales, both coincidence rules) — WHOLE", ""]
+    L += md_table(ordered(G["NEST_GRID_LANES_FREQ"],
+                          LANE_ORDER + [("coin_rule", COIN_RULES), ("state", STATES5),
+                                        ("coin_cat", cc)]),
+                  ["book", "scale_kind", "lens", "coin_rule", "state", "coin_cat", "n",
+                   "n_entries", "share", "n_scale_in_sample", "n_stability_changed",
+                   "n_holdout", "lenses_read", "pick_window"])
+    L += ["", "### Outcomes by L state at ENTRY (n, E[net R], P(win), ΣR — the book's own "
+          "net_r; the HOLDOUT slice beside) — WHOLE", ""]
+    L += md_table(bs, ["book", "scale_kind", "lens", "state", "n", "mean_net_r", "p_win",
+                       "sum_net_r"] + GRID_HONEST_COLS + ["pick_window",
+                                                          "stability_changed_members"])
+    L += ["", "### Outcomes by coincidence at ENTRY (the HOLDOUT slice beside) — WHOLE", ""]
+    L += md_table(ordered(G["NEST_GRID_LANES_BY_COIN"],
+                          LANE_ORDER + [("coin_rule", COIN_RULES), ("coin_cat", cc)]),
+                  ["book", "scale_kind", "lens", "coin_rule", "coin_cat", "n", "mean_net_r",
+                   "p_win", "sum_net_r"] + GRID_HONEST_COLS + ["lenses_read", "pick_window",
+                                                               "stability_changed_members"])
+    return L
+
+
+def _guard_lanes(out: Path) -> Path:
+    """stage_r/lanes (the record); a direct child of DET_ROOT; or a direct child of a
+    `_det_stage_r/` directory OUTSIDE the repo tree (a fixture scratch)."""
+    o = Path(out).resolve()
+    if o == LANES_OUT.resolve() or o.parent == DET_ROOT.resolve():
+        return o
+    trees = {ROOT.resolve(), Path(E.MAIN_TREE).resolve()}
+    if o.parent.name == DET_ROOT.name and not any(_inside(o, t) for t in trees):
+        return o
+    _halt(f"lanes --out-dir {o} is neither {E.rel_of(E._real(LANES_OUT))}, a run dir under "
+          f"{DET_ROOT.name}/, nor one under a {DET_ROOT.name}/ scratch outside the repo")
+    return o
+
+
+def lanes(out: Path = LANES_OUT, books=LANE_BOOKS) -> dict:
+    """THE LANES PASS [SR-15]: every lane book through the nest-book door, both scales;
+    NEST_<REG>.parquet (+ .json), the lane nesting grid whole, NEST_GRID_LANES.md,
+    LANES_MANIFEST.json."""
+    out = _guard_lanes(out)
+    W, K = {}, {}
+    scored = _score_inputs()
+    nests, sides, entries, panels, regs = {}, {}, {}, {}, {}
+    for reg, arm, kind in books:
+        f, side, df = lane_book(reg, arm, kind, scored)
+        label = f"{reg}/{arm}"
+        nests.setdefault(reg, []).append(f)
+        sides[label] = side
+        panels[label] = side["panel"] or sorted(set(df["symbol"]))
+        entries[label] = lane_entries(f, df)
+        regs[label] = df
+    written = {}
+    for reg in dict.fromkeys(r for r, _, _ in books):
+        d = pd.concat(nests[reg], ignore_index=True)
+        written[reg] = put_table(d, f"NEST_{reg}", LANES_KEYS[f"NEST_{reg}"], out, W, K,
+                                 round_floats=False)
+        arms = [a for r, a, _ in books if r == reg]
+        put_json({"registration": reg, "arms": {a: sides[f"{reg}/{a}"] for a in arms},
+                  "key": LANES_KEYS[f"NEST_{reg}"], "scales": list(SCALE_KINDS),
+                  "content_sha256": W[f"NEST_{reg}"], "law": READINGS[14], **COLLAR, **AS_OF,
+                  "source_script": "scripts/tierc11_stage_r.py lanes"},
+                 out / f"NEST_{reg}.json")
+    G = lane_grid(entries, panels)
+    for name, d in G.items():
+        G[name] = put_table(d, name, LANES_KEYS[name], out, W, K)
+    md = put_text("\n".join(lanes_md(G, sides)) + "\n", out / LANES_MD)
+    man = {"stage": "TC11-R (R3 lanes)", "tier": "TIER-C11", "seed": SEED, "as_of": PIN_ISO,
+           "as_of_close_ms": PIN_MS, "substrate": SUBSTRATE, "sha": W, "keys": K,
+           "books": {b: {k: v for k, v in sides[b].items() if k != "event_sources"}
+                     for b in sides},
+           "event_sources": {b: sides[b]["event_sources"] for b in sides},
+           "inputs": {"SCALE_PICKS.json": sha_bytes(N.PICKS_PATH.read_bytes()),
+                      "scores/SCORE_MANIFEST.json": sha_bytes(SCORE_MANIFEST_PATH.read_bytes())},
+           "md_sha256": sha_bytes(md), "readings": [READINGS[14], READINGS[8], READINGS[5]],
+           "collar": COLLAR}
+    put_json(man, out / LANES_MANIFEST)
+    return {"nests": written, "sides": sides, "G": G, "manifest": man, "entries": entries}
+
+
 def main(argv: list[str] | None = None) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
     cmd = args[0] if args and not args[0].startswith("--") else "lean"
@@ -2068,6 +2568,15 @@ def main(argv: list[str] | None = None) -> int:
         clock(f"build wall {time.perf_counter() - t0:.1f}s")
         for l in LENSES11:
             sys.stdout.write(f"R2 {l}: {R['V'][l]['verdict']}\n")
+        return 0
+    if cmd == "lanes":
+        out = next((a.split("=", 1)[1] for a in args if a.startswith("--out-dir=")), None)
+        t0 = time.perf_counter()
+        R = lanes(LANES_OUT if out is None else Path(out))
+        clock(f"lanes wall {time.perf_counter() - t0:.1f}s")
+        for b, sd in R["sides"].items():
+            sys.stdout.write(f"{b}: n {sd['n_campaigns']} · rows {sd['n_rows']} · "
+                             + json.dumps(sd["named_events_per_scale"], sort_keys=True) + "\n")
         return 0
     if cmd == "nest-book":
         def opt(name: str, default=None):

@@ -1,0 +1,18 @@
+{
+  "lens": "fidelity",
+  "commit": "04067a04b320526c170c28b2ac28bd88348b5345",
+  "worktree": "/Users/luis/Naiad/.claude/worktrees/tc11-review-fidelity",
+  "before": {
+    "head": "04067a04b320526c170c28b2ac28bd88348b5345",
+    "porcelain": ""
+  },
+  "staged_artifacts": 142,
+  "staged_sha256": "df851c8f9a2d68b57d74f1e74c1f2fc1c7f704423ff7aa5df54026fbc46957e8",
+  "after": {
+    "head": "04067a04b320526c170c28b2ac28bd88348b5345",
+    "porcelain": ""
+  },
+  "findings": [],
+  "verdict": "GREEN",
+  "fails_if": "HEAD != the reviewed commit, or porcelain non-empty, before or after"
+}

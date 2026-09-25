@@ -17,6 +17,7 @@ Registered books are printed as **book, not a verdict** (no CI, no p, no verdict
 - [LEAN-HEPHAESTUS] SA-9 COLLARS [L-1.4]: every stage table but REGISTERED_BOOKS carries tier 'TIER-E', selection_not_a_result 'a SELECTION, not a result', gates 'nothing' and no verdict word; registered books are labelled 'book, not a verdict'. Head-to-head: 'neither promoted by the other's failure'.
 - [LEAN-HEPHAESTUS] SA-10 SCALE-IN-SAMPLE [L-R.2]: calibrated-scale range reads at instants <= the era cut are structurally in-sample (tuning-era calibration); the holdout slice (tierE__holdout) and the frozen-3.0 twin (tierE__frozen3) are the statistics printed beside the verdict.
 - [LEAN-HEPHAESTUS] SA-11 HEAD-TO-HEAD [registrations' tier_e_arms, scorer SC-3]: tierE__head_to_head_vs_p_add_sfp (under P-ADD-BRK) / tierE__head_to_head_vs_p_add_brk (under P-ADD-SFP) = the registration's scored book, row for row (the same book sha), with ruler 'paired' and sidecar base_arm '<the other registration>/scored'; both are the v6 key set, so the paired premise holds by construction. Extras opponent_net_r and delta_vs_opponent_net_r (= net_r - opponent_net_r). The head-to-head is a SELECTION, not a result: 'neither promoted by the other's failure'.
+- [LEAN-HEPHAESTUS] SA-12 NAMED-EVENT INSTANTS [L-R.5, AM-6; the lanes pass]: every arm carries the extra columns add1_close_ms / add2_close_ms = the instant of the first / second admitted add (Add.ms: the event's 1h close, or the parent's close on an L-W.0 mismatch bar), NA where fewer adds — close events, stamped at their close; required columns, numbers, book_sha256 and sidecars unchanged.
 
 ## 1 · Registered books (book, not a verdict)
 
@@ -815,22 +816,22 @@ The corridor's mismatch bars (a 4h bar whose four 1h children do not reproduce i
 
 | file | rows | key | content sha256 | book sha256 |
 |---|---|---|---|---|
-| regbooks/P-ADD-BRK/base.parquet | 200 | symbol, entry_ms | ee8f06605b9bc0ad… | f41bfaf02b86dfb0… |
-| regbooks/P-ADD-BRK/scored.parquet | 200 | symbol, entry_ms | 0f642194049fa400… | 15ba415b7a30f20f… |
-| regbooks/P-ADD-BRK/tierE__frozen3.parquet | 200 | symbol, entry_ms | a4d68ded0e6d0936… | b854c1c6ef8903d6… |
-| regbooks/P-ADD-BRK/tierE__head_to_head_vs_p_add_sfp.parquet | 200 | symbol, entry_ms | 9da47ef7a82bb293… | 15ba415b7a30f20f… |
-| regbooks/P-ADD-BRK/tierE__holdout.parquet | 77 | symbol, entry_ms | 060e2dad360a2c26… | a4854282ba7253e0… |
-| regbooks/P-ADD-BRK/tierE__refuse_below_entry.parquet | 200 | symbol, entry_ms | 0f642194049fa400… | 15ba415b7a30f20f… |
-| regbooks/P-ADD-BRK/tierE__refuse_post_harvest.parquet | 200 | symbol, entry_ms | f153928dde6fc8a7… | dbd4dbac8f4f28dc… |
-| regbooks/P-ADD-BRK/tierE__tuning.parquet | 123 | symbol, entry_ms | f9d3ec50b8a64033… | a8dc8371e22a4f28… |
-| regbooks/P-ADD-SFP/base.parquet | 200 | symbol, entry_ms | ee8f06605b9bc0ad… | f41bfaf02b86dfb0… |
-| regbooks/P-ADD-SFP/scored.parquet | 200 | symbol, entry_ms | 98332199920f1fb8… | ee2d19250f3e3d74… |
-| regbooks/P-ADD-SFP/tierE__frozen3.parquet | 200 | symbol, entry_ms | d5478ecdef997eab… | 227a062b2ed99c28… |
-| regbooks/P-ADD-SFP/tierE__head_to_head_vs_p_add_brk.parquet | 200 | symbol, entry_ms | 480105bdb11e025a… | ee2d19250f3e3d74… |
-| regbooks/P-ADD-SFP/tierE__holdout.parquet | 77 | symbol, entry_ms | ee359ab9562936fe… | fb0f47b8604ac1ee… |
-| regbooks/P-ADD-SFP/tierE__refuse_below_entry.parquet | 200 | symbol, entry_ms | d66adbcc20ae8bc3… | eccbbcbd9afbaa55… |
-| regbooks/P-ADD-SFP/tierE__refuse_post_harvest.parquet | 200 | symbol, entry_ms | 68f1b0e0ad09aabe… | 80276294f3ce4cbd… |
-| regbooks/P-ADD-SFP/tierE__tuning.parquet | 123 | symbol, entry_ms | 86309a990f7a1dde… | 011c58ba0964a713… |
+| regbooks/P-ADD-BRK/base.parquet | 200 | symbol, entry_ms | 21eabd96962af61c… | f41bfaf02b86dfb0… |
+| regbooks/P-ADD-BRK/scored.parquet | 200 | symbol, entry_ms | 4c68370ad23000e8… | 15ba415b7a30f20f… |
+| regbooks/P-ADD-BRK/tierE__frozen3.parquet | 200 | symbol, entry_ms | cc678eca8b17bc63… | b854c1c6ef8903d6… |
+| regbooks/P-ADD-BRK/tierE__head_to_head_vs_p_add_sfp.parquet | 200 | symbol, entry_ms | f102e560d439018c… | 15ba415b7a30f20f… |
+| regbooks/P-ADD-BRK/tierE__holdout.parquet | 77 | symbol, entry_ms | d7df685b7b54033a… | a4854282ba7253e0… |
+| regbooks/P-ADD-BRK/tierE__refuse_below_entry.parquet | 200 | symbol, entry_ms | 4c68370ad23000e8… | 15ba415b7a30f20f… |
+| regbooks/P-ADD-BRK/tierE__refuse_post_harvest.parquet | 200 | symbol, entry_ms | b8eb696ddb892e88… | dbd4dbac8f4f28dc… |
+| regbooks/P-ADD-BRK/tierE__tuning.parquet | 123 | symbol, entry_ms | 364eb8ec8e578488… | a8dc8371e22a4f28… |
+| regbooks/P-ADD-SFP/base.parquet | 200 | symbol, entry_ms | 21eabd96962af61c… | f41bfaf02b86dfb0… |
+| regbooks/P-ADD-SFP/scored.parquet | 200 | symbol, entry_ms | adc9ea36c04ebbed… | ee2d19250f3e3d74… |
+| regbooks/P-ADD-SFP/tierE__frozen3.parquet | 200 | symbol, entry_ms | a4f8d0381f5b2e8f… | 227a062b2ed99c28… |
+| regbooks/P-ADD-SFP/tierE__head_to_head_vs_p_add_brk.parquet | 200 | symbol, entry_ms | 8e2131d234d1f71a… | ee2d19250f3e3d74… |
+| regbooks/P-ADD-SFP/tierE__holdout.parquet | 77 | symbol, entry_ms | 7743d9ec2a741bbf… | fb0f47b8604ac1ee… |
+| regbooks/P-ADD-SFP/tierE__refuse_below_entry.parquet | 200 | symbol, entry_ms | bfa582a9d2e69f6f… | eccbbcbd9afbaa55… |
+| regbooks/P-ADD-SFP/tierE__refuse_post_harvest.parquet | 200 | symbol, entry_ms | fcb904f1c3d15123… | 80276294f3ce4cbd… |
+| regbooks/P-ADD-SFP/tierE__tuning.parquet | 123 | symbol, entry_ms | 37dd04a37c7367d7… | 011c58ba0964a713… |
 | stage_a/ACTED.parquet | 284 | registration, arm, symbol, entry_ms | d1fdfc2b9f98b0cb… | — |
 | stage_a/ADDS.parquet | 350 | registration, arm, symbol, entry_ms, seq | c48cbb97128c26d1… | — |
 | stage_a/DISPOSITIONS.parquet | 459 | registration, arm, symbol, entry_ms, event_ms, event_rid | fdc096198a681b0f… | — |

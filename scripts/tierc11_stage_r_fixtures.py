@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-"""TIER-C11 · STAGE R-a — F-FEAS · F-R5-ANCHOR · F-CHOP-VALUE · F-NEST-BOOK · F-GRID ·
-F-KEY · F-DET.  The fixtures of scripts/tierc11_stage_r.py (R1 lenses, R2 feasibility,
+"""TIER-C11 · STAGE R-a — F-FEAS · F-R5-ANCHOR · F-CHOP-VALUE · F-NEST-BOOK · F-NEST-LANES ·
+F-GRID · F-KEY · F-DET.  The fixtures of scripts/tierc11_stage_r.py (R1 lenses, R2 feasibility,
 R3 the nest on the books + the nest-book door, R5 the chop table) [LEANS L-R.1..L-R.5,
 L-R.7; AM-1, AM-2, AM-4, AM-6].  REPAIRED after the stage verifier's report (MAJOR-1..4,
 MINOR-1..11, 14): the tolls, the R5 / NEST_GRID values and honesty labels, the door's
@@ -111,12 +111,20 @@ every key and required column.
                 P-BRK-4H scored (lane4h: 4h closes from the entry, +1R derived,
                 harvest_i, the exit stamp typed from exit_reason and the tape),
                 P-WARN-1 scored (v6transform: arm_ms, v6's harvest by the pairing key,
-                derived exit and +1R), a harvest-free copy of P-RELAY-1 scored
-                re-sidecar'd here (relay: window_arm_close_ms, exit_stamp_ms,
-                latch_1h_ms at the resolving 1h child's close, and planted
-                parent-decided latches at the parent's OPEN with the close as twin);
-                or the door does NOT refuse P-RELAY-1 scored and P-ADD-BRK scored with
-                the typed UNSTAMPED counts (their harvested / n_adds records).
+                the 1h-resolved exit_instant_ms — a warn exit at its own 1h close, a
+                stop at its resolving child's close — and the derived +1R), a
+                harvest-free copy of P-RELAY-1 scored re-sidecar'd here (relay:
+                window_arm_close_ms, exit_stamp_ms, latch_1h_ms at the resolving 1h
+                child's close with its twin at the 4h close by the twin law, and planted
+                parent-decided latches at the parent's OPEN with the close as twin), a
+                copy of P-ADD-BRK scored whose last-child stops (exit_close_1h_ms at the 4h
+                close, no other event in the bar) are re-filed exit_resolved_by 'parent'
+                (the stop at the parent's OPEN, the close as twin, the parent stamp law
+                named; >= 2 planted) [verifier MINOR-3]; or the door does NOT refuse the
+                same stops re-filed 'close' (an intrabar exit is never read at the close),
+                nor P-RELAY-1 scored and P-ADD-BRK scored STRIPPED of their named-event
+                instant columns (harvest_close_ms; add1_close_ms / add2_close_ms) with the
+                typed UNSTAMPED counts (their harvested / n_adds records).
                 SABOTAGE: intrabar events close-stamped (the module's
                 INTRABAR_STAMP mutated), on the books path and on the derived path; a
                 one-bar-late nest read on a copy; one bar_close instant dropped; a
@@ -124,7 +132,56 @@ every key and required column.
                 leaked next-bar read at the sampled entries (a copy); a harvested
                 regbook with no harvest instant (the door must HALT UNSTAMPED); an
                 n_adds > 0 regbook with no add instants (HALT UNSTAMPED); the
-                parent-latch law disabled (SR._parent_latch mutated) on the relay copy.
+                parent-latch law disabled (SR._parent_latch mutated) on the relay copy;
+                the parent-exit law disabled (a 'parent' exit read as '1h') on the
+                P-ADD-BRK parent copy.
+  F-NEST-LANES  [the lanes pass, SR-15; contract R3 "at every instant of every campaign of
+                every card (… the lanes below)"] FAILS IF any of the nine lane books typed
+                HERE (P-WARN-1 / P-AGE-1 / P-WIN-1 / P-BRK-4H / P-RELAY-1 / P-ADD-BRK /
+                P-ADD-SFP / P-TP-RNG scored + P-BRK-4H tierE__panel17) is absent from
+                stage_r/lanes/, is not the book the scorer scored (this file's book_sha256 ==
+                LANES_MANIFEST.json's == scores/SCORE_MANIFEST.json's input), or is not of its
+                typed door kind; any campaign's written instant set differs, at either scale,
+                from the door's law typed HERE (typed_door_instants: 4h closes from the arm /
+                entry through the exit stamp; arm / entry / harvest (harvest_close_ms first) /
+                adds (add1 / add2_close_ms) / bell at their close; +1R and a stop / TP fill at
+                their bar OPEN or at the close of the resolving 1h child, a parent-resolved
+                one at the parent's OPEN; THE TWIN LAW: an intrabar event stamped before its
+                4h bar's close carries one post-event twin at that close — the relay's and
+                the 1h-resolved latches' included — and a stamp that IS the 4h close none; a
+                warn exit at its own 1h close with no twin; corridor_end -> as_of_pin); any
+                row's stamp_law differs from the law typed HERE for its event's CLASS
+                (intrabar / close / twin, and the parent / 1h-child / derived sub-law) —
+                never read off exit_close_ms [verifier MINOR-1]; any row's named_event
+                differs from the naming law typed HERE; a book's harvest / add / +1R /
+                exit-or-pin instant count differs from its own record (harvested, n_adds,
+                latched_1h / reached_1r, n); a SEEDED sample (400 rows per book, seed
+                20260924) of the written nest differs from a FRESH N.nest_at at the same
+                instants; a lane grid (FREQ / BY_STATE / BY_COIN) is not WHOLE against the
+                cells declared HERE per book panel (the twelve's 12h / 1w state 'NA', 4h /
+                12h / 1d coincidence 'NA'; 1w 'NA' only) or a cell's n / share / mean / P(win)
+                / ΣR / holdout slice / honesty counts does not re-derive from the written entry
+                rows and the regbook's own net_r (counts exact, floats to the 8-dp bound); a
+                lane table lacks the exact collar or carries a verdict column; the manifest's
+                keys / content shas / the lanes/ file set are not the typed ones, or the
+                regbook bytes it pins per book (content sha — the csv, typed HERE — and file
+                sha, in the manifest and in NEST_<REG>.json) are not the regbook on disk
+                [verifier MINOR-4]; the door
+                REFUSES any arm of any regbook (all swept); or the lanes pass re-run in two
+                fresh interpreters (PYTHONHASHSEED 1 / 20260924) differs from the record by a
+                byte.  SABOTAGE: intrabar events close-stamped (SR.INTRABAR_STAMP mutated) on
+                P-WARN-1; the door's 1h-resolved exit source removed (SR.EXIT_1H_COLS
+                mutated: the warn exits read one bar late); a TP fill close-stamped in a copy
+                of NEST_P-TP-RNG; an add instant dropped from a copy of NEST_P-ADD-BRK; a
+                relay's harvest instant nulled in a regbook copy (the door must refuse); a
+                one-bar-late nest read on a copy (ETH, calibrated, instant + 4h); a TP fill
+                misnamed on a copy; a lane grid cell's n + 1 on a copy; a relay stop's
+                stamp_law relabelled 'close' on a copy; the twin anchor removed
+                (SR.EXIT_BAR_CLOSE_COLS mutated: the relay's stop twins lost); the +1R
+                post-event twins dropped from a copy of NEST_P-ADD-BRK; P-ADD-BRK scored
+                re-filed in a temp copy with one add instant moved +1h (book_sha256
+                unchanged).  Other stages' numbers (per-book counts, the plants' findings)
+                go to stdout only.
   F-GRID        FAILS IF a written grid is not WHOLE against the cells typed HERE
                 (R1 71 · R2 1458 · R5 64 · NEST_GRID_FREQ 544 · BY_STATE 100 · BY_COIN
                 136); an R1 pick (record / tuning / whole / first half) or window
@@ -149,12 +206,14 @@ every key and required column.
   F-KEY         FAILS IF a written parquet's key (typed HERE) is not unique, a typed
                 required column holds a null, a parquet on disk is undeclared in the
                 manifest (or a declared one absent), the manifest's key is not the
-                typed one, or its content sha is not the table's.  SABOTAGE: a
+                typed one, or its content sha is not the table's (lanes/ — the `lanes`
+                pass's own files and manifest — is F-NEST-LANES').  SABOTAGE: a
                 duplicated NEST row; a nulled R2 would_read; a manifest sha altered; a
                 manifest key altered; an undeclared parquet in a temp copy.
   F-DET         FAILS IF two subprocess builds (PYTHONHASHSEED 1, 20260924) under
                 RUN_ROOT/_det_stage_r differ from each other or from the canonical
-                stage_r/ files of record in the file set (recursive), any byte, or any
+                stage_r/ files of record in the file set (recursive; lanes/ is the
+                `lanes` pass's, re-run under both seeds by F-NEST-LANES), any byte, or any
                 parquet content sha (read through pandas on a PATH string, AM-2), or
                 either exits nonzero.  SABOTAGE: one byte bent in a copy; a parquet
                 copy with one float moved; a hash-order line emitted under the two
@@ -326,6 +385,28 @@ REQUIRED_T = {
                                  + COLLAR_COLS_T + ASOF_T,
 }
 REGBOOKS = E.OUT / "regbooks"                # other stages' regbooks: READ-ONLY here
+# ── THE LANES PASS, typed HERE [contract R3; L-R.5, AM-6; SR-15] ────────────────────
+LANES_DIR_T = "lanes"
+LANE_BOOKS_T = (("P-WARN-1", "scored", "v6transform"), ("P-AGE-1", "scored", "v6transform"),
+                ("P-WIN-1", "scored", "v6transform"), ("P-BRK-4H", "scored", "lane4h"),
+                ("P-BRK-4H", "tierE__panel17", "lane4h"), ("P-RELAY-1", "scored", "relay"),
+                ("P-ADD-BRK", "scored", "v6transform"), ("P-ADD-SFP", "scored", "v6transform"),
+                ("P-TP-RNG", "scored", "v6transform"))
+LANE_REGS_T = tuple(dict.fromkeys(r for r, _, _ in LANE_BOOKS_T))
+LANE_KEYS_T = {**{f"NEST_{r}": ["arm"] + NEST_KEY_T for r in LANE_REGS_T},
+               "NEST_GRID_LANES_FREQ": ["book", "scale_kind", "lens", "coin_rule", "state",
+                                        "coin_cat"],
+               "NEST_GRID_LANES_BY_STATE": ["book", "scale_kind", "lens", "state"],
+               "NEST_GRID_LANES_BY_COIN": ["book", "scale_kind", "lens", "coin_rule",
+                                           "coin_cat"]}
+LANE_FILES_T = tuple(sorted([f"{k}.parquet" for k in LANE_KEYS_T]
+                            + [f"NEST_{r}.json" for r in LANE_REGS_T]
+                            + ["LANES_MANIFEST.json", "NEST_GRID_LANES.md"]))
+LANE_SAMPLE_T = 400                      # seeded nest rows per lane book for the fresh join
+EXIT_1H_T = ("exit_instant_ms", "exit_close_1h_ms")   # a 1h-walked ride's resolved exit
+INTRABAR_T = ("stop", "tp", "target")
+LENSES_OF_T = {**{s: LENSES_T for s in C5_T}, **{s: U_LENSES_T for s in U12_T}}
+SCORE_MANIFEST_T = E.OUT / "scores" / "SCORE_MANIFEST.json"
 
 OUT = SR.OUT
 DET_ROOT = SR.DET_ROOT
@@ -1443,23 +1524,47 @@ def _mism(x) -> set:
     return set() if _isna(x) else {int(x)}
 
 
-def typed_door_instants(reg: pd.DataFrame, kind: str) -> tuple[dict, list[str]]:
+def _hold_close(ms: int) -> int:
+    """the CLOSE of the 4h bar holding the instant `ms` when `ms` is a 1h child's close
+    (== ms when that child is the bar's last)."""
+    return ((int(ms) + MS4H - 1) // MS4H) * MS4H
+
+
+LAW_BAR_T = "close (4h bar)"
+LAW_TWIN_T = "post-event twin (close)"
+
+
+def typed_door_instants(reg: pd.DataFrame, kind: str, laws: dict | None = None
+                        ) -> tuple[dict, list[str]]:
     """THE DOOR'S LAW typed HERE for a regbook (4h kinds v6transform / lane4h /
     relay): 4h closes from the start (the arm close; the entry close for lane4h)
-    through the exit stamp (exit_stamp_ms as filed; else a stop -> the OPEN of the 4h
-    bar holding exit_close_ms, a close reason -> exit_close_ms); arm / entry /
-    harvest / bell at their close; +1R: latch_1h_ms (gated by latched_1h) at the
+    through the exit stamp (exit_stamp_ms as filed; else a 1h-walked ride's resolved
+    exit instant exit_instant_ms / exit_close_1h_ms — as filed, but a PARENT-resolved
+    intrabar exit at the parent bar's OPEN; else a stop -> the OPEN of the 4h bar
+    holding exit_close_ms, a close reason -> exit_close_ms); arm / entry / harvest /
+    adds / bell at their close; +1R: latch_1h_ms (gated by latched_1h) at the
     child's close, or — its parent bar listed in walk_mismatch_ms — at the parent's
-    OPEN with the close as twin; else, reached_1r, the OPEN of the first 4h bar in
-    (entry, exit] reaching +1R on the raw tape, the close as twin; harvest: harvest_i
-    / harvest_ms / (v6transform) v6's harvest_close_ms from books/, when harvested;
-    corridor_end -> as_of_pin; an exit stamp before exit_close_ms -> the twin."""
+    OPEN; else, reached_1r, the OPEN of the first 4h bar in (entry, exit] reaching +1R
+    on the raw tape; harvest: harvest_close_ms / harvest_i / harvest_ms /
+    (v6transform) v6's harvest_close_ms from books/, when harvested; adds:
+    add1_close_ms / add2_close_ms as filed; corridor_end -> as_of_pin.
+    THE TWIN LAW [SR-15], typed HERE from the stamp alone: an INTRABAR event (+1R, a
+    stop, a TP fill) stamped before the close of the 4h bar holding it carries one
+    post-event twin at that close — a bar-OPEN stamp (the unwalked / parent / derived
+    law) -> the same bar's close (stamp + 4h); a 1h child's close -> its parent 4h
+    close (none when the child is the bar's last: the stamp IS the close); a close
+    event (a warn exit, a close exit) has none.  exit_bar_close_ms, when filed, must
+    BE the typed twin (or the stamp itself when there is none).
+    `laws` (optional) receives, per (symbol, entry_ms, instant_kind), the typed stamp
+    law as (exact | prefix, text, must-contain) [verifier MINOR-1]."""
     exp, bad = {}, []
+    lw = {} if laws is None else laws
     cols = set(reg.columns)
     v6 = pd.read_parquet(str(E.OUT / "books" / "v6_campaigns.parquet"))
     v6k = {(str(a), int(b)): (int(c), bool(h), (None if _isna(hc) else int(hc)))
            for a, b, c, h, hc in zip(v6["symbol"], v6["entry_ms"], v6["arm_close_ms"],
                                      v6["harvested"], v6["harvest_close_ms"])}
+    x1h = next((c for c in EXIT_1H_T if c in cols), None)
     for s in sorted(reg["symbol"].unique()):
         tape = N.load11(s, "4h")
         t0 = tape.t0.astype(np.int64)
@@ -1470,14 +1575,31 @@ def typed_door_instants(reg: pd.DataFrame, kind: str) -> tuple[dict, list[str]]:
             k = (s, int(r["entry_ms"]))
             enc, ec = int(r["entry_close_ms"]), int(r["exit_close_ms"])
             reason = str(r["exit_reason"])
-            intrabar = reason in ("stop", "tp", "target")
+            intrabar = reason in INTRABAR_T
             if "exit_stamp_ms" in cols:
-                ex = int(r["exit_stamp_ms"])
+                ex, how = int(r["exit_stamp_ms"]), "exit_stamp_ms"
                 if ex > ec or ex % MS1H:
                     bad.append(f"DOOR-LAW: {s} {enc}: exit_stamp_ms {ex} is not a 1h instant "
                                f"at or before exit_close_ms {ec}")
+                # a filed stamp: a 4h OPEN before exit_close_ms is the bar-OPEN law; any
+                # other 1h instant is a resolving child's close
+                opened = ex % MS4H == 0 and ex < ec
+            elif "exit_event_ms" not in cols and x1h is not None:
+                x = int(r[x1h])
+                if x > ec or x % MS1H or x <= enc:
+                    bad.append(f"DOOR-LAW: {s} {enc}: {x1h} {x} is not a 1h instant in "
+                               f"(entry close, exit_close_ms {ec}]")
+                by = str(r["exit_resolved_by"])
+                if by == "close" and (intrabar or x != ec):
+                    bad.append(f"DOOR-LAW: {s} {enc}: exit_resolved_by 'close' on {reason!r} "
+                               f"at {x} (exit_close_ms {ec}) — only a close reason at "
+                               f"exit_close_ms is resolved by the close")
+                ex = x - MS4H if (by == "parent" and intrabar) else x
+                how, opened = by, (by == "parent" and intrabar)
             else:
                 ex = _holding_open(ec) if intrabar else ec
+                how, opened = ("exit_event_ms" if "exit_event_ms" in cols else "derived"), \
+                    intrabar
                 if "exit_event_ms" in cols and int(r["exit_event_ms"]) != ex:
                     bad.append(f"DOOR-LAW: {s} {enc}: exit_event_ms {int(r['exit_event_ms'])} != "
                                f"the typed exit stamp {ex}")
@@ -1493,9 +1615,12 @@ def typed_door_instants(reg: pd.DataFrame, kind: str) -> tuple[dict, list[str]]:
                 start = v6k[k][0]
             first = enc if start is None else start
             exp[k + ("bar_close",)] = [int(c) for c in closes if first <= c <= ex]
+            lw[k + ("bar_close",)] = ("exact", LAW_BAR_T, "")
             if start is not None:
                 exp[k + ("arm",)] = [start]
+                lw[k + ("arm",)] = ("prefix", "close (", "")
             exp[k + ("entry",)] = [enc]
+            lw[k + ("entry",)] = ("exact", "close", "")
             if "latch_1h_ms" in cols:
                 lat = r["latch_1h_ms"]
                 on = ("latched_1h" not in cols) or (not _isna(r["latched_1h"])
@@ -1506,8 +1631,12 @@ def typed_door_instants(reg: pd.DataFrame, kind: str) -> tuple[dict, list[str]]:
                     if lat % MS4H == 0 and (lat - MS4H) in mm:
                         exp[k + ("plus_1r",)] = [lat - MS4H]
                         exp[k + ("plus_1r_post_event",)] = [lat]
+                        lw[k + ("plus_1r",)] = ("prefix", "intrabar", "parent 4h bar's OPEN")
                     else:
                         exp[k + ("plus_1r",)] = [lat]
+                        lw[k + ("plus_1r",)] = ("prefix", "intrabar", "resolving 1h child")
+                        if lat % MS4H:
+                            exp[k + ("plus_1r_post_event",)] = [_hold_close(lat)]
             elif "reached_1r" in cols and kind in ("v6transform", "lane4h"):
                 ei = pos[enc]
                 xi = int(np.searchsorted(closes, ec, side="left"))
@@ -1520,22 +1649,67 @@ def typed_door_instants(reg: pd.DataFrame, kind: str) -> tuple[dict, list[str]]:
                 if j1 is not None:
                     exp[k + ("plus_1r",)] = [int(t0[j1])]
                     exp[k + ("plus_1r_post_event",)] = [int(t0[j1]) + MS4H]
+                    lw[k + ("plus_1r",)] = ("prefix", "intrabar", "derived on the lens tape")
+            lw[k + ("plus_1r_post_event",)] = ("exact", LAW_TWIN_T, "")
             if "harvested" in cols and bool(r["harvested"]):
-                if "harvest_i" in cols:
+                if "harvest_close_ms" in cols:
+                    exp[k + ("harvest",)] = [int(r["harvest_close_ms"])]
+                elif "harvest_i" in cols:
                     exp[k + ("harvest",)] = [int(closes[int(r["harvest_i"])])]
                 elif "harvest_ms" in cols:
                     exp[k + ("harvest",)] = [int(r["harvest_ms"]) + MS4H]
                 elif kind == "v6transform":
                     exp[k + ("harvest",)] = [v6k[k][2]]
+                lw[k + ("harvest",)] = ("prefix", "close", "")
+            for q in (1, 2):
+                c = f"add{q}_close_ms"
+                if c in cols and not _isna(r[c]):
+                    exp[k + (f"add{q}",)] = [int(r[c])]
+                    lw[k + (f"add{q}",)] = ("exact", "close", "")
             if reason.startswith("bell"):
                 exp[k + ("bell",)] = [ec]
+                lw[k + ("bell",)] = ("exact", "close", "")
             if reason.startswith("corridor_end"):
                 exp[k + ("as_of_pin",)] = [ex]
+                lw[k + ("as_of_pin",)] = ("prefix", "close — the campaign is OPEN at the pin", "")
+                continue
+            exp[k + ("exit",)] = [ex]
+            if intrabar:
+                lw[k + ("exit",)] = ("prefix", "intrabar",
+                                     {"1h": "resolving 1h child", "parent": "parent 4h bar's OPEN",
+                                      "exit_stamp_ms": "exit_stamp_ms",
+                                      "exit_event_ms": "exit_event_ms"}.get(how, "intrabar"))
+                tw = (ex + MS4H) if opened else (_hold_close(ex) if ex % MS4H else None)
+                if tw is not None:
+                    exp[k + ("exit_post_event",)] = [tw]
+                    lw[k + ("exit_post_event",)] = ("exact", LAW_TWIN_T, "")
+                if "exit_bar_close_ms" in cols and not _isna(r["exit_bar_close_ms"]) and \
+                        int(r["exit_bar_close_ms"]) != (ex if tw is None else tw):
+                    bad.append(f"DOOR-LAW: {s} {enc}: exit_bar_close_ms "
+                               f"{int(r['exit_bar_close_ms'])} is not the typed twin "
+                               f"{tw} of the stamp {ex}")
             else:
-                exp[k + ("exit",)] = [ex]
-                if ex < ec:
-                    exp[k + ("exit_post_event",)] = [ec]
+                lw[k + ("exit",)] = (("prefix", "close", "its own instant") if ex < ec
+                                     else ("exact", "close", ""))
     return exp, bad
+
+
+def stamp_law_findings(nest: pd.DataFrame, laws: dict, tag: str = "") -> list[str]:
+    """[verifier MINOR-1] every row's stamp_law == the law typed HERE for its event's
+    CLASS (intrabar vs close; the parent / 1h-child / derived sub-law)."""
+    out, bad, first = [], 0, None
+    for sym, em, kd, sl in zip(nest["symbol"], nest["entry_ms"], nest["instant_kind"],
+                               nest["stamp_law"]):
+        t = laws.get((str(sym), int(em), str(kd)))
+        sl = str(sl)
+        ok = t is not None and ((sl == t[1]) if t[0] == "exact" else sl.startswith(t[1])) \
+            and (t[2] in sl)
+        if not ok:
+            bad += 1
+            first = first or (str(sym), int(em), str(kd), sl[:70], t)
+    if bad:
+        out.append(f"{tag}STAMP-LAW: {bad} row(s) off the typed stamp law, e.g. {first}")
+    return out
 
 
 def typed_book_sha(df: pd.DataFrame) -> str:
@@ -1575,6 +1749,44 @@ def relay_copy(tmp: Path, plant_parent: bool = True) -> tuple[Path, int, int]:
             "n": int(len(d)), "book_sha256": typed_book_sha(d),
             "description": "F-NEST-BOOK's synthetic copy of P-RELAY-1 scored (harvest-free, "
                            "parent latches planted) — never scored"}
+    (reg / "scored.json").write_text(json.dumps(meta, indent=1, sort_keys=True), encoding="utf-8")
+    return reg, int(len(d)), npl
+
+
+def add_parent_copy(tmp: Path, by: str = "parent") -> tuple[Path, int, int]:
+    """A copy of P-ADD-BRK scored in which every stop resolved in its 4h bar's LAST 1h
+    child (exit_close_1h_ms AT the 4h close) whose parent bar holds no other named event
+    after its OPEN (latch, add, v6's harvest) is re-filed exit_resolved_by `by` —
+    'parent' (the parent-resolved exit path: the stop at the parent's OPEN, the close as
+    its twin) or 'close' (an intrabar exit resolved by the close: the door must refuse)
+    [verifier MINOR-3].  The required columns are untouched, so the sidecar's typed
+    book_sha256 is the scored arm's.  Returns (dir, n rows, n planted)."""
+    d = pd.read_parquet(str(REGBOOKS / "P-ADD-BRK" / "scored.parquet"))
+    v6 = pd.read_parquet(str(E.OUT / "books" / "v6_campaigns.parquet"))
+    hv = {(str(a), int(b)): (None if (not bool(h) or _isna(c)) else int(c))
+          for a, b, h, c in zip(v6["symbol"], v6["entry_ms"], v6["harvested"],
+                                v6["harvest_close_ms"])}
+    by_col = d["exit_resolved_by"].astype(object).copy()
+    npl = 0
+    for i, r in d.iterrows():
+        x = r["exit_close_1h_ms"]
+        if str(r["exit_reason"]) != "stop" or _isna(x) or int(x) % MS4H:
+            continue
+        x = int(x)
+        evs = [r[c] for c in ("latch_1h_ms", "add1_close_ms", "add2_close_ms")] + \
+              [hv.get((str(r["symbol"]), int(r["entry_ms"])))]
+        if any(e is not None and not _isna(e) and x - MS4H < int(e) <= x for e in evs):
+            continue
+        by_col.loc[i] = by
+        npl += 1
+    d["exit_resolved_by"] = by_col.astype(str)
+    reg = tmp / f"FIX-ADD-{by.upper()}"
+    reg.mkdir(parents=True, exist_ok=True)
+    d.to_parquet(str(reg / "scored.parquet"), index=False)
+    meta = {"registration": f"FIX-ADD-{by.upper()}", "arm": "scored", "kind": "scored",
+            "n": int(len(d)), "book_sha256": typed_book_sha(d),
+            "description": f"F-NEST-BOOK's synthetic copy of P-ADD-BRK scored (last-child "
+                           f"stops re-filed exit_resolved_by {by!r}) — never scored"}
     (reg / "scored.json").write_text(json.dumps(meta, indent=1, sort_keys=True), encoding="utf-8")
     return reg, int(len(d)), npl
 
@@ -1622,17 +1834,55 @@ def door_law_findings(tmp: Path) -> tuple[list[str], list[str]]:
                      f"{int((z['instant_kind'] == 'plus_1r_post_event').sum())})")
     if npl < 2:
         f.append(f"DOOR-REAL: only {npl} parent latches could be planted (cardinality)")
-    for reg, kind, what, col in (("P-RELAY-1", "relay", "harvest", "harvested"),
-                                 ("P-ADD-BRK", "v6transform", "add", "n_adds")):
+    # the PARENT-RESOLVED EXIT path [verifier MINOR-3]: planted last-child stops re-filed
+    # 'parent' -> the parent's OPEN, the close as the twin, the typed parent law named
+    ac, n_ac, npx = add_parent_copy(tmp, "parent")
+    laws: dict = {}
+    exp, bad = typed_door_instants(pd.read_parquet(str(ac / "scored.parquet")), "v6transform",
+                                   laws)
+    f += [x.replace("DOOR-LAW", "DOOR-LAW add parent copy") for x in bad]
+    got, halt = door_run(ac, "scored", "v6transform", tmp / "add_parent_out")
+    if got is None:
+        f.append(f"DOOR-REAL: the P-ADD-BRK parent copy HALTED: {halt[:200]}")
+    else:
+        f += instant_findings(got, exp, tag="DOOR-REAL add parent copy ")
+        f += stamp_law_findings(got, laws, tag="DOOR-REAL add parent copy ")
+        z = got[got["scale_kind"] == "calibrated"]
+        par = z["stamp_law"].astype(str).str.contains("parent 4h bar's OPEN") & \
+            (z["instant_kind"] == "exit")
+        if int(par.sum()) != npx:
+            f.append(f"DOOR-REAL: the P-ADD-BRK parent copy stamps {int(par.sum())} exits by "
+                     f"the parent law, {npx} planted")
+        tally.append(f"P-ADD-BRK scored parent copy ({n_ac} campaigns, v6transform): {npx} "
+                     f"last-child stops planted exit_resolved_by 'parent' -> stamped at the "
+                     f"parent's OPEN, twin at the close")
+    if npx < 2:
+        f.append(f"DOOR-REAL: only {npx} parent exits could be planted (cardinality)")
+    cc, _, ncl = add_parent_copy(tmp, "close")
+    got, halt = door_run(cc, "scored", "v6transform", tmp / "add_close_out")
+    if got is not None or "resolved by 'close'" not in halt or ncl < 2:
+        f.append(f"DOOR-REFUSE: a P-ADD-BRK copy with {ncl} stop(s) resolved by 'close' must "
+                 f"HALT (an intrabar exit is never read at the close); got "
+                 + ("a filed table" if got is not None else f"HALT {halt[:160]}"))
+    else:
+        tally.append(f"P-ADD-BRK scored copy with {ncl} stops resolved by 'close' REFUSED")
+    for reg, kind, what, col, strip in (
+            ("P-RELAY-1", "relay", "harvest", "harvested", ("harvest_close_ms",)),
+            ("P-ADD-BRK", "v6transform", "add", "n_adds", ("add1_close_ms", "add2_close_ms"))):
         df = pd.read_parquet(str(REGBOOKS / reg / "scored.parquet"))
         n_t = int(df[col].astype(bool).sum()) if col == "harvested" else int(df[col].sum())
-        got, halt = door_run(REGBOOKS / reg, "scored", kind, tmp / f"refuse_{reg}")
+        cp = tmp / f"strip_{reg}"
+        cp.mkdir(parents=True, exist_ok=True)
+        df.drop(columns=list(strip)).to_parquet(str(cp / "scored.parquet"), index=False)
+        shutil.copyfile(REGBOOKS / reg / "scored.json", cp / "scored.json")
+        got, halt = door_run(cp, "scored", kind, tmp / f"refuse_{reg}")
         if got is not None or "UNSTAMPED" not in halt or f"{what} {n_t} " not in halt:
-            f.append(f"DOOR-REFUSE: {reg} scored ({kind}) must HALT UNSTAMPED '{what} {n_t}' "
-                     f"(typed from its {col}); got "
-                     + ("a filed table" if got is not None else f"HALT {halt[:160]}"))
+            f.append(f"DOOR-REFUSE: {reg} scored ({kind}) WITHOUT its instant column(s) "
+                     f"{list(strip)} must HALT UNSTAMPED '{what} {n_t}' (typed from its {col}); "
+                     f"got " + ("a filed table" if got is not None else f"HALT {halt[:160]}"))
         else:
-            tally.append(f"{reg} scored REFUSED: UNSTAMPED {what} {n_t} (typed from its {col})")
+            tally.append(f"{reg} scored stripped of {list(strip)} REFUSED: UNSTAMPED {what} "
+                         f"{n_t} (typed from its {col})")
     return f, tally
 
 
@@ -1719,6 +1969,29 @@ def nestbook_break():
         finally:
             shutil.rmtree(tmp, ignore_errors=True)
 
+    def parent_exit_off():
+        tmp = Path(tempfile.mkdtemp(prefix="f-nestbook-addpar-"))
+        try:
+            ac, _, _ = add_parent_copy(tmp, "parent")
+            df = pd.read_parquet(str(ac / "scored.parquet"))
+            ex, _ = typed_door_instants(df, "v6transform")
+            orig = SR._exit_stamp
+
+            def as_1h(r, closes, step):         # a 'parent' exit read as '1h' (the close)
+                if "exit_resolved_by" in r and str(r["exit_resolved_by"]) == "parent":
+                    r = r.copy()
+                    r["exit_resolved_by"] = "1h"
+                return orig(r, closes, step)
+            with mutated(SR, "_exit_stamp", as_1h):
+                inst, _ = SR.instants_of(df, "v6transform")
+            both = pd.concat([inst.assign(scale_kind=k) for k in SCALES_T], ignore_index=True)
+            f = instant_findings(both, ex)
+            return ([f"STAMP: planted parent-resolved stops of the P-ADD-BRK copy are not "
+                     f"stamped at the parent's OPEN with the close as twin (the typed law)"]
+                    if f else [])
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+
     return plants([
         ("intrabar events close-stamped (SR.INTRABAR_STAMP = 'bar_close')", "STAMP",
          close_stamped),
@@ -1735,6 +2008,8 @@ def nestbook_break():
         ("an n_adds > 0 campaign with no add instants", "UNSTAMPED", unstamped_add),
         ("the parent-latch law disabled (SR._parent_latch mutated) on the relay copy", "STAMP",
          parent_off),
+        ("the parent-exit law disabled (a 'parent' exit read as '1h': stamped at the parent's "
+         "close, no twin) on the P-ADD-BRK parent copy", "STAMP", parent_exit_off),
     ])
 
 
@@ -1783,13 +2058,562 @@ def nestbook_real():
                      f"regbooks, == the law typed here: P-BRK-4H scored (lane4h: 4h closes from "
                      f"the entry, +1R derived, harvest_i, the exit stamp typed from exit_reason), "
                      f"P-WARN-1 scored (v6transform: arm_ms, v6's harvest by the pairing key, "
-                     f"derived exit and +1R), a harvest-free copy of P-RELAY-1 scored (relay: "
-                     f"window_arm_close_ms, exit_stamp_ms, latch_1h_ms at the 1h child's close; "
-                     f"every latch at a 4h close planted parent-decided -> the parent's OPEN, "
-                     f"twin at the close; >= 2 planted); P-RELAY-1 scored and P-ADD-BRK scored "
-                     f"REFUSED with their typed UNSTAMPED harvest / add counts (the counts, "
-                     f"other stages' data, on stdout only)"
+                     f"the 1h-resolved exit_instant_ms — a warn exit at its 1h close — and the "
+                     f"derived +1R), a harvest-free copy of P-RELAY-1 scored (relay: "
+                     f"window_arm_close_ms, exit_stamp_ms, latch_1h_ms at the 1h child's close "
+                     f"with its twin at the 4h close by the twin law; every latch at a 4h close "
+                     f"planted parent-decided -> the parent's OPEN, twin at the close; >= 2 "
+                     f"planted), a copy of P-ADD-BRK scored whose last-child stops are "
+                     f"re-filed exit_resolved_by 'parent' (the parent-resolved exit -> the "
+                     f"parent's OPEN, twin at the close, the parent stamp law named; >= 2 "
+                     f"planted) and the same stops re-filed 'close' REFUSED (an intrabar exit "
+                     f"is never read at the close); P-RELAY-1 scored and P-ADD-BRK scored, "
+                     f"each stripped of its named-event instant column(s) (harvest_close_ms; "
+                     f"add1_close_ms / add2_close_ms), REFUSED with their typed UNSTAMPED "
+                     f"harvest / add counts (the counts, other stages' data, on stdout only; "
+                     f"the filed books themselves are stamped in F-NEST-LANES)"
                      + (f"; findings {f[:4]}" if f else ""))
+
+
+# ═══════════════════════════════════════════════════════════════════ F-NEST-LANES
+def lane_kind_of(reg: str, df: pd.DataFrame) -> str:
+    """The door kind a regbook arm takes, typed HERE: P-BRK-4H -> lane4h; a relay arm (its
+    rows carry window_arm_close_ms) -> relay; every other arm (a v6 transform) ->
+    v6transform."""
+    if reg == "P-BRK-4H":
+        return "lane4h"
+    return "relay" if "window_arm_close_ms" in df.columns else "v6transform"
+
+
+def typed_named(kind: str, reason: str, nest_kind: str) -> str:
+    """THE NAMING LAW typed HERE [L-R.5 'plus the named events'; SR-15]."""
+    if kind in ("exit", "exit_post_event"):
+        base = ("TP fill" if reason in ("tp", "target") else "exit: stop" if reason == "stop"
+                else "warn exit" if reason.startswith("warn") else f"exit: {reason}")
+        return base if kind == "exit" else f"{base} (post-event twin)"
+    return {"bar_close": "bar_close", "arm": "arm",
+            "entry": "relay_entry" if nest_kind == "relay" else "entry", "plus_1r": "+1R",
+            "plus_1r_post_event": "+1R (post-event twin)", "harvest": "harvest",
+            "add1": "add", "add2": "add", "bell": "bell",
+            "as_of_pin": "open at the pin"}.get(kind, f"<untyped {kind}>")
+
+
+_LW: dict = {}
+
+
+def lane_written(name: str) -> pd.DataFrame:
+    if name not in _LW:
+        _LW[name] = pd.read_parquet(str(OUT / LANES_DIR_T / f"{name}.parquet"))
+    return _LW[name].copy()
+
+
+def lane_regbook(reg: str, arm: str) -> pd.DataFrame:
+    return pd.read_parquet(str(REGBOOKS / reg / f"{arm}.parquet"))
+
+
+def lane_instant_findings(reg: str, arm: str, kind: str, nest: pd.DataFrame,
+                          df: pd.DataFrame) -> tuple[list[str], dict]:
+    """The written lane nest's instants of one book == the door's law typed HERE; every
+    row's stamp_law == the typed stamp law of its event's class [verifier MINOR-1];
+    every row's named_event == the typed naming law; every recorded event stamped."""
+    laws: dict = {}
+    exp, bad = typed_door_instants(df, kind, laws)
+    z = nest[nest["arm"] == arm]
+    f = [x.replace("DOOR-LAW", f"LANE-LAW {reg}/{arm}") for x in bad]
+    f += instant_findings(z, exp, tag=f"LANE {reg}/{arm} ")
+    f += stamp_law_findings(z, laws, tag=f"LANE {reg}/{arm} ")
+    rs = {(str(a), int(b)): str(c) for a, b, c in zip(df["symbol"], df["entry_ms"],
+                                                     df["exit_reason"])}
+    want = np.array([typed_named(k, rs.get((str(a), int(b)), "?"), kind) for k, a, b in
+                     zip(z["instant_kind"], z["symbol"], z["entry_ms"])], dtype=object)
+    miss = z["named_event"].astype(str).to_numpy() != want
+    if miss.any():
+        i = int(np.flatnonzero(miss)[0])
+        f.append(f"NAMED-EVENT: LANE {reg}/{arm}: {int(miss.sum())} row(s) named off the typed "
+                 f"law, e.g. {z['instant_kind'].iloc[i]} -> {z['named_event'].iloc[i]!r} vs "
+                 f"{want[i]!r}")
+    t = {"n": len(df)}
+    for sc in SCALES_T:
+        zz = z[z["scale_kind"] == sc]
+        kc = zz["instant_kind"].value_counts()
+        rec = {"harvest": int(df["harvested"].astype(bool).sum()) if "harvested" in df else 0,
+               "add": int(df["n_adds"].sum()) if "n_adds" in df else 0,
+               "plus_1r": int(df[next(c for c in ("latched_1h", "reached_1r")
+                                      if c in df.columns)].astype(bool).sum()),
+               "entry": len(df), "exit+as_of_pin": len(df)}
+        got = {"harvest": int(kc.get("harvest", 0)),
+               "add": int(kc.get("add1", 0)) + int(kc.get("add2", 0)),
+               "plus_1r": int(kc.get("plus_1r", 0)), "entry": int(kc.get("entry", 0)),
+               "exit+as_of_pin": int(kc.get("exit", 0)) + int(kc.get("as_of_pin", 0))}
+        for k2 in rec:
+            if rec[k2] != got[k2]:
+                f.append(f"LANE-STAMPED: {reg}/{arm} {sc}: {got[k2]} {k2} instant(s) != the "
+                         f"book's own record {rec[k2]}")
+        if sc == SCALES_T[0]:
+            t.update(got)
+            t["named"] = {k: int(v) for k, v in zz["named_event"].value_counts().items()}
+    return f, t
+
+
+def lane_value_findings(tag: str, z: pd.DataFrame, k: int = LANE_SAMPLE_T,
+                        pick=None) -> tuple[list[str], int]:
+    """JOIN INTEGRITY on a SEEDED sample of the written lane nest: the nest columns ==
+    a FRESH N.nest_at at the same instants (N.nest_at is the causal as-of read that
+    F-NEST-BOOK's prefix check proves)."""
+    z = z.reset_index(drop=True)
+    idx = pick if pick is not None else np.sort(
+        np.random.default_rng(SEED).choice(len(z), min(k, len(z)), replace=False))
+    zz = z.iloc[idx]
+    out, cells = [], 0
+    cols = [f"{L}_{fl}" for L in NEST_LENSES_T for fl in NEST_FIELDS_T]
+    for (sc, sym), g in zz.groupby(["scale_kind", "symbol"], sort=True):
+        u = np.unique(g["instant_ms"].to_numpy(np.int64))
+        nv = N.nest_at(sym, u, sc).set_index("instant_ms")
+        ref = nv.loc[g["instant_ms"].to_numpy(np.int64)].reset_index(drop=True)
+        gg = g.reset_index(drop=True)
+        for c in cols:
+            eq = _cell_equal(gg[c], ref[c])
+            cells += len(eq)
+            if not eq.all():
+                i = int(np.nonzero(~eq)[0][0])
+                out.append(f"NEST-VALUE: LANE {tag} {sc} {sym} {c}: {int((~eq).sum())} sampled "
+                           f"cell(s) differ from a fresh N.nest_at, e.g. instant "
+                           f"{int(gg['instant_ms'].iloc[i])} written {_py(gg[c].iloc[i])!r} vs "
+                           f"{_py(ref[c].iloc[i])!r}")
+    return out, cells
+
+
+def _lane_flags(z: pd.DataFrame, lenses: tuple, kind: str) -> tuple[np.ndarray, np.ndarray]:
+    """the typed honesty flags: calibrated AND a consumed lens the asset HAS (a filed pick)
+    read at an instant <= the cut or on a whole-tape fallback pick; stability-changed pick."""
+    if kind != "calibrated":
+        return np.zeros(len(z), bool), np.zeros(len(z), bool)
+    tun = (z["entry_close_ms"].astype(np.int64) <= ERA_CUT_T).to_numpy(bool)
+    isin = np.zeros(len(z), bool)
+    stab = np.zeros(len(z), bool)
+    pf = picks_filed()
+    for L in lenses:
+        has = np.array([(s, L) in pf for s in z["symbol"]], dtype=bool)
+        fb = np.array([(s, L) in pf and _pick_fallback(s, L) for s in z["symbol"]], dtype=bool)
+        ch = np.array([(s, L) in pf and _pick_changed(s, L) for s in z["symbol"]], dtype=bool)
+        isin |= has & (tun | fb)
+        stab |= ch
+    return isin, stab
+
+
+def _lane_coin(top, bot, L: str) -> str:
+    if L == "1w" or _isna(top) or _isna(bot):
+        return "NA"
+    return typed_coin(top, bot, L)
+
+
+def lane_typed_cells(entries: dict, panels: dict) -> dict:
+    """{table: {cell: expected values}} for the three lane grids, re-derived HERE from the
+    written lane ENTRY rows and each regbook's own net_r (the typed laws of F-CHOP-VALUE,
+    with the twelve's NA: a state NA where the asset lacks L, a category NA where it
+    lacks L or L+1; declared per book from its panel)."""
+    exp = {"NEST_GRID_LANES_FREQ": {}, "NEST_GRID_LANES_BY_STATE": {},
+           "NEST_GRID_LANES_BY_COIN": {}}
+    for book, e in entries.items():
+        for kind in SCALES_T:
+            z = e[e["scale_kind"] == kind].reset_index(drop=True)
+            net = z["net_r"].to_numpy(float)
+            hold = (z["entry_close_ms"].astype(np.int64) > ERA_CUT_T).to_numpy(bool)
+            n_all = len(z)
+
+            def cellv(m, isin, stab):
+                d = _cell_stats(net[m])
+                h = _cell_stats(net[m & hold])
+                d.update({"n_scale_in_sample": int((isin & m).sum()),
+                          "n_stability_changed": int((stab & m).sum()),
+                          "n_holdout": h["n"], "mean_net_r_holdout": h["mean_net_r"],
+                          "p_win_holdout": h["p_win"], "sum_net_r_holdout": h["sum_net_r"]})
+                return d
+            for L in NEST_LENSES_T:
+                U = LADDER_T[L]
+                lack = any(L not in LENSES_OF_T[s] for s in panels[book])
+                lack_u = U is not None and any(U not in LENSES_OF_T[s] for s in panels[book])
+                states = STATES_T + (("NA",) if lack else ())
+                cats = ("NA",) if L == "1w" else COIN_CATS_T + (("NA",) if (lack or lack_u)
+                                                                else ())
+                st = np.array(["NA" if _isna(v) else str(v) for v in z[f"{L}_state"]],
+                              dtype=object)
+                lc = (L, U) if U is not None else (L,)
+                isin_c, stab_c = _lane_flags(z, lc, kind)
+                isin_s, stab_s = _lane_flags(z, (L,), kind)
+                for rule, sfx in (("record", ""), ("mem_twin", "_mem")):
+                    cc = np.array([_lane_coin(t, b2, L) for t, b2 in
+                                   zip(z[f"{L}_coin_top{sfx}"], z[f"{L}_coin_bot{sfx}"])],
+                                  dtype=object)
+                    for s4 in states:
+                        for c in cats:
+                            m = (st == s4) & (cc == c)
+                            exp["NEST_GRID_LANES_FREQ"][f"{book}|{kind}|{L}|{rule}|{s4}|{c}"] = {
+                                "n": int(m.sum()), "n_entries": n_all,
+                                "share": float(m.sum()) / n_all,
+                                "n_scale_in_sample": int((isin_c & m).sum()),
+                                "n_stability_changed": int((stab_c & m).sum()),
+                                "n_holdout": int((hold & m).sum())}
+                    for c in cats:
+                        exp["NEST_GRID_LANES_BY_COIN"][f"{book}|{kind}|{L}|{rule}|{c}"] = \
+                            cellv(cc == c, isin_c, stab_c)
+                for s4 in states + ("__ALL__",):
+                    m = np.ones(n_all, bool) if s4 == "__ALL__" else (st == s4)
+                    exp["NEST_GRID_LANES_BY_STATE"][f"{book}|{kind}|{L}|{s4}"] = \
+                        cellv(m, isin_s, stab_s)
+    return exp
+
+
+def lane_entries() -> tuple[dict, dict]:
+    """The written lane ENTRY rows + each regbook's own net_r, and each book's panel
+    (the regbook's own symbols) — this file's inputs to lane_typed_cells."""
+    ents, panels = {}, {}
+    for reg, arm, _ in LANE_BOOKS_T:
+        df = lane_regbook(reg, arm)
+        z = lane_written(f"NEST_{reg}")
+        e = z[(z["arm"] == arm) & (z["instant_kind"] == "entry")].merge(
+            df[["symbol", "entry_ms", "net_r"]], on=["symbol", "entry_ms"], how="left",
+            validate="m:1").reset_index(drop=True)
+        ents[f"{reg}/{arm}"] = e
+        panels[f"{reg}/{arm}"] = sorted(set(df["symbol"].astype(str)))
+    return ents, panels
+
+
+def lane_grid_findings(T: dict, exp: dict) -> tuple[list[str], int]:
+    f, n = chop_findings(T, exp)
+    for name, want in exp.items():
+        extra = sorted(set(T[name]["cell"]) - set(want))
+        if extra:
+            f.append(f"GRID-WHOLE: {name} carries {len(extra)} undeclared cell(s), e.g. "
+                     f"{extra[0]}")
+        if int(T[name]["cell"].duplicated().sum()):
+            f.append(f"GRID-WHOLE: {name} repeats a cell")
+    return f, n
+
+
+def lane_collar_findings(frames: dict) -> list[str]:
+    out = []
+    for name, d in frames.items():
+        for c, v in COLLAR_T.items():
+            if c not in d.columns or not (d[c].astype(str) == v).all():
+                out.append(f"LANE-COLLAR: {name}.{c} is not {v!r} on every row")
+        bad = [c for c in d.columns if c in VERDICT_COLS_T]
+        if bad:
+            out.append(f"LANE-COLLAR: {name} carries a verdict column {bad}")
+    return out
+
+
+def typed_content_sha(df: pd.DataFrame) -> str:
+    """a parquet's CONTENT sha, typed HERE: sha256 of its csv (index dropped)."""
+    return sha_bytes(df.to_csv(index=False).encode("utf-8"))
+
+
+def lane_manifest_findings(man: dict, frames: dict, root: Path | None = None) -> list[str]:
+    """The lanes manifest: the typed file set / keys / table shas; per book, this file's
+    book_sha256 == the manifest's == the scorer's input; and the regbook bytes the pass
+    STAMPED (content sha + file sha) == the regbook on disk (under `root`, default the
+    regbooks of record) [verifier MINOR-4: book_sha256 covers the 16 required columns
+    only, so a re-filed regbook that moves an instant keeps it]."""
+    root = REGBOOKS if root is None else root
+    out = []
+    on_disk = sorted(p.name for p in (OUT / LANES_DIR_T).iterdir() if p.is_file())
+    if on_disk != sorted(LANE_FILES_T):
+        out.append(f"LANE-MANIFEST: lanes/ holds {sorted(set(on_disk) ^ set(LANE_FILES_T))} "
+                   f"off the typed file set")
+    if man.get("keys") != LANE_KEYS_T:
+        out.append("LANE-MANIFEST: the manifest keys are not the typed keys")
+    for name, key in LANE_KEYS_T.items():
+        d = frames[name]
+        if int(d.duplicated(subset=key).sum()):
+            out.append(f"LANE-MANIFEST: {name} key {key} not unique")
+        if man.get("sha", {}).get(name) != C.content_sha(d):
+            out.append(f"LANE-MANIFEST: the manifest sha of {name} is not the table's")
+    sc = json.loads(SCORE_MANIFEST_T.read_text(encoding="utf-8"))["inputs"]
+    for reg, arm, _ in LANE_BOOKS_T:
+        p = root / reg / f"{arm}.parquet"
+        df = pd.read_parquet(str(p))
+        own = typed_book_sha(df)
+        mbk = man.get("books", {}).get(f"{reg}/{arm}", {})
+        mb = mbk.get("book_sha256")
+        if not (own == mb == sc.get(f"{reg}/{arm}", {}).get("book_sha256")):
+            out.append(f"LANE-BOOK: {reg}/{arm}: this file's book_sha256 {own[:12]}… / the "
+                       f"lanes manifest's {str(mb)[:12]}… / the scorer's input are not one")
+        for col, want in (("regbook_content_sha256", typed_content_sha(df)),
+                          ("regbook_file_sha256", sha_bytes(p.read_bytes()))):
+            if mbk.get(col) != want:
+                out.append(f"LANE-REGBOOK: {reg}/{arm}: the lanes manifest's {col} "
+                           f"{str(mbk.get(col))[:12]}… is not the regbook on disk "
+                           f"({want[:12]}…) — the nest was stamped from other bytes")
+        js = json.loads((OUT / LANES_DIR_T / f"NEST_{reg}.json").read_text(encoding="utf-8"))
+        if {c: js.get("arms", {}).get(arm, {}).get(c) for c in
+                ("regbook_content_sha256", "regbook_file_sha256")} != \
+                {c: mbk.get(c) for c in ("regbook_content_sha256", "regbook_file_sha256")}:
+            out.append(f"LANE-REGBOOK: {reg}/{arm}: NEST_{reg}.json and the lanes manifest "
+                       f"pin different regbook bytes")
+    return out
+
+
+def lane_sweep() -> tuple[list[str], int]:
+    """No refusal anywhere: the door's instant law runs on EVERY arm of EVERY regbook."""
+    out, n = [], 0
+    for d in sorted(REGBOOKS.iterdir()):
+        for p in sorted(d.glob("*.parquet")):
+            df = pd.read_parquet(str(p))
+            n += 1
+            try:
+                SR.instants_of(df, lane_kind_of(d.name, df))
+            except SystemExit as e:
+                out.append(f"LANE-REFUSED: {d.name}/{p.stem}: {str(e)[:200]}")
+    return out, n
+
+
+def lane_det_findings() -> list[str]:
+    """The lanes pass re-run in two fresh interpreters (PYTHONHASHSEED 1 / 20260924) ==
+    the files of record, byte for byte."""
+    out, procs = [], {}
+    for sd in DET_SEEDS:
+        d = det_dir() / f"lanes_seed_{sd}"
+        if d.exists():
+            shutil.rmtree(d)
+        d.parent.mkdir(parents=True, exist_ok=True)
+        procs[sd] = (d, subprocess.Popen(
+            [PY, "-B", str(ROOT / "scripts" / "tierc11_stage_r.py"), "lanes", f"--out-dir={d}"],
+            env=dict(_env(), PYTHONHASHSEED=str(sd)), stdout=subprocess.DEVNULL,
+            stderr=subprocess.PIPE, text=True, cwd=str(ROOT)))
+    rec = {p.name: p for p in (OUT / LANES_DIR_T).iterdir() if p.is_file()}
+    for sd, (d, p) in procs.items():
+        _, err = p.communicate(timeout=3600)
+        if p.returncode != 0:
+            out.append(f"LANE-DET: seed {sd} exit {p.returncode}: {err.strip()[-200:]}")
+            continue
+        got = {q.name: q for q in d.iterdir() if q.is_file()}
+        if sorted(got) != sorted(rec):
+            out.append(f"LANE-DET: seed {sd} file set {sorted(set(got) ^ set(rec))} differs")
+        for name in sorted(set(got) & set(rec)):
+            if got[name].read_bytes() != rec[name].read_bytes():
+                out.append(f"LANE-DET: seed {sd} {name} bytes differ from the record")
+    return out
+
+
+def _generic(found: list[str], det: str, what: str) -> list[str]:
+    """[the transcript law] a plant on ANOTHER stage's regbook reports its detector, never
+    that regbook's numbers (the findings themselves go to stdout, `note`)."""
+    for x in found[:3]:
+        note(f"  plant finding ({what}): {x[:220]}")
+    if any(det in x for x in found):
+        return [f"{det}: {what} — caught (the findings on stdout)"]
+    return found
+
+
+def lanes_break():
+    def close_stamped():
+        df = lane_regbook("P-WARN-1", "scored")
+        exp, _ = typed_door_instants(df, "v6transform")
+        with mutated(SR, "INTRABAR_STAMP", "bar_close"):
+            inst, _ = SR.instants_of(df, "v6transform")
+        both = pd.concat([inst.assign(scale_kind=k) for k in SCALES_T], ignore_index=True)
+        return _generic(instant_findings(both, exp, tag="LANE P-WARN-1/scored (mutant) "),
+                        "STAMP", "P-WARN-1 scored, intrabar events close-stamped")
+
+    def warn_late():
+        df = lane_regbook("P-WARN-1", "scored")
+        exp, _ = typed_door_instants(df, "v6transform")
+        with mutated(SR, "EXIT_1H_COLS", ()):
+            inst, _ = SR.instants_of(df, "v6transform")
+        both = pd.concat([inst.assign(scale_kind=k) for k in SCALES_T], ignore_index=True)
+        return _generic(instant_findings(both, exp, tag="LANE P-WARN-1/scored (mutant) "),
+                        "STAMP", "P-WARN-1 scored, warn exits at the 4h exit-bar close")
+
+    def tp_close():
+        z = lane_written("NEST_P-TP-RNG")
+        i = z.index[(z["named_event"] == "TP fill")][0]
+        z.loc[i, "instant_ms"] = int(z.loc[i, "instant_ms"]) + MS4H
+        return _generic(lane_instant_findings("P-TP-RNG", "scored", "v6transform", z,
+                                              lane_regbook("P-TP-RNG", "scored"))[0],
+                        "STAMP", "NEST_P-TP-RNG copy, one TP fill close-stamped")
+
+    def add_dropped():
+        z = lane_written("NEST_P-ADD-BRK")
+        i = z.index[z["instant_kind"] == "add1"][3]
+        return _generic(lane_instant_findings("P-ADD-BRK", "scored", "v6transform",
+                                              z.drop(index=i),
+                                              lane_regbook("P-ADD-BRK", "scored"))[0],
+                        "INSTANT-SET", "NEST_P-ADD-BRK copy, one add instant dropped")
+
+    def harvest_nulled():
+        df = lane_regbook("P-RELAY-1", "scored")
+        i = df.index[df["harvested"].astype(bool)][2]
+        df.loc[i, "harvest_close_ms"] = pd.NA
+        try:
+            SR.instants_of(df, "relay")
+        except SystemExit as e:
+            return _generic([str(e)], "UNSTAMPED", "P-RELAY-1 scored copy, one harvest "
+                                                   "instant nulled: the door refused")
+        return []
+
+    def late_read():
+        z = lane_written("NEST_P-RELAY-1")
+        m = (z["scale_kind"] == "calibrated") & (z["symbol"] == "ETHUSDT")
+        inst = z.loc[m, "instant_ms"].to_numpy(np.int64)
+        nv = N.nest_at("ETHUSDT", np.unique(inst + MS4H), "calibrated").set_index("instant_ms")
+        ref = nv.loc[inst + MS4H].reset_index(drop=True)
+        for c in [f"{L}_{fl}" for L in NEST_LENSES_T for fl in NEST_FIELDS_T]:
+            z.loc[m, c] = ref[c].to_numpy()
+        return _generic(lane_value_findings("P-RELAY-1/scored (copy)", z[m])[0],
+                        "NEST-VALUE", "NEST_P-RELAY-1 copy, ETH calibrated read one 4h bar "
+                                      "late")
+
+    def misnamed():
+        z = lane_written("NEST_P-TP-RNG")
+        i = z.index[(z["named_event"] == "TP fill")][1]
+        z.loc[i, "named_event"] = "exit: stop"
+        return _generic(lane_instant_findings("P-TP-RNG", "scored", "v6transform", z,
+                                              lane_regbook("P-TP-RNG", "scored"))[0],
+                        "NAMED-EVENT", "NEST_P-TP-RNG copy, a TP fill misnamed")
+
+    def relay_stop_close_law():
+        z = lane_written("NEST_P-RELAY-1")
+        i = z.index[(z["instant_kind"] == "exit") & (z["exit_reason"] == "stop")][4]
+        z.loc[i, "stamp_law"] = "close"
+        return _generic(lane_instant_findings("P-RELAY-1", "scored", "relay", z,
+                                              lane_regbook("P-RELAY-1", "scored"))[0],
+                        "STAMP-LAW", "NEST_P-RELAY-1 copy, a stop's stamp_law relabelled "
+                                     "'close'")
+
+    def relay_twin_anchor_off():
+        df = lane_regbook("P-RELAY-1", "scored")
+        exp, _ = typed_door_instants(df, "relay")
+        with mutated(SR, "EXIT_BAR_CLOSE_COLS", ()):
+            inst, _ = SR.instants_of(df, "relay")
+        both = pd.concat([inst.assign(scale_kind=k) for k in SCALES_T], ignore_index=True)
+        return _generic(instant_findings(both, exp, tag="LANE P-RELAY-1/scored (mutant) "),
+                        "STAMP", "P-RELAY-1 scored, the twin anchor exit_bar_close_ms "
+                                 "removed: the stops' post-event twins lost")
+
+    def p1r_twins_dropped():
+        z = lane_written("NEST_P-ADD-BRK")
+        z = z[z["instant_kind"] != "plus_1r_post_event"]
+        return _generic(lane_instant_findings("P-ADD-BRK", "scored", "v6transform", z,
+                                              lane_regbook("P-ADD-BRK", "scored"))[0],
+                        "STAMP", "NEST_P-ADD-BRK copy, the +1R post-event twins dropped")
+
+    def regbook_refiled():
+        tmp = Path(tempfile.mkdtemp(prefix="f-nest-lanes-regbooks-"))
+        try:
+            for reg, arm, _ in LANE_BOOKS_T:
+                (tmp / reg).mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(REGBOOKS / reg / f"{arm}.parquet", tmp / reg / f"{arm}.parquet")
+            q = tmp / "P-ADD-BRK" / "scored.parquet"
+            d = pd.read_parquet(str(q))
+            i = d.index[d["add1_close_ms"].notna()][2]
+            d["add1_close_ms"] = d["add1_close_ms"].astype("Int64")
+            d.loc[i, "add1_close_ms"] = int(d.loc[i, "add1_close_ms"]) + MS1H
+            d.to_parquet(str(q), index=False)
+            frames = {k: lane_written(k) for k in LANE_KEYS_T}
+            man = json.loads((OUT / LANES_DIR_T / "LANES_MANIFEST.json").read_text(
+                encoding="utf-8"))
+            return _generic(lane_manifest_findings(man, frames, root=tmp), "LANE-REGBOOK",
+                            "P-ADD-BRK scored re-filed with one add instant moved +1h "
+                            "(book_sha256 unchanged)")
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+
+    def cell_bent():
+        ents, panels = lane_entries()
+        exp = lane_typed_cells(ents, panels)
+        T = {k: lane_written(k) for k in exp}
+        d = T["NEST_GRID_LANES_BY_STATE"]
+        i = d.index[d["n"].astype(int) > 0][7]
+        d.loc[i, "n"] = int(d.loc[i, "n"]) + 1
+        return _generic(lane_grid_findings(T, exp)[0], "GRID-VALUE",
+                        "NEST_GRID_LANES_BY_STATE copy, one n + 1")
+
+    return plants([
+        ("intrabar events close-stamped (SR.INTRABAR_STAMP = 'bar_close') on P-WARN-1 scored: "
+         "the derived +1R and the 1h-resolved stops moved to their 4h bar's close", "STAMP",
+         close_stamped),
+        ("[mutant] the door's 1h-resolved exit source removed (SR.EXIT_1H_COLS = ()): "
+         "P-WARN-1's warn exits read one bar late, at the exit bar's 4h close", "STAMP",
+         warn_late),
+        ("a TP fill close-stamped in a copy of NEST_P-TP-RNG (the bar's close, not its OPEN)",
+         "STAMP", tp_close),
+        ("a dropped instant: one add row dropped from a copy of NEST_P-ADD-BRK",
+         "INSTANT-SET", add_dropped),
+        ("a dropped instant in the regbook: one harvested relay's harvest_close_ms nulled (a "
+         "copy of P-RELAY-1 scored) — the door must refuse", "UNSTAMPED", harvest_nulled),
+        ("a one-bar-late read: ETH's calibrated rows of a copy of NEST_P-RELAY-1 re-read at "
+         "instant + 4h", "NEST-VALUE", late_read),
+        ("a TP fill misnamed 'exit: stop' in a copy of NEST_P-TP-RNG", "NAMED-EVENT",
+         misnamed),
+        ("one NEST_GRID_LANES_BY_STATE cell's n + 1 (a copy)", "GRID-VALUE", cell_bent),
+        ("a relay stop's stamp_law relabelled 'close' in a copy of NEST_P-RELAY-1 (the label "
+         "read off exit_close_ms, not the event's class)", "STAMP-LAW", relay_stop_close_law),
+        ("[mutant] the twin anchor removed (SR.EXIT_BAR_CLOSE_COLS = ()): P-RELAY-1's stops "
+         "anchor their twin on exit_close_ms, the 1h instant, and lose it", "STAMP",
+         relay_twin_anchor_off),
+        ("the +1R post-event twins dropped from a copy of NEST_P-ADD-BRK (the 1h-resolved "
+         "latches' 4h closes)", "STAMP", p1r_twins_dropped),
+        ("a re-filed regbook: P-ADD-BRK scored with one add1_close_ms moved +1h in a temp "
+         "copy — book_sha256 unchanged, the stamped bytes not", "LANE-REGBOOK",
+         regbook_refiled),
+    ])
+
+
+def lanes_real():
+    f, lines = [], []
+    frames = {k: lane_written(k) for k in LANE_KEYS_T}
+    man = json.loads((OUT / LANES_DIR_T / "LANES_MANIFEST.json").read_text(encoding="utf-8"))
+    f += lane_manifest_findings(man, frames)
+    f += lane_collar_findings(frames)
+    cells_v = 0
+    for reg, arm, kind in LANE_BOOKS_T:
+        df = lane_regbook(reg, arm)
+        if lane_kind_of(reg, df) != kind:
+            f.append(f"LANE-KIND: {reg}/{arm} is not a {kind} regbook by the typed law")
+        z = frames[f"NEST_{reg}"]
+        fi, t = lane_instant_findings(reg, arm, kind, z, df)
+        f += fi
+        fv, cv = lane_value_findings(f"{reg}/{arm}", z[z["arm"] == arm])
+        f += fv
+        cells_v += cv
+        note(f"LANE {reg}/{arm} ({kind}): n {t['n']}; per scale entry {t['entry']}, +1R "
+             f"{t['plus_1r']}, harvest {t['harvest']}, add {t['add']}, exit/as-of-pin "
+             f"{t['exit+as_of_pin']}; named {t['named']}")
+    ents, panels = lane_entries()
+    exp = lane_typed_cells(ents, panels)
+    fg, ng = lane_grid_findings({k: frames[k] for k in exp}, exp)
+    f += fg
+    fs, n_arms = lane_sweep()
+    f += fs
+    f += lane_det_findings()
+    n_cells = sum(len(v) for v in exp.values())
+    note(f"F-NEST-LANES counts (other stages' data): {cells_v} sampled nest cells; {n_cells} "
+         f"typed grid cells, {ng} values; {n_arms} regbook arms swept")
+    lines.append(f"{len(LANE_BOOKS_T)} lane books ({', '.join(f'{r}/{a}' for r, a, _ in LANE_BOOKS_T)}) "
+                 f"stamped in lanes/, each the book the scorer scored (this file's book_sha256 == "
+                 f"the lanes manifest's == scores/SCORE_MANIFEST.json's); every campaign's "
+                 f"instant set == the door's law typed here at both scales (4h closes from the "
+                 f"arm / entry through the exit stamp; arm / entry / harvest / adds / bell at "
+                 f"their close; +1R and a stop / TP fill at their bar OPEN or the resolving 1h "
+                 f"child's close; the twin law — one post-event twin at the 4h close after an "
+                 f"intrabar stamp, none when the stamp is that close; a warn exit at its 1h "
+                 f"close); every row's stamp_law == the typed law of its event's class; every "
+                 f"row's named_event == the typed naming law; every recorded harvest / add / "
+                 f"+1R / exit stamped (counts == the books' own records; per-book counts on "
+                 f"stdout)")
+    lines.append(f"a fresh N.nest_at join on a seeded sample ({LANE_SAMPLE_T} rows per book, "
+                 f"seed {SEED}): every sampled nest cell equal; the lane grid WHOLE (FREQ / "
+                 f"BY_STATE / BY_COIN, the twelve's NA declared per panel) and every cell "
+                 f"re-derived here from the written entry rows and each regbook's net_r (counts "
+                 f"exact, floats to the 8-dp bound); every lane table collared, no verdict "
+                 f"column; the manifest's keys / shas == the typed keys / the tables, and the "
+                 f"regbook bytes it pins per book (content + file sha) == the regbooks on disk; "
+                 f"lanes/ == the typed {len(LANE_FILES_T)} files")
+    lines.append(f"no refusal: the door's instant law ran on every arm of every regbook; "
+                 f"the lanes pass re-run in two fresh interpreters (PYTHONHASHSEED "
+                 f"{DET_SEEDS[0]} / {DET_SEEDS[1]}) == the files of record byte for byte"
+                 + (f"; findings {len(f)}: {f[:4]}" if f else ""))
+    return (not f), "; ".join(lines)
 
 
 # ═══════════════════════════════════════════════════════════════════ F-GRID
@@ -2099,8 +2923,8 @@ def _parquets(root: Path) -> list[str]:
     out = []
     for p in sorted(root.rglob("*.parquet")):
         rel = p.relative_to(root)
-        if rel.parts[0].startswith("_det_"):
-            continue
+        if rel.parts[0].startswith("_det_") or rel.parts[0] == LANES_DIR_T:
+            continue                        # lanes/: the `lanes` pass's own (F-NEST-LANES)
         out.append(str(rel.with_suffix("")))
     return out
 
@@ -2206,7 +3030,8 @@ def _files(d: Path) -> dict:
         if not p.is_file():
             continue
         rel = p.relative_to(d)
-        if rel.parts[0].startswith("_det_") or rel.name.startswith("FIXTURES_"):
+        if rel.parts[0].startswith("_det_") or rel.name.startswith("FIXTURES_") or \
+                rel.parts[0] == LANES_DIR_T:     # lanes/: the `lanes` pass's (F-NEST-LANES)
             continue
         out[str(rel)] = p
     return out
@@ -2358,10 +3183,29 @@ FIXTURES = (
      "close events at the close; corridor_end -> as_of_pin); the join differs from N.nest_at; "
      "a sampled entry read differs from a machine run on the tape cut at the read bar; the "
      "CLI door differs from the in-process door or (outside stamp_law) NEST_v6; the derived "
-     "path differs from the typed law; the door on P-BRK-4H / P-WARN-1 / the relay copy "
-     "differs from the typed law; or the door files P-RELAY-1 / P-ADD-BRK scored instead of "
-     "refusing them with the typed UNSTAMPED counts",
+     "path differs from the typed law; the door on P-BRK-4H / P-WARN-1 / the relay copy / "
+     "the P-ADD-BRK parent-exit copy differs from the typed law (twins by the twin law; the "
+     "parent-resolved stop at the parent's OPEN under its named stamp law); or the door files "
+     "the P-ADD-BRK copy whose stops are resolved by 'close', or P-RELAY-1 / P-ADD-BRK scored "
+     "stripped of their instant columns, instead of refusing them (the latter with the typed "
+     "UNSTAMPED counts)",
      nestbook_break, nestbook_real),
+    ("F-NEST-LANES", "the nest on EVERY lane book [contract R3; L-R.5, AM-6, SR-15]: every "
+     "book stamped, no refusal; instants == the door's law typed here; named events; a fresh "
+     "N.nest_at join on a seeded sample; the lane grid whole and re-derived; determinism",
+     "a lane book is absent, refused, not the book the scorer scored, or any campaign's "
+     "instant set differs from the door's law typed here (closes arm/entry -> exit stamp; "
+     "close events at their close; +1R / stop / TP fill at their bar OPEN or the resolving "
+     "1h child's close; the twin law: one post-event twin at the 4h close after an intrabar "
+     "stamp, none when the stamp is that close; a warn exit at its 1h close; adds and "
+     "harvests as filed), a row's stamp_law is off the typed law of its event's class, a row "
+     "is named off the typed naming law, a recorded harvest / add / +1R / exit is "
+     "unstamped, a sampled nest cell differs from a fresh N.nest_at, a lane grid is not "
+     "whole or a cell's value does not re-derive, a lane table lacks the collar, the "
+     "manifest's keys / shas / file set are off or its pinned regbook bytes (content + file "
+     "sha) are not the regbooks on disk, any regbook arm is refused by the door, or the "
+     "lanes pass re-run under two hash seeds differs from the record by a byte",
+     lanes_break, lanes_real),
     ("F-GRID", "every grid WHOLE against cells typed here; R1 == the filed picks, densities "
      "from their counts; honesty labels; collars; no verdict word off the record; NaN law; "
      "partitions",

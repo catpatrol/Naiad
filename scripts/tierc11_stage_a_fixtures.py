@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-"""TIER-C11 · STAGE A — F-ADD · F-ADD-BOOK · F-IDENTITY · F-GRID · F-KEY · F-DET.
+"""TIER-C11 · STAGE A — F-ADD · F-ADD-BOOK · F-IDENTITY · F-ADD-INSTANTS · F-GRID · F-KEY ·
+F-DET.
 The fixtures of scripts/tierc11_stage_a.py (the P-ADD-BRK / P-ADD-SFP books)
 [LEANS L-A.1, L-A.2, L-A.3, L-W.0, L-W.3, L-1.5; AM-3, AM-5, AM-6, AM-7].
 
@@ -93,6 +94,20 @@ stage's event table.
                exit_close_ms written as a 1h instant; a scored exit_close_ms moved
                a bar; the head-to-head opponent_net_r bent 1e-12; the
                head-to-head arm built from the frozen-3.0 twin's rows.
+  F-ADD-INSTANTS FAILS IF, on ANY row of ANY written regbook of either rule (the base, the
+               ridden arms, the slices, the head-to-head), the extra columns
+               add1_close_ms / add2_close_ms [SA-12; L-R.5, AM-6 — the lanes pass]
+               are absent or not Int64, or differ from THIS FILE'S re-derivation from
+               the machine's FULL 1h run (expected_adds: the rule's events on the
+               trade's side, each at its 1h close — the parent's close on an own
+               L-W.0 mismatch bar — in-trade against the own 1h-resolved exit, at/after
+               the own +1R latch, the arm's twin, then the first 2): add k's instant or
+               NA when fewer than k adds; or the count of stamped instants != n_adds;
+               or add1 >= add2; or an instant lies outside (entry close, own
+               1h-resolved exit); or a base row carries an add instant.  SABOTAGE:
+               (copies) add1 moved one 1h bar late; add2 dropped (nulled on a 2-add
+               row); [mutant] the writer's add_instants_of stamping each add at the
+               CLOSE of its 4h bar (the parent's close, not the 1h event).
   F-GRID       FAILS IF a grid is not WHOLE against the cells declared here
                (TP.grid_whole: DISPOSITION_COUNTS 2x4x7, HEAD_TO_HEAD 6x2,
                TIER_E_ARMS 2x6, REGISTERED_BOOKS 2x2, OVERLAP 6, PICK_STABILITY_1H
@@ -1635,6 +1650,103 @@ def identity_real():
                         + (f"; findings {len(bad)}: {bad[:4]}" if bad else "")])
 
 
+# ═══════════════════════════════════════════════════════════════ F-ADD-INSTANTS
+def add_instant_findings(rb: pd.DataFrame, rule: str, arm: str) -> tuple[list[str], dict]:
+    """Every row's add1_close_ms / add2_close_ms against expected_adds (the machine's
+    full run, the own exit / latch / walk law) for the arm's scale and twin."""
+    out, tally = [], {"rows": len(rb), "n_adds": 0, "stamped": 0}
+    for c in ("add1_close_ms", "add2_close_ms"):
+        if c not in rb.columns:
+            return [f"INSTANT-ADD: {rule} {arm} carries no {c} column"], tally
+        if str(rb[c].dtype) != "Int64":
+            out.append(f"INSTANT-ADD: {rule} {arm}.{c} dtype {rb[c].dtype} != Int64")
+    src = "scored" if arm in (H2H_T[rule],) + tuple(SLICES_T) else arm
+    V = v6()
+    for r in rb.itertuples(index=False):
+        got = [None if pd.isna(x) else int(x) for x in (r.add1_close_ms, r.add2_close_ms)]
+        tag = f"{rule} {arm} {r.symbol} {iso(int(r.entry_ms))}"
+        tally["n_adds"] += int(r.n_adds)
+        tally["stamped"] += sum(x is not None for x in got)
+        if src == "base":
+            want = [None, None]
+        else:
+            t = V[(str(r.symbol), int(r.entry_ms))]
+            ex = [int(x) for x, _ in expected_adds(t, rule, SCALE_ARM_T[src], TWIN_T[src])]
+            want = (ex + [None, None])[:2]
+            xc = own_exit(t)
+            for x in ex:
+                if not (int(t.entry_ms) + H4 < x < xc):
+                    out.append(f"INSTANT-ADD: {tag}: add instant {iso(x)} outside (entry "
+                               f"close, own 1h-resolved exit {iso(xc)})")
+        if got != want:
+            out.append(f"INSTANT-ADD: {tag}: (add1, add2) "
+                       f"{[iso(x) if x else None for x in got]} != the re-derivation "
+                       f"{[iso(x) if x else None for x in want]}")
+        if sum(x is not None for x in got) != int(r.n_adds):
+            out.append(f"INSTANT-ADD: {tag}: {sum(x is not None for x in got)} stamped add "
+                       f"instant(s) != n_adds {int(r.n_adds)}")
+        if got[0] is None and got[1] is not None or (None not in got and got[0] >= got[1]):
+            out.append(f"INSTANT-ADD: {tag}: add1 {got[0]} / add2 {got[1]} not in time order")
+    return out, tally
+
+
+def instants_break():
+    sc = rb_frame("P-ADD-BRK", "scored")
+    two = sc.index[sc["n_adds"].astype(int) == 2]
+    one = sc.index[sc["n_adds"].astype(int) >= 1]
+
+    def late():
+        d = sc.copy()
+        d.loc[one[0], "add1_close_ms"] = int(d.loc[one[0], "add1_close_ms"]) + H1
+        return add_instant_findings(d, "P-ADD-BRK", "scored")[0]
+
+    def dropped():
+        d = sc.copy()
+        d.loc[two[0], "add2_close_ms"] = pd.NA
+        return add_instant_findings(d, "P-ADD-BRK", "scored")[0]
+
+    def parent_close():
+        om = {s: T9.frame(s)["f"].open_ms for s in CLASSIC5_T}
+        orig = SA.add_instants_of
+
+        def mutant(t):
+            a1, a2 = orig(t)
+            ads = list(t.adds)
+            return tuple(None if a is None else int(om[t.symbol][int(ads[k].i)]) + H4
+                         for k, a in enumerate((a1, a2)))
+        with mutated(SA, "add_instants_of", mutant):
+            bk = SA.ride_arm(ctx(), "P-ADD-BRK", "scored")
+            bf = SA.book_frame(ctx(), bk, "P-ADD-BRK", "scored", "calibrated")
+        return add_instant_findings(bf, "P-ADD-BRK", "scored")[0]
+
+    return plants([
+        ("add1 moved one 1h bar late (a copy of P-ADD-BRK scored)", "INSTANT-ADD", late),
+        ("add2 dropped — nulled on a 2-add row (a copy of P-ADD-BRK scored)", "INSTANT-ADD",
+         dropped),
+        ("[mutant] the writer's add_instants_of stamping each add at its 4h bar's CLOSE",
+         "INSTANT-ADD", parent_close),
+    ])
+
+
+def instants_real():
+    bad, lines = [], []
+    for rule in REGS_T:
+        parts = []
+        for arm in ARMS_OF_T[rule]:
+            f, t = add_instant_findings(rb_frame(rule, arm), rule, arm)
+            bad += f
+            parts.append(f"{arm} {t['stamped']}/{t['n_adds']}")
+        lines.append(f"{rule} stamped/admitted adds: " + " · ".join(parts))
+    return (not bad), lines + [
+        f"add1_close_ms / add2_close_ms (Int64) on EVERY row of the "
+        f"{sum(len(ARMS_OF_T[r]) for r in REGS_T)} regbooks == this file's re-derivation from "
+        f"the machine's full 1h run (the rule's events on the trade's side at their 1h close, "
+        f"the parent's close on an own mismatch bar, in-trade against the own 1h-resolved exit, "
+        f"at/after the own +1R latch, the arm's twin, the first 2); the stamped count == "
+        f"n_adds; add1 < add2; every instant inside (entry close, own exit); the base arms carry "
+        f"none" + (f"; findings {len(bad)}: {bad[:4]}" if bad else "")]
+
+
 # ═══════════════════════════════════════════════════════════════ F-GRID
 def grid_findings(T: dict, A: pd.DataFrame, D: pd.DataFrame) -> list[str]:
     out = []
@@ -2257,6 +2369,14 @@ FIXTURES = (
      "books/v6_campaigns.parquet on its 13 regbook columns at 6 dp; or a head-to-head arm is "
      "not its scored rows with the other registration's scored net_r beside it exactly",
      identity_break, identity_real),
+    ("F-ADD-INSTANTS", "the adds' named-event instants on every regbook row == this file's "
+     "re-derivation from the machine's full run [SA-12; L-R.5, AM-6 — the lanes pass]",
+     "a regbook lacks add1_close_ms / add2_close_ms (Int64), an instant differs from the "
+     "re-derivation from the machine's full 1h run (1h close, parent close on a mismatch "
+     "bar, in-trade, after the own latch, the twin, the first 2), the stamped count != "
+     "n_adds, add1 >= add2, an instant lies outside (entry close, own exit), or a base row "
+     "carries one",
+     instants_break, instants_real),
     ("F-GRID", "every grid WHOLE against the cells declared here; counts re-derived",
      "a grid is not whole against the declared cells (TP.grid_whole), a count does not "
      "re-derive from the row tables, a printed Δ sum / mean, base sum or ruled-base sum does "

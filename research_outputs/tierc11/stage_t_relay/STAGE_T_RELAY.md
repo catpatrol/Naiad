@@ -20,6 +20,7 @@ substrate tc11_20260925 · corridor 2019-09-08T16:00:00Z → 2026-09-25T00:00:00
 - [LEAN-HEPHAESTUS] SR-5 one position per asset at 1h resolution: entry instant strictly after the previous relay's 1h-resolved exit; v6's 4h-bar law printed as a disclosure.
 - [LEAN-HEPHAESTUS] SR-6 late-relay twin (Tier-E rival) = the record rule with the trigger bound removed (the trigger instant and later admissible).
 - [LEAN-HEPHAESTUS] SR-7 relay entry_ms = open of the 4h bar J holding the entry close; relay exit_close_ms = the 1h-resolved exit instant; base v6 exit_close_ms = the exit bar's close (tierc11_books convention); both carry exit_bar_close_ms.
+- [LEAN-HEPHAESTUS] SR-9 named-event instants [L-R.5, AM-6; the lanes pass]: every arm carries the extra column harvest_close_ms = the close of the 4h bar whose close slot fired the band harvest (Trade.harvest_ms + 4h, checked against harvest_i), NA when never harvested — a close event, stamped at its close; required columns, numbers, book_sha256 and sidecars unchanged.
 
 ## Anchor
 

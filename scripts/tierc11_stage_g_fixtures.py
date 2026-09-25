@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-"""TIER-C11 · STAGE G — F-DEF · F-GATE · F-PRIORITY · F-DISC · F-EDGE · F-GRID · F-KEY · F-DET.
+"""TIER-C11 · STAGE G — F-DEF · F-GATE · F-PRIORITY · F-DISC · F-EDGE · F-HARVEST-INSTANTS ·
+F-GRID · F-KEY · F-DET.
 The fixtures of scripts/tierc11_stage_g.py (the admission gates P-AGE-1 and
 P-WIN-1, their regbooks, and the L-G.3 Tier-E structure) [LEANS L-G.1, L-G.2,
 L-G.3, L-1.3, L-1.4, L-1.5, AM-7].
@@ -108,6 +109,19 @@ never from tierc11_stage_g or tierc11_ride.
               (EDGE-ABS); lag '> 16' (EDGE-WIN); shadow 7..16 (EDGE-LAG); r/ATR '>='
               (EDGE-RATR); era by the bar's OPEN (EDGE-ERA); the claim printed always
               (EDGE-CLAIM); the flat test removed (EDGE-HOLD).
+  F-HARVEST-INSTANTS  FAILS IF, on ANY row of ANY of the 14 regbooks, the extra column
+              harvest_close_ms [L-R.5, AM-6 — the lanes pass] is absent or not Int64, is
+              set on a row that did not harvest or NA on one that did, or differs from
+              THIS FILE'S hand harvest law on its own 4h read (the band edge max/min(own
+              EMA89, EMA316); from the bar after the entry on a fresh state, armed once
+              any close[j-1] sat outside the edge, touched on the whole bar j; the first
+              such bar strictly before the exit bar, the exit bar itself only at
+              corridor_end; the bar's CLOSE); or a v6 key's instant differs from
+              books/v6_campaigns.parquet's harvest_close_ms; or the priority book's
+              substitutes (no v6 key: the rows the pairing-key join could not stamp)
+              are not all covered.  SABOTAGE: (copies) one harvest one 4h bar late; one
+              substitute's harvest dropped (nulled); [mutant] the writer's
+              harvest_close_of stamping the harvest bar's OPEN (rebuilt priority arm).
   F-GRID      FAILS IF any stage table is not WHOLE against its typed declared
               cells (TP.grid_whole: missing / undeclared / duplicated), a non-
               registered table lacks the collar or carries a verdict column or a
@@ -426,7 +440,10 @@ def _f6(x: float) -> float:
 
 
 def _same(a, b) -> bool:
-    """Exact equality, NaN == NaN."""
+    """Exact equality, NaN == NaN, NA == NA (a nullable Int64 column's missing value —
+    the lanes pass's harvest_close_ms; NA never equals a number)."""
+    if a is pd.NA or b is pd.NA:
+        return a is pd.NA and b is pd.NA
     if isinstance(a, float) or isinstance(b, float):
         try:
             fa, fb = float(a), float(b)
@@ -2742,6 +2759,141 @@ def det_real():
                        + (f"; findings {bad[:4]}" if bad else ""))
 
 
+# ══════════════════════════════════════════════════════════ F-HARVEST-INSTANTS
+def own_harvest_close(sym: str, d: int, entry_close_ms: int, exit_close_ms: int,
+                      reason: str) -> int | None:
+    """THIS FILE'S hand harvest law [v6's band harvest] on its own 4h read: the CLOSE
+    of the first bar after the entry whose close slot fires the harvest, or None."""
+    X = own4(sym)
+    o, h, l, c, e89, e316 = X["o"], X["h"], X["l"], X["c"], X["e89"], X["e316"]
+
+    def edge(j: int) -> float:
+        return max(e89[j], e316[j]) if d == 1 else min(e89[j], e316[j])
+
+    ei = int(np.searchsorted(o, int(entry_close_ms), "left")) - 1
+    xi = int(np.searchsorted(o, int(exit_close_ms), "left")) - 1
+    if int(o[ei]) + MS4H != int(entry_close_ms):
+        raise RuntimeError(f"{sym} {iso(int(entry_close_ms))}: not a 4h-close entry")
+    last = xi if reason == "corridor_end" else xi - 1
+    armed = False
+    for j in range(ei + 1, last + 1):
+        if not armed and ((c[j - 1] > edge(j - 1)) if d == 1 else (c[j - 1] < edge(j - 1))):
+            armed = True
+        if armed and ((l[j] <= edge(j)) if d == 1 else (h[j] >= edge(j))):
+            return int(o[j]) + MS4H
+    return None
+
+
+def harvest_instant_findings(tag: str, df: pd.DataFrame, v6hc: dict) -> tuple[list[str], dict]:
+    out = []
+    t = {"rows": len(df), "harvested": 0, "stamped": 0, "v6_keys": 0, "substitutes": 0,
+         "substitutes_harvested": 0}
+    if "harvest_close_ms" not in df.columns:
+        return [f"INSTANT-HARVEST: {tag} carries no harvest_close_ms column"], t
+    if str(df["harvest_close_ms"].dtype) != "Int64":
+        out.append(f"INSTANT-HARVEST: {tag}.harvest_close_ms dtype "
+                   f"{df['harvest_close_ms'].dtype} != Int64")
+    for r in df.itertuples(index=False):
+        got = None if pd.isna(r.harvest_close_ms) else int(r.harvest_close_ms)
+        want = own_harvest_close(str(r.symbol), int(r.direction), int(r.entry_close_ms),
+                                 int(r.exit_close_ms), str(r.exit_reason))
+        k = (str(r.symbol), int(r.entry_ms))
+        w = f"{tag} {r.symbol} {iso(int(r.entry_close_ms))}"
+        t["harvested"] += int(bool(r.harvested))
+        t["stamped"] += int(got is not None)
+        if (got is not None) != bool(r.harvested):
+            out.append(f"INSTANT-HARVEST: {w}: harvested {bool(r.harvested)} but "
+                       f"harvest_close_ms {got}")
+        if got != want:
+            out.append(f"INSTANT-HARVEST: {w}: harvest_close_ms {iso(got) if got else None} "
+                       f"!= the hand law's {iso(want) if want else None}")
+        if k in v6hc:
+            t["v6_keys"] += 1
+            if v6hc[k] != got:
+                out.append(f"INSTANT-HARVEST: {w}: harvest_close_ms {got} != books/"
+                           f"v6_campaigns' {v6hc[k]}")
+        else:
+            t["substitutes"] += 1
+            t["substitutes_harvested"] += int(bool(r.harvested))
+    return out, t
+
+
+def _v6_harvests() -> dict:
+    v = pd.read_parquet(str(ROOT / "research_outputs" / "tierc11" / "books"
+                            / "v6_campaigns.parquet"))
+    return {(str(a), int(b)): (None if pd.isna(c) else int(c))
+            for a, b, c in zip(v["symbol"], v["entry_ms"], v["harvest_close_ms"])}
+
+
+def hinst_break():
+    v6hc = _v6_harvests()
+    pr = reg_df("P-WIN-1", "tierE__ratr_priority")
+    sub_h = pr.index[pr["priority_substitute"].astype(bool) & pr["harvested"].astype(bool)]
+    hv = pr.index[pr["harvested"].astype(bool)]
+
+    def late():
+        d = pr.copy()
+        d.loc[hv[0], "harvest_close_ms"] = int(d.loc[hv[0], "harvest_close_ms"]) + MS4H
+        return harvest_instant_findings("P-WIN-1/tierE__ratr_priority (copy)", d, v6hc)[0]
+
+    def dropped_sub():
+        d = pr.copy()
+        d.loc[sub_h[0], "harvest_close_ms"] = pd.NA
+        return harvest_instant_findings("P-WIN-1/tierE__ratr_priority (copy)", d, v6hc)[0]
+
+    def open_stamped():
+        orig = G.harvest_close_of
+
+        def at_open(t):
+            x = orig(t)
+            return None if x is None else x - MS4H
+        R = module_R()
+        with mutated(G, "harvest_close_of", at_open):
+            f = G.regbook_frame(R["priority"], R["pool"])
+        return harvest_instant_findings("P-WIN-1/tierE__ratr_priority (rebuilt, mutant)", f,
+                                        v6hc)[0]
+
+    return plants([
+        ("one harvest one 4h bar late (a copy of the priority arm)", "INSTANT-HARVEST", late),
+        ("one SUBSTITUTE's harvest instant dropped — nulled (a copy of the priority arm)",
+         "INSTANT-HARVEST", dropped_sub),
+        ("[mutant] the writer's harvest_close_of stamping the harvest bar's OPEN (the "
+         "priority arm rebuilt)", "INSTANT-HARVEST", open_stamped),
+    ])
+
+
+def hinst_real():
+    v6hc = _v6_harvests()
+    bad, lines = [], []
+    subs = (0, 0)
+    for (reg, arm) in ARMS_TYPED:
+        f, t = harvest_instant_findings(f"{reg}/{arm}", reg_df(reg, arm), v6hc)
+        bad += f
+        lines.append(f"{reg}/{arm} {t['stamped']}/{t['harvested']}")
+        if (reg, arm) == ("P-WIN-1", "tierE__ratr_priority"):
+            subs = (t["substitutes"], t["substitutes_harvested"])
+    R = module_R()
+    rb = G.regbook_frame(R["priority"], R["pool"])
+    same = (rb["harvest_close_ms"].fillna(-1).to_numpy(np.int64).tolist()
+            == reg_df("P-WIN-1", "tierE__ratr_priority")["harvest_close_ms"].fillna(-1)
+            .to_numpy(np.int64).tolist())
+    if not same:
+        bad.append("INSTANT-HARVEST: the in-process priority rebuild differs from its record "
+                   "on harvest_close_ms")
+    if subs[0] < 1 or subs[1] < 1:
+        bad.append(f"INSTANT-HARVEST: the priority arm holds {subs} (substitutes, harvested) "
+                   f"— the rows the pairing-key join cannot stamp are not exercised")
+    return (not bad), (
+        f"harvest_close_ms (Int64) on EVERY row of the {len(ARMS_TYPED)} regbooks == this "
+        f"file's hand harvest law on its own 4h read (from the bar after the entry, armed once "
+        f"a close sat outside the own EMA89/316 edge, touched on the whole bar, strictly before "
+        f"the exit bar, corridor_end excepted; the bar's CLOSE), NA iff not harvested "
+        f"(stamped/harvested: {' · '.join(lines)}); every v6 key == "
+        f"books/v6_campaigns.parquet; the priority arm's {subs[0]} substitutes ({subs[1]} "
+        f"harvested) — the rows no pairing-key join can stamp — covered; rebuild == record: "
+        f"{same}" + (f"; findings {bad[:4]}" if bad else ""))
+
+
 FIXTURES = (
     ("F-DEF", "both tide-age definitions computed; the gated set recomputed from a typed "
      "definition [L-G.1]",
@@ -2779,6 +2931,13 @@ FIXTURES = (
      "follow the counts, or under a forced hold the module's replays differ from this file's "
      "held replay (or the hold does not bind)",
      edge_break, edge_real),
+    ("F-HARVEST-INSTANTS", "the harvest's named-event instant on every regbook row == this "
+     "file's hand harvest law; v6 keys == books/ [L-R.5, AM-6 — the lanes pass]",
+     "a regbook lacks harvest_close_ms (Int64), stamps a row that did not harvest or leaves a "
+     "harvested row NA, an instant differs from the hand harvest law on the own 4h read, a v6 "
+     "key differs from books/v6_campaigns, the priority substitutes are not covered, or the "
+     "priority rebuild differs from its record",
+     hinst_break, hinst_real),
     ("F-GRID", "every Stage G table whole, collared, verdict-free, recomputed [L-1.4, L-G.3]",
      "a table is not whole against its typed cells, a non-registered table lacks the collar "
      "or carries a verdict column / word, an n = 0 cell carries a number, or a cell's n / ΣR / "

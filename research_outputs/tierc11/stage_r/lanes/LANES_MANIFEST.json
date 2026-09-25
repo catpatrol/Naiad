@@ -1,0 +1,605 @@
+{
+ "as_of": "2026-09-25T00:00:00Z",
+ "as_of_close_ms": 1790294400000,
+ "books": {
+  "P-ADD-BRK/scored": {
+   "arm": "scored",
+   "book_sha256": "15ba415b7a30f20f95192aa279e84fe2cd9ea8cfde4c325513d8a128819e79cd",
+   "book_sha256_is_the_scored_input": true,
+   "campaign_lens": "4h",
+   "kind": "v6transform",
+   "n_campaigns": 200,
+   "n_rows": 19464,
+   "n_rows_by_kind_per_scale": {
+    "add1": 52,
+    "add2": 14,
+    "arm": 200,
+    "bar_close": 8684,
+    "bell": 4,
+    "entry": 200,
+    "exit": 200,
+    "exit_post_event": 144,
+    "harvest": 55,
+    "plus_1r": 103,
+    "plus_1r_post_event": 76
+   },
+   "named_events_per_scale": {
+    "+1R": 103,
+    "+1R (post-event twin)": 76,
+    "add": 66,
+    "arm": 200,
+    "bar_close": 8684,
+    "bell": 4,
+    "entry": 200,
+    "exit: bell_12_89": 4,
+    "exit: stop": 196,
+    "exit: stop (post-event twin)": 144,
+    "harvest": 55
+   },
+   "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+   ],
+   "regbook_content_sha256": "4c68370ad23000e8f7544469bb9eaad46906c8aed75422a0e1a0fd14284d0225",
+   "regbook_file_sha256": "7d44337a459238924f7d6ad71293a5e1b34d786a80d24aaffd1f2308305b01d6",
+   "registration": "P-ADD-BRK",
+   "sidecar_file_sha256": "4c0ccfedc4dee8977d8b47faaf67ced112b039931802ba0fa9de5af06eab6087",
+   "source_regbook": "research_outputs/tierc11/regbooks/P-ADD-BRK/scored.parquet"
+  },
+  "P-ADD-SFP/scored": {
+   "arm": "scored",
+   "book_sha256": "ee2d19250f3e3d747784b2ba8f45940fb7bb50354d3099e4480e672819c90910",
+   "book_sha256_is_the_scored_input": true,
+   "campaign_lens": "4h",
+   "kind": "v6transform",
+   "n_campaigns": 200,
+   "n_rows": 19356,
+   "n_rows_by_kind_per_scale": {
+    "add1": 9,
+    "add2": 3,
+    "arm": 200,
+    "bar_close": 8684,
+    "bell": 4,
+    "entry": 200,
+    "exit": 200,
+    "exit_post_event": 144,
+    "harvest": 55,
+    "plus_1r": 103,
+    "plus_1r_post_event": 76
+   },
+   "named_events_per_scale": {
+    "+1R": 103,
+    "+1R (post-event twin)": 76,
+    "add": 12,
+    "arm": 200,
+    "bar_close": 8684,
+    "bell": 4,
+    "entry": 200,
+    "exit: bell_12_89": 4,
+    "exit: stop": 196,
+    "exit: stop (post-event twin)": 144,
+    "harvest": 55
+   },
+   "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+   ],
+   "regbook_content_sha256": "adc9ea36c04ebbed1b5a1a2112c05a1c77efd7abd3c8b887e2234343b0e45e1d",
+   "regbook_file_sha256": "739d45d76a9cc240d5ce1f11f63bc7befd08bf652f074e561431d49244eeab53",
+   "registration": "P-ADD-SFP",
+   "sidecar_file_sha256": "d6e922d923ce871c12a15e79b4566eb36acfe42143317ca9e7a249b77d043db0",
+   "source_regbook": "research_outputs/tierc11/regbooks/P-ADD-SFP/scored.parquet"
+  },
+  "P-AGE-1/scored": {
+   "arm": "scored",
+   "book_sha256": "d008fa5086ce14f578403c083169e28c5870701fd37f3cb2b03c5474f04f22d8",
+   "book_sha256_is_the_scored_input": true,
+   "campaign_lens": "4h",
+   "kind": "v6transform",
+   "n_campaigns": 141,
+   "n_rows": 11698,
+   "n_rows_by_kind_per_scale": {
+    "arm": 141,
+    "bar_close": 5089,
+    "entry": 141,
+    "exit": 141,
+    "exit_post_event": 141,
+    "harvest": 38,
+    "plus_1r": 79,
+    "plus_1r_post_event": 79
+   },
+   "named_events_per_scale": {
+    "+1R": 79,
+    "+1R (post-event twin)": 79,
+    "arm": 141,
+    "bar_close": 5089,
+    "entry": 141,
+    "exit: stop": 141,
+    "exit: stop (post-event twin)": 141,
+    "harvest": 38
+   },
+   "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+   ],
+   "regbook_content_sha256": "d8a887403f8b20dcbc8434d0de292c2a29d7c41d453bb707c3b1c66f8306279a",
+   "regbook_file_sha256": "6440a6e0d14cfbf1c62df19246a066d0f7086a1e64aae3bb0ced8c2b2a624dca",
+   "registration": "P-AGE-1",
+   "sidecar_file_sha256": "75ea0a199c2d219667b26f9a62ad8fbb3517fdd3d2716817bb881b4f375bd234",
+   "source_regbook": "research_outputs/tierc11/regbooks/P-AGE-1/scored.parquet"
+  },
+  "P-BRK-4H/scored": {
+   "arm": "scored",
+   "book_sha256": "c76358dfaeb034ddc679f74f0f26f40eca9a88bcbb48c5c62bcac45f5b4ec311",
+   "book_sha256_is_the_scored_input": true,
+   "campaign_lens": "4h",
+   "kind": "lane4h",
+   "n_campaigns": 322,
+   "n_rows": 17798,
+   "n_rows_by_kind_per_scale": {
+    "bar_close": 7402,
+    "bell": 53,
+    "entry": 322,
+    "exit": 322,
+    "exit_post_event": 269,
+    "harvest": 215,
+    "plus_1r": 158,
+    "plus_1r_post_event": 158
+   },
+   "named_events_per_scale": {
+    "+1R": 158,
+    "+1R (post-event twin)": 158,
+    "bar_close": 7402,
+    "bell": 53,
+    "entry": 322,
+    "exit: bell_12_89": 53,
+    "exit: stop": 269,
+    "exit: stop (post-event twin)": 269,
+    "harvest": 215
+   },
+   "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+   ],
+   "regbook_content_sha256": "4b48e80e84bae8b0eba8f1b49352a8642c91e2813e6f9d000e6848f00aa30f7c",
+   "regbook_file_sha256": "b58e678a0a35075039679667af55f38afb5e4c610e53897918fb0042141694a2",
+   "registration": "P-BRK-4H",
+   "sidecar_file_sha256": "3cb25e07dbbc2e2ea9223628a7ba095b2f672a3dc21a3e376c0b7ebcabadb073",
+   "source_regbook": "research_outputs/tierc11/regbooks/P-BRK-4H/scored.parquet"
+  },
+  "P-BRK-4H/tierE__panel17": {
+   "arm": "tierE__panel17",
+   "book_sha256": "761922c7fc32f0ef01ea86ebb427f31a22e070c0cc0f89a993301c96fded17cb",
+   "book_sha256_is_the_scored_input": true,
+   "campaign_lens": "4h",
+   "kind": "lane4h",
+   "n_campaigns": 762,
+   "n_rows": 43560,
+   "n_rows_by_kind_per_scale": {
+    "bar_close": 18210,
+    "bell": 110,
+    "entry": 762,
+    "exit": 762,
+    "exit_post_event": 652,
+    "harvest": 520,
+    "plus_1r": 382,
+    "plus_1r_post_event": 382
+   },
+   "named_events_per_scale": {
+    "+1R": 382,
+    "+1R (post-event twin)": 382,
+    "bar_close": 18210,
+    "bell": 110,
+    "entry": 762,
+    "exit: bell_12_89": 110,
+    "exit: stop": 652,
+    "exit: stop (post-event twin)": 652,
+    "harvest": 520
+   },
+   "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT",
+    "ENAUSDT",
+    "PUMPUSDT",
+    "HYPEUSDT",
+    "MNTUSDT_BYBIT",
+    "SUIUSDT",
+    "LTCUSDT",
+    "XMRUSDT",
+    "BNBUSDT",
+    "UNIUSDT",
+    "1000PEPEUSDT",
+    "DOGEUSDT",
+    "1000BONKUSDT"
+   ],
+   "regbook_content_sha256": "be2b23e0b06fbb9cdb5e4295cda3534639343f0d7085f9cbd9eb1b237b9c90c0",
+   "regbook_file_sha256": "286d9636cba9e6be72d077481290b468a3e48c9f088e316d1f0449c54a79ea97",
+   "registration": "P-BRK-4H",
+   "sidecar_file_sha256": "a137070608f732413d74c0435c74d191973b4d6de398d8ac5f377b76bb399480",
+   "source_regbook": "research_outputs/tierc11/regbooks/P-BRK-4H/tierE__panel17.parquet"
+  },
+  "P-RELAY-1/scored": {
+   "arm": "scored",
+   "book_sha256": "57d8bbef8190492d1df83a137977463ee441508e20a57cd81499c60258a53361",
+   "book_sha256_is_the_scored_input": true,
+   "campaign_lens": "4h",
+   "kind": "relay",
+   "n_campaigns": 173,
+   "n_rows": 12296,
+   "n_rows_by_kind_per_scale": {
+    "arm": 173,
+    "bar_close": 5292,
+    "bell": 11,
+    "entry": 173,
+    "exit": 173,
+    "exit_post_event": 114,
+    "harvest": 48,
+    "plus_1r": 95,
+    "plus_1r_post_event": 69
+   },
+   "named_events_per_scale": {
+    "+1R": 95,
+    "+1R (post-event twin)": 69,
+    "arm": 173,
+    "bar_close": 5292,
+    "bell": 11,
+    "exit: bell_12_89": 11,
+    "exit: stop": 162,
+    "exit: stop (post-event twin)": 114,
+    "harvest": 48,
+    "relay_entry": 173
+   },
+   "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+   ],
+   "regbook_content_sha256": "9eb15727e863edf74117306afcccc9beea12811c30d1da084235ccb53f8fdd3a",
+   "regbook_file_sha256": "bc6854ec92dd1635b0be6fbc920eef9a54521368adc4922a83b0d39e657c24f4",
+   "registration": "P-RELAY-1",
+   "sidecar_file_sha256": "5e7015f8f99586a6b87c657e8637606e0497122d453dbc7118ade34c2acc7713",
+   "source_regbook": "research_outputs/tierc11/regbooks/P-RELAY-1/scored.parquet"
+  },
+  "P-TP-RNG/scored": {
+   "arm": "scored",
+   "book_sha256": "a10c667b26932948074c94da892ea998ccf8db9a76999981efea53b69aaf2a9d",
+   "book_sha256_is_the_scored_input": true,
+   "campaign_lens": "4h",
+   "kind": "v6transform",
+   "n_campaigns": 200,
+   "n_rows": 17456,
+   "n_rows_by_kind_per_scale": {
+    "arm": 200,
+    "bar_close": 7685,
+    "bell": 4,
+    "entry": 200,
+    "exit": 200,
+    "exit_post_event": 196,
+    "harvest": 53,
+    "plus_1r": 95,
+    "plus_1r_post_event": 95
+   },
+   "named_events_per_scale": {
+    "+1R": 95,
+    "+1R (post-event twin)": 95,
+    "TP fill": 36,
+    "TP fill (post-event twin)": 36,
+    "arm": 200,
+    "bar_close": 7685,
+    "bell": 4,
+    "entry": 200,
+    "exit: bell_12_89": 4,
+    "exit: stop": 160,
+    "exit: stop (post-event twin)": 160,
+    "harvest": 53
+   },
+   "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+   ],
+   "regbook_content_sha256": "520b72e66db30b719cba698bbb8a57c1ac64fa2f1b037ab1cf8a5f0ea2a8b3da",
+   "regbook_file_sha256": "4ba47f8b6d41a0e9a2860822340413a3e98071794eb644b47e168cf380140e1e",
+   "registration": "P-TP-RNG",
+   "sidecar_file_sha256": "459b8a8d7bfd86ab29488832b8f87446850376bf3c6d03958e6602f74c9a9cc0",
+   "source_regbook": "research_outputs/tierc11/regbooks/P-TP-RNG/scored.parquet"
+  },
+  "P-WARN-1/scored": {
+   "arm": "scored",
+   "book_sha256": "956e15390419f8ab4a2f9e644f7a041f1b20708c83f41b744eec1d4965cf54e1",
+   "book_sha256_is_the_scored_input": true,
+   "campaign_lens": "4h",
+   "kind": "v6transform",
+   "n_campaigns": 200,
+   "n_rows": 17682,
+   "n_rows_by_kind_per_scale": {
+    "arm": 200,
+    "bar_close": 7909,
+    "entry": 200,
+    "exit": 200,
+    "exit_post_event": 114,
+    "harvest": 34,
+    "plus_1r": 92,
+    "plus_1r_post_event": 92
+   },
+   "named_events_per_scale": {
+    "+1R": 92,
+    "+1R (post-event twin)": 92,
+    "arm": 200,
+    "bar_close": 7909,
+    "entry": 200,
+    "exit: stop": 158,
+    "exit: stop (post-event twin)": 114,
+    "harvest": 34,
+    "warn exit": 42
+   },
+   "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+   ],
+   "regbook_content_sha256": "8e7410a68114204e47733c186ab9f093c7df2156d44993a47c2db989102d31d9",
+   "regbook_file_sha256": "ad7c8ce8d5a8a04b3398008f62219e9c86fb9e3bd6c326039d563f3d10822d07",
+   "registration": "P-WARN-1",
+   "sidecar_file_sha256": "bda30cbfc2dc1866264976f0b20b4ed42fa27a48036b1d7d897e6ec13e0e08f7",
+   "source_regbook": "research_outputs/tierc11/regbooks/P-WARN-1/scored.parquet"
+  },
+  "P-WIN-1/scored": {
+   "arm": "scored",
+   "book_sha256": "fd3f407ad6b1867039bb24a42816678e4992b9204ed65971058e48fa2bdabbfe",
+   "book_sha256_is_the_scored_input": true,
+   "campaign_lens": "4h",
+   "kind": "v6transform",
+   "n_campaigns": 137,
+   "n_rows": 7886,
+   "n_rows_by_kind_per_scale": {
+    "arm": 137,
+    "bar_close": 3202,
+    "entry": 137,
+    "exit": 137,
+    "exit_post_event": 137,
+    "harvest": 39,
+    "plus_1r": 77,
+    "plus_1r_post_event": 77
+   },
+   "named_events_per_scale": {
+    "+1R": 77,
+    "+1R (post-event twin)": 77,
+    "arm": 137,
+    "bar_close": 3202,
+    "entry": 137,
+    "exit: stop": 137,
+    "exit: stop (post-event twin)": 137,
+    "harvest": 39
+   },
+   "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+   ],
+   "regbook_content_sha256": "74759e9744db049096e92d10393b1a0a9c4bc3ed3d13220d09ac395dcfba656c",
+   "regbook_file_sha256": "824c5e08ca79511fea96b98d65b74e8e7209f36379d881a2ff02f927db08241c",
+   "registration": "P-WIN-1",
+   "sidecar_file_sha256": "c9b254f9620937f08a4146ec9d0cadc67127c6365a1ff5974daf5d379128f02f",
+   "source_regbook": "research_outputs/tierc11/regbooks/P-WIN-1/scored.parquet"
+  }
+ },
+ "collar": {
+  "gates": "nothing",
+  "selection_not_a_result": "a SELECTION, not a result",
+  "tier": "TIER-E"
+ },
+ "event_sources": {
+  "P-ADD-BRK/scored": {
+   "add1": "add1_close_ms",
+   "add2": "add2_close_ms",
+   "arm": "v6's own arm, joined on (symbol, entry_ms) [L-1.5]",
+   "exit": "exit_close_1h_ms by exit_resolved_by ('1h' -> as filed; 'close' -> a close reason as filed at exit_close_ms; 'parent' -> an intrabar reason at the parent bar's OPEN, a close reason at the parent's close) [L-R.5, AM-6]",
+   "exit_post_event": "THE TWIN LAW: an intrabar exit stamped before the close of the 4h bar holding it -> that close (exit_close_ms)",
+   "harvest": "v6's own harvest close, joined on (symbol, entry_ms) [L-1.5] \u2014 checked per row: harvested -> v6 harvested at or before the exit stamp; not harvested -> v6 did not harvest before it",
+   "plus_1r": "latch_1h_ms (the resolving 1h child's close; a PARENT-decided latch -> the parent's OPEN, source n_walk_mismatch)",
+   "plus_1r_post_event": "THE TWIN LAW: the close of the 4h bar holding latch_1h_ms, when after the stamp (a parent-decided latch: the parent's close; a latch resolved before the bar's last 1h child: the bar's close; none when the resolving child is the bar's last)"
+  },
+  "P-ADD-SFP/scored": {
+   "add1": "add1_close_ms",
+   "add2": "add2_close_ms",
+   "arm": "v6's own arm, joined on (symbol, entry_ms) [L-1.5]",
+   "exit": "exit_close_1h_ms by exit_resolved_by ('1h' -> as filed; 'close' -> a close reason as filed at exit_close_ms; 'parent' -> an intrabar reason at the parent bar's OPEN, a close reason at the parent's close) [L-R.5, AM-6]",
+   "exit_post_event": "THE TWIN LAW: an intrabar exit stamped before the close of the 4h bar holding it -> that close (exit_close_ms)",
+   "harvest": "v6's own harvest close, joined on (symbol, entry_ms) [L-1.5] \u2014 checked per row: harvested -> v6 harvested at or before the exit stamp; not harvested -> v6 did not harvest before it",
+   "plus_1r": "latch_1h_ms (the resolving 1h child's close; a PARENT-decided latch -> the parent's OPEN, source n_walk_mismatch)",
+   "plus_1r_post_event": "THE TWIN LAW: the close of the 4h bar holding latch_1h_ms, when after the stamp (a parent-decided latch: the parent's close; a latch resolved before the bar's last 1h child: the bar's close; none when the resolving child is the bar's last)"
+  },
+  "P-AGE-1/scored": {
+   "arm": "arm_ms + 4h (the arm bar's OPEN + one bar)",
+   "exit": "exit_event_ms",
+   "exit_post_event": "THE TWIN LAW: an intrabar exit stamped before the close of the 4h bar holding it -> that close (exit_close_ms)",
+   "harvest": "harvest_close_ms",
+   "plus_1r": "derived: the OPEN of the first 4h bar after the entry whose favourable extreme reaches entry +/- R (reached_1r rows only)",
+   "plus_1r_post_event": "derived: that bar's CLOSE"
+  },
+  "P-BRK-4H/scored": {
+   "exit": "exit_event_ms",
+   "exit_post_event": "THE TWIN LAW: an intrabar exit stamped before the close of the 4h bar holding it -> that close (exit_close_ms)",
+   "harvest": "harvest_i on the 4h tape (checked against entry_i)",
+   "plus_1r": "derived: the OPEN of the first 4h bar after the entry whose favourable extreme reaches entry +/- R (reached_1r rows only)",
+   "plus_1r_post_event": "derived: that bar's CLOSE"
+  },
+  "P-BRK-4H/tierE__panel17": {
+   "exit": "exit_event_ms",
+   "exit_post_event": "THE TWIN LAW: an intrabar exit stamped before the close of the 4h bar holding it -> that close (exit_close_ms)",
+   "harvest": "harvest_i on the 4h tape (checked against entry_i)",
+   "plus_1r": "derived: the OPEN of the first 4h bar after the entry whose favourable extreme reaches entry +/- R (reached_1r rows only)",
+   "plus_1r_post_event": "derived: that bar's CLOSE"
+  },
+  "P-RELAY-1/scored": {
+   "arm": "window_arm_close_ms",
+   "exit": "exit_stamp_ms",
+   "exit_post_event": "THE TWIN LAW: an intrabar exit stamped before the close of the 4h bar holding it -> that close (exit_bar_close_ms)",
+   "harvest": "harvest_close_ms",
+   "plus_1r": "latch_1h_ms (the resolving 1h child's close; a PARENT-decided latch -> the parent's OPEN, source walk_mismatch_ms)",
+   "plus_1r_post_event": "THE TWIN LAW: the close of the 4h bar holding latch_1h_ms, when after the stamp (a parent-decided latch: the parent's close; a latch resolved before the bar's last 1h child: the bar's close; none when the resolving child is the bar's last)"
+  },
+  "P-TP-RNG/scored": {
+   "arm": "v6's own arm, joined on (symbol, entry_ms) [L-1.5]",
+   "exit": "exit_stamp_ms",
+   "exit_post_event": "THE TWIN LAW: an intrabar exit stamped before the close of the 4h bar holding it -> that close (exit_close_ms)",
+   "harvest": "harvest_ms + 4h",
+   "plus_1r": "derived: the OPEN of the first 4h bar after the entry whose favourable extreme reaches entry +/- R (reached_1r rows only)",
+   "plus_1r_post_event": "derived: that bar's CLOSE"
+  },
+  "P-WARN-1/scored": {
+   "arm": "arm_ms + 4h (the arm bar's OPEN + one bar)",
+   "exit": "exit_instant_ms by exit_resolved_by ('1h' -> as filed; 'close' -> a close reason as filed at exit_close_ms; 'parent' -> an intrabar reason at the parent bar's OPEN, a close reason at the parent's close) [L-R.5, AM-6]",
+   "exit_post_event": "THE TWIN LAW: an intrabar exit stamped before the close of the 4h bar holding it -> that close (exit_close_ms)",
+   "harvest": "v6's own harvest close, joined on (symbol, entry_ms) [L-1.5] \u2014 checked per row: harvested -> v6 harvested at or before the exit stamp; not harvested -> v6 did not harvest before it",
+   "plus_1r": "derived: the OPEN of the first 4h bar after the entry whose favourable extreme reaches entry +/- R (reached_1r rows only)",
+   "plus_1r_post_event": "derived: that bar's CLOSE"
+  },
+  "P-WIN-1/scored": {
+   "arm": "arm_ms + 4h (the arm bar's OPEN + one bar)",
+   "exit": "exit_event_ms",
+   "exit_post_event": "THE TWIN LAW: an intrabar exit stamped before the close of the 4h bar holding it -> that close (exit_close_ms)",
+   "harvest": "harvest_close_ms",
+   "plus_1r": "derived: the OPEN of the first 4h bar after the entry whose favourable extreme reaches entry +/- R (reached_1r rows only)",
+   "plus_1r_post_event": "derived: that bar's CLOSE"
+  }
+ },
+ "inputs": {
+  "SCALE_PICKS.json": "cb5319c975e44df610c05f5917759b7b47d819fa095b8af26d174d79fcef454f",
+  "scores/SCORE_MANIFEST.json": "5b47292067701d85b160c075a5dabd9f3c7254e9182ba92438351ac4d55654a3"
+ },
+ "keys": {
+  "NEST_GRID_LANES_BY_COIN": [
+   "book",
+   "scale_kind",
+   "lens",
+   "coin_rule",
+   "coin_cat"
+  ],
+  "NEST_GRID_LANES_BY_STATE": [
+   "book",
+   "scale_kind",
+   "lens",
+   "state"
+  ],
+  "NEST_GRID_LANES_FREQ": [
+   "book",
+   "scale_kind",
+   "lens",
+   "coin_rule",
+   "state",
+   "coin_cat"
+  ],
+  "NEST_P-ADD-BRK": [
+   "arm",
+   "scale_kind",
+   "symbol",
+   "entry_ms",
+   "instant_kind",
+   "instant_ms"
+  ],
+  "NEST_P-ADD-SFP": [
+   "arm",
+   "scale_kind",
+   "symbol",
+   "entry_ms",
+   "instant_kind",
+   "instant_ms"
+  ],
+  "NEST_P-AGE-1": [
+   "arm",
+   "scale_kind",
+   "symbol",
+   "entry_ms",
+   "instant_kind",
+   "instant_ms"
+  ],
+  "NEST_P-BRK-4H": [
+   "arm",
+   "scale_kind",
+   "symbol",
+   "entry_ms",
+   "instant_kind",
+   "instant_ms"
+  ],
+  "NEST_P-RELAY-1": [
+   "arm",
+   "scale_kind",
+   "symbol",
+   "entry_ms",
+   "instant_kind",
+   "instant_ms"
+  ],
+  "NEST_P-TP-RNG": [
+   "arm",
+   "scale_kind",
+   "symbol",
+   "entry_ms",
+   "instant_kind",
+   "instant_ms"
+  ],
+  "NEST_P-WARN-1": [
+   "arm",
+   "scale_kind",
+   "symbol",
+   "entry_ms",
+   "instant_kind",
+   "instant_ms"
+  ],
+  "NEST_P-WIN-1": [
+   "arm",
+   "scale_kind",
+   "symbol",
+   "entry_ms",
+   "instant_kind",
+   "instant_ms"
+  ]
+ },
+ "md_sha256": "696e6832c171636fbcbe12360d47967960deaec00c1b53cb0736ba2f2200d995",
+ "readings": [
+  "SR-15 THE LANES PASS [contract R3 'at every instant of every campaign of every card (base v6, 9/12, the lanes below)'; L-R.5, AM-6]: `lanes` runs the nest-book door (read_regbook -> instants_of -> nest_frame, both scales) over every REGISTERED scored arm that is a campaign book \u2014 P-WARN-1, P-AGE-1, P-WIN-1, P-BRK-4H, P-RELAY-1, P-ADD-BRK, P-ADD-SFP, P-TP-RNG (P-SCALP-2 is closed by R2 and files no book) \u2014 plus P-BRK-4H tierE__panel17 (the twelve: 12h / 1w NA, hence 4h / 12h / 1d coincidence NA). Each book must be the book the scorer scored (its sidecar book_sha256 == scores/SCORE_MANIFEST.json's input, HALT otherwise). Named events per L-R.5 / AM-6: arm, entry (the relay's 1h entry close: 'relay_entry'), harvest, add (add1 / add2), bell, a warn exit at its 1h close, a close exit at its close \u2014 close events at their close; +1R, a stop and a TP fill are intrabar: at the OPEN of their bar or at the close of the 1h child that resolves them (the regbook's own stamp of record). THE TWIN LAW (one law for every intrabar event \u2014 +1R, a stop, a TP fill \u2014 every book, the relay included): an intrabar event whose stamp precedes the close of the 4h bar holding it carries exactly one close-stamped twin, labelled post-event, AT that close (a bar-OPEN stamp: the same bar's close; a 1h child's close: its parent 4h bar's close \u2014 exit_bar_close_ms for the relay, whose exit_close_ms is its 1h exit instant); a stamp that IS that close (the resolving 1h child is the bar's last) has none \u2014 its own instant is the close, a bar_close row through the exit stamp; close events (arm, entry, harvest, add, bell, a warn exit, a close exit) have none \u2014 a warn exit before its 4h bar's close ends the campaign there, so that close is not one of its instants. Each row's `stamp_law` names its rule from the event's own class (intrabar vs close), never from its position against exit_close_ms. An intrabar exit resolved by 'close' HALTs. A campaign OPEN at the pin -> 'as_of_pin'. Each row carries `named_event` (the event's name, 'bar_close' for a plain lens close) and the campaign's `exit_reason`. The nesting grid at ENTRY per book x scale x lens (state x coincidence frequency, outcomes by state, outcomes by coincidence: n, E[net R], P(win), sum R, the book's own net_r) is printed whole with SR-12's honesty labels, collared; declared cells: STATES4 (+ 'NA' where a member lacks the lens) x COIN_CATS (+ 'NA' where a member lacks L or L+1; 1w 'NA' only). LANES_MANIFEST.json pins, per book, the regbook bytes it stamped (the parquet's content sha \u2014 its csv \u2014 and its file sha) beside book_sha256, which covers the 16 required columns only, not the instant columns the nest reads.",
+  "SR-9 nest-book [L-R.5]: kinds v6transform (4h bars from the arm), lane4h (4h from the entry), relay (4h bars from the v6 arm \u2014 its stop, R, window and ride are 4h; its 1h entry instant is the named event 'entry'), scalp5m (5m bars from the entry). Columns read beyond the REGBOOK INTERFACE: arm = arm_close_ms | window_arm_close_ms | arm_ms + one lens bar (the arm bar's OPEN) | (v6transform) v6's own arm joined on the pairing key (symbol, entry_ms) [L-1.5]; kinds v6transform / relay start their bar closes there (a close event); exit = exit_stamp_ms (ride11's stamp of record) | exit_event_ms (the books' L-R.5 stamp) | a 1h-walked ride's RESOLVED exit instant exit_instant_ms / exit_close_1h_ms, read by exit_resolved_by: '1h' -> the instant as filed (a stop at the close of the 1h child that resolves it, a warn exit at its 1h close), 'close' -> a CLOSE reason as filed at exit_close_ms (an intrabar reason resolved by 'close', or a 'close' exit off exit_close_ms, HALTs), 'parent' -> an intrabar reason at the parent bar's OPEN, a close reason at the parent's close (a missing exit_resolved_by HALTs) [the lanes pass: the warn exit and the add books' exits at their own instant, never the exit bar's 4h close] | derived: an intrabar reason (stop / tp / target) -> the OPEN of the lens bar holding exit_close_ms, a close reason (bell* / corridor_end / warn* / invalidation* / close*) -> exit_close_ms; any other reason HALTs; THE TWIN LAW: an INTRABAR exit stamped before the close of the lens bar holding it (exit_bar_close_ms when filed \u2014 the relay, whose exit_close_ms is its 1h exit instant \u2014 else exit_close_ms; HALT unless it is that bar's close) carries the close-stamped twin 'exit_post_event' there; a stamp that IS that close (the resolving 1h child is the bar's last) has none, and a close event (a 1h warn exit) has none; a corridor_end campaign (OPEN at the pin) is stamped 'as_of_pin', never 'exit'; +1R = latch_stamp_ms (+ latch_post_event_ms) | latch_1h_ms gated by latched_1h: the resolving 1h child's close, a PARENT-decided latch (latch_1h_by 'parent' | its parent bar listed in walk_mismatch_ms) -> the parent's OPEN, an undecidable latch at a parent close HALTs; its twin by THE TWIN LAW: the close of the lens bar holding latch_1h_ms when after the stamp (the parent's close; the bar's close for a latch resolved before the bar's last 1h child; none when the resolving child is the bar's last) | derived on the lens tape by the bar-OPEN law when reached_1r is True (v6transform / lane4h), its twin at that bar's close | none; harvest = harvest_close_ms | harvest_ms + one lens bar | harvest_i on the lens tape (checked) | (v6transform) v6's own harvest close joined on the pairing key, checked per row against `harvested` and the exit stamp \u2014 gated by `harvested`; a close event inside (entry close, exit]; adds / others = add1_close_ms, add2_close_ms (close events; gated by n_adds); ev_<name>_ms (kind <name>, as given); UNSTAMPED = a campaign whose own record says an event happened (latched_1h / reached_1r True, harvested True, n_adds > k) but no source above stamps it is counted, and the door REFUSES to file (HALT naming the counts) [L-R.5 'plus the named events'].",
+  "SR-6 R3 INSTANTS [L-R.5, AM-6]: every CLOSE of the campaign's own lens from its arm close (entry close for a book without arming) through its exit stamp of record; plus the named events \u2014 arm, entry, harvest, bell, add, a close exit at their CLOSE; +1R and an intrabar exit (stop / tp) at the OPEN of their bar for the 4h books (latch bar = latch_1r_open_ms, exit = exit_event_ms: the books' UNWALKED 4h ride) \u2014 their close-stamped twins are labelled 'post-event' (instant kinds plus_1r_post_event / exit_post_event); a campaign OPEN at the pin (corridor_end) is stamped 'as_of_pin', never 'exit'. Each row's stamp_law names its rule. The nest is N.nest_at(symbol, instants, scale) \u2014 per L read at the last CLOSED bar of L at or before the instant."
+ ],
+ "seed": 20260924,
+ "sha": {
+  "NEST_GRID_LANES_BY_COIN": "1c238f5d390f7ce2042d15c910fea662be963a409a30f113d312a1ac242eee84",
+  "NEST_GRID_LANES_BY_STATE": "88732c35f68ed4b64ecd673b62ae705c71294ba3aa23b29ccf90cda2eb08eca9",
+  "NEST_GRID_LANES_FREQ": "987fd862fe93c91c015676f7619205483c534d7b02c17eee10f6c43485d09abe",
+  "NEST_P-ADD-BRK": "74b40dd7228b6d6141616a53878d140f3f31bb8fc11b248c360247296e0bc812",
+  "NEST_P-ADD-SFP": "f5a8638881fe86b0a21edead903c5099a0295e822aa91f7ded59bacb41ae5f37",
+  "NEST_P-AGE-1": "5555824465e37a602a5fd9bf2af7fb9b5bba9dd79ef07ab9dbfcce78ba33be0c",
+  "NEST_P-BRK-4H": "6d7188c322ce2011857aa6b2f7eaff068cb17bbdd905fcfc2325c422d9b9ebed",
+  "NEST_P-RELAY-1": "1d042db10b19664f9dbfd22c7f1372102c644baa66d2a2360879d8e05769c756",
+  "NEST_P-TP-RNG": "dfc122f5b156239d2a4486dca672313f924aa502565c391f32473c6cdf5489ef",
+  "NEST_P-WARN-1": "3e444bd4ad366ae6078cb5f1bea0d4128c98604d799399e9212e2ead60434f2b",
+  "NEST_P-WIN-1": "98b2c647df5ae4df06bf1b1e9b14e3e0eb11cccf8c4af314575a651bdcb2a83f"
+ },
+ "stage": "TC11-R (R3 lanes)",
+ "substrate": "tc11_20260925",
+ "tier": "TIER-C11"
+}

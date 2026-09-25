@@ -1,0 +1,77 @@
+{
+ "arms": {
+  "scored": {
+   "arm": "scored",
+   "book_sha256": "57d8bbef8190492d1df83a137977463ee441508e20a57cd81499c60258a53361",
+   "book_sha256_is_the_scored_input": true,
+   "campaign_lens": "4h",
+   "event_sources": {
+    "arm": "window_arm_close_ms",
+    "exit": "exit_stamp_ms",
+    "exit_post_event": "THE TWIN LAW: an intrabar exit stamped before the close of the 4h bar holding it -> that close (exit_bar_close_ms)",
+    "harvest": "harvest_close_ms",
+    "plus_1r": "latch_1h_ms (the resolving 1h child's close; a PARENT-decided latch -> the parent's OPEN, source walk_mismatch_ms)",
+    "plus_1r_post_event": "THE TWIN LAW: the close of the 4h bar holding latch_1h_ms, when after the stamp (a parent-decided latch: the parent's close; a latch resolved before the bar's last 1h child: the bar's close; none when the resolving child is the bar's last)"
+   },
+   "kind": "relay",
+   "n_campaigns": 173,
+   "n_rows": 12296,
+   "n_rows_by_kind_per_scale": {
+    "arm": 173,
+    "bar_close": 5292,
+    "bell": 11,
+    "entry": 173,
+    "exit": 173,
+    "exit_post_event": 114,
+    "harvest": 48,
+    "plus_1r": 95,
+    "plus_1r_post_event": 69
+   },
+   "named_events_per_scale": {
+    "+1R": 95,
+    "+1R (post-event twin)": 69,
+    "arm": 173,
+    "bar_close": 5292,
+    "bell": 11,
+    "exit: bell_12_89": 11,
+    "exit: stop": 162,
+    "exit: stop (post-event twin)": 114,
+    "harvest": 48,
+    "relay_entry": 173
+   },
+   "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+   ],
+   "regbook_content_sha256": "9eb15727e863edf74117306afcccc9beea12811c30d1da084235ccb53f8fdd3a",
+   "regbook_file_sha256": "bc6854ec92dd1635b0be6fbc920eef9a54521368adc4922a83b0d39e657c24f4",
+   "registration": "P-RELAY-1",
+   "sidecar_file_sha256": "5e7015f8f99586a6b87c657e8637606e0497122d453dbc7118ade34c2acc7713",
+   "source_regbook": "research_outputs/tierc11/regbooks/P-RELAY-1/scored.parquet"
+  }
+ },
+ "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+ "as_of_substrate": "tc11_20260925",
+ "content_sha256": "1d042db10b19664f9dbfd22c7f1372102c644baa66d2a2360879d8e05769c756",
+ "gates": "nothing",
+ "key": [
+  "arm",
+  "scale_kind",
+  "symbol",
+  "entry_ms",
+  "instant_kind",
+  "instant_ms"
+ ],
+ "law": "SR-15 THE LANES PASS [contract R3 'at every instant of every campaign of every card (base v6, 9/12, the lanes below)'; L-R.5, AM-6]: `lanes` runs the nest-book door (read_regbook -> instants_of -> nest_frame, both scales) over every REGISTERED scored arm that is a campaign book \u2014 P-WARN-1, P-AGE-1, P-WIN-1, P-BRK-4H, P-RELAY-1, P-ADD-BRK, P-ADD-SFP, P-TP-RNG (P-SCALP-2 is closed by R2 and files no book) \u2014 plus P-BRK-4H tierE__panel17 (the twelve: 12h / 1w NA, hence 4h / 12h / 1d coincidence NA). Each book must be the book the scorer scored (its sidecar book_sha256 == scores/SCORE_MANIFEST.json's input, HALT otherwise). Named events per L-R.5 / AM-6: arm, entry (the relay's 1h entry close: 'relay_entry'), harvest, add (add1 / add2), bell, a warn exit at its 1h close, a close exit at its close \u2014 close events at their close; +1R, a stop and a TP fill are intrabar: at the OPEN of their bar or at the close of the 1h child that resolves them (the regbook's own stamp of record). THE TWIN LAW (one law for every intrabar event \u2014 +1R, a stop, a TP fill \u2014 every book, the relay included): an intrabar event whose stamp precedes the close of the 4h bar holding it carries exactly one close-stamped twin, labelled post-event, AT that close (a bar-OPEN stamp: the same bar's close; a 1h child's close: its parent 4h bar's close \u2014 exit_bar_close_ms for the relay, whose exit_close_ms is its 1h exit instant); a stamp that IS that close (the resolving 1h child is the bar's last) has none \u2014 its own instant is the close, a bar_close row through the exit stamp; close events (arm, entry, harvest, add, bell, a warn exit, a close exit) have none \u2014 a warn exit before its 4h bar's close ends the campaign there, so that close is not one of its instants. Each row's `stamp_law` names its rule from the event's own class (intrabar vs close), never from its position against exit_close_ms. An intrabar exit resolved by 'close' HALTs. A campaign OPEN at the pin -> 'as_of_pin'. Each row carries `named_event` (the event's name, 'bar_close' for a plain lens close) and the campaign's `exit_reason`. The nesting grid at ENTRY per book x scale x lens (state x coincidence frequency, outcomes by state, outcomes by coincidence: n, E[net R], P(win), sum R, the book's own net_r) is printed whole with SR-12's honesty labels, collared; declared cells: STATES4 (+ 'NA' where a member lacks the lens) x COIN_CATS (+ 'NA' where a member lacks L or L+1; 1w 'NA' only). LANES_MANIFEST.json pins, per book, the regbook bytes it stamped (the parquet's content sha \u2014 its csv \u2014 and its file sha) beside book_sha256, which covers the 16 required columns only, not the instant columns the nest reads.",
+ "registration": "P-RELAY-1",
+ "scales": [
+  "calibrated",
+  "frozen3.0"
+ ],
+ "selection_not_a_result": "a SELECTION, not a result",
+ "source_script": "scripts/tierc11_stage_r.py lanes",
+ "tier": "TIER-E"
+}

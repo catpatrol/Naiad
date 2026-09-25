@@ -138,7 +138,8 @@
     "[LEAN-HEPHAESTUS] L-G.2 lag = entry_i - arm_i (4h bars); P-WIN-1 refuses lag >= 16; the shadow refuses 7..15.",
     "[LEAN-HEPHAESTUS] L-G.3 r_over_atr = r_dist / ATR14_4h(entry); admission refuses > 2.2; the PRIORITY book is replay9's loop with the first-trigger pass and the in-window substitute (first later same-direction 12/26 cross with the asset flat and r_over_atr <= 2.2), ridden by tierc11_ride.ride11 from its 4h close; the cross-asset same-close collision count is a disclosure; the three gates crossed 2 x 2 x 2 (partition + gate books), whole.",
     "[LEAN-HEPHAESTUS] L-1.5 gates are POST-FILTERS: gated = v6 minus exactly the refused set, row-identical; the re-ride rival count is taken from the v6 ride's rejection log (first order), the re-ride book with a refusal hook printed beside (Tier-E).",
-    "[LEAN-HEPHAESTUS] L-1.3 era = the entry bar's CLOSE (E.era_of); L-1.4 no verdict word here, every non-registered table collared; AM-7 haircut_net_r = net_r - fee_r x slip_bps_side / 5.0 (charter tier)."
+    "[LEAN-HEPHAESTUS] L-1.3 era = the entry bar's CLOSE (E.era_of); L-1.4 no verdict word here, every non-registered table collared; AM-7 haircut_net_r = net_r - fee_r x slip_bps_side / 5.0 (charter tier).",
+    "[LEAN-HEPHAESTUS] L-R.5 named-event instants [AM-6; the lanes pass]: every regbook arm carries the extra column harvest_close_ms = the close of the 4h bar whose close slot fired the band harvest (Trade.harvest_ms + 4h, checked against harvest_i), NA when never harvested — a close event, stamped at its close; required columns, numbers, book_sha256 and sidecars unchanged."
   ],
   "regbook_status_file_sha256": {
     "P-AGE-1": "5593031c0204ae4da6d1735e5663c29ad5d73d23935c4fb4718a05875726676f",
@@ -151,7 +152,7 @@
       "kind": "base",
       "n": 200,
       "n_entry_bar_straddles_era_cut": 0,
-      "parquet_file_sha256": "0b48c7fb656e33bdfe780cd210ba99d43d30ad10936d8e93b5396b3023659feb",
+      "parquet_file_sha256": "dbfe4788610b11cc70ef64be31aac95949b921f086eaeb66b4535fbbad7af4ce",
       "ruler": "two_sample",
       "sidecar_file_sha256": "003d8dc21c6ee0d330d9f531fb24e3e44459124bf951a2c2fe5fe833c9e20760",
       "sum_net_r": 40.80756457414756
@@ -162,7 +163,7 @@
       "kind": "scored",
       "n": 141,
       "n_entry_bar_straddles_era_cut": 0,
-      "parquet_file_sha256": "0b1b8b41bb92f2a0ea4809c0b67b47292f25d3f58fc8a139bc15814a5e9fa464",
+      "parquet_file_sha256": "6440a6e0d14cfbf1c62df19246a066d0f7086a1e64aae3bb0ced8c2b2a624dca",
       "ruler": "two_sample",
       "sidecar_file_sha256": "75ea0a199c2d219667b26f9a62ad8fbb3517fdd3d2716817bb881b4f375bd234",
       "sum_net_r": 63.464130732724186
@@ -173,7 +174,7 @@
       "kind": "tierE",
       "n": 60,
       "n_entry_bar_straddles_era_cut": 0,
-      "parquet_file_sha256": "6f6b331760cf69d39826fd4d30b1b646ba5846891320878cb1974da7e218aa60",
+      "parquet_file_sha256": "e9e4bed0b1fe49b06f8b426065e8e5c8d24d968e1e71ee7c55a4cbdbd6843ba0",
       "ruler": "two_sample",
       "sidecar_file_sha256": "380c26346cec03b8ca9464812f979fbfb8ed9f4b4489d5c9bff5a4e942f5b83e",
       "sum_net_r": 52.001614330956656
@@ -184,7 +185,7 @@
       "kind": "tierE",
       "n": 59,
       "n_entry_bar_straddles_era_cut": 0,
-      "parquet_file_sha256": "9a462a55dc5a5a77f6e8867a56ccce46361439e24c273a69dc0eb9116a20ed45",
+      "parquet_file_sha256": "71b6444b0dbc8cb87551bb2bc3676d78d987b6e791e49ff2a00cb376344edeb5",
       "ruler": "vs_zero",
       "sidecar_file_sha256": "75868abc998fadaeefa15321c316628094f9007d112037fd85b85aea372ad7f3",
       "sum_net_r": -22.656566158576624
@@ -195,7 +196,7 @@
       "kind": "tierE",
       "n": 80,
       "n_entry_bar_straddles_era_cut": 0,
-      "parquet_file_sha256": "567a20aa74acf6fdd8a50ae66d7d7b4ec97a831f9bdbb7b5009c8a7ea393c740",
+      "parquet_file_sha256": "f12cef30cad2f230010d07e2fe1a63fae47c0dbecad38576eb363c97a31726bb",
       "ruler": "two_sample",
       "sidecar_file_sha256": "7e36fa29042ba48357ea9915e21782f6bd3eab670e7fa1adf064380c77287a0b",
       "sum_net_r": 48.803986308375
@@ -206,7 +207,7 @@
       "kind": "tierE",
       "n": 81,
       "n_entry_bar_straddles_era_cut": 0,
-      "parquet_file_sha256": "dd0f6fd0c57ef1ca9f254b11622315ffc93723b40342836426e20e32d5f1922e",
+      "parquet_file_sha256": "0c2efa513e58aec3ee194333f0feba0f614a8d0299dcb371948822c04cb97600",
       "ruler": "two_sample",
       "sidecar_file_sha256": "abb2402cc04d650d6f4cb6414662ca5ef19b917e9e2401057cee9deeb61ba0d1",
       "sum_net_r": 11.46251640176753
@@ -217,7 +218,7 @@
       "kind": "base",
       "n": 200,
       "n_entry_bar_straddles_era_cut": 0,
-      "parquet_file_sha256": "0b48c7fb656e33bdfe780cd210ba99d43d30ad10936d8e93b5396b3023659feb",
+      "parquet_file_sha256": "dbfe4788610b11cc70ef64be31aac95949b921f086eaeb66b4535fbbad7af4ce",
       "ruler": "two_sample",
       "sidecar_file_sha256": "97ef38b8731868397827cdbb8e5458fdbf407890e99968de44486003ec431444",
       "sum_net_r": 40.80756457414756
@@ -228,7 +229,7 @@
       "kind": "scored",
       "n": 137,
       "n_entry_bar_straddles_era_cut": 0,
-      "parquet_file_sha256": "41862ecfbffffc227ecff2abfba278e399c35d61ab94e603f1b5fe09a507bc52",
+      "parquet_file_sha256": "824c5e08ca79511fea96b98d65b74e8e7209f36379d881a2ff02f927db08241c",
       "ruler": "two_sample",
       "sidecar_file_sha256": "c9b254f9620937f08a4146ec9d0cadc67127c6365a1ff5974daf5d379128f02f",
       "sum_net_r": 51.97401862719062
@@ -239,7 +240,7 @@
       "kind": "tierE",
       "n": 56,
       "n_entry_bar_straddles_era_cut": 0,
-      "parquet_file_sha256": "984c0f634165a16c0cd153f2da42a90ec9a90ccf456e985e096011695b7b5f2e",
+      "parquet_file_sha256": "797b440c1e7bf89c7a6dcde54a430de5d13fbf2a8d459ce24295cca935569b3b",
       "ruler": "two_sample",
       "sidecar_file_sha256": "a0c73bfef3173bdd82f8af25b8f557d9d631735e28c894897ce16bbadb02d779",
       "sum_net_r": 43.95145157935582
@@ -250,7 +251,7 @@
       "kind": "tierE",
       "n": 147,
       "n_entry_bar_straddles_era_cut": 0,
-      "parquet_file_sha256": "57c70d72e418020f723074f9c3579232b12547cfed85b455c5447152a6de9e77",
+      "parquet_file_sha256": "92be97b10f21e81115c72f43d1cfca94c22662c7f8d0b16ab6c13e45266147b9",
       "ruler": "two_sample",
       "sidecar_file_sha256": "0c2a0171392230cd81639ed4768395328c566f573663943a071cb6f56d4793d8",
       "sum_net_r": 19.115450023555383
@@ -261,7 +262,7 @@
       "kind": "tierE",
       "n": 165,
       "n_entry_bar_straddles_era_cut": 0,
-      "parquet_file_sha256": "9c5b2e9048282d4c409d3edf8e7edd3af78563dd4a76537ede1fbcd143e619b9",
+      "parquet_file_sha256": "50a2cc140c540f0030e28fbd9865c8a4e93802aca14ec8faada4a83c021befd9",
       "ruler": "two_sample",
       "sidecar_file_sha256": "ee1e7d57063fcbdf489929e5b2ffadce53eee2257661b958268c7c76d96e632e",
       "sum_net_r": 18.392480226910806
@@ -272,7 +273,7 @@
       "kind": "tierE",
       "n": 63,
       "n_entry_bar_straddles_era_cut": 0,
-      "parquet_file_sha256": "ed2166bb93050c1054a80b41b643f2eddd9708dcd8f0a460acefdbcdcb9c6267",
+      "parquet_file_sha256": "a92c5589596490ee5a67cbc688a7a502164eb9a514332e1c201ee6387900d89b",
       "ruler": "vs_zero",
       "sidecar_file_sha256": "93df057ae5de8269c98f2f67a39b0e605164927ffdcccc798bae84e8b1cc1c43",
       "sum_net_r": -11.166454053043058
@@ -283,7 +284,7 @@
       "kind": "tierE",
       "n": 196,
       "n_entry_bar_straddles_era_cut": 0,
-      "parquet_file_sha256": "b6093b01294ae930b4fc99ae267bd7aff5b0036acf053eb8d50b0d2f9af06ec2",
+      "parquet_file_sha256": "4b308d854a30b49b4e7c53282243a41d676f71974439d36612261680778f589c",
       "ruler": "two_sample",
       "sidecar_file_sha256": "97f31afc420a77270d3d39c98ebc9d8ad033180613a76b48a9fb782de5c53a71",
       "sum_net_r": 43.085654820857705
@@ -294,7 +295,7 @@
       "kind": "tierE",
       "n": 81,
       "n_entry_bar_straddles_era_cut": 0,
-      "parquet_file_sha256": "81acc37396c582f6e87c1af571f97c19f44e3686c69301c5fa9de54b68bce562",
+      "parquet_file_sha256": "d5dbd141007787c3b10fb37ef2aa25b91697f1315ed35c9b6cf845a76cee66b4",
       "ruler": "two_sample",
       "sidecar_file_sha256": "768a0186855ece3497180753266498de256f476dc6cddfc409aaee3dbcccce31",
       "sum_net_r": 8.022567047834794

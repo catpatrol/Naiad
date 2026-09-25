@@ -58,6 +58,14 @@ AM-3: the paired Δ is net_r(book) − net_r(v6); each acted row prints add_r an
 the cap-absorbed funding beside it, and Δ − add_r == absorbed(book) −
 absorbed(v6) is asserted to 1e-9 (never Δ == add_r).
 
+NAMED-EVENT INSTANTS [SA-12; L-R.5, AM-6; the lanes pass, 2026-09-25]: every arm carries
+the EXTRA columns add1_close_ms / add2_close_ms (Int64) = the instant of the first / second
+ADMITTED add (Add.ms: the 1h close of its event, or the parent's close on an L-W.0
+mismatch bar), NA where the campaign holds fewer adds — close events, stamped at their
+close.  Extra columns only: the 16 required columns, every number, book_sha256 and every
+sidecar are unchanged; Stage R's nest-book door reads them instead of refusing the add
+arms UNSTAMPED.  FIXTURE SEAM: `add_instants_of`.
+
 WHAT WOULD MAKE THIS WRONG: an event taken before its 1h close (look-ahead); a
 death on the wrong side (a bottom death added to a long); an add before the +1R
 latch; a third add; a price other than the tape's 1h close; re-admitting a
@@ -232,6 +240,11 @@ READINGS = (
     "the v6 key set, so the paired premise holds by construction. Extras opponent_net_r and "
     "delta_vs_opponent_net_r (= net_r - opponent_net_r). The head-to-head is a SELECTION, "
     f"not a result: '{NEITHER}'.",
+    f"{LEAN} SA-12 NAMED-EVENT INSTANTS [L-R.5, AM-6; the lanes pass]: every arm carries the "
+    "extra columns add1_close_ms / add2_close_ms = the instant of the first / second admitted "
+    "add (Add.ms: the event's 1h close, or the parent's close on an L-W.0 mismatch bar), NA "
+    "where fewer adds — close events, stamped at their close; required columns, numbers, "
+    "book_sha256 and sidecars unchanged.",
 )
 
 
@@ -386,6 +399,18 @@ def ride_arm(ctx: dict, rule: str, arm: str, *, max_adds: int = RD.ADDS_MAX,
 
 
 # ═══════════════════════════════════════════════════════════════ THE FRAMES
+def add_instants_of(t) -> tuple:
+    """SA-12 [L-R.5] (a FIXTURE SEAM): the named-event instants of a campaign's admitted
+    adds, in admission (time) order — (add1, add2), None where absent.  Add.ms is the add's
+    own instant (the 1h close; the parent's close on a mismatch bar), a close event."""
+    ms = [int(a.ms) for a in t.adds]
+    if len(ms) > RD.ADDS_MAX or ms != sorted(ms) or len(set(ms)) != len(ms):
+        _halt(f"{t.symbol} {iso(int(t.entry_ms))}: the admitted adds are not <= "
+              f"{RD.ADDS_MAX} strictly time-ordered instants: {ms}")
+    ms += [None] * (RD.ADDS_MAX - len(ms))
+    return tuple(ms[:2])
+
+
 def _absorbed(t) -> float:
     return float(t.funding_r_uncapped) - float(t.funding_r)
 
@@ -406,6 +431,7 @@ def book_frame(ctx: dict, book: list, rule: str, arm: str, scale_kind: str | Non
         latch = t.latch_1h_ms
         lab = ctx["picks"][t.symbol]
         net = float(t.net_r)
+        a1, a2 = add_instants_of(t)
         rows.append({
             "symbol": t.symbol, "entry_ms": int(t.entry_ms),
             "entry_close_ms": int(t.entry_close_ms), "direction": int(t.direction),
@@ -422,6 +448,7 @@ def book_frame(ctx: dict, book: list, rule: str, arm: str, scale_kind: str | Non
             "latch_1h_ms": int(latch) if latch is not None else -1,
             "latched_1h": latch is not None, "harvested": bool(t.harvested),
             "n_adds": len(adds), "add_r": float(t.add_r) if t.add_r is not None else 0.0,
+            "add1_close_ms": a1, "add2_close_ms": a2,                   # SA-12 [L-R.5]
             "v6_net_r": float(v.net_r), "delta_net_r": net - float(v.net_r),
             "funding_r_uncapped": float(t.funding_r_uncapped),
             "funding_absorbed_r": _absorbed(t), "v6_funding_absorbed_r": _absorbed(v),
@@ -441,6 +468,8 @@ def book_frame(ctx: dict, book: list, rule: str, arm: str, scale_kind: str | Non
     for c in ("entry_ms", "entry_close_ms", "exit_close_ms", "exit_ms", "exit_close_1h_ms",
               "latch_1h_ms"):
         f[c] = f[c].astype(np.int64)
+    for c in ("add1_close_ms", "add2_close_ms"):
+        f[c] = pd.array([None if pd.isna(v) else int(v) for v in f[c]], dtype="Int64")
     return f.sort_values(["symbol", "entry_ms"], kind="mergesort").reset_index(drop=True)
 
 

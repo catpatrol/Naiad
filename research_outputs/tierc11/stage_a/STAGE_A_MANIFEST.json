@@ -43,7 +43,7 @@
  "files": {
   "regbooks/P-ADD-BRK/base.parquet": {
    "book_sha256": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
-   "content_sha256": "ee8f06605b9bc0adf052193ecedfaeca0a15e946df2536ed24ad224c37a3142e",
+   "content_sha256": "21eabd96962af61caddd00c6677b2dd08c4f19b0fb992178ab192a1ee34a001b",
    "key": [
     "symbol",
     "entry_ms"
@@ -52,7 +52,7 @@
   },
   "regbooks/P-ADD-BRK/scored.parquet": {
    "book_sha256": "15ba415b7a30f20f95192aa279e84fe2cd9ea8cfde4c325513d8a128819e79cd",
-   "content_sha256": "0f642194049fa4000a2606ffc5d8ced435990ff14c318e1a74b22c1c3e8fab0d",
+   "content_sha256": "4c68370ad23000e8f7544469bb9eaad46906c8aed75422a0e1a0fd14284d0225",
    "key": [
     "symbol",
     "entry_ms"
@@ -61,7 +61,7 @@
   },
   "regbooks/P-ADD-BRK/tierE__frozen3.parquet": {
    "book_sha256": "b854c1c6ef8903d6f98c20c5d92800940fdf3070400bc80e43fd8b3777ab396f",
-   "content_sha256": "a4d68ded0e6d09360e372882f2bf44d29e5289c9b9b81aac7fd9943ed427f83c",
+   "content_sha256": "cc678eca8b17bc63d91aec2cce9ba0715aba9abaa2458aaa70935364487f908f",
    "key": [
     "symbol",
     "entry_ms"
@@ -70,7 +70,7 @@
   },
   "regbooks/P-ADD-BRK/tierE__head_to_head_vs_p_add_sfp.parquet": {
    "book_sha256": "15ba415b7a30f20f95192aa279e84fe2cd9ea8cfde4c325513d8a128819e79cd",
-   "content_sha256": "9da47ef7a82bb2937d46c5af89ee19a0cc919669c62da975b9685578e4bc5173",
+   "content_sha256": "f102e560d439018ce31324f337e9a0d49bebd6659e1a6d0942da348868ffb921",
    "key": [
     "symbol",
     "entry_ms"
@@ -79,7 +79,7 @@
   },
   "regbooks/P-ADD-BRK/tierE__holdout.parquet": {
    "book_sha256": "a4854282ba7253e068b8688dbc30a1826e48db16052e2af38add7af01ec062d9",
-   "content_sha256": "060e2dad360a2c26b572a683e0f26f038dc7668aee61c257d6d225f6443175b8",
+   "content_sha256": "d7df685b7b54033a13f5bb98620fa5c0c55493b5aade88aebaf1858e28b487fe",
    "key": [
     "symbol",
     "entry_ms"
@@ -88,7 +88,7 @@
   },
   "regbooks/P-ADD-BRK/tierE__refuse_below_entry.parquet": {
    "book_sha256": "15ba415b7a30f20f95192aa279e84fe2cd9ea8cfde4c325513d8a128819e79cd",
-   "content_sha256": "0f642194049fa4000a2606ffc5d8ced435990ff14c318e1a74b22c1c3e8fab0d",
+   "content_sha256": "4c68370ad23000e8f7544469bb9eaad46906c8aed75422a0e1a0fd14284d0225",
    "key": [
     "symbol",
     "entry_ms"
@@ -97,7 +97,7 @@
   },
   "regbooks/P-ADD-BRK/tierE__refuse_post_harvest.parquet": {
    "book_sha256": "dbd4dbac8f4f28dc30153541f558cc9f4d91b3042849ca545778908be5ce6bb6",
-   "content_sha256": "f153928dde6fc8a7347e86a2d92ac451fe466c16aaef6c9727d50bcbe42ad9e2",
+   "content_sha256": "b8eb696ddb892e88dc1dfaecba3eff46637014bdec114ce434a463dbd3cf7c5c",
    "key": [
     "symbol",
     "entry_ms"
@@ -106,7 +106,7 @@
   },
   "regbooks/P-ADD-BRK/tierE__tuning.parquet": {
    "book_sha256": "a8dc8371e22a4f28e66baa84f3344afeaa2f40809b4f9231185b45ccdfd80364",
-   "content_sha256": "f9d3ec50b8a64033c654977574c039906c8011d7bd13ae63e6da583ae411b55d",
+   "content_sha256": "364eb8ec8e5784885771508b6d721978e63c9eaf2ffca5593b39344469f9ebb1",
    "key": [
     "symbol",
     "entry_ms"
@@ -115,7 +115,7 @@
   },
   "regbooks/P-ADD-SFP/base.parquet": {
    "book_sha256": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
-   "content_sha256": "ee8f06605b9bc0adf052193ecedfaeca0a15e946df2536ed24ad224c37a3142e",
+   "content_sha256": "21eabd96962af61caddd00c6677b2dd08c4f19b0fb992178ab192a1ee34a001b",
    "key": [
     "symbol",
     "entry_ms"
@@ -124,7 +124,7 @@
   },
   "regbooks/P-ADD-SFP/scored.parquet": {
    "book_sha256": "ee2d19250f3e3d747784b2ba8f45940fb7bb50354d3099e4480e672819c90910",
-   "content_sha256": "98332199920f1fb8d686278c51f8aa0c248fa6521bfa530b6adb824b823024e1",
+   "content_sha256": "adc9ea36c04ebbed1b5a1a2112c05a1c77efd7abd3c8b887e2234343b0e45e1d",
    "key": [
     "symbol",
     "entry_ms"
@@ -133,7 +133,7 @@
   },
   "regbooks/P-ADD-SFP/tierE__frozen3.parquet": {
    "book_sha256": "227a062b2ed99c285064188bc8e08754dcefe1b9eb7b7e6faaab0ff2418b3c2c",
-   "content_sha256": "d5478ecdef997eabb7634617cbac238517ca4b24544c6457e350d74834b71fe4",
+   "content_sha256": "a4f8d0381f5b2e8f22b990cfac0a7ff6d13eb494aa62323e85166cfe92371c12",
    "key": [
     "symbol",
     "entry_ms"
@@ -142,7 +142,7 @@
   },
   "regbooks/P-ADD-SFP/tierE__head_to_head_vs_p_add_brk.parquet": {
    "book_sha256": "ee2d19250f3e3d747784b2ba8f45940fb7bb50354d3099e4480e672819c90910",
-   "content_sha256": "480105bdb11e025ae72a7f94387d5d3042f074efc1bf976072365b741033270f",
+   "content_sha256": "8e2131d234d1f71ac2c8d29e5c3a449645fdf5c64bed202e911cea3131b14acd",
    "key": [
     "symbol",
     "entry_ms"
@@ -151,7 +151,7 @@
   },
   "regbooks/P-ADD-SFP/tierE__holdout.parquet": {
    "book_sha256": "fb0f47b8604ac1ee0c3cc7b734ba3a006692e88d2de1ec66a707ee6ffb8af007",
-   "content_sha256": "ee359ab9562936fe2436f2c206a2e56be06efb8116e3314df3f7b9b977336aa6",
+   "content_sha256": "7743d9ec2a741bbf30c7fa15f20faac71589f59874350396bda89c9be4e21254",
    "key": [
     "symbol",
     "entry_ms"
@@ -160,7 +160,7 @@
   },
   "regbooks/P-ADD-SFP/tierE__refuse_below_entry.parquet": {
    "book_sha256": "eccbbcbd9afbaa55cf053ec581d3bb6a0104a92074591dc186ad097f05093310",
-   "content_sha256": "d66adbcc20ae8bc38a9adcbd8531eb9a7dda7c5b6c65227466f9ee3ed00d1262",
+   "content_sha256": "bfa582a9d2e69f6f726d154d0fbfb694abcf53ff9f771658b5f7455b92e0a6c6",
    "key": [
     "symbol",
     "entry_ms"
@@ -169,7 +169,7 @@
   },
   "regbooks/P-ADD-SFP/tierE__refuse_post_harvest.parquet": {
    "book_sha256": "80276294f3ce4cbd756e7bc2ff281f527cfeef5063dd609e43fe03899aea1d9b",
-   "content_sha256": "68f1b0e0ad09aabeacb12b1595325230008a55ba6b55bbba92a0617962d78da8",
+   "content_sha256": "fcb904f1c3d15123c8facd34049cad9fab42a431d7304f4c3d14229bb727d3ed",
    "key": [
     "symbol",
     "entry_ms"
@@ -178,7 +178,7 @@
   },
   "regbooks/P-ADD-SFP/tierE__tuning.parquet": {
    "book_sha256": "011c58ba0964a7130d7a44c1d1bd5693b6c2cb42132c7b531de8b00ed293f96d",
-   "content_sha256": "86309a990f7a1ddeb537a3f4a94f88b9c3725fe8d2fb75eff3e2d31b823f129c",
+   "content_sha256": "37dd04a37c7367d7609f29bd414e2ec5cd08bfc1a0096f0535f255817a8646e9",
    "key": [
     "symbol",
     "entry_ms"
@@ -302,7 +302,7 @@
   "scripts/tierc11_env.py": "1526093b25161927337ced6112a310075b1a57c825f08705814e48619398f798",
   "scripts/tierc11_nest.py": "16e325022523064e67eede439998e9ee4cacfeb0df8171202a85b46125827429",
   "scripts/tierc11_ride.py": "65eb880f2b127a26cc07a6bf40e6ca6556dac37aa62bdfef45e3b045aa26915d",
-  "scripts/tierc11_stage_a.py": "b4650a18987bf094aba0904c851ea5ef0ba64884fcaa2d4ca1de7481f5ae59f3"
+  "scripts/tierc11_stage_a.py": "00cdf4b3b8e093bbf191fa45d7d92215432e44075e633ab45289b25b1d42c407"
  },
  "n_v6": 200,
  "readings": [
@@ -316,7 +316,8 @@
   "[LEAN-HEPHAESTUS] SA-8 FLAGS [L-A.1]: below_entry = (add_px - entry_px) x d < 0; post_harvest = the harvest fired and the add's 4h bar >= the harvest bar (after it, or inside its 4h bar). The twins refuse each class; the scored arm is unchanged. The 'inside its 4h bar' clause refuses an add whose 1h close precedes the harvest's decision at that bar's close — look-ahead at reading level inside a Tier-E twin; the count of such adds is printed (finding F7).",
   "[LEAN-HEPHAESTUS] SA-9 COLLARS [L-1.4]: every stage table but REGISTERED_BOOKS carries tier 'TIER-E', selection_not_a_result 'a SELECTION, not a result', gates 'nothing' and no verdict word; registered books are labelled 'book, not a verdict'. Head-to-head: 'neither promoted by the other's failure'.",
   "[LEAN-HEPHAESTUS] SA-10 SCALE-IN-SAMPLE [L-R.2]: calibrated-scale range reads at instants <= the era cut are structurally in-sample (tuning-era calibration); the holdout slice (tierE__holdout) and the frozen-3.0 twin (tierE__frozen3) are the statistics printed beside the verdict.",
-  "[LEAN-HEPHAESTUS] SA-11 HEAD-TO-HEAD [registrations' tier_e_arms, scorer SC-3]: tierE__head_to_head_vs_p_add_sfp (under P-ADD-BRK) / tierE__head_to_head_vs_p_add_brk (under P-ADD-SFP) = the registration's scored book, row for row (the same book sha), with ruler 'paired' and sidecar base_arm '<the other registration>/scored'; both are the v6 key set, so the paired premise holds by construction. Extras opponent_net_r and delta_vs_opponent_net_r (= net_r - opponent_net_r). The head-to-head is a SELECTION, not a result: 'neither promoted by the other's failure'."
+  "[LEAN-HEPHAESTUS] SA-11 HEAD-TO-HEAD [registrations' tier_e_arms, scorer SC-3]: tierE__head_to_head_vs_p_add_sfp (under P-ADD-BRK) / tierE__head_to_head_vs_p_add_brk (under P-ADD-SFP) = the registration's scored book, row for row (the same book sha), with ruler 'paired' and sidecar base_arm '<the other registration>/scored'; both are the v6 key set, so the paired premise holds by construction. Extras opponent_net_r and delta_vs_opponent_net_r (= net_r - opponent_net_r). The head-to-head is a SELECTION, not a result: 'neither promoted by the other's failure'.",
+  "[LEAN-HEPHAESTUS] SA-12 NAMED-EVENT INSTANTS [L-R.5, AM-6; the lanes pass]: every arm carries the extra columns add1_close_ms / add2_close_ms = the instant of the first / second admitted add (Add.ms: the event's 1h close, or the parent's close on an L-W.0 mismatch bar), NA where fewer adds — close events, stamped at their close; required columns, numbers, book_sha256 and sidecars unchanged."
  ],
  "registrations": [
   "P-ADD-BRK",

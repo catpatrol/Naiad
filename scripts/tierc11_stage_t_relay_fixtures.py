@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """TIER-C11 · STAGE T-relay + THE FORWARD LEDGER — F-RELAY · F-RELAY-MISS · F-FWD ·
-F-KEY · F-GRID · F-DET.  The fixtures of scripts/tierc11_stage_t_relay.py (P-RELAY-1,
+F-RELAY-INSTANTS · F-KEY · F-GRID · F-DET.  The fixtures of scripts/tierc11_stage_t_relay.py (P-RELAY-1,
 L-T.2 / L-T.3 / L-W.0) and scripts/tierc11_forward_ledger.py (L-T.6).
 
 TWO LEGS PER FIXTURE, the BREAK leg first, and it must go RED or the fixture is VOID
@@ -89,6 +89,23 @@ through the module's code.
                 re-ride closes the OPEN campaign (must HALT: SAME pin); a tampered
                 line and a deleted line (must FAIL the chain); an open continuation
                 relabelled net_r (copy).
+  F-RELAY-INSTANTS  FAILS IF, on ANY row of ANY of the six arms of record (the relay
+                arms scored / late / tuning / holdout slices and the v6 arms base /
+                miss_v6), the extra column harvest_close_ms [SR-9; L-R.5, AM-6 — the
+                lanes pass] is absent, not Int64, set on a row that did not harvest or
+                NA on one that did, or differs from THIS FILE'S hand harvest law on
+                the raw 4h / 1h bars: the band edge max/min(own EMA89, EMA316); a
+                1h relay's entry bar J armed per close[J-1] and touched on its
+                POST-ENTRY 1h children only, then every later 4h bar j (a 4h-close
+                or moved entry: from J+1 on a fresh state) armed once any close[j-1]
+                sat outside the edge and touched on the whole bar; the first such bar
+                strictly before the exit bar (the exit bar itself only at
+                corridor_end) — its CLOSE is the instant (a close event); or a v6 row's
+                instant differs from books/v6_campaigns.parquet's harvest_close_ms;
+                or the in-process rebuild of the scored arm differs from its record
+                on the column.  SABOTAGE: (copies) one harvest one 4h bar late; one
+                harvest instant dropped (nulled on a harvested row); [mutant] the
+                writer's harvest_close_of stamping the harvest bar's OPEN.
   F-KEY         FAILS IF a regbook parquet lacks a required column, carries the
                 wrong dtype, a null in a required column, a duplicated (symbol,
                 entry_close_ms) key (or (symbol, entry_ms) on scored / base); its
@@ -2632,6 +2649,139 @@ def det_real():
                        + (f"; findings {bad[:4]}" if bad else ""))
 
 
+# ══════════════════════════════════════════════════════════ F-RELAY-INSTANTS
+INSTANT_ARMS_TYPED = {"scored": "relay", "tierE__late_relay": "relay",
+                      "tierE__tuning_slice": "relay", "tierE__holdout_slice": "relay",
+                      "base": "v6", "tierE__miss_v6": "v6"}
+
+
+def own_harvest_close(row) -> int | None:
+    """THIS FILE'S hand harvest law [v6's band harvest; L-T.2 for the relay's J]: the
+    CLOSE of the first 4h bar whose close slot fires the harvest, from the raw bars and
+    this file's own EMA89 / EMA316 — None when none fires before the exit."""
+    sym, d = str(row.symbol), int(row.direction)
+    X = own(sym)
+    o4, c4, h4, l4, e89, e316 = X["o4"], X["c4"], X["h4"], X["l4"], X["e89"], X["e316"]
+
+    def edge(j: int) -> float:
+        return max(e89[j], e316[j]) if d == 1 else min(e89[j], e316[j])
+
+    def outside(px: float, e: float) -> bool:
+        return bool(px > e) if d == 1 else bool(px < e)
+
+    ecl, xcl = int(row.entry_close_ms), int(row.exit_close_ms)
+    J = int(np.searchsorted(o4, ecl, "left")) - 1          # the 4h bar holding the entry
+    xi = int(np.searchsorted(o4, xcl, "left")) - 1         # the 4h bar holding the exit
+    last = xi if str(row.exit_reason) == "corridor_end" else xi - 1
+    armed = False
+    if ecl != int(o4[J]) + H4:                             # a 1h entry strictly inside J
+        armed = outside(float(c4[J - 1]), edge(J - 1))
+        if J <= last:
+            post = np.flatnonzero((X["close1"] > ecl) & (X["close1"] <= int(o4[J]) + H4))
+            if post.size:
+                ext = float(X["l1"][post].min()) if d == 1 else float(X["h1"][post].max())
+                if armed and ((ext <= edge(J)) if d == 1 else (ext >= edge(J))):
+                    return int(o4[J]) + H4
+    for j in range(J + 1, last + 1):
+        if not armed and outside(float(c4[j - 1]), edge(j - 1)):
+            armed = True
+        if armed and ((float(l4[j]) <= edge(j)) if d == 1 else (float(h4[j]) >= edge(j))):
+            return int(o4[j]) + H4
+    return None
+
+
+def instant_findings(arm: str, df: pd.DataFrame, v6hc: dict | None = None) -> tuple[list, dict]:
+    """Every row's harvest_close_ms against the hand law (and books/ for v6 rows)."""
+    out, tally = [], {"rows": len(df), "harvested": 0, "stamped": 0}
+    if "harvest_close_ms" not in df.columns:
+        return [f"INSTANT-HARVEST: {arm} carries no harvest_close_ms column"], tally
+    if str(df["harvest_close_ms"].dtype) != "Int64":
+        out.append(f"INSTANT-HARVEST: {arm}.harvest_close_ms dtype {df['harvest_close_ms'].dtype}"
+                   f" != Int64")
+    for r in df.itertuples(index=False):
+        got = None if pd.isna(r.harvest_close_ms) else int(r.harvest_close_ms)
+        want = own_harvest_close(r)
+        tag = f"{arm} {r.symbol} {iso(int(r.entry_close_ms))}"
+        tally["harvested"] += int(bool(r.harvested))
+        tally["stamped"] += int(got is not None)
+        if (got is not None) != bool(r.harvested):
+            out.append(f"INSTANT-HARVEST: {tag}: harvested {bool(r.harvested)} but "
+                       f"harvest_close_ms {got}")
+        if got != want:
+            out.append(f"INSTANT-HARVEST: {tag}: harvest_close_ms "
+                       f"{iso(got) if got else None} != the hand law's "
+                       f"{iso(want) if want else None}")
+        if v6hc is not None:
+            ref = v6hc.get((str(r.symbol), int(r.entry_ms)), "absent")
+            if ref != got:
+                out.append(f"INSTANT-HARVEST: {tag}: harvest_close_ms {got} != books/"
+                           f"v6_campaigns' {ref}")
+    return out, tally
+
+
+def _v6_harvests() -> dict:
+    v = pd.read_parquet(str(E.OUT / "books" / "v6_campaigns.parquet"))
+    return {(str(a), int(b)): (None if pd.isna(c) else int(c))
+            for a, b, c in zip(v["symbol"], v["entry_ms"], v["harvest_close_ms"])}
+
+
+def instants_break():
+    rec = reg("scored")
+    hv = np.flatnonzero(rec["harvested"].astype(bool).to_numpy())
+
+    def late():
+        d = rec.copy()
+        i = d.index[hv[0]]
+        d.loc[i, "harvest_close_ms"] = int(d.loc[i, "harvest_close_ms"]) + H4
+        return instant_findings("scored (copy)", d)[0]
+
+    def dropped():
+        d = rec.copy()
+        d.loc[d.index[hv[1]], "harvest_close_ms"] = pd.NA
+        return instant_findings("scored (copy)", d)[0]
+
+    def open_stamped():
+        orig = S.harvest_close_of
+
+        def at_open(t):
+            x = orig(t)
+            return None if x is None else x - H4
+        with mutated(S, "harvest_close_of", at_open):
+            return instant_findings("scored (rebuilt, mutant)", rebuilt_scored())[0]
+
+    return plants([
+        ("one harvest instant moved one 4h bar late (a copy of scored)", "INSTANT-HARVEST",
+         late),
+        ("one harvest instant dropped — nulled on a harvested row (a copy of scored)",
+         "INSTANT-HARVEST", dropped),
+        ("[mutant] the writer's harvest_close_of stamping the harvest bar's OPEN (a close "
+         "event stamped as if intrabar)", "INSTANT-HARVEST", open_stamped),
+    ])
+
+
+def instants_real():
+    bad, lines = [], []
+    v6hc = _v6_harvests()
+    for arm, k in INSTANT_ARMS_TYPED.items():
+        f, t = instant_findings(arm, reg(arm), v6hc if k == "v6" else None)
+        bad += f
+        lines.append(f"{arm} ({k}): {t['rows']} rows, {t['harvested']} harvested, "
+                     f"{t['stamped']} stamped")
+    rb = rebuilt_scored()
+    same = (rb["harvest_close_ms"].astype("Int64").fillna(-1).to_numpy(np.int64).tolist()
+            == reg("scored")["harvest_close_ms"].fillna(-1).to_numpy(np.int64).tolist())
+    if not same:
+        bad.append("INSTANT-HARVEST: the in-process rebuild of scored differs from its record "
+                   "on harvest_close_ms")
+    return (not bad), lines + [
+        f"harvest_close_ms on EVERY row of the six arms == this file's hand harvest law on the "
+        f"raw bars (J armed per close[J-1] and touched on the post-entry 1h children for a 1h "
+        f"relay; later bars armed by a close outside the own EMA89/316 edge, touched on the "
+        f"whole bar; strictly before the exit bar, corridor_end excepted; the bar's CLOSE), NA "
+        f"iff not harvested, Int64; the v6 arms == books/v6_campaigns.parquet; rebuild == "
+        f"record: {same}" + (f"; findings {bad[:4]}" if bad else "")]
+
+
 # ═══════════════════════════════════════════════════════════════════ THE TABLE
 FIXTURES = (
     ("F-RELAY", "every relay strictly inside its armed window, the first 1h 9/12 cross, "
@@ -2667,6 +2817,14 @@ FIXTURES = (
      "(or a closed one is) — on the record, the planted sequence or a planted opening at the "
      "9/12 SOL entry close",
      fwd_break, fwd_real),
+    ("F-RELAY-INSTANTS", "the harvest's named-event instant on every arm == this file's "
+     "hand harvest law on the raw bars [SR-9; L-R.5, AM-6 — the lanes pass]",
+     "an arm lacks harvest_close_ms (Int64), stamps a row that did not harvest or leaves a "
+     "harvested row NA, or an instant differs from the hand harvest law (own EMA89/316 edge; "
+     "J armed per close[J-1], touched on post-entry children; later bars armed once a close "
+     "sat outside, touched on the whole bar; before the exit bar; the bar's CLOSE); a v6 "
+     "row differs from books/v6_campaigns; or the rebuild differs from the record",
+     instants_break, instants_real),
     ("F-KEY", "the regbook interface and the stage tables: typed columns and dtypes, unique "
      "keys, no nulls, sidecars that re-derive, collars, as-of stamps",
      "a required column absent / mistyped / null, a duplicated key, a sidecar whose typed "

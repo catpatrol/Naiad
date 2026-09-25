@@ -70,9 +70,18 @@ EXECUTOR SUB-READINGS (the frozen text is silent; each printed in the lean block
         ride).  Both carry `exit_bar_close_ms`.
   SR-8  haircut_net_r = net_r − fee_r × slip_bps_side / taker_bps_side (AM-7), with
         the stem's charter tier from E.fees().
+  SR-9  NAMED-EVENT INSTANTS [L-R.5, AM-6; the lanes pass, 2026-09-25]: every arm carries
+        the EXTRA column `harvest_close_ms` (Int64) = the CLOSE of the 4h bar whose close
+        slot fired the band harvest (Trade.harvest_ms, that bar's OPEN, + 4h; checked
+        against harvest_i on the 4h frame), NA when the campaign never harvested.  A
+        close event, so the close is its stamp of record [L-R.5].  An extra column only:
+        the 16 required columns, every number, book_sha256 and every sidecar are
+        unchanged — Stage R's nest-book door reads it (SR-9 there) instead of refusing
+        the relay arms UNSTAMPED.
 
 FIXTURE SEAMS (named, greppable; the defaults ARE the readings): relay_pair, relay_asof,
-bound_of, first_index, moved_refused, position_open, windows_of, _miss_code.
+bound_of, first_index, moved_refused, position_open, windows_of, _miss_code,
+harvest_close_of.
 
 Outputs:  research_outputs/tierc11/stage_t_relay/ (tables, manifest, STAGE_T_RELAY.md)
           research_outputs/tierc11/regbooks/P-RELAY-1/ (scored, base, tierE__* arms +
@@ -205,6 +214,11 @@ READINGS = (
     "[LEAN-HEPHAESTUS] SR-7 relay entry_ms = open of the 4h bar J holding the entry close; "
     "relay exit_close_ms = the 1h-resolved exit instant; base v6 exit_close_ms = the exit "
     "bar's close (tierc11_books convention); both carry exit_bar_close_ms.",
+    "[LEAN-HEPHAESTUS] SR-9 named-event instants [L-R.5, AM-6; the lanes pass]: every arm "
+    "carries the extra column harvest_close_ms = the close of the 4h bar whose close slot "
+    "fired the band harvest (Trade.harvest_ms + 4h, checked against harvest_i), NA when "
+    "never harvested — a close event, stamped at its close; required columns, numbers, "
+    "book_sha256 and sidecars unchanged.",
 )
 
 
@@ -261,6 +275,18 @@ def first_index(mask: np.ndarray, close_ms: np.ndarray, after_ms: int, before_ms
         return None
     hit = np.flatnonzero(mask[k0:k1])
     return int(k0 + hit[0]) if hit.size else None
+
+
+def harvest_close_of(t) -> int | None:
+    """SR-9 [L-R.5]: the harvest's named-event instant — a CLOSE event, the close of the
+    4h bar whose close slot fired the band harvest (Trade.harvest_ms is that bar's OPEN;
+    HALT unless it is the OPEN of harvest_i on the 4h frame); None when never harvested."""
+    if not bool(t.harvested):
+        return None
+    om = T9.frame(str(t.symbol))["f"].open_ms
+    if t.harvest_i is None or int(om[int(t.harvest_i)]) != int(t.harvest_ms):
+        _halt(f"{t.symbol} {iso(int(t.entry_ms))}: harvest_ms is not the OPEN of harvest_i")
+    return int(t.harvest_ms) + MS_4H
 
 
 # ═══════════════════════════════════════════════════════════════ THE WINDOWS
@@ -470,7 +496,8 @@ def regbook_frame(trades, kind: str) -> pd.DataFrame:
                "harvested": bool(t.harvested), "mfe_r": float(t.mfe_r),
                "n_advances": int(len(t.advances)), "atr_at_entry": float(t.atr_at_entry),
                "slip_bps_side": slip, "slip_tier": tier,
-               "funding_ceiling_bound": bool(t.funding_ceiling_bound)}
+               "funding_ceiling_bound": bool(t.funding_ceiling_bound),
+               "harvest_close_ms": harvest_close_of(t)}                 # SR-9 [L-R.5]
         if kind == "relay":
             row.update({
                 "entry_1h_open_ms": ecl - MS_1H, "relay_J": int(getattr(t, "relay_J")),
@@ -508,7 +535,7 @@ def regbook_frame(trades, kind: str) -> pd.DataFrame:
     for c in STR_COLS:
         df[c] = df[c].astype(str)
     for c in ("trigger_close_ms", "window_close_ms", "tide_against_close_ms", "bound_ms",
-              "latch_1h_ms", "v6_entry_ms"):
+              "latch_1h_ms", "v6_entry_ms", "harvest_close_ms"):
         if c in df.columns:
             df[c] = df[c].astype("Int64")
     if "v6_net_r" in df.columns:

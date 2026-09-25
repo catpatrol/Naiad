@@ -106,37 +106,38 @@
     "[LEAN-HEPHAESTUS] SR-4 a moved entry is refused unless its RESOLVED instant is strictly before every bound (relay_entry refuses the trigger; the runner the other two).",
     "[LEAN-HEPHAESTUS] SR-5 one position per asset at 1h resolution: entry instant strictly after the previous relay's 1h-resolved exit; v6's 4h-bar law printed as a disclosure.",
     "[LEAN-HEPHAESTUS] SR-6 late-relay twin (Tier-E rival) = the record rule with the trigger bound removed (the trigger instant and later admissible).",
-    "[LEAN-HEPHAESTUS] SR-7 relay entry_ms = open of the 4h bar J holding the entry close; relay exit_close_ms = the 1h-resolved exit instant; base v6 exit_close_ms = the exit bar's close (tierc11_books convention); both carry exit_bar_close_ms."
+    "[LEAN-HEPHAESTUS] SR-7 relay entry_ms = open of the 4h bar J holding the entry close; relay exit_close_ms = the 1h-resolved exit instant; base v6 exit_close_ms = the exit bar's close (tierc11_books convention); both carry exit_bar_close_ms.",
+    "[LEAN-HEPHAESTUS] SR-9 named-event instants [L-R.5, AM-6; the lanes pass]: every arm carries the extra column harvest_close_ms = the close of the 4h bar whose close slot fired the band harvest (Trade.harvest_ms + 4h, checked against harvest_i), NA when never harvested \u2014 a close event, stamped at its close; required columns, numbers, book_sha256 and sidecars unchanged."
   ],
   "regbooks": {
     "base": {
       "book_sha256": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
-      "content_sha": "3862ebca7fa9be6dedab14f4c68ddd0d47d785e987983cdff82005b595a40c65",
+      "content_sha": "ccedd324bd5af768f4e2d7553459391d3075f9aeed9d58b7d67fdb769809e3cc",
       "parquet": "regbooks/P-RELAY-1/base.parquet"
     },
     "scored": {
       "book_sha256": "57d8bbef8190492d1df83a137977463ee441508e20a57cd81499c60258a53361",
-      "content_sha": "5e038fb8ed4c119e684c42702a7d63b074a398fcfefbff8c6c112b2a29d828d7",
+      "content_sha": "9eb15727e863edf74117306afcccc9beea12811c30d1da084235ccb53f8fdd3a",
       "parquet": "regbooks/P-RELAY-1/scored.parquet"
     },
     "tierE__holdout_slice": {
       "book_sha256": "7e975ad781e3e31f15b3ff082443d33cfb516b529849d36efbea6027090b3fb4",
-      "content_sha": "02da1d9521b2d79acab07e7f8b5405dc2f4789f9207ee03a5575aff59b9ef2d1",
+      "content_sha": "5de61bfc3826df7b6e4c1565008c46827055a9fd2e61d868e0e142a3590d736c",
       "parquet": "regbooks/P-RELAY-1/tierE__holdout_slice.parquet"
     },
     "tierE__late_relay": {
       "book_sha256": "9e295b903e0c6e37d56e874b989f5978c1b9fac1dd54888fe3736c4de1abd61b",
-      "content_sha": "2f0cd0cd2bbae06f57bd9c511743d5f76493eba41d0d50b6de723854b7fc537e",
+      "content_sha": "11b24fbd0f3d14a8b3721db36184a78948b34d44d135117426f3967dd7d1e252",
       "parquet": "regbooks/P-RELAY-1/tierE__late_relay.parquet"
     },
     "tierE__miss_v6": {
       "book_sha256": "306b9ceebecb9e5141fb0cfa1b264f233fadea8876b26db3ae24f3947fde3edb",
-      "content_sha": "bcc84319c8e885d71e6acb3092484b7462b17e5d479bdc74338e3f481abbeebb",
+      "content_sha": "bb184b41bfc06cb254f6dca4d76eabaa54c245fd9f75058e892f4af140064800",
       "parquet": "regbooks/P-RELAY-1/tierE__miss_v6.parquet"
     },
     "tierE__tuning_slice": {
       "book_sha256": "10ac7ec867fab0873cf5b729301e19d62c63a90eabd8e1776924d44b1a6100f9",
-      "content_sha": "9f0c28c1b385d4765210017d619e85a1b1bfeec66114bcb8c07fc6196689fd3c",
+      "content_sha": "12cf00d23d0823e42d122e19d75ce0dffd35c9d8a83cfde1aa938ee838e7c6cc",
       "parquet": "regbooks/P-RELAY-1/tierE__tuning_slice.parquet"
     }
   },
