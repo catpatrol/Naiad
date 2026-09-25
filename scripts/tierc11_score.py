@@ -155,6 +155,27 @@ EXECUTOR SUB-READINGS (the frozen text is silent; each printed in READINGS):
        line, fields joined by ',', ints as str(int), floats as repr(float), '\\n' line
        ends — byte-equal to pandas' to_csv(index=False) of the same frame (F-BASE-IDENT
        proves it on every planted arm).
+  SC-20 A STATUS.json reason is the BUILDER's word, never the scorer's: it is printed
+       under the label "builder's stage status:" (the detail block's status line, the
+       closed rows' §0 cell) [final review statistics MINOR-1, fidelity MINOR-4].
+  SC-21 PRE_SEEN FACTS IN THE §0 CELL [L-G.1 pre_seen, statistics MINOR-2]: a pre_seen
+       honesty label carries "point known before filing; new campaigns since
+       2026-09-21T16:00Z: scored <n> / base <n>", counted from the books by the entry
+       bar's CLOSE > the TC10 pin (a bar closing AT the pin was seen by TC10).
+  SC-22 D15 ON AN UNPAIRED RULER [statistics MINOR-3]: T5.d15 pairs on (symbol,
+       entry_ms), so on a two-sample row (a gate: paired Δ 0 by construction; a lane:
+       n_paired 0) and a vs-zero row (no base) the §0 D15 cell reads "D15 n/a
+       (two-sample)" / "D15 n/a (vs zero)" and then the scored book's concentration:
+       the top trade (largest |net_r|; ties -> the first in (symbol, entry_ms) order) and
+       its share of the scored ΣR, the point with it removed from EVERY book holding its
+       (symbol, entry_ms) key, the point without its asset (the LOAO point of that
+       panel) and that asset's share of ΣR, and per asset Δ = scored mean − base mean
+       (two-sample) or the scored mean (vs zero).  Deciding nothing; T5.d15 stays in
+       SCORES.json and the detail block, labelled.
+
+REPAIR G2 (final review 2026-09-25: statistics MINOR-1..4, reproducibility MINOR-2,
+fidelity MINOR-4; labels and text only — no ruler, draw, statistic or verdict moved):
+SC-20..SC-22 above; F-EXIT runs main() itself against an out-dir holding a bent record.
 
 WHAT WOULD MAKE THIS WRONG: taking the ruler from the sidecar instead of the spec; a
 CI-only verdict (clause (b) dropped); pairing on a key with lane (the paired key of
@@ -256,6 +277,10 @@ V6_CMP = (("entry_close_ms", "entry_close_ms"), ("direction", "direction"),
 V6_DP = 6
 
 TC10_PIN_MS = 1_790_006_400_000            # 2026-09-21T16:00:00Z [L-G.1 pre_seen, L-T.6]
+TC10_PIN_LABEL = "2026-09-21T16:00Z"
+PRESEEN_TIME_COL = "entry_close_ms"         # SC-21: 'entered after the pin' by the entry CLOSE
+BUILDER_STATUS_LABEL = "builder's stage status:"   # SC-20: a STATUS.json reason is the builder's
+CONC_TOP_FROM_EVERY_BOOK = True             # SC-22: the top trade leaves every book holding its key
 LEANS_AMEND_REL = "research_outputs/tierc11/LEANS_AMENDMENTS.md"   # hashed [repair m-12]
 # SC-14 / SC-17: the plain-JSON records read beside the regbooks (never a Range object)
 SCALE_PICKS_PATH = E.OUT / "ranges" / "SCALE_PICKS.json"
@@ -334,6 +359,16 @@ READINGS = (
     "[LEAN-HEPHAESTUS] SC-19 regbook strictness: int64 times, int8 direction, no ',', '\"', "
     "CR, LF in a string field, 0 < entry_close_ms - entry_ms <= one lens step (4h unless the "
     "sidecar names a lens)",
+    "[LEAN-HEPHAESTUS] SC-20 a STATUS.json reason is the builder's word: printed under "
+    "\"builder's stage status:\" (detail status line, closed §0 cells), never as the scorer's",
+    "[LEAN-HEPHAESTUS] SC-21 pre_seen: the §0 honesty label carries 'point known before "
+    "filing; new campaigns since 2026-09-21T16:00Z: scored <n> / base <n>', counted from the "
+    "books by the entry bar's CLOSE > the TC10 pin",
+    "[LEAN-HEPHAESTUS] SC-22 D15 on an unpaired ruler: 'D15 n/a (two-sample)' / 'D15 n/a (vs "
+    "zero)', then the scored book's top trade (largest |net_r|) and its share of ΣR, the point "
+    "without it (removed from every book holding its key), the point without its asset and "
+    "that asset's share of ΣR, per asset Δ = scored mean - base mean (two-sample) or the "
+    "scored mean (vs zero); deciding nothing",
 )
 
 
@@ -540,6 +575,42 @@ def hazard_of(spec: dict) -> str | None:
         t = spec["labels"].get(k)
         if t:
             parts.append(f"{k}: {first_clause(t)}")
+    return " · ".join(parts) if parts else None
+
+
+def builder_status(reason) -> str:
+    """SC-20: a STATUS.json reason, printed as the BUILDER's word (it sits beside the
+    scorer's verdict and must never read as the scorer's)."""
+    return f"{BUILDER_STATUS_LABEL} {reason}"
+
+
+def new_since_pin(df: pd.DataFrame) -> int:
+    """SC-21: campaigns entered after the TC10 pin (2026-09-21T16:00Z), by the entry bar's
+    CLOSE — a bar closing AT the pin was seen by TC10."""
+    return int((df[PRESEEN_TIME_COL].to_numpy(np.int64) > TC10_PIN_MS).sum())
+
+
+def preseen_facts(a: pd.DataFrame, b: pd.DataFrame | None) -> dict:
+    """SC-21 [L-G.1 pre_seen]: what a pre_seen re-score can add beside its known point —
+    the campaigns entered after the TC10 pin, counted in the scored book and its base."""
+    ns = new_since_pin(a)
+    nb = None if b is None else new_since_pin(b)
+    return {"since": TC10_PIN_LABEL, "time_col": PRESEEN_TIME_COL, "scored": ns, "base": nb,
+            "text": (f"point known before filing; new campaigns since {TC10_PIN_LABEL}: "
+                     f"scored {ns} / base {'—' if nb is None else nb}")}
+
+
+def label_of(spec: dict, facts: dict | None) -> str | None:
+    """The §0 honesty label: SC-8's '<key>: <first clause>' per label, the pre_seen clause
+    carrying SC-21's facts."""
+    parts = []
+    for k in LABEL_KEYS:
+        t = spec["labels"].get(k)
+        if t:
+            p = f"{k}: {first_clause(t)}"
+            if k == "pre_seen" and facts:
+                p += f"; {facts['text']}"
+            parts.append(p)
     return " · ".join(parts) if parts else None
 
 
@@ -983,6 +1054,98 @@ def d15_of(a: pd.DataFrame, b: pd.DataFrame) -> dict:
         return [SimpleNamespace(symbol=s, entry_ms=int(e), net_r=float(r))
                 for s, e, r in zip(d["symbol"], d["entry_ms"], d["net_r"])]
     return T5.d15(objs(a), objs(b))
+
+
+def conc_point(ruler: str, a: pd.DataFrame, b: pd.DataFrame | None):
+    """SC-22: the unpaired ruler's point on (a, b) — mean(a) − mean(b) (two-sample) or
+    mean(a) (vs zero); None when a book it reads is empty."""
+    if not len(a) or (ruler == "two_sample" and (b is None or not len(b))):
+        return None
+    pt = float(np.mean(a["net_r"].to_numpy(float)))
+    if ruler == "two_sample":
+        pt -= float(np.mean(b["net_r"].to_numpy(float)))
+    return pt
+
+
+def _drop_key(df: pd.DataFrame, key: tuple) -> pd.DataFrame:
+    hit = ((df["symbol"].to_numpy(object) == key[0])
+           & (df["entry_ms"].to_numpy(np.int64) == key[1]))
+    return df[~hit]
+
+
+def concentration(ruler: str, a: pd.DataFrame, b: pd.DataFrame | None) -> dict | None:
+    """SC-22 [statistics MINOR-3]: beside an UNPAIRED ruler's row (two-sample, vs zero),
+    where T5.d15's paired columns say nothing, the scored book's concentration — the top
+    trade (largest |net_r|; ties -> the first in (symbol, entry_ms) order) and its share of
+    the scored ΣR; the point with it removed from EVERY book holding its (symbol,
+    entry_ms) key; the point without its asset and that asset's share of ΣR; per asset
+    Δ = scored mean − base mean (two-sample) or the scored mean (vs zero).  Decides
+    nothing."""
+    if ruler == "paired":
+        return None
+    kind = ("delta: scored mean - base mean" if ruler == "two_sample" else "scored mean")
+    if not len(a):
+        return {"ruler": ruler, "top": None, "per_asset_kind": kind, "per_asset": []}
+    d = a.sort_values(PAIR_KEY, kind="mergesort").reset_index(drop=True)
+    v = d["net_r"].to_numpy(float)
+    k = int(np.argmax(np.abs(v)))            # the first maximum in (symbol, entry_ms) order
+    key = (str(d["symbol"].iloc[k]), int(d["entry_ms"].iloc[k]))
+    tot = float(a["net_r"].sum())
+    in_base = bool(b is not None and len(_drop_key(b, key)) != len(b))
+    from_base = in_base and CONC_TOP_FROM_EVERY_BOOK
+    asset = key[0]
+    per = []
+    for s in sorted(set(a["symbol"]) | (set(b["symbol"]) if b is not None else set())):
+        a_s = a[a["symbol"] == s]
+        b_s = None if b is None else b[b["symbol"] == s]
+        per.append({"asset": s, "n": int(len(a_s)),
+                    "n_base": None if b_s is None else int(len(b_s)),
+                    "value": conc_point(ruler, a_s, b_s)})
+    return {"ruler": ruler,
+            "top": {"symbol": key[0], "entry_ms": key[1],
+                    "entry_close_ms": int(d["entry_close_ms"].iloc[k]), "net_r": float(v[k])},
+            "sum_net_r": tot,
+            "top_share": float(v[k]) / tot if abs(tot) > 1e-12 else None,
+            "top_in_base": in_base,
+            "top_removed_from": "scored and base" if from_base else "scored",
+            "point_without_top": conc_point(ruler, _drop_key(a, key),
+                                            _drop_key(b, key) if from_base else b),
+            "asset": asset,
+            "asset_share": (float(a.loc[a["symbol"] == asset, "net_r"].sum()) / tot
+                            if abs(tot) > 1e-12 else None),
+            "point_without_asset": conc_point(ruler, a[a["symbol"] != asset],
+                                              None if b is None else b[b["symbol"] != asset]),
+            "per_asset_kind": kind, "per_asset": per}
+
+
+def _pct(x) -> str:
+    return "n/a" if x is None else f"{100.0 * x:.1f}%"
+
+
+def conc_text(ruler: str, c: dict | None, detail: bool = False) -> str:
+    """SC-22: the §0 D15 cell of an unpaired row (detail=True adds the per-asset n)."""
+    head = "D15 n/a (two-sample)" if ruler == "two_sample" else "D15 n/a (vs zero)"
+    if not c or c.get("top") is None:
+        return head + " · the scored book holds no campaign"
+    t = c["top"]
+
+    def per(p):
+        x = f"{p['asset']} {_f(p['value'])}"
+        if detail:
+            x += (f" (n {p['n']} vs {p['n_base']})" if p.get("n_base") is not None
+                  else f" (n {p['n']})")
+        return x
+
+    return " · ".join([
+        head,
+        f"top trade {t['symbol']} {TB.iso(t['entry_close_ms'])[:16]}Z {_f(t['net_r'])} R = "
+        f"{_pct(c['top_share'])} of the scored ΣR {_f(c['sum_net_r'])}",
+        f"point without it {_f(c['point_without_top'])}"
+        + (" (removed from both books)" if c["top_removed_from"] == "scored and base" else ""),
+        f"point without {c['asset']} {_f(c['point_without_asset'])} ({c['asset']} = "
+        f"{_pct(c['asset_share'])} of ΣR)",
+        ("per-asset Δ (scored mean − base mean): " if ruler == "two_sample"
+         else "per-asset mean: ") + ", ".join(per(p) for p in c["per_asset"])])
 
 
 def clears_bar(p) -> bool:
@@ -1608,6 +1771,7 @@ def score_registration(L: Loader, reg: dict, ident: dict, n_boot: int = N_BOOT) 
            "verdict_cell": None, "spent_test": False, "clears_bar": None, "stats": None,
            "gate": None, "adds": None, "scale_beside": None, "premise": None, "tier_e": [],
            "r2_beside": None, "condition_record": None, "precondition_record": None,
+           "pre_seen_new_campaigns": None, "concentration": None,
            "provenance": {}, "halts": [], "notes": []}
     st, sh, sn = L.status_of(rid)
     row["notes"] += sn
@@ -1650,8 +1814,8 @@ def score_registration(L: Loader, reg: dict, ident: dict, n_boot: int = N_BOOT) 
         word = ("CLOSED BY PRECONDITION" if status == "CLOSED_BY_PRECONDITION"
                 else "CONDITION NOT MET")
         row.update(verdict_of_record=status,
-                   verdict_cell=(f"{word}: {st['reason']} — report-only · no number · no slot "
-                                 f"spent" + (f" · {r2b['text']}" if r2b else "")))
+                   verdict_cell=(f"{word} ({builder_status(st['reason'])}) — report-only · no "
+                                 f"number · no slot spent" + (f" · {r2b['text']}" if r2b else "")))
         if "scored" in arms:
             note = (f"the {'rule book' if status == 'CONDITION_NOT_MET' else 'scored arm'} of a "
                     f"{word} registration, printed only as a collared Tier-E row")
@@ -1728,7 +1892,13 @@ def score_registration(L: Loader, reg: dict, ident: dict, n_boot: int = N_BOOT) 
     row["verdict_stable_across_seeds"] = row["verdict_at_sens_seed"] == verdict
     cell = verdict
     if row["hazard"]:
-        cell += f" — IN-SAMPLE RE-SCORE, NOT CONFIRMATORY ({row['hazard']})"
+        facts = None
+        if "pre_seen" in spec["labels"]:     # SC-21: what the re-score adds, from the books
+            facts = preseen_facts(a, b)
+            row["pre_seen_new_campaigns"] = {k: facts[k] for k in ("since", "time_col",
+                                                                   "scored", "base")}
+        cell += f" — IN-SAMPLE RE-SCORE, NOT CONFIRMATORY ({label_of(spec, facts)})"
+    row["concentration"] = concentration(spec["ruler"], a, b)   # SC-22 (None when paired)
     if spec["gate"]:
         g = gate_block(a, b)
         row["gate"] = g
@@ -1879,8 +2049,7 @@ def _prov(A: dict) -> dict:
                                                    & (df["entry_close_ms"] > E.ERA_CUT_MS)).sum())
                                               if ok else None),
             # P-AGE-1 pre_seen: "campaigns entered after 2026-09-21T16:00Z (listed by count)"
-            "entered_after_tc10_pin": (int((df["entry_close_ms"] > TC10_PIN_MS).sum())
-                                       if ok else None),
+            "entered_after_tc10_pin": new_since_pin(df) if ok else None,
             "halts": A["halts"]}
 
 
@@ -1977,13 +2146,22 @@ def s0_line(r: dict) -> list[str]:
           f"{'clears' if lo['clears_line'] else 'short'}) · sens {s['loao_sens']['line']}")
     h = s["haircut"]
     hc = f"{_f(h['point'])} [{_f(h['lo'])}, {_f(h['hi'])}] p {_p(h['p_one_sided'])}"
-    d = s.get("d15")
-    dc = ("— (vs zero: no base)" if d is None else
-          f"tail {d.get('tail_exit_ratio')} · paired n {d.get('n_paired')} · max Δ share "
-          f"{d.get('max_single_trade_delta_share')}")
+    return [head, ncell, _f(m["point"]), ci, r["verdict_cell"], pc, lc, hc, d15_cell(r)]
+
+
+def d15_cell(r: dict) -> str:
+    """The §0 D15 column: T5.d15 on a PAIRED row; on an unpaired row 'D15 n/a (…)' and the
+    scored book's concentration [SC-22]; the named risk beside either."""
+    if r["ruler"] == "paired":
+        d = (r.get("stats") or {}).get("d15")
+        dc = ("—" if d is None else
+              f"tail {d.get('tail_exit_ratio')} · paired n {d.get('n_paired')} · max Δ share "
+              f"{d.get('max_single_trade_delta_share')}")
+    else:
+        dc = conc_text(r["ruler"], r.get("concentration"))
     if r.get("named_risk"):
         dc += f" · named risk: {r['named_risk']}"
-    return [head, ncell, _f(m["point"]), ci, r["verdict_cell"], pc, lc, hc, dc]
+    return dc
 
 
 def _md_table(header: list[str], rows: list[list[str]]) -> list[str]:
@@ -2085,8 +2263,8 @@ def _detail(r: dict) -> list[str]:
          "Text of record (the contract's own lines):", "", "```", r["text_of_record"], "```", "",
          f"- kind: {r['kind']} · panel {r['panel_name']} · era {r['era']} · ruler "
          f"{r['ruler']} · payload sha `{r['payload_sha256'][:16]}…`",
-         f"- status: {r['status']}" + (f" — {r['status_reason']}" if r.get("status_reason")
-                                       else ""),
+         f"- status: {r['status']}" + (f" — {builder_status(r['status_reason'])}"
+                                       if r.get("status_reason") else ""),
          f"- verdict cell: {r['verdict_cell']}"]
     for k, v in (r.get("labels") or {}).items():
         L.append(f"- {k} (full text): {v}")
@@ -2145,8 +2323,16 @@ def _detail(r: dict) -> list[str]:
                  f"{_f(hs['point'], 6)} [{_f(hs['lo'], 6)}, {_f(hs['hi'], 6)}] p "
                  f"{_p(hs['p_one_sided'])}")
         d = s.get("d15")
-        L.append("- D15: " + ("— (vs zero: no base)" if d is None else
-                               ", ".join(f"{k} {v}" for k, v in d.items())))
+        if r["ruler"] == "paired":
+            L.append("- D15: " + ("—" if d is None else
+                                   ", ".join(f"{k} {v}" for k, v in d.items())))
+        else:                               # SC-22: T5.d15 pairs; this ruler does not
+            L.append(f"- D15: n/a under the {r['ruler']} ruler (T5.d15 pairs on (symbol, "
+                     f"entry_ms)) — " + ("no base" if d is None else
+                                         "printed for the record only: "
+                                         + ", ".join(f"{k} {v}" for k, v in d.items())))
+            L.append("- concentration beside it (SC-22, deciding nothing): "
+                     + conc_text(r["ruler"], r.get("concentration"), detail=True))
         if r.get("premise"):
             L.append("- premise: " + ", ".join(f"{k} {v}" for k, v in r["premise"].items()))
         if r.get("adds"):

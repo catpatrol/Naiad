@@ -75,11 +75,17 @@ end in exit 0).
                  or from this run's bytes, or either exits nonzero.  SABOTAGE:
                  the comparator on a one-byte-bent copy, and a hash-order-
                  dependent emission under the two seeds, must each be found.
+REVIEW WORKTREES [final review MAJOR-1]: research_outputs/tierc10 is gitignored,
+so a review worktree carries no TC10 record.  Every plant that READS a TC10 record
+(D.OUT reverted, the amendment-candidate read, the skipped D.OUT / TP.AS_OF_PIN
+re-roots) aims at TC10's record of record by absolute MAIN-TREE path (E.MAIN_TREE),
+exactly as the shim's allow-list reads; write plants aim at absent directories of
+THIS tree.  Absolute tree roots print as <repo> (before any truncation).
 BANNED: self-comparison; one example where cardinality was possible; a tuned
 magnitude bound standing in for an identity; a check whose claim is not the
 design's claim.  FROZEN SUBSTRATE: HALTs unless NAIAD_CACHE_DIR is the TC11
-snapshot (tierc11_env's guard).  Seed 20260924.  The transcript carries no clock
-and no temp path.
+snapshot (tierc11_env's guard).  Seed 20260924.  The transcript carries no clock,
+no temp path and no absolute tree path.
 
 Run:  export NAIAD_CACHE_DIR=$HOME/.cache/naiad/snapshots/tc11_20260925 PYTHONDONTWRITEBYTECODE=1
       ~/venvs/naiad/bin/python -B scripts/tierc11_env_fixtures.py \\
@@ -184,10 +190,21 @@ LINES: list[str] = []
 PASSED: list[str] = []
 FAILED: list[str] = []
 _TMP_RX = re.compile(r"(/private)?/(var/folders|tmp)/[^\s'\"]+")
+# The absolute tree roots — this tree and the main tree (E.MAIN_TREE, where a review worktree
+# reads TC10's records) — print as ONE fixed token, longest first, BEFORE any truncation: an
+# alias spelling such as the /System/Volumes/Data firmlink of the repo then reads the same in
+# the main tree and in a review worktree or a copy of one [reproducibility review MAJOR-1].
+_TREE_RX = re.compile("|".join(re.escape(t) for t in sorted(
+    {str(ROOT), os.path.realpath(ROOT), str(E.MAIN_TREE), os.path.realpath(E.MAIN_TREE)},
+    key=len, reverse=True)) + r"(?![\w.-])")
+
+
+def detree(s: str) -> str:
+    return _TREE_RX.sub("<repo>", s)
 
 
 def say(line: str = "") -> None:            # deterministic -> transcript
-    line = _TMP_RX.sub("<tmp>", line)
+    line = _TMP_RX.sub("<tmp>", detree(line))
     print(line)
     LINES.append(line)
 
@@ -231,9 +248,9 @@ def plants(rows) -> tuple[bool, str]:
     passed, wrong, caught, crashed = [], [], [], []
     for name, want, thunk in rows:
         try:
-            found = thunk()
+            found = [detree(str(f)) for f in thunk()]
         except SystemExit as e:
-            found = [f"HALT: {e}"]
+            found = [detree(f"HALT: {e}")]
         except Exception as e:
             crashed.append(f"{name} -> RAISED {type(e).__name__}: {e}")
             continue
@@ -427,7 +444,7 @@ def substrate_break():
     _absent_dir(ROOT / "research_outputs" / "tierc10" / "__tc11_env_plant__" / "q.txt")
     live = LIVE / "__tc11_env_plant__" / "p.parquet"                  # READ of an absent file
     livec = Path(str(LIVE).replace("data_cache", "Data_Cache")) / "__tc11_env_plant__" / "p.parquet"
-    cand = ROOT / "research_outputs" / "tierc10" / "PROGRESS.json"
+    cand = E.MAIN_TREE / "research_outputs" / "tierc10" / "PROGRESS.json"   # TC10's record of record
     return plants([
         ("TC10-snapshot read (pd.read_parquet)", "TC11-AUDIT[tc10-snapshot]",
          lambda: hook_plant(f"import pandas as pd\npd.read_parquet({str(tc10_file)!r})")),
@@ -465,7 +482,7 @@ def substrate_break():
         ("D.OUT reverted to research_outputs/tierc10/data, then D.load_pin",
          "TC11-AUDIT[tc10-unlisted]",
          lambda: hook_plant(f"from pathlib import Path\n"
-                            f"E.D.OUT = Path({str(ROOT / 'research_outputs' / 'tierc10' / 'data')!r})\n"
+                            f"E.D.OUT = Path({str(E.MAIN_TREE / 'research_outputs' / 'tierc10' / 'data')!r})\n"
                             f"E.D.load_pin()")),
         ("read of an AMENDMENT-CANDIDATE record (research_outputs/tierc10/PROGRESS.json)",
          "TC11-AUDIT[tc10-unlisted]",
@@ -588,7 +605,9 @@ def substrate_real():
         return False, f"the TC10 listing exit {lr.returncode}: {lr.stderr[-300:]}"
     files = _last_json(lr.stdout)
     e_cls = {f: E.classify(_r(f)) for f in files}
-    e_allow = sorted(_tree_rel(_r(f)) for f, c in e_cls.items() if c == "tc10-allow")
+    # the SET of records allowed: a record staged read-only beside a review worktree is the same
+    # record as the main tree's, never a ninth
+    e_allow = sorted({_tree_rel(_r(f)) for f, c in e_cls.items() if c == "tc10-allow"})
     e_other = sorted({c for c in e_cls.values()} - {"tc10-allow", "tc10-unlisted"})
     disagree = sorted(_tree_rel(_r(f)) for f, c in e_cls.items()
                       if (c == "tc10-allow") != (my_class(_r(f)) == "allow"))
@@ -640,7 +659,7 @@ def _live_value(Em, alias: str, attr: str, key):
 def _shown(v) -> str:
     if isinstance(v, (str, Path)):
         s = _r(v)
-        for t, pre in ((_r(ROOT), ""), (_r(HOME), "~/")):
+        for t, pre in ((_r(ROOT), ""), (_r(E.MAIN_TREE), ""), (_r(HOME), "~/")):
             if s == t or s.startswith(t + os.sep):
                 return pre + os.path.relpath(s, t)
         return s
@@ -814,15 +833,25 @@ def _stray_pin_plant() -> list[str]:
                   f'("D", "OUT", None, Path({td!r}), "L-0.3"),'), _POST_SHIM_CALL))
 
 
+# A skipped re-root leaves TC10's module on ITS OWN tree's record (tierc10_data / tierc10_panel bind
+# ROOT from their own __file__); in a review worktree that tree carries no TC10 record (gitignored),
+# so the shadow re-binds the attribute to TC10's record of record — by absolute MAIN-TREE path, the
+# shim's own MAIN_TREE — which in the main tree IS the value a skip leaves [final review MAJOR-1].
+_TC10_REC = 'MAIN_TREE / "research_outputs" / "tierc10" / "data"'
+
+
 def reroot_break():
-    dout = _drop_line('("D", "OUT", None, OUT / "data", "L-0.3"),')
+    dout = _swap('("D", "OUT", None, OUT / "data", "L-0.3"),',
+                 f'("D", "OUT", None, {_TC10_REC}, "L-0.3"),')
     return plants([
-        ("skip the D.OUT re-root", "D.load_pin(): 1790006400000 (the TC10 pin LEAKED)",
+        ("skip the D.OUT re-root (D.OUT left on TC10's data dir of record)",
+         "D.load_pin(): 1790006400000 (the TC10 pin LEAKED)",
          lambda: _shadow_halt(dout)),
-        ("skip the TP.AS_OF_PIN re-root",
+        ("skip the TP.AS_OF_PIN re-root (TP.AS_OF_PIN left on TC10's AS_OF_PIN.json of record)",
          "TP.stage_d_pin(): 1790006400000 (the TC10 pin LEAKED)",
-         lambda: _shadow_halt(_drop_line(
-             '("TP", "AS_OF_PIN", None, OUT / "data" / "AS_OF_PIN.json", "L-0.3"),'))),
+         lambda: _shadow_halt(_swap(
+             '("TP", "AS_OF_PIN", None, OUT / "data" / "AS_OF_PIN.json", "L-0.3"),',
+             f'("TP", "AS_OF_PIN", None, {_TC10_REC} / "AS_OF_PIN.json", "L-0.3"),'))),
         ("skip the D.SNAPSHOT re-root", "HALT: POST-SHIM [L-0.3]",
          lambda: [f for f in _shadow_halt(_drop_line('("D", "SNAPSHOT", None, SNAPSHOT, "L-0.3"),'))
                   if "D.kline_path('BTCUSDT','4h')" in f]),

@@ -43,8 +43,8 @@
     "NEARUSDT",
     "ZECUSDT"
    ],
-   "regbook_content_sha256": "4b48e80e84bae8b0eba8f1b49352a8642c91e2813e6f9d000e6848f00aa30f7c",
-   "regbook_file_sha256": "b58e678a0a35075039679667af55f38afb5e4c610e53897918fb0042141694a2",
+   "regbook_content_sha256": "bfac2c1ae7cbc50ceb9d39fc89c01c8fdfb41b9ad22ed9406f041523b726099b",
+   "regbook_file_sha256": "62a0becefe84f284b7556b61265344e22bc793e94a54b5bca2e1cb4c323231c4",
    "registration": "P-BRK-4H",
    "sidecar_file_sha256": "3cb25e07dbbc2e2ea9223628a7ba095b2f672a3dc21a3e376c0b7ebcabadb073",
    "source_regbook": "research_outputs/tierc11/regbooks/P-BRK-4H/scored.parquet"
@@ -104,8 +104,8 @@
     "DOGEUSDT",
     "1000BONKUSDT"
    ],
-   "regbook_content_sha256": "be2b23e0b06fbb9cdb5e4295cda3534639343f0d7085f9cbd9eb1b237b9c90c0",
-   "regbook_file_sha256": "286d9636cba9e6be72d077481290b468a3e48c9f088e316d1f0449c54a79ea97",
+   "regbook_content_sha256": "42ad5dee675b415be27f556b2e530cbc40c8a915c0450c51a5c394d2e997bb10",
+   "regbook_file_sha256": "b527b30cbe23581a8b388419a1973cf302db497fb76bf50fcd84c774874faa21",
    "registration": "P-BRK-4H",
    "sidecar_file_sha256": "a137070608f732413d74c0435c74d191973b4d6de398d8ac5f377b76bb399480",
    "source_regbook": "research_outputs/tierc11/regbooks/P-BRK-4H/tierE__panel17.parquet"

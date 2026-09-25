@@ -20,7 +20,9 @@ WHAT IT BUILDS (research_outputs/tierc11/stage_r4/)
                       outcome ledger (C.outcome_ledger: term / MFE / MAE at
                       H20 / H100 in bars of L from the known_at close, censored
                       never shortened, toll_atr = 10 bps x c / ATR_L) and the
-                      honesty labels (pick window, scale-in-sample, stability).
+                      honesty labels (pick window, scale-in-sample, stability;
+                      the EXTRA l_anchor_scale_in_sample keyed also to the
+                      death / harden bar, R4-8).
   R4_GRID.parquet     the grid WHOLE: asset | pool x lens x scale x event x
                       cell law x L+1 cell x direction x era x horizon, every
                       statistic by C.grid_rows itself (unforked; pooled rows
@@ -233,7 +235,13 @@ READINGS = (
     "R4-8 LABELS [L-R.2, AM-4]: every event row carries l_ / u_ pick_window, "
     "scale_in_sample and stability_changed; every grid / base / null row carries the pick "
     "windows and stability flags of L and L+1 (a pool: the distinct values joined) and the "
-    "counts of its anchors whose L or L+1 read is scale-in-sample.",
+    "counts of its anchors whose L or L+1 read is scale-in-sample. l_scale_in_sample is keyed "
+    "to the known instant; every event row also carries the EXTRA label "
+    "l_anchor_scale_in_sample [causality review MINOR-2] = N.scale_in_sample at the close of "
+    "the bar its anchor rests on (a BREAKOUT's death bar die_i, an SFP's harden bar) OR at the "
+    "known close (a tuning pick: that close <= the era cut; a whole-tape fallback True; "
+    "frozen3.0 False). It is a label only: every grid / base / null count stays on "
+    "l_scale_in_sample, and the rows where the two differ are counted in §2.",
     "R4-9 PARALLELISM [AM-2]: the runner starts no process; units run in-process (serial) or "
     "in fresh interpreters started by the caller; the merge alone writes the files of record.",
     "R4-10 SCAN LEDGER [L-R.6(a) 'every evaluated touch is a row']: R4_SCAN files N's "
@@ -340,6 +348,30 @@ def _close_ms(tape, i) -> np.ndarray:
     i = np.asarray(i, dtype=np.int64)
     inside = (i >= 0) & (i < tape.n)
     return np.where(inside, tape.t0[np.where(inside, i, 0)] + tape.step, -1)
+
+
+def _anchor_read_bar(ev: pd.DataFrame) -> np.ndarray:
+    """[R4-8] the bar of L whose read the event's anchor rests on: a BREAKOUT's
+    death bar (die_i — the death that fixes its boundary, the broken side as-of
+    die_i - 1, is read at die_i), an SFP's harden bar (anchor_i = its known_at)
+    — the hook F-R4-EVENTS bends."""
+    return np.where(ev["family"].to_numpy() == "BRK", ev["die_i"].to_numpy(np.int64),
+                    ev["anchor_i"].to_numpy(np.int64))
+
+
+def anchor_in_sample(stem: str, lens: str, kind: str, tape, ev: pd.DataFrame) -> pd.array:
+    """l_anchor_scale_in_sample [R4-8; causality review MINOR-2] — an EXTRA label,
+    beside l_scale_in_sample (keyed to the known instant, unchanged): the L read
+    is scale-in-sample if the bar its anchor rests on closes <= the era cut OR its
+    known_at closes <= the cut (N.scale_in_sample's law at both instants: a
+    tuning pick by the instant, a whole-tape fallback True, frozen3.0 False)."""
+    rd = _close_ms(tape, _anchor_read_bar(ev))
+    if (rd < 0).any():
+        raise SystemExit(f"HALT: {stem} {lens} {kind}: an event's anchor-read bar is off the "
+                         f"tape — the anchor label is read at a closed bar or not at all")
+    lab = N.scale_label(stem, lens, kind)
+    return (pd.array(ev["l_scale_in_sample"], dtype="boolean")
+            | pd.array(N.scale_in_sample(lab, rd), dtype="boolean"))
 
 
 # ═══════════════════════════════════════════════ 3 · EVENTS
@@ -458,6 +490,8 @@ def real_events(stem: str, lens: str, kind: str) -> pd.DataFrame:
     tape = N.load11(stem, lens)
     bps = C.toll_bps_for(stem)[0]
     out = event_ledger(stem, lens, kind, tape, evs, bps)
+    out.insert(list(out.columns).index("l_scale_in_sample") + 1, "l_anchor_scale_in_sample",
+               anchor_in_sample(stem, lens, kind, tape, out))
     out.insert(0, "asset", stem)
     out.insert(1, "lens", lens)
     out.insert(2, "scale_kind", kind)
@@ -1439,6 +1473,50 @@ def _labels_table() -> list:
     return L
 
 
+def anchor_label_counts(events: pd.DataFrame) -> dict:
+    """[R4-8] the rows of R4_EVENTS where l_anchor_scale_in_sample differs from
+    l_scale_in_sample — whole over panel x lens x scale x family."""
+    a = pd.array(events["l_anchor_scale_in_sample"], dtype="boolean")
+    lb = pd.array(events["l_scale_in_sample"], dtype="boolean")
+    na_a, na_l = np.asarray(a.isna(), bool), np.asarray(lb.isna(), bool)
+    diff = (na_a != na_l) | (a.fillna(False).to_numpy(bool) != lb.fillna(False).to_numpy(bool))
+    cells = []
+    for p in PANELS:
+        for lens in LENSES_R4[p]:
+            for kind in SCALE_KINDS:
+                for fam in ("BRK", "SFP"):
+                    m = (events["asset"].isin(PANELS[p]) & (events["lens"] == lens)
+                         & (events["scale_kind"] == kind)
+                         & (events["family"] == fam)).to_numpy(bool)
+                    cells.append({"panel": p, "lens": lens, "scale_kind": kind, "family": fam,
+                                  "rows": int(m.sum()), "differ": int((m & diff).sum())})
+    c5 = (events["asset"].isin(PANELS["CLASSIC5"]) & (events["scale_kind"] == "calibrated")
+          & (events["family"] == "BRK")).to_numpy(bool)
+    return {"rows": int(len(events)), "differ": int(diff.sum()),
+            "anchor_true_label_false": int((a.fillna(False).to_numpy(bool)
+                                            & ~lb.fillna(False).to_numpy(bool)).sum()),
+            "classic5_calibrated_brk": {"rows": int(c5.sum()), "differ": int((c5 & diff).sum())},
+            "by_cell": cells}
+
+
+def _anchor_table(ac: dict) -> list:
+    x = ac["classic5_calibrated_brk"]
+    L = [f"- **l_anchor_scale_in_sample** (R4_EVENTS, an EXTRA label [R4-8; causality review "
+         f"MINOR-2]) differs from l_scale_in_sample on **{ac['differ']:,}** of {ac['rows']:,} "
+         f"event rows ({ac['anchor_true_label_false']:,} of them anchor-label True where "
+         f"l_scale_in_sample is False); CLASSIC5 · calibrated · BREAKOUT: {x['differ']:,} of "
+         f"{x['rows']:,}. A row differs only when the bar its anchor rests on closes at or "
+         f"before the era cut and its known_at closes after it, under a tuning pick. It is a "
+         f"label only: no grid / base / null figure is keyed to it (n_l_scale_in_sample counts "
+         f"l_scale_in_sample).", "",
+         "| panel | lens | scale | family | event rows | rows where the two labels differ |",
+         "|---|---|---|---|---|---|"]
+    for r in ac["by_cell"]:
+        L.append(f"| {r['panel']} | {r['lens']} | {r['scale_kind']} | {r['family']} | "
+                 f"{r['rows']} | {r['differ']} |")
+    return L
+
+
 def _scan_table(scan: pd.DataFrame, deaths: pd.DataFrame) -> list:
     """[R4-10] per panel x lens x scale x band: deaths, the scan's END per death,
     evaluated touches by verdict — WHOLE over the commission."""
@@ -1465,7 +1543,7 @@ def _scan_table(scan: pd.DataFrame, deaths: pd.DataFrame) -> list:
 
 
 def stage_md(grid, base, null, events, boxes, cont: dict, shas: dict, scan: pd.DataFrame,
-             deaths: pd.DataFrame) -> str:
+             deaths: pd.DataFrame, anchor: dict) -> str:
     L = [f"# TIER-C11 · STAGE R-b · R4 — THE TWO TRADES PER LENS (TIER-E, WHOLE)",
          "",
          f"as_of_last_closed_4h: {PIN_ISO} · substrate {E.SNAPSHOT.name} · seed {SEED} "
@@ -1552,6 +1630,7 @@ def stage_md(grid, base, null, events, boxes, cont: dict, shas: dict, scan: pd.D
         "censored at H20 in the TC10 window and uncensored now, or a term moved)."))
     L += ["", "## 2 · Honesty labels per lens [L-R.2, AM-4]", ""]
     L += _labels_table()
+    L += [""] + _anchor_table(anchor)
     L += ["", "## 3 · Event counts, per panel (per-asset counts in R4_EVENTS.parquet)", ""]
     L += _counts_table(events)
     L += ["", "## 4 · The grid of record — POOLED:CLASSIC5 · calibrated · cell law record "
@@ -1629,10 +1708,16 @@ def merge(parts: Path, out: Path) -> dict:
         shas[name] = {"sha": sha, "rows": int(len(dd))}
         filed[name] = dd
         clock(f"wrote {name} rows {len(dd):,} sha {sha[:16]}…")
+    anchor = anchor_label_counts(filed["R4_EVENTS"])
+    clock(f"l_anchor_scale_in_sample differs from l_scale_in_sample on {anchor['differ']} of "
+          f"{anchor['rows']} event rows (CLASSIC5 calibrated BREAKOUT "
+          f"{anchor['classic5_calibrated_brk']['differ']} of "
+          f"{anchor['classic5_calibrated_brk']['rows']})")
     (out / "R4_GRID.md").write_text(grid_md(filed["R4_GRID"]), encoding="utf-8")
     (out / "STAGE_R4.md").write_text(
         stage_md(filed["R4_GRID"], filed["R4_BASE"], filed["R4_NULL"], filed["R4_EVENTS"],
-                 filed["R4_NULL_BOXES"], cont, shas, filed["R4_SCAN"], filed["R4_DEATHS"]),
+                 filed["R4_NULL_BOXES"], cont, shas, filed["R4_SCAN"], filed["R4_DEATHS"],
+                 anchor),
         encoding="utf-8")
     man = {
         "stage": "TIER-C11 · STAGE R-b · R4 (TC11-R)", "tier": "TIER-E",
@@ -1664,6 +1749,7 @@ def merge(parts: Path, out: Path) -> dict:
         "files_of_record": list(FILES_OF_RECORD),
         "input_sha": input_shas(), "code_sha": code_shas(),
         "tc10_continuity": cont,
+        "anchor_scale_in_sample": anchor,
     }
     (out / "build_manifest.json").write_text(
         json.dumps(man, indent=2, sort_keys=True, default=str) + "\n", encoding="utf-8")

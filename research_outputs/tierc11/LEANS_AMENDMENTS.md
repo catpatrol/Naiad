@@ -95,3 +95,39 @@ lean blocks. They are sub-readings where the frozen text is silent:
 - A maker leg (scalper twins) carries zero slippage (L-1.2), so the maker twins apply the law to their taker legs
   only.
 - Printed on every trade row beside `net_r`. It never replaces `net_r` (the veto "tiers").
+
+---------------------------------------------------------------------------------------------------------------
+## FINAL-REVIEW WAVE — 2026-09-25, filed after the five-lens worktree-attested review of 04067a0
+
+These two amendments correct the record's wording and scope. Neither moves a registered number. Every verdict of
+record was already scored (04067a0), and no reading that decides a verdict changes here.
+
+**AM-5 ERRATUM · the mismatch-bar list (causality review MINOR-1).**
+- AM-5 described the 16 L-W.0 mismatch bars as "2023-11-10T12:00Z and 2024-10-28T20:00Z on every asset, plus
+  the assets' first frame bars". That description is wrong. The 16 bars are:
+  - **10 shared bars:** those two instants on each of CLASSIC5.
+  - **3 first-frame bars:** BTC 2019-09-08T16:00Z (3 children), ETH 2019-11-27T04:00Z (1 child),
+    SOL 2020-09-14T04:00Z (1 child).
+  - **3 ordinary bars** whose 4h high/low disagrees with the children: BTC 2019-09-09T00:00Z (high),
+    BTC 2019-09-24T16:00Z (high and low), ETH 2019-12-11T16:00Z (high and low).
+- All 6 extras fall before each asset's bar 316. Among the REGISTERED books, only ZEC 2024-10-28T20:00Z is
+  ridden by a 1h-walked book (one v6 campaign), and no registered book's W1 event, add or relay falls on a
+  mismatch bar.
+- **Tier-E exceptions** (the W1 stamps of the other 4h books, added in TC11-FIX):
+  - the 9/12 re-ride walks BTC 2023-11-10T12:00Z and ZEC 2024-10-28T20:00Z;
+  - P-BRK-4H's walks BTC and SOL 2024-10-28T20:00Z;
+  - one Tier-E W1 event (P-BRK-4H, SOL) is taken at the parent's close, 2024-10-29T00:00Z.
+- The ride's `child_mismatch` reason column names the FIRST failing check only. BTC 2019-09-24T16:00Z and ETH
+  2019-12-11T16:00Z fail on both high and low but read "high".
+- Impact on any number: none.
+
+**AM-8 · AM-2's subprocess clause, scoped to its real uses (reproducibility review MINOR-6).**
+- AM-2 allowed subprocesses "only for the fixture harness". Three non-fixture uses exist. All three are
+  outside any decision path and are allowed by name:
+  - `scripts/tierc11_data.py`: the `cp -cpR` APFS clone of the TC10 snapshot (TC11-D `--clone`, run once,
+    before the guard).
+  - `scripts/tierc11_data_clock_note.py`: `git show e97ad73:…`, a read of the committed record.
+  - `scripts/tierc11_worktree_attest.py`: `git worktree` / `git rev-parse` / `git status` / `git show` (the
+    reviewed commit's PROGRESS record) for L-F.3. No other git subcommand is allowed.
+- Any other subprocess use in a tierc11 module is a defect. The import-closure suite enforces this over every
+  non-fixture tierc11 module.

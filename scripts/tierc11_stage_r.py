@@ -52,6 +52,15 @@ WHAT IT BUILDS (research_outputs/tierc11/stage_r/)
                             state x %-of-range decile at entry, honesty labels and the
                             holdout slice beside (SR-12); TC10's five-row table (4h,
                             frozen 3.0) reproduced beside, all eleven columns [L-R.7].
+  R5_CHOP_DIRECTION.parquet (+ its section in R5_CHOP.md / STAGE_R.md)   [SR-16; the
+                            trading review D-2] BESIDE the unchanged R5 rows: the same v6
+                            entries by 4h / 12h state split EXP_ALIGNED / EXP_COUNTER /
+                            IN_RANGE / NONE (aligned = BULL_EXP for a long, BEAR_EXP for a
+                            short) and the IN_RANGE entries by direction-adjusted pct
+                            tercile (pct long, 100 - pct short; '<0', '>=100'), both
+                            scales, n / n_long / n_short / E[net R] / P(win) / sum R with
+                            SR-12's honesty labels and holdout slice — collared Tier-E,
+                            decides nothing; partitioned against R5_CHOP (HALT otherwise).
   nestbook_probe/V6-PROBE/base.{parquet,json} + nest_books/V6-PROBE__base.{parquet,json}
                             the nest-book door tested on v6 (a probe in the REGBOOK
                             schema — NOT a registration).
@@ -160,6 +169,20 @@ DECILES = tuple(f"[{10 * d},{10 * d + 10})" for d in range(10))
 R5_LENSES = ("4h", "12h")
 R5_BUCKETS = DECILES + ("<0", ">=100", "not-in-range:NONE", "not-in-range:BULL_EXP",
                         "not-in-range:BEAR_EXP", "__ALL__")
+# R5 BY DIRECTION [SR-16; the trading review D-2, FINAL_REVIEW_2026-09-25] — beside the
+# unchanged, direction-blind L-R.7 rows: collared Tier-E rows that decide nothing
+R5_DIR_TABLE = "R5_CHOP_DIRECTION"
+R5_ALIGN_BUCKETS = ("EXP_ALIGNED", "EXP_COUNTER", "IN_RANGE", "NONE", "__ALL__")
+R5_ADJ_CUTS = (100.0 / 3.0, 200.0 / 3.0, 100.0)   # exact thirds; 100 opens '>=100' (SR-8's law)
+R5_ADJ_BUCKETS = ("<0", "[0,33.33)", "[33.33,66.67)", "[66.67,100)", ">=100")
+R5_DIR_BUCKETS = {"alignment": R5_ALIGN_BUCKETS, "pct_dir_adj": R5_ADJ_BUCKETS}
+R5_DIR_SPLIT_LAW = {
+    "alignment": ("the lens state at entry by the trade's direction: EXP_ALIGNED = BULL_EXP for "
+                  "a long / BEAR_EXP for a short; EXP_COUNTER = the other expansion; IN_RANGE / "
+                  "NONE as read [SR-16]"),
+    "pct_dir_adj": ("IN_RANGE entries by direction-adjusted pct-of-range (pct for a long, "
+                    "100 - pct for a short; 100 = the boundary the trade must break): "
+                    "[0,100/3), [100/3,200/3), [200/3,100), '<0', '>=100' [SR-16]")}
 TC10_STATES = ("BEAR_EXP", "BULL_EXP", "NEUTRAL", "NONE", "__ALL__")
 FIVE_ROW_COLS = ("n", "n_assets", "net_r_sum", "expectancy_r", "median_net_r",
                  "win_rate_pct", "median_mfe_r", "median_pct_of_range",
@@ -335,6 +358,25 @@ READINGS = (
     "LANES_MANIFEST.json pins, per book, the regbook bytes it stamped (the parquet's content "
     "sha — its csv — and its file sha) beside book_sha256, which covers the 16 required "
     "columns only, not the instant columns the nest reads.",
+    "SR-16 R5 BY DIRECTION [the trading review D-2, research_outputs/tierc11/review/"
+    "FINAL_REVIEW_2026-09-25.json: L-R.7's chop table is direction-blind as frozen, so a "
+    "BULL_EXP / BEAR_EXP row mixes longs riding the expansion with shorts fading it — an "
+    "alignment effect that reads as a market state]: BESIDE the R5 rows, which stay unchanged, "
+    "R5_CHOP_DIRECTION prints collared Tier-E rows that DECIDE NOTHING, per scale "
+    "(calibrated, frozen3.0) x lens {4h, 12h}, on the same v6 entries (direction = the book's "
+    "own +1 long / -1 short). (i) 'alignment': the lens state at entry split EXP_ALIGNED "
+    "(BULL_EXP for a long, BEAR_EXP for a short), EXP_COUNTER (the other expansion), "
+    "IN_RANGE, NONE, and '__ALL__'. (ii) 'pct_dir_adj': the IN_RANGE entries by "
+    "DIRECTION-ADJUSTED pct-of-range, unclamped (pct for a long, 100 - pct for a short, so "
+    "100 is the boundary the trade must break and 0 the one behind it), in terciles "
+    "[0,33.33), [33.33,66.67), [66.67,100) (exact cuts 100/3 and 200/3) plus '<0' and "
+    "'>=100'. This is SR-8's half-open law, one law for both sides. The commission's "
+    "text ('[66.67,100]' beside '>=100') overlaps only at exactly 100, which this law sends "
+    "to '>=100' as SR-8 does; R5_CHOP.md prints how many entries sit on a cut. Columns: n "
+    "(n_long / n_short beside), E[net R], P(win), sum R, and SR-12's honesty labels with "
+    "the holdout slice. Partitions (the build HALTs otherwise): EXP_ALIGNED + EXP_COUNTER == "
+    "R5's not-in-range BULL_EXP + BEAR_EXP; NONE == R5's not-in-range:NONE; IN_RANGE == R5's "
+    "deciles + '<0' + '>=100' == the five pct_dir_adj buckets; '__ALL__' == R5's.",
 )
 
 
@@ -1594,6 +1636,130 @@ def r5_chop(entry_v6: pd.DataFrame) -> pd.DataFrame:
     return d
 
 
+# ── R5 BY DIRECTION [SR-16] — the seams align_of / dir_adj_pct are read at CALL time
+#    (F-CHOP-VALUE plants them) ──────────────────────────────────────────────────
+def _direction(z: pd.DataFrame) -> np.ndarray:
+    d = z["direction"].to_numpy(np.int64)
+    bad = ~np.isin(d, (1, -1))
+    if bad.any():
+        _halt(f"R5 BY DIRECTION: {int(bad.sum())} entry row(s) carry a direction outside "
+              f"{{+1, -1}}")
+    return d
+
+
+def align_of(state: np.ndarray, direction: np.ndarray) -> np.ndarray:
+    """EXP_ALIGNED = the lens expands the trade's way (BULL_EXP for a long, BEAR_EXP for
+    a short); EXP_COUNTER = the other expansion; IN_RANGE / NONE as read."""
+    out = np.empty(len(state), dtype=object)
+    for i, (s, d) in enumerate(zip(state, direction)):
+        if s in ("IN_RANGE", "NONE"):
+            out[i] = s
+        elif s in ("BULL_EXP", "BEAR_EXP"):
+            out[i] = "EXP_ALIGNED" if (s == "BULL_EXP") == (int(d) > 0) else "EXP_COUNTER"
+        else:
+            _halt(f"R5 BY DIRECTION: undeclared lens state {s!r}")
+    return out
+
+
+def dir_adj_pct(pct: np.ndarray, direction: np.ndarray) -> np.ndarray:
+    """pct for a long, 100 - pct for a short (unclamped): 100 = the boundary the trade
+    must break, 0 = the one behind it."""
+    pct = np.asarray(pct, dtype=float)
+    return np.where(np.asarray(direction) > 0, pct, 100.0 - pct)
+
+
+def adj_bucket_of(adj: np.ndarray) -> np.ndarray:
+    """SR-8's half-open law on the adjusted pct: '<0'; [0, 100/3); [100/3, 200/3);
+    [200/3, 100); '>=100'."""
+    out = np.empty(len(adj), dtype=object)
+    for i, a in enumerate(adj):
+        if not np.isfinite(a):
+            _halt("an IN_RANGE entry carries no finite pct")
+        if a < 0:
+            out[i] = "<0"
+        elif a >= R5_ADJ_CUTS[2]:
+            out[i] = ">=100"
+        else:
+            out[i] = R5_ADJ_BUCKETS[1 + int(a >= R5_ADJ_CUTS[0]) + int(a >= R5_ADJ_CUTS[1])]
+    return out
+
+
+def r5_direction(entry_v6: pd.DataFrame) -> pd.DataFrame:
+    """R5_CHOP_DIRECTION [SR-16]: the v6 entries by alignment and by direction-adjusted
+    pct tercile, per scale x {4h, 12h} — the same _cell / honesty law as R5_CHOP."""
+    rows = []
+    for kind in SCALE_KINDS:
+        z = entry_v6[entry_v6["scale_kind"] == kind].reset_index(drop=True)
+        net = z["net_r"].to_numpy(float)
+        hold = (z["era"] == "holdout").to_numpy(bool)
+        d = _direction(z)
+        lng = d > 0
+        for L in R5_LENSES:
+            st = z[f"{L}_state"].astype(str).to_numpy()
+            inr = st == "IN_RANGE"
+            keys = {"alignment": align_of(st, d),
+                    "pct_dir_adj": np.full(len(z), "", dtype=object)}
+            keys["pct_dir_adj"][inr] = adj_bucket_of(
+                dir_adj_pct(z[f"{L}_pct"].to_numpy(float), d)[inr])
+            lab = _lens_labels(z, (L,))
+            labs = {k: v for k, v in lab.items() if not k.startswith("_")}
+            for split, arr in keys.items():
+                for bk in R5_DIR_BUCKETS[split]:
+                    m = np.ones(len(z), bool) if bk == "__ALL__" else arr == bk
+                    rows.append({"cell": f"{kind}|{L}|{split}|{bk}", "scale_kind": kind,
+                                 "lens": L, "split": split, "bucket": bk,
+                                 "n_long": int((m & lng).sum()), "n_short": int((m & ~lng).sum()),
+                                 **_cell(net[m], lab["_isin"][m], lab["_stab"][m], hold[m]),
+                                 **labs, "split_law": R5_DIR_SPLIT_LAW[split]})
+    out = pd.DataFrame(rows)
+    for k, v in {**COLLAR, **AS_OF}.items():
+        out[k] = v
+    return out
+
+
+def r5_direction_partition(R5: pd.DataFrame, R5D: pd.DataFrame) -> list[str]:
+    """SR-16's partitions against the unchanged R5 rows (the build HALTs on any)."""
+    out = []
+    for kind in SCALE_KINDS:
+        for L in R5_LENSES:
+            a = R5[(R5["scale_kind"] == kind) & (R5["lens"] == L)].set_index("bucket")["n"]
+            z = R5D[(R5D["scale_kind"] == kind) & (R5D["lens"] == L)]
+            al = z[z["split"] == "alignment"].set_index("bucket")
+            pc = z[z["split"] == "pct_dir_adj"].set_index("bucket")
+            inr = int(sum(int(a[b]) for b in DECILES + ("<0", ">=100")))
+            want = {"EXP_ALIGNED+EXP_COUNTER": (
+                        int(al.loc["EXP_ALIGNED", "n"]) + int(al.loc["EXP_COUNTER", "n"]),
+                        int(a["not-in-range:BULL_EXP"]) + int(a["not-in-range:BEAR_EXP"])),
+                    "NONE": (int(al.loc["NONE", "n"]), int(a["not-in-range:NONE"])),
+                    "IN_RANGE": (int(al.loc["IN_RANGE", "n"]), inr),
+                    "pct_dir_adj": (int(pc["n"].sum()), inr),
+                    "__ALL__": (int(al.loc["__ALL__", "n"]), int(a["__ALL__"])),
+                    "n_long+n_short": (int((z["n_long"] + z["n_short"] != z["n"]).sum()), 0)}
+            for k, (got, exp) in want.items():
+                if got != exp:
+                    out.append(f"{kind}|{L} {k}: {got} != {exp}")
+    return out
+
+
+def r5_direction_on_cut(entry_v6: pd.DataFrame) -> dict:
+    """[SR-16 disclosure] per scale x lens: IN_RANGE entries whose adjusted pct sits
+    exactly on a cut (0, 100/3, 200/3, 100) or between a printed label and its exact
+    cut ([33.33, 100/3) or [200/3, 66.67)) — where another reading of the tercile text
+    would move an entry."""
+    out = {}
+    for kind in SCALE_KINDS:
+        z = entry_v6[entry_v6["scale_kind"] == kind].reset_index(drop=True)
+        d = _direction(z)
+        for L in R5_LENSES:
+            inr = z[f"{L}_state"].astype(str).to_numpy() == "IN_RANGE"
+            a = dir_adj_pct(z[f"{L}_pct"].to_numpy(float), d)[inr]
+            on = np.isin(a, (0.0, 100.0) + R5_ADJ_CUTS[:2])
+            sliver = ((a >= 33.33) & (a < R5_ADJ_CUTS[0])) | ((a >= R5_ADJ_CUTS[1]) & (a < 66.67))
+            out[f"{kind}|{L}"] = {"n_in_range": int(inr.sum()), "n_on_a_cut": int(on.sum()),
+                                  "n_between_label_and_cut": int(sliver.sum())}
+    return out
+
+
 def five_row(j: pd.DataFrame, shift_ms: int = 0, scale_kind: str = "frozen3.0") -> pd.DataFrame:
     """TC10's entry_state_crosstab (tierc10_stamps.py:1093), transcribed, on the TC11
     nest at FROZEN 3.0 (TC10 LEAN L2), 4h, read at the entry CLOSE (shift_ms /
@@ -1962,7 +2128,44 @@ def nest_md(G: dict, nests: dict) -> list[str]:
     return L
 
 
-def r5_md(R5: pd.DataFrame, five: pd.DataFrame) -> list[str]:
+R5_DIR_MD_COLS = ["bucket", "n", "n_long", "n_short", "mean_net_r", "p_win", "sum_net_r"]
+
+
+def r5_direction_md(R5D: pd.DataFrame, on_cut: dict) -> list[str]:
+    """[SR-16] the R5 rows read by direction — beside L-R.7's rows, never in their place."""
+    L = ["### R5 BY DIRECTION [SR-16; the trading review D-2] — collared Tier-E rows that "
+         "DECIDE NOTHING", "",
+         "L-R.7's chop table above is direction-blind as frozen and is printed unchanged. A "
+         "BULL_EXP / BEAR_EXP row there mixes longs riding the expansion with shorts fading "
+         "it, so it can read as a market state when the effect is alignment. The rows below "
+         "read the SAME v6 entries (R5_CHOP_DIRECTION.parquet) by alignment and by "
+         "direction-adjusted pct-of-range. They gate nothing and are not results.", "",
+         collar_line(), "", READINGS[15], "",
+         "Entries on a cut (the tercile text read another way would move them) — IN_RANGE "
+         "entries whose adjusted pct is exactly 0, 100/3, 200/3 or 100, or lies between a "
+         "printed label and its exact cut ([33.33, 100/3) or [200/3, 66.67)): "
+         + " · ".join(f"{k} {v['n_on_a_cut']} on a cut, {v['n_between_label_and_cut']} "
+                      f"between, of {v['n_in_range']} in range" for k, v in on_cut.items())
+         + ".", "",
+         "The honesty labels (lenses_read, pick_window, stability-changed members) are the R5 "
+         "rows' own for the same lens; every row carries them and the HOLDOUT slice.", ""]
+    for kind in SCALE_KINDS:
+        for lens in R5_LENSES:
+            z = R5D[(R5D["scale_kind"] == kind) & (R5D["lens"] == lens)]
+            tag = (" (the scale of record; IN-SAMPLE on the tuning-era entries, the HOLDOUT "
+                   "slice beside is the causal one)" if kind == "calibrated"
+                   else " (the fully causal twin)")
+            for split in R5_DIR_BUCKETS:
+                zz = ordered(z[z["split"] == split], [("bucket", R5_DIR_BUCKETS[split])])
+                L += [f"#### {lens} · {kind} · {split}{tag}", "",
+                      "Law: " + R5_DIR_SPLIT_LAW[split], ""]
+                L += md_table(zz, R5_DIR_MD_COLS + GRID_HONEST_COLS)
+                L.append("")
+    return L
+
+
+def r5_md(R5: pd.DataFrame, five: pd.DataFrame, R5D: pd.DataFrame | None = None,
+          on_cut: dict | None = None) -> list[str]:
     L = ["## R5 · THE CHOP TABLE [L-R.7] — v6 outcomes by 4h / 12h state x %-of-range decile at "
          "entry — Tier-E (printed first in §0)", "", collar_line(), "", READINGS[7], "",
          HONESTY_LAW, ""]
@@ -1983,6 +2186,8 @@ def r5_md(R5: pd.DataFrame, five: pd.DataFrame) -> list[str]:
             L += md_table(z, ["bucket", "n", "mean_net_r", "p_win", "sum_net_r"]
                           + GRID_HONEST_COLS)
             L.append("")
+    if R5D is not None:
+        L += r5_direction_md(R5D, on_cut or {})
     L += ["### The anchor: TC10's five-row table (4h, frozen 3.0) beside the TC11 v6 book's own "
           "five rows — all eleven columns [L-R.7, SR-11]", ""]
     fo = ordered(five, [("macro_state_at_entry", TC10_STATES)])
@@ -2061,7 +2266,8 @@ OUTPUT_FILES = (
     "R1_LENSES.parquet", "R1_LENSES.md", "R2_FEASIBILITY.parquet", "R2_FEASIBILITY.md",
     "R2_LENS_VERDICTS.json", "NEST_v6.parquet", "NEST_trg912.parquet",
     "NEST_GRID_FREQ.parquet", "NEST_GRID_BY_STATE.parquet", "NEST_GRID_BY_COIN.parquet",
-    "NEST_GRID.md", "R5_CHOP.parquet", "R5_FIVE_ROW.parquet", "R5_CHOP.md", "STAGE_R.md",
+    "NEST_GRID.md", "R5_CHOP.parquet", "R5_CHOP_DIRECTION.parquet", "R5_FIVE_ROW.parquet",
+    "R5_CHOP.md", "STAGE_R.md",
     "build_manifest.json", "nestbook_probe/V6-PROBE/base.parquet",
     "nestbook_probe/V6-PROBE/base.json", "nest_books/V6-PROBE__base.parquet",
     "nest_books/V6-PROBE__base.json")
@@ -2072,6 +2278,7 @@ KEYS = {"R1_LENSES": ["asset", "lens"],
         "NEST_GRID_BY_STATE": ["book", "scale_kind", "lens", "state"],
         "NEST_GRID_BY_COIN": ["book", "scale_kind", "lens", "coin_rule", "coin_cat"],
         "R5_CHOP": ["scale_kind", "lens", "bucket"],
+        R5_DIR_TABLE: ["scale_kind", "lens", "split", "bucket"],
         "R5_FIVE_ROW": ["macro_state_at_entry"]}
 
 
@@ -2129,6 +2336,13 @@ def build(out: Path = OUT) -> dict:
 
     # R5 + the anchor
     R5 = put_table(r5_chop(entries["v6"]), "R5_CHOP", KEYS["R5_CHOP"], out, W, K)
+    # R5 by direction [SR-16] — beside the unchanged R5 rows, Tier-E, decides nothing
+    R5D = put_table(r5_direction(entries["v6"]), R5_DIR_TABLE, KEYS[R5_DIR_TABLE], out, W, K)
+    dir_bad = r5_direction_partition(R5, R5D)
+    if dir_bad:
+        _halt("R5 BY DIRECTION [SR-16] — the rows do not partition against R5_CHOP: "
+              + " | ".join(dir_bad[:6]))
+    on_cut = r5_direction_on_cut(entries["v6"])
     filed_j = tc10_table(TC10_JOURNAL_REL)
     filed_five = tc10_table(TC10_FIVE_ROW_REL)
     anchor_got = five_row(filed_j)
@@ -2149,7 +2363,7 @@ def build(out: Path = OUT) -> dict:
     r1l = r1_md(R1, grid, rec)
     r2l = r2_md(R2, V)
     nml = nest_md(G, nests)
-    r5l = r5_md(R5, five)
+    r5l = r5_md(R5, five, R5D, on_cut)
     head = [f"as_of_last_closed_4h: {PIN_ISO}", ""]
     put_text("\n".join(head + ["# TIER-C11 · STAGE R · R1 LENSES", ""] + r1l) + "\n",
              out / "R1_LENSES.md")
@@ -2180,6 +2394,9 @@ def build(out: Path = OUT) -> dict:
              ["", "## Executor readings of this stage", ""] + [f"- {x}" for x in READINGS] +
              ["", "## §0 lines this stage feeds", "",
               "- R5 chop table (printed first in §0): see R5 below.",
+              "- R5 by direction [SR-16; the trading review D-2]: collared Tier-E rows beside "
+              "the unchanged R5 rows (alignment; direction-adjusted pct terciles) — they decide "
+              "nothing; see R5 below.",
               "- The lens verdicts of record per lens: " + " · ".join(
                   f"{l} **{V[l]['verdict']}**" for l in LENSES11),
               "- Stage S precondition [L-S.1]: the 1h lens verdict of record is "
@@ -2205,12 +2422,18 @@ def build(out: Path = OUT) -> dict:
                       "tc10_records": [TC10_JOURNAL_REL, TC10_FIVE_ROW_REL, TC10_VERDICT_REL]},
            "r5_anchor": {"reproduced": True, "rows": list(TC10_STATES),
                          "columns": list(FIVE_ROW_COLS)},
+           "r5_direction": {"reading": "SR-16", "table": R5_DIR_TABLE,
+                            "review": "trading review D-2 (research_outputs/tierc11/review/"
+                                      "FINAL_REVIEW_2026-09-25.json)",
+                            "splits": {k: list(v) for k, v in R5_DIR_BUCKETS.items()},
+                            "partition_vs_R5_CHOP": "checked (the build HALTs otherwise)",
+                            "entries_on_a_cut": on_cut, **COLLAR},
            "nest_book_probe": {k: nb[k] for k in ("registration", "arm", "kind", "n_campaigns",
                                                   "n_rows", "content_sha256", "book_sha256")},
            "readings": list(READINGS), "collar": COLLAR, "record_collar": RECORD_COLLAR}
     put_json(man, out / "build_manifest.json")
-    return {"R1": R1, "R2": R2, "V": V, "nests": nests, "G": G, "R5": R5, "five": five,
-            "manifest": man}
+    return {"R1": R1, "R2": R2, "V": V, "nests": nests, "G": G, "R5": R5, "R5D": R5D,
+            "five": five, "manifest": man}
 
 
 # ══════════════════════════════════════════════════════════ 10 · THE LANES PASS [SR-15]

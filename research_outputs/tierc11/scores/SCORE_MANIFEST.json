@@ -192,14 +192,14 @@
   },
   "leans_amendments": {
     "path": "research_outputs/tierc11/LEANS_AMENDMENTS.md",
-    "sha256": "b1c6275b5008fa684af9bebdaeefa2c41a99f40e60f033db71d085c9ba3e10fb"
+    "sha256": "85f57ce7832b2754cff70fe052dc87dcf4bcf4182f61112c7a1d227df84f0c07"
   },
   "outputs": {
     "BASE_IDENT.json": "29f795dcae5c3994f8cc09d742c7480e989f09afe72113b95e2e8859a8ca5581",
     "FAMILY.json": "3fa36bd482eac4de729b0e1ff2a66e7becbc30f2646ce16fc0df8fc369b2fd73",
-    "REGISTRY_CHECK.json": "601c9195bdc82f130fe64d462a9def584dce8fc9616d7f6a0e034d8e61bc3b22",
-    "S0_VERDICTS.md": "51f35563671f7e152e8a4499cf7899c1f8a7e98608e39a1f65492b54f185d9e3",
-    "SCORES.json": "a257160866780b0cae1e45c62ec4ef0148f0b53044c37b7df4af8e20331bd63b"
+    "REGISTRY_CHECK.json": "aea83bf10b5bbe62ff6c0af542870cd60f5ad8773b6bb61fab45ea465d8f8ed0",
+    "S0_VERDICTS.md": "ea728250249e1f1f548faf315fac22515d653743075d64155c47f1ea06f670aa",
+    "SCORES.json": "2c1a664a27abfc320355dcb89b2eff8a7f7637ddc26843e72ab3baf30cbef856"
   },
   "records": {
     "r2_lens_verdicts": {

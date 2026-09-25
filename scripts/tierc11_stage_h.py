@@ -78,6 +78,10 @@ REPAIR (stage-H verifier report, all MINOR; no reading moved, no book moved):
   (unguarded_guard_would_withhold_bars), its sidecar and the report [finding 6];
   STAGE_H.md prints tp_campaigns WHOLE (§12) [finding 7]; the manifest carries
   the file BYTE shas beside the content shas [builder-report error].
+REPAIR G2 (final review, statistics MINOR-1 / fidelity MINOR-4; STATUS text only,
+  no book moved): STATUS.json's reason no longer ends "books only — no CI, no p,
+  no verdict word" (the scorer printed it directly above its verdict); it reads
+  "the stage emits books only; the scorer rules".
 
 WHAT WOULD MAKE THIS WRONG: reading the 12h bar that CONTAINS the 4h open (a
 bar closing after it — look-ahead); carrying a dead range's box into an
@@ -970,7 +974,7 @@ def build(out: Path = OUT) -> dict:
               "reason": (f"the paired premise and the identity law held on every paired arm "
                          f"(key sets identical to v6, n {len(R['base'])}; every campaign the TP "
                          f"never filled carries v6's net_r / exit_ms / exit_reason exactly); "
-                         f"books only — no CI, no p, no verdict word [L-1.4, L-1.5]"),
+                         f"the stage emits books only; the scorer rules [L-1.4, L-1.5]"),
               "arms": [a[0] for a in ARMS]}
     write_text(rdir / "STATUS.json", _json(status))
 

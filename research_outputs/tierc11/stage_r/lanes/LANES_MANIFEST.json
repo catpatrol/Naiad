@@ -173,8 +173,8 @@
     "NEARUSDT",
     "ZECUSDT"
    ],
-   "regbook_content_sha256": "4b48e80e84bae8b0eba8f1b49352a8642c91e2813e6f9d000e6848f00aa30f7c",
-   "regbook_file_sha256": "b58e678a0a35075039679667af55f38afb5e4c610e53897918fb0042141694a2",
+   "regbook_content_sha256": "bfac2c1ae7cbc50ceb9d39fc89c01c8fdfb41b9ad22ed9406f041523b726099b",
+   "regbook_file_sha256": "62a0becefe84f284b7556b61265344e22bc793e94a54b5bca2e1cb4c323231c4",
    "registration": "P-BRK-4H",
    "sidecar_file_sha256": "3cb25e07dbbc2e2ea9223628a7ba095b2f672a3dc21a3e376c0b7ebcabadb073",
    "source_regbook": "research_outputs/tierc11/regbooks/P-BRK-4H/scored.parquet"
@@ -227,8 +227,8 @@
     "DOGEUSDT",
     "1000BONKUSDT"
    ],
-   "regbook_content_sha256": "be2b23e0b06fbb9cdb5e4295cda3534639343f0d7085f9cbd9eb1b237b9c90c0",
-   "regbook_file_sha256": "286d9636cba9e6be72d077481290b468a3e48c9f088e316d1f0449c54a79ea97",
+   "regbook_content_sha256": "42ad5dee675b415be27f556b2e530cbc40c8a915c0450c51a5c394d2e997bb10",
+   "regbook_file_sha256": "b527b30cbe23581a8b388419a1973cf302db497fb76bf50fcd84c774874faa21",
    "registration": "P-BRK-4H",
    "sidecar_file_sha256": "a137070608f732413d74c0435c74d191973b4d6de398d8ac5f377b76bb399480",
    "source_regbook": "research_outputs/tierc11/regbooks/P-BRK-4H/tierE__panel17.parquet"
@@ -490,7 +490,7 @@
  },
  "inputs": {
   "SCALE_PICKS.json": "cb5319c975e44df610c05f5917759b7b47d819fa095b8af26d174d79fcef454f",
-  "scores/SCORE_MANIFEST.json": "5b47292067701d85b160c075a5dabd9f3c7254e9182ba92438351ac4d55654a3"
+  "scores/SCORE_MANIFEST.json": "4cde52cd5c019d663bdec4a2c74f4ce2e1812193066b379cf031411b886865b2"
  },
  "keys": {
   "NEST_GRID_LANES_BY_COIN": [
@@ -579,7 +579,7 @@
    "instant_ms"
   ]
  },
- "md_sha256": "696e6832c171636fbcbe12360d47967960deaec00c1b53cb0736ba2f2200d995",
+ "md_sha256": "980757d468e2a6a5a3baa526de42f094c125cc4accc4912ea8d0f8315d0de043",
  "readings": [
   "SR-15 THE LANES PASS [contract R3 'at every instant of every campaign of every card (base v6, 9/12, the lanes below)'; L-R.5, AM-6]: `lanes` runs the nest-book door (read_regbook -> instants_of -> nest_frame, both scales) over every REGISTERED scored arm that is a campaign book \u2014 P-WARN-1, P-AGE-1, P-WIN-1, P-BRK-4H, P-RELAY-1, P-ADD-BRK, P-ADD-SFP, P-TP-RNG (P-SCALP-2 is closed by R2 and files no book) \u2014 plus P-BRK-4H tierE__panel17 (the twelve: 12h / 1w NA, hence 4h / 12h / 1d coincidence NA). Each book must be the book the scorer scored (its sidecar book_sha256 == scores/SCORE_MANIFEST.json's input, HALT otherwise). Named events per L-R.5 / AM-6: arm, entry (the relay's 1h entry close: 'relay_entry'), harvest, add (add1 / add2), bell, a warn exit at its 1h close, a close exit at its close \u2014 close events at their close; +1R, a stop and a TP fill are intrabar: at the OPEN of their bar or at the close of the 1h child that resolves them (the regbook's own stamp of record). THE TWIN LAW (one law for every intrabar event \u2014 +1R, a stop, a TP fill \u2014 every book, the relay included): an intrabar event whose stamp precedes the close of the 4h bar holding it carries exactly one close-stamped twin, labelled post-event, AT that close (a bar-OPEN stamp: the same bar's close; a 1h child's close: its parent 4h bar's close \u2014 exit_bar_close_ms for the relay, whose exit_close_ms is its 1h exit instant); a stamp that IS that close (the resolving 1h child is the bar's last) has none \u2014 its own instant is the close, a bar_close row through the exit stamp; close events (arm, entry, harvest, add, bell, a warn exit, a close exit) have none \u2014 a warn exit before its 4h bar's close ends the campaign there, so that close is not one of its instants. Each row's `stamp_law` names its rule from the event's own class (intrabar vs close), never from its position against exit_close_ms. An intrabar exit resolved by 'close' HALTs. A campaign OPEN at the pin -> 'as_of_pin'. Each row carries `named_event` (the event's name, 'bar_close' for a plain lens close) and the campaign's `exit_reason`. The nesting grid at ENTRY per book x scale x lens (state x coincidence frequency, outcomes by state, outcomes by coincidence: n, E[net R], P(win), sum R, the book's own net_r) is printed whole with SR-12's honesty labels, collared; declared cells: STATES4 (+ 'NA' where a member lacks the lens) x COIN_CATS (+ 'NA' where a member lacks L or L+1; 1w 'NA' only). LANES_MANIFEST.json pins, per book, the regbook bytes it stamped (the parquet's content sha \u2014 its csv \u2014 and its file sha) beside book_sha256, which covers the 16 required columns only, not the instant columns the nest reads.",
   "SR-9 nest-book [L-R.5]: kinds v6transform (4h bars from the arm), lane4h (4h from the entry), relay (4h bars from the v6 arm \u2014 its stop, R, window and ride are 4h; its 1h entry instant is the named event 'entry'), scalp5m (5m bars from the entry). Columns read beyond the REGBOOK INTERFACE: arm = arm_close_ms | window_arm_close_ms | arm_ms + one lens bar (the arm bar's OPEN) | (v6transform) v6's own arm joined on the pairing key (symbol, entry_ms) [L-1.5]; kinds v6transform / relay start their bar closes there (a close event); exit = exit_stamp_ms (ride11's stamp of record) | exit_event_ms (the books' L-R.5 stamp) | a 1h-walked ride's RESOLVED exit instant exit_instant_ms / exit_close_1h_ms, read by exit_resolved_by: '1h' -> the instant as filed (a stop at the close of the 1h child that resolves it, a warn exit at its 1h close), 'close' -> a CLOSE reason as filed at exit_close_ms (an intrabar reason resolved by 'close', or a 'close' exit off exit_close_ms, HALTs), 'parent' -> an intrabar reason at the parent bar's OPEN, a close reason at the parent's close (a missing exit_resolved_by HALTs) [the lanes pass: the warn exit and the add books' exits at their own instant, never the exit bar's 4h close] | derived: an intrabar reason (stop / tp / target) -> the OPEN of the lens bar holding exit_close_ms, a close reason (bell* / corridor_end / warn* / invalidation* / close*) -> exit_close_ms; any other reason HALTs; THE TWIN LAW: an INTRABAR exit stamped before the close of the lens bar holding it (exit_bar_close_ms when filed \u2014 the relay, whose exit_close_ms is its 1h exit instant \u2014 else exit_close_ms; HALT unless it is that bar's close) carries the close-stamped twin 'exit_post_event' there; a stamp that IS that close (the resolving 1h child is the bar's last) has none, and a close event (a 1h warn exit) has none; a corridor_end campaign (OPEN at the pin) is stamped 'as_of_pin', never 'exit'; +1R = latch_stamp_ms (+ latch_post_event_ms) | latch_1h_ms gated by latched_1h: the resolving 1h child's close, a PARENT-decided latch (latch_1h_by 'parent' | its parent bar listed in walk_mismatch_ms) -> the parent's OPEN, an undecidable latch at a parent close HALTs; its twin by THE TWIN LAW: the close of the lens bar holding latch_1h_ms when after the stamp (the parent's close; the bar's close for a latch resolved before the bar's last 1h child; none when the resolving child is the bar's last) | derived on the lens tape by the bar-OPEN law when reached_1r is True (v6transform / lane4h), its twin at that bar's close | none; harvest = harvest_close_ms | harvest_ms + one lens bar | harvest_i on the lens tape (checked) | (v6transform) v6's own harvest close joined on the pairing key, checked per row against `harvested` and the exit stamp \u2014 gated by `harvested`; a close event inside (entry close, exit]; adds / others = add1_close_ms, add2_close_ms (close events; gated by n_adds); ev_<name>_ms (kind <name>, as given); UNSTAMPED = a campaign whose own record says an event happened (latched_1h / reached_1r True, harvested True, n_adds > k) but no source above stamps it is counted, and the door REFUSES to file (HALT naming the counts) [L-R.5 'plus the named events'].",

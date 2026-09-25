@@ -99,6 +99,114 @@ SCALE-IN-SAMPLE [L-R.2, AM-4]: a calibrated-scale range read at an instant <= th
 | not-in-range:BEAR_EXP | 50 | -0.1239 | 0.2800 | -6.1949 | 0 | 0 | 17 | -0.6656 | 0.1176 | -11.3149 |
 | __ALL__ | 200 | 0.2040 | 0.3450 | 40.8076 | 0 | 0 | 77 | 0.5472 | 0.3636 | 42.1314 |
 
+### R5 BY DIRECTION [SR-16; the trading review D-2] — collared Tier-E rows that DECIDE NOTHING
+
+L-R.7's chop table above is direction-blind as frozen and is printed unchanged. A BULL_EXP / BEAR_EXP row there mixes longs riding the expansion with shorts fading it, so it can read as a market state when the effect is alignment. The rows below read the SAME v6 entries (R5_CHOP_DIRECTION.parquet) by alignment and by direction-adjusted pct-of-range. They gate nothing and are not results.
+
+Collar on every table below unless marked RECORD: tier = 'TIER-E' · selection_not_a_result = 'a SELECTION, not a result' · gates = 'nothing'.
+
+SR-16 R5 BY DIRECTION [the trading review D-2, research_outputs/tierc11/review/FINAL_REVIEW_2026-09-25.json: L-R.7's chop table is direction-blind as frozen, so a BULL_EXP / BEAR_EXP row mixes longs riding the expansion with shorts fading it — an alignment effect that reads as a market state]: BESIDE the R5 rows, which stay unchanged, R5_CHOP_DIRECTION prints collared Tier-E rows that DECIDE NOTHING, per scale (calibrated, frozen3.0) x lens {4h, 12h}, on the same v6 entries (direction = the book's own +1 long / -1 short). (i) 'alignment': the lens state at entry split EXP_ALIGNED (BULL_EXP for a long, BEAR_EXP for a short), EXP_COUNTER (the other expansion), IN_RANGE, NONE, and '__ALL__'. (ii) 'pct_dir_adj': the IN_RANGE entries by DIRECTION-ADJUSTED pct-of-range, unclamped (pct for a long, 100 - pct for a short, so 100 is the boundary the trade must break and 0 the one behind it), in terciles [0,33.33), [33.33,66.67), [66.67,100) (exact cuts 100/3 and 200/3) plus '<0' and '>=100'. This is SR-8's half-open law, one law for both sides. The commission's text ('[66.67,100]' beside '>=100') overlaps only at exactly 100, which this law sends to '>=100' as SR-8 does; R5_CHOP.md prints how many entries sit on a cut. Columns: n (n_long / n_short beside), E[net R], P(win), sum R, and SR-12's honesty labels with the holdout slice. Partitions (the build HALTs otherwise): EXP_ALIGNED + EXP_COUNTER == R5's not-in-range BULL_EXP + BEAR_EXP; NONE == R5's not-in-range:NONE; IN_RANGE == R5's deciles + '<0' + '>=100' == the five pct_dir_adj buckets; '__ALL__' == R5's.
+
+Entries on a cut (the tercile text read another way would move them) — IN_RANGE entries whose adjusted pct is exactly 0, 100/3, 200/3 or 100, or lies between a printed label and its exact cut ([33.33, 100/3) or [200/3, 66.67)): calibrated|4h 0 on a cut, 0 between, of 141 in range · calibrated|12h 0 on a cut, 0 between, of 103 in range · frozen3.0|4h 0 on a cut, 0 between, of 94 in range · frozen3.0|12h 0 on a cut, 0 between, of 74 in range.
+
+The honesty labels (lenses_read, pick_window, stability-changed members) are the R5 rows' own for the same lens; every row carries them and the HOLDOUT slice.
+
+#### 4h · calibrated · alignment (the scale of record; IN-SAMPLE on the tuning-era entries, the HOLDOUT slice beside is the causal one)
+
+Law: the lens state at entry by the trade's direction: EXP_ALIGNED = BULL_EXP for a long / BEAR_EXP for a short; EXP_COUNTER = the other expansion; IN_RANGE / NONE as read [SR-16]
+
+| bucket | n | n_long | n_short | mean_net_r | p_win | sum_net_r | n_scale_in_sample | n_stability_changed | n_holdout | mean_net_r_holdout | p_win_holdout | sum_net_r_holdout |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| EXP_ALIGNED | 47 | 24 | 23 | 0.4913 | 0.3830 | 23.0934 | 30 | 6 | 17 | 1.3416 | 0.4118 | 22.8067 |
+| EXP_COUNTER | 12 | 4 | 8 | -0.4939 | 0.2500 | -5.9272 | 5 | 3 | 7 | -0.3683 | 0.2857 | -2.5779 |
+| IN_RANGE | 141 | 69 | 72 | 0.1677 | 0.3404 | 23.6414 | 88 | 31 | 53 | 0.4133 | 0.3585 | 21.9025 |
+| NONE | 0 | 0 | 0 | — | — | — | 0 | 0 | 0 | — | — | — |
+| __ALL__ | 200 | 97 | 103 | 0.2040 | 0.3450 | 40.8076 | 123 | 40 | 77 | 0.5472 | 0.3636 | 42.1314 |
+
+#### 4h · calibrated · pct_dir_adj (the scale of record; IN-SAMPLE on the tuning-era entries, the HOLDOUT slice beside is the causal one)
+
+Law: IN_RANGE entries by direction-adjusted pct-of-range (pct for a long, 100 - pct for a short; 100 = the boundary the trade must break): [0,100/3), [100/3,200/3), [200/3,100), '<0', '>=100' [SR-16]
+
+| bucket | n | n_long | n_short | mean_net_r | p_win | sum_net_r | n_scale_in_sample | n_stability_changed | n_holdout | mean_net_r_holdout | p_win_holdout | sum_net_r_holdout |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| <0 | 0 | 0 | 0 | — | — | — | 0 | 0 | 0 | — | — | — |
+| [0,33.33) | 1 | 0 | 1 | -1.0448 | 0.0000 | -1.0448 | 1 | 1 | 0 | — | — | — |
+| [33.33,66.67) | 55 | 31 | 24 | 0.3537 | 0.4000 | 19.4536 | 34 | 11 | 21 | 0.5780 | 0.3333 | 12.1382 |
+| [66.67,100) | 81 | 36 | 45 | 0.0560 | 0.2963 | 4.5397 | 50 | 17 | 31 | 0.2822 | 0.3548 | 8.7483 |
+| >=100 | 4 | 2 | 2 | 0.1732 | 0.5000 | 0.6929 | 3 | 2 | 1 | 1.0160 | 1.0000 | 1.0160 |
+
+#### 12h · calibrated · alignment (the scale of record; IN-SAMPLE on the tuning-era entries, the HOLDOUT slice beside is the causal one)
+
+Law: the lens state at entry by the trade's direction: EXP_ALIGNED = BULL_EXP for a long / BEAR_EXP for a short; EXP_COUNTER = the other expansion; IN_RANGE / NONE as read [SR-16]
+
+| bucket | n | n_long | n_short | mean_net_r | p_win | sum_net_r | n_scale_in_sample | n_stability_changed | n_holdout | mean_net_r_holdout | p_win_holdout | sum_net_r_holdout |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| EXP_ALIGNED | 87 | 53 | 34 | 0.2925 | 0.3793 | 25.4447 | 60 | 45 | 27 | 1.0292 | 0.4074 | 27.7878 |
+| EXP_COUNTER | 10 | 5 | 5 | 0.1036 | 0.3000 | 1.0358 | 9 | 4 | 1 | 5.1566 | 1.0000 | 5.1566 |
+| IN_RANGE | 103 | 39 | 64 | 0.1391 | 0.3204 | 14.3271 | 54 | 74 | 49 | 0.1875 | 0.3265 | 9.1870 |
+| NONE | 0 | 0 | 0 | — | — | — | 0 | 0 | 0 | — | — | — |
+| __ALL__ | 200 | 97 | 103 | 0.2040 | 0.3450 | 40.8076 | 123 | 123 | 77 | 0.5472 | 0.3636 | 42.1314 |
+
+#### 12h · calibrated · pct_dir_adj (the scale of record; IN-SAMPLE on the tuning-era entries, the HOLDOUT slice beside is the causal one)
+
+Law: IN_RANGE entries by direction-adjusted pct-of-range (pct for a long, 100 - pct for a short; 100 = the boundary the trade must break): [0,100/3), [100/3,200/3), [200/3,100), '<0', '>=100' [SR-16]
+
+| bucket | n | n_long | n_short | mean_net_r | p_win | sum_net_r | n_scale_in_sample | n_stability_changed | n_holdout | mean_net_r_holdout | p_win_holdout | sum_net_r_holdout |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| <0 | 0 | 0 | 0 | — | — | — | 0 | 0 | 0 | — | — | — |
+| [0,33.33) | 2 | 1 | 1 | -0.2099 | 0.5000 | -0.4199 | 1 | 2 | 1 | -1.0795 | 0.0000 | -1.0795 |
+| [33.33,66.67) | 44 | 18 | 26 | 0.3250 | 0.3409 | 14.2986 | 21 | 34 | 23 | 0.4306 | 0.3043 | 9.9040 |
+| [66.67,100) | 57 | 20 | 37 | 0.0079 | 0.2982 | 0.4484 | 32 | 38 | 25 | 0.0145 | 0.3600 | 0.3625 |
+| >=100 | 0 | 0 | 0 | — | — | — | 0 | 0 | 0 | — | — | — |
+
+#### 4h · frozen3.0 · alignment (the fully causal twin)
+
+Law: the lens state at entry by the trade's direction: EXP_ALIGNED = BULL_EXP for a long / BEAR_EXP for a short; EXP_COUNTER = the other expansion; IN_RANGE / NONE as read [SR-16]
+
+| bucket | n | n_long | n_short | mean_net_r | p_win | sum_net_r | n_scale_in_sample | n_stability_changed | n_holdout | mean_net_r_holdout | p_win_holdout | sum_net_r_holdout |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| EXP_ALIGNED | 92 | 55 | 37 | 0.2380 | 0.3370 | 21.8943 | 0 | 0 | 27 | 0.9376 | 0.3333 | 25.3144 |
+| EXP_COUNTER | 14 | 3 | 11 | -0.5740 | 0.2143 | -8.0357 | 0 | 0 | 5 | -0.5604 | 0.2000 | -2.8019 |
+| IN_RANGE | 94 | 39 | 55 | 0.2867 | 0.3723 | 26.9490 | 0 | 0 | 45 | 0.4360 | 0.4000 | 19.6189 |
+| NONE | 0 | 0 | 0 | — | — | — | 0 | 0 | 0 | — | — | — |
+| __ALL__ | 200 | 97 | 103 | 0.2040 | 0.3450 | 40.8076 | 0 | 0 | 77 | 0.5472 | 0.3636 | 42.1314 |
+
+#### 4h · frozen3.0 · pct_dir_adj (the fully causal twin)
+
+Law: IN_RANGE entries by direction-adjusted pct-of-range (pct for a long, 100 - pct for a short; 100 = the boundary the trade must break): [0,100/3), [100/3,200/3), [200/3,100), '<0', '>=100' [SR-16]
+
+| bucket | n | n_long | n_short | mean_net_r | p_win | sum_net_r | n_scale_in_sample | n_stability_changed | n_holdout | mean_net_r_holdout | p_win_holdout | sum_net_r_holdout |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| <0 | 0 | 0 | 0 | — | — | — | 0 | 0 | 0 | — | — | — |
+| [0,33.33) | 0 | 0 | 0 | — | — | — | 0 | 0 | 0 | — | — | — |
+| [33.33,66.67) | 36 | 17 | 19 | 0.4936 | 0.3611 | 17.7702 | 0 | 0 | 16 | 0.7950 | 0.3750 | 12.7204 |
+| [66.67,100) | 56 | 21 | 35 | 0.1480 | 0.3750 | 8.2853 | 0 | 0 | 27 | 0.2224 | 0.4074 | 6.0050 |
+| >=100 | 2 | 1 | 1 | 0.4468 | 0.5000 | 0.8935 | 0 | 0 | 2 | 0.4468 | 0.5000 | 0.8935 |
+
+#### 12h · frozen3.0 · alignment (the fully causal twin)
+
+Law: the lens state at entry by the trade's direction: EXP_ALIGNED = BULL_EXP for a long / BEAR_EXP for a short; EXP_COUNTER = the other expansion; IN_RANGE / NONE as read [SR-16]
+
+| bucket | n | n_long | n_short | mean_net_r | p_win | sum_net_r | n_scale_in_sample | n_stability_changed | n_holdout | mean_net_r_holdout | p_win_holdout | sum_net_r_holdout |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| EXP_ALIGNED | 108 | 62 | 46 | 0.1928 | 0.3056 | 20.8251 | 0 | 0 | 35 | 0.6848 | 0.2857 | 23.9673 |
+| EXP_COUNTER | 18 | 4 | 14 | 0.4385 | 0.5556 | 7.8933 | 0 | 0 | 6 | 1.0571 | 0.8333 | 6.3427 |
+| IN_RANGE | 74 | 31 | 43 | 0.1634 | 0.3514 | 12.0891 | 0 | 0 | 36 | 0.3284 | 0.3611 | 11.8213 |
+| NONE | 0 | 0 | 0 | — | — | — | 0 | 0 | 0 | — | — | — |
+| __ALL__ | 200 | 97 | 103 | 0.2040 | 0.3450 | 40.8076 | 0 | 0 | 77 | 0.5472 | 0.3636 | 42.1314 |
+
+#### 12h · frozen3.0 · pct_dir_adj (the fully causal twin)
+
+Law: IN_RANGE entries by direction-adjusted pct-of-range (pct for a long, 100 - pct for a short; 100 = the boundary the trade must break): [0,100/3), [100/3,200/3), [200/3,100), '<0', '>=100' [SR-16]
+
+| bucket | n | n_long | n_short | mean_net_r | p_win | sum_net_r | n_scale_in_sample | n_stability_changed | n_holdout | mean_net_r_holdout | p_win_holdout | sum_net_r_holdout |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| <0 | 0 | 0 | 0 | — | — | — | 0 | 0 | 0 | — | — | — |
+| [0,33.33) | 1 | 0 | 1 | 0.6596 | 1.0000 | 0.6596 | 0 | 0 | 0 | — | — | — |
+| [33.33,66.67) | 21 | 12 | 9 | 0.1630 | 0.3333 | 3.4238 | 0 | 0 | 9 | 0.4034 | 0.3333 | 3.6306 |
+| [66.67,100) | 52 | 19 | 33 | 0.1540 | 0.3462 | 8.0058 | 0 | 0 | 27 | 0.3034 | 0.3704 | 8.1908 |
+| >=100 | 0 | 0 | 0 | — | — | — | 0 | 0 | 0 | — | — | — |
+
 ### The anchor: TC10's five-row table (4h, frozen 3.0) beside the TC11 v6 book's own five rows — all eleven columns [L-R.7, SR-11]
 
 #### tc11: the TC11 v6 book (books/v6_campaigns, the TC11 nest)

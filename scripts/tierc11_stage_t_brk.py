@@ -60,6 +60,17 @@ REPAIR (verifier report on stage_t_brk; no rule changed, no regbook byte moved):
   disclosure cell of holdout rows acting on a death closed <= the era cut (F-6);
   the bar-316 floor disclosure (F-7); the report prints every table whole.
 
+REPAIR 2 (final review 2026-09-25, task G4; no rule changed, no book_sha256 moved —
+it covers the 16 required columns only):
+  trading D-1: finding F-1 prints BOTH harvest medians — over every harvest and over
+  the negative ones (it printed the all-harvest median beside the negative count);
+  causality MINOR-2: every regbook row carries the EXTRA column
+  anchor_scale_in_sample (R-TBRK-11: the label keyed to the death read as well as
+  the known instant), counted per arm in T_BRK_ARMS (all rows and holdout rows,
+  beside scale_in_sample's counts), by era in T_BRK_INSAMPLE, and printed in §11 /
+  Appendix C / F-6; the sidecars are unchanged byte for byte;
+  reproducibility MINOR-1: the fixtures re-derive all six STAT_COLS of every grid row.
+
 Run:  export NAIAD_CACHE_DIR=$HOME/.cache/naiad/snapshots/tc11_20260925 PYTHONDONTWRITEBYTECODE=1
       ~/venvs/naiad/bin/python -B scripts/tierc11_stage_t_brk.py [--out-root=DIR]
 """
@@ -247,6 +258,14 @@ READINGS = (
     "R-TBRK-10 SCALE-IN-SAMPLE per row = range_facts' '<source>_scale_in_sample' of the "
     "row (a calibrated read at a known instant <= the era cut, or any read of a fallback "
     "pick) [L-R.2, R-LABEL]; stability_changed = the 4h pick's first-half-vs-tuning flag.",
+    "R-TBRK-11 ANCHOR-SCALE-IN-SAMPLE per row (an EXTRA column; decides nothing; the "
+    "interface's 16 columns and book_sha256 are untouched) = at the calibrated scale, "
+    "(death close <= the era cut) OR (known close <= the era cut) OR the row's own "
+    "scale_in_sample (a fallback pick's read is in-sample everywhere); False at frozen "
+    "3.0 (fully causal). The row depends on the death read as well as the known-instant "
+    "read, so a holdout entry acting on a death closed in the tuning era reads True here "
+    "while its scale_in_sample (R-TBRK-10, keyed to the known instant) reads False; both "
+    "labels and their holdout counts are printed side by side [causality MINOR-2].",
 )
 
 
@@ -432,6 +451,17 @@ DECISION_FUNCS = ("scan_rows", "candidates", "tide_series", "permit_of", "dispos
 
 
 # ══════════════════════════════════════════════ 4 · ONE ARM
+def anchor_in_sample(scale_kind: str, row_in_sample: bool, die_close_ms: int,
+                     known_close_ms: int) -> bool:
+    """[R-TBRK-11] the row's anchor label: at the calibrated scale, (death close <= the
+    era cut) OR (known close <= the era cut) OR the row's own flag (a fallback pick);
+    False at frozen 3.0.  A label, never a decision."""
+    if scale_kind != "calibrated":
+        return False
+    return bool(row_in_sample) or int(die_close_ms) <= ERA_CUT_MS \
+        or int(known_close_ms) <= ERA_CUT_MS
+
+
 def trade_rows(trades: list, lf, arm: Arm, cand_info: dict, fees: dict) -> pd.DataFrame:
     rows = []
     fe = fees[lf.sym]
@@ -439,6 +469,7 @@ def trade_rows(trades: list, lf, arm: Arm, cand_info: dict, fees: dict) -> pd.Da
         ti, xi = int(t.entry_i), int(t.exit_i)
         ci = cand_info[(ti, int(t.direction), int(t.die_i))]
         d = int(t.direction)
+        die_close = int(lf.close_ms[int(ci["die_i"])])
         rows.append({
             "symbol": t.symbol, "entry_ms": int(lf.open_ms[ti]),
             "entry_close_ms": int(lf.close_ms[ti]), "direction": d,
@@ -452,8 +483,10 @@ def trade_rows(trades: list, lf, arm: Arm, cand_info: dict, fees: dict) -> pd.Da
             "arm": arm.name, "anchor": ci["anchor"], "source": arm.source,
             "scale_kind": arm.scale_kind, "scale_mult": ci["scale_mult"],
             "pick_window": ci["pick_window"], "scale_in_sample": bool(ci["scale_in_sample"]),
+            "anchor_scale_in_sample": anchor_in_sample(arm.scale_kind, ci["scale_in_sample"],
+                                                       die_close, int(lf.close_ms[ti])),
             "stability_changed": ci["stability_changed"],
-            "die_i": int(ci["die_i"]), "die_close_ms": int(lf.close_ms[int(ci["die_i"])]),
+            "die_i": int(ci["die_i"]), "die_close_ms": die_close,
             "rid": int(ci["rid"]), "scan_seq": int(ci["seq"]), "touch_i": int(ci["touch_i"]),
             "touch_close_ms": int(lf.close_ms[int(ci["touch_i"])]),
             "entry_i": ti, "exit_i": xi, "exit_ms": int(lf.open_ms[xi]),
@@ -681,6 +714,14 @@ def grid_tables(books: dict) -> dict:
                      "n_long": int((b["direction"] == 1).sum()) if len(b) else 0,
                      "n_short": int((b["direction"] == -1).sum()) if len(b) else 0,
                      "n_scale_in_sample": int(b["scale_in_sample"].sum()) if len(b) else 0,
+                     "n_anchor_scale_in_sample": (int(b["anchor_scale_in_sample"].sum())
+                                                  if len(b) else 0),
+                     "n_holdout_scale_in_sample": (int((b["scale_in_sample"]
+                                                        & (b["era"] == "holdout")).sum())
+                                                   if len(b) else 0),
+                     "n_holdout_anchor_scale_in_sample": (
+                         int((b["anchor_scale_in_sample"] & (b["era"] == "holdout")).sum())
+                         if len(b) else 0),
                      "book_sha256": book_sha256(b)})
     asset, era, exitg, dirg = [], [], [], []
     for a in RIDDEN:
@@ -761,7 +802,8 @@ def picks_rows() -> pd.DataFrame:
 
 def insample_rows(books: dict) -> pd.DataFrame:
     """SCALE-IN-SAMPLE [L-R.2]: the scored book by the row's in-sample flag and era,
-    with the holdout slice and the frozen-3.0 twin beside; then, per ridden arm, the
+    then by its anchor label (R-TBRK-11) and era beside it, with the holdout slice and
+    the frozen-3.0 twin beside; then, per ridden arm, the
     DISCLOSURE cell of holdout rows (era by the entry close) whose death closed at
     or before the era cut — the per-row flag is read at the entry instant
     (R-TBRK-10), so these rows read False while acting on a death the calibrated
@@ -772,20 +814,31 @@ def insample_rows(books: dict) -> pd.DataFrame:
         for e in ERAS:
             b = sc[(sc["scale_in_sample"] == flag) & (sc["era"] == e)]
             rows.append({"cell": f"scored|in_sample={flag}|{e}", "arm": "scored",
-                         "slice": "in-sample flag x era", "scale_in_sample": flag, "era": e,
+                         "slice": "in-sample flag x era", "scale_in_sample": flag,
+                         "anchor_scale_in_sample": None, "era": e, **stats(b)})
+    # [R-TBRK-11, causality MINOR-2] the anchor label's cells, beside the flag's
+    for flag in (True, False):
+        for e in ERAS:
+            b = sc[(sc["anchor_scale_in_sample"] == flag) & (sc["era"] == e)]
+            rows.append({"cell": f"scored|anchor_in_sample={flag}|{e}", "arm": "scored",
+                         "slice": "anchor in-sample label (R-TBRK-11) x era",
+                         "scale_in_sample": None, "anchor_scale_in_sample": flag, "era": e,
                          **stats(b)})
     for nm in ("tierE__holdout", "tierE__frozen3"):
         rows.append({"cell": f"{nm}|beside", "arm": nm, "slice": "beside",
-                     "scale_in_sample": None, "era": "all", **stats(books[nm])})
+                     "scale_in_sample": None, "anchor_scale_in_sample": None, "era": "all",
+                     **stats(books[nm])})
     for a in RIDDEN:
         b = books[a.name]
         m = (b["era"] == "holdout") & (b["die_close_ms"] <= ERA_CUT_MS)
         rows.append({"cell": f"{a.name}|holdout|death_close<=cut", "arm": a.name,
                      "slice": "holdout entry acting on a death closed <= the era cut "
                               "(disclosure)",
-                     "scale_in_sample": None, "era": "holdout", **stats(b[m])})
+                     "scale_in_sample": None, "anchor_scale_in_sample": None, "era": "holdout",
+                     **stats(b[m])})
     d = pd.DataFrame(rows)
     d["scale_in_sample"] = d["scale_in_sample"].astype("boolean")
+    d["anchor_scale_in_sample"] = d["anchor_scale_in_sample"].astype("boolean")
     return d
 
 
@@ -830,6 +883,12 @@ def compute() -> dict:
     c5 = p17[p17["symbol"].isin(CLASSIC5)].reset_index(drop=True)
     if book_sha256(c5) != book_sha256(runs["scored"]["book"]):
         _halt("the 17-asset view's CLASSIC5 rows differ from the scored book")
+    for a in RIDDEN:                    # R-TBRK-11: the anchor label never narrows the flag
+        b = runs[a.name]["book"]
+        if bool((b["scale_in_sample"] & ~b["anchor_scale_in_sample"]).any()):
+            _halt(f"{a.name}: a row is scale_in_sample but not anchor_scale_in_sample")
+        if a.scale_kind != "calibrated" and bool(b["anchor_scale_in_sample"].any()):
+            _halt(f"{a.name}: an anchor in-sample row at {a.scale_kind}")
     books = arm_books(runs)
     tables = grid_tables(books)
     tables["T_BRK_TALLY"] = pd.concat([runs[a.name]["tally"] for a in RIDDEN], ignore_index=True)
@@ -1055,12 +1114,16 @@ def render_md(R: dict, sides: dict, man: dict) -> str:
                                       "frozen_scale", "stable_first_half_vs_tuning",
                                       "in_sample_holdout", "row_kind"]), "",
           "The scored book by the row's in-sample flag (a calibrated range read at an instant "
-          "≤ the era cut is structurally in-sample) and era, with the holdout slice (the only "
-          "slice with a causal scale) and the frozen-3.0 twin (fully causal) beside; then, "
-          "per ridden arm, the DISCLOSURE cell of holdout rows whose death closed at or before "
-          "the era cut (the per-row flag is read at the entry instant, R-TBRK-10, so these "
-          "rows read False; era by the entry close is unchanged, L-1.3 — see F-6):", "",
-          md_table(W["T_BRK_INSAMPLE"], ["cell", "slice", "scale_in_sample", "era"] + STAT_COLS
+          "≤ the era cut is structurally in-sample) and era; then by the row's ANCHOR label "
+          "(anchor_scale_in_sample, R-TBRK-11: the death read's instant as well as the known "
+          "instant) and era, beside it; with the holdout slice (the only slice with a causal "
+          "scale) and the frozen-3.0 twin (fully causal) beside; then, per ridden arm, the "
+          "DISCLOSURE cell of holdout rows whose death closed at or before the era cut (the "
+          "per-row flag is read at the entry instant, R-TBRK-10, so these rows read False "
+          "there and True on the anchor label; era by the entry close is unchanged, L-1.3 — "
+          "see F-6):", "",
+          md_table(W["T_BRK_INSAMPLE"], ["cell", "slice", "scale_in_sample",
+                                         "anchor_scale_in_sample", "era"] + STAT_COLS
                    + ["row_kind"]), "",
           "## 4 · Tier-E arms — a SELECTION, not a result (no verdict word)", "",
           "The scored arm's row is the reference row of this Tier-E table (row_kind "
@@ -1068,7 +1131,9 @@ def render_md(R: dict, sides: dict, man: dict) -> str:
           "collar is the table's: a split or a side-by-side of the registered book is a "
           "selection view, not the registered result.", "",
           md_table(W["T_BRK_ARMS"], ["arm", "panel", "scale_kind", "source", "era_scope", "lane"]
-                   + STAT_COLS + ["n_long", "n_short", "n_scale_in_sample", "row_kind"]), "",
+                   + STAT_COLS + ["n_long", "n_short", "n_scale_in_sample",
+                                  "n_anchor_scale_in_sample", "n_holdout_scale_in_sample",
+                                  "n_holdout_anchor_scale_in_sample", "row_kind"]), "",
           "Arm descriptions:", ""]
     for a in ARMS:
         L.append(f"- `{a.name}` ({a.kind}): {a.description}")
@@ -1110,10 +1175,14 @@ def render_md(R: dict, sides: dict, man: dict) -> str:
           "was seen)", ""]
     hv = sb[sb["harvested"]]
     lag = (hv["harvest_i"] - hv["entry_i"]).to_numpy()
+    hu = hv["harvest_unit_move_r"].to_numpy(float)
+    hneg = hu[hu < 0]
+    # [trading D-1] both medians: the all-harvest one and the negative harvests' own
     L.append(f"- F-1 THE v6 HARVEST FIRES EARLY ON THIS LANE. v6's harvest (50% at the 89/316 "
              f"band edge, harvest_min_unit_r = -inf) fired on {len(hv)}/{len(sb)} scored "
-             f"campaigns; {int((hv['harvest_unit_move_r'] < 0).sum())} of those harvests were at a "
-             f"NEGATIVE unit move (median {float(hv['harvest_unit_move_r'].median()):+.4f} R), a "
+             f"campaigns; {len(hneg)} of those harvests were at a NEGATIVE unit move (median "
+             f"over all {len(hv)} harvests {float(np.median(hu)):+.4f} R; over the {len(hneg)} "
+             f"negative ones {float(np.median(hneg)):+.4f} R), a "
              f"median {float(np.median(lag)):.0f} bars after entry "
              f"({int((lag == 1).sum())} on the very next bar). The lane enters AT the EMA-89 tap, "
              f"next to the harvest band. This is the registered 'v6 management', built as "
@@ -1155,7 +1224,16 @@ def render_md(R: dict, sides: dict, man: dict) -> str:
              + f". The per-row scale_in_sample flag is read at the entry instant (R-TBRK-10; "
              f"L-R.2 'read at an instant'), so these rows read False; era membership is by the "
              f"entry close [L-1.3] and is unchanged. Per ridden arm: {per}. Printed beside the "
-             f"holdout slice in §3.")
+             f"holdout slice in §3. The EXTRA column anchor_scale_in_sample (R-TBRK-11: death "
+             f"close <= cut OR known close <= cut at the calibrated scale, OR the row's flag; "
+             f"False at frozen 3.0) labels these rows True. Holdout rows labelled in-sample per "
+             f"ridden arm, (scale_in_sample, anchor_scale_in_sample): "
+             + str({a.name: (int((books[a.name]["scale_in_sample"]
+                                  & (books[a.name]["era"] == "holdout")).sum()),
+                             int((books[a.name]["anchor_scale_in_sample"]
+                                  & (books[a.name]["era"] == "holdout")).sum()))
+                    for a in RIDDEN})
+             + " (T_BRK_ARMS n_holdout_scale_in_sample / n_holdout_anchor_scale_in_sample).")
     fl_d = {a.name: (int((books[a.name]["die_i"] < FLOOR_BARS).sum()),
                      round(fsum(books[a.name].loc[books[a.name]["die_i"] < FLOOR_BARS, "net_r"]), 6))
             for a in RIDDEN}
@@ -1173,14 +1251,16 @@ def render_md(R: dict, sides: dict, man: dict) -> str:
           + ", " + ", ".join(f"{a.name} {len(books[a.name])}" for a in ARMS if a.kind == "tierE")
           + ").", "",
           "| # | symbol | entry | side | entry_px | stop_px | r_dist | r_over_atr | exit | "
-          "exit_reason | net_r | haircut_net_r | era | scale_in_sample |",
-          "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+          "exit_reason | net_r | haircut_net_r | era | scale_in_sample | "
+          "anchor_scale_in_sample |",
+          "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for k, r in enumerate(sb.itertuples(index=False), 1):
         L.append(f"| {k} | {r.symbol} | {iso(int(r.entry_close_ms))} | "
                  f"{'long' if int(r.direction) == 1 else 'short'} | {r.entry_px!r} | "
                  f"{float(r.stop_px):.10g} | {float(r.r_dist):.10g} | {float(r.r_over_atr):.4f} | "
                  f"{iso(int(r.exit_close_ms))} | {r.exit_reason} | {float(r.net_r):+.6f} | "
-                 f"{float(r.haircut_net_r):+.6f} | {r.era} | {bool(r.scale_in_sample)} |")
+                 f"{float(r.haircut_net_r):+.6f} | {r.era} | {bool(r.scale_in_sample)} | "
+                 f"{bool(r.anchor_scale_in_sample)} |")
     L += appendices(W, books)
     return "\n".join(L) + "\n"
 
@@ -1200,7 +1280,7 @@ APPX_B_COLS = ("arm", "symbol", "die_i", "seq", "touch_i", "known_at", "known_cl
                "retest_outcome", "scale_in_sample", "row_kind")
 APPX_C_COLS = ("arm", "symbol", "entry_close", "side", "entry_px", "stop_px", "r_dist",
                "exit_close", "exit_reason", "net_r", "gross_r", "fee_r", "funding_r",
-               "haircut_net_r", "era", "scale_in_sample")
+               "haircut_net_r", "era", "scale_in_sample", "anchor_scale_in_sample")
 
 
 def _appx(tag: str, cols: tuple, rows: list) -> list:
@@ -1253,7 +1333,8 @@ def appendices(W: dict, books: dict) -> list:
                          _g(r.stop_px), _g(r.r_dist), iso(int(r.exit_close_ms)), r.exit_reason,
                          f"{float(r.net_r):+.6f}", f"{float(r.gross_r):+.6f}",
                          f"{float(r.fee_r):+.6f}", f"{float(r.funding_r):+.6f}",
-                         f"{float(r.haircut_net_r):+.6f}", r.era, bool(r.scale_in_sample)))
+                         f"{float(r.haircut_net_r):+.6f}", r.era, bool(r.scale_in_sample),
+                         bool(r.anchor_scale_in_sample)))
     L += _appx("C", APPX_C_COLS, rows)
     return L
 

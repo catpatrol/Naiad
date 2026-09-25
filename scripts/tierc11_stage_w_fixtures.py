@@ -69,6 +69,30 @@ its own EMA by a plain loop — never through the module's event code.
                 latch ignored; the raw 1h close kept on the planted mismatch bars; the
                 relay lead median read at the 45th percentile; the twin's known window
                 end one 4h bar late; the strict re-cross flag ignored.
+  F-W1-OTHER    (final-review fidelity MINOR-1; readings w12..w14) FAILS IF, on ANY
+                campaign of the three other 4h books — the 9/12 book (199), P-BRK-4H
+                scored (322), P-RELAY-1 scored (173): every one hand-walked, the typed n
+                per book and never fewer than 20 — a W1_EVENTS_OTHER row (cross, side,
+                phase, latch relation, taken instant, visibility, mismatch flag, strict
+                flag, era) or a W1_CAMPAIGNS_OTHER fact (the TYPED window open per book,
+                the 1h-resolved exit and its resolver, the L-W.3 and L-W.5 latches,
+                memberships, counts, first events, era) differs from this file's hand walk
+                (own EMA, own walk law; the book's exit bar and — for a stop — its exit
+                price as the stop in force; own first touching child; own +1R child); an
+                event is visible at a 4h close other than the first >= its 1h close; a
+                relay's hand-walked exit / L-W.5 latch differs from the regbook of record's
+                exit_close_ms / latch_1h_ms; any W1_OTHER_SUMMARY cell (n campaigns, n
+                events) differs from its re-derivation from the hand walk; or a fallback
+                row is off the TYPED 4h-close law, has no reason, or claims a walk HALT
+                where the raw 1h bars resolve the exit (and a row resolved on 1h where
+                they cannot).  SABOTAGE (module mutations, the other books recomputed
+                in-process; copies): `visible` reading the 1h bar that closes after the 4h
+                close; a look-ahead event tape; the 9/12 / P-BRK-4H resolver walking
+                children shifted one 1h bar late (the child closing after the 4h bar's
+                close read); the exit taken at the 4h exit-bar close; a relay's in-trade
+                window opened at its 4h bar close; P-BRK-4H's window opened at the touch;
+                a summary cell bent; a 1h row relabelled a fallback with no reason; a book
+                cut below 20 rows.
   F-W2-MARK     FAILS IF, for any member of C1, C2, C3, C4 or C3S, this file's OWN
                 price of the first event (the tape's price at the taken instant; gross,
                 taker fee 5 bps/side on every fill, funding from the snapshot's own
@@ -102,10 +126,15 @@ its own EMA by a plain loop — never through the module's event code.
                 (TP.grid_whole), any stage_w table or condition.json lacks the collar
                 (exact values), carries a verdict column or a verdict word, n == 0 does
                 not coincide with NaN stats + a nan_reason, an era split is not a
-                partition (ALL = tuning + holdout), or a relay histogram does not sum
-                to its population.  SABOTAGE (copies): a cell dropped; an undeclared
-                cell; the collar removed; a verdict column; a verdict word; a silent
-                NaN; a broken era partition; condition.json's `gates` not 'nothing'.
+                partition (ALL = tuning + holdout; W1_OTHER_SUMMARY on n campaigns and
+                n events per (book, kind, class, group)), or a relay histogram does not
+                sum to its population.  The three W1 tables of the other books are in
+                the typed set (W1_OTHER_SUMMARY's 522 cells declared here).  SABOTAGE
+                (copies): a cell dropped; an undeclared cell; the collar removed; a
+                verdict column; a verdict word; a silent NaN; a broken era partition;
+                condition.json's `gates` not 'nothing'; a W1_OTHER_SUMMARY cell
+                dropped; its era partition broken; W1_EVENTS_OTHER's collar removed; a
+                verdict word in W1_CAMPAIGNS_OTHER.
   F-KEY         FAILS IF a stage_w table has a duplicated key or an absent / null
                 as-of stamp (TP.check_keys), or a regbook parquet lacks a required
                 column, has a null in one, a wrong dtype, a duplicated (symbol,
@@ -116,15 +145,19 @@ its own EMA by a plain loop — never through the module's event code.
                 a sidecar whose n / sum_net_r / book_sha256 (this file's own canonical
                 CSV) / kind / ruler / collar / L-1.3 straddle count differ; or a
                 W1_CAMPAIGNS / W2_RELAY_WINDOWS fee or AM-7 haircut column is not the
-                6-dp image of the typed law on the regbook rows.  SABOTAGE (copies): a
-                duplicated row; a nulled net_r; a required column dropped; a float
-                moved behind the sidecar's sha; TP.check_keys on a temp root with a
-                duplicated row; a tierE sidecar without its collar; a straddle count
-                bent; a W1_CAMPAIGNS haircut moved.
+                6-dp image of the typed law on the regbook rows; or a W1_CAMPAIGNS_OTHER
+                row set / net_r / fee_r / haircut_net_r / era is not the 6-dp image of
+                its source book (the typed keys of the three new tables are in the
+                manifest check).  SABOTAGE (copies): a duplicated row; a nulled net_r; a
+                required column dropped; a float moved behind the sidecar's sha;
+                TP.check_keys on a temp root with a duplicated row; a tierE sidecar
+                without its collar; a straddle count bent; a W1_CAMPAIGNS haircut moved;
+                a W1_CAMPAIGNS_OTHER haircut moved; a duplicated W1_EVENTS_OTHER key.
   F-DET         FAILS IF two subprocess builds (PYTHONHASHSEED 1, 20260924) under
                 RUN_ROOT/_det_stage_w differ from each other or from the canonical
-                files of record (stage_w/ + regbooks/P-WARN-1/) in the file set,
-                any byte, or any parquet content sha, or either exits nonzero.
+                files of record (stage_w/ — W1_EVENTS_OTHER, W1_CAMPAIGNS_OTHER and
+                W1_OTHER_SUMMARY in the typed set — + regbooks/P-WARN-1/) in the file
+                set, any byte, or any parquet content sha, or either exits nonzero.
                 SABOTAGE: one byte bent in a copy; a parquet copy with one float
                 moved; a hash-order-dependent line emitted under the two seeds.
 BANNED: self-comparison; one example where cardinality was possible; a tuned
@@ -138,7 +171,11 @@ fixture-GREEN); the twin population's ARMINGS come from the lineage's card machi
 (T9.card_candidates9 over B.ride_bounds) — this file types the gate filter, the
 v6-key exclusion (books/v6_campaigns.parquet), the window-end law, the relay search,
 the walk and the leads itself; the 12/26 warn referee rides the foundation ride
-(RD.transform_book), never the module's mark code.
+(RD.transform_book), never the module's mark code.  F-W1-OTHER's inputs per campaign
+(entry, R, the exit bar, the exit price and reason — the WHAT the walk never changes)
+come from the 9/12 foundation Trades (B.trg912_book) and the P-BRK-4H / P-RELAY-1
+scored regbook parquets read here; the window open per book is TYPED here (w13); the
+walk, the exit child, the +1R child, the events and every count are this file's.
 
 Run:  export NAIAD_CACHE_DIR=$HOME/.cache/naiad/snapshots/tc11_20260925 PYTHONDONTWRITEBYTECODE=1
       ~/venvs/naiad/bin/python -B scripts/tierc11_stage_w.py            # the canonical build first
@@ -214,6 +251,16 @@ L1_BINS_T = (("1", 1, 1), ("2-3", 2, 3), ("4-7", 4, 7), ("8-15", 8, 15), ("16-31
              ("32-63", 32, 63), ("64-127", 64, 127), ("128-255", 128, 255), (">=256", 256, None))
 L4_BINS_T = (("0", 0, 0), ("1", 1, 1), ("2-3", 2, 3), ("4-7", 4, 7), ("8-15", 8, 15),
              ("16-31", 16, 31), ("32-63", 32, 63), (">=64", 64, None))
+# (w12..w14) the other 4h books — the commission: the three books, each book's n of
+# record (books/trg912_campaigns.parquet; the P-BRK-4H and P-RELAY-1 scored sidecars),
+# the floor of hand-walked campaigns per book, the W1 event classes
+OTHER_BOOKS_T = ("trg912", "P-BRK-4H", "P-RELAY-1")
+N_OTHER_T = {"trg912": 199, "P-BRK-4H": 322, "P-RELAY-1": 173}
+MIN_HAND_T = 20
+PHASES_T = ("PRE-ENTRY", "IN-TRADE", "AT-EXIT", "POST-EXIT")
+EV_CLASSES_T = tuple(f"{ph}|{p}|{sd}|{rl}" for ph in PHASES_T for p in PAIRS_TYPED
+                     for sd in ("counter", "with")
+                     for rl in (("before", "after") if ph == "IN-TRADE" else ("-",)))
 DECLARED = {
     "W2_COHORTS": [f"{c}_{lab}|{g}|{e}" for c, lab, *_ in COHORTS_T
                    for e in ERAS_T for g in ("cohort", "at_risk", "complement")],
@@ -227,6 +274,13 @@ DECLARED = {
                       for b in [x[0] for x in bins] + ["none"]],
     "P_WARN_1_COMPLEMENT": [f"{g}|{e}" for g in ("cohort_C1", "complement_C1", "acted",
                                                   "unacted", "ALL") for e in ERAS_T],
+    "W1_OTHER_SUMMARY": [c for bk in OTHER_BOOKS_T for e in ERAS_T for c in (
+        [f"{bk}|{e}|campaigns|all|book"]
+        + [f"{bk}|{e}|events|{cls}|events" for cls in EV_CLASSES_T]
+        + [f"{bk}|{e}|cohort|{cid}_{lab}|{g}" for cid, lab, *_ in COHORTS_T
+           for g in ("cohort", "at_risk", "complement")]
+        + [f"{bk}|{e}|pre_entry|{pid}_{lab}|{g}" for pid, lab, *_ in PRE_T
+           for g in ("cohort", "whole_book", "complement")])],
 }
 KEYS_TYPED = {"W1_EVENTS": ["symbol", "entry_ms", "pair", "h1_open_ms"],
               "W1_TIMELINE": ["symbol", "entry_ms", "bar_close_ms"],
@@ -235,7 +289,10 @@ KEYS_TYPED = {"W1_EVENTS": ["symbol", "entry_ms", "pair", "h1_open_ms"],
               "W2_RELAY_WINDOWS": ["symbol", "entry_ms"],
               "W2_RELAY_WINDOWS_TWIN": ["symbol", "arm_ms", "direction"],
               "W2_RELAY_SUMMARY": ["cell"], "W2_RELAY_HIST": ["cell"],
-              "P_WARN_1_COMPLEMENT": ["cell"]}
+              "P_WARN_1_COMPLEMENT": ["cell"],
+              "W1_EVENTS_OTHER": ["book", "symbol", "entry_close_ms", "pair", "h1_open_ms"],
+              "W1_CAMPAIGNS_OTHER": ["book", "symbol", "entry_close_ms"],
+              "W1_OTHER_SUMMARY": ["cell"]}
 STAGE_FILES_TYPED = tuple(sorted([f"{k}.parquet" for k in KEYS_TYPED]
                                  + ["MANIFEST_STAGE_W.json", "STAGE_W.md"]))
 REQUIRED_T = ("symbol", "entry_ms", "entry_close_ms", "direction", "entry_px", "stop_px",
@@ -1213,6 +1270,459 @@ def hand_real():
         f"plants, all by the law"))
 
 
+# ═══════════════════════════════════════════════════════════════ F-W1-OTHER
+def _law_haircut(sym: str, net_r: float, fee_r: float) -> float:
+    return float(net_r) - float(fee_r) * (SLIP_T[sym] / TAKER_T)
+
+
+def other_src() -> dict:
+    """THE SHARED INPUTS of the other books (stated, not hidden) — per campaign the
+    book's own entry, R, window open (w13, TYPED here), exit bar, exit price and exit
+    reason: the 9/12 book from the foundation Trades (B.trg912_book; fixture-GREEN in
+    the books suite; its stop exits cross-checked against the stop in force from its
+    own trail advances), P-BRK-4H and P-RELAY-1 from their scored regbook parquets,
+    read HERE.  The hand walk resolves WHEN on the raw 1h bars; the WHAT (the exit
+    bar, the price at a stop) is the book's."""
+    if "osrc" in _C:
+        return _C["osrc"]
+    lo, hi, _ = B.corridor()
+    out = {bk: [] for bk in OTHER_BOOKS_T}
+    for t in B.trg912_book(lo, hi):
+        if t.exit_reason == "stop" and float(t.exit_px) != stop_at(t, int(t.exit_i)):
+            raise RuntimeError(f"9/12 {t.symbol} {iso(int(t.entry_ms))}: exit px is not the stop "
+                               f"in force — a fixture defect")
+        out["trg912"].append({
+            "symbol": t.symbol, "d": int(t.direction), "entry_ms": int(t.entry_ms),
+            "entry_px": float(t.entry_px), "R": float(t.r_dist),
+            "arm_close": int(t.arm_ms) + H4, "entry_close": int(t.entry_ms) + H4,
+            "exit_ms": int(t.exit_ms), "exit_px": float(t.exit_px),
+            "exit_reason": str(t.exit_reason), "net_r": float(t.net_r), "fee_r": float(t.fee_r),
+            "haircut": _law_haircut(t.symbol, t.net_r, t.fee_r), "reached_book": bool(t.reached_1r),
+            "record_exit": None, "record_latch": None})
+    for bk, arm_col in (("P-BRK-4H", "die_close_ms"), ("P-RELAY-1", "window_arm_close_ms")):
+        d = pd.read_parquet(str(E.OUT / "regbooks" / bk / "scored.parquet"))
+        for r in d.itertuples(index=False):
+            out[bk].append({
+                "symbol": str(r.symbol), "d": int(r.direction), "entry_ms": int(r.entry_ms),
+                "entry_px": float(r.entry_px), "R": float(r.r_dist),
+                "arm_close": int(getattr(r, arm_col)), "entry_close": int(r.entry_close_ms),
+                "exit_ms": int(r.exit_ms), "exit_px": float(r.exit_px),
+                "exit_reason": str(r.exit_reason), "net_r": float(r.net_r),
+                "fee_r": float(r.fee_r), "haircut": float(r.haircut_net_r),
+                "reached_book": bool(r.reached_1r),
+                "record_exit": int(r.exit_close_ms) if bk == "P-RELAY-1" else None,
+                "record_latch": (None if bk != "P-RELAY-1" or pd.isna(r.latch_1h_ms)
+                                 else int(r.latch_1h_ms))})
+    _C["osrc"] = out
+    return out
+
+
+def hand_other(src: dict) -> dict:
+    """THE HAND WALK of one campaign of an other book from the raw bars [L-W.0..L-W.3,
+    w1, w2, w10, w13, w14]: the bars after the entry close (a relay: its entry bar's
+    children after its 1h entry close, then the next bars), per walkable bar its four
+    children in tape order — the +1R child (L-W.3: the literal first child reaching
+    entry ± R, the stop child included), the L-W.5 latch (a child that stops does not
+    latch), and on the book's exit bar, for a stop exit, the FIRST child touching the
+    book's exit price (the stop in force); on a mismatch bar (own walk law) the parent
+    decides.  A walkable stop-exit bar where no child touches is NOT resolvable on 1h
+    (L-W.3's HALT): the law then demands the labelled 4h-close fallback."""
+    k0 = ("hando",) + tuple(sorted(src.items()))   # the whole input: two books can share
+    #                                                  (symbol, entry close, window open)
+    if k0 in _C:
+        return _C[k0]
+    s, d, e, R = src["symbol"], src["d"], src["entry_px"], src["R"]
+    X, Hh = own4(s), own1(s)
+    om = X["om"]
+    ec = src["entry_close"]
+    xi = int(np.searchsorted(om, src["exit_ms"], "left"))
+    if int(om[xi]) != src["exit_ms"]:
+        raise RuntimeError(f"{s}: exit bar {iso(src['exit_ms'])} not on the own 4h frame")
+    J = int(np.searchsorted(om, ec, "left")) - 1
+    if not int(om[J]) < ec <= int(om[J]) + H4:
+        raise RuntimeError(f"{s}: entry close {iso(ec)} in no own 4h bar")
+    start = J + 1 if ec == int(om[J]) + H4 else J
+    if start == J and own_kids(s, J) is None:
+        raise RuntimeError(f"{s}: a 1h entry inside a mismatch bar — a fixture defect")
+    exit_close, by, latch, lby, lw5 = None, None, None, None, None
+    resolvable = True
+    stop_px = src["exit_px"]
+    for j in range(start, xi + 1):
+        close_j = int(om[j]) + H4
+        stop_bar = (j == xi and src["exit_reason"] == "stop")
+        ks = own_kids(s, j)
+        if ks is not None:
+            for k in [k for k in ks if int(Hh["t"][k]) + H1 > ec]:
+                hi_, lo_ = float(Hh["h"][k]), float(Hh["l"][k])
+                fav = hi_ if d == 1 else lo_
+                reach = (fav - e) * d / R >= 1.0
+                stops = stop_bar and ((d == 1 and lo_ <= stop_px) or (d == -1 and hi_ >= stop_px))
+                if latch is None and reach:
+                    latch, lby = int(Hh["t"][k]) + H1, "1h"
+                if lw5 is None and reach and not stops:
+                    lw5 = int(Hh["t"][k]) + H1
+                if stops:
+                    exit_close, by = int(Hh["t"][k]) + H1, "1h"
+                    break
+            if stop_bar and exit_close is None:
+                resolvable = False
+        else:
+            fav = float(X["h"][j]) if d == 1 else float(X["l"][j])
+            if (fav - e) * d / R >= 1.0:
+                if latch is None:
+                    latch, lby = close_j, "parent"
+                if lw5 is None:
+                    lw5 = close_j
+            if stop_bar:
+                exit_close, by = close_j, "parent"
+    exit_bar_close = int(om[xi]) + H4
+    if exit_close is None:
+        exit_close, by = exit_bar_close, "close"
+    evs = []
+    k_lo = int(np.searchsorted(Hh["t"], src["arm_close"] - H4, "left"))
+    k_hi = int(np.searchsorted(Hh["t"], exit_bar_close, "left"))
+    for p in PAIRS_TYPED:
+        up, dn = Hh["crosses"][p]
+        for cross, arr in (("up", up), ("dn", dn)):
+            for k in (k_lo + np.flatnonzero(arr[k_lo:k_hi])).tolist():
+                op = int(Hh["t"][k])
+                close = op + H1
+                Jk = bar_of(s, op)
+                walk = own_kids(s, Jk) is not None
+                taken = close if walk else int(om[Jk]) + H4
+                if not (src["arm_close"] < taken <= exit_bar_close):
+                    continue
+                ph = ("PRE-ENTRY" if taken <= ec else "IN-TRADE" if taken < exit_close
+                      else "AT-EXIT" if taken == exit_close else "POST-EXIT")
+                side = side_t(cross, d)
+                rel = None
+                if ph == "IN-TRADE":
+                    rel = "before" if (latch is None or taken < latch) else "after"
+                vis = int(X["closes"][int(np.searchsorted(X["closes"], close, "left"))])
+                pc, pcl = Hh["prev"][p].get(k, (None, None))
+                strict = bool(p == "9/12" and side == "with" and pc is not None
+                              and side_t(pc, d) == "counter" and int(pcl) > ec)
+                evs.append({"pair": p, "cross": cross, "h1_open_ms": op, "close_ms": close,
+                            "taken_ms": taken, "on_mismatch_bar": not walk, "phase": ph,
+                            "side": side, "latch_rel": rel, "visible_4h_close_ms": vis,
+                            "recross_strict": strict, "k": k, "J": Jk})
+    out = {"arm_close": src["arm_close"], "entry_close": ec, "exit_close": exit_close,
+           "exit_by": by, "exit_bar_close": exit_bar_close, "latch": latch, "latch_by": lby,
+           "latch_w5": lw5, "resolvable": resolvable, "events": evs,
+           "era": "tuning" if ec <= ERA_CUT else "holdout", "d": d}
+    _C[k0] = out
+    return out
+
+
+def own_fallback(src: dict) -> dict:
+    """The TYPED fallback law (w14): the exit at the 4h exit-bar close; the latch at
+    the close of the first 4h bar after the entry bar whose favourable extreme
+    reaches entry ± R (through the exit bar)."""
+    X = own4(src["symbol"])
+    om = X["om"]
+    xi = int(np.searchsorted(om, src["exit_ms"], "left"))
+    ti = int(np.searchsorted(om, src["entry_close"] - H4, "left"))
+    lat = None
+    for j in range(ti + 1, xi + 1):
+        fav = float(X["h"][j]) if src["d"] == 1 else float(X["l"][j])
+        if (fav - src["entry_px"]) * src["d"] / src["R"] >= 1.0:
+            lat = int(om[j]) + H4
+            break
+    return {"exit_close": int(om[xi]) + H4, "latch": lat}
+
+
+def other_findings(ev: pd.DataFrame, c: pd.DataFrame, sm: pd.DataFrame | None,
+                   tag: str = "W1-OTHER") -> tuple[list, dict]:
+    """The module's W1 on the other books (events, campaigns, summary) vs THIS file's
+    hand walk of EVERY campaign of every book (>= MIN_HAND_T per book, the typed n)."""
+    bad = []
+    src = other_src()
+    evg = {}
+    for r in ev.itertuples(index=False):
+        evg.setdefault((r.book, r.symbol, int(r.entry_close_ms)), {})[
+            (r.pair, int(r.h1_open_ms))] = r
+        cl = own4(r.symbol)["closes"]
+        i = int(np.searchsorted(cl, int(r.close_ms), "left"))
+        if int(r.visible_4h_close_ms) != int(cl[i]):
+            bad.append(f"{tag}-VIS {r.book} {r.symbol} {r.pair} 1h close {iso(int(r.close_ms))}: "
+                       f"visible at {iso(int(r.visible_4h_close_ms))}, the law (the first 4h "
+                       f"close >= the 1h close) says {iso(int(cl[i]))}")
+    ck = {(r.book, r.symbol, int(r.entry_close_ms)): r for r in c.itertuples(index=False)}
+    st = {"n": {}, "events": {}, "by": {}, "fallback": {}, "record_checked": 0}
+    hand_rows = []
+    for bk in OTHER_BOOKS_T:
+        rows = src[bk]
+        n_c = int((c["book"] == bk).sum())
+        if len(rows) != N_OTHER_T[bk] or n_c != N_OTHER_T[bk] or n_c < MIN_HAND_T:
+            bad.append(f"{tag}-N {bk}: source n {len(rows)}, module rows {n_c}, typed n "
+                       f"{N_OTHER_T[bk]} (at least {MIN_HAND_T} hand-walked per book)")
+        st["n"][bk], st["events"][bk], st["by"][bk], st["fallback"][bk] = len(rows), 0, {}, 0
+        for x in rows:
+            h = hand_other(x)
+            hc = hand_classes(h)
+            key = (bk, x["symbol"], x["entry_close"])
+            lab = f"{tag}-HAND {bk} {x['symbol']} {iso(x['entry_close'])}"
+            hand_rows.append((bk, h, hc))       # the summary's referee: every source campaign
+            r = ck.get(key)
+            mine = {(y["pair"], y["h1_open_ms"]): y for y in h["events"]}
+            theirs = evg.get(key, {})
+            st["events"][bk] += len(mine)
+            if r is None:
+                bad.append(f"{lab}: no W1_CAMPAIGNS_OTHER row (the campaign set differs)")
+                continue
+            fb = str(r.resolution) == "4h-close-fallback"
+            if fb:
+                st["fallback"][bk] += 1
+                own = own_fallback(x)
+                if (int(r.exit_close_ms), _nn(r.latch_ms), str(r.exit_resolved_by)) != (
+                        own["exit_close"], own["latch"], "4h-close-fallback") \
+                        or not str(r.fallback_reason):
+                    bad.append(f"{tag}-FALLBACK {bk} {x['symbol']} {iso(x['entry_close'])}: a "
+                               f"fallback row off the typed law (exit {_nn(r.exit_close_ms)} vs "
+                               f"{own['exit_close']}, latch {_nn(r.latch_ms)} vs {own['latch']}, "
+                               f"reason {str(r.fallback_reason)[:40]!r})")
+                if str(r.fallback_reason).startswith("walk-halt") and h["resolvable"]:
+                    bad.append(f"{tag}-FALLBACK {bk} {x['symbol']} {iso(x['entry_close'])}: "
+                               f"'walk-halt' claimed, but the raw 1h bars resolve the exit at "
+                               f"{iso(h['exit_close'])}")
+            else:
+                if not h["resolvable"]:
+                    bad.append(f"{tag}-FALLBACK {bk} {x['symbol']} {iso(x['entry_close'])}: no "
+                               f"1h child touches the stop on the walkable exit bar, yet the "
+                               f"row is resolved {r.resolution!r} (a silent resolution)")
+                st["by"][bk][h["exit_by"]] = st["by"][bk].get(h["exit_by"], 0) + 1
+            if x["record_exit"] is not None:
+                st["record_checked"] += 1
+                if (h["exit_close"], h["latch_w5"]) != (x["record_exit"], x["record_latch"]):
+                    bad.append(f"{lab}: the hand walk's exit / L-W.5 latch ({h['exit_close']}, "
+                               f"{h['latch_w5']}) != the regbook of record's "
+                               f"({x['record_exit']}, {x['record_latch']})")
+            if set(mine) != set(theirs):
+                bad.append(f"{lab}: event set differs — hand-only "
+                           f"{sorted(set(mine) - set(theirs))[:2]}, module-only "
+                           f"{sorted(set(theirs) - set(mine))[:2]}")
+            if not fb:
+                for k in sorted(set(mine) & set(theirs)):
+                    y, q = mine[k], theirs[k]
+                    got = (q.cross, q.side, q.phase, _nn(q.latch_rel), int(q.taken_ms),
+                           int(q.visible_4h_close_ms), bool(q.on_mismatch_bar), int(q.close_ms),
+                           bool(q.recross_strict), q.era)
+                    want = (y["cross"], y["side"], y["phase"], y["latch_rel"], y["taken_ms"],
+                            y["visible_4h_close_ms"], y["on_mismatch_bar"], y["close_ms"],
+                            y["recross_strict"], h["era"])
+                    if got != want:
+                        bad.append(f"{lab} {k[0]} {iso(k[1])}: module {got} != hand {want}")
+            facts = [("arm_close_ms", int(r.arm_close_ms), h["arm_close"]),
+                     ("entry_ms", int(r.entry_ms), x["entry_ms"]),
+                     ("direction", int(r.direction), x["d"]),
+                     ("exit_bar_close_ms", int(r.exit_bar_close_ms), h["exit_bar_close"]),
+                     ("era", r.era, h["era"]),
+                     ("reached_1r_book", bool(r.reached_1r_book), x["reached_book"]),
+                     ("n_events_w1", int(r.n_events_w1), len(h["events"]))]
+            if not fb:
+                facts += [("exit_close_ms", int(r.exit_close_ms), h["exit_close"]),
+                          ("exit_resolved_by", str(r.exit_resolved_by), h["exit_by"]),
+                          ("latch_ms", _nn(r.latch_ms), h["latch"]),
+                          ("latch_w5_ms", _nn(r.latch_w5_ms), h["latch_w5"]),
+                          ("reached_1r", bool(r.reached_1r), hc["reached"]),
+                          ("open_1h_after_entry", bool(r.open_1h_after_entry), hc["open1h"])]
+                for cid, *_ in COHORTS_T:
+                    f0 = first_of(hc[cid])
+                    facts += [(f"{cid}_member", bool(getattr(r, f"{cid}_member")), bool(hc[cid])),
+                              (f"{cid}_n_events", int(getattr(r, f"{cid}_n_events")),
+                               len(hc[cid])),
+                              (f"{cid}_first_taken_ms", _nn(getattr(r, f"{cid}_first_taken_ms")),
+                               f0["taken_ms"] if f0 else None),
+                              (f"{cid}_first_on_mismatch_bar",
+                               _nn(getattr(r, f"{cid}_first_on_mismatch_bar")),
+                               f0["on_mismatch_bar"] if f0 else None)]
+                for pid, *_ in PRE_T:
+                    facts += [(f"{pid}_member", bool(getattr(r, f"{pid}_member")), bool(hc[pid])),
+                              (f"{pid}_n_events", int(getattr(r, f"{pid}_n_events")),
+                               len(hc[pid]))]
+            for nm, got, want in facts:
+                g = None if got is None else (int(got) if isinstance(got, np.integer) else got)
+                if isinstance(g, np.bool_):
+                    g = bool(g)
+                if g != want:
+                    bad.append(f"{lab}: {nm} module {g!r} != hand {want!r}")
+    if sm is not None:
+        bad += other_summary_findings(sm, hand_rows, tag)
+    extra = set(ck) - {(bk, x["symbol"], x["entry_close"]) for bk in OTHER_BOOKS_T
+                       for x in src[bk]}
+    if extra:
+        bad.append(f"{tag}-HAND: module rows with no source campaign {sorted(extra)[:2]}")
+    return bad, st
+
+
+def other_summary_findings(sm: pd.DataFrame, hand_rows: list, tag: str) -> list:
+    """Every W1_OTHER_SUMMARY cell re-derived from THIS file's hand walk."""
+    bad = []
+    want = {}
+    for bk in OTHER_BOOKS_T:
+        hs = [(h, hc) for b_, h, hc in hand_rows if b_ == bk]
+        for e in ERAS_T:
+            sub = [(h, hc) for h, hc in hs if e == "ALL" or h["era"] == e]
+            evs = [y for h, _ in sub for y in h["events"]]
+            want[f"{bk}|{e}|campaigns|all|book"] = (len(sub), len(evs))
+            for cls in EV_CLASSES_T:
+                ph, p, sd, rl = cls.split("|")
+                hit_c, n_e = 0, 0
+                for h, _ in sub:
+                    m = [y for y in h["events"] if y["phase"] == ph and y["pair"] == p
+                         and y["side"] == sd and (rl == "-" or y["latch_rel"] == rl)]
+                    n_e += len(m)
+                    hit_c += int(bool(m))
+                want[f"{bk}|{e}|events|{cls}|events"] = (hit_c, n_e)
+            for cid, lab, _p, _s, _r, ar in COHORTS_T:
+                risk = [(h, hc) for h, hc in sub if ar == "whole" or (ar == "open1h" and
+                                                                     hc["open1h"])
+                        or (ar == "reached" and hc["reached"])]
+                mem = [(h, hc) for h, hc in risk if hc[cid]]
+                comp = [(h, hc) for h, hc in risk if not hc[cid]]
+                for g, grp in (("cohort", mem), ("at_risk", risk), ("complement", comp)):
+                    want[f"{bk}|{e}|cohort|{cid}_{lab}|{g}"] = (
+                        len(grp), sum(len(hc[cid]) for _, hc in grp))
+            for pid, lab, _p, _s in PRE_T:
+                mem = [(h, hc) for h, hc in sub if hc[pid]]
+                comp = [(h, hc) for h, hc in sub if not hc[pid]]
+                for g, grp in (("cohort", mem), ("whole_book", sub), ("complement", comp)):
+                    want[f"{bk}|{e}|pre_entry|{pid}_{lab}|{g}"] = (
+                        len(grp), sum(len(hc[pid]) for _, hc in grp))
+    got = {str(r.cell): (int(r.n_campaigns), int(r.n_events)) for r in sm.itertuples(index=False)}
+    if set(got) != set(want):
+        bad.append(f"{tag}-SUMMARY: cell set differs — missing {sorted(set(want) - set(got))[:2]}, "
+                   f"undeclared {sorted(set(got) - set(want))[:2]}")
+    for cell in sorted(set(got) & set(want)):
+        if got[cell] != want[cell]:
+            bad.append(f"{tag}-SUMMARY {cell}: module (n campaigns, n events) {got[cell]} != "
+                       f"this file's hand walk {want[cell]}")
+    return bad
+
+
+def module_other() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """The module's W1 on the other books recomputed IN-PROCESS (the path a mutation
+    is judged on); every memo it reads is dropped before and after."""
+    S._MEMO.pop("other", None)
+    S.clear_memo(events=True)
+    try:
+        WO = S.w1_other()
+        c = S.campaign_table_other(WO["camps"])
+        ev = pd.DataFrame(WO["events"])
+        sm = S.other_summary(c, ev)
+    finally:
+        S._MEMO.pop("other", None)
+        S.clear_memo(events=True)
+    return ev, c, sm
+
+
+def other_break():
+    def run(obj, name, value, summary=False):
+        def thunk():
+            with mutated(obj, name, value):
+                ev, c, sm = module_other()
+            return other_findings(ev, c, sm if summary else None)[0]
+        return thunk
+
+    real_arrays = S.event_arrays
+
+    def lookahead(h1):
+        a = real_arrays(h1)
+        out = {}
+        for p, (up, dn) in a.items():
+            u, d_ = np.zeros(len(up), bool), np.zeros(len(dn), bool)
+            u[:-1], d_[:-1] = up[1:], dn[1:]
+            out[p] = (u, d_)
+        return out
+
+    def shifted_walk(sym):
+        W = RD.walk_of(sym)
+        n1 = len(W.h1.open_ms)
+        a2 = np.where(W.a + RD.N_1H < n1, W.a + 1, W.a).astype(np.int64)
+        return RD.Walk(W.sym, W.h1, W.open4, a2, W.n, W.ok, W.why)
+
+    real_window = S.window_of
+
+    def relay_at_4h_close(book, row):
+        a, e = real_window(book, row)
+        return (a, int(row.entry_ms) + H4) if book == "P-RELAY-1" else (a, e)
+
+    def brk_at_touch(book, row):
+        a, e = real_window(book, row)
+        return (int(row.touch_close_ms), e) if book == "P-BRK-4H" else (a, e)
+
+    def summary_bent():
+        sm = written("W1_OTHER_SUMMARY")
+        i = int(np.flatnonzero((sm["kind"] == "cohort").to_numpy())[0])
+        sm.loc[i, "n_campaigns"] = int(sm.loc[i, "n_campaigns"]) + 1
+        return other_findings(written("W1_EVENTS_OTHER"), written("W1_CAMPAIGNS_OTHER"), sm)[0]
+
+    def fallback_unlabelled():
+        c = written("W1_CAMPAIGNS_OTHER")
+        i = int(np.flatnonzero(((c["book"] == "P-BRK-4H")
+                                & (c["exit_resolved_by"] == "1h")).to_numpy())[0])
+        c.loc[i, "resolution"] = "4h-close-fallback"
+        return other_findings(written("W1_EVENTS_OTHER"), c, None)[0]
+
+    def book_cut():
+        c = written("W1_CAMPAIGNS_OTHER")
+        keep = c[c["book"] == "P-RELAY-1"].index[:MIN_HAND_T - 1]
+        c = c[(c["book"] != "P-RELAY-1") | c.index.isin(keep)]
+        return other_findings(written("W1_EVENTS_OTHER"), c, None)[0]
+
+    def lookahead_thunk():
+        with mutated(S, "event_arrays", lookahead):
+            ev, c, sm = module_other()
+        return other_findings(ev, c, None)[0]
+
+    return plants([
+        ("`visible` reads the 1h bar that closes after the 4h close (other books, in-process)",
+         "W1-OTHER-VIS", run(S, "visible", lambda close, T: int(close) <= int(T) + H1)),
+        ("a look-ahead event tape: each cross flagged on the 1h bar before it (in-process)",
+         "W1-OTHER-HAND", lookahead_thunk),
+        ("the 9/12 / P-BRK-4H resolver walks children shifted one 1h bar late (the child "
+         "closing after the 4h bar's close read)", "W1-OTHER-HAND",
+         run(S, "other_walk", shifted_walk)),
+        ("the exit instant taken at the 4h exit-bar close on every book (in-process)",
+         "W1-OTHER-HAND", run(S, "exit_instant", lambda w: int(w.exit_ms) + H4)),
+        ("a relay's in-trade window opened at its 4h bar close, not its 1h entry close",
+         "W1-OTHER-HAND", run(S, "window_of", relay_at_4h_close)),
+        ("P-BRK-4H's window opened at the touch close, not the death close", "W1-OTHER-HAND",
+         run(S, "window_of", brk_at_touch)),
+        ("one W1_OTHER_SUMMARY cohort size bent by one (copy)", "W1-OTHER-SUMMARY",
+         summary_bent),
+        ("a 1h-resolved row relabelled a fallback with no reason (copy)", "W1-OTHER-FALLBACK",
+         fallback_unlabelled),
+        ("P-RELAY-1 cut to 19 hand-walkable rows (copy)", "W1-OTHER-N", book_cut),
+    ])
+
+
+def other_real():
+    ev, c, sm = (written("W1_EVENTS_OTHER"), written("W1_CAMPAIGNS_OTHER"),
+                 written("W1_OTHER_SUMMARY"))
+    bad, st = other_findings(ev, c, sm)
+    man = json.loads((OUT / "MANIFEST_STAGE_W.json").read_text(encoding="utf-8"))
+    dis = man["disclosures"].get("other_books", {})
+    for bk in OTHER_BOOKS_T:
+        if len(dis.get(bk, {}).get("fallbacks", [None])) != st["fallback"][bk]:
+            bad.append(f"W1-OTHER-FALLBACK {bk}: the manifest lists "
+                       f"{len(dis.get(bk, {}).get('fallbacks', []))} fallbacks, the table "
+                       f"{st['fallback'][bk]}")
+    per = "; ".join(f"{bk} n {st['n'][bk]} (events {st['events'][bk]}, 1h exits by "
+                    f"{dict(sorted(st['by'][bk].items()))}, 4h-close fallbacks "
+                    f"{st['fallback'][bk]})" for bk in OTHER_BOOKS_T)
+    return verdict(bad, (
+        f"EVERY campaign of the three other 4h books hand-walked from the raw 1h bars (own "
+        f"EMA 9/12, 12/26, 12/89; own walk law; the book's exit bar and exit price, the "
+        f"typed window open per book): {per}; every W1_EVENTS_OTHER row == the hand walk on "
+        f"(cross, side, phase, latch relation, taken, visible 4h close, mismatch flag, close, "
+        f"strict flag, era); every W1_CAMPAIGNS_OTHER fact (window open, exit instant and "
+        f"resolver, both latch readings, memberships, counts, first events) equal; the "
+        f"relay hand walk == its regbook of record's exit_close_ms and latch_1h_ms on "
+        f"{st['record_checked']} relays; all {len(sm)} W1_OTHER_SUMMARY cells re-derived "
+        f"equal; visibility: each event first visible at the first 4h close >= its 1h close"))
+
+
 # ═══════════════════════════════════════════════════════════════ F-WARN-ASOF
 def vis_findings(ev: pd.DataFrame, tl: pd.DataFrame, tag: str = "WARN-ASOF-VIS") -> list:
     bad = []
@@ -2126,6 +2636,13 @@ def grid_findings(frames: dict, tag: str = "GRID", cond: dict | None = None) -> 
             if n.get("ALL") != n.get("tuning", 0) + n.get("holdout", 0):
                 bad.append(f"{tag} ERA {name} {key}: ALL {n.get('ALL')} != tuning "
                            f"{n.get('tuning')} + holdout {n.get('holdout')}")
+    so = frames["W1_OTHER_SUMMARY"]
+    for key, g in so.groupby(["book", "kind", "event_class", "group"]):
+        for col in ("n_campaigns", "n_events"):
+            n = {r.era: int(getattr(r, col)) for r in g.itertuples(index=False)}
+            if n.get("ALL") != n.get("tuning", 0) + n.get("holdout", 0):
+                bad.append(f"{tag} ERA W1_OTHER_SUMMARY {key} {col}: ALL {n.get('ALL')} != "
+                           f"tuning {n.get('tuning')} + holdout {n.get('holdout')}")
     rs, rh = frames["W2_RELAY_SUMMARY"], frames["W2_RELAY_HIST"]
     for pop in ("v6_campaigns", "armed_windows_not_entered"):
         nw = int(rs[rs["cell"] == f"{pop}|ALL|ALL"]["n_windows"].iloc[0])
@@ -2172,6 +2689,13 @@ def grid_break():
         d.loc[0, "at_risk_set"] = "SUPPORTED at the family bar"
         return d
 
+    def summary_era(d):
+        d = d.copy()
+        i = int(np.flatnonzero(((d["era"] == "holdout") & (d["kind"] == "events")
+                                & (d["n_events"] > 0)).to_numpy())[0])
+        d.loc[i, "n_events"] = int(d.loc[i, "n_events"]) - 1
+        return d
+
     def cond_gates():
         cd = copy.deepcopy(reg_json("condition.json"))
         cd["gates"] = "only whether P-WARN-1 is scored"
@@ -2188,6 +2712,14 @@ def grid_break():
         ("a verdict word in a cell", "VERDICT", mod("W2_COHORTS", word)),
         ("a silent NaN (n > 0, mean NaN)", "NAN", mod("W2_PREENTRY", silent_nan)),
         ("the era partition broken", "ERA", mod("W2_COHORTS", era_broken)),
+        ("a W1_OTHER_SUMMARY declared cell dropped (copy)", "W1_OTHER_SUMMARY: declared",
+         mod("W1_OTHER_SUMMARY", lambda d: d.iloc[1:])),
+        ("W1_OTHER_SUMMARY's era partition broken (copy)", "ERA W1_OTHER_SUMMARY",
+         mod("W1_OTHER_SUMMARY", summary_era)),
+        ("the collar removed from W1_EVENTS_OTHER (copy)", "COLLAR W1_EVENTS_OTHER",
+         mod("W1_EVENTS_OTHER", lambda d: d.drop(columns=["tier"]))),
+        ("a verdict word in a W1_CAMPAIGNS_OTHER cell (copy)", "VERDICT W1_CAMPAIGNS_OTHER",
+         mod("W1_CAMPAIGNS_OTHER", lambda d: d.assign(arm_kind="PASS at the bar"))),
     ])
 
 
@@ -2199,7 +2731,9 @@ def grid_real():
         f"collar exact on every row of all {len(fr)} stage_w tables and on condition.json "
         f"(gates 'nothing'); no verdict column, no "
         f"verdict word; n == 0 <=> NaN stats + nan_reason; ALL = tuning + holdout in every "
-        f"cohort / pre-entry / forward / complement group; relay bins sum to each population"))
+        f"cohort / pre-entry / forward / complement group and in every W1_OTHER_SUMMARY "
+        f"(book, kind, class, group) on n campaigns and n events; relay bins sum to each "
+        f"population"))
 
 
 # ═══════════════════════════════════════════════════════════════ F-KEY
@@ -2312,6 +2846,32 @@ def table_haircut_findings(cw: pd.DataFrame, rw: pd.DataFrame, tag: str = "KEY")
     return bad
 
 
+def other_value_findings(co: pd.DataFrame, tag: str = "KEY") -> list:
+    """W1_CAMPAIGNS_OTHER's carried book values (w12): net_r, fee_r and haircut_net_r
+    are the 6-dp image of the source book's own (P-BRK-4H / P-RELAY-1: the regbook's
+    columns; the 9/12 book: its Trades, the haircut by the TYPED AM-7 law); era by
+    the typed cut on the entry close; one row per source campaign."""
+    bad = []
+    src = other_src()
+    want = {(bk, x["symbol"], x["entry_close"]): x for bk in OTHER_BOOKS_T for x in src[bk]}
+    got = {(r.book, r.symbol, int(r.entry_close_ms)): r for r in co.itertuples(index=False)}
+    if set(got) != set(want) or len(co) != len(want):
+        bad.append(f"{tag} W1-OTHER: rows {len(co)} / keys differ from the {len(want)} source "
+                   f"campaigns")
+    for k in sorted(set(got) & set(want)):
+        r, x = got[k], want[k]
+        for col, v in (("net_r", x["net_r"]), ("fee_r", x["fee_r"]),
+                       ("haircut_net_r", x["haircut"])):
+            if float(getattr(r, col)) != float(np.round(v, 6)):
+                bad.append(f"{tag} W1-OTHER {k[0]} {k[1]} {iso(k[2])}: {col} "
+                           f"{float(getattr(r, col))!r} != the 6-dp image of the book's "
+                           f"{v!r}")
+        era = "tuning" if k[2] <= ERA_CUT else "holdout"
+        if r.era != era:
+            bad.append(f"{tag} W1-OTHER {k[0]} {k[1]} {iso(k[2])}: era {r.era!r} != typed {era!r}")
+    return bad
+
+
 def _arms_written() -> dict:
     status = reg_json("STATUS.json")
     return {a: (reg_parquet(a), reg_json(f"{a}.json")) for a in ARMS_T[status["status"]]}
@@ -2363,6 +2923,24 @@ def key_break():
         a2["base"][1]["n_entry_bar_straddles_era_cut"] = 1
         return reg_findings(a2)
 
+    def other_haircut_moved():
+        co = written("W1_CAMPAIGNS_OTHER")
+        i = int(np.flatnonzero((co["book"] == "P-BRK-4H").to_numpy())[0])
+        co.loc[i, "haircut_net_r"] = float(co.loc[i, "haircut_net_r"]) + 1e-3
+        return other_value_findings(co)
+
+    def other_dup_key():
+        root = Path(tempfile.mkdtemp(prefix="f-key-"))
+        try:
+            d = pd.read_parquet(str(OUT / "W1_EVENTS_OTHER.parquet"))
+            pd.concat([d, d.iloc[[5]]]).to_parquet(str(root / "W1_EVENTS_OTHER.parquet"),
+                                                   index=False)
+            ok, ls = TP.check_keys(root, {"keys": {"W1_EVENTS_OTHER":
+                                                   KEYS_TYPED["W1_EVENTS_OTHER"]}})
+            return [] if ok else [f"KEY check_keys: {x}" for x in ls if x.startswith("[BAD]")]
+        finally:
+            shutil.rmtree(root, ignore_errors=True)
+
     def haircut_moved():
         cw = written("W1_CAMPAIGNS")
         cw.loc[7, "rule_haircut_net_r"] = float(cw.loc[7, "rule_haircut_net_r"]) + 1e-3
@@ -2379,6 +2957,10 @@ def key_break():
         ("a float moved behind the sidecar's sha", "SIDECAR", edit(moved)),
         ("TP.check_keys on a temp root holding a duplicated row", "KEY check_keys", tier_dir),
         ("a tierE sidecar without its collar", "SIDECAR tierE__tuning", collarless),
+        ("a W1_CAMPAIGNS_OTHER P-BRK-4H haircut moved 1e-3 (copy)", "KEY W1-OTHER",
+         other_haircut_moved),
+        ("TP.check_keys on a temp root holding a duplicated W1_EVENTS_OTHER row",
+         "KEY check_keys: [BAD] unique keys", other_dup_key),
     ])
 
 
@@ -2398,6 +2980,7 @@ def key_real():
         if TB._content_sha(d) != man["sha"].get(name):
             bad.append(f"KEY {name}: manifest content sha is not the table's")
     bad += table_haircut_findings(written("W1_CAMPAIGNS"), written("W2_RELAY_WINDOWS"))
+    bad += other_value_findings(written("W1_CAMPAIGNS_OTHER"))
     cond = reg_json("condition.json")
     miss = [k for k in COND_KEYS_T if k not in cond]
     if miss:
@@ -2411,7 +2994,9 @@ def key_real():
         f"tiers, sidecars == this file's recomputation incl. the L-1.3 straddle count "
         f"({arms_line}); W1_CAMPAIGNS fee / AM-7 haircut columns (v6 and rule) and "
         f"W2_RELAY_WINDOWS haircut == the 6-dp image of the typed law on the regbook rows; "
-        f"stage_w: "
+        f"W1_CAMPAIGNS_OTHER: one row per source campaign of the three other books, net_r / "
+        f"fee_r / haircut_net_r the 6-dp image of each book's own (the 9/12 haircut by the "
+        f"typed law), era by the typed cut; stage_w: "
         f"{len(KEYS_TYPED)} tables with the typed keys, TP.check_keys "
         f"{' · '.join(ls)}; manifest content shas == the tables; condition.json carries "
         f"{len(COND_KEYS_T)} typed keys"))
@@ -2560,6 +3145,18 @@ FIXTURES = (
      "latch bar and stop-exit bar holding a W1 event), the module's re-ride / event tape is "
      "not the law's",
      hand_break, hand_real),
+    ("F-W1-OTHER", "the Tier-E W1 stamps of the OTHER 4h books (the 9/12 book, P-BRK-4H "
+     "scored, P-RELAY-1 scored): every campaign hand-walked from raw bars by a plain loop "
+     "[L-W.0..L-W.3, w12..w14; final-review fidelity MINOR-1]",
+     "on any campaign of the three books (every one, the typed n per book, at least 20) a "
+     "W1_EVENTS_OTHER row or W1_CAMPAIGNS_OTHER fact (window open, 1h-resolved exit and its "
+     "resolver, both +1R latch readings, memberships, counts, first events) differs from "
+     "this file's hand walk; an event is visible at a 4h close other than the first >= its "
+     "1h close; a relay's hand-walked exit / L-W.5 latch differs from its regbook of "
+     "record; any W1_OTHER_SUMMARY cell differs from its re-derivation from the hand walk; "
+     "a fallback row is off the typed 4h-close law, carries no reason, or claims a walk "
+     "HALT where the raw 1h bars resolve the exit; a row resolved on 1h where they cannot",
+     other_break, other_real),
     ("F-W2-MARK", "the forward leg priced independently: every cohort member's mark by this "
      "file's typed account law; C1 by the rule book, C2 by a 12/26 warn ride [L-W.4, w5]",
      "any member's module mark != this file's own price of its first event exactly, a C1 mark "
@@ -2575,22 +3172,26 @@ FIXTURES = (
      "R exactly; or P_WARN_1_COMPLEMENT (net and haircut sums) differs from its re-derivation",
      ident_break, ident_real),
     ("F-GRID", "every Tier-E grid whole, collared, verdict-free [L-1.4]",
-     "a Tier-E table's cells are not the typed declared set, a row (or condition.json) lacks "
-     "the exact collar, a verdict column or word appears, n == 0 does not coincide with NaN "
-     "stats + nan_reason, an era split is not a partition, or a relay histogram does not sum "
-     "to its population",
+     "a Tier-E table's cells are not the typed declared set (W1_OTHER_SUMMARY's 522 "
+     "included), a row of any of the 14 stage_w tables (or condition.json) lacks the exact "
+     "collar, a verdict column or word appears, n == 0 does not coincide with NaN stats + "
+     "nan_reason, an era split is not a partition (W1_OTHER_SUMMARY on n campaigns and n "
+     "events), or a relay histogram does not sum to its population",
      grid_break, grid_real),
     ("F-KEY", "unique keys, no nulls in required columns, the regbook interface exact",
      "a duplicated key, a null or missing required column, a wrong dtype, rows out of order, "
      "an era, haircut or exit_close_ms off the typed law, a sidecar n / sum / sha / kind / "
      "ruler / collar / straddle count that is not this file's recomputation, a W1_CAMPAIGNS / "
-     "W2_RELAY_WINDOWS fee or haircut column off the typed law, TP.check_keys RED, or a "
-     "manifest content sha that is not the table's",
+     "W2_RELAY_WINDOWS fee or haircut column off the typed law, a W1_CAMPAIGNS_OTHER row set "
+     "/ net_r / fee_r / haircut / era off its source book, TP.check_keys RED (the three "
+     "other-book tables' typed keys included), or a manifest content sha that is not the "
+     "table's",
      key_break, key_real),
     ("F-DET", "two subprocess builds under different hash seeds, one set of bytes",
      "the PYTHONHASHSEED 1 and 20260924 builds (under RUN_ROOT/_det_stage_w) differ from each "
-     "other or from the canonical stage_w/ + regbooks/P-WARN-1/ files in the file set, any "
-     "byte or any parquet content sha, or either exits nonzero",
+     "other or from the canonical stage_w/ (the three other-book W1 tables included) + "
+     "regbooks/P-WARN-1/ files in the file set, any byte or any parquet content sha, or "
+     "either exits nonzero",
      det_break, det_real),
 )
 

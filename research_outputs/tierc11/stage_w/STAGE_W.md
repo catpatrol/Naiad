@@ -18,6 +18,9 @@ Every table below except the P-WARN-1 condition block and the regbook arms is Ti
 - [LEAN-HEPHAESTUS] AM-7 haircut_net_r = net_r − fee_r × slip/taker per stem (E.fees()).
 - [LEAN-HEPHAESTUS] (w10) C3 '9/12 re-cross with trend after entry' = ANY in-trade with-trend 1h 9/12 cross (the reading of the first build, disclosed); C3S, printed beside and deciding nothing = the STRICT reading: a with-trend 9/12 cross whose preceding 9/12 cross on the 1h tape is a counter cross closing after the entry close.
 - [LEAN-HEPHAESTUS] (w11) AM-7's haircut twin beside every per-campaign net R (W1_CAMPAIGNS, W2_RELAY_WINDOWS) and the complement table's sums; L-1.3 entry bars straddling the era cut printed as a count (sidecars, STAGE_W.md).
+- [LEAN-HEPHAESTUS] (w12) W1 on every 4h campaign (final-review MINOR-1): the 9/12 book, P-BRK-4H scored and P-RELAY-1 scored stamped Tier-E by the same event tape and classifiers as v6 (W1_EVENTS_OTHER, W1_CAMPAIGNS_OTHER, W1_OTHER_SUMMARY: counts and W2's cohort sizes only, no outcome statistic).
+- [LEAN-HEPHAESTUS] (w13) window open = the 9/12 book's arm close; P-BRK-4H's 4h death close; P-RELAY-1's v6 window arm close.  A relay's entry = its 1h close: its in-trade window starts there.
+- [LEAN-HEPHAESTUS] (w14) 1h resolution of the books ridden without the walk (9/12, P-BRK-4H) by the ride module's resolver (RD.transform_book / RD.ride11 with the walk), the book's WHAT reproduced exactly per campaign, else the 4h-close fallback, labelled with its reason; P-RELAY-1 by its path of record (RD.relay11 walk_after), reproduced exactly or HALT.
 
 ## Changes after first output (disclosed; no net_r moved)
 
@@ -29,6 +32,8 @@ Every table below except the P-WARN-1 condition block and the regbook arms is Ti
 | CH-2 | the regbook column exit_close_ms | the 1h-resolved exit instant (L-W.3) | the CLOSE of the 4h exit bar (the estate's v6 schema); the exact 1h instant is the extra column exit_instant_ms | books/v6_campaigns.parquet carries exit_close_ms as the 4h exit-bar close and the scorer's SC-7 F-BASE-IDENT compares the base arm to it column by column | that column and so each arm's book_sha256; no net_r / gross_r / fee_r / funding_r moved |
 
 Repair of 2026-09-25 (the Stage W verifier's MINOR findings; no rule, cohort, condition number or registered figure moved): the (w7) docstring rewritten to the twin as built; this block; AM-7 haircut columns beside every per-campaign net R (w11); condition.json's collar `gates` set to 'nothing' with the gating statement moved to `condition_role`; `cohort_law_holds` computed by the frozen law (belltie keys listed separately, never absorbed); the C3 reading disclosed as (w10) with the strict reading C3S printed beside; the L-1.3 straddle count printed; fixtures extended (independent marks, relay leads and twin windows hand-walked, mismatch plants on every C1 first event and on latch / stop-exit bars, timeline columns).
+
+Final-review repair G7 (2026-09-25; fidelity MINOR-1 "W1 stamps only v6"): the Tier-E W1 stamps of the other 4h books — the 9/12 book, P-BRK-4H scored, P-RELAY-1 scored — added as W1_EVENTS_OTHER, W1_CAMPAIGNS_OTHER and W1_OTHER_SUMMARY (readings w12..w14; section "W1 on the other 4h books" below). Every table above that section, the P-WARN-1 regbooks, condition.json and STATUS.json are byte-identical to the build before it; no registered number moved.
 
 ## P-WARN-1 · the condition block (the only Tier-E place a CI is printed)
 
@@ -672,13 +677,89 @@ Twin population (w7) — armed windows of v6's card holding no v6 campaign: trig
 | ZECUSDT | 2026-06-02T20:00:00Z | 1 | 2026-06-04T20:00:00Z | window_close | 11 | holdout | False | — | — | — |
 | ZECUSDT | 2026-08-04T16:00:00Z | 1 | 2026-08-11T16:00:00Z | window_close | 41 | holdout | True | 2026-08-07T09:00:00Z | 103 | 25 |
 
+## W1 on the other 4h books (Tier-E, whole; final-review fidelity MINOR-1)
+
+The contract's W1 stamps every 4h campaign's timeline with the 1h events; the first build stamped v6 only. The 9/12 book, P-BRK-4H scored and P-RELAY-1 scored are stamped here by the same 1h event tape and the same classifiers as W1_EVENTS (w12): 1h 9/12, 12/26 and 12/89 crosses with / against the campaign, PRE-ENTRY / IN-TRADE / AT-EXIT / POST-EXIT and before / after the +1R latch (L-W.3), visibility (L-W.1) on every event row. Counts and W2's cohort sizes only — no outcome statistic, no mark, no forward leg. Every row: tier TIER-E · a SELECTION, not a result · gates nothing.
+
+- **trg912** (n 199) — research_outputs/tierc11/books/trg912_campaigns.parquet — the TC11-BOOKS 9/12 book (B.trg912_book; filed book_sha asserted), re-ridden per campaign by RD.transform_book(walk=other_walk). Window open (w13): arm close (the 9/12 card's window arming). Source check: {'book_sha': '2c32fd60924336acc7c48852143d47661a5eb83f12c047ac8b041ad90046e030', 'ctrl_cols_worst_walked': 0.0, 'ctrl_cols_ok': True}. 1h resolution (w14): {'1h-walk': 199}; exits resolved by {'1h': 191, 'close': 8}; 4h-close fallbacks 0; the two +1R latch readings (L-W.3 / L-W.5) agree on 199/199; latch present == the book's own reached_1r on 199/199; L-W.0 mismatch bars ridden 2 (BTCUSDT 2023-11-10T12:00:00Z, ZECUSDT 2024-10-28T20:00:00Z); W1 events 4153 by phase {'AT-EXIT': 64, 'IN-TRADE': 1849, 'POST-EXIT': 58, 'PRE-ENTRY': 2182}, on mismatch bars 0 (taken at the parent close, w1), classifications the raw instant would change 0; entry bars straddling the era cut 0.
+- **P-BRK-4H** (n 322) — research_outputs/tierc11/regbooks/P-BRK-4H/scored.parquet — the scored book (sidecar book_sha256 == this stage's recomputation == the scorer's input), re-ridden per campaign by RD.ride11(walk=other_walk(sym)). Window open (w13): death close (the 4h macro death that opens the lane's candidacy). Source check: {'book_sha256': 'c76358dfaeb034ddc679f74f0f26f40eca9a88bcbb48c5c62bcac45f5b4ec311'}. 1h resolution (w14): {'1h-walk': 322}; exits resolved by {'1h': 269, 'close': 53}; 4h-close fallbacks 0; the two +1R latch readings (L-W.3 / L-W.5) agree on 322/322; latch present == the book's own reached_1r on 322/322; L-W.0 mismatch bars ridden 2 (BTCUSDT 2024-10-28T20:00:00Z, SOLUSDT 2024-10-28T20:00:00Z); W1 events 11585 by phase {'AT-EXIT': 54, 'IN-TRADE': 3537, 'POST-EXIT': 21, 'PRE-ENTRY': 7973}, on mismatch bars 1 (taken at the parent close, w1: SOLUSDT entry 2024-10-26T12:00:00Z 9/12 with 1h close 2024-10-28T22:00:00Z -> taken 2024-10-29T00:00:00Z (IN-TRADE before)), classifications the raw instant would change 0; entry bars straddling the era cut 0.
+- **P-RELAY-1** (n 173) — research_outputs/tierc11/regbooks/P-RELAY-1/scored.parquet — the scored book (sidecar book_sha256 == this stage's recomputation == the scorer's input), its path of record re-run by RD.relay11(walk_after=True, moved=). Window open (w13): window arm close (the v6 window the relay entered). Source check: {'book_sha256': '57d8bbef8190492d1df83a137977463ee441508e20a57cd81499c60258a53361'}. 1h resolution (w14): {'1h-walk': 173}; exits resolved by {'1h': 162, 'close': 11}; 4h-close fallbacks 0; the two +1R latch readings (L-W.3 / L-W.5) agree on 173/173; latch present == the book's own reached_1r on 173/173; L-W.0 mismatch bars ridden 0 (none); W1 events 2190 by phase {'AT-EXIT': 57, 'IN-TRADE': 1608, 'POST-EXIT': 39, 'PRE-ENTRY': 486}, on mismatch bars 0 (taken at the parent close, w1), classifications the raw instant would change 0; entry bars straddling the era cut 0.
+
+Mismatch-bar note (AM-5 and its ERRATUM, which were written of the books ridden on the walk before this repair): under the 1h resolution added here the other books ride 4 L-W.0 mismatch bar(s) (listed per book above; the parent decides STOP and the +1R latch there, AM-5) and hold 1 W1 event(s) on one, each taken at the parent close (w1); classifications the raw 1h instant would change: 0. Printed here; LEANS_AMENDMENTS.md is not this stage's file.
+
+W1_OTHER_SUMMARY, whole. Event rows: n events (n campaigns holding one). Cohort rows (W2's cohorts vs their at-risk sets, w6): n campaigns (n events). Pre-entry rows (W2's classes in (window open, entry close] vs the whole book): n campaigns (n events).
+
+| kind | class | group | trg912 ALL | trg912 tuning | trg912 holdout | P-BRK-4H ALL | P-BRK-4H tuning | P-BRK-4H holdout | P-RELAY-1 ALL | P-RELAY-1 tuning | P-RELAY-1 holdout |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| campaigns | all | book | 199 (4153 ev) | 132 (2777 ev) | 67 (1376 ev) | 322 (11585 ev) | 210 (7527 ev) | 112 (4058 ev) | 173 (2190 ev) | 114 (1466 ev) | 59 (724 ev) |
+| events | PRE-ENTRY · 9/12 · counter · - | events | 602 (124) | 422 (83) | 180 (41) | 2297 (320) | 1491 (209) | 806 (111) | 173 (173) | 114 (114) | 59 (59) |
+| events | PRE-ENTRY · 9/12 · with · - | events | 599 (124) | 419 (83) | 180 (41) | 2097 (307) | 1359 (201) | 738 (106) | 173 (173) | 114 (114) | 59 (59) |
+| events | PRE-ENTRY · 12/26 · counter · - | events | 349 (124) | 245 (83) | 104 (41) | 1374 (322) | 870 (210) | 504 (112) | 81 (79) | 52 (51) | 29 (28) |
+| events | PRE-ENTRY · 12/26 · with · - | events | 336 (119) | 236 (80) | 100 (39) | 1105 (277) | 690 (178) | 415 (99) | 33 (31) | 24 (23) | 9 (8) |
+| events | PRE-ENTRY · 12/89 · counter · - | events | 138 (110) | 90 (70) | 48 (40) | 692 (316) | 429 (207) | 263 (109) | 18 (18) | 12 (12) | 6 (6) |
+| events | PRE-ENTRY · 12/89 · with · - | events | 158 (130) | 103 (84) | 55 (46) | 408 (183) | 241 (112) | 167 (71) | 8 (7) | 5 (4) | 3 (3) |
+| events | IN-TRADE · 9/12 · counter · before | events | 255 (113) | 179 (76) | 76 (37) | 442 (171) | 311 (115) | 131 (56) | 259 (115) | 183 (78) | 76 (37) |
+| events | IN-TRADE · 9/12 · counter · after | events | 364 (107) | 219 (69) | 145 (38) | 521 (154) | 339 (100) | 182 (54) | 277 (91) | 185 (57) | 92 (34) |
+| events | IN-TRADE · 9/12 · with · before | events | 190 (79) | 132 (55) | 58 (24) | 491 (211) | 351 (147) | 140 (64) | 187 (74) | 133 (50) | 54 (24) |
+| events | IN-TRADE · 9/12 · with · after | events | 272 (86) | 162 (53) | 110 (33) | 394 (120) | 255 (80) | 139 (40) | 202 (71) | 139 (46) | 63 (25) |
+| events | IN-TRADE · 12/26 · counter · before | events | 146 (82) | 104 (57) | 42 (25) | 257 (122) | 187 (84) | 70 (38) | 162 (81) | 114 (54) | 48 (27) |
+| events | IN-TRADE · 12/26 · counter · after | events | 201 (97) | 120 (61) | 81 (36) | 297 (137) | 189 (90) | 108 (47) | 151 (76) | 87 (45) | 64 (31) |
+| events | IN-TRADE · 12/26 · with · before | events | 103 (55) | 70 (38) | 33 (17) | 316 (162) | 231 (115) | 85 (47) | 148 (76) | 99 (46) | 49 (30) |
+| events | IN-TRADE · 12/26 · with · after | events | 124 (63) | 74 (40) | 50 (23) | 222 (104) | 142 (69) | 80 (35) | 90 (42) | 54 (27) | 36 (15) |
+| events | IN-TRADE · 12/89 · counter · before | events | 89 (63) | 61 (45) | 28 (18) | 154 (85) | 107 (56) | 47 (29) | 52 (33) | 35 (21) | 17 (12) |
+| events | IN-TRADE · 12/89 · counter · after | events | 40 (32) | 20 (17) | 20 (15) | 120 (78) | 69 (48) | 51 (30) | 31 (26) | 16 (14) | 15 (12) |
+| events | IN-TRADE · 12/89 · with · before | events | 48 (32) | 31 (21) | 17 (11) | 195 (113) | 139 (77) | 56 (36) | 37 (22) | 25 (13) | 12 (9) |
+| events | IN-TRADE · 12/89 · with · after | events | 17 (15) | 8 (7) | 9 (8) | 128 (82) | 75 (51) | 53 (31) | 12 (12) | 7 (7) | 5 (5) |
+| events | AT-EXIT · 9/12 · counter · - | events | 22 (22) | 13 (13) | 9 (9) | 17 (17) | 13 (13) | 4 (4) | 18 (18) | 11 (11) | 7 (7) |
+| events | AT-EXIT · 9/12 · with · - | events | 1 (1) | 0 (0) | 1 (1) | 0 (0) | 0 (0) | 0 (0) | 0 (0) | 0 (0) | 0 (0) |
+| events | AT-EXIT · 12/26 · counter · - | events | 23 (23) | 16 (16) | 7 (7) | 24 (24) | 17 (17) | 7 (7) | 22 (22) | 18 (18) | 4 (4) |
+| events | AT-EXIT · 12/26 · with · - | events | 1 (1) | 0 (0) | 1 (1) | 0 (0) | 0 (0) | 0 (0) | 0 (0) | 0 (0) | 0 (0) |
+| events | AT-EXIT · 12/89 · counter · - | events | 17 (17) | 12 (12) | 5 (5) | 13 (13) | 8 (8) | 5 (5) | 17 (17) | 13 (13) | 4 (4) |
+| events | AT-EXIT · 12/89 · with · - | events | 0 (0) | 0 (0) | 0 (0) | 0 (0) | 0 (0) | 0 (0) | 0 (0) | 0 (0) | 0 (0) |
+| events | POST-EXIT · 9/12 · counter · - | events | 10 (10) | 7 (7) | 3 (3) | 1 (1) | 0 (0) | 1 (1) | 1 (1) | 1 (1) | 0 (0) |
+| events | POST-EXIT · 9/12 · with · - | events | 3 (3) | 2 (2) | 1 (1) | 0 (0) | 0 (0) | 0 (0) | 3 (3) | 1 (1) | 2 (2) |
+| events | POST-EXIT · 12/26 · counter · - | events | 17 (17) | 12 (12) | 5 (5) | 5 (5) | 3 (3) | 2 (2) | 10 (10) | 8 (8) | 2 (2) |
+| events | POST-EXIT · 12/26 · with · - | events | 2 (2) | 2 (2) | 0 (0) | 0 (0) | 0 (0) | 0 (0) | 1 (1) | 1 (1) | 0 (0) |
+| events | POST-EXIT · 12/89 · counter · - | events | 26 (26) | 18 (18) | 8 (8) | 14 (14) | 10 (10) | 4 (4) | 24 (24) | 15 (15) | 9 (9) |
+| events | POST-EXIT · 12/89 · with · - | events | 0 (0) | 0 (0) | 0 (0) | 1 (1) | 1 (1) | 0 (0) | 0 (0) | 0 (0) | 0 (0) |
+| cohort | C1_counter_12_89_before_1r | cohort | 63 (89) | 45 (61) | 18 (28) | 85 (154) | 56 (107) | 29 (47) | 33 (52) | 21 (35) | 12 (17) |
+| cohort | C1_counter_12_89_before_1r | at_risk | 199 (89) | 132 (61) | 67 (28) | 322 (154) | 210 (107) | 112 (47) | 173 (52) | 114 (35) | 59 (17) |
+| cohort | C1_counter_12_89_before_1r | complement | 136 (0) | 87 (0) | 49 (0) | 237 (0) | 154 (0) | 83 (0) | 140 (0) | 93 (0) | 47 (0) |
+| cohort | C2_counter_12_26_before_1r | cohort | 82 (146) | 57 (104) | 25 (42) | 122 (257) | 84 (187) | 38 (70) | 81 (162) | 54 (114) | 27 (48) |
+| cohort | C2_counter_12_26_before_1r | at_risk | 199 (146) | 132 (104) | 67 (42) | 322 (257) | 210 (187) | 112 (70) | 173 (162) | 114 (114) | 59 (48) |
+| cohort | C2_counter_12_26_before_1r | complement | 117 (0) | 75 (0) | 42 (0) | 200 (0) | 126 (0) | 74 (0) | 92 (0) | 60 (0) | 32 (0) |
+| cohort | C3_with_9_12_recross_after_entry | cohort | 124 (462) | 85 (294) | 39 (168) | 234 (885) | 158 (606) | 76 (279) | 113 (389) | 76 (272) | 37 (117) |
+| cohort | C3_with_9_12_recross_after_entry | at_risk | 197 (462) | 131 (294) | 66 (168) | 317 (885) | 206 (606) | 111 (279) | 172 (389) | 113 (272) | 59 (117) |
+| cohort | C3_with_9_12_recross_after_entry | complement | 73 (0) | 46 (0) | 27 (0) | 83 (0) | 48 (0) | 35 (0) | 59 (0) | 37 (0) | 22 (0) |
+| cohort | C4_counter_12_89_after_1r | cohort | 32 (40) | 17 (20) | 15 (20) | 78 (120) | 48 (69) | 30 (51) | 26 (31) | 14 (16) | 12 (15) |
+| cohort | C4_counter_12_89_after_1r | at_risk | 112 (40) | 72 (20) | 40 (20) | 158 (120) | 103 (69) | 55 (51) | 95 (31) | 61 (16) | 34 (15) |
+| cohort | C4_counter_12_89_after_1r | complement | 80 (0) | 55 (0) | 25 (0) | 80 (0) | 55 (0) | 25 (0) | 69 (0) | 47 (0) | 22 (0) |
+| cohort | C3S_with_9_12_recross_strict | cohort | 123 (459) | 84 (291) | 39 (168) | 184 (725) | 125 (496) | 59 (229) | 113 (389) | 76 (272) | 37 (117) |
+| cohort | C3S_with_9_12_recross_strict | at_risk | 197 (459) | 131 (291) | 66 (168) | 317 (725) | 206 (496) | 111 (229) | 172 (389) | 113 (272) | 59 (117) |
+| cohort | C3S_with_9_12_recross_strict | complement | 74 (0) | 47 (0) | 27 (0) | 133 (0) | 81 (0) | 52 (0) | 59 (0) | 37 (0) | 22 (0) |
+| pre_entry | P1_counter_12_89 | cohort | 110 (138) | 70 (90) | 40 (48) | 316 (692) | 207 (429) | 109 (263) | 18 (18) | 12 (12) | 6 (6) |
+| pre_entry | P1_counter_12_89 | whole_book | 199 (138) | 132 (90) | 67 (48) | 322 (692) | 210 (429) | 112 (263) | 173 (18) | 114 (12) | 59 (6) |
+| pre_entry | P1_counter_12_89 | complement | 89 (0) | 62 (0) | 27 (0) | 6 (0) | 3 (0) | 3 (0) | 155 (0) | 102 (0) | 53 (0) |
+| pre_entry | P2_counter_12_26 | cohort | 124 (349) | 83 (245) | 41 (104) | 322 (1374) | 210 (870) | 112 (504) | 79 (81) | 51 (52) | 28 (29) |
+| pre_entry | P2_counter_12_26 | whole_book | 199 (349) | 132 (245) | 67 (104) | 322 (1374) | 210 (870) | 112 (504) | 173 (81) | 114 (52) | 59 (29) |
+| pre_entry | P2_counter_12_26 | complement | 75 (0) | 49 (0) | 26 (0) | 0 (0) | 0 (0) | 0 (0) | 94 (0) | 63 (0) | 31 (0) |
+| pre_entry | P3_with_9_12 | cohort | 124 (599) | 83 (419) | 41 (180) | 307 (2097) | 201 (1359) | 106 (738) | 173 (173) | 114 (114) | 59 (59) |
+| pre_entry | P3_with_9_12 | whole_book | 199 (599) | 132 (419) | 67 (180) | 322 (2097) | 210 (1359) | 112 (738) | 173 (173) | 114 (114) | 59 (59) |
+| pre_entry | P3_with_9_12 | complement | 75 (0) | 49 (0) | 26 (0) | 15 (0) | 9 (0) | 6 (0) | 0 (0) | 0 (0) | 0 (0) |
+| pre_entry | P4_with_12_26 | cohort | 119 (336) | 80 (236) | 39 (100) | 277 (1105) | 178 (690) | 99 (415) | 31 (33) | 23 (24) | 8 (9) |
+| pre_entry | P4_with_12_26 | whole_book | 199 (336) | 132 (236) | 67 (100) | 322 (1105) | 210 (690) | 112 (415) | 173 (33) | 114 (24) | 59 (9) |
+| pre_entry | P4_with_12_26 | complement | 80 (0) | 52 (0) | 28 (0) | 45 (0) | 32 (0) | 13 (0) | 142 (0) | 91 (0) | 51 (0) |
+
 ## Files
 
 | table | content sha256 |
 |---|---|
 | P_WARN_1_COMPLEMENT | 12355b7ff5b09e55091dbbeaaabdf1330f73a8d15cf05604b773f72ef77f7b17 |
 | W1_CAMPAIGNS | efd27667ea0afaf9618fb87771994e0cf735ad8432f5ae6e2882db2104c92e00 |
+| W1_CAMPAIGNS_OTHER | f426c5be56ed982f64c4e5b17a8fb9e08b79603f340dec782e5ee388ee073d74 |
 | W1_EVENTS | 4c8286410f330a6b76a729ea33bd66f586138c04bc6bfa2ff0255ea3c26b2c8d |
+| W1_EVENTS_OTHER | 31ad8e88c673335b6077454b3dac303675399837b20bdbf6f90297ea69491cc1 |
+| W1_OTHER_SUMMARY | 99ef17f02b8c6521c06695ca4c64b8ac049ef2a49ac91b17992f5f48d8286c0f |
 | W1_TIMELINE | ebaff8ba4f712f8f86c82c395d729b5476d5b542a5c8cafeb40686bc01aae16f |
 | W2_COHORTS | 2835ef0efa8248ee5564276c89a7aad00dba749f0ab906fbb7f8d6f6efd897e4 |
 | W2_FORWARD | 6f3adc7101364ab62c2b7d5f75bd30d2916b022b855ef5f76a252a22cc36f4cb |
@@ -695,5 +776,5 @@ Twin population (w7) — armed windows of v6's card holding no v6 campaign: trig
 | tierE__tuning | 123 | +0.341015 | c41450b34294d820d841c68f17c7ee8b0648550dcc950506905adddf74270f04 |
 | tierE__holdout | 77 | +41.582228 | 9dd70a94cb2b2923e977a4c5eb7e0089c65ea85c96710a792211af3c2529323f |
 
-W1_EVENTS / W1_TIMELINE / W1_CAMPAIGNS / W2_RELAY_WINDOWS_TWIN are filed whole as parquet (row counts in the manifest keys); every row is collared.
+W1_EVENTS / W1_TIMELINE / W1_CAMPAIGNS / W2_RELAY_WINDOWS_TWIN / W1_EVENTS_OTHER / W1_CAMPAIGNS_OTHER are filed whole as parquet (row counts in the manifest keys); every row is collared.
 

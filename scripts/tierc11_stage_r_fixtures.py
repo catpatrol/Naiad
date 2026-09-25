@@ -4,7 +4,11 @@ F-GRID · F-KEY · F-DET.  The fixtures of scripts/tierc11_stage_r.py (R1 lenses
 R3 the nest on the books + the nest-book door, R5 the chop table) [LEANS L-R.1..L-R.5,
 L-R.7; AM-1, AM-2, AM-4, AM-6].  REPAIRED after the stage verifier's report (MAJOR-1..4,
 MINOR-1..11, 14): the tolls, the R5 / NEST_GRID values and honesty labels, the door's
-named events and its extra paths, the causal (prefix-run) nest check.
+named events and its extra paths, the causal (prefix-run) nest check.  EXTENDED after the
+final review's trading D-2 (FINAL_REVIEW_2026-09-25): R5_CHOP_DIRECTION [SR-16] — the R5
+entries by alignment and by direction-adjusted pct tercile, collared Tier-E, beside the
+unchanged R5 rows — re-derived in F-CHOP-VALUE, declared / partitioned in F-GRID, keyed in
+F-KEY, byte-compared in F-DET.
 
 TWO LEGS PER FIXTURE, the BREAK leg first, and it must go RED or the fixture is
 VOID — a guard nobody has seen fail is a guard nobody has seen [the prove() law of
@@ -87,6 +91,18 @@ every key and required column.
                 bot swapped (SR.coin_cat mutated); the mean replaced by the median
                 (SR._stats mutated); the 12h table bucketed on the 4h pct (a copy of
                 the entries); the 4h in-sample labels dropped (a copy of the entries).
+                [SR-16] ALSO FAILS IF any cell of R5_CHOP_DIRECTION (n, n_long, n_short,
+                mean, P(win), sum, the holdout slice, the honesty counts) differs from the
+                cell re-derived HERE from NEST_v6's ENTRY rows with the trade's direction
+                typed from the BOOK's own stop side (+1 when the stop is below the entry)
+                — alignment: BULL_EXP & long or BEAR_EXP & short -> EXP_ALIGNED, the other
+                expansion -> EXP_COUNTER, IN_RANGE / NONE as read, '__ALL__'; IN_RANGE
+                entries by adjusted pct a = pct (long) / 100 - pct (short): a < 0 '<0',
+                a >= 100 '>=100', a < 100/3 '[0,33.33)', a < 200/3 '[33.33,66.67)', else
+                '[66.67,100)' — or NEST's direction differs from the book's stop side.
+                SABOTAGE: the direction adjustment dropped (SR.dir_adj_pct mutated); the
+                alignment read without the direction (SR.align_of mutated); NEST's
+                direction flipped on a copy of the entries.
   F-NEST-BOOK   FAILS IF, for either book at either scale, the written NEST's instant
                 set differs from the law typed HERE and derived from the raw 4h tape
                 (every 4h close from the arm bar through the exit stamp; arm / entry /
@@ -183,8 +199,8 @@ every key and required column.
                 unchanged).  Other stages' numbers (per-book counts, the plants' findings)
                 go to stdout only.
   F-GRID        FAILS IF a written grid is not WHOLE against the cells typed HERE
-                (R1 71 · R2 1458 · R5 64 · NEST_GRID_FREQ 544 · BY_STATE 100 · BY_COIN
-                136); an R1 pick (record / tuning / whole / first half) or window
+                (R1 71 · R2 1458 · R5 64 · R5_CHOP_DIRECTION 40 · NEST_GRID_FREQ 544 ·
+                BY_STATE 100 · BY_COIN 136); an R1 pick (record / tuning / whole / first half) or window
                 differs from the FILED SCALE_PICKS.json, or its window density from the
                 filed one; an R1 density (ALL / tuning / holdout, record and frozen) is
                 not 100 x its printed confirmed count / its era's printed bar count; an
@@ -197,7 +213,15 @@ every key and required column.
                 slice) is NaN with n > 0 or finite with n = 0; or a partition breaks
                 (R1 confirmed ranges and bars, R2 n_ranges and edge_n: tuning +
                 holdout == ALL; R5 buckets and NEST_GRID states / coincidence
-                categories sum to the entries).  SABOTAGE: an R1 pick moved; an R1
+                categories sum to the entries; R5_CHOP_DIRECTION [SR-16]: the alignment
+                split == the book (v6 200) == its '__ALL__', whose n_long / n_short are
+                the book's longs / shorts typed from its stop side, n_long + n_short == n
+                on every row, EXP_ALIGNED + EXP_COUNTER == R5's not-in-range BULL_EXP +
+                BEAR_EXP, NONE == R5's not-in-range:NONE, IN_RANGE == R5's deciles + '<0'
+                + '>=100' == the five adjusted-pct buckets).  SABOTAGE: [SR-16] a dropped
+                R5_CHOP_DIRECTION cell; an adjusted-pct tercile n + 1 (its n_long with it);
+                one entry moved IN_RANGE -> EXP_ALIGNED (row and book totals kept); its
+                gates set to a decision; an R1 pick moved; an R1
                 holdout density struck over ALL bars; the 1w record cell's fallback
                 members hidden; the 12h record cell's stability-changed members
                 hidden; an R5 pick_window blanked; a dropped R2 cell; an undeclared R5
@@ -207,17 +231,21 @@ every key and required column.
                 required column holds a null, a parquet on disk is undeclared in the
                 manifest (or a declared one absent), the manifest's key is not the
                 typed one, or its content sha is not the table's (lanes/ — the `lanes`
-                pass's own files and manifest — is F-NEST-LANES').  SABOTAGE: a
-                duplicated NEST row; a nulled R2 would_read; a manifest sha altered; a
+                pass's own files and manifest — is F-NEST-LANES'; R5_CHOP_DIRECTION
+                [SR-16] keyed scale_kind / lens / split / bucket).  SABOTAGE: a
+                duplicated NEST row; a nulled R2 would_read; a nulled R5_CHOP_DIRECTION
+                n_long; a manifest sha altered; a
                 manifest key altered; an undeclared parquet in a temp copy.
   F-DET         FAILS IF two subprocess builds (PYTHONHASHSEED 1, 20260924) under
                 RUN_ROOT/_det_stage_r differ from each other or from the canonical
                 stage_r/ files of record in the file set (recursive; lanes/ is the
                 `lanes` pass's, re-run under both seeds by F-NEST-LANES), any byte, or any
                 parquet content sha (read through pandas on a PATH string, AM-2), or
-                either exits nonzero.  SABOTAGE: one byte bent in a copy; a parquet
-                copy with one float moved; a hash-order line emitted under the two
-                seeds.
+                either exits nonzero, or a typed parquet (R5_CHOP_DIRECTION [SR-16]
+                included) is absent from the canonical set (DET-COVERAGE).  SABOTAGE: one
+                byte bent in a copy; a parquet copy with one float moved (R5_CHOP, and
+                R5_CHOP_DIRECTION); R5_CHOP_DIRECTION absent from a copy of the canonical
+                set; a hash-order line emitted under the two seeds.
 BANNED: self-comparison; one example where cardinality was possible; a tuned
 magnitude bound standing in for an identity (the only bounds used are the printed
 precision's rounding half-ulps, 0.5e-8 and 0.5e-6, derived, not tuned); a check whose
@@ -321,6 +349,12 @@ DEC_T = tuple(f"[{10 * d},{10 * d + 10})" for d in range(10))
 R5_BUCKETS_T = DEC_T + ("<0", ">=100", "not-in-range:NONE", "not-in-range:BULL_EXP",
                         "not-in-range:BEAR_EXP", "__ALL__")
 R5_LENSES_T = ("4h", "12h")
+# R5 BY DIRECTION [SR-16; the trading review D-2], typed HERE: aligned = BULL_EXP for a long,
+# BEAR_EXP for a short; adjusted pct = pct (long) / 100 - pct (short), SR-8's half-open law
+R5_DIR_T = "R5_CHOP_DIRECTION"
+R5_ALIGN_T = ("EXP_ALIGNED", "EXP_COUNTER", "IN_RANGE", "NONE", "__ALL__")
+R5_ADJ_T = ("<0", "[0,33.33)", "[33.33,66.67)", "[66.67,100)", ">=100")
+R5_DIR_SPLITS_T = {"alignment": R5_ALIGN_T, "pct_dir_adj": R5_ADJ_T}
 TC10_JOURNAL_REL = "research_outputs/tierc10/panel/control_journal.parquet"
 TC10_JOURNAL_SHA = "fcbf5db0480416b0a5c7f704987980aea220650cb0764d5dd4095611fae64c1c"
 TC10_JOURNAL_N = 200
@@ -345,6 +379,7 @@ KEYS_T = {"R1_LENSES": ["asset", "lens"],
           "NEST_GRID_BY_STATE": ["book", "scale_kind", "lens", "state"],
           "NEST_GRID_BY_COIN": ["book", "scale_kind", "lens", "coin_rule", "coin_cat"],
           "R5_CHOP": ["scale_kind", "lens", "bucket"],
+          R5_DIR_T: ["scale_kind", "lens", "split", "bucket"],
           "R5_FIVE_ROW": ["macro_state_at_entry"],
           "nestbook_probe/V6-PROBE/base": ["symbol", "entry_ms"],
           "nest_books/V6-PROBE__base": NEST_KEY_T}
@@ -377,6 +412,8 @@ REQUIRED_T = {
                          + COLLAR_COLS_T + ASOF_T,
     "R5_CHOP": ("cell", "n", "nan_reason", "nan_reason_holdout") + HONEST_COLS_T
                + COLLAR_COLS_T + ASOF_T,
+    R5_DIR_T: ("cell", "split", "bucket", "n", "n_long", "n_short", "nan_reason",
+               "nan_reason_holdout", "split_law") + HONEST_COLS_T + COLLAR_COLS_T + ASOF_T,
     "R5_FIVE_ROW": ("tc11_n", "tc10_n", "tc11_n_assets", "tc10_n_assets", "tc11_provisional",
                     "tc10_provisional", "tc10_reproduced_on_filed_journal") + COLLAR_COLS_T
                    + ASOF_T,
@@ -1108,16 +1145,53 @@ def typed_coin(top, bot, L: str) -> str:
     return "both" if (t and b) else "top" if t else "bot" if b else "none"
 
 
+def typed_align(state: str, d: int) -> str:
+    """[SR-16] EXP_ALIGNED iff the expansion runs the trade's way (BULL_EXP & long, or
+    BEAR_EXP & short); the other expansion EXP_COUNTER; IN_RANGE / NONE as read."""
+    if state == "BULL_EXP":
+        return "EXP_ALIGNED" if d == 1 else "EXP_COUNTER" if d == -1 else "DIRECTION?"
+    if state == "BEAR_EXP":
+        return "EXP_ALIGNED" if d == -1 else "EXP_COUNTER" if d == 1 else "DIRECTION?"
+    return state
+
+
+def typed_adj_bucket(a: float) -> str:
+    """[SR-16] the direction-adjusted pct (pct long, 100 - pct short) by SR-8's
+    half-open law: '<0', [0, 100/3), [100/3, 200/3), [200/3, 100), '>=100'."""
+    if a < 0:
+        return "<0"
+    if a >= 100.0:
+        return ">=100"
+    if a < 100.0 / 3.0:
+        return "[0,33.33)"
+    if a < 200.0 / 3.0:
+        return "[33.33,66.67)"
+    return "[66.67,100)"
+
+
 def typed_entries(book: str, nest: pd.DataFrame | None = None) -> pd.DataFrame:
     """The ENTRY rows of the written NEST_<book> + the book's net_r, with the typed
-    era, in-sample and stability flags per consumed-lens set (from the FILED picks)."""
+    era, in-sample and stability flags per consumed-lens set (from the FILED picks),
+    and the trade's direction typed HERE from the book's own stop side (+1 when the
+    stop sits below the entry, -1 above) — a second object, never NEST's column."""
     nest = written(f"NEST_{book}") if nest is None else nest
     camp = pd.read_parquet(str(E.OUT / "books" / f"{book}_campaigns.parquet"))
     e = nest[nest["instant_kind"] == "entry"].merge(
-        camp[["symbol", "entry_ms", "net_r"]], on=["symbol", "entry_ms"], how="left",
-        validate="m:1").reset_index(drop=True)
+        camp[["symbol", "entry_ms", "net_r", "entry_px", "stop_px"]], on=["symbol", "entry_ms"],
+        how="left", validate="m:1").reset_index(drop=True)
     e["_hold"] = e["entry_close_ms"].astype(np.int64) > ERA_CUT_T
+    e["_dir_t"] = np.sign(e["entry_px"].to_numpy(float) - e["stop_px"].to_numpy(float)) \
+        .astype(np.int64)
     return e
+
+
+def direction_findings(e: pd.DataFrame) -> list[str]:
+    """[SR-16] NEST's direction == the book's stop side on every entry row."""
+    bad = int((e["direction"].astype(np.int64).to_numpy() != e["_dir_t"].to_numpy()).sum())
+    zero = int((e["_dir_t"] == 0).sum())
+    return ([f"CHOP-DIR-SIDE: NEST direction != the book's stop side on {bad} entry row(s)"]
+            if bad else []) + ([f"CHOP-DIR-SIDE: {zero} entry row(s) with stop == entry"]
+                               if zero else [])
 
 
 def _typed_flags(z: pd.DataFrame, lenses: tuple, kind: str) -> tuple[np.ndarray, np.ndarray]:
@@ -1143,7 +1217,8 @@ def _cell_stats(net: np.ndarray) -> dict:
 
 def typed_cells(book_entries: dict) -> dict:
     """{table: {cell: expected values}} for R5_CHOP and the three NEST_GRID tables."""
-    exp = {"R5_CHOP": {}, "NEST_GRID_FREQ": {}, "NEST_GRID_BY_STATE": {}, "NEST_GRID_BY_COIN": {}}
+    exp = {"R5_CHOP": {}, R5_DIR_T: {}, "NEST_GRID_FREQ": {}, "NEST_GRID_BY_STATE": {},
+           "NEST_GRID_BY_COIN": {}}
     for book, e in book_entries.items():
         for kind in SCALES_T:
             z = e[e["scale_kind"] == kind].reset_index(drop=True)
@@ -1168,6 +1243,23 @@ def typed_cells(book_entries: dict) -> dict:
                     for bk in R5_BUCKETS_T:
                         m = np.ones(n_all, bool) if bk == "__ALL__" else (b == bk)
                         exp["R5_CHOP"][f"{kind}|{L}|{bk}"] = cellv(m, isin, stab)
+                    # [SR-16] by direction: the book's stop side, never NEST's column
+                    dr = z["_dir_t"].to_numpy(np.int64)
+                    st5 = z[f"{L}_state"].astype(str).tolist()
+                    p5 = z[f"{L}_pct"].astype(float).tolist()
+                    arr = {"alignment": np.array([typed_align(s, int(d)) for s, d in
+                                                  zip(st5, dr)], dtype=object),
+                           "pct_dir_adj": np.array([typed_adj_bucket(p if d == 1 else 100.0 - p)
+                                                    if s == "IN_RANGE" else "not-in-range"
+                                                    for s, p, d in zip(st5, p5, dr)],
+                                                   dtype=object)}
+                    for split, bks in R5_DIR_SPLITS_T.items():
+                        for bk in bks:
+                            m = np.ones(n_all, bool) if bk == "__ALL__" else (arr[split] == bk)
+                            v = cellv(m, isin, stab)
+                            v.update({"n_long": int((m & (dr == 1)).sum()),
+                                      "n_short": int((m & (dr == -1)).sum())})
+                            exp[R5_DIR_T][f"{kind}|{L}|{split}|{bk}"] = v
             for L in NEST_LENSES_T:
                 st = z[f"{L}_state"].astype(str).to_numpy()
                 U = LADDER_T[L]
@@ -1199,13 +1291,15 @@ def typed_cells(book_entries: dict) -> dict:
     return exp
 
 
-CHOP_INT_T = ("n", "n_entries", "n_scale_in_sample", "n_stability_changed", "n_holdout")
+CHOP_INT_T = ("n", "n_entries", "n_scale_in_sample", "n_stability_changed", "n_holdout",
+              "n_long", "n_short")
+CHOP_TAG_T = {"R5_CHOP": "CHOP-VALUE", R5_DIR_T: "CHOP-DIR-VALUE"}
 
 
 def chop_findings(T: dict, exp: dict) -> tuple[list[str], int]:
     out, n = [], 0
     for name, want in exp.items():
-        tag = "CHOP-VALUE" if name == "R5_CHOP" else "GRID-VALUE"
+        tag = CHOP_TAG_T.get(name, "GRID-VALUE")
         d = T[name].set_index("cell")
         for cell, ev in want.items():
             if cell not in d.index:
@@ -1228,6 +1322,7 @@ def _module_tables(entries: dict) -> dict:
     G = SR.nest_grid(entries)
     T = {k: SR.canon(v, SR.KEYS[k]) for k, v in G.items()}
     T["R5_CHOP"] = SR.canon(SR.r5_chop(entries["v6"]), SR.KEYS["R5_CHOP"])
+    T[R5_DIR_T] = SR.canon(SR.r5_direction(entries["v6"]), SR.KEYS[R5_DIR_T])
     return T
 
 
@@ -1288,7 +1383,35 @@ def chop_break():
             return nest
         return [x for x in run(_sr_entries(mod)) if "n_scale_in_sample" in x]
 
+    def adj_dropped():                      # [SR-16] the direction adjustment dropped
+        def f(pct, direction):
+            return np.asarray(pct, dtype=float)
+        with mutated(SR, "dir_adj_pct", f):
+            return [x for x in run(_sr_entries()) if R5_DIR_T in x]
+
+    def align_dropped():                    # [SR-16] alignment read off the state alone
+        def f(state, direction):
+            return orig_align(state, np.ones(len(state), dtype=np.int64))
+        with mutated(SR, "align_of", f):
+            return [x for x in run(_sr_entries()) if R5_DIR_T in x]
+
+    def side_flipped():                     # [SR-16] NEST's direction flipped on a copy
+        def mod(b, nest):
+            nest = nest.copy()
+            nest["direction"] = (-nest["direction"].astype(np.int64)).astype(np.int8)
+            return nest
+        e = _sr_entries(mod)
+        return [x for x in run(e) if R5_DIR_T in x]
+
+    orig_align = SR.align_of
     return plants([
+        ("[SR-16] the direction adjustment dropped (SR.dir_adj_pct mutated: a short's pct "
+         "read unadjusted), R5_CHOP_DIRECTION re-run on the written entries", "CHOP-DIR-VALUE",
+         adj_dropped),
+        ("[SR-16] the alignment read without the direction (SR.align_of mutated: BULL_EXP "
+         "aligned for every trade)", "CHOP-DIR-VALUE", align_dropped),
+        ("[SR-16] NEST's direction flipped on a copy of the entries (the typed side is the "
+         "book's stop side)", "CHOP-DIR-VALUE", side_flipped),
         ("deciles mirrored (SR.bucket_of mutated), R5 re-run on the written entries",
          "CHOP-VALUE", mirror),
         ("coincidence top / bot swapped (SR.coin_cat mutated), the grids re-run", "GRID-VALUE",
@@ -1302,15 +1425,23 @@ def chop_break():
 
 
 def chop_real():
-    exp = typed_cells({b: typed_entries(b) for b in BOOKS_T})
+    te = {b: typed_entries(b) for b in BOOKS_T}
+    exp = typed_cells(te)
     T = {n: written(n) for n in exp}
     f, n = chop_findings(T, exp)
+    f = direction_findings(te["v6"]) + f
     cnt = {k: len(v) for k, v in exp.items()}
+    nd = sum(len(v) for k, v in exp[R5_DIR_T].items())
     return (not f), (f"every cell re-derived HERE from the written NEST entry rows and the books' "
                      f"net_r by the typed bucket / coincidence / honesty laws {cnt}: {n} values "
                      f"(n, mean, P(win), ΣR, the holdout slice, n_scale_in_sample, "
                      f"n_stability_changed, FREQ n / share) == the written tables (counts exact, "
-                     f"floats to the 8-dp bound)" + (f"; findings {f[:4]}" if f else ""))
+                     f"floats to the 8-dp bound); {R5_DIR_T} [SR-16] ({len(exp[R5_DIR_T])} "
+                     f"cells, {nd} of those values, n_long / n_short included) by the direction "
+                     f"typed from the book's stop side (== NEST's direction on all "
+                     f"{len(te['v6'])} v6 entry rows), aligned = BULL_EXP long / BEAR_EXP "
+                     f"short, adjusted pct = pct long / 100 - pct short in SR-8's half-open "
+                     f"terciles" + (f"; findings {f[:4]}" if f else ""))
 
 
 # ═══════════════════════════════════════════════════════════════════ F-NEST-BOOK
@@ -2626,6 +2757,8 @@ def declared() -> dict:
     r2 = [f"{p}|{l}|{e}|{k}|{t}" for p, l in panels for e in ERAS_T for k in SCALES_T
           for t in TOLLS_T]
     r5 = [f"{k}|{l}|{b}" for k in SCALES_T for l in R5_LENSES_T for b in R5_BUCKETS_T]
+    r5d = [f"{k}|{l}|{sp}|{b}" for k in SCALES_T for l in R5_LENSES_T
+           for sp, bs in R5_DIR_SPLITS_T.items() for b in bs]
     fq, bs, bc = [], [], []
     for b in BOOKS_T:
         for k in SCALES_T:
@@ -2635,16 +2768,72 @@ def declared() -> dict:
                     fq += [f"{b}|{k}|{L}|{rule}|{s}|{c}" for s in STATES_T for c in cats]
                     bc += [f"{b}|{k}|{L}|{rule}|{c}" for c in cats]
                 bs += [f"{b}|{k}|{L}|{s}" for s in STATES_T + ("__ALL__",)]
-    return {"R1_LENSES": r1, "R2_FEASIBILITY": r2, "R5_CHOP": r5, "NEST_GRID_FREQ": fq,
-            "NEST_GRID_BY_STATE": bs, "NEST_GRID_BY_COIN": bc}
+    return {"R1_LENSES": r1, "R2_FEASIBILITY": r2, "R5_CHOP": r5, R5_DIR_T: r5d,
+            "NEST_GRID_FREQ": fq, "NEST_GRID_BY_STATE": bs, "NEST_GRID_BY_COIN": bc}
 
 
-DECL_N_T = {"R1_LENSES": 71, "R2_FEASIBILITY": 1458, "R5_CHOP": 64, "NEST_GRID_FREQ": 544,
-            "NEST_GRID_BY_STATE": 100, "NEST_GRID_BY_COIN": 136}
+DECL_N_T = {"R1_LENSES": 71, "R2_FEASIBILITY": 1458, "R5_CHOP": 64, R5_DIR_T: 40,
+            "NEST_GRID_FREQ": 544, "NEST_GRID_BY_STATE": 100, "NEST_GRID_BY_COIN": 136}
 TIER_E_TABLES = ("R1_LENSES", "NEST_v6", "NEST_trg912", "NEST_GRID_FREQ", "NEST_GRID_BY_STATE",
-                 "NEST_GRID_BY_COIN", "R5_CHOP", "R5_FIVE_ROW", "nest_books/V6-PROBE__base")
-STAT_TABLES = ("NEST_GRID_BY_STATE", "NEST_GRID_BY_COIN", "R5_CHOP")
-LABELLED_TABLES = ("R5_CHOP", "NEST_GRID_FREQ", "NEST_GRID_BY_STATE", "NEST_GRID_BY_COIN")
+                 "NEST_GRID_BY_COIN", "R5_CHOP", R5_DIR_T, "R5_FIVE_ROW",
+                 "nest_books/V6-PROBE__base")
+STAT_TABLES = ("NEST_GRID_BY_STATE", "NEST_GRID_BY_COIN", "R5_CHOP", R5_DIR_T)
+LABELLED_TABLES = ("R5_CHOP", R5_DIR_T, "NEST_GRID_FREQ", "NEST_GRID_BY_STATE",
+                   "NEST_GRID_BY_COIN")
+
+
+def _book_longs(book: str = "v6") -> int:
+    """the book's long campaigns, typed HERE from its own stop side (stop below entry)."""
+    c = pd.read_parquet(str(E.OUT / "books" / f"{book}_campaigns.parquet"))
+    return int((c["entry_px"].astype(float) > c["stop_px"].astype(float)).sum())
+
+
+def r5_dir_partition_findings(r5: pd.DataFrame, rd: pd.DataFrame) -> list[str]:
+    """[SR-16] R5_CHOP_DIRECTION against the typed book and the unchanged R5_CHOP rows:
+    the alignment split sums to the book (v6 200) and to its '__ALL__'; '__ALL__' holds
+    the book's typed longs / shorts; n_long + n_short == n on every row; EXP_ALIGNED +
+    EXP_COUNTER == R5's not-in-range BULL_EXP + BEAR_EXP; NONE == R5's not-in-range:NONE;
+    IN_RANGE == R5's deciles + '<0' + '>=100' == the five adjusted-pct buckets.  Sums by
+    mask (a dropped or duplicated cell is a finding, never a crash)."""
+    out = []
+    longs = _book_longs("v6")
+    bad = rd.index[(rd["n_long"].astype(int) + rd["n_short"].astype(int)) != rd["n"].astype(int)]
+    if len(bad):
+        out.append(f"PARTITION: {R5_DIR_T} n_long + n_short != n on "
+                   f"{sorted(rd.loc[bad, 'cell'].tolist())[:4]}")
+
+    def nsum(d, col, buckets, split=None):
+        m = d["bucket"].isin(buckets)
+        if split is not None:
+            m &= d["split"] == split
+        return int(d.loc[m, col].astype(int).sum())
+    for k in SCALES_T:
+        for L in R5_LENSES_T:
+            a5 = r5[(r5["scale_kind"] == k) & (r5["lens"] == L)]
+            g = rd[(rd["scale_kind"] == k) & (rd["lens"] == L)]
+            inr5 = nsum(a5, "n", DEC_T + ("<0", ">=100"))
+            al = [x for x in R5_ALIGN_T if x != "__ALL__"]
+            want = {
+                "alignment buckets == the book": (nsum(g, "n", al, "alignment"), BOOK_N_T["v6"]),
+                "alignment '__ALL__' == the book": (nsum(g, "n", ("__ALL__",), "alignment"),
+                                                    BOOK_N_T["v6"]),
+                "'__ALL__' n_long == the book's typed longs": (
+                    nsum(g, "n_long", ("__ALL__",), "alignment"), longs),
+                "'__ALL__' n_short == the book's typed shorts": (
+                    nsum(g, "n_short", ("__ALL__",), "alignment"), BOOK_N_T["v6"] - longs),
+                "EXP_ALIGNED + EXP_COUNTER == R5 not-in-range BULL_EXP + BEAR_EXP": (
+                    nsum(g, "n", ("EXP_ALIGNED", "EXP_COUNTER"), "alignment"),
+                    nsum(a5, "n", ("not-in-range:BULL_EXP", "not-in-range:BEAR_EXP"))),
+                "NONE == R5 not-in-range:NONE": (nsum(g, "n", ("NONE",), "alignment"),
+                                                 nsum(a5, "n", ("not-in-range:NONE",))),
+                "IN_RANGE == R5 deciles + '<0' + '>=100'": (
+                    nsum(g, "n", ("IN_RANGE",), "alignment"), inr5),
+                "adjusted-pct buckets == R5 deciles + '<0' + '>=100'": (
+                    nsum(g, "n", R5_ADJ_T, "pct_dir_adj"), inr5)}
+            for what, (got, exp) in want.items():
+                if got != exp:
+                    out.append(f"PARTITION: {R5_DIR_T} {k}|{L} {what}: {got} != {exp}")
+    return out
 
 
 def label_findings(T: dict) -> list[str]:
@@ -2806,13 +2995,15 @@ def grid_findings(T: dict) -> tuple[list[str], list[str]]:
         parts = int(a.loc[[x for x in R5_BUCKETS_T if x != "__ALL__"], "n"].sum())
         if parts != int(a.loc["__ALL__", "n"]) or parts != BOOK_N_T["v6"]:
             out.append(f"PARTITION: R5_CHOP {k}|{L} buckets sum {parts}")
+    out += r5_dir_partition_findings(r5, T[R5_DIR_T])
     return out, lines
 
 
 def _tables() -> dict:
-    return {n: written(n) for n in ("R1_LENSES", "R2_FEASIBILITY", "R5_CHOP", "R5_FIVE_ROW",
-                                    "NEST_GRID_FREQ", "NEST_GRID_BY_STATE", "NEST_GRID_BY_COIN",
-                                    "NEST_v6", "NEST_trg912", "nest_books/V6-PROBE__base")}
+    return {n: written(n) for n in ("R1_LENSES", "R2_FEASIBILITY", "R5_CHOP", R5_DIR_T,
+                                    "R5_FIVE_ROW", "NEST_GRID_FREQ", "NEST_GRID_BY_STATE",
+                                    "NEST_GRID_BY_COIN", "NEST_v6", "NEST_trg912",
+                                    "nest_books/V6-PROBE__base")}
 
 
 def grid_break():
@@ -2875,7 +3066,35 @@ def grid_break():
         d.loc[d["scale_kind"] == "calibrated", "pick_window"] = ""
         return d
 
+    def dir_tercile_plus_one(d):            # [SR-16] the row's own n_long + n_short kept == n
+        i = d.index[(d["split"] == "pct_dir_adj") & (d["n"].astype(int) > 0)][0]
+        d.loc[i, "n"] = int(d.loc[i, "n"]) + 1
+        d.loc[i, "n_long"] = int(d.loc[i, "n_long"]) + 1
+        return d
+
+    def dir_moved_to_aligned(d):            # [SR-16] IN_RANGE -> EXP_ALIGNED, totals kept
+        m = (d["split"] == "alignment") & (d["scale_kind"] == "frozen3.0") & (d["lens"] == "4h")
+        i = d.index[m & (d["bucket"] == "IN_RANGE")][0]
+        j = d.index[m & (d["bucket"] == "EXP_ALIGNED")][0]
+        for c, dv in (("n", 1), ("n_long", 1)):
+            d.loc[i, c] = int(d.loc[i, c]) - dv
+            d.loc[j, c] = int(d.loc[j, c]) + dv
+        return d
+
+    def dir_gates(d):                       # [SR-16] rows that decide nothing
+        d["gates"] = "the chop entry filter"
+        return d
+
     return plants([
+        ("[SR-16] a dropped R5_CHOP_DIRECTION cell", "missing ['",
+         lambda: with_(R5_DIR_T, lambda d: d.iloc[1:].copy())),
+        ("[SR-16] an R5_CHOP_DIRECTION adjusted-pct tercile n + 1 (and its n_long) on a copy",
+         "adjusted-pct buckets == R5 deciles", lambda: with_(R5_DIR_T, dir_tercile_plus_one)),
+        ("[SR-16] one frozen 4h entry moved IN_RANGE -> EXP_ALIGNED on a copy (row and book "
+         "totals kept)", "EXP_ALIGNED + EXP_COUNTER == R5",
+         lambda: with_(R5_DIR_T, dir_moved_to_aligned)),
+        ("[SR-16] R5_CHOP_DIRECTION's gates set to a decision on a copy",
+         f"COLLAR: {R5_DIR_T}.gates", lambda: with_(R5_DIR_T, dir_gates)),
         ("an R1 pick of record moved 0.25 on a copy", "R1-PICKS",
          lambda: with_("R1_LENSES", pick_moved)),
         ("R1's holdout density struck over ALL bars on a copy", "R1-DENSITY",
@@ -2910,7 +3129,11 @@ def grid_real():
                      f"stability_changed_members == the filed picks of the lenses it "
                      f"consumes; era partitions exact (R1 confirmed ranges and bars, R2 "
                      f"n_ranges and edge_n: tuning + holdout == ALL); "
-                     f"every grid WHOLE against the typed cells {n}; every Tier-E table "
+                     f"every grid WHOLE against the typed cells {n}; R5_CHOP_DIRECTION "
+                     f"[SR-16] partitions against the book's typed longs / shorts and the "
+                     f"unchanged R5_CHOP rows (alignment == the book; EXP_ALIGNED + "
+                     f"EXP_COUNTER == R5's BULL_EXP + BEAR_EXP; IN_RANGE == R5's in-range == "
+                     f"the adjusted-pct buckets; n_long + n_short == n); every Tier-E table "
                      f"collared on every row with no verdict column; R2's word and verdict only "
                      f"on the 7 record rows and no verdict-named column; n = 0 <=> NaN stats "
                      f"(whole and holdout slice); R5 buckets, NEST_GRID states and coincidence "
@@ -2995,6 +3218,11 @@ def key_break():
         m["keys"]["R5_CHOP"] = ["lens", "bucket"]
         return key_findings(OUT, m)
 
+    def null_dir():                         # [SR-16]
+        d = written(R5_DIR_T)
+        d.loc[d.index[3], "n_long"] = None
+        return key_findings(OUT, man, {R5_DIR_T: d})
+
     def undeclared():
         tmp = Path(tempfile.mkdtemp(prefix="f-key-"))
         try:
@@ -3008,6 +3236,7 @@ def key_break():
         ("a duplicated NEST_v6 row", "KEY-UNIQUE", dup),
         ("a nulled R2 would_read on a Tier-E row", "KEY-NULL: R2 verdict / word (record) / "
                                                    "would_read (Tier-E) null", null_would),
+        ("[SR-16] a nulled R5_CHOP_DIRECTION n_long", f"KEY-NULL: {R5_DIR_T}.n_long", null_dir),
         ("a manifest content sha altered", "KEY-SHA", sha_alt),
         ("a manifest key altered", "KEY-MANIFEST", key_alt),
         ("an undeclared parquet in a temp copy of stage_r/", "KEY-DECLARED", undeclared),
@@ -3039,6 +3268,9 @@ def _files(d: Path) -> dict:
 
 def det_findings(a: tuple, b: tuple, canon: dict) -> list[str]:
     out = []
+    miss = [f"{k}.parquet" for k in KEYS_T if f"{k}.parquet" not in canon]
+    if miss:                                # every typed table is in the byte comparison
+        out.append(f"DET-COVERAGE: typed parquet(s) {miss} absent from the canonical set")
     for lab, (rc, _) in (("seed 1", a), (f"seed {SEED}", b)):
         if rc != 0:
             out.append(f"{lab} exit {rc}")
@@ -3112,6 +3344,19 @@ def det_break():
             c2 = dict(canon, **{"R5_CHOP.parquet": p})
             return det_findings((0, c2), (0, c2), canon)
 
+        def dir_moved():                    # [SR-16] the new table is in the byte comparison
+            d = pd.read_parquet(str(canon[f"{R5_DIR_T}.parquet"]))
+            i = d.index[d["n"].astype(int) > 0][0]
+            d.loc[i, "sum_net_r"] = float(d.loc[i, "sum_net_r"]) + 1e-6
+            p = tmp / f"{R5_DIR_T}.parquet"
+            d.to_parquet(str(p), index=False)
+            c2 = dict(canon, **{f"{R5_DIR_T}.parquet": p})
+            return det_findings((0, c2), (0, c2), canon)
+
+        def dir_absent():                   # [SR-16] a canonical set without the new table
+            c2 = {k: v for k, v in canon.items() if k != f"{R5_DIR_T}.parquet"}
+            return det_findings((0, c2), (0, c2), c2)
+
         def hashorder():
             procs = {s: (det_dir() / f"hashorder_{s}", det_launch(det_dir() / f"hashorder_{s}", s,
                                                                  hashorder=True))
@@ -3125,6 +3370,10 @@ def det_break():
              lambda: det_findings((0, canon), (0, bent), canon)),
             ("one R5_CHOP sum moved 1e-6 in a parquet copy", "R5_CHOP.parquet content sha",
              float_moved),
+            ("[SR-16] one R5_CHOP_DIRECTION sum moved 1e-6 in a parquet copy",
+             f"{R5_DIR_T}.parquet content sha", dir_moved),
+            ("[SR-16] R5_CHOP_DIRECTION.parquet absent from a copy of the canonical set",
+             "DET-COVERAGE", dir_absent),
             ("a hash-order-dependent line (set iteration) under the two seeds",
              f"seed 1 vs seed {SEED}: STAGE_R.md bytes differ", hashorder),
         ])
@@ -3140,7 +3389,8 @@ def det_real():
     a, b = o[DET_SEEDS[0]], o[DET_SEEDS[1]]
     bad = det_findings(a, b, canon)
     return (not bad), (f"exit {a[0]}/{b[0]}; file set == canonical ({len(canon)} files, "
-                       f"recursive) in both builds; every file byte-identical seed 1 == seed "
+                       f"recursive, every typed parquet among them — {R5_DIR_T} [SR-16] "
+                       f"included) in both builds; every file byte-identical seed 1 == seed "
                        f"{SEED} == canonical, every parquet content sha equal: {not bad}"
                        + (f"; findings {bad[:4]}" if bad else ""))
 
@@ -3168,12 +3418,16 @@ FIXTURES = (
      "this file's own crosstab of NEST_v6's frozen entry rows, or R5_CHOP does not partition "
      "them",
      anchor_break, anchor_real),
-    ("F-CHOP-VALUE", "every R5_CHOP and NEST_GRID cell re-derived here from the written entry "
-     "rows by the typed bucket / coincidence / honesty laws [L-R.7, L-R.5, L-R.2, AM-4]",
-     "any cell of R5_CHOP / NEST_GRID_FREQ / BY_STATE / BY_COIN (n, mean, P(win), ΣR, the "
-     "holdout slice, n_scale_in_sample, n_stability_changed, FREQ n / share) differs from the "
-     "value re-derived here from NEST_v6 / NEST_trg912's entry rows, the books' net_r and the "
-     "FILED picks (counts exact, floats to the 8-dp bound)",
+    ("F-CHOP-VALUE", "every R5_CHOP, R5_CHOP_DIRECTION and NEST_GRID cell re-derived here from "
+     "the written entry rows by the typed bucket / direction / coincidence / honesty laws "
+     "[L-R.7, SR-16, L-R.5, L-R.2, AM-4]",
+     "any cell of R5_CHOP / R5_CHOP_DIRECTION / NEST_GRID_FREQ / BY_STATE / BY_COIN (n, mean, "
+     "P(win), ΣR, the holdout slice, n_scale_in_sample, n_stability_changed, FREQ n / share, "
+     "n_long / n_short) differs from the value re-derived here from NEST_v6 / NEST_trg912's "
+     "entry rows, the books' net_r and the FILED picks (counts exact, floats to the 8-dp "
+     "bound) — R5_CHOP_DIRECTION with the direction typed from the book's stop side (aligned "
+     "= BULL_EXP long / BEAR_EXP short; adjusted pct = pct long / 100 - pct short in SR-8's "
+     "half-open terciles) — or NEST's direction differs from the book's stop side",
      chop_break, chop_real),
     ("F-NEST-BOOK", "the nest at book instants: the instant law typed here from the raw 4h "
      "tape; the join; the causal prefix-run check; the nest-book door on the probe and on "
@@ -3209,14 +3463,15 @@ FIXTURES = (
     ("F-GRID", "every grid WHOLE against cells typed here; R1 == the filed picks, densities "
      "from their counts; honesty labels; collars; no verdict word off the record; NaN law; "
      "partitions",
-     "a grid is not whole against the typed cells (R1 71 · R2 1458 · R5 64 · FREQ 544 · "
-     "BY_STATE 100 · BY_COIN 136); an R1 pick / window differs from SCALE_PICKS.json or its "
+     "a grid is not whole against the typed cells (R1 71 · R2 1458 · R5 64 · "
+     "R5_CHOP_DIRECTION 40 · FREQ 544 · BY_STATE 100 · BY_COIN 136); an R1 pick / window differs from SCALE_PICKS.json or its "
      "window density from the filed one, or an R1 density is not 100 x count / bars of its "
      "era; an R2 fallback / stability-changed / window label, or an R5 / NEST_GRID lens "
      "label, differs from the filed picks; a Tier-E table lacks the exact collar or carries a "
      "verdict column; R2's word / verdict is off the 7 record rows; a stat is NaN under n > 0 "
      "(or finite at n = 0), whole or holdout; or a partition breaks (R1 / R2 eras, R5 "
-     "buckets, NEST_GRID states and categories)",
+     "buckets, NEST_GRID states and categories, R5_CHOP_DIRECTION against the book's typed "
+     "longs / shorts and the unchanged R5_CHOP rows)",
      grid_break, grid_real),
     ("F-KEY", "typed keys unique, typed required columns non-null, the manifest total and "
      "exact",
@@ -3227,7 +3482,8 @@ FIXTURES = (
     ("F-DET", "two subprocess builds under different hash seeds, one set of bytes",
      "the PYTHONHASHSEED 1 and 20260924 builds (under RUN_ROOT/_det_stage_r) differ from each "
      "other or from the canonical stage_r/ files in the recursive file set, any byte or any "
-     "parquet content sha, or either exits nonzero",
+     "parquet content sha, or either exits nonzero, or a typed parquet (R5_CHOP_DIRECTION "
+     "included) is absent from the canonical set",
      det_break, det_real),
 )
 

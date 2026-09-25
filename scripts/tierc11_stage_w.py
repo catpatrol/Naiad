@@ -41,6 +41,22 @@ WHAT IT BUILDS
     W2_RELAY_SUMMARY.parquet share and lead distribution summaries, whole.
     W2_RELAY_HIST.parquet    the lead distributions binned, whole.
     P_WARN_1_COMPLEMENT.parquet  the complement comparison (Tier-E arm of P-WARN-1).
+    W1_EVENTS_OTHER.parquet  the W1 stamps on the OTHER 4h books (w12): every 1h cross of
+                             the three pairs inside each campaign's window (window open,
+                             exit-bar close] of the 9/12 book, P-BRK-4H scored and
+                             P-RELAY-1 scored, classified by the SAME classifiers as
+                             W1_EVENTS; key (book, symbol, entry_close_ms, pair,
+                             h1_open_ms).  Tier-E, whole.
+    W1_CAMPAIGNS_OTHER.parquet one row per campaign of those books: the window open
+                             (w13), the 1h-resolved exit and the two +1R latch readings
+                             by the ride module's resolver (w14; a campaign whose exit
+                             cannot be resolved on 1h falls back to the 4h close,
+                             labelled), cohort and pre-entry memberships and counts, the
+                             first event per cohort; key (book, symbol, entry_close_ms).
+    W1_OTHER_SUMMARY.parquet per book x era: n campaigns, n events per class (phase x
+                             pair x side x latch relation), cohort sizes as W2 defines them
+                             (cohort / at-risk / complement; pre-entry cohort / whole book /
+                             complement) — counts only, no outcome statistic.  Tier-E.
     MANIFEST_STAGE_W.json, STAGE_W.md
   research_outputs/tierc11/regbooks/P-WARN-1/
     <arm>.parquet + <arm>.json for: the rule book (scored iff the condition is MET,
@@ -142,6 +158,50 @@ never re-chosen after a number):
        / rule_fee_r; W2_RELAY_WINDOWS: haircut_net_r) and beside the complement
        table's sums (sum_v6_haircut_r / sum_rule_haircut_r).  The forward-leg marks
        stay net R (a mark is a hypothetical exit, not a trade row).
+  (w12) W1 ON EVERY 4h CAMPAIGN (contract W1 "stamp every 4h campaign's timeline";
+       final-review fidelity MINOR-1: the first build stamped only v6).  The other 4h
+       books are stamped as Tier-E W1 rows by the SAME event tape (`asset_events`) and
+       the SAME classifiers (`phase_of`, `latch_rel`, `side_of`, `recross_strict`,
+       `visible` / `first_visible`, `in_class`, `cohort_hits`): the 9/12 book (the
+       TC11-BOOKS trg912 book, B.trg912_book — its filed book_sha asserted), P-BRK-4H
+       scored and P-RELAY-1 scored (each read from its regbook; the sidecar's
+       book_sha256 == this stage's BOOK_SHA_LAW recomputation == the input the
+       scorer scored, scores/SCORE_MANIFEST.json — HALT otherwise).  Only W1 is
+       stamped there: memberships, counts and cohort SIZES (W2's cohorts and at-risk
+       sets, W2's pre-entry classes), no outcome statistic, no mark, no forward leg,
+       no verdict word; every W table of v6 and the P-WARN-1 regbooks are untouched.
+       Each campaign row carries its book's own net_r, fee_r and haircut_net_r (w11:
+       the regbook's own AM-7 column for P-BRK-4H / P-RELAY-1; the typed law on the
+       9/12 book's fee_r).
+  (w13) THE WINDOW OPEN (L-W.3's "arm close") per book: the 9/12 book = its arm close
+       (v6's card law with the 9/12 trigger); P-BRK-4H = the CLOSE OF THE 4h MACRO
+       DEATH that opens the lane's candidacy (die_close_ms: the lane has no arming;
+       the death is the instant its window opens — the touch and the hold are the
+       entry pattern, inside the window); P-RELAY-1 = the arm close of the v6 window
+       it entered (window_arm_close_ms).  THE ENTRY is the entry close: for a relay
+       its 1h close (L-T.2) — its IN-TRADE window starts there, and its own entry
+       cross (the 9/12 with-trend cross closing at the entry) is PRE-ENTRY by L-W.3's
+       "cross close <= entry close".
+  (w14) THE 1h RESOLUTION.  The 9/12 book and P-BRK-4H were ridden WITHOUT the 1h walk,
+       so their exit instant and +1R latch are resolved here by the ride module's own
+       resolver under L-W.0 / L-W.3 — the law the v6 stamps use: the 9/12 book
+       campaign by campaign through RD.transform_book(walk=`other_walk`) (identity
+       asserted by RD.identity_findings: acted 0, worst 0.000e+00); P-BRK-4H through
+       RD.ride11(walk=`other_walk`(sym)) on the book's own entry bar, entry price, stop
+       and R (BK.ride_leg_l(ribbon=None) is tierc9._ride_leg9 transcribed, and every
+       campaign here has 0 inactive components).  The walked re-ride must reproduce
+       the book's WHAT exactly — exit bar, exit price, exit reason, reached_1r, the
+       harvest (flag and price), the final stop and the advance count; the walk
+       resolves WHEN, never WHAT.  A campaign whose re-ride HALTs under L-W.3
+       ('walk-halt: …') or does not reproduce the book ('ride-not-reproduced: …') is
+       NOT resolved on 1h: its exit instant falls back to the 4h exit-bar close and its
+       latch to the close of the book's own 4h +1R bar (B.plus_1r_bar), labelled
+       resolution '4h-close-fallback' with the reason (on this corridor: none —
+       the count is printed).  P-RELAY-1 was ridden ON the walk (relay11 walk_after):
+       its path of record is re-run (RD.relay11(walk_after=True, moved=)) and must
+       reproduce the regbook's exit_close_ms, exit price, exit reason, exit bar and
+       latch_1h_ms exactly (HALT otherwise); L-W.3's latch (plus1r_1h_ms, not a regbook
+       column) is read from it.
 
 CHANGES AFTER FIRST OUTPUT (disclosed; no net_r, cohort, condition number or
 registered figure moved by either; printed in STAGE_W.md and the manifest):
@@ -159,12 +219,20 @@ registered figure moved by either; printed in STAGE_W.md and the manifest):
        the book_sha256) moved; net_r / gross_r / fee_r / funding_r did not.
   (The builder's first-output files are not on disk; both changes are stated from
   the code's own law texts and the Stage W verifier's report, finding 2.)
+  FINAL-REVIEW REPAIR G7 (fidelity MINOR-1, 2026-09-25): W1_EVENTS_OTHER,
+  W1_CAMPAIGNS_OTHER and W1_OTHER_SUMMARY added (w12..w14).  Every pre-existing W
+  table, the P-WARN-1 regbooks, condition.json and STATUS.json are byte-identical;
+  only the manifest and STAGE_W.md text move.
 
 WHAT WOULD MAKE THIS WRONG: classifying at the 4h exit-bar close (a cross after the
 stop child would count in-trade — F-WARN-ASOF); reading a 1h bar that closes after
 the 4h instant (F-WARN-ASOF); admitting pre-entry crosses into a post-entry cohort
 (F-WARN-COHORT); a cohort latch that disagrees with the walk; a rule book that moves
-an untouched campaign (F-IDENTITY); printing a verdict word on a Tier-E row.
+an untouched campaign (F-IDENTITY); printing a verdict word on a Tier-E row; on the
+other books (F-W1-OTHER): a resolver that reads a 1h child closing after its 4h bar's
+close, a relay's in-trade window opened at its 4h bar close instead of its 1h entry
+close, a lane window opened anywhere but its death close, or a silent fall-back to
+the 4h close.
 
 Run:  export NAIAD_CACHE_DIR=$HOME/.cache/naiad/snapshots/tc11_20260925 PYTHONDONTWRITEBYTECODE=1
       ~/venvs/naiad/bin/python -B scripts/tierc11_stage_w.py              # canonical build
@@ -181,6 +249,7 @@ import json
 import os
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -291,8 +360,32 @@ TABLES = {                                   # name -> (key, lens)
     "W2_RELAY_SUMMARY": (["cell"], "4h"),
     "W2_RELAY_HIST": (["cell"], "4h"),
     "P_WARN_1_COMPLEMENT": (["cell"], "4h"),
+    # (w12) the other 4h books — Tier-E W1 stamps (final-review MINOR-1)
+    "W1_EVENTS_OTHER": (["book", "symbol", "entry_close_ms", "pair", "h1_open_ms"], "1h"),
+    "W1_CAMPAIGNS_OTHER": (["book", "symbol", "entry_close_ms"], "4h"),
+    "W1_OTHER_SUMMARY": (["cell"], "4h"),
 }
-ARMS_MET = ("scored", "base", "tierE__tuning", "tierE__holdout")
+# (w12..w14) the other 4h books, in print order
+OTHER_BOOKS = ("trg912", "P-BRK-4H", "P-RELAY-1")
+OTHER_SOURCE = {
+    "trg912": ("research_outputs/tierc11/books/trg912_campaigns.parquet — the TC11-BOOKS 9/12 "
+               "book (B.trg912_book; filed book_sha asserted), re-ridden per campaign by "
+               "RD.transform_book(walk=other_walk)"),
+    "P-BRK-4H": ("research_outputs/tierc11/regbooks/P-BRK-4H/scored.parquet — the scored book "
+                 "(sidecar book_sha256 == this stage's recomputation == the scorer's input), "
+                 "re-ridden per campaign by RD.ride11(walk=other_walk(sym))"),
+    "P-RELAY-1": ("research_outputs/tierc11/regbooks/P-RELAY-1/scored.parquet — the scored "
+                  "book (sidecar book_sha256 == this stage's recomputation == the scorer's "
+                  "input), its path of record re-run by RD.relay11(walk_after=True, moved=)"),
+}
+ARM_KIND = {"trg912": "arm close (the 9/12 card's window arming)",
+            "P-BRK-4H": "death close (the 4h macro death that opens the lane's candidacy)",
+            "P-RELAY-1": "window arm close (the v6 window the relay entered)"}
+RES_1H, RES_FALLBACK = "1h-walk", "4h-close-fallback"
+SCORE_MANIFEST_PATH = E.OUT / "scores" / "SCORE_MANIFEST.json"
+OTHER_GROUPS_COHORT = ("cohort", "at_risk", "complement")
+OTHER_GROUPS_PRE = ("cohort", "whole_book", "complement")
+ARMS_MET =("scored", "base", "tierE__tuning", "tierE__holdout")
 ARMS_NOT_MET = ("tierE__rule_book_condition_not_met", "base", "tierE__tuning",
                 "tierE__holdout")
 
@@ -326,6 +419,18 @@ READINGS = (
     "[LEAN-HEPHAESTUS] (w11) AM-7's haircut twin beside every per-campaign net R "
     "(W1_CAMPAIGNS, W2_RELAY_WINDOWS) and the complement table's sums; L-1.3 entry bars "
     "straddling the era cut printed as a count (sidecars, STAGE_W.md).",
+    "[LEAN-HEPHAESTUS] (w12) W1 on every 4h campaign (final-review MINOR-1): the 9/12 book, "
+    "P-BRK-4H scored and P-RELAY-1 scored stamped Tier-E by the same event tape and "
+    "classifiers as v6 (W1_EVENTS_OTHER, W1_CAMPAIGNS_OTHER, W1_OTHER_SUMMARY: counts and "
+    "W2's cohort sizes only, no outcome statistic).",
+    "[LEAN-HEPHAESTUS] (w13) window open = the 9/12 book's arm close; P-BRK-4H's 4h death "
+    "close; P-RELAY-1's v6 window arm close.  A relay's entry = its 1h close: its in-trade "
+    "window starts there.",
+    "[LEAN-HEPHAESTUS] (w14) 1h resolution of the books ridden without the walk (9/12, "
+    "P-BRK-4H) by the ride module's resolver (RD.transform_book / RD.ride11 with the walk), "
+    "the book's WHAT reproduced exactly per campaign, else the 4h-close fallback, labelled "
+    "with its reason; P-RELAY-1 by its path of record (RD.relay11 walk_after), reproduced "
+    "exactly or HALT.",
 )
 CHANGES_AFTER_FIRST_OUTPUT = (
     {"id": "CH-1", "what": "the (w7) twin population",
@@ -810,6 +915,366 @@ def relay_twin_windows(v6_keys: set) -> tuple[pd.DataFrame, dict]:
            "twin_windows_by_end_kind": {k: int(v) for k, v in
                                         d["end_kind"].value_counts().sort_index().items()}}
     return d, chk
+
+
+# ═══════════════════════ (w12..w14) W1 ON THE OTHER 4h BOOKS (final-review MINOR-1)
+def other_walk(sym: str):
+    """The walk the 9/12 and P-BRK-4H re-rides resolve on — RD.walk_of [L-W.0].
+    Fixture seam: F-W1-OTHER plants a walk that reads the child closing after the
+    4h bar's close."""
+    return RD.walk_of(sym)
+
+
+def window_of(book: str, row) -> tuple[int, int]:
+    """(w13) (window open, entry close) of one campaign of an other book.  Fixture
+    seam."""
+    if book == "trg912":
+        return int(row.arm_ms) + MS_4H, int(row.entry_ms) + MS_4H
+    if book == "P-BRK-4H":
+        return int(row.die_close_ms), int(row.entry_close_ms)
+    if book == "P-RELAY-1":
+        return int(row.window_arm_close_ms), int(row.entry_close_ms)
+    _halt(f"window_of: unknown book {book!r}")
+    return 0, 0
+
+
+def _scored_regbook(reg: str) -> pd.DataFrame:
+    """A scored regbook of record: its sidecar's book_sha256 == this stage's BOOK_SHA_LAW
+    recomputation == the input the scorer scored (scores/SCORE_MANIFEST.json)."""
+    d = pd.read_parquet(str(E.OUT / "regbooks" / reg / "scored.parquet"))
+    side = json.loads((E.OUT / "regbooks" / reg / "scored.json").read_text(encoding="utf-8"))
+    man = json.loads(SCORE_MANIFEST_PATH.read_text(encoding="utf-8"))
+    want = (man.get("inputs", {}).get(f"{reg}/scored") or {}).get("book_sha256")
+    got = book_sha256(d)
+    if not (want == side.get("book_sha256") == got):
+        _halt(f"{reg}/scored: sidecar book_sha256 {str(side.get('book_sha256'))[:12]}…, "
+              f"recomputed {got[:12]}…, scorer's input {str(want)[:12]}… — not the scored "
+              f"book of record")
+    if bool(d.duplicated(subset=["symbol", "entry_close_ms"]).any()):
+        _halt(f"{reg}/scored: (symbol, entry_close_ms) is not unique")
+    return d
+
+
+def _res(exit_close_ms, exit_by, plus1r, latch, latch_by, n_mis, mis_ms, exit_ms,
+         resolution=RES_1H, why="") -> SimpleNamespace:
+    """One campaign's resolution, in the attribute names `exit_instant` /
+    `latch_instant` / `latch_twin` read (so the v6 seams judge every book)."""
+    return SimpleNamespace(
+        exit_close_ms=None if exit_close_ms is None else int(exit_close_ms),
+        exit_resolved_by=str(exit_by), plus1r_1h_ms=None if plus1r is None else int(plus1r),
+        latch_1h_ms=None if latch is None else int(latch), latch_1h_by=latch_by,
+        n_walk_mismatch=int(n_mis), walk_mismatch_ms=[int(x) for x in mis_ms],
+        exit_ms=int(exit_ms), resolution=resolution, fallback_reason=why)
+
+
+def fallback_res(sym: str, d: int, entry_i: int, entry_px: float, r_dist: float,
+                 exit_i: int, why: str) -> SimpleNamespace:
+    """(w14) NOT resolved on 1h: the exit instant is the 4h exit-bar close and the
+    latch the close of the book's own 4h +1R bar (B.plus_1r_bar), labelled."""
+    f = T9.frame(sym)["f"]
+    j1 = B.plus_1r_bar(f, SimpleNamespace(direction=int(d), r_dist=float(r_dist),
+                                          entry_i=int(entry_i), exit_i=int(exit_i),
+                                          entry_px=float(entry_px)))
+    lat = None if j1 is None else int(f.open_ms[j1]) + MS_4H
+    return _res(int(f.open_ms[exit_i]) + MS_4H, RES_FALLBACK, lat, lat,
+                None if lat is None else "4h-fallback", 0, [], int(f.open_ms[exit_i]),
+                resolution=RES_FALLBACK, why=why)
+
+
+WHAT_FIELDS = ("exit bar", "exit px", "exit reason", "reached_1r", "harvested", "harvest px",
+               "final stop", "n advances")
+
+
+def _what_diff(want: tuple, got: tuple) -> list[str]:
+    return [f"{n} book {a!r} re-ride {b!r}" for n, a, b in zip(WHAT_FIELDS, want, got)
+            if not (a == b or (a is None and b is None))]
+
+
+def resolve_trg912(t, roles, lo: int, hi: int) -> SimpleNamespace:
+    """(w14) one 9/12 campaign through RD.transform_book(walk=other_walk)."""
+    def what(x):
+        return (int(x.exit_ms), float(x.exit_px), str(x.exit_reason), bool(x.reached_1r),
+                bool(x.harvested), None if x.harvest_px is None else float(x.harvest_px),
+                float(x.final_stop_px), len(x.advances))
+    why = ""
+    try:
+        w = RD.transform_book([t], CARD, roles, lo, hi, walk=other_walk)[0]
+        f_, st_ = RD.identity_findings([t], [w])
+        diff = _what_diff(what(t), what(w))
+        if f_ or st_["acted"] or diff or getattr(w, "exit_close_ms", None) is None:
+            why = ("ride-not-reproduced: " + "; ".join((f_ + diff)[:3] or
+                                                         [f"acted {st_['acted']}"]))
+    except SystemExit as e:
+        why = f"walk-halt: {e}"
+    if why:
+        return fallback_res(t.symbol, int(t.direction), int(t.entry_i), float(t.entry_px),
+                            float(t.r_dist), int(t.exit_i), why)
+    out = _res(w.exit_close_ms, w.exit_resolved_by, w.plus1r_1h_ms, w.latch_1h_ms,
+               w.latch_1h_by, w.n_walk_mismatch, w.walk_mismatch_ms, w.exit_ms)
+    out.walked = w                       # the walked Trade (the book's CTRL_COLS check)
+    return out
+
+
+def resolve_brk(r, lo: int, hi: int) -> SimpleNamespace:
+    """(w14) one P-BRK-4H campaign: RD.ride11(walk=other_walk(sym)) on the book's own
+    entry bar, entry price, stop and R; the book's WHAT must re-derive exactly."""
+    sym, d = str(r.symbol), int(r.direction)
+    f = T9.frame(sym)["f"]
+    om = np.asarray(f.open_ms, dtype=np.int64)
+    ti = int(np.searchsorted(om, int(r.entry_ms), "left"))
+    xi = int(np.searchsorted(om, int(r.exit_ms), "left"))
+    if (ti >= len(om) or xi >= len(om) or int(om[ti]) != int(r.entry_ms)
+            or int(om[xi]) != int(r.exit_ms) or int(om[ti]) + MS_4H != int(r.entry_close_ms)
+            or float(f.c[ti]) != float(r.entry_px)):
+        _halt(f"P-BRK-4H {sym} {iso(int(r.entry_ms))}: the book's entry / exit bars are not "
+              f"the 4h frame's (entry at the close of the entry bar)")
+    _lo_i, hi_i, _n = B.ride_bounds(sym, ROLES, lo, hi)
+    if int(om[hi_i]) + MS_4H != PIN_MS:
+        _halt(f"{sym}: the ride's last bar does not close at the pin")
+    want = (int(r.exit_ms), float(r.exit_px), str(r.exit_reason), bool(r.reached_1r),
+            bool(r.harvested), float(r.harvest_px) if bool(r.harvested) else None,
+            float(r.final_stop_px), int(r.n_advances))
+    why = ""
+    try:
+        leg = RD.ride11(sym, CARD, ROLES, d, ti, float(r.entry_px), float(r.stop_px),
+                        float(r.r_dist), hi_i, walk=other_walk(sym))
+        hv = leg["harvest"]
+        got = (int(om[int(leg["exit_i"])]), float(leg["exit_px"]), str(leg["exit_reason"]),
+               bool(leg["reached_1r"]), hv is not None, None if hv is None else float(hv[1]),
+               float(leg["final_stop"]), len(leg["advances"]))
+        diff = _what_diff(want, got)
+        if diff or leg.get("exit_close_ms") is None:
+            why = "ride-not-reproduced: " + "; ".join(diff[:3] or ["no 1h-resolved exit"])
+    except SystemExit as e:
+        why = f"walk-halt: {e}"
+    if why:
+        return fallback_res(sym, d, ti, float(r.entry_px), float(r.r_dist), xi, why)
+    return _res(leg["exit_close_ms"], leg["exit_resolved_by"], leg["plus1r_1h_ms"],
+                leg["latch_1h_ms"], leg["latch_1h_by"], leg["n_walk_mismatch"],
+                leg["walk_mismatch_ms"], int(om[int(leg["exit_i"])]))
+
+
+def resolve_relay(r, lo: int, hi: int) -> SimpleNamespace:
+    """(w14) one P-RELAY-1 relay: its path of record (RD.relay11 walk_after, moved=)
+    re-run; the regbook's exit instant, price, reason, bar and latch_1h_ms must
+    re-derive exactly (HALT otherwise); L-W.3's plus1r_1h_ms is read from it."""
+    sym, d = str(r.symbol), int(r.direction)
+    _lo_i, hi_i, _n = B.ride_bounds(sym, ROLES, lo, hi)
+    om = np.asarray(T9.frame(sym)["f"].open_ms, dtype=np.int64)
+    leg = RD.relay11(sym, CARD, ROLES, d, int(r.entry_close_ms), float(r.entry_px),
+                     float(r.stop_px), float(r.r_dist), hi_i, walk=RD.walk_of(sym),
+                     walk_after=True, moved=bool(r.moved))
+    lat = None if pd.isna(r.latch_1h_ms) else int(r.latch_1h_ms)
+    got = (leg.get("exit_close_ms"), float(leg["exit_px"]), str(leg["exit_reason"]),
+           int(om[int(leg["exit_i"])]), leg["latch_1h_ms"])
+    want = (int(r.exit_close_ms), float(r.exit_px), str(r.exit_reason), int(r.exit_ms), lat)
+    if got != want:
+        _halt(f"P-RELAY-1 {sym} {iso(int(r.entry_close_ms))}: its path of record re-run gives "
+              f"{got}, the regbook {want} [w14]")
+    return _res(leg["exit_close_ms"], leg["exit_resolved_by"], leg["plus1r_1h_ms"],
+                leg["latch_1h_ms"], leg["latch_1h_by"], leg["n_walk_mismatch"],
+                leg["walk_mismatch_ms"], int(r.exit_ms))
+
+
+def other_books() -> dict:
+    """{book: [(row, res)]} in each book's own order — the source rows and their
+    1h resolution (w14).  Memoised."""
+    if "other" in _MEMO:
+        return _MEMO["other"]
+    lo, hi, _ = corridor()
+    out, chk = {}, {}
+    roles = B.r912()
+    b912 = B.trg912_book(lo, hi)
+    filed = json.loads((B.OUT / B.MANIFEST).read_text(encoding="utf-8"))["book_sha"]["trg912"]
+    if B.book_sha(b912) != filed:
+        _halt("the live 9/12 book is not the filed TC11-BOOKS trg912 book")
+    c912 = pd.read_parquet(str(B.OUT / "trg912_campaigns.parquet"))
+    if {(str(s), int(e)) for s, e in zip(c912["symbol"], c912["entry_ms"])} != \
+            {(t.symbol, int(t.entry_ms)) for t in b912} or len(c912) != len(b912):
+        _halt("books/trg912_campaigns.parquet is not the live 9/12 book's key set")
+    out["trg912"] = [(t, resolve_trg912(t, roles, lo, hi)) for t in b912]
+    walked = [x.walked for t, x in out["trg912"] if x.resolution == RES_1H]
+    kept = [t for t, x in out["trg912"] if x.resolution == RES_1H]
+    ok, worst, why = TP.ctrl_diff(TP.journal_frame(walked), TP.journal_frame(kept))
+    chk["trg912"] = {"book_sha": filed, "ctrl_cols_worst_walked": float(worst),
+                     "ctrl_cols_ok": bool(ok)}
+    if not ok or worst != 0.0:
+        _halt(f"the walked 9/12 re-rides differ from the book on CTRL_COLS: {why}")
+    for reg, fn in (("P-BRK-4H", resolve_brk), ("P-RELAY-1", resolve_relay)):
+        d = _scored_regbook(reg)
+        out[reg] = [(r, fn(r, lo, hi)) for r in d.itertuples(index=False)]
+        chk[reg] = {"book_sha256": book_sha256(d)}
+    _MEMO["other"] = (out, chk)
+    return _MEMO["other"]
+
+
+def other_campaign_info(book: str, row, res) -> dict:
+    """The instants of one campaign of an other book (w13, w14) — the keys
+    `classify_campaign` reads, plus the book's own facts."""
+    if book == "trg912":
+        sym, d = row.symbol, int(row.direction)
+        entry_ms, exit_ms = int(row.entry_ms), int(row.exit_ms)
+        net, fee = float(row.net_r), float(row.fee_r)
+        hc, reached = haircut(sym, net, fee), bool(row.reached_1r)
+    else:
+        sym, d = str(row.symbol), int(row.direction)
+        entry_ms, exit_ms = int(row.entry_ms), int(row.exit_ms)
+        net, fee = float(row.net_r), float(row.fee_r)
+        hc, reached = float(row.haircut_net_r), bool(row.reached_1r)
+    arm_close, entry_close = window_of(book, row)
+    if not arm_close <= entry_close:           # a lag-0 window opens at its entry close
+        _halt(f"{book} {sym} {iso(entry_ms)}: window open {iso(arm_close)} is after the "
+              f"entry close {iso(entry_close)}")
+    return {"book": book, "symbol": sym, "entry_ms": entry_ms, "entry_close_ms": entry_close,
+            "direction": d, "arm_close_ms": arm_close, "arm_kind": ARM_KIND[book],
+            "exit_close_ms": exit_instant(res), "exit_bar_close_ms": exit_ms + MS_4H,
+            "exit_resolved_by": str(res.exit_resolved_by), "resolution": res.resolution,
+            "fallback_reason": res.fallback_reason, "exit_reason": str(row.exit_reason),
+            "latch_ms": latch_instant(res), "latch_w5_ms": latch_twin(res),
+            "latch_by": res.latch_1h_by, "n_walk_mismatch": int(res.n_walk_mismatch),
+            "walk_mismatch_bars": ",".join(iso(int(x)) for x in res.walk_mismatch_ms),
+            "reached_1r_book": reached, "net_r": net, "fee_r": fee, "haircut_net_r": hc,
+            "era": E.era_of(entry_close)}
+
+
+def w1_other() -> dict:
+    """W1 on the other 4h books: the per-campaign facts and the classified events
+    (the SAME classifiers as v6's W1) [w12]."""
+    books, chk = other_books()
+    closes = {s: np.asarray(T9.frame(s)["f"].open_ms, dtype=np.int64) + MS_4H
+              for s in E.CLASSIC5}
+    camps, events = [], []
+    for bk in OTHER_BOOKS:
+        for row, res in books[bk]:
+            ci = other_campaign_info(bk, row, res)
+            er = classify_campaign(ci, asset_events(ci["symbol"]), closes[ci["symbol"]])
+            for e in er:
+                e["book"], e["entry_close_ms"] = bk, ci["entry_close_ms"]
+            ci["_events"] = er
+            camps.append(ci)
+            events += er
+    return {"camps": camps, "events": events, "check": chk}
+
+
+def campaign_table_other(camps: list[dict]) -> pd.DataFrame:
+    """W1_CAMPAIGNS_OTHER: memberships, counts and first events — no mark, no forward
+    leg (w12)."""
+    rows = []
+    for ci in camps:
+        er = ci["_events"]
+        row = {k: v for k, v in ci.items() if not k.startswith("_")}
+        row["reached_1r"] = ci["latch_ms"] is not None
+        row["latch_readings_agree"] = ci["latch_ms"] == ci["latch_w5_ms"]
+        row["open_1h_after_entry"] = bool(ci["exit_close_ms"] > ci["entry_close_ms"] + MS_1H)
+        row["n_events_w1"] = len(er)
+        row["n_events_raw_instant_changes_class"] = sum(e["raw_instant_changes_class"]
+                                                        for e in er)
+        for cid, lab, pair, side, rel, _ in COHORTS:
+            hits = cohort_hits(er, cid, pair, side, rel)
+            row[f"{cid}_n_events"] = len(hits)
+            row[f"{cid}_member"] = bool(hits)
+            e0 = min(hits, key=lambda e: (e["taken_ms"], e["close_ms"])) if hits else None
+            row[f"{cid}_first_taken_ms"] = None if e0 is None else int(e0["taken_ms"])
+            row[f"{cid}_first_on_mismatch_bar"] = (None if e0 is None
+                                                   else bool(e0["on_mismatch_bar"]))
+        for pid, lab, pair, side in PRE:
+            hits = [e for e in er if e["pair"] == pair and e["side"] == side
+                    and e["phase"] == "PRE-ENTRY"]
+            row[f"{pid}_n_events"] = len(hits)
+            row[f"{pid}_member"] = bool(hits)
+        rows.append(row)
+    d = pd.DataFrame(rows)
+    for c in d.columns:
+        if c.endswith(("_first_taken_ms", "latch_ms", "latch_w5_ms")):
+            d[c] = d[c].astype("Int64")
+        elif c.endswith("_first_on_mismatch_bar"):
+            d[c] = d[c].astype("boolean")
+    d["direction"] = d["direction"].astype("int8")
+    return d
+
+
+def other_event_classes() -> list[tuple]:
+    """(phase, pair, side, latch relation or None) — W1's printed event classes."""
+    return [(ph, p, sd, rl) for ph in PHASES for p, _, _ in PAIRS for sd in ("counter", "with")
+            for rl in (("before", "after") if ph == "IN-TRADE" else (None,))]
+
+
+def other_summary(c: pd.DataFrame, ev: pd.DataFrame) -> pd.DataFrame:
+    """W1_OTHER_SUMMARY: per book x era, n campaigns, n events per class, and the
+    cohort / pre-entry SIZES as W2 defines them (w6 at-risk sets) — counts only."""
+    rows = []
+
+    def add(bk, era, kind, cls, grp, n_c, n_e, ar=""):
+        rows.append({"cell": f"{bk}|{era}|{kind}|{cls}|{grp}", "book": bk, "era": era,
+                     "kind": kind, "event_class": cls, "group": grp, "n_campaigns": int(n_c),
+                     "n_events": int(n_e), "at_risk_set": ar, **COLLAR})
+    for bk in OTHER_BOOKS:
+        cb = c[c["book"] == bk].reset_index(drop=True)
+        eb = ev[ev["book"] == bk].reset_index(drop=True)
+        for era in ERAS:
+            cm = _era_mask(cb, era)
+            em = _era_mask(eb, era)
+            ce, ee = cb[cm], eb[em]
+            add(bk, era, "campaigns", "all", "book", len(ce), len(ee))
+            for ph, p, sd, rl in other_event_classes():
+                m = (ee["phase"] == ph) & (ee["pair"] == p) & (ee["side"] == sd)
+                if rl is not None:
+                    m &= ee["latch_rel"] == rl
+                sub = ee[m]
+                add(bk, era, "events", f"{ph}|{p}|{sd}|{rl or '-'}", "events",
+                    sub[["symbol", "entry_close_ms"]].drop_duplicates().shape[0], len(sub))
+            for cid, lab, pair, side, rel, ar in COHORTS:
+                mem = ce[f"{cid}_member"].to_numpy(bool)
+                risk = at_risk_mask(ce, ar)
+                if bool((mem & ~risk).any()):
+                    _halt(f"{bk} {cid}: a cohort member outside its at-risk set [L-W.4]")
+                nev = ce[f"{cid}_n_events"].to_numpy(int)
+                for g, m in (("cohort", mem), ("at_risk", risk), ("complement", risk & ~mem)):
+                    add(bk, era, "cohort", f"{cid}_{lab}", g, int(m.sum()), int(nev[m].sum()),
+                        AT_RISK_TEXT[ar].replace("v6 book", "book"))
+            for pid, lab, pair, side in PRE:
+                mem = ce[f"{pid}_member"].to_numpy(bool)
+                nev = ce[f"{pid}_n_events"].to_numpy(int)
+                every = np.ones(len(ce), bool)
+                for g, m in (("cohort", mem), ("whole_book", every), ("complement", ~mem)):
+                    add(bk, era, "pre_entry", f"{pid}_{lab}", g, int(m.sum()), int(nev[m].sum()),
+                        "the whole book (a pre-entry class) [L-W.4]")
+    return pd.DataFrame(rows)
+
+
+def other_disclosure(c: pd.DataFrame, ev: pd.DataFrame, chk: dict) -> dict:
+    out = {}
+    for bk in OTHER_BOOKS:
+        cb, eb = c[c["book"] == bk], ev[ev["book"] == bk]
+        fb = cb[cb["resolution"] == RES_FALLBACK]
+        out[bk] = {
+            "source": OTHER_SOURCE[bk], "window_open": ARM_KIND[bk], "n": int(len(cb)),
+            "source_check": chk.get(bk, {}),
+            "resolution": {k: int(v) for k, v in cb["resolution"].value_counts().sort_index()
+                           .items()},
+            "exit_resolved_by": {k: int(v) for k, v in
+                                 cb["exit_resolved_by"].value_counts().sort_index().items()},
+            "fallbacks": [f"{s} {iso(int(e))}: {w}" for s, e, w in
+                          zip(fb["symbol"], fb["entry_close_ms"], fb["fallback_reason"])],
+            "latch_readings_agree": int(cb["latch_readings_agree"].sum()),
+            "latch_present_vs_book_reached_1r_agree": int(
+                (cb["reached_1r"] == cb["reached_1r_book"]).sum()),
+            "n_walk_mismatch": int(cb["n_walk_mismatch"].sum()),
+            "walk_mismatch_bars_ridden": sorted({f"{s} {x}" for s, xs in
+                                                 zip(cb["symbol"], cb["walk_mismatch_bars"])
+                                                 for x in str(xs).split(",") if x}),
+            "events": int(len(eb)),
+            "events_on_mismatch_bars": int(eb["on_mismatch_bar"].astype(bool).sum()),
+            "events_on_mismatch_bars_list": [
+                f"{r.symbol} entry {iso(int(r.entry_close_ms))} {r.pair} {r.side} 1h close "
+                f"{iso(int(r.close_ms))} -> taken {iso(int(r.taken_ms))} ({r.phase}"
+                f"{' ' + str(r.latch_rel) if r.latch_rel else ''})"
+                for r in eb[eb["on_mismatch_bar"].astype(bool)].itertuples(index=False)],
+            "events_raw_instant_changes_class": int(eb["raw_instant_changes_class"].sum()),
+            "phase_counts": {k: int(v) for k, v in eb["phase"].value_counts().sort_index()
+                             .items()},
+            "n_entry_bar_straddles_era_cut": n_straddle(cb["entry_ms"], cb["entry_close_ms"])}
+    return out
 
 
 # ════════════════════════════════════════════════════════════ W2 TABLES
@@ -1361,6 +1826,19 @@ def compute() -> dict:
         "W2_RELAY_SUMMARY": relay_summary(pops), "W2_RELAY_HIST": relay_hist(pops),
         "P_WARN_1_COMPLEMENT": complement_table(ctab),
     }
+    # (w12..w14) the other 4h books — Tier-E W1 stamps, computed after (and apart from)
+    # every v6 table above
+    WO = w1_other()
+    co = campaign_table_other(WO["camps"])
+    evo = pd.DataFrame(WO["events"])
+    evo["on_mismatch_bar"] = evo["on_mismatch_bar"].astype(bool)
+    lead = ["book", "symbol", "entry_ms", "entry_close_ms"]
+    evo = evo[lead + [x for x in evo.columns if x not in lead]]
+    so = other_summary(co, evo)
+    for k, v in COLLAR.items():
+        evo[k] = v
+        co[k] = v
+    tables.update({"W1_EVENTS_OTHER": evo, "W1_CAMPAIGNS_OTHER": co, "W1_OTHER_SUMMARY": so})
     mism_rule = sorted({f"{t.symbol} {iso(int(ms))}" for t in rd["rule"]
                         for ms in t.walk_mismatch_ms})
     disclosures = {
@@ -1388,9 +1866,11 @@ def compute() -> dict:
                                                  ctab["entry_close_ms"]),
             "twin_window_end_bars": n_straddle(twin["end_close_ms"] - MS_4H,
                                                twin["end_close_ms"])},
+        "other_books": other_disclosure(co, evo, WO["check"]),
     }
     return {"lo": lo, "hi": hi, "meta": meta, "rides": rd, "campaigns": ctab,
-            "tables": tables, "condition": cond, "arms": A, "disclosures": disclosures}
+            "campaigns_other": co, "tables": tables, "condition": cond, "arms": A,
+            "disclosures": disclosures}
 
 
 # ════════════════════════════════════════════════════════════════ WRITING
@@ -1571,6 +2051,12 @@ def render_md(R: dict, Wsha: dict, reg_files: dict, status: dict) -> str:
           "strict reading C3S printed beside; the L-1.3 straddle count printed; fixtures "
           "extended (independent marks, relay leads and twin windows hand-walked, mismatch "
           "plants on every C1 first event and on latch / stop-exit bars, timeline columns).",
+          "", "Final-review repair G7 (2026-09-25; fidelity MINOR-1 \"W1 stamps only v6\"): the "
+          "Tier-E W1 stamps of the other 4h books — the 9/12 book, P-BRK-4H scored, P-RELAY-1 "
+          "scored — added as W1_EVENTS_OTHER, W1_CAMPAIGNS_OTHER and W1_OTHER_SUMMARY "
+          "(readings w12..w14; section \"W1 on the other 4h books\" below). Every table above "
+          "that section, the P-WARN-1 regbooks, condition.json and STATUS.json are "
+          "byte-identical to the build before it; no registered number moved.",
           "", "## P-WARN-1 · the condition block (the only Tier-E place a CI is printed)", "",
           f"- cohort (v6 campaigns with an IN-TRADE counter 12/89 1h cross before the +1R "
           f"latch): n {cond['cohort_n']}, mean net R {_f(cond['cohort_mean'])}",
@@ -1718,14 +2204,82 @@ def render_md(R: dict, Wsha: dict, reg_files: dict, status: dict) -> str:
                                  lambda x: "—" if pd.isna(x) else iso(int(x)))),
                    ["symbol", "arm", "direction", "end", "end_kind", "window_bars", "era",
                     "relay_cross", "relay", "relay_lead_1h", "relay_lead_4h"])
+    L += render_other(R)
     L += ["", "## Files", "", "| table | content sha256 |", "|---|---|"]
     L += [f"| {k} | {v} |" for k, v in sorted(Wsha.items())]
     L += ["", "| regbook arm | n | sum net R | book_sha256 |", "|---|---|---|---|"]
     L += [f"| {k} | {v['n']} | {_f(v['sum_net_r'], 6)} | {v['book_sha256']} |"
           for k, v in reg_files.items()]
-    L += ["", "W1_EVENTS / W1_TIMELINE / W1_CAMPAIGNS / W2_RELAY_WINDOWS_TWIN are filed whole "
-          "as parquet (row counts in the manifest keys); every row is collared.", ""]
+    L += ["", "W1_EVENTS / W1_TIMELINE / W1_CAMPAIGNS / W2_RELAY_WINDOWS_TWIN / W1_EVENTS_OTHER / "
+          "W1_CAMPAIGNS_OTHER are filed whole as parquet (row counts in the manifest keys); "
+          "every row is collared.", ""]
     return "\n".join(L) + "\n"
+
+
+def render_other(R: dict) -> list[str]:
+    """(w12..w14) the other 4h books: per-book resolution facts and the summary grid,
+    whole (every W1_OTHER_SUMMARY cell)."""
+    dis = R["disclosures"]["other_books"]
+    so = R["tables"]["W1_OTHER_SUMMARY"]
+    L = ["", "## W1 on the other 4h books (Tier-E, whole; final-review fidelity MINOR-1)", "",
+         "The contract's W1 stamps every 4h campaign's timeline with the 1h events; the first "
+         "build stamped v6 only. The 9/12 book, P-BRK-4H scored and P-RELAY-1 scored are "
+         "stamped here by the same 1h event tape and the same classifiers as W1_EVENTS (w12): "
+         "1h 9/12, 12/26 and 12/89 crosses with / against the campaign, PRE-ENTRY / IN-TRADE / "
+         "AT-EXIT / POST-EXIT and before / after the +1R latch (L-W.3), visibility (L-W.1) "
+         "on every event row. Counts and W2's cohort sizes only — no outcome statistic, no "
+         "mark, no forward leg. Every row: tier TIER-E · a SELECTION, not a result · gates "
+         "nothing.", ""]
+    for bk in OTHER_BOOKS:
+        x = dis[bk]
+        n = x["n"]
+        L.append(
+            f"- **{bk}** (n {n}) — {x['source']}. Window open (w13): {x['window_open']}. "
+            f"Source check: {x['source_check']}. 1h resolution (w14): {x['resolution']}; "
+            f"exits resolved by {x['exit_resolved_by']}; 4h-close fallbacks "
+            f"{len(x['fallbacks'])}{': ' + ' · '.join(x['fallbacks']) if x['fallbacks'] else ''}; "
+            f"the two +1R latch readings (L-W.3 / L-W.5) agree on "
+            f"{x['latch_readings_agree']}/{n}; latch present == the book's own reached_1r on "
+            f"{x['latch_present_vs_book_reached_1r_agree']}/{n}; L-W.0 mismatch bars ridden "
+            f"{x['n_walk_mismatch']} ({', '.join(x['walk_mismatch_bars_ridden']) or 'none'}); "
+            f"W1 events {x['events']} by phase {x['phase_counts']}, on mismatch bars "
+            f"{x['events_on_mismatch_bars']} (taken at the parent close, w1"
+            f"{': ' + ' · '.join(x['events_on_mismatch_bars_list']) if x['events_on_mismatch_bars_list'] else ''}"
+            f"), classifications "
+            f"the raw instant would change {x['events_raw_instant_changes_class']}; entry bars "
+            f"straddling the era cut {x['n_entry_bar_straddles_era_cut']}.")
+    n_bars = sum(dis[bk]["n_walk_mismatch"] for bk in OTHER_BOOKS)
+    n_evm = sum(dis[bk]["events_on_mismatch_bars"] for bk in OTHER_BOOKS)
+    n_chg = sum(dis[bk]["events_raw_instant_changes_class"] for bk in OTHER_BOOKS)
+    L += ["", f"Mismatch-bar note (AM-5 and its ERRATUM, which were written of the books "
+          f"ridden on the walk before this repair): under the 1h resolution added here the "
+          f"other books ride {n_bars} L-W.0 mismatch bar(s) (listed per book above; the "
+          f"parent decides STOP and the +1R latch there, AM-5) and hold {n_evm} W1 event(s) "
+          f"on one, each taken at the parent close (w1); classifications the raw 1h instant "
+          f"would change: {n_chg}. Printed here; LEANS_AMENDMENTS.md is not this stage's "
+          f"file."]
+    L += ["", "W1_OTHER_SUMMARY, whole. Event rows: n events (n campaigns holding one). "
+          "Cohort rows (W2's cohorts vs their at-risk sets, w6): n campaigns (n events). "
+          "Pre-entry rows (W2's classes in (window open, entry close] vs the whole book): "
+          "n campaigns (n events).", ""]
+    cols = [(bk, era) for bk in OTHER_BOOKS for era in ERAS]
+    L.append("| kind | class | group | " + " | ".join(f"{bk} {era}" for bk, era in cols) + " |")
+    L.append("|---|---|---|" + "|".join("---" for _ in cols) + "|")
+    idx = {(r.book, r.era, r.kind, r.event_class, r.group): r for r in so.itertuples(index=False)}
+    order = list(dict.fromkeys((r.kind, r.event_class, r.group)
+                               for r in so.itertuples(index=False)))
+    for kind, cls, grp in order:
+        cells = []
+        for bk, era in cols:
+            r = idx[(bk, era, kind, cls, grp)]
+            if kind == "events":
+                cells.append(f"{r.n_events} ({r.n_campaigns})")
+            elif kind == "campaigns":
+                cells.append(f"{r.n_campaigns} ({r.n_events} ev)")
+            else:
+                cells.append(f"{r.n_campaigns} ({r.n_events})")
+        L.append(f"| {kind} | {cls.replace('|', ' · ')} | {grp} | " + " | ".join(cells) + " |")
+    return L
 
 
 def main(argv: list[str] | None = None) -> int:

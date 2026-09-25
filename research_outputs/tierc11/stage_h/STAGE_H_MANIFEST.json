@@ -6,7 +6,7 @@
     "tierc11_env.py": "1526093b25161927337ced6112a310075b1a57c825f08705814e48619398f798",
     "tierc11_nest.py": "16e325022523064e67eede439998e9ee4cacfeb0df8171202a85b46125827429",
     "tierc11_ride.py": "65eb880f2b127a26cc07a6bf40e6ca6556dac37aa62bdfef45e3b045aa26915d",
-    "tierc11_stage_h.py": "cf80545adcd763a0d64f529dedc2f6ccbcbcd7d1ae355272c01f3cce2001c0e2"
+    "tierc11_stage_h.py": "780897bffd0a6c0d011ffdb54f881e456aaeb30d15a35519cdd05a630dadd159"
   },
   "collar": {
     "applies_to": "every stage_h table and every tierE regbook",
@@ -77,7 +77,7 @@
     },
     "dir": "research_outputs/tierc11/regbooks/P-TP-RNG",
     "file_sha256": {
-      "STATUS.json": "b31fb2778120ead0d77bbaf9105dc847e0f20a9138d6d67807480330f5f763f7",
+      "STATUS.json": "c33bf2af9f48a4870e5a9b4d295cf8fb6148d53f3155a682eee1df6b7994b9ba",
       "base.json": "700d685be73c87e1f5895615c83fbcb5b27de3c773745c8462fe6ef7e4ccfd95",
       "base.parquet": "f54b2f09a715463a37e3f7fa47ab786f01e50af2127105035f9568e98f1f27ff",
       "scored.json": "459b8a8d7bfd86ab29488832b8f87446850376bf3c6d03958e6602f74c9a9cc0",

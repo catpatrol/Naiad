@@ -75,6 +75,12 @@
    "lens",
    "bucket"
   ],
+  "R5_CHOP_DIRECTION": [
+   "scale_kind",
+   "lens",
+   "split",
+   "bucket"
+  ],
   "R5_FIVE_ROW": [
    "macro_state_at_entry"
   ],
@@ -131,6 +137,53 @@
    "__ALL__"
   ]
  },
+ "r5_direction": {
+  "entries_on_a_cut": {
+   "calibrated|12h": {
+    "n_between_label_and_cut": 0,
+    "n_in_range": 103,
+    "n_on_a_cut": 0
+   },
+   "calibrated|4h": {
+    "n_between_label_and_cut": 0,
+    "n_in_range": 141,
+    "n_on_a_cut": 0
+   },
+   "frozen3.0|12h": {
+    "n_between_label_and_cut": 0,
+    "n_in_range": 74,
+    "n_on_a_cut": 0
+   },
+   "frozen3.0|4h": {
+    "n_between_label_and_cut": 0,
+    "n_in_range": 94,
+    "n_on_a_cut": 0
+   }
+  },
+  "gates": "nothing",
+  "partition_vs_R5_CHOP": "checked (the build HALTs otherwise)",
+  "reading": "SR-16",
+  "review": "trading review D-2 (research_outputs/tierc11/review/FINAL_REVIEW_2026-09-25.json)",
+  "selection_not_a_result": "a SELECTION, not a result",
+  "splits": {
+   "alignment": [
+    "EXP_ALIGNED",
+    "EXP_COUNTER",
+    "IN_RANGE",
+    "NONE",
+    "__ALL__"
+   ],
+   "pct_dir_adj": [
+    "<0",
+    "[0,33.33)",
+    "[33.33,66.67)",
+    "[66.67,100)",
+    ">=100"
+   ]
+  },
+  "table": "R5_CHOP_DIRECTION",
+  "tier": "TIER-E"
+ },
  "readings": [
   "SR-1 R1 COUNTS: a confirmed range's era is its CONFIRM bar's CLOSE [L-1.3] (the census's height_rows law); density per 100 bars = 100 x confirmed ranges in the era / bars of the lens in the era (tuning = bars with close <= 2024-06-30T23:59:59Z); ALL equals C.density_per_100 on the whole tape (asserted). The pick of record is READ from SCALE_PICKS.json (a pin) \u2014 never re-fitted; frozen 3.0 beside.",
   "SR-2 R2 TOLLS [L-R.4, L-1.1, L-1.2]: taker = fee_schedule round_trip_bps_used (10.0; == C.toll_bps_for, asserted); charter twin = 2 x (taker 5.0 + the stem's charter slippage tier A 2 / B 5 / C 10) bps round trip; maker twin = 2 x maker 2.0 = 4.0 bps round trip (maker legs carry zero slippage). A pooled height row pools per-range ratios, each struck on its own asset's toll; a pooled edge row's toll is the BINDING (max) per-asset median (census law C-f) \u2014 both the census's own functions, unchanged.",
@@ -146,7 +199,8 @@
   "SR-12 HONESTY OF THE AGGREGATED TABLES [L-R.2 SCALE-IN-SAMPLE, AM-4]: every R5_CHOP / NEST_GRID row carries lenses_read, pick_window, stability_changed_members, n_scale_in_sample, n_stability_changed and the HOLDOUT slice (n_holdout, mean_net_r_holdout, p_win_holdout, sum_net_r_holdout; era = the entry's CLOSE [L-1.3]) \u2014 the causal slice of a tuning-calibrated read, printed beside every cell.",
   "SR-13 NO VERDICT WORD OFF THE RECORD [L-1.4, L-R.4]: R2's `word` and `verdict` are printed on the seven lens-verdict-of-record rows only; every Tier-E row carries its word as `would_read`, and the census's booleans are renamed height_leg_would_pass / edge_leg_would_pass / census_would_pass (TC10's: tc10_would_read / tc10_would_pass).",
   "SR-14 THE PROBE [the nest-book self-test]: nestbook_probe/V6-PROBE is books/v6_campaigns.parquet (floats at the books table's 6 dp) in the REGBOOK schema \u2014 NOT the full-precision v6 base arm the stages file (its book_sha256 differs), never scored; the books' full-precision \u03a3R is read from books/build_manifest.json and printed beside.",
-  "SR-15 THE LANES PASS [contract R3 'at every instant of every campaign of every card (base v6, 9/12, the lanes below)'; L-R.5, AM-6]: `lanes` runs the nest-book door (read_regbook -> instants_of -> nest_frame, both scales) over every REGISTERED scored arm that is a campaign book \u2014 P-WARN-1, P-AGE-1, P-WIN-1, P-BRK-4H, P-RELAY-1, P-ADD-BRK, P-ADD-SFP, P-TP-RNG (P-SCALP-2 is closed by R2 and files no book) \u2014 plus P-BRK-4H tierE__panel17 (the twelve: 12h / 1w NA, hence 4h / 12h / 1d coincidence NA). Each book must be the book the scorer scored (its sidecar book_sha256 == scores/SCORE_MANIFEST.json's input, HALT otherwise). Named events per L-R.5 / AM-6: arm, entry (the relay's 1h entry close: 'relay_entry'), harvest, add (add1 / add2), bell, a warn exit at its 1h close, a close exit at its close \u2014 close events at their close; +1R, a stop and a TP fill are intrabar: at the OPEN of their bar or at the close of the 1h child that resolves them (the regbook's own stamp of record). THE TWIN LAW (one law for every intrabar event \u2014 +1R, a stop, a TP fill \u2014 every book, the relay included): an intrabar event whose stamp precedes the close of the 4h bar holding it carries exactly one close-stamped twin, labelled post-event, AT that close (a bar-OPEN stamp: the same bar's close; a 1h child's close: its parent 4h bar's close \u2014 exit_bar_close_ms for the relay, whose exit_close_ms is its 1h exit instant); a stamp that IS that close (the resolving 1h child is the bar's last) has none \u2014 its own instant is the close, a bar_close row through the exit stamp; close events (arm, entry, harvest, add, bell, a warn exit, a close exit) have none \u2014 a warn exit before its 4h bar's close ends the campaign there, so that close is not one of its instants. Each row's `stamp_law` names its rule from the event's own class (intrabar vs close), never from its position against exit_close_ms. An intrabar exit resolved by 'close' HALTs. A campaign OPEN at the pin -> 'as_of_pin'. Each row carries `named_event` (the event's name, 'bar_close' for a plain lens close) and the campaign's `exit_reason`. The nesting grid at ENTRY per book x scale x lens (state x coincidence frequency, outcomes by state, outcomes by coincidence: n, E[net R], P(win), sum R, the book's own net_r) is printed whole with SR-12's honesty labels, collared; declared cells: STATES4 (+ 'NA' where a member lacks the lens) x COIN_CATS (+ 'NA' where a member lacks L or L+1; 1w 'NA' only). LANES_MANIFEST.json pins, per book, the regbook bytes it stamped (the parquet's content sha \u2014 its csv \u2014 and its file sha) beside book_sha256, which covers the 16 required columns only, not the instant columns the nest reads."
+  "SR-15 THE LANES PASS [contract R3 'at every instant of every campaign of every card (base v6, 9/12, the lanes below)'; L-R.5, AM-6]: `lanes` runs the nest-book door (read_regbook -> instants_of -> nest_frame, both scales) over every REGISTERED scored arm that is a campaign book \u2014 P-WARN-1, P-AGE-1, P-WIN-1, P-BRK-4H, P-RELAY-1, P-ADD-BRK, P-ADD-SFP, P-TP-RNG (P-SCALP-2 is closed by R2 and files no book) \u2014 plus P-BRK-4H tierE__panel17 (the twelve: 12h / 1w NA, hence 4h / 12h / 1d coincidence NA). Each book must be the book the scorer scored (its sidecar book_sha256 == scores/SCORE_MANIFEST.json's input, HALT otherwise). Named events per L-R.5 / AM-6: arm, entry (the relay's 1h entry close: 'relay_entry'), harvest, add (add1 / add2), bell, a warn exit at its 1h close, a close exit at its close \u2014 close events at their close; +1R, a stop and a TP fill are intrabar: at the OPEN of their bar or at the close of the 1h child that resolves them (the regbook's own stamp of record). THE TWIN LAW (one law for every intrabar event \u2014 +1R, a stop, a TP fill \u2014 every book, the relay included): an intrabar event whose stamp precedes the close of the 4h bar holding it carries exactly one close-stamped twin, labelled post-event, AT that close (a bar-OPEN stamp: the same bar's close; a 1h child's close: its parent 4h bar's close \u2014 exit_bar_close_ms for the relay, whose exit_close_ms is its 1h exit instant); a stamp that IS that close (the resolving 1h child is the bar's last) has none \u2014 its own instant is the close, a bar_close row through the exit stamp; close events (arm, entry, harvest, add, bell, a warn exit, a close exit) have none \u2014 a warn exit before its 4h bar's close ends the campaign there, so that close is not one of its instants. Each row's `stamp_law` names its rule from the event's own class (intrabar vs close), never from its position against exit_close_ms. An intrabar exit resolved by 'close' HALTs. A campaign OPEN at the pin -> 'as_of_pin'. Each row carries `named_event` (the event's name, 'bar_close' for a plain lens close) and the campaign's `exit_reason`. The nesting grid at ENTRY per book x scale x lens (state x coincidence frequency, outcomes by state, outcomes by coincidence: n, E[net R], P(win), sum R, the book's own net_r) is printed whole with SR-12's honesty labels, collared; declared cells: STATES4 (+ 'NA' where a member lacks the lens) x COIN_CATS (+ 'NA' where a member lacks L or L+1; 1w 'NA' only). LANES_MANIFEST.json pins, per book, the regbook bytes it stamped (the parquet's content sha \u2014 its csv \u2014 and its file sha) beside book_sha256, which covers the 16 required columns only, not the instant columns the nest reads.",
+  "SR-16 R5 BY DIRECTION [the trading review D-2, research_outputs/tierc11/review/FINAL_REVIEW_2026-09-25.json: L-R.7's chop table is direction-blind as frozen, so a BULL_EXP / BEAR_EXP row mixes longs riding the expansion with shorts fading it \u2014 an alignment effect that reads as a market state]: BESIDE the R5 rows, which stay unchanged, R5_CHOP_DIRECTION prints collared Tier-E rows that DECIDE NOTHING, per scale (calibrated, frozen3.0) x lens {4h, 12h}, on the same v6 entries (direction = the book's own +1 long / -1 short). (i) 'alignment': the lens state at entry split EXP_ALIGNED (BULL_EXP for a long, BEAR_EXP for a short), EXP_COUNTER (the other expansion), IN_RANGE, NONE, and '__ALL__'. (ii) 'pct_dir_adj': the IN_RANGE entries by DIRECTION-ADJUSTED pct-of-range, unclamped (pct for a long, 100 - pct for a short, so 100 is the boundary the trade must break and 0 the one behind it), in terciles [0,33.33), [33.33,66.67), [66.67,100) (exact cuts 100/3 and 200/3) plus '<0' and '>=100'. This is SR-8's half-open law, one law for both sides. The commission's text ('[66.67,100]' beside '>=100') overlaps only at exactly 100, which this law sends to '>=100' as SR-8 does; R5_CHOP.md prints how many entries sit on a cut. Columns: n (n_long / n_short beside), E[net R], P(win), sum R, and SR-12's honesty labels with the holdout slice. Partitions (the build HALTs otherwise): EXP_ALIGNED + EXP_COUNTER == R5's not-in-range BULL_EXP + BEAR_EXP; NONE == R5's not-in-range:NONE; IN_RANGE == R5's deciles + '<0' + '>=100' == the five pct_dir_adj buckets; '__ALL__' == R5's."
  ],
  "record": {
   "era": "holdout",
@@ -169,6 +223,7 @@
   "R1_LENSES": "ad6a71c6914fa1456ff859896b4196a146b57d6346d360fd53474b4da59668a4",
   "R2_FEASIBILITY": "2545d290133c5d7b76553acd2793122fb40a929a35ca0f406b889411000cb2eb",
   "R5_CHOP": "6a1420d54562fd802d1dc376f4c4bb22c70e426147044c5640f247c007592e4d",
+  "R5_CHOP_DIRECTION": "8a29c7f57fb5a797f7d3427aa0aeb504f2c10a8aafecd0d77184ae5736f36ac0",
   "R5_FIVE_ROW": "b86eb74bd8d785c606afd2b20f8796f658d245e887ba38b8aca3492df19da8f2",
   "nest_books/V6-PROBE__base": "a84ce938c40e9a9fce3f7267df1b7b90c2f96ebb3233775306d5355bd291085e",
   "nestbook_probe/V6-PROBE/base": "505d0fbff545ef422f20e97aedaa561dcebafec8e3c42df39d0c263779a801d4"

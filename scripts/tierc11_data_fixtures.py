@@ -31,7 +31,16 @@ CRASHES each make the fixture VOID (hardened plants()).
                   source function (or constant) in scripts/tierc10_data.py, a
                   provenance comment names the wrong lines or sha, a label lies, or
                   the port set read off the provenance COMMENTS is not D.PORTS.
-                  [round 2: defect 9]
+                  [round 2: defect 9]  ALSO FAILS IF the main-tree walk ported from
+                  scripts/tierc11_env.py (_main_tree) is not AST-identical to the
+                  shim's, its comment names the wrong lines or sha, a TC10 record
+                  constant is not bound under MAIN_TREE = _main_tree(ROOT) (or any
+                  ROOT-rooted path in the module names research_outputs/tierc10 — a `/`
+                  chain, a .joinpath(...), a Path(ROOT, ...) or an os.path.join(ROOT, ...)
+                  [TC11-FIX verify MINOR-5]), or
+                  D.MAIN_TREE is not the parent of git's common dir.  [final review
+                  MAJOR-1: TC10's records are gitignored, so a review worktree reads
+                  them by absolute main-tree path]
   F-D11-SCOPE     FAILS IF the module's scope_paths(), PRE_STATE.json's files or the
                   manifest's files[] are not the fixture's own typed 124 paths
                   (17 stems x {5m,1h,4h,12h,1d,1w} + CLASSIC5 x 15m + 17 funding).
@@ -69,9 +78,11 @@ CRASHES each make the fixture VOID (hardened plants()).
                   in any parquet content sha (124 files + 34 derivations) [L-F.1;
                   round 2: defect 8].
   F-D11-OUT       FAILS IF --out admits research_outputs/tierc10/data, a symlink to
-                  it, a '..' traversal to it, or the stage dir's parent; refuses the
-                  stage dir, a directory under it or a temp directory; or a write of
-                  write_manifest does not sit behind _out_guard().  [round 2: defect 3]
+                  it, a '..' traversal to it, the stage dir's parent, or the TC10 data
+                  dir of a repo tree that itself sits under a temp directory (a review
+                  copy); refuses the stage dir, a directory under it or a temp
+                  directory; or a write of write_manifest does not sit behind
+                  _out_guard().  [round 2: defect 3; final review MAJOR-1]
   F-D11-FETCHPATH FAILS IF, offline on a temp snapshot the module is bound to, the
                   fetch path's HALTs (absent file, not in PRE_STATE, an early start,
                   an off-grid venue stamp, a Bybit 15m, an absent funding tape, a
@@ -88,7 +99,9 @@ CRASHES each make the fixture VOID (hardened plants()).
 BANNED: self-comparison; one example where cardinality was possible; a tuned
 magnitude bound standing in for an identity; a check whose claim is not the
 design's claim.  FROZEN SUBSTRATE: HALTs unless NAIAD_CACHE_DIR is the TC11
-snapshot.  Seed 20260924.  The transcript carries no clock and no temp path.
+snapshot.  Seed 20260924.  The transcript carries no clock, no temp path and no absolute tree path
+(this tree and the main tree print as <tree>): the same bytes in the main tree and
+in a review worktree.
 
 Run:  export NAIAD_CACHE_DIR=$HOME/.cache/naiad/snapshots/tc11_20260925 PYTHONDONTWRITEBYTECODE=1
       ~/venvs/naiad/bin/python -B scripts/tierc11_data_fixtures.py \\
@@ -152,6 +165,12 @@ RELABEL = "by construction (guard + _assert_bound)"
 LIVE_MANIFEST = D.LIVE_CACHE / "MANIFEST.json"                  # os.stat ONLY — never opened
 CLOCK_FIELD = re.compile(r'"[^"]*(elapsed|wall_clock|perf_counter|_at_run|run_started)[^"]*"\s*:')
 TMP_RX = re.compile(r"[^\s'\"=]*f-d11-[A-Za-z0-9_]+")
+# The absolute tree roots — this tree, and the main tree a review worktree reads TC10's records from
+# (D.MAIN_TREE) — print as ONE fixed token, longest first, so the transcript is the same bytes in the
+# main tree and in a review worktree or a copy of one [reproducibility review MAJOR-1].
+TREE_RX = re.compile("|".join(re.escape(t) for t in sorted(
+    {str(ROOT), str(ROOT.resolve()), str(D.MAIN_TREE), str(D.MAIN_TREE.resolve())},
+    key=len, reverse=True)) + r"(?![\w.-])")
 LINES: list[str] = []
 PASSED: list[str] = []
 FAILED: list[str] = []
@@ -159,7 +178,7 @@ TALLY = {"break_red": 0, "break_void": 0, "real_green": 0, "real_red": 0, "plant
 
 
 def _norm(s: str) -> str:
-    return TMP_RX.sub("<tmp>", s)
+    return TMP_RX.sub("<tmp>", TREE_RX.sub("<tree>", s))
 
 
 def say(line: str = "") -> None:            # deterministic -> transcript
@@ -426,7 +445,7 @@ def guard_break():
             ("a '~' spelling of the snapshot of record (engine.data would bind <cwd>/~/...)",
              "is not an absolute path", halt("~/.cache/naiad/snapshots/tc11_20260925")),
             ("the snapshot of record spelled relative to the repo root", "is not an absolute path",
-             halt(os.path.relpath(D.SNAPSHOT, ROOT))),
+             halt(os.path.relpath(D.SNAPSHOT, D.MAIN_TREE))),
             ("the live cache (path string)", "names the LIVE cache", halt(str(D.LIVE_CACHE))),
             ("a directory inside the live cache", "names the LIVE cache",
              halt(str(D.LIVE_CACHE / "klines"))),
@@ -885,15 +904,15 @@ def top_nodes(src: str) -> dict:
     return out
 
 
-def port_targets(src: str) -> tuple[dict, list[str]]:
+def port_targets(src: str, rx: re.Pattern = PROV_RX) -> tuple[dict, list[str]]:
     """THE PORT SET, READ OFF THE COMMENTS: {name: (a, b, sha16, label)} for every
-    provenance comment, bound to the first top-level def or assignment under it (only
-    comment lines between)."""
+    provenance comment (`rx`: tierc10_data's by default), bound to the first top-level
+    def or assignment under it (only comment lines between)."""
     lines = src.splitlines()
     tops = sorted((n.lineno, name) for name, n in top_nodes(src).items())
     out, bad = {}, []
     for i, line in enumerate(lines, 1):
-        m = PROV_RX.match(line)
+        m = rx.match(line)
         if not m:
             continue
         nxt = next(((ln, name) for ln, name in tops if ln > i), None)
@@ -943,6 +962,138 @@ def _srcs() -> tuple[str, str]:
     return module_src(), D.TC10_SRC.read_text(encoding="utf-8")
 
 
+# ── the MAIN-TREE walk [final review MAJOR-1] ─────────────────────────────────
+# TC10's records are gitignored, so a review worktree does not carry them; the module reads
+# them by ABSOLUTE MAIN-TREE path through the shim's own walk, ported VERBATIM (the shim is
+# never imported by tierc11_data: it arms the audit hook and re-roots TC10 modules).
+ENV_SRC_PATH = ROOT / "scripts" / "tierc11_env.py"                 # typed here, not D's
+ENV_PROV_RX = re.compile(r"^# ported from scripts/tierc11_env\.py:(\d+)-(\d+) @ sha256 "
+                         r"([0-9a-f]{16}) — (VERBATIM|CHANGED)")
+ENV_PORTS = ("_main_tree",)
+TC10_RECORD_ROOTS = {"TC10_DATA": "MAIN_TREE", "TC10_MANIFEST": "TC10_DATA",
+                     "TC10_PROBE": "TC10_DATA", "TC10_PIN_FILE": "TC10_DATA"}
+
+
+def _chain(node) -> tuple[str | None, list]:
+    """(the leftmost Name, the string constants) of an `a / "b" / "c"` chain."""
+    consts = []
+    while isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div):
+        if isinstance(node.right, ast.Constant) and isinstance(node.right.value, str):
+            consts.append(node.right.value)
+        node = node.left
+    return (node.id if isinstance(node, ast.Name) else None), consts
+
+
+_PATH_CTORS = frozenset({"Path", "PurePath", "PosixPath", "PurePosixPath"})
+
+
+def _is_os_path_join(f) -> bool:
+    return (isinstance(f, ast.Attribute) and f.attr == "join" and isinstance(f.value, ast.Attribute)
+            and f.value.attr == "path" and isinstance(f.value.value, ast.Name)
+            and f.value.value.id == "os")
+
+
+def _path_base(node) -> tuple[str | None, list, str]:
+    """(the leftmost Name, the string constants, the outermost form) of a path expression built
+    by any of: `a / "b"`, `a.joinpath("b", …)`, `Path(a, "b", …)` (Path / PurePath / PosixPath /
+    PurePosixPath, bare or pathlib.<name>), `os.path.join(a, "b", …)`, through `str(a)` /
+    `os.fspath(a)` [TC11-FIX verify MINOR-5]."""
+    consts, form = [], None
+
+    def cs(args):
+        return [a.value for a in args if isinstance(a, ast.Constant) and isinstance(a.value, str)]
+
+    while True:
+        f = node.func if isinstance(node, ast.Call) else None
+        args = node.args if isinstance(node, ast.Call) else []
+        if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div):
+            form = form or "/"
+            consts += cs([node.right])
+            node = node.left
+        elif isinstance(f, ast.Attribute) and f.attr == "joinpath":
+            form = form or "joinpath"
+            consts += cs(node.args)
+            node = f.value
+        elif args and ((isinstance(f, ast.Name) and f.id in _PATH_CTORS) or
+                       (isinstance(f, ast.Attribute) and f.attr in _PATH_CTORS)):
+            form = form or "Path(...)"
+            consts += cs(args[1:])
+            node = args[0]
+        elif args and _is_os_path_join(f):
+            form = form or "os.path.join"
+            consts += cs(args[1:])
+            node = args[0]
+        elif len(args) == 1 and ((isinstance(f, ast.Name) and f.id == "str")
+                                 or (isinstance(f, ast.Attribute) and f.attr == "fspath")):
+            node = args[0]
+        else:
+            break
+    return (node.id if isinstance(node, ast.Name) else None), consts, form or ""
+
+
+def main_tree_findings(my_src: str, env_src: str) -> list[str]:
+    """[port-env] the shim's _main_tree, ported VERBATIM (AST, lines, sha as the comment says);
+    [tc10-tree] MAIN_TREE = _main_tree(ROOT), every TC10 record constant hangs off it, and no
+    ROOT-rooted path anywhere in the module names research_outputs/tierc10."""
+    targets, orphans = port_targets(my_src, ENV_PROV_RX)
+    bad = [f"[port-env] {x}" for x in orphans]
+    mine, theirs = top_nodes(my_src), top_nodes(env_src)
+    env_sha16 = hashlib.sha256(env_src.encode("utf-8")).hexdigest()[:16]
+    for name in sorted(set(ENV_PORTS) | set(targets)):
+        if name not in targets:
+            bad.append(f"[port-env] {name}: no scripts/tierc11_env.py provenance comment above it")
+            continue
+        if name not in ENV_PORTS:
+            bad.append(f"[port-env] {name}: a tierc11_env provenance comment on a name ENV_PORTS "
+                       f"does not list")
+            continue
+        a, b, sha16, label = targets[name]
+        m, t = mine.get(name), theirs.get(name)
+        if t is None:
+            bad.append(f"[port-env] {name}: no top-level {name} in tierc11_env")
+            continue
+        if (a, b) != (t.lineno, t.end_lineno):
+            bad.append(f"[port-env] {name}: comment names :{a}-{b}, the shim's source is "
+                       f":{t.lineno}-{t.end_lineno}")
+        if sha16 != env_sha16:
+            bad.append(f"[port-env] {name}: comment sha {sha16} != scripts/tierc11_env.py's {env_sha16}")
+        if label != "VERBATIM":
+            bad.append(f"[port-env] {name}: labelled {label} — the walk must be the shim's own")
+        elif ast.dump(m) != ast.dump(t):
+            bad.append(f"[port-env] {name}: labelled VERBATIM but its AST differs from "
+                       f"tierc11_env.{name}")
+    mt = mine.get("MAIN_TREE")
+    v = mt.value if isinstance(mt, ast.Assign) else None
+    if not (isinstance(v, ast.Call) and isinstance(v.func, ast.Name) and v.func.id == "_main_tree"
+            and len(v.args) == 1 and not v.keywords and isinstance(v.args[0], ast.Name)
+            and v.args[0].id == "ROOT"):
+        bad.append("[tc10-tree] MAIN_TREE is not bound to _main_tree(ROOT)")
+    for name, want in TC10_RECORD_ROOTS.items():
+        n = mine.get(name)
+        got = _chain(n.value)[0] if isinstance(n, ast.Assign) else None
+        if got != want:
+            bad.append(f"[tc10-tree] {name} is rooted at {got}, not {want}")
+    rooted = {}
+    for n in ast.walk(ast.parse(my_src)):
+        if not isinstance(n, (ast.BinOp, ast.Call)):
+            continue
+        base, consts, form = _path_base(n)
+        if form and base == "ROOT" and any("tierc10" in c.split("/") for c in consts):
+            rooted.setdefault(n.lineno, form)          # the outermost form on the line
+    bad += [f"[tc10-tree] line {ln}: a ROOT-rooted path ({form}) names research_outputs/tierc10"
+            for ln, form in sorted(rooted.items())]
+    return bad
+
+
+def git_main_tree() -> Path:
+    """The main tree as GIT names it: the parent of this tree's common dir (a second object)."""
+    r = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "--path-format=absolute",
+                        "--git-common-dir"], capture_output=True, text=True)
+    if r.returncode:
+        raise SystemExit(f"HALT: git rev-parse --git-common-dir exit {r.returncode}: {r.stderr[-200:]}")
+    return Path(r.stdout.strip()).resolve().parent
+
+
 def port_break():
     mine, tc10 = _srcs()
     body = src_edit(mine, 'h.update(f"{len(df)}|{\',\'.join(cols)}".encode())',
@@ -955,7 +1106,39 @@ def port_break():
     uncom = src_edit(mine, "# ported from scripts/tierc10_data.py:973-986 @ sha256 2cbf9bb6bcfea3ec "
                            "— VERBATIM\n", "")
     dropped = {k: v for k, v in D.PORTS.items() if k != "frame_sha"}
+    env = ENV_SRC_PATH.read_text(encoding="utf-8")
+    a, b = port_targets(mine, ENV_PROV_RX)[0]["_main_tree"][:2]
+    walk_root = src_edit(mine, '    g = root / ".git"\n', '    return root\n    g = root / ".git"\n')
+    tc10_root = src_edit(mine, 'TC10_DATA = MAIN_TREE / "research_outputs"', 'TC10_DATA = ROOT / "research_outputs"')
+    walk_rng = src_edit(mine, f"scripts/tierc11_env.py:{a}-{b} @", f"scripts/tierc11_env.py:{a}-{b + 1} @")
+    lazy = mine + ("\n\ndef _plant_pin():\n"
+                   "    return ROOT / 'research_outputs' / 'tierc10' / 'data' / 'AS_OF_PIN.json'\n")
+    jp = mine + ("\n\ndef _plant_pin():\n"
+                 "    return ROOT.joinpath('research_outputs', 'tierc10', 'data', 'AS_OF_PIN.json')\n")
+    pc = mine + ("\n\ndef _plant_pin():\n"
+                 "    return Path(ROOT, 'research_outputs/tierc10/data', 'AS_OF_PIN.json')\n")
+    oj = mine + ("\n\ndef _plant_pin():\n"
+                 "    return os.path.join(str(ROOT), 'research_outputs', 'tierc10', 'data')\n")
     return plants([
+        ("the main-tree walk made to return its root (TC10's records read under a worktree's own "
+         "root) in a copy of this module",
+         "[port-env] _main_tree: labelled VERBATIM but its AST differs",
+         lambda: main_tree_findings(walk_root, env)),
+        ("TC10_DATA bound under ROOT instead of MAIN_TREE in a copy of this module",
+         "[tc10-tree] TC10_DATA is rooted at ROOT", lambda: main_tree_findings(tc10_root, env)),
+        ("the main-tree walk's provenance range off by one", f"_main_tree: comment names :{a}-{b + 1}",
+         lambda: main_tree_findings(walk_rng, env)),
+        ("a function building ROOT / research_outputs / tierc10 appended to a copy of this module",
+         "a ROOT-rooted path (/) names research_outputs/tierc10", lambda: main_tree_findings(lazy, env)),
+        ("a function building ROOT.joinpath('research_outputs', 'tierc10', …) appended to a copy of "
+         "this module", "a ROOT-rooted path (joinpath) names research_outputs/tierc10",
+         lambda: main_tree_findings(jp, env)),
+        ("a function building Path(ROOT, 'research_outputs/tierc10/data', …) appended to a copy of "
+         "this module", "a ROOT-rooted path (Path(...)) names research_outputs/tierc10",
+         lambda: main_tree_findings(pc, env)),
+        ("a function building os.path.join(str(ROOT), 'research_outputs', 'tierc10', …) appended to "
+         "a copy of this module", "a ROOT-rooted path (os.path.join) names research_outputs/tierc10",
+         lambda: main_tree_findings(oj, env)),
         ("frame_sha's separator changed in a copy of this module",
          "labelled VERBATIM but its AST differs", lambda: port_findings(body, tc10)[0]),
         ("frame_sha's provenance range off by one", "comment names :428-438",
@@ -977,10 +1160,26 @@ def port_real():
     targets, _ = port_targets(mine)
     if sha_now != D.TC10_SRC_SHA256:
         bad.append(f"scripts/tierc10_data.py sha {sha_now[:16]} != the provenance sha")
+    env = ENV_SRC_PATH.read_text(encoding="utf-8")
+    bad += main_tree_findings(mine, env)
+    wa, wb, wsha, _ = port_targets(mine, ENV_PROV_RX)[0].get("_main_tree", (0, 0, "", ""))
+    gm = git_main_tree()
+    rec = gm / "research_outputs" / "tierc10" / "data"
+    if D.MAIN_TREE.resolve() != gm:
+        bad.append(f"[tc10-tree] D.MAIN_TREE {_norm(str(D.MAIN_TREE))} is not git's main tree {_norm(str(gm))}")
+    if D.TC10_DATA.resolve() != rec or not D.TC10_MANIFEST.is_file():
+        bad.append(f"[tc10-tree] D.TC10_DATA {_norm(str(D.TC10_DATA))} is not <main tree>/research_outputs/"
+                   f"tierc10/data holding STAGE_D_MANIFEST.json")
     return (not bad), (f"{len(targets)} provenance comments (the port set, read off the comments) == "
                        f"the {len(D.PORTS)} D.PORTS entries: {st['VERBATIM']} VERBATIM (AST-identical), "
                        f"{st['CHANGED']} CHANGED (each names its change), {st['constants']} of them a "
-                       f"constant (STEP_MS); source sha {sha_now[:16]} == provenance"
+                       f"constant (STEP_MS); source sha {sha_now[:16]} == provenance; the main-tree walk "
+                       f"_main_tree VERBATIM, AST-identical to scripts/tierc11_env.py:{wa}-{wb} @ sha256 "
+                       f"{wsha}; MAIN_TREE = _main_tree(ROOT) is git's main tree (the parent of "
+                       f"--git-common-dir); TC10_DATA hangs off it and TC10_MANIFEST / TC10_PROBE / "
+                       f"TC10_PIN_FILE off TC10_DATA, TC10's STAGE_D_MANIFEST.json is a file there; no "
+                       f"ROOT-rooted path in the module (a / chain, .joinpath, Path(ROOT, …) or "
+                       f"os.path.join(ROOT, …)) names research_outputs/tierc10"
                        if not bad else f"{len(bad)} fault(s): {bad[:3]}")
 
 
@@ -2159,7 +2358,7 @@ def out_guard_order_findings(src: str) -> list[str]:
 
 
 def out_break():
-    refuse = f"is not {D.OUT}, under it, or under a temp directory"
+    refuse = f"is not {D.OUT}, under it, or under a temp directory outside the repo tree"
     src = module_src()
     no_guard = src_edit(src, "    dst = _out_guard(dst)\n", "")
 
@@ -2171,7 +2370,20 @@ def out_break():
     with tmpdir() as tmp:
         link = Path(tmp) / "to_tc10_data"
         link.symlink_to(D.TC10_DATA, target_is_directory=True)
+        # a repo tree checked out UNDER a temp directory (a review copy): its own TC10 data dir
+        # is still the repo's, never "a temp directory"
+        copy = Path(tmp).resolve() / "tree"
+        (copy / "research_outputs" / "tierc10" / "data").mkdir(parents=True)
+        (copy / "research_outputs" / "tierc11" / "data").mkdir(parents=True)
+
+        def in_temp_tree():
+            with mutated(D, "ROOT", copy), mutated(D, "MAIN_TREE", copy), \
+                    mutated(D, "OUT", copy / "research_outputs" / "tierc11" / "data"):
+                D._out_guard(copy / "research_outputs" / "tierc10" / "data")
+            return []
         return plants([
+            ("--out research_outputs/tierc10/data of a repo tree that sits under a temp directory "
+             "(a review copy)", "or under a temp directory outside the repo tree", in_temp_tree),
             ("--out research_outputs/tierc10/data (TC10's filed manifest, md and fee schedule)", refuse,
              g(D.TC10_DATA)),
             ("--out a temp-dir symlink that resolves to research_outputs/tierc10/data", refuse, g(link)),
@@ -2419,13 +2631,20 @@ FIXTURES = (
      "snapshot, any engine save / _write_if_changed call is reachable from an entry point "
      "without _assert_bound() on every path before it, or a file-writing call sits in a "
      "function the fixture has not typed as a write owner", bound_break, bound_real),
-    ("F-D11-OUT", "--out admits the stage dir, a directory under it or a temp dir, and nothing else",
-     "_out_guard admits research_outputs/tierc10/data, a symlink to it, a '..' traversal to it or the "
-     "stage dir's parent, refuses the stage dir, a directory under it or a temp directory, or a write "
-     "of write_manifest does not sit behind _out_guard()", out_break, out_real),
-    ("F-D11-PORT", "every port of tierc10_data is what its provenance comment says",
+    ("F-D11-OUT", "--out admits the stage dir, a directory under it or a temp dir outside the repo "
+     "tree, and nothing else",
+     "_out_guard admits research_outputs/tierc10/data, a symlink to it, a '..' traversal to it, the "
+     "stage dir's parent, or the TC10 data dir of a repo tree that itself sits under a temp directory; "
+     "refuses the stage dir, a directory under it or a temp directory; or a write of write_manifest "
+     "does not sit behind _out_guard()", out_break, out_real),
+    ("F-D11-PORT", "every port of tierc10_data is what its provenance comment says; TC10's records "
+     "are read through the shim's main-tree walk",
      "a VERBATIM port is not AST-identical to its source, a comment names the wrong lines or "
-     "sha, a CHANGED label hides an identical copy, or tierc10_data.py's sha moved",
+     "sha, a CHANGED label hides an identical copy, or tierc10_data.py's sha moved; or the "
+     "main-tree walk ported from tierc11_env is not AST-identical to the shim's (lines, sha), a "
+     "TC10 record constant is not bound under MAIN_TREE = _main_tree(ROOT), a ROOT-rooted path "
+     "(a / chain, .joinpath, Path(ROOT, …) or os.path.join(ROOT, …)) names "
+     "research_outputs/tierc10, or MAIN_TREE is not git's main tree",
      port_break, port_real),
     ("F-D11-SCOPE", "the fixture's typed 124 paths are the module's, PRE_STATE's and the manifest's",
      "D.scope_paths() differs from the fixture's typed 124 (in order), or PRE_STATE.json's files "

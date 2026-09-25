@@ -31,9 +31,18 @@ kline files by this file's own loader.
                (anchor = touch + 3 on a tap, touch + 6 on the memory line, the
                harden's own bar; direction +1 iff a top death / a bottom harden;
                the close stamp = the raw bar's open + the lens step; era by that
-               close).  SABOTAGE: events read at their bar close (touch) instead
+               close); or break the typed honesty-label laws of L [R4-8]:
+               l_pick_window = the cell's pick window, l_scale_in_sample by the
+               known close (tuning: close <= the era cut; whole-tape fallback
+               True; frozen3.0 False), l_anchor_scale_in_sample = that OR the
+               same law at the raw close of the anchor-read bar (a BREAKOUT's
+               death bar, an SFP's harden bar) [causality review MINOR-2], or
+               the manifest's count of rows where the two differ is not the
+               table's.  SABOTAGE: events read at their bar close (touch) instead
                of known_at (module mutation); the one-shot rows filed as
-               first-hold; a spring filed short; a boundary moved.
+               first-hold; a spring filed short; a boundary moved; the anchor
+               label keyed to the known instant only (module mutation); a
+               known-instant label flipped (copy).
   F-R4-SCAN    FAILS IF, on ANY of the 112 cells, R4_SCAN's rows are not N's
                first-retest scan rows (N.first_retest_scan: key set, seq,
                known_at, verdict, first-hold flag, death bar), a (death, band)
@@ -93,10 +102,17 @@ kline files by this file's own loader.
                copy; the null's L+1 read one bar late; the null's springs filed
                short (module mutations).
   F-R4-L1      FAILS IF the filed L+1 cell (record, memory-line twin, SFP
-               post-redraw twin) of >= 30 events (aimed at events whose cell
-               moves one bar later, plus seeded ones) differs from this file's
-               recomputation from N.nest_at at the known_at close.  SABOTAGE:
-               the L+1 read one bar of L late (module mutation).
+               post-redraw twin) of ANY of the R4_EVENTS rows (every event of
+               the 112 cells — exhaustive, never a sample [reproducibility
+               review MINOR-3]) differs from this file's recomputation: N.nest_at
+               at the known_at close, the typed coincidence (0.25 x ATR_L,
+               inclusive, while L+1 is in range), the typed live law of the L+1
+               memory lines, the typed partition; 'NA' without an L+1, 'n/a'
+               without a post-redraw boundary.  SABOTAGE: the L+1 read one bar
+               of L late; the coincidence width 0.30 x ATR_L (module mutations,
+               the module's cell road re-run on every filed event); the
+               memory-line twin filed as the record cell; the post-redraw twin
+               read at the pre-redraw boundary (copies).
   F-R4-CONT    FAILS IF TC10's filed row is not the typed n / NET, the manifest's
                continuity block says the replay differs, the replay run here
                differs from the file at 8 dp, or TC11's grid row is not the
@@ -209,6 +225,7 @@ STATIC_T = {"dev_return": 7, "break_n": 8, "break_margin": 1.5}   # the static-b
 ANCHOR_LAG_T = {"tap89": 3, "tap127": 3, "tap200": 3, "memory-line": 6, "harden": 0}
 TOLL_BPS_T = 10.0
 ERA_CUT_T = 1_719_791_999_000            # tuning closes <= 2024-06-30T23:59:59Z
+PICK_WINDOWS_T = ("tuning", "whole-tape (fallback)", "frozen3.0")   # [L-R.2]
 COIN_T, MID_T, ATR_LEN_T, LEAD_FLOOR_T = 0.25, (25.0, 75.0), 14, 14
 DAY_MS_T, BARS_PER_DAY_T = 86_400_000, 6
 TC10_TYPED = {"ALL": (236, "+0.681"), "holdout": (88, "+0.706")}    # L-T.1 / AM-1
@@ -233,7 +250,8 @@ AS_OF_T = ("as_of_last_closed_4h", "as_of_panel_start", "as_of_span_days", "warr
 REQUIRED_T = {
     "R4_EVENTS": ["family", "band", "rule", "dir", "die_i", "seq", "known_at",
                   "known_close_ms", "era", "cell", "cell_mem", "cell_post", "u_state",
-                  "bad_atr", "cens_H20", "cens_H100", "l_pick_window", "u_pick_window"],
+                  "bad_atr", "cens_H20", "cens_H100", "l_pick_window", "u_pick_window",
+                  "l_scale_in_sample", "l_anchor_scale_in_sample"],
     "R4_GRID": ["n_events", "n", "n_censored", "nan_reason", "horizon_bars", "toll_pooling",
                 "n_l_scale_in_sample", "n_u_scale_in_sample", "l_pick_window"],
     "R4_BASE": ["n_events", "n", "n_censored", "nan_reason", "horizon_bars",
@@ -501,6 +519,23 @@ def expected_events(stem: str, lens: str, kind: str) -> dict:
     return out
 
 
+def typed_in_sample(window: str, close_ms: int) -> bool | None:
+    """THE SCALE-IN-SAMPLE LAW, typed [L-R.2]: a tuning pick read at a close <= the
+    era cut; a whole-tape fallback at every instant; frozen 3.0 never.  None = a
+    window outside the typed three (or a close off the tape)."""
+    if window == "frozen3.0":
+        return False
+    if window == "whole-tape (fallback)":
+        return True
+    if window == "tuning" and close_ms >= 0:
+        return close_ms <= ERA_CUT_T
+    return None
+
+
+def _nb(x) -> bool | None:
+    return None if pd.isna(x) else bool(x)
+
+
 def events_findings(got: pd.DataFrame, stem: str, lens: str, kind: str,
                     exp: dict | None = None) -> list[str]:
     exp = expected_events(stem, lens, kind) if exp is None else exp
@@ -512,7 +547,11 @@ def events_findings(got: pd.DataFrame, stem: str, lens: str, kind: str,
         bad.append(f"EVENT-SET: {tag}: {len(miss)} of N's events missing, {len(extra)} not N's, "
                    f"e.g. {(miss or extra)[0]}")
     raw = raw_bars(stem, lens)
-    n_anchor = n_dir = n_bnd = n_close = n_era = 0
+    win = "frozen3.0" if kind == "frozen3.0" else N.scale_label(stem, lens, kind)["pick_window"]
+    if win not in PICK_WINDOWS_T:
+        bad.append(f"LABEL-KNOWN: {tag}: pick window {win!r} is not one of the typed "
+                   f"{PICK_WINDOWS_T}")
+    n_anchor = n_dir = n_bnd = n_close = n_era = n_lab = n_anc = 0
     first = {}
     for key in sorted(set(exp) & set(g)):
         r, (ka, die, d, b, bp) = g[key], exp[key]
@@ -541,8 +580,27 @@ def events_findings(got: pd.DataFrame, stem: str, lens: str, kind: str,
         if r.era != want_era:
             n_era += 1
             first.setdefault("ERA", f"{key} filed {r.era}, typed {want_era}")
+        # [R4-8] the honesty labels of L: l_scale_in_sample by the known close; the
+        # EXTRA l_anchor_scale_in_sample ALSO by the raw close of the anchor-read bar
+        # (a BREAKOUT's death bar, an SFP's harden bar) [causality review MINOR-2]
+        want_l = typed_in_sample(win, want_close)
+        if r.l_pick_window != win or _nb(r.l_scale_in_sample) != want_l or want_l is None:
+            n_lab += 1
+            first.setdefault("LABEL-KNOWN", f"{key} filed window {r.l_pick_window} in-sample "
+                                            f"{r.l_scale_in_sample}, typed {win} / {want_l} at "
+                                            f"close {want_close}")
+        rb = int(r.die_i) if fam == "BRK" else key[3]
+        rb_close = int(raw["close"][rb]) if 0 <= rb < raw["n"] else -1
+        want_a = typed_in_sample(win, rb_close)
+        want_a = None if want_l is None or want_a is None else (want_l or want_a)
+        if _nb(r.l_anchor_scale_in_sample) != want_a or want_a is None:
+            n_anc += 1
+            first.setdefault("LABEL-READ-BAR", f"{key} filed {r.l_anchor_scale_in_sample}, "
+                                                 f"typed {want_a} (anchor-read bar {rb} close "
+                                                 f"{rb_close}, known close {want_close})")
     for det, n_ in (("ANCHOR", n_anchor), ("DIR-LAW", n_dir), ("BOUNDARY", n_bnd),
-                    ("CLOSE-STAMP", n_close), ("ERA", n_era)):
+                    ("CLOSE-STAMP", n_close), ("ERA", n_era), ("LABEL-KNOWN", n_lab),
+                    ("LABEL-READ-BAR", n_anc)):
         if n_:
             bad.append(f"{det}: {tag}: {n_} row(s), e.g. {first[det]}")
     return bad
@@ -580,12 +638,27 @@ def ev_break():
         d.loc[i, "boundary"] = float(d.loc[i, "boundary"]) * (1 + 1e-4)
         return events_findings(d, *cell, exp=exp)
 
+    def read_bar_is_known():
+        with mutated(R, "_anchor_read_bar", lambda f: f["known_at"].to_numpy(np.int64)):
+            got = R.real_events(*cell)
+        return events_findings(got, *cell, exp=exp)
+
+    def known_label_flipped():
+        d = ev_f.copy()
+        i = d.index[d["l_pick_window"] == "tuning"][0]
+        d["l_scale_in_sample"] = d["l_scale_in_sample"].astype("boolean")
+        d.loc[i, "l_scale_in_sample"] = not bool(d.loc[i, "l_scale_in_sample"])
+        return events_findings(d, *cell, exp=exp)
+
     return plants([
         ("events read at their bar close (touch) instead of known_at (module mutation)",
          "ANCHOR", at_close),
         ("the one-shot tap89 rows filed as first-hold", "EVENT-SET", oneshot_as_first),
         ("a spring (bottom harden) filed short", "DIR-LAW", spring_short),
         ("a BREAKOUT boundary moved 1e-4 x", "BOUNDARY", boundary_moved),
+        ("the anchor label keyed to the known instant only — the anchor-read bar = known_at "
+         "(module mutation)", "LABEL-READ-BAR", read_bar_is_known),
+        ("one tuning row's l_scale_in_sample flipped (copy)", "LABEL-KNOWN", known_label_flipped),
     ])
 
 
@@ -603,9 +676,30 @@ def ev_real():
     if extra:
         bad.append(f"EVENT-SET: cells outside the commission {extra[:3]}")
     fams = f.groupby("event").size().to_dict()
+    # [R4-8] the rows where the anchor label differs from the known-instant label,
+    # counted here and against the manifest's count
+    la = pd.array(f["l_anchor_scale_in_sample"], dtype="boolean")
+    lk = pd.array(f["l_scale_in_sample"], dtype="boolean")
+    diff = ((np.asarray(la.isna(), bool) != np.asarray(lk.isna(), bool))
+            | (la.fillna(False).to_numpy(bool) != lk.fillna(False).to_numpy(bool)))
+    c5 = (f["asset"].isin(CLASSIC5_T) & (f["scale_kind"] == "calibrated")
+          & (f["family"] == "BRK")).to_numpy(bool)
+    fam_d = {k: int(v) for k, v in sorted(f.loc[diff, "family"].value_counts().items())}
+    man = manifest().get("anchor_scale_in_sample", {})
+    if (man.get("differ") != int(diff.sum()) or man.get("rows") != len(f)
+            or man.get("classic5_calibrated_brk") != {"rows": int(c5.sum()),
+                                                      "differ": int((c5 & diff).sum())}):
+        bad.append(f"LABEL-READ-BAR: the manifest's anchor-label count "
+                   f"{ {k: man.get(k) for k in ('rows', 'differ', 'classic5_calibrated_brk')} } "
+                   f"is not the table's ({len(f)} rows, {int(diff.sum())} differ, CLASSIC5 "
+                   f"calibrated BREAKOUT {int((c5 & diff).sum())} of {int(c5.sum())})")
     return (not bad), (f"{n_cells} (asset, lens, scale) cells, {n_rows} filed events == N's own "
                        f"frames (key set, known_at, death bar, boundary), typed anchor / "
-                       f"direction / close-stamp / era laws hold; per event {fams}"
+                       f"direction / close-stamp / era laws hold; per event {fams}; the typed "
+                       f"honesty-label laws hold on every row: l_anchor_scale_in_sample differs "
+                       f"from l_scale_in_sample on {int(diff.sum())} rows (by family {fam_d}; "
+                       f"CLASSIC5 calibrated BREAKOUT {int((c5 & diff).sum())} of "
+                       f"{int(c5.sum())}) == the manifest's count"
                        + (f"; findings {bad[:4]}" if bad else ""))
 
 
@@ -1756,69 +1850,98 @@ def null_real():
 
 
 # ═══════════════════════════════════════════════════════ F-R4-L1
-def indep_cells(stem, lens, kind, d, bnd, post, kms) -> tuple[str, str, str]:
-    U = LADDER_T[lens]
-    nv = N.nest_at(stem, [int(kms)], kind).iloc[0]
-    state = nv[f"{U}_state"] or "NONE"
-    inr = bool(nv[f"{U}_in_range"]) if not pd.isna(nv[f"{U}_in_range"]) else False
-    top, bot, pct = float(nv[f"{U}_top"]), float(nv[f"{U}_bot"]), float(nv[f"{U}_pct"])
-    atr = float(nv[f"{lens}_atr_L"])
-    uk = int(nv[f"{U}_k"])
-    mem = N.memory_lines(stem, U, kind)
-    live = mem[(mem["born"] <= uk) & (uk < mem["end_live"])]
-
-    def coin_of(b):
-        return inr and (abs(b - top) <= COIN_T * atr or abs(b - bot) <= COIN_T * atr)
-
-    def mcoin_of(b):
-        return inr and bool((np.abs(b - live["px"].to_numpy(float)) <= COIN_T * atr).any())
-    rec = typed_cell(d, state, pct, coin_of(bnd))
-    memc = typed_cell(d, state, pct, coin_of(bnd) or mcoin_of(bnd))
-    pc = typed_cell(d, state, pct, coin_of(post)) if np.isfinite(post) else "n/a"
-    return rec, memc, pc
+L1_DETS_T = (("cell", "L1-CELL"), ("cell_mem", "L1-MEM"), ("cell_post", "L1-POST"))
+COIN_PLANT_T = 0.30                      # the plant's coincidence width (the contract's is 0.25)
 
 
-def l1_selection() -> pd.DataFrame:
-    f = filed("R4_EVENTS")
-    rng = np.random.default_rng(SEED + 1)
-    pick = []
-    for L in LENSES_T["CLASSIC5"]:
-        g = f[(f["lens"] == L) & (f["scale_kind"] == "calibrated")
-              & f["asset"].isin(CLASSIC5_T)].sort_values(["asset", "known_at", "event", "rid"],
-                                                         kind="mergesort")
-        aimed = []
-        for r in g.iloc[::7].itertuples(index=False):   # a typed stride through the cell
-            a = indep_cells(r.asset, L, "calibrated", int(r.dir), float(r.boundary),
-                            float(r.boundary_post), int(r.known_close_ms))
-            b = indep_cells(r.asset, L, "calibrated", int(r.dir), float(r.boundary),
-                            float(r.boundary_post), int(r.known_close_ms) + STEP_T[L])
-            if a[0] != b[0]:
-                aimed.append(r)
-            if len(aimed) == 3:
-                break
-        if aimed:
-            pick.append(pd.DataFrame(aimed))
-        pick.append(g.iloc[sorted(rng.choice(len(g), 5, replace=False))])
-    return pd.concat(pick, ignore_index=True)
+def _cell_positions(df: pd.DataFrame) -> list:
+    """[((asset, lens, scale), row positions)] in sorted key order, positions in
+    df's own row order."""
+    a_, l_, k_ = (df[c].to_numpy() for c in ("asset", "lens", "scale_kind"))
+    pos = np.arange(len(df))
+    return [(key, pos[(a_ == key[0]) & (l_ == key[1]) & (k_ == key[2])])
+            for key in sorted(set(zip(a_.tolist(), l_.tolist(), k_.tolist())))]
+
+
+def l1_expected(df: pd.DataFrame) -> dict:
+    """THIS FILE'S L+1 CELLS of EVERY row of `df` — {'cell' (record), 'cell_mem'
+    (memory-line twin), 'cell_post' (SFP post-redraw twin): array in df's row
+    order}.  L+1 read from N.nest_at at the row's known_at close (state,
+    in_range, top, bottom, pct, L+1's as-of bar k; ATR_L of L's as-of bar), the
+    L+1 memory lines from N.memory_lines, LIVE by the typed law (born <= k <
+    end_live), the typed coincidence (|boundary - a live L+1 boundary or live
+    memory line| <= COIN_T x ATR_L, inclusive, only while L+1 is in range; NaN
+    never coincides) and the typed partition (typed_cell).  No L+1 in the
+    commission -> 'NA' (the post twin 'NA' where a post-redraw boundary exists);
+    no post-redraw boundary -> 'n/a'."""
+    out = {c: np.empty(len(df), dtype=object) for c, _ in L1_DETS_T}
+    for (stem, lens, kind), ix in _cell_positions(df):
+        g = df.iloc[ix]
+        b = g["boundary"].to_numpy(float)
+        bp = g["boundary_post"].to_numpy(float)
+        d = g["dir"].to_numpy(np.int64)
+        fin = np.isfinite(bp)
+        if not HAS_L1_T[(panel_of(stem), lens)]:
+            out["cell"][ix] = "NA"
+            out["cell_mem"][ix] = "NA"
+            out["cell_post"][ix] = np.where(fin, "NA", "n/a")
+            continue
+        U = LADDER_T[lens]
+        nv = N.nest_at(stem, g["known_close_ms"].to_numpy(np.int64).tolist(), kind)
+        st = [x or "NONE" for x in nv[f"{U}_state"].tolist()]
+        inr = nv[f"{U}_in_range"].fillna(False).to_numpy(bool)
+        top, bot = nv[f"{U}_top"].to_numpy(float), nv[f"{U}_bot"].to_numpy(float)
+        pct, atr = nv[f"{U}_pct"].to_numpy(float), nv[f"{lens}_atr_L"].to_numpy(float)
+        uk = nv[f"{U}_k"].fillna(-1).to_numpy(np.int64)
+        ml = N.memory_lines(stem, U, kind)
+        born, end = ml["born"].to_numpy(np.int64), ml["end_live"].to_numpy(np.int64)
+        px = ml["px"].to_numpy(float)
+        thr = COIN_T * atr
+        with np.errstate(invalid="ignore"):
+            coin = inr & ((np.abs(b - top) <= thr) | (np.abs(b - bot) <= thr))
+            cpost = inr & ((np.abs(bp - top) <= thr) | (np.abs(bp - bot) <= thr))
+            live = ((uk[:, None] >= 0) & (born[None, :] <= uk[:, None])
+                    & (uk[:, None] < end[None, :]))
+            mco = inr & (live & (np.abs(b[:, None] - px[None, :]) <= thr[:, None])).any(axis=1)
+        for j, i in enumerate(ix):
+            out["cell"][i] = typed_cell(int(d[j]), st[j], pct[j], bool(coin[j]))
+            out["cell_mem"][i] = typed_cell(int(d[j]), st[j], pct[j], bool(coin[j] or mco[j]))
+            out["cell_post"][i] = (typed_cell(int(d[j]), st[j], pct[j], bool(cpost[j])) if fin[j]
+                                   else "n/a")
+    return out
 
 
 def l1_findings(got: pd.DataFrame) -> list[str]:
+    """EVERY row of `got` against l1_expected — one finding per detector, counted."""
+    exp = l1_expected(got)
     bad = []
-    for r in got.itertuples(index=False):
-        rec, memc, pc = indep_cells(r.asset, r.lens, r.scale_kind, int(r.dir), float(r.boundary),
-                                    float(r.boundary_post), int(r.known_close_ms))
-        tag = f"{r.asset} {r.lens} {r.event} anchor {r.anchor_i}"
-        if r.cell != rec:
-            bad.append(f"L1-CELL: {tag}: filed {r.cell}, nest_at at known_at {rec}")
-        if r.cell_mem != memc:
-            bad.append(f"L1-MEM: {tag}: filed {r.cell_mem}, nest_at {memc}")
-        if r.cell_post != pc:
-            bad.append(f"L1-POST: {tag}: filed {r.cell_post}, nest_at {pc}")
+    for col, det in L1_DETS_T:
+        f_ = got[col].astype(object).to_numpy()
+        m = f_ != exp[col]
+        if m.any():
+            i = int(np.nonzero(m)[0][0])
+            r = got.iloc[i]
+            bad.append(f"{det}: {int(m.sum())} of {len(got)} rows, e.g. {r['asset']} {r['lens']} "
+                       f"{r['scale_kind']} {r['event']} anchor {int(r['anchor_i'])}: filed "
+                       f"{f_[i]}, recomputed at {COIN_T} x ATR_L {exp[col][i]}")
     return bad
 
 
+def module_l1(df: pd.DataFrame) -> pd.DataFrame:
+    """The MODULE's own L+1 road (R.event_ledger -> R._l1 -> N.l1_cell: record,
+    memory-line twin, post-redraw twin) re-run on EVERY row's filed event frame
+    under whatever mutation is live — the break legs' material (never filed)."""
+    parts = []
+    for (stem, lens, kind), ix in _cell_positions(df):
+        g = df.iloc[ix].reset_index(drop=True)
+        led = R.event_ledger(stem, lens, kind, N.load11(stem, lens), g[R.EV_FRAME_COLS],
+                             C.toll_bps_for(stem)[0])
+        parts.append(g.assign(**{c: led[c].to_numpy() for c, _ in L1_DETS_T}))
+    return pd.concat(parts, ignore_index=True)
+
+
 def l1_break():
-    sel = l1_selection()
+    f = filed("R4_EVENTS")
     orig = R._l1
 
     def late(stem, lens, kind, d, b, kms):
@@ -1826,22 +1949,52 @@ def l1_break():
 
     def one_bar_late():
         with mutated(R, "_l1", late):
-            return l1_findings(_rebuilt(sel))
-    return plants([("the L+1 read one bar of L late (module mutation)", "L1-CELL",
-                    one_bar_late)])
+            return l1_findings(module_l1(f))
+
+    def coin_030():
+        with mutated(N, "COIN_FRAC", COIN_PLANT_T):
+            return l1_findings(module_l1(f))
+
+    def mem_as_record():
+        return l1_findings(f.assign(cell_mem=f["cell"]))
+
+    def post_at_pre():
+        return l1_findings(f.assign(cell_post=np.where(f["boundary_post"].notna(), f["cell"],
+                                                       f["cell_post"])))
+
+    return plants([
+        ("the L+1 read one bar of L late (module mutation; the module's cell road re-run on "
+         "every filed event)", "L1-CELL", one_bar_late),
+        (f"the coincidence width {COIN_PLANT_T:.2f} x ATR_L instead of {COIN_T:.2f} (module "
+         f"mutation of N.COIN_FRAC; the module's cell road re-run on every filed event)",
+         "L1-CELL", coin_030),
+        ("the memory-line twin filed as the record cell (copy)", "L1-MEM", mem_as_record),
+        ("the SFP post-redraw twin read at the pre-redraw boundary (copy)", "L1-POST",
+         post_at_pre),
+    ])
 
 
 def l1_real():
-    sel = l1_selection()
-    bad = l1_findings(sel)
-    cells = sel["cell"].value_counts().to_dict()
-    if len(sel) < 30:
-        bad.append(f"SELECTION: {len(sel)} < 30 events")
-    return (not bad), (f"{len(sel)} events (per CLASSIC5 lens: up to 3 aimed at a cell that moves "
-                       f"one bar later along a typed stride + 5 seeded), record / memory-line "
-                       f"twin / post-redraw cells == "
-                       f"this file's recomputation from N.nest_at at the known_at close; cells "
-                       f"{cells}" + (f"; findings {bad[:4]}" if bad else ""))
+    f = filed("R4_EVENTS")
+    bad = l1_findings(f)
+    cells = _cell_positions(f)
+    if sorted(k for k, _ in cells) != sorted(all_cells()):
+        bad.append(f"L1-CELL: the checked rows span {len(cells)} (asset, lens, scale) cells, "
+                   f"not the commission's {len(all_cells())}")
+    has = np.array([HAS_L1_T[(panel_of(a), L)] for a, L in zip(f["asset"], f["lens"])], bool)
+    post = f["boundary_post"].notna().to_numpy(bool)
+    rec = dict(sorted(f.loc[has, "cell"].value_counts().to_dict().items()))
+    return (not bad), (f"EVERY event of R4_EVENTS ({len(f)} rows over {len(cells)} (asset, lens, "
+                       f"scale) cells: {int(has.sum())} with an L+1 in the commission, "
+                       f"{int((~has).sum())} without, filed 'NA'): record / memory-line twin / "
+                       f"post-redraw twin cells == this file's recomputation (N.nest_at at the "
+                       f"known_at close, typed coincidence {COIN_T} x ATR_L, typed live memory "
+                       f"lines, typed partition); record cells {rec}; the memory-line twin "
+                       f"differs from the record cell on {int((f['cell'] != f['cell_mem']).sum())} "
+                       f"rows; post-redraw twin on {int(post.sum())} SFP rows with a post-redraw "
+                       f"boundary ({int((post & (f['cell_post'] != f['cell']).to_numpy()).sum())} "
+                       f"differ from the record cell)"
+                       + (f"; findings {bad[:4]}" if bad else ""))
 
 
 # ═══════════════════════════════════════════════════════ F-R4-CONT
@@ -2392,7 +2545,10 @@ FIXTURES = (
      "at N's known_at [L-R.6(a)(b)]",
      "on any of the 112 cells the filed events differ from N.events' frames in key set, known_at, "
      "death bar or boundary, or break the typed anchor (tap +3, memory line +6, harden +0), "
-     "direction, close-stamp or era laws",
+     "direction, close-stamp or era laws, or the typed honesty-label laws of L "
+     "(l_scale_in_sample by the known close; l_anchor_scale_in_sample by it OR the death / "
+     "harden bar's close [R4-8]), or the manifest's count of rows where the two differ is not "
+     "the table's",
      ev_break, ev_real),
     ("F-R4-SCAN", "every evaluated touch is a row (R4_SCAN) and every death its scan's end "
      "(R4_DEATHS) [L-R.6(a)]",
@@ -2426,10 +2582,12 @@ FIXTURES = (
      "rebuild (own static-box law, own tap scans, N.nest_at L+1 with the typed partition, own "
      "arithmetic) on 3 cells x 2 draws and one pooled draw",
      null_break, null_real),
-    ("F-R4-L1", "the L+1 cell of >= 30 events recomputed from N.nest_at at the known_at close "
-     "[L-R.6 L+1 conditioning]",
-     "a selected event's filed record / memory-line / post-redraw cell differs from this file's "
-     "recomputation from N.nest_at at its known_at close",
+    ("F-R4-L1", "the L+1 cell of EVERY event recomputed from N.nest_at at the known_at close at "
+     "0.25 x ATR_L [L-R.6 L+1 conditioning; reproducibility review MINOR-3]",
+     "any R4_EVENTS row's filed record / memory-line twin / post-redraw twin cell differs from "
+     "this file's recomputation (N.nest_at at its known_at close, typed coincidence 0.25 x "
+     "ATR_L, typed live memory lines, typed partition), or the rows checked do not span the "
+     "commission's 112 cells",
      l1_break, l1_real),
     ("F-R4-CONT", "TC10 continuity at frozen3.0 · one-shot · 4h · POOLED:CLASSIC5 · tap89 · H20 "
      "[AM-1]",

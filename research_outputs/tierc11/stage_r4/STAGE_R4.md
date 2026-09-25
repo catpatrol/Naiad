@@ -19,7 +19,7 @@ as_of_last_closed_4h: 2026-09-25T00:00:00Z · substrate tc11_20260925 · seed 20
 - [LEAN-HEPHAESTUS] R4-5 BASE RATE [L-R.6, AM-6 R-BASE-COIN]: C.outcome_ledger anchored at EVERY closed bar k of L, long and short; direction 'both' = the union of the two anchored sets (a cell that depends on direction — EXP_ALIGNED — takes each bar under its own direction). Cells from N.range_facts: record = coin_top OR coin_bot of L at k with L+1 read as-of close_k; twins topside / botside (one side alone), own_side_brk (long@topside + short@botside: a BREAKOUT's broken side), own_side_sfp (long@botside + short@topside: an SFP's deviated side), mem_twin (L's nest coin_*_mem), and the memory-line own-side twins own_side_brk_mem / own_side_sfp_mem (the same composites on coin_top_mem / coin_bot_mem). Each event row carries its cell-base row (law record; mem_twin for mem_twin rows), its own-side base (BRK own_side_brk, SFP own_side_sfp; the _mem composite for mem_twin rows; post_redraw rows the record composite) and the unconditional base (cell ALL), with event NET - base NET.
 - [LEAN-HEPHAESTUS] R4-6 NULL [L-R.6, ruling R10]: gaps+order, K = 20, per (asset, lens, scale) at the filed pick — NL.real_box_set, NL.draw_rng (default_rng([seed + draw, crc32('asset|lens|scale_kind')]); 'kind' read as the scale kind, TC10's key), NL.schedule(keep_order=False), NL.static_box_machine, RC.flips_and_leash on the corpses; events through N's scan and the null's hardens; the null box's static edge is the event boundary; the L+1 cell read from the REAL L+1 machine at the null event's known_at. Pooled null draw d = draw d of every member (TC10's law). One null row per real grid cell of law record: real beside the null's median / q25 / q75 / IQR / min / max over the valid draws and the mid-rank percentile — a DESCRIPTION, never a p-value; every draw's n and NET filed; the sensitivity seed 20260816 re-draws the null and prints its NET median and percentile beside. Built at both scales (calibrated of record; frozen3.0 = TC10's null scale).
 - [LEAN-HEPHAESTUS] R4-7 CONTINUITY [AM-1]: at frozen3.0, one-shot, 4h, POOLED:CLASSIC5, tap89, H20 NET, TC11's value is printed beside TC10's census/outcome_grid.parquet row (read by absolute main-tree path), and the TC10 window is REPLAYED in TC11 code (the tapes cut at 2026-09-21T16:00Z, C.run_scale at 3.0, C.retest_holds, C.outcome_ledger, C.grid_rows): the replay must equal the filed row at its 8 dp; the difference to TC11 is then decomposed event by event over the 20 extra 4h bars.
-- [LEAN-HEPHAESTUS] R4-8 LABELS [L-R.2, AM-4]: every event row carries l_ / u_ pick_window, scale_in_sample and stability_changed; every grid / base / null row carries the pick windows and stability flags of L and L+1 (a pool: the distinct values joined) and the counts of its anchors whose L or L+1 read is scale-in-sample.
+- [LEAN-HEPHAESTUS] R4-8 LABELS [L-R.2, AM-4]: every event row carries l_ / u_ pick_window, scale_in_sample and stability_changed; every grid / base / null row carries the pick windows and stability flags of L and L+1 (a pool: the distinct values joined) and the counts of its anchors whose L or L+1 read is scale-in-sample. l_scale_in_sample is keyed to the known instant; every event row also carries the EXTRA label l_anchor_scale_in_sample [causality review MINOR-2] = N.scale_in_sample at the close of the bar its anchor rests on (a BREAKOUT's death bar die_i, an SFP's harden bar) OR at the known close (a tuning pick: that close <= the era cut; a whole-tape fallback True; frozen3.0 False). It is a label only: every grid / base / null count stays on l_scale_in_sample, and the rows where the two differ are counted in §2.
 - [LEAN-HEPHAESTUS] R4-9 PARALLELISM [AM-2]: the runner starts no process; units run in-process (serial) or in fresh interpreters started by the caller; the merge alone writes the files of record.
 - [LEAN-HEPHAESTUS] R4-10 SCAN LEDGER [L-R.6(a) 'every evaluated touch is a row']: R4_SCAN files N's first-retest scan rows verbatim (N.first_retest_scan: tap89 / tap127 / tap200 and the memory line; seq, touch, known_at = touch + 3 / + 6, verdict, first hold; era by the known_at close, 'beyond_pin' where a truncated row's known_at passes the tape); R4_DEATHS files every death of N.events with, per band, its evaluated-touch count and its END: hold (a first hold), truncated, failed-out (every touch in the candidacy window failed), no-touch.
 
@@ -27,7 +27,7 @@ as_of_last_closed_4h: 2026-09-25T00:00:00Z · substrate tc11_20260925 · seed 20
 
 | file | rows | content sha256 (parquet: canonical csv) |
 |---|---|---|
-| R4_EVENTS.parquet | 71889 | 935ca1bd816119887e32a9a26bfa15ae9ddabda8ddfee7108a0c097a9d3b0211 |
+| R4_EVENTS.parquet | 71889 | 25b72fdb7a9f5c166a2e40d5645524e30f553e3c23017286b0c83e891d9fadb7 |
 | R4_GRID.parquet | 180684 | 4eab273ecf28ce147d6ae148a712710f4f58f5d8e01a4c7a45ace627065576ac |
 | R4_BASE.parquet | 67140 | fd55ce37c316a2329b901b5b5f03706fa5c4f7ad8886d8fb34b9f1f3804bfdb4 |
 | R4_NULL.parquet | 100764 | cd03d8d6c53071671748e01db1dd78a4936b301b33594ee65683f54ff785d541 |
@@ -118,6 +118,39 @@ as_of_last_closed_4h: 2026-09-25T00:00:00Z · substrate tc11_20260925 · seed 20
 | 1000BONKUSDT | 1h | 2.0 | tuning | True | 4h | 2.0 | tuning | False |
 | 1000BONKUSDT | 4h | 2.0 | tuning | False | NA | — | — | — |
 | 1000BONKUSDT | 1d | 2.0 | whole-tape (fallback) | None | NA | — | — | — |
+
+- **l_anchor_scale_in_sample** (R4_EVENTS, an EXTRA label [R4-8; causality review MINOR-2]) differs from l_scale_in_sample on **75** of 71,889 event rows (75 of them anchor-label True where l_scale_in_sample is False); CLASSIC5 · calibrated · BREAKOUT: 29 of 15,535. A row differs only when the bar its anchor rests on closes at or before the era cut and its known_at closes after it, under a tuning pick. It is a label only: no grid / base / null figure is keyed to it (n_l_scale_in_sample counts l_scale_in_sample).
+
+| panel | lens | scale | family | event rows | rows where the two labels differ |
+|---|---|---|---|---|---|
+| CLASSIC5 | 1h | calibrated | BRK | 11396 | 11 |
+| CLASSIC5 | 1h | calibrated | SFP | 2571 | 0 |
+| CLASSIC5 | 1h | frozen3.0 | BRK | 6581 | 0 |
+| CLASSIC5 | 1h | frozen3.0 | SFP | 1226 | 0 |
+| CLASSIC5 | 4h | calibrated | BRK | 2828 | 10 |
+| CLASSIC5 | 4h | calibrated | SFP | 627 | 0 |
+| CLASSIC5 | 4h | frozen3.0 | BRK | 1797 | 0 |
+| CLASSIC5 | 4h | frozen3.0 | SFP | 289 | 0 |
+| CLASSIC5 | 12h | calibrated | BRK | 860 | 1 |
+| CLASSIC5 | 12h | calibrated | SFP | 198 | 0 |
+| CLASSIC5 | 12h | frozen3.0 | BRK | 546 | 0 |
+| CLASSIC5 | 12h | frozen3.0 | SFP | 105 | 0 |
+| CLASSIC5 | 1d | calibrated | BRK | 451 | 7 |
+| CLASSIC5 | 1d | calibrated | SFP | 77 | 0 |
+| CLASSIC5 | 1d | frozen3.0 | BRK | 275 | 0 |
+| CLASSIC5 | 1d | frozen3.0 | SFP | 55 | 0 |
+| UNSEEN12 | 1h | calibrated | BRK | 17247 | 18 |
+| UNSEEN12 | 1h | calibrated | SFP | 4390 | 0 |
+| UNSEEN12 | 1h | frozen3.0 | BRK | 9545 | 0 |
+| UNSEEN12 | 1h | frozen3.0 | SFP | 1931 | 0 |
+| UNSEEN12 | 4h | calibrated | BRK | 3894 | 17 |
+| UNSEEN12 | 4h | calibrated | SFP | 930 | 0 |
+| UNSEEN12 | 4h | frozen3.0 | BRK | 2395 | 0 |
+| UNSEEN12 | 4h | frozen3.0 | SFP | 488 | 0 |
+| UNSEEN12 | 1d | calibrated | BRK | 648 | 11 |
+| UNSEEN12 | 1d | calibrated | SFP | 120 | 0 |
+| UNSEEN12 | 1d | frozen3.0 | BRK | 357 | 0 |
+| UNSEEN12 | 1d | frozen3.0 | SFP | 62 | 0 |
 
 ## 3 · Event counts, per panel (per-asset counts in R4_EVENTS.parquet)
 

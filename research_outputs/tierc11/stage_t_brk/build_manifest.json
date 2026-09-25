@@ -74,22 +74,22 @@
     "tier": "TIER-E"
   },
   "content_sha": {
-    "regbooks/P-BRK-4H/scored.parquet": "4b48e80e84bae8b0eba8f1b49352a8642c91e2813e6f9d000e6848f00aa30f7c",
-    "regbooks/P-BRK-4H/tierE__frozen3.parquet": "85e46e9e8088d64fda7ed72be472ab8e53df58d674e2be97a497d54113258771",
-    "regbooks/P-BRK-4H/tierE__holdout.parquet": "f0e4cd54a42e1110aff70bda131279b3c6448267dee6ee67065fb14ec7dd8320",
-    "regbooks/P-BRK-4H/tierE__memline_first_hold.parquet": "3025aca3eef91e48b3ea748c29a4c98e4471126f2d6eaf4ec8d1ea643938a6bf",
-    "regbooks/P-BRK-4H/tierE__memline_oneshot_flip.parquet": "1a190e373f8766da3f100e940d91bfa435a038c6a30d1b3f2653db475b2c33bd",
-    "regbooks/P-BRK-4H/tierE__oneshot_first_touch.parquet": "6a03829bb7344b37738de53a712e851c6a216f542d606cbd53ba126697451a2a",
-    "regbooks/P-BRK-4H/tierE__panel17.parquet": "be2b23e0b06fbb9cdb5e4295cda3534639343f0d7085f9cbd9eb1b237b9c90c0",
-    "regbooks/P-BRK-4H/tierE__tuning.parquet": "0195858217668f52220c5d5e0c91e94dc4a0e093aae2b61835056bc4888bdaa7",
-    "stage_t_brk/T_BRK_ARMS.parquet": "dc4396bf6412055b41273c45b18acf8cf11d3d9a97ced5c90c59ddfd92d54213",
+    "regbooks/P-BRK-4H/scored.parquet": "bfac2c1ae7cbc50ceb9d39fc89c01c8fdfb41b9ad22ed9406f041523b726099b",
+    "regbooks/P-BRK-4H/tierE__frozen3.parquet": "9f42754d8d557889d96ee503904180a04ea6146483f0270752878734193859b0",
+    "regbooks/P-BRK-4H/tierE__holdout.parquet": "828492ee8b084a485137294f38df8b31e8cfdf95129d49ebf00e4865a40f5551",
+    "regbooks/P-BRK-4H/tierE__memline_first_hold.parquet": "f3c41dc63278e917010a2cf14404966e2fa0ed13836f866640c9952372942140",
+    "regbooks/P-BRK-4H/tierE__memline_oneshot_flip.parquet": "811bb4ea5a951829d90120742350c513f1a28df41d744493c30c58da89b92108",
+    "regbooks/P-BRK-4H/tierE__oneshot_first_touch.parquet": "8ae5c4981e5d531d5a1a37d24db06df5a8863c7895c38be5ea0e2e73659f69bc",
+    "regbooks/P-BRK-4H/tierE__panel17.parquet": "42ad5dee675b415be27f556b2e530cbc40c8a915c0450c51a5c394d2e997bb10",
+    "regbooks/P-BRK-4H/tierE__tuning.parquet": "f8ec46569c69e649e8fd2b5205fd62950cfe9e53d1e558271b2725dd9e3c0899",
+    "stage_t_brk/T_BRK_ARMS.parquet": "2b5cf21b3d87e65d41ca910a1929f5d014b9b53006bb9e436dcf40edaec3c175",
     "stage_t_brk/T_BRK_ASSET_GRID.parquet": "03892d6e32d27327c5b0224839cc5e0c95d70be1c493650c080d2ee73e2acb0c",
     "stage_t_brk/T_BRK_CANDIDATES.parquet": "0e0def5dbe5eabc9b01d41b79d34d8852eabd0d6d77872c4cbb070bce47277ed",
     "stage_t_brk/T_BRK_DIR_GRID.parquet": "c7a20c828a6b0860392f063ef3b6f0ab486d7d822085d1ff17c05cf996bdc141",
     "stage_t_brk/T_BRK_ERA_GRID.parquet": "f49882bea634f652b17bb8a081e9114b7b3dd7a43167b5228f0d4b26de65e803",
     "stage_t_brk/T_BRK_EXIT_GRID.parquet": "08ef5bb35f02a8696c9b42e764e3e8946889afd92d9e9bed8cc7c8e2dd091c18",
     "stage_t_brk/T_BRK_HAZARD.parquet": "aed4a480fc9d124bfe0b0f3ecf29b64bba83035a8b949148e4a0694117d86bd1",
-    "stage_t_brk/T_BRK_INSAMPLE.parquet": "6264bdabb7fee0849f8d6d32d5f041524f4559b4b3ae6438b5e4797a8c4b743b",
+    "stage_t_brk/T_BRK_INSAMPLE.parquet": "f990a96845b3d7e9e3cca6e6f3e9bb1fe342e195deb6240a10565a2384b62edd",
     "stage_t_brk/T_BRK_PICKS.parquet": "9f56a6b80061e1241ea4390779eeeb9ec04a89d230735b3f79d564e0e3970ab3",
     "stage_t_brk/T_BRK_SCAN.parquet": "ddac1f0ddb87656039055ad6999a4b0fa5e5be98cdbd3b7ac3ac7df695def0c7",
     "stage_t_brk/T_BRK_TALLY.parquet": "f45e561034be9e3c4a526052473b993c23d50315fe0d43c60520625586b861e5"
@@ -137,7 +137,7 @@
     "scripts/tierc10_brk.py": "9c26561c7ad405101496217b145ab78a20e4ee805a5ddfd117dceaa0a7177ae6",
     "scripts/tierc11_env.py": "1526093b25161927337ced6112a310075b1a57c825f08705814e48619398f798",
     "scripts/tierc11_nest.py": "16e325022523064e67eede439998e9ee4cacfeb0df8171202a85b46125827429",
-    "scripts/tierc11_stage_t_brk.py": "8a0c4f93aef0a53efae700fb43dbc2b9d5e8ad82025cd0ac2994ea596dbb69fb"
+    "scripts/tierc11_stage_t_brk.py": "3bb38d03be79b69803f8b20e5be24c7d98fe9cce682e2bb98fbe1224e397181f"
   },
   "keys": {
     "regbooks/P-BRK-4H/scored.parquet": [
@@ -222,7 +222,8 @@
     "R-TBRK-7 STAMPS: entry_ms = the entry bar's OPEN (the pairing key), entry_close_ms = its close (the entry instant); exit_close_ms = the exit bar's close (BK's stamp; a stop is intrabar, so exit_event_ms = the exit bar's OPEN beside it [L-R.5]); era = E.era_of(entry_close_ms) [L-1.3].",
     "R-TBRK-8 HAIRCUT [AM-7]: haircut_net_r = net_r - fee_r x (slip_bps_side / taker_bps_side), slip = the stem's charter tier from E.fees() (A 2 / B 5 / C 10), taker = 5.0; fee_r is account_l's taker fee over every fill (entry, harvest, exit).",
     "R-TBRK-9 TIER-E ARMS each substitute ONE named element of the scored rule (panel, anchor law, scale, one-shot law) or slice the scored book by era; the 17-asset view's CLASSIC5 rows are asserted IDENTICAL to the scored book (same rule, same bars).",
-    "R-TBRK-10 SCALE-IN-SAMPLE per row = range_facts' '<source>_scale_in_sample' of the row (a calibrated read at a known instant <= the era cut, or any read of a fallback pick) [L-R.2, R-LABEL]; stability_changed = the 4h pick's first-half-vs-tuning flag."
+    "R-TBRK-10 SCALE-IN-SAMPLE per row = range_facts' '<source>_scale_in_sample' of the row (a calibrated read at a known instant <= the era cut, or any read of a fallback pick) [L-R.2, R-LABEL]; stability_changed = the 4h pick's first-half-vs-tuning flag.",
+    "R-TBRK-11 ANCHOR-SCALE-IN-SAMPLE per row (an EXTRA column; decides nothing; the interface's 16 columns and book_sha256 are untouched) = at the calibrated scale, (death close <= the era cut) OR (known close <= the era cut) OR the row's own scale_in_sample (a fallback pick's read is in-sample everywhere); False at frozen 3.0 (fully causal). The row depends on the death read as well as the known-instant read, so a holdout entry acting on a death closed in the tuning era reads True here while its scale_in_sample (R-TBRK-10, keyed to the known instant) reads False; both labels and their holdout counts are printed side by side [causality MINOR-2]."
   ],
   "registration": "P-BRK-4H",
   "registration_sha256": "120939d9d4a2092958fcc72c25db5036e981ca5ad4f1be0b4da4f0edb9ba1655",

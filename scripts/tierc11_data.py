@@ -142,7 +142,31 @@ RANGE_PINS_SOURCE = ROOT / "engine" / "rangefinder.py"
 
 TC10_SRC = ROOT / "scripts" / "tierc10_data.py"
 TC10_SRC_SHA256 = "2cbf9bb6bcfea3ec6184d5502ba5c530f5c0089d95288ab848a745ad5b3015fc"
-TC10_DATA = ROOT / "research_outputs" / "tierc10" / "data"            # READ-ONLY
+
+
+# ported from scripts/tierc11_env.py:218-230 @ sha256 1526093b25161927 — VERBATIM: the shim's
+# main-tree walk (the shim is never IMPORTED here: it arms the audit hook and re-roots the TC10
+# modules at import).  F-D11-PORT holds it AST-identical to tierc11_env._main_tree.
+def _main_tree(root: Path) -> Path:
+    """The main working tree: `root` itself, or — in a linked worktree whose
+    .git is a `gitdir:` file — the tree that owns .git/worktrees/<name>.
+    TC10 records are read there by absolute path [L-0.3, L-F.3]."""
+    g = root / ".git"
+    if g.is_file():
+        txt = g.read_text(encoding="utf-8").strip()
+        if txt.startswith("gitdir:"):
+            gd = Path(txt.split(":", 1)[1].strip())
+            gd = gd if gd.is_absolute() else (root / gd).resolve()
+            if gd.parent.name == "worktrees" and gd.parent.parent.name == ".git":
+                return gd.parent.parent.parent
+    return root
+
+
+# TC10's records are gitignored, so a review worktree does not carry them: they are read by
+# ABSOLUTE MAIN-TREE path [L-0.3, L-F.3; reproducibility review MAJOR-1].  In the main tree
+# MAIN_TREE is ROOT and nothing moves.
+MAIN_TREE = _main_tree(ROOT)
+TC10_DATA = MAIN_TREE / "research_outputs" / "tierc10" / "data"       # READ-ONLY
 TC10_MANIFEST = TC10_DATA / "STAGE_D_MANIFEST.json"
 TC10_PROBE = TC10_DATA / "VENUE_PROBE.json"
 TC10_PIN_FILE = TC10_DATA / "AS_OF_PIN.json"
@@ -2408,12 +2432,19 @@ def manifest_md(man: dict, fees: dict) -> str:
 
 def _out_guard(dst: Path) -> Path:
     """--out must be the stage directory, a directory under it, or a system
-    temp directory.  HALTS IF it is anywhere else (the TC10 tree above all)."""
+    temp directory OUTSIDE the repo trees (a tree checked out under a temp
+    directory — a review copy — is still the repo: its research_outputs/tierc10
+    and the stage dir's parent stay refused).  HALTS IF it is anywhere else
+    (the TC10 tree above all)."""
     r = dst.expanduser().resolve()
     tmps = {Path(tempfile.gettempdir()).resolve(), Path("/private/tmp").resolve()}
-    if r == OUT.resolve() or OUT.resolve() in r.parents or any(t in r.parents for t in tmps):
+    trees = {ROOT.resolve(), MAIN_TREE.resolve()}
+    in_tree = any(r == t or t in r.parents for t in trees)
+    if r == OUT.resolve() or OUT.resolve() in r.parents or (
+            not in_tree and any(t in r.parents for t in tmps)):
         return r
-    raise SystemExit(f"HALT: --out {r} is not {OUT}, under it, or under a temp directory")
+    raise SystemExit(f"HALT: --out {r} is not {OUT}, under it, or under a temp directory outside "
+                     f"the repo tree")
 
 
 def write_manifest(dst: Path) -> dict:

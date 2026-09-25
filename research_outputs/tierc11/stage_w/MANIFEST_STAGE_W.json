@@ -85,6 +85,111 @@
     "latch_vs_v6_reached_1r_agree": 200,
     "n_walk_mismatch_base": 1,
     "n_walk_mismatch_rule_book": 1,
+    "other_books": {
+      "P-BRK-4H": {
+        "events": 11585,
+        "events_on_mismatch_bars": 1,
+        "events_on_mismatch_bars_list": [
+          "SOLUSDT entry 2024-10-26T12:00:00Z 9/12 with 1h close 2024-10-28T22:00:00Z -> taken 2024-10-29T00:00:00Z (IN-TRADE before)"
+        ],
+        "events_raw_instant_changes_class": 0,
+        "exit_resolved_by": {
+          "1h": 269,
+          "close": 53
+        },
+        "fallbacks": [],
+        "latch_present_vs_book_reached_1r_agree": 322,
+        "latch_readings_agree": 322,
+        "n": 322,
+        "n_entry_bar_straddles_era_cut": 0,
+        "n_walk_mismatch": 2,
+        "phase_counts": {
+          "AT-EXIT": 54,
+          "IN-TRADE": 3537,
+          "POST-EXIT": 21,
+          "PRE-ENTRY": 7973
+        },
+        "resolution": {
+          "1h-walk": 322
+        },
+        "source": "research_outputs/tierc11/regbooks/P-BRK-4H/scored.parquet — the scored book (sidecar book_sha256 == this stage's recomputation == the scorer's input), re-ridden per campaign by RD.ride11(walk=other_walk(sym))",
+        "source_check": {
+          "book_sha256": "c76358dfaeb034ddc679f74f0f26f40eca9a88bcbb48c5c62bcac45f5b4ec311"
+        },
+        "walk_mismatch_bars_ridden": [
+          "BTCUSDT 2024-10-28T20:00:00Z",
+          "SOLUSDT 2024-10-28T20:00:00Z"
+        ],
+        "window_open": "death close (the 4h macro death that opens the lane's candidacy)"
+      },
+      "P-RELAY-1": {
+        "events": 2190,
+        "events_on_mismatch_bars": 0,
+        "events_on_mismatch_bars_list": [],
+        "events_raw_instant_changes_class": 0,
+        "exit_resolved_by": {
+          "1h": 162,
+          "close": 11
+        },
+        "fallbacks": [],
+        "latch_present_vs_book_reached_1r_agree": 173,
+        "latch_readings_agree": 173,
+        "n": 173,
+        "n_entry_bar_straddles_era_cut": 0,
+        "n_walk_mismatch": 0,
+        "phase_counts": {
+          "AT-EXIT": 57,
+          "IN-TRADE": 1608,
+          "POST-EXIT": 39,
+          "PRE-ENTRY": 486
+        },
+        "resolution": {
+          "1h-walk": 173
+        },
+        "source": "research_outputs/tierc11/regbooks/P-RELAY-1/scored.parquet — the scored book (sidecar book_sha256 == this stage's recomputation == the scorer's input), its path of record re-run by RD.relay11(walk_after=True, moved=)",
+        "source_check": {
+          "book_sha256": "57d8bbef8190492d1df83a137977463ee441508e20a57cd81499c60258a53361"
+        },
+        "walk_mismatch_bars_ridden": [],
+        "window_open": "window arm close (the v6 window the relay entered)"
+      },
+      "trg912": {
+        "events": 4153,
+        "events_on_mismatch_bars": 0,
+        "events_on_mismatch_bars_list": [],
+        "events_raw_instant_changes_class": 0,
+        "exit_resolved_by": {
+          "1h": 191,
+          "close": 8
+        },
+        "fallbacks": [],
+        "latch_present_vs_book_reached_1r_agree": 199,
+        "latch_readings_agree": 199,
+        "n": 199,
+        "n_entry_bar_straddles_era_cut": 0,
+        "n_walk_mismatch": 2,
+        "phase_counts": {
+          "AT-EXIT": 64,
+          "IN-TRADE": 1849,
+          "POST-EXIT": 58,
+          "PRE-ENTRY": 2182
+        },
+        "resolution": {
+          "1h-walk": 199
+        },
+        "source": "research_outputs/tierc11/books/trg912_campaigns.parquet — the TC11-BOOKS 9/12 book (B.trg912_book; filed book_sha asserted), re-ridden per campaign by RD.transform_book(walk=other_walk)",
+        "source_check": {
+          "book_sha": "2c32fd60924336acc7c48852143d47661a5eb83f12c047ac8b041ad90046e030",
+          "ctrl_cols_ok": true,
+          "ctrl_cols_worst_walked": 0.0
+        },
+        "walk_mismatch_bars_ridden": [
+          "BTCUSDT 2023-11-10T12:00:00Z",
+          "ZECUSDT 2024-10-28T20:00:00Z"
+        ],
+        "window_open": "arm close (the 9/12 card's window arming)"
+      }
+    },
     "phase_counts": {
       "AT-EXIT": 65,
       "IN-TRADE": 1658,
@@ -161,11 +266,26 @@
       "symbol",
       "entry_ms"
     ],
+    "W1_CAMPAIGNS_OTHER": [
+      "book",
+      "symbol",
+      "entry_close_ms"
+    ],
     "W1_EVENTS": [
       "symbol",
       "entry_ms",
       "pair",
       "h1_open_ms"
+    ],
+    "W1_EVENTS_OTHER": [
+      "book",
+      "symbol",
+      "entry_close_ms",
+      "pair",
+      "h1_open_ms"
+    ],
+    "W1_OTHER_SUMMARY": [
+      "cell"
     ],
     "W1_TIMELINE": [
       "symbol",
@@ -208,7 +328,10 @@
     "[LEAN-HEPHAESTUS] (w1) an event on a mismatch bar is TAKEN at the parent's close [L-W.0]; (w5) the mark = the campaign exited at the event, booked by tierc7._account_chain; (w6) 9/12 at-risk = exit > entry close + 1h; (w7) every v6 window = the campaign windows; the armed windows holding no v6 campaign are a twin.",
     "[LEAN-HEPHAESTUS] AM-7 haircut_net_r = net_r − fee_r × slip/taker per stem (E.fees()).",
     "[LEAN-HEPHAESTUS] (w10) C3 '9/12 re-cross with trend after entry' = ANY in-trade with-trend 1h 9/12 cross (the reading of the first build, disclosed); C3S, printed beside and deciding nothing = the STRICT reading: a with-trend 9/12 cross whose preceding 9/12 cross on the 1h tape is a counter cross closing after the entry close.",
-    "[LEAN-HEPHAESTUS] (w11) AM-7's haircut twin beside every per-campaign net R (W1_CAMPAIGNS, W2_RELAY_WINDOWS) and the complement table's sums; L-1.3 entry bars straddling the era cut printed as a count (sidecars, STAGE_W.md)."
+    "[LEAN-HEPHAESTUS] (w11) AM-7's haircut twin beside every per-campaign net R (W1_CAMPAIGNS, W2_RELAY_WINDOWS) and the complement table's sums; L-1.3 entry bars straddling the era cut printed as a count (sidecars, STAGE_W.md).",
+    "[LEAN-HEPHAESTUS] (w12) W1 on every 4h campaign (final-review MINOR-1): the 9/12 book, P-BRK-4H scored and P-RELAY-1 scored stamped Tier-E by the same event tape and classifiers as v6 (W1_EVENTS_OTHER, W1_CAMPAIGNS_OTHER, W1_OTHER_SUMMARY: counts and W2's cohort sizes only, no outcome statistic).",
+    "[LEAN-HEPHAESTUS] (w13) window open = the 9/12 book's arm close; P-BRK-4H's 4h death close; P-RELAY-1's v6 window arm close.  A relay's entry = its 1h close: its in-trade window starts there.",
+    "[LEAN-HEPHAESTUS] (w14) 1h resolution of the books ridden without the walk (9/12, P-BRK-4H) by the ride module's resolver (RD.transform_book / RD.ride11 with the walk), the book's WHAT reproduced exactly per campaign, else the 4h-close fallback, labelled with its reason; P-RELAY-1 by its path of record (RD.relay11 walk_after), reproduced exactly or HALT."
   ],
   "regbooks": {
     "arms": {
@@ -244,7 +367,10 @@
   "sha": {
     "P_WARN_1_COMPLEMENT": "12355b7ff5b09e55091dbbeaaabdf1330f73a8d15cf05604b773f72ef77f7b17",
     "W1_CAMPAIGNS": "efd27667ea0afaf9618fb87771994e0cf735ad8432f5ae6e2882db2104c92e00",
+    "W1_CAMPAIGNS_OTHER": "f426c5be56ed982f64c4e5b17a8fb9e08b79603f340dec782e5ee388ee073d74",
     "W1_EVENTS": "4c8286410f330a6b76a729ea33bd66f586138c04bc6bfa2ff0255ea3c26b2c8d",
+    "W1_EVENTS_OTHER": "31ad8e88c673335b6077454b3dac303675399837b20bdbf6f90297ea69491cc1",
+    "W1_OTHER_SUMMARY": "99ef17f02b8c6521c06695ca4c64b8ac049ef2a49ac91b17992f5f48d8286c0f",
     "W1_TIMELINE": "ebaff8ba4f712f8f86c82c395d729b5476d5b542a5c8cafeb40686bc01aae16f",
     "W2_COHORTS": "2835ef0efa8248ee5564276c89a7aad00dba749f0ab906fbb7f8d6f6efd897e4",
     "W2_FORWARD": "6f3adc7101364ab62c2b7d5f75bd30d2916b022b855ef5f76a252a22cc36f4cb",

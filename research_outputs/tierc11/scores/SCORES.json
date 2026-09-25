@@ -24,7 +24,10 @@
     "[LEAN-HEPHAESTUS] SC-16 gate = post-filter [L-1.5]: no key outside the base, every kept row equal to the base on the 16 columns, else HALT",
     "[LEAN-HEPHAESTUS] SC-17 gating status cross-checked: P-WARN-1 vs condition.json (met, ci_hi < 0), P-SCALP-2 vs R2_LENS_VERDICTS.json 1h; the tuning-era R2 1h word printed beside P-SCALP-2, collared [§10]",
     "[LEAN-HEPHAESTUS] SC-18 adds head-to-head: derived (paired, collared) when not filed with a base_arm",
-    "[LEAN-HEPHAESTUS] SC-19 regbook strictness: int64 times, int8 direction, no ',', '\"', CR, LF in a string field, 0 < entry_close_ms - entry_ms <= one lens step (4h unless the sidecar names a lens)"
+    "[LEAN-HEPHAESTUS] SC-19 regbook strictness: int64 times, int8 direction, no ',', '\"', CR, LF in a string field, 0 < entry_close_ms - entry_ms <= one lens step (4h unless the sidecar names a lens)",
+    "[LEAN-HEPHAESTUS] SC-20 a STATUS.json reason is the builder's word: printed under \"builder's stage status:\" (detail status line, closed §0 cells), never as the scorer's",
+    "[LEAN-HEPHAESTUS] SC-21 pre_seen: the §0 honesty label carries 'point known before filing; new campaigns since 2026-09-21T16:00Z: scored <n> / base <n>', counted from the books by the entry bar's CLOSE > the TC10 pin",
+    "[LEAN-HEPHAESTUS] SC-22 D15 on an unpaired ruler: 'D15 n/a (two-sample)' / 'D15 n/a (vs zero)', then the scored book's top trade (largest |net_r|) and its share of ΣR, the point without it (removed from every book holding its key), the point without its asset and that asset's share of ΣR, per asset Δ = scored mean - base mean (two-sample) or the scored mean (vs zero); deciding nothing"
   ],
   "regbooks_root": "research_outputs/tierc11/regbooks",
   "rows": [
@@ -38,6 +41,7 @@
       ],
       "clears_bar": false,
       "clears_bar_float": false,
+      "concentration": null,
       "condition_record": {
         "ci_hi": -0.5277942972642365,
         "delta": -0.728646908214193,
@@ -62,6 +66,7 @@
       ],
       "panel_name": "CLASSIC5",
       "payload_sha256": "c6121ba9330a40bd31fd0dd1f78303b940417d3ac1f3a9eba8750979f84f0c99",
+      "pre_seen_new_campaigns": null,
       "precondition_record": null,
       "premise": {
         "identity": {
@@ -618,6 +623,56 @@
       ],
       "clears_bar": true,
       "clears_bar_float": true,
+      "concentration": {
+        "asset": "ZECUSDT",
+        "asset_share": 0.45929004330339923,
+        "per_asset": [
+          {
+            "asset": "BTCUSDT",
+            "n": 25,
+            "n_base": 39,
+            "value": 0.35143677680361796
+          },
+          {
+            "asset": "ETHUSDT",
+            "n": 31,
+            "n_base": 48,
+            "value": 0.1721038560784243
+          },
+          {
+            "asset": "NEARUSDT",
+            "n": 29,
+            "n_base": 40,
+            "value": 0.282108167558244
+          },
+          {
+            "asset": "SOLUSDT",
+            "n": 27,
+            "n_base": 36,
+            "value": 0.18877888573109047
+          },
+          {
+            "asset": "ZECUSDT",
+            "n": 29,
+            "n_base": 37,
+            "value": 0.15339621803426895
+          }
+        ],
+        "per_asset_kind": "delta: scored mean - base mean",
+        "point_without_asset": 0.24937269535154044,
+        "point_without_top": 0.19518070723254705,
+        "ruler": "two_sample",
+        "sum_net_r": 63.464130732724186,
+        "top": {
+          "entry_close_ms": 1777622400000,
+          "entry_ms": 1777608000000,
+          "net_r": 25.060482575130408,
+          "symbol": "ZECUSDT"
+        },
+        "top_in_base": true,
+        "top_removed_from": "scored and base",
+        "top_share": 0.3948763228266893
+      },
       "condition_record": null,
       "era": "full",
       "gate": {
@@ -649,6 +704,12 @@
       ],
       "panel_name": "CLASSIC5",
       "payload_sha256": "e01a89ea7e6fda864f7002a450abd1a4e92424c44d1a9626f6641814e7d35879",
+      "pre_seen_new_campaigns": {
+        "base": 0,
+        "scored": 0,
+        "since": "2026-09-21T16:00Z",
+        "time_col": "entry_close_ms"
+      },
       "precondition_record": null,
       "premise": {
         "key_sets_identical": false,
@@ -1297,7 +1358,7 @@
         }
       ],
       "verdict_at_sens_seed": "SUPPORTED",
-      "verdict_cell": "SUPPORTED — IN-SAMPLE RE-SCORE, NOT CONFIRMATORY (pre_seen: the scored cohort IS TC10 P_AGE_1_TIDE_YOUTH B4 (same function, same trailing edges, same 200 campaigns, anchored by F-CTRL(b)))",
+      "verdict_cell": "SUPPORTED — IN-SAMPLE RE-SCORE, NOT CONFIRMATORY (pre_seen: the scored cohort IS TC10 P_AGE_1_TIDE_YOUTH B4 (same function, same trailing edges, same 200 campaigns, anchored by F-CTRL(b)); point known before filing; new campaigns since 2026-09-21T16:00Z: scored 0 / base 0)",
       "verdict_of_record": "SUPPORTED",
       "verdict_stable_across_seeds": true
     },
@@ -1315,6 +1376,56 @@
       ],
       "clears_bar": false,
       "clears_bar_float": false,
+      "concentration": {
+        "asset": "ZECUSDT",
+        "asset_share": 0.5547147639255442,
+        "per_asset": [
+          {
+            "asset": "BTCUSDT",
+            "n": 21,
+            "n_base": 39,
+            "value": 0.5207665355331142
+          },
+          {
+            "asset": "ETHUSDT",
+            "n": 36,
+            "n_base": 48,
+            "value": 0.2716073093069965
+          },
+          {
+            "asset": "NEARUSDT",
+            "n": 26,
+            "n_base": 40,
+            "value": -0.09898903617052143
+          },
+          {
+            "asset": "SOLUSDT",
+            "n": 23,
+            "n_base": 36,
+            "value": -0.09076742854025005
+          },
+          {
+            "asset": "ZECUSDT",
+            "n": 31,
+            "n_base": 37,
+            "value": 0.07830185184123506
+          }
+        ],
+        "per_asset_kind": "delta: scored mean - base mean",
+        "point_without_asset": 0.16131530072173017,
+        "point_without_top": 0.11876258211992498,
+        "ruler": "two_sample",
+        "sum_net_r": 51.97401862719062,
+        "top": {
+          "entry_close_ms": 1777622400000,
+          "entry_ms": 1777608000000,
+          "net_r": 25.060482575130408,
+          "symbol": "ZECUSDT"
+        },
+        "top_in_base": true,
+        "top_removed_from": "scored and base",
+        "top_share": 0.48217327112781344
+      },
       "condition_record": null,
       "era": "full",
       "gate": {
@@ -1346,6 +1457,7 @@
       ],
       "panel_name": "CLASSIC5",
       "payload_sha256": "d19a42a329be3bfeea73c3c628bf515f5d0fa2fb8facd3fcac795b0186525084",
+      "pre_seen_new_campaigns": null,
       "precondition_record": null,
       "premise": {
         "key_sets_identical": false,
@@ -2130,6 +2242,56 @@
       ],
       "clears_bar": false,
       "clears_bar_float": false,
+      "concentration": {
+        "asset": "ETHUSDT",
+        "asset_share": 1.2077919846675107,
+        "per_asset": [
+          {
+            "asset": "BTCUSDT",
+            "n": 69,
+            "n_base": null,
+            "value": -0.20675780959136283
+          },
+          {
+            "asset": "ETHUSDT",
+            "n": 60,
+            "n_base": null,
+            "value": 0.3258086971315748
+          },
+          {
+            "asset": "NEARUSDT",
+            "n": 63,
+            "n_base": null,
+            "value": 0.24457877932432595
+          },
+          {
+            "asset": "SOLUSDT",
+            "n": 55,
+            "n_base": null,
+            "value": -0.045776030821008555
+          },
+          {
+            "asset": "ZECUSDT",
+            "n": 75,
+            "n_base": null,
+            "value": -0.026502348019563225
+          }
+        ],
+        "per_asset_kind": "scored mean",
+        "point_without_asset": -0.01283657847707714,
+        "point_without_top": -0.0001933633705868617,
+        "ruler": "vs_zero",
+        "sum_net_r": 16.18533826690027,
+        "top": {
+          "entry_close_ms": 1769644800000,
+          "entry_ms": 1769630400000,
+          "net_r": 16.24740790885865,
+          "symbol": "ETHUSDT"
+        },
+        "top_in_base": false,
+        "top_removed_from": "scored",
+        "top_share": 1.0038349301654892
+      },
       "condition_record": null,
       "era": "full",
       "gate": null,
@@ -2150,6 +2312,7 @@
       ],
       "panel_name": "CLASSIC5",
       "payload_sha256": "120939d9d4a2092958fcc72c25db5036e981ca5ad4f1be0b4da4f0edb9ba1655",
+      "pre_seen_new_campaigns": null,
       "precondition_record": null,
       "premise": {
         "ruler": "vs_zero"
@@ -2976,6 +3139,56 @@
       ],
       "clears_bar": false,
       "clears_bar_float": false,
+      "concentration": {
+        "asset": "ETHUSDT",
+        "asset_share": 1.045119791424677,
+        "per_asset": [
+          {
+            "asset": "BTCUSDT",
+            "n": 47,
+            "n_base": 39,
+            "value": 0.26248206130182683
+          },
+          {
+            "asset": "ETHUSDT",
+            "n": 33,
+            "n_base": 48,
+            "value": 2.3591094587245145
+          },
+          {
+            "asset": "NEARUSDT",
+            "n": 32,
+            "n_base": 40,
+            "value": -0.21578893287454046
+          },
+          {
+            "asset": "SOLUSDT",
+            "n": 33,
+            "n_base": 36,
+            "value": -0.41266447623228364
+          },
+          {
+            "asset": "ZECUSDT",
+            "n": 28,
+            "n_base": 37,
+            "value": -0.7471055084491665
+          }
+        ],
+        "per_asset_kind": "delta: scored mean - base mean",
+        "point_without_asset": -0.25385831021264627,
+        "point_without_top": 0.061828711795795716,
+        "ruler": "two_sample",
+        "sum_net_r": 78.47972576227235,
+        "top": {
+          "entry_close_ms": 1787065200000,
+          "entry_ms": 1787054400000,
+          "net_r": 32.75068179962861,
+          "symbol": "ETHUSDT"
+        },
+        "top_in_base": false,
+        "top_removed_from": "scored",
+        "top_share": 0.4173139174674956
+      },
       "condition_record": null,
       "era": "full",
       "gate": null,
@@ -2994,6 +3207,7 @@
       ],
       "panel_name": "CLASSIC5",
       "payload_sha256": "e8f6d4595b449a18bfd7ef8d01ed89d0b1fe65c4ab2ecf8964fa84fc8028a59b",
+      "pre_seen_new_campaigns": null,
       "precondition_record": null,
       "premise": {
         "key_sets_identical": false,
@@ -3650,6 +3864,7 @@
       "adds": null,
       "arms_listed": [],
       "clears_bar": null,
+      "concentration": null,
       "condition_record": null,
       "era": "holdout",
       "gate": null,
@@ -3668,6 +3883,7 @@
       ],
       "panel_name": "CLASSIC5",
       "payload_sha256": "c4e7ea0064bf0355804f311b8a2c91af1178de0ac9e705a417a1cc09b90bd250",
+      "pre_seen_new_campaigns": null,
       "precondition_record": {
         "lens": "1h",
         "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
@@ -3700,7 +3916,7 @@
       "status_reason": "CLOSED BY R2 (1h: FAIL)",
       "text_of_record": " P-SCALP-2 [30%] vs zero, five assets, holdout era, taker; the maker twin and the 17-asset view Tier-E.",
       "tier_e": [],
-      "verdict_cell": "CLOSED BY PRECONDITION: CLOSED BY R2 (1h: FAIL) — report-only · no number · no slot spent · beside, Tier-E [§10] (tier TIER-E · a SELECTION, not a result · gates nothing): the tuning-era R2 1h word FAIL (holdout word of record FAIL)",
+      "verdict_cell": "CLOSED BY PRECONDITION (builder's stage status: CLOSED BY R2 (1h: FAIL)) — report-only · no number · no slot spent · beside, Tier-E [§10] (tier TIER-E · a SELECTION, not a result · gates nothing): the tuning-era R2 1h word FAIL (holdout word of record FAIL)",
       "verdict_of_record": "CLOSED_BY_PRECONDITION"
     },
     {
@@ -3728,6 +3944,7 @@
       ],
       "clears_bar": false,
       "clears_bar_float": false,
+      "concentration": null,
       "condition_record": null,
       "era": "full",
       "gate": null,
@@ -3746,6 +3963,7 @@
       ],
       "panel_name": "CLASSIC5",
       "payload_sha256": "510e67de50923baf8b0d3feeb6638c4ae0fc04cebad1504c52a9602956f47797",
+      "pre_seen_new_campaigns": null,
       "precondition_record": null,
       "premise": {
         "identity": {
@@ -4634,6 +4852,7 @@
       ],
       "clears_bar": false,
       "clears_bar_float": false,
+      "concentration": null,
       "condition_record": null,
       "era": "full",
       "gate": null,
@@ -4652,6 +4871,7 @@
       ],
       "panel_name": "CLASSIC5",
       "payload_sha256": "ed4acdfe532b8c13f3700fa6a736a40a13b3cd3160e1f6618437428b18077c90",
+      "pre_seen_new_campaigns": null,
       "precondition_record": null,
       "premise": {
         "identity": {
@@ -5528,6 +5748,7 @@
       ],
       "clears_bar": false,
       "clears_bar_float": false,
+      "concentration": null,
       "condition_record": null,
       "era": "full",
       "gate": null,
@@ -5546,6 +5767,7 @@
       ],
       "panel_name": "CLASSIC5",
       "payload_sha256": "ad12a44cd8aeb27cc9a1ab0c4225725462f597a6d1dfc621ddf1e06a484de808",
+      "pre_seen_new_campaigns": null,
       "precondition_record": null,
       "premise": {
         "identity": {
@@ -5930,7 +6152,7 @@
         "sum_net_r_base": 40.807564574147555
       },
       "status": "BUILT",
-      "status_reason": "the paired premise and the identity law held on every paired arm (key sets identical to v6, n 200; every campaign the TP never filled carries v6's net_r / exit_ms / exit_reason exactly); books only — no CI, no p, no verdict word [L-1.4, L-1.5]",
+      "status_reason": "the paired premise and the identity law held on every paired arm (key sets identical to v6, n 200; every campaign the TP never filled carries v6's net_r / exit_ms / exit_reason exactly); the stage emits books only; the scorer rules [L-1.4, L-1.5]",
       "text_of_record": " P-TP-RNG [35%]: take-profit of the remainder at the approach (0.25 ATR) of the NEXT-HIGHER lens's range\n    boundary (12h boundary for a 4h campaign) when that lens is IN-RANGE; if the lens above is in\n    EXPANSION, no take-profit (let the trail run) — paired vs v6; the wall-exit lesson (tail cut) is the\n    named risk and the D15 tail ratio is printed on the row.",
       "tier_e": [
         {

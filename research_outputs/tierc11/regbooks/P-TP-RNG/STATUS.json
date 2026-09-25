@@ -8,7 +8,7 @@
     "tierE__tuning",
     "tierE__holdout"
   ],
-  "reason": "the paired premise and the identity law held on every paired arm (key sets identical to v6, n 200; every campaign the TP never filled carries v6's net_r / exit_ms / exit_reason exactly); books only — no CI, no p, no verdict word [L-1.4, L-1.5]",
+  "reason": "the paired premise and the identity law held on every paired arm (key sets identical to v6, n 200; every campaign the TP never filled carries v6's net_r / exit_ms / exit_reason exactly); the stage emits books only; the scorer rules [L-1.4, L-1.5]",
   "registration": "P-TP-RNG",
   "status": "BUILT"
 }

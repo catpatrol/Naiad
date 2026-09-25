@@ -94,15 +94,28 @@ path string), and EMA / ATR are this file's own plain loops.
                typed declared cells (TP.grid_whole), a row lacks the typed collar
                or the typed row_kind (the scored arm's rows 'registered book
                (reference)', every other arm's 'Tier-E arm'), a verdict word or a
-               'verdict' column appears, a cell's n / sum_net_r differ from this
-               file's own re-derivation from the regbooks (the holdout-on-a-
-               pre-cut-death disclosure cells included; or a tally does not add
-               up), or the report omits a declared cell row, a registered-book
-               row (§11), a candidate (Appendix A), an evaluated retest (Appendix
-               B) or a Tier-E regbook row (Appendix C).  SABOTAGE: a cell dropped;
-               a cell duplicated; the collar removed; a 'verdict' column; a cell's
-               n bent; a report row dropped; the scored arm's row labelled a
-               Tier-E arm; an Appendix A row dropped; an Appendix C row dropped.
+               'verdict' column appears, ANY of a grid row's six STAT_COLS (n,
+               sum and mean of net_r, p_win, sum and mean of haircut_net_r)
+               differs from this file's own re-derivation from the regbooks
+               (every row of the arm summary, the four grids and the in-sample
+               table: the holdout-on-a-pre-cut-death disclosure cells and the
+               anchor-label cells included), an arm-summary count (sides, both
+               in-sample labels, both holdout counts; the anchor label typed
+               here, R-TBRK-11) differs, a tally does not add up, the report's
+               F-1 line does not print the harvest count, the negative count and
+               BOTH medians (over every harvest; over the negative ones) as
+               re-derived from the scored regbook, or the report omits a declared
+               cell row, a registered-book row (§11), a candidate (Appendix A),
+               an evaluated retest (Appendix B) or a Tier-E regbook row (Appendix
+               C).  SABOTAGE: a cell dropped; a cell duplicated; the collar
+               removed; a 'verdict' column; a cell's n bent; a report row
+               dropped; the scored arm's row labelled a Tier-E arm; an Appendix
+               A row dropped; an Appendix C row dropped; (module mutation, the
+               module's own grid builders re-run on the written regbooks) the
+               haircut mean computed as s / n; a side cell's p_win bent by one
+               win; the anchor holdout count read off the flag; F-1's pre-repair
+               text (one median); F-1's negative median printed as the
+               all-harvest one.
   F-KEY        FAILS IF a regbook lacks a typed required column or dtype, carries a
                null in one, a duplicated (symbol, entry_ms), a sidecar whose keys /
                kind / ruler / panel / era_scope / n / sum_net_r / book_sha256 (this
@@ -112,15 +125,21 @@ path string), and EMA / ATR are this file's own plain loops.
                schedule's charter tier, typed A 2 / B 5 / C 10), an as-of stamp
                off the pin; STATUS.json is not the typed record; a stage table key
                is duplicated; a manifest content sha is not the table's; a row's
-               net_r is not EXACTLY gross_r - fee_r - funding_r; or the module's
-               WRITER (T.ride + T.trade_rows on a typed synthetic leg) stamps the
-               entry bar that STRADDLES the cut (open 2024-06-30T20:00Z, close
-               2024-07-01T00:00Z) anything but 'holdout', or the bar before it
-               anything but 'tuning'.  SABOTAGE (copies): a duplicated row; a
+               net_r is not EXACTLY gross_r - fee_r - funding_r; a regbook lacks
+               the bool EXTRA column anchor_scale_in_sample or a row's value is
+               not this file's typed law (R-TBRK-11: at the calibrated scale,
+               death close <= the cut OR known close <= the cut OR the row's own
+               flag; False at frozen 3.0; the arm's scale typed here); or the
+               module's WRITER (T.ride + T.trade_rows on a typed synthetic leg)
+               stamps the entry bar that STRADDLES the cut (open 2024-06-30T20:00Z,
+               close 2024-07-01T00:00Z) anything but 'holdout', or the bar before
+               it anything but 'tuning'.  SABOTAGE (copies): a duplicated row; a
                nulled net_r; direction as float; a bent sidecar sha; sidecar n + 1;
                BTC's haircut at 5 bps; a dropped 'lane'; an era flipped; STATUS
                'CLOSED'; a bent manifest sha; net_r = gross - fee + funding; fee_r
-               halved; (mutation) E.era_of read at the bar OPEN.
+               halved; the anchor label keyed to the known instant only (the
+               pre-repair law); a frozen-3.0 row's anchor set True; (mutation)
+               E.era_of read at the bar OPEN.
   F-DET        FAILS IF two subprocess builds (PYTHONHASHSEED 1, 20260924) differ
                from each other or from the canonical files of record in the file
                set, any byte or any parquet content sha, or either exits nonzero.
@@ -240,8 +259,10 @@ DECLARED_T = {
     "T_BRK_DIR_GRID": [f"{a}|{d}" for a in RIDDEN_T for d in ("long", "short")],
     "T_BRK_TALLY": [f"{a}|{s}" for a in RIDDEN_T for s in PANEL_T[ARM_PANEL_T[a]]],
     "T_BRK_INSAMPLE": [f"scored|in_sample={f}|{e}" for f in (True, False)
-                       for e in ("tuning", "holdout")] + ["tierE__holdout|beside",
-                                                          "tierE__frozen3|beside"]
+                       for e in ("tuning", "holdout")]
+                      + [f"scored|anchor_in_sample={f}|{e}" for f in (True, False)
+                         for e in ("tuning", "holdout")]
+                      + ["tierE__holdout|beside", "tierE__frozen3|beside"]
                       + [f"{a}|holdout|death_close<=cut" for a in RIDDEN_T],
     "T_BRK_HAZARD": [f"{p}|{e}" for p in ("POOLED:CLASSIC5", "POOLED:UNSEEN12")
                      for e in ("ALL", "tuning", "holdout")],
@@ -277,6 +298,14 @@ FEE_BPS_T = 5.0                              # taker, a side, every fill [L-1.1]
 FUND_CAP_T = 1.0                             # D12: a funding COST capped at 1R, once
 EXIT_KINDS_T = ("stop, no trail advance", "bell after a harvest", "stop after a trail advance")
 MIN_EXIT_KIND_T = 3
+# every grid row's six numbers, typed (reproducibility MINOR-1: all six re-derived)
+STAT_COLS_T = ("n", "sum_net_r", "mean_net_r", "p_win", "sum_haircut_net_r",
+               "mean_haircut_net_r")
+# the arm summary's counts, typed (sides, both in-sample labels, both holdout counts)
+COUNT_COLS_T = ("n_long", "n_short", "n_scale_in_sample", "n_anchor_scale_in_sample",
+                "n_holdout_scale_in_sample", "n_holdout_anchor_scale_in_sample")
+# the arm's scale, typed: only the frozen-3.0 twin reads no calibrated pick
+ARM_SCALE_T = {a: ("frozen3.0" if a == "tierE__frozen3" else "calibrated") for a in ARMS_T}
 
 OUT = E.OUT / T.STAGE_DIR                # research_outputs/tierc11/stage_t_brk
 REG_OUT = E.OUT.joinpath(*T.REGBOOK_DIR)  # research_outputs/tierc11/regbooks/P-BRK-4H
@@ -1430,7 +1459,97 @@ def all_books() -> dict:
 
 
 def _stats(b: pd.DataFrame) -> tuple:
-    return int(len(b)), (fsum(b["net_r"]) if len(b) else 0.0)
+    """This file's own six STAT_COLS of a book: n; ΣR (fsum) and ΣR / n; P(win) =
+    #(net_r > 0) / n; Σhaircut (fsum) and Σhaircut / n — the means and P(win) NaN
+    at n = 0, the sums 0.0."""
+    n = int(len(b))
+    if not n:
+        return (0, 0.0, math.nan, math.nan, 0.0, math.nan)
+    s, sh = fsum(b["net_r"]), fsum(b["haircut_net_r"])
+    k = int((b["net_r"].to_numpy(float) > 0).sum())
+    return (n, s, s / n, k / n, sh, sh / n)
+
+
+def _same(got, want) -> bool:
+    """Exact: a NaN only where a NaN is due; every other value equal to the last bit."""
+    try:
+        g = float(got)
+    except (TypeError, ValueError):
+        return False
+    if isinstance(want, float) and math.isnan(want):
+        return math.isnan(g)
+    return g == float(want)
+
+
+def num_findings(table: str, cell: str, row: dict, want: tuple) -> list[str]:
+    """One GRID-NUM finding per STAT_COL of the row that is not this file's number."""
+    out = []
+    for c, w in zip(STAT_COLS_T, want):
+        g = row.get(c, None)
+        if not _same(g, w):
+            out.append(f"GRID-NUM {table} {cell}: {c} {g!r} vs regbook {w!r}")
+    return out
+
+
+def anchor_t(b: pd.DataFrame) -> np.ndarray:
+    """R-TBRK-11, typed HERE: at the calibrated scale, death close <= the era cut OR
+    known (= entry) close <= the era cut OR the row's own scale_in_sample; False at
+    frozen 3.0."""
+    if not len(b):
+        return np.zeros(0, bool)
+    cal = b["scale_kind"].to_numpy(object) == "calibrated"
+    return cal & (b["scale_in_sample"].to_numpy(bool)
+                  | (b["die_close_ms"].to_numpy(np.int64) <= ERA_CUT_T)
+                  | (b["entry_close_ms"].to_numpy(np.int64) <= ERA_CUT_T))
+
+
+def count_findings(arm: str, row: dict, b: pd.DataFrame) -> list[str]:
+    """The arm summary's typed counts, re-derived (holdout = entry close > the cut)."""
+    ho = b["entry_close_ms"].to_numpy(np.int64) > ERA_CUT_T
+    sis, anc = b["scale_in_sample"].to_numpy(bool), anchor_t(b)
+    d = b["direction"].to_numpy(np.int64)
+    want = {"n_long": int((d == 1).sum()), "n_short": int((d == -1).sum()),
+            "n_scale_in_sample": int(sis.sum()), "n_anchor_scale_in_sample": int(anc.sum()),
+            "n_holdout_scale_in_sample": int((sis & ho).sum()),
+            "n_holdout_anchor_scale_in_sample": int((anc & ho).sum())}
+    return [f"GRID-NUM T_BRK_ARMS {arm}: {c} {row.get(c)!r} vs regbook {w}"
+            for c, w in want.items() if not _same(row.get(c), w)]
+
+
+def _median(xs: list) -> float:
+    """This file's own median: the middle of the sorted list, or the mean of the two."""
+    s = sorted(float(x) for x in xs)
+    n = len(s)
+    if not n:
+        return math.nan
+    return s[n // 2] if n % 2 else (s[n // 2 - 1] + s[n // 2]) / 2.0
+
+
+F1_RX = re.compile(r"^- F-1 .*? fired on (\d+)/(\d+) scored campaigns; (\d+) of those harvests "
+                   r"were at a NEGATIVE unit move \(median over all (\d+) harvests "
+                   r"([+-]\d+\.\d{4}) R; over the (\d+) negative ones ([+-]\d+\.\d{4}) R\)",
+                   flags=re.M)
+
+
+def f1_findings(sb: pd.DataFrame, md: str) -> list[str]:
+    """[trading D-1] F-1 prints the harvest count, the negative count and BOTH medians
+    (over every harvest; over the negative ones), re-derived from the scored regbook."""
+    hv = sb[sb["harvested"].to_numpy(bool)]
+    u = [float(x) for x in hv["harvest_unit_move_r"]]
+    neg = [x for x in u if x < 0]
+    want = (len(hv), len(sb), len(neg), len(hv), f"{_median(u):+.4f}", len(neg),
+            f"{_median(neg):+.4f}")
+    m = F1_RX.search(md)
+    if m is None:
+        return [f"GRID-F1 the report's F-1 line does not print both harvest medians (over all "
+                f"{want[0]} harvests {want[4]} R; over the {want[2]} negative ones {want[6]} R)"]
+    got = (int(m[1]), int(m[2]), int(m[3]), int(m[4]), m[5], int(m[6]), m[7])
+    if got != want:
+        return [f"GRID-F1 the report's F-1 figures (harvests {got[0]}/{got[1]}, negative "
+                f"{got[2]}, median over all {got[3]} {got[4]} R, over the {got[5]} negative "
+                f"{got[6]} R) vs regbook ({want[0]}/{want[1]}, {want[2]}, {want[4]} R, "
+                f"{want[6]} R)"]
+    return []
 
 
 def reg_brk() -> dict:
@@ -1456,23 +1575,22 @@ def grid_findings(tabs: dict, books: dict, md: str) -> list[str]:
                 hit = [x for x in w[c].dropna().astype(str).unique() if VERDICT_RX.search(x)]
                 if hit:
                     out.append(f"GRID-VERDICT {name}.{c}: {hit[:2]}")
-    # numbers re-derived from the regbooks, this file's own grouping
-    for a in ARMS_T:
-        r = tabs["T_BRK_ARMS"].set_index("cell").loc[a] if a in set(
-            tabs["T_BRK_ARMS"]["cell"]) else None
-        if r is not None and (int(r["n"]), float(r["sum_net_r"])) != _stats(books[a]):
-            out.append(f"GRID-NUM T_BRK_ARMS {a}: ({r['n']}, {r['sum_net_r']}) vs regbook "
-                       f"{_stats(books[a])}")
+    # numbers re-derived from the regbooks, this file's own grouping: ALL SIX STAT_COLS
+    # of every row [reproducibility MINOR-1], and the arm summary's typed counts
+    for r in tabs["T_BRK_ARMS"].to_dict("records"):
+        a = str(r.get("cell"))
+        if a in books:                  # an undeclared cell is GRID-WHOLE's finding
+            out += num_findings("T_BRK_ARMS", a, r, _stats(books[a]))
+            out += count_findings(a, r, books[a])
     for name, col, fn in (("T_BRK_ASSET_GRID", "symbol", lambda b, v: b[b["symbol"] == v]),
                           ("T_BRK_ERA_GRID", "era", lambda b, v: b[b["era"] == v]),
                           ("T_BRK_EXIT_GRID", "exit_reason", lambda b, v: b[b["exit_reason"] == v]),
                           ("T_BRK_DIR_GRID", "side",
                            lambda b, v: b[b["direction"] == (1 if v == "long" else -1)])):
-        for r in tabs[name].itertuples(index=False):
-            got = (int(r.n), float(r.sum_net_r))
-            want = _stats(fn(books[r.arm], getattr(r, col)))
-            if got != want:
-                out.append(f"GRID-NUM {name} {r.cell}: {got} vs regbook {want}")
+        for r in tabs[name].to_dict("records"):
+            if str(r.get("arm")) in books:
+                out += num_findings(name, str(r["cell"]), r,
+                                    _stats(fn(books[str(r["arm"])], r[col])))
     for r in tabs["T_BRK_TALLY"].itertuples(index=False):
         b = books[r.arm]
         disp = (r.n_out_of_window + r.n_out_of_tape + r.n_no_atr + r.n_tide + r.n_no_stop
@@ -1487,24 +1605,25 @@ def grid_findings(tabs: dict, books: dict, md: str) -> list[str]:
                 or (n_ is not None and int(hz.loc[cell, "n"]) != n_):
             out.append(f"GRID-HAZARD {cell}: the grid row is not the registration's typed "
                        f"figure (n {n_}, NET {net_:+.3f})")
-    ins = tabs["T_BRK_INSAMPLE"].set_index("cell")
     sb = books["scored"]
+    sb_era, sb_anc = sb["era"].to_numpy(str), anchor_t(sb)
+    want_ins = {}                       # cell -> the rows it is cut from (this file's cut)
     for f_ in (True, False):
         for e in ("tuning", "holdout"):
-            c = f"scored|in_sample={f_}|{e}"
-            want = _stats(sb[(sb["scale_in_sample"] == f_) & (sb["era"] == e)])
-            if c in ins.index and (int(ins.loc[c, "n"]), float(ins.loc[c, "sum_net_r"])) != want:
-                out.append(f"GRID-NUM T_BRK_INSAMPLE {c}: vs regbook {want}")
+            want_ins[f"scored|in_sample={f_}|{e}"] = sb[(sb["scale_in_sample"].to_numpy(bool) == f_)
+                                                        & (sb_era == e)]
+            want_ins[f"scored|anchor_in_sample={f_}|{e}"] = sb[(sb_anc == f_) & (sb_era == e)]
     for a in ("tierE__holdout", "tierE__frozen3"):
-        c = f"{a}|beside"
-        if c in ins.index and (int(ins.loc[c, "n"]), float(ins.loc[c, "sum_net_r"])) != _stats(books[a]):
-            out.append(f"GRID-NUM T_BRK_INSAMPLE {c}: vs regbook {_stats(books[a])}")
+        want_ins[f"{a}|beside"] = books[a]
     for a in RIDDEN_T:                  # the disclosure: holdout rows acting on a pre-cut death
-        c, b = f"{a}|holdout|death_close<=cut", books[a]
-        want = _stats(b[(b["entry_close_ms"] > ERA_CUT_T) & (b["die_close_ms"] <= ERA_CUT_T)])
-        if c in ins.index and (int(ins.loc[c, "n"]), float(ins.loc[c, "sum_net_r"])) != want:
-            out.append(f"GRID-NUM T_BRK_INSAMPLE {c}: {(int(ins.loc[c, 'n']), float(ins.loc[c, 'sum_net_r']))} "
-                       f"vs regbook {want}")
+        b = books[a]
+        want_ins[f"{a}|holdout|death_close<=cut"] = b[(b["entry_close_ms"] > ERA_CUT_T)
+                                                      & (b["die_close_ms"] <= ERA_CUT_T)]
+    for r in tabs["T_BRK_INSAMPLE"].to_dict("records"):
+        c = str(r.get("cell"))
+        if c in want_ins:
+            out += num_findings("T_BRK_INSAMPLE", c, r, _stats(want_ins[c]))
+    out += f1_findings(sb, md)
     # row_kind, typed: the scored arm's rows are the registered book's reference rows
     for name, w in tabs.items():
         if "row_kind" not in w.columns:
@@ -1583,6 +1702,44 @@ def grid_break():
         t2[name] = fn(tabs[name].copy())
         return grid_findings(t2, books, md)
 
+    stats0 = T.stats
+
+    def haircut_mean_s_over_n(df):     # the review's mutation (tierc11_stage_t_brk.py stats)
+        d = dict(stats0(df))
+        if d["n"]:
+            d["mean_haircut_net_r"] = d["sum_net_r"] / d["n"]
+        return d
+
+    def module_tables():
+        """The MODULE's own grid builders (T.grid_tables + T.insample_rows) re-run on the
+        WRITTEN regbooks under the mutation of T.stats; their STAT_COLS spliced, by cell,
+        into copies of the written tables — the tables such a module would write."""
+        with mutated(T, "stats", haircut_mean_s_over_n):
+            g = T.grid_tables(books)
+            g["T_BRK_INSAMPLE"] = T.insample_rows(books)
+        t2 = dict(tabs)
+        for name, d in g.items():
+            w = tabs[name].copy()
+            src = d.set_index("cell")
+            for c in STAT_COLS_T:
+                w[c] = w["cell"].map(src[c]).to_numpy()
+            t2[name] = w
+        return grid_findings(t2, books, md)
+
+    def p_win_bent(d):
+        m = (d["cell"] == "scored|long").to_numpy()
+        d.loc[m, "p_win"] = (d.loc[m, "p_win"] * d.loc[m, "n"] + 1.0) / d.loc[m, "n"]
+        return d
+
+    def anchor_off_flag(d):
+        d["n_holdout_anchor_scale_in_sample"] = d["n_holdout_scale_in_sample"]
+        return d
+
+    f1_old = re.sub(r"\(median over all \d+ harvests ([+-]\d+\.\d{4}) R; over the \d+ negative "
+                    r"ones [+-]\d+\.\d{4} R\)", lambda m: f"(median {m[1]} R)", md, count=1)
+    f1_swap = re.sub(r"(median over all \d+ harvests ([+-]\d+\.\d{4}) R; over the \d+ negative "
+                     r"ones )[+-]\d+\.\d{4}( R\))", lambda m: f"{m[1]}{m[2]}{m[3]}", md, count=1)
+
     return plants([
         ("a zero-n cell dropped (scored|in_sample=True|holdout)", "GRID-WHOLE",
          lambda: bent("T_BRK_INSAMPLE", lambda d: d[d["cell"] != "scored|in_sample=True|holdout"])),
@@ -1615,6 +1772,20 @@ def grid_break():
         ("an Appendix C row (a Tier-E campaign) dropped from the report", "GRID-MD Appendix C",
          lambda: grid_findings(tabs, books, re.sub(r"^\| C\.5 \|.*\n", "", md, count=1,
                                                    flags=re.M))),
+        ("(module mutation) T.stats computing the haircut mean as s / n (ΣR / n), the "
+         "module's grid builders re-run on the written regbooks",
+         "GRID-NUM T_BRK_ARMS scored: mean_haircut_net_r", module_tables),
+        ("the scored long cell's p_win bent by one win (side grid copy)",
+         "GRID-NUM T_BRK_DIR_GRID scored|long: p_win",
+         lambda: bent("T_BRK_DIR_GRID", p_win_bent)),
+        ("the anchor label's holdout count read off the flag (arm summary copy)",
+         "GRID-NUM T_BRK_ARMS scored: n_holdout_anchor_scale_in_sample",
+         lambda: bent("T_BRK_ARMS", anchor_off_flag)),
+        ("F-1's pre-repair text: one median (the all-harvest one) beside the negative count",
+         "GRID-F1 the report's F-1 line does not print both harvest medians",
+         lambda: grid_findings(tabs, books, f1_old)),
+        ("F-1's negative median printed as the all-harvest median", "GRID-F1 the report's F-1 "
+         "figures", lambda: grid_findings(tabs, books, f1_swap)),
     ])
 
 
@@ -1623,14 +1794,30 @@ def grid_real():
     md = (OUT / "STAGE_T_BRK.md").read_text(encoding="utf-8")
     bad = grid_findings(tabs, books, md)
     sizes = {k: len(v) for k, v in DECLARED_T.items()}
+    n_rows = sum(len(tabs[t]) for t in ("T_BRK_ARMS", "T_BRK_ASSET_GRID", "T_BRK_ERA_GRID",
+                                        "T_BRK_EXIT_GRID", "T_BRK_DIR_GRID", "T_BRK_INSAMPLE"))
+    sb = books["scored"]
+    hv = sb[sb["harvested"].to_numpy(bool)]
+    u = [float(x) for x in hv["harvest_unit_move_r"]]
+    neg = [x for x in u if x < 0]
+    arm_sc = tabs["T_BRK_ARMS"].set_index("cell").loc["scored"]
     return (not bad), (f"{len(DECLARED_T)} grids whole against the typed cells {sizes}; the "
                        f"typed collar on every row of all {len(tabs)} stage tables; the "
                        f"hazard rows == the registration's typed figures (CLASSIC5 +0.681 n 236 / "
                        f"+0.706 n 88; UNSEEN12 +0.064 / +0.272); the report prints the text of "
                        f"record, selection_hazard and scale_in_sample verbatim; no verdict "
-                       f"word or 'verdict' column; every grid cell's n and ΣR re-derived from "
-                       f"the regbooks exactly (the {len(RIDDEN_T)} holdout-on-a-pre-cut-death "
-                       f"disclosure cells included); the typed row_kind on every row (scored -> "
+                       f"word or 'verdict' column; all six STAT_COLS {list(STAT_COLS_T)} of "
+                       f"every row of the arm summary, the four grids and the in-sample table "
+                       f"({n_rows} rows) re-derived from the regbooks exactly (the "
+                       f"{len(RIDDEN_T)} holdout-on-a-pre-cut-death disclosure cells and the 4 "
+                       f"anchor-label cells included; scored mean haircut "
+                       f"{float(arm_sc['mean_haircut_net_r']):+.6f}); the arm summary's "
+                       f"{len(COUNT_COLS_T)} typed counts re-derived (scored holdout rows "
+                       f"in-sample: flag {int(arm_sc['n_holdout_scale_in_sample'])}, anchor "
+                       f"{int(arm_sc['n_holdout_anchor_scale_in_sample'])}); F-1 prints "
+                       f"{len(hv)}/{len(sb)} harvests, {len(neg)} negative, median over all "
+                       f"{_median(u):+.4f} R and over the negative {_median(neg):+.4f} R, as "
+                       f"re-derived; the typed row_kind on every row (scored -> "
                        f"'{ROW_KIND_REG_T}'); the tallies add up; the report prints every arm × "
                        f"asset cell, every registered-book row (§11, {len(books['scored'])}), every "
                        f"candidate (App. A, {len(tabs['T_BRK_CANDIDATES'])}), every evaluated retest "
@@ -1734,6 +1921,23 @@ def key_findings(books: dict, sides: dict, status: dict, tabs: dict, man: dict) 
         if "as_of_last_closed_4h" not in b.columns or \
                 not bool((b["as_of_last_closed_4h"] == PIN_ISO_T).all()):
             out.append(f"KEY-ASOF {a}: as_of_last_closed_4h is not {PIN_ISO_T} on every row")
+        # [causality MINOR-2] the EXTRA anchor label, R-TBRK-11 typed here (anchor_t)
+        if "anchor_scale_in_sample" not in b.columns \
+                or str(b["anchor_scale_in_sample"].dtype) != "bool":
+            out.append(f"KEY-ANCHOR {a}: no bool anchor_scale_in_sample column")
+        elif set(b["scale_kind"].astype(str)) != {ARM_SCALE_T[a]}:
+            out.append(f"KEY-ANCHOR {a}: scale_kind {sorted(set(b['scale_kind'].astype(str)))} "
+                       f"is not the arm's typed scale {ARM_SCALE_T[a]!r}")
+        else:
+            got_a, want_a = b["anchor_scale_in_sample"].to_numpy(bool), anchor_t(b)
+            off = np.flatnonzero(got_a != want_a)
+            if len(off):
+                r0 = b.iloc[int(off[0])]
+                out.append(f"KEY-ANCHOR {a}: {len(off)} row(s) whose anchor_scale_in_sample is "
+                           f"not R-TBRK-11 (e.g. {r0['symbol']} death close "
+                           f"{iso(int(r0['die_close_ms']))}, entry close "
+                           f"{iso(int(r0['entry_close_ms']))}: {bool(got_a[int(off[0])])} vs "
+                           f"{bool(want_a[int(off[0])])})")
     sc_b = books["scored"]
     for a in ("tierE__tuning", "tierE__holdout"):
         e = ARM_ERA_T[a]
@@ -1854,6 +2058,16 @@ def key_break():
         m2["content_sha"]["stage_t_brk/T_BRK_ERA_GRID.parquet"] = "0" * 64
         return key_findings(books, sides, status, tabs, m2)
 
+    def anchor_known_only(d):           # the pre-repair law: keyed to the known instant only
+        d["anchor_scale_in_sample"] = d["scale_in_sample"].to_numpy(bool)
+        return d
+
+    def frozen_anchor_true(d):
+        v = d["anchor_scale_in_sample"].to_numpy(bool).copy()
+        v[min(3, len(v) - 1)] = True
+        d["anchor_scale_in_sample"] = v
+        return d
+
     return plants([
         ("a duplicated row", "KEY-DUP",
          lambda: with_book("scored", lambda d: pd.concat([d, d.iloc[[min(9, len(d) - 1)]]],
@@ -1876,6 +2090,11 @@ def key_break():
         ("net_r written as gross - fee + funding (tierE__panel17 copy)", "KEY-NET",
          lambda: with_book("tierE__panel17", fund_sign)),
         ("fee_r halved (scored copy)", "KEY-NET", lambda: with_book("scored", fee_half)),
+        ("the anchor label keyed to the known instant only (scored copy: anchor := "
+         "scale_in_sample, the pre-repair law)", "KEY-ANCHOR scored: 1 row(s)",
+         lambda: with_book("scored", anchor_known_only)),
+        ("a frozen-3.0 row's anchor set True (tierE__frozen3 copy)", "KEY-ANCHOR tierE__frozen3",
+         lambda: with_book("tierE__frozen3", frozen_anchor_true)),
         ("the writer's era read at the bar OPEN (E.era_of on entry_close - 4h)",
          "KEY-ERA-STRADDLE", under(E, "era_of", era_by_open, straddle_findings)),
     ])
@@ -1892,7 +2111,11 @@ def key_real():
                        f"file's own canonical CSV; tier-E collars on sidecar and rows; era by the "
                        f"entry close; the slices ARE the scored book's era cuts; haircut_net_r == "
                        f"AM-7 on every row; net_r == gross_r - fee_r - funding_r EXACTLY on every "
-                       f"row; the module's writer stamps the straddle bar (open "
+                       f"row; the bool EXTRA column anchor_scale_in_sample == R-TBRK-11 (typed "
+                       f"here) on every row of every arm ("
+                       + ", ".join(f"{a} {int(books[a]['anchor_scale_in_sample'].sum())}"
+                                   for a in ARMS_T)
+                       + f" True); the module's writer stamps the straddle bar (open "
                        f"{iso(STRADDLE_T[0][0])}, close {iso(STRADDLE_T[0][1])}) 'holdout' and the "
                        f"bar before 'tuning'; STATUS.json typed; 11 stage tables keyed and "
                        f"stamped; every manifest content sha == the table read back"
@@ -2063,12 +2286,15 @@ FIXTURES = (
     ("F-GRID", "every Tier-E grid WHOLE, collared, verdict-free, and re-derived from the "
      "regbooks [LAWS: every grid whole; L-1.4 collars]",
      "a written grid is not whole against the typed declared cells (TP.grid_whole), a row "
-     "lacks the typed collar, a verdict word or 'verdict' column appears, a cell's n / ΣR "
-     "differs from this file's re-derivation from the regbooks (disclosure cells included), a "
-     "row's row_kind is not the typed one (scored -> 'registered book (reference)'), a tally "
-     "does not add up, or the report omits a declared arm × asset row, a registered-book row "
-     "(§11), a candidate (App. A), an evaluated retest (App. B) or a Tier-E regbook row "
-     "(App. C)",
+     "lacks the typed collar, a verdict word or 'verdict' column appears, ANY of a row's six "
+     "STAT_COLS (n, ΣR, mean R, P(win), Σhaircut, mean haircut) differs from this file's "
+     "re-derivation from the regbooks (arm summary, four grids, in-sample table: disclosure "
+     "and anchor-label cells included), an arm-summary count (sides, both in-sample labels, "
+     "both holdout counts) differs, a row's row_kind is not the typed one (scored -> "
+     "'registered book (reference)'), a tally does not add up, the report's F-1 line does not "
+     "print both harvest medians (over every harvest; over the negative ones) as re-derived, "
+     "or the report omits a declared arm × asset row, a registered-book row (§11), a "
+     "candidate (App. A), an evaluated retest (App. B) or a Tier-E regbook row (App. C)",
      grid_break, grid_real),
     ("F-KEY", "the regbook interface: columns, dtypes, keys, sidecars, the canonical sha, "
      "eras, slices, AM-7, STATUS, stage keys, manifest",
@@ -2078,7 +2304,9 @@ FIXTURES = (
      "is not by the entry close; a slice is not the scored book's era cut; haircut_net_r is "
      "off AM-7; the as-of stamp is off the pin; STATUS.json is not typed; a stage-table key "
      "is duplicated; a manifest content sha is not the table's; net_r is not EXACTLY gross_r "
-     "- fee_r - funding_r; or the module's writer stamps the bar straddling the cut (open "
+     "- fee_r - funding_r; the bool EXTRA column anchor_scale_in_sample is absent or off "
+     "R-TBRK-11 (calibrated: death close <= cut OR known close <= cut OR the row's flag; "
+     "frozen 3.0: False); or the module's writer stamps the bar straddling the cut (open "
      "2024-06-30T20:00Z, close 2024-07-01T00:00Z) anything but 'holdout' or the bar before "
      "anything but 'tuning'",
      key_break, key_real),

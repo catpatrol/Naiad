@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 """TIER-C11 · TC11-SCORE — F-SCORE-REG · F-RULER · F-BOOT · F-VERDICT · F-STATUS ·
-F-COLLAR · F-BASE-IDENT · F-GRID · F-KEY · F-CLOSURE · F-DRYRUN · F-EXIT · F-DET.
-REPAIRED 2026-09-25 per VERIFY TC11-SCORE (MAJOR-1/2, m-1..m-14, f-1..f-6).  The fixtures of
+F-COLLAR · F-BASE-IDENT · F-GRID · F-KEY · F-CLOSURE · F-DRYRUN · F-EXIT · F-S0-TEXT ·
+F-REPORT · F-DET.
+REPAIRED 2026-09-25 per VERIFY TC11-SCORE (MAJOR-1/2, m-1..m-14, f-1..f-6), and per the
+final review G2 (statistics MINOR-1..4, reproducibility MINOR-2, fidelity MINOR-4: F-EXIT
+runs main() itself; F-S0-TEXT and F-REPORT are new).  The fixtures of
 scripts/tierc11_score.py (the scorer of the nine) [LEANS L-1.4, L-1.5, L-1.3, L-S.1,
 L-W.4, AM-3, AM-7].
 
@@ -149,8 +152,50 @@ typed verdict cases.  Hand computations use this file's own loops.
   F-EXIT       FAILS IF any of the 16 subsets of (registered HALT, Tier-E halted, ABSENT,
                no-clobber) exits other than the OR of the typed bits 2 / 4 / 8 / 16 with
                the typed EXIT line, or the dry run on a family with all three row
-               conditions does not exit 14.  SABOTAGE: the old masking precedence law; a
-               registered HALT dropped from the word; the bits permuted.
+               conditions does not exit 14, or S.main([...]) run against an out-dir
+               holding a BENT record does not return (the process exit code) 16 with the
+               typed 'EXIT 16 = 16 (a no-clobber refusal)' line, leave the bent record
+               untouched and file the run as FAMILY_rerun.json, or does not return 0 on
+               the clean record (score_all stubbed to the memoized planted result; the
+               stub asserts main parsed and passed its argv) [reproducibility MINOR-2], or
+               `python scripts/tierc11_score.py` run in a SUBPROCESS (unstubbed, the
+               planted regbooks) against an out-dir holding a bent FAMILY.json does not
+               EXIT 16 — the PROCESS exit code — with the typed EXIT 16 line last, the bent
+               record untouched and the run filed as FAMILY_rerun.json [TC11-FIX verify
+               MINOR-1].  SABOTAGE: the old masking precedence law; a registered HALT
+               dropped from the word; the bits permuted; main mutated to `return
+               exit_code(res)` (it prints EXIT 16 but returns 0); a copy of the script whose
+               __main__ calls main(...) without sys.exit (the process exits 0).
+  F-S0-TEXT    FAILS IF a detail block's status line is not 'status: <word> — builder's
+               stage status: <the STATUS.json reason>' or a closed row's §0 cell lacks
+               '(builder's stage status: <reason>)' [SC-20]; P-AGE-1's (pre_seen) §0 cell
+               lacks '; point known before filing; new campaigns since 2026-09-21T16:00Z:
+               scored <n> / base <n>)' inside its pre_seen label with THIS file's counts
+               (entry CLOSE > the typed TC10 pin) — on the planted family AND on a copy
+               whose P-AGE-1 books were moved so the typed counts are scored 3 / base 4
+               (a campaign closing AT the pin, one opening at it, one refused) — or another
+               row carries those facts [SC-21]; a two-sample / vs-zero §0 D15 cell is not
+               exactly 'D15 n/a (two-sample)' / 'D15 n/a (vs zero)' + this file's own
+               concentration (top trade by |net_r|, its share of ΣR, the point without it
+               removed from every book holding its key, the point without its asset and
+               that asset's share, per-asset Δ / mean), or a paired cell is not T5.d15's
+               [SC-22].  SABOTAGE: the builder label dropped; the pre_seen facts dropped;
+               the count by the entry OPEN; a campaign closing AT the pin counted new; the
+               pre-G2 paired D15 cell on unpaired rows; the top trade removed from the
+               scored book only; the base ignored in the concentration points.
+  F-REPORT     FAILS IF research_outputs/tierc11/scores/STAGE_SCORE.md lacks, in its first
+               12 lines, the typed pointer to S0_VERDICTS.md as the record, still says it
+               'computes no registered result', or its planted section holds a table row
+               whose verdict cell (§0 verdict / Family verdict_of_record / Tier-E
+               would_read_ci_only) does not start 'PLANTED · ', a (NOT) SUPPORTED not
+               preceded by 'PLANTED · ', or a planted table that is not (tag removed) the
+               planted run's own S0_VERDICTS.md table [statistics MINOR-4], or it prints a
+               LEANS_AMENDMENTS.md sha that is not the file's own (THIS file's hash) outside
+               a section whose heading carries 'HISTORICAL' [TC11-FIX verify MINOR-11].
+               SABOTAGE (copies of the text): a §0 tag stripped; a Family tag stripped; the
+               pointer removed; the stale line restored; a §0 cell reverted to the pre-G2
+               render; an old amendments sha injected under the Files heading; the
+               HISTORICAL label struck from the sections that print an old amendments sha.
   F-DET        FAILS IF two subprocess scorer runs on the planted regbooks (PYTHONHASHSEED
                1, 20260924) differ from each other or from this process's render in the
                file set or any byte, or either exits nonzero.  The regbooks root is printed
@@ -166,15 +211,24 @@ Run:  export NAIAD_CACHE_DIR=$HOME/.cache/naiad/snapshots/tc11_20260925 PYTHONDO
       ~/venvs/naiad/bin/python -B scripts/tierc11_score_fixtures.py \\
           [leg-substring ...] [--refile-transcript] [--root=DIR]
       --root=DIR redirects the transcript, the planted regbooks and the F-DET twins.
+      --print-tally-section prints STAGE_SCORE.md's fixture-tally section, rendered from
+      the FILED transcript (stdout only) [TC11-FIX verify MINOR-11].
+      --print-planted-section prints STAGE_SCORE.md's planted section (the planted run's
+          own S0_VERDICTS.md tables, every verdict cell tagged 'PLANTED ·') to stdout and
+          exits; nothing is written.
 Exit 0 = every leg GREEN, every break RED · 1 = a RED or VOID fixture, a transcript
 finding, or a HALT.
 """
 from __future__ import annotations
 
+import __future__
 import contextlib
 import copy
 import hashlib
+import inspect
+import io
 import json
+import math
 import os
 import re
 import shutil
@@ -182,6 +236,7 @@ import subprocess
 import sys
 import tempfile
 import time
+import types
 from fractions import Fraction
 from pathlib import Path
 from types import SimpleNamespace
@@ -2448,7 +2503,141 @@ def exit_findings(tmp: Path) -> list[str]:
     if code != 14 or lines[-1] != want14:
         out.append(f"EXIT-FLAGS: dry run on HALT + Tier-E + ABSENT -> exit {code}, "
                    f"{lines[-1]!r} != typed 14 naming all three")
+    out += main_exit_findings(tmp)
     return out
+
+
+EXIT16_LINE_T = "EXIT 16 = 16 (a no-clobber refusal)"
+EXIT0_LINE_T = "EXIT 0 = 0 (no condition)"
+MAIN_SITE_T = "return exit_code(res, noclobber=bool(notes))"     # the typed mutation site
+
+
+def main_exit_findings(tmp: Path) -> list[str]:
+    """[reproducibility MINOR-2] S.main ITSELF returns the word it prints — the value
+    `sys.exit(main(sys.argv[1:]))` hands the process.  Against an out-dir holding a BENT
+    record it must print and return 16, leave the bent record untouched and file the run
+    as FAMILY_rerun.json; on the clean record it returns 0.  score_all is stubbed to the
+    memoized planted result (F-DET runs the unstubbed script end to end); the stub
+    records what main parsed from its argv, and that is judged too."""
+    R = planted_run()
+    out_dir = tmp / "main_out"
+    S.write_outputs(R["files"], out_dir, True)
+    rec = out_dir / "FAMILY.json"
+    bent = bytearray(R["files"]["FAMILY.json"])
+    bent[len(bent) // 2] ^= 0x01
+    rec.write_bytes(bytes(bent))
+    seen: list = []
+
+    def stub(regbooks_root=None, n_boot=S.N_BOOT, banner=None, root_label=None):
+        seen.append((Path(regbooks_root).resolve(), banner, root_label))
+        return R["res"]
+
+    argv = [f"--regbooks-root={R['root']}", f"--out-dir={out_dir}", f"--banner={PLANT_BANNER}",
+            f"--regbooks-label={PLANT_LABEL}"]
+    want_args = (Path(R["root"]).resolve(), PLANT_BANNER, PLANT_LABEL)
+    out = []
+
+    def run() -> tuple[int, str]:
+        buf = io.StringIO()
+        with mutated(S, "score_all", stub), contextlib.redirect_stdout(buf):
+            try:
+                code = S.main(list(argv))
+            except SystemExit as e:              # a HALT inside main is judged, never lost
+                code = f"SystemExit {e}"
+        lines = buf.getvalue().splitlines()
+        return code, (lines[-1] if lines else "")
+
+    code, last = run()
+    if code != 16 or last != EXIT16_LINE_T:
+        out.append(f"EXIT-MAIN: S.main against an out-dir holding a bent FAMILY.json returned "
+                   f"{code!r} and printed {last!r} != typed 16 / {EXIT16_LINE_T!r}")
+    rr = out_dir / "FAMILY_rerun.json"
+    if rec.read_bytes() != bytes(bent) or not rr.exists() or \
+            rr.read_bytes() != R["files"]["FAMILY.json"]:
+        out.append("EXIT-MAIN: the no-clobber run did not leave the bent record untouched and "
+                   "file itself as FAMILY_rerun.json")
+    rec.write_bytes(R["files"]["FAMILY.json"])
+    code0, last0 = run()
+    if code0 != 0 or last0 != EXIT0_LINE_T:
+        out.append(f"EXIT-MAIN: S.main on the clean record returned {code0!r} and printed "
+                   f"{last0!r} != typed 0 / {EXIT0_LINE_T!r}")
+    if seen != [want_args, want_args]:
+        out.append(f"EXIT-MAIN: main passed score_all {[(str(p.name), b is not None, l) for p, b, l in seen]} "
+                   f"— not the argv's regbooks root / banner / label")
+    return out
+
+
+SCORE_SCRIPT = ROOT / "scripts" / "tierc11_score.py"
+MAIN_LINE_T = "    sys.exit(main(sys.argv[1:]))"              # the typed __main__ line [verify MINOR-1]
+
+
+def process_exit_findings(tmp: Path, mutant: bool = False) -> list[str]:
+    """[TC11-FIX verify MINOR-1] The PROCESS exit code, not main()'s return: scripts/tierc11_score.py
+    run in a SUBPROCESS (unstubbed, the planted regbooks) against an out-dir holding a BENT
+    FAMILY.json must exit 16, print the typed EXIT 16 line last, leave the bent record untouched
+    and file the run as FAMILY_rerun.json.  mutant=True runs a COPY of the script's source whose
+    `__main__` calls main(...) WITHOUT sys.exit (compiled under the script's own path, run as
+    __main__), which exits 0 — the break."""
+    R = planted_run()
+    out_dir = tmp / ("proc_mutant" if mutant else "proc_out")
+    S.write_outputs(R["files"], out_dir, True)
+    rec = out_dir / "FAMILY.json"
+    bent = bytearray(R["files"]["FAMILY.json"])
+    bent[len(bent) // 2] ^= 0x01
+    rec.write_bytes(bytes(bent))
+    argv = [f"--regbooks-root={R['root']}", f"--out-dir={out_dir}", f"--banner={PLANT_BANNER}",
+            f"--regbooks-label={PLANT_LABEL}"]
+    if not mutant:
+        cmd = [PY, "-B", str(SCORE_SCRIPT), *argv]
+        how = "`python scripts/tierc11_score.py`"
+    else:
+        src = SCORE_SCRIPT.read_text(encoding="utf-8")
+        if src.count(MAIN_LINE_T) != 1:
+            raise RuntimeError(f"the typed __main__ line {MAIN_LINE_T.strip()!r} is not in "
+                               f"tierc11_score.py once")
+        mut = tmp / "tierc11_score_mutant.py"
+        mut.write_text(src.replace(MAIN_LINE_T, "    main(sys.argv[1:])"), encoding="utf-8")
+        code = (f"import sys\nsys.dont_write_bytecode = True\n"
+                f"sys.argv = [{str(SCORE_SCRIPT)!r}] + {argv!r}\n"
+                f"src = open({str(mut)!r}, encoding='utf-8').read()\n"
+                f"g = {{'__name__': '__main__', '__file__': {str(SCORE_SCRIPT)!r}}}\n"
+                f"exec(compile(src, {str(SCORE_SCRIPT)!r}, 'exec'), g)\n")
+        cmd = [PY, "-B", "-c", code]
+        how = "the mutant __main__ (main(...) without sys.exit)"
+    r = subprocess.run(cmd, env=_env(), capture_output=True, text=True, cwd=str(ROOT), timeout=3600)
+    lines = r.stdout.splitlines()
+    last = lines[-1] if lines else ""
+    out = []
+    if r.returncode != 16 or last != EXIT16_LINE_T:
+        out.append(f"EXIT-PROCESS: {how} against an out-dir holding a bent FAMILY.json exited "
+                   f"{r.returncode} and printed {last!r} last != typed process exit 16 / "
+                   f"{EXIT16_LINE_T!r}" + (f" (stderr {r.stderr.strip()[-160:]!r})"
+                                             if r.returncode not in (0, 16) else ""))
+    rr = out_dir / "FAMILY_rerun.json"
+    if rec.read_bytes() != bytes(bent) or not rr.exists() or \
+            rr.read_bytes() != R["files"]["FAMILY.json"]:
+        out.append(f"EXIT-PROCESS: {how} did not leave the bent record untouched and file itself "
+                   f"as FAMILY_rerun.json")
+    return out
+
+
+def mutant_main():
+    """The reviewer's mutation, made on a COPY of S.main's source: `return exit_code(res)`
+    (the no-clobber bit dropped from the RETURN; the printed EXIT line still says 16)."""
+    src = inspect.getsource(S.main)
+    if src.count(MAIN_SITE_T) != 1:
+        raise RuntimeError(f"the typed mutation site {MAIN_SITE_T!r} is not in S.main once")
+    ns: dict = {}
+    exec(compile(src.replace(MAIN_SITE_T, "return exit_code(res)"), S.__file__, "exec",
+                 flags=__future__.annotations.compiler_flag, dont_inherit=True),
+         dict(vars(S)), ns)
+    f = ns["main"]
+    return types.FunctionType(f.__code__, vars(S), "main", f.__defaults__, f.__closure__)
+
+
+def _proc_mutant() -> list[str]:
+    with tempfile.TemporaryDirectory() as td:
+        return process_exit_findings(Path(td), mutant=True)
 
 
 def exit_break():
@@ -2481,16 +2670,565 @@ def exit_break():
         ("the flag bits permuted (Tier-E 8, ABSENT 4)", "EXIT-FLAGS",
          under("EXIT_FLAGS", (S.EXIT_FLAGS[0], (S.EXIT_FLAGS[1][0], 8),
                               (S.EXIT_FLAGS[2][0], 4), S.EXIT_FLAGS[3]))),
+        ("main mutated to `return exit_code(res)` (prints EXIT 16, returns 0)", "EXIT-MAIN",
+         under("main", mutant_main())),
+        ("__main__ calls main(...) without sys.exit (a subprocess of the mutated script: the "
+         "no-clobber refusal exits 0)", "EXIT-PROCESS", _proc_mutant),
     ])
 
 
 def exit_real():
     with tempfile.TemporaryDirectory() as td:
         bad = exit_findings(Path(td))
+        bad += process_exit_findings(Path(td))
     return (not bad), (f"all 16 subsets of (registered HALT 2, Tier-E halted 4, ABSENT 8, "
                        f"no-clobber 16) exit the OR of their typed bits with an EXIT line naming "
                        f"each; the dry run on a family with all three row conditions exits 14 and "
-                       f"names all three" + (f"; findings {bad[:3]}" if bad else ""))
+                       f"names all three; S.main against an out-dir holding a bent FAMILY.json "
+                       f"returns 16 and prints {EXIT16_LINE_T!r} (the bent record untouched, the "
+                       f"run filed as FAMILY_rerun.json), and on the clean record returns 0 "
+                       f"({EXIT0_LINE_T!r}); main passed score_all the argv's root / banner / "
+                       f"label; `python scripts/tierc11_score.py` in a SUBPROCESS against an "
+                       f"out-dir holding a bent FAMILY.json EXITS 16 (the process exit code) and "
+                       f"prints {EXIT16_LINE_T!r} last, the bent record untouched, the run filed "
+                       f"as FAMILY_rerun.json" + (f"; findings {bad[:3]}" if bad else ""))
+
+
+# ═══════════════════════════════════════════════════════════════ F-S0-TEXT
+BUILDER_T = "builder's stage status:"                        # SC-20, typed
+CLOSED_WORD_T = {"CLOSED_BY_PRECONDITION": "CLOSED BY PRECONDITION",
+                 "CONDITION_NOT_MET": "CONDITION NOT MET"}
+TC10_PIN_T = 1_790_006_400_000                               # 2026-09-21T16:00:00Z, typed
+PRESEEN_T = ("point known before filing; new campaigns since 2026-09-21T16:00Z: scored {} / "
+             "base {}")                                      # SC-21, typed
+PRESEEN_REGS_T = ("P-AGE-1",)                               # the one pre_seen label [L-G.1]
+SHIFT_COUNTS_T = (3, 4)                                     # the moved P-AGE-1 copy: scored / base
+D15_NA_T = {"two_sample": "D15 n/a (two-sample)", "vs_zero": "D15 n/a (vs zero)"}   # SC-22
+
+
+def own_new(df: pd.DataFrame) -> int:
+    """SC-21 by THIS file's loop: entry bar CLOSE strictly after the typed TC10 pin."""
+    return sum(1 for c in df["entry_close_ms"] if int(c) > TC10_PIN_T)
+
+
+def _ts(ms: int) -> str:
+    return time.strftime("%Y-%m-%dT%H:%M", time.gmtime(int(ms) // 1000)) + "Z"
+
+
+def _f4(x) -> str:
+    return "—" if x is None else f"{x:+.4f}"
+
+
+def _pc(x) -> str:
+    return "n/a" if x is None else f"{100.0 * x:.1f}%"
+
+
+def own_conc_cell(ruler: str, a: pd.DataFrame, b: pd.DataFrame | None) -> str:
+    """SC-22 by THIS file's own selection — the top trade by |net_r| (a scan in (symbol,
+    entry_ms) order, the first maximum), the removal law (every book holding its key),
+    the asset split, the per-asset grouping — over the books in the scorer's frame order
+    (symbol, entry_close_ms) with the same arithmetic primitives (Series.sum, np.mean): the
+    F-BOOT law, a hand computation exact to the last bit, so the printed 4 dp compare as
+    an identity.  Stamps by time.gmtime; the typed 'D15 n/a (…)' head."""
+    ra = [(str(s), int(e), int(c), float(v)) for s, e, c, v in
+          zip(a["symbol"], a["entry_ms"], a["entry_close_ms"], a["net_r"])]
+    rb = ([] if b is None else
+          [(str(s), int(e), float(v)) for s, e, v in zip(b["symbol"], b["entry_ms"], b["net_r"])])
+    head = D15_NA_T[ruler]
+    if not ra:
+        return head + " · the scored book holds no campaign"
+    scan = sorted(ra, key=lambda r: (r[0], r[1]))
+    top = scan[0]
+    for r in scan[1:]:
+        if abs(r[3]) > abs(top[3]):
+            top = r
+
+    def mean(xs):
+        x = np.asarray(list(xs), float)
+        return float(np.mean(x)) if len(x) else None
+
+    def total(xs):
+        return float(pd.Series(list(xs), dtype=float).sum())
+
+    def point(av, bv):
+        ma = mean(av)
+        if ma is None or ruler == "vs_zero":
+            return ma
+        mb = mean(bv)
+        return None if mb is None else ma - mb
+
+    key, asset = (top[0], top[1]), top[0]
+    tot = total(r[3] for r in ra)
+    in_base = any((s, e) == key for s, e, _ in rb)
+    pwt = point([r[3] for r in ra if (r[0], r[1]) != key], [v for s, e, v in rb if (s, e) != key])
+    pwa = point([r[3] for r in ra if r[0] != asset], [v for s, _, v in rb if s != asset])
+    ash = total(r[3] for r in ra if r[0] == asset) / tot
+    assets = sorted({r[0] for r in ra} | {s for s, _, _ in rb})
+    per = ", ".join(f"{x} {_f4(point([r[3] for r in ra if r[0] == x], [v for s, _, v in rb if s == x]))}"
+                    for x in assets)
+    return " · ".join([
+        head,
+        f"top trade {top[0]} {_ts(top[2])} {top[3]:+.4f} R = {_pc(top[3] / tot)} of the scored "
+        f"ΣR {tot:+.4f}",
+        f"point without it {_f4(pwt)}" + (" (removed from both books)" if in_base else ""),
+        f"point without {asset} {_f4(pwa)} ({asset} = {_pc(ash)} of ΣR)",
+        ("per-asset Δ (scored mean − base mean): " if ruler == "two_sample" else
+         "per-asset mean: ") + per])
+
+
+def _objs(df: pd.DataFrame) -> list:
+    return [SimpleNamespace(symbol=str(s), entry_ms=int(e), net_r=float(v))
+            for s, e, v in zip(df["symbol"], df["entry_ms"], df["net_r"])]
+
+
+def md_view(R: dict) -> dict:
+    """The planted run as RENDERED: the §0 cells and each detail block's status line,
+    parsed from its S0_VERDICTS.md by THIS file."""
+    md = R["files"]["S0_VERDICTS.md"].decode("utf-8")
+    status = {}
+    for blk in md.split("\n### ")[1:]:
+        head, _, body = blk.partition("\n")
+        status[head.split(" · ")[1].split(" [")[0]] = next(
+            (ln for ln in body.splitlines() if ln.startswith("- status: ")), None)
+    return {"rows": R["rows"], "cells": {r[0].split(" · ")[1]: r for r in s0_rows(md)},
+            "status": status, "root": R["root"]}
+
+
+def module_view(root: Path) -> dict:
+    """The nine re-scored by the module on `root` (small B) and rendered by its own s0_line
+    / _detail — the view a plant bends."""
+    rows = {rid: score_one(root, rid) for rid in NINE_T}
+    return {"rows": rows,
+            "cells": {rid: [str(c).replace("\n", " ") for c in S.s0_line(r)]
+                      for rid, r in rows.items()},
+            "status": {rid: next((ln for ln in S._detail(r) if ln.startswith("- status: ")), None)
+                       for rid, r in rows.items()},
+            "root": root}
+
+
+def preseen_shift_findings(tmp: Path) -> tuple[list[str], tuple]:
+    """SC-21 where the counts are not 0: a COPY of the planted family whose P-AGE-1 books
+    (the base and the gate's scored arm alike) move five campaigns to the TC10 pin and
+    past it — a kept BTC campaign whose entry bar CLOSES AT the pin (seen by TC10: not
+    new), a kept ETH one whose bar OPENS at it (new by its close), kept NEAR and SOL ones
+    after it, and the first campaign the gate refused (base only): typed scored 3 / base 4.
+    Ruled by score_registration under an ident harness (the moved base is no longer
+    books/v6; F-BASE-IDENT is not on trial here)."""
+    out = []
+    d = tmp / "preseen_shift"
+    if d.exists():
+        shutil.rmtree(d)
+    d.mkdir(parents=True)
+    root = copy_family(d)
+    rid = "P-AGE-1"
+    base, sc = read_arm(root, rid, "base"), read_arm(root, rid, "scored")
+    kept = set(zip(sc["symbol"], (int(e) for e in sc["entry_ms"])))
+    bkeys = sorted(zip(base["symbol"], (int(e) for e in base["entry_ms"])))
+    picks = [next(k for k in bkeys if k[0] == s and k in kept)
+             for s in ("BTCUSDT", "ETHUSDT", "NEARUSDT", "SOLUSDT")]
+    picks.append(next(k for k in bkeys if k not in kept))
+    closes = [TC10_PIN_T + j * MS_4H for j in range(len(picks))]   # AT the pin, then after
+
+    def moved(df):
+        x = df.copy()
+        keys = list(zip(x["symbol"], (int(e) for e in x["entry_ms"])))
+        for k, c in zip(picks, closes):
+            j = [i for i, kk in enumerate(keys) if kk == k]
+            if j:
+                x.loc[x.index[j[0]], ["entry_ms", "entry_close_ms", "exit_close_ms"]] = \
+                    [c - MS_4H, c, c + MS_4H]
+        for col in ("entry_ms", "entry_close_ms", "exit_close_ms"):
+            x[col] = x[col].astype(np.int64)
+        x["era"] = era_t(x["entry_close_ms"])
+        return x
+
+    rewrite_arm(root, rid, "base", moved(base))
+    rewrite_arm(root, rid, "scored", moved(sc))
+    ns, nb = own_new(read_arm(root, rid, "scored")), own_new(read_arm(root, rid, "base"))
+    if (ns, nb) != SHIFT_COUNTS_T:
+        out.append(f"S0-PRESEEN: the moved copy counts scored {ns} / base {nb} by this file != "
+                   f"typed {SHIFT_COUNTS_T} (a FIXTURE defect)")
+    doc, _ = S.load_registry(ROOT)
+    reg = next(r for r in doc["registrations"] if r["registration"] == rid)
+    row = S.score_registration(S.Loader(root, S._fees()), reg,
+                               {"per_registration_ok": {rid: True}, "findings": []}, n_boot=199)
+    cell = str(row["verdict_cell"])
+    want = "; " + PRESEEN_T.format(ns, nb) + ")"
+    if row["verdict_of_record"] == "HALT":
+        out.append(f"S0-PRESEEN: the moved {rid} copy HALTed: {row['halts'][:1]}")
+    elif want not in cell or cell.find("(pre_seen: ") < 0 or \
+            cell.find("(pre_seen: ") > cell.find(want):
+        out.append(f"S0-PRESEEN: the moved {rid} copy's cell lacks {want!r} inside its pre_seen "
+                   f"label ({cell[cell.find('F-CTRL(b))'):][:110]!r})")
+    rec = row.get("pre_seen_new_campaigns") or {}
+    if (rec.get("scored"), rec.get("base")) != (ns, nb):
+        out.append(f"S0-PRESEEN: the moved {rid} copy records ({rec.get('scored')}, "
+                   f"{rec.get('base')}) != this file's ({ns}, {nb})")
+    return out, (ns, nb)
+
+
+def s0_text_findings(view: dict, tmp: Path) -> tuple[list[str], dict]:
+    """SC-20 / SC-21 / SC-22 on one view of the nine (rendered or re-scored)."""
+    out, tally = [], {"status_lines": 0, "closed_cells": 0, "unpaired": [], "paired": []}
+    rows, cells, status, root = view["rows"], view["cells"], view["status"], view["root"]
+    for rid in NINE_T:                      # SC-20: the builder's words, labelled
+        r = rows[rid]
+        reason = r.get("status_reason")
+        if reason:
+            want = f"- status: {r['status']} — {BUILDER_T} {reason}"
+            if status.get(rid) != want:
+                out.append(f"S0-BUILDER: {rid} status line {str(status.get(rid))[:90]!r} != typed "
+                           f"'- status: {r['status']} — {BUILDER_T} <its STATUS.json reason>'")
+            tally["status_lines"] += 1
+        if r.get("status") in CLOSED_WORD_T:
+            want = f"{CLOSED_WORD_T[r['status']]} ({BUILDER_T} {reason})"
+            if not cells[rid][4].startswith(want):
+                out.append(f"S0-BUILDER: {rid} closed §0 cell {cells[rid][4][:90]!r} does not "
+                           f"start {want[:70]!r}")
+            tally["closed_cells"] += 1
+    for rid in NINE_T:                      # SC-21: the pre_seen facts, from the books
+        cell = cells[rid][4]
+        if rid in PRESEEN_REGS_T:
+            ns, nb = own_new(read_arm(root, rid, "scored")), own_new(read_arm(root, rid, "base"))
+            want = "; " + PRESEEN_T.format(ns, nb) + ")"
+            i, j = cell.find("(pre_seen: "), cell.find(want)
+            if i < 0 or j < i:
+                out.append(f"S0-PRESEEN: {rid} §0 cell lacks {want!r} inside its pre_seen label")
+            rec = rows[rid].get("pre_seen_new_campaigns") or {}
+            if (rec.get("scored"), rec.get("base")) != (ns, nb):
+                out.append(f"S0-PRESEEN: {rid} records ({rec.get('scored')}, {rec.get('base')}) != "
+                           f"this file's ({ns}, {nb})")
+            tally["preseen"] = (ns, nb)
+        elif "point known before filing" in cell:
+            out.append(f"S0-PRESEEN: {rid} (no pre_seen label) carries the pre_seen facts")
+    sh, tally["shift"] = preseen_shift_findings(tmp)
+    out += sh
+    for rid in NINE_T:                      # SC-22: D15 where it applies, n/a + concentration
+        r = rows[rid]
+        if r.get("stats") is None:
+            continue
+        cell, ruler = cells[rid][8], RULER_T[rid]
+        a = _sorted_arm(root, rid, "scored")
+        if ruler == "paired":
+            d = E.T5.d15(_objs(a), _objs(_sorted_arm(root, rid, "base")))
+            want = (f"tail {d['tail_exit_ratio']} · paired n {d['n_paired']} · max Δ share "
+                    f"{d['max_single_trade_delta_share']}")
+            if not cell.startswith(want) or "D15 n/a" in cell or r.get("concentration"):
+                out.append(f"S0-D15: {rid} (paired) cell {cell[:80]!r} != T5.d15's {want!r}")
+            tally["paired"].append(rid)
+        else:
+            b = None if ruler == "vs_zero" else _sorted_arm(root, rid, "base")
+            want = own_conc_cell(ruler, a, b) + (f" · named risk: {r['named_risk']}"
+                                                 if r.get("named_risk") else "")
+            if cell != want:
+                k = next((i for i in range(min(len(cell), len(want))) if cell[i] != want[i]),
+                         min(len(cell), len(want)))
+                out.append(f"S0-D15: {rid} ({ruler}) cell != this file's at char {k}: "
+                           f"{cell[max(0, k - 40):k + 60]!r} vs {want[max(0, k - 40):k + 60]!r}")
+            tally["unpaired"].append(rid)
+    return out, tally
+
+
+def _old_d15_cell(r: dict) -> str:
+    """The pre-G2 D15 cell: T5.d15's paired columns on every row with a base."""
+    d = (r.get("stats") or {}).get("d15")
+    dc = ("— (vs zero: no base)" if d is None else
+          f"tail {d.get('tail_exit_ratio')} · paired n {d.get('n_paired')} · max Δ share "
+          f"{d.get('max_single_trade_delta_share')}")
+    return dc + (f" · named risk: {r['named_risk']}" if r.get("named_risk") else "")
+
+
+def s0_text_break():
+    real_label, real_point = S.label_of, S.conc_point
+
+    def under(name, val):
+        def thunk():
+            with tempfile.TemporaryDirectory() as td, mutated(S, name, val):
+                return s0_text_findings(module_view(planted_root()), Path(td))[0]
+        return thunk
+
+    return plants([
+        ("the builder's label dropped from the status line and the closed cells (SC-20)",
+         "S0-BUILDER", under("BUILDER_STATUS_LABEL", "")),
+        ("the pre_seen facts dropped from the §0 cell (SC-21)", "S0-PRESEEN",
+         under("label_of", lambda spec, facts: real_label(spec, None))),
+        ("new campaigns counted by the entry bar's OPEN", "S0-PRESEEN: the moved P-AGE-1",
+         under("PRESEEN_TIME_COL", "entry_ms")),
+        ("a campaign closing AT the TC10 pin counted as new (>=)", "S0-PRESEEN: the moved P-AGE-1",
+         under("new_since_pin", lambda df: int((df["entry_close_ms"].to_numpy(np.int64)
+                                                >= S.TC10_PIN_MS).sum()))),
+        ("the pre-G2 paired D15 cell on the unpaired rows (SC-22)", "S0-D15",
+         under("d15_cell", _old_d15_cell)),
+        ("the top trade removed from the scored book only (a base holding its key keeps it)",
+         "S0-D15: P-AGE-1", under("CONC_TOP_FROM_EVERY_BOOK", False)),
+        ("the base ignored in the concentration points (two-sample read as vs zero)",
+         "S0-D15: P-RELAY-1", under("conc_point", lambda ruler, a, b: real_point("vs_zero", a, None))),
+    ])
+
+
+def s0_text_real():
+    with tempfile.TemporaryDirectory() as td:
+        bad, t = s0_text_findings(md_view(planted_run()), Path(td))
+    return (not bad), (f"SC-20: {t['status_lines']} detail status lines read '- status: <word> — "
+                       f"{BUILDER_T} <the STATUS.json reason>' and {t['closed_cells']} closed §0 "
+                       f"cells '<WORD> ({BUILDER_T} <reason>)'; SC-21: P-AGE-1's §0 cell carries "
+                       f"'; {PRESEEN_T.format(*t.get('preseen', ('?', '?')))})' inside its "
+                       f"pre_seen label (this file's counts, entry close > the typed pin), no "
+                       f"other row carries it, and the moved copy reads scored {t['shift'][0]} / "
+                       f"base {t['shift'][1]} (closing AT the pin not new, opening at it new, a "
+                       f"refused campaign base-only); SC-22: {len(t['unpaired'])} unpaired D15 "
+                       f"cells ({', '.join(t['unpaired'])}) == this file's own 'D15 n/a' + "
+                       f"concentration exactly, {len(t['paired'])} paired cells "
+                       f"({', '.join(t['paired'])}) == T5.d15's" + (f"; {bad[:3]}" if bad else ""))
+
+
+# ═══════════════════════════════════════════════════════════════ F-REPORT
+REPORT_PATH = S.SCORES / "STAGE_SCORE.md"
+REPORT_POINTER_T = "**The record is `research_outputs/tierc11/scores/S0_VERDICTS.md`**"
+REPORT_STALE_T = "computes no registered result"
+AMEND_PATH_T = ROOT / "research_outputs" / "tierc11" / "LEANS_AMENDMENTS.md"
+HISTORICAL_T = "HISTORICAL"
+# the report's own pin form: `LEANS_AMENDMENTS.md`, at most three words, then the BACKTICKED sha
+# (a transcript line the report quotes prints its shas bare, never backticked)
+_AMEND_PIN_RX = re.compile(r"LEANS_AMENDMENTS\.md(?:\s+[^`\s]+){0,3}\s+`([0-9a-f]{8,64})")
+PLANTED_TAG_T = "PLANTED · "
+PLANTED_SECTION_T = "## The planted run"
+# (name, the report's sub-heading, the planted S0_VERDICTS.md segment, verdict column, rows)
+PLANTED_TABLES_T = (
+    ("§0", "### §0 table (planted)", ("## §0 table", "## Family"),
+     "verdict under its own text (with labels)", 9),
+    ("Family", "### Family (planted)", ("## Family", "## Detail blocks"), "verdict_of_record", 9),
+    ("Tier-E", "### Tier-E rows (planted)", ("## Tier-E rows", "## F-BASE-IDENT"),
+     "would_read_ci_only", len(TIER_E_DECLARED_T)),
+)
+
+
+def md_tables(text: str) -> list[tuple[list[str], list[list[str]]]]:
+    """Every markdown table in `text` as (header cells, data rows) — THIS file's parser."""
+    out, cur = [], None
+    for ln in text.splitlines():
+        if ln.startswith("|"):
+            cells = [c.strip() for c in re.split(r"(?<!\\)\|", ln)[1:-1]]
+            if cur is None:
+                cur = (cells, [])
+            elif not set(ln.replace("|", "").strip()) - {"-"}:
+                continue                        # the |---| separator
+            else:
+                cur[1].append(cells)
+        elif cur is not None:
+            out.append(cur)
+            cur = None
+    if cur is not None:
+        out.append(cur)
+    return out
+
+
+def _seg(text: str, start: str, end: str | None) -> str:
+    if start not in text:
+        return ""
+    s = text.split(start, 1)[1]
+    return s.split(end, 1)[0] if end and end in s else s
+
+
+def stale_amend_pins(text: str, amend_sha: str) -> tuple[list[str], int]:
+    """[TC11-FIX verify MINOR-11] Every LEANS_AMENDMENTS.md pin the report prints in its own pin
+    form (`LEANS_AMENDMENTS.md`, at most three words, then a BACKTICKED hex sha of 8..64) must be
+    a prefix of the file's own sha, or sit under a heading (any level of the active chain) that
+    carries 'HISTORICAL'.  Returns (findings, the number of old shas under HISTORICAL headings)."""
+    out, hist, heads = [], 0, {}
+    for ln in text.splitlines():
+        m = re.match(r"^(#{1,6}) (.*)", ln)
+        if m:
+            lvl = len(m[1])
+            heads = {k: v for k, v in heads.items() if k < lvl}
+            heads[lvl] = m[2]
+            continue
+        for h in _AMEND_PIN_RX.findall(ln):
+            if amend_sha.startswith(h):
+                continue
+            if any(HISTORICAL_T in v for v in heads.values()):
+                hist += 1
+                continue
+            under = heads[max(heads)] if heads else "(no heading)"
+            out.append(f"REPORT-STALE-PIN: a LEANS_AMENDMENTS.md sha {h[:12]}… printed outside "
+                       f"a {HISTORICAL_T} section (under {under[:70]!r}); the file's sha is "
+                       f"{amend_sha[:12]}…")
+    return out, hist
+
+
+def report_findings(text: str, planted_md: str) -> tuple[list[str], dict]:
+    """STAGE_SCORE.md is the build report, NOT the record: the pointer, no stale claim,
+    and every planted table tagged row by row and equal (tag removed) to the planted run's
+    own S0_VERDICTS.md table [statistics MINOR-4]; no old amendments sha outside a HISTORICAL
+    section [TC11-FIX verify MINOR-11]."""
+    out, tally = [], {}
+    amend_sha = hashlib.sha256(AMEND_PATH_T.read_bytes()).hexdigest()
+    pins, tally["historical_pins"] = stale_amend_pins(text, amend_sha)
+    out += pins
+    if not any(REPORT_POINTER_T in ln for ln in text.splitlines()[:12]):
+        out.append(f"REPORT-POINTER: STAGE_SCORE.md's first 12 lines lack {REPORT_POINTER_T!r}")
+    if REPORT_STALE_T in text:
+        out.append("REPORT-STALE: STAGE_SCORE.md still carries the stale no-registered-result "
+                   "claim (the scoring of record exists)")
+    if PLANTED_SECTION_T not in text:
+        return out + [f"REPORT-PLANTED: no {PLANTED_SECTION_T!r} section"], tally
+    sec = text.split(PLANTED_SECTION_T, 1)[1].split("\n## ", 1)[0]
+    words = list(re.finditer(r"\b(NOT )?SUPPORTED\b", sec))
+    for m in words:
+        if not sec[:m.start()].endswith(PLANTED_TAG_T):
+            out.append(f"REPORT-PLANTED: {m.group(0)!r} not preceded by {PLANTED_TAG_T!r} "
+                       f"({sec[max(0, m.start() - 60):m.end()]!r})")
+    tally["verdict_words"] = len(words)
+    heads = [t[1] for t in PLANTED_TABLES_T]
+    for i, (name, sub, (p0, p1), vcol, n_t) in enumerate(PLANTED_TABLES_T):
+        rt = md_tables(_seg(sec, sub, heads[i + 1] if i + 1 < len(heads) else None))
+        pt = md_tables(_seg(planted_md, p0, p1))
+        if not rt or not pt:
+            out.append(f"REPORT-PLANTED: the {name} table is absent (report {len(rt)}, planted "
+                       f"run {len(pt)})")
+            continue
+        (rh, rrows), (ph, prows) = rt[0], pt[0]
+        if rh != ph or vcol not in rh:
+            out.append(f"REPORT-STALE-TABLE: the {name} header != the planted run's")
+            continue
+        c = rh.index(vcol)
+        untag = [r for r in rrows if not r[c].startswith(PLANTED_TAG_T)]
+        if untag:
+            out.append(f"REPORT-PLANTED: {len(untag)} {name} row(s) whose {vcol!r} cell lacks "
+                       f"{PLANTED_TAG_T!r} (first: {untag[0][c][:60]!r})")
+        stripped = [r[:c] + [r[c][len(PLANTED_TAG_T):] if r[c].startswith(PLANTED_TAG_T)
+                             else r[c]] + r[c + 1:] for r in rrows]
+        if stripped != prows:
+            k = next((j for j in range(min(len(stripped), len(prows))) if stripped[j] != prows[j]),
+                     min(len(stripped), len(prows)))
+            out.append(f"REPORT-STALE-TABLE: the {name} table (tag removed) != the planted run's "
+                       f"own S0_VERDICTS.md table from row {k} ({len(stripped)} vs {len(prows)} rows)")
+        if len(rrows) != n_t:
+            out.append(f"REPORT-PLANTED: the {name} table holds {len(rrows)} rows != typed {n_t}")
+        tally[name] = len(rrows)
+    return out, tally
+
+
+def planted_report_section() -> str:
+    """The report's planted section, rendered from the planted run's own S0_VERDICTS.md
+    with every verdict cell tagged (--print-planted-section prints it; F-REPORT checks
+    the filed report against the planted run independently of this function)."""
+    md = planted_run()["files"]["S0_VERDICTS.md"].decode("utf-8")
+
+    def tagged(seg: str, vcol: str) -> list[str]:
+        lines, hdr = [], None
+        for ln in seg.strip("\n").splitlines():
+            if ln.startswith("|") and hdr is None:
+                hdr = [c.strip() for c in re.split(r"(?<!\\)\|", ln)[1:-1]]
+            elif ln.startswith("|") and set(ln.replace("|", "").strip()) - {"-"}:
+                cells = [c.strip() for c in re.split(r"(?<!\\)\|", ln)[1:-1]]
+                c = hdr.index(vcol)
+                cells[c] = PLANTED_TAG_T + cells[c]
+                ln = "| " + " | ".join(cells) + " |"
+            elif not ln.startswith("|"):
+                ln = ln.replace("SUPPORTED: ", PLANTED_TAG_T + "SUPPORTED: ")
+            lines.append(ln)
+        return lines
+
+    L = ["## The planted run (PLANTED — synthetic regbooks; NOT A RESULT of any registration)", "",
+         "Every scored and Tier-E arm below is a SYNTHETIC transform of books/v6 (a typed delta or "
+         "index filter) or a seeded synthetic lane, written by the fixture file. Every verdict "
+         "cell below is prefixed \"PLANTED ·\": the words are the scorer's law exercised on "
+         "synthetic data and say nothing about any registration (the record is `S0_VERDICTS.md`). "
+         "The pick-stability flags and fallback labels are real, because they are read from the "
+         "filed SCALE_PICKS.json record. These tables are the planted run's own S0_VERDICTS.md "
+         "tables (F-REPORT checks it), regenerated with `scripts/tierc11_score_fixtures.py "
+         "--print-planted-section`.", ""]
+    for name, sub, (p0, p1), vcol, _n in PLANTED_TABLES_T:
+        seg = _seg(md, p0, p1)
+        head = sub
+        if not seg.startswith("\n"):            # '## Tier-E rows — …': the heading's tail
+            tail, seg = seg.split("\n", 1)
+            head += tail
+        L += [head, ""] + tagged(seg, vcol) + [""]
+    return "\n".join(L).rstrip("\n") + "\n"
+
+
+OLD_AMEND_T = "b1c6275b5008fa684af9bebdaeefa2c41a99f40e60f033db71d085c9ba3e10fb"   # pre-TC11-FIX
+
+
+def tally_section(transcript: Path) -> str:
+    """STAGE_SCORE.md's fixture-tally section, rendered from the FILED transcript: each
+    fixture's [PASS]/[FAIL] line, then its break line (--print-tally-section; stdout only)."""
+    raw = transcript.read_bytes()
+    lines = raw.decode("utf-8").splitlines()
+    tally = next((ln.strip() for ln in reversed(lines) if re.fullmatch(r"\d+ GREEN, \d+ RED",
+                                                                        ln.strip())), "? GREEN, ? RED")
+    red = tally.split(", ")[1] != "0 RED"
+    rows, brk = [], None
+    for ln in lines:
+        x = ln.lstrip()
+        if x.startswith("[BREAK] deliberate violation -> "):
+            brk = "  - [BREAK] " + x[len("[BREAK] deliberate violation -> "):]
+        elif x.startswith("[PASS] ") or x.startswith("[FAIL] "):
+            rows += ["- " + x] + ([brk] if brk else [])
+            brk = None
+    rel = transcript.resolve().relative_to(ROOT.resolve()).as_posix() \
+        if ROOT.resolve() in transcript.resolve().parents else transcript.name
+    return "\n".join([f"## Fixture tally — {tally}", "",
+                      f"Transcript `{rel}` (sha `{sha_bytes(raw)}`), exit {1 if red else 0}.", "",
+                      *rows]) + "\n"
+
+
+def report_break():
+    text = REPORT_PATH.read_text(encoding="utf-8")
+    pmd = planted_run()["files"]["S0_VERDICTS.md"].decode("utf-8")
+
+    def strip_first(sub):
+        i = text.index(sub)
+        j = text.index("| " + PLANTED_TAG_T, i)
+        return text[:j + 2] + text[j + 2 + len(PLANTED_TAG_T):]
+
+    def reverted():
+        i = text.index("### §0 table (planted)")
+        j = text.index(D15_NA_T["two_sample"], i)
+        return text[:j] + "tail 1.0 · paired n 187 · max Δ share None" + \
+            text[j + len(D15_NA_T["two_sample"]):]
+
+    title_end = text.index("\n", text.index("# TIER-C11"))
+    return plants([
+        ("a planted §0 row's tag stripped", "REPORT-PLANTED",
+         lambda: report_findings(strip_first("### §0 table (planted)"), pmd)[0]),
+        ("a planted Family verdict untagged", "REPORT-PLANTED",
+         lambda: report_findings(strip_first("### Family (planted)"), pmd)[0]),
+        ("the pointer to S0_VERDICTS.md removed", "REPORT-POINTER",
+         lambda: report_findings(text.replace(REPORT_POINTER_T, "The record is elsewhere."),
+                                 pmd)[0]),
+        ("the stale 'no registered result' claim restored", "REPORT-STALE:",
+         lambda: report_findings(text[:title_end] + "\n\n**This stage " + REPORT_STALE_T + ".**"
+                                 + text[title_end:], pmd)[0]),
+        ("a planted §0 D15 cell reverted to the pre-G2 render", "REPORT-STALE-TABLE",
+         lambda: report_findings(reverted(), pmd)[0]),
+        ("an old LEANS_AMENDMENTS.md sha (the pre-TC11-FIX b1c6275b…) printed under the Files "
+         "heading", "REPORT-STALE-PIN",
+         lambda: report_findings(text.replace("\n## Files\n", "\n## Files\n\n- LEANS_AMENDMENTS.md "
+                                              f"`{OLD_AMEND_T}`\n", 1), pmd)[0]),
+        ("the HISTORICAL label struck from every heading (the pre-scoring section prints an old "
+         "LEANS_AMENDMENTS.md sha)", "REPORT-STALE-PIN",
+         lambda: report_findings("\n".join(
+             ln.replace(HISTORICAL_T, "") if ln.startswith("#") else ln
+             for ln in text.splitlines()) + "\n", pmd)[0]),
+    ])
+
+
+def report_real():
+    text = REPORT_PATH.read_text(encoding="utf-8")
+    bad, t = report_findings(text, planted_run()["files"]["S0_VERDICTS.md"].decode("utf-8"))
+    return (not bad), (f"STAGE_SCORE.md carries the typed pointer to S0_VERDICTS.md as the record "
+                       f"in its first 12 lines and no stale 'no registered result' claim; its "
+                       f"planted section's §0 ({t.get('§0')} rows), Family ({t.get('Family')}) and "
+                       f"Tier-E ({t.get('Tier-E')}) tables tag every verdict cell "
+                       f"{PLANTED_TAG_T.strip()!r} and equal, tag removed, the planted run's own "
+                       f"S0_VERDICTS.md tables; all {t.get('verdict_words')} (NOT) SUPPORTED words "
+                       f"in the section are tagged; every LEANS_AMENDMENTS.md sha it prints is the "
+                       f"file's own or sits under a {HISTORICAL_T} heading "
+                       f"({t.get('historical_pins')} old sha(s), all labelled)"
+                       + (f"; {bad[:3]}" if bad else ""))
 
 
 # ═══════════════════════════════════════════════════════════════ F-DET
@@ -2645,7 +3383,31 @@ FIXTURES = (
     ("F-EXIT", "the exit code is a bit-flag word; no condition masks another [SC-10]",
      "a subset of (registered HALT, Tier-E halted, ABSENT, no-clobber) exits other than the OR "
      "of the typed bits 2 / 4 / 8 / 16 or its EXIT line fails to name each; the dry run on a "
-     "family with all three row conditions does not exit 14", exit_break, exit_real),
+     "family with all three row conditions does not exit 14; S.main against an out-dir holding "
+     "a bent record does not return 16 with the typed EXIT line (bent record untouched, the run "
+     "filed as _rerun) or does not return 0 on the clean record; the script run as a SUBPROCESS "
+     "against an out-dir holding a bent record does not exit 16 (the process exit code) with the "
+     "typed EXIT line last, the bent record untouched and the run filed as _rerun",
+     exit_break, exit_real),
+    ("F-S0-TEXT", "the §0 text names whose words and which numbers: the builder's stage status "
+     "labelled, the pre_seen facts in the cell, D15 n/a on unpaired rulers with the "
+     "concentration beside [SC-20, SC-21, SC-22; final review statistics MINOR-1..3, fidelity "
+     "MINOR-4]",
+     "a status line or closed cell prints a STATUS.json reason without 'builder's stage "
+     "status:'; P-AGE-1's pre_seen label lacks 'point known before filing; new campaigns since "
+     "2026-09-21T16:00Z: scored <n> / base <n>' with this file's counts (the planted family and "
+     "a moved copy typed 3 / 4), or another row carries it; an unpaired D15 cell is not 'D15 "
+     "n/a (…)' + this file's own concentration exactly, or a paired cell is not T5.d15's",
+     s0_text_break, s0_text_real),
+    ("F-REPORT", "the build report is not the record: a pointer to S0_VERDICTS.md, no stale "
+     "claim, every planted verdict cell tagged 'PLANTED ·' [statistics MINOR-4], every old "
+     "amendments sha under a HISTORICAL heading [TC11-FIX verify MINOR-11]",
+     "STAGE_SCORE.md lacks the typed pointer to S0_VERDICTS.md in its first 12 lines, still "
+     "carries the stale no-registered-result claim, holds a planted table row whose verdict "
+     "cell is untagged "
+     "or an untagged (NOT) SUPPORTED in its planted section, a planted table that is not "
+     "(tag removed) the planted run's own S0_VERDICTS.md table, or a LEANS_AMENDMENTS.md sha "
+     "other than the file's own outside a HISTORICAL section", report_break, report_real),
     ("F-DET", "two subprocess scorer runs under different hash seeds, one set of bytes",
      "the PYTHONHASHSEED 1 and 20260924 runs on the planted regbooks differ from each other or "
      "from this process's render in the file set or any byte, or either exits nonzero",
@@ -2687,6 +3449,12 @@ def main() -> int:
     global RUN_ROOT
     root = RUN_ROOT = Path(next((a.split("=", 1)[1] for a in args if a.startswith("--root=")),
                                 OUT)).resolve()
+    if "--print-planted-section" in args:   # STAGE_SCORE.md's planted section (stdout only)
+        sys.stdout.write(planted_report_section())
+        return 0
+    if "--print-tally-section" in args:     # STAGE_SCORE.md's tally section (stdout only)
+        sys.stdout.write(tally_section(root / TRANSCRIPT))
+        return 0
     pick = [a.lower() for a in args if not a.startswith("--")]
     t0 = time.time()
     say(AS_OF_LINE)
