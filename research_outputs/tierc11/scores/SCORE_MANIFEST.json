@@ -1,0 +1,224 @@
+{
+  "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+  "inputs": {
+    "P-ADD-BRK/base": {
+      "book_sha256": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+      "sidecar_sha256": "6e5fa97bcd3c82078cd3e4c7125b13268d2cc83758ef2d8cca03ef305bbc76d2"
+    },
+    "P-ADD-BRK/scored": {
+      "book_sha256": "15ba415b7a30f20f95192aa279e84fe2cd9ea8cfde4c325513d8a128819e79cd",
+      "sidecar_sha256": "4c0ccfedc4dee8977d8b47faaf67ced112b039931802ba0fa9de5af06eab6087"
+    },
+    "P-ADD-BRK/tierE__frozen3": {
+      "book_sha256": "b854c1c6ef8903d6f98c20c5d92800940fdf3070400bc80e43fd8b3777ab396f"
+    },
+    "P-ADD-BRK/tierE__head_to_head_vs_p_add_sfp": {
+      "book_sha256": "15ba415b7a30f20f95192aa279e84fe2cd9ea8cfde4c325513d8a128819e79cd"
+    },
+    "P-ADD-BRK/tierE__holdout": {
+      "book_sha256": "a4854282ba7253e068b8688dbc30a1826e48db16052e2af38add7af01ec062d9"
+    },
+    "P-ADD-BRK/tierE__refuse_below_entry": {
+      "book_sha256": "15ba415b7a30f20f95192aa279e84fe2cd9ea8cfde4c325513d8a128819e79cd"
+    },
+    "P-ADD-BRK/tierE__refuse_post_harvest": {
+      "book_sha256": "dbd4dbac8f4f28dc30153541f558cc9f4d91b3042849ca545778908be5ce6bb6"
+    },
+    "P-ADD-BRK/tierE__tuning": {
+      "book_sha256": "a8dc8371e22a4f28e66baa84f3344afeaa2f40809b4f9231185b45ccdfd80364"
+    },
+    "P-ADD-SFP/base": {
+      "book_sha256": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+      "sidecar_sha256": "e03cdfbf5c1ac96648c916b40d60063e206e81ed568f24f0fd0a30501991dd5e"
+    },
+    "P-ADD-SFP/scored": {
+      "book_sha256": "ee2d19250f3e3d747784b2ba8f45940fb7bb50354d3099e4480e672819c90910",
+      "sidecar_sha256": "d6e922d923ce871c12a15e79b4566eb36acfe42143317ca9e7a249b77d043db0"
+    },
+    "P-ADD-SFP/tierE__frozen3": {
+      "book_sha256": "227a062b2ed99c285064188bc8e08754dcefe1b9eb7b7e6faaab0ff2418b3c2c"
+    },
+    "P-ADD-SFP/tierE__head_to_head_vs_p_add_brk": {
+      "book_sha256": "ee2d19250f3e3d747784b2ba8f45940fb7bb50354d3099e4480e672819c90910"
+    },
+    "P-ADD-SFP/tierE__holdout": {
+      "book_sha256": "fb0f47b8604ac1ee0c3cc7b734ba3a006692e88d2de1ec66a707ee6ffb8af007"
+    },
+    "P-ADD-SFP/tierE__refuse_below_entry": {
+      "book_sha256": "eccbbcbd9afbaa55cf053ec581d3bb6a0104a92074591dc186ad097f05093310"
+    },
+    "P-ADD-SFP/tierE__refuse_post_harvest": {
+      "book_sha256": "80276294f3ce4cbd756e7bc2ff281f527cfeef5063dd609e43fe03899aea1d9b"
+    },
+    "P-ADD-SFP/tierE__tuning": {
+      "book_sha256": "011c58ba0964a7130d7a44c1d1bd5693b6c2cb42132c7b531de8b00ed293f96d"
+    },
+    "P-AGE-1/base": {
+      "book_sha256": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+      "sidecar_sha256": "003d8dc21c6ee0d330d9f531fb24e3e44459124bf951a2c2fe5fe833c9e20760"
+    },
+    "P-AGE-1/scored": {
+      "book_sha256": "d008fa5086ce14f578403c083169e28c5870701fd37f3cb2b03c5474f04f22d8",
+      "sidecar_sha256": "75ea0a199c2d219667b26f9a62ad8fbb3517fdd3d2716817bb881b4f375bd234"
+    },
+    "P-AGE-1/tierE__holdout": {
+      "book_sha256": "f7331ba52363642520df489500970333494bdf0f7ab90f4ce3ee342d74d91183"
+    },
+    "P-AGE-1/tierE__refused_cohort": {
+      "book_sha256": "0569170404a1d10cb80c1021278423e53b5c0a0ad26030940098c1770e2d9838"
+    },
+    "P-AGE-1/tierE__shadow_abs206": {
+      "book_sha256": "2c1e47eec765be4a531205ff26dfb495d21efa42788fdea1c9d673b6e385d169"
+    },
+    "P-AGE-1/tierE__tuning": {
+      "book_sha256": "4acc5b91b27e1a931480218f038ffe5749f04479d4dcd0add1a3b84b79bcf7c5"
+    },
+    "P-BRK-4H/scored": {
+      "book_sha256": "c76358dfaeb034ddc679f74f0f26f40eca9a88bcbb48c5c62bcac45f5b4ec311",
+      "sidecar_sha256": "3cb25e07dbbc2e2ea9223628a7ba095b2f672a3dc21a3e376c0b7ebcabadb073"
+    },
+    "P-BRK-4H/tierE__frozen3": {
+      "book_sha256": "ce34edb784fd5c6205a00cef6465ba873700901a72889ad41f706ad5026b6218"
+    },
+    "P-BRK-4H/tierE__holdout": {
+      "book_sha256": "8ef3e6119006c58c3708bcb84598d498d5b8c58c3efa7ca630a92cbd5ac330d0"
+    },
+    "P-BRK-4H/tierE__memline_first_hold": {
+      "book_sha256": "9e11902a3d933cb77f39fc4be4d553131d7ab4022779f011e360b14e90a5d445"
+    },
+    "P-BRK-4H/tierE__memline_oneshot_flip": {
+      "book_sha256": "2212c4d117181da138e33a6a81b478a48bbc7af05e15d3a8b678413f83c10c4a"
+    },
+    "P-BRK-4H/tierE__oneshot_first_touch": {
+      "book_sha256": "60cfab3678b01936e34ceb76db102502984afe04e327f6b5164a65df88905084"
+    },
+    "P-BRK-4H/tierE__panel17": {
+      "book_sha256": "761922c7fc32f0ef01ea86ebb427f31a22e070c0cc0f89a993301c96fded17cb"
+    },
+    "P-BRK-4H/tierE__tuning": {
+      "book_sha256": "831c53b34fc2ae1a42edd9918cf6722e34b098c24aabc5849bdcf6f235dcad98"
+    },
+    "P-RELAY-1/base": {
+      "book_sha256": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+      "sidecar_sha256": "c8d71ad3072036d4c8f2f891c7fb9c72595502a29596b21d748afde7dec8224a"
+    },
+    "P-RELAY-1/scored": {
+      "book_sha256": "57d8bbef8190492d1df83a137977463ee441508e20a57cd81499c60258a53361",
+      "sidecar_sha256": "5e7015f8f99586a6b87c657e8637606e0497122d453dbc7118ade34c2acc7713"
+    },
+    "P-RELAY-1/tierE__holdout_slice": {
+      "book_sha256": "7e975ad781e3e31f15b3ff082443d33cfb516b529849d36efbea6027090b3fb4"
+    },
+    "P-RELAY-1/tierE__late_relay": {
+      "book_sha256": "9e295b903e0c6e37d56e874b989f5978c1b9fac1dd54888fe3736c4de1abd61b"
+    },
+    "P-RELAY-1/tierE__miss_v6": {
+      "book_sha256": "306b9ceebecb9e5141fb0cfa1b264f233fadea8876b26db3ae24f3947fde3edb"
+    },
+    "P-RELAY-1/tierE__tuning_slice": {
+      "book_sha256": "10ac7ec867fab0873cf5b729301e19d62c63a90eabd8e1776924d44b1a6100f9"
+    },
+    "P-SCALP-2/precondition_record": {
+      "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+      "sha256": "82cc3ec6ddd588c9fbd8402def471438a0c931590606b9a2a6cc3a97572f3087"
+    },
+    "P-TP-RNG/base": {
+      "book_sha256": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+      "sidecar_sha256": "700d685be73c87e1f5895615c83fbcb5b27de3c773745c8462fe6ef7e4ccfd95"
+    },
+    "P-TP-RNG/scored": {
+      "book_sha256": "a10c667b26932948074c94da892ea998ccf8db9a76999981efea53b69aaf2a9d",
+      "sidecar_sha256": "459b8a8d7bfd86ab29488832b8f87446850376bf3c6d03958e6602f74c9a9cc0"
+    },
+    "P-TP-RNG/tierE__frozen3": {
+      "book_sha256": "8ff7213a76ecf1c21bfe4dc9405cb294517c1a63a078a02998869aa67ebf101e"
+    },
+    "P-TP-RNG/tierE__holdout": {
+      "book_sha256": "8bd94584706ed92fd6354c87eff718273528c869ea3112c7a909f0e1cccbd29f"
+    },
+    "P-TP-RNG/tierE__tp_post_harvest": {
+      "book_sha256": "3d2c34a4fcdcc709893c4e66fc70afe91830e506fc769b10f1f82e31a901a902"
+    },
+    "P-TP-RNG/tierE__tuning": {
+      "book_sha256": "ec8eb28167758a8daa2f0c7f04d74515769ff179fcccd313d49f57c31a27ca3f"
+    },
+    "P-TP-RNG/tierE__unguarded": {
+      "book_sha256": "b2c0794eaca8409e0943c727955758ef87ad1ed4febf411e1fa99797eeb20bca"
+    },
+    "P-WARN-1/base": {
+      "book_sha256": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+      "sidecar_sha256": "bc4c5ea4e84d12f8c14a204bd288f49ded5261ca9b7d525a55fb40344e09db3b"
+    },
+    "P-WARN-1/condition_record": {
+      "path": "P-WARN-1/condition.json",
+      "sha256": "41670c5ac533253ae4c2239253784344d262fe529aeb20be2ce1a36fcd7dc86d"
+    },
+    "P-WARN-1/scored": {
+      "book_sha256": "956e15390419f8ab4a2f9e644f7a041f1b20708c83f41b744eec1d4965cf54e1",
+      "sidecar_sha256": "bda30cbfc2dc1866264976f0b20b4ed42fa27a48036b1d7d897e6ec13e0e08f7"
+    },
+    "P-WARN-1/tierE__holdout": {
+      "book_sha256": "9dd70a94cb2b2923e977a4c5eb7e0089c65ea85c96710a792211af3c2529323f"
+    },
+    "P-WARN-1/tierE__tuning": {
+      "book_sha256": "c41450b34294d820d841c68f17c7ee8b0648550dcc950506905adddf74270f04"
+    },
+    "P-WIN-1/base": {
+      "book_sha256": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+      "sidecar_sha256": "97ef38b8731868397827cdbb8e5458fdbf407890e99968de44486003ec431444"
+    },
+    "P-WIN-1/scored": {
+      "book_sha256": "fd3f407ad6b1867039bb24a42816678e4992b9204ed65971058e48fa2bdabbfe",
+      "sidecar_sha256": "c9b254f9620937f08a4146ec9d0cadc67127c6365a1ff5974daf5d379128f02f"
+    },
+    "P-WIN-1/tierE__holdout": {
+      "book_sha256": "7cdb206beff5ae4d8a45827e54f1450744fe3c6fc1b7cd06d801c0ec4afa07b3"
+    },
+    "P-WIN-1/tierE__ratr_admission": {
+      "book_sha256": "dcfffefbddad389657173b6458f5c88e9ec26865621742740bbd9f8f033201c8"
+    },
+    "P-WIN-1/tierE__ratr_priority": {
+      "book_sha256": "a10416bd49c47a08766078e075a1f4187f75aa36f3a29ef521cfc5698403a7f3"
+    },
+    "P-WIN-1/tierE__refused_cohort": {
+      "book_sha256": "7a97b32895c78324c22dacc563efdec38e98ffa8fe196f0e9629d5ed6b3bacf6"
+    },
+    "P-WIN-1/tierE__shadow_lag7_15": {
+      "book_sha256": "f624bffc3baea05741a1a94b61699997a0e4d615ce52649fb02b3277866d7fae"
+    },
+    "P-WIN-1/tierE__tuning": {
+      "book_sha256": "862fc6fd0a237ed4b6f84e250d4737048eedc58910911c05840606fbcb714218"
+    }
+  },
+  "leans_amendments": {
+    "path": "research_outputs/tierc11/LEANS_AMENDMENTS.md",
+    "sha256": "b1c6275b5008fa684af9bebdaeefa2c41a99f40e60f033db71d085c9ba3e10fb"
+  },
+  "outputs": {
+    "BASE_IDENT.json": "29f795dcae5c3994f8cc09d742c7480e989f09afe72113b95e2e8859a8ca5581",
+    "FAMILY.json": "3fa36bd482eac4de729b0e1ff2a66e7becbc30f2646ce16fc0df8fc369b2fd73",
+    "REGISTRY_CHECK.json": "601c9195bdc82f130fe64d462a9def584dce8fc9616d7f6a0e034d8e61bc3b22",
+    "S0_VERDICTS.md": "51f35563671f7e152e8a4499cf7899c1f8a7e98608e39a1f65492b54f185d9e3",
+    "SCORES.json": "a257160866780b0cae1e45c62ec4ef0148f0b53044c37b7df4af8e20331bd63b"
+  },
+  "records": {
+    "r2_lens_verdicts": {
+      "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+      "sha256": "82cc3ec6ddd588c9fbd8402def471438a0c931590606b9a2a6cc3a97572f3087"
+    },
+    "scale_picks": {
+      "path": "research_outputs/tierc11/ranges/SCALE_PICKS.json",
+      "sha256": "cb5319c975e44df610c05f5917759b7b47d819fa095b8af26d174d79fcef454f"
+    }
+  },
+  "regbooks_root": "research_outputs/tierc11/regbooks",
+  "registry_head": "6772568b31fcfb2d56eb8c80b66dedee4fb5082673369e872972df8f475ec8f9",
+  "stage": "TC11-SCORE",
+  "v6": {
+    "content_sha": "a5d0c57087c9b9bb95b61341e798b98eb41a8dc135d07c2eb279db8683ca96dd",
+    "manifest_content_sha": "a5d0c57087c9b9bb95b61341e798b98eb41a8dc135d07c2eb279db8683ca96dd",
+    "n": 200,
+    "path": "research_outputs/tierc11/books/v6_campaigns.parquet",
+    "sum_net_r_6dp": 40.807566
+  }
+}

@@ -1626,6 +1626,60 @@
         }
       ],
       "one_line": "the scorer (own rulers, verdict_of_record = CI lo>0 AND p<=0.10/9, honesty labels, collars, F-BASE-IDENT) built and fixtured on planted regbooks; not yet run for the record \u2014 built, adversarially verified, repaired; fixtures re-run GREEN in the 15-suite sweep"
+    },
+    {
+      "stage": "TC11-SCORE",
+      "status": "COMPLETE-VERIFIED",
+      "as_of": "2026-09-25T00:00:00Z",
+      "blockers": [],
+      "artifact_count": 8,
+      "artifact_shas": {
+        "research_outputs/tierc11/scores/BASE_IDENT.json": {
+          "bytes": 1624,
+          "sha256": "29f795dcae5c3994f8cc09d742c7480e989f09afe72113b95e2e8859a8ca5581"
+        },
+        "research_outputs/tierc11/scores/FAMILY.json": {
+          "bytes": 3313,
+          "sha256": "3fa36bd482eac4de729b0e1ff2a66e7becbc30f2646ce16fc0df8fc369b2fd73"
+        },
+        "research_outputs/tierc11/scores/FIXTURES_SCORE.txt": {
+          "bytes": 30469,
+          "sha256": "dbcc36ad8818812261478c822fe195d0b73223dd6ba59e450b2dfed08bd56a3f"
+        },
+        "research_outputs/tierc11/scores/REGISTRY_CHECK.json": {
+          "bytes": 6880,
+          "sha256": "601c9195bdc82f130fe64d462a9def584dce8fc9616d7f6a0e034d8e61bc3b22"
+        },
+        "research_outputs/tierc11/scores/S0_VERDICTS.md": {
+          "bytes": 91131,
+          "sha256": "51f35563671f7e152e8a4499cf7899c1f8a7e98608e39a1f65492b54f185d9e3"
+        },
+        "research_outputs/tierc11/scores/SCORES.json": {
+          "bytes": 229886,
+          "sha256": "a257160866780b0cae1e45c62ec4ef0148f0b53044c37b7df4af8e20331bd63b"
+        },
+        "research_outputs/tierc11/scores/SCORE_MANIFEST.json": {
+          "bytes": 10408,
+          "sha256": "5b47292067701d85b160c075a5dabd9f3c7254e9182ba92438351ac4d55654a3"
+        },
+        "research_outputs/tierc11/scores/STAGE_SCORE.md": {
+          "bytes": 89877,
+          "sha256": "210dda9d7e23e9243f0d8347228a938f566342d15d2143106c6cd4b07b77f89a"
+        }
+      },
+      "fixtures": [
+        {
+          "suite": "the scorer run of record, re-run byte-identical (no-clobber)",
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": 13,
+          "transcript_drift": false,
+          "transcript_sha_before": "51f35563671f7e152e8a4499cf7899c1f8a7e98608e39a1f65492b54f185d9e3",
+          "transcript_sha_after": "51f35563671f7e152e8a4499cf7899c1f8a7e98608e39a1f65492b54f185d9e3",
+          "wall_seconds": 22
+        }
+      ],
+      "one_line": "the nine rows of record: P-AGE-1 SUPPORTED \u2014 IN-SAMPLE RE-SCORE, NOT CONFIRMATORY (+0.2461 [+0.1912, +0.2967] p 0.00025); P-WARN-1, P-WIN-1 (p 0.036 > bar), P-BRK-4H, P-RELAY-1, P-ADD-BRK, P-TP-RNG NOT SUPPORTED; P-ADD-SFP NOT SUPPORTED \u2014 CI wholly below zero; P-SCALP-2 CLOSED BY R2 (1h: FAIL), no slot spent; m = 9, bar 0.011111, 8 tests spent"
     }
   ],
   "amendments_of_record": {

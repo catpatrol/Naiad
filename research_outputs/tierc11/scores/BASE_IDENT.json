@@ -1,0 +1,50 @@
+{
+  "absent": [],
+  "book_sha256": {
+    "P-ADD-BRK": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+    "P-ADD-SFP": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+    "P-AGE-1": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+    "P-RELAY-1": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+    "P-TP-RNG": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+    "P-WARN-1": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+    "P-WIN-1": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8"
+  },
+  "findings": [],
+  "law": "every 'base' arm of the seven carries ONE book_sha256 and equals books/v6_campaigns.parquet on (symbol, entry_ms) x 13 columns at 6 dp [SC-7]",
+  "ok": true,
+  "per_registration_ok": {
+    "P-ADD-BRK": true,
+    "P-ADD-SFP": true,
+    "P-AGE-1": true,
+    "P-RELAY-1": true,
+    "P-TP-RNG": true,
+    "P-WARN-1": true,
+    "P-WIN-1": true
+  },
+  "registrations_checked": [
+    "P-ADD-BRK",
+    "P-ADD-SFP",
+    "P-AGE-1",
+    "P-RELAY-1",
+    "P-TP-RNG",
+    "P-WARN-1",
+    "P-WIN-1"
+  ],
+  "registrations_expected": [
+    "P-AGE-1",
+    "P-WIN-1",
+    "P-WARN-1",
+    "P-ADD-BRK",
+    "P-ADD-SFP",
+    "P-TP-RNG",
+    "P-RELAY-1"
+  ],
+  "unusable": [],
+  "v6": {
+    "content_sha": "a5d0c57087c9b9bb95b61341e798b98eb41a8dc135d07c2eb279db8683ca96dd",
+    "manifest_content_sha": "a5d0c57087c9b9bb95b61341e798b98eb41a8dc135d07c2eb279db8683ca96dd",
+    "n": 200,
+    "path": "research_outputs/tierc11/books/v6_campaigns.parquet",
+    "sum_net_r_6dp": 40.807566
+  }
+}

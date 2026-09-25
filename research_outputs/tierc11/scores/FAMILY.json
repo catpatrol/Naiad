@@ -1,0 +1,106 @@
+{
+  "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+  "banner": null,
+  "bar": 0.011111111111111112,
+  "bar_exact": "1/90",
+  "bar_filed": 0.011111,
+  "family_m": 9,
+  "family_q": 0.1,
+  "law": "m = 9 in every case; bar = 0.10/9 fixed, no ranks, no step-up; a registration closed by its own precondition or condition spends no test and never loosens the bar; a HALTed or ABSENT row spends no test [L-1.4]",
+  "rows": [
+    {
+      "clears_bar": false,
+      "honesty_label": null,
+      "p_one_sided": 0.303424143964009,
+      "registration": "P-WARN-1",
+      "seq": 1,
+      "spent_test": true,
+      "status": "BUILT",
+      "verdict_of_record": "NOT SUPPORTED"
+    },
+    {
+      "clears_bar": true,
+      "honesty_label": "IN-SAMPLE RE-SCORE, NOT CONFIRMATORY (pre_seen: the scored cohort IS TC10 P_AGE_1_TIDE_YOUTH B4 (same function, same trailing edges, same 200 campaigns, anchored by F-CTRL(b)))",
+      "p_one_sided": 0.00024993751562109475,
+      "registration": "P-AGE-1",
+      "seq": 2,
+      "spent_test": true,
+      "status": "BUILT",
+      "verdict_of_record": "SUPPORTED"
+    },
+    {
+      "clears_bar": false,
+      "honesty_label": "IN-SAMPLE RE-SCORE, NOT CONFIRMATORY (selection_hazard: direction informed by TC6V L-LAG deciles on the same corridor (lag-0 +0.4149, 56-bar decile -0.5796))",
+      "p_one_sided": 0.03649087728067983,
+      "registration": "P-WIN-1",
+      "seq": 3,
+      "spent_test": true,
+      "status": "BUILT",
+      "verdict_of_record": "NOT SUPPORTED"
+    },
+    {
+      "clears_bar": false,
+      "honesty_label": "IN-SAMPLE RE-SCORE, NOT CONFIRMATORY (selection_hazard: the best of 7,920 TC10 census cells (4h retest-hold-tap89, CLASSIC5 NET H20 +0.681 ALL n 236 / +0.706 holdout n 88; UNSEEN12 +0.064 / +0.272))",
+      "p_one_sided": 0.3181704573856536,
+      "registration": "P-BRK-4H",
+      "seq": 4,
+      "spent_test": true,
+      "status": "BUILT",
+      "verdict_of_record": "NOT SUPPORTED"
+    },
+    {
+      "clears_bar": false,
+      "honesty_label": null,
+      "p_one_sided": 0.3084228942764309,
+      "registration": "P-RELAY-1",
+      "seq": 5,
+      "spent_test": true,
+      "status": "BUILT",
+      "verdict_of_record": "NOT SUPPORTED"
+    },
+    {
+      "clears_bar": null,
+      "honesty_label": null,
+      "p_one_sided": null,
+      "registration": "P-SCALP-2",
+      "seq": 6,
+      "spent_test": false,
+      "status": "CLOSED_BY_PRECONDITION",
+      "verdict_of_record": "CLOSED_BY_PRECONDITION"
+    },
+    {
+      "clears_bar": false,
+      "honesty_label": null,
+      "p_one_sided": 0.730817295676081,
+      "registration": "P-ADD-BRK",
+      "seq": 7,
+      "spent_test": true,
+      "status": "BUILT",
+      "verdict_of_record": "NOT SUPPORTED"
+    },
+    {
+      "clears_bar": false,
+      "honesty_label": null,
+      "p_one_sided": 1.0,
+      "registration": "P-ADD-SFP",
+      "seq": 8,
+      "spent_test": true,
+      "status": "BUILT",
+      "verdict_of_record": "NOT SUPPORTED — CI wholly below zero"
+    },
+    {
+      "clears_bar": false,
+      "honesty_label": null,
+      "p_one_sided": 0.7430642339415147,
+      "registration": "P-TP-RNG",
+      "seq": 9,
+      "spent_test": true,
+      "status": "BUILT",
+      "verdict_of_record": "NOT SUPPORTED"
+    }
+  ],
+  "supported": [
+    "P-AGE-1"
+  ],
+  "tests_spent": 8
+}

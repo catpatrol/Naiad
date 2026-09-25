@@ -1,0 +1,160 @@
+{
+  "contract": {
+    "path": "exchange/queue/2026-09-24_TC11_APOLLO.md",
+    "sha256": "bb38e016a8f3e55ca3bcc09fec53ba6b8dc40accb60d054f8163d033a898f835"
+  },
+  "family": {
+    "bar": 0.011111111111111112,
+    "bar_filed": 0.011111,
+    "m": 9,
+    "q": 0.1
+  },
+  "findings": [],
+  "head": "6772568b31fcfb2d56eb8c80b66dedee4fb5082673369e872972df8f475ec8f9",
+  "head_of_record_typed": "6772568b31fcfb2d56eb8c80b66dedee4fb5082673369e872972df8f475ec8f9",
+  "law": "texts are the contract's own lines (frozen at STEP Q); operative specs are the executor's readings, filed before any TC11 book was computed; payload sha = sha256(json.dumps(body without shas, sort_keys, ensure_ascii=False)); chain line_sha256 over {seq, registration, sha256, prev}",
+  "leans": {
+    "path": "research_outputs/tierc11/LEANS.md",
+    "sha256": "655e1605165e7a66c67f544e5cda421b46aa0b6fcd4cb97a6ad19654479f294f"
+  },
+  "leans_amendments": {
+    "path": "research_outputs/tierc11/LEANS_AMENDMENTS.md",
+    "sha256": "b1c6275b5008fa684af9bebdaeefa2c41a99f40e60f033db71d085c9ba3e10fb"
+  },
+  "per_registration": [
+    {
+      "line_sha256": "0db9a7e9d337ff55aca60b56a7b7e5973279cd19dfe17e71b7b690914f798f21",
+      "payload_sha256": "c6121ba9330a40bd31fd0dd1f78303b940417d3ac1f3a9eba8750979f84f0c99",
+      "payload_sha256_filed": "c6121ba9330a40bd31fd0dd1f78303b940417d3ac1f3a9eba8750979f84f0c99",
+      "prev": "0000000000000000000000000000000000000000000000000000000000000000",
+      "registration": "P-WARN-1",
+      "seq": 1,
+      "text_lines": [
+        40,
+        42
+      ],
+      "text_sha256": "9dc01fefcccd82eb355a8b9c59b7803d26d7a07f9af56dfe7bc44af24b98a605",
+      "text_slice_recut_equal": true
+    },
+    {
+      "line_sha256": "cb05950509bae39e8699fd874a96d752fb480f07ed70b343f8338d3466c38daa",
+      "payload_sha256": "e01a89ea7e6fda864f7002a450abd1a4e92424c44d1a9626f6641814e7d35879",
+      "payload_sha256_filed": "e01a89ea7e6fda864f7002a450abd1a4e92424c44d1a9626f6641814e7d35879",
+      "prev": "0db9a7e9d337ff55aca60b56a7b7e5973279cd19dfe17e71b7b690914f798f21",
+      "registration": "P-AGE-1",
+      "seq": 2,
+      "text_lines": [
+        45,
+        46
+      ],
+      "text_sha256": "eeb058719de17172ca6ed7e5dc6192ee6a65219973507ccd2c8d72e37c7d57b1",
+      "text_slice_recut_equal": true
+    },
+    {
+      "line_sha256": "f324eefccc49d84372dce46019a1e633e5a2d74ae80f8d2ecf7de63a262109ec",
+      "payload_sha256": "d19a42a329be3bfeea73c3c628bf515f5d0fa2fb8facd3fcac795b0186525084",
+      "payload_sha256_filed": "d19a42a329be3bfeea73c3c628bf515f5d0fa2fb8facd3fcac795b0186525084",
+      "prev": "cb05950509bae39e8699fd874a96d752fb480f07ed70b343f8338d3466c38daa",
+      "registration": "P-WIN-1",
+      "seq": 3,
+      "text_lines": [
+        47,
+        48
+      ],
+      "text_sha256": "c7fe848193d9b8fd239f74fdaf6483edf8f79b47d9ea47b2ba26bfd935f7a9b3",
+      "text_slice_recut_equal": true
+    },
+    {
+      "line_sha256": "627442c219dcb5870953bb32a0efb3a81e56edb25d0692233028fa35383cdcfc",
+      "payload_sha256": "120939d9d4a2092958fcc72c25db5036e981ca5ad4f1be0b4da4f0edb9ba1655",
+      "payload_sha256_filed": "120939d9d4a2092958fcc72c25db5036e981ca5ad4f1be0b4da4f0edb9ba1655",
+      "prev": "f324eefccc49d84372dce46019a1e633e5a2d74ae80f8d2ecf7de63a262109ec",
+      "registration": "P-BRK-4H",
+      "seq": 4,
+      "text_lines": [
+        52,
+        54
+      ],
+      "text_sha256": "47b2ad7a260f6e0a2936ff2056efe02f2f1305a4f47f2a3b2355289ed6e559b0",
+      "text_slice_recut_equal": true
+    },
+    {
+      "line_sha256": "b1c9e3a04fbd59db1439e0cf425d1b67fa36ea641f04252eaa66001ff0ec1748",
+      "payload_sha256": "e8f6d4595b449a18bfd7ef8d01ed89d0b1fe65c4ab2ecf8964fa84fc8028a59b",
+      "payload_sha256_filed": "e8f6d4595b449a18bfd7ef8d01ed89d0b1fe65c4ab2ecf8964fa84fc8028a59b",
+      "prev": "627442c219dcb5870953bb32a0efb3a81e56edb25d0692233028fa35383cdcfc",
+      "registration": "P-RELAY-1",
+      "seq": 5,
+      "text_lines": [
+        55,
+        57
+      ],
+      "text_sha256": "b089017bcc8b55035842b5950b58c6a28a227fa34712217c7d5197f42dfc8382",
+      "text_slice_recut_equal": true
+    },
+    {
+      "line_sha256": "c0e48c4cf4b6566d38a090cd298832865cedcf8648a59a2a9a43606c27e8b4ae",
+      "payload_sha256": "c4e7ea0064bf0355804f311b8a2c91af1178de0ac9e705a417a1cc09b90bd250",
+      "payload_sha256_filed": "c4e7ea0064bf0355804f311b8a2c91af1178de0ac9e705a417a1cc09b90bd250",
+      "prev": "b1c9e3a04fbd59db1439e0cf425d1b67fa36ea641f04252eaa66001ff0ec1748",
+      "registration": "P-SCALP-2",
+      "seq": 6,
+      "text_lines": [
+        71,
+        71
+      ],
+      "text_sha256": "e55707ebad521fd887d090a55ff915170703c1109f1e57d34dab03f4b2395b9c",
+      "text_slice_recut_equal": true
+    },
+    {
+      "line_sha256": "cca5ef44ae93ccc18fdd251fd94f0044b989fbf228aafe55a1fd8e40d9fde62b",
+      "payload_sha256": "510e67de50923baf8b0d3feeb6638c4ae0fc04cebad1504c52a9602956f47797",
+      "payload_sha256_filed": "510e67de50923baf8b0d3feeb6638c4ae0fc04cebad1504c52a9602956f47797",
+      "prev": "c0e48c4cf4b6566d38a090cd298832865cedcf8648a59a2a9a43606c27e8b4ae",
+      "registration": "P-ADD-BRK",
+      "seq": 7,
+      "text_lines": [
+        75,
+        76
+      ],
+      "text_sha256": "8d2d0afb2c873b9d3bd643077527e2bce7c17391107bc82d216e93a3ca15faf0",
+      "text_slice_recut_equal": true
+    },
+    {
+      "line_sha256": "de17cd2bf73d1b29eddfb30972b6cdd6a733ee706d5f616dac20319c6efab2e0",
+      "payload_sha256": "ed4acdfe532b8c13f3700fa6a736a40a13b3cd3160e1f6618437428b18077c90",
+      "payload_sha256_filed": "ed4acdfe532b8c13f3700fa6a736a40a13b3cd3160e1f6618437428b18077c90",
+      "prev": "cca5ef44ae93ccc18fdd251fd94f0044b989fbf228aafe55a1fd8e40d9fde62b",
+      "registration": "P-ADD-SFP",
+      "seq": 8,
+      "text_lines": [
+        77,
+        78
+      ],
+      "text_sha256": "3d7dbbef66065052a1a5dc53681154c8058d3c8451c3860881bc6d6a337ed3a3",
+      "text_slice_recut_equal": true
+    },
+    {
+      "line_sha256": "6772568b31fcfb2d56eb8c80b66dedee4fb5082673369e872972df8f475ec8f9",
+      "payload_sha256": "ad12a44cd8aeb27cc9a1ab0c4225725462f597a6d1dfc621ddf1e06a484de808",
+      "payload_sha256_filed": "ad12a44cd8aeb27cc9a1ab0c4225725462f597a6d1dfc621ddf1e06a484de808",
+      "prev": "de17cd2bf73d1b29eddfb30972b6cdd6a733ee706d5f616dac20319c6efab2e0",
+      "registration": "P-TP-RNG",
+      "seq": 9,
+      "text_lines": [
+        83,
+        86
+      ],
+      "text_sha256": "a3dc242d19128b7e9c10481427cda3d8f1aa3e55b7b6dd1a345aa26fe9a4c236",
+      "text_slice_recut_equal": true
+    }
+  ],
+  "pin": {
+    "head": "6772568b31fcfb2d56eb8c80b66dedee4fb5082673369e872972df8f475ec8f9",
+    "path": "research_outputs/tierc11/registrations/REGISTRY_PIN.json"
+  },
+  "registrations": {
+    "path": "research_outputs/tierc11/registrations/REGISTRATIONS.json",
+    "sha256": "648834bf30e20e92713bddef2374ddef1aae843f4d8ba152fc50166c8cc6f1ee"
+  }
+}
