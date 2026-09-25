@@ -195,7 +195,7 @@
 
 ## Leans
 
-- [LEAN-HEPHAESTUS] L-0.1 (research_outputs/tierc11/LEANS.md) CORRIDOR: AS_OF = 2026-09-25T00:00:00Z (close ms 1790294400000), the latest 4h bar closed when STEP Q was filed (2026-09-25T00:09:43Z); pinned BY VALUE, proven closed by the venue's own closeTime < the venue clock, write-once; the latest close at pin time is filed beside it.
+- [LEAN-HEPHAESTUS] L-0.1 (research_outputs/tierc11/LEANS.md) CORRIDOR: AS_OF = 2026-09-25T00:00:00Z (close ms 1790294400000), the latest 4h bar closed when STEP Q was filed (2026-09-25T00:09:43Z); pinned BY VALUE, proven closed by the venue's own closeTime < the venue clock, write-once; every stage reads it, and the latest close at FETCH time is printed beside it (record_fetch_clock also files it as a kind='clock' row of FETCH_LOG.jsonl; the 2026-09-25 run printed it only, and FETCH_CLOCK_NOTE.json records it from the sealed log). The latest close at PIN time is filed in AS_OF_PIN.json besides.
 - [LEAN-HEPHAESTUS] L-0.2 (research_outputs/tierc11/LEANS.md) SNAPSHOT: tc11_20260925 is an APFS clone (cp -cpR) of tc10_20260921; every cloned file is re-hashed against TC10's STAGE_D_MANIFEST before the first write (CLONE_ATTEST.json); it is extended over REST only. The live cache is never read or written and the TC10 snapshot is never written.
 - [LEAN-HEPHAESTUS] TC10 L1 CARRIED: 1d = exactly six complete native-4h bars per UTC day; 1w = seven complete derived days, MONDAY-anchored UTC, complete weeks only; the source is native 4h, never 1h/5m aggregates.
 - [LEAN-HEPHAESTUS] TC10 D-b CARRIED: funding is kept through AS_OF close + 60 s.
@@ -210,13 +210,14 @@
 - [LEAN-HEPHAESTUS] D11-f complete_to_as_of is STRICT on every lens. TC10 let a derived lens pass by construction (`or iv in DERIVED_IVS`); here 1d and 1w must also end at their own last bar closing <= the pin.
 - [LEAN-HEPHAESTUS] D11-g ORDER: --all seals BEFORE it describes, so the manifest's write_once block verifies the filed seal (TC10 re-described after --seal for the same reason). The seal covers AS_OF_PIN, CLONE_ATTEST, CONTRACT_SPECS, EDGE_AUDIT, PRE_STATE and the fetch-log head — a superset of the brief's three.
 - [LEAN-HEPHAESTUS] L-1.1 (research_outputs/tierc11/LEANS.md) TOLL OF RECORD: taker 5.0 bps/side, 10.0 round trip (tierc2_rules); the charter slippage tier (A 2 / B 5 / C 10 bps/side) is a haircut TWIN beside it, never in its place.
-- [LEAN-HEPHAESTUS] L-1.2 (research_outputs/tierc11/LEANS.md) MAKER TWIN: 2.0 bps/side (README.md:150 'maker is 0.02%'; precedent scripts/v3_recompute.py R10), an ASSUMPTION, MNT included (Bybit's maker rate is not in the repo); maker legs (entry and target only) carry zero slippage; stop and invalidation legs stay taker + slippage.
+- [LEAN-HEPHAESTUS] L-1.2 (research_outputs/tierc11/LEANS.md) MAKER TWIN: 2.0 bps/side (README.md:150 'maker is 0.02%'; precedent scripts/v3_recompute.py R10), an ASSUMPTION, MNT included (Bybit's maker rate is not in the repo); maker legs (entry and target only) carry zero slippage; stop and invalidation legs stay taker (5.0 bps/side, the toll of record's rate — the charter slippage belongs to the haircut twin only [L-1.1]).
 
 ## Standing disclosures
 
 - The executor made two connectivity probes (Binance /fapi/v1/time and one BTCUSDT 4h kline, Bybit /v5/market/time) with curl BEFORE this module existed; they are not in FETCH_LOG.jsonl and nothing they returned was saved or used.
 - The 5m rows 16:00-16:25Z of 2026-09-21 (14 Binance stems) and the 15m rows 16:00/16:15Z (CLASSIC5) PRE-DATE TC10 (copied from the live cache before TC10's pin) and sat past TC10's as-of; TC11's as-of includes them. They are INHERITED, not refetched [D11-b]; EDGE_AUDIT.json compares each with REST read-only and inherited_edge_audit prints the result.
 - The 15m tapes of the nine non-CLASSIC5 stems that hold one stay in the snapshot untouched and out of scope (listed by sha under out_of_scope_snapshot_files), as the 1m tapes do.
+- The snapshot root's MANIFEST.json (11589 B, sha256 c73fec06e38f2ef9…) is carried byte-for-byte from the TC10 snapshot; TC10's manifest does not pin it (CLONE_ATTEST compares it with the TC10 snapshot's own bytes). It is a cache manifest written by another estate (self-described created_utc 2026-08-12T02:42:31Z, mode 'estate', 73 files) and it is STALE: of the other 175 files of the TC11 snapshot it describes 0 at their current bytes (3 of the files it lists are not in the snapshot), and 0 of the 107 files TC11 extended. No TC11 loader reads it; it is listed under out_of_scope_snapshot_files and read only to describe it here.
 
 ## Operator rulings needed
 

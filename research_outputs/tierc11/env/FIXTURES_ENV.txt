@@ -1,0 +1,187 @@
+as_of_last_closed_4h: 2026-09-25T00:00:00Z
+==============================================================================
+TIER-C11 TC11-ENV FIXTURES — scripts/tierc11_env.py (the RANGE-FREE shim, L-0.3) — break leg first, RED or void
+==============================================================================
+seed 20260924 · substrate tc11_20260925 · pin 1790294400000
+[LEAN-HEPHAESTUS] L-0.3 TC11 RANGE-FREE SHIM · substrate tc11_20260925 · pin 2026-09-25T00:00:00Z (1790294400000) · seed 20260924 (sensitivity 20260816) · n_boot 4000
+[LEAN-HEPHAESTUS] L-0.3 IMPORTS — tierc2_baseline FIRST under the TC11 env; every other module inside a TC10 env window restored in finally (17 windows):
+  window tierc2_baseline    env tc11_20260925  tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+  window tierc10_data       env tc10_20260921  tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+      source read (AST, never imported) engine/rangefinder.py
+  window tierc10_panel      env tc10_20260921  tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+      data open  [tc10-import-read] research_outputs/tierc10/data/STAGE_D_MANIFEST.json
+  window tierc10_brk        env tc10_20260921  tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+      source read (AST, never imported) engine/rangefinder.py
+  window tierc10_lanes      env tc10_20260921  tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+  window tierc9             env tc10_20260921  tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+  window tierc8             env tc10_20260921  tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+  window tierc7             env tc10_20260921  tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+  window tierc7_rules       env tc10_20260921  tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+  window tierc7_lab_regime  env tc10_20260921  tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+  window tierc6             env tc10_20260921  tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+  window tierc6_rules       env tc10_20260921  tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+  window tierc5             env tc10_20260921  tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+  window tierc5_rules       env tc10_20260921  tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+  window tierc4_rules       env tc10_20260921  tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+  window tierc3_rules       env tc10_20260921  tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+  window tierc2_rules       env tc10_20260921  tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+[LEAN-HEPHAESTUS] L-0.3 RE-ROOTS (26; each verified to exist before assignment):
+  RE-ROOT D.SNAPSHOT
+      ~/.cache/naiad/snapshots/tc10_20260921
+   -> ~/.cache/naiad/snapshots/tc11_20260925   [L-0.3]
+  RE-ROOT D.OUT
+      research_outputs/tierc10/data
+   -> research_outputs/tierc11/data   [L-0.3]
+  RE-ROOT D.STEP_MS['15m']
+      '(absent)'
+   -> 900000   [L-0.3]
+  RE-ROOT D.SEED
+      20260921
+   -> 20260924   [L-0.3+ missed: Stage D's seed, bound at import]
+  RE-ROOT TP.OUT
+      research_outputs/tierc10
+   -> research_outputs/tierc11   [L-0.3]
+  RE-ROOT TP.OUT_RERUN
+      research_outputs/tierc10_run2
+   -> research_outputs/tierc11/_det_rerun   [L-0.3 (rerun twin under tierc11/_det_rerun)]
+  RE-ROOT TP.AS_OF_PIN
+      research_outputs/tierc10/data/AS_OF_PIN.json
+   -> research_outputs/tierc11/data/AS_OF_PIN.json   [L-0.3]
+  RE-ROOT TP.STAGE_D_MANIFEST
+      research_outputs/tierc10/data/STAGE_D_MANIFEST.json
+   -> research_outputs/tierc11/data/STAGE_D_MANIFEST.json   [L-0.3]
+  RE-ROOT TP.SEED
+      20260921
+   -> 20260924   [L-0.3]
+  RE-ROOT TP.SEEDS
+      (20260921, 20260816)
+   -> (20260924, 20260816)   [L-0.3+ missed: (SEED, SEED_LINEAGE) copied at import]
+  RE-ROOT BK.SEED
+      20260921
+   -> 20260924   [L-0.3]
+  RE-ROOT BK.OUT
+      research_outputs/tierc10/brk
+   -> research_outputs/tierc11/brk   [L-0.3]
+  RE-ROOT BK.OUT_RERUN
+      research_outputs/tierc10_run2/brk
+   -> research_outputs/tierc11/_det_rerun/brk   [L-0.3]
+  RE-ROOT BK.LENS_MS['15m']
+      '(absent)'
+   -> 900000   [L-0.3 (dict(D.STEP_MS) copied at import)]
+  RE-ROOT BK.TUNING_RESULT_FOR['5m']
+      research_outputs/tierc10/census/TUNING_RESULT.json
+   -> research_outputs/tierc11/census/TUNING_RESULT.json   [L-0.3]
+  RE-ROOT BK.TUNING_RESULT_FOR['1d']
+      research_outputs/tierc10/census/TUNING_RESULT_1d.json
+   -> research_outputs/tierc11/census/TUNING_RESULT_1d.json   [L-0.3]
+  RE-ROOT BK.TUNING_RESULT
+      research_outputs/tierc10/census/TUNING_RESULT.json
+   -> research_outputs/tierc11/census/TUNING_RESULT.json   [L-0.3+ missed: TUNING_RESULT_FOR['5m'] copied at import]
+  RE-ROOT BK.HEIGHT_VS_TOLL_PATH
+      research_outputs/tierc10/census/height_toll.parquet
+   -> research_outputs/tierc11/census/height_toll.parquet   [L-0.3]
+  RE-ROOT BK.HEIGHT_VS_TOLL_VERDICT_PATH
+      research_outputs/tierc10/census/height_toll_verdict.parquet
+   -> research_outputs/tierc11/census/height_toll_verdict.parquet   [L-0.3]
+  RE-ROOT BK.REGISTRY_PIN_PATH
+      research_outputs/tierc10/REGISTRY_PIN.json
+   -> research_outputs/tierc11/REGISTRY_PIN.json   [L-0.3]
+  RE-ROOT BK.REGISTRATION_TEXTS_PATH
+      research_outputs/tierc10/REGISTRATION_TEXTS.json
+   -> research_outputs/tierc11/REGISTRATION_TEXTS.json   [L-0.3]
+  RE-ROOT LN.SEED
+      20260921
+   -> 20260924   [L-0.3]
+  RE-ROOT LN.OUT
+      research_outputs/tierc10/lanes
+   -> research_outputs/tierc11/lanes   [L-0.3]
+  RE-ROOT LN.REGISTRY_PIN_PATH
+      research_outputs/tierc10/REGISTRY_PIN.json
+   -> research_outputs/tierc11/REGISTRY_PIN.json   [L-0.3]
+  RE-ROOT LN.REGISTRATION_TEXTS_PATH
+      research_outputs/tierc10/REGISTRATION_TEXTS.json
+   -> research_outputs/tierc11/REGISTRATION_TEXTS.json   [L-0.3]
+  RE-ROOT TP._U12 (+UNSEEN12_SOURCE/NAME_OF/UNRESOLVED, UNSEEN12, PANEL17)
+      resolved at import from research_outputs/tierc10/data/STAGE_D_MANIFEST.json
+   -> re-resolved from research_outputs/tierc11/data/STAGE_D_MANIFEST.json   [L-0.3+ missed: resolve_unseen12() runs at import on TC10's record]
+[LEAN-HEPHAESTUS] L-0.3 RE-ROOTED TARGETS THAT DO NOT EXIST — they FAIL CLOSED:
+  BK.REGISTRY_PIN_PATH = research_outputs/tierc11/REGISTRY_PIN.json · exists False
+  BK.REGISTRATION_TEXTS_PATH = research_outputs/tierc11/REGISTRATION_TEXTS.json · exists False
+  LN.REGISTRY_PIN_PATH = research_outputs/tierc11/REGISTRY_PIN.json · exists False
+  LN.REGISTRATION_TEXTS_PATH = research_outputs/tierc11/REGISTRATION_TEXTS.json · exists False
+      TC11's registry pin is research_outputs/tierc11/registrations/REGISTRY_PIN.json (another format), read only by tierc11_score [L-1.4]; a BK/LN door that reads these paths raises FileNotFoundError — it can never fall back on a TC10 record.
+[LEAN-HEPHAESTUS] L-0.3 LEFT AS IS (declared; not re-rooted):
+  D.LIVE_CACHE = ~/.cache/naiad/data_cache  [live-cache] — a GUARD constant: the path assert_substrate refuses, never read
+  D.SPEND_EXCLUDED_DIRS[2] = research_outputs/tierc10  [tierc10-out] — TC10's data-spend audit EXCLUSION filter (directories its grep skips); not an output root, never written; TC11 never runs TC10's data-spend audit
+  D.SPEND_EXCLUDED_DIRS[3] = research_outputs/tierc10_run2  [tierc10-out] — TC10's data-spend audit EXCLUSION filter (directories its grep skips); not an output root, never written; TC11 never runs TC10's data-spend audit
+  TP.LIVE_CACHE = ~/.cache/naiad/data_cache  [live-cache] — a GUARD constant: the path TP.substrate() refuses, never read
+  TP.REG_DIR = research_outputs/tierc10/registrations  [tierc10-out] — L-1.4: TP.REG_DIR is left untouched — TC11 never routes through a TP registry door; the audit hook refuses any write there
+[LEAN-HEPHAESTUS] L-0.3 DEFAULTS BOUND AT DEF TIME ARE NOT RE-ROOTED: every TC11 call passes seed=20260924, n_boot=4000; no family_m default; no TP registry door [L-1.4].
+[LEAN-HEPHAESTUS] L-0.3 POST-SHIM ASSERTION (17 clauses):
+  ok  TB.KLINES/FUNDING: ~/.cache/naiad/snapshots/tc11_20260925/klines · ~/.cache/naiad/snapshots/tc11_20260925/funding
+  ok  every KLINES/FUNDING binding under tc11_20260925: 0 stray []
+  ok  TP._SUB empty after the windows: {}
+  ok  no bar memo filled during the windows: TP._OPEN 0 · LN._FIVE 0 · BK._FRAMES 0
+  ok  TP.substrate(): tc11_20260925
+  ok  D.load_pin(): 1790294400000 vs 1790294400000
+  ok  TP.stage_d_pin(): 1790294400000 vs 1790294400000
+  ok  D.kline_path('BTCUSDT','4h'): ~/.cache/naiad/snapshots/tc11_20260925/klines/BTCUSDT_4h.parquet
+  ok  D.funding_path('BTCUSDT'): ~/.cache/naiad/snapshots/tc11_20260925/funding/BTCUSDT.parquet
+  ok  D.STEP_MS == BK.LENS_MS == E.LENS_MS (15m in place): ['12h', '15m', '1d', '1h', '1w', '4h', '5m'] / ['12h', '15m', '1d', '1h', '1w', '4h', '5m']
+  ok  TP.ERA_CUT_MS: 1719791999000
+  ok  sensitivity seed / n_boot: T5.SEED 20260816 TP.SEED_LINEAGE 20260816 TP.N_BOOT 4000
+  ok  no undeclared TC10 binding in the estate's module globals: 5 TC10 binding(s), 0 undeclared
+  ok  panels == TC11 Stage D manifest (D.panel()): CLASSIC5 5 · UNSEEN12 12 · PANEL17 17
+  ok  the TC11 stems equal TC10's (copies taken at import stay valid): UNSEEN12 same=True PANEL17 same=True
+  ok  fee_schedule taker == tierc2_rules.FEE_BPS_SIDE, one row per PANEL17 stem: taker [5.0] vs 5.0; 17 stems
+  ok  RANGE-FREE: no range module in the process: 0 []
+[LEAN-HEPHAESTUS] L-0.3 HANDOFF TO tierc11_nest — two post-shim clauses of L-0.3 are about the census module, which this range-free shim never imports. tierc11_nest MUST assert both right after its C.* / stamps.* re-roots, and its fixture MUST plant a skipped C.STAGE_D re-root that turns (1) RED:
+  (1) C.as_of_close_ms(s)[0] == 1790294400000 for every s in PANEL17 — at census import C.STAGE_D names research_outputs/tierc10/data, whose AS_OF_PIN.json is NOT on the allow-list: with the hook armed a skipped re-root HALTs [tc10-unlisted] instead of returning TC10's pin 1790006400000;
+  (2) C.RETEST_PINS == {margin_atr 1.0, hold_bars 3, ttl_bars 400, grid_sha 2135ca66…} (resolved at census import from the allow-listed census/TUNING_RESULT.json).
+  The range door tc10_import(name, allow_range=True) opens ONLY for a caller that is tierc11_nest; any other caller HALTs.
+[LEAN-HEPHAESTUS] L-0.3 AUDIT HOOK armed LAST. Paths judged CANONICALLY (realpath; the deepest existing ancestor matched by device+inode against the protected roots; NFC + casefold; the /System/Volumes/Data firmlink, /.nofollow and /.resolve/N prefixes stripped). AuditHalt on:
+  · any open / listing / mutation under the TC10 snapshot or the live cache;
+  · any write under research_outputs/tierc10[_run2]/, scripts/tierc10_*, exchange/status/LEDGER*, LEDGER.md, .gitignore (this tree and the main tree);
+  · any open / listing under research_outputs/tierc10 that is not one of the 8 records below;
+  · a relative open judged against the cwd AND every open directory fd (the event carries no dir_fd); a directory open of a protected root, of an ancestor of one, or inside write-protected space, when its anchor is unambiguous;
+  · at exit: ALLOW/BLOCKED printed on stderr; any BLOCKED attempt forces exit 70.
+  TC10 record allow-list (8 — the six L-0.3 names + two by AM-1; read by absolute main-tree path, logged ALLOW):
+  ALLOW research_outputs/tierc10/STEP0_RECORD.json · exists True — STEP0_RECORD — L-R.3 port shas + pins_of_record
+  ALLOW research_outputs/tierc10/census/TUNING_RESULT.json · exists True — TUNING_RESULT — C.RETEST_PINS at census import (tierc11_nest) [L-R.3/L-R.6]
+  ALLOW research_outputs/tierc10/census/height_toll_verdict.parquet · exists True — AM-1 · L-R.4 disclosure: TC10's per-era [Q-R3] verdicts (continuity column beside TC11's R2)
+  ALLOW research_outputs/tierc10/census/outcome_grid.parquet · exists True — AM-1 · L-T.1 selection_hazard + R4 continuity anchor: TC10's 7,920-cell census grid
+  ALLOW research_outputs/tierc10/close/P_AGE_1_TIDE_YOUTH.parquet · exists True — the P_AGE_1 table — L-G.1 pre_seen anchor
+  ALLOW research_outputs/tierc10/panel/control_journal.parquet · exists True — the control journal — L-1.7 F-CTRL(b) referee (200 rows, sha fcbf5db0…)
+  ALLOW research_outputs/tierc10/registrations/P-TRG-2.scored.json · exists True — the P-TRG-2 scored json — L-1.6 9/12 anchor, full-arm book_sha256 b2276fa4…
+  ALLOW research_outputs/tierc10/stamps/control_entry_by_state.parquet · exists True — the five-row table — L-R.7 anchor of R5
+  AMENDMENT CANDIDATES (3; NOT allowed — refused until ruled in):
+  REFUSED research_outputs/tierc10/PROGRESS.json — L-1.7 the sha of record of the filed control journal (stage PANEL/gate)
+  REFUSED research_outputs/tierc10/close/P_AGE_1_TIDE_YOUTH.md — L-G.1 pre_seen: the P_AGE_1 narrative that prints B4 OLD n 59 / −22.6566 R
+  REFUSED research_outputs/tierc10/data/STAGE_D_MANIFEST.json — L-0.2 clone provenance; read BEFORE ARMING by tierc10_panel's import (IMPORT_TC10_READS); refused after arming
+  Declared import-window reads (before arming; any other TC10 read in a window HALTs):
+  IMPORT-READ research_outputs/tierc10/data/STAGE_D_MANIFEST.json by window tierc10_panel — TP.resolve_unseen12() runs at import on TC10's record; TP._U12 is re-resolved from TC11's manifest after the windows
+[LEAN-HEPHAESTUS] L-0.3 LIMIT OF THE HOOK (AMENDMENT CANDIDATE text): Python-level opens only. Unseen: pyarrow native readers/writers (pq.read_table, pq.ParquetFile, pq.write_table, pa.memory_map, pyarrow.dataset, pyarrow.fs); pd.read_parquet(filesystem=…) and to_parquet(partition_cols=…); out-of-process I/O (subprocess, os.system, ctypes). hook_escapes(src) is the AST ban.
+[LEAN-HEPHAESTUS] L-1.3 ERA = the entry/anchor bar's CLOSE: tuning <= 2024-06-30T23:59:59Z (1719791999000), holdout after; TP.in_era / BK.require_era (bar OPEN) are not used for TC11 era gating.
+[LEAN-HEPHAESTUS] L-1.1/L-1.2 TOLLS (research_outputs/tierc11/data/fee_schedule.json): taker [5.0] bps/side of record; maker [2.0] bps/side ASSUMPTION; slippage twin by tier A 2.0, B 5.0, C 10.0
+
+F-SUBSTRATE — the audit hook refuses the TC10 snapshot, the live cache, unlisted TC10 records, guarded directory opens and the protected writes — by any alias; a representative run, watched independently, stays on TC11 + repo + the eight records
+  FAILS IF: a planted TC10-snapshot read (as written, case-varied, through the firmlink or /.nofollow, or dir_fd-relative — through a guarded directory or a sibling's '..'), D.OUT reverted to research_outputs/tierc10/data, an amendment-candidate TC10 read, a write under research_outputs/tierc10/ or scripts/tierc10_* or exchange/status/LEDGER* (as written, case-varied, through the firmlink, or dir_fd-relative), a live-cache open (as written or case-varied), or an AuditHalt swallowed in a thread is not refused by the hook's own named detector AND a forced exit 70; a case-varied / firmlinked .gitignore or LEDGER.md is not a protected write; or the representative run, seen by this file's recorder armed before the shim, opens a path outside {TC11 snapshot, repo minus research_outputs/tierc10, the eight allow-listed records, interpreter, OS subdirectories} (import phase: plus exactly the one declared import read), its TC10 reads differ from the shim's ALLOW log, or E.classify allows any file under research_outputs/tierc10 but the eight; or a shutil.rmtree of a temp tree whose subdirectories are named like guarded repo directories is refused
+  [BREAK] deliberate violation -> RED (correct): all 22 plants caught by their named detector, one at a time: TC10-snapshot read (pd.read_parquet) -> AuditHalt: TC11-AUDIT[tc10-snapshot]: open ~/.cache/naiad/snapshots/tc10_20260921/klines/BTCUSDT_4h.parquet — the TC10 snapshot and the live cache are READ-NEVER for TC11 · D.SNAPSHOT reverted to TC10, then D.load_asof -> AuditHalt: TC11-AUDIT[tc10-snapshot]: open ~/.cache/naiad/snapshots/tc10_20260921/klines/BTCUSDT_4h.parquet — the TC10 snapshot and the live cache are READ-NEVER for TC11 · D.SNAPSHOT = a CASE VARIANT of the TC10 snapshot (Tc10_20260921) -> AuditHalt: TC11-AUDIT[tc10-snapshot]: open ~/.cache/naiad/snapshots/tc10_20260921/klines/BTCUSDT_4h.parquet (opened as ~/.cache/naiad/snapshots/Tc10_20260921/klines/BTCUS · D.SNAPSHOT through the /System/Volumes/Data FIRMLINK -> AuditHalt: TC11-AUDIT[tc10-snapshot]: open ~/.cache/naiad/snapshots/tc10_20260921/klines/BTCUSDT_4h.parquet (opened as /System/Volumes/Data/Users/luis/.cache/naiad/snapsh · TB.KLINES through the /.nofollow prefix -> AuditHalt: TC11-AUDIT[tc10-snapshot]: open ~/.cache/naiad/snapshots/tc10_20260921/klines/BTCUSDT_4h.parquet (opened as /.nofollow/Users/luis/.cache/naiad/snapshots/tc10_2 · dir_fd-relative read: os.open(the snapshots dir), then tc10_20260921/… on it -> AuditHalt: TC11-AUDIT[dir-guard]: open ~/.cache/naiad/snapshots — a directory open of a protected root or its ancestor: a dir_fd-relative open through it could not be jud · dir_fd sibling '..': os.open(the TC11 snapshot dir), then ../tc10_20260921/… on it -> AuditHalt: TC11-AUDIT[tc10-snapshot]: open ~/.cache/naiad/snapshots/tc10_20260921/klines/BTCUSDT_4h.parquet — the TC10 snapshot and the live cache are READ-NEVER for TC11 · dir_fd write: scripts/ opened relative to the cwd while another dir fd is open, then tierc10_* on it -> AuditHalt: TC11-AUDIT[tierc10-script-write]: open scripts/tierc10___tc11_env_plant__/p.py — WRITE-NEVER for TC11 (a relative path, resolved against an open directory fd)  · D.OUT reverted to research_outputs/tierc10/data, then D.load_pin -> AuditHalt: TC11-AUDIT[tc10-unlisted]: open research_outputs/tierc10/data/AS_OF_PIN.json — not one of the 8 TC10 records L-0.3 allows [L-0.3] ‖ exit 70 · read of an AMENDMENT-CANDIDATE record (research_outputs/tierc10/PROGRESS.json) -> AuditHalt: TC11-AUDIT[tc10-unlisted]: open research_outputs/tierc10/PROGRESS.json — not one of the 8 TC10 records L-0.3 allows (an AMENDMENT CANDIDATE, not ruled in) [L-0 · write under research_outputs/tierc10/ (open 'w') -> AuditHalt: TC11-AUDIT[tierc10-write]: open research_outputs/tierc10/__tc11_env_plant__/p.txt — WRITE-NEVER for TC11 [L-0.3] ‖ exit 70 · write under research_outputs/TIERC10/ (case variant) -> AuditHalt: TC11-AUDIT[tierc10-write]: open research_outputs/TIERC10/__tc11_env_plant__/p.txt — WRITE-NEVER for TC11 [L-0.3] ‖ exit 70 · write under scripts/tierc10_* (os.open O_CREAT) -> AuditHalt: TC11-AUDIT[tierc10-script-write]: open scripts/tierc10___tc11_env_plant__/p.py — WRITE-NEVER for TC11 [L-0.3] ‖ exit 70 · write under scripts/TIERC10_* through the firmlink -> AuditHalt: TC11-AUDIT[tierc10-script-write]: open scripts/TIERC10___tc11_env_plant__/p.py (opened as /System/Volumes/Data/Users/luis/Naiad/scripts/TIERC10___tc11_env_plan · append under exchange/status/LEDGER* (open 'a') -> AuditHalt: TC11-AUDIT[ledger-write]: open exchange/status/LEDGER___tc11_env_plant__/p.md — WRITE-NEVER for TC11 [L-0.3] ‖ exit 70 · dir_fd-relative write: os.open(research_outputs), then tierc10/… on it -> AuditHalt: TC11-AUDIT[dir-guard]: open research_outputs — a directory open of a protected root or its ancestor: a dir_fd-relative open through it could not be judged [L-0 · live-cache open (path string only) -> AuditHalt: TC11-AUDIT[live-cache]: open ~/.cache/naiad/data_cache/__tc11_env_plant__/p.parquet — the TC10 snapshot and the live cache are READ-NEVER for TC11 [L-0.3] ‖ ex · live-cache open, CASE VARIANT (Data_Cache) -> AuditHalt: TC11-AUDIT[live-cache]: open ~/.cache/naiad/data_cache/__tc11_env_plant__/p.parquet (opened as ~/.cache/naiad/Data_Cache/__tc11_env_plant__/p.parquet) — the TC · an AuditHalt swallowed in a thread (main thread carries on) -> the main thread continued, the process exited 70: TC11-AUDIT: 1 BLOCKED attempt(s) in this process — exit forced to 70 [L-0.3] · write-class of .GITIGNORE (case variant; never opened) -> E._protected_write -> gitignore-write · write-class of LEDGER.MD (case variant; never opened) -> E._protected_write -> ledger-write · write-class of .gitignore through the firmlink (never opened) -> E._protected_write -> gitignore-write
+  [PASS] F-SUBSTRATE: BTCUSDT 4h 15440 rows via TB; v6 control over the full corridor (end == pin True) = 39 campaigns, last exit <= pin True; one allow-listed record read (200 rows). THIS file's recorder (armed before the shim) + its own roots: import phase 665 paths, outside the allowed classes 0, TC10 records read ['research_outputs/tierc10/data/STAGE_D_MANIFEST.json'] (== the one declared import read True); run phase 19 paths, outside 0, TC10 records read ['research_outputs/tierc10/panel/control_journal.parquet'] == the shim's ALLOW log ['research_outputs/tierc10/panel/control_journal.parquet']: True; BLOCKED 0; the 4 run-phase DATA opens ['[allow] research_outputs/tierc10/panel/control_journal.parquet', '[repo] research_outputs/tierc11/data/AS_OF_PIN.json', '[tc11] funding/BTCUSDT.parquet', '[tc11] klines/BTCUSDT_4h.parquet']; exit report ['TC11-AUDIT exit report: ALLOW 1 · BLOCKED 0']. E.classify over all 1183 files under research_outputs/tierc10: tc10-allow 8 == the eight typed records True, tc10-unlisted 1175, other classes 0, disagreements with this file's classifier 0; E.TC10_ALLOW == the eight True. shutil.rmtree of a temp tree with subdirectories named scripts / exchange / research_outputs / brk (opened relative to the walk's dir fd): exit 0, BLOCKED 0
+
+F-REROOT — the closed re-root list lands on its typed tierc11 / tc11_20260925 targets; no TC10 pin or Stage D record leaks
+  FAILS IF: a closed-list constant or extra re-root resolves anywhere but its typed target, a D/TP/BK/LN global names TC10 outside the declared set, a pin reads anything but 1790294400000, or TP._U12 is not TC11's Stage D record; or a shim skipping D.OUT / TP.AS_OF_PIN / D.SNAPSHOT imports without a POST-SHIM HALT, or one skipping D.OUT and the assertion, mis-targeting BK.OUT, or skipping the _U12 re-resolve escapes this fixture's own checks
+  [BREAK] deliberate violation -> RED (correct): all 7 plants caught by their named detector, one at a time: skip the D.OUT re-root -> HALT: POST-SHIM [L-0.3] — D.load_pin(): 1790006400000 (the TC10 pin LEAKED) vs 1790294400000 | no undeclared TC10 binding in the estate's module globals: 6 TC10 binding(s · skip the TP.AS_OF_PIN re-root -> HALT: POST-SHIM [L-0.3] — TP.stage_d_pin(): 1790006400000 (the TC10 pin LEAKED) vs 1790294400000 | no undeclared TC10 binding in the estate's module globals: 6 TC10 bindi · skip the D.SNAPSHOT re-root -> HALT: POST-SHIM [L-0.3] — D.kline_path('BTCUSDT','4h'): ~/.cache/naiad/snapshots/tc10_20260921/klines/BTCUSDT_4h.parquet | D.funding_path('BTCUSDT'): ~/.cache/naiad/snaps · skip D.OUT AND the post-shim assertion (D.load_pin reaches TC10's AS_OF_PIN.json: the armed hook must refuse it inside this fixture's pin check) -> D.load_pin(): REFUSED — TC11-AUDIT[tc10-unlisted]: open research_outputs/tierc10/data/AS_OF_PIN.json — not one of the 8 TC10 records L-0.3 allows [L-0.3] · D.OUT re-rooted to a stray pin record carrying TC10's pin value, post-shim assertion skipped (no TC10 path, so only this fixture's pin check can see it) -> D.load_pin() = 1790006400000 — THE TC10 PIN 1790006400000 LEAKED · BK.OUT re-rooted to research_outputs/tierc11 instead of tierc11/brk (post-shim blind to it) -> BK.OUT: resolves to research_outputs/tierc11, typed target research_outputs/tierc11/brk · skip the TP._U12 re-resolve (TC10's Stage D record stays; post-shim blind: the stems are equal) -> TP._U12[BTCUSDT].closed_4h_bars = 15420, TC11 manifest 15440
+  [PASS] F-REROOT: 52 checks on the live objects: 22 closed-list constants + 3 extra re-roots, each against ITS TYPED TARGET (this file's literals) + every D/TP/BK/LN global naming TC10 + 4 pins == 1790294400000 + TP._U12 closed_4h_bars on the 17 TC11 stems + TP.admission agreement; findings 0; re-roots not performed/printed 0 / not in the lean block 0; the shim's re-roots beyond the closed list: ['BK.TUNING_RESULT', 'D.SEED', 'TP.SEEDS', 'TP._U12 (+UNSEEN12_SOURCE/NAME_OF/UNRESOLVED, UNSEEN12, PANEL17)']
+
+F-CLOSURE-ENV — tierc11_env is range-free (fresh-interpreter closure + AST + no hook-escaping I/O); the range door opens only for tierc11_nest
+  FAILS IF: a fresh interpreter importing tierc11_env holds a module named with rangefinder / tierc10_census / tierc10_stamps / tierc10_null, the shim's source imports one anywhere or uses I/O the hook cannot see, a declared shim import is absent, the range door opens for a caller that is not tierc11_nest, or fails to open for one that is
+  [BREAK] deliberate violation -> RED (correct): all 5 plants caught by their named detector, one at a time: shadow shim importing tierc10_census after arming -> fresh-interpreter closure reaches ['analytics.rangefinder_census', 'tierc10_census'] · shadow shim importing tierc10_census before its self-check -> HALT: POST-SHIM [L-0.3] — no undeclared TC10 binding in the  … RANGE-FREE: no range module in the process: 2 ['analytics.rangefinder_census', 'tierc10_census'] · a lazy in-function tierc10_stamps import (invisible to a closure) -> AST scan: line 1385: tierc10_stamps · tc10_import(<a variable naming tierc10_census>, allow_range=True) from __main__ -> HALT: tc10_import('tierc10_census') from '__main__' — a range module; only tierc11_nest may import it (allow_range=True) [L-0.3] · a pq.read_table call planted in the shim (I/O the audit hook cannot see) -> HOOK-ESCAPE line 1386: read_table(…) — pyarrow native I/O
+  [PASS] F-CLOSURE-ENV: fresh interpreter: after `import tierc11_env` sys.modules holds 803 modules; names containing ['rangefinder', 'tierc10_census', 'tierc10_stamps', 'tierc10_null']: 0; AST scan of the shim (function bodies included): 0; hook_escapes(shim): 0; the other side of the wall — the 17 modules the shim declares are all loaded: True; the range door opens for a module named tierc11_nest: exit 0, tierc10_census loaded True, C.RETEST_PINS (margin, hold, ttl, grid sha) [1.0, 3, 400, '2135ca66']
+
+F-DET — two subprocess emissions under different hash seeds, one set of bytes
+  FAILS IF: the PYTHONHASHSEED 1 and 20260924 emissions of the lean block + probe differ from each other or from this run's bytes, or either exits nonzero
+  [BREAK] deliberate violation -> RED (correct): all 2 plants caught by their named detector, one at a time: one byte bent in a copy of the seed-20260924 emission -> seed 1 vs seed 20260924: bytes differ at byte 8815 (sha 2850fd461739… vs 21312fd0f3b7…) · a hash-order-dependent emission (set iteration) under the two seeds -> seed 1 vs seed 20260924: bytes differ at byte 17642 (sha 9e6a939acf08… vs 605452376dad…)
+  [PASS] F-DET: exit 0/0; 17631 bytes; sha 2850fd461739bfad… == 2850fd461739bfad… == this run 2850fd461739bfad…: True; the probe's key lines: ["TP.corridor_n(CLASSIC5): 2019-09-08T16:00:00Z -> 2026-09-25T00:00:00Z · end == pin True · binding ['BTCUSDT', 'ETHUSDT', 'NEARUSDT', 'SOLUSDT', 'ZECUSDT'] · substrate tc11_20260925 · stage_d_as_of_pin 2026-09-25T00:00:00Z", 'v6 control, BTCUSDT, full corridor: n 39 · sum net_r -4.942924 · first entry 2020-01-27T00:00:00Z · last entry 2026-09-14T16:00:00Z · book sha 7ecba6d6bb0080b2d785e63df71442c9d640ed321b8b243052de8769c37239e9']
+
+  4 GREEN, 0 RED

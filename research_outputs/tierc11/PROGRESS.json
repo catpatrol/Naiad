@@ -24,7 +24,7 @@
   "r0_census_utc": "2026-09-25T00:30:00Z",
   "r0_census": "fresh tier: no tierc11 artifact existed before STEP Q (b9ed953); nothing to verify or quarantine. TC10 CLOSE is PARTIAL (operator's close_acts.sh not run): the TC10 build doc is absent from exchange/reports and LEDGER_APOLLO has no TC10 block \u2014 TC11 builds on TC10's filed artifacts read-only and its CLOSE is ordered after TC10's (LEANS L-F.4).",
   "law_1_note": "a stage is COMPLETE only if its artifacts exist, manifest shas verify, and its fixtures RE-PASS now.",
-  "resume_point": "TC11-FOUNDATION (env shim, books + F-CTRL, nest, ride) then TC11-R",
+  "resume_point": "TC11-R (R1 print, R2 feasibility, R3 nest on the books, R4 grid + null, R5 chop) and the stage runners W/G/T/S/A/H",
   "stages": [
     {
       "stage": "STEP Q",
@@ -75,7 +75,7 @@
       "status": "COMPLETE-VERIFIED",
       "as_of": "2026-09-25T00:00:00Z",
       "blockers": [],
-      "artifact_count": 13,
+      "artifact_count": 16,
       "artifact_shas": {
         "research_outputs/tierc11/data/AS_OF_PIN.json": {
           "bytes": 1768,
@@ -93,41 +93,53 @@
           "bytes": 7489,
           "sha256": "c1fe3206fb099b01616a932746f6f65127dbef88861064aa49d6f56ba0816f39"
         },
+        "research_outputs/tierc11/data/FETCH_CLOCK_NOTE.json": {
+          "bytes": 12679,
+          "sha256": "719b5b955063e94e2aee52e8154f9da7f41d4912e04a649a58b42a604fe4dc48"
+        },
         "research_outputs/tierc11/data/FETCH_LOG.jsonl": {
           "bytes": 82122,
           "sha256": "bf34b4cd9f0f562f91358403a9d91b1d5ea3ed65057da92a781df98385e18ec7"
         },
         "research_outputs/tierc11/data/FIXTURES_DATA.txt": {
-          "bytes": 8912,
-          "sha256": "d179770f32db7158e1d01b7bec802dd6cdebe7094850af16b3a6461318cd3e3d"
+          "bytes": 32077,
+          "sha256": "dfcd9dabb230e33a7e796cf3412d116128687744adac8d6116777f21b8d824a2"
         },
         "research_outputs/tierc11/data/PRE_STATE.json": {
           "bytes": 62628,
           "sha256": "29361958c3f94bc7d6ff97f27542fc7e5c0cb61db1fab7e6945c8ec7beae37d0"
         },
+        "research_outputs/tierc11/data/RUN_ALL_STDOUT_20260925.txt": {
+          "bytes": 16191,
+          "sha256": "f76a837a1e44ad672475c35493d6a90c3b170fddfad9d08e320bb7fd7e8c5fab"
+        },
         "research_outputs/tierc11/data/STAGE_D_MANIFEST.json": {
-          "bytes": 574158,
-          "sha256": "106cc1f7222bf8fee9cb8c5a77dbc8651dd9169ff4fcc5f0266095f83c71c158"
+          "bytes": 591951,
+          "sha256": "0d8da58739bddcbf8c5243ef05bda67151a7b4d3957e10af28a8506c8d0ec712"
         },
         "research_outputs/tierc11/data/STAGE_D_MANIFEST.md": {
-          "bytes": 24684,
-          "sha256": "ce7248ef310e8599d05b44159bf81213cc30bedf98dc8474ce959fc45b47d850"
+          "bytes": 25683,
+          "sha256": "1f8e711391594bad6e7f5951c9437f8cbdf7ca18283022cf34d603fe3c636f24"
         },
         "research_outputs/tierc11/data/WRITE_ONCE_SEAL.json": {
           "bytes": 2390,
           "sha256": "055dab8cc11c3bd5b848ea0ee2a1a1a04049233d448a98234c9e9ac2ec9aeaeb"
         },
         "research_outputs/tierc11/data/fee_schedule.json": {
-          "bytes": 38620,
-          "sha256": "ee15621de529bf357f093d845ebdf746f1583038a3b17a7cb2c353135a715ad3"
+          "bytes": 38721,
+          "sha256": "6febe170d423b0ef37dca9fe95a7316e4259ef5a77e576cafa6781d581c1968b"
         },
         "scripts/tierc11_data.py": {
-          "bytes": 137162,
-          "sha256": "a080d78605c18bb11479429a287e82031b08aee131d20773245928932def1538"
+          "bytes": 145238,
+          "sha256": "fdb260301fee2d0c6c086fa6b9ecca588151c61fb5e9fcc72728b0be4273fcea"
         },
         "scripts/tierc11_data_fixtures.py": {
-          "bytes": 40236,
-          "sha256": "71e75105033f90bb38c7931258cb541276df4dc464b9a9b244bbbbafc67db56c"
+          "bytes": 138397,
+          "sha256": "a4b22d69319439913a6e36c57d480db5554d68678accf1d9e18472248bb4f591"
+        },
+        "scripts/tierc11_data_clock_note.py": {
+          "bytes": 18361,
+          "sha256": "9a43af4da8ed17514888d3e9917b2e54199e86d177884f162fa287897a71ecb8"
         }
       },
       "fixtures": [
@@ -141,10 +153,202 @@
           "transcript_sha_after": "d179770f32db7158e1d01b7bec802dd6cdebe7094850af16b3a6461318cd3e3d",
           "wall_seconds": null,
           "note": "re-run by the independent verifier: 9 GREEN, byte-identical transcript"
+        },
+        {
+          "suite": "TIER-C11 TC11-D DATA FIXTURES (hardened after round-2 verification)",
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": 14,
+          "transcript_drift": false,
+          "transcript_sha_before": "dfcd9dabb230e33a7e796cf3412d116128687744adac8d6116777f21b8d824a2",
+          "transcript_sha_after": "dfcd9dabb230e33a7e796cf3412d116128687744adac8d6116777f21b8d824a2",
+          "wall_seconds": null,
+          "note": "re-run 2026-09-25 at the foundation commit; 120 plants; manifest/md/fee_schedule re-filed by the hardening (0d8da587\u2026/1f8e7113\u2026/6febe170\u2026) \u2014 no number moved (F-D11-CLOCK diffs against e97ad73)"
         }
       ],
       "notes": "independent verifier: data correct (124 files swept, prefixes bit-identical to TC10, 0 gaps); 8 fixture-coverage defects (3 medium, 5 low) queued for hardening \u2014 see research_outputs/tierc11/review/TC11-D_VERIFY.md",
-      "one_line": "snapshot tc11_20260925 = APFS clone of tc10 (176/176 re-hashed) extended over REST to the pin 2026-09-25T00:00Z (venue closeTime 1790294399999); 19,645 new kline rows + 210 funding prints, 200 requests all 200, 0 gaps; manifest 106cc1f7\u2026; fee schedule adds maker 2.0 bps (ASSUMPTION) and charter slippage tiers; 9/9 fixtures GREEN."
+      "one_line": "snapshot tc11_20260925 = APFS clone of tc10 (176/176 re-hashed) extended over REST to the pin 2026-09-25T00:00Z (venue closeTime 1790294399999); 19,645 new kline rows + 210 funding prints, 200 requests all 200, 0 gaps; manifest 106cc1f7\u2026; fee schedule adds maker 2.0 bps (ASSUMPTION) and charter slippage tiers; 9/9 fixtures GREEN. \u00b7 hardened: 14/14 fixtures, 120 plants; manifest re-filed 0d8da587\u2026 (text + added keys only)."
+    },
+    {
+      "stage": "TC11-ENV",
+      "status": "COMPLETE-VERIFIED",
+      "as_of": "2026-09-25T00:00:00Z",
+      "blockers": [],
+      "artifact_count": 3,
+      "artifact_shas": {
+        "scripts/tierc11_env.py": {
+          "bytes": 68545,
+          "sha256": "1526093b25161927337ced6112a310075b1a57c825f08705814e48619398f798"
+        },
+        "scripts/tierc11_env_fixtures.py": {
+          "bytes": 62862,
+          "sha256": "53a4d7306a7cf67f81e0b78ea9f5dbbf425459d0163147ca04ffcccb1ab27f22"
+        },
+        "research_outputs/tierc11/env/FIXTURES_ENV.txt": {
+          "bytes": 27785,
+          "sha256": "4475d95f0bb4130b6b3eb8e11c9415e94ce4b2a7e051761a1e01320d65cc2ea6"
+        }
+      },
+      "fixtures": [
+        {
+          "suite": "TIER-C11 ENV SHIM FIXTURES",
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": 4,
+          "transcript_drift": false,
+          "transcript_sha_before": "4475d95f0bb4130b6b3eb8e11c9415e94ce4b2a7e051761a1e01320d65cc2ea6",
+          "transcript_sha_after": "4475d95f0bb4130b6b3eb8e11c9415e94ce4b2a7e051761a1e01320d65cc2ea6",
+          "wall_seconds": null
+        }
+      ],
+      "one_line": "range-free shim: guarded TC10 modules imported under an env window, 26 re-roots + 4 extra, post-shim pin assertion, audit hook (inode+casefold canonicalisation, dir-fd resolution, exit 70 on any block); allow-list = 6 L-0.3 records + 2 by AM-1"
+    },
+    {
+      "stage": "TC11-BOOKS",
+      "status": "COMPLETE-VERIFIED",
+      "as_of": "2026-09-25T00:00:00Z",
+      "blockers": [],
+      "artifact_count": 9,
+      "artifact_shas": {
+        "scripts/tierc11_books.py": {
+          "bytes": 61781,
+          "sha256": "e025499d92b25231c676aaac17abffedba4dcc9d4821174fcd9f3566bd821313"
+        },
+        "scripts/tierc11_books_fixtures.py": {
+          "bytes": 73920,
+          "sha256": "4aa0994c54b523e2c7235da3214d507a6d16f40ca6210099d333339a65fa0267"
+        },
+        "research_outputs/tierc11/books/BOOKS.md": {
+          "bytes": 9889,
+          "sha256": "7b4e37d5b8e00208b52c8fa630a32abe7e08a738e6861e9a624cfb01afb05d5d"
+        },
+        "research_outputs/tierc11/books/FIXTURES_BOOKS.txt": {
+          "bytes": 20970,
+          "sha256": "336a2163e9bd8df8fd40d1fdb6949a0251529c0f34a5c025e4ff6b3d31b45c10"
+        },
+        "research_outputs/tierc11/books/build_manifest.json": {
+          "bytes": 7744,
+          "sha256": "04f129b7731f700a3cf5eea0775e0a05792e7abd2ec458585feb4768a196bd24"
+        },
+        "research_outputs/tierc11/books/trg912_campaigns.parquet": {
+          "bytes": 75359,
+          "sha256": "46ef63c5fe348871f5601ba2c7768008b195b7934e1cb5dc2f0b49c5a39f87c4"
+        },
+        "research_outputs/tierc11/books/trg912_journal.parquet": {
+          "bytes": 70918,
+          "sha256": "1ac9e317f0966c9cfb86a3129d1758590bb949db350993463c006bc33ccaca5f"
+        },
+        "research_outputs/tierc11/books/v6_campaigns.parquet": {
+          "bytes": 75048,
+          "sha256": "aab06934ae92689ef2e0fcc6b857350cf397ddca7a0a57e180960c51669b28e5"
+        },
+        "research_outputs/tierc11/books/v6_journal.parquet": {
+          "bytes": 70081,
+          "sha256": "deb70b099593f0a8096f3437e0a1aa5dfb5d6a9835dc596d161303ee86b42a5c"
+        }
+      },
+      "fixtures": [
+        {
+          "suite": "TIER-C11 BOOKS FIXTURES",
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": 8,
+          "transcript_drift": false,
+          "transcript_sha_before": "336a2163e9bd8df8fd40d1fdb6949a0251529c0f34a5c025e4ff6b3d31b45c10",
+          "transcript_sha_after": "336a2163e9bd8df8fd40d1fdb6949a0251529c0f34a5c025e4ff6b3d31b45c10",
+          "wall_seconds": null
+        }
+      ],
+      "one_line": "v6 n 200 (\u03a3R +40.807565, sha f3c68f54\u2026) and 9/12 n 199 (sha 2c32fd60\u2026) on the TC11 corridor; F-CTRL-a 0.000e+00; F-CTRL-b 199 filed closed campaigns exact + the ETH continuation; 9/12 re-anchored to TC10's b2276fa4\u2026 (n 198); TC10's P_AGE_1 bands reproduced exactly; 55-column campaign tables"
+    },
+    {
+      "stage": "TC11-NEST",
+      "status": "COMPLETE-VERIFIED",
+      "as_of": "2026-09-25T00:00:00Z",
+      "blockers": [],
+      "artifact_count": 7,
+      "artifact_shas": {
+        "scripts/tierc11_nest.py": {
+          "bytes": 99239,
+          "sha256": "16e325022523064e67eede439998e9ee4cacfeb0df8171202a85b46125827429"
+        },
+        "scripts/tierc11_nest_fixtures.py": {
+          "bytes": 107951,
+          "sha256": "950cf175fd537961be1608374319bd1d60aeaa414431a4667fb2a2ef64a3d3b3"
+        },
+        "research_outputs/tierc11/ranges/FIXTURES_NEST.txt": {
+          "bytes": 43710,
+          "sha256": "513551f5ad5dae8ea007f376467c4f436fd962e418b47e45bf88d8b6207e132e"
+        },
+        "research_outputs/tierc11/ranges/SCALE_GRID.parquet": {
+          "bytes": 75579,
+          "sha256": "9072aeabd0bbcd2c5f26da2bcbad1e071173721ebda3b5db3211aeb7d1606919"
+        },
+        "research_outputs/tierc11/ranges/SCALE_PICKS.json": {
+          "bytes": 59799,
+          "sha256": "cb5319c975e44df610c05f5917759b7b47d819fa095b8af26d174d79fcef454f"
+        },
+        "research_outputs/tierc11/ranges/SCALE_PICKS.md": {
+          "bytes": 39671,
+          "sha256": "431d144e501c320adff742cd3e07e2eb21a586be970427ee26a3c4acd9eb719c"
+        },
+        "research_outputs/tierc11/ranges/SCALE_PICKS_SOURCES.json": {
+          "bytes": 19340,
+          "sha256": "c6344309ebbc15aa7b316ae217d67b6783f500861a7c8d5ec6732bbfe04a7bab"
+        }
+      },
+      "fixtures": [
+        {
+          "suite": "TIER-C11 NEST (RANGE LAYER) FIXTURES",
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": 7,
+          "transcript_drift": false,
+          "transcript_sha_before": "513551f5ad5dae8ea007f376467c4f436fd962e418b47e45bf88d8b6207e132e",
+          "transcript_sha_after": "513551f5ad5dae8ea007f376467c4f436fd962e418b47e45bf88d8b6207e132e",
+          "wall_seconds": null
+        }
+      ],
+      "one_line": "range layer: pins = TC10 sha (12/12), 71 scale picks filed write-once (57 tuning-era, 14 IN-SAMPLE fallbacks), nest vector with signed distance + coincidence, first-that-holds scan (254,819 rows == a plain loop; 20,779 tap / 7,869 memory-line deaths rescued after a failed touch); F-NEST-ASOF 1,000 cuts 0 mismatches, leaked redraw RED"
+    },
+    {
+      "stage": "TC11-RIDE",
+      "status": "COMPLETE-VERIFIED",
+      "as_of": "2026-09-25T00:00:00Z",
+      "blockers": [],
+      "artifact_count": 3,
+      "artifact_shas": {
+        "scripts/tierc11_ride.py": {
+          "bytes": 68153,
+          "sha256": "65eb880f2b127a26cc07a6bf40e6ca6556dac37aa62bdfef45e3b045aa26915d"
+        },
+        "scripts/tierc11_ride_fixtures.py": {
+          "bytes": 151880,
+          "sha256": "b2aa257c19a1298c46db5423b37b2ff68450dc28ad4a9057a1a2294edfe7506e"
+        },
+        "research_outputs/tierc11/ride/FIXTURES_RIDE.txt": {
+          "bytes": 27862,
+          "sha256": "578d6399a00bc345ba2c4079aeb6585bb0d3cf8bf0c34794fd52bf1ed93b3e91"
+        }
+      },
+      "fixtures": [
+        {
+          "suite": "TIER-C11 RIDE FIXTURES",
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_total": 9,
+          "transcript_drift": false,
+          "transcript_sha_before": "578d6399a00bc345ba2c4079aeb6585bb0d3cf8bf0c34794fd52bf1ed93b3e91",
+          "transcript_sha_after": "578d6399a00bc345ba2c4079aeb6585bb0d3cf8bf0c34794fd52bf1ed93b3e91",
+          "wall_seconds": null
+        }
+      ],
+      "one_line": "1h-walk ride with warn / add / TP / relay hooks: v6 identity 200/200 at 0.000e+00 with the walk on; 1,800 relays == a hand walk; 4,007 split-point continuations; mismatch-bar law on 16 corridor bars; adds via _account_chain (AM-3)"
     }
-  ]
+  ],
+  "amendments_of_record": {
+    "path": "research_outputs/tierc11/LEANS_AMENDMENTS.md",
+    "sha256": "0fa0477e3c3bca6b7b85714b98605b3c21b82cf7abafc7232a4b8825ff7e554a"
+  },
+  "last_sweep_utc": "2026-09-25 (foundation commit): 42 fixtures across 5 suites re-run GREEN"
 }

@@ -1,0 +1,242 @@
+as_of_last_closed_4h: 2026-09-25T00:00:00Z
+==============================================================================
+TIER-C11 TC11-R FIXTURES — scripts/tierc11_nest.py (THE RANGE LAYER; L-0.3, L-R.2, L-R.3, L-R.5, L-R.6, L-F.1, L-F.2) — break leg first, RED or void
+==============================================================================
+seed 20260924 · substrate tc11_20260925 · pin 1790294400000
+[LEAN-HEPHAESTUS] L-0.3 TC11 RANGE LAYER (tierc11_nest) · substrate tc11_20260925 · pin 2026-09-25T00:00:00Z (1790294400000) · seed 20260924
+[LEAN-HEPHAESTUS] L-0.3 SECOND IMPORT WINDOW (through E.tc10_import, the range door):
+  window tierc10_census   env tc10_20260921 · new modules ['analytics.rangefinder_census', 'tierc10_census'] · tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+  window tierc10_stamps   env tc10_20260921 · new modules ['tierc10_stamps'] · tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+  window tierc10_null     env tc10_20260921 · new modules ['tierc10_null'] · tc10-snapshot/live touches 0 · protected writes 0 · undeclared tc10 reads 0
+  (the windows' data opens are TREE-DEPENDENT — the census import reads TC10's ROOT-relative, gitignored census dir, absent in a review worktree — so they are printed by `tierc11_nest.py` to stdout, never in this block [verifier finding 3])
+[LEAN-HEPHAESTUS] L-0.3 RE-ROOTS (30; each verified to exist before assignment):
+  RE-ROOT C.SNAPSHOT
+      ~/.cache/naiad/snapshots/tc10_20260921
+   -> ~/.cache/naiad/snapshots/tc11_20260925   [L-0.3]
+  RE-ROOT C.OUT
+      research_outputs/tierc10/census
+   -> research_outputs/tierc11/census   [L-0.3 — the ONE TC11 census root, shared with the env shim's BK.TUNING_RESULT_FOR / BK.HEIGHT_VS_TOLL_PATH / _VERDICT_PATH (BK.grid_toll_atr reads through C.get_toll = C.OUT/outcome_grid.parquet) [verifier finding 10: two roots refused]]
+  RE-ROOT C.STAGE_D
+      research_outputs/tierc10/data
+   -> research_outputs/tierc11/data   [L-0.3]
+  RE-ROOT C.NULL_ROOT
+      research_outputs/tierc10/null
+   -> research_outputs/tierc11/ranges/null   [L-0.3]
+  RE-ROOT C.SEED
+      20260921
+   -> 20260924   [L-0.3]
+  RE-ROOT C.LENSES
+      ('5m', '4h', '1d')
+   -> ('5m', '4h', '1d', '15m', '1h', '12h', '1w')   [L-0.3 (a TUPLE: rebound, read at call time by load_tape)]
+  RE-ROOT C.LENS_MS['15m']
+      '(absent)'
+   -> 900000   [L-0.3]
+  RE-ROOT C.LENS_MS['1h']
+      '(absent)'
+   -> 3600000   [L-0.3]
+  RE-ROOT C.LENS_MS['12h']
+      '(absent)'
+   -> 43200000   [L-0.3]
+  RE-ROOT C.LENS_MS['1w']
+      '(absent)'
+   -> 604800000   [L-0.3 (Tape.step / head() keep the lens step)]
+  RE-ROOT C.LENS_SOURCE['15m']
+      '(absent)'
+   -> '15m'   [L-0.3 native]
+  RE-ROOT C.LENS_SOURCE['1h']
+      '(absent)'
+   -> '1h'   [L-0.3 native]
+  RE-ROOT C.LENS_SOURCE['12h']
+      '(absent)'
+   -> '12h'   [L-0.3 native]
+  RE-ROOT C.LENS_SOURCE['1w']
+      '(absent)'
+   -> '1w'   [L-0.3 the Stage-D-derived 1w file]
+  RE-ROOT C.TS_FMT['15m']
+      '(absent)'
+   -> '%Y-%m-%dT%H:%M'   [L-0.3]
+  RE-ROOT C.TS_FMT['1h']
+      '(absent)'
+   -> '%Y-%m-%dT%H:%M'   [L-0.3]
+  RE-ROOT C.TS_FMT['12h']
+      '(absent)'
+   -> '%Y-%m-%dT%H:%M'   [L-0.3]
+  RE-ROOT C.TS_FMT['1w']
+      '(absent)'
+   -> '%Y-%m-%d'   [L-0.3]
+  RE-ROOT C.toll_bps_for
+      tierc10_census.toll_bps_for
+   -> tierc11_nest.toll_bps_for11   [finding: the label leak at tierc10_census.py:520 (TC10's fee-file path typed into the source label) — overridden; the bps is the census function's own]
+  RE-ROOT ST.SNAPSHOT
+      ~/.cache/naiad/snapshots/tc10_20260921
+   -> ~/.cache/naiad/snapshots/tc11_20260925   [L-0.3]
+  RE-ROOT ST.OUT
+      research_outputs/tierc10/stamps
+   -> research_outputs/tierc11/ranges/stamps   [L-0.3]
+  RE-ROOT ST.OUT_RERUN
+      research_outputs/tierc10_run2/stamps
+   -> research_outputs/tierc11/_det_rerun/stamps   [L-0.3+ missed: research_outputs/tierc10_run2/stamps (the env's _det_rerun law)]
+  RE-ROOT ST.SEED
+      20260921
+   -> 20260924   [L-0.3+ missed: stamps' own seed, bound at import]
+  RE-ROOT ST.LENS_MS['15m']
+      '(absent)'
+   -> 900000   [L-0.3 (dict(C.LENS_MS) copied at import)]
+  RE-ROOT ST.LENS_MS['1h']
+      '(absent)'
+   -> 3600000   [L-0.3]
+  RE-ROOT ST.LENS_MS['12h']
+      '(absent)'
+   -> 43200000   [L-0.3]
+  RE-ROOT ST.LENS_MS['1w']
+      '(absent)'
+   -> 604800000   [L-0.3]
+  RE-ROOT NL.SEED
+      20260921
+   -> 20260924   [L-0.3+ missed: null.SEED = C.SEED copied at import]
+  RE-ROOT NL.OUT
+      research_outputs/tierc10/null
+   -> research_outputs/tierc11/ranges/null   [L-0.3+ missed: research_outputs/tierc10/null]
+  RE-ROOT C.RETEST_PINS
+      as resolved at census import from the ROOT-relative census dir (tree-dependent — gitignored, absent in a review worktree — so not printed)
+   -> re-resolved from the absolute main-tree research_outputs/tierc10/census/TUNING_RESULT.json: margin_atr 1.0 · hold_bars 3 · ttl_bars 400 · grid_sha '2135ca663a7c407ca1a2a99165692bd3a9a9cd90de458e03dabdc2e32855e7b3' · status 'TUNED-PINS (R1 protocol, tuning era only)'   [L-0.3 / buildability 8: TC10 records are read by absolute main-tree path]
+[LEAN-HEPHAESTUS] L-0.3 LEFT AS IS (declared; not re-rooted):
+  tierc10_census.LIVE_CACHE = ~/.cache/naiad/data_cache  [live-cache] — a GUARD constant: the path assert_substrate refuses, never read
+  tierc10_stamps.LIVE_CACHE = ~/.cache/naiad/data_cache  [live-cache] — a GUARD constant: the path assert_substrate refuses, never read
+[LEAN-HEPHAESTUS] L-0.3 POST-SHIM ASSERTION, tierc11_nest's half (11 clauses):
+  ok  C.STAGE_D / C.SNAPSHOT are TC11's (checked FIRST; no read goes through a TC10 root): research_outputs/tierc11/data · tc11_20260925
+  ok  one census root: C.OUT == the env shim's BK census paths' dir == research_outputs/tierc11/census: 6 bindings -> ['research_outputs/tierc11/census']
+  ok  C.as_of_close_ms(s)[0] == 1790294400000 for every CLASSIC5 + UNSEEN12 stem: 17 stems, 0 wrong · source ['Stage D AS_OF_PIN.json']
+  ok  C.RETEST_PINS == {margin_atr 1.0, hold_bars 3, ttl_bars 400, grid_sha 2135ca66…}: margin 1.0 hold 3 ttl 400 grid 2135ca663a7c407c…
+  ok  C.LENS_MS == stamps.LENS_MS == E.LENS_MS (extended in place): ['5m', '15m', '1h', '4h', '12h', '1d', '1w'] / ['5m', '15m', '1h', '4h', '12h', '1d', '1w']
+  ok  C.LENSES / LENS_SOURCE / TS_FMT cover the seven lenses: ['5m', '4h', '1d', '15m', '1h', '12h', '1w']
+  ok  C.Tape.head() keeps the lens step: Tape('1w').head(2).step 604800000
+  ok  C.ERA_BOUNDARY_MS == E.ERA_CUT_MS: 1719791999000
+  ok  C.toll_bps_for(s) == TC11 fee_schedule taker round trip, labelled TC11: 17 stems, 0 wrong · e.g. (10.0, 'research_outputs/tierc11/data/fee_schedule.json[BTCUSDT].round_trip_bps_used')
+  ok  no undeclared TC10 binding in the census / stamps / null globals: 2 TC10 binding(s), 0 undeclared
+  ok  seeds re-rooted (C / stamps / null): C 20260924 · ST 20260924 · NL 20260924
+[LEAN-HEPHAESTUS] L-R.3 PINS = TC10 sha — verified at import, HALT on any mismatch:
+  analytics/rangefinder_census.py sha256 19c5507ff2d39b68aa119ff701aef58a2d219fa287c34cdf7302ebf2bbb7b37d == STEP0_RECORD sha256_expected == literal: True
+  engine/rangefinder.py sha256 bbae464fdc8e0e01fc90b286aa79e726fcff4422e6118dee1173f2460dab84d4 == STEP0_RECORD sha256_expected == literal: True
+  the 12 pins, key order of record (research_outputs/tierc10/STEP0_RECORD.json pins_of_record; PINS-OK 12/12 — port == machine == Pine, key order included):
+    LEG_MIN           0.5
+    REV_MIN           1.75
+    TOUCH_EPS         0.6
+    DEV_RETURN_BARS   7
+    BREAK_CONFIRM_N   8
+    BREAK_MARGIN      1.5
+    BOUNDARY_MODE     'body'
+    SCALE_MULT        3.0
+    FLIP_HOLD_MARGIN  1.0
+    FLIP_HOLD_BARS    6
+    MEM_TTL_BARS      400
+    ATR_LEN           14
+  recipe preconditions (not in the 12; asof_view asserts them): REDRAW_BASIS 'wick' · MULTI_ACTIVE 0 · MEM_CAP_PER_SIDE 6
+  C.RETEST_PINS: margin_atr 1.0 · hold_bars 3 · ttl_bars 400 · grid_sha 2135ca663a7c407ca1a2a99165692bd3a9a9cd90de458e03dabdc2e32855e7b3 · status 'TUNED-PINS (R1 protocol, tuning era only)' (the ONE 5m-tuned pair, applied to every lens)
+[LEAN-HEPHAESTUS] L-R.1 LENSES: ['5m', '15m', '1h', '4h', '12h', '1d', '1w'] x CLASSIC5; [1h, 4h, 1d] x the twelve. Nest lenses ['1h', '4h', '12h', '1d', '1w'], ladder 1h -> 4h -> 12h -> 1d -> 1w. Loader = C.load_tape through the extended dicts: closed bars <= the pin, full history, ATR = engine.indicators.atr(h, l, c, 14) on the whole tape (asserted); 1d derived from native 4h == Stage D's 1d file (C's HALT); 1w = Stage D's derived file == derive_1w(derive_1d(native 4h)) (asserted).
+[LEAN-HEPHAESTUS] L-R.2 L-R.2: pick of record = C.calibrate(tape.head(C.era_cut(tape))) — the 11-cell grid 1.5..4.0, the density nearest 0.75 confirmed ranges / 100 bars, ties toward 3.0 then lower — on the TUNING era (bar CLOSE <= 2024-06-30T23:59:59Z); where the tuning era holds fewer than 400 bars of the lens the pick falls back to the WHOLE tape and is labelled IN-SAMPLE everywhere. calibrate()'s hard-coded calibrated_in_sample=True is overwritten with the true flag. The whole-tape pick, the first-half-of-tuning pick (stability) and the frozen 3.0 ride beside. The picks are PINS: every reader takes them from this file and never re-fits.
+[LEAN-HEPHAESTUS] R-NEST-1 STATE (four-valued, tierc10_stamps.macro_state_of's collapse): a live confirmed range -> IN_RANGE; otherwise the machine's latch +1 BULL_EXP / -1 BEAR_EXP; latch 0 outside a range (no pivot sealed yet) or no closed bar of L yet -> NONE.
+[LEAN-HEPHAESTUS] R-NEST-2 SIGNED DISTANCE: + when bot <= close <= top (inclusive) at L's as-of bar, - beyond; |value| = the as-of view's dist_atr (the nearest boundary, ATR of that bar); near_side beside (+1 top / -1 bottom, tie -> top).
+[LEAN-HEPHAESTUS] R-NEST-3 COINCIDENCE: per side of L, |L boundary - L+1 top or bottom| <= 0.25 x ATR_L (INCLUSIVE; ATR_L = ATR of L's as-of bar; all four pairings); both L and L+1 must hold a LIVE confirmed range at their as-of bars — otherwise False (a fact, not NA); NA only when L has no L+1 (1w: 'no lens above') or L / L+1 is outside the commission (the twelve's 12h and 1w, hence their 4h and 1d coincidence).
+[LEAN-HEPHAESTUS] R-NEST-4 MEMORY-LINE TWIN (coin_*_mem): L+1's LIVE memory lines are admitted beside its live boundaries. A line = a dead macro range's boundary AS-OF bar die_i - 1 (the view, full precision; the leash's own line is the machine's end-of-life boundary, equal because no harden falls at or after die_i — asserted per death). LIVE = the engine's LIVE (engine/rangefinder.py H3: unfrozen, unexpired): born at die_i, live until its FIRST leash event — the first two-sided touch freezes it, a cap / ttl expiry ends it — each known at its own bar; read at L+1's as-of bar.
+[LEAN-HEPHAESTUS] R-NEST-5 OUT OF RANGE: pct, signed distance, top, bot, bnd_age are NaN / NA; state, flip (polarity, age) and deviations CARRY — deviations are the live range's hardens per side, and out of range the LAST live range's final counts as of its last in-range bar (die_i - 1), 0 before the first range (the as-of view resets them to 0 at a death; the nest and range_facts carry them instead) [verifier finding 4].
+[LEAN-HEPHAESTUS] R-SCAN-1 BANDS (tap89 / tap127 / tap200, C.band_of EMAs of close on L's own bars, C.RETEST_PINS 1.0 ATR / 3 bars / ttl 400): C.retest_holds' touch law and test, applied to EVERY qualifying touch in bar order in (die_i, min(die_i + 400, next_die - 1, n - 1)]; the first hold is the event (known at touch + 3) and ends the scan; truncated ends it; every evaluated touch is a row. Twin: C.retest_holds itself (one-shot).
+[LEAN-HEPHAESTUS] R-SCAN-2 MEMORY LINE: the dead range's BROKEN-side line (top after a top death, bottom after a bottom death), same window with MEM_TTL_BARS 400; a qualifying touch contains the line (l <= px <= h), its prior close sat STRICTLY beyond it on the die side (the band law; the engine's own flip test reads c[j-1] <= px for a bottom line — equal except on an exact tie), and the line is unexpired (no cap / ttl expiry at or before the bar); hold = no close through by 1.0 ATR over touch..touch + 6, known at touch + 6. Twin: the engine's one-shot flip evaluation (leash flip / failed through / truncated), unbounded by the next death, as the engine has it.
+[LEAN-HEPHAESTUS] R-CELL L+1 PARTITION: L+1 read as-of the event's known_at instant; IN_RANGE_COINCIDENT when the event's boundary of L (BREAKOUT: broken side at die_i - 1; SWING-FAILURE: deviated side at harden_i - 1, post-redraw at harden_i the Tier-E twin) is within 0.25 x ATR_L (L's as-of bar at the instant) of either live L+1 boundary; IN_RANGE_MID when L+1 pct in [25, 75] (inclusive) and not coincident; IN_RANGE_OTHER otherwise; EXP_ALIGNED / EXP_COUNTER by the L+1 latch vs the event direction; NONE; NA without an L+1. cell_mem = the twin admitting L+1's live memory lines.
+[LEAN-HEPHAESTUS] R-CAL-1 calibrated_in_sample is overwritten with the TRUE flag, as text per window: tuning 'IN-SAMPLE for tuning · OUT-OF-SAMPLE for holdout'; whole 'IN-SAMPLE for tuning AND holdout'; first half 'IN-SAMPLE for the first half of tuning · OUT-OF-SAMPLE after it' — with in_sample_tuning / in_sample_holdout booleans beside. First half = tape.head(t_cut // 2). The 400-bar floor is C.TUNE_MIN_BARS.
+[LEAN-HEPHAESTUS] R-FACTS range_facts is a plain dict of numpy arrays; per-bar arrays are as-of their bar, event arrays carry *_known_at (a reader at bar k filters known_at <= k; a memory line is live at k iff born <= k < end_live). Codes: state4 0 NONE · 1 BULL_EXP · -1 BEAR_EXP · 2 IN_RANGE; verdict 1 hold · 0 failed · -1 truncated; coin_* 1 · 0 · -1 NA; base_cell_long / _short = the L+1 cell of every closed bar of L, CELL_CODE order 0 EXP_ALIGNED · 1 EXP_COUNTER · 2 IN_RANGE_COINCIDENT · 3 IN_RANGE_MID · 4 IN_RANGE_OTHER · 5 NONE · 6 NA.
+[LEAN-HEPHAESTUS] R-BASE-COIN (a sub-reading of L-R.6's base rate, declared [verifier finding 12]): the base rate anchors at EVERY closed bar k of L and has no event side, so its coincidence of record is L's nest flag coin_top OR coin_bot at k (either boundary of L coincides with L+1). Rival, printed beside as twins: the per-side base cells base_cell_{long,short}_topside (coin_top alone) and _botside (coin_bot alone), so an event can be set against the base of its own side (BREAKOUT: the broken side; SWING-FAILURE: the deviated side).
+[LEAN-HEPHAESTUS] R-LABEL (L-R.2 'labelled IN-SAMPLE everywhere', 'a change is flagged on every row that consumes that lens') [verifier finding 5]: every row that reads a lens carries pick_window ('tuning' · 'whole-tape (fallback)' · 'frozen3.0'), scale_in_sample (a calibrated read at an instant <= 2024-06-30T23:59:59Z, or ANY read of a fallback pick; never frozen 3.0; the instant = the nest instant, an event's known close, a bar's close, a memory line's birth close) and stability_changed (first half of tuning != tuning pick; NA without a tuning pick). Nest columns L_pick_window / L_scale_in_sample / L_stability_changed; event frames and l1_cell (l_ / u_ prefixes) and range_facts beside.
+[LEAN-HEPHAESTUS] R-CENSUS-ROOT one TC11 census root, research_outputs/tierc11/census: C.OUT (the census's own outputs, C.get_toll) and the env shim's BK.TUNING_RESULT_FOR / HEIGHT_VS_TOLL paths agree (asserted in the post-shim) [verifier finding 10].
+[LEAN-HEPHAESTUS] NEVER READ: Range.top / .bottom / .n_deviations, or a price from an event. The machine is reached only here; decision modules receive range_facts().
+
+F-PINS — pins = TC10 sha: the port, the engine, the 12 pins in key order and the retest grid pins equal STEP0_RECORD and the literals of record; HALT at import otherwise
+  [BREAK] FAILS IF: a perturbed input to N.pins_findings (pin value, pin type, key order, port / engine sha, provisional hold 6, grid sha, foreign port file) is not refused by its named detector, or a tierc11_nest with a bent port literal imports without the PINS HALT
+  [BREAK] deliberate violation -> RED (correct): all 10 plants caught by their named detector, one at a time: TOUCH_EPS perturbed 0.60 -> 0.61 (live) -> PINS-12: pin TOUCH_EPS live 0.61 (float) != record 0.6 (float) · ATR_LEN 14 handed as the float 14.0 -> PINS-12: pin ATR_LEN live 14.0 (float) != record 14 (int) · the record's DEV_RETURN_BARS 7 -> 8 -> PINS-12: pin DEV_RETURN_BARS live 7 (int) != record 8 (int) · TOUCH_EPS and DEV_RETURN_BARS swapped in key order -> PINS-ORDER: live key order ['LEG_MIN', 'REV_MIN', 'DEV_RETURN_BARS', 'TOUCH_EPS', 'BREAK_CONFIRM_N', 'BREAK_MARGIN', 'BOUNDARY_MODE', 'SCALE_MULT', 'FLIP_HOLD_MARGIN', 'F · the port sha bent by one hex digit -> PORT-SHA: analytics/rangefinder_census.py hashes 19c5507ff2d39b68aa119ff701aef58a2d219fa287c34cdf7302ebf2bbb7b370, STEP0_RECORD expects 19c5507ff2d39b68aa119ff701aef58a2d · the engine sha bent by one hex digit -> ENGINE-SHA: engine/rangefinder.py hashes bbae464fdc8e0e01fc90b286aa79e726fcff4422e6118dee1173f2460dab84d0, STEP0_RECORD expects bbae464fdc8e0e01fc90b286aa79e726fcff4422e6 · the PROVISIONAL retest hold 6 (a worktree's fallback) -> RETEST-PINS: C.RETEST_PINS['hold_bars'] = 6 != 3 · the retest grid sha bent -> RETEST-PINS: C.RETEST_PINS['grid_sha'] = '2135ca663a7c407ca1a2a99165692bd3a9a9cd90de458e03dabdc2e32855e7b0' != '2135ca663a7c407ca1a2a99165692bd3a9a9cd90de458e03dabdc2e328 · a port imported from another file -> PORT-FILE: the imported port is scripts/rangefinder_core.py, not analytics/rangefinder_census.py (tree-relative) · a mutated tierc11_nest whose port literal is bent (import must HALT) -> SystemExit: HALT: PINS [L-R.3] — PORT-SHA: analytics/rangefinder_census.py hashes 19c5507ff2d39b68aa119ff701aef58a2d219fa287c34cdf7302ebf2bbb7b37d, STEP0_RECORD expects 1
+  [REAL]  FAILS IF: the port / engine sha, a pin's value, type or key order, or the retest pins differ from STEP0_RECORD or the literals typed here
+      [LEAN-HEPHAESTUS] L-R.3 PINS = TC10 sha — verified at import, HALT on any mismatch:
+        analytics/rangefinder_census.py sha256 19c5507ff2d39b68aa119ff701aef58a2d219fa287c34cdf7302ebf2bbb7b37d == STEP0_RECORD sha256_expected == literal: True
+        engine/rangefinder.py sha256 bbae464fdc8e0e01fc90b286aa79e726fcff4422e6118dee1173f2460dab84d4 == STEP0_RECORD sha256_expected == literal: True
+        the 12 pins, key order of record (research_outputs/tierc10/STEP0_RECORD.json pins_of_record; PINS-OK 12/12 — port == machine == Pine, key order included):
+          LEG_MIN           0.5
+          REV_MIN           1.75
+          TOUCH_EPS         0.6
+          DEV_RETURN_BARS   7
+          BREAK_CONFIRM_N   8
+          BREAK_MARGIN      1.5
+          BOUNDARY_MODE     'body'
+          SCALE_MULT        3.0
+          FLIP_HOLD_MARGIN  1.0
+          FLIP_HOLD_BARS    6
+          MEM_TTL_BARS      400
+          ATR_LEN           14
+        recipe preconditions (not in the 12; asof_view asserts them): REDRAW_BASIS 'wick' · MULTI_ACTIVE 0 · MEM_CAP_PER_SIDE 6
+        C.RETEST_PINS: margin_atr 1.0 · hold_bars 3 · ttl_bars 400 · grid_sha 2135ca663a7c407ca1a2a99165692bd3a9a9cd90de458e03dabdc2e32855e7b3 · status 'TUNED-PINS (R1 protocol, tuning era only)' (the ONE 5m-tuned pair, applied to every lens)
+  [PASS] F-PINS: N.pins_findings: 0 findings []; the 12 live pins == STEP0_RECORD pins_of_record == the 12 typed here, values + types + key order: True; port 19c5507ff2d39b68… / engine bbae464fdc8e0e01… == the typed literals: True; C.RETEST_PINS (1.0, 3, 400, 2135ca663a7c407c…) == typed: True
+
+F-REROOT-NEST — the census / stamps / null re-roots land on their typed tierc11 targets; the post-shim handoff holds; one census root; a fresh interpreter reads only the two allowed TC10 records
+  [BREAK] FAILS IF: a mutated copy skipping the C.STAGE_D re-root (-> the ROOTS clause, checked first, the same detector in every tree), re-rooting C.OUT to a second census root, skipping the C.LENS_MS['1h'] extension, the stamps.OUT re-root, the toll label override or the C.SEED re-root, or resolving the provisional retest pins, imports without its own HALT
+  [BREAK] deliberate violation -> RED (correct): all 7 plants caught by their named detector, one at a time: C.STAGE_D re-root skipped (every later read would go through TC10's data dir) -> SystemExit: HALT: POST-SHIM [L-0.3, tierc11_nest] — C.STAGE_D / C.SNAPSHOT are TC11's (checked FIRST; no read goes through a TC10 root): research_outputs/tierc10/data · t · C.OUT re-rooted to a SECOND census root (tierc11/ranges/census) -> SystemExit: HALT: POST-SHIM [L-0.3, tierc11_nest] — one census root: C.OUT == the env shim's BK census paths' dir == research_outputs/tierc11/census: 6 bindings -> ['rese · C.LENS_MS['1h'] extension skipped -> SystemExit: HALT: POST-SHIM [L-0.3, tierc11_nest] — C.LENS_MS == stamps.LENS_MS == E.LENS_MS (extended in place): ['5m', '15m', '4h', '12h', '1d', '1w'] / ['5m', '15m', ' · stamps.OUT re-root skipped -> SystemExit: HALT: POST-SHIM [L-0.3, tierc11_nest] — no undeclared TC10 binding in the census / stamps / null globals: 3 TC10 binding(s), 1 undeclared: tierc10_stamps.OUT= · the toll label override skipped (the census.py:520 leak) -> SystemExit: HALT: POST-SHIM [L-0.3, tierc11_nest] — C.toll_bps_for(s) == TC11 fee_schedule taker round trip, labelled TC11: 17 stems, 17 wrong {'BTCUSDT': (10.0, 'researc · C.SEED re-root skipped (TC10's 20260921 survives) -> SystemExit: HALT: POST-SHIM [L-0.3, tierc11_nest] — seeds re-rooted (C / stamps / null): C 20260921 · ST 20260924 · NL 20260924 ‖ exit 0 · the PROVISIONAL retest pins resolved (a worktree without TUNING_RESULT) -> SystemExit: HALT: PINS [L-R.3] — RETEST-PINS: C.RETEST_PINS['hold_bars'] = 6 != 3 | RETEST-PINS: C.RETEST_PINS['grid_sha'] = None != '2135ca663a7c407ca1a2a99165692bd3a9a9
+  [REAL]  FAILS IF: a typed C.* / stamps.* / null.* re-root misses, the census roots are not the one typed root, a post-shim clause is not ok, a TC10 binding of the three modules is undeclared, or the fresh import does not exit 0 with BLOCKED 0 and ALLOW ⊆ {STEP0_RECORD, TUNING_RESULT}
+  [PASS] F-REROOT-NEST: 24 typed re-roots land on their targets (0 misses []); one census root research_outputs/tierc11/census; post-shim 11 clauses, 0 not ok; 2 TC10 bindings left in census/stamps/null, all declared (0 undeclared []); toll label 'research_outputs/tierc11/data/fee_schedule.json[BTCUSDT].round_trip_bps_used'; a fresh interpreter importing tierc11_nest: exit 0, BLOCKED 0, TC10 reads ['research_outputs/tierc10/STEP0_RECORD.json', 'research_outputs/tierc10/census/TUNING_RESULT.json'] ⊆ the two the nest needs: True
+
+F-CAL — every filed pick, grid row, honesty label and input sha reproduces from an INDEPENDENT path (snapshot files, tuning bars by close, fresh ATR, the typed density loop and tie-break); write-once holds
+  [BREAK] FAILS IF: N.pick_findings lets through a whole-tape pick labelled out-of-sample, a fallback relabelled out-of-sample or a dropped cell; the grid-row check lets through one bent n_confirmed; the sources check lets through one bent input sha; or the label check lets through labels dropped from every row
+  [BREAK] deliberate violation -> RED (correct): all 6 plants caught by their named detector, one at a time: the WHOLE-TAPE pick filed as the pick of record, labelled out-of-sample -> (25 cells planted) TUNING-HEAD: BTCUSDT 5m pick of record 1.75 / filed tuning 1.75 != the pick fit on the tuning head alone 1.5 · every in-sample fallback relabelled out-of-sample -> (14 cells planted) IN-SAMPLE-LABEL: PUMPUSDT 1h has 0 < 400 tuning bars but is labelled 'tuning' / in_sample_holdout False / 'OUT-OF-SAMPLE for holdout (tuning-era pi' · one cell dropped from the record -> COVERAGE: 70 filed cells vs the commission's 71 · one filed grid row's n_confirmed bent by 1 (BTC 4h tuning, scale 3.0) -> GRID-ROWS: BTCUSDT 4h tuning scale 3.0: ['n_confirmed'] filed [41] vs independent [40] · one input sha bent in a copy of the provenance sidecar -> SOURCES: BTCUSDT 4h klines/BTCUSDT_4h.parquet sha 281c3ac3195e5bb8de6b211573f77919bb2af2a342f71162426085f54bf37bf0 vs snapshot 281c3ac3195e5bb8de6b211573f77919bb2af2a342f · the honesty labels dropped (every lens read as a tuning pick, stable) -> LABEL: scale_label(BTCUSDT, 5m, frozen3.0) {'pick_window': 'tuning', 'fallback': False, 'in_sample_holdout': False, 'stability_changed': False} != typed {'pick_window': '
+  [REAL]  FAILS IF: the typed commission (71) != N.PICK_CELLS; any pick of record / tuning / whole-tape / first-half pick, stability flag, window text, fallback label or first-half bar count differs from the independent path; any of the filed grid rows differs from the independent machine; the grid's content sha is not the record's; the sidecar's input shas differ from the snapshot or STAGE_D_MANIFEST or it does not annotate the filed json; a nest / event label differs from the typed law; or a second build is not refused
+      picks filed: 71 cells (57 tuning-era picks, 14 IN-SAMPLE fallbacks: BTCUSDT 1w, ETHUSDT 1w, SOLUSDT 1w, NEARUSDT 1w, ZECUSDT 1w, ENAUSDT 1d, PUMPUSDT 1h, PUMPUSDT 4h, PUMPUSDT 1d, HYPEUSDT 1h, HYPEUSDT 4h, HYPEUSDT 1d, MNTUSDT_BYBIT 1d, 1000BONKUSDT 1d)
+      tuning pick != whole-tape pick on 25 cells: BTCUSDT 5m 1.5/1.75, BTCUSDT 15m 1.75/2, BTCUSDT 1h 1.75/2, BTCUSDT 12h 2/1.75, ETHUSDT 5m 1.5/1.75, ETHUSDT 15m 2/1.75, ETHUSDT 12h 1.5/2, SOLUSDT 1h 1.75/2, SOLUSDT 1d 2.25/2.5, NEARUSDT 1h 1.75/2, NEARUSDT 4h 1.75/2, NEARUSDT 12h 2.25/2, ENAUSDT 1h 1.5/1.75, ENAUSDT 4h 2.75/2.25, MNTUSDT_BYBIT 1h 2.25/2, SUIUSDT 4h 2.25/1.75, SUIUSDT 1d 2.25/2.5, XMRUSDT 4h 1.75/1.5, BNBUSDT 1h 1.75/2, BNBUSDT 4h 2/1.75, BNBUSDT 1d 1.75/2, 1000PEPEUSDT 4h 2/1.75, 1000PEPEUSDT 1d 3/2.25, 1000BONKUSDT 1h 2/1.75, 1000BONKUSDT 4h 2/1.75
+      stability (CLASSIC5 x 1h/4h/12h, first half vs tuning) changed on 7: BTCUSDT 1h: first half 2.0 vs tuning 1.75; BTCUSDT 12h: first half 1.75 vs tuning 2.0; ETHUSDT 12h: first half 2.0 vs tuning 1.5; SOLUSDT 1h: first half 2.0 vs tuning 1.75; SOLUSDT 12h: first half 1.75 vs tuning 2.25; NEARUSDT 1h: first half 2.0 vs tuning 1.75; NEARUSDT 4h: first half 2.0 vs tuning 1.75
+      picks of record at the grid edge (a clamp, not a fit): BTCUSDT 5m 1.5, ETHUSDT 5m 1.5, ETHUSDT 12h 1.5, ENAUSDT 1h 1.5, XMRUSDT 1h 1.5, XMRUSDT 1d 1.5
+      provenance sidecar SCALE_PICKS_SOURCES.json: 71 cells, annotates SCALE_PICKS.json sha256 cb5319c975e44df6…; 71 distinct input files hashed here == STAGE_D_MANIFEST
+  [PASS] F-CAL: 71 cells (71 typed = 5 x 7 + 12 x 3) recomputed on the INDEPENDENT path (snapshot files, tuning = bars with close <= 1719791999000, fresh ATR, RC.run_machine at the 11 typed scales, the typed tie-break): 57 tuning picks and 14 whole-tape fallbacks labelled IN-SAMPLE reproduce, every whole-tape / first-half pick and stability flag reproduces, 2035 filed grid rows == the independent machine (n_confirmed, density, coverage, lifetime, window facts, true in-sample text); SCALE_GRID content sha d2b5ec141516d7be… == the record's; the sidecar's input shas == the snapshot == STAGE_D_MANIFEST; honesty labels on 280 nest lens-rows and 6322 event rows == the typed law; a second build refused (write-once) — 0 findings []
+
+F-NEST-ASOF — the nest vector is AS-OF (prefix == full at every cut, every lens cut at one instant, the scale held at the filed pick) AND RIGHT (== the end-of-prefix machine oracle)
+  [BREAK] FAILS IF: the leaked-redraw reader or the flip-at-stamp reader is not caught by the prefix check on EVERY asset, or the top/bottom-swapped reader or the pre-repair deviation reset (causal, wrong) is not caught by the machine oracle on EVERY asset
+  [BREAK] deliberate violation -> RED (correct): all 4 plants caught by their named detector, one at a time: LEAKED REDRAW (top / bot read off Range.top / .bottom — end-of-run values) -> nest vector RED on all 5 assets (597 cut-lens readings; the oracle saw 982), e.g. BTCUSDT 1h cut 1587927600000 (flip-hold): nest vector columns ['1h_pct', '1h_dist_signed · FLIP AT ITS STAMP BAR (flip polarity / age from the touch bar, not touch + 6) -> nest vector RED on all 5 assets (331 cut-lens readings; the oracle saw 4670), e.g. BTCUSDT 1h cut 1587927600000 (flip-hold): nest vector columns ['1h_flip_age'] · TOP / BOTTOM SWAPPED (a CAUSAL but wrong reader: prefix-invariant by construction) -> machine oracle RED on all 5 assets (1992 cut-lens readings; the prefix check saw 0), e.g. machine oracle: BTCUSDT 1h cut 1587927600000 (flip-hold): 1h ['top', 'bot', 'pct · DEVIATIONS RESET out of range (the PRE-REPAIR reader; causal, so prefix-invariant) -> machine oracle RED on all 5 assets (1285 cut-lens readings; the prefix check saw 0), e.g. machine oracle: BTCUSDT 1h cut 1587927600000 (flip-hold): 4h ['dev_bot'] nest [0
+  [REAL]  FAILS IF: on any CLASSIC5 asset, any of >= 40 cuts per nest lens gives a prefix nest vector != the full-run vector (at the cut or at a lens's last three closes), a lens's as-of arrays or event frames known by the cut != the full run's, any lens's field at the cut != the end-of-prefix machine oracle, or no out-of-range reading carries deviations
+      BTCUSDT: cuts per lens {'1h': 40, '4h': 40, '12h': 40, '1d': 40, '1w': 40} · aimed {'confirm': 30, 'death': 30, 'flip-hold': 30, 'harden': 26, 'random': 84} · 2283 instants compared · 20000 as-of arrays · 602207 events known by the cut · 1000 oracle lens-readings (270 out of range with carried deviations) · honest mismatches 0 / oracle 0
+      ETHUSDT: cuts per lens {'1h': 40, '4h': 40, '12h': 40, '1d': 40, '1w': 40} · aimed {'confirm': 30, 'death': 28, 'flip-hold': 30, 'harden': 26, 'random': 86} · 2280 instants compared · 20000 as-of arrays · 546765 events known by the cut · 1000 oracle lens-readings (207 out of range with carried deviations) · honest mismatches 0 / oracle 0
+      SOLUSDT: cuts per lens {'1h': 40, '4h': 40, '12h': 40, '1d': 40, '1w': 40} · aimed {'confirm': 28, 'death': 26, 'flip-hold': 30, 'harden': 26, 'random': 90} · 2330 instants compared · 20000 as-of arrays · 483115 events known by the cut · 1000 oracle lens-readings (241 out of range with carried deviations) · honest mismatches 0 / oracle 0
+      NEARUSDT: cuts per lens {'1h': 40, '4h': 40, '12h': 40, '1d': 40, '1w': 40} · aimed {'confirm': 28, 'death': 25, 'flip-hold': 30, 'harden': 26, 'random': 91} · 2296 instants compared · 20000 as-of arrays · 539169 events known by the cut · 1000 oracle lens-readings (231 out of range with carried deviations) · honest mismatches 0 / oracle 0
+      ZECUSDT: cuts per lens {'1h': 40, '4h': 40, '12h': 40, '1d': 40, '1w': 40} · aimed {'confirm': 30, 'death': 30, 'flip-hold': 30, 'harden': 28, 'random': 82} · 2280 instants compared · 20000 as-of arrays · 512001 events known by the cut · 1000 oracle lens-readings (336 out of range with carried deviations) · honest mismatches 0 / oracle 0
+      scale HELD at the filed pick (SCALE_PICKS.json) on every prefix: this fixture does NOT test the pick — the pick is a pin, fitted once [L-R.5].
+  [PASS] F-NEST-ASOF: 1000 cuts over 5 CLASSIC5 assets x 5 nest lenses (min 40 per lens; seeded random mid-bar instants + aimed at hardens, confirms, deaths and flip hold windows), every lens cut at the one instant: the prefix nest vector == the full-run nest vector at the cut and at each lens's last three closes, every lens's 20 as-of arrays == full[:t], the death / harden / memory-line / scan frames known by the cut == the full run's; and at every cut every lens's 17 fields == the END-OF-PREFIX MACHINE ORACLE (5000 lens-readings, 1285 of them out of range with carried deviations) — 0 mismatches
+
+F-EQ-SCAN — the first-retest-that-holds scan: EVERY row == a plain-loop scan; its first row per DIE IS the one-shot detector; the memory-line scan's first row IS the engine's flip evaluation
+  [BREAK] FAILS IF: a scan that skips the first touch is not caught by the one-shot comparison, or the ONE-SHOT rule / a skipped SECOND touch, on the taps or on the memory line, is not caught by the plain-loop row comparison
+  [BREAK] deliberate violation -> RED (correct): all 5 plants caught by their named detector, one at a time: taps: a scan that SKIPS the first qualifying touch -> BTCUSDT 1w calibrated tap89: first evaluated row per DIE != C.retest_holds (3 vs 3 rows; first difference at 0: {'rid': 1, 'side': 'top', 'die_i': 48, 'touch_i': 125, 'kn · taps: the ONE-SHOT rule (the scan stops after the first touch, whatever its verdict) -> SCAN-ROWS: BTCUSDT 1w calibrated tap127: 3 module rows vs 5 plain-loop rows; first difference at row 3: None vs ('tap127', 270, 5, 'top', 1, 1, 348, 351, 'failed', False) · taps: the SECOND qualifying touch skipped -> SCAN-ROWS: BTCUSDT 1w calibrated tap127: 4 module rows vs 5 plain-loop rows; first difference at row 3: ('tap127', 270, 5, 'top', 1, 1, 364, 367, 'truncated', False) vs ( · memory line: the ONE-SHOT rule -> SCAN-ROWS: BTCUSDT 1d calibrated memory-line: 13 module rows vs 20 plain-loop rows; first difference at row 3: ('memory-line', 865, 10, 'bottom', -1, 0, 879, 885, 'failed · memory line: the SECOND qualifying touch skipped -> SCAN-ROWS: BTCUSDT 1d calibrated memory-line: 17 module rows vs 20 plain-loop rows; first difference at row 3: ('memory-line', 865, 10, 'bottom', -1, 0, 879, 885, 'failed
+  [REAL]  FAILS IF: on any CLASSIC5 asset x 7 lenses x {calibrated, frozen3.0}, any scan row (taps 89/127/200, memory line, every seq) differs from the plain loop typed here, the first evaluated row per DIE differs from C.retest_holds or BK.band_hold_candidates, the scan breaks its own law, the memory-line first row differs from the engine's one-shot flip in the window, N.SCAN_BANDS != typed, or no DIE is rescued (taps, memory line)
+      calibrated  5m: 28072 DIEs · taps 89/127/200: 78014 scan rows == the plain loop's 78014 · 62109 one-shot rows == the scan's first rows · one-shot holds 47545 · first-that-holds 55214 (rescued after a failed touch 7669) · memory line: 33322 rows == the plain loop, holds 17381 (rescued 3476); 21332 first rows == the engine flip, 6740 DIEs with no in-window engine evaluation
+      calibrated 15m: 8769 DIEs · taps 89/127/200: 25376 scan rows == the plain loop's 25376 · 20192 one-shot rows == the scan's first rows · one-shot holds 15487 · first-that-holds 17956 (rescued after a failed touch 2469) · memory line: 10133 rows == the plain loop, holds 5437 (rescued 1048); 6619 first rows == the engine flip, 2150 DIEs with no in-window engine evaluation
+      calibrated  1h: 2251 DIEs · taps 89/127/200: 6614 scan rows == the plain loop's 6614 · 5286 one-shot rows == the scan's first rows · one-shot holds 4022 · first-that-holds 4674 (rescued after a failed touch 652) · memory line: 2623 rows == the plain loop, holds 1390 (rescued 258); 1706 first rows == the engine flip, 545 DIEs with no in-window engine evaluation
+      calibrated  4h: 536 DIEs · taps 89/127/200: 1607 scan rows == the plain loop's 1607 · 1315 one-shot rows == the scan's first rows · one-shot holds 1045 · first-that-holds 1186 (rescued after a failed touch 141) · memory line: 597 rows == the plain loop, holds 310 (rescued 55); 399 first rows == the engine flip, 137 DIEs with no in-window engine evaluation
+      calibrated 12h: 179 DIEs · taps 89/127/200: 499 scan rows == the plain loop's 499 · 395 one-shot rows == the scan's first rows · one-shot holds 302 · first-that-holds 354 (rescued after a failed touch 52) · memory line: 183 rows == the plain loop, holds 100 (rescued 11); 128 first rows == the engine flip, 51 DIEs with no in-window engine evaluation
+      calibrated  1d: 93 DIEs · taps 89/127/200: 255 scan rows == the plain loop's 255 · 212 one-shot rows == the scan's first rows · one-shot holds 159 · first-that-holds 182 (rescued after a failed touch 23) · memory line: 105 rows == the plain loop, holds 56 (rescued 6); 67 first rows == the engine flip, 26 DIEs with no in-window engine evaluation
+      calibrated  1w: 10 DIEs · taps 89/127/200: 38 scan rows == the plain loop's 38 · 23 one-shot rows == the scan's first rows · one-shot holds 13 · first-that-holds 21 (rescued after a failed touch 8) · memory line: 8 rows == the plain loop, holds 8 (rescued 0); 8 first rows == the engine flip, 2 DIEs with no in-window engine evaluation
+       frozen3.0  5m: 13036 DIEs · taps 89/127/200: 49335 scan rows == the plain loop's 49335 · 36445 one-shot rows == the scan's first rows · one-shot holds 27397 · first-that-holds 34288 (rescued after a failed touch 6891) · memory line: 17630 rows == the plain loop, holds 9233 (rescued 2188); 10753 first rows == the engine flip, 2283 DIEs with no in-window engine evaluation
+       frozen3.0 15m: 4107 DIEs · taps 89/127/200: 15723 scan rows == the plain loop's 15723 · 11669 one-shot rows == the scan's first rows · one-shot holds 8821 · first-that-holds 10942 (rescued after a failed touch 2121) · memory line: 5248 rows == the plain loop, holds 2869 (rescued 634); 3314 first rows == the engine flip, 793 DIEs with no in-window engine evaluation
+       frozen3.0  1h: 1087 DIEs · taps 89/127/200: 4092 scan rows == the plain loop's 4092 · 3066 one-shot rows == the scan's first rows · one-shot holds 2314 · first-that-holds 2871 (rescued after a failed touch 557) · memory line: 1325 rows == the plain loop, holds 752 (rescued 143); 864 first rows == the engine flip, 223 DIEs with no in-window engine evaluation
+       frozen3.0  4h: 298 DIEs · taps 89/127/200: 1064 scan rows == the plain loop's 1064 · 823 one-shot rows == the scan's first rows · one-shot holds 648 · first-that-holds 781 (rescued after a failed touch 133) · memory line: 354 rows == the plain loop, holds 196 (rescued 37); 232 first rows == the engine flip, 66 DIEs with no in-window engine evaluation
+       frozen3.0 12h: 91 DIEs · taps 89/127/200: 320 scan rows == the plain loop's 320 · 247 one-shot rows == the scan's first rows · one-shot holds 195 · first-that-holds 232 (rescued after a failed touch 37) · memory line: 108 rows == the plain loop, holds 61 (rescued 8); 69 first rows == the engine flip, 22 DIEs with no in-window engine evaluation
+       frozen3.0  1d: 53 DIEs · taps 89/127/200: 168 scan rows == the plain loop's 168 · 131 one-shot rows == the scan's first rows · one-shot holds 94 · first-that-holds 116 (rescued after a failed touch 22) · memory line: 47 rows == the plain loop, holds 35 (rescued 5); 37 first rows == the engine flip, 16 DIEs with no in-window engine evaluation
+       frozen3.0  1w: 6 DIEs · taps 89/127/200: 25 scan rows == the plain loop's 25 · 15 one-shot rows == the scan's first rows · one-shot holds 9 · first-that-holds 13 (rescued after a failed touch 4) · memory line: 6 rows == the plain loop, holds 6 (rescued 0); 6 first rows == the engine flip, 0 DIEs with no in-window engine evaluation
+  [PASS] F-EQ-SCAN: 5 assets x 7 lenses x 2 scale kinds: EVERY scan row (254819, every seq, taps 89/127/200 and the memory line) == the plain-loop scan typed here (own EMA, own loops, the machine's own line); the first evaluated row per DIE == C.retest_holds == BK.band_hold_candidates; the scan's own law holds on every (band, DIE); the memory-line first row == the engine's one-shot flip wherever that evaluation lies in the window; 20779 tap and 7869 memory-line DIEs rescued after a failed touch (the rule the one-shot twin cannot see) — 0 findings
+
+F-COIN — boundary coincidence (0.25 x ATR_L, live boxes, all four pairings; the memory-line twin) on planted configurations and on every real closed bar
+  [BREAK] FAILS IF: COIN_FRAC 0.5, or memory lines ignored, leaves every hand-computed configuration GREEN
+  [BREAK] deliberate violation -> RED (correct): all 2 plants caught by their named detector, one at a time: COIN_FRAC 0.25 -> 0.5 -> hand-computed config 'same-side top 0.4 of 0.5; bottom 0.8 (inside 1.0)': got (True, True, True, True), hand-computed (True, False, True, False) · L+1 memory lines ignored (none live) -> hand-computed config 'L+1 out of range; live memory lines 0.2 and 0.3 ATR away': got (False, False, False, False), hand-computed (False, False, False, True)
+  [REAL]  FAILS IF: a planted configuration differs from its hand-computed flags, a real nest row's flags differ from an independent plain-Python recomputation, the NA structure (1w; the twelve's 12h / 1w and 4h / 1d coincidence) is wrong, or N.LADDER != typed
+      1h vs 4h: over every closed 1h bar of CLASSIC5 — coin_top 13762 · coin_bot 14545 · with memory lines 14566 / 15629
+      4h vs 12h: over every closed 4h bar of CLASSIC5 — coin_top 5276 · coin_bot 5514 · with memory lines 5397 / 5677
+      12h vs 1d: over every closed 12h bar of CLASSIC5 — coin_top 1751 · coin_bot 2389 · with memory lines 2319 / 2817
+      1d vs 1w: over every closed 1d bar of CLASSIC5 — coin_top 46 · coin_bot 18 · with memory lines 46 / 18
+  [PASS] F-COIN: 5 planted configurations == hand-computed; 391482 real nest rows (every closed 1h/4h/12h/1d bar of CLASSIC5) == an independent plain-Python recomputation of all four flags; 1w coincidence NA; the twelve: 12h/1w NA, 4h/1d coincidence NA, 1h live; the ladder == typed — 0 findings
+
+F-DET — [L-F.1 variant (i)] two subprocess BUILDS under different hash seeds: one file set, one set of bytes, one parquet content sha — and the filed pick files
+  [BREAK] FAILS IF: a bent byte, a hash-order-dependent emission, an extra file, a parquet whose content moved, or a rebuilt SCALE_PICKS.json one byte off the filed one is not caught by its named detector
+  [BREAK] deliberate violation -> RED (correct): all 5 plants caught by their named detector, one at a time: one byte bent in a copy of the seed-20260924 emission -> seed 1 vs seed 20260924: NEST_PROBE.txt: bytes differ at byte 15021 (sha 8ca29f0de036… vs 3b126a66a8e1…) · a hash-order-dependent emission (set iteration) under the two seeds -> seed 1 vs seed 20260924: NEST_PROBE.txt: bytes differ at byte 15150 (sha 13ed96858450… vs 81f0847a9f36…) · an extra file in one build's set -> file set: seed 1 ['NEST_PROBE.txt', 'picks/SCALE_PICKS.json', 'picks/SCALE_PICKS.md', 'picks/SCALE_PICKS_SOURCES.json'] vs seed 20260924 ['NEST_PROBE.txt', 'picks/EXTRA.j · a parquet whose content moved between the builds (one density bent) -> parquet content sha: picks/SCALE_GRID.parquet seed 1 4f3cda2ef45c… vs seed 20260924 6cc69b1da576… · a rebuilt SCALE_PICKS.json one byte off the FILED record (both builds agree) -> picks/SCALE_PICKS.json: bytes != the FILED SCALE_PICKS.json (differ at byte 19933)
+  [REAL]  FAILS IF: the PYTHONHASHSEED 1 and 20260924 builds (lean block + range probe + the four pick files rebuilt into their own _det_ roots) differ in file set, bytes or parquet content sha from each other, the probe differs from this run's, a rebuilt pick file differs from the FILED one (the parquet by the record's content sha), or either exits nonzero
+  [PASS] F-DET: exit 0/0; the two hash-seed subprocess builds hold the typed file set ['NEST_PROBE.txt', 'picks/SCALE_GRID.parquet', 'picks/SCALE_PICKS.json', 'picks/SCALE_PICKS.md', 'picks/SCALE_PICKS_SOURCES.json']; bytes (parquet: content sha) equal under both seeds: NEST_PROBE.txt 8ca29f0de036fd77… · picks/SCALE_GRID.parquet d2b5ec141516d7be… · picks/SCALE_PICKS.json cb5319c975e44df6… · picks/SCALE_PICKS.md 431d144e501c320a… · picks/SCALE_PICKS_SOURCES.json c6344309ebbc15aa…; NEST_PROBE.txt == this run (30043 bytes); the rebuilt SCALE_PICKS.json / .md / SCALE_PICKS_SOURCES.json == the FILED bytes and the rebuilt grid's content sha == the record's: True
+
+  7 GREEN, 0 RED

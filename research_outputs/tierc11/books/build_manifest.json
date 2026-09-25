@@ -1,0 +1,179 @@
+{
+  "anchors": {
+    "f_912_anchor": {
+      "arm": "trg-9/12 vs card v6 \u00b7 CLASSIC5 \u00b7 full",
+      "book_sha256": "b2276fa487119ef12a8e0434e54f9b77efbfb7ee387b3cb35d2955043c371a8f",
+      "filed": "research_outputs/tierc10/registrations/P-TRG-2.scored.json",
+      "n": 198
+    },
+    "f_age_anchor": {
+      "filed": "research_outputs/tierc10/close/P_AGE_1_TIDE_YOUTH.parquet",
+      "prefix_band_shared": 200,
+      "reproduced": true,
+      "whole_corridor_streak_edges_for_the_shadow_caveat": {
+        "tc10_window": [
+          88.0,
+          206.0,
+          396.0
+        ],
+        "tc11_corridor": [
+          88.0,
+          206.0,
+          396.0
+        ]
+      }
+    },
+    "f_ctrl_a": {
+      "n": 200,
+      "window_ok": true,
+      "worst": 0.0
+    },
+    "f_ctrl_b": {
+      "continuations": [
+        {
+          "asset": "ETHUSDT",
+          "entry_ts": "2026-09-18T08:00:00Z",
+          "filed_exit": "2026-09-21T12:00:00Z corridor_end net +3.642965",
+          "live_exit": "2026-09-23T12:00:00Z stop net +2.707180"
+        }
+      ],
+      "filed": "research_outputs/tierc10/panel/control_journal.parquet",
+      "filed_bytes": 70102,
+      "filed_sha256": "fcbf5db0480416b0a5c7f704987980aea220650cb0764d5dd4095611fae64c1c",
+      "n_closed_compared": 199,
+      "n_filed": 200,
+      "new": []
+    },
+    "referees": {
+      "as_of_close_ms_typed": 1790294400000,
+      "filed_journal_rows": 200,
+      "filed_journal_rows_typed": 200,
+      "filed_journal_sha256_typed": "fcbf5db0480416b0a5c7f704987980aea220650cb0764d5dd4095611fae64c1c",
+      "held": true,
+      "trg2_book_sha256_typed": "b2276fa487119ef12a8e0434e54f9b77efbfb7ee387b3cb35d2955043c371a8f",
+      "trg2_n_typed": 198
+    },
+    "v6_tc10_window": {
+      "book_sha256": "2bd244bfa0a1349ee73aa51e61619e3dda1257eafe3f613df4524a4d87909acd",
+      "filed_base_sha256": "2bd244bfa0a1349ee73aa51e61619e3dda1257eafe3f613df4524a4d87909acd",
+      "n": 200
+    }
+  },
+  "as_of": "2026-09-25T00:00:00Z",
+  "as_of_close_ms": 1790294400000,
+  "as_of_pin_record": {
+    "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+    "latest_closed_4h_at_pin_run": "2026-09-25T00:00:00Z",
+    "path": "research_outputs/tierc11/data/AS_OF_PIN.json",
+    "pin_equals_latest_closed_at_pin_run": true
+  },
+  "book_sha": {
+    "trg912": "2c32fd60924336acc7c48852143d47661a5eb83f12c047ac8b041ad90046e030",
+    "v6": "f3c68f544bcda52c909374105dabbdc773c9bffa4b66b2ef7e0f35ac9b369132"
+  },
+  "collar": {
+    "applies_to": "every descriptive table of BOOKS.md [L-1.4]",
+    "gates": "nothing",
+    "selection_not_a_result": "a SELECTION, not a result",
+    "tier": "TIER-E"
+  },
+  "column_notes": {
+    "exit_close_ms": "the exit bar's close; on an intrabar (stop) exit this is the close-stamped twin \u2014 POST-EVENT [L-R.5]",
+    "exit_event_ms": "L-R.5 event stamp: 'intrabar_open' = the exit bar's OPEN for a stop exit; 'close' = the bar close for bell / corridor_end",
+    "latch_1r_open_ms": "the +1R latch bar's OPEN (intrabar event) [L-R.5]",
+    "tide_abs_gt206": "streak > 206 is L-G.1's ABSOLUTE SHADOW, printed as written: 206 is the whole-corridor MEDIAN edge, not the OLD edge, and it reads the corridor ahead (look-ahead); the OLD cut of record is the trailing q75 (B4)",
+    "window_end_i": "the window end AS KNOWN at the as-of (known_window_end): armings9's first counter 12/89 cross after arm_i if it is <= the ride's hi_i, else hi_i + 1 (OPEN; window_end_close_ms null)"
+  },
+  "corridor": {
+    "hi_close": "2026-09-25T00:00:00Z",
+    "lo": "2019-09-08T16:00:00Z",
+    "panel": [
+      "BTCUSDT",
+      "ETHUSDT",
+      "SOLUSDT",
+      "NEARUSDT",
+      "ZECUSDT"
+    ]
+  },
+  "float_precision": {
+    "dp": 6,
+    "law": "every float column of the four parquet tables is rounded to 6 dp at write (tierc2_baseline._round_floats via TP.make_put); flags are computed at full precision before rounding; identity-law checks read the Trade objects (tierc11_books.v6_book / trg912_book)"
+  },
+  "input_sha": {
+    "funding/BTCUSDT.parquet": "a3d21e1f1a78930b9ca27132d4973f4f4cd4d3ab0639d33d949f25ad8722a77b",
+    "funding/ETHUSDT.parquet": "31120f82bd515bf664acedacfa86cb0867d309686c2db508f4977edf981767ed",
+    "funding/NEARUSDT.parquet": "593ac29381ca6c6432d3ce59f3134de000c7a1a428286a832835733b09adad50",
+    "funding/SOLUSDT.parquet": "63f3b205c1a88345c9c72bd4d9694b6349b069ce0ebbff93badebb9eabc37f8d",
+    "funding/ZECUSDT.parquet": "19a0080a11c5b3194a7be1a01e61f0f5ae244fc26be9a0e848dfcbeb7c6fa700",
+    "klines/BTCUSDT_4h.parquet": "281c3ac3195e5bb8de6b211573f77919bb2af2a342f71162426085f54bf37bfb",
+    "klines/ETHUSDT_4h.parquet": "e78895774de7d30ae06528060d97896a846975e26e1ceb7bdc6245ef70993fab",
+    "klines/NEARUSDT_4h.parquet": "e3fdd23041ffcdd3a55a8c24c9473389051d2c95d20a8c2d1fcb136144d04098",
+    "klines/SOLUSDT_4h.parquet": "6dfc049478f6e5fb8752c6211ebbda3b0c222afd95933d13b12b4d63e541d021",
+    "klines/ZECUSDT_4h.parquet": "1e054d71061f18be429907a0331eb43eb1aa26fa511ca01af581f428b8844935"
+  },
+  "keys": {
+    "trg912_campaigns": [
+      "symbol",
+      "entry_ms"
+    ],
+    "trg912_journal": [
+      "asset",
+      "entry_ms"
+    ],
+    "v6_campaigns": [
+      "symbol",
+      "entry_ms"
+    ],
+    "v6_journal": [
+      "asset",
+      "entry_ms"
+    ]
+  },
+  "n": {
+    "trg912": 199,
+    "v6": 200
+  },
+  "net_r_sum": {
+    "trg912": 92.31844,
+    "v6": 40.807565
+  },
+  "readings": [
+    "[LEAN-HEPHAESTUS] L-1.6 BASE v6 = TP.run_cell_n(TP.CONTROL_CARD, T9.V6_ROLES, CLASSIC5, lo, hi) over (lo, hi) = TP.corridor_n(CLASSIC5): the full TC11 corridor, hi + 1 == 1790294400000 (2026-09-25T00:00:00Z).",
+    "[LEAN-HEPHAESTUS] L-1.6 9/12 = T9.replay9(s, TP.CONTROL_CARD, T9.SWEEP_CELLS[-1], lo, hi) per CLASSIC5 asset; SWEEP_CELLS[-1] must be Roles('trigger-9/12', trg_f=9, trg_s=12) or HALT; anchored by TP._book_sha over the TC10 window (hi + 1 = 2026-09-21T16:00:00Z) == P-TRG-2.scored.json full-arm book_sha256.",
+    "[LEAN-HEPHAESTUS] L-1.7 F-CTRL(a) exact 0.000e+00 vs tierc6.run_cell(CARD_V6); F-CTRL(b) journal_frame(live) vs the filed TC10 control journal at 6 dp \u2014 closed campaigns exact on the 12 CTRL_COLS, corridor_end rows are continuations, entries after the TC10 pin listed as new.",
+    "[LEAN-HEPHAESTUS] L-1.3 era = the entry bar's CLOSE (E.era_of(entry_close_ms)); tuning <= 2024-06-30T23:59:59Z; TP.in_era (bar OPEN) is not used; an entry bar straddling the cut is counted.",
+    "[LEAN-HEPHAESTUS] L-G.1 tide age = tierc7_lab_regime.tide_streak at the ENTRY bar; band of record = trailing CLASSIC5 quartile edges over bars with open <= the entry bar (T9._trailing_edges, >= 30 bars), B4 OLD = streak >= trailing q75; shadow = streak > 206 as written; tierc9.tide_streak_age (arm bar) printed as disclosure.",
+    "[LEAN-HEPHAESTUS] L-G.2 lag = entry_i - arm_i in 4h bars, bands 0 / 1-6 / 7-15 / >=16; L-G.3 r_over_atr = r_dist / ATR14_4h(entry), > 2.2 flagged."
+  ],
+  "roles": {
+    "trg912": {
+      "name": "trigger-9/12",
+      "tide_f": 89,
+      "tide_s": 316,
+      "trg_f": 9,
+      "trg_s": 12,
+      "win_f": 12,
+      "win_s": 89
+    },
+    "v6": {
+      "name": "v6-roles",
+      "tide_f": 89,
+      "tide_s": 316,
+      "trg_f": 12,
+      "trg_s": 26,
+      "win_f": 12,
+      "win_s": 89
+    }
+  },
+  "seed": 20260924,
+  "sha": {
+    "trg912_campaigns": "ff2b62cbebc657cdc57a6e80b9e393a5ed3b41633e499828de00525628f55fae",
+    "trg912_journal": "42060018fbceee721fa76e271841b0f955b72adaa249ca93541936531d740536",
+    "v6_campaigns": "a5d0c57087c9b9bb95b61341e798b98eb41a8dc135d07c2eb279db8683ca96dd",
+    "v6_journal": "5952563c9d8fdc689c37fe481aba00459762b3b54628b93b1ec6fe4c79414894"
+  },
+  "skipped_empty": [],
+  "stage": "TC11-BOOKS",
+  "substrate": "tc11_20260925",
+  "tier": "TIER-C11"
+}

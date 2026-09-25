@@ -765,7 +765,7 @@
     }
   },
   "maker_bps_per_side": 2.0,
-  "maker_law": "MAKER TWIN [L-1.2] \u2014 an ADDED column, never the toll of record: maker fee 2.0 bps per side (4.0 bps round trip) on the maker legs, ENTRY and TARGET only, with ZERO slippage on a maker leg; stop and invalidation legs stay TAKER at 5.0 bps per side plus the charter slippage twin. A maker leg is ASSUMED filled at the named price (the contract's wording); the fill-risk column is the consuming stage's. MNT (Bybit) carries the same figure, an ASSUMPTION: Bybit's maker rate is not in the repo.",
+  "maker_law": "MAKER TWIN [L-1.2] \u2014 an ADDED column, never the toll of record: maker fee 2.0 bps per side (4.0 bps round trip) on the maker legs, ENTRY and TARGET only, with ZERO slippage on a maker leg; stop and invalidation legs stay TAKER at 5.0 bps per side, the toll of record's side rate, with no slippage in this twin (the charter slippage tier belongs to the haircut twin only [L-1.1]). A maker leg is ASSUMED filled at the named price (the contract's wording); the fill-risk column is the consuming stage's. MNT (Bybit) carries the same figure, an ASSUMPTION: Bybit's maker rate is not in the repo.",
   "maker_source": [
     "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\"",
     "scripts/v3_recompute.py:965 \u2014 the V3 R10 precedent ('maker entries 2 bps/side, taker stops 5 bps/side')"

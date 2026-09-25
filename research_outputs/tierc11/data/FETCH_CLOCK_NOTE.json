@@ -1,0 +1,164 @@
+{
+  "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+  "as_of_last_closed_4h_close_ms": 1790294400000,
+  "code_change_for_future_runs": "scripts/tierc11_data.py record_fetch_clock(): --all (after the pin, before the fetch and the seal), --pin and --fetch append one kind='clock' row to FETCH_LOG.jsonl carrying venue_server_time_ms and latest_closed_4h_close_ms beside the pin",
+  "corroboration_stdout": {
+    "captured_at": "/private/tmp/claude-501/-Users-luis-Naiad/fa1cb7a0-1726-4409-8f61-bc58ab09398a/scratchpad/run_all_1.log",
+    "consistency": "line 18's serverTime 1790297866708 and closeTime 1790294399999 == AS_OF_PIN.json; line 19's '(== pin: True)' == AS_OF_PIN.pin_equals_latest_closed_at_pin_run; line 155's 291 fetch-log lines == WRITE_ONCE_SEAL.fetch_log.sealed_lines",
+    "filed_copy": "research_outputs/tierc11/data/RUN_ALL_STDOUT_20260925.txt",
+    "lines": {
+      "135": "FETCH wall 106.8s; HTTP calls this process {'BINANCE': 193, 'BYBIT': 7}",
+      "155": "SEALED 5 provenance records + 291 fetch-log lines -> /Users/luis/Naiad/research_outputs/tierc11/data/WRITE_ONCE_SEAL.json",
+      "18": "AS_OF PINNED: open 2026-09-24T20:00:00Z close 2026-09-25T00:00:00Z (venue clock 2026-09-25T00:57:46Z, venue closeTime of the bar 1790294399999 < serverTime 1790297866708: CLOSED)",
+      "19": "  latest closed 4h at run time: 2026-09-25T00:00:00Z (== pin: True)",
+      "20": "  latest closed 4h at THIS run (venue clock 2026-09-25T00:57:47Z): 2026-09-25T00:00:00Z \u00b7 pinned 2026-09-25T00:00:00Z"
+    },
+    "sha256": "f76a837a1e44ad672475c35493d6a90c3b170fddfad9d08e320bb7fd7e8c5fab",
+    "what": "stdout of `scripts/tierc11_data.py --all` as captured by the builder session, FILED as a byte copy (sha256 equal) so the corroboration outlives session scratch; quoted here verbatim. Not a write-once record."
+  },
+  "derivation": {
+    "clock_row_utc": "2026-09-25T00:57:47Z",
+    "clock_used": "each sealed fetch-log row's local wall_clock_utc (1 s resolution: the true instant lies in [t, t + 999 ms]) corrected by AS_OF_PIN.local_clock_skew_ms (local - venue, measured at the pin call of the same run)",
+    "distinct_4h_floor_close_ms_over_every_sealed_row": [
+      1790294400000
+    ],
+    "fetch_log_sealed_lines": 291,
+    "fetch_log_sha256_of_sealed_lines": "bf34b4cd9f0f562f91358403a9d91b1d5ea3ed65057da92a781df98385e18ec7",
+    "first_row_utc": "2026-09-25T00:57:46Z",
+    "last_row_utc": "2026-09-25T00:59:46Z",
+    "law": "the latest closed 4h bar at instant t closes at floor(t / 14400000) * 14400000 ms (the venue stamps its closeTime at close - 1 ms, so at t >= close the bar is closed)",
+    "local_clock_skew_ms": 127,
+    "margins_law": "both margins are the CONSERVATIVE bound, floored to the second: the first row at its earliest venue instant (t - skew), the last row at its latest (t + 999 - skew)",
+    "reading": "all 291 sealed rows (the pin call, the clock call and the whole fetch) fall inside one 4h bar, [2026-09-25T00:00:00Z, 2026-09-25T04:00:00Z), with ~57 min of margin after the pinned close and ~3 h before the next; a clock error of minutes would not move the value. The latest closed 4h at every instant of the fetch was 2026-09-25T00:00:00Z == the pin.",
+    "seconds_after_the_pinned_close_at_the_first_row": 3465,
+    "seconds_before_the_next_4h_close_at_the_last_row": 10813
+  },
+  "fetch_time_clock_call": {
+    "carries_venue_server_time": false,
+    "fetch_log": "research_outputs/tierc11/data/FETCH_LOG.jsonl",
+    "line": 3,
+    "reading": "the only phase='clock' row of the sealed log: GET /fapi/v1/time, status 200, local wall clock 2026-09-25T00:57:47Z; the sealed log holds 0 kind='clock' rows (the code of that run did not write one)",
+    "row": {
+      "bybit_limit_status": null,
+      "elapsed_ms": 398,
+      "endpoint": "/fapi/v1/time",
+      "error": null,
+      "items": null,
+      "kind": "http",
+      "params": {},
+      "phase": "clock",
+      "status": 200,
+      "used_weight_1m": "3",
+      "venue": "BINANCE",
+      "wall_clock_utc": "2026-09-25T00:57:47Z"
+    }
+  },
+  "fetch_time_latest_closed_4h": "2026-09-25T00:00:00Z",
+  "fetch_time_latest_closed_4h_close_ms": 1790294400000,
+  "fetch_time_latest_equals_pin": true,
+  "generated_by": {
+    "reads": "research_outputs/tierc11/data/{WRITE_ONCE_SEAL.json, AS_OF_PIN.json, FETCH_LOG.jsonl, STAGE_D_MANIFEST.json, STAGE_D_MANIFEST.md, fee_schedule.json, RUN_ALL_STDOUT_20260925.txt} and git e97ad73; no network, no snapshot read, no clock",
+    "replaces": "the session-scratch one-off make_clock_note.py that wrote the first note (round-2 verification, finding 3)",
+    "script": "scripts/tierc11_data_clock_note.py --write"
+  },
+  "l01_lean_erratum": {
+    "filed_at_build": "[LEAN-HEPHAESTUS] L-0.1 (research_outputs/tierc11/LEANS.md) CORRIDOR: AS_OF = 2026-09-25T00:00:00Z (close ms 1790294400000), the latest 4h bar closed when STEP Q was filed (2026-09-25T00:09:43Z); pinned BY VALUE, proven closed by the venue's own closeTime < the venue clock, write-once; the latest close at pin time is filed beside it.",
+    "filed_now": "[LEAN-HEPHAESTUS] L-0.1 (research_outputs/tierc11/LEANS.md) CORRIDOR: AS_OF = 2026-09-25T00:00:00Z (close ms 1790294400000), the latest 4h bar closed when STEP Q was filed (2026-09-25T00:09:43Z); pinned BY VALUE, proven closed by the venue's own closeTime < the venue clock, write-once; every stage reads it, and the latest close at FETCH time is printed beside it (record_fetch_clock also files it as a kind='clock' row of FETCH_LOG.jsonl; the 2026-09-25 run printed it only, and FETCH_CLOCK_NOTE.json records it from the sealed log). The latest close at PIN time is filed in AS_OF_PIN.json besides.",
+    "misquote": "the build's lean said 'the latest close at pin time is filed beside it'; the PIN-time close is filed (AS_OF_PIN.latest_closed_4h_at_pin_run), but L-0.1 reads the FETCH-time close, printed",
+    "reading": "L-0.1 (research_outputs/tierc11/LEANS.md:24-25): 'Every stage reads it, and the latest close at fetch time is printed beside it.'",
+    "source": "TC11-D verification round 2, defect 6"
+  },
+  "law": "L-0.1 (research_outputs/tierc11/LEANS.md): 'the latest close at fetch time is printed beside it'. The --all run of 2026-09-25 PRINTED it (stdout) but never FILED it: LOG_LINES is never written and the fetch log's clock row carries no serverTime (research_outputs/tierc11/review/TC11-D_VERIFY.md defect 8).",
+  "live_cache_touched_relabel": {
+    "basis_filed": "by construction (guard + _assert_bound), NOT MEASURED: guard_substrate HALTs at import unless NAIAD_CACHE_DIR is the TC11 snapshot (F-D11-GUARD) and _assert_bound HALTs before every snapshot write unless engine.data.cache_dir() still resolves to it (F-D11-BOUND); live_cache_touched keeps the bool of TC10's schema",
+    "basis_key": "live_cache_touched_basis",
+    "file": "research_outputs/tierc11/data/STAGE_D_MANIFEST.json",
+    "filed_value": false,
+    "key": "live_cache_touched",
+    "meaning": "the filed False is NOT a measurement. The build's live-cache claim rests on construction: guard_substrate HALTs at import unless NAIAD_CACHE_DIR is the TC11 snapshot (F-D11-GUARD, which imports the module in a subprocess), and _assert_bound HALTs before every snapshot write unless engine.data.cache_dir() still resolves to it (F-D11-BOUND). The live-cache stat in F-D11-UNTOUCHED covers a fixture run only.",
+    "reading_of_record": "by construction (guard + _assert_bound)",
+    "source": "research_outputs/tierc11/review/TC11-D_VERIFY.md defect 3; the basis key is filed in the manifest since the re-describe (round-2 verification, finding 2)"
+  },
+  "manifest_redescribed": {
+    "by": "scripts/tierc11_data.py --manifest (no network, no snapshot write)",
+    "changes": {
+      "STAGE_D_MANIFEST.json": {
+        "added": {
+          "content_sha_law.derivations_with_content_sha": 1,
+          "content_sha_law.files_with_content_sha": 1,
+          "content_sha_law.law": 1,
+          "files[*].content_sha": 124,
+          "files[*].derivation_content_sha": 34,
+          "live_cache_touched_basis": 1,
+          "out_of_scope_snapshot_files[51]": 20,
+          "standing_disclosures[3]": 1
+        },
+        "changed": {
+          "leans[0]": 1,
+          "leans[15]": 1
+        },
+        "removed": {}
+      },
+      "STAGE_D_MANIFEST.md": {
+        "lines_after": 227,
+        "lines_before": 226,
+        "lines_gone": 2,
+        "lines_new": 3
+      },
+      "fee_schedule.json": {
+        "added": {},
+        "changed": {
+          "maker_law": 1
+        },
+        "removed": {}
+      }
+    },
+    "files": {
+      "STAGE_D_MANIFEST.json": {
+        "new_sha256": "0d8da58739bddcbf8c5243ef05bda67151a7b4d3957e10af28a8506c8d0ec712",
+        "old_sha256": "106cc1f7222bf8fee9cb8c5a77dbc8651dd9169ff4fcc5f0266095f83c71c158",
+        "old_source": "git e97ad73:research_outputs/tierc11/data/STAGE_D_MANIFEST.json"
+      },
+      "STAGE_D_MANIFEST.md": {
+        "new_sha256": "1f8e711391594bad6e7f5951c9437f8cbdf7ca18283022cf34d603fe3c636f24",
+        "old_sha256": "ce7248ef310e8599d05b44159bf81213cc30bedf98dc8474ce959fc45b47d850",
+        "old_source": "git e97ad73:research_outputs/tierc11/data/STAGE_D_MANIFEST.md"
+      },
+      "fee_schedule.json": {
+        "new_sha256": "6febe170d423b0ef37dca9fe95a7316e4259ef5a77e576cafa6781d581c1968b",
+        "old_sha256": "ee15621de529bf357f093d845ebdf746f1583038a3b17a7cb2c353135a715ad3",
+        "old_source": "git e97ad73:research_outputs/tierc11/data/fee_schedule.json"
+      }
+    },
+    "numbers_moved": "none \u2014 every changed path is a text (leans[0], leans[15], maker_law) and every other path is ADDED; `changes` is the whole diff",
+    "when": "2026-09-25, the repair of TC11-D after the round-2 verification",
+    "why": [
+      "defect 6: the L-0.1 lean misquoted the reading (l01_lean_erratum)",
+      "defect 7: the snapshot root's stale MANIFEST.json was undisclosed (out_of_scope_snapshot_files + a standing disclosure)",
+      "defect 8: parquet content shas for F-DET (files[*].content_sha, files[*].derivation_content_sha, content_sha_law) [L-F.1]",
+      "finding 1: the maker twin's stop and invalidation legs are taker WITHOUT slippage [L-1.2] (leans[15], fee_schedule.maker_law)",
+      "finding 2: live_cache_touched_basis filed beside live_cache_touched"
+    ]
+  },
+  "pin_run_record": {
+    "latest_closed_4h_at_pin_run": "2026-09-25T00:00:00Z",
+    "latest_closed_4h_at_pin_run_close_ms": 1790294400000,
+    "pin_equals_latest_closed_at_pin_run": true,
+    "source": "research_outputs/tierc11/data/AS_OF_PIN.json (write-once, sealed)",
+    "venue_server_time": "2026-09-25T00:57:46Z",
+    "venue_server_time_ms": 1790297866708
+  },
+  "records_not_rewritten_law": "whole-file sha256 for AS_OF_PIN.json and WRITE_ONCE_SEAL.json; for the append-only FETCH_LOG.jsonl, the sha256 of its sealed 291-line prefix (the whole file when this note was written) \u2014 a later --pin or --fetch appends kind='clock' rows past the prefix without moving it (round-2 verification, finding 5)",
+  "records_not_rewritten_sha256": {
+    "AS_OF_PIN.json": "4f609ccfdf2bc61af2e9e2818ff3cd27aea3f88f7637bd73163b3947c977e4bd",
+    "FETCH_LOG.jsonl": "bf34b4cd9f0f562f91358403a9d91b1d5ea3ed65057da92a781df98385e18ec7",
+    "WRITE_ONCE_SEAL.json": "055dab8cc11c3bd5b848ea0ee2a1a1a04049233d448a98234c9e9ac2ec9aeaeb"
+  },
+  "seed": 20260924,
+  "stage": "TC11-D",
+  "tier": "TIER-C11",
+  "venue_server_time_at_fetch_clock_call_status": "NEVER RECORDED in any filed file. The fetch-time clock call's response (serverTime) was printed to stdout to the SECOND only ('venue clock 2026-09-25T00:57:47Z', capture line 20 below) and its millisecond value exists nowhere. It is left null here, not reconstructed.",
+  "venue_server_time_ms_at_fetch_clock_call": null,
+  "verified_by": "F-D11-CLOCK in scripts/tierc11_data_fixtures.py re-derives every field of this note from the filed records, the filed stdout copy and git e97ad73 ([note-top], [note-row], [note-server-time], [note-latest], [note-derivation], [note-pin-run], [note-records], [note-corroboration], [note-relabel], [note-erratum], [note-redescribe]) and holds the filed bytes to build_note() ([note-provenance])",
+  "what_this_note_is": "an after-the-fact record, derived ONLY from what the filed records show, with the --all run's stdout capture (filed as a byte copy) quoted as corroboration. FETCH_LOG.jsonl, WRITE_ONCE_SEAL.json and AS_OF_PIN.json are write-once records and were NOT rewritten. STAGE_D_MANIFEST.json/.md and fee_schedule.json are not write-once; they were RE-DESCRIBED once, by the repair after the round-2 verification, and manifest_redescribed lists every change."
+}

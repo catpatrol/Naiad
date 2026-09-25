@@ -30,7 +30,10 @@ WHAT IT DOES, IN ORDER
               pinned BY VALUE and proven closed by the venue (Binance
               /fapi/v1/time + the BTCUSDT 4h closeTime).  The latest closed 4h at
               run time is printed and filed beside it -> AS_OF_PIN.json
-              (write-once; TC10's keys, plus extra keys).
+              (write-once; TC10's keys, plus extra keys).  --pin, --fetch and
+              --all also file the venue clock and the latest closed 4h at that
+              moment as a kind='clock' row of FETCH_LOG.jsonl
+              (record_fetch_clock; --all files it before the fetch and seal).
   --fetch     CONTRACT_SPECS.json (write-once; proves every symbol still
               TRADING), PRE_STATE.json (write-once; every in-scope file's edge,
               rows and shas before the first fetch), EDGE_AUDIT.json (write-once;
@@ -85,14 +88,22 @@ def guard_substrate(env: str | None) -> Path:
     """THE FROZEN-SUBSTRATE GUARD [L-0.2].  Runs at import, BEFORE engine.data
     or any tier module can bind a cache path (every subcommand but --clone).
 
-    HALTS IF: NAIAD_CACHE_DIR is unset; names the live cache (tested on the
-    path STRING first, then resolved); names the TC10 snapshot; is anything but
-    the TC11 snapshot; or the TC11 snapshot has no klines/ directory.
+    HALTS IF: NAIAD_CACHE_DIR is unset; is not an absolute path AS GIVEN (a
+    '~' or a relative value: engine.data binds Path(env) with no expansion,
+    relative to the working directory, so the guard and the engine would name
+    different directories — TC11-D verification round 2, defect 4); names the
+    live cache (tested on the path STRING first, then resolved); names the TC10
+    snapshot; is anything but the TC11 snapshot; or the TC11 snapshot has no
+    klines/ directory.
     """
     if not env:
         raise SystemExit(f"HALT: NAIAD_CACHE_DIR is unset — TC11 reads and writes ONLY "
                          f"the snapshot {SNAPSHOT}")
-    norm = Path(os.path.normpath(os.path.expanduser(env)))
+    if os.path.expanduser(env) != env or not os.path.isabs(env):
+        raise SystemExit(f"HALT: NAIAD_CACHE_DIR={env!r} is not an absolute path as given — "
+                         "engine.data binds Path(env) with no '~' expansion, relative to the "
+                         "working directory, so it would name another directory than this guard")
+    norm = Path(os.path.normpath(env))
     for bad, why in ((LIVE_CACHE, "the LIVE cache — READ-NEVER, WRITE-NEVER"),
                      (TC10_SNAPSHOT, "the TC10 snapshot — frozen, WRITE-NEVER for TC11")):
         if (norm == bad or bad in norm.parents or norm.resolve() == bad.resolve()
@@ -276,6 +287,17 @@ CHUNK_BARS = 15_000                          # 10 REST pages per save (resumable
 WEIGHT_SOFT_CAP = 1200                       # of Binance's 2400 / minute
 RETRIES = 6
 
+LIVE_CACHE_BASIS = (
+    "by construction (guard + _assert_bound), NOT MEASURED: guard_substrate HALTs at import unless "
+    "NAIAD_CACHE_DIR is the TC11 snapshot (F-D11-GUARD) and _assert_bound HALTs before every "
+    "snapshot write unless engine.data.cache_dir() still resolves to it (F-D11-BOUND); "
+    "live_cache_touched keeps the bool of TC10's schema")
+CONTENT_SHA_LAW = (
+    "content_sha = frame_sha of the file's rows sorted by their stamp (kline: open_time + OHLCV; "
+    "funding: funding_time + funding_rate) — the raw little-endian column bytes, independent of "
+    "the parquet writer; derivation_content_sha = frame_sha of the in-memory 1d/1w re-derivation. "
+    "F-DET compares every one across the two hash-seed builds [L-F.1]")
+
 WARRANTY = ("these files are described AS OF the pinned last closed 4h bar named "
             "here and of no other; bars stamped after it are counted, never read "
             "[TC6V-a, carried by TIER-C11]")
@@ -284,7 +306,10 @@ LEANS = (
     f"[LEAN-HEPHAESTUS] L-0.1 ({LEANS_DOC}) CORRIDOR: AS_OF = 2026-09-25T00:00:00Z (close ms "
     f"{PIN_CLOSE_MS}), the latest 4h bar closed when STEP Q was filed (2026-09-25T00:09:43Z); "
     "pinned BY VALUE, proven closed by the venue's own closeTime < the venue clock, write-once; "
-    "the latest close at pin time is filed beside it.",
+    "every stage reads it, and the latest close at FETCH time is printed beside it "
+    "(record_fetch_clock also files it as a kind='clock' row of FETCH_LOG.jsonl; the 2026-09-25 "
+    "run printed it only, and FETCH_CLOCK_NOTE.json records it from the sealed log). The latest "
+    "close at PIN time is filed in AS_OF_PIN.json besides.",
     f"[LEAN-HEPHAESTUS] L-0.2 ({LEANS_DOC}) SNAPSHOT: tc11_20260925 is an APFS clone (cp -cpR) of "
     "tc10_20260921; every cloned file is re-hashed against TC10's STAGE_D_MANIFEST before the "
     "first write (CLONE_ATTEST.json); it is extended over REST only. The live cache is never "
@@ -332,7 +357,9 @@ LEANS = (
     f"[LEAN-HEPHAESTUS] L-1.2 ({LEANS_DOC}) MAKER TWIN: {MAKER_BPS_SIDE} bps/side (README.md:"
     f"{MAKER_SOURCE_LINE} 'maker is 0.02%'; precedent scripts/v3_recompute.py R10), an "
     "ASSUMPTION, MNT included (Bybit's maker rate is not in the repo); maker legs (entry and "
-    "target only) carry zero slippage; stop and invalidation legs stay taker + slippage.",
+    f"target only) carry zero slippage; stop and invalidation legs stay taker "
+    f"({float(R2.FEE_BPS_SIDE)} bps/side, the toll of record's rate — the charter slippage "
+    "belongs to the haircut twin only [L-1.1]).",
 )
 
 LOG_LINES: list[str] = []
@@ -748,6 +775,28 @@ def venue_latest_closed(out: Path) -> tuple[int, int]:
     with CallLog(out, "clock"):
         server_ms = int(ED._get(ED.REST_BASE + "/fapi/v1/time").json()["serverTime"])
     return server_ms, (server_ms // MS_4H) * MS_4H
+
+
+def record_fetch_clock(out: Path, pin: dict | None = None) -> tuple[int, int]:
+    """[L-0.1] "the latest close at fetch time is printed beside it" — PRINTED
+    AND FILED.  One /fapi/v1/time call (its kind='http' row), then one
+    kind='clock' row of FETCH_LOG.jsonl carrying the venue clock and the close
+    of the latest closed 4h it implies, beside the pin.  --all files it after
+    the pin and BEFORE the fetch and the seal; --pin and --fetch file it too.
+    [TC11-D_VERIFY defect 8: the 2026-09-25 --all run printed this to stdout
+    only and its clock row carries no serverTime; FETCH_CLOCK_NOTE.json records
+    what the filed log shows — the write-once log and seal are not rewritten.]"""
+    srv, latest = venue_latest_closed(out)
+    row = {"kind": "clock", "venue_server_time_ms": srv, "venue_server_time": iso(srv),
+           "latest_closed_4h_close_ms": latest, "latest_closed_4h": iso(latest)}
+    if pin is not None:
+        pinned = int(pin["as_of_last_closed_4h_close_ms"])
+        row.update(pinned_close_ms=pinned, pinned=iso(pinned), latest_equals_pin=latest == pinned)
+    _fetch_log(out, row)
+    log(f"  latest closed 4h at THIS run (venue clock {iso(srv)}): {iso(latest)}"
+        + (f" · pinned {iso(row['pinned_close_ms'])}" if pin is not None else "")
+        + " -> FETCH_LOG.jsonl kind=clock")
+    return srv, latest
 
 
 # ported from scripts/tierc10_data.py:520-524 @ sha256 2cbf9bb6bcfea3ec — CHANGED: names tierc11_data in the HALT
@@ -1809,7 +1858,9 @@ MAKER_LAW = (
     f"MAKER TWIN [L-1.2] — an ADDED column, never the toll of record: maker fee "
     f"{MAKER_BPS_SIDE} bps per side ({2 * MAKER_BPS_SIDE} bps round trip) on the maker legs, "
     "ENTRY and TARGET only, with ZERO slippage on a maker leg; stop and invalidation legs stay "
-    f"TAKER at {float(R2.FEE_BPS_SIDE)} bps per side plus the charter slippage twin. A maker leg "
+    f"TAKER at {float(R2.FEE_BPS_SIDE)} bps per side, the toll of record's side rate, with no "
+    "slippage in this twin (the charter slippage tier belongs to the haircut twin only "
+    "[L-1.1]). A maker leg "
     "is ASSUMED filled at the named price (the contract's wording); the fill-risk column is the "
     "consuming stage's. MNT (Bybit) carries the same figure, an ASSUMPTION: Bybit's maker rate "
     "is not in the repo.")
@@ -1956,6 +2007,47 @@ def _tc10_manifest() -> tuple[dict, str]:
     return json.loads(TC10_MANIFEST.read_text(encoding="utf-8")), file_sha256(TC10_MANIFEST)
 
 
+def cache_manifest_staleness(q: Path, files: list[dict], other: list[dict],
+                             extended: list[str]) -> dict:
+    """[TC11-D verification round 2, defect 7] The snapshot root's MANIFEST.json,
+    DESCRIBED (never used): what it says of itself, and how many of the files
+    it lists it still describes at their TC11 bytes.  Read-only; the shas
+    compared are the ones this manifest already computed for files[] and
+    out_of_scope_snapshot_files[]."""
+    doc = json.loads(q.read_text(encoding="utf-8"))
+    known = {f["path"]: f.get("sha256") for f in files} | {o["path"]: o["sha256"] for o in other}
+    listed = [(e.get("rel_path"), e.get("sha256")) for e in doc.get("files", [])]
+    at_bytes = sorted(p for p, s in listed if p in known and known[p] == s)
+    in_scope_listed = sorted(p for p, _ in listed if p in {f["path"] for f in files})
+    ext_described = sorted(set(at_bytes) & set(extended))
+    selfd = {k: doc.get(k) for k in ("created_utc", "mode", "file_count", "total_bytes",
+                                     "repo_head", "naiad_cache_dir_override")}
+    absent = sum(1 for p, _ in listed if p not in known)
+    stale = len(at_bytes) < len(known) or absent > 0
+    return {
+        "stale": stale,
+        "self_described": selfd,
+        "listed_files": len(listed),
+        "listed_files_absent_from_the_tc11_snapshot": absent,
+        "listed_files_at_their_tc11_bytes": len(at_bytes),
+        "in_scope_files_it_lists": len(in_scope_listed),
+        "tc11_extended_files": len(extended),
+        "tc11_extended_files_it_describes_at_their_tc11_bytes": len(ext_described),
+        "disclosure": (
+            f"The snapshot root's MANIFEST.json ({q.stat().st_size} B, sha256 "
+            f"{file_sha256(q)[:16]}…) is carried byte-for-byte from the TC10 snapshot; TC10's "
+            "manifest does not pin it (CLONE_ATTEST compares it with the TC10 snapshot's own "
+            "bytes). It is a cache manifest written by another estate (self-described "
+            f"created_utc {selfd['created_utc']}, mode {selfd['mode']!r}, {len(listed)} files) and "
+            f"it is {'STALE' if stale else 'CURRENT'}: of the other {len(known)} files of the TC11 "
+            f"snapshot it describes {len(at_bytes)} at their current bytes ({absent} of the files "
+            f"it lists are not in the snapshot), and "
+            f"{len(ext_described)} of the {len(extended)} files TC11 extended. No TC11 loader "
+            "reads it; it is listed under out_of_scope_snapshot_files and read only to describe "
+            "it here."),
+    }
+
+
 def build_manifest(pin: dict, pre: dict) -> dict:
     """TC10's STAGE_D_MANIFEST schema, at the TC11 pin, read-only: nothing is
     fetched and nothing in the snapshot is written (the derived lenses are
@@ -2012,6 +2104,8 @@ def build_manifest(pin: dict, pre: dict) -> dict:
                 df = pd.read_parquet(q)
                 row.update(sha256=file_sha256(q), bytes=q.stat().st_size,
                            **scan_klines(df, iv, close_ms))
+                # [L-F.1; TC11-D verification round 2, defect 8] the parquet CONTENT sha
+                row["content_sha"] = frame_sha(df.sort_values("open_time"), KLINE_COLS)
                 tgt = target_last_open(iv, close_ms)
                 row["complete_to_as_of"] = bool(row["as_of_last_closed_bar_open"] == iso(tgt))
                 row["lens_last_closed_bar_at_pin"] = {"open": iso(tgt), "close": iso(tgt + STEP_MS[iv])}
@@ -2031,6 +2125,7 @@ def build_manifest(pin: dict, pre: dict) -> dict:
                     same = frame_sha(df, KLINE_COLS) == frame_sha(dv[iv], KLINE_COLS)
                     derived_ok[rel] = same
                     row["derived_file_equals_derivation"] = same
+                    row["derivation_content_sha"] = frame_sha(dv[iv], KLINE_COLS)
                     row["derived_from"] = (
                         f"klines/{stem}_4h.parquet (native 4h, {dv['source_rows_as_of']} rows closed "
                         f"as-of) — " + ("1d = exactly six complete 4h bars of one UTC day"
@@ -2063,10 +2158,12 @@ def build_manifest(pin: dict, pre: dict) -> dict:
                "venue": a["venue"], "listing": a["listing"], "kind": "funding",
                "as_of_lens": "funding", "present": q.exists()}
         if q.exists():
-            fs = scan_funding(pd.read_parquet(q), close_ms)
+            fdf = pd.read_parquet(q)
+            fs = scan_funding(fdf, close_ms)
             funding[stem] = fs
             was = pre["files"][rel]
             row.update(sha256=file_sha256(q), bytes=q.stat().st_size, **fs)
+            row["content_sha"] = frame_sha(fdf.sort_values("funding_time"), FUNDING_COLS)
             row["coverage"] = funding_coverage(stem, close_ms)
             row["tc10_manifest_sha256"] = tc10_rows.get(rel, {}).get("sha256")
             row["pre_state"] = {"rows": was["rows"], "last": iso(was["last_ms"]),
@@ -2086,6 +2183,23 @@ def build_manifest(pin: dict, pre: dict) -> dict:
                 ref = attest["files"].get(rel, {}).get("reference_sha256")
                 other.append({"path": rel, "sha256": sha, "bytes": q.stat().st_size,
                               "tc10_manifest_sha256": ref, "unchanged_since_tc10": sha == ref})
+    # [TC11-D verification round 2, defect 7] every OTHER file of the snapshot (the root
+    # MANIFEST.json above all), appended after the klines/funding rows so their order holds
+    extended = sorted(f["path"] for f in files if f.get("tc11_rows_added"))
+    root_disclosures = []
+    for rel in tree_files(SNAPSHOT):
+        if rel in in_scope or rel.startswith(("klines/", "funding/")):
+            continue
+        q = SNAPSHOT / rel
+        sha = file_sha256(q)
+        ref = attest["files"].get(rel, {}).get("reference_sha256")
+        row = {"path": rel, "sha256": sha, "bytes": q.stat().st_size,
+               "tc10_manifest_sha256": None, "tc10_snapshot_sha256": ref,
+               "unchanged_since_tc10": sha == ref}
+        if rel == "MANIFEST.json":
+            row.update(cache_manifest_staleness(q, files, other, extended))
+            root_disclosures.append(row["disclosure"])
+        other.append(row)
     adm = [r for r in admission if r["admitted"]]
     prefixes = verify_prefixes(pre)
     lens_set = LENS_ORDER
@@ -2100,7 +2214,12 @@ def build_manifest(pin: dict, pre: dict) -> dict:
             for iv in lens_set},
         "warranty": WARRANTY,
         "snapshot_root": str(SNAPSHOT),
+        # BY CONSTRUCTION (guard + _assert_bound), NOT MEASURED [TC11-D_VERIFY defect 3]: the
+        # substrate guard (import) + _assert_bound (before every snapshot write) are its basis
+        # (F-D11-GUARD, F-D11-BOUND). The key stays the bool TC10's schema holds; its basis is
+        # filed beside it [TC11-D verification round 2, finding 2].
         "live_cache_touched": False,
+        "live_cache_touched_basis": LIVE_CACHE_BASIS,
         "venues": [{**{k: a.get(k) for k in ("asset", "venue", "symbol", "stem", "status",
                                              "contract_type", "listing", "venue_reason")},
                     "status_at_tc11_capture": status.get(a.get("stem"))}
@@ -2139,7 +2258,11 @@ def build_manifest(pin: dict, pre: dict) -> dict:
                "not re-measured."}
     man["contract_premise_checks"] = premise_checks(probe)
     man["contract_multipliers"] = contract_multiplier_table()
-    man["standing_disclosures"] = list(STANDING_DISCLOSURES)
+    man["standing_disclosures"] = list(STANDING_DISCLOSURES) + root_disclosures
+    man["content_sha_law"] = {
+        "law": CONTENT_SHA_LAW,
+        "files_with_content_sha": sum(1 for f in files if f.get("content_sha")),
+        "derivations_with_content_sha": sum(1 for f in files if f.get("derivation_content_sha"))}
     man["operator_rulings_needed"] = list(OPERATOR_RULINGS)
     late = [{"path": f["path"], "rows_after_as_of": f["rows_after_as_of"]} for f in files
             if f["kind"] == "klines" and f.get("rows_after_as_of")]
@@ -2397,6 +2520,7 @@ PORTS = {
     "extend_funding": "a missing tape HALTs; skip when the edge is already in the pin's hour",
     "seal_provenance": "TC11's five SEALED_FILES; a late write is disclosed as a finding",
     "fee_schedule": "+ maker_* [L-1.2] and charter_slippage_* keys; TC10 keys whole",
+    "STEP_MS": 'gains "15m": 900_000',                     # a constant port (an Assign, not a def)
 }
 
 
@@ -2433,9 +2557,7 @@ def run_all() -> int:
     for x in LEANS:
         log(x)
     pin = pin_as_of(OUT)
-    srv, latest = venue_latest_closed(OUT)
-    log(f"  latest closed 4h at THIS run (venue clock {iso(srv)}): {iso(latest)} · pinned "
-        f"{pin['as_of_last_closed_4h']}")
+    srv, latest = record_fetch_clock(OUT, pin)          # filed BEFORE the fetch and the seal
     incomplete, stats = run_fetch(pin, OUT)
     log(f"FETCH wall {stats['t1'] - stats['t0']:.1f}s; HTTP calls this process {CallLog.counts}")
     log("\nDERIVE 1d/1w from native 4h")
@@ -2472,11 +2594,12 @@ def main() -> int:
         return 0
     if cmd == "pin":
         pin = pin_as_of(OUT)
-        srv, latest = venue_latest_closed(OUT)
-        log(f"  latest closed 4h at THIS run (venue clock {iso(srv)}): {iso(latest)}")
+        record_fetch_clock(OUT, pin)
         return 0
     if cmd == "fetch":
-        incomplete, stats = run_fetch(load_pin(OUT), OUT)
+        pin = load_pin(OUT)
+        record_fetch_clock(OUT, pin)                    # [L-0.1] the latest close AT FETCH TIME
+        incomplete, stats = run_fetch(pin, OUT)
         log(f"FETCH wall {stats['t1'] - stats['t0']:.1f}s; HTTP calls {CallLog.counts}")
         return 2 if incomplete else 0
     if cmd == "derive":

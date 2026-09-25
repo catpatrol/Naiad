@@ -1,0 +1,172 @@
+TIER-C11 · STAGE TC11-D · seed 20260924 · snapshot /Users/luis/.cache/naiad/snapshots/tc11_20260925
+[LEAN-HEPHAESTUS] L-0.1 (research_outputs/tierc11/LEANS.md) CORRIDOR: AS_OF = 2026-09-25T00:00:00Z (close ms 1790294400000), the latest 4h bar closed when STEP Q was filed (2026-09-25T00:09:43Z); pinned BY VALUE, proven closed by the venue's own closeTime < the venue clock, write-once; the latest close at pin time is filed beside it.
+[LEAN-HEPHAESTUS] L-0.2 (research_outputs/tierc11/LEANS.md) SNAPSHOT: tc11_20260925 is an APFS clone (cp -cpR) of tc10_20260921; every cloned file is re-hashed against TC10's STAGE_D_MANIFEST before the first write (CLONE_ATTEST.json); it is extended over REST only. The live cache is never read or written and the TC10 snapshot is never written.
+[LEAN-HEPHAESTUS] TC10 L1 CARRIED: 1d = exactly six complete native-4h bars per UTC day; 1w = seven complete derived days, MONDAY-anchored UTC, complete weeks only; the source is native 4h, never 1h/5m aggregates.
+[LEAN-HEPHAESTUS] TC10 D-b CARRIED: funding is kept through AS_OF close + 60 s.
+[LEAN-HEPHAESTUS] TC10 D-c CARRIED: MNT's whole tape (klines and funding) is Bybit v5 linear, stem MNTUSDT_BYBIT, never spliced. Bybit serves no 15m in BYBIT_IV and R1 needs no 15m for the twelve, so MNT has none.
+[LEAN-HEPHAESTUS] TC10 D-d CARRIED: PUMPFUN = PUMPUSDT (baseAsset PUMP); PUMPBTCUSDT is a different asset.
+[LEAN-HEPHAESTUS] TC10 D-g CARRIED: a funding print belongs to the hour its stamp FLOORS to.
+[LEAN-HEPHAESTUS] D11-a PRE_STATE SCOPE: 124 files = 17 x {5m,1h,4h,12h,1d,1w} + CLASSIC5 x 15m + 17 funding tapes (the C map's §7 step 4). It is a SUPERSET of the brief's native + 15m + funding list: the derived lenses are included so the no-rewrite proof covers them.
+[LEAN-HEPHAESTUS] D11-b NEVER EARLIER: every fetch starts at the file's PRE_STATE edge + one step (engine.data._save_cache keeps the NEW row at an identical open_time, so an earlier start would let REST overwrite an inherited bar). The rows TC10's as-of excluded but TC11's includes (5m 16:00-16:25Z for 14 stems, 15m 16:00/16:15Z for CLASSIC5) are INHERITED from the TC10 snapshot and never refetched into a file; EDGE_AUDIT.json compares them with REST read-only and the manifest prints the result.
+[LEAN-HEPHAESTUS] D11-c VENUE OF RECORD: TC10's VENUE_PROBE.json (read-only, pinned by sha) — the venue of a tape is decided once. TC11 re-captures CONTRACT_SPECS.json in TC10's schema only to prove every symbol is still TRADING at the pin (and to give the re-rooted modules a TC11 file of that name).
+[LEAN-HEPHAESTUS] D11-d CARRIED BLOCKS: two_token_trap, data_spend and venue_publications_disagree are TC10's (measured on the TC10 snapshot, whose every byte the TC11 clone reproduces — F-D11-CLONE). They are carried VERBATIM with the TC10 manifest's sha, not re-measured; carried_from_tc10 says so.
+[LEAN-HEPHAESTUS] D11-e 15m: CLASSIC5 only [L-0.2], audited against the three 5m bars it spans; a mismatch is a DISCLOSURE, never a failure (the venue's intervals disagree on incident bars; TC10's derivation law never aggregates across native intervals).
+[LEAN-HEPHAESTUS] D11-f complete_to_as_of is STRICT on every lens. TC10 let a derived lens pass by construction (`or iv in DERIVED_IVS`); here 1d and 1w must also end at their own last bar closing <= the pin.
+[LEAN-HEPHAESTUS] D11-g ORDER: --all seals BEFORE it describes, so the manifest's write_once block verifies the filed seal (TC10 re-described after --seal for the same reason). The seal covers AS_OF_PIN, CLONE_ATTEST, CONTRACT_SPECS, EDGE_AUDIT, PRE_STATE and the fetch-log head — a superset of the brief's three.
+[LEAN-HEPHAESTUS] L-1.1 (research_outputs/tierc11/LEANS.md) TOLL OF RECORD: taker 5.0 bps/side, 10.0 round trip (tierc2_rules); the charter slippage tier (A 2 / B 5 / C 10 bps/side) is a haircut TWIN beside it, never in its place.
+[LEAN-HEPHAESTUS] L-1.2 (research_outputs/tierc11/LEANS.md) MAKER TWIN: 2.0 bps/side (README.md:150 'maker is 0.02%'; precedent scripts/v3_recompute.py R10), an ASSUMPTION, MNT included (Bybit's maker rate is not in the repo); maker legs (entry and target only) carry zero slippage; stop and invalidation legs stay taker + slippage.
+AS_OF PINNED: open 2026-09-24T20:00:00Z close 2026-09-25T00:00:00Z (venue clock 2026-09-25T00:57:46Z, venue closeTime of the bar 1790294399999 < serverTime 1790297866708: CLOSED)
+  latest closed 4h at run time: 2026-09-25T00:00:00Z (== pin: True)
+  latest closed 4h at THIS run (venue clock 2026-09-25T00:57:47Z): 2026-09-25T00:00:00Z · pinned 2026-09-25T00:00:00Z
+CONTRACT SPECS captured for 17 symbols, all TRADING -> /Users/luis/Naiad/research_outputs/tierc11/data/CONTRACT_SPECS.json
+PRE_STATE filed: 124 pre-existing in-scope files, all equal to TC10's manifest: True
+    edge audit klines/1000BONKUSDT_5m.parquet: 6 inherited rows 2026-09-21T16:00:00Z..2026-09-21T16:25:00Z — EQUAL to REST
+    edge audit klines/1000PEPEUSDT_5m.parquet: 6 inherited rows 2026-09-21T16:00:00Z..2026-09-21T16:25:00Z — EQUAL to REST
+    edge audit klines/BNBUSDT_5m.parquet: 6 inherited rows 2026-09-21T16:00:00Z..2026-09-21T16:25:00Z — EQUAL to REST
+    edge audit klines/BTCUSDT_15m.parquet: 2 inherited rows 2026-09-21T16:00:00Z..2026-09-21T16:15:00Z — EQUAL to REST
+    edge audit klines/BTCUSDT_5m.parquet: 6 inherited rows 2026-09-21T16:00:00Z..2026-09-21T16:25:00Z — EQUAL to REST
+    edge audit klines/DOGEUSDT_5m.parquet: 6 inherited rows 2026-09-21T16:00:00Z..2026-09-21T16:25:00Z — EQUAL to REST
+    edge audit klines/ENAUSDT_5m.parquet: 6 inherited rows 2026-09-21T16:00:00Z..2026-09-21T16:25:00Z — EQUAL to REST
+    edge audit klines/ETHUSDT_15m.parquet: 2 inherited rows 2026-09-21T16:00:00Z..2026-09-21T16:15:00Z — EQUAL to REST
+    edge audit klines/ETHUSDT_5m.parquet: 6 inherited rows 2026-09-21T16:00:00Z..2026-09-21T16:25:00Z — EQUAL to REST
+    edge audit klines/HYPEUSDT_5m.parquet: 6 inherited rows 2026-09-21T16:00:00Z..2026-09-21T16:25:00Z — EQUAL to REST
+    edge audit klines/LTCUSDT_5m.parquet: 6 inherited rows 2026-09-21T16:00:00Z..2026-09-21T16:25:00Z — EQUAL to REST
+    edge audit klines/NEARUSDT_15m.parquet: 2 inherited rows 2026-09-21T16:00:00Z..2026-09-21T16:15:00Z — EQUAL to REST
+    edge audit klines/NEARUSDT_5m.parquet: 6 inherited rows 2026-09-21T16:00:00Z..2026-09-21T16:25:00Z — EQUAL to REST
+    edge audit klines/SOLUSDT_15m.parquet: 2 inherited rows 2026-09-21T16:00:00Z..2026-09-21T16:15:00Z — EQUAL to REST
+    edge audit klines/SOLUSDT_5m.parquet: 6 inherited rows 2026-09-21T16:00:00Z..2026-09-21T16:25:00Z — EQUAL to REST
+    edge audit klines/UNIUSDT_5m.parquet: 6 inherited rows 2026-09-21T16:00:00Z..2026-09-21T16:25:00Z — EQUAL to REST
+    edge audit klines/XMRUSDT_5m.parquet: 6 inherited rows 2026-09-21T16:00:00Z..2026-09-21T16:25:00Z — EQUAL to REST
+    edge audit klines/ZECUSDT_15m.parquet: 2 inherited rows 2026-09-21T16:00:00Z..2026-09-21T16:15:00Z — EQUAL to REST
+    edge audit klines/ZECUSDT_5m.parquet: 6 inherited rows 2026-09-21T16:00:00Z..2026-09-21T16:25:00Z — EQUAL to REST
+EDGE AUDIT filed: 19 files, 94 inherited rows, all equal to REST: True
+
+FETCH — 4h, 12h, 1h, funding, 15m (CLASSIC5), 5m; each from its edge + one step
+    BTCUSDT 4h: 2026-09-21T16:00:00Z -> 2026-09-24T20:00:00Z  +20 bars
+    ETHUSDT 4h: 2026-09-21T16:00:00Z -> 2026-09-24T20:00:00Z  +20 bars
+    SOLUSDT 4h: 2026-09-21T16:00:00Z -> 2026-09-24T20:00:00Z  +20 bars
+    NEARUSDT 4h: 2026-09-21T16:00:00Z -> 2026-09-24T20:00:00Z  +20 bars
+    ZECUSDT 4h: 2026-09-21T16:00:00Z -> 2026-09-24T20:00:00Z  +20 bars
+    ENAUSDT 4h: 2026-09-21T16:00:00Z -> 2026-09-24T20:00:00Z  +20 bars
+    PUMPUSDT 4h: 2026-09-21T16:00:00Z -> 2026-09-24T20:00:00Z  +20 bars
+    HYPEUSDT 4h: 2026-09-21T16:00:00Z -> 2026-09-24T20:00:00Z  +20 bars
+    MNTUSDT_BYBIT 4h: 2026-09-21T16:00:00Z -> 2026-09-24T20:00:00Z  +20 bars
+    SUIUSDT 4h: 2026-09-21T16:00:00Z -> 2026-09-24T20:00:00Z  +20 bars
+    LTCUSDT 4h: 2026-09-21T16:00:00Z -> 2026-09-24T20:00:00Z  +20 bars
+    XMRUSDT 4h: 2026-09-21T16:00:00Z -> 2026-09-24T20:00:00Z  +20 bars
+    BNBUSDT 4h: 2026-09-21T16:00:00Z -> 2026-09-24T20:00:00Z  +20 bars
+    UNIUSDT 4h: 2026-09-21T16:00:00Z -> 2026-09-24T20:00:00Z  +20 bars
+    1000PEPEUSDT 4h: 2026-09-21T16:00:00Z -> 2026-09-24T20:00:00Z  +20 bars
+    DOGEUSDT 4h: 2026-09-21T16:00:00Z -> 2026-09-24T20:00:00Z  +20 bars
+    1000BONKUSDT 4h: 2026-09-21T16:00:00Z -> 2026-09-24T20:00:00Z  +20 bars
+    BTCUSDT 12h: 2026-09-21T12:00:00Z -> 2026-09-24T12:00:00Z  +7 bars
+    ETHUSDT 12h: 2026-09-21T12:00:00Z -> 2026-09-24T12:00:00Z  +7 bars
+    SOLUSDT 12h: 2026-09-21T12:00:00Z -> 2026-09-24T12:00:00Z  +7 bars
+    NEARUSDT 12h: 2026-09-21T12:00:00Z -> 2026-09-24T12:00:00Z  +7 bars
+    ZECUSDT 12h: 2026-09-21T12:00:00Z -> 2026-09-24T12:00:00Z  +7 bars
+    ENAUSDT 12h: 2026-09-21T12:00:00Z -> 2026-09-24T12:00:00Z  +7 bars
+    PUMPUSDT 12h: 2026-09-21T12:00:00Z -> 2026-09-24T12:00:00Z  +7 bars
+    HYPEUSDT 12h: 2026-09-21T12:00:00Z -> 2026-09-24T12:00:00Z  +7 bars
+    MNTUSDT_BYBIT 12h: 2026-09-21T12:00:00Z -> 2026-09-24T12:00:00Z  +7 bars
+    SUIUSDT 12h: 2026-09-21T12:00:00Z -> 2026-09-24T12:00:00Z  +7 bars
+    LTCUSDT 12h: 2026-09-21T12:00:00Z -> 2026-09-24T12:00:00Z  +7 bars
+    XMRUSDT 12h: 2026-09-21T12:00:00Z -> 2026-09-24T12:00:00Z  +7 bars
+    BNBUSDT 12h: 2026-09-21T12:00:00Z -> 2026-09-24T12:00:00Z  +7 bars
+    UNIUSDT 12h: 2026-09-21T12:00:00Z -> 2026-09-24T12:00:00Z  +7 bars
+    1000PEPEUSDT 12h: 2026-09-21T12:00:00Z -> 2026-09-24T12:00:00Z  +7 bars
+    DOGEUSDT 12h: 2026-09-21T12:00:00Z -> 2026-09-24T12:00:00Z  +7 bars
+    1000BONKUSDT 12h: 2026-09-21T12:00:00Z -> 2026-09-24T12:00:00Z  +7 bars
+    BTCUSDT 1h: 2026-09-21T16:00:00Z -> 2026-09-24T23:00:00Z  +80 bars
+    ETHUSDT 1h: 2026-09-21T16:00:00Z -> 2026-09-24T23:00:00Z  +80 bars
+    SOLUSDT 1h: 2026-09-21T16:00:00Z -> 2026-09-24T23:00:00Z  +80 bars
+    NEARUSDT 1h: 2026-09-21T16:00:00Z -> 2026-09-24T23:00:00Z  +80 bars
+    ZECUSDT 1h: 2026-09-21T16:00:00Z -> 2026-09-24T23:00:00Z  +80 bars
+    ENAUSDT 1h: 2026-09-21T16:00:00Z -> 2026-09-24T23:00:00Z  +80 bars
+    PUMPUSDT 1h: 2026-09-21T16:00:00Z -> 2026-09-24T23:00:00Z  +80 bars
+    HYPEUSDT 1h: 2026-09-21T16:00:00Z -> 2026-09-24T23:00:00Z  +80 bars
+    MNTUSDT_BYBIT 1h: 2026-09-21T16:00:00Z -> 2026-09-24T23:00:00Z  +80 bars
+    SUIUSDT 1h: 2026-09-21T16:00:00Z -> 2026-09-24T23:00:00Z  +80 bars
+    LTCUSDT 1h: 2026-09-21T16:00:00Z -> 2026-09-24T23:00:00Z  +80 bars
+    XMRUSDT 1h: 2026-09-21T16:00:00Z -> 2026-09-24T23:00:00Z  +80 bars
+    BNBUSDT 1h: 2026-09-21T16:00:00Z -> 2026-09-24T23:00:00Z  +80 bars
+    UNIUSDT 1h: 2026-09-21T16:00:00Z -> 2026-09-24T23:00:00Z  +80 bars
+    1000PEPEUSDT 1h: 2026-09-21T16:00:00Z -> 2026-09-24T23:00:00Z  +80 bars
+    DOGEUSDT 1h: 2026-09-21T16:00:00Z -> 2026-09-24T23:00:00Z  +80 bars
+    1000BONKUSDT 1h: 2026-09-21T16:00:00Z -> 2026-09-24T23:00:00Z  +80 bars
+    BTCUSDT funding: edge 2026-09-21T16:00:00Z -> 2026-09-25T00:00:00Z
+    ETHUSDT funding: edge 2026-09-21T16:00:00Z -> 2026-09-25T00:00:00Z
+    SOLUSDT funding: edge 2026-09-21T16:00:00Z -> 2026-09-25T00:00:00Z
+    NEARUSDT funding: edge 2026-09-21T16:00:00Z -> 2026-09-25T00:00:00Z
+    ZECUSDT funding: edge 2026-09-21T16:00:00Z -> 2026-09-25T00:00:00Z
+    ENAUSDT funding: edge 2026-09-21T16:00:00Z -> 2026-09-25T00:00:00Z
+    PUMPUSDT funding: edge 2026-09-21T16:00:00Z -> 2026-09-25T00:00:00Z
+    HYPEUSDT funding: edge 2026-09-21T16:00:00Z -> 2026-09-25T00:00:00Z
+    MNTUSDT_BYBIT funding: edge 2026-09-21T16:00:00Z -> 2026-09-25T00:00:00Z
+    SUIUSDT funding: edge 2026-09-21T16:00:00Z -> 2026-09-25T00:00:00Z
+    LTCUSDT funding: edge 2026-09-21T16:00:00Z -> 2026-09-25T00:00:00Z
+    XMRUSDT funding: edge 2026-09-21T16:00:00Z -> 2026-09-25T00:00:00Z
+    BNBUSDT funding: edge 2026-09-21T16:00:00Z -> 2026-09-25T00:00:00Z
+    UNIUSDT funding: edge 2026-09-21T16:00:00Z -> 2026-09-25T00:00:00Z
+    1000PEPEUSDT funding: edge 2026-09-21T16:00:00Z -> 2026-09-25T00:00:00Z
+    DOGEUSDT funding: edge 2026-09-21T16:00:00Z -> 2026-09-25T00:00:00Z
+    1000BONKUSDT funding: edge 2026-09-21T16:00:00Z -> 2026-09-25T00:00:00Z
+    BTCUSDT 15m: 2026-09-21T16:30:00Z -> 2026-09-24T23:45:00Z  +318 bars
+    ETHUSDT 15m: 2026-09-21T16:30:00Z -> 2026-09-24T23:45:00Z  +318 bars
+    SOLUSDT 15m: 2026-09-21T16:30:00Z -> 2026-09-24T23:45:00Z  +318 bars
+    NEARUSDT 15m: 2026-09-21T16:30:00Z -> 2026-09-24T23:45:00Z  +318 bars
+    ZECUSDT 15m: 2026-09-21T16:30:00Z -> 2026-09-24T23:45:00Z  +318 bars
+    BTCUSDT 5m: 2026-09-21T16:30:00Z -> 2026-09-24T23:55:00Z  +954 bars
+    ETHUSDT 5m: 2026-09-21T16:30:00Z -> 2026-09-24T23:55:00Z  +954 bars
+    SOLUSDT 5m: 2026-09-21T16:30:00Z -> 2026-09-24T23:55:00Z  +954 bars
+    NEARUSDT 5m: 2026-09-21T16:30:00Z -> 2026-09-24T23:55:00Z  +954 bars
+    ZECUSDT 5m: 2026-09-21T16:30:00Z -> 2026-09-24T23:55:00Z  +954 bars
+    ENAUSDT 5m: 2026-09-21T16:30:00Z -> 2026-09-24T23:55:00Z  +954 bars
+    PUMPUSDT 5m: 2026-09-21T16:00:00Z -> 2026-09-24T23:55:00Z  +960 bars
+    HYPEUSDT 5m: 2026-09-21T16:30:00Z -> 2026-09-24T23:55:00Z  +954 bars
+    MNTUSDT_BYBIT 5m: 2026-09-21T16:00:00Z -> 2026-09-24T23:55:00Z  +960 bars
+    SUIUSDT 5m: 2026-09-21T16:00:00Z -> 2026-09-24T23:55:00Z  +960 bars
+    LTCUSDT 5m: 2026-09-21T16:30:00Z -> 2026-09-24T23:55:00Z  +954 bars
+    XMRUSDT 5m: 2026-09-21T16:30:00Z -> 2026-09-24T23:55:00Z  +954 bars
+    BNBUSDT 5m: 2026-09-21T16:30:00Z -> 2026-09-24T23:55:00Z  +954 bars
+    UNIUSDT 5m: 2026-09-21T16:30:00Z -> 2026-09-24T23:55:00Z  +954 bars
+    1000PEPEUSDT 5m: 2026-09-21T16:30:00Z -> 2026-09-24T23:55:00Z  +954 bars
+    DOGEUSDT 5m: 2026-09-21T16:30:00Z -> 2026-09-24T23:55:00Z  +954 bars
+    1000BONKUSDT 5m: 2026-09-21T16:30:00Z -> 2026-09-24T23:55:00Z  +954 bars
+FETCH wall 106.8s; HTTP calls this process {'BINANCE': 193, 'BYBIT': 7}
+
+DERIVE 1d/1w from native 4h
+    DERIVE BTCUSDT        1d  2573 (written  ) 1w  367 (unchanged)
+    DERIVE ETHUSDT        1d  2493 (written  ) 1w  355 (unchanged)
+    DERIVE SOLUSDT        1d  2201 (written  ) 1w  313 (unchanged)
+    DERIVE NEARUSDT       1d  2170 (written  ) 1w  309 (unchanged)
+    DERIVE ZECUSDT        1d  2423 (written  ) 1w  345 (unchanged)
+    DERIVE ENAUSDT        1d   905 (written  ) 1w  128 (unchanged)
+    DERIVE PUMPUSDT       1d   441 (written  ) 1w   62 (unchanged)
+    DERIVE HYPEUSDT       1d   482 (written  ) 1w   68 (unchanged)
+    DERIVE MNTUSDT_BYBIT  1d  1088 (written  ) 1w  154 (unchanged)
+    DERIVE SUIUSDT        1d  1240 (written  ) 1w  176 (unchanged)
+    DERIVE LTCUSDT        1d  2450 (written  ) 1w  349 (unchanged)
+    DERIVE XMRUSDT        1d  2425 (written  ) 1w  345 (unchanged)
+    DERIVE BNBUSDT        1d  2418 (written  ) 1w  344 (unchanged)
+    DERIVE UNIUSDT        1d  2197 (written  ) 1w  313 (unchanged)
+    DERIVE 1000PEPEUSDT   1d  1238 (written  ) 1w  176 (unchanged)
+    DERIVE DOGEUSDT       1d  2267 (written  ) 1w  323 (unchanged)
+    DERIVE 1000BONKUSDT   1d  1037 (written  ) 1w  147 (unchanged)
+SEALED 5 provenance records + 291 fetch-log lines -> /Users/luis/Naiad/research_outputs/tierc11/data/WRITE_ONCE_SEAL.json
+
+AS_OF 2026-09-25T00:00:00Z (open 2026-09-24T20:00:00Z); venue closeTime 1790294399999 < venue clock 1790297866708 (2026-09-25T00:57:46Z)
+NEW BARS PER LENS (rows added by TC11, per stem):
+  5m       files 17  total + 16236  per-file [954, 960]
+  15m      files  5  total +  1590  per-file [318]
+  1h       files 17  total +  1360  per-file [80]
+  4h       files 17  total +   340  per-file [20]
+  12h      files 17  total +   119  per-file [7]
+  1d       files 17  total +    68  per-file [4]
+  1w       files 17  total +     0  per-file [0]
+  funding  files 17  total +   210  per-file [10, 20]
+EDGES: 107/107 kline files end at their lens's last bar closing <= the pin; gaps 0; rows after as-of 0
+PREFIX attestation all_ok True (124 files)
+15m vs 5m triples (DISCLOSURE): BTCUSDT price 10 vol 3 notriple 1 · ETHUSDT price 11 vol 5 notriple 0 · SOLUSDT price 5 vol 3 notriple 0 · NEARUSDT price 8 vol 3 notriple 0 · ZECUSDT price 14 vol 3 notriple 0
+INHERITED EDGE ROWS vs REST: 94 rows / 19 files, all equal True
+SEAL faults: none · complete=True
+elapsed 122s
