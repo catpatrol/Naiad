@@ -1,0 +1,48 @@
+{
+  "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+  "as_of_last_closed_4h_open": "2026-09-24T20:00:00Z",
+  "disclosure": [
+    "AS_OF_PIN.json: last written 2026-09-25T00:57:47Z, before the last fetch row 2026-09-25T00:59:46Z \u2014 as first written",
+    "CLONE_ATTEST.json: last written 2026-09-25T00:57:25Z, before the last fetch row 2026-09-25T00:59:46Z \u2014 as first written",
+    "CONTRACT_SPECS.json: last written 2026-09-25T00:57:48Z, before the last fetch row 2026-09-25T00:59:46Z \u2014 as first written",
+    "EDGE_AUDIT.json: last written 2026-09-25T00:58:00Z, before the last fetch row 2026-09-25T00:59:46Z \u2014 as first written",
+    "PRE_STATE.json: last written 2026-09-25T00:57:49Z, before the last fetch row 2026-09-25T00:59:46Z \u2014 as first written"
+  ],
+  "fetch_log": {
+    "file": "FETCH_LOG.jsonl",
+    "first_row_utc": "2026-09-25T00:57:46Z",
+    "last_row_utc": "2026-09-25T00:59:46Z",
+    "sealed_lines": 291,
+    "sha256_of_sealed_lines": "bf34b4cd9f0f562f91358403a9d91b1d5ea3ed65057da92a781df98385e18ec7"
+  },
+  "files": {
+    "AS_OF_PIN.json": {
+      "bytes": 1768,
+      "last_written_utc": "2026-09-25T00:57:47Z",
+      "sha256": "4f609ccfdf2bc61af2e9e2818ff3cd27aea3f88f7637bd73163b3947c977e4bd"
+    },
+    "CLONE_ATTEST.json": {
+      "bytes": 56087,
+      "last_written_utc": "2026-09-25T00:57:25Z",
+      "sha256": "3cbd6ff3bf819031057511427ca282588654588834f6828201ca1401d47cb441"
+    },
+    "CONTRACT_SPECS.json": {
+      "bytes": 57433,
+      "last_written_utc": "2026-09-25T00:57:48Z",
+      "sha256": "74d9d47b7177955237339eb417100581230efbaf13f2701677436df1c74a6b7e"
+    },
+    "EDGE_AUDIT.json": {
+      "bytes": 7489,
+      "last_written_utc": "2026-09-25T00:58:00Z",
+      "sha256": "c1fe3206fb099b01616a932746f6f65127dbef88861064aa49d6f56ba0816f39"
+    },
+    "PRE_STATE.json": {
+      "bytes": 62628,
+      "last_written_utc": "2026-09-25T00:57:49Z",
+      "sha256": "29361958c3f94bc7d6ff97f27542fc7e5c0cb61db1fab7e6945c8ec7beae37d0"
+    }
+  },
+  "law": "from this seal on, a sealed file's bytes never move and the fetch log only grows past its sealed line prefix; the seal itself is write-once (_dump_once)",
+  "sealed_utc": "2026-09-25T00:59:47Z",
+  "warranty": "these files are described AS OF the pinned last closed 4h bar named here and of no other; bars stamped after it are counted, never read [TC6V-a, carried by TIER-C11]"
+}

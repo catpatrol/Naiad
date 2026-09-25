@@ -1,0 +1,1850 @@
+{
+  "all_trading": true,
+  "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+  "as_of_last_closed_4h_open": "2026-09-24T20:00:00Z",
+  "assets": [
+    {
+      "asset": "BTC",
+      "base_asset": "BTC",
+      "contract_type": "PERPETUAL",
+      "min_notional_usdt": "50",
+      "min_qty": "0.001",
+      "multiplier_source": "baseAsset 'BTC' -> leading integer 1 [LEAN D-l]; the venue publishes NO ['multiplier', 'contractSize', 'contract_size', 'quantity_multiplier', 'contractMultiplier', 'multiplierSize'] field for this contract (fields found in its object: none)",
+      "multiplier_tokens_per_contract_unit": 1,
+      "normalized_price_law": "normalized price = venue price / 1 (USDT per one BTC)",
+      "normalized_qty_law": "normalized quantity = venue quantity x 1 (BTC tokens)",
+      "price_is_per_tokens": "prices on BTCUSDT are per ONE BTC (multiplier 1)",
+      "price_precision": 2,
+      "price_tick": "0.10",
+      "qty_step": "0.001",
+      "quantity_precision": 3,
+      "quote_asset": "USDT",
+      "quotes_per_tokens": 1,
+      "status": "TRADING",
+      "stem": "BTCUSDT",
+      "symbol": "BTCUSDT",
+      "venue": "BINANCE_USDTM",
+      "venue_object": {
+        "baseAsset": "BTC",
+        "baseAssetPrecision": 8,
+        "contractType": "PERPETUAL",
+        "deliveryDate": 4133404800000,
+        "filters": [
+          {
+            "filterType": "PRICE_FILTER",
+            "maxPrice": "4529764",
+            "minPrice": "556.80",
+            "tickSize": "0.10"
+          },
+          {
+            "filterType": "LOT_SIZE",
+            "maxQty": "1000",
+            "minQty": "0.001",
+            "stepSize": "0.001"
+          },
+          {
+            "filterType": "MARKET_LOT_SIZE",
+            "maxQty": "120",
+            "minQty": "0.001",
+            "stepSize": "0.001"
+          },
+          {
+            "filterType": "MAX_NUM_ORDERS",
+            "limit": 200
+          },
+          {
+            "filterType": "MIN_NOTIONAL",
+            "notional": "50"
+          },
+          {
+            "filterType": "PERCENT_PRICE",
+            "multiplierDecimal": "4",
+            "multiplierDown": "0.9500",
+            "multiplierUp": "1.0500"
+          },
+          {
+            "filterType": "POSITION_RISK_CONTROL",
+            "positionControlSide": "NONE"
+          }
+        ],
+        "liquidationFee": "0.012500",
+        "maintMarginPercent": "2.5000",
+        "marginAsset": "USDT",
+        "marketTakeBound": "0.05",
+        "maxMoveOrderLimit": 10000,
+        "onboardDate": 1567965300000,
+        "orderTypes": [
+          "LIMIT",
+          "MARKET",
+          "STOP",
+          "STOP_MARKET",
+          "TAKE_PROFIT",
+          "TAKE_PROFIT_MARKET",
+          "TRAILING_STOP_MARKET"
+        ],
+        "pair": "BTCUSDT",
+        "permissionSets": [
+          "GRID",
+          "COPY",
+          "DCA",
+          "PSB"
+        ],
+        "pricePrecision": 2,
+        "quantityPrecision": 3,
+        "quoteAsset": "USDT",
+        "quotePrecision": 8,
+        "requiredMarginPercent": "5.0000",
+        "status": "TRADING",
+        "symbol": "BTCUSDT",
+        "timeInForce": [
+          "GTC",
+          "IOC",
+          "FOK",
+          "GTX",
+          "GTD"
+        ],
+        "triggerProtect": "0.0500",
+        "underlyingSubType": [
+          "PoW",
+          "Crypto"
+        ],
+        "underlyingType": "COIN"
+      }
+    },
+    {
+      "asset": "ETH",
+      "base_asset": "ETH",
+      "contract_type": "PERPETUAL",
+      "min_notional_usdt": "20",
+      "min_qty": "0.001",
+      "multiplier_source": "baseAsset 'ETH' -> leading integer 1 [LEAN D-l]; the venue publishes NO ['multiplier', 'contractSize', 'contract_size', 'quantity_multiplier', 'contractMultiplier', 'multiplierSize'] field for this contract (fields found in its object: none)",
+      "multiplier_tokens_per_contract_unit": 1,
+      "normalized_price_law": "normalized price = venue price / 1 (USDT per one ETH)",
+      "normalized_qty_law": "normalized quantity = venue quantity x 1 (ETH tokens)",
+      "price_is_per_tokens": "prices on ETHUSDT are per ONE ETH (multiplier 1)",
+      "price_precision": 2,
+      "price_tick": "0.01",
+      "qty_step": "0.001",
+      "quantity_precision": 3,
+      "quote_asset": "USDT",
+      "quotes_per_tokens": 1,
+      "status": "TRADING",
+      "stem": "ETHUSDT",
+      "symbol": "ETHUSDT",
+      "venue": "BINANCE_USDTM",
+      "venue_object": {
+        "baseAsset": "ETH",
+        "baseAssetPrecision": 8,
+        "contractType": "PERPETUAL",
+        "deliveryDate": 4133404800000,
+        "filters": [
+          {
+            "filterType": "PRICE_FILTER",
+            "maxPrice": "306177",
+            "minPrice": "39.86",
+            "tickSize": "0.01"
+          },
+          {
+            "filterType": "LOT_SIZE",
+            "maxQty": "10000",
+            "minQty": "0.001",
+            "stepSize": "0.001"
+          },
+          {
+            "filterType": "MARKET_LOT_SIZE",
+            "maxQty": "2000",
+            "minQty": "0.001",
+            "stepSize": "0.001"
+          },
+          {
+            "filterType": "MAX_NUM_ORDERS",
+            "limit": 200
+          },
+          {
+            "filterType": "MIN_NOTIONAL",
+            "notional": "20"
+          },
+          {
+            "filterType": "PERCENT_PRICE",
+            "multiplierDecimal": "4",
+            "multiplierDown": "0.9500",
+            "multiplierUp": "1.0500"
+          },
+          {
+            "filterType": "POSITION_RISK_CONTROL",
+            "positionControlSide": "NONE"
+          }
+        ],
+        "liquidationFee": "0.012500",
+        "maintMarginPercent": "2.5000",
+        "marginAsset": "USDT",
+        "marketTakeBound": "0.05",
+        "maxMoveOrderLimit": 10000,
+        "onboardDate": 1574840700000,
+        "orderTypes": [
+          "LIMIT",
+          "MARKET",
+          "STOP",
+          "STOP_MARKET",
+          "TAKE_PROFIT",
+          "TAKE_PROFIT_MARKET",
+          "TRAILING_STOP_MARKET"
+        ],
+        "pair": "ETHUSDT",
+        "permissionSets": [
+          "GRID",
+          "COPY",
+          "DCA",
+          "PSB"
+        ],
+        "pricePrecision": 2,
+        "quantityPrecision": 3,
+        "quoteAsset": "USDT",
+        "quotePrecision": 8,
+        "requiredMarginPercent": "5.0000",
+        "status": "TRADING",
+        "symbol": "ETHUSDT",
+        "timeInForce": [
+          "GTC",
+          "IOC",
+          "FOK",
+          "GTX",
+          "GTD"
+        ],
+        "triggerProtect": "0.0500",
+        "underlyingSubType": [
+          "Layer-1",
+          "Crypto"
+        ],
+        "underlyingType": "COIN"
+      }
+    },
+    {
+      "asset": "SOL",
+      "base_asset": "SOL",
+      "contract_type": "PERPETUAL",
+      "min_notional_usdt": "5",
+      "min_qty": "0.01",
+      "multiplier_source": "baseAsset 'SOL' -> leading integer 1 [LEAN D-l]; the venue publishes NO ['multiplier', 'contractSize', 'contract_size', 'quantity_multiplier', 'contractMultiplier', 'multiplierSize'] field for this contract (fields found in its object: none)",
+      "multiplier_tokens_per_contract_unit": 1,
+      "normalized_price_law": "normalized price = venue price / 1 (USDT per one SOL)",
+      "normalized_qty_law": "normalized quantity = venue quantity x 1 (SOL tokens)",
+      "price_is_per_tokens": "prices on SOLUSDT are per ONE SOL (multiplier 1)",
+      "price_precision": 4,
+      "price_tick": "0.0100",
+      "qty_step": "0.01",
+      "quantity_precision": 2,
+      "quote_asset": "USDT",
+      "quotes_per_tokens": 1,
+      "status": "TRADING",
+      "stem": "SOLUSDT",
+      "symbol": "SOLUSDT",
+      "venue": "BINANCE_USDTM",
+      "venue_object": {
+        "baseAsset": "SOL",
+        "baseAssetPrecision": 8,
+        "contractType": "PERPETUAL",
+        "deliveryDate": 4133404800000,
+        "filters": [
+          {
+            "filterType": "PRICE_FILTER",
+            "maxPrice": "6857",
+            "minPrice": "0.4200",
+            "tickSize": "0.0100"
+          },
+          {
+            "filterType": "LOT_SIZE",
+            "maxQty": "1000000",
+            "minQty": "0.01",
+            "stepSize": "0.01"
+          },
+          {
+            "filterType": "MARKET_LOT_SIZE",
+            "maxQty": "80000",
+            "minQty": "0.01",
+            "stepSize": "0.01"
+          },
+          {
+            "filterType": "MAX_NUM_ORDERS",
+            "limit": 200
+          },
+          {
+            "filterType": "MIN_NOTIONAL",
+            "notional": "5"
+          },
+          {
+            "filterType": "PERCENT_PRICE",
+            "multiplierDecimal": "4",
+            "multiplierDown": "0.9500",
+            "multiplierUp": "1.0500"
+          },
+          {
+            "filterType": "POSITION_RISK_CONTROL",
+            "positionControlSide": "NONE"
+          }
+        ],
+        "liquidationFee": "0.015000",
+        "maintMarginPercent": "2.5000",
+        "marginAsset": "USDT",
+        "marketTakeBound": "0.05",
+        "maxMoveOrderLimit": 10000,
+        "onboardDate": 1600066800000,
+        "orderTypes": [
+          "LIMIT",
+          "MARKET",
+          "STOP",
+          "STOP_MARKET",
+          "TAKE_PROFIT",
+          "TAKE_PROFIT_MARKET",
+          "TRAILING_STOP_MARKET"
+        ],
+        "pair": "SOLUSDT",
+        "permissionSets": [
+          "GRID",
+          "COPY",
+          "DCA",
+          "PSB"
+        ],
+        "pricePrecision": 4,
+        "quantityPrecision": 2,
+        "quoteAsset": "USDT",
+        "quotePrecision": 8,
+        "requiredMarginPercent": "5.0000",
+        "status": "TRADING",
+        "symbol": "SOLUSDT",
+        "timeInForce": [
+          "GTC",
+          "IOC",
+          "FOK",
+          "GTX",
+          "GTD"
+        ],
+        "triggerProtect": "0.0500",
+        "underlyingSubType": [
+          "Layer-1",
+          "Crypto"
+        ],
+        "underlyingType": "COIN"
+      }
+    },
+    {
+      "asset": "NEAR",
+      "base_asset": "NEAR",
+      "contract_type": "PERPETUAL",
+      "min_notional_usdt": "5",
+      "min_qty": "1",
+      "multiplier_source": "baseAsset 'NEAR' -> leading integer 1 [LEAN D-l]; the venue publishes NO ['multiplier', 'contractSize', 'contract_size', 'quantity_multiplier', 'contractMultiplier', 'multiplierSize'] field for this contract (fields found in its object: none)",
+      "multiplier_tokens_per_contract_unit": 1,
+      "normalized_price_law": "normalized price = venue price / 1 (USDT per one NEAR)",
+      "normalized_qty_law": "normalized quantity = venue quantity x 1 (NEAR tokens)",
+      "price_is_per_tokens": "prices on NEARUSDT are per ONE NEAR (multiplier 1)",
+      "price_precision": 4,
+      "price_tick": "0.0010",
+      "qty_step": "1",
+      "quantity_precision": 0,
+      "quote_asset": "USDT",
+      "quotes_per_tokens": 1,
+      "status": "TRADING",
+      "stem": "NEARUSDT",
+      "symbol": "NEARUSDT",
+      "venue": "BINANCE_USDTM",
+      "venue_object": {
+        "baseAsset": "NEAR",
+        "baseAssetPrecision": 8,
+        "contractType": "PERPETUAL",
+        "deliveryDate": 4133404800000,
+        "filters": [
+          {
+            "filterType": "PRICE_FILTER",
+            "maxPrice": "1000",
+            "minPrice": "0.0480",
+            "tickSize": "0.0010"
+          },
+          {
+            "filterType": "LOT_SIZE",
+            "maxQty": "5000000",
+            "minQty": "1",
+            "stepSize": "1"
+          },
+          {
+            "filterType": "MARKET_LOT_SIZE",
+            "maxQty": "400000",
+            "minQty": "1",
+            "stepSize": "1"
+          },
+          {
+            "filterType": "MAX_NUM_ORDERS",
+            "limit": 200
+          },
+          {
+            "filterType": "MIN_NOTIONAL",
+            "notional": "5"
+          },
+          {
+            "filterType": "PERCENT_PRICE",
+            "multiplierDecimal": "4",
+            "multiplierDown": "0.9000",
+            "multiplierUp": "1.1000"
+          },
+          {
+            "filterType": "POSITION_RISK_CONTROL",
+            "positionControlSide": "NONE"
+          }
+        ],
+        "liquidationFee": "0.015000",
+        "maintMarginPercent": "2.5000",
+        "marginAsset": "USDT",
+        "marketTakeBound": "0.10",
+        "maxMoveOrderLimit": 10000,
+        "onboardDate": 1602748800000,
+        "orderTypes": [
+          "LIMIT",
+          "MARKET",
+          "STOP",
+          "STOP_MARKET",
+          "TAKE_PROFIT",
+          "TAKE_PROFIT_MARKET",
+          "TRAILING_STOP_MARKET"
+        ],
+        "pair": "NEARUSDT",
+        "permissionSets": [
+          "GRID",
+          "COPY",
+          "DCA",
+          "PSB"
+        ],
+        "pricePrecision": 4,
+        "quantityPrecision": 0,
+        "quoteAsset": "USDT",
+        "quotePrecision": 8,
+        "requiredMarginPercent": "5.0000",
+        "status": "TRADING",
+        "symbol": "NEARUSDT",
+        "timeInForce": [
+          "GTC",
+          "IOC",
+          "FOK",
+          "GTX",
+          "GTD"
+        ],
+        "triggerProtect": "0.1000",
+        "underlyingSubType": [
+          "Layer-1",
+          "Crypto"
+        ],
+        "underlyingType": "COIN"
+      }
+    },
+    {
+      "asset": "ZEC",
+      "base_asset": "ZEC",
+      "contract_type": "PERPETUAL",
+      "min_notional_usdt": "5",
+      "min_qty": "0.001",
+      "multiplier_source": "baseAsset 'ZEC' -> leading integer 1 [LEAN D-l]; the venue publishes NO ['multiplier', 'contractSize', 'contract_size', 'quantity_multiplier', 'contractMultiplier', 'multiplierSize'] field for this contract (fields found in its object: none)",
+      "multiplier_tokens_per_contract_unit": 1,
+      "normalized_price_law": "normalized price = venue price / 1 (USDT per one ZEC)",
+      "normalized_qty_law": "normalized quantity = venue quantity x 1 (ZEC tokens)",
+      "price_is_per_tokens": "prices on ZECUSDT are per ONE ZEC (multiplier 1)",
+      "price_precision": 2,
+      "price_tick": "0.01",
+      "qty_step": "0.001",
+      "quantity_precision": 3,
+      "quote_asset": "USDT",
+      "quotes_per_tokens": 1,
+      "status": "TRADING",
+      "stem": "ZECUSDT",
+      "symbol": "ZECUSDT",
+      "venue": "BINANCE_USDTM",
+      "venue_object": {
+        "baseAsset": "ZEC",
+        "baseAssetPrecision": 8,
+        "contractType": "PERPETUAL",
+        "deliveryDate": 4133404800000,
+        "filters": [
+          {
+            "filterType": "PRICE_FILTER",
+            "maxPrice": "100000",
+            "minPrice": "2.85",
+            "tickSize": "0.01"
+          },
+          {
+            "filterType": "LOT_SIZE",
+            "maxQty": "15000",
+            "minQty": "0.001",
+            "stepSize": "0.001"
+          },
+          {
+            "filterType": "MARKET_LOT_SIZE",
+            "maxQty": "2000",
+            "minQty": "0.001",
+            "stepSize": "0.001"
+          },
+          {
+            "filterType": "MAX_NUM_ORDERS",
+            "limit": 200
+          },
+          {
+            "filterType": "MIN_NOTIONAL",
+            "notional": "5"
+          },
+          {
+            "filterType": "PERCENT_PRICE",
+            "multiplierDecimal": "4",
+            "multiplierDown": "0.9000",
+            "multiplierUp": "1.1000"
+          },
+          {
+            "filterType": "POSITION_RISK_CONTROL",
+            "positionControlSide": "NONE"
+          }
+        ],
+        "liquidationFee": "0.015000",
+        "maintMarginPercent": "2.5000",
+        "marginAsset": "USDT",
+        "marketTakeBound": "0.10",
+        "maxMoveOrderLimit": 10000,
+        "onboardDate": 1580889600000,
+        "orderTypes": [
+          "LIMIT",
+          "MARKET",
+          "STOP",
+          "STOP_MARKET",
+          "TAKE_PROFIT",
+          "TAKE_PROFIT_MARKET",
+          "TRAILING_STOP_MARKET"
+        ],
+        "pair": "ZECUSDT",
+        "permissionSets": [
+          "GRID",
+          "COPY",
+          "DCA",
+          "PSB"
+        ],
+        "pricePrecision": 2,
+        "quantityPrecision": 3,
+        "quoteAsset": "USDT",
+        "quotePrecision": 8,
+        "requiredMarginPercent": "5.0000",
+        "status": "TRADING",
+        "symbol": "ZECUSDT",
+        "timeInForce": [
+          "GTC",
+          "IOC",
+          "FOK",
+          "GTX",
+          "GTD"
+        ],
+        "triggerProtect": "0.1000",
+        "underlyingSubType": [
+          "PoW",
+          "Crypto"
+        ],
+        "underlyingType": "COIN"
+      }
+    },
+    {
+      "asset": "ENA",
+      "base_asset": "ENA",
+      "contract_type": "PERPETUAL",
+      "min_notional_usdt": "5",
+      "min_qty": "1",
+      "multiplier_source": "baseAsset 'ENA' -> leading integer 1 [LEAN D-l]; the venue publishes NO ['multiplier', 'contractSize', 'contract_size', 'quantity_multiplier', 'contractMultiplier', 'multiplierSize'] field for this contract (fields found in its object: none)",
+      "multiplier_tokens_per_contract_unit": 1,
+      "normalized_price_law": "normalized price = venue price / 1 (USDT per one ENA)",
+      "normalized_qty_law": "normalized quantity = venue quantity x 1 (ENA tokens)",
+      "price_is_per_tokens": "prices on ENAUSDT are per ONE ENA (multiplier 1)",
+      "price_precision": 7,
+      "price_tick": "0.0000100",
+      "qty_step": "1",
+      "quantity_precision": 0,
+      "quote_asset": "USDT",
+      "quotes_per_tokens": 1,
+      "status": "TRADING",
+      "stem": "ENAUSDT",
+      "symbol": "ENAUSDT",
+      "venue": "BINANCE_USDTM",
+      "venue_object": {
+        "baseAsset": "ENA",
+        "baseAssetPrecision": 8,
+        "contractType": "PERPETUAL",
+        "deliveryDate": 4133404800000,
+        "filters": [
+          {
+            "filterType": "PRICE_FILTER",
+            "maxPrice": "200",
+            "minPrice": "0.0000100",
+            "tickSize": "0.0000100"
+          },
+          {
+            "filterType": "LOT_SIZE",
+            "maxQty": "20000000",
+            "minQty": "1",
+            "stepSize": "1"
+          },
+          {
+            "filterType": "MARKET_LOT_SIZE",
+            "maxQty": "2000000",
+            "minQty": "1",
+            "stepSize": "1"
+          },
+          {
+            "filterType": "MAX_NUM_ORDERS",
+            "limit": 200
+          },
+          {
+            "filterType": "MIN_NOTIONAL",
+            "notional": "5"
+          },
+          {
+            "filterType": "PERCENT_PRICE",
+            "multiplierDecimal": "4",
+            "multiplierDown": "0.8500",
+            "multiplierUp": "1.1500"
+          },
+          {
+            "filterType": "POSITION_RISK_CONTROL",
+            "positionControlSide": "NONE"
+          }
+        ],
+        "liquidationFee": "0.015000",
+        "maintMarginPercent": "2.5000",
+        "marginAsset": "USDT",
+        "marketTakeBound": "0.15",
+        "maxMoveOrderLimit": 10000,
+        "onboardDate": 1712061000000,
+        "orderTypes": [
+          "LIMIT",
+          "MARKET",
+          "STOP",
+          "STOP_MARKET",
+          "TAKE_PROFIT",
+          "TAKE_PROFIT_MARKET",
+          "TRAILING_STOP_MARKET"
+        ],
+        "pair": "ENAUSDT",
+        "permissionSets": [
+          "GRID",
+          "COPY",
+          "DCA",
+          "PSB"
+        ],
+        "pricePrecision": 7,
+        "quantityPrecision": 0,
+        "quoteAsset": "USDT",
+        "quotePrecision": 8,
+        "requiredMarginPercent": "5.0000",
+        "status": "TRADING",
+        "symbol": "ENAUSDT",
+        "timeInForce": [
+          "GTC",
+          "IOC",
+          "FOK",
+          "GTX",
+          "GTD"
+        ],
+        "triggerProtect": "0.1500",
+        "underlyingSubType": [
+          "DeFi",
+          "Crypto"
+        ],
+        "underlyingType": "COIN"
+      }
+    },
+    {
+      "asset": "PUMPFUN",
+      "base_asset": "PUMP",
+      "contract_type": "PERPETUAL",
+      "min_notional_usdt": "5",
+      "min_qty": "1",
+      "multiplier_source": "baseAsset 'PUMP' -> leading integer 1 [LEAN D-l]; the venue publishes NO ['multiplier', 'contractSize', 'contract_size', 'quantity_multiplier', 'contractMultiplier', 'multiplierSize'] field for this contract (fields found in its object: none)",
+      "multiplier_tokens_per_contract_unit": 1,
+      "normalized_price_law": "normalized price = venue price / 1 (USDT per one PUMP)",
+      "normalized_qty_law": "normalized quantity = venue quantity x 1 (PUMP tokens)",
+      "price_is_per_tokens": "prices on PUMPUSDT are per ONE PUMP (multiplier 1)",
+      "price_precision": 7,
+      "price_tick": "0.0000010",
+      "qty_step": "1",
+      "quantity_precision": 0,
+      "quote_asset": "USDT",
+      "quotes_per_tokens": 1,
+      "status": "TRADING",
+      "stem": "PUMPUSDT",
+      "symbol": "PUMPUSDT",
+      "venue": "BINANCE_USDTM",
+      "venue_object": {
+        "baseAsset": "PUMP",
+        "baseAssetPrecision": 8,
+        "contractType": "PERPETUAL",
+        "deliveryDate": 4133404800000,
+        "filters": [
+          {
+            "filterType": "PRICE_FILTER",
+            "maxPrice": "200",
+            "minPrice": "0.0000010",
+            "tickSize": "0.0000010"
+          },
+          {
+            "filterType": "LOT_SIZE",
+            "maxQty": "900000000",
+            "minQty": "1",
+            "stepSize": "1"
+          },
+          {
+            "filterType": "MARKET_LOT_SIZE",
+            "maxQty": "90000000",
+            "minQty": "1",
+            "stepSize": "1"
+          },
+          {
+            "filterType": "MAX_NUM_ORDERS",
+            "limit": 200
+          },
+          {
+            "filterType": "MIN_NOTIONAL",
+            "notional": "5"
+          },
+          {
+            "filterType": "PERCENT_PRICE",
+            "multiplierDecimal": "4",
+            "multiplierDown": "0.8500",
+            "multiplierUp": "1.1500"
+          },
+          {
+            "filterType": "POSITION_RISK_CONTROL",
+            "positionControlSide": "NONE"
+          }
+        ],
+        "liquidationFee": "0.025000",
+        "maintMarginPercent": "2.5000",
+        "marginAsset": "USDT",
+        "marketTakeBound": "0.15",
+        "maxMoveOrderLimit": 10000,
+        "onboardDate": 1752132600000,
+        "orderTypes": [
+          "LIMIT",
+          "MARKET",
+          "STOP",
+          "STOP_MARKET",
+          "TAKE_PROFIT",
+          "TAKE_PROFIT_MARKET",
+          "TRAILING_STOP_MARKET"
+        ],
+        "pair": "PUMPUSDT",
+        "permissionSets": [
+          "GRID",
+          "COPY",
+          "DCA",
+          "PSB"
+        ],
+        "pricePrecision": 7,
+        "quantityPrecision": 0,
+        "quoteAsset": "USDT",
+        "quotePrecision": 8,
+        "requiredMarginPercent": "5.0000",
+        "status": "TRADING",
+        "symbol": "PUMPUSDT",
+        "timeInForce": [
+          "GTC",
+          "IOC",
+          "FOK",
+          "GTX",
+          "GTD"
+        ],
+        "triggerProtect": "0.1500",
+        "underlyingSubType": [
+          "Meme",
+          "Crypto"
+        ],
+        "underlyingType": "COIN"
+      }
+    },
+    {
+      "asset": "HYPE",
+      "base_asset": "HYPE",
+      "contract_type": "PERPETUAL",
+      "min_notional_usdt": "5",
+      "min_qty": "0.01",
+      "multiplier_source": "baseAsset 'HYPE' -> leading integer 1 [LEAN D-l]; the venue publishes NO ['multiplier', 'contractSize', 'contract_size', 'quantity_multiplier', 'contractMultiplier', 'multiplierSize'] field for this contract (fields found in its object: none)",
+      "multiplier_tokens_per_contract_unit": 1,
+      "normalized_price_law": "normalized price = venue price / 1 (USDT per one HYPE)",
+      "normalized_qty_law": "normalized quantity = venue quantity x 1 (HYPE tokens)",
+      "price_is_per_tokens": "prices on HYPEUSDT are per ONE HYPE (multiplier 1)",
+      "price_precision": 5,
+      "price_tick": "0.00100",
+      "qty_step": "0.01",
+      "quantity_precision": 2,
+      "quote_asset": "USDT",
+      "quotes_per_tokens": 1,
+      "status": "TRADING",
+      "stem": "HYPEUSDT",
+      "symbol": "HYPEUSDT",
+      "venue": "BINANCE_USDTM",
+      "venue_object": {
+        "baseAsset": "HYPE",
+        "baseAssetPrecision": 8,
+        "contractType": "PERPETUAL",
+        "deliveryDate": 4133404800000,
+        "filters": [
+          {
+            "filterType": "PRICE_FILTER",
+            "maxPrice": "20000",
+            "minPrice": "0.00100",
+            "tickSize": "0.00100"
+          },
+          {
+            "filterType": "LOT_SIZE",
+            "maxQty": "200000",
+            "minQty": "0.01",
+            "stepSize": "0.01"
+          },
+          {
+            "filterType": "MARKET_LOT_SIZE",
+            "maxQty": "20000",
+            "minQty": "0.01",
+            "stepSize": "0.01"
+          },
+          {
+            "filterType": "MAX_NUM_ORDERS",
+            "limit": 200
+          },
+          {
+            "filterType": "MIN_NOTIONAL",
+            "notional": "5"
+          },
+          {
+            "filterType": "PERCENT_PRICE",
+            "multiplierDecimal": "4",
+            "multiplierDown": "0.8500",
+            "multiplierUp": "1.1500"
+          },
+          {
+            "filterType": "POSITION_RISK_CONTROL",
+            "positionControlSide": "NONE"
+          }
+        ],
+        "liquidationFee": "0.020000",
+        "maintMarginPercent": "2.5000",
+        "marginAsset": "USDT",
+        "marketTakeBound": "0.15",
+        "maxMoveOrderLimit": 10000,
+        "onboardDate": 1748601000000,
+        "orderTypes": [
+          "LIMIT",
+          "MARKET",
+          "STOP",
+          "STOP_MARKET",
+          "TAKE_PROFIT",
+          "TAKE_PROFIT_MARKET",
+          "TRAILING_STOP_MARKET"
+        ],
+        "pair": "HYPEUSDT",
+        "permissionSets": [
+          "GRID",
+          "COPY",
+          "DCA",
+          "PSB"
+        ],
+        "pricePrecision": 5,
+        "quantityPrecision": 2,
+        "quoteAsset": "USDT",
+        "quotePrecision": 8,
+        "requiredMarginPercent": "5.0000",
+        "status": "TRADING",
+        "symbol": "HYPEUSDT",
+        "timeInForce": [
+          "GTC",
+          "IOC",
+          "FOK",
+          "GTX",
+          "GTD"
+        ],
+        "triggerProtect": "0.1500",
+        "underlyingSubType": [
+          "DeFi",
+          "Crypto"
+        ],
+        "underlyingType": "COIN"
+      }
+    },
+    {
+      "asset": "MNT",
+      "base_asset": "MNT",
+      "contract_type": "LinearPerpetual",
+      "funding_interval_minutes": 480,
+      "min_notional_usdt": "5",
+      "min_qty": "0.1",
+      "multiplier_source": "baseAsset 'MNT' -> leading integer 1 [LEAN D-l]; the venue publishes NO ['multiplier', 'contractSize', 'contract_size', 'quantity_multiplier', 'contractMultiplier', 'multiplierSize'] field for this contract (fields found in its object: none)",
+      "multiplier_tokens_per_contract_unit": 1,
+      "normalized_price_law": "normalized price = venue price / 1 (USDT per one MNT)",
+      "normalized_qty_law": "normalized quantity = venue quantity x 1 (MNT tokens)",
+      "price_is_per_tokens": "prices on MNTUSDT are per ONE MNT (multiplier 1)",
+      "price_precision": "5",
+      "price_tick": "0.00010",
+      "qty_step": "0.1",
+      "quantity_precision": null,
+      "quote_asset": "USDT",
+      "quotes_per_tokens": 1,
+      "status": "Trading",
+      "stem": "MNTUSDT_BYBIT",
+      "symbol": "MNTUSDT",
+      "venue": "BYBIT_V5_LINEAR",
+      "venue_object": {
+        "baseCoin": "MNT",
+        "contractType": "LinearPerpetual",
+        "copyTrading": "both",
+        "deliveryFeeRate": "",
+        "deliveryTime": "0",
+        "displayName": "MNTUSDT",
+        "forbidUplWithdrawal": false,
+        "fullName": "Mantle",
+        "fundingInterval": 480,
+        "isPreListing": false,
+        "launchTime": "1696225255000",
+        "leverageFilter": {
+          "leverageStep": "0.01",
+          "maxLeverage": "25.00",
+          "minLeverage": "1"
+        },
+        "lotSizeFilter": {
+          "maxMktOrderQty": "50000.0",
+          "maxOrderQty": "250000.0",
+          "minNotionalValue": "5",
+          "minOrderQty": "0.1",
+          "postOnlyMaxOrderQty": "250000.0",
+          "qtyStep": "0.1"
+        },
+        "lowerFundingRate": "-0.02",
+        "marketRegion": "",
+        "preListingInfo": null,
+        "priceFilter": {
+          "maxPrice": "1999.99980",
+          "minPrice": "0.00010",
+          "tickSize": "0.00010"
+        },
+        "priceScale": "5",
+        "quoteCoin": "USDT",
+        "riskParameters": {
+          "priceLimitRatioX": "0.05",
+          "priceLimitRatioY": "0.1"
+        },
+        "settleCoin": "USDT",
+        "status": "Trading",
+        "symbol": "MNTUSDT",
+        "symbolId": 365,
+        "symbolType": "",
+        "underlyingTicker": "",
+        "unifiedMarginTrade": true,
+        "upperFundingRate": "0.02"
+      }
+    },
+    {
+      "asset": "SUI",
+      "base_asset": "SUI",
+      "contract_type": "PERPETUAL",
+      "min_notional_usdt": "5",
+      "min_qty": "0.1",
+      "multiplier_source": "baseAsset 'SUI' -> leading integer 1 [LEAN D-l]; the venue publishes NO ['multiplier', 'contractSize', 'contract_size', 'quantity_multiplier', 'contractMultiplier', 'multiplierSize'] field for this contract (fields found in its object: none)",
+      "multiplier_tokens_per_contract_unit": 1,
+      "normalized_price_law": "normalized price = venue price / 1 (USDT per one SUI)",
+      "normalized_qty_law": "normalized quantity = venue quantity x 1 (SUI tokens)",
+      "price_is_per_tokens": "prices on SUIUSDT are per ONE SUI (multiplier 1)",
+      "price_precision": 6,
+      "price_tick": "0.000100",
+      "qty_step": "0.1",
+      "quantity_precision": 1,
+      "quote_asset": "USDT",
+      "quotes_per_tokens": 1,
+      "status": "TRADING",
+      "stem": "SUIUSDT",
+      "symbol": "SUIUSDT",
+      "venue": "BINANCE_USDTM",
+      "venue_object": {
+        "baseAsset": "SUI",
+        "baseAssetPrecision": 8,
+        "contractType": "PERPETUAL",
+        "deliveryDate": 4133404800000,
+        "filters": [
+          {
+            "filterType": "PRICE_FILTER",
+            "maxPrice": "2000",
+            "minPrice": "0.000100",
+            "tickSize": "0.000100"
+          },
+          {
+            "filterType": "LOT_SIZE",
+            "maxQty": "10000000",
+            "minQty": "0.1",
+            "stepSize": "0.1"
+          },
+          {
+            "filterType": "MARKET_LOT_SIZE",
+            "maxQty": "600000",
+            "minQty": "0.1",
+            "stepSize": "0.1"
+          },
+          {
+            "filterType": "MAX_NUM_ORDERS",
+            "limit": 200
+          },
+          {
+            "filterType": "MIN_NOTIONAL",
+            "notional": "5"
+          },
+          {
+            "filterType": "PERCENT_PRICE",
+            "multiplierDecimal": "4",
+            "multiplierDown": "0.8500",
+            "multiplierUp": "1.1500"
+          },
+          {
+            "filterType": "POSITION_RISK_CONTROL",
+            "positionControlSide": "NONE"
+          }
+        ],
+        "liquidationFee": "0.015000",
+        "maintMarginPercent": "2.5000",
+        "marginAsset": "USDT",
+        "marketTakeBound": "0.15",
+        "maxMoveOrderLimit": 10000,
+        "onboardDate": 1683072000000,
+        "orderTypes": [
+          "LIMIT",
+          "MARKET",
+          "STOP",
+          "STOP_MARKET",
+          "TAKE_PROFIT",
+          "TAKE_PROFIT_MARKET",
+          "TRAILING_STOP_MARKET"
+        ],
+        "pair": "SUIUSDT",
+        "permissionSets": [
+          "GRID",
+          "COPY",
+          "DCA",
+          "PSB"
+        ],
+        "pricePrecision": 6,
+        "quantityPrecision": 1,
+        "quoteAsset": "USDT",
+        "quotePrecision": 8,
+        "requiredMarginPercent": "5.0000",
+        "status": "TRADING",
+        "symbol": "SUIUSDT",
+        "timeInForce": [
+          "GTC",
+          "IOC",
+          "FOK",
+          "GTX",
+          "GTD"
+        ],
+        "triggerProtect": "0.1500",
+        "underlyingSubType": [
+          "Layer-1",
+          "Crypto"
+        ],
+        "underlyingType": "COIN"
+      }
+    },
+    {
+      "asset": "LTC",
+      "base_asset": "LTC",
+      "contract_type": "PERPETUAL",
+      "min_notional_usdt": "20",
+      "min_qty": "0.001",
+      "multiplier_source": "baseAsset 'LTC' -> leading integer 1 [LEAN D-l]; the venue publishes NO ['multiplier', 'contractSize', 'contract_size', 'quantity_multiplier', 'contractMultiplier', 'multiplierSize'] field for this contract (fields found in its object: none)",
+      "multiplier_tokens_per_contract_unit": 1,
+      "normalized_price_law": "normalized price = venue price / 1 (USDT per one LTC)",
+      "normalized_qty_law": "normalized quantity = venue quantity x 1 (LTC tokens)",
+      "price_is_per_tokens": "prices on LTCUSDT are per ONE LTC (multiplier 1)",
+      "price_precision": 2,
+      "price_tick": "0.01",
+      "qty_step": "0.001",
+      "quantity_precision": 3,
+      "quote_asset": "USDT",
+      "quotes_per_tokens": 1,
+      "status": "TRADING",
+      "stem": "LTCUSDT",
+      "symbol": "LTCUSDT",
+      "venue": "BINANCE_USDTM",
+      "venue_object": {
+        "baseAsset": "LTC",
+        "baseAssetPrecision": 8,
+        "contractType": "PERPETUAL",
+        "deliveryDate": 4133404800000,
+        "filters": [
+          {
+            "filterType": "PRICE_FILTER",
+            "maxPrice": "100000",
+            "minPrice": "0.01",
+            "tickSize": "0.01"
+          },
+          {
+            "filterType": "LOT_SIZE",
+            "maxQty": "170000",
+            "minQty": "0.001",
+            "stepSize": "0.001"
+          },
+          {
+            "filterType": "MARKET_LOT_SIZE",
+            "maxQty": "100000",
+            "minQty": "0.001",
+            "stepSize": "0.001"
+          },
+          {
+            "filterType": "MAX_NUM_ORDERS",
+            "limit": 200
+          },
+          {
+            "filterType": "MIN_NOTIONAL",
+            "notional": "20"
+          },
+          {
+            "filterType": "PERCENT_PRICE",
+            "multiplierDecimal": "4",
+            "multiplierDown": "0.9500",
+            "multiplierUp": "1.0500"
+          },
+          {
+            "filterType": "POSITION_RISK_CONTROL",
+            "positionControlSide": "NONE"
+          }
+        ],
+        "liquidationFee": "0.012500",
+        "maintMarginPercent": "2.5000",
+        "marginAsset": "USDT",
+        "marketTakeBound": "0.05",
+        "maxMoveOrderLimit": 10000,
+        "onboardDate": 1578557100000,
+        "orderTypes": [
+          "LIMIT",
+          "MARKET",
+          "STOP",
+          "STOP_MARKET",
+          "TAKE_PROFIT",
+          "TAKE_PROFIT_MARKET",
+          "TRAILING_STOP_MARKET"
+        ],
+        "pair": "LTCUSDT",
+        "permissionSets": [
+          "GRID",
+          "COPY",
+          "RPI",
+          "DCA",
+          "PSB"
+        ],
+        "pricePrecision": 2,
+        "quantityPrecision": 3,
+        "quoteAsset": "USDT",
+        "quotePrecision": 8,
+        "requiredMarginPercent": "5.0000",
+        "status": "TRADING",
+        "symbol": "LTCUSDT",
+        "timeInForce": [
+          "GTC",
+          "IOC",
+          "FOK",
+          "GTX",
+          "GTD"
+        ],
+        "triggerProtect": "0.0500",
+        "underlyingSubType": [
+          "Payment",
+          "Crypto"
+        ],
+        "underlyingType": "COIN"
+      }
+    },
+    {
+      "asset": "XMR",
+      "base_asset": "XMR",
+      "contract_type": "PERPETUAL",
+      "min_notional_usdt": "5",
+      "min_qty": "0.001",
+      "multiplier_source": "baseAsset 'XMR' -> leading integer 1 [LEAN D-l]; the venue publishes NO ['multiplier', 'contractSize', 'contract_size', 'quantity_multiplier', 'contractMultiplier', 'multiplierSize'] field for this contract (fields found in its object: none)",
+      "multiplier_tokens_per_contract_unit": 1,
+      "normalized_price_law": "normalized price = venue price / 1 (USDT per one XMR)",
+      "normalized_qty_law": "normalized quantity = venue quantity x 1 (XMR tokens)",
+      "price_is_per_tokens": "prices on XMRUSDT are per ONE XMR (multiplier 1)",
+      "price_precision": 2,
+      "price_tick": "0.01",
+      "qty_step": "0.001",
+      "quantity_precision": 3,
+      "quote_asset": "USDT",
+      "quotes_per_tokens": 1,
+      "status": "TRADING",
+      "stem": "XMRUSDT",
+      "symbol": "XMRUSDT",
+      "venue": "BINANCE_USDTM",
+      "venue_object": {
+        "baseAsset": "XMR",
+        "baseAssetPrecision": 8,
+        "contractType": "PERPETUAL",
+        "deliveryDate": 4133404800000,
+        "filters": [
+          {
+            "filterType": "PRICE_FILTER",
+            "maxPrice": "100000",
+            "minPrice": "4.36",
+            "tickSize": "0.01"
+          },
+          {
+            "filterType": "LOT_SIZE",
+            "maxQty": "5000",
+            "minQty": "0.001",
+            "stepSize": "0.001"
+          },
+          {
+            "filterType": "MARKET_LOT_SIZE",
+            "maxQty": "1200",
+            "minQty": "0.001",
+            "stepSize": "0.001"
+          },
+          {
+            "filterType": "MAX_NUM_ORDERS",
+            "limit": 200
+          },
+          {
+            "filterType": "MIN_NOTIONAL",
+            "notional": "5"
+          },
+          {
+            "filterType": "PERCENT_PRICE",
+            "multiplierDecimal": "4",
+            "multiplierDown": "0.9500",
+            "multiplierUp": "1.0500"
+          },
+          {
+            "filterType": "POSITION_RISK_CONTROL",
+            "positionControlSide": "NONE"
+          }
+        ],
+        "liquidationFee": "0.020000",
+        "maintMarginPercent": "2.5000",
+        "marginAsset": "USDT",
+        "marketTakeBound": "0.05",
+        "maxMoveOrderLimit": 10000,
+        "onboardDate": 1580716800000,
+        "orderTypes": [
+          "LIMIT",
+          "MARKET",
+          "STOP",
+          "STOP_MARKET",
+          "TAKE_PROFIT",
+          "TAKE_PROFIT_MARKET",
+          "TRAILING_STOP_MARKET"
+        ],
+        "pair": "XMRUSDT",
+        "permissionSets": [
+          "GRID",
+          "COPY",
+          "DCA",
+          "PSB"
+        ],
+        "pricePrecision": 2,
+        "quantityPrecision": 3,
+        "quoteAsset": "USDT",
+        "quotePrecision": 8,
+        "requiredMarginPercent": "5.0000",
+        "status": "TRADING",
+        "symbol": "XMRUSDT",
+        "timeInForce": [
+          "GTC",
+          "IOC",
+          "FOK",
+          "GTX",
+          "GTD"
+        ],
+        "triggerProtect": "0.0500",
+        "underlyingSubType": [
+          "PoW",
+          "Crypto"
+        ],
+        "underlyingType": "COIN"
+      }
+    },
+    {
+      "asset": "BNB",
+      "base_asset": "BNB",
+      "contract_type": "PERPETUAL",
+      "min_notional_usdt": "5",
+      "min_qty": "0.01",
+      "multiplier_source": "baseAsset 'BNB' -> leading integer 1 [LEAN D-l]; the venue publishes NO ['multiplier', 'contractSize', 'contract_size', 'quantity_multiplier', 'contractMultiplier', 'multiplierSize'] field for this contract (fields found in its object: none)",
+      "multiplier_tokens_per_contract_unit": 1,
+      "normalized_price_law": "normalized price = venue price / 1 (USDT per one BNB)",
+      "normalized_qty_law": "normalized quantity = venue quantity x 1 (BNB tokens)",
+      "price_is_per_tokens": "prices on BNBUSDT are per ONE BNB (multiplier 1)",
+      "price_precision": 3,
+      "price_tick": "0.010",
+      "qty_step": "0.01",
+      "quantity_precision": 2,
+      "quote_asset": "USDT",
+      "quotes_per_tokens": 1,
+      "status": "TRADING",
+      "stem": "BNBUSDT",
+      "symbol": "BNBUSDT",
+      "venue": "BINANCE_USDTM",
+      "venue_object": {
+        "baseAsset": "BNB",
+        "baseAssetPrecision": 8,
+        "contractType": "PERPETUAL",
+        "deliveryDate": 4133404800000,
+        "filters": [
+          {
+            "filterType": "PRICE_FILTER",
+            "maxPrice": "100000",
+            "minPrice": "6.600",
+            "tickSize": "0.010"
+          },
+          {
+            "filterType": "LOT_SIZE",
+            "maxQty": "100000",
+            "minQty": "0.01",
+            "stepSize": "0.01"
+          },
+          {
+            "filterType": "MARKET_LOT_SIZE",
+            "maxQty": "2000",
+            "minQty": "0.01",
+            "stepSize": "0.01"
+          },
+          {
+            "filterType": "MAX_NUM_ORDERS",
+            "limit": 200
+          },
+          {
+            "filterType": "MIN_NOTIONAL",
+            "notional": "5"
+          },
+          {
+            "filterType": "PERCENT_PRICE",
+            "multiplierDecimal": "4",
+            "multiplierDown": "0.9500",
+            "multiplierUp": "1.0500"
+          },
+          {
+            "filterType": "POSITION_RISK_CONTROL",
+            "positionControlSide": "NONE"
+          }
+        ],
+        "liquidationFee": "0.012500",
+        "maintMarginPercent": "2.5000",
+        "marginAsset": "USDT",
+        "marketTakeBound": "0.05",
+        "maxMoveOrderLimit": 10000,
+        "onboardDate": 1581321600000,
+        "orderTypes": [
+          "LIMIT",
+          "MARKET",
+          "STOP",
+          "STOP_MARKET",
+          "TAKE_PROFIT",
+          "TAKE_PROFIT_MARKET",
+          "TRAILING_STOP_MARKET"
+        ],
+        "pair": "BNBUSDT",
+        "permissionSets": [
+          "GRID",
+          "COPY",
+          "RPI",
+          "DCA",
+          "PSB"
+        ],
+        "pricePrecision": 3,
+        "quantityPrecision": 2,
+        "quoteAsset": "USDT",
+        "quotePrecision": 8,
+        "requiredMarginPercent": "5.0000",
+        "status": "TRADING",
+        "symbol": "BNBUSDT",
+        "timeInForce": [
+          "GTC",
+          "IOC",
+          "FOK",
+          "GTX",
+          "GTD"
+        ],
+        "triggerProtect": "0.0500",
+        "underlyingSubType": [
+          "Layer-1",
+          "Crypto"
+        ],
+        "underlyingType": "COIN"
+      }
+    },
+    {
+      "asset": "UNI",
+      "base_asset": "UNI",
+      "contract_type": "PERPETUAL",
+      "min_notional_usdt": "5",
+      "min_qty": "1",
+      "multiplier_source": "baseAsset 'UNI' -> leading integer 1 [LEAN D-l]; the venue publishes NO ['multiplier', 'contractSize', 'contract_size', 'quantity_multiplier', 'contractMultiplier', 'multiplierSize'] field for this contract (fields found in its object: none)",
+      "multiplier_tokens_per_contract_unit": 1,
+      "normalized_price_law": "normalized price = venue price / 1 (USDT per one UNI)",
+      "normalized_qty_law": "normalized quantity = venue quantity x 1 (UNI tokens)",
+      "price_is_per_tokens": "prices on UNIUSDT are per ONE UNI (multiplier 1)",
+      "price_precision": 4,
+      "price_tick": "0.0010",
+      "qty_step": "1",
+      "quantity_precision": 0,
+      "quote_asset": "USDT",
+      "quotes_per_tokens": 1,
+      "status": "TRADING",
+      "stem": "UNIUSDT",
+      "symbol": "UNIUSDT",
+      "venue": "BINANCE_USDTM",
+      "venue_object": {
+        "baseAsset": "UNI",
+        "baseAssetPrecision": 8,
+        "contractType": "PERPETUAL",
+        "deliveryDate": 4133404800000,
+        "filters": [
+          {
+            "filterType": "PRICE_FILTER",
+            "maxPrice": "2684",
+            "minPrice": "0.0010",
+            "tickSize": "0.0010"
+          },
+          {
+            "filterType": "LOT_SIZE",
+            "maxQty": "2000000",
+            "minQty": "1",
+            "stepSize": "1"
+          },
+          {
+            "filterType": "MARKET_LOT_SIZE",
+            "maxQty": "100000",
+            "minQty": "1",
+            "stepSize": "1"
+          },
+          {
+            "filterType": "MAX_NUM_ORDERS",
+            "limit": 200
+          },
+          {
+            "filterType": "MIN_NOTIONAL",
+            "notional": "5"
+          },
+          {
+            "filterType": "PERCENT_PRICE",
+            "multiplierDecimal": "4",
+            "multiplierDown": "0.9000",
+            "multiplierUp": "1.1000"
+          },
+          {
+            "filterType": "POSITION_RISK_CONTROL",
+            "positionControlSide": "NONE"
+          }
+        ],
+        "liquidationFee": "0.015000",
+        "maintMarginPercent": "2.5000",
+        "marginAsset": "USDT",
+        "marketTakeBound": "0.10",
+        "maxMoveOrderLimit": 10000,
+        "onboardDate": 1600412400000,
+        "orderTypes": [
+          "LIMIT",
+          "MARKET",
+          "STOP",
+          "STOP_MARKET",
+          "TAKE_PROFIT",
+          "TAKE_PROFIT_MARKET",
+          "TRAILING_STOP_MARKET"
+        ],
+        "pair": "UNIUSDT",
+        "permissionSets": [
+          "GRID",
+          "COPY",
+          "DCA",
+          "PSB"
+        ],
+        "pricePrecision": 4,
+        "quantityPrecision": 0,
+        "quoteAsset": "USDT",
+        "quotePrecision": 8,
+        "requiredMarginPercent": "5.0000",
+        "status": "TRADING",
+        "symbol": "UNIUSDT",
+        "timeInForce": [
+          "GTC",
+          "IOC",
+          "FOK",
+          "GTX",
+          "GTD"
+        ],
+        "triggerProtect": "0.1000",
+        "underlyingSubType": [
+          "DeFi",
+          "Crypto"
+        ],
+        "underlyingType": "COIN"
+      }
+    },
+    {
+      "asset": "PEPE",
+      "base_asset": "1000PEPE",
+      "contract_type": "PERPETUAL",
+      "min_notional_usdt": "5",
+      "min_qty": "1",
+      "multiplier_source": "baseAsset '1000PEPE' -> leading integer 1000 [LEAN D-l]; the venue publishes NO ['multiplier', 'contractSize', 'contract_size', 'quantity_multiplier', 'contractMultiplier', 'multiplierSize'] field for this contract (fields found in its object: none)",
+      "multiplier_tokens_per_contract_unit": 1000,
+      "normalized_price_law": "normalized price = venue price / 1000 (USDT per one PEPE)",
+      "normalized_qty_law": "normalized quantity = venue quantity x 1000 (PEPE tokens)",
+      "price_is_per_tokens": "EVERY PRICE ON 1000PEPEUSDT IS QUOTED PER 1000 TOKENS",
+      "price_precision": 7,
+      "price_tick": "0.0000001",
+      "qty_step": "1",
+      "quantity_precision": 0,
+      "quote_asset": "USDT",
+      "quotes_per_tokens": 1000,
+      "status": "TRADING",
+      "stem": "1000PEPEUSDT",
+      "symbol": "1000PEPEUSDT",
+      "venue": "BINANCE_USDTM",
+      "venue_object": {
+        "baseAsset": "1000PEPE",
+        "baseAssetPrecision": 8,
+        "contractType": "PERPETUAL",
+        "deliveryDate": 4133404800000,
+        "filters": [
+          {
+            "filterType": "PRICE_FILTER",
+            "maxPrice": "200",
+            "minPrice": "0.0000001",
+            "tickSize": "0.0000001"
+          },
+          {
+            "filterType": "LOT_SIZE",
+            "maxQty": "800000000",
+            "minQty": "1",
+            "stepSize": "1"
+          },
+          {
+            "filterType": "MARKET_LOT_SIZE",
+            "maxQty": "100000000",
+            "minQty": "1",
+            "stepSize": "1"
+          },
+          {
+            "filterType": "MAX_NUM_ORDERS",
+            "limit": 200
+          },
+          {
+            "filterType": "MIN_NOTIONAL",
+            "notional": "5"
+          },
+          {
+            "filterType": "PERCENT_PRICE",
+            "multiplierDecimal": "4",
+            "multiplierDown": "0.8500",
+            "multiplierUp": "1.1500"
+          },
+          {
+            "filterType": "POSITION_RISK_CONTROL",
+            "positionControlSide": "NONE"
+          }
+        ],
+        "liquidationFee": "0.015000",
+        "maintMarginPercent": "2.5000",
+        "marginAsset": "USDT",
+        "marketTakeBound": "0.15",
+        "maxMoveOrderLimit": 10000,
+        "onboardDate": 1683244800000,
+        "orderTypes": [
+          "LIMIT",
+          "MARKET",
+          "STOP",
+          "STOP_MARKET",
+          "TAKE_PROFIT",
+          "TAKE_PROFIT_MARKET",
+          "TRAILING_STOP_MARKET"
+        ],
+        "pair": "1000PEPEUSDT",
+        "permissionSets": [
+          "GRID",
+          "COPY",
+          "RPI",
+          "DCA",
+          "PSB"
+        ],
+        "pricePrecision": 7,
+        "quantityPrecision": 0,
+        "quoteAsset": "USDT",
+        "quotePrecision": 8,
+        "requiredMarginPercent": "5.0000",
+        "status": "TRADING",
+        "symbol": "1000PEPEUSDT",
+        "timeInForce": [
+          "GTC",
+          "IOC",
+          "FOK",
+          "GTX",
+          "GTD"
+        ],
+        "triggerProtect": "0.1500",
+        "underlyingSubType": [
+          "Meme",
+          "Crypto"
+        ],
+        "underlyingType": "COIN"
+      }
+    },
+    {
+      "asset": "DOGE",
+      "base_asset": "DOGE",
+      "contract_type": "PERPETUAL",
+      "min_notional_usdt": "5",
+      "min_qty": "1",
+      "multiplier_source": "baseAsset 'DOGE' -> leading integer 1 [LEAN D-l]; the venue publishes NO ['multiplier', 'contractSize', 'contract_size', 'quantity_multiplier', 'contractMultiplier', 'multiplierSize'] field for this contract (fields found in its object: none)",
+      "multiplier_tokens_per_contract_unit": 1,
+      "normalized_price_law": "normalized price = venue price / 1 (USDT per one DOGE)",
+      "normalized_qty_law": "normalized quantity = venue quantity x 1 (DOGE tokens)",
+      "price_is_per_tokens": "prices on DOGEUSDT are per ONE DOGE (multiplier 1)",
+      "price_precision": 6,
+      "price_tick": "0.000010",
+      "qty_step": "1",
+      "quantity_precision": 0,
+      "quote_asset": "USDT",
+      "quotes_per_tokens": 1,
+      "status": "TRADING",
+      "stem": "DOGEUSDT",
+      "symbol": "DOGEUSDT",
+      "venue": "BINANCE_USDTM",
+      "venue_object": {
+        "baseAsset": "DOGE",
+        "baseAssetPrecision": 8,
+        "contractType": "PERPETUAL",
+        "deliveryDate": 4133404800000,
+        "filters": [
+          {
+            "filterType": "PRICE_FILTER",
+            "maxPrice": "30",
+            "minPrice": "0.002440",
+            "tickSize": "0.000010"
+          },
+          {
+            "filterType": "LOT_SIZE",
+            "maxQty": "300000000",
+            "minQty": "1",
+            "stepSize": "1"
+          },
+          {
+            "filterType": "MARKET_LOT_SIZE",
+            "maxQty": "30000000",
+            "minQty": "1",
+            "stepSize": "1"
+          },
+          {
+            "filterType": "MAX_NUM_ORDERS",
+            "limit": 200
+          },
+          {
+            "filterType": "MIN_NOTIONAL",
+            "notional": "5"
+          },
+          {
+            "filterType": "PERCENT_PRICE",
+            "multiplierDecimal": "4",
+            "multiplierDown": "0.9000",
+            "multiplierUp": "1.1000"
+          },
+          {
+            "filterType": "POSITION_RISK_CONTROL",
+            "positionControlSide": "NONE"
+          }
+        ],
+        "liquidationFee": "0.015000",
+        "maintMarginPercent": "2.5000",
+        "marginAsset": "USDT",
+        "marketTakeBound": "0.10",
+        "maxMoveOrderLimit": 10000,
+        "onboardDate": 1594371600000,
+        "orderTypes": [
+          "LIMIT",
+          "MARKET",
+          "STOP",
+          "STOP_MARKET",
+          "TAKE_PROFIT",
+          "TAKE_PROFIT_MARKET",
+          "TRAILING_STOP_MARKET"
+        ],
+        "pair": "DOGEUSDT",
+        "permissionSets": [
+          "GRID",
+          "COPY",
+          "RPI",
+          "DCA",
+          "PSB"
+        ],
+        "pricePrecision": 6,
+        "quantityPrecision": 0,
+        "quoteAsset": "USDT",
+        "quotePrecision": 8,
+        "requiredMarginPercent": "5.0000",
+        "status": "TRADING",
+        "symbol": "DOGEUSDT",
+        "timeInForce": [
+          "GTC",
+          "IOC",
+          "FOK",
+          "GTX",
+          "GTD"
+        ],
+        "triggerProtect": "0.1000",
+        "underlyingSubType": [
+          "Meme",
+          "Crypto"
+        ],
+        "underlyingType": "COIN"
+      }
+    },
+    {
+      "asset": "BONK",
+      "base_asset": "1000BONK",
+      "contract_type": "PERPETUAL",
+      "min_notional_usdt": "5",
+      "min_qty": "1",
+      "multiplier_source": "baseAsset '1000BONK' -> leading integer 1000 [LEAN D-l]; the venue publishes NO ['multiplier', 'contractSize', 'contract_size', 'quantity_multiplier', 'contractMultiplier', 'multiplierSize'] field for this contract (fields found in its object: none)",
+      "multiplier_tokens_per_contract_unit": 1000,
+      "normalized_price_law": "normalized price = venue price / 1000 (USDT per one BONK)",
+      "normalized_qty_law": "normalized quantity = venue quantity x 1000 (BONK tokens)",
+      "price_is_per_tokens": "EVERY PRICE ON 1000BONKUSDT IS QUOTED PER 1000 TOKENS",
+      "price_precision": 7,
+      "price_tick": "0.0000010",
+      "qty_step": "1",
+      "quantity_precision": 0,
+      "quote_asset": "USDT",
+      "quotes_per_tokens": 1000,
+      "status": "TRADING",
+      "stem": "1000BONKUSDT",
+      "symbol": "1000BONKUSDT",
+      "venue": "BINANCE_USDTM",
+      "venue_object": {
+        "baseAsset": "1000BONK",
+        "baseAssetPrecision": 8,
+        "contractType": "PERPETUAL",
+        "deliveryDate": 4133404800000,
+        "filters": [
+          {
+            "filterType": "PRICE_FILTER",
+            "maxPrice": "200",
+            "minPrice": "0.0000010",
+            "tickSize": "0.0000010"
+          },
+          {
+            "filterType": "LOT_SIZE",
+            "maxQty": "400000000",
+            "minQty": "1",
+            "stepSize": "1"
+          },
+          {
+            "filterType": "MARKET_LOT_SIZE",
+            "maxQty": "40000000",
+            "minQty": "1",
+            "stepSize": "1"
+          },
+          {
+            "filterType": "MAX_NUM_ORDERS",
+            "limit": 200
+          },
+          {
+            "filterType": "MIN_NOTIONAL",
+            "notional": "5"
+          },
+          {
+            "filterType": "PERCENT_PRICE",
+            "multiplierDecimal": "4",
+            "multiplierDown": "0.8500",
+            "multiplierUp": "1.1500"
+          },
+          {
+            "filterType": "POSITION_RISK_CONTROL",
+            "positionControlSide": "NONE"
+          }
+        ],
+        "liquidationFee": "0.015000",
+        "maintMarginPercent": "2.5000",
+        "marginAsset": "USDT",
+        "marketTakeBound": "0.15",
+        "maxMoveOrderLimit": 10000,
+        "onboardDate": 1700661600000,
+        "orderTypes": [
+          "LIMIT",
+          "MARKET",
+          "STOP",
+          "STOP_MARKET",
+          "TAKE_PROFIT",
+          "TAKE_PROFIT_MARKET",
+          "TRAILING_STOP_MARKET"
+        ],
+        "pair": "1000BONKUSDT",
+        "permissionSets": [
+          "GRID",
+          "COPY",
+          "DCA",
+          "PSB"
+        ],
+        "pricePrecision": 7,
+        "quantityPrecision": 0,
+        "quoteAsset": "USDT",
+        "quotePrecision": 8,
+        "requiredMarginPercent": "5.0000",
+        "status": "TRADING",
+        "symbol": "1000BONKUSDT",
+        "timeInForce": [
+          "GTC",
+          "IOC",
+          "FOK",
+          "GTX",
+          "GTD"
+        ],
+        "triggerProtect": "0.1500",
+        "underlyingSubType": [
+          "Meme",
+          "Crypto"
+        ],
+        "underlyingType": "COIN"
+      }
+    }
+  ],
+  "binance_endpoint": "https://fapi.binance.com/fapi/v1/exchangeInfo",
+  "binance_response_sha256": "78a2bcf69b7899c269b5089b2d74892169cb74026af5e0d9fbf48bf6da13af13",
+  "binance_symbols_in_response": 907,
+  "bybit_endpoint": "https://api.bybit.com/v5/market/instruments-info?category=linear",
+  "captured_wall_clock_utc": "2026-09-25T00:57:48Z",
+  "law": "the venue's OWN contract spec per panel symbol, captured ONCE; the multiplier is READ off baseAsset because the venue publishes no multiplier field [LEAN D-l]; in TIER-C11 the capture is also the proof that every symbol of record is TRADING",
+  "multiplier_fields_found_per_symbol": {
+    "1000BONKUSDT": [],
+    "1000PEPEUSDT": [],
+    "BNBUSDT": [],
+    "BTCUSDT": [],
+    "DOGEUSDT": [],
+    "ENAUSDT": [],
+    "ETHUSDT": [],
+    "HYPEUSDT": [],
+    "LTCUSDT": [],
+    "MNTUSDT": [],
+    "NEARUSDT": [],
+    "PUMPUSDT": [],
+    "SOLUSDT": [],
+    "SUIUSDT": [],
+    "UNIUSDT": [],
+    "XMRUSDT": [],
+    "ZECUSDT": []
+  },
+  "multiplier_fields_searched": [
+    "multiplier",
+    "contractSize",
+    "contract_size",
+    "quantity_multiplier",
+    "contractMultiplier",
+    "multiplierSize"
+  ],
+  "normalization": "NORMALIZED PRICE = venue price / multiplier (USDT per ONE token); NORMALIZED QUANTITY = venue quantity x multiplier (tokens). For 1000PEPEUSDT and 1000BONKUSDT the multiplier is 1000, i.e. EVERY PRICE THE VENUE QUOTES ON THOSE TWO TAPES IS PER 1000 TOKENS; for the other fifteen it is 1 and normalization is the identity. THE NORMALIZATION IS A PURE SCALING OF THE PRICE SERIES BY A CONSTANT, AND THEREFORE CANNOT MOVE ANY RATIO-VALUED STATISTIC: for a constant k > 0, R = (exit - entry) / (entry - stop) has k in numerator and denominator and is unchanged; an ATR-normalized height (high - low) / ATR is a price over a price and is unchanged; a log return ln(p_t / p_{t-1}) is unchanged; the notional price x quantity is unchanged because the quantity scales by 1/k. What DOES move is anything quoted in absolute price units \u2014 a tick size, a MIN_NOTIONAL, a per-unit fee in USDT \u2014 and those are filed per symbol here, unnormalized, as the venue states them. NAIAD DOES NOT REWRITE THE TAPE: the parquet holds the venue's own numbers; normalization is a READING, applied by whoever needs per-token units, and F-D-MULT proves on the real 1000PEPEUSDT and 1000BONKUSDT tapes that applying it leaves every ratio-valued statistic identical.",
+  "seed": 20260924,
+  "venue_of_record": {
+    "path": "research_outputs/tierc10/data/VENUE_PROBE.json",
+    "sha256": "849810473cb8a1c7e23a4a85879141ab14a3618a4542465fb4b389f65278bc34"
+  },
+  "warranty": "these files are described AS OF the pinned last closed 4h bar named here and of no other; bars stamped after it are counted, never read [TC6V-a, carried by TIER-C11]"
+}

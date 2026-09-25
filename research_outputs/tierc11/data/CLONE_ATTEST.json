@@ -1,0 +1,1254 @@
+{
+  "all_equal": true,
+  "cloned_wall_clock_utc": "2026-09-25T00:57:25Z",
+  "files": {
+    "MANIFEST.json": {
+      "bytes": 11589,
+      "equal": true,
+      "reference": "NOT in TC10's manifest \u2014 compared with the same file's bytes in the TC10 snapshot (read-only)",
+      "reference_sha256": "c73fec06e38f2ef99e135839a50da615da203000eaf7554fb2ce85d2707a860f",
+      "sha256": "c73fec06e38f2ef99e135839a50da615da203000eaf7554fb2ce85d2707a860f"
+    },
+    "funding/1000BONKUSDT.parquet": {
+      "bytes": 82438,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "750ff559aadf941861ceb61a85ee4620ccda4ab58e4575a51acf53c216280f35",
+      "sha256": "750ff559aadf941861ceb61a85ee4620ccda4ab58e4575a51acf53c216280f35"
+    },
+    "funding/1000PEPEUSDT.parquet": {
+      "bytes": 51444,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "ecb902462089afb5dffda3deb9373b80584171323d74ef6c2db3628b535f0fcf",
+      "sha256": "ecb902462089afb5dffda3deb9373b80584171323d74ef6c2db3628b535f0fcf"
+    },
+    "funding/BNBUSDT.parquet": {
+      "bytes": 98248,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "4b8c0176749a526a1f56f32196d577aeb09d4f7cd5710b49fa1bcb0256450241",
+      "sha256": "4b8c0176749a526a1f56f32196d577aeb09d4f7cd5710b49fa1bcb0256450241"
+    },
+    "funding/BTCUSDT.parquet": {
+      "bytes": 111857,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "3ba1f31d10944dd6486da07ff5218188580e63e556926a9b6c40f4100a5ca110",
+      "sha256": "3ba1f31d10944dd6486da07ff5218188580e63e556926a9b6c40f4100a5ca110"
+    },
+    "funding/DOGEUSDT.parquet": {
+      "bytes": 96361,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "fe51a47364b107a834bca127e45f89c77062f86e8e322f1661320688cc57ae86",
+      "sha256": "fe51a47364b107a834bca127e45f89c77062f86e8e322f1661320688cc57ae86"
+    },
+    "funding/ENAUSDT.parquet": {
+      "bytes": 77019,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "951e99858f98a1f6fe941ec34f6b4a0d7ade147e8afa37bc51a2060be2e7a1f2",
+      "sha256": "951e99858f98a1f6fe941ec34f6b4a0d7ade147e8afa37bc51a2060be2e7a1f2"
+    },
+    "funding/ETHUSDT.parquet": {
+      "bytes": 109322,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "33c9a22780f369870479ec4f44086db37153e232cb986ccb34293f6664449cc8",
+      "sha256": "33c9a22780f369870479ec4f44086db37153e232cb986ccb34293f6664449cc8"
+    },
+    "funding/FARTCOINUSDT.parquet": {
+      "bytes": 40044,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "0f0e3653e7133264aad5bb4a857de7b7fdfa1d77eba3adcba98cca0a177a840b",
+      "sha256": "0f0e3653e7133264aad5bb4a857de7b7fdfa1d77eba3adcba98cca0a177a840b"
+    },
+    "funding/HYPEUSDT.parquet": {
+      "bytes": 36762,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "98551fd7b530990a83f4f333898bbc084f49cb02f50661bb1440fb9ed32a1ee4",
+      "sha256": "98551fd7b530990a83f4f333898bbc084f49cb02f50661bb1440fb9ed32a1ee4"
+    },
+    "funding/JTOUSDT.parquet": {
+      "bytes": 78549,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "81e7a2fa40977759143b51c564d39787e6335a3e4d1cb8ceac6069b0e89269f4",
+      "sha256": "81e7a2fa40977759143b51c564d39787e6335a3e4d1cb8ceac6069b0e89269f4"
+    },
+    "funding/LITUSDT.parquet": {
+      "bytes": 14714,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "ae32da7ff0407a7bdcec8d55a376b86d476b10729393ad582a25a318cc597dd8",
+      "sha256": "ae32da7ff0407a7bdcec8d55a376b86d476b10729393ad582a25a318cc597dd8"
+    },
+    "funding/LTCUSDT.parquet": {
+      "bytes": 103615,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "68b874931b1c7a7827f1c9efc0909022c9396de7fea531ea258f481ca87f0c32",
+      "sha256": "68b874931b1c7a7827f1c9efc0909022c9396de7fea531ea258f481ca87f0c32"
+    },
+    "funding/MNTUSDT_BYBIT.parquet": {
+      "bytes": 42884,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "725824db985dfecb01fb61430b1f4f307e1ebcf85ead66af9b822949b0d24e1b",
+      "sha256": "725824db985dfecb01fb61430b1f4f307e1ebcf85ead66af9b822949b0d24e1b"
+    },
+    "funding/NEARUSDT.parquet": {
+      "bytes": 89283,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "580eb953ba839ce2aedefb4756f1cc50f6a844e37ff5d2073d24c60b37c8f830",
+      "sha256": "580eb953ba839ce2aedefb4756f1cc50f6a844e37ff5d2073d24c60b37c8f830"
+    },
+    "funding/PUMPUSDT.parquet": {
+      "bytes": 35493,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "a44738bdb23b23ad19842cd64b0c75e7f3a0db9c3a3f2af9d2ab020143a2fedf",
+      "sha256": "a44738bdb23b23ad19842cd64b0c75e7f3a0db9c3a3f2af9d2ab020143a2fedf"
+    },
+    "funding/SOLUSDT.parquet": {
+      "bytes": 99013,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "1192f92711d8e0d02c1afe8d09ecc8ceeb675a20005265b71be0ee0fdb90c544",
+      "sha256": "1192f92711d8e0d02c1afe8d09ecc8ceeb675a20005265b71be0ee0fdb90c544"
+    },
+    "funding/SUIUSDT.parquet": {
+      "bytes": 56249,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "24458a3de211dcaec3655f9488457e946c74530e47c9ce4d24deac6f939fbace",
+      "sha256": "24458a3de211dcaec3655f9488457e946c74530e47c9ce4d24deac6f939fbace"
+    },
+    "funding/TAOUSDT.parquet": {
+      "bytes": 65025,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "3a17a669b73e5761266cd14f4530e40316d2bdbd6b97c7f5039e4f9ae8fd7bd7",
+      "sha256": "3a17a669b73e5761266cd14f4530e40316d2bdbd6b97c7f5039e4f9ae8fd7bd7"
+    },
+    "funding/UNIUSDT.parquet": {
+      "bytes": 88563,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "a84577a184adf23240489af7b9c66269d602c617c440969acfdac201898ce0b5",
+      "sha256": "a84577a184adf23240489af7b9c66269d602c617c440969acfdac201898ce0b5"
+    },
+    "funding/XMRUSDT.parquet": {
+      "bytes": 93858,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "4f5a64150cee2cd4843c608afb99f75b44c13c908fd4b6e077fba6d3156419d0",
+      "sha256": "4f5a64150cee2cd4843c608afb99f75b44c13c908fd4b6e077fba6d3156419d0"
+    },
+    "funding/ZECUSDT.parquet": {
+      "bytes": 92816,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "2586f8ec7dda0d44f5a6cd32e8a0a2c8ae50b38efa721c24ab94922b63a73419",
+      "sha256": "2586f8ec7dda0d44f5a6cd32e8a0a2c8ae50b38efa721c24ab94922b63a73419"
+    },
+    "klines/1000BONKUSDT_12h.parquet": {
+      "bytes": 111695,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "2f47ad221cfaf1fa82190073c9c4ae75815a8d52ac7afd28d209a42a119fd3f8",
+      "sha256": "2f47ad221cfaf1fa82190073c9c4ae75815a8d52ac7afd28d209a42a119fd3f8"
+    },
+    "klines/1000BONKUSDT_15m.parquet": {
+      "bytes": 3399292,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "63a5c256e87d77fbfc0f055b5adfcc72030f3dcd929394613922abe12000a466",
+      "sha256": "63a5c256e87d77fbfc0f055b5adfcc72030f3dcd929394613922abe12000a466"
+    },
+    "klines/1000BONKUSDT_1d.parquet": {
+      "bytes": 57887,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "3c7035f50fabb59b2818a6de74bb72762fe29a0d1daeb0458787c81aa9909526",
+      "sha256": "3c7035f50fabb59b2818a6de74bb72762fe29a0d1daeb0458787c81aa9909526"
+    },
+    "klines/1000BONKUSDT_1h.parquet": {
+      "bytes": 1112581,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "6bc3e0f7946cda338daa123b9a4e19b154bb9712480cc6aa2905c67d0b903b7e",
+      "sha256": "6bc3e0f7946cda338daa123b9a4e19b154bb9712480cc6aa2905c67d0b903b7e"
+    },
+    "klines/1000BONKUSDT_1w.parquet": {
+      "bytes": 11452,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "5fcbd0afa58560ff209635bffd697a1544bd8b26b00dd1d73bb81d07984ea1ca",
+      "sha256": "5fcbd0afa58560ff209635bffd697a1544bd8b26b00dd1d73bb81d07984ea1ca"
+    },
+    "klines/1000BONKUSDT_4h.parquet": {
+      "bytes": 318276,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "f8494679f8f9c4396da2865de934770524fd90de6f503bc191ec6522973b8b1f",
+      "sha256": "f8494679f8f9c4396da2865de934770524fd90de6f503bc191ec6522973b8b1f"
+    },
+    "klines/1000BONKUSDT_5m.parquet": {
+      "bytes": 7848021,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "1d738a5cd662bb08548e8e63e3b082db5c8e74708cb6f6fbcdeb0c9c3539a150",
+      "sha256": "1d738a5cd662bb08548e8e63e3b082db5c8e74708cb6f6fbcdeb0c9c3539a150"
+    },
+    "klines/1000PEPEUSDT_12h.parquet": {
+      "bytes": 136471,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "4cbc06d806d1f7e5531aecec672d02089eb4021ad038053cb5a044285cb46567",
+      "sha256": "4cbc06d806d1f7e5531aecec672d02089eb4021ad038053cb5a044285cb46567"
+    },
+    "klines/1000PEPEUSDT_15m.parquet": {
+      "bytes": 5292009,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "557de54097638f1ea01e8f08fb34e2a2b86b0ba0328cb2d80091c29e5d5c7be5",
+      "sha256": "557de54097638f1ea01e8f08fb34e2a2b86b0ba0328cb2d80091c29e5d5c7be5"
+    },
+    "klines/1000PEPEUSDT_1d.parquet": {
+      "bytes": 70497,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "aaadd5d267f35b04fb726409729065915ffd1ee9a5ec0d34a9892fa9c84957ed",
+      "sha256": "aaadd5d267f35b04fb726409729065915ffd1ee9a5ec0d34a9892fa9c84957ed"
+    },
+    "klines/1000PEPEUSDT_1h.parquet": {
+      "bytes": 1525255,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "999fd89b04e6b33f23b6d45dc22e7128f083885d25e19290a0601bff949834ca",
+      "sha256": "999fd89b04e6b33f23b6d45dc22e7128f083885d25e19290a0601bff949834ca"
+    },
+    "klines/1000PEPEUSDT_1w.parquet": {
+      "bytes": 13009,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "af42afc572adc568dfe2759a5d3f95bdd2055d6a8b528400644f46f00af01377",
+      "sha256": "af42afc572adc568dfe2759a5d3f95bdd2055d6a8b528400644f46f00af01377"
+    },
+    "klines/1000PEPEUSDT_4h.parquet": {
+      "bytes": 397949,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "10fa162424ccffd62c484f68d2405e66c4f0830585ad28e8db70173d4f69f800",
+      "sha256": "10fa162424ccffd62c484f68d2405e66c4f0830585ad28e8db70173d4f69f800"
+    },
+    "klines/1000PEPEUSDT_5m.parquet": {
+      "bytes": 12017071,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "822ce1fc9832f004bcf0bb49806ed075e3099c7bb0f71d9ebf6d97542fd583a6",
+      "sha256": "822ce1fc9832f004bcf0bb49806ed075e3099c7bb0f71d9ebf6d97542fd583a6"
+    },
+    "klines/BNBUSDT_12h.parquet": {
+      "bytes": 195150,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "6cfd6e9a11349ce501376ae4d487fbda4d72b4402227206b9c0f04101c14dcaf",
+      "sha256": "6cfd6e9a11349ce501376ae4d487fbda4d72b4402227206b9c0f04101c14dcaf"
+    },
+    "klines/BNBUSDT_15m.parquet": {
+      "bytes": 6742587,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "c03998a2bdabc3a3e8ff4673c29277b2698a7d3b701b9be2bae6202d03f68a73",
+      "sha256": "c03998a2bdabc3a3e8ff4673c29277b2698a7d3b701b9be2bae6202d03f68a73"
+    },
+    "klines/BNBUSDT_1d.parquet": {
+      "bytes": 100613,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "5682ce1458f8e8d31198cc9a68c82b6164fbb5fab8d9cf583ee58f79d5c2e7a8",
+      "sha256": "5682ce1458f8e8d31198cc9a68c82b6164fbb5fab8d9cf583ee58f79d5c2e7a8"
+    },
+    "klines/BNBUSDT_1h.parquet": {
+      "bytes": 2073925,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "f899d7b3ef6e0ad1df2cdefd9d2f7e00405031a360af7bb5a02b59984da81e14",
+      "sha256": "f899d7b3ef6e0ad1df2cdefd9d2f7e00405031a360af7bb5a02b59984da81e14"
+    },
+    "klines/BNBUSDT_1w.parquet": {
+      "bytes": 17993,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "65abb4a833f44ae735d46d6faf77c3073681e091dfd6063f8ac444b81e94010d",
+      "sha256": "65abb4a833f44ae735d46d6faf77c3073681e091dfd6063f8ac444b81e94010d"
+    },
+    "klines/BNBUSDT_4h.parquet": {
+      "bytes": 556139,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "0ed961d6fa60164a085ea96ae2a2ae2f20a8eb1facdbb4830d059e2f01e68b32",
+      "sha256": "0ed961d6fa60164a085ea96ae2a2ae2f20a8eb1facdbb4830d059e2f01e68b32"
+    },
+    "klines/BNBUSDT_5m.parquet": {
+      "bytes": 16931256,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "d4c94612b91b3c7f7b5878d0c69563699db7b05426142ac1169d70af6666e191",
+      "sha256": "d4c94612b91b3c7f7b5878d0c69563699db7b05426142ac1169d70af6666e191"
+    },
+    "klines/BTCUSDT_12h.parquet": {
+      "bytes": 222385,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "cd61f763c88f29dbcc209648aee7894e5b083b5e0224cd044695b2da08e04363",
+      "sha256": "cd61f763c88f29dbcc209648aee7894e5b083b5e0224cd044695b2da08e04363"
+    },
+    "klines/BTCUSDT_15m.parquet": {
+      "bytes": 9189884,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "47baa9a58b3a7f505f8b93d7791fcb8c8d517e7afb44ff79e79d8d02d9648211",
+      "sha256": "47baa9a58b3a7f505f8b93d7791fcb8c8d517e7afb44ff79e79d8d02d9648211"
+    },
+    "klines/BTCUSDT_1d.parquet": {
+      "bytes": 113414,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "7c2d90c049aba05a2bf6355d5eab5363237c445e34079b90eaf9261d2edca912",
+      "sha256": "7c2d90c049aba05a2bf6355d5eab5363237c445e34079b90eaf9261d2edca912"
+    },
+    "klines/BTCUSDT_1h.parquet": {
+      "bytes": 2643525,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "7a3b86f82f384d09441c64ad80792fe1a156f8ce2573d8b79612865f8e103978",
+      "sha256": "7a3b86f82f384d09441c64ad80792fe1a156f8ce2573d8b79612865f8e103978"
+    },
+    "klines/BTCUSDT_1m.parquet": {
+      "bytes": 108828611,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "ed983cb595a724d17338a515bdb472d465371cc2b0588752e164a3ff954ec15e",
+      "sha256": "ed983cb595a724d17338a515bdb472d465371cc2b0588752e164a3ff954ec15e"
+    },
+    "klines/BTCUSDT_1w.parquet": {
+      "bytes": 19809,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "5844aa75b0253f7be3b71d544c8bea28d3d73273ef289b2c7e7f186565fe2e1c",
+      "sha256": "5844aa75b0253f7be3b71d544c8bea28d3d73273ef289b2c7e7f186565fe2e1c"
+    },
+    "klines/BTCUSDT_4h.parquet": {
+      "bytes": 654802,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "280607719edd49fdc03ec0ed80c5c312cd3f3aee8b4d6a9472978a6027863263",
+      "sha256": "280607719edd49fdc03ec0ed80c5c312cd3f3aee8b4d6a9472978a6027863263"
+    },
+    "klines/BTCUSDT_5m.parquet": {
+      "bytes": 23700062,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "74319e9782cc883b5a126e58c999e9148681283814b9e93323c6ffb9e8280fd3",
+      "sha256": "74319e9782cc883b5a126e58c999e9148681283814b9e93323c6ffb9e8280fd3"
+    },
+    "klines/DOGEUSDT_12h.parquet": {
+      "bytes": 232600,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "b7df033d6e1f2749986295a19fcf013b80cb96f53cc27c7940eb2abd132faa12",
+      "sha256": "b7df033d6e1f2749986295a19fcf013b80cb96f53cc27c7940eb2abd132faa12"
+    },
+    "klines/DOGEUSDT_15m.parquet": {
+      "bytes": 6287924,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "0b3e5463683c4e87dfa04340146ad45e8e7617d7716fac8f108c5278a4ef738b",
+      "sha256": "0b3e5463683c4e87dfa04340146ad45e8e7617d7716fac8f108c5278a4ef738b"
+    },
+    "klines/DOGEUSDT_1d.parquet": {
+      "bytes": 121911,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "bfb08cac13c47a720ec824ff5bf459ae0ca702b3d97201567b097b32ebb278a7",
+      "sha256": "bfb08cac13c47a720ec824ff5bf459ae0ca702b3d97201567b097b32ebb278a7"
+    },
+    "klines/DOGEUSDT_1h.parquet": {
+      "bytes": 2011919,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "fa5858dfa10eb340b7dacc796f72034fe17a997cc10a557011046b7603e683a6",
+      "sha256": "fa5858dfa10eb340b7dacc796f72034fe17a997cc10a557011046b7603e683a6"
+    },
+    "klines/DOGEUSDT_1w.parquet": {
+      "bytes": 20658,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "c27d0bcea865748d87af437071b52cb39799c2a19b0aac79fb7902a538f5a010",
+      "sha256": "c27d0bcea865748d87af437071b52cb39799c2a19b0aac79fb7902a538f5a010"
+    },
+    "klines/DOGEUSDT_4h.parquet": {
+      "bytes": 630142,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "2dfd29c6f88094839c24509e2f970abb61e2db3962b250e836afbf93c09630ab",
+      "sha256": "2dfd29c6f88094839c24509e2f970abb61e2db3962b250e836afbf93c09630ab"
+    },
+    "klines/DOGEUSDT_5m.parquet": {
+      "bytes": 15545682,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "67f9d282df57efb47230de96447986ee2e38f46698c5cbeda0689f29edfae532",
+      "sha256": "67f9d282df57efb47230de96447986ee2e38f46698c5cbeda0689f29edfae532"
+    },
+    "klines/ENAUSDT_12h.parquet": {
+      "bytes": 80759,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "2071332a4c1c6b757d069d83cd2a883797f414f77b94f2bd1b37720ab795e47e",
+      "sha256": "2071332a4c1c6b757d069d83cd2a883797f414f77b94f2bd1b37720ab795e47e"
+    },
+    "klines/ENAUSDT_15m.parquet": {
+      "bytes": 2426693,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "5691474c954311e29f4ae58b7a6681ba73764c8917a2abaa3bb5ad3759a05d1f",
+      "sha256": "5691474c954311e29f4ae58b7a6681ba73764c8917a2abaa3bb5ad3759a05d1f"
+    },
+    "klines/ENAUSDT_1d.parquet": {
+      "bytes": 44300,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "9e81363b553ffcb4fea767b515cbf47e222e8a36aab376bd570e0e0d38c1daa8",
+      "sha256": "9e81363b553ffcb4fea767b515cbf47e222e8a36aab376bd570e0e0d38c1daa8"
+    },
+    "klines/ENAUSDT_1h.parquet": {
+      "bytes": 729288,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "5860d840872b647c6217525618e5d86b343f1bc477839e88050e8c50a77ea86e",
+      "sha256": "5860d840872b647c6217525618e5d86b343f1bc477839e88050e8c50a77ea86e"
+    },
+    "klines/ENAUSDT_1w.parquet": {
+      "bytes": 10246,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "cc9ffe145c6bf48f02a85d69e728e8b1453b00d01ca8aa1d210ab0aee7f8ce03",
+      "sha256": "cc9ffe145c6bf48f02a85d69e728e8b1453b00d01ca8aa1d210ab0aee7f8ce03"
+    },
+    "klines/ENAUSDT_4h.parquet": {
+      "bytes": 215512,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "6b9f33bc6af044029e0544a4d9da801eea7adace14b54b54d3e21d1d9e8589ee",
+      "sha256": "6b9f33bc6af044029e0544a4d9da801eea7adace14b54b54d3e21d1d9e8589ee"
+    },
+    "klines/ENAUSDT_5m.parquet": {
+      "bytes": 6011241,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "316128479ba330f432eab79f522504146087b35bace3d35bb05c71df5ed6160f",
+      "sha256": "316128479ba330f432eab79f522504146087b35bace3d35bb05c71df5ed6160f"
+    },
+    "klines/ETHUSDT_12h.parquet": {
+      "bytes": 210790,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "b5ab0c06c8ca9a2637f7ad4962392cf3384174c7cc02099c3361899de9d08fb9",
+      "sha256": "b5ab0c06c8ca9a2637f7ad4962392cf3384174c7cc02099c3361899de9d08fb9"
+    },
+    "klines/ETHUSDT_15m.parquet": {
+      "bytes": 8371704,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "a54f971b0e8fcf05a02a9efaf6498e748bbd4a5c6e207322a9fe2a8fb0af4b9d",
+      "sha256": "a54f971b0e8fcf05a02a9efaf6498e748bbd4a5c6e207322a9fe2a8fb0af4b9d"
+    },
+    "klines/ETHUSDT_1d.parquet": {
+      "bytes": 107552,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "2c5abd5ff36913738af6ca808465d7f32970bd614f2fc70dc7128af28c6b6b7f",
+      "sha256": "2c5abd5ff36913738af6ca808465d7f32970bd614f2fc70dc7128af28c6b6b7f"
+    },
+    "klines/ETHUSDT_1h.parquet": {
+      "bytes": 2406999,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "fb70f93edf04c30c390addae87aec496ecb3fa4cf0ab4d2921a3dc80fd39e7b3",
+      "sha256": "fb70f93edf04c30c390addae87aec496ecb3fa4cf0ab4d2921a3dc80fd39e7b3"
+    },
+    "klines/ETHUSDT_1m.parquet": {
+      "bytes": 95531339,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "1e4b1703520953d0bae49e4319346fc5e9d2154e8ffefd3e6fb7874f2407db81",
+      "sha256": "1e4b1703520953d0bae49e4319346fc5e9d2154e8ffefd3e6fb7874f2407db81"
+    },
+    "klines/ETHUSDT_1w.parquet": {
+      "bytes": 18777,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "6da90fe87b32349cda942bf8f58619e778cf3883e07c76182a6419e1bab1fcba",
+      "sha256": "6da90fe87b32349cda942bf8f58619e778cf3883e07c76182a6419e1bab1fcba"
+    },
+    "klines/ETHUSDT_4h.parquet": {
+      "bytes": 614065,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "c8c14416e498c50131bd1531cfad4fda57468ae25c63f00af55ecdf1414cf750",
+      "sha256": "c8c14416e498c50131bd1531cfad4fda57468ae25c63f00af55ecdf1414cf750"
+    },
+    "klines/ETHUSDT_5m.parquet": {
+      "bytes": 21657668,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "61c0f0427ccbf35cf974d651c20ffb9a4444ab846b4632e7350e40da87642ced",
+      "sha256": "61c0f0427ccbf35cf974d651c20ffb9a4444ab846b4632e7350e40da87642ced"
+    },
+    "klines/FARTCOINUSDT_12h.parquet": {
+      "bytes": 55917,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "d440f1bde3fb12073a89ca2c883a2d53b7b6213740a80f307dc4567b3a102273",
+      "sha256": "d440f1bde3fb12073a89ca2c883a2d53b7b6213740a80f307dc4567b3a102273"
+    },
+    "klines/FARTCOINUSDT_15m.parquet": {
+      "bytes": 1702472,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "f40ae0e91a14d3df6346fdaaa8e49cd519fe10f1791f426d6dc61a927f29b32c",
+      "sha256": "f40ae0e91a14d3df6346fdaaa8e49cd519fe10f1791f426d6dc61a927f29b32c"
+    },
+    "klines/FARTCOINUSDT_1h.parquet": {
+      "bytes": 500481,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "2805fe4e821ee19c48b6c29b3fefd17b4f4f02d3055b115b57a0e1e981253eba",
+      "sha256": "2805fe4e821ee19c48b6c29b3fefd17b4f4f02d3055b115b57a0e1e981253eba"
+    },
+    "klines/FARTCOINUSDT_1m.parquet": {
+      "bytes": 17329796,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "da22f1b3184684513fc9b3edecce7068ba542c7865bfd87408204bf8a319b980",
+      "sha256": "da22f1b3184684513fc9b3edecce7068ba542c7865bfd87408204bf8a319b980"
+    },
+    "klines/FARTCOINUSDT_4h.parquet": {
+      "bytes": 149459,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "0d95e5983d91245b19539876cbfff7572d4a674f626d1198a85bc48ef21206df",
+      "sha256": "0d95e5983d91245b19539876cbfff7572d4a674f626d1198a85bc48ef21206df"
+    },
+    "klines/FARTCOINUSDT_5m.parquet": {
+      "bytes": 4386358,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "284086155226fdeb79309cba1d3e21ce764aaa0ecd5151e48c70e3e92b87ccf6",
+      "sha256": "284086155226fdeb79309cba1d3e21ce764aaa0ecd5151e48c70e3e92b87ccf6"
+    },
+    "klines/HYPEUSDT_12h.parquet": {
+      "bytes": 43689,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "76c1d5c1426befb4d21a2331e942bba8b5b2514a31caedbfb06f50583f4d5ab4",
+      "sha256": "76c1d5c1426befb4d21a2331e942bba8b5b2514a31caedbfb06f50583f4d5ab4"
+    },
+    "klines/HYPEUSDT_15m.parquet": {
+      "bytes": 1626504,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "6f08eaa6f2889b293050eeb82c5af3c53e340bee7bdf511c74fed42cdf781e0c",
+      "sha256": "6f08eaa6f2889b293050eeb82c5af3c53e340bee7bdf511c74fed42cdf781e0c"
+    },
+    "klines/HYPEUSDT_1d.parquet": {
+      "bytes": 24173,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "0f5bbe4ccd7d8baa398c64c4f3b3fb042154dbd3a729a9782c7298abe1aafc54",
+      "sha256": "0f5bbe4ccd7d8baa398c64c4f3b3fb042154dbd3a729a9782c7298abe1aafc54"
+    },
+    "klines/HYPEUSDT_1h.parquet": {
+      "bytes": 462836,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "f1de5d31011bf648212c80b962172d4685bcaab04fa4375fbfa35044aee29211",
+      "sha256": "f1de5d31011bf648212c80b962172d4685bcaab04fa4375fbfa35044aee29211"
+    },
+    "klines/HYPEUSDT_1m.parquet": {
+      "bytes": 13930395,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "7d1dfd807b2c78dcdeb6530405548b95fbcf89b2fba8950e7e211275deadf43e",
+      "sha256": "7d1dfd807b2c78dcdeb6530405548b95fbcf89b2fba8950e7e211275deadf43e"
+    },
+    "klines/HYPEUSDT_1w.parquet": {
+      "bytes": 7212,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "5d52c97c2ea8d700bbb6459c247c2fb15789adf84d761aa5bd158a29705ab447",
+      "sha256": "5d52c97c2ea8d700bbb6459c247c2fb15789adf84d761aa5bd158a29705ab447"
+    },
+    "klines/HYPEUSDT_4h.parquet": {
+      "bytes": 122120,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "5f8085646ef983bf3e8ee3d0d72c7c81371a16645fb7956d7576a2ea60d333ca",
+      "sha256": "5f8085646ef983bf3e8ee3d0d72c7c81371a16645fb7956d7576a2ea60d333ca"
+    },
+    "klines/HYPEUSDT_5m.parquet": {
+      "bytes": 4218571,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "21da81858fc9b876032cdb2537e0ae6c7e0b10ea65b3162b29b79cb1070a5707",
+      "sha256": "21da81858fc9b876032cdb2537e0ae6c7e0b10ea65b3162b29b79cb1070a5707"
+    },
+    "klines/JTOUSDT_12h.parquet": {
+      "bytes": 89286,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "e5784e52ec47f8a4620677a1758bef7adc8afaf27ff291e9d11b17acae8a7eee",
+      "sha256": "e5784e52ec47f8a4620677a1758bef7adc8afaf27ff291e9d11b17acae8a7eee"
+    },
+    "klines/JTOUSDT_15m.parquet": {
+      "bytes": 2837632,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "fac540d1ebdaf54e08d6ac3ec146e66296ad1f9adee587093de5fe9b29db9ee9",
+      "sha256": "fac540d1ebdaf54e08d6ac3ec146e66296ad1f9adee587093de5fe9b29db9ee9"
+    },
+    "klines/JTOUSDT_1h.parquet": {
+      "bytes": 887894,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "4e4f5061710050ddc857a8f1f332a635ed264dffa6dfe195ee9fb9b12e2f6bca",
+      "sha256": "4e4f5061710050ddc857a8f1f332a635ed264dffa6dfe195ee9fb9b12e2f6bca"
+    },
+    "klines/JTOUSDT_1m.parquet": {
+      "bytes": 24536051,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "3965ef8162b97aa16169a119ce891a002b73b95eb3f61aa4996dea84bc64c1a1",
+      "sha256": "3965ef8162b97aa16169a119ce891a002b73b95eb3f61aa4996dea84bc64c1a1"
+    },
+    "klines/JTOUSDT_4h.parquet": {
+      "bytes": 253101,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "d668308502c901f651f965018dc51a3952149d0cff6087deb8fe96949b7a950f",
+      "sha256": "d668308502c901f651f965018dc51a3952149d0cff6087deb8fe96949b7a950f"
+    },
+    "klines/JTOUSDT_5m.parquet": {
+      "bytes": 6719967,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "5b87b2b13d7782cfe47d73da341ed5f4e05858475686d2a263699f2df772015b",
+      "sha256": "5b87b2b13d7782cfe47d73da341ed5f4e05858475686d2a263699f2df772015b"
+    },
+    "klines/LITUSDT_12h.parquet": {
+      "bytes": 24487,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "2fada51f978255bed1fe0bff3455f2554a54ec93dcd19d638efa4626e7096504",
+      "sha256": "2fada51f978255bed1fe0bff3455f2554a54ec93dcd19d638efa4626e7096504"
+    },
+    "klines/LITUSDT_15m.parquet": {
+      "bytes": 849714,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "869b1bdc574adba131ff91bcc892e8c439f986b061a45a9c920c03f20e56b38c",
+      "sha256": "869b1bdc574adba131ff91bcc892e8c439f986b061a45a9c920c03f20e56b38c"
+    },
+    "klines/LITUSDT_1h.parquet": {
+      "bytes": 246708,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "67faa435e8d0fe0dec452522a7a9c656786010431a0d3ec7342c95fc9d7c729a",
+      "sha256": "67faa435e8d0fe0dec452522a7a9c656786010431a0d3ec7342c95fc9d7c729a"
+    },
+    "klines/LITUSDT_1m.parquet": {
+      "bytes": 7098695,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "e71bf1d046a8a52397febc03ff527526b0f4b7b7be808fb6dd60f119988dbade",
+      "sha256": "e71bf1d046a8a52397febc03ff527526b0f4b7b7be808fb6dd60f119988dbade"
+    },
+    "klines/LITUSDT_4h.parquet": {
+      "bytes": 71101,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "c535c48debef977e962f123fa0733e2092bbaad0664eced115a3cdd7a23567e8",
+      "sha256": "c535c48debef977e962f123fa0733e2092bbaad0664eced115a3cdd7a23567e8"
+    },
+    "klines/LITUSDT_5m.parquet": {
+      "bytes": 2280319,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "d01e6cb9558569a80e4df27f4414e81a5e4fb59150b0ef353522f15164eb1312",
+      "sha256": "d01e6cb9558569a80e4df27f4414e81a5e4fb59150b0ef353522f15164eb1312"
+    },
+    "klines/LTCUSDT_12h.parquet": {
+      "bytes": 183978,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "ce8e49c3d618e7b15d0dd9c47a48d7e69f8a2ef0f2cadcb6909d80bf2186910d",
+      "sha256": "ce8e49c3d618e7b15d0dd9c47a48d7e69f8a2ef0f2cadcb6909d80bf2186910d"
+    },
+    "klines/LTCUSDT_15m.parquet": {
+      "bytes": 5607220,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "600dff0fcce9ca3ef9731eefa14d07c1ef2e5e77f0c4893703060bce33e8d396",
+      "sha256": "600dff0fcce9ca3ef9731eefa14d07c1ef2e5e77f0c4893703060bce33e8d396"
+    },
+    "klines/LTCUSDT_1d.parquet": {
+      "bytes": 98338,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "7a1e025e7ed54f67b9ef5ae4b6fbf7db9bfa54adeeafbb39226785d35444f757",
+      "sha256": "7a1e025e7ed54f67b9ef5ae4b6fbf7db9bfa54adeeafbb39226785d35444f757"
+    },
+    "klines/LTCUSDT_1h.parquet": {
+      "bytes": 1656331,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "a37a40fddfe164f44c16318e333b292468ee3440dcf3f8b96c33c11146aa8b1c",
+      "sha256": "a37a40fddfe164f44c16318e333b292468ee3440dcf3f8b96c33c11146aa8b1c"
+    },
+    "klines/LTCUSDT_1w.parquet": {
+      "bytes": 18013,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "f99c92df34c8480178eebd0ca44cea3ea801b3477db40c882afe390059afd468",
+      "sha256": "f99c92df34c8480178eebd0ca44cea3ea801b3477db40c882afe390059afd468"
+    },
+    "klines/LTCUSDT_4h.parquet": {
+      "bytes": 493293,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "f556133b7feaa219c9ceb1807361f6ad63983f6b94ae946ba4551aa0ea33a744",
+      "sha256": "f556133b7feaa219c9ceb1807361f6ad63983f6b94ae946ba4551aa0ea33a744"
+    },
+    "klines/LTCUSDT_5m.parquet": {
+      "bytes": 14842863,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "4fb0cd41cfab9253765dda3db5d7394600caa1ca861197414fede34e59393be8",
+      "sha256": "4fb0cd41cfab9253765dda3db5d7394600caa1ca861197414fede34e59393be8"
+    },
+    "klines/MNTUSDT_BYBIT_12h.parquet": {
+      "bytes": 104795,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "1c8da890f8eaeaf6bd476b356d0cbe0bb6992f06dec5e71c5480cf91c81d2734",
+      "sha256": "1c8da890f8eaeaf6bd476b356d0cbe0bb6992f06dec5e71c5480cf91c81d2734"
+    },
+    "klines/MNTUSDT_BYBIT_1d.parquet": {
+      "bytes": 56990,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "13c5b96c9ed5d80ab8ff59279d7e830cf5167800438c600b382e97cdd2b0e162",
+      "sha256": "13c5b96c9ed5d80ab8ff59279d7e830cf5167800438c600b382e97cdd2b0e162"
+    },
+    "klines/MNTUSDT_BYBIT_1h.parquet": {
+      "bytes": 881423,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "f78d3b3877922083d0f2eb35df534199dcb72ab4343181b69486fc84326ce1dd",
+      "sha256": "f78d3b3877922083d0f2eb35df534199dcb72ab4343181b69486fc84326ce1dd"
+    },
+    "klines/MNTUSDT_BYBIT_1w.parquet": {
+      "bytes": 11625,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "a04c5eb57cbdfeb9c690c795a6b83f67114374a63ebc654babc7143fdb6c6dce",
+      "sha256": "a04c5eb57cbdfeb9c690c795a6b83f67114374a63ebc654babc7143fdb6c6dce"
+    },
+    "klines/MNTUSDT_BYBIT_4h.parquet": {
+      "bytes": 276511,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "ad5265cdb2f5d8f41334e24c44972ebef4ee8c46b784785a30a8fc9c25ea1610",
+      "sha256": "ad5265cdb2f5d8f41334e24c44972ebef4ee8c46b784785a30a8fc9c25ea1610"
+    },
+    "klines/MNTUSDT_BYBIT_5m.parquet": {
+      "bytes": 6817414,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "4dde955a65086b0a4b76f864b020c9749bc88dd4eba1681142630678d3eb92d5",
+      "sha256": "4dde955a65086b0a4b76f864b020c9749bc88dd4eba1681142630678d3eb92d5"
+    },
+    "klines/NEARUSDT_12h.parquet": {
+      "bytes": 167807,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "850e0406ac79f140e06e7f63f70b25021d799f15e5546b17342f6b11e2b1f6ab",
+      "sha256": "850e0406ac79f140e06e7f63f70b25021d799f15e5546b17342f6b11e2b1f6ab"
+    },
+    "klines/NEARUSDT_15m.parquet": {
+      "bytes": 5498795,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "8dd9a3520ebd44ee87a89c18719e62ce668cd661b80978c2a0748f04d8f0ee6c",
+      "sha256": "8dd9a3520ebd44ee87a89c18719e62ce668cd661b80978c2a0748f04d8f0ee6c"
+    },
+    "klines/NEARUSDT_1d.parquet": {
+      "bytes": 89597,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "8125ba76bb529dfc93d350804701cfac6c023403702cd1bc90b32d54c7212e65",
+      "sha256": "8125ba76bb529dfc93d350804701cfac6c023403702cd1bc90b32d54c7212e65"
+    },
+    "klines/NEARUSDT_1h.parquet": {
+      "bytes": 1579892,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "65ada840cd899b3519d3545787b990d1790202b426840e6886ff86072029f565",
+      "sha256": "65ada840cd899b3519d3545787b990d1790202b426840e6886ff86072029f565"
+    },
+    "klines/NEARUSDT_1m.parquet": {
+      "bytes": 55528561,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "cd0ef08e5afcade34be1ad13fb80b3ab4fa3c59c09ebe8ad2fcb5066bf371728",
+      "sha256": "cd0ef08e5afcade34be1ad13fb80b3ab4fa3c59c09ebe8ad2fcb5066bf371728"
+    },
+    "klines/NEARUSDT_1w.parquet": {
+      "bytes": 18175,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "f3ee8ab250bf5b833dec8b5423d308850e69dfd1aacb72754c511cb8239a5ddc",
+      "sha256": "f3ee8ab250bf5b833dec8b5423d308850e69dfd1aacb72754c511cb8239a5ddc"
+    },
+    "klines/NEARUSDT_4h.parquet": {
+      "bytes": 437017,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "a978d31eb4c949c200886c16116307534d07815ff7aa1b6a2fab89400315eb04",
+      "sha256": "a978d31eb4c949c200886c16116307534d07815ff7aa1b6a2fab89400315eb04"
+    },
+    "klines/NEARUSDT_5m.parquet": {
+      "bytes": 14380116,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "89682896240f3b7a32098a5618a9721db33c0731c6df0abd68c60ae7be90aacb",
+      "sha256": "89682896240f3b7a32098a5618a9721db33c0731c6df0abd68c60ae7be90aacb"
+    },
+    "klines/PUMPUSDT_12h.parquet": {
+      "bytes": 46060,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "82015cc4d12970275036dc48097924541e938f9253f49a6b1169c2b82edf309d",
+      "sha256": "82015cc4d12970275036dc48097924541e938f9253f49a6b1169c2b82edf309d"
+    },
+    "klines/PUMPUSDT_1d.parquet": {
+      "bytes": 25748,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "53cd5ca5b79dd54f684972f7e9176a276bfd06f5bbffdac3a224d009abf88c62",
+      "sha256": "53cd5ca5b79dd54f684972f7e9176a276bfd06f5bbffdac3a224d009abf88c62"
+    },
+    "klines/PUMPUSDT_1h.parquet": {
+      "bytes": 365609,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "b48653c974286802f61b6a2e5cfe3109d95fb6af2edc978abacde06f49bf8751",
+      "sha256": "b48653c974286802f61b6a2e5cfe3109d95fb6af2edc978abacde06f49bf8751"
+    },
+    "klines/PUMPUSDT_1w.parquet": {
+      "bytes": 6901,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "afa2ee1b1ac4b38e892e035d4fc05474333831ee23fd3e68ed2ab74a323bc48d",
+      "sha256": "afa2ee1b1ac4b38e892e035d4fc05474333831ee23fd3e68ed2ab74a323bc48d"
+    },
+    "klines/PUMPUSDT_4h.parquet": {
+      "bytes": 117879,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "1b66edfac0835b803cbec292965ef10b2d001fda2c2276d0b2a3b3c92004dca8",
+      "sha256": "1b66edfac0835b803cbec292965ef10b2d001fda2c2276d0b2a3b3c92004dca8"
+    },
+    "klines/PUMPUSDT_5m.parquet": {
+      "bytes": 3120599,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "41d5600e6403247ee0094e26bd1a704ce744b9a26e580ddc5d48704167650d80",
+      "sha256": "41d5600e6403247ee0094e26bd1a704ce744b9a26e580ddc5d48704167650d80"
+    },
+    "klines/SOLUSDT_12h.parquet": {
+      "bytes": 185605,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "f363e729e781d63435cdfa7a0e33d1fe1ea984ef47cee68fb75eb5fa475b61b9",
+      "sha256": "f363e729e781d63435cdfa7a0e33d1fe1ea984ef47cee68fb75eb5fa475b61b9"
+    },
+    "klines/SOLUSDT_15m.parquet": {
+      "bytes": 6430937,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "8f3d60c824f74fcf7e6280d8e47bf20b3e53460fb55123151067da8dad89b0a9",
+      "sha256": "8f3d60c824f74fcf7e6280d8e47bf20b3e53460fb55123151067da8dad89b0a9"
+    },
+    "klines/SOLUSDT_1d.parquet": {
+      "bytes": 96262,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "26f0d20d94f6cebdc4ee0792de13a8e929df989cda71dcb3e3242fb31d1e98ff",
+      "sha256": "26f0d20d94f6cebdc4ee0792de13a8e929df989cda71dcb3e3242fb31d1e98ff"
+    },
+    "klines/SOLUSDT_1h.parquet": {
+      "bytes": 1943251,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "b534bc7eedda7640f2ee823eb795d1035a768055c5c5caeb92c43048b461dd29",
+      "sha256": "b534bc7eedda7640f2ee823eb795d1035a768055c5c5caeb92c43048b461dd29"
+    },
+    "klines/SOLUSDT_1m.parquet": {
+      "bytes": 67170383,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "030dce33207f1b3413431d2bd6056677a9de78e5e8f298e20a049dbc91662585",
+      "sha256": "030dce33207f1b3413431d2bd6056677a9de78e5e8f298e20a049dbc91662585"
+    },
+    "klines/SOLUSDT_1w.parquet": {
+      "bytes": 17829,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "f4279094e89aa171b202da85cfbee77fb9a989eb1c4e085eca95429ce6e24a8f",
+      "sha256": "f4279094e89aa171b202da85cfbee77fb9a989eb1c4e085eca95429ce6e24a8f"
+    },
+    "klines/SOLUSDT_4h.parquet": {
+      "bytes": 525335,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "33609269233da8f76ddb62383dda554e5d6b30702e9c17309fa3bdc854b6c117",
+      "sha256": "33609269233da8f76ddb62383dda554e5d6b30702e9c17309fa3bdc854b6c117"
+    },
+    "klines/SOLUSDT_5m.parquet": {
+      "bytes": 17289914,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "0dfda5c7154a03c26035655a0d187dfc51c954bfa373ed09e5b08972655bfc40",
+      "sha256": "0dfda5c7154a03c26035655a0d187dfc51c954bfa373ed09e5b08972655bfc40"
+    },
+    "klines/SUIUSDT_12h.parquet": {
+      "bytes": 112439,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "4b9d0e94ee477c381efa924e5d3315b9b1269167d69c15d289ace6635a1edd2e",
+      "sha256": "4b9d0e94ee477c381efa924e5d3315b9b1269167d69c15d289ace6635a1edd2e"
+    },
+    "klines/SUIUSDT_1d.parquet": {
+      "bytes": 62259,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "b265039e664ab597db349a6dc627f7c46c4ea4c7f07b2a24d5a3b0e10dd47cc6",
+      "sha256": "b265039e664ab597db349a6dc627f7c46c4ea4c7f07b2a24d5a3b0e10dd47cc6"
+    },
+    "klines/SUIUSDT_1h.parquet": {
+      "bytes": 1114950,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "2259d859dbffe995e9e9aff29d259c0de1f2a0ebb30027ddfac51cd192fe1222",
+      "sha256": "2259d859dbffe995e9e9aff29d259c0de1f2a0ebb30027ddfac51cd192fe1222"
+    },
+    "klines/SUIUSDT_1w.parquet": {
+      "bytes": 12815,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "45a2a78abb344242fdf2b617f5ad45069b53f6c3602b3ea4fe9245dfbc670283",
+      "sha256": "45a2a78abb344242fdf2b617f5ad45069b53f6c3602b3ea4fe9245dfbc670283"
+    },
+    "klines/SUIUSDT_4h.parquet": {
+      "bytes": 304759,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "ad7f9b5172fe5d69d1c07fb10f7569941cf8d67f8123d3d415c0b5004f9c7ab2",
+      "sha256": "ad7f9b5172fe5d69d1c07fb10f7569941cf8d67f8123d3d415c0b5004f9c7ab2"
+    },
+    "klines/SUIUSDT_5m.parquet": {
+      "bytes": 8560843,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "d8206c0d367fa2cb52ffabbe02a682f5f06f47d3190fbda6078407eb07c1778a",
+      "sha256": "d8206c0d367fa2cb52ffabbe02a682f5f06f47d3190fbda6078407eb07c1778a"
+    },
+    "klines/TAOUSDT_12h.parquet": {
+      "bytes": 71135,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "1d6071aa3010011e00124aa10fed36a737defbc3ee634eef9a1bdcbb7d9000de",
+      "sha256": "1d6071aa3010011e00124aa10fed36a737defbc3ee634eef9a1bdcbb7d9000de"
+    },
+    "klines/TAOUSDT_15m.parquet": {
+      "bytes": 2671366,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "4326f01db95db37b13f9c1c433fd458bfdf6397c748895fb441a2601e2e242ff",
+      "sha256": "4326f01db95db37b13f9c1c433fd458bfdf6397c748895fb441a2601e2e242ff"
+    },
+    "klines/TAOUSDT_1h.parquet": {
+      "bytes": 776158,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "71a7e8b4fa0fb0c7405fc7b9223560611dec2201829560e31b5064f6d6a6a2c3",
+      "sha256": "71a7e8b4fa0fb0c7405fc7b9223560611dec2201829560e31b5064f6d6a6a2c3"
+    },
+    "klines/TAOUSDT_1m.parquet": {
+      "bytes": 25413483,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "989e3608e1ac79f7f3fb286c4a7c35f9ff88995f682a560bd3b9bebd0a87383b",
+      "sha256": "989e3608e1ac79f7f3fb286c4a7c35f9ff88995f682a560bd3b9bebd0a87383b"
+    },
+    "klines/TAOUSDT_4h.parquet": {
+      "bytes": 209874,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "f282b18e6a8e876b7044947c9c60ce0da63d485549a251cc91f7aa35db3db1a9",
+      "sha256": "f282b18e6a8e876b7044947c9c60ce0da63d485549a251cc91f7aa35db3db1a9"
+    },
+    "klines/TAOUSDT_5m.parquet": {
+      "bytes": 6374195,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "aceab6ad3aefa39e041ada5d5ea1cff87410506a3f0b1be0a65685c74fae8ae6",
+      "sha256": "aceab6ad3aefa39e041ada5d5ea1cff87410506a3f0b1be0a65685c74fae8ae6"
+    },
+    "klines/UNIUSDT_12h.parquet": {
+      "bytes": 171089,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "aa46bdec70eab63ca1926a25182cba4963d837ceb8a1c42124a7e90ad85594bc",
+      "sha256": "aa46bdec70eab63ca1926a25182cba4963d837ceb8a1c42124a7e90ad85594bc"
+    },
+    "klines/UNIUSDT_15m.parquet": {
+      "bytes": 5378991,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "41f4189c09e4d0642253b273adc51e5e621bb250f82e6016a02e764d18df63ba",
+      "sha256": "41f4189c09e4d0642253b273adc51e5e621bb250f82e6016a02e764d18df63ba"
+    },
+    "klines/UNIUSDT_1d.parquet": {
+      "bytes": 90200,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "8b5e4f50084f32e9a1c35ba16e08d62af7fa68b6ad2c96faab5088f63049901d",
+      "sha256": "8b5e4f50084f32e9a1c35ba16e08d62af7fa68b6ad2c96faab5088f63049901d"
+    },
+    "klines/UNIUSDT_1h.parquet": {
+      "bytes": 1599798,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "bb33097872d152466e8f623d9f8cf3331d2c7049076f9dc0636a88467a3eb8d3",
+      "sha256": "bb33097872d152466e8f623d9f8cf3331d2c7049076f9dc0636a88467a3eb8d3"
+    },
+    "klines/UNIUSDT_1w.parquet": {
+      "bytes": 17386,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "67f885b934cd9fb4baa6a803888b84fde1741505257d28a740fc9b2bbcb24224",
+      "sha256": "67f885b934cd9fb4baa6a803888b84fde1741505257d28a740fc9b2bbcb24224"
+    },
+    "klines/UNIUSDT_4h.parquet": {
+      "bytes": 462747,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "ea4c3c81b71b587c329676d84d0d8c5e5c1980734421b6fd20c64ca39c3774f4",
+      "sha256": "ea4c3c81b71b587c329676d84d0d8c5e5c1980734421b6fd20c64ca39c3774f4"
+    },
+    "klines/UNIUSDT_5m.parquet": {
+      "bytes": 13485611,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "3b3684ac9bc688f78c76abb8288773bfc31a67dfa33a50dda98694e30fc2c89e",
+      "sha256": "3b3684ac9bc688f78c76abb8288773bfc31a67dfa33a50dda98694e30fc2c89e"
+    },
+    "klines/USELESSUSDT_15m.parquet": {
+      "bytes": 1168294,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "c6a00de3f6c2631b1be16b13430a8c0fd5f313161b3b113efd480c1dde0e4fb6",
+      "sha256": "c6a00de3f6c2631b1be16b13430a8c0fd5f313161b3b113efd480c1dde0e4fb6"
+    },
+    "klines/USELESSUSDT_1h.parquet": {
+      "bytes": 367534,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "d9d9cd0f6da3b3eb54422bb05504463eb3f29411755b0c5b661e7d8ca445cb3e",
+      "sha256": "d9d9cd0f6da3b3eb54422bb05504463eb3f29411755b0c5b661e7d8ca445cb3e"
+    },
+    "klines/USELESSUSDT_4h.parquet": {
+      "bytes": 116535,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "2c72e5c54b69e9ee474b90e57216df2a3495385aebaa4351190da064870e4218",
+      "sha256": "2c72e5c54b69e9ee474b90e57216df2a3495385aebaa4351190da064870e4218"
+    },
+    "klines/USELESSUSDT_5m.parquet": {
+      "bytes": 3006567,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "68aac8fca5e58b0d194993dd10809681be0440d7808f2f5374f3a1382749a7bf",
+      "sha256": "68aac8fca5e58b0d194993dd10809681be0440d7808f2f5374f3a1382749a7bf"
+    },
+    "klines/XMRUSDT_12h.parquet": {
+      "bytes": 188555,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "577ce9a055c2437d3d2493ad7c5477419e29a73d551b3dfe1f7648a6fdd12226",
+      "sha256": "577ce9a055c2437d3d2493ad7c5477419e29a73d551b3dfe1f7648a6fdd12226"
+    },
+    "klines/XMRUSDT_15m.parquet": {
+      "bytes": 5878600,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "00ed18f366dab6acecc6d1527fd7a2f8c2639c1c402ab2cf7499ed64ddf8bda0",
+      "sha256": "00ed18f366dab6acecc6d1527fd7a2f8c2639c1c402ab2cf7499ed64ddf8bda0"
+    },
+    "klines/XMRUSDT_1d.parquet": {
+      "bytes": 98103,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "68b7def5da34cb6303ab5462cf8a738df3a2cb94261db436481e8541dd64ce6e",
+      "sha256": "68b7def5da34cb6303ab5462cf8a738df3a2cb94261db436481e8541dd64ce6e"
+    },
+    "klines/XMRUSDT_1h.parquet": {
+      "bytes": 1821796,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "323ceae118c9d704d50d001846989124c5726f39a78d993703a9b4302417fcf0",
+      "sha256": "323ceae118c9d704d50d001846989124c5726f39a78d993703a9b4302417fcf0"
+    },
+    "klines/XMRUSDT_1w.parquet": {
+      "bytes": 17925,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "043d6eeaa2cd1e23b0af9033fcd5fe6e2dd36c5953457fb45b91b5bf3440d7f8",
+      "sha256": "043d6eeaa2cd1e23b0af9033fcd5fe6e2dd36c5953457fb45b91b5bf3440d7f8"
+    },
+    "klines/XMRUSDT_4h.parquet": {
+      "bytes": 520159,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "9f40d3a0f416f742509b6d7456a7798cf0827ef42e95170f6344c196166958f2",
+      "sha256": "9f40d3a0f416f742509b6d7456a7798cf0827ef42e95170f6344c196166958f2"
+    },
+    "klines/XMRUSDT_5m.parquet": {
+      "bytes": 14928211,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "0272fffa5c90aaf64a0429ea12e6339c5bfc749a7052d58d72dfe50ced763e62",
+      "sha256": "0272fffa5c90aaf64a0429ea12e6339c5bfc749a7052d58d72dfe50ced763e62"
+    },
+    "klines/XPLUSDT_15m.parquet": {
+      "bytes": 1100001,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "74031e754f29c7979692e4e151ace7ff0094a3d4083e8cac1501227adbc1219b",
+      "sha256": "74031e754f29c7979692e4e151ace7ff0094a3d4083e8cac1501227adbc1219b"
+    },
+    "klines/XPLUSDT_1h.parquet": {
+      "bytes": 327751,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "3898704fd31d438dfcb26ef843c8678e3bfc5d491abb985d88b46b393a0d40bc",
+      "sha256": "3898704fd31d438dfcb26ef843c8678e3bfc5d491abb985d88b46b393a0d40bc"
+    },
+    "klines/XPLUSDT_4h.parquet": {
+      "bytes": 99740,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "377f5d83fdb796b7d136b277b94c8478df91ce6ede3fe5046b4717d2ea47ff8c",
+      "sha256": "377f5d83fdb796b7d136b277b94c8478df91ce6ede3fe5046b4717d2ea47ff8c"
+    },
+    "klines/XPLUSDT_5m.parquet": {
+      "bytes": 2889345,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "e9188396ec292d5ae3fa129ad2e74968da5ccb421ec2dd4721727824877ed17a",
+      "sha256": "e9188396ec292d5ae3fa129ad2e74968da5ccb421ec2dd4721727824877ed17a"
+    },
+    "klines/ZECUSDT_12h.parquet": {
+      "bytes": 183195,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "9183c110b31ec2146fe605f58b8769389f71ba7660c78e1e7aa3585cd1694588",
+      "sha256": "9183c110b31ec2146fe605f58b8769389f71ba7660c78e1e7aa3585cd1694588"
+    },
+    "klines/ZECUSDT_15m.parquet": {
+      "bytes": 5978038,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "eaa75864d05b14719d9f71dbc1378f968edfcb68bbde782a178492ff823c6c2a",
+      "sha256": "eaa75864d05b14719d9f71dbc1378f968edfcb68bbde782a178492ff823c6c2a"
+    },
+    "klines/ZECUSDT_1d.parquet": {
+      "bytes": 98029,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "26b67d8072b9fa41dbf93047d48d8816b9cd226e66e553d96ba0c56c34dc1db1",
+      "sha256": "26b67d8072b9fa41dbf93047d48d8816b9cd226e66e553d96ba0c56c34dc1db1"
+    },
+    "klines/ZECUSDT_1h.parquet": {
+      "bytes": 1765425,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "9e9b22f917d08c95e659efe8b0f8fb9b5e66122315a906d3f37a2adfbad8800f",
+      "sha256": "9e9b22f917d08c95e659efe8b0f8fb9b5e66122315a906d3f37a2adfbad8800f"
+    },
+    "klines/ZECUSDT_1m.parquet": {
+      "bytes": 67626644,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "8af6e23b414629acf4b3e63dbfc50f63d4fed490d65f5718c575c6468ebdece7",
+      "sha256": "8af6e23b414629acf4b3e63dbfc50f63d4fed490d65f5718c575c6468ebdece7"
+    },
+    "klines/ZECUSDT_1w.parquet": {
+      "bytes": 17867,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "1c330c55f26255885a32e2219dffbcb5c64f73a9209d51363a41e0db9b969196",
+      "sha256": "1c330c55f26255885a32e2219dffbcb5c64f73a9209d51363a41e0db9b969196"
+    },
+    "klines/ZECUSDT_4h.parquet": {
+      "bytes": 499774,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "8d9459e839b9b3dae3f8be862f1cbd518a7575bb015eb529601e45499098ef2b",
+      "sha256": "8d9459e839b9b3dae3f8be862f1cbd518a7575bb015eb529601e45499098ef2b"
+    },
+    "klines/ZECUSDT_5m.parquet": {
+      "bytes": 15164274,
+      "equal": true,
+      "reference": "TC10 STAGE_D_MANIFEST.json",
+      "reference_sha256": "b5363ee6e9585c4d80abd4ef2be69e7d42fedfe43fb6985f721870d78458d992",
+      "sha256": "b5363ee6e9585c4d80abd4ef2be69e7d42fedfe43fb6985f721870d78458d992"
+    }
+  },
+  "law": "every cloned file re-hashes to TC10's STAGE_D_MANIFEST.json (files[] + out_of_scope_snapshot_files[]); a file the manifest does not pin is compared with its own bytes in the TC10 snapshot; any mismatch HALTs before anything is filed",
+  "method": "cp -cpR (APFS clonefile, permissions and times preserved)",
+  "n_files": 176,
+  "n_not_in_tc10_manifest": [
+    "MANIFEST.json"
+  ],
+  "n_pinned_by_tc10_manifest": 175,
+  "seed": 20260924,
+  "source": "/Users/luis/.cache/naiad/snapshots/tc10_20260921",
+  "stage": "TC11-D",
+  "target": "/Users/luis/.cache/naiad/snapshots/tc11_20260925",
+  "tc10_manifest": {
+    "path": "research_outputs/tierc10/data/STAGE_D_MANIFEST.json",
+    "sha256": "de2e8663bbf101dfb46ad9f77a4969ca73648e78373646c0d17b81b9f9a87421"
+  },
+  "tier": "TIER-C11"
+}

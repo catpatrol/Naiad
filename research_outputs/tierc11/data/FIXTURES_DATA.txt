@@ -1,0 +1,53 @@
+as_of_last_closed_4h: 2026-09-25T00:00:00Z
+==============================================================================
+TIER-C11 STAGE TC11-D FIXTURES — the corridor · break leg first, RED or void
+==============================================================================
+seed 20260924 · substrate tc11_20260925 · pin close ms 1790294400000 · contract sha bb38e016a8f3e55c… · module scripts/tierc11_data.py
+[LEAN-HEPHAESTUS] 16 readings filed in STAGE_D_MANIFEST.json leans (L-0.1, L-0.2, L-1.1, L-1.2 of research_outputs/tierc11/LEANS.md; D11-a..g)
+
+F-D11-GUARD — the substrate guard admits the TC11 snapshot and nothing else
+  FAILS IF: an unset variable, the live cache, a directory inside it, the TC10 snapshot, a foreign directory, or a snapshot path without klines/ is accepted, or the real env does not resolve to tc11_20260925 with engine.data bound to it
+  [BREAK] deliberate violation -> RED (correct): all 7 plants caught, one at a time: unset -> HALT: HALT: NAIAD_CACHE_DIR is unset — TC11 reads and writes ONLY the snapshot /Users/luis/.cache/naiad/snapshots/tc11_20260925 · empty string -> HALT: HALT: NAIAD_CACHE_DIR is unset — TC11 reads and writes ONLY the snapshot /Users/luis/.cache/naiad/snapshots/tc11_20260925 · the live cache (path string) -> HALT: HALT: NAIAD_CACHE_DIR=/Users/luis/.cache/naiad/data_cache names the LIVE cache — READ-NEVER, WRITE-NEVER · a directory inside the live cache -> HALT: HALT: NAIAD_CACHE_DIR=/Users/luis/.cache/naiad/data_cache/klines names the LIVE cache — READ-NEVER, WRITE-NEVER · the TC10 snapshot -> HALT: HALT: NAIAD_CACHE_DIR=/Users/luis/.cache/naiad/snapshots/tc10_20260921 names the TC10 snapshot — frozen, WRITE-NEVER for TC11 · a foreign directory holding klines/ -> HALT: HALT: <tmp>/foreign is not the TC11 snapshot /Users/luis/.cache/naiad/snapshots/tc11_20260925 · the snapshot of record with no klines/ -> HALT: HALT: the TC11 snapshot has no klines/ directory: <tmp>/bare
+  [PASS] F-D11-GUARD: NAIAD_CACHE_DIR resolves to tc11_20260925; engine.data.cache_dir() -> tc11_20260925; klines/ present: True
+
+F-D11-PORT — every port of tierc10_data is what its provenance comment says
+  FAILS IF: a VERBATIM port is not AST-identical to its source, a comment names the wrong lines or sha, a CHANGED label hides an identical copy, or tierc10_data.py's sha moved
+  [BREAK] deliberate violation -> RED (correct): all 3 plants caught, one at a time: frame_sha's separator changed in a copy of this module -> frame_sha: labelled VERBATIM but its AST differs from tierc10_data.frame_sha · frame_sha's provenance range off by one -> frame_sha: comment names :428-438, the source def is :428-437 · pin_as_of relabelled VERBATIM -> pin_as_of: labelled VERBATIM, PORTS says CHANGED
+  [PASS] F-D11-PORT: 57 ports: 48 VERBATIM (AST-identical), 9 CHANGED (each names its change); source sha 2cbf9bb6bcfea3ec == provenance
+
+F-D11-CLONE — the clone reproduces TC10's bytes up to every TC10 edge
+  FAILS IF: any in-scope file's rows up to its TC10 edge differ from the TC10 snapshot's rows (whose file re-hashes to TC10's manifest), any other file differs from TC10's record, or the clone's file set differs from TC10's
+  [BREAK] deliberate violation -> RED (correct): all 2 plants caught, one at a time: a flipped byte in a temp copy of funding/LITUSDT.parquet -> funding/LITUSDT.parquet: bytes differ from TC10's record · a temp copy of klines/BTCUSDT_4h.parquet with one historical close moved -> klines/BTCUSDT_4h.parquet: rows up to the TC10 edge differ from the TC10 snapshot
+  [PASS] F-D11-CLONE: 176 files == the TC10 snapshot's set; CLONE_ATTEST 176 files, 175 pinned by TC10's manifest; 124 in-scope files: rows up to the TC10 edge (10870630 rows) byte-identical to the TC10 snapshot; 52 other files byte-identical
+
+F-D11-PIN — one as-of pin, closed by the venue, written once
+  FAILS IF: the pin is not 2026-09-25T00:00:00Z, is not a 4h close, is not closed by the venue record in the file, lacks a TC10 key, moved since the seal, or write-once lets a rewrite through
+  [BREAK] deliberate violation -> RED (correct): all 4 plants caught, one at a time: a pin that is not a 4h close (+5 min) -> close 1790294700000 != the contract's pin 1790294400000 · a bar still forming by the venue clock -> venue closeTime 1790294399999 is not before the venue clock 1790294399998 — still forming · a pin one 4h bar later than the contract's -> close 1790308800000 != the contract's pin 1790294400000 · a TC10 schema key dropped -> TC10 AS_OF_PIN keys missing: ['local_clock_skew_ms']
+  [PASS] F-D11-PIN: pin 2026-09-25T00:00:00Z (close ms 1790294400000); venue closeTime 1790294399999 < venue clock 1790297866708; latest closed at the pin run 2026-09-25T00:00:00Z; TC10's 11 keys all present; a rewrite HALTs and a second pin re-reads, no network
+
+F-D11-PREFIX — no pre-existing row was rewritten by the fetch
+  FAILS IF: any of the 124 PRE_STATE files' old rows (<= its old edge) does not re-hash to its PRE_STATE content sha
+  [BREAK] deliberate violation -> RED (correct): all 3 plants caught, one at a time: a historical 12h high moved by 0.01 in a temp copy -> old-prefix content sha moved · a historical 12h row deleted in a temp copy -> old-prefix content sha moved · a row inserted behind the edge in a temp copy -> old-prefix content sha moved
+  [PASS] F-D11-PREFIX: 124/124 PRE_STATE files: every old row byte-identical (10870630 rows); 107 extended (+19923 rows), 17 untouched byte for byte
+
+F-D11-EDGE — every lens ends exactly at its last bar closing <= the pin, whole
+  FAILS IF: a kline file's last open is not its lens's last bar closing <= the pin, it holds a gap, a duplicate or a row past the pin, the manifest mis-describes it, or a funding tape lacks the pin-hour print
+  [BREAK] deliberate violation -> RED (correct): all 3 plants caught, one at a time: a dropped middle bar -> klines/BTCUSDT_4h.parquet: 1 gap(s), 0 duplicate/backward stamp(s) · a dropped last bar -> klines/BTCUSDT_4h.parquet: last open 2026-09-24T16:00:00Z != the lens's last bar closing <= the pin 2026-09-24T20:00:00Z · a bar appended past the pin -> klines/BTCUSDT_4h.parquet: last open 2026-09-25T00:00:00Z != the lens's last bar closing <= the pin 2026-09-24T20:00:00Z
+  [PASS] F-D11-EDGE: 107 kline files (5m, 15m, 1h, 4h, 12h, 1d, 1w) each end exactly at their lens's last bar closing <= 2026-09-25T00:00:00Z, zero gaps, zero duplicates, zero rows past the pin; 17 funding tapes carry the 2026-09-25T00:00:00Z print; the manifest's sha matches every file
+
+F-D11-DERIVE — 1d / 1w are native 4h re-derived, bit for bit
+  FAILS IF: the plain-loop 1d (six complete 4h bars per UTC day) or 1w (seven complete days, Monday-anchored) differs from a derived file in any stamp or value
+  [BREAK] deliberate violation -> RED (correct): all 2 plants caught, one at a time: the module's 1w with the week anchor shifted to Sunday -> a Sunday-anchored 1w (366 weeks, first 2019-09-15T00:00:00Z) != the Monday-anchored plain loop · the plain loop with an uncompensated volume sum -> the derived 1d file != a 1d whose volume is a naive (uncompensated) sum
+  [PASS] F-D11-DERIVE: 17 assets: 30048 days and 4274 Monday-anchored weeks re-derived by a plain loop from native 4h (bars closed <= 2026-09-25T00:00:00Z) equal the derived files bit for bit on all six columns
+
+F-DET — two subprocess manifest builds under different hash seeds, one set of bytes
+  FAILS IF: the PYTHONHASHSEED 1 and 20260924 builds differ from each other or from the filed bytes, either exits nonzero, or a JSON carries a clock field
+  [BREAK] deliberate violation -> RED (correct): all 2 plants caught, one at a time: a process-dependent salt in a copy of the manifest -> bytes differ from the filed manifest · a clock field in a copy of the manifest -> clock field wall_clock
+  [PASS] F-DET: exit 0/0; 3 files byte-identical under PYTHONHASHSEED 1 and 20260924 and == the filed bytes (STAGE_D_MANIFEST.json sha 106cc1f7222bf8fe…); no clock field
+
+F-D11-UNTOUCHED — the TC10 snapshot and the live cache are as they were
+  FAILS IF: a TC10 snapshot file does not re-hash to TC10's manifest (or its clone-time record), TC10's own seal faults, or the live cache MANIFEST.json's stat moved across this run
+  [BREAK] deliberate violation -> RED (correct): all 2 plants caught, one at a time: a flipped byte in a temp copy of TC10's klines/PUMPUSDT_1w.parquet -> klines/PUMPUSDT_1w.parquet: the TC10 snapshot's bytes moved · a live-cache stat whose mtime moved by 1 ns -> live cache MANIFEST.json stat moved (mtime_ns)
+  [PASS] F-D11-UNTOUCHED: 176 TC10 snapshot files re-hash to TC10's manifest (175) / the clone-time record (1); TC10's WRITE_ONCE_SEAL verifies; the live cache MANIFEST.json stat (size, mtime_ns, inode) is unchanged across this run (stat only, never opened)
+
+  9 GREEN, 0 RED · break legs RED (correct) 9/9 · real legs GREEN 9/9
