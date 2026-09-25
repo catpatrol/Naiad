@@ -1,6 +1,6 @@
 {
   "ahead_behind": {
-    "ahead": 48,
+    "ahead": 57,
     "behind": 0
   },
   "branch": "v12-v1-census",
@@ -10,8 +10,8 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": false
   },
-  "generated_utc": "2026-09-24T10:00:01Z",
-  "head": "e63f922c1355af5cb2f60a2bf538abc52f475020",
+  "generated_utc": "2026-09-25T10:00:04Z",
+  "head": "f081c94eb68d79c9f5e0143a069510583fa6b8d1",
   "lane_last_commit": {
     "brief": null,
     "docs": {
@@ -20,9 +20,9 @@
       "subject": "docs: closing 11-entry memory snapshot post-redraft + phase-archive relocation pointer (ruling B, archives to D:/Naiad)"
     },
     "exchange": {
-      "committed_iso": "2026-09-23T14:59:49-03:00",
-      "sha": "e63f922c1355af5cb2f60a2bf538abc52f475020",
-      "subject": "exchange: auto-publish 2026-09-23"
+      "committed_iso": "2026-09-24T07:00:01-03:00",
+      "sha": "a33a5135ab7e1f8d0b654e4eafccb4249aa93c76",
+      "subject": "exchange: auto-publish 2026-09-24"
     },
     "ops": {
       "committed_iso": "2026-08-12T07:52:01-03:00",
@@ -39,9 +39,9 @@
   "manifest_version": "1.1",
   "onedrive_running": null,
   "origin_head": "088d475bb71613b964ec0b96a0f585ae1dcd688d",
-  "queue_open": 4,
-  "queue_ratified_unbuilt": 4,
-  "queue_total": 9,
+  "queue_open": 5,
+  "queue_ratified_unbuilt": 5,
+  "queue_total": 10,
   "queue_unratified": 0,
   "reviewer_box": [
     {
@@ -75,7 +75,7 @@
       "match_head": false,
       "path": "exchange/status/HEARTBEAT.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "ae0aed398d13f31faf93e4a224fe1714ca9426d936bf6ba595713eb1dd2f386f",
+      "sha256_worktree": "d67a40987710755f81ca24fd1fb0cb3e0ab440b0bdf2de25856a2837b2f02308",
       "size": 175,
       "source_guess": null,
       "tracked": true
@@ -181,15 +181,6 @@
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/DAILY_2026-09-14.md",
-      "sha256_head_blob": null,
-      "sha256_worktree": "84acc82d30d66164d588dbc0f08d6bb1a27588cce80786046942063cad0f6ce4",
-      "size": 5472,
-      "source_guess": null,
-      "tracked": true
-    },
-    {
-      "match_head": false,
       "path": "exchange/status/daily/DAILY_2026-09-15.md",
       "sha256_head_blob": null,
       "sha256_worktree": "6c2f122429783ec8bbcfd2ce53b8b28fd7e08731a747069667629e7b233e5f97",
@@ -244,10 +235,10 @@
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-09-14.json",
+      "path": "exchange/status/daily/DAILY_2026-09-24.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "565c4f4d30a0aa4063c012591585f2a6a2503a1fe305222e4451fe687ad7da85",
-      "size": 25154,
+      "sha256_worktree": "1b8cfad9f5529b07a6e3b9ef9bef25b534e1bcf0efc5a6f0383e199b663b4f61",
+      "size": 5510,
       "source_guess": null,
       "tracked": true
     },
@@ -302,6 +293,15 @@
       "sha256_head_blob": null,
       "sha256_worktree": "0b8d4ffd423c0de5e5fcef229318d1ad4ccf279446b7d6328ac82a02b0227af1",
       "size": 25338,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-09-24.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "a0ffb3b1274efd3fdae60910b2e3701bf12f7afd5846307a9fbe256690c8afe3",
+      "size": 25388,
       "source_guess": null,
       "tracked": true
     }
@@ -693,7 +693,37 @@
     }
   ],
   "status_porcelain": [
+    " M exchange/status/daily/DAILY_2026-09-24.md",
     " M research_outputs/tierc10/close/FIXTURES_CLOSE_ledger_append_root.txt",
+    " M research_outputs/tierc11/LEANS_AMENDMENTS.md",
+    " M research_outputs/tierc11/data/FIXTURES_DATA.txt",
+    " M research_outputs/tierc11/env/FIXTURES_ENV.txt",
+    " M research_outputs/tierc11/stage_a/FIXTURES_STAGE_A.txt",
+    " M research_outputs/tierc11/stage_a/STAGE_A_MANIFEST.json",
+    " M research_outputs/tierc11/stage_r/FIXTURES_STAGE_R.txt",
+    " M research_outputs/tierc11/stage_r/R5_CHOP.md",
+    " M research_outputs/tierc11/stage_r/STAGE_R.md",
+    " M research_outputs/tierc11/stage_r/build_manifest.json",
+    " M research_outputs/tierc11/stage_r/lanes/LANES_MANIFEST.json",
+    " M research_outputs/tierc11/stage_r/lanes/NEST_GRID_LANES.md",
+    " M research_outputs/tierc11/stage_r/lanes/NEST_P-BRK-4H.json",
+    " M research_outputs/tierc11/stage_t_brk/FIXTURES_T_BRK.txt",
+    " M research_outputs/tierc11/stage_t_brk/STAGE_T_BRK.md",
+    " M research_outputs/tierc11/stage_t_brk/build_manifest.json",
+    " M research_outputs/tierc11/stage_w/MANIFEST_STAGE_W.json",
+    " M research_outputs/tierc11/stage_w/STAGE_W.md",
+    " M scripts/tierc11_data.py",
+    " M scripts/tierc11_data_fixtures.py",
+    " M scripts/tierc11_env_fixtures.py",
+    " M scripts/tierc11_stage_r.py",
+    " M scripts/tierc11_stage_r4.py",
+    " M scripts/tierc11_stage_r4_fixtures.py",
+    " M scripts/tierc11_stage_r_fixtures.py",
+    " M scripts/tierc11_stage_t_brk.py",
+    " M scripts/tierc11_stage_t_brk_fixtures.py",
+    " M scripts/tierc11_stage_w.py",
+    " M scripts/tierc11_stage_w_fixtures.py",
+    " M scripts/tierc11_worktree_attest.py",
     "?? pine/SS12_ANCHOR_v12_6.pine",
     "?? pine/SS12_MANTLE_v12_6.pine",
     "?? pine/SS12_SIGNAL_v12_6.pine",
@@ -703,7 +733,9 @@
     "?? \"research_outputs/Cascade Atlas v2 \\342\\200\\224 CENSUS-1b MTF cross structure_files/\"",
     "?? \"research_outputs/Cascade Rewire.html\"",
     "?? \"research_outputs/Naiad Daily Brief v2 \\342\\200\\224 Confluence Prototype \\342\\200\\224 2026-07-27.html\"",
-    "?? research_outputs/VIZ3-4/"
+    "?? research_outputs/VIZ3-4/",
+    "?? research_outputs/tierc11/review/attest/g1probe.json",
+    "?? scripts/tierc11_closure_fixtures.py"
   ],
   "untracked_root": []
 }
