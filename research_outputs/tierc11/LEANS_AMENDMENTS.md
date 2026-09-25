@@ -79,3 +79,19 @@ lean blocks. They are sub-readings where the frozen text is silent:
   - L-W.5: the child order stop → latch.
 
   They agree on 200/200 v6 campaigns (`latch_on_stop_child` = 0).
+
+---------------------------------------------------------------------------------------------------------------
+## STAGE WAVE — 2026-09-25, filed before any stage runner existed
+
+**AM-7 · L-1.1 the haircut twin law, generalised.**
+- TC10's `haircut_twin_net_r` charges (fee + slippage) on entry_px + exit_px once. It ignores the harvest split,
+  adds and funding, so it cannot price a v6 campaign that harvested or added.
+- **TC11's law:** `haircut_net_r = net_r − fee_r × (slip_bps_side / taker_bps_side)`.
+  - `fee_r` is the ride's own taker fee over EVERY fill (entry, harvest, final exit, add entries and exits), each
+    at 5.0 bps per side of its notional, divided by r_dist.
+  - `slip_bps_side` is the charter tier of the stem (A 2 / B 5 / C 10; `fee_schedule.json`).
+- Slippage is a per-notional charge like the fee, so it scales the fee exactly. Funding stays in, because
+  `net_r` carries it.
+- A maker leg (scalper twins) carries zero slippage (L-1.2), so the maker twins apply the law to their taker legs
+  only.
+- Printed on every trade row beside `net_r`. It never replaces `net_r` (the veto "tiers").
