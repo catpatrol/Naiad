@@ -1,0 +1,17 @@
+{
+ "arms": [
+  "scored",
+  "base",
+  "tierE__head_to_head_vs_p_add_sfp",
+  "tierE__frozen3",
+  "tierE__refuse_below_entry",
+  "tierE__refuse_post_harvest",
+  "tierE__tuning",
+  "tierE__holdout"
+ ],
+ "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+ "reason": "paired add book built on the v6 campaign set (n 200); the identity law held on every campaign without an add (148 unacted, 0.000e+00) and the key sets are identical",
+ "registration": "P-ADD-BRK",
+ "source_script": "scripts/tierc11_stage_a.py",
+ "status": "BUILT"
+}

@@ -1,0 +1,49 @@
+{
+ "arm": "tierE__tuning",
+ "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+ "book_sha256": "a8dc8371e22a4f28e66baa84f3344afeaa2f40809b4f9231185b45ccdfd80364",
+ "book_sha_law": "sha256 of a canonical CSV of the REQUIRED columns (in the order ['symbol', 'entry_ms', 'entry_close_ms', 'direction', 'entry_px', 'stop_px', 'r_dist', 'exit_close_ms', 'exit_reason', 'net_r', 'gross_r', 'fee_r', 'funding_r', 'haircut_net_r', 'era', 'lane']), rows sorted by (symbol, entry_close_ms); first line = the column names joined by ','; one line per row, fields joined by ','; floats as repr(float(x)), ints as str(int(x)), strings raw; every line ends '\\n'; UTF-8",
+ "description": "P-ADD-BRK · tierE__tuning: Tier-E slice: the scored book's campaigns with era(entry close) == tuning; paired vs the base restricted to the same keys [L-1.3]",
+ "era_scope": "tuning",
+ "gates": "nothing",
+ "kind": "tierE",
+ "n": 123,
+ "paired_with": "base",
+ "pairing_key": [
+  "symbol",
+  "entry_ms"
+ ],
+ "panel": [
+  "BTCUSDT",
+  "ETHUSDT",
+  "SOLUSDT",
+  "NEARUSDT",
+  "ZECUSDT"
+ ],
+ "registration": "P-ADD-BRK",
+ "required_columns": [
+  "symbol",
+  "entry_ms",
+  "entry_close_ms",
+  "direction",
+  "entry_px",
+  "stop_px",
+  "r_dist",
+  "exit_close_ms",
+  "exit_reason",
+  "net_r",
+  "gross_r",
+  "fee_r",
+  "funding_r",
+  "haircut_net_r",
+  "era",
+  "lane"
+ ],
+ "ruler": "paired",
+ "scale_kind": "calibrated",
+ "seed": 20260924,
+ "selection_not_a_result": "a SELECTION, not a result",
+ "source_script": "scripts/tierc11_stage_a.py",
+ "sum_net_r": -1.8743822107773072,
+ "tier": "TIER-E"
+}

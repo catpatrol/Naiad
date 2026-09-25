@@ -1,0 +1,178 @@
+{
+ "as_of": "2026-09-25T00:00:00Z",
+ "as_of_close_ms": 1790294400000,
+ "collar": {
+  "gates": "nothing",
+  "selection_not_a_result": "a SELECTION, not a result",
+  "tier": "TIER-E"
+ },
+ "inputs": {
+  "SCALE_GRID.content_sha256": "d2b5ec141516d7bea1fe4ab296c97087233d7daa40044eebeeda730604ea2c2b",
+  "SCALE_PICKS.json": "cb5319c975e44df610c05f5917759b7b47d819fa095b8af26d174d79fcef454f",
+  "books_manifest_sha": {
+   "trg912_campaigns": "ff2b62cbebc657cdc57a6e80b9e393a5ed3b41633e499828de00525628f55fae",
+   "trg912_journal": "42060018fbceee721fa76e271841b0f955b72adaa249ca93541936531d740536",
+   "v6_campaigns": "a5d0c57087c9b9bb95b61341e798b98eb41a8dc135d07c2eb279db8683ca96dd",
+   "v6_journal": "5952563c9d8fdc689c37fe481aba00459762b3b54628b93b1ec6fe4c79414894"
+  },
+  "tc10_records": [
+   "research_outputs/tierc10/panel/control_journal.parquet",
+   "research_outputs/tierc10/stamps/control_entry_by_state.parquet",
+   "research_outputs/tierc10/census/height_toll_verdict.parquet"
+  ]
+ },
+ "keys": {
+  "NEST_GRID_BY_COIN": [
+   "book",
+   "scale_kind",
+   "lens",
+   "coin_rule",
+   "coin_cat"
+  ],
+  "NEST_GRID_BY_STATE": [
+   "book",
+   "scale_kind",
+   "lens",
+   "state"
+  ],
+  "NEST_GRID_FREQ": [
+   "book",
+   "scale_kind",
+   "lens",
+   "coin_rule",
+   "state",
+   "coin_cat"
+  ],
+  "NEST_trg912": [
+   "book",
+   "scale_kind",
+   "symbol",
+   "entry_ms",
+   "instant_kind",
+   "instant_ms"
+  ],
+  "NEST_v6": [
+   "book",
+   "scale_kind",
+   "symbol",
+   "entry_ms",
+   "instant_kind",
+   "instant_ms"
+  ],
+  "R1_LENSES": [
+   "asset",
+   "lens"
+  ],
+  "R2_FEASIBILITY": [
+   "panel",
+   "lens",
+   "era",
+   "scale_kind",
+   "toll"
+  ],
+  "R5_CHOP": [
+   "scale_kind",
+   "lens",
+   "bucket"
+  ],
+  "R5_FIVE_ROW": [
+   "macro_state_at_entry"
+  ],
+  "nest_books/V6-PROBE__base": [
+   "scale_kind",
+   "symbol",
+   "entry_ms",
+   "instant_kind",
+   "instant_ms"
+  ],
+  "nestbook_probe/V6-PROBE/base": [
+   "symbol",
+   "entry_ms"
+  ]
+ },
+ "lens_verdicts": {
+  "12h": "FAIL",
+  "15m": "FAIL",
+  "1d": "FAIL",
+  "1h": "FAIL",
+  "1w": "FAIL (provisional, n<30)",
+  "4h": "FAIL",
+  "5m": "FAIL"
+ },
+ "nest_book_probe": {
+  "arm": "base",
+  "book_sha256": "13feaf39a2fc25e62d29f9fbc035f7d6a15c8cab2b5e928392fd1a8249e39b72",
+  "content_sha256": "a84ce938c40e9a9fce3f7267df1b7b90c2f96ebb3233775306d5355bd291085e",
+  "kind": "v6transform",
+  "n_campaigns": 200,
+  "n_rows": 19386,
+  "registration": "V6-PROBE"
+ },
+ "r5_anchor": {
+  "columns": [
+   "n",
+   "n_assets",
+   "net_r_sum",
+   "expectancy_r",
+   "median_net_r",
+   "win_rate_pct",
+   "median_mfe_r",
+   "median_pct_of_range",
+   "median_dist_boundary_atr",
+   "n_in_range",
+   "provisional"
+  ],
+  "reproduced": true,
+  "rows": [
+   "BEAR_EXP",
+   "BULL_EXP",
+   "NEUTRAL",
+   "NONE",
+   "__ALL__"
+  ]
+ },
+ "readings": [
+  "SR-1 R1 COUNTS: a confirmed range's era is its CONFIRM bar's CLOSE [L-1.3] (the census's height_rows law); density per 100 bars = 100 x confirmed ranges in the era / bars of the lens in the era (tuning = bars with close <= 2024-06-30T23:59:59Z); ALL equals C.density_per_100 on the whole tape (asserted). The pick of record is READ from SCALE_PICKS.json (a pin) \u2014 never re-fitted; frozen 3.0 beside.",
+  "SR-2 R2 TOLLS [L-R.4, L-1.1, L-1.2]: taker = fee_schedule round_trip_bps_used (10.0; == C.toll_bps_for, asserted); charter twin = 2 x (taker 5.0 + the stem's charter slippage tier A 2 / B 5 / C 10) bps round trip; maker twin = 2 x maker 2.0 = 4.0 bps round trip (maker legs carry zero slippage). A pooled height row pools per-range ratios, each struck on its own asset's toll; a pooled edge row's toll is the BINDING (max) per-asset median (census law C-f) \u2014 both the census's own functions, unchanged.",
+  "SR-3 THE WORD [L-R.4]: PASS iff the height leg (n_ranges >= 30, median(ratio) >= 3.0, share(ratio < 1) <= 0.10) AND the edge leg (edge_n >= 30, edge_n_ranges >= 30, net = round(median term H20, 8) - round(toll, 8) > 0) both pass within the row's era; a FAIL with any leg under its floor (n_ranges, edge_n_ranges or edge_n < 30) reads 'FAIL (provisional, n<30)'; else 'FAIL'. The census's own gate booleans are cross-checked (HALT on disagreement).",
+  "SR-4 THE LENS VERDICT OF RECORD [L-R.4] = the POOLED:CLASSIC5 row, HOLDOUT era, calibrated scale (each member at its FILED pick), taker toll; 'FAIL \u2014 maker twin PASSES (\u2026)' when taker FAILs and the maker twin of the same row PASSES. Every other row is Tier-E, its word in `would_read`, collared.",
+  "SR-5 POOLED SCALE: a pooled calibrated row pools each member's run at ITS OWN filed pick (the census's pooling of per-asset runs); pick_window / scale_in_sample / stability_changed are carried per row, pooled rows name their fallback and stability-changed members [AM-4].",
+  "SR-6 R3 INSTANTS [L-R.5, AM-6]: every CLOSE of the campaign's own lens from its arm close (entry close for a book without arming) through its exit stamp of record; plus the named events \u2014 arm, entry, harvest, bell, add, a close exit at their CLOSE; +1R and an intrabar exit (stop / tp) at the OPEN of their bar for the 4h books (latch bar = latch_1r_open_ms, exit = exit_event_ms: the books' UNWALKED 4h ride) \u2014 their close-stamped twins are labelled 'post-event' (instant kinds plus_1r_post_event / exit_post_event); a campaign OPEN at the pin (corridor_end) is stamped 'as_of_pin', never 'exit'. Each row's stamp_law names its rule. The nest is N.nest_at(symbol, instants, scale) \u2014 per L read at the last CLOSED bar of L at or before the instant.",
+  "SR-7 COINCIDENCE AT ENTRY (NEST_GRID): per lens L the category from L's two side flags \u2014 'both' (coin_top and coin_bot), 'top', 'bot', 'none'; 'NA' for 1w (no lens above). Record rule = the live L+1 boundaries (coin_*); twin = with L+1's live memory lines (coin_*_mem).",
+  "SR-8 R5 BUCKETS [L-R.7]: IN_RANGE entries by pct-of-range (unclamped) decile [0,10) .. [90,100), '<0', '>=100'; not-in-range entries by state (NONE, BULL_EXP, BEAR_EXP); '__ALL__'. n, E[net R] (mean), P(win) (share net R > 0), sum R.",
+  "SR-9 nest-book [L-R.5]: kinds v6transform (4h bars from the arm), lane4h (4h from the entry), relay (4h bars from the v6 arm \u2014 its stop, R, window and ride are 4h; its 1h entry instant is the named event 'entry'), scalp5m (5m bars from the entry). Columns read beyond the REGBOOK INTERFACE: arm = arm_close_ms | window_arm_close_ms | arm_ms + one lens bar (the arm bar's OPEN) | (v6transform) v6's own arm joined on the pairing key (symbol, entry_ms) [L-1.5]; kinds v6transform / relay start their bar closes there (a close event); exit = exit_stamp_ms (ride11's stamp of record) | exit_event_ms (the books' L-R.5 stamp) | derived: an intrabar reason (stop / tp / target) -> the OPEN of the lens bar holding exit_close_ms, a close reason (bell* / corridor_end / warn* / invalidation* / close*) -> exit_close_ms; any other reason HALTs; an exit stamp before exit_close_ms carries the close-stamped twin 'exit_post_event'; a corridor_end campaign (OPEN at the pin) is stamped 'as_of_pin', never 'exit'; +1R = latch_stamp_ms (+ latch_post_event_ms) | latch_1h_ms gated by latched_1h: the resolving 1h child's close, a PARENT-decided latch (latch_1h_by 'parent' | its parent bar listed in walk_mismatch_ms) -> the parent's OPEN with its close as the twin, an undecidable latch at a parent close HALTs | derived on the lens tape by the bar-OPEN law when reached_1r is True (v6transform / lane4h) | none; harvest = harvest_close_ms | harvest_ms + one lens bar | harvest_i on the lens tape (checked) | (v6transform) v6's own harvest close joined on the pairing key, checked per row against `harvested` and the exit stamp \u2014 gated by `harvested`; a close event inside (entry close, exit]; adds / others = add1_close_ms, add2_close_ms (close events; gated by n_adds); ev_<name>_ms (kind <name>, as given); UNSTAMPED = a campaign whose own record says an event happened (latched_1h / reached_1r True, harvested True, n_adds > k) but no source above stamps it is counted, and the door REFUSES to file (HALT naming the counts) [L-R.5 'plus the named events'].",
+  "SR-10 TC10 CONTINUITY [AM-1]: TC10's census/height_toll_verdict.parquet rows (taker, 10 bps) beside TC11's taker rows at 5m/4h/1d, keyed (lens, scale_kind, asset, era); POOLED:PANEL17 <-> TC10 'POOLED:ALL'. TC10's calibrated scale is ITS whole-tape pick (TC10 L2), not TC11's tuning pick; its frozen3.0 rows are the like-for-like ones.",
+  "SR-11 R5 ANCHOR [L-R.7]: TC10's five-row table (control_entry_by_state.parquet, 4h, frozen 3.0) is re-derived from the FILED TC10 control journal's 200 campaigns with the TC11 nest (4h state at the entry close; IN_RANGE printed as TC10's 'NEUTRAL'; |dist_signed_atr| = TC10's unsigned dist) and must equal it exactly (the build HALTs otherwise); the TC11 v6 book's own five rows ride beside (all eleven columns, both sides).",
+  "SR-12 HONESTY OF THE AGGREGATED TABLES [L-R.2 SCALE-IN-SAMPLE, AM-4]: every R5_CHOP / NEST_GRID row carries lenses_read, pick_window, stability_changed_members, n_scale_in_sample, n_stability_changed and the HOLDOUT slice (n_holdout, mean_net_r_holdout, p_win_holdout, sum_net_r_holdout; era = the entry's CLOSE [L-1.3]) \u2014 the causal slice of a tuning-calibrated read, printed beside every cell.",
+  "SR-13 NO VERDICT WORD OFF THE RECORD [L-1.4, L-R.4]: R2's `word` and `verdict` are printed on the seven lens-verdict-of-record rows only; every Tier-E row carries its word as `would_read`, and the census's booleans are renamed height_leg_would_pass / edge_leg_would_pass / census_would_pass (TC10's: tc10_would_read / tc10_would_pass).",
+  "SR-14 THE PROBE [the nest-book self-test]: nestbook_probe/V6-PROBE is books/v6_campaigns.parquet (floats at the books table's 6 dp) in the REGBOOK schema \u2014 NOT the full-precision v6 base arm the stages file (its book_sha256 differs), never scored; the books' full-precision \u03a3R is read from books/build_manifest.json and printed beside."
+ ],
+ "record": {
+  "era": "holdout",
+  "panel": "POOLED:CLASSIC5",
+  "scale_kind": "calibrated",
+  "toll": "taker"
+ },
+ "record_collar": {
+  "gates": "range trading on this lens in this and every later tier unless the toll model changes [contract R2]; at 1h also Stage S [L-S.1]",
+  "selection_not_a_result": "n/a \u2014 the lens verdict of record, not a selection",
+  "tier": "R2 LENS VERDICT OF RECORD [L-R.4]"
+ },
+ "seed": 20260924,
+ "sha": {
+  "NEST_GRID_BY_COIN": "67af8e4b7997e078d42c432eea6fdfe619e9643484713ad4816b15e4130e1bdc",
+  "NEST_GRID_BY_STATE": "bb28e06e47f524150e95d301ccbd50c8beca008a7359de827126e3b4823dbca2",
+  "NEST_GRID_FREQ": "74198e0b932ea169be58b23f00106d65b19ffa36de43368b5938cffc2602a7ae",
+  "NEST_trg912": "60c2cd3bb9ef674a4efac9f88b4189626aa0e119efa43b0f75a8f9a74871f045",
+  "NEST_v6": "77f3012723aa59595e481c1b3b5df6c197b7f44be533de59adba894311ca2c39",
+  "R1_LENSES": "ad6a71c6914fa1456ff859896b4196a146b57d6346d360fd53474b4da59668a4",
+  "R2_FEASIBILITY": "2545d290133c5d7b76553acd2793122fb40a929a35ca0f406b889411000cb2eb",
+  "R5_CHOP": "6a1420d54562fd802d1dc376f4c4bb22c70e426147044c5640f247c007592e4d",
+  "R5_FIVE_ROW": "b86eb74bd8d785c606afd2b20f8796f658d245e887ba38b8aca3492df19da8f2",
+  "nest_books/V6-PROBE__base": "a84ce938c40e9a9fce3f7267df1b7b90c2f96ebb3233775306d5355bd291085e",
+  "nestbook_probe/V6-PROBE/base": "505d0fbff545ef422f20e97aedaa561dcebafec8e3c42df39d0c263779a801d4"
+ },
+ "stage": "TC11-R (R-a: R1 R2 R3 R5)",
+ "substrate": "tc11_20260925",
+ "tier": "TIER-C11"
+}

@@ -1,0 +1,51 @@
+{
+ "arm": "tierE__head_to_head_vs_p_add_brk",
+ "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+ "base_arm": "P-ADD-BRK/scored",
+ "book_sha256": "ee2d19250f3e3d747784b2ba8f45940fb7bb50354d3099e4480e672819c90910",
+ "book_sha_law": "sha256 of a canonical CSV of the REQUIRED columns (in the order ['symbol', 'entry_ms', 'entry_close_ms', 'direction', 'entry_px', 'stop_px', 'r_dist', 'exit_close_ms', 'exit_reason', 'net_r', 'gross_r', 'fee_r', 'funding_r', 'haircut_net_r', 'era', 'lane']), rows sorted by (symbol, entry_close_ms); first line = the column names joined by ','; one line per row, fields joined by ','; floats as repr(float(x)), ints as str(int(x)), strings raw; every line ends '\\n'; UTF-8",
+ "description": "P-ADD-SFP · tierE__head_to_head_vs_p_add_brk: Tier-E head-to-head vs P-ADD-BRK: this registration's scored book, row for row, ruled (paired, on (symbol, entry_ms)) against base_arm P-ADD-BRK/scored — the other rule's add book on the same v6 campaigns; extras opponent_net_r, delta_vs_opponent_net_r; neither promoted by the other's failure [SA-11]",
+ "era_scope": "full",
+ "gates": "nothing",
+ "kind": "tierE",
+ "n": 200,
+ "note": "neither promoted by the other's failure",
+ "paired_with": "P-ADD-BRK/scored",
+ "pairing_key": [
+  "symbol",
+  "entry_ms"
+ ],
+ "panel": [
+  "BTCUSDT",
+  "ETHUSDT",
+  "SOLUSDT",
+  "NEARUSDT",
+  "ZECUSDT"
+ ],
+ "registration": "P-ADD-SFP",
+ "required_columns": [
+  "symbol",
+  "entry_ms",
+  "entry_close_ms",
+  "direction",
+  "entry_px",
+  "stop_px",
+  "r_dist",
+  "exit_close_ms",
+  "exit_reason",
+  "net_r",
+  "gross_r",
+  "fee_r",
+  "funding_r",
+  "haircut_net_r",
+  "era",
+  "lane"
+ ],
+ "ruler": "paired",
+ "scale_kind": "calibrated",
+ "seed": 20260924,
+ "selection_not_a_result": "a SELECTION, not a result",
+ "source_script": "scripts/tierc11_stage_a.py",
+ "sum_net_r": 36.81196856626967,
+ "tier": "TIER-E"
+}

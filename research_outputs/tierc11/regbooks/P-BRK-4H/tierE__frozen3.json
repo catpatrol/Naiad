@@ -1,0 +1,39 @@
+{
+  "arm": "tierE__frozen3",
+  "book_sha256": "ce34edb784fd5c6205a00cef6465ba873700901a72889ad41f706ad5026b6218",
+  "description": "the frozen-3.0 twin: the scored rule with the macro scale at the frozen 3.0 (fully causal scale)",
+  "era_scope": "full",
+  "extra": {
+    "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+    "book_sha_law": "sha256 over UTF-8 bytes of a canonical CSV: header = the 16 required columns in interface order joined by ','; rows sorted by (symbol, entry_close_ms) (mergesort); ints as str(int), direction as str(int), floats as repr(float) (full precision), strings as str; fields joined by ',', lines by '\\n', a trailing '\\n'",
+    "haircut_law": "AM-7: haircut_net_r = net_r - fee_r x (slip_bps_side / 5.0)",
+    "key": [
+      "symbol",
+      "entry_ms"
+    ],
+    "label": "a SELECTION, not a result",
+    "lane": "brk-4h-frozen3",
+    "lens": "4h",
+    "loao_bar_above_half": "3/5",
+    "panel_name": "CLASSIC5",
+    "scale_kind": "frozen3.0",
+    "source": "scan_tap89",
+    "sum_haircut_net_r": 34.03245959905971
+  },
+  "gates": "nothing",
+  "kind": "tierE",
+  "n": 232,
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-BRK-4H",
+  "ruler": "vs_zero",
+  "selection_not_a_result": "a SELECTION, not a result",
+  "source_script": "scripts/tierc11_stage_t_brk.py",
+  "sum_net_r": 38.30608941293104,
+  "tier": "TIER-E"
+}

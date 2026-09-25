@@ -1,0 +1,27 @@
+{
+  "arm": "tierE__late_relay",
+  "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+  "book_sha256": "9e295b903e0c6e37d56e874b989f5978c1b9fac1dd54888fe3736c4de1abd61b",
+  "book_sha256_recipe": "sha256 of the UTF-8 CSV: header = the 16 required columns in interface order joined by ','; one line per row sorted by (symbol, entry_close_ms) (stable mergesort); ints as str(int), floats as repr(float), strings as is (csv.writer, QUOTE_MINIMAL, lineterminator '\\n')",
+  "description": "Tier-E rival reading (SR-6): relays allowed at/after the v6 4h trigger (the trigger bound removed; counter 12/89 and 89/316-against kept); one per window, one position per asset. a SELECTION, not a result.",
+  "era_scope": "full",
+  "gates": "nothing",
+  "kind": "tierE",
+  "label": "book, not a verdict",
+  "mean_net_r": 0.4651728539831388,
+  "n": 283,
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-RELAY-1",
+  "ruler": "two_sample",
+  "seed": 20260924,
+  "selection_not_a_result": "a SELECTION, not a result",
+  "source_script": "scripts/tierc11_stage_t_relay.py",
+  "sum_net_r": 131.64391767722827,
+  "tier": "TIER-E"
+}

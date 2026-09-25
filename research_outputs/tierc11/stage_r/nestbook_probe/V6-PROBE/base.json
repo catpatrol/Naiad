@@ -1,0 +1,23 @@
+{
+ "arm": "base",
+ "book_sha256": "13feaf39a2fc25e62d29f9fbc035f7d6a15c8cab2b5e928392fd1a8249e39b72",
+ "description": "Stage R's nest-book self-test: books/v6_campaigns.parquet (the v6 book with floats at the books table's 6 dp) in the REGBOOK schema \u2014 NOT the full-precision v6 base arm the stages file (its book_sha256 differs; net_r within 5e-7 per row), NOT a registration, never scored [SR-14]",
+ "era_scope": "full",
+ "gates": "nothing",
+ "kind": "base",
+ "n": 200,
+ "panel": [
+  "BTCUSDT",
+  "ETHUSDT",
+  "SOLUSDT",
+  "NEARUSDT",
+  "ZECUSDT"
+ ],
+ "registration": "V6-PROBE",
+ "ruler": "paired",
+ "selection_not_a_result": "a SELECTION, not a result",
+ "source_script": "scripts/tierc11_stage_r.py",
+ "sum_net_r": 40.807566,
+ "sum_net_r_law": "the sum of the books table's 6-dp rows (SR-14)",
+ "tier": "TIER-E"
+}

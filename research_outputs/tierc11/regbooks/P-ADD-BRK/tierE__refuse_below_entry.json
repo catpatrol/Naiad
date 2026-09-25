@@ -1,0 +1,49 @@
+{
+ "arm": "tierE__refuse_below_entry",
+ "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+ "book_sha256": "15ba415b7a30f20f95192aa279e84fe2cd9ea8cfde4c325513d8a128819e79cd",
+ "book_sha_law": "sha256 of a canonical CSV of the REQUIRED columns (in the order ['symbol', 'entry_ms', 'entry_close_ms', 'direction', 'entry_px', 'stop_px', 'r_dist', 'exit_close_ms', 'exit_reason', 'net_r', 'gross_r', 'fee_r', 'funding_r', 'haircut_net_r', 'era', 'lane']), rows sorted by (symbol, entry_close_ms); first line = the column names joined by ','; one line per row, fields joined by ','; floats as repr(float(x)), ints as str(int(x)), strings raw; every line ends '\\n'; UTF-8",
+ "description": "P-ADD-BRK · tierE__refuse_below_entry: Tier-E twin: adds priced below the entry ((px - entry) x d < 0) refused (judged before the 2-add cap, AM-6 s4) [L-A.1]",
+ "era_scope": "full",
+ "gates": "nothing",
+ "kind": "tierE",
+ "n": 200,
+ "paired_with": "base",
+ "pairing_key": [
+  "symbol",
+  "entry_ms"
+ ],
+ "panel": [
+  "BTCUSDT",
+  "ETHUSDT",
+  "SOLUSDT",
+  "NEARUSDT",
+  "ZECUSDT"
+ ],
+ "registration": "P-ADD-BRK",
+ "required_columns": [
+  "symbol",
+  "entry_ms",
+  "entry_close_ms",
+  "direction",
+  "entry_px",
+  "stop_px",
+  "r_dist",
+  "exit_close_ms",
+  "exit_reason",
+  "net_r",
+  "gross_r",
+  "fee_r",
+  "funding_r",
+  "haircut_net_r",
+  "era",
+  "lane"
+ ],
+ "ruler": "paired",
+ "scale_kind": "calibrated",
+ "seed": 20260924,
+ "selection_not_a_result": "a SELECTION, not a result",
+ "source_script": "scripts/tierc11_stage_a.py",
+ "sum_net_r": 36.77086452045925,
+ "tier": "TIER-E"
+}

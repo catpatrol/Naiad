@@ -1,0 +1,13 @@
+{
+  "arms": [
+    "base",
+    "scored",
+    "tierE__holdout",
+    "tierE__refused_cohort",
+    "tierE__shadow_abs206",
+    "tierE__tuning"
+  ],
+  "reason": "every arm built by scripts/tierc11_stage_g.py on the TC11 corridor (as of 2026-09-25T00:00:00Z); gates are post-filters of the v6 book [L-1.5]",
+  "registration": "P-AGE-1",
+  "status": "BUILT"
+}

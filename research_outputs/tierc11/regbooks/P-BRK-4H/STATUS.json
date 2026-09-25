@@ -1,0 +1,15 @@
+{
+  "arms": [
+    "scored",
+    "tierE__panel17",
+    "tierE__memline_first_hold",
+    "tierE__memline_oneshot_flip",
+    "tierE__frozen3",
+    "tierE__oneshot_first_touch",
+    "tierE__tuning",
+    "tierE__holdout"
+  ],
+  "reason": "P-BRK-4H's scored arm and seven Tier-E books (the registration's six tier_e_arms; the memory-line lane carries its engine one-shot twin as its own book) built over the TC11 corridor; no precondition or condition applies (vs zero, full corridor) [L-T.1]",
+  "registration": "P-BRK-4H",
+  "status": "BUILT"
+}

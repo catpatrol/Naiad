@@ -1,0 +1,65 @@
+{
+  "arm": "tierE__tp_post_harvest",
+  "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+  "book_sha256": "3d2c34a4fcdcc709893c4e66fc70afe91830e506fc769b10f1f82e31a901a902",
+  "book_sha256_law": "sha256 of the UTF-8 canonical CSV of the 16 required columns in REQ order, rows sorted by (symbol, entry_close_ms) (mergesort), header = the column names joined by ',', one row per line joined by ',', '\\n' after every line (the last included); int columns as str(int), direction as str(int), floats as repr(float) (shortest round-trip), strings verbatim (no ',' or newline allowed)",
+  "columns_required": [
+    "symbol",
+    "entry_ms",
+    "entry_close_ms",
+    "direction",
+    "entry_px",
+    "stop_px",
+    "r_dist",
+    "exit_close_ms",
+    "exit_reason",
+    "net_r",
+    "gross_r",
+    "fee_r",
+    "funding_r",
+    "haircut_net_r",
+    "era",
+    "lane"
+  ],
+  "d15_vs_base": {
+    "max_single_trade_delta_share": 2.1712,
+    "n_paired": 200,
+    "paired_delta_expectancy_r": 0.001944,
+    "tail_exit_ratio": 1.0,
+    "unpaired_base_n": 0,
+    "unpaired_cell_n": 0
+  },
+  "description": "rival reading: the TP rests only after the v6 band harvest has fired (the 0.5 runner) [L-H.1 rival]. Paired vs base.",
+  "era_scope": "full",
+  "gates": "nothing",
+  "identity_law": {
+    "acted": 5,
+    "held": true,
+    "unacted": 195,
+    "worst_unacted_abs_diff": 0.0
+  },
+  "kind": "tierE",
+  "n": 200,
+  "named_risk": "the wall-exit lesson (the NAMED RISK, REGISTRATIONS.json named_risk): P-WALL-1 (TC6) — exit the remainder on a close within 0.25 ATR of the profit-side 12h champion wall — paired Δ −0.0331, tail_exit_ratio 0.9329: it lost BY CUTTING THE TAIL. A take-profit near a structural level cuts the tail the card lives on.",
+  "pairing_key": [
+    "symbol",
+    "entry_ms"
+  ],
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-TP-RNG",
+  "ruler": "paired",
+  "scale_in_sample": "SCALE-IN-SAMPLE: calibrated-scale 12h reads at instants <= the era cut are structurally in-sample (tuning-era calibration); the holdout slice and the frozen-3.0 twin print beside [L-R.2]",
+  "scale_kind_12h": "calibrated",
+  "seed": 20260924,
+  "selection_not_a_result": "a SELECTION, not a result",
+  "source_script": "scripts/tierc11_stage_h.py",
+  "sum_net_r": 41.19640820232249,
+  "tier": "TIER-E",
+  "tp_mode": "post_harvest"
+}

@@ -1,0 +1,520 @@
+{
+  "as_of": "2026-09-25T00:00:00Z",
+  "as_of_close_ms": 1790294400000,
+  "beside_tier_e": {
+    "all_era_word": "FAIL",
+    "all_row": {
+      "cell": "POOLED:CLASSIC5|1h|ALL|calibrated|taker",
+      "clauses": [
+        {
+          "bound": ">= 30",
+          "clause": "n_ranges >= 30",
+          "column": "n_ranges",
+          "holds": true,
+          "leg": "height",
+          "value": 2253
+        },
+        {
+          "bound": ">= 3.0",
+          "clause": "median(height / toll) >= 3.0",
+          "column": "ratio_median",
+          "holds": true,
+          "leg": "height",
+          "value": 51.59590951
+        },
+        {
+          "bound": "<= 0.10",
+          "clause": "share(ratio < 1) <= 0.10",
+          "column": "share_ratio_lt_1",
+          "holds": true,
+          "leg": "height",
+          "value": 0.0
+        },
+        {
+          "bound": ">= 30",
+          "clause": "edge_n_ranges >= 30",
+          "column": "edge_n_ranges",
+          "holds": true,
+          "leg": "edge",
+          "value": 2140
+        },
+        {
+          "bound": ">= 30",
+          "clause": "edge_n >= 30",
+          "column": "edge_n",
+          "holds": true,
+          "leg": "edge",
+          "value": 35941
+        },
+        {
+          "bound": "> 0",
+          "clause": "median H20 term - toll > 0",
+          "column": "edge_net_h20",
+          "holds": false,
+          "leg": "edge",
+          "value": -0.07534231
+        }
+      ],
+      "legs": {
+        "edge_leg_holds": false,
+        "edge_n_ok": true,
+        "edge_n_ranges_ok": true,
+        "edge_net_ok": false,
+        "height_leg_holds": true,
+        "height_n_ranges_ok": true,
+        "height_ratio_ok": true,
+        "height_share_ok": true,
+        "net_identity_holds": true,
+        "net_rederived": -0.07534231,
+        "under_floor": false,
+        "values": {
+          "edge_median_term_h20": 0.05947917,
+          "edge_n": 35941,
+          "edge_n_ranges": 2140,
+          "edge_net_h20": -0.07534231,
+          "edge_toll_atr": 0.13482148,
+          "n_ranges": 2253,
+          "ratio_median": 51.59590951,
+          "share_ratio_lt_1": 0.0
+        },
+        "word": "FAIL"
+      },
+      "word": "FAIL"
+    },
+    "gates": "nothing",
+    "reading": "LEANS §10",
+    "selection_not_a_result": "a SELECTION, not a result",
+    "text": "beside, Tier-E [LEANS §10] (tier TIER-E · a SELECTION, not a result · gates nothing): the tuning-era R2 1h word FAIL (holdout word of record FAIL)",
+    "tier": "TIER-E",
+    "tuning_era_word": "FAIL",
+    "tuning_row": {
+      "cell": "POOLED:CLASSIC5|1h|tuning|calibrated|taker",
+      "clauses": [
+        {
+          "bound": ">= 30",
+          "clause": "n_ranges >= 30",
+          "column": "n_ranges",
+          "holds": true,
+          "leg": "height",
+          "value": 1437
+        },
+        {
+          "bound": ">= 3.0",
+          "clause": "median(height / toll) >= 3.0",
+          "column": "ratio_median",
+          "holds": true,
+          "leg": "height",
+          "value": 55.51948052
+        },
+        {
+          "bound": "<= 0.10",
+          "clause": "share(ratio < 1) <= 0.10",
+          "column": "share_ratio_lt_1",
+          "holds": true,
+          "leg": "height",
+          "value": 0.0
+        },
+        {
+          "bound": ">= 30",
+          "clause": "edge_n_ranges >= 30",
+          "column": "edge_n_ranges",
+          "holds": true,
+          "leg": "edge",
+          "value": 1371
+        },
+        {
+          "bound": ">= 30",
+          "clause": "edge_n >= 30",
+          "column": "edge_n",
+          "holds": true,
+          "leg": "edge",
+          "value": 23897
+        },
+        {
+          "bound": "> 0",
+          "clause": "median H20 term - toll > 0",
+          "column": "edge_net_h20",
+          "holds": false,
+          "leg": "edge",
+          "value": -0.03690565
+        }
+      ],
+      "legs": {
+        "edge_leg_holds": false,
+        "edge_n_ok": true,
+        "edge_n_ranges_ok": true,
+        "edge_net_ok": false,
+        "height_leg_holds": true,
+        "height_n_ranges_ok": true,
+        "height_ratio_ok": true,
+        "height_share_ok": true,
+        "net_identity_holds": true,
+        "net_rederived": -0.03690565,
+        "under_floor": false,
+        "values": {
+          "edge_median_term_h20": 0.08344812,
+          "edge_n": 23897,
+          "edge_n_ranges": 1371,
+          "edge_net_h20": -0.03690565,
+          "edge_toll_atr": 0.12035377,
+          "n_ranges": 1437,
+          "ratio_median": 55.51948052,
+          "share_ratio_lt_1": 0.0
+        },
+        "word": "FAIL"
+      },
+      "word": "FAIL"
+    }
+  },
+  "charter_twin": {
+    "cell": "POOLED:CLASSIC5|1h|holdout|calibrated|charter",
+    "clauses": [
+      {
+        "bound": ">= 30",
+        "clause": "n_ranges >= 30",
+        "column": "n_ranges",
+        "holds": true,
+        "leg": "height",
+        "value": 816
+      },
+      {
+        "bound": ">= 3.0",
+        "clause": "median(height / toll) >= 3.0",
+        "column": "ratio_median",
+        "holds": true,
+        "leg": "height",
+        "value": 26.2698845
+      },
+      {
+        "bound": "<= 0.10",
+        "clause": "share(ratio < 1) <= 0.10",
+        "column": "share_ratio_lt_1",
+        "holds": true,
+        "leg": "height",
+        "value": 0.0
+      },
+      {
+        "bound": ">= 30",
+        "clause": "edge_n_ranges >= 30",
+        "column": "edge_n_ranges",
+        "holds": true,
+        "leg": "edge",
+        "value": 771
+      },
+      {
+        "bound": ">= 30",
+        "clause": "edge_n >= 30",
+        "column": "edge_n",
+        "holds": true,
+        "leg": "edge",
+        "value": 12044
+      },
+      {
+        "bound": "> 0",
+        "clause": "median H20 term - toll > 0",
+        "column": "edge_net_h20",
+        "holds": false,
+        "leg": "edge",
+        "value": -0.23464735
+      }
+    ],
+    "legs": {
+      "edge_leg_holds": false,
+      "edge_n_ok": true,
+      "edge_n_ranges_ok": true,
+      "edge_net_ok": false,
+      "height_leg_holds": true,
+      "height_n_ranges_ok": true,
+      "height_ratio_ok": true,
+      "height_share_ok": true,
+      "net_identity_holds": true,
+      "net_rederived": -0.23464735,
+      "under_floor": false,
+      "values": {
+        "edge_median_term_h20": 0.0,
+        "edge_n": 12044,
+        "edge_n_ranges": 771,
+        "edge_net_h20": -0.23464735,
+        "edge_toll_atr": 0.23464735,
+        "n_ranges": 816,
+        "ratio_median": 26.2698845,
+        "share_ratio_lt_1": 0.0
+      },
+      "word": "FAIL"
+    },
+    "word": "FAIL"
+  },
+  "gate": "CLOSED",
+  "labels_agree_with_columns": true,
+  "law": {
+    "edge_n_min": 30,
+    "edge_n_ranges_min": 30,
+    "edge_net_gt": 0.0,
+    "height_n_ranges_min": 30,
+    "height_ratio_median_min": 3.0,
+    "height_share_lt1_max": 0.1
+  },
+  "lens": "1h",
+  "maker_twin": {
+    "cell": "POOLED:CLASSIC5|1h|holdout|calibrated|maker",
+    "clauses": [
+      {
+        "bound": ">= 30",
+        "clause": "n_ranges >= 30",
+        "column": "n_ranges",
+        "holds": true,
+        "leg": "height",
+        "value": 816
+      },
+      {
+        "bound": ">= 3.0",
+        "clause": "median(height / toll) >= 3.0",
+        "column": "ratio_median",
+        "holds": true,
+        "leg": "height",
+        "value": 115.58886049
+      },
+      {
+        "bound": "<= 0.10",
+        "clause": "share(ratio < 1) <= 0.10",
+        "column": "share_ratio_lt_1",
+        "holds": true,
+        "leg": "height",
+        "value": 0.0
+      },
+      {
+        "bound": ">= 30",
+        "clause": "edge_n_ranges >= 30",
+        "column": "edge_n_ranges",
+        "holds": true,
+        "leg": "edge",
+        "value": 771
+      },
+      {
+        "bound": ">= 30",
+        "clause": "edge_n >= 30",
+        "column": "edge_n",
+        "holds": true,
+        "leg": "edge",
+        "value": 12044
+      },
+      {
+        "bound": "> 0",
+        "clause": "median H20 term - toll > 0",
+        "column": "edge_net_h20",
+        "holds": false,
+        "leg": "edge",
+        "value": -0.0670421
+      }
+    ],
+    "legs": {
+      "edge_leg_holds": false,
+      "edge_n_ok": true,
+      "edge_n_ranges_ok": true,
+      "edge_net_ok": false,
+      "height_leg_holds": true,
+      "height_n_ranges_ok": true,
+      "height_ratio_ok": true,
+      "height_share_ok": true,
+      "net_identity_holds": true,
+      "net_rederived": -0.0670421,
+      "under_floor": false,
+      "values": {
+        "edge_median_term_h20": 0.0,
+        "edge_n": 12044,
+        "edge_n_ranges": 771,
+        "edge_net_h20": -0.0670421,
+        "edge_toll_atr": 0.0670421,
+        "n_ranges": 816,
+        "ratio_median": 115.58886049,
+        "share_ratio_lt_1": 0.0
+      },
+      "word": "FAIL"
+    },
+    "reopening_path": "none — the maker twin of the record row reads FAIL too, so no reopening path exists at 1h ('FAIL — maker twin PASSES (the reopening path; needs a toll-model change the operator rules)' is read only when the maker twin of the same row passes) [L-R.4, L-1.2]",
+    "word": "FAIL"
+  },
+  "printed": {
+    "maker_twin": "FAIL",
+    "provisional": false,
+    "verdict": "FAIL",
+    "word": "FAIL"
+  },
+  "r2_record_row_parquet": {
+    "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+    "as_of_substrate": "tc11_20260925",
+    "cell": "POOLED:CLASSIC5|1h|holdout|calibrated|taker",
+    "census_would_pass": false,
+    "edge_hit_rate_net": 0.48289605,
+    "edge_leg_would_pass": false,
+    "edge_median_term_h20": 0.0,
+    "edge_n": 12044,
+    "edge_n_ranges": 771,
+    "edge_net_h20": -0.16760525,
+    "edge_toll_atr": 0.16760525,
+    "era": "holdout",
+    "fail_reasons": "net -0.167605 <= 0",
+    "fallback_members": "",
+    "gates": "range trading on this lens in this and every later tier unless the toll model changes [contract R2]; at 1h also Stage S [L-S.1]",
+    "height_atr_median": 3.94028245,
+    "height_leg_would_pass": true,
+    "is_lens_verdict_of_record": true,
+    "lens": "1h",
+    "members": "BTCUSDT,ETHUSDT,SOLUSDT,NEARUSDT,ZECUSDT",
+    "n_members": 5,
+    "n_ranges": 816,
+    "panel": "POOLED:CLASSIC5",
+    "pick_window": "tuning",
+    "pooled": true,
+    "ratio_d1": 19.89618571,
+    "ratio_d2": 28.10622566,
+    "ratio_d3": 34.70036807,
+    "ratio_d4": 41.65503768,
+    "ratio_d5": 46.2355442,
+    "ratio_d6": 53.73104454,
+    "ratio_d7": 64.74069208,
+    "ratio_d8": 80.21108179,
+    "ratio_d9": 103.15555316,
+    "ratio_median": 46.2355442,
+    "scale_in_sample": "OUT-OF-SAMPLE (holdout; the causal slice of a tuning pick)",
+    "scale_kind": "calibrated",
+    "scale_mult": null,
+    "selection_not_a_result": "n/a — the lens verdict of record, not a selection",
+    "share_ratio_lt_1": 0.0,
+    "stability_changed": true,
+    "stability_changed_members": "BTCUSDT,SOLUSDT,NEARUSDT",
+    "tc10_edge_n": null,
+    "tc10_edge_n_ranges": null,
+    "tc10_edge_net_h20": null,
+    "tc10_n_ranges": null,
+    "tc10_note": "not measured by TC10 (lens / toll / panel)",
+    "tc10_ratio_median": null,
+    "tc10_would_pass": null,
+    "tc10_would_read": null,
+    "tier": "R2 LENS VERDICT OF RECORD [L-R.4]",
+    "toll": "taker",
+    "toll_atr_median": 0.0864487,
+    "toll_bps_rt_max": 10.0,
+    "toll_bps_rt_min": 10.0,
+    "under_floor": false,
+    "verdict": "FAIL",
+    "word": "FAIL",
+    "would_read": null
+  },
+  "r2_row": {
+    "charter_twin": "FAIL",
+    "edge_median_term_h20": 0.0,
+    "edge_n": 12044,
+    "edge_n_ranges": 771,
+    "edge_net_h20": -0.16760525,
+    "edge_toll_atr": 0.16760525,
+    "era": "holdout",
+    "fallback_members": "",
+    "maker_twin": "FAIL",
+    "members": "BTCUSDT,ETHUSDT,SOLUSDT,NEARUSDT,ZECUSDT",
+    "n_ranges": 816,
+    "pick_window": "tuning",
+    "pool": "POOLED:CLASSIC5",
+    "provisional": false,
+    "ratio_median": 46.2355442,
+    "scale": "calibrated",
+    "scale_in_sample": "OUT-OF-SAMPLE (holdout; the causal slice of a tuning pick)",
+    "share_ratio_lt_1": 0.0,
+    "stability_changed_members": "BTCUSDT,SOLUSDT,NEARUSDT",
+    "tier_e_all_word": "FAIL",
+    "tier_e_note": "the tuning / ALL words are Tier-E twins: 'a SELECTION, not a result'",
+    "tier_e_tuning_word": "FAIL",
+    "toll": "taker",
+    "toll_bps_rt": 10.0,
+    "verdict": "FAIL",
+    "word": "FAIL"
+  },
+  "reading": {
+    "L-S.1": "Stage S runs only if the R2 lens verdict of record at 1h is PASS. Otherwise it prints \"CLOSED BY R2 (1h: <verdict>)\" and stops. P-SCALP-2's §0 row reads that verdict, with no number and no slot spent."
+  },
+  "reason": "CLOSED BY R2 (1h: FAIL)",
+  "record": {
+    "era": "holdout",
+    "panel": "POOLED:CLASSIC5",
+    "scale_kind": "calibrated",
+    "toll": "taker"
+  },
+  "rederivation": {
+    "clauses": [
+      {
+        "bound": ">= 30",
+        "clause": "n_ranges >= 30",
+        "column": "n_ranges",
+        "holds": true,
+        "leg": "height",
+        "value": 816
+      },
+      {
+        "bound": ">= 3.0",
+        "clause": "median(height / toll) >= 3.0",
+        "column": "ratio_median",
+        "holds": true,
+        "leg": "height",
+        "value": 46.2355442
+      },
+      {
+        "bound": "<= 0.10",
+        "clause": "share(ratio < 1) <= 0.10",
+        "column": "share_ratio_lt_1",
+        "holds": true,
+        "leg": "height",
+        "value": 0.0
+      },
+      {
+        "bound": ">= 30",
+        "clause": "edge_n_ranges >= 30",
+        "column": "edge_n_ranges",
+        "holds": true,
+        "leg": "edge",
+        "value": 771
+      },
+      {
+        "bound": ">= 30",
+        "clause": "edge_n >= 30",
+        "column": "edge_n",
+        "holds": true,
+        "leg": "edge",
+        "value": 12044
+      },
+      {
+        "bound": "> 0",
+        "clause": "median H20 term - toll > 0",
+        "column": "edge_net_h20",
+        "holds": false,
+        "leg": "edge",
+        "value": -0.16760525
+      }
+    ],
+    "edge_leg_holds": false,
+    "height_leg_holds": true,
+    "net_identity_holds": true,
+    "net_rederived": -0.16760525,
+    "taker_word": "FAIL",
+    "under_floor": false
+  },
+  "registration": "P-SCALP-2",
+  "registration_payload_sha256": "c4e7ea0064bf0355804f311b8a2c91af1178de0ac9e705a417a1cc09b90bd250",
+  "seed": 20260924,
+  "source": {
+    "r2_feasibility": {
+      "content_sha256": "2545d290133c5d7b76553acd2793122fb40a929a35ca0f406b889411000cb2eb",
+      "path": "research_outputs/tierc11/stage_r/R2_FEASIBILITY.parquet"
+    },
+    "r2_manifest": {
+      "path": "research_outputs/tierc11/stage_r/build_manifest.json",
+      "vouches_for_feasibility_content_sha": true
+    },
+    "r2_verdicts": {
+      "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+      "sha256": "82cc3ec6ddd588c9fbd8402def471438a0c931590606b9a2a6cc3a97572f3087"
+    }
+  },
+  "stage": "TC11-S",
+  "stage_stops": "Stage S STOPS [L-S.1]: no scalper book, no maker twin (fill assumed or fill conditioned), no 17-asset view, no regime gate, no tuning slice, no frozen-3.0 twin, no refused-entry count and no target/stop ratio distribution were built; P-SCALP-2's §0 row reads the verdict, with no number and no slot spent.",
+  "verdict_of_record": "FAIL"
+}

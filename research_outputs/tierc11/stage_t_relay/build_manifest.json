@@ -1,0 +1,173 @@
+{
+  "as_of": "2026-09-25T00:00:00Z",
+  "as_of_close_ms": 1790294400000,
+  "book_sha256_recipe": "sha256 of the UTF-8 CSV: header = the 16 required columns in interface order joined by ','; one line per row sorted by (symbol, entry_close_ms) (stable mergesort); ints as str(int), floats as repr(float), strings as is (csv.writer, QUOTE_MINIMAL, lineterminator '\\n')",
+  "collar": {
+    "applies_to": "every stage table here and every tierE__ arm",
+    "gates": "nothing",
+    "selection_not_a_result": "a SELECTION, not a result",
+    "tier": "TIER-E"
+  },
+  "corridor": {
+    "hi_close": "2026-09-25T00:00:00Z",
+    "lo": "2019-09-08T16:00:00Z",
+    "panel": [
+      "BTCUSDT",
+      "ETHUSDT",
+      "SOLUSDT",
+      "NEARUSDT",
+      "ZECUSDT"
+    ]
+  },
+  "disclosure": {
+    "after_trigger_late": 110,
+    "after_trigger_record": 0,
+    "belled_at_J": 0,
+    "entry_kinds": {
+      "1h": 141,
+      "4h-close": 32
+    },
+    "exit_reasons": {
+      "bell_12_89": 11,
+      "stop": 162
+    },
+    "exit_resolved_by": {
+      "1h": 162,
+      "close": 11
+    },
+    "mismatch_bars_named": [],
+    "n_mismatch_bar_rides": 0,
+    "n_moved": 0,
+    "relays_the_v6_4h_bar_law_would_refuse": 0,
+    "stopped_inside_J": 4
+  },
+  "dispositions": {
+    "MISS_CLOSED_COUNTER_12_89": "miss: the window closed unrelayed (counter 4h 12/89)",
+    "MISS_CLOSED_TIDE_AGAINST": "miss: the window closed unrelayed (4h 89/316 against)",
+    "MISS_OPEN_AT_ASOF": "miss: still armed at the as-of, unrelayed (censored)",
+    "MISS_REFUSED_MOVED_ONTO_BOUND": "miss: the first cross sits in an L-W.0 mismatch bar and its parent-close entry is not strictly before the bound",
+    "MISS_REFUSED_NO_STOP": "miss: no structural stop (struct_stop_4h None / ATR not finite)",
+    "MISS_REFUSED_POSITION_OPEN": "miss: the first cross came while a relay was open on the asset (one position per asset)",
+    "MISS_TRIGGER_FIRST": "miss: the v6 4h 12/26 trigger closed first (lag >= 1)",
+    "MISS_TRIGGER_FIRST_LAG0": "miss: the v6 4h 12/26 trigger closed first, at the arm bar (lag 0 \u2014 no 1h close lies strictly between)",
+    "RELAYED": "relayed: the first with-trend 1h 9/12 close inside the armed interval, entered"
+  },
+  "input_sha": {
+    "funding/BTCUSDT.parquet": "a3d21e1f1a78930b9ca27132d4973f4f4cd4d3ab0639d33d949f25ad8722a77b",
+    "funding/ETHUSDT.parquet": "31120f82bd515bf664acedacfa86cb0867d309686c2db508f4977edf981767ed",
+    "funding/NEARUSDT.parquet": "593ac29381ca6c6432d3ce59f3134de000c7a1a428286a832835733b09adad50",
+    "funding/SOLUSDT.parquet": "63f3b205c1a88345c9c72bd4d9694b6349b069ce0ebbff93badebb9eabc37f8d",
+    "funding/ZECUSDT.parquet": "19a0080a11c5b3194a7be1a01e61f0f5ae244fc26be9a0e848dfcbeb7c6fa700",
+    "klines/BTCUSDT_4h.parquet": "281c3ac3195e5bb8de6b211573f77919bb2af2a342f71162426085f54bf37bfb",
+    "klines/ETHUSDT_4h.parquet": "e78895774de7d30ae06528060d97896a846975e26e1ceb7bdc6245ef70993fab",
+    "klines/NEARUSDT_4h.parquet": "e3fdd23041ffcdd3a55a8c24c9473389051d2c95d20a8c2d1fcb136144d04098",
+    "klines/SOLUSDT_4h.parquet": "6dfc049478f6e5fb8752c6211ebbda3b0c222afd95933d13b12b4d63e541d021",
+    "klines/ZECUSDT_4h.parquet": "1e054d71061f18be429907a0331eb43eb1aa26fa511ca01af581f428b8844935"
+  },
+  "input_sha_1h": {
+    "BTCUSDT": "76ad1c804260a5b57ec663a7550194d21f2e5e7090d574dd183778aa404b3289",
+    "ETHUSDT": "d447f0ef5784ed610d7f32ca632a3a27ffaca42dd3f08a08c9528982b6abe3c7",
+    "NEARUSDT": "5a8ddf6790886b4be75774d46a46014441b7114221e182c600ce77a0ab9de427",
+    "SOLUSDT": "1629d318a6e7424a9a68b600f9ffc3ddb2ec5d2a0b83becc64150c2daaac9a75",
+    "ZECUSDT": "8254440f1a068cae34971b9a58c7ff237838c62b7fcb8144fa5fb3b4d090de11"
+  },
+  "keys": {
+    "relay_disposition_grid": [
+      "variant",
+      "disposition"
+    ],
+    "relay_era_slices": [
+      "arm",
+      "era"
+    ],
+    "relay_lead_bins": [
+      "lead_kind",
+      "bin"
+    ],
+    "relay_lead_values": [
+      "lead_kind",
+      "lead_value"
+    ],
+    "relay_windows": [
+      "symbol",
+      "arm_ms",
+      "direction"
+    ]
+  },
+  "readings": [
+    "[LEAN-HEPHAESTUS] L-T.2 windows = every v6 arming on CLASSIC5 (replay9's armings, TIDE and d >= 0.75 at the arm bar) whether or not v6 entered it; ARMED from the arm close to min(v6 4h 12/26 trigger close, counter 12/89 close, 89/316-against close); the relay enters at the FIRST 1h close strictly inside that interval on which EMA9 crosses EMA12 with the trend; one relay per window, one position per asset; stop struct_stop_4h as of the last CLOSED 4h bar railed 1.0 ATR (R on 4h); RD.relay_entry / relay_stop / relay11(walk_after=True).",
+    "[LEAN-HEPHAESTUS] L-T.3 every relay's close < its window's v6 4h trigger close (when the window triggered); misses are windows whose trigger closed first (every lag-0 window) or that closed unrelayed \u2014 each with what v6 did in it.",
+    "[LEAN-HEPHAESTUS] L-W.0 / AM-5 a relay entry inside a 4h bar whose four 1h children do not reproduce the parent is taken at the parent's close (moved) and the bar is counted; the book prints its mismatch-bar count and names the bars.",
+    "[LEAN-HEPHAESTUS] AM-6 (s3) a relay stopped inside its entry bar J books mae/mfe at 1h resolution (the stop child is the stop unit); L-T.2 arms the harvest on close[J-1].",
+    "[LEAN-HEPHAESTUS] AM-7 haircut_net_r = net_r - fee_r x slip_bps_side / taker_bps_side (charter tier per stem from E.fees()); printed beside net_r, never replacing it.",
+    "[LEAN-HEPHAESTUS] SR-1 window set = replay9's armings (tide_ok and d_ok) over replay9's own bounds; v6's disposition of each is replay9's.",
+    "[LEAN-HEPHAESTUS] SR-2 bounds known by the as-of only; a window with no bound by the pin is armed at the pin (1h closes <= the pin eligible); tie order trigger -> counter 12/89 -> 89/316-against.",
+    "[LEAN-HEPHAESTUS] SR-3 first cross only: a window whose first qualifying cross cannot be entered is a MISS with the reason (v6's one-trigger-per-window law); refusal order position open, then the stop (replay9's order).",
+    "[LEAN-HEPHAESTUS] SR-4 a moved entry is refused unless its RESOLVED instant is strictly before every bound (relay_entry refuses the trigger; the runner the other two).",
+    "[LEAN-HEPHAESTUS] SR-5 one position per asset at 1h resolution: entry instant strictly after the previous relay's 1h-resolved exit; v6's 4h-bar law printed as a disclosure.",
+    "[LEAN-HEPHAESTUS] SR-6 late-relay twin (Tier-E rival) = the record rule with the trigger bound removed (the trigger instant and later admissible).",
+    "[LEAN-HEPHAESTUS] SR-7 relay entry_ms = open of the 4h bar J holding the entry close; relay exit_close_ms = the 1h-resolved exit instant; base v6 exit_close_ms = the exit bar's close (tierc11_books convention); both carry exit_bar_close_ms."
+  ],
+  "regbooks": {
+    "base": {
+      "book_sha256": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+      "content_sha": "3862ebca7fa9be6dedab14f4c68ddd0d47d785e987983cdff82005b595a40c65",
+      "parquet": "regbooks/P-RELAY-1/base.parquet"
+    },
+    "scored": {
+      "book_sha256": "57d8bbef8190492d1df83a137977463ee441508e20a57cd81499c60258a53361",
+      "content_sha": "5e038fb8ed4c119e684c42702a7d63b074a398fcfefbff8c6c112b2a29d828d7",
+      "parquet": "regbooks/P-RELAY-1/scored.parquet"
+    },
+    "tierE__holdout_slice": {
+      "book_sha256": "7e975ad781e3e31f15b3ff082443d33cfb516b529849d36efbea6027090b3fb4",
+      "content_sha": "02da1d9521b2d79acab07e7f8b5405dc2f4789f9207ee03a5575aff59b9ef2d1",
+      "parquet": "regbooks/P-RELAY-1/tierE__holdout_slice.parquet"
+    },
+    "tierE__late_relay": {
+      "book_sha256": "9e295b903e0c6e37d56e874b989f5978c1b9fac1dd54888fe3736c4de1abd61b",
+      "content_sha": "2f0cd0cd2bbae06f57bd9c511743d5f76493eba41d0d50b6de723854b7fc537e",
+      "parquet": "regbooks/P-RELAY-1/tierE__late_relay.parquet"
+    },
+    "tierE__miss_v6": {
+      "book_sha256": "306b9ceebecb9e5141fb0cfa1b264f233fadea8876b26db3ae24f3947fde3edb",
+      "content_sha": "bcc84319c8e885d71e6acb3092484b7462b17e5d479bdc74338e3f481abbeebb",
+      "parquet": "regbooks/P-RELAY-1/tierE__miss_v6.parquet"
+    },
+    "tierE__tuning_slice": {
+      "book_sha256": "10ac7ec867fab0873cf5b729301e19d62c63a90eabd8e1776924d44b1a6100f9",
+      "content_sha": "9f0c28c1b385d4765210017d619e85a1b1bfeec66114bcb8c07fc6196689fd3c",
+      "parquet": "regbooks/P-RELAY-1/tierE__tuning_slice.parquet"
+    }
+  },
+  "registration": "P-RELAY-1",
+  "registration_record": {
+    "seq": 5,
+    "sha256": "e8f6d4595b449a18bfd7ef8d01ed89d0b1fe65c4ab2ecf8964fa84fc8028a59b",
+    "text_sha256": "b089017bcc8b55035842b5950b58c6a28a227fa34712217c7d5197f42dfc8382",
+    "tier_e_arms": [
+      "miss column (windows never relayed; what v6 did in them)",
+      "lead distribution vs the 4h trigger",
+      "late-relay twin (relays allowed after the trigger)",
+      "tuning slice",
+      "holdout slice"
+    ]
+  },
+  "seed": 20260924,
+  "sha": {
+    "relay_disposition_grid": "bbb652c3183ddcc0df5854425757225d1697c59b11ffed0835e0707c30576dca",
+    "relay_era_slices": "f07c8fc30e2b5e4093a8dba9bada2e0eece7dc57699769350f210c98f9eee1c7",
+    "relay_lead_bins": "68cedbbd028975761fe0e12f1c48962e7f653d8c7be9a954a4c16f425f40882f",
+    "relay_lead_values": "4c2e2e7bd0d4bf4c6a9ded5d1ed6c247fc5b735e5fcbbb1b4a4bb77ba713042d",
+    "relay_windows": "d33b1e65cad84440e81d733312f1d36c36103c639ff229f12733f00807ed9851"
+  },
+  "skipped_empty": [],
+  "stage": "TC11-T (relay)",
+  "substrate": "tc11_20260925",
+  "tier": "TIER-C11",
+  "v6_anchor": {
+    "book_sha": "f3c68f544bcda52c909374105dabbdc773c9bffa4b66b2ef7e0f35ac9b369132",
+    "manifest": "research_outputs/tierc11/books/build_manifest.json",
+    "n": 200
+  }
+}

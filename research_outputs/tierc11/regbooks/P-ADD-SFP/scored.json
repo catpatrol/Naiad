@@ -1,0 +1,48 @@
+{
+ "arm": "scored",
+ "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+ "book_sha256": "ee2d19250f3e3d747784b2ba8f45940fb7bb50354d3099e4480e672819c90910",
+ "book_sha_law": "sha256 of a canonical CSV of the REQUIRED columns (in the order ['symbol', 'entry_ms', 'entry_close_ms', 'direction', 'entry_px', 'stop_px', 'r_dist', 'exit_close_ms', 'exit_reason', 'net_r', 'gross_r', 'fee_r', 'funding_r', 'haircut_net_r', 'era', 'lane']), rows sorted by (symbol, entry_close_ms); first line = the column names joined by ','; one line per row, fields joined by ','; floats as repr(float(x)), ints as str(int(x)), strings raw; every line ends '\\n'; UTF-8",
+ "description": "P-ADD-SFP · scored: the registration's scored arm: v6 campaigns plus <= 2 adds of 0.5 unit at the 1h close of the rule's event (calibrated 1h scale), IN-TRADE and after the +1R latch, booked by tierc7._account_chain [L-A.1]",
+ "era_scope": "full",
+ "kind": "scored",
+ "label": "book, not a verdict",
+ "n": 200,
+ "paired_with": "base",
+ "pairing_key": [
+  "symbol",
+  "entry_ms"
+ ],
+ "panel": [
+  "BTCUSDT",
+  "ETHUSDT",
+  "SOLUSDT",
+  "NEARUSDT",
+  "ZECUSDT"
+ ],
+ "registration": "P-ADD-SFP",
+ "required_columns": [
+  "symbol",
+  "entry_ms",
+  "entry_close_ms",
+  "direction",
+  "entry_px",
+  "stop_px",
+  "r_dist",
+  "exit_close_ms",
+  "exit_reason",
+  "net_r",
+  "gross_r",
+  "fee_r",
+  "funding_r",
+  "haircut_net_r",
+  "era",
+  "lane"
+ ],
+ "ruler": "paired",
+ "scale_in_sample": "SCALE-IN-SAMPLE: calibrated-scale range reads at instants <= the era cut are structurally in-sample (tuning-era calibration); the holdout-slice statistic (tierE__holdout) and the frozen-3.0 twin (tierE__frozen3) are printed beside the verdict; pick stability printed [L-R.2]",
+ "scale_kind": "calibrated",
+ "seed": 20260924,
+ "source_script": "scripts/tierc11_stage_a.py",
+ "sum_net_r": 36.81196856626967
+}

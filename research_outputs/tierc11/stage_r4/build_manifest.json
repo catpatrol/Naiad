@@ -1,0 +1,690 @@
+{
+  "as_of_close_ms": 1790294400000,
+  "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+  "code_sha": {
+    "analytics/rangefinder_census.py": "19c5507ff2d39b68aa119ff701aef58a2d219fa287c34cdf7302ebf2bbb7b37d",
+    "engine/indicators.py": "91805c04130c3701e16f933b4c4ac258109f8636d9cd8a0ae44787d86f13c113",
+    "scripts/tierc10_census.py": "0e6cb635436acc2dd75fb0757506bd6122975453ca45a3c311fa4a3d67d7a6ef",
+    "scripts/tierc10_null.py": "c9f19e701996c4048f0037f621b60746f887978571711dbfa6bbd97ba8f995db",
+    "scripts/tierc11_env.py": "1526093b25161927337ced6112a310075b1a57c825f08705814e48619398f798",
+    "scripts/tierc11_nest.py": "16e325022523064e67eede439998e9ee4cacfeb0df8171202a85b46125827429",
+    "scripts/tierc11_stage_r4.py": "ed79fdca56033642edfd5bb288d37216d0628ebc05aaec6990de58ac1f4c05c4"
+  },
+  "commission": {
+    "base_laws": [
+      "record",
+      "mem_twin",
+      "topside",
+      "botside",
+      "own_side_brk",
+      "own_side_sfp",
+      "own_side_brk_mem",
+      "own_side_sfp_mem"
+    ],
+    "directions": [
+      "both",
+      "long",
+      "short"
+    ],
+    "eras": [
+      "ALL",
+      "tuning",
+      "holdout"
+    ],
+    "event_laws": {
+      "BRK": [
+        "record",
+        "mem_twin"
+      ],
+      "SFP": [
+        "record",
+        "mem_twin",
+        "post_redraw"
+      ]
+    },
+    "events": [
+      "BRK_tap89_first",
+      "BRK_tap89_oneshot",
+      "BRK_tap127_first",
+      "BRK_tap127_oneshot",
+      "BRK_tap200_first",
+      "BRK_tap200_oneshot",
+      "BRK_mem_first",
+      "BRK_mem_oneshot",
+      "SFP_harden"
+    ],
+    "has_l1": {
+      "CLASSIC5|12h": true,
+      "CLASSIC5|1d": true,
+      "CLASSIC5|1h": true,
+      "CLASSIC5|4h": true,
+      "UNSEEN12|1d": false,
+      "UNSEEN12|1h": true,
+      "UNSEEN12|4h": false
+    },
+    "horizons": [
+      [
+        "H20",
+        20
+      ],
+      [
+        "H100",
+        100
+      ]
+    ],
+    "lenses": {
+      "CLASSIC5": [
+        "1h",
+        "4h",
+        "12h",
+        "1d"
+      ],
+      "UNSEEN12": [
+        "1h",
+        "4h",
+        "1d"
+      ]
+    },
+    "panels": {
+      "CLASSIC5": [
+        "BTCUSDT",
+        "ETHUSDT",
+        "SOLUSDT",
+        "NEARUSDT",
+        "ZECUSDT"
+      ],
+      "UNSEEN12": [
+        "ENAUSDT",
+        "PUMPUSDT",
+        "HYPEUSDT",
+        "MNTUSDT_BYBIT",
+        "SUIUSDT",
+        "LTCUSDT",
+        "XMRUSDT",
+        "BNBUSDT",
+        "UNIUSDT",
+        "1000PEPEUSDT",
+        "DOGEUSDT",
+        "1000BONKUSDT"
+      ]
+    },
+    "partition": [
+      "EXP_ALIGNED",
+      "EXP_COUNTER",
+      "IN_RANGE_COINCIDENT",
+      "IN_RANGE_MID",
+      "IN_RANGE_OTHER",
+      "NONE"
+    ],
+    "scale_kinds": [
+      "calibrated",
+      "frozen3.0"
+    ],
+    "scan_bands": [
+      "tap89",
+      "tap127",
+      "tap200",
+      "memory-line"
+    ],
+    "scan_ends": [
+      "hold",
+      "truncated",
+      "failed-out",
+      "no-touch"
+    ],
+    "side_base_law": {
+      "BRK|mem_twin": "own_side_brk_mem",
+      "BRK|record": "own_side_brk",
+      "SFP|mem_twin": "own_side_sfp_mem",
+      "SFP|post_redraw": "own_side_sfp",
+      "SFP|record": "own_side_sfp"
+    },
+    "units": [
+      "CLASSIC5:1h:calibrated",
+      "CLASSIC5:1h:frozen3.0",
+      "CLASSIC5:4h:calibrated",
+      "CLASSIC5:4h:frozen3.0",
+      "CLASSIC5:12h:calibrated",
+      "CLASSIC5:12h:frozen3.0",
+      "CLASSIC5:1d:calibrated",
+      "CLASSIC5:1d:frozen3.0",
+      "UNSEEN12:1h:calibrated",
+      "UNSEEN12:1h:frozen3.0",
+      "UNSEEN12:4h:calibrated",
+      "UNSEEN12:4h:frozen3.0",
+      "UNSEEN12:1d:calibrated",
+      "UNSEEN12:1d:frozen3.0"
+    ]
+  },
+  "files_of_record": [
+    "R4_BASE.parquet",
+    "R4_DEATHS.parquet",
+    "R4_EVENTS.parquet",
+    "R4_GRID.md",
+    "R4_GRID.parquet",
+    "R4_NULL.parquet",
+    "R4_NULL_BOXES.parquet",
+    "R4_SCAN.parquet",
+    "STAGE_R4.md",
+    "build_manifest.json"
+  ],
+  "gates": "nothing",
+  "input_sha": {
+    "1000BONKUSDT|1d": {
+      "source_file": "klines/1000BONKUSDT_4h.parquet",
+      "source_sha256": "fd57e979d330936bfd71535c06682e287a4e59dbe6dee941eb01cac5aac6c4ca"
+    },
+    "1000BONKUSDT|1h": {
+      "source_file": "klines/1000BONKUSDT_1h.parquet",
+      "source_sha256": "1d2be24081b4e42555c0c287ee78017eaf093d1dd402652be070ab2cfd612ea8"
+    },
+    "1000BONKUSDT|4h": {
+      "source_file": "klines/1000BONKUSDT_4h.parquet",
+      "source_sha256": "fd57e979d330936bfd71535c06682e287a4e59dbe6dee941eb01cac5aac6c4ca"
+    },
+    "1000PEPEUSDT|1d": {
+      "source_file": "klines/1000PEPEUSDT_4h.parquet",
+      "source_sha256": "5eee1366551d52ddf2e72b6ba2204715c3fd928ee33d4a1b67712d6ec5006e17"
+    },
+    "1000PEPEUSDT|1h": {
+      "source_file": "klines/1000PEPEUSDT_1h.parquet",
+      "source_sha256": "327b65a9c886201b1ad9e3b5d56d58a3a88286c703be4153bd0345f045e81c03"
+    },
+    "1000PEPEUSDT|4h": {
+      "source_file": "klines/1000PEPEUSDT_4h.parquet",
+      "source_sha256": "5eee1366551d52ddf2e72b6ba2204715c3fd928ee33d4a1b67712d6ec5006e17"
+    },
+    "BNBUSDT|1d": {
+      "source_file": "klines/BNBUSDT_4h.parquet",
+      "source_sha256": "aceb10208ceaac1d59425cfa3412c5d617aa30ccbc09742ed5cacad1e62612c2"
+    },
+    "BNBUSDT|1h": {
+      "source_file": "klines/BNBUSDT_1h.parquet",
+      "source_sha256": "b0aebb0e21e1a013b376853a9a17f783b71fd29692c530de4c4c0167d8a33756"
+    },
+    "BNBUSDT|4h": {
+      "source_file": "klines/BNBUSDT_4h.parquet",
+      "source_sha256": "aceb10208ceaac1d59425cfa3412c5d617aa30ccbc09742ed5cacad1e62612c2"
+    },
+    "BTCUSDT|12h": {
+      "source_file": "klines/BTCUSDT_12h.parquet",
+      "source_sha256": "f2894ed4102a729e332abd205a84b4ba53ea51ff7b475873bfc9c7d8da987e40"
+    },
+    "BTCUSDT|1d": {
+      "source_file": "klines/BTCUSDT_4h.parquet",
+      "source_sha256": "281c3ac3195e5bb8de6b211573f77919bb2af2a342f71162426085f54bf37bfb"
+    },
+    "BTCUSDT|1h": {
+      "source_file": "klines/BTCUSDT_1h.parquet",
+      "source_sha256": "76ad1c804260a5b57ec663a7550194d21f2e5e7090d574dd183778aa404b3289"
+    },
+    "BTCUSDT|1w": {
+      "source_file": "klines/BTCUSDT_1w.parquet",
+      "source_sha256": "5844aa75b0253f7be3b71d544c8bea28d3d73273ef289b2c7e7f186565fe2e1c"
+    },
+    "BTCUSDT|4h": {
+      "source_file": "klines/BTCUSDT_4h.parquet",
+      "source_sha256": "281c3ac3195e5bb8de6b211573f77919bb2af2a342f71162426085f54bf37bfb"
+    },
+    "DOGEUSDT|1d": {
+      "source_file": "klines/DOGEUSDT_4h.parquet",
+      "source_sha256": "ad2e4f1f4e80a28d0b1ab997a4420be048876c4d88edbc38d0c24323e5c65885"
+    },
+    "DOGEUSDT|1h": {
+      "source_file": "klines/DOGEUSDT_1h.parquet",
+      "source_sha256": "5abddbe55d60b4cb558c7a8177fa0feaef725ce4d6498f71bb62f44b97f58cc0"
+    },
+    "DOGEUSDT|4h": {
+      "source_file": "klines/DOGEUSDT_4h.parquet",
+      "source_sha256": "ad2e4f1f4e80a28d0b1ab997a4420be048876c4d88edbc38d0c24323e5c65885"
+    },
+    "ENAUSDT|1d": {
+      "source_file": "klines/ENAUSDT_4h.parquet",
+      "source_sha256": "f0970eede06e59dbb35c79a2aa24f1de169aaa53ae8f84e859b5fceea705ea93"
+    },
+    "ENAUSDT|1h": {
+      "source_file": "klines/ENAUSDT_1h.parquet",
+      "source_sha256": "c174ccfdbdafc1a38c1b8af5d34612b42ccc79af9624ead7a2630f567a1e039e"
+    },
+    "ENAUSDT|4h": {
+      "source_file": "klines/ENAUSDT_4h.parquet",
+      "source_sha256": "f0970eede06e59dbb35c79a2aa24f1de169aaa53ae8f84e859b5fceea705ea93"
+    },
+    "ETHUSDT|12h": {
+      "source_file": "klines/ETHUSDT_12h.parquet",
+      "source_sha256": "d67e030dacfdc7d1518757f583f8c8176a16c924e949183ac1b7fa48be484d20"
+    },
+    "ETHUSDT|1d": {
+      "source_file": "klines/ETHUSDT_4h.parquet",
+      "source_sha256": "e78895774de7d30ae06528060d97896a846975e26e1ceb7bdc6245ef70993fab"
+    },
+    "ETHUSDT|1h": {
+      "source_file": "klines/ETHUSDT_1h.parquet",
+      "source_sha256": "d447f0ef5784ed610d7f32ca632a3a27ffaca42dd3f08a08c9528982b6abe3c7"
+    },
+    "ETHUSDT|1w": {
+      "source_file": "klines/ETHUSDT_1w.parquet",
+      "source_sha256": "6da90fe87b32349cda942bf8f58619e778cf3883e07c76182a6419e1bab1fcba"
+    },
+    "ETHUSDT|4h": {
+      "source_file": "klines/ETHUSDT_4h.parquet",
+      "source_sha256": "e78895774de7d30ae06528060d97896a846975e26e1ceb7bdc6245ef70993fab"
+    },
+    "HYPEUSDT|1d": {
+      "source_file": "klines/HYPEUSDT_4h.parquet",
+      "source_sha256": "ab35e570e2c74b58c2776eef8a0bb5542006d917a8028d0fe751b618354da14e"
+    },
+    "HYPEUSDT|1h": {
+      "source_file": "klines/HYPEUSDT_1h.parquet",
+      "source_sha256": "813112ca20b82b71fc393895d9184f4d1bc597a2a26c29a389d472d7e1c98df8"
+    },
+    "HYPEUSDT|4h": {
+      "source_file": "klines/HYPEUSDT_4h.parquet",
+      "source_sha256": "ab35e570e2c74b58c2776eef8a0bb5542006d917a8028d0fe751b618354da14e"
+    },
+    "LTCUSDT|1d": {
+      "source_file": "klines/LTCUSDT_4h.parquet",
+      "source_sha256": "636a1bf05fdcc104c162fcb0771cad0bfaa784ade302a3d8c7e1a91a0664b05c"
+    },
+    "LTCUSDT|1h": {
+      "source_file": "klines/LTCUSDT_1h.parquet",
+      "source_sha256": "4a9644c85995b3be471dcc0888bd7b95d11966cdaf23d99aac2cb2b8cb58073d"
+    },
+    "LTCUSDT|4h": {
+      "source_file": "klines/LTCUSDT_4h.parquet",
+      "source_sha256": "636a1bf05fdcc104c162fcb0771cad0bfaa784ade302a3d8c7e1a91a0664b05c"
+    },
+    "MNTUSDT_BYBIT|1d": {
+      "source_file": "klines/MNTUSDT_BYBIT_4h.parquet",
+      "source_sha256": "b1d3b037381d7a5ce151790a35705da6b62501fc8a54e1016407d9b53409bb07"
+    },
+    "MNTUSDT_BYBIT|1h": {
+      "source_file": "klines/MNTUSDT_BYBIT_1h.parquet",
+      "source_sha256": "f9b22679331294f98a769099ea0e08fb5cc2d09d897d5abd224d48ed68e2d960"
+    },
+    "MNTUSDT_BYBIT|4h": {
+      "source_file": "klines/MNTUSDT_BYBIT_4h.parquet",
+      "source_sha256": "b1d3b037381d7a5ce151790a35705da6b62501fc8a54e1016407d9b53409bb07"
+    },
+    "NEARUSDT|12h": {
+      "source_file": "klines/NEARUSDT_12h.parquet",
+      "source_sha256": "11165a4d35a40c8da0521892157b5af62ba44408c5361468f9d168bafebcd8ed"
+    },
+    "NEARUSDT|1d": {
+      "source_file": "klines/NEARUSDT_4h.parquet",
+      "source_sha256": "e3fdd23041ffcdd3a55a8c24c9473389051d2c95d20a8c2d1fcb136144d04098"
+    },
+    "NEARUSDT|1h": {
+      "source_file": "klines/NEARUSDT_1h.parquet",
+      "source_sha256": "5a8ddf6790886b4be75774d46a46014441b7114221e182c600ce77a0ab9de427"
+    },
+    "NEARUSDT|1w": {
+      "source_file": "klines/NEARUSDT_1w.parquet",
+      "source_sha256": "f3ee8ab250bf5b833dec8b5423d308850e69dfd1aacb72754c511cb8239a5ddc"
+    },
+    "NEARUSDT|4h": {
+      "source_file": "klines/NEARUSDT_4h.parquet",
+      "source_sha256": "e3fdd23041ffcdd3a55a8c24c9473389051d2c95d20a8c2d1fcb136144d04098"
+    },
+    "PUMPUSDT|1d": {
+      "source_file": "klines/PUMPUSDT_4h.parquet",
+      "source_sha256": "f1abb5883362536b5d978f835e37fb10d49ef7e8bc2b8ccfcceb7dd382a6643f"
+    },
+    "PUMPUSDT|1h": {
+      "source_file": "klines/PUMPUSDT_1h.parquet",
+      "source_sha256": "8b0cf37f7b0f3915532c1cbebdee6cd330710d8c51c72a87259bf93464cebbee"
+    },
+    "PUMPUSDT|4h": {
+      "source_file": "klines/PUMPUSDT_4h.parquet",
+      "source_sha256": "f1abb5883362536b5d978f835e37fb10d49ef7e8bc2b8ccfcceb7dd382a6643f"
+    },
+    "SOLUSDT|12h": {
+      "source_file": "klines/SOLUSDT_12h.parquet",
+      "source_sha256": "4cf86641273e67e15ba7963ee515f8c22075687e55aa84ae5692e269e2a2c3fc"
+    },
+    "SOLUSDT|1d": {
+      "source_file": "klines/SOLUSDT_4h.parquet",
+      "source_sha256": "6dfc049478f6e5fb8752c6211ebbda3b0c222afd95933d13b12b4d63e541d021"
+    },
+    "SOLUSDT|1h": {
+      "source_file": "klines/SOLUSDT_1h.parquet",
+      "source_sha256": "1629d318a6e7424a9a68b600f9ffc3ddb2ec5d2a0b83becc64150c2daaac9a75"
+    },
+    "SOLUSDT|1w": {
+      "source_file": "klines/SOLUSDT_1w.parquet",
+      "source_sha256": "f4279094e89aa171b202da85cfbee77fb9a989eb1c4e085eca95429ce6e24a8f"
+    },
+    "SOLUSDT|4h": {
+      "source_file": "klines/SOLUSDT_4h.parquet",
+      "source_sha256": "6dfc049478f6e5fb8752c6211ebbda3b0c222afd95933d13b12b4d63e541d021"
+    },
+    "SUIUSDT|1d": {
+      "source_file": "klines/SUIUSDT_4h.parquet",
+      "source_sha256": "cdc38a2d471947ad255746f1cc32dfa20a0262af132431c5539e4d801cf208ee"
+    },
+    "SUIUSDT|1h": {
+      "source_file": "klines/SUIUSDT_1h.parquet",
+      "source_sha256": "f40b84f0d31500f431711de9018ae7b969caa13f823847ff9daf20eecb56defc"
+    },
+    "SUIUSDT|4h": {
+      "source_file": "klines/SUIUSDT_4h.parquet",
+      "source_sha256": "cdc38a2d471947ad255746f1cc32dfa20a0262af132431c5539e4d801cf208ee"
+    },
+    "UNIUSDT|1d": {
+      "source_file": "klines/UNIUSDT_4h.parquet",
+      "source_sha256": "84771b6be95fef21a3ba20f18eb4070cc28f5636554e2feb28e0938768cf50a9"
+    },
+    "UNIUSDT|1h": {
+      "source_file": "klines/UNIUSDT_1h.parquet",
+      "source_sha256": "253667620da671f9a6aecbc284dce11b1c80951743f7666c8e2cb4072fe370b8"
+    },
+    "UNIUSDT|4h": {
+      "source_file": "klines/UNIUSDT_4h.parquet",
+      "source_sha256": "84771b6be95fef21a3ba20f18eb4070cc28f5636554e2feb28e0938768cf50a9"
+    },
+    "XMRUSDT|1d": {
+      "source_file": "klines/XMRUSDT_4h.parquet",
+      "source_sha256": "154b7b931a21ff21f3170680ddbaac9120d07b2f39f9b9e0031f67d66f0106b0"
+    },
+    "XMRUSDT|1h": {
+      "source_file": "klines/XMRUSDT_1h.parquet",
+      "source_sha256": "5f7e617d394fab43b02710c700a8d50c11fbf077ae5e1b0600520671b56d9118"
+    },
+    "XMRUSDT|4h": {
+      "source_file": "klines/XMRUSDT_4h.parquet",
+      "source_sha256": "154b7b931a21ff21f3170680ddbaac9120d07b2f39f9b9e0031f67d66f0106b0"
+    },
+    "ZECUSDT|12h": {
+      "source_file": "klines/ZECUSDT_12h.parquet",
+      "source_sha256": "d0e3bf8f9c974873ce6f41b4eb2493ff637567b1dcfea674badad9fbe7d3bbd0"
+    },
+    "ZECUSDT|1d": {
+      "source_file": "klines/ZECUSDT_4h.parquet",
+      "source_sha256": "1e054d71061f18be429907a0331eb43eb1aa26fa511ca01af581f428b8844935"
+    },
+    "ZECUSDT|1h": {
+      "source_file": "klines/ZECUSDT_1h.parquet",
+      "source_sha256": "8254440f1a068cae34971b9a58c7ff237838c62b7fcb8144fa5fb3b4d090de11"
+    },
+    "ZECUSDT|1w": {
+      "source_file": "klines/ZECUSDT_1w.parquet",
+      "source_sha256": "1c330c55f26255885a32e2219dffbcb5c64f73a9209d51363a41e0db9b969196"
+    },
+    "ZECUSDT|4h": {
+      "source_file": "klines/ZECUSDT_4h.parquet",
+      "source_sha256": "1e054d71061f18be429907a0331eb43eb1aa26fa511ca01af581f428b8844935"
+    }
+  },
+  "k_draws": 20,
+  "keys": {
+    "R4_BASE": [
+      "asset",
+      "lens",
+      "scale_kind",
+      "cell_law",
+      "cell",
+      "direction",
+      "era",
+      "horizon"
+    ],
+    "R4_DEATHS": [
+      "asset",
+      "lens",
+      "scale_kind",
+      "rid",
+      "side"
+    ],
+    "R4_EVENTS": [
+      "asset",
+      "lens",
+      "scale_kind",
+      "event",
+      "rid",
+      "side",
+      "anchor_i"
+    ],
+    "R4_GRID": [
+      "asset",
+      "lens",
+      "scale_kind",
+      "event",
+      "cell_law",
+      "cell",
+      "direction",
+      "era",
+      "horizon"
+    ],
+    "R4_NULL": [
+      "asset",
+      "lens",
+      "scale_kind",
+      "event",
+      "cell",
+      "direction",
+      "era",
+      "horizon"
+    ],
+    "R4_NULL_BOXES": [
+      "asset",
+      "lens",
+      "scale_kind",
+      "draw",
+      "box"
+    ],
+    "R4_SCAN": [
+      "asset",
+      "lens",
+      "scale_kind",
+      "band",
+      "rid",
+      "side",
+      "touch_i"
+    ]
+  },
+  "n_boot": "not used (no bootstrap in R4)",
+  "pctile_law": "mid-rank: 100 x (#null < real + 0.5 x #null == real) / valid draws \u2014 a DESCRIPTION of where the real value sits among the K draws, never a p-value; K = 20 resolves it to 5 points at best",
+  "picks": {
+    "1000BONKUSDT|1d": 2.0,
+    "1000BONKUSDT|1h": 2.0,
+    "1000BONKUSDT|4h": 2.0,
+    "1000PEPEUSDT|1d": 3.0,
+    "1000PEPEUSDT|1h": 1.75,
+    "1000PEPEUSDT|4h": 2.0,
+    "BNBUSDT|1d": 1.75,
+    "BNBUSDT|1h": 1.75,
+    "BNBUSDT|4h": 2.0,
+    "BTCUSDT|12h": 2.0,
+    "BTCUSDT|1d": 2.25,
+    "BTCUSDT|1h": 1.75,
+    "BTCUSDT|4h": 2.0,
+    "DOGEUSDT|1d": 2.25,
+    "DOGEUSDT|1h": 1.75,
+    "DOGEUSDT|4h": 1.75,
+    "ENAUSDT|1d": 2.0,
+    "ENAUSDT|1h": 1.5,
+    "ENAUSDT|4h": 2.75,
+    "ETHUSDT|12h": 1.5,
+    "ETHUSDT|1d": 2.0,
+    "ETHUSDT|1h": 2.0,
+    "ETHUSDT|4h": 2.0,
+    "HYPEUSDT|1d": 2.25,
+    "HYPEUSDT|1h": 2.0,
+    "HYPEUSDT|4h": 1.75,
+    "LTCUSDT|1d": 2.25,
+    "LTCUSDT|1h": 1.75,
+    "LTCUSDT|4h": 2.0,
+    "MNTUSDT_BYBIT|1d": 2.25,
+    "MNTUSDT_BYBIT|1h": 2.25,
+    "MNTUSDT_BYBIT|4h": 2.0,
+    "NEARUSDT|12h": 2.25,
+    "NEARUSDT|1d": 2.0,
+    "NEARUSDT|1h": 1.75,
+    "NEARUSDT|4h": 1.75,
+    "PUMPUSDT|1d": 1.75,
+    "PUMPUSDT|1h": 2.0,
+    "PUMPUSDT|4h": 2.25,
+    "SOLUSDT|12h": 2.25,
+    "SOLUSDT|1d": 2.25,
+    "SOLUSDT|1h": 1.75,
+    "SOLUSDT|4h": 2.0,
+    "SUIUSDT|1d": 2.25,
+    "SUIUSDT|1h": 2.0,
+    "SUIUSDT|4h": 2.25,
+    "UNIUSDT|1d": 2.25,
+    "UNIUSDT|1h": 2.0,
+    "UNIUSDT|4h": 2.0,
+    "XMRUSDT|1d": 1.5,
+    "XMRUSDT|1h": 1.5,
+    "XMRUSDT|4h": 1.75,
+    "ZECUSDT|12h": 2.0,
+    "ZECUSDT|1d": 2.5,
+    "ZECUSDT|1h": 2.0,
+    "ZECUSDT|4h": 2.0
+  },
+  "readings": [
+    "R4-1 COMMISSION [L-R.6]: CLASSIC5 x {1h, 4h, 12h, 1d} and UNSEEN12 x {1h, 4h, 1d}, per asset and pooled (POOLED:CLASSIC5, POOLED:UNSEEN12 \u2014 the pools never mix), x {calibrated (the filed pick of record, N.scale_of), frozen3.0 (the twin)} x eras {ALL, tuning, holdout} by the anchor bar's CLOSE [L-1.3] x directions {both, long, short} x {H20, H100} in bars of L. Everything is TIER-E.",
+    "R4-2 EVENTS [L-R.6(a)(b)]: BREAKOUT = N's first-retest-that-HOLDS scan (rule 'first') on tap89 / tap127 / tap200 (C.RETEST_PINS 1.0 ATR / 3 bars / ttl 400) and the memory line (1.0 ATR / 6 bars), each beside its one-shot twin (rule 'oneshot': C.retest_holds' hold rows; the engine's one-shot flip for the memory line). Direction = the death side (top -> long). SWING-FAILURE = the machine's harden (bottom -> spring, long; top -> upthrust, short). Every event is anchored at N's known_at (touch + hold; the harden bar) and never recomputed here.",
+    "R4-3 L+1 CELL [L-R.6, R-CELL]: N.l1_cell at the event's known_at CLOSE \u2014 record = coincidence of the event's boundary of L (BREAKOUT: the broken side as-of die_i - 1; SFP: the deviated side as-of harden_i - 1) with a LIVE L+1 boundary within 0.25 x ATR_L; twins: 'mem_twin' (L+1 live memory lines admitted, N's cell_mem) and, for SFP, 'post_redraw' (the boundary as-of harden_i; 'n/a' where no post-redraw boundary exists). Cells: EXP_ALIGNED*, EXP_COUNTER, IN_RANGE_COINCIDENT*, IN_RANGE_MID*, IN_RANGE_OTHER, NONE (the contract's three starred); 'ALL' = unconditioned; 'NA' where the ladder lacks L+1 in the commission (UNSEEN12 4h and 1d, whose 12h / 1w are not built).",
+    "R4-4 OUTCOMES: C.outcome_ledger (the census's own road, unforked): term = sgn x (c[k+H] - c[k]) / ATR_L[k] from the known_at close k, MFE / MAE likewise; CENSORED when k + H > n - 1 (never shortened); toll_atr_evt = (10 bps / 10^4) x c[k] / ATR_L[k] with the bps read from TC11's fee schedule (C.toll_bps_for). Statistics = C.grid_rows ITSELF on each cell's ledger slice (n_events, n, n_censored, median_term, mean_term, q25/q75, hit_rate, hit_rate_net, median MFE / MAE, toll_atr, net = median_term - toll_atr) fed the FILED (8 dp) ledger as the census feeds it (tierc10_census.compute_cell canons first); a pooled row quotes the BINDING max of its members' toll_atr (C.grid_rows' tolls= law, TC10's). Cells are packed up to eleven per C.grid_rows call under its eleven class labels; the label changes only the dropped metadata columns, never the arithmetic.",
+    "R4-5 BASE RATE [L-R.6, AM-6 R-BASE-COIN]: C.outcome_ledger anchored at EVERY closed bar k of L, long and short; direction 'both' = the union of the two anchored sets (a cell that depends on direction \u2014 EXP_ALIGNED \u2014 takes each bar under its own direction). Cells from N.range_facts: record = coin_top OR coin_bot of L at k with L+1 read as-of close_k; twins topside / botside (one side alone), own_side_brk (long@topside + short@botside: a BREAKOUT's broken side), own_side_sfp (long@botside + short@topside: an SFP's deviated side), mem_twin (L's nest coin_*_mem), and the memory-line own-side twins own_side_brk_mem / own_side_sfp_mem (the same composites on coin_top_mem / coin_bot_mem). Each event row carries its cell-base row (law record; mem_twin for mem_twin rows), its own-side base (BRK own_side_brk, SFP own_side_sfp; the _mem composite for mem_twin rows; post_redraw rows the record composite) and the unconditional base (cell ALL), with event NET - base NET.",
+    "R4-6 NULL [L-R.6, ruling R10]: gaps+order, K = 20, per (asset, lens, scale) at the filed pick \u2014 NL.real_box_set, NL.draw_rng (default_rng([seed + draw, crc32('asset|lens|scale_kind')]); 'kind' read as the scale kind, TC10's key), NL.schedule(keep_order=False), NL.static_box_machine, RC.flips_and_leash on the corpses; events through N's scan and the null's hardens; the null box's static edge is the event boundary; the L+1 cell read from the REAL L+1 machine at the null event's known_at. Pooled null draw d = draw d of every member (TC10's law). One null row per real grid cell of law record: real beside the null's median / q25 / q75 / IQR / min / max over the valid draws and the mid-rank percentile \u2014 a DESCRIPTION, never a p-value; every draw's n and NET filed; the sensitivity seed 20260816 re-draws the null and prints its NET median and percentile beside. Built at both scales (calibrated of record; frozen3.0 = TC10's null scale).",
+    "R4-7 CONTINUITY [AM-1]: at frozen3.0, one-shot, 4h, POOLED:CLASSIC5, tap89, H20 NET, TC11's value is printed beside TC10's census/outcome_grid.parquet row (read by absolute main-tree path), and the TC10 window is REPLAYED in TC11 code (the tapes cut at 2026-09-21T16:00Z, C.run_scale at 3.0, C.retest_holds, C.outcome_ledger, C.grid_rows): the replay must equal the filed row at its 8 dp; the difference to TC11 is then decomposed event by event over the 20 extra 4h bars.",
+    "R4-8 LABELS [L-R.2, AM-4]: every event row carries l_ / u_ pick_window, scale_in_sample and stability_changed; every grid / base / null row carries the pick windows and stability flags of L and L+1 (a pool: the distinct values joined) and the counts of its anchors whose L or L+1 read is scale-in-sample.",
+    "R4-9 PARALLELISM [AM-2]: the runner starts no process; units run in-process (serial) or in fresh interpreters started by the caller; the merge alone writes the files of record.",
+    "R4-10 SCAN LEDGER [L-R.6(a) 'every evaluated touch is a row']: R4_SCAN files N's first-retest scan rows verbatim (N.first_retest_scan: tap89 / tap127 / tap200 and the memory line; seq, touch, known_at = touch + 3 / + 6, verdict, first hold; era by the known_at close, 'beyond_pin' where a truncated row's known_at passes the tape); R4_DEATHS files every death of N.events with, per band, its evaluated-touch count and its END: hold (a first hold), truncated, failed-out (every touch in the candidacy window failed), no-touch."
+  ],
+  "retest_pins": {
+    "grid_sha": "2135ca663a7c407ca1a2a99165692bd3a9a9cd90de458e03dabdc2e32855e7b3",
+    "hold_bars": 3,
+    "margin_atr": 1.0,
+    "ttl_bars": 400
+  },
+  "rows": {
+    "R4_BASE": 67140,
+    "R4_DEATHS": 10796,
+    "R4_EVENTS": 71889,
+    "R4_GRID": 180684,
+    "R4_NULL": 100764,
+    "R4_NULL_BOXES": 216200,
+    "R4_SCAN": 47403
+  },
+  "schedule_variant": "gaps+order",
+  "seed": 20260924,
+  "seed_sensitivity": 20260816,
+  "selection_not_a_result": "a SELECTION, not a result",
+  "sha": {
+    "R4_BASE": "fd55ce37c316a2329b901b5b5f03706fa5c4f7ad8886d8fb34b9f1f3804bfdb4",
+    "R4_DEATHS": "dd362766de146554fe480b10d0ff450d61a036754d6d9b531498a7df15429c00",
+    "R4_EVENTS": "935ca1bd816119887e32a9a26bfa15ae9ddabda8ddfee7108a0c097a9d3b0211",
+    "R4_GRID": "4eab273ecf28ce147d6ae148a712710f4f58f5d8e01a4c7a45ace627065576ac",
+    "R4_NULL": "cd03d8d6c53071671748e01db1dd78a4936b301b33594ee65683f54ff785d541",
+    "R4_NULL_BOXES": "fea807c11c867f4262daf01b064cd4407ba8756791507cde4c20a6a0ed3609b8",
+    "R4_SCAN": "7545b95ce075ee0d81a29b71b59d7c4d9b3a6066debe4457d30e1e0c177fd057"
+  },
+  "stage": "TIER-C11 \u00b7 STAGE R-b \u00b7 R4 (TC11-R)",
+  "substrate": "tc11_20260925",
+  "tc10_continuity": {
+    "decomposition": {
+      "events_tc10_window": 236,
+      "events_tc11": 236,
+      "extra_4h_bars": {
+        "BTCUSDT": 20,
+        "ETHUSDT": 20,
+        "NEARUSDT": 20,
+        "SOLUSDT": 20,
+        "ZECUSDT": 20
+      },
+      "in_both": 236,
+      "in_both_censored_at_tc10_uncensored_now": 0,
+      "in_both_same_h20": 236,
+      "in_both_term_moved": 0,
+      "last_hold_rows": [
+        "BTCUSDT: last tap89 one-shot hold known at bar 15344 = 75 bars before the TC10 window's last bar",
+        "ETHUSDT: last tap89 one-shot hold known at bar 14591 = 351 bars before the TC10 window's last bar",
+        "SOLUSDT: last tap89 one-shot hold known at bar 12742 = 448 bars before the TC10 window's last bar",
+        "NEARUSDT: last tap89 one-shot hold known at bar 12824 = 179 bars before the TC10 window's last bar",
+        "ZECUSDT: last tap89 one-shot hold known at bar 14479 = 42 bars before the TC10 window's last bar"
+      ],
+      "min_bars_before_edge": 42,
+      "moved_rows": [],
+      "new_deaths_rows": [],
+      "only_tc10_rows": [],
+      "only_tc10_window": 0,
+      "only_tc11": 0,
+      "only_tc11_known_after_tc10_pin": 0,
+      "only_tc11_rows": [],
+      "uncensored_rows": []
+    },
+    "filed": {
+      "ALL": {
+        "median_term": 0.74673869,
+        "n": 236,
+        "n_events": 236,
+        "net": 0.68067364,
+        "toll_atr": 0.06606505
+      },
+      "holdout": {
+        "median_term": 0.7855721,
+        "n": 88,
+        "n_events": 88,
+        "net": 0.7056048,
+        "toll_atr": 0.0799673
+      },
+      "tuning": {
+        "median_term": 0.721099,
+        "n": 148,
+        "n_events": 148,
+        "net": 0.67074003,
+        "toll_atr": 0.05035897
+      }
+    },
+    "replay": {
+      "ALL": {
+        "median_term": 0.74673869,
+        "n": 236,
+        "n_events": 236,
+        "net": 0.68067364,
+        "toll_atr": 0.06606505
+      },
+      "holdout": {
+        "median_term": 0.7855721,
+        "n": 88,
+        "n_events": 88,
+        "net": 0.7056048,
+        "toll_atr": 0.0799673
+      },
+      "tuning": {
+        "median_term": 0.721099,
+        "n": 148,
+        "n_events": 148,
+        "net": 0.67074003,
+        "toll_atr": 0.05035897
+      }
+    },
+    "replay_equals_filed": true,
+    "tc11": {
+      "ALL": {
+        "median_term": 0.74673869,
+        "n": 236,
+        "n_events": 236,
+        "net": 0.68067364,
+        "toll_atr": 0.06606505
+      },
+      "holdout": {
+        "median_term": 0.7855721,
+        "n": 88,
+        "n_events": 88,
+        "net": 0.7056048,
+        "toll_atr": 0.0799673
+      },
+      "tuning": {
+        "median_term": 0.721099,
+        "n": 148,
+        "n_events": 148,
+        "net": 0.67074003,
+        "toll_atr": 0.05035897
+      }
+    }
+  },
+  "tier": "TIER-E"
+}

@@ -1,0 +1,24 @@
+{
+  "arm": "base",
+  "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+  "book_sha256": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+  "book_sha256_recipe": "sha256 of the UTF-8 CSV: header = the 16 required columns in interface order joined by ','; one line per row sorted by (symbol, entry_close_ms) (stable mergesort); ints as str(int), floats as repr(float), strings as is (csv.writer, QUOTE_MINIMAL, lineterminator '\\n')",
+  "description": "card v6 (the 12/26-triggered base): TP.run_cell_n(TP.CONTROL_CARD, T9.V6_ROLES, CLASSIC5) over the full TC11 corridor (tierc11_books.v6_book); entry_ms is v6's; exit_close_ms is the exit bar's close (SR-7).",
+  "era_scope": "full",
+  "kind": "base",
+  "label": "book, not a verdict",
+  "mean_net_r": 0.20403782287073777,
+  "n": 200,
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-RELAY-1",
+  "ruler": "two_sample",
+  "seed": 20260924,
+  "source_script": "scripts/tierc11_stage_t_relay.py",
+  "sum_net_r": 40.807564574147555
+}

@@ -1,0 +1,77 @@
+{
+  "as_of": "2026-09-25T00:00:00Z",
+  "as_of_close_ms": 1790294400000,
+  "collar": {
+    "gates": "nothing",
+    "selection_not_a_result": "a SELECTION, not a result",
+    "tier": "TIER-E"
+  },
+  "files": {
+    "STAGE_S.md": "1eca265b18bfff278441ce340f255c31a007b1e18aea742e60c96713a5454163",
+    "S_GATE.json": "4846bf2a666cef173b20ed138c1c8f5d92c447a61b5ec3c18c8d18e7cc4618c8",
+    "regbooks/P-SCALP-2/STATUS.json": "5457ea6aeac139a832b3312051fdfef88f409402d0c096678c02cc332c473eda"
+  },
+  "gate": {
+    "lens": "1h",
+    "maker_twin_word": "FAIL",
+    "reason": "CLOSED BY R2 (1h: FAIL)",
+    "rederived_taker_word": "FAIL",
+    "state": "CLOSED",
+    "tuning_era_word_tier_e": "FAIL",
+    "verdict_of_record": "FAIL"
+  },
+  "inputs": {
+    "research_outputs/tierc11/stage_r/R2_FEASIBILITY.parquet": {
+      "content_sha256": "2545d290133c5d7b76553acd2793122fb40a929a35ca0f406b889411000cb2eb"
+    },
+    "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json": {
+      "sha256": "82cc3ec6ddd588c9fbd8402def471438a0c931590606b9a2a6cc3a97572f3087"
+    },
+    "research_outputs/tierc11/stage_r/build_manifest.json": {
+      "lens_verdict_1h": "FAIL",
+      "sha_R2_FEASIBILITY": "2545d290133c5d7b76553acd2793122fb40a929a35ca0f406b889411000cb2eb"
+    }
+  },
+  "keys": {
+    "S_R2_1H": [
+      "cell"
+    ]
+  },
+  "n_boot": 4000,
+  "readings": [
+    "[LEAN-HEPHAESTUS] L-S.1 the precondition: the R2 lens verdict of record at 1h (CLASSIC5 pooled, holdout, calibrated, taker) == PASS, else 'CLOSED BY R2 (1h: <verdict>)' and STOP — no book, no twin, no Tier-E arm; the tuning-era word printed beside, Tier-E [§10].",
+    "[LEAN-HEPHAESTUS] L-R.4 the [Q-R3] law typed here: height n_ranges >= 30, ratio_median >= 3.0, share_ratio_lt_1 <= 0.10; edge edge_n_ranges >= 30, edge_n >= 30, edge_net_h20 > 0; both legs; under a floor -> 'FAIL (provisional, n<30)'; taker FAIL + maker PASS -> the reopening-path word.",
+    "[LEAN-HEPHAESTUS] SS-1 the gate re-derives the JSON of record's 1h word from its printed columns; a label that disagrees with its columns HALTs LABEL-LAW; a row that is not the verdict of record (pool / era / scale / toll, the record block, members == CLASSIC5, fallback_members within CLASSIC5) HALTs RECORD-SPEC.",
+    "[LEAN-HEPHAESTUS] SS-2 the printed net must be round(round(median,8) - round(toll,8), 8) exactly (NET-ARITH).",
+    "[LEAN-HEPHAESTUS] SS-3 the gate opens only on the exact word 'PASS'; the reason prints the verdict of record verbatim.",
+    "[LEAN-HEPHAESTUS] SS-4 on a PASS this runner HALTs GATE-OPEN and writes nothing (STEP 2, the L-S.2 scalper, is built only on a PASS — re-dispatch) — only after SS-5 passes.",
+    "[LEAN-HEPHAESTUS] SS-5 before acting on the gate, on both paths: JSON row == R2_FEASIBILITY record row, the parquet's content sha and 1h word == Stage R's manifest, the maker / charter / tuning / ALL words == this stage's re-derivation, every block row's word and collar == the law's.",
+    "[LEAN-HEPHAESTUS] SS-6 S_R2_1H.parquet = the whole 1h CLASSIC5 R2 block (108 cells), re-derived, would_read only; every row but the record row collared Tier-E (gates nothing), the record row carrying Stage R's record collar verbatim [L-1.4].",
+    "[LEAN-HEPHAESTUS] SS-7 a CLOSED registration holds no arm: regbooks/P-SCALP-2 holds STATUS.json only (STRAY-BOOK HALT otherwise)."
+  ],
+  "record_collar": {
+    "gates": "range trading on this lens in this and every later tier unless the toll model changes [contract R2]; at 1h also Stage S [L-S.1]",
+    "selection_not_a_result": "n/a — the lens verdict of record, not a selection",
+    "tier": "R2 LENS VERDICT OF RECORD [L-R.4]"
+  },
+  "regbooks": {
+    "arms": [],
+    "dir": "research_outputs/tierc11/regbooks/P-SCALP-2",
+    "status": "CLOSED_BY_PRECONDITION"
+  },
+  "registration": {
+    "id": "P-SCALP-2",
+    "payload_sha256": "c4e7ea0064bf0355804f311b8a2c91af1178de0ac9e705a417a1cc09b90bd250"
+  },
+  "rows": {
+    "S_R2_1H": 108
+  },
+  "seed": 20260924,
+  "sha": {
+    "S_R2_1H": "3300b78bcf04c53f74bd05d3fc62606a3b476c0e93ec99b64855b2ac9284fc89"
+  },
+  "stage": "TC11-S",
+  "substrate": "tc11_20260925",
+  "tier": "TIER-C11",
+  "writer": "pandas.DataFrame.to_parquet on a path string [AM-2]; content sha = sha256(DataFrame.to_csv(index=False)) (tierc2_baseline._content_sha law)"
+}

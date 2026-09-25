@@ -1,0 +1,39 @@
+{
+  "arm": "tierE__memline_oneshot_flip",
+  "book_sha256": "2212c4d117181da138e33a6a81b478a48bbc7af05e15d3a8b678413f83c10c4a",
+  "description": "the memory-line lane's twin: the engine's ONE-SHOT memory flip (the leash's single evaluation of the broken-side line; flip = hold), entry at the touch+6 close",
+  "era_scope": "full",
+  "extra": {
+    "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+    "book_sha_law": "sha256 over UTF-8 bytes of a canonical CSV: header = the 16 required columns in interface order joined by ','; rows sorted by (symbol, entry_close_ms) (mergesort); ints as str(int), direction as str(int), floats as repr(float) (full precision), strings as str; fields joined by ',', lines by '\\n', a trailing '\\n'",
+    "haircut_law": "AM-7: haircut_net_r = net_r - fee_r x (slip_bps_side / 5.0)",
+    "key": [
+      "symbol",
+      "entry_ms"
+    ],
+    "label": "a SELECTION, not a result",
+    "lane": "brk-4h-memflip",
+    "lens": "4h",
+    "loao_bar_above_half": "3/5",
+    "panel_name": "CLASSIC5",
+    "scale_kind": "calibrated",
+    "source": "oneshot_mem",
+    "sum_haircut_net_r": 46.35673773333535
+  },
+  "gates": "nothing",
+  "kind": "tierE",
+  "n": 166,
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-BRK-4H",
+  "ruler": "vs_zero",
+  "selection_not_a_result": "a SELECTION, not a result",
+  "source_script": "scripts/tierc11_stage_t_brk.py",
+  "sum_net_r": 48.80959881560416,
+  "tier": "TIER-E"
+}

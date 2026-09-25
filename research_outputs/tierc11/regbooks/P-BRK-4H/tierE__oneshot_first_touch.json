@@ -1,0 +1,39 @@
+{
+  "arm": "tierE__oneshot_first_touch",
+  "book_sha256": "60cfab3678b01936e34ceb76db102502984afe04e327f6b5164a65df88905084",
+  "description": "the one-shot first-touch twin: C.retest_holds' law (the FIRST qualifying touch gets the only evaluation; a failed first touch spends the death)",
+  "era_scope": "full",
+  "extra": {
+    "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+    "book_sha_law": "sha256 over UTF-8 bytes of a canonical CSV: header = the 16 required columns in interface order joined by ','; rows sorted by (symbol, entry_close_ms) (mergesort); ints as str(int), direction as str(int), floats as repr(float) (full precision), strings as str; fields joined by ',', lines by '\\n', a trailing '\\n'",
+    "haircut_law": "AM-7: haircut_net_r = net_r - fee_r x (slip_bps_side / 5.0)",
+    "key": [
+      "symbol",
+      "entry_ms"
+    ],
+    "label": "a SELECTION, not a result",
+    "lane": "brk-4h-oneshot",
+    "lens": "4h",
+    "loao_bar_above_half": "3/5",
+    "panel_name": "CLASSIC5",
+    "scale_kind": "calibrated",
+    "source": "oneshot_tap89",
+    "sum_haircut_net_r": 13.605116426315908
+  },
+  "gates": "nothing",
+  "kind": "tierE",
+  "n": 289,
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-BRK-4H",
+  "ruler": "vs_zero",
+  "selection_not_a_result": "a SELECTION, not a result",
+  "source_script": "scripts/tierc11_stage_t_brk.py",
+  "sum_net_r": 18.789452088038097,
+  "tier": "TIER-E"
+}

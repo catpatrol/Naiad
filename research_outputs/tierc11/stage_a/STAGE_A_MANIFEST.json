@@ -1,0 +1,330 @@
+{
+ "arms": {
+  "P-ADD-BRK": [
+   "scored",
+   "base",
+   "tierE__head_to_head_vs_p_add_sfp",
+   "tierE__frozen3",
+   "tierE__refuse_below_entry",
+   "tierE__refuse_post_harvest",
+   "tierE__tuning",
+   "tierE__holdout"
+  ],
+  "P-ADD-SFP": [
+   "scored",
+   "base",
+   "tierE__head_to_head_vs_p_add_brk",
+   "tierE__frozen3",
+   "tierE__refuse_below_entry",
+   "tierE__refuse_post_harvest",
+   "tierE__tuning",
+   "tierE__holdout"
+  ]
+ },
+ "as_of": "2026-09-25T00:00:00Z",
+ "as_of_close_ms": 1790294400000,
+ "book_sha_law": "sha256 of a canonical CSV of the REQUIRED columns (in the order ['symbol', 'entry_ms', 'entry_close_ms', 'direction', 'entry_px', 'stop_px', 'r_dist', 'exit_close_ms', 'exit_reason', 'net_r', 'gross_r', 'fee_r', 'funding_r', 'haircut_net_r', 'era', 'lane']), rows sorted by (symbol, entry_close_ms); first line = the column names joined by ','; one line per row, fields joined by ','; floats as repr(float(x)), ints as str(int(x)), strings raw; every line ends '\\n'; UTF-8",
+ "collar": {
+  "gates": "nothing",
+  "selection_not_a_result": "a SELECTION, not a result",
+  "tier": "TIER-E"
+ },
+ "corridor": {
+  "hi_close": "2026-09-25T00:00:00Z",
+  "lo": "2019-09-08T16:00:00Z",
+  "panel": [
+   "BTCUSDT",
+   "ETHUSDT",
+   "SOLUSDT",
+   "NEARUSDT",
+   "ZECUSDT"
+  ]
+ },
+ "files": {
+  "regbooks/P-ADD-BRK/base.parquet": {
+   "book_sha256": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+   "content_sha256": "ee8f06605b9bc0adf052193ecedfaeca0a15e946df2536ed24ad224c37a3142e",
+   "key": [
+    "symbol",
+    "entry_ms"
+   ],
+   "rows": 200
+  },
+  "regbooks/P-ADD-BRK/scored.parquet": {
+   "book_sha256": "15ba415b7a30f20f95192aa279e84fe2cd9ea8cfde4c325513d8a128819e79cd",
+   "content_sha256": "0f642194049fa4000a2606ffc5d8ced435990ff14c318e1a74b22c1c3e8fab0d",
+   "key": [
+    "symbol",
+    "entry_ms"
+   ],
+   "rows": 200
+  },
+  "regbooks/P-ADD-BRK/tierE__frozen3.parquet": {
+   "book_sha256": "b854c1c6ef8903d6f98c20c5d92800940fdf3070400bc80e43fd8b3777ab396f",
+   "content_sha256": "a4d68ded0e6d09360e372882f2bf44d29e5289c9b9b81aac7fd9943ed427f83c",
+   "key": [
+    "symbol",
+    "entry_ms"
+   ],
+   "rows": 200
+  },
+  "regbooks/P-ADD-BRK/tierE__head_to_head_vs_p_add_sfp.parquet": {
+   "book_sha256": "15ba415b7a30f20f95192aa279e84fe2cd9ea8cfde4c325513d8a128819e79cd",
+   "content_sha256": "9da47ef7a82bb2937d46c5af89ee19a0cc919669c62da975b9685578e4bc5173",
+   "key": [
+    "symbol",
+    "entry_ms"
+   ],
+   "rows": 200
+  },
+  "regbooks/P-ADD-BRK/tierE__holdout.parquet": {
+   "book_sha256": "a4854282ba7253e068b8688dbc30a1826e48db16052e2af38add7af01ec062d9",
+   "content_sha256": "060e2dad360a2c26b572a683e0f26f038dc7668aee61c257d6d225f6443175b8",
+   "key": [
+    "symbol",
+    "entry_ms"
+   ],
+   "rows": 77
+  },
+  "regbooks/P-ADD-BRK/tierE__refuse_below_entry.parquet": {
+   "book_sha256": "15ba415b7a30f20f95192aa279e84fe2cd9ea8cfde4c325513d8a128819e79cd",
+   "content_sha256": "0f642194049fa4000a2606ffc5d8ced435990ff14c318e1a74b22c1c3e8fab0d",
+   "key": [
+    "symbol",
+    "entry_ms"
+   ],
+   "rows": 200
+  },
+  "regbooks/P-ADD-BRK/tierE__refuse_post_harvest.parquet": {
+   "book_sha256": "dbd4dbac8f4f28dc30153541f558cc9f4d91b3042849ca545778908be5ce6bb6",
+   "content_sha256": "f153928dde6fc8a7347e86a2d92ac451fe466c16aaef6c9727d50bcbe42ad9e2",
+   "key": [
+    "symbol",
+    "entry_ms"
+   ],
+   "rows": 200
+  },
+  "regbooks/P-ADD-BRK/tierE__tuning.parquet": {
+   "book_sha256": "a8dc8371e22a4f28e66baa84f3344afeaa2f40809b4f9231185b45ccdfd80364",
+   "content_sha256": "f9d3ec50b8a64033c654977574c039906c8011d7bd13ae63e6da583ae411b55d",
+   "key": [
+    "symbol",
+    "entry_ms"
+   ],
+   "rows": 123
+  },
+  "regbooks/P-ADD-SFP/base.parquet": {
+   "book_sha256": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+   "content_sha256": "ee8f06605b9bc0adf052193ecedfaeca0a15e946df2536ed24ad224c37a3142e",
+   "key": [
+    "symbol",
+    "entry_ms"
+   ],
+   "rows": 200
+  },
+  "regbooks/P-ADD-SFP/scored.parquet": {
+   "book_sha256": "ee2d19250f3e3d747784b2ba8f45940fb7bb50354d3099e4480e672819c90910",
+   "content_sha256": "98332199920f1fb8d686278c51f8aa0c248fa6521bfa530b6adb824b823024e1",
+   "key": [
+    "symbol",
+    "entry_ms"
+   ],
+   "rows": 200
+  },
+  "regbooks/P-ADD-SFP/tierE__frozen3.parquet": {
+   "book_sha256": "227a062b2ed99c285064188bc8e08754dcefe1b9eb7b7e6faaab0ff2418b3c2c",
+   "content_sha256": "d5478ecdef997eabb7634617cbac238517ca4b24544c6457e350d74834b71fe4",
+   "key": [
+    "symbol",
+    "entry_ms"
+   ],
+   "rows": 200
+  },
+  "regbooks/P-ADD-SFP/tierE__head_to_head_vs_p_add_brk.parquet": {
+   "book_sha256": "ee2d19250f3e3d747784b2ba8f45940fb7bb50354d3099e4480e672819c90910",
+   "content_sha256": "480105bdb11e025ae72a7f94387d5d3042f074efc1bf976072365b741033270f",
+   "key": [
+    "symbol",
+    "entry_ms"
+   ],
+   "rows": 200
+  },
+  "regbooks/P-ADD-SFP/tierE__holdout.parquet": {
+   "book_sha256": "fb0f47b8604ac1ee0c3cc7b734ba3a006692e88d2de1ec66a707ee6ffb8af007",
+   "content_sha256": "ee359ab9562936fe2436f2c206a2e56be06efb8116e3314df3f7b9b977336aa6",
+   "key": [
+    "symbol",
+    "entry_ms"
+   ],
+   "rows": 77
+  },
+  "regbooks/P-ADD-SFP/tierE__refuse_below_entry.parquet": {
+   "book_sha256": "eccbbcbd9afbaa55cf053ec581d3bb6a0104a92074591dc186ad097f05093310",
+   "content_sha256": "d66adbcc20ae8bc38a9adcbd8531eb9a7dda7c5b6c65227466f9ee3ed00d1262",
+   "key": [
+    "symbol",
+    "entry_ms"
+   ],
+   "rows": 200
+  },
+  "regbooks/P-ADD-SFP/tierE__refuse_post_harvest.parquet": {
+   "book_sha256": "80276294f3ce4cbd756e7bc2ff281f527cfeef5063dd609e43fe03899aea1d9b",
+   "content_sha256": "68f1b0e0ad09aabeacb12b1595325230008a55ba6b55bbba92a0617962d78da8",
+   "key": [
+    "symbol",
+    "entry_ms"
+   ],
+   "rows": 200
+  },
+  "regbooks/P-ADD-SFP/tierE__tuning.parquet": {
+   "book_sha256": "011c58ba0964a7130d7a44c1d1bd5693b6c2cb42132c7b531de8b00ed293f96d",
+   "content_sha256": "86309a990f7a1ddeb537a3f4a94f88b9c3725fe8d2fb75eff3e2d31b823f129c",
+   "key": [
+    "symbol",
+    "entry_ms"
+   ],
+   "rows": 123
+  },
+  "stage_a/ACTED.parquet": {
+   "content_sha256": "d1fdfc2b9f98b0cbd7f8f42e778a51f24df3b21f593dbb439a87072a870d016f",
+   "key": [
+    "registration",
+    "arm",
+    "symbol",
+    "entry_ms"
+   ],
+   "rows": 284
+  },
+  "stage_a/ADDS.parquet": {
+   "content_sha256": "c48cbb97128c26d1f867b54f435928f2b04da8897688f7067d5802e43a740351",
+   "key": [
+    "registration",
+    "arm",
+    "symbol",
+    "entry_ms",
+    "seq"
+   ],
+   "rows": 350
+  },
+  "stage_a/DISPOSITIONS.parquet": {
+   "content_sha256": "fdc096198a681b0ff7404b6fee4e9a3ecafe4b04a08de62deecb2ceae9692d55",
+   "key": [
+    "registration",
+    "arm",
+    "symbol",
+    "entry_ms",
+    "event_ms",
+    "event_rid"
+   ],
+   "rows": 459
+  },
+  "stage_a/DISPOSITION_COUNTS.parquet": {
+   "content_sha256": "09611bd0e94cdbfe88ac53db01190420db6b5047dc77d1a7a85097388bdfcd86",
+   "key": [
+    "registration",
+    "arm",
+    "disposition"
+   ],
+   "rows": 56
+  },
+  "stage_a/EVENTS_1H.parquet": {
+   "content_sha256": "e8f7c254c73e92f328cba19d3fd1576618952e346f82830636dfaac1543011e4",
+   "key": [
+    "asset",
+    "scale_kind",
+    "event_kind",
+    "event_i"
+   ],
+   "rows": 7135
+  },
+  "stage_a/HEAD_TO_HEAD.parquet": {
+   "content_sha256": "b3e238b8fed06dd990fc903d0c2dd342a458196504dcf651d2fb1107d1f1cff6",
+   "key": [
+    "arm",
+    "registration"
+   ],
+   "rows": 12
+  },
+  "stage_a/MISMATCH_BARS.parquet": {
+   "content_sha256": "f687c7f080feffb9c3736194b2a32f46b49a7e1835b06e4f909d0d7bab17fcfe",
+   "key": [
+    "asset",
+    "bar_open_ms"
+   ],
+   "rows": 16
+  },
+  "stage_a/MISMATCH_BOOKS.parquet": {
+   "content_sha256": "b2a1206d7a8dd6d7bddb787bf807a3993925779abda3f989430f3371e9e658de",
+   "key": [
+    "registration",
+    "arm"
+   ],
+   "rows": 10
+  },
+  "stage_a/OVERLAP.parquet": {
+   "content_sha256": "05916ed78becc492f733fad7371cb1391c5ddb3c351d5629845393f3680a939f",
+   "key": [
+    "arm"
+   ],
+   "rows": 6
+  },
+  "stage_a/PICK_STABILITY_1H.parquet": {
+   "content_sha256": "79b1ef182d09fb808402ce09c6f2dd1d1143997c15fbfad3a43c645a8e8f99ac",
+   "key": [
+    "asset"
+   ],
+   "rows": 5
+  },
+  "stage_a/REGISTERED_BOOKS.parquet": {
+   "content_sha256": "b32fa5ac6b54d016a99daed681334e0920f6efe74e95d4a535be150a22b5ab16",
+   "key": [
+    "registration",
+    "arm"
+   ],
+   "rows": 4
+  },
+  "stage_a/TIER_E_ARMS.parquet": {
+   "content_sha256": "7c9a237960d48ea5ef31e3d21b7ebdcd946d91fe627cb2a5be8e47909720e156",
+   "key": [
+    "registration",
+    "arm"
+   ],
+   "rows": 12
+  }
+ },
+ "inputs_sha256": {
+  "research_outputs/tierc11/LEANS.md": "655e1605165e7a66c67f544e5cda421b46aa0b6fcd4cb97a6ad19654479f294f",
+  "research_outputs/tierc11/LEANS_AMENDMENTS.md": "b1c6275b5008fa684af9bebdaeefa2c41a99f40e60f033db71d085c9ba3e10fb",
+  "research_outputs/tierc11/data/fee_schedule.json": "6febe170d423b0ef37dca9fe95a7316e4259ef5a77e576cafa6781d581c1968b",
+  "research_outputs/tierc11/ranges/SCALE_PICKS.json": "cb5319c975e44df610c05f5917759b7b47d819fa095b8af26d174d79fcef454f",
+  "research_outputs/tierc11/registrations/REGISTRATIONS.json": "648834bf30e20e92713bddef2374ddef1aae843f4d8ba152fc50166c8cc6f1ee",
+  "scripts/tierc11_books.py": "e025499d92b25231c676aaac17abffedba4dcc9d4821174fcd9f3566bd821313",
+  "scripts/tierc11_env.py": "1526093b25161927337ced6112a310075b1a57c825f08705814e48619398f798",
+  "scripts/tierc11_nest.py": "16e325022523064e67eede439998e9ee4cacfeb0df8171202a85b46125827429",
+  "scripts/tierc11_ride.py": "65eb880f2b127a26cc07a6bf40e6ca6556dac37aa62bdfef45e3b045aa26915d",
+  "scripts/tierc11_stage_a.py": "b4650a18987bf094aba0904c851ea5ef0ba64884fcaa2d4ca1de7481f5ae59f3"
+ },
+ "n_v6": 200,
+ "readings": [
+  "[LEAN-HEPHAESTUS] SA-1 EVENTS [L-A.2, L-A.3]: from N.range_facts(stem, '1h', scale) (plain arrays): P-ADD-BRK = die_* rows (machine 'breakout-die' of a CONFIRMED range), trade direction = die_dir (+1 top death -> long, -1 bottom -> short); P-ADD-SFP = harden_* rows, trade direction = harden_dir (+1 bottom harden = spring -> long, -1 top harden = upthrust -> short). Known at the event bar's 1h close (known_at == event bar holds by the nest's construction, so its assert cannot fail; the as-of guard is F-ADD's prefix run of the machine); a confirmed range of the same rid alive at the prior 1h close (asserted); a death leaves it dead at its bar, a harden leaves it alive (asserted).",
+  "[LEAN-HEPHAESTUS] SA-2 CANDIDATES: per campaign, the same-direction events whose 1h close lies in (entry close, close of the exit 4h bar]; handed as (1h close ms, None) to RD.transform_book(walk=True, adds_of=...) -> RD.admit_adds, which decides in-trade (> entry close, < the 1h-resolved exit), after the +1R latch (latch child counts), the twins, then the 2-add cap (AM-6 s4), the tape's 1h close as the price (s5), a mismatch-bar event taken at the parent's close (L-W.0).",
+  "[LEAN-HEPHAESTUS] SA-3 SCALE [L-R.2]: the calibrated 1h pick of record (SCALE_PICKS.json, tuning-era calibration) for the scored arm and every twin but tierE__frozen3 (frozen 3.0, fully causal). Every add row carries scale_in_sample (a calibrated read at an instant <= 2024-06-30T23:59:59Z), pick_window and stability_changed.",
+  "[LEAN-HEPHAESTUS] SA-4 BASE ARM: the v6 book in the regbook schema = RD.transform_book(v6, walk=True) with every hook off, asserted identical to v6 (TP.ctrl_diff worst 0.000e+00, identity helper acted 0) AND to books/v6_campaigns.parquet on its 13 regbook columns at that file's 6 dp. exit_close_ms = the v6 book of record's exit_close_ms (the exit bar's 4h close; for a stop exit the L-R.5 post-event twin) on EVERY arm (the add books keep the v6 leg); the 1h-RESOLVED exit instant (L-W.3: a stop at the close of the first 1h child touching it, a bell at the 4h close, a mismatch-bar stop at the parent's close) rides beside as exit_close_1h_ms and is the instant the in-trade test uses; entry_ms = v6's entry_ms (the pairing key); entry_close_ms = entry_ms + 4h.",
+  "[LEAN-HEPHAESTUS] SA-5 ERA SLICES [L-1.3]: tierE__tuning / tierE__holdout = the scored book's rows with E.era_of(entry_close_ms) == the slice; paired against the base arm restricted to the same keys.",
+  "[LEAN-HEPHAESTUS] SA-6 HAIRCUT [AM-7]: haircut_net_r = net_r - fee_r x (slip_bps_side / 5.0), slip = the stem's charter tier (E.fees(): A 2 / B 5 / C 10 bps per side); fee_r is the ride's taker fee over every fill incl. the adds' entries and exits.",
+  "[LEAN-HEPHAESTUS] SA-7 Δ [AM-3]: delta_net_r = net_r(add book) - net_r(v6), the paired statistic; add_r (tierc7._account_chain) and the cap-absorbed funding (funding_r_uncapped - funding_r) printed beside; Δ - add_r == absorbed(book) - absorbed(v6) asserted to 1e-9; never Δ == add_r.",
+  "[LEAN-HEPHAESTUS] SA-8 FLAGS [L-A.1]: below_entry = (add_px - entry_px) x d < 0; post_harvest = the harvest fired and the add's 4h bar >= the harvest bar (after it, or inside its 4h bar). The twins refuse each class; the scored arm is unchanged. The 'inside its 4h bar' clause refuses an add whose 1h close precedes the harvest's decision at that bar's close — look-ahead at reading level inside a Tier-E twin; the count of such adds is printed (finding F7).",
+  "[LEAN-HEPHAESTUS] SA-9 COLLARS [L-1.4]: every stage table but REGISTERED_BOOKS carries tier 'TIER-E', selection_not_a_result 'a SELECTION, not a result', gates 'nothing' and no verdict word; registered books are labelled 'book, not a verdict'. Head-to-head: 'neither promoted by the other's failure'.",
+  "[LEAN-HEPHAESTUS] SA-10 SCALE-IN-SAMPLE [L-R.2]: calibrated-scale range reads at instants <= the era cut are structurally in-sample (tuning-era calibration); the holdout slice (tierE__holdout) and the frozen-3.0 twin (tierE__frozen3) are the statistics printed beside the verdict.",
+  "[LEAN-HEPHAESTUS] SA-11 HEAD-TO-HEAD [registrations' tier_e_arms, scorer SC-3]: tierE__head_to_head_vs_p_add_sfp (under P-ADD-BRK) / tierE__head_to_head_vs_p_add_brk (under P-ADD-SFP) = the registration's scored book, row for row (the same book sha), with ruler 'paired' and sidecar base_arm '<the other registration>/scored'; both are the v6 key set, so the paired premise holds by construction. Extras opponent_net_r and delta_vs_opponent_net_r (= net_r - opponent_net_r). The head-to-head is a SELECTION, not a result: 'neither promoted by the other's failure'."
+ ],
+ "registrations": [
+  "P-ADD-BRK",
+  "P-ADD-SFP"
+ ],
+ "seed": 20260924,
+ "stage": "TC11-A",
+ "substrate": "tc11_20260925",
+ "tier": "TIER-C11",
+ "v6_book_sha": "f3c68f544bcda52c909374105dabbdc773c9bffa4b66b2ef7e0f35ac9b369132"
+}

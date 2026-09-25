@@ -1,0 +1,58 @@
+{
+  "arm": "tierE__tuning",
+  "as_of": "2026-09-25T00:00:00Z",
+  "book_sha256": "c41450b34294d820d841c68f17c7ee8b0648550dcc950506905adddf74270f04",
+  "book_sha256_law": "sha256 of the UTF-8 CSV written by Python's csv.writer (lineterminator '\\n', QUOTE_MINIMAL): header = the 16 required columns in interface order; rows sorted by (symbol, entry_close_ms) (stable); floats as repr(float(x)), ints as str(int(x)), strings as str(x)",
+  "description": "the rule book, tuning slice (era by the entry close, L-1.3) — paired against base on the same keys; a SELECTION, not a result",
+  "era_cut_ms": 1719791999000,
+  "era_scope": "tuning",
+  "exit_close_ms_law": "exit_close_ms = the CLOSE of the 4h exit bar (exit bar open + 4h) — the estate's v6 schema (books/v6_campaigns.parquet, the scorer's F-BASE-IDENT referee); the exact 1h-resolved exit instant (L-W.3: the stop child's close, the warn child's close, a bell / corridor_end at its 4h close) is the extra column exit_instant_ms",
+  "gates": "nothing",
+  "haircut_law": "AM-7: haircut_net_r = net_r − fee_r × (slip_bps_side / taker_bps_side); fee_r = the ride's taker fee over every fill / r_dist; slip_bps_side = the stem's charter tier (A 2 · B 5 · C 10) from E.fees(); taker 5.0 bps/side",
+  "honesty_labels": {
+    "note": "REGISTRATIONS.json carries none for P-WARN-1",
+    "pre_seen": null,
+    "scale_in_sample": null,
+    "selection_hazard": null
+  },
+  "kind": "tierE",
+  "n": 123,
+  "n_entry_bar_straddles_era_cut": 0,
+  "pairing_key": [
+    "symbol",
+    "entry_ms"
+  ],
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-WARN-1",
+  "registration_payload_sha256": "c6121ba9330a40bd31fd0dd1f78303b940417d3ac1f3a9eba8750979f84f0c99",
+  "required_columns": [
+    "symbol",
+    "entry_ms",
+    "entry_close_ms",
+    "direction",
+    "entry_px",
+    "stop_px",
+    "r_dist",
+    "exit_close_ms",
+    "exit_reason",
+    "net_r",
+    "gross_r",
+    "fee_r",
+    "funding_r",
+    "haircut_net_r",
+    "era",
+    "lane"
+  ],
+  "ruler": "paired",
+  "seed": 20260924,
+  "selection_not_a_result": "a SELECTION, not a result",
+  "source_script": "scripts/tierc11_stage_w.py",
+  "sum_net_r": 0.34101510960288284,
+  "tier": "TIER-E"
+}

@@ -1,0 +1,27 @@
+{
+  "arm": "tierE__tuning_slice",
+  "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+  "book_sha256": "10ac7ec867fab0873cf5b729301e19d62c63a90eabd8e1776924d44b1a6100f9",
+  "book_sha256_recipe": "sha256 of the UTF-8 CSV: header = the 16 required columns in interface order joined by ','; one line per row sorted by (symbol, entry_close_ms) (stable mergesort); ints as str(int), floats as repr(float), strings as is (csv.writer, QUOTE_MINIMAL, lineterminator '\\n')",
+  "description": "Tier-E: the scored arm's campaigns whose entry close is in the tuning era (<= 2024-06-30T23:59:59Z, L-1.3); compare with base rows of era 'tuning'. a SELECTION, not a result.",
+  "era_scope": "tuning",
+  "gates": "nothing",
+  "kind": "tierE",
+  "label": "book, not a verdict",
+  "mean_net_r": 0.31654009835442576,
+  "n": 114,
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-RELAY-1",
+  "ruler": "two_sample",
+  "seed": 20260924,
+  "selection_not_a_result": "a SELECTION, not a result",
+  "source_script": "scripts/tierc11_stage_t_relay.py",
+  "sum_net_r": 36.08557121240454,
+  "tier": "TIER-E"
+}

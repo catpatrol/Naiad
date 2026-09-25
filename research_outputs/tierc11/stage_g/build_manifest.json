@@ -1,0 +1,341 @@
+{
+  "as_of": "2026-09-25T00:00:00Z",
+  "as_of_close_ms": 1790294400000,
+  "as_of_pin_record": {
+    "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+    "latest_closed_4h_at_pin_run": "2026-09-25T00:00:00Z",
+    "path": "research_outputs/tierc11/data/AS_OF_PIN.json",
+    "pin_equals_latest_closed_at_pin_run": true
+  },
+  "canonical_csv_law": "sha256 of the UTF-8 canonical CSV of the 16 required columns in interface order, rows sorted by (symbol, entry_close_ms) (mergesort), header = the column names joined by ',', one row per line joined by ',', '\\n' after every line (the last included); int columns and direction as str(int), floats as repr(float), strings verbatim (no ',' or newline allowed)",
+  "collared_tables": [
+    "g_age_crosstab",
+    "g_arrivals",
+    "g_campaign_gates",
+    "g_collision_list_v6",
+    "g_collisions",
+    "g_era_slices",
+    "g_gate_rows",
+    "g_grid_books",
+    "g_grid_partition",
+    "g_lag_bands",
+    "g_priority_vs_v6",
+    "g_priority_windows",
+    "g_rivals",
+    "g_tide_bands",
+    "g_tiere_books"
+  ],
+  "corridor": {
+    "hi_close": "2026-09-25T00:00:00Z",
+    "lo": "2019-09-08T16:00:00Z",
+    "panel": [
+      "BTCUSDT",
+      "ETHUSDT",
+      "SOLUSDT",
+      "NEARUSDT",
+      "ZECUSDT"
+    ]
+  },
+  "haircut_law": "AM-7: haircut_net_r = net_r - fee_r x (slip_bps_side / taker_bps_side); fee_r = the ride's taker fee over every fill / r_dist; slip_bps_side = the stem's charter tier (A 2 / B 5 / C 10) from E.fees(); taker 5.0 bps/side",
+  "input_sha": {
+    "funding/BTCUSDT.parquet": "a3d21e1f1a78930b9ca27132d4973f4f4cd4d3ab0639d33d949f25ad8722a77b",
+    "funding/ETHUSDT.parquet": "31120f82bd515bf664acedacfa86cb0867d309686c2db508f4977edf981767ed",
+    "funding/NEARUSDT.parquet": "593ac29381ca6c6432d3ce59f3134de000c7a1a428286a832835733b09adad50",
+    "funding/SOLUSDT.parquet": "63f3b205c1a88345c9c72bd4d9694b6349b069ce0ebbff93badebb9eabc37f8d",
+    "funding/ZECUSDT.parquet": "19a0080a11c5b3194a7be1a01e61f0f5ae244fc26be9a0e848dfcbeb7c6fa700",
+    "klines/BTCUSDT_4h.parquet": "281c3ac3195e5bb8de6b211573f77919bb2af2a342f71162426085f54bf37bfb",
+    "klines/ETHUSDT_4h.parquet": "e78895774de7d30ae06528060d97896a846975e26e1ceb7bdc6245ef70993fab",
+    "klines/NEARUSDT_4h.parquet": "e3fdd23041ffcdd3a55a8c24c9473389051d2c95d20a8c2d1fcb136144d04098",
+    "klines/SOLUSDT_4h.parquet": "6dfc049478f6e5fb8752c6211ebbda3b0c222afd95933d13b12b4d63e541d021",
+    "klines/ZECUSDT_4h.parquet": "1e054d71061f18be429907a0331eb43eb1aa26fa511ca01af581f428b8844935"
+  },
+  "keys": {
+    "g_age_crosstab": [
+      "cell"
+    ],
+    "g_arrivals": [
+      "kind",
+      "symbol",
+      "entry_ms"
+    ],
+    "g_campaign_gates": [
+      "symbol",
+      "entry_ms"
+    ],
+    "g_collision_list_v6": [
+      "entry_close_ms",
+      "symbol"
+    ],
+    "g_collisions": [
+      "book"
+    ],
+    "g_era_slices": [
+      "registration",
+      "book",
+      "era"
+    ],
+    "g_gate_rows": [
+      "gate"
+    ],
+    "g_grid_books": [
+      "cell"
+    ],
+    "g_grid_partition": [
+      "cell"
+    ],
+    "g_lag_bands": [
+      "lag_band"
+    ],
+    "g_priority_vs_v6": [
+      "symbol",
+      "entry_ms"
+    ],
+    "g_priority_windows": [
+      "symbol",
+      "arm_ms",
+      "direction"
+    ],
+    "g_registered_books": [
+      "registration",
+      "arm"
+    ],
+    "g_rivals": [
+      "symbol",
+      "trigger_ms",
+      "direction"
+    ],
+    "g_tide_bands": [
+      "measure",
+      "band"
+    ],
+    "g_tiere_books": [
+      "registration",
+      "arm"
+    ]
+  },
+  "priority": {
+    "n": 165,
+    "n_exit_after_window_end_bar_priority": 0,
+    "n_exit_after_window_end_bar_v6": 0,
+    "n_new_not_in_v6": 18,
+    "n_position_open_priority": 0,
+    "n_position_open_v6": 0,
+    "n_scan_not_flat": 0,
+    "n_shared": 147,
+    "n_substituted": 18,
+    "n_v6_not_taken": 53,
+    "n_windows": 200,
+    "outcomes": {
+      "entered": 147,
+      "passed_no_substitute": 35,
+      "passed_substituted": 18
+    },
+    "sum_net_r": 18.392480226910806
+  },
+  "readings": [
+    "[LEAN-HEPHAESTUS] L-G.1 tide age of record = tierc7_lab_regime.tide_streak (run length of sign(e89 - e316) on 4h, counted from warm bar 316) read at the campaign's ENTRY bar; trailing CLASSIC5 quartile edges over bars with open <= the entry bar (tierc9._trailing_edges, >= 30 bars; pool = tierc9._trailing_pool over the TC11 corridor); OLD = B4 = streak >= trailing q75; P-AGE-1 refuses OLD.",
+    "[LEAN-HEPHAESTUS] L-G.1 shadow: refuse streak > 206 exactly as written (206 = the whole-corridor median edge, not the OLD edge; it reads the corridor ahead).  Disclosure: tierc9.tide_streak_age (arm bar, three-state tide), banded on the SAME trailing edges as the campaign's entry-bar band.",
+    "[LEAN-HEPHAESTUS] L-G.2 lag = entry_i - arm_i (4h bars); P-WIN-1 refuses lag >= 16; the shadow refuses 7..15.",
+    "[LEAN-HEPHAESTUS] L-G.3 r_over_atr = r_dist / ATR14_4h(entry); admission refuses > 2.2; the PRIORITY book is replay9's loop with the first-trigger pass and the in-window substitute (first later same-direction 12/26 cross with the asset flat and r_over_atr <= 2.2), ridden by tierc11_ride.ride11 from its 4h close; the cross-asset same-close collision count is a disclosure; the three gates crossed 2 x 2 x 2 (partition + gate books), whole.",
+    "[LEAN-HEPHAESTUS] L-1.5 gates are POST-FILTERS: gated = v6 minus exactly the refused set, row-identical; the re-ride rival count is taken from the v6 ride's rejection log (first order), the re-ride book with a refusal hook printed beside (Tier-E).",
+    "[LEAN-HEPHAESTUS] L-1.3 era = the entry bar's CLOSE (E.era_of); L-1.4 no verdict word here, every non-registered table collared; AM-7 haircut_net_r = net_r - fee_r x slip_bps_side / 5.0 (charter tier)."
+  ],
+  "regbook_status_file_sha256": {
+    "P-AGE-1": "5593031c0204ae4da6d1735e5663c29ad5d73d23935c4fb4718a05875726676f",
+    "P-WIN-1": "66ce56d12cc43afa329b2681b5d98fb5a006e4c9115428c393c0469d30ba1304"
+  },
+  "regbooks": {
+    "P-AGE-1/base": {
+      "book_sha256": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+      "era_scope": "full",
+      "kind": "base",
+      "n": 200,
+      "n_entry_bar_straddles_era_cut": 0,
+      "parquet_file_sha256": "0b48c7fb656e33bdfe780cd210ba99d43d30ad10936d8e93b5396b3023659feb",
+      "ruler": "two_sample",
+      "sidecar_file_sha256": "003d8dc21c6ee0d330d9f531fb24e3e44459124bf951a2c2fe5fe833c9e20760",
+      "sum_net_r": 40.80756457414756
+    },
+    "P-AGE-1/scored": {
+      "book_sha256": "d008fa5086ce14f578403c083169e28c5870701fd37f3cb2b03c5474f04f22d8",
+      "era_scope": "full",
+      "kind": "scored",
+      "n": 141,
+      "n_entry_bar_straddles_era_cut": 0,
+      "parquet_file_sha256": "0b1b8b41bb92f2a0ea4809c0b67b47292f25d3f58fc8a139bc15814a5e9fa464",
+      "ruler": "two_sample",
+      "sidecar_file_sha256": "75ea0a199c2d219667b26f9a62ad8fbb3517fdd3d2716817bb881b4f375bd234",
+      "sum_net_r": 63.464130732724186
+    },
+    "P-AGE-1/tierE__holdout": {
+      "book_sha256": "f7331ba52363642520df489500970333494bdf0f7ab90f4ce3ee342d74d91183",
+      "era_scope": "holdout",
+      "kind": "tierE",
+      "n": 60,
+      "n_entry_bar_straddles_era_cut": 0,
+      "parquet_file_sha256": "6f6b331760cf69d39826fd4d30b1b646ba5846891320878cb1974da7e218aa60",
+      "ruler": "two_sample",
+      "sidecar_file_sha256": "380c26346cec03b8ca9464812f979fbfb8ed9f4b4489d5c9bff5a4e942f5b83e",
+      "sum_net_r": 52.001614330956656
+    },
+    "P-AGE-1/tierE__refused_cohort": {
+      "book_sha256": "0569170404a1d10cb80c1021278423e53b5c0a0ad26030940098c1770e2d9838",
+      "era_scope": "full",
+      "kind": "tierE",
+      "n": 59,
+      "n_entry_bar_straddles_era_cut": 0,
+      "parquet_file_sha256": "9a462a55dc5a5a77f6e8867a56ccce46361439e24c273a69dc0eb9116a20ed45",
+      "ruler": "vs_zero",
+      "sidecar_file_sha256": "75868abc998fadaeefa15321c316628094f9007d112037fd85b85aea372ad7f3",
+      "sum_net_r": -22.656566158576624
+    },
+    "P-AGE-1/tierE__shadow_abs206": {
+      "book_sha256": "2c1e47eec765be4a531205ff26dfb495d21efa42788fdea1c9d673b6e385d169",
+      "era_scope": "full",
+      "kind": "tierE",
+      "n": 80,
+      "n_entry_bar_straddles_era_cut": 0,
+      "parquet_file_sha256": "567a20aa74acf6fdd8a50ae66d7d7b4ec97a831f9bdbb7b5009c8a7ea393c740",
+      "ruler": "two_sample",
+      "sidecar_file_sha256": "7e36fa29042ba48357ea9915e21782f6bd3eab670e7fa1adf064380c77287a0b",
+      "sum_net_r": 48.803986308375
+    },
+    "P-AGE-1/tierE__tuning": {
+      "book_sha256": "4acc5b91b27e1a931480218f038ffe5749f04479d4dcd0add1a3b84b79bcf7c5",
+      "era_scope": "tuning",
+      "kind": "tierE",
+      "n": 81,
+      "n_entry_bar_straddles_era_cut": 0,
+      "parquet_file_sha256": "dd0f6fd0c57ef1ca9f254b11622315ffc93723b40342836426e20e32d5f1922e",
+      "ruler": "two_sample",
+      "sidecar_file_sha256": "abb2402cc04d650d6f4cb6414662ca5ef19b917e9e2401057cee9deeb61ba0d1",
+      "sum_net_r": 11.46251640176753
+    },
+    "P-WIN-1/base": {
+      "book_sha256": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+      "era_scope": "full",
+      "kind": "base",
+      "n": 200,
+      "n_entry_bar_straddles_era_cut": 0,
+      "parquet_file_sha256": "0b48c7fb656e33bdfe780cd210ba99d43d30ad10936d8e93b5396b3023659feb",
+      "ruler": "two_sample",
+      "sidecar_file_sha256": "97ef38b8731868397827cdbb8e5458fdbf407890e99968de44486003ec431444",
+      "sum_net_r": 40.80756457414756
+    },
+    "P-WIN-1/scored": {
+      "book_sha256": "fd3f407ad6b1867039bb24a42816678e4992b9204ed65971058e48fa2bdabbfe",
+      "era_scope": "full",
+      "kind": "scored",
+      "n": 137,
+      "n_entry_bar_straddles_era_cut": 0,
+      "parquet_file_sha256": "41862ecfbffffc227ecff2abfba278e399c35d61ab94e603f1b5fe09a507bc52",
+      "ruler": "two_sample",
+      "sidecar_file_sha256": "c9b254f9620937f08a4146ec9d0cadc67127c6365a1ff5974daf5d379128f02f",
+      "sum_net_r": 51.97401862719062
+    },
+    "P-WIN-1/tierE__holdout": {
+      "book_sha256": "7cdb206beff5ae4d8a45827e54f1450744fe3c6fc1b7cd06d801c0ec4afa07b3",
+      "era_scope": "holdout",
+      "kind": "tierE",
+      "n": 56,
+      "n_entry_bar_straddles_era_cut": 0,
+      "parquet_file_sha256": "984c0f634165a16c0cd153f2da42a90ec9a90ccf456e985e096011695b7b5f2e",
+      "ruler": "two_sample",
+      "sidecar_file_sha256": "a0c73bfef3173bdd82f8af25b8f557d9d631735e28c894897ce16bbadb02d779",
+      "sum_net_r": 43.95145157935582
+    },
+    "P-WIN-1/tierE__ratr_admission": {
+      "book_sha256": "dcfffefbddad389657173b6458f5c88e9ec26865621742740bbd9f8f033201c8",
+      "era_scope": "full",
+      "kind": "tierE",
+      "n": 147,
+      "n_entry_bar_straddles_era_cut": 0,
+      "parquet_file_sha256": "57c70d72e418020f723074f9c3579232b12547cfed85b455c5447152a6de9e77",
+      "ruler": "two_sample",
+      "sidecar_file_sha256": "0c2a0171392230cd81639ed4768395328c566f573663943a071cb6f56d4793d8",
+      "sum_net_r": 19.115450023555383
+    },
+    "P-WIN-1/tierE__ratr_priority": {
+      "book_sha256": "a10416bd49c47a08766078e075a1f4187f75aa36f3a29ef521cfc5698403a7f3",
+      "era_scope": "full",
+      "kind": "tierE",
+      "n": 165,
+      "n_entry_bar_straddles_era_cut": 0,
+      "parquet_file_sha256": "9c5b2e9048282d4c409d3edf8e7edd3af78563dd4a76537ede1fbcd143e619b9",
+      "ruler": "two_sample",
+      "sidecar_file_sha256": "ee1e7d57063fcbdf489929e5b2ffadce53eee2257661b958268c7c76d96e632e",
+      "sum_net_r": 18.392480226910806
+    },
+    "P-WIN-1/tierE__refused_cohort": {
+      "book_sha256": "7a97b32895c78324c22dacc563efdec38e98ffa8fe196f0e9629d5ed6b3bacf6",
+      "era_scope": "full",
+      "kind": "tierE",
+      "n": 63,
+      "n_entry_bar_straddles_era_cut": 0,
+      "parquet_file_sha256": "ed2166bb93050c1054a80b41b643f2eddd9708dcd8f0a460acefdbcdcb9c6267",
+      "ruler": "vs_zero",
+      "sidecar_file_sha256": "93df057ae5de8269c98f2f67a39b0e605164927ffdcccc798bae84e8b1cc1c43",
+      "sum_net_r": -11.166454053043058
+    },
+    "P-WIN-1/tierE__shadow_lag7_15": {
+      "book_sha256": "f624bffc3baea05741a1a94b61699997a0e4d615ce52649fb02b3277866d7fae",
+      "era_scope": "full",
+      "kind": "tierE",
+      "n": 196,
+      "n_entry_bar_straddles_era_cut": 0,
+      "parquet_file_sha256": "b6093b01294ae930b4fc99ae267bd7aff5b0036acf053eb8d50b0d2f9af06ec2",
+      "ruler": "two_sample",
+      "sidecar_file_sha256": "97f31afc420a77270d3d39c98ebc9d8ad033180613a76b48a9fb782de5c53a71",
+      "sum_net_r": 43.085654820857705
+    },
+    "P-WIN-1/tierE__tuning": {
+      "book_sha256": "862fc6fd0a237ed4b6f84e250d4737048eedc58910911c05840606fbcb714218",
+      "era_scope": "tuning",
+      "kind": "tierE",
+      "n": 81,
+      "n_entry_bar_straddles_era_cut": 0,
+      "parquet_file_sha256": "81acc37396c582f6e87c1af571f97c19f44e3686c69301c5fa9de54b68bce562",
+      "ruler": "two_sample",
+      "sidecar_file_sha256": "768a0186855ece3497180753266498de256f476dc6cddfc409aaee3dbcccce31",
+      "sum_net_r": 8.022567047834794
+    }
+  },
+  "registrations": {
+    "P-AGE-1": {
+      "sha256": "e01a89ea7e6fda864f7002a450abd1a4e92424c44d1a9626f6641814e7d35879",
+      "text_sha256": "eeb058719de17172ca6ed7e5dc6192ee6a65219973507ccd2c8d72e37c7d57b1"
+    },
+    "P-WIN-1": {
+      "sha256": "d19a42a329be3bfeea73c3c628bf515f5d0fa2fb8facd3fcac795b0186525084",
+      "text_sha256": "c7fe848193d9b8fd239f74fdaf6483edf8f79b47d9ea47b2ba26bfd935f7a9b3"
+    }
+  },
+  "replay_g_identity_sha": "f3c68f544bcda52c909374105dabbdc773c9bffa4b66b2ef7e0f35ac9b369132",
+  "seed": 20260924,
+  "sha": {
+    "g_age_crosstab": "2f3d01b0158f9640b43eeaa8bb04c85a4a9d34f33d192373f0534e92100ec60a",
+    "g_arrivals": "b19b468c9192ca9e640a63efc13524915bdcd09e83c02e05b01c6083337be5b5",
+    "g_campaign_gates": "196ddc1c00bd4ac1c83a2eb2a30a4f986364aac783abc75c8c02f98b391762a5",
+    "g_collision_list_v6": "3d210291125aeffb7d6892a11771dc304739c1297e55078fb735496fa5ebe845",
+    "g_collisions": "3a3e9178b33de18ee7c39ca92ee95ce65543c7963600117f7daad88f1a4f1d31",
+    "g_era_slices": "d9643e3faaf9035d0e565e05aaeb7fdb7b3d982891a53bff340919c5732059cd",
+    "g_gate_rows": "1f88b0a5c2818f97ec51360a818ba4eafe97c48c41ec528da45ba144bbf8fe9e",
+    "g_grid_books": "cce5f1ccc8ff61b390c6733a856909fd5cbbd873185cfa37ee9f939fde943683",
+    "g_grid_partition": "d786f529981e8b496648ddf1f269acbc277f7b4d3c78114066b6d86fabb20abd",
+    "g_lag_bands": "f64f99670b8aebeaa97f41c7efbc408dbc70175b85ddeb295ed8fd33b5d68ce0",
+    "g_priority_vs_v6": "7b359c5679def52036ff571f105867285fa8a769ea9b11265c5c0fb76d6641b5",
+    "g_priority_windows": "5de969792e571b7b48e40d8c216e44b802fb64b321131993da7e0e7e8bbde085",
+    "g_registered_books": "190a523c06f68f7d52f3732804c236e1472fb029cf094dcf89b51d436d51df32",
+    "g_rivals": "2c6bb8c8778ac1a2dee835a69a01f7f5dc67dfb10900f7a2d065bdd71e96d380",
+    "g_tide_bands": "b2f32c84c17ecfe22aca4a504fbbe1cbf11e1d7bc3a1189b40ac64e97202e40d",
+    "g_tiere_books": "a1de44ac30a6c4c9793f9e8af2f7f4fd1c6023afa2c33c1ab83a4b221a94ad8a"
+  },
+  "skipped_empty": [],
+  "stage": "TC11-G",
+  "substrate": "tc11_20260925",
+  "tier": "TIER-C11",
+  "uncollared_tables": {
+    "g_registered_books": "registered-book arithmetic (book, not a verdict)"
+  },
+  "v6_book_sha": "f3c68f544bcda52c909374105dabbdc773c9bffa4b66b2ef7e0f35ac9b369132"
+}

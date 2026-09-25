@@ -1,0 +1,14 @@
+{
+  "arms": [
+    "scored",
+    "base",
+    "tierE__tp_post_harvest",
+    "tierE__unguarded",
+    "tierE__frozen3",
+    "tierE__tuning",
+    "tierE__holdout"
+  ],
+  "reason": "the paired premise and the identity law held on every paired arm (key sets identical to v6, n 200; every campaign the TP never filled carries v6's net_r / exit_ms / exit_reason exactly); books only — no CI, no p, no verdict word [L-1.4, L-1.5]",
+  "registration": "P-TP-RNG",
+  "status": "BUILT"
+}

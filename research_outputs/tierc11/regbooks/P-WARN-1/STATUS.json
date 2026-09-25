@@ -1,0 +1,34 @@
+{
+  "arms": [
+    "scored",
+    "base",
+    "tierE__tuning",
+    "tierE__holdout"
+  ],
+  "as_of": "2026-09-25T00:00:00Z",
+  "condition_path": "research_outputs/tierc11/regbooks/P-WARN-1/condition.json",
+  "identity": {
+    "acted": 42,
+    "n": 200,
+    "unacted": 158,
+    "worst": 0.0
+  },
+  "n_walk_mismatch_rule_book": 1,
+  "reason": "condition MET: delta -0.728647, cluster-90% [-0.964287, -0.527794] (hi < 0); the rule book is the scored arm, paired vs v6",
+  "registration": "P-WARN-1",
+  "reride_disclosure": {
+    "acted_campaigns_with_a_freed_slot_candidate": 0,
+    "first_per_campaign": [],
+    "freed_slot_candidates": 0,
+    "freed_slot_candidates_valid_stop": 0,
+    "law": "L-1.5: the freed slot admits NOTHING in the rule book; this count is the re-ride rival's disclosure (chain effects of a re-ride not ridden)"
+  },
+  "ruler": "paired",
+  "seed": 20260924,
+  "status": "BUILT",
+  "tier_e_tables": {
+    "cohorts": "research_outputs/tierc11/stage_w/W2_COHORTS.parquet",
+    "complement_comparison": "research_outputs/tierc11/stage_w/P_WARN_1_COMPLEMENT.parquet",
+    "forward_leg": "research_outputs/tierc11/stage_w/W2_FORWARD.parquet (cells C1_counter_12_89_before_1r|*)"
+  }
+}

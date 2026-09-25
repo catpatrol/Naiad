@@ -1,0 +1,191 @@
+{
+  "as_of": "2026-09-25T00:00:00Z",
+  "as_of_close_ms": 1790294400000,
+  "code": {
+    "tierc11_books.py": "e025499d92b25231c676aaac17abffedba4dcc9d4821174fcd9f3566bd821313",
+    "tierc11_env.py": "1526093b25161927337ced6112a310075b1a57c825f08705814e48619398f798",
+    "tierc11_nest.py": "16e325022523064e67eede439998e9ee4cacfeb0df8171202a85b46125827429",
+    "tierc11_ride.py": "65eb880f2b127a26cc07a6bf40e6ca6556dac37aa62bdfef45e3b045aa26915d",
+    "tierc11_stage_h.py": "cf80545adcd763a0d64f529dedc2f6ccbcbcd7d1ae355272c01f3cce2001c0e2"
+  },
+  "collar": {
+    "applies_to": "every stage_h table and every tierE regbook",
+    "gates": "nothing",
+    "selection_not_a_result": "a SELECTION, not a result",
+    "tier": "TIER-E"
+  },
+  "corridor": {
+    "hi_close": "2026-09-25T00:00:00Z",
+    "lo": "2019-09-08T16:00:00Z",
+    "panel": [
+      "BTCUSDT",
+      "ETHUSDT",
+      "SOLUSDT",
+      "NEARUSDT",
+      "ZECUSDT"
+    ]
+  },
+  "inputs": {
+    "SCALE_PICKS.json": "cb5319c975e44df610c05f5917759b7b47d819fa095b8af26d174d79fcef454f",
+    "books/build_manifest.json": "04f129b7731f700a3cf5eea0775e0a05792e7abd2ec458585feb4768a196bd24",
+    "fee_schedule.json": "6febe170d423b0ef37dca9fe95a7316e4259ef5a77e576cafa6781d581c1968b",
+    "input_sha_classic5": {
+      "funding/BTCUSDT.parquet": "a3d21e1f1a78930b9ca27132d4973f4f4cd4d3ab0639d33d949f25ad8722a77b",
+      "funding/ETHUSDT.parquet": "31120f82bd515bf664acedacfa86cb0867d309686c2db508f4977edf981767ed",
+      "funding/NEARUSDT.parquet": "593ac29381ca6c6432d3ce59f3134de000c7a1a428286a832835733b09adad50",
+      "funding/SOLUSDT.parquet": "63f3b205c1a88345c9c72bd4d9694b6349b069ce0ebbff93badebb9eabc37f8d",
+      "funding/ZECUSDT.parquet": "19a0080a11c5b3194a7be1a01e61f0f5ae244fc26be9a0e848dfcbeb7c6fa700",
+      "klines/BTCUSDT_4h.parquet": "281c3ac3195e5bb8de6b211573f77919bb2af2a342f71162426085f54bf37bfb",
+      "klines/ETHUSDT_4h.parquet": "e78895774de7d30ae06528060d97896a846975e26e1ceb7bdc6245ef70993fab",
+      "klines/NEARUSDT_4h.parquet": "e3fdd23041ffcdd3a55a8c24c9473389051d2c95d20a8c2d1fcb136144d04098",
+      "klines/SOLUSDT_4h.parquet": "6dfc049478f6e5fb8752c6211ebbda3b0c222afd95933d13b12b4d63e541d021",
+      "klines/ZECUSDT_4h.parquet": "1e054d71061f18be429907a0331eb43eb1aa26fa511ca01af581f428b8844935"
+    }
+  },
+  "readings": [
+    "[LEAN-HEPHAESTUS] L-H.1 P-TP-RNG: v6's harvest law (50% at the opposing 89/316 band) is KEPT; at each 4h bar j after entry the 12h as-of state at j's OPEN (the last 12h bar closed <= open_j) — IN_RANGE: level = top − 0.25 × ATR_12h (long) / bot + 0.25 × ATR_12h (short); a resting limit for the REMAINDER (1.0 before the band harvest, 0.5 after) is live iff (i) the prior 4h close is on the near side and (ii) (level − entry)·d > 10 bps · entry; fill at max(level, o[j]) long / min(level, o[j]) short; EXPANSION or NONE -> no TP, the trail runs; same-bar order STOP -> TP -> (close) BELL -> HARVEST -> TRAIL. Rival twin 'tp-post-harvest' (TP only after the harvest, the 0.5 runner); the unguarded twin (no (ii)) and the guard-withheld counts printed.",
+    "[LEAN-HEPHAESTUS] L-1.5 PAIRED = the v6 campaign set TRANSFORMED: same arm, entry, stop, R; a slot a TP frees admits NO new entry (the re-ride rival is a disclosure count); the IDENTITY law — every campaign the TP never filled carries v6's net_r, exit_ms and exit_reason exactly — asserted over the whole book before any regbook is written.",
+    "[LEAN-HEPHAESTUS] L-1.3 era = the entry bar's CLOSE (E.era_of(entry_close_ms)); tuning closes <= 2024-06-30T23:59:59Z; the registration names no era -> scored on the FULL corridor, tuning and holdout slices printed beside as Tier-E.",
+    "[LEAN-HEPHAESTUS] L-R.2 SCALE-IN-SAMPLE: the calibrated 12h pick (tuning-era calibration) makes every calibrated read at an instant <= the era cut structurally in-sample; the holdout slice (the only slice with a causal scale) and the frozen-3.0 twin (fully causal) print beside; pick stability per CLASSIC5 asset printed (tp_picks).",
+    "[LEAN-HEPHAESTUS] AM-6 (s2) on a TP exit bar mfe is capped at the FILL price (tierc11_ride).",
+    "[LEAN-HEPHAESTUS] AM-7 haircut_net_r = net_r − fee_r × (slip_bps_side / taker_bps_side), fee_r the ride's own taker fee over EVERY fill (entry, harvest, final exit), slip the stem's charter tier (A 2 · B 5 · C 10 bps/side, fee_schedule.json), taker 5.0; funding stays in (net_r carries it).",
+    "[LEAN-HEPHAESTUS] SR-H1 the as-of 12h bar = the last 12h bar with close <= the 4h bar's OPEN (inclusive: a 12h bar closing exactly at the 4h open is known at it).",
+    "[LEAN-HEPHAESTUS] SR-H2 box and ATR are the as-of 12h bar's own (tierc10_census.asof_view via N.range_facts, full precision; ATR = engine.indicators.atr(h, l, c, 14) on the whole 12h tape, recursive); IN_RANGE = the as-of view's in_range (state4 == 2).",
+    "[LEAN-HEPHAESTUS] SR-H3 the TP ride is 4h-granular (walk=False; the 1h walk resolves instants only); regbook exit_close_ms = the exit 4h bar's CLOSE (for an intrabar STOP or TP exit the post-event close stamp); exit_stamp_ms beside = the L-R.5 stamp of record (the bar's OPEN for an intrabar exit, the close for bell / corridor_end).",
+    "[LEAN-HEPHAESTUS] SR-H4 a prior close exactly AT the level is NOT on the near side (tierc11_ride's tie-break, measure zero).",
+    "[LEAN-HEPHAESTUS] SR-H5 SCALE-IN-SAMPLE per campaign = any calibrated 12h read at a 4h OPEN <= the era cut among the bars the arm rode (N.scale_in_sample at the read instant); frozen 3.0 never.",
+    "[LEAN-HEPHAESTUS] SR-H6 the re-ride rival = tierc9.replay9's admission loop (first trigger per window, one position per asset, struct_stop_4h railed 1.0 ATR) with the ride swapped for ride11(tp=); it reproduces the v6 book exactly with tp=None (asserted) and is a DISCLOSURE count only."
+  ],
+  "regbooks": {
+    "book_sha256": {
+      "base": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+      "scored": "a10c667b26932948074c94da892ea998ccf8db9a76999981efea53b69aaf2a9d",
+      "tierE__frozen3": "8ff7213a76ecf1c21bfe4dc9405cb294517c1a63a078a02998869aa67ebf101e",
+      "tierE__holdout": "8bd94584706ed92fd6354c87eff718273528c869ea3112c7a909f0e1cccbd29f",
+      "tierE__tp_post_harvest": "3d2c34a4fcdcc709893c4e66fc70afe91830e506fc769b10f1f82e31a901a902",
+      "tierE__tuning": "ec8eb28167758a8daa2f0c7f04d74515769ff179fcccd313d49f57c31a27ca3f",
+      "tierE__unguarded": "b2c0794eaca8409e0943c727955758ef87ad1ed4febf411e1fa99797eeb20bca"
+    },
+    "content_sha": {
+      "base.parquet": "b8a0ee95cdf11cacb6c1da393d1f153c005d152d8b55c07a7fbb66de52739719",
+      "scored.parquet": "520b72e66db30b719cba698bbb8a57c1ac64fa2f1b037ab1cf8a5f0ea2a8b3da",
+      "tierE__frozen3.parquet": "8024528689ede21248c8f7f6b80a9ad4c4b65da758a761d21c7ffbc75dcdbca4",
+      "tierE__holdout.parquet": "d869aa0f8a744d82f033a516f52d1a3fef6c2444cba26d3c855981136d34e78b",
+      "tierE__tp_post_harvest.parquet": "45e3d1c5b5b90fce8e602ece10d5b97fbf05a48243a11417bad3b345968cddd9",
+      "tierE__tuning.parquet": "56d877c45b9b4f405c6d3bf884f8e2fe8855d29a072d85a88888d9dc2b7d312b",
+      "tierE__unguarded.parquet": "b3fd7adb55cc15a5a18d19af5934b6d923cc13ee98aa5d1ece156b7b43301b0a"
+    },
+    "dir": "research_outputs/tierc11/regbooks/P-TP-RNG",
+    "file_sha256": {
+      "STATUS.json": "b31fb2778120ead0d77bbaf9105dc847e0f20a9138d6d67807480330f5f763f7",
+      "base.json": "700d685be73c87e1f5895615c83fbcb5b27de3c773745c8462fe6ef7e4ccfd95",
+      "base.parquet": "f54b2f09a715463a37e3f7fa47ab786f01e50af2127105035f9568e98f1f27ff",
+      "scored.json": "459b8a8d7bfd86ab29488832b8f87446850376bf3c6d03958e6602f74c9a9cc0",
+      "scored.parquet": "4ba47f8b6d41a0e9a2860822340413a3e98071794eb644b47e168cf380140e1e",
+      "tierE__frozen3.json": "102844d14f816bf849cae56056b5cb0e3dcf8ca62937b6ca7d8db373c485c041",
+      "tierE__frozen3.parquet": "096c32ff9f3c2ff196aca6e86abf6b7da8a7ffd5f0da8752636445b6e0c4dd9d",
+      "tierE__holdout.json": "ce9ac5e5d94462cb1554968b1f7e6d04b46fdda5f6f69419132e5f9e9d600001",
+      "tierE__holdout.parquet": "3ff60b8feb0b17bed4605ca4888d2b9232bdf9070603a4fef9a807fbcfa2ff39",
+      "tierE__tp_post_harvest.json": "f808ec570aaa1f0d7fa4957b3c8f5a35edb009c93dc2851a46f780673be967b0",
+      "tierE__tp_post_harvest.parquet": "d4ca3228c1804633742107b080fedd19232320deae699b1cf4a329b2c935af00",
+      "tierE__tuning.json": "4c63e1268679aaed66a1ab4dd68077b5b5b8a1818eb03db65be0e1700a2b93c5",
+      "tierE__tuning.parquet": "843f099c0f16fc4ee819a80b6e1aef06e68472f0fb32ec8f5920bbbc874585ee",
+      "tierE__unguarded.json": "70b1c9ac3fb5a96dcfbc3ccfbbd68ffed9c3c710a64fc5a8bf6c75a68f15af30",
+      "tierE__unguarded.parquet": "71883c6db18da76be1a622a9e2da7d7272a2f9997bfed35010d2b156c3d19ed9"
+    },
+    "n": {
+      "base": 200,
+      "scored": 200,
+      "tierE__frozen3": 200,
+      "tierE__holdout": 77,
+      "tierE__tp_post_harvest": 200,
+      "tierE__tuning": 123,
+      "tierE__unguarded": 200
+    },
+    "sum_net_r": {
+      "base": 40.80756457414756,
+      "scored": 36.81646971905991,
+      "tierE__frozen3": 45.673723680039956,
+      "tierE__holdout": 38.853474124553614,
+      "tierE__tp_post_harvest": 41.19640820232249,
+      "tierE__tuning": -2.037004405493704,
+      "tierE__unguarded": 36.79829646147887
+    }
+  },
+  "registration": "P-TP-RNG",
+  "report_sha256": "a79b4f0e972d7c11edd55d896f0f409910b8a84cedd4f58aba4241e66e2f06be",
+  "seed": 20260924,
+  "sha_kinds": {
+    "content_sha": "TB._content_sha of the frame as written (NOT the file bytes)",
+    "file_sha256": "sha256 of the file's BYTES on disk (shasum -a 256)"
+  },
+  "stage": "TC11-H",
+  "stage_tables": {
+    "content_sha": {
+      "tp_bars.parquet": "b63d4cc2b5bce342298aa5d32a607714f6b845eec9a7d16567065596a2410a78",
+      "tp_campaigns.parquet": "01ddd25a9ae33bbf4e2d14fe15d7526a1498c9bb3fd09d3cd9b0e069a2aa50cd",
+      "tp_exit_reasons.parquet": "199ec43e261f28dd047846582732884dd9e56136c763451fe3dc6a927b9424c3",
+      "tp_fills.parquet": "3f1743905f5f2d7a3379adb6bd1fb2be6f26a638b1146e287ca50eb40eecb67c",
+      "tp_picks.parquet": "4710ccbde5a71e4e167f042dd4657f652c776a628200fe52121d20e19678aa47",
+      "tp_reride.parquet": "fcbdb60136019ea3cc9294625fc45730439b64efde3796b348d90bb259b76289",
+      "tp_summary.parquet": "c508f99e20549402a71aa5cf531c60e15ef519c2ea53483f7c23fb07d8f925d1",
+      "tp_withheld.parquet": "f3d3c317bcfd099cf7516e9c7d8cee9d5dca8b9d5b2b8d942ae8e295cd4bad51"
+    },
+    "dir": "research_outputs/tierc11/stage_h",
+    "file_sha256": {
+      "STAGE_H.md": "a79b4f0e972d7c11edd55d896f0f409910b8a84cedd4f58aba4241e66e2f06be",
+      "tp_bars.parquet": "e20f972bdfc7deade4bf0142097b06b2a4f5491a9d095d019a2aec1a35bd7292",
+      "tp_campaigns.parquet": "2775065c2e30346b0e1d16d6e2a6f724aeaf61597b08fc4c1d3db0e298fd3f63",
+      "tp_exit_reasons.parquet": "e92b79f94b85f72c9efd43305fe5d6f2905ef50df0cde013df93209b9a4a2b2b",
+      "tp_fills.parquet": "1b00ce318a51922af4a49cef070c95ca91c94edc46ecbe77b136aa456c92c655",
+      "tp_picks.parquet": "6ca887db1ae246cc4aeb0bd9dbc3e396cd984291e93f9106fcaa1eecbe438ccd",
+      "tp_reride.parquet": "8edca15e086e07e3e57035047d76a9a810c541a42162a214a4cef388a1529cba",
+      "tp_summary.parquet": "fa8e7a4e89076c3d8dc5aa0d956d897600181a6207f0daa0cdcf48eb0f158512",
+      "tp_withheld.parquet": "6a773757bbd1f57c4cc3210a9e96c9c32420725b94435457c329b1308cb99830"
+    },
+    "keys": {
+      "tp_bars": [
+        "scale_kind",
+        "symbol",
+        "entry_ms",
+        "bar_open_ms"
+      ],
+      "tp_campaigns": [
+        "symbol",
+        "entry_ms"
+      ],
+      "tp_exit_reasons": [
+        "cell"
+      ],
+      "tp_fills": [
+        "book",
+        "symbol",
+        "entry_ms"
+      ],
+      "tp_picks": [
+        "asset"
+      ],
+      "tp_reride": [
+        "asset"
+      ],
+      "tp_summary": [
+        "cell"
+      ],
+      "tp_withheld": [
+        "cell"
+      ]
+    },
+    "rows": {
+      "tp_bars": 8414,
+      "tp_campaigns": 200,
+      "tp_exit_reasons": 25,
+      "tp_fills": 109,
+      "tp_picks": 5,
+      "tp_reride": 6,
+      "tp_summary": 90,
+      "tp_withheld": 24
+    }
+  },
+  "substrate": "tc11_20260925",
+  "tier": "TIER-C11"
+}

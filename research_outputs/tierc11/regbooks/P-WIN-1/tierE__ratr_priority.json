@@ -1,0 +1,26 @@
+{
+  "arm": "tierE__ratr_priority",
+  "as_of": "2026-09-25T00:00:00Z",
+  "book_sha256": "a10416bd49c47a08766078e075a1f4187f75aa36f3a29ef521cfc5698403a7f3",
+  "book_sha256_law": "sha256 of the UTF-8 canonical CSV of the 16 required columns in interface order, rows sorted by (symbol, entry_close_ms) (mergesort), header = the column names joined by ',', one row per line joined by ',', '\\n' after every line (the last included); int columns and direction as str(int), floats as repr(float), strings verbatim (no ',' or newline allowed)",
+  "description": "L-G.3 within-window PRIORITY book: replay9's loop; a window whose first 12/26 trigger has r_over_atr > 2.2 is passed and its entry is the first later same-direction 12/26 cross before the window closes with the asset flat and r_over_atr <= 2.2; ridden by tierc11_ride.ride11 from its 4h close; 18 substitutions (priority_substitute)",
+  "era_scope": "full",
+  "gates": "nothing",
+  "haircut_law": "AM-7: haircut_net_r = net_r - fee_r x (slip_bps_side / taker_bps_side); fee_r = the ride's taker fee over every fill / r_dist; slip_bps_side = the stem's charter tier (A 2 / B 5 / C 10) from E.fees(); taker 5.0 bps/side",
+  "kind": "tierE",
+  "n": 165,
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-WIN-1",
+  "ruler": "two_sample",
+  "seed": 20260924,
+  "selection_not_a_result": "a SELECTION, not a result",
+  "source_script": "scripts/tierc11_stage_g.py",
+  "sum_net_r": 18.392480226910806,
+  "tier": "TIER-E"
+}

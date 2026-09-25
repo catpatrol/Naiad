@@ -1,0 +1,37 @@
+{
+  "arm": "scored",
+  "book_sha256": "c76358dfaeb034ddc679f74f0f26f40eca9a88bcbb48c5c62bcac45f5b4ec311",
+  "description": "P-BRK-4H scored arm: 4h macro death (calibrated 4h pick) -> the FIRST retest that HOLDS on tap-89 (1.0 ATR / 3 bars / ttl 400) -> entry at the touch+hold close, direction = the death direction; tide aligned at the entry bar's close; stop BK.brk_stop (retest extreme touch..entry -/+ 0.5 ATR, railed R >= 1.0 ATR(4h)); BK.ride_leg_l(ribbon=None) pure v6; one position per asset; CLASSIC5, full corridor, vs zero [L-T.1]",
+  "era_scope": "full",
+  "extra": {
+    "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+    "book_sha_law": "sha256 over UTF-8 bytes of a canonical CSV: header = the 16 required columns in interface order joined by ','; rows sorted by (symbol, entry_close_ms) (mergesort); ints as str(int), direction as str(int), floats as repr(float) (full precision), strings as str; fields joined by ',', lines by '\\n', a trailing '\\n'",
+    "haircut_law": "AM-7: haircut_net_r = net_r - fee_r x (slip_bps_side / 5.0)",
+    "honesty_label_required": "IN-SAMPLE RE-SCORE, NOT CONFIRMATORY (selection_hazard: the best of 7,920 TC10 census cells; SCALE-IN-SAMPLE: tuning-calibrated 4h scale) [L-1.4, L-R.2]",
+    "key": [
+      "symbol",
+      "entry_ms"
+    ],
+    "label": "book, not a verdict",
+    "lane": "brk-4h",
+    "lens": "4h",
+    "loao_bar_above_half": "3/5",
+    "panel_name": "CLASSIC5",
+    "scale_kind": "calibrated",
+    "source": "scan_tap89",
+    "sum_haircut_net_r": 10.339802657960742
+  },
+  "kind": "scored",
+  "n": 322,
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-BRK-4H",
+  "ruler": "vs_zero",
+  "source_script": "scripts/tierc11_stage_t_brk.py",
+  "sum_net_r": 16.185338266900267
+}

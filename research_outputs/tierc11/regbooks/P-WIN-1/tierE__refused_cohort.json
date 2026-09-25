@@ -1,0 +1,26 @@
+{
+  "arm": "tierE__refused_cohort",
+  "as_of": "2026-09-25T00:00:00Z",
+  "book_sha256": "7a97b32895c78324c22dacc563efdec38e98ffa8fe196f0e9629d5ed6b3bacf6",
+  "book_sha256_law": "sha256 of the UTF-8 canonical CSV of the 16 required columns in interface order, rows sorted by (symbol, entry_close_ms) (mergesort), header = the column names joined by ',', one row per line joined by ',', '\\n' after every line (the last included); int columns and direction as str(int), floats as repr(float), strings verbatim (no ',' or newline allowed)",
+  "description": "the REFUSED cohort of P-WIN-1 (lag >= 16): n / mean / ΣR printed on the gate row [L-1.5]",
+  "era_scope": "full",
+  "gates": "nothing",
+  "haircut_law": "AM-7: haircut_net_r = net_r - fee_r x (slip_bps_side / taker_bps_side); fee_r = the ride's taker fee over every fill / r_dist; slip_bps_side = the stem's charter tier (A 2 / B 5 / C 10) from E.fees(); taker 5.0 bps/side",
+  "kind": "tierE",
+  "n": 63,
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-WIN-1",
+  "ruler": "vs_zero",
+  "seed": 20260924,
+  "selection_not_a_result": "a SELECTION, not a result",
+  "source_script": "scripts/tierc11_stage_g.py",
+  "sum_net_r": -11.166454053043058,
+  "tier": "TIER-E"
+}

@@ -1,0 +1,23 @@
+{
+  "arm": "scored",
+  "as_of": "2026-09-25T00:00:00Z",
+  "book_sha256": "d008fa5086ce14f578403c083169e28c5870701fd37f3cb2b03c5474f04f22d8",
+  "book_sha256_law": "sha256 of the UTF-8 canonical CSV of the 16 required columns in interface order, rows sorted by (symbol, entry_close_ms) (mergesort), header = the column names joined by ',', one row per line joined by ',', '\\n' after every line (the last included); int columns and direction as str(int), floats as repr(float), strings verbatim (no ',' or newline allowed)",
+  "description": "v6 minus the campaigns whose ENTRY-bar tide streak (tierc7_lab_regime.tide_streak) >= the trailing q75 edge (B4 OLD; tierc9._trailing_edges over CLASSIC5 4h bars with open <= the entry bar, >= 30 bars) [L-G.1]; a post-filter [L-1.5]",
+  "era_scope": "full",
+  "haircut_law": "AM-7: haircut_net_r = net_r - fee_r x (slip_bps_side / taker_bps_side); fee_r = the ride's taker fee over every fill / r_dist; slip_bps_side = the stem's charter tier (A 2 / B 5 / C 10) from E.fees(); taker 5.0 bps/side",
+  "kind": "scored",
+  "n": 141,
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-AGE-1",
+  "ruler": "two_sample",
+  "seed": 20260924,
+  "source_script": "scripts/tierc11_stage_g.py",
+  "sum_net_r": 63.464130732724186
+}

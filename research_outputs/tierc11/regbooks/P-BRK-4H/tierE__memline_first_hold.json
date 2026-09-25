@@ -1,0 +1,39 @@
+{
+  "arm": "tierE__memline_first_hold",
+  "book_sha256": "9e11902a3d933cb77f39fc4be4d553131d7ab4022779f011e360b14e90a5d445",
+  "description": "the memory-line first-that-holds lane: the dead range's broken-side memory line (as-of boundary at die_i-1), same candidacy window, hold = no close through by 1.0 ATR over touch..touch+6, entry at the touch+6 close; everything else the scored rule",
+  "era_scope": "full",
+  "extra": {
+    "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+    "book_sha_law": "sha256 over UTF-8 bytes of a canonical CSV: header = the 16 required columns in interface order joined by ','; rows sorted by (symbol, entry_close_ms) (mergesort); ints as str(int), direction as str(int), floats as repr(float) (full precision), strings as str; fields joined by ',', lines by '\\n', a trailing '\\n'",
+    "haircut_law": "AM-7: haircut_net_r = net_r - fee_r x (slip_bps_side / 5.0)",
+    "key": [
+      "symbol",
+      "entry_ms"
+    ],
+    "label": "a SELECTION, not a result",
+    "lane": "brk-4h-memline",
+    "lens": "4h",
+    "loao_bar_above_half": "3/5",
+    "panel_name": "CLASSIC5",
+    "scale_kind": "calibrated",
+    "source": "scan_mem",
+    "sum_haircut_net_r": 63.94706575459665
+  },
+  "gates": "nothing",
+  "kind": "tierE",
+  "n": 186,
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-BRK-4H",
+  "ruler": "vs_zero",
+  "selection_not_a_result": "a SELECTION, not a result",
+  "source_script": "scripts/tierc11_stage_t_brk.py",
+  "sum_net_r": 66.7238002795728,
+  "tier": "TIER-E"
+}

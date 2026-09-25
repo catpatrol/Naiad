@@ -1,0 +1,26 @@
+{
+  "arm": "tierE__shadow_abs206",
+  "as_of": "2026-09-25T00:00:00Z",
+  "book_sha256": "2c1e47eec765be4a531205ff26dfb495d21efa42788fdea1c9d673b6e385d169",
+  "book_sha256_law": "sha256 of the UTF-8 canonical CSV of the 16 required columns in interface order, rows sorted by (symbol, entry_close_ms) (mergesort), header = the column names joined by ',', one row per line joined by ',', '\\n' after every line (the last included); int columns and direction as str(int), floats as repr(float), strings verbatim (no ',' or newline allowed)",
+  "description": "SHADOW absolute: v6 minus ENTRY-bar tide streak > 206 bars, exactly as written; 206 is the whole-corridor MEDIAN edge of the pooled CLASSIC5 streak, not the OLD edge, and it reads the corridor ahead (look-ahead); the OLD cut of record is the trailing q75 (B4)",
+  "era_scope": "full",
+  "gates": "nothing",
+  "haircut_law": "AM-7: haircut_net_r = net_r - fee_r x (slip_bps_side / taker_bps_side); fee_r = the ride's taker fee over every fill / r_dist; slip_bps_side = the stem's charter tier (A 2 / B 5 / C 10) from E.fees(); taker 5.0 bps/side",
+  "kind": "tierE",
+  "n": 80,
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-AGE-1",
+  "ruler": "two_sample",
+  "seed": 20260924,
+  "selection_not_a_result": "a SELECTION, not a result",
+  "source_script": "scripts/tierc11_stage_g.py",
+  "sum_net_r": 48.803986308375,
+  "tier": "TIER-E"
+}

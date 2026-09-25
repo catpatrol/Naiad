@@ -1,0 +1,39 @@
+{
+  "arm": "tierE__tuning",
+  "book_sha256": "831c53b34fc2ae1a42edd9918cf6722e34b098c24aabc5849bdcf6f235dcad98",
+  "description": "the scored book's TUNING slice (entry close <= 2024-06-30T23:59:59Z) [L-1.3]",
+  "era_scope": "tuning",
+  "extra": {
+    "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+    "book_sha_law": "sha256 over UTF-8 bytes of a canonical CSV: header = the 16 required columns in interface order joined by ','; rows sorted by (symbol, entry_close_ms) (mergesort); ints as str(int), direction as str(int), floats as repr(float) (full precision), strings as str; fields joined by ',', lines by '\\n', a trailing '\\n'",
+    "haircut_law": "AM-7: haircut_net_r = net_r - fee_r x (slip_bps_side / 5.0)",
+    "key": [
+      "symbol",
+      "entry_ms"
+    ],
+    "label": "a SELECTION, not a result",
+    "lane": "brk-4h",
+    "lens": "4h",
+    "loao_bar_above_half": "3/5",
+    "panel_name": "CLASSIC5",
+    "scale_kind": "calibrated",
+    "source": "slice:tuning",
+    "sum_haircut_net_r": -12.444184377535796
+  },
+  "gates": "nothing",
+  "kind": "tierE",
+  "n": 210,
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-BRK-4H",
+  "ruler": "vs_zero",
+  "selection_not_a_result": "a SELECTION, not a result",
+  "source_script": "scripts/tierc11_stage_t_brk.py",
+  "sum_net_r": -8.837788480830895,
+  "tier": "TIER-E"
+}

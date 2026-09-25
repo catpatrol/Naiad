@@ -1,0 +1,46 @@
+{
+  "arm": "base",
+  "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+  "book_sha256": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+  "book_sha256_law": "sha256 of the UTF-8 canonical CSV of the 16 required columns in REQ order, rows sorted by (symbol, entry_close_ms) (mergesort), header = the column names joined by ',', one row per line joined by ',', '\\n' after every line (the last included); int columns as str(int), direction as str(int), floats as repr(float) (shortest round-trip), strings verbatim (no ',' or newline allowed)",
+  "columns_required": [
+    "symbol",
+    "entry_ms",
+    "entry_close_ms",
+    "direction",
+    "entry_px",
+    "stop_px",
+    "r_dist",
+    "exit_close_ms",
+    "exit_reason",
+    "net_r",
+    "gross_r",
+    "fee_r",
+    "funding_r",
+    "haircut_net_r",
+    "era",
+    "lane"
+  ],
+  "description": "the v6 book (card v6, V6_ROLES, CLASSIC5, full TC11 corridor) in the regbook schema — the pairing base [L-1.5, L-1.6].",
+  "era_scope": "full",
+  "kind": "base",
+  "n": 200,
+  "pairing_key": [
+    "symbol",
+    "entry_ms"
+  ],
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-TP-RNG",
+  "ruler": "paired",
+  "scale_kind_12h": null,
+  "seed": 20260924,
+  "source_script": "scripts/tierc11_stage_h.py",
+  "sum_net_r": 40.80756457414756,
+  "tp_mode": null
+}

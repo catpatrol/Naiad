@@ -1,0 +1,47 @@
+{
+ "arm": "base",
+ "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+ "as_of_substrate": "tc11_20260925",
+ "book_sha256": "13feaf39a2fc25e62d29f9fbc035f7d6a15c8cab2b5e928392fd1a8249e39b72",
+ "campaign_lens": "4h",
+ "content_sha256": "a84ce938c40e9a9fce3f7267df1b7b90c2f96ebb3233775306d5355bd291085e",
+ "event_sources": {
+  "arm": "arm_close_ms",
+  "exit": "exit_stamp_ms",
+  "harvest": "harvest_close_ms",
+  "plus_1r": "latch_stamp_ms",
+  "plus_1r_post_event": "latch_post_event_ms"
+ },
+ "gates": "nothing",
+ "key": [
+  "scale_kind",
+  "symbol",
+  "entry_ms",
+  "instant_kind",
+  "instant_ms"
+ ],
+ "kind": "v6transform",
+ "law": "SR-6 R3 INSTANTS [L-R.5, AM-6]: every CLOSE of the campaign's own lens from its arm close (entry close for a book without arming) through its exit stamp of record; plus the named events \u2014 arm, entry, harvest, bell, add, a close exit at their CLOSE; +1R and an intrabar exit (stop / tp) at the OPEN of their bar for the 4h books (latch bar = latch_1r_open_ms, exit = exit_event_ms: the books' UNWALKED 4h ride) \u2014 their close-stamped twins are labelled 'post-event' (instant kinds plus_1r_post_event / exit_post_event); a campaign OPEN at the pin (corridor_end) is stamped 'as_of_pin', never 'exit'. Each row's stamp_law names its rule. The nest is N.nest_at(symbol, instants, scale) \u2014 per L read at the last CLOSED bar of L at or before the instant. SR-9 nest-book [L-R.5]: kinds v6transform (4h bars from the arm), lane4h (4h from the entry), relay (4h bars from the v6 arm \u2014 its stop, R, window and ride are 4h; its 1h entry instant is the named event 'entry'), scalp5m (5m bars from the entry). Columns read beyond the REGBOOK INTERFACE: arm = arm_close_ms | window_arm_close_ms | arm_ms + one lens bar (the arm bar's OPEN) | (v6transform) v6's own arm joined on the pairing key (symbol, entry_ms) [L-1.5]; kinds v6transform / relay start their bar closes there (a close event); exit = exit_stamp_ms (ride11's stamp of record) | exit_event_ms (the books' L-R.5 stamp) | derived: an intrabar reason (stop / tp / target) -> the OPEN of the lens bar holding exit_close_ms, a close reason (bell* / corridor_end / warn* / invalidation* / close*) -> exit_close_ms; any other reason HALTs; an exit stamp before exit_close_ms carries the close-stamped twin 'exit_post_event'; a corridor_end campaign (OPEN at the pin) is stamped 'as_of_pin', never 'exit'; +1R = latch_stamp_ms (+ latch_post_event_ms) | latch_1h_ms gated by latched_1h: the resolving 1h child's close, a PARENT-decided latch (latch_1h_by 'parent' | its parent bar listed in walk_mismatch_ms) -> the parent's OPEN with its close as the twin, an undecidable latch at a parent close HALTs | derived on the lens tape by the bar-OPEN law when reached_1r is True (v6transform / lane4h) | none; harvest = harvest_close_ms | harvest_ms + one lens bar | harvest_i on the lens tape (checked) | (v6transform) v6's own harvest close joined on the pairing key, checked per row against `harvested` and the exit stamp \u2014 gated by `harvested`; a close event inside (entry close, exit]; adds / others = add1_close_ms, add2_close_ms (close events; gated by n_adds); ev_<name>_ms (kind <name>, as given); UNSTAMPED = a campaign whose own record says an event happened (latched_1h / reached_1r True, harvested True, n_adds > k) but no source above stamps it is counted, and the door REFUSES to file (HALT naming the counts) [L-R.5 'plus the named events'].",
+ "n_campaigns": 200,
+ "n_rows": 19386,
+ "n_rows_by_kind": {
+  "arm": 400,
+  "bar_close": 17264,
+  "bell": 8,
+  "entry": 400,
+  "exit": 400,
+  "exit_post_event": 392,
+  "harvest": 110,
+  "plus_1r": 206,
+  "plus_1r_post_event": 206
+ },
+ "registration": "V6-PROBE",
+ "scales": [
+  "calibrated",
+  "frozen3.0"
+ ],
+ "selection_not_a_result": "a SELECTION, not a result",
+ "source_regbook": "<out>/nestbook_probe/V6-PROBE",
+ "source_script": "scripts/tierc11_stage_r.py nest-book",
+ "tier": "TIER-E"
+}

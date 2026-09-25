@@ -1,0 +1,23 @@
+{
+  "arm": "scored",
+  "as_of": "2026-09-25T00:00:00Z",
+  "book_sha256": "fd3f407ad6b1867039bb24a42816678e4992b9204ed65971058e48fa2bdabbfe",
+  "book_sha256_law": "sha256 of the UTF-8 canonical CSV of the 16 required columns in interface order, rows sorted by (symbol, entry_close_ms) (mergesort), header = the column names joined by ',', one row per line joined by ',', '\\n' after every line (the last included); int columns and direction as str(int), floats as repr(float), strings verbatim (no ',' or newline allowed)",
+  "description": "v6 minus campaigns with lag = entry_i - arm_i >= 16 (4h bars) [L-G.2]; a post-filter [L-1.5]",
+  "era_scope": "full",
+  "haircut_law": "AM-7: haircut_net_r = net_r - fee_r x (slip_bps_side / taker_bps_side); fee_r = the ride's taker fee over every fill / r_dist; slip_bps_side = the stem's charter tier (A 2 / B 5 / C 10) from E.fees(); taker 5.0 bps/side",
+  "kind": "scored",
+  "n": 137,
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-WIN-1",
+  "ruler": "two_sample",
+  "seed": 20260924,
+  "source_script": "scripts/tierc11_stage_g.py",
+  "sum_net_r": 51.97401862719062
+}

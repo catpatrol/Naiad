@@ -1,0 +1,51 @@
+{
+  "arm": "tierE__panel17",
+  "book_sha256": "761922c7fc32f0ef01ea86ebb427f31a22e070c0cc0f89a993301c96fded17cb",
+  "description": "the 17-asset view (CLASSIC5 + UNSEEN12), the scored rule unchanged; LOAO bar 9/17 (printed by the scorer, deciding nothing)",
+  "era_scope": "full",
+  "extra": {
+    "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+    "book_sha_law": "sha256 over UTF-8 bytes of a canonical CSV: header = the 16 required columns in interface order joined by ','; rows sorted by (symbol, entry_close_ms) (mergesort); ints as str(int), direction as str(int), floats as repr(float) (full precision), strings as str; fields joined by ',', lines by '\\n', a trailing '\\n'",
+    "haircut_law": "AM-7: haircut_net_r = net_r - fee_r x (slip_bps_side / 5.0)",
+    "key": [
+      "symbol",
+      "entry_ms"
+    ],
+    "label": "a SELECTION, not a result",
+    "lane": "brk-4h",
+    "lens": "4h",
+    "loao_bar_above_half": "9/17",
+    "panel_name": "PANEL17",
+    "scale_kind": "calibrated",
+    "source": "scan_tap89",
+    "sum_haircut_net_r": 70.32504340512499
+  },
+  "gates": "nothing",
+  "kind": "tierE",
+  "n": 762,
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT",
+    "ENAUSDT",
+    "PUMPUSDT",
+    "HYPEUSDT",
+    "MNTUSDT_BYBIT",
+    "SUIUSDT",
+    "LTCUSDT",
+    "XMRUSDT",
+    "BNBUSDT",
+    "UNIUSDT",
+    "1000PEPEUSDT",
+    "DOGEUSDT",
+    "1000BONKUSDT"
+  ],
+  "registration": "P-BRK-4H",
+  "ruler": "vs_zero",
+  "selection_not_a_result": "a SELECTION, not a result",
+  "source_script": "scripts/tierc11_stage_t_brk.py",
+  "sum_net_r": 89.24862161324104,
+  "tier": "TIER-E"
+}

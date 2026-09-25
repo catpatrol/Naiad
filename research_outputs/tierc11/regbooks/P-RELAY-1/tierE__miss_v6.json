@@ -1,0 +1,27 @@
+{
+  "arm": "tierE__miss_v6",
+  "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+  "book_sha256": "306b9ceebecb9e5141fb0cfa1b264f233fadea8876b26db3ae24f3947fde3edb",
+  "book_sha256_recipe": "sha256 of the UTF-8 CSV: header = the 16 required columns in interface order joined by ','; one line per row sorted by (symbol, entry_close_ms) (stable mergesort); ints as str(int), floats as repr(float), strings as is (csv.writer, QUOTE_MINIMAL, lineterminator '\\n')",
+  "description": "Tier-E MISS COLUMN book: what v6 did in the windows the relay never activated (the v6 campaigns entered in missed windows). a SELECTION, not a result.",
+  "era_scope": "full",
+  "gates": "nothing",
+  "kind": "tierE",
+  "label": "book, not a verdict",
+  "mean_net_r": 0.4117657412865427,
+  "n": 131,
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-RELAY-1",
+  "ruler": "vs_zero",
+  "seed": 20260924,
+  "selection_not_a_result": "a SELECTION, not a result",
+  "source_script": "scripts/tierc11_stage_t_relay.py",
+  "sum_net_r": 53.94131210853709,
+  "tier": "TIER-E"
+}

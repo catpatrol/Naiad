@@ -1,0 +1,46 @@
+{
+ "arm": "base",
+ "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+ "book_sha256": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+ "book_sha_law": "sha256 of a canonical CSV of the REQUIRED columns (in the order ['symbol', 'entry_ms', 'entry_close_ms', 'direction', 'entry_px', 'stop_px', 'r_dist', 'exit_close_ms', 'exit_reason', 'net_r', 'gross_r', 'fee_r', 'funding_r', 'haircut_net_r', 'era', 'lane']), rows sorted by (symbol, entry_close_ms); first line = the column names joined by ','; one line per row, fields joined by ','; floats as repr(float(x)), ints as str(int(x)), strings raw; every line ends '\\n'; UTF-8",
+ "description": "P-ADD-BRK · base: the v6 book (walked v6 ride, hooks off; identical to v6 at 0.000e+00), the paired comparison book [L-1.5, SA-4]",
+ "era_scope": "full",
+ "kind": "base",
+ "n": 200,
+ "paired_with": "base",
+ "pairing_key": [
+  "symbol",
+  "entry_ms"
+ ],
+ "panel": [
+  "BTCUSDT",
+  "ETHUSDT",
+  "SOLUSDT",
+  "NEARUSDT",
+  "ZECUSDT"
+ ],
+ "registration": "P-ADD-BRK",
+ "required_columns": [
+  "symbol",
+  "entry_ms",
+  "entry_close_ms",
+  "direction",
+  "entry_px",
+  "stop_px",
+  "r_dist",
+  "exit_close_ms",
+  "exit_reason",
+  "net_r",
+  "gross_r",
+  "fee_r",
+  "funding_r",
+  "haircut_net_r",
+  "era",
+  "lane"
+ ],
+ "ruler": "paired",
+ "scale_kind": "none (v6)",
+ "seed": 20260924,
+ "source_script": "scripts/tierc11_stage_a.py",
+ "sum_net_r": 40.807564574147555
+}

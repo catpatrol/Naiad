@@ -1,0 +1,24 @@
+{
+  "arm": "scored",
+  "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+  "book_sha256": "57d8bbef8190492d1df83a137977463ee441508e20a57cd81499c60258a53361",
+  "book_sha256_recipe": "sha256 of the UTF-8 CSV: header = the 16 required columns in interface order joined by ','; one line per row sorted by (symbol, entry_close_ms) (stable mergesort); ints as str(int), floats as repr(float), strings as is (csv.writer, QUOTE_MINIMAL, lineterminator '\\n')",
+  "description": "P-RELAY-1 scored arm: the 1h EMA9/12 with-trend relay entered inside the armed v6 4h window strictly before min(trigger, counter 12/89, 89/316-against) [L-T.2]; stop struct_stop_4h as of the last closed 4h bar, railed 1.0 ATR, R on 4h; ridden by RD.relay11 (walk_after=True) and booked by tierc7._account_chain; CLASSIC5, full corridor; two-sample vs the base arm.",
+  "era_scope": "full",
+  "kind": "scored",
+  "label": "book, not a verdict",
+  "mean_net_r": 0.4536400333079327,
+  "n": 173,
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-RELAY-1",
+  "ruler": "two_sample",
+  "seed": 20260924,
+  "source_script": "scripts/tierc11_stage_t_relay.py",
+  "sum_net_r": 78.47972576227235
+}

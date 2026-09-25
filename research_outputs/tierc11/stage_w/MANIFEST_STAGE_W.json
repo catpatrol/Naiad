@@ -1,0 +1,261 @@
+{
+  "as_of": "2026-09-25T00:00:00Z",
+  "as_of_close_ms": 1790294400000,
+  "book_sha_v6_live": "f3c68f544bcda52c909374105dabbdc773c9bffa4b66b2ef7e0f35ac9b369132",
+  "books_manifest_book_sha_v6": "f3c68f544bcda52c909374105dabbdc773c9bffa4b66b2ef7e0f35ac9b369132",
+  "changes_after_first_output": [
+    {
+      "first_output": "every triggered candidate window of v6's card, admission ignored",
+      "id": "CH-1",
+      "moved": "W2_RELAY_WINDOWS_TWIN and the armed_windows_not_entered rows of W2_RELAY_SUMMARY / W2_RELAY_HIST only (Tier-E, gates nothing); no net_r moved",
+      "now": "every ARMED window of v6's card (tide + displacement gates passed) holding no v6 campaign: triggered-not-entered (end = trigger close) or never triggered (end = the known window close, else the as-of)",
+      "what": "the (w7) twin population",
+      "why": "on this corridor the first population IS the v6 campaign set (200 triggered gate-passing windows == the 200 v6 windows, none refused by an open position; relay_twin_check), so the twin duplicated the population it stands beside"
+    },
+    {
+      "first_output": "the 1h-resolved exit instant (L-W.3)",
+      "id": "CH-2",
+      "moved": "that column and so each arm's book_sha256; no net_r / gross_r / fee_r / funding_r moved",
+      "now": "the CLOSE of the 4h exit bar (the estate's v6 schema); the exact 1h instant is the extra column exit_instant_ms",
+      "what": "the regbook column exit_close_ms",
+      "why": "books/v6_campaigns.parquet carries exit_close_ms as the 4h exit-bar close and the scorer's SC-7 F-BASE-IDENT compares the base arm to it column by column"
+    }
+  ],
+  "changes_note": "the builder's first-output files are not on disk; both changes are stated from the code's own law texts and the Stage W verifier's report (finding 2)",
+  "collar": {
+    "gates": "nothing",
+    "selection_not_a_result": "a SELECTION, not a result",
+    "tier": "TIER-E"
+  },
+  "condition": {
+    "book_mean": 0.20403782287073782,
+    "ci_hi": -0.5277942972642365,
+    "ci_lo": -0.9642874809705922,
+    "cohort_mean": -0.5246090853434552,
+    "cohort_n": 42,
+    "delta": -0.728646908214193,
+    "met": true,
+    "n_boot": 4000,
+    "seed": 20260924
+  },
+  "corridor": {
+    "hi_close": "2026-09-25T00:00:00Z",
+    "lo": "2019-09-08T16:00:00Z",
+    "panel": [
+      "BTCUSDT",
+      "ETHUSDT",
+      "SOLUSDT",
+      "NEARUSDT",
+      "ZECUSDT"
+    ]
+  },
+  "disclosures": {
+    "c3_strict": {
+      "c3_members": 109,
+      "c3_members_not_c3s": [],
+      "c3s_members": 109,
+      "members_first_event_not_strict": [
+        "BTCUSDT 2025-02-22T16:00:00Z",
+        "ETHUSDT 2026-04-03T08:00:00Z",
+        "NEARUSDT 2021-10-06T12:00:00Z"
+      ],
+      "n_first_event_not_strict": 3,
+      "note": "C3 is the reading of record for the W2 tables (w10, the first build's reading); C3S is printed beside it and decides nothing"
+    },
+    "ctrl_worst_walked": 0.0,
+    "events_on_mismatch_bars": 0,
+    "events_raw_instant_changes_class": 0,
+    "exit_resolved_by_base": {
+      "1h": 196,
+      "close": 4
+    },
+    "identity_rule": {
+      "acted": 42,
+      "n": 200,
+      "unacted": 158,
+      "worst": 0.0
+    },
+    "identity_walked": {
+      "acted": 0,
+      "n": 200,
+      "unacted": 200,
+      "worst": 0.0
+    },
+    "latch_readings_agree": 200,
+    "latch_vs_v6_reached_1r_agree": 200,
+    "n_walk_mismatch_base": 1,
+    "n_walk_mismatch_rule_book": 1,
+    "phase_counts": {
+      "AT-EXIT": 65,
+      "IN-TRADE": 1658,
+      "POST-EXIT": 50,
+      "PRE-ENTRY": 1914
+    },
+    "relay_twin_check": {
+      "triggered_equals_v6_set": true,
+      "triggered_gate_passing_windows": 200,
+      "triggered_not_entered": [],
+      "twin_windows_by_end_kind": {
+        "as_of": 1,
+        "window_close": 149
+      },
+      "v6_campaign_windows": 200,
+      "v6_not_in_triggered": []
+    },
+    "reride": {
+      "acted_campaigns_with_a_freed_slot_candidate": 0,
+      "first_per_campaign": [],
+      "freed_slot_candidates": 0,
+      "freed_slot_candidates_valid_stop": 0,
+      "law": "L-1.5: the freed slot admits NOTHING in the rule book; this count is the re-ride rival's disclosure (chain effects of a re-ride not ridden)"
+    },
+    "straddle_era_cut": {
+      "law": "L-1.3: a bar straddling the era cut (open <= 2024-06-30T23:59:59Z < close) is printed as a count",
+      "twin_window_end_bars": 0,
+      "v6_campaign_entry_bars": 0
+    },
+    "walk_mismatch_bars_ridden_rule_book": [
+      "ZECUSDT 2024-10-28T20:00:00Z"
+    ],
+    "warn_exit_on_v6_harvest_bar_close": [
+      {
+        "abs_px_diff": 0.0,
+        "key": "BTCUSDT 2026-01-01T04:00:00Z",
+        "rule_harvested": false,
+        "rule_net_r": -0.8933518569235634,
+        "v6_harvest_px": 88354.8,
+        "v6_net_r": -0.9886059573125963,
+        "warn_exit_instant": "2026-01-01T20:00:00Z",
+        "warn_exit_px": 88354.8
+      },
+      {
+        "abs_px_diff": 0.0,
+        "key": "ZECUSDT 2020-12-07T12:00:00Z",
+        "rule_harvested": false,
+        "rule_net_r": -0.8460798033978358,
+        "v6_harvest_px": 71.64,
+        "v6_net_r": -0.9398876718936358,
+        "warn_exit_instant": "2020-12-08T12:00:00Z",
+        "warn_exit_px": 71.64
+      }
+    ]
+  },
+  "float_precision": "stage_w tables: floats rounded to 6 dp at write (tierc2_baseline.write_table via TP.make_put); regbooks: full precision",
+  "input_sha": {
+    "funding/BTCUSDT.parquet": "a3d21e1f1a78930b9ca27132d4973f4f4cd4d3ab0639d33d949f25ad8722a77b",
+    "funding/ETHUSDT.parquet": "31120f82bd515bf664acedacfa86cb0867d309686c2db508f4977edf981767ed",
+    "funding/NEARUSDT.parquet": "593ac29381ca6c6432d3ce59f3134de000c7a1a428286a832835733b09adad50",
+    "funding/SOLUSDT.parquet": "63f3b205c1a88345c9c72bd4d9694b6349b069ce0ebbff93badebb9eabc37f8d",
+    "funding/ZECUSDT.parquet": "19a0080a11c5b3194a7be1a01e61f0f5ae244fc26be9a0e848dfcbeb7c6fa700",
+    "klines/BTCUSDT_4h.parquet": "281c3ac3195e5bb8de6b211573f77919bb2af2a342f71162426085f54bf37bfb",
+    "klines/ETHUSDT_4h.parquet": "e78895774de7d30ae06528060d97896a846975e26e1ceb7bdc6245ef70993fab",
+    "klines/NEARUSDT_4h.parquet": "e3fdd23041ffcdd3a55a8c24c9473389051d2c95d20a8c2d1fcb136144d04098",
+    "klines/SOLUSDT_4h.parquet": "6dfc049478f6e5fb8752c6211ebbda3b0c222afd95933d13b12b4d63e541d021",
+    "klines/ZECUSDT_4h.parquet": "1e054d71061f18be429907a0331eb43eb1aa26fa511ca01af581f428b8844935"
+  },
+  "keys": {
+    "P_WARN_1_COMPLEMENT": [
+      "cell"
+    ],
+    "W1_CAMPAIGNS": [
+      "symbol",
+      "entry_ms"
+    ],
+    "W1_EVENTS": [
+      "symbol",
+      "entry_ms",
+      "pair",
+      "h1_open_ms"
+    ],
+    "W1_TIMELINE": [
+      "symbol",
+      "entry_ms",
+      "bar_close_ms"
+    ],
+    "W2_COHORTS": [
+      "cell"
+    ],
+    "W2_FORWARD": [
+      "cell"
+    ],
+    "W2_PREENTRY": [
+      "cell"
+    ],
+    "W2_RELAY_HIST": [
+      "cell"
+    ],
+    "W2_RELAY_SUMMARY": [
+      "cell"
+    ],
+    "W2_RELAY_WINDOWS": [
+      "symbol",
+      "entry_ms"
+    ],
+    "W2_RELAY_WINDOWS_TWIN": [
+      "symbol",
+      "arm_ms",
+      "direction"
+    ]
+  },
+  "n_boot": 4000,
+  "readings": [
+    "[LEAN-HEPHAESTUS] L-W.2 events = 1h engine-EMA-of-close crosses 9/12, 12/26, 12/89 (RD.cross_1h), known at the 1h close where the fast line changes side; with = the trade's direction, counter = against.",
+    "[LEAN-HEPHAESTUS] L-W.1 visible at a 4h instant T iff the 1h close <= T.",
+    "[LEAN-HEPHAESTUS] L-W.3 IN-TRADE = entry close < taken < the 1h-resolved exit (RD exit_close_ms); PRE-ENTRY = arm close < taken <= entry close; before +1R = taken < the L-W.3 latch (RD plus1r_1h_ms; none = any in-trade); after = >=.",
+    "[LEAN-HEPHAESTUS] L-W.4 at-risk sets: before-+1R and pre-entry -> whole book; after-+1R -> reached +1R; 9/12 re-cross -> open 1h after entry; condition = T5.cluster_boot_diff(cohort C1, whole book, seed 20260924, n_boot 4000), MET iff cluster-90% hi < 0.",
+    "[LEAN-HEPHAESTUS] L-W.5 rule book = RD.transform_book(v6, walk=True, warn_of=RD.warn_of(12/89)); L-1.5 identity law on every campaign the rule never acted on.",
+    "[LEAN-HEPHAESTUS] L-W.6 relay evidence = the first 1h with-trend 12/26 cross with arm close < taken < the 4h trigger close, per v6 window.",
+    "[LEAN-HEPHAESTUS] (w1) an event on a mismatch bar is TAKEN at the parent's close [L-W.0]; (w5) the mark = the campaign exited at the event, booked by tierc7._account_chain; (w6) 9/12 at-risk = exit > entry close + 1h; (w7) every v6 window = the campaign windows; the armed windows holding no v6 campaign are a twin.",
+    "[LEAN-HEPHAESTUS] AM-7 haircut_net_r = net_r − fee_r × slip/taker per stem (E.fees()).",
+    "[LEAN-HEPHAESTUS] (w10) C3 '9/12 re-cross with trend after entry' = ANY in-trade with-trend 1h 9/12 cross (the reading of the first build, disclosed); C3S, printed beside and deciding nothing = the STRICT reading: a with-trend 9/12 cross whose preceding 9/12 cross on the 1h tape is a counter cross closing after the entry close.",
+    "[LEAN-HEPHAESTUS] (w11) AM-7's haircut twin beside every per-campaign net R (W1_CAMPAIGNS, W2_RELAY_WINDOWS) and the complement table's sums; L-1.3 entry bars straddling the era cut printed as a count (sidecars, STAGE_W.md)."
+  ],
+  "regbooks": {
+    "arms": {
+      "base": {
+        "book_sha256": "f41bfaf02b86dfb0b57dcffaf3c5f5e4bb05eda5c305b361322bc334369468a8",
+        "kind": "base",
+        "n": 200,
+        "sum_net_r": 40.807564574147555
+      },
+      "scored": {
+        "book_sha256": "956e15390419f8ab4a2f9e644f7a041f1b20708c83f41b744eec1d4965cf54e1",
+        "kind": "scored",
+        "n": 200,
+        "sum_net_r": 41.92324273608339
+      },
+      "tierE__holdout": {
+        "book_sha256": "9dd70a94cb2b2923e977a4c5eb7e0089c65ea85c96710a792211af3c2529323f",
+        "kind": "tierE",
+        "n": 77,
+        "sum_net_r": 41.58222762648051
+      },
+      "tierE__tuning": {
+        "book_sha256": "c41450b34294d820d841c68f17c7ee8b0648550dcc950506905adddf74270f04",
+        "kind": "tierE",
+        "n": 123,
+        "sum_net_r": 0.34101510960288284
+      }
+    },
+    "dir": "research_outputs/tierc11/regbooks/P-WARN-1",
+    "status": "BUILT"
+  },
+  "seed": 20260924,
+  "sha": {
+    "P_WARN_1_COMPLEMENT": "12355b7ff5b09e55091dbbeaaabdf1330f73a8d15cf05604b773f72ef77f7b17",
+    "W1_CAMPAIGNS": "efd27667ea0afaf9618fb87771994e0cf735ad8432f5ae6e2882db2104c92e00",
+    "W1_EVENTS": "4c8286410f330a6b76a729ea33bd66f586138c04bc6bfa2ff0255ea3c26b2c8d",
+    "W1_TIMELINE": "ebaff8ba4f712f8f86c82c395d729b5476d5b542a5c8cafeb40686bc01aae16f",
+    "W2_COHORTS": "2835ef0efa8248ee5564276c89a7aad00dba749f0ab906fbb7f8d6f6efd897e4",
+    "W2_FORWARD": "6f3adc7101364ab62c2b7d5f75bd30d2916b022b855ef5f76a252a22cc36f4cb",
+    "W2_PREENTRY": "8f849d17a0c21aae1640e83682e4755ee728bbac7eb541fadbaab571e161ab98",
+    "W2_RELAY_HIST": "25479e20075939542dc41f1d4b5bfa010b51fa04df5ef753b19085a3e61dbce4",
+    "W2_RELAY_SUMMARY": "692146562c3e967d1561dd6b3d308fc49cf95d4384ab1345703c85144c1a32cf",
+    "W2_RELAY_WINDOWS": "3809a15900c1e609314fb54cf0c567fc167678447e8969a99dc4411b3cb9169b",
+    "W2_RELAY_WINDOWS_TWIN": "0f4da63a765374bff57a0a925d397482b2b874e227c0e4bfd78be048b1f42f3f"
+  },
+  "skipped_empty": [],
+  "stage": "TC11-W",
+  "substrate": "tc11_20260925",
+  "tier": "TIER-C11"
+}

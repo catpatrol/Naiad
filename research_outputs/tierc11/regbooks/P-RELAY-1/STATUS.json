@@ -1,0 +1,15 @@
+{
+  "arms": [
+    "scored",
+    "base",
+    "tierE__late_relay",
+    "tierE__tuning_slice",
+    "tierE__holdout_slice",
+    "tierE__miss_v6"
+  ],
+  "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+  "reason": "the relay book and its base / Tier-E arms were built on the TC11 corridor exactly as L-T.2 reads (no precondition or condition)",
+  "registration": "P-RELAY-1",
+  "source_script": "scripts/tierc11_stage_t_relay.py",
+  "status": "BUILT"
+}

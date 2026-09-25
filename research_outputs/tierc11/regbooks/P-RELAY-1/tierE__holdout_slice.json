@@ -1,0 +1,27 @@
+{
+  "arm": "tierE__holdout_slice",
+  "as_of_last_closed_4h": "2026-09-25T00:00:00Z",
+  "book_sha256": "7e975ad781e3e31f15b3ff082443d33cfb516b529849d36efbea6027090b3fb4",
+  "book_sha256_recipe": "sha256 of the UTF-8 CSV: header = the 16 required columns in interface order joined by ','; one line per row sorted by (symbol, entry_close_ms) (stable mergesort); ints as str(int), floats as repr(float), strings as is (csv.writer, QUOTE_MINIMAL, lineterminator '\\n')",
+  "description": "Tier-E: the scored arm's campaigns whose entry close is in the holdout era; compare with base rows of era 'holdout'. a SELECTION, not a result.",
+  "era_scope": "holdout",
+  "gates": "nothing",
+  "kind": "tierE",
+  "label": "book, not a verdict",
+  "mean_net_r": 0.7185449923706411,
+  "n": 59,
+  "panel": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "NEARUSDT",
+    "ZECUSDT"
+  ],
+  "registration": "P-RELAY-1",
+  "ruler": "two_sample",
+  "seed": 20260924,
+  "selection_not_a_result": "a SELECTION, not a result",
+  "source_script": "scripts/tierc11_stage_t_relay.py",
+  "sum_net_r": 42.39415454986782,
+  "tier": "TIER-E"
+}
