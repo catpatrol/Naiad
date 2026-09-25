@@ -1,0 +1,74 @@
+{
+  "tier": "TIER-C11",
+  "identity": "v2",
+  "branch": "v12-v1-census",
+  "head_at_r0": "b9ed9532651102d247af3b1f74b0a340ffb05db2",
+  "seed": 20260924,
+  "substrate": "tc11_20260925 (being built by TC11-D)",
+  "as_of_of_record": "2026-09-25T00:00:00Z",
+  "as_of_last_closed_4h_close_ms": 1790294400000,
+  "contract_of_record": {
+    "path": "exchange/queue/2026-09-24_TC11_APOLLO.md",
+    "sha256": "bb38e016a8f3e55ca3bcc09fec53ba6b8dc40accb60d054f8163d033a898f835"
+  },
+  "leans_of_record": {
+    "path": "research_outputs/tierc11/LEANS.md",
+    "sha256": "655e1605165e7a66c67f544e5cda421b46aa0b6fcd4cb97a6ad19654479f294f"
+  },
+  "registrations_of_record": {
+    "path": "research_outputs/tierc11/registrations/REGISTRATIONS.json",
+    "sha256": "648834bf30e20e92713bddef2374ddef1aae843f4d8ba152fc50166c8cc6f1ee",
+    "head": "6772568b31fcfb2d56eb8c80b66dedee4fb5082673369e872972df8f475ec8f9"
+  },
+  "live_cache_touched": false,
+  "r0_census_utc": "2026-09-25T00:30:00Z",
+  "r0_census": "fresh tier: no tierc11 artifact existed before STEP Q (b9ed953); nothing to verify or quarantine. TC10 CLOSE is PARTIAL (operator's close_acts.sh not run): the TC10 build doc is absent from exchange/reports and LEDGER_APOLLO has no TC10 block \u2014 TC11 builds on TC10's filed artifacts read-only and its CLOSE is ordered after TC10's (LEANS L-F.4).",
+  "law_1_note": "a stage is COMPLETE only if its artifacts exist, manifest shas verify, and its fixtures RE-PASS now.",
+  "resume_point": "TC11-D (snapshot + pin) then TC11-R",
+  "stages": [
+    {
+      "stage": "STEP Q",
+      "status": "COMPLETE-VERIFIED",
+      "as_of": null,
+      "blockers": [],
+      "artifact_shas": {
+        "exchange/queue/2026-09-24_TC11_APOLLO.md": {
+          "bytes": 8442,
+          "sha256": "bb38e016a8f3e55ca3bcc09fec53ba6b8dc40accb60d054f8163d033a898f835"
+        }
+      },
+      "fixtures": [],
+      "one_line": "contract filed verbatim, commit b9ed953, sha bb38e016\u2026"
+    },
+    {
+      "stage": "TC11-REG",
+      "status": "COMPLETE-VERIFIED",
+      "as_of": null,
+      "blockers": [],
+      "artifact_shas": {
+        "research_outputs/tierc11/LEANS.md": {
+          "bytes": 40646,
+          "sha256": "655e1605165e7a66c67f544e5cda421b46aa0b6fcd4cb97a6ad19654479f294f"
+        },
+        "research_outputs/tierc11/registrations/REGISTRATIONS.json": {
+          "bytes": 34228,
+          "sha256": "648834bf30e20e92713bddef2374ddef1aae843f4d8ba152fc50166c8cc6f1ee"
+        },
+        "research_outputs/tierc11/registrations/REGISTRY_PIN.json": {
+          "bytes": 308,
+          "sha256": "ea77921a410db962376412a5f179fd3d9225f81fb5405a788c8077cd46de748f"
+        },
+        "research_outputs/tierc11/review/LEANS_REVIEW_2026-09-25.json": {
+          "bytes": 96079,
+          "sha256": "a6c4afcf91683b9319a701bdb70d60154022d667165e735464ea7b72c1a318a9"
+        },
+        "scripts/tierc11_registrations.py": {
+          "bytes": 17788,
+          "sha256": "55cc090e811337100ed63a3c66aab28774579ce8b97bb0d685be933c84a82800"
+        }
+      },
+      "fixtures": [],
+      "one_line": "executor readings (LEANS.md, ~50 readings) revised after a five-lens adversarial review (51 findings: 50 accepted, 1 rejected with reason, \u00a710) and the nine registrations filed write-once (texts sliced from the contract by line; operative specs beside; hash chain head 6772568b\u2026) BEFORE any TC11 range or trade book was computed."
+    }
+  ]
+}

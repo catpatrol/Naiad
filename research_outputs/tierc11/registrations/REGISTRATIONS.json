@@ -1,0 +1,585 @@
+{
+  "tier": "TIER-C11",
+  "contract": {
+    "path": "exchange/queue/2026-09-24_TC11_APOLLO.md",
+    "sha256": "bb38e016a8f3e55ca3bcc09fec53ba6b8dc40accb60d054f8163d033a898f835"
+  },
+  "leans": {
+    "path": "research_outputs/tierc11/LEANS.md",
+    "sha256": "655e1605165e7a66c67f544e5cda421b46aa0b6fcd4cb97a6ad19654479f294f"
+  },
+  "family_m": 9,
+  "family_q": 0.1,
+  "family_bar": 0.011111,
+  "seed": 20260924,
+  "registrations": [
+    {
+      "registration": "P-WARN-1",
+      "seq": 1,
+      "prior_pct": 40,
+      "family_m": 9,
+      "family_bar": 0.011111,
+      "seed": 20260924,
+      "text_of_record": " P-WARN-1 [40%, CONDITIONAL]: IF W2's \"1h counter-12/89 before +1R\" cohort's E[net] is below the\n    base by a cluster-90% interval excluding zero, score the rule \"exit at the 1h counter-12/89 close\n    while pre-+1R\" paired vs v6; ELSE report-only, no slot spent, stated.",
+      "text_lines": [
+        40,
+        42
+      ],
+      "context_of_record": [
+        {
+          "lines": [
+            33,
+            39
+          ],
+          "text": "STAGE W · EARLY WARNINGS FROM THE 1H CROSSES (Tier-E → one conditional registration)\n W1 stamp every 4h campaign's timeline with 1h events: 9/12, 12/26, 12/89 crosses (with/against the\n    trade), only 1h bars CLOSED before the 4h bar closes (F-WARN-ASOF).\n W2 tables: P(win) and E[net R] given {1h counter-12/89 before +1R · 1h counter-12/26 before +1R ·\n    1h 9/12 re-cross with trend after entry · 1h counter-12/89 after +1R} vs the base rate; also the\n    SAME events as PRE-ENTRY conditions: does a 1h 12/26 with-trend cross inside the open 4h window\n    precede the 4h trigger, and by how many bars (the relay's evidence)."
+        }
+      ],
+      "operative_spec": {
+        "kind": "CONDITIONAL exit rule",
+        "panel": "CLASSIC5",
+        "era": "full corridor",
+        "ruler": "paired (set kept; HALT unless key sets identical)",
+        "base": "card-v6 (the same campaigns, v6 exits)",
+        "condition": "cohort = v6 campaigns with an IN-TRADE counter EMA12/EMA89 1h cross (1h close > entry close, strictly before the 1h-resolved exit, not on the stop child) before the +1R latch (L-W.3); delta = mean(cohort) - mean(whole v6 book) by T5.cluster_boot_diff seed 20260924; MET iff the cluster-90% hi < 0 (L-W.4). NOT MET -> report-only, no slot spent, stated; the rule book is then printed only as a collared Tier-E row.",
+        "scored_arm": "v6 campaigns walked on 1h children (L-W.0 walk law); on each child STOP -> +1R latch -> at the close, if pre-+1R and a counter EMA12/EMA89 cross closed, exit at that 1h close; v6 BELL/HARVEST/TRAIL at 4h closes unchanged; identity law on untouched campaigns [L-W.5]",
+        "tier_e_arms": [
+          "tuning slice",
+          "holdout slice",
+          "complement comparison",
+          "forward leg E[final - marked at event]"
+        ],
+        "leans": [
+          "L-W.0",
+          "L-W.1",
+          "L-W.2",
+          "L-W.3",
+          "L-W.4",
+          "L-W.5",
+          "L-1.5"
+        ]
+      },
+      "verdict_rule": "verdict_of_record = SUPPORTED iff (a) the cluster-90% CI lower bound > 0 AND (b) one-sided p <= 0.10/9 = 0.011111 (asset-cluster bootstrap by scripts/tierc11_score.py, T5 primitives, N_BOOT 4000, seed 20260924; sensitivity seed 20260816 beside); else NOT SUPPORTED. LOAO printed beside, deciding nothing. m = 9 in every case; a registration closed by its own precondition or condition prints its reason, spends no test and never loosens the bar. A registration carrying pre_seen or selection_hazard prints '<verdict> — IN-SAMPLE RE-SCORE, NOT CONFIRMATORY (<hazard>)'. A paired row HALTs (no verdict) unless the key sets are identical. Tier-E arms carry no verdict word. [LEANS L-1.4, L-1.5]",
+      "text_sha256": "9dc01fefcccd82eb355a8b9c59b7803d26d7a07f9af56dfe7bc44af24b98a605",
+      "sha256": "c6121ba9330a40bd31fd0dd1f78303b940417d3ac1f3a9eba8750979f84f0c99"
+    },
+    {
+      "registration": "P-AGE-1",
+      "seq": 2,
+      "prior_pct": 50,
+      "family_m": 9,
+      "family_bar": 0.011111,
+      "seed": 20260924,
+      "text_of_record": " P-AGE-1 [50%] tide-age gate, TRAILING-quantile definition (refuse the OLD band) vs v6; the absolute\n    definition (refuse age > 206 bars) printed as shadow.",
+      "text_lines": [
+        45,
+        46
+      ],
+      "context_of_record": [
+        {
+          "lines": [
+            44,
+            44
+          ],
+          "text": "STAGE G · ADMISSION GATES (registrations; each removes trades → two-sample)"
+        }
+      ],
+      "operative_spec": {
+        "kind": "admission gate (post-filter)",
+        "panel": "CLASSIC5",
+        "era": "full corridor",
+        "ruler": "two-sample",
+        "base": "card-v6",
+        "scored_arm": "v6 book minus the campaigns whose ENTRY-bar tide streak (tierc7_lab_regime.tide_streak) is >= the trailing 75th-percentile edge (B4 OLD; tierc9._trailing_edges over CLASSIC5 4h bars with open <= the entry bar, >= 30 bars) [L-G.1]",
+        "tier_e_arms": [
+          "SHADOW absolute: refuse streak > 206 bars (the whole-corridor median edge, not the OLD edge; reads the corridor ahead)",
+          "tuning slice",
+          "holdout slice",
+          "disclosure: tierc9.tide_streak_age (arm bar, 3-state tide)",
+          "re-ride rival count (freed slots)",
+          "refused cohort n / mean / sum R"
+        ],
+        "pre_seen": "the scored cohort IS TC10 P_AGE_1_TIDE_YOUTH B4 (same function, same trailing edges, same 200 campaigns, anchored by F-CTRL(b)); point known before filing: gated n 141, +0.4567 vs +0.2087, delta ~ +0.2480 R; new information = the interval and campaigns entered after 2026-09-21T16:00Z (listed by count)",
+        "leans": [
+          "L-G.1",
+          "L-1.4",
+          "L-1.5"
+        ]
+      },
+      "verdict_rule": "verdict_of_record = SUPPORTED iff (a) the cluster-90% CI lower bound > 0 AND (b) one-sided p <= 0.10/9 = 0.011111 (asset-cluster bootstrap by scripts/tierc11_score.py, T5 primitives, N_BOOT 4000, seed 20260924; sensitivity seed 20260816 beside); else NOT SUPPORTED. LOAO printed beside, deciding nothing. m = 9 in every case; a registration closed by its own precondition or condition prints its reason, spends no test and never loosens the bar. A registration carrying pre_seen or selection_hazard prints '<verdict> — IN-SAMPLE RE-SCORE, NOT CONFIRMATORY (<hazard>)'. A paired row HALTs (no verdict) unless the key sets are identical. Tier-E arms carry no verdict word. [LEANS L-1.4, L-1.5]",
+      "text_sha256": "eeb058719de17172ca6ed7e5dc6192ee6a65219973507ccd2c8d72e37c7d57b1",
+      "sha256": "e01a89ea7e6fda864f7002a450abd1a4e92424c44d1a9626f6641814e7d35879"
+    },
+    {
+      "registration": "P-WIN-1",
+      "seq": 3,
+      "prior_pct": 50,
+      "family_m": 9,
+      "family_bar": 0.011111,
+      "seed": 20260924,
+      "text_of_record": " P-WIN-1 [50%] window-age gate: refuse triggers with arm→trigger lag ≥ 16 bars vs v6; lag 7–15\n    printed as shadow cut.",
+      "text_lines": [
+        47,
+        48
+      ],
+      "context_of_record": [
+        {
+          "lines": [
+            44,
+            44
+          ],
+          "text": "STAGE G · ADMISSION GATES (registrations; each removes trades → two-sample)"
+        }
+      ],
+      "operative_spec": {
+        "kind": "admission gate (post-filter)",
+        "panel": "CLASSIC5",
+        "era": "full corridor",
+        "ruler": "two-sample",
+        "base": "card-v6",
+        "scored_arm": "v6 book minus campaigns with entry_i - arm_i >= 16 (4h bars) [L-G.2]",
+        "tier_e_arms": [
+          "SHADOW cut: refuse lag 7..15",
+          "tuning slice",
+          "holdout slice",
+          "refused cohort n / mean / sum R",
+          "Tier-E r_over_atr > 2.2 admission + within-window priority book; 2x2x2 gates crossed [L-G.3]"
+        ],
+        "selection_hazard": "direction informed by TC6V L-LAG deciles on the same corridor (lag-0 +0.4149, 56-bar decile -0.5796); P-LAG-1 on the same question NOT MET (delta +0.0616 [-0.7819, +0.9566]); the 16 cut has no on-disk provenance; v6 lag 7-15 holds 4/200, so >=16 ~ >=7",
+        "leans": [
+          "L-G.2",
+          "L-G.3",
+          "L-1.4",
+          "L-1.5"
+        ]
+      },
+      "verdict_rule": "verdict_of_record = SUPPORTED iff (a) the cluster-90% CI lower bound > 0 AND (b) one-sided p <= 0.10/9 = 0.011111 (asset-cluster bootstrap by scripts/tierc11_score.py, T5 primitives, N_BOOT 4000, seed 20260924; sensitivity seed 20260816 beside); else NOT SUPPORTED. LOAO printed beside, deciding nothing. m = 9 in every case; a registration closed by its own precondition or condition prints its reason, spends no test and never loosens the bar. A registration carrying pre_seen or selection_hazard prints '<verdict> — IN-SAMPLE RE-SCORE, NOT CONFIRMATORY (<hazard>)'. A paired row HALTs (no verdict) unless the key sets are identical. Tier-E arms carry no verdict word. [LEANS L-1.4, L-1.5]",
+      "text_sha256": "c7fe848193d9b8fd239f74fdaf6483edf8f79b47d9ea47b2ba26bfd935f7a9b3",
+      "sha256": "d19a42a329be3bfeea73c3c628bf515f5d0fa2fb8facd3fcac795b0186525084"
+    },
+    {
+      "registration": "P-BRK-4H",
+      "seq": 4,
+      "prior_pct": 45,
+      "family_m": 9,
+      "family_bar": 0.011111,
+      "seed": 20260924,
+      "text_of_record": " P-BRK-4H [45%] the 4h breakout-retest lane: 4h macro death → first HOLD retest on the 89 tap (memory-\n    line printed beside); stop beyond retest extreme railed 1.0 ATR(4h); tide aligned; v6 management;\n    vs zero, five assets (seventeen Tier-E).",
+      "text_lines": [
+        52,
+        54
+      ],
+      "context_of_record": [
+        {
+          "lines": [
+            13,
+            15
+          ],
+          "text": " R1 LENSES: the twin (analytics/rangefinder_census.py, pins = TC10 sha) runs on {5m, 15m, 1h, 4h, 12h,\n    1d, 1w} × the five home assets (twelve new assets: 1h/4h/1d only, Tier-E). Macro scale self-\n    calibrated per asset per lens to 0.75 confirmed ranges/100 bars; every pin printed."
+        },
+        {
+          "lines": [
+            24,
+            25
+          ],
+          "text": " R4 THE TWO TRADES PER LENS, TIER-E, WHOLE: for L in {1h,4h,12h,1d}: (a) BREAKOUT = macro death →\n    first retest that HOLDS (band taps 89/127/200 and the memory-line, both printed); (b) SWING-FAILURE ="
+        },
+        {
+          "lines": [
+            51,
+            51
+          ],
+          "text": "STAGE T · TRIGGERS AND LANES"
+        }
+      ],
+      "operative_spec": {
+        "kind": "lane",
+        "panel": "CLASSIC5",
+        "era": "full corridor",
+        "ruler": "vs zero",
+        "base": null,
+        "scored_arm": "4h macro death (calibrated 4h scale, tuning-era pick) -> the FIRST retest that HOLDS on tap-89 (EMA-89 of 4h close; census RETEST_PINS margin 1.0 ATR, hold 3 bars, ttl 400; touches scanned in order within the candidacy window) -> entry at the touch+hold close; stop BK.brk_stop beyond the retest extreme, offset 0.5 ATR(4h), railed R >= 1.0 ATR(4h); tide aligned at the entry bar's close; v6 management (BK.ride_leg_l, ribbon=None, no 12/25 bell); one position per asset [L-T.1]",
+        "tier_e_arms": [
+          "17-asset view (LOAO bar 9/17)",
+          "memory-line first-that-holds lane (engine one-shot flip as its twin)",
+          "frozen-3.0 twin",
+          "one-shot first-touch twin",
+          "tuning slice",
+          "holdout slice"
+        ],
+        "selection_hazard": "the best of 7,920 TC10 census cells (4h retest-hold-tap89, CLASSIC5 NET H20 +0.681 ALL n 236 / +0.706 holdout n 88; UNSEEN12 +0.064 / +0.272); every era and asset was seen; the scored event (first-HOLD scan, tuning-calibrated scale) differs from the one-shot frozen-3.0 row that was selected",
+        "scale_in_sample": "SCALE-IN-SAMPLE: calibrated-scale range reads at instants <= the era cut are structurally in-sample (tuning-era calibration); the holdout-slice statistic and the frozen-3.0 twin are printed beside the verdict; pick stability printed [L-R.2]",
+        "leans": [
+          "L-T.1",
+          "L-R.2",
+          "L-R.6",
+          "L-1.4"
+        ]
+      },
+      "verdict_rule": "verdict_of_record = SUPPORTED iff (a) the cluster-90% CI lower bound > 0 AND (b) one-sided p <= 0.10/9 = 0.011111 (asset-cluster bootstrap by scripts/tierc11_score.py, T5 primitives, N_BOOT 4000, seed 20260924; sensitivity seed 20260816 beside); else NOT SUPPORTED. LOAO printed beside, deciding nothing. m = 9 in every case; a registration closed by its own precondition or condition prints its reason, spends no test and never loosens the bar. A registration carrying pre_seen or selection_hazard prints '<verdict> — IN-SAMPLE RE-SCORE, NOT CONFIRMATORY (<hazard>)'. A paired row HALTs (no verdict) unless the key sets are identical. Tier-E arms carry no verdict word. [LEANS L-1.4, L-1.5]",
+      "text_sha256": "47b2ad7a260f6e0a2936ff2056efe02f2f1305a4f47f2a3b2355289ed6e559b0",
+      "sha256": "120939d9d4a2092958fcc72c25db5036e981ca5ad4f1be0b4da4f0edb9ba1655"
+    },
+    {
+      "registration": "P-RELAY-1",
+      "seq": 5,
+      "prior_pct": 45,
+      "family_m": 9,
+      "family_bar": 0.011111,
+      "seed": 20260924,
+      "text_of_record": " P-RELAY-1 [45%] [\"relay\"]: 4h window open+armed; ENTRY on the 1h 9/12 with-trend close inside it;\n    stop = 4h pivot railed, R on 4h; miss column first-class (windows the relay never activates);\n    vs the 12/26-triggered base, two-sample.",
+      "text_lines": [
+        55,
+        57
+      ],
+      "context_of_record": [
+        {
+          "lines": [
+            51,
+            51
+          ],
+          "text": "STAGE T · TRIGGERS AND LANES"
+        },
+        {
+          "lines": [
+            101,
+            103
+          ],
+          "text": "VETOES BY NAME: \"nest\" (lens set / coincidence 0.25 ATR) · \"relay\" (1h, not 15m) · \"scalp\" (lower-third\n entry, target −0.25 ATR, no trail, no tide) · \"add\" (≤2 adds, 0.5 unit, post-+1R only) · \"tp\" (next-higher\n lens, in-range only)."
+        }
+      ],
+      "operative_spec": {
+        "kind": "trigger lane",
+        "panel": "CLASSIC5",
+        "era": "full corridor",
+        "ruler": "two-sample",
+        "base": "card-v6 (the 12/26-triggered base)",
+        "scored_arm": "ARMED per the posture word: entry at the first 1h close strictly after the v6 arm close and strictly before min(that window's v6 4h 12/26 trigger close, the window-close instant, a 4h 89/316-against close) on which EMA9 crosses EMA12 in the trade direction; windows whose 4h trigger closes first are MISSES; stop struct_stop_4h with pivots and ATR(4h) as of the last CLOSED 4h bar, railed 1.0 ATR(4h); R on 4h; the entry 4h bar's post-entry 1h children walked for STOP/+1R, then that bar's close runs v6's BELL/HARVEST/TRAIL slot with latches carried, then the v6 ride; one relay per window, one position per asset [L-T.2]",
+        "tier_e_arms": [
+          "miss column (windows never relayed; what v6 did in them)",
+          "lead distribution vs the 4h trigger",
+          "late-relay twin (relays allowed after the trigger)",
+          "tuning slice",
+          "holdout slice"
+        ],
+        "leans": [
+          "L-T.2",
+          "L-T.3",
+          "L-W.0"
+        ]
+      },
+      "verdict_rule": "verdict_of_record = SUPPORTED iff (a) the cluster-90% CI lower bound > 0 AND (b) one-sided p <= 0.10/9 = 0.011111 (asset-cluster bootstrap by scripts/tierc11_score.py, T5 primitives, N_BOOT 4000, seed 20260924; sensitivity seed 20260816 beside); else NOT SUPPORTED. LOAO printed beside, deciding nothing. m = 9 in every case; a registration closed by its own precondition or condition prints its reason, spends no test and never loosens the bar. A registration carrying pre_seen or selection_hazard prints '<verdict> — IN-SAMPLE RE-SCORE, NOT CONFIRMATORY (<hazard>)'. A paired row HALTs (no verdict) unless the key sets are identical. Tier-E arms carry no verdict word. [LEANS L-1.4, L-1.5]",
+      "text_sha256": "b089017bcc8b55035842b5950b58c6a28a227fa34712217c7d5197f42dfc8382",
+      "sha256": "e8f6d4595b449a18bfd7ef8d01ed89d0b1fe65c4ab2ecf8964fa84fc8028a59b"
+    },
+    {
+      "registration": "P-SCALP-2",
+      "seq": 6,
+      "prior_pct": 30,
+      "family_m": 9,
+      "family_bar": 0.011111,
+      "seed": 20260924,
+      "text_of_record": " P-SCALP-2 [30%] vs zero, five assets, holdout era, taker; the maker twin and the 17-asset view Tier-E.",
+      "text_lines": [
+        71,
+        71
+      ],
+      "context_of_record": [
+        {
+          "lines": [
+            16,
+            18
+          ],
+          "text": " R2 FEASIBILITY GATE PER LENS [Q-R3 law]: confirmed-range height ÷ round-trip toll (distribution) + the\n    edge-fade leg; PASS/FAIL printed per lens; a FAIL closes that lens for range trading in this and every\n    later tier unless the toll model changes (maker twin below is the only reopening path)."
+        },
+        {
+          "lines": [
+            61,
+            70
+          ],
+          "text": "STAGE S · THE SCALPER RETUNED [\"scalp\"]: trade the 5m 12/89 cross TOWARD the far 1h boundary.\n Preconditions: R2 must PASS at 1h (the 1h range is the target; if 1h ranges are not respected net of\n    toll, the mode is closed and the stage prints that verdict and stops).\n Form: a live CONFIRMED 1h macro range; price in the lower (upper) third of it; a 5m 12/89 cross\n    upward (downward) → enter at that 5m close; TARGET = the 1h range's far boundary minus 0.25 ATR_1h\n    (take-profit order); STOP = beyond the 5m structural pivot, railed 1.0 ATR_5m; invalidation also on a\n    1h boundary breach; no trail (this is a range trade — target or stop); 4h tide NOT required (range\n    trades are two-way inside balance).\n Twins on every row: taker toll (record) AND maker toll (limit fill at the 5m close, entry and target\n    only) — the reopening path. Regime gate printed: 5m ATR tercile, 1h boundary age."
+        },
+        {
+          "lines": [
+            101,
+            103
+          ],
+          "text": "VETOES BY NAME: \"nest\" (lens set / coincidence 0.25 ATR) · \"relay\" (1h, not 15m) · \"scalp\" (lower-third\n entry, target −0.25 ATR, no trail, no tide) · \"add\" (≤2 adds, 0.5 unit, post-+1R only) · \"tp\" (next-higher\n lens, in-range only)."
+        }
+      ],
+      "operative_spec": {
+        "kind": "lane (range trade)",
+        "panel": "CLASSIC5",
+        "era": "holdout",
+        "ruler": "vs zero",
+        "base": null,
+        "precondition": "R2 lens verdict of record at 1h (CLASSIC5 pooled, holdout, calibrated, taker) == PASS; otherwise CLOSED BY R2, not scored, no slot spent [L-S.1]",
+        "scored_arm": "live CONFIRMED 1h range (calibrated 1h scale) whose last closed 1h bar closed inside the as-of box; 5m close in its lower (upper) third; 5m EMA12/EMA89 cross up (down) -> entry at the 5m close; target far boundary -/+ 0.25 ATR_1h (frozen at entry; entry refused if the target is not beyond entry by > 10 bps); stop beyond the 5m (5,5) pivot, offset 0.5 ATR_5m, railed 1.0 ATR_5m; invalidation exit at the first 1h close beyond the entry-side boundary; within a 5m bar STOP -> TARGET -> invalidation; no trail; no tide; taker toll [L-S.2]",
+        "tier_e_arms": [
+          "maker twin, fill assumed (2.0 bps entry/target)",
+          "maker twin, fill conditioned",
+          "17-asset view",
+          "regime gate: 5m ATR tercile x 1h boundary-age tercile (trailing)",
+          "tuning slice",
+          "frozen-3.0 twin"
+        ],
+        "leans": [
+          "L-S.1",
+          "L-S.2",
+          "L-1.2",
+          "L-R.4"
+        ]
+      },
+      "verdict_rule": "verdict_of_record = SUPPORTED iff (a) the cluster-90% CI lower bound > 0 AND (b) one-sided p <= 0.10/9 = 0.011111 (asset-cluster bootstrap by scripts/tierc11_score.py, T5 primitives, N_BOOT 4000, seed 20260924; sensitivity seed 20260816 beside); else NOT SUPPORTED. LOAO printed beside, deciding nothing. m = 9 in every case; a registration closed by its own precondition or condition prints its reason, spends no test and never loosens the bar. A registration carrying pre_seen or selection_hazard prints '<verdict> — IN-SAMPLE RE-SCORE, NOT CONFIRMATORY (<hazard>)'. A paired row HALTs (no verdict) unless the key sets are identical. Tier-E arms carry no verdict word. [LEANS L-1.4, L-1.5]",
+      "text_sha256": "e55707ebad521fd887d090a55ff915170703c1109f1e57d34dab03f4b2395b9c",
+      "sha256": "c4e7ea0064bf0355804f311b8a2c91af1178de0ac9e705a417a1cc09b90bd250"
+    },
+    {
+      "registration": "P-ADD-BRK",
+      "seq": 7,
+      "prior_pct": 40,
+      "family_m": 9,
+      "family_bar": 0.011111,
+      "seed": 20260924,
+      "text_of_record": " P-ADD-BRK [40%]: add when a range ONE LENS BELOW the trade (1h for a 4h campaign) DIES in the trade's\n    direction after +1R has been touched.",
+      "text_lines": [
+        75,
+        76
+      ],
+      "context_of_record": [
+        {
+          "lines": [
+            73,
+            74
+          ],
+          "text": "STAGE A · ADDS, DECIDED [\"add\"] (adds keep the campaign set → paired vs v6; ≤ 2 adds; tranche 0.5 unit;\n each add stops with the campaign)"
+        },
+        {
+          "lines": [
+            79,
+            79
+          ],
+          "text": " Both printed against each other; neither promoted by the other's failure."
+        },
+        {
+          "lines": [
+            101,
+            103
+          ],
+          "text": "VETOES BY NAME: \"nest\" (lens set / coincidence 0.25 ATR) · \"relay\" (1h, not 15m) · \"scalp\" (lower-third\n entry, target −0.25 ATR, no trail, no tide) · \"add\" (≤2 adds, 0.5 unit, post-+1R only) · \"tp\" (next-higher\n lens, in-range only)."
+        }
+      ],
+      "operative_spec": {
+        "kind": "add rule",
+        "panel": "CLASSIC5",
+        "era": "full corridor",
+        "ruler": "paired (set kept; HALT unless key sets identical)",
+        "base": "card-v6",
+        "scored_arm": "v6 campaigns plus <= 2 adds of 0.5 unit at the 1h close of a 1h macro range death (calibrated 1h scale) whose breakout side is the trade's direction; the event IN-TRADE and after the +1R latch (1h path); booked by tierc7._account_chain (Add.i = the 4h bar containing the 1h close; exit at the campaign's exit price; the funding ceiling once on the total) [L-A.1, L-A.2]",
+        "tier_e_arms": [
+          "head-to-head vs P-ADD-SFP",
+          "frozen-3.0 twin",
+          "below-entry adds refused twin",
+          "post-harvest adds refused twin",
+          "tuning slice",
+          "holdout slice"
+        ],
+        "scale_in_sample": "SCALE-IN-SAMPLE: calibrated-scale range reads at instants <= the era cut are structurally in-sample (tuning-era calibration); the holdout-slice statistic and the frozen-3.0 twin are printed beside the verdict; pick stability printed [L-R.2]",
+        "leans": [
+          "L-A.1",
+          "L-A.2",
+          "L-W.0",
+          "L-W.3",
+          "L-1.5"
+        ]
+      },
+      "verdict_rule": "verdict_of_record = SUPPORTED iff (a) the cluster-90% CI lower bound > 0 AND (b) one-sided p <= 0.10/9 = 0.011111 (asset-cluster bootstrap by scripts/tierc11_score.py, T5 primitives, N_BOOT 4000, seed 20260924; sensitivity seed 20260816 beside); else NOT SUPPORTED. LOAO printed beside, deciding nothing. m = 9 in every case; a registration closed by its own precondition or condition prints its reason, spends no test and never loosens the bar. A registration carrying pre_seen or selection_hazard prints '<verdict> — IN-SAMPLE RE-SCORE, NOT CONFIRMATORY (<hazard>)'. A paired row HALTs (no verdict) unless the key sets are identical. Tier-E arms carry no verdict word. [LEANS L-1.4, L-1.5]",
+      "text_sha256": "8d2d0afb2c873b9d3bd643077527e2bce7c17391107bc82d216e93a3ca15faf0",
+      "sha256": "510e67de50923baf8b0d3feeb6638c4ae0fc04cebad1504c52a9602956f47797"
+    },
+    {
+      "registration": "P-ADD-SFP",
+      "seq": 8,
+      "prior_pct": 40,
+      "family_m": 9,
+      "family_bar": 0.011111,
+      "seed": 20260924,
+      "text_of_record": " P-ADD-SFP [40%]: add when a swing-failure CONFIRMS at the trend-side boundary of the 1h range (the\n    deviation back into range in the trade's favour) after +1R.",
+      "text_lines": [
+        77,
+        78
+      ],
+      "context_of_record": [
+        {
+          "lines": [
+            73,
+            74
+          ],
+          "text": "STAGE A · ADDS, DECIDED [\"add\"] (adds keep the campaign set → paired vs v6; ≤ 2 adds; tranche 0.5 unit;\n each add stops with the campaign)"
+        },
+        {
+          "lines": [
+            79,
+            79
+          ],
+          "text": " Both printed against each other; neither promoted by the other's failure."
+        },
+        {
+          "lines": [
+            101,
+            103
+          ],
+          "text": "VETOES BY NAME: \"nest\" (lens set / coincidence 0.25 ATR) · \"relay\" (1h, not 15m) · \"scalp\" (lower-third\n entry, target −0.25 ATR, no trail, no tide) · \"add\" (≤2 adds, 0.5 unit, post-+1R only) · \"tp\" (next-higher\n lens, in-range only)."
+        }
+      ],
+      "operative_spec": {
+        "kind": "add rule",
+        "panel": "CLASSIC5",
+        "era": "full corridor",
+        "ruler": "paired (set kept; HALT unless key sets identical)",
+        "base": "card-v6",
+        "scored_arm": "v6 campaigns plus <= 2 adds of 0.5 unit at the 1h close of a confirmed swing-failure in the trade's favour on a CONFIRMED 1h range (calibrated 1h scale): spring (bottom harden) for a long, upthrust (top harden) for a short; IN-TRADE and after the +1R latch; booked by tierc7._account_chain as P-ADD-BRK [L-A.1, L-A.3]",
+        "tier_e_arms": [
+          "head-to-head vs P-ADD-BRK",
+          "frozen-3.0 twin",
+          "below-entry adds refused twin",
+          "post-harvest adds refused twin",
+          "tuning slice",
+          "holdout slice"
+        ],
+        "scale_in_sample": "SCALE-IN-SAMPLE: calibrated-scale range reads at instants <= the era cut are structurally in-sample (tuning-era calibration); the holdout-slice statistic and the frozen-3.0 twin are printed beside the verdict; pick stability printed [L-R.2]",
+        "leans": [
+          "L-A.1",
+          "L-A.3",
+          "L-W.0",
+          "L-W.3",
+          "L-1.5"
+        ]
+      },
+      "verdict_rule": "verdict_of_record = SUPPORTED iff (a) the cluster-90% CI lower bound > 0 AND (b) one-sided p <= 0.10/9 = 0.011111 (asset-cluster bootstrap by scripts/tierc11_score.py, T5 primitives, N_BOOT 4000, seed 20260924; sensitivity seed 20260816 beside); else NOT SUPPORTED. LOAO printed beside, deciding nothing. m = 9 in every case; a registration closed by its own precondition or condition prints its reason, spends no test and never loosens the bar. A registration carrying pre_seen or selection_hazard prints '<verdict> — IN-SAMPLE RE-SCORE, NOT CONFIRMATORY (<hazard>)'. A paired row HALTs (no verdict) unless the key sets are identical. Tier-E arms carry no verdict word. [LEANS L-1.4, L-1.5]",
+      "text_sha256": "3d7dbbef66065052a1a5dc53681154c8058d3c8451c3860881bc6d6a337ed3a3",
+      "sha256": "ed4acdfe532b8c13f3700fa6a736a40a13b3cd3160e1f6618437428b18077c90"
+    },
+    {
+      "registration": "P-TP-RNG",
+      "seq": 9,
+      "prior_pct": 35,
+      "family_m": 9,
+      "family_bar": 0.011111,
+      "seed": 20260924,
+      "text_of_record": " P-TP-RNG [35%]: take-profit of the remainder at the approach (0.25 ATR) of the NEXT-HIGHER lens's range\n    boundary (12h boundary for a 4h campaign) when that lens is IN-RANGE; if the lens above is in\n    EXPANSION, no take-profit (let the trail run) — paired vs v6; the wall-exit lesson (tail cut) is the\n    named risk and the D15 tail ratio is printed on the row.",
+      "text_lines": [
+        83,
+        86
+      ],
+      "context_of_record": [
+        {
+          "lines": [
+            81,
+            82
+          ],
+          "text": "STAGE H · HARVEST AND TAKE-PROFIT TIED TO RANGE EVENTS\n keep: de-risk at the opposing 89/316 band (law)."
+        },
+        {
+          "lines": [
+            101,
+            103
+          ],
+          "text": "VETOES BY NAME: \"nest\" (lens set / coincidence 0.25 ATR) · \"relay\" (1h, not 15m) · \"scalp\" (lower-third\n entry, target −0.25 ATR, no trail, no tide) · \"add\" (≤2 adds, 0.5 unit, post-+1R only) · \"tp\" (next-higher\n lens, in-range only)."
+        }
+      ],
+      "operative_spec": {
+        "kind": "exit rule",
+        "panel": "CLASSIC5",
+        "era": "full corridor",
+        "ruler": "paired (set kept; HALT unless key sets identical)",
+        "base": "card-v6",
+        "scored_arm": "v6 campaigns; at each 4h bar, with the 12h as-of state at the bar's OPEN IN_RANGE, a resting limit for the remainder (the position still open: 1.0, or 0.5 after the v6 harvest) at the 12h far boundary -/+ 0.25 ATR_12h, live only when the prior 4h close is on the near side AND the level is beyond entry in the trade's favour by > 10 bps; fill at max(level, open) for a long, min(level, open) for a short; EXPANSION/NONE -> no TP; order STOP -> TP -> BELL -> HARVEST -> TRAIL; v6 harvest kept [L-H.1]",
+        "tier_e_arms": [
+          "D15 tail ratio on the row",
+          "tp-post-harvest twin (TP only after the harvest, 0.5 runner)",
+          "unguarded twin (no entry-side guard) + withheld-order counts",
+          "frozen-3.0 twin",
+          "tuning slice",
+          "holdout slice"
+        ],
+        "named_risk": "the wall-exit lesson: P-WALL-1 (TC6) delta -0.0331, tail ratio 0.9329 — loses by cutting the tail",
+        "scale_in_sample": "SCALE-IN-SAMPLE: calibrated-scale range reads at instants <= the era cut are structurally in-sample (tuning-era calibration); the holdout-slice statistic and the frozen-3.0 twin are printed beside the verdict; pick stability printed [L-R.2]",
+        "leans": [
+          "L-H.1",
+          "L-R.2",
+          "L-1.5"
+        ]
+      },
+      "verdict_rule": "verdict_of_record = SUPPORTED iff (a) the cluster-90% CI lower bound > 0 AND (b) one-sided p <= 0.10/9 = 0.011111 (asset-cluster bootstrap by scripts/tierc11_score.py, T5 primitives, N_BOOT 4000, seed 20260924; sensitivity seed 20260816 beside); else NOT SUPPORTED. LOAO printed beside, deciding nothing. m = 9 in every case; a registration closed by its own precondition or condition prints its reason, spends no test and never loosens the bar. A registration carrying pre_seen or selection_hazard prints '<verdict> — IN-SAMPLE RE-SCORE, NOT CONFIRMATORY (<hazard>)'. A paired row HALTs (no verdict) unless the key sets are identical. Tier-E arms carry no verdict word. [LEANS L-1.4, L-1.5]",
+      "text_sha256": "a3dc242d19128b7e9c10481427cda3d8f1aa3e55b7b6dd1a345aa26fe9a4c236",
+      "sha256": "ad12a44cd8aeb27cc9a1ab0c4225725462f597a6d1dfc621ddf1e06a484de808"
+    }
+  ],
+  "chain": [
+    {
+      "seq": 1,
+      "registration": "P-WARN-1",
+      "sha256": "c6121ba9330a40bd31fd0dd1f78303b940417d3ac1f3a9eba8750979f84f0c99",
+      "prev": "0000000000000000000000000000000000000000000000000000000000000000",
+      "line_sha256": "0db9a7e9d337ff55aca60b56a7b7e5973279cd19dfe17e71b7b690914f798f21"
+    },
+    {
+      "seq": 2,
+      "registration": "P-AGE-1",
+      "sha256": "e01a89ea7e6fda864f7002a450abd1a4e92424c44d1a9626f6641814e7d35879",
+      "prev": "0db9a7e9d337ff55aca60b56a7b7e5973279cd19dfe17e71b7b690914f798f21",
+      "line_sha256": "cb05950509bae39e8699fd874a96d752fb480f07ed70b343f8338d3466c38daa"
+    },
+    {
+      "seq": 3,
+      "registration": "P-WIN-1",
+      "sha256": "d19a42a329be3bfeea73c3c628bf515f5d0fa2fb8facd3fcac795b0186525084",
+      "prev": "cb05950509bae39e8699fd874a96d752fb480f07ed70b343f8338d3466c38daa",
+      "line_sha256": "f324eefccc49d84372dce46019a1e633e5a2d74ae80f8d2ecf7de63a262109ec"
+    },
+    {
+      "seq": 4,
+      "registration": "P-BRK-4H",
+      "sha256": "120939d9d4a2092958fcc72c25db5036e981ca5ad4f1be0b4da4f0edb9ba1655",
+      "prev": "f324eefccc49d84372dce46019a1e633e5a2d74ae80f8d2ecf7de63a262109ec",
+      "line_sha256": "627442c219dcb5870953bb32a0efb3a81e56edb25d0692233028fa35383cdcfc"
+    },
+    {
+      "seq": 5,
+      "registration": "P-RELAY-1",
+      "sha256": "e8f6d4595b449a18bfd7ef8d01ed89d0b1fe65c4ab2ecf8964fa84fc8028a59b",
+      "prev": "627442c219dcb5870953bb32a0efb3a81e56edb25d0692233028fa35383cdcfc",
+      "line_sha256": "b1c9e3a04fbd59db1439e0cf425d1b67fa36ea641f04252eaa66001ff0ec1748"
+    },
+    {
+      "seq": 6,
+      "registration": "P-SCALP-2",
+      "sha256": "c4e7ea0064bf0355804f311b8a2c91af1178de0ac9e705a417a1cc09b90bd250",
+      "prev": "b1c9e3a04fbd59db1439e0cf425d1b67fa36ea641f04252eaa66001ff0ec1748",
+      "line_sha256": "c0e48c4cf4b6566d38a090cd298832865cedcf8648a59a2a9a43606c27e8b4ae"
+    },
+    {
+      "seq": 7,
+      "registration": "P-ADD-BRK",
+      "sha256": "510e67de50923baf8b0d3feeb6638c4ae0fc04cebad1504c52a9602956f47797",
+      "prev": "c0e48c4cf4b6566d38a090cd298832865cedcf8648a59a2a9a43606c27e8b4ae",
+      "line_sha256": "cca5ef44ae93ccc18fdd251fd94f0044b989fbf228aafe55a1fd8e40d9fde62b"
+    },
+    {
+      "seq": 8,
+      "registration": "P-ADD-SFP",
+      "sha256": "ed4acdfe532b8c13f3700fa6a736a40a13b3cd3160e1f6618437428b18077c90",
+      "prev": "cca5ef44ae93ccc18fdd251fd94f0044b989fbf228aafe55a1fd8e40d9fde62b",
+      "line_sha256": "de17cd2bf73d1b29eddfb30972b6cdd6a733ee706d5f616dac20319c6efab2e0"
+    },
+    {
+      "seq": 9,
+      "registration": "P-TP-RNG",
+      "sha256": "ad12a44cd8aeb27cc9a1ab0c4225725462f597a6d1dfc621ddf1e06a484de808",
+      "prev": "de17cd2bf73d1b29eddfb30972b6cdd6a733ee706d5f616dac20319c6efab2e0",
+      "line_sha256": "6772568b31fcfb2d56eb8c80b66dedee4fb5082673369e872972df8f475ec8f9"
+    }
+  ],
+  "head": "6772568b31fcfb2d56eb8c80b66dedee4fb5082673369e872972df8f475ec8f9",
+  "law": "texts are the contract's own lines (frozen at STEP Q); operative specs are the executor's readings, filed before any TC11 book was computed; payload sha = sha256(json.dumps(body without shas, sort_keys, ensure_ascii=False)); chain line_sha256 over {seq, registration, sha256, prev}"
+}

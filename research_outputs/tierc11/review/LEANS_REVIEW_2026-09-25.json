@@ -1,0 +1,513 @@
+{
+  "summary": "Adversarial 5-lens review of the TC11 executor readings and registration specs before they are frozen",
+  "agentCount": 5,
+  "logs": [],
+  "result": [
+    {
+      "lens": "fidelity",
+      "findings": [
+        {
+          "target": "L-W.3 (and REGS P-WARN-1 'condition', which cites L-W.3)",
+          "severity": "BLOCKER",
+          "problem": "The contract splits W2 into post-entry cohorts ({counter-12/89 before +1R · counter-12/26 before +1R · 9/12 re-cross after entry · counter-12/89 after +1R}) and, separately, 'the SAME events as PRE-ENTRY conditions'. L-W.2 starts the 1h timeline at the ARM close, and L-W.3 defines 'before +1R' only as cross index < latch index, with no entry lower bound. Only the no-latch sentence says 'post-entry'. As written, any campaign that reaches +1R puts its arm-to-entry counter crosses into the 'before +1R' cohort. That cohort is P-WARN-1's condition. The rule it gates ('exit ... while pre-+1R') can never act on a cross that happens before entry.",
+          "scenario": "A v6 long with arm-to-trigger lag of 20 bars (63/200 v6 campaigns have lag >= 16) gets a 1h 12/89 crossunder during the pre-trigger pullback. It then enters, reaches +1R and wins or loses. The formula puts it in the 'counter-12/89 before +1R' cohort. The condition's delta then mixes the long-lag (P-WIN-1) effect with the warning effect, and could be MET for a population the exit rule never touches. Or a builder follows the 'post-entry' sentence instead and gets a different cohort. Either way the frozen text does not fix which campaigns are counted.",
+          "amendment": "Replace L-W.3's definitions with: \"'Before +1R' = entry close < cross close AND cross 1h index < latch 1h index (no latch: cross close < exit instant). 'After +1R' = latch 1h index <= cross 1h index AND cross close < exit instant. A cross whose close is <= the entry close is a PRE-ENTRY event. It enters only the W2 pre-entry block, never the four post-entry cohorts and never P-WARN-1's condition.\" In REGS P-WARN-1 'condition', append: \"(post-entry crosses only: entry close < cross close)\"."
+        },
+        {
+          "target": "L-H.1 / REGS P-TP-RNG scored_arm ('remainder')",
+          "severity": "MAJOR",
+          "problem": "The contract says 'take-profit of the remainder', written directly under 'keep: de-risk at the opposing 89/316 band (law)'. Read literally, the remainder is what is left after the de-risk. L-H.1 silently reads it as 'whatever is open (1.0 before the harvest, 0.5 after)'. That lets the TP close the full unit before any harvest. The scout flagged this ambiguity (D-A10, B-A7), and LEANS' own preamble says every reading must name its rival, but L-H.1 names none. This is a scored paired registration, and the two readings change which campaigns are touched and how much tail is cut, which is the named risk.",
+          "scenario": "A v6 long goes to the 12h top - 0.25 ATR_12h before any pullback to the tide band. Under the lean, the whole 1.0 unit exits at the TP, so the harvest and the trail never act. Under the literal reading, no TP rests until the harvest fires, and the full unit rides the trail. P-TP-RNG's delta and its D15 tail ratio are then measuring a different rule from the one the operator wrote.",
+          "amendment": "Add to L-H.1: \"'the remainder' — READING OF RECORD: the position still open when the TP fills (1.0 if the band harvest has not fired, 0.5 after), because the contract makes the harvest a kept law, not a precondition. RIVAL (Tier-E twin 'tp-post-harvest', printed on the row): the TP rests only after the v6 harvest has fired, for the 0.5 runner.\" Add 'tp-post-harvest twin' to REGS P-TP-RNG tier_e_arms. If the operator's word is the literal reading, swap which one is of record before freezing."
+        },
+        {
+          "target": "L-H.1 / REGS P-TP-RNG scored_arm (level vs entry)",
+          "severity": "MAJOR",
+          "problem": "The contract names a TAKE-PROFIT. L-H.1 arms a resting limit at top - 0.25 ATR_12h whenever the 12h state is IN_RANGE and the prior 4h close is below the level. Nothing requires the level to be on the profitable side of the entry. A long entered in the top 0.25 ATR_12h of the 12h box, or above the top while the 12h range is still alive (a breach), gets a 'take-profit' below its entry price. That turns the rule into a loss-taking exit the contract never describes.",
+          "scenario": "A v6 long enters at a 4h close above the 12h top during a 12h breach, so the 12h state is still IN_RANGE and the level is below the entry, and no order rests. Price falls back inside the box (a harden), which arms the limit. Price then rises to the level, still under the entry, and the TP fills at a loss. v6 would have kept riding. The paired delta counts that as the TP rule's effect.",
+          "amendment": "In L-H.1, after 'is live during bar j', insert: \"and only if the level lies on the favourable side of the entry price (level > entry_px for a long, < entry_px for a short); otherwise no order rests that bar.\" In REGS P-TP-RNG scored_arm, after 'armed only when the prior 4h close is on the near side', add \"and the level is beyond entry_px in the trade's favour\"."
+        },
+        {
+          "target": "L-R.4 (R2 verdict words)",
+          "severity": "MAJOR",
+          "problem": "The contract says 'PASS/FAIL printed per lens [Q-R3 law]' and 'a FAIL closes that lens ... in this and every later tier'. The Q-R3 law as built in TC10, which L-R.4 itself cites as 'unchanged', makes n >= 30 part of the PASS condition. Under it, n < 30 is a FAIL, and TC10 printed it as 'FAIL (provisional)'. L-R.4 adds a third word, UNDERPOWERED, that 'does not close the lens'. That widens the law. The verdict of record is the holdout era, where slow lenses are thin by construction (TC10 1d holdout pooled had 18 ranges; 1w will have fewer). So the 1d and 1w verdicts escape the closure the contract prescribes.",
+          "scenario": "1d on CLASSIC5 pooled, holdout, calibrated has about 20-30 confirmed ranges. The Q-R3 law gives FAIL (provisional), which closes 1d for range trading in later tiers. L-R.4 prints UNDERPOWERED and leaves 1d open, so a later tier can draft a 1d range trade that this contract's law had closed.",
+          "amendment": "Replace L-R.4's 'Three verdict words' block with: \"Two verdict words, per the [Q-R3] law: PASS; FAIL. A leg with pooled n < 30 fails that leg, and the row prints 'FAIL (provisional, n<30)', as TC10 printed it. Any FAIL, provisional included, closes the lens for range trading per the contract. The provisional flag is listed in findings-not-fixed for the operator.\" Keep the maker-twin sentence unchanged."
+        },
+        {
+          "target": "L-R.6 (a) and L-T.1 (memory-line column / flip-hold lane)",
+          "severity": "MAJOR",
+          "problem": "The contract applies 'first retest that HOLDS' to 'band taps 89/127/200 AND the memory-line, both printed'. L-R.6 enacts first-that-holds for the band taps only. The memory-line is read through the engine's frozen flip (memory_flip_candidates), which is ONE-SHOT: a failed first touch 'consumes the candidacy' (engine/rangefinder.py:550-560). That is exactly the rival the engine filed as 'not enacted' and that L-R.6 says the contract now names. So the memory-line half of R4(a), and P-BRK-4H's memory-line lane printed beside it, are measured under the reading the contract overrode. R4 is 'measured once, completely' and will not be redone.",
+          "scenario": "A dead 4h top's memory line is retested from above and closes through by 1.0 ATR within 6 bars. The engine consumes that line's candidacy. Twenty bars later a second touch holds for 6 bars. The contract's reading yields a memory-line breakout event there. The lean yields none, so the memory-line row of the fractal grid undercounts events and differs in kind from the band rows beside it.",
+          "amendment": "In L-R.6 (a), replace 'The memory-line is printed beside, with the frozen flip pins (1.0 ATR / 6 bars, known at touch + 6).' with: \"The memory-line follows the same law. For each DIE, the opposite-side touches of its (unexpired, per the leash's ttl/cap) memory line inside the candidacy window are scanned in order. The first touch with no close through by 1.0 ATR over touch..touch+6 is the event, known at touch + 6. The engine's one-shot flip (candidacy consumed) is printed beside as the twin.\" In L-T.1, change 'The memory-line flip-hold lane' to 'The memory-line first-that-holds lane (engine one-shot flip as its twin)'."
+        },
+        {
+          "target": "L-W.6 (W2 pre-entry block)",
+          "severity": "MINOR",
+          "problem": "The contract asks for 'the SAME events as PRE-ENTRY conditions', i.e. the W2 events tabulated as arm-to-entry conditions, plus the relay-evidence question. L-W.6 builds only the 12/26 with-trend lead statistic. The pre-entry P(win)/E[net R] tables for the same events are dropped, which narrows a grid the contract says must be reported whole.",
+          "scenario": "The close report prints the relay lead distribution. It has no table showing whether a 1h counter-12/89, counter-12/26 or with-trend 9/12 cross between arm and entry changes v6's P(win) or E[net R]. Those are the pre-entry halves the contract asked for.",
+          "amendment": "Append to L-W.6: \"Also, for each W2 event class (1h counter-12/89, counter-12/26, with-trend 9/12, with-trend 12/26), the v6 cohort with at least one such cross in (arm close, entry close] is tabulated: n, P(win), E[net R] vs the whole-book base rate, complement beside. Tier-E, whole.\""
+        },
+        {
+          "target": "L-S.2 (invalidation exit)",
+          "severity": "MINOR",
+          "problem": "The contract says 'invalidation also on a 1h boundary breach'. L-S.2 exits at 'the next 5m close after that 1h close', which adds a 5-minute lag the contract does not have. The 1h close is itself a 5m close (the last 5m child closes at the same millisecond and price). The delay is also inconsistent with the lean's other event exits (P-WARN-1 exits at the event close).",
+          "scenario": "A long scalp's 1h bar closes below the bottom at 14:00. The breach is known at 14:00 at the 13:55-14:00 5m close. The lean exits at the 14:05 close instead, so the invalidation leg takes one extra 5m bar of adverse or favourable drift on every invalidated scalp.",
+          "amendment": "Replace 'Exit at the next 5m close after that 1h close.' with 'Exit at that 1h close (= the coincident 5m close), taker.'"
+        },
+        {
+          "target": "L-R.4 (F-FEAS)",
+          "severity": "MINOR",
+          "problem": "L-R.4 says 'F-FEAS re-derives every lens verdict from the height and toll columns alone'. A lens verdict is height leg AND edge-fade leg. The edge-fade leg needs the edge-term H20 column and its n, so height and toll alone cannot re-derive a verdict whose edge leg decides it.",
+          "scenario": "At 5m every asset passes the height leg and fails the edge-fade leg, as in TC10. Height and toll alone re-derive PASS, which disagrees with the verdict of record FAIL. The fixture would then go RED on a correct build, or be weakened to check only the height leg.",
+          "amendment": "Replace with: 'F-FEAS re-derives every lens verdict from its printed columns: height ratio, toll, share(ratio<1) and n for the height leg, and edge-term H20 median, toll and edge n for the edge-fade leg.'"
+        },
+        {
+          "target": "L-R.6 (R4 base rate)",
+          "severity": "MINOR",
+          "problem": "The contract says 'Outcomes H20/H100 net of L's toll, base rate, null'. L-R.6 nets the events of the toll, but defines the base rate as 'the same H-bar signed term', which is gross. Comparing a net event outcome with a gross base rate builds a toll-sized handicap into every event-vs-base comparison.",
+          "scenario": "A 1h SFP cell with gross term equal to the drift prints net = drift - toll_atr, below a gross base. At 1h the toll is a material share of an ATR, so every cell appears to underperform the base.",
+          "amendment": "In L-R.6, set the base rate to 'the same H-bar signed term over every bar of that asset x lens x era, per direction, printed gross AND net of the same toll_atr; the event-vs-base comparison is net vs net'."
+        },
+        {
+          "target": "scripts/tierc11_registrations.py REGS context ranges",
+          "severity": "MINOR",
+          "problem": "The text slices are correct: every text range starts at its registration id and ends where its text ends. But the context slices leave out contract lines that govern these registrations. Line 79 ('Both printed against each other; neither promoted by the other's failure.') binds P-ADD-BRK and P-ADD-SFP and is in neither context. Lines 101-103 (VETOES BY NAME: relay, scalp, add, tp) are in no context. P-BRK-4H's 'first HOLD retest' and '4h macro death' are defined in R1 and R4 (lines 13-15, 24-25), and P-SCALP-2's precondition reads R2 (lines 16-18); none of these lines is in any context.",
+          "scenario": "The filed REGISTRATIONS.json is the frozen record of what each hypothesis means. A later challenge to P-ADD-SFP (for example, promoting it after P-ADD-BRK fails) or to the scalp's no-tide or lower-third form finds no governing clause in the filing.",
+          "amendment": "Set contexts to: P-ADD-BRK and P-ADD-SFP [(73,74),(79,79),(101,103)]; P-RELAY-1 [(51,51),(101,103)]; P-SCALP-2 [(16,18),(61,70),(101,103)]; P-TP-RNG [(81,82),(101,103)]; P-BRK-4H [(13,15),(24,25),(51,51)]."
+        },
+        {
+          "target": "scripts/tierc11_registrations.py REGS P-TP-RNG scored_arm",
+          "severity": "MINOR",
+          "problem": "The operative spec says 'fill at max(level, open)' with no mirror for shorts. L-H.1 mirrors it for a short. The frozen spec is the one scored against, and for a short (a buy limit), max(level, open) fills at the worse price.",
+          "scenario": "A short's TP limit rests at bot + 0.25 ATR_12h. The bar gaps open below the level, and the spec as written fills at the level instead of the better open, understating the TP arm on gap bars.",
+          "amendment": "Replace 'fill at max(level, open)' with 'fill at max(level, open) for a long, min(level, open) for a short'."
+        }
+      ],
+      "summary": "Contract-fidelity review of LEANS.md and the REGS specs against the contract of record (sha bb38e016, 103 lines). The nine registration text slices are the right lines. Each starts with its id, carries the contract's prior, and the dry run prints all nine. The operative specs match their leans except for the defects listed.\n\nLeans that follow the contract: the corridor pin (the filing commit was 2026-09-25T00:09Z, so 2026-09-25T00:00Z is the latest closed 4h bar), the 206-bar shadow kept literally, the paired and two-sample rulers, the holdout era for P-SCALP-2 only, CLASSIC5 as 'five assets', R4 tolls, the trend-side and spring reading for P-ADD-SFP, the 12h lens for 4h campaigns, 'breach' as the machine's breach-open close, m = 9 with 'no slot spent', and the vetoes. The tuning-era scale calibration is a defensible reading the contract leaves open.\n\nOne blocker:\n- L-W.3 gives no entry lower bound for 'before +1R'. P-WARN-1's condition cohort can therefore take in arm-to-entry crosses that the exit rule can never act on, and the contract's W2 keeps those as a separate pre-entry block.\n\nFour major:\n- **P-TP-RNG 'remainder':** L-H.1 reads it as the whole open position and names no rival, although the wording sits right after the de-risk law and is ambiguous.\n- **P-TP-RNG level:** the TP level can sit on the losing side of the entry, so a 'take-profit' can realize a loss.\n- **R2 verdict words:** L-R.4 adds a third word, UNDERPOWERED, that overrides the [Q-R3] law. Under that law n < 30 is FAIL (provisional) and closes the lens.\n- **R4 memory-line:** it is read through the engine's one-shot flip, the reading the contract's 'first retest that HOLDS' overrides.\n\nSix minor:\n- W2's pre-entry tables are narrowed to the relay lead statistic only.\n- The scalp's invalidation exit adds a 5m lag the contract does not have.\n- F-FEAS, as written, cannot re-derive the edge-fade leg.\n- The R4 base rate is gross while event outcomes are net.\n- REGS context slices leave out line 79 and the veto lines.\n- The P-TP-RNG spec's fill rule has no mirror for shorts."
+    },
+    {
+      "lens": "causality",
+      "findings": [
+        {
+          "target": "L-W.2 / L-W.3 (W2 in-trade cohorts; the P-WARN-1 condition; REGS P-WARN-1 'condition', scripts/tierc11_registrations.py:42-44)",
+          "severity": "BLOCKER",
+          "problem": "The exit instant that bounds the in-trade 1h timeline is never resolved on the 1h path. L-W.2 says the timeline runs 'from its arm close through its exit'. The natural build reuses the TC10 stamper: tierc10_stamps.campaign_instants stamps the exit at exit_ms = open_ms[exit_i], and instant_close_ms adds +4h, so the exit lands at the CLOSE of the 4h exit bar. But 195 of 200 v6 exits are intrabar stops. So 1h crosses that close AFTER the 1h child on which the stop was touched are counted as in-trade, and as 'before +1R'. L-W.3's index test (cross index < latch index) also places pre-entry crosses, between the arm close and the entry close, in the 'before +1R' cohort. The P-WARN-1 exit rule can act on neither kind of cross.",
+          "scenario": "A long is stopped on child 2 of 4h exit bar X, and 1h EMA12 crosses under EMA89 at the close of child 3. The campaign joins the '1h counter-12/89 before +1R' cohort although the cross came after the exit. Stop bars are sharp adverse moves, so post-stop counter crosses are common, and the cohort fills up with stopped losers. That pushes the cluster-90% hi of Δ below 0, so the P-WARN-1 condition is MET spuriously and a slot is spent. The causal L-W.5 walk can never exit on those crosses.",
+          "amendment": "Append to L-W.3: \"IN-TRADE window. A campaign's in-trade 1h events are those on 1h bars with close > the entry close and strictly before the 1h-resolved exit. For a stop exit (initial or trailed), the exit child m is the first 1h child of the 4h exit bar whose low <= the stop in force (high >= for a short); events on m or later are post-exit, as L-A.1 already rules for adds. For a bell or corridor_end exit at 4h close T, events on 1h bars closing >= T are post-exit. HALT if no 1h child of a stop-exit bar touches the stop. Events closing in (arm close, entry close] belong only to the PRE-ENTRY tables. Every W2 in-trade cohort and the P-WARN-1 condition use in-trade events only.\" F-WARN-ASOF gains a sabotage leg: a cohort built with the exit at the 4h exit-bar close must FAIL on a planted campaign whose counter cross closes after its stop child. In REGS P-WARN-1 'condition', after '(L-W.3)', insert '(in-trade events only: close > entry close and before the 1h-resolved exit)'."
+        },
+        {
+          "target": "L-T.2 / P-RELAY-1 (REGS scored_arm, scripts/tierc11_registrations.py:84-87)",
+          "severity": "MAJOR",
+          "problem": "The rest of the relay's entry 4h bar e is walked for the stop and +1R only; then 'From the next 4h bar on, it is the v6 ride unchanged.' v6 bells are single-bar cross events (_ride_leg9 reads ra['w_dn'][j] and ra['b_dn'][j]), and the ride loops from ti+1 (tierc9.py:269). So a bell at e's own close is never seen. The +1R and trail-arm latches reached on post-entry children are also dropped: the ride restarts with reached_1r and trail_armed False. And because a relay may enter at any 1h close before the window-close instant, EVERY relay entered inside the window_end 4h bar has the counter 12/89 cross at its own entry bar's close.",
+          "scenario": "A long window closes at 4h bar W, where EMA12 crosses under EMA89 at W's close. The first with-trend 1h 9/12 cross is at W's second child, so the relay enters there. At W's close v6 management would exit bell_12_89. But the ride starts at W+1, where w_dn is False, so the relay is held with its window already closed until a stop, bell_89_316 or the trail. That is a position v6's own management would have closed.",
+          "amendment": "Replace the L-T.2 sentence 'The rest of the entry's 4h bar ... v6 ride unchanged.' with: \"The relay's entry 4h bar e is ridden as v6 bar j = e, with fav/adverse taken over its post-entry 1h children only (STOP adverse-first, then the +1R latch and trail arm). At e's CLOSE, v6's close-time steps apply unchanged: BELL on w_dn[e]/b_dn[e] (mirror for a short) exits at close[e]; HARVEST fires only if the band touch falls on a post-entry child and h_armed holds per close[e-1]; TRAIL fires if armed. reached_1r, trail_armed and h_armed carry into the ride from e+1. If the entry instant equals e's close, the ride starts at e+1 exactly as v6. atr_at_entry and r_over_atr use ATR(4h) of the last CLOSED 4h bar.\" In REGS scored_arm, replace 'rest of the 4h bar walked on 1h for stop/+1R, then the v6 ride' with 'rest of the entry 4h bar walked on 1h for stop/+1R, v6 close-time steps (bell/harvest/trail) applied at that bar's close with latches carried, then the v6 ride'."
+        },
+        {
+          "target": "L-R.2 (calibrated scale), feeding P-BRK-4H, P-ADD-BRK, P-ADD-SFP, P-TP-RNG",
+          "severity": "MAJOR",
+          "problem": "The scale is fit on bars closing <= 2024-06-30, but these four registrations are scored on the full corridor (L-1.3). Every tuning-era instant, roughly two-thirds of campaigns (P-TRG-2's filed split was 132 tuning / 66 holdout), reads deaths, hardens and boxes from a scale chosen with bars up to about 4.8 years in its own future. This is structural look-ahead: the scale sets LEG_MIN and REV_MIN. It is outcome-free, but it is still look-ahead. The lean labels only the <400-bar fallback IN-SAMPLE. F-NEST-ASOF cannot detect it: prefix-stability holds only at a fixed scale, and a prefix that re-calibrates would fail for a reason unrelated to leakage.",
+          "scenario": "Say BTC's 4h tuning pick of 2.0 is driven by 2022-24 density, and a 2020 4h death exists at 2.0 but not at the scale a 2020 observer could have fit. That death spawns a P-BRK-4H campaign, and the campaign enters the scored full-corridor book and its SUPPORTED test.",
+          "amendment": "Add to L-R.2: \"Every calibrated-scale range read at an instant <= the era cut is SCALE-IN-SAMPLE (structural, outcome-free look-ahead). The §0 rows of P-BRK-4H, P-ADD-BRK, P-ADD-SFP and P-TP-RNG say so, and print beside the verdict (i) the holdout-slice statistic, the only slice with a causal scale, and (ii) the frozen-3.0 twin's statistic, which is fully causal. Pick stability is printed per CLASSIC5 asset x {1h, 4h, 12h}: the pick fit on the first half of the tuning era vs the whole tuning era. Any change is flagged on the rows that consume that lens. F-NEST-ASOF runs every prefix at the pinned scale of record, never a re-calibration, and states that it does not test the pick.\" In REGS, add 'SCALE-IN-SAMPLE flag + pick-stability print' to the tier_e_arms of those four registrations."
+        },
+        {
+          "target": "L-R.4 / L-S.1 (P-SCALP-2 precondition; REGS scripts/tierc11_registrations.py:93-94)",
+          "severity": "MAJOR",
+          "problem": "Stage S is gated on the R2 1h row for CLASSIC5 pooled, HOLDOUT era, and P-SCALP-2 is then scored on that same holdout. R2's binding leg is the edge fade: from the outer 20% of the range toward the far boundary, H20 net. That is nearly the scalp's own trade (lower third toward the far boundary), measured on the same 1h ranges and bars. So whether the test runs at all depends on the test sample's own outcomes. A SUPPORTED verdict is then conditional on a favourable look at its own data, and the 0.10/9 bar is not honoured.",
+          "scenario": "Suppose 1h fades have no true edge. Holdout noise lifts the pooled edge-fade median net to +0.01, so R2 PASSES. P-SCALP-2 is then scored on the very bars whose fades just tested positive, and its CI is shifted up. In the draws where the noise runs the other way, the stage is closed without a slot. The false-positive rate is inflated.",
+          "amendment": "Replace in L-S.1: \"Stage S runs iff the R2 1h verdict on the TUNING era (CLASSIC5 pooled, tuning-fit calibrated scale, taker) is PASS. The holdout-era R2 row is printed beside it and governs lens closure for later tiers (L-R.4), but it neither opens nor closes P-SCALP-2, whose own holdout test is the holdout evidence. If tuning PASSES and holdout FAILS, both are printed on the §0 row.\" In REGS P-SCALP-2, change the precondition's '(CLASSIC5 pooled, holdout, calibrated, taker)' to '(CLASSIC5 pooled, TUNING era, calibrated, taker)'. If the operator keeps the holdout gate, the §0 cell must read 'precondition read on the scored sample'."
+        },
+        {
+          "target": "L-T.6 (forward ledger)",
+          "severity": "MAJOR",
+          "problem": "'re-rides both frozen books on new bars only, appending ... (hash-chained)' leaves two things unsaid. First, the ride must run over the whole tape: warm 316-bar EMAs, and the one-position slot the continuation holds. Second, only CLOSED campaigns may be appended. A literal new-bars-only ride seeds the EMAs cold at the opening and frees the continuation's slot. A campaign open at a refresh pin comes out as corridor_end, marked at the pin's close. That mark is a truncation, not a result, and in an append-only chain it cannot be retracted when the campaign really closes.",
+          "scenario": "The ETH continuation is open at 2026-09-21T16:00Z. A new-bars-only ride admits an ETH trigger that v6 would have refused as position_open. Separately, a campaign still open at the 2026-09-25T00:00Z pin is appended with a corridor_end net_r, counts toward n >= 30, and gets a second, different row at the next refresh.",
+          "amendment": "Replace the --refresh bullet: \"--refresh re-rides each frozen book over the whole tape, bar 0 to the refresh pin, on the same code path as F-CTRL. It admits to the ledger only campaigns whose entry close is > 2026-09-21T16:00Z. A campaign is appended exactly once, when its exit_reason != corridor_end. A campaign open at the refresh pin is listed OPEN; it is not appended and not counted in n. A refresh whose re-ride changes any already-appended row HALTs.\""
+        },
+        {
+          "target": "L-R.5 (nest instants for intrabar named events)",
+          "severity": "MINOR",
+          "problem": "The named events +1R, a stop exit and a TP fill all happen intrabar. If they reuse TC10's stamper convention (instant_close_ms = the event bar's open + the lens step; tierc10_stamps.py:652), each is stamped at the close of its bar. The nest then reads every lens's bars closing after the event, including the 1h children after the touch.",
+          "scenario": "A long is stopped on child 1 of 4h bar X. Its 'exit' nest reads X's 4h close and 1h bars closing up to X+4h, so a later 1h death or state change is reported as the state 'at exit'.",
+          "amendment": "Add to L-R.5: \"Intrabar named events (+1R, stop, TP fill) are stamped as of the OPEN of the bar in which they occur, or at the close of the 1h child that resolves them (L-W.3). A close-stamped twin may be printed, labelled 'post-event'.\""
+        },
+        {
+          "target": "L-S.2 (regime gate printed)",
+          "severity": "MINOR",
+          "problem": "The 1h boundary-age tercile edges are unspecified. Whole-sample terciles would band holdout scalps using edges computed from later bars. Only the 5m ATR tercile is stated as trailing.",
+          "scenario": "The boundary-age terciles are fit over all 1h in-range bars through 2026. A 2024 scalp is then banded with edges that include 2025-26 range ages.",
+          "amendment": "Replace the regime-gate line with: \"Regime gate printed: 5m ATR tercile (trailing 2,000-bar quantiles, window ending at the entry bar inclusive), and 1h boundary-age tercile (trailing quantiles over that asset's 1h in-range bars with close <= the entry instant, at least 30 bars, otherwise unbanded).\""
+        },
+        {
+          "target": "L-1.2 / L-S.2 (maker twin fills)",
+          "severity": "MINOR",
+          "problem": "The maker entry is a limit posted at the 5m close. It can fill only on a later bar, yet it is booked as filled whether or not price ever returns to it. Which orders go unfilled depends on the path after t: they are the ones where price ran away in the trade's favour. So the assumed-fill twin keeps its best non-fills. The fill-risk column describes this but does not correct it.",
+          "scenario": "A long 5m cross closes at P, and the next bars never trade back to P before reaching the target. The maker twin books a full win at P with a 2 bps fee, but the real limit order never filled.",
+          "amendment": "Add to L-1.2: \"A fill-conditioned maker twin is printed beside the contract's assumed-fill twin. It books the entry only if the next 5m bar trades strictly through the limit (low < P for a long, high > P for a short); otherwise there is no trade, and those are counted. The assumed-fill row is labelled 'fill assumed'.\""
+        }
+      ],
+      "summary": "Through the causality lens: 1 BLOCKER, 4 MAJOR, 3 MINOR.\n\n- **BLOCKER (L-W.2/L-W.3, P-WARN-1 condition).** The exit instant that bounds the in-trade 1h window is never resolved to a 1h bar. The TC10 stamper convention puts an intrabar stop at the close of the 4h exit bar, and 195 of 200 v6 exits are stops. So counter-12/89 crosses that close after the stop get counted as \"before +1R\", and so do crosses between arm and entry. Both push the cohort toward losers, which can meet the P-WARN-1 condition spuriously and spend a slot.\n\n**MAJOR**\n- **P-RELAY-1 (L-T.2).** The v6 ride restarts at the 4h bar after entry, so a bell at the close of the relay's entry bar is never seen, and the +1R/trail latches are dropped. Every relay entered inside the window's closing 4h bar is therefore held through the window's own bell_12_89.\n- **Calibrated scale (L-R.2).** The scale is fit on the tuning era, but P-BRK-4H, both adds and P-TP-RNG are scored on the full corridor. Their tuning-era instants (roughly two-thirds of campaigns) read range structure chosen with future bars. F-NEST-ASOF cannot see this because it is prefix-stable only at a fixed scale.\n- **P-SCALP-2 gate (L-S.1/L-R.4).** Stage S is gated on the holdout R2 edge-fade leg, which is nearly the scalp's own trade on the same bars, and P-SCALP-2 is then scored on that holdout. The gate reads the test's own data.\n- **Forward ledger (L-T.6).** It is not stated that the re-ride runs over the whole tape or that only closed campaigns are appended. A literal new-bars-only ride restarts the EMAs cold and frees the continuation's slot, and pin-truncated marks would be appended to an append-only chain.\n\n**MINOR**\n- Nest vectors at intrabar events are stamped at the bar close, after the event.\n- The 1h boundary-age tercile edges are unspecified, so they may be whole-sample.\n- The maker twin counts limit fills that never happened, which are exactly the trades that ran in the trade's favour.\n\n**Checked and found causal (no change needed):**\n- Engine EMA and ATR are recursive from the series start, so whole-tape values at bar k use only bars up to k (engine/indicators.py).\n- struct_stop_4h uses only pivots confirmed at pivot bar + 5, at or before the stop's bar. That holds for the relay (read at the last closed 4h bar) and the 5m scalp.\n- The (2,2) fractal trail acts only on the bar where the fractal confirms.\n- tide_streak is a running count, and the trailing edges pool bars opened at or before the entry bar's open (tierc9.py:1356).\n- The BRK hold is known at touch + hold. The candidacy window's next_die − 1 bound amounts to \"no newer death yet\", which is causal.\n- The R2 edge-fade geometry uses the boundaries in force at each bar, not the end-state boundaries (tierc10_census.py:2334-2470).\n- asof_index reads bars with close at or before the instant.\n- The TP order at each 4h open reads only 12h bars closed by that open.\n- L-W.1's inclusion of the 1h bar that closes at the same moment as the 4h bar is not look-ahead.\n- Adds already resolve stop exits to the 1h bar."
+    },
+    {
+      "lens": "statistics",
+      "summary": "I reviewed the TC11 readings for statistical integrity and honest labeling. Four things hold up:\n- **Verdict rule.** \"CI lo > 0 AND p ≤ 0.10/9\" agrees with TC10's scorer (`_ci_from` percentiles, p = (#draws ≤ 0 + 1)/(B + 1), `finish_family` bar = q/m).\n- **\"m stays 9\" and \"no slot spent\".** A precondition (R2 for P-SCALP-2) or a condition (P-WARN-1) can only remove chances to reject: P(condition AND p ≤ bar) ≤ P(p ≤ bar) ≤ bar. So the condition test is not a hidden extra look that must be counted in m, and keeping the declared m is conservative.\n- **Two-sample of a subset against its superset.** This is valid. `cluster_boot_diff` puts the same asset draw into both books, so the overlap is handled. `_set_change_law('two_sample')` does not HALT on a subset: it halts only when the key sets are identical. The paired columns on a gate row are, by construction, zero deltas, printed beside.\n- **The paired transforms** (L-1.5, no re-admission) keep the key set, so they are scored paired.\n\nThe defects are mostly about labeling:\n- **P-AGE-1 (BLOCKER).** It is an exact re-score of an already-filed TC10 table on the same 200 campaigns. Its point estimate is already known, so a \"SUPPORTED\" would not be confirmatory.\n- **Selection hazards.** P-BRK-4H's hazard is recorded but never reaches the verdict cell, and P-WIN-1 has no hazard field at all.\n- **The code's `verdict` column** reads SUPPORTED on the CI alone. **Tier-E arm rows** carry verdict words, which breaks the contract's SELECTION collar.\n- **The P-WARN-1 condition cohort** includes crosses the rule can never act on: crosses between arm and entry, and crosses on the bar where the stop is hit.\n- **The W2 comparison group** ignores survivorship for the \"after +1R\" and \"after entry\" groups.\n- **R4's base rate** is unconditional and does not say which statistic or which toll it uses, so it cannot be compared with the conditioned, net-of-toll event rows.\n- **R2's UNDERPOWERED word** can hide a leg that has enough data and fails, and it quietly departs from TC10's floor law while the readings call that law \"unchanged\".\n- **Four smaller items:** the \"paired\" ruler label, the gate reading (per-campaign mean vs total R), the untouched-campaign identity check, and the R2 era chosen with TC10's per-era verdicts already seen.",
+      "findings": [
+        {
+          "target": "P-AGE-1 (REGS operative spec + L-G.1 + VERDICT_RULE)",
+          "severity": "BLOCKER",
+          "problem": "The scored arm is exactly TC10's filed Tier-E cohort: the same function (tierc7_lab_regime.tide_streak at ENTRY), the same trailing panel-pooled edges (open_ms <= entry bar, floor 30), and the same 200 campaigns. F-CTRL(b) requires the v6 book to reproduce control_journal.parquet exactly. research_outputs/tierc10/close/P_AGE_1_TIDE_YOUTH.md already prints B4 OLD as n 59, -22.6566 R across 5/5 assets, against the whole book at n 200, +41.7433 R. So the registered statistic's point estimate is already known: gated n 141, mean +0.4567 vs +0.2087, Δ ≈ +0.2480 R. Only the interval and the handful of campaigns entered after 2026-09-21T16:00Z are new. The spec's selection_hazard field records this, but nothing carries it into the verdict cell. A plain 'SUPPORTED' in §0 under the same family bar as the eight genuinely new tests is a mislabeled confirmatory result.",
+          "scenario": "At CLOSE, P-AGE-1 prints 'SUPPORTED, Δ +0.248, p 0.004' in §0 next to P-RELAY-1. The operator counts it as a registered confirmation of the tide-age gate, although the number was published three days earlier from the same bars and the band table it came from was itself one of several regime cuts explored in TC7/TC9.",
+          "amendment": "Add to REGS P-AGE-1 a field \"pre_seen\": \"The scored cohort IS TC10 P_AGE_1_TIDE_YOUTH B4 (same function, same trailing edges, same 200 campaigns anchored by F-CTRL(b)). Point known before filing: gated n 141, +0.4567 vs +0.2087, Δ +0.2480 R. New information: the interval, plus campaigns entered after 2026-09-21T16:00Z (listed by count).\" Append to VERDICT_RULE: \"A registration carrying selection_hazard or pre_seen prints its §0 cell as '<SUPPORTED|NOT SUPPORTED> — IN-SAMPLE RE-SCORE, NOT CONFIRMATORY (<hazard>)'. The family bar is applied unchanged, and the row is never cited as confirmation.\" Add to L-T.6: \"Every forward-ledger v6 row carries the P-AGE-1 trailing band and the P-WIN-1 lag as stamp columns (no new book), so both gates build an out-of-sample record.\""
+        },
+        {
+          "target": "P-BRK-4H and P-WIN-1 (REGS selection_hazard) / L-1.3",
+          "severity": "MAJOR",
+          "problem": "P-WIN-1 has no selection_hazard field, yet the lag→outcome relation was already read on essentially this book. TC6V L-LAG gives lag-0 at +0.4149 and the 56-bar decile at −0.5796. The P-LAG-1 condition on the same question was NOT MET (Δ +0.0616 [−0.78, +0.96]). The 16-bar cut has no on-disk provenance (scout G). P-BRK-4H's hazard understates the selection: 4h retest-hold-tap89 was the top of 7,920 census cells, with CLASSIC5 +0.681 on ALL and +0.706 on holdout (UNSEEN12 only +0.064 / +0.272). Every era of every asset was seen, and the scored event ('first retest that HOLDS', calibrated scale) is not the one-shot, frozen-3.0 row that was selected. Scoring on the 'full corridor' (L-1.3) removes nothing from either hazard.",
+          "scenario": "P-WIN-1 clears 0.10/9 and is read as a clean confirmation, when it is the second look at a question whose first look failed. P-BRK-4H 'SUPPORTED' is read as independent evidence for 4h breakout-retest, when it is winner's-curse territory: the best of 7,920 cells, re-scored on the same bars.",
+          "amendment": "Add to REGS P-WIN-1: \"selection_hazard\": \"direction informed by TC6V L-LAG deciles on the same corridor (lag-0 +0.4149, 56-bar decile −0.5796); P-LAG-1 on the same question NOT MET (Δ +0.0616 [−0.7819, +0.9566]); the 16 cut has no on-disk provenance; v6 lag 7–15 holds 4/200, so ≥16 ≈ ≥7\". Replace P-BRK-4H's selection_hazard with: \"the best of 7,920 TC10 census cells (4h retest-hold-tap89, CLASSIC5 NET H20 +0.681 ALL n 236 / +0.706 holdout n 88; UNSEEN12 +0.064 / +0.272); every era and asset was seen; the scored event (first-HOLD scan, tuning-calibrated scale) differs from the selected one-shot, frozen-3.0 row\". Both verdict cells then take the IN-SAMPLE RE-SCORE label from the VERDICT_RULE clause above."
+        },
+        {
+          "target": "L-1.4 / VERDICT_RULE (consistency with TP.score's verdict column)",
+          "severity": "MAJOR",
+          "problem": "TP._verdict writes 'SUPPORTED' whenever ci_lo > 0 and reads nothing else. clears_bh_bar is a separate column that only finish_family adds. Under the percentile bootstrap, clause (b) implies clause (a): p ≤ 0.0111 means at most 43 of 4,000 draws are ≤ 0, so the 5th percentile is already > 0. Any row with 0.0111 < p < ~0.05 therefore carries verdict='SUPPORTED' in rows.json while its verdict of record is NOT SUPPORTED. The printed 'cluster-90% CI' is also not the interval that decides.",
+          "scenario": "P-TP-RNG scores Δ +0.06, CI [+0.004, +0.11], p 0.03. scores/P-TP-RNG.rows.json says verdict: SUPPORTED, and any downstream reader of the rows file (the Oracle, the forward strip, a later tier) promotes a registration that failed the family bar.",
+          "amendment": "Replace the first sentence of VERDICT_RULE with: \"verdict_of_record = SUPPORTED iff TP row verdict == 'SUPPORTED' (clause a) AND FAMILY clears_bh_bar is True (clause b, p ≤ 0.10/9 = 0.011111), seed 20260924. In every TC11 artifact, TP's own `verdict` column is renamed `clause_a_ci_lo_gt_0` and is never printed alone. Each row also prints the deciding one-sided bound, the 1.111th percentile of the draws (clause b implies clause a under the percentile bootstrap), and verdict_of_record at the sensitivity seed.\""
+        },
+        {
+          "target": "Tier-E arms of all nine REGS (tier_e_arms) + L-R.4's beside-grid",
+          "severity": "MAJOR",
+          "problem": "The contract requires 'a SELECTION, not a result' on every non-registered table. Tier-E arms scored through TP.score(scored_in_family=False) come back as full rows with verdict='SUPPORTED'/'NOT SUPPORTED', a CI and a p, and only clears_bh_bar is None. About 40 such rows result: era slices, 17-asset views, frozen-3.0 twins, shadow cuts, the maker twin, the relay lead table. L-R.4 also prints PASS/FAIL words for every asset × era × scale × toll beside the lens verdict of record. None of these rows carries the collar.",
+          "scenario": "The P-BRK-4H 17-asset arm, or P-SCALP-2's maker twin, reads 'verdict: SUPPORTED' in its rows file. A later tier cites it as a TC11 result. Or the 4h tuning-era R2 row says 'PASS' and gets quoted as the 4h feasibility verdict.",
+          "amendment": "Add to VERDICT_RULE: \"Rows with scored_in_family=False print no verdict word. TP `verdict` is renamed `would_read_ci_only`, clears_bh_bar stays None, and the row carries the collar columns tier='TIER-E', selection_not_a_result='a SELECTION, not a result', gates='nothing'. The same collar applies to every R2 row other than the lens verdict of record: their PASS/FAIL/UNDERPOWERED is printed as `would_read`, and it closes or opens nothing.\""
+        },
+        {
+          "target": "L-W.2 / L-W.3 / P-WARN-1 condition (cohort definition and era)",
+          "severity": "MAJOR",
+          "problem": "The timeline runs 'from its arm close', and 'before +1R' is defined only as cross index < latch index. So the condition cohort includes (i) counter-12/89 crosses between arm and entry, which the rule (L-W.5, walked from entry) can never act on, and (ii) crosses on the 1h bar where the stop is hit, which are 'through its exit' but come after the STOP in L-W.5's order. Stop-outs often coincide with a counter 12/89 cross at that close, so the cohort is mechanically loaded with −1R campaigns. The condition then tests a different set from the one the rule acts on. The condition's era is also unstated.",
+          "scenario": "About 30 stop-outs whose final 1h close produced a counter 12/89 enter the cohort, and the cohort E[net] drops to about −0.4 R. The condition is MET because of those −1R stop-outs, not because the warning predicts anything. The W2 row 'counter-12/89 before +1R' is then labeled a warning for a set the rule never touches.",
+          "amendment": "Replace L-W.3's 'Before +1R' bullet with: \"'Before +1R' = a counter cross whose 1h close is strictly after the entry close and strictly before the latch 1h bar, at which the campaign is still open under L-W.5's order. A cross on the 1h bar whose range touched the stop in force, or at or after the exit instant, does not count. Crosses with arm close < cross close ≤ entry close belong only to W2's PRE-ENTRY rows.\" Add to the P-WARN-1 condition: \"computed on the full-corridor v6 book the rule is scored on; fixture: condition-cohort keys == keys whose rule-book exit_reason is the warn exit; if NOT MET, the rule book is printed only as a collared Tier-E row with no verdict word.\""
+        },
+        {
+          "target": "L-W.4 (W2 comparison group for cohorts that require survival)",
+          "severity": "MAJOR",
+          "problem": "Every W2 cohort is compared with the whole v6 book. 'Counter-12/89 after +1R' exists only for the 103/200 campaigns that reached +1R. 'The 9/12 re-crosses with trend after entry' exists only for campaigns that survive long enough. Both cohorts are therefore mechanically above the whole-book P(win) and E[net R] through survivorship, not because of the 1h event.",
+          "scenario": "The W2 table prints 'counter-12/89 after +1R: P(win) 70%, E +0.9 R vs base 34.5%, +0.21 R'. The operator reads the counter cross after +1R as benign, or bullish, when it only restates that these campaigns had already reached +1R.",
+          "amendment": "Replace L-W.4 with: \"W2's comparison group per cohort is its at-risk set. 'Before +1R' and pre-entry cohorts are compared with the whole v6 book. 'After +1R' cohorts are compared with the campaigns that reached +1R, and the complement within that set is printed beside. Every post-entry cohort also prints its forward leg, E[final net R − R marked at the event's 1h close], i.e. hold vs exit at the event, which carries no survivorship up to the event. The complement is printed beside in every case.\""
+        },
+        {
+          "target": "L-R.6 R4 base rate",
+          "severity": "MAJOR",
+          "problem": "The base rate is 'the same H-bar signed term over EVERY bar', which does not match the event rows three ways. (i) It is not said to be net of the toll, while the events are net. (ii) The statistic is unnamed; C.grid_rows uses median_term / hit_rate_net / NET = median − row toll, with a binding max toll on pooled rows. (iii) It is unconditional, while every event row is conditioned on an L+1 cell. Against the unconditional drift, an 'L+1 expansion aligned' cell inherits L+1's trend drift, which is then misattributed to the L event. That is exactly the confound the operator's fractal thesis needs separated.",
+          "scenario": "A 4h BREAKOUT long in the '12h BULL_EXP aligned' cell shows NET H20 +0.5 ATR against an unconditional long base of +0.05. It is read as the fractal edge, but every 4h bar with 12h in BULL_EXP has a +0.45 base, so the event adds nothing.",
+          "amendment": "Replace the Base rate bullet with: \"Base rate = C.grid_rows' own statistics (n, median_term, mean_term, hit_rate, hit_rate_net, toll_atr = the median over the base's own uncensored anchors of 10 bps·c/ATR_L, with the binding max toll on pooled rows, NET = median_term − toll_atr). It is anchored at every closed bar k of L for that asset × era, with H20/H100 censored exactly as for the events, per direction. It is computed (i) unconditionally and (ii) within each L+1 cell of the same partition, each cell read from L+1's as-of state at close_k: aligned = BULL_EXP for longs and BEAR_EXP for shorts; coincidence = the nest vector's coincidence flag for L at k. Each event row prints beside the base row of its own L+1 cell, along with event NET − cell-base NET.\""
+        },
+        {
+          "target": "L-R.4 R2 verdict words (UNDERPOWERED)",
+          "severity": "MAJOR",
+          "problem": "L-R.4 says TC10's Q-R3 gate is 'unchanged', but TC10's HEIGHT_GATE_LAW makes a leg under its floor FAIL (tierc10_census.py gate_min_n_why: 'a row under the floor FAILS its leg'). The lean replaces that with UNDERPOWERED. It also says 'UNDERPOWERED (pooled n < 30 on either leg)' without stating precedence. A lens whose height leg has enough data and fails, but whose edge leg is under its floor, would read UNDERPOWERED, which hides a decisive FAIL and keeps a lens open that the contract says must close. 'n' is also ambiguous for the edge leg, which has two floors: edge_n_ranges and edge_n.",
+          "scenario": "1d on the pooled holdout: 34 ranges, median ratio 2.1 (height leg powered and FAILS), 22 near-edge ranges (edge leg under its floor). The lean prints UNDERPOWERED, so the 1d lens stays open for later tiers against the contract's 'a FAIL closes that lens'.",
+          "amendment": "Replace the three-word list with: \"Lens word, in this precedence: FAIL iff any leg whose own floor is met fails its threshold; else UNDERPOWERED iff any leg is under its floor (height: n_ranges < 30; edge: edge_n_ranges < 30 OR edge_n < 30); else PASS. UNDERPOWERED neither closes nor passes the lens. This DEPARTS from TC10's HEIGHT_GATE_LAW (an under-floor leg FAILS) and is filed as a departure, not as 'unchanged'.\""
+        },
+        {
+          "target": "REGS ruler 'paired' (P-WARN-1, P-ADD-BRK, P-ADD-SFP, P-TP-RNG)",
+          "severity": "MINOR",
+          "problem": "'paired' is not a TC10 ruler (RULERS = vs_zero, two_sample, set_change), and the code has no forced-paired ruler. The only buildable ruler is set_change, which silently switches to TWO-SAMPLE if any (symbol, lane, entry_ms) key differs. The contract text says 'paired vs v6'.",
+          "scenario": "A lane-string or entry_ms mismatch on one continuation campaign makes set_change score two-sample. The row then tests something the text did not register, and nothing HALTs.",
+          "amendment": "Set REGS \"ruler\" for these four to \"set_change (paired premise)\" and add to L-1.5: \"Scored with TC10 ruler set_change. Before the row is accepted, set_changes_measured must be False and paired_n == n == len(base). Otherwise HALT — NO VERDICT ('paired premise failed'), never a two-sample row.\""
+        },
+        {
+          "target": "P-AGE-1 / P-WIN-1 two-sample gate rows (L-1.5)",
+          "severity": "MINOR",
+          "problem": "For a post-filter subset, the two-sample Δ = mean(kept) − mean(all) = (1−f)·(mean(kept) − mean(refused)). It can be SUPPORTED while the refused cohort is net-positive, so the gate lowers total R. The row's label reads as 'a better trading rule'.",
+          "scenario": "P-WIN-1 refuses 63 campaigns at +0.10 R each while the kept ones average +0.26. Δ > 0 may clear the bar while the gate forfeits about +6 R.",
+          "amendment": "Add to L-1.5: \"Gate rows print the refused cohort's n, mean and ΣR, and ΣR of both books. If mean(refused) > 0, the §0 cell appends 'on per-campaign expectancy only; the gate forfeits +X R total'.\""
+        },
+        {
+          "target": "L-W.5 / L-H.1 / L-A.1 (identity of untouched campaigns in paired books)",
+          "severity": "MINOR",
+          "problem": "The paired Δ should measure only the rule. L-W.5 and L-H.1 re-walk each campaign (on the 1h path, or with a new same-bar order), so campaigns the rule never acts on could get exits that differ from v6 because of the walk's resolution (1h gap fills, order changes). Those differences would leak into the paired mean.",
+          "scenario": "A 1h-walk stop fill on a gapped 1h open differs from v6's 4h fill on five untouched campaigns. The paired CI then includes an engine-resolution artifact.",
+          "amendment": "Add to L-1.5: \"In every paired book, each campaign on which the rule never acts (no warn exit, no TP fill, no add) carries v6's net_r, exit_ms and exit_reason exactly (0.000e+00), asserted over the whole book before scoring. For adds, the v6 leg of every campaign is identical and Δ = the add tranches' net R.\""
+        },
+        {
+          "target": "L-R.4 era of record for the R2 lens verdict",
+          "severity": "MINOR",
+          "problem": "The holdout was chosen as the era of record with TC10's per-era Q-R3 verdicts already visible: 4h CLASSIC5 pooled PASSES only on the holdout (+0.0062 ATR), and 1d PASSES on ALL/tuning but FAILS the holdout. A FAIL closes a lens permanently, so the era choice decides which lenses survive. The choice is principled (the scale is tuning-calibrated) and is clean for 1h, the only lens anything is scored on. It is not disclosed.",
+          "scenario": "4h is kept open for later tiers on a marginal holdout PASS while the ALL and tuning rows FAIL, and nobody can tell from the report that this era choice was made knowing that.",
+          "amendment": "Add to L-R.4: \"TC10's per-era Q-R3 verdicts for 5m, 4h and 1d were seen before this choice (4h CLASSIC5 pooled passes only on the holdout, +0.0062 ATR; 1d passes ALL and tuning and fails the holdout). 1h, 12h and 1w were never measured. The holdout is of record because the scale is tuning-calibrated. The ALL and tuning words are printed beside as Tier-E and close or open nothing.\""
+        }
+      ]
+    },
+    {
+      "lens": "buildability",
+      "findings": [
+        {
+          "target": "L-T.2 / P-RELAY-1 (REGS scored_arm: 'rest of the 4h bar walked on 1h for stop/+1R, then the v6 ride')",
+          "severity": "BLOCKER",
+          "problem": "The reading hands a relay entered strictly inside 4h bar J back to 'the v6 ride unchanged' from J+1. The only v6 ride code is tierc9._ride_leg9 (and BK.ride_leg_l). It loops j = ti+1..hi and starts with reached_1r, trail_armed, h_armed, mfe, mae and mae_to_1r all reset. So J's own close, which falls after the entry, never runs v6's close slot (BELL at w_dn/b_dn[J], then HARVEST, then TRAIL). A +1R printed in J's remainder also never arms the trail.",
+          "scenario": "A long window arms at bar A and the counter 12/89 cross closes at bar A+1, so window_end_i = A+1. The first with-trend 1h 9/12 close is the 2nd hour of A+1. That is '< the window-close instant', so the relay enters. At A+1's close, w_dn[A+1] is exactly v6's bell_12_89. The ride starts at A+2, where w_dn is False, so the trade rides with no 12/89 bell until a stop, a trail or the 89/316 bell. Separately: +1R is touched in J's 3rd 1h child and no later 4h high reaches +1R, so trail_armed stays False forever.",
+          "amendment": "Replace L-T.2's ride sentence with: \"After the 1h walk of the entry bar J's post-entry children (STOP, then the +1R latch), J's own close runs v6's close slot. First BELL: w_dn[J] or b_dn[J] for a long, mirrored for a short. Then HARVEST: armed per close[J−1], and the touch is judged on the post-entry 1h children only. Then TRAIL: armed iff the latch fired. The 4h ride continues from J+1 with stop, reached_1r, trail_armed, h_armed, mfe, mae and mae_to_1r carried in. This needs a new ride with an injectable initial state, not _ride_leg9. F-RELAY-RIDE: a relay whose 1h close equals a 4h close must reproduce _ride_leg9 at 0.000e+00 on CTRL_COLS.\" Mirror this text in the REGS P-RELAY-1 scored_arm."
+        },
+        {
+          "target": "L-0.3 (re-root list)",
+          "severity": "MAJOR",
+          "problem": "The re-root list ('census STAGE_D/OUT, panel AS_OF_PIN/OUT/REG_DIR, lens tables, FAMILY_M=9, SEED') misses bindings the cited code actually reads. (1) tierc10_data.SNAPSHOT and .OUT drive kline_path, funding_path, load_pin, load_asof, load_funding_asof, derive_lenses and extend_klines, and BK.frame_l reads through them. D.STEP_MS also has no '15m'. (2) Some values were copied at import, so re-rooting the source does not reach them: BK.SEED/OUT/OUT_RERUN/LENS_MS/TUNING_RESULT_FOR/HEIGHT_VS_TOLL_PATH(_VERDICT)/REGISTRY_PIN_PATH; LN.SEED/OUT; tierc10_score.REG_DIR/OUT; tierc10_stamps.LENS_MS/OUT/SNAPSHOT. C.SNAPSHOT is written into every census row's as_of_substrate column. (3) Some defaults were bound at def time: TP.require_registered, require_arm, register and finish_family use family_m=6. TP.score, loao_n, co_headline and headline_n use seed=20260921. T5.cluster_boot and cluster_boot_diff use seed=20260816. Setting TP.FAMILY_M or TP.SEED changes none of these.",
+          "scenario": "The shim re-roots D.SNAPSHOT but not D.OUT. BK.frame_l then reads TC11 bars but cuts them at load_pin(OUT), which is TC10's 2026-09-21T16:00Z. The audit hook allows reads of research_outputs/tierc10, so it does not catch this. Every 4h, 1h and 5m lane frame silently loses the 20 new 4h bars. Separately: T5.cluster_boot(v, c) called without seed draws with 20260816, not 20260924. And any census-style table stamped via C.stamp says substrate 'tc10_20260921'.",
+          "amendment": "Replace L-0.3's re-root clause with: \"After all imports, the shim assigns this closed list (each printed as a lean): D.SNAPSHOT, D.OUT, and D.STEP_MS['15m']=900_000 in place; C.SNAPSHOT, C.OUT, C.STAGE_D, C.NULL_ROOT, C.SEED; C.LENSES/LENS_MS/LENS_SOURCE/TS_FMT extended IN PLACE for 15m, 1h, 12h and 1w (1w reads the Stage-D-derived 1w file); stamps.SNAPSHOT/OUT/LENS_MS; TP.OUT/OUT_RERUN/AS_OF_PIN/STAGE_D_MANIFEST/SEED; BK.SEED/OUT/OUT_RERUN/LENS_MS/TUNING_RESULT_FOR/HEIGHT_VS_TOLL_PATH/HEIGHT_VS_TOLL_VERDICT_PATH/REGISTRY_PIN_PATH/REGISTRATION_TEXTS_PATH; LN.SEED/OUT/REGISTRY_PIN_PATH/REGISTRATION_TEXTS_PATH. Default arguments are NOT re-rooted: every TC11 call passes seed=20260924 and n_boot=4000 explicitly, and none relies on a family_m default. A post-shim assertion HALTs unless D.load_pin(), TP.stage_d_pin() and C.as_of_close_ms(s)[0] for every s all equal 1790294400000, and D.kline_path('BTCUSDT','4h') resolves under tc11_20260925.\" Drop FAMILY_M and REG_DIR from the list (see the registry finding)."
+        },
+        {
+          "target": "L-0.3 vs L-F.2 (shim vs import-closure)",
+          "severity": "MAJOR",
+          "problem": "L-0.3 has one shim import every guarded TC10 module, and that set includes tierc10_census and tierc10_stamps. Every TC11 decision module must import the shim, or it cannot import TP, BK or D at all (tierc10_data's guard). Its fresh-interpreter closure then contains analytics.rangefinder_census and tierc10_census. That is exactly what L-F.2's scan must FAIL on (TC10's FORBIDDEN_IN_DECISION = tierc10_stamps, tierc10_census, rangefinder). Conversely, if census is NOT pre-imported, BK.macro_signals, BK.grid_toll_atr and tierc10_lanes:1246 do a function-local `import tierc10_census` after the env is back on TC11, and C.assert_substrate() HALTs.",
+          "scenario": "tierc11_ride.py (the P-TP-RNG/P-ADD ride) imports tierc11_env to get BK and T9. F-CLOSURE runs `python -c 'import tierc11_ride'` and finds rangefinder_census in sys.modules, so it goes RED by construction. Or the shim omits census, and the P-BRK-4H runner's BK.macro_signals call HALTs with 'NAIAD_CACHE_DIR=...tc11_20260925 is not the TC10 snapshot'.",
+          "amendment": "Add to L-0.3: \"Two shims. scripts/tierc11_env.py is range-free: it imports tierc10_data, tierc10_panel, tierc10_brk, tierc10_lanes and the tierc2..9 lineage under the env window, never imports tierc10_census, tierc10_stamps, tierc10_null or analytics.rangefinder_census, and installs the audit hook last. scripts/tierc11_nest.py imports tierc11_env, then tierc10_census, tierc10_stamps and tierc10_null under a second env window. It is the only TC11 module that may reach the range machine, and every runner imports it before any BK.macro_signals, BK.grid_toll_atr or LN census call. Decision modules import tierc11_env only.\" Change L-F.2's DECISION set to 'every tierc11 module except tierc11_nest and the runners'."
+        },
+        {
+          "target": "L-1.4 / L-0.3 (REG_DIR, FAMILY_M) / L-1.6 / L-T.6 (9/12 book) / REGS filing format",
+          "severity": "MAJOR",
+          "problem": "The TC10 registration doors cannot open on TC11's filings. TP.register and require_registered call _require_loao_line, which needs the literal 'LOAO LINE OF RECORD: …' clause inside the TEXT, plus a book_spec with per-arm era and loao_line. The contract's verbatim texts, which tierc11_registrations.py slices, carry none of these. REGISTRATIONS.json is also not TP's per-id json + REGISTRY.jsonl format. So TP.score, require_arm, external_book, run_cell_n (non-control) and finish_family(canonical_only) cannot be used without editing frozen text. TP.score's 'verdict' column is also CI-only: _verdict's docstring forbids folding p in, while L-1.4's verdict needs p ≤ 0.0111. TP has no forced-paired ruler, and set_change turns two-sample if lane or entry_ms keys drift. Finally, with REG_DIR re-rooted, run_cell_n(9/12, 'P-TRG-2') HALTs, because root ≠ REG_DIR while the real replay is loaded.",
+          "scenario": "The executor calls TP.score('P-ADD-BRK', text, book, …). It HALTs at require_registered because no TP-format file exists, or because the LOAO clause is absent from the text, or because '[filed m=9] vs scorer m=6'. Or a TP.score row prints verdict SUPPORTED with CI lo +0.02 and p 0.03 and is reported as the verdict, which mislabels it under L-1.4. The forward ledger's 'frozen 9/12' cannot be ridden through run_cell_n at all.",
+          "amendment": "Add to L-1.4: \"TC11 does not route through TP.register, require_registered, require_arm, score, external_book or finish_family, and TP.REG_DIR and TP.FAMILY_M are left untouched. scripts/tierc11_score.py verifies REGISTRATIONS.json before scoring: contract sha, text slice, payload sha, and the chain head pinned in a tracked file. It then computes: vs-zero = T5.cluster_boot on net_r; two-sample = T5.cluster_boot_diff; paired = T5.cluster_boot on per-campaign deltas keyed (symbol, entry_ms). All use _ci_from, seed=20260924, n_boot=4000 and the sensitivity seed 20260816, plus T5.d15. It applies SUPPORTED iff lo>0 AND p≤0.10/9 itself.\" Add to L-1.6: \"9/12 = T9.replay9(s, TP.CONTROL_CARD, T9.SWEEP_CELLS[-1], lo, hi) per CLASSIC5 asset. It is anchored cross-process by TP._book_sha over the TC10 window (hi = 2026-09-21T16:00Z) == P-TRG-2.scored.json full-arm book_sha256 b2276fa4….\""
+        },
+        {
+          "target": "L-W.1 / L-W.3 / L-W.5 / L-T.2 / L-A.1 (1h walks inside 4h bars)",
+          "severity": "MAJOR",
+          "problem": "Three readings assume the native 1h children reproduce the native 4h parent. L-W.1 says the last 1h bar closes 'at the same price'. L-W.3 says the 1h latch 'is the same event as v6's 4h intrabar latch'. L-W.5 and L-A.1 walk STOP on 1h lows. A read-only probe of the TC10 snapshot says otherwise. Every CLASSIC5 asset has in-corridor 4h bars whose 1h children do not reproduce the parent's high, low or close: 2023-11-10T12:00Z and 2024-10-28T20:00Z on all five. For example, ZEC 2024-10-28T20 has a 4h low of 38.04 against a 1h min of 37.95, and 1h closes of 38.09 then 38.59. There is one close mismatch per asset, plus listing-day 4h bars with fewer than 4 children. No mismatch law is stated. TC10's own precedent is LN.be_sequence: REPR_TOL, then mismatch → the parent decides, and the bar is counted.",
+          "scenario": "A v6 short is open across BTC 2024-10-28T20:00Z (4h high 69480.3, 1h max 69389.0) with its stop between those two prices. v6 stops out on the 4h high. The P-WARN-1 1h walk never touches the stop and rides on. The paired delta then carries a data-inconsistency exit that is not the warn rule. The same thing can flip a +1R latch (cohort membership), an add's legality or a relay stop. (The TC10 book had one campaign open across such a bar, ZEC long 2024-10-28T08→10-29T04.)",
+          "amendment": "Add a lean L-W.0: \"A 4h bar may be walked on 1h only if its four native 1h children exist on the grid and reproduce the parent's high, low and close to REPR_TOL (1e-9 relative, the LN.be_sequence law). On any other bar the parent decides STOP and the +1R latch exactly as v6 does. 1h-only events on that bar (warn cross, add trigger, relay entry) are taken at the parent's close. The bar is counted in a per-book mismatch column.\" Add fixture F-WALK-IDENT: \"with the warn rule and adds disabled, the 1h-walk ride reproduces v6 at 0.000e+00 on the 12 CTRL_COLS.\" Strike 'at the same price' from L-W.1 and 'It is the same event' from L-W.3."
+        },
+        {
+          "target": "L-R.6(a) / L-T.1 / P-BRK-4H (first retest that HOLDS) and R4's null",
+          "severity": "MINOR",
+          "problem": "Both cited detectors are one-shot: C.retest_holds and BK.band_hold_candidates break after hit[0]. So the scan is a new function, and the lean leaves unstated how it treats touches inside a still-pending hold window, and a 'truncated' mid-scan. It also sets no equivalence anchor. Separately, R4's 'null of record at the calibrated scale' cannot be built by calling tierc10_null. Its scale_for('calibrated') reads the TC10 census cell.json whole-tape pick (or C.calibrate on the whole tape). Its events_of goes through C.census_events, which uses the one-shot retest.",
+          "scenario": "A reused tierc10_null.compute_cell/run_cell on 4h silently draws null boxes at TC10's whole-tape pick 2.00 and scores one-shot retest events. The real TC11 side uses the tuning-era pick and scanning holds. The printed null is then not the null of the event measured.",
+          "amendment": "Add to L-R.6(a): \"The scan is a new function. Qualifying touches are those of C.retest_holds (the bar meets the band AND the prior close sits beyond it on the die side), taken in bar order within the candidacy window. Each touch gets retest_holds' test, including a touch inside another touch's pending window. The first 'hold' is the event (known_at = touch+hold). A 'truncated' verdict ends the scan. Every evaluated touch is a row. F-EQ-SCAN: the first row per DIE equals C.retest_holds/BK.band_hold_candidates exactly on every CLASSIC5 lens. R4's null calls real_side/null_draw-equivalents with the TC11 tuning-era pick passed in and this same scan, never tierc10_null.scale_for/compute_cell.\""
+        },
+        {
+          "target": "L-R.2 / L-R.5 (calibrate on a slice; F-NEST-ASOF)",
+          "severity": "MINOR",
+          "problem": "C.calibrate(tape.head(C.era_cut(tape))) is buildable. However: (1) C.Tape.head() returns a base Tape whose .step reads C.LENS_MS[lens], so prefix tapes for 1h, 12h, 1w or 15m KeyError in asof_index or era_cut unless C.LENS_MS is extended in place (a Tape11 that overrides only step is not enough). (2) Prefix-stability holds only at a FIXED scale. For 1w, and for late listings using the whole-tape fallback, the pick depends on bars after any cut. (3) calibrate's grid_df hard-codes calibrated_in_sample=True even for the tuning-era pick.",
+          "scenario": "F-NEST-ASOF re-runs the pipeline on the 1w prefix, including calibration. The whole-tape 1w pick moves, and a mismatch appears that is the scale's, not a leaked redraw. Alternatively the fixture KeyErrors on Tape('1h').step.",
+          "amendment": "Add to L-R.5: \"F-NEST-ASOF holds each (asset, lens) scale at its filed pick. The pick is a pin and is never re-fitted on a prefix. Prefix tapes keep their lens step (C.LENS_MS is extended in place, or Tape11 overrides head()).\" Add to L-R.2: \"The calibrate() grid's calibrated_in_sample column is overwritten with the true flag: tuning pick = in-sample for tuning and out-of-sample for holdout; whole-tape fallback = IN-SAMPLE everywhere.\""
+        },
+        {
+          "target": "L-A.1 (add accounting)",
+          "severity": "MINOR",
+          "problem": "The lean books net R = v6 net R + adds' net R, with the tranche funding added outside. The accounting it would reuse, tierc7._account_chain's add slot, puts tranche funding into the chain total and applies the D12 1R funding ceiling ONCE to that total. Its add_r is uncapped. The two readings disagree whenever the ceiling binds. For a 1h add, Add.i (a 4h index for funding) is also unstated.",
+          "scenario": "A long-held campaign with 0.64 R of funding (the v6 max) takes two 0.5-unit adds early. The chain funding exceeds 1R. _account_chain caps it, but 'v6 + add_r' does not. The paired delta then depends on which formula the builder picked.",
+          "amendment": "Replace the last two bullets of L-A.1 with: \"Adds are booked by tierc7._account_chain (Add.i = the 4h bar containing the add's 1h close, so funding runs from the next 4h open; size 0.5; exit at the campaign's exit_px). The D12 ceiling applies once to the campaign's total funding including tranches. The campaign's net R is _account_chain's net_r, and add_r is printed beside.\""
+        },
+        {
+          "target": "L-1.7 F-CTRL(b) and L-F.3 (TC10 records in worktrees)",
+          "severity": "MINOR",
+          "problem": "The filed control_journal.parquet stores TP.journal_frame values rounded to 6 dp (e.g. stop_px 8397.707345). Raw Trade floats will never match it at 0.000e+00; only journal_frame(live) vs filed will. Also, every TC10 record the build anchors to is gitignored and untracked: control_journal.parquet, AS_OF_PIN.json, STAGE_D_MANIFEST.json, census/TUNING_RESULT.json, STEP0_RECORD.json and P-TRG-2.scored.json. C.RETEST_PINS resolves at import from the ROOT-relative census dir.",
+          "scenario": "In a detached review worktree, `import tierc10_census` finds no TUNING_RESULT.json and silently resolves RETEST_DEFAULT (margin 1.0, hold 6, no grid_sha). Tap-89 holds would use hold 6, and F-CTRL(b) cannot find its referee.",
+          "amendment": "Add to L-1.7(b): \"comparison is TP.journal_frame(live) vs the filed parquet on the 12 CTRL_COLS.\" Add to L-0.3/L-F.3: \"TC10 records are read by absolute main-tree path. Immediately after import, every TC11 process (including F-DET subprocesses and worktree reviews) asserts C.RETEST_PINS == {margin_atr 1.0, hold_bars 3, ttl_bars 400, grid_sha 2135ca66…} and HALTs otherwise.\""
+        },
+        {
+          "target": "L-1.3 (era membership)",
+          "severity": "MINOR",
+          "problem": "L-1.3 puts entries in eras by their CLOSE ≤ 2024-06-30T23:59:59Z. The cited panel machinery tests the entry bar's OPEN instead: TP.in_era, era_window, BK.require_era and TP.score's era HALT all use entry_ms. TP.corridor_era also leaves the 4h bar opening 2024-06-30T20:00Z in no era window.",
+          "scenario": "A relay, BRK-4H or 9/12 campaign enters at the close of the 4h bar opening 2024-06-30T20:00Z. The Tier-E tuning and holdout slices then label it holdout (L-1.3), while any TP/BK door labels it tuning or refuses it. The slices do not sum to the full book.",
+          "amendment": "Add to L-1.3: \"One law everywhere in TC11: era = the entry (or anchor) bar's CLOSE. The TC11 scorer and slicer apply it, and TP.in_era/BK.require_era are not used for TC11 era gating. A bar straddling the cut is printed as a count.\""
+        },
+        {
+          "target": "L-R.4 (F-FEAS)",
+          "severity": "MINOR",
+          "problem": "'F-FEAS re-derives every lens verdict from the height and toll columns alone' cannot reproduce the verdict. L-R.4's verdict (C.verdict_rows) is the height leg AND the edge-fade leg, and the edge leg needs edge_n, edge_n_ranges, edge_median_term_h20 and edge_toll_atr.",
+          "scenario": "At 1h the height leg passes (ratio ≈20) and the edge leg fails. A fixture that reads only the height and toll columns re-derives PASS and goes RED against a correct FAIL. Or it is written to agree, and so checks nothing.",
+          "amendment": "Replace the F-FEAS bullet with: \"F-FEAS re-derives every lens verdict from the height columns (n_ranges, ratio_median, share_ratio_lt_1), the toll column and the edge-fade columns (edge_n, edge_n_ranges, edge_net_h20 = edge_median_term_h20 − edge_toll_atr), per C.verdict_rows' law, including UNDERPOWERED.\""
+        },
+        {
+          "target": "L-R.6 L+1 conditioning (★ 'in-range at its own boundary')",
+          "severity": "MINOR",
+          "problem": "'The event's boundary of L' is undefined at the event's known_at. For a BREAKOUT, the L range is dead by then (asof_view in_range False, top/bot NaN). For a SWING-FAILURE, the harden bar redraws the as-of boundary on that same bar to the episode's wick extreme, so pre- and post-redraw values can differ by more than 0.25 ATR_L. The only other source is Range.top/.bottom, which L-F.2 forbids.",
+          "scenario": "An upthrust's wick extends 0.4 ATR_L above the old top, and the L+1 top sits 0.1 ATR_L above the old top. Pre-redraw, the event is coincident (★ cell); post-redraw it is not. The builder picks one after seeing counts.",
+          "amendment": "Add to L-R.6: \"For coincidence, the event's boundary of L is: BREAKOUT = view.top/bot of the broken side at bar die_i−1; SWING-FAILURE = the deviated side's as-of boundary at harden_i−1 (pre-redraw), with the post-redraw value (view at harden_i) as a Tier-E twin. Never Range.top/.bottom.\""
+        }
+      ],
+      "summary": "I checked the leans and the operative specs for buildability against scripts/tierc10_{panel,census,brk,lanes,data,stamps,null}.py, tierc9.py, tierc7.py, tierc7_lab_regime.py, tierc5.py, tierc3_rules.py and analytics/rangefinder_census.py. I also ran read-only probes of the TC10 snapshot, the filed control journal and git tracking.\n\nMaterial defects:\n- **One BLOCKER, P-RELAY-1.** \"The v6 ride from the next 4h bar\" skips the entry bar's own bell, harvest and trail slot, and resets the +1R/trail state. Relays entered in the window-closing bar become zombie trades with no 12/89 bell.\n- **L-0.3 re-root list is incomplete.** It misses tierc10_data.SNAPSHOT/OUT and STEP_MS['15m']. It also misses values copied at import (BK/LN/score/stamps constants, C.SNAPSHOT) and defaults bound at def time (family_m=6, seeds 20260921 and 20260816). Re-rooting D.SNAPSHOT without D.OUT silently truncates every BK lens frame at the TC10 pin.\n- **Shim vs closure fixture.** One shim that pre-imports tierc10_census breaks L-F.2's closure fixture. Not pre-importing it makes BK.macro_signals HALT on its lazy census import. The shim must be split.\n- **TC10 registry doors can't take the verbatim texts.** They need a LOAO clause in the text, TP's book_spec and TP's file format. TP.score's verdict column is CI-only. With REG_DIR re-rooted, the 9/12 book cannot be ridden through run_cell_n. A TC11 scorer path must be stated.\n- **1h children don't always match the 4h parent.** They disagree on 2 in-corridor bars per asset (measured: 2023-11-10T12Z and 2024-10-28T20Z). The 1h walks (warn, adds, relay, latch) need a mismatch law and an identity fixture.\n\nMINOR items:\n- The scanning \"first HOLD\" detector and R4's null must be written new; tierc10_null reads TC10's whole-tape pick and one-shot events.\n- F-NEST-ASOF needs a fixed scale pick, and prefix tapes need their lens step.\n- Add accounting disagrees with _account_chain's funding ceiling.\n- F-CTRL(b) must compare 6-dp journal frames, and every TC10 record it reads is gitignored.\n- Era law: L-1.3 uses the entry bar's close; the panel doors use its open.\n- F-FEAS cannot re-derive the verdict without the edge-fade columns.\n- The coincidence boundary is undefined for breakout and SFP events.\n\nThese check out against the code:\n- L-G.1: tide_streak, _trailing_pool/_trailing_edges and digitize work as described, and B4 = run ≥ trailing q75.\n- L-T.1: the brk_stop geometry, BK.tide_state, ride_leg_l(ribbon=None) and brk_campaigns all fit.\n- L-T.2 stop: struct_stop_4h at the last closed 4h bar is buildable.\n- Calibrating on the era_cut head is buildable.\n- T5.d15 and T5.cluster_boot/_ci_from match L-1.4's p formula.\n- L-R.3: the pins and shas match STEP0_RECORD.\n- Harden events occur only on confirmed ranges, so L-R.6(b)'s filter is a harmless no-op.\n- pd.read_parquet reads do fire the audit hook's open event."
+    },
+    {
+      "lens": "trading",
+      "findings": [
+        {
+          "target": "L-T.2 / P-RELAY-1 (REGS scored_arm)",
+          "severity": "BLOCKER",
+          "problem": "L-T.2 lets the relay enter on any with-trend 1h 9/12 close up to the counter-12/89 close. That includes closes after v6's own 4h 12/26 trigger has fired. In every lag-0 window (52/200 in the TC10 v6 book) the relay can only come after the base entry. The estate's ruled posture word ARMED (scripts/posture_engine.py:243-252) reads 'no counter 12/89 and no 89/316-against since. No in-window 12/26 trigger yet'. Once the trigger fires the window is TRIGGERED, not armed. The contract's F-RELAY law ('1h close precedes the 4h trigger bar') and W2's 'relay's evidence' (lead before the trigger) both make the relay an earlier hand-off. The lean's book mixes that early lane with a late re-entry lane that pays a worse price and has a different stop, so the two-sample test answers a different question. F-RELAY would also pass on 3 hand-picked relays while a large share of the book breaks the property the fixture asserts.",
+          "scenario": "Lag-0 long window: the 4h 12/89 arm and the 12/26 trigger close on the same bar, and v6 enters at that close. Three hours later a 1h 9/12 up-cross closes, and the relay 'enters' after the base at a higher price. It is scored as the relay's earlier entry. The lean's lead distribution even prints these as 'relays that came after the 4h trigger'.",
+          "amendment": "L-T.2 entry clause becomes: 'The relay enters at the first 1h bar whose close is > the arm close AND < the earliest of (i) that window's v6 4h 12/26 trigger close, (ii) the window-close instant (counter 4h 12/89), (iii) a 4h 89/316 cross against the window direction (the ruled ARMED gate), and on which EMA9 crosses EMA12 in the trade direction. A 1h close at the same instant as the 4h trigger close is not a relay. Windows whose 4h trigger closes first (every lag-0 window included) are relay MISSES, printed in the miss column with what v6 did.' L-T.3: F-RELAY asserts 'relay 1h close < that window's 4h trigger close' on EVERY relay (one planted post-trigger relay must FAIL) and hand-walks 3. The lean's current reading is printed only as a Tier-E 'late-relay' twin. Mirror this in the REGS P-RELAY-1 scored_arm: '...strictly after the v6 arm close and strictly before min(v6 4h trigger close, window-close, 4h 89/316-against close)...'."
+        },
+        {
+          "target": "L-H.1 / P-TP-RNG (REGS scored_arm)",
+          "severity": "BLOCKER",
+          "problem": "The TP level (12h top − 0.25·ATR_12h for a long) is placed without regard to the entry price. The 12h range can still be IN_RANGE with price above its top, because death needs 8 closes or 1.5 ATR_12h beyond it. So a long entered within 0.25 ATR_12h of the top, or above it, has level ≤ entry_px. The near-side rule arms the limit after the first 4h close back below the level, and the bounce then fills it at a price at or below entry. The rule books a loss (or a gain smaller than the fee) as a 'take-profit'. That is a failed-breakout exit, not the contract's 'take-profit of the remainder', and it contaminates the paired Δ and the D15 tail ratio.",
+          "scenario": "12h top 100, ATR_12h 4, level 99. A v6 long enters at 99.6. The next 4h close is 98.7, below the level, so a limit rests at 99. The next bar's high is 99.2, so the remainder exits at 99.0, a loss labelled TP. v6 would have held the trade.",
+          "amendment": "In L-H.1, after 'If it is IN_RANGE, the level is ...', insert: 'The order rests during bar j only if the level is beyond the entry in the trade's favour by more than the round-trip taker fee: (level − entry_px)·d > (FEE_BPS_ROUND_TRIP/1e4)·entry_px. A bar that fails this rests no order and the trail runs. Printed: the count of campaigns and bars where the guard withheld an order, and the unguarded rival as a Tier-E twin.' Mirror this in the REGS P-TP-RNG scored_arm ('...armed only when the prior 4h close is on the near side AND the level is beyond entry by more than the round-trip fee...')."
+        },
+        {
+          "target": "L-W.2 / L-W.3 / P-WARN-1 condition (REGS)",
+          "severity": "MAJOR",
+          "problem": "The 1h timeline runs from the ARM close (L-W.2), and 'before +1R' is defined only as cross index < latch index (L-W.3). A counter-12/89 cross between the arm and the entry therefore puts a campaign into the 'counter-12/89 before +1R' cohort. That pre-entry pullback often comes before a 12/26 re-trigger in lag ≥ 1 windows. The P-WARN-1 exit rule can only act on crosses after the entry close, and the contract lists pre-entry events separately ('the SAME events as PRE-ENTRY conditions'). So the condition that decides whether the slot is spent is measured on a different event set from the one the scored rule trades. It is also confounded with window age, which is P-WIN-1's variable.",
+          "scenario": "Lag-20 long: a 1h 12/89 cross-under 30h before the entry and none after it. The trade loses −1R. It enters the cohort, pulls the cohort's E[net] down, and the condition is MET. The exit rule is then scored even though this campaign's warning could never have been acted on.",
+          "amendment": "L-W.3: ''Before +1R' = entry close < the cross's 1h close AND cross index < latch index. 'After +1R' = cross index ≥ latch index. Crosses whose 1h close is ≤ the entry close (arm→entry, including the 1h bar closing at the entry instant) are PRE-ENTRY events. They feed only W2's pre-entry table, never a post-entry cohort and never the P-WARN-1 condition.' Mirror this in the REGS P-WARN-1 condition text ('cohort = campaigns with a post-entry counter-12/89 cross before the +1R latch')."
+        },
+        {
+          "target": "L-S.2 / P-SCALP-2 (REGS scored_arm)",
+          "severity": "MAJOR",
+          "problem": "'Live range' is asof_view in_range (confirm_i ≤ t < die_i), which stays true while a breach is pending, and pct is read at the 5m close. A long can therefore be entered when the last closed 1h bar has already CLOSED below the bottom, i.e. an open breach episode, as long as 5m price has bounced back to pct ≥ 0. At that moment the contract's own invalidation ('a 1h boundary breach') is already true. The trade either gets invalidated at the next 1h close or becomes a spring bet read against a box that the harden will redraw. That is not the contract's lower-third range trade. Upper-third shorts during a pending top breach mirror this.",
+          "scenario": "1h bottom 100. A 1h bar closes at 99.4 (breach-open). In the next hour 5m price recovers to 100.8 (pct 8) and the 5m 12/89 crosses up, so the scalper goes long. If the next 1h close is 99.7, the trade is invalidated within the hour and pays the toll. If it closes at 100.5, the harden redraws the bottom to 98.9, so the 'third' and target were read off a box that no longer exists.",
+          "amendment": "L-S.2 Live range: append 'and the last closed 1h bar's close lies inside that as-of box (bot ≤ c_1h ≤ top): no open breach episode on either side. 5m crosses taken during a pending breach are refused and counted (disclosure).' Mirror this in the REGS P-SCALP-2 scored_arm ('live CONFIRMED 1h range with the last 1h close inside the box; ...')."
+        },
+        {
+          "target": "L-T.2 (relay ride, entry 4h bar close)",
+          "severity": "MINOR",
+          "problem": "'From the next 4h bar on, it is the v6 ride unchanged' skips the close stage of the relay's own entry 4h bar. The relay can legally enter in the 4h bar whose close is the counter 12/89 (unknowable at the 1h entry), or an 89/316 against. v6's bells are one-bar cross events, so the ride from the next bar never sees them. The relay then holds through its own bell until a stop.",
+          "scenario": "A long relay enters at the 2nd 1h close of a 4h bar, and that 4h bar closes with e12 crossing under e89. v6 would ring bell_12_89 at that close. The relay ignores it and rides against a dead window.",
+          "amendment": "Replace the sentence with: 'The rest of the entry's 4h bar is walked on 1h bars for the stop and the +1R latch. At that 4h bar's close v6's BELL applies (counter 12/89 or 89/316 at that close → exit at that close), and the TRAIL step applies if +1R has latched. From the next 4h bar on, it is the v6 ride unchanged.'"
+        },
+        {
+          "target": "L-S.2 (target/stop geometry, intrabar order)",
+          "severity": "MINOR",
+          "problem": "Nothing guards that the target lies beyond entry. Target = top − 0.25·ATR_1h at entry, and entry can be as high as pct 33.33, so target ≤ entry when height < 0.375·ATR_1h: a box confirmed in calm conditions and read after an ATR spike. That is rare but degenerate, a 'take-profit' at a loss. The order of the invalidation exit against the stop and target inside its 5m bar is also unstated.",
+          "scenario": "A 1h box of height 1.2 ATR at confirm is read after ATR_1h triples. H is 0.4 ATR_now, so the target sits within a few bps of entry and the trade nets a loss on a target fill.",
+          "amendment": "Add to L-S.2: 'Refuse (and count) an entry with (target − entry)·d ≤ (10 bps)·entry. Print per row the distribution of (target − entry)/(entry − stop). Within a 5m bar the order is STOP → TARGET → invalidation exit at that bar's close.'"
+        },
+        {
+          "target": "L-A.1 / P-ADD-BRK / P-ADD-SFP",
+          "severity": "MINOR",
+          "problem": "The +1R gate is a latch, so an add can fire after a retrace below entry (averaging down). This is plausible for a 1h spring after a deep pullback. An add can also fire after v6's harvest has de-risked 50% at the 89/316 band, and the 1h spring often forms in that same pullback, which re-levers the position the law just de-risked. Both follow the contract's text, but they blur what the paired Δ measures: add-on-strength versus undoing the harvest or averaging down.",
+          "scenario": "A long touches +1R, pulls back to the 4h EMA89 (harvest sells 0.5 at the 4h close), and a 1h spring at the 1h bottom (below entry) adds 0.5. Exposure returns to 1.0, bought below the entry.",
+          "amendment": "Add to L-A.1: 'Printed per add book: n adds with (add_px − entry_px)·d < 0, and n adds after the harvest fired (or inside the harvest's 4h bar). Tier-E twins refusing each class are printed beside. The scored arm is unchanged.'"
+        },
+        {
+          "target": "L-G.3 (Tier-E priority)",
+          "severity": "MINOR",
+          "problem": "'Priority' is read as a preference between two ASSETS triggering at the same 4h close. v6 is one position per asset with no book capacity, so this never changes a single entry. The 'priority' half of the contract's 'admission/priority' becomes a no-op collision count, and the 2×2×2 cross carries no priority arm.",
+          "scenario": "BTC and SOL trigger on the same close. Both are taken under either ordering, so every priority cell is identical to the ungated book.",
+          "amendment": "Replace the priority bullet with: 'As priority: within one window, when the window's first 12/26 trigger has r_over_atr > 2.2, pass it and take that window's next same-direction 12/26 trigger with r_over_atr ≤ 2.2 (before the window closes, asset flat). This is printed as its own Tier-E book beside the admission cut, with the count of substituted entries. The same-close cross-asset collision count is kept as a disclosure (it cannot bind under one position per asset).'"
+        }
+      ],
+      "summary": "I reviewed the readings through the trading-semantics lens only and found 2 blockers, 2 major defects and 4 minor ones.\n\nBlockers:\n- **P-RELAY-1:** the relay can enter after v6's own 4h trigger has fired. In every lag-0 window it can only come after the base. The ruled ARMED word (posture_engine.py:243-252) means \"no in-window 12/26 trigger yet\", and F-RELAY asserts that the relay comes before the trigger. As read, part of the relay book is a late re-entry lane.\n- **P-TP-RNG:** the take-profit level can be at or below entry. This happens when a long is entered near or above a 12h top whose range is still alive. The resting limit then fills on the bounce and books a loss as a \"take-profit\".\n\nMajor:\n- **P-WARN-1:** the \"before +1R\" cohort includes counter-crosses between arm and entry. So whether the slot is spent is decided on events the exit rule can never act on, and it is confounded with window age.\n- **P-SCALP-2:** it can enter while a 1h breach is pending, when its own invalidation condition is already true at entry.\n\nMinor:\n- The relay skips the bell at the close of its own entry 4h bar.\n- The scalper has no guard that the target is beyond entry, and does not state the order of exits within a 5m bar.\n- Adds can average down below entry, or re-lever after the harvest has de-risked.\n- The Tier-E priority reading never binds under one position per asset.\n\nThese were checked and are fine:\n- **L-T.1:** reading the tide at the entry close is causal and correct.\n- **L-W.5:** an exit in the first hour is the contract's rule, not a defect.\n- **Adds cannot be stopped out instantly:** a 1h close beyond the stop in force would already have exited the campaign, and a trail advance at a 4h close is railed at least 1 ATR behind that close.\n- **Scalper stop and target:** they cannot give a negative reward-to-risk."
+    }
+  ],
+  "workflowProgress": [
+    {
+      "type": "workflow_phase",
+      "index": 1,
+      "title": "Review"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 1,
+      "label": "review:fidelity",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "a40dcc7264a76c919",
+      "model": "claude-opus-5-5[1m]",
+      "state": "done",
+      "startedAt": 1790296675313,
+      "queuedAt": 1790296675299,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Contract-fidelity review of LEANS.md and the REGS specs aga…",
+      "promptPreview": "You are an adversarial reviewer for TIER-C11 in the Naiad repo (/Users/luis/Naiad). READ-ONLY: modify nothing, commit nothing.\nRead, in full: (1) the contract exchange/queue/2026-09-24_TC11_APOLLO.md (103 lines; the operator's frozen text), (2) the executor's readings research_outputs/tierc11/LEANS.md, (3) the operative registration specs in scripts/tierc11_registrations.py (the REGS list). The sc…",
+      "promptFramed": true,
+      "lastProgressAt": 1790297477501,
+      "tokens": 170502,
+      "toolCalls": 27,
+      "durationMs": 802187,
+      "resultPreview": "{\"findings\":[{\"target\":\"L-W.3 (and REGS P-WARN-1 'condition', which cites L-W.3)\",\"severity\":\"BLOCKER\",\"problem\":\"The contract splits W2 into post-entry cohorts ({counter-12/89 before +1R · counter-12/26 before +1R · 9/12 re-cross after entry · counter-12/89 after +1R}) and, separately, 'the SAME events as PRE-ENTRY conditions'. L-W.2 starts the 1h timeline at the ARM close, and L-W.3 defines 'bef…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 2,
+      "label": "review:causality",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "a9b95dd6e1857b4a1",
+      "model": "claude-opus-5-5[1m]",
+      "state": "done",
+      "startedAt": 1790296675313,
+      "queuedAt": 1790296675299,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "Through the causality lens: 1 BLOCKER, 4 MAJOR, 3 MINOR. - …",
+      "promptPreview": "You are an adversarial reviewer for TIER-C11 in the Naiad repo (/Users/luis/Naiad). READ-ONLY: modify nothing, commit nothing.\nRead, in full: (1) the contract exchange/queue/2026-09-24_TC11_APOLLO.md (103 lines; the operator's frozen text), (2) the executor's readings research_outputs/tierc11/LEANS.md, (3) the operative registration specs in scripts/tierc11_registrations.py (the REGS list). The sc…",
+      "promptFramed": true,
+      "lastProgressAt": 1790297534434,
+      "tokens": 201010,
+      "toolCalls": 21,
+      "durationMs": 858005,
+      "resultPreview": "{\"findings\":[{\"target\":\"L-W.2 / L-W.3 (W2 in-trade cohorts; the P-WARN-1 condition; REGS P-WARN-1 'condition', scripts/tierc11_registrations.py:42-44)\",\"severity\":\"BLOCKER\",\"problem\":\"The exit instant that bounds the in-trade 1h timeline is never resolved on the 1h path. L-W.2 says the timeline runs 'from its arm close through its exit'. The natural build reuses the TC10 stamper: tierc10_stamps.ca…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 3,
+      "label": "review:statistics",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "a950e8b9c2a8cd68b",
+      "model": "claude-opus-5-5[1m]",
+      "state": "done",
+      "startedAt": 1790296675314,
+      "queuedAt": 1790296675299,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "I reviewed the TC11 readings for statistical integrity and …",
+      "promptPreview": "You are an adversarial reviewer for TIER-C11 in the Naiad repo (/Users/luis/Naiad). READ-ONLY: modify nothing, commit nothing.\nRead, in full: (1) the contract exchange/queue/2026-09-24_TC11_APOLLO.md (103 lines; the operator's frozen text), (2) the executor's readings research_outputs/tierc11/LEANS.md, (3) the operative registration specs in scripts/tierc11_registrations.py (the REGS list). The sc…",
+      "promptFramed": true,
+      "lastProgressAt": 1790297383072,
+      "tokens": 183369,
+      "toolCalls": 24,
+      "durationMs": 706642,
+      "resultPreview": "{\"summary\":\"I reviewed the TC11 readings for statistical integrity and honest labeling. Four things hold up:\\n- **Verdict rule.** \\\"CI lo > 0 AND p ≤ 0.10/9\\\" agrees with TC10's scorer (`_ci_from` percentiles, p = (#draws ≤ 0 + 1)/(B + 1), `finish_family` bar = q/m).\\n- **\\\"m stays 9\\\" and \\\"no slot spent\\\".** A precondition (R2 for P-SCALP-2) or a condition (P-WARN-1) can only remove chances to r…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 4,
+      "label": "review:buildability",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "a8289b93917fdaad6",
+      "model": "claude-opus-5-5[1m]",
+      "state": "done",
+      "startedAt": 1790296675314,
+      "queuedAt": 1790296675299,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "I checked the leans and the operative specs for buildabilit…",
+      "promptPreview": "You are an adversarial reviewer for TIER-C11 in the Naiad repo (/Users/luis/Naiad). READ-ONLY: modify nothing, commit nothing.\nRead, in full: (1) the contract exchange/queue/2026-09-24_TC11_APOLLO.md (103 lines; the operator's frozen text), (2) the executor's readings research_outputs/tierc11/LEANS.md, (3) the operative registration specs in scripts/tierc11_registrations.py (the REGS list). The sc…",
+      "promptFramed": true,
+      "lastProgressAt": 1790297926986,
+      "tokens": 358146,
+      "toolCalls": 76,
+      "durationMs": 1250557,
+      "resultPreview": "{\"findings\":[{\"target\":\"L-T.2 / P-RELAY-1 (REGS scored_arm: 'rest of the 4h bar walked on 1h for stop/+1R, then the v6 ride')\",\"severity\":\"BLOCKER\",\"problem\":\"The reading hands a relay entered strictly inside 4h bar J back to 'the v6 ride unchanged' from J+1. The only v6 ride code is tierc9._ride_leg9 (and BK.ride_leg_l). It loops j = ti+1..hi and starts with reached_1r, trail_armed, h_armed, mfe,…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 5,
+      "label": "review:trading",
+      "phaseIndex": 1,
+      "phaseTitle": "Review",
+      "agentId": "a1a018f0f289e4f28",
+      "model": "claude-opus-5-5[1m]",
+      "state": "done",
+      "startedAt": 1790296675314,
+      "queuedAt": 1790296675299,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "lastToolSummary": "I reviewed the readings through the trading-semantics lens …",
+      "promptPreview": "You are an adversarial reviewer for TIER-C11 in the Naiad repo (/Users/luis/Naiad). READ-ONLY: modify nothing, commit nothing.\nRead, in full: (1) the contract exchange/queue/2026-09-24_TC11_APOLLO.md (103 lines; the operator's frozen text), (2) the executor's readings research_outputs/tierc11/LEANS.md, (3) the operative registration specs in scripts/tierc11_registrations.py (the REGS list). The sc…",
+      "promptFramed": true,
+      "lastProgressAt": 1790297239283,
+      "tokens": 175992,
+      "toolCalls": 10,
+      "durationMs": 562853,
+      "resultPreview": "{\"findings\":[{\"target\":\"L-T.2 / P-RELAY-1 (REGS scored_arm)\",\"severity\":\"BLOCKER\",\"problem\":\"L-T.2 lets the relay enter on any with-trend 1h 9/12 close up to the counter-12/89 close. That includes closes after v6's own 4h 12/26 trigger has fired. In every lag-0 window (52/200 in the TC10 v6 book) the relay can only come after the base entry. The estate's ruled posture word ARMED (scripts/posture_e…"
+    }
+  ],
+  "totalTokens": 1089019,
+  "totalToolCalls": 158
+}

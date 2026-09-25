@@ -281,3 +281,8 @@ research_outputs/tierc10_run2/**
 # roster_mapping_<date>.json (OR-2 R-7): the record a RULED roster mapping is held to by
 # F-BR-16 (PUMPFUNUSDT -> PUMPUSDT). Evidence a fixture requires must survive a clone.
 !research_outputs/oracle/roster_mapping_*.json
+# TIER-C11 (2026-09-25): parquet stays out of git — its shas live in research_outputs/tierc11/PROGRESS.json
+# and the stage manifests; documents of record (md/json/txt) are committed. Appended at the END so that line
+# numbers other lanes cite (TC10 cites :263) stay put.
+research_outputs/tierc11/**/*.parquet
+research_outputs/tierc11/**/_det_*/
