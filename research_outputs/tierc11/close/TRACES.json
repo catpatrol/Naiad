@@ -1,0 +1,3401 @@
+{
+  "schema": "tierc11.close.TRACES.v1",
+  "built_by": "scripts/tierc11_close.py",
+  "law": "every number the draft, the append and the measured findings print is a trace: its spec names the record (file + field, a parquet cell, a text match, a git fact, an ast constant) and its fmt the formatting; uses count the renders per region (s0 = the draft's §0, append = the ledger append, s5 = the measured findings, doc = the rest of the draft). Exemptions are digit-bearing NAMES, counted the same way.",
+  "regions": {
+    "s0": "the draft from '## 0 · VERDICTS' to '## 1 ·'",
+    "append": "the ledger append's prose",
+    "s5": "measured findings",
+    "doc": "the rest of the draft"
+  },
+  "traces": [
+    {
+      "key": "P-ADD-BRK.hi",
+      "lit": "+0.0348",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-ADD-BRK].stats.main.hi"
+      },
+      "value": 0.03478746117222606,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-ADD-BRK.lo",
+      "lit": "-0.0741",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-ADD-BRK].stats.main.lo"
+      },
+      "value": -0.074065927819195,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-ADD-BRK.n",
+      "lit": "200",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-ADD-BRK].stats.main.n"
+      },
+      "value": 200,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-ADD-BRK.n_base",
+      "lit": "200",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-ADD-BRK].stats.main.n_base"
+      },
+      "value": 200,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-ADD-BRK.p",
+      "lit": "0.730817",
+      "fmt": "f6",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-ADD-BRK].stats.main.p_one_sided"
+      },
+      "value": 0.730817295676081,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-ADD-BRK.point",
+      "lit": "-0.0202",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-ADD-BRK].stats.main.point"
+      },
+      "value": -0.020183500268441564,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-ADD-SFP.hi",
+      "lit": "-0.0070",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-ADD-SFP].stats.main.hi"
+      },
+      "value": -0.007020101623174398,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-ADD-SFP.lo",
+      "lit": "-0.0314",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-ADD-SFP].stats.main.lo"
+      },
+      "value": -0.0313541455972871,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-ADD-SFP.n",
+      "lit": "200",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-ADD-SFP].stats.main.n"
+      },
+      "value": 200,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-ADD-SFP.n_base",
+      "lit": "200",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-ADD-SFP].stats.main.n_base"
+      },
+      "value": 200,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-ADD-SFP.p",
+      "lit": "1.000000",
+      "fmt": "f6",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-ADD-SFP].stats.main.p_one_sided"
+      },
+      "value": 1.0,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-ADD-SFP.point",
+      "lit": "-0.0200",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-ADD-SFP].stats.main.point"
+      },
+      "value": -0.019977980039389415,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-AGE-1.hi",
+      "lit": "+0.2967",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-AGE-1].stats.main.hi"
+      },
+      "value": 0.29665616046817667,
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "P-AGE-1.honesty",
+      "lit": "IN-SAMPLE RE-SCORE, NOT CONFIRMATORY",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-AGE-1].verdict_cell",
+        "re_in_value": "^SUPPORTED — ([A-Z][A-Z ,-]*?) \\("
+      },
+      "value": "IN-SAMPLE RE-SCORE, NOT CONFIRMATORY",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "P-AGE-1.lo",
+      "lit": "+0.1912",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-AGE-1].stats.main.lo"
+      },
+      "value": 0.19118979196542596,
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "P-AGE-1.n",
+      "lit": "141",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-AGE-1].stats.main.n"
+      },
+      "value": 141,
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "P-AGE-1.n_base",
+      "lit": "200",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-AGE-1].stats.main.n_base"
+      },
+      "value": 200,
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "P-AGE-1.new_base",
+      "lit": "0",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-AGE-1].pre_seen_new_campaigns.base"
+      },
+      "value": 0,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "P-AGE-1.new_scored",
+      "lit": "0",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-AGE-1].pre_seen_new_campaigns.scored"
+      },
+      "value": 0,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "P-AGE-1.p",
+      "lit": "0.000250",
+      "fmt": "f6",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-AGE-1].stats.main.p_one_sided"
+      },
+      "value": 0.00024993751562109475,
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "P-AGE-1.point",
+      "lit": "+0.2461",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-AGE-1].stats.main.point"
+      },
+      "value": 0.2460623950918451,
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "P-AGE-1.pre_seen.cohort",
+      "lit": "the scored cohort IS TC10 P_AGE_1_TIDE_YOUTH B4",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-AGE-1].labels.pre_seen",
+        "re_in_value": "^(the scored cohort IS [^(;]*?) \\("
+      },
+      "value": "the scored cohort IS TC10 P_AGE_1_TIDE_YOUTH B4",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "P-AGE-1.refused_band",
+      "lit": "B4 OLD",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-AGE-1].provenance.scored.description",
+        "re_in_value": "\\((B4 OLD);"
+      },
+      "value": "B4 OLD",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "P-AGE-1.refused_n",
+      "lit": "59",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-AGE-1].gate.refused_n"
+      },
+      "value": 59,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "P-AGE-1.refused_sum",
+      "lit": "-22.66",
+      "fmt": "f2s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-AGE-1].gate.refused_sum_r"
+      },
+      "value": -22.656566158576627,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "P-AGE-1.since",
+      "lit": "2026-09-21T16:00Z",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-AGE-1].pre_seen_new_campaigns.since"
+      },
+      "value": "2026-09-21T16:00Z",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "P-BRK-4H.hi",
+      "lit": "+0.2081",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-BRK-4H].stats.main.hi"
+      },
+      "value": 0.20807970205604148,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-BRK-4H.lo",
+      "lit": "-0.0920",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-BRK-4H].stats.main.lo"
+      },
+      "value": -0.09202487748656933,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-BRK-4H.n",
+      "lit": "322",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-BRK-4H].stats.main.n"
+      },
+      "value": 322,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-BRK-4H.p",
+      "lit": "0.318170",
+      "fmt": "f6",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-BRK-4H].stats.main.p_one_sided"
+      },
+      "value": 0.3181704573856536,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-BRK-4H.point",
+      "lit": "+0.0503",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-BRK-4H].stats.main.point"
+      },
+      "value": 0.050265025673603324,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-RELAY-1.hi",
+      "lit": "+1.2600",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-RELAY-1].stats.main.hi"
+      },
+      "value": 1.2600101509952861,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-RELAY-1.lo",
+      "lit": "-0.4412",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-RELAY-1].stats.main.lo"
+      },
+      "value": -0.4411945973819836,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-RELAY-1.n",
+      "lit": "173",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-RELAY-1].stats.main.n"
+      },
+      "value": 173,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-RELAY-1.n_base",
+      "lit": "200",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-RELAY-1].stats.main.n_base"
+      },
+      "value": 200,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-RELAY-1.p",
+      "lit": "0.308423",
+      "fmt": "f6",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-RELAY-1].stats.main.p_one_sided"
+      },
+      "value": 0.3084228942764309,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-RELAY-1.point",
+      "lit": "+0.2496",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-RELAY-1].stats.main.point"
+      },
+      "value": 0.2496022104371949,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-TP-RNG.hi",
+      "lit": "+0.0500",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-TP-RNG].stats.main.hi"
+      },
+      "value": 0.04996534730596904,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-TP-RNG.lo",
+      "lit": "-0.0813",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-TP-RNG].stats.main.lo"
+      },
+      "value": -0.08129461905757226,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-TP-RNG.n",
+      "lit": "200",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-TP-RNG].stats.main.n"
+      },
+      "value": 200,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-TP-RNG.n_base",
+      "lit": "200",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-TP-RNG].stats.main.n_base"
+      },
+      "value": 200,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-TP-RNG.p",
+      "lit": "0.743064",
+      "fmt": "f6",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-TP-RNG].stats.main.p_one_sided"
+      },
+      "value": 0.7430642339415147,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-TP-RNG.point",
+      "lit": "-0.0200",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-TP-RNG].stats.main.point"
+      },
+      "value": -0.019955474275438242,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-WARN-1.hi",
+      "lit": "+0.0217",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-WARN-1].stats.main.hi"
+      },
+      "value": 0.021674629130789602,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-WARN-1.lo",
+      "lit": "-0.0092",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-WARN-1].stats.main.lo"
+      },
+      "value": -0.009192532688461725,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-WARN-1.n",
+      "lit": "200",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-WARN-1].stats.main.n"
+      },
+      "value": 200,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-WARN-1.n_base",
+      "lit": "200",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-WARN-1].stats.main.n_base"
+      },
+      "value": 200,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-WARN-1.p",
+      "lit": "0.303424",
+      "fmt": "f6",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-WARN-1].stats.main.p_one_sided"
+      },
+      "value": 0.303424143964009,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-WARN-1.point",
+      "lit": "+0.0056",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-WARN-1].stats.main.point"
+      },
+      "value": 0.005578390809679168,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-WIN-1.hi",
+      "lit": "+0.3393",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-WIN-1].stats.main.hi"
+      },
+      "value": 0.33925603239869473,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-WIN-1.lo",
+      "lit": "+0.0030",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-WIN-1].stats.main.lo"
+      },
+      "value": 0.002963561089636302,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-WIN-1.n",
+      "lit": "137",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-WIN-1].stats.main.n"
+      },
+      "value": 137,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-WIN-1.n_base",
+      "lit": "200",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-WIN-1].stats.main.n_base"
+      },
+      "value": 200,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "P-WIN-1.p",
+      "lit": "0.036491",
+      "fmt": "f6",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-WIN-1].stats.main.p_one_sided"
+      },
+      "value": 0.03649087728067983,
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "P-WIN-1.point",
+      "lit": "+0.1753",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "sel": "rows[registration=P-WIN-1].stats.main.point"
+      },
+      "value": 0.1753345758678799,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "append.date",
+      "lit": "2026-09-25",
+      "fmt": "date",
+      "spec": {
+        "kind": "git",
+        "what": "date",
+        "rev": "d307829cf870534fd4eb76fbfb7a7c095863b42d"
+      },
+      "value": "2026-09-25T09:41:43-03:00",
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "att.fix.commit",
+      "lit": "d307829",
+      "fmt": "sha7",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/review/attest/fix-head.json",
+        "sel": "commit"
+      },
+      "value": "d307829cf870534fd4eb76fbfb7a7c095863b42d",
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "att.review.commit",
+      "lit": "04067a0",
+      "fmt": "sha7",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/review/attest/trading.json",
+        "sel": "commit"
+      },
+      "value": "04067a04b320526c170c28b2ac28bd88348b5345",
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "compute.tc11-data.agents",
+      "lit": "2",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[2].agents"
+      },
+      "value": 2,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-data.tokens",
+      "lit": "620,409",
+      "fmt": "intc",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[2].tokens"
+      },
+      "value": 620409,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-data.wall_s",
+      "lit": "2,278",
+      "fmt": "intc",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[2].wall_s"
+      },
+      "value": 2278,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-final-repairs.agents",
+      "lit": "9",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[6].agents"
+      },
+      "value": 9,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-final-repairs.tokens",
+      "lit": "2,756,728",
+      "fmt": "intc",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[6].tokens"
+      },
+      "value": 2756728,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-final-repairs.wall_s",
+      "lit": "5,744",
+      "fmt": "intc",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[6].wall_s"
+      },
+      "value": 5744,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-fix-final.agents",
+      "lit": "2",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[7].agents"
+      },
+      "value": 2,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-fix-final.tokens",
+      "lit": "747,793",
+      "fmt": "intc",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[7].tokens"
+      },
+      "value": 747793,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-fix-final.wall_s",
+      "lit": "5,130",
+      "fmt": "intc",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[7].wall_s"
+      },
+      "value": 5130,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-foundation.agents",
+      "lit": "15",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[3].agents"
+      },
+      "value": 15,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-foundation.tokens",
+      "lit": "5,243,091",
+      "fmt": "intc",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[3].tokens"
+      },
+      "value": 5243091,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-foundation.wall_s",
+      "lit": "12,179",
+      "fmt": "intc",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[3].wall_s"
+      },
+      "value": 12179,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-lanes-and-review.agents",
+      "lit": "8",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[5].agents"
+      },
+      "value": 8,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-lanes-and-review.tokens",
+      "lit": "3,100,086",
+      "fmt": "intc",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[5].tokens"
+      },
+      "value": 3100086,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-lanes-and-review.wall_s",
+      "lit": "5,194",
+      "fmt": "intc",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[5].wall_s"
+      },
+      "value": 5194,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-leans-review.agents",
+      "lit": "5",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[1].agents"
+      },
+      "value": 5,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-leans-review.tokens",
+      "lit": "1,089,019",
+      "fmt": "intc",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[1].tokens"
+      },
+      "value": 1089019,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-leans-review.wall_s",
+      "lit": "1,253",
+      "fmt": "intc",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[1].wall_s"
+      },
+      "value": 1253,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-scout.agents",
+      "lit": "8",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[0].agents"
+      },
+      "value": 8,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-scout.tokens",
+      "lit": "2,721,633",
+      "fmt": "intc",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[0].tokens"
+      },
+      "value": 2721633,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-scout.wall_s",
+      "lit": "1,031",
+      "fmt": "intc",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[0].wall_s"
+      },
+      "value": 1031,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-stages.agents",
+      "lit": "30",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[4].agents"
+      },
+      "value": 30,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-stages.tokens",
+      "lit": "11,595,422",
+      "fmt": "intc",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[4].tokens"
+      },
+      "value": 11595422,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.tc11-stages.wall_s",
+      "lit": "10,264",
+      "fmt": "intc",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "workflows[4].wall_s"
+      },
+      "value": 10264,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.this_wave.agents",
+      "lit": "3",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "this_wave.agents"
+      },
+      "value": 3,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.this_wave.tokens",
+      "lit": "1,573,951",
+      "fmt": "intc",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "this_wave.tokens"
+      },
+      "value": 1573951,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "compute.this_wave.wall_s",
+      "lit": "7,429",
+      "fmt": "intc",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/close/COMPUTE_LEDGER.json",
+        "sel": "this_wave.wall_s"
+      },
+      "value": 7429,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "contract.bytes",
+      "lit": "8,442",
+      "fmt": "intc",
+      "spec": {
+        "kind": "file",
+        "what": "bytes",
+        "path": "exchange/queue/2026-09-24_TC11_APOLLO.md"
+      },
+      "value": 8442,
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "contract.sha",
+      "lit": "bb38e016a8f3e55ca3bcc09fec53ba6b8dc40accb60d054f8163d033a898f835",
+      "fmt": "str",
+      "spec": {
+        "kind": "file",
+        "what": "sha256",
+        "path": "exchange/queue/2026-09-24_TC11_APOLLO.md"
+      },
+      "value": "bb38e016a8f3e55ca3bcc09fec53ba6b8dc40accb60d054f8163d033a898f835",
+      "uses": {
+        "doc": 1
+      }
+    },
+    {
+      "key": "fam.bar",
+      "lit": "0.011111",
+      "fmt": "f6",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/FAMILY.json",
+        "sel": "bar_filed"
+      },
+      "value": 0.011111,
+      "uses": {
+        "append": 1,
+        "s0": 2
+      }
+    },
+    {
+      "key": "fam.bar_exact",
+      "lit": "1/90",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/FAMILY.json",
+        "sel": "bar_exact"
+      },
+      "value": "1/90",
+      "uses": {
+        "append": 1,
+        "s0": 2
+      }
+    },
+    {
+      "key": "fam.m",
+      "lit": "9",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/FAMILY.json",
+        "sel": "family_m"
+      },
+      "value": 9,
+      "uses": {
+        "append": 2,
+        "s0": 3
+      }
+    },
+    {
+      "key": "fam.q",
+      "lit": "0.1",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/FAMILY.json",
+        "sel": "family_q"
+      },
+      "value": 0.1,
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "fam.spent",
+      "lit": "8",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/scores/FAMILY.json",
+        "sel": "tests_spent"
+      },
+      "value": 8,
+      "uses": {
+        "append": 1,
+        "s0": 2
+      }
+    },
+    {
+      "key": "fwd.912.n",
+      "lit": "0",
+      "fmt": "int",
+      "spec": {
+        "kind": "jsonl",
+        "path": "research_outputs/tierc11/forward/FORWARD_LEDGER.jsonl",
+        "line": 1,
+        "sel": "books.trg912.n_appended_total"
+      },
+      "value": 0,
+      "uses": {
+        "append": 1,
+        "s0": 1,
+        "doc": 1
+      }
+    },
+    {
+      "key": "fwd.912.open.entry",
+      "lit": "2026-09-24T16:00:00Z",
+      "fmt": "iso_ms",
+      "spec": {
+        "kind": "jsonl",
+        "path": "research_outputs/tierc11/forward/FORWARD_LEDGER.jsonl",
+        "line": 1,
+        "sel": "books.trg912.open[0].key[1]"
+      },
+      "value": 1790265600000,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "fwd.912.open.mark",
+      "lit": "-0.031452",
+      "fmt": "f6s",
+      "spec": {
+        "kind": "jsonl",
+        "path": "research_outputs/tierc11/forward/FORWARD_LEDGER.jsonl",
+        "line": 1,
+        "sel": "books.trg912.open[0].net_r_marked_to_pin"
+      },
+      "value": -0.03145186341885717,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "fwd.912.open.sym",
+      "lit": "SOLUSDT",
+      "fmt": "str",
+      "spec": {
+        "kind": "jsonl",
+        "path": "research_outputs/tierc11/forward/FORWARD_LEDGER.jsonl",
+        "line": 1,
+        "sel": "books.trg912.open[0].key[0]"
+      },
+      "value": "SOLUSDT",
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "fwd.n_score",
+      "lit": "30",
+      "fmt": "int",
+      "spec": {
+        "kind": "jsonl",
+        "path": "research_outputs/tierc11/forward/FORWARD_LEDGER.jsonl",
+        "line": 0,
+        "sel": "n_score"
+      },
+      "value": 30,
+      "uses": {
+        "append": 1,
+        "s0": 2
+      }
+    },
+    {
+      "key": "fwd.opening",
+      "lit": "2026-09-21T16:00:00Z",
+      "fmt": "str",
+      "spec": {
+        "kind": "jsonl",
+        "path": "research_outputs/tierc11/forward/FORWARD_LEDGER.jsonl",
+        "line": 0,
+        "sel": "opening_iso"
+      },
+      "value": "2026-09-21T16:00:00Z",
+      "uses": {
+        "s0": 2
+      }
+    },
+    {
+      "key": "fwd.pin",
+      "lit": "2026-09-25T00:00:00Z",
+      "fmt": "str",
+      "spec": {
+        "kind": "jsonl",
+        "path": "research_outputs/tierc11/forward/FORWARD_LEDGER.jsonl",
+        "line": 1,
+        "sel": "pin_iso"
+      },
+      "value": "2026-09-25T00:00:00Z",
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "fwd.v6.cont.entry",
+      "lit": "2026-09-18T08:00:00Z",
+      "fmt": "iso_ms",
+      "spec": {
+        "kind": "jsonl",
+        "path": "research_outputs/tierc11/forward/FORWARD_LEDGER.jsonl",
+        "line": 1,
+        "sel": "books.v6.continuations_not_admitted[0].key[1]"
+      },
+      "value": 1789718400000,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "fwd.v6.cont.net",
+      "lit": "+2.707180",
+      "fmt": "f6s",
+      "spec": {
+        "kind": "jsonl",
+        "path": "research_outputs/tierc11/forward/FORWARD_LEDGER.jsonl",
+        "line": 1,
+        "sel": "books.v6.continuations_not_admitted[0].net_r"
+      },
+      "value": 2.7071804854309196,
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "fwd.v6.cont.sym",
+      "lit": "ETHUSDT",
+      "fmt": "str",
+      "spec": {
+        "kind": "jsonl",
+        "path": "research_outputs/tierc11/forward/FORWARD_LEDGER.jsonl",
+        "line": 1,
+        "sel": "books.v6.continuations_not_admitted[0].key[0]"
+      },
+      "value": "ETHUSDT",
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "fwd.v6.n",
+      "lit": "0",
+      "fmt": "int",
+      "spec": {
+        "kind": "jsonl",
+        "path": "research_outputs/tierc11/forward/FORWARD_LEDGER.jsonl",
+        "line": 1,
+        "sel": "books.v6.n_appended_total"
+      },
+      "value": 0,
+      "uses": {
+        "append": 1,
+        "s0": 2,
+        "doc": 1
+      }
+    },
+    {
+      "key": "git.head7",
+      "lit": "d307829",
+      "fmt": "str",
+      "spec": {
+        "kind": "git",
+        "what": "short",
+        "rev": "d307829cf870534fd4eb76fbfb7a7c095863b42d"
+      },
+      "value": "d307829",
+      "uses": {
+        "append": 1,
+        "doc": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "git.origin.date",
+      "lit": "2026-09-25T07:00:11-03:00",
+      "fmt": "str",
+      "spec": {
+        "kind": "git",
+        "what": "date",
+        "rev": "4ae8c817c3aaecc231e2dec8067002677a2e437c"
+      },
+      "value": "2026-09-25T07:00:11-03:00",
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "git.origin.subject",
+      "lit": "exchange: auto-publish 2026-09-25",
+      "fmt": "str",
+      "spec": {
+        "kind": "git",
+        "what": "subject",
+        "rev": "4ae8c817c3aaecc231e2dec8067002677a2e437c"
+      },
+      "value": "exchange: auto-publish 2026-09-25",
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "git.origin7",
+      "lit": "4ae8c81",
+      "fmt": "str",
+      "spec": {
+        "kind": "git",
+        "what": "short",
+        "rev": "4ae8c817c3aaecc231e2dec8067002677a2e437c"
+      },
+      "value": "4ae8c81",
+      "uses": {
+        "append": 2,
+        "s0": 1
+      }
+    },
+    {
+      "key": "git.tier.count",
+      "lit": "9",
+      "fmt": "int",
+      "spec": {
+        "kind": "git",
+        "what": "tierc11_count_in",
+        "rev": "d307829cf870534fd4eb76fbfb7a7c095863b42d"
+      },
+      "value": 9,
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "git.tier.not_on_origin",
+      "lit": "d307829",
+      "fmt": "str",
+      "spec": {
+        "kind": "git",
+        "what": "tierc11_not_ancestor_of",
+        "rev": "d307829cf870534fd4eb76fbfb7a7c095863b42d",
+        "base": "4ae8c817c3aaecc231e2dec8067002677a2e437c"
+      },
+      "value": "d307829",
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "git.tier.on_origin",
+      "lit": "8",
+      "fmt": "int",
+      "spec": {
+        "kind": "git",
+        "what": "tierc11_count_ancestor_of",
+        "rev": "d307829cf870534fd4eb76fbfb7a7c095863b42d",
+        "base": "4ae8c817c3aaecc231e2dec8067002677a2e437c"
+      },
+      "value": 8,
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "meas.scores.added",
+      "lit": "156",
+      "fmt": "int",
+      "spec": {
+        "kind": "git",
+        "what": "json_leaves",
+        "rev": "d307829cf870534fd4eb76fbfb7a7c095863b42d",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "stat": "added",
+        "base": "04067a04b320526c170c28b2ac28bd88348b5345"
+      },
+      "value": 156,
+      "uses": {
+        "s5": 1,
+        "append": 1,
+        "doc": 1
+      }
+    },
+    {
+      "key": "meas.scores.changed",
+      "lit": "3",
+      "fmt": "int",
+      "spec": {
+        "kind": "git",
+        "what": "json_leaves",
+        "rev": "d307829cf870534fd4eb76fbfb7a7c095863b42d",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "stat": "changed",
+        "base": "04067a04b320526c170c28b2ac28bd88348b5345"
+      },
+      "value": 3,
+      "uses": {
+        "s5": 1
+      }
+    },
+    {
+      "key": "meas.scores.changed_non_string",
+      "lit": "0",
+      "fmt": "int",
+      "spec": {
+        "kind": "git",
+        "what": "json_leaves",
+        "rev": "d307829cf870534fd4eb76fbfb7a7c095863b42d",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "stat": "changed_non_string",
+        "base": "04067a04b320526c170c28b2ac28bd88348b5345"
+      },
+      "value": 0,
+      "uses": {
+        "s5": 1
+      }
+    },
+    {
+      "key": "meas.scores.removed",
+      "lit": "0",
+      "fmt": "int",
+      "spec": {
+        "kind": "git",
+        "what": "json_leaves",
+        "rev": "d307829cf870534fd4eb76fbfb7a7c095863b42d",
+        "path": "research_outputs/tierc11/scores/SCORES.json",
+        "stat": "removed",
+        "base": "04067a04b320526c170c28b2ac28bd88348b5345"
+      },
+      "value": 0,
+      "uses": {
+        "s5": 1
+      }
+    },
+    {
+      "key": "progress.asof",
+      "lit": "2026-09-25T00:00:00Z",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/PROGRESS.json",
+        "sel": "as_of_of_record"
+      },
+      "value": "2026-09-25T00:00:00Z",
+      "uses": {
+        "append": 1,
+        "doc": 1
+      }
+    },
+    {
+      "key": "progress.seed",
+      "lit": "20260924",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/PROGRESS.json",
+        "sel": "seed"
+      },
+      "value": 20260924,
+      "uses": {
+        "append": 1,
+        "doc": 1
+      }
+    },
+    {
+      "key": "progress.substrate",
+      "lit": "tc11_20260925",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/PROGRESS.json",
+        "sel": "substrate"
+      },
+      "value": "tc11_20260925",
+      "uses": {
+        "append": 1,
+        "doc": 1
+      }
+    },
+    {
+      "key": "progress.sweep",
+      "lit": "17 suites, 134 fixtures GREEN",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/PROGRESS.json",
+        "sel": "last_sweep_utc",
+        "re_in_value": "\\): (\\d+ suites, \\d+ fixtures GREEN)"
+      },
+      "value": "17 suites, 134 fixtures GREEN",
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "pub.flag",
+      "lit": "64,000",
+      "fmt": "intc",
+      "spec": {
+        "kind": "const",
+        "path": "scripts/publish_exchange.py",
+        "name": "FLAG_BYTES"
+      },
+      "value": 64000,
+      "uses": {
+        "append": 1,
+        "doc": 1
+      }
+    },
+    {
+      "key": "r2.12h.charter_twin",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.12h.charter_twin"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.12h.edge_n_ranges",
+      "lit": "67",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.12h.edge_n_ranges"
+      },
+      "value": 67,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.12h.edge_net_h20",
+      "lit": "-0.15791885",
+      "fmt": "f8s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.12h.edge_net_h20"
+      },
+      "value": -0.15791885,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.12h.maker_twin",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.12h.maker_twin"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.12h.n_ranges",
+      "lit": "66",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.12h.n_ranges"
+      },
+      "value": 66,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.12h.scale_in_sample",
+      "lit": "OUT-OF-SAMPLE (holdout; the causal slice of a tuning pick)",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.12h.scale_in_sample"
+      },
+      "value": "OUT-OF-SAMPLE (holdout; the causal slice of a tuning pick)",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.12h.tier_e_all_word",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.12h.tier_e_all_word"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.12h.tier_e_tuning_word",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.12h.tier_e_tuning_word"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.12h.word",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.12h.word"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 2
+      }
+    },
+    {
+      "key": "r2.15m.charter_twin",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.15m.charter_twin"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.15m.edge_n_ranges",
+      "lit": "2948",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.15m.edge_n_ranges"
+      },
+      "value": 2948,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.15m.edge_net_h20",
+      "lit": "-0.30307768",
+      "fmt": "f8s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.15m.edge_net_h20"
+      },
+      "value": -0.30307768,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.15m.maker_twin",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.15m.maker_twin"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.15m.n_ranges",
+      "lit": "3049",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.15m.n_ranges"
+      },
+      "value": 3049,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.15m.scale_in_sample",
+      "lit": "OUT-OF-SAMPLE (holdout; the causal slice of a tuning pick)",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.15m.scale_in_sample"
+      },
+      "value": "OUT-OF-SAMPLE (holdout; the causal slice of a tuning pick)",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.15m.tier_e_all_word",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.15m.tier_e_all_word"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.15m.tier_e_tuning_word",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.15m.tier_e_tuning_word"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.15m.word",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.15m.word"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 2
+      }
+    },
+    {
+      "key": "r2.1d.charter_twin",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1d.charter_twin"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1d.edge_n_ranges",
+      "lit": "35",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1d.edge_n_ranges"
+      },
+      "value": 35,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1d.edge_net_h20",
+      "lit": "-0.68750838",
+      "fmt": "f8s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1d.edge_net_h20"
+      },
+      "value": -0.68750838,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1d.maker_twin",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1d.maker_twin"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1d.n_ranges",
+      "lit": "33",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1d.n_ranges"
+      },
+      "value": 33,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1d.scale_in_sample",
+      "lit": "OUT-OF-SAMPLE (holdout; the causal slice of a tuning pick)",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1d.scale_in_sample"
+      },
+      "value": "OUT-OF-SAMPLE (holdout; the causal slice of a tuning pick)",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1d.tier_e_all_word",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1d.tier_e_all_word"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1d.tier_e_tuning_word",
+      "lit": "PASS",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1d.tier_e_tuning_word"
+      },
+      "value": "PASS",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1d.word",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1d.word"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 2
+      }
+    },
+    {
+      "key": "r2.1h.charter_twin",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1h.charter_twin"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1h.edge_n_ranges",
+      "lit": "771",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1h.edge_n_ranges"
+      },
+      "value": 771,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1h.edge_net_h20",
+      "lit": "-0.16760525",
+      "fmt": "f8s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1h.edge_net_h20"
+      },
+      "value": -0.16760525,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1h.maker_twin",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1h.maker_twin"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1h.med",
+      "lit": "+0.00000000",
+      "fmt": "f8s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1h.edge_median_term_h20"
+      },
+      "value": 0.0,
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1h.n_ranges",
+      "lit": "816",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1h.n_ranges"
+      },
+      "value": 816,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1h.net",
+      "lit": "-0.16760525",
+      "fmt": "f8s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1h.edge_net_h20"
+      },
+      "value": -0.16760525,
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1h.scale_in_sample",
+      "lit": "OUT-OF-SAMPLE (holdout; the causal slice of a tuning pick)",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1h.scale_in_sample"
+      },
+      "value": "OUT-OF-SAMPLE (holdout; the causal slice of a tuning pick)",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1h.tier_e_all_word",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1h.tier_e_all_word"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1h.tier_e_tuning_word",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1h.tier_e_tuning_word"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1h.toll",
+      "lit": "0.16760525",
+      "fmt": "f8",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1h.edge_toll_atr"
+      },
+      "value": 0.16760525,
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1h.word",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1h.word"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 2
+      }
+    },
+    {
+      "key": "r2.1w.charter_twin",
+      "lit": "FAIL (provisional, n<30)",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1w.charter_twin"
+      },
+      "value": "FAIL (provisional, n<30)",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1w.edge_n_ranges",
+      "lit": "5",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1w.edge_n_ranges"
+      },
+      "value": 5,
+      "uses": {
+        "append": 1,
+        "s0": 2
+      }
+    },
+    {
+      "key": "r2.1w.edge_net_h20",
+      "lit": "+1.12360020",
+      "fmt": "f8s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1w.edge_net_h20"
+      },
+      "value": 1.1236002,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1w.edge_net_h20.f4",
+      "lit": "+1.1236",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1w.edge_net_h20"
+      },
+      "value": 1.1236002,
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1w.maker_twin",
+      "lit": "FAIL (provisional, n<30)",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1w.maker_twin"
+      },
+      "value": "FAIL (provisional, n<30)",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1w.n_ranges",
+      "lit": "6",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1w.n_ranges"
+      },
+      "value": 6,
+      "uses": {
+        "append": 1,
+        "s0": 2
+      }
+    },
+    {
+      "key": "r2.1w.ratio_median",
+      "lit": "1626",
+      "fmt": "f0",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1w.ratio_median"
+      },
+      "value": 1626.07365541,
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1w.scale_in_sample",
+      "lit": "IN-SAMPLE at every instant (whole-tape fallback pick)",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1w.scale_in_sample"
+      },
+      "value": "IN-SAMPLE at every instant (whole-tape fallback pick)",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1w.tier_e_all_word",
+      "lit": "FAIL (provisional, n<30)",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1w.tier_e_all_word"
+      },
+      "value": "FAIL (provisional, n<30)",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1w.tier_e_tuning_word",
+      "lit": "FAIL (provisional, n<30)",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1w.tier_e_tuning_word"
+      },
+      "value": "FAIL (provisional, n<30)",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.1w.word",
+      "lit": "FAIL (provisional, n<30)",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.1w.word"
+      },
+      "value": "FAIL (provisional, n<30)",
+      "uses": {
+        "append": 2,
+        "s0": 3,
+        "doc": 1
+      }
+    },
+    {
+      "key": "r2.4h.charter_twin",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.4h.charter_twin"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.4h.edge_n_ranges",
+      "lit": "186",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.4h.edge_n_ranges"
+      },
+      "value": 186,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.4h.edge_net_h20",
+      "lit": "-0.10308264",
+      "fmt": "f8s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.4h.edge_net_h20"
+      },
+      "value": -0.10308264,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.4h.maker_twin",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.4h.maker_twin"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.4h.n_ranges",
+      "lit": "191",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.4h.n_ranges"
+      },
+      "value": 191,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.4h.scale_in_sample",
+      "lit": "OUT-OF-SAMPLE (holdout; the causal slice of a tuning pick)",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.4h.scale_in_sample"
+      },
+      "value": "OUT-OF-SAMPLE (holdout; the causal slice of a tuning pick)",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.4h.tier_e_all_word",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.4h.tier_e_all_word"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.4h.tier_e_tuning_word",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.4h.tier_e_tuning_word"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.4h.word",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.4h.word"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 2
+      }
+    },
+    {
+      "key": "r2.5m.charter_twin",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.5m.charter_twin"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.5m.edge_n_ranges",
+      "lit": "9978",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.5m.edge_n_ranges"
+      },
+      "value": 9978,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.5m.edge_net_h20",
+      "lit": "-0.61572371",
+      "fmt": "f8s",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.5m.edge_net_h20"
+      },
+      "value": -0.61572371,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.5m.maker_twin",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.5m.maker_twin"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.5m.n_ranges",
+      "lit": "10344",
+      "fmt": "int",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.5m.n_ranges"
+      },
+      "value": 10344,
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.5m.scale_in_sample",
+      "lit": "OUT-OF-SAMPLE (holdout; the causal slice of a tuning pick)",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.5m.scale_in_sample"
+      },
+      "value": "OUT-OF-SAMPLE (holdout; the causal slice of a tuning pick)",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.5m.tier_e_all_word",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.5m.tier_e_all_word"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.5m.tier_e_tuning_word",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.5m.tier_e_tuning_word"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.5m.word",
+      "lit": "FAIL",
+      "fmt": "str",
+      "spec": {
+        "kind": "json",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json",
+        "sel": "lenses.5m.word"
+      },
+      "value": "FAIL",
+      "uses": {
+        "s0": 2
+      }
+    },
+    {
+      "key": "r2.law.floor",
+      "lit": "30",
+      "fmt": "int",
+      "spec": {
+        "kind": "text",
+        "path": "research_outputs/tierc11/stage_r/STAGE_R.md",
+        "re": "^Word law: SR-3 THE WORD \\[L-R\\.4\\]: PASS iff the height leg \\(n_ranges >= (\\d+),"
+      },
+      "value": "30",
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.law.net_bar",
+      "lit": "0",
+      "fmt": "str",
+      "spec": {
+        "kind": "text",
+        "path": "research_outputs/tierc11/stage_r/STAGE_R.md",
+        "re": "^Word law: SR-3 THE WORD \\[L-R\\.4\\]: .*? - round\\(toll, 8\\) > (\\d+)\\)"
+      },
+      "value": "0",
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2.law.ratio_bar",
+      "lit": "3.0",
+      "fmt": "str",
+      "spec": {
+        "kind": "text",
+        "path": "research_outputs/tierc11/stage_r/STAGE_R.md",
+        "re": "^Word law: SR-3 THE WORD \\[L-R\\.4\\]: .*?median\\(ratio\\) >= (\\d+\\.\\d+),"
+      },
+      "value": "3.0",
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "r2j.sha",
+      "lit": "82cc3ec6ddd588c9",
+      "fmt": "sha16",
+      "spec": {
+        "kind": "file",
+        "what": "sha256",
+        "path": "research_outputs/tierc11/stage_r/R2_LENS_VERDICTS.json"
+      },
+      "value": "82cc3ec6ddd588c9fbd8402def471438a0c931590606b9a2a6cc3a97572f3087",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r4.grid.rows",
+      "lit": "180,684",
+      "fmt": "intc",
+      "spec": {
+        "kind": "text",
+        "path": "research_outputs/tierc11/stage_r4/STAGE_R4.md",
+        "re": "^\\| R4_GRID\\.parquet \\| (\\d+) \\|"
+      },
+      "value": "180684",
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|12h|alignment|IN_RANGE.mean_net_r",
+      "lit": "+0.1391",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 12h · calibrated · alignment",
+        "row": "IN_RANGE",
+        "col": "mean_net_r"
+      },
+      "value": "0.1391",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|12h|alignment|IN_RANGE.mean_net_r_holdout",
+      "lit": "+0.1875",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 12h · calibrated · alignment",
+        "row": "IN_RANGE",
+        "col": "mean_net_r_holdout"
+      },
+      "value": "0.1875",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|12h|alignment|IN_RANGE.n",
+      "lit": "103",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 12h · calibrated · alignment",
+        "row": "IN_RANGE",
+        "col": "n"
+      },
+      "value": "103",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|12h|alignment|IN_RANGE.n_holdout",
+      "lit": "49",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 12h · calibrated · alignment",
+        "row": "IN_RANGE",
+        "col": "n_holdout"
+      },
+      "value": "49",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|12h|alignment|IN_RANGE.n_scale_in_sample",
+      "lit": "54",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 12h · calibrated · alignment",
+        "row": "IN_RANGE",
+        "col": "n_scale_in_sample"
+      },
+      "value": "54",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|alignment|EXP_ALIGNED.mean_net_r",
+      "lit": "+0.4913",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · alignment",
+        "row": "EXP_ALIGNED",
+        "col": "mean_net_r"
+      },
+      "value": "0.4913",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|alignment|EXP_ALIGNED.n",
+      "lit": "47",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · alignment",
+        "row": "EXP_ALIGNED",
+        "col": "n"
+      },
+      "value": "47",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|alignment|EXP_ALIGNED.n_scale_in_sample",
+      "lit": "30",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · alignment",
+        "row": "EXP_ALIGNED",
+        "col": "n_scale_in_sample"
+      },
+      "value": "30",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|alignment|EXP_COUNTER.mean_net_r",
+      "lit": "-0.4939",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · alignment",
+        "row": "EXP_COUNTER",
+        "col": "mean_net_r"
+      },
+      "value": "-0.4939",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|alignment|EXP_COUNTER.n",
+      "lit": "12",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · alignment",
+        "row": "EXP_COUNTER",
+        "col": "n"
+      },
+      "value": "12",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|alignment|EXP_COUNTER.n_scale_in_sample",
+      "lit": "5",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · alignment",
+        "row": "EXP_COUNTER",
+        "col": "n_scale_in_sample"
+      },
+      "value": "5",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|alignment|IN_RANGE.mean_net_r",
+      "lit": "+0.1677",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · alignment",
+        "row": "IN_RANGE",
+        "col": "mean_net_r"
+      },
+      "value": "0.1677",
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|alignment|IN_RANGE.mean_net_r_holdout",
+      "lit": "+0.4133",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · alignment",
+        "row": "IN_RANGE",
+        "col": "mean_net_r_holdout"
+      },
+      "value": "0.4133",
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|alignment|IN_RANGE.n",
+      "lit": "141",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · alignment",
+        "row": "IN_RANGE",
+        "col": "n"
+      },
+      "value": "141",
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|alignment|IN_RANGE.n_holdout",
+      "lit": "53",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · alignment",
+        "row": "IN_RANGE",
+        "col": "n_holdout"
+      },
+      "value": "53",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|alignment|IN_RANGE.n_scale_in_sample",
+      "lit": "88",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · alignment",
+        "row": "IN_RANGE",
+        "col": "n_scale_in_sample"
+      },
+      "value": "88",
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|alignment|__ALL__.mean_net_r",
+      "lit": "+0.2040",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · alignment",
+        "row": "__ALL__",
+        "col": "mean_net_r"
+      },
+      "value": "0.2040",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|alignment|__ALL__.n",
+      "lit": "200",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · alignment",
+        "row": "__ALL__",
+        "col": "n"
+      },
+      "value": "200",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|alignment|__ALL__.n_scale_in_sample",
+      "lit": "123",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · alignment",
+        "row": "__ALL__",
+        "col": "n_scale_in_sample"
+      },
+      "value": "123",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|pct_dir_adj|[33.33,66.67).mean_net_r",
+      "lit": "+0.3537",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · pct_dir_adj",
+        "row": "[33.33,66.67)",
+        "col": "mean_net_r"
+      },
+      "value": "0.3537",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|pct_dir_adj|[33.33,66.67).n",
+      "lit": "55",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · pct_dir_adj",
+        "row": "[33.33,66.67)",
+        "col": "n"
+      },
+      "value": "55",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|pct_dir_adj|[33.33,66.67).n_scale_in_sample",
+      "lit": "34",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · pct_dir_adj",
+        "row": "[33.33,66.67)",
+        "col": "n_scale_in_sample"
+      },
+      "value": "34",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|pct_dir_adj|[66.67,100).mean_net_r",
+      "lit": "+0.0560",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · pct_dir_adj",
+        "row": "[66.67,100)",
+        "col": "mean_net_r"
+      },
+      "value": "0.0560",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|pct_dir_adj|[66.67,100).n",
+      "lit": "81",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · pct_dir_adj",
+        "row": "[66.67,100)",
+        "col": "n"
+      },
+      "value": "81",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.calibrated|4h|pct_dir_adj|[66.67,100).n_scale_in_sample",
+      "lit": "50",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · calibrated · pct_dir_adj",
+        "row": "[66.67,100)",
+        "col": "n_scale_in_sample"
+      },
+      "value": "50",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.frozen3.0|12h|alignment|IN_RANGE.mean_net_r",
+      "lit": "+0.1634",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 12h · frozen3.0 · alignment",
+        "row": "IN_RANGE",
+        "col": "mean_net_r"
+      },
+      "value": "0.1634",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.frozen3.0|12h|alignment|IN_RANGE.mean_net_r_holdout",
+      "lit": "+0.3284",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 12h · frozen3.0 · alignment",
+        "row": "IN_RANGE",
+        "col": "mean_net_r_holdout"
+      },
+      "value": "0.3284",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.frozen3.0|12h|alignment|IN_RANGE.n",
+      "lit": "74",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 12h · frozen3.0 · alignment",
+        "row": "IN_RANGE",
+        "col": "n"
+      },
+      "value": "74",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.frozen3.0|12h|alignment|IN_RANGE.n_holdout",
+      "lit": "36",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 12h · frozen3.0 · alignment",
+        "row": "IN_RANGE",
+        "col": "n_holdout"
+      },
+      "value": "36",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.frozen3.0|4h|alignment|IN_RANGE.mean_net_r",
+      "lit": "+0.2867",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · frozen3.0 · alignment",
+        "row": "IN_RANGE",
+        "col": "mean_net_r"
+      },
+      "value": "0.2867",
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.frozen3.0|4h|alignment|IN_RANGE.mean_net_r_holdout",
+      "lit": "+0.4360",
+      "fmt": "f4s",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · frozen3.0 · alignment",
+        "row": "IN_RANGE",
+        "col": "mean_net_r_holdout"
+      },
+      "value": "0.4360",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.frozen3.0|4h|alignment|IN_RANGE.n",
+      "lit": "94",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · frozen3.0 · alignment",
+        "row": "IN_RANGE",
+        "col": "n"
+      },
+      "value": "94",
+      "uses": {
+        "append": 1,
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5d.frozen3.0|4h|alignment|IN_RANGE.n_holdout",
+      "lit": "45",
+      "fmt": "int",
+      "spec": {
+        "kind": "mdcell",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md",
+        "heading": "#### 4h · frozen3.0 · alignment",
+        "row": "IN_RANGE",
+        "col": "n_holdout"
+      },
+      "value": "45",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "r5md.sha",
+      "lit": "601b932ae452aed9",
+      "fmt": "sha16",
+      "spec": {
+        "kind": "file",
+        "what": "sha256",
+        "path": "research_outputs/tierc11/stage_r/R5_CHOP.md"
+      },
+      "value": "601b932ae452aed921a938919317a3d8bb6ed43dda2efff7fc935212081f4f16",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "s0md.sha",
+      "lit": "ea728250249e1f1f",
+      "fmt": "sha16",
+      "spec": {
+        "kind": "file",
+        "what": "sha256",
+        "path": "research_outputs/tierc11/scores/S0_VERDICTS.md"
+      },
+      "value": "ea728250249e1f1f548faf315fac22515d653743075d64155c47f1ea06f670aa",
+      "uses": {
+        "s0": 1
+      }
+    },
+    {
+      "key": "w.cohort.n",
+      "lit": "42",
+      "fmt": "int",
+      "spec": {
+        "kind": "text",
+        "path": "research_outputs/tierc11/stage_w/STAGE_W.md",
+        "re": "^- cohort \\(v6 campaigns with an IN-TRADE counter 12/89 1h cross before the \\+1R latch\\): n (\\d+),"
+      },
+      "value": "42",
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "w.delta",
+      "lit": "-0.728647",
+      "fmt": "str",
+      "spec": {
+        "kind": "text",
+        "path": "research_outputs/tierc11/stage_w/STAGE_W.md",
+        "re": "^- delta = mean\\(cohort\\) − mean\\(book\\) = (-?\\d+\\.\\d+);"
+      },
+      "value": "-0.728647",
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "w.hi",
+      "lit": "-0.527794",
+      "fmt": "str",
+      "spec": {
+        "kind": "text",
+        "path": "research_outputs/tierc11/stage_w/STAGE_W.md",
+        "re": "^- delta = .*; cluster-90% \\[-?\\d+\\.\\d+, (-?\\d+\\.\\d+)\\]"
+      },
+      "value": "-0.527794",
+      "uses": {
+        "append": 1
+      }
+    },
+    {
+      "key": "w.lo",
+      "lit": "-0.964287",
+      "fmt": "str",
+      "spec": {
+        "kind": "text",
+        "path": "research_outputs/tierc11/stage_w/STAGE_W.md",
+        "re": "^- delta = .*; cluster-90% \\[(-?\\d+\\.\\d+), "
+      },
+      "value": "-0.964287",
+      "uses": {
+        "append": 1
+      }
+    }
+  ],
+  "exemptions": [
+    {
+      "lit": "9/12",
+      "why": "the frozen 9/12 book: a trigger-pair NAME (contract :58), not a measured value",
+      "uses": {
+        "append": 1,
+        "s0": 2,
+        "doc": 1
+      }
+    }
+  ],
+  "r4_star_rows": 108
+}

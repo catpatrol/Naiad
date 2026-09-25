@@ -1,0 +1,150 @@
+{
+ "schema": "tierc11.close.COMPUTE_LEDGER.v1",
+ "tier": "TIER-C11",
+ "source": "orchestrator workflow notifications",
+ "law": "the ONE exception to 'no typed number' in the TC11 CLOSE: these compute figures are the orchestrator's, relayed in the close commission; each row is corroborated read-only against the workflow journal the harness wrote (agentCount, totalTokens, durationMs rounded to the second) at the moment this record was filed",
+ "units": {
+  "agents": "agentCount",
+  "tokens": "totalTokens",
+  "wall_s": "wall seconds (durationMs / 1000, rounded)"
+ },
+ "workflows": [
+  {
+   "workflow": "tc11-scout",
+   "agents": 8,
+   "tokens": 2721633,
+   "wall_s": 1031,
+   "source": "orchestrator workflow notifications",
+   "corroborated_by": {
+    "journal": "~/.claude/projects/-Users-luis-Naiad/<session>/workflows/wf_4c220438-0bd.json",
+    "run_id": "wf_4c220438-0bd",
+    "agentCount": 8,
+    "totalTokens": 2721633,
+    "durationMs": 1031101,
+    "wall_s_rounded": 1031,
+    "agrees": true
+   }
+  },
+  {
+   "workflow": "tc11-leans-review",
+   "agents": 5,
+   "tokens": 1089019,
+   "wall_s": 1253,
+   "source": "orchestrator workflow notifications",
+   "corroborated_by": {
+    "journal": "~/.claude/projects/-Users-luis-Naiad/<session>/workflows/wf_3924a4d3-0f3.json",
+    "run_id": "wf_3924a4d3-0f3",
+    "agentCount": 5,
+    "totalTokens": 1089019,
+    "durationMs": 1252961,
+    "wall_s_rounded": 1253,
+    "agrees": true
+   }
+  },
+  {
+   "workflow": "tc11-data",
+   "agents": 2,
+   "tokens": 620409,
+   "wall_s": 2278,
+   "source": "orchestrator workflow notifications",
+   "corroborated_by": {
+    "journal": "~/.claude/projects/-Users-luis-Naiad/<session>/workflows/wf_48e70abb-d77.json",
+    "run_id": "wf_48e70abb-d77",
+    "agentCount": 2,
+    "totalTokens": 620409,
+    "durationMs": 2278493,
+    "wall_s_rounded": 2278,
+    "agrees": true
+   }
+  },
+  {
+   "workflow": "tc11-foundation",
+   "agents": 15,
+   "tokens": 5243091,
+   "wall_s": 12179,
+   "source": "orchestrator workflow notifications",
+   "corroborated_by": {
+    "journal": "~/.claude/projects/-Users-luis-Naiad/<session>/workflows/wf_6e07be75-c4a.json",
+    "run_id": "wf_6e07be75-c4a",
+    "agentCount": 15,
+    "totalTokens": 5243091,
+    "durationMs": 12179265,
+    "wall_s_rounded": 12179,
+    "agrees": true
+   }
+  },
+  {
+   "workflow": "tc11-stages",
+   "agents": 30,
+   "tokens": 11595422,
+   "wall_s": 10264,
+   "source": "orchestrator workflow notifications",
+   "corroborated_by": {
+    "journal": "~/.claude/projects/-Users-luis-Naiad/<session>/workflows/wf_591e83a0-75a.json",
+    "run_id": "wf_591e83a0-75a",
+    "agentCount": 30,
+    "totalTokens": 11595422,
+    "durationMs": 10264430,
+    "wall_s_rounded": 10264,
+    "agrees": true
+   }
+  },
+  {
+   "workflow": "tc11-lanes-and-review",
+   "agents": 8,
+   "tokens": 3100086,
+   "wall_s": 5194,
+   "source": "orchestrator workflow notifications",
+   "corroborated_by": {
+    "journal": "~/.claude/projects/-Users-luis-Naiad/<session>/workflows/wf_4635cde6-5d4.json",
+    "run_id": "wf_4635cde6-5d4",
+    "agentCount": 8,
+    "totalTokens": 3100086,
+    "durationMs": 5194156,
+    "wall_s_rounded": 5194,
+    "agrees": true
+   }
+  },
+  {
+   "workflow": "tc11-final-repairs",
+   "agents": 9,
+   "tokens": 2756728,
+   "wall_s": 5744,
+   "source": "orchestrator workflow notifications",
+   "corroborated_by": {
+    "journal": "~/.claude/projects/-Users-luis-Naiad/<session>/workflows/wf_faaa7339-bfa.json",
+    "run_id": "wf_faaa7339-bfa",
+    "agentCount": 9,
+    "totalTokens": 2756728,
+    "durationMs": 5744299,
+    "wall_s_rounded": 5744,
+    "agrees": true
+   }
+  },
+  {
+   "workflow": "tc11-fix-final",
+   "agents": 2,
+   "tokens": 747793,
+   "wall_s": 5130,
+   "source": "orchestrator workflow notifications",
+   "corroborated_by": {
+    "journal": "~/.claude/projects/-Users-luis-Naiad/<session>/workflows/wf_dac7c88c-807.json",
+    "run_id": "wf_dac7c88c-807",
+    "agentCount": 2,
+    "totalTokens": 747793,
+    "durationMs": 5129964,
+    "wall_s_rounded": 5130,
+    "agrees": true
+   }
+  }
+ ],
+ "this_wave": {
+  "workflow": "tc11-close",
+  "agents": 3,
+  "tokens": 1573951,
+  "wall_s": 7429,
+  "source": "orchestrator workflow notifications",
+  "run_id": "wf_b201d738-434",
+  "state": "tallied after the close wave finished (3 agents \u00b7 1,573,951 tokens \u00b7 7,429 s)"
+ }
+}
