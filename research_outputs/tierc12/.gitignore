@@ -1,0 +1,9 @@
+# TIER-C12 (2026-10-08): nested rule — the root .gitignore is not edited.
+# Parquet and determinism twins stay out of git; their shas live in progress/*.json and PROGRESS.json.
+**/*.parquet
+**/_det_*/
+# x_rec/ = byte copies of TC11-X's records and sources, read from the X worktree at its certified tip.
+# They are X's to merge (the operator's close act), never TC12's to commit; X_REC_MANIFEST.json pins every sha.
+x_rec/**
+!x_rec/
+!x_rec/X_REC_MANIFEST.json

@@ -1,0 +1,14 @@
+{
+ "stage": "STEP Q",
+ "status": "COMPLETE-VERIFIED",
+ "as_of": null,
+ "blockers": [],
+ "commit": "28e006b",
+ "artifact_shas": {
+  "exchange/queue/2026-10-08_TC12_APOLLO.md": {
+   "bytes": 12209,
+   "sha256": "861d6050e80e66995e4f9db2855aaf274d63285249c2549e5a0813582095a7bd"
+  }
+ },
+ "one_line": "contract filed verbatim (137 lines, 12,209 B), sha 861d6050…; committed 2026-10-08T22:52:13Z staging that one path"
+}

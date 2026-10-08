@@ -1,0 +1,114 @@
+{
+ "stage": "TC12-R0",
+ "status": "COMPLETE-VERIFIED",
+ "as_of": null,
+ "blockers": [],
+ "r0_census_utc": "2026-10-08T23:50:00Z",
+ "head_at_r0": "28e006bc5def421bd65e3835a95a2905c4e21b93",
+ "r0_census": "fresh tier: no tierc12 artifact existed before STEP Q (28e006b) — no research_outputs/tierc12, no scripts/tierc12_*, no analytics/value_area.py, no exchange/rows/; nothing to verify or quarantine. PREDECESSORS UNFINISHED: the operator close acts of TC10, TC11 and TC11-X have not run (no report of theirs in exchange/reports/, exchange/status/LEDGER_APOLLO.md ends at the TIER-C9 block, X is unmerged at its certified tip, origin is at ac8d8da). TC12 builds beside them and moves none of their bytes (ORCHESTRATOR_RULINGS O-3, O-10).",
+ "pre_existing_dirty_paths_not_tc12": [
+  "exchange/status/daily/DAILY_2026-10-08.md",
+  "research_outputs/tierc10/close/FIXTURES_CLOSE_ledger_append_root.txt"
+ ],
+ "operator_ruling_in_session": "2026-10-08: \"Main tree, by path\" — TC12 is built in /Users/luis/Naiad on v12-v1-census by absolute path",
+ "x_tip": "7b24f835bcbf7430eb0f97b6c39b6b1b233eef11",
+ "x_rec": {
+  "n_files": 490,
+  "bytes": 343737312,
+  "n_untracked_at_tip": 345
+ },
+ "frozen_estate_shas_at_r0": {
+  "exchange/queue/2026-09-24_TC11_APOLLO.md": {
+   "bytes": 8442,
+   "sha256": "bb38e016a8f3e55ca3bcc09fec53ba6b8dc40accb60d054f8163d033a898f835"
+  },
+  "research_outputs/tierc11/scores/SCORES.json": {
+   "bytes": 236946,
+   "sha256": "2c1a664a27abfc320355dcb89b2eff8a7f7637ddc26843e72ab3baf30cbef856"
+  },
+  "research_outputs/tierc11/registrations/REGISTRATIONS.json": {
+   "bytes": 34228,
+   "sha256": "648834bf30e20e92713bddef2374ddef1aae843f4d8ba152fc50166c8cc6f1ee"
+  },
+  "research_outputs/tierc11/forward/FORWARD_LEDGER.jsonl": {
+   "bytes": 3442,
+   "sha256": "e53328add9e71f1c6198f724a131565a2a10ad2ad1600c36a74c6676f7ada288"
+  },
+  "research_outputs/tierc11/data/fee_schedule.json": {
+   "bytes": 38721,
+   "sha256": "6febe170d423b0ef37dca9fe95a7316e4259ef5a77e576cafa6781d581c1968b"
+  },
+  "research_outputs/tierc11/PROGRESS.json": {
+   "bytes": 101683,
+   "sha256": "dbcc08cf60a9dbb5827c65f3728857fcab12df50aeefee7667ba3dbfc205c4fe"
+  },
+  "LEDGER.md": {
+   "bytes": 259298,
+   "sha256": "4d58d591668badffc34624e81feddf106ac94a92ca64aceafd4f871e84d31c76"
+  },
+  "exchange/status/LEDGER_APOLLO.md": {
+   "bytes": 174090,
+   "sha256": "cd6ad43a0fe4890635e6d7098d29ae52d4af1268be4466740823701014222d2c"
+  }
+ },
+ "artifact_shas": {
+  "research_outputs/tierc12/scout/U1_rulings_close_state.md": {
+   "bytes": 77142,
+   "sha256": "4a8302336577c00e839299a30acc25f80a105e0565d547f43b1a6e8cfc9cdf4a"
+  },
+  "research_outputs/tierc12/scout/U2_value_area_source.md": {
+   "bytes": 63775,
+   "sha256": "50109e8bac4dda48d56c59cdcd23edb7d6493df14bb662eb30bc7e16447f3aef"
+  },
+  "research_outputs/tierc12/scout/U3_env_books_control.md": {
+   "bytes": 67825,
+   "sha256": "6b95ca2889c218d215a03cd412e6e311032a5aa6e574d96e53baaf0b97544148"
+  },
+  "research_outputs/tierc12/scout/U4_data_substrate.md": {
+   "bytes": 82779,
+   "sha256": "f700f842aa0bb5af5aed49fd9c29ce85740216ce1567e445f230fc85af1f1342"
+  },
+  "research_outputs/tierc12/scout/U5_admission_inputs.md": {
+   "bytes": 63623,
+   "sha256": "e557ba94714a22ec7cb50443b50fc786f04265b900091977f3ece1293a508c8a"
+  },
+  "research_outputs/tierc12/scout/U6_range_scalper_machinery.md": {
+   "bytes": 81474,
+   "sha256": "8315e351501e52c5f46f93fd25b01d0f6461d8c432f6f0c657f769298fecbc4e"
+  },
+  "research_outputs/tierc12/scout/U7_registrations_scoring.md": {
+   "bytes": 60661,
+   "sha256": "7849eda96fc0df3a88ad13a0eb77bb7aeb876e928ec19a0e00174b730f7ae96c"
+  },
+  "research_outputs/tierc12/scout/U8_forward_era_ferry.md": {
+   "bytes": 90194,
+   "sha256": "20c2f098ef1d76b0277c9eb0fdbe384e6139a337d2d02c106f0d541468cec3eb"
+  },
+  "research_outputs/tierc12/scout/U9_process_close_fixtures.md": {
+   "bytes": 88250,
+   "sha256": "339890e59471369ce52c3c956ce43dc19ef4d2408f518fd8c2fc70c3cf9ca839"
+  },
+  "research_outputs/tierc12/ORCHESTRATOR_RULINGS.md": {
+   "bytes": 13195,
+   "sha256": "c280a972f5bc24d6972e931c3991168648ebd5a4a86bb6e106d780854e1ef509"
+  },
+  "research_outputs/tierc12/x_rec/X_REC_MANIFEST.json": {
+   "bytes": 160035,
+   "sha256": "cf66cb81a9dfed2b1112db0c3caa896c019a5fd41b3f1aa58bdb8a85ae3c3e88"
+  },
+  "research_outputs/tierc12/.gitignore": {
+   "bytes": 462,
+   "sha256": "8dfedec456f053c38b3043a42caf87763e79eb3f4d698f76c68edb8f3362944e"
+  },
+  "scripts/tierc12_progress.py": {
+   "bytes": 3119,
+   "sha256": "b47a017bcc7a04499fea37b63fc86ffc535a9a722ac0934b97bf0626497c5ef2"
+  }
+ },
+ "fixtures": [],
+ "one_line": "R0 census (fresh tier; three predecessor closes pending), nine read-only scout maps U1..U9 filed, X records cloned and sha-manifested (490 files), orchestrator rulings O-1..O-24 filed before any reading or book",
+ "notes": [
+  "scout workflow wf_d2102739-cb1: nine readers, read-only on both trees; no outcome computed",
+  "the frozen-estate shas are re-asserted at CLOSE: a moved sha there is a finding against TC12"
+ ]
+}

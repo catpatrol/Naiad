@@ -1,0 +1,3442 @@
+{
+ "bytes": 343737312,
+ "files": [
+  {
+   "bytes": 244,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/.gitignore",
+   "sha256": "59f52a0bf4bc0ed7e15ab03ccbd209a0173a565ea634cfeb1d5bee119cf7bf51",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/.gitignore"
+  },
+  {
+   "bytes": 95768,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/AMENDMENTS_PROPOSED.md",
+   "sha256": "a3eb2f2fdb3fa9b786a0f5fe5dc96df86b752a880fc3d6178a3878c080abfc45",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/AMENDMENTS_PROPOSED.md"
+  },
+  {
+   "bytes": 169771,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/BUILD_DRAFT.md",
+   "sha256": "0555cafc1129cdda6c12f39885e1e84fd8e567d7dbcf179452e0b08d84a43e6e",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/BUILD_DRAFT.md"
+  },
+  {
+   "bytes": 250656,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/LEANS_X.md",
+   "sha256": "74a989ee6357e2169f2ad88722b67f1174cf0d080783dc8c77f5f064e3468623",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/LEANS_X.md"
+  },
+  {
+   "bytes": 37205,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/LEANS_X_AMENDMENTS.md",
+   "sha256": "af845b95d1c7699f788aa242af6f5bef0d0f86b92a74a938cb7ca14c9d87d059",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/LEANS_X_AMENDMENTS.md"
+  },
+  {
+   "bytes": 16154,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/LEDGER_APOLLO_APPEND.md",
+   "sha256": "c63f7a18e2c4540f8ef8eddb178918252a7a6a50f43317b0a051ae41364db9e3",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/LEDGER_APOLLO_APPEND.md"
+  },
+  {
+   "bytes": 489020,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/PROGRESS.json",
+   "sha256": "4c91b2efef002e7347f125bc9bcb1450f7eb35a7888814a4b7d8c67fe9b39475",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/PROGRESS.json"
+  },
+  {
+   "bytes": 41387,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/REGISTRATION_PLAN.md",
+   "sha256": "a887ea64a5099b8b27b5433d263969911ea7795c0fade2af9b40a5b92b8c3d15",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/REGISTRATION_PLAN.md"
+  },
+  {
+   "bytes": 16918,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/BOOKS_X.md",
+   "sha256": "7fda7a51a8fd08f78011bc398c7ec7b60f0bd02b21cd0189b5cf2e1e05ae5515",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/books/BOOKS_X.md"
+  },
+  {
+   "bytes": 34675,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/FIXTURES_BOOKS_X.txt",
+   "sha256": "2dc1230a070f03bd3f19059cfc1b18411e56e25d8ed3a6a5c36530b87fd0231a",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/books/FIXTURES_BOOKS_X.txt"
+  },
+  {
+   "bytes": 17085,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/hashorder_1/BOOKS_X.md",
+   "sha256": "d39f27d23d0b1444411bd59034b8a1339a38d9b5b877611a079a66b8de43d4a8",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/hashorder_1/BOOKS_X.md"
+  },
+  {
+   "bytes": 14640,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/hashorder_1/build_manifest.json",
+   "sha256": "68d4a4a939026584d6b389050f131f99623f83c6fa22fa031260e3ee7a8cef06",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/hashorder_1/build_manifest.json"
+  },
+  {
+   "bytes": 68914,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/hashorder_1/trg912_x_campaigns.parquet",
+   "sha256": "8c22a9489142b9c54bf13f596d4153e5f9f8b62a87d994ac73a2cbd11f1ddf83",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/hashorder_1/trg912_x_campaigns.parquet"
+  },
+  {
+   "bytes": 70918,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/hashorder_1/trg912_x_journal.parquet",
+   "sha256": "1ac9e317f0966c9cfb86a3129d1758590bb949db350993463c006bc33ccaca5f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/hashorder_1/trg912_x_journal.parquet"
+  },
+  {
+   "bytes": 60704,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/hashorder_1/v6_inputs.parquet",
+   "sha256": "658b5ed178f736373c6338f00dd0b63c248c844382d399fd44f72e1ef8f51248",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/hashorder_1/v6_inputs.parquet"
+  },
+  {
+   "bytes": 68782,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/hashorder_1/v6_x_campaigns.parquet",
+   "sha256": "7eb0bf4e552f9462b7532ee612b73c7610870c3f502c3844838054fd4088a05f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/hashorder_1/v6_x_campaigns.parquet"
+  },
+  {
+   "bytes": 70081,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/hashorder_1/v6_x_journal.parquet",
+   "sha256": "deb70b099593f0a8096f3437e0a1aa5dfb5d6a9835dc596d161303ee86b42a5c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/hashorder_1/v6_x_journal.parquet"
+  },
+  {
+   "bytes": 17085,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/hashorder_20260925/BOOKS_X.md",
+   "sha256": "bce8a597f40772f3ef11d37be95a561a988c1be107fdd0fb9b258c34781ea7a0",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/hashorder_20260925/BOOKS_X.md"
+  },
+  {
+   "bytes": 14640,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/hashorder_20260925/build_manifest.json",
+   "sha256": "68d4a4a939026584d6b389050f131f99623f83c6fa22fa031260e3ee7a8cef06",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/hashorder_20260925/build_manifest.json"
+  },
+  {
+   "bytes": 68914,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/hashorder_20260925/trg912_x_campaigns.parquet",
+   "sha256": "8c22a9489142b9c54bf13f596d4153e5f9f8b62a87d994ac73a2cbd11f1ddf83",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/hashorder_20260925/trg912_x_campaigns.parquet"
+  },
+  {
+   "bytes": 70918,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/hashorder_20260925/trg912_x_journal.parquet",
+   "sha256": "1ac9e317f0966c9cfb86a3129d1758590bb949db350993463c006bc33ccaca5f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/hashorder_20260925/trg912_x_journal.parquet"
+  },
+  {
+   "bytes": 60704,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/hashorder_20260925/v6_inputs.parquet",
+   "sha256": "658b5ed178f736373c6338f00dd0b63c248c844382d399fd44f72e1ef8f51248",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/hashorder_20260925/v6_inputs.parquet"
+  },
+  {
+   "bytes": 68782,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/hashorder_20260925/v6_x_campaigns.parquet",
+   "sha256": "7eb0bf4e552f9462b7532ee612b73c7610870c3f502c3844838054fd4088a05f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/hashorder_20260925/v6_x_campaigns.parquet"
+  },
+  {
+   "bytes": 70081,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/hashorder_20260925/v6_x_journal.parquet",
+   "sha256": "deb70b099593f0a8096f3437e0a1aa5dfb5d6a9835dc596d161303ee86b42a5c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/hashorder_20260925/v6_x_journal.parquet"
+  },
+  {
+   "bytes": 16918,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/seed_1/BOOKS_X.md",
+   "sha256": "7fda7a51a8fd08f78011bc398c7ec7b60f0bd02b21cd0189b5cf2e1e05ae5515",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/seed_1/BOOKS_X.md"
+  },
+  {
+   "bytes": 14640,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/seed_1/build_manifest.json",
+   "sha256": "68d4a4a939026584d6b389050f131f99623f83c6fa22fa031260e3ee7a8cef06",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/seed_1/build_manifest.json"
+  },
+  {
+   "bytes": 68914,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/seed_1/trg912_x_campaigns.parquet",
+   "sha256": "8c22a9489142b9c54bf13f596d4153e5f9f8b62a87d994ac73a2cbd11f1ddf83",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/seed_1/trg912_x_campaigns.parquet"
+  },
+  {
+   "bytes": 70918,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/seed_1/trg912_x_journal.parquet",
+   "sha256": "1ac9e317f0966c9cfb86a3129d1758590bb949db350993463c006bc33ccaca5f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/seed_1/trg912_x_journal.parquet"
+  },
+  {
+   "bytes": 60704,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/seed_1/v6_inputs.parquet",
+   "sha256": "658b5ed178f736373c6338f00dd0b63c248c844382d399fd44f72e1ef8f51248",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/seed_1/v6_inputs.parquet"
+  },
+  {
+   "bytes": 68782,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/seed_1/v6_x_campaigns.parquet",
+   "sha256": "7eb0bf4e552f9462b7532ee612b73c7610870c3f502c3844838054fd4088a05f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/seed_1/v6_x_campaigns.parquet"
+  },
+  {
+   "bytes": 70081,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/seed_1/v6_x_journal.parquet",
+   "sha256": "deb70b099593f0a8096f3437e0a1aa5dfb5d6a9835dc596d161303ee86b42a5c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/seed_1/v6_x_journal.parquet"
+  },
+  {
+   "bytes": 16918,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/seed_20260925/BOOKS_X.md",
+   "sha256": "7fda7a51a8fd08f78011bc398c7ec7b60f0bd02b21cd0189b5cf2e1e05ae5515",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/seed_20260925/BOOKS_X.md"
+  },
+  {
+   "bytes": 14640,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/seed_20260925/build_manifest.json",
+   "sha256": "68d4a4a939026584d6b389050f131f99623f83c6fa22fa031260e3ee7a8cef06",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/seed_20260925/build_manifest.json"
+  },
+  {
+   "bytes": 68914,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/seed_20260925/trg912_x_campaigns.parquet",
+   "sha256": "8c22a9489142b9c54bf13f596d4153e5f9f8b62a87d994ac73a2cbd11f1ddf83",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/seed_20260925/trg912_x_campaigns.parquet"
+  },
+  {
+   "bytes": 70918,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/seed_20260925/trg912_x_journal.parquet",
+   "sha256": "1ac9e317f0966c9cfb86a3129d1758590bb949db350993463c006bc33ccaca5f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/seed_20260925/trg912_x_journal.parquet"
+  },
+  {
+   "bytes": 60704,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/seed_20260925/v6_inputs.parquet",
+   "sha256": "658b5ed178f736373c6338f00dd0b63c248c844382d399fd44f72e1ef8f51248",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/seed_20260925/v6_inputs.parquet"
+  },
+  {
+   "bytes": 68782,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/seed_20260925/v6_x_campaigns.parquet",
+   "sha256": "7eb0bf4e552f9462b7532ee612b73c7610870c3f502c3844838054fd4088a05f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/seed_20260925/v6_x_campaigns.parquet"
+  },
+  {
+   "bytes": 70081,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/_det_books/seed_20260925/v6_x_journal.parquet",
+   "sha256": "deb70b099593f0a8096f3437e0a1aa5dfb5d6a9835dc596d161303ee86b42a5c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/_det_books/seed_20260925/v6_x_journal.parquet"
+  },
+  {
+   "bytes": 14640,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/build_manifest.json",
+   "sha256": "68d4a4a939026584d6b389050f131f99623f83c6fa22fa031260e3ee7a8cef06",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/books/build_manifest.json"
+  },
+  {
+   "bytes": 68914,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/trg912_x_campaigns.parquet",
+   "sha256": "8c22a9489142b9c54bf13f596d4153e5f9f8b62a87d994ac73a2cbd11f1ddf83",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/trg912_x_campaigns.parquet"
+  },
+  {
+   "bytes": 70918,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/trg912_x_journal.parquet",
+   "sha256": "1ac9e317f0966c9cfb86a3129d1758590bb949db350993463c006bc33ccaca5f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/trg912_x_journal.parquet"
+  },
+  {
+   "bytes": 60704,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/v6_inputs.parquet",
+   "sha256": "658b5ed178f736373c6338f00dd0b63c248c844382d399fd44f72e1ef8f51248",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/v6_inputs.parquet"
+  },
+  {
+   "bytes": 68782,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/v6_x_campaigns.parquet",
+   "sha256": "7eb0bf4e552f9462b7532ee612b73c7610870c3f502c3844838054fd4088a05f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/v6_x_campaigns.parquet"
+  },
+  {
+   "bytes": 70081,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/books/v6_x_journal.parquet",
+   "sha256": "deb70b099593f0a8096f3437e0a1aa5dfb5d6a9835dc596d161303ee86b42a5c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/books/v6_x_journal.parquet"
+  },
+  {
+   "bytes": 35907,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/census/R2_MIRROR.md",
+   "sha256": "2f36af7ea338613bd624f9735da9ced75b8a56a83ef146184591aa4d429a1deb",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/census/R2_MIRROR.md"
+  },
+  {
+   "bytes": 35907,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/census/_det_census/seed_1/R2_MIRROR.md",
+   "sha256": "2f36af7ea338613bd624f9735da9ced75b8a56a83ef146184591aa4d429a1deb",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/census/_det_census/seed_1/R2_MIRROR.md"
+  },
+  {
+   "bytes": 29088,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/census/_det_census/seed_1/build_manifest.json",
+   "sha256": "35769586ca1fe0de35a37176c131b2e084c04f99e74dc2d2aa6dff3928d66c5f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/census/_det_census/seed_1/build_manifest.json"
+  },
+  {
+   "bytes": 76580,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/census/_det_census/seed_1/height_toll.parquet",
+   "sha256": "c1a36c6e9c4f503d9586a3db82dfec839deef97f4cf82cf4b60cc28c2da879a8",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/census/_det_census/seed_1/height_toll.parquet"
+  },
+  {
+   "bytes": 81470,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/census/_det_census/seed_1/height_toll_verdict.parquet",
+   "sha256": "5302fb35296a218e3b4d32a21a8f359b43ae65c10e176ba223834606c4cba6cf",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/census/_det_census/seed_1/height_toll_verdict.parquet"
+  },
+  {
+   "bytes": 35907,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/census/_det_census/seed_20260925/R2_MIRROR.md",
+   "sha256": "2f36af7ea338613bd624f9735da9ced75b8a56a83ef146184591aa4d429a1deb",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/census/_det_census/seed_20260925/R2_MIRROR.md"
+  },
+  {
+   "bytes": 29088,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/census/_det_census/seed_20260925/build_manifest.json",
+   "sha256": "35769586ca1fe0de35a37176c131b2e084c04f99e74dc2d2aa6dff3928d66c5f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/census/_det_census/seed_20260925/build_manifest.json"
+  },
+  {
+   "bytes": 76580,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/census/_det_census/seed_20260925/height_toll.parquet",
+   "sha256": "c1a36c6e9c4f503d9586a3db82dfec839deef97f4cf82cf4b60cc28c2da879a8",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/census/_det_census/seed_20260925/height_toll.parquet"
+  },
+  {
+   "bytes": 81470,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/census/_det_census/seed_20260925/height_toll_verdict.parquet",
+   "sha256": "5302fb35296a218e3b4d32a21a8f359b43ae65c10e176ba223834606c4cba6cf",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/census/_det_census/seed_20260925/height_toll_verdict.parquet"
+  },
+  {
+   "bytes": 29088,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/census/build_manifest.json",
+   "sha256": "35769586ca1fe0de35a37176c131b2e084c04f99e74dc2d2aa6dff3928d66c5f",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/census/build_manifest.json"
+  },
+  {
+   "bytes": 76580,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/census/height_toll.parquet",
+   "sha256": "c1a36c6e9c4f503d9586a3db82dfec839deef97f4cf82cf4b60cc28c2da879a8",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/census/height_toll.parquet"
+  },
+  {
+   "bytes": 81470,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/census/height_toll_verdict.parquet",
+   "sha256": "5302fb35296a218e3b4d32a21a8f359b43ae65c10e176ba223834606c4cba6cf",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/census/height_toll_verdict.parquet"
+  },
+  {
+   "bytes": 227796,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/close/BOX_COST.json",
+   "sha256": "77590330c22ed2cf83d0ae21e3e9063c8ca2e54c497ebdef82fb4b1e66b83d53",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/close/BOX_COST.json"
+  },
+  {
+   "bytes": 82058,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/close/BOX_COST.md",
+   "sha256": "1f6007de712fcf372737901cc11e68304772064fa5932fc049e8ccf3b1ed44ab",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/close/BOX_COST.md"
+  },
+  {
+   "bytes": 41,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/close/CERTIFIED_TIP",
+   "sha256": "3998267a0621be3d11ae13c3fbd637e6c00b8a4a2c7b502ec400c26236788064",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/close/CERTIFIED_TIP"
+  },
+  {
+   "bytes": 163046,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/close/FINDINGS_NOT_FIXED.json",
+   "sha256": "7f0354c73469a9519286a75b0bf3b4f1a3bfdf85fef35f4bc98547d8d2e6da82",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/close/FINDINGS_NOT_FIXED.json"
+  },
+  {
+   "bytes": 121058,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/close/FINDINGS_NOT_FIXED.md",
+   "sha256": "2ae86f34172f715c2cce0dec2cbb29b135ffe27be11a7d78ab55000934f428e0",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/close/FINDINGS_NOT_FIXED.md"
+  },
+  {
+   "bytes": 14029,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/close/FIXTURES_CLOSE_BOX_COST.txt",
+   "sha256": "59f2bfc512892b8339f6ca7bc1f4ff8a19c793d667d6d7aee3c1e5522991938c",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/close/FIXTURES_CLOSE_BOX_COST.txt"
+  },
+  {
+   "bytes": 16897,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/close/FIXTURES_CLOSE_X.txt",
+   "sha256": "1bbb2414041e2158527978d198be0941c02e98e7b88eca7aa302a2c24006e954",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/close/FIXTURES_CLOSE_X.txt"
+  },
+  {
+   "bytes": 11793,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/close/FIXTURES_CLOSE_draft.txt",
+   "sha256": "150adf208f8f3b379cb2c70fdee3d7a3c4e0c62642850f53b50d230885cd86e5",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/close/FIXTURES_CLOSE_draft.txt"
+  },
+  {
+   "bytes": 20975,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/close/FIXTURES_CLOSE_findings.txt",
+   "sha256": "5ff87115c47f983ba70ea92a13bf5f4e3d8b20b3253c5c497a22785a269a99be",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/close/FIXTURES_CLOSE_findings.txt"
+  },
+  {
+   "bytes": 23780,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/close/close_acts.sh",
+   "sha256": "02191457023d062a757f42d980f6b0ecc31ce127be8b3606e50b7e642d4d1940",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/close/close_acts.sh"
+  },
+  {
+   "bytes": 2184,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/AS_OF_PIN.json",
+   "sha256": "c7b99c5865c7a2cfc3cb9ce0d71839115a0c3b8a4e397a69a42461084b91363e",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/data/AS_OF_PIN.json"
+  },
+  {
+   "bytes": 51205,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/FIXTURES_DATA_X.txt",
+   "sha256": "2cac3f1605cfeb5de8983a13b0bd1dd99ae2cd08a7b4dcc2286f560174a38f6b",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/data/FIXTURES_DATA_X.txt"
+  },
+  {
+   "bytes": 25044,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/SUBSTRATE_VERIFY.json",
+   "sha256": "f0b450da903632e253fec4ba7031320c5989dd0508dbc4002ea3434629e5d453",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/data/SUBSTRATE_VERIFY.json"
+  },
+  {
+   "bytes": 41400,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/TC11_READS_X-CLOSE.json",
+   "sha256": "95d623b25a79b8f8e74e3b26d51698a26ab8e1cc9d3ee6c178f57308b2e1d0bc",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/data/TC11_READS_X-CLOSE.json"
+  },
+  {
+   "bytes": 5740,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/TC11_READS_X-D.json",
+   "sha256": "2b2e2095e638e5fe91feed884ee9810feed8c09dd1517cd5a584a1eb431a1236",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/data/TC11_READS_X-D.json"
+  },
+  {
+   "bytes": 136813,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/TC11_READS_X-FIX.json",
+   "sha256": "c993fb38d1b6862ab6bcd34adc50545ae460d6067f9834e1b2f179e0e202f184",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/data/TC11_READS_X-FIX.json"
+  },
+  {
+   "bytes": 9256,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/TC11_READS_X-FOUND.json",
+   "sha256": "bf720ccd871885234478938a44ab20458c77c9f15a06d713aab6c065e03da930",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/data/TC11_READS_X-FOUND.json"
+  },
+  {
+   "bytes": 134477,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/TC11_READS_X-SCORE.json",
+   "sha256": "62b61ad0a5c2aae04b923a1378e354cd381f8e60add5ea3c8834edb57d224733",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/data/TC11_READS_X-SCORE.json"
+  },
+  {
+   "bytes": 1817,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/TC11_READS_X4.json",
+   "sha256": "55fafa29b7806b3a8ff1261fc778d05d17b5183cda60c2fc67714af00fd6508b",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/data/TC11_READS_X4.json"
+  },
+  {
+   "bytes": 137838,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/TC11_READS_X6.json",
+   "sha256": "d9c647c5f5bd409c9fc0b4010743ebf43f185db9dada1026d17bda74a72f1628",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/data/TC11_READS_X6.json"
+  },
+  {
+   "bytes": 2184,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/_det_xd/seed_1/AS_OF_PIN.json",
+   "sha256": "c7b99c5865c7a2cfc3cb9ce0d71839115a0c3b8a4e397a69a42461084b91363e",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/data/_det_xd/seed_1/AS_OF_PIN.json"
+  },
+  {
+   "bytes": 25044,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/_det_xd/seed_1/SUBSTRATE_VERIFY.json",
+   "sha256": "f0b450da903632e253fec4ba7031320c5989dd0508dbc4002ea3434629e5d453",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/data/_det_xd/seed_1/SUBSTRATE_VERIFY.json"
+  },
+  {
+   "bytes": 96176,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/_det_xd/seed_1/tc11x_env.py",
+   "sha256": "db74225e6fa26bf7e9c2e19f31b6e0c76b379a8de72ef4c0cc9e6b1a2e653928",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/data/_det_xd/seed_1/tc11x_env.py"
+  },
+  {
+   "bytes": 2184,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/_det_xd/seed_20260925/AS_OF_PIN.json",
+   "sha256": "c7b99c5865c7a2cfc3cb9ce0d71839115a0c3b8a4e397a69a42461084b91363e",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/data/_det_xd/seed_20260925/AS_OF_PIN.json"
+  },
+  {
+   "bytes": 25044,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/_det_xd/seed_20260925/SUBSTRATE_VERIFY.json",
+   "sha256": "f0b450da903632e253fec4ba7031320c5989dd0508dbc4002ea3434629e5d453",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/data/_det_xd/seed_20260925/SUBSTRATE_VERIFY.json"
+  },
+  {
+   "bytes": 96176,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/_det_xd/seed_20260925/tc11x_env.py",
+   "sha256": "db74225e6fa26bf7e9c2e19f31b6e0c76b379a8de72ef4c0cc9e6b1a2e653928",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/data/_det_xd/seed_20260925/tc11x_env.py"
+  },
+  {
+   "bytes": 40646,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/tc11_rec/LEANS.md",
+   "sha256": "655e1605165e7a66c67f544e5cda421b46aa0b6fcd4cb97a6ad19654479f294f",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/data/tc11_rec/LEANS.md"
+  },
+  {
+   "bytes": 1768,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/tc11_rec/data/AS_OF_PIN.json",
+   "sha256": "4f609ccfdf2bc61af2e9e2818ff3cd27aea3f88f7637bd73163b3947c977e4bd",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/data/tc11_rec/data/AS_OF_PIN.json"
+  },
+  {
+   "bytes": 57433,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/tc11_rec/data/CONTRACT_SPECS.json",
+   "sha256": "74d9d47b7177955237339eb417100581230efbaf13f2701677436df1c74a6b7e",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/data/tc11_rec/data/CONTRACT_SPECS.json"
+  },
+  {
+   "bytes": 591951,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/tc11_rec/data/STAGE_D_MANIFEST.json",
+   "sha256": "0d8da58739bddcbf8c5243ef05bda67151a7b4d3957e10af28a8506c8d0ec712",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/data/tc11_rec/data/STAGE_D_MANIFEST.json"
+  },
+  {
+   "bytes": 38721,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/tc11_rec/data/fee_schedule.json",
+   "sha256": "6febe170d423b0ef37dca9fe95a7316e4259ef5a77e576cafa6781d581c1968b",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/data/tc11_rec/data/fee_schedule.json"
+  },
+  {
+   "bytes": 59799,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/tc11_rec/ranges/SCALE_PICKS.json",
+   "sha256": "cb5319c975e44df610c05f5917759b7b47d819fa095b8af26d174d79fcef454f",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/data/tc11_rec/ranges/SCALE_PICKS.json"
+  },
+  {
+   "bytes": 34228,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/data/tc11_rec/registrations/REGISTRATIONS.json",
+   "sha256": "648834bf30e20e92713bddef2374ddef1aae843f4d8ba152fc50166c8cc6f1ee",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/data/tc11_rec/registrations/REGISTRATIONS.json"
+  },
+  {
+   "bytes": 44159,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/env/FIXTURES_ENV_X.txt",
+   "sha256": "94ef89c7fff117af47513aa4def82310e80f311d374d47bf9899d6f5216d1dfc",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/env/FIXTURES_ENV_X.txt"
+  },
+  {
+   "bytes": 23285,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/era/FIXTURES_X4.txt",
+   "sha256": "2c942f8c855835ebaa5a3dc778be0f360064673ed27c96d15bdbe857a08e4e58",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/era/FIXTURES_X4.txt"
+  },
+  {
+   "bytes": 422116,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/era/X4.md",
+   "sha256": "aac2be88b8d71f46c232a1976cd5d06dd5ded91b3356976050a48344e9557be8",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/era/X4.md"
+  },
+  {
+   "bytes": 177485,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/era/X4_stamps.parquet",
+   "sha256": "e647a9f782a204ba70c8307d8b7fcce744528b433dd7f908a276ca31f0e95683",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/era/X4_stamps.parquet"
+  },
+  {
+   "bytes": 164057,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/era/X4_tables.parquet",
+   "sha256": "fda7a280b76e295b5faf06119061e3243461c50c6d0d941daecf1b4715a1e5b0",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/era/X4_tables.parquet"
+  },
+  {
+   "bytes": 422116,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/era/_det_era/seed_1/X4.md",
+   "sha256": "aac2be88b8d71f46c232a1976cd5d06dd5ded91b3356976050a48344e9557be8",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/era/_det_era/seed_1/X4.md"
+  },
+  {
+   "bytes": 177485,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/era/_det_era/seed_1/X4_stamps.parquet",
+   "sha256": "e647a9f782a204ba70c8307d8b7fcce744528b433dd7f908a276ca31f0e95683",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/era/_det_era/seed_1/X4_stamps.parquet"
+  },
+  {
+   "bytes": 164057,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/era/_det_era/seed_1/X4_tables.parquet",
+   "sha256": "fda7a280b76e295b5faf06119061e3243461c50c6d0d941daecf1b4715a1e5b0",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/era/_det_era/seed_1/X4_tables.parquet"
+  },
+  {
+   "bytes": 34139,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/era/_det_era/seed_1/build_manifest.json",
+   "sha256": "0ad7f6eac56a003bbcc694115f54f347dcb2d20895da414d1615410cfc34a642",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/era/_det_era/seed_1/build_manifest.json"
+  },
+  {
+   "bytes": 422116,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/era/_det_era/seed_20260925/X4.md",
+   "sha256": "aac2be88b8d71f46c232a1976cd5d06dd5ded91b3356976050a48344e9557be8",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/era/_det_era/seed_20260925/X4.md"
+  },
+  {
+   "bytes": 177485,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/era/_det_era/seed_20260925/X4_stamps.parquet",
+   "sha256": "e647a9f782a204ba70c8307d8b7fcce744528b433dd7f908a276ca31f0e95683",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/era/_det_era/seed_20260925/X4_stamps.parquet"
+  },
+  {
+   "bytes": 164057,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/era/_det_era/seed_20260925/X4_tables.parquet",
+   "sha256": "fda7a280b76e295b5faf06119061e3243461c50c6d0d941daecf1b4715a1e5b0",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/era/_det_era/seed_20260925/X4_tables.parquet"
+  },
+  {
+   "bytes": 34139,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/era/_det_era/seed_20260925/build_manifest.json",
+   "sha256": "0ad7f6eac56a003bbcc694115f54f347dcb2d20895da414d1615410cfc34a642",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/era/_det_era/seed_20260925/build_manifest.json"
+  },
+  {
+   "bytes": 34139,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/era/build_manifest.json",
+   "sha256": "0ad7f6eac56a003bbcc694115f54f347dcb2d20895da414d1615410cfc34a642",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/era/build_manifest.json"
+  },
+  {
+   "bytes": 38148,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/FIXTURES_X1.txt",
+   "sha256": "1599c1876bd31e40c6288e326c49cb98112f12dff513b2e0f40e3a4a9922cc8a",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/exit/FIXTURES_X1.txt"
+  },
+  {
+   "bytes": 64239,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/X1.md",
+   "sha256": "25e991ecfe81f38f6a8b8d2fee8fc21c75cad7599b1357c4572d730d55b91380",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/exit/X1.md"
+  },
+  {
+   "bytes": 171403,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/X1_advances.parquet",
+   "sha256": "01b666e2816ad9e5d9f89d5c1984884fb03ca3a37ec28b5653c4830536e929a0",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/X1_advances.parquet"
+  },
+  {
+   "bytes": 162896,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/X1_cells.parquet",
+   "sha256": "19507647f267870b7e5c3b73c8170225807871bcaf54f33ff6c528ca6ff10c8c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/X1_cells.parquet"
+  },
+  {
+   "bytes": 120311,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/X1_grid.parquet",
+   "sha256": "022f9b33533b0cdc1f6a1827d3fcb43831b591a5fa2588767473a0ce980965f5",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/X1_grid.parquet"
+  },
+  {
+   "bytes": 28953,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/X1_pool.parquet",
+   "sha256": "aa678984350f6d64f0f47d568c8e58f797ef1ed12c47068f01a92aeb0f9f0e84",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/X1_pool.parquet"
+  },
+  {
+   "bytes": 95927,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/X1_registered.parquet",
+   "sha256": "06049937e0ca84b63ca400503212f6290a5d55b30a21efcfe8d2ba3a9c68b936",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/X1_registered.parquet"
+  },
+  {
+   "bytes": 258520,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/X1_tests.parquet",
+   "sha256": "0abad71b317aabdc4d595e6b5c397d167d1c13fca276d62fa40237cf570d3da3",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/X1_tests.parquet"
+  },
+  {
+   "bytes": 64406,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/hashorder_1/X1.md",
+   "sha256": "ee670a3ffa879c6966a5550ee98ec6dba3c1992af3d88c9298893dde4129e3d2",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/hashorder_1/X1.md"
+  },
+  {
+   "bytes": 171403,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/hashorder_1/X1_advances.parquet",
+   "sha256": "01b666e2816ad9e5d9f89d5c1984884fb03ca3a37ec28b5653c4830536e929a0",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/hashorder_1/X1_advances.parquet"
+  },
+  {
+   "bytes": 162896,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/hashorder_1/X1_cells.parquet",
+   "sha256": "19507647f267870b7e5c3b73c8170225807871bcaf54f33ff6c528ca6ff10c8c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/hashorder_1/X1_cells.parquet"
+  },
+  {
+   "bytes": 120311,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/hashorder_1/X1_grid.parquet",
+   "sha256": "022f9b33533b0cdc1f6a1827d3fcb43831b591a5fa2588767473a0ce980965f5",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/hashorder_1/X1_grid.parquet"
+  },
+  {
+   "bytes": 28953,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/hashorder_1/X1_pool.parquet",
+   "sha256": "aa678984350f6d64f0f47d568c8e58f797ef1ed12c47068f01a92aeb0f9f0e84",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/hashorder_1/X1_pool.parquet"
+  },
+  {
+   "bytes": 95927,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/hashorder_1/X1_registered.parquet",
+   "sha256": "06049937e0ca84b63ca400503212f6290a5d55b30a21efcfe8d2ba3a9c68b936",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/hashorder_1/X1_registered.parquet"
+  },
+  {
+   "bytes": 258520,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/hashorder_1/X1_tests.parquet",
+   "sha256": "0abad71b317aabdc4d595e6b5c397d167d1c13fca276d62fa40237cf570d3da3",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/hashorder_1/X1_tests.parquet"
+  },
+  {
+   "bytes": 22622,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/hashorder_1/build_manifest.json",
+   "sha256": "6f57e78e6acdb3b9b91e01246ca6921ed013d816d1dd145a1748ce6adf0f3bc6",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/hashorder_1/build_manifest.json"
+  },
+  {
+   "bytes": 64406,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/hashorder_20260925/X1.md",
+   "sha256": "2542202b2d1f882f70a5ffbd7de608a9ccbf06ddd5a3f81c44ef67261f71797c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/hashorder_20260925/X1.md"
+  },
+  {
+   "bytes": 171403,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/hashorder_20260925/X1_advances.parquet",
+   "sha256": "01b666e2816ad9e5d9f89d5c1984884fb03ca3a37ec28b5653c4830536e929a0",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/hashorder_20260925/X1_advances.parquet"
+  },
+  {
+   "bytes": 162896,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/hashorder_20260925/X1_cells.parquet",
+   "sha256": "19507647f267870b7e5c3b73c8170225807871bcaf54f33ff6c528ca6ff10c8c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/hashorder_20260925/X1_cells.parquet"
+  },
+  {
+   "bytes": 120311,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/hashorder_20260925/X1_grid.parquet",
+   "sha256": "022f9b33533b0cdc1f6a1827d3fcb43831b591a5fa2588767473a0ce980965f5",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/hashorder_20260925/X1_grid.parquet"
+  },
+  {
+   "bytes": 28953,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/hashorder_20260925/X1_pool.parquet",
+   "sha256": "aa678984350f6d64f0f47d568c8e58f797ef1ed12c47068f01a92aeb0f9f0e84",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/hashorder_20260925/X1_pool.parquet"
+  },
+  {
+   "bytes": 95927,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/hashorder_20260925/X1_registered.parquet",
+   "sha256": "06049937e0ca84b63ca400503212f6290a5d55b30a21efcfe8d2ba3a9c68b936",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/hashorder_20260925/X1_registered.parquet"
+  },
+  {
+   "bytes": 258520,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/hashorder_20260925/X1_tests.parquet",
+   "sha256": "0abad71b317aabdc4d595e6b5c397d167d1c13fca276d62fa40237cf570d3da3",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/hashorder_20260925/X1_tests.parquet"
+  },
+  {
+   "bytes": 22622,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/hashorder_20260925/build_manifest.json",
+   "sha256": "6f57e78e6acdb3b9b91e01246ca6921ed013d816d1dd145a1748ce6adf0f3bc6",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/hashorder_20260925/build_manifest.json"
+  },
+  {
+   "bytes": 64239,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/seed_1/X1.md",
+   "sha256": "25e991ecfe81f38f6a8b8d2fee8fc21c75cad7599b1357c4572d730d55b91380",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/seed_1/X1.md"
+  },
+  {
+   "bytes": 171403,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/seed_1/X1_advances.parquet",
+   "sha256": "01b666e2816ad9e5d9f89d5c1984884fb03ca3a37ec28b5653c4830536e929a0",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/seed_1/X1_advances.parquet"
+  },
+  {
+   "bytes": 162896,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/seed_1/X1_cells.parquet",
+   "sha256": "19507647f267870b7e5c3b73c8170225807871bcaf54f33ff6c528ca6ff10c8c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/seed_1/X1_cells.parquet"
+  },
+  {
+   "bytes": 120311,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/seed_1/X1_grid.parquet",
+   "sha256": "022f9b33533b0cdc1f6a1827d3fcb43831b591a5fa2588767473a0ce980965f5",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/seed_1/X1_grid.parquet"
+  },
+  {
+   "bytes": 28953,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/seed_1/X1_pool.parquet",
+   "sha256": "aa678984350f6d64f0f47d568c8e58f797ef1ed12c47068f01a92aeb0f9f0e84",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/seed_1/X1_pool.parquet"
+  },
+  {
+   "bytes": 95927,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/seed_1/X1_registered.parquet",
+   "sha256": "06049937e0ca84b63ca400503212f6290a5d55b30a21efcfe8d2ba3a9c68b936",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/seed_1/X1_registered.parquet"
+  },
+  {
+   "bytes": 258520,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/seed_1/X1_tests.parquet",
+   "sha256": "0abad71b317aabdc4d595e6b5c397d167d1c13fca276d62fa40237cf570d3da3",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/seed_1/X1_tests.parquet"
+  },
+  {
+   "bytes": 22622,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/seed_1/build_manifest.json",
+   "sha256": "6f57e78e6acdb3b9b91e01246ca6921ed013d816d1dd145a1748ce6adf0f3bc6",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/seed_1/build_manifest.json"
+  },
+  {
+   "bytes": 64239,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/seed_20260925/X1.md",
+   "sha256": "25e991ecfe81f38f6a8b8d2fee8fc21c75cad7599b1357c4572d730d55b91380",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/seed_20260925/X1.md"
+  },
+  {
+   "bytes": 171403,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/seed_20260925/X1_advances.parquet",
+   "sha256": "01b666e2816ad9e5d9f89d5c1984884fb03ca3a37ec28b5653c4830536e929a0",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/seed_20260925/X1_advances.parquet"
+  },
+  {
+   "bytes": 162896,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/seed_20260925/X1_cells.parquet",
+   "sha256": "19507647f267870b7e5c3b73c8170225807871bcaf54f33ff6c528ca6ff10c8c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/seed_20260925/X1_cells.parquet"
+  },
+  {
+   "bytes": 120311,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/seed_20260925/X1_grid.parquet",
+   "sha256": "022f9b33533b0cdc1f6a1827d3fcb43831b591a5fa2588767473a0ce980965f5",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/seed_20260925/X1_grid.parquet"
+  },
+  {
+   "bytes": 28953,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/seed_20260925/X1_pool.parquet",
+   "sha256": "aa678984350f6d64f0f47d568c8e58f797ef1ed12c47068f01a92aeb0f9f0e84",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/seed_20260925/X1_pool.parquet"
+  },
+  {
+   "bytes": 95927,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/seed_20260925/X1_registered.parquet",
+   "sha256": "06049937e0ca84b63ca400503212f6290a5d55b30a21efcfe8d2ba3a9c68b936",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/seed_20260925/X1_registered.parquet"
+  },
+  {
+   "bytes": 258520,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/seed_20260925/X1_tests.parquet",
+   "sha256": "0abad71b317aabdc4d595e6b5c397d167d1c13fca276d62fa40237cf570d3da3",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/seed_20260925/X1_tests.parquet"
+  },
+  {
+   "bytes": 22622,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/_det_exit/seed_20260925/build_manifest.json",
+   "sha256": "6f57e78e6acdb3b9b91e01246ca6921ed013d816d1dd145a1748ce6adf0f3bc6",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/exit/_det_exit/seed_20260925/build_manifest.json"
+  },
+  {
+   "bytes": 22622,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/exit/build_manifest.json",
+   "sha256": "6f57e78e6acdb3b9b91e01246ca6921ed013d816d1dd145a1748ce6adf0f3bc6",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/exit/build_manifest.json"
+  },
+  {
+   "bytes": 27184,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/BOX_FORECAST.md",
+   "sha256": "b369d1bf6df75fd206957d17a06178e7ccf997f3db93bd77e9119bc62369c10d",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/ferry/BOX_FORECAST.md"
+  },
+  {
+   "bytes": 24506,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/BOX_FORECAST_CLOSE.md",
+   "sha256": "f577308f58ad99e0ef885a741ac77ddd0a5e0e391c83c2cf2273340c51dcb24b",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/ferry/BOX_FORECAST_CLOSE.md"
+  },
+  {
+   "bytes": 143706,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/DRYRUN_FERRY_OF_RECORD.json",
+   "sha256": "be62ff7f2c4a4104c03227bc65eb2036559c4733a951328745b0dee825197afa",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/ferry/DRYRUN_FERRY_OF_RECORD.json"
+  },
+  {
+   "bytes": 951831,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/FERRY_MANIFEST.json",
+   "sha256": "604a055ce217421b0186072dec8b2f468a59082e826f1e5e4fc6b1af8342d41f",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/ferry/FERRY_MANIFEST.json"
+  },
+  {
+   "bytes": 29173,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/FIXTURES_X6.txt",
+   "sha256": "f951cad4763a04a6c70d95795d7fda25601b858db261425de1444374a182afc7",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/ferry/FIXTURES_X6.txt"
+  },
+  {
+   "bytes": 36254,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/FIXTURES_X6_rerun.txt",
+   "sha256": "390d5260983c9c3144f4ef34cebb6691579ba3d557bcb0e2ef8345271b755557",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/ferry/FIXTURES_X6_rerun.txt"
+  },
+  {
+   "bytes": 75359,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/books/trg912_campaigns.parquet",
+   "sha256": "46ef63c5fe348871f5601ba2c7768008b195b7934e1cb5dc2f0b49c5a39f87c4",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/books/trg912_campaigns.parquet"
+  },
+  {
+   "bytes": 70918,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/books/trg912_journal.parquet",
+   "sha256": "1ac9e317f0966c9cfb86a3129d1758590bb949db350993463c006bc33ccaca5f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/books/trg912_journal.parquet"
+  },
+  {
+   "bytes": 75048,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/books/v6_campaigns.parquet",
+   "sha256": "aab06934ae92689ef2e0fcc6b857350cf397ddca7a0a57e180960c51669b28e5",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/books/v6_campaigns.parquet"
+  },
+  {
+   "bytes": 70081,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/books/v6_journal.parquet",
+   "sha256": "deb70b099593f0a8096f3437e0a1aa5dfb5d6a9835dc596d161303ee86b42a5c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/books/v6_journal.parquet"
+  },
+  {
+   "bytes": 3442,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/forward/FORWARD_LEDGER.jsonl",
+   "sha256": "e53328add9e71f1c6198f724a131565a2a10ad2ad1600c36a74c6676f7ada288",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/forward/FORWARD_LEDGER.jsonl"
+  },
+  {
+   "bytes": 75579,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/ranges/SCALE_GRID.parquet",
+   "sha256": "9072aeabd0bbcd2c5f26da2bcbad1e071173721ebda3b5db3211aeb7d1606919",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/ranges/SCALE_GRID.parquet"
+  },
+  {
+   "bytes": 58159,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-BRK/base.parquet",
+   "sha256": "16ac0419718c72ee23cce2b30d6bc014bc06b510fc7cf8410fe76b32c5beb377",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-BRK/base.parquet"
+  },
+  {
+   "bytes": 60229,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-BRK/scored.parquet",
+   "sha256": "7d44337a459238924f7d6ad71293a5e1b34d786a80d24aaffd1f2308305b01d6",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-BRK/scored.parquet"
+  },
+  {
+   "bytes": 59984,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__frozen3.parquet",
+   "sha256": "79cc28db96641bef6d647486159bc1c3fb8abae01cf169050cca271246d6bb71",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__frozen3.parquet"
+  },
+  {
+   "bytes": 64463,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__head_to_head_vs_p_add_sfp.parquet",
+   "sha256": "10da26456aca0e03418399eb063b4dca99fb15a5df2fd3393f7e1cc847d90c42",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__head_to_head_vs_p_add_sfp.parquet"
+  },
+  {
+   "bytes": 42579,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__holdout.parquet",
+   "sha256": "5510c1728f33d173fefda3fcb8244e9633f58bdc9d78ea98c5332b0d5aaaa85c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__holdout.parquet"
+  },
+  {
+   "bytes": 60229,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__refuse_below_entry.parquet",
+   "sha256": "7d44337a459238924f7d6ad71293a5e1b34d786a80d24aaffd1f2308305b01d6",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__refuse_below_entry.parquet"
+  },
+  {
+   "bytes": 59995,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__refuse_post_harvest.parquet",
+   "sha256": "a3a68d3b27b1815d26c0f4e45a0f8e407a3819b845a7aaebb779967730d14283",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__refuse_post_harvest.parquet"
+  },
+  {
+   "bytes": 48849,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__tuning.parquet",
+   "sha256": "43256883de920d2e0f33b91488f82003bdf40d12a64cd46795bb31f6311a39d5",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-BRK/tierE__tuning.parquet"
+  },
+  {
+   "bytes": 58159,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-SFP/base.parquet",
+   "sha256": "16ac0419718c72ee23cce2b30d6bc014bc06b510fc7cf8410fe76b32c5beb377",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-SFP/base.parquet"
+  },
+  {
+   "bytes": 58778,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-SFP/scored.parquet",
+   "sha256": "739d45d76a9cc240d5ce1f11f63bc7befd08bf652f074e561431d49244eeab53",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-SFP/scored.parquet"
+  },
+  {
+   "bytes": 58457,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__frozen3.parquet",
+   "sha256": "2ef537b8adfb33b5c0308873eeee586d36316bee65bb9e4c641edbcf1486d937",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__frozen3.parquet"
+  },
+  {
+   "bytes": 63012,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__head_to_head_vs_p_add_brk.parquet",
+   "sha256": "bc4ba19b1f3a5ed54d7266d9eed76316b9883fd2e82bb1f450c19f8b0babbfcc",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__head_to_head_vs_p_add_brk.parquet"
+  },
+  {
+   "bytes": 41999,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__holdout.parquet",
+   "sha256": "4212728d5f68662f850c710f1e166904ded1265265c77d77d3916403c8a3bf9d",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__holdout.parquet"
+  },
+  {
+   "bytes": 58730,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__refuse_below_entry.parquet",
+   "sha256": "4a6ca86d3fe4a3a32a020c2ff30776e498b4b556d6d902285e436b7490bb83b7",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__refuse_below_entry.parquet"
+  },
+  {
+   "bytes": 58626,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__refuse_post_harvest.parquet",
+   "sha256": "665b0a52905ca3d08ecdac970c786995255749a43b2d81b85c9c15897c6ca90e",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__refuse_post_harvest.parquet"
+  },
+  {
+   "bytes": 47876,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__tuning.parquet",
+   "sha256": "5281d22ec8a785620c37969ca62d91d33e61b15340b215c845f5902b4606ea55",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-ADD-SFP/tierE__tuning.parquet"
+  },
+  {
+   "bytes": 61738,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-AGE-1/base.parquet",
+   "sha256": "dbfe4788610b11cc70ef64be31aac95949b921f086eaeb66b4535fbbad7af4ce",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-AGE-1/base.parquet"
+  },
+  {
+   "bytes": 51778,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-AGE-1/scored.parquet",
+   "sha256": "6440a6e0d14cfbf1c62df19246a066d0f7086a1e64aae3bb0ced8c2b2a624dca",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-AGE-1/scored.parquet"
+  },
+  {
+   "bytes": 39077,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-AGE-1/tierE__holdout.parquet",
+   "sha256": "e9e4bed0b1fe49b06f8b426065e8e5c8d24d968e1e71ee7c55a4cbdbd6843ba0",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-AGE-1/tierE__holdout.parquet"
+  },
+  {
+   "bytes": 39463,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-AGE-1/tierE__refused_cohort.parquet",
+   "sha256": "71b6444b0dbc8cb87551bb2bc3676d78d987b6e791e49ff2a00cb376344edeb5",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-AGE-1/tierE__refused_cohort.parquet"
+  },
+  {
+   "bytes": 42860,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-AGE-1/tierE__shadow_abs206.parquet",
+   "sha256": "f12cef30cad2f230010d07e2fe1a63fae47c0dbecad38576eb363c97a31726bb",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-AGE-1/tierE__shadow_abs206.parquet"
+  },
+  {
+   "bytes": 43354,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-AGE-1/tierE__tuning.parquet",
+   "sha256": "0c2efa513e58aec3ee194333f0feba0f614a8d0299dcb371948822c04cb97600",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-AGE-1/tierE__tuning.parquet"
+  },
+  {
+   "bytes": 114152,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-BRK-4H/scored.parquet",
+   "sha256": "62a0becefe84f284b7556b61265344e22bc793e94a54b5bca2e1cb4c323231c4",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-BRK-4H/scored.parquet"
+  },
+  {
+   "bytes": 94784,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-BRK-4H/tierE__frozen3.parquet",
+   "sha256": "c5680b71a3f28ce86839ed188a3f49878ed1c0cb793efc67abbc555393ad505e",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-BRK-4H/tierE__frozen3.parquet"
+  },
+  {
+   "bytes": 66704,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-BRK-4H/tierE__holdout.parquet",
+   "sha256": "38c80c690ae056cb920582636a600a9136b660deba77174b1c48c67ffb64d7a6",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-BRK-4H/tierE__holdout.parquet"
+  },
+  {
+   "bytes": 83589,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-BRK-4H/tierE__memline_first_hold.parquet",
+   "sha256": "220302cffc22ddd4f5f4909a21d059eea9ae8ca858e3bf291b0954d3e451ad2d",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-BRK-4H/tierE__memline_first_hold.parquet"
+  },
+  {
+   "bytes": 79012,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-BRK-4H/tierE__memline_oneshot_flip.parquet",
+   "sha256": "3e162448a42a6c0c9645ab172ef918338b158e6f202bea6eea5dd01b5435f16f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-BRK-4H/tierE__memline_oneshot_flip.parquet"
+  },
+  {
+   "bytes": 108353,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-BRK-4H/tierE__oneshot_first_touch.parquet",
+   "sha256": "92e33bdce587f1cb521abf040e98d9d282c9933424abb6ae91154108f72b92e7",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-BRK-4H/tierE__oneshot_first_touch.parquet"
+  },
+  {
+   "bytes": 217366,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-BRK-4H/tierE__panel17.parquet",
+   "sha256": "b527b30cbe23581a8b388419a1973cf302db497fb76bf50fcd84c774874faa21",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-BRK-4H/tierE__panel17.parquet"
+  },
+  {
+   "bytes": 89346,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-BRK-4H/tierE__tuning.parquet",
+   "sha256": "023a2325da9fbdbad511f8f416860260bb982ff482e4edb32ebfcf85362d537f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-BRK-4H/tierE__tuning.parquet"
+  },
+  {
+   "bytes": 53486,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-RELAY-1/base.parquet",
+   "sha256": "57842a76417cdf6e77c238cb92172afb9c569d5ac078e9bd8cc73c17480b2e8a",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-RELAY-1/base.parquet"
+  },
+  {
+   "bytes": 75484,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-RELAY-1/scored.parquet",
+   "sha256": "bc6854ec92dd1635b0be6fbc920eef9a54521368adc4922a83b0d39e657c24f4",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-RELAY-1/scored.parquet"
+  },
+  {
+   "bytes": 49364,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-RELAY-1/tierE__holdout_slice.parquet",
+   "sha256": "5b0e0438c346feaa56428a9b1f284ad18fb87af9c441306f23b1b6ffd2638ed8",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-RELAY-1/tierE__holdout_slice.parquet"
+  },
+  {
+   "bytes": 101513,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-RELAY-1/tierE__late_relay.parquet",
+   "sha256": "51b221f34c6862446e26bdc742d05318dda3f035c838d8fd2977986ff196f3b3",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-RELAY-1/tierE__late_relay.parquet"
+  },
+  {
+   "bytes": 43331,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-RELAY-1/tierE__miss_v6.parquet",
+   "sha256": "7c2dfcbc03f3d0f186afc95b2f49dd980b04245df95a312e7f36aaaac861d8d2",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-RELAY-1/tierE__miss_v6.parquet"
+  },
+  {
+   "bytes": 61713,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-RELAY-1/tierE__tuning_slice.parquet",
+   "sha256": "32c020577050b475653d3a47daf8610a062306409646bd82e7705c58767f0b4a",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-RELAY-1/tierE__tuning_slice.parquet"
+  },
+  {
+   "bytes": 47629,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-TP-RNG/base.parquet",
+   "sha256": "f54b2f09a715463a37e3f7fa47ab786f01e50af2127105035f9568e98f1f27ff",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-TP-RNG/base.parquet"
+  },
+  {
+   "bytes": 62798,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-TP-RNG/scored.parquet",
+   "sha256": "4ba47f8b6d41a0e9a2860822340413a3e98071794eb644b47e168cf380140e1e",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-TP-RNG/scored.parquet"
+  },
+  {
+   "bytes": 64165,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-TP-RNG/tierE__frozen3.parquet",
+   "sha256": "096c32ff9f3c2ff196aca6e86abf6b7da8a7ffd5f0da8752636445b6e0c4dd9d",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-TP-RNG/tierE__frozen3.parquet"
+  },
+  {
+   "bytes": 45326,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-TP-RNG/tierE__holdout.parquet",
+   "sha256": "3ff60b8feb0b17bed4605ca4888d2b9232bdf9070603a4fef9a807fbcfa2ff39",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-TP-RNG/tierE__holdout.parquet"
+  },
+  {
+   "bytes": 63705,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-TP-RNG/tierE__tp_post_harvest.parquet",
+   "sha256": "d4ca3228c1804633742107b080fedd19232320deae699b1cf4a329b2c935af00",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-TP-RNG/tierE__tp_post_harvest.parquet"
+  },
+  {
+   "bytes": 52346,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-TP-RNG/tierE__tuning.parquet",
+   "sha256": "843f099c0f16fc4ee819a80b6e1aef06e68472f0fb32ec8f5920bbbc874585ee",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-TP-RNG/tierE__tuning.parquet"
+  },
+  {
+   "bytes": 64483,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-TP-RNG/tierE__unguarded.parquet",
+   "sha256": "71883c6db18da76be1a622a9e2da7d7272a2f9997bfed35010d2b156c3d19ed9",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-TP-RNG/tierE__unguarded.parquet"
+  },
+  {
+   "bytes": 42146,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WARN-1/base.parquet",
+   "sha256": "d4ffeda3a5ea88262195a8f2af50e6524947647d2ff3ba1a840e63249bf10458",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WARN-1/base.parquet"
+  },
+  {
+   "bytes": 42258,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WARN-1/scored.parquet",
+   "sha256": "ad7c8ce8d5a8a04b3398008f62219e9c86fb9e3bd6c326039d563f3d10822d07",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WARN-1/scored.parquet"
+  },
+  {
+   "bytes": 26377,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WARN-1/tierE__holdout.parquet",
+   "sha256": "0d002cdc2ca426776f3276e20085c830230253735fa9250751cbbee33b44df10",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WARN-1/tierE__holdout.parquet"
+  },
+  {
+   "bytes": 32243,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WARN-1/tierE__tuning.parquet",
+   "sha256": "a43e6b3c0edee0ea825a559251a83b469d36a0f30c0f88331f1fb574e1b5e313",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WARN-1/tierE__tuning.parquet"
+  },
+  {
+   "bytes": 61738,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WIN-1/base.parquet",
+   "sha256": "dbfe4788610b11cc70ef64be31aac95949b921f086eaeb66b4535fbbad7af4ce",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WIN-1/base.parquet"
+  },
+  {
+   "bytes": 51212,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WIN-1/scored.parquet",
+   "sha256": "824c5e08ca79511fea96b98d65b74e8e7209f36379d881a2ff02f927db08241c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WIN-1/scored.parquet"
+  },
+  {
+   "bytes": 38348,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WIN-1/tierE__holdout.parquet",
+   "sha256": "797b440c1e7bf89c7a6dcde54a430de5d13fbf2a8d459ce24295cca935569b3b",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WIN-1/tierE__holdout.parquet"
+  },
+  {
+   "bytes": 54413,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WIN-1/tierE__ratr_admission.parquet",
+   "sha256": "92be97b10f21e81115c72f43d1cfca94c22662c7f8d0b16ab6c13e45266147b9",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WIN-1/tierE__ratr_admission.parquet"
+  },
+  {
+   "bytes": 57480,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WIN-1/tierE__ratr_priority.parquet",
+   "sha256": "50a2cc140c540f0030e28fbd9865c8a4e93802aca14ec8faada4a83c021befd9",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WIN-1/tierE__ratr_priority.parquet"
+  },
+  {
+   "bytes": 39899,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WIN-1/tierE__refused_cohort.parquet",
+   "sha256": "a92c5589596490ee5a67cbc688a7a502164eb9a514332e1c201ee6387900d89b",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WIN-1/tierE__refused_cohort.parquet"
+  },
+  {
+   "bytes": 62796,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WIN-1/tierE__shadow_lag7_15.parquet",
+   "sha256": "4b308d854a30b49b4e7c53282243a41d676f71974439d36612261680778f589c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WIN-1/tierE__shadow_lag7_15.parquet"
+  },
+  {
+   "bytes": 43399,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WIN-1/tierE__tuning.parquet",
+   "sha256": "d5dbd141007787c3b10fb37ef2aa25b91697f1315ed35c9b6cf845a76cee66b4",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/regbooks/P-WIN-1/tierE__tuning.parquet"
+  },
+  {
+   "bytes": 28710,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/ACTED.parquet",
+   "sha256": "7be64e026672609fd4fbb430141a27267caf57ee3e09bb1fa3599fea8e82feef",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/ACTED.parquet"
+  },
+  {
+   "bytes": 37838,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/ADDS.parquet",
+   "sha256": "c1a240e02993313f8a126ffb3eb0318505712ccecb276bdbe32e7d22ba77a2e6",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/ADDS.parquet"
+  },
+  {
+   "bytes": 25157,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/DISPOSITIONS.parquet",
+   "sha256": "4531565be672d8008a4fe7336e201fca0b9923d1e86949f19f16ea854fb27489",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/DISPOSITIONS.parquet"
+  },
+  {
+   "bytes": 10724,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/DISPOSITION_COUNTS.parquet",
+   "sha256": "f11fff97a9ed92498d431b431925d8c101e5bb6738fb3ba63e19b2c58d2e98b0",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/DISPOSITION_COUNTS.parquet"
+  },
+  {
+   "bytes": 234928,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/EVENTS_1H.parquet",
+   "sha256": "63140cb8810f3a3d23a1643948f9f387dac1ea7581e79a1ce49d0cd1ab0c4c38",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/EVENTS_1H.parquet"
+  },
+  {
+   "bytes": 17737,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/HEAD_TO_HEAD.parquet",
+   "sha256": "07465daa165eaff35d214082d5c220895ac33513271ef3093e5241ba744fda2a",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/HEAD_TO_HEAD.parquet"
+  },
+  {
+   "bytes": 11063,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/MISMATCH_BARS.parquet",
+   "sha256": "318922223d166244654e734f6154a67defb414f2ff7e2dfbdab00e68da3e65d2",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/MISMATCH_BARS.parquet"
+  },
+  {
+   "bytes": 12492,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/MISMATCH_BOOKS.parquet",
+   "sha256": "d6ab3c31eab9e973e38f5320a5c53608cb4b9317b14900fb53bbf510531dac3e",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/MISMATCH_BOOKS.parquet"
+  },
+  {
+   "bytes": 13609,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/OVERLAP.parquet",
+   "sha256": "b289d4d3a3b8ca69a7055b9082d95876eb0714ce9613db0e0c779a4dbe3d1b28",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/OVERLAP.parquet"
+  },
+  {
+   "bytes": 15830,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/PICK_STABILITY_1H.parquet",
+   "sha256": "f06d5165d209af8426a97c82a596483f1a93fc1f1a0467f197b106d30256c7a8",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/PICK_STABILITY_1H.parquet"
+  },
+  {
+   "bytes": 14758,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/REGISTERED_BOOKS.parquet",
+   "sha256": "ae958b20f26165af4b58e2bc052c4b630afffd1d46957cfef2c5ffd6f05d0147",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/REGISTERED_BOOKS.parquet"
+  },
+  {
+   "bytes": 22540,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/TIER_E_ARMS.parquet",
+   "sha256": "9521a99e8d59cdcb7b99a925e12c127ba223efe1845d6f12b30991b473fb0cba",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_a/TIER_E_ARMS.parquet"
+  },
+  {
+   "bytes": 13089,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_age_crosstab.parquet",
+   "sha256": "f35db296c0aa668343c778e9a5b27abf10036a2a19a417a21efa00ca7a135c16",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_age_crosstab.parquet"
+  },
+  {
+   "bytes": 14341,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_arrivals.parquet",
+   "sha256": "a6306bd5b2f6608e8d6c4f471c6e9636e845446cef0cd9d74b1f93c6e2ebb4e6",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_arrivals.parquet"
+  },
+  {
+   "bytes": 37547,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_campaign_gates.parquet",
+   "sha256": "c5a5f486df5709c0386e8733c9cc2490b1a15e6416b6f5adf45efcae608674d6",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_campaign_gates.parquet"
+  },
+  {
+   "bytes": 12629,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_collision_list_v6.parquet",
+   "sha256": "6de3518ee9801f86774c1fd7bf47f4d46a64bd3962d83527eb10bb9c34746ea9",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_collision_list_v6.parquet"
+  },
+  {
+   "bytes": 13402,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_collisions.parquet",
+   "sha256": "9fe7993fa555dac9183ea5794839a0e9cbffa13a0de56cb1bfbde739f23be3a6",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_collisions.parquet"
+  },
+  {
+   "bytes": 12666,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_era_slices.parquet",
+   "sha256": "5d27780478b654d5e9d0ba22bf63c1fdd3c2a1596f51fa3efa63cde7c8e4fe10",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_era_slices.parquet"
+  },
+  {
+   "bytes": 21464,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_gate_rows.parquet",
+   "sha256": "f7e4b5557f11aacbc8fbade03148eb5a10cdeea9840120822643233bfa499121",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_gate_rows.parquet"
+  },
+  {
+   "bytes": 14399,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_grid_books.parquet",
+   "sha256": "b2c786e0e7204e1be49c31c0ed7eae7e61365e61ae608dd0efcbe0f4e3b7b51b",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_grid_books.parquet"
+  },
+  {
+   "bytes": 12955,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_grid_partition.parquet",
+   "sha256": "977ed42f60f0a6a21471faa62ccc00ee44bad555221bd7d24bd8603b7ec74917",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_grid_partition.parquet"
+  },
+  {
+   "bytes": 11495,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_lag_bands.parquet",
+   "sha256": "0e747f962c56747c4867432ece2d1a6bd584d1cd09147f34886ed8179c578ecc",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_lag_bands.parquet"
+  },
+  {
+   "bytes": 19051,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_priority_vs_v6.parquet",
+   "sha256": "5776dcf818caecd30555c681da93ddd16fbb56dec51b65c0b61664ccb57ec36b",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_priority_vs_v6.parquet"
+  },
+  {
+   "bytes": 33021,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_priority_windows.parquet",
+   "sha256": "5cdbfa847f154cf887413c7cdbfe5adfd5514d0a1d1c745ebb93e0416fed1e4a",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_priority_windows.parquet"
+  },
+  {
+   "bytes": 12434,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_registered_books.parquet",
+   "sha256": "c9046ea3c3851d638acb8cc486e3d123d2e10b0f166fde7c73b289c8ead75e8d",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_registered_books.parquet"
+  },
+  {
+   "bytes": 12797,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_rivals.parquet",
+   "sha256": "e65f8dbf473f30cb7da2bee0fbcc3c3f452a3c576dd7b3af47a2e77b2de6d58d",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_rivals.parquet"
+  },
+  {
+   "bytes": 14311,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_tide_bands.parquet",
+   "sha256": "ba26f34ae39afab1108a207f71cbc547e0d6a04348fb7bb50c26420d3db91bb3",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_tide_bands.parquet"
+  },
+  {
+   "bytes": 17320,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_tiere_books.parquet",
+   "sha256": "ab8235b5b907f55d096bf4a3dae30590288ac42d08e2d33f40c4eeb46bad7ff1",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_g/g_tiere_books.parquet"
+  },
+  {
+   "bytes": 262952,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_h/tp_bars.parquet",
+   "sha256": "e20f972bdfc7deade4bf0142097b06b2a4f5491a9d095d019a2aec1a35bd7292",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_h/tp_bars.parquet"
+  },
+  {
+   "bytes": 59344,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_h/tp_campaigns.parquet",
+   "sha256": "2775065c2e30346b0e1d16d6e2a6f724aeaf61597b08fc4c1d3db0e298fd3f63",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_h/tp_campaigns.parquet"
+  },
+  {
+   "bytes": 10662,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_h/tp_exit_reasons.parquet",
+   "sha256": "e92b79f94b85f72c9efd43305fe5d6f2905ef50df0cde013df93209b9a4a2b2b",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_h/tp_exit_reasons.parquet"
+  },
+  {
+   "bytes": 24287,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_h/tp_fills.parquet",
+   "sha256": "1b00ce318a51922af4a49cef070c95ca91c94edc46ecbe77b136aa456c92c655",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_h/tp_fills.parquet"
+  },
+  {
+   "bytes": 14571,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_h/tp_picks.parquet",
+   "sha256": "6ca887db1ae246cc4aeb0bd9dbc3e396cd984291e93f9106fcaa1eecbe438ccd",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_h/tp_picks.parquet"
+  },
+  {
+   "bytes": 11939,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_h/tp_reride.parquet",
+   "sha256": "8edca15e086e07e3e57035047d76a9a810c541a42162a214a4cef388a1529cba",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_h/tp_reride.parquet"
+  },
+  {
+   "bytes": 21607,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_h/tp_summary.parquet",
+   "sha256": "fa8e7a4e89076c3d8dc5aa0d956d897600181a6207f0daa0cdcf48eb0f158512",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_h/tp_summary.parquet"
+  },
+  {
+   "bytes": 20018,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_h/tp_withheld.parquet",
+   "sha256": "6a773757bbd1f57c4cc3210a9e96c9c32420725b94435457c329b1308cb99830",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_h/tp_withheld.parquet"
+  },
+  {
+   "bytes": 21860,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/NEST_GRID_BY_COIN.parquet",
+   "sha256": "d361c053ede893999e7b76d8c1fead31682287f657d3eb1a7479509e444d94ec",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/NEST_GRID_BY_COIN.parquet"
+  },
+  {
+   "bytes": 20268,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/NEST_GRID_BY_STATE.parquet",
+   "sha256": "130cb7c3a94287facc66e2e7f7a87bd55b14e7771c6ee0881c2794c3a39d1881",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/NEST_GRID_BY_STATE.parquet"
+  },
+  {
+   "bytes": 20006,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/NEST_GRID_FREQ.parquet",
+   "sha256": "3a779e546cebb895ebcf770992f4c5867be8723005be98a0555c78d01d26d80b",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/NEST_GRID_FREQ.parquet"
+  },
+  {
+   "bytes": 1502388,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/NEST_trg912.parquet",
+   "sha256": "7c5ffe231deb10d982b36fbc5068a26941db66c8e8dc8f92746b2eed7b383ef9",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/NEST_trg912.parquet"
+  },
+  {
+   "bytes": 1421546,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/NEST_v6.parquet",
+   "sha256": "de27be17325fada7e8033cb295508a8bc4b65eccdcd632f512bb874e6138cb11",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/NEST_v6.parquet"
+  },
+  {
+   "bytes": 34518,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/R1_LENSES.parquet",
+   "sha256": "0dbe477457c48319517a7a160bd1ece91284953d43b96a643460f5ce014f89d9",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/R1_LENSES.parquet"
+  },
+  {
+   "bytes": 261126,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/R2_FEASIBILITY.parquet",
+   "sha256": "009a30de530af6d187bf07a8970b1146fe2c54661c7b946d8bcb4381f0c104e4",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/R2_FEASIBILITY.parquet"
+  },
+  {
+   "bytes": 17924,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/R5_CHOP.parquet",
+   "sha256": "1403a7732cd222e22807633a816c93904019a1f59d509646fef9b831984d2b04",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/R5_CHOP.parquet"
+  },
+  {
+   "bytes": 19996,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/R5_CHOP_DIRECTION.parquet",
+   "sha256": "a73b4894998e326a7264619ddd012f37bdf8c193fd512b90b082792c524846f1",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/R5_CHOP_DIRECTION.parquet"
+  },
+  {
+   "bytes": 21260,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/R5_FIVE_ROW.parquet",
+   "sha256": "228ef18bda5e946c1722c31be358a93299371b7597c1a344f978b00c29992fe3",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/R5_FIVE_ROW.parquet"
+  },
+  {
+   "bytes": 38464,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_GRID_LANES_BY_COIN.parquet",
+   "sha256": "30fb79446e4bf1a0a36eeffff1dcb16cfec3d336d175c67edce89d77f696c718",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_GRID_LANES_BY_COIN.parquet"
+  },
+  {
+   "bytes": 35443,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_GRID_LANES_BY_STATE.parquet",
+   "sha256": "4c48c2ca96978005f7f98c6f987fdebaf5b56aa68aef0a1d364b66a3720680ca",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_GRID_LANES_BY_STATE.parquet"
+  },
+  {
+   "bytes": 42154,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_GRID_LANES_FREQ.parquet",
+   "sha256": "84d68542ba1c1563a298922423dd6e4c4ce9a748ba1b9874206556d6fb8c3e65",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_GRID_LANES_FREQ.parquet"
+  },
+  {
+   "bytes": 1401055,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_P-ADD-BRK.parquet",
+   "sha256": "4f54597bb8e2c0e57ee14d1798088513a951cdb086fa5645a0ca9d569eee9703",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_P-ADD-BRK.parquet"
+  },
+  {
+   "bytes": 1391131,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_P-ADD-SFP.parquet",
+   "sha256": "dea84442adf434ffae277c8bbfafa90af1fec5f59e2c644bda685bca624dc481",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_P-ADD-SFP.parquet"
+  },
+  {
+   "bytes": 889814,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_P-AGE-1.parquet",
+   "sha256": "f05db80cc70f08974bc9765d99a8592b6db27bd6e35b4a7314e392b04a68c09b",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_P-AGE-1.parquet"
+  },
+  {
+   "bytes": 3094816,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_P-BRK-4H.parquet",
+   "sha256": "368f0c72159298a0fb02654e58500fc0e033127a1ebe18a14889727376107f7a",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_P-BRK-4H.parquet"
+  },
+  {
+   "bytes": 964123,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_P-RELAY-1.parquet",
+   "sha256": "96281143a06813ba89cbdb55f32960e82e4a8c0f94d3c39d629e163b83c25de1",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_P-RELAY-1.parquet"
+  },
+  {
+   "bytes": 1254523,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_P-TP-RNG.parquet",
+   "sha256": "ea735bb3659ce1558253be751a60183c8d0646f5598a8dc12b9c8a3a66c7dba0",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_P-TP-RNG.parquet"
+  },
+  {
+   "bytes": 1277603,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_P-WARN-1.parquet",
+   "sha256": "6aeb82de03c6138f49b51e97c7e1a0fe54047b2bee9ff1482354d346a928e7fa",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_P-WARN-1.parquet"
+  },
+  {
+   "bytes": 641630,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_P-WIN-1.parquet",
+   "sha256": "5805e7544a5ba8b7470fc597f6aeeb9fa11557bfcf732c0be6bc19f209f10035",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/lanes/NEST_P-WIN-1.parquet"
+  },
+  {
+   "bytes": 1422086,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/nest_books/V6-PROBE__base.parquet",
+   "sha256": "9a50c804f92cdb89daf63dbef8b0d865f7d1c117b1b6c48deb04a4c18287ba01",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/nest_books/V6-PROBE__base.parquet"
+  },
+  {
+   "bytes": 34848,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/nestbook_probe/V6-PROBE/base.parquet",
+   "sha256": "e042a040e527a7642872312a664e22838802248348242bb56e3369b73a116001",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r/nestbook_probe/V6-PROBE/base.parquet"
+  },
+  {
+   "bytes": 2316895,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r4/R4_BASE.parquet",
+   "sha256": "9530e482c8a1d2c1abd997cb07c47a679b2fd03f07ca0aec63c6cbd96ea600d2",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r4/R4_BASE.parquet"
+  },
+  {
+   "bytes": 574153,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r4/R4_DEATHS.parquet",
+   "sha256": "183040307ee48d35ba1dc940f7d863b29a9a483160fb47156bde1ff12918a3cc",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r4/R4_DEATHS.parquet"
+  },
+  {
+   "bytes": 4823144,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r4/R4_EVENTS.parquet",
+   "sha256": "49809aa095ef6be6fae826f065a34aa1a1399b15088508c5d7f0a08171f39c46",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r4/R4_EVENTS.parquet"
+  },
+  {
+   "bytes": 7127543,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r4/R4_GRID.parquet",
+   "sha256": "1ff9e837286754de36f6e8bab24ef1184399e895a4490758ba33bd57a6390cc3",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r4/R4_GRID.parquet"
+  },
+  {
+   "bytes": 20007755,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r4/R4_NULL.parquet",
+   "sha256": "1cdafba4cb6d9c788cc39485de1d4161ac8697ce00a4c0036529d9c58eb79f84",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r4/R4_NULL.parquet"
+  },
+  {
+   "bytes": 5168949,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r4/R4_NULL_BOXES.parquet",
+   "sha256": "27498914b01c99c22a8aa33c4b7b4685744b85ff995380d52c6e3fe63703f77b",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r4/R4_NULL_BOXES.parquet"
+  },
+  {
+   "bytes": 812879,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r4/R4_SCAN.parquet",
+   "sha256": "ef0ddb72aaf7b73b84c84e424524b32296438690ccf63d86d6e4636ce7524ddc",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_r4/R4_SCAN.parquet"
+  },
+  {
+   "bytes": 30168,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_s/S_R2_1H.parquet",
+   "sha256": "1ca126e7e2a7f881e4d63c33bc9e4fbc846700be14f0a54c7d8cf0ba002e7976",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_s/S_R2_1H.parquet"
+  },
+  {
+   "bytes": 22187,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_ARMS.parquet",
+   "sha256": "556cd303e32ec376b5e77fba61953d378f2812c1527e33ba1fdcaea62707ca05",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_ARMS.parquet"
+  },
+  {
+   "bytes": 16147,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_ASSET_GRID.parquet",
+   "sha256": "3d77f52ba1d4fcb7edfb1ce22083a470fd9a44d2ece5344d7d26c1c4aee6b818",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_ASSET_GRID.parquet"
+  },
+  {
+   "bytes": 100871,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_CANDIDATES.parquet",
+   "sha256": "768dae24fa7c86e2b46010378731eb5bb0da7f7415175115aec5abab36089966",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_CANDIDATES.parquet"
+  },
+  {
+   "bytes": 14498,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_DIR_GRID.parquet",
+   "sha256": "097b426223ecafc27635b7a58e80e82e6508b529d35f6c039ea5f21d41dd831b",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_DIR_GRID.parquet"
+  },
+  {
+   "bytes": 14493,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_ERA_GRID.parquet",
+   "sha256": "706c22562ca6b82db1d6f42a335e6777f2dd01e5689d2dee67fac0a5c0f81e18",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_ERA_GRID.parquet"
+  },
+  {
+   "bytes": 14820,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_EXIT_GRID.parquet",
+   "sha256": "a7eb271252da5ea9b27604dd3b6cba46a120fbc2e9b6621614f962947b8769ed",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_EXIT_GRID.parquet"
+  },
+  {
+   "bytes": 17400,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_HAZARD.parquet",
+   "sha256": "e68f3a180d5c496d3003581f0ff8bbee4073bd7857df402f437692f1eaeb8434",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_HAZARD.parquet"
+  },
+  {
+   "bytes": 16205,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_INSAMPLE.parquet",
+   "sha256": "4f25f82a9cca5f8f7bd023f17cd1987e8d1c31f95f256943ae91d821d8e78dfe",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_INSAMPLE.parquet"
+  },
+  {
+   "bytes": 17540,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_PICKS.parquet",
+   "sha256": "2b9aba44226b8f3dee28badfa923ca8b2ce3f66e196da64a13df65cf0fa847a2",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_PICKS.parquet"
+  },
+  {
+   "bytes": 75869,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_SCAN.parquet",
+   "sha256": "81944dd49f1ba1a441f270b6dda45945a139ae7eb919ee26fae0382ee5fcf8ac",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_SCAN.parquet"
+  },
+  {
+   "bytes": 22848,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_TALLY.parquet",
+   "sha256": "9d3b873a8f7f3724ca2bce10adcc1a3f509dd40e871fc51fbec013ef02138609",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_brk/T_BRK_TALLY.parquet"
+  },
+  {
+   "bytes": 16157,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_relay/relay_disposition_grid.parquet",
+   "sha256": "4eb022ce6648b0d94261262b58b673177c5c7e0ae364319ed1968a274dd87348",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_relay/relay_disposition_grid.parquet"
+  },
+  {
+   "bytes": 13516,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_relay/relay_era_slices.parquet",
+   "sha256": "8dc8aebf954906b02251bf39ac187eb6ae2b95300b310c74e1b0b80029096774",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_relay/relay_era_slices.parquet"
+  },
+  {
+   "bytes": 10588,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_relay/relay_lead_bins.parquet",
+   "sha256": "fa37cae6ff14382076d87dbe6ba2560435f797e4ea2295e7aa7c3dc267481165",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_relay/relay_lead_bins.parquet"
+  },
+  {
+   "bytes": 10485,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_relay/relay_lead_values.parquet",
+   "sha256": "a5ceb48f0f249f7e2340796da83ea69ac586835701abbe899fefe2b5b3e1bb4a",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_relay/relay_lead_values.parquet"
+  },
+  {
+   "bytes": 75234,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_relay/relay_windows.parquet",
+   "sha256": "5d9b1e7c32bec2e6e2d75deafddf86a383d925ae375e134b448481fb49fad776",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_t_relay/relay_windows.parquet"
+  },
+  {
+   "bytes": 17274,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/P_WARN_1_COMPLEMENT.parquet",
+   "sha256": "2f6b9afa05f21e812e5bacd0de58f80bf3eb7a072b05725f17743c029dc3a95a",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/P_WARN_1_COMPLEMENT.parquet"
+  },
+  {
+   "bytes": 91334,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W1_CAMPAIGNS.parquet",
+   "sha256": "efba0362d21979ff8743df9638ef3a72d4eb9170f0a8bb5dd30d68d97e5e333f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W1_CAMPAIGNS.parquet"
+  },
+  {
+   "bytes": 105897,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W1_CAMPAIGNS_OTHER.parquet",
+   "sha256": "c69c963bfcb35cdc24945c2f03d754f4868e061ecb08a21f8009dadd5c5dab88",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W1_CAMPAIGNS_OTHER.parquet"
+  },
+  {
+   "bytes": 181657,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W1_EVENTS.parquet",
+   "sha256": "1e82f7b75515d74a238e2b6b57f09781dfea1909c7369d6b3eb82cbe8fb58cb1",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W1_EVENTS.parquet"
+  },
+  {
+   "bytes": 682913,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W1_EVENTS_OTHER.parquet",
+   "sha256": "53d60b608651797ebf025dba03bb0d0f6218fc121b28f63fd70f1177f35e52fb",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W1_EVENTS_OTHER.parquet"
+  },
+  {
+   "bytes": 21779,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W1_OTHER_SUMMARY.parquet",
+   "sha256": "376cd49efcd50148262cd27aae63ed8b0a5a885114508cd821d90395d8b16286",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W1_OTHER_SUMMARY.parquet"
+  },
+  {
+   "bytes": 79210,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W1_TIMELINE.parquet",
+   "sha256": "0404e807c20311f8ac98f29ff799bbb73a920064fc40e2dfcfe1d6b266df12d4",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W1_TIMELINE.parquet"
+  },
+  {
+   "bytes": 19199,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W2_COHORTS.parquet",
+   "sha256": "18cb800c11f1e753bdc5d06c334ffae04a0bce0ce80705b7df2971f68487788b",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W2_COHORTS.parquet"
+  },
+  {
+   "bytes": 16164,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W2_FORWARD.parquet",
+   "sha256": "d7d159635b7f5fc7782f7eed54a7017e400ee8324397b6edc184d2266f21ffe0",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W2_FORWARD.parquet"
+  },
+  {
+   "bytes": 17911,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W2_PREENTRY.parquet",
+   "sha256": "54750e65c2aabffe932148ec8b596d941bcee02a841593d478c43a3c8e098fd2",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W2_PREENTRY.parquet"
+  },
+  {
+   "bytes": 11373,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W2_RELAY_HIST.parquet",
+   "sha256": "a5161057f32bc4f0b91f3b798bff7f4ca9ef138bb958c4b41c75d797c209cce1",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W2_RELAY_HIST.parquet"
+  },
+  {
+   "bytes": 22452,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W2_RELAY_SUMMARY.parquet",
+   "sha256": "3f6433c0502b10c1c8431f53e7db3b2d1045d30699b899788936d8493a5122cb",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W2_RELAY_SUMMARY.parquet"
+  },
+  {
+   "bytes": 27867,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W2_RELAY_WINDOWS.parquet",
+   "sha256": "ac694ee7c3a533dcbb036cb7ffceb7917960468cd3382ac8523878bd3f471d76",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W2_RELAY_WINDOWS.parquet"
+  },
+  {
+   "bytes": 23109,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W2_RELAY_WINDOWS_TWIN.parquet",
+   "sha256": "8f09a2fc3815250796290b76111fd8925b9148cac46fa0163e04fb75278bde30",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/ferry/_det_snap/research_outputs/tierc11/stage_w/W2_RELAY_WINDOWS_TWIN.parquet"
+  },
+  {
+   "bytes": 12535,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/forward/BOOK_SPECS.json",
+   "sha256": "72a1f52359c66084d22f8bc99b0cd35e7edd89db2751f4859f559c8b1f51cac3",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/forward/BOOK_SPECS.json"
+  },
+  {
+   "bytes": 37441,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/forward/FIXTURES_X5.txt",
+   "sha256": "fa7d4084af6cbb5ff4e42cdda8e1b589c3feed025e73dd608eb3f31ac99de001",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/forward/FIXTURES_X5.txt"
+  },
+  {
+   "bytes": 5643,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/forward/FORWARD_LEDGER.jsonl",
+   "sha256": "4a6da7e89a3cf5f0127f76aca0d2ae12d218ffc06417c6528c70210092cfa4c5",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/forward/FORWARD_LEDGER.jsonl"
+  },
+  {
+   "bytes": 12475,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/forward/FORWARD_LEDGER.md",
+   "sha256": "64d4529670d1fcc730b194f2e7d885df05f7fb004c9dc45c0cec3b5656eb6572",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/forward/FORWARD_LEDGER.md"
+  },
+  {
+   "bytes": 12535,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/forward/_det_forward/seed_1/BOOK_SPECS.json",
+   "sha256": "72a1f52359c66084d22f8bc99b0cd35e7edd89db2751f4859f559c8b1f51cac3",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/forward/_det_forward/seed_1/BOOK_SPECS.json"
+  },
+  {
+   "bytes": 5643,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/forward/_det_forward/seed_1/FORWARD_LEDGER.jsonl",
+   "sha256": "4a6da7e89a3cf5f0127f76aca0d2ae12d218ffc06417c6528c70210092cfa4c5",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/forward/_det_forward/seed_1/FORWARD_LEDGER.jsonl"
+  },
+  {
+   "bytes": 12475,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/forward/_det_forward/seed_1/FORWARD_LEDGER.md",
+   "sha256": "64d4529670d1fcc730b194f2e7d885df05f7fb004c9dc45c0cec3b5656eb6572",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/forward/_det_forward/seed_1/FORWARD_LEDGER.md"
+  },
+  {
+   "bytes": 12535,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/forward/_det_forward/seed_20260925/BOOK_SPECS.json",
+   "sha256": "72a1f52359c66084d22f8bc99b0cd35e7edd89db2751f4859f559c8b1f51cac3",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/forward/_det_forward/seed_20260925/BOOK_SPECS.json"
+  },
+  {
+   "bytes": 5643,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/forward/_det_forward/seed_20260925/FORWARD_LEDGER.jsonl",
+   "sha256": "4a6da7e89a3cf5f0127f76aca0d2ae12d218ffc06417c6528c70210092cfa4c5",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/forward/_det_forward/seed_20260925/FORWARD_LEDGER.jsonl"
+  },
+  {
+   "bytes": 12475,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/forward/_det_forward/seed_20260925/FORWARD_LEDGER.md",
+   "sha256": "64d4529670d1fcc730b194f2e7d885df05f7fb004c9dc45c0cec3b5656eb6572",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/forward/_det_forward/seed_20260925/FORWARD_LEDGER.md"
+  },
+  {
+   "bytes": 264736,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/land/TC11_LANDING_2026-09-25T11-45-32Z.json",
+   "sha256": "2a3fdb779a3a731c3e2e079ef4f98bae1add10cbf7e7bde4d73b2c7cea264f7c",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/land/TC11_LANDING_2026-09-25T11-45-32Z.json"
+  },
+  {
+   "bytes": 39326,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/land/TC11_LANDING_2026-09-25T11-45-32Z.md",
+   "sha256": "93c91c3029e94fc58a735532e2cbd6eba5b104437919445169b7c2a0e3bf6eeb",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/land/TC11_LANDING_2026-09-25T11-45-32Z.md"
+  },
+  {
+   "bytes": 177163,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/land/TC11_LANDING_2026-09-25T11-47-02Z.json",
+   "sha256": "7cb7f8698b5c24aaf9483ea4c90e4648f62cf8212fec2e1cee38f6f1489f2cef",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/land/TC11_LANDING_2026-09-25T11-47-02Z.json"
+  },
+  {
+   "bytes": 18626,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/land/TC11_LANDING_2026-09-25T11-47-02Z.md",
+   "sha256": "091bb8e68d6af055cf30ce2f7f9670021b863eec8ec2309b9bd66de186963e45",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/land/TC11_LANDING_2026-09-25T11-47-02Z.md"
+  },
+  {
+   "bytes": 199203,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/land/TC11_LANDING_2026-09-25T18-00-48Z.json",
+   "sha256": "dd20f2374ad91736be025cdd838fa4dedbf2ab986b71cd9eb5470f6d722fe9fd",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/land/TC11_LANDING_2026-09-25T18-00-48Z.json"
+  },
+  {
+   "bytes": 22759,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/land/TC11_LANDING_2026-09-25T18-00-48Z.md",
+   "sha256": "d93b73b230123b97e6e259df80b923e3c824a23f65394e765022c15d799cc75d",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/land/TC11_LANDING_2026-09-25T18-00-48Z.md"
+  },
+  {
+   "bytes": 8861,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/null/_det_null/seed_1/build_manifest.json",
+   "sha256": "2558099dc7121b811c89665d8ba29b8858b5e24014c20f66248b41469df3bd9a",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/null/_det_null/seed_1/build_manifest.json"
+  },
+  {
+   "bytes": 491594,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/null/_det_null/seed_1/null_pivot.parquet",
+   "sha256": "a2cb318bc7a1551064267321dfc41a4460ddf066384501854b1232824b54b82d",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/null/_det_null/seed_1/null_pivot.parquet"
+  },
+  {
+   "bytes": 1478309,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/null/_det_null/seed_1/null_va.parquet",
+   "sha256": "a4de5b89868961d207e5ae2515aaaa0678d5b40f976fc2c703a00ea5e3124074",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/null/_det_null/seed_1/null_va.parquet"
+  },
+  {
+   "bytes": 8861,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/null/_det_null/seed_20260925/build_manifest.json",
+   "sha256": "2558099dc7121b811c89665d8ba29b8858b5e24014c20f66248b41469df3bd9a",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/null/_det_null/seed_20260925/build_manifest.json"
+  },
+  {
+   "bytes": 491594,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/null/_det_null/seed_20260925/null_pivot.parquet",
+   "sha256": "a2cb318bc7a1551064267321dfc41a4460ddf066384501854b1232824b54b82d",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/null/_det_null/seed_20260925/null_pivot.parquet"
+  },
+  {
+   "bytes": 1478309,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/null/_det_null/seed_20260925/null_va.parquet",
+   "sha256": "a4de5b89868961d207e5ae2515aaaa0678d5b40f976fc2c703a00ea5e3124074",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/null/_det_null/seed_20260925/null_va.parquet"
+  },
+  {
+   "bytes": 8861,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/null/build_manifest.json",
+   "sha256": "2558099dc7121b811c89665d8ba29b8858b5e24014c20f66248b41469df3bd9a",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/null/build_manifest.json"
+  },
+  {
+   "bytes": 491594,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/null/null_pivot.parquet",
+   "sha256": "a2cb318bc7a1551064267321dfc41a4460ddf066384501854b1232824b54b82d",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/null/null_pivot.parquet"
+  },
+  {
+   "bytes": 1478309,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/null/null_va.parquet",
+   "sha256": "a4de5b89868961d207e5ae2515aaaa0678d5b40f976fc2c703a00ea5e3124074",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/null/null_va.parquet"
+  },
+  {
+   "bytes": 26421,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/pins/FIXTURES_PINS_X.txt",
+   "sha256": "be813f95ae3f98c1d5ba443bdb94e997df9a4364e0a533f7bd7b300be30b8c9d",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/pins/FIXTURES_PINS_X.txt"
+  },
+  {
+   "bytes": 83955,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/pins/PINS_X.json",
+   "sha256": "85e1eeea2d04ffe834b93caf76aae55b1f427ae7935b12a7ecae9d814be7498f",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/pins/PINS_X.json"
+  },
+  {
+   "bytes": 83955,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/pins/_det_pins/seed_1/PINS_X.json",
+   "sha256": "85e1eeea2d04ffe834b93caf76aae55b1f427ae7935b12a7ecae9d814be7498f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/pins/_det_pins/seed_1/PINS_X.json"
+  },
+  {
+   "bytes": 4399,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/pins/_det_pins/seed_1/build_manifest.json",
+   "sha256": "19072aee992e5eae185604f5b5a53f0a84827a6a75fae0f4b6d00ec1c3e59aad",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/pins/_det_pins/seed_1/build_manifest.json"
+  },
+  {
+   "bytes": 137336,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/pins/_det_pins/seed_1/life_ranges.parquet",
+   "sha256": "2f1d7f7f5276c112175be533ad8c4f7d7787fc7bfc2087ac303d4102202415fe",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/pins/_det_pins/seed_1/life_ranges.parquet"
+  },
+  {
+   "bytes": 117169,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/pins/_det_pins/seed_1/traverse_ranges.parquet",
+   "sha256": "d0700bd64dc6232c7c10d132c5d91cab5e5457a8432fd22053ca27149d114fd3",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/pins/_det_pins/seed_1/traverse_ranges.parquet"
+  },
+  {
+   "bytes": 83955,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/pins/_det_pins/seed_20260925/PINS_X.json",
+   "sha256": "85e1eeea2d04ffe834b93caf76aae55b1f427ae7935b12a7ecae9d814be7498f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/pins/_det_pins/seed_20260925/PINS_X.json"
+  },
+  {
+   "bytes": 4399,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/pins/_det_pins/seed_20260925/build_manifest.json",
+   "sha256": "19072aee992e5eae185604f5b5a53f0a84827a6a75fae0f4b6d00ec1c3e59aad",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/pins/_det_pins/seed_20260925/build_manifest.json"
+  },
+  {
+   "bytes": 137336,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/pins/_det_pins/seed_20260925/life_ranges.parquet",
+   "sha256": "2f1d7f7f5276c112175be533ad8c4f7d7787fc7bfc2087ac303d4102202415fe",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/pins/_det_pins/seed_20260925/life_ranges.parquet"
+  },
+  {
+   "bytes": 117169,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/pins/_det_pins/seed_20260925/traverse_ranges.parquet",
+   "sha256": "d0700bd64dc6232c7c10d132c5d91cab5e5457a8432fd22053ca27149d114fd3",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/pins/_det_pins/seed_20260925/traverse_ranges.parquet"
+  },
+  {
+   "bytes": 4399,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/pins/build_manifest.json",
+   "sha256": "19072aee992e5eae185604f5b5a53f0a84827a6a75fae0f4b6d00ec1c3e59aad",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/pins/build_manifest.json"
+  },
+  {
+   "bytes": 137336,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/pins/life_ranges.parquet",
+   "sha256": "2f1d7f7f5276c112175be533ad8c4f7d7787fc7bfc2087ac303d4102202415fe",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/pins/life_ranges.parquet"
+  },
+  {
+   "bytes": 117169,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/pins/traverse_ranges.parquet",
+   "sha256": "d0700bd64dc6232c7c10d132c5d91cab5e5457a8432fd22053ca27149d114fd3",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/pins/traverse_ranges.parquet"
+  },
+  {
+   "bytes": 20766,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/progress/X-CLOSE.json",
+   "sha256": "c86210b1f3c2637dbece0bb0c5616715e23bc6b803b5bef6d1055fef0c22f6a6",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/progress/X-CLOSE.json"
+  },
+  {
+   "bytes": 20162,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/progress/X-D.json",
+   "sha256": "421050402cc5aee60d7cd097aefb6fbc821ac75a2b08a9d461c7bd2fd377302a",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/progress/X-D.json"
+  },
+  {
+   "bytes": 138844,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/progress/X-FIX.json",
+   "sha256": "b81da8837e9fccc22a8cfd4ab05afb4b9dac31c71466700b870709be39babd15",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/progress/X-FIX.json"
+  },
+  {
+   "bytes": 25078,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/progress/X-FOUND.books.json",
+   "sha256": "c44345dfb7c67799719fc87eb4eec5de00a3cfe4eb1c194834362d749df2b17e",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/progress/X-FOUND.books.json"
+  },
+  {
+   "bytes": 15432,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/progress/X-FOUND.ranges.json",
+   "sha256": "30705e027d7a7614f11031a03aef834df729e4f90b8da1c97ef7a3130ddc9aef",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/progress/X-FOUND.ranges.json"
+  },
+  {
+   "bytes": 12355,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/progress/X-REG.json",
+   "sha256": "93eee27a998af460b84f36444f576c51704b4d52f87c64502eab7f71efe5aafb",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/progress/X-REG.json"
+  },
+  {
+   "bytes": 21826,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/progress/X-REVIEW.json",
+   "sha256": "e3e841bd5c021e21ed02220265de4fd560c765a0078feb7dd7bb62258fc492d8",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/progress/X-REVIEW.json"
+  },
+  {
+   "bytes": 34096,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/progress/X-SCORE.json",
+   "sha256": "d9802133f13437456977bdab83dadfda4ccf9dbaaa37a0b0d791df971af402fc",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/progress/X-SCORE.json"
+  },
+  {
+   "bytes": 33543,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/progress/X1.json",
+   "sha256": "193f3471c88329ec7d68867bb606e5c676eb41efa3bc975c5698e78aa78b5d3f",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/progress/X1.json"
+  },
+  {
+   "bytes": 26727,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/progress/X2.json",
+   "sha256": "2b20edef48ad116acab4749d41b32c334c2362c58bcc993b6e3ed4fa56d2fd3e",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/progress/X2.json"
+  },
+  {
+   "bytes": 24014,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/progress/X3.json",
+   "sha256": "92b6c49dbc63f737ee421bb0ea53636720f1fd8275d21a0c3d621e1cfd617555",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/progress/X3.json"
+  },
+  {
+   "bytes": 18080,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/progress/X4.json",
+   "sha256": "db3571726bd36ea4830e2b4eedec6780c4356f77f2c091d4d59ea1cd61984f5c",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/progress/X4.json"
+  },
+  {
+   "bytes": 18507,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/progress/X5.json",
+   "sha256": "021cae211fcb08f57c97b0a155ca1fc5f07876577d14c83410067cc6d4bce96e",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/progress/X5.json"
+  },
+  {
+   "bytes": 36047,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/progress/X6.json",
+   "sha256": "975449b6db214f7adcf8c03a5db2bcefe11d7b9e97d2247a06a253bbe02647eb",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/progress/X6.json"
+  },
+  {
+   "bytes": 24894,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/progress/fix_FOUNDATION.json",
+   "sha256": "bc3608bde72fab3c2d64bd65a2bda6b87fff9cd4f2ba922689bdf23d59bd915c",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/progress/fix_FOUNDATION.json"
+  },
+  {
+   "bytes": 17340,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/progress/fix_X1_X4.json",
+   "sha256": "bbdc3150adef947d37ad5a9243e27d614fd3e906a0729488bb7c3bbb9d2a9149",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/progress/fix_X1_X4.json"
+  },
+  {
+   "bytes": 23702,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/progress/fix_X2_X3.json",
+   "sha256": "1796219ced9cb68b79fcc887af5220f8d95610c436e3089ca5cba49faa82278b",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/progress/fix_X2_X3.json"
+  },
+  {
+   "bytes": 14768,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/progress/fix_X5_X-SCORE.json",
+   "sha256": "54df6a6d23c762b48ba41acb2cc75373f774421f0184aa2a656228cfc0b9a099",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/progress/fix_X5_X-SCORE.json"
+  },
+  {
+   "bytes": 18951,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/progress/fix_X6.json",
+   "sha256": "e079cd90df34e436bbc23811d7854c847a23f5522809f1bff8da758306057b2e",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/progress/fix_X6.json"
+  },
+  {
+   "bytes": 14155,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/registrations/FIXTURES_REG_X.txt",
+   "sha256": "480a7421cc15f3f340fc68438baf249a4be786d82101067599cba22a6c47ebb3",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/registrations/FIXTURES_REG_X.txt"
+  },
+  {
+   "bytes": 31863,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/registrations/FIXTURES_SCORE_X.txt",
+   "sha256": "e7aed61164bb6c352f07d7c51fa25d9b3d66770d0360e034efff27c379e1562c",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/registrations/FIXTURES_SCORE_X.txt"
+  },
+  {
+   "bytes": 26862,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/registrations/REGISTRATIONS_X.json",
+   "sha256": "6b0eb52d63ce6823c35f27010705e04263b21e7bfc1603f241c9a7b4b7deb0a4",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/registrations/REGISTRATIONS_X.json"
+  },
+  {
+   "bytes": 4495,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/registrations/REGISTRY_PIN_X.json",
+   "sha256": "6a445afe147f8e36eceeb03cc1b41c906b0c8102b0f36d2a4a32af6b42b72e73",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/registrations/REGISTRY_PIN_X.json"
+  },
+  {
+   "bytes": 29875,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/registrations/SCORED_X.json",
+   "sha256": "dd9b6e2db8b03377d30c3479504bc1510331582c459598813aca5a10adf804ae",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/registrations/SCORED_X.json"
+  },
+  {
+   "bytes": 13355,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/registrations/SCORED_X.md",
+   "sha256": "6191bc8eea2147bc0c0102b9b9a24a5e1a2f1a03ca704934ba7992d39f2d0481",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/registrations/SCORED_X.md"
+  },
+  {
+   "bytes": 409309,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/registrations/SCORED_X_DRAWS.parquet",
+   "sha256": "2521ea255048c4f10fd01fd6d75f2fb302c825a9a1feccde83fadc4318a448a8",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/registrations/SCORED_X_DRAWS.parquet"
+  },
+  {
+   "bytes": 29875,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/registrations/_det_score/seed_1/SCORED_X.json",
+   "sha256": "dd9b6e2db8b03377d30c3479504bc1510331582c459598813aca5a10adf804ae",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/registrations/_det_score/seed_1/SCORED_X.json"
+  },
+  {
+   "bytes": 13355,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/registrations/_det_score/seed_1/SCORED_X.md",
+   "sha256": "6191bc8eea2147bc0c0102b9b9a24a5e1a2f1a03ca704934ba7992d39f2d0481",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/registrations/_det_score/seed_1/SCORED_X.md"
+  },
+  {
+   "bytes": 409309,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/registrations/_det_score/seed_1/SCORED_X_DRAWS.parquet",
+   "sha256": "2521ea255048c4f10fd01fd6d75f2fb302c825a9a1feccde83fadc4318a448a8",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/registrations/_det_score/seed_1/SCORED_X_DRAWS.parquet"
+  },
+  {
+   "bytes": 3607,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/registrations/_det_score/seed_1/build_manifest.json",
+   "sha256": "fdbb5ba2095ca6aebb26085d662bc9b4b8ec67b7d8d1c002cd8b6506ae184d9b",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/registrations/_det_score/seed_1/build_manifest.json"
+  },
+  {
+   "bytes": 29875,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/registrations/_det_score/seed_20260925/SCORED_X.json",
+   "sha256": "dd9b6e2db8b03377d30c3479504bc1510331582c459598813aca5a10adf804ae",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/registrations/_det_score/seed_20260925/SCORED_X.json"
+  },
+  {
+   "bytes": 13355,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/registrations/_det_score/seed_20260925/SCORED_X.md",
+   "sha256": "6191bc8eea2147bc0c0102b9b9a24a5e1a2f1a03ca704934ba7992d39f2d0481",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/registrations/_det_score/seed_20260925/SCORED_X.md"
+  },
+  {
+   "bytes": 409309,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/registrations/_det_score/seed_20260925/SCORED_X_DRAWS.parquet",
+   "sha256": "2521ea255048c4f10fd01fd6d75f2fb302c825a9a1feccde83fadc4318a448a8",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/registrations/_det_score/seed_20260925/SCORED_X_DRAWS.parquet"
+  },
+  {
+   "bytes": 3607,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/registrations/_det_score/seed_20260925/build_manifest.json",
+   "sha256": "fdbb5ba2095ca6aebb26085d662bc9b4b8ec67b7d8d1c002cd8b6506ae184d9b",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/registrations/_det_score/seed_20260925/build_manifest.json"
+  },
+  {
+   "bytes": 3607,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/registrations/build_manifest.json",
+   "sha256": "fdbb5ba2095ca6aebb26085d662bc9b4b8ec67b7d8d1c002cd8b6506ae184d9b",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/registrations/build_manifest.json"
+  },
+  {
+   "bytes": 43089,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/review/BUILD_REVIEW_2026-09-25.json",
+   "sha256": "961e1c1a5016a1b74685f70c86055139b961daeb120a46997b3807bdc712d285",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/review/BUILD_REVIEW_2026-09-25.json"
+  },
+  {
+   "bytes": 114850,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/review/CLOSE_BRIEF.json",
+   "sha256": "5e67029ad6ce9dbc30d77ab392e6b3595d4079f87b6730fd80d650c7fa53b8f1",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/review/CLOSE_BRIEF.json"
+  },
+  {
+   "bytes": 185410,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/review/LEANS_X_REVIEW_2026-09-25.json",
+   "sha256": "e753601e84a8da01fe19ac2a32372d53693f28e794cd8c5dcc8d0d452645dd48",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/review/LEANS_X_REVIEW_2026-09-25.json"
+  },
+  {
+   "bytes": 60590,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/review/RESIDUAL_FINDINGS_PRE_FIX.json",
+   "sha256": "2edf91dc218b301f96170c6227423d4c31abc6c17f914e60b9565d838f3859ae",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/review/RESIDUAL_FINDINGS_PRE_FIX.json"
+  },
+  {
+   "bytes": 4779,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/review/WORKTREE_ATTEST.jsonl",
+   "sha256": "c13d4f5ed224023d73061d52477997e7eb8ede3fddc64dbaa5d67e1edb433fd3",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/review/WORKTREE_ATTEST.jsonl"
+  },
+  {
+   "bytes": 8434,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/review/WORKTREE_ATTEST_REG.jsonl",
+   "sha256": "9e8c52c57b9a98fdb2cb61e260651895e3282724757c3a7e20126284c6edb7f6",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/review/WORKTREE_ATTEST_REG.jsonl"
+  },
+  {
+   "bytes": 2944,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/review/attest.sh",
+   "sha256": "f7779b54bab2edf3ffdb84176f702bf72576c6b1c732d4910bbac3a90c8b3bf5",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/review/attest.sh"
+  },
+  {
+   "bytes": 49376,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/scout/U1_exit.md",
+   "sha256": "b23583501c7be3cab04403d7c975045bae0391dbacdb7793b87aa2fb7af62017",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/scout/U1_exit.md"
+  },
+  {
+   "bytes": 38296,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/scout/U2_range_sfp.md",
+   "sha256": "ed66a82162f0633dc9ec58fa0e67c7aae0fb7f8cea83d264882690ee57ffd78b",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/scout/U2_range_sfp.md"
+  },
+  {
+   "bytes": 49041,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/scout/U3_value_area.md",
+   "sha256": "03634e688860b70bea7497c2033e438a1cdd510e9a4864ebda9256316b84f87c",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/scout/U3_value_area.md"
+  },
+  {
+   "bytes": 39780,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/scout/U4_era.md",
+   "sha256": "89b3d2998d6610ba7d708e7f1d5d55a4c9c402d559ffc7db7ef7639626a40eab",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/scout/U4_era.md"
+  },
+  {
+   "bytes": 53258,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/scout/U5_close_ferry.md",
+   "sha256": "3e510312cd720628dd346efb7d37345c42f3badc156996a67004920ffe81cc37",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/scout/U5_close_ferry.md"
+  },
+  {
+   "bytes": 27606,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/FIXTURES_X2.txt",
+   "sha256": "2c51abe235355a631db9b44bb8a2e1c7cb38d9cbc6e9607baeac11723b9abf0d",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/sfp/FIXTURES_X2.txt"
+  },
+  {
+   "bytes": 38459,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/X2.md",
+   "sha256": "b13e1286bb1de04d8e0f7c66ead189d5e8232105728bb596f60ba6d2832bf74f",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/sfp/X2.md"
+  },
+  {
+   "bytes": 124747,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/X2_cooccur.parquet",
+   "sha256": "2244211ee67ca0c20a7699ed1aed68356422cd81dd85b8b2676d025fae65d43c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/X2_cooccur.parquet"
+  },
+  {
+   "bytes": 17405,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/X2_cooccur_draws.parquet",
+   "sha256": "2be1b28831c20172c24bc65391d7dbdc5d47a0509530247791543a42aafa10d6",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/X2_cooccur_draws.parquet"
+  },
+  {
+   "bytes": 31186,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/X2_grid.parquet",
+   "sha256": "4e75539ed620347ecd20abea334e957331e1d0c09782d0ceac83d7e58f4ad7e8",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/X2_grid.parquet"
+  },
+  {
+   "bytes": 135835,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/X2_refusals.parquet",
+   "sha256": "81b7fa6c5750be4e2aedb4046663ad8a16d2171681fc09680f1e0f141e42534d",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/X2_refusals.parquet"
+  },
+  {
+   "bytes": 817033,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/X2_trades_1h.parquet",
+   "sha256": "4e3b5f4f7eb01db468b4203c4b64362f54fe388419290b5c58a68d9a54427eac",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/X2_trades_1h.parquet"
+  },
+  {
+   "bytes": 235788,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/X2_trades_4h.parquet",
+   "sha256": "552e7582d7559c032438f89c402e3070a3011559c1b334babd4c942f23b1bbef",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/X2_trades_4h.parquet"
+  },
+  {
+   "bytes": 5149564,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/X2_twins.parquet",
+   "sha256": "f2abf81de9202eef907857355799536012992d114b87a3fbd00a44ac4ae28c25",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/X2_twins.parquet"
+  },
+  {
+   "bytes": 38459,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/_det_sfp/seed_1/X2.md",
+   "sha256": "b13e1286bb1de04d8e0f7c66ead189d5e8232105728bb596f60ba6d2832bf74f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/_det_sfp/seed_1/X2.md"
+  },
+  {
+   "bytes": 124747,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/_det_sfp/seed_1/X2_cooccur.parquet",
+   "sha256": "2244211ee67ca0c20a7699ed1aed68356422cd81dd85b8b2676d025fae65d43c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/_det_sfp/seed_1/X2_cooccur.parquet"
+  },
+  {
+   "bytes": 17405,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/_det_sfp/seed_1/X2_cooccur_draws.parquet",
+   "sha256": "2be1b28831c20172c24bc65391d7dbdc5d47a0509530247791543a42aafa10d6",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/_det_sfp/seed_1/X2_cooccur_draws.parquet"
+  },
+  {
+   "bytes": 31186,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/_det_sfp/seed_1/X2_grid.parquet",
+   "sha256": "4e75539ed620347ecd20abea334e957331e1d0c09782d0ceac83d7e58f4ad7e8",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/_det_sfp/seed_1/X2_grid.parquet"
+  },
+  {
+   "bytes": 135835,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/_det_sfp/seed_1/X2_refusals.parquet",
+   "sha256": "81b7fa6c5750be4e2aedb4046663ad8a16d2171681fc09680f1e0f141e42534d",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/_det_sfp/seed_1/X2_refusals.parquet"
+  },
+  {
+   "bytes": 817033,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/_det_sfp/seed_1/X2_trades_1h.parquet",
+   "sha256": "4e3b5f4f7eb01db468b4203c4b64362f54fe388419290b5c58a68d9a54427eac",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/_det_sfp/seed_1/X2_trades_1h.parquet"
+  },
+  {
+   "bytes": 235788,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/_det_sfp/seed_1/X2_trades_4h.parquet",
+   "sha256": "552e7582d7559c032438f89c402e3070a3011559c1b334babd4c942f23b1bbef",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/_det_sfp/seed_1/X2_trades_4h.parquet"
+  },
+  {
+   "bytes": 5149564,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/_det_sfp/seed_1/X2_twins.parquet",
+   "sha256": "f2abf81de9202eef907857355799536012992d114b87a3fbd00a44ac4ae28c25",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/_det_sfp/seed_1/X2_twins.parquet"
+  },
+  {
+   "bytes": 36246,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/_det_sfp/seed_1/build_manifest.json",
+   "sha256": "6f786d84c68f35b2ad1b4390aaddd6921d6a7ef2bb83b745f35f8b5ac8e43835",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/_det_sfp/seed_1/build_manifest.json"
+  },
+  {
+   "bytes": 38459,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/_det_sfp/seed_20260925/X2.md",
+   "sha256": "b13e1286bb1de04d8e0f7c66ead189d5e8232105728bb596f60ba6d2832bf74f",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/_det_sfp/seed_20260925/X2.md"
+  },
+  {
+   "bytes": 124747,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/_det_sfp/seed_20260925/X2_cooccur.parquet",
+   "sha256": "2244211ee67ca0c20a7699ed1aed68356422cd81dd85b8b2676d025fae65d43c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/_det_sfp/seed_20260925/X2_cooccur.parquet"
+  },
+  {
+   "bytes": 17405,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/_det_sfp/seed_20260925/X2_cooccur_draws.parquet",
+   "sha256": "2be1b28831c20172c24bc65391d7dbdc5d47a0509530247791543a42aafa10d6",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/_det_sfp/seed_20260925/X2_cooccur_draws.parquet"
+  },
+  {
+   "bytes": 31186,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/_det_sfp/seed_20260925/X2_grid.parquet",
+   "sha256": "4e75539ed620347ecd20abea334e957331e1d0c09782d0ceac83d7e58f4ad7e8",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/_det_sfp/seed_20260925/X2_grid.parquet"
+  },
+  {
+   "bytes": 135835,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/_det_sfp/seed_20260925/X2_refusals.parquet",
+   "sha256": "81b7fa6c5750be4e2aedb4046663ad8a16d2171681fc09680f1e0f141e42534d",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/_det_sfp/seed_20260925/X2_refusals.parquet"
+  },
+  {
+   "bytes": 817033,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/_det_sfp/seed_20260925/X2_trades_1h.parquet",
+   "sha256": "4e3b5f4f7eb01db468b4203c4b64362f54fe388419290b5c58a68d9a54427eac",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/_det_sfp/seed_20260925/X2_trades_1h.parquet"
+  },
+  {
+   "bytes": 235788,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/_det_sfp/seed_20260925/X2_trades_4h.parquet",
+   "sha256": "552e7582d7559c032438f89c402e3070a3011559c1b334babd4c942f23b1bbef",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/_det_sfp/seed_20260925/X2_trades_4h.parquet"
+  },
+  {
+   "bytes": 5149564,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/_det_sfp/seed_20260925/X2_twins.parquet",
+   "sha256": "f2abf81de9202eef907857355799536012992d114b87a3fbd00a44ac4ae28c25",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/_det_sfp/seed_20260925/X2_twins.parquet"
+  },
+  {
+   "bytes": 36246,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/_det_sfp/seed_20260925/build_manifest.json",
+   "sha256": "6f786d84c68f35b2ad1b4390aaddd6921d6a7ef2bb83b745f35f8b5ac8e43835",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/sfp/_det_sfp/seed_20260925/build_manifest.json"
+  },
+  {
+   "bytes": 36246,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/sfp/build_manifest.json",
+   "sha256": "6f786d84c68f35b2ad1b4390aaddd6921d6a7ef2bb83b745f35f8b5ac8e43835",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/sfp/build_manifest.json"
+  },
+  {
+   "bytes": 26702,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/FIXTURES_X3.txt",
+   "sha256": "474731ed4044a446fe16a30aaa23a886ca92cd2c757992d159ec173aa3b844b2",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/va/FIXTURES_X3.txt"
+  },
+  {
+   "bytes": 40822,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/X3.md",
+   "sha256": "eea131167b827f2763a1564655234ab97d7c3c92e7e02a1ec0f461a4ed5abf08",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/va/X3.md"
+  },
+  {
+   "bytes": 40822,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_1/X3.md",
+   "sha256": "eea131167b827f2763a1564655234ab97d7c3c92e7e02a1ec0f461a4ed5abf08",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_1/X3.md"
+  },
+  {
+   "bytes": 75132,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_1/agreement.parquet",
+   "sha256": "7984fb78f9393df19eaeaaee0291edf54a4cf6e3e6859c1e0725b753d8b2e41a",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_1/agreement.parquet"
+  },
+  {
+   "bytes": 182922,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_1/build_manifest.json",
+   "sha256": "769ac0915ee35b8783d99e0d39870f9e164871b81b94b6bb3533204fa28f078b",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_1/build_manifest.json"
+  },
+  {
+   "bytes": 1940512,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_1/events_pivot.parquet",
+   "sha256": "eb99f3f3760c1883ece3e9dcb3ee1b033a25a4a04993118044d67d98c78a9097",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_1/events_pivot.parquet"
+  },
+  {
+   "bytes": 20751566,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_1/events_va.parquet",
+   "sha256": "2c35b15162a1dfa96fa09074688650dd313fd9245836ccb301cfa2eb3aa35848",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_1/events_va.parquet"
+  },
+  {
+   "bytes": 98554,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_1/feasibility.parquet",
+   "sha256": "ea8573b3240bb1112521c55f0a52ee2ed7156c598b7665685d0b86eefbecb6f0",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_1/feasibility.parquet"
+  },
+  {
+   "bytes": 1147787,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_1/two_trades.parquet",
+   "sha256": "a03ef1343cc93c9bc093c4f34960978daac51ca24d5160480546d40bf76f91b0",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_1/two_trades.parquet"
+  },
+  {
+   "bytes": 3747949,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_1/va_series_12h.parquet",
+   "sha256": "c2ce9a8f131fac79de5a3890d67aa626fbf1f9d6bf0a27cb4e4fce0014c40359",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_1/va_series_12h.parquet"
+  },
+  {
+   "bytes": 2025996,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_1/va_series_1d.parquet",
+   "sha256": "1fc7bc75033c4d57a39e3bdae0de4d8bb590e7752894bb0ad329398e106ae1a7",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_1/va_series_1d.parquet"
+  },
+  {
+   "bytes": 36748745,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_1/va_series_1h.parquet",
+   "sha256": "860b895448dec9e3d53c10a3bf5233f3e94610a4cb983efe02d676ee64a1af7e",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_1/va_series_1h.parquet"
+  },
+  {
+   "bytes": 10771152,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_1/va_series_4h.parquet",
+   "sha256": "d5881508a02475eb46c180b757e1948466313cb1673d2a909ea9ab5bda25891c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_1/va_series_4h.parquet"
+  },
+  {
+   "bytes": 40822,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_20260925/X3.md",
+   "sha256": "eea131167b827f2763a1564655234ab97d7c3c92e7e02a1ec0f461a4ed5abf08",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_20260925/X3.md"
+  },
+  {
+   "bytes": 75132,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_20260925/agreement.parquet",
+   "sha256": "7984fb78f9393df19eaeaaee0291edf54a4cf6e3e6859c1e0725b753d8b2e41a",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_20260925/agreement.parquet"
+  },
+  {
+   "bytes": 182922,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_20260925/build_manifest.json",
+   "sha256": "769ac0915ee35b8783d99e0d39870f9e164871b81b94b6bb3533204fa28f078b",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_20260925/build_manifest.json"
+  },
+  {
+   "bytes": 1940512,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_20260925/events_pivot.parquet",
+   "sha256": "eb99f3f3760c1883ece3e9dcb3ee1b033a25a4a04993118044d67d98c78a9097",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_20260925/events_pivot.parquet"
+  },
+  {
+   "bytes": 20751566,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_20260925/events_va.parquet",
+   "sha256": "2c35b15162a1dfa96fa09074688650dd313fd9245836ccb301cfa2eb3aa35848",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_20260925/events_va.parquet"
+  },
+  {
+   "bytes": 98554,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_20260925/feasibility.parquet",
+   "sha256": "ea8573b3240bb1112521c55f0a52ee2ed7156c598b7665685d0b86eefbecb6f0",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_20260925/feasibility.parquet"
+  },
+  {
+   "bytes": 1147787,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_20260925/two_trades.parquet",
+   "sha256": "a03ef1343cc93c9bc093c4f34960978daac51ca24d5160480546d40bf76f91b0",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_20260925/two_trades.parquet"
+  },
+  {
+   "bytes": 3747949,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_20260925/va_series_12h.parquet",
+   "sha256": "c2ce9a8f131fac79de5a3890d67aa626fbf1f9d6bf0a27cb4e4fce0014c40359",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_20260925/va_series_12h.parquet"
+  },
+  {
+   "bytes": 2025996,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_20260925/va_series_1d.parquet",
+   "sha256": "1fc7bc75033c4d57a39e3bdae0de4d8bb590e7752894bb0ad329398e106ae1a7",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_20260925/va_series_1d.parquet"
+  },
+  {
+   "bytes": 36748745,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_20260925/va_series_1h.parquet",
+   "sha256": "860b895448dec9e3d53c10a3bf5233f3e94610a4cb983efe02d676ee64a1af7e",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_20260925/va_series_1h.parquet"
+  },
+  {
+   "bytes": 10771152,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/_det_va/seed_20260925/va_series_4h.parquet",
+   "sha256": "d5881508a02475eb46c180b757e1948466313cb1673d2a909ea9ab5bda25891c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/_det_va/seed_20260925/va_series_4h.parquet"
+  },
+  {
+   "bytes": 75132,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/agreement.parquet",
+   "sha256": "7984fb78f9393df19eaeaaee0291edf54a4cf6e3e6859c1e0725b753d8b2e41a",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/agreement.parquet"
+  },
+  {
+   "bytes": 182922,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/build_manifest.json",
+   "sha256": "769ac0915ee35b8783d99e0d39870f9e164871b81b94b6bb3533204fa28f078b",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/va/build_manifest.json"
+  },
+  {
+   "bytes": 1940512,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/events_pivot.parquet",
+   "sha256": "eb99f3f3760c1883ece3e9dcb3ee1b033a25a4a04993118044d67d98c78a9097",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/events_pivot.parquet"
+  },
+  {
+   "bytes": 20751566,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/events_va.parquet",
+   "sha256": "2c35b15162a1dfa96fa09074688650dd313fd9245836ccb301cfa2eb3aa35848",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/events_va.parquet"
+  },
+  {
+   "bytes": 98554,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/feasibility.parquet",
+   "sha256": "ea8573b3240bb1112521c55f0a52ee2ed7156c598b7665685d0b86eefbecb6f0",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/feasibility.parquet"
+  },
+  {
+   "bytes": 1147787,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/two_trades.parquet",
+   "sha256": "a03ef1343cc93c9bc093c4f34960978daac51ca24d5160480546d40bf76f91b0",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/two_trades.parquet"
+  },
+  {
+   "bytes": 3747949,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/va_series_12h.parquet",
+   "sha256": "c2ce9a8f131fac79de5a3890d67aa626fbf1f9d6bf0a27cb4e4fce0014c40359",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/va_series_12h.parquet"
+  },
+  {
+   "bytes": 2025996,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/va_series_1d.parquet",
+   "sha256": "1fc7bc75033c4d57a39e3bdae0de4d8bb590e7752894bb0ad329398e106ae1a7",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/va_series_1d.parquet"
+  },
+  {
+   "bytes": 36748745,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/va_series_1h.parquet",
+   "sha256": "860b895448dec9e3d53c10a3bf5233f3e94610a4cb983efe02d676ee64a1af7e",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/va_series_1h.parquet"
+  },
+  {
+   "bytes": 10771152,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/va/va_series_4h.parquet",
+   "sha256": "d5881508a02475eb46c180b757e1948466313cb1673d2a909ea9ab5bda25891c",
+   "tracked_at_tip": false,
+   "x_path": "research_outputs/tierc11x/va/va_series_4h.parquet"
+  },
+  {
+   "bytes": 594,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/vendor/README.md",
+   "sha256": "ca47f717e8a163b291c223fda9e151fcbd8d221179a8d0439d1480a232cca628",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/vendor/README.md"
+  },
+  {
+   "bytes": 68355,
+   "copy": "research_outputs/tierc12/x_rec/tierc11x/vendor/tierc11_env@086d66da.py",
+   "sha256": "086d66da0609043834df59336e107acd8b202a39a697a8f012d6a1845f52d82c",
+   "tracked_at_tip": true,
+   "x_path": "research_outputs/tierc11x/vendor/tierc11_env@086d66da.py"
+  },
+  {
+   "bytes": 90076,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_books.py",
+   "sha256": "26870ff97317801fdf9c4874e1f41cdac69bacbf9263198e623e19ab19913b2b",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_books.py"
+  },
+  {
+   "bytes": 104087,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_books_fixtures.py",
+   "sha256": "ee8bac68c23da4e0ef4b8ece574e5a518ead0697930efefecee8cd93aaadf7d9",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_books_fixtures.py"
+  },
+  {
+   "bytes": 115827,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_close_box_cost.py",
+   "sha256": "aec455fc12d586bf92e48e5df6e5186a3de949fc8e89f61762be730c6a723d9b",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_close_box_cost.py"
+  },
+  {
+   "bytes": 139910,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_close_draft.py",
+   "sha256": "bdc8b4c91f802fec32a347dc396d36efd08a75a915a3f0abd2416326fc4be8e5",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_close_draft.py"
+  },
+  {
+   "bytes": 68834,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_close_draft_fixtures.py",
+   "sha256": "d7fe1ba285a5acfbc0188ac7cf609faddd2cdb5369adacbd21355b836354f213",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_close_draft_fixtures.py"
+  },
+  {
+   "bytes": 89776,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_close_findings.py",
+   "sha256": "17a3e5c24a4ce742cabd0b799b4adb1f0392eca64a3e4287c5dd27190cbaa34c",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_close_findings.py"
+  },
+  {
+   "bytes": 66698,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_close_findings_fixtures.py",
+   "sha256": "e7b74fb32a0b5927f9bdccbb7bd966a09b34e826ac6842eea40bd3bf1af3a4b7",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_close_findings_fixtures.py"
+  },
+  {
+   "bytes": 86383,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_close_fixtures.py",
+   "sha256": "ef00901584fec058b81e6b613282a801adb5d17dcfe397dc961ea7c5b6f6656e",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_close_fixtures.py"
+  },
+  {
+   "bytes": 104894,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_data.py",
+   "sha256": "c73ca805509e504f1f7c5284de8375d389a59c88e71c766384ba44b8fd68b4d6",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_data.py"
+  },
+  {
+   "bytes": 28682,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_data_fixtures.py",
+   "sha256": "2eabdaf7d8cdf27a500bd111edf6c2854ade3832ca0036b37fdb45aab0176e40",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_data_fixtures.py"
+  },
+  {
+   "bytes": 96176,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_env.py",
+   "sha256": "db74225e6fa26bf7e9c2e19f31b6e0c76b379a8de72ef4c0cc9e6b1a2e653928",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_env.py"
+  },
+  {
+   "bytes": 58374,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_env_fixtures.py",
+   "sha256": "b1bea520da0063535ea49ed47d233037c60249cbec7c3f08334e1690e03bbcfc",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_env_fixtures.py"
+  },
+  {
+   "bytes": 139867,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_era.py",
+   "sha256": "f1b42be4b7012ae3c7166cf0d51195bb9c505abc126b8a68e6af49c7649b597b",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_era.py"
+  },
+  {
+   "bytes": 85772,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_era_fixtures.py",
+   "sha256": "4429dec5586893d4cad4bc9dfe5110dd69d0a9ef0e470bf0270dbe04186660d0",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_era_fixtures.py"
+  },
+  {
+   "bytes": 109945,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_exit.py",
+   "sha256": "2b7b404ff60357f1dc524a9fbb24b28d2695dbaf814e4809102c0c2895358945",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_exit.py"
+  },
+  {
+   "bytes": 135455,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_exit_fixtures.py",
+   "sha256": "a7bf7bf216a27f70ae5059c1948c94196641e7f5525047b6a417a6c2a6bf4732",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_exit_fixtures.py"
+  },
+  {
+   "bytes": 165341,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_ferry.py",
+   "sha256": "6594bbc27f2f2ed9f1a0261e06b86d1fd26be84fce92a297200f7e9af6478f8f",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_ferry.py"
+  },
+  {
+   "bytes": 145593,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_ferry_fixtures.py",
+   "sha256": "eb044dc477cfca1d8b3e7ac222ab18d36cbf075ab91ee81447082f88cbb42c5f",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_ferry_fixtures.py"
+  },
+  {
+   "bytes": 65539,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_forward.py",
+   "sha256": "33f65b5eca8e50dfce6690bb827270f7de1cf7207ef14245416210ce88bbe80b",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_forward.py"
+  },
+  {
+   "bytes": 144597,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_forward_fixtures.py",
+   "sha256": "ed54f30385e3090543ad9483e250e284fc9faf12d25dd3dc1e1b56e5a4912267",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_forward_fixtures.py"
+  },
+  {
+   "bytes": 107899,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_land.py",
+   "sha256": "438db24345d557bdd8f2bec919d45362d2783f4ccec6d3f7bb15166d6950c70f",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_land.py"
+  },
+  {
+   "bytes": 6648,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_pct.py",
+   "sha256": "49809c070ed00223a345edc51b5d83355f229a6b1372495038ff42aeba204bb7",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_pct.py"
+  },
+  {
+   "bytes": 4636,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_progress.py",
+   "sha256": "5dbd5c916eb6ed509eedc5a1e51ff3b0cf8c9e7dc07505731bf98a1603d37562",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_progress.py"
+  },
+  {
+   "bytes": 83896,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_ranges.py",
+   "sha256": "26e829d8990b462fc6f22829a9974a5a291fee462dadf58e1160d749dd127d8d",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_ranges.py"
+  },
+  {
+   "bytes": 59287,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_ranges_fixtures.py",
+   "sha256": "66ebedb7d95e9eb9328db06fece238d3d947f93d2fe43d13903b4dc3426d3afe",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_ranges_fixtures.py"
+  },
+  {
+   "bytes": 58983,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_registrations.py",
+   "sha256": "6bf4bf4e722477458dcc1cde44f3184581b6754392583b0cb40e27249ac09fc6",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_registrations.py"
+  },
+  {
+   "bytes": 61518,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_registrations_fixtures.py",
+   "sha256": "fdcc362f1bfc5029b4242521761673bedf4f5aff7c0322d1a31ce085ca48367e",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_registrations_fixtures.py"
+  },
+  {
+   "bytes": 67391,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_score.py",
+   "sha256": "da7035a9ddbfe4a707a57a534c352ca79f5cac39ecc4a6c8b04102bf49620d92",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_score.py"
+  },
+  {
+   "bytes": 145651,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_score_fixtures.py",
+   "sha256": "a65fa3ebcd6c85d5ce3d62cebecd9931304007691b9410ad5457f92be7cdc884",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_score_fixtures.py"
+  },
+  {
+   "bytes": 111919,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_sfp.py",
+   "sha256": "79ba35f417a5d6d9f59c574f60376945e55722559495ba69a162a917bcd40f95",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_sfp.py"
+  },
+  {
+   "bytes": 110073,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_sfp_fixtures.py",
+   "sha256": "61cccad20ead67232d7b278040e758c008397e1b377804763b5d366e2fd27885",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_sfp_fixtures.py"
+  },
+  {
+   "bytes": 158641,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_va.py",
+   "sha256": "3f6a43cbbf7fd71cb374bd9e2b2fd16b1cd9bd52b24437a35fb76b9c171ca422",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_va.py"
+  },
+  {
+   "bytes": 115600,
+   "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_va_fixtures.py",
+   "sha256": "dd941ed23971a8ce590443378fbf7870cb631d86b0ea63028521f224299eee3c",
+   "tracked_at_tip": true,
+   "x_path": "scripts/tc11x_va_fixtures.py"
+  }
+ ],
+ "law": "every TC12 read of an X record goes through this manifest: path + sha256 asserted before use",
+ "n_files": 490,
+ "n_untracked_at_tip": 345,
+ "what": "byte copies of TC11-X's records and sources, read from the X worktree; X is never written by TC12",
+ "x_branch": "tierc11x",
+ "x_tip": "7b24f835bcbf7430eb0f97b6c39b6b1b233eef11",
+ "x_worktree": "/Users/luis/Naiad/.claude/worktrees/tierc11x"
+}
