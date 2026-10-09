@@ -1,0 +1,183 @@
+{
+ "stage": "TC12-REG",
+ "parent": null,
+ "status": "COMPLETE-VERIFIED",
+ "as_of": null,
+ "blockers": [],
+ "depends_on": [
+  "TC12-LEANS"
+ ],
+ "artifact_shas": {
+  "research_outputs/tierc12/REGISTRATION_PLAN.md": {
+   "bytes": 95414,
+   "sha256": "740f08d5f84246c0333c8cb6363d43851b1f7ba7b00e4a9c0b156c1ca5bab9e7"
+  },
+  "research_outputs/tierc12/registrations/REGISTRATIONS.json": {
+   "bytes": 101003,
+   "sha256": "f3bbe2602d312e347e29f9e88e8eadcdff2004fa0d357130f4ae80589e104aa9"
+  },
+  "research_outputs/tierc12/registrations/REGISTRY_PIN.json": {
+   "bytes": 8124,
+   "sha256": "b045fc541c7b406647a41a8fe9fbf57c7ce561771a9bbea6184153f58ed1bdf1"
+  },
+  "research_outputs/tierc12/registrations/ATTEST_REG.json": {
+   "bytes": 97562,
+   "sha256": "62135f165e72194f70f4394dbe23a1e431cddd0f9eb64e56da8c5f454637f028"
+  },
+  "research_outputs/tierc12/registrations/FIXTURES_REG.txt": {
+   "bytes": 27031,
+   "sha256": "1e7be4ad4fa26cc09d47e14831b52b6e9eb1fb2752745af9eb3eb753a30f2b1b"
+  },
+  "research_outputs/tierc12/pins/CONTRACT_PIN_MAP.json": {
+   "bytes": 10423,
+   "sha256": "dd9f5e4dfd7165c8288218b58cd6f402c2d81ca4b286305a53c4d2e1802c5d4e"
+  },
+  "research_outputs/tierc12/pins/CONTRACT_PINS.json": {
+   "bytes": 17050,
+   "sha256": "b9d695998807aa3bd506842eb85746e2b03e7b76a9d755e4063a199f15c716bf"
+  },
+  "research_outputs/tierc12/pins/PIN_REGISTER.json": {
+   "bytes": 52021,
+   "sha256": "9a85e2dcde058a1d4ef4d644569d5b775b7b4ae634a9c7dac7def6f7109973ff"
+  },
+  "research_outputs/tierc12/pins/CONTRACT_TOKENS_UNPINNED.json": {
+   "bytes": 16170,
+   "sha256": "6af0e46a2d20751200891a7942a9f52e51a668a3c2bf7c2f4c4eeb10f1c1f5c7"
+  },
+  "research_outputs/tierc12/pins/FIXTURES_PINS.txt": {
+   "bytes": 13651,
+   "sha256": "cbe6f22460a0ddf8ef40e450ebb5ad337c24b9ea4a2b4c4fc405ca8a2415c5fb"
+  },
+  "research_outputs/tierc12/frozen/FROZEN_ESTATE.json": {
+   "bytes": 613548,
+   "sha256": "fae1d4fe4de4e4599d4ea5cbc701d8bf3dbe2d7cdcc12c3b799d52e313bc9788"
+  },
+  "research_outputs/tierc12/resume/FIXTURES_RESUME_TC12-REG.txt": {
+   "bytes": 31517,
+   "sha256": "c84f4a3a327573eae9cbc75c4ea85f780a9e57fa69088f84ac5d52342e268a4f"
+  },
+  "research_outputs/tierc12/closure/FIXTURES_CLOSURE_TC12-REG.txt": {
+   "bytes": 22682,
+   "sha256": "0fd8b737a0f0390fe58d9f13cf619dab6e8a0672ddae5fbb3f5d6529dc8290e4"
+  },
+  "scripts/tierc12_fx.py": {
+   "bytes": 121338,
+   "sha256": "03e732bf98688a0a4a89ddeb861d06d517298fb1f65fcc6aee6d848db79e401f"
+  },
+  "scripts/tierc12_units.py": {
+   "bytes": 853,
+   "sha256": "a385604ae28890d1aa8b7a6223fe7a23218abef59aa55413477fe6c35c00b9fc"
+  },
+  "scripts/tierc12_pins.py": {
+   "bytes": 56520,
+   "sha256": "28bbeb3f9a68a14d857801edef75921b5587f9c88ac508dec9a7f7baa3daaa0e"
+  },
+  "scripts/tierc12_frozen.py": {
+   "bytes": 16792,
+   "sha256": "8f3519141079fec1ce28d102f8079f0410705edb7e30826416390bf0ab8e1aae"
+  },
+  "scripts/tierc12_registrations.py": {
+   "bytes": 69712,
+   "sha256": "95950fd48042671b81b3e5b6a2dc02816d4571e7459684e835ff2b6ee900e476"
+  },
+  "scripts/tierc12_registrations_fixtures.py": {
+   "bytes": 86188,
+   "sha256": "47846d671386c20b92b37ef2de13ace979791e88c5fc37af9d81ae6cea0795f7"
+  },
+  "scripts/tierc12_pins_fixtures.py": {
+   "bytes": 45783,
+   "sha256": "a0bf88dca0b63d42add62ab1c19de7c659ada8bca77f64606f01c06da27c1d67"
+  },
+  "scripts/tierc12_resume_fixtures.py": {
+   "bytes": 114216,
+   "sha256": "240b1a9489e22dad02c0221665e84fedd712dfb3fc735676ecf80a88b1eb214f"
+  },
+  "scripts/tierc12_closure_fixtures.py": {
+   "bytes": 118536,
+   "sha256": "7f3b21de3fb962d8d54695922eada65c3a35ff0298dade2123eebf9dc57ba730"
+  },
+  "scripts/tierc12_progress.py": {
+   "bytes": 18641,
+   "sha256": "4fa98578851bd37739d0e0031d980105507b42c84e37bce132419e8eac08ea28"
+  },
+  "research_outputs/tierc12/LEANS_AMENDMENTS.md": {
+   "bytes": 52977,
+   "sha256": "477f5e8cd2bc8a7e4912b27b5de6c52d642e2bf25e14d3dd1c906fb5cc28a56e"
+  },
+  "research_outputs/tierc12/AMENDMENTS_PROPOSED.md": {
+   "bytes": 67821,
+   "sha256": "23bc4c94e6521d9c321e429a33afaee93af6c6fc844d8f8d9a8de6cb56d33461"
+  }
+ },
+ "supersedes": [],
+ "fixtures": [
+  {
+   "suite": "scripts/tierc12_pins_fixtures.py",
+   "transcript": "research_outputs/tierc12/pins/FIXTURES_PINS.txt",
+   "provenance": false,
+   "exit_code": 0,
+   "legs_red": 0,
+   "legs_not_run": 0,
+   "legs_total": 3,
+   "transcript_drift": false,
+   "transcript_sha_before": "cbe6f22460a0ddf8ef40e450ebb5ad337c24b9ea4a2b4c4fc405ca8a2415c5fb",
+   "transcript_sha_after": "cbe6f22460a0ddf8ef40e450ebb5ad337c24b9ea4a2b4c4fc405ca8a2415c5fb",
+   "wall_seconds": 0.5
+  },
+  {
+   "suite": "scripts/tierc12_closure_fixtures.py --stage=TC12-REG",
+   "transcript": "research_outputs/tierc12/closure/FIXTURES_CLOSURE_TC12-REG.txt",
+   "provenance": false,
+   "exit_code": 0,
+   "legs_red": 0,
+   "legs_not_run": 0,
+   "legs_total": 6,
+   "transcript_drift": false,
+   "transcript_sha_before": "0fd8b737a0f0390fe58d9f13cf619dab6e8a0672ddae5fbb3f5d6529dc8290e4",
+   "transcript_sha_after": "0fd8b737a0f0390fe58d9f13cf619dab6e8a0672ddae5fbb3f5d6529dc8290e4",
+   "wall_seconds": 11.8
+  },
+  {
+   "suite": "scripts/tierc12_resume_fixtures.py --stage=TC12-REG --at=50c64c2191c536f02d1bda5e8d91b6b71ef14610",
+   "transcript": "research_outputs/tierc12/resume/FIXTURES_RESUME_TC12-REG.txt",
+   "provenance": false,
+   "exit_code": 0,
+   "legs_red": 0,
+   "legs_not_run": 0,
+   "legs_total": 10,
+   "transcript_drift": false,
+   "transcript_sha_before": "c84f4a3a327573eae9cbc75c4ea85f780a9e57fa69088f84ac5d52342e268a4f",
+   "transcript_sha_after": "c84f4a3a327573eae9cbc75c4ea85f780a9e57fa69088f84ac5d52342e268a4f",
+   "wall_seconds": 8.9
+  },
+  {
+   "suite": "scripts/tierc12_registrations_fixtures.py",
+   "transcript": "research_outputs/tierc12/registrations/FIXTURES_REG.txt",
+   "provenance": false,
+   "exit_code": 0,
+   "legs_red": 0,
+   "legs_not_run": 0,
+   "legs_total": 8,
+   "transcript_drift": false,
+   "transcript_sha_before": "1e7be4ad4fa26cc09d47e14831b52b6e9eb1fb2752745af9eb3eb753a30f2b1b",
+   "transcript_sha_after": "1e7be4ad4fa26cc09d47e14831b52b6e9eb1fb2752745af9eb3eb753a30f2b1b",
+   "wall_seconds": 0.8
+  }
+ ],
+ "registry": {
+  "head": "bbbc6cabcdfe33c04c6532f20eb2c016c458a4b08aecf66422a765b91d8f5f33",
+  "registrations_sha256": "f3bbe2602d312e347e29f9e88e8eadcdff2004fa0d357130f4ae80589e104aa9",
+  "registry_pin_sha256": "b045fc541c7b406647a41a8fe9fbf57c7ce561771a9bbea6184153f58ed1bdf1"
+ },
+ "one_line": "the write-once registry filed before any bar is read: five registrations in three families (ADMISSION m 2, RANGE-STATE m 2, SCALPER m 1) carried verbatim from the frozen readings, hash-chained; the pin door, map and register; the frozen-estate census; the progress law as data (RESUME_ORDER, SUBSTAGES, certified, the contract by prefix, the resume paste of record); four suites GREEN incl. F-SEAM",
+ "notes": [
+  "the parent record of a stage with several producers, written by the orchestrator's gate step from the builders' artifact maps (L-0.10 point 6)",
+  "built by workflow wf_f78e1fcc-35d: six units (harness; pins; progress+frozen+resume; registry; closure; the ledger-spec child), then one independent verifier on the BUILT artifacts — verdict COMMITTABLE-AFTER-FIXES, 9 defects (5 BLOCKING), each fixed by its owner before this gate; the registry bytes themselves were not re-filed (head as first filed)",
+  "verifier defects: V-1 BLOCKING unit D: The real leg of F-ATTEST-ORDER [REG] (attest_real :1179-1197, set_referee :1089-1096, listing_findings :1099-1117) judges the LIVE disk, not the walk ; V-2 MAJOR unit D: Two more real legs are bound to texts that lawfully move after filing. F-REG [WRITE-ONCE] (write_once_real :842-845) requires a twin filed NOW to equa; V-3 BLOCKING unit A: The harness fails two closure blocks on three findings, so the closure suite cannot be GREEN at the gate. :2130-2131 with :2150 hands a seed read by k; V-4 BLOCKING unit B: The docstring of iso_ms at :197 holds `2026-09-21T16:00Z`, which is TC10's pin as an ISO string; seam 16's scan of every non-fixture source reads it a; V-5 BLOCKING unit E: The closure transcript on file (sha 5e0a3451.., a REG_SET member) is a RED transcript and is stale: its tally reads `3 GREEN, 3 RED, 0 NOT RUN` and it; V-6 MAJOR unit B: The pins transcript of record (sha 0d581a30..) was filed before the registry existed. With the registry on file the suite prints two other sentences, ; V-7 BLOCKING unit F: At --stage=TC12-REG.ledger-spec the real legs judge only the first five lines of the working ledger (N5_T; load_record :1423-1425). Anything after lin; V-8 MINOR unit C: PROGRESS.json on disk (sha c03338c1..) was merged before the registry was filed and is no longer the merger's output, so the resume suite is RED until; V-9 MINOR unit D: Three mechanics choices in the write-once filing differ from the key lists of L-X.19 and L-X.20, and unit D filed no amendment proposal for any of the",
+  "the builders' 46 mechanics proposals were filed as AP-2..AP-47 and ruled AM-3..AM-48 at this gate, AP-1 ruled AM-2 (reading cap, O-35): none moves a registered row's population, arms, statistic, verdict rule or labels; LEANS_AMENDMENTS.md and AMENDMENTS_PROPOSED.md are re-recorded here as grown (append-only)",
+  "the ledger-spec child's six files were moved outside the tree for this gate's attestation and restored after the commit (ATTEST-REG lists the disk at filing)",
+  "KNOWN HAZARD (registry unit): every path ATTEST_REG.json lists outside LATER_T and the two append-only texts is held to its listed sha for good; a repair of a listed REG_SET script after this commit turns F-ATTEST-ORDER [REG] RED and needs an amendment",
+  "KNOWN (closure unit): legs (i), (i-b), F-HOOK-ESCAPE and F-WALL file no block before the shim exists; they first run at TC12-ENV",
+  "suites run at --at=50c64c2191c536f02d1bda5e8d91b6b71ef14610 (the TC12-LEANS commit, HEAD at the gate)"
+ ]
+}

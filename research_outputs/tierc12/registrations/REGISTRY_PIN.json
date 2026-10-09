@@ -1,0 +1,181 @@
+{
+  "amendments": {
+    "path": "research_outputs/tierc12/LEANS_AMENDMENTS.md",
+    "sha256": "e55467875bb96f1b15aceecc0c43d3ba4fe59fba96472691050d57d1c33e0e07"
+  },
+  "chain": [
+    "41c71359d525098c765a536af3e026e4c1331ad88864eb62aa6f4ef0876205e3",
+    "0ad28019868a7f5f5eafc9124d16f0433a3ac4089e3681873b0dacb9f312f82e",
+    "1e95018fb7fcb9a10c12c555a544cae8f8bcce9d6fa7e7be2dbd3693ea3eb13e",
+    "73205382e8a3f15d125f4cf925d479c10f021e63b94e6c0b6c8dac1ec0414bc1",
+    "bbbc6cabcdfe33c04c6532f20eb2c016c458a4b08aecf66422a765b91d8f5f33"
+  ],
+  "contract": {
+    "n_lines": 137,
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md",
+    "prefix_bytes": 12209,
+    "prefix_sha256": "861d6050e80e66995e4f9db2855aaf274d63285249c2549e5a0813582095a7bd",
+    "whole_file_sha256_at_filing": "861d6050e80e66995e4f9db2855aaf274d63285249c2549e5a0813582095a7bd"
+  },
+  "disclosures": {
+    "path": "research_outputs/tierc12/DISCLOSURES.md",
+    "sha256": "2d436a4b951da868fb7191be21e7d6ec4d5de48ef5da0d3a56a68b3beef835b2"
+  },
+  "families": [
+    {
+      "bar": "0.05",
+      "bar_exact": "1/20",
+      "family": "ADMISSION",
+      "header_line": 52,
+      "header_text": "STAGE G · ADMISSION FAMILY (m=2, bar 0.05; both two-sample vs v6 — they remove trades):",
+      "header_text_sha256": "9c75b3ec4f751ee0f64143076a3724267328452bdfd791946ae868178d6cf6b0",
+      "m": 2,
+      "n_registrations": 2,
+      "q": "0.10",
+      "stage": "G"
+    },
+    {
+      "bar": "0.05",
+      "bar_exact": "1/20",
+      "family": "RANGE-STATE",
+      "header_line": 64,
+      "header_text": "STAGE R · RANGE-STATE FAMILY (m=2, bar 0.05):",
+      "header_text_sha256": "8b1038704f484036362d644634faeba64e5543313f1af007a548b694a687a4bb",
+      "m": 2,
+      "n_registrations": 2,
+      "q": "0.10",
+      "stage": "R"
+    },
+    {
+      "bar": "0.10",
+      "bar_exact": "1/10",
+      "family": "SCALPER",
+      "header_line": 82,
+      "header_text": "STAGE S · SCALPER FAMILY (m=1, bar 0.10) — exists by the \"maker\" ruling:",
+      "header_text_sha256": "886cea7d7542363f6b47a16667efb8c1c03f15fce92829c3eb3e3ccacedd2db9",
+      "m": 1,
+      "n_registrations": 1,
+      "q": "0.10",
+      "stage": "S"
+    }
+  ],
+  "genesis": "0000000000000000000000000000000000000000000000000000000000000000",
+  "head": "bbbc6cabcdfe33c04c6532f20eb2c016c458a4b08aecf66422a765b91d8f5f33",
+  "law": "texts are the contract's own lines (frozen at STEP Q); operative specs are the executor's readings, filed before any TC11 book was computed; payload sha = sha256(json.dumps(body without shas, sort_keys, ensure_ascii=False)); chain line_sha256 over {seq, registration, sha256, prev}",
+  "law_source": {
+    "head": "6772568b31fcfb2d56eb8c80b66dedee4fb5082673369e872972df8f475ec8f9",
+    "head_source": {
+      "key": "head",
+      "path": "research_outputs/tierc11/registrations/REGISTRY_PIN.json"
+    },
+    "key": "law",
+    "path": "research_outputs/tierc11/registrations/REGISTRATIONS.json"
+  },
+  "leans": {
+    "path": "research_outputs/tierc12/LEANS.md",
+    "sha256": "69c430b017f34df61cbdd5951ff8728d49b11f89e484d251c1f43cd0264f7409"
+  },
+  "n_boot": 4000,
+  "order_of_filing": [
+    "P-ADM-1",
+    "P-BRD-1",
+    "P-DIR-1",
+    "P-SFP-VA-1",
+    "P-SCALP-3"
+  ],
+  "plan": {
+    "path": "research_outputs/tierc12/REGISTRATION_PLAN.md",
+    "sha256": "740f08d5f84246c0333c8cb6363d43851b1f7ba7b00e4a9c0b156c1ca5bab9e7"
+  },
+  "registrations": {
+    "P-ADM-1": {
+      "family": "ADMISSION",
+      "family_bar": "0.05",
+      "family_m": 2,
+      "prior_pct": 50,
+      "seq": 1,
+      "sha256": "bf2e1350d7dab0cbca7593706ace46944aaf4d4d5497d0b8d408f484cf78c0d7",
+      "text_lines": [
+        53,
+        56
+      ],
+      "text_sha256": "b4f14e60f766ddfd7bf7847fcdccb4b069f6a32fd16816e0a27f7ceacd8281a1"
+    },
+    "P-BRD-1": {
+      "family": "ADMISSION",
+      "family_bar": "0.05",
+      "family_m": 2,
+      "prior_pct": 40,
+      "seq": 2,
+      "sha256": "a056126f1aa779f6e47e19732e47fc3d24ab685f8a169d8214b8384cd753bcdc",
+      "text_lines": [
+        57,
+        59
+      ],
+      "text_sha256": "e049d8d9fb62cc5cf15e1145c696270c5bd369aeae63a5b2570a1d6d5decfd7d"
+    },
+    "P-DIR-1": {
+      "family": "RANGE-STATE",
+      "family_bar": "0.05",
+      "family_m": 2,
+      "prior_pct": 45,
+      "seq": 3,
+      "sha256": "879661d67b0258f729120ba3c573cab480ac615ff1568312edc5e6b1e38db8c6",
+      "text_lines": [
+        65,
+        68
+      ],
+      "text_sha256": "1b4dec34d1337d49e22266006550421d8e4d88618e639a6581078c3fb0fcaf26"
+    },
+    "P-SCALP-3": {
+      "family": "SCALPER",
+      "family_bar": "0.10",
+      "family_m": 1,
+      "prior_pct": 30,
+      "seq": 5,
+      "sha256": "c9b06cbd89f00ee6da3f9b148328e53054c07e04adbcc2d49affd3de219bb51d",
+      "text_lines": [
+        83,
+        106
+      ],
+      "text_sha256": "fa141ec5d25ab67fbe57a673b676d94152dd287f145f66621e0d23b2e1b52198"
+    },
+    "P-SFP-VA-1": {
+      "family": "RANGE-STATE",
+      "family_bar": "0.05",
+      "family_m": 2,
+      "prior_pct": 45,
+      "seq": 4,
+      "sha256": "58f688ff852c3083a646f1664086cde2fa8cbb8227741647ff62801e1a859bfb",
+      "text_lines": [
+        69,
+        75
+      ],
+      "text_sha256": "f6e581da8fe470b9f3fe9e414b466459ec0180af8dbcad3c57cdfcdf2d9d2754"
+    }
+  },
+  "registrations_file": {
+    "bytes": 101003,
+    "path": "research_outputs/tierc12/registrations/REGISTRATIONS.json",
+    "sha256": "f3bbe2602d312e347e29f9e88e8eadcdff2004fa0d357130f4ae80589e104aa9"
+  },
+  "registry_len": 5,
+  "resume_paste": {
+    "path": "exchange/queue/2026-10-09_TC12_RESUME_APOLLO.md",
+    "sha256": "d903bf3a2ddf71662ee180f89e719e16c920f38d49528383874b90ea6d5f357c"
+  },
+  "review": {
+    "path": "research_outputs/tierc12/review/LEANS_REVIEW_2026-10-09.json",
+    "sha256": "b98b6d870d2f9b8bc9c5cb6ffaebba75db1a70fe279fe55f9561d332e3828087"
+  },
+  "rulings": {
+    "path": "research_outputs/tierc12/ORCHESTRATOR_RULINGS.md",
+    "sha256": "e774a11760087ce14bedb72a8a4a640f53a5c66c2aae385cb82dd578c3063cb4"
+  },
+  "seed": 20261008,
+  "seed_sens": 20260816,
+  "spec_carry_law": "each operative_spec is this plan's §1.k block, which is the frozen LEANS's REGISTRATION SPEC block byte for byte; a block is fifteen top-level bullets in this order — id, family, family_m, family_bar, prior, mechanism, population, arms, statistic, comparison, preconditions, verdict_rule, labels, disclosed_beside, failure_conditions; a bullet's wrapped lines are joined by one space and nothing else changes (markdown kept); one level of sub-bullets is a list, and a bullet with both a head and sub-bullets is {text, items}; the five checked fields file the text up to the first space as body keys (family_m and prior as integers), verdict_rule is a body key, and the other nine fields are the operative_spec; the blank lines and the trailing rule line of the frozen text carry nothing",
+  "text_before_result_law": "(1) write-once — --file HALTs if either file exists and creates both by exclusive create; (2) the head and the filing's sha are stamped into every regbook STATUS, arm sidecar and book manifest as registry_head and registrations_sha256, and the scorer HALTs a row (HEAD-STAMP) that lacks them or carries other values; (3) a git-order attestation keyed on TC12's own paths — ATTEST-REG at filing (the disk walk under research_outputs/tierc12/ holds no file outside PRE_REG ∪ REG_SET, no parquet outside x_rec/, and no tierc12 script outside the typed set) and ATTEST-ORDER at TC12-SCORE, at CLOSE and in close_acts.sh step 0 (the commit that adds REGISTRATIONS.json adds exactly REG_SET, and every other tracked TC12 path is first added by a proper descendant of it)",
+  "tier": "TIER-C12",
+  "witness_law": "research_outputs/tierc12/registrations/ is tracked (the nested .gitignore excludes only parquet, _det_*/ and x_rec/**), so the one commit tierc12(TC12-REG) witnesses REGISTRATIONS.json and REGISTRY_PIN.json; both are created by exclusive create and are never overwritten; the scorer's first act is verify_filing — the contract's prefix, every slice, every payload sha, the chain and this head — before any number"
+}

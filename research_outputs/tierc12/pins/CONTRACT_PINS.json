@@ -1,0 +1,1063 @@
+{
+ "contract": {
+  "n_lines": 137,
+  "path": "exchange/queue/2026-10-08_TC12_APOLLO.md",
+  "prefix_bytes": 12209,
+  "prefix_sha256": "861d6050e80e66995e4f9db2855aaf274d63285249c2549e5a0813582095a7bd"
+ },
+ "families": {
+  "families": [
+   {
+    "bar": "0.05",
+    "bar_exact": "1/20",
+    "family": "ADMISSION",
+    "header_line": 52,
+    "header_text": "STAGE G · ADMISSION FAMILY (m=2, bar 0.05; both two-sample vs v6 — they remove trades):",
+    "header_text_sha256": "9c75b3ec4f751ee0f64143076a3724267328452bdfd791946ae868178d6cf6b0",
+    "m": 2,
+    "n_registrations": 2,
+    "priors_pct": [
+     50,
+     40
+    ],
+    "q": "0.10",
+    "registration_lines": [
+     53,
+     57
+    ],
+    "registrations": [
+     "P-ADM-1",
+     "P-BRD-1"
+    ],
+    "stage": "G"
+   },
+   {
+    "bar": "0.05",
+    "bar_exact": "1/20",
+    "family": "RANGE-STATE",
+    "header_line": 64,
+    "header_text": "STAGE R · RANGE-STATE FAMILY (m=2, bar 0.05):",
+    "header_text_sha256": "8b1038704f484036362d644634faeba64e5543313f1af007a548b694a687a4bb",
+    "m": 2,
+    "n_registrations": 2,
+    "priors_pct": [
+     45,
+     45
+    ],
+    "q": "0.10",
+    "registration_lines": [
+     65,
+     69
+    ],
+    "registrations": [
+     "P-DIR-1",
+     "P-SFP-VA-1"
+    ],
+    "stage": "R"
+   },
+   {
+    "bar": "0.10",
+    "bar_exact": "1/10",
+    "family": "SCALPER",
+    "header_line": 82,
+    "header_text": "STAGE S · SCALPER FAMILY (m=1, bar 0.10) — exists by the \"maker\" ruling:",
+    "header_text_sha256": "886cea7d7542363f6b47a16667efb8c1c03f15fce92829c3eb3e3ccacedd2db9",
+    "m": 1,
+    "n_registrations": 1,
+    "priors_pct": [
+     30
+    ],
+    "q": "0.10",
+    "registration_lines": [
+     83
+    ],
+    "registrations": [
+     "P-SCALP-3"
+    ],
+    "stage": "S"
+   }
+  ],
+  "q": "0.10",
+  "q_exact": "1/10",
+  "q_line": 9
+ },
+ "fixture_names": [
+  "F-CTRL",
+  "F-D-2",
+  "F-D-3",
+  "F-VA-ASOF",
+  "F-VA-RAW",
+  "F-VA-MIRROR",
+  "F-STATE",
+  "F-TRAV",
+  "F-GATE",
+  "F-BRD",
+  "F-DIR",
+  "F-SFP",
+  "F-SCALP",
+  "F-TOLL",
+  "F-NEST-ASOF",
+  "F-LEDGER",
+  "F-FAM",
+  "F-DET",
+  "F-GRID",
+  "F-KEY",
+  "import-closure",
+  "worktree attestation"
+ ],
+ "law": "derived by scripts/tierc12_pins.py --file from the first prefix_bytes bytes of the contract through CONTRACT_PIN_MAP.json; at every run the pin door re-derives every leaf and HALTs unless equal [LEANS L-0.17]",
+ "map": {
+  "path": "research_outputs/tierc12/pins/CONTRACT_PIN_MAP.json",
+  "sha256": "dd9f5e4dfd7165c8288218b58cd6f402c2d81ca4b286305a53c4d2e1802c5d4e"
+ },
+ "pins": {
+  "adm.abs_cut": {
+   "lines": [
+    56,
+    56
+   ],
+   "slice_sha256": "860a9403eb07304ff85b5ebc0918cd4800d5e6e290d33210d142b39b3b4b989d",
+   "text": [
+    "206"
+   ],
+   "type": [
+    "int"
+   ],
+   "value": 206
+  },
+  "adm.lag_cut": {
+   "lines": [
+    54,
+    54
+   ],
+   "slice_sha256": "cc5a785a3ffafcce000b49131f3a82a068377ea97bc4b98d225fadaacfe137ce",
+   "text": [
+    "16"
+   ],
+   "type": [
+    "int"
+   ],
+   "value": 16
+  },
+  "adm.old_quantile": {
+   "lines": [
+    54,
+    54
+   ],
+   "slice_sha256": "cc5a785a3ffafcce000b49131f3a82a068377ea97bc4b98d225fadaacfe137ce",
+   "text": [
+    "75"
+   ],
+   "type": [
+    "int"
+   ],
+   "value": 75
+  },
+  "adm.preseen_cell": {
+   "lines": [
+    55,
+    55
+   ],
+   "slice_sha256": "d5ad88950ca5adaceaea67fd341a9c7f701f8db4792baf36e0e27b5a18833516",
+   "text": [
+    "110",
+    "0.515"
+   ],
+   "type": [
+    "int",
+    "fraction"
+   ],
+   "value": [
+    110,
+    "103/200"
+   ]
+  },
+  "book.trg912_periods": {
+   "lines": [
+    44,
+    44
+   ],
+   "slice_sha256": "d156467deb1a96fc3be5640519a73576b11ac495a7a28be34bd2847414f5e6f7",
+   "text": [
+    "9",
+    "12"
+   ],
+   "type": [
+    "int",
+    "int"
+   ],
+   "value": [
+    9,
+    12
+   ]
+  },
+  "brd.cut": {
+   "also": [
+    {
+     "lines": [
+      135,
+      135
+     ],
+     "slice_sha256": "97edffe9477fe3da39cb0eccb1a712ef12732722e9791c5ac5753b18a5ddc330",
+     "text": [
+      "2",
+      "5"
+     ]
+    }
+   ],
+   "lines": [
+    58,
+    58
+   ],
+   "slice_sha256": "94b3b9ebeef0b969630a246a3dfaa4d574f11bde26a4314212fd94aa520c9ca4",
+   "text": [
+    "2",
+    "5"
+   ],
+   "type": [
+    "int",
+    "int"
+   ],
+   "value": [
+    2,
+    5
+   ]
+  },
+  "chop.n_bands": {
+   "lines": [
+    68,
+    68
+   ],
+   "slice_sha256": "82a3e3231b28375d70142a1759311c12f87acd58a77cb98980bd5c0425469eae",
+   "text": [
+    "decile"
+   ],
+   "type": [
+    "word"
+   ],
+   "value": 10
+  },
+  "ctrl.sum_net_r": {
+   "lines": [
+    49,
+    49
+   ],
+   "slice_sha256": "6a6b863f6af2ab6ec596718fc8b78bfd43b9a6ed4abaeedfc5a90afdff37dcb9",
+   "text": [
+    "40.807566"
+   ],
+   "type": [
+    "fraction"
+   ],
+   "value": "20403783/500000"
+  },
+  "fam.G": {
+   "lines": [
+    52,
+    52
+   ],
+   "slice_sha256": "9c75b3ec4f751ee0f64143076a3724267328452bdfd791946ae868178d6cf6b0",
+   "text": [
+    "G",
+    "ADMISSION",
+    "2",
+    "0.05"
+   ],
+   "type": [
+    "str",
+    "str",
+    "int",
+    "fraction"
+   ],
+   "value": [
+    "G",
+    "ADMISSION",
+    2,
+    "1/20"
+   ]
+  },
+  "fam.R": {
+   "lines": [
+    64,
+    64
+   ],
+   "slice_sha256": "8b1038704f484036362d644634faeba64e5543313f1af007a548b694a687a4bb",
+   "text": [
+    "R",
+    "RANGE-STATE",
+    "2",
+    "0.05"
+   ],
+   "type": [
+    "str",
+    "str",
+    "int",
+    "fraction"
+   ],
+   "value": [
+    "R",
+    "RANGE-STATE",
+    2,
+    "1/20"
+   ]
+  },
+  "fam.S": {
+   "lines": [
+    82,
+    82
+   ],
+   "slice_sha256": "886cea7d7542363f6b47a16667efb8c1c03f15fce92829c3eb3e3ccacedd2db9",
+   "text": [
+    "S",
+    "SCALPER",
+    "1",
+    "0.10"
+   ],
+   "type": [
+    "str",
+    "str",
+    "int",
+    "fraction"
+   ],
+   "value": [
+    "S",
+    "SCALPER",
+    1,
+    "1/10"
+   ]
+  },
+  "fam.q": {
+   "lines": [
+    9,
+    9
+   ],
+   "slice_sha256": "91a88f4bf38b88e076ff778cdb7d48c0e069af0cd60688fa55674911552c02ea",
+   "text": [
+    "0.10"
+   ],
+   "type": [
+    "fraction"
+   ],
+   "value": "1/10"
+  },
+  "ferry.bus_dir": {
+   "lines": [
+    111,
+    111
+   ],
+   "slice_sha256": "4d3118ed0b7a5da08232bfbd635d19f26feaa7d5572c8ecced62f4d721c70b9c",
+   "text": [
+    "exchange/rows/tierc12/"
+   ],
+   "type": [
+    "str"
+   ],
+   "value": "exchange/rows/tierc12/"
+  },
+  "ferry.cap_mb": {
+   "lines": [
+    112,
+    112
+   ],
+   "slice_sha256": "7128f91df4bba92c75db0e6f85a7a2a71ab977b34c15a0010007b6ab5440db54",
+   "text": [
+    "2"
+   ],
+   "type": [
+    "int"
+   ],
+   "value": 2
+  },
+  "grid.brd_levels": {
+   "lines": [
+    59,
+    59
+   ],
+   "slice_sha256": "67642fffa4839404bdeb821d38be22ae70309e82a677ff3ac55ba2eba68f72b6",
+   "text": [
+    "0",
+    "5"
+   ],
+   "type": [
+    "int",
+    "int"
+   ],
+   "value": [
+    0,
+    5
+   ]
+  },
+  "grid.x16_shape": {
+   "lines": [
+    60,
+    60
+   ],
+   "slice_sha256": "646db9fa255fed2ee2696b1f2dd515ff6ff9590ae3b8a09d18b56f0fb15ceff3",
+   "text": [
+    "2",
+    "2",
+    "2",
+    "2"
+   ],
+   "type": [
+    "int",
+    "int",
+    "int",
+    "int"
+   ],
+   "value": [
+    2,
+    2,
+    2,
+    2
+   ]
+  },
+  "ledger.n_min": {
+   "lines": [
+    110,
+    110
+   ],
+   "slice_sha256": "44362eef05ef5369b2c9b2edfd941c20437bbd9e35c0c2b3af137ae82149f36f",
+   "text": [
+    "30"
+   ],
+   "type": [
+    "int"
+   ],
+   "value": 30
+  },
+  "ledger.opening": {
+   "lines": [
+    109,
+    109
+   ],
+   "slice_sha256": "e420fe0d422c22b0d5fd127f3cf6cc14174dfff1110aa96d1cec362af1eb7f65",
+   "text": [
+    "2026-09-21T16:00Z"
+   ],
+   "type": [
+    "iso"
+   ],
+   "value": "2026-09-21T16:00Z"
+  },
+  "loao.line": {
+   "lines": [
+    106,
+    106
+   ],
+   "slice_sha256": "5b01dab06c59679433e012bd7aa4409a8df550e6895f5ba5c3c3e2b5ca76d4da",
+   "text": [
+    "3",
+    "5"
+   ],
+   "type": [
+    "int",
+    "int"
+   ],
+   "value": [
+    3,
+    5
+   ]
+  },
+  "rr_min": {
+   "also": [
+    {
+     "lines": [
+      100,
+      100
+     ],
+     "slice_sha256": "d61ab8edf0aa5b0c579239bb6e172e7a7d05c39ed1ba68edcc27aaf33eeff19f",
+     "text": [
+      "1.5"
+     ]
+    },
+    {
+     "lines": [
+      135,
+      136
+     ],
+     "slice_sha256": "14438c1bc3569a0307b8b55fbc96f930e4ed39318bcce53ddad47e4181375698",
+     "text": [
+      "1.5"
+     ]
+    }
+   ],
+   "lines": [
+    73,
+    73
+   ],
+   "slice_sha256": "aacc4c018140eb0a51eb47134cfe60160af516cb63559b9c7af4d2de4aa26bc6",
+   "text": [
+    "1.5"
+   ],
+   "type": [
+    "fraction"
+   ],
+   "value": "3/2"
+  },
+  "scalp.deep_atr": {
+   "lines": [
+    94,
+    95
+   ],
+   "slice_sha256": "7dc64e1d9de97c1d3900d07fcaa7fac91390c476f315aede6ec27d68e40f68cd",
+   "text": [
+    "0.05"
+   ],
+   "type": [
+    "fraction"
+   ],
+   "value": "1/20"
+  },
+  "scalp.ema_fast": {
+   "lines": [
+    89,
+    89
+   ],
+   "slice_sha256": "7fc43e26bf3dadba87f096e1ceaf0100d524980d40019719d2b4f6c7e1bde989",
+   "text": [
+    "12"
+   ],
+   "type": [
+    "int"
+   ],
+   "value": 12
+  },
+  "scalp.ema_slow": {
+   "lines": [
+    89,
+    89
+   ],
+   "slice_sha256": "7fc43e26bf3dadba87f096e1ceaf0100d524980d40019719d2b4f6c7e1bde989",
+   "text": [
+    "89"
+   ],
+   "type": [
+    "int"
+   ],
+   "value": 89
+  },
+  "scalp.era": {
+   "also": [
+    {
+     "lines": [
+      137,
+      137
+     ],
+     "slice_sha256": "43d77af0dcc4e75f3dbecfc996aa2e9305e827c27b83f2f9c390d31c546ec9a4",
+     "text": [
+      "holdout"
+     ]
+    }
+   ],
+   "lines": [
+    83,
+    83
+   ],
+   "slice_sha256": "7b81eff859ec57eaf810d8c3d38dcbccbb07c6371f75d7c8f9f967c16d9cb7d0",
+   "text": [
+    "HOLDOUT"
+   ],
+   "type": [
+    "word"
+   ],
+   "value": "holdout"
+  },
+  "scalp.fill_ticks": {
+   "also": [
+    {
+     "lines": [
+      136,
+      136
+     ],
+     "slice_sha256": "429afe82a03f2bc51be804b7d9c952efa1d5f4310398ff72633fd8cfcbfe32e6",
+     "text": [
+      "1"
+     ]
+    }
+   ],
+   "lines": [
+    94,
+    94
+   ],
+   "slice_sha256": "3a91431e223f2a1bbbb0caa17fbbb171d245d3b9e0b49fd3b160772f89812016",
+   "text": [
+    "1"
+   ],
+   "type": [
+    "int"
+   ],
+   "value": 1
+  },
+  "scalp.rail_atr": {
+   "lines": [
+    98,
+    98
+   ],
+   "slice_sha256": "f92a210d92cfc5aa870bf60b0a5017c4fff2943328a7122f7a5ac5cd02089a83",
+   "text": [
+    "1.0"
+   ],
+   "type": [
+    "fraction"
+   ],
+   "value": "1/1"
+  },
+  "scalp.stop_beyond_atr": {
+   "lines": [
+    97,
+    97
+   ],
+   "slice_sha256": "4b91be3064b3d2f1c07d7792670da13f1e54a5ae6a56c65accdaa9eeb70cc797",
+   "text": [
+    "0.5"
+   ],
+   "type": [
+    "fraction"
+   ],
+   "value": "1/2"
+  },
+  "scalp.t1_fraction": {
+   "lines": [
+    99,
+    99
+   ],
+   "slice_sha256": "aa2885562be0895e3ffa695498b06aec141dd2af8b8f9f63aeac2cf3854b9d81",
+   "text": [
+    "half"
+   ],
+   "type": [
+    "word"
+   ],
+   "value": "1/2"
+  },
+  "scalp.t2_offset_atr": {
+   "lines": [
+    99,
+    99
+   ],
+   "slice_sha256": "aa2885562be0895e3ffa695498b06aec141dd2af8b8f9f63aeac2cf3854b9d81",
+   "text": [
+    "0.25"
+   ],
+   "type": [
+    "fraction"
+   ],
+   "value": "1/4"
+  },
+  "scalp.third_long_max": {
+   "also": [
+    {
+     "lines": [
+      136,
+      136
+     ],
+     "slice_sha256": "429afe82a03f2bc51be804b7d9c952efa1d5f4310398ff72633fd8cfcbfe32e6",
+     "text": [
+      "33"
+     ]
+    }
+   ],
+   "lines": [
+    87,
+    87
+   ],
+   "slice_sha256": "b65913fdb8786b3cfc361c8032b642bda2652aa7cb3fbd73fad6f29479955be9",
+   "text": [
+    "33"
+   ],
+   "type": [
+    "int"
+   ],
+   "value": 33
+  },
+  "scalp.third_short_min": {
+   "also": [
+    {
+     "lines": [
+      136,
+      136
+     ],
+     "slice_sha256": "429afe82a03f2bc51be804b7d9c952efa1d5f4310398ff72633fd8cfcbfe32e6",
+     "text": [
+      "67"
+     ]
+    }
+   ],
+   "lines": [
+    87,
+    87
+   ],
+   "slice_sha256": "b65913fdb8786b3cfc361c8032b642bda2652aa7cb3fbd73fad6f29479955be9",
+   "text": [
+    "67"
+   ],
+   "type": [
+    "int"
+   ],
+   "value": 67
+  },
+  "scalp.trigger_prox_atr": {
+   "lines": [
+    90,
+    90
+   ],
+   "slice_sha256": "68e9b26687ed1101f776f8844631aaf932fcde51d48ce011ad0cc37de5c5701d",
+   "text": [
+    "0.25"
+   ],
+   "type": [
+    "fraction"
+   ],
+   "value": "1/4"
+  },
+  "scalp.validity_bars": {
+   "also": [
+    {
+     "lines": [
+      136,
+      136
+     ],
+     "slice_sha256": "429afe82a03f2bc51be804b7d9c952efa1d5f4310398ff72633fd8cfcbfe32e6",
+     "text": [
+      "12"
+     ]
+    }
+   ],
+   "lines": [
+    92,
+    92
+   ],
+   "slice_sha256": "1f5e85a5c076fa891c9434fe76e0aa96954e272d9e8fbfdd34dc3cda7fd259f2",
+   "text": [
+    "12"
+   ],
+   "type": [
+    "int"
+   ],
+   "value": 12
+  },
+  "seed": {
+   "lines": [
+    4,
+    4
+   ],
+   "slice_sha256": "d05cb0cbaa4fc003000fdce23cb4c521a39783f21289f25dec246f8c496536ac",
+   "text": [
+    "20261008"
+   ],
+   "type": [
+    "int"
+   ],
+   "value": 20261008
+  },
+  "sfp.rail_atr": {
+   "lines": [
+    71,
+    71
+   ],
+   "slice_sha256": "2a5c36f2b535f35537bb6a1067b671f7f9a3f70765fff37da43566e3f1cc53d5",
+   "text": [
+    "1.0"
+   ],
+   "type": [
+    "fraction"
+   ],
+   "value": "1/1"
+  },
+  "sfp.t1_fraction": {
+   "lines": [
+    71,
+    71
+   ],
+   "slice_sha256": "2a5c36f2b535f35537bb6a1067b671f7f9a3f70765fff37da43566e3f1cc53d5",
+   "text": [
+    "half"
+   ],
+   "type": [
+    "word"
+   ],
+   "value": "1/2"
+  },
+  "sfp.t2_offset_atr": {
+   "lines": [
+    72,
+    72
+   ],
+   "slice_sha256": "b842400c0877e4a43234e4ea3e1e9ac21bb5829b178733d02de7d7bb8d8eb3c1",
+   "text": [
+    "0.25"
+   ],
+   "type": [
+    "fraction"
+   ],
+   "value": "1/4"
+  },
+  "tp1d.approach_atr": {
+   "lines": [
+    80,
+    80
+   ],
+   "slice_sha256": "272f1d6241dd14aba91576eaf16e81b698869325064f0e576746716f178a619b",
+   "text": [
+    "0.25"
+   ],
+   "type": [
+    "fraction"
+   ],
+   "value": "1/4"
+  },
+  "two_trades.horizons": {
+   "lines": [
+    78,
+    78
+   ],
+   "slice_sha256": "63d172f7b3b3c3b5e33662d6e77268cb99463a8c3917a97aeac4ebddf033a973",
+   "text": [
+    "20",
+    "100"
+   ],
+   "type": [
+    "int",
+    "int"
+   ],
+   "value": [
+    20,
+    100
+   ]
+  },
+  "va.accept_margin_atr": {
+   "lines": [
+    35,
+    35
+   ],
+   "slice_sha256": "e621291bb7d59944ac7baa525bc7d433905e551a51e37d7c07913732b0697852",
+   "text": [
+    "1.5"
+   ],
+   "type": [
+    "fraction"
+   ],
+   "value": "3/2"
+  },
+  "va.accept_n": {
+   "lines": [
+    35,
+    35
+   ],
+   "slice_sha256": "e621291bb7d59944ac7baa525bc7d433905e551a51e37d7c07913732b0697852",
+   "text": [
+    "8"
+   ],
+   "type": [
+    "int"
+   ],
+   "value": 8
+  },
+  "va.licence_set": {
+   "lines": [
+    41,
+    41
+   ],
+   "slice_sha256": "b35df3d93e88eb138b7fd31e37d2db02e34ae225341c97c37aacd3be4e7ed798",
+   "text": [
+    "4h",
+    "taker",
+    "1d",
+    "taker",
+    "1h",
+    "maker"
+   ],
+   "type": [
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str"
+   ],
+   "value": [
+    "4h",
+    "taker",
+    "1d",
+    "taker",
+    "1h",
+    "maker"
+   ]
+  },
+  "va.mirror_words": {
+   "lines": [
+    39,
+    40
+   ],
+   "slice_sha256": "4b61a1e0909a5bee7b6c69cdc9556d0a9b8906a9fb4fa7ba73a817309644bac7",
+   "text": [
+    "4h",
+    "taker",
+    "PASS",
+    "1d",
+    "taker",
+    "PASS",
+    "1h",
+    "maker",
+    "PASS",
+    "12h",
+    "",
+    "FAIL",
+    "1h",
+    "taker",
+    "FAIL"
+   ],
+   "type": [
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str"
+   ],
+   "value": [
+    "4h",
+    "taker",
+    "PASS",
+    "1d",
+    "taker",
+    "PASS",
+    "1h",
+    "maker",
+    "PASS",
+    "12h",
+    "",
+    "FAIL",
+    "1h",
+    "taker",
+    "FAIL"
+   ]
+  },
+  "va.nest_frac": {
+   "also": [
+    {
+     "lines": [
+      135,
+      135
+     ],
+     "slice_sha256": "97edffe9477fe3da39cb0eccb1a712ef12732722e9791c5ac5753b18a5ddc330",
+     "text": [
+      "0.25"
+     ]
+    }
+   ],
+   "lines": [
+    45,
+    45
+   ],
+   "slice_sha256": "60d3bbcac6c521167bb81e7dd04d0b5bc7ad81c8efe9aec7271072dbef502a10",
+   "text": [
+    "0.25"
+   ],
+   "type": [
+    "fraction"
+   ],
+   "value": "1/4"
+  },
+  "va.sfp_k": {
+   "also": [
+    {
+     "lines": [
+      135,
+      135
+     ],
+     "slice_sha256": "97edffe9477fe3da39cb0eccb1a712ef12732722e9791c5ac5753b18a5ddc330",
+     "text": [
+      "3"
+     ]
+    }
+   ],
+   "lines": [
+    36,
+    36
+   ],
+   "slice_sha256": "564c5598c57669a16140337a28c54a9b1c780ca3cc8ffb40e1470e0e5e44b2ba",
+   "text": [
+    "3"
+   ],
+   "type": [
+    "int"
+   ],
+   "value": 3
+  },
+  "va.value_area_pct": {
+   "lines": [
+    29,
+    29
+   ],
+   "slice_sha256": "2cad3750a1c5e5a45e591a76524ba7736a0337cf28294fdda38591985a9eff09",
+   "text": [
+    "70"
+   ],
+   "type": [
+    "int"
+   ],
+   "value": 70
+  }
+ },
+ "veto_tokens": [
+  {
+   "token": "va-lookback",
+   "value_text": null
+  },
+  {
+   "token": "sfp-k",
+   "value_text": "3"
+  },
+  {
+   "token": "nest",
+   "value_text": "0.25 ATR"
+  },
+  {
+   "token": "breadth",
+   "value_text": "<2/5 refused"
+  },
+  {
+   "token": "rr-min",
+   "value_text": "1.5 at T2"
+  },
+  {
+   "token": "outer-third",
+   "value_text": "33/67"
+  },
+  {
+   "token": "validity",
+   "value_text": "12 five-minute bars"
+  },
+  {
+   "token": "fill",
+   "value_text": "through by 1 tick"
+  },
+  {
+   "token": "maker-bps",
+   "value_text": null
+  },
+  {
+   "token": "era",
+   "value_text": "scalper scored on holdout"
+  },
+  {
+   "token": "tc11-stamp",
+   "value_text": null
+  },
+  {
+   "token": "1w",
+   "value_text": null
+  }
+ ]
+}

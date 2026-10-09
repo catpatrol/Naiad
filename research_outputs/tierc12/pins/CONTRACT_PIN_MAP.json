@@ -1,0 +1,690 @@
+{
+ "contract": "exchange/queue/2026-10-08_TC12_APOLLO.md",
+ "grammar": {
+  "registration": "^ (P-[A-Z0-9]+(?:-[A-Z0-9]+)*) \\[(\\d+)%\\] ",
+  "stage": "^STAGE [A-Z] · "
+ },
+ "law": "one row per contract pin: {pin, lines [a, b], regex (one or more capture groups), type (a tuple of the regex's arity; members int | fraction | word | iso | str), word_map, also [{lines, regex, group}]}; no veto field; a multi-group row's value is a tuple; a row's regex matches its slice exactly once; an `also` citation parses to the row's value or the door HALTs [LEANS L-0.17, CANON-25 point 1]",
+ "rows": [
+  {
+   "lines": [
+    4,
+    4
+   ],
+   "pin": "seed",
+   "regex": "Seed (\\d{8})\\.",
+   "type": [
+    "int"
+   ]
+  },
+  {
+   "lines": [
+    9,
+    9
+   ],
+   "pin": "fam.q",
+   "regex": "bar = (\\d+\\.\\d+) ÷ m per family",
+   "type": [
+    "fraction"
+   ]
+  },
+  {
+   "lines": [
+    29,
+    29
+   ],
+   "pin": "va.value_area_pct",
+   "regex": "holding (\\d+)% of",
+   "type": [
+    "int"
+   ]
+  },
+  {
+   "lines": [
+    35,
+    35
+   ],
+   "pin": "va.accept_n",
+   "regex": "ACCEPTED above/below: (\\d+) consecutive closes",
+   "type": [
+    "int"
+   ]
+  },
+  {
+   "lines": [
+    35,
+    35
+   ],
+   "pin": "va.accept_margin_atr",
+   "regex": "one close ≥ (\\d+\\.\\d+) ATR_L beyond",
+   "type": [
+    "fraction"
+   ]
+  },
+  {
+   "also": [
+    {
+     "lines": [
+      135,
+      135
+     ],
+     "regex": "\"sfp-k\" \\((\\d+)\\)"
+    }
+   ],
+   "lines": [
+    36,
+    36
+   ],
+   "pin": "va.sfp_k",
+   "regex": "within K=(\\d+) closes",
+   "type": [
+    "int"
+   ]
+  },
+  {
+   "lines": [
+    39,
+    40
+   ],
+   "pin": "va.mirror_words",
+   "regex": "records — (\\d+[hd]) ?((?:taker|maker)?) ?(PASS|FAIL) · (\\d+[hd]) ?((?:taker|maker)?) ?(PASS|FAIL) ·\\s+(\\d+[hd]) ?((?:taker|maker)?) ?(PASS|FAIL) · (\\d+[hd]) ?((?:taker|maker)?) ?(PASS|FAIL) · (\\d+[hd]) ?((?:taker|maker)?) ?(PASS|FAIL) — HALT",
+   "type": [
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str"
+   ]
+  },
+  {
+   "lines": [
+    41,
+    41
+   ],
+   "pin": "va.licence_set",
+   "regex": "licenses exactly \\{VA-(\\d+[hd]) (taker|maker), VA-(\\d+[hd]) (taker|maker), VA-(\\d+[hd]) (taker|maker)\\}",
+   "type": [
+    "str",
+    "str",
+    "str",
+    "str",
+    "str",
+    "str"
+   ]
+  },
+  {
+   "lines": [
+    44,
+    44
+   ],
+   "pin": "book.trg912_periods",
+   "regex": "\\(base v6, (\\d+)/(\\d+), the gated books",
+   "type": [
+    "int",
+    "int"
+   ]
+  },
+  {
+   "also": [
+    {
+     "lines": [
+      135,
+      135
+     ],
+     "regex": "\"nest\" \\((\\d+\\.\\d+) ATR\\)"
+    }
+   ],
+   "lines": [
+    45,
+    45
+   ],
+   "pin": "va.nest_frac",
+   "regex": "within (\\d+\\.\\d+) ATR_L of an edge",
+   "type": [
+    "fraction"
+   ]
+  },
+  {
+   "lines": [
+    49,
+    49
+   ],
+   "pin": "ctrl.sum_net_r",
+   "regex": "Σ net_r (\\d+\\.\\d+) at its pin",
+   "type": [
+    "fraction"
+   ]
+  },
+  {
+   "lines": [
+    52,
+    52
+   ],
+   "pin": "fam.G",
+   "regex": "^STAGE ([A-Z]) · ([A-Z][A-Z-]*) FAMILY \\(m=(\\d+), bar (\\d+\\.\\d+)(?=[;)])",
+   "type": [
+    "str",
+    "str",
+    "int",
+    "fraction"
+   ]
+  },
+  {
+   "lines": [
+    54,
+    54
+   ],
+   "pin": "adm.old_quantile",
+   "regex": "trailing q(\\d+)",
+   "type": [
+    "int"
+   ]
+  },
+  {
+   "lines": [
+    54,
+    54
+   ],
+   "pin": "adm.lag_cut",
+   "regex": "≥ (\\d+) bars",
+   "type": [
+    "int"
+   ]
+  },
+  {
+   "lines": [
+    55,
+    55
+   ],
+   "pin": "adm.preseen_cell",
+   "regex": "cell (\\d+) @ \\+(\\d+\\.\\d+)",
+   "type": [
+    "int",
+    "fraction"
+   ]
+  },
+  {
+   "lines": [
+    56,
+    56
+   ],
+   "pin": "adm.abs_cut",
+   "regex": "absolute-(\\d+) cut",
+   "type": [
+    "int"
+   ]
+  },
+  {
+   "also": [
+    {
+     "lines": [
+      135,
+      135
+     ],
+     "regex": "\"breadth\" \\(<(\\d+)/(\\d+) refused\\)"
+    }
+   ],
+   "lines": [
+    58,
+    58
+   ],
+   "pin": "brd.cut",
+   "regex": "breadth < (\\d+)/(\\d+)",
+   "type": [
+    "int",
+    "int"
+   ]
+  },
+  {
+   "lines": [
+    59,
+    59
+   ],
+   "pin": "grid.brd_levels",
+   "regex": "breadth \\{(\\d+)\\.\\.(\\d+)\\}",
+   "type": [
+    "int",
+    "int"
+   ]
+  },
+  {
+   "lines": [
+    60,
+    60
+   ],
+   "pin": "grid.x16_shape",
+   "regex": "crossed table (\\d+)×(\\d+)×(\\d+)×(\\d+)",
+   "type": [
+    "int",
+    "int",
+    "int",
+    "int"
+   ]
+  },
+  {
+   "lines": [
+    64,
+    64
+   ],
+   "pin": "fam.R",
+   "regex": "^STAGE ([A-Z]) · ([A-Z][A-Z-]*) FAMILY \\(m=(\\d+), bar (\\d+\\.\\d+)(?=[;)])",
+   "type": [
+    "str",
+    "str",
+    "int",
+    "fraction"
+   ]
+  },
+  {
+   "lines": [
+    68,
+    68
+   ],
+   "pin": "chop.n_bands",
+   "regex": "%-of-value (decile) at entry",
+   "type": [
+    "word"
+   ],
+   "word_map": {
+    "decile": 10
+   }
+  },
+  {
+   "lines": [
+    71,
+    71
+   ],
+   "pin": "sfp.rail_atr",
+   "regex": "railed ≥ (\\d+\\.\\d+) ATR_4h",
+   "type": [
+    "fraction"
+   ]
+  },
+  {
+   "lines": [
+    71,
+    71
+   ],
+   "pin": "sfp.t1_fraction",
+   "regex": "TARGET 1 = POC \\((half) off\\)",
+   "type": [
+    "word"
+   ],
+   "word_map": {
+    "half": "1/2"
+   }
+  },
+  {
+   "lines": [
+    72,
+    72
+   ],
+   "pin": "sfp.t2_offset_atr",
+   "regex": "− (\\d+\\.\\d+) ATR_4h \\(remainder\\)",
+   "type": [
+    "fraction"
+   ]
+  },
+  {
+   "also": [
+    {
+     "lines": [
+      100,
+      100
+     ],
+     "regex": "Minimum reward at T2 ≥ (\\d+\\.\\d+) × stop"
+    },
+    {
+     "lines": [
+      135,
+      136
+     ],
+     "regex": "\"rr-min\"\\s+\\((\\d+\\.\\d+) at T2\\)"
+    }
+   ],
+   "lines": [
+    73,
+    73
+   ],
+   "pin": "rr_min",
+   "regex": "Minimum reward at T2 ≥ (\\d+\\.\\d+) × stop distance",
+   "type": [
+    "fraction"
+   ]
+  },
+  {
+   "lines": [
+    78,
+    78
+   ],
+   "pin": "two_trades.horizons",
+   "regex": "H(\\d+)/H(\\d+) net of",
+   "type": [
+    "int",
+    "int"
+   ]
+  },
+  {
+   "lines": [
+    80,
+    80
+   ],
+   "pin": "tp1d.approach_atr",
+   "regex": "remainder at (\\d+\\.\\d+) ATR_1d",
+   "type": [
+    "fraction"
+   ]
+  },
+  {
+   "lines": [
+    82,
+    82
+   ],
+   "pin": "fam.S",
+   "regex": "^STAGE ([A-Z]) · ([A-Z][A-Z-]*) FAMILY \\(m=(\\d+), bar (\\d+\\.\\d+)(?=[;)])",
+   "type": [
+    "str",
+    "str",
+    "int",
+    "fraction"
+   ]
+  },
+  {
+   "also": [
+    {
+     "lines": [
+      137,
+      137
+     ],
+     "regex": "\"era\" \\(scalper scored on (holdout)\\)"
+    }
+   ],
+   "lines": [
+    83,
+    83
+   ],
+   "pin": "scalp.era",
+   "regex": "\\(vs zero; (HOLDOUT) era \\[\"era\"\\]",
+   "type": [
+    "word"
+   ],
+   "word_map": {
+    "HOLDOUT": "holdout",
+    "holdout": "holdout"
+   }
+  },
+  {
+   "also": [
+    {
+     "group": 1,
+     "lines": [
+      136,
+      136
+     ],
+     "regex": "\"outer-third\" \\((\\d+)/(\\d+)\\)"
+    }
+   ],
+   "lines": [
+    87,
+    87
+   ],
+   "pin": "scalp.third_long_max",
+   "regex": "%-of-value ≤ (\\d+) for a long",
+   "type": [
+    "int"
+   ]
+  },
+  {
+   "also": [
+    {
+     "group": 2,
+     "lines": [
+      136,
+      136
+     ],
+     "regex": "\"outer-third\" \\((\\d+)/(\\d+)\\)"
+    }
+   ],
+   "lines": [
+    87,
+    87
+   ],
+   "pin": "scalp.third_short_min",
+   "regex": "≥ (\\d+) for a short",
+   "type": [
+    "int"
+   ]
+  },
+  {
+   "lines": [
+    89,
+    89
+   ],
+   "pin": "scalp.ema_fast",
+   "regex": "EMA(\\d+)/EMA\\d+ cross",
+   "type": [
+    "int"
+   ]
+  },
+  {
+   "lines": [
+    89,
+    89
+   ],
+   "pin": "scalp.ema_slow",
+   "regex": "EMA\\d+/EMA(\\d+) cross",
+   "type": [
+    "int"
+   ]
+  },
+  {
+   "lines": [
+    90,
+    90
+   ],
+   "pin": "scalp.trigger_prox_atr",
+   "regex": "within (\\d+\\.\\d+) ATR_1h of the edge",
+   "type": [
+    "fraction"
+   ]
+  },
+  {
+   "also": [
+    {
+     "lines": [
+      136,
+      136
+     ],
+     "regex": "\"validity\" \\((\\d+) five-minute bars\\)"
+    }
+   ],
+   "lines": [
+    92,
+    92
+   ],
+   "pin": "scalp.validity_bars",
+   "regex": "valid (\\d+) five-minute bars",
+   "type": [
+    "int"
+   ]
+  },
+  {
+   "also": [
+    {
+     "lines": [
+      136,
+      136
+     ],
+     "regex": "\"fill\" \\(through by (\\d+) tick\\)"
+    }
+   ],
+   "lines": [
+    94,
+    94
+   ],
+   "pin": "scalp.fill_ticks",
+   "regex": "≥ (\\d+) tick \\(low < limit",
+   "type": [
+    "int"
+   ]
+  },
+  {
+   "lines": [
+    94,
+    95
+   ],
+   "pin": "scalp.deep_atr",
+   "regex": "DEEP \\(through\\s+by (\\d+\\.\\d+) ATR_1h\\)",
+   "type": [
+    "fraction"
+   ]
+  },
+  {
+   "lines": [
+    97,
+    97
+   ],
+   "pin": "scalp.stop_beyond_atr",
+   "regex": "else (\\d+\\.\\d+) ATR_1h beyond",
+   "type": [
+    "fraction"
+   ]
+  },
+  {
+   "lines": [
+    98,
+    98
+   ],
+   "pin": "scalp.rail_atr",
+   "regex": "railed ≥ (\\d+\\.\\d+) ATR_1h",
+   "type": [
+    "fraction"
+   ]
+  },
+  {
+   "lines": [
+    99,
+    99
+   ],
+   "pin": "scalp.t1_fraction",
+   "regex": "T1 = POC \\((half), resting limit",
+   "type": [
+    "word"
+   ],
+   "word_map": {
+    "half": "1/2"
+   }
+  },
+  {
+   "lines": [
+    99,
+    99
+   ],
+   "pin": "scalp.t2_offset_atr",
+   "regex": "T2 = far edge − (\\d+\\.\\d+) ATR_1h \\(remainder\\)",
+   "type": [
+    "fraction"
+   ]
+  },
+  {
+   "lines": [
+    106,
+    106
+   ],
+   "pin": "loao.line",
+   "regex": "LOAO (\\d+)/(\\d+)",
+   "type": [
+    "int",
+    "int"
+   ]
+  },
+  {
+   "lines": [
+    109,
+    109
+   ],
+   "pin": "ledger.opening",
+   "regex": "since (\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\dZ)",
+   "type": [
+    "iso"
+   ]
+  },
+  {
+   "lines": [
+    110,
+    110
+   ],
+   "pin": "ledger.n_min",
+   "regex": "own n ≥ (\\d+)",
+   "type": [
+    "int"
+   ]
+  },
+  {
+   "lines": [
+    111,
+    111
+   ],
+   "pin": "ferry.bus_dir",
+   "regex": "row file → (\\S+)",
+   "type": [
+    "str"
+   ]
+  },
+  {
+   "lines": [
+    112,
+    112
+   ],
+   "pin": "ferry.cap_mb",
+   "regex": "(\\d+) MB cap",
+   "type": [
+    "int"
+   ]
+  }
+ ],
+ "slice_law": "text = \"\\n\".join(lines[a-1:b]) over the prefix's lines — 1-indexed, inclusive [L-0.1, L-X.17]",
+ "slices": {
+  "fixtures": {
+   "end": ".",
+   "head": "FIXTURES (each states its failure condition): ",
+   "item": "(F-[A-Z0-9]+(?:-[A-Z0-9]+)*)(?:/(\\d+))?(?= |$)",
+   "lines": [
+    114,
+    124
+   ],
+   "sep": " · ",
+   "unprefixed": [
+    "import-closure",
+    "worktree attestation"
+   ]
+  },
+  "vetoes": {
+   "end": ".",
+   "head": "VETOES BY NAME: ",
+   "item": "\"([^\"]+)\"(?: \\(([^()]*)\\))?",
+   "lines": [
+    135,
+    137
+   ],
+   "sep": " · "
+  }
+ },
+ "types": [
+  "int",
+  "fraction",
+  "word",
+  "iso",
+  "str"
+ ]
+}

@@ -1,0 +1,1997 @@
+{
+ "kinds": [
+  "contract",
+  "x_record",
+  "stage_d",
+  "fitted",
+  "lineage",
+  "ruling"
+ ],
+ "law": "one row per pin of EVERY door: {pin, kind, source {path, key or lines}, door, consumers [record ids], witness, veto (a token of the VETOES line or null)}; a ruling row has no value; `witness` names what must move when the pin is bent at its door; `equal_to` lists what a value is asserted equal to and by whom — `by: door` items are made by scripts/tierc12_pins.py at filing (a literal of a frozen file read as text, its AST node sha asserted, or an X record read as JSON, its manifest sha asserted), `by: consumer` items by the named record at its own gate [LEANS L-0.17, L-0.23, seam 6; CANON-25 point 2]",
+ "node_sha_law": "node_sha256 = sha256(ast.dump(node).encode('utf-8')) of the literal's value node (after the row's `at` steps) — never a file sha [L-0.24]; ast.dump's default form under the venv's CPython 3.12 at filing",
+ "rows": [
+  {
+   "consumers": [
+    "TC12-C",
+    "TC12-G"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": "TC12-G",
+     "by": "consumer",
+     "object": "the one capture of `refuse age > (\\d+) bars` in TC11's P-AGE-1 `text_of_record` and of its `tier_e_arms` SHADOW entry (L-G.8)"
+    }
+   ],
+   "kind": "contract",
+   "pin": "adm.abs_cut",
+   "source": {
+    "lines": [
+     56,
+     56
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.adm.abs_cut.value",
+   "veto": null,
+   "witness": "the absolute-cut shadow's refused set, or the assertion that holds the cut (the build HALTs there) [seam 45]"
+  },
+  {
+   "consumers": [
+    "TC12-G",
+    "TC12-REG.ledger-spec",
+    "TC12-L"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": "TC12-G",
+     "by": "consumer",
+     "object": "the one capture of `lag ≥ (\\d+) bars` in TC11's P-WIN-1 `text_of_record` and of `entry_i - arm_i >= (\\d+)` in its `operative_spec.scored_arm`, the registry pinned by TC11's chain head (L-G.5)"
+    },
+    {
+     "at": "TC12-REG.ledger-spec",
+     "by": "consumer",
+     "object": "the fourth spec's `gate.components.stale.cut.value` (L-L.2, L-L.3)"
+    }
+   ],
+   "kind": "contract",
+   "pin": "adm.lag_cut",
+   "source": {
+    "lines": [
+     54,
+     54
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.adm.lag_cut.value",
+   "veto": null,
+   "witness": "`p_win_1_refuses` on the planted `lag = CUT − 1` row (L-L); the refused set, or the LAG-CUT assertion (the build HALTs there, L-G.5) [seam 45]"
+  },
+  {
+   "consumers": [
+    "TC12-C.tide",
+    "TC12-G"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": [
+      [
+       "index",
+       -1
+      ]
+     ],
+     "by": "door",
+     "name": "STREAK_BAND_QUANTILES",
+     "node_sha256": "b531f0044783e38877c8e32f7e0afba7da0af5a1552d822a023b17f79b0aaebe",
+     "object": "the LAST fraction of `E.LAB.STREAK_BAND_QUANTILES` × PCT_PER_UNIT",
+     "op": "object_times_unit",
+     "path": "scripts/tierc7_lab_regime.py",
+     "read": "ast",
+     "unit": "PCT_PER_UNIT"
+    }
+   ],
+   "kind": "contract",
+   "pin": "adm.old_quantile",
+   "source": {
+    "lines": [
+     54,
+     54
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.adm.old_quantile.value",
+   "veto": null,
+   "witness": "a refused set, flag or cell, or the assertion that holds the cut (the build HALTs there) (L-G.19)"
+  },
+  {
+   "consumers": [
+    "TC12-G"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": "TC12-G",
+     "by": "consumer",
+     "object": "row `age:on|win:on|ratr:off` of research_outputs/tierc11/stage_g/g_grid_books.parquet: `n`, and `mean_net_r` rounded to the token's own decimals (L-G.7)"
+    }
+   ],
+   "kind": "contract",
+   "pin": "adm.preseen_cell",
+   "source": {
+    "lines": [
+     55,
+     55
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.adm.preseen_cell.value",
+   "veto": null,
+   "witness": "the pre-seen cell assertion against `n` and `mean_net_r` of TC11's gate-book row (the build HALTs there) [seam 45]"
+  },
+  {
+   "consumers": [
+    "TC12-C"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": "TC12-C",
+     "by": "consumer",
+     "object": "`(R912.trg_f, R912.trg_s)` of `E.T9.SWEEP_CELLS[-1]` (L-C.3)"
+    }
+   ],
+   "kind": "contract",
+   "pin": "book.trg912_periods",
+   "source": {
+    "lines": [
+     44,
+     44
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.book.trg912_periods.value",
+   "veto": null,
+   "witness": "F-CTRL-912's assertion against `(R912.trg_f, R912.trg_s)` (the build HALTs there)"
+  },
+  {
+   "consumers": [
+    "TC12-G"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": "TC12-G",
+     "by": "consumer",
+     "object": "`den == len(E.CLASSIC5)` (HALT BRD-DEN, L-G.12)"
+    }
+   ],
+   "kind": "contract",
+   "pin": "brd.cut",
+   "source": {
+    "lines": [
+     58,
+     58
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.brd.cut.value",
+   "veto": "breadth",
+   "witness": "the refused set `R_BRD` (the campaigns at the cut move when `num` is bent)"
+  },
+  {
+   "consumers": [
+    "TC12-R.dir"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": [
+      [
+       "call_arg",
+       "range",
+       0
+      ]
+     ],
+     "by": "door",
+     "name": "DECILES",
+     "node_sha256": "a2838193f927321540fb9a36355934a87e15ba202009114f32bc7e4a1f2ec794",
+     "object": "the `range` argument of the `DECILES` generator of scripts/tierc11_stage_r.py",
+     "op": "eq",
+     "path": "scripts/tierc11_stage_r.py",
+     "read": "ast"
+    }
+   ],
+   "kind": "contract",
+   "pin": "chop.n_bands",
+   "source": {
+    "lines": [
+     68,
+     68
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.chop.n_bands.value",
+   "veto": null,
+   "witness": "the band of the first campaign in a band the bend moves"
+  },
+  {
+   "consumers": [
+    "TC12-C"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": "TC12-C",
+     "by": "consumer",
+     "object": "`Decimal(repr(...))` of the Σ net_r that research_outputs/tierc11/scores/BASE_IDENT.json files for v6 (L-C.7)"
+    }
+   ],
+   "kind": "contract",
+   "pin": "ctrl.sum_net_r",
+   "source": {
+    "lines": [
+     49,
+     49
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.ctrl.sum_net_r.value",
+   "veto": null,
+   "witness": "the Σ net_r assertion of LAW S6 (the build HALTs there) [seam 45]"
+  },
+  {
+   "consumers": [
+    "TC12-REG",
+    "TC12-SCORE"
+   ],
+   "door": "tierc12_pins.pin",
+   "kind": "contract",
+   "pin": "fam.G",
+   "source": {
+    "lines": [
+     52,
+     52
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.fam.G.value",
+   "veto": null,
+   "witness": "the FAMILY-BAR assertion of `families()` (bar == q ÷ m; the bend HALTs there)"
+  },
+  {
+   "consumers": [
+    "TC12-REG",
+    "TC12-SCORE"
+   ],
+   "door": "tierc12_pins.pin",
+   "kind": "contract",
+   "pin": "fam.R",
+   "source": {
+    "lines": [
+     64,
+     64
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.fam.R.value",
+   "veto": null,
+   "witness": "the FAMILY-BAR assertion of `families()` (bar == q ÷ m; the bend HALTs there)"
+  },
+  {
+   "consumers": [
+    "TC12-REG",
+    "TC12-SCORE"
+   ],
+   "door": "tierc12_pins.pin",
+   "kind": "contract",
+   "pin": "fam.S",
+   "source": {
+    "lines": [
+     82,
+     82
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.fam.S.value",
+   "veto": null,
+   "witness": "the FAMILY-BAR assertion of `families()` (bar == q ÷ m; the bend HALTs there)"
+  },
+  {
+   "consumers": [
+    "TC12-REG",
+    "TC12-SCORE"
+   ],
+   "door": "tierc12_pins.pin",
+   "kind": "contract",
+   "pin": "fam.q",
+   "source": {
+    "lines": [
+     9,
+     9
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.fam.q.value",
+   "veto": null,
+   "witness": "the FAMILY-BAR assertion of `families()` (bar == q ÷ m; the bend HALTs there)"
+  },
+  {
+   "consumers": [
+    "TC12-D",
+    "TC12-S",
+    "TC12-R.sfp",
+    "TC12-SCORE"
+   ],
+   "door": "E.fees()",
+   "kind": "stage_d",
+   "pin": "fee.maker_bps_side.BINANCE_USDTM",
+   "source": {
+    "key": "venues[BINANCE_USDTM].maker_bps_side",
+    "path": "research_outputs/tierc12/data/fee_schedule.json"
+   },
+   "value_at": "ABSENT until TC12-D: filed in the source by Stage D (L-D.21)",
+   "veto": "maker-bps",
+   "witness": "`net_r` of every scored row (F-TOLL [book t4])"
+  },
+  {
+   "consumers": [
+    "TC12-D",
+    "TC12-S",
+    "TC12-R.sfp",
+    "TC12-SCORE"
+   ],
+   "door": "E.fees()",
+   "kind": "stage_d",
+   "pin": "fee.maker_bps_side.BYBIT_V5_LINEAR",
+   "source": {
+    "key": "venues[BYBIT_V5_LINEAR].maker_bps_side",
+    "path": "research_outputs/tierc12/data/fee_schedule.json"
+   },
+   "value_at": "ABSENT until TC12-D: filed in the source by Stage D (L-D.21)",
+   "veto": "maker-bps",
+   "witness": "`net_r` of every scored row (F-TOLL [book t4])"
+  },
+  {
+   "consumers": [
+    "TC12-L",
+    "TC12-CLOSE"
+   ],
+   "door": "tierc12_pins.pin",
+   "kind": "contract",
+   "pin": "ferry.bus_dir",
+   "source": {
+    "lines": [
+     111,
+     111
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.ferry.bus_dir.value",
+   "veto": null,
+   "witness": "every would-be bus path of a scratch manifest and of a scratch copy list"
+  },
+  {
+   "consumers": [
+    "TC12-L",
+    "TC12-CLOSE"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "by": "door",
+     "name": "CAP_BYTES",
+     "node_sha256": "2cf36ad3634367a8e830a259aeb341cc110f861b04d33f9d1b8a108c11d5abe1",
+     "object": "`CAP_BYTES` of x_rec/scripts/tc11x_ferry.py == pin × BYTES_PER_MB",
+     "op": "pin_times_unit",
+     "path": "research_outputs/tierc12/x_rec/scripts/tc11x_ferry.py",
+     "read": "ast",
+     "unit": "BYTES_PER_MB"
+    }
+   ],
+   "kind": "contract",
+   "pin": "ferry.cap_mb",
+   "source": {
+    "lines": [
+     112,
+     112
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.ferry.cap_mb.value",
+   "veto": null,
+   "witness": "the rows carried of the synthetic frame of F-ROWS [CUT]"
+  },
+  {
+   "consumers": [
+    "TC12-G"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": "TC12-G",
+     "by": "consumer",
+     "object": "`(0, len(E.CLASSIC5))`"
+    }
+   ],
+   "kind": "contract",
+   "pin": "grid.brd_levels",
+   "source": {
+    "lines": [
+     59,
+     59
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.grid.brd_levels.value",
+   "veto": null,
+   "witness": "the assertion against `(0, N)` (the build HALTs there) (L-G.15)"
+  },
+  {
+   "consumers": [
+    "TC12-G"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": "TC12-G",
+     "by": "consumer",
+     "object": "the cardinalities of the four two-level axes of G-X16P / G-X16B"
+    }
+   ],
+   "kind": "contract",
+   "pin": "grid.x16_shape",
+   "source": {
+    "lines": [
+     60,
+     60
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.grid.x16_shape.value",
+   "veto": null,
+   "witness": "the assertion against the four axes' cardinalities (the build HALTs there) (L-G.16)"
+  },
+  {
+   "consumers": [
+    "TC12-REG.ledger-spec",
+    "TC12-L"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "by": "door",
+     "key": "n_min",
+     "object": "X's `BOOK_SPECS.json` `n_min`",
+     "op": "eq",
+     "path": "research_outputs/tierc12/x_rec/tierc11x/forward/BOOK_SPECS.json",
+     "read": "json"
+    },
+    {
+     "at": "TC12-REG.ledger-spec",
+     "by": "consumer",
+     "object": "the four `book_open` line values, TC11's GENESIS `n_score`, the L-T.6 text (HALT FWD-NMIN, L-L.14)"
+    }
+   ],
+   "kind": "contract",
+   "pin": "ledger.n_min",
+   "source": {
+    "lines": [
+     110,
+     110
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.ledger.n_min.value",
+   "veto": null,
+   "witness": "the first half of the status string of a scratch ledger holding `n_min − 1` rows"
+  },
+  {
+   "consumers": [
+    "TC12-REG.ledger-spec",
+    "TC12-L"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "by": "door",
+     "key": "opening.ms",
+     "object": "X's `BOOK_SPECS.json` `opening.ms`",
+     "op": "iso_ms",
+     "path": "research_outputs/tierc12/x_rec/tierc11x/forward/BOOK_SPECS.json",
+     "read": "json"
+    },
+    {
+     "at": "TC12-REG.ledger-spec",
+     "by": "consumer",
+     "object": "`opening_ms` of ledger lines 1-3 and 5, `E.TC10_PIN_MS`, TC10's STEP0 record, TC11's GENESIS line, the L-T.6 text (HALT FWD-OPENING, L-L.8)"
+    }
+   ],
+   "kind": "contract",
+   "pin": "ledger.opening",
+   "source": {
+    "lines": [
+     109,
+     109
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.ledger.opening.value",
+   "veto": null,
+   "witness": "the admitted set of the scratch ledger"
+  },
+  {
+   "consumers": [
+    "TC12-V"
+   ],
+   "door": "analytics.profile.PROFILE_ROWS (by attribute inside a door)",
+   "kind": "lineage",
+   "named_by": "L-V.4's table lists this constant with kind lineage and no name of record; the name is the door's",
+   "node_sha256": "4fd6eda196c971ee9362d118ab849ffd6e2bfd3489bbf823abba5bb76962c7f5",
+   "pin": "lineage.analytics_profile.PROFILE_ROWS",
+   "source": {
+    "key": "PROFILE_ROWS",
+    "path": "analytics/profile.py"
+   },
+   "value_at": "the frozen source (read at run time, never retyped)",
+   "veto": null,
+   "witness": "`VA(t)` on the sampled windows"
+  },
+  {
+   "consumers": [
+    "TC12-V"
+   ],
+   "door": "analytics.profile.VALUE_AREA (by attribute inside a door)",
+   "kind": "lineage",
+   "named_by": "L-V.4's table lists this constant with kind lineage and no name of record; the name is the door's",
+   "node_sha256": "f77d42bd9657194eaeeb39923ee1fd37f45f6b4aa4a3339984a06cc8b948230f",
+   "pin": "lineage.analytics_profile.VALUE_AREA",
+   "source": {
+    "key": "VALUE_AREA",
+    "path": "analytics/profile.py"
+   },
+   "value_at": "the frozen source (read at run time, never retyped)",
+   "veto": null,
+   "witness": "`VA(t)` on the sampled windows"
+  },
+  {
+   "consumers": [
+    "TC12-ENV",
+    "TC12-V",
+    "TC12-S",
+    "TC12-SCORE"
+   ],
+   "door": "E.TP.ERA_CUT_MS",
+   "kind": "lineage",
+   "named_by": "L-0.17 names the object in its lineage door; the name is the door's (lineage.<module>.<NAME>)",
+   "node_sha256": "f935df035c0dbd9ca5c71e9dd3e1b878cfdf22a5d2a09095b9aefa3557b70c32",
+   "pin": "lineage.tierc10_panel.ERA_CUT_MS",
+   "source": {
+    "key": "ERA_CUT_MS",
+    "path": "scripts/tierc10_panel.py"
+   },
+   "value_at": "the frozen source (read at run time, never retyped)",
+   "veto": null,
+   "witness": "the era of a bar at the cut"
+  },
+  {
+   "consumers": [
+    "TC12-ENV",
+    "TC12-V",
+    "TC12-S"
+   ],
+   "door": "E.TP.LENS_MS",
+   "kind": "lineage",
+   "named_by": "L-0.17 names the object in its lineage door; the name is the door's (lineage.<module>.<NAME>)",
+   "node_sha256": "cbbd3b19f5153f4e64d949c373a94c9c4cb515c644945cbfc5d7a363ae9c490b",
+   "pin": "lineage.tierc10_panel.LENS_MS",
+   "source": {
+    "key": "LENS_MS",
+    "path": "scripts/tierc10_panel.py"
+   },
+   "value_at": "the frozen source (read at run time, never retyped)",
+   "veto": null,
+   "witness": "the close instant of a lens bar"
+  },
+  {
+   "consumers": [
+    "TC12-ENV.score-build",
+    "TC12-SCORE",
+    "TC12-L"
+   ],
+   "door": "E.TP.N_BOOT",
+   "kind": "lineage",
+   "named_by": "L-0.17 names the object in its lineage door; the name is the door's (lineage.<module>.<NAME>)",
+   "node_sha256": "084e37228c0a3ac1bdc4782529fcf37f193602fda7822bc4e69eddb003f3458d",
+   "pin": "lineage.tierc10_panel.N_BOOT",
+   "source": {
+    "key": "N_BOOT",
+    "path": "scripts/tierc10_panel.py"
+   },
+   "value_at": "the frozen source (read at run time, never retyped)",
+   "veto": null,
+   "witness": "the number of draws of every ruler"
+  },
+  {
+   "consumers": [
+    "TC12-ENV.score-build",
+    "TC12-SCORE"
+   ],
+   "door": "ast over the text of the frozen source, node sha asserted",
+   "kind": "lineage",
+   "named_by": "seam 35 orders the row; the name is the door's (lineage.<module>.<NAME>)",
+   "node_sha256": "d9b1c42844492900f8d25386c06eb7a8d6e8266718cb63b83df5cb12b8a045cf",
+   "pin": "lineage.tierc11_score.EXIT_FLAGS",
+   "source": {
+    "key": "EXIT_FLAGS",
+    "path": "scripts/tierc11_score.py"
+   },
+   "value_at": "the frozen source (read at run time, never retyped)",
+   "veto": null,
+   "witness": "the scorer's exit word and code"
+  },
+  {
+   "consumers": [
+    "TC12-ENV.score-build",
+    "TC12-SCORE"
+   ],
+   "door": "ast over the text of the frozen source, node sha asserted",
+   "kind": "lineage",
+   "named_by": "seam 35 orders the row; the name is the door's (lineage.<module>.<NAME>)",
+   "node_sha256": "431997e1369186cf73b4aef8ce88f1032c951df1410f9286b9414dff8c7f4efa",
+   "pin": "lineage.tierc11_score.FLOAT_COLS",
+   "source": {
+    "key": "FLOAT_COLS",
+    "path": "scripts/tierc11_score.py"
+   },
+   "value_at": "the frozen source (read at run time, never retyped)",
+   "veto": null,
+   "witness": "the regbook validator's dtypes (F-REGBOOK)"
+  },
+  {
+   "consumers": [
+    "TC12-ENV.score-build",
+    "TC12-SCORE",
+    "TC12-S"
+   ],
+   "door": "ast over the text of the frozen source, node sha asserted",
+   "kind": "lineage",
+   "named_by": "seam 35 orders the row; the name is the door's (lineage.<module>.<NAME>)",
+   "node_sha256": "fbb85e24c0dbadf8c97b393398a3c2ff0a47b821dcfd3711e89fdda9e3994925",
+   "pin": "lineage.tierc11_score.HAIRCUT_TOL",
+   "source": {
+    "key": "HAIRCUT_TOL",
+    "path": "scripts/tierc11_score.py"
+   },
+   "value_at": "the frozen source (read at run time, never retyped)",
+   "veto": null,
+   "witness": "the haircut identity check of a regbook row"
+  },
+  {
+   "consumers": [
+    "TC12-ENV.score-build",
+    "TC12-SCORE"
+   ],
+   "door": "ast over the text of the frozen source, node sha asserted",
+   "kind": "lineage",
+   "named_by": "seam 35 orders the row; the name is the door's (lineage.<module>.<NAME>)",
+   "node_sha256": "28b6ca105b6e661e2b6b2b3e0265b80e3e19fb4aeddbdb0f1a9dfbf25f44b103",
+   "pin": "lineage.tierc11_score.INT_COLS",
+   "source": {
+    "key": "INT_COLS",
+    "path": "scripts/tierc11_score.py"
+   },
+   "value_at": "the frozen source (read at run time, never retyped)",
+   "veto": null,
+   "witness": "the regbook validator's dtypes (F-REGBOOK)"
+  },
+  {
+   "consumers": [
+    "TC12-ENV.score-build",
+    "TC12-SCORE"
+   ],
+   "door": "ast over the text of the frozen source, node sha asserted",
+   "kind": "lineage",
+   "named_by": "seam 35 orders the row; the name is the door's (lineage.<module>.<NAME>)",
+   "node_sha256": "3d4c20c67a1aea4c7251e69338a20819cf4a1eb0f4b8d3e198f8a9d6a1e6ec41",
+   "pin": "lineage.tierc11_score.NET_LAW_TOL",
+   "source": {
+    "key": "NET_LAW_TOL",
+    "path": "scripts/tierc11_score.py"
+   },
+   "value_at": "the frozen source (read at run time, never retyped)",
+   "veto": null,
+   "witness": "the net-law disclosure count"
+  },
+  {
+   "consumers": [
+    "TC12-ENV.score-build",
+    "TC12-SCORE"
+   ],
+   "door": "ast over the text of the frozen source, node sha asserted",
+   "kind": "lineage",
+   "named_by": "seam 35 orders the row; the name is the door's (lineage.<module>.<NAME>)",
+   "node_sha256": "0c979daba0201abbb9e9faa876c0b060eebe129eb256a4c829ab4fe7b11baf0c",
+   "pin": "lineage.tierc11_score.REQUIRED",
+   "source": {
+    "key": "REQUIRED",
+    "path": "scripts/tierc11_score.py"
+   },
+   "value_at": "the frozen source (read at run time, never retyped)",
+   "veto": null,
+   "witness": "the regbook validator's column list (F-REGBOOK)"
+  },
+  {
+   "consumers": [
+    "TC12-ENV.score-build",
+    "TC12-SCORE"
+   ],
+   "door": "ast over the text of the frozen source, node sha asserted",
+   "kind": "lineage",
+   "named_by": "seam 35 orders the row; the name is the door's (lineage.<module>.<NAME>)",
+   "node_sha256": "a584de5a8ede5b6ea552809e612b4df588d30d79f319565c4189b93c3c8233a3",
+   "pin": "lineage.tierc11_score.SORT_KEY",
+   "source": {
+    "key": "SORT_KEY",
+    "path": "scripts/tierc11_score.py"
+   },
+   "value_at": "the frozen source (read at run time, never retyped)",
+   "veto": null,
+   "witness": "the canonical book order of `book_sha256`"
+  },
+  {
+   "consumers": [
+    "TC12-ENV.score-build",
+    "TC12-SCORE"
+   ],
+   "door": "ast over the text of the frozen source, node sha asserted",
+   "kind": "lineage",
+   "named_by": "seam 35 orders the row; the name is the door's (lineage.<module>.<NAME>)",
+   "node_sha256": "7a122c31e823e97f5f1330b865e4c4eaa0d017f8dcc0f140a0c2ab5fedc68045",
+   "pin": "lineage.tierc11_score.STR_COLS",
+   "source": {
+    "key": "STR_COLS",
+    "path": "scripts/tierc11_score.py"
+   },
+   "value_at": "the frozen source (read at run time, never retyped)",
+   "veto": null,
+   "witness": "the regbook validator's dtypes (F-REGBOOK)"
+  },
+  {
+   "consumers": [
+    "TC12-ENV.score-build",
+    "TC12-SCORE"
+   ],
+   "door": "ast over the text of the frozen source, node sha asserted",
+   "kind": "lineage",
+   "named_by": "seam 35 orders the row; the name is the door's (lineage.<module>.<NAME>)",
+   "node_sha256": "f7f23e47cdb57ed39bf5076cd3436e71953a23c8e95095afba56f5cb3ece6dc6",
+   "pin": "lineage.tierc11_score.SUM_TOL",
+   "source": {
+    "key": "SUM_TOL",
+    "path": "scripts/tierc11_score.py"
+   },
+   "value_at": "the frozen source (read at run time, never retyped)",
+   "veto": null,
+   "witness": "the Σ identity check of a regbook"
+  },
+  {
+   "consumers": [
+    "TC12-ENV"
+   ],
+   "door": "the default of `TB._round_floats`' `nd`, read from the signature",
+   "kind": "lineage",
+   "named_by": "L-0.17 names the object in its lineage door; the name is the door's (lineage.<module>.<NAME>)",
+   "node_sha256": "c4338f6e23a58a13c5773ff40384829662c3698eb79d54c3f43e31f825f70116",
+   "pin": "lineage.tierc2_baseline._round_floats.nd",
+   "source": {
+    "key": "_round_floats.nd",
+    "path": "scripts/tierc2_baseline.py"
+   },
+   "value_at": "the frozen source (read at run time, never retyped)",
+   "veto": null,
+   "witness": "the last written decimal of a filed float"
+  },
+  {
+   "at": [
+    [
+     "key",
+     "ATR_LEN"
+    ],
+    [
+     "key",
+     "value"
+    ]
+   ],
+   "consumers": [
+    "TC12-V",
+    "TC12-ENV"
+   ],
+   "door": "E.R2.ATR_LEN",
+   "kind": "lineage",
+   "named_by": "L-0.17 names the object in its lineage door; the name is the door's (lineage.<module>.<NAME>)",
+   "node_sha256": "8ef275d1d640179a8a9da9ef464e518441a2227632afae620a85a550cd47adaa",
+   "pin": "lineage.tierc2_rules.ATR_LEN",
+   "source": {
+    "key": "REGISTER",
+    "path": "scripts/tierc2_rules.py"
+   },
+   "value_at": "the frozen source (read at run time, never retyped)",
+   "veto": null,
+   "witness": "`ATR[t]` on the sampled bars"
+  },
+  {
+   "at": [
+    [
+     "key",
+     "PROVISIONAL_MIN_N"
+    ],
+    [
+     "key",
+     "value"
+    ]
+   ],
+   "consumers": [
+    "TC12-V"
+   ],
+   "door": "E.R5.PROVISIONAL_MIN_N",
+   "kind": "lineage",
+   "named_by": "L-V.4's table lists this constant with kind lineage and no name of record; the name is the door's",
+   "node_sha256": "14e182932528b6c448913ce34d285784536ff26e86b383ecd370e4ef72396206",
+   "pin": "lineage.tierc5_rules.PROVISIONAL_MIN_N",
+   "source": {
+    "key": "REGISTER_DIFF",
+    "path": "scripts/tierc5_rules.py"
+   },
+   "value_at": "the frozen source (read at run time, never retyped)",
+   "veto": null,
+   "witness": "the traverse HALT (TRAVERSE-UNDER-FLOOR)"
+  },
+  {
+   "at": [
+    [
+     "key",
+     "WARMUP_BARS"
+    ],
+    [
+     "key",
+     "value"
+    ]
+   ],
+   "consumers": [
+    "TC12-ENV",
+    "TC12-V"
+   ],
+   "door": "E.R5.WARMUP_BARS",
+   "kind": "lineage",
+   "named_by": "L-0.17 names the object in its lineage door; the name is the door's (lineage.<module>.<NAME>)",
+   "node_sha256": "7a9bbd1fe01bc135891dba5c22fdc833f7cef90b074daba971c81ae2e95f81b0",
+   "pin": "lineage.tierc5_rules.WARMUP_BARS",
+   "source": {
+    "key": "REGISTER_DIFF",
+    "path": "scripts/tierc5_rules.py"
+   },
+   "value_at": "the frozen source (read at run time, never retyped)",
+   "veto": null,
+   "witness": "the first stamped bar of a tape"
+  },
+  {
+   "consumers": [
+    "TC12-ENV.score-build",
+    "TC12-SCORE"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": "TC12-SCORE",
+     "by": "consumer",
+     "object": "`(above_half_bar(N), N)`, N = len(E.CLASSIC5)"
+    }
+   ],
+   "kind": "contract",
+   "pin": "loao.line",
+   "source": {
+    "lines": [
+     106,
+     106
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.loao.line.value",
+   "veto": null,
+   "witness": "the scorer's assertion against `(above_half_bar(N), N)` for the five home assets (it HALTs there) (L-X.11)"
+  },
+  {
+   "consumers": [
+    "TC12-R.sfp",
+    "TC12-S"
+   ],
+   "door": "tierc12_pins.pin",
+   "kind": "contract",
+   "pin": "rr_min",
+   "source": {
+    "lines": [
+     73,
+     73
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.rr_min.value",
+   "veto": "rr-min",
+   "witness": "the disposition of the event nearest the cut (the skipped set)"
+  },
+  {
+   "consumers": [
+    "TC12-V",
+    "TC12-CLOSE"
+   ],
+   "door": null,
+   "kind": "ruling",
+   "pin": "ruling.1w",
+   "source": {
+    "lines": [
+     14,
+     14
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "veto": "1w",
+   "witness": "the closure sentence of the report and the append (L-0.25); no 1w cell is built either way"
+  },
+  {
+   "consumers": [
+    "TC12-CLOSE"
+   ],
+   "door": null,
+   "kind": "ruling",
+   "pin": "ruling.tc11_stamp",
+   "source": {
+    "lines": [
+     13,
+     13
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "veto": "tc11-stamp",
+   "witness": "`close/TC11_STAMP_MAP.json` `applied` and the stamp step of close_acts.sh (L-0.24)"
+  },
+  {
+   "consumers": [
+    "TC12-S"
+   ],
+   "door": "tierc12_pins.pin",
+   "kind": "contract",
+   "pin": "scalp.deep_atr",
+   "source": {
+    "lines": [
+     94,
+     95
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.scalp.deep_atr.value",
+   "veto": null,
+   "witness": "`n_D` of an order"
+  },
+  {
+   "consumers": [
+    "TC12-S"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": [
+      [
+       "key",
+       "WINDOW_FAST"
+      ],
+      [
+       "key",
+       "value"
+      ]
+     ],
+     "by": "door",
+     "name": "REGISTER",
+     "node_sha256": "dc8bd17100f676e79004b2231b87017d089cb97d605f77d64cd987563c500b49",
+     "object": "`E.R2.WINDOW_FAST` (`REGISTER[\"WINDOW_FAST\"][\"value\"]` of scripts/tierc2_rules.py)",
+     "op": "eq",
+     "path": "scripts/tierc2_rules.py",
+     "read": "ast"
+    }
+   ],
+   "kind": "contract",
+   "pin": "scalp.ema_fast",
+   "source": {
+    "lines": [
+     89,
+     89
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.scalp.ema_fast.value",
+   "veto": null,
+   "witness": "the cross bars"
+  },
+  {
+   "consumers": [
+    "TC12-S"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": [
+      [
+       "key",
+       "WINDOW_SLOW"
+      ],
+      [
+       "key",
+       "value"
+      ]
+     ],
+     "by": "door",
+     "name": "REGISTER",
+     "node_sha256": "2467bbc3442981beadffe4bf3afb8606d62895a489dac980e2d366fc5c944d0f",
+     "object": "`E.R2.WINDOW_SLOW` (`REGISTER[\"WINDOW_SLOW\"][\"value\"]` of scripts/tierc2_rules.py)",
+     "op": "eq",
+     "path": "scripts/tierc2_rules.py",
+     "read": "ast"
+    }
+   ],
+   "kind": "contract",
+   "pin": "scalp.ema_slow",
+   "source": {
+    "lines": [
+     89,
+     89
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.scalp.ema_slow.value",
+   "veto": null,
+   "witness": "the cross bars"
+  },
+  {
+   "consumers": [
+    "TC12-S",
+    "TC12-SCORE"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": "TC12-S",
+     "by": "consumer",
+     "object": "the scored arm's sidecar `era_scope`"
+    }
+   ],
+   "kind": "contract",
+   "pin": "scalp.era",
+   "source": {
+    "lines": [
+     83,
+     83
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.scalp.era.value",
+   "veto": "era",
+   "witness": "the scored arm's row set"
+  },
+  {
+   "consumers": [
+    "TC12-S",
+    "TC12-R.sfp"
+   ],
+   "door": "tierc12_pins.pin",
+   "kind": "contract",
+   "pin": "scalp.fill_ticks",
+   "source": {
+    "lines": [
+     94,
+     94
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.scalp.fill_ticks.value",
+   "veto": "fill",
+   "witness": "the fill bar of an order (TC12-S); the fill of the first conditioned event whose child is through by less than the bent count (TC12-R.sfp)"
+  },
+  {
+   "consumers": [
+    "TC12-S"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": [
+      [
+       "key",
+       "MIN_STOP_ATR"
+      ],
+      [
+       "key",
+       "value"
+      ]
+     ],
+     "by": "door",
+     "name": "REGISTER_DIFF",
+     "node_sha256": "a77ce679a39d58612d22d1de65d61b51b39b980ebe20eded1309aa6215eb9387",
+     "object": "`E.R3.MIN_STOP_ATR` (`REGISTER_DIFF[\"MIN_STOP_ATR\"][\"value\"]` of scripts/tierc3_rules.py)",
+     "op": "eq",
+     "path": "scripts/tierc3_rules.py",
+     "read": "ast"
+    },
+    {
+     "by": "door",
+     "key": "laws.rail_atr",
+     "object": "X's sfp `laws.rail_atr`",
+     "op": "eq",
+     "path": "research_outputs/tierc12/x_rec/tierc11x/sfp/build_manifest.json",
+     "read": "json"
+    }
+   ],
+   "kind": "contract",
+   "pin": "scalp.rail_atr",
+   "source": {
+    "lines": [
+     98,
+     98
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.scalp.rail_atr.value",
+   "veto": null,
+   "witness": "every cross order's stop"
+  },
+  {
+   "consumers": [
+    "TC12-S"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": [
+      [
+       "key",
+       "STOP_BUF_ATR"
+      ],
+      [
+       "key",
+       "value"
+      ]
+     ],
+     "by": "door",
+     "name": "REGISTER",
+     "node_sha256": "58547221ee78862df0bb04b94411232b1c0ac1918af7004d5c66795b18b1b8b8",
+     "object": "`E.R2.STOP_BUF_ATR` (`REGISTER[\"STOP_BUF_ATR\"][\"value\"]` of scripts/tierc2_rules.py)",
+     "op": "eq",
+     "path": "scripts/tierc2_rules.py",
+     "read": "ast"
+    },
+    {
+     "by": "door",
+     "key": "laws.stop_buf_atr",
+     "object": "X's sfp `laws.stop_buf_atr`",
+     "op": "eq",
+     "path": "research_outputs/tierc12/x_rec/tierc11x/sfp/build_manifest.json",
+     "read": "json"
+    }
+   ],
+   "kind": "contract",
+   "pin": "scalp.stop_beyond_atr",
+   "source": {
+    "lines": [
+     97,
+     97
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.scalp.stop_beyond_atr.value",
+   "veto": null,
+   "witness": "the stop of a swing-failure order"
+  },
+  {
+   "consumers": [
+    "TC12-S"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": [
+      [
+       "key",
+       "HARVEST_FRACTION"
+      ],
+      [
+       "key",
+       "value"
+      ]
+     ],
+     "by": "door",
+     "name": "REGISTER_DIFF",
+     "node_sha256": "58547221ee78862df0bb04b94411232b1c0ac1918af7004d5c66795b18b1b8b8",
+     "object": "`E.R4.HARVEST_FRACTION` (`REGISTER_DIFF[\"HARVEST_FRACTION\"][\"value\"]` of scripts/tierc4_rules.py)",
+     "op": "eq",
+     "path": "scripts/tierc4_rules.py",
+     "read": "ast"
+    },
+    {
+     "by": "door",
+     "key": "laws.harvest_frac",
+     "object": "X's sfp `laws.harvest_frac`",
+     "op": "eq",
+     "path": "research_outputs/tierc12/x_rec/tierc11x/sfp/build_manifest.json",
+     "read": "json"
+    },
+    {
+     "at": "TC12-S",
+     "by": "consumer",
+     "object": "`E.TP.CONTROL_CARD.harvest_frac` (the object the run reads)"
+    }
+   ],
+   "kind": "contract",
+   "pin": "scalp.t1_fraction",
+   "source": {
+    "lines": [
+     99,
+     99
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.scalp.t1_fraction.value",
+   "veto": null,
+   "witness": "`net_r` of a T1-then-stop trade"
+  },
+  {
+   "consumers": [
+    "TC12-S"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "by": "door",
+     "key": "laws.t2_atr_off",
+     "object": "X's sfp `laws.t2_atr_off`",
+     "op": "eq",
+     "path": "research_outputs/tierc12/x_rec/tierc11x/sfp/build_manifest.json",
+     "read": "json"
+    }
+   ],
+   "kind": "contract",
+   "pin": "scalp.t2_offset_atr",
+   "source": {
+    "lines": [
+     99,
+     99
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.scalp.t2_offset_atr.value",
+   "veto": null,
+   "witness": "`n_T2` of an order"
+  },
+  {
+   "consumers": [
+    "TC12-S"
+   ],
+   "door": "tierc12_pins.pin",
+   "kind": "contract",
+   "pin": "scalp.third_long_max",
+   "source": {
+    "lines": [
+     87,
+     87
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.scalp.third_long_max.value",
+   "veto": "outer-third",
+   "witness": "the SETUP mask"
+  },
+  {
+   "consumers": [
+    "TC12-S"
+   ],
+   "door": "tierc12_pins.pin",
+   "kind": "contract",
+   "pin": "scalp.third_short_min",
+   "source": {
+    "lines": [
+     87,
+     87
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.scalp.third_short_min.value",
+   "veto": "outer-third",
+   "witness": "the SETUP mask"
+  },
+  {
+   "consumers": [
+    "TC12-S"
+   ],
+   "door": "tierc12_pins.pin",
+   "kind": "contract",
+   "pin": "scalp.trigger_prox_atr",
+   "source": {
+    "lines": [
+     90,
+     90
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.scalp.trigger_prox_atr.value",
+   "veto": null,
+   "witness": "the proximity mask"
+  },
+  {
+   "consumers": [
+    "TC12-S"
+   ],
+   "door": "tierc12_pins.pin",
+   "kind": "contract",
+   "pin": "scalp.validity_bars",
+   "source": {
+    "lines": [
+     92,
+     92
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.scalp.validity_bars.value",
+   "veto": "validity",
+   "witness": "the expiry bar of an order"
+  },
+  {
+   "consumers": [
+    "TC12-REG",
+    "TC12-REG.ledger-spec",
+    "TC12-D",
+    "TC12-ENV",
+    "TC12-L",
+    "TC12-SCORE"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": "TC12-REG",
+     "by": "consumer",
+     "object": "research_outputs/tierc12/PROGRESS.json `seed` (F-RESUME)"
+    },
+    {
+     "at": "TC12-ENV",
+     "by": "consumer",
+     "object": "`E.SEED`"
+    },
+    {
+     "at": "TC12-SCORE",
+     "by": "consumer",
+     "object": "`E.SEED`"
+    }
+   ],
+   "kind": "contract",
+   "pin": "seed",
+   "source": {
+    "lines": [
+     4,
+     4
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.seed.value",
+   "veto": null,
+   "witness": "the SEED_DEPENDENT_T columns of `level_stats` (L-L's F-TYPED-FLOW [seed]); the draws of every seeded stream"
+  },
+  {
+   "consumers": [
+    "TC12-R.sfp"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": [
+      [
+       "key",
+       "MIN_STOP_ATR"
+      ],
+      [
+       "key",
+       "value"
+      ]
+     ],
+     "by": "door",
+     "name": "REGISTER_DIFF",
+     "node_sha256": "a77ce679a39d58612d22d1de65d61b51b39b980ebe20eded1309aa6215eb9387",
+     "object": "the lineage rail `MIN_STOP_ATR` (`REGISTER_DIFF[\"MIN_STOP_ATR\"][\"value\"]` of scripts/tierc3_rules.py)",
+     "op": "eq",
+     "path": "scripts/tierc3_rules.py",
+     "read": "ast"
+    },
+    {
+     "at": "TC12-R.sfp",
+     "by": "consumer",
+     "object": "`E.BK.MIN_STOP_ATR`"
+    }
+   ],
+   "kind": "contract",
+   "pin": "sfp.rail_atr",
+   "source": {
+    "lines": [
+     71,
+     71
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.sfp.rail_atr.value",
+   "veto": null,
+   "witness": "`r_dist` of the first rail-bound row"
+  },
+  {
+   "consumers": [
+    "TC12-R.sfp"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": "TC12-R.sfp",
+     "by": "consumer",
+     "object": "`E.TP.CONTROL_CARD.harvest_frac` (the object the run reads, inside `account_l`)"
+    }
+   ],
+   "kind": "contract",
+   "pin": "sfp.t1_fraction",
+   "source": {
+    "lines": [
+     71,
+     71
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.sfp.t1_fraction.value",
+   "veto": null,
+   "witness": "`n1` of the first T1-filled row"
+  },
+  {
+   "consumers": [
+    "TC12-R.sfp"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "by": "door",
+     "name": "T2_ATR_OFF",
+     "node_sha256": "60f402c9c5241ce9e251543988a07bec2c6c220275c89680b909b0ad7fa309cf",
+     "object": "the AST literal `T2_ATR_OFF` of x_rec/scripts/tc11x_sfp.py",
+     "op": "eq",
+     "path": "research_outputs/tierc12/x_rec/scripts/tc11x_sfp.py",
+     "read": "ast"
+    }
+   ],
+   "kind": "contract",
+   "pin": "sfp.t2_offset_atr",
+   "source": {
+    "lines": [
+     72,
+     72
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.sfp.t2_offset_atr.value",
+   "veto": null,
+   "witness": "`T2` of the first row"
+  },
+  {
+   "consumers": [
+    "TC12-R.tables"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "by": "door",
+     "name": "APPROACH_ATR",
+     "node_sha256": "60f402c9c5241ce9e251543988a07bec2c6c220275c89680b909b0ad7fa309cf",
+     "object": "the AST literal `APPROACH_ATR` of scripts/tierc11_stage_h.py",
+     "op": "eq",
+     "path": "scripts/tierc11_stage_h.py",
+     "read": "ast"
+    }
+   ],
+   "kind": "contract",
+   "pin": "tp1d.approach_atr",
+   "source": {
+    "lines": [
+     80,
+     80
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.tp1d.approach_atr.value",
+   "veto": null,
+   "witness": "the level of the first ridden bar with an order"
+  },
+  {
+   "consumers": [
+    "TC12-V"
+   ],
+   "door": "tierc12_va_stamps.traverse",
+   "kind": "fitted",
+   "pin": "traverse.12h",
+   "source": {
+    "key": "by_lens.12h.T_of_record",
+    "path": "research_outputs/tierc12/va/TRAVERSE.json"
+   },
+   "value_at": "ABSENT until TC12-V: fitted on the tuning era and frozen by DOOR 1 (O-18, L-V.18)",
+   "veto": null,
+   "witness": "the filed twin (no registered consumer)"
+  },
+  {
+   "consumers": [
+    "TC12-R.sfp"
+   ],
+   "door": "tierc12_va_stamps.traverse",
+   "kind": "fitted",
+   "pin": "traverse.1d",
+   "source": {
+    "key": "by_lens.1d.T_of_record",
+    "path": "research_outputs/tierc12/va/TRAVERSE.json"
+   },
+   "value_at": "ABSENT until TC12-V: fitted on the tuning era and frozen by DOOR 1 (O-18, L-V.18)",
+   "veto": null,
+   "witness": "a time-stop exit bar (the 1d cell, Tier-E)"
+  },
+  {
+   "consumers": [
+    "TC12-S"
+   ],
+   "door": "tierc12_va_stamps.traverse",
+   "kind": "fitted",
+   "pin": "traverse.1h",
+   "source": {
+    "key": "by_lens.1h.T_of_record",
+    "path": "research_outputs/tierc12/va/TRAVERSE.json"
+   },
+   "value_at": "ABSENT until TC12-V: fitted on the tuning era and frozen by DOOR 1 (O-18, L-V.18)",
+   "veto": null,
+   "witness": "the header check of the 5m count (L-S.2)"
+  },
+  {
+   "consumers": [
+    "TC12-S"
+   ],
+   "door": "tierc12_va_stamps.traverse",
+   "kind": "fitted",
+   "pin": "traverse.1h.in_5m_bars",
+   "source": {
+    "key": "by_lens.1h.T_in_5m_bars",
+    "path": "research_outputs/tierc12/va/TRAVERSE.json"
+   },
+   "value_at": "ABSENT until TC12-V: traverse.1h × (LENS_MS[1h] // LENS_MS[5m]) (L-S.2, L-V.18)",
+   "veto": null,
+   "witness": "the bar of a time-stop exit"
+  },
+  {
+   "consumers": [
+    "TC12-R.sfp"
+   ],
+   "door": "tierc12_va_stamps.traverse",
+   "kind": "fitted",
+   "pin": "traverse.4h",
+   "source": {
+    "key": "by_lens.4h.T_of_record",
+    "path": "research_outputs/tierc12/va/TRAVERSE.json"
+   },
+   "value_at": "ABSENT until TC12-V: fitted on the tuning era and frozen by DOOR 1 (O-18, L-V.18)",
+   "veto": null,
+   "witness": "a time-stop exit bar"
+  },
+  {
+   "consumers": [
+    "TC12-V.trades"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": [
+      [
+       "each",
+       1
+      ]
+     ],
+     "by": "door",
+     "key": "pins.laws.horizons",
+     "object": "the bar counts of X's `pins.laws.horizons`",
+     "op": "eq",
+     "path": "research_outputs/tierc12/x_rec/tierc11x/va/build_manifest.json",
+     "read": "json"
+    },
+    {
+     "at": [
+      [
+       "each",
+       1
+      ]
+     ],
+     "by": "door",
+     "name": "HORIZONS",
+     "node_sha256": "c7d29c75e44b36ce46c94fcbc97fa856d67f4175ca53c8dfe4c16a6d409a5001",
+     "object": "the bar counts of the AST literal `HORIZONS` of scripts/tierc10_census.py",
+     "op": "eq",
+     "path": "scripts/tierc10_census.py",
+     "read": "ast"
+    }
+   ],
+   "kind": "contract",
+   "pin": "two_trades.horizons",
+   "source": {
+    "lines": [
+     78,
+     78
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.two_trades.horizons.value",
+   "veto": null,
+   "witness": "a term's anchor+H bar"
+  },
+  {
+   "consumers": [
+    "TC12-V",
+    "TC12-V.trades"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": [
+      [
+       "key",
+       "BREAK_MARGIN"
+      ]
+     ],
+     "by": "door",
+     "name": "PINS",
+     "node_sha256": "fb54fc906d32fd0aa694f9ae7e42cdc76209170e3a0f8822f1a446dbac9423ed",
+     "object": "the AST literal `PINS[\"BREAK_MARGIN\"]` of analytics/rangefinder_census.py",
+     "op": "eq",
+     "path": "analytics/rangefinder_census.py",
+     "read": "ast"
+    },
+    {
+     "by": "door",
+     "key": "pins.laws.break_margin",
+     "object": "X's `pins.laws.break_margin`",
+     "op": "eq",
+     "path": "research_outputs/tierc12/x_rec/tierc11x/va/build_manifest.json",
+     "read": "json"
+    }
+   ],
+   "kind": "contract",
+   "pin": "va.accept_margin_atr",
+   "source": {
+    "lines": [
+     35,
+     35
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.va.accept_margin_atr.value",
+   "veto": null,
+   "witness": "F-STATE's A2 and A3"
+  },
+  {
+   "consumers": [
+    "TC12-V",
+    "TC12-V.trades"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": [
+      [
+       "key",
+       "BREAK_CONFIRM_N"
+      ]
+     ],
+     "by": "door",
+     "name": "PINS",
+     "node_sha256": "1f3154c8c25a6c46296246c0fa4e72be3ed39096902413adf1185cf2ff1fddd3",
+     "object": "the AST literal `PINS[\"BREAK_CONFIRM_N\"]` of analytics/rangefinder_census.py",
+     "op": "eq",
+     "path": "analytics/rangefinder_census.py",
+     "read": "ast"
+    },
+    {
+     "by": "door",
+     "key": "pins.laws.break_confirm_n",
+     "object": "X's `pins.laws.break_confirm_n`",
+     "op": "eq",
+     "path": "research_outputs/tierc12/x_rec/tierc11x/va/build_manifest.json",
+     "read": "json"
+    }
+   ],
+   "kind": "contract",
+   "pin": "va.accept_n",
+   "source": {
+    "lines": [
+     35,
+     35
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.va.accept_n.value",
+   "veto": null,
+   "witness": "the bar of F-STATE's A1"
+  },
+  {
+   "consumers": [
+    "TC12-V",
+    "TC12-R.sfp",
+    "TC12-S"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": "TC12-V",
+     "by": "consumer",
+     "object": "the PASS rows of `va.mirror_words` (L-V.17)"
+    }
+   ],
+   "kind": "contract",
+   "pin": "va.licence_set",
+   "source": {
+    "lines": [
+     41,
+     41
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.va.licence_set.value",
+   "veto": null,
+   "witness": "the licensed set of `va/VA_MIRROR.json` (a range trade outside it HALTs)"
+  },
+  {
+   "consumers": [
+    "TC12-V",
+    "TC12-V.trades"
+   ],
+   "door": "E.x_rec",
+   "kind": "x_record",
+   "pin": "va.lookback.12h",
+   "source": {
+    "key": "L.by_lens.12h.L_of_record",
+    "path": "research_outputs/tierc12/x_rec/tierc11x/pins/PINS_X.json"
+   },
+   "value_at": "va/VA_PINS.json by_lens.12h.L_bars (filed ONCE by DOOR 1 at TC12-V; read here from the source, manifest sha asserted)",
+   "veto": "va-lookback",
+   "witness": "`VA(t)` on the sampled windows of F-VA-PINS [c]"
+  },
+  {
+   "consumers": [
+    "TC12-V",
+    "TC12-V.trades"
+   ],
+   "door": "E.x_rec",
+   "kind": "x_record",
+   "pin": "va.lookback.1d",
+   "source": {
+    "key": "L.by_lens.1d.L_of_record",
+    "path": "research_outputs/tierc12/x_rec/tierc11x/pins/PINS_X.json"
+   },
+   "value_at": "va/VA_PINS.json by_lens.1d.L_bars (filed ONCE by DOOR 1 at TC12-V; read here from the source, manifest sha asserted)",
+   "veto": "va-lookback",
+   "witness": "`VA(t)` on the sampled windows of F-VA-PINS [c]"
+  },
+  {
+   "consumers": [
+    "TC12-V",
+    "TC12-V.trades"
+   ],
+   "door": "E.x_rec",
+   "kind": "x_record",
+   "pin": "va.lookback.1h",
+   "source": {
+    "key": "L.by_lens.1h.L_of_record",
+    "path": "research_outputs/tierc12/x_rec/tierc11x/pins/PINS_X.json"
+   },
+   "value_at": "va/VA_PINS.json by_lens.1h.L_bars (filed ONCE by DOOR 1 at TC12-V; read here from the source, manifest sha asserted)",
+   "veto": "va-lookback",
+   "witness": "`VA(t)` on the sampled windows of F-VA-PINS [c]"
+  },
+  {
+   "consumers": [
+    "TC12-V",
+    "TC12-V.trades"
+   ],
+   "door": "E.x_rec",
+   "kind": "x_record",
+   "label": "BORROWED (O-28): the 1d pin's bar count; read in exactly two Tier-E places and by no gate",
+   "pin": "va.lookback.1w",
+   "source": {
+    "key": "L.by_lens.1d.L_of_record",
+    "path": "research_outputs/tierc12/x_rec/tierc11x/pins/PINS_X.json"
+   },
+   "source_lens": "1d",
+   "value_at": "va/VA_PINS.json by_lens.1w.L_bars (filed ONCE by DOOR 1 at TC12-V; read here from the source, manifest sha asserted)",
+   "veto": "va-lookback",
+   "witness": "`VA(t)` on the sampled windows of F-VA-PINS [c]"
+  },
+  {
+   "consumers": [
+    "TC12-V",
+    "TC12-V.trades"
+   ],
+   "door": "E.x_rec",
+   "kind": "x_record",
+   "pin": "va.lookback.4h",
+   "source": {
+    "key": "L.by_lens.4h.L_of_record",
+    "path": "research_outputs/tierc12/x_rec/tierc11x/pins/PINS_X.json"
+   },
+   "value_at": "va/VA_PINS.json by_lens.4h.L_bars (filed ONCE by DOOR 1 at TC12-V; read here from the source, manifest sha asserted)",
+   "veto": "va-lookback",
+   "witness": "`VA(t)` on the sampled windows of F-VA-PINS [c]"
+  },
+  {
+   "consumers": [
+    "TC12-V"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "at": "TC12-V",
+     "by": "consumer",
+     "object": "the `would_read` strings of x_rec/tierc11x/va/feasibility.parquet at POOLED:CLASSIC5 · holdout · va_regime (L-V.17)"
+    }
+   ],
+   "kind": "contract",
+   "pin": "va.mirror_words",
+   "source": {
+    "lines": [
+     39,
+     40
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.va.mirror_words.value",
+   "veto": null,
+   "witness": "F-VA-MIRROR's word comparison with X's feasibility record (a bent word HALTs the mirror)"
+  },
+  {
+   "consumers": [
+    "TC12-V"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "by": "door",
+     "key": "pins.laws.coincidence_atr",
+     "object": "X's `pins.laws.coincidence_atr`",
+     "op": "eq",
+     "path": "research_outputs/tierc12/x_rec/tierc11x/va/build_manifest.json",
+     "read": "json"
+    },
+    {
+     "by": "door",
+     "name": "COIN_FRAC",
+     "node_sha256": "60f402c9c5241ce9e251543988a07bec2c6c220275c89680b909b0ad7fa309cf",
+     "object": "the AST literal `COIN_FRAC` of scripts/tierc11_nest.py",
+     "op": "eq",
+     "path": "scripts/tierc11_nest.py",
+     "read": "ast"
+    }
+   ],
+   "kind": "contract",
+   "pin": "va.nest_frac",
+   "source": {
+    "lines": [
+     45,
+     45
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.va.nest_frac.value",
+   "veto": "nest",
+   "witness": "the nest flags on the sampled bars of F-VA-PINS [c]"
+  },
+  {
+   "consumers": [
+    "TC12-V",
+    "TC12-V.trades"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "by": "door",
+     "key": "pins.laws.sfp_k_twins",
+     "object": "a member of X's `pins.laws.sfp_k_twins`",
+     "op": "member",
+     "path": "research_outputs/tierc12/x_rec/tierc11x/va/build_manifest.json",
+     "read": "json"
+    }
+   ],
+   "kind": "contract",
+   "pin": "va.sfp_k",
+   "source": {
+    "lines": [
+     36,
+     36
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.va.sfp_k.value",
+   "veto": "sfp-k",
+   "witness": "F-STATE's N1"
+  },
+  {
+   "consumers": [
+    "TC12-V"
+   ],
+   "door": "tierc12_pins.pin",
+   "equal_to": [
+    {
+     "by": "door",
+     "name": "VALUE_AREA",
+     "node_sha256": "f77d42bd9657194eaeeb39923ee1fd37f45f6b4aa4a3339984a06cc8b948230f",
+     "object": "`analytics.profile.VALUE_AREA` × PCT_PER_UNIT",
+     "op": "object_times_unit",
+     "path": "analytics/profile.py",
+     "read": "ast",
+     "unit": "PCT_PER_UNIT"
+    },
+    {
+     "by": "door",
+     "key": "pins.profile.value_area",
+     "object": "X's `pins.profile.value_area` × PCT_PER_UNIT",
+     "op": "object_times_unit",
+     "path": "research_outputs/tierc12/x_rec/tierc11x/va/build_manifest.json",
+     "read": "json",
+     "unit": "PCT_PER_UNIT"
+    }
+   ],
+   "kind": "contract",
+   "pin": "va.value_area_pct",
+   "source": {
+    "lines": [
+     29,
+     29
+    ],
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md"
+   },
+   "value_at": "pins/CONTRACT_PINS.json pins.va.value_area_pct.value",
+   "veto": null,
+   "witness": "the equality with `analytics.profile.VALUE_AREA` × PCT_PER_UNIT (bent at the pin door it HALTs); `VA(t)` on the sampled windows when the lineage object is bent (L-V.4)"
+  },
+  {
+   "consumers": [
+    "TC12-V"
+   ],
+   "door": "E.x_rec",
+   "kind": "x_record",
+   "named_by": "L-V.4's table lists this constant with kind x_record and no name of record; the name is the door's (x.<record>.<key>)",
+   "pin": "x.va.laws.dev_return_bars",
+   "source": {
+    "key": "pins.laws.dev_return_bars",
+    "path": "research_outputs/tierc12/x_rec/tierc11x/va/build_manifest.json"
+   },
+   "value_at": "the source (read at run time through E.x_rec)",
+   "veto": null,
+   "witness": "F-STATE-X [x1]"
+  },
+  {
+   "consumers": [
+    "TC12-V.trades"
+   ],
+   "door": "E.x_rec",
+   "kind": "x_record",
+   "named_by": "L-V.4's table lists this constant with kind x_record and no name of record; the name is the door's (x.<record>.<key>)",
+   "pin": "x.va.laws.k_draws",
+   "source": {
+    "key": "pins.laws.k_draws",
+    "path": "research_outputs/tierc12/x_rec/tierc11x/va/build_manifest.json"
+   },
+   "value_at": "the source (read at run time through E.x_rec)",
+   "veto": null,
+   "witness": "the number of draws filed per cell (F-VA-NULL [c])"
+  }
+ ]
+}

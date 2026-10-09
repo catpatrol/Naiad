@@ -1,0 +1,1083 @@
+{
+ "classes": {
+  "date": "a date",
+  "hand_sample_count": "a hand-sample count of the FIXTURES line (\"3 … hand-verified\")",
+  "history_figure": "a quoted history figure of an earlier tier",
+  "id": "an id or label: a registration, a fixture, a stage (X4, R5, R10, R0), a book or card (v6, 9/12), a target (T1, T2), a named view or twin (17-asset, breadth-17)",
+  "index_offset": "an index offset in a law's wording (bar t+1, lens L+1)",
+  "lens_name": "a lens name (5m, 1h, 4h, 12h, 1d, 1w), alone or in ATR_<lens>",
+  "print_format": "a print-format token (0.000e+00): never a pin — F-CTRL passes iff the worst difference == 0.0 [seam 39]",
+  "prior": "a registration's prior, in percent",
+  "ruling_or_section_id": "a ruling or section id (Q1..Q9, Q-R3, §n, L-W.n, V1..V5)",
+  "tier_id": "a tier id (TIER-C12, TC10, TC11, TC11-X, TC12), in a path or a token"
+ },
+ "contract": "exchange/queue/2026-10-08_TC12_APOLLO.md",
+ "law": "TOTALITY of the contract: every digit run of the prefix lies inside exactly one map row's capture or inside exactly one token below, classed; every line of the prefix is operative [LEANS L-0.17; CANON-25 point 6; seam 39]",
+ "span_law": "token == lines[line - 1][start:end] over the prefix's lines (characters, 0-indexed, end exclusive)",
+ "tokens": [
+  {
+   "class": "tier_id",
+   "end": 8,
+   "line": 1,
+   "start": 0,
+   "token": "TIER-C12"
+  },
+  {
+   "class": "date",
+   "end": 29,
+   "line": 2,
+   "start": 19,
+   "token": "2026-10-08"
+  },
+  {
+   "class": "date",
+   "end": 10,
+   "line": 4,
+   "start": 0,
+   "token": "2026-09-24"
+  },
+  {
+   "class": "id",
+   "end": 20,
+   "line": 5,
+   "start": 18,
+   "token": "R0"
+  },
+  {
+   "class": "date",
+   "end": 61,
+   "line": 10,
+   "start": 51,
+   "token": "2026-10-08"
+  },
+  {
+   "class": "tier_id",
+   "end": 66,
+   "line": 10,
+   "start": 62,
+   "token": "TC12"
+  },
+  {
+   "class": "tier_id",
+   "end": 33,
+   "line": 12,
+   "start": 29,
+   "token": "TC11"
+  },
+  {
+   "class": "ruling_or_section_id",
+   "end": 37,
+   "line": 12,
+   "start": 34,
+   "token": "§11"
+  },
+  {
+   "class": "ruling_or_section_id",
+   "end": 6,
+   "line": 13,
+   "start": 1,
+   "token": "Q1/Q2"
+  },
+  {
+   "class": "tier_id",
+   "end": 42,
+   "line": 13,
+   "start": 38,
+   "token": "TC11"
+  },
+  {
+   "class": "tier_id",
+   "end": 85,
+   "line": 13,
+   "start": 81,
+   "token": "tc11"
+  },
+  {
+   "class": "ruling_or_section_id",
+   "end": 3,
+   "line": 14,
+   "start": 1,
+   "token": "Q4"
+  },
+  {
+   "class": "lens_name",
+   "end": 13,
+   "line": 14,
+   "start": 11,
+   "token": "1w"
+  },
+  {
+   "class": "lens_name",
+   "end": 46,
+   "line": 14,
+   "start": 44,
+   "token": "1w"
+  },
+  {
+   "class": "lens_name",
+   "end": 69,
+   "line": 14,
+   "start": 67,
+   "token": "1w"
+  },
+  {
+   "class": "ruling_or_section_id",
+   "end": 76,
+   "line": 14,
+   "start": 74,
+   "token": "Q6"
+  },
+  {
+   "class": "ruling_or_section_id",
+   "end": 27,
+   "line": 15,
+   "start": 25,
+   "token": "Q8"
+  },
+  {
+   "class": "tier_id",
+   "end": 5,
+   "line": 16,
+   "start": 1,
+   "token": "TC11"
+  },
+  {
+   "class": "ruling_or_section_id",
+   "end": 48,
+   "line": 16,
+   "start": 46,
+   "token": "Q9"
+  },
+  {
+   "class": "ruling_or_section_id",
+   "end": 88,
+   "line": 16,
+   "start": 83,
+   "token": "L-W.4"
+  },
+  {
+   "class": "ruling_or_section_id",
+   "end": 96,
+   "line": 16,
+   "start": 91,
+   "token": "L-W.1"
+  },
+  {
+   "class": "lens_name",
+   "end": 84,
+   "line": 18,
+   "start": 82,
+   "token": "5m"
+  },
+  {
+   "class": "lens_name",
+   "end": 87,
+   "line": 18,
+   "start": 85,
+   "token": "1h"
+  },
+  {
+   "class": "lens_name",
+   "end": 90,
+   "line": 18,
+   "start": 88,
+   "token": "4h"
+  },
+  {
+   "class": "lens_name",
+   "end": 94,
+   "line": 18,
+   "start": 91,
+   "token": "12h"
+  },
+  {
+   "class": "lens_name",
+   "end": 97,
+   "line": 18,
+   "start": 95,
+   "token": "1d"
+  },
+  {
+   "class": "lens_name",
+   "end": 100,
+   "line": 18,
+   "start": 98,
+   "token": "1w"
+  },
+  {
+   "class": "lens_name",
+   "end": 37,
+   "line": 19,
+   "start": 35,
+   "token": "4h"
+  },
+  {
+   "class": "lens_name",
+   "end": 97,
+   "line": 19,
+   "start": 95,
+   "token": "1h"
+  },
+  {
+   "class": "lens_name",
+   "end": 100,
+   "line": 19,
+   "start": 98,
+   "token": "4h"
+  },
+  {
+   "class": "lens_name",
+   "end": 103,
+   "line": 19,
+   "start": 101,
+   "token": "1d"
+  },
+  {
+   "class": "tier_id",
+   "end": 31,
+   "line": 20,
+   "start": 27,
+   "token": "TC10"
+  },
+  {
+   "class": "id",
+   "end": 23,
+   "line": 21,
+   "start": 18,
+   "token": "F-D-2"
+  },
+  {
+   "class": "id",
+   "end": 49,
+   "line": 21,
+   "start": 44,
+   "token": "F-D-3"
+  },
+  {
+   "class": "ruling_or_section_id",
+   "end": 3,
+   "line": 27,
+   "start": 1,
+   "token": "V1"
+  },
+  {
+   "class": "tier_id",
+   "end": 29,
+   "line": 27,
+   "start": 23,
+   "token": "TC11-X"
+  },
+  {
+   "class": "tier_id",
+   "end": 79,
+   "line": 27,
+   "start": 71,
+   "token": "tierc11x"
+  },
+  {
+   "class": "ruling_or_section_id",
+   "end": 3,
+   "line": 32,
+   "start": 1,
+   "token": "V2"
+  },
+  {
+   "class": "lens_name",
+   "end": 101,
+   "line": 32,
+   "start": 99,
+   "token": "4h"
+  },
+  {
+   "class": "ruling_or_section_id",
+   "end": 3,
+   "line": 39,
+   "start": 1,
+   "token": "V3"
+  },
+  {
+   "class": "ruling_or_section_id",
+   "end": 97,
+   "line": 40,
+   "start": 93,
+   "token": "Q-R3"
+  },
+  {
+   "class": "ruling_or_section_id",
+   "end": 3,
+   "line": 42,
+   "start": 1,
+   "token": "V4"
+  },
+  {
+   "class": "ruling_or_section_id",
+   "end": 3,
+   "line": 44,
+   "start": 1,
+   "token": "V5"
+  },
+  {
+   "class": "id",
+   "end": 55,
+   "line": 44,
+   "start": 53,
+   "token": "v6"
+  },
+  {
+   "class": "lens_name",
+   "end": 23,
+   "line": 45,
+   "start": 21,
+   "token": "1h"
+  },
+  {
+   "class": "lens_name",
+   "end": 27,
+   "line": 45,
+   "start": 25,
+   "token": "4h"
+  },
+  {
+   "class": "lens_name",
+   "end": 32,
+   "line": 45,
+   "start": 29,
+   "token": "12h"
+  },
+  {
+   "class": "lens_name",
+   "end": 36,
+   "line": 45,
+   "start": 34,
+   "token": "1d"
+  },
+  {
+   "class": "lens_name",
+   "end": 40,
+   "line": 45,
+   "start": 38,
+   "token": "1w"
+  },
+  {
+   "class": "index_offset",
+   "end": 10,
+   "line": 46,
+   "start": 7,
+   "token": "L+1"
+  },
+  {
+   "class": "lens_name",
+   "end": 91,
+   "line": 46,
+   "start": 89,
+   "token": "1h"
+  },
+  {
+   "class": "lens_name",
+   "end": 94,
+   "line": 46,
+   "start": 92,
+   "token": "4h"
+  },
+  {
+   "class": "lens_name",
+   "end": 97,
+   "line": 46,
+   "start": 95,
+   "token": "1d"
+  },
+  {
+   "class": "id",
+   "end": 26,
+   "line": 48,
+   "start": 24,
+   "token": "v6"
+  },
+  {
+   "class": "tier_id",
+   "end": 85,
+   "line": 48,
+   "start": 81,
+   "token": "TC11"
+  },
+  {
+   "class": "id",
+   "end": 96,
+   "line": 48,
+   "start": 94,
+   "token": "v6"
+  },
+  {
+   "class": "print_format",
+   "end": 28,
+   "line": 49,
+   "start": 19,
+   "token": "0.000e+00"
+  },
+  {
+   "class": "tier_id",
+   "end": 36,
+   "line": 49,
+   "start": 32,
+   "token": "TC11"
+  },
+  {
+   "class": "id",
+   "end": 64,
+   "line": 52,
+   "start": 62,
+   "token": "v6"
+  },
+  {
+   "class": "id",
+   "end": 8,
+   "line": 53,
+   "start": 1,
+   "token": "P-ADM-1"
+  },
+  {
+   "class": "prior",
+   "end": 13,
+   "line": 53,
+   "start": 10,
+   "token": "50%"
+  },
+  {
+   "class": "tier_id",
+   "end": 8,
+   "line": 55,
+   "start": 4,
+   "token": "TC11"
+  },
+  {
+   "class": "id",
+   "end": 8,
+   "line": 57,
+   "start": 1,
+   "token": "P-BRD-1"
+  },
+  {
+   "class": "prior",
+   "end": 13,
+   "line": 57,
+   "start": 10,
+   "token": "40%"
+  },
+  {
+   "class": "id",
+   "end": 97,
+   "line": 58,
+   "start": 95,
+   "token": "X4"
+  },
+  {
+   "class": "id",
+   "end": 100,
+   "line": 59,
+   "start": 90,
+   "token": "breadth-17"
+  },
+  {
+   "class": "history_figure",
+   "end": 39,
+   "line": 62,
+   "start": 32,
+   "token": "+21.69R"
+  },
+  {
+   "class": "id",
+   "end": 8,
+   "line": 65,
+   "start": 1,
+   "token": "P-DIR-1"
+  },
+  {
+   "class": "prior",
+   "end": 13,
+   "line": 65,
+   "start": 10,
+   "token": "45%"
+  },
+  {
+   "class": "id",
+   "end": 51,
+   "line": 65,
+   "start": 49,
+   "token": "v6"
+  },
+  {
+   "class": "lens_name",
+   "end": 88,
+   "line": 65,
+   "start": 86,
+   "token": "4h"
+  },
+  {
+   "class": "tier_id",
+   "end": 36,
+   "line": 67,
+   "start": 32,
+   "token": "TC11"
+  },
+  {
+   "class": "id",
+   "end": 39,
+   "line": 67,
+   "start": 37,
+   "token": "R5"
+  },
+  {
+   "class": "history_figure",
+   "end": 46,
+   "line": 67,
+   "start": 41,
+   "token": "+0.49"
+  },
+  {
+   "class": "history_figure",
+   "end": 59,
+   "line": 67,
+   "start": 54,
+   "token": "−0.49"
+  },
+  {
+   "class": "id",
+   "end": 18,
+   "line": 68,
+   "start": 16,
+   "token": "v6"
+  },
+  {
+   "class": "lens_name",
+   "end": 24,
+   "line": 68,
+   "start": 22,
+   "token": "4h"
+  },
+  {
+   "class": "lens_name",
+   "end": 31,
+   "line": 68,
+   "start": 29,
+   "token": "1d"
+  },
+  {
+   "class": "id",
+   "end": 11,
+   "line": 69,
+   "start": 1,
+   "token": "P-SFP-VA-1"
+  },
+  {
+   "class": "prior",
+   "end": 16,
+   "line": 69,
+   "start": 13,
+   "token": "45%"
+  },
+  {
+   "class": "lens_name",
+   "end": 56,
+   "line": 69,
+   "start": 54,
+   "token": "4h"
+  },
+  {
+   "class": "ruling_or_section_id",
+   "end": 36,
+   "line": 70,
+   "start": 34,
+   "token": "V2"
+  },
+  {
+   "class": "lens_name",
+   "end": 57,
+   "line": 71,
+   "start": 51,
+   "token": "ATR_4h"
+  },
+  {
+   "class": "id",
+   "end": 67,
+   "line": 71,
+   "start": 59,
+   "token": "TARGET 1"
+  },
+  {
+   "class": "id",
+   "end": 94,
+   "line": 71,
+   "start": 86,
+   "token": "TARGET 2"
+  },
+  {
+   "class": "lens_name",
+   "end": 16,
+   "line": 72,
+   "start": 10,
+   "token": "ATR_4h"
+  },
+  {
+   "class": "lens_name",
+   "end": 48,
+   "line": 72,
+   "start": 46,
+   "token": "4h"
+  },
+  {
+   "class": "ruling_or_section_id",
+   "end": 61,
+   "line": 72,
+   "start": 59,
+   "token": "V4"
+  },
+  {
+   "class": "id",
+   "end": 60,
+   "line": 73,
+   "start": 58,
+   "token": "T2"
+  },
+  {
+   "class": "lens_name",
+   "end": 85,
+   "line": 74,
+   "start": 83,
+   "token": "1d"
+  },
+  {
+   "class": "lens_name",
+   "end": 5,
+   "line": 75,
+   "start": 3,
+   "token": "1d"
+  },
+  {
+   "class": "lens_name",
+   "end": 44,
+   "line": 75,
+   "start": 42,
+   "token": "1d"
+  },
+  {
+   "class": "lens_name",
+   "end": 48,
+   "line": 76,
+   "start": 46,
+   "token": "4h"
+  },
+  {
+   "class": "lens_name",
+   "end": 55,
+   "line": 76,
+   "start": 53,
+   "token": "1d"
+  },
+  {
+   "class": "id",
+   "end": 47,
+   "line": 79,
+   "start": 44,
+   "token": "R10"
+  },
+  {
+   "class": "lens_name",
+   "end": 56,
+   "line": 79,
+   "start": 54,
+   "token": "1d"
+  },
+  {
+   "class": "id",
+   "end": 6,
+   "line": 80,
+   "start": 4,
+   "token": "v6"
+  },
+  {
+   "class": "lens_name",
+   "end": 31,
+   "line": 80,
+   "start": 25,
+   "token": "ATR_1d"
+  },
+  {
+   "class": "lens_name",
+   "end": 41,
+   "line": 80,
+   "start": 39,
+   "token": "1d"
+  },
+  {
+   "class": "lens_name",
+   "end": 54,
+   "line": 80,
+   "start": 52,
+   "token": "1d"
+  },
+  {
+   "class": "id",
+   "end": 10,
+   "line": 83,
+   "start": 1,
+   "token": "P-SCALP-3"
+  },
+  {
+   "class": "prior",
+   "end": 15,
+   "line": 83,
+   "start": 12,
+   "token": "30%"
+  },
+  {
+   "class": "lens_name",
+   "end": 23,
+   "line": 83,
+   "start": 21,
+   "token": "1h"
+  },
+  {
+   "class": "lens_name",
+   "end": 64,
+   "line": 83,
+   "start": 62,
+   "token": "5m"
+  },
+  {
+   "class": "id",
+   "end": 68,
+   "line": 84,
+   "start": 60,
+   "token": "17-asset"
+  },
+  {
+   "class": "lens_name",
+   "end": 17,
+   "line": 85,
+   "start": 15,
+   "token": "1h"
+  },
+  {
+   "class": "lens_name",
+   "end": 66,
+   "line": 85,
+   "start": 64,
+   "token": "1h"
+  },
+  {
+   "class": "lens_name",
+   "end": 84,
+   "line": 85,
+   "start": 82,
+   "token": "4h"
+  },
+  {
+   "class": "lens_name",
+   "end": 40,
+   "line": 87,
+   "start": 38,
+   "token": "1h"
+  },
+  {
+   "class": "lens_name",
+   "end": 14,
+   "line": 89,
+   "start": 12,
+   "token": "5m"
+  },
+  {
+   "class": "lens_name",
+   "end": 36,
+   "line": 89,
+   "start": 34,
+   "token": "5m"
+  },
+  {
+   "class": "lens_name",
+   "end": 68,
+   "line": 89,
+   "start": 66,
+   "token": "5m"
+  },
+  {
+   "class": "lens_name",
+   "end": 48,
+   "line": 90,
+   "start": 42,
+   "token": "ATR_1h"
+  },
+  {
+   "class": "lens_name",
+   "end": 69,
+   "line": 90,
+   "start": 67,
+   "token": "5m"
+  },
+  {
+   "class": "lens_name",
+   "end": 94,
+   "line": 90,
+   "start": 92,
+   "token": "1h"
+  },
+  {
+   "class": "lens_name",
+   "end": 15,
+   "line": 91,
+   "start": 13,
+   "token": "5m"
+  },
+  {
+   "class": "lens_name",
+   "end": 72,
+   "line": 93,
+   "start": 70,
+   "token": "5m"
+  },
+  {
+   "class": "lens_name",
+   "end": 19,
+   "line": 95,
+   "start": 13,
+   "token": "ATR_1h"
+  },
+  {
+   "class": "lens_name",
+   "end": 89,
+   "line": 97,
+   "start": 83,
+   "token": "ATR_1h"
+  },
+  {
+   "class": "lens_name",
+   "end": 30,
+   "line": 98,
+   "start": 24,
+   "token": "ATR_1h"
+  },
+  {
+   "class": "id",
+   "end": 14,
+   "line": 99,
+   "start": 12,
+   "token": "T1"
+  },
+  {
+   "class": "id",
+   "end": 62,
+   "line": 99,
+   "start": 60,
+   "token": "T2"
+  },
+  {
+   "class": "lens_name",
+   "end": 87,
+   "line": 99,
+   "start": 81,
+   "token": "ATR_1h"
+  },
+  {
+   "class": "lens_name",
+   "end": 23,
+   "line": 100,
+   "start": 21,
+   "token": "1h"
+  },
+  {
+   "class": "ruling_or_section_id",
+   "end": 36,
+   "line": 100,
+   "start": 34,
+   "token": "V4"
+  },
+  {
+   "class": "id",
+   "end": 69,
+   "line": 100,
+   "start": 67,
+   "token": "T2"
+  },
+  {
+   "class": "lens_name",
+   "end": 94,
+   "line": 102,
+   "start": 92,
+   "token": "1h"
+  },
+  {
+   "class": "lens_name",
+   "end": 47,
+   "line": 103,
+   "start": 45,
+   "token": "4h"
+  },
+  {
+   "class": "id",
+   "end": 63,
+   "line": 108,
+   "start": 61,
+   "token": "v6"
+  },
+  {
+   "class": "id",
+   "end": 76,
+   "line": 108,
+   "start": 69,
+   "token": "P-ADM-1"
+  },
+  {
+   "class": "id",
+   "end": 13,
+   "line": 109,
+   "start": 9,
+   "token": "9/12"
+  },
+  {
+   "class": "id",
+   "end": 78,
+   "line": 110,
+   "start": 76,
+   "token": "X4"
+  },
+  {
+   "class": "print_format",
+   "end": 62,
+   "line": 114,
+   "start": 53,
+   "token": "0.000e+00"
+  },
+  {
+   "class": "id",
+   "end": 86,
+   "line": 114,
+   "start": 79,
+   "token": "F-D-2/3"
+  },
+  {
+   "class": "index_offset",
+   "end": 27,
+   "line": 115,
+   "start": 24,
+   "token": "t+1"
+  },
+  {
+   "class": "hand_sample_count",
+   "end": 102,
+   "line": 115,
+   "start": 93,
+   "token": "3 windows"
+  },
+  {
+   "class": "hand_sample_count",
+   "end": 97,
+   "line": 116,
+   "start": 84,
+   "token": "3 acceptances"
+  },
+  {
+   "class": "hand_sample_count",
+   "end": 101,
+   "line": 116,
+   "start": 100,
+   "token": "3"
+  },
+  {
+   "class": "ruling_or_section_id",
+   "end": 40,
+   "line": 117,
+   "start": 38,
+   "token": "V2"
+  },
+  {
+   "class": "hand_sample_count",
+   "end": 83,
+   "line": 118,
+   "start": 77,
+   "token": "3 bars"
+  },
+  {
+   "class": "hand_sample_count",
+   "end": 104,
+   "line": 118,
+   "start": 94,
+   "token": "3 refusals"
+  },
+  {
+   "class": "hand_sample_count",
+   "end": 33,
+   "line": 119,
+   "start": 25,
+   "token": "3 trades"
+  },
+  {
+   "class": "hand_sample_count",
+   "end": 104,
+   "line": 119,
+   "start": 96,
+   "token": "3 scalps"
+  },
+  {
+   "class": "hand_sample_count",
+   "end": 34,
+   "line": 120,
+   "start": 26,
+   "token": "3 MISSES"
+  },
+  {
+   "class": "date",
+   "end": 40,
+   "line": 126,
+   "start": 30,
+   "token": "2026-10-08"
+  },
+  {
+   "class": "tier_id",
+   "end": 48,
+   "line": 126,
+   "start": 41,
+   "token": "TIERC12"
+  },
+  {
+   "class": "ruling_or_section_id",
+   "end": 67,
+   "line": 126,
+   "start": 65,
+   "token": "§0"
+  },
+  {
+   "class": "lens_name",
+   "end": 3,
+   "line": 133,
+   "start": 1,
+   "token": "5m"
+  },
+  {
+   "class": "tier_id",
+   "end": 18,
+   "line": 134,
+   "start": 14,
+   "token": "TC11"
+  },
+  {
+   "class": "id",
+   "end": 11,
+   "line": 136,
+   "start": 9,
+   "token": "T2"
+  },
+  {
+   "class": "tier_id",
+   "end": 56,
+   "line": 137,
+   "start": 52,
+   "token": "tc11"
+  },
+  {
+   "class": "lens_name",
+   "end": 69,
+   "line": 137,
+   "start": 67,
+   "token": "1w"
+  }
+ ]
+}
