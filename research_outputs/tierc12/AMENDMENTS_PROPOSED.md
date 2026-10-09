@@ -761,3 +761,307 @@ every item of L-X.36's list. The verdict words, the clauses (a)(b)(c) and the la
 **DEFAULT TAKEN.** The pessimistic reading: the real legs of F-LEDGER [CHAIN] and [STRUCTURE] run their detector over the first five lines AND over the whole working file (working_fx: forward_log.verify_chain, the ported verify_chain, the suite's own hash loop with its byte / NaN / line-break laws; production's chain_findings S1-S7) and fail on any finding; on GREEN nothing tail-dependent is printed. Consequence to rule on: a breach in TC12-L's tail turns THIS record's [CHAIN] / [STRUCTURE] RED as well as TC12-L's own. [PREFIX] already read the whole file for the byte-prefix law; [REHASH] and [ANCESTORS] stay on lines 1-5 (their failure conditions name only those).
 
 **Status.** Ruled at the TC12-REG gate: AM-48.
+
+---
+
+## AP-48 · 2026-10-09 (~23:36Z) · L-0.22, L-D.3, L-D.5, L-D.6, L-D.11, L-D.24 · TC12-D (fix pass)
+
+**Title.** CLOSURE-REACH at TC12-D: the closure suite asserts 'no lineage reach' at every stage before TC12-ENV, but the readings order the Stage D builder to import the lineage (verifier D-1, BLOCKING at the gate)
+
+**Readings.** L-0.22 (FAILS-IF, lines 1456-1459), L-D register of constants (2019, 2024, 2028), L-D.3, L-D.5, L-D.6, L-D.11, L-D.24
+
+**The texts.** L-0.22: "At `--stage=TC12-REG` the suite runs `[ii]` and `[iii]` only (no module then in scope reaches the lineage, asserted); legs (i), (i-b), (iv) and (v) need the shim and first run at TC12-ENV". L-D register: "`MS_4H` and every native step | `engine.cells.INTERVAL_MS`"; "taker bps per side ... the objects `tierc2_rules.FEE_BPS_SIDE`, `FEE_BPS_ROUND_TRIP`"; "drive-wait attempts · delay | the objects `drive_wait.DEFAULT_ATTEMPTS`, `DEFAULT_DELAY`". L-D.3: "Guard `guard_substrate(env)`, at import of `scripts/tierc12_data.py`, before `engine.data` is imported". L-D.6: "`ED._save_cache` (merge, no-shrink ...)", "`ED.backfill_funding`". L-D.24: "`r = wait_for_drive("/Volumes/LaCie")`".
+
+**The fact.** scripts/tierc12_closure_fixtures.py:1387 `if not stage_at_least(stage, SHIM_STAGE_T) and (walk["lineage"] or walk["tc10"])` raises CLOSURE-REACH at every stage before TC12-ENV. Re-measured in the fix pass into a scratch --root: exit 1, 5 GREEN, 1 RED (F-CLOSURE [ii]); the one finding: 'at TC12-D no module in scope may reach the lineage; the static closure holds [drive_wait, engine, engine.cells, engine.data, engine.htf, engine.indicators, engine.journal, engine.s1, engine.shadows, engine.signals, engine.trading, tierc2_rules]'. No tierc10_* / tierc11_* module, no shim and no analytics module is reached; no PIN-LITERAL, TICK-LITERAL, TICK-FLOAT-COMPARE or F-TYPED finding. Nothing in TC12-D's own files can remove the finding without breaking L-D.
+
+**DEFAULT TAKEN.** Stage D built as L-D orders (the four lineage imports stand; tierc12_data.py never imports the shim, tierc10_data or tierc11_data). The closure suite is not this unit's file and was not touched. Proposed mechanics for the orchestrator's ruling: bind the no-reach assertion at --stage=TC12-REG only, or admit a typed, disclosed Stage D lineage set reachable from tierc12_data alone (the twelve names above), keeping the TC12-REG transcript of record byte-identical; then re-run the closure suite at --stage=TC12-D and file its transcript at the gate.
+
+**Status.** Ruled at the TC12-D gate: AM-49.
+
+---
+
+## AP-49 · 2026-10-09 (~23:36Z) · L-D.18, L-D.19, L-D.20, L-D.21 · TC12-D (fix pass)
+
+**Title.** AM-D-FEE-BINANCE_USDTM / AM-D-FEE-BYBIT_V5_LINEAR: NULL grammar for both venues — neither fee page was retrievable with the library's default headers; the maker pin is the figure on file, flagged
+
+**Readings.** L-D.18, L-D.19, L-D.20, L-D.21, O-19, resume paste ["maker-bps"]
+
+**The texts.** L-D.18: "one request per venue through `ED._get` (its transport retries included, each an `http` log row) with the library's default headers — no forged browser identity"; "A failed capture is a filed status — never a HALT"; "UNRETRIEVABLE with a reason from the closed set {`transport`, `http_<status>`, `off_domain_redirect`, `no_entry_tier_label`, `no_rate_in_body`, `ambiguous`}"; "Where the saved body holds no qualifying figure ..., the amendment files a NULL grammar with the reason (`no_entry_tier_label` or `no_rate_in_body`)"; "What is recorded if unretrievable (O-19): ... `maker_kind = "ON FILE — NOT RE-CONFIRMED"` ... For `BYBIT_V5_LINEAR` the same on-file figure is applied and marked "ASSUMPTION — NOT RE-CONFIRMED; no Bybit figure is on file""; "No figure ever enters by keyboard."
+
+**The fact.** data/FEE_SOURCE.json (sealed): https://www.binance.com/en/fee/futureFee answered HTTP 202 on each of the transport's 4 attempts; https://www.bybit.com/en/help-center/article/Trading-Fee-Structure HTTP 403 on each of 4 (8 http rows, phase fee_source, attempt date 2026-10-09). engine.data._get returns a response only on 200 / 404, so NO body exists: body_path / body_sha256 / body_bytes are null, ~/.cache/naiad/provenance/tc12_20261008/ was never created, and there are no bytes to fix a grammar against. The reading's NULL-grammar reasons presuppose a saved body; here the reason is the acceptance set's `http_202` / `http_403`.
+
+**DEFAULT TAKEN.** data/FEE_GRAMMAR.json filed with `venues` {BINANCE_USDTM: null, BYBIT_V5_LINEAR: null}, `amendment` null and `why_null` per venue; --manifest does not HALT (a grammar is required only for a venue captured with HTTP 200). maker_bps_side = 2.0 bps/side on both venues, read from README.md:150 by the regex `maker is (\d+(?:\.\d+)?)%` x pct_to_bps (never typed): BINANCE_USDTM 'ON FILE — NOT RE-CONFIRMED', BYBIT_V5_LINEAR 'ASSUMPTION — NOT RE-CONFIRMED; no Bybit figure is on file'. maker_retrieved_utc_date null, maker_retrieval_attempted_utc_date 2026-10-09. F-TOLL [data d] and [data f] REAL halves assert exactly this from FEE_SOURCE.json. Nothing is mirrored under /Volumes/LaCie/Naiad/provenance/tc12_20261008/ (0 bodies; the directory was not created). The operator's veto "maker-bps" remains the only door for a hand-given figure.
+
+**Status.** Ruled at the TC12-D gate: AM-50.
+
+---
+
+## AP-50 · 2026-10-09 (~23:36Z) · L-D.11, L-D.15 · TC12-D (fix pass)
+
+**Title.** Port labels follow what F-D-PORT can prove against D11; D11's dead helper `_port_tag` is not ported (verifier D-9, first half)
+
+**Readings.** L-D.11 (the port law), L-D.15 (F-D-PORT)
+
+**The texts.** L-D.11: "TEXT-ONLY: `extend_klines`, `extend_funding`, `capture_contract_specs`, `load_pin`. CHANGED, each named: ... `write_pre_state` (TC11 shas per row) ... `seal_provenance` (seven sealed files) ... Everything else D11 defines is VERBATIM." L-D.15 F-D-PORT: "a port labelled VERBATIM is not AST-identical ...; a port labelled TEXT-ONLY differs from it once string constants are blanked; ... or the port set read off the comments is not `PORTS`".
+
+**The fact.** PORTS holds 95 rows: 63 VERBATIM, 22 CHANGED, 10 TEXT-ONLY. By AST against scripts/tierc11_data.py at the sha TC11's PROGRESS certifies: write_pre_state differs from D11's only in string constants (the reading lists it CHANGED); _assert_bound, clone_findings, contract_multiplier_table, cache_manifest_staleness and summarize differ only in strings (the reading's 'everything else is VERBATIM'); seal_provenance is AST-identical and the change sits in its module constant SEALED_FILES (seven files). D11's tc10_expected_shas / tc10_pin_keys / _tc10_manifest are ported under tc11_* names (CHANGED). D11's unused helper `_port_tag` (tierc11_data.py:182, defined once, never called; it formats a TC10 port tag from TC10_SRC_SHA256) is neither ported nor in PORTS.
+
+**DEFAULT TAKEN.** Each label is the strongest one the AST supports: 10 TEXT-ONLY (the reading's four plus write_pre_state, _assert_bound, clone_findings, contract_multiplier_table, cache_manifest_staleness, summarize); seal_provenance VERBATIM with the constant SEALED_FILES labelled CHANGED. `_port_tag` not ported (dead code naming TC10's source sha). No logic differs from what the reading orders; F-D-PORT GREEN.
+
+**Status.** Ruled at the TC12-D gate: AM-51.
+
+---
+
+## AP-51 · 2026-10-09 (~23:36Z) · L-D.22, L-D.11, L-0.17 · TC12-D (fix pass)
+
+**Title.** CONTRACT_SPECS.json keeps the referee's `law` sentence whole — it names TIER-C11 and does not itself say 'point-in-time' (verifier D-4)
+
+**Readings.** L-D.22, L-D.11 (capture_contract_specs TEXT-ONLY), L-0.17 / AM-38 (the statement rule of F-TYPED)
+
+**The texts.** L-D.22: "It is a point-in-time venue spec taken at the fetch run, hours after the pin; the record says so." L-D.11: "TEXT-ONLY: ... `capture_contract_specs`". The quotation law: "A literal inside a function proven AST-identical to its filed source (F-D-PORT) ... is a QUOTATION of that source".
+
+**The fact.** The sealed, write-once data/CONTRACT_SPECS.json `law` reads "...in TIER-C11 the capture is also the proof that every symbol of record is TRADING" (D11's filed sentence). Under AM-38's statement rule a string-changed statement in that function would have the referee's numeric literal read as a typed number (F-TYPED RED), so the statement was kept whole. The record does carry captured_wall_clock_utc 2026-10-09T22:18:03Z (26.3 h after the pin) and its as-of stamps; the point-in-time sentence is in data/TICK_GRID_AUDIT.json `law` and the manifest's tick_of_record block. The file is sealed (WRITE_ONCE_SEAL.json) and cannot be edited without a new fetch.
+
+**DEFAULT TAKEN.** Bytes left as sealed; the sentence is accepted as a TEXT-ONLY quotation of the referee; the fact is returned as a build disclosure for the B-1 entry.
+
+**Status.** Ruled at the TC12-D gate: AM-52.
+
+---
+
+## AP-52 · 2026-10-09 (~23:36Z) · L-D.15, L-D.20 · TC12-D (fix pass)
+
+**Title.** F-D-DET's AST clock leg: which calls count as a clock
+
+**Readings.** L-D.15 (F-D-DET), L-D.20
+
+**The texts.** L-D.15: "OR the call graph of `write_manifest` holds a `time.` / `datetime.` call (AST)". L-D.20: "`--manifest` makes no clock call."
+
+**The fact.** The call graph of write_manifest lawfully holds pure conversions of filed integers and strings (datetime.fromtimestamp of a filed ms stamp, strptime of a filed ISO string) — read literally, the leg would be RED on the real tree by construction.
+
+**DEFAULT TAKEN.** The leg counts time.* and datetime.now / utcnow / today as clock calls; fromtimestamp / strptime conversions of filed values are not clocks. The planted mutation (a fee_schedule() copy stamping datetime.now()'s date) is RED by the AST leg.
+
+**Status.** Ruled at the TC12-D gate: AM-53.
+
+---
+
+## AP-53 · 2026-10-09 (~23:36Z) · L-D.11, L-D.20, L-0.20 · TC12-D (fix pass)
+
+**Title.** The determinism set carries sealed wall-clock STRINGS and the absolute snapshot_root (verifier D-6)
+
+**Readings.** L-D.11 (key-for-key schema; the determinism set), L-D.20, L-0.20
+
+**The texts.** L-D.11: "reproduces TC11's manifest schema KEY FOR KEY (41 top-level keys ...)"; "with no network and no clock call". L-D.20: "The retrieval INSTANT ... lives ONLY in the provenance set"; "The same law covers `CONTRACT_SPECS.json`'s capture stamp ...: the manifest pins that file's BYTES by sha and never carries its clock."
+
+**The fact.** STAGE_D_MANIFEST.json `write_once.disclosure` (TC11's key; seal_provenance / the seal reader are VERBATIM ports and TC11's manifest did the same) holds seven 'last written <stamp>' sentences plus the last fetch-row stamp, copied from the sealed WRITE_ONCE_SEAL.json — among them CONTRACT_SPECS.json's 2026-10-09T22:18:03Z. `snapshot_root` and the .md header hold /Users/luis/.cache/naiad/snapshots/tc12_20261008. No clock call is made (F-D-DET's AST leg and two-seed twins GREEN; rebuilds reproduce the filed bytes on any day), but under another HOME the bytes differ (verifier: byte 475193 of the .json, byte 161 of the .md).
+
+**DEFAULT TAKEN.** L-D.11's key-for-key port kept (TC11's form); the strings are sealed data, not a clock. Any review run must use the same HOME path. If the orchestrator rules L-D.20's 'never carries its clock' to bind this key, the change is a mechanics amendment to --manifest (drop or sha-point the disclosure sentences), moving the manifest sha and the mirror's self-describing copy.
+
+**Status.** Ruled at the TC12-D gate: AM-54.
+
+---
+
+## AP-54 · 2026-10-09 (~23:36Z) · L-0.9, L-0.4, L-D.11 · TC12-D (fix pass)
+
+**Title.** No outside-repo path in artifact_shas: the snapshot is pinned through the tracked manifest
+
+**Readings.** L-0.9 (the record's keys), L-0.4 (tierc12_progress.certified), L-D.11
+
+**The texts.** The unit text: "artifact_shas {repo-relative path (or absolute path for a file outside the repo): {bytes, sha256}}". L-0.4: certified() is "THE ONE HELPER OF EVERY SHA-FIRST READER".
+
+**The fact.** tierc12_progress.certified() resolves a path relative to the repo root; measured: certified('/Users/luis/.cache/naiad/snapshots/tc12_20261008/MANIFEST.json') raises ValueError ('is not in the subpath of /Users/luis/Naiad'). The snapshot is 176 files, 859258689 bytes.
+
+**DEFAULT TAKEN.** No outside-repo path is in TC12-D.json artifact_shas. Every snapshot file's sha256, bytes and content_sha is pinned in the tracked data/STAGE_D_MANIFEST.json (files[] 124 + out_of_scope_snapshot_files[] 52), which the record pins by sha dcddc5f7…e8b8; the fix pass re-hashed all 176 local files and all 176 mirrored files equal to it.
+
+**Status.** Ruled at the TC12-D gate: AM-55.
+
+---
+
+## AP-55 · 2026-10-09 (~23:36Z) · L-0.20, L-0.21, L-D.11, L-D.15 · TC12-D (fix pass)
+
+**Title.** No F-DET / F-KEY helper instance, no build_manifest.json and no STAGE_D.md at this record
+
+**Readings.** L-0.20 (F-DET), L-0.21 (F-KEY), L-D.11, L-D.15
+
+**The texts.** L-0.20: "For every directory a record writes parquet into ...". L-0.21: "per parquet directory". L-D.11: "`data/STAGE_D_MANIFEST.json` (+ `.md`)" and the determinism set of four files; L-D.15 names F-D-DET as the determinism leg of data/FIXTURES_DATA.txt.
+
+**The fact.** Stage D writes no parquet directory under research_outputs/tierc12 (its parquet is the snapshot, outside the repo, pinned by the manifest). The readings name STAGE_D_MANIFEST.json / .md as the directory's tracked manifest and document; no reading of L-D names a build_manifest.json or a STAGE_D.md.
+
+**DEFAULT TAKEN.** F-D-DET (two hash-seed subprocess builds of the four determinism-set files, the filed bytes, the AST clock leg, parquet content shas) is this record's determinism leg; no F-KEY instance; no build_manifest.json and no STAGE_D.md filed.
+
+**Status.** Ruled at the TC12-D gate: AM-56.
+
+---
+
+## AP-56 · 2026-10-09 (~23:36Z) · L-D.6, L-D.5 · TC12-D (fix pass)
+
+**Title.** A resumed --fetch re-asks the thirteen 8h funding tapes
+
+**Readings.** L-D.6 (funding), L-D.5 (F-D-FETCHPATH)
+
+**The texts.** L-D.6: "A tape whose edge already floors to the pin's hour is skipped ("nothing can be due"). ... This is D11's `extend_funding` with its logic unchanged (D11:1359-1383; TEXT-ONLY)." L-D.5 F-D-FETCHPATH: "a `--fetch` resume over the filed snapshot asks or saves anything".
+
+**The fact.** The thirteen 8h tapes end at the 2026-10-08T16:00Z print, one print before the pin's hour (20:00Z is a funding hour of the four 4h tapes only), so D11's skip test is false for them and a resume asks the venue again; the venue returns nothing new and no content moves.
+
+**DEFAULT TAKEN.** D11's logic kept unchanged (TEXT-ONLY). F-D-FETCHPATH holds the resume on CONTENT (nothing saved, no kline asked). --fetch was run exactly once on the real snapshot.
+
+**Status.** Ruled at the TC12-D gate: AM-57.
+
+---
+
+## AP-57 · 2026-10-09 (~23:36Z) · L-D.6, L-D.14, L-D.15, L-D.11 · TC12-D (fix pass)
+
+**Title.** Funding contiguity INSIDE the extension is held by no leg (verifier D-5; a coverage observation, not a breach)
+
+**Readings.** L-D.6 (row accounting), L-D.14 (F-D-3), L-D.15 (F-D-EDGE), L-D.11 (`complete`)
+
+**The texts.** L-D.6: "Row accounting, asserted per native kline file". L-D.14: "`last_ms + FUNDING_JITTER_MS ≥ PIN − ivl × MS_1H`". L-D.15 F-D-EDGE: "a funding tape stops short of the pin's hour, repeats a print or holds a print past pin + jitter".
+
+**The fact.** The readings check a funding tape's edge, duplicates and the funding-hour law, not that the prints TC12 added form an unbroken cadence. The verifier's mutant (funding/ZECUSDT.parquet, print 1790928000000 removed, a 16 h hole) is caught only because the file no longer matches the filed manifest; a manifest rebuilt over the holed tape reads complete and F-D-3 stays GREEN. Re-measured in the fix pass on the filed tapes: one constant floor-hour spacing on each of the 17 (thirteen 8h x 41 prints, four 4h x 83 = 865) and prints added == (last due hour <= the pin − TC11's pin) / cadence on every tape — no hole.
+
+**DEFAULT TAKEN.** Built as the readings state; no leg added. If the orchestrator wants it held: a detector in F-D-EDGE (and a clause of `complete`) — per tape, prints added == (last due floor hour <= pin − TC11 pin) / observed cadence, with one constant spacing — and a plant (one print removed mid-extension, the manifest rebuilt on the copy).
+
+**Status.** Ruled at the TC12-D gate: AM-58.
+
+---
+
+## AP-58 · 2026-10-09 (~23:36Z) · L-D.23 · TC12-D (fix pass)
+
+**Title.** TickGrid.lt / le / gt / ge do not type-check the level n (verifier D-7)
+
+**Readings.** L-D.23, O-20
+
+**The texts.** L-D.23: "The four comparisons against a grid level `n × T`, each an INTEGER comparison, exact for off-grid `x` too"; "No float subtraction, no float comparison, no tolerance."
+
+**The fact.** px(n) HALTs on a non-int n; the four comparisons do not: `TickGrid('0.10').lt(0.3, 3.5)` returns False with no HALT (an int-against-float comparison), `TickGrid('0.10').px(1.5)` -> 'HALT: TickGrid: px(n) takes an int level, got float'. No live path: consumers take n from floor_ticks / ceil_ticks (ints) and F-TICK [a] enumerates int levels.
+
+**DEFAULT TAKEN.** Left as filed, as the verifier advises (the change moves scripts/tierc12_tick.py's sha and F-TICK [a]'s source-copy plants). Proposed for a later ruled change: `if type(n) is not int: halt(...)` at the head of the four comparisons plus one F-TICK [a] case (a float level must HALT); until then a consumer must pass an int level.
+
+**Status.** Ruled at the TC12-D gate: AM-59.
+
+---
+
+## AP-59 · 2026-10-09 (~23:36Z) · L-D.19, L-D.1, L-D.18 · TC12-D (fix pass)
+
+**Title.** Additive keys beyond the readings' tables in fee_schedule.json, AS_OF_PIN.json and FEE_SOURCE.json (verifier D-9, second half)
+
+**Readings.** L-D.19 (the schema), L-D.1 (the pin record's keys), L-D.18 (FEE_SOURCE.json's keys)
+
+**The texts.** L-D.19's venue-block table and `maker_pin` row; L-D.1: "plus: `tc11_pin_close_ms`, `tc11_pin`, `bars_4h_past_tc11_pin`, `step_q` {`commit`, `instant`, `record_path`, `record_sha256`, `contract_path`, `contract_sha256`}, `pin_derivation`, `bybit_server_time_ms`, `bybit_kline_of_pinned_bar`, `bybit_pin_bar_closed`"; L-D.18: "per venue: `url`, `final_url`, `http_status`, `error`, `body_path`, `body_sha256`, `body_bytes`, `retrieved_wall_clock_utc`, `retrieved_utc_date`".
+
+**The fact.** fee_schedule.json: each venues[<VENUE>] block carries maker_retrieval_http_status and maker_unretrievable_reason; maker_pin carries x_assumed_source {path, sha256, certified_by}. AS_OF_PIN.json carries step_q.instant_iso and bybit_closure_law, bybit_kline_endpoint, bybit_server_time, o7_printed. FEE_SOURCE.json carries per venue http_requests_logged, redirects, venue_domain. Every key the readings name is present with the value they define; nothing is renamed or removed.
+
+**DEFAULT TAKEN.** Kept: all additive provenance. AS_OF_PIN.json and FEE_SOURCE.json are write-once and sealed and cannot be rewritten without a new fetch; fee_schedule.json is in the determinism set and reproduces byte for byte.
+
+**Status.** Ruled at the TC12-D gate: AM-60.
+
+---
+
+## AP-60 · 2026-10-09 (~23:36Z) · L-D.24 · TC12-D (fix pass)
+
+**Title.** F-MIRROR's BREAK half plants on a temp copy of the mirror's funding tree, not of the whole mirror
+
+**Readings.** L-D.24
+
+**The texts.** L-D.24: "Mutation: one byte flipped in a TEMP copy of the mirror tree → RED at "sha != manifest"; one file removed from the temp copy → RED at "file set"."
+
+**The fact.** The mirror tree is 859 MB; the BREAK half copies the destination's funding/ subtree (21 files) to $TMPDIR and runs the same comparator (mirror_tree_findings) on it against the manifest's rows for those paths; the REAL half re-reads all 176 destination files.
+
+**DEFAULT TAKEN.** The plants (one flipped byte, one removed file, one altered sha in a copy of the attestation) run on the 21-file temp copy with an unbent control; the comparator is the one the REAL half uses.
+
+**Status.** Ruled at the TC12-D gate: AM-61.
+
+---
+
+## AP-61 · 2026-10-09 (~23:36Z) · L-D.18 · TC12-D (build)
+
+**Title.** A fee page answered with a status other than 200 / 404 leaves no body to save
+
+**Readings.** L-D.18 (Act 1 — CAPTURE)
+
+**The texts.** L-D.18: 'one request per venue through ED._get (its transport retries included...)' and 'The response body is saved byte for byte'.
+
+**The fact.** engine.data._get returns a response only on 200 or 404; on 202 / 403 it retries 4 times and raises RuntimeError, discarding every response. Both pages answered that way.
+
+**DEFAULT TAKEN.** Through ED._get as the reading orders; FEE_SOURCE.json files http_status (the last attempt's, read from the logged http rows), the error text, http_requests_logged = 4, null body_path / body_sha256 / body_bytes. No fee_source body file exists and ~/.cache/naiad/provenance/ was not created.
+
+**Status.** Ruled at the TC12-D gate: AM-62.
+
+---
+
+## AP-62 · 2026-10-09 (~23:36Z) · L-D.5 · TC12-D (build)
+
+**Title.** --all returns 2 before the derivation and the seal when the fetch is incomplete
+
+**Readings.** L-D.5 ('--all = steps 2 -> clock row -> 3a-3f -> 4 -> 5 -> 6 (D11's run_all)')
+
+**The texts.** L-D.5: 'the 3f record is not filed while a venue it must ask cannot be reached'; L-D.11: FLAT_BAR_ATTEST.json is one of the seven SEALED_FILES.
+
+**The fact.** D11's run_all derived, sealed and described even when the fetch was incomplete. With FLAT_BAR_ATTEST.json among the sealed files and filed only after a complete extension, sealing an incomplete fetch would crash on the absent record or seal a partial log.
+
+**DEFAULT TAKEN.** run_all (CHANGED, named in PORTS) returns exit 2 right after an incomplete fetch; nothing is derived, sealed or described until a re-run completes. The build of record ran the subcommands one by one in L-D.5's order (--clone, --pin, --fetch, --derive, --seal, --manifest, fixtures, --mirror, mirror fixture), each once and complete.
+
+**Status.** Ruled at the TC12-D gate: AM-63.
+
+---
+
+## AP-63 · 2026-10-09 (~23:36Z) · L-D.24, L-D.11 · TC12-D (build)
+
+**Title.** MIRROR_ATTEST.json cannot name the volume's filesystem without a second out-of-process site
+
+**Readings.** L-D.24 (step 6: 'destination, volume filesystem, drive_wait state...'), L-D.11 ('exactly ONE out-of-process call')
+
+**The texts.** L-D.11: 'tierc12_data.py holds exactly ONE out-of-process call, a literal argv: cp -cpR'.
+
+**The fact.** Python's os.statvfs does not expose the filesystem type name on macOS; reading it needs `mount` (a subprocess) or a typed ctypes struct.
+
+**DEFAULT TAKEN.** MIRROR_ATTEST.json files `volume_observed`: os.statvfs fields, case_insensitive = True (measured on the destination) and a sentence that the name is not read by the module. The mirror child record's notes carry what `mount` printed in the builder's shell: /dev/disk6s2 on /Volumes/LaCie (exfat).
+
+**Status.** Ruled at the TC12-D gate: AM-64.
+
+---
+
+## AP-64 · 2026-10-09 (~23:36Z) · L-D.23, L-S.11, L-S.15, L-R.24 · TC12-D (build)
+
+**Title.** TickGrid: an inexact quotient under grid.ctx raises MemoryError, not decimal.Inexact
+
+**Readings.** L-D.23 (the trapping context; 'a quotient that is not exact raises at this precision and is a HALT'); consumers L-S.11, L-S.15, L-R.24
+
+**The texts.** L-D.23: 'A decimal signal surfaces as a HALT (SystemExit), never as a rounded value.'
+
+**The fact.** Measured: with prec = decimal.MAX_PREC and Inexact trapped, CPython answers Decimal(1) / Decimal(3) under ctx with MemoryError. It still raises and never rounds, but it is not a decimal.DecimalException.
+
+**DEFAULT TAKEN.** TickGrid's own operations (+, -, x, divmod) catch (decimal.DecimalException, MemoryError) and HALT. A consumer forming its own expression under decimal.localcontext(grid.ctx) must treat MemoryError as the same HALT — stated in the module docstring. lt / gt are written with the level formed in a statement of its own (below = n - 1; above = n + 1), so no BinOp stands under a comparison (AM-34).
+
+**Status.** Ruled at the TC12-D gate: AM-65.
+
+---
+
+## AP-65 · 2026-10-09 (~23:36Z) · L-D.3, L-D.15, L-D.1 · TC12-D (build)
+
+**Title.** F-D-GUARD's equality-removed mutant, and step_q.instant
+
+**Readings.** L-D.3 (FAILS-IF), L-D.15 (F-D-GUARD), L-D.1 (the pin record's keys)
+
+**The texts.** L-D.3: 'a copy of the guard with its final equality test removed ACCEPTS the planted TC11 path'. L-D.1: step_q {commit, instant, ...}; 'this reading's ct_ms, filed as step_q.instant'.
+
+**The fact.** The same reading puts the TC11 snapshot on the guard's refusal list, so removing only the final equality test still refuses the TC11 path (it then accepts a foreign directory holding klines/).
+
+**DEFAULT TAKEN.** Two mutants, both caught: equality removed (GUARD-ACCEPTS a foreign directory), and equality plus the TC11 refusal row removed (GUARD-ACCEPTS the TC11 snapshot). AS_OF_PIN.json step_q.instant = ct_ms 1791499933000 with step_q.instant_iso '2026-10-08T22:52:13Z' beside it; extra provenance keys o7_printed, bybit_server_time, bybit_kline_endpoint, bybit_closure_law were added.
+
+**Status.** Ruled at the TC12-D gate: AM-66.
+
+---
+
+## AP-66 · 2026-10-09 (~23:36Z) · L-X.21, L-X.20, L-0.4 · the orchestrator at TC12-D
+
+**Title.** F-ATTEST-ORDER [REG] holds a listed REG_SET script to its listed sha for good, so a lawful repair of one after the registry commit turns the leg RED
+
+**Readings.** L-X.21, L-X.20, L-0.4
+
+**The texts.** L-X.21 clause 3: ATTEST_REG.json is 'the listing … of every file then on disk …, taken after --file'. As built (AP-45 / AM-46) the leg holds every listed path outside LATER_T and the two append-only texts to its listed sha against the WORKING file.
+
+**The fact.** The registry builder reported it at TC12-REG as a known hazard; at TC12-D it is met: the closure suite (a listed REG_SET script) must be repaired under AM-49, and the leg itself lives in another listed script.
+
+**DEFAULT TAKEN.** (no builder default: an orchestrator ruling)
+
+**Status.** Ruled at the TC12-D gate: AM-67.

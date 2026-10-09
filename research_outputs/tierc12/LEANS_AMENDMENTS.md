@@ -632,3 +632,231 @@ row's population, arms, statistic, verdict rule or labels moves.
 (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
 
 **Redone.** Nothing: the stage was built under this default.
+
+---
+
+## AM-49 · 2026-10-09 (~23:36Z) · L-0.22, L-D.3, L-D.5, L-D.6, L-D.11, L-D.24 · ruling on AP-48
+
+**Text amended.** L-0.22 (FAILS-IF, lines 1456-1459), L-D register of constants (2019, 2024, 2028), L-D.3, L-D.5, L-D.6, L-D.11, L-D.24 — CLOSURE-REACH at TC12-D: the closure suite asserts 'no lineage reach' at every stage before TC12-ENV, but the readings order the Stage D builder to import the lineage (verifier D-1, BLOCKING at the gate)
+
+**Amended to.** RULED BY THE ORCHESTRATOR (not the builder's default): the no-lineage-reach assertion of the closure suite binds at `--stage=TC12-REG` ONLY, as L-0.22's FAILS-IF line states it ('At --stage=TC12-REG the suite runs [ii] and [iii] only (no module then in scope reaches the lineage, asserted)'). From `--stage=TC12-D` on, the static reach of each non-fixture module is PRINTED as a disclosed set and a module of TC12-D may reach only `engine.*`, `tierc2_rules` and `drive_wait` (the lineage L-D.3, L-D.5, L-D.11 and L-D.24 name); a reach into a `tierc10_*` / `tierc11_*` module, the shim or a value-area module from a Stage D source stays RED. `scripts/tierc12_closure_fixtures.py` is repaired under this amendment; its `--stage=TC12-REG` behaviour does not change.
+
+**Reason.** A build fact met at TC12-D; the orchestrator's ruling replaces the builder's default here. Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** The artifact named is repaired under this amendment before the TC12-D gate; its transcripts are re-filed and re-recorded by TC12-D's record.
+
+---
+
+## AM-50 · 2026-10-09 (~23:36Z) · L-D.18, L-D.19, L-D.20, L-D.21 · ruling on AP-49
+
+**Text amended.** L-D.18, L-D.19, L-D.20, L-D.21, O-19, resume paste ["maker-bps"] — AM-D-FEE-BINANCE_USDTM / AM-D-FEE-BYBIT_V5_LINEAR: NULL grammar for both venues — neither fee page was retrievable with the library's default headers; the maker pin is the figure on file, flagged
+
+**Amended to.** data/FEE_GRAMMAR.json filed with `venues` {BINANCE_USDTM: null, BYBIT_V5_LINEAR: null}, `amendment` null and `why_null` per venue; --manifest does not HALT (a grammar is required only for a venue captured with HTTP 200). maker_bps_side = 2.0 bps/side on both venues, read from README.md:150 by the regex `maker is (\d+(?:\.\d+)?)%` x pct_to_bps (never typed): BINANCE_USDTM 'ON FILE — NOT RE-CONFIRMED', BYBIT_V5_LINEAR 'ASSUMPTION — NOT RE-CONFIRMED; no Bybit figure is on file'. maker_retrieved_utc_date null, maker_retrieval_attempted_utc_date 2026-10-09. F-TOLL [data d] and [data f] REAL halves assert exactly this from FEE_SOURCE.json. Nothing is mirrored under /Volumes/LaCie/Naiad/provenance/tc12_20261008/ (0 bodies; the directory was not created). The operator's veto "maker-bps" remains the only door for a hand-given figure.
+
+**Reason.** A build fact met at TC12-D, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the stage was built under this default.
+
+---
+
+## AM-51 · 2026-10-09 (~23:36Z) · L-D.11, L-D.15 · ruling on AP-50
+
+**Text amended.** L-D.11 (the port law), L-D.15 (F-D-PORT) — Port labels follow what F-D-PORT can prove against D11; D11's dead helper `_port_tag` is not ported (verifier D-9, first half)
+
+**Amended to.** Each label is the strongest one the AST supports: 10 TEXT-ONLY (the reading's four plus write_pre_state, _assert_bound, clone_findings, contract_multiplier_table, cache_manifest_staleness, summarize); seal_provenance VERBATIM with the constant SEALED_FILES labelled CHANGED. `_port_tag` not ported (dead code naming TC10's source sha). No logic differs from what the reading orders; F-D-PORT GREEN.
+
+**Reason.** A build fact met at TC12-D, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the stage was built under this default.
+
+---
+
+## AM-52 · 2026-10-09 (~23:36Z) · L-D.22, L-D.11, L-0.17 · ruling on AP-51
+
+**Text amended.** L-D.22, L-D.11 (capture_contract_specs TEXT-ONLY), L-0.17 / AM-38 (the statement rule of F-TYPED) — CONTRACT_SPECS.json keeps the referee's `law` sentence whole — it names TIER-C11 and does not itself say 'point-in-time' (verifier D-4)
+
+**Amended to.** Bytes left as sealed; the sentence is accepted as a TEXT-ONLY quotation of the referee; the fact is returned as a build disclosure for the B-1 entry.
+
+**Reason.** A build fact met at TC12-D, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the stage was built under this default.
+
+---
+
+## AM-53 · 2026-10-09 (~23:36Z) · L-D.15, L-D.20 · ruling on AP-52
+
+**Text amended.** L-D.15 (F-D-DET), L-D.20 — F-D-DET's AST clock leg: which calls count as a clock
+
+**Amended to.** The leg counts time.* and datetime.now / utcnow / today as clock calls; fromtimestamp / strptime conversions of filed values are not clocks. The planted mutation (a fee_schedule() copy stamping datetime.now()'s date) is RED by the AST leg.
+
+**Reason.** A build fact met at TC12-D, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the stage was built under this default.
+
+---
+
+## AM-54 · 2026-10-09 (~23:36Z) · L-D.11, L-D.20, L-0.20 · ruling on AP-53
+
+**Text amended.** L-D.11 (key-for-key schema; the determinism set), L-D.20, L-0.20 — The determinism set carries sealed wall-clock STRINGS and the absolute snapshot_root (verifier D-6)
+
+**Amended to.** L-D.11's key-for-key port kept (TC11's form); the strings are sealed data, not a clock. Any review run must use the same HOME path. If the orchestrator rules L-D.20's 'never carries its clock' to bind this key, the change is a mechanics amendment to --manifest (drop or sha-point the disclosure sentences), moving the manifest sha and the mirror's self-describing copy.
+
+**Reason.** A build fact met at TC12-D, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the stage was built under this default.
+
+---
+
+## AM-55 · 2026-10-09 (~23:36Z) · L-0.9, L-0.4, L-D.11 · ruling on AP-54
+
+**Text amended.** L-0.9 (the record's keys), L-0.4 (tierc12_progress.certified), L-D.11 — No outside-repo path in artifact_shas: the snapshot is pinned through the tracked manifest
+
+**Amended to.** No outside-repo path is in TC12-D.json artifact_shas. Every snapshot file's sha256, bytes and content_sha is pinned in the tracked data/STAGE_D_MANIFEST.json (files[] 124 + out_of_scope_snapshot_files[] 52), which the record pins by sha dcddc5f7…e8b8; the fix pass re-hashed all 176 local files and all 176 mirrored files equal to it.
+
+**Reason.** A build fact met at TC12-D, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the stage was built under this default.
+
+---
+
+## AM-56 · 2026-10-09 (~23:36Z) · L-0.20, L-0.21, L-D.11, L-D.15 · ruling on AP-55
+
+**Text amended.** L-0.20 (F-DET), L-0.21 (F-KEY), L-D.11, L-D.15 — No F-DET / F-KEY helper instance, no build_manifest.json and no STAGE_D.md at this record
+
+**Amended to.** F-D-DET (two hash-seed subprocess builds of the four determinism-set files, the filed bytes, the AST clock leg, parquet content shas) is this record's determinism leg; no F-KEY instance; no build_manifest.json and no STAGE_D.md filed.
+
+**Reason.** A build fact met at TC12-D, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the stage was built under this default.
+
+---
+
+## AM-57 · 2026-10-09 (~23:36Z) · L-D.6, L-D.5 · ruling on AP-56
+
+**Text amended.** L-D.6 (funding), L-D.5 (F-D-FETCHPATH) — A resumed --fetch re-asks the thirteen 8h funding tapes
+
+**Amended to.** D11's logic kept unchanged (TEXT-ONLY). F-D-FETCHPATH holds the resume on CONTENT (nothing saved, no kline asked). --fetch was run exactly once on the real snapshot.
+
+**Reason.** A build fact met at TC12-D, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the stage was built under this default.
+
+---
+
+## AM-58 · 2026-10-09 (~23:36Z) · L-D.6, L-D.14, L-D.15, L-D.11 · ruling on AP-57
+
+**Text amended.** L-D.6 (row accounting), L-D.14 (F-D-3), L-D.15 (F-D-EDGE), L-D.11 (`complete`) — Funding contiguity INSIDE the extension is held by no leg (verifier D-5; a coverage observation, not a breach)
+
+**Amended to.** Built as the readings state; no leg added. If the orchestrator wants it held: a detector in F-D-EDGE (and a clause of `complete`) — per tape, prints added == (last due floor hour <= pin − TC11 pin) / observed cadence, with one constant spacing — and a plant (one print removed mid-extension, the manifest rebuilt on the copy).
+
+**Reason.** A build fact met at TC12-D, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the stage was built under this default.
+
+---
+
+## AM-59 · 2026-10-09 (~23:36Z) · L-D.23 · ruling on AP-58
+
+**Text amended.** L-D.23, O-20 — TickGrid.lt / le / gt / ge do not type-check the level n (verifier D-7)
+
+**Amended to.** RULED BY THE ORCHESTRATOR (not the builder's default): hardened now, before any consumer exists — the four level comparisons `lt`, `le`, `gt`, `ge` HALT unless the level `n` is an `int` (`type(n) is int`), as `px` does, and F-TICK [a] gains the case 'a float level must HALT'. L-D.23 calls each an INTEGER comparison; a float level silently decided by a float compare is the hazard the tick grid exists to remove.
+
+**Reason.** A build fact met at TC12-D; the orchestrator's ruling replaces the builder's default here. Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** The artifact named is repaired under this amendment before the TC12-D gate; its transcripts are re-filed and re-recorded by TC12-D's record.
+
+---
+
+## AM-60 · 2026-10-09 (~23:36Z) · L-D.19, L-D.1, L-D.18 · ruling on AP-59
+
+**Text amended.** L-D.19 (the schema), L-D.1 (the pin record's keys), L-D.18 (FEE_SOURCE.json's keys) — Additive keys beyond the readings' tables in fee_schedule.json, AS_OF_PIN.json and FEE_SOURCE.json (verifier D-9, second half)
+
+**Amended to.** Kept: all additive provenance. AS_OF_PIN.json and FEE_SOURCE.json are write-once and sealed and cannot be rewritten without a new fetch; fee_schedule.json is in the determinism set and reproduces byte for byte.
+
+**Reason.** A build fact met at TC12-D, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the stage was built under this default.
+
+---
+
+## AM-61 · 2026-10-09 (~23:36Z) · L-D.24 · ruling on AP-60
+
+**Text amended.** L-D.24 — F-MIRROR's BREAK half plants on a temp copy of the mirror's funding tree, not of the whole mirror
+
+**Amended to.** The plants (one flipped byte, one removed file, one altered sha in a copy of the attestation) run on the 21-file temp copy with an unbent control; the comparator is the one the REAL half uses.
+
+**Reason.** A build fact met at TC12-D, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the stage was built under this default.
+
+---
+
+## AM-62 · 2026-10-09 (~23:36Z) · L-D.18 · ruling on AP-61
+
+**Text amended.** L-D.18 (Act 1 — CAPTURE) — A fee page answered with a status other than 200 / 404 leaves no body to save
+
+**Amended to.** Through ED._get as the reading orders; FEE_SOURCE.json files http_status (the last attempt's, read from the logged http rows), the error text, http_requests_logged = 4, null body_path / body_sha256 / body_bytes. No fee_source body file exists and ~/.cache/naiad/provenance/ was not created.
+
+**Reason.** A build fact met at TC12-D, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the stage was built under this default.
+
+---
+
+## AM-63 · 2026-10-09 (~23:36Z) · L-D.5 · ruling on AP-62
+
+**Text amended.** L-D.5 ('--all = steps 2 -> clock row -> 3a-3f -> 4 -> 5 -> 6 (D11's run_all)') — --all returns 2 before the derivation and the seal when the fetch is incomplete
+
+**Amended to.** run_all (CHANGED, named in PORTS) returns exit 2 right after an incomplete fetch; nothing is derived, sealed or described until a re-run completes. The build of record ran the subcommands one by one in L-D.5's order (--clone, --pin, --fetch, --derive, --seal, --manifest, fixtures, --mirror, mirror fixture), each once and complete.
+
+**Reason.** A build fact met at TC12-D, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the stage was built under this default.
+
+---
+
+## AM-64 · 2026-10-09 (~23:36Z) · L-D.24, L-D.11 · ruling on AP-63
+
+**Text amended.** L-D.24 (step 6: 'destination, volume filesystem, drive_wait state...'), L-D.11 ('exactly ONE out-of-process call') — MIRROR_ATTEST.json cannot name the volume's filesystem without a second out-of-process site
+
+**Amended to.** MIRROR_ATTEST.json files `volume_observed`: os.statvfs fields, case_insensitive = True (measured on the destination) and a sentence that the name is not read by the module. The mirror child record's notes carry what `mount` printed in the builder's shell: /dev/disk6s2 on /Volumes/LaCie (exfat).
+
+**Reason.** A build fact met at TC12-D, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the stage was built under this default.
+
+---
+
+## AM-65 · 2026-10-09 (~23:36Z) · L-D.23, L-S.11, L-S.15, L-R.24 · ruling on AP-64
+
+**Text amended.** L-D.23 (the trapping context; 'a quotient that is not exact raises at this precision and is a HALT'); consumers L-S.11, L-S.15, L-R.24 — TickGrid: an inexact quotient under grid.ctx raises MemoryError, not decimal.Inexact
+
+**Amended to.** TickGrid's own operations (+, -, x, divmod) catch (decimal.DecimalException, MemoryError) and HALT. A consumer forming its own expression under decimal.localcontext(grid.ctx) must treat MemoryError as the same HALT — stated in the module docstring. lt / gt are written with the level formed in a statement of its own (below = n - 1; above = n + 1), so no BinOp stands under a comparison (AM-34).
+
+**Reason.** A build fact met at TC12-D, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the stage was built under this default.
+
+---
+
+## AM-66 · 2026-10-09 (~23:36Z) · L-D.3, L-D.15, L-D.1 · ruling on AP-65
+
+**Text amended.** L-D.3 (FAILS-IF), L-D.15 (F-D-GUARD), L-D.1 (the pin record's keys) — F-D-GUARD's equality-removed mutant, and step_q.instant
+
+**Amended to.** Two mutants, both caught: equality removed (GUARD-ACCEPTS a foreign directory), and equality plus the TC11 refusal row removed (GUARD-ACCEPTS the TC11 snapshot). AS_OF_PIN.json step_q.instant = ct_ms 1791499933000 with step_q.instant_iso '2026-10-08T22:52:13Z' beside it; extra provenance keys o7_printed, bybit_server_time, bybit_kline_endpoint, bybit_closure_law were added.
+
+**Reason.** A build fact met at TC12-D, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the stage was built under this default.
+
+---
+
+## AM-67 · 2026-10-09 (~23:36Z) · L-X.21, L-X.20, L-0.4 · ruling on AP-66
+
+**Text amended.** L-X.21, L-X.20, L-0.4 — F-ATTEST-ORDER [REG] holds a listed REG_SET script to its listed sha for good, so a lawful repair of one after the registry commit turns the leg RED
+
+**Amended to.** RULED BY THE ORCHESTRATOR: the attestation is a statement about the FILING INSTANT. For a listed path that is tracked, the leg holds the listed sha equal to the sha of the blob of that path at the commit that first adds `registrations/REGISTRATIONS.json` (read-only git) — immutable, so a later lawful repair cannot move it; for a listed path that is git-ignored (`x_rec/**`) it holds the working file, as before. LATER_T and the append-only prefix rule are unchanged. A repaired REG_SET script is re-recorded by the record of the gate that repairs it (L-0.4 (1), the last-record law). `scripts/tierc12_registrations_fixtures.py` is repaired under this amendment.
+
+**Reason.** A build fact met at TC12-D; the orchestrator's ruling replaces the builder's default here. Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** The artifact named is repaired under this amendment before the TC12-D gate; its transcripts are re-filed and re-recorded by TC12-D's record.
