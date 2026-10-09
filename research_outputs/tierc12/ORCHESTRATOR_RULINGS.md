@@ -225,3 +225,34 @@ the far-stop "priority" twin is an event count and an identity statement on TC11
 armings on file), nothing simulated beyond the same-bar ordering rule; the fourth ledger book keeps the
 contract's origin with every pre-filing row flagged; the LaCie mirror goes to a new directory
 `/Volumes/LaCie/Naiad/snapshots/tc12_20261008/` and is NOT RUN (and blocks nothing) if the drive is unreachable.
+
+## I · Rulings after the first fix pass (2026-10-09)
+
+Filed after the reconciler's canon (`review/CROSS_SECTION_CANON.md`, 42 items; 133 of 133 findings accepted)
+and the eight section fixers returned (`review/FIX_PASS_1_RETURNS.json`), before the seam pass. No book exists.
+
+**O-33 (annotates O-10).** The tc11-stamp proof runs in a DETACHED LINKED WORKTREE created for the proof and
+removed after it (TC11-X's precedent), not in a clone: TC11's suites resolve the main tree through the git
+common directory and read records that are in no commit, so a clone cannot run them. The worktree lives
+outside both working trees; the main tree's HEAD and porcelain are attested before and after; nothing tracked
+in main moves. If the proof is not GREEN the stamp is NOT APPLIED and the report says so.
+
+**O-34 CONFIRMATIONS OF THE CANON.** (a) DOOR 2 (`scripts/tierc12_va_trades.py`, record `TC12-V.trades`)
+builds the Tier-E two-trades tables and their nulls WHOLE; Stage R holds no copy of the V2 machine and no
+replay loop. (b) `va/stamps/` is the one shared directory, written by the three stamp children under a
+cumulative manifest. (c) The re-ride of a gated book is a disclosure of counts and differing rows on all three
+gates; it is never an arm and prints no statistic. (d) `DISCLOSURES_BUILD.md` is the append-only file for
+disclosures that arise after the registry is filed; the orchestrator appends at a stage gate and that stage's
+record re-records it. (e) The reconciler's additions to L-0 stand: the record keys `transcript`,
+`depends_on`, `parent`, `supersedes`, `legs_not_run`, `provenance`; `SUBSTAGES`, `RESUME_ORDER` and
+`certified()` added to `scripts/tierc12_progress.py` at TC12-REG; the child record `TC12-ENV.score-build`.
+(f) Where a fixer rejected a canon sentence on the facts (`WARMUP_BARS` lives in `tierc5_rules`, read as
+`E.R5.WARMUP_BARS`; the exit check's `analytics.profile` clause exempts the two doors), the SECTION text
+governs and the canon carries an erratum.
+
+**O-35 AFTER THE FREEZE, SEAMS GO THROUGH THE AMENDMENTS LAW.** `LEANS.md` is never edited once frozen. A
+builder who meets two readings that cannot both be built files the two texts and the build fact in
+`AMENDMENTS_PROPOSED.md`; the orchestrator rules and dates it in `LEANS_AMENDMENTS.md` before the stage's
+gate. An amendment may settle mechanics. It may NOT change a registered row's population, arms, statistic,
+verdict rule or labels after TC12-REG: that is a re-registration, visible to the operator, with the earlier
+payload and any number computed under it kept beside.

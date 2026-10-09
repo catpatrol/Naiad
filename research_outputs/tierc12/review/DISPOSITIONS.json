@@ -1,0 +1,2209 @@
+{
+ "what": "TIER-C12 · the reconciler's disposition of every finding of review/LEANS_REVIEW_2026-10-09.json (133 findings, six lenses, draft committed at 7295ab5) under ORCHESTRATOR_DISPOSITIONS OD-0..OD-19 and ORCHESTRATOR_RULINGS O-1..O-32. ACCEPT = the finding's own fix is the instruction (quoted in `edit`); ACCEPT-VIA-CANON = the text of the named items of review/CROSS_SECTION_CANON.md is the instruction and `edit` says which parts of the finding's fix stand and which are not built; REJECT = wrong on the facts or against a disposition or ruling (none). Where a canon item and a finding's fix differ, the canon governs. No outcome of any book was computed.",
+ "canon_file": "research_outputs/tierc12/review/CROSS_SECTION_CANON.md",
+ "review_file": "research_outputs/tierc12/review/LEANS_REVIEW_2026-10-09.json",
+ "n_findings": 133,
+ "n_by_disposition": {
+  "ACCEPT-VIA-CANON": 112,
+  "ACCEPT": 21
+ },
+ "dispositions": [
+  {
+   "id": "FID-01",
+   "lens": "FIDELITY",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-01"
+   ],
+   "sections_to_edit": [
+    "L-X",
+    "L-G",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-01 (L-X.13 table, mechanics, rival, plants; L-R.6, L-R.23, the P-DIR-1 and P-SFP-VA-1 specs, L-R INTERFACE; L-S.29 and the P-SCALP-3 spec; L-G.13 and the P-BRD-1 spec). The finding's fix stands in substance — three templates, the KIN-SEEN bytes, the lower-case tag, the RE-SCORE plant, the conforming edits it lists — with ONE change: the templates and the TEMPLATE detector are keyed by registration id (OD-1), not by (label key, tag). Readings named by the finding: L-X.13; L-R.23; L-R REGISTRATION SPEC P-SFP-VA-1; L-S.29; L-S REGISTRATION SPEC P-SCALP-3; L-G REGISTRATION SPEC P-BRD-1; L-R REGISTRATION SPEC P-DIR-1.",
+   "reject_reason": ""
+  },
+  {
+   "id": "FID-02",
+   "lens": "FIDELITY",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-02",
+    "CANON-12"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D",
+    "L-V",
+    "L-C",
+    "L-G",
+    "L-R",
+    "L-S",
+    "L-L"
+   ],
+   "edit": "Apply CANON-02 (and CANON-12 for the reader's sha law). The finding's replacement READING of L-0.22 stands except: DOORS_T is exactly TWO scripts, tierc12_va.py and tierc12_va_trades.py (OD-2) — not 'the door scripts L-V names (at drafting tierc12_va.py)'; the at-exit clause is the shim's exit check (leg i-b, L-D.26 hunk 7); VA_BLIND_T and VA_MODULE_FIXTURES_T are typed. Its deletions (RUNNERS_T, ACCESSORS_T, NEVER_RUNNER_T, R-i..R-iii, every runner plant), its strikes in L-0.25, L-0.30 and L-0 INTERFACE, and its conforming edits in L-C.4, L-C.11, L-G INTERFACE, L-R.31 and INTERFACE (i), L-S.1 and INTERFACE, L-L.16 and INTERFACE are applied in CANON-02's words. Readings named by the finding: L-0.22; L-0.25; L-0.30; L-0 INTERFACE ASSUMPTIONS; L-V.2; L-S.1; L-R.31; L-C.4; L-L.16.",
+   "reject_reason": ""
+  },
+  {
+   "id": "FID-03",
+   "lens": "FIDELITY",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-05",
+    "CANON-39"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D",
+    "L-V",
+    "L-C"
+   ],
+   "edit": "Apply CANON-05 and CANON-39. Of the finding's fix: (a), (c), (d) stand (CANON-05 points 3, 5, 2 — the manifest sha is read through tierc12_progress.certified; the orientation value cf66cb81…3e88 is struck in L-D's register, L-V.1 SOURCE and the L-C abbreviations); (b) is REPLACED by CANON-05 point 1 (OD-4: an earlier record is held to the blob at the commit that closed it; supersedes[] is kept for untracked paths only); (e) stands (CANON-39: OBJECTION 'accepted as O-25', the 'Drafted under the ruling as written' paragraph deleted; L-0.6 names X's contract as the manifest-pinned copy). Readings named by the finding: L-0.4; L-0.5; L-0.6; L-0.12; L-0 OBJECTIONS; L-D register of constants; L-V.1; L-C abbreviations.",
+   "reject_reason": ""
+  },
+  {
+   "id": "FID-04",
+   "lens": "FIDELITY",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-06",
+    "CANON-07"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-X",
+    "L-G"
+   ],
+   "edit": "Apply CANON-06 (the two writers) and CANON-07 point 1 (tierc12_regbook.write_arm is put_regbook's only caller). The finding's text stands with CANON-06's one signature put_regbook(reg_dir, arm, df, *, meta, lens, kind): key [symbol, entry_close_ms], collar iff kind in {strip, tierE}, FULL FLOAT, HALT outside regbooks/. F-WARRANTY (d) and its plant, L-0.20's wording, L-X.24's citation and the deletion of L-G's ASSUMED sentence as the finding says. Readings named by the finding: L-0.13; L-0.20; L-X.24; L-X.25; L-G.8; L-G.19; L-G INTERFACE ASSUMPTIONS.",
+   "reject_reason": ""
+  },
+  {
+   "id": "FID-05",
+   "lens": "FIDELITY",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-04"
+   ],
+   "sections_to_edit": [
+    "L-V",
+    "L-R"
+   ],
+   "edit": "Apply CANON-04. The finding's 'L = 1d' bullet stands with: the label column and string are OD-3's (u_lookback_label = \"BORROWED: the 1d pin's bar count; X pins no 1w lookback\"); the module that reads the five 1w_ columns is DOOR 2, scripts/tierc12_va_trades.py (CANON-02), not tierc12_stage_r_tables.py; OPEN TO OPERATOR 1 is REPLACED by the one-line 'settled by O-28' text (the item keeps its number) rather than re-defaulted; OBJECTION → 'accepted as O-28'; INTERFACE difference (ii) deleted; the FAILS-IF mutation and L-V.5's wording as the finding gives them. Readings named by the finding: L-R.27; L-R OPEN TO OPERATOR 1; L-R OBJECTIONS; L-R INTERFACE ASSUMPTIONS; L-V.5.",
+   "reject_reason": ""
+  },
+  {
+   "id": "FID-06",
+   "lens": "FIDELITY",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-04"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-V",
+    "L-R"
+   ],
+   "edit": "Apply CANON-04 points 2, 5, 6: L-0.25 (iii) in the finding's words; F-NOT leg 1W with the typed pair ONEW_READERS_T = ((tierc12_va_stamps.py, va/stamps/VA_STAMPS_*), (tierc12_va_trades.py, va/trades/TWO_TRADES_*)) and the five named columns; the finding's three plants stand, plus the P-SFP-VA-1-builder plant. Readings named by the finding: L-0.25; L-0.30; L-R.27; L-V.5.",
+   "reject_reason": ""
+  },
+  {
+   "id": "FID-07",
+   "lens": "FIDELITY",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-07",
+    "CANON-13"
+   ],
+   "sections_to_edit": [
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-13. The finding's refusal list stands with OD-8's slugs and comparators (stop_none; poc_not_ahead: d·(T1 − e) ≤ 0; t2_not_ahead: d·(T2 − e) ≤ 0; flag t1_within_fee_band; t1_void) and the arm tierE__x_geometry. Its edits to the P-SFP-VA-1 spec's Refused clause, L-R.19, L-R.24 and L-R.32 are applied in CANON-13's words; L-S.11 conforms to the same law (a T1 at the limit is REFUSED poc_not_ahead, not 'traded as written'); L-S INTERFACE: no difference remains. Readings named by the finding: L-R.14; L-R REGISTRATION SPEC P-SFP-VA-1; L-R.32; L-S.11.",
+   "reject_reason": ""
+  },
+  {
+   "id": "FID-08",
+   "lens": "FIDELITY",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-17"
+   ],
+   "sections_to_edit": [
+    "L-V",
+    "L-X",
+    "L-S"
+   ],
+   "edit": "Apply CANON-17: delete item 2 from L-S.27 and from the spec's preconditions (one item remains); the printed-beside leaf is the scorer's licence_at_maker_pin (STA-02's form) and is always computed, labelled 'a re-derivation of one leg from printed columns; not a licence'. Strike the at_maker_pin additions asked of L-V and F-SCALP (p)'s fee-file plant; OPEN TO OPERATOR 2 in the finding's words plus 'by name, before Stage D's fee capture'. Readings named by the finding: L-S.27; L-S REGISTRATION SPEC P-SCALP-3; L-S OPEN TO OPERATOR 2; L-X.10; L-V.17.",
+   "reject_reason": ""
+  },
+  {
+   "id": "FID-09",
+   "lens": "FIDELITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-02",
+    "CANON-03",
+    "CANON-11",
+    "CANON-24"
+   ],
+   "sections_to_edit": [
+    "L-V",
+    "L-R"
+   ],
+   "edit": "Apply CANON-02 (DOOR 2), CANON-03 (cut-tape law) and CANON-11 point 8. Of the finding's fix: (1) is NOT built as written — there is no child TC12-V.asof-r and no va/ASOF_REFEREE_R.parquet (OD-2: Stage V's suite owns prefix identity; L-R.7 (c) and F-SFP-ASOF cut the FILED tables through the reader and lean on F-VA-ASOF [d]); (2) stands in OD-2's stronger form — the gaps+order schedule, its box events AND the two-trades tables are DOOR 2's (scripts/tierc12_va_trades.py, record TC12-V.trades); files va/trades/NULL_BOXES_VA.parquet and va/trades/va_null_go_events.parquet; F-NULL-MIRROR (a), (c), (d) are hosted at TC12-V.trades, leg (b) is deleted. Readings named by the finding: L-R.7; L-R.25; L-R.29; L-V.23.",
+   "reject_reason": ""
+  },
+  {
+   "id": "FID-10",
+   "lens": "FIDELITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-08"
+   ],
+   "sections_to_edit": [
+    "L-X",
+    "L-S"
+   ],
+   "edit": "Apply CANON-08 (the one ladder-law text; the F-REGBOOK plant). L-S INTERFACE: 'settled: OD-6'. Readings named by the finding: L-X.24; L-S.16; L-S INTERFACE ASSUMPTIONS.",
+   "reject_reason": ""
+  },
+  {
+   "id": "FID-11",
+   "lens": "FIDELITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-09",
+    "CANON-10"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-V",
+    "L-C",
+    "L-G",
+    "L-R",
+    "L-S",
+    "L-L"
+   ],
+   "edit": "Apply CANON-10 and CANON-09. The finding's 'Who files what' stands with OD-7's three children TC12-V.stamps.c / .r / .s (one record each), not a single record TC12-V.stamps; path va/stamps/VA_STAMPS_<book>.parquet; a consumer asserts the sha through certified(). L-0.10's depends_on sentence is CANON-09 point 9; the TC12-V5 sentence of L-0 INTERFACE is struck; L-C.11, L-G.18, L-R.31, L-S.30, L-L.16, L-L.25 conform as CANON-10 lists. Readings named by the finding: L-V.19; L-C.11; L-R.31; L-S.30; L-L.16; L-0.10; L-0 INTERFACE ASSUMPTIONS.",
+   "reject_reason": ""
+  },
+  {
+   "id": "FID-12",
+   "lens": "FIDELITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-09"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D"
+   ],
+   "edit": "Apply CANON-09: TC12-REG.vendor → TC12-ENV.vendor everywhere (L-D.25, L-D.30, L-D INTERFACE, L-0.10, L-0 INTERFACE), in the finding's words plus the own-commit and F-VENDOR [referee] sentences of CANON-09's L-D edit. Readings named by the finding: L-D.25; L-D.30; L-D INTERFACE ASSUMPTIONS; L-0.10; L-0 INTERFACE ASSUMPTIONS.",
+   "reject_reason": ""
+  },
+  {
+   "id": "FID-13",
+   "lens": "FIDELITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-11",
+    "CANON-20"
+   ],
+   "sections_to_edit": [
+    "L-V",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-20 (the finding's fix verbatim, OD-15): the strict-INSIDE twin in TRAVERSE.json under twins.strict_inside and in STAGE_V.md; the sentence 'T of record uses the regime reading; the strict reading is a printed twin and enters no book'; F-TRAV [b] re-derives both. Readings named by the finding: L-V.18; L-R.16; L-S.20.",
+   "reject_reason": ""
+  },
+  {
+   "id": "FID-14",
+   "lens": "FIDELITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-18",
+    "CANON-32"
+   ],
+   "sections_to_edit": [
+    "L-X",
+    "L-S"
+   ],
+   "edit": "Apply CANON-18 (the table over C / F / U, the two booleans fails_under_deep_too and clears_only_under_touch, the operator item) and CANON-32 point 4 (i). The finding's operator-item wording is CANON-18 point 6; mirror it in L-S OPEN TO OPERATOR. Readings named by the finding: L-X.9; L-S.28; L-X OPEN TO OPERATOR; L-S OPEN TO OPERATOR.",
+   "reject_reason": ""
+  },
+  {
+   "id": "FID-15",
+   "lens": "FIDELITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-29"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-X"
+   ],
+   "edit": "Apply CANON-29 points 2, 3, 5: the template module scripts/tierc12_close_acts_template.py (typed list of one), the L-0.26 READING sentence and F-NOT leg ACTS in the finding's words, L-0.16's marker sentence, and the deletion of the three-differences paragraph from L-X's INTERFACE. The sandbox run of steps 1-7 is the STUBBED scratch copy of BLD-25. Readings named by the finding: L-0.26; L-0.16; L-X.33; L-X.36; L-X.28; L-X INTERFACE ASSUMPTIONS.",
+   "reject_reason": ""
+  },
+  {
+   "id": "FID-16",
+   "lens": "FIDELITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-33"
+   ],
+   "sections_to_edit": [
+    "L-S",
+    "L-L"
+   ],
+   "edit": "Apply CANON-33 points 1-3: keys [book, symbol, known_at_ms] for S_orders_<book> and S_refusals_<book>; S_miss key [book, symbol, known_at_ms, variant]; no alias column — trigger_close_ms is renamed known_at_ms everywhere (the finding kept it as an alias; one name is canon); the replacement sentence at the end of L-S.30 as the finding gives it (stamp tables POINTED); L-L.25 gains the rows. Readings named by the finding: L-S.30; L-S INTERFACE ASSUMPTIONS; L-L.24; L-L.25.",
+   "reject_reason": ""
+  },
+  {
+   "id": "FID-17",
+   "lens": "FIDELITY",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [
+    "CANON-11",
+    "CANON-34",
+    "CANON-39"
+   ],
+   "sections_to_edit": [
+    "L-V",
+    "L-S"
+   ],
+   "edit": "Applied as written, with two bindings: the amendment is AM-1 (nickname AM-V2) and the added paragraph is CANON-34 point 3; the per-bar column inside_frozen_only is in CANON-11 point 2. The annotation of O-16 (a) goes into L-V's OBJECTIONS in the finding's words. Readings named by the finding: L-V.8; L-V.9; L-V.13; L-V.15; L-V OBJECTIONS; L-S.4. THE FINDING'S FIX, APPLIED AS WRITTEN: L-V.8 rule 2: \"An IDLE bar's close, and every bar's high and low, are judged against VA(t−1). A close while a probe is pending is judged against that probe's FROZEN edge, the edge of VA(t0−1) (L-V.9) — X's convention, which O-16 (a) names. Never the self-inclusive VA(t).\" Add to L-V's OBJECTIONS an annotation of O-16 (a) in those words. Add to AM-V2: \"Declared against the contract's letter: (i) pending closes are judged against the frozen edge; (ii) on a bar that resolves a probe the state is INSIDE by the frozen edge even where the close lies outside the rolling VA(t−1), counted per cell and filed per bar as inside_frozen_only.\" L-V.24's va_bars columns gain inside_frozen_only; L-S.4 prints the count of orders whose row k1 carries it.",
+   "reject_reason": ""
+  },
+  {
+   "id": "FID-18",
+   "lens": "FIDELITY",
+   "severity": "MINOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-26",
+    "CANON-39"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D",
+    "L-V",
+    "L-X",
+    "L-C",
+    "L-G",
+    "L-R",
+    "L-S",
+    "L-L"
+   ],
+   "edit": "Apply CANON-39: every header reads 'conforms to ORCHESTRATOR_RULINGS O-1..O-32'; L-D OBJECTIONS become two one-line 'accepted as O-26' / 'accepted as O-27' entries with both 'Drafted under the ruling as written' alternatives deleted; L-D.4 cites O-26; L-D.22 cites O-27; L-D.27 'the two earlier TC contracts (TC10 RESUME, TC11)'; L-S.15 'O-27'. Readings named by the finding: L-D.4; L-D.22; L-D.27; L-D OBJECTIONS; L-S.15; L-0 header; L-C header; L-G header; L-R header; L-L header; L-X OBJECTIONS.",
+   "reject_reason": ""
+  },
+  {
+   "id": "FID-19",
+   "lens": "FIDELITY",
+   "severity": "MINOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-10",
+    "CANON-22"
+   ],
+   "sections_to_edit": [
+    "L-V",
+    "L-R"
+   ],
+   "edit": "Apply CANON-10 point 4 and CANON-22. The take-profit venue's tp exits are stamped at TC12-V.stamps.r (book tp1d, event ev_tp from ev_tp_ms, open_of_bar with a post-event twin). The re-ride half of the finding is MOOT: no re-ride arm exists (CANON-22), so no re-ride campaign is a book instant. L-R.31's stamps bullet is replaced as CANON-10 words it. Readings named by the finding: L-R.5; L-R.30; L-R.31; L-V.19.",
+   "reject_reason": ""
+  },
+  {
+   "id": "FID-20",
+   "lens": "FIDELITY",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [
+    "CANON-18",
+    "CANON-32"
+   ],
+   "sections_to_edit": [
+    "L-S"
+   ],
+   "edit": "Applied as written (it is OD-19's second operator item, CANON-32 point 4 (ii)); L-X's §9 harvests it. Readings named by the finding: L-S.10; L-S OPEN TO OPERATOR. THE FINDING'S FIX, APPLIED AS WRITTEN: Add to L-S OPEN TO OPERATOR: \"The stop's else-clause never binds. With the stop measured from the limit at the edge, '0.5 ATR_1h beyond the edge' (:97) is always inside the 1.0 ATR_1h rail (:98), so every cross-triggered order has R = 1.0·ATR_1h. DEFAULT if silent: the contract as written (the rail governs); the count of cross orders and rail_binding is printed. A cross stop at 0.5 ATR_1h with no rail is the operator's order.\"",
+   "reject_reason": ""
+  },
+  {
+   "id": "CAU-01",
+   "lens": "CAUSALITY",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-04"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-V",
+    "L-R"
+   ],
+   "edit": "Apply CANON-04. The finding's as-of rule (row k = asof_index(close_ms_1w, τ); the last COMPLETE Monday-anchored week; a forming week never read; the Monday-00:00Z case), its coincidence unit F·ATR_1d[k_event], its base-rate sentence and its F-TWO plant are CANON-04 point 3-6 verbatim. Label column and string are OD-3's (u_lookback_label). OPEN TO OPERATOR 1 is replaced by the 'settled by O-28' line; the OBJECTION by 'accepted as O-28'. Readings named by the finding: L-R.27; L-R.28; L-V.5; L-0.25.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CAU-02",
+   "lens": "CAUSALITY",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-04"
+   ],
+   "sections_to_edit": [
+    "L-0"
+   ],
+   "edit": "Apply CANON-04 points 2, 5, 6 to L-0.25 (iii) and F-NOT leg 1W; the typed module is scripts/tierc12_va_trades.py (CANON-02), not tierc12_stage_r_tables.py; the finding's plant (a 1w condition in a copy of the P-SFP-VA-1 builder) stands. Readings named by the finding: L-0.25; L-0.30; L-R.27; L-V.5.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CAU-03",
+   "lens": "CAUSALITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-26"
+   ],
+   "sections_to_edit": [
+    "L-D",
+    "L-V"
+   ],
+   "edit": "Apply CANON-26 points 3-4: E.load_asof_at(stem, iv, cut_ms) admits any int instant ≤ PIN_MS (no 4h-modulus clause); E.load_funding_asof_at likewise; F-ENV-ASOF in the finding's words (strike 'that is not a 4h close or'; add the ERA_CUT_MS / off-grid-1h / 5m leg). Readings named by the finding: L-D.28; L-D.31; L-V.18; L-V.8; L-V.20; L-S.31.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CAU-04",
+   "lens": "CAUSALITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT",
+   "canon": [
+    "CANON-03",
+    "CANON-11",
+    "CANON-12"
+   ],
+   "sections_to_edit": [
+    "L-V",
+    "L-R"
+   ],
+   "edit": "Applied as written. The struck fields and the summary-table law are CANON-11 points 3-4; regimes(asof_close_ms=B) with no unbounded form is CANON-12; the finding's F-VA-ASOF (d) wording is contained in CANON-03's [d FILED-ROW PREFIX], which is the text L-V writes. L-R.29 reads the regimes through regimes(asof_close_ms=W). Readings named by the finding: L-V.14; L-V.8; L-V.24; L-R.29. THE FINDING'S FIX, APPLIED AS WRITTEN: In L-V.14's field table strike `end_kind` and `end_i` from probe rows (keep `episode`) and add: \"No field of an event row depends on a bar after `i`. How a probe ended is read from its resolving row (`swing_failure` / `lapse` / `acceptance`), joined on `(lens, asset, side, t0)`; a probe with no resolving row is pending.\" Add under the regimes sentence: \"`va_regimes` is a SUMMARY table, not an as-of table. A consumer bounded at an instant B treats a regime with `die_close_ms > B` or null as alive at B and reads none of its `die_*`, `end_*`, `n_bars`; the reader offers `regimes(asof_close_ms=B)` and no un-bounded form to decision modules.\" F-VA-ASOF (d) becomes: \"every event row with `known_close_ms ≤ close_ms[k]`, every per-bar machine array at bars ≤ k and `regimes(asof_close_ms=close_ms[k])` from a fresh prefix == the full tape's, on every column.\"",
+   "reject_reason": ""
+  },
+  {
+   "id": "CAU-05",
+   "lens": "CAUSALITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-03",
+    "CANON-10",
+    "CANON-24"
+   ],
+   "sections_to_edit": [
+    "L-V",
+    "L-C",
+    "L-S"
+   ],
+   "edit": "Apply CANON-03 and CANON-10. Of the finding's fix: (i) and (ii) stand verbatim (F-VA-RAW [c] on the FILED rows; F-VA-ASOF [e IDENTITY] with its two plants); (iii) stands with CANON-03 point 3's instant classes (5m-grid instants per era, 4h closes and opens, the boundary set), the count stated in L-V; the per-book re-runs are hosted by the stamps children TC12-V.stamps.c / .r / .s (OD-7), NOT by TC12-C.stamps, TC12-R.sfp or TC12-S; (iv) F-NEST-KEYS is a TC12-V.stamps.c leg. Readings named by the finding: L-V.19; L-V.20; L-V.24; L-S.3; L-S.30; L-S.31; L-C.11.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CAU-06",
+   "lens": "CAUSALITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-02",
+    "CANON-03"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-V",
+    "L-R"
+   ],
+   "edit": "The defect is settled by CANON-02 (the class law; the exit check runs in every process, suites included) and CANON-03 (every as-of leg outside Stage V cuts the FILED tables through the reader and leans on F-VA-ASOF [d]). NOT built: the finding's cut-mode subprocess (tierc12_va.py --cut=…) — OD-2: no suite outside Stage V imports or spawns a door. L-R.7 (c), L-R.25 F-SFP-ASOF and L-R.30 (c) are rewritten as CANON-03 gives them; L-R.29 (b) is deleted (CANON-02). Readings named by the finding: L-0.22; L-V.2; L-R.7; L-R.25; L-R.29; L-R.30.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CAU-07",
+   "lens": "CAUSALITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-03"
+   ],
+   "sections_to_edit": [
+    "L-S"
+   ],
+   "edit": "Apply CANON-03's L-S edit: (e2) becomes ACT-BOUNDARY PREFIX with the finding's sample rule, three cuts, required reproductions and four plants verbatim; the 1h / 4h rows are the FILED tables cut through the reader at the same instant (not a door subprocess). (e1) and (e3) stay. Readings named by the finding: L-S.31; L-S.25; L-S.13; L-S.19.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CAU-08",
+   "lens": "CAUSALITY",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [
+    "CANON-03"
+   ],
+   "sections_to_edit": [
+    "L-V"
+   ],
+   "edit": "Applied as written (the clipped plant window, the rule-based cuts at bars i−1 and i, P2 filed with close_ms = τ, P1 NULL past the tape end); the rule-based cuts are members of CUTS_V in CANON-03 point 1. Readings named by the finding: L-V.8; L-V.21; L-0.14. THE FINDING'S FIX, APPLIED AS WRITTEN: F-VA-ASOF PLANTS: \"the window shifted one bar forward, `t−L+2 .. t+1`, clipped at the tape end (X's form)\". F-VA-ASOF (d): add rule-based cuts \"for the first acceptance and the first swing failure of each cell and era, cuts at bars i−1 and i\". F-NEST-ASOF P2: \"... synthesised from the 4h bars of the current incomplete day (week) and filed with `close_ms` = the instant τ (a forming bar published as closed)\". P1: \"`up_k + 1`, NULL where it passes the tape end\".",
+   "reject_reason": ""
+  },
+  {
+   "id": "CAU-09",
+   "lens": "CAUSALITY",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [
+    "CANON-02",
+    "CANON-11"
+   ],
+   "sections_to_edit": [
+    "L-V",
+    "L-R"
+   ],
+   "edit": "Applied as written, with one binding: the box set is built by DOOR 2 (CANON-02) from regimes(asof_close_ms=W); the cut-at-W sentence and the NULL-STRIP plant are CANON-11 point 8; the file is va/trades/NULL_BOXES_VA.parquet. Readings named by the finding: L-R.29; L-V.14. THE FINDING'S FIX, APPLIED AS WRITTEN: Add to L-R.29: \"The regimes are cut at W: keep rows with `r0_close_ms ≤ W`; a kept regime whose `die_close_ms > W` or is null is the alive one (`life = n − r0`, censored) and its `die_*`, `end_*`, `n_bars` are not read; regimes with `r0_close_ms > W` are dropped.\" Add the plant: a strip-dying regime's filed `die_i` used -> `NULL-STRIP` RED.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CAU-10",
+   "lens": "CAUSALITY",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [
+    "CANON-19"
+   ],
+   "sections_to_edit": [
+    "L-R"
+   ],
+   "edit": "Applied as written (it is CANON-19 point 6). Readings named by the finding: L-R.21; L-R.25. THE FINDING'S FIX, APPLIED AS WRITTEN: F-SFP (d): \"... OPEN-at-W rows compared on entry, stop, R, T1 and T2 levels; and on `t1_i`, `t1_px` iff the full ride's `t1_i ≤ hi_W`, else the scored row's T1 must be unfilled\". Add the plant: a scored OPEN row carrying a T1 fill at a bar after `hi_W` -> RED.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CAU-11",
+   "lens": "CAUSALITY",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [],
+   "sections_to_edit": [
+    "L-G"
+   ],
+   "edit": "Applied as written. Readings named by the finding: L-G.8; L-G.19. THE FINDING'S FIX, APPLIED AS WRITTEN: L-G.8, rival bullet, add: \"It carries the same caveat as the filed arm, verbatim, and the sentence 'the OLD clause of this arm reads the corridor ahead; only its stale clause is causal'.\" Spec `disclosed_beside`: \"`tierE__shadow_abs206_or_stale` — ...; Tier-E, no verdict word; carries TC11's look-ahead caveat.\" L-G.19: the column `age_abs206_refused` of `g_campaign_gates` carries the column note 'whole-corridor cut — look-ahead on the scored window'.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CAU-12",
+   "lens": "CAUSALITY",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [
+    "CANON-11"
+   ],
+   "sections_to_edit": [
+    "L-R"
+   ],
+   "edit": "Applied as written. L-R.28's rows are built by DOOR 2; every TWO_TRADES_* row carries l_label (CANON-11 point 8); L-R.30's TP1D tables carry l_label. Readings named by the finding: L-R.3; L-R.6; L-R.28; L-R.30; L-V.4. THE FINDING'S FIX, APPLIED AS WRITTEN: P-DIR-1 spec, `disclosed_beside`, add: \"the 4h lookback is tuning-fit (`l_label`: in-sample for tuning-era VA bars); the holdout slice is printed beside for that reason\". L-R.3: add `4h_L`, `4h_l_label` to the filed columns of each refused row. L-R.28 and L-R.30: \"every row carries `l_label` (and `t_label` where a traverse is read)\".",
+   "reject_reason": ""
+  },
+  {
+   "id": "CAU-13",
+   "lens": "CAUSALITY",
+   "severity": "MINOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-37"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-L"
+   ],
+   "edit": "Apply CANON-37: the STEP Q flag is renamed entered_before_contract_filed; entered_before_book_frozen is added; the freeze instant is filed once in forward/BOOK4_FREEZE.json (written by the orchestrator after the ledger-spec commit; held to git by F-FWD-OVERLAP); both are CHAINED row fields (with in_o9_scored_window); the FREEZE-FLAG plant stands. Readings named by the finding: L-L.17; L-L.1; L-L.16; L-L.3.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CAU-14",
+   "lens": "CAUSALITY",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [
+    "CANON-15"
+   ],
+   "sections_to_edit": [
+    "L-R"
+   ],
+   "edit": "Applied as written (funding on the range rows is uncapped under CANON-15; the 1d shift disclosure is unaffected). Readings named by the finding: L-R.20; L-R.24. THE FINDING'S FIX, APPLIED AS WRITTEN: L-R.24, 1d cell, add: \"On 1d the interval sum is shifted by the entry bar: it charges the entry day's in-bar prints and omits the exit day's on a close exit. `n_stamps_inside_entry_bar` and `n_stamps_inside_exit_bar` are filed per row and their totals printed in the cell's description with that sentence; the booking stays `account_l`'s so the cell remains comparable with the estate's 1d lanes.\" L-R.20: replace \"expected zero on 4h\" with \"asserted zero on 4h (HALT `SFP-FUND-INBAR` otherwise)\".",
+   "reject_reason": ""
+  },
+  {
+   "id": "STA-01",
+   "lens": "STATISTICS",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-01"
+   ],
+   "sections_to_edit": [
+    "L-X",
+    "L-G",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-01. The finding's templates and its instruction to print the owners' long pre_seen.text under the cell with D-2 and D-3 stand. NOT built: the filed field labels.<key>.form — OD-1 keys the template by registration id. Readings named by the finding: L-X.13; L-S.29; L-R.23; REGISTRATION SPEC P-SFP-VA-1 (labels, verdict_rule); REGISTRATION SPEC P-SCALP-3 (labels, verdict_rule).",
+   "reject_reason": ""
+  },
+  {
+   "id": "STA-02",
+   "lens": "STATISTICS",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-11",
+    "CANON-17"
+   ],
+   "sections_to_edit": [
+    "L-V",
+    "L-X",
+    "L-S"
+   ],
+   "edit": "Apply CANON-17 (one item; the scorer's collared leaf licence_at_maker_pin with the finding's formula, ND = X's pins.laws.round_nd; the qualifier LICENCE EDGE ≤ 0 AT THE PINNED MAKER RATE (…); the row is built, scored and spends its test) and CANON-11 point 6 (the quoted columns edge_median_term_h20, edge_toll_atr, ratio_median in each by_era leaf). OPEN TO OPERATOR 2 reworded as the finding says. Readings named by the finding: L-S.27; REGISTRATION SPEC P-SCALP-3 (preconditions); L-X.10; L-V.17.",
+   "reject_reason": ""
+  },
+  {
+   "id": "STA-03",
+   "lens": "STATISTICS",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-05",
+    "CANON-09",
+    "CANON-41"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-X"
+   ],
+   "edit": "Apply CANON-41 (a) — the finding's text verbatim, with quarantine paths written T12/_det_partial_*/ (CANON-09 point 9) — and CANON-05 point 3 (scores/SUPERSEDED.jsonl on the append-only list). L-X.26 and L-0.10 T7 as the finding says. Readings named by the finding: L-X.27; L-X.26; L-X.28; L-0.5; L-0.10; L-S.26; L-S.30.",
+   "reject_reason": ""
+  },
+  {
+   "id": "STA-04",
+   "lens": "STATISTICS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-08"
+   ],
+   "sections_to_edit": [
+    "L-X",
+    "L-S"
+   ],
+   "edit": "Apply CANON-08; the four integer keys join the sidecar list (CANON-07 point 7). Readings named by the finding: L-X.24; L-S.16; L-X.7.",
+   "reject_reason": ""
+  },
+  {
+   "id": "STA-05",
+   "lens": "STATISTICS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-41"
+   ],
+   "sections_to_edit": [
+    "L-X",
+    "L-G",
+    "L-R"
+   ],
+   "edit": "Apply CANON-41 (b) — the finding's text verbatim; the qualifier joins L-X.9's list and the exhaustive-words sentence of the P-ADM-1, P-BRD-1 and P-DIR-1 specs; F-VERDICT gains the two-of-five case. Readings named by the finding: L-X.7; L-X.9; REGISTRATION SPEC P-DIR-1; REGISTRATION SPEC P-ADM-1; REGISTRATION SPEC P-BRD-1; L-R §E (UNVERIFIED list).",
+   "reject_reason": ""
+  },
+  {
+   "id": "STA-06",
+   "lens": "STATISTICS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-18"
+   ],
+   "sections_to_edit": [
+    "L-X",
+    "L-S"
+   ],
+   "edit": "Apply CANON-18 points 1-2, 7 (U / F / C; a closure word needs a MEASURED failure; the ten-case table; the LADDER leg over three states per book) in L-X.9, L-X.7, L-S.28 and the P-SCALP-3 spec's verdict_rule. Readings named by the finding: L-X.9; L-X.7; L-S.28; REGISTRATION SPEC P-SCALP-3 (verdict_rule).",
+   "reject_reason": ""
+  },
+  {
+   "id": "STA-07",
+   "lens": "STATISTICS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-21"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-X",
+    "L-G",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-21: the leaf arm__<slug> exactly as the finding gives it (no p, no bar, no sensitivity seed, no LOAO); the declared beside set; m_looks_this_table = the number of intervals, every LOAO panel counted. L-G.8, L-R.5 (now a disclosure without an arm, CANON-22), L-R.24 and L-S.26 cite the leaf by this name. Readings named by the finding: L-X.14; L-X.26; L-G.8; L-R.5; L-R.24; L-R INTERFACE (L-X); L-S.26.",
+   "reject_reason": ""
+  },
+  {
+   "id": "STA-08",
+   "lens": "STATISTICS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-32",
+    "CANON-41"
+   ],
+   "sections_to_edit": [
+    "L-X"
+   ],
+   "edit": "Apply CANON-41 (c) and CANON-32 point 2 — the finding's text verbatim (size_footnote, size_measured, the SIZE leg per ruler form, the frozen §0.1 columns, Σ_f m_f·bar_f in §1; F-S0-FIVE RED without the footnote). Readings named by the finding: L-X.14; L-X.26; L-X.28; L-X.2.",
+   "reject_reason": ""
+  },
+  {
+   "id": "STA-09",
+   "lens": "STATISTICS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-36",
+    "CANON-37"
+   ],
+   "sections_to_edit": [
+    "L-G",
+    "L-L"
+   ],
+   "edit": "Apply CANON-37. The finding's rule stands — the row set of record is fixed NOW in BOOK_SPEC_COMBINED.json n_law; n and n_record on the status line; the flags are chained — with CAU-13's refinement: for gated-v6-combined the binding flag is entered_before_book_frozen, and row_fields_added holds three flags beside the three gate booleans. P-ADM-1's disclosed_beside clause is CANON-36 point 6. Readings named by the finding: L-L.17; L-L.14; L-L.10; L-L.15; L-L.16; L-L.3; L-L REGISTRATION SPEC note (P-ADM-1 disclosed_beside).",
+   "reject_reason": ""
+  },
+  {
+   "id": "STA-10",
+   "lens": "STATISTICS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-41"
+   ],
+   "sections_to_edit": [
+    "L-X",
+    "L-G",
+    "L-R"
+   ],
+   "edit": "Apply CANON-41 (d) — the finding's text; P-DIR-1's counts are filed by tierc12_stage_r_dir.py in stage_r/dir/build_manifest.json under r5_overlap; L-G.13 and L-R.6 name the count and its source; the note on arm__brd17. Readings named by the finding: L-X.13; L-G.13; L-G.15; L-R.6; L-R.9.",
+   "reject_reason": ""
+  },
+  {
+   "id": "STA-11",
+   "lens": "STATISTICS",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [
+    "CANON-36"
+   ],
+   "sections_to_edit": [
+    "L-G"
+   ],
+   "edit": "Applied as written: the sentence is inserted in P-ADM-1's labels text before 'confirmation, if any, …' (the labels bullet in CANON-36 point 4's grammar; quotes inside the text are single). Readings named by the finding: L-G.7; REGISTRATION SPEC P-ADM-1 (labels). THE FINDING'S FIX, APPLIED AS WRITTEN: In `labels.pre_seen.text`, before \"confirmation, if any, …\", insert: \"the point estimate of this row's statistic is fixed by filed numbers before scoring (the kept book's mean on file minus the v6 mean on file); the bar of this family (q ÷ 2) is looser than the bar under which both halves were scored on these campaigns in TC11 (q ÷ 9); a SUPPORTED here adds an interval to a seen effect and no evidence beyond TC11's;\".",
+   "reject_reason": ""
+  },
+  {
+   "id": "STA-12",
+   "lens": "STATISTICS",
+   "severity": "MINOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-07",
+    "CANON-18",
+    "CANON-32"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-X",
+    "L-S"
+   ],
+   "edit": "Apply CANON-18 point 4 (the fixed sentence opening the fill-sensitivity row) and point 6 (L-X OPEN TO OPERATOR item 7), and CANON-07's L-0 edit (L-0.16's registered-table definition gains 'the arms a registered row's verdict_rule reads (P-SCALP-3's ladder__touch, ladder__deep)'). Readings named by the finding: L-X.9; L-X.14; L-0.16; L-S.28; L-X OPEN TO OPERATOR.",
+   "reject_reason": ""
+  },
+  {
+   "id": "STA-13",
+   "lens": "STATISTICS",
+   "severity": "MINOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-18"
+   ],
+   "sections_to_edit": [
+    "L-X",
+    "L-S"
+   ],
+   "edit": "Apply CANON-18 point 5 and the table's fourth row: the qualifier reads LOAO BELOW THE LINE (k/N above; passing when dropped: <assets>; failing when dropped: <assets>) with the fixed sentence; the rule for D and the word are unchanged. Readings named by the finding: L-X.9; L-X.11; L-S.28.",
+   "reject_reason": ""
+  },
+  {
+   "id": "STA-14",
+   "lens": "STATISTICS",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [
+    "CANON-18"
+   ],
+   "sections_to_edit": [
+    "L-X"
+   ],
+   "edit": "Applied as written; C(scored) is CANON-18's C of the scored arm, and the sensitivity-seed ladder tuple is evaluated on CANON-18's table. Readings named by the finding: L-X.8; L-X.14; L-X.26. THE FINDING'S FIX, APPLIED AS WRITTEN: L-X.8 and L-X.14: \"`stable_across_seeds` and SEED-FRAGILE are defined on `C(scored)` = (a) ∧ (b) ∧ (c) of the scored arm at the two seeds and on the exact enumeration, on all five rows. P-SCALP-3 also files `fill_ladder.<book>.C_sens`, `one_asset.D_sens` and `word_stable_across_seeds` (the six-case table evaluated on the sensitivity-seed tuple equals the word of record).\" L-X.26: DRAWS.parquet also persists `ladder_touch_sens`, `ladder_deep_sens` and `loao_<asset>_sens` for P-SCALP-3.",
+   "reject_reason": ""
+  },
+  {
+   "id": "STA-15",
+   "lens": "STATISTICS",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [
+    "CANON-21"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-X"
+   ],
+   "edit": "Applied as written (it is CANON-21 point 4). Readings named by the finding: L-X.14; L-0.16. THE FINDING'S FIX, APPLIED AS WRITTEN: L-X.14 `literal_bar` row: \"`literal_bar_p`, `literal_bar_pctile` (the (100 · bar)-th percentile of the record's draws) and `would_read_ci_only`; no boolean\". Widen the forbidden-key pattern in L-X.14 and L-0.16 to `verdict|clears|spent_test`.",
+   "reject_reason": ""
+  },
+  {
+   "id": "STA-16",
+   "lens": "STATISTICS",
+   "severity": "MINOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-23"
+   ],
+   "sections_to_edit": [
+    "L-R"
+   ],
+   "edit": "Apply CANON-23 G in L-R.7 (b): with fewer than three refusals EVERY refused campaign is hand-verified; the print token is the canon's 'ONLY <n> EXIST (contract count 3)' (not 'ONLY k REFUSALS EXIST'), n asserted equal to the gate row's n_refused; empty slots print NONE-EXISTS; the shortfall is carried to the report as a finding. Readings named by the finding: L-R.7.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-01",
+   "lens": "BUILDABILITY",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-02",
+    "CANON-11",
+    "CANON-12",
+    "CANON-28"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D",
+    "L-V",
+    "L-C",
+    "L-G",
+    "L-R",
+    "L-S",
+    "L-L"
+   ],
+   "edit": "Apply CANON-02 (class law, VA_BLIND_T, the legs incl. the exit check and the plants), CANON-11 (the filed-table inventory the finding sketches), CANON-12 (the reader's sha law) and CANON-28 (READ_SET for the VA-BLIND proof). The finding's text stands with OD-2's changes: DOORS_T = (tierc12_va, tierc12_va_trades); VA_FIXTURE_IMPORTERS_T is VA_MODULE_FIXTURES_T = (tierc12_va_fixtures,) only — tierc12_stage_r_fixtures and tierc12_closure_fixtures import no door (a suite may import analytics.profile as a referee). The residue sentences it lists (L-0.25, L-0.30, L-0 INTERFACE, L-R.4, L-R.31, L-R INTERFACE, the P-DIR-1 spec, L-L.16, L-S.1, L-S INTERFACE, L-CG INTERFACE, L-C.11) are edited as CANON-02 gives them. Readings named by the finding: L-0.22; L-0.25; L-0.30; L-V.2; L-C.11; L-R.4; L-R.31; L-R.7; L-R.25; L-R.30; L-S.1; L-L.16; L-D.26.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-02",
+   "lens": "BUILDABILITY",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-05"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D",
+    "L-V",
+    "L-C",
+    "L-L"
+   ],
+   "edit": "Apply CANON-05. The finding's clause (a) and (b) stand; its (c) SUPERSEDED-with-notes rule is kept for UNTRACKED paths only (supersedes[]); for tracked paths OD-4's rule governs (the blob at the earlier record's closing commit). forward/FORWARD_LEDGER.jsonl joins the append-only list by name; the TC12-LEANS record re-records the rulings and the X manifest; the literal cf66cb81…3e88 and '490 files' are struck as values to assert. Readings named by the finding: L-0.4; L-0.5; L-0.6; L-D (register of constants); L-C (abbreviations); L-V.1; L-L.5; L-L.32.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-03",
+   "lens": "BUILDABILITY",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-30"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-X"
+   ],
+   "edit": "Apply CANON-30 — the finding's PRE_REG, REG_SET, ATTEST-REG and ATTEST-ORDER texts verbatim, plus the note that the REG commit also MODIFIES scripts/tierc12_progress.py and PROGRESS.json. L-X.20 and L-0.10's TC12-REG row as the finding says. Readings named by the finding: L-X.21; L-X.20; L-X.1; L-0.10; L-0.17.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-04",
+   "lens": "BUILDABILITY",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-02"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D"
+   ],
+   "edit": "Apply CANON-02 point 7 (ii) and point 8 — the finding's text verbatim (the TC10 layer disclosed and not walked; TC10_LAZY_RANGE_T typed by (module, enclosing function); the coverage clause; the PIVOT-RANGE addition) — and the L-D.29 sentence that its pinning walk is a different walk. Readings named by the finding: L-0.22; L-0.30; L-D.29; L-R.10; L-S.1.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-05",
+   "lens": "BUILDABILITY",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-06",
+    "CANON-07"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-X",
+    "L-G"
+   ],
+   "edit": "Apply CANON-06 and CANON-07 (the zero-row write is CANON-07 point 8). The finding's text stands with the one signature put_regbook(reg_dir, arm, df, *, meta, lens, kind). Readings named by the finding: L-0.13; L-0.20; L-0.21; L-G.19; L-X.24; L-X.25; L-G.8.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-06",
+   "lens": "BUILDABILITY",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-08"
+   ],
+   "sections_to_edit": [
+    "L-X",
+    "L-S"
+   ],
+   "edit": "Apply CANON-08. Readings named by the finding: L-X.24; L-S.16; L-S.31; O-32.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-07",
+   "lens": "BUILDABILITY",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-01"
+   ],
+   "sections_to_edit": [
+    "L-X",
+    "L-G",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-01 — the finding's fix verbatim (keyed by registration id; no clause slot on the KIN-SEEN template; the owner's text printed under the cell). Readings named by the finding: L-X.13; L-R.23; L-S.29; L-G.13; L-R.6; P-SFP-VA-1 spec; P-SCALP-3 spec; P-BRD-1 spec; P-DIR-1 spec.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-08",
+   "lens": "BUILDABILITY",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-04"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-V",
+    "L-R"
+   ],
+   "edit": "Apply CANON-04. The finding's fix stands with: the label column is u_lookback_label with OD-3's string (not u_label); the typed module is scripts/tierc12_va_trades.py; the partition is UNCHANGED — a 1d event with no closed 1w bar is in cell UNDEFINED, and NA is an empty-by-construction row (not 'NA holds only events with no 1w bar closed'). L-R OPEN 1, the OBJECTION, INTERFACE (ii) and L-V OPEN 1's alternative are closed as settled. Readings named by the finding: L-R.27; L-R.28; L-0.25; L-V.5; O-28.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-09",
+   "lens": "BUILDABILITY",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-09"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D"
+   ],
+   "edit": "Apply CANON-09 points 2 and 7 — the finding's L-D.25 and L-D.30 texts verbatim (TC12-ENV.vendor; its own commit; --pin-lineage inside it; F-VENDOR's blob leg at the TC12-ENV gate). Readings named by the finding: L-D.25; L-D.30; L-0.10; O-31.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-10",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-09",
+    "CANON-10"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D",
+    "L-V",
+    "L-X",
+    "L-C",
+    "L-G",
+    "L-R",
+    "L-L"
+   ],
+   "edit": "Apply CANON-09 (SUBSTAGES_T, parent records, the stage-complete rule, L-X.23 item 6) and CANON-10. Of the finding's fix, rules (1)-(3) stand as CANON-09 points 6 and 5 and CANON-07's L-X edit. NOT built: item (4) and the row 'TC12-C.stamps' — OD-7 instantiates the stamps as TC12-V.stamps.c / .r / .s, filed by the reader. Readings named by the finding: L-0.3; L-0.10; L-X.23; L-R.31; L-C.11; L-G.10; L-L.3; L-D.24; L-V.19; O-31.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-11",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-09",
+    "CANON-10",
+    "CANON-24"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D",
+    "L-C",
+    "L-G",
+    "L-R",
+    "L-L"
+   ],
+   "edit": "Apply CANON-09 point 10 (one writer script per parquet directory; one transcript per fixture record; --stage, never a leg filter) and CANON-24's rows. (a) stands verbatim (stage_r/dir/, stage_r/sfp/, stage_r/tables/ with their own manifests, stage documents and transcripts FIXTURES_STAGE_R_dir.txt / _sfp.txt / _tables.txt); (b) stands (F-MIRROR in data/FIXTURES_MIRROR.txt); (c) is NOT built — the stamp tables live in va/stamps/ (OD-7), the one typed shared directory; the range books' stamps are not in stage_r/sfp/. Readings named by the finding: L-R.7; L-R.31; L-R.33; L-C.11; L-D.15; L-D.24; L-0.4; L-0.14; L-0.20; L-0.21.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-12",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-03",
+    "CANON-10",
+    "CANON-24"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-V",
+    "L-C",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-24 (the hosting map) and CANON-10 point 5. The finding's roll stands with: per-book F-NEST-KEYS and F-NEST-ASOF [<book>] in the stamps suite at TC12-V.stamps.c / .r / .s; F-TRAV [e] and F-VA-PINS [e] as helper legs in the CONSUMING suites (CMP-10), not in the closure suite; the seeded instants of F-NEST-ASOF [a] per CANON-03 point 3. Readings named by the finding: L-V.19; L-V.24; L-V (F-NEST-ASOF, F-NEST-KEYS, F-TRAV, F-VA-PINS); L-0.10; L-0.11; L-C.11.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-13",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-26"
+   ],
+   "sections_to_edit": [
+    "L-D"
+   ],
+   "edit": "Apply CANON-26 points 3-4 — the finding's text verbatim (parameter name cut_ms). Readings named by the finding: L-D.28; L-D.31; L-V.7; L-V.18; L-V (F-VA-ASOF, F-TRAV, F-NEST-ASOF).",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-14",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-26"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D"
+   ],
+   "edit": "Apply CANON-26 point 2-3 — the finding's text verbatim (X_REC on MAIN_TREE; E.x_rec returns the absolute main-tree path; the three x-rec classes judged on that root). Readings named by the finding: L-D.26; L-D.27; L-0.12.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-15",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-11",
+    "CANON-17"
+   ],
+   "sections_to_edit": [
+    "L-V",
+    "L-S"
+   ],
+   "edit": "The defect (a frozen selector that does not exist) is settled by DELETING the second precondition (CANON-17, OD-12). Built from the finding: each by_era leaf of VA_MIRROR.json also QUOTES X's n_ranges, ratio_median, share_ratio_lt_1, edge_n, edge_median_term_h20, edge_toll_atr (CANON-11 point 6); L-S.27's 'until it does …' sentence is deleted. NOT built: the at_maker_pin block, qr3_pass, and the single-record item 2. Readings named by the finding: L-V.17; L-S.27; P-SCALP-3 spec; L-X.10.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-16",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-02",
+    "CANON-12",
+    "CANON-20"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-V",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-12 — traverse(name) -> (value, source) exactly as the finding gives it — and the citations in L-0.17, L-R.16, L-S.1 item 3 and L-S.20. Readings named by the finding: L-V.2; L-V.18; L-0.17; L-R.16; L-S.1; L-S.20.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-17",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-10",
+    "CANON-12"
+   ],
+   "sections_to_edit": [
+    "L-V",
+    "L-C",
+    "L-R",
+    "L-S",
+    "L-L"
+   ],
+   "edit": "Apply CANON-10 points 2-4 — the finding's kind dict and declared kinds, with the scalper's key column named known_at_ms (CANON-33), not event_ms, and the take-profit venue's kind added. Readings named by the finding: L-V.19; L-V.20; L-C.11; L-R.31; L-S.30; L-L.25.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-18",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-36"
+   ],
+   "sections_to_edit": [
+    "L-X",
+    "L-G",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-36 points 1-4 — the finding's FIELD GRAMMAR, with the separator written ' — ' (space, U+2014, space), the required-grammar without '> 0' (no numeric item remains after OD-12), and the five blocks rewritten to it. Readings named by the finding: L-X.18; L-X.10; L-X.13; P-ADM-1 spec; P-BRD-1 spec; P-DIR-1 spec; P-SFP-VA-1 spec; P-SCALP-3 spec.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-19",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-36"
+   ],
+   "sections_to_edit": [
+    "L-G",
+    "L-L"
+   ],
+   "edit": "Apply CANON-36 point 5 — the finding's selector, the match made exact: the one element of registrations[P-ADM-1].operative_spec.arms matching ^`scored`\\s; HALT FWD-GATE-TEXT otherwise; gate.text_sha256. Readings named by the finding: L-L.2; L-L.3; L-L.18; L-X.19; L-G.7; P-ADM-1 spec.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-20",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-33",
+    "CANON-36"
+   ],
+   "sections_to_edit": [
+    "L-S",
+    "L-L"
+   ],
+   "edit": "Apply CANON-33 and CANON-36 point 3. The finding's rename stands with the instant column named known_at_ms (two findings and the stamp key agree on it), not event_ms; target → variant; L-L.25 gains the rows; the P-SCALP-3 block gains the 'VA columns read (declared for F-VA-PINS (e)): …' sub-bullet with L-S.1's list verbatim. Readings named by the finding: L-S.30; L-S.23; L-L.24; L-L.25; P-SCALP-3 spec.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-21",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-25"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D",
+    "L-V",
+    "L-X",
+    "L-G",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-25. From the finding: multi-capture regexes with a tuple type; VETO_ROWS_T typed in F-VETO; rr_min as ONE pin (L-S.2 renames scalp.rr_min). Changed by the canon: the veto field lives in PIN_REGISTER.json; va-lookback and maker-bps name per-lens and per-venue rows; tc11-stamp and 1w name register rows of kind 'ruling'; the breadth pin is brd.cut. Readings named by the finding: L-0.17; L-0.23; L-S.2; L-R.32; L-G.12; L-G.7; L-X.11; L-V.4.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-22",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-23"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-V",
+    "L-G",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-23 G — the finding's law (NONE-EXISTS + FILL; all rows verified when the population is short; GREEN; a finding-not-fixed owned by the operator; never RED or VOID on a population's size) with the canon's print tokens ('ONLY <n> EXIST (contract count <k>)', 'EMPTY POPULATION'). L-V F-STATE (a), L-R.7 (b), L-R.25 (a), L-S.31 (a), (b) and L-S's unverified list conform. Readings named by the finding: L-0.14; L-V (F-STATE a); L-G.14; L-R.7; L-R.25; L-S.31.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-23",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-28"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D",
+    "L-S",
+    "L-L"
+   ],
+   "edit": "Apply CANON-28 — E.read_set() and <dir>/READ_SET.json as the finding gives them, restricted to the judged classes; the legs that read it are listed there. Readings named by the finding: L-D.27; L-D.26; L-0.13; L-0.30; L-S.1; L-L.9.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-24",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-29"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-X"
+   ],
+   "edit": "Apply CANON-29. SUBPROC_SITE_T stands as the finding types it (with the stamp tool's site on a linked worktree, BLD-26) and L-0.16's marker sentence stands. Changed: the acts' text lives in the template MODULE scripts/tierc12_close_acts_template.py (OD-18, FID-15), not in a constant ACTS_TEMPLATE of tierc12_close.py. Readings named by the finding: L-0.22; L-0.26; L-0.16; L-X.31; L-X.29; L-X.34; L-X.28.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-25",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-29"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-X",
+    "L-L"
+   ],
+   "edit": "Apply CANON-29 point 3 — the finding's stubbed scratch copy (two typed substitution points) verbatim; the real planner is proven by F-ROWS [ACT] and the real stamp by F-TC11-STAMP. Readings named by the finding: L-X.33; L-0.26; L-L.32; L-X.34.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-26",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-29"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-X"
+   ],
+   "edit": "Apply CANON-29 point 4 — the finding's proof tree (a detached linked worktree; the PRE leg; PROOF ENVIRONMENT DEFECT) verbatim; L-0.24's 'SCRATCH CLONE' wording conformed. O-10's 'scratch clone' is read as 'a scratch tree outside both trees' and is listed for the orchestrator. Readings named by the finding: L-X.34; L-0.24.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-27",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-05",
+    "CANON-35"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D",
+    "L-X",
+    "L-G",
+    "L-R",
+    "L-S",
+    "L-L"
+   ],
+   "edit": "Apply CANON-35 — the finding's four rules verbatim (AST-node shas for set-(c) literals; TC11's registry pinned by chain head and payload sha, 648834bf… struck; E.tc11_record's second accepted PROGRESS sha; contract_of_record by prefix) — plus F-FROZEN's matching acceptance. Readings named by the finding: L-0.24; L-0.1; L-0.9; L-X.24; L-X.27; L-G.5; L-D.27; L-L.2; P-ADM-1 spec; P-BRD-1 spec.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-28",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-23",
+    "CANON-24"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D"
+   ],
+   "edit": "Apply CANON-24 note 1 — the finding's sealed capture data/FLAT_BAR_ATTEST.json and OFFLINE leg verbatim; L-D.5's run table and L-D.11's provenance set gain it — and CANON-23 D ('No fixture leg makes a network call'). Readings named by the finding: L-D.13; L-D.15; L-0.11; L-0.14.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-29",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-06",
+    "CANON-07"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-X",
+    "L-L"
+   ],
+   "edit": "Apply CANON-07 points 2 and 8 (every named arm written even when empty; regbooks/<ID>/build_manifest.json) and CANON-06 point 4 (the skip-empty file-set law outside regbooks; manifest key registrations_sha256). Readings named by the finding: L-X.24; L-X.7; L-X.14; L-0.13; L-0.20; L-L.16.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-30",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-31"
+   ],
+   "sections_to_edit": [
+    "L-0"
+   ],
+   "edit": "Apply CANON-31 — the finding's grammar with the longest-match rule; the filed subjects parse as STEP Q, R0, R0, LEANS, LEANS. Readings named by the finding: L-0.9; L-0.10.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-31",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-27"
+   ],
+   "sections_to_edit": [
+    "L-D",
+    "L-S"
+   ],
+   "edit": "Apply CANON-27 — the finding's text; the fallback and the unverified line are deleted in L-S. Readings named by the finding: L-D.23; L-S.11; L-S.15.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-32",
+   "lens": "BUILDABILITY",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-02",
+    "CANON-11",
+    "CANON-24"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-V",
+    "L-R"
+   ],
+   "edit": "The single-implementation choice is taken, in OD-2's stronger form: DOOR 2 scripts/tierc12_va_trades.py (record TC12-V.trades) runs the schedule and va_machine on the boxes AND builds the two-trades tables; tierc12_stage_r_tables.py is struck. Files: va/trades/NULL_BOXES_VA.parquet (the finding's va_null_go_boxes, under L-R.29's existing name) and va/trades/va_null_go_events.parquet. F-NULL-MIRROR (a), (c), (d) are hosted at TC12-V.trades; (b) is dropped. The finding's 'if the orchestrator keeps the builder-side machine' branch is not taken. Readings named by the finding: L-R.29; L-R.17; L-V.23; L-0.22; O-29.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-33",
+   "lens": "BUILDABILITY",
+   "severity": "MINOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-26"
+   ],
+   "sections_to_edit": [
+    "L-D",
+    "L-V",
+    "L-C",
+    "L-G",
+    "L-R",
+    "L-L"
+   ],
+   "edit": "Apply CANON-26 points 1-3 — the finding's renames verbatim (E.LR → E.LAB, E.RC → E.R7; E.D.load_asof; TC11_LIST_DIRS deleted). Readings named by the finding: L-C (abbreviations); L-G.2; L-G.4; L-V.7; L-R (interface); L-D.26; L-D.27; L-L (interface).",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-34",
+   "lens": "BUILDABILITY",
+   "severity": "MINOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-23",
+    "CANON-24"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D",
+    "L-X",
+    "L-C",
+    "L-L"
+   ],
+   "edit": "The defect is settled by CANON-23 B and E (CMP-26's grammar): exact FID match for F-LEDGER (and for every contract name but F-CTRL), so F-LEDGER-FMT is never matched. NOT built: the finding's ids F-FAM-PARSE, F-TOLL-DATA, F-TOLL-READER, F-TOLL-BOOK and its per-name prefix list. Built instead: F-FAM-PINS (pins suite, TC12-REG); F-FAM [PARSE], [REAL] at TC12-SCORE and [PLANTED] at TC12-ENV.score-build; F-TOLL [data …], [reader], [book …]; L-0.19's owner line as the finding gives it. Readings named by the finding: L-0.19; L-0.18; L-X.15; L-L.7; L-C.12.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-35",
+   "lens": "BUILDABILITY",
+   "severity": "MINOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-23"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-V",
+    "L-G",
+    "L-R",
+    "L-L"
+   ],
+   "edit": "Apply CANON-23 F — the finding's stream law and F-SEED rule verbatim (the tag is '<suite tag>|<block id>'); each owner states its count as a fixture-typed literal in its reading: L-V F-NEST-ASOF [a], F-VA-ASOF [a]; L-R.25 F-SFP-ASOF; L-G.10 ASOF; L-0.28 F-ASOF; every FLOW leg. Readings named by the finding: L-0.14; L-0.2; L-V (fixture common law); L-V.23; L-L.20; L-R.25; L-G.10; L-0.28.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-36",
+   "lens": "BUILDABILITY",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [
+    "CANON-07",
+    "CANON-09"
+   ],
+   "sections_to_edit": [
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Applied as written: (1) is CANON-07 point 7 (licence_pointers, licence_ok_by_era; L-S.30's licence column values); (2) is CANON-09's L-R edit (certified by progress/TC12-R.dir.json); (3) is CANON-09's L-R.31 compute sentence. Readings named by the finding: L-R.24; L-X.29; L-0.16; L-0.27; L-S.30; P-DIR-1 spec; L-R.31. THE FINDING'S FIX, APPLIED AS WRITTEN: (1) L-R.24: 'the sidecar carries licence_pointers = {era: \"research_outputs/tierc12/va/VA_MIRROR.json#licence[1d|taker].by_era[<era>]\"} and the booleans licence_ok_by_era; the words themselves are printed only in section 0 beside the row'; L-S.30's licence column takes the values 'licensed' / 'none - CLASSIC5 word transplanted'. (2) P-DIR-1 block: 'the base arm (regbooks/P-DIR-1/base.parquet, certified by progress/TC12-R.dir.json; its book identity held to TC11's by F-BASE-IDENT)'. (3) L-R.31 adds: 'Compute: one process per sub-stage, no worker pool; fixture subprocesses run one at a time (O-5).'",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-37",
+   "lens": "BUILDABILITY",
+   "severity": "MINOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-09",
+    "CANON-38"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-C",
+    "L-G",
+    "L-R",
+    "L-S",
+    "L-L"
+   ],
+   "edit": "Apply CANON-38 — the finding's three unifications verbatim — and CANON-09 point 5 (TC12-S starts after TC12-R.sfp). Readings named by the finding: L-L.9; L-C.4; L-G.18; L-R.5; L-R.31; L-S.21.",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-38",
+   "lens": "BUILDABILITY",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [
+    "CANON-21",
+    "CANON-26",
+    "CANON-32"
+   ],
+   "sections_to_edit": [
+    "L-D",
+    "L-X"
+   ],
+   "edit": "Applied as written for (1) and (2): L-X's TC11_ALLOW_FILE rows are in CANON-26 point 5; L-X.32's brackets are rendered at a fixed byte width. (3) is CANON-21 point 1 (the leaf is named arm__<slug> and carries no p). Readings named by the finding: L-X.23; L-X.14; L-X.32; L-D.27; L-L.29; L-R (interface). THE FINDING'S FIX, APPLIED AS WRITTEN: (1) L-X INTERFACE (L-D): 'TC11_ALLOW_FILE rows: scores/SCORES.json, scores/BASE_IDENT.json, data/AS_OF_PIN.json, registrations/REGISTRATIONS.json, regbooks/P-BRK-4H/scored.{parquet,json}, regbooks/P-AGE-1/{scored,base}.{parquet,json}'. (2) L-X.32: 'each bracket is rendered at a fixed byte width and its fill is padded or truncated to exactly that width, so the stamped append and report have the staged byte counts'. (3) L-X.14: 'each shipped tierE__ arm gets one leaf keyed (registration, arm): its sidecar's ruler (two_sample against the row's base, or vs_zero) at the seed of record with B draws, printing n, point, interval and would_read_ci_only; no other slug is computed on it.'",
+   "reject_reason": ""
+  },
+  {
+   "id": "BLD-39",
+   "lens": "BUILDABILITY",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [
+    "CANON-09",
+    "CANON-23",
+    "CANON-24"
+   ],
+   "sections_to_edit": [
+    "L-0"
+   ],
+   "edit": "Applied as written: (1) clock files at T12/sweep/_det_clock/<record id>.json and quarantine directories T12/_det_partial_<ts>/ (CANON-09 point 9); (2) is CANON-23 H; (3) is the closure row of CANON-24; (4) is CANON-09 point 6. Readings named by the finding: L-0.11; L-0.4; L-0.9; L-0.22. THE FINDING'S FIX, APPLIED AS WRITTEN: (1) 'clock files go to T12/sweep/_det_clock/<STAGE>.json; quarantine directories are named T12/_det_partial_<ts>/' (both then fall under the existing **/_det_*/ rule; no ignore file is edited). (2) L-0.11: 'every tierc12_*_fixtures.py accepts --root=DIR (all writes, transcripts and twins under DIR); the sweep appends it to each recorded invocation'. (3) Suites table: 'at --stage=TC12-REG the closure suite runs F-TYPED, F-SEED, F-FX-MIRROR, F-FX-FORM and F-CLOSURE (ii)-(iii); legs (i), (i-b), (iv), (v) first run at TC12-ENV'. (4) L-0.9: 'the parent record of a stage with several producers is written by the orchestrator's gate step from the artifact maps each producer returns'.",
+   "reject_reason": ""
+  },
+  {
+   "id": "TRD-01",
+   "lens": "TRADING",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-14"
+   ],
+   "sections_to_edit": [
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-14 (OD-9). Built from the finding: a bar opening at or beyond the stop exits at the OPEN; targets book their LEVEL with no gap improvement; T1 and T2 are touch-triggered TAKER exits on P-SFP-VA-1; X's record law behind a declared switch, mirrored on X's filed rows and printed as tierE__x_gaplaw; the plant 'a gap stop booked at the stop price'; the spec's walk sentence. NOT built: the finding's open-decides-first step for TARGETS (X's symmetric law) — OD-9: the stop is tested before any target on every bar, the same law as L-S.18; no difference from L-S.18 remains to state. Readings named by the finding: L-R.19; L-R.12; L-R.25; L-S.18; L-S.11.",
+   "reject_reason": ""
+  },
+  {
+   "id": "TRD-02",
+   "lens": "TRADING",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-08"
+   ],
+   "sections_to_edit": [
+    "L-X",
+    "L-S"
+   ],
+   "edit": "Apply CANON-08 — the finding's ladder-law sentence and its addition to the P-SCALP-3 spec's verdict_rule verbatim. Readings named by the finding: L-X.24; L-S.16; L-S.28; L-S.31.",
+   "reject_reason": ""
+  },
+  {
+   "id": "TRD-03",
+   "lens": "TRADING",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-13"
+   ],
+   "sections_to_edit": [
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-13 (OD-8). The finding's structure stands (two refusals; the fee band a flag; a void T1) with OD-8's comparators and slugs: poc_not_ahead is d·(T1 − e) ≤ 0 (not the strict poc_behind_entry), t2_not_ahead (not t2_not_beyond_entry); X's law by a declared switch in F-SFP-MIRROR and as tierE__x_geometry. Its last alternative (keep X's refusals) is not taken. Readings named by the finding: L-R.14; L-R.15; L-S.11; L-S.12.",
+   "reject_reason": ""
+  },
+  {
+   "id": "TRD-04",
+   "lens": "TRADING",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-07",
+    "CANON-15"
+   ],
+   "sections_to_edit": [
+    "L-X",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-15 — the finding's three assignments, tc_series_net_r, the two-case F-TOLL (t2) identity and the bound count verbatim; the two conditional columns are in CANON-07 point 5. Readings named by the finding: L-S.21; L-S.22; L-R.20; L-X.24.",
+   "reject_reason": ""
+  },
+  {
+   "id": "TRD-05",
+   "lens": "TRADING",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-16"
+   ],
+   "sections_to_edit": [
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-16 — the finding's sentence, written on TickGrid's dec and T. Readings named by the finding: L-R.24; L-S.15; L-S.9.",
+   "reject_reason": ""
+  },
+  {
+   "id": "TRD-06",
+   "lens": "TRADING",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-04"
+   ],
+   "sections_to_edit": [
+    "L-V",
+    "L-R"
+   ],
+   "edit": "Apply CANON-04. The finding's fix stands with OD-3's column and string (u_lookback_label, not lens_above_label) and the unchanged partition (no closed 1w bar → UNDEFINED; NA empty by construction). Readings named by the finding: L-R.27; L-V.5.",
+   "reject_reason": ""
+  },
+  {
+   "id": "TRD-07",
+   "lens": "TRADING",
+   "severity": "MINOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-13"
+   ],
+   "sections_to_edit": [
+    "L-S"
+   ],
+   "edit": "(b) is CANON-13 point 1 with the slug t2_not_ahead (not no_order_t2_not_beyond_entry): an order whose T2 is not ahead of the limit is not an order in ANY book, tierE__rr_unfiltered included. (a) stands as written: L-S.9's law reads 'the ENTRY limit is never marketable against the price that placed it'; L-S.17 adds target_marketable_at_placement = d·(c5[f] − px(n_T)) ≥ 0, counted per target — such a target is still filled only by the book's test on a later bar and only at its level. Readings named by the finding: L-S.9; L-S.11; L-S.12; L-S.17; L-S.26.",
+   "reject_reason": ""
+  },
+  {
+   "id": "TRD-08",
+   "lens": "TRADING",
+   "severity": "MINOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-07",
+    "CANON-21"
+   ],
+   "sections_to_edit": [
+    "L-X",
+    "L-S"
+   ],
+   "edit": "Apply CANON-21 point 2 (the leaf taker_twin_haircut) and CANON-07 points 5-6 (the conditional column and its identity); L-S.22 gains the finding's sentence on adverse selection verbatim. Readings named by the finding: L-S.22; L-X.14; L-X.24.",
+   "reject_reason": ""
+  },
+  {
+   "id": "TRD-09",
+   "lens": "TRADING",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [
+    "CANON-07"
+   ],
+   "sections_to_edit": [
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Applied as written (the two columns are extra regbook columns, CANON-07's L-R edit). Readings named by the finding: L-S.19; L-S.13; L-R.17. THE FINDING'S FIX, APPLIED AS WRITTEN: L-S.19 adds: \"Each invalidation row files `inval_event_E` (the event's frozen edge) and `inval_edge_moved = (inval_event_E != edge_px)`; printed: `n_invalidation` by `inval_edge_moved` and by the sign of `d·(exit_px − L)`.\" L-R.17 adds the same two columns against the event's `E`, with the same print.",
+   "reject_reason": ""
+  },
+  {
+   "id": "TRD-10",
+   "lens": "TRADING",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [],
+   "sections_to_edit": [
+    "L-S"
+   ],
+   "edit": "Applied as written. Readings named by the finding: L-S.13; L-S.2; L-S.31. THE FINDING'S FIX, APPLIED AS WRITTEN: Replace the sentence with: \"IF `V·STEP5 == E.LENS_MS[\\\"1h\\\"]` (a guard, never a HALT) THEN, on a gap-free tape, exactly one 1h close lies in the window and every cancellation is asserted `by == \\\"margin\\\"`, `bars_out == 0`, `E == edge_px`; ELSE no such assertion is made and every cancellation is filed with its `by`, `bars_out` and `E`.\"",
+   "reject_reason": ""
+  },
+  {
+   "id": "TRD-11",
+   "lens": "TRADING",
+   "severity": "MINOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-27"
+   ],
+   "sections_to_edit": [
+    "L-D",
+    "L-S"
+   ],
+   "edit": "Apply CANON-27. Readings named by the finding: L-D.23; L-S.11; L-S.15.",
+   "reject_reason": ""
+  },
+  {
+   "id": "TRD-12",
+   "lens": "TRADING",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [],
+   "sections_to_edit": [
+    "L-0"
+   ],
+   "edit": "Applied as written. Readings named by the finding: L-0.30; L-R.10; L-R.31; L-S.30. THE FINDING'S FIX, APPLIED AS WRITTEN: L-0.30: \"… the edge is compared with the level the owning reading names: P-SCALP-3 — the in-force `val` / `vah` of `va_bars_1h` row `k1`; P-SFP-VA-1 and its 1d cell — `E` of the trade's `va_events` row, itself asserted equal to the in-force `vah` / `val` of `va_bars_<lens>` row `t0 − 1`.\"",
+   "reject_reason": ""
+  },
+  {
+   "id": "TRD-13",
+   "lens": "TRADING",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [
+    "CANON-10"
+   ],
+   "sections_to_edit": [
+    "L-R"
+   ],
+   "edit": "Applied as written; TP1D_CAMPAIGNS also files ev_tp_ms for the stamps (CANON-10). Readings named by the finding: L-R.30. THE FINDING'S FIX, APPLIED AS WRITTEN: L-R.30 adds: \"`TP1D_CAMPAIGNS` files `gap_tp` and `tp_px_level` (the level), and `delta_r_level_fill` = the same ride with the TP booked at the level; `TP1D_SUMMARY` prints both deltas and `n_gap_tp`. The `max(level, open)` form stays the table's first column because F-TP-MIRROR (b) anchors it to TC11's filed arm.\"",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-01",
+   "lens": "COMPLETENESS",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-05",
+    "CANON-31",
+    "CANON-39"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D",
+    "L-V",
+    "L-C"
+   ],
+   "edit": "Apply CANON-05 (the finding's (a)-(d) are its points 1, 3, 5, 2 — OD-4's own rule), CANON-31 ((e): the commit grammar; F-COMMIT plants a subject whose first token is not a record id) and CANON-39. Readings named by the finding: L-0.3; L-0.4; L-0.5; L-0.6; L-0.9; L-0.12; L-D register of constants; L-V.1; L-C abbreviations.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-02",
+   "lens": "COMPLETENESS",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-06"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-X",
+    "L-G"
+   ],
+   "edit": "Apply CANON-06 — the finding's regbook-writer law with the one signature (kind ∈ {base, scored, ladder, strip, tierE}; collar for strip and tierE). Readings named by the finding: L-0.13; L-X.24; L-X.25; L-G.8; L-G.19; L-R.4.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-03",
+   "lens": "COMPLETENESS",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-02",
+    "CANON-03",
+    "CANON-04",
+    "CANON-09",
+    "CANON-39"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-R"
+   ],
+   "edit": "Apply CANON-02 ((i): the rewrite of L-0.22; the exit check registered by the shim; of the finding's two options for the three L-R legs, 'move them into Stage V's suite / cut the filed tables' is taken — CANON-03 — and no DOOR_FIXTURES_T beyond tierc12_va_fixtures exists), CANON-04 ((ii)), CANON-09 ((iii): TC12-ENV.vendor) and CANON-39 ((iv): L-0.6 and the deleted OBJECTION). Readings named by the finding: L-0.22; L-0.25; L-0.10; L-0.6; L-0 INTERFACE ASSUMPTIONS; L-0 OBJECTIONS; L-R.7; L-R.25; L-R.29.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-04",
+   "lens": "COMPLETENESS",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-01",
+    "CANON-08"
+   ],
+   "sections_to_edit": [
+    "L-X",
+    "L-G",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-01 ((i): three templates, keyed by registration id — not by (label key, kin flag)) and CANON-08 ((ii): the per-order ladder law, n_orders ≥ n_filled_touch ≥ n_filled_tick ≥ n_filled_deep). Readings named by the finding: L-X.13; L-X.24; L-X REGISTRATION SPEC common table; L-R.23; L-R spec P-SFP-VA-1; L-S.29; L-S spec P-SCALP-3; L-G spec P-BRD-1; L-R spec P-DIR-1; L-S.16.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-05",
+   "lens": "COMPLETENESS",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-04"
+   ],
+   "sections_to_edit": [
+    "L-V",
+    "L-R"
+   ],
+   "edit": "Apply CANON-04. The finding's fix stands with OD-3's label column and string and the unchanged partition (no closed 1w bar → UNDEFINED); L-R.28 (ii) and L-R.29's conditioning follow; the declared 1w reads belong to scripts/tierc12_va_trades.py. Readings named by the finding: L-R.27; L-R.28; L-R.29; L-R OPEN TO OPERATOR 1; L-R OBJECTION O-11; L-V.5; L-V OPEN TO OPERATOR 1.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-06",
+   "lens": "COMPLETENESS",
+   "severity": "BLOCKING",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-09",
+    "CANON-39"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D"
+   ],
+   "edit": "Apply CANON-09 — the finding's L-D.25 text (TC12-ENV.vendor with F-VENDOR's referee legs as its fixture record, transcript env/FIXTURES_ENV_VENDOR.txt) and L-D.30 order — and CANON-39 (the two OBJECTION one-liners). Readings named by the finding: L-D.25; L-D.30; L-D OBJECTIONS; L-D INTERFACE ASSUMPTIONS (L-0); L-0.4.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-07",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-33"
+   ],
+   "sections_to_edit": [
+    "L-C",
+    "L-G",
+    "L-R",
+    "L-S",
+    "L-L"
+   ],
+   "edit": "Apply CANON-33 — the finding's list completed for every section's declared tables (with the paths of CANON-09 and CANON-11: stage_r/dir|sfp|tables/, va/trades/, va/stamps/); S_orders / S_refusals / S_miss keyed on known_at_ms; g_strip_gates and g_reride_diff declare keys; the stage_s grids name their asset axis 'panel' so that they class POINTED 'no ASSET column'. Readings named by the finding: L-L.24; L-L.25; L-L.30; L-C.4; L-G.10; L-G.19; L-R.31; L-S.30.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-08",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-09",
+    "CANON-23",
+    "CANON-24"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D",
+    "L-C",
+    "L-G",
+    "L-R",
+    "L-L"
+   ],
+   "edit": "Apply CANON-09 (SUBSTAGES_T with a blocking flag; the parent rule; the resume walk over RESUME_ORDER_T; no child id outside the table; --stage and one transcript per record; the stage table's added rows) and CANON-23 I (the pre-substrate header; F-ONE-CORRIDOR's exemption). Readings named by the finding: L-0.3; L-0.4; L-0.9; L-0.10; L-0.14; L-D.24; L-G.10; L-C.11; L-R.31; L-L.3; L-L.7.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-09",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-09",
+    "CANON-10",
+    "CANON-24"
+   ],
+   "sections_to_edit": [
+    "L-V",
+    "L-C",
+    "L-G",
+    "L-R",
+    "L-S",
+    "L-L"
+   ],
+   "edit": "Apply CANON-10 — the finding's fix as OD-7 adopted it (three children, va/stamps/VA_STAMPS_<book>.parquet, the stamps suite hosting F-NEST-KEYS and F-NEST-ASOF, key tables for gated books incl. P-DIR-1's) with BLD-17's fuller kind dict; its re-ride item is moot under CANON-22. Readings named by the finding: L-V.19; L-V.20; L-V fixture roll F-NEST-ASOF; L-V fixture roll F-NEST-KEYS; L-C.11; L-G.18; L-R.5; L-R.30; L-R.31; L-S.30; L-L.16.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-10",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-24"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-V",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-24 note 2 and its rows — the finding's split verbatim (F-TRAV [b]-[d] and F-VA-PINS [a]-[d], [f] at TC12-V; F-TRAV [a], [e] and F-VA-PINS [e] as helper legs in the consuming suites; F-TYPED-TOTAL's range-book clause; L-0.11's scope sentence). Readings named by the finding: L-V fixture roll F-TRAV; L-V fixture roll F-VA-PINS; L-0.11; L-R.16; L-S.31.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-11",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-23"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-23 C — the finding's CLOSED-NO-BOOK law verbatim (L-0.19, L-0.30) — and the leg classification in CANON-23's L-R and L-S edits. Readings named by the finding: L-0.19; L-0.30; L-0.11; L-R.22; L-R.25; L-S.27; L-S.31; L-S.32; L-X.10.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-12",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-23"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-V",
+    "L-G",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-23 G. The finding's rule stands (FILL; all k verified; GREEN; a contract-named empty category is a finding) with the canon's tokens; its carve-out for L-V F-STATE (a) ('keeps VOID only for a class the synthetic table cannot produce') is NOT built — no hand-sample leg is VOID on a population. Readings named by the finding: L-S.31; L-S unverified list; L-R.7; L-R.25; L-0.14; L-V fixture roll F-STATE; L-G.14; L-X.7.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-13",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-23",
+    "CANON-24"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D"
+   ],
+   "edit": "Apply CANON-23 C and D (NOT RUN as a third state via not_run; legs_not_run; the GREEN rule; provenance transcripts) and CANON-24 (F-MIRROR at --stage=TC12-D.mirror → data/FIXTURES_MIRROR.txt). NOT built: the --online invocation and data/FIXTURES_DATA_ONLINE.txt — F-D-2 leg 4 is OFFLINE against the sealed capture (BLD-28), so no online leg exists. Readings named by the finding: L-0.14; L-0.11; L-0.9; L-0.4; L-D.13; L-D.15; L-D.21; L-D.24; L-D.5.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-14",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-30"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-X",
+    "L-L"
+   ],
+   "edit": "Apply CANON-30 (BLD-03's exact file list is the typed REG_SET; the finding's directory globs are not used); the sentence that TC12-REG.ledger-spec is filed after the attested instant stands verbatim. Readings named by the finding: L-X.21; L-0.10; L-0.17; L-0.6; L-D.25; L-L.3.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-15",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-07",
+    "CANON-09",
+    "CANON-24"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-X",
+    "L-G",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-07 point 1 (scripts/tierc12_regbook.py), CANON-09 (the child TC12-ENV.score-build) and CANON-24 (the hosting column). The finding's hosting stands with one change: the build transcript is env/FIXTURES_SCORE_BUILD.txt, not scores/FIXTURES_SCORE_BUILD.txt (a file under scores/ before the regbooks would breach L-0.10 T5). The REG-stage parse leg is named F-FAM-PINS. Readings named by the finding: L-X FIXTURES DEFINED BY THIS SECTION; L-X.15; L-X.21; L-X.23; L-X.24; L-X.25; L-0.10; L-0.18; L-G.19; L-R.33.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-16",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-21"
+   ],
+   "sections_to_edit": [
+    "L-X",
+    "L-G",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-21. The finding's leaf stands under the name arm__<slug> and WITHOUT p_num / p_den (STA-07's content: the reading that prints less that could be mistaken for a test); a strip arm gets the strip leaf only; the declared beside set as the finding gives it; the look count is by interval. Readings named by the finding: L-X.14; L-X.26; L-G.8; L-G.13; L-R.5; L-R.24; L-S.26.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-17",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-32"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-V",
+    "L-X",
+    "L-R",
+    "L-S",
+    "L-L"
+   ],
+   "edit": "Apply CANON-32 — the finding's map verbatim (OD-18), the L-0.15 sentence, OPEN 6 settled, the three §9 lists; the stage documents of record are named there (scores/BESIDE.md is added for the beside leaves). Readings named by the finding: L-X.28; L-X OPEN TO OPERATOR 6; L-0.10; L-0.15; L-L.19; L-L.22; L-R.28; L-V.24.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-18",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-25"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D",
+    "L-V",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-25 — the finding's register rows and the two veto effects verbatim, with the breadth pin named brd.cut and F-VETO typed against VETO_ROWS_T (a token may name several register rows). Readings named by the finding: L-0.23; L-0.17; L-V.4; L-D.21; L-0.24; L-0.25; L-R.32; L-S.2.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-19",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-11",
+    "CANON-42"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-V",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-42 — the finding's LICENCE leg and ORDERED_TWINS_T verbatim, the licence read evidenced by READ_SET.json's licence_reads — and CANON-11 point 6 (beside.twin_words['4h|maker']). Readings named by the finding: L-V.17; L-0.30; L-0.25; L-R.24; L-S.26; L-X.24.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-20",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-07",
+    "CANON-19"
+   ],
+   "sections_to_edit": [
+    "L-X",
+    "L-G",
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-19 point 3 and CANON-07 point 9 (OD-14: the strip is for EVERY ridden arm, under the column arm; O-9 is not annotated). The finding's L-S.25 / L-S.33 and L-R.21 / L-R.24 sentences stand, with the arm lists of CANON-07 point 4. Readings named by the finding: L-S.25; L-S.33; L-R.21; L-R.24; L-G.18.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-21",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-17"
+   ],
+   "sections_to_edit": [
+    "L-V",
+    "L-X",
+    "L-S"
+   ],
+   "edit": "Option (B) is taken (OD-12): apply CANON-17. The re-derived figure is printed beside the word in §0.3 and in the verdict text as the scorer's leaf licence_at_maker_pin; OPEN 2 is reworded (not deleted) so that the operator may still order closure by name before Stage D's fee capture. Readings named by the finding: L-S.27; L-S OPEN TO OPERATOR 2; L-V.17; L-X.10; L-D.21.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-22",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-36",
+    "CANON-37"
+   ],
+   "sections_to_edit": [
+    "L-G",
+    "L-L"
+   ],
+   "edit": "Apply CANON-36 points 5-6 (the gate-text selector; L-L's disclosed_beside clause carried into P-ADM-1's spec with STA-09's rewording; L-L's offered precondition withdrawn in words) and CANON-37. Readings named by the finding: L-L.2; L-L.3; L-L unverified list; L-L REGISTRATION SPEC note; L-X.19; L-G spec P-ADM-1; L-G INTERFACE (L-L).",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-23",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-34"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D",
+    "L-V",
+    "L-X"
+   ],
+   "edit": "Apply CANON-34 — the finding's two added sources and one heading grammar verbatim; AM-1 is L-V.15's statement (nickname AM-V2); fee grammars are AP-n → AM-n (nickname AM-D-FEE-<VENUE>). Readings named by the finding: L-0.5; L-V.15; L-D.18; L-X.19; L-X.23; L-0.10.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-24",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-40"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-X"
+   ],
+   "edit": "Apply CANON-40: the assembler appends D-5..D-12 as the finding gives them (with CANON-40's two conformances) before the freeze; L-0.10's TC12-LEANS row names them. No section fixer writes the entries. Readings named by the finding: L-0.10; L-X.28; L-G.11; L-G.7; L-R.6; L-R.30; L-X.8; L-S.10; L-S.15; L-V.18; L-L.17.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-25",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-13",
+    "CANON-14"
+   ],
+   "sections_to_edit": [
+    "L-R",
+    "L-S"
+   ],
+   "edit": "Apply CANON-13 and CANON-14 — one geometry law and one gap law for both rows, written in L-R and cited by L-S (OD-8, OD-9); X's laws are switched on for the mirror leg and printed as tierE__x_geometry and tierE__x_gaplaw. T2 inside the fee band is left to rr-min, as the finding says; a T2 at or behind the entry is refused t2_not_ahead (OD-8). Readings named by the finding: L-R.14; L-R.19; L-S.11; L-S.18; L-S INTERFACE (L-R); L-R OPEN TO OPERATOR.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-26",
+   "lens": "COMPLETENESS",
+   "severity": "MAJOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-23",
+    "CANON-24"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-D",
+    "L-X",
+    "L-G",
+    "L-S",
+    "L-L"
+   ],
+   "edit": "Apply CANON-23 A, B, E — the finding's grammar and name → FID table verbatim, with the qualifier grammar extended to '<leg> · <instance>' and F-TRAV / F-NEST-ASOF given their required qualifiers. Readings named by the finding: L-0.19; L-0.14; L-L.7; L-L INTERFACE (L-0); L-X.32; L-G.9; L-S.31; L-D.21.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-27",
+   "lens": "COMPLETENESS",
+   "severity": "MINOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-25"
+   ],
+   "sections_to_edit": [
+    "L-0",
+    "L-C",
+    "L-G",
+    "L-R"
+   ],
+   "edit": "Apply CANON-25 points 3 and 6 — the finding's four map rows (two_trades.horizons, book.trg912_periods, grid.x16_shape, grid.brd_levels) and three unpinned classes verbatim. Readings named by the finding: L-0.17; L-R.28; L-C.3; L-G.15; L-G.16.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-28",
+   "lens": "COMPLETENESS",
+   "severity": "MINOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-27"
+   ],
+   "sections_to_edit": [
+    "L-D",
+    "L-S"
+   ],
+   "edit": "Apply CANON-27. Readings named by the finding: L-D.23; L-S.11; L-S.15; L-S unverified list; L-S INTERFACE (L-D).",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-29",
+   "lens": "COMPLETENESS",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [
+    "CANON-07"
+   ],
+   "sections_to_edit": [
+    "L-X"
+   ],
+   "edit": "Applied as written (L-X.24's new head is also CANON-07's first L-X edit). Readings named by the finding: L-X.27; L-X.35; L-X.24. THE FINDING'S FIX, APPLIED AS WRITTEN: Re-head: L-X.27 'no contract line — the scorer's write law (answers the question TC11 left as Q1; contract :13 is read by L-0.24)'; L-X.35 'no contract line — the queue's rule 6 (`exchange/queue/README.md:8-12`)'; L-X.24 'no contract line — the regbook interface (F-KEY, :124, is L-0.21's)'.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-30",
+   "lens": "COMPLETENESS",
+   "severity": "MINOR",
+   "disposition": "ACCEPT",
+   "canon": [
+    "CANON-02",
+    "CANON-11"
+   ],
+   "sections_to_edit": [
+    "L-V"
+   ],
+   "edit": "Applied as written; L-V.23's generator and its draws run in DOOR 2 (CANON-02) and file under va/trades/ (CANON-11 point 8) — the new head stands. Readings named by the finding: L-V.23; L-V unverified list; L-V.3; L-R.29. THE FINDING'S FIX, APPLIED AS WRITTEN: (a) Head L-V.23 'no contract line — X's value-area null of record, built because L-R.29 prints it beside the contract's gaps+order null'. (b) The unverified line reads 'Counted per cell and the bars are UNDEFINED; no HALT on 1w or twelve-asset tapes (L-V.3's HALT covers home 1h, 4h, 1d only)'.",
+   "reject_reason": ""
+  },
+  {
+   "id": "CMP-31",
+   "lens": "COMPLETENESS",
+   "severity": "MINOR",
+   "disposition": "ACCEPT-VIA-CANON",
+   "canon": [
+    "CANON-22"
+   ],
+   "sections_to_edit": [
+    "L-G",
+    "L-R"
+   ],
+   "edit": "Apply CANON-22. No disposition rules the form, so the tie-break decides: L-G.18's form on all three gates — counts on the gate row and diff rows with a placeholder; NO re-ride arm (tierE__reride is struck from L-R.5, L-R.31 and the P-DIR-1 spec; no scorer leaf, no stamp). The finding's second sentence stands verbatim: each stage manifest carries, per mirrored ride, ride_spec and roles_name (L-G.18, L-R.5, L-R.30). Readings named by the finding: L-G.18; L-R.5; L-R.30; L-0.30; L-C.1.",
+   "reject_reason": ""
+  }
+ ]
+}
