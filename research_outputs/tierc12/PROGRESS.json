@@ -497,6 +497,75 @@
         "path": "research_outputs/tierc12/progress/TC12-REG.json",
         "sha256": "479771b021b4365e93bddc00b4d75c4a9f0faca3260556ccd0c72d2343a51c56"
       }
+    },
+    {
+      "stage": "TC12-REG.ledger-spec",
+      "parent": "TC12-REG",
+      "status": "COMPLETE-VERIFIED",
+      "as_of": null,
+      "blockers": [],
+      "depends_on": [
+        "TC12-REG"
+      ],
+      "artifact_shas": {
+        "scripts/tierc12_forward_spec.py": {
+          "bytes": 67294,
+          "sha256": "8a64c9e0e7fdd34082f4ecf94237e2303d181512a9327ca242df552e5dd7d554"
+        },
+        "scripts/tierc12_forward_fixtures.py": {
+          "bytes": 90906,
+          "sha256": "60bcefb5aa1a672c689685422bfc5cc1aab64e0323c979871541d97d6566798d"
+        },
+        "research_outputs/tierc12/forward/BOOK_SPEC_COMBINED.json": {
+          "bytes": 16880,
+          "sha256": "56cdeb25f42d740209c12300fe5b680b3eca388455431d2883caab6507e91173"
+        },
+        "research_outputs/tierc12/forward/FORWARD_LEDGER.jsonl": {
+          "bytes": 6083,
+          "sha256": "e069b5010b8ae525bd7886ca0d445a4191b27d8b2c83caa2b4b167c8ebd21b85"
+        },
+        "research_outputs/tierc12/forward/FIXTURES_LEDGER_SPEC.txt": {
+          "bytes": 33137,
+          "sha256": "aceff0bd09640e21526b3af08ecc1cd125f3d3d3d86f9635fa86073483daf949"
+        }
+      },
+      "supersedes": [],
+      "fixtures": [
+        {
+          "suite": "scripts/tierc12_forward_fixtures.py --stage=TC12-REG.ledger-spec",
+          "transcript": "research_outputs/tierc12/forward/FIXTURES_LEDGER_SPEC.txt",
+          "provenance": false,
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_not_run": 0,
+          "legs_total": 10,
+          "transcript_drift": false,
+          "transcript_sha_before": "aceff0bd09640e21526b3af08ecc1cd125f3d3d3d86f9635fa86073483daf949",
+          "transcript_sha_after": "aceff0bd09640e21526b3af08ecc1cd125f3d3d3d86f9635fa86073483daf949",
+          "wall_seconds": 1.2
+        }
+      ],
+      "one_line": "the fourth book gated-v6-combined frozen before any bar is read: BOOK_SPEC_COMBINED.json filed write-once (sha 56cdeb25…, 16,880 B; gate text = the ONE `scored` element of P-ADM-1's arms, by object) and TC12's ledger of record opened on the BYTES of X's ledger (5,643 B, 4 lines) and continued by ONE line, the fourth book's book_open (line 5, entry f8948168…, prev = X's head 61ea177f…); 10 legs GREEN (F-LEDGER ×5, F-FWD-SPEC, F-PORT, F-TYPED-FLOW ×3), transcript byte-identical from two clean states",
+      "notes": [
+        "the five ledger lines (kind · book · entry_sha256): 1 book_open · v6 · 7f33aee65a9d82f833f1d1a7175e7d9318fe0a7c9fc687d789e57e87e1223062 | 2 book_open · trg912 · 2fab0eb76232a74bc43bd362e6a8f9761ceb9659c8eb86f29eb07bbd1474aac1 | 3 book_open · gated-v6-oldtide · f747d827ab6d984da0480268057597321f085b77c466a8cfc7ddfcce70b7d273 | 4 refresh · - · 61ea177fadcc82bad06f4744305b88476e29d801829cdfacc4817878306cd89c | 5 book_open · gated-v6-combined · f8948168c3d4a91693975ce1ce8de2ddca6dae5030ec140eda6834676f937166",
+        "spec sha256 56cdeb25f42d740209c12300fe5b680b3eca388455431d2883caab6507e91173 == line 5's spec_sha256; X's spec sha (lines 1-4) 72a1f52359c66084d22f8bc99b0cd35e7edd89db2751f4859f559c8b1f51cac3 is not reused",
+        "no bar is read and nothing is ridden: the tool is env-free (stdlib, the pin door, tierc12_progress), opens only SPEC_READS_T and the 18 lineage files X's spec names, and is value-area-blind (L-0.22 seam 62)",
+        "forward/BOOK4_FREEZE.json is NOT this record's: the orchestrator writes it after this record's commit (L-L.17); TC12-D's record names it",
+        "DEFAULT TAKEN, to be ruled (amendment proposal 1): scripts/forward_log.py is not imported by the spec tool — forward_log.main() holds function-local imports (`analytics`, `brief2`; brief2 imports analytics.profile) which the closure suite's static walk reads as CLOSURE-IMPORT [lineage] and, before TC12-ENV, CLOSURE-REACH; its six chain functions stand in the tool as ports (five VERBATIM, last_sha CHANGED by one index token), exposed as the namespace FL, held AST-identical to forward_log.py at the sha X's spec names by production (HALT FWD-FL-PORT) and by F-PORT; the suite imports forward_log itself as the independent verifier",
+        "DEFAULT TAKEN (proposal 2): TC12's two registry files are held by the registry's own pin (REGISTRY_PIN.registrations_file bytes+sha; head recomputed from the payloads) at every run, and through certified() from the moment a progress record names them — progress/TC12-REG.json is written by the orchestrator's gate step and was not on file at this build; the spec's bytes do not depend on which",
+        "DEFAULT TAKEN (proposal 3): SPEC_READS_T also types x_rec/X_REC_MANIFEST.json and close/TC11_STAMP_MAP.json, the two files L-L.3's own sha law opens and its list omits",
+        "DEFAULT TAKEN (proposal 4): at this record the flow witness of ledger.opening and ledger.n_min is the spec tool's equality assertion (HALT FWD-OPENING / FWD-NMIN, the register's equal_to row at TC12-REG.ledger-spec); the [FLOW] line names it in L-0.17's form; the register's scratch-ledger witnesses are TC12-L's; no F-TYPED-FLOW [seed] block here (nothing is drawn)",
+        "DEFAULT TAKEN (proposal 5): the opening is held equal here to X's lines, TC11's AS_OF_PIN tc10_pin_close_ms, TC11's GENESIS, the L-T.6 text and the contract pin; the shim's TC10 pin and TC10's STEP0 record are left to the TC12-L refresh (an env-free tool opens no TC10 record) — stated in the spec's opening_held_equal",
+        "DEFAULT TAKEN (proposal 6): F-FWD-SPEC (its env-free clauses) and F-PORT are hosted at this record too, where the artifacts they test are frozen; the ride clause FWD-SPEC-RIDE stays TC12-L's",
+        "scratch copies of the suite live under $TMPDIR (the builders' brief), not under forward/_det_fixtures/",
+        "GATE HAZARD (another unit's leg, measured read-only at this build): with the six files of this record on disk the TC12-REG registrations suite's F-ATTEST-ORDER [REG] real leg, which walks the LIVE disk, finds 11 — ATTEST-REG `outside PRE_REG ∪ REG_SET` for forward/{BOOK_SPEC_COMBINED.json, FORWARD_LEDGER.jsonl, FIXTURES_LEDGER_SPEC.txt} and scripts/tierc12_forward_{spec,fixtures}.py, and ATTEST-LISTING `not listed` for those five and for this record; it was clean before they landed. The closure suite's scope at --stage=TC12-REG does not hold this record's scripts while this record names them (it holds them from --stage=TC12-D on, where they pass F-TYPED, [ii], [iii] and F-FX-FORM)",
+        "V-7 (the independent verifier's defect, BLOCKING for this child's commit) FIXED in scripts/tierc12_forward_fixtures.py: the real legs of F-LEDGER [CHAIN] and [STRUCTURE] judge the WHOLE working file besides its first five lines (working_fx — forward_log.verify_chain, the suite's own hash loop and its byte, NaN and line-break laws, production's chain_findings) and print nothing of the tail; three plants ride the real legs' own read (a sixth line that is not JSON; a sixth line on the zeros under a made-up entry sha; line 5 appended again as line 6 -> FWD-CHAIN S4): [CHAIN] 13 plants, [STRUCTURE] 13. Measured on a scratch copy of the tree under the session's scratch directory, the real ledger bent there: line 5 copied and appended as line 6, chained -> [STRUCTURE] RED (S4), exit 1; a sixth line on the zeros under an ffff sha -> [CHAIN] and [STRUCTURE] RED, exit 1; a sixth line `not json at all` -> [CHAIN] and [STRUCTURE] RED, exit 1; a torn sixth line, a blank line, an unknown kind, a file ending on a row, a compact-separator line, a bare NaN, two rows swapped and re-chained, a second refresh at one pin, a duplicated key, an orphan gated row -> RED each; one lawful row block + refresh line, one lawful refresh line, and a second lawful refresh at a later pin -> 10 GREEN each with the transcript byte-identical to this record's. The transcript was re-filed once (a8b3537a8fa14c2e71b11cd0774f6f9c93531e7d3a67ad27465dd755b5dcdbfa -> aceff0bd09640e21526b3af08ecc1cd125f3d3d3d86f9635fa86073483daf949) and re-run twice without the flag (exit 0, no _rerun.txt; the same sha under PYTHONHASHSEED 1, 777 and the seed); the spec, the five-line ledger and the spec tool did not move",
+        "GATE HAZARD RE-MEASURED read-only at the V-7 pass (the registrations suite's F-ATTEST-ORDER [REG] leg alone, its partial transcript under the session's scratch directory): 18 findings — 16 for this record's files (ATTEST-REG `on disk at filing and outside PRE_REG ∪ REG_SET` ×5 and `outside PRE_REG_T ∪ REG_SET_T` ×5 for forward/{BOOK_SPEC_COMBINED.json, FORWARD_LEDGER.jsonl, FIXTURES_LEDGER_SPEC.txt} and scripts/tierc12_forward_{spec,fixtures}.py; ATTEST-LISTING `not listed` ×6 for those five and this record) and 2 that are other units' (ATTEST-LISTING `the bytes on disk are not the listed sha` for scripts/tierc12_fx.py and scripts/tierc12_pins.py); that leg is not this unit's and no file of it was touched"
+      ],
+      "_record": {
+        "path": "research_outputs/tierc12/progress/TC12-REG.ledger-spec.json",
+        "sha256": "9066e21f12f38d8466e34a0387909c1c5d87675098f170b2c1c12bdaec195a75"
+      }
     }
   ]
 }
