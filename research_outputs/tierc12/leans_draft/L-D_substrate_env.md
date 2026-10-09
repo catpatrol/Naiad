@@ -91,7 +91,7 @@ BY OBJECT and never typed:
   It is a PROVENANCE record (it holds clocks) and is never in the determinism set (L-D.11).
 - **Every later read is by object:** Stage D reads this file; the shim reads it (L-D.26 hunk 3); no `scripts/tierc12_*`
   source holds the pin, TC11's pin or TC10's pin as a NEW literal, as an int or as an ISO string. "The STEP Q
-  instant" that other sections cite (L-L's `entered_before_contract_filed`) is this reading's `ct_ms`, filed as
+  instant" that other sections cite (L-L's `entered_before_gate_text_filed`) is this reading's `ct_ms`, filed as
   `step_q.instant` and held equal to `progress/STEP_Q.json` and to git by F-D-PIN.
 SOURCE: O-7 (OR:55-59); TC11 L-0.1 (`MR/LEANS.md:21-26`); D11:178 (the typed precedent this reading replaces),
 D11:719-793 `pin_as_of`, D11:678-710 `pin_findings`; `progress/STEP_Q.json`; git commit
@@ -1262,6 +1262,8 @@ the closed door, the exit check and its two tuples; its plants); F-ENV-ASOF and 
 
 **L-D.27 PROTECTION — WHAT AN ARMED TC12 PROCESS CANNOT READ OR WRITE** — ruling O-3 "TC12's env shim write-protects
 all of them"; O-4; O-1
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 5] the hook admits exactly one reader of `T12/_det_partial_*/regbooks/<ID>/scored.json`: `tierc12_score.py`, read-only, classed apart from `tc12-record` (L-0.4 names the scorer as the quarantine's one reader; OD-16).
 READING: once `tierc12_env` has finished importing, the audit hook refuses (AuditHalt, forced exit 70, logged
 BLOCKED) each of the following. Paths are judged canonically, in the main tree AND in the tree the shim runs from.
 

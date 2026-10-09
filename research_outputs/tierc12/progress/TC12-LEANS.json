@@ -1,0 +1,140 @@
+{
+ "stage": "TC12-LEANS",
+ "parent": null,
+ "status": "COMPLETE-VERIFIED",
+ "as_of": null,
+ "blockers": [],
+ "depends_on": [
+  "TC12-R0"
+ ],
+ "artifact_shas": {
+  "research_outputs/tierc12/LEANS.md": {
+   "bytes": 1449241,
+   "sha256": "69c430b017f34df61cbdd5951ff8728d49b11f89e484d251c1f43cd0264f7409"
+  },
+  "research_outputs/tierc12/LEANS_AMENDMENTS.md": {
+   "bytes": 3178,
+   "sha256": "e55467875bb96f1b15aceecc0c43d3ba4fe59fba96472691050d57d1c33e0e07"
+  },
+  "research_outputs/tierc12/AMENDMENTS_PROPOSED.md": {
+   "bytes": 1883,
+   "sha256": "fc39cdf0b91427e7b8b3df29ac393fd02b8538fe027a9c4ba6656189000d8488"
+  },
+  "research_outputs/tierc12/DISCLOSURES.md": {
+   "bytes": 7220,
+   "sha256": "2d436a4b951da868fb7191be21e7d6ec4d5de48ef5da0d3a56a68b3beef835b2"
+  },
+  "research_outputs/tierc12/ORCHESTRATOR_RULINGS.md": {
+   "bytes": 23037,
+   "sha256": "e774a11760087ce14bedb72a8a4a640f53a5c66c2aae385cb82dd578c3063cb4"
+  },
+  "research_outputs/tierc12/x_rec/X_REC_MANIFEST.json": {
+   "bytes": 160450,
+   "sha256": "58d594a3c573ef9e233cda8c49dc8424d45448be54c89f909006eab7980bce4f"
+  },
+  "research_outputs/tierc12/review/LEANS_REVIEW_2026-10-09.json": {
+   "bytes": 303383,
+   "sha256": "b98b6d870d2f9b8bc9c5cb6ffaebba75db1a70fe279fe55f9561d332e3828087"
+  },
+  "research_outputs/tierc12/review/ORCHESTRATOR_DISPOSITIONS.md": {
+   "bytes": 10257,
+   "sha256": "b92cbacd42581e7f22683dbd7cb8b8a7a33962de5770314100c755abe93efaea"
+  },
+  "research_outputs/tierc12/review/CROSS_SECTION_CANON.md": {
+   "bytes": 199532,
+   "sha256": "46b44cc21ed395992febc421c04aab76fa4789f534eb570d4dd50b4a7dc69a90"
+  },
+  "research_outputs/tierc12/review/DISPOSITIONS.json": {
+   "bytes": 92365,
+   "sha256": "4757b0b0b03b55b0d3d0a05f59b17d760f47fbcefd4b5e2f48cfde93e740bf13"
+  },
+  "research_outputs/tierc12/review/FIX_PASS_1_RETURNS.json": {
+   "bytes": 140281,
+   "sha256": "1498ddb7ab6e6d01203641990e36938ca4dc2466e268060e0886f5637cd2c857"
+  },
+  "research_outputs/tierc12/review/SEAM_PASS.json": {
+   "bytes": 17304,
+   "sha256": "20f3c8a15f631c920580b57c14494e9a74a01115bb06a61155e87f13a2f2539c"
+  },
+  "research_outputs/tierc12/review/WORKTREE_ATTEST_LEANS.jsonl": {
+   "bytes": 7822,
+   "sha256": "3987d171a5f03ea7630757247ef66aa3516f21e0aa276c841b0992c91823e477"
+  },
+  "research_outputs/tierc12/leans_draft/DRAFT_DIGESTS.json": {
+   "bytes": 86849,
+   "sha256": "44b6ffde9869785c4d7fa2d98f922bc8efede8b38e748c8dd3a765798bf5bc86"
+  },
+  "research_outputs/tierc12/leans_draft/L-0_laws_process.md": {
+   "bytes": 203394,
+   "sha256": "1ceee0b0ed429a20a092df4a72f4fdb0d5cb25d6a36410a31e03d1df4ec28504"
+  },
+  "research_outputs/tierc12/leans_draft/L-D_substrate_env.md": {
+   "bytes": 174008,
+   "sha256": "6070b5ec63c882e0feb1e53468aba5ccbe9d4e71179fcfc13db87a256ed4dbb2"
+  },
+  "research_outputs/tierc12/leans_draft/L-V_value_area.md": {
+   "bytes": 168277,
+   "sha256": "375ffb1fa27becdb68b0806211f08a0b3449339f3e32713de624e31f5bf653d6"
+  },
+  "research_outputs/tierc12/leans_draft/L-X_statistics_registrations_close.md": {
+   "bytes": 195948,
+   "sha256": "1d151b8608d9266c03cd5e81fb2df9420b8ed5e544b418bddc96ee9951a81d7f"
+  },
+  "research_outputs/tierc12/leans_draft/L-CG_control_admission.md": {
+   "bytes": 184975,
+   "sha256": "4da156017f5a7ade8f0d8c7a2233e66aee2ea4e1e9e5dfdf6f4110a1bc5c6aad"
+  },
+  "research_outputs/tierc12/leans_draft/L-R_range_state.md": {
+   "bytes": 181154,
+   "sha256": "b503f8c1b3e4ada2dedd45ec8b623481ede728e519d1c49b0c10a5039f692d20"
+  },
+  "research_outputs/tierc12/leans_draft/L-S_scalper.md": {
+   "bytes": 170424,
+   "sha256": "a8384180ec5f6b36302987492d5e1725d3dbdc3acdace2c84df30b2869f61fe2"
+  },
+  "research_outputs/tierc12/leans_draft/L-L_ledger_era_ferry.md": {
+   "bytes": 167606,
+   "sha256": "7654c58226258326b145c9d19da98898d601451d37a539078ee948d4c6dcb1b5"
+  },
+  "exchange/queue/2026-10-09_TC12_RESUME_APOLLO.md": {
+   "bytes": 15145,
+   "sha256": "d903bf3a2ddf71662ee180f89e719e16c920f38d49528383874b90ea6d5f357c"
+  }
+ },
+ "supersedes": [],
+ "fixtures": [],
+ "n_readings": 251,
+ "leans": {
+  "path": "research_outputs/tierc12/LEANS.md",
+  "sha256": "69c430b017f34df61cbdd5951ff8728d49b11f89e484d251c1f43cd0264f7409"
+ },
+ "resume_paste": {
+  "path": "exchange/queue/2026-10-09_TC12_RESUME_APOLLO.md",
+  "sha256": "d903bf3a2ddf71662ee180f89e719e16c920f38d49528383874b90ea6d5f357c"
+ },
+ "x_rec": {
+  "n_files": 491,
+  "bytes": 343742370
+ },
+ "seam_pass": {
+  "n": 70,
+  "by_settled_by": {
+   "disposition": 57,
+   "ruling": 8,
+   "pessimistic": 4,
+   "AMENDMENTS_PROPOSED": 1
+  },
+  "seams_with_section_edits": 53
+ },
+ "one_line": "the readings frozen: LEANS.md (251 readings in nine sections, sha 69c430b0…) after a six-lens review (133 findings, all applied under a 42-item canon) and ONE seam pass by the orchestrator alone (70 settlements: {'disposition': 57, 'ruling': 8, 'pessimistic': 4, 'AMENDMENTS_PROPOSED': 1}); AM-1 (V2 against X's machine of record) and AP-1 filed; D-5..D-14 appended; the resume paste bound beside the contract",
+ "notes": [
+  "fixtureless by the typed list of three (STEP Q, TC12-R0, TC12-LEANS): documents only, verified by sha",
+  "re-records ORCHESTRATOR_RULINGS.md (now O-1..O-36, append-only since R0: R0's bytes are a byte-prefix) and x_rec/X_REC_MANIFEST.json (491 files: O-25 added the one row for X's contract, read as a git object) at their current shas — OD-4, the last-record law",
+  "the readings were NOT re-reviewed after fix pass 1 and the seam pass (resume paste RC-4; DISCLOSURES D-13); the attestation is hash-bound (review/WORKTREE_ATTEST_LEANS.jsonl)",
+  "the paste's flag name entered_before_gate_text_filed replaced the canon's entered_before_contract_filed in 7 places at the freeze (O-36); no definition moved",
+  "R0-PRIME CENSUS (read-only, before any act of the resumed session): {\"utc\": \"2026-10-09T18:06:17Z\", \"identity_gate\": {\"toplevel\": \"/Users/luis/Naiad\", \"branch\": \"v12-v1-census\"}, \"head\": \"a8211aca792cd6310aa55817530b7f18f2a69e99\", \"head_subject\": \"exchange: auto-publish 2026-10-09\", \"porcelain\": [\" M exchange/status/daily/DAILY_2026-10-09.md\", \" M research_outputs/tierc10/close/FIXTURES_CLOSE_ledger_append_root.txt\", \"?? pine/SS12_ANCHOR_v12_6.pine\", \"?? pine/SS12_MANTLE_v12_6.pine\", \"?? pine/SS12_SIGNAL_v12_6.pine\", \"?? pine/SS_Anchor_v12_T_0.pine\", \"?? \\\"research_outputs/CENSUS-2A \\\\342\\\\200\\\\224 ENTRIES & EXITS, SEEN.html\\\"\", \"?? \\\"research_outputs/Cascade Atlas v2 \\\\342\\\\200\\\\224 CENSUS-1b MTF cross structure.html\\\"\", \"?? \\\"research_outputs/Cascade Atlas v2 \\\\342\\\\200\\\\224 CENSUS-1b MTF cross structure_files/\\\"\", \"?? \\\"research_outputs/Cascade Rewire.html\\\"\", \"?? \\\"research_outputs/Naiad Daily Brief v2 \\\\342\\\\200\\\\224 Confluence Prototype \\\\342\\\\200\\\\224 2026-07-27.html\\\"\", \"?? research_outputs/VIZ3-4/\"], \"readings_estate_vs_1c074ea\": {\"moved\": [], \"untracked_under_tierc12\": []}, \"x_rec\": {\"n_files\": 491, \"bytes\": 343742370, \"manifest_sha256\": \"58d594a3c573ef9e233cda8c49dc8424d45448be54c89f909006eab7980bce4f\", \"sample_seed\": 20261008, \"sample_n\": 50, \"sample_mismatches\": [], \"x_tip\": \"7b24f835bcbf7430eb0f97b6c39b6b1b233eef11\", \"x_tip_is_certified\": true}, \"record_ledger\": [[\"STEP Q\", \"COMPLETE-VERIFIED\"], [\"TC12-R0\", \"COMPLETE-VERIFIED\"], [\"TC12-LEANS\", \"ABSENT\"], [\"TC12-REG\", \"ABSENT\"], [\"TC12-REG.ledger-spec\", \"ABSENT\"], [\"TC12-D\", \"ABSENT\"], [\"TC12-ENV.vendor\", \"ABSENT\"], [\"TC12-ENV\", \"ABSENT\"], [\"TC12-ENV.score-build\", \"ABSENT\"], [\"TC12-V\", \"ABSENT\"], [\"TC12-V.trades\", \"ABSENT\"], [\"TC12-C.tide\", \"ABSENT\"], [\"TC12-C\", \"ABSENT\"], [\"TC12-V.stamps.c\", \"ABSENT\"], [\"TC12-G\", \"ABSENT\"], [\"TC12-R.dir\", \"ABSENT\"], [\"TC12-R.sfp\", \"ABSENT\"], [\"TC12-R.tables\", \"ABSENT\"], [\"TC12-R\", \"ABSENT\"], [\"TC12-V.stamps.r\", \"ABSENT\"], [\"TC12-S\", \"ABSENT\"], [\"TC12-V.stamps.s\", \"ABSENT\"], [\"TC12-L\", \"ABSENT\"], [\"TC12-SCORE\", \"ABSENT\"], [\"TC12-FIX\", \"ABSENT\"], [\"TC12-REVIEW\", \"ABSENT\"], [\"TC12-CLOSE\", \"ABSENT\"]], \"resume_point\": \"TC12-LEANS\", \"findings\": []}",
+  "R0-PRIME artifacts: [{\"record\": \"STEP_Q\", \"path\": \"exchange/queue/2026-10-08_TC12_APOLLO.md\", \"status\": \"IDENTICAL\"}, {\"record\": \"TC12-R0\", \"path\": \"research_outputs/tierc12/scout/U1_rulings_close_state.md\", \"status\": \"IDENTICAL\"}, {\"record\": \"TC12-R0\", \"path\": \"research_outputs/tierc12/scout/U2_value_area_source.md\", \"status\": \"IDENTICAL\"}, {\"record\": \"TC12-R0\", \"path\": \"research_outputs/tierc12/scout/U3_env_books_control.md\", \"status\": \"IDENTICAL\"}, {\"record\": \"TC12-R0\", \"path\": \"research_outputs/tierc12/scout/U4_data_substrate.md\", \"status\": \"IDENTICAL\"}, {\"record\": \"TC12-R0\", \"path\": \"research_outputs/tierc12/scout/U5_admission_inputs.md\", \"status\": \"IDENTICAL\"}, {\"record\": \"TC12-R0\", \"path\": \"research_outputs/tierc12/scout/U6_range_scalper_machinery.md\", \"status\": \"IDENTICAL\"}, {\"record\": \"TC12-R0\", \"path\": \"research_outputs/tierc12/scout/U7_registrations_scoring.md\", \"status\": \"IDENTICAL\"}, {\"record\": \"TC12-R0\", \"path\": \"research_outputs/tierc12/scout/U8_forward_era_ferry.md\", \"status\": \"IDENTICAL\"}, {\"record\": \"TC12-R0\", \"path\": \"research_outputs/tierc12/scout/U9_process_close_fixtures.md\", \"status\": \"IDENTICAL\"}, {\"record\": \"TC12-R0\", \"path\": \"research_outputs/tierc12/ORCHESTRATOR_RULINGS.md\", \"status\": \"APPEND-ONLY: R0 bytes are a byte-prefix\"}, {\"record\": \"TC12-R0\", \"path\": \"research_outputs/tierc12/x_rec/X_REC_MANIFEST.json\", \"status\": \"MOVED SINCE; held to the blob at its closing commit (last-record law)\"}, {\"record\": \"TC12-R0\", \"path\": \"research_outputs/tierc12/.gitignore\", \"status\": \"IDENTICAL\"}, {\"record\": \"TC12-R0\", \"path\": \"scripts/tierc12_progress.py\", \"status\": \"IDENTICAL\"}]",
+  "R0-PRIME frozen estate (the eight shas of TC12-R0.json): all unmoved = True",
+  "nothing was quarantined: the interrupted verification workflow left no file"
+ ]
+}

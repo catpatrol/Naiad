@@ -256,3 +256,29 @@ builder who meets two readings that cannot both be built files the two texts and
 gate. An amendment may settle mechanics. It may NOT change a registered row's population, arms, statistic,
 verdict rule or labels after TC12-REG: that is a re-registration, visible to the operator, with the earlier
 payload and any number computed under it kept beside.
+
+## J · The resume paste (2026-10-09)
+
+**O-36 THE RESUME PASTE BINDS BESIDE THE CONTRACT.** Operator, 2026-10-09: "resume". The paste is filed verbatim at
+`exchange/queue/2026-10-09_TC12_RESUME_APOLLO.md` (sha256 `d903bf3a2ddf71662ee180f89e719e16c920f38d49528383874b90ea6d5f357c`, commit `1e8f8ff`). The contract of record is unchanged. Where a ruling
+above, a disposition, the canon or a reading differs from the paste, THE PASTE GOVERNS; nothing frozen is re-drafted
+for it. What it changes, by its veto names:
+- `"reading-cap"`: one seam pass by the orchestrator alone (`review/SEAM_PASS.json`, 70 lines); `n_readings` stays 251;
+  LEANS.md is assembled and frozen in the same session; no review of TEXT before TC12-REVIEW; a mid-build finding goes
+  to `AMENDMENTS_PROPOSED.md` with its default taken and to the next gate, never to a re-draft; nothing new is a
+  question that waits.
+- Every default filed under OPEN TO OPERATOR by the drafters and fixers STANDS and is listed in the report's §9 with
+  "no veto received": `"stop-rail"`, `"deep-floor"`, `"loao-kill"`, `"share"`, `"closure-reach"`, `"breadth-den"`,
+  `"1w-axis"`, `"1d-era"`, `"book4-origin"`, `"tc11-stamp"`, `"mirror"`, `"maker-bps"`, `"ratr-rows"`.
+- `"report-cap"` (new; replaces L-X's "the generator HALTs over the cap"): over publish_exchange's per-file cap the
+  close generator POINTS TO stage documents in the paste's fixed order and never truncates or HALTs.
+- `"tier-e-never-halts"` (new; replaces every Tier-E HALT in the readings, L-R's unbuildable-null HALT among them): a
+  Tier-E table that cannot be built as specified prints its reason and the filed null beside, under the collar; the
+  stage continues; its F-GRID / F-KEY legs print `NOT BUILT <reason>`, a leg state that is never PASS. HALTs are
+  reserved for registered rows, pins, fixtures of record and the frozen estate.
+- `"book4-origin"` names the STEP Q flag `entered_before_gate_text_filed`; the sections carry that name (the canon's
+  `entered_before_contract_filed` is the same flag, renamed in 7 places at the freeze; no definition moved).
+- SAIL HELD is cited to the operator's words of 2026-09-24 as the paste quotes them.
+- `"push-route"` and `"box-hold"` are the operator's; the build does not wait for either.
+- F-SEAM joins the resume suite at TC12-REG; `scripts/tierc12_progress.py` gains `resume_paste_of_record` there; the
+  report gains §R0′; the close's final line is "Operator: fix the push route, then click Sync now."

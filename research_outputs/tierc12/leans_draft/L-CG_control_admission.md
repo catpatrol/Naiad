@@ -136,6 +136,8 @@ scored book ridden to `hi12`) → `CAMP-ASOF` in F-CTRL-CAMP (a window open at T
 
 **L-C.3 THE 9/12 BOOK AND ITS OPEN SOL CAMPAIGN AT TC11's PIN** — "every funnel instant of every book (base v6,
 9/12, …)" (contract :44); "all four books (base · 9/12 · OLD-gated · combined-gated)" (contract :109)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 6] an 'asserted equal' whose second object is not on file at TC12-REG is asserted by the pin's CONSUMER at its own stage's gate, never by the stdlib-only pin door at filing.
 READING:
 - **Roles.** `R912 = E.T9.SWEEP_CELLS[-1]`, PROVEN without constructing anything: `type(R912) is E.T9.Roles`,
   `R912.name` equals `XR/tierc11x/forward/BOOK_SPECS.json` → `books.trg912.roles_name`, and
@@ -169,6 +171,8 @@ builder → `912-ROLES` (its trigger periods also differ from the pin's); the SO
 ride → `CTRL-DIFF` on its exit columns.
 
 **L-C.4 WHAT STAGE C FILES** — "the extension printed separately (the forward strip, never scored)" (contract :50)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 47] `tierc12_books.base_regbook_frame` returns the same twenty regbook columns for the scored window and, on request, for the STRIP of the extended ride (TC11's pin < entry close ≤ TC12's pin); the gates' and P-DIR-1's `strip` arms are post-filters of that strip frame.
 READING: record `TC12-C`, builder `scripts/tierc12_books.py` (a DECISION module on `VA_BLIND_T`, L-0.22), directory
 `T12/books/` — the one writer of that directory (L-0.9). Every parquet goes through L-0.13's `put` (declared key,
 lineage rounding, nine stamps, collar per L-0.16 — none of these tables is registered). The lineage's skip-empty
@@ -482,7 +486,7 @@ READING: Stage C stamps nothing itself, imports nothing of the value area and op
   `trg912`; `lens` 4h; `key` `[entry_ms]`; `start_col` = `arm_close_ms` (TC11's `KINDS["v6transform"]`: the run of
   bar closes starts at the ARM close); `end_col` = `exit_event_ms`; `bar_close_lens` 4h; events `arm` and `entry`
   (stamp `close`); `plus_1r` (`latch_1r_open_ms`, `open_of_bar`, with its post-event stamp); `harvest`
-  (`harvest_close_ms`, `close`); `bell` and `exit` (from `exit_event_ms`, told apart by `exit_reason`, stamped by
+  (`harvest_close_ms`, `close`); `bell` and `exit` (from `exit_event_ms`; a bell row is stamped BOTH `bell` and `exit` — TC11's law, as L-V.19 rule 5 carries it, never either/or; stamped by
   `exit_event_stamp` — an intrabar exit is `open_of_bar` with its post-event stamp); `as_of_pin` for a row whose
   `open_at_asof` is True (never `exit`).
 - **Who stamps.** The child record `TC12-V.stamps.c` (L-V.19; `depends_on` `TC12-V`, `TC12-C`) runs the reader
@@ -897,6 +901,8 @@ the shadows and their caveat in L-G.8.
 **L-G.10 THE PER-ASSET PER-BAR TIDE-BAND SERIES — BUILT, BECAUSE NO FILE HOLDS IT** — "breadth = share of the five
 home assets whose tide band is YOUNG or EARLY" (contract :57-58); "breadth-17 twin" (contract :59); "REGIME COLUMNS:
 … breadth · 4h tide age" (contract :102-103)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 56] column names L-S.24 reads: `run`, `band`, `warm`, `edges_defined` of `tide_bars_4h.parquet`, and the home-five determined-young count `y_det5` of `breadth_4h.parquet` — per-panel columns of that table take the suffixes `5` and `17`, as `n_eff5` / `n_eff17`.
 READING: every filed tide record is per campaign or distributional (scout U5 §1.11); breadth needs every asset's
 band at arbitrary bars.
 - **The record.** Child `TC12-C.tide` of L-0.10's `SUBSTAGES_T`: BLOCKING; `depends_on` `TC12-ENV`; gated BEFORE
@@ -1159,6 +1165,8 @@ found in them is registered or promoted (O-13).
 
 **L-G.15 THE BREADTH GRID, WHOLE; THE BREADTH-17 TWIN** — "Tier-E: the whole breadth {0..5} × own-band grid;
 breadth-17 twin." (contract :59)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 6] an 'asserted equal' whose second object is not on file at TC12-REG is asserted by the pin's CONSUMER at its own stage's gate, never by the stdlib-only pin door at filing.
 READING:
 - **The grid `G-BRD`** (`stage_g/g_brd_grid.parquet`, key `[cell]`): axes `y5` = the levels `0 … N`, generated
   from `N` (the contract's "{0..5}" is the pin `grid.brd_levels`, :59, parsed by the pin door and asserted equal
@@ -1196,6 +1204,8 @@ RED against X's `breadth_n_eff`.
 
 **L-G.16 THE CROSSED TABLE 2 × 2 × 2 × 2** — "Tier-E: the crossed table 2×2×2×2 (OLD · stale · far stop · low
 breadth)" (contract :60)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 6] an 'asserted equal' whose second object is not on file at TC12-REG is asserted by the pin's CONSUMER at its own stage's gate, never by the stdlib-only pin door at filing.
 READING: four bits per base campaign, each a filed flag of `g_campaign_gates.parquet`:
 
 | bit | flag | definition |
@@ -1356,6 +1366,8 @@ position is open) → the identity leg RED under the forced hold of L-G.17; one 
 copy of the manifest → `RIDE-SPEC`.
 
 **L-G.19 WHAT STAGE G FILES; THE FIXTURE ROLL** — "FIXTURES (each states its failure condition)" (contract :114)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 1] every flow leg of this section prints L-0.17's fixed line `  [FLOW] <pin> @ <door>: <witness> moved`, which F-TYPED-TOTAL reads at TC12-FIX.
 READING: record `TC12-G`; `scripts/tierc12_stage_g.py` is the one writer of the three directories below.
 
 **`T12/stage_g/`** — every parquet through L-0.13's `put` (6 dp, nine stamps, collar; none is registered; an

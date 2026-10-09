@@ -117,6 +117,8 @@ records. A census that reads the live HEAD into its transcript — not taken: th
 FAILS-IF: see L-0.4 (one fixture, F-RESUME).
 
 **L-0.4 VERIFY-OR-QUARANTINE** — "verify-or-quarantine" (contract :5)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 12] TC11's PROGRESS sha is NOT read through `certified()`: it is read from `progress/TC12-R0.json` → `frozen_estate_shas_at_r0` (or from `close/TC11_STAMP_MAP.json` once applied), as L-D does; `certified()` HALTs on a path no record's `artifact_shas` names.
 READING: three status words and no fourth (`STATUSES`, `scripts/tierc12_progress.py:22`; the merger HALTs on any
 other, :44-45). A RECORD is **COMPLETE-VERIFIED** iff all of:
 - (1) THE LAST-RECORD LAW (OD-4). Every `artifact_shas` path exists and verifies under THE LAST RECORD THAT NAMES IT
@@ -194,6 +196,8 @@ to 1; `legs_not_run` one less than the transcript's NOT RUN count; `fixtures` em
 `READ_SET.json` — each must be caught by its named detector.
 
 **L-0.5 FROZEN TEXTS** — "frozen texts" (contract :5)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 20] `DISCLOSURES_BUILD.md` (O-34 d): the orchestrator appends a dated `B-n` entry at a stage gate and that stage's record re-records the file; a build writes nothing there.
 READING:
 - **Byte-frozen** from the instant named: the contract prefix (STEP Q; L-0.1); from the TC12-REG commit: `T12/LEANS.md`,
   `T12/registrations/REGISTRATIONS.json` (filed by a write-once filer that HALTs if the file exists — TC11's law),
@@ -258,6 +262,8 @@ heading `## AM-V2 · …` (a nickname in the id's place) → RED; the registry f
 
 **L-0.6 THE FROZEN ESTATE** — "frozen texts" (contract :5) as it binds the predecessors, and "no re-family of TC11"
 (contract :133-134); governed by O-3.
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 18] binds every section: a TC11 or X record is opened only through `E.tc11_record` / `E.x_rec` (L-D.27, O-4); a raw open, or a listing of a `research_outputs/tierc11` or `x_rec` directory, is refused (exit 70), armed fixture processes included.
 READING: TC12 moves no byte of the estate O-3 lists. Prevention is L-D's env hook; DETECTION is here. At TC12-REG a
 census `T12/frozen/FROZEN_ESTATE.json` is written once by `scripts/tierc12_frozen.py` (stdlib only; walks and hashes; no
 git) over the WORKING-TREE bytes of: `research_outputs/tierc10/**`, `research_outputs/tierc11/**`, `scripts/tierc10_*`,
@@ -346,6 +352,9 @@ with the draft copied to the report's destination → RED; a planted `(ROOT / "e
 the ferry stager → RED.
 
 **L-0.9 COMMIT + PROGRESS.json PER STAGE** — "commit + PROGRESS.json per stage" (contract :5-6); O-1, O-2, O-6.
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 4] the `depends_on` floor binds every record of every section: the `SUBSTAGES_T` row or `PARALLEL_T` list PLUS the last earlier record certifying each `tc12-record` path of the directory's `READ_SET.json`, computed at the gate from the read set — a section's typed row is the minimum, never the whole.
+- [seam 66] one exception to 'an untracked artifact is pinned twice': the ferry's staged CSVs (`ferry/_det_staged/*.csv`) are pinned by carried sha in the tracked `FERRY_MANIFEST.json` and are not in `artifact_shas` (L-L.32).
 READING:
 - **Progress.** Each record's builder writes `T12/progress/<record id>.json` (the file of `STEP Q` is `STEP_Q.json`)
   with the keys `stage`, `parent`, `status`, `as_of`, `blockers`, `depends_on` [record ids], `artifact_shas`
@@ -449,9 +458,9 @@ and be COMPLETE-VERIFIED and committed; which record may start when is points 3-
 | TC12-R0 | L-0.3 | the census record, the nine scout maps, `XR/X_REC_MANIFEST.json`, the rulings, the disclosures (filed, `ac8cb92`, `c3129e9`) |
 | TC12-LEANS | all sections | `T12/LEANS.md` (nine sections, review disposition filled), `T12/review/LEANS_REVIEW_<date>.json` (every lens and pass, drafted and revised shas), `T12/review/WORKTREE_ATTEST_LEANS.jsonl` (L-0.12), `T12/LEANS_AMENDMENTS.md` (holding AM-1, L-0.5), `T12/AMENDMENTS_PROPOSED.md`, `T12/DISCLOSURES.md` appended with D-5..D-12 (the drafters' and reviewers' disclosures; OD-18). The record re-records the rulings and the X manifest at their current shas (OD-4), with `x_rec {n_files, bytes}` and a note naming O-25's one added row |
 | TC12-REG | L-X, L-0.5, L-0.6, L-0.17 | exactly `REG_SET` (fixture-typed; what the commit ADDS): `REGISTRATION_PLAN.md`; `registrations/{REGISTRATIONS.json, REGISTRY_PIN.json, ATTEST_REG.json, FIXTURES_REG.txt}`; `pins/{CONTRACT_PIN_MAP.json, CONTRACT_PINS.json, PIN_REGISTER.json, CONTRACT_TOKENS_UNPINNED.json, FIXTURES_PINS.txt}`; `frozen/FROZEN_ESTATE.json`; `resume/FIXTURES_RESUME_TC12-REG.txt`; `closure/FIXTURES_CLOSURE_TC12-REG.txt`; `progress/TC12-REG.json`; the scripts `tierc12_{fx, units, pins, frozen, registrations}.py` and `tierc12_{registrations, pins, resume, closure}_fixtures.py`. The commit also MODIFIES (does not add) `scripts/tierc12_progress.py` (L-0.9) and `PROGRESS.json`. **No bar is read and no book exists at or before this commit.** Then the child `TC12-REG.ledger-spec` (L-L): the fourth book's spec and the five-line ledger, in a commit of its own that is a proper descendant of the registry commit |
-| TC12-D | L-D | the snapshot, its manifest, the pin record, the fee schedule, the contract specs, their transcripts; `forward/BOOK4_FREEZE.json` (the orchestrator's, L-0.5). Its child `TC12-D.mirror` blocks nothing |
+| TC12-D | L-D | the snapshot, its manifest, the pin record, the fee schedule with `FEE_GRAMMAR.json` and `FEE_SOURCE.json`, the contract specs, the sealed `data/FLAT_BAR_ATTEST.json` (its capture reads the venue's bulk archive read-only inside `--fetch`, nothing saved), their transcripts; `forward/BOOK4_FREEZE.json` (the orchestrator's, L-0.5). Its child `TC12-D.mirror` blocks nothing |
 | TC12-ENV | L-D, L-0.12-0.16, L-0.22, L-X | first the child `TC12-ENV.vendor` (the vendored referee, its own commit); then the parent: `scripts/tierc12_env.py`; `tierc12_tables.py`, `tierc12_asof.py`, `tierc12_worktree_attest.py`; the suites `tierc12_{tables, attest, not, sweep}_fixtures.py`; the env, tables, attest, closure, not and sweep transcripts; last the child `TC12-ENV.score-build` (the regbook interface and the scorer's code; no TC12 book is read) |
-| TC12-V | L-V | `analytics/value_area.py`, DOOR 1, the per-bar VA tables per lens, the event and regime tables, the mirror record (HALT on disagreement), **the traverse pins, frozen**; then the child `TC12-V.trades` (DOOR 2); and, each after the books it stamps, the children `TC12-V.stamps.c`, `.r`, `.s` (the reader's stamp tables) |
+| TC12-V | L-V | ALL of Stage V's code as artifacts of the record `TC12-V` — `analytics/value_area.py`, `scripts/tierc12_va.py` (DOOR 1), `tierc12_va_trades.py` (DOOR 2), `tierc12_va_stamps.py`, `tierc12_va_fixtures.py`, `tierc12_va_stamps_fixtures.py` (the children file tables, records and transcripts only, so DOORS_T's EARNED check has DOOR 2's source at this gate); DOOR 1's tables: the per-bar VA tables per lens, the event and regime tables, the mirror record (HALT on disagreement), **the traverse pins, frozen**; then the child `TC12-V.trades` (DOOR 2); and, each after the books it stamps, the children `TC12-V.stamps.c`, `.r`, `.s` (the reader's stamp tables) |
 | TC12-C | L-C, L-G | first the child `TC12-C.tide` (the tide and breadth series); then the v6 book on the scored window and its strip; F-CTRL |
 | TC12-G | L-G | the regbooks of P-ADM-1 and P-BRD-1; the admission Tier-E grids |
 | TC12-R | L-R | the children `TC12-R.dir` (the regbook of P-DIR-1, the chop tables), `TC12-R.sfp` (the range walk, the regbook of P-SFP-VA-1), `TC12-R.tables` (the 1d take-profit venue); then the parent's index `stage_r/STAGE_R.md` |
@@ -478,14 +487,14 @@ and be COMPLETE-VERIFIED and committed; which record may start when is points 3-
    |---|---|---|---|---|
    | `TC12-REG.ledger-spec` | L-L | yes | `TC12-REG` | `forward/BOOK_SPEC_COMBINED.json`, `forward/FORWARD_LEDGER.jsonl` (five lines), `tierc12_forward_spec.py`, `tierc12_forward_fixtures.py` |
    | `TC12-D.mirror` | L-D | **NO — the only non-blocking child** | `TC12-D` | `data/MIRROR_ATTEST.json` (PARTIAL allowed through CLOSE; harvested as a finding) |
-   | `TC12-ENV.vendor` | L-D | yes | `TC12-D` | `vendor/tierc11_env@1526093b.py`, `vendor/README.md`, `scripts/tierc12_vendor.py`, `env/LINEAGE_PINS.json` |
-   | `TC12-ENV.score-build` | L-X | yes | `TC12-ENV` | `scripts/tierc12_regbook.py`, `tierc12_score.py`, `tierc12_score_fixtures.py` (the scorer's code and its synthetic and anchor legs; no TC12 book is read) |
+   | `TC12-ENV.vendor` | L-D | yes | `TC12-D` | `vendor/tierc11_env@1526093b.py`, `vendor/README.md`, `scripts/tierc12_vendor.py`, `env/LINEAGE_PINS.json`, `scripts/tierc12_env_fixtures.py`, `env/FIXTURES_ENV_VENDOR.txt` (F-VENDOR [referee] runs from that suite at this record) |
+   | `TC12-ENV.score-build` | L-X | yes | `TC12-ENV` | `scripts/tierc12_regbook.py`, `tierc12_score.py`, `tierc12_score_fixtures.py` (the scorer's code and its synthetic and anchor legs; no TC12 book is read), and `env/SIZE_MEASURED.json`, written by the score suite's F-VERDICT [SIZE] leg and read by the scorer at its certified sha |
    | `TC12-V.trades` | L-V builds, L-R defines | yes | `TC12-V` | `va/trades/**` (DOOR 2) |
-   | `TC12-C.tide` | L-G | yes | `TC12-ENV` | `tide/**` |
+   | `TC12-C.tide` | L-G | yes | `TC12-ENV` | `tide/**`, `scripts/tierc12_tide.py`, `scripts/tierc12_tide_fixtures.py` (committed with it, before `tierc12_books.py` exists) |
    | `TC12-V.stamps.c` | L-V | yes | `TC12-V`, `TC12-C` | `va/stamps/VA_STAMPS_{v6,trg912}.parquet` |
    | `TC12-R.dir` | L-R | yes | `TC12-V`, `TC12-C`, `TC12-V.stamps.c`, `TC12-ENV.score-build` | `regbooks/P-DIR-1/**`, `stage_r/dir/**` |
    | `TC12-R.sfp` | L-R | yes | `TC12-V`, `TC12-ENV.score-build` | `scripts/tierc12_rangewalk.py`, `regbooks/P-SFP-VA-1/**`, `stage_r/sfp/**` |
-   | `TC12-R.tables` | L-R | yes | `TC12-V`, `TC12-C` | `stage_r/tables/**` (the 1d take-profit venue, L-R.30) |
+   | `TC12-R.tables` | L-R | yes | `TC12-V`, `TC12-C`, `TC12-ENV.score-build` | `stage_r/tables/**` (the 1d take-profit venue, L-R.30) |
    | `TC12-V.stamps.r` | L-V | yes | `TC12-R.sfp`, `TC12-R.tables` | `va/stamps/VA_STAMPS_<book>.parquet` for Stage R's books (L-V.19) |
    | `TC12-V.stamps.s` | L-V | yes | `TC12-S` | `va/stamps/VA_STAMPS_<book>.parquet` for Stage S's books |
 
@@ -513,7 +522,7 @@ and be COMPLETE-VERIFIED and committed; which record may start when is points 3-
    child records: the stage's own artifacts, its index document where it has children (`stage_r/STAGE_R.md` = three
    pointers), and the transcripts of the L-0 suites run at its gate. An `ORDER` STAGE is COMPLETE-VERIFIED iff its
    parent record and every BLOCKING child are. The parent record of a stage with several producers (`TC12-REG`,
-   `TC12-ENV`) is written by the orchestrator's gate step from the artifact maps each producer returns.
+   `TC12-ENV`, `TC12-L`) is written by the orchestrator's gate step from the artifact maps each producer returns.
 7. **One commit per record gate**, subject `tierc12(<record id>): …`; the grammar and the gate, run per record, are
    L-0.9's.
 8. **Record keys** — L-0.9's list.
@@ -571,6 +580,8 @@ before the record of `TC12-V.stamps.s` → RED.
 
 **L-0.11 THE SWEEP DRIVER** — "a stage is COMPLETE only if its … fixtures RE-PASS now" (TC10 contract :12-13, named
 by contract :5 "verify-or-quarantine") and "F-DET hash-identical" (contract :123)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 64] the ferry suite's `--of-record` invocation is an act-mode run of the close acts; its transcript `ferry/of_record/F_ROWS_AT_CLOSE.txt` belongs to no record and neither the sweep nor F-ROLL counts it as a transcript of record.
 READING: No sweep driver exists in either predecessor (scout U9 §1.4); TC12 files one:
 `scripts/tierc12_sweep_fixtures.py` (a fixture module: it may use `subprocess`, and it is outside the decision glob).
 THE ROLL is a list of INVOCATIONS, never typed: for each record in `RESUME_ORDER_T` (then `TC12-D.mirror`, if its
@@ -691,6 +702,8 @@ with `--xrec-root=<scratch>`); a file touched in a scratch snapshot copy. For th
 scratch `LEANS.md` after the last pass → the bind record's sha equality RED.
 
 **L-0.13 AS-OF WARRANTY STAMPS** — "as-of warranty stamps" (contract :6)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 15] a law of every spawning builder: each spawned worker calls `E.read_set()` and returns it with its result and the parent merges them, so the VA-wall predicate L-D.26 evaluates inside `read_set()` is seen where a worker's exit code is not.
 READING: Every parquet TC12 writes carries the nine columns of `TP.AS_OF_COLUMNS`, non-null on every row: the four of
 `tierc8.stamp` (`as_of_last_closed_4h`, `as_of_panel_start`, `as_of_span_days`, `warranty`) and the five `stamp_n`
 adds (`as_of_lens`, `as_of_last_closed_bar`, `as_of_panel`, `as_of_n_assets`, `as_of_substrate`).
@@ -788,6 +801,9 @@ depends on L-D's import windows and is established by leg (a) at TC12-ENV.
 
 **L-0.14 EVERY FIXTURE LEG STATES ITS FAILURE CONDITION** — "every fixture leg states its failure condition"
 (contract :6-7); "FIXTURES (each states its failure condition)" (contract :114)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 3] `NOT_RUN_FIDS_T`, as assembled at the freeze: L-D's F-MIRROR and the body-file leg of F-TOLL [data]. A generic 'a leg that cannot run prints NOT RUN' sentence in any other section earns no entry; such a leg reads FAIL.
+- [seam 31] the one non-transcript file a fixture suite writes: `env/SIZE_MEASURED.json`, by the score suite's F-VERDICT [SIZE] leg at `TC12-ENV.score-build`, under the transcript no-clobber law.
 READING: One harness, `scripts/tierc12_fx.py` (stdlib only), a COPY — never an import — of the harness of record in
 `scripts/tierc11_closure_fixtures.py`: `say` (deterministic line → transcript, temp paths scrubbed), `clock` (stdout
 only), `prove(fid, title, break_if, real_if, break_leg, real_leg)`, `plants(rows)`, `file_transcript(out, body,
@@ -985,6 +1001,12 @@ unchanged; a document table with its collar line deleted; the registered marker 
 
 **L-0.17 NO NUMBER TYPED THAT A FILE CAN SUPPLY** — "no number typed that a file can supply" (contract :8); also
 "F-TRAV greps for typed constants → FAIL" (:43) and "F-TOLL (maker bps read, never typed …)" (:121)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 6] an 'asserted equal' whose second object is not on file at TC12-REG is asserted by the pin's CONSUMER at its own stage's gate, never by the stdlib-only pin door at filing.
+- [seam 35] the pin register filed at TC12-REG carries `lineage` rows (sha256 of `ast.dump(node)`) for the literals L-X reads from `scripts/tierc11_score.py` (the sixteen columns, `HAIRCUT_TOL`, `SUM_TOL`, `NET_LAW_TOL`, `EXIT_FLAGS`) and the pin-map rows `fam.q`, `fam.<stage letter>`, `seed` and `loao.line`.
+- [seam 39] the contract token `0.000e+00` (:49, :114) is a PRINT-FORMAT token: classed in `CONTRACT_TOKENS_UNPINNED.json`, never a pin; F-CTRL passes iff the worst difference `== 0.0`.
+- [seam 45] for a second-object pin held equal to a filed value (`adm.lag_cut`, `adm.abs_cut`, `adm.preseen_cell`, `ctrl.sum_net_r`) a bend that HALTs the build at its assertion counts as flow.
+- [seam 63] `PIN_REGISTER` consumers name `TC12-REG.ledger-spec` and `TC12-L` for `ledger.*`, `adm.lag_cut` and `seed`, and `TC12-L` / `TC12-CLOSE` for `ferry.*`.
 READING: Every number a TC12 non-fixture source uses comes through a DOOR from the file that supplies it. The doors:
 - **The contract** — `scripts/tierc12_pins.py`, reading the prefix (L-0.1) with the filed map
   `T12/pins/CONTRACT_PIN_MAP.json`: one row per contract pin, `{pin, lines [a, b], regex (one or more capture groups),
@@ -1141,6 +1163,11 @@ payload carries the ADMISSION bar → RED.
 
 **L-0.19 THE CONTRACT'S FIXTURE LIST IS A TOTALITY** — "FIXTURES (each states its failure condition): F-CTRL
 0.000e+00 cross-process · F-D-2/3 · … · F-KEY · import-closure · worktree attestation." (contract :114-124)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 2] L-0.17's rule governs the hosting map: one `F-TYPED-FLOW [<pin>]` block per consumed pin is hosted in the consuming record's suite — `TC12-REG.ledger-spec`, `TC12-V`, `TC12-V.trades` (DOOR 2's pins), `TC12-R.dir`, `TC12-R.tables`, `TC12-S`, `TC12-L` beside `TC12-G` and `TC12-R.sfp` — and F-ROLL and F-TYPED-TOTAL expect those blocks.
+- [seam 30] a `CLOSED-NO-BOOK` block (row closed by precondition) or a block asserting zero instants (empty frame) satisfies 'one F-NEST-ASOF block per stamp table' in the roll.
+- [seam 32] `F-KEY [scores]` is hosted at `TC12-SCORE` (`scores/DRAWS.parquet` has a declared key).
+- [seam 60] L-S.31's wording governs the scalper's leg classes: (n) PIN-NOT-READ is judged on the tapes of (i) ALWAYS; a real-tape instance is printed when the row is BUILT (a zero moved-count there is printed, never RED).
 READING: Every fixture the contract names on :114-124 exists under its contract name, as at least one fixture block
 in a transcript of record, PASS at TC12-FIX, with both `FAILS IF:` lines. The names are parsed from the prefix by the
 pin door (tokens of the form `F-<NAME>`, the pair written `F-D-2/3` read as two, and the two unprefixed names
@@ -1180,6 +1207,8 @@ reading `BUILT` → RED. Control that must stay GREEN and is printed: a FAIL blo
 F-LEDGER untouched (it is RED as its own, added fixture).
 
 **L-0.20 F-DET** — "F-DET hash-identical" (contract :123)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 68] F-DET [forward] compares the TC12-L writer's outputs only; `BOOK_SPEC_COMBINED.json`, `BOOK4_FREEZE.json` and `FIXTURES_LEDGER_SPEC.txt` are twin INPUTS, outside the file-set equality (L-L.18).
 READING: TC10's variant (i), per parquet directory, as TC11 and X ran it. For every directory a record writes parquet
 into, the suite runs that directory's one writer script (L-0.9) twice, each in a fresh subprocess that imports `E`
 before any I/O, into `<dir>/_det_<stage>/seed_<s>/` (git-ignored), under `PYTHONHASHSEED` = "1" (TC11 L-F.1's first
@@ -1248,6 +1277,11 @@ stamped with the pin — each RED by its named detector.
 **L-0.22 IMPORT-CLOSURE AND THE MEANING OF "DECISION MODULE"** — "STAGE V · THE VALUE AREA, MODULE-IZED
 (analytics/value_area.py; decision modules import NOTHING from it — import-closure extends to it)" (contract :25-26);
 "import-closure" (contract :124)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 14] at `--stage=TC12-REG`, before `TC12-ENV.vendor` files `env/LINEAGE_PINS.json`, leg (ii)'s TC10-layer disclosure is stated as EMPTY (nothing on file to read), never guessed.
+- [seam 16] the two L-D detectors — the pin as an int or ISO string, and a tick string literal or a float `x - tick` compare — follow every module: the closure suite's AST sweep re-runs them over every non-fixture `tierc12_*` source on file at each `ORDER`-stage gate (the same legs on a wider scope; no new block id).
+- [seam 29] the reader's import of `tierc12_progress` (stdlib-only, for `certified()`) is lawful and is not a finding of the AST legs.
+- [seam 62] leg (iii) VA-BLIND keys on a directory's ONE parquet writer (the manifest's `source_script`), not on the directory's `READ_SET.json`: `forward/` is written by `tierc12_forward.py`, which lawfully opens the two `.c` stamp tables, while the VA-blind `tierc12_forward_spec` is held blind by AST and `SPEC_READS_T` (L-L.3).
 READING: Three registered rows decide ON value-area state (P-DIR-1 :65-66, P-SFP-VA-1 :69-73, P-SCALP-3 :85-98), and
 the contract forbids decision modules to import the module that computes it. The two hold together in the strong
 form O-29 rules: **value-area facts enter every module that builds a book, a gate, an order or a score ONLY AS FILED
@@ -1451,6 +1485,8 @@ pin door's HALT.
 
 **L-0.24 Q1/Q2 · "tc11-stamp"** — "Q1/Q2 keep SCORES.json leaves; stamp TC11 BUILT and re-pin its registry files
 ["tc11-stamp"]" (contract :13); O-10.
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 33] L-X.34 defines the map: `close/TC11_STAMP_MAP.json` also carries `head_at_proof` and `proof` ∈ {GREEN, RED, PROOF ENVIRONMENT DEFECT}; `--apply` rewrites it with `applied: true`; the BUILT line is composed by the close generator and handed to the stamp tool as an argument.
 READING:
 - **Q1.** No byte of `T11/scores/SCORES.json` moves in TC12. Its sha is the R0 value
   (`T12/progress/TC12-R0.json` `frozen_estate_shas_at_r0`), re-asserted at every gate (F-FROZEN), at CLOSE and inside
@@ -1539,6 +1575,8 @@ establishes it.
 
 **L-0.25 Q4 · "1w"** — "Q4 accept 1w FAIL (provisional) as closing 1w for range trading ["1w"]" (contract :14); O-11
 as amended by O-28.
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 67] leg 1W (c) judges by AST and by the declared VA read list — never by `READ_SET` paths or by a table's presence in a staged CSV (the ferry opens every tabular file whole and names no `1w_` column).
 READING: 1w is closed for range trading in TC12 and no re-measure is ordered. (i) No trade, order, setup or
 event-outcome row of any range form — the swing failure, the breakout-retest, the 1d-edge take-profit venue, the
 scalper — has lens 1w, registered or Tier-E: no 1w range cell, trade, traverse row or feasibility row exists. (ii) No
@@ -1675,6 +1713,8 @@ hold the two defaults that are code (no foreign-tier import, L-0.22; the twin be
 **L-0.30 WHAT THIS IS NOT → F-NOT** — "WHAT THIS IS NOT: no entry-cross research · no trail-offset tuning · no adds ·
 no pivot-range trades · no 5m signal source · no new assets by list · no SAIL act · no promotion from any Tier-E
 table · no re-family of TC11." (contract :132-134; the drafting brief cites :130-132, which are CLOSE's last lines)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 53] leg LICENCE derives the licensed pair from the LANE and the toll — lane `scalp_va_1h` → lens 1h; maker entry and targets → `maker` — never from a sidecar's `lens`, which on P-SCALP-3 is the 5m clock.
 READING: Each clause is a refusal with a detector, and each is one leg — one block `F-NOT [<LEG>]` — of
 `scripts/tierc12_not_fixtures.py --stage=<S>`: ENTRY-CROSS, TRAIL-OFFSET, ADDS, PIVOT-RANGE, 5M, NEW-ASSETS, SAIL,
 PROMOTION, RE-FAMILY, 1W, ACTS, POST-HOC, LICENCE. The suite runs from TC12-ENV on. A leg's AST clauses bind from
@@ -1722,7 +1762,7 @@ STATUS record instead), never "NO TABLE IN SCOPE".
   prices may be compared with 1h and 4h level columns and with order prices. FAILS IF (a) a 5m kline path appears in
   a directory's `READ_SET.json` (L-0.13) outside the typed list `FIVE_MIN_READERS_T` — the directories of TC12-D and
   TC12-S, and of any record whose owning reading declares at freeze a 5m WALK or FILL read and names it (at this
-  pass: `stage_r/sfp/`, for the conditioned maker twin's first 5m child, L-R.24); (b) a
+  pass: `stage_r/sfp/`, for the conditioned maker twin's fill child and the remaining 5m children of that 4h bar — the fill-bar walk, L-R.24); (b) a
   Stage V table holds a 5m lens; (c)
   the scalper source's `ema`-family call sites are not exactly the fixture-typed two, or any has a literal period;
   (d) the scalper's PERMISSION column (:85-86), recomputed by the fixture from the filed 1h and 4h VA tables in a

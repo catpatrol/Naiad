@@ -1,0 +1,549 @@
+{
+ "what": "the ONE seam pass of the resume paste's RC-1: each of the 70 residual conflicts of review/FIX_PASS_1_RETURNS.json (residual_conflicts, in order) settled in one line by the canon's precedence — contract text, then rulings, then dispositions, then the pessimistic reading",
+ "by": "the orchestrator alone; no lens, scout or drafter fan-out",
+ "date_utc": "2026-10-09",
+ "source": {
+  "path": "research_outputs/tierc12/review/FIX_PASS_1_RETURNS.json",
+  "sha256": "1498ddb7ab6e6d01203641990e36938ca4dc2466e268060e0886f5637cd2c857",
+  "key": "residual_conflicts",
+  "n": 70
+ },
+ "n_readings_after": 251,
+ "seams": [
+  {
+   "seam_no": 1,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-G",
+    "L-L",
+    "L-S",
+    "L-V"
+   ],
+   "one_line": "L-0.17 defines the flow line; the flow legs of L-V, L-S, L-L and L-G carry it."
+  },
+  {
+   "seam_no": 2,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "L-0.17's rule governs the hosting map: one F-TYPED-FLOW block per consumed pin in each consuming record's suite; F-ROLL and F-TYPED-TOTAL expect them."
+  },
+  {
+   "seam_no": 3,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "OD-17: NOT RUN is earned only by an FID on NOT_RUN_FIDS_T (L-D's F-MIRROR and the body-file leg of F-TOLL [data]); a generic sentence elsewhere earns no entry and such a leg reads FAIL."
+  },
+  {
+   "seam_no": 4,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "L-0.9's depends_on floor binds every record of every section; it is computed at the gate from the read set, and a typed row is the minimum."
+  },
+  {
+   "seam_no": 5,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-D"
+   ],
+   "one_line": "OD-16: the scorer is the quarantine's one reader; L-D.27's hook admits its read-only opens of quarantined sidecars and no other module's."
+  },
+  {
+   "seam_no": 6,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0",
+    "L-C",
+    "L-G",
+    "L-R"
+   ],
+   "one_line": "An equality whose second object is not on file at TC12-REG is asserted by the pin's consumer at its own gate, not by the pin door at filing."
+  },
+  {
+   "seam_no": 7,
+   "settled_by": "disposition",
+   "sections_edited": [],
+   "one_line": "CANON-35 holds: no census sha of a file TC12's close acts move stands in any REGISTRATION SPEC block (checked by grep at assembly: none)."
+  },
+  {
+   "seam_no": 8,
+   "settled_by": "ruling",
+   "sections_edited": [],
+   "one_line": "O-34(e) and OD-4: STEP_Q.json and TC12-R0.json keep their filed keys and are not rewritten; TC12-R0's entries are held to the blobs at ac8cb92."
+  },
+  {
+   "seam_no": 9,
+   "settled_by": "ruling",
+   "sections_edited": [],
+   "one_line": "O-33 annotates O-10: the stamp proof runs in a detached linked worktree, as L-0.24 and L-X.34 already build it."
+  },
+  {
+   "seam_no": 10,
+   "settled_by": "ruling",
+   "sections_edited": [],
+   "one_line": "The orchestrator's acts are performed where the resume paste orders them: the TC12-LEANS record, AM-1 and the disclosures at this freeze; the progress-script change, the pin map, the pin register and the fixture-typed lists at TC12-REG and the gates that type them; the freeze record after the ledger-spec commit."
+  },
+  {
+   "seam_no": 11,
+   "settled_by": "ruling",
+   "sections_edited": [],
+   "one_line": "O-34(f): the section text governs — L-0.22 (i-b) clause (2) already exempts the two doors by name, matching L-D.26 hunk 7."
+  },
+  {
+   "seam_no": 12,
+   "settled_by": "pessimistic",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "TC11's PROGRESS sha is read from the R0 record's frozen-estate map, not through certified(), which HALTs on a path no record's artifact_shas names."
+  },
+  {
+   "seam_no": 13,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "The TC12-ENV.vendor row also files the env fixture suite and its vendor transcript, as L-D.30 records."
+  },
+  {
+   "seam_no": 14,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "Before TC12-ENV.vendor files the lineage pins, the closure suite's TC10-layer disclosure is stated as empty, never guessed."
+  },
+  {
+   "seam_no": 15,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "CANON-28 as a law of every spawning builder: each worker returns its read set and the parent merges them."
+  },
+  {
+   "seam_no": 16,
+   "settled_by": "pessimistic",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "The pin-literal and tick-literal detectors follow every module: the closure suite re-runs them over every non-fixture tierc12 source at each ORDER-stage gate — same legs, wider scope."
+  },
+  {
+   "seam_no": 17,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-R",
+    "L-S"
+   ],
+   "one_line": "L-D.23 names the trapping context TickGrid.ctx; L-R.24, L-S.11 and L-S.15 form exact expressions under it."
+  },
+  {
+   "seam_no": 18,
+   "settled_by": "ruling",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "O-4 as L-D.27 enforces it binds every section: TC11 and X records are opened only through the shim's two verified readers; raw opens and directory listings are refused."
+  },
+  {
+   "seam_no": 19,
+   "settled_by": "disposition",
+   "sections_edited": [],
+   "one_line": "CANON-17 and CANON-36 hold: no REGISTRATION SPEC names a Stage D file as a precondition or by sha (checked by grep at assembly: none)."
+  },
+  {
+   "seam_no": 20,
+   "settled_by": "ruling",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "O-34(d): the orchestrator appends DISCLOSURES_BUILD.md at a stage gate and that stage's record re-records it; a build writes nothing there."
+  },
+  {
+   "seam_no": 21,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "The TC12-D row names the sealed flat-bar attestation and the two fee-capture records L-D files."
+  },
+  {
+   "seam_no": 22,
+   "settled_by": "disposition",
+   "sections_edited": [],
+   "one_line": "A frame's owner names its columns: L-V.19's kind table already carries L-R.31's and L-S.30's exit-stamp and end-column names."
+  },
+  {
+   "seam_no": 23,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-C"
+   ],
+   "one_line": "L-V.19 rule 5 (TC11's law) governs: a bell row is stamped both bell and exit; L-C.11 says so."
+  },
+  {
+   "seam_no": 24,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "All of Stage V's code is filed at the record TC12-V; the children file tables, records and transcripts only."
+  },
+  {
+   "seam_no": 25,
+   "settled_by": "disposition",
+   "sections_edited": [],
+   "one_line": "Covered by seam 2's line: F-TYPED-FLOW is hosted at TC12-V.trades for DOOR 2's pins."
+  },
+  {
+   "seam_no": 26,
+   "settled_by": "disposition",
+   "sections_edited": [],
+   "one_line": "RC-2 adds no leg: the builder's HALT assertion of L-R.31 (the P-DIR-1 key table is a subset of the v6 keys) is the check of record, beside L-G.18's SUBSET legs."
+  },
+  {
+   "seam_no": 27,
+   "settled_by": "ruling",
+   "sections_edited": [],
+   "one_line": "O-34(f): L-V's leg governs — every declared column, excluding the nine as-of stamps and the collar, which a cut-tape rebuild necessarily changes; the canon carries the erratum."
+  },
+  {
+   "seam_no": 28,
+   "settled_by": "disposition",
+   "sections_edited": [],
+   "one_line": "Holds as written: L-S.30 flags an open row by a null terminal stamp and L-R.31 by open_at_asof; a later change to either frame is an AMENDMENTS_PROPOSED entry."
+  },
+  {
+   "seam_no": 29,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "The reader's stdlib-only import of the progress module is lawful and is not a finding of the closure suite."
+  },
+  {
+   "seam_no": 30,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "OD-17: a CLOSED-NO-BOOK block or a zero-instants block satisfies the one-block-per-stamp-table qualifier in the roll."
+  },
+  {
+   "seam_no": 31,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "The TC12-ENV.score-build row also files the size record the score suite writes; L-0.14 admits that one non-transcript file."
+  },
+  {
+   "seam_no": 32,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "F-KEY [scores] is hosted at TC12-SCORE, as the canon hosts F-KEY at every record that writes parquet."
+  },
+  {
+   "seam_no": 33,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "L-X.34 defines the stamp map's keys and who composes the BUILT line; L-0.24 carries them."
+  },
+  {
+   "seam_no": 34,
+   "settled_by": "ruling",
+   "sections_edited": [
+    "L-X"
+   ],
+   "one_line": "O-33 settles it; L-X's operator item on the proof tree is closed."
+  },
+  {
+   "seam_no": 35,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "The pin register filed at TC12-REG carries the lineage rows and pin-map rows L-X consumes; L-0.17 names them."
+  },
+  {
+   "seam_no": 36,
+   "settled_by": "disposition",
+   "sections_edited": [],
+   "one_line": "L-S.28 as filed governs: the LOAO sentence and line are printed unconditionally, and L-X.9 is aligned to it."
+  },
+  {
+   "seam_no": 37,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-L"
+   ],
+   "one_line": "The ferry forecast sizes TC12's ledger append from the staged file's byte count."
+  },
+  {
+   "seam_no": 38,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-V"
+   ],
+   "one_line": "L-V.19 states it: at the first stamps child the v6 stamp table's campaign key set equals the frame's, so gated subsets are covered by L-G.18's SUBSET legs."
+  },
+  {
+   "seam_no": 39,
+   "settled_by": "pessimistic",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "0.000e+00 is a print-format token, classed unpinned and never a pin; F-CTRL passes iff the worst difference is exactly zero."
+  },
+  {
+   "seam_no": 40,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "The TC12-C.tide row also carries its two scripts, committed with it."
+  },
+  {
+   "seam_no": 41,
+   "settled_by": "disposition",
+   "sections_edited": [],
+   "one_line": "Already conformed: L-R names the one replay hook of the books module with refuse(ctx) and holds no replay loop."
+  },
+  {
+   "seam_no": 42,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-X"
+   ],
+   "one_line": "The ban on 're-score' is scoped to templates and labels; the refile qualifier is a scorer qualifier, never a label and never in a registry payload."
+  },
+  {
+   "seam_no": 43,
+   "settled_by": "AMENDMENTS_PROPOSED",
+   "sections_edited": [
+    "L-R",
+    "L-S"
+   ],
+   "one_line": "L-X.36's ruler sentence (through 'never loosens the bar.') is now carried byte for byte by all five spec blocks — the three range and scalper blocks drop their inline family constants and move their bootstrap clause after it; the printed-beside list that follows is row-owned in those three, so AP-1 is filed with the default that the text detector holds the ruler sentence alone."
+  },
+  {
+   "seam_no": 44,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-X"
+   ],
+   "one_line": "Under P-BRD-1's cell only the cell counts of the 17-asset breadth table are printed — no sum, no mean."
+  },
+  {
+   "seam_no": 45,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "For a second-object pin held equal to a filed value, a bend that HALTs the build at its assertion counts as flow."
+  },
+  {
+   "seam_no": 46,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "TC12-R.tables also depends on TC12-ENV.score-build, whose book-sha function its anchor leg calls."
+  },
+  {
+   "seam_no": 47,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-C"
+   ],
+   "one_line": "L-C.4 is the definer: the base regbook frame is returned for the scored window and, on request, for the strip; strip arms are post-filters of it."
+  },
+  {
+   "seam_no": 48,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-X"
+   ],
+   "one_line": "F-REGBOOK accepts the touch fill rule on the assumed-maker twin and the tick rule on the conditioned one."
+  },
+  {
+   "seam_no": 49,
+   "settled_by": "disposition",
+   "sections_edited": [],
+   "one_line": "Covered by seam 2's line: flow legs at TC12-R.dir, TC12-R.tables and TC12-V.trades."
+  },
+  {
+   "seam_no": 50,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-V"
+   ],
+   "one_line": "DOOR 2 builds to L-R's two-trades readings verbatim; L-V.23 names the axis column, the pooled key mapping and the legs."
+  },
+  {
+   "seam_no": 51,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "L-0.30's five-minute readers line names the fill child and the remaining children of that 4h bar, as L-R.24 reads them."
+  },
+  {
+   "seam_no": 52,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-X"
+   ],
+   "one_line": "As seam 42: the refile qualifier is not a label and no payload or label scan can meet it."
+  },
+  {
+   "seam_no": 53,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "The LICENCE leg derives the licensed pair from the lane and the toll, never from a sidecar's clock lens."
+  },
+  {
+   "seam_no": 54,
+   "settled_by": "disposition",
+   "sections_edited": [],
+   "one_line": "As seam 22: L-V.19's kind for the scalper's books uses L-S.30's column names."
+  },
+  {
+   "seam_no": 55,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-V"
+   ],
+   "one_line": "L-V.24's read line for the 1h bars names the two further columns L-S declares."
+  },
+  {
+   "seam_no": 56,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-G"
+   ],
+   "one_line": "L-G.10 is the definer: it names the tide and breadth columns L-S.24 reads, with the panel suffixes it already uses."
+  },
+  {
+   "seam_no": 57,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-R"
+   ],
+   "one_line": "The shared fee helper mirrors X's per-leg signature; the scalper never passes the X-mirror switches."
+  },
+  {
+   "seam_no": 58,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-X"
+   ],
+   "one_line": "The regbook validator accepts a null fill rule on a strip arm."
+  },
+  {
+   "seam_no": 59,
+   "settled_by": "pessimistic",
+   "sections_edited": [
+    "L-X"
+   ],
+   "one_line": "The no-comma/quote/CR/LF law covers every string column of a regbook row, extra columns included."
+  },
+  {
+   "seam_no": 60,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "L-S.31's wording governs the restatement in L-0.19: the pin-not-read leg is judged on synthetic tapes always, with a printed real-tape instance when the row is built."
+  },
+  {
+   "seam_no": 61,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-X"
+   ],
+   "one_line": "The filed verdict_rule governs the scorer's verdict text; L-X.9 lists the same elements L-S.28 requires."
+  },
+  {
+   "seam_no": 62,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "The VA-blind leg keys on a directory's one parquet writer, not on the directory's read set."
+  },
+  {
+   "seam_no": 63,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "Covered by seam 2's line; L-0.17 names the consumers of the ledger and ferry pins."
+  },
+  {
+   "seam_no": 64,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0",
+    "L-X"
+   ],
+   "one_line": "The ferry suite's of-record invocation is an act-mode run whose transcript belongs to no record; L-X.33 step 2 names it and the sweep does not count it."
+  },
+  {
+   "seam_no": 65,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "TC12-L joins TC12-REG and TC12-ENV: its parent record is written by the orchestrator's gate step from the producers' artifact maps."
+  },
+  {
+   "seam_no": 66,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "L-L.32 stands: the staged CSVs are pinned by carried sha in the tracked ferry manifest, the one exception to double pinning."
+  },
+  {
+   "seam_no": 67,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "The 1w leg judges by AST and the declared read list, never by read-set paths or a table's presence in a staged CSV."
+  },
+  {
+   "seam_no": 68,
+   "settled_by": "disposition",
+   "sections_edited": [
+    "L-0"
+   ],
+   "one_line": "F-DET on forward/ compares the TC12-L writer's outputs; the spec, the freeze record and the spec transcript are twin inputs."
+  },
+  {
+   "seam_no": 69,
+   "settled_by": "disposition",
+   "sections_edited": [],
+   "one_line": "L-V.24 and L-X.24 hold the Stage V inventory and the arms table that L-L.25's two reworded cells cite."
+  },
+  {
+   "seam_no": 70,
+   "settled_by": "disposition",
+   "sections_edited": [],
+   "one_line": "No rename: the draws table keeps its key; the ferry class is POINTED either way and L-L.25 holds the class only."
+  }
+ ]
+}

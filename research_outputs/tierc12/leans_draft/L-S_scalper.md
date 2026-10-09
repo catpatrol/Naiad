@@ -413,6 +413,8 @@ rail removed; a cross order's `ext` set to the trigger bar's low; a breakeven mo
 
 **L-S.11 THE TWO TARGETS, AND THE TIER'S ONE GEOMETRY LAW** — "TARGETS: T1 = POC (half, resting limit, same fill
 rule); T2 = far edge − 0.25 ATR_1h (remainder)" (contract :99); disposition OD-8
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 17] exact tick expressions are formed under `decimal.localcontext(grid.ctx)` — `TickGrid.ctx` as L-D.23 names it; an inexact quotient raises and is a HALT.
 READING: both targets are resting limits placed when the entry fills, on the grid by L-S.9's snapping law, levels
 from `G`:
 - **T1:** the POC of the frozen profile. Long (a SELL limit) `n_T1 = ceil_ticks(POC)`; short `n_T1 =
@@ -545,6 +547,8 @@ admitted at an exit bar's close.
 **L-S.15 THE FILL OF RECORD AND ITS TWO TWINS, IN INTEGER TICKS** — "FILL OF RECORD: a later 5m bar trades THROUGH
 the limit by ≥ 1 tick (low < limit − tick for a long) ["fill"]. Twins printed: TOUCH (low ≤ limit) · DEEP (through
 by 0.05 ATR_1h)." (contract :93-95); rulings O-20, O-27, O-32
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 17] exact tick expressions are formed under `decimal.localcontext(grid.ctx)` — `TickGrid.ctx` as L-D.23 names it; an inexact quotient raises and is a HALT.
 READING: a resting limit at grid level `n` is tested on each bar's range with `TickGrid`'s integer comparisons —
 never a float subtraction, never a tolerance. Three rules:
 
@@ -1345,6 +1349,8 @@ twin == TC-series" held on every row whatever the cap — it would force the car
 FAILS-IF: as the table states.
 
 **L-S.33 THE COMPUTE PLAN** — ruling O-5; "F-DET hash-identical" (contract :123)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 1] every flow leg of this section prints L-0.17's fixed line `  [FLOW] <pin> @ <door>: <witness> moved`, which F-TYPED-TOTAL reads at TC12-FIX.
 READING:
 - **Size (orientation, read at build):** a home 5m tape holds 625,152 to 741,097 bars at TC11's pin (scout U4
   §1.2) plus the top-up; the holdout to TC11's pin is 235,009 bars per asset as the scout counted it (U6 §1.9).
@@ -1489,11 +1495,10 @@ worker count written into the manifest.
     research_outputs/tierc12/x_rec/tierc11x/va/feasibility.parquet (sha256
     ea8573b3240bb1112521c55f0a52ee2ed7156c598b7665685d0b86eefbecb6f0); it is this row's only precondition.
 - **verdict_rule:** verdict_of_record = SUPPORTED iff (a) the cluster-90% CI lower bound (the 5th percentile of
-  the draws) > 0 AND (b) one-sided p <= q ÷ m = 0.10 ÷ 1 = 0.10, exact, AND (c) every declared asset holds at
-  least one row in every arm the ruler reads; else NOT SUPPORTED (asset-cluster bootstrap by
-  scripts/tierc12_score.py, T5 primitives, N_BOOT 4000, seed 20261008; sensitivity seed 20260816 beside). m is
+  the draws) > 0 AND (b) one-sided p <= q ÷ m, exact, AND (c) every declared asset holds at
+  least one row in every arm the ruler reads; else NOT SUPPORTED. m is
   fixed in every case; a registration closed by its precondition prints 'CLOSED BY PRECONDITION (…) — no number ·
-  no test spent', spends no test and never loosens the bar. At m = 1 the bar does not bind and the bar cell prints
+  no test spent', spends no test and never loosens the bar. Bootstrap of record: asset-cluster bootstrap by scripts/tierc12_score.py, T5 primitives, N_BOOT 4000, seed 20261008, sensitivity seed 20260816 beside. At m = 1 the bar does not bind and the bar cell prints
   '0.10 (not binding at m = 1; decided at the 5th percentile, clause (a))'. THE PRE-NAMED KILL (L-X.9's table,
   verbatim in content). For each fill book X ∈ {TOUCH, TICK, DEEP}, at the seed of record and this bar, exactly
   one of three states holds: U(X) = X is not PANEL COMPLETE (clause (c) fails on X; its ruler is undefined; an

@@ -998,6 +998,8 @@ copy of `TRAVERSE.json`; a `traverse()` read of a `TRAVERSE.json` copy whose sha
 **L-V.19 THE FUNNEL INSTANTS** — "every funnel instant of every book (base v6, 9/12, the gated books, every arm
 below)" (contract :44)
 
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 38] F-NEST-KEYS at `.c` asserts that `VA_STAMPS_v6`'s campaign key set EQUALS the v6 frame's key set (and likewise 9/12), so stamp coverage of every gated subset follows from L-G.18's SUBSET legs.
 READING: TC11's instant law, mirrored as `instants_of(frame, kind)` in the reader from
 `tierc11_stage_r.instants_of` (`scripts/tierc11_stage_r.py:1267 ff.`; `KINDS` :213-216; `NEST_KEY` :258) — the
 TC11 module reaches the range layer and is never imported. Per campaign (or order) of a book: **every close of the
@@ -1231,6 +1233,8 @@ twelve-asset leg is in `traverse_legs.parquet`; mutation: a twelve-asset leg app
 because L-R.29 prints it beside the contract's gaps+order null ("null gaps+order (R10)", contract :79, is
 L-R.29's phrase)
 
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 50] DOOR 2 builds to L-R's two-trades readings verbatim: the lens-above axis column is `u_cell` (the grid id stays `cell`); the pooled panel value is `POOLED` (X's filed key `POOLED:CLASSIC5` is mapped in the mirror leg); the mirror and null legs are those L-R lists.
 READING: The value area's null OF RECORD in the estate is X's `tr_tercile_lblock`: a true-range-tercile-stratified
 L-block volume PERMUTATION with random phase; prices untouched. `value_area.null_volume(volume=, true_range=,
 lookback=, rng=)` mirrors it exactly: draw the phase `φ = rng.integers(0, lookback)`; blocks
@@ -1300,6 +1304,9 @@ defined in L-R.26..L-R.29 and hosted in the same invocation.
 **L-V.24 OUTPUTS, PRECISION AND THE COMPUTE PLAN** — "Stage V pins and the traverse table · the VA stack whole"
 (contract :128)
 
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 1] every flow leg of this section prints L-0.17's fixed line `  [FLOW] <pin> @ <door>: <witness> moved`, which F-TYPED-TOTAL reads at TC12-FIX.
+- [seam 55] the `R:` line of `va_bars` for L-S also names `inside_frozen_only` and `l_label` (declared in L-S.1; they decide nothing).
 READING: Stage `TC12-V` runs before any book exists. It files one parent record and four dotted children, every
 one BLOCKING (L-0.10's sub-stage table):
 

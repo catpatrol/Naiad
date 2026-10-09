@@ -199,7 +199,7 @@ books.
   `T11/data/AS_OF_PIN.json["as_of_last_closed_4h_close_ms"]` and asserted equal to X's `opening_rival.ms`),
   `admission`, `append_law`, `n_min`, `pool_lo_ms`, `refresh_law`; `row_fields` (X's names by object from
   `BOOK_SPECS.json` → `row_fields`; 43 on file), `row_fields_added` — the six names (`p_age_1_refuses`,
-  `p_win_1_refuses`, `p_adm_1_refuses`, `in_o9_scored_window`, `entered_before_contract_filed`,
+  `p_win_1_refuses`, `p_adm_1_refuses`, `in_o9_scored_window`, `entered_before_gate_text_filed`,
   `entered_before_book_frozen`) (L-L.10), `row_nullable` (X's tuple by AST, `XF`:173-174), `ctrl_cols`; `flags`
   {the three flag definitions of L-L.17 as text; `step_q` {`commit`, `instant_ms`, `instant_iso`, read from
   `T12/progress/STEP_Q.json`}; `book_frozen` {`rule` "the committer time (ms) of the commit that first adds line 5
@@ -497,7 +497,7 @@ READING: one `row` line per appended campaign per book.
   fourth spec names in `row_fields_added`:
   - three gate booleans, `p_age_1_refuses`, `p_win_1_refuses`, `p_adm_1_refuses` (L-L.2's predicates on the row's
     own `tide_band` and `lag`);
-  - three freeze flags (L-L.17), `in_o9_scored_window`, `entered_before_contract_filed`,
+  - three freeze flags (L-L.17), `in_o9_scored_window`, `entered_before_gate_text_filed`,
     `entered_before_book_frozen` — functions of the row's `entry_close_ms` and of frozen instants only.
   The row's field count is `len(row_fields) + len(row_fields_added)`, computed and never typed; a `row` line is
   that set and the two chain fields.
@@ -779,7 +779,7 @@ both inside the window every registered row is scored on and admissible to the l
 - **The three flags — pin-independent, CHAINED on every row** (L-L.10; each a function of the row's
   `entry_close_ms` and of frozen instants):
   - `in_o9_scored_window` := `OPENING_MS < entry_close_ms ≤ W` (`W = E.TC11_PIN_MS`, the score edge);
-  - `entered_before_contract_filed` := `entry_close_ms ≤` the STEP Q instant (L-D.1's object);
+  - `entered_before_gate_text_filed` := `entry_close_ms ≤` the STEP Q instant (L-D.1's object);
   - `entered_before_book_frozen` := `entry_close_ms ≤` the committer time (ms) of the commit that first adds line 5
     of `forward/FORWARD_LEDGER.jsonl`.
 - **The freeze instant is filed ONCE,** in the write-once provenance record `T12/forward/BOOK4_FREEZE.json`
@@ -810,11 +810,11 @@ both inside the window every registered row is scored on and admissible to the l
   the spec's pool law, its HALT on an unbanded entry and its post-filter law were first carried by a line of the
   chain — yet it admits entries from the origin of record, more than two weeks before either. TC12's pin precedes
   the STEP Q instant, which precedes the freeze instant, so EVERY row any book appends at this refresh carries
-  `entered_before_contract_filed` and `entered_before_book_frozen` both true. What stands behind those rows: no
+  `entered_before_gate_text_filed` and `entered_before_book_frozen` both true. What stands behind those rows: no
   snapshot on this disk held a bar after the score edge when the contract was filed (scout U8 §1.7), and the
   fourth spec and its `book_open` line are committed before Stage D fetches one (L-L.3). That is evidence about
   the build, not about what was visible on a chart, and it earns no row a place in the row set of record: the
-  binding flag for `gated-v6-combined` is `entered_before_book_frozen`, and `entered_before_contract_filed` is
+  binding flag for `gated-v6-combined` is `entered_before_book_frozen`, and `entered_before_gate_text_filed` is
   printed beside it. The fourth book's record that is forward of its own freeze begins with entries that close
   after the freeze instant — at a later refresh, not this one.
 SOURCE: O-9, O-32; contract :55-56, :110; `T11/data/AS_OF_PIN.json` → `bars_4h_past_tc10_pin` [read here]; TC11's
@@ -831,6 +831,8 @@ chain, and a row entered there would otherwise count as forward-of-freeze eviden
 FAILS-IF: F-FWD-OVERLAP (L-L.18).
 
 **L-L.18 THE LEDGER'S OTHER FIXTURES** — "FIXTURES (each states its failure condition)" (contract :114)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 1] every flow leg of this section prints L-0.17's fixed line `  [FLOW] <pin> @ <door>: <witness> moved`, which F-TYPED-TOTAL reads at TC12-FIX.
 READING: `scripts/tierc12_forward_fixtures.py --stage=TC12-L`, transcript `T12/forward/FIXTURES_LEDGER.txt` (the
 record `TC12-L`). It hosts L-L.7's five `F-LEDGER` blocks on the refreshed file and the blocks below. The suite
 imports no door, not `analytics.value_area` and not the reader. Scratch ledgers live under
@@ -1221,6 +1223,8 @@ FAILS-IF: `F-ROWS [BOX]` (L-L.33).
 
 **L-L.29 THE FORECAST BASIS** — "files that would push the box past WARN are held" (contract :112); O-24 "staged
 off-bus under `research_outputs/tierc12/ferry/` with a forecast"
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 37] the reservation for TC12's own ledger append is sized from the STAGED file's byte count (L-X.32 makes the stamped and the staged counts equal by law).
 READING: during the build the ferry writes nothing on the bus; it files a FORECAST. Two are filed: F1 at TC12-L and
 F2 at TC12-CLOSE (when the draft and the staged append exist). Both use one law.
 - **The pin.** `--pin` reads the main branch's HEAD sha from the ref files in process and writes it ONCE per stage
@@ -1495,7 +1499,7 @@ registry. One clause of an owner's spec is worded here, and L-G's P-ADM-1 block 
    book's gate text was filed at STEP Q and its spec was frozen on the chain at the ledger-spec commit, both after
    TC12's pin, so every row of this refresh predates both (L-L.17). Default if silent (O-32): the contract's
    origin stands; every such row is appended, counted in `n`, and carries the chained flags
-   `entered_before_contract_filed` and `entered_before_book_frozen`; the rows of record are fixed in `n_law`
+   `entered_before_gate_text_filed` and `entered_before_book_frozen`; the rows of record are fixed in `n_law`
    (L-L.17) — for the fourth book, rows entered after the freeze instant — so its `n_record` is 0 at this
    refresh; the all-rows figure is printed beside. Moving the origin itself, or taking STEP Q in place of the
    freeze instant as the binding flag, is the operator's order.

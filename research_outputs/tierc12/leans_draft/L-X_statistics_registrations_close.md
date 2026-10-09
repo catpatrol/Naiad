@@ -283,6 +283,9 @@ synthetic draw set (the mutant reads SUPPORTED → RED).
 through-tick book fails the bar; CLOSED FOR GOOD if it fails under DEEP too; CLOSED if it clears only under TOUCH
 (the fill-sensitivity row is part of the verdict text); one-asset dependence read by LOAO 3/5 and the single-trade
 share." (:104-106)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 61] the filed `verdict_rule` of P-SCALP-3 governs the scorer's verdict text, which prints: each fill book's state C / F / U, the booleans `fails_under_deep_too` and `clears_only_under_touch`, both fixed sentences, `licence_at_maker_pin` beside the licence word, and the adverse-selection sentence beside the cost twins (L-S.28).
+- [seam 42] CANON-01's ban on 're-score' is scoped to cell TEMPLATES and LABELS; the refile qualifier `RE-SCORED AFTER <id>` is a scorer qualifier, never a label and never in a registry payload, so no scan of payloads or label fields can meet it.
 READING:
 - **Five words, exhaustive.** `verdict_of_record` ∈ { `SUPPORTED` · `NOT SUPPORTED` · `NOT SUPPORTED — CLOSED` ·
   `NOT SUPPORTED — CLOSED FOR GOOD` · `CLOSED BY PRECONDITION` }. The scalper's two closure words (`CLOSED`,
@@ -468,6 +471,9 @@ row; planted mutation: the top trade taken by `net_r` instead of `|net_r|`.
 
 **L-X.13 THE IN-SAMPLE LABELS IN THE VERDICT TEXT** — "Label pre_seen …" (:54-55); "Label: direction informed by …"
 (:58-59, :67); "§0 VERDICTS FIRST: the five rows with their labels" (:126-127); "in-sample labels carried" (:130)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 52] CANON-01's ban on 're-score' is scoped to cell TEMPLATES and LABELS; the refile qualifier `RE-SCORED AFTER <id>` is a scorer qualifier, never a label and never in a registry payload, so no scan of payloads or label fields can meet it.
+- [seam 44] under P-BRD-1's cell the key overlap prints the cell COUNTS (`n`) of `stage_g/g_brd17.parquet` alone — no sum, no mean.
 READING:
 - Label keys are `pre_seen` and `selection_hazard`, each filed in the spec's `labels` field as one sub-bullet `<key>
   — tag: <TAG|none>; label: <label>; text: "<text>"; items: <items>` (L-X.18's grammar). Per O-23 as amended by
@@ -987,6 +993,10 @@ does not list scored anyway; a regbook file whose sha is the one an EARLIER reco
 
 **L-X.24 THE REGBOOK INTERFACE (what Stages G, R and S write and the scorer reads)** — no contract line — the
 regbook interface (F-KEY, :124, is L-0.21's)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 48] F-REGBOOK accepts `fill_rule = "touch"` on `tierE__maker_assumed` (it re-books the record's touch fills) and `"tick"` on `tierE__maker_conditioned`.
+- [seam 58] `validate_book` accepts `fill_rule = null` on kind `strip` (P-SCALP-3's strip holds rows of three fill rules).
+- [seam 59] the 'no comma, quote, CR or LF in a string' law covers EVERY string column of a regbook row, extra columns included; an owner-supplied label must comply or stay out of the rows.
 READING: the directory-level F-KEY (declared keys, as-of stamps, collar totality) is L-0.21's and runs on every
 regbook directory; the ROW-level laws below are the scorer's, proven by F-REGBOOK.
 - **Module.** `scripts/tierc12_regbook.py` (filed at `TC12-ENV.score-build`, L-X.23) holds the interface every
@@ -1469,6 +1479,8 @@ the "maker" cite dropped; D-1 dropped from under P-BRD-1's cell; a stamp fill on
 
 **L-X.33 CLOSE ACTS: THE STEP LIST** — "Q6 the close acts remain the operator's keystrokes" (:14-15);
 "publish_exchange; STATE push; bright paths; final line" (:130)
+SEAM SETTLEMENTS (`review/SEAM_PASS.json`, 2026-10-09 — part of this reading; each line governs where the text below is silent or differs):
+- [seam 64] step 2 names the invocation: `tierc12_ferry_fixtures.py --of-record` (act mode), transcript `ferry/of_record/F_ROWS_AT_CLOSE.txt`, belonging to no record.
 READING: the generator writes `research_outputs/tierc12/close/close_acts.sh` (tracked; `set -euo pipefail`; no
 force, no reset, no stash, no clean). The executor never runs it, never pushes, never calls `publish()`, never
 merges, never moves a report onto the bus and never appends to the ledger (O-12). `--check` runs step 0 only.
@@ -1825,9 +1837,9 @@ Each item states the default the build takes if the operator is silent; every it
    (:104-105). DEFAULT if silent: `NOT SUPPORTED — CLOSED` (clears only under TOUCH), so that each clause has a
    live event; the literal-order rival (CLOSED FOR GOOD whenever TICK and DEEP fail) is the operator's to name.
    Both clause truths are printed on the row either way (`fails_under_deep_too`, `clears_only_under_touch`).
-8. **The proof tree of the tc11-stamp.** O-10 says "scratch clone"; a clone cannot run TC11's suites (L-X.34).
-   DEFAULT if silent: a detached linked worktree under a scratch directory outside both trees, removed after the
-   proof; no ref and no main-tree file moves.
+8. **The proof tree of the tc11-stamp.** SETTLED by O-33, which annotates O-10 (a clone cannot run TC11's suites,
+   L-X.34): a detached linked worktree under a scratch directory outside both trees, removed after the proof; no
+   ref and no main-tree file moves. Not an open item.
 
 ### INTERFACE ASSUMPTIONS
 
