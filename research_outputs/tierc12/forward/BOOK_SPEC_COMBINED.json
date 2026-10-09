@@ -1,0 +1,356 @@
+{
+  "admission": "entry_close_ms > opening ms (the entry bar's CLOSE; TC11 L-T.6)",
+  "ancestors": {
+    "tc11_ledger": {
+      "bytes": 3442,
+      "chain_law": "TC11's law, not forward_log's: line_sha256 = sha256(canonical JSON of the line without line_sha256), `prev` INSIDE the line (genesis: the zeros), canonical = sort_keys, compact separators, ensure_ascii False, allow_nan False, written compact. Under forward_log.canonical a field named line_sha256 would be hashed into its own digest, so this head cannot be a prev_sha256 of TC12's chain: the file is CITED, never appended, never continued.",
+      "continued": false,
+      "genesis_line_sha256": "b68a4942b35f6599f8783b02d20dfafc3a72052e88dfaf22055e003b2a105c56",
+      "head_line_sha256": "0db889425ef8e3d2075a2a3cf2d1b500c3b0bbc7f7b4d535ffa3dec3575261cb",
+      "n_lines": 2,
+      "path": "research_outputs/tierc11/forward/FORWARD_LEDGER.jsonl",
+      "sha256": "e53328add9e71f1c6198f724a131565a2a10ad2ad1600c36a74c6676f7ada288",
+      "verified": true
+    },
+    "x_ledger": {
+      "bytes": 5643,
+      "chain_law": "entry_sha256 = forward_log.chain_hash(line, prev) = sha256(forward_log.canonical(line) + prev); canonical strips only entry_sha256; written by forward_log.append_entry, verified by forward_log.verify_chain",
+      "continued": true,
+      "copy": "research_outputs/tierc12/x_rec/tierc11x/forward/FORWARD_LEDGER.jsonl",
+      "head": "61ea177fadcc82bad06f4744305b88476e29d801829cdfacc4817878306cd89c",
+      "n_lines": 4,
+      "path": "research_outputs/tierc11x/forward/FORWARD_LEDGER.jsonl",
+      "sha256": "4a6da7e89a3cf5f0127f76aca0d2ae12d218ffc06417c6528c70210092cfa4c5"
+    }
+  },
+  "append_law": "once, when closed (exit_reason != 'corridor_end'); OPEN at the refresh pin is listed, not appended, not counted; a change to an appended row HALTs",
+  "book": "gated-v6-combined",
+  "book_order": [
+    "v6",
+    "trg912",
+    "gated-v6-oldtide",
+    "gated-v6-combined"
+  ],
+  "books": {
+    "gated-v6-combined": {
+      "card_name": "v6-control",
+      "gate": {
+        "base_book": "v6",
+        "combine": "OR",
+        "components": {
+          "old": {
+            "band_quantiles": [
+              0.25,
+              0.5,
+              0.75
+            ],
+            "code": "B4",
+            "lineage_functions": [
+              "tierc7_lab_regime.tide_streak",
+              "tierc9._trailing_pool",
+              "tierc9._trailing_edges",
+              "tierc7_lab_regime._streak_band"
+            ],
+            "min_pool_bars": 30,
+            "payload_sha256": "e01a89ea7e6fda864f7002a450abd1a4e92424c44d1a9626f6641814e7d35879",
+            "pool_lo_ms": 1567958400000,
+            "refuse": "tide_band == 'B4' (B4 OLD tide): the ENTRY-bar tide_streak >= the trailing q75 edge",
+            "registration": "P-AGE-1",
+            "text_of_record": "v6 book minus the campaigns whose ENTRY-bar tide streak (tierc7_lab_regime.tide_streak) is >= the trailing 75th-percentile edge (B4 OLD; tierc9._trailing_edges over CLASSIC5 4h bars with open <= the entry bar, >= 30 bars) [L-G.1]"
+          },
+          "stale": {
+            "cut": {
+              "contract_lines": [
+                54,
+                54
+              ],
+              "pin": "adm.lag_cut",
+              "tc11_capture": {
+                "regex": "entry_i - arm_i >= (\\d+)",
+                "value": 16
+              },
+              "value": 16
+            },
+            "payload_sha256": "d19a42a329be3bfeea73c3c628bf515f5d0fa2fb8facd3fcac795b0186525084",
+            "refuse": "lag >= cut, lag = entry_i - arm_i in 4h bars (a row field)",
+            "registration": "P-WIN-1",
+            "text_of_record": "v6 book minus campaigns with entry_i - arm_i >= 16 (4h bars) [L-G.2]"
+          }
+        },
+        "kind": "admission gate, POST-FILTER (TC11 L-1.5): gated = base minus the refused; no re-ride into a freed slot",
+        "none_band": "HALT",
+        "p_adm_1_payload_sha256": "bf2e1350d7dab0cbca7593706ace46944aaf4d4d5497d0b8d408f484cf78c0d7",
+        "rivals": [
+          "the absolute cut (a stamp)",
+          "the arm-bar tide_streak_age (a stamp)",
+          "the re-ride (n_reride_differs, recorded on every refresh line)"
+        ],
+        "stamps_only": {
+          "absolute_cut": {
+            "column": "tide_abs_gt206",
+            "law": "streak > the cut (read by object from TC11's P-AGE-1 text); a stamp, never the band",
+            "value": 206
+          },
+          "arm_bar_age": {
+            "columns": [
+              "tide_streak_age_arm",
+              "tide_streak_age_arm_censored"
+            ],
+            "function": "tierc9.tide_streak_age"
+          }
+        },
+        "text_of_record": "`scored` (the treated arm) — `base` minus the refused set, a POST-FILTER: the same Trade objects in the base's order, keyed (symbol, entry_ms), and no entry admitted into a slot a refusal frees (no re-ride). A base campaign is refused iff (i) its tide band at the ENTRY bar is OLD — the two-state tide run `tierc7_lab_regime.tide_streak(symbol)[1][entry_i]` (EMA periods `tierc7_rules.TIDE_FAST` and `tierc7_rules.TIDE_SLOW`; the flip bar counts as bar 1) is `>=` the top edge of `tierc9._trailing_edges(pool, open_ms[entry_i])[\"streak_bar\"]`, the quantiles `tierc7_lab_regime.STREAK_BAND_QUANTILES` of the home-panel bar pool `tierc9._trailing_pool(pool_lo_ms, pin − 1)` (`pin` = the as-of pin of the ride; the edge at an entry does not depend on it) restricted to bars with open `<=` the entry bar's open, defined once that prefix holds `tierc7_rules.PROVISIONAL_MIN_N` bars, `pool_lo_ms` read from `research_outputs/tierc12/x_rec/tierc11x/forward/BOOK_SPECS.json` key `pool_lo_ms` — OR (ii) its window age `entry_i − arm_i` (4h bars) is `>=` the cut read from the text of record of TC11's registration P-WIN-1 (`research_outputs/tierc11/registrations/REGISTRATIONS.json`) and asserted equal to the contract's (:54). The OR is inclusive: a campaign both OLD and stale is refused once. An entry bar whose trailing edges are undefined HALTs — it is never 'not refused'.",
+        "text_sha256": "ac66bfa2c3d395b9db7ce504a7ce23445fe6104f307051e0c2d2effba807f23c",
+        "text_source": "research_outputs/tierc12/registrations/REGISTRATIONS.json registrations[P-ADM-1].operative_spec.arms — the ONE element matching ^`scored`\\s"
+      },
+      "panel": [
+        "BTCUSDT",
+        "ETHUSDT",
+        "SOLUSDT",
+        "NEARUSDT",
+        "ZECUSDT"
+      ],
+      "ride_spec": {
+        "card_class": "tierc8.Card",
+        "card_fields": {
+          "add_size": "1.0",
+          "adds_max": "0",
+          "ae_abort_r": "None",
+          "anchor_kind": "'pivot'",
+          "anchor_offset": "0.5",
+          "entry_rail_atr": "1.0",
+          "funding_ceiling_r": "1.0",
+          "grid": "'card'",
+          "harvest": "'band'",
+          "harvest_fixed_r": "2.0",
+          "harvest_frac": "0.5",
+          "harvest_min_unit_r": "-inf",
+          "hybrid_anchor": "False",
+          "lane": "'card'",
+          "limit_ae_mult": "None",
+          "reentry": "False",
+          "seal_open": "True",
+          "stop_grid_offset_atr": "0.0",
+          "time_stop_bars": "None",
+          "trail": "True",
+          "trail_arm_after_r": "1.0",
+          "trail_extra_buf_atr": "0.0",
+          "trail_l": "2",
+          "trail_min_advance_atr": "0.05",
+          "trail_r": "2",
+          "wall_exit_atr": "None",
+          "wall_tf": "'12h'",
+          "weave": "False",
+          "weave_k": "6"
+        },
+        "roles_class": "tierc9.Roles",
+        "roles_fields": {
+          "tide_f": "89",
+          "tide_s": "316",
+          "trg_f": "12",
+          "trg_s": "26",
+          "win_f": "12",
+          "win_s": "89"
+        }
+      },
+      "role": "of record",
+      "roles_name": "v6-roles",
+      "runner": "the v6 ride, post-filtered",
+      "title": "gated-v6-combined (of record)"
+    }
+  },
+  "chain": {
+    "genesis": "0000000000000000000000000000000000000000000000000000000000000000",
+    "kinds": [
+      "book_open",
+      "refresh",
+      "row"
+    ],
+    "law": "entry_sha256 = forward_log.chain_hash(line, prev) = sha256(forward_log.canonical(line) + prev); canonical strips only entry_sha256; written by forward_log.append_entry, verified by forward_log.verify_chain",
+    "module": "scripts/forward_log.py",
+    "structure_law": [
+      "S1 forward_log.verify_chain(path) is ok",
+      "S2 every line kind is one of X's chain.kinds",
+      "S3 the raw bytes of the first lines are X's ledger (the prefix law is on bytes); they open X's book_order in order and name X's spec sha; the line after them is X's refresh",
+      "S4 exactly ONE book_open follows X's lines; it is the next line; its book is the fourth id; its spec_sha256 is the sha of the bytes of BOOK_SPEC_COMBINED.json and differs from X's spec sha; its opening_ms and n_min equal those of X's book_open lines",
+      "S5 every row line names one of the four books, carries exactly row_fields + row_fields_added + the two chain fields, and no (book, symbol, entry_ms) occurs twice",
+      "S6 the pins of the refresh lines strictly increase; the file never ends on a row line; inside one refresh block rows stand in book order, then (entry_close_ms, symbol)",
+      "S7 every row of a gated book has, earlier in the file, the base row of the same key, equal on every field but `book`"
+    ]
+  },
+  "continuation": {
+    "declared_difference_from_x_verifier": "X's chain_findings (scripts/tc11x_forward.py) reports any book_open after its third line; run on this file it reports the fourth book's book_open, by design. TC12's structure law admits exactly one more book_open, directly after X's lines. X's file and X's module are untouched.",
+    "first_tc12_line": 5,
+    "x_prefix_bytes": 5643,
+    "x_prefix_sha256": "4a6da7e89a3cf5f0127f76aca0d2ae12d218ffc06417c6528c70210092cfa4c5"
+  },
+  "contract": {
+    "path": "exchange/queue/2026-10-08_TC12_APOLLO.md",
+    "prefix_bytes": 12209,
+    "prefix_sha256": "861d6050e80e66995e4f9db2855aaf274d63285249c2549e5a0813582095a7bd"
+  },
+  "ctrl_cols": [
+    "entry_ms",
+    "exit_ms",
+    "entry_px",
+    "exit_px",
+    "stop_px",
+    "r_dist",
+    "net_r",
+    "gross_r",
+    "fee_r",
+    "funding_r",
+    "mfe_r",
+    "n_advances"
+  ],
+  "existing_books": {
+    "book_open_entry_sha256": {
+      "gated-v6-oldtide": "f747d827ab6d984da0480268057597321f085b77c466a8cfc7ddfcce70b7d273",
+      "trg912": "2fab0eb76232a74bc43bd362e6a8f9761ceb9659c8eb86f29eb07bbd1474aac1",
+      "v6": "7f33aee65a9d82f833f1d1a7175e7d9318fe0a7c9fc687d789e57e87e1223062"
+    },
+    "copy": "research_outputs/tierc12/x_rec/tierc11x/forward/BOOK_SPECS.json",
+    "sha256": "72a1f52359c66084d22f8bc99b0cd35e7edd89db2751f4859f559c8b1f51cac3",
+    "spec": "research_outputs/tierc11x/forward/BOOK_SPECS.json"
+  },
+  "flags": {
+    "book_frozen": {
+      "record": "research_outputs/tierc12/forward/BOOK4_FREEZE.json",
+      "rule": "the committer time (ms) of the commit that first adds line 5 of forward/FORWARD_LEDGER.jsonl"
+    },
+    "entered_before_book_frozen": "entry_close_ms <= the committer_time_ms of flags.book_frozen.record",
+    "entered_before_gate_text_filed": "entry_close_ms <= flags.step_q.instant_ms",
+    "in_o9_scored_window": "opening.ms < entry_close_ms <= scored_window_end_ms",
+    "step_q": {
+      "commit": "28e006b",
+      "instant_iso": "2026-10-08T22:52:13Z",
+      "instant_ms": 1791499933000
+    }
+  },
+  "leans_sha256": "69c430b017f34df61cbdd5951ff8728d49b11f89e484d251c1f43cd0264f7409",
+  "n_law": {
+    "beside": "the all-rows figure, printed beside under the collar",
+    "chooser": "none — the row set of record for any later score is fixed here; no later registration chooses",
+    "row_set_of_record": {
+      "every_book": "in_o9_scored_window == false",
+      "gated-v6-combined": "in_o9_scored_window == false and entered_before_book_frozen == false"
+    },
+    "x_n_law": "n is counted per book and never combined; unscored until n >= n_min [LX-X5.5]"
+  },
+  "n_min": 30,
+  "opening": {
+    "iso": "2026-09-21T16:00:00Z",
+    "ms": 1790006400000,
+    "source": "TC10's pin, read from research_outputs/tierc10/STEP0_RECORD.json (tc11x_books.tc10_pin) == TC11 L-T.6's 'It opens at' (data/tc11_rec/LEANS.md) [LX-X5.2]"
+  },
+  "opening_held_equal": [
+    "opening_ms of X's three book_open lines and of the fourth book's",
+    "research_outputs/tierc11/data/AS_OF_PIN.json tc10_pin_close_ms",
+    "TC11's GENESIS opening_ms",
+    "the one capture of L-T.6's `It opens at` in research_outputs/tierc11/LEANS.md",
+    "the contract pin ledger.opening, parsed to ms",
+    "at the refresh (TC12-L, an armed process): the shim's TC10 pin and TC10's STEP0 record — this env-free tool opens no TC10 record"
+  ],
+  "opening_rival": {
+    "iso": "2026-09-25T00:00:00Z",
+    "ms": 1790294400000,
+    "why": "LX-X5.2's rival (TC11's pin), printed beside; it decides nothing"
+  },
+  "path_modules": {
+    "engine/indicators.py": "91805c04130c3701e16f933b4c4ac258109f8636d9cd8a0ae44787d86f13c113",
+    "engine/s1.py": "eb15690da648c62c96c705f232064086cca931117bfeb5fe0190542d1c5b3e06",
+    "scripts/forward_log.py": "74e9657fbcf26cce3040ee52d28a96bc1cf60897e375ba26a09b2e13676e1967",
+    "scripts/tierc10_data.py": "2cbf9bb6bcfea3ec6184d5502ba5c530f5c0089d95288ab848a745ad5b3015fc",
+    "scripts/tierc10_panel.py": "40b660cdc943a947f199f2e59f38bfbda04866b44191506de2298d8474d79b0e",
+    "scripts/tierc2_baseline.py": "682044305a9e80695e95c710cfb053ec146a7c40755841bb083748da62ca04c5",
+    "scripts/tierc2_rules.py": "1739b4006b6a01296bb0b9f6bd8b6c22e546b09d5fa3b47b175545156b12fc2a",
+    "scripts/tierc3_rules.py": "c61a9679a369c75a94b4c1ed27c19cc394de7a07f891e16fd80d2309d61a0d6d",
+    "scripts/tierc4_rules.py": "3e56420575d1d87ce92672c471d0a866aef29ff5de625f9d3844ac24426fb9ee",
+    "scripts/tierc5.py": "ad912b385cc8dd2e5291af3b79c520760ae8c91764af8e3eee56c6b3dd295a6f",
+    "scripts/tierc5_rules.py": "c27a5ecb425f0247adbd59fa921e8637900523714eafa69aa5d9453d875a1515",
+    "scripts/tierc6.py": "429f6849708d2f2bee5ec1a74829f09792b0483cb1a80d920f821cd998ceae8e",
+    "scripts/tierc6_rules.py": "777700d42258cbdf4cf7895a8c42d3a092dd46f0a79545de17b8c79496b88d5f",
+    "scripts/tierc7.py": "6abeaf6e662e9a61c1be73ee21f900133869432d7006cbe1b352b9a0f6ef1452",
+    "scripts/tierc7_lab_regime.py": "4d19cf0095ebf2593b3008caf9c9af032a75515dda8507da5154308e977682a5",
+    "scripts/tierc7_rules.py": "fa7d8d4804c82ea6247343a80bbd6d784ba48a60908c2c0efe7912e7495b2092",
+    "scripts/tierc8.py": "148e9a975af75ad4370580d168ff616e3abab18d9f522c91c77dffd7f737cfe0",
+    "scripts/tierc9.py": "663eef3107909221a6a651343363bad5c7d7730dd9adb92495d3f1e262c5b3c3"
+  },
+  "pool_lo_ms": 1567958400000,
+  "refresh_law": "re-ride each frozen book over the whole tape (bar 0 to the refresh pin) on the F-CTRL path; no refresh past the snapshot's pin (a data spend)",
+  "registry": {
+    "head": "bbbc6cabcdfe33c04c6532f20eb2c016c458a4b08aecf66422a765b91d8f5f33",
+    "path": "research_outputs/tierc12/registrations/REGISTRATIONS.json"
+  },
+  "row_fields": [
+    "kind",
+    "book",
+    "symbol",
+    "entry_ms",
+    "direction",
+    "lane",
+    "roles_name",
+    "arm_i",
+    "arm_ms",
+    "lag",
+    "entry_i",
+    "entry_close_ms",
+    "exit_i",
+    "exit_ms",
+    "exit_close_ms",
+    "exit_reason",
+    "bars_held",
+    "entry_px",
+    "exit_px",
+    "stop_px",
+    "r_dist",
+    "atr_at_entry",
+    "net_r",
+    "gross_r",
+    "fee_r",
+    "funding_r",
+    "mfe_r",
+    "n_advances",
+    "harvested",
+    "harvest_ms",
+    "reached_1r",
+    "era_of_entry",
+    "tide_state_entry",
+    "tide_streak_entry",
+    "tide_left_censored",
+    "tide_trailing_edge_q25",
+    "tide_trailing_edge_q50",
+    "tide_trailing_edge_q75",
+    "tide_band",
+    "tide_band_label",
+    "tide_abs_gt206",
+    "tide_streak_age_arm",
+    "tide_streak_age_arm_censored"
+  ],
+  "row_fields_added": [
+    "p_age_1_refuses",
+    "p_win_1_refuses",
+    "p_adm_1_refuses",
+    "in_o9_scored_window",
+    "entered_before_gate_text_filed",
+    "entered_before_book_frozen"
+  ],
+  "row_nullable": [
+    "harvest_ms",
+    "tide_trailing_edge_q25",
+    "tide_trailing_edge_q50",
+    "tide_trailing_edge_q75",
+    "tide_band",
+    "tide_band_label"
+  ],
+  "scored_window_end_ms": 1790294400000,
+  "stage": "TC12-REG.ledger-spec",
+  "tc11_registry": {
+    "head": "6772568b31fcfb2d56eb8c80b66dedee4fb5082673369e872972df8f475ec8f9",
+    "p_age_1_payload_sha256": "e01a89ea7e6fda864f7002a450abd1a4e92424c44d1a9626f6641814e7d35879",
+    "p_win_1_payload_sha256": "d19a42a329be3bfeea73c3c628bf515f5d0fa2fb8facd3fcac795b0186525084",
+    "path": "research_outputs/tierc11/registrations/REGISTRATIONS.json",
+    "pinned_by": "the chain head VALUE (recomputed from the payloads) and each payload sha read — never the file's own sha [L-0.24]"
+  },
+  "tier": "TIER-C12"
+}
