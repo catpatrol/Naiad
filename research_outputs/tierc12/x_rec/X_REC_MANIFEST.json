@@ -1,6 +1,14 @@
 {
- "bytes": 343737312,
+ "bytes": 343742370,
  "files": [
+  {
+   "bytes": 5058,
+   "copy": "research_outputs/tierc12/x_rec/queue/2026-09-25_TC11X_APOLLO.md",
+   "read_as": "git object at the certified tip (git show 7b24f835:exchange/queue/2026-09-25_TC11X_APOLLO.md); no X worktree file opened [O-25]",
+   "sha256": "40e0c4b716b978ab913e3900db01502b0113b93ece16afa60a8079d7d0203c3d",
+   "tracked_at_tip": true,
+   "x_path": "exchange/queue/2026-09-25_TC11X_APOLLO.md"
+  },
   {
    "bytes": 244,
    "copy": "research_outputs/tierc12/x_rec/tierc11x/.gitignore",
@@ -3433,7 +3441,7 @@
   }
  ],
  "law": "every TC12 read of an X record goes through this manifest: path + sha256 asserted before use",
- "n_files": 490,
+ "n_files": 491,
  "n_untracked_at_tip": 345,
  "what": "byte copies of TC11-X's records and sources, read from the X worktree; X is never written by TC12",
  "x_branch": "tierc11x",

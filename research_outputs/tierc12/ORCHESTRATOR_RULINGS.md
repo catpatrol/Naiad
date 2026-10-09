@@ -168,3 +168,60 @@ appended in place. The fourth book has its own spec document and sha. Row files 
 `research_outputs/tierc12/ferry/` with a forecast; the ferry of record into `exchange/rows/tierc12/` is a close
 act (the box is within a few KB of WARN once the three earlier closes land, so most files will be HELD and
 LISTED for ATHENA).
+
+## H · Rulings after the draft, before the review (2026-10-09)
+
+Filed after the eight section drafts returned (`leans_draft/`, 251 readings; the drafters' own digests in
+`leans_draft/DRAFT_DIGESTS.json`) and BEFORE the five-lens review. Four are the drafters' objections, accepted;
+three settle conflicts between sections. No book exists yet.
+
+**O-25 (amends O-3, O-4 — objection of L-0, accepted).** Main's `exchange/queue/` holds TWO earlier TC
+contracts (TC10 RESUME, TC11). X's contract is not in main; it is read as a git OBJECT at the certified tip
+(`git show 7b24f835:exchange/queue/2026-09-25_TC11X_APOLLO.md`, sha256 `40e0c4b7…3c3d` asserted) and filed at
+`x_rec/queue/2026-09-25_TC11X_APOLLO.md` with its row in `X_REC_MANIFEST.json`. That one git-object read opens
+no X worktree file and is the only X source outside the R0 clones.
+
+**O-26 (amends O-8 — objection of L-D, accepted).** The fetch scope is TC11's scope of record BY OBJECT
+(`scope_paths()` == the 124 paths of TC11's filed manifest: 17 stems × {5m, 1h, 4h, 12h} + CLASSIC5 × 15m + 17
+funding; 1d/1w derived for all 17). The parenthesis in O-8 omitted the five 15m tapes.
+
+**O-27 (amends O-20 — objection of L-D, accepted).** "Stricter than history" is claimed only where it is
+measured: the one-recorded-tick rule is stricter than or equal to history wherever the tape's observed price
+granularity is ≤ the recorded tick; Stage D's `TICK_GRID_AUDIT.json` prints the observed granularity per asset
+per month and LISTS every month where it is greater. "Never looser" is carried UNVERIFIED until that prints.
+
+**O-28 (amends O-11 — objection of L-R, accepted; settles the 1w lookback).** X pins no 1w lookback and X's
+law cannot be applied at 1w from any filed record (L-V's search). The 1w value area is built on the 1d pin's
+bar count, read from `PINS_X.json` and labelled BORROWED. It may be read in exactly two places, both Tier-E:
+the V5 stamp columns, and the lens-above conditioning axis of the 1d two-trades table (the contract's
+"conditioned on the lens above" at :76-79 has no other object at 1d). No 1w range cell, trade, gate,
+permission, licence, time stop or registered construction reads a 1w column; a fixture proves it.
+
+**O-29 THE WALL IS FILE-ONLY (settles L-0.22 against L-V's accessor law).** "Decision modules import NOTHING
+from it" is taken in its strong form for EVERY module that builds a book, a gate, an order or a score —
+including the P-SFP-VA-1 and P-SCALP-3 builders. `analytics.value_area` is imported only by the Stage V door
+scripts and their fixtures. Everything downstream reads the door's FILED tables (per-bar series with levels,
+state and columns; event rows; the traverse pin; the licence record; the instant stamps), each sha-pinned in
+Stage V's progress record and asserted before use. A consumer compares a price with a filed LEVEL (the
+scalper's 5m close against the 1h edge) but never re-derives a lens STATE or EVENT. The closure fixture asserts
+both the static import graph and that no decision process has `analytics.value_area` or a door module in
+`sys.modules` at exit. There are no "runner" exemptions and no accessor that recomputes.
+
+**O-30 A LABEL MUST BE TRUE (amends O-23).** `IN-SAMPLE RE-SCORE, NOT CONFIRMATORY` is P-ADM-1's label alone
+(its kept book's mean is on file). P-SFP-VA-1 and P-SCALP-3 were never scored before in their trade forms, so
+their label is `NOT CONFIRMATORY (pre_seen · KIN-SEEN: X3 printed value-area swing-failure outcomes on these
+bars)` — never "re-score". P-BRD-1 and P-DIR-1: `NOT CONFIRMATORY (selection_hazard: direction-informed)`,
+P-BRD-1 with D-1 beside.
+
+**O-31 STAGE IDS.** `ORDER` in `scripts/tierc12_progress.py` is the stage list of record. Sub-stages are dotted
+children of a listed stage (`TC12-D.mirror`, `TC12-ENV.vendor`, `TC12-V.stamps`), never new top-level ids. The
+env shim is vendored and proven inside TC12-ENV, after TC12-D.
+
+**O-32 DEFAULTS THAT STAND INTO THE REVIEW** (each listed for the operator in the report; a lens may overturn
+one only on mechanism, never on outcome): LOAO below 3/5 on the through-tick book is part of P-SCALP-3's
+pre-named kill (L-X.9 = L-S.28); DEEP is through by max(0.05·ATR_1h, 1 tick) so the contract's own ordering
+fixture can hold per order; the single-trade share is printed and decides no word (no threshold exists);
+the far-stop "priority" twin is an event count and an identity statement on TC11's corridor (no competing
+armings on file), nothing simulated beyond the same-bar ordering rule; the fourth ledger book keeps the
+contract's origin with every pre-filing row flagged; the LaCie mirror goes to a new directory
+`/Volumes/LaCie/Naiad/snapshots/tc12_20261008/` and is NOT RUN (and blocks nothing) if the drive is unreachable.
