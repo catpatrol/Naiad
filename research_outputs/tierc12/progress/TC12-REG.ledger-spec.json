@@ -27,6 +27,10 @@
   "research_outputs/tierc12/forward/FIXTURES_LEDGER_SPEC.txt": {
    "bytes": 33137,
    "sha256": "aceff0bd09640e21526b3af08ecc1cd125f3d3d3d86f9635fa86073483daf949"
+  },
+  "research_outputs/tierc12/resume/FIXTURES_RESUME_TC12-REG.ledger-spec.txt": {
+   "bytes": 31730,
+   "sha256": "4e13a4d894b9b73eb8c141b1dac8a864d850ddae8b6b1739edf4286ac2cfe687"
   }
  },
  "supersedes": [],
@@ -43,6 +47,19 @@
    "transcript_sha_before": "aceff0bd09640e21526b3af08ecc1cd125f3d3d3d86f9635fa86073483daf949",
    "transcript_sha_after": "aceff0bd09640e21526b3af08ecc1cd125f3d3d3d86f9635fa86073483daf949",
    "wall_seconds": 1.2
+  },
+  {
+   "suite": "scripts/tierc12_resume_fixtures.py --stage=TC12-REG.ledger-spec --at=3b0b78d3e96b0c9e4bc52d9204cee5c688293377",
+   "transcript": "research_outputs/tierc12/resume/FIXTURES_RESUME_TC12-REG.ledger-spec.txt",
+   "provenance": false,
+   "exit_code": 0,
+   "legs_red": 0,
+   "legs_not_run": 0,
+   "legs_total": 10,
+   "transcript_drift": false,
+   "transcript_sha_before": "4e13a4d894b9b73eb8c141b1dac8a864d850ddae8b6b1739edf4286ac2cfe687",
+   "transcript_sha_after": "4e13a4d894b9b73eb8c141b1dac8a864d850ddae8b6b1739edf4286ac2cfe687",
+   "wall_seconds": 8.9
   }
  ],
  "one_line": "the fourth book gated-v6-combined frozen before any bar is read: BOOK_SPEC_COMBINED.json filed write-once (sha 56cdeb25…, 16,880 B; gate text = the ONE `scored` element of P-ADM-1's arms, by object) and TC12's ledger of record opened on the BYTES of X's ledger (5,643 B, 4 lines) and continued by ONE line, the fourth book's book_open (line 5, entry f8948168…, prev = X's head 61ea177f…); 10 legs GREEN (F-LEDGER ×5, F-FWD-SPEC, F-PORT, F-TYPED-FLOW ×3), transcript byte-identical from two clean states",
