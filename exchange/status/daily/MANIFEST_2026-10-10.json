@@ -1,6 +1,6 @@
 {
   "ahead_behind": {
-    "ahead": 6,
+    "ahead": 32,
     "behind": 0
   },
   "branch": "v12-v1-census",
@@ -10,8 +10,8 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": false
   },
-  "generated_utc": "2026-10-02T10:04:29Z",
-  "head": "07cc81bb79865d601041462ea5089535baaf56a3",
+  "generated_utc": "2026-10-10T10:13:33Z",
+  "head": "85849ade1f55db29b7d45da696ceee2d7d90603f",
   "lane_last_commit": {
     "brief": null,
     "docs": {
@@ -20,9 +20,9 @@
       "subject": "docs: closing 11-entry memory snapshot post-redraft + phase-archive relocation pointer (ruling B, archives to D:/Naiad)"
     },
     "exchange": {
-      "committed_iso": "2026-10-01T07:08:00-03:00",
-      "sha": "07cc81bb79865d601041462ea5089535baaf56a3",
-      "subject": "exchange: auto-publish 2026-10-01"
+      "committed_iso": "2026-10-09T07:00:06-03:00",
+      "sha": "a8211aca792cd6310aa55817530b7f18f2a69e99",
+      "subject": "exchange: auto-publish 2026-10-09"
     },
     "ops": {
       "committed_iso": "2026-08-12T07:52:01-03:00",
@@ -39,9 +39,9 @@
   "manifest_version": "1.1",
   "onedrive_running": null,
   "origin_head": "ac8d8da7706b241f0b50f6ce5da4ab10bbd1a73d",
-  "queue_open": 5,
-  "queue_ratified_unbuilt": 5,
-  "queue_total": 10,
+  "queue_open": 7,
+  "queue_ratified_unbuilt": 7,
+  "queue_total": 12,
   "queue_unratified": 0,
   "reviewer_box": [
     {
@@ -75,7 +75,7 @@
       "match_head": false,
       "path": "exchange/status/HEARTBEAT.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "ad22d0a0039267c78baae5806b5bdd96f398c9533df73e2f13bfd3b92280babf",
+      "sha256_worktree": "f023d1f8d03c0922ec705a1bec875ea6f71b133203fd6d098ce0b4494a04ba4a",
       "size": 187,
       "source_guess": null,
       "tracked": true
@@ -156,8 +156,8 @@
       "match_head": false,
       "path": "exchange/status/RETENTION.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "d17c9714c7d4da0c619f6072c86ff1444251eef26774143fed588258a6cbd1ab",
-      "size": 2311,
+      "sha256_worktree": "251ef050db95180fb22cfb1317868140b7333c4047d03e9df98ca7a1daf87d2a",
+      "size": 2420,
       "source_guess": null,
       "tracked": true
     },
@@ -181,127 +181,127 @@
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/DAILY_2026-09-24.md",
+      "path": "exchange/status/daily/DAILY_2026-10-02.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "1b8cfad9f5529b07a6e3b9ef9bef25b534e1bcf0efc5a6f0383e199b663b4f61",
-      "size": 5510,
+      "sha256_worktree": "67110963541ce74feb18b146a5a9b4110c1832cadc751f44a6dab556561b0818",
+      "size": 7216,
       "source_guess": null,
       "tracked": true
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/DAILY_2026-09-25.md",
+      "path": "exchange/status/daily/DAILY_2026-10-04.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "8e25cd358f3e0868cf342dbe5083fb25a1337204e61c40e7ba2abe509b828b88",
-      "size": 7960,
+      "sha256_worktree": "27f18761dfd2863cb5ef0c01455e75d3c93703be52734a187bc03d398ea1d550",
+      "size": 8046,
       "source_guess": null,
       "tracked": true
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/DAILY_2026-09-26.md",
+      "path": "exchange/status/daily/DAILY_2026-10-05.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "0414e1b148f32f03a1787445a50f1e5e389eecee86c5103e58b6a401e59e12ef",
-      "size": 7958,
+      "sha256_worktree": "367bfbf6e79dda2aa058567c95c126b5691fd274aae2603d77919233c81294f5",
+      "size": 7737,
       "source_guess": null,
       "tracked": true
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/DAILY_2026-09-27.md",
+      "path": "exchange/status/daily/DAILY_2026-10-06.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "6b43831dae4686c8174791c02f0a85eee79fc87e76580064a43060574b819211",
-      "size": 7039,
+      "sha256_worktree": "9dabc951d0320070dcdfb7e465efe43db8c9c11669bc60c634ba95cdabda3b45",
+      "size": 7702,
       "source_guess": null,
       "tracked": true
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/DAILY_2026-09-29.md",
+      "path": "exchange/status/daily/DAILY_2026-10-07.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "9e5d03ed3dfbf23ab62cf7cd1a6d8550d0f0505550793ace1de8aba09bc50370",
-      "size": 7908,
+      "sha256_worktree": "0ddf9cdda68e0a5afa8e97d5d579e7f213aefac247359fef316e96c5fbb4750c",
+      "size": 7874,
       "source_guess": null,
       "tracked": true
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/DAILY_2026-09-30.md",
+      "path": "exchange/status/daily/DAILY_2026-10-08.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "6d1d5f19499e863cca53f1be5634a9bc367cc4b5708a1c975f75e308de722b0a",
-      "size": 7528,
+      "sha256_worktree": "d5b7053791d12aad7336654d6ed5e071bc1e1aedf8a108f4d1972d1f25299387",
+      "size": 7874,
       "source_guess": null,
       "tracked": true
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/DAILY_2026-10-01.md",
+      "path": "exchange/status/daily/DAILY_2026-10-09.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "dc3b4c8cf0263e027d2f5f8a022289b4026e33bf65896656d254cb2701eece58",
-      "size": 7700,
+      "sha256_worktree": "55519f4a593f6cebb9a21561e3eedfaf06af98105b98e68d59c43403c834cf1e",
+      "size": 7874,
       "source_guess": null,
       "tracked": true
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-09-24.json",
+      "path": "exchange/status/daily/MANIFEST_2026-10-02.json",
       "sha256_head_blob": null,
-      "sha256_worktree": "a0ffb3b1274efd3fdae60910b2e3701bf12f7afd5846307a9fbe256690c8afe3",
-      "size": 25388,
-      "source_guess": null,
-      "tracked": true
-    },
-    {
-      "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-09-25.json",
-      "sha256_head_blob": null,
-      "sha256_worktree": "2c71efa2dc7afed4e558d02b22da5fb300de482c7cda6cfa10623b324fae6a12",
-      "size": 27107,
-      "source_guess": null,
-      "tracked": true
-    },
-    {
-      "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-09-26.json",
-      "sha256_head_blob": null,
-      "sha256_worktree": "9e68e76c3548a28ecbeb8b4252cb1a2bbb9760d83001602fe300b5e547fa4e2a",
+      "sha256_worktree": "65e390b7036f7170c92cb893810a2d06ce5f1c5b3017a111d26312c12b4c8309",
       "size": 25440,
       "source_guess": null,
       "tracked": true
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-09-27.json",
+      "path": "exchange/status/daily/MANIFEST_2026-10-04.json",
       "sha256_head_blob": null,
-      "sha256_worktree": "0321a1b07b3a5f140fad7c76a7b278b06066eee3350e2b30451eca63e2aee04f",
+      "sha256_worktree": "d28acd33882c381c5708165093ebfc3abbb505ce746a3076761e0dc2823a69ea",
       "size": 25440,
       "source_guess": null,
       "tracked": true
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-09-29.json",
+      "path": "exchange/status/daily/MANIFEST_2026-10-05.json",
       "sha256_head_blob": null,
-      "sha256_worktree": "104d458c3c0a4c92ee7e26df6dcd60a754fa8af6dd9ef539720d6b5ce163c802",
-      "size": 25388,
+      "sha256_worktree": "c091d9ab7d65069cae46d62b9f6c42f7998071fe019c3f0e1357677a2b73491d",
+      "size": 25389,
       "source_guess": null,
       "tracked": true
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-09-30.json",
+      "path": "exchange/status/daily/MANIFEST_2026-10-06.json",
       "sha256_head_blob": null,
-      "sha256_worktree": "540d563b301168aa30f5e763c67e6f85691ae1c5540839a0efc026a4fc501fa9",
-      "size": 25440,
+      "sha256_worktree": "51a20f98d781337cf0dce5ab1c58bb3c89c90930388b82e13d53c7ce2380e5d2",
+      "size": 25441,
       "source_guess": null,
       "tracked": true
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-10-01.json",
+      "path": "exchange/status/daily/MANIFEST_2026-10-07.json",
       "sha256_head_blob": null,
-      "sha256_worktree": "00d9c89a6317b502427f73a9542d92676f0c1d7e895c23beff02b5ed4682d104",
-      "size": 25440,
+      "sha256_worktree": "c93f5093c55b3d94147e762af59ea5e6242b6c1b1feac3b87e0b4ee2db5f6dfa",
+      "size": 25441,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-10-08.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "4e44ad33de09c77e84112680f9590335135923ba4cc0bf36710708a491e7dd95",
+      "size": 25441,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-10-09.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "efabaea482724f291c18c3ef4a0ab1230a67492fddc02bd83a65e133863f2a64",
+      "size": 25441,
       "source_guess": null,
       "tracked": true
     }
@@ -693,8 +693,11 @@
     }
   ],
   "status_porcelain": [
-    " M exchange/status/daily/DAILY_2026-10-01.md",
+    " M exchange/status/daily/DAILY_2026-10-09.md",
     " M research_outputs/tierc10/close/FIXTURES_CLOSE_ledger_append_root.txt",
+    " M scripts/tierc12_env_fixtures.py",
+    " M scripts/tierc12_vendor.py",
+    "?? exchange/reports/2026-10-09_TC12_RESUME_APOLLO.md",
     "?? pine/SS12_ANCHOR_v12_6.pine",
     "?? pine/SS12_MANTLE_v12_6.pine",
     "?? pine/SS12_SIGNAL_v12_6.pine",
@@ -704,7 +707,22 @@
     "?? \"research_outputs/Cascade Atlas v2 \\342\\200\\224 CENSUS-1b MTF cross structure_files/\"",
     "?? \"research_outputs/Cascade Rewire.html\"",
     "?? \"research_outputs/Naiad Daily Brief v2 \\342\\200\\224 Confluence Prototype \\342\\200\\224 2026-07-27.html\"",
-    "?? research_outputs/VIZ3-4/"
+    "?? research_outputs/VIZ3-4/",
+    "?? research_outputs/tierc12/closure/FIXTURES_ATTEST.txt",
+    "?? research_outputs/tierc12/closure/FIXTURES_NOT_TC12-ENV.txt",
+    "?? research_outputs/tierc12/env/FIXTURES_ENV.txt",
+    "?? research_outputs/tierc12/env/FIXTURES_TABLES.txt",
+    "?? research_outputs/tierc12/env/LEAN_BLOCK.txt",
+    "?? research_outputs/tierc12/env/SUBSTRATE_VERIFY.json",
+    "?? research_outputs/tierc12/sweep/",
+    "?? scripts/tierc12_asof.py",
+    "?? scripts/tierc12_attest_fixtures.py",
+    "?? scripts/tierc12_env.py",
+    "?? scripts/tierc12_not_fixtures.py",
+    "?? scripts/tierc12_sweep_fixtures.py",
+    "?? scripts/tierc12_tables.py",
+    "?? scripts/tierc12_tables_fixtures.py",
+    "?? scripts/tierc12_worktree_attest.py"
   ],
   "untracked_root": []
 }
