@@ -1065,3 +1065,35 @@ every item of L-X.36's list. The verdict words, the clauses (a)(b)(c) and the la
 **DEFAULT TAKEN.** (no builder default: an orchestrator ruling)
 
 **Status.** Ruled at the TC12-D gate: AM-67.
+
+---
+
+## AP-67 · 2026-10-10 (~00:05Z) · L-0.23, L-0.14, L-0.9 · the orchestrator at the TC12-D gate
+
+**Title.** A transcript of record that prints the number of amendments on file drifts with every amendment
+
+**Readings.** L-0.23, L-0.14, L-0.9
+
+**The texts.** L-0.14: a transcript of record is byte-identical run to run; L-0.9: a record's fixtures re-pass now. The pins suite's F-VETO PASS line prints '<n> amendment(s) on file, 0 changing a pin', n counted on the working LEANS_AMENDMENTS.md.
+
+**The fact.** Met at the TC12-D gate: after AM-49..AM-67 were appended, `tierc12_pins_fixtures.py` run plain reads 3 GREEN but its transcript differs from the record in that one token (48 → 67), and exits 1 on drift. It would drift again with every amendment, and an earlier record's fixture row cannot be re-filed.
+
+**DEFAULT TAKEN.** (no builder default: an orchestrator ruling)
+
+**Status.** Ruled at the TC12-D gate: AM-68.
+
+---
+
+## AP-68 · 2026-10-10 (~00:05Z) · L-0.4, L-0.9, L-0.11 · the orchestrator at the TC12-D gate
+
+**Title.** The resume suite re-run at an EARLIER gate holds a path to that gate's entry against the working file, so a lawful later re-record turns the earlier gate red
+
+**Readings.** L-0.4, L-0.9, L-0.11
+
+**The texts.** L-0.4 (1): a path recorded by more than one record is governed by its LAST record; an earlier record's entry is held to the blob at the commit that closed it. As built, the suite's walk takes 'last' among the records IN SCOPE of `--stage` (those before the gate and its own).
+
+**The fact.** Met at the TC12-D gate: four REG_SET suites are repaired under AM-49, AM-67, AM-68 and this amendment and re-recorded by TC12-D's record. Re-run at `--stage=TC12-REG` (or `.ledger-spec`), the suite sees TC12-REG as the last record naming them, compares the working files and reports ARTIFACT-MOVED — so the sweep of earlier records' fixture rows (L-0.11) could never be GREEN again.
+
+**DEFAULT TAKEN.** (no builder default: an orchestrator ruling)
+
+**Status.** Ruled at the TC12-D gate: AM-69.

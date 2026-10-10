@@ -860,3 +860,27 @@ row's population, arms, statistic, verdict rule or labels moves.
 **Reason.** A build fact met at TC12-D; the orchestrator's ruling replaces the builder's default here. Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
 
 **Redone.** The artifact named is repaired under this amendment before the TC12-D gate; its transcripts are re-filed and re-recorded by TC12-D's record.
+
+---
+
+## AM-68 · 2026-10-10 (~00:05Z) · L-0.23, L-0.14, L-0.9 · ruling on AP-67
+
+**Text amended.** L-0.23, L-0.14, L-0.9 — A transcript of record that prints the number of amendments on file drifts with every amendment
+
+**Amended to.** RULED BY THE ORCHESTRATOR: a transcript of record states the estate AS OF ITS GATE. The count F-VETO prints is the number of `## AM-` headings in the blob of `LEANS_AMENDMENTS.md` at the commit that first adds `registrations/REGISTRATIONS.json` (read-only git; the working file when no such commit exists, as in a scratch tree); the leg's JUDGMENT is unchanged and still reads EVERY amendment on the working file — an amendment that changes a pin, filed at any time, is still held by the veto law. No printed string of the suite moves. `scripts/tierc12_pins_fixtures.py` is repaired under this amendment and re-recorded by TC12-D's record.
+
+**Reason.** A build fact met at the TC12-D gate. Mechanics of two fixture suites only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** The suite named is repaired under this amendment before the TC12-D gate; no transcript of record of an earlier gate moves.
+
+---
+
+## AM-69 · 2026-10-10 (~00:05Z) · L-0.4, L-0.9, L-0.11 · ruling on AP-68
+
+**Text amended.** L-0.4, L-0.9, L-0.11 — The resume suite re-run at an EARLIER gate holds a path to that gate's entry against the working file, so a lawful later re-record turns the earlier gate red
+
+**Amended to.** RULED BY THE ORCHESTRATOR: 'the last record that names a path' is taken over EVERY record on file, in walk order, whatever `--stage` is. An in-scope record's entry that a LATER record on file re-records is an earlier entry: it is held to the blob at the commit that closed its own record, never to the working file. Nothing else in the walk changes, and no printed string of the suite moves at a gate where no path is re-recorded later. `scripts/tierc12_resume_fixtures.py` is repaired under this amendment and re-recorded by TC12-D's record; the earlier gates' resume transcripts must re-run byte-identical.
+
+**Reason.** A build fact met at the TC12-D gate. Mechanics of two fixture suites only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** The suite named is repaired under this amendment before the TC12-D gate; no transcript of record of an earlier gate moves.
