@@ -1,0 +1,940 @@
+{
+  "as_of_last_closed_4h": "2026-10-08T20:00:00Z",
+  "as_of_last_closed_4h_open": "2026-10-08T16:00:00Z",
+  "assets": [
+    {
+      "asset": "BTC",
+      "charter_slippage_bps_per_side": 2.0,
+      "charter_slippage_source": [
+        "Naiad_Phase0_Charter.md:114",
+        "scripts/tierc10_data.py:217-220 (CONTRACT_SLIPPAGE_CLAUSE, read by AST)"
+      ],
+      "charter_slippage_tier": "A",
+      "funding_interval_hours_observed_modal": 8,
+      "funding_interval_hours_observed_tail": 8,
+      "funding_spacing_hours_histogram": {
+        "8": 7756
+      },
+      "haircut_twin_bps_side": 7.0,
+      "haircut_twin_kind": "CHARTER MODEL \u2014 an ADDED column beside the TC-series toll; round_trip_bps_used above is untouched and stays the accounting figure of record [VETO 'tiers']",
+      "haircut_twin_round_trip_bps": 14.0,
+      "haircut_twin_slippage_bps_side": 2.0,
+      "haircut_twin_source": "every row gets the charter model as a HAIRCUT TWIN beside the TC-series toll \u2014 slippage/side tier A {BTC ETH} 2 bps \u00b7 tier B {SOL NEAR ZEC LTC BNB DOGE UNI SUI XMR} 5 \u00b7 tier C {ENA PUMPFUN HYPE MNT PEPE BONK} 10",
+      "haircut_twin_tier": "A",
+      "kind": "ASSUMPTION \u2014 the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
+      "maker_bps_per_side": 2.0,
+      "maker_bps_side": 2.0,
+      "maker_kind": "ON FILE \u2014 NOT RE-CONFIRMED",
+      "maker_round_trip_bps": 4.0,
+      "maker_slippage_bps_side": 0.0,
+      "maker_source": [
+        "https://www.binance.com/en/fee/futureFee",
+        "research_outputs/tierc12/data/FEE_SOURCE.json sha256 83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103",
+        "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\""
+      ],
+      "round_trip_bps_used": 10.0,
+      "source": [
+        "scripts/tierc2_rules.py:122",
+        "scripts/tierc2_rules.py:123",
+        "configs/naiad_v0.yaml:58"
+      ],
+      "stem": "BTCUSDT",
+      "symbol": "BTCUSDT",
+      "taker_bps_side_used": 5.0,
+      "venue": "BINANCE_USDTM",
+      "venue_note": "Binance USDT-M per-account commissionRate is a signed endpoint; not fetched"
+    },
+    {
+      "asset": "ETH",
+      "charter_slippage_bps_per_side": 2.0,
+      "charter_slippage_source": [
+        "Naiad_Phase0_Charter.md:114",
+        "scripts/tierc10_data.py:217-220 (CONTRACT_SLIPPAGE_CLAUSE, read by AST)"
+      ],
+      "charter_slippage_tier": "A",
+      "funding_interval_hours_observed_modal": 8,
+      "funding_interval_hours_observed_tail": 8,
+      "funding_spacing_hours_histogram": {
+        "8": 7522
+      },
+      "haircut_twin_bps_side": 7.0,
+      "haircut_twin_kind": "CHARTER MODEL \u2014 an ADDED column beside the TC-series toll; round_trip_bps_used above is untouched and stays the accounting figure of record [VETO 'tiers']",
+      "haircut_twin_round_trip_bps": 14.0,
+      "haircut_twin_slippage_bps_side": 2.0,
+      "haircut_twin_source": "every row gets the charter model as a HAIRCUT TWIN beside the TC-series toll \u2014 slippage/side tier A {BTC ETH} 2 bps \u00b7 tier B {SOL NEAR ZEC LTC BNB DOGE UNI SUI XMR} 5 \u00b7 tier C {ENA PUMPFUN HYPE MNT PEPE BONK} 10",
+      "haircut_twin_tier": "A",
+      "kind": "ASSUMPTION \u2014 the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
+      "maker_bps_per_side": 2.0,
+      "maker_bps_side": 2.0,
+      "maker_kind": "ON FILE \u2014 NOT RE-CONFIRMED",
+      "maker_round_trip_bps": 4.0,
+      "maker_slippage_bps_side": 0.0,
+      "maker_source": [
+        "https://www.binance.com/en/fee/futureFee",
+        "research_outputs/tierc12/data/FEE_SOURCE.json sha256 83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103",
+        "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\""
+      ],
+      "round_trip_bps_used": 10.0,
+      "source": [
+        "scripts/tierc2_rules.py:122",
+        "scripts/tierc2_rules.py:123",
+        "configs/naiad_v0.yaml:58"
+      ],
+      "stem": "ETHUSDT",
+      "symbol": "ETHUSDT",
+      "taker_bps_side_used": 5.0,
+      "venue": "BINANCE_USDTM",
+      "venue_note": "Binance USDT-M per-account commissionRate is a signed endpoint; not fetched"
+    },
+    {
+      "asset": "SOL",
+      "charter_slippage_bps_per_side": 5.0,
+      "charter_slippage_source": [
+        "Naiad_Phase0_Charter.md:114",
+        "scripts/tierc10_data.py:217-220 (CONTRACT_SLIPPAGE_CLAUSE, read by AST)"
+      ],
+      "charter_slippage_tier": "B",
+      "funding_interval_hours_observed_modal": 8,
+      "funding_interval_hours_observed_tail": 8,
+      "funding_spacing_hours_histogram": {
+        "2": 98,
+        "4": 3,
+        "8": 6620
+      },
+      "haircut_twin_bps_side": 10.0,
+      "haircut_twin_kind": "CHARTER MODEL \u2014 an ADDED column beside the TC-series toll; round_trip_bps_used above is untouched and stays the accounting figure of record [VETO 'tiers']",
+      "haircut_twin_round_trip_bps": 20.0,
+      "haircut_twin_slippage_bps_side": 5.0,
+      "haircut_twin_source": "every row gets the charter model as a HAIRCUT TWIN beside the TC-series toll \u2014 slippage/side tier A {BTC ETH} 2 bps \u00b7 tier B {SOL NEAR ZEC LTC BNB DOGE UNI SUI XMR} 5 \u00b7 tier C {ENA PUMPFUN HYPE MNT PEPE BONK} 10",
+      "haircut_twin_tier": "B",
+      "kind": "ASSUMPTION \u2014 the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
+      "maker_bps_per_side": 2.0,
+      "maker_bps_side": 2.0,
+      "maker_kind": "ON FILE \u2014 NOT RE-CONFIRMED",
+      "maker_round_trip_bps": 4.0,
+      "maker_slippage_bps_side": 0.0,
+      "maker_source": [
+        "https://www.binance.com/en/fee/futureFee",
+        "research_outputs/tierc12/data/FEE_SOURCE.json sha256 83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103",
+        "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\""
+      ],
+      "round_trip_bps_used": 10.0,
+      "source": [
+        "scripts/tierc2_rules.py:122",
+        "scripts/tierc2_rules.py:123",
+        "configs/naiad_v0.yaml:58"
+      ],
+      "stem": "SOLUSDT",
+      "symbol": "SOLUSDT",
+      "taker_bps_side_used": 5.0,
+      "venue": "BINANCE_USDTM",
+      "venue_note": "Binance USDT-M per-account commissionRate is a signed endpoint; not fetched"
+    },
+    {
+      "asset": "NEAR",
+      "charter_slippage_bps_per_side": 5.0,
+      "charter_slippage_source": [
+        "Naiad_Phase0_Charter.md:114",
+        "scripts/tierc10_data.py:217-220 (CONTRACT_SLIPPAGE_CLAUSE, read by AST)"
+      ],
+      "charter_slippage_tier": "B",
+      "funding_interval_hours_observed_modal": 8,
+      "funding_interval_hours_observed_tail": 8,
+      "funding_spacing_hours_histogram": {
+        "8": 6553
+      },
+      "haircut_twin_bps_side": 10.0,
+      "haircut_twin_kind": "CHARTER MODEL \u2014 an ADDED column beside the TC-series toll; round_trip_bps_used above is untouched and stays the accounting figure of record [VETO 'tiers']",
+      "haircut_twin_round_trip_bps": 20.0,
+      "haircut_twin_slippage_bps_side": 5.0,
+      "haircut_twin_source": "every row gets the charter model as a HAIRCUT TWIN beside the TC-series toll \u2014 slippage/side tier A {BTC ETH} 2 bps \u00b7 tier B {SOL NEAR ZEC LTC BNB DOGE UNI SUI XMR} 5 \u00b7 tier C {ENA PUMPFUN HYPE MNT PEPE BONK} 10",
+      "haircut_twin_tier": "B",
+      "kind": "ASSUMPTION \u2014 the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
+      "maker_bps_per_side": 2.0,
+      "maker_bps_side": 2.0,
+      "maker_kind": "ON FILE \u2014 NOT RE-CONFIRMED",
+      "maker_round_trip_bps": 4.0,
+      "maker_slippage_bps_side": 0.0,
+      "maker_source": [
+        "https://www.binance.com/en/fee/futureFee",
+        "research_outputs/tierc12/data/FEE_SOURCE.json sha256 83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103",
+        "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\""
+      ],
+      "round_trip_bps_used": 10.0,
+      "source": [
+        "scripts/tierc2_rules.py:122",
+        "scripts/tierc2_rules.py:123",
+        "configs/naiad_v0.yaml:58"
+      ],
+      "stem": "NEARUSDT",
+      "symbol": "NEARUSDT",
+      "taker_bps_side_used": 5.0,
+      "venue": "BINANCE_USDTM",
+      "venue_note": "Binance USDT-M per-account commissionRate is a signed endpoint; not fetched"
+    },
+    {
+      "asset": "ZEC",
+      "charter_slippage_bps_per_side": 5.0,
+      "charter_slippage_source": [
+        "Naiad_Phase0_Charter.md:114",
+        "scripts/tierc10_data.py:217-220 (CONTRACT_SLIPPAGE_CLAUSE, read by AST)"
+      ],
+      "charter_slippage_tier": "B",
+      "funding_interval_hours_observed_modal": 8,
+      "funding_interval_hours_observed_tail": 8,
+      "funding_spacing_hours_histogram": {
+        "8": 7312
+      },
+      "haircut_twin_bps_side": 10.0,
+      "haircut_twin_kind": "CHARTER MODEL \u2014 an ADDED column beside the TC-series toll; round_trip_bps_used above is untouched and stays the accounting figure of record [VETO 'tiers']",
+      "haircut_twin_round_trip_bps": 20.0,
+      "haircut_twin_slippage_bps_side": 5.0,
+      "haircut_twin_source": "every row gets the charter model as a HAIRCUT TWIN beside the TC-series toll \u2014 slippage/side tier A {BTC ETH} 2 bps \u00b7 tier B {SOL NEAR ZEC LTC BNB DOGE UNI SUI XMR} 5 \u00b7 tier C {ENA PUMPFUN HYPE MNT PEPE BONK} 10",
+      "haircut_twin_tier": "B",
+      "kind": "ASSUMPTION \u2014 the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
+      "maker_bps_per_side": 2.0,
+      "maker_bps_side": 2.0,
+      "maker_kind": "ON FILE \u2014 NOT RE-CONFIRMED",
+      "maker_round_trip_bps": 4.0,
+      "maker_slippage_bps_side": 0.0,
+      "maker_source": [
+        "https://www.binance.com/en/fee/futureFee",
+        "research_outputs/tierc12/data/FEE_SOURCE.json sha256 83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103",
+        "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\""
+      ],
+      "round_trip_bps_used": 10.0,
+      "source": [
+        "scripts/tierc2_rules.py:122",
+        "scripts/tierc2_rules.py:123",
+        "configs/naiad_v0.yaml:58"
+      ],
+      "stem": "ZECUSDT",
+      "symbol": "ZECUSDT",
+      "taker_bps_side_used": 5.0,
+      "venue": "BINANCE_USDTM",
+      "venue_note": "Binance USDT-M per-account commissionRate is a signed endpoint; not fetched"
+    },
+    {
+      "asset": "ENA",
+      "charter_slippage_bps_per_side": 10.0,
+      "charter_slippage_source": [
+        "Naiad_Phase0_Charter.md:114",
+        "scripts/tierc10_data.py:217-220 (CONTRACT_SLIPPAGE_CLAUSE, read by AST)"
+      ],
+      "charter_slippage_tier": "C",
+      "funding_interval_hours_observed_modal": 4,
+      "funding_interval_hours_observed_tail": 4,
+      "funding_spacing_hours_histogram": {
+        "4": 5513,
+        "8": 1
+      },
+      "haircut_twin_bps_side": 15.0,
+      "haircut_twin_kind": "CHARTER MODEL \u2014 an ADDED column beside the TC-series toll; round_trip_bps_used above is untouched and stays the accounting figure of record [VETO 'tiers']",
+      "haircut_twin_round_trip_bps": 30.0,
+      "haircut_twin_slippage_bps_side": 10.0,
+      "haircut_twin_source": "every row gets the charter model as a HAIRCUT TWIN beside the TC-series toll \u2014 slippage/side tier A {BTC ETH} 2 bps \u00b7 tier B {SOL NEAR ZEC LTC BNB DOGE UNI SUI XMR} 5 \u00b7 tier C {ENA PUMPFUN HYPE MNT PEPE BONK} 10",
+      "haircut_twin_tier": "C",
+      "kind": "ASSUMPTION \u2014 the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
+      "maker_bps_per_side": 2.0,
+      "maker_bps_side": 2.0,
+      "maker_kind": "ON FILE \u2014 NOT RE-CONFIRMED",
+      "maker_round_trip_bps": 4.0,
+      "maker_slippage_bps_side": 0.0,
+      "maker_source": [
+        "https://www.binance.com/en/fee/futureFee",
+        "research_outputs/tierc12/data/FEE_SOURCE.json sha256 83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103",
+        "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\""
+      ],
+      "round_trip_bps_used": 10.0,
+      "source": [
+        "scripts/tierc2_rules.py:122",
+        "scripts/tierc2_rules.py:123",
+        "configs/naiad_v0.yaml:58"
+      ],
+      "stem": "ENAUSDT",
+      "symbol": "ENAUSDT",
+      "taker_bps_side_used": 5.0,
+      "venue": "BINANCE_USDTM",
+      "venue_note": "Binance USDT-M per-account commissionRate is a signed endpoint; not fetched"
+    },
+    {
+      "asset": "PUMPFUN",
+      "charter_slippage_bps_per_side": 10.0,
+      "charter_slippage_source": [
+        "Naiad_Phase0_Charter.md:114",
+        "scripts/tierc10_data.py:217-220 (CONTRACT_SLIPPAGE_CLAUSE, read by AST)"
+      ],
+      "charter_slippage_tier": "C",
+      "funding_interval_hours_observed_modal": 4,
+      "funding_interval_hours_observed_tail": 4,
+      "funding_spacing_hours_histogram": {
+        "4": 2731,
+        "8": 1
+      },
+      "haircut_twin_bps_side": 15.0,
+      "haircut_twin_kind": "CHARTER MODEL \u2014 an ADDED column beside the TC-series toll; round_trip_bps_used above is untouched and stays the accounting figure of record [VETO 'tiers']",
+      "haircut_twin_round_trip_bps": 30.0,
+      "haircut_twin_slippage_bps_side": 10.0,
+      "haircut_twin_source": "every row gets the charter model as a HAIRCUT TWIN beside the TC-series toll \u2014 slippage/side tier A {BTC ETH} 2 bps \u00b7 tier B {SOL NEAR ZEC LTC BNB DOGE UNI SUI XMR} 5 \u00b7 tier C {ENA PUMPFUN HYPE MNT PEPE BONK} 10",
+      "haircut_twin_tier": "C",
+      "kind": "ASSUMPTION \u2014 the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
+      "maker_bps_per_side": 2.0,
+      "maker_bps_side": 2.0,
+      "maker_kind": "ON FILE \u2014 NOT RE-CONFIRMED",
+      "maker_round_trip_bps": 4.0,
+      "maker_slippage_bps_side": 0.0,
+      "maker_source": [
+        "https://www.binance.com/en/fee/futureFee",
+        "research_outputs/tierc12/data/FEE_SOURCE.json sha256 83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103",
+        "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\""
+      ],
+      "round_trip_bps_used": 10.0,
+      "source": [
+        "scripts/tierc2_rules.py:122",
+        "scripts/tierc2_rules.py:123",
+        "configs/naiad_v0.yaml:58"
+      ],
+      "stem": "PUMPUSDT",
+      "symbol": "PUMPUSDT",
+      "taker_bps_side_used": 5.0,
+      "venue": "BINANCE_USDTM",
+      "venue_note": "Binance USDT-M per-account commissionRate is a signed endpoint; not fetched"
+    },
+    {
+      "asset": "HYPE",
+      "charter_slippage_bps_per_side": 10.0,
+      "charter_slippage_source": [
+        "Naiad_Phase0_Charter.md:114",
+        "scripts/tierc10_data.py:217-220 (CONTRACT_SLIPPAGE_CLAUSE, read by AST)"
+      ],
+      "charter_slippage_tier": "C",
+      "funding_interval_hours_observed_modal": 4,
+      "funding_interval_hours_observed_tail": 4,
+      "funding_spacing_hours_histogram": {
+        "4": 2976,
+        "8": 1
+      },
+      "haircut_twin_bps_side": 15.0,
+      "haircut_twin_kind": "CHARTER MODEL \u2014 an ADDED column beside the TC-series toll; round_trip_bps_used above is untouched and stays the accounting figure of record [VETO 'tiers']",
+      "haircut_twin_round_trip_bps": 30.0,
+      "haircut_twin_slippage_bps_side": 10.0,
+      "haircut_twin_source": "every row gets the charter model as a HAIRCUT TWIN beside the TC-series toll \u2014 slippage/side tier A {BTC ETH} 2 bps \u00b7 tier B {SOL NEAR ZEC LTC BNB DOGE UNI SUI XMR} 5 \u00b7 tier C {ENA PUMPFUN HYPE MNT PEPE BONK} 10",
+      "haircut_twin_tier": "C",
+      "kind": "ASSUMPTION \u2014 the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
+      "maker_bps_per_side": 2.0,
+      "maker_bps_side": 2.0,
+      "maker_kind": "ON FILE \u2014 NOT RE-CONFIRMED",
+      "maker_round_trip_bps": 4.0,
+      "maker_slippage_bps_side": 0.0,
+      "maker_source": [
+        "https://www.binance.com/en/fee/futureFee",
+        "research_outputs/tierc12/data/FEE_SOURCE.json sha256 83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103",
+        "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\""
+      ],
+      "round_trip_bps_used": 10.0,
+      "source": [
+        "scripts/tierc2_rules.py:122",
+        "scripts/tierc2_rules.py:123",
+        "configs/naiad_v0.yaml:58"
+      ],
+      "stem": "HYPEUSDT",
+      "symbol": "HYPEUSDT",
+      "taker_bps_side_used": 5.0,
+      "venue": "BINANCE_USDTM",
+      "venue_note": "Binance USDT-M per-account commissionRate is a signed endpoint; not fetched"
+    },
+    {
+      "asset": "MNT",
+      "charter_slippage_bps_per_side": 10.0,
+      "charter_slippage_source": [
+        "Naiad_Phase0_Charter.md:114",
+        "scripts/tierc10_data.py:217-220 (CONTRACT_SLIPPAGE_CLAUSE, read by AST)"
+      ],
+      "charter_slippage_tier": "C",
+      "funding_interval_hours_observed_modal": 8,
+      "funding_interval_hours_observed_tail": 8,
+      "funding_spacing_hours_histogram": {
+        "8": 3308
+      },
+      "haircut_twin_bps_side": 15.0,
+      "haircut_twin_kind": "CHARTER MODEL \u2014 an ADDED column beside the TC-series toll; round_trip_bps_used above is untouched and stays the accounting figure of record [VETO 'tiers']",
+      "haircut_twin_round_trip_bps": 30.0,
+      "haircut_twin_slippage_bps_side": 10.0,
+      "haircut_twin_source": "every row gets the charter model as a HAIRCUT TWIN beside the TC-series toll \u2014 slippage/side tier A {BTC ETH} 2 bps \u00b7 tier B {SOL NEAR ZEC LTC BNB DOGE UNI SUI XMR} 5 \u00b7 tier C {ENA PUMPFUN HYPE MNT PEPE BONK} 10",
+      "haircut_twin_tier": "C",
+      "kind": "ASSUMPTION \u2014 the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
+      "maker_bps_per_side": 2.0,
+      "maker_bps_side": 2.0,
+      "maker_kind": "ASSUMPTION \u2014 NOT RE-CONFIRMED; no Bybit figure is on file",
+      "maker_round_trip_bps": 4.0,
+      "maker_slippage_bps_side": 0.0,
+      "maker_source": [
+        "https://www.bybit.com/en/help-center/article/Trading-Fee-Structure",
+        "research_outputs/tierc12/data/FEE_SOURCE.json sha256 83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103",
+        "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\""
+      ],
+      "round_trip_bps_used": 10.0,
+      "source": [
+        "scripts/tierc2_rules.py:122",
+        "scripts/tierc2_rules.py:123",
+        "configs/naiad_v0.yaml:58"
+      ],
+      "stem": "MNTUSDT_BYBIT",
+      "symbol": "MNTUSDT",
+      "taker_bps_side_used": 5.0,
+      "venue": "BYBIT_V5_LINEAR",
+      "venue_note": "Bybit's published base taker rate for linear perpetuals is NOT fetched here (signed endpoint) and is widely quoted ABOVE 5.0 bps [UNVERIFIED, general knowledge]; the estate figure is applied unchanged and that is the assumption of record"
+    },
+    {
+      "asset": "SUI",
+      "charter_slippage_bps_per_side": 5.0,
+      "charter_slippage_source": [
+        "Naiad_Phase0_Charter.md:114",
+        "scripts/tierc10_data.py:217-220 (CONTRACT_SLIPPAGE_CLAUSE, read by AST)"
+      ],
+      "charter_slippage_tier": "B",
+      "funding_interval_hours_observed_modal": 8,
+      "funding_interval_hours_observed_tail": 8,
+      "funding_spacing_hours_histogram": {
+        "8": 3762
+      },
+      "haircut_twin_bps_side": 10.0,
+      "haircut_twin_kind": "CHARTER MODEL \u2014 an ADDED column beside the TC-series toll; round_trip_bps_used above is untouched and stays the accounting figure of record [VETO 'tiers']",
+      "haircut_twin_round_trip_bps": 20.0,
+      "haircut_twin_slippage_bps_side": 5.0,
+      "haircut_twin_source": "every row gets the charter model as a HAIRCUT TWIN beside the TC-series toll \u2014 slippage/side tier A {BTC ETH} 2 bps \u00b7 tier B {SOL NEAR ZEC LTC BNB DOGE UNI SUI XMR} 5 \u00b7 tier C {ENA PUMPFUN HYPE MNT PEPE BONK} 10",
+      "haircut_twin_tier": "B",
+      "kind": "ASSUMPTION \u2014 the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
+      "maker_bps_per_side": 2.0,
+      "maker_bps_side": 2.0,
+      "maker_kind": "ON FILE \u2014 NOT RE-CONFIRMED",
+      "maker_round_trip_bps": 4.0,
+      "maker_slippage_bps_side": 0.0,
+      "maker_source": [
+        "https://www.binance.com/en/fee/futureFee",
+        "research_outputs/tierc12/data/FEE_SOURCE.json sha256 83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103",
+        "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\""
+      ],
+      "round_trip_bps_used": 10.0,
+      "source": [
+        "scripts/tierc2_rules.py:122",
+        "scripts/tierc2_rules.py:123",
+        "configs/naiad_v0.yaml:58"
+      ],
+      "stem": "SUIUSDT",
+      "symbol": "SUIUSDT",
+      "taker_bps_side_used": 5.0,
+      "venue": "BINANCE_USDTM",
+      "venue_note": "Binance USDT-M per-account commissionRate is a signed endpoint; not fetched"
+    },
+    {
+      "asset": "LTC",
+      "charter_slippage_bps_per_side": 5.0,
+      "charter_slippage_source": [
+        "Naiad_Phase0_Charter.md:114",
+        "scripts/tierc10_data.py:217-220 (CONTRACT_SLIPPAGE_CLAUSE, read by AST)"
+      ],
+      "charter_slippage_tier": "B",
+      "funding_interval_hours_observed_modal": 8,
+      "funding_interval_hours_observed_tail": 8,
+      "funding_spacing_hours_histogram": {
+        "8": 7393
+      },
+      "haircut_twin_bps_side": 10.0,
+      "haircut_twin_kind": "CHARTER MODEL \u2014 an ADDED column beside the TC-series toll; round_trip_bps_used above is untouched and stays the accounting figure of record [VETO 'tiers']",
+      "haircut_twin_round_trip_bps": 20.0,
+      "haircut_twin_slippage_bps_side": 5.0,
+      "haircut_twin_source": "every row gets the charter model as a HAIRCUT TWIN beside the TC-series toll \u2014 slippage/side tier A {BTC ETH} 2 bps \u00b7 tier B {SOL NEAR ZEC LTC BNB DOGE UNI SUI XMR} 5 \u00b7 tier C {ENA PUMPFUN HYPE MNT PEPE BONK} 10",
+      "haircut_twin_tier": "B",
+      "kind": "ASSUMPTION \u2014 the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
+      "maker_bps_per_side": 2.0,
+      "maker_bps_side": 2.0,
+      "maker_kind": "ON FILE \u2014 NOT RE-CONFIRMED",
+      "maker_round_trip_bps": 4.0,
+      "maker_slippage_bps_side": 0.0,
+      "maker_source": [
+        "https://www.binance.com/en/fee/futureFee",
+        "research_outputs/tierc12/data/FEE_SOURCE.json sha256 83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103",
+        "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\""
+      ],
+      "round_trip_bps_used": 10.0,
+      "source": [
+        "scripts/tierc2_rules.py:122",
+        "scripts/tierc2_rules.py:123",
+        "configs/naiad_v0.yaml:58"
+      ],
+      "stem": "LTCUSDT",
+      "symbol": "LTCUSDT",
+      "taker_bps_side_used": 5.0,
+      "venue": "BINANCE_USDTM",
+      "venue_note": "Binance USDT-M per-account commissionRate is a signed endpoint; not fetched"
+    },
+    {
+      "asset": "XMR",
+      "charter_slippage_bps_per_side": 5.0,
+      "charter_slippage_source": [
+        "Naiad_Phase0_Charter.md:114",
+        "scripts/tierc10_data.py:217-220 (CONTRACT_SLIPPAGE_CLAUSE, read by AST)"
+      ],
+      "charter_slippage_tier": "B",
+      "funding_interval_hours_observed_modal": 8,
+      "funding_interval_hours_observed_tail": 8,
+      "funding_spacing_hours_histogram": {
+        "8": 7321
+      },
+      "haircut_twin_bps_side": 10.0,
+      "haircut_twin_kind": "CHARTER MODEL \u2014 an ADDED column beside the TC-series toll; round_trip_bps_used above is untouched and stays the accounting figure of record [VETO 'tiers']",
+      "haircut_twin_round_trip_bps": 20.0,
+      "haircut_twin_slippage_bps_side": 5.0,
+      "haircut_twin_source": "every row gets the charter model as a HAIRCUT TWIN beside the TC-series toll \u2014 slippage/side tier A {BTC ETH} 2 bps \u00b7 tier B {SOL NEAR ZEC LTC BNB DOGE UNI SUI XMR} 5 \u00b7 tier C {ENA PUMPFUN HYPE MNT PEPE BONK} 10",
+      "haircut_twin_tier": "B",
+      "kind": "ASSUMPTION \u2014 the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
+      "maker_bps_per_side": 2.0,
+      "maker_bps_side": 2.0,
+      "maker_kind": "ON FILE \u2014 NOT RE-CONFIRMED",
+      "maker_round_trip_bps": 4.0,
+      "maker_slippage_bps_side": 0.0,
+      "maker_source": [
+        "https://www.binance.com/en/fee/futureFee",
+        "research_outputs/tierc12/data/FEE_SOURCE.json sha256 83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103",
+        "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\""
+      ],
+      "round_trip_bps_used": 10.0,
+      "source": [
+        "scripts/tierc2_rules.py:122",
+        "scripts/tierc2_rules.py:123",
+        "configs/naiad_v0.yaml:58"
+      ],
+      "stem": "XMRUSDT",
+      "symbol": "XMRUSDT",
+      "taker_bps_side_used": 5.0,
+      "venue": "BINANCE_USDTM",
+      "venue_note": "Binance USDT-M per-account commissionRate is a signed endpoint; not fetched"
+    },
+    {
+      "asset": "BNB",
+      "charter_slippage_bps_per_side": 5.0,
+      "charter_slippage_source": [
+        "Naiad_Phase0_Charter.md:114",
+        "scripts/tierc10_data.py:217-220 (CONTRACT_SLIPPAGE_CLAUSE, read by AST)"
+      ],
+      "charter_slippage_tier": "B",
+      "funding_interval_hours_observed_modal": 8,
+      "funding_interval_hours_observed_tail": 8,
+      "funding_spacing_hours_histogram": {
+        "8": 7297
+      },
+      "haircut_twin_bps_side": 10.0,
+      "haircut_twin_kind": "CHARTER MODEL \u2014 an ADDED column beside the TC-series toll; round_trip_bps_used above is untouched and stays the accounting figure of record [VETO 'tiers']",
+      "haircut_twin_round_trip_bps": 20.0,
+      "haircut_twin_slippage_bps_side": 5.0,
+      "haircut_twin_source": "every row gets the charter model as a HAIRCUT TWIN beside the TC-series toll \u2014 slippage/side tier A {BTC ETH} 2 bps \u00b7 tier B {SOL NEAR ZEC LTC BNB DOGE UNI SUI XMR} 5 \u00b7 tier C {ENA PUMPFUN HYPE MNT PEPE BONK} 10",
+      "haircut_twin_tier": "B",
+      "kind": "ASSUMPTION \u2014 the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
+      "maker_bps_per_side": 2.0,
+      "maker_bps_side": 2.0,
+      "maker_kind": "ON FILE \u2014 NOT RE-CONFIRMED",
+      "maker_round_trip_bps": 4.0,
+      "maker_slippage_bps_side": 0.0,
+      "maker_source": [
+        "https://www.binance.com/en/fee/futureFee",
+        "research_outputs/tierc12/data/FEE_SOURCE.json sha256 83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103",
+        "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\""
+      ],
+      "round_trip_bps_used": 10.0,
+      "source": [
+        "scripts/tierc2_rules.py:122",
+        "scripts/tierc2_rules.py:123",
+        "configs/naiad_v0.yaml:58"
+      ],
+      "stem": "BNBUSDT",
+      "symbol": "BNBUSDT",
+      "taker_bps_side_used": 5.0,
+      "venue": "BINANCE_USDTM",
+      "venue_note": "Binance USDT-M per-account commissionRate is a signed endpoint; not fetched"
+    },
+    {
+      "asset": "UNI",
+      "charter_slippage_bps_per_side": 5.0,
+      "charter_slippage_source": [
+        "Naiad_Phase0_Charter.md:114",
+        "scripts/tierc10_data.py:217-220 (CONTRACT_SLIPPAGE_CLAUSE, read by AST)"
+      ],
+      "charter_slippage_tier": "B",
+      "funding_interval_hours_observed_modal": 8,
+      "funding_interval_hours_observed_tail": 8,
+      "funding_spacing_hours_histogram": {
+        "8": 6637
+      },
+      "haircut_twin_bps_side": 10.0,
+      "haircut_twin_kind": "CHARTER MODEL \u2014 an ADDED column beside the TC-series toll; round_trip_bps_used above is untouched and stays the accounting figure of record [VETO 'tiers']",
+      "haircut_twin_round_trip_bps": 20.0,
+      "haircut_twin_slippage_bps_side": 5.0,
+      "haircut_twin_source": "every row gets the charter model as a HAIRCUT TWIN beside the TC-series toll \u2014 slippage/side tier A {BTC ETH} 2 bps \u00b7 tier B {SOL NEAR ZEC LTC BNB DOGE UNI SUI XMR} 5 \u00b7 tier C {ENA PUMPFUN HYPE MNT PEPE BONK} 10",
+      "haircut_twin_tier": "B",
+      "kind": "ASSUMPTION \u2014 the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
+      "maker_bps_per_side": 2.0,
+      "maker_bps_side": 2.0,
+      "maker_kind": "ON FILE \u2014 NOT RE-CONFIRMED",
+      "maker_round_trip_bps": 4.0,
+      "maker_slippage_bps_side": 0.0,
+      "maker_source": [
+        "https://www.binance.com/en/fee/futureFee",
+        "research_outputs/tierc12/data/FEE_SOURCE.json sha256 83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103",
+        "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\""
+      ],
+      "round_trip_bps_used": 10.0,
+      "source": [
+        "scripts/tierc2_rules.py:122",
+        "scripts/tierc2_rules.py:123",
+        "configs/naiad_v0.yaml:58"
+      ],
+      "stem": "UNIUSDT",
+      "symbol": "UNIUSDT",
+      "taker_bps_side_used": 5.0,
+      "venue": "BINANCE_USDTM",
+      "venue_note": "Binance USDT-M per-account commissionRate is a signed endpoint; not fetched"
+    },
+    {
+      "asset": "PEPE",
+      "charter_slippage_bps_per_side": 10.0,
+      "charter_slippage_source": [
+        "Naiad_Phase0_Charter.md:114",
+        "scripts/tierc10_data.py:217-220 (CONTRACT_SLIPPAGE_CLAUSE, read by AST)"
+      ],
+      "charter_slippage_tier": "C",
+      "funding_interval_hours_observed_modal": 8,
+      "funding_interval_hours_observed_tail": 8,
+      "funding_spacing_hours_histogram": {
+        "8": 3756
+      },
+      "haircut_twin_bps_side": 15.0,
+      "haircut_twin_kind": "CHARTER MODEL \u2014 an ADDED column beside the TC-series toll; round_trip_bps_used above is untouched and stays the accounting figure of record [VETO 'tiers']",
+      "haircut_twin_round_trip_bps": 30.0,
+      "haircut_twin_slippage_bps_side": 10.0,
+      "haircut_twin_source": "every row gets the charter model as a HAIRCUT TWIN beside the TC-series toll \u2014 slippage/side tier A {BTC ETH} 2 bps \u00b7 tier B {SOL NEAR ZEC LTC BNB DOGE UNI SUI XMR} 5 \u00b7 tier C {ENA PUMPFUN HYPE MNT PEPE BONK} 10",
+      "haircut_twin_tier": "C",
+      "kind": "ASSUMPTION \u2014 the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
+      "maker_bps_per_side": 2.0,
+      "maker_bps_side": 2.0,
+      "maker_kind": "ON FILE \u2014 NOT RE-CONFIRMED",
+      "maker_round_trip_bps": 4.0,
+      "maker_slippage_bps_side": 0.0,
+      "maker_source": [
+        "https://www.binance.com/en/fee/futureFee",
+        "research_outputs/tierc12/data/FEE_SOURCE.json sha256 83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103",
+        "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\""
+      ],
+      "round_trip_bps_used": 10.0,
+      "source": [
+        "scripts/tierc2_rules.py:122",
+        "scripts/tierc2_rules.py:123",
+        "configs/naiad_v0.yaml:58"
+      ],
+      "stem": "1000PEPEUSDT",
+      "symbol": "1000PEPEUSDT",
+      "taker_bps_side_used": 5.0,
+      "venue": "BINANCE_USDTM",
+      "venue_note": "Binance USDT-M per-account commissionRate is a signed endpoint; not fetched"
+    },
+    {
+      "asset": "DOGE",
+      "charter_slippage_bps_per_side": 5.0,
+      "charter_slippage_source": [
+        "Naiad_Phase0_Charter.md:114",
+        "scripts/tierc10_data.py:217-220 (CONTRACT_SLIPPAGE_CLAUSE, read by AST)"
+      ],
+      "charter_slippage_tier": "B",
+      "funding_interval_hours_observed_modal": 8,
+      "funding_interval_hours_observed_tail": 8,
+      "funding_spacing_hours_histogram": {
+        "8": 6844
+      },
+      "haircut_twin_bps_side": 10.0,
+      "haircut_twin_kind": "CHARTER MODEL \u2014 an ADDED column beside the TC-series toll; round_trip_bps_used above is untouched and stays the accounting figure of record [VETO 'tiers']",
+      "haircut_twin_round_trip_bps": 20.0,
+      "haircut_twin_slippage_bps_side": 5.0,
+      "haircut_twin_source": "every row gets the charter model as a HAIRCUT TWIN beside the TC-series toll \u2014 slippage/side tier A {BTC ETH} 2 bps \u00b7 tier B {SOL NEAR ZEC LTC BNB DOGE UNI SUI XMR} 5 \u00b7 tier C {ENA PUMPFUN HYPE MNT PEPE BONK} 10",
+      "haircut_twin_tier": "B",
+      "kind": "ASSUMPTION \u2014 the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
+      "maker_bps_per_side": 2.0,
+      "maker_bps_side": 2.0,
+      "maker_kind": "ON FILE \u2014 NOT RE-CONFIRMED",
+      "maker_round_trip_bps": 4.0,
+      "maker_slippage_bps_side": 0.0,
+      "maker_source": [
+        "https://www.binance.com/en/fee/futureFee",
+        "research_outputs/tierc12/data/FEE_SOURCE.json sha256 83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103",
+        "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\""
+      ],
+      "round_trip_bps_used": 10.0,
+      "source": [
+        "scripts/tierc2_rules.py:122",
+        "scripts/tierc2_rules.py:123",
+        "configs/naiad_v0.yaml:58"
+      ],
+      "stem": "DOGEUSDT",
+      "symbol": "DOGEUSDT",
+      "taker_bps_side_used": 5.0,
+      "venue": "BINANCE_USDTM",
+      "venue_note": "Binance USDT-M per-account commissionRate is a signed endpoint; not fetched"
+    },
+    {
+      "asset": "BONK",
+      "charter_slippage_bps_per_side": 10.0,
+      "charter_slippage_source": [
+        "Naiad_Phase0_Charter.md:114",
+        "scripts/tierc10_data.py:217-220 (CONTRACT_SLIPPAGE_CLAUSE, read by AST)"
+      ],
+      "charter_slippage_tier": "C",
+      "funding_interval_hours_observed_modal": 4,
+      "funding_interval_hours_observed_tail": 4,
+      "funding_spacing_hours_histogram": {
+        "4": 6305,
+        "8": 1
+      },
+      "haircut_twin_bps_side": 15.0,
+      "haircut_twin_kind": "CHARTER MODEL \u2014 an ADDED column beside the TC-series toll; round_trip_bps_used above is untouched and stays the accounting figure of record [VETO 'tiers']",
+      "haircut_twin_round_trip_bps": 30.0,
+      "haircut_twin_slippage_bps_side": 10.0,
+      "haircut_twin_source": "every row gets the charter model as a HAIRCUT TWIN beside the TC-series toll \u2014 slippage/side tier A {BTC ETH} 2 bps \u00b7 tier B {SOL NEAR ZEC LTC BNB DOGE UNI SUI XMR} 5 \u00b7 tier C {ENA PUMPFUN HYPE MNT PEPE BONK} 10",
+      "haircut_twin_tier": "C",
+      "kind": "ASSUMPTION \u2014 the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
+      "maker_bps_per_side": 2.0,
+      "maker_bps_side": 2.0,
+      "maker_kind": "ON FILE \u2014 NOT RE-CONFIRMED",
+      "maker_round_trip_bps": 4.0,
+      "maker_slippage_bps_side": 0.0,
+      "maker_source": [
+        "https://www.binance.com/en/fee/futureFee",
+        "research_outputs/tierc12/data/FEE_SOURCE.json sha256 83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103",
+        "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\""
+      ],
+      "round_trip_bps_used": 10.0,
+      "source": [
+        "scripts/tierc2_rules.py:122",
+        "scripts/tierc2_rules.py:123",
+        "configs/naiad_v0.yaml:58"
+      ],
+      "stem": "1000BONKUSDT",
+      "symbol": "1000BONKUSDT",
+      "taker_bps_side_used": 5.0,
+      "venue": "BINANCE_USDTM",
+      "venue_note": "Binance USDT-M per-account commissionRate is a signed endpoint; not fetched"
+    }
+  ],
+  "charter_slippage_source": [
+    "Naiad_Phase0_Charter.md:114",
+    "scripts/tierc10_data.py:217-220 (CONTRACT_SLIPPAGE_CLAUSE, read by AST)"
+  ],
+  "charter_slippage_tiers": {
+    "A": {
+      "assets": [
+        "BTC",
+        "ETH"
+      ],
+      "bps_per_side": 2.0
+    },
+    "B": {
+      "assets": [
+        "SOL",
+        "NEAR",
+        "ZEC",
+        "LTC",
+        "BNB",
+        "DOGE",
+        "UNI",
+        "SUI",
+        "XMR"
+      ],
+      "bps_per_side": 5.0
+    },
+    "C": {
+      "assets": [
+        "ENA",
+        "PUMPFUN",
+        "HYPE",
+        "MNT",
+        "PEPE",
+        "BONK"
+      ],
+      "bps_per_side": 10.0
+    }
+  },
+  "fee_law": "fee = (FEE_BPS_SIDE / 10_000) * (entry_px + exit_px) (scripts/tierc2_baseline.py)",
+  "haircut_twin_clause": "every row gets the charter model as a HAIRCUT TWIN beside the TC-series toll \u2014 slippage/side tier A {BTC ETH} 2 bps \u00b7 tier B {SOL NEAR ZEC LTC BNB DOGE UNI SUI XMR} 5 \u00b7 tier C {ENA PUMPFUN HYPE MNT PEPE BONK} 10",
+  "haircut_twin_law": "ADDED, never a replacement: haircut_twin_* keys carry the charter model (per-side taker fee + the charter's per-side slippage tier) beside round_trip_bps_used, which stays the TC-series accounting figure on every row [VETO 'tiers']. twin cost_px = ((FEE_BPS_SIDE + slippage_bps_side) / 10_000) * (entry_px + exit_px); net_r_twin = gross_r - cost_px / risk_px (tierc10_data.haircut_twin_net_r)",
+  "haircut_twin_tiers": {
+    "A": {
+      "assets": [
+        "BTC",
+        "ETH"
+      ],
+      "bps_per_side": 2.0
+    },
+    "B": {
+      "assets": [
+        "SOL",
+        "NEAR",
+        "ZEC",
+        "LTC",
+        "BNB",
+        "DOGE",
+        "UNI",
+        "SUI",
+        "XMR"
+      ],
+      "bps_per_side": 5.0
+    },
+    "C": {
+      "assets": [
+        "ENA",
+        "PUMPFUN",
+        "HYPE",
+        "MNT",
+        "PEPE",
+        "BONK"
+      ],
+      "bps_per_side": 10.0
+    }
+  },
+  "keys_removed_vs_tc11": {
+    "maker_bps_per_side (top level)": "a scalar cannot carry two venues",
+    "maker_source (top level)": "replaced by the per-venue block"
+  },
+  "maker_law": "MAKER \u2014 THE DATA LAW [L-D.17]: maker_bps_side is filed PER VENUE (`venues[<VENUE>]`), with its source and kind: the venue's published entry-tier USDT-margined maker rate when its page was retrieved and parsed from saved bytes (PUBLISHED), else the figure on file in README.md (ON FILE \u2014 NOT RE-CONFIRMED), applied to Bybit as an ASSUMPTION. A maker leg carries the maker_slippage_bps_side of TC11's rows (carried). By the operator's ruling of the filing day of the contract (\"maker as toll of record for scalper mode\") the maker rate is a toll of record; WHICH LEGS pay it is defined by the registration texts and the stage that rides them, not by this file. Taker and charter tiers are unchanged and equal to TC11's file.",
+  "maker_pin": {
+    "differs_from_x_assumption": {
+      "BINANCE_USDTM": false,
+      "BYBIT_V5_LINEAR": false
+    },
+    "kinds": {
+      "BINANCE_USDTM": "ON FILE \u2014 NOT RE-CONFIRMED",
+      "BYBIT_V5_LINEAR": "ASSUMPTION \u2014 NOT RE-CONFIRMED; no Bybit figure is on file"
+    },
+    "name": "maker-bps",
+    "values": {
+      "BINANCE_USDTM": 2.0,
+      "BYBIT_V5_LINEAR": 2.0
+    },
+    "x_assumed_bps_side": 2.0,
+    "x_assumed_source": {
+      "certified_by": "research_outputs/tierc12/x_rec/X_REC_MANIFEST.json",
+      "path": "research_outputs/tierc12/x_rec/tierc11x/data/tc11_rec/data/fee_schedule.json",
+      "sha256": "6febe170d423b0ef37dca9fe95a7316e4259ef5a77e576cafa6781d581c1968b"
+    }
+  },
+  "seed": 20261008,
+  "stage": "TC12-D",
+  "tc11_fee_schedule": {
+    "all_equal": true,
+    "keys_compared_row": [
+      "asset",
+      "venue",
+      "symbol",
+      "stem",
+      "taker_bps_side_used",
+      "round_trip_bps_used",
+      "kind",
+      "source",
+      "haircut_twin_tier",
+      "haircut_twin_slippage_bps_side",
+      "haircut_twin_bps_side",
+      "haircut_twin_round_trip_bps",
+      "haircut_twin_kind",
+      "haircut_twin_source",
+      "charter_slippage_tier",
+      "charter_slippage_bps_per_side",
+      "charter_slippage_source",
+      "maker_slippage_bps_side",
+      "venue_note"
+    ],
+    "keys_compared_top": [
+      "fee_law",
+      "haircut_twin_law",
+      "haircut_twin_clause",
+      "haircut_twin_tiers",
+      "charter_slippage_tiers",
+      "charter_slippage_source"
+    ],
+    "path": "research_outputs/tierc11/data/fee_schedule.json",
+    "sha256": "6febe170d423b0ef37dca9fe95a7316e4259ef5a77e576cafa6781d581c1968b"
+  },
+  "tier": "TIER-C12",
+  "venues": {
+    "BINANCE_USDTM": {
+      "maker_basis": "UNRETRIEVABLE (http_202): the figure on file is carried \u2014 README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\"",
+      "maker_bps_side": 2.0,
+      "maker_equals_on_file": true,
+      "maker_grammar": null,
+      "maker_kind": "ON FILE \u2014 NOT RE-CONFIRMED",
+      "maker_on_file_bps_side": 2.0,
+      "maker_on_file_source": "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\"",
+      "maker_retrieval_attempted_utc_date": "2026-10-09",
+      "maker_retrieval_http_status": 202,
+      "maker_retrieved_utc_date": null,
+      "maker_round_trip_bps": 4.0,
+      "maker_slippage_bps_side": 0.0,
+      "maker_source_body_sha256": null,
+      "maker_source_record": {
+        "path": "research_outputs/tierc12/data/FEE_SOURCE.json",
+        "sha256": "83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103"
+      },
+      "maker_source_url": "https://www.binance.com/en/fee/futureFee",
+      "maker_unretrievable_reason": "http_202",
+      "stems": [
+        "BTCUSDT",
+        "ETHUSDT",
+        "SOLUSDT",
+        "NEARUSDT",
+        "ZECUSDT",
+        "ENAUSDT",
+        "PUMPUSDT",
+        "HYPEUSDT",
+        "SUIUSDT",
+        "LTCUSDT",
+        "XMRUSDT",
+        "BNBUSDT",
+        "UNIUSDT",
+        "1000PEPEUSDT",
+        "DOGEUSDT",
+        "1000BONKUSDT"
+      ],
+      "taker_bps_side": 5.0,
+      "taker_kind": "ASSUMPTION \u2014 the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
+      "taker_published_bps_side": null,
+      "taker_published_note": "DISCLOSURE ONLY \u2014 no reader consumes it; the taker of record is the estate's object (contract: 'taker \u2026 unchanged')",
+      "taker_round_trip_bps": 10.0
+    },
+    "BYBIT_V5_LINEAR": {
+      "maker_basis": "UNRETRIEVABLE (http_403): the figure on file is carried \u2014 README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\"",
+      "maker_bps_side": 2.0,
+      "maker_equals_on_file": true,
+      "maker_grammar": null,
+      "maker_kind": "ASSUMPTION \u2014 NOT RE-CONFIRMED; no Bybit figure is on file",
+      "maker_on_file_bps_side": 2.0,
+      "maker_on_file_source": "README.md:150 \u2014 \"**taker 0.05%/side** (the charter's 5 bps stands; maker is 0.02% but the\"",
+      "maker_retrieval_attempted_utc_date": "2026-10-09",
+      "maker_retrieval_http_status": 403,
+      "maker_retrieved_utc_date": null,
+      "maker_round_trip_bps": 4.0,
+      "maker_slippage_bps_side": 0.0,
+      "maker_source_body_sha256": null,
+      "maker_source_record": {
+        "path": "research_outputs/tierc12/data/FEE_SOURCE.json",
+        "sha256": "83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103"
+      },
+      "maker_source_url": "https://www.bybit.com/en/help-center/article/Trading-Fee-Structure",
+      "maker_unretrievable_reason": "http_403",
+      "stems": [
+        "MNTUSDT_BYBIT"
+      ],
+      "taker_bps_side": 5.0,
+      "taker_kind": "ASSUMPTION \u2014 the estate's flat FEE_BPS_SIDE object, NOT a venue schedule",
+      "taker_published_bps_side": null,
+      "taker_published_note": "DISCLOSURE ONLY \u2014 no reader consumes it; the taker of record is the estate's object (contract: 'taker \u2026 unchanged')",
+      "taker_round_trip_bps": 10.0
+    }
+  },
+  "warranty": "these files are described AS OF the pinned last closed 4h bar named here and of no other; bars stamped after it are counted, never read [TC6V-a, carried by TIER-C12]"
+}

@@ -1,0 +1,38 @@
+{
+  "body_dir": "/Users/luis/.cache/naiad/provenance/tc12_20261008/fee_source",
+  "definition": "the MAKER fee, in percent of notional per fill, that the venue's own public fee schedule lists for USDT-margined perpetual futures at its ENTRY tier \u2014 the tier an account holds with no volume, balance or token-holding qualification \u2014 WITHOUT any token-payment discount, referral kickback, market-maker or liquidity-provider programme, zero-fee promotion or pair-specific special rate; where the entry tier lists more than one qualifying figure the HIGHEST is taken; a zero or negative figure is a rebate or a promotion and is never a base rate [L-D.18]",
+  "law": "Act 1 of L-D.18: one request per venue with the library's default headers; the body saved byte for byte outside the repo and the snapshot; NO parsed figure here; a failed capture is a filed status. The retrieval instant lives only in this record and in FETCH_LOG.jsonl; --manifest copies the url and the calendar date out of this sealed record and makes no clock call [L-D.20]",
+  "seed": 20261008,
+  "stage": "TC12-D",
+  "tier": "TIER-C12",
+  "venues": {
+    "BINANCE_USDTM": {
+      "body_bytes": null,
+      "body_path": null,
+      "body_sha256": null,
+      "error": "failed after 4 attempts: https://www.binance.com/en/fee/futureFee <- RuntimeError('HTTP 202 for https://www.binance.com/en/fee/futureFee')",
+      "final_url": null,
+      "http_requests_logged": 4,
+      "http_status": 202,
+      "redirects": [],
+      "retrieved_utc_date": "2026-10-09",
+      "retrieved_wall_clock_utc": "2026-10-09T22:19:21Z",
+      "url": "https://www.binance.com/en/fee/futureFee",
+      "venue_domain": "binance.com"
+    },
+    "BYBIT_V5_LINEAR": {
+      "body_bytes": null,
+      "body_path": null,
+      "body_sha256": null,
+      "error": "failed after 4 attempts: https://www.bybit.com/en/help-center/article/Trading-Fee-Structure <- RuntimeError('HTTP 403 for https://www.bybit.com/en/help-center/article/Trading-Fee-Structure')",
+      "final_url": null,
+      "http_requests_logged": 4,
+      "http_status": 403,
+      "redirects": [],
+      "retrieved_utc_date": "2026-10-09",
+      "retrieved_wall_clock_utc": "2026-10-09T22:19:36Z",
+      "url": "https://www.bybit.com/en/help-center/article/Trading-Fee-Structure",
+      "venue_domain": "bybit.com"
+    }
+  }
+}

@@ -21,10 +21,22 @@ transcript re-passes after every lawful later act [L-0.11's scope law]:
     O-35] — a text that only grows is held to a BYTE-PREFIX at the sha on file;
   · a later record's files, the ledger-spec child among them [L-X.21: "filed AFTER the attested
     instant"] — a path the listing does not name is no finding here; ATTEST-ORDER holds it to git
-    ancestry at TC12-SCORE and CLOSE.
-Every other pinned or listed text (LEANS.md, the review, the plan, the paste, the rulings and the
-disclosures frozen from the TC12-REG commit, the scripts and pin files of REG_SET) stays held to its
-whole-file sha; the files the gate itself writes after the attested instant are LATER_T.
+    ancestry at TC12-SCORE and CLOSE;
+  · a lawful repair of a REG_SET script under a dated amendment, re-recorded by the record of the
+    gate that repairs it [AM-67, ruling on AP-66; L-0.4 (1)].
+Every other pinned text (LEANS.md, the review, the plan, the paste, the rulings and the disclosures
+frozen from the TC12-REG commit) stays held to its whole-file sha by the filing's own legs; the files
+the gate itself writes after the attested instant are LATER_T.
+
+THE LISTING IS A STATEMENT ABOUT THE FILING INSTANT [AM-67].  F-ATTEST-ORDER [REG] holds a listed
+path that the registry commit TRACKS — the commit that first adds registrations/REGISTRATIONS.json
+(`git log --diff-filter=A --format=%H -- <path>`, read-only, --no-optional-locks) — to the sha of its
+BLOB at that commit, never to the working file: the blob is immutable, so a later lawful repair
+cannot move it.  A listed path that commit does not track (the git-ignored x_rec/**) is held on the
+working file, as before; LATER_T and the append-only byte-prefix rule are unchanged.  A tree that
+holds no such commit yet (the tree at its own TC12-REG gate; a scratch tree) is held on the working
+file throughout — the form the plants are judged in.  The blob form is proven on scratch
+REPOSITORIES by controls that raise (the break leg is then VOID) and print nothing when they hold.
 
 Production is scripts/tierc12_registrations.py and the filed pair under registrations/.  Every BREAK
 plant is a mutation INSIDE production's inputs or source — a bent copy of the filed document, the pin,
@@ -33,8 +45,10 @@ scratch tree, or a shadow copy of the filer — judged one at a time by the dete
 The referees below are this suite's typed commission and its own re-derivation (slices, shas, chain,
 the template table, the grammar): a second object.  No value is read back from the filer to judge it.
 
-PRE-SUBSTRATE: no bar is read, no book exists, no env is imported, no network is touched, no git is
-called.  The registry must be ON FILE (`tierc12_registrations.py --file`, then `--attest`).
+PRE-SUBSTRATE: no bar is read, no book exists, no env is imported, no network is touched.  Git is
+asked two read-only verbs of the tree this suite stands in (`log`, `cat-file`, out of process
+[L-X.21 clause 3]); a write verb runs only in a scratch repository under this run's temp directory.
+The registry must be ON FILE (`tierc12_registrations.py --file`, then `--attest`).
 
 Run (stdlib only; the transcript is registrations/FIXTURES_REG.txt):
   ~/venvs/naiad/bin/python -B /Users/luis/Naiad/scripts/tierc12_registrations_fixtures.py
@@ -49,6 +63,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 import tempfile
 from decimal import Decimal
@@ -214,6 +229,14 @@ GROWS_T = (("contract", "whole_file_sha256_at_filing"), ("amendments", "sha256")
 GROWS_PIN_T = "registrations_file"
 SHOWN_T = 12                                 # unnamed paths shown on stdout (never in the transcript)
 AM_FIRST_T = "## AM-1 · "                    # L-X.19: the amendments file "holds AM-1 at filing"
+# AM-67 (ruling on AP-66): the commit that first adds this path is the registry commit — the filing
+# instant on record; a listed path it TRACKS is held to its blob there, never to the working file
+REG_FILE_REL_T = T12_REL + "/registrations/REGISTRATIONS.json"
+GIT_RO_T = ("log", "cat-file")               # the read-only verbs asked of a tree [L-X.21 clause 3]
+COMMIT_RX_T = re.compile(r"[0-9a-f]{40}|[0-9a-f]{64}")
+SCRATCH_GIT_T = (("init", "-q"), ("add", "-A"),
+                 ("commit", "-q", "--no-verify", "-m", "scratch: the registry commit"))
+SCRATCH_DATE_T = "2026-10-08T00:00:00+0000"  # a scratch repository's one commit: a typed date, never a clock
 
 _TMP: list = []
 _N = [0]
@@ -1195,21 +1218,90 @@ def own_path(root: Path, rel: str) -> Path:
     return (PINS.main_tree(root) if rel.startswith(X_REC_T) else root) / T12_REL / rel
 
 
-def listing_findings(root: Path) -> list:
+def git(root, *args, stdin: bytes = b"", ro: bool = True, env=None) -> tuple:
+    """(exit code, stdout bytes) of one git call on `root`, out of process.  A tree sees the
+    read-only verbs of GIT_RO_T only; a write verb runs in a scratch repository under this run's temp
+    directory and nowhere else.  No GIT_* variable of the caller reaches git: `-C root` alone names
+    the repository."""
+    root = Path(root).resolve()
+    if ro and args[0] not in GIT_RO_T:
+        raise RuntimeError(f"git {args[0]} is not a read-only verb of this suite")
+    if not ro and Path(_TMP[0]).resolve() not in root.parents:
+        raise RuntimeError("a write verb of git may run in a scratch repository only")
+    e = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
+    e.update({"GIT_OPTIONAL_LOCKS": "0", **(env or {})})
+    r = subprocess.run(["git", "--no-optional-locks", "-C", str(root), *args], input=stdin,
+                       capture_output=True, env=e)
+    return r.returncode, r.stdout
+
+
+def repo_rel(rel: str) -> str:
+    """A listed path, repo-relative (the listing's are relative to the tier directory unless scripts/)."""
+    return rel if rel.startswith("scripts/") else T12_REL + "/" + rel
+
+
+def registry_commit(root: Path):
+    """The commit that FIRST adds registrations/REGISTRATIONS.json — the filing instant on record
+    [AM-67; L-X.21's `REG`] — or None when the tree holds no such commit (a tree at its own TC12-REG
+    gate, before the commit; a tree that is no repository)."""
+    rc, out = git(root, "log", "--diff-filter=A", "--format=%H", "--", REG_FILE_REL_T)
+    shas = [s for s in out.decode("ascii", "replace").split() if COMMIT_RX_T.fullmatch(s)] if rc == 0 else []
+    return shas[-1] if shas else None                       # `git log` prints newest first: the last is the first add
+
+
+def registry_blobs(root: Path) -> tuple:
+    """(the registry commit, {listed path: sha256 of its BLOB at that commit}) over the listed paths
+    the commit TRACKS, outside LATER_T and the append-only texts — (None, None) when the tree holds no
+    registry commit.  One `git cat-file --batch`; a path the commit does not track answers `missing`
+    and is left out (it is held on the working file)."""
+    commit = registry_commit(root)
+    if commit is None:
+        return None, None
+    _, listed = own_listing(root)
+    want = [x for x in sorted(listed) if x not in LATER_T and x not in APPEND_ONLY_T and "\n" not in x]
+    rc, out = git(root, "cat-file", "--batch",
+                  stdin="".join(f"{commit}:{repo_rel(x)}\n" for x in want).encode("utf-8"))
+    if rc:
+        raise RuntimeError("git cat-file --batch failed on the registry commit")
+    blobs, i = {}, 0
+    for x in want:
+        j = out.index(b"\n", i)
+        head, i = out[i:j].split(b" "), j + 1
+        if head[-1] == b"missing":
+            continue
+        size = int(head[-1])
+        if head[-2] == b"blob":
+            blobs[x] = sha(out[i:i + size])
+        i += size + 1
+    if i != len(out):
+        raise RuntimeError("git cat-file --batch answered other than one object per listed path")
+    return commit, blobs
+
+
+def listing_findings(root: Path, blobs=None) -> list:
     """ATTEST-LISTING: ATTEST_REG.json is the listing of the attested instant, and it still holds.
     It is sorted, counts right, does not list itself and names as absent exactly the REG_SET members
-    it does not list; it was taken after the filing on disk.  Every path it LISTS is on disk at the
-    listed sha — a text that only grows (APPEND_ONLY_T) holds a byte-prefix at that sha, and the
-    files the gate itself writes after that instant (LATER_T) are not held — and no REG_SET member
-    it lists as ABSENT has appeared since, outside LATER_T.  A path on disk that the listing does
-    not name is no finding: a later record's file was filed after the attested instant, and
-    ATTEST-ORDER holds it to git ancestry at TC12-SCORE and CLOSE [L-X.21]."""
+    it does not list; it was taken after the filing on disk.  Every path it LISTS holds the listed
+    sha — a text that only grows (APPEND_ONLY_T) holds a byte-prefix at that sha, and the files the
+    gate itself writes after that instant (LATER_T) are not held — and no REG_SET member it lists as
+    ABSENT has appeared since, outside LATER_T.  A path on disk that the listing does not name is no
+    finding: a later record's file was filed after the attested instant, and ATTEST-ORDER holds it to
+    git ancestry at TC12-SCORE and CLOSE [L-X.21].
+
+    WHERE the listed sha is held [AM-67]: `blobs` = {listed path: the sha of its blob at the registry
+    commit} (registry_blobs) — a path the registry commit tracks is held THERE, at the filing instant,
+    never on the working file; every other listed path (git-ignored x_rec/**) on the working file.
+    `blobs=None` — a tree with no registry commit — holds every listed path on the working file."""
     doc, listed = own_listing(root)
     if doc is None:
         return ["ATTEST-LISTING ATTEST_REG.json is not on file — run tierc12_registrations.py --attest"]
     out = []
     for x in sorted(listed):
         if x in LATER_T:
+            continue
+        if blobs is not None and x in blobs and x not in APPEND_ONLY_T:
+            if blobs[x] != listed[x]:
+                out.append(f"ATTEST-LISTING {x}: the blob at the registry commit is not the listed sha")
             continue
         f = own_path(root, x)
         if not f.is_file():
@@ -1289,6 +1381,53 @@ def unfiled() -> list:
     return REG.attest_findings(r)
 
 
+def committed(before=None, after=None) -> list:
+    """A scratch tree attested by production and then COMMITTED to a scratch repository of its own —
+    that one commit is its registry commit — with `before` written between the attestation and the
+    commit and `after` written after it; judged in the form the tree of record is judged [AM-67]."""
+    r = attest_tree()
+    (r / T12_REL / ATTEST_SELF_T).write_bytes(REG.render_sorted(REG.attest_doc(r)))
+    env = {"GIT_AUTHOR_NAME": "Scratch Fixture", "GIT_AUTHOR_EMAIL": "fixture@scratch.invalid",
+           "GIT_COMMITTER_NAME": "Scratch Fixture", "GIT_COMMITTER_EMAIL": "fixture@scratch.invalid",
+           "GIT_AUTHOR_DATE": SCRATCH_DATE_T, "GIT_COMMITTER_DATE": SCRATCH_DATE_T,
+           "GIT_CONFIG_GLOBAL": os.devnull, "GIT_CONFIG_NOSYSTEM": "1", "GIT_CEILING_DIRECTORIES": _TMP[0]}
+    for step, files in ((SCRATCH_GIT_T, before), ((), after)):
+        for rel, body in (files or {}).items():
+            (r / rel).parent.mkdir(parents=True, exist_ok=True)
+            (r / rel).write_bytes(body)
+        for args in step:
+            if git(r, *args, ro=False, env=env)[0]:
+                raise RuntimeError(f"scratch git {args[0]} failed")
+    commit, blobs = registry_blobs(r)
+    if commit is None or not blobs:
+        raise RuntimeError("the scratch repository holds no registry commit")
+    return listing_findings(r, blobs)
+
+
+X_REC_SCRATCH_T = "x_rec/tierc11x/va/feasibility.parquet"   # the scratch tree's git-ignored X record
+REPAIR_T = {"scripts/tierc12_fx.py": b"# repaired under a dated amendment, after the registry commit\n"}
+
+
+def blob_form_controls() -> None:
+    """AM-67's form on a scratch REPOSITORY, held as controls of the break leg: silent when they hold,
+    a raise — the break leg is then VOID — when one does not.  (They are not rows of `plants`: the
+    eight rows below are the transcript of record's, judged in the form of a tree with no commit.)"""
+    if not attested(REPAIR_T):
+        raise ValueError("a tree with NO registry commit does not hold a listed script on the working file — "
+                         "the scratch form is not the form before AM-67")
+    if committed(after={**LAWFUL_LATER_T, **REPAIR_T}):
+        raise ValueError("a lawful repair of a tracked REG_SET script AFTER the registry commit is a finding "
+                         "of the listing — AM-67's control is not GREEN")
+    want = "ATTEST-LISTING LEANS.md: the blob at the registry commit is not the listed sha"
+    if committed(before={T12_REL + "/LEANS.md": b"readings, edited\n"}) != [want]:
+        raise ValueError("a listed tracked file changed between the attested instant and the registry commit "
+                         "is not caught from the commit's blob [AM-67]")
+    want = f"ATTEST-LISTING {X_REC_SCRATCH_T}: the bytes on disk are not the listed sha"
+    if committed(after={T12_REL + "/" + X_REC_SCRATCH_T: b"an X record, edited\n"}) != [want]:
+        raise ValueError("a git-ignored listed path (x_rec/**) changed on disk is not caught on the working "
+                         "file, as before [AM-67]")
+
+
 def attest_break():
     clean = attest_tree()
     if REG.attest_findings(clean) or set_referee(clean, own_walk(clean)) or attested():
@@ -1296,6 +1435,7 @@ def attest_break():
     if attested(LAWFUL_LATER_T):
         raise ValueError("a lawful later act (an appended amendment, a later record's files, the stage's own "
                          "record, PROGRESS.json re-merged) is a finding of the listing — the control is not GREEN")
+    blob_form_controls()
     return FX.plants([
         ("an ignored `books/x.parquet` present at filing", "ATTEST-REG books/x.parquet",
          lambda: REG.attest_findings(attest_tree({T12_REL + "/books/x.parquet": b"a book\n"}))),
@@ -1319,11 +1459,19 @@ def attest_break():
 
 def attest_real():
     """The LISTING of the attested instant is what is judged — production's detector and this file's
-    typed sets over the paths ATTEST_REG.json lists — never the disk as it stands at a later run."""
+    typed sets over the paths ATTEST_REG.json lists — never the disk as it stands at a later run.  A
+    listed path the registry commit tracks is held to its blob at that commit, never to the working
+    file [AM-67]; the words of the transcript of record are unchanged."""
     doc, listed = own_listing(ROOT)
     if doc is None:
         return False, "ATTEST-LISTING ATTEST_REG.json is not on file — run tierc12_registrations.py --attest"
-    found = REG.attest_findings(ROOT, walk=listed) + set_referee(ROOT, listed) + listing_findings(ROOT)
+    commit, blobs = registry_blobs(ROOT)
+    FX.clock(f"[AM-67] no commit of this tree adds {REG_FILE_REL_T}: every listed path is held on the working file"
+             if commit is None else
+             f"[AM-67] registry commit {commit}: {len(blobs)} listed path(s) it tracks are held to their blob at "
+             f"that commit, never to the working file; the others outside LATER_T (git-ignored x_rec/**; the "
+             f"append-only texts, by byte-prefix) on the working file")
+    found = REG.attest_findings(ROOT, walk=listed) + set_referee(ROOT, listed) + listing_findings(ROOT, blobs)
     if (REG.PRE_REG, REG.PRE_REG_RECORDS, REG.PRE_REG_SCRIPTS, REG.REG_SET) != (
             PRE_REG_T, PRE_REG_RECORDS_T, PRE_REG_SCRIPTS_T, REG_SET_T):
         found.append("ATTEST-SETS production's PRE_REG / REG_SET are not this file's typed sets")

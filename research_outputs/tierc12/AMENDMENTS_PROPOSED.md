@@ -1097,3 +1097,19 @@ every item of L-X.36's list. The verdict words, the clauses (a)(b)(c) and the la
 **DEFAULT TAKEN.** (no builder default: an orchestrator ruling)
 
 **Status.** Ruled at the TC12-D gate: AM-69.
+
+---
+
+## AP-69 · 2026-10-10 (~00:29Z) · L-0.4, L-0.9 · the repair unit at the TC12-D gate
+
+**Title.** AM-69's premise is not what the code does: the resume suite already takes the last record over every record on file
+
+**Readings.** L-0.4 (1), L-0.9
+
+**The texts.** AP-68 and AM-69 say the suite's walk takes 'the last record that names a path' among the records in scope of `--stage`, and order `scripts/tierc12_resume_fixtures.py` repaired.
+
+**The fact.** The suite's `last_naming` iterates every record on disk in walk order, whatever `--stage` is; `Estate.scope` limits only which records' entries are walked. The ARTIFACT-MOVED findings AP-68 reported came from TC12-D's record not yet naming the three suites that WERE repaired (closure, registrations, pins). With those re-recorded and the merger run, all six fixture rows of the committed records pass plain with their transcripts unchanged. The suite is byte-identical to its blob at the registry commit (sha256 240b1a94…214f).
+
+**DEFAULT TAKEN.** No edit was made to the resume suite and none was invented to give AM-69 a diff.
+
+**Status.** Ruled at the TC12-D gate: AM-70.

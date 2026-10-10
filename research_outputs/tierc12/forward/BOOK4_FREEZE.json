@@ -1,0 +1,8 @@
+{
+ "commit": "324a8350acb08d0a856dde940663a5a023142b79",
+ "committer_time_iso": "2026-10-09T18:45:41-03:00",
+ "committer_time_ms": 1791582341000,
+ "line": 5,
+ "path": "research_outputs/tierc12/forward/FORWARD_LEDGER.jsonl",
+ "what": "the freeze instant of the fourth ledger book (gated-v6-combined): the committer time of the commit that first adds line 5 of the ledger of record [CANON-37 point 2]; write-once provenance, written by the orchestrator immediately after that commit; recorded by TC12-D's record"
+}

@@ -1,0 +1,1229 @@
+{
+  "all_equal": true,
+  "as_of_last_closed_4h": "2026-10-08T20:00:00Z",
+  "as_of_last_closed_4h_open": "2026-10-08T16:00:00Z",
+  "audited_wall_clock_utc": "2026-10-09T22:19:21Z",
+  "files_audited": 73,
+  "funding": {
+    "funding/1000BONKUSDT.parquet": {
+      "all_equal": true,
+      "funding_hour": "2026-09-25T00:00:00Z",
+      "last_inherited": "2026-09-25T00:00:00Z",
+      "last_inherited_ms": 1790294400002,
+      "stem": "1000BONKUSDT",
+      "tape_rate": 5e-05,
+      "venue": "BINANCE_USDTM",
+      "venue_prints_of_the_hour": [
+        [
+          1790294400002,
+          "0.00005000"
+        ]
+      ]
+    },
+    "funding/1000PEPEUSDT.parquet": {
+      "all_equal": true,
+      "funding_hour": "2026-09-25T00:00:00Z",
+      "last_inherited": "2026-09-25T00:00:00Z",
+      "last_inherited_ms": 1790294400002,
+      "stem": "1000PEPEUSDT",
+      "tape_rate": -4.411e-05,
+      "venue": "BINANCE_USDTM",
+      "venue_prints_of_the_hour": [
+        [
+          1790294400002,
+          "-0.00004411"
+        ]
+      ]
+    },
+    "funding/BNBUSDT.parquet": {
+      "all_equal": true,
+      "funding_hour": "2026-09-25T00:00:00Z",
+      "last_inherited": "2026-09-25T00:00:00Z",
+      "last_inherited_ms": 1790294400002,
+      "stem": "BNBUSDT",
+      "tape_rate": 1.3e-07,
+      "venue": "BINANCE_USDTM",
+      "venue_prints_of_the_hour": [
+        [
+          1790294400002,
+          "0.00000013"
+        ]
+      ]
+    },
+    "funding/BTCUSDT.parquet": {
+      "all_equal": true,
+      "funding_hour": "2026-09-25T00:00:00Z",
+      "last_inherited": "2026-09-25T00:00:00Z",
+      "last_inherited_ms": 1790294400002,
+      "stem": "BTCUSDT",
+      "tape_rate": 2.14e-06,
+      "venue": "BINANCE_USDTM",
+      "venue_prints_of_the_hour": [
+        [
+          1790294400002,
+          "0.00000214"
+        ]
+      ]
+    },
+    "funding/DOGEUSDT.parquet": {
+      "all_equal": true,
+      "funding_hour": "2026-09-25T00:00:00Z",
+      "last_inherited": "2026-09-25T00:00:00Z",
+      "last_inherited_ms": 1790294400002,
+      "stem": "DOGEUSDT",
+      "tape_rate": 9.707e-05,
+      "venue": "BINANCE_USDTM",
+      "venue_prints_of_the_hour": [
+        [
+          1790294400002,
+          "0.00009707"
+        ]
+      ]
+    },
+    "funding/ENAUSDT.parquet": {
+      "all_equal": true,
+      "funding_hour": "2026-09-25T00:00:00Z",
+      "last_inherited": "2026-09-25T00:00:00Z",
+      "last_inherited_ms": 1790294400002,
+      "stem": "ENAUSDT",
+      "tape_rate": 5e-05,
+      "venue": "BINANCE_USDTM",
+      "venue_prints_of_the_hour": [
+        [
+          1790294400002,
+          "0.00005000"
+        ]
+      ]
+    },
+    "funding/ETHUSDT.parquet": {
+      "all_equal": true,
+      "funding_hour": "2026-09-25T00:00:00Z",
+      "last_inherited": "2026-09-25T00:00:00Z",
+      "last_inherited_ms": 1790294400002,
+      "stem": "ETHUSDT",
+      "tape_rate": 2.767e-05,
+      "venue": "BINANCE_USDTM",
+      "venue_prints_of_the_hour": [
+        [
+          1790294400002,
+          "0.00002767"
+        ]
+      ]
+    },
+    "funding/HYPEUSDT.parquet": {
+      "all_equal": true,
+      "funding_hour": "2026-09-25T00:00:00Z",
+      "last_inherited": "2026-09-25T00:00:00Z",
+      "last_inherited_ms": 1790294400002,
+      "stem": "HYPEUSDT",
+      "tape_rate": -4.991e-05,
+      "venue": "BINANCE_USDTM",
+      "venue_prints_of_the_hour": [
+        [
+          1790294400002,
+          "-0.00004991"
+        ]
+      ]
+    },
+    "funding/LTCUSDT.parquet": {
+      "all_equal": true,
+      "funding_hour": "2026-09-25T00:00:00Z",
+      "last_inherited": "2026-09-25T00:00:00Z",
+      "last_inherited_ms": 1790294400002,
+      "stem": "LTCUSDT",
+      "tape_rate": 0.0001,
+      "venue": "BINANCE_USDTM",
+      "venue_prints_of_the_hour": [
+        [
+          1790294400002,
+          "0.00010000"
+        ]
+      ]
+    },
+    "funding/MNTUSDT_BYBIT.parquet": {
+      "all_equal": true,
+      "funding_hour": "2026-09-25T00:00:00Z",
+      "last_inherited": "2026-09-25T00:00:00Z",
+      "last_inherited_ms": 1790294400000,
+      "stem": "MNTUSDT_BYBIT",
+      "tape_rate": 4.755e-05,
+      "venue": "BYBIT_V5_LINEAR",
+      "venue_prints_of_the_hour": [
+        [
+          1790294400000,
+          "0.00004755"
+        ]
+      ]
+    },
+    "funding/NEARUSDT.parquet": {
+      "all_equal": true,
+      "funding_hour": "2026-09-25T00:00:00Z",
+      "last_inherited": "2026-09-25T00:00:00Z",
+      "last_inherited_ms": 1790294400002,
+      "stem": "NEARUSDT",
+      "tape_rate": 0.0001,
+      "venue": "BINANCE_USDTM",
+      "venue_prints_of_the_hour": [
+        [
+          1790294400002,
+          "0.00010000"
+        ]
+      ]
+    },
+    "funding/PUMPUSDT.parquet": {
+      "all_equal": true,
+      "funding_hour": "2026-09-25T00:00:00Z",
+      "last_inherited": "2026-09-25T00:00:00Z",
+      "last_inherited_ms": 1790294400002,
+      "stem": "PUMPUSDT",
+      "tape_rate": 5e-05,
+      "venue": "BINANCE_USDTM",
+      "venue_prints_of_the_hour": [
+        [
+          1790294400002,
+          "0.00005000"
+        ]
+      ]
+    },
+    "funding/SOLUSDT.parquet": {
+      "all_equal": true,
+      "funding_hour": "2026-09-25T00:00:00Z",
+      "last_inherited": "2026-09-25T00:00:00Z",
+      "last_inherited_ms": 1790294400002,
+      "stem": "SOLUSDT",
+      "tape_rate": -4.015e-05,
+      "venue": "BINANCE_USDTM",
+      "venue_prints_of_the_hour": [
+        [
+          1790294400002,
+          "-0.00004015"
+        ]
+      ]
+    },
+    "funding/SUIUSDT.parquet": {
+      "all_equal": true,
+      "funding_hour": "2026-09-25T00:00:00Z",
+      "last_inherited": "2026-09-25T00:00:00Z",
+      "last_inherited_ms": 1790294400002,
+      "stem": "SUIUSDT",
+      "tape_rate": 8.347e-05,
+      "venue": "BINANCE_USDTM",
+      "venue_prints_of_the_hour": [
+        [
+          1790294400002,
+          "0.00008347"
+        ]
+      ]
+    },
+    "funding/UNIUSDT.parquet": {
+      "all_equal": true,
+      "funding_hour": "2026-09-25T00:00:00Z",
+      "last_inherited": "2026-09-25T00:00:00Z",
+      "last_inherited_ms": 1790294400002,
+      "stem": "UNIUSDT",
+      "tape_rate": 7.999e-05,
+      "venue": "BINANCE_USDTM",
+      "venue_prints_of_the_hour": [
+        [
+          1790294400002,
+          "0.00007999"
+        ]
+      ]
+    },
+    "funding/XMRUSDT.parquet": {
+      "all_equal": true,
+      "funding_hour": "2026-09-25T00:00:00Z",
+      "last_inherited": "2026-09-25T00:00:00Z",
+      "last_inherited_ms": 1790294400002,
+      "stem": "XMRUSDT",
+      "tape_rate": 0.00025081,
+      "venue": "BINANCE_USDTM",
+      "venue_prints_of_the_hour": [
+        [
+          1790294400002,
+          "0.00025081"
+        ]
+      ]
+    },
+    "funding/ZECUSDT.parquet": {
+      "all_equal": true,
+      "funding_hour": "2026-09-25T00:00:00Z",
+      "last_inherited": "2026-09-25T00:00:00Z",
+      "last_inherited_ms": 1790294400002,
+      "stem": "ZECUSDT",
+      "tape_rate": 0.0001,
+      "venue": "BINANCE_USDTM",
+      "venue_prints_of_the_hour": [
+        [
+          1790294400002,
+          "0.00010000"
+        ]
+      ]
+    }
+  },
+  "funding_all_equal": true,
+  "funding_tapes_audited": 17,
+  "inherited_rows_past_tc11_as_of": {
+    "files_holding_any": [],
+    "files_measured": 73,
+    "law": "the population TC11's audit compared at ITS clone (rows with open + step > the previous pin) is, in the TC12 clone, the rows with open + step > 2026-09-25T00:00:00Z: EMPTY \u2014 recorded, not dropped",
+    "rows": 0
+  },
+  "law": "READ-ONLY: THE SEAM BAR \u2014 the last inherited row of every native in-scope kline file \u2014 compared field by field with the venue's REST bar of the same stamp, and the last inherited funding print of every tape with the venue's print of that hour; NOTHING fetched here is saved; a difference is disclosed, never repaired [L-D.6]",
+  "rows": {
+    "klines/1000BONKUSDT_12h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T12:00:00Z",
+      "inherited_rows": 1,
+      "iv": "12h",
+      "last_open": "2026-09-24T12:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "1000BONKUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/1000BONKUSDT_1h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:00:00Z",
+      "inherited_rows": 1,
+      "iv": "1h",
+      "last_open": "2026-09-24T23:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "1000BONKUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/1000BONKUSDT_4h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T20:00:00Z",
+      "inherited_rows": 1,
+      "iv": "4h",
+      "last_open": "2026-09-24T20:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "1000BONKUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/1000BONKUSDT_5m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:55:00Z",
+      "inherited_rows": 1,
+      "iv": "5m",
+      "last_open": "2026-09-24T23:55:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "1000BONKUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/1000PEPEUSDT_12h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T12:00:00Z",
+      "inherited_rows": 1,
+      "iv": "12h",
+      "last_open": "2026-09-24T12:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "1000PEPEUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/1000PEPEUSDT_1h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:00:00Z",
+      "inherited_rows": 1,
+      "iv": "1h",
+      "last_open": "2026-09-24T23:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "1000PEPEUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/1000PEPEUSDT_4h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T20:00:00Z",
+      "inherited_rows": 1,
+      "iv": "4h",
+      "last_open": "2026-09-24T20:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "1000PEPEUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/1000PEPEUSDT_5m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:55:00Z",
+      "inherited_rows": 1,
+      "iv": "5m",
+      "last_open": "2026-09-24T23:55:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "1000PEPEUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/BNBUSDT_12h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T12:00:00Z",
+      "inherited_rows": 1,
+      "iv": "12h",
+      "last_open": "2026-09-24T12:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "BNBUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/BNBUSDT_1h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:00:00Z",
+      "inherited_rows": 1,
+      "iv": "1h",
+      "last_open": "2026-09-24T23:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "BNBUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/BNBUSDT_4h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T20:00:00Z",
+      "inherited_rows": 1,
+      "iv": "4h",
+      "last_open": "2026-09-24T20:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "BNBUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/BNBUSDT_5m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:55:00Z",
+      "inherited_rows": 1,
+      "iv": "5m",
+      "last_open": "2026-09-24T23:55:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "BNBUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/BTCUSDT_12h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T12:00:00Z",
+      "inherited_rows": 1,
+      "iv": "12h",
+      "last_open": "2026-09-24T12:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "BTCUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/BTCUSDT_15m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:45:00Z",
+      "inherited_rows": 1,
+      "iv": "15m",
+      "last_open": "2026-09-24T23:45:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "BTCUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/BTCUSDT_1h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:00:00Z",
+      "inherited_rows": 1,
+      "iv": "1h",
+      "last_open": "2026-09-24T23:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "BTCUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/BTCUSDT_4h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T20:00:00Z",
+      "inherited_rows": 1,
+      "iv": "4h",
+      "last_open": "2026-09-24T20:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "BTCUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/BTCUSDT_5m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:55:00Z",
+      "inherited_rows": 1,
+      "iv": "5m",
+      "last_open": "2026-09-24T23:55:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "BTCUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/DOGEUSDT_12h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T12:00:00Z",
+      "inherited_rows": 1,
+      "iv": "12h",
+      "last_open": "2026-09-24T12:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "DOGEUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/DOGEUSDT_1h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:00:00Z",
+      "inherited_rows": 1,
+      "iv": "1h",
+      "last_open": "2026-09-24T23:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "DOGEUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/DOGEUSDT_4h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T20:00:00Z",
+      "inherited_rows": 1,
+      "iv": "4h",
+      "last_open": "2026-09-24T20:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "DOGEUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/DOGEUSDT_5m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:55:00Z",
+      "inherited_rows": 1,
+      "iv": "5m",
+      "last_open": "2026-09-24T23:55:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "DOGEUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/ENAUSDT_12h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T12:00:00Z",
+      "inherited_rows": 1,
+      "iv": "12h",
+      "last_open": "2026-09-24T12:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "ENAUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/ENAUSDT_1h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:00:00Z",
+      "inherited_rows": 1,
+      "iv": "1h",
+      "last_open": "2026-09-24T23:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "ENAUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/ENAUSDT_4h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T20:00:00Z",
+      "inherited_rows": 1,
+      "iv": "4h",
+      "last_open": "2026-09-24T20:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "ENAUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/ENAUSDT_5m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:55:00Z",
+      "inherited_rows": 1,
+      "iv": "5m",
+      "last_open": "2026-09-24T23:55:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "ENAUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/ETHUSDT_12h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T12:00:00Z",
+      "inherited_rows": 1,
+      "iv": "12h",
+      "last_open": "2026-09-24T12:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "ETHUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/ETHUSDT_15m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:45:00Z",
+      "inherited_rows": 1,
+      "iv": "15m",
+      "last_open": "2026-09-24T23:45:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "ETHUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/ETHUSDT_1h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:00:00Z",
+      "inherited_rows": 1,
+      "iv": "1h",
+      "last_open": "2026-09-24T23:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "ETHUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/ETHUSDT_4h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T20:00:00Z",
+      "inherited_rows": 1,
+      "iv": "4h",
+      "last_open": "2026-09-24T20:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "ETHUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/ETHUSDT_5m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:55:00Z",
+      "inherited_rows": 1,
+      "iv": "5m",
+      "last_open": "2026-09-24T23:55:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "ETHUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/HYPEUSDT_12h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T12:00:00Z",
+      "inherited_rows": 1,
+      "iv": "12h",
+      "last_open": "2026-09-24T12:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "HYPEUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/HYPEUSDT_1h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:00:00Z",
+      "inherited_rows": 1,
+      "iv": "1h",
+      "last_open": "2026-09-24T23:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "HYPEUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/HYPEUSDT_4h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T20:00:00Z",
+      "inherited_rows": 1,
+      "iv": "4h",
+      "last_open": "2026-09-24T20:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "HYPEUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/HYPEUSDT_5m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:55:00Z",
+      "inherited_rows": 1,
+      "iv": "5m",
+      "last_open": "2026-09-24T23:55:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "HYPEUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/LTCUSDT_12h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T12:00:00Z",
+      "inherited_rows": 1,
+      "iv": "12h",
+      "last_open": "2026-09-24T12:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "LTCUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/LTCUSDT_1h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:00:00Z",
+      "inherited_rows": 1,
+      "iv": "1h",
+      "last_open": "2026-09-24T23:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "LTCUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/LTCUSDT_4h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T20:00:00Z",
+      "inherited_rows": 1,
+      "iv": "4h",
+      "last_open": "2026-09-24T20:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "LTCUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/LTCUSDT_5m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:55:00Z",
+      "inherited_rows": 1,
+      "iv": "5m",
+      "last_open": "2026-09-24T23:55:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "LTCUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/MNTUSDT_BYBIT_12h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T12:00:00Z",
+      "inherited_rows": 1,
+      "iv": "12h",
+      "last_open": "2026-09-24T12:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "MNTUSDT_BYBIT",
+      "venue": "BYBIT_V5_LINEAR"
+    },
+    "klines/MNTUSDT_BYBIT_1h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:00:00Z",
+      "inherited_rows": 1,
+      "iv": "1h",
+      "last_open": "2026-09-24T23:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "MNTUSDT_BYBIT",
+      "venue": "BYBIT_V5_LINEAR"
+    },
+    "klines/MNTUSDT_BYBIT_4h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T20:00:00Z",
+      "inherited_rows": 1,
+      "iv": "4h",
+      "last_open": "2026-09-24T20:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "MNTUSDT_BYBIT",
+      "venue": "BYBIT_V5_LINEAR"
+    },
+    "klines/MNTUSDT_BYBIT_5m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:55:00Z",
+      "inherited_rows": 1,
+      "iv": "5m",
+      "last_open": "2026-09-24T23:55:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "MNTUSDT_BYBIT",
+      "venue": "BYBIT_V5_LINEAR"
+    },
+    "klines/NEARUSDT_12h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T12:00:00Z",
+      "inherited_rows": 1,
+      "iv": "12h",
+      "last_open": "2026-09-24T12:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "NEARUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/NEARUSDT_15m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:45:00Z",
+      "inherited_rows": 1,
+      "iv": "15m",
+      "last_open": "2026-09-24T23:45:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "NEARUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/NEARUSDT_1h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:00:00Z",
+      "inherited_rows": 1,
+      "iv": "1h",
+      "last_open": "2026-09-24T23:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "NEARUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/NEARUSDT_4h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T20:00:00Z",
+      "inherited_rows": 1,
+      "iv": "4h",
+      "last_open": "2026-09-24T20:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "NEARUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/NEARUSDT_5m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:55:00Z",
+      "inherited_rows": 1,
+      "iv": "5m",
+      "last_open": "2026-09-24T23:55:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "NEARUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/PUMPUSDT_12h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T12:00:00Z",
+      "inherited_rows": 1,
+      "iv": "12h",
+      "last_open": "2026-09-24T12:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "PUMPUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/PUMPUSDT_1h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:00:00Z",
+      "inherited_rows": 1,
+      "iv": "1h",
+      "last_open": "2026-09-24T23:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "PUMPUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/PUMPUSDT_4h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T20:00:00Z",
+      "inherited_rows": 1,
+      "iv": "4h",
+      "last_open": "2026-09-24T20:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "PUMPUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/PUMPUSDT_5m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:55:00Z",
+      "inherited_rows": 1,
+      "iv": "5m",
+      "last_open": "2026-09-24T23:55:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "PUMPUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/SOLUSDT_12h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T12:00:00Z",
+      "inherited_rows": 1,
+      "iv": "12h",
+      "last_open": "2026-09-24T12:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "SOLUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/SOLUSDT_15m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:45:00Z",
+      "inherited_rows": 1,
+      "iv": "15m",
+      "last_open": "2026-09-24T23:45:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "SOLUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/SOLUSDT_1h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:00:00Z",
+      "inherited_rows": 1,
+      "iv": "1h",
+      "last_open": "2026-09-24T23:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "SOLUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/SOLUSDT_4h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T20:00:00Z",
+      "inherited_rows": 1,
+      "iv": "4h",
+      "last_open": "2026-09-24T20:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "SOLUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/SOLUSDT_5m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:55:00Z",
+      "inherited_rows": 1,
+      "iv": "5m",
+      "last_open": "2026-09-24T23:55:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "SOLUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/SUIUSDT_12h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T12:00:00Z",
+      "inherited_rows": 1,
+      "iv": "12h",
+      "last_open": "2026-09-24T12:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "SUIUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/SUIUSDT_1h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:00:00Z",
+      "inherited_rows": 1,
+      "iv": "1h",
+      "last_open": "2026-09-24T23:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "SUIUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/SUIUSDT_4h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T20:00:00Z",
+      "inherited_rows": 1,
+      "iv": "4h",
+      "last_open": "2026-09-24T20:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "SUIUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/SUIUSDT_5m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:55:00Z",
+      "inherited_rows": 1,
+      "iv": "5m",
+      "last_open": "2026-09-24T23:55:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "SUIUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/UNIUSDT_12h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T12:00:00Z",
+      "inherited_rows": 1,
+      "iv": "12h",
+      "last_open": "2026-09-24T12:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "UNIUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/UNIUSDT_1h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:00:00Z",
+      "inherited_rows": 1,
+      "iv": "1h",
+      "last_open": "2026-09-24T23:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "UNIUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/UNIUSDT_4h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T20:00:00Z",
+      "inherited_rows": 1,
+      "iv": "4h",
+      "last_open": "2026-09-24T20:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "UNIUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/UNIUSDT_5m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:55:00Z",
+      "inherited_rows": 1,
+      "iv": "5m",
+      "last_open": "2026-09-24T23:55:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "UNIUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/XMRUSDT_12h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T12:00:00Z",
+      "inherited_rows": 1,
+      "iv": "12h",
+      "last_open": "2026-09-24T12:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "XMRUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/XMRUSDT_1h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:00:00Z",
+      "inherited_rows": 1,
+      "iv": "1h",
+      "last_open": "2026-09-24T23:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "XMRUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/XMRUSDT_4h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T20:00:00Z",
+      "inherited_rows": 1,
+      "iv": "4h",
+      "last_open": "2026-09-24T20:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "XMRUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/XMRUSDT_5m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:55:00Z",
+      "inherited_rows": 1,
+      "iv": "5m",
+      "last_open": "2026-09-24T23:55:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "XMRUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/ZECUSDT_12h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T12:00:00Z",
+      "inherited_rows": 1,
+      "iv": "12h",
+      "last_open": "2026-09-24T12:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "ZECUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/ZECUSDT_15m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:45:00Z",
+      "inherited_rows": 1,
+      "iv": "15m",
+      "last_open": "2026-09-24T23:45:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "ZECUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/ZECUSDT_1h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:00:00Z",
+      "inherited_rows": 1,
+      "iv": "1h",
+      "last_open": "2026-09-24T23:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "ZECUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/ZECUSDT_4h.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T20:00:00Z",
+      "inherited_rows": 1,
+      "iv": "4h",
+      "last_open": "2026-09-24T20:00:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "ZECUSDT",
+      "venue": "BINANCE_USDTM"
+    },
+    "klines/ZECUSDT_5m.parquet": {
+      "all_equal": true,
+      "differing": [],
+      "equal_rows": 1,
+      "first_open": "2026-09-24T23:55:00Z",
+      "inherited_rows": 1,
+      "iv": "5m",
+      "last_open": "2026-09-24T23:55:00Z",
+      "missing_at_rest": [],
+      "rest_rows": 1,
+      "stem": "ZECUSDT",
+      "venue": "BINANCE_USDTM"
+    }
+  },
+  "rows_audited": 73,
+  "seed": 20261008,
+  "stage": "TC12-D",
+  "tier": "TIER-C12",
+  "warranty": "these files are described AS OF the pinned last closed 4h bar named here and of no other; bars stamped after it are counted, never read [TC6V-a, carried by TIER-C12]"
+}

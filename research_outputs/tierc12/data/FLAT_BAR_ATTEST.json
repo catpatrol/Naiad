@@ -1,0 +1,1424 @@
+{
+  "as_of_last_closed_4h": "2026-10-08T20:00:00Z",
+  "as_of_last_closed_4h_open": "2026-10-08T16:00:00Z",
+  "bars": [
+    {
+      "archive_form": null,
+      "archive_row": null,
+      "fetch_log_lines_archive": [
+        486,
+        486
+      ],
+      "fetch_log_lines_rest": [
+        485,
+        485
+      ],
+      "lens": "5m",
+      "open": "2019-09-08T18:50:00Z",
+      "open_ms": 1567968600000,
+      "populations": [
+        "a"
+      ],
+      "publication": "rest",
+      "rest_row": [
+        "10000",
+        "10000",
+        "10000",
+        "10000",
+        "0"
+      ],
+      "stem": "BTCUSDT",
+      "tape_row": {
+        "close": 10000.0,
+        "high": 10000.0,
+        "low": 10000.0,
+        "open": 10000.0,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": null,
+      "archive_row": null,
+      "fetch_log_lines_archive": [
+        488,
+        488
+      ],
+      "fetch_log_lines_rest": [
+        487,
+        487
+      ],
+      "lens": "5m",
+      "open": "2019-09-09T00:55:00Z",
+      "open_ms": 1567990500000,
+      "populations": [
+        "a"
+      ],
+      "publication": "rest",
+      "rest_row": [
+        "10391.63",
+        "10391.63",
+        "10391.63",
+        "10391.63",
+        "0"
+      ],
+      "stem": "BTCUSDT",
+      "tape_row": {
+        "close": 10391.63,
+        "high": 10391.63,
+        "low": 10391.63,
+        "open": 10391.63,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": null,
+      "archive_row": null,
+      "fetch_log_lines_archive": [
+        490,
+        490
+      ],
+      "fetch_log_lines_rest": [
+        489,
+        489
+      ],
+      "lens": "5m",
+      "open": "2019-11-28T00:20:00Z",
+      "open_ms": 1574900400000,
+      "populations": [
+        "a"
+      ],
+      "publication": "rest",
+      "rest_row": [
+        "152.52",
+        "152.52",
+        "152.52",
+        "152.52",
+        "0"
+      ],
+      "stem": "ETHUSDT",
+      "tape_row": {
+        "close": 152.52,
+        "high": 152.52,
+        "low": 152.52,
+        "open": 152.52,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "1565.00",
+        "1565.00",
+        "1565.00",
+        "1565.00",
+        "0.000"
+      ],
+      "fetch_log_lines_archive": [
+        492,
+        492
+      ],
+      "fetch_log_lines_rest": [
+        491,
+        491
+      ],
+      "lens": "5m",
+      "open": "2021-03-02T01:35:00Z",
+      "open_ms": 1614648900000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "1565.00",
+        "1565.00",
+        "1565.00",
+        "1565.00",
+        "0.000"
+      ],
+      "stem": "ETHUSDT",
+      "tape_row": {
+        "close": 1565.0,
+        "high": 1565.0,
+        "low": 1565.0,
+        "open": 1565.0,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "15.0526",
+        "15.0526",
+        "15.0526",
+        "15.0526",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        494,
+        494
+      ],
+      "fetch_log_lines_rest": [
+        493,
+        493
+      ],
+      "lens": "5m",
+      "open": "2021-03-02T01:05:00Z",
+      "open_ms": 1614647100000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "15.0526",
+        "15.0526",
+        "15.0526",
+        "15.0526",
+        "0"
+      ],
+      "stem": "SOLUSDT",
+      "tape_row": {
+        "close": 15.0526,
+        "high": 15.0526,
+        "low": 15.0526,
+        "open": 15.0526,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "15.0526",
+        "15.0526",
+        "15.0526",
+        "15.0526",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        494,
+        494
+      ],
+      "fetch_log_lines_rest": [
+        495,
+        495
+      ],
+      "lens": "5m",
+      "open": "2021-03-02T01:10:00Z",
+      "open_ms": 1614647400000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "15.0526",
+        "15.0526",
+        "15.0526",
+        "15.0526",
+        "0"
+      ],
+      "stem": "SOLUSDT",
+      "tape_row": {
+        "close": 15.0526,
+        "high": 15.0526,
+        "low": 15.0526,
+        "open": 15.0526,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "4.1127",
+        "4.1127",
+        "4.1127",
+        "4.1127",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        497,
+        497
+      ],
+      "fetch_log_lines_rest": [
+        496,
+        496
+      ],
+      "lens": "5m",
+      "open": "2021-03-02T01:10:00Z",
+      "open_ms": 1614647400000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "4.1127",
+        "4.1127",
+        "4.1127",
+        "4.1127",
+        "0"
+      ],
+      "stem": "NEARUSDT",
+      "tape_row": {
+        "close": 4.1127,
+        "high": 4.1127,
+        "low": 4.1127,
+        "open": 4.1127,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "2.4810",
+        "2.4810",
+        "2.4810",
+        "2.4810",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        499,
+        499
+      ],
+      "fetch_log_lines_rest": [
+        498,
+        498
+      ],
+      "lens": "5m",
+      "open": "2025-08-29T06:25:00Z",
+      "open_ms": 1756448700000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "2.4810",
+        "2.4810",
+        "2.4810",
+        "2.4810",
+        "0"
+      ],
+      "stem": "NEARUSDT",
+      "tape_row": {
+        "close": 2.481,
+        "high": 2.481,
+        "low": 2.481,
+        "open": 2.481,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "52.58",
+        "52.58",
+        "52.58",
+        "52.58",
+        "0.000"
+      ],
+      "fetch_log_lines_archive": [
+        501,
+        501
+      ],
+      "fetch_log_lines_rest": [
+        500,
+        500
+      ],
+      "lens": "5m",
+      "open": "2020-06-06T06:30:00Z",
+      "open_ms": 1591425000000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "52.58",
+        "52.58",
+        "52.58",
+        "52.58",
+        "0.000"
+      ],
+      "stem": "ZECUSDT",
+      "tape_row": {
+        "close": 52.58,
+        "high": 52.58,
+        "low": 52.58,
+        "open": 52.58,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "123.14",
+        "123.14",
+        "123.14",
+        "123.14",
+        "0.000"
+      ],
+      "fetch_log_lines_archive": [
+        503,
+        503
+      ],
+      "fetch_log_lines_rest": [
+        502,
+        502
+      ],
+      "lens": "5m",
+      "open": "2021-03-02T01:25:00Z",
+      "open_ms": 1614648300000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "123.14",
+        "123.14",
+        "123.14",
+        "123.14",
+        "0.000"
+      ],
+      "stem": "ZECUSDT",
+      "tape_row": {
+        "close": 123.14,
+        "high": 123.14,
+        "low": 123.14,
+        "open": 123.14,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "0.3386000",
+        "0.3386000",
+        "0.3386000",
+        "0.3386000",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        505,
+        505
+      ],
+      "fetch_log_lines_rest": [
+        504,
+        504
+      ],
+      "lens": "5m",
+      "open": "2024-10-28T16:30:00Z",
+      "open_ms": 1730133000000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "0.3386000",
+        "0.3386000",
+        "0.3386000",
+        "0.3386000",
+        "0"
+      ],
+      "stem": "ENAUSDT",
+      "tape_row": {
+        "close": 0.3386,
+        "high": 0.3386,
+        "low": 0.3386,
+        "open": 0.3386,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "0.3409000",
+        "0.3409000",
+        "0.3409000",
+        "0.3409000",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        505,
+        505
+      ],
+      "fetch_log_lines_rest": [
+        506,
+        506
+      ],
+      "lens": "5m",
+      "open": "2024-10-28T20:50:00Z",
+      "open_ms": 1730148600000,
+      "populations": [
+        "a"
+      ],
+      "publication": "archive-only",
+      "rest_row": [
+        "0.3522000",
+        "0.3530000",
+        "0.3507000",
+        "0.3519000",
+        "1457498"
+      ],
+      "stem": "ENAUSDT",
+      "tape_row": {
+        "close": 0.3409,
+        "high": 0.3409,
+        "low": 0.3409,
+        "open": 0.3409,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "0.0032950",
+        "0.0032950",
+        "0.0032950",
+        "0.0032950",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        508,
+        508
+      ],
+      "fetch_log_lines_rest": [
+        507,
+        507
+      ],
+      "lens": "5m",
+      "open": "2025-08-29T06:20:00Z",
+      "open_ms": 1756448400000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "0.0032950",
+        "0.0032950",
+        "0.0032950",
+        "0.0032950",
+        "0"
+      ],
+      "stem": "PUMPUSDT",
+      "tape_row": {
+        "close": 0.003295,
+        "high": 0.003295,
+        "low": 0.003295,
+        "open": 0.003295,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "0.0032950",
+        "0.0032950",
+        "0.0032950",
+        "0.0032950",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        508,
+        508
+      ],
+      "fetch_log_lines_rest": [
+        509,
+        509
+      ],
+      "lens": "5m",
+      "open": "2025-08-29T06:25:00Z",
+      "open_ms": 1756448700000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "0.0032950",
+        "0.0032950",
+        "0.0032950",
+        "0.0032950",
+        "0"
+      ],
+      "stem": "PUMPUSDT",
+      "tape_row": {
+        "close": 0.003295,
+        "high": 0.003295,
+        "low": 0.003295,
+        "open": 0.003295,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "45.02800",
+        "45.02800",
+        "45.02800",
+        "45.02800",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        511,
+        511
+      ],
+      "fetch_log_lines_rest": [
+        510,
+        510
+      ],
+      "lens": "5m",
+      "open": "2025-08-29T06:20:00Z",
+      "open_ms": 1756448400000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "45.02800",
+        "45.02800",
+        "45.02800",
+        "45.02800",
+        "0"
+      ],
+      "stem": "HYPEUSDT",
+      "tape_row": {
+        "close": 45.028,
+        "high": 45.028,
+        "low": 45.028,
+        "open": 45.028,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "45.02800",
+        "45.02800",
+        "45.02800",
+        "45.02800",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        511,
+        511
+      ],
+      "fetch_log_lines_rest": [
+        512,
+        512
+      ],
+      "lens": "5m",
+      "open": "2025-08-29T06:30:00Z",
+      "open_ms": 1756449000000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "45.02800",
+        "45.02800",
+        "45.02800",
+        "45.02800",
+        "0"
+      ],
+      "stem": "HYPEUSDT",
+      "tape_row": {
+        "close": 45.028,
+        "high": 45.028,
+        "low": 45.028,
+        "open": 45.028,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": null,
+      "archive_row": null,
+      "fetch_log_lines_archive": null,
+      "fetch_log_lines_rest": [
+        513,
+        513
+      ],
+      "lens": "5m",
+      "open": "2023-10-18T23:45:00Z",
+      "open_ms": 1697672700000,
+      "populations": [
+        "a"
+      ],
+      "publication": "rest",
+      "rest_row": [
+        "0.32049",
+        "0.32049",
+        "0.32049",
+        "0.32049",
+        "0"
+      ],
+      "stem": "MNTUSDT_BYBIT",
+      "tape_row": {
+        "close": 0.32049,
+        "high": 0.32049,
+        "low": 0.32049,
+        "open": 0.32049,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BYBIT_V5_LINEAR"
+    },
+    {
+      "archive_form": null,
+      "archive_row": null,
+      "fetch_log_lines_archive": null,
+      "fetch_log_lines_rest": [
+        514,
+        514
+      ],
+      "lens": "5m",
+      "open": "2023-10-29T12:35:00Z",
+      "open_ms": 1698582900000,
+      "populations": [
+        "a"
+      ],
+      "publication": "rest",
+      "rest_row": [
+        "0.37928",
+        "0.37928",
+        "0.37928",
+        "0.37928",
+        "0"
+      ],
+      "stem": "MNTUSDT_BYBIT",
+      "tape_row": {
+        "close": 0.37928,
+        "high": 0.37928,
+        "low": 0.37928,
+        "open": 0.37928,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BYBIT_V5_LINEAR"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "0.445300",
+        "0.445300",
+        "0.445300",
+        "0.445300",
+        "0.0"
+      ],
+      "fetch_log_lines_archive": [
+        516,
+        516
+      ],
+      "fetch_log_lines_rest": [
+        515,
+        515
+      ],
+      "lens": "5m",
+      "open": "2023-09-12T08:35:00Z",
+      "open_ms": 1694507700000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "0.445300",
+        "0.445300",
+        "0.445300",
+        "0.445300",
+        "0.0"
+      ],
+      "stem": "SUIUSDT",
+      "tape_row": {
+        "close": 0.4453,
+        "high": 0.4453,
+        "low": 0.4453,
+        "open": 0.4453,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "1.646200",
+        "1.646200",
+        "1.646200",
+        "1.646200",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        518,
+        518
+      ],
+      "fetch_log_lines_rest": [
+        517,
+        517
+      ],
+      "lens": "5m",
+      "open": "2024-10-28T16:30:00Z",
+      "open_ms": 1730133000000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "1.646200",
+        "1.646200",
+        "1.646200",
+        "1.646200",
+        "0"
+      ],
+      "stem": "SUIUSDT",
+      "tape_row": {
+        "close": 1.6462,
+        "high": 1.6462,
+        "low": 1.6462,
+        "open": 1.6462,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "175.33",
+        "175.33",
+        "175.33",
+        "175.33",
+        "0.000"
+      ],
+      "fetch_log_lines_archive": [
+        520,
+        520
+      ],
+      "fetch_log_lines_rest": [
+        519,
+        519
+      ],
+      "lens": "5m",
+      "open": "2021-03-02T01:30:00Z",
+      "open_ms": 1614648600000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "175.33",
+        "175.33",
+        "175.33",
+        "175.33",
+        "0.000"
+      ],
+      "stem": "LTCUSDT",
+      "tape_row": {
+        "close": 175.33,
+        "high": 175.33,
+        "low": 175.33,
+        "open": 175.33,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "175.33",
+        "175.33",
+        "175.33",
+        "175.33",
+        "0.000"
+      ],
+      "fetch_log_lines_archive": [
+        520,
+        520
+      ],
+      "fetch_log_lines_rest": [
+        521,
+        521
+      ],
+      "lens": "5m",
+      "open": "2021-03-02T01:55:00Z",
+      "open_ms": 1614650100000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "175.33",
+        "175.33",
+        "175.33",
+        "175.33",
+        "0.000"
+      ],
+      "stem": "LTCUSDT",
+      "tape_row": {
+        "close": 175.33,
+        "high": 175.33,
+        "low": 175.33,
+        "open": 175.33,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "63.99",
+        "63.99",
+        "63.99",
+        "63.99",
+        "0.000"
+      ],
+      "fetch_log_lines_archive": [
+        523,
+        523
+      ],
+      "fetch_log_lines_rest": [
+        522,
+        522
+      ],
+      "lens": "5m",
+      "open": "2020-06-20T07:55:00Z",
+      "open_ms": 1592639700000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "63.99",
+        "63.99",
+        "63.99",
+        "63.99",
+        "0.000"
+      ],
+      "stem": "XMRUSDT",
+      "tape_row": {
+        "close": 63.99,
+        "high": 63.99,
+        "low": 63.99,
+        "open": 63.99,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "161.17",
+        "161.17",
+        "161.17",
+        "161.17",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        525,
+        525
+      ],
+      "fetch_log_lines_rest": [
+        524,
+        524
+      ],
+      "lens": "5m",
+      "open": "2024-10-28T21:00:00Z",
+      "open_ms": 1730149200000,
+      "populations": [
+        "a"
+      ],
+      "publication": "archive-only",
+      "rest_row": [
+        "161.53",
+        "161.68",
+        "161.08",
+        "161.42",
+        "425.812"
+      ],
+      "stem": "XMRUSDT",
+      "tape_row": {
+        "close": 161.17,
+        "high": 161.17,
+        "low": 161.17,
+        "open": 161.17,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "596.040",
+        "596.040",
+        "596.040",
+        "596.040",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        527,
+        527
+      ],
+      "fetch_log_lines_rest": [
+        526,
+        526
+      ],
+      "lens": "5m",
+      "open": "2024-10-28T20:20:00Z",
+      "open_ms": 1730146800000,
+      "populations": [
+        "a"
+      ],
+      "publication": "archive-only",
+      "rest_row": [
+        "597.560",
+        "597.730",
+        "597.160",
+        "597.700",
+        "1708.48"
+      ],
+      "stem": "BNBUSDT",
+      "tape_row": {
+        "close": 596.04,
+        "high": 596.04,
+        "low": 596.04,
+        "open": 596.04,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "596.040",
+        "596.040",
+        "596.040",
+        "596.040",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        527,
+        527
+      ],
+      "fetch_log_lines_rest": [
+        528,
+        528
+      ],
+      "lens": "5m",
+      "open": "2024-10-28T20:55:00Z",
+      "open_ms": 1730148900000,
+      "populations": [
+        "a"
+      ],
+      "publication": "archive-only",
+      "rest_row": [
+        "597.420",
+        "598.300",
+        "597.340",
+        "598.300",
+        "669.48"
+      ],
+      "stem": "BNBUSDT",
+      "tape_row": {
+        "close": 596.04,
+        "high": 596.04,
+        "low": 596.04,
+        "open": 596.04,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "7.6120",
+        "7.6120",
+        "7.6120",
+        "7.6120",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        530,
+        530
+      ],
+      "fetch_log_lines_rest": [
+        529,
+        529
+      ],
+      "lens": "5m",
+      "open": "2024-10-28T20:35:00Z",
+      "open_ms": 1730147700000,
+      "populations": [
+        "a"
+      ],
+      "publication": "archive-only",
+      "rest_row": [
+        "7.6640",
+        "7.6660",
+        "7.6430",
+        "7.6650",
+        "14531"
+      ],
+      "stem": "UNIUSDT",
+      "tape_row": {
+        "close": 7.612,
+        "high": 7.612,
+        "low": 7.612,
+        "open": 7.612,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "7.6120",
+        "7.6120",
+        "7.6120",
+        "7.6120",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        530,
+        530
+      ],
+      "fetch_log_lines_rest": [
+        531,
+        531
+      ],
+      "lens": "5m",
+      "open": "2024-10-28T20:55:00Z",
+      "open_ms": 1730148900000,
+      "populations": [
+        "a"
+      ],
+      "publication": "archive-only",
+      "rest_row": [
+        "7.6280",
+        "7.6410",
+        "7.6220",
+        "7.6410",
+        "14385"
+      ],
+      "stem": "UNIUSDT",
+      "tape_row": {
+        "close": 7.612,
+        "high": 7.612,
+        "low": 7.612,
+        "open": 7.612,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "0.0087688",
+        "0.0087688",
+        "0.0087688",
+        "0.0087688",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        533,
+        533
+      ],
+      "fetch_log_lines_rest": [
+        532,
+        532
+      ],
+      "lens": "5m",
+      "open": "2024-10-28T16:25:00Z",
+      "open_ms": 1730132700000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "0.0087688",
+        "0.0087688",
+        "0.0087688",
+        "0.0087688",
+        "0"
+      ],
+      "stem": "1000PEPEUSDT",
+      "tape_row": {
+        "close": 0.0087688,
+        "high": 0.0087688,
+        "low": 0.0087688,
+        "open": 0.0087688,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "0.0089121",
+        "0.0089121",
+        "0.0089121",
+        "0.0089121",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        533,
+        533
+      ],
+      "fetch_log_lines_rest": [
+        534,
+        534
+      ],
+      "lens": "5m",
+      "open": "2024-10-28T20:05:00Z",
+      "open_ms": 1730145900000,
+      "populations": [
+        "a"
+      ],
+      "publication": "archive-only",
+      "rest_row": [
+        "0.0089521",
+        "0.0089619",
+        "0.0089176",
+        "0.0089222",
+        "272802061"
+      ],
+      "stem": "1000PEPEUSDT",
+      "tape_row": {
+        "close": 0.0089121,
+        "high": 0.0089121,
+        "low": 0.0089121,
+        "open": 0.0089121,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "0.051547",
+        "0.051547",
+        "0.051547",
+        "0.051547",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        536,
+        536
+      ],
+      "fetch_log_lines_rest": [
+        535,
+        535
+      ],
+      "lens": "5m",
+      "open": "2021-03-02T01:05:00Z",
+      "open_ms": 1614647100000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "0.051547",
+        "0.051547",
+        "0.051547",
+        "0.051547",
+        "0"
+      ],
+      "stem": "DOGEUSDT",
+      "tape_row": {
+        "close": 0.051547,
+        "high": 0.051547,
+        "low": 0.051547,
+        "open": 0.051547,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "0.082210",
+        "0.082210",
+        "0.082210",
+        "0.082210",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        538,
+        538
+      ],
+      "fetch_log_lines_rest": [
+        537,
+        537
+      ],
+      "lens": "5m",
+      "open": "2022-05-28T16:45:00Z",
+      "open_ms": 1653756300000,
+      "populations": [
+        "a"
+      ],
+      "publication": "both",
+      "rest_row": [
+        "0.082210",
+        "0.082210",
+        "0.082210",
+        "0.082210",
+        "0"
+      ],
+      "stem": "DOGEUSDT",
+      "tape_row": {
+        "close": 0.08221,
+        "high": 0.08221,
+        "low": 0.08221,
+        "open": 0.08221,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "0.0207030",
+        "0.0207030",
+        "0.0207030",
+        "0.0207030",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        540,
+        540
+      ],
+      "fetch_log_lines_rest": [
+        539,
+        539
+      ],
+      "lens": "5m",
+      "open": "2024-10-28T20:05:00Z",
+      "open_ms": 1730145900000,
+      "populations": [
+        "a"
+      ],
+      "publication": "archive-only",
+      "rest_row": [
+        "0.0208150",
+        "0.0208330",
+        "0.0207440",
+        "0.0207620",
+        "15054728"
+      ],
+      "stem": "1000BONKUSDT",
+      "tape_row": {
+        "close": 0.020703,
+        "high": 0.020703,
+        "low": 0.020703,
+        "open": 0.020703,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    },
+    {
+      "archive_form": "daily",
+      "archive_row": [
+        "0.0207030",
+        "0.0207030",
+        "0.0207030",
+        "0.0207030",
+        "0"
+      ],
+      "fetch_log_lines_archive": [
+        540,
+        540
+      ],
+      "fetch_log_lines_rest": [
+        541,
+        541
+      ],
+      "lens": "5m",
+      "open": "2024-10-28T20:35:00Z",
+      "open_ms": 1730147700000,
+      "populations": [
+        "a"
+      ],
+      "publication": "archive-only",
+      "rest_row": [
+        "0.0208390",
+        "0.0208780",
+        "0.0208140",
+        "0.0208380",
+        "16397896"
+      ],
+      "stem": "1000BONKUSDT",
+      "tape_row": {
+        "close": 0.020703,
+        "high": 0.020703,
+        "low": 0.020703,
+        "open": 0.020703,
+        "volume": 0.0
+      },
+      "tc12_added_row": false,
+      "venue": "BINANCE_USDTM"
+    }
+  ],
+  "by_publication": {
+    "archive-only": 9,
+    "both": 20,
+    "neither": 0,
+    "rest": 5,
+    "rest-only": 0
+  },
+  "captured_wall_clock_utc": "2026-10-09T22:22:31Z",
+  "law": "the venue's answers for (a) the seeded 5m zero-volume-flat-bar sample and (b) every zero-volume flat bar among the rows TC12 added, captured ONCE by the builder and sealed; F-D-2 [4] re-derives both populations from the snapshot and holds every bar field-equal to its sealed venue row. THE CLAIM IS 'Naiad inserted no bar', NOT 'the venue published no flat bar' [L-D.13]",
+  "n_bars": 34,
+  "n_per_stem": 2,
+  "n_per_stem_source": "scripts/tierc10_data_fixtures.py fd2_real: the first argument of `min` in `size=` of rng.choice (read by AST)",
+  "n_population_a": 34,
+  "n_population_b": 0,
+  "publications": [
+    "both",
+    "rest",
+    "rest-only",
+    "archive-only",
+    "neither"
+  ],
+  "seed": 20261008,
+  "stage": "TC12-D",
+  "stream": "numpy.random.default_rng([seed, crc32('data|F-D-2 [4]')])",
+  "tier": "TIER-C12",
+  "warranty": "these files are described AS OF the pinned last closed 4h bar named here and of no other; bars stamped after it are counted, never read [TC6V-a, carried by TIER-C12]"
+}

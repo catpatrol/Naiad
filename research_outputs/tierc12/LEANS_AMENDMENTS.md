@@ -884,3 +884,15 @@ row's population, arms, statistic, verdict rule or labels moves.
 **Reason.** A build fact met at the TC12-D gate. Mechanics of two fixture suites only: no registered row's population, arms, statistic, verdict rule or labels moves.
 
 **Redone.** The suite named is repaired under this amendment before the TC12-D gate; no transcript of record of an earlier gate moves.
+
+---
+
+## AM-70 · 2026-10-10 (~00:29Z) · L-0.4, L-0.9 · ruling on AP-69
+
+**Text amended.** AM-69, which this entry CORRECTS (an amendment is never edited): its statement of how the resume suite's walk chooses the last record, and its order that `scripts/tierc12_resume_fixtures.py` be repaired.
+
+**Amended to.** AM-69's LAW stands as the reading of L-0.4 (1) — the last record naming a path is taken over every record on file, and an entry a later record re-records is held to the blob at the commit that closed its own record. AM-69's PREMISE and REPAIR ORDER are withdrawn: the suite already does this, was not edited, and is not re-recorded by TC12-D. The orchestrator's error was to read the scope of the walk as the scope of 'last'. One limit is stated and left as built: at a gate's OWN row, an entry of that gate's record which a later record re-records is held to nothing, because the commit that closed the record lies after `--at`; from the next row on it is held to its blob.
+
+**Reason.** A build fact reported by the repair unit and checked on the tree: the sweep of earlier gates is GREEN with the suite's bytes unchanged. Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing.

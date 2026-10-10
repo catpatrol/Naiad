@@ -17,6 +17,15 @@ PRE-SUBSTRATE: no bar is read, no book exists, no env is imported, no network is
 registry (registrations/REGISTRATIONS.json) is filed after the pin files in the same record; its
 two clauses assert on the filed payloads when it is on file and say so in one line when it is not.
 
+THE ESTATE AS OF THE GATE [AM-68]: a transcript of record states the estate as of its gate, so the
+number of amendments ON FILE that F-VETO prints is the number of `## AM-` headings in the BLOB of
+LEANS_AMENDMENTS.md at the commit that first adds registrations/REGISTRATIONS.json
+(`git log --diff-filter=A --format=%H -- <path>`, the oldest; read-only, --no-optional-locks) —
+immutable, so an amendment filed later cannot move the line — and the working file's count when
+the tree holds no such commit (this tree at its own gate, before the commit; a scratch tree).
+ONLY THE COUNT PRINTED is read there.  The JUDGMENT is unchanged and reads EVERY amendment on the
+working file: an amendment that changes a pin, filed at any time, is still held by the veto law.
+
 Run (stdlib only; the transcript is pins/FIXTURES_PINS.txt):
   ~/venvs/naiad/bin/python -B /Users/luis/Naiad/scripts/tierc12_pins_fixtures.py
       [--root=DIR] [--refile-transcript] [<leg filter> ...]
@@ -27,7 +36,10 @@ from __future__ import annotations
 import ast
 import importlib.util
 import json
+import os
+import re
 import shutil
+import subprocess
 import sys
 import tempfile
 from fractions import Fraction
@@ -44,6 +56,7 @@ MAIN = PINS.main_tree(ROOT)
 T12 = ROOT / "research_outputs" / "tierc12"
 TRANSCRIPT = "FIXTURES_PINS.txt"
 REGISTRY = T12 / "registrations" / "REGISTRATIONS.json"
+REGISTRY_REL = REGISTRY.relative_to(ROOT).as_posix()                # the same path, as git names it
 VENUE_PROBE = "research_outputs/tierc10/data/VENUE_PROBE.json"      # TC10's Stage D probe [L-D.10]
 BANNER = ("TIER-C12 TC12-REG PINS FIXTURES — L-0.17 the contract pin door, the pin map, the pin "
           "register, the totality · L-0.23 the veto map · L-0.18 the families — break leg first, "
@@ -164,6 +177,9 @@ ABBREV_MIN_T = 8                 # "whole or abbreviated": a hex run of at least
 FLOW_PINS_T = ("fam.q", "fam.G", "fam.R", "fam.S")
 SHADOW_OLD_T = "        q = values[FAM_Q]\n"
 SHADOW_NEW_T = "        q = Fraction(1, 10)\n"
+# the gate instant [AM-68]: the read-only verbs asked of the tree, and the form of a commit id
+GIT_RO_T = ("log", "cat-file")
+COMMIT_RX_T = re.compile(r"[0-9a-f]{40}|[0-9a-f]{64}")
 
 DATA_FILES = (PINS.MAP_NAME, PINS.PINS_NAME, PINS.REGISTER_NAME, PINS.UNPINNED_NAME)
 _TMP: list = []
@@ -535,6 +551,64 @@ def registry_on_file():
     return REGISTRY.read_text(encoding="utf-8") if REGISTRY.exists() else None
 
 
+# ═══════════════════════════════════════════════ THE ESTATE AS OF THE GATE [AM-68]
+def git_ro(root, *args) -> tuple:
+    """(exit code, stdout bytes) of one READ-ONLY git call on `root`, out of process: the verbs of
+    GIT_RO_T and no other, no optional lock taken.  No GIT_* variable of the caller reaches git —
+    `-C root` alone names the repository."""
+    if args[0] not in GIT_RO_T:
+        raise RuntimeError(f"git {args[0]} is not a read-only verb of this suite")
+    env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_")}
+    env["GIT_OPTIONAL_LOCKS"] = "0"
+    r = subprocess.run(["git", "--no-optional-locks", "-C", str(Path(root).resolve()), *args],
+                       stdin=subprocess.DEVNULL, capture_output=True, env=env)
+    return r.returncode, r.stdout
+
+
+def registry_commit(root):
+    """The commit that FIRST adds registrations/REGISTRATIONS.json — the instant of this suite's
+    gate on record [AM-68; the registry commit of AM-67] — or None when the tree holds no such
+    commit (a tree at its own TC12-REG gate, before the commit; a scratch tree; no repository)."""
+    rc, out = git_ro(root, "log", "--diff-filter=A", "--format=%H", "--", REGISTRY_REL)
+    shas = ([s for s in out.decode("ascii", "replace").split() if COMMIT_RX_T.fullmatch(s)]
+            if rc == 0 else [])
+    return shas[-1] if shas else None       # `git log` prints newest first: the last is the oldest
+
+
+def gate_amendments(root) -> tuple:
+    """(the registry commit, the bytes of the BLOB of LEANS_AMENDMENTS.md at that commit) —
+    (None, None) when the tree holds no registry commit.  A registry commit that holds no such
+    blob is a tree AM-68 names no count for: it raises, and the leg reads FAIL."""
+    commit = registry_commit(root)
+    if commit is None:
+        return None, None
+    rc, blob = git_ro(root, "cat-file", "blob", f"{commit}:{PINS.AMENDMENTS_REL}")
+    if rc:
+        raise RuntimeError(f"the registry commit {commit} holds no blob of {PINS.AMENDMENTS_REL} "
+                           f"— AM-68 names no count of amendments for such a tree")
+    return commit, blob
+
+
+def on_file_at_gate(d: PINS.Door) -> int:
+    """The number of amendments ON FILE that F-VETO PRINTS [AM-68]: the door's own count
+    (`amendment_sections`, one per `## AM-` heading) over the blob of LEANS_AMENDMENTS.md at the
+    registry commit, and over the door's working file when the tree holds no such commit — as
+    before.  ONLY THE COUNT: what the leg JUDGES is every amendment on the working file
+    (`veto_findings` over `d`), filed at any time."""
+    commit, blob = gate_amendments(d.root)
+    if commit is None:
+        FX.clock(f"[AM-68] no commit of this tree adds {REGISTRY_REL}: the count of amendments "
+                 f"printed is the working file's")
+        return len(d.amendment_sections())
+    p = Path(_TMP[0]) / "AM_AT_GATE.md"
+    p.write_bytes(blob)
+    n = len(PINS.Door(root=d.root, amendments=p, main=d.main).amendment_sections())
+    FX.clock(f"[AM-68] registry commit {commit}: {n} amendment(s) stand in its blob of "
+             f"{PINS.AMENDMENTS_REL} — the count printed; the working file holds "
+             f"{len(d.amendment_sections())}, every one of them judged")
+    return n
+
+
 # ═══════════════════════════════════════════════ F-PINS
 def pins_break():
     reg_sha = stamp_shas()[STAMP_SETS_T[0]]
@@ -681,7 +755,7 @@ def veto_real():
            + " · ".join(f"\"{t}\" -> {', '.join(rows[t])}" for t, _ in VETO_TOKENS_T)
            + f"; the {sum(1 for _, v in VETO_TOKENS_T if v)} parenthesised values each parse "
              f"equal to their stage-text citation (second citations of the map); "
-             f"{len(d.amendment_sections())} amendment(s) on file, "
+             f"{on_file_at_gate(d)} amendment(s) on file, "
              f"{sum(len(s['pins']) for s in d.amendment_sections())} changing a pin; control "
              f"GREEN: a quoted operator veto \"breadth\" is read by the door as brd.cut = (3, 5), "
              f"the filed contract value {d.pin('brd.cut')} untouched")

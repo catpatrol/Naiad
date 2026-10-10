@@ -1,0 +1,186 @@
+{
+ "stage": "TC12-D",
+ "parent": null,
+ "status": "COMPLETE-VERIFIED",
+ "as_of": "2026-10-08T20:00:00Z",
+ "blockers": [],
+ "depends_on": [
+  "STEP Q",
+  "TC12-R0",
+  "TC12-LEANS",
+  "TC12-REG",
+  "TC12-REG.ledger-spec"
+ ],
+ "artifact_shas": {
+  "scripts/tierc12_data.py": {
+   "bytes": 246028,
+   "sha256": "6bf8a2376381dec79aeddbae1db054c239e149ed72c20f6e973b28c9958c1cd1"
+  },
+  "scripts/tierc12_data_fixtures.py": {
+   "bytes": 181608,
+   "sha256": "a9533f662175620f3e0c94934f2d3fa3b0b880131299987047daaad315b683aa"
+  },
+  "scripts/tierc12_tick.py": {
+   "bytes": 7682,
+   "sha256": "fbd5ea693957ad7d08aebd0fc4249bbf4e8e51d0354cb48bd44a6f74e3c29195"
+  },
+  "research_outputs/tierc12/data/AS_OF_PIN.json": {
+   "bytes": 3737,
+   "sha256": "229bc94d7cfdcfe90c65834972a51593a2604bbb5db76c63d48ebf3a591482d8"
+  },
+  "research_outputs/tierc12/data/CLONE_ATTEST.json": {
+   "bytes": 56138,
+   "sha256": "cec2320ec24d166f77ae5dd5ea30d47e2f24935073558b66a73e34e8451a0932"
+  },
+  "research_outputs/tierc12/data/CONTRACT_SPECS.json": {
+   "bytes": 57453,
+   "sha256": "f4de2bfba19e073101e7d2ca9e231b087fd07c582ca3a082c9e3f98834b983af"
+  },
+  "research_outputs/tierc12/data/PRE_STATE.json": {
+   "bytes": 62661,
+   "sha256": "0ca88883968a6e15c7263a7a75b2a954d99e263bf3929614bb06894423645966"
+  },
+  "research_outputs/tierc12/data/EDGE_AUDIT.json": {
+   "bytes": 33976,
+   "sha256": "e29738afaf53d2600d991a08ee2a2c0ba560fd0557e1b468ebcb531f3c737b7e"
+  },
+  "research_outputs/tierc12/data/FEE_SOURCE.json": {
+   "bytes": 2341,
+   "sha256": "83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103"
+  },
+  "research_outputs/tierc12/data/FEE_GRAMMAR.json": {
+   "bytes": 1704,
+   "sha256": "d36e311416ae975b2246a4854785259b386a6da875a175dbaa0cdd0b5147e824"
+  },
+  "research_outputs/tierc12/data/FLAT_BAR_ATTEST.json": {
+   "bytes": 28786,
+   "sha256": "1de6db0af9fac9848ceefcf94b76cbaa68204d068ab34b10d0fb86dfd2a004a6"
+  },
+  "research_outputs/tierc12/data/FETCH_LOG.jsonl": {
+   "bytes": 164012,
+   "sha256": "dc6ad55d8594be4759e8a749aa60c7e824af2334d1f367137ea78a999dc8b2a0"
+  },
+  "research_outputs/tierc12/data/WRITE_ONCE_SEAL.json": {
+   "bytes": 3034,
+   "sha256": "bf3e4a95de9184124b42e697ae9c6f3389f608524c6bf11662b44cce2af9617f"
+  },
+  "research_outputs/tierc12/data/STAGE_D_MANIFEST.json": {
+   "bytes": 667123,
+   "sha256": "dcddc5f7d08d0f0bc9805ff79b611d80052d43566b38d1b83d9906964092e8b8"
+  },
+  "research_outputs/tierc12/data/STAGE_D_MANIFEST.md": {
+   "bytes": 43557,
+   "sha256": "00be8ed2ac168a6d69137e88c2b23b63e9be391da07460378f716085baae7dfa"
+  },
+  "research_outputs/tierc12/data/fee_schedule.json": {
+   "bytes": 43527,
+   "sha256": "f450924c178a0ecdd858c27d147371aa61fd4f52a6a41dcbecabb432f950eb89"
+  },
+  "research_outputs/tierc12/data/TICK_GRID_AUDIT.json": {
+   "bytes": 303212,
+   "sha256": "e24046ff334873c6c27681afdcdf9a53e2862a9bd050154e52224008f18cea4e"
+  },
+  "research_outputs/tierc12/data/FIXTURES_DATA.txt": {
+   "bytes": 57853,
+   "sha256": "09298818960463a84c4847edd2a9ad25987d7afc147c75d831ce9d0fd8c43b97"
+  },
+  "research_outputs/tierc12/forward/BOOK4_FREEZE.json": {
+   "bytes": 513,
+   "sha256": "4a4d98fe55b69861c2cbeeeec015989f5ec806b2de4c200452480848dba29783"
+  },
+  "scripts/tierc12_closure_fixtures.py": {
+   "bytes": 129346,
+   "sha256": "b690e86347a12bd1397b659f460a00e7dcea16bd52ba2cf9d06c20a1d75ea131"
+  },
+  "scripts/tierc12_registrations_fixtures.py": {
+   "bytes": 95689,
+   "sha256": "c578c0e0fa9f646af18f2547e4f3315629839a24c4af7db72ef9b275d585225e"
+  },
+  "scripts/tierc12_pins_fixtures.py": {
+   "bytes": 50219,
+   "sha256": "5cf6d7d913f8a4653455f292f1cc776beadde48030660607f910ee5d75213c12"
+  },
+  "research_outputs/tierc12/LEANS_AMENDMENTS.md": {
+   "bytes": 74549,
+   "sha256": "fa90f30cba690e0986ec5a7014ceaeaf1224cb09eff965096bf66712bbdfb017"
+  },
+  "research_outputs/tierc12/AMENDMENTS_PROPOSED.md": {
+   "bytes": 96962,
+   "sha256": "5733ada4dcc5d539e697eb77fbebcabb978a3899c5edd341e62ddde6ddc2d0bb"
+  },
+  "research_outputs/tierc12/DISCLOSURES_BUILD.md": {
+   "bytes": 8030,
+   "sha256": "953754c8a7c67f929673d07985309e333f64268f87a8f36642f3aab3befbd5ff"
+  },
+  "research_outputs/tierc12/closure/FIXTURES_CLOSURE_TC12-D.txt": {
+   "bytes": 27023,
+   "sha256": "e86a8406a5d8b80fe7bf7fbdfee0f200612e9b54a9f2e7f603b8ce068f761353"
+  },
+  "research_outputs/tierc12/resume/FIXTURES_RESUME_TC12-D.txt": {
+   "bytes": 31727,
+   "sha256": "39915bcd363a10ee9d7370a6ba2505bdf40e0602b50f39d908f75f31f0bc2507"
+  }
+ },
+ "supersedes": [],
+ "fixtures": [
+  {
+   "suite": "scripts/tierc12_data_fixtures.py",
+   "transcript": "research_outputs/tierc12/data/FIXTURES_DATA.txt",
+   "provenance": false,
+   "exit_code": 0,
+   "legs_red": 0,
+   "legs_not_run": 0,
+   "legs_total": 41,
+   "transcript_drift": false,
+   "transcript_sha_before": "09298818960463a84c4847edd2a9ad25987d7afc147c75d831ce9d0fd8c43b97",
+   "transcript_sha_after": "09298818960463a84c4847edd2a9ad25987d7afc147c75d831ce9d0fd8c43b97",
+   "wall_seconds": 33.2
+  },
+  {
+   "suite": "scripts/tierc12_closure_fixtures.py --stage=TC12-D",
+   "transcript": "research_outputs/tierc12/closure/FIXTURES_CLOSURE_TC12-D.txt",
+   "provenance": false,
+   "exit_code": 0,
+   "legs_red": 0,
+   "legs_not_run": 0,
+   "legs_total": 6,
+   "transcript_drift": false,
+   "transcript_sha_before": "e86a8406a5d8b80fe7bf7fbdfee0f200612e9b54a9f2e7f603b8ce068f761353",
+   "transcript_sha_after": "e86a8406a5d8b80fe7bf7fbdfee0f200612e9b54a9f2e7f603b8ce068f761353",
+   "wall_seconds": 32.7
+  },
+  {
+   "suite": "scripts/tierc12_resume_fixtures.py --stage=TC12-D --at=8fba5a9fba9c08e61a0a1e5470057d4144e1ad0b",
+   "transcript": "research_outputs/tierc12/resume/FIXTURES_RESUME_TC12-D.txt",
+   "provenance": false,
+   "exit_code": 0,
+   "legs_red": 0,
+   "legs_not_run": 0,
+   "legs_total": 10,
+   "transcript_drift": false,
+   "transcript_sha_before": "39915bcd363a10ee9d7370a6ba2505bdf40e0602b50f39d908f75f31f0bc2507",
+   "transcript_sha_after": "39915bcd363a10ee9d7370a6ba2505bdf40e0602b50f39d908f75f31f0bc2507",
+   "wall_seconds": 9.2
+  }
+ ],
+ "one_line": "the substrate topped up to the pin 2026-10-08T20:00:00Z (close ms 1791489600000, derived from the STEP Q instant, proven closed on both venue clocks; latest closed 4h at the pin run 2026-10-09T20:00:00Z): snapshot tc12_20261008 = an APFS clone of tc11_20260925 (176 files re-hashed equal to TC11's manifest before any extension), extended by REST with zero overlap — rows added 5m 67728 · 15m 6640 · 1h 5644 · 4h 1411 · 12h 459 · derived 1d 221 · 1w 34 · funding 865; 124 in-scope files complete, 0 gaps, 0 rows past the pin, every prefix bit-identical to TC11's snapshot; maker pin 2.0 bps/side on both venues, ON FILE — NOT RE-CONFIRMED (both fee pages unretrievable: Binance HTTP 202, Bybit HTTP 403); tick of record captured for 17 stems, 24 stem-months (ENAUSDT) coarser than the recorded tick listed; 41 legs GREEN, transcript byte-identical on the filing run and three fresh re-runs",
+ "notes": [
+  "THE PIN: 1791489600000 = 2026-10-08T20:00:00Z (open 2026-10-08T16:00:00Z), derived from progress/STEP_Q.json's instant 2026-10-08T22:52:13Z (never typed), equal to O-7's printed value and 83 4h bars past TC11's pin; VENUE PROOF (data/AS_OF_PIN.json, write-once, sealed): Binance closeTime of the pinned BTCUSDT 4h bar 1791489599999 < Binance serverTime 1791584268811 (2026-10-09T22:17:48Z); Bybit served the pinned MNTUSDT 4h bar and its envelope clock 1791584270093 (2026-10-09T22:17:50Z) is past the pin; LATEST-AT-FETCH BAR: latest closed 4h at the pin run 2026-10-09T20:00:00Z (pin_equals_latest_closed_at_pin_run False — a fact, not a fault); kind='clock' rows filed at --pin and --fetch",
+  "THE SNAPSHOT (outside the repo, never in artifact_shas — see the finding below): /Users/luis/.cache/naiad/snapshots/tc12_20261008 — 176 files, 859258689 bytes; every file's sha256, bytes and content_sha are pinned in the tracked data/STAGE_D_MANIFEST.json (sha256 dcddc5f7d08d0f0bc9805ff79b611d80052d43566b38d1b83d9906964092e8b8): files[] (124 in scope) + out_of_scope_snapshot_files[] (52, untouched since TC11); manifest `complete` = True",
+  "LAST BAR PER LENS at the pin (all 17 stems, the five home assets among them; open of the last bar): 5m 2026-10-08T19:55:00Z · 15m 2026-10-08T19:45:00Z · 1h 2026-10-08T19:00:00Z · 4h 2026-10-08T16:00:00Z · 12h 2026-10-08T00:00:00Z · 1d 2026-10-07T00:00:00Z · 1w 2026-09-28T00:00:00Z; FUNDING EDGE: BTC 2026-10-08T16:00:00Z (8h) · ETH 2026-10-08T16:00:00Z (8h) · SOL 2026-10-08T16:00:00Z (8h) · NEAR 2026-10-08T16:00:00Z (8h) · ZEC 2026-10-08T16:00:00Z (8h) · ENA 2026-10-08T20:00:00Z (4h) · PUMP 2026-10-08T20:00:00Z (4h) · HYPE 2026-10-08T20:00:00Z (4h) · MNT_BYBIT 2026-10-08T16:00:00Z (8h) · SUI 2026-10-08T16:00:00Z (8h) · LTC 2026-10-08T16:00:00Z (8h) · XMR 2026-10-08T16:00:00Z (8h) · BNB 2026-10-08T16:00:00Z (8h) · UNI 2026-10-08T16:00:00Z (8h) · 1000PEPE 2026-10-08T16:00:00Z (8h) · DOGE 2026-10-08T16:00:00Z (8h) · 1000BONK 2026-10-08T20:00:00Z (4h)",
+  "ROWS ADDED per file class (each file whole, equal on every stem of its class): 5m 3984 x 17 = 67728 · 15m 1328 x 5 = 6640 · 1h 332 x 17 = 5644 · 4h 83 x 17 = 1411 · 12h 27 x 17 = 459 · derived 1d 13 x 17 = 221 · derived 1w 2 x 17 = 34 · funding 865 (41 on the thirteen 8h tapes, 83 on the four 4h tapes ENA PUMP HYPE 1000BONK); 0 gaps, 0 duplicates, 0 off-grid stamps, 0 rows past the pin",
+  "HTTP: 445 kind='http' rows in data/FETCH_LOG.jsonl (542 rows in all, sealed line prefix 542) by (phase, status): clock 200: 4, contract_specs 200: 2, edge_audit 200: 159, fee_source 202: 4, fee_source 403: 4, fetch 200: 211, flat_attest 200: 54, flat_attest 404: 3, pin 200: 4; hosts: fapi.binance.com, api.bybit.com, data.binance.vision (the bulk archive, attestation phase only, read and never saved to a tape), www.binance.com and www.bybit.com (the two fee pages, one request each through the transport's 4 attempts); no status 404 in the file-feeding phase; the three 404s are the archive answering that it publishes no daily zip for three 2019 bars (recorded answers)",
+  "SEAM AUDIT (data/EDGE_AUDIT.json, sealed): the last inherited bar of all 73 native in-scope kline files equals the venue's REST bar of that stamp on O, H, L, C, V; the last inherited funding print of all 17 tapes equals the venue's print of that hour; the population past TC11's as-of is empty (0 rows in 73 files), recorded",
+  "THE MAKER PIN [\"maker-bps\"]: PIN [\"maker-bps\"] BINANCE_USDTM 2.0 bps/side (4.0 round trip) · ON FILE — NOT RE-CONFIRMED · https://www.binance.com/en/fee/futureFee · retrieved — · body sha — | PIN [\"maker-bps\"] BYBIT_V5_LINEAR 2.0 bps/side (4.0 round trip) · ASSUMPTION — NOT RE-CONFIRMED; no Bybit figure is on file · https://www.bybit.com/en/help-center/article/Trading-Fee-Structure · retrieved — · body sha — | X assumed 2.0 bps/side (4.0 round trip); differs: BINANCE_USDTM: False, BYBIT_V5_LINEAR: False — data/FEE_SOURCE.json (sealed): https://www.binance.com/en/fee/futureFee answered HTTP 202 on each of 4 attempts and https://www.bybit.com/en/help-center/article/Trading-Fee-Structure HTTP 403 on each of 4, with the library's default headers; engine.data._get returns a response only on 200 / 404, so NO body exists and none is saved; both venues are UNRETRIEVABLE (http_202, http_403) and carry README.md:150's figure; data/FEE_GRAMMAR.json holds null entries (no bytes to fix a grammar against)",
+  "TICK OF RECORD (data/CONTRACT_SPECS.json, sealed; price_tick strings): 1000BONK=0.0000010 1000PEPE=0.0000001 BNB=0.010 BTC=0.10 DOGE=0.000010 ENA=0.0000100 ETH=0.01 HYPE=0.00100 LTC=0.01 MNT_BYBIT=0.00010 NEAR=0.0010 PUMP=0.0000010 SOL=0.0100 SUI=0.000100 UNI=0.0010 XMR=0.01 ZEC=0.01; none moved vs TC11's capture; data/TICK_GRID_AUDIT.json: 1014 stem-months measured, 24 COARSER than the recorded tick — all ENAUSDT, 2024-04 .. 2026-03 (observed granularity 0.001 in 2024-04, 0.0001 after, against the recorded 0.00001): O-27's 'never looser' is NOT HELD there; no home asset has a coarser month",
+  "ZERO-VOLUME FLAT BARS (kept, counted, attributed): 5m whole-tape home assets {'BTC': 86, 'ETH': 72, 'SOL': 31, 'NEAR': 34, 'ZEC': 70}; in the strip (TC11's pin < close <= the pin) 0 zero-volume bars on every native file of all 17 stems; data/FLAT_BAR_ATTEST.json (sealed): 34 bars re-asked of the venue (34 seeded 5m, 0 among the rows TC12 added), by publication {'archive-only': 9, 'both': 20, 'neither': 0, 'rest': 5, 'rest-only': 0} — the 9 archive-only bars are 2024-10-28 incident bars REST now serves traded",
+  "BOOK4_FREEZE.json (the orchestrator's file, recorded here, not rewritten): verified read-only against git — commit 324a8350acb08d0a856dde940663a5a023142b79 is the one commit touching forward/FORWARD_LEDGER.jsonl (it adds the file with its 5 lines; the parent holds none), committer time 1791582341 s = 2026-10-09T18:45:41-03:00, as the file says",
+  "GATE HAZARD (the closure suite, not this unit's file; measured read-only into a scratch --root): at --stage=TC12-D F-TYPED, F-SEED, F-FX-MIRROR, F-FX-FORM and F-CLOSURE [iii] PASS on this record's sources; F-CLOSURE [ii] is RED on ONE finding, CLOSURE-REACH 'at TC12-D no module in scope may reach the lineage' — scripts/tierc12_data.py imports engine.data, engine.cells, tierc2_rules and drive_wait as readings L-D.3, L-D.5, L-D.24 and the register of L-D order (the suite generalises L-0.22's TC12-REG assertion to every stage before TC12-ENV). Reported as an amendment proposal; no PIN-LITERAL, TICK-LITERAL or TICK-FLOAT-COMPARE finding",
+  "DEFAULTS TAKEN, reported as amendment proposals: (1) port labels follow the code — 10 TEXT-ONLY (the reading's 4 plus _assert_bound, clone_findings, contract_multiplier_table, cache_manifest_staleness, write_pre_state, summarize: only strings differ) and seal_provenance VERBATIM with its constant SEALED_FILES CHANGED; (2) capture_contract_specs keeps the referee's `doc` statement whole (its `law` sentence still names TIER-C11) because AM-38's statement rule would read the referee's 1000 as a typed number in a string-changed statement; (3) F-D-DET's clock leg counts time.* and datetime.now/utcnow/today as clocks, not fromtimestamp/strptime; (4) no outside-repo path is in artifact_shas (tierc12_progress.certified raises ValueError on one) — the snapshot is pinned through the manifest; (5) a non-200/404 fee page leaves no body (engine.data._get discards it); (6) F-KEY / the L-0.20 helper F-DET have no parquet directory at this record — F-D-DET is the determinism leg; no build_manifest.json or STAGE_D.md is filed (the readings name STAGE_D_MANIFEST.json/.md); (7) a resumed --fetch re-asks the thirteen 8h funding tapes (their edge is one print before the pin's hour) — content does not move (F-D-FETCHPATH), but --fetch was run exactly once",
+  "HYGIENE: one early read-only probe (tierc12_pins / tierc12_progress imported without -B) wrote two .pyc files into the pre-existing git-ignored scripts/__pycache__; both were removed; before the module existed the three venue hostnames were resolved by DNS only (no HTTP request) — stated in the manifest's standing_disclosures; no scratch file is left in the tree (temp copies under $TMPDIR, the F-D-DET twins removed after comparison); FIX PASS (the verifier's defect D-8): an interrupted fixture run of the first build had left its temp directory tc12_fd_bkqse16s under $TMPDIR (19 files, 1.8 MB of temp copies — out_*/FETCH_LOG.jsonl, snap_*/klines, snap_*/funding, resume_*; outside the tree: the suite removes its temp directory in main()'s `finally`, which a killed process never reaches) — removed in the fix pass; no tc12_fd_* directory is left under $TMPDIR, no TC12 .pyc exists, and the fix pass wrote no bytecode (scripts/__pycache__ mtime did not move)",
+  "FIX PASS on the independent verifier's nine defects (its ids D-1 … D-9 — not the entries of DISCLOSURES.md), 2026-10-09: NO artifact of this record moved (every sha above re-hashed equal; the snapshot's 176 files and the mirror's 176 re-hashed equal to the manifest) and no network call was made; the suite re-run five times — four in the tree with no drift (two of them after this note was first written), once from a clean scratch --root with --refile-transcript — 41 GREEN each, transcript sha aab07487… each; the mirror invocation three times, 1 GREEN, f1d5cdab… each. D-1: the closure gate at --stage=TC12-D stays RED on the one finding CLOSURE-REACH (re-measured into a scratch --root: 5 GREEN, 1 RED) until the orchestrator rules the proposal and changes its own suite — nothing in this record's files is at fault (the GATE HAZARD note above). D-2: the 24 ENAUSDT stem-months coarser than the recorded tick (2024-04 at 0.001; 2024-05 … 2026-03 at 0.0001; recorded 0.0000100) are returned as a build disclosure for the orchestrator's B-1 entry of DISCLOSURES_BUILD.md, which this record re-records once it is on file [L-0.5 seam 20: a build writes nothing there]. D-3: the merge is the orchestrator's. D-4: CONTRACT_SPECS.json is sealed and its bytes stay — its `law` sentence is the referee's and names TIER-C11; the point-in-time sentence L-D.22 asks for is in TICK_GRID_AUDIT.json `law` (default (2) above). D-5: no leg holds funding contiguity INSIDE the extension (the readings ask row accounting of kline files and the funding edge) — re-measured in the fix pass on the filed tapes: one constant floor-hour spacing on each of the 17 (thirteen tapes 8h x 41 prints, four tapes 4h x 83 = 865), prints added == (last due hour <= the pin - TC11's pin) / cadence on every tape, no hole; reported as a mechanics proposal. D-6: the determinism set makes no clock call, but it carries — as sealed DATA copied from WRITE_ONCE_SEAL.json under TC11's manifest key `write_once.disclosure`, kept key for key — seven 'last written <stamp>' sentences and the last fetch-row stamp, and the absolute `snapshot_root`; any review run reproduces its bytes only under the same HOME path. D-7: TickGrid.lt / le / gt / ge do not type-check the level n (px does): left unchanged as the verifier advises (no live path — a consumer takes n from floor_ticks / ceil_ticks, an int); reported as a proposal for a later ruled change. D-8: the HYGIENE note above. D-9: the additive departures stand and are reported with the port-label proposal — D11's unused helper _port_tag is neither ported nor in PORTS; each fee venue block carries maker_retrieval_http_status and maker_unretrievable_reason and maker_pin carries x_assumed_source beyond L-D.19's table; AS_OF_PIN.json carries step_q.instant_iso and bybit_closure_law, bybit_kline_endpoint, bybit_server_time, o7_printed beyond L-D.1's list",
+  "TC12-D.mirror is a separate, non-blocking child record (data/MIRROR_ATTEST.json, data/FIXTURES_MIRROR.txt): its paths are not named here",
+  "AM-59: TickGrid level comparisons HALT on a non-integer level; F-TICK [a] holds it",
+  "TC12-D re-records three REG_SET suites repaired at this gate under dated amendments — scripts/tierc12_closure_fixtures.py (AM-49), scripts/tierc12_registrations_fixtures.py (AM-67), scripts/tierc12_pins_fixtures.py (AM-68) — by the last-record law (L-0.4 (1)); the two amendment texts as grown (AM-49..AM-70); and DISCLOSURES_BUILD.md (B-1..B-16). The resume suite was NOT repaired and is not re-recorded (AM-70 corrects AM-69)."
+ ]
+}

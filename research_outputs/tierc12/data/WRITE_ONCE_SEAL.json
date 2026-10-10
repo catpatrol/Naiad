@@ -1,0 +1,60 @@
+{
+  "as_of_last_closed_4h": "2026-10-08T20:00:00Z",
+  "as_of_last_closed_4h_open": "2026-10-08T16:00:00Z",
+  "disclosure": [
+    "AS_OF_PIN.json: last written 2026-10-09T22:17:50Z, before the last fetch row 2026-10-09T22:22:31Z \u2014 as first written",
+    "CLONE_ATTEST.json: last written 2026-10-09T22:17:20Z, before the last fetch row 2026-10-09T22:22:31Z \u2014 as first written",
+    "CONTRACT_SPECS.json: last written 2026-10-09T22:18:03Z, before the last fetch row 2026-10-09T22:22:31Z \u2014 as first written",
+    "EDGE_AUDIT.json: last written 2026-10-09T22:19:21Z, before the last fetch row 2026-10-09T22:22:31Z \u2014 as first written",
+    "PRE_STATE.json: last written 2026-10-09T22:18:04Z, before the last fetch row 2026-10-09T22:22:31Z \u2014 as first written",
+    "FEE_SOURCE.json: last written 2026-10-09T22:19:52Z, before the last fetch row 2026-10-09T22:22:31Z \u2014 as first written",
+    "FLAT_BAR_ATTEST.json: last written 2026-10-09T22:22:31Z, before the last fetch row 2026-10-09T22:22:31Z \u2014 as first written"
+  ],
+  "fetch_log": {
+    "file": "FETCH_LOG.jsonl",
+    "first_row_utc": "2026-10-09T22:17:48Z",
+    "last_row_utc": "2026-10-09T22:22:31Z",
+    "sealed_lines": 542,
+    "sha256_of_sealed_lines": "dc6ad55d8594be4759e8a749aa60c7e824af2334d1f367137ea78a999dc8b2a0"
+  },
+  "files": {
+    "AS_OF_PIN.json": {
+      "bytes": 3737,
+      "last_written_utc": "2026-10-09T22:17:50Z",
+      "sha256": "229bc94d7cfdcfe90c65834972a51593a2604bbb5db76c63d48ebf3a591482d8"
+    },
+    "CLONE_ATTEST.json": {
+      "bytes": 56138,
+      "last_written_utc": "2026-10-09T22:17:20Z",
+      "sha256": "cec2320ec24d166f77ae5dd5ea30d47e2f24935073558b66a73e34e8451a0932"
+    },
+    "CONTRACT_SPECS.json": {
+      "bytes": 57453,
+      "last_written_utc": "2026-10-09T22:18:03Z",
+      "sha256": "f4de2bfba19e073101e7d2ca9e231b087fd07c582ca3a082c9e3f98834b983af"
+    },
+    "EDGE_AUDIT.json": {
+      "bytes": 33976,
+      "last_written_utc": "2026-10-09T22:19:21Z",
+      "sha256": "e29738afaf53d2600d991a08ee2a2c0ba560fd0557e1b468ebcb531f3c737b7e"
+    },
+    "FEE_SOURCE.json": {
+      "bytes": 2341,
+      "last_written_utc": "2026-10-09T22:19:52Z",
+      "sha256": "83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103"
+    },
+    "FLAT_BAR_ATTEST.json": {
+      "bytes": 28786,
+      "last_written_utc": "2026-10-09T22:22:31Z",
+      "sha256": "1de6db0af9fac9848ceefcf94b76cbaa68204d068ab34b10d0fb86dfd2a004a6"
+    },
+    "PRE_STATE.json": {
+      "bytes": 62661,
+      "last_written_utc": "2026-10-09T22:18:04Z",
+      "sha256": "0ca88883968a6e15c7263a7a75b2a954d99e263bf3929614bb06894423645966"
+    }
+  },
+  "law": "from this seal on, a sealed file's bytes never move and the fetch log only grows past its sealed line prefix; the seal itself is write-once (_dump_once)",
+  "sealed_utc": "2026-10-09T22:24:14Z",
+  "warranty": "these files are described AS OF the pinned last closed 4h bar named here and of no other; bars stamped after it are counted, never read [TC6V-a, carried by TIER-C12]"
+}

@@ -1,0 +1,16 @@
+{
+  "amendment": null,
+  "law": "THE GRAMMARS OF RECORD of the fee extraction [L-D.18] — DATA, tracked, read by `tierc12_data.py --manifest`: per venue the pattern that locates the entry tier's label (`entry_tier_label`), optionally the pattern whose named group `row` holds the entry tier's own text (`scope`), the patterns that locate its USDT-margined maker and taker figures (`maker`, `taker`; each with the named group `pct`), the sha256 of the saved body it was written against (`body_sha256`) and the AM-<n> id that ruled it (`amendment`). A venue's grammar is REQUIRED only when its capture returned HTTP 200 (then --manifest HALTs without one); a venue whose capture returned no body has no bytes to fix a grammar against and its entry is null.",
+  "proposal": "reported by the TC12-D builder as an amendment proposal (AM-D-FEE-BINANCE_USDTM / AM-D-FEE-BYBIT_V5_LINEAR): there is no pattern to rule — neither page was retrieved with the library's default headers, so the maker pin of both venues is the figure on file (README.md), flagged NOT RE-CONFIRMED",
+  "source_record": "research_outputs/tierc12/data/FEE_SOURCE.json",
+  "stage": "TC12-D",
+  "tier": "TIER-C12",
+  "venues": {
+    "BINANCE_USDTM": null,
+    "BYBIT_V5_LINEAR": null
+  },
+  "why_null": {
+    "BINANCE_USDTM": "FEE_SOURCE.json records http_status 202 on each of the transport's 4 attempts and NO body (engine.data._get returns a response only on 200 or 404): UNRETRIEVABLE (http_202); no grammar is required and none is applied",
+    "BYBIT_V5_LINEAR": "FEE_SOURCE.json records http_status 403 on each of the transport's 4 attempts and NO body: UNRETRIEVABLE (http_403); no grammar is required and none is applied"
+  }
+}

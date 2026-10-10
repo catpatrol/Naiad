@@ -42,6 +42,11 @@ WHAT IT FILES, one block per leg (CANON-24's row):
                  the TC10 layer DISCLOSED and not walked, its function-local range imports ==
                  TC10_LAZY_RANGE_T; and [seam 16] the two L-D detectors — the pin as an int or ISO
                  string, a tick literal or a float `x ± tick` compare — over every non-fixture source.
+                 THE REACH [AM-49, ruling on AP-48]: at --stage=TC12-REG, and there only, no module in
+                 scope reaches the lineage (asserted).  From --stage=TC12-D on the static reach of each
+                 non-fixture module is PRINTED as a disclosed set, and a source of the TC12-D record
+                 reaches only D_REACH_T (engine.*, tierc2_rules, drive_wait) and its own tier: a reach
+                 into a tierc10_* / tierc11_* module, the shim, a door or a value-area module is RED.
   F-CLOSURE [iii] DATA-ONLY (no value-area NAME outside the doors) · VA-BLIND (keyed on a
                  directory's one parquet writer, seam 62) · DOOR OUTPUT (earned, env first, no
                  TRADE_COLS_T column, no regbooks/ root, imported only by tierc12_va_fixtures).
@@ -135,6 +140,11 @@ VA_NAMES_T = ("volume_profile", "value_area", "va_series", "va_machine", "va_col
 TC10_LAZY_RANGE_T = (("tierc10_brk", "grid_toll_atr"), ("tierc10_brk", "macro_signals"),
                      ("tierc10_lanes", "spring_signals_from_census"))
 TC10_PREFIX_T = "tierc10_"
+# AM-49 (ruling on AP-48): leg (ii)'s no-lineage-reach assertion binds at FIRST_STAGE_T only.  From
+# SUBSTRATE_STAGE_T on the static reach of every GLOB member is PRINTED, and a source of the TC12-D
+# record may reach — outside its own tier — only the lineage L-D.3, L-D.5, L-D.11 and L-D.24 name
+D_REACH_T = ("engine.*", "tierc2_rules", "drive_wait")
+D_REACH_TAG_T = "CLOSURE-REACH [stage D]"
 LINEAGE_PINS_REL = T12_REL + "/env/LINEAGE_PINS.json"            # seam 14: filed by TC12-ENV.vendor
 DYN_FUNCS_T = ("import_module", "__import__")
 DYN_DECLARED_T = ((SHIM_T, "tc10_import"),)                       # L-D.26 hunk 7: the env's one door, CLOSED
@@ -268,8 +278,15 @@ def build_scope(stage: str) -> dict:
                           + list(recs[rid].get("artifact_shas", {})) if TRANSCRIPT_RX.fullmatch(t)})
     latest = not gated and not any(rid in recs for rid in order[order.index(stage) + 1:])
     unrecorded = [p for p in on_disk if p not in named_all] if latest else []
+    # AM-49: the scripts of the TC12-D record — the record's own once it is on file; at its own gate,
+    # before that, the gated record's (the tierc12 scripts on disk that no record names)
+    if SUBSTRATE_STAGE_T in recs:
+        d_paths = set(recs[SUBSTRATE_STAGE_T].get("artifact_shas", {}))
+    else:
+        d_paths = {p for p in on_disk if p not in named_all} if stage == SUBSTRATE_STAGE_T else set()
+    stage_d = sorted(m.group(1) for m in map(SCRIPT_RX.fullmatch, sorted(d_paths)) if m)
     return {"stage": stage, "upto": upto, "paths": paths, "names": [n for n in scripts if n not in missing],
-            "missing": missing, "transcripts": transcripts, "unrecorded": unrecorded}
+            "missing": missing, "transcripts": transcripts, "unrecorded": unrecorded, "stage_d": stage_d}
 
 
 def filed_by_now(rel: str) -> bool:
@@ -1267,6 +1284,100 @@ def static_walk(tree: Tree) -> dict:
             "outside": sorted(outside)}
 
 
+# ─────────────────────────────────────────────── AM-49: the disclosed reach, and Stage D's reach law
+_REPO_AST: dict = {}                           # a lineage module's AST, parsed once per run (its text is of record)
+
+
+def repo_ast(name: str) -> ast.Module:
+    if name not in _REPO_AST:
+        _REPO_AST[name] = ast.parse(repo_file(name).read_text(encoding="utf-8"))
+    return _REPO_AST[name]
+
+
+def reach_graph(tree: Tree) -> dict:
+    """{module: what its import statements reach in ONE step} over the GLOB members in scope and every
+    repo module their imports walk to.  A tierc12 name is a node of its own, walked when it is in
+    scope; a forbidden name and a TC10-layer module are NAMED and never walked (leg (ii)'s walk);
+    every other repo module is walked, its name-held imports included."""
+    graph, queue = {}, list(tree.glob)
+    while queue:
+        n = queue.pop(0)
+        if n in graph:
+            continue
+        own = n in tree.names
+        t = tree.ast(n) if own else repo_ast(n)
+        names = [x for _, x in imported_names(t)]
+        names += [] if own else [y for _, _, _, _, tg in dyn_sites(t) for y in tg]
+        step = set()
+        for x in names:
+            root = x.split(".")[0]
+            if root.startswith("tierc12_"):
+                step.add(root)
+                queue += [root] if root in tree.names else []
+            elif forbidden_rule(x, "decision"):
+                step.add(x)
+            else:
+                for c in repo_candidates(x):
+                    step.add(c)
+                    queue += [] if c.startswith(TC10_PREFIX_T) else [c]
+        graph[n] = sorted(step)
+    return graph
+
+
+def reach_of(graph: dict, name: str) -> list:
+    """The static reach of one module: every name its imports reach, through the graph."""
+    seen, queue = set(), list(graph.get(name, ()))
+    while queue:
+        x = queue.pop(0)
+        if x not in seen:
+            seen.add(x)
+            queue += graph.get(x, ())
+    return sorted(seen - {name})
+
+
+def d_refused(name: str):
+    """Why a source of the TC12-D record may not reach `name` (None: it may) [AM-49]: its own tier
+    but the shim and the doors, and of the lineage D_REACH_T only."""
+    root = name.split(".")[0]
+    if root == SHIM_T:
+        return "the shim"
+    why = forbidden_rule(name, "decision")
+    if why or root.startswith("tierc12_"):
+        return why
+    if root.startswith(TC10_PREFIX_T):
+        return "the TC10 layer"
+    held = any(name == a or (a.endswith(".*") and (name == a[:-2] or name.startswith(a[:-1]))) for a in D_REACH_T)
+    return None if held else f"outside D_REACH_T {list(D_REACH_T)}"
+
+
+def stage_d_sources(tree: Tree) -> list:
+    return [n for n in CTX["scope"]["stage_d"] if n in tree.glob]
+
+
+def stage_d_findings(tree: Tree, graph: dict) -> list:
+    """AM-49: from TC12-D on, a source of the TC12-D record that reaches a tierc10_* / tierc11_* module,
+    the shim, a door, a value-area module or any repo module outside D_REACH_T — one finding a name."""
+    srcs = stage_d_sources(tree)
+    out = [] if srcs else [f"{D_REACH_TAG_T}: no source of the {SUBSTRATE_STAGE_T} record is in scope at "
+                           f"{CTX['stage']} — the reach law has no subject"]
+    for n in srcs:
+        out += [f"{D_REACH_TAG_T} {n}: reaches {x} — {why}; a source of the {SUBSTRATE_STAGE_T} record may "
+                f"reach only {list(D_REACH_T)} and its own tier [AM-49]"
+                for x in reach_of(graph, n) for why in [d_refused(x)] if why]
+    return out
+
+
+def disclosed(tree: Tree, graph: dict) -> str:
+    """The static reach of each GLOB member outside its own tier, as printed: `module -> [names]`,
+    `-> none`, or `-> = <the first module printed with the same set>`."""
+    first, parts = {}, []
+    for n in tree.glob:
+        key = tuple(x for x in reach_of(graph, n) if not x.startswith("tierc12_"))
+        parts.append(f"{n} -> " + ("none" if not key else f"= {first[key]}" if key in first else str(list(key))))
+        first.setdefault(key, n)
+    return "; ".join(parts)
+
+
 def lineage_pins() -> dict:
     """{repo-relative path: sha256} of the disclosed layer, from env/LINEAGE_PINS.json — {} before
     TC12-ENV.vendor files it (seam 14: stated EMPTY, never guessed)."""
@@ -1384,9 +1495,11 @@ def closure_ii_findings(tree: Tree, tc10_over=None, loaded=None) -> list:
         out += scan_ii(n, t, "lineage")
     out += [f"CLOSURE-REACH {src} imports {x}, a tierc12 module no record up to {stage} names"
             for src, x in walk["outside"]]
-    if not stage_at_least(stage, SHIM_STAGE_T) and (walk["lineage"] or walk["tc10"]):
+    if stage == FIRST_STAGE_T and (walk["lineage"] or walk["tc10"]):    # AM-49: binds at TC12-REG only
         out.append(f"CLOSURE-REACH: at {stage} no module in scope may reach the lineage; the static closure "
                    f"holds {sorted(walk['lineage']) + sorted(walk['tc10'])}")
+    if stage != FIRST_STAGE_T:                  # AM-49: from TC12-D on, the reach law of Stage D's sources
+        out += stage_d_findings(tree, reach_graph(tree))
     pins = lineage_pins()
     for mod, rel in walk["tc10"].items():
         sha = FX.sha_bytes((ROOT / rel).read_bytes())
@@ -1450,10 +1563,38 @@ def ii_break():
     if captured_ticks():
         rows.append(("a captured tick typed and assigned to `tick` in a copy", "TICK-LITERAL",
                      shadow(f"tick = {captured_ticks()[0]}\n")))
-    if not stage_at_least(CTX["stage"], SHIM_STAGE_T):
+    if CTX["stage"] == FIRST_STAGE_T:
         rows.append((f"a copy importing a lineage module at {CTX['stage']}", "CLOSURE-REACH",
                      shadow("import tierc9\n")))
-    else:
+    else:                                       # AM-49: the reach law of Stage D's sources, on scratch copies
+        srcs = stage_d_sources(tree)
+        if not srcs:
+            raise RuntimeError(f"no source of the {SUBSTRATE_STAGE_T} record is in scope to plant on")
+        d, tag = srcs[0], f"{D_REACH_TAG_T} {srcs[0]}: reaches "
+        if [x for x in shadow("import tierc10_brk\n")() if x.startswith(D_REACH_TAG_T)]:
+            raise RuntimeError(f"the Stage D reach law fired on a module that is no source of the "
+                               f"{SUBSTRATE_STAGE_T} record — the control is not GREEN")
+
+        def bent(tail: str, **more):
+            return lambda: added(closure_ii_findings, plant({d: tree.src[d] + tail, **more}))
+
+        rows += [
+            (f"a copy of the Stage D source {d} importing a TC10-layer module (`import tierc10_brk`)",
+             tag + "tierc10_brk", bent("\nimport tierc10_brk\n")),
+            (f"a copy of {d} importing a tierc11 module (`import tierc11_data`)",
+             tag + "tierc11_data", bent("\nimport tierc11_data\n")),
+            (f"a copy of {d} importing the shim (`import {SHIM_T}`)",
+             tag + SHIM_T, bent(f"\nimport {SHIM_T}\n")),
+            (f"a copy of {d} importing a door (`import {DOORS_T[0]}`)",
+             tag + DOORS_T[0], bent(f"\nimport {DOORS_T[0]}\n")),
+            (f"a copy of {d} importing the value-area module (`import {FORBIDDEN_EXACT_T[0]}`)",
+             tag + FORBIDDEN_EXACT_T[0], bent(f"\nimport {FORBIDDEN_EXACT_T[0]}\n")),
+            (f"a copy of {d} importing a lineage module outside D_REACH_T (`import tierc9`)",
+             tag + "tierc9", bent("\nimport tierc9\n")),
+            (f"a copy of {d} importing a shadow tierc12 module that imports tierc10_brk (transitive)",
+             tag + "tierc10_brk", bent(f"\nimport {SHADOW}\n", **{SHADOW: SHADOW_TEXT + "import tierc10_brk\n"})),
+        ]
+    if stage_at_least(CTX["stage"], SHIM_STAGE_T):
         walk = static_walk(tree)
         known = set(walk["lineage"]) | set(walk["tc10"]) | set(tree.names)
         stray = next(q.stem for q in sorted(SCRIPTS.glob("*.py")) if q.stem not in known
@@ -1476,13 +1617,24 @@ def ii_real():
         layer = (f"EMPTY — {LINEAGE_PINS_REL} is not yet filed (TC12-ENV.vendor files it); nothing is on file "
                  f"to read and nothing is guessed [seam 14]" if not pins else "EMPTY — no decision source reaches it")
     lazy = sorted({m for m, _ in TC10_LAZY_RANGE_T} | set(walk["tc10"]))
+    if stage == FIRST_STAGE_T:                  # AM-49: the assertion binds here only, in these words
+        reach = f" — no module in scope at {stage} reaches the lineage, asserted"
+    else:                                       # AM-49: from TC12-D on the reach is printed, Stage D's held
+        graph, srcs = reach_graph(tree), stage_d_sources(tree)
+        tier = sorted({x for n in srcs for x in reach_of(graph, n) if x.startswith("tierc12_")})
+        reach = (f"; the static reach of each of the {len(tree.glob)} non-fixture module(s) outside its own "
+                 f"tier, DISCLOSED and printed [AM-49]: {disclosed(tree, graph)}; the source(s) of the "
+                 f"{SUBSTRATE_STAGE_T} record {srcs or 'NONE IN SCOPE'} reach only D_REACH_T {list(D_REACH_T)} "
+                 f"and of their own tier {tier or 'nothing'} — no tierc10_* / tierc11_* module, not the shim "
+                 f"{SHIM_T}, no door, no value-area module; the no-lineage-reach assertion bound at "
+                 f"--stage={FIRST_STAGE_T} only")
     return (not f), (
         f"AST over {len(tree.decision)} decision source(s) {tree.decision} and the doors "
         f"[{filed(DOORS_T, tree)}]: no forbidden import anywhere (function bodies included), no dynamic import "
         f"outside {[f'{a}.{b}' for a, b in DYN_DECLARED_T]}, no exec / eval / compile, no sys.modules reach of a "
         f"forbidden name, no `value_area` / `profile` on the {ANALYTICS_T} package, no .top / .bottom read; the "
         f"static repo closure of their imports: lineage modules walked {sorted(walk['lineage']) or 'none'}"
-        + ("" if shim else f" — no module in scope at {stage} reaches the lineage, asserted")
+        + reach
         + f"; TC10 LAYER, disclosed and not walked: {layer}; TC10_LAZY_RANGE_T "
         f"{[f'{a}.{b}' for a, b in TC10_LAZY_RANGE_T]} == the function-local range imports found by AST in the "
         f"TEXT of {lazy}; COVERAGE "
@@ -2039,16 +2191,39 @@ TAIL_FIXTURES = (
 )
 
 
+# AM-49: from TC12-D on leg (ii) also holds the reach law of Stage D's sources — its FAILS IF lines say
+# so from that stage on (the lines of the TC12-REG transcript are AST_FIXTURES's own, unchanged)
+D_REACH_BREAK_IF_T = ("; or a copy of a Stage D source importing a TC10-layer module, a tierc11 module, the "
+                      "shim, a door, the value-area module or a lineage module outside D_REACH_T, directly or "
+                      "through a shadow tierc12 module, is not caught by CLOSURE-REACH [stage D]")
+D_REACH_REAL_IF_T = ("; or, from TC12-D on [AM-49], the static reach of a source of the TC12-D record holds a "
+                     "tierc10_* / tierc11_* module, the shim, a door, a value-area module or any repo module "
+                     "outside D_REACH_T and its own tier (the no-lineage-reach assertion binds at "
+                     "--stage=TC12-REG only; from TC12-D on every module's reach is printed)")
+AST_FIXTURES_D = (
+    ("F-CLOSURE [ii]", AST_FIXTURES[0][1], AST_FIXTURES[0][2] + D_REACH_BREAK_IF_T,
+     AST_FIXTURES[0][3] + D_REACH_REAL_IF_T, ii_break, ii_real),
+    AST_FIXTURES[1],
+)
+
+
 def fixtures_of(stage: str) -> tuple:
-    if not stage_at_least(stage, SHIM_STAGE_T):
+    if stage == FIRST_STAGE_T:
         return REG_FIXTURES + AST_FIXTURES
-    return REG_FIXTURES + SHIM_FIXTURES + AST_FIXTURES + TAIL_FIXTURES
+    if not stage_at_least(stage, SHIM_STAGE_T):
+        return REG_FIXTURES + AST_FIXTURES_D
+    return REG_FIXTURES + SHIM_FIXTURES + AST_FIXTURES_D + TAIL_FIXTURES
 
 
 def substrate_header(stage: str) -> dict:
-    """The header's pin and snapshot name, read from Stage D's records once the stage has them."""
+    """The header's pin and snapshot name, read from Stage D's records once the stage has them.  A
+    run from TC12-D on before Stage D has filed them HALTs — it has no header to print."""
     if not stage_at_least(stage, SUBSTRATE_STAGE_T):
         return {}
+    for rel in (TC12_PIN_REL, STAGE_D_MANIFEST_REL):
+        if not (ROOT / rel).is_file():
+            halt(f"--stage={stage}: {rel} is not on file — from {SUBSTRATE_STAGE_T} on this suite's header "
+                 f"reads the pin and the snapshot name from Stage D's records")
     pin = json.loads((ROOT / TC12_PIN_REL).read_text(encoding="utf-8"))
     manifest = json.loads((ROOT / STAGE_D_MANIFEST_REL).read_text(encoding="utf-8"))
     name = next((manifest[k] for k in SNAPSHOT_KEYS_T if isinstance(manifest.get(k), str)), None)
@@ -2061,6 +2236,12 @@ def substrate_header(stage: str) -> dict:
 def typed_lines(stage: str, tree: Tree) -> list:
     rows = fixtures_of(stage)
     later = [r[0] for r in SHIM_FIXTURES + TAIL_FIXTURES if r not in rows]
+    # AM-49: typed from TC12-D on (the header of the TC12-REG transcript is unchanged)
+    am49 = [] if stage == FIRST_STAGE_T else [
+        f"D_REACH_T {list(D_REACH_T)} [AM-49] · the sources of the {SUBSTRATE_STAGE_T} record in scope "
+        f"{stage_d_sources(tree)} may reach only these and their own tier (not {SHIM_T}, not a door); the "
+        f"no-lineage-reach assertion binds at --stage={FIRST_STAGE_T} only; from {SUBSTRATE_STAGE_T} on every "
+        f"GLOB member's static reach is printed in F-CLOSURE [ii]"]
     return [
         f"--stage={stage} · scope [L-0.11]: the scripts named by the records up to {stage} in RESUME_ORDER; at "
         f"the stage's own gate, before its record exists, the tierc12 scripts on disk that no record names",
@@ -2087,7 +2268,7 @@ def typed_lines(stage: str, tree: Tree) -> list:
         f"RULERS_T {list(RULERS_T)} · X_SEED_MIRROR_T {[f'{a}.{b}' for a, b in X_SEED_MIRROR_T]} + the "
         f"F-VA-NULL stream builder of {list(X_SEED_MIRROR_UNNAMED_T)} (unnamed by the readings)",
         f"MIRRORED_T {list(MIRRORED_T)} · NOT_RUN_FIDS_T {list(NOT_RUN_FIDS_T)} · NETWORK_T {list(NETWORK_T)}",
-    ]
+    ] + am49
 
 
 def main() -> int:
