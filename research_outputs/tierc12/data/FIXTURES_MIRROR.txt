@@ -1,0 +1,20 @@
+as_of_last_closed_4h: 2026-10-08T20:00:00Z
+==============================================================================
+TIER-C12 · TC12-D.mirror — F-MIRROR [L-D.24] — the tier's one PROVENANCE transcript (it depends on a mounted drive)
+==============================================================================
+seed 20261008 · substrate tc12_20261008 · pin 1791489600000
+  typed: substrate tc12_20261008; own modules ['scripts/tierc12_data.py', 'scripts/tierc12_tick.py']
+  typed: steps (ms) {'5m': 300000, '15m': 900000, '1h': 3600000, '4h': 14400000, '12h': 43200000, '1d': 86400000, '1w': 604800000}; funding jitter 60000; Monday anchor 345600000
+  typed: panel (17) BTCUSDT ETHUSDT SOLUSDT NEARUSDT ZECUSDT ENAUSDT PUMPUSDT HYPEUSDT MNTUSDT_BYBIT SUIUSDT LTCUSDT XMRUSDT BNBUSDT UNIUSDT 1000PEPEUSDT DOGEUSDT 1000BONKUSDT
+  typed: sealed files (7) ['AS_OF_PIN.json', 'CLONE_ATTEST.json', 'CONTRACT_SPECS.json', 'EDGE_AUDIT.json', 'PRE_STATE.json', 'FEE_SOURCE.json', 'FLAT_BAR_ATTEST.json']; determinism set (4) ['STAGE_D_MANIFEST.json', 'STAGE_D_MANIFEST.md', 'fee_schedule.json', 'TICK_GRID_AUDIT.json']
+  typed: manifest renames top {'tc11_extension': 'tc12_extension', 'carried_from_tc10': 'carried_from_tc11'} row {'tc11_rows_added': 'tc12_rows_added', 'tc10_manifest_sha256': 'tc11_manifest_sha256'} new ['tc11_record', 'pins', 'tick_of_record', 'fee_sources', 'zero_volume_bars']
+  typed: F-D-2 [4] seeded 5m sample n = 2 per stem on the stream [seed, crc32('data|F-D-2 [4]')]
+  typed: F-TICK [d] seeded cells n = 3 on the stream [seed, crc32('data|F-TICK [d]')]
+
+F-MIRROR — the LaCie mirror, re-read from the destination, is the manifest's bytes
+  [BREAK] FAILS IF: one byte flipped in a TEMP copy of the mirror tree; one file removed from the temp copy
+  [BREAK] deliberate violation -> RED (correct): all 3 plants caught by their named detector, one at a time: one byte flipped in a TEMP copy of the mirror's funding tree [1 finding(s)] -> MIRROR-SHA snapshots/funding/BTCUSDT.parquet: sha != manifest · one file removed from the temp copy [2 finding(s)] -> MIRROR-FILE-SET snapshots/funding/BTCUSDT.parquet: absent from the mirror · a file's sha altered in a COPY of the attestation [1 finding(s)] -> MIRROR-ATTEST the attestation's file list is not the manifest's
+  [REAL]  FAILS IF: any mirrored file re-read from the LaCie differs from the manifest's sha, the file sets differ, or MIRROR_ATTEST.json mis-states either
+  [PASS] F-MIRROR: 176 mirrored files (859258689 bytes) re-read from /Volumes/LaCie/Naiad/snapshots/tc12_20261008 and /Volumes/LaCie/Naiad/provenance/tc12_20261008 hash to STAGE_D_MANIFEST.json's shas (in-scope and out-of-scope; the fee-source bodies to FEE_SOURCE.json's — 0 on file); the destination's file set is the manifest's plus ['STAGE_D_MANIFEST.json', 'SHA256SUMS']; MIRROR_ATTEST.json states the manifest sha and the file list truly; drive PRESENT; stated limit: a read served from the OS cache cannot be told from a read off the platter
+
+  1 GREEN, 0 RED, 0 NOT RUN

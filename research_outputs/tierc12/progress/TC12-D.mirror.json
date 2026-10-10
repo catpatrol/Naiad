@@ -1,0 +1,46 @@
+{
+ "stage": "TC12-D.mirror",
+ "parent": "TC12-D",
+ "status": "COMPLETE-VERIFIED",
+ "as_of": "2026-10-08T20:00:00Z",
+ "blockers": [],
+ "depends_on": [
+  "TC12-D"
+ ],
+ "artifact_shas": {
+  "research_outputs/tierc12/data/MIRROR_ATTEST.json": {
+   "bytes": 29758,
+   "sha256": "5467037753417eac2c93b25dfb0082eeec155213afefe4d73fe6c97e7abbcde9"
+  },
+  "research_outputs/tierc12/data/FIXTURES_MIRROR.txt": {
+   "bytes": 3033,
+   "sha256": "f1d5cdab894d05e8dfcf5d8cac368bea8c326b06ccfcbe60ea90980d9677c48d"
+  }
+ },
+ "supersedes": [],
+ "fixtures": [
+  {
+   "suite": "scripts/tierc12_data_fixtures.py --stage=TC12-D.mirror",
+   "transcript": "research_outputs/tierc12/data/FIXTURES_MIRROR.txt",
+   "provenance": true,
+   "exit_code": 0,
+   "legs_red": 0,
+   "legs_not_run": 0,
+   "legs_total": 1,
+   "transcript_drift": false,
+   "transcript_sha_before": "f1d5cdab894d05e8dfcf5d8cac368bea8c326b06ccfcbe60ea90980d9677c48d",
+   "transcript_sha_after": "f1d5cdab894d05e8dfcf5d8cac368bea8c326b06ccfcbe60ea90980d9677c48d",
+   "wall_seconds": 0.9
+  }
+ ],
+ "one_line": "the LaCie mirror MADE AND VERIFIED: 176 files, 859258689 bytes — a plain byte copy of the sealed snapshot tc12_20261008 to /Volumes/LaCie/Naiad/snapshots/tc12_20261008 — each destination file re-read and equal to STAGE_D_MANIFEST.json's sha (manifest sha dcddc5f7…), file set equal; drive PRESENT on attempt 1; F-MIRROR GREEN (1 block, PROVENANCE transcript)",
+ "notes": [
+  "the non-blocking child of TC12-D [L-D.24; the resume paste's \"mirror\"]: in no position of the resume order; nothing waits on it",
+  "destination: /Volumes/LaCie/Naiad/snapshots/tc12_20261008 (176 snapshot files + the two self-describing files STAGE_D_MANIFEST.json and SHA256SUMS); the provenance destination /Volumes/LaCie/Naiad/provenance/tc12_20261008 was NOT created: FEE_SOURCE.json records no fee-page body (both pages unretrievable), so there is nothing to mirror there (0 provenance files)",
+  "nothing else on the drive was touched: the copy created /Volumes/LaCie/Naiad/snapshots/ and the one directory under it; the vault naiad-backups was not used; no file was deleted or overwritten",
+  "drive_wait: state PRESENT, attempts 1, no WOKE row (no data/DRIVE_WAKE_LOG_TC12.md was written); volume observed case-insensitive: True; the filesystem name is not read by the module (it makes no out-of-process call there) — `mount` on this machine reported /dev/disk6s2 on /Volumes/LaCie (exfat) at the start of this build",
+  "stated limit [L-D.24]: a read served from the OS cache cannot be told from a read off the platter; F-MIRROR re-hashes every destination file again on any later run",
+  "the TC10 and TC11 snapshots stay UNMIRRORED and are listed for ATHENA: ~/.cache/naiad/snapshots/tc10_20260921, ~/.cache/naiad/snapshots/tc11_20260925",
+  "data/FIXTURES_MIRROR.txt is the tier's one PROVENANCE transcript (it depends on a mounted drive): recorded by sha with provenance true, outside the sweep's byte-identity roll; its BREAK half plants on a TEMP copy of the mirror's funding tree (21 files) rather than of all 859 MB"
+ ]
+}

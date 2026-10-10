@@ -1,0 +1,762 @@
+{
+  "all_equal": true,
+  "bytes": 859258689,
+  "destination": {
+    "mount_point": "/Volumes/LaCie",
+    "provenance": "/Volumes/LaCie/Naiad/provenance/tc12_20261008",
+    "snapshot": "/Volumes/LaCie/Naiad/snapshots/tc12_20261008"
+  },
+  "drive_wait": {
+    "attempts": 1,
+    "budget_s": 18.0,
+    "elapsed_s": 0.0,
+    "state": "PRESENT",
+    "wake_log": null,
+    "wake_logged": false
+  },
+  "faults": [],
+  "fee_source": {
+    "path": "research_outputs/tierc12/data/FEE_SOURCE.json",
+    "sha256": "83194cb7ee7790e83092c293c8166263a872ba83351227b5d30e10d157e71103"
+  },
+  "files": {
+    "snapshots/MANIFEST.json": {
+      "equal": true,
+      "sha256": "c73fec06e38f2ef99e135839a50da615da203000eaf7554fb2ce85d2707a860f"
+    },
+    "snapshots/funding/1000BONKUSDT.parquet": {
+      "equal": true,
+      "sha256": "6afbfe7fda26a5fc804bee8b77c96b52c8b71e19859e6b9fc2cc29474d2c558f"
+    },
+    "snapshots/funding/1000PEPEUSDT.parquet": {
+      "equal": true,
+      "sha256": "bc7f75b2445327510b6e5436ccb4cd183728358d5e1270c6490b8bb0ebaf0bcb"
+    },
+    "snapshots/funding/BNBUSDT.parquet": {
+      "equal": true,
+      "sha256": "9f610b40cd9cb85f0f7144c7cbc806deec7b8448618cf6cffb712a702c06efaf"
+    },
+    "snapshots/funding/BTCUSDT.parquet": {
+      "equal": true,
+      "sha256": "48de999daae78c9ca5ca1aae107dc032309885062f516b87687ef98201ec245f"
+    },
+    "snapshots/funding/DOGEUSDT.parquet": {
+      "equal": true,
+      "sha256": "1e2f8da8b68475313f599cacae7fd2e0f6339b999abe1bf4bad7cb6120ea1dda"
+    },
+    "snapshots/funding/ENAUSDT.parquet": {
+      "equal": true,
+      "sha256": "d1ffc6883ae5d2cae306738c5a7dc3bee134fc1528b9f735de05e7b5fb2fca6f"
+    },
+    "snapshots/funding/ETHUSDT.parquet": {
+      "equal": true,
+      "sha256": "ad1f94f0a2d422959ccae066b5d503a1cb912c9bf8e86f687d71f6ad07d7de32"
+    },
+    "snapshots/funding/FARTCOINUSDT.parquet": {
+      "equal": true,
+      "sha256": "0f0e3653e7133264aad5bb4a857de7b7fdfa1d77eba3adcba98cca0a177a840b"
+    },
+    "snapshots/funding/HYPEUSDT.parquet": {
+      "equal": true,
+      "sha256": "51eb825256b36e2ef8743bace1740a1b29215ac8f3052532b317f8bc34340838"
+    },
+    "snapshots/funding/JTOUSDT.parquet": {
+      "equal": true,
+      "sha256": "81e7a2fa40977759143b51c564d39787e6335a3e4d1cb8ceac6069b0e89269f4"
+    },
+    "snapshots/funding/LITUSDT.parquet": {
+      "equal": true,
+      "sha256": "ae32da7ff0407a7bdcec8d55a376b86d476b10729393ad582a25a318cc597dd8"
+    },
+    "snapshots/funding/LTCUSDT.parquet": {
+      "equal": true,
+      "sha256": "ebfeb660dedb9d3a4c3098c94f896052005429c26c48019ba91da7e1e42c62b7"
+    },
+    "snapshots/funding/MNTUSDT_BYBIT.parquet": {
+      "equal": true,
+      "sha256": "a9a02ad58a3cd0dec893d32d5e15540f4f6d99b1ba4347691f9e51e34c0d2cd1"
+    },
+    "snapshots/funding/NEARUSDT.parquet": {
+      "equal": true,
+      "sha256": "ff72209a547a64c5426cfacea225d94f0b1d383cc280e3b31acaf6ff94b96f56"
+    },
+    "snapshots/funding/PUMPUSDT.parquet": {
+      "equal": true,
+      "sha256": "46fdea7f4555a5f7164b8a4806516fcec0de559e48df885cb1dc270a1366ec56"
+    },
+    "snapshots/funding/SOLUSDT.parquet": {
+      "equal": true,
+      "sha256": "e0ef738ee49d1efad87e73e418d901bdffc8ba9899bbf3bc8cdd554022c1a577"
+    },
+    "snapshots/funding/SUIUSDT.parquet": {
+      "equal": true,
+      "sha256": "f3323e09aa7d55af58c19d97186f545a014e878194a81cb2bd5fdada1a6f6c0e"
+    },
+    "snapshots/funding/TAOUSDT.parquet": {
+      "equal": true,
+      "sha256": "3a17a669b73e5761266cd14f4530e40316d2bdbd6b97c7f5039e4f9ae8fd7bd7"
+    },
+    "snapshots/funding/UNIUSDT.parquet": {
+      "equal": true,
+      "sha256": "81d7047d9e90866b88c745b076cff9b2b1d1480a007d6cc7dafbdc989e53cbf8"
+    },
+    "snapshots/funding/XMRUSDT.parquet": {
+      "equal": true,
+      "sha256": "0cc8111efa4eb44ee1ae1c1ebb7c6e90afc08287d49b8cc9ab1b4c257b1b573e"
+    },
+    "snapshots/funding/ZECUSDT.parquet": {
+      "equal": true,
+      "sha256": "8b1b5ac99efda2c4c8ada235c64179b6beca544837e1f2592dadcdd8cb9195a9"
+    },
+    "snapshots/klines/1000BONKUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "c7c7cef818f1a9fb0d9dfda1472e3a968d41769b8d8d2e2c1dfc60486caea557"
+    },
+    "snapshots/klines/1000BONKUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "63a5c256e87d77fbfc0f055b5adfcc72030f3dcd929394613922abe12000a466"
+    },
+    "snapshots/klines/1000BONKUSDT_1d.parquet": {
+      "equal": true,
+      "sha256": "f57b3c4b4f31ddd3a8fcc57ad0e33fb70341cf8811fd717782084bbd01715dbe"
+    },
+    "snapshots/klines/1000BONKUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "563d4f81870a0f3769b3b85e8fc6a8c5e6f1db1dd668c76eccb751ddee02ce6a"
+    },
+    "snapshots/klines/1000BONKUSDT_1w.parquet": {
+      "equal": true,
+      "sha256": "70f0fbf950dbd4dd3ef65c37f0bf7742ffabb33c8130fb4a91f4e1df6086fe87"
+    },
+    "snapshots/klines/1000BONKUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "6ad95d730488eb2e9701205df58bf4062f28651812bf45965d683d600e9e34af"
+    },
+    "snapshots/klines/1000BONKUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "5ec06fa8c77d02d75d6632da05aae3031895b2d78736bf67d9d44fd134245d72"
+    },
+    "snapshots/klines/1000PEPEUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "cdb4490e9552fc66d62bc540933077726de534b158593b9b497ab62514357430"
+    },
+    "snapshots/klines/1000PEPEUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "557de54097638f1ea01e8f08fb34e2a2b86b0ba0328cb2d80091c29e5d5c7be5"
+    },
+    "snapshots/klines/1000PEPEUSDT_1d.parquet": {
+      "equal": true,
+      "sha256": "039e921bf45ba1d5ea6aabd44fd5ab13d9558176b3ba49c22956e4e56039f73c"
+    },
+    "snapshots/klines/1000PEPEUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "d83b965f15e776902640288c2b61156693c063aac5a9ca5ad968b0bffa83907e"
+    },
+    "snapshots/klines/1000PEPEUSDT_1w.parquet": {
+      "equal": true,
+      "sha256": "0f0879c2c1583518aff17e6dc300bbe32aad4d5bfacf5f9f05c4249e2b156c09"
+    },
+    "snapshots/klines/1000PEPEUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "ab6acb37c73c1529c219e01acd9b52c09c35d18decba9dd74c06cf2689c14320"
+    },
+    "snapshots/klines/1000PEPEUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "a7475ad55cbf4d87317feefc29190e256339139ebcf52cfd52e06f2d5231fe08"
+    },
+    "snapshots/klines/BNBUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "7ee5e83b7dc4f40a0999a74d3d4a8a8a6e0b6f09a0dc630946d276c64239d5b3"
+    },
+    "snapshots/klines/BNBUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "c03998a2bdabc3a3e8ff4673c29277b2698a7d3b701b9be2bae6202d03f68a73"
+    },
+    "snapshots/klines/BNBUSDT_1d.parquet": {
+      "equal": true,
+      "sha256": "6c2f18d1fe32c04ec7b3ea222b0a980ef08ab7959f1d212de84c45f6771acc5f"
+    },
+    "snapshots/klines/BNBUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "2c3102dd064d71ce2a459e3aa77f0b16739d27e61cf83d9eb62742a2fa6b8877"
+    },
+    "snapshots/klines/BNBUSDT_1w.parquet": {
+      "equal": true,
+      "sha256": "c9b71051323339f686c45809ee0f585d3c9ce89356efc260788d564e86ff5461"
+    },
+    "snapshots/klines/BNBUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "92a23f9a2293c3bd5fb0d4680c70234833881ea3dfb54496815d0b747e283457"
+    },
+    "snapshots/klines/BNBUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "48fc184dd83381ccbeb586d2112ee2cd05fbd0ba0ed19c96a2f2f9252a6da45c"
+    },
+    "snapshots/klines/BTCUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "c100b4de5dd4c97014d832aa147581340aab070df528d109968e0af6d450e0da"
+    },
+    "snapshots/klines/BTCUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "ee52dac31f16c6517d05d709c9d3498946aed19dfedf6b6e4e41d4ae3158b38c"
+    },
+    "snapshots/klines/BTCUSDT_1d.parquet": {
+      "equal": true,
+      "sha256": "a31a34c032509ef5c30f7cd7bcb22c8a7ce6427b8082708352f8d08572ee1fe4"
+    },
+    "snapshots/klines/BTCUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "a9e7af42ac4c3b663ef2bebe9be326b8c3e79f57081b53afd1190b3bc582309e"
+    },
+    "snapshots/klines/BTCUSDT_1m.parquet": {
+      "equal": true,
+      "sha256": "ed983cb595a724d17338a515bdb472d465371cc2b0588752e164a3ff954ec15e"
+    },
+    "snapshots/klines/BTCUSDT_1w.parquet": {
+      "equal": true,
+      "sha256": "a4ff9ee297b070939863b2947e3cfea5eec8480ed90244d89421ae6ef0419a3d"
+    },
+    "snapshots/klines/BTCUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "b22a2057e19f5da1b21a41b0f1734c6f158ca7799ad94ee316ac2462d243b1b8"
+    },
+    "snapshots/klines/BTCUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "045bf6cf45d15924003c1abebf2c3b4399c421388a7dd8f47c796bf2de19ec16"
+    },
+    "snapshots/klines/DOGEUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "d7a1f0d5a9a08e3592cc31548e32525e91bb4e6d80248e2c10eb4a9c05db5cb4"
+    },
+    "snapshots/klines/DOGEUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "0b3e5463683c4e87dfa04340146ad45e8e7617d7716fac8f108c5278a4ef738b"
+    },
+    "snapshots/klines/DOGEUSDT_1d.parquet": {
+      "equal": true,
+      "sha256": "609f0644bcc636788030bccf57faa51a5bbe4541fde0feb905f1bd8e61551ae6"
+    },
+    "snapshots/klines/DOGEUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "227d1d51f9a700c096a2a3ebaa561f84f4df24a7dd19f083f6ecf510b7ade46f"
+    },
+    "snapshots/klines/DOGEUSDT_1w.parquet": {
+      "equal": true,
+      "sha256": "45c979f34c0902041f6966dc90c90d5ff76a7c8cc603dd55dbdb5fa1a28fbed6"
+    },
+    "snapshots/klines/DOGEUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "cb241bc1f44b7748a58f5ad2f27f7cd17c98cb1c9f695c36fc2852981462ca16"
+    },
+    "snapshots/klines/DOGEUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "69656d1b4f3f7df5d6e2137252b7c215faca69110705d9ddf166bec2ce7a33b7"
+    },
+    "snapshots/klines/ENAUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "af26f23cf38d64b5321301aca597861323b7c8b26a175e22da1778f246adc25b"
+    },
+    "snapshots/klines/ENAUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "5691474c954311e29f4ae58b7a6681ba73764c8917a2abaa3bb5ad3759a05d1f"
+    },
+    "snapshots/klines/ENAUSDT_1d.parquet": {
+      "equal": true,
+      "sha256": "b7bc6d888a1a25ae27950399cb9c422ebe5ff50ff19dffbfe7597a96530ef3e0"
+    },
+    "snapshots/klines/ENAUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "5c5063e6122308d841ae32992cb2fb1be7ff175ab1ccba305f5d86b4358bc96b"
+    },
+    "snapshots/klines/ENAUSDT_1w.parquet": {
+      "equal": true,
+      "sha256": "7472c2427948640bb26794053f9cabf20d24a3569c78999c150932ae7e6eba27"
+    },
+    "snapshots/klines/ENAUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "1faa9df1fba7a9fe74adda36f55c4a0a2a07276334d8b822f6aa25bdeb917ab6"
+    },
+    "snapshots/klines/ENAUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "79ac7d4f77d3e58184dbd7569242360d4d45fb1d5a6ddb06cd4ee87c48f14104"
+    },
+    "snapshots/klines/ETHUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "7591d60929462e1ec2982caa22451d454b765f1b915a0b4bcd92bf1132873023"
+    },
+    "snapshots/klines/ETHUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "ba8e6540ff041ef252992b916ea6d62b075e31e98f0b56917d30e45001168a61"
+    },
+    "snapshots/klines/ETHUSDT_1d.parquet": {
+      "equal": true,
+      "sha256": "edf22fc8b8413ee925b56d86fdfadbdd612b264ee12ce1dd5693f7f8eff25bd8"
+    },
+    "snapshots/klines/ETHUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "0ee0488dcd1c93df9155114825d6cd32684878bf0d0b799eb1c463cf861be3b8"
+    },
+    "snapshots/klines/ETHUSDT_1m.parquet": {
+      "equal": true,
+      "sha256": "1e4b1703520953d0bae49e4319346fc5e9d2154e8ffefd3e6fb7874f2407db81"
+    },
+    "snapshots/klines/ETHUSDT_1w.parquet": {
+      "equal": true,
+      "sha256": "f7752db56adf9b0b0d35e5fca04f6f387042f90ead951f0628c9120c5e1fc07b"
+    },
+    "snapshots/klines/ETHUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "1486f6b8fa9adcfea8e9b5e11c9c98f02db25d5f380433b0fea2c7cc85af9fdf"
+    },
+    "snapshots/klines/ETHUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "5d48a50541e27b681aeb5d37d28bf3095a1d1a69d7c0dea6d5b775ea25db2312"
+    },
+    "snapshots/klines/FARTCOINUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "d440f1bde3fb12073a89ca2c883a2d53b7b6213740a80f307dc4567b3a102273"
+    },
+    "snapshots/klines/FARTCOINUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "f40ae0e91a14d3df6346fdaaa8e49cd519fe10f1791f426d6dc61a927f29b32c"
+    },
+    "snapshots/klines/FARTCOINUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "2805fe4e821ee19c48b6c29b3fefd17b4f4f02d3055b115b57a0e1e981253eba"
+    },
+    "snapshots/klines/FARTCOINUSDT_1m.parquet": {
+      "equal": true,
+      "sha256": "da22f1b3184684513fc9b3edecce7068ba542c7865bfd87408204bf8a319b980"
+    },
+    "snapshots/klines/FARTCOINUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "0d95e5983d91245b19539876cbfff7572d4a674f626d1198a85bc48ef21206df"
+    },
+    "snapshots/klines/FARTCOINUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "284086155226fdeb79309cba1d3e21ce764aaa0ecd5151e48c70e3e92b87ccf6"
+    },
+    "snapshots/klines/HYPEUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "7c6f5212aaf37643c02407f64c38c0661825a7f145e4729d165bbc3cc2cf0662"
+    },
+    "snapshots/klines/HYPEUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "6f08eaa6f2889b293050eeb82c5af3c53e340bee7bdf511c74fed42cdf781e0c"
+    },
+    "snapshots/klines/HYPEUSDT_1d.parquet": {
+      "equal": true,
+      "sha256": "6e1b7424c51239fae8771f452107c0a4b39689b18012678bc7ff7fa7dafe3474"
+    },
+    "snapshots/klines/HYPEUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "3b242abd674548ae8de8ed7bcfd617807af74bda6dc60d37b30ff49332aa34f3"
+    },
+    "snapshots/klines/HYPEUSDT_1m.parquet": {
+      "equal": true,
+      "sha256": "7d1dfd807b2c78dcdeb6530405548b95fbcf89b2fba8950e7e211275deadf43e"
+    },
+    "snapshots/klines/HYPEUSDT_1w.parquet": {
+      "equal": true,
+      "sha256": "3b153bbd3d628fe0642b351b9e08d3b5c523bb3f51e7d0a559a2e603568258d8"
+    },
+    "snapshots/klines/HYPEUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "5190dad15682170f97a91483d8aa520c048706d4719e2a07c64ff760c66c1fde"
+    },
+    "snapshots/klines/HYPEUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "121e920a5d17bcd6dbd30bbe4728c4897cdfb9e87d24d1d3253c6dbd5ce25766"
+    },
+    "snapshots/klines/JTOUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "e5784e52ec47f8a4620677a1758bef7adc8afaf27ff291e9d11b17acae8a7eee"
+    },
+    "snapshots/klines/JTOUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "fac540d1ebdaf54e08d6ac3ec146e66296ad1f9adee587093de5fe9b29db9ee9"
+    },
+    "snapshots/klines/JTOUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "4e4f5061710050ddc857a8f1f332a635ed264dffa6dfe195ee9fb9b12e2f6bca"
+    },
+    "snapshots/klines/JTOUSDT_1m.parquet": {
+      "equal": true,
+      "sha256": "3965ef8162b97aa16169a119ce891a002b73b95eb3f61aa4996dea84bc64c1a1"
+    },
+    "snapshots/klines/JTOUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "d668308502c901f651f965018dc51a3952149d0cff6087deb8fe96949b7a950f"
+    },
+    "snapshots/klines/JTOUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "5b87b2b13d7782cfe47d73da341ed5f4e05858475686d2a263699f2df772015b"
+    },
+    "snapshots/klines/LITUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "2fada51f978255bed1fe0bff3455f2554a54ec93dcd19d638efa4626e7096504"
+    },
+    "snapshots/klines/LITUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "869b1bdc574adba131ff91bcc892e8c439f986b061a45a9c920c03f20e56b38c"
+    },
+    "snapshots/klines/LITUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "67faa435e8d0fe0dec452522a7a9c656786010431a0d3ec7342c95fc9d7c729a"
+    },
+    "snapshots/klines/LITUSDT_1m.parquet": {
+      "equal": true,
+      "sha256": "e71bf1d046a8a52397febc03ff527526b0f4b7b7be808fb6dd60f119988dbade"
+    },
+    "snapshots/klines/LITUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "c535c48debef977e962f123fa0733e2092bbaad0664eced115a3cdd7a23567e8"
+    },
+    "snapshots/klines/LITUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "d01e6cb9558569a80e4df27f4414e81a5e4fb59150b0ef353522f15164eb1312"
+    },
+    "snapshots/klines/LTCUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "1809fdc7fa4581f7efe020e94394e5cf85a7d5bed8a1ba904f63a2a016dc054b"
+    },
+    "snapshots/klines/LTCUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "600dff0fcce9ca3ef9731eefa14d07c1ef2e5e77f0c4893703060bce33e8d396"
+    },
+    "snapshots/klines/LTCUSDT_1d.parquet": {
+      "equal": true,
+      "sha256": "03c154d34dbddbb4a115a063ae86301d821db35cfbb04d9db189c0b5565405f3"
+    },
+    "snapshots/klines/LTCUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "4b00410e1811297e13675cb77343798a91ff2190ccfd4cc9e60a12637029e918"
+    },
+    "snapshots/klines/LTCUSDT_1w.parquet": {
+      "equal": true,
+      "sha256": "435146aad8a8a80aed60d57c1e0cfea01a5d46fe4ccb1a35de25954bf028962a"
+    },
+    "snapshots/klines/LTCUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "c9c748ebe9e9924ee66f24225baa122e58f8d728962bb3b9f741ba3ed6a80816"
+    },
+    "snapshots/klines/LTCUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "d7770242070fe069849975af8ee5f8a3d6a81d2e41de73ff1cd87ec180c194e2"
+    },
+    "snapshots/klines/MNTUSDT_BYBIT_12h.parquet": {
+      "equal": true,
+      "sha256": "cb98bc1d45028bde35b9bf2f638eb3642dbb62b10016eb8f1cd2a750f63de69e"
+    },
+    "snapshots/klines/MNTUSDT_BYBIT_1d.parquet": {
+      "equal": true,
+      "sha256": "26997f236b1f1efcd04a39abeef58270ca49d02ea3591eb9c5ad157edd24b2fc"
+    },
+    "snapshots/klines/MNTUSDT_BYBIT_1h.parquet": {
+      "equal": true,
+      "sha256": "84f58f16538323270bf964b4d1a3c445e8e4f3178ea8c255d96208e039a2b131"
+    },
+    "snapshots/klines/MNTUSDT_BYBIT_1w.parquet": {
+      "equal": true,
+      "sha256": "af6e7dbf02333429c5ac5f3bd30a74ab3f7d4f403ada0d22c011874a7621cd77"
+    },
+    "snapshots/klines/MNTUSDT_BYBIT_4h.parquet": {
+      "equal": true,
+      "sha256": "1cda01e4953bdb8795475b8fe3a5999a40d6edc85f18b53845b48ec3252919ca"
+    },
+    "snapshots/klines/MNTUSDT_BYBIT_5m.parquet": {
+      "equal": true,
+      "sha256": "72b039039b5f869e6e307b831797d57e211f333f6b824d40039d02092b3907a6"
+    },
+    "snapshots/klines/NEARUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "35f7ee5ae8ec2aa0ffab1060aa6df97e78cd9618d96dcd1184b2536ac05de92f"
+    },
+    "snapshots/klines/NEARUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "c8ef91b0cf5900bcaa3b727e5e278450af5aa818c4d6991f58469bafda018e3d"
+    },
+    "snapshots/klines/NEARUSDT_1d.parquet": {
+      "equal": true,
+      "sha256": "b38404d79d12cd0bf58115f74a18ef45a508a7830fd4bb33613e61b32b618d8c"
+    },
+    "snapshots/klines/NEARUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "87f7b417728a2557d572e3b28c6073633928f01999c09fe430feab4b6f58a707"
+    },
+    "snapshots/klines/NEARUSDT_1m.parquet": {
+      "equal": true,
+      "sha256": "cd0ef08e5afcade34be1ad13fb80b3ab4fa3c59c09ebe8ad2fcb5066bf371728"
+    },
+    "snapshots/klines/NEARUSDT_1w.parquet": {
+      "equal": true,
+      "sha256": "e9752678292ae2f96e580c301319eb184ad1b6d3210be5ceaf49e9aba0fdc0d2"
+    },
+    "snapshots/klines/NEARUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "aacdfe91183e004c0968908327a63db5350e8a7c9d8e7f598edcb4ce83c6d2ef"
+    },
+    "snapshots/klines/NEARUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "0798a6ed44581dcf53d210aec108cfe078b919347e3d4ed641cefd93fab27ad7"
+    },
+    "snapshots/klines/PUMPUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "ef13bcd3d290b47b2bfd9cad2e4884443f52baaaa5528efdf1d427b991054d4f"
+    },
+    "snapshots/klines/PUMPUSDT_1d.parquet": {
+      "equal": true,
+      "sha256": "a45699e4b24b74f04c2f15ed8407d0174ab9b81d9ff7bdd9004ee33a8fd2bbbb"
+    },
+    "snapshots/klines/PUMPUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "3999cdd4bff650d1c2c3b1c20db5bafdd6ac2a99a0bb723a77f963b38c3a956d"
+    },
+    "snapshots/klines/PUMPUSDT_1w.parquet": {
+      "equal": true,
+      "sha256": "ba6c0cfd5bd242ee58ce8bea64f3cd9fb183a3cd7d0261e8db72e47a50336d4b"
+    },
+    "snapshots/klines/PUMPUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "b5c2cd4c5433e4523280aec90fab29c0e2a370f7b6d883d7c7b600cfbc14ec75"
+    },
+    "snapshots/klines/PUMPUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "750c3a1b98040205c8c1ffb7cffc8d0c73a9e89b8b3766742ce1d37b80a68303"
+    },
+    "snapshots/klines/SOLUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "dafe64d7ac541ae7386deda54368600da19b662bc82cf4745f153a2a8c9f97c8"
+    },
+    "snapshots/klines/SOLUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "da0bb6c994385d70643f71d96b184975ffb3ad688a87ca4ffec9f6def438d404"
+    },
+    "snapshots/klines/SOLUSDT_1d.parquet": {
+      "equal": true,
+      "sha256": "ef22899076dbd65916fba5c49fd4d66e94a4a783f7a934075657ff7f2b6871b6"
+    },
+    "snapshots/klines/SOLUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "40105a51c27cbb3a6f70dfce64f5866db7f101ac5d46e8b9d55175dec6259ef6"
+    },
+    "snapshots/klines/SOLUSDT_1m.parquet": {
+      "equal": true,
+      "sha256": "030dce33207f1b3413431d2bd6056677a9de78e5e8f298e20a049dbc91662585"
+    },
+    "snapshots/klines/SOLUSDT_1w.parquet": {
+      "equal": true,
+      "sha256": "38a6667ee0d1ddb8016e2ca57edd4a2f28d4c95745e9446658dbb04984dd7b58"
+    },
+    "snapshots/klines/SOLUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "597f91f54c362960a9113aa63442580c8cab17c5aef112c97659c2be0d2d83b8"
+    },
+    "snapshots/klines/SOLUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "3519babec50234c5550062d67c6ed5bac25f0c72d476e79ab7061db72a78e0df"
+    },
+    "snapshots/klines/SUIUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "b93a4d61475a30210ed2f1141f2f4e842a1be9c76f07b26c3c504e721bb96eee"
+    },
+    "snapshots/klines/SUIUSDT_1d.parquet": {
+      "equal": true,
+      "sha256": "17b55d6d433eccb4c9cb2e0f348026fde9d33f185c8540fab2594df6817e1de6"
+    },
+    "snapshots/klines/SUIUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "adac39a4605b5be2bd95472b842741b6da9d3b60a7a02a39a9eddef8d1bf0e68"
+    },
+    "snapshots/klines/SUIUSDT_1w.parquet": {
+      "equal": true,
+      "sha256": "39a97c1506afac7b37587477503f6c6300a0e252aafd518e3202ec05e44eb89b"
+    },
+    "snapshots/klines/SUIUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "01d1de2c8a633d6e95db7d675377a18a37df6293b6b3bb07d86d1d4b433df086"
+    },
+    "snapshots/klines/SUIUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "f832c2af0e466a4292297f490aae327fd09b820b15ce911aeec6527aedca3aca"
+    },
+    "snapshots/klines/TAOUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "1d6071aa3010011e00124aa10fed36a737defbc3ee634eef9a1bdcbb7d9000de"
+    },
+    "snapshots/klines/TAOUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "4326f01db95db37b13f9c1c433fd458bfdf6397c748895fb441a2601e2e242ff"
+    },
+    "snapshots/klines/TAOUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "71a7e8b4fa0fb0c7405fc7b9223560611dec2201829560e31b5064f6d6a6a2c3"
+    },
+    "snapshots/klines/TAOUSDT_1m.parquet": {
+      "equal": true,
+      "sha256": "989e3608e1ac79f7f3fb286c4a7c35f9ff88995f682a560bd3b9bebd0a87383b"
+    },
+    "snapshots/klines/TAOUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "f282b18e6a8e876b7044947c9c60ce0da63d485549a251cc91f7aa35db3db1a9"
+    },
+    "snapshots/klines/TAOUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "aceab6ad3aefa39e041ada5d5ea1cff87410506a3f0b1be0a65685c74fae8ae6"
+    },
+    "snapshots/klines/UNIUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "6eb3c2c290673a672f970dfe1582b3a83aae3a764748fc3b96f4c773e96909a0"
+    },
+    "snapshots/klines/UNIUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "41f4189c09e4d0642253b273adc51e5e621bb250f82e6016a02e764d18df63ba"
+    },
+    "snapshots/klines/UNIUSDT_1d.parquet": {
+      "equal": true,
+      "sha256": "538e1c221cf4f610eb902f4cee4469fdd27294474aaabaca36b4b5823d201185"
+    },
+    "snapshots/klines/UNIUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "e511eb36cfb768f7b3a2a22794eea73c1d9843db2e1b7ff7e9993a56a9a5a07d"
+    },
+    "snapshots/klines/UNIUSDT_1w.parquet": {
+      "equal": true,
+      "sha256": "fd299527db3f53edd67403950efe2d3de66d17bae5407958ee5c35b232a912ab"
+    },
+    "snapshots/klines/UNIUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "5ae91b4d1da079c7c4b2abc2ac9036ad6fda113502b3fc7fd3436503a424e5c7"
+    },
+    "snapshots/klines/UNIUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "4ae21d7095d956cc4701698c37a2311bfde4e25dd8ade5e69b4b4d9cd1fc6486"
+    },
+    "snapshots/klines/USELESSUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "c6a00de3f6c2631b1be16b13430a8c0fd5f313161b3b113efd480c1dde0e4fb6"
+    },
+    "snapshots/klines/USELESSUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "d9d9cd0f6da3b3eb54422bb05504463eb3f29411755b0c5b661e7d8ca445cb3e"
+    },
+    "snapshots/klines/USELESSUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "2c72e5c54b69e9ee474b90e57216df2a3495385aebaa4351190da064870e4218"
+    },
+    "snapshots/klines/USELESSUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "68aac8fca5e58b0d194993dd10809681be0440d7808f2f5374f3a1382749a7bf"
+    },
+    "snapshots/klines/XMRUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "91db678d52b55df8de203d1480b679e7992ebf94ed1cc476eec6b8ac30c848ba"
+    },
+    "snapshots/klines/XMRUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "00ed18f366dab6acecc6d1527fd7a2f8c2639c1c402ab2cf7499ed64ddf8bda0"
+    },
+    "snapshots/klines/XMRUSDT_1d.parquet": {
+      "equal": true,
+      "sha256": "d5c1ae12f28e4435fe45fb083ac051d6477eda08a5be6b0a8f2ef5fbd43a4911"
+    },
+    "snapshots/klines/XMRUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "1b2f6410f9b738107f5863edeb0d3f692d4dd816a0bf05e51800330c92a39fe1"
+    },
+    "snapshots/klines/XMRUSDT_1w.parquet": {
+      "equal": true,
+      "sha256": "1b911a5796b79551a4a5e00567201133d956c23fd9978ed8bf2ccd4ad899cc18"
+    },
+    "snapshots/klines/XMRUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "77f5e1582a070c0b4c811d727a2b38bbf7d09c52c4de98b73529387490cc02a2"
+    },
+    "snapshots/klines/XMRUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "229194aa3a2d516495bb007151d9c098014c3827be088acc33fff55d1c795a80"
+    },
+    "snapshots/klines/XPLUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "74031e754f29c7979692e4e151ace7ff0094a3d4083e8cac1501227adbc1219b"
+    },
+    "snapshots/klines/XPLUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "3898704fd31d438dfcb26ef843c8678e3bfc5d491abb985d88b46b393a0d40bc"
+    },
+    "snapshots/klines/XPLUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "377f5d83fdb796b7d136b277b94c8478df91ce6ede3fe5046b4717d2ea47ff8c"
+    },
+    "snapshots/klines/XPLUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "e9188396ec292d5ae3fa129ad2e74968da5ccb421ec2dd4721727824877ed17a"
+    },
+    "snapshots/klines/ZECUSDT_12h.parquet": {
+      "equal": true,
+      "sha256": "41009b9c7c5dc5f48af56d22c0716e39fa9fb6dca5fde27c7fb80d4de55aada0"
+    },
+    "snapshots/klines/ZECUSDT_15m.parquet": {
+      "equal": true,
+      "sha256": "ebd1bf5d1fd624d1d2f0f742dba8ba35ba3a43314535bf17d99494af9a9708cc"
+    },
+    "snapshots/klines/ZECUSDT_1d.parquet": {
+      "equal": true,
+      "sha256": "9fc8925c075ccfd74a61b57d9e7f246af805154784700de366ee729b6abecfe3"
+    },
+    "snapshots/klines/ZECUSDT_1h.parquet": {
+      "equal": true,
+      "sha256": "2d810bb621546f2c612a06fc73111aa434e9acce7ed220c6e7f625c63564e2d3"
+    },
+    "snapshots/klines/ZECUSDT_1m.parquet": {
+      "equal": true,
+      "sha256": "8af6e23b414629acf4b3e63dbfc50f63d4fed490d65f5718c575c6468ebdece7"
+    },
+    "snapshots/klines/ZECUSDT_1w.parquet": {
+      "equal": true,
+      "sha256": "68dce507c0b186cd7a0d181ae7cd07b65a6197795f09f975a69c3038ea0f5f6b"
+    },
+    "snapshots/klines/ZECUSDT_4h.parquet": {
+      "equal": true,
+      "sha256": "0bfa930b527c0b384ac3c7e5c1fd9ddf75fa904f575f6d8fe042da88809cae25"
+    },
+    "snapshots/klines/ZECUSDT_5m.parquet": {
+      "equal": true,
+      "sha256": "e170dfef538d6964c3e712f08dbe305043e568f52f0496a6ae923c49aa413556"
+    }
+  },
+  "law": "a sha-verified plain copy: every destination file was RE-READ from the destination and its sha256 equals STAGE_D_MANIFEST.json's (the bodies: FEE_SOURCE.json's); the destination's file set equals the manifest's. Stated limit: a read served from the OS cache cannot be told from a read off the platter; F-MIRROR re-hashes again on any later run [L-D.24]",
+  "manifest": {
+    "path": "research_outputs/tierc12/data/STAGE_D_MANIFEST.json",
+    "sha256": "dcddc5f7d08d0f0bc9805ff79b611d80052d43566b38d1b83d9906964092e8b8"
+  },
+  "mirrored_wall_clock_utc": "2026-10-09T22:47:33Z",
+  "n_already_equal": 0,
+  "n_copied_this_run": 176,
+  "n_files": 176,
+  "n_provenance_files": 0,
+  "n_snapshot_files": 176,
+  "provenance_note": "the provenance destination holds the fee-source bodies FEE_SOURCE.json records; where it records none (no page was retrieved) nothing is written there",
+  "seed": 20261008,
+  "self_describing_files": [
+    "STAGE_D_MANIFEST.json",
+    "SHA256SUMS"
+  ],
+  "stage": "TC12-D.mirror",
+  "tier": "TIER-C12",
+  "unmirrored_for_athena": [
+    "/Users/luis/.cache/naiad/snapshots/tc10_20260921",
+    "/Users/luis/.cache/naiad/snapshots/tc11_20260925"
+  ],
+  "volume_observed": {
+    "case_insensitive": true,
+    "filesystem_name": "not read by this process \u2014 it makes no out-of-process call here (L-D.11: one site, the clone)",
+    "statvfs": {
+      "f_bavail": 5234579,
+      "f_blocks": 15260665,
+      "f_bsize": 1048576,
+      "f_frsize": 262144,
+      "f_namemax": 255
+    }
+  }
+}
