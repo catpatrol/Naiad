@@ -21,7 +21,7 @@
   },
   "amendments_of_record": {
     "path": "research_outputs/tierc12/LEANS_AMENDMENTS.md",
-    "sha256": "fa90f30cba690e0986ec5a7014ceaeaf1224cb09eff965096bf66712bbdfb017"
+    "sha256": "dda75425ffe7d6681defedabc12e1e0d46772b4996b55f9edee068742eb89aec"
   },
   "registrations_of_record": {
     "path": "research_outputs/tierc12/registrations/REGISTRY_PIN.json",
@@ -894,6 +894,105 @@
       "_record": {
         "path": "research_outputs/tierc12/progress/TC12-D.mirror.json",
         "sha256": "6390ea4cc4a3eef817651f44dddbb6223b152771bdcfb252eb4aa038f6de5d54"
+      }
+    },
+    {
+      "artifact_shas": {
+        "research_outputs/tierc12/env/FIXTURES_ENV_VENDOR.txt": {
+          "bytes": 4215,
+          "sha256": "7c55b22abbde0e0b39b9c8f0bef88f8085189530c6e50db35199aecd689a8bd0"
+        },
+        "research_outputs/tierc12/env/LINEAGE_PINS.json": {
+          "bytes": 24368,
+          "sha256": "f1fad830303280b38646385e552533cd605826a105624ffefb27ae4c063a66b4"
+        },
+        "research_outputs/tierc12/vendor/README.md": {
+          "bytes": 1242,
+          "sha256": "b41a4c2256791f58ca8894123869519152982e72f12f9f78faa16501cf9d758e"
+        },
+        "research_outputs/tierc12/vendor/tierc11_env@1526093b.py": {
+          "bytes": 68545,
+          "sha256": "1526093b25161927337ced6112a310075b1a57c825f08705814e48619398f798"
+        },
+        "scripts/tierc12_env_fixtures.py": {
+          "bytes": 20261,
+          "sha256": "5dab647ed232465c2bf2393b38a660f13f4de5f4ba09bfe292ea6ee32a04e657"
+        },
+        "scripts/tierc12_vendor.py": {
+          "bytes": 34415,
+          "sha256": "5e069839aaba1cdd6fd7915546597534618acbaa82a47b960b0b1b39279f2a47"
+        },
+        "research_outputs/tierc12/LEANS_AMENDMENTS.md": {
+          "bytes": 79784,
+          "sha256": "dda75425ffe7d6681defedabc12e1e0d46772b4996b55f9edee068742eb89aec"
+        },
+        "research_outputs/tierc12/AMENDMENTS_PROPOSED.md": {
+          "bytes": 105337,
+          "sha256": "a5af9a404412afc46f770eb36060f4827bf63f481d5cf9c3a6b78344c1e1459a"
+        },
+        "research_outputs/tierc12/resume/FIXTURES_RESUME_TC12-ENV.vendor.txt": {
+          "bytes": 31823,
+          "sha256": "2eea72a9db0589cb3d959b0c9caeaaf8b30ef525795d0e56f7101ae0ece52050"
+        }
+      },
+      "as_of": "2026-10-08T20:00:00Z",
+      "blockers": [],
+      "depends_on": [
+        "TC12-D"
+      ],
+      "fixtures": [
+        {
+          "exit_code": 0,
+          "legs_not_run": 0,
+          "legs_red": 0,
+          "legs_total": 1,
+          "provenance": false,
+          "suite": "scripts/tierc12_env_fixtures.py --stage=TC12-ENV.vendor",
+          "transcript": "research_outputs/tierc12/env/FIXTURES_ENV_VENDOR.txt",
+          "transcript_drift": false,
+          "transcript_sha_after": "7c55b22abbde0e0b39b9c8f0bef88f8085189530c6e50db35199aecd689a8bd0",
+          "transcript_sha_before": "7c55b22abbde0e0b39b9c8f0bef88f8085189530c6e50db35199aecd689a8bd0",
+          "wall_seconds": 0.1
+        },
+        {
+          "suite": "scripts/tierc12_resume_fixtures.py --stage=TC12-ENV.vendor --at=7146abccbc4c77d82619cb940c561a59f5fc86dc",
+          "transcript": "research_outputs/tierc12/resume/FIXTURES_RESUME_TC12-ENV.vendor.txt",
+          "provenance": false,
+          "exit_code": 0,
+          "legs_red": 0,
+          "legs_not_run": 0,
+          "legs_total": 10,
+          "transcript_drift": false,
+          "transcript_sha_before": "2eea72a9db0589cb3d959b0c9caeaaf8b30ef525795d0e56f7101ae0ece52050",
+          "transcript_sha_after": "2eea72a9db0589cb3d959b0c9caeaaf8b30ef525795d0e56f7101ae0ece52050",
+          "wall_seconds": 9.0
+        }
+      ],
+      "notes": [
+        "the first act of TC12-ENV [L-D.25, L-D.30; O-31]: a blocking child with its own commit, filed after TC12-D (COMPLETE-VERIFIED) and before scripts/tierc12_env.py exists; no shim is imported, no lineage module is imported (the tool reads source TEXT and hashes BYTES), no tape is read, no out-of-process call is made by the tool",
+        "THE THREE SHAS, as measured: vendored 1526093b25161927337ced6112a310075b1a57c825f08705814e48619398f798 == certified (research_outputs/tierc11/PROGRESS.json, stage TC11-ENV, artifact_shas['scripts/tierc11_env.py'], that file held to TC12-R0's frozen_estate_shas_at_r0) == live scripts/tierc11_env.py; 68545 bytes each; the copy was written by `tierc12_vendor.py --vendor` from the live file's bytes (never retyped) and is write-once in code; vendor/README.md is rendered from the referee's own bytes",
+        "THE LINEAGE PINS [L-D.29]: walk_roots = the 17 modules of the referee's import windows, read by AST in its order (tierc2_baseline, tierc10_data, tierc10_panel, tierc10_brk, tierc10_lanes, tierc9, tierc8, tierc7, tierc7_rules, tierc7_lab_regime, tierc6, tierc6_rules, tierc5, tierc5_rules, tierc4_rules, tierc3_rules, tierc2_rules); modules = 60 repo files (the mirrored walk of scripts/tierc11_closure_fixtures.py, NOT stopping at the TC10 layer and not skipping the range machine); X's record x_rec/tierc11x/forward/BOOK_SPECS.json (sha 72a1f52359c66084d22f8bc99b0cd35e7edd89db2751f4859f559c8b1f51cac3, at its X_REC_MANIFEST row; the manifest at its certified sha) holds 21 path_modules keys: 18 main-tree files, ALL EQUAL to the main tree now, and 3 of X's own scripts, each equal to its x_rec/scripts copy; NOTHING in the lineage differs from X's record; step_q_commit 28e006b",
+        "measured beside it (dev checks, not legs of this record): every one of the 60 pinned files, and scripts/forward_log.py, equals its git blob at the STEP Q commit and at HEAD; the pins rebuilt into scratch under PYTHONHASHSEED 1, 7 and the contract seed are byte-identical to the filed record; every import the walk could not resolve is third-party (numpy, pandas, pyarrow, requests, yaml)",
+        "DEFAULT TAKEN, to be ruled (amendment proposal 1): ENV_HUNKS is EMPTY at this record — the unit files the referee, the tool and the pins 'before any hunk is applied'; the ten hunks of L-D.26 are filed with the shim they build at TC12-ENV. L-D.25's [referee] clause 'a declared number unused' therefore cannot bind the table of record here: the block proves the hunk laws through production's build_env_text on a CONTROL TABLE typed in the suite (ten entries, one per declared number) with the three stated plants, and JUDGES the table of record by the same laws whenever it holds an entry (a breach is RED; nothing of it is printed, so the transcript does not move when TC12-ENV fills it — checked: a lawful ten-entry table of record gives the same bytes, a nine-number one is RED). All ten are mandatory at TC12-ENV's F-VENDOR block",
+        "DEFAULT TAKEN (proposal 2): `modules` is the static closure exactly (60 files). 17 of X's 18 main-tree keys lie inside it; the other, ['scripts/forward_log.py'], is X's forward ride-path module, which the shim does not import — it is held equal under x_path_modules.main_tree (in_closure false) and is not a key of `modules`. Additive keys beyond L-D.29's four (module_rows with name / bytes / held_against, referee, n_*, the per-key maps under x_path_modules) are kept; the X manifest's own sha is asserted and not filed (a later record may re-record that file)",
+        "DEFAULT TAKEN (proposal 3): a caught plant prints its DETECTOR in the suite's own fixed words, never production's message text — scripts/tierc12_vendor.py is extended at TC12-ENV and a transcript of record must not move with its wording; the vendor transcript stands on the tool's API and detector names only",
+        "DEFAULT TAKEN (proposal 4): 'tracked and equal to its blob' is written as referee_git_findings(at, required) for TC12-ENV's F-VENDOR block (read-only git at --at); at this stage the referee is not committed, so the clause is held only when --at names a commit whose tree holds the referee, and one fixed sentence says so (checked in a scratch repository: equal blob GREEN, a differing working file VENDOR-GIT, an earlier commit silent here and VENDOR-GIT when required)",
+        "the closure suite, run by the builder at --stage=TC12-ENV into a scratch --root with NAIAD_CACHE_DIR exported: 8 GREEN, 2 RED — both RED legs are the shim's absence (F-CLOSURE [i-b] WALL-TUPLES: tierc12_env is not on file; F-HOOK-ESCAPE: the shim's hook_escapes did not answer) and say nothing of this record's sources; scripts/tierc12_vendor.py is scanned GREEN by F-TYPED (no typed number), F-SEED, F-CLOSURE [i] (fresh interpreter), [ii] (no forbidden import, no dynamic import, no pin or tick literal; static reach: none) and [iii] (VA-blind); scripts/tierc12_env_fixtures.py is scanned GREEN by F-FX-FORM",
+        "HAZARD FOR THE TC12-ENV GATE (measured, another unit's leg): the closure suite's pin scan is a raw TEXT scan over every non-fixture tierc12 source; run over the referee's own text it reads 7 PIN-LITERAL hits (the docstring's TC11 pin, the PIN_MS / PIN_ISO lines, the TC10_PIN_MS line and its comment, the comment naming L-T.6's opening instant). L-D.26 keeps the TC10_PIN_MS line and the referee's comments in the built shim, and hunk 3's `old` must quote the PIN_MS / PIN_ISO lines inside scripts/tierc12_vendor.py — both will read PIN-LITERAL at F-CLOSURE [ii] unless ruled",
+        "depends_on is the SUBSTAGES_T floor, [TC12-D]; through that record's own closure this build also read progress/TC12-R0.json (frozen_estate_shas_at_r0, for TC11's PROGRESS — L-0.4 seam 12), x_rec/X_REC_MANIFEST.json at the sha TC12-LEANS certifies, progress/STEP_Q.json (the commit), the contract seed through the pin door (TC12-REG) and Stage D's pin and manifest for the transcript header",
+        "dry runs by the builder into scratch roots, the tree read-only: the resume suite at --stage=TC12-ENV.vendor --at=7146abc… reads 9 GREEN, 1 RED — F-PROGRESS alone (PROGRESS.json is not yet the merger's output with this record on disk: the merge is the orchestrator's gate step); with these files on disk the recorded suites of the earlier gates re-run BYTE-IDENTICAL to their filed transcripts (pins, registrations, forward, data, closure at TC12-REG and TC12-D; the three earlier resume transcripts differ in that same F-PROGRESS block only, until the merge)",
+        "this record's file is rendered with sorted keys and a trailing newline (the unit brief's hygiene line); the seven records filed before it carry L-0.9's key order and no trailing newline — the key set is the same",
+        "scratch lives under $TMPDIR and is removed; no __pycache__ was written; the dirty daily file, the dirty tierc10 transcript and pine/*.pine were not touched; no git state was changed",
+        "4 mechanics proposal(s) of this record's builder filed AP-70..AP-73 and ruled AM-71..AM-74 at this gate; the two amendment texts are re-recorded here as grown (append-only)"
+      ],
+      "one_line": "the referee VENDORED before any hunk is applied: vendor/tierc11_env@1526093b.py is the BYTES of scripts/tierc11_env.py (sha256 1526093b25161927337ced6112a310075b1a57c825f08705814e48619398f798, 68545 B, 1381 lines) — three shas equal (the copy's, the one TC11's PROGRESS certifies under TC11-ENV, the live file's), the tag prefixes it; env/LINEAGE_PINS.json filed write-once: 60 modules in the static import closure of the referee's 17 roots, X's 18 main-tree path_modules ALL EQUAL in the main tree (17 of them inside the closure, 43 modules pinned by this file alone); the hunk table declares 10 hunks and holds no entry; F-VENDOR [referee] GREEN (1 block), transcript byte-identical from clean states",
+      "parent": "TC12-ENV",
+      "stage": "TC12-ENV.vendor",
+      "status": "COMPLETE-VERIFIED",
+      "supersedes": [],
+      "_record": {
+        "path": "research_outputs/tierc12/progress/TC12-ENV.vendor.json",
+        "sha256": "427a32ca9acd91b4dae18153755af91a34398d7d4a81369fc830a612c580141d"
       }
     }
   ]

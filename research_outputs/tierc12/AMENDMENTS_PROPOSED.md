@@ -1113,3 +1113,67 @@ every item of L-X.36's list. The verdict words, the clauses (a)(b)(c) and the la
 **DEFAULT TAKEN.** No edit was made to the resume suite and none was invented to give AM-69 a diff.
 
 **Status.** Ruled at the TC12-D gate: AM-70.
+
+---
+
+## AP-70 · 2026-10-10 (~01:12Z) · L-D.25, L-D.26, L-D.30, L-D.31, L-0.10 · the builder of TC12-ENV.vendor
+
+**Title.** F-VENDOR [referee] at TC12-ENV.vendor: the hunk table holds no entry at this record, and the suite holds this record's row only
+
+**Readings.** L-D.25, L-D.26, L-D.30, L-D.31, L-0.10 (SUBSTAGES_T row TC12-ENV.vendor)
+
+**The texts.** L-D.25: "The same record files `scripts/tierc12_vendor.py` (the hunk table, below)" and "F-VENDOR [referee] ... FAILS IF: the three shas are not equal; the tag does not prefix the sha; `build_env_text(referee)` breaks one of its own laws (an `old` that does not occur exactly once, a hunk number outside 1-10, a declared number unused); or the text it builds, with the hunks reverted in reverse order, is not the referee byte for byte." L-D.30: "`TC12-ENV.vendor` — `scripts/tierc12_vendor.py` and `scripts/tierc12_env_fixtures.py` (written whole before the vendor gate, because its first invocation runs there; if its bytes change before the TC12-ENV gate it is re-recorded there under L-0.4's last-record law)". Unit brief: "small, exact, and committed on its own before any hunk is applied ... the vendor tool: writes/verifies the referee and builds LINEAGE_PINS.json ... at THIS record it hosts F-VENDOR's [referee] legs only ... the parent record TC12-ENV, built after your commit by another builder, will extend this same suite".
+
+**The fact.** The unit files the referee, the tool and the pins; the ten hunks of L-D.26 (the shim's whole change) and the shim's legs are the TC12-ENV builder's. With ENV_HUNKS empty, build_env_text(referee) HALTs HUNK-UNUSED for all ten, so the [referee] clause 'a declared number unused' would be RED at its own gate. No hunk can be proven beyond its text laws here in any case: the shim cannot be imported until this record's LINEAGE_PINS.json is certified (P6). And both the tool and the suite are extended and re-recorded at TC12-ENV, so a vendor transcript that printed, or depended for its bytes on, the table of record could not re-run byte-identical afterwards.
+
+**DEFAULT TAKEN.** ENV_HUNKS is filed EMPTY with the whole machinery around it (HUNK_NAMES x10 in L-D.26's order, a hunk's number = its position; H(); build_env_text; revert_env_text; --build-env, write-once and byte-verified; text_only_hunk() derives 9 without typing it). F-VENDOR [referee] proves the hunk laws through PRODUCTION's build_env_text on a CONTROL TABLE typed in the suite (ten entries, one per declared number, each `old` a line standing once in the referee): it builds, and its text reverted by the suite's own loop is the referee byte for byte. The three stated plants run on that table plus one bad entry, and also on a copy of the table of record whenever it holds entries. The table of record is JUDGED by the same laws and the same revert whenever it holds an entry (a breach is RED) and nothing of it is printed. Checked in scratch: a lawful ten-entry table of record gives the SAME transcript bytes; a nine-number one is RED (HUNK-UNUSED); an `old` standing twice is RED. All ten are mandatory at TC12-ENV's F-VENDOR block. If ruled to the letter instead, authoring the ten hunks into ENV_HUNKS before this gate moves only the tool's sha in this record; the transcript does not move.
+
+**Status.** Ruled at the TC12-ENV.vendor gate: AM-71.
+
+---
+
+## AP-71 · 2026-10-10 (~01:12Z) · L-D.29, L-0.22 · the builder of TC12-ENV.vendor
+
+**Title.** LINEAGE_PINS.json: `modules` is the static closure exactly; one of X's 18 main-tree keys lies outside it; additive keys
+
+**Readings.** L-D.29; L-0.22 seam 14
+
+**The texts.** L-D.29: "`modules` {relative path: sha256} for the STATIC repo import closure of those roots"; "`x_path_modules` {record path, sha, `n_main_tree_keys`, `all_equal`}, `step_q_commit`"; "The 18 that are main-tree files ... must each hash, in the main tree NOW, to X's value." Unit brief: "for every lineage module the shim will import ... its name, path, bytes, sha256; 18 of them are held against X's filed path_modules record ..., the rest pinned by TC12's own file".
+
+**The fact.** The static closure of the referee's 17 roots is 60 repo files. Of X's 18 main-tree path_modules keys, 17 are inside it; the 18th, scripts/forward_log.py, is X's forward ride-path module, which neither the shim nor anything it reaches imports. L-D.29's key list carries no per-module name or bytes. The closure suite's reader (lineage_pins()) takes any `*.py` key -> sha and any {path, sha256} object, so additive keys read consistently. X_REC_MANIFEST.json may lawfully be re-recorded by a later record, and this record is write-once.
+
+**DEFAULT TAKEN.** `modules` = the 60 closure files exactly, {path: sha256}. `module_rows` adds name / path / bytes / sha256 / held_against (17 'X path_modules', 43 'TC12 LINEAGE_PINS'). `x_path_modules` = {record_path, sha256 72a1f523...cac3, key, n_keys 21, n_main_tree_keys 18, all_equal true, main_tree {path: {sha256, bytes, equal, in_closure}} (forward_log.py: in_closure false), x_own {the three tc11x scripts: sha256, copy, equal}, manifest_path}. The manifest's own sha is asserted (certified) and not filed. Also filed: walk_roots (17, the referee's order), step_q_commit '28e006b', tier, record, what, law, walk_law, referee {path, bytes, sha256, source, certified_by}, n_modules, n_held_against_x, n_held_by_tc12_alone.
+
+**Status.** Ruled at the TC12-ENV.vendor gate: AM-72.
+
+---
+
+## AP-72 · 2026-10-10 (~01:12Z) · L-0.14, L-D.25, L-D.30 · the builder of TC12-ENV.vendor
+
+**Title.** A caught plant prints its detector in the suite's own fixed words, not production's message text
+
+**Readings.** L-0.14 A and I; L-D.25 (the [referee] plants); L-D.30
+
+**The texts.** L-0.14 A: "caught only if a finding NAMES THE INTENDED DETECTOR". L-D.25: "a one-byte edit of a COPY of the referee → 'sha != certified'". The brief's law of the last gate: "a suite prints only facts fixed AS OF ITS GATE: never ... the working copy of a script another gate may repair".
+
+**The fact.** FX.plants prints the first 170 characters of the caught finding, which is production's message text (a HALT line of build_env_text, a finding of referee_findings). scripts/tierc12_vendor.py is extended and re-recorded at TC12-ENV; a reworded message there would move this record's transcript.
+
+**DEFAULT TAKEN.** Each plant thunk hands `plants` the production finding rewritten as '<detector> — <the suite's typed words>' if and only if the finding names the wanted detector; any other finding is handed back raw, so the harness still reads the wrong detector. The vendor transcript therefore stands on the tool's API and detector names only (referee_findings, three_shas, referee_tag, REFEREE_REL, hunk_numbers, ENV_HUNKS, build_env_text; `sha != certified`, HUNK-NUMBER, HUNK-OLD, HUNK-UNUSED, HUNK-REVERT), stated in both docstrings.
+
+**Status.** Ruled at the TC12-ENV.vendor gate: AM-73.
+
+---
+
+## AP-73 · 2026-10-10 (~01:12Z) · L-D.25, L-0.9 · the builder of TC12-ENV.vendor
+
+**Title.** 'tracked and equal to its blob' at the vendor stage: written now, held only when --at's tree holds the referee
+
+**Readings.** L-D.25 (the second F-VENDOR block); L-0.9
+
+**The texts.** L-D.25: "the referee is untracked or differs from its blob at HEAD (a fixture-side read-only git call; the vendor commit precedes this gate, so the blob exists when the leg first runs)". L-0.9: "F-VENDOR's 'tracked and equal to its blob' leg (read at `--at`) runs at the `TC12-ENV` gate, after the vendor commit." Unit brief: "write it now, parameterised, and at this stage print its stated pre-commit form".
+
+**The fact.** At this record's gate the referee is in no commit, so a line stating its git state would differ between the filing run and every later sweep.
+
+**DEFAULT TAKEN.** referee_git_findings(at, required) is written in the suite (git --no-optional-locks cat-file -e / show at --at). required=True is for TC12-ENV's block: no --at, the path absent from that tree, or blob != file is VENDOR-GIT. At the vendor stage required=False: the clause is held only when --at names a commit whose tree holds the referee (then a differing working file is RED), and one fixed sentence says so. 'Tracked' is read as 'in the tree of the commit --at names' (L-0.9), not the index. Tested in a scratch repository under $TMPDIR.
+
+**Status.** Ruled at the TC12-ENV.vendor gate: AM-74.

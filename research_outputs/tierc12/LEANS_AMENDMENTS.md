@@ -896,3 +896,51 @@ row's population, arms, statistic, verdict rule or labels moves.
 **Reason.** A build fact reported by the repair unit and checked on the tree: the sweep of earlier gates is GREEN with the suite's bytes unchanged. Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
 
 **Redone.** Nothing.
+
+---
+
+## AM-71 · 2026-10-10 (~01:12Z) · L-D.25, L-D.26, L-D.30, L-D.31, L-0.10 · ruling on AP-70
+
+**Text amended.** L-D.25, L-D.26, L-D.30, L-D.31, L-0.10 (SUBSTAGES_T row TC12-ENV.vendor) — F-VENDOR [referee] at TC12-ENV.vendor: the hunk table holds no entry at this record, and the suite holds this record's row only
+
+**Amended to.** ENV_HUNKS is filed EMPTY with the whole machinery around it (HUNK_NAMES x10 in L-D.26's order, a hunk's number = its position; H(); build_env_text; revert_env_text; --build-env, write-once and byte-verified; text_only_hunk() derives 9 without typing it). F-VENDOR [referee] proves the hunk laws through PRODUCTION's build_env_text on a CONTROL TABLE typed in the suite (ten entries, one per declared number, each `old` a line standing once in the referee): it builds, and its text reverted by the suite's own loop is the referee byte for byte. The three stated plants run on that table plus one bad entry, and also on a copy of the table of record whenever it holds entries. The table of record is JUDGED by the same laws and the same revert whenever it holds an entry (a breach is RED) and nothing of it is printed. Checked in scratch: a lawful ten-entry table of record gives the SAME transcript bytes; a nine-number one is RED (HUNK-UNUSED); an `old` standing twice is RED. All ten are mandatory at TC12-ENV's F-VENDOR block. If ruled to the letter instead, authoring the ten hunks into ENV_HUNKS before this gate moves only the tool's sha in this record; the transcript does not move.
+
+**Reason.** A build fact met at TC12-ENV.vendor, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the record was built under this default.
+
+---
+
+## AM-72 · 2026-10-10 (~01:12Z) · L-D.29, L-0.22 · ruling on AP-71
+
+**Text amended.** L-D.29; L-0.22 seam 14 — LINEAGE_PINS.json: `modules` is the static closure exactly; one of X's 18 main-tree keys lies outside it; additive keys
+
+**Amended to.** `modules` = the 60 closure files exactly, {path: sha256}. `module_rows` adds name / path / bytes / sha256 / held_against (17 'X path_modules', 43 'TC12 LINEAGE_PINS'). `x_path_modules` = {record_path, sha256 72a1f523...cac3, key, n_keys 21, n_main_tree_keys 18, all_equal true, main_tree {path: {sha256, bytes, equal, in_closure}} (forward_log.py: in_closure false), x_own {the three tc11x scripts: sha256, copy, equal}, manifest_path}. The manifest's own sha is asserted (certified) and not filed. Also filed: walk_roots (17, the referee's order), step_q_commit '28e006b', tier, record, what, law, walk_law, referee {path, bytes, sha256, source, certified_by}, n_modules, n_held_against_x, n_held_by_tc12_alone.
+
+**Reason.** A build fact met at TC12-ENV.vendor, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the record was built under this default.
+
+---
+
+## AM-73 · 2026-10-10 (~01:12Z) · L-0.14, L-D.25, L-D.30 · ruling on AP-72
+
+**Text amended.** L-0.14 A and I; L-D.25 (the [referee] plants); L-D.30 — A caught plant prints its detector in the suite's own fixed words, not production's message text
+
+**Amended to.** Each plant thunk hands `plants` the production finding rewritten as '<detector> — <the suite's typed words>' if and only if the finding names the wanted detector; any other finding is handed back raw, so the harness still reads the wrong detector. The vendor transcript therefore stands on the tool's API and detector names only (referee_findings, three_shas, referee_tag, REFEREE_REL, hunk_numbers, ENV_HUNKS, build_env_text; `sha != certified`, HUNK-NUMBER, HUNK-OLD, HUNK-UNUSED, HUNK-REVERT), stated in both docstrings.
+
+**Reason.** A build fact met at TC12-ENV.vendor, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the record was built under this default.
+
+---
+
+## AM-74 · 2026-10-10 (~01:12Z) · L-D.25, L-0.9 · ruling on AP-73
+
+**Text amended.** L-D.25 (the second F-VENDOR block); L-0.9 — 'tracked and equal to its blob' at the vendor stage: written now, held only when --at's tree holds the referee
+
+**Amended to.** referee_git_findings(at, required) is written in the suite (git --no-optional-locks cat-file -e / show at --at). required=True is for TC12-ENV's block: no --at, the path absent from that tree, or blob != file is VENDOR-GIT. At the vendor stage required=False: the clause is held only when --at names a commit whose tree holds the referee (then a differing working file is RED), and one fixed sentence says so. 'Tracked' is read as 'in the tree of the commit --at names' (L-0.9), not the index. Tested in a scratch repository under $TMPDIR.
+
+**Reason.** A build fact met at TC12-ENV.vendor, with the default the precedence gives already built (reading cap, O-35). Mechanics only: no registered row's population, arms, statistic, verdict rule or labels moves.
+
+**Redone.** Nothing: the record was built under this default.

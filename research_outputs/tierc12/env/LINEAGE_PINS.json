@@ -1,0 +1,660 @@
+{
+ "law": "write-once; written by scripts/tierc12_vendor.py --pin-lineage, a plain process that only hashes files; the shim's post-shim clause P6 re-hashes every estate module it loaded against `modules`, and each main-tree key of X's record against X's value, at every import; a drifted module HALTs the build and is never re-pinned silently",
+ "module_rows": [
+  {
+   "bytes": 19520,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "analytics",
+   "path": "analytics/__init__.py",
+   "sha256": "ddbcfe642c6b07e6b57279f0196f123f575b4b105d6b10283395e65d9c0fae01"
+  },
+  {
+   "bytes": 13884,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "analytics.levels",
+   "path": "analytics/levels.py",
+   "sha256": "024982f6b4f6d4dd976486b1c811f2ad43e6392b4e2126004f17ba354f4e96cf"
+  },
+  {
+   "bytes": 7956,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "analytics.momentum",
+   "path": "analytics/momentum.py",
+   "sha256": "d3bbc0619f2ff4c4325dddbc590f5ebfbc27caf50d62a8679827b8e57ff68de7"
+  },
+  {
+   "bytes": 13827,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "analytics.profile",
+   "path": "analytics/profile.py",
+   "sha256": "1c0a7519ddd4c37963163e1dc302788d142c74f741a82d8022742595a8eb3e18"
+  },
+  {
+   "bytes": 48328,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "analytics.rangefinder_census",
+   "path": "analytics/rangefinder_census.py",
+   "sha256": "19c5507ff2d39b68aa119ff701aef58a2d219fa287c34cdf7302ebf2bbb7b37d"
+  },
+  {
+   "bytes": 12659,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "analytics.structure",
+   "path": "analytics/structure.py",
+   "sha256": "35d128feb82f3a0f7b6fd9bce648b367fc1d9f5204b3557f3284511d385f2bd6"
+  },
+  {
+   "bytes": 2923,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "analytics.volatility",
+   "path": "analytics/volatility.py",
+   "sha256": "68bcf5324d24efb0be8689e97d07ce4f23e4d3c4194a3cf7fdc9d939dedd1b00"
+  },
+  {
+   "bytes": 13170,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "analytics.vwap",
+   "path": "analytics/vwap.py",
+   "sha256": "1a179d068ebe4efed79121a781285e748980a057f12d35d5e6adf4fe90eb99ee"
+  },
+  {
+   "bytes": 0,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "engine",
+   "path": "engine/__init__.py",
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "bytes": 2680,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "engine.cells",
+   "path": "engine/cells.py",
+   "sha256": "af73625015c0839d901b282b84c96c5ff523314b3ee38d1276ac2ffd685f9a9b"
+  },
+  {
+   "bytes": 1248,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "engine.config",
+   "path": "engine/config.py",
+   "sha256": "59278db2c2cc244976242ddd801da1388ecf6b7856df7c658b02c37dfda656c6"
+  },
+  {
+   "bytes": 16257,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "engine.data",
+   "path": "engine/data.py",
+   "sha256": "ddee40202f197765b7c65a1595f32b6d07543fbee517e104bf3610b828edc88f"
+  },
+  {
+   "bytes": 1593,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "engine.htf",
+   "path": "engine/htf.py",
+   "sha256": "52722f1f5540ae4658d12d28bd40af233d774679506334b91edc5fb08cffcfba"
+  },
+  {
+   "bytes": 3151,
+   "held_against": "X path_modules",
+   "name": "engine.indicators",
+   "path": "engine/indicators.py",
+   "sha256": "91805c04130c3701e16f933b4c4ac258109f8636d9cd8a0ae44787d86f13c113"
+  },
+  {
+   "bytes": 6202,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "engine.journal",
+   "path": "engine/journal.py",
+   "sha256": "009fd07b0bfb784e623fc22fecf049e534288c41c4b51ee622d713df6ae25ba8"
+  },
+  {
+   "bytes": 18800,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "engine.replay",
+   "path": "engine/replay.py",
+   "sha256": "1b23077818a0f969b0a4b8752459c1d5d40f78563ab8337003a9c1cb4ac06ea6"
+  },
+  {
+   "bytes": 43726,
+   "held_against": "X path_modules",
+   "name": "engine.s1",
+   "path": "engine/s1.py",
+   "sha256": "eb15690da648c62c96c705f232064086cca931117bfeb5fe0190542d1c5b3e06"
+  },
+  {
+   "bytes": 35962,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "engine.s2",
+   "path": "engine/s2.py",
+   "sha256": "f12c805aeb1baa043b3ac5478c57aad54bc550583a8b221363216d836cd986dd"
+  },
+  {
+   "bytes": 13797,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "engine.shadows",
+   "path": "engine/shadows.py",
+   "sha256": "a8d4db6382ec535c3e57d3b363afbf9fe295a6ed0f58b0f8c8707217c184bd66"
+  },
+  {
+   "bytes": 27757,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "engine.signals",
+   "path": "engine/signals.py",
+   "sha256": "ff7f644714ada5d8fcc1484389c210b485b6c3c8187c40414598425413a09792"
+  },
+  {
+   "bytes": 34032,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "engine.trading",
+   "path": "engine/trading.py",
+   "sha256": "48cc09459f0129cd9a911d1784d5dca386babbba6a2c541b2b7ded87def14e6f"
+  },
+  {
+   "bytes": 110,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "engine.version",
+   "path": "engine/version.py",
+   "sha256": "54a3611e3a593a174b1dd040abb4ff152636f508fe7f63d4098f50d999b4877e"
+  },
+  {
+   "bytes": 175714,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "census2a_program",
+   "path": "scripts/census2a_program.py",
+   "sha256": "eaf03561948e87d821173d811b67a66228372c7db6f0b3375f3123951601595b"
+  },
+  {
+   "bytes": 44365,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "census2b_firstlook",
+   "path": "scripts/census2b_firstlook.py",
+   "sha256": "51804f2cea669d3c388de49cfd1bf4aed46a45a0d4e903005a1572226cdfa5c7"
+  },
+  {
+   "bytes": 90636,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "census2b_parta",
+   "path": "scripts/census2b_parta.py",
+   "sha256": "5c970d57cf1493fde21f3720e394ea69a5d41061deefe3f7e33a630cc989141d"
+  },
+  {
+   "bytes": 59479,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "census2b_program",
+   "path": "scripts/census2b_program.py",
+   "sha256": "5a00ed99fcae6218e758a6329251873ac1e48ffd4fb2b2142660f88b06c00797"
+  },
+  {
+   "bytes": 31848,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "census_build",
+   "path": "scripts/census_build.py",
+   "sha256": "57d9f0429b59a0168335209dcf8c981f622566505f3fa68fa2e64eb2fb4489b6"
+  },
+  {
+   "bytes": 99699,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "mc1_program",
+   "path": "scripts/mc1_program.py",
+   "sha256": "8fd0b953f81c8d8cd71ca477e5b4fe22dc92e57999c8c3f4518fbfbe6a7cd98a"
+  },
+  {
+   "bytes": 92351,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "mc2_program",
+   "path": "scripts/mc2_program.py",
+   "sha256": "877c537b6396baa50228a7653695fb77219fd96327d807b78dfbdd124805baff"
+  },
+  {
+   "bytes": 22594,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "seq8_extract",
+   "path": "scripts/seq8_extract.py",
+   "sha256": "9546dddeb9fd6fd5d009b446e47c5f48af647d421d3fee27e367c4cfda53ca5b"
+  },
+  {
+   "bytes": 22219,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "seq8_views",
+   "path": "scripts/seq8_views.py",
+   "sha256": "b8f592515e02905eed104b9f298de072e19555f64ad1f76b77550ab44a2ffdc1"
+  },
+  {
+   "bytes": 226417,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "tierc10_brk",
+   "path": "scripts/tierc10_brk.py",
+   "sha256": "9c26561c7ad405101496217b145ab78a20e4ee805a5ddfd117dceaa0a7177ae6"
+  },
+  {
+   "bytes": 247368,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "tierc10_census",
+   "path": "scripts/tierc10_census.py",
+   "sha256": "0e6cb635436acc2dd75fb0757506bd6122975453ca45a3c311fa4a3d67d7a6ef"
+  },
+  {
+   "bytes": 172077,
+   "held_against": "X path_modules",
+   "name": "tierc10_data",
+   "path": "scripts/tierc10_data.py",
+   "sha256": "2cbf9bb6bcfea3ec6184d5502ba5c530f5c0089d95288ab848a745ad5b3015fc"
+  },
+  {
+   "bytes": 111123,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "tierc10_lanes",
+   "path": "scripts/tierc10_lanes.py",
+   "sha256": "c9142f1123356ad57687bca6f9877b2d1dd5f04071bac19e41e5bd806daa28a4"
+  },
+  {
+   "bytes": 154338,
+   "held_against": "X path_modules",
+   "name": "tierc10_panel",
+   "path": "scripts/tierc10_panel.py",
+   "sha256": "40b660cdc943a947f199f2e59f38bfbda04866b44191506de2298d8474d79b0e"
+  },
+  {
+   "bytes": 51618,
+   "held_against": "X path_modules",
+   "name": "tierc2_baseline",
+   "path": "scripts/tierc2_baseline.py",
+   "sha256": "682044305a9e80695e95c710cfb053ec146a7c40755841bb083748da62ca04c5"
+  },
+  {
+   "bytes": 15329,
+   "held_against": "X path_modules",
+   "name": "tierc2_rules",
+   "path": "scripts/tierc2_rules.py",
+   "sha256": "1739b4006b6a01296bb0b9f6bd8b6c22e546b09d5fa3b47b175545156b12fc2a"
+  },
+  {
+   "bytes": 48769,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "tierc3_baseline",
+   "path": "scripts/tierc3_baseline.py",
+   "sha256": "569061dabe206c4dc70e4c7a4dba1949f83655d26cb87e1d991439b37cc6f278"
+  },
+  {
+   "bytes": 18876,
+   "held_against": "X path_modules",
+   "name": "tierc3_rules",
+   "path": "scripts/tierc3_rules.py",
+   "sha256": "c61a9679a369c75a94b4c1ed27c19cc394de7a07f891e16fd80d2309d61a0d6d"
+  },
+  {
+   "bytes": 67567,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "tierc4_baseline",
+   "path": "scripts/tierc4_baseline.py",
+   "sha256": "24186f9b285a8870fcdd3e68257039323a60183c4f8239ae8aa92040eb1a77dd"
+  },
+  {
+   "bytes": 29342,
+   "held_against": "X path_modules",
+   "name": "tierc4_rules",
+   "path": "scripts/tierc4_rules.py",
+   "sha256": "3e56420575d1d87ce92672c471d0a866aef29ff5de625f9d3844ac24426fb9ee"
+  },
+  {
+   "bytes": 101988,
+   "held_against": "X path_modules",
+   "name": "tierc5",
+   "path": "scripts/tierc5.py",
+   "sha256": "ad912b385cc8dd2e5291af3b79c520760ae8c91764af8e3eee56c6b3dd295a6f"
+  },
+  {
+   "bytes": 34173,
+   "held_against": "X path_modules",
+   "name": "tierc5_rules",
+   "path": "scripts/tierc5_rules.py",
+   "sha256": "c27a5ecb425f0247adbd59fa921e8637900523714eafa69aa5d9453d875a1515"
+  },
+  {
+   "bytes": 37568,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "tierc5q",
+   "path": "scripts/tierc5q.py",
+   "sha256": "43ebf7a0fecf866b98a13693a82e5ada0e5a27107f8ccdb1b70221d988781bb8"
+  },
+  {
+   "bytes": 72032,
+   "held_against": "X path_modules",
+   "name": "tierc6",
+   "path": "scripts/tierc6.py",
+   "sha256": "429f6849708d2f2bee5ec1a74829f09792b0483cb1a80d920f821cd998ceae8e"
+  },
+  {
+   "bytes": 112087,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "tierc6_lab_limit",
+   "path": "scripts/tierc6_lab_limit.py",
+   "sha256": "74eeab6369039112f718a8cb0def1f9561508eba96e5af663f7660f396076029"
+  },
+  {
+   "bytes": 121712,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "tierc6_lab_misc",
+   "path": "scripts/tierc6_lab_misc.py",
+   "sha256": "c4bc17e286c01500601fa8ebcc66d30c353763787270e68bfb5e0c99c160edb0"
+  },
+  {
+   "bytes": 121015,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "tierc6_lab_zec",
+   "path": "scripts/tierc6_lab_zec.py",
+   "sha256": "b12c77de0692cfc12665a75aa4c71a09bb58014e69937ba7958c6d5cc48c572b"
+  },
+  {
+   "bytes": 23989,
+   "held_against": "X path_modules",
+   "name": "tierc6_rules",
+   "path": "scripts/tierc6_rules.py",
+   "sha256": "777700d42258cbdf4cf7895a8c42d3a092dd46f0a79545de17b8c79496b88d5f"
+  },
+  {
+   "bytes": 60355,
+   "held_against": "X path_modules",
+   "name": "tierc7",
+   "path": "scripts/tierc7.py",
+   "sha256": "6abeaf6e662e9a61c1be73ee21f900133869432d7006cbe1b352b9a0f6ef1452"
+  },
+  {
+   "bytes": 51290,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "tierc7_lab_chain",
+   "path": "scripts/tierc7_lab_chain.py",
+   "sha256": "8f0b1fbf767119798aad804ab1a18a963fd3ccd34e88737bfa7626a1feb11e3a"
+  },
+  {
+   "bytes": 68314,
+   "held_against": "X path_modules",
+   "name": "tierc7_lab_regime",
+   "path": "scripts/tierc7_lab_regime.py",
+   "sha256": "4d19cf0095ebf2593b3008caf9c9af032a75515dda8507da5154308e977682a5"
+  },
+  {
+   "bytes": 66019,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "tierc7_lab_stopgrid",
+   "path": "scripts/tierc7_lab_stopgrid.py",
+   "sha256": "bf659246179f899f83d7fcdc4039b70b32e4f5276ba87ca0d5be90e1355473ec"
+  },
+  {
+   "bytes": 66549,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "tierc7_lab_weave",
+   "path": "scripts/tierc7_lab_weave.py",
+   "sha256": "11bc631f6a1721861d99592e8ebfafd9c254af21def8352f2668c059c6c82666"
+  },
+  {
+   "bytes": 23435,
+   "held_against": "X path_modules",
+   "name": "tierc7_rules",
+   "path": "scripts/tierc7_rules.py",
+   "sha256": "fa7d8d4804c82ea6247343a80bbd6d784ba48a60908c2c0efe7912e7495b2092"
+  },
+  {
+   "bytes": 46726,
+   "held_against": "X path_modules",
+   "name": "tierc8",
+   "path": "scripts/tierc8.py",
+   "sha256": "148e9a975af75ad4370580d168ff616e3abab18d9f522c91c77dffd7f737cfe0"
+  },
+  {
+   "bytes": 84776,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "tierc8_an1",
+   "path": "scripts/tierc8_an1.py",
+   "sha256": "6eebafdf378b05714ae37437b70204a264094ad9493c6f8ce53e6a5d58059be4"
+  },
+  {
+   "bytes": 87990,
+   "held_against": "TC12 LINEAGE_PINS",
+   "name": "tierc8_an2",
+   "path": "scripts/tierc8_an2.py",
+   "sha256": "cca98e0deb88dd19a1e0c89de176233f372b0e12c2eb0da46a825983e90765bb"
+  },
+  {
+   "bytes": 77952,
+   "held_against": "X path_modules",
+   "name": "tierc9",
+   "path": "scripts/tierc9.py",
+   "sha256": "663eef3107909221a6a651343363bad5c7d7730dd9adb92495d3f1e262c5b3c3"
+  }
+ ],
+ "modules": {
+  "analytics/__init__.py": "ddbcfe642c6b07e6b57279f0196f123f575b4b105d6b10283395e65d9c0fae01",
+  "analytics/levels.py": "024982f6b4f6d4dd976486b1c811f2ad43e6392b4e2126004f17ba354f4e96cf",
+  "analytics/momentum.py": "d3bbc0619f2ff4c4325dddbc590f5ebfbc27caf50d62a8679827b8e57ff68de7",
+  "analytics/profile.py": "1c0a7519ddd4c37963163e1dc302788d142c74f741a82d8022742595a8eb3e18",
+  "analytics/rangefinder_census.py": "19c5507ff2d39b68aa119ff701aef58a2d219fa287c34cdf7302ebf2bbb7b37d",
+  "analytics/structure.py": "35d128feb82f3a0f7b6fd9bce648b367fc1d9f5204b3557f3284511d385f2bd6",
+  "analytics/volatility.py": "68bcf5324d24efb0be8689e97d07ce4f23e4d3c4194a3cf7fdc9d939dedd1b00",
+  "analytics/vwap.py": "1a179d068ebe4efed79121a781285e748980a057f12d35d5e6adf4fe90eb99ee",
+  "engine/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "engine/cells.py": "af73625015c0839d901b282b84c96c5ff523314b3ee38d1276ac2ffd685f9a9b",
+  "engine/config.py": "59278db2c2cc244976242ddd801da1388ecf6b7856df7c658b02c37dfda656c6",
+  "engine/data.py": "ddee40202f197765b7c65a1595f32b6d07543fbee517e104bf3610b828edc88f",
+  "engine/htf.py": "52722f1f5540ae4658d12d28bd40af233d774679506334b91edc5fb08cffcfba",
+  "engine/indicators.py": "91805c04130c3701e16f933b4c4ac258109f8636d9cd8a0ae44787d86f13c113",
+  "engine/journal.py": "009fd07b0bfb784e623fc22fecf049e534288c41c4b51ee622d713df6ae25ba8",
+  "engine/replay.py": "1b23077818a0f969b0a4b8752459c1d5d40f78563ab8337003a9c1cb4ac06ea6",
+  "engine/s1.py": "eb15690da648c62c96c705f232064086cca931117bfeb5fe0190542d1c5b3e06",
+  "engine/s2.py": "f12c805aeb1baa043b3ac5478c57aad54bc550583a8b221363216d836cd986dd",
+  "engine/shadows.py": "a8d4db6382ec535c3e57d3b363afbf9fe295a6ed0f58b0f8c8707217c184bd66",
+  "engine/signals.py": "ff7f644714ada5d8fcc1484389c210b485b6c3c8187c40414598425413a09792",
+  "engine/trading.py": "48cc09459f0129cd9a911d1784d5dca386babbba6a2c541b2b7ded87def14e6f",
+  "engine/version.py": "54a3611e3a593a174b1dd040abb4ff152636f508fe7f63d4098f50d999b4877e",
+  "scripts/census2a_program.py": "eaf03561948e87d821173d811b67a66228372c7db6f0b3375f3123951601595b",
+  "scripts/census2b_firstlook.py": "51804f2cea669d3c388de49cfd1bf4aed46a45a0d4e903005a1572226cdfa5c7",
+  "scripts/census2b_parta.py": "5c970d57cf1493fde21f3720e394ea69a5d41061deefe3f7e33a630cc989141d",
+  "scripts/census2b_program.py": "5a00ed99fcae6218e758a6329251873ac1e48ffd4fb2b2142660f88b06c00797",
+  "scripts/census_build.py": "57d9f0429b59a0168335209dcf8c981f622566505f3fa68fa2e64eb2fb4489b6",
+  "scripts/mc1_program.py": "8fd0b953f81c8d8cd71ca477e5b4fe22dc92e57999c8c3f4518fbfbe6a7cd98a",
+  "scripts/mc2_program.py": "877c537b6396baa50228a7653695fb77219fd96327d807b78dfbdd124805baff",
+  "scripts/seq8_extract.py": "9546dddeb9fd6fd5d009b446e47c5f48af647d421d3fee27e367c4cfda53ca5b",
+  "scripts/seq8_views.py": "b8f592515e02905eed104b9f298de072e19555f64ad1f76b77550ab44a2ffdc1",
+  "scripts/tierc10_brk.py": "9c26561c7ad405101496217b145ab78a20e4ee805a5ddfd117dceaa0a7177ae6",
+  "scripts/tierc10_census.py": "0e6cb635436acc2dd75fb0757506bd6122975453ca45a3c311fa4a3d67d7a6ef",
+  "scripts/tierc10_data.py": "2cbf9bb6bcfea3ec6184d5502ba5c530f5c0089d95288ab848a745ad5b3015fc",
+  "scripts/tierc10_lanes.py": "c9142f1123356ad57687bca6f9877b2d1dd5f04071bac19e41e5bd806daa28a4",
+  "scripts/tierc10_panel.py": "40b660cdc943a947f199f2e59f38bfbda04866b44191506de2298d8474d79b0e",
+  "scripts/tierc2_baseline.py": "682044305a9e80695e95c710cfb053ec146a7c40755841bb083748da62ca04c5",
+  "scripts/tierc2_rules.py": "1739b4006b6a01296bb0b9f6bd8b6c22e546b09d5fa3b47b175545156b12fc2a",
+  "scripts/tierc3_baseline.py": "569061dabe206c4dc70e4c7a4dba1949f83655d26cb87e1d991439b37cc6f278",
+  "scripts/tierc3_rules.py": "c61a9679a369c75a94b4c1ed27c19cc394de7a07f891e16fd80d2309d61a0d6d",
+  "scripts/tierc4_baseline.py": "24186f9b285a8870fcdd3e68257039323a60183c4f8239ae8aa92040eb1a77dd",
+  "scripts/tierc4_rules.py": "3e56420575d1d87ce92672c471d0a866aef29ff5de625f9d3844ac24426fb9ee",
+  "scripts/tierc5.py": "ad912b385cc8dd2e5291af3b79c520760ae8c91764af8e3eee56c6b3dd295a6f",
+  "scripts/tierc5_rules.py": "c27a5ecb425f0247adbd59fa921e8637900523714eafa69aa5d9453d875a1515",
+  "scripts/tierc5q.py": "43ebf7a0fecf866b98a13693a82e5ada0e5a27107f8ccdb1b70221d988781bb8",
+  "scripts/tierc6.py": "429f6849708d2f2bee5ec1a74829f09792b0483cb1a80d920f821cd998ceae8e",
+  "scripts/tierc6_lab_limit.py": "74eeab6369039112f718a8cb0def1f9561508eba96e5af663f7660f396076029",
+  "scripts/tierc6_lab_misc.py": "c4bc17e286c01500601fa8ebcc66d30c353763787270e68bfb5e0c99c160edb0",
+  "scripts/tierc6_lab_zec.py": "b12c77de0692cfc12665a75aa4c71a09bb58014e69937ba7958c6d5cc48c572b",
+  "scripts/tierc6_rules.py": "777700d42258cbdf4cf7895a8c42d3a092dd46f0a79545de17b8c79496b88d5f",
+  "scripts/tierc7.py": "6abeaf6e662e9a61c1be73ee21f900133869432d7006cbe1b352b9a0f6ef1452",
+  "scripts/tierc7_lab_chain.py": "8f0b1fbf767119798aad804ab1a18a963fd3ccd34e88737bfa7626a1feb11e3a",
+  "scripts/tierc7_lab_regime.py": "4d19cf0095ebf2593b3008caf9c9af032a75515dda8507da5154308e977682a5",
+  "scripts/tierc7_lab_stopgrid.py": "bf659246179f899f83d7fcdc4039b70b32e4f5276ba87ca0d5be90e1355473ec",
+  "scripts/tierc7_lab_weave.py": "11bc631f6a1721861d99592e8ebfafd9c254af21def8352f2668c059c6c82666",
+  "scripts/tierc7_rules.py": "fa7d8d4804c82ea6247343a80bbd6d784ba48a60908c2c0efe7912e7495b2092",
+  "scripts/tierc8.py": "148e9a975af75ad4370580d168ff616e3abab18d9f522c91c77dffd7f737cfe0",
+  "scripts/tierc8_an1.py": "6eebafdf378b05714ae37437b70204a264094ad9493c6f8ce53e6a5d58059be4",
+  "scripts/tierc8_an2.py": "cca98e0deb88dd19a1e0c89de176233f372b0e12c2eb0da46a825983e90765bb",
+  "scripts/tierc9.py": "663eef3107909221a6a651343363bad5c7d7730dd9adb92495d3f1e262c5b3c3"
+ },
+ "n_held_against_x": 17,
+ "n_held_by_tc12_alone": 43,
+ "n_modules": 60,
+ "record": "TC12-ENV.vendor",
+ "referee": {
+  "bytes": 68545,
+  "certified_by": {
+   "path": "research_outputs/tierc11/PROGRESS.json",
+   "stage": "TC11-ENV"
+  },
+  "path": "research_outputs/tierc12/vendor/tierc11_env@1526093b.py",
+  "sha256": "1526093b25161927337ced6112a310075b1a57c825f08705814e48619398f798",
+  "source": "scripts/tierc11_env.py"
+ },
+ "step_q_commit": "28e006b",
+ "tier": "TIER-C12",
+ "walk_law": "the STATIC repo import closure of walk_roots: Import / ImportFrom anywhere (function bodies included), constant-string dynamic imports and the repo modules a name-held dynamic import can name — the walk of scripts/tierc11_closure_fixtures.py (lineage_walk), mirrored, NOT stopping at the TC10 layer and not skipping the range machine: pinning is a superset law",
+ "walk_roots": [
+  "tierc2_baseline",
+  "tierc10_data",
+  "tierc10_panel",
+  "tierc10_brk",
+  "tierc10_lanes",
+  "tierc9",
+  "tierc8",
+  "tierc7",
+  "tierc7_rules",
+  "tierc7_lab_regime",
+  "tierc6",
+  "tierc6_rules",
+  "tierc5",
+  "tierc5_rules",
+  "tierc4_rules",
+  "tierc3_rules",
+  "tierc2_rules"
+ ],
+ "what": "the lineage modules the TC12 shim imports as-is, and every repo file their import statements can reach, pinned by sha256 before any ride [LEANS L-D.29]",
+ "x_path_modules": {
+  "all_equal": true,
+  "key": "path_modules",
+  "main_tree": {
+   "engine/indicators.py": {
+    "bytes": 3151,
+    "equal": true,
+    "in_closure": true,
+    "sha256": "91805c04130c3701e16f933b4c4ac258109f8636d9cd8a0ae44787d86f13c113"
+   },
+   "engine/s1.py": {
+    "bytes": 43726,
+    "equal": true,
+    "in_closure": true,
+    "sha256": "eb15690da648c62c96c705f232064086cca931117bfeb5fe0190542d1c5b3e06"
+   },
+   "scripts/forward_log.py": {
+    "bytes": 13779,
+    "equal": true,
+    "in_closure": false,
+    "sha256": "74e9657fbcf26cce3040ee52d28a96bc1cf60897e375ba26a09b2e13676e1967"
+   },
+   "scripts/tierc10_data.py": {
+    "bytes": 172077,
+    "equal": true,
+    "in_closure": true,
+    "sha256": "2cbf9bb6bcfea3ec6184d5502ba5c530f5c0089d95288ab848a745ad5b3015fc"
+   },
+   "scripts/tierc10_panel.py": {
+    "bytes": 154338,
+    "equal": true,
+    "in_closure": true,
+    "sha256": "40b660cdc943a947f199f2e59f38bfbda04866b44191506de2298d8474d79b0e"
+   },
+   "scripts/tierc2_baseline.py": {
+    "bytes": 51618,
+    "equal": true,
+    "in_closure": true,
+    "sha256": "682044305a9e80695e95c710cfb053ec146a7c40755841bb083748da62ca04c5"
+   },
+   "scripts/tierc2_rules.py": {
+    "bytes": 15329,
+    "equal": true,
+    "in_closure": true,
+    "sha256": "1739b4006b6a01296bb0b9f6bd8b6c22e546b09d5fa3b47b175545156b12fc2a"
+   },
+   "scripts/tierc3_rules.py": {
+    "bytes": 18876,
+    "equal": true,
+    "in_closure": true,
+    "sha256": "c61a9679a369c75a94b4c1ed27c19cc394de7a07f891e16fd80d2309d61a0d6d"
+   },
+   "scripts/tierc4_rules.py": {
+    "bytes": 29342,
+    "equal": true,
+    "in_closure": true,
+    "sha256": "3e56420575d1d87ce92672c471d0a866aef29ff5de625f9d3844ac24426fb9ee"
+   },
+   "scripts/tierc5.py": {
+    "bytes": 101988,
+    "equal": true,
+    "in_closure": true,
+    "sha256": "ad912b385cc8dd2e5291af3b79c520760ae8c91764af8e3eee56c6b3dd295a6f"
+   },
+   "scripts/tierc5_rules.py": {
+    "bytes": 34173,
+    "equal": true,
+    "in_closure": true,
+    "sha256": "c27a5ecb425f0247adbd59fa921e8637900523714eafa69aa5d9453d875a1515"
+   },
+   "scripts/tierc6.py": {
+    "bytes": 72032,
+    "equal": true,
+    "in_closure": true,
+    "sha256": "429f6849708d2f2bee5ec1a74829f09792b0483cb1a80d920f821cd998ceae8e"
+   },
+   "scripts/tierc6_rules.py": {
+    "bytes": 23989,
+    "equal": true,
+    "in_closure": true,
+    "sha256": "777700d42258cbdf4cf7895a8c42d3a092dd46f0a79545de17b8c79496b88d5f"
+   },
+   "scripts/tierc7.py": {
+    "bytes": 60355,
+    "equal": true,
+    "in_closure": true,
+    "sha256": "6abeaf6e662e9a61c1be73ee21f900133869432d7006cbe1b352b9a0f6ef1452"
+   },
+   "scripts/tierc7_lab_regime.py": {
+    "bytes": 68314,
+    "equal": true,
+    "in_closure": true,
+    "sha256": "4d19cf0095ebf2593b3008caf9c9af032a75515dda8507da5154308e977682a5"
+   },
+   "scripts/tierc7_rules.py": {
+    "bytes": 23435,
+    "equal": true,
+    "in_closure": true,
+    "sha256": "fa7d8d4804c82ea6247343a80bbd6d784ba48a60908c2c0efe7912e7495b2092"
+   },
+   "scripts/tierc8.py": {
+    "bytes": 46726,
+    "equal": true,
+    "in_closure": true,
+    "sha256": "148e9a975af75ad4370580d168ff616e3abab18d9f522c91c77dffd7f737cfe0"
+   },
+   "scripts/tierc9.py": {
+    "bytes": 77952,
+    "equal": true,
+    "in_closure": true,
+    "sha256": "663eef3107909221a6a651343363bad5c7d7730dd9adb92495d3f1e262c5b3c3"
+   }
+  },
+  "manifest_path": "research_outputs/tierc12/x_rec/X_REC_MANIFEST.json",
+  "n_keys": 21,
+  "n_main_tree_keys": 18,
+  "record_path": "research_outputs/tierc12/x_rec/tierc11x/forward/BOOK_SPECS.json",
+  "sha256": "72a1f52359c66084d22f8bc99b0cd35e7edd89db2751f4859f559c8b1f51cac3",
+  "x_own": {
+   "scripts/tc11x_books.py": {
+    "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_books.py",
+    "equal": true,
+    "sha256": "26870ff97317801fdf9c4874e1f41cdac69bacbf9263198e623e19ab19913b2b"
+   },
+   "scripts/tc11x_env.py": {
+    "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_env.py",
+    "equal": true,
+    "sha256": "db74225e6fa26bf7e9c2e19f31b6e0c76b379a8de72ef4c0cc9e6b1a2e653928"
+   },
+   "scripts/tc11x_forward.py": {
+    "copy": "research_outputs/tierc12/x_rec/scripts/tc11x_forward.py",
+    "equal": true,
+    "sha256": "33f65b5eca8e50dfce6690bb827270f7de1cf7207ef14245416210ce88bbe80b"
+   }
+  }
+ }
+}
