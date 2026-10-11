@@ -1,6 +1,6 @@
 # RETENTION — archive estate vs the rule
 
-Generated 2026-10-11T11:45:25Z by `scripts/backup_estate.py`.
+Generated 2026-10-11T12:58:29Z by `scripts/backup_estate.py`.
 
 **Rule:** keep the newest 4 estate generations and the newest 4 workflow generations. **Phase archives are permanent evidence and are never prunable.**
 **This report never deletes anything.** It names what falls outside the generation rule; acting on it is the operator's call.
@@ -9,10 +9,11 @@ Generated 2026-10-11T11:45:25Z by `scripts/backup_estate.py`.
 
 Location: `/Volumes/LaCie/naiad-backups`
 
-2 generation(s) present; 2 within the rule, 0 outside it.
+3 generation(s) present; 3 within the rule, 0 outside it.
 
 | generation | size (B) | within rule |
 |---|---:|---|
+| `naiad_estate_2026-10-11.zip` | 633,529,438 | yes |
 | `naiad_estate_2026-10-04.zip` | 633,529,438 | yes |
 | `naiad_estate_2026-09-27.zip` | 633,529,440 | yes |
 
