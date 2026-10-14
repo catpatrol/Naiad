@@ -1,5 +1,5 @@
 # HEARTBEAT
-run: 2026-10-13T10:20:12Z
+run: 2026-10-14T10:32:01Z
 exit: 0 (jobs + window; publish outcome in the day's DAILY report)
-overdue: 4
-archives — estate: 2026-10-11 · workflow: 2026-10-11 · phase: NONE
+overdue: 2
+archives — estate: NONE · workflow: NONE · phase: NONE
