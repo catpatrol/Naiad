@@ -1,6 +1,6 @@
 {
   "ahead_behind": {
-    "ahead": 1,
+    "ahead": 2,
     "behind": 0
   },
   "branch": "v12-v1-census",
@@ -10,8 +10,8 @@
     "gitattributes_present": true,
     "gitattributes_star_minus_text": false
   },
-  "generated_utc": "2026-11-04T10:00:05Z",
-  "head": "e42492dceca704bc2ce8e333a588e9aee4e30b6f",
+  "generated_utc": "2026-11-05T10:16:23Z",
+  "head": "21dd888f233f1f3decd4b36fa7198168f8f3833e",
   "lane_last_commit": {
     "brief": null,
     "docs": {
@@ -20,9 +20,9 @@
       "subject": "docs: closing 11-entry memory snapshot post-redraft + phase-archive relocation pointer (ruling B, archives to D:/Naiad)"
     },
     "exchange": {
-      "committed_iso": "2026-11-03T07:46:21-03:00",
-      "sha": "e42492dceca704bc2ce8e333a588e9aee4e30b6f",
-      "subject": "exchange: auto-publish 2026-11-03"
+      "committed_iso": "2026-11-04T07:00:24-03:00",
+      "sha": "21dd888f233f1f3decd4b36fa7198168f8f3833e",
+      "subject": "exchange: auto-publish 2026-11-04"
     },
     "ops": {
       "committed_iso": "2026-08-12T07:52:01-03:00",
@@ -75,7 +75,7 @@
       "match_head": false,
       "path": "exchange/status/HEARTBEAT.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "29184e0c9c6e0ae4bc4f7c5d5d6139b46d7b835f97526c0052a441ba781226dc",
+      "sha256_worktree": "6a62dcf7ba129351f02073f8fa61340b1b16f2e0fc9c5bbd2b05455aadacbfce",
       "size": 175,
       "source_guess": null,
       "tracked": true
@@ -181,15 +181,6 @@
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/DAILY_2026-10-28.md",
-      "sha256_head_blob": null,
-      "sha256_worktree": "93f7cf72760e36b73c6cf40dce0f1bfbee6690ef36ffb45d9f31179f52bd30e3",
-      "size": 7390,
-      "source_guess": null,
-      "tracked": true
-    },
-    {
-      "match_head": false,
       "path": "exchange/status/daily/DAILY_2026-10-29.md",
       "sha256_head_blob": null,
       "sha256_worktree": "06c81246524aae5e586e1b77bda348fde5b690a2d636e295a8678e60f46373fe",
@@ -244,10 +235,10 @@
     },
     {
       "match_head": false,
-      "path": "exchange/status/daily/MANIFEST_2026-10-28.json",
+      "path": "exchange/status/daily/DAILY_2026-11-04.md",
       "sha256_head_blob": null,
-      "sha256_worktree": "29eb9a91a88b3986a26002668d9e4f7e97ad996a52c48fa582bec1716d611bc6",
-      "size": 26247,
+      "sha256_worktree": "c600a2c4f4c56b81a5026816d2f440fc2ee6bfcbd1719a6923777e63ca603ab3",
+      "size": 7376,
       "source_guess": null,
       "tracked": true
     },
@@ -301,6 +292,15 @@
       "path": "exchange/status/daily/MANIFEST_2026-11-03.json",
       "sha256_head_blob": null,
       "sha256_worktree": "91a595d168af302941b1fef3af3d8ae90f9dc7cb03d58ff23fbdffdbc82b7736",
+      "size": 26246,
+      "source_guess": null,
+      "tracked": true
+    },
+    {
+      "match_head": false,
+      "path": "exchange/status/daily/MANIFEST_2026-11-04.json",
+      "sha256_head_blob": null,
+      "sha256_worktree": "4cd6ef474581d53e145f15aff1f33c1322b72a0ab9a327e8b87642d7b16d1118",
       "size": 26246,
       "source_guess": null,
       "tracked": true
@@ -693,7 +693,7 @@
     }
   ],
   "status_porcelain": [
-    " M exchange/status/daily/DAILY_2026-11-03.md",
+    " M exchange/status/daily/DAILY_2026-11-04.md",
     " M research_outputs/tierc10/close/FIXTURES_CLOSE_ledger_append_root.txt",
     " M scripts/tierc12_env_fixtures.py",
     " M scripts/tierc12_vendor.py",
